@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "packages/configs/*"
+allowBuilds:
+  msw: false
