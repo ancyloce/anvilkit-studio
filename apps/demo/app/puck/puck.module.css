@@ -1,0 +1,175 @@
+.shell {
+  min-height: 100svh;
+  padding: 2rem 1rem 3rem;
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 166, 0.16), transparent 28rem),
+    radial-gradient(circle at top right, rgba(251, 191, 36, 0.16), transparent 24rem),
+    linear-gradient(180deg, #f7f1e6 0%, #efe6d2 100%);
+}
+
+.masthead {
+  display: grid;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0 auto 1.5rem;
+  padding: 1.6rem;
+  border: 1px solid rgba(16, 32, 51, 0.12);
+  border-radius: 1.75rem;
+  background: rgba(255, 252, 245, 0.84);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1.5rem 3rem rgba(16, 32, 51, 0.08);
+}
+
+.eyebrow {
+  margin-bottom: 0.55rem;
+  color: #0f766e;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 50rem;
+  font-size: clamp(2rem, 3vw, 3.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.lede {
+  max-width: 46rem;
+  color: #3d556d;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 999px;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    background-color 140ms ease;
+}
+
+.primaryAction {
+  background: #102033;
+  color: #fff8ed;
+  box-shadow: 0 0.75rem 2rem rgba(16, 32, 51, 0.18);
+}
+
+.secondaryAction {
+  border: 1px solid rgba(16, 32, 51, 0.14);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.panel,
+.renderFrame,
+.snapshot {
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.panel :global(.Puck) {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 1.5rem 3rem rgba(16, 32, 51, 0.1);
+}
+
+.snapshot {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(16, 32, 51, 0.08);
+  border-radius: 1.5rem;
+  background: rgba(255, 252, 245, 0.78);
+}
+
+.snapshotHeader {
+  margin-bottom: 0.85rem;
+}
+
+.snapshotHeader h2 {
+  margin-bottom: 0.3rem;
+  font-size: 1.2rem;
+}
+
+.snapshotHeader p {
+  color: #4b637a;
+}
+
+.codeBlock {
+  overflow-x: auto;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: #102033;
+  color: #f8f6ef;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.renderFrame {
+  padding: 1rem;
+  border: 1px solid rgba(16, 32, 51, 0.08);
+  border-radius: 1.5rem;
+  background: rgba(255, 252, 245, 0.78);
+  box-shadow: 0 1rem 2.5rem rgba(16, 32, 51, 0.08);
+}
+
+.renderNote {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.renderNote span {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(16, 32, 51, 0.08);
+  color: #23415f;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.renderCanvas {
+  padding: 1.3rem;
+  border-radius: 1.25rem;
+  background: #fffdf8;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primaryAction:hover,
+  .secondaryAction:hover {
+    transform: translateY(-1px);
+  }
+
+  .primaryAction:hover {
+    background: #18314d;
+  }
+
+  .secondaryAction:hover {
+    box-shadow: 0 0.75rem 1.6rem rgba(16, 32, 51, 0.08);
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    padding-inline: 0.8rem;
+  }
+
+  .masthead,
+  .renderFrame,
+  .snapshot {
+    border-radius: 1.2rem;
+  }
+}

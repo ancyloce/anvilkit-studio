@@ -11,7 +11,9 @@
 		"check-types": "next typegen && tsc --noEmit"
 	},
 	"dependencies": {
-		"@anvilkit/ui": "workspace:*",
+		"@anvilkit/button": "workspace:*",
+		"@anvilkit/input": "workspace:*",
+		"@puckeditor/core": "^0.21.1",
 		"next": "16.2.0",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0"
