@@ -5,7 +5,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --port 3000",
-		"build": "next build",
+		"build": "next build --webpack",
 		"start": "next start",
 		"lint": "pnpm exec biome lint .",
 		"check-types": "next typegen && tsc --noEmit"
@@ -13,14 +13,17 @@
 	"dependencies": {
 		"@anvilkit/button": "workspace:*",
 		"@anvilkit/input": "workspace:*",
+		"@anvilkit/navbar": "workspace:*",
+		"@anvilkit/ui": "workspace:*",
 		"@puckeditor/core": "^0.21.1",
 		"next": "16.2.0",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0"
 	},
 	"devDependencies": {
-		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/biome-config": "workspace:*",
+		"@anvilkit/tailwind-config": "workspace:*",
+		"@anvilkit/typescript-config": "workspace:*",
 		"@types/node": "^22.15.3",
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",

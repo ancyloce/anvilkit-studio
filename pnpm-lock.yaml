@@ -29,6 +29,12 @@ importers:
       '@anvilkit/input':
         specifier: workspace:*
         version: link:../../packages/components/src/input
+      '@anvilkit/navbar':
+        specifier: workspace:*
+        version: link:../../packages/components/src/navbar
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@puckeditor/core':
         specifier: ^0.21.1
         version: 0.21.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
@@ -45,6 +51,9 @@ importers:
       '@anvilkit/biome-config':
         specifier: workspace:*
         version: link:../../packages/configs/biome-config
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/configs/tailwind-config
       '@anvilkit/typescript-config':
         specifier: workspace:*
         version: link:../../packages/configs/typescript-config
