@@ -2,5 +2,6 @@ packages:
   - "apps/*"
   - "packages/*"
   - "packages/configs/*"
+  - "packages/components/src/*"
 allowBuilds:
   msw: false
