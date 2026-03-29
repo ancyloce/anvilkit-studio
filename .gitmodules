@@ -1,9 +1,9 @@
 [submodule "packages/components"]
 	path = packages/components
 	url = https://github.com/ancyloce/anvilkit-components.git
-[submodule "packages/plugins/plugin-export-html"]
-	path = packages/plugins/plugin-export-html
-	url = https://github.com/ancyloce/anvilkit-plugin-export-html.git
 [submodule "packages/plugins/plugin-ai-copilot"]
 	path = packages/plugins/plugin-ai-copilot
 	url = https://github.com/ancyloce/anvilkit-plugin-ai-copilot.git
+[submodule "packages/plugins/plugin-export-html"]
+	path = packages/plugins/plugin-export-html
+	url = https://github.com/ancyloce/anvilkit-plugin-export-html.git
