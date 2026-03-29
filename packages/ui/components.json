@@ -1,22 +1,26 @@
 {
-	"$schema": "https://ui.shadcn.com/schema.json",
-	"style": "base-nova",
-	"rsc": false,
-	"tsx": true,
-	"tailwind": {
-		"css": "src/globals.css",
-		"baseColor": "neutral",
-		"cssVariables": true
-	},
-	"aliases": {
-		"components": "@anvilkit/ui",
-		"utils": "@anvilkit/ui/lib/utils",
-		"ui": "@anvilkit/ui",
-		"lib": "@anvilkit/ui/lib",
-		"hooks": "@anvilkit/ui/hooks"
-	},
-	"iconLibrary": "lucide",
-	"rtl": false,
-	"menuColor": "default",
-	"menuAccent": "subtle"
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-nova",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "css": "src/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "rtl": false,
+  "menuColor": "default",
+  "menuAccent": "subtle",
+  "aliases": {
+    "components": "@anvilkit/ui",
+    "utils": "@anvilkit/ui/lib/utils",
+    "ui": "@anvilkit/ui",
+    "lib": "@anvilkit/ui/lib",
+    "hooks": "@anvilkit/ui/hooks"
+  },
+  "registries": {
+    "@magicui": "https://magicui.design/r/{name}",
+    "@animate-ui": "https://animate-ui.com/r/{name}.json"
+  }
 }
