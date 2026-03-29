@@ -2,6 +2,7 @@
 
 @source "./**/*.{ts,tsx}";
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../packages/components/src/hero/src/**/*.{ts,tsx}";
 @source "../../../packages/components/src/navbar/src/**/*.{ts,tsx}";
 
 :root {

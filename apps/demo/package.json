@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@anvilkit/button": "workspace:*",
+		"@anvilkit/hero": "workspace:*",
 		"@anvilkit/input": "workspace:*",
 		"@anvilkit/navbar": "workspace:*",
 		"@anvilkit/ui": "workspace:*",

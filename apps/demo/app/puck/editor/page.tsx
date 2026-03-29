@@ -21,14 +21,17 @@ export default function PuckEditorPage() {
 						Puck editor surface for the Anvilkit component packages.
 					</h1>
 					<p className={styles.lede}>
-						This route uses the real package exports from `@anvilkit/navbar`,
-						`@anvilkit/button`, and `@anvilkit/input`, composed into a
-						consumer-owned Puck `Config`.
+						This route uses the real package exports from `@anvilkit/hero`,
+						`@anvilkit/navbar`, `@anvilkit/button`, and `@anvilkit/input`,
+						composed into a consumer-owned Puck `Config`.
 					</p>
 				</div>
 				<div className={styles.actions}>
 					<Link href="/" className={styles.secondaryAction}>
 						Back to demo hub
+					</Link>
+					<Link href="/hero" className={styles.secondaryAction}>
+						Open hero demo
 					</Link>
 					<Link href="/navbar" className={styles.secondaryAction}>
 						Open navbar demo

@@ -15,12 +15,16 @@ export default function PuckRenderPage() {
 					<p className={styles.lede}>
 						This route renders the shared demo data with `Render` from
 						`@puckeditor/core/rsc`, using the same package-level component
-						configs as the editor view, including the new navbar package.
+						configs as the editor view, including the new hero and navbar
+						packages.
 					</p>
 				</div>
 				<div className={styles.actions}>
 					<Link href="/" className={styles.secondaryAction}>
 						Back to demo hub
+					</Link>
+					<Link href="/hero" className={styles.secondaryAction}>
+						Open hero demo
 					</Link>
 					<Link href="/navbar" className={styles.secondaryAction}>
 						Open navbar demo

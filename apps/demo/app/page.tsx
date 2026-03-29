@@ -12,12 +12,15 @@ export default function Home() {
 				</h1>
 				<p className={styles.lede}>
 					This demo app validates the `packages/components` workspace against a
-					real Puck setup. The current surface includes the new
-					`@anvilkit/navbar` package, the retrofitted `@anvilkit/button` and
-					`@anvilkit/input` packages, plus the Turbo Gen scaffolds for content,
-					layout, and form blocks.
+					real Puck setup. The current surface includes the new `@anvilkit/hero`
+					and `@anvilkit/navbar` packages, the retrofitted `@anvilkit/button`
+					and `@anvilkit/input` packages, plus the Turbo Gen scaffolds for
+					content, layout, and form blocks.
 				</p>
 				<div className={styles.actions}>
+					<Link href="/hero" className={styles.primary}>
+						Open hero demo
+					</Link>
 					<Link href="/navbar" className={styles.primary}>
 						Open navbar demo
 					</Link>
@@ -35,6 +38,10 @@ export default function Home() {
 					<span className={styles.cardLabel}>Included blocks</span>
 					<h2>Workspace packages</h2>
 					<ul className={styles.list}>
+						<li>
+							`@anvilkit/hero` with a reference-matched marketing layout, shared
+							UI button primitives, and editor-safe CTA behavior.
+						</li>
 						<li>
 							`@anvilkit/navbar` with concise props, shared UI primitives, and
 							responsive layout.
@@ -75,7 +82,7 @@ export default function Home() {
 					<ul className={styles.list}>
 						<li>
 							Each package exports `componentConfig`, `defaultProps`, `fields`,
-							and `metadata`.
+							and `metadata`, ready for both direct rendering and Puck usage.
 						</li>
 						<li>
 							All editable props stay serializable so they can live inside Puck
