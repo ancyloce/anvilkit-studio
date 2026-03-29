@@ -6,10 +6,9 @@ import { cn } from "@anvilkit/ui/lib/utils"
 
 const rainbowButtonVariants = cva(
   cn(
-    "relative cursor-pointer group transition-all animate-rainbow",
+    "relative isolate inline-flex shrink-0 cursor-pointer appearance-none items-center justify-center gap-2 overflow-visible whitespace-nowrap border border-transparent text-sm font-medium select-none transition-[background-position,box-shadow,transform] duration-300 ease-out animate-rainbow",
     "inline-flex items-center justify-center gap-2 shrink-0",
-    "rounded-sm outline-none focus-visible:ring-[3px] aria-invalid:border-destructive",
-    "text-sm font-medium whitespace-nowrap",
+    "rounded-xl bg-origin-border outline-none focus-visible:ring-[3px] aria-invalid:border-destructive",
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0"
   ),
@@ -17,15 +16,15 @@ const rainbowButtonVariants = cva(
     variants: {
       variant: {
         default:
-          "border-0 bg-[linear-gradient(#121213,#121213),linear-gradient(#121213_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-primary-foreground [background-clip:padding-box,border-box,border-box] [background-origin:border-box] [border:calc(0.125rem)_solid_transparent] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#fff,#fff),linear-gradient(#fff_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
+          "bg-[linear-gradient(#121213,#121213),linear-gradient(#121213_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] text-white shadow-[0_6px_18px_rgba(18,18,19,0.16)] [background-clip:padding-box,border-box,border-box] [background-size:200%_100%] [border:calc(0.08rem)_solid_transparent] before:pointer-events-none before:absolute before:bottom-[-20%] before:left-1/2 before:z-[-1] before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:content-[''] before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[background-size:200%_100%] before:opacity-80 before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#ffffff,#ffffff),linear-gradient(#ffffff_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] dark:text-black",
         outline:
-          "border border-input border-b-transparent bg-[linear-gradient(#ffffff,#ffffff),linear-gradient(#ffffff_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-accent-foreground [background-clip:padding-box,border-box,border-box] [background-origin:border-box] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#0a0a0a,#0a0a0a),linear-gradient(#0a0a0a_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
+          "bg-[linear-gradient(#ffffff,#ffffff),linear-gradient(#ffffff_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] text-black shadow-[0_4px_16px_rgba(18,18,19,0.08)] [background-clip:padding-box,border-box,border-box] [background-size:200%_100%] [border:1px_solid_transparent] before:pointer-events-none before:absolute before:bottom-[-20%] before:left-1/2 before:z-[-1] before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:content-[''] before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[background-size:200%_100%] before:opacity-75 before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#0a0a0a,#0a0a0a),linear-gradient(#0a0a0a_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] dark:text-white",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-xl px-3 text-xs",
-        lg: "h-11 rounded-xl px-8",
-        icon: "size-9",
+        default: "h-11 px-6",
+        sm: "h-9 px-4 text-xs",
+        lg: "h-12 px-8 text-base",
+        icon: "size-11",
       },
     },
     defaultVariants: {
