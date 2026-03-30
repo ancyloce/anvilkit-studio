@@ -1,91 +1,88 @@
 import {
-	type ButtonProps,
-	componentConfig as buttonComponentConfig,
-	defaultProps as buttonDefaultProps,
-} from "@anvilkit/button";
-import {
-	type HeroProps,
-	componentConfig as heroComponentConfig,
-	defaultProps as heroDefaultProps,
+  type HeroProps,
+  componentConfig as heroComponentConfig,
+  defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
 import {
-	type InputProps,
-	componentConfig as inputComponentConfig,
-	defaultProps as inputDefaultProps,
-} from "@anvilkit/input";
-import {
-	type NavbarProps,
-	componentConfig as navbarComponentConfig,
-	defaultProps as navbarDefaultProps,
+  type NavbarProps,
+  componentConfig as navbarComponentConfig,
+  defaultProps as navbarDefaultProps,
 } from "@anvilkit/navbar";
 import type { Config, Data } from "@puckeditor/core";
 
 export type DemoComponents = {
-	Button: ButtonProps;
-	Hero: HeroProps;
-	Input: InputProps;
-	Navbar: NavbarProps;
+  Hero: HeroProps;
+  Navbar: NavbarProps;
 };
 
+export const demoDataSearchParam = "data";
+
 export const demoConfig: Config<DemoComponents> = {
-	categories: {
-		marketing: {
-			title: "Marketing",
-			components: ["Hero"],
-		},
-		navigation: {
-			title: "Navigation",
-			components: ["Navbar"],
-		},
-		actions: {
-			title: "Actions",
-			components: ["Button"],
-		},
-		forms: {
-			title: "Forms",
-			components: ["Input"],
-		},
-	},
-	components: {
-		Button: buttonComponentConfig,
-		Hero: heroComponentConfig,
-		Input: inputComponentConfig,
-		Navbar: navbarComponentConfig,
-	},
+  categories: {
+    navigation: {
+      title: "Navigation",
+      components: ["Navbar"],
+    },
+    marketing: {
+      title: "Marketing",
+      components: ["Hero"],
+    },
+  },
+  components: {
+    Hero: heroComponentConfig,
+    Navbar: navbarComponentConfig,
+  },
 };
 
 export function createDemoData(): Data<DemoComponents> {
-	return {
-		root: {},
-		content: [
-			{
-				type: "Hero",
-				props: {
-					id: "hero-primary",
-					...heroDefaultProps,
-				},
-			},
-			{
-				type: "Navbar",
-				props: {
-					id: "navbar-primary",
-					...navbarDefaultProps,
-				},
-			},
-			{
-				type: "Button",
-				props: {
-					id: "button-primary",
-					...buttonDefaultProps,
-				},
-			},
-			{
-				type: "Input",
-				props: {
-					id: "input-email",
-					...inputDefaultProps,
-				},
-			},
-		],
-	};
+  return {
+    root: {},
+    content: [
+      {
+        type: "Navbar",
+        props: {
+          id: "navbar-primary",
+          ...navbarDefaultProps,
+        },
+      },
+      {
+        type: "Hero",
+        props: {
+          id: "hero-primary",
+          ...heroDefaultProps,
+        },
+      },
+    ],
+  };
+}
+
+function getSerializedDemoData(data: Data<DemoComponents>) {
+  return JSON.stringify(data);
+}
+
+export function createDemoModeHref(
+  pathname: "/puck/editor" | "/puck/render",
+  data: Data<DemoComponents>,
+) {
+  const searchParams = new URLSearchParams({
+    [demoDataSearchParam]: getSerializedDemoData(data),
+  });
+
+  return `${pathname}?${searchParams.toString()}`;
+}
+
+export function getDemoDataFromSearchParam(
+  value: string | string[] | null | undefined,
+) {
+  const serializedData = Array.isArray(value) ? value[0] : value;
+
+  if (!serializedData) {
+    return createDemoData();
+  }
+
+  try {
+    return JSON.parse(serializedData) as Data<DemoComponents>;
+  } catch {
+    return createDemoData();
+  }
 }

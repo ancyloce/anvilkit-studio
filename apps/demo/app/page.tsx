@@ -2,99 +2,81 @@ import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function Home() {
-	return (
-		<main className={styles.page}>
-			<section className={styles.hero}>
-				<p className={styles.eyebrow}>Anvilkit x Puck</p>
-				<h1 className={styles.title}>
-					Build publishable components that are ready for the editor and safe to
-					render on the server.
-				</h1>
-				<p className={styles.lede}>
-					This demo app validates the `packages/components` workspace against a
-					real Puck setup. The current surface includes the new `@anvilkit/hero`
-					and `@anvilkit/navbar` packages, the retrofitted `@anvilkit/button`
-					and `@anvilkit/input` packages, plus the Turbo Gen scaffolds for
-					content, layout, and form blocks.
-				</p>
-				<div className={styles.actions}>
-					<Link href="/hero" className={styles.primary}>
-						Open hero demo
-					</Link>
-					<Link href="/navbar" className={styles.primary}>
-						Open navbar demo
-					</Link>
-					<Link href="/puck/editor" className={styles.primary}>
-						Open editor surface
-					</Link>
-					<Link href="/puck/render" className={styles.secondary}>
-						Open render surface
-					</Link>
-				</div>
-			</section>
+  return (
+    <main className={styles.page}>
+      <section className={styles.hero}>
+        <p className={styles.eyebrow}>Anvilkit x Puck</p>
+        <h1 className={styles.title}>
+          Validate the shared navbar and hero blocks in editor and render mode.
+        </h1>
+        <p className={styles.lede}>
+          This demo app focuses on the two Puck surfaces that matter for package
+          validation: the editor and the shared render view. Both use the same
+          consumer-owned config with `@anvilkit/navbar` first, followed by
+          `@anvilkit/hero`.
+        </p>
+        <div className={styles.actions}>
+          <Link href="/puck/editor" className={styles.primary}>
+            Open editor mode
+          </Link>
+          <Link href="/puck/render" className={styles.secondary}>
+            Open render mode
+          </Link>
+        </div>
+      </section>
 
-			<section className={styles.grid}>
-				<article className={styles.card}>
-					<span className={styles.cardLabel}>Included blocks</span>
-					<h2>Workspace packages</h2>
-					<ul className={styles.list}>
-						<li>
-							`@anvilkit/hero` with a reference-matched marketing layout, shared
-							UI button primitives, and editor-safe CTA behavior.
-						</li>
-						<li>
-							`@anvilkit/navbar` with concise props, shared UI primitives, and
-							responsive layout.
-						</li>
-						<li>
-							`@anvilkit/button` with Puck metadata, serializable props, and
-							edit-safe links.
-						</li>
-						<li>
-							`@anvilkit/input` with editor-safe form behavior and shareable
-							default props.
-						</li>
-						<li>
-							Turbo Gen scaffolds for `content`, `layout`, and `form` component
-							packages.
-						</li>
-					</ul>
-				</article>
+      <section className={styles.grid}>
+        <article className={styles.card}>
+          <span className={styles.cardLabel}>Demo sequence</span>
+          <h2>Shared content order</h2>
+          <ul className={styles.list}>
+            <li>
+              `@anvilkit/navbar` renders first so navigation behavior is visible
+              at the top of both demo surfaces.
+            </li>
+            <li>
+              `@anvilkit/hero` follows immediately after and validates the
+              marketing section beneath the nav.
+            </li>
+            <li>
+              The Puck palette is intentionally trimmed to just these two
+              blocks.
+            </li>
+          </ul>
+        </article>
 
-				<article className={styles.card}>
-					<span className={styles.cardLabel}>Generator flow</span>
-					<h2>Create a new block</h2>
-					<code className={styles.command}>
-						cd packages/components && pnpm gen:component
-					</code>
-					<p className={styles.cardBody}>
-						Use named flags for scripting or CI-friendly scaffolding:
-					</p>
-					<code className={styles.command}>
-						pnpm gen:component -- --name hero-banner --label "Hero Banner"
-						--template content --category marketing
-					</code>
-				</article>
+        <article className={styles.card}>
+          <span className={styles.cardLabel}>Available modes</span>
+          <h2>Focused validation flow</h2>
+          <p className={styles.cardBody}>
+            Use editor mode to adjust data and publish snapshots, then check the
+            same payload in render mode to confirm the shared config stays
+            server-safe.
+          </p>
+          <code className={styles.command}>
+            /puck/editor -&gt; /puck/render
+          </code>
+        </article>
 
-				<article className={styles.card}>
-					<span className={styles.cardLabel}>Compatibility notes</span>
-					<h2>Puck-first contract</h2>
-					<ul className={styles.list}>
-						<li>
-							Each package exports `componentConfig`, `defaultProps`, `fields`,
-							and `metadata`, ready for both direct rendering and Puck usage.
-						</li>
-						<li>
-							All editable props stay serializable so they can live inside Puck
-							data.
-						</li>
-						<li>
-							Interactive behavior is disabled in edit mode so the editor stays
-							stable.
-						</li>
-					</ul>
-				</article>
-			</section>
-		</main>
-	);
+        <article className={styles.card}>
+          <span className={styles.cardLabel}>Compatibility notes</span>
+          <h2>Puck-first contract</h2>
+          <ul className={styles.list}>
+            <li>
+              Each package exports `componentConfig`, `defaultProps`, `fields`,
+              and `metadata`, ready for both direct rendering and Puck usage.
+            </li>
+            <li>
+              All editable props stay serializable so they can live inside Puck
+              data.
+            </li>
+            <li>
+              Interactive behavior is disabled in edit mode so the editor stays
+              stable.
+            </li>
+          </ul>
+        </article>
+      </section>
+    </main>
+  );
 }
