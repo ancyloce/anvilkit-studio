@@ -7,14 +7,14 @@ export default function Home() {
 			<section className={styles.hero}>
 				<p className={styles.eyebrow}>Anvilkit x Puck</p>
 				<h1 className={styles.title}>
-					Validate the shared navbar, hero, and logo cloud blocks in editor and
-					render mode.
+					Validate the shared navbar, hero, section, and logo cloud blocks in
+					editor and render mode.
 				</h1>
 				<p className={styles.lede}>
 					This demo app focuses on the two Puck surfaces that matter for package
 					validation: the editor and the shared render view. Both use the same
 					consumer-owned config with `@anvilkit/navbar` first, followed by
-					`@anvilkit/hero` and `@anvilkit/logo-clouds`.
+					`@anvilkit/hero`, `@anvilkit/section`, and `@anvilkit/logo-clouds`.
 				</p>
 				<div className={styles.actions}>
 					<Link href="/puck/editor" className={styles.primary}>
@@ -37,14 +37,18 @@ export default function Home() {
 						</li>
 						<li>
 							`@anvilkit/hero` follows immediately after and validates the
-							marketing section beneath the nav.
+							primary marketing section beneath the nav.
+						</li>
+						<li>
+							`@anvilkit/section` adds the animated supporting message block
+							between the hero and the brand proof strip.
 						</li>
 						<li>
 							`@anvilkit/logo-clouds` closes the stack with the scrolling brand
 							proof section shown in both demo surfaces.
 						</li>
 						<li>
-							The Puck palette is intentionally trimmed to these three blocks.
+							The Puck palette is intentionally trimmed to these four blocks.
 						</li>
 					</ul>
 				</article>

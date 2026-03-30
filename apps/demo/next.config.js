@@ -7,6 +7,7 @@ const nextConfig = {
 		"@anvilkit/hero",
 		"@anvilkit/logo-clouds",
 		"@anvilkit/navbar",
+		"@anvilkit/section",
 		"@anvilkit/ui",
 	],
 };

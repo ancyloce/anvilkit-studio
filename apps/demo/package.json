@@ -14,6 +14,7 @@
 		"@anvilkit/hero": "workspace:*",
 		"@anvilkit/logo-clouds": "workspace:*",
 		"@anvilkit/navbar": "workspace:*",
+		"@anvilkit/section": "workspace:*",
 		"@anvilkit/ui": "workspace:*",
 		"@puckeditor/core": "^0.21.1",
 		"next": "16.2.0",

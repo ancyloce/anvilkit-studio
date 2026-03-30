@@ -29,13 +29,13 @@ export default async function PuckRenderPage({
 				<div>
 					<p className={styles.eyebrow}>Render Validation</p>
 					<h1 className={styles.title}>
-						Render mode for the same shared three-block demo payload.
+						Render mode for the same shared four-block demo payload.
 					</h1>
 					<p className={styles.lede}>
 						This route renders the shared demo data with `Render` from
 						`@puckeditor/core/rsc`, using the same package-level component
 						configs as the editor view for `@anvilkit/navbar`, `@anvilkit/hero`,
-						and `@anvilkit/logo-clouds`.
+						`@anvilkit/section`, and `@anvilkit/logo-clouds`.
 					</p>
 				</div>
 				<div className={styles.actions}>
