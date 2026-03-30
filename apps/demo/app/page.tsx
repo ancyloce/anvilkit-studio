@@ -8,14 +8,15 @@ export default function Home() {
 				<p className={styles.eyebrow}>Anvilkit x Puck</p>
 				<h1 className={styles.title}>
 					Validate the shared navbar, hero, Bento Grid, section, statistics, and
-					logo cloud blocks in editor and render mode.
+					helps and logo cloud blocks in editor and render mode.
 				</h1>
 				<p className={styles.lede}>
 					This demo app focuses on the two Puck surfaces that matter for package
 					validation: the editor and the shared render view. Both use the same
 					consumer-owned config with `@anvilkit/navbar` first, followed by
 					`@anvilkit/hero`, `@anvilkit/bento-grid`, `@anvilkit/section`,
-					`@anvilkit/statistics`, and `@anvilkit/logo-clouds`.
+					`@anvilkit/statistics`, `@anvilkit/helps`, and
+					`@anvilkit/logo-clouds`.
 				</p>
 				<div className={styles.actions}>
 					<Link href="/puck/editor" className={styles.primary}>
@@ -53,11 +54,15 @@ export default function Home() {
 							to validate themed backgrounds and effects.
 						</li>
 						<li>
+							`@anvilkit/helps` adds the ripple-backed contributor CTA section
+							before the final logo cloud.
+						</li>
+						<li>
 							`@anvilkit/logo-clouds` closes the stack with the scrolling brand
 							proof section shown in both demo surfaces.
 						</li>
 						<li>
-							The Puck palette is intentionally trimmed to these six blocks.
+							The Puck palette is intentionally trimmed to these seven blocks.
 						</li>
 					</ul>
 				</article>

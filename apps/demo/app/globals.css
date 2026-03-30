@@ -8,6 +8,8 @@
 @source "../../../packages/components/src/section/src/**/*.{ts,tsx}";
 @source "../../../packages/components/src/statistics/src/**/*.{ts,tsx}";
 @source "../../../packages/components/src/bento-grid/src/**/*.{ts,tsx}";
+@source "../../../packages/components/src/helps/src/**/*.{ts,tsx}";
+
 
 :root {
   --font-sans: var(--font-geist-sans);

@@ -9,6 +9,11 @@ import {
 	defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
 import {
+	type HelpsProps,
+	componentConfig as helpsComponentConfig,
+	defaultProps as helpsDefaultProps,
+} from "@anvilkit/helps";
+import {
 	type LogoCloudsProps,
 	componentConfig as logoCloudsComponentConfig,
 	defaultProps as logoCloudsDefaultProps,
@@ -33,6 +38,7 @@ import type { Config, Data } from "@puckeditor/core";
 export type DemoComponents = {
 	BentoGrid: BentoGridProps;
 	Hero: HeroProps;
+	Helps: HelpsProps;
 	LogoClouds: LogoCloudsProps;
 	Navbar: NavbarProps;
 	Section: SectionProps;
@@ -49,12 +55,20 @@ export const demoConfig: Config<DemoComponents> = {
 		},
 		marketing: {
 			title: "Marketing",
-			components: ["Hero", "BentoGrid", "Section", "Statistics", "LogoClouds"],
+			components: [
+				"Hero",
+				"BentoGrid",
+				"Section",
+				"Statistics",
+				"Helps",
+				"LogoClouds",
+			],
 		},
 	},
 	components: {
 		BentoGrid: bentoGridComponentConfig,
 		Hero: heroComponentConfig,
+		Helps: helpsComponentConfig,
 		LogoClouds: logoCloudsComponentConfig,
 		Navbar: navbarComponentConfig,
 		Section: sectionComponentConfig,
@@ -99,6 +113,13 @@ export function createDemoData(): Data<DemoComponents> {
 				props: {
 					id: "statistics-primary",
 					...statisticsDefaultProps,
+				},
+			},
+			{
+				type: "Helps",
+				props: {
+					id: "helps-primary",
+					...helpsDefaultProps,
 				},
 			},
 			{

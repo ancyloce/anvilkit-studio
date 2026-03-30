@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@anvilkit/bento-grid": "workspace:*",
 		"@anvilkit/hero": "workspace:*",
+		"@anvilkit/helps": "workspace:*",
 		"@anvilkit/logo-clouds": "workspace:*",
 		"@anvilkit/navbar": "workspace:*",
 		"@anvilkit/section": "workspace:*",
