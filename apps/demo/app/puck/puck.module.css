@@ -1,183 +1,177 @@
 .shell {
-	min-height: 100svh;
-	padding: 2rem 1rem 3rem;
-	background:
-		radial-gradient(
-			circle at top left,
-			rgba(20, 184, 166, 0.16),
-			transparent 28rem
-		),
-		radial-gradient(
-			circle at top right,
-			rgba(251, 191, 36, 0.16),
-			transparent 24rem
-		),
-		linear-gradient(180deg, #f7f1e6 0%, #efe6d2 100%);
+  min-height: 100svh;
+  padding: 2rem 1rem 3rem;
+  background: var(--demo-page-bg);
 }
 
 .masthead {
-	display: grid;
-	gap: 1rem;
-	max-width: 76rem;
-	margin: 0 auto 1.5rem;
-	padding: 1.6rem;
-	border: 1px solid rgba(16, 32, 51, 0.12);
-	border-radius: 1.75rem;
-	background: rgba(255, 252, 245, 0.84);
-	backdrop-filter: blur(10px);
-	box-shadow: 0 1.5rem 3rem rgba(16, 32, 51, 0.08);
+  display: grid;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0 auto 1.5rem;
+  padding: 1.6rem;
+  border: 1px solid var(--demo-panel-border);
+  border-radius: 1.75rem;
+  background: var(--demo-panel-bg);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1.5rem 3rem rgba(16, 32, 51, 0.08);
 }
 
 .eyebrow {
-	margin-bottom: 0.55rem;
-	color: #0f766e;
-	font-size: 0.78rem;
-	font-weight: 700;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
+  margin-bottom: 0.55rem;
+  color: var(--demo-accent-cool);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .title {
-	max-width: 50rem;
-	font-size: clamp(2rem, 3vw, 3.8rem);
-	line-height: 1.02;
-	letter-spacing: -0.045em;
+  max-width: 50rem;
+  font-size: clamp(2rem, 3vw, 3.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
 }
 
 .lede {
-	max-width: 46rem;
-	color: #3d556d;
+  max-width: 46rem;
+  color: var(--demo-muted-text);
 }
 
 .actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
 }
 
 .primaryAction,
 .secondaryAction {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 2.9rem;
-	padding: 0.75rem 1.1rem;
-	border-radius: 999px;
-	transition:
-		transform 140ms ease,
-		box-shadow 140ms ease,
-		background-color 140ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 999px;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    background-color 140ms ease;
 }
 
 .primaryAction {
-	background: #102033;
-	color: #fff8ed;
-	box-shadow: 0 0.75rem 2rem rgba(16, 32, 51, 0.18);
+  background: var(--demo-inverse-bg);
+  color: var(--demo-inverse-text);
+  box-shadow: 0 0.75rem 2rem rgba(16, 32, 51, 0.18);
 }
 
 .secondaryAction {
-	border: 1px solid rgba(16, 32, 51, 0.14);
-	background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--demo-panel-border-strong);
+  background: var(--demo-secondary-bg);
 }
 
 .panel,
 .renderFrame,
 .snapshot {
-	max-width: 76rem;
-	margin: 0 auto;
+  max-width: 76rem;
+  margin: 0 auto;
 }
 
 .panel :global(.Puck) {
-	border-radius: 1.5rem;
-	overflow: hidden;
-	box-shadow: 0 1.5rem 3rem rgba(16, 32, 51, 0.1);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 1.5rem 3rem rgba(16, 32, 51, 0.1);
 }
 
 .snapshot {
-	margin-top: 1rem;
-	padding: 1rem;
-	border: 1px solid rgba(16, 32, 51, 0.08);
-	border-radius: 1.5rem;
-	background: rgba(255, 252, 245, 0.78);
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--demo-panel-border);
+  border-radius: 1.5rem;
+  background: var(--demo-panel-bg);
 }
 
 .snapshotHeader {
-	margin-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
 }
 
 .snapshotHeader h2 {
-	margin-bottom: 0.3rem;
-	font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+  font-size: 1.2rem;
 }
 
 .snapshotHeader p {
-	color: #4b637a;
+  color: var(--demo-soft-text);
 }
 
 .codeBlock {
-	overflow-x: auto;
-	padding: 1rem;
-	border-radius: 1rem;
-	background: #102033;
-	color: #f8f6ef;
-	font-family: var(--font-geist-mono), monospace;
-	font-size: 0.84rem;
-	line-height: 1.55;
+  overflow-x: auto;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: var(--demo-inverse-bg);
+  color: var(--demo-inverse-text);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.84rem;
+  line-height: 1.55;
 }
 
 .renderFrame {
-	padding: 1rem;
-	border: 1px solid rgba(16, 32, 51, 0.08);
-	border-radius: 1.5rem;
-	background: rgba(255, 252, 245, 0.78);
-	box-shadow: 0 1rem 2.5rem rgba(16, 32, 51, 0.08);
+  padding: 1rem;
+  border: 1px solid var(--demo-panel-border);
+  border-radius: 1.5rem;
+  background: var(--demo-panel-bg);
+  box-shadow: 0 1rem 2.5rem rgba(16, 32, 51, 0.08);
 }
 
 .renderNote {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.6rem;
-	margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
 }
 
 .renderNote span {
-	padding: 0.4rem 0.75rem;
-	border-radius: 999px;
-	background: rgba(16, 32, 51, 0.08);
-	color: #23415f;
-	font-size: 0.85rem;
-	font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: var(--demo-secondary-bg);
+  color: var(--demo-muted-text);
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .renderCanvas {
-	padding: 1.3rem;
-	border-radius: 1.25rem;
-	background: #fffdf8;
+  padding: 1.3rem;
+  border-radius: 1.25rem;
+  background: var(--demo-canvas-bg);
 }
 
 @media (hover: hover) and (pointer: fine) {
-	.primaryAction:hover,
-	.secondaryAction:hover {
-		transform: translateY(-1px);
-	}
+  .primaryAction:hover,
+  .secondaryAction:hover {
+    transform: translateY(-1px);
+  }
 
-	.primaryAction:hover {
-		background: #18314d;
-	}
+  .primaryAction:hover {
+    background: color-mix(
+      in oklab,
+      var(--demo-inverse-bg) 88%,
+      var(--demo-inverse-text) 12%
+    );
+  }
 
-	.secondaryAction:hover {
-		box-shadow: 0 0.75rem 1.6rem rgba(16, 32, 51, 0.08);
-	}
+  .secondaryAction:hover {
+    background: var(--demo-secondary-hover);
+    box-shadow: 0 0.75rem 1.6rem rgba(16, 32, 51, 0.08);
+  }
 }
 
 @media (max-width: 720px) {
-	.shell {
-		padding-inline: 0.8rem;
-	}
+  .shell {
+    padding-inline: 0.8rem;
+  }
 
-	.masthead,
-	.renderFrame,
-	.snapshot {
-		border-radius: 1.2rem;
-	}
+  .masthead,
+  .renderFrame,
+  .snapshot {
+    border-radius: 1.2rem;
+  }
 }
