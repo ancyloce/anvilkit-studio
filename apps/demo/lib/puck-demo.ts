@@ -18,6 +18,11 @@ import {
 	componentConfig as sectionComponentConfig,
 	defaultProps as sectionDefaultProps,
 } from "@anvilkit/section";
+import {
+	type StatisticsProps,
+	componentConfig as statisticsComponentConfig,
+	defaultProps as statisticsDefaultProps,
+} from "@anvilkit/statistics";
 import type { Config, Data } from "@puckeditor/core";
 
 export type DemoComponents = {
@@ -25,6 +30,7 @@ export type DemoComponents = {
 	LogoClouds: LogoCloudsProps;
 	Navbar: NavbarProps;
 	Section: SectionProps;
+	Statistics: StatisticsProps;
 };
 
 export const demoDataSearchParam = "data";
@@ -37,7 +43,7 @@ export const demoConfig: Config<DemoComponents> = {
 		},
 		marketing: {
 			title: "Marketing",
-			components: ["Hero", "Section", "LogoClouds"],
+			components: ["Hero", "Section", "Statistics", "LogoClouds"],
 		},
 	},
 	components: {
@@ -45,6 +51,7 @@ export const demoConfig: Config<DemoComponents> = {
 		LogoClouds: logoCloudsComponentConfig,
 		Navbar: navbarComponentConfig,
 		Section: sectionComponentConfig,
+		Statistics: statisticsComponentConfig,
 	},
 };
 
@@ -71,6 +78,13 @@ export function createDemoData(): Data<DemoComponents> {
 				props: {
 					id: "section-primary",
 					...sectionDefaultProps,
+				},
+			},
+			{
+				type: "Statistics",
+				props: {
+					id: "statistics-primary",
+					...statisticsDefaultProps,
 				},
 			},
 			{

@@ -6,6 +6,7 @@
 @source "../../../packages/components/src/logo-clouds/src/**/*.{ts,tsx}";
 @source "../../../packages/components/src/navbar/src/**/*.{ts,tsx}";
 @source "../../../packages/components/src/section/src/**/*.{ts,tsx}";
+@source "../../../packages/components/src/statistics/src/**/*.{ts,tsx}";
 
 :root {
   --font-sans: var(--font-geist-sans);
