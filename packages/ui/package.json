@@ -13,6 +13,7 @@
 		"check-types": "tsc --noEmit"
 	},
 	"devDependencies": {
+		"@anvilkit/biome-config": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@radix-ui/react-slot": "1.2.4",
 		"@types/node": "^25.5.0",
