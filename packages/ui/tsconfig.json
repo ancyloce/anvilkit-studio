@@ -2,6 +2,7 @@
 	"extends": "@anvilkit/typescript-config/react-library.json",
 	"compilerOptions": {
 		"baseUrl": ".",
+		"ignoreDeprecations": "6.0",
 		"outDir": "dist",
 		"paths": {
 			"@anvilkit/ui": ["src"],
