@@ -23,6 +23,9 @@ importers:
 
   apps/demo:
     dependencies:
+      '@anvilkit/bento-grid':
+        specifier: workspace:*
+        version: link:../../packages/components/src/bento-grid
       '@anvilkit/hero':
         specifier: workspace:*
         version: link:../../packages/components/src/hero
@@ -123,6 +126,25 @@ importers:
       typescript:
         specifier: ^6.0.2
         version: 6.0.2
+
+  packages/components/src/bento-grid:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.21.1
+        version: 0.21.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      lucide-react:
+        specifier: ^1.7.0
+        version: 1.7.0(react@19.2.4)
+      react:
+        specifier: '>=19.0.0'
+        version: 19.2.4
+      react-dom:
+        specifier: '>=19.0.0'
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../configs/tailwind-config
 
   packages/components/src/button:
     dependencies:

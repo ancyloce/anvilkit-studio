@@ -11,6 +11,7 @@
 		"check-types": "next typegen && tsc --noEmit"
 	},
 	"dependencies": {
+		"@anvilkit/bento-grid": "workspace:*",
 		"@anvilkit/hero": "workspace:*",
 		"@anvilkit/logo-clouds": "workspace:*",
 		"@anvilkit/navbar": "workspace:*",

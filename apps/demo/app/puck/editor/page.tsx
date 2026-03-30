@@ -38,12 +38,12 @@ function PuckEditorContent() {
 				<div>
 					<p className={styles.eyebrow}>Editor Validation</p>
 					<h1 className={styles.title}>
-						Puck editor mode for the shared navbar, hero, section, statistics,
-						and logo cloud demo.
+						Puck editor mode for the shared navbar, hero, Bento Grid, section,
+						statistics, and logo cloud demo.
 					</h1>
 					<p className={styles.lede}>
 						This route uses the real package exports from `@anvilkit/navbar` and
-						`@anvilkit/hero`, plus `@anvilkit/section`,
+						`@anvilkit/hero`, plus `@anvilkit/bento-grid`, `@anvilkit/section`,
 						`@anvilkit/statistics`, and `@anvilkit/logo-clouds`, composed into
 						the same consumer-owned Puck `Config` used by render mode.
 					</p>
@@ -95,8 +95,8 @@ export default function PuckEditorPage() {
 							<p className={styles.eyebrow}>Editor Validation</p>
 							<h1 className={styles.title}>Loading Puck editor...</h1>
 							<p className={styles.lede}>
-								Preparing the shared navbar, hero, section, statistics, and
-								logo cloud demo payload.
+								Preparing the shared navbar, hero, Bento Grid, section,
+								statistics, and logo cloud demo payload.
 							</p>
 						</div>
 						<div className={styles.actions}>
