@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@anvilkit/bento-grid": "workspace:*",
+		"@anvilkit/blog-list": "workspace:*",
 		"@anvilkit/hero": "workspace:*",
 		"@anvilkit/helps": "workspace:*",
 		"@anvilkit/logo-clouds": "workspace:*",

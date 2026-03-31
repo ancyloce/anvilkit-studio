@@ -4,6 +4,11 @@ import {
 	defaultProps as bentoGridDefaultProps,
 } from "@anvilkit/bento-grid";
 import {
+	type BlogListProps,
+	componentConfig as blogListComponentConfig,
+	defaultProps as blogListDefaultProps,
+} from "@anvilkit/blog-list";
+import {
 	type HeroProps,
 	componentConfig as heroComponentConfig,
 	defaultProps as heroDefaultProps,
@@ -37,6 +42,7 @@ import type { Config, Data } from "@puckeditor/core";
 
 export type DemoComponents = {
 	BentoGrid: BentoGridProps;
+	BlogList: BlogListProps;
 	Hero: HeroProps;
 	Helps: HelpsProps;
 	LogoClouds: LogoCloudsProps;
@@ -60,6 +66,7 @@ export const demoConfig: Config<DemoComponents> = {
 				"BentoGrid",
 				"Section",
 				"Statistics",
+				"BlogList",
 				"Helps",
 				"LogoClouds",
 			],
@@ -67,6 +74,7 @@ export const demoConfig: Config<DemoComponents> = {
 	},
 	components: {
 		BentoGrid: bentoGridComponentConfig,
+		BlogList: blogListComponentConfig,
 		Hero: heroComponentConfig,
 		Helps: helpsComponentConfig,
 		LogoClouds: logoCloudsComponentConfig,
@@ -113,6 +121,13 @@ export function createDemoData(): Data<DemoComponents> {
 				props: {
 					id: "statistics-primary",
 					...statisticsDefaultProps,
+				},
+			},
+			{
+				type: "BlogList",
+				props: {
+					id: "blog-list-primary",
+					...blogListDefaultProps,
 				},
 			},
 			{
