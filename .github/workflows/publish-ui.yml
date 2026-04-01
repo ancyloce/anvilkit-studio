@@ -1,0 +1,223 @@
+name: Publish UI Package
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish-ui:
+    name: Publish @anvilkit/ui to npm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency: publish-ui-${{ github.ref }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      PACKAGE_DIR: packages/ui
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Verify tagged commit belongs to main or master
+        run: |
+          # GitHub cannot branch-filter tag pushes, so we enforce the release branch here.
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main || true
+          git fetch --no-tags origin +refs/heads/master:refs/remotes/origin/master || true
+
+          release_branch=""
+          for branch in main master; do
+            if git show-ref --verify --quiet "refs/remotes/origin/${branch}" && \
+              git merge-base --is-ancestor "${GITHUB_SHA}" "refs/remotes/origin/${branch}"; then
+              release_branch="${branch}"
+              break
+            fi
+          done
+
+          if [[ -z "${release_branch}" ]]; then
+            echo "Tag ${GITHUB_REF_NAME} does not point to a commit reachable from origin/main or origin/master."
+            exit 1
+          fi
+
+          echo "RELEASE_BRANCH=${release_branch}" >> "${GITHUB_ENV}"
+          echo "Validated release branch: ${release_branch}"
+
+      - name: Verify tag matches package version
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          package_version="$(node -p "require('./${PACKAGE_DIR}/package.json').version")"
+
+          if [[ "${tag_version}" != "${package_version}" ]]; then
+            echo "Tag version (${tag_version}) does not match ${PACKAGE_DIR}/package.json version (${package_version})."
+            exit 1
+          fi
+
+          echo "RELEASE_VERSION=${tag_version}" >> "${GITHUB_ENV}"
+          echo "RELEASE_DATE=$(date -u +%Y-%m-%d)" >> "${GITHUB_ENV}"
+          echo "Validated package version: ${package_version}"
+
+      - name: Verify package publish readiness
+        run: |
+          # Fail fast with actionable feedback before install/build/publish.
+          node <<'EOF'
+          const pkg = require("./packages/ui/package.json");
+          const errors = [];
+
+          if (pkg.private === true) {
+            errors.push('Remove or set "private": false in packages/ui/package.json.');
+          }
+
+          if (!pkg.scripts?.build) {
+            errors.push('Add a "build" script to packages/ui/package.json.');
+          }
+
+          if (!pkg.scripts?.test) {
+            errors.push('Add a "test" script to packages/ui/package.json.');
+          }
+
+          for (const field of ["main", "module", "types"]) {
+            if (!pkg[field] || typeof pkg[field] !== "string") {
+              errors.push(`Add a "${field}" field that points at built output.`);
+            }
+          }
+
+          if (!Array.isArray(pkg.files) || pkg.files.length === 0) {
+            errors.push('Add a non-empty "files" array for publishable artifacts.');
+          }
+
+          if (!pkg.publishConfig?.access) {
+            errors.push('Add "publishConfig.access" (for example "public").');
+          }
+
+          if (!pkg.peerDependencies?.react) {
+            errors.push('Add "peerDependencies.react" for the published library.');
+          }
+
+          if (!pkg.peerDependencies?.["react-dom"]) {
+            errors.push('Add "peerDependencies.react-dom" for the published library.');
+          }
+
+          if (errors.length > 0) {
+            console.error("packages/ui is not publish-ready:");
+            for (const error of errors) {
+              console.error(`- ${error}`);
+            }
+            process.exit(1);
+          }
+          EOF
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run UI lint
+        run: pnpm --filter @anvilkit/ui lint
+
+      - name: Run UI typecheck
+        run: pnpm --filter @anvilkit/ui check-types
+
+      - name: Run UI tests
+        run: pnpm --filter @anvilkit/ui test
+
+      - name: Build UI package
+        run: pnpm --filter @anvilkit/ui build
+
+      - name: Publish UI package to npm
+        run: pnpm publish --access public --no-git-checks --dir "${PACKAGE_DIR}"
+        env:
+          # Required secret: repository or organization secret named NPM_TOKEN.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Prepare changelog entry
+        run: |
+          # New: derive release notes for CHANGELOG.md from the current version tag.
+          previous_tag="$(
+            git tag --merged "${GITHUB_SHA}" --list 'v*' --sort=-version:refname \
+              | grep -Fxv "${GITHUB_REF_NAME}" \
+              | head -n 1 || true
+          )"
+
+          if [[ -n "${previous_tag}" ]]; then
+            git log --no-merges --pretty=format:'- %s' "${previous_tag}..${GITHUB_SHA}" > .release-notes.tmp
+          else
+            git log --no-merges --pretty=format:'- %s' -n 20 "${GITHUB_SHA}" > .release-notes.tmp
+          fi
+
+          if [[ ! -s .release-notes.tmp ]]; then
+            echo "- Placeholder: summarize release changes." > .release-notes.tmp
+          fi
+
+      - name: Update UI changelog
+        run: |
+          # New: write the newest release entry to packages/ui/CHANGELOG.md.
+          git checkout -B "${RELEASE_BRANCH}" "origin/${RELEASE_BRANCH}"
+
+          python - <<'PY'
+          from pathlib import Path
+          import os
+
+          package_dir = Path(os.environ["PACKAGE_DIR"])
+          changelog_path = package_dir / "CHANGELOG.md"
+          version = os.environ["RELEASE_VERSION"]
+          release_date = os.environ["RELEASE_DATE"]
+          notes = Path(".release-notes.tmp").read_text(encoding="utf-8").strip()
+          heading = f"## v{version} - {release_date}"
+          entry = f"{heading}\n\n{notes}\n\n"
+
+          if changelog_path.exists():
+              existing = changelog_path.read_text(encoding="utf-8")
+          else:
+              existing = "# Changelog\n\n"
+
+          if f"## v{version}" in existing:
+              raise SystemExit(0)
+
+          if existing.startswith("# Changelog"):
+              _, _, remainder = existing.partition("\n")
+              remainder = remainder.lstrip("\n")
+              updated = f"# Changelog\n\n{entry}{remainder}"
+          else:
+              updated = f"# Changelog\n\n{entry}{existing.lstrip()}"
+
+          changelog_path.write_text(updated, encoding="utf-8")
+          PY
+
+      - name: Commit and push changelog
+        run: |
+          if git diff --quiet -- "${PACKAGE_DIR}/CHANGELOG.md"; then
+            echo "No changelog changes to commit."
+            exit 0
+          fi
+
+          git add "${PACKAGE_DIR}/CHANGELOG.md"
+
+          if git diff --cached --quiet; then
+            echo "No staged changelog changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git commit -m "chore(release): update changelog for v${RELEASE_VERSION}"
+          git push origin "HEAD:${RELEASE_BRANCH}"
+        env:
+          # Least-privilege repository auth for the changelog commit.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
