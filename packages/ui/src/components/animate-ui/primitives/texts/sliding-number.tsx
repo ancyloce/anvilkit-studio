@@ -15,7 +15,7 @@ import useMeasure from 'react-use-measure';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
+} from '@anvilkit/ui/hooks/use-is-in-view';
 
 type SlidingNumberRollerProps = {
   prevValue: number;
@@ -203,11 +203,12 @@ function SlidingNumber({
 
       const factor = Math.pow(10, inferredDecimals);
 
-      const unsubscribe = springVal.on('change', (latest: number) => {
+      const unsubscribe = springVal.on('change', (latest) => {
+        const numericLatest = Number(latest);
         const newValue =
           inferredDecimals > 0
-            ? Math.round(latest * factor) / factor
-            : Math.round(latest);
+            ? Math.round(numericLatest * factor) / factor
+            : Math.round(numericLatest);
 
         if (effectiveNumber !== newValue) {
           setEffectiveNumber(newValue);
@@ -239,7 +240,7 @@ function SlidingNumber({
   );
 
   const numberStr = formatNumber(effectiveNumber);
-  const [newIntStrRaw, newDecStrRaw = ''] = numberStr.split('.');
+  const [newIntStrRaw = '0', newDecStrRaw = ''] = numberStr.split('.');
 
   const finalIntLength = padStart
     ? Math.max(

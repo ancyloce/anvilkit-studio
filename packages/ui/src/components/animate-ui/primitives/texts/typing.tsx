@@ -6,8 +6,8 @@ import { motion, type HTMLMotionProps } from 'motion/react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
-import { getStrictContext } from '@anvilkit/lib/get-strict-context';
+} from '@anvilkit/ui/hooks/use-is-in-view';
+import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
 
 type TypingTextContextType = {
   isTyping: boolean;

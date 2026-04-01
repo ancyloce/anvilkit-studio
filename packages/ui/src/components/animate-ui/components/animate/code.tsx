@@ -6,10 +6,10 @@ import { useTheme } from 'next-themes';
 import {
   CodeBlock as CodeBlockPrimitive,
   type CodeBlockProps as CodeBlockPropsPrimitive,
-} from '@anvilkit/components/animate-ui/primitives/animate/code-block';
+} from '@anvilkit/ui/components/animate-ui/primitives/animate/code-block';
 import { cn } from '@anvilkit/ui/lib/utils';
-import { CopyButton } from '@anvilkit/components/animate-ui/components/buttons/copy';
-import { getStrictContext } from '@anvilkit/lib/get-strict-context';
+import { CopyButton } from '@anvilkit/ui/components/animate-ui/components/buttons/copy';
+import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
 
 type CodeContextType = {
   code: string;

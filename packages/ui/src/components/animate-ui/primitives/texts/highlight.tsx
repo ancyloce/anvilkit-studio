@@ -6,7 +6,7 @@ import { motion, type HTMLMotionProps } from 'motion/react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
+} from '@anvilkit/ui/hooks/use-is-in-view';
 
 type HighlightTextProps = Omit<HTMLMotionProps<'span'>, 'children'> & {
   text: string;

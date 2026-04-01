@@ -47,7 +47,7 @@
 	"scripts": {
 		"build": "rslib build",
 		"dev": "rslib build --watch",
-		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts src/index.ts src/*.tsx src/globals.css src/hooks/*.tsx src/lib/*.ts src/lib/*.tsx",
+		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts src/**/*.ts src/**/*.tsx src/globals.css",
 		"generate:component": "turbo gen react-component",
 		"check-types": "tsc --noEmit",
 		"test": "pnpm exec node --eval \"console.log('No tests configured for @anvilkit/ui')\""

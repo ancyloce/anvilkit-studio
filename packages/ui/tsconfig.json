@@ -20,6 +20,6 @@
 		"useDefineForClassFields": true,
 		"verbatimModuleSyntax": true
 	},
-	"include": ["src/index.ts", "src/*.tsx", "src/hooks/*.tsx", "src/lib/*.ts", "src/lib/*.tsx"],
-	"exclude": ["node_modules", "dist", "src/components/**"]
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["node_modules", "dist"]
 }

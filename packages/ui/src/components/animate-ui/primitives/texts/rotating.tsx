@@ -6,8 +6,8 @@ import { motion, AnimatePresence, type HTMLMotionProps } from 'motion/react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
-import { getStrictContext } from '@anvilkit/lib/get-strict-context';
+} from '@anvilkit/ui/hooks/use-is-in-view';
+import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
 
 type RotatingTextContextType = {
   currentText: string;
@@ -68,7 +68,7 @@ function RotatingTextContainer({
     };
   }, [text, duration, delay, inView, isInView]);
 
-  const currentText = Array.isArray(text) ? text[index] : text;
+  const currentText = Array.isArray(text) ? (text[index] ?? '') : text;
 
   return (
     <RotatingTextProvider value={{ currentText, y, isInView }}>

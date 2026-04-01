@@ -6,7 +6,7 @@ import { useMotionValue, useSpring, type SpringOptions } from 'motion/react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
+} from '@anvilkit/ui/hooks/use-is-in-view';
 
 type CountingNumberProps = Omit<React.ComponentProps<'span'>, 'children'> & {
   number: number;
@@ -65,10 +65,11 @@ function CountingNumber({
   React.useEffect(() => {
     const unsubscribe = springVal.on('change', (latest) => {
       if (localRef.current) {
+        const numericLatest = Number(latest);
         let formatted =
           decimals > 0
-            ? latest.toFixed(decimals)
-            : Math.round(latest).toString();
+            ? numericLatest.toFixed(decimals)
+            : Math.round(numericLatest).toString();
 
         if (decimals > 0) {
           formatted = formatted.replace('.', decimalSeparator);

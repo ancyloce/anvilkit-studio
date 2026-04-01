@@ -6,7 +6,7 @@ import { motion, type Transition } from 'motion/react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
+} from '@anvilkit/ui/hooks/use-is-in-view';
 
 const formatCharacter = (char: string) => (char === ' ' ? '\u00A0' : char);
 
@@ -41,14 +41,14 @@ function RollingText({
     },
   );
 
-  const parts = React.useMemo(() => text.split(/(\s+)/), [text]);
+  const parts = React.useMemo<string[]>(() => text.split(/(\s+)/), [text]);
   const stepDelay = transition?.delay ?? 0;
 
   let charIdx = 0;
 
   return (
     <span ref={localRef} data-slot="rolling-text" {...props}>
-      {parts.map((part, wi) => {
+      {parts.map((part: string, wi: number) => {
         if (/^\s+$/.test(part)) {
           return <span key={`space-${wi}`}>{part}</span>;
         }
@@ -59,7 +59,7 @@ function RollingText({
             key={`word-${wi}`}
             style={{ display: 'inline-block', whiteSpace: 'nowrap' }}
           >
-            {chars.map((char, ci) => {
+            {chars.map((char: string, ci: number) => {
               const thisIdx = charIdx++;
               const charDelay = delay / 1000 + thisIdx * stepDelay;
               return (

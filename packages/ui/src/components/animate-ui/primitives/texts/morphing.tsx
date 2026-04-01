@@ -6,7 +6,7 @@ import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
+} from '@anvilkit/ui/hooks/use-is-in-view';
 
 function segmentGraphemes(text: string): string[] {
   if (typeof Intl.Segmenter === 'function') {
@@ -57,7 +57,7 @@ function MorphingText({
 
   const currentText = React.useMemo(() => {
     if (Array.isArray(text)) {
-      return text[currentIndex];
+      return text[currentIndex] ?? '';
     }
     return text;
   }, [text, currentIndex]);

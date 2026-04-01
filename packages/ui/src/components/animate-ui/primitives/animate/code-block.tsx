@@ -5,7 +5,7 @@ import * as React from 'react';
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/hooks/use-is-in-view';
+} from '@anvilkit/ui/hooks/use-is-in-view';
 
 type CodeBlockProps = React.ComponentProps<'div'> & {
   code: string;
@@ -89,7 +89,7 @@ function CodeBlock({
     let index = 0;
     const totalDuration = duration;
     const interval = totalDuration / characters.length;
-    let intervalId: NodeJS.Timeout;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
 
     const timeout = setTimeout(() => {
       intervalId = setInterval(() => {
@@ -123,7 +123,9 @@ function CodeBlock({
 
     return () => {
       clearTimeout(timeout);
-      clearInterval(intervalId);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
     };
   }, [code, duration, delay, isInView, writing, onDone, onWrite, localRef]);
 
