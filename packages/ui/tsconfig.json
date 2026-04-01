@@ -3,7 +3,10 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"ignoreDeprecations": "6.0",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
 		"outDir": "dist",
+		"rootDir": "src",
 		"paths": {
 			"@anvilkit/ui": ["src"],
 			"@anvilkit/ui/*": ["src/*"],
@@ -13,8 +16,10 @@
 			"@anvilkit/ui/lib/utils": ["src/lib/utils.ts"],
 			"@anvilkit/ui/lib/*": ["src/lib/*"]
 		},
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		"useDefineForClassFields": true,
+		"verbatimModuleSyntax": true
 	},
-	"include": ["src"],
-	"exclude": ["node_modules", "dist"]
+	"include": ["src/index.ts", "src/*.tsx", "src/hooks/*.tsx", "src/lib/*.ts", "src/lib/*.tsx"],
+	"exclude": ["node_modules", "dist", "src/components/**"]
 }

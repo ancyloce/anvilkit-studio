@@ -15,6 +15,19 @@ export const Ripple = React.memo(function Ripple({
   className,
   ...props
 }: RippleProps) {
+  const circles = Array.from({ length: numCircles }, (_, circleIndex) => {
+    const size = mainCircleSize + circleIndex * 70
+    const opacity = mainCircleOpacity - circleIndex * 0.03
+
+    return {
+      id: `ripple-${size}`,
+      order: circleIndex,
+      size,
+      opacity,
+      animationDelay: `${circleIndex * 0.06}s`,
+    }
+  })
+
   return (
     <div
       className={cn(
@@ -23,23 +36,20 @@ export const Ripple = React.memo(function Ripple({
       )}
       {...props}
     >
-      {Array.from({ length: numCircles }, (_, i) => {
-        const size = mainCircleSize + i * 70
-        const opacity = mainCircleOpacity - i * 0.03
-        const animationDelay = `${i * 0.06}s`
+      {circles.map((circle) => {
         const borderStyle = "solid"
 
         return (
           <div
-            key={i}
+            key={circle.id}
             className={`animate-ripple bg-foreground/25 absolute rounded-full border shadow-xl`}
             style={
               {
-                "--i": i,
-                width: `${size}px`,
-                height: `${size}px`,
-                opacity,
-                animationDelay,
+                "--i": circle.order,
+                width: `${circle.size}px`,
+                height: `${circle.size}px`,
+                opacity: circle.opacity,
+                animationDelay: circle.animationDelay,
                 borderStyle,
                 borderWidth: "1px",
                 borderColor: `var(--foreground)`,

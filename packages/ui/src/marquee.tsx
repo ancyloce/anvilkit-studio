@@ -42,6 +42,10 @@ export function Marquee({
   repeat = 4,
   ...props
 }: MarqueeProps) {
+  const groups = Array.from({ length: repeat }, (_, groupIndex) => ({
+    id: `marquee-group-${groupIndex + 1}`,
+  }))
+
   return (
     <div
       {...props}
@@ -54,11 +58,9 @@ export function Marquee({
         className
       )}
     >
-      {Array(repeat)
-        .fill(0)
-        .map((_, i) => (
+      {groups.map((group) => (
           <div
-            key={i}
+            key={group.id}
             className={cn("flex shrink-0 justify-around gap-(--gap)", {
               "animate-marquee flex-row": !vertical,
               "animate-marquee-vertical flex-col": vertical,
