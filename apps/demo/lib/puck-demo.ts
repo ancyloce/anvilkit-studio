@@ -9,15 +9,15 @@ import {
 	defaultProps as blogListDefaultProps,
 } from "@anvilkit/blog-list";
 import {
-	type HeroProps,
-	componentConfig as heroComponentConfig,
-	defaultProps as heroDefaultProps,
-} from "@anvilkit/hero";
-import {
 	type HelpsProps,
 	componentConfig as helpsComponentConfig,
 	defaultProps as helpsDefaultProps,
 } from "@anvilkit/helps";
+import {
+	type HeroProps,
+	componentConfig as heroComponentConfig,
+	defaultProps as heroDefaultProps,
+} from "@anvilkit/hero";
 import {
 	type LogoCloudsProps,
 	componentConfig as logoCloudsComponentConfig,
@@ -28,6 +28,11 @@ import {
 	componentConfig as navbarComponentConfig,
 	defaultProps as navbarDefaultProps,
 } from "@anvilkit/navbar";
+import {
+	type PricingMinimalProps,
+	componentConfig as pricingMinimalComponentConfig,
+	defaultProps as pricingMinimalDefaultProps,
+} from "@anvilkit/pricing-minimal";
 import {
 	type SectionProps,
 	componentConfig as sectionComponentConfig,
@@ -47,6 +52,7 @@ export type DemoComponents = {
 	Helps: HelpsProps;
 	LogoClouds: LogoCloudsProps;
 	Navbar: NavbarProps;
+	PricingMinimal: PricingMinimalProps;
 	Section: SectionProps;
 	Statistics: StatisticsProps;
 };
@@ -63,6 +69,7 @@ export const demoConfig: Config<DemoComponents> = {
 			title: "Marketing",
 			components: [
 				"Hero",
+				"PricingMinimal",
 				"BentoGrid",
 				"Section",
 				"Statistics",
@@ -79,6 +86,7 @@ export const demoConfig: Config<DemoComponents> = {
 		Helps: helpsComponentConfig,
 		LogoClouds: logoCloudsComponentConfig,
 		Navbar: navbarComponentConfig,
+		PricingMinimal: pricingMinimalComponentConfig,
 		Section: sectionComponentConfig,
 		Statistics: statisticsComponentConfig,
 	},
@@ -100,6 +108,13 @@ export function createDemoData(): Data<DemoComponents> {
 				props: {
 					id: "hero-primary",
 					...heroDefaultProps,
+				},
+			},
+			{
+				type: "PricingMinimal",
+				props: {
+					id: "pricing-minimal-primary",
+					...pricingMinimalDefaultProps,
 				},
 			},
 			{

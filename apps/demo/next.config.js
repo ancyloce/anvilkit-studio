@@ -4,10 +4,15 @@ const nextConfig = {
 		externalDir: true,
 	},
 	transpilePackages: [
+		"@anvilkit/bento-grid",
+		"@anvilkit/blog-list",
 		"@anvilkit/hero",
+		"@anvilkit/helps",
 		"@anvilkit/logo-clouds",
 		"@anvilkit/navbar",
+		"@anvilkit/pricing-minimal",
 		"@anvilkit/section",
+		"@anvilkit/statistics",
 		"@anvilkit/ui",
 	],
 };

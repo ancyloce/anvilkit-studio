@@ -29,15 +29,15 @@ export default async function PuckRenderPage({
 				<div>
 					<p className={styles.eyebrow}>Render Validation</p>
 					<h1 className={styles.title}>
-						Render mode for the same shared eight-block demo payload.
+						Render mode for the same shared nine-block demo payload.
 					</h1>
 					<p className={styles.lede}>
 						This route renders the shared demo data with `Render` from
 						`@puckeditor/core/rsc`, using the same package-level component
 						configs as the editor view for `@anvilkit/navbar`, `@anvilkit/hero`,
-						`@anvilkit/bento-grid`, `@anvilkit/section`, `@anvilkit/statistics`,
-						`@anvilkit/blog-list`, `@anvilkit/helps`, and
-						`@anvilkit/logo-clouds`.
+						`@anvilkit/pricing-minimal`, `@anvilkit/bento-grid`,
+						`@anvilkit/section`, `@anvilkit/statistics`, `@anvilkit/blog-list`,
+						`@anvilkit/helps`, and `@anvilkit/logo-clouds`.
 					</p>
 				</div>
 				<div className={styles.actions}>
@@ -54,7 +54,7 @@ export default async function PuckRenderPage({
 				<div className={styles.renderNote}>
 					<span>Shared config</span>
 					<span>RSC-friendly components</span>
-					<span>Eight publishable package blocks</span>
+					<span>Nine publishable package blocks</span>
 				</div>
 				<div className={styles.renderCanvas}>
 					<Render config={demoConfig} data={renderData} />

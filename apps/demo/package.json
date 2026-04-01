@@ -17,6 +17,7 @@
 		"@anvilkit/helps": "workspace:*",
 		"@anvilkit/logo-clouds": "workspace:*",
 		"@anvilkit/navbar": "workspace:*",
+		"@anvilkit/pricing-minimal": "workspace:*",
 		"@anvilkit/section": "workspace:*",
 		"@anvilkit/statistics": "workspace:*",
 		"@anvilkit/ui": "workspace:*",

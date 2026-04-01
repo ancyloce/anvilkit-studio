@@ -7,16 +7,17 @@ export default function Home() {
 			<section className={styles.hero}>
 				<p className={styles.eyebrow}>Anvilkit x Puck</p>
 				<h1 className={styles.title}>
-					Validate the shared navbar, hero, Bento Grid, section, statistics,
-					blog list, helps, and logo cloud blocks in editor and render mode.
+					Validate the shared navbar, hero, pricing, Bento Grid, section,
+					statistics, blog list, helps, and logo cloud blocks in editor and
+					render mode.
 				</h1>
 				<p className={styles.lede}>
 					This demo app focuses on the two Puck surfaces that matter for package
 					validation: the editor and the shared render view. Both use the same
 					consumer-owned config with `@anvilkit/navbar` first, followed by
-					`@anvilkit/hero`, `@anvilkit/bento-grid`, `@anvilkit/section`,
-					`@anvilkit/statistics`, `@anvilkit/blog-list`, `@anvilkit/helps`, and
-					`@anvilkit/logo-clouds`.
+					`@anvilkit/hero`, `@anvilkit/pricing-minimal`, `@anvilkit/bento-grid`,
+					`@anvilkit/section`, `@anvilkit/statistics`, `@anvilkit/blog-list`,
+					`@anvilkit/helps`, and `@anvilkit/logo-clouds`.
 				</p>
 				<div className={styles.actions}>
 					<Link href="/puck/editor" className={styles.primary}>
@@ -42,8 +43,13 @@ export default function Home() {
 							primary marketing section beneath the nav.
 						</li>
 						<li>
-							`@anvilkit/bento-grid` follows the hero and validates the new
-							publishable card grid package inside the shared Puck payload.
+							`@anvilkit/pricing-minimal` follows the hero and validates the new
+							reusable pricing section package inside the shared Puck payload.
+						</li>
+						<li>
+							`@anvilkit/bento-grid` follows the pricing section and validates
+							the new publishable card grid package inside the shared Puck
+							payload.
 						</li>
 						<li>
 							`@anvilkit/section` adds the animated supporting message block
@@ -66,7 +72,7 @@ export default function Home() {
 							proof section shown in both demo surfaces.
 						</li>
 						<li>
-							The Puck palette is intentionally trimmed to these eight blocks.
+							The Puck palette is intentionally trimmed to these nine blocks.
 						</li>
 					</ul>
 				</article>
