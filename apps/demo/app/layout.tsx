@@ -2,6 +2,15 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "@puckeditor/core/puck.css";
+import "@anvilkit/bento-grid/styles.css";
+import "@anvilkit/blog-list/styles.css";
+import "@anvilkit/hero/styles.css";
+import "@anvilkit/helps/styles.css";
+import "@anvilkit/logo-clouds/styles.css";
+import "@anvilkit/navbar/styles.css";
+import "@anvilkit/pricing-minimal/styles.css";
+import "@anvilkit/section/styles.css";
+import "@anvilkit/statistics/styles.css";
 import { DemoThemeToggle } from "./demo-theme-toggle";
 import "./globals.css";
 
