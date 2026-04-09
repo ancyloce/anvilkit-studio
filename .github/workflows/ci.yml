@@ -45,5 +45,8 @@ jobs:
       - name: Typecheck workspace
         run: pnpm check-types
 
+      - name: Test workspace
+        run: pnpm test
+
       - name: Build workspace
         run: pnpm build
