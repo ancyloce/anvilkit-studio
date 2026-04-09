@@ -1,0 +1,41 @@
+{
+	"name": "@anvilkit/vitest-config",
+	"version": "0.0.1",
+	"description": "Shared Vitest presets for anvilkit-studio packages.",
+	"private": true,
+	"license": "MIT",
+	"type": "module",
+	"files": ["dist"],
+	"exports": {
+		"./react-library": {
+			"types": "./dist/react-library.d.ts",
+			"import": "./dist/react-library.js"
+		},
+		"./node": {
+			"types": "./dist/node.d.ts",
+			"import": "./dist/node.js"
+		},
+		"./setup/jest-dom": {
+			"types": "./dist/setup/jest-dom.d.ts",
+			"import": "./dist/setup/jest-dom.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"lint": "pnpm exec biome lint package.json tsconfig.json src",
+		"check-types": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@anvilkit/biome-config": "workspace:*",
+		"@anvilkit/typescript-config": "workspace:*",
+		"@testing-library/jest-dom": "^6.9.1",
+		"typescript": "6.0.2",
+		"vitest": "^4.1.4"
+	},
+	"peerDependencies": {
+		"@testing-library/jest-dom": "^6.9.0",
+		"jsdom": "^29.0.0",
+		"vitest": "^4.1.0"
+	}
+}
