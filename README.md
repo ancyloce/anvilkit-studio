@@ -32,10 +32,12 @@ Useful root commands:
 
 ## Current Packages
 
-Component packages:
+Component packages (11 total):
 
-- `@anvilkit/hero`
+- `@anvilkit/button`
+- `@anvilkit/input`
 - `@anvilkit/navbar`
+- `@anvilkit/hero`
 - `@anvilkit/section`
 - `@anvilkit/bento-grid`
 - `@anvilkit/blog-list`
@@ -44,7 +46,7 @@ Component packages:
 - `@anvilkit/pricing-minimal`
 - `@anvilkit/statistics`
 
-Each component package exports a render component plus `componentConfig`, `defaultProps`, `fields`, and `metadata`.
+Each component package exports a render component plus `componentConfig`, `defaultProps`, `fields`, and `metadata`. The demo currently wires up 9 of the 11 — `@anvilkit/button` and `@anvilkit/input` are published but not yet imported in `apps/demo/lib/puck-demo.ts`.
 
 ## Demo App
 
@@ -55,6 +57,10 @@ The demo app is a validation surface, not a docs site.
 - `/puck/render` renders the same payload through `@puckeditor/core/rsc`
 
 The shared Puck config lives in `apps/demo/lib/puck-demo.ts`.
+
+## Continuous Integration
+
+`.github/workflows/ci.yml` runs `pnpm lint`, `pnpm check-types`, and `pnpm build` on every pull request (pnpm 10.33.0 / Node 20, submodules pulled recursively).
 
 ## Architecture Context
 

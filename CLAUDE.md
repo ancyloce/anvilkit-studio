@@ -79,21 +79,24 @@ Each component package must export:
 The render component must accept only serializable props (no functions, no refs at the top level).
 
 ### Demo App Integration
-The demo validates all components via two Puck modes:
+The demo validates components via two Puck modes:
 - `/puck/editor` — interactive builder
 - `/puck/render` — server-side render (RSC-compatible)
 
-Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from all component imports. When adding a new component to the demo, update this file and `apps/demo/next.config.js` (`transpilePackages`).
+Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from each imported component package. As of April 2026, 9 of the 11 published component packages are wired here — `@anvilkit/button` and `@anvilkit/input` are published but not yet integrated into the demo. When adding a new component to the demo, update this file and `apps/demo/next.config.js` (`transpilePackages`).
 
 ### Styling
-- **Tailwind CSS 3** with shared tokens from `@anvilkit/tailwind-config/base.js`
+- **Tailwind CSS 4** (`tailwindcss` 4.2.2 via `@tailwindcss/postcss`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"` (CSS-first config, no `tailwind.config.js`)
 - shadcn-style CSS variable tokens (light/dark mode)
 - All components must be responsive (mobile/tablet/desktop) and theme-aware
 
 ### Linting & Formatting
 - **Biome** handles both lint and format across all packages
 - **Prettier** is used at root level for `.ts/.tsx/.md` files
-- TypeScript 6.x at the workspace level; demo uses TS 5.9.x for Next.js compatibility
+- TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
+
+### Continuous Integration
+`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 10.33.0 / Node 20, then runs `pnpm lint`, `pnpm check-types`, and `pnpm build`. A separate `publish-ui.yml` workflow exists for the `@anvilkit/ui` package.
 
 ## Adding a New Component
 
