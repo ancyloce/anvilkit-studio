@@ -47,22 +47,28 @@
 	"scripts": {
 		"build": "rslib build",
 		"dev": "rslib build --watch",
-		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts src/**/*.ts src/**/*.tsx src/globals.css",
+		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts vitest.config.ts src/**/*.ts src/**/*.tsx src/globals.css",
 		"generate:component": "turbo gen react-component",
 		"check-types": "tsc --noEmit",
-		"test": "pnpm exec node --eval \"console.log('No tests configured for @anvilkit/ui')\""
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"devDependencies": {
 		"@anvilkit/biome-config": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
+		"@anvilkit/vitest-config": "workspace:*",
 		"@rsbuild/plugin-react": "^1.4.6",
 		"@rslib/core": "^0.20.1",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/react": "^16.3.2",
 		"@types/node": "^25.5.0",
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",
+		"jsdom": "^29.0.2",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
-		"typescript": "6.0.2"
+		"typescript": "6.0.2",
+		"vitest": "^4.1.4"
 	},
 	"dependencies": {
 		"@radix-ui/react-slot": "1.2.4",
