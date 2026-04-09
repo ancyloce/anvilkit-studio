@@ -1,0 +1,27 @@
+import { defineConfig } from "@rslib/core";
+
+export default defineConfig({
+	source: {
+		entry: {
+			index: [
+				"./src/**/*.ts",
+				"!./src/**/*.{test,spec}.{ts,tsx}",
+				"!./src/**/__tests__/**",
+			],
+		},
+	},
+	lib: [
+		{
+			bundle: false,
+			dts: true,
+			format: "esm",
+		},
+		{
+			bundle: false,
+			format: "cjs",
+		},
+	],
+	output: {
+		target: "web",
+	},
+});
