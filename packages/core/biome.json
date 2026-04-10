@@ -5,6 +5,7 @@
 		"includes": [
 			"package.json",
 			"tsconfig.json",
+			"tsconfig.test.json",
 			"rslib.config.ts",
 			"vitest.config.ts",
 			"src/**/*.ts",

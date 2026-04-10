@@ -76,9 +76,9 @@
 	"scripts": {
 		"build": "rslib build",
 		"dev": "rslib build --watch",
-		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts vitest.config.ts src",
-		"format": "pnpm exec biome check --write package.json tsconfig.json rslib.config.ts vitest.config.ts src",
-		"typecheck": "tsc --noEmit",
+		"lint": "pnpm exec biome lint package.json tsconfig.json tsconfig.test.json rslib.config.ts vitest.config.ts src",
+		"format": "pnpm exec biome check --write package.json tsconfig.json tsconfig.test.json rslib.config.ts vitest.config.ts src",
+		"typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
 		"test": "vitest run",
 		"test:watch": "vitest"
 	}
