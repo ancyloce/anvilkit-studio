@@ -1,0 +1,85 @@
+{
+	"name": "@anvilkit/core",
+	"version": "0.1.0-alpha.0",
+	"description": "Anvilkit Studio runtime — types, plugin engine, React shell, and config system for the Puck-native visual editor.",
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./types": {
+			"types": "./dist/types/index.d.ts",
+			"import": "./dist/types/index.js",
+			"require": "./dist/types/index.cjs"
+		},
+		"./runtime": {
+			"types": "./dist/runtime/index.d.ts",
+			"import": "./dist/runtime/index.js",
+			"require": "./dist/runtime/index.cjs"
+		},
+		"./config": {
+			"types": "./dist/config/index.d.ts",
+			"import": "./dist/config/index.js",
+			"require": "./dist/config/index.cjs"
+		},
+		"./react": {
+			"types": "./dist/react/index.d.ts",
+			"import": "./dist/react/index.js",
+			"require": "./dist/react/index.cjs"
+		},
+		"./compat": {
+			"types": "./dist/compat/index.d.ts",
+			"import": "./dist/compat/index.js",
+			"require": "./dist/compat/index.cjs"
+		}
+	},
+	"files": ["dist"],
+	"license": "MIT",
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"peerDependencies": {
+		"@puckeditor/core": "^0.21.0",
+		"react": "^18 || ^19",
+		"react-dom": "^18 || ^19"
+	},
+	"dependencies": {
+		"@anvilkit/ui": "workspace:*",
+		"@anvilkit/utils": "workspace:*",
+		"zod": "^4.3.0",
+		"zustand": "^5.0.0"
+	},
+	"devDependencies": {
+		"@anvilkit/biome-config": "workspace:*",
+		"@anvilkit/typescript-config": "workspace:*",
+		"@anvilkit/vitest-config": "workspace:*",
+		"@puckeditor/core": "^0.21.1",
+		"@rsbuild/plugin-react": "^1.4.6",
+		"@rslib/core": "^0.20.1",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/react": "^16.3.2",
+		"@types/node": "^22.15.3",
+		"@types/react": "19.2.14",
+		"@types/react-dom": "19.2.3",
+		"jsdom": "^29.0.2",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
+		"typescript": "6.0.2",
+		"vitest": "^4.1.4"
+	},
+	"scripts": {
+		"build": "rslib build",
+		"dev": "rslib build --watch",
+		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts vitest.config.ts src",
+		"format": "pnpm exec biome check --write package.json tsconfig.json rslib.config.ts vitest.config.ts src",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest"
+	}
+}
