@@ -123,7 +123,7 @@ describe("compilePlugins — happy paths", () => {
 		expect(runtime.pluginMeta).toEqual([]);
 		expect(runtime.exportFormats.size).toBe(0);
 		expect(runtime.headerActions).toEqual([]);
-		expect(runtime.overrides).toEqual({});
+		expect(runtime.overrides).toEqual([]);
 		expect(runtime.puckPlugins).toEqual([]);
 		expect(typeof runtime.lifecycle.emit).toBe("function");
 		expect(typeof runtime.lifecycle.subscribe).toBe("function");

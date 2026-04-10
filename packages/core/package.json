@@ -8,37 +8,69 @@
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
 		},
 		"./types": {
-			"types": "./dist/types/index.d.ts",
-			"import": "./dist/types/index.js",
-			"require": "./dist/types/index.cjs"
+			"import": {
+				"types": "./dist/types/index.d.ts",
+				"default": "./dist/types/index.js"
+			},
+			"require": {
+				"types": "./dist/types/index.d.cts",
+				"default": "./dist/types/index.cjs"
+			}
 		},
 		"./runtime": {
-			"types": "./dist/runtime/index.d.ts",
-			"import": "./dist/runtime/index.js",
-			"require": "./dist/runtime/index.cjs"
+			"import": {
+				"types": "./dist/runtime/index.d.ts",
+				"default": "./dist/runtime/index.js"
+			},
+			"require": {
+				"types": "./dist/runtime/index.d.cts",
+				"default": "./dist/runtime/index.cjs"
+			}
 		},
 		"./config": {
-			"types": "./dist/config/index.d.ts",
-			"import": "./dist/config/index.js",
-			"require": "./dist/config/index.cjs"
+			"import": {
+				"types": "./dist/config/index.d.ts",
+				"default": "./dist/config/index.js"
+			},
+			"require": {
+				"types": "./dist/config/index.d.cts",
+				"default": "./dist/config/index.cjs"
+			}
 		},
 		"./react": {
-			"types": "./dist/react/index.d.ts",
-			"import": "./dist/react/index.js",
-			"require": "./dist/react/index.cjs"
+			"import": {
+				"types": "./dist/react/index.d.ts",
+				"default": "./dist/react/index.js"
+			},
+			"require": {
+				"types": "./dist/react/index.d.cts",
+				"default": "./dist/react/index.cjs"
+			}
 		},
 		"./compat": {
-			"types": "./dist/compat/index.d.ts",
-			"import": "./dist/compat/index.js",
-			"require": "./dist/compat/index.cjs"
+			"import": {
+				"types": "./dist/compat/index.d.ts",
+				"default": "./dist/compat/index.js"
+			},
+			"require": {
+				"types": "./dist/compat/index.d.cts",
+				"default": "./dist/compat/index.cjs"
+			}
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"license": "MIT",
 	"sideEffects": false,
 	"publishConfig": {
@@ -67,19 +99,30 @@
 		"@types/node": "^22.15.3",
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",
+		"esbuild": "^0.25.12",
 		"jsdom": "^29.0.2",
+		"madge": "^8.0.0",
+		"publint": "^0.3.18",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
+		"typedoc": "^0.28.18",
 		"typescript": "6.0.2",
 		"vitest": "^4.1.4"
 	},
 	"scripts": {
 		"build": "rslib build",
 		"dev": "rslib build --watch",
-		"lint": "pnpm exec biome lint package.json tsconfig.json tsconfig.test.json rslib.config.ts vitest.config.ts src",
-		"format": "pnpm exec biome check --write package.json tsconfig.json tsconfig.test.json rslib.config.ts vitest.config.ts src",
+		"lint": "pnpm exec biome lint package.json tsconfig.json tsconfig.test.json rslib.config.ts vitest.config.ts src scripts",
+		"format": "pnpm exec biome check --write package.json tsconfig.json tsconfig.test.json rslib.config.ts vitest.config.ts src scripts",
 		"typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
 		"test": "vitest run",
-		"test:watch": "vitest"
+		"test:watch": "vitest",
+		"check:publint": "publint .",
+		"check:circular": "madge --circular --extensions ts,tsx src/",
+		"check:react-free-runtime": "node ./scripts/check-react-free.mjs",
+		"check:peer-deps": "node ./scripts/check-peer-deps.mjs",
+		"check:bundle-budget": "node ./scripts/check-bundle-budget.mjs",
+		"check:api-snapshot": "typedoc --json ./api/api-snapshot.json --entryPoints ./src/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
+		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot"
 	}
 }

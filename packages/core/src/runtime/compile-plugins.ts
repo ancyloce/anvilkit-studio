@@ -82,16 +82,21 @@ export interface StudioRuntime {
 	 */
 	readonly headerActions: readonly StudioHeaderAction[];
 	/**
-	 * Shallow-merged Puck override object.
+	 * Plugin-contributed Puck override slices, in registration order.
 	 *
-	 * **Not** the curried per-key merge promised by `core-014` — this
-	 * is a last-wins `Object.assign`-style merge so the runtime has
-	 * a valid `Partial<PuckOverrides>` to hand to `<Puck overrides={…}>`
-	 * during the M3 → M4 handoff. `core-014` will replace this with
-	 * `mergeOverrides()`, which composes overrides per key so two
-	 * plugins contributing the same slot both run.
+	 * This is the **raw** per-plugin array — `<Studio>` (`core-014`)
+	 * runs it through `mergeOverrides([...runtime.overrides, consumer])`
+	 * to produce the curried-per-key merge Puck actually receives.
+	 * Keeping the array un-composed here means the `runtime/` layer
+	 * stays React-free (architecture §17) and the `react/` layer owns
+	 * the composition step.
+	 *
+	 * Entries appear in plugin registration order, first-registered
+	 * first — so when {@link mergeOverrides} folds them, the first
+	 * plugin becomes the innermost wrapper (closest to the default
+	 * render) and later plugins wrap it.
 	 */
-	readonly overrides: Partial<PuckOverrides>;
+	readonly overrides: readonly Partial<PuckOverrides>[];
 	/**
 	 * Raw Puck plugin objects, passed through to `<Puck plugins={…}>`
 	 * verbatim. These do not participate in the Studio lifecycle.
@@ -166,7 +171,7 @@ export async function compilePlugins(
 	const exportOwners = new Map<string, string>();
 	const headerActions: StudioHeaderAction[] = [];
 	const puckPlugins: PuckPlugin[] = [];
-	let overrides: Partial<PuckOverrides> = {};
+	const overrides: Partial<PuckOverrides>[] = [];
 
 	for (const [index, plugin] of plugins.entries()) {
 		if (isStudioPlugin(plugin)) {
@@ -222,14 +227,13 @@ export async function compilePlugins(
 				}
 			}
 
-			// Overrides: shallow last-wins merge. See StudioRuntime
-			// JSDoc for why this is not the per-key curry — that
-			// lives in core-014.
+			// Overrides: push the raw per-plugin slice onto the
+			// registration-ordered array. The curried per-key composition
+			// happens in `mergeOverrides()` (`core-014`) — keeping it out
+			// of `runtime/` preserves the React-free boundary
+			// (architecture §17).
 			if (registration.overrides) {
-				overrides = {
-					...overrides,
-					...(registration.overrides as Partial<PuckOverrides>),
-				};
+				overrides.push(registration.overrides as Partial<PuckOverrides>);
 			}
 
 			continue;
