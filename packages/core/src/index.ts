@@ -1,11 +1,16 @@
 // Root barrel for `@anvilkit/core`.
 //
-// Each subdirectory barrel is currently an empty module populated by
-// later tasks (core-005…core-014). Re-exports are listed here ahead of
-// time so the public API surface is in one place — as subdir barrels
-// gain real exports, no edit to this file is required.
+// Re-exports the public API of the package. Each subdirectory barrel
+// is populated by its corresponding `core-0NN` task; the root barrel
+// stays small and intentional so the public surface is reviewable in
+// one place.
+//
+// **Compat is intentionally not re-exported here.** `src/compat/`
+// (currently the legacy `aiHostAdapter`) is reachable only at the
+// `@anvilkit/core/compat` subpath so ESM tree-shaking can drop it
+// entirely from host bundles that don't import it. See core-010
+// acceptance criterion #6.
 
-export * from "./compat/index.js";
 export * from "./config/index.js";
 export * from "./react/index.js";
 export * from "./runtime/index.js";
