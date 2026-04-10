@@ -50,3 +50,13 @@ jobs:
 
       - name: Build workspace
         run: pnpm build
+
+      # `check:all` aggregates the `@anvilkit/core` release gates from
+      # `core-015`: publint, circular-dep scan (madge), the
+      # React-free-runtime assertion, the peer-dep contract, the
+      # `<Studio>` entry bundle budget (25 KB gzipped + adapter
+      # tree-shake check), and the TypeDoc API snapshot. Runs after
+      # `build` because the bundle-budget script inspects `dist/` and
+      # the API-snapshot generator emits into `packages/core/api/`.
+      - name: Run @anvilkit/core release gates
+        run: pnpm --filter @anvilkit/core check:all
