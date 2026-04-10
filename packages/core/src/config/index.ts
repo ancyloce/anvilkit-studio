@@ -1,8 +1,11 @@
 // Barrel for `@anvilkit/core/config`.
 //
-// Filled in by core-007 (`StudioConfigSchema`), core-011
-// (`createStudioConfig`, env parser), and core-012
-// (`StudioConfigProvider`, `useStudioConfig`). Zod schema is the single
-// source of truth — `types/config.ts` re-exports the inferred shape.
+// Populated incrementally by the M2 / M4 task chain:
+// - core-007 → `StudioConfigSchema` (this file's current content)
+// - core-011 → `createStudioConfig`, `parseEnv`
+// - core-012 → `StudioConfigProvider`, `useStudioConfig`
+//
+// The Zod schema is the single source of truth — `types/config.ts`
+// re-exports its inferred shape.
 
-export {};
+export { StudioConfigSchema } from "./schema.js";

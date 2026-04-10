@@ -2,10 +2,9 @@
 //
 // Populated incrementally by the M2 task chain:
 // - core-005 → plugin contract
-// - core-006 → export / ir / ai domain types (this file's current
-//   content)
-// - core-007 → `z.infer<typeof StudioConfigSchema>` (replaces
-//   `./config.js`)
+// - core-006 → export / ir / ai domain types
+// - core-007 → `z.infer<typeof StudioConfigSchema>` +
+//   `ComponentPackageManifest` (this file's current content)
 
 export type {
 	AiComponentSchema,
@@ -15,7 +14,7 @@ export type {
 	AiValidationIssue,
 	AiValidationResult,
 } from "./ai.js";
-export type { StudioConfig } from "./config.js";
+export type { ComponentPackageManifest, StudioConfig } from "./config.js";
 export type {
 	ExportFormatDefinition,
 	ExportOptions,

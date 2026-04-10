@@ -18,6 +18,7 @@
 
 import { describe, expect, it } from "vitest";
 
+import { StudioConfigSchema } from "../../config/schema.js";
 import type {
 	StudioPlugin,
 	StudioPluginContext,
@@ -25,6 +26,8 @@ import type {
 	StudioPluginMeta,
 	StudioPluginRegistration,
 } from "../plugin.js";
+
+const testStudioConfig = StudioConfigSchema.parse({});
 
 describe("StudioPlugin type contract", () => {
 	it("accepts a minimal valid plugin", () => {
@@ -114,7 +117,7 @@ describe("StudioPlugin type contract", () => {
 			getPuckApi: () => {
 				throw new Error("test stub");
 			},
-			studioConfig: {},
+			studioConfig: testStudioConfig,
 			log: () => {
 				/* no-op */
 			},
