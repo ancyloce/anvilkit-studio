@@ -26,6 +26,7 @@ import type {
 	ExportResult,
 } from "../../types/export.js";
 import type {
+	StudioHeaderAction,
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginMeta,
@@ -90,6 +91,20 @@ function makeExportFormat(id: string): ExportFormatDefinition {
 	};
 }
 
+/**
+ * Build a minimal valid {@link StudioHeaderAction} for compile-time
+ * tests. Only `id` is meaningful here — `compilePlugins` treats
+ * actions as opaque data and just passes them through to the
+ * runtime aggregate, so the `label` / `onClick` are filler.
+ */
+function makeHeaderAction(id: string): StudioHeaderAction {
+	return {
+		id,
+		label: id,
+		onClick: () => undefined,
+	};
+}
+
 describe("CORE_VERSION drift guard", () => {
 	it("matches package.json's version field", async () => {
 		const here = dirname(fileURLToPath(import.meta.url));
@@ -121,7 +136,7 @@ describe("compilePlugins — happy paths", () => {
 				return {
 					meta,
 					exportFormats: [makeExportFormat("html")],
-					headerActions: [{ id: "export-html" }],
+					headerActions: [makeHeaderAction("export-html")],
 				};
 			},
 		});
@@ -132,7 +147,9 @@ describe("compilePlugins — happy paths", () => {
 			"com.example.async",
 		]);
 		expect(runtime.exportFormats.has("html")).toBe(true);
-		expect(runtime.headerActions).toEqual([{ id: "export-html" }]);
+		expect(runtime.headerActions.map((action) => action.id)).toEqual([
+			"export-html",
+		]);
 	});
 
 	it("passes Puck plugins through verbatim", async () => {
@@ -153,14 +170,14 @@ describe("compilePlugins — happy paths", () => {
 					register: (meta) => ({
 						meta,
 						exportFormats: [makeExportFormat("html")],
-						headerActions: [{ id: "action-a" }],
+						headerActions: [makeHeaderAction("action-a")],
 					}),
 				}),
 				makePlugin("b", {
 					register: (meta) => ({
 						meta,
 						exportFormats: [makeExportFormat("json")],
-						headerActions: [{ id: "action-b" }],
+						headerActions: [makeHeaderAction("action-b")],
 					}),
 				}),
 			],

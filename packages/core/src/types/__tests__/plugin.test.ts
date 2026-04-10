@@ -91,7 +91,13 @@ describe("StudioPlugin type contract", () => {
 				const registration: StudioPluginRegistration = {
 					meta: plugin.meta,
 					hooks,
-					headerActions: [{ id: "full-action" }],
+					headerActions: [
+						{
+							id: "full-action",
+							label: "Full",
+							onClick: () => undefined,
+						},
+					],
 					exportFormats: [
 						{
 							id: "html",

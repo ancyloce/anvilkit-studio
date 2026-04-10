@@ -182,20 +182,109 @@ export interface StudioPluginContext<
  * Header action descriptor, contributed by plugins via
  * {@link StudioPluginRegistration.headerActions}.
  *
- * **Forward-declaration** — the full shape (label, icon, onClick,
- * disabled, tooltip, …) is finalized in `core-009` alongside
- * `composeHeaderActions()`. Declared here so `StudioPluginRegistration`
- * can reference it without introducing a dependency on `src/runtime/`
- * from the `src/types/` layer.
+ * Plugins author header actions as **plain data** — no React, no
+ * components, no closures over render-time state. The Studio shell
+ * (`core-014`) is responsible for resolving the {@link icon} string
+ * to a `lucide-react` icon element, rendering the {@link label}, and
+ * wiring up `onClick` / `disabled` to the live React tree at runtime.
+ *
+ * Keeping the type free of `ReactNode` / `ComponentType` lets the
+ * `runtime/` layer stay React-free (architecture §17) and lets test
+ * code compare action arrays with structural equality.
+ *
+ * The full shape was finalized in `core-009` alongside
+ * `composeHeaderActions()`. The interface lives in `src/types/` so
+ * `StudioPluginRegistration` can reference it without crossing the
+ * types → runtime boundary; `composeHeaderActions()` re-exports it
+ * for callers that import from `@anvilkit/core/runtime`.
  *
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md | core-009}
  */
 export interface StudioHeaderAction {
 	/**
-	 * Stable identifier for the action (e.g. `"export-html"`). The
-	 * runtime rejects duplicate ids when composing the header.
+	 * Stable, globally-unique identifier for the action
+	 * (e.g. `"export-html"`, `"publish"`). `composeHeaderActions()`
+	 * rejects duplicate ids across all contributing plugins.
+	 *
+	 * Convention: lowercase, hyphen-separated, no namespace prefix —
+	 * the runtime treats ids as opaque strings.
 	 */
 	readonly id: string;
+
+	/**
+	 * Human-readable label rendered inside the button (or shown in
+	 * the overflow menu) by the Studio shell.
+	 *
+	 * Required so plugin authors cannot ship a button with no visible
+	 * affordance. Localization is the host app's responsibility — the
+	 * runtime treats this as an opaque display string.
+	 */
+	readonly label: string;
+
+	/**
+	 * Optional `lucide-react` icon **name** (e.g. `"download"`,
+	 * `"sparkles"`). Resolved to a real icon component at render time
+	 * by the Studio shell.
+	 *
+	 * **Why a string and not a `ComponentType`?** The `runtime/` layer
+	 * cannot import React, and plugin-contributed action arrays must
+	 * stay serializable enough that lifecycle tests can compare them
+	 * with `toEqual`. The string-name indirection lets the renderer
+	 * own React while the protocol stays headless.
+	 */
+	readonly icon?: string;
+
+	/**
+	 * Display group the action belongs to. Used by
+	 * `composeHeaderActions()` as the primary sort key.
+	 *
+	 * - `"primary"` — high-emphasis call-to-action (e.g. "Publish").
+	 * - `"secondary"` — normal toolbar action (e.g. "Save Draft").
+	 *   **Default** when omitted — most actions belong here.
+	 * - `"overflow"` — collapsed into the "…" menu when space is
+	 *   tight (e.g. "Generate with AI", "Download HTML").
+	 */
+	readonly group?: "primary" | "secondary" | "overflow";
+
+	/**
+	 * Per-group ordering hint. Lower values render first; the default
+	 * is `100` so plugin authors can interleave their actions with
+	 * built-ins (which conventionally use round numbers like `0`,
+	 * `100`, `200`).
+	 *
+	 * Within a group, actions are sorted ascending by `order`. Ties
+	 * break on {@link id} for determinism.
+	 */
+	readonly order?: number;
+
+	/**
+	 * Click handler invoked by the Studio shell when the user
+	 * activates the action. Receives the same
+	 * {@link StudioPluginContext} the lifecycle hooks receive, so
+	 * the action can read live page data, call
+	 * `getPuckApi().dispatch()`, log diagnostics, or `emit` events
+	 * to other plugins.
+	 *
+	 * The runtime awaits the returned promise (if any) before
+	 * re-enabling the button — host apps are free to render a
+	 * loading affordance during the wait.
+	 *
+	 * Errors thrown from `onClick` are caught by the shell and routed
+	 * through `ctx.log("error", …)`; they do not crash the editor.
+	 */
+	readonly onClick: (ctx: StudioPluginContext) => void | Promise<void>;
+
+	/**
+	 * Optional predicate that disables the action based on live
+	 * context. Called on every render of the header (cheap by
+	 * convention — do not perform async work or expensive
+	 * computation here).
+	 *
+	 * Receives the same {@link StudioPluginContext} as `onClick`.
+	 * Return `true` to disable the button, `false` (or omit) to
+	 * enable it.
+	 */
+	readonly disabled?: (ctx: StudioPluginContext) => boolean;
 }
 
 /**

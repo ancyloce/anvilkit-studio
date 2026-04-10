@@ -1,9 +1,9 @@
 // Barrel for `@anvilkit/core/runtime`.
 //
-// Populated by `core-008` (plugin engine — this task) and
-// `core-009` (`createExportRegistry`, `composeHeaderActions`).
-// MUST remain React-free — architecture constraint enforced in
-// `core-015` quality gates.
+// Populated by `core-008` (plugin engine, errors, lifecycle) and
+// `core-009` (export registry, header action composition). MUST
+// remain React-free — architecture constraint enforced in `core-015`
+// quality gates.
 
 export {
 	type StudioRuntime,
@@ -16,6 +16,14 @@ export {
 	StudioExportError,
 	StudioPluginError,
 } from "./errors.js";
+export {
+	type ExportRegistry,
+	createExportRegistry,
+} from "./export-registry.js";
+export {
+	type StudioHeaderAction,
+	composeHeaderActions,
+} from "./header-actions.js";
 export {
 	type LifecycleEventName,
 	type LifecycleManager,
