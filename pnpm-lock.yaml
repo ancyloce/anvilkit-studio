@@ -11,6 +11,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.4.9
         version: 2.4.9
+      '@changesets/cli':
+        specifier: ^2.30.0
+        version: 2.30.0(@types/node@22.15.3)
       '@testing-library/dom':
         specifier: ^10.4.1
         version: 10.4.1
@@ -44,6 +47,12 @@ importers:
       vitest:
         specifier: ^4.1.4
         version: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.2))(vite@8.0.8(@types/node@22.15.3)(jiti@2.6.1))
+      zod:
+        specifier: ^4.3.0
+        version: 4.3.6
+      zustand:
+        specifier: ^5.0.0
+        version: 5.0.12(@types/react@19.2.14)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
 
   apps/demo:
     dependencies:
@@ -494,6 +503,48 @@ importers:
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
+      jsdom:
+        specifier: ^29.0.2
+        version: 29.0.2(@noble/hashes@1.8.0)
+      react:
+        specifier: ^19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.4
+        version: 19.2.4(react@19.2.4)
+      typescript:
+        specifier: 6.0.2
+        version: 6.0.2
+      vitest:
+        specifier: ^4.1.4
+        version: 4.1.4(@types/node@25.5.0)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@25.5.0)(typescript@6.0.2))(vite@8.0.8(@types/node@25.5.0)(jiti@2.6.1))
+
+  packages/utils:
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../configs/vitest-config
+      '@rslib/core':
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@6.0.2)
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitest/coverage-v8':
+        specifier: ^4.1.4
+        version: 4.1.4(vitest@4.1.4)
       jsdom:
         specifier: ^29.0.2
         version: 29.0.2(@noble/hashes@1.8.0)
@@ -4640,6 +4691,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+
   zustand@5.0.12:
     resolution: {integrity: sha512-i77ae3aZq4dhMlRhJVCYgMLKuSiZAaUPAct2AksxQ+gOtimhGMdXljRT21P5BNpeT4kXlLIckvkPM029OljD7g==}
     engines: {node: '>=12.20.0'}
@@ -5003,6 +5057,37 @@ snapshots:
   '@changesets/changelog-git@0.2.1':
     dependencies:
       '@changesets/types': 6.1.0
+
+  '@changesets/cli@2.30.0(@types/node@22.15.3)':
+    dependencies:
+      '@changesets/apply-release-plan': 7.1.0
+      '@changesets/assemble-release-plan': 6.0.9
+      '@changesets/changelog-git': 0.2.1
+      '@changesets/config': 3.1.3
+      '@changesets/errors': 0.2.0
+      '@changesets/get-dependents-graph': 2.1.3
+      '@changesets/get-release-plan': 4.0.15
+      '@changesets/git': 3.0.4
+      '@changesets/logger': 0.1.1
+      '@changesets/pre': 2.0.2
+      '@changesets/read': 0.6.7
+      '@changesets/should-skip-package': 0.1.2
+      '@changesets/types': 6.1.0
+      '@changesets/write': 0.4.0
+      '@inquirer/external-editor': 1.0.3(@types/node@22.15.3)
+      '@manypkg/get-packages': 1.1.3
+      ansi-colors: 4.1.3
+      enquirer: 2.4.1
+      fs-extra: 7.0.1
+      mri: 1.2.0
+      package-manager-detector: 0.2.11
+      picocolors: 1.1.1
+      resolve-from: 5.0.0
+      semver: 7.7.3
+      spawndamnit: 3.0.1
+      term-size: 2.2.1
+    transitivePeerDependencies:
+      - '@types/node'
 
   '@changesets/cli@2.30.0(@types/node@25.5.0)':
     dependencies:
@@ -5511,6 +5596,13 @@ snapshots:
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
       '@types/node': 25.5.0
+
+  '@inquirer/external-editor@1.0.3(@types/node@22.15.3)':
+    dependencies:
+      chardet: 2.1.1
+      iconv-lite: 0.7.2
+    optionalDependencies:
+      '@types/node': 22.15.3
 
   '@inquirer/external-editor@1.0.3(@types/node@25.5.0)':
     dependencies:
@@ -8763,6 +8855,8 @@ snapshots:
       zod: 3.25.76
 
   zod@3.25.76: {}
+
+  zod@4.3.6: {}
 
   zustand@5.0.12(@types/react@19.2.14)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4)):
     optionalDependencies:

@@ -36,7 +36,7 @@
 		"build": "rslib build",
 		"dev": "rslib build --watch",
 		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts vitest.config.ts src",
-		"check-types": "tsc --noEmit",
+		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest"
 	},

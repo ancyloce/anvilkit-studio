@@ -24,7 +24,7 @@
 		"build": "tsc",
 		"dev": "tsc --watch",
 		"lint": "pnpm exec biome lint package.json tsconfig.json src",
-		"check-types": "tsc --noEmit"
+		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
 		"@anvilkit/biome-config": "workspace:*",

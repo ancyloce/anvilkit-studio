@@ -131,7 +131,7 @@ jobs:
         run: pnpm --filter @anvilkit/ui lint
 
       - name: Run UI typecheck
-        run: pnpm --filter @anvilkit/ui check-types
+        run: pnpm --filter @anvilkit/ui typecheck
 
       - name: Run UI tests
         run: pnpm --filter @anvilkit/ui test

@@ -43,7 +43,7 @@ jobs:
         run: pnpm lint
 
       - name: Typecheck workspace
-        run: pnpm check-types
+        run: pnpm typecheck
 
       - name: Test workspace
         run: pnpm test

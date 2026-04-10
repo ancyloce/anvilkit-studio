@@ -33,7 +33,8 @@ pnpm dev          # Turbo watch mode for all packages
 pnpm build        # Build all packages
 pnpm lint         # Biome lint
 pnpm format       # Prettier format (TS/TSX/MD)
-pnpm check-types  # TypeScript type checking across workspace
+pnpm typecheck    # TypeScript type checking across workspace
+pnpm test         # Run Vitest across every workspace package (via Turbo cache)
 ```
 
 ### Components workspace (`packages/components/`)
@@ -59,7 +60,7 @@ pnpm release      # Version + build + publish to npm
 pnpm dev          # Next.js dev server (port 3000)
 pnpm build        # Production build
 pnpm lint         # Biome lint
-pnpm check-types  # next typegen + tsc
+pnpm typecheck    # next typegen + tsc
 ```
 
 ## Key Architecture Decisions
@@ -96,7 +97,9 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 - TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
 
 ### Continuous Integration
-`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 10.33.0 / Node 20, then runs `pnpm lint`, `pnpm check-types`, and `pnpm build`. A separate `publish-ui.yml` workflow exists for the `@anvilkit/ui` package.
+`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 10.33.0 / Node 20, then runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`. A separate `publish-ui.yml` workflow exists for the `@anvilkit/ui` package.
+
+**Typecheck script naming:** the workspace normalizes on `typecheck` (not `check-types`) across every package and the Turbo task graph. The components submodule (`packages/components/`) already used `typecheck` for each component package, so the root and direct-workspace packages (`ui`, `utils`, `vitest-config`, `apps/demo`) were renamed to match. Do not reintroduce `check-types`.
 
 ## Adding a New Component
 

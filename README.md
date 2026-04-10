@@ -28,7 +28,8 @@ Useful root commands:
 - `pnpm dev`
 - `pnpm build`
 - `pnpm lint`
-- `pnpm check-types`
+- `pnpm typecheck`
+- `pnpm test`
 
 ## Current Packages
 
@@ -60,7 +61,7 @@ The shared Puck config lives in `apps/demo/lib/puck-demo.ts`.
 
 ## Continuous Integration
 
-`.github/workflows/ci.yml` runs `pnpm lint`, `pnpm check-types`, and `pnpm build` on every pull request (pnpm 10.33.0 / Node 20, submodules pulled recursively).
+`.github/workflows/ci.yml` runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` on every pull request (pnpm 10.33.0 / Node 20, submodules pulled recursively).
 
 ## Architecture Context
 

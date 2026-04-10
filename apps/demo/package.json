@@ -9,7 +9,7 @@
 		"build": "next build --webpack",
 		"start": "next start",
 		"lint": "pnpm exec biome lint .",
-		"check-types": "next typegen && tsc --noEmit"
+		"typecheck": "next typegen && tsc --noEmit"
 	},
 	"dependencies": {
 		"@anvilkit/bento-grid": "workspace:*",
