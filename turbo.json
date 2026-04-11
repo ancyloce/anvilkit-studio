@@ -20,6 +20,10 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "e2e": {
+      "cache": false,
+      "dependsOn": ["^build"]
     }
   }
 }
