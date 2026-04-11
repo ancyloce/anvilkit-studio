@@ -60,3 +60,26 @@ jobs:
       # the API-snapshot generator emits into `packages/core/api/`.
       - name: Run @anvilkit/core release gates
         run: pnpm --filter @anvilkit/core check:all
+
+      # Phase 3 M0 (`phase3-001`): Playwright + demo E2E harness. The
+      # smoke spec loads `/puck/editor`, waits for `<Studio>` to
+      # hydrate, and asserts `smokeTestPlugin.onInit` logs to the
+      # browser console. Future Phase 3 tasks (`phase3-014`) add
+      # real export + AI copilot E2Es under the same harness.
+      #
+      # `install --with-deps chromium` downloads Chromium + the OS
+      # libraries Playwright needs on Ubuntu runners. Locally,
+      # developers run `pnpm --filter demo e2e:install` once.
+      - name: Install Playwright browsers
+        run: pnpm --filter demo exec playwright install --with-deps chromium
+
+      - name: Run demo E2E tests
+        run: pnpm --filter demo e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/demo/playwright-report/
+          retention-days: 7
