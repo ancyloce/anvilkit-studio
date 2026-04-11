@@ -80,7 +80,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 128,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L128"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L128"
 						}
 					],
 					"signatures": [
@@ -95,7 +95,7 @@
 									"fileName": "packages/core/src/runtime/errors.ts",
 									"line": 128,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L128"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L128"
 								}
 							],
 							"parameters": [
@@ -207,7 +207,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 126,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L126"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L126"
 						}
 					],
 					"type": {
@@ -324,7 +324,7 @@
 					"fileName": "packages/core/src/runtime/errors.ts",
 					"line": 122,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L122"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L122"
 				}
 			],
 			"extendedTypes": [
@@ -404,7 +404,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 59,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L59"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L59"
 						}
 					],
 					"signatures": [
@@ -419,7 +419,7 @@
 									"fileName": "packages/core/src/runtime/errors.ts",
 									"line": 59,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L59"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L59"
 								}
 							],
 							"parameters": [
@@ -532,7 +532,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 57,
 							"character": 19,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L57"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L57"
 						}
 					],
 					"type": {
@@ -643,7 +643,7 @@
 					"fileName": "packages/core/src/runtime/errors.ts",
 					"line": 49,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L49"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L49"
 				}
 			],
 			"extendedTypes": [
@@ -734,7 +734,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 159,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L159"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L159"
 						}
 					],
 					"signatures": [
@@ -749,7 +749,7 @@
 									"fileName": "packages/core/src/runtime/errors.ts",
 									"line": 159,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L159"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L159"
 								}
 							],
 							"parameters": [
@@ -872,7 +872,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 151,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L151"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L151"
 						}
 					],
 					"type": {
@@ -933,7 +933,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 157,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L157"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L157"
 						}
 					],
 					"type": {
@@ -1045,7 +1045,7 @@
 					"fileName": "packages/core/src/runtime/errors.ts",
 					"line": 147,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L147"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L147"
 				}
 			],
 			"extendedTypes": [
@@ -1147,7 +1147,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 100,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L100"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L100"
 						}
 					],
 					"signatures": [
@@ -1162,7 +1162,7 @@
 									"fileName": "packages/core/src/runtime/errors.ts",
 									"line": 100,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L100"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L100"
 								}
 							],
 							"parameters": [
@@ -1285,7 +1285,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 89,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L89"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L89"
 						}
 					],
 					"type": {
@@ -1380,7 +1380,7 @@
 							"fileName": "packages/core/src/runtime/errors.ts",
 							"line": 98,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L98"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L98"
 						}
 					],
 					"type": {
@@ -1440,7 +1440,7 @@
 					"fileName": "packages/core/src/runtime/errors.ts",
 					"line": 85,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/errors.ts#L85"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/errors.ts#L85"
 				}
 			],
 			"extendedTypes": [
@@ -1544,7 +1544,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 126,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L126"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L126"
 						}
 					],
 					"type": {
@@ -1573,7 +1573,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 132,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L132"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L132"
 						}
 					],
 					"type": {
@@ -1603,7 +1603,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 143,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L143"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L143"
 						}
 					],
 					"type": {
@@ -1660,7 +1660,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 136,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L136"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L136"
 						}
 					],
 					"type": {
@@ -1694,7 +1694,7 @@
 					"fileName": "packages/core/src/types/ai.ts",
 					"line": 120,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L120"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L120"
 				}
 			]
 		},
@@ -1813,7 +1813,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 93,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L93"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L93"
 						}
 					],
 					"type": {
@@ -1859,7 +1859,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 108,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L108"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L108"
 						}
 					],
 					"type": {
@@ -1914,7 +1914,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 76,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L76"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L76"
 						}
 					],
 					"type": {
@@ -1968,7 +1968,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 100,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L100"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L100"
 						}
 					],
 					"type": {
@@ -1998,7 +1998,7 @@
 													"fileName": "packages/core/src/types/ai.ts",
 													"line": 100,
 													"character": 40,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L100"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L100"
 												}
 											],
 											"type": {
@@ -2019,7 +2019,7 @@
 													"fileName": "packages/core/src/types/ai.ts",
 													"line": 100,
 													"character": 64,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L100"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L100"
 												}
 											],
 											"type": {
@@ -2072,7 +2072,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 86,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L86"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L86"
 						}
 					],
 					"type": {
@@ -2111,7 +2111,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 80,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L80"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L80"
 						}
 					],
 					"type": {
@@ -2140,7 +2140,7 @@
 					"fileName": "packages/core/src/types/ai.ts",
 					"line": 70,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L70"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L70"
 				}
 			]
 		},
@@ -2208,7 +2208,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 160,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L160"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L160"
 						}
 					],
 					"type": {
@@ -2247,7 +2247,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 166,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L166"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L166"
 						}
 					],
 					"type": {
@@ -2299,7 +2299,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 177,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L177"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L177"
 						}
 					],
 					"type": {
@@ -2345,7 +2345,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 172,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L172"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L172"
 						}
 					],
 					"type": {
@@ -2379,7 +2379,7 @@
 					"fileName": "packages/core/src/types/ai.ts",
 					"line": 154,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L154"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L154"
 				}
 			]
 		},
@@ -2442,7 +2442,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 69,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L69"
 						}
 					],
 					"type": {
@@ -2470,7 +2471,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 64,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L64"
 						}
 					],
 					"type": {
@@ -2492,7 +2494,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/ai-store.ts",
 					"line": 60,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L60"
 				}
 			]
 		},
@@ -2570,7 +2573,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 101,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L101"
 						}
 					],
 					"type": {
@@ -2619,7 +2623,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 82,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L82"
 						}
 					],
 					"type": {
@@ -2655,7 +2660,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 94,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L94"
 						}
 					],
 					"type": {
@@ -2700,7 +2706,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 87,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L87"
 						}
 					],
 					"type": {
@@ -2727,7 +2734,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 128,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L128"
 						}
 					],
 					"signatures": [
@@ -2765,7 +2773,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/ai-store.ts",
 									"line": 128,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L128"
 								}
 							],
 							"type": {
@@ -2785,7 +2794,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 121,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L121"
 						}
 					],
 					"signatures": [
@@ -2839,7 +2849,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/ai-store.ts",
 									"line": 121,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L121"
 								}
 							],
 							"parameters": [
@@ -2885,7 +2896,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 133,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L133"
 						}
 					],
 					"signatures": [
@@ -2917,7 +2929,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/ai-store.ts",
 									"line": 133,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L133"
 								}
 							],
 							"type": {
@@ -2937,7 +2950,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/ai-store.ts",
 							"line": 113,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L113"
 						}
 					],
 					"signatures": [
@@ -3027,7 +3041,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/ai-store.ts",
 									"line": 113,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L113"
 								}
 							],
 							"parameters": [
@@ -3075,7 +3090,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/ai-store.ts",
 					"line": 76,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L76"
 				}
 			]
 		},
@@ -3123,7 +3139,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 199,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L199"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L199"
 						}
 					],
 					"type": {
@@ -3160,7 +3176,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 194,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L194"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L194"
 						}
 					],
 					"type": {
@@ -3205,7 +3221,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 208,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L208"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L208"
 						}
 					],
 					"type": {
@@ -3238,7 +3254,7 @@
 					"fileName": "packages/core/src/types/ai.ts",
 					"line": 188,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L188"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L188"
 				}
 			]
 		},
@@ -3312,7 +3328,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 229,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L229"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L229"
 						}
 					],
 					"type": {
@@ -3380,7 +3396,7 @@
 							"fileName": "packages/core/src/types/ai.ts",
 							"line": 224,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L224"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L224"
 						}
 					],
 					"type": {
@@ -3403,7 +3419,7 @@
 					"fileName": "packages/core/src/types/ai.ts",
 					"line": 218,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L218"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L218"
 				}
 			]
 		},
@@ -3523,7 +3539,7 @@
 							"fileName": "packages/core/src/types/config.ts",
 							"line": 75,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L75"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L75"
 						}
 					],
 					"type": {
@@ -3568,7 +3584,7 @@
 							"fileName": "packages/core/src/types/config.ts",
 							"line": 98,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L98"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L98"
 						}
 					],
 					"type": {
@@ -3605,7 +3621,7 @@
 							"fileName": "packages/core/src/types/config.ts",
 							"line": 60,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L60"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L60"
 						}
 					],
 					"type": {
@@ -3666,7 +3682,7 @@
 							"fileName": "packages/core/src/types/config.ts",
 							"line": 86,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L86"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L86"
 						}
 					],
 					"type": {
@@ -3708,7 +3724,7 @@
 							"fileName": "packages/core/src/types/config.ts",
 							"line": 92,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L92"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L92"
 						}
 					],
 					"type": {
@@ -3761,7 +3777,7 @@
 							"fileName": "packages/core/src/types/config.ts",
 							"line": 70,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L70"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L70"
 						}
 					],
 					"type": {
@@ -3798,7 +3814,7 @@
 							"fileName": "packages/core/src/types/config.ts",
 							"line": 64,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L64"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L64"
 						}
 					],
 					"type": {
@@ -3826,7 +3842,7 @@
 					"fileName": "packages/core/src/types/config.ts",
 					"line": 55,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L55"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L55"
 				}
 			]
 		},
@@ -3885,7 +3901,7 @@
 							"fileName": "packages/core/src/config/create-config.ts",
 							"line": 79,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/create-config.ts#L79"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/create-config.ts#L79"
 						}
 					],
 					"type": {
@@ -3932,7 +3948,7 @@
 					"fileName": "packages/core/src/config/create-config.ts",
 					"line": 71,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/create-config.ts#L71"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/create-config.ts#L71"
 				}
 			]
 		},
@@ -4095,7 +4111,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 202,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L202"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L202"
 						}
 					],
 					"type": {
@@ -4156,7 +4172,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 192,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L192"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L192"
 						}
 					],
 					"type": {
@@ -4209,7 +4225,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 197,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L197"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L197"
 						}
 					],
 					"type": {
@@ -4278,7 +4294,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 211,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L211"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L211"
 						}
 					],
 					"type": {
@@ -4335,7 +4351,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 223,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L223"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L223"
 						}
 					],
 					"type": {
@@ -4440,7 +4456,7 @@
 					"fileName": "packages/core/src/types/export.ts",
 					"line": 181,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L181"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L181"
 				}
 			],
 			"typeParameters": [
@@ -4589,7 +4605,7 @@
 							"fileName": "packages/core/src/runtime/export-registry.ts",
 							"line": 65,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/export-registry.ts#L65"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/export-registry.ts#L65"
 						}
 					],
 					"type": {
@@ -4699,7 +4715,7 @@
 							"fileName": "packages/core/src/runtime/export-registry.ts",
 							"line": 70,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/export-registry.ts#L70"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/export-registry.ts#L70"
 						}
 					],
 					"type": {
@@ -4770,7 +4786,7 @@
 							"fileName": "packages/core/src/runtime/export-registry.ts",
 							"line": 59,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/export-registry.ts#L59"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/export-registry.ts#L59"
 						}
 					],
 					"type": {
@@ -4845,7 +4861,7 @@
 							"fileName": "packages/core/src/runtime/export-registry.ts",
 							"line": 75,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/export-registry.ts#L75"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/export-registry.ts#L75"
 						}
 					],
 					"type": {
@@ -4889,7 +4905,7 @@
 					"fileName": "packages/core/src/runtime/export-registry.ts",
 					"line": 51,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/export-registry.ts#L51"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/export-registry.ts#L51"
 				}
 			]
 		},
@@ -5021,7 +5037,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 136,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L136"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L136"
 						}
 					],
 					"type": {
@@ -5093,7 +5109,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 144,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L144"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L144"
 						}
 					],
 					"type": {
@@ -5133,7 +5149,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 152,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L152"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L152"
 						}
 					],
 					"type": {
@@ -5166,7 +5182,7 @@
 					"fileName": "packages/core/src/types/export.ts",
 					"line": 128,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L128"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L128"
 				}
 			]
 		},
@@ -5237,7 +5253,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 93,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L93"
 						}
 					],
 					"type": {
@@ -5294,7 +5311,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 100,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L100"
 						}
 					],
 					"type": {
@@ -5343,7 +5361,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 106,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L106"
 						}
 					],
 					"type": {
@@ -5379,7 +5398,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 111,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L111"
 						}
 					],
 					"type": {
@@ -5408,7 +5428,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 136,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L136"
 						}
 					],
 					"signatures": [
@@ -5446,7 +5467,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/export-store.ts",
 									"line": 136,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L136"
 								}
 							],
 							"parameters": [
@@ -5490,7 +5512,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 142,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L142"
 						}
 					],
 					"signatures": [
@@ -5520,7 +5543,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/export-store.ts",
 									"line": 142,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L142"
 								}
 							],
 							"type": {
@@ -5540,7 +5564,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 119,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L119"
 						}
 					],
 					"signatures": [
@@ -5588,7 +5613,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/export-store.ts",
 									"line": 119,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L119"
 								}
 							],
 							"parameters": [
@@ -5628,7 +5654,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 124,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L124"
 						}
 					],
 					"signatures": [
@@ -5658,7 +5685,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/export-store.ts",
 									"line": 124,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L124"
 								}
 							],
 							"parameters": [
@@ -5700,7 +5728,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 130,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L130"
 						}
 					],
 					"signatures": [
@@ -5746,7 +5775,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/export-store.ts",
 									"line": 130,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L130"
 								}
 							],
 							"parameters": [
@@ -5795,7 +5825,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/export-store.ts",
 					"line": 86,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L86"
 				}
 			]
 		},
@@ -5867,7 +5898,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 66,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L66"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L66"
 						}
 					],
 					"type": {
@@ -5906,7 +5937,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 59,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L59"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L59"
 						}
 					],
 					"type": {
@@ -5937,7 +5968,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 71,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L71"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L71"
 						}
 					],
 					"type": {
@@ -5977,7 +6008,7 @@
 							"fileName": "packages/core/src/types/export.ts",
 							"line": 78,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L78"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L78"
 						}
 					],
 					"type": {
@@ -6002,7 +6033,7 @@
 					"fileName": "packages/core/src/types/export.ts",
 					"line": 55,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L55"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L55"
 				}
 			]
 		},
@@ -6055,7 +6086,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 67,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L67"
 						}
 					],
 					"type": {
@@ -6093,7 +6125,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 62,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L62"
 						}
 					],
 					"type": {
@@ -6157,7 +6190,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/export-store.ts",
 							"line": 73,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L73"
 						}
 					],
 					"type": {
@@ -6180,7 +6214,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/export-store.ts",
 					"line": 58,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L58"
 				}
 			]
 		},
@@ -6264,7 +6299,7 @@
 							"fileName": "packages/core/src/runtime/lifecycle-manager.ts",
 							"line": 93,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/lifecycle-manager.ts#L93"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/lifecycle-manager.ts#L93"
 						}
 					],
 					"type": {
@@ -6371,7 +6406,7 @@
 							"fileName": "packages/core/src/runtime/lifecycle-manager.ts",
 							"line": 105,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/lifecycle-manager.ts#L105"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/lifecycle-manager.ts#L105"
 						}
 					],
 					"type": {
@@ -6474,7 +6509,7 @@
 					"fileName": "packages/core/src/runtime/lifecycle-manager.ts",
 					"line": 82,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/lifecycle-manager.ts#L82"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/lifecycle-manager.ts#L82"
 				}
 			]
 		},
@@ -6549,7 +6584,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 201,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L201"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L201"
 						}
 					],
 					"type": {
@@ -6597,7 +6632,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 205,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L205"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L205"
 						}
 					],
 					"type": {
@@ -6628,7 +6663,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 194,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L194"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L194"
 						}
 					],
 					"type": {
@@ -6683,7 +6718,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 188,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L188"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L188"
 						}
 					],
 					"type": {
@@ -6708,7 +6743,7 @@
 					"fileName": "packages/core/src/types/ir.ts",
 					"line": 178,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L178"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L178"
 				}
 			]
 		},
@@ -6778,7 +6813,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 55,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L55"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L55"
 						}
 					],
 					"type": {
@@ -6815,7 +6850,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 63,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L63"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L63"
 						}
 					],
 					"type": {
@@ -6878,7 +6913,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 79,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L79"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L79"
 						}
 					],
 					"type": {
@@ -6935,7 +6970,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 71,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L71"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L71"
 						}
 					],
 					"type": {
@@ -6960,7 +6995,7 @@
 					"fileName": "packages/core/src/types/ir.ts",
 					"line": 47,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L47"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L47"
 				}
 			]
 		},
@@ -7017,7 +7052,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 164,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L164"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L164"
 						}
 					],
 					"type": {
@@ -7055,7 +7090,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 160,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L160"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L160"
 						}
 					],
 					"type": {
@@ -7093,7 +7128,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 155,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L155"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L155"
 						}
 					],
 					"type": {
@@ -7123,7 +7158,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 168,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L168"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L168"
 						}
 					],
 					"type": {
@@ -7148,7 +7183,7 @@
 					"fileName": "packages/core/src/types/ir.ts",
 					"line": 151,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L151"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L151"
 				}
 			]
 		},
@@ -7303,7 +7338,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 138,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L138"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L138"
 						}
 					],
 					"type": {
@@ -7342,7 +7377,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 131,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L131"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L131"
 						}
 					],
 					"type": {
@@ -7390,7 +7425,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 114,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L114"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L114"
 						}
 					],
 					"type": {
@@ -7419,7 +7454,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 127,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L127"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L127"
 						}
 					],
 					"type": {
@@ -7492,7 +7527,7 @@
 							"fileName": "packages/core/src/types/ir.ts",
 							"line": 120,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L120"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L120"
 						}
 					],
 					"type": {
@@ -7518,7 +7553,7 @@
 					"fileName": "packages/core/src/types/ir.ts",
 					"line": 108,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ir.ts#L108"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ir.ts#L108"
 				}
 			]
 		},
@@ -7584,7 +7619,7 @@
 							"fileName": "packages/core/src/config/provider.tsx",
 							"line": 83,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/provider.tsx#L83"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/provider.tsx#L83"
 						}
 					],
 					"type": {
@@ -7628,7 +7663,7 @@
 							"fileName": "packages/core/src/config/provider.tsx",
 							"line": 78,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/provider.tsx#L78"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/provider.tsx#L78"
 						}
 					],
 					"type": {
@@ -7667,7 +7702,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 183,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 										}
 									],
 									"type": {
@@ -7708,7 +7743,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 191,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 														}
 													],
 													"type": {
@@ -7752,7 +7787,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 198,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 														}
 													],
 													"type": {
@@ -7794,7 +7829,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 105,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 										}
 									],
 									"type": {
@@ -7833,7 +7868,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 112,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 														}
 													],
 													"type": {
@@ -7871,7 +7906,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 119,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 														}
 													],
 													"type": {
@@ -7909,7 +7944,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 126,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 														}
 													],
 													"type": {
@@ -7960,7 +7995,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 211,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 										}
 									],
 									"type": {
@@ -8004,7 +8039,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 155,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 										}
 									],
 									"type": {
@@ -8053,7 +8088,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 164,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 														}
 													],
 													"type": {
@@ -8097,7 +8132,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 172,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 														}
 													],
 													"type": {
@@ -8147,7 +8182,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 76,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 										}
 									],
 									"type": {
@@ -8194,7 +8229,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 91,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 														}
 													],
 													"type": {
@@ -8238,7 +8273,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 98,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 														}
 													],
 													"type": {
@@ -8306,7 +8341,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 84,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 														}
 													],
 													"type": {
@@ -8349,7 +8384,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 133,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 										}
 									],
 									"type": {
@@ -8396,7 +8431,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 148,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 														}
 													],
 													"type": {
@@ -8456,7 +8491,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 141,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 														}
 													],
 													"type": {
@@ -8524,7 +8559,7 @@
 					"fileName": "packages/core/src/config/provider.tsx",
 					"line": 72,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/provider.tsx#L72"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/provider.tsx#L72"
 				}
 			]
 		},
@@ -8746,7 +8781,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 287,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L287"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L287"
 						}
 					],
 					"type": {
@@ -8842,7 +8877,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 247,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L247"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L247"
 						}
 					],
 					"type": {
@@ -8933,7 +8968,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 235,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L235"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L235"
 						}
 					],
 					"type": {
@@ -8986,7 +9021,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 212,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L212"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L212"
 						}
 					],
 					"type": {
@@ -9015,7 +9050,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 222,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L222"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L222"
 						}
 					],
 					"type": {
@@ -9086,7 +9121,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 275,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L275"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L275"
 						}
 					],
 					"type": {
@@ -9221,7 +9256,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 258,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L258"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L258"
 						}
 					],
 					"type": {
@@ -9249,7 +9284,7 @@
 					"fileName": "packages/core/src/types/plugin.ts",
 					"line": 203,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L203"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L203"
 				}
 			]
 		},
@@ -9344,7 +9379,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 488,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L488"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L488"
 						}
 					],
 					"type": {
@@ -9365,7 +9400,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 498,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L498"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L498"
 						}
 					],
 					"signatures": [
@@ -9404,7 +9439,7 @@
 									"fileName": "packages/core/src/types/plugin.ts",
 									"line": 498,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L498"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L498"
 								}
 							],
 							"parameters": [
@@ -9522,7 +9557,7 @@
 					"fileName": "packages/core/src/types/plugin.ts",
 					"line": 482,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L482"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L482"
 				}
 			],
 			"typeParameters": [
@@ -9657,7 +9692,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 178,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L178"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L178"
 						}
 					],
 					"type": {
@@ -9765,7 +9800,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 133,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L133"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L133"
 						}
 					],
 					"type": {
@@ -9875,7 +9910,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 143,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L143"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L143"
 						}
 					],
 					"type": {
@@ -9939,7 +9974,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 163,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L163"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L163"
 						}
 					],
 					"type": {
@@ -10104,7 +10139,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 153,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L153"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L153"
 						}
 					],
 					"type": {
@@ -10143,7 +10178,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 183,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 										}
 									],
 									"type": {
@@ -10184,7 +10219,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 191,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 														}
 													],
 													"type": {
@@ -10228,7 +10263,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 198,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 														}
 													],
 													"type": {
@@ -10270,7 +10305,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 105,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 										}
 									],
 									"type": {
@@ -10309,7 +10344,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 112,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 														}
 													],
 													"type": {
@@ -10347,7 +10382,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 119,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 														}
 													],
 													"type": {
@@ -10385,7 +10420,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 126,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 														}
 													],
 													"type": {
@@ -10436,7 +10471,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 211,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 										}
 									],
 									"type": {
@@ -10480,7 +10515,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 155,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 										}
 									],
 									"type": {
@@ -10529,7 +10564,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 164,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 														}
 													],
 													"type": {
@@ -10573,7 +10608,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 172,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 														}
 													],
 													"type": {
@@ -10623,7 +10658,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 76,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 										}
 									],
 									"type": {
@@ -10670,7 +10705,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 91,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 														}
 													],
 													"type": {
@@ -10714,7 +10749,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 98,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 														}
 													],
 													"type": {
@@ -10782,7 +10817,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 84,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 														}
 													],
 													"type": {
@@ -10825,7 +10860,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 133,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 										}
 									],
 									"type": {
@@ -10872,7 +10907,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 148,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 														}
 													],
 													"type": {
@@ -10932,7 +10967,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 141,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 														}
 													],
 													"type": {
@@ -11003,7 +11038,7 @@
 					"fileName": "packages/core/src/types/plugin.ts",
 					"line": 123,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L123"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L123"
 				}
 			],
 			"typeParameters": [
@@ -11151,7 +11186,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 355,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L355"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L355"
 						}
 					],
 					"type": {
@@ -11271,7 +11306,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 346,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L346"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L346"
 						}
 					],
 					"type": {
@@ -11407,7 +11442,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 336,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L336"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L336"
 						}
 					],
 					"type": {
@@ -11527,7 +11562,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 364,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L364"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L364"
 						}
 					],
 					"type": {
@@ -11638,7 +11673,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 326,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L326"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L326"
 						}
 					],
 					"type": {
@@ -11729,7 +11764,7 @@
 					"fileName": "packages/core/src/types/plugin.ts",
 					"line": 318,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L318"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L318"
 				}
 			],
 			"typeParameters": [
@@ -11876,7 +11911,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 88,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L88"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L88"
 						}
 					],
 					"type": {
@@ -11906,7 +11941,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 93,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L93"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L93"
 						}
 					],
 					"type": {
@@ -11959,7 +11994,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 61,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L61"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L61"
 						}
 					],
 					"type": {
@@ -11988,7 +12023,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 69,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L69"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L69"
 						}
 					],
 					"type": {
@@ -12035,7 +12070,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 77,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L77"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L77"
 						}
 					],
 					"type": {
@@ -12061,7 +12096,7 @@
 					"fileName": "packages/core/src/types/plugin.ts",
 					"line": 53,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L53"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L53"
 				}
 			]
 		},
@@ -12224,7 +12259,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 441,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L441"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L441"
 						}
 					],
 					"type": {
@@ -12293,7 +12328,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 432,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L432"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L432"
 						}
 					],
 					"type": {
@@ -12342,7 +12377,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 411,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L411"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L411"
 						}
 					],
 					"type": {
@@ -12393,7 +12428,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 404,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L404"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L404"
 						}
 					],
 					"type": {
@@ -12449,7 +12484,7 @@
 							"fileName": "packages/core/src/types/plugin.ts",
 							"line": 422,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L422"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L422"
 						}
 					],
 					"type": {
@@ -12503,7 +12538,7 @@
 					"fileName": "packages/core/src/types/plugin.ts",
 					"line": 393,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L393"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L393"
 				}
 			],
 			"typeParameters": [
@@ -12712,7 +12747,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 164,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L164"
 						}
 					],
 					"type": {
@@ -12769,7 +12805,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 135,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L135"
 						}
 					],
 					"type": {
@@ -12810,7 +12847,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 183,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 										}
 									],
 									"type": {
@@ -12851,7 +12888,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 191,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 														}
 													],
 													"type": {
@@ -12897,7 +12934,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 198,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 														}
 													],
 													"type": {
@@ -12941,7 +12978,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 105,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 										}
 									],
 									"type": {
@@ -12982,7 +13019,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 112,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 														}
 													],
 													"type": {
@@ -13020,7 +13057,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 119,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 														}
 													],
 													"type": {
@@ -13058,7 +13095,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 126,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 														}
 													],
 													"type": {
@@ -13111,7 +13148,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 211,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 										}
 									],
 									"type": {
@@ -13173,7 +13210,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 155,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 										}
 									],
 									"type": {
@@ -13222,7 +13259,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 164,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 														}
 													],
 													"type": {
@@ -13268,7 +13305,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 172,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 														}
 													],
 													"type": {
@@ -13320,7 +13357,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 76,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 										}
 									],
 									"type": {
@@ -13369,7 +13406,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 91,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 														}
 													],
 													"type": {
@@ -13415,7 +13452,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 98,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 														}
 													],
 													"type": {
@@ -13485,7 +13522,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 84,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 														}
 													],
 													"type": {
@@ -13530,7 +13567,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 133,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 										}
 									],
 									"type": {
@@ -13579,7 +13616,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 148,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 														}
 													],
 													"type": {
@@ -13641,7 +13678,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 141,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 														}
 													],
 													"type": {
@@ -13733,7 +13770,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 122,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L122"
 						}
 					],
 					"type": {
@@ -13792,7 +13830,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 148,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L148"
 						}
 					],
 					"type": {
@@ -13883,7 +13922,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 155,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L155"
 						}
 					],
 					"type": {
@@ -13971,7 +14011,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 141,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L141"
 						}
 					],
 					"type": {
@@ -14026,7 +14067,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 128,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L128"
 						}
 					],
 					"type": {
@@ -14122,7 +14164,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 116,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L116"
 						}
 					],
 					"type": {
@@ -14156,7 +14199,8 @@
 				{
 					"fileName": "packages/core/src/react/components/Studio.tsx",
 					"line": 108,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L108"
 				}
 			]
 		},
@@ -14224,7 +14268,7 @@
 							"fileName": "packages/core/src/runtime/compile-plugins.ts",
 							"line": 77,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L77"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L77"
 						}
 					],
 					"type": {
@@ -14309,7 +14353,7 @@
 							"fileName": "packages/core/src/runtime/compile-plugins.ts",
 							"line": 83,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L83"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L83"
 						}
 					],
 					"type": {
@@ -14357,7 +14401,7 @@
 							"fileName": "packages/core/src/runtime/compile-plugins.ts",
 							"line": 72,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L72"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L72"
 						}
 					],
 					"type": {
@@ -14438,7 +14482,7 @@
 							"fileName": "packages/core/src/runtime/compile-plugins.ts",
 							"line": 99,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L99"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L99"
 						}
 					],
 					"type": {
@@ -14500,7 +14544,7 @@
 							"fileName": "packages/core/src/runtime/compile-plugins.ts",
 							"line": 67,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L67"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L67"
 						}
 					],
 					"type": {
@@ -14546,7 +14590,7 @@
 							"fileName": "packages/core/src/runtime/compile-plugins.ts",
 							"line": 104,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L104"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L104"
 						}
 					],
 					"type": {
@@ -14586,7 +14630,7 @@
 					"fileName": "packages/core/src/runtime/compile-plugins.ts",
 					"line": 61,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L61"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L61"
 				}
 			]
 		},
@@ -14633,7 +14677,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/theme-store.ts",
 							"line": 74,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L74"
 						}
 					],
 					"type": {
@@ -14671,7 +14716,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/theme-store.ts",
 							"line": 80,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L80"
 						}
 					],
 					"type": {
@@ -14691,7 +14737,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/theme-store.ts",
 							"line": 97,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L97"
 						}
 					],
 					"signatures": [
@@ -14723,7 +14770,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/theme-store.ts",
 									"line": 97,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L97"
 								}
 							],
 							"type": {
@@ -14743,7 +14791,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/theme-store.ts",
 							"line": 85,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L85"
 						}
 					],
 					"signatures": [
@@ -14765,7 +14814,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/theme-store.ts",
 									"line": 85,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L85"
 								}
 							],
 							"parameters": [
@@ -14800,7 +14850,8 @@
 						{
 							"fileName": "packages/core/src/react/stores/theme-store.ts",
 							"line": 91,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L91"
 						}
 					],
 					"signatures": [
@@ -14846,7 +14897,8 @@
 								{
 									"fileName": "packages/core/src/react/stores/theme-store.ts",
 									"line": 91,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L91"
 								}
 							],
 							"parameters": [
@@ -14893,7 +14945,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/theme-store.ts",
 					"line": 70,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L70"
 				}
 			]
 		},
@@ -14982,7 +15035,8 @@
 						{
 							"fileName": "packages/core/src/react/hooks/use-studio.ts",
 							"line": 83,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/hooks/use-studio.ts#L83"
 						}
 					],
 					"type": {
@@ -15066,7 +15120,8 @@
 						{
 							"fileName": "packages/core/src/react/hooks/use-studio.ts",
 							"line": 90,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/hooks/use-studio.ts#L90"
 						}
 					],
 					"type": {
@@ -15121,7 +15176,8 @@
 						{
 							"fileName": "packages/core/src/react/hooks/use-studio.ts",
 							"line": 75,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/hooks/use-studio.ts#L75"
 						}
 					],
 					"type": {
@@ -15153,7 +15209,8 @@
 				{
 					"fileName": "packages/core/src/react/hooks/use-studio.ts",
 					"line": 68,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/hooks/use-studio.ts#L68"
 				}
 			]
 		},
@@ -15184,7 +15241,7 @@
 					"fileName": "packages/core/src/types/ai.ts",
 					"line": 45,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/ai.ts#L45"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/ai.ts#L45"
 				}
 			],
 			"type": {
@@ -15289,7 +15346,7 @@
 					"fileName": "packages/core/src/types/export.ts",
 					"line": 114,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L114"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L114"
 				}
 			],
 			"typeParameters": [
@@ -15432,7 +15489,7 @@
 					"fileName": "packages/core/src/types/export.ts",
 					"line": 45,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/export.ts#L45"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/export.ts#L45"
 				}
 			],
 			"type": {
@@ -15490,7 +15547,7 @@
 					"fileName": "packages/core/src/runtime/lifecycle-manager.ts",
 					"line": 61,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/lifecycle-manager.ts#L61"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/lifecycle-manager.ts#L61"
 				}
 			],
 			"type": {
@@ -15564,7 +15621,7 @@
 					"fileName": "packages/core/src/runtime/lifecycle-manager.ts",
 					"line": 74,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/lifecycle-manager.ts#L74"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/lifecycle-manager.ts#L74"
 				}
 			],
 			"type": {
@@ -15727,7 +15784,7 @@
 					"fileName": "packages/core/src/types/config.ts",
 					"line": 42,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/config.ts#L42"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/config.ts#L42"
 				}
 			],
 			"type": {
@@ -15822,7 +15879,7 @@
 					"fileName": "packages/core/src/types/plugin.ts",
 					"line": 43,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/types/plugin.ts#L43"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/types/plugin.ts#L43"
 				}
 			],
 			"type": {
@@ -15873,7 +15930,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/theme-store.ts",
 					"line": 55,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L55"
 				}
 			],
 			"type": {
@@ -15936,7 +15994,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/theme-store.ts",
 					"line": 62,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L62"
 				}
 			],
 			"type": {
@@ -16062,7 +16121,7 @@
 					"fileName": "packages/core/src/runtime/version.ts",
 					"line": 21,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/version.ts#L21"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/version.ts#L21"
 				}
 			],
 			"type": {
@@ -16172,7 +16231,7 @@
 					"fileName": "packages/core/src/config/schema.ts",
 					"line": 69,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L69"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L69"
 				}
 			],
 			"type": {
@@ -16227,7 +16286,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 183,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 												}
 											],
 											"type": {
@@ -16282,7 +16341,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 191,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 																				}
 																			],
 																			"type": {
@@ -16344,7 +16403,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 198,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 																				}
 																			],
 																			"type": {
@@ -16422,7 +16481,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 105,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 												}
 											],
 											"type": {
@@ -16477,7 +16536,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 112,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 																				}
 																			],
 																			"type": {
@@ -16531,7 +16590,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 119,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 																				}
 																			],
 																			"type": {
@@ -16585,7 +16644,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 126,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 																				}
 																			],
 																			"type": {
@@ -16672,7 +16731,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 211,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 												}
 											],
 											"type": {
@@ -16740,7 +16799,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 155,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 												}
 											],
 											"type": {
@@ -16803,7 +16862,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 164,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 																				}
 																			],
 																			"type": {
@@ -16865,7 +16924,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 172,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 																				}
 																			],
 																			"type": {
@@ -16951,7 +17010,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 76,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 												}
 											],
 											"type": {
@@ -17014,7 +17073,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 91,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 																				}
 																			],
 																			"type": {
@@ -17076,7 +17135,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 98,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 																				}
 																			],
 																			"type": {
@@ -17162,7 +17221,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 84,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 																				}
 																			],
 																			"type": {
@@ -17241,7 +17300,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 133,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 												}
 											],
 											"type": {
@@ -17304,7 +17363,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 148,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 																				}
 																			],
 																			"type": {
@@ -17382,7 +17441,7 @@
 																					"fileName": "packages/core/src/config/schema.ts",
 																					"line": 141,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 																				}
 																			],
 																			"type": {
@@ -17565,7 +17624,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/ai-store.ts",
 					"line": 182,
-					"character": 13
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/ai-store.ts#L182"
 				}
 			],
 			"type": {
@@ -17669,7 +17729,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/export-store.ts",
 					"line": 196,
-					"character": 13
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/export-store.ts#L196"
 				}
 			],
 			"type": {
@@ -17757,7 +17818,8 @@
 				{
 					"fileName": "packages/core/src/react/stores/theme-store.ts",
 					"line": 133,
-					"character": 13
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/stores/theme-store.ts#L133"
 				}
 			],
 			"type": {
@@ -17825,7 +17887,7 @@
 					"fileName": "packages/core/src/runtime/compile-plugins.ts",
 					"line": 162,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L162"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L162"
 				}
 			],
 			"signatures": [
@@ -17858,7 +17920,7 @@
 							"fileName": "packages/core/src/runtime/compile-plugins.ts",
 							"line": 162,
 							"character": 22,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/compile-plugins.ts#L162"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/compile-plugins.ts#L162"
 						}
 					],
 					"parameters": [
@@ -17997,7 +18059,7 @@
 					"fileName": "packages/core/src/runtime/header-actions.ts",
 					"line": 154,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/header-actions.ts#L154"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/header-actions.ts#L154"
 				}
 			],
 			"signatures": [
@@ -18078,7 +18140,7 @@
 							"fileName": "packages/core/src/runtime/header-actions.ts",
 							"line": 154,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/header-actions.ts#L154"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/header-actions.ts#L154"
 						}
 					],
 					"parameters": [
@@ -18152,7 +18214,7 @@
 					"fileName": "packages/core/src/runtime/export-registry.ts",
 					"line": 98,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/export-registry.ts#L98"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/export-registry.ts#L98"
 				}
 			],
 			"signatures": [
@@ -18260,7 +18322,7 @@
 							"fileName": "packages/core/src/runtime/export-registry.ts",
 							"line": 98,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/export-registry.ts#L98"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/export-registry.ts#L98"
 						}
 					],
 					"parameters": [
@@ -18353,7 +18415,7 @@
 					"fileName": "packages/core/src/runtime/lifecycle-manager.ts",
 					"line": 122,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/lifecycle-manager.ts#L122"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/lifecycle-manager.ts#L122"
 				}
 			],
 			"signatures": [
@@ -18376,7 +18438,7 @@
 							"fileName": "packages/core/src/runtime/lifecycle-manager.ts",
 							"line": 122,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/lifecycle-manager.ts#L122"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/lifecycle-manager.ts#L122"
 						}
 					],
 					"parameters": [
@@ -18449,7 +18511,7 @@
 					"fileName": "packages/core/src/config/create-config.ts",
 					"line": 132,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/create-config.ts#L132"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/create-config.ts#L132"
 				}
 			],
 			"signatures": [
@@ -18643,7 +18705,7 @@
 							"fileName": "packages/core/src/config/create-config.ts",
 							"line": 132,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/create-config.ts#L132"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/create-config.ts#L132"
 						}
 					],
 					"parameters": [
@@ -18701,7 +18763,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 183,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 												}
 											],
 											"type": {
@@ -18742,7 +18804,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 191,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 																}
 															],
 															"type": {
@@ -18788,7 +18850,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 198,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 																}
 															],
 															"type": {
@@ -18832,7 +18894,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 105,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 												}
 											],
 											"type": {
@@ -18873,7 +18935,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 112,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 																}
 															],
 															"type": {
@@ -18911,7 +18973,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 119,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 																}
 															],
 															"type": {
@@ -18949,7 +19011,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 126,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 																}
 															],
 															"type": {
@@ -19002,7 +19064,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 211,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 												}
 											],
 											"type": {
@@ -19064,7 +19126,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 155,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 												}
 											],
 											"type": {
@@ -19113,7 +19175,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 164,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 																}
 															],
 															"type": {
@@ -19159,7 +19221,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 172,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 																}
 															],
 															"type": {
@@ -19211,7 +19273,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 76,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 												}
 											],
 											"type": {
@@ -19260,7 +19322,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 91,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 																}
 															],
 															"type": {
@@ -19306,7 +19368,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 98,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 																}
 															],
 															"type": {
@@ -19376,7 +19438,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 84,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 																}
 															],
 															"type": {
@@ -19421,7 +19483,7 @@
 													"fileName": "packages/core/src/config/schema.ts",
 													"line": 133,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 												}
 											],
 											"type": {
@@ -19470,7 +19532,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 148,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 																}
 															],
 															"type": {
@@ -19532,7 +19594,7 @@
 																	"fileName": "packages/core/src/config/schema.ts",
 																	"line": 141,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 																}
 															],
 															"type": {
@@ -19655,7 +19717,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 183,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 										}
 									],
 									"type": {
@@ -19696,7 +19758,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 191,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 														}
 													],
 													"type": {
@@ -19740,7 +19802,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 198,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 														}
 													],
 													"type": {
@@ -19782,7 +19844,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 105,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 										}
 									],
 									"type": {
@@ -19821,7 +19883,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 112,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 														}
 													],
 													"type": {
@@ -19859,7 +19921,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 119,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 														}
 													],
 													"type": {
@@ -19897,7 +19959,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 126,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 														}
 													],
 													"type": {
@@ -19948,7 +20010,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 211,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 										}
 									],
 									"type": {
@@ -19992,7 +20054,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 155,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 										}
 									],
 									"type": {
@@ -20041,7 +20103,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 164,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 														}
 													],
 													"type": {
@@ -20085,7 +20147,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 172,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 														}
 													],
 													"type": {
@@ -20135,7 +20197,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 76,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 										}
 									],
 									"type": {
@@ -20182,7 +20244,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 91,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 														}
 													],
 													"type": {
@@ -20226,7 +20288,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 98,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 														}
 													],
 													"type": {
@@ -20294,7 +20356,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 84,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 														}
 													],
 													"type": {
@@ -20337,7 +20399,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 133,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 										}
 									],
 									"type": {
@@ -20384,7 +20446,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 148,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 														}
 													],
 													"type": {
@@ -20444,7 +20506,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 141,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 														}
 													],
 													"type": {
@@ -20510,7 +20572,7 @@
 					"fileName": "packages/core/src/runtime/detect-plugin.ts",
 					"line": 114,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/detect-plugin.ts#L114"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/detect-plugin.ts#L114"
 				}
 			],
 			"signatures": [
@@ -20703,7 +20765,7 @@
 							"fileName": "packages/core/src/runtime/detect-plugin.ts",
 							"line": 114,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/detect-plugin.ts#L114"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/detect-plugin.ts#L114"
 						}
 					],
 					"parameters": [
@@ -20748,7 +20810,7 @@
 					"fileName": "packages/core/src/runtime/detect-plugin.ts",
 					"line": 65,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/detect-plugin.ts#L65"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/detect-plugin.ts#L65"
 				}
 			],
 			"signatures": [
@@ -20831,7 +20893,7 @@
 							"fileName": "packages/core/src/runtime/detect-plugin.ts",
 							"line": 65,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/runtime/detect-plugin.ts#L65"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/runtime/detect-plugin.ts#L65"
 						}
 					],
 					"parameters": [
@@ -20883,7 +20945,8 @@
 				{
 					"fileName": "packages/core/src/react/overrides/merge-overrides.ts",
 					"line": 132,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/overrides/merge-overrides.ts#L132"
 				}
 			],
 			"signatures": [
@@ -21004,7 +21067,8 @@
 						{
 							"fileName": "packages/core/src/react/overrides/merge-overrides.ts",
 							"line": 132,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/overrides/merge-overrides.ts#L132"
 						}
 					],
 					"parameters": [
@@ -21098,7 +21162,7 @@
 					"fileName": "packages/core/src/config/env-parser.ts",
 					"line": 200,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/env-parser.ts#L200"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/env-parser.ts#L200"
 				}
 			],
 			"signatures": [
@@ -21180,7 +21244,7 @@
 							"fileName": "packages/core/src/config/env-parser.ts",
 							"line": 200,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/env-parser.ts#L200"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/env-parser.ts#L200"
 						}
 					],
 					"parameters": [
@@ -21276,7 +21340,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 183,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 										}
 									],
 									"type": {
@@ -21317,7 +21381,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 191,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 														}
 													],
 													"type": {
@@ -21363,7 +21427,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 198,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 														}
 													],
 													"type": {
@@ -21407,7 +21471,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 105,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 										}
 									],
 									"type": {
@@ -21448,7 +21512,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 112,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 														}
 													],
 													"type": {
@@ -21486,7 +21550,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 119,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 														}
 													],
 													"type": {
@@ -21524,7 +21588,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 126,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 														}
 													],
 													"type": {
@@ -21577,7 +21641,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 211,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 										}
 									],
 									"type": {
@@ -21639,7 +21703,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 155,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 										}
 									],
 									"type": {
@@ -21688,7 +21752,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 164,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 														}
 													],
 													"type": {
@@ -21734,7 +21798,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 172,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 														}
 													],
 													"type": {
@@ -21786,7 +21850,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 76,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 										}
 									],
 									"type": {
@@ -21835,7 +21899,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 91,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 														}
 													],
 													"type": {
@@ -21881,7 +21945,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 98,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 														}
 													],
 													"type": {
@@ -21951,7 +22015,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 84,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 														}
 													],
 													"type": {
@@ -21996,7 +22060,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 133,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 										}
 									],
 									"type": {
@@ -22045,7 +22109,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 148,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 														}
 													],
 													"type": {
@@ -22107,7 +22171,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 141,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 														}
 													],
 													"type": {
@@ -22172,7 +22236,8 @@
 				{
 					"fileName": "packages/core/src/react/components/Studio.tsx",
 					"line": 252,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L252"
 				}
 			],
 			"signatures": [
@@ -22213,7 +22278,8 @@
 						{
 							"fileName": "packages/core/src/react/components/Studio.tsx",
 							"line": 252,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/components/Studio.tsx#L252"
 						}
 					],
 					"parameters": [
@@ -22297,7 +22363,7 @@
 					"fileName": "packages/core/src/config/provider.tsx",
 					"line": 99,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/provider.tsx#L99"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/provider.tsx#L99"
 				}
 			],
 			"signatures": [
@@ -22359,7 +22425,7 @@
 							"fileName": "packages/core/src/config/provider.tsx",
 							"line": 99,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/provider.tsx#L99"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/provider.tsx#L99"
 						}
 					],
 					"parameters": [
@@ -22401,7 +22467,8 @@
 				{
 					"fileName": "packages/core/src/react/hooks/use-studio.ts",
 					"line": 111,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/hooks/use-studio.ts#L111"
 				}
 			],
 			"signatures": [
@@ -22487,7 +22554,8 @@
 						{
 							"fileName": "packages/core/src/react/hooks/use-studio.ts",
 							"line": 111,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/react/hooks/use-studio.ts#L111"
 						}
 					],
 					"type": {
@@ -22510,19 +22578,19 @@
 					"fileName": "packages/core/src/config/hooks.ts",
 					"line": 63,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/hooks.ts#L63"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/hooks.ts#L63"
 				},
 				{
 					"fileName": "packages/core/src/config/hooks.ts",
 					"line": 78,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/hooks.ts#L78"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/hooks.ts#L78"
 				},
 				{
 					"fileName": "packages/core/src/config/hooks.ts",
 					"line": 79,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/hooks.ts#L79"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/hooks.ts#L79"
 				}
 			],
 			"signatures": [
@@ -22592,7 +22660,7 @@
 							"fileName": "packages/core/src/config/hooks.ts",
 							"line": 63,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/hooks.ts#L63"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/hooks.ts#L63"
 						}
 					],
 					"type": {
@@ -22631,7 +22699,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 183,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 										}
 									],
 									"type": {
@@ -22672,7 +22740,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 191,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 														}
 													],
 													"type": {
@@ -22716,7 +22784,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 198,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 														}
 													],
 													"type": {
@@ -22758,7 +22826,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 105,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 										}
 									],
 									"type": {
@@ -22797,7 +22865,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 112,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 														}
 													],
 													"type": {
@@ -22835,7 +22903,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 119,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 														}
 													],
 													"type": {
@@ -22873,7 +22941,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 126,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 														}
 													],
 													"type": {
@@ -22924,7 +22992,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 211,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 										}
 									],
 									"type": {
@@ -22968,7 +23036,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 155,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 										}
 									],
 									"type": {
@@ -23017,7 +23085,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 164,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 														}
 													],
 													"type": {
@@ -23061,7 +23129,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 172,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 														}
 													],
 													"type": {
@@ -23111,7 +23179,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 76,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 										}
 									],
 									"type": {
@@ -23158,7 +23226,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 91,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 														}
 													],
 													"type": {
@@ -23202,7 +23270,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 98,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 														}
 													],
 													"type": {
@@ -23270,7 +23338,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 84,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 														}
 													],
 													"type": {
@@ -23313,7 +23381,7 @@
 											"fileName": "packages/core/src/config/schema.ts",
 											"line": 133,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 										}
 									],
 									"type": {
@@ -23360,7 +23428,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 148,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 														}
 													],
 													"type": {
@@ -23420,7 +23488,7 @@
 															"fileName": "packages/core/src/config/schema.ts",
 															"line": 141,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 														}
 													],
 													"type": {
@@ -23546,7 +23614,7 @@
 							"fileName": "packages/core/src/config/hooks.ts",
 							"line": 78,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/hooks.ts#L78"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/hooks.ts#L78"
 						}
 					],
 					"typeParameters": [
@@ -23631,7 +23699,7 @@
 																			"fileName": "packages/core/src/config/schema.ts",
 																			"line": 183,
 																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L183"
+																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L183"
 																		}
 																	],
 																	"type": {
@@ -23672,7 +23740,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 191,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L191"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L191"
 																						}
 																					],
 																					"type": {
@@ -23716,7 +23784,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 198,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L198"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L198"
 																						}
 																					],
 																					"type": {
@@ -23758,7 +23826,7 @@
 																			"fileName": "packages/core/src/config/schema.ts",
 																			"line": 105,
 																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L105"
+																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L105"
 																		}
 																	],
 																	"type": {
@@ -23797,7 +23865,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 112,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L112"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L112"
 																						}
 																					],
 																					"type": {
@@ -23835,7 +23903,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 119,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L119"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L119"
 																						}
 																					],
 																					"type": {
@@ -23873,7 +23941,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 126,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L126"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L126"
 																						}
 																					],
 																					"type": {
@@ -23924,7 +23992,7 @@
 																			"fileName": "packages/core/src/config/schema.ts",
 																			"line": 211,
 																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L211"
+																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L211"
 																		}
 																	],
 																	"type": {
@@ -23968,7 +24036,7 @@
 																			"fileName": "packages/core/src/config/schema.ts",
 																			"line": 155,
 																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L155"
+																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L155"
 																		}
 																	],
 																	"type": {
@@ -24017,7 +24085,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 164,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L164"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L164"
 																						}
 																					],
 																					"type": {
@@ -24061,7 +24129,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 172,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L172"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L172"
 																						}
 																					],
 																					"type": {
@@ -24111,7 +24179,7 @@
 																			"fileName": "packages/core/src/config/schema.ts",
 																			"line": 76,
 																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L76"
+																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L76"
 																		}
 																	],
 																	"type": {
@@ -24158,7 +24226,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 91,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L91"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L91"
 																						}
 																					],
 																					"type": {
@@ -24202,7 +24270,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 98,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L98"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L98"
 																						}
 																					],
 																					"type": {
@@ -24270,7 +24338,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 84,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L84"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L84"
 																						}
 																					],
 																					"type": {
@@ -24313,7 +24381,7 @@
 																			"fileName": "packages/core/src/config/schema.ts",
 																			"line": 133,
 																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L133"
+																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L133"
 																		}
 																	],
 																	"type": {
@@ -24360,7 +24428,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 148,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L148"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L148"
 																						}
 																					],
 																					"type": {
@@ -24420,7 +24488,7 @@
 																							"fileName": "packages/core/src/config/schema.ts",
 																							"line": 141,
 																							"character": 4,
-																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/c1fe7ea230a07c6ac9d386c9e6270c640a043c0b/packages/core/src/config/schema.ts#L141"
+																							"url": "https://github.com/ancyloce/anvilkit-studio/blob/507d35235087bce137a6d5f4f434c15a781c1823/packages/core/src/config/schema.ts#L141"
 																						}
 																					],
 																					"type": {
