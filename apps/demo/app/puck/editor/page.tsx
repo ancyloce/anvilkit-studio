@@ -3,8 +3,8 @@
 import { Studio } from "@anvilkit/core";
 import type { Data } from "@puckeditor/core";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
 	createDemoData,
 	createDemoModeHref,
@@ -16,18 +16,33 @@ import {
 import { smokeTestPlugin } from "../../../lib/smoke-test-plugin";
 import styles from "../puck.module.css";
 
-function PuckEditorContent() {
+// The editor page reads the incoming demo `data` param from
+// `window.location.search` in a client effect rather than calling
+// `useSearchParams()` at render time. The hook-based approach forces
+// the render tree into a `<Suspense>` fallback under Next.js 16's
+// `"use client"` boundary, and under Next.js 16 + React 19 that
+// Suspense boundary never resolves on client hydration — the page
+// gets permanently stuck on its fallback.
+//
+// This effect-based read sidesteps the issue entirely: the initial
+// render uses `createDemoData()`, and on mount we replace it with the
+// URL-derived payload. Playwright's smoke test (`e2e/smoke.spec.ts`)
+// asserts that `smokeTestPlugin.onInit` fires end-to-end, which
+// requires this page to mount successfully.
+export default function PuckEditorPage() {
 	const router = useRouter();
-	const searchParams = useSearchParams();
-	const incomingData = searchParams.get(demoDataSearchParam);
 	const [publishedData, setPublishedData] = useState<Data<DemoComponents>>(() =>
 		createDemoData(),
 	);
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
 
 	useEffect(() => {
-		setPublishedData(getDemoDataFromSearchParam(incomingData));
-	}, [incomingData]);
+		const params = new URLSearchParams(window.location.search);
+		const incomingData = params.get(demoDataSearchParam);
+		if (incomingData !== null) {
+			setPublishedData(getDemoDataFromSearchParam(incomingData));
+		}
+	}, []);
 
 	function handlePublish(nextPublishedData: Data) {
 		// `<Studio>` narrows its callback to Puck's default `Data` type.
@@ -89,33 +104,5 @@ function PuckEditorContent() {
 				</pre>
 			</section>
 		</main>
-	);
-}
-
-export default function PuckEditorPage() {
-	return (
-		<Suspense
-			fallback={
-				<main className={styles.shell}>
-					<section className={styles.masthead}>
-						<div>
-							<p className={styles.eyebrow}>Editor Validation</p>
-							<h1 className={styles.title}>Loading Puck editor...</h1>
-							<p className={styles.lede}>
-								Preparing the shared navbar, hero, pricing, Bento Grid, section,
-								statistics, blog list, helps, and logo cloud demo payload.
-							</p>
-						</div>
-						<div className={styles.actions}>
-							<Link href="/" className={styles.secondaryAction}>
-								Back to demo hub
-							</Link>
-						</div>
-					</section>
-				</main>
-			}
-		>
-			<PuckEditorContent />
-		</Suspense>
 	);
 }
