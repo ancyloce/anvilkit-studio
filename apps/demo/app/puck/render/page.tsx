@@ -1,3 +1,18 @@
+// The render path deliberately keeps `<Render>` from `@puckeditor/core/rsc`
+// instead of importing `<Studio>` from `@anvilkit/core`. Three reasons:
+//
+//   1. `<Studio>` is the *editor* shell — it mounts `<Puck>`, runs the
+//      plugin compile + lifecycle pipeline, and is `"use client"`. The
+//      render route is a React Server Component and never needs any of
+//      that machinery.
+//   2. `@puckeditor/core/rsc` is the RSC-safe entry point for `Render`
+//      so page rendering stays on the server and ships zero editor
+//      JavaScript to the client.
+//   3. Plugin lifecycle hooks (`onInit`, `onDataChange`, publish veto)
+//      have no meaning on the read path — there is no editing session
+//      to observe.
+//
+// See `docs/tasks/core-016-demo-migration.md` — implementation notes.
 import { Render } from "@puckeditor/core/rsc";
 import Link from "next/link";
 import {

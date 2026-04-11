@@ -1,6 +1,7 @@
 "use client";
 
-import { type Data, Puck } from "@puckeditor/core";
+import { Studio } from "@anvilkit/core";
+import type { Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
@@ -12,6 +13,7 @@ import {
 	demoDataSearchParam,
 	getDemoDataFromSearchParam,
 } from "../../../lib/puck-demo";
+import { smokeTestPlugin } from "../../../lib/smoke-test-plugin";
 import styles from "../puck.module.css";
 
 function PuckEditorContent() {
@@ -27,9 +29,16 @@ function PuckEditorContent() {
 		setPublishedData(getDemoDataFromSearchParam(incomingData));
 	}, [incomingData]);
 
-	function handlePublish(nextPublishedData: Data<DemoComponents>) {
-		setPublishedData(nextPublishedData);
-		router.push(createDemoModeHref("/puck/render", nextPublishedData));
+	function handlePublish(nextPublishedData: Data) {
+		// `<Studio>` narrows its callback to Puck's default `Data` type.
+		// The demo knows the shape is `Data<DemoComponents>` because
+		// `demoConfig` is the source of truth; assert through `unknown`
+		// so the editor state stays strongly typed without forking the
+		// public Studio surface.
+		const typedData = nextPublishedData as unknown as Data<DemoComponents>;
+		setPublishedData(typedData);
+		router.push(createDemoModeHref("/puck/render", typedData));
+		console.log("[demo] publish", typedData);
 	}
 
 	return (
@@ -42,12 +51,10 @@ function PuckEditorContent() {
 						section, statistics, blog list, helps, and logo cloud demo.
 					</h1>
 					<p className={styles.lede}>
-						This route uses the real package exports from `@anvilkit/navbar` and
-						`@anvilkit/hero`, plus `@anvilkit/pricing-minimal`,
-						`@anvilkit/bento-grid`, `@anvilkit/section`, `@anvilkit/statistics`,
-						`@anvilkit/blog-list`, `@anvilkit/helps`, and
-						`@anvilkit/logo-clouds`, composed into the same consumer-owned Puck
-						`Config` used by render mode.
+						This route mounts {"`<Studio>`"} from `@anvilkit/core` with the
+						same consumer-owned Puck `Config` used by render mode. The demo
+						`smokeTestPlugin` logs every lifecycle event so you can verify the
+						plugin pipeline end-to-end from the browser console.
 					</p>
 				</div>
 				<div className={styles.actions}>
@@ -61,12 +68,10 @@ function PuckEditorContent() {
 			</section>
 
 			<section className={styles.panel}>
-				<Puck
-					config={demoConfig}
+				<Studio
+					puckConfig={demoConfig}
 					data={publishedData}
-					headerPath="/"
-					headerTitle="Anvilkit Components"
-					height="100vh"
+					plugins={[smokeTestPlugin]}
 					onPublish={handlePublish}
 				/>
 			</section>
