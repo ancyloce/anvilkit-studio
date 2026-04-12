@@ -18,7 +18,9 @@
 			"require": "./dist/*.cjs"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"license": "MIT",
 	"sideEffects": false,
 	"publishConfig": {
