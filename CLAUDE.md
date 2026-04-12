@@ -119,6 +119,16 @@ git submodule update --init --recursive  # Initialize after cloning
 
 Submodules: `packages/components`, `packages/plugins/plugin-ai-copilot`, `packages/plugins/plugin-export-html`
 
+## Health Stack
+
+- typecheck: pnpm typecheck
+- lint: pnpm lint
+- test: pnpm test
+
+knip and shellcheck are intentionally skipped: neither is installed in this repo,
+and the only `.sh` files live under `node_modules/`. Reintroduce them here if that
+ever changes.
+
 ## Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill
