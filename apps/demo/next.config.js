@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
 	experimental: {
 		externalDir: true,
@@ -9,12 +9,17 @@ const nextConfig = {
 		"@anvilkit/core",
 		"@anvilkit/hero",
 		"@anvilkit/helps",
+		"@anvilkit/ir",
 		"@anvilkit/logo-clouds",
 		"@anvilkit/navbar",
+		"@anvilkit/plugin-ai-copilot",
+		"@anvilkit/plugin-export-html",
 		"@anvilkit/pricing-minimal",
+		"@anvilkit/schema",
 		"@anvilkit/section",
 		"@anvilkit/statistics",
 		"@anvilkit/ui",
+		"@anvilkit/validator",
 	],
 };
 

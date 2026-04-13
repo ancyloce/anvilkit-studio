@@ -1,7 +1,11 @@
 "use client";
 
 import { Studio } from "@anvilkit/core";
-import type { Data } from "@puckeditor/core";
+import { puckDataToIR } from "@anvilkit/ir";
+import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
+import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
+import { createHtmlExportPlugin, htmlFormat } from "@anvilkit/plugin-export-html";
+import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,6 +19,17 @@ import {
 } from "../../../lib/puck-demo";
 import { smokeTestPlugin } from "../../../lib/smoke-test-plugin";
 import styles from "../puck.module.css";
+
+// Hoisted to module scope so React re-renders do not re-instantiate
+// the plugins (which would bust the AI copilot's WeakMap cache and
+// re-run compilePlugins inside <Studio>).
+const htmlExportPlugin = createHtmlExportPlugin();
+const aiCopilotPlugin = createAiCopilotPlugin({
+	puckConfig: demoConfig as unknown as Config,
+	generatePage: createMockGeneratePage({ delayMs: 300 }),
+	timeoutMs: 5_000,
+	forwardCurrentData: true,
+});
 
 // The editor page reads the incoming demo `data` param from
 // `window.location.search` in a client effect rather than calling
@@ -34,6 +49,9 @@ export default function PuckEditorPage() {
 	const [publishedData, setPublishedData] = useState<Data<DemoComponents>>(() =>
 		createDemoData(),
 	);
+	const [prompt, setPrompt] = useState("");
+	const [aiError, setAiError] = useState<string | null>(null);
+	const [aiStatus, setAiStatus] = useState<"idle" | "pending">("idle");
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
 
 	useEffect(() => {
@@ -54,6 +72,54 @@ export default function PuckEditorPage() {
 		setPublishedData(typedData);
 		router.push(createDemoModeHref("/puck/render", typedData));
 		console.log("[demo] publish", typedData);
+	}
+
+	async function handleExportHtml() {
+		try {
+			const ir = puckDataToIR(
+				publishedData,
+				demoConfig as unknown as Config,
+			);
+			const result = await htmlFormat.run(ir, { title: "Exported Page" });
+			const blobPart =
+				typeof result.content === "string"
+					? result.content
+					: new Uint8Array(result.content);
+			const blob = new Blob([blobPart], { type: htmlFormat.mimeType });
+			const url = URL.createObjectURL(blob);
+			const anchor = document.createElement("a");
+			anchor.href = url;
+			anchor.download = result.filename;
+			document.body.appendChild(anchor);
+			anchor.click();
+			anchor.remove();
+			URL.revokeObjectURL(url);
+			console.log("[demo] exported html", {
+				filename: result.filename,
+				byteLength: result.content.length,
+			});
+		} catch (error) {
+			console.error("[demo] export failed", error);
+		}
+	}
+
+	async function handleGenerate() {
+		const trimmed = prompt.trim();
+		if (trimmed.length === 0) {
+			setAiError("Enter a prompt first.");
+			return;
+		}
+		setAiError(null);
+		setAiStatus("pending");
+		try {
+			await aiCopilotPlugin.runGeneration(trimmed);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			setAiError(message);
+			console.error("[demo] ai generation failed", error);
+		} finally {
+			setAiStatus("idle");
+		}
 	}
 
 	return (
@@ -82,11 +148,71 @@ export default function PuckEditorPage() {
 				</div>
 			</section>
 
+			<section className={styles.masthead} aria-labelledby="demo-copilot-heading">
+				<div>
+					<p className={styles.eyebrow}>Plugins</p>
+					<h2
+						id="demo-copilot-heading"
+						className={styles.title}
+						style={{ fontSize: "1.4rem" }}
+					>
+						AI copilot + HTML export
+					</h2>
+					<p className={styles.lede}>
+						Type a prompt that matches a mock fixture (e.g. &ldquo;a hero for a
+						SaaS landing page&rdquo;) and hit Generate to see the canvas
+						update. Use Download HTML to export the current canvas as a
+						standalone document.
+					</p>
+				</div>
+				<label htmlFor="ai-prompt" style={{ display: "grid", gap: "0.5rem" }}>
+					<span className={styles.eyebrow}>Prompt</span>
+					<textarea
+						id="ai-prompt"
+						name="ai-prompt"
+						value={prompt}
+						onChange={(event) => setPrompt(event.target.value)}
+						rows={3}
+						placeholder="a hero for a SaaS landing page"
+						style={{
+							padding: "0.75rem",
+							borderRadius: "0.75rem",
+							border: "1px solid var(--demo-panel-border)",
+							fontFamily: "inherit",
+							fontSize: "0.95rem",
+							resize: "vertical",
+						}}
+					/>
+				</label>
+				<div className={styles.actions}>
+					<button
+						type="button"
+						className={styles.primaryAction}
+						onClick={handleGenerate}
+						disabled={aiStatus === "pending"}
+					>
+						{aiStatus === "pending" ? "Generating…" : "Generate"}
+					</button>
+					<button
+						type="button"
+						className={styles.secondaryAction}
+						onClick={handleExportHtml}
+					>
+						Download HTML
+					</button>
+				</div>
+				{aiError !== null ? (
+					<p role="alert" data-testid="ai-error" style={{ color: "crimson" }}>
+						{aiError}
+					</p>
+				) : null}
+			</section>
+
 			<section className={styles.panel}>
 				<Studio
 					puckConfig={demoConfig}
 					data={publishedData}
-					plugins={[smokeTestPlugin]}
+					plugins={[smokeTestPlugin, htmlExportPlugin, aiCopilotPlugin]}
 					onPublish={handlePublish}
 				/>
 			</section>
