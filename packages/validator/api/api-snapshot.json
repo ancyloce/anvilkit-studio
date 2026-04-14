@@ -21,14 +21,6 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"sources": [
-						{
-							"fileName": "types.ts",
-							"line": 3,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L3"
-						}
-					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
@@ -43,14 +35,6 @@
 						"isOptional": true,
 						"isReadonly": true
 					},
-					"sources": [
-						{
-							"fileName": "types.ts",
-							"line": 6,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L6"
-						}
-					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
@@ -64,14 +48,6 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"sources": [
-						{
-							"fileName": "types.ts",
-							"line": 2,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L2"
-						}
-					],
 					"type": {
 						"type": "union",
 						"types": [
@@ -94,14 +70,6 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"sources": [
-						{
-							"fileName": "types.ts",
-							"line": 4,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L4"
-						}
-					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
@@ -115,14 +83,6 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"sources": [
-						{
-							"fileName": "types.ts",
-							"line": 5,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L5"
-						}
-					],
 					"type": {
 						"type": "typeOperator",
 						"operator": "readonly",
@@ -156,14 +116,6 @@
 						5
 					]
 				}
-			],
-			"sources": [
-				{
-					"fileName": "types.ts",
-					"line": 1,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L1"
-				}
 			]
 		},
 		{
@@ -181,14 +133,6 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"sources": [
-						{
-							"fileName": "types.ts",
-							"line": 11,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L11"
-						}
-					],
 					"type": {
 						"type": "typeOperator",
 						"operator": "readonly",
@@ -211,14 +155,6 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"sources": [
-						{
-							"fileName": "types.ts",
-							"line": 10,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L10"
-						}
-					],
 					"type": {
 						"type": "intrinsic",
 						"name": "boolean"
@@ -233,14 +169,6 @@
 						8
 					]
 				}
-			],
-			"sources": [
-				{
-					"fileName": "types.ts",
-					"line": 9,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L9"
-				}
 			]
 		},
 		{
@@ -249,14 +177,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "validate-ai-output.ts",
-					"line": 67,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-ai-output.ts#L67"
-				}
-			],
 			"signatures": [
 				{
 					"id": 11,
@@ -264,14 +184,6 @@
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
-					"sources": [
-						{
-							"fileName": "validate-ai-output.ts",
-							"line": 67,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-ai-output.ts#L67"
-						}
-					],
 					"parameters": [
 						{
 							"id": 12,
@@ -328,14 +240,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "validate-component-config.ts",
-					"line": 15,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-component-config.ts#L15"
-				}
-			],
 			"signatures": [
 				{
 					"id": 15,
@@ -343,14 +247,6 @@
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
-					"sources": [
-						{
-							"fileName": "validate-component-config.ts",
-							"line": 15,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-component-config.ts#L15"
-						}
-					],
 					"typeParameters": [
 						{
 							"id": 16,
@@ -432,7 +328,15 @@
 		},
 		{
 			"kind": "text",
-			"text": " are implemented and tested.\n\n## Quickstart\n\n### Validating a Puck component config\n\n"
+			"text": " are implemented and tested.\n\n## Install\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "```bash\npnpm add @anvilkit/validator @puckeditor/core\n```"
+		},
+		{
+			"kind": "text",
+			"text": "\n\n## Quickstart\n\n### Validating a Puck component config\n\n"
 		},
 		{
 			"kind": "code",
@@ -448,7 +352,41 @@
 		},
 		{
 			"kind": "text",
-			"text": "\n\n## Error Codes — "
+			"text": "\n\n## Phase 3 references\n\nSee the [Phase 3 plan]("
+		},
+		{
+			"kind": "relative-link",
+			"text": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
+			"target": 2
+		},
+		{
+			"kind": "text",
+			"text": ")\n("
+		},
+		{
+			"kind": "code",
+			"text": "`M3 — @anvilkit/validator`"
+		},
+		{
+			"kind": "text",
+			"text": ") and the\n[architecture package catalog]("
+		},
+		{
+			"kind": "relative-link",
+			"text": "../../docs/ai-context/anvilkit-architecture.md",
+			"target": 3
+		},
+		{
+			"kind": "text",
+			"text": ")\n("
+		},
+		{
+			"kind": "code",
+			"text": "`§7 — @anvilkit/validator [Planned]`"
+		},
+		{
+			"kind": "text",
+			"text": ") for the validator's trust\nboundary and dependency rules.\n\n## Error Codes — "
 		},
 		{
 			"kind": "code",
@@ -832,7 +770,23 @@
 		},
 		{
 			"kind": "text",
-			"text": " (peer, types-only) | |"
+			"text": " (peer, types-only) | |\n\n## Peer dependencies\n\n| Package | Version |\n| ------- | ------- |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`@puckeditor/core`"
+		},
+		{
+			"kind": "text",
+			"text": " | "
+		},
+		{
+			"kind": "code",
+			"text": "`^0.19.0`"
+		},
+		{
+			"kind": "text",
+			"text": " |"
 		}
 	],
 	"symbolIdMap": {
@@ -930,13 +884,15 @@
 	"files": {
 		"entries": {
 			"1": "src/index.ts",
-			"2": "README.md",
-			"3": ""
+			"2": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
+			"3": "../../docs/ai-context/anvilkit-architecture.md",
+			"4": "README.md",
+			"5": ""
 		},
 		"reflections": {
 			"1": 0,
-			"2": 0,
-			"3": 0
+			"4": 0,
+			"5": 0
 		}
 	}
 }

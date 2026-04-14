@@ -21,14 +21,6 @@
 					"flags": {
 						"isOptional": true
 					},
-					"sources": [
-						{
-							"fileName": "config-to-ai-context.ts",
-							"line": 21,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/config-to-ai-context.ts#L21"
-						}
-					],
 					"type": {
 						"type": "array",
 						"elementType": {
@@ -44,14 +36,6 @@
 					"children": [
 						2
 					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "config-to-ai-context.ts",
-					"line": 20,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/config-to-ai-context.ts#L20"
 				}
 			]
 		},
@@ -70,14 +54,6 @@
 					"flags": {
 						"isOptional": true
 					},
-					"sources": [
-						{
-							"fileName": "extract-field-schema.ts",
-							"line": 8,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/extract-field-schema.ts#L8"
-						}
-					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
@@ -91,14 +67,6 @@
 					"flags": {
 						"isOptional": true
 					},
-					"sources": [
-						{
-							"fileName": "extract-field-schema.ts",
-							"line": 7,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/extract-field-schema.ts#L7"
-						}
-					],
 					"type": {
 						"type": "intrinsic",
 						"name": "boolean"
@@ -112,14 +80,6 @@
 						10,
 						9
 					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "extract-field-schema.ts",
-					"line": 6,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/extract-field-schema.ts#L6"
 				}
 			]
 		},
@@ -138,14 +98,6 @@
 					"flags": {
 						"isOptional": true
 					},
-					"sources": [
-						{
-							"fileName": "is-json-serializable.ts",
-							"line": 2,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/is-json-serializable.ts#L2"
-						}
-					],
 					"type": {
 						"type": "intrinsic",
 						"name": "boolean"
@@ -159,14 +111,6 @@
 						22
 					]
 				}
-			],
-			"sources": [
-				{
-					"fileName": "is-json-serializable.ts",
-					"line": 1,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/is-json-serializable.ts#L1"
-				}
 			]
 		},
 		{
@@ -175,14 +119,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "config-to-ai-context.ts",
-					"line": 24,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/config-to-ai-context.ts#L24"
-				}
-			],
 			"signatures": [
 				{
 					"id": 4,
@@ -190,14 +126,6 @@
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
-					"sources": [
-						{
-							"fileName": "config-to-ai-context.ts",
-							"line": 24,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/config-to-ai-context.ts#L24"
-						}
-					],
 					"typeParameters": [
 						{
 							"id": 5,
@@ -267,14 +195,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "extract-field-schema.ts",
-					"line": 11,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/extract-field-schema.ts#L11"
-				}
-			],
 			"signatures": [
 				{
 					"id": 12,
@@ -282,14 +202,6 @@
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
-					"sources": [
-						{
-							"fileName": "extract-field-schema.ts",
-							"line": 11,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/extract-field-schema.ts#L11"
-						}
-					],
 					"parameters": [
 						{
 							"id": 13,
@@ -367,14 +279,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "identify-slot-fields.ts",
-					"line": 3,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/identify-slot-fields.ts#L3"
-				}
-			],
 			"signatures": [
 				{
 					"id": 18,
@@ -382,14 +286,6 @@
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
-					"sources": [
-						{
-							"fileName": "identify-slot-fields.ts",
-							"line": 3,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/identify-slot-fields.ts#L3"
-						}
-					],
 					"typeParameters": [
 						{
 							"id": 19,
@@ -461,14 +357,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "is-json-serializable.ts",
-					"line": 5,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/is-json-serializable.ts#L5"
-				}
-			],
 			"signatures": [
 				{
 					"id": 24,
@@ -476,14 +364,6 @@
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
-					"sources": [
-						{
-							"fileName": "is-json-serializable.ts",
-							"line": 5,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/schema/src/is-json-serializable.ts#L5"
-						}
-					],
 					"parameters": [
 						{
 							"id": 25,
@@ -633,11 +513,19 @@
 		},
 		{
 			"kind": "text",
-			"text": " are implemented and tested.\n\n## Quickstart\n\n"
+			"text": " are implemented and tested.\n\n## Install\n\n"
 		},
 		{
 			"kind": "code",
-			"text": "```ts\nimport { configToAiContext } from \"@anvilkit/schema\";\nconst ctx = configToAiContext(puckConfig);\n// ctx.availableComponents is ready to ship to an LLM\n```"
+			"text": "```bash\npnpm add @anvilkit/schema @puckeditor/core\n```"
+		},
+		{
+			"kind": "text",
+			"text": "\n\n## Quickstart\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "```ts\nimport { configToAiContext } from \"@anvilkit/schema\";\nimport type { Config } from \"@puckeditor/core\";\n\ndeclare const puckConfig: Config;\n\nconst ctx = configToAiContext(puckConfig);\nconst firstComponent = ctx.availableComponents[0];\n\nconsole.log(firstComponent?.componentName);\n```"
 		},
 		{
 			"kind": "text",
@@ -649,7 +537,41 @@
 		},
 		{
 			"kind": "text",
-			"text": "\n\n## Public API\n\n| Export                    | Signature                                                              | Purpose                                                       |\n| ------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------- |\n| "
+			"text": "\n\n## Phase 3 references\n\nSee the [Phase 3 plan]("
+		},
+		{
+			"kind": "relative-link",
+			"text": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
+			"target": 3
+		},
+		{
+			"kind": "text",
+			"text": ")\n("
+		},
+		{
+			"kind": "code",
+			"text": "`M2 — @anvilkit/schema`"
+		},
+		{
+			"kind": "text",
+			"text": ") and the\n[architecture package catalog]("
+		},
+		{
+			"kind": "relative-link",
+			"text": "../../docs/ai-context/anvilkit-architecture.md",
+			"target": 4
+		},
+		{
+			"kind": "text",
+			"text": ")\n("
+		},
+		{
+			"kind": "code",
+			"text": "`§7 — @anvilkit/schema [Planned]`"
+		},
+		{
+			"kind": "text",
+			"text": ") for the schema-derivation role\nand dependency boundary.\n\n## Public API\n\n| Export                    | Signature                                                              | Purpose                                                       |\n| ------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------- |\n| "
 		},
 		{
 			"kind": "code",
@@ -793,7 +715,23 @@
 		},
 		{
 			"kind": "text",
-			"text": " (peer, types-only)| React, ReactDOM, any plugin package, any DOM API                        |"
+			"text": " (peer, types-only)| React, ReactDOM, any plugin package, any DOM API                        |\n\n## Peer dependencies\n\n| Package | Version |\n| ------- | ------- |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`@puckeditor/core`"
+		},
+		{
+			"kind": "text",
+			"text": " | "
+		},
+		{
+			"kind": "code",
+			"text": "`^0.21.0`"
+		},
+		{
+			"kind": "text",
+			"text": " |"
 		}
 	],
 	"symbolIdMap": {
@@ -937,13 +875,15 @@
 		"entries": {
 			"1": "src/index.ts",
 			"2": "../core/src/types/ai.ts",
-			"3": "README.md",
-			"4": ""
+			"3": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
+			"4": "../../docs/ai-context/anvilkit-architecture.md",
+			"5": "README.md",
+			"6": ""
 		},
 		"reflections": {
 			"1": 0,
-			"3": 0,
-			"4": 0
+			"5": 0,
+			"6": 0
 		}
 	}
 }

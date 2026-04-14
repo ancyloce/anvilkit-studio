@@ -63,14 +63,6 @@
 							}
 						]
 					},
-					"sources": [
-						{
-							"fileName": "puck-data-to-ir.ts",
-							"line": 20,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/puck-data-to-ir.ts#L20"
-						}
-					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
@@ -117,14 +109,6 @@
 							}
 						]
 					},
-					"sources": [
-						{
-							"fileName": "puck-data-to-ir.ts",
-							"line": 25,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/puck-data-to-ir.ts#L25"
-						}
-					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
@@ -176,14 +160,6 @@
 						14,
 						17
 					]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "puck-data-to-ir.ts",
-					"line": 15,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/puck-data-to-ir.ts#L15"
 				}
 			]
 		},
@@ -250,14 +226,6 @@
 					}
 				]
 			},
-			"sources": [
-				{
-					"fileName": "collect-assets.ts",
-					"line": 104,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/collect-assets.ts#L104"
-				}
-			],
 			"signatures": [
 				{
 					"id": 2,
@@ -301,14 +269,6 @@
 							}
 						]
 					},
-					"sources": [
-						{
-							"fileName": "collect-assets.ts",
-							"line": 104,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/collect-assets.ts#L104"
-						}
-					],
 					"parameters": [
 						{
 							"id": 3,
@@ -352,14 +312,6 @@
 													"variant": "declaration",
 													"kind": 1024,
 													"flags": {},
-													"sources": [
-														{
-															"fileName": "collect-assets.ts",
-															"line": 105,
-															"character": 22,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/collect-assets.ts#L105"
-														}
-													],
 													"type": {
 														"type": "reference",
 														"target": {
@@ -463,14 +415,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "identify-slots.ts",
-					"line": 23,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/identify-slots.ts#L23"
-				}
-			],
 			"signatures": [
 				{
 					"id": 8,
@@ -547,14 +491,6 @@
 							}
 						]
 					},
-					"sources": [
-						{
-							"fileName": "identify-slots.ts",
-							"line": 23,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/identify-slots.ts#L23"
-						}
-					],
 					"parameters": [
 						{
 							"id": 9,
@@ -626,14 +562,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "ir-to-puck-data.ts",
-					"line": 19,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/ir-to-puck-data.ts#L19"
-				}
-			],
 			"signatures": [
 				{
 					"id": 11,
@@ -732,14 +660,6 @@
 							}
 						]
 					},
-					"sources": [
-						{
-							"fileName": "ir-to-puck-data.ts",
-							"line": 19,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/ir-to-puck-data.ts#L19"
-						}
-					],
 					"parameters": [
 						{
 							"id": 12,
@@ -786,14 +706,6 @@
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
-			"sources": [
-				{
-					"fileName": "puck-data-to-ir.ts",
-					"line": 43,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/puck-data-to-ir.ts#L43"
-				}
-			],
 			"signatures": [
 				{
 					"id": 22,
@@ -866,14 +778,6 @@
 							}
 						]
 					},
-					"sources": [
-						{
-							"fileName": "puck-data-to-ir.ts",
-							"line": 43,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/ir/src/puck-data-to-ir.ts#L43"
-						}
-					],
 					"parameters": [
 						{
 							"id": 23,
@@ -1091,7 +995,15 @@
 		},
 		{
 			"kind": "text",
-			"text": " changeset.\n\n## Quickstart\n\n"
+			"text": " changeset.\n\n## Install\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "```bash\npnpm add @anvilkit/ir @puckeditor/core\n```"
+		},
+		{
+			"kind": "text",
+			"text": "\n\n## Quickstart\n\n"
 		},
 		{
 			"kind": "code",
@@ -1099,7 +1011,41 @@
 		},
 		{
 			"kind": "text",
-			"text": "\n\n## Public API\n\n| Export           | Signature                                                          | Purpose                                                                                              |\n| ---------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |\n| "
+			"text": "\n\n## Phase 3 references\n\nSee the [Phase 3 plan]("
+		},
+		{
+			"kind": "relative-link",
+			"text": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
+			"target": 3
+		},
+		{
+			"kind": "text",
+			"text": ")\n("
+		},
+		{
+			"kind": "code",
+			"text": "`M1 — @anvilkit/ir`"
+		},
+		{
+			"kind": "text",
+			"text": ") and the\n[architecture package catalog]("
+		},
+		{
+			"kind": "relative-link",
+			"text": "../../docs/ai-context/anvilkit-architecture.md",
+			"target": 4
+		},
+		{
+			"kind": "text",
+			"text": ")\n("
+		},
+		{
+			"kind": "code",
+			"text": "`§7 — @anvilkit/ir [Planned]`"
+		},
+		{
+			"kind": "text",
+			"text": ") for the IR contract, dependency\ndirection, and release expectations.\n\n## Public API\n\n| Export           | Signature                                                          | Purpose                                                                                              |\n| ---------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |\n| "
 		},
 		{
 			"kind": "code",
@@ -1195,7 +1141,23 @@
 		},
 		{
 			"kind": "text",
-			"text": " and return the slot-field keys declared on each component.                   |\n\n## Dependency contract\n\n| Allowed                       | Forbidden                                                               |\n| ----------------------------- | ----------------------------------------------------------------------- |\n| "
+			"text": " and return the slot-field keys declared on each component.                   |\n\n## Peer dependencies\n\n| Package | Version |\n| ------- | ------- |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`@puckeditor/core`"
+		},
+		{
+			"kind": "text",
+			"text": " | "
+		},
+		{
+			"kind": "code",
+			"text": "`^0.21.0`"
+		},
+		{
+			"kind": "text",
+			"text": " |\n\n## Dependency contract\n\n| Allowed                       | Forbidden                                                               |\n| ----------------------------- | ----------------------------------------------------------------------- |\n| "
 		},
 		{
 			"kind": "code",
