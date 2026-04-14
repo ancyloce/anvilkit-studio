@@ -1,6 +1,5 @@
 import { isJsonSerializable } from "@anvilkit/schema";
 import type { Config } from "@puckeditor/core";
-import { z } from "zod";
 import {
 	knownFieldTypeSet,
 	makeFieldZodSchema,
@@ -55,7 +54,7 @@ export function validateComponentConfig<C extends Config>(
 			});
 		} else {
 			for (const [fieldName, fieldDef] of Object.entries(fieldsValue)) {
-				const parsedField = z.safeParse(fieldSchema, fieldDef);
+				const parsedField = fieldSchema.safeParse(fieldDef);
 
 				if (!parsedField.success) {
 					issues.push({

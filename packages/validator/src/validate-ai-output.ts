@@ -3,7 +3,14 @@ import type {
 	AiValidationIssue,
 	AiValidationResult,
 } from "@anvilkit/core/types";
-import { z } from "zod";
+import {
+	enum as enumSchema,
+	looseObject,
+	optional,
+	record,
+	string,
+	unknown,
+} from "zod/mini";
 import { closestMatch } from "./internal/closest-match.js";
 import { makeComponentPropsSchema } from "./internal/make-zod-schema.js";
 
@@ -18,15 +25,43 @@ const assetKinds = [
 	"other",
 ] as const;
 
-const assetSchema = z.object({
-	id: z.string(),
-	kind: z.enum(assetKinds),
-	url: z.string(),
-	meta: z.record(z.string(), z.unknown()).optional(),
+const assetSchema = looseObject({
+	id: string(),
+	kind: enumSchema(assetKinds),
+	url: string(),
+	meta: optional(record(string(), unknown())),
 });
 
 function buildPath(segments: readonly (string | number)[]): string {
 	return segments.join(".");
+}
+
+function hasValueAtPath(
+	value: Record<string, unknown>,
+	path: readonly PropertyKey[],
+): boolean {
+	let current = value;
+
+	for (let index = 0; index < path.length; index += 1) {
+		const segment = path[index]!;
+
+		if (typeof segment === "symbol" || !(segment in current)) {
+			return false;
+		}
+
+		if (index === path.length - 1) {
+			return true;
+		}
+
+		const next = current[segment];
+		if (typeof next !== "object" || next === null) {
+			return false;
+		}
+
+		current = next as Record<string, unknown>;
+	}
+
+	return true;
 }
 
 export function validateAiOutput(
@@ -60,7 +95,7 @@ export function validateAiOutput(
 	if (Array.isArray(res.assets)) {
 		for (let i = 0; i < res.assets.length; i++) {
 			const asset = res.assets[i];
-			const result = z.safeParse(assetSchema, asset);
+			const result = assetSchema.safeParse(asset);
 			if (!result.success) {
 				issues.push({
 					path: buildPath(["assets", i]),
@@ -159,21 +194,28 @@ function walkNode(
 					componentSchema.fields,
 					componentSchema.componentName,
 				);
-				const result = z.safeParse(propsSchema, propsRecord);
+				const result = propsSchema.safeParse(propsRecord);
 
 				if (!result.success) {
-					const zodIssues = JSON.parse(result.error.message) as Array<{
-						path: (string | number)[];
-						message: string;
-						code: string;
-					}>;
+					const zodIssues = result.error.issues.map((issue) => ({
+						path: issue.path,
+						message: issue.message,
+						code: issue.code,
+					}));
 					for (const zi of zodIssues) {
-						const fullPath = buildPath([...pathSegments, "props", ...zi.path]);
+						const normalizedIssuePath = zi.path.map((segment) =>
+							typeof segment === "symbol" ? String(segment) : segment,
+						);
+						const fullPath = buildPath([
+							...pathSegments,
+							"props",
+							...normalizedIssuePath,
+						]);
 
 						let code = "INVALID_FIELD_TYPE";
 						if (
 							zi.code === "invalid_type" &&
-							zi.message.includes("undefined")
+							!hasValueAtPath(propsRecord, zi.path)
 						) {
 							code = "MISSING_REQUIRED_FIELD";
 						} else if (zi.code === "invalid_value") {

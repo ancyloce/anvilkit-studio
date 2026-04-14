@@ -1,18 +1,30 @@
 import type { AiFieldSchema } from "@anvilkit/core/types";
-import { z } from "zod";
+import {
+	array,
+	boolean,
+	enum as enumSchema,
+	literal,
+	looseObject,
+	number,
+	optional,
+	record,
+	string,
+	type ZodMiniType,
+	unknown,
+} from "zod/mini";
 
 const MAX_DEPTH = 16;
 
 export function makeZodSchemaForField(
 	field: AiFieldSchema,
 	depth?: number,
-): z.ZodType {
+): ZodMiniType {
 	const d = depth ?? 0;
 	if (d > MAX_DEPTH) {
-		return z.unknown();
+		return unknown();
 	}
 
-	let schema: z.ZodType;
+	let schema: ZodMiniType;
 
 	switch (field.type) {
 		case "text":
@@ -20,67 +32,67 @@ export function makeZodSchemaForField(
 		case "image":
 		case "url":
 		case "color":
-			schema = z.string();
+			schema = string();
 			break;
 		case "number":
-			schema = z.number();
+			schema = number();
 			break;
 		case "boolean":
-			schema = z.boolean();
+			schema = boolean();
 			break;
 		case "select": {
 			if (field.options && field.options.length > 0) {
 				const values = field.options.map((o: { value: string }) => o.value);
 				if (values.length === 1) {
-					schema = z.literal(values[0]);
+					schema = literal(values[0]);
 				} else {
-					schema = z.enum(values as [string, ...string[]]);
+					schema = enumSchema(values as [string, ...string[]]);
 				}
 			} else {
-				schema = z.string();
+				schema = string();
 			}
 			break;
 		}
 		case "array": {
 			if (field.itemSchema) {
-				schema = z.array(makeZodSchemaForField(field.itemSchema, d + 1));
+				schema = array(makeZodSchemaForField(field.itemSchema, d + 1));
 			} else {
-				schema = z.array(z.unknown());
+				schema = array(unknown());
 			}
 			break;
 		}
 		case "object": {
-			schema = z.record(z.string(), z.unknown());
+			schema = record(string(), unknown());
 			break;
 		}
 		default:
-			schema = z.unknown();
+			schema = unknown();
 			break;
 	}
 
 	if (field.required !== true) {
-		schema = schema.optional();
+		schema = optional(schema);
 	}
 
 	return schema;
 }
 
-const componentSchemaCache = new Map<string, z.ZodType>();
+const componentSchemaCache = new Map<string, ZodMiniType>();
 
 export function makeComponentPropsSchema(
 	fields: readonly AiFieldSchema[],
 	cacheKey?: string,
-): z.ZodType {
+): ZodMiniType {
 	if (cacheKey && componentSchemaCache.has(cacheKey)) {
 		return componentSchemaCache.get(cacheKey)!;
 	}
 
-	const shape: Record<string, z.ZodType> = {};
+	const shape: Record<string, ZodMiniType> = {};
 	for (const field of fields) {
 		shape[field.name] = makeZodSchemaForField(field);
 	}
 
-	const schema = z.object(shape).passthrough();
+	const schema = looseObject(shape);
 
 	if (cacheKey) {
 		componentSchemaCache.set(cacheKey, schema);

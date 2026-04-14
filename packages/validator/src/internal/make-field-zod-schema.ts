@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { looseObject, minLength, string } from "zod/mini";
 
 const knownFieldTypes = [
 	"text",
@@ -20,12 +20,8 @@ export const knownFieldTypeSet: ReadonlySet<string> = new Set<string>(
 	knownFieldTypes,
 );
 
-const fieldZodSchema = z
-	.object({
-		type: z.string().check(z.minLength(1)),
-	})
-	.passthrough();
-
 export function makeFieldZodSchema() {
-	return fieldZodSchema;
+	return looseObject({
+		type: string().check(minLength(1)),
+	});
 }
