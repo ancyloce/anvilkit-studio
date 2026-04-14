@@ -61,6 +61,19 @@ jobs:
       - name: Run @anvilkit/core release gates
         run: pnpm --filter @anvilkit/core check:all
 
+      # Phase 3 (`phase3-015`): run the same quality gates against each
+      # new package — `publint`, `madge --circular`,
+      # `check:react-free-runtime` (ir / schema / validator only;
+      # plugin `check:all` already omits that step),
+      # `check:peer-deps`, `check:bundle-budget`, and the TypeDoc API
+      # snapshot. Loop form matches the task brief and avoids
+      # duplicating five near-identical step entries.
+      - name: Run Phase 3 package release gates
+        run: |
+          for pkg in @anvilkit/ir @anvilkit/schema @anvilkit/validator @anvilkit/plugin-export-html @anvilkit/plugin-ai-copilot; do
+            pnpm --filter "$pkg" check:all
+          done
+
       # Phase 3 M0 (`phase3-001`): Playwright + demo E2E harness. The
       # smoke spec loads `/puck/editor`, waits for `<Studio>` to
       # hydrate, and asserts `smokeTestPlugin.onInit` logs to the
