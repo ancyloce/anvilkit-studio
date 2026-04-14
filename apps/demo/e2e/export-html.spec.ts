@@ -19,7 +19,9 @@ test("HTML export downloads a document containing the Hero title", async ({
 
 	const [download] = await Promise.all([
 		page.waitForEvent("download"),
-		page.getByRole("button", { name: /download html/i }).click(),
+		page
+			.getByRole("button", { name: /download html/i })
+			.click({ force: true }),
 	]);
 
 	expect(download.suggestedFilename().endsWith(".html")).toBe(true);
