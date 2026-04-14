@@ -1,0 +1,823 @@
+
+> @anvilkit/studio@ changeset /root/Rhett/anvilkit-studio
+> changeset publish --tag alpha --dry-run
+
+Package "@anvilkit/button" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/helps" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/hero" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/input" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/logo-clouds" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/navbar" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/pricing-minimal" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/section" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+Package "@anvilkit/statistics" must depend on the current version of "@anvilkit/ui": "0.0.2" vs "^0.0.1"
+🦋  warn ===============================IMPORTANT!===============================
+🦋  warn Packages will be released under the alpha tag
+🦋  warn ----------------------------------------------------------------------
+🦋  info npm info @anvilkit/bento-grid
+🦋  info npm info @anvilkit/blog-list
+🦋  info npm info @anvilkit/button
+🦋  info npm info @anvilkit/helps
+🦋  info npm info @anvilkit/hero
+🦋  info npm info @anvilkit/input
+🦋  info npm info @anvilkit/logo-clouds
+🦋  info npm info @anvilkit/navbar
+🦋  info npm info @anvilkit/pricing-minimal
+🦋  info npm info @anvilkit/section
+🦋  info npm info @anvilkit/statistics
+🦋  info npm info @anvilkit/core
+🦋  info npm info @anvilkit/ir
+🦋  info npm info @anvilkit/plugin-ai-copilot
+🦋  info npm info @anvilkit/plugin-export-html
+🦋  info npm info @anvilkit/schema
+🦋  info npm info @anvilkit/ui
+🦋  info npm info @anvilkit/utils
+🦋  info npm info @anvilkit/validator
+🦋  warn Received 404 for npm info "@anvilkit/plugin-ai-copilot"
+🦋  warn Received 404 for npm info "@anvilkit/core"
+🦋  warn Received 404 for npm info "@anvilkit/ir"
+🦋  warn Received 404 for npm info "@anvilkit/validator"
+🦋  warn Received 404 for npm info "@anvilkit/schema"
+🦋  warn Received 404 for npm info "@anvilkit/plugin-export-html"
+🦋  warn Received 404 for npm info "@anvilkit/utils"
+🦋  warn @anvilkit/bento-grid is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/blog-list is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/button is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/helps is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/hero is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/input is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/logo-clouds is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/navbar is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/pricing-minimal is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/section is not being published because version 0.0.2 is already published on npm
+🦋  warn @anvilkit/statistics is not being published because version 0.0.2 is already published on npm
+🦋  info @anvilkit/core is being published because our local version (0.1.0-alpha.0) has not been published on npm
+🦋  info @anvilkit/ir is being published because our local version (0.1.0-alpha.0) has not been published on npm
+🦋  info @anvilkit/plugin-ai-copilot is being published because our local version (0.1.0-alpha.0) has not been published on npm
+🦋  info @anvilkit/plugin-export-html is being published because our local version (0.1.0-alpha.0) has not been published on npm
+🦋  info @anvilkit/schema is being published because our local version (0.1.0-alpha.0) has not been published on npm
+🦋  warn @anvilkit/ui is not being published because version 0.0.2 is already published on npm
+🦋  info @anvilkit/utils is being published because our local version (0.0.0) has not been published on npm
+🦋  info @anvilkit/validator is being published because our local version (0.1.0-alpha.0) has not been published on npm
+🦋  info Publishing "@anvilkit/core" at "0.1.0-alpha.0"
+🦋  info Publishing "@anvilkit/ir" at "0.1.0-alpha.0"
+🦋  info Publishing "@anvilkit/plugin-ai-copilot" at "0.1.0-alpha.0"
+🦋  info Publishing "@anvilkit/plugin-export-html" at "0.1.0-alpha.0"
+🦋  info Publishing "@anvilkit/schema" at "0.1.0-alpha.0"
+🦋  info Publishing "@anvilkit/utils" at "0.0.0"
+🦋  info Publishing "@anvilkit/validator" at "0.1.0-alpha.0"
+🦋  error an error occurred while publishing @anvilkit/utils: E404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2futils - Not found 
+🦋  error The requested resource '@anvilkit/utils@0.0.0' could not be found or you do not have permission to access it.
+🦋  error 
+🦋  error Note that you can also install from a
+🦋  error tarball, folder, http url, or git url.
+🦋  error npm warn Unknown env config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown global config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm notice Publishing to https://registry.npmjs.org with tag alpha and public access
+🦋  error npm error code E404
+🦋  error npm error 404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2futils - Not found
+🦋  error npm error 404
+🦋  error npm error 404  The requested resource '@anvilkit/utils@0.0.0' could not be found or you do not have permission to access it.
+🦋  error npm error 404
+🦋  error npm error 404 Note that you can also install from a
+🦋  error npm error 404 tarball, folder, http url, or git url.
+🦋  error npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-14T20_50_37_753Z-debug-0.log
+🦋  error 
+🦋  error an error occurred while publishing @anvilkit/schema: E404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fschema - Not found 
+🦋  error The requested resource '@anvilkit/schema@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error 
+🦋  error Note that you can also install from a
+🦋  error tarball, folder, http url, or git url.
+🦋  error npm warn Unknown env config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown global config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm notice Publishing to https://registry.npmjs.org with tag alpha and public access
+🦋  error npm error code E404
+🦋  error npm error 404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fschema - Not found
+🦋  error npm error 404
+🦋  error npm error 404  The requested resource '@anvilkit/schema@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error npm error 404
+🦋  error npm error 404 Note that you can also install from a
+🦋  error npm error 404 tarball, folder, http url, or git url.
+🦋  error npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-14T20_50_37_774Z-debug-0.log
+🦋  error 
+🦋  error an error occurred while publishing @anvilkit/validator: E404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fvalidator - Not found 
+🦋  error The requested resource '@anvilkit/validator@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error 
+🦋  error Note that you can also install from a
+🦋  error tarball, folder, http url, or git url.
+🦋  error npm warn Unknown env config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown global config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm notice Publishing to https://registry.npmjs.org with tag alpha and public access
+🦋  error npm error code E404
+🦋  error npm error 404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fvalidator - Not found
+🦋  error npm error 404
+🦋  error npm error 404  The requested resource '@anvilkit/validator@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error npm error 404
+🦋  error npm error 404 Note that you can also install from a
+🦋  error npm error 404 tarball, folder, http url, or git url.
+🦋  error npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-14T20_50_37_720Z-debug-0.log
+🦋  error 
+🦋  error an error occurred while publishing @anvilkit/ir: E404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fir - Not found 
+🦋  error The requested resource '@anvilkit/ir@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error 
+🦋  error Note that you can also install from a
+🦋  error tarball, folder, http url, or git url.
+🦋  error npm warn Unknown env config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown global config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm notice Publishing to https://registry.npmjs.org with tag alpha and public access
+🦋  error npm error code E404
+🦋  error npm error 404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fir - Not found
+🦋  error npm error 404
+🦋  error npm error 404  The requested resource '@anvilkit/ir@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error npm error 404
+🦋  error npm error 404 Note that you can also install from a
+🦋  error npm error 404 tarball, folder, http url, or git url.
+🦋  error npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-14T20_50_37_787Z-debug-0.log
+🦋  error 
+🦋  error an error occurred while publishing @anvilkit/plugin-export-html: E404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fplugin-export-html - Not found 
+🦋  error The requested resource '@anvilkit/plugin-export-html@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error 
+🦋  error Note that you can also install from a
+🦋  error tarball, folder, http url, or git url.
+🦋  error npm warn Unknown env config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown global config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm notice Publishing to https://registry.npmjs.org with tag alpha and public access
+🦋  error npm error code E404
+🦋  error npm error 404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fplugin-export-html - Not found
+🦋  error npm error 404
+🦋  error npm error 404  The requested resource '@anvilkit/plugin-export-html@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error npm error 404
+🦋  error npm error 404 Note that you can also install from a
+🦋  error npm error 404 tarball, folder, http url, or git url.
+🦋  error npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-14T20_50_37_805Z-debug-0.log
+🦋  error 
+🦋  error an error occurred while publishing @anvilkit/plugin-ai-copilot: E404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fplugin-ai-copilot - Not found 
+🦋  error The requested resource '@anvilkit/plugin-ai-copilot@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error 
+🦋  error Note that you can also install from a
+🦋  error tarball, folder, http url, or git url.
+🦋  error npm warn Unknown env config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown global config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm notice Publishing to https://registry.npmjs.org with tag alpha and public access
+🦋  error npm error code E404
+🦋  error npm error 404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fplugin-ai-copilot - Not found
+🦋  error npm error 404
+🦋  error npm error 404  The requested resource '@anvilkit/plugin-ai-copilot@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error npm error 404
+🦋  error npm error 404 Note that you can also install from a
+🦋  error npm error 404 tarball, folder, http url, or git url.
+🦋  error npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-14T20_50_37_862Z-debug-0.log
+🦋  error 
+🦋  error an error occurred while publishing @anvilkit/core: E404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fcore - Not found 
+🦋  error The requested resource '@anvilkit/core@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error 
+🦋  error Note that you can also install from a
+🦋  error tarball, folder, http url, or git url.
+🦋  error npm warn Unknown env config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+🦋  error npm warn Unknown global config "ignore-workspace-root-check". This will stop working in the next major version of npm.
+🦋  error npm notice Publishing to https://registry.npmjs.org with tag alpha and public access
+🦋  error npm error code E404
+🦋  error npm error 404 Not Found - PUT https://registry.npmjs.org/@anvilkit%2fcore - Not found
+🦋  error npm error 404
+🦋  error npm error 404  The requested resource '@anvilkit/core@0.1.0-alpha.0' could not be found or you do not have permission to access it.
+🦋  error npm error 404
+🦋  error npm error 404 Note that you can also install from a
+🦋  error npm error 404 tarball, folder, http url, or git url.
+🦋  error npm error A complete log of this run can be found in: /root/.npm/_logs/2026-04-14T20_50_38_031Z-debug-0.log
+🦋  error 
+🦋  error packages failed to publish:
+🦋  @anvilkit/core@0.1.0-alpha.0
+🦋  @anvilkit/ir@0.1.0-alpha.0
+🦋  @anvilkit/plugin-ai-copilot@0.1.0-alpha.0
+🦋  @anvilkit/plugin-export-html@0.1.0-alpha.0
+🦋  @anvilkit/schema@0.1.0-alpha.0
+🦋  @anvilkit/utils@0.0.0
+🦋  @anvilkit/validator@0.1.0-alpha.0
+ ELIFECYCLE  Command failed with exit code 1.
+
+================================================================
+Per-package npm pack --dry-run (tarball previews)
+Executed 2026-04-14 because changeset publish --dry-run attempts
+registry PUTs and returns 404 E404 for unregistered @anvilkit scope.
+This confirms all 6 publishable packages produce valid tarballs.
+================================================================
+
+--- @anvilkit/core ---
+npm notice
+npm notice 📦  @anvilkit/core@0.1.0-alpha.0
+npm notice Tarball Contents
+npm notice 5.8kB README.md
+npm notice 3.7kB dist/compat/ai-host-adapter.cjs
+npm notice 3.6kB dist/compat/ai-host-adapter.d.cts
+npm notice 464B dist/compat/ai-host-adapter.d.cts.map
+npm notice 3.6kB dist/compat/ai-host-adapter.d.ts
+npm notice 463B dist/compat/ai-host-adapter.d.ts.map
+npm notice 2.5kB dist/compat/ai-host-adapter.js
+npm notice 1.3kB dist/compat/index.cjs
+npm notice 117B dist/compat/index.d.cts
+npm notice 173B dist/compat/index.d.cts.map
+npm notice 116B dist/compat/index.d.ts
+npm notice 172B dist/compat/index.d.ts.map
+npm notice 54B dist/compat/index.js
+npm notice 2.5kB dist/config/create-config.cjs
+npm notice 5.4kB dist/config/create-config.d.cts
+npm notice 587B dist/config/create-config.d.cts.map
+npm notice 5.4kB dist/config/create-config.d.ts
+npm notice 586B dist/config/create-config.d.ts.map
+npm notice 1.0kB dist/config/create-config.js
+npm notice 2.8kB dist/config/env-parser.cjs
+npm notice 4.1kB dist/config/env-parser.d.cts
+npm notice 425B dist/config/env-parser.d.cts.map
+npm notice 4.1kB dist/config/env-parser.d.ts
+npm notice 424B dist/config/env-parser.d.ts.map
+npm notice 1.7kB dist/config/env-parser.js
+npm notice 1.6kB dist/config/hooks.cjs
+npm notice 3.2kB dist/config/hooks.d.cts
+npm notice 377B dist/config/hooks.d.cts.map
+npm notice 3.2kB dist/config/hooks.d.ts
+npm notice 376B dist/config/hooks.d.ts.map
+npm notice 305B dist/config/hooks.js
+npm notice 2.3kB dist/config/index.cjs
+npm notice 359B dist/config/index.d.cts
+npm notice 366B dist/config/index.d.cts.map
+npm notice 358B dist/config/index.d.ts
+npm notice 365B dist/config/index.d.ts.map
+npm notice 257B dist/config/index.js
+npm notice 1.8kB dist/config/provider.cjs
+npm notice 4.7kB dist/config/provider.d.cts
+npm notice 621B dist/config/provider.d.cts.map
+npm notice 4.7kB dist/config/provider.d.ts
+npm notice 620B dist/config/provider.d.ts.map
+npm notice 420B dist/config/provider.js
+npm notice 2.9kB dist/config/schema.cjs
+npm notice 8.6kB dist/config/schema.d.cts
+npm notice 552B dist/config/schema.d.cts.map
+npm notice 8.6kB dist/config/schema.d.ts
+npm notice 551B dist/config/schema.d.ts.map
+npm notice 1.1kB dist/config/schema.js
+npm notice 4.9kB dist/index.cjs
+npm notice 3.2kB dist/index.d.cts
+npm notice 827B dist/index.d.cts.map
+npm notice 3.2kB dist/index.d.ts
+npm notice 826B dist/index.d.ts.map
+npm notice 521B dist/index.js
+npm notice 8.4kB dist/react/components/Studio.cjs
+npm notice 7.2kB dist/react/components/Studio.d.cts
+npm notice 1.2kB dist/react/components/Studio.d.cts.map
+npm notice 7.2kB dist/react/components/Studio.d.ts
+npm notice 1.2kB dist/react/components/Studio.d.ts.map
+npm notice 6.2kB dist/react/components/Studio.js
+npm notice 1.8kB dist/react/hooks/use-studio.cjs
+npm notice 4.6kB dist/react/hooks/use-studio.d.cts
+npm notice 636B dist/react/hooks/use-studio.d.cts.map
+npm notice 4.6kB dist/react/hooks/use-studio.d.ts
+npm notice 635B dist/react/hooks/use-studio.d.ts.map
+npm notice 406B dist/react/hooks/use-studio.js
+npm notice 3.4kB dist/react/index.cjs
+npm notice 276B dist/react/index.d.cts
+npm notice 294B dist/react/index.d.cts.map
+npm notice 275B dist/react/index.d.ts
+npm notice 293B dist/react/index.d.ts.map
+npm notice 200B dist/react/index.js
+npm notice 2.7kB dist/react/overrides/merge-overrides.cjs
+npm notice 4.4kB dist/react/overrides/merge-overrides.d.cts
+npm notice 420B dist/react/overrides/merge-overrides.d.cts.map
+npm notice 4.4kB dist/react/overrides/merge-overrides.d.ts
+npm notice 419B dist/react/overrides/merge-overrides.d.ts.map
+npm notice 1.5kB dist/react/overrides/merge-overrides.js
+npm notice 2.6kB dist/react/stores/ai-store.cjs
+npm notice 6.8kB dist/react/stores/ai-store.d.cts
+npm notice 966B dist/react/stores/ai-store.d.cts.map
+npm notice 6.8kB dist/react/stores/ai-store.d.ts
+npm notice 965B dist/react/stores/ai-store.d.ts.map
+npm notice 1.3kB dist/react/stores/ai-store.js
+npm notice 2.4kB dist/react/stores/export-store.cjs
+npm notice 7.8kB dist/react/stores/export-store.d.cts
+npm notice 1.1kB dist/react/stores/export-store.d.cts.map
+npm notice 7.8kB dist/react/stores/export-store.d.ts
+npm notice 1.1kB dist/react/stores/export-store.d.ts.map
+npm notice 1.1kB dist/react/stores/export-store.js
+npm notice 1.8kB dist/react/stores/index.cjs
+npm notice 2.9kB dist/react/stores/index.d.cts
+npm notice 423B dist/react/stores/index.d.cts.map
+npm notice 2.9kB dist/react/stores/index.d.ts
+npm notice 422B dist/react/stores/index.d.ts.map
+npm notice 146B dist/react/stores/index.js
+npm notice 1.9kB dist/react/stores/theme-store.cjs
+npm notice 5.1kB dist/react/stores/theme-store.d.cts
+npm notice 743B dist/react/stores/theme-store.d.cts.map
+npm notice 5.1kB dist/react/stores/theme-store.d.ts
+npm notice 742B dist/react/stores/theme-store.d.ts.map
+npm notice 656B dist/react/stores/theme-store.js
+npm notice 4.6kB dist/runtime/compile-plugins.cjs
+npm notice 4.5kB dist/runtime/compile-plugins.d.cts
+npm notice 1.0kB dist/runtime/compile-plugins.d.cts.map
+npm notice 4.5kB dist/runtime/compile-plugins.d.ts
+npm notice 1.0kB dist/runtime/compile-plugins.d.ts.map
+npm notice 2.8kB dist/runtime/compile-plugins.js
+npm notice 2.3kB dist/runtime/detect-plugin.cjs
+npm notice 3.5kB dist/runtime/detect-plugin.d.cts
+npm notice 465B dist/runtime/detect-plugin.d.cts.map
+npm notice 3.5kB dist/runtime/detect-plugin.d.ts
+npm notice 464B dist/runtime/detect-plugin.d.ts.map
+npm notice 1.1kB dist/runtime/detect-plugin.js
+npm notice 2.5kB dist/runtime/errors.cjs
+npm notice 5.4kB dist/runtime/errors.d.cts
+npm notice 892B dist/runtime/errors.d.cts.map
+npm notice 5.4kB dist/runtime/errors.d.ts
+npm notice 891B dist/runtime/errors.d.ts.map
+npm notice 951B dist/runtime/errors.js
+npm notice 1.8kB dist/runtime/export-registry.cjs
+npm notice 3.8kB dist/runtime/export-registry.d.cts
+npm notice 645B dist/runtime/export-registry.d.cts.map
+npm notice 3.8kB dist/runtime/export-registry.d.ts
+npm notice 644B dist/runtime/export-registry.d.ts.map
+npm notice 591B dist/runtime/export-registry.js
+npm notice 2.4kB dist/runtime/header-actions.cjs
+npm notice 2.9kB dist/runtime/header-actions.d.cts
+npm notice 382B dist/runtime/header-actions.d.cts.map
+npm notice 2.9kB dist/runtime/header-actions.d.ts
+npm notice 381B dist/runtime/header-actions.d.ts.map
+npm notice 1.1kB dist/runtime/header-actions.js
+npm notice 3.6kB dist/runtime/index.cjs
+npm notice 634B dist/runtime/index.d.cts
+npm notice 573B dist/runtime/index.d.cts.map
+npm notice 633B dist/runtime/index.d.ts
+npm notice 572B dist/runtime/index.d.ts.map
+npm notice 453B dist/runtime/index.js
+npm notice 3.7kB dist/runtime/lifecycle-manager.cjs
+npm notice 4.3kB dist/runtime/lifecycle-manager.d.cts
+npm notice 905B dist/runtime/lifecycle-manager.d.cts.map
+npm notice 4.3kB dist/runtime/lifecycle-manager.d.ts
+npm notice 904B dist/runtime/lifecycle-manager.d.ts.map
+npm notice 2.4kB dist/runtime/lifecycle-manager.js
+npm notice 1.2kB dist/runtime/version.cjs
+npm notice 980B dist/runtime/version.d.cts
+npm notice 180B dist/runtime/version.d.cts.map
+npm notice 979B dist/runtime/version.d.ts
+npm notice 179B dist/runtime/version.d.ts.map
+npm notice 63B dist/runtime/version.js
+npm notice 585B dist/types/ai.cjs
+npm notice 8.2kB dist/types/ai.d.cts
+npm notice 1.7kB dist/types/ai.d.cts.map
+npm notice 8.2kB dist/types/ai.d.ts
+npm notice 1.7kB dist/types/ai.d.ts.map
+npm notice 0B dist/types/ai.js
+npm notice 585B dist/types/config.cjs
+npm notice 3.7kB dist/types/config.d.cts
+npm notice 743B dist/types/config.d.cts.map
+npm notice 3.7kB dist/types/config.d.ts
+npm notice 742B dist/types/config.d.ts.map
+npm notice 0B dist/types/config.js
+npm notice 585B dist/types/export.cjs
+npm notice 8.3kB dist/types/export.d.cts
+npm notice 1.4kB dist/types/export.d.cts.map
+npm notice 8.3kB dist/types/export.d.ts
+npm notice 1.4kB dist/types/export.d.ts.map
+npm notice 0B dist/types/export.js
+npm notice 585B dist/types/index.cjs
+npm notice 634B dist/types/index.d.cts
+npm notice 542B dist/types/index.d.cts.map
+npm notice 633B dist/types/index.d.ts
+npm notice 541B dist/types/index.d.ts.map
+npm notice 0B dist/types/index.js
+npm notice 585B dist/types/ir.cjs
+npm notice 7.6kB dist/types/ir.d.cts
+npm notice 1.4kB dist/types/ir.d.cts.map
+npm notice 7.6kB dist/types/ir.d.ts
+npm notice 1.4kB dist/types/ir.d.ts.map
+npm notice 0B dist/types/ir.js
+npm notice 585B dist/types/plugin.cjs
+npm notice 17.7kB dist/types/plugin.d.cts
+npm notice 3.3kB dist/types/plugin.d.cts.map
+npm notice 17.7kB dist/types/plugin.d.ts
+npm notice 3.3kB dist/types/plugin.d.ts.map
+npm notice 0B dist/types/plugin.js
+npm notice 3.7kB package.json
+npm notice Tarball Details
+npm notice name: @anvilkit/core
+npm notice version: 0.1.0-alpha.0
+npm notice filename: anvilkit-core-0.1.0-alpha.0.tgz
+npm notice package size: 119.7 kB
+npm notice unpacked size: 450.9 kB
+npm notice shasum: 62bc791a394b41331890a4be7d5e0e9dd2b1da62
+npm notice integrity: sha512-vcI5Jmk9wURRq[...]1tZJIkf4Z63MQ==
+npm notice total files: 188
+npm notice
+anvilkit-core-0.1.0-alpha.0.tgz
+
+--- @anvilkit/ir ---
+npm notice
+npm notice 📦  @anvilkit/ir@0.1.0-alpha.0
+npm notice Tarball Contents
+npm notice 4.5kB README.md
+npm notice 2.9kB dist/collect-assets.cjs
+npm notice 1.1kB dist/collect-assets.d.cts
+npm notice 464B dist/collect-assets.d.cts.map
+npm notice 1.1kB dist/collect-assets.d.ts
+npm notice 463B dist/collect-assets.d.ts.map
+npm notice 1.7kB dist/collect-assets.js
+npm notice 1.7kB dist/identify-slots.cjs
+npm notice 1.0kB dist/identify-slots.d.cts
+npm notice 288B dist/identify-slots.d.cts.map
+npm notice 1.0kB dist/identify-slots.d.ts
+npm notice 287B dist/identify-slots.d.ts.map
+npm notice 570B dist/identify-slots.js
+npm notice 2.1kB dist/index.cjs
+npm notice 796B dist/index.d.cts
+npm notice 340B dist/index.d.cts.map
+npm notice 795B dist/index.d.ts
+npm notice 339B dist/index.d.ts.map
+npm notice 212B dist/index.js
+npm notice 2.3kB dist/internal/canonicalize.cjs
+npm notice 933B dist/internal/canonicalize.d.cts
+npm notice 427B dist/internal/canonicalize.d.cts.map
+npm notice 932B dist/internal/canonicalize.d.ts
+npm notice 426B dist/internal/canonicalize.d.ts.map
+npm notice 994B dist/internal/canonicalize.js
+npm notice 1.5kB dist/internal/derive-asset-id.cjs
+npm notice 529B dist/internal/derive-asset-id.d.cts
+npm notice 209B dist/internal/derive-asset-id.d.cts.map
+npm notice 528B dist/internal/derive-asset-id.d.ts
+npm notice 208B dist/internal/derive-asset-id.d.ts.map
+npm notice 298B dist/internal/derive-asset-id.js
+npm notice 1.7kB dist/ir-to-puck-data.cjs
+npm notice 779B dist/ir-to-puck-data.d.cts
+npm notice 297B dist/ir-to-puck-data.d.cts.map
+npm notice 778B dist/ir-to-puck-data.d.ts
+npm notice 296B dist/ir-to-puck-data.d.ts.map
+npm notice 488B dist/ir-to-puck-data.js
+npm notice 3.4kB dist/puck-data-to-ir.cjs
+npm notice 1.4kB dist/puck-data-to-ir.d.cts
+npm notice 520B dist/puck-data-to-ir.d.cts.map
+npm notice 1.4kB dist/puck-data-to-ir.d.ts
+npm notice 519B dist/puck-data-to-ir.d.ts.map
+npm notice 1.9kB dist/puck-data-to-ir.js
+npm notice 2.3kB package.json
+npm notice Tarball Details
+npm notice name: @anvilkit/ir
+npm notice version: 0.1.0-alpha.0
+npm notice filename: anvilkit-ir-0.1.0-alpha.0.tgz
+npm notice package size: 11.7 kB
+npm notice unpacked size: 46.7 kB
+npm notice shasum: 48239fb1c25781fad5da60e4c31278428e3df715
+npm notice integrity: sha512-VVlfN76aaBPEU[...]3YjePCCPk3BHA==
+npm notice total files: 44
+npm notice
+anvilkit-ir-0.1.0-alpha.0.tgz
+
+--- @anvilkit/schema ---
+npm notice
+npm notice 📦  @anvilkit/schema@0.1.0-alpha.0
+npm notice Tarball Contents
+npm notice 3.6kB README.md
+npm notice 2.5kB dist/config-to-ai-context.cjs
+npm notice 360B dist/config-to-ai-context.d.cts
+npm notice 404B dist/config-to-ai-context.d.cts.map
+npm notice 359B dist/config-to-ai-context.d.ts
+npm notice 403B dist/config-to-ai-context.d.ts.map
+npm notice 1.1kB dist/config-to-ai-context.js
+npm notice 5.8kB dist/extract-field-schema.cjs
+npm notice 392B dist/extract-field-schema.d.cts
+npm notice 449B dist/extract-field-schema.d.cts.map
+npm notice 391B dist/extract-field-schema.d.ts
+npm notice 448B dist/extract-field-schema.d.ts.map
+npm notice 4.6kB dist/extract-field-schema.js
+npm notice 2.0kB dist/identify-slot-fields.cjs
+npm notice 204B dist/identify-slot-fields.d.cts
+npm notice 294B dist/identify-slot-fields.d.cts.map
+npm notice 203B dist/identify-slot-fields.d.ts
+npm notice 293B dist/identify-slot-fields.d.ts.map
+npm notice 781B dist/identify-slot-fields.js
+npm notice 2.2kB dist/index.cjs
+npm notice 518B dist/index.d.cts
+npm notice 418B dist/index.d.cts.map
+npm notice 517B dist/index.d.ts
+npm notice 417B dist/index.d.ts.map
+npm notice 255B dist/index.js
+npm notice 2.2kB dist/is-json-serializable.cjs
+npm notice 226B dist/is-json-serializable.d.cts
+npm notice 276B dist/is-json-serializable.d.cts.map
+npm notice 225B dist/is-json-serializable.d.ts
+npm notice 275B dist/is-json-serializable.d.ts.map
+npm notice 964B dist/is-json-serializable.js
+npm notice 2.3kB package.json
+npm notice Tarball Details
+npm notice name: @anvilkit/schema
+npm notice version: 0.1.0-alpha.0
+npm notice filename: anvilkit-schema-0.1.0-alpha.0.tgz
+npm notice package size: 6.2 kB
+npm notice unpacked size: 35.4 kB
+npm notice shasum: c0684b9fa2a63752bf2d5ebc0aab991098e11e02
+npm notice integrity: sha512-1h970JQKl3eFy[...]dyYu1hDSbvPEQ==
+npm notice total files: 32
+npm notice
+anvilkit-schema-0.1.0-alpha.0.tgz
+
+--- @anvilkit/validator ---
+npm notice
+npm notice 📦  @anvilkit/validator@0.1.0-alpha.0
+npm notice Tarball Contents
+npm notice 4.0kB README.md
+npm notice 1.7kB dist/index.cjs
+npm notice 239B dist/index.d.cts
+npm notice 246B dist/index.d.cts.map
+npm notice 238B dist/index.d.ts
+npm notice 245B dist/index.d.ts.map
+npm notice 134B dist/index.js
+npm notice 2.2kB dist/internal/closest-match.cjs
+npm notice 147B dist/internal/closest-match.d.cts
+npm notice 228B dist/internal/closest-match.d.cts.map
+npm notice 146B dist/internal/closest-match.d.ts
+npm notice 227B dist/internal/closest-match.d.ts.map
+npm notice 1.0kB dist/internal/closest-match.js
+npm notice 1.8kB dist/internal/make-field-zod-schema.cjs
+npm notice 506B dist/internal/make-field-zod-schema.d.cts
+npm notice 325B dist/internal/make-field-zod-schema.d.cts.map
+npm notice 505B dist/internal/make-field-zod-schema.d.ts
+npm notice 324B dist/internal/make-field-zod-schema.d.ts.map
+npm notice 453B dist/internal/make-field-zod-schema.js
+npm notice 3.7kB dist/internal/make-zod-schema.cjs
+npm notice 414B dist/internal/make-zod-schema.d.cts
+npm notice 440B dist/internal/make-zod-schema.d.cts.map
+npm notice 413B dist/internal/make-zod-schema.d.ts
+npm notice 439B dist/internal/make-zod-schema.d.ts.map
+npm notice 1.9kB dist/internal/make-zod-schema.js
+npm notice 585B dist/types.cjs
+npm notice 373B dist/types.d.cts
+npm notice 465B dist/types.d.cts.map
+npm notice 372B dist/types.d.ts
+npm notice 464B dist/types.d.ts.map
+npm notice 0B dist/types.js
+npm notice 8.1kB dist/validate-ai-output.cjs
+npm notice 264B dist/validate-ai-output.d.cts
+npm notice 290B dist/validate-ai-output.d.cts.map
+npm notice 263B dist/validate-ai-output.d.ts
+npm notice 289B dist/validate-ai-output.d.ts.map
+npm notice 6.6kB dist/validate-ai-output.js
+npm notice 5.7kB dist/validate-component-config.cjs
+npm notice 252B dist/validate-component-config.d.cts
+npm notice 320B dist/validate-component-config.d.cts.map
+npm notice 251B dist/validate-component-config.d.ts
+npm notice 319B dist/validate-component-config.d.ts.map
+npm notice 4.4kB dist/validate-component-config.js
+npm notice 2.3kB package.json
+npm notice Tarball Details
+npm notice name: @anvilkit/validator
+npm notice version: 0.1.0-alpha.0
+npm notice filename: anvilkit-validator-0.1.0-alpha.0.tgz
+npm notice package size: 10.2 kB
+npm notice unpacked size: 53.7 kB
+npm notice shasum: add46458297712c950126cd47af6c063953183b0
+npm notice integrity: sha512-8KEheg9N6sKnQ[...]mjApfRN1Xn5yw==
+npm notice total files: 44
+npm notice
+anvilkit-validator-0.1.0-alpha.0.tgz
+
+--- @anvilkit/plugin-ai-copilot ---
+npm notice
+npm notice 📦  @anvilkit/plugin-ai-copilot@0.1.0-alpha.0
+npm notice Tarball Contents
+npm notice 1.1kB LICENSE
+npm notice 2.0kB README.md
+npm notice 4.7kB dist/create-ai-copilot-plugin.cjs
+npm notice 440B dist/create-ai-copilot-plugin.d.cts
+npm notice 282B dist/create-ai-copilot-plugin.d.cts.map
+npm notice 439B dist/create-ai-copilot-plugin.d.ts
+npm notice 281B dist/create-ai-copilot-plugin.d.ts.map
+npm notice 3.4kB dist/create-ai-copilot-plugin.js
+npm notice 1.4kB dist/index.cjs
+npm notice 237B dist/index.d.cts
+npm notice 238B dist/index.d.cts.map
+npm notice 236B dist/index.d.ts
+npm notice 237B dist/index.d.ts.map
+npm notice 71B dist/index.js
+npm notice 1.7kB dist/ir-to-puck-patch.cjs
+npm notice 612B dist/ir-to-puck-patch.d.cts
+npm notice 303B dist/ir-to-puck-patch.d.cts.map
+npm notice 611B dist/ir-to-puck-patch.d.ts
+npm notice 302B dist/ir-to-puck-patch.d.ts.map
+npm notice 490B dist/ir-to-puck-patch.js
+npm notice 2.3kB dist/mock/fixtures/bento-grid.fixture.cjs
+npm notice 140B dist/mock/fixtures/bento-grid.fixture.d.cts
+npm notice 235B dist/mock/fixtures/bento-grid.fixture.d.cts.map
+npm notice 139B dist/mock/fixtures/bento-grid.fixture.d.ts
+npm notice 234B dist/mock/fixtures/bento-grid.fixture.d.ts.map
+npm notice 1.2kB dist/mock/fixtures/bento-grid.fixture.js
+npm notice 2.5kB dist/mock/fixtures/blog-list.fixture.cjs
+npm notice 138B dist/mock/fixtures/blog-list.fixture.d.cts
+npm notice 231B dist/mock/fixtures/blog-list.fixture.d.cts.map
+npm notice 137B dist/mock/fixtures/blog-list.fixture.d.ts
+npm notice 230B dist/mock/fixtures/blog-list.fixture.d.ts.map
+npm notice 1.3kB dist/mock/fixtures/blog-list.fixture.js
+npm notice 2.3kB dist/mock/fixtures/helps.fixture.cjs
+npm notice 131B dist/mock/fixtures/helps.fixture.d.cts
+npm notice 223B dist/mock/fixtures/helps.fixture.d.cts.map
+npm notice 130B dist/mock/fixtures/helps.fixture.d.ts
+npm notice 222B dist/mock/fixtures/helps.fixture.d.ts.map
+npm notice 1.2kB dist/mock/fixtures/helps.fixture.js
+npm notice 2.0kB dist/mock/fixtures/hero.fixture.cjs
+npm notice 129B dist/mock/fixtures/hero.fixture.d.cts
+npm notice 221B dist/mock/fixtures/hero.fixture.d.cts.map
+npm notice 128B dist/mock/fixtures/hero.fixture.d.ts
+npm notice 220B dist/mock/fixtures/hero.fixture.d.ts.map
+npm notice 862B dist/mock/fixtures/hero.fixture.js
+npm notice 3.9kB dist/mock/fixtures/index.cjs
+npm notice 250B dist/mock/fixtures/index.d.cts
+npm notice 309B dist/mock/fixtures/index.d.cts.map
+npm notice 249B dist/mock/fixtures/index.d.ts
+npm notice 308B dist/mock/fixtures/index.d.ts.map
+npm notice 1.8kB dist/mock/fixtures/index.js
+npm notice 1.9kB dist/mock/fixtures/logo-clouds.fixture.cjs
+npm notice 142B dist/mock/fixtures/logo-clouds.fixture.d.cts
+npm notice 237B dist/mock/fixtures/logo-clouds.fixture.d.cts.map
+npm notice 141B dist/mock/fixtures/logo-clouds.fixture.d.ts
+npm notice 236B dist/mock/fixtures/logo-clouds.fixture.d.ts.map
+npm notice 752B dist/mock/fixtures/logo-clouds.fixture.js
+npm notice 2.6kB dist/mock/fixtures/navbar.fixture.cjs
+npm notice 133B dist/mock/fixtures/navbar.fixture.d.cts
+npm notice 225B dist/mock/fixtures/navbar.fixture.d.cts.map
+npm notice 132B dist/mock/fixtures/navbar.fixture.d.ts
+npm notice 224B dist/mock/fixtures/navbar.fixture.d.ts.map
+npm notice 1.5kB dist/mock/fixtures/navbar.fixture.js
+npm notice 2.6kB dist/mock/fixtures/pricing-minimal.fixture.cjs
+npm notice 150B dist/mock/fixtures/pricing-minimal.fixture.d.cts
+npm notice 245B dist/mock/fixtures/pricing-minimal.fixture.d.cts.map
+npm notice 149B dist/mock/fixtures/pricing-minimal.fixture.d.ts
+npm notice 244B dist/mock/fixtures/pricing-minimal.fixture.d.ts.map
+npm notice 1.4kB dist/mock/fixtures/pricing-minimal.fixture.js
+npm notice 2.0kB dist/mock/fixtures/section.fixture.cjs
+npm notice 135B dist/mock/fixtures/section.fixture.d.cts
+npm notice 227B dist/mock/fixtures/section.fixture.d.cts.map
+npm notice 134B dist/mock/fixtures/section.fixture.d.ts
+npm notice 226B dist/mock/fixtures/section.fixture.d.ts.map
+npm notice 866B dist/mock/fixtures/section.fixture.js
+npm notice 2.4kB dist/mock/fixtures/statistics.fixture.cjs
+npm notice 141B dist/mock/fixtures/statistics.fixture.d.cts
+npm notice 235B dist/mock/fixtures/statistics.fixture.d.cts.map
+npm notice 140B dist/mock/fixtures/statistics.fixture.d.ts
+npm notice 234B dist/mock/fixtures/statistics.fixture.d.ts.map
+npm notice 1.2kB dist/mock/fixtures/statistics.fixture.js
+npm notice 585B dist/mock/fixtures/types.cjs
+npm notice 183B dist/mock/fixtures/types.d.cts
+npm notice 280B dist/mock/fixtures/types.d.cts.map
+npm notice 182B dist/mock/fixtures/types.d.ts
+npm notice 279B dist/mock/fixtures/types.d.ts.map
+npm notice 0B dist/mock/fixtures/types.js
+npm notice 1.8kB dist/mock/index.cjs
+npm notice 264B dist/mock/index.d.cts
+npm notice 273B dist/mock/index.d.cts.map
+npm notice 263B dist/mock/index.d.ts
+npm notice 272B dist/mock/index.d.ts.map
+npm notice 139B dist/mock/index.js
+npm notice 3.4kB dist/mock/mock-generate-page.cjs
+npm notice 380B dist/mock/mock-generate-page.d.cts
+npm notice 414B dist/mock/mock-generate-page.d.cts.map
+npm notice 379B dist/mock/mock-generate-page.d.ts
+npm notice 413B dist/mock/mock-generate-page.d.ts.map
+npm notice 2.1kB dist/mock/mock-generate-page.js
+npm notice 585B dist/types.cjs
+npm notice 2.0kB dist/types.d.cts
+npm notice 1.1kB dist/types.d.cts.map
+npm notice 2.0kB dist/types.d.ts
+npm notice 1.1kB dist/types.d.ts.map
+npm notice 0B dist/types.js
+npm notice 2.6kB package.json
+npm notice Tarball Details
+npm notice name: @anvilkit/plugin-ai-copilot
+npm notice version: 0.1.0-alpha.0
+npm notice filename: anvilkit-plugin-ai-copilot-0.1.0-alpha.0.tgz
+npm notice package size: 16.8 kB
+npm notice unpacked size: 84.4 kB
+npm notice shasum: 4c9fbd96c45d5e603c3d1e49c8660674968c54ed
+npm notice integrity: sha512-evodHg1uY8s2B[...]qCdHD+K1/zGMw==
+npm notice total files: 105
+npm notice
+anvilkit-plugin-ai-copilot-0.1.0-alpha.0.tgz
+
+--- @anvilkit/plugin-export-html ---
+npm notice
+npm notice 📦  @anvilkit/plugin-export-html@0.1.0-alpha.0
+npm notice Tarball Contents
+npm notice 1.1kB LICENSE
+npm notice 2.0kB README.md
+npm notice 2.1kB dist/create-html-export-plugin.cjs
+npm notice 256B dist/create-html-export-plugin.d.cts
+npm notice 304B dist/create-html-export-plugin.d.cts.map
+npm notice 255B dist/create-html-export-plugin.d.ts
+npm notice 303B dist/create-html-export-plugin.d.ts.map
+npm notice 769B dist/create-html-export-plugin.js
+npm notice 7.7kB dist/emit-css.cjs
+npm notice 195B dist/emit-css.d.cts
+npm notice 251B dist/emit-css.d.cts.map
+npm notice 194B dist/emit-css.d.ts
+npm notice 250B dist/emit-css.d.ts.map
+npm notice 6.5kB dist/emit-css.js
+npm notice 24.0kB dist/emit-html.cjs
+npm notice 750B dist/emit-html.d.cts
+npm notice 782B dist/emit-html.d.cts.map
+npm notice 749B dist/emit-html.d.ts
+npm notice 781B dist/emit-html.d.ts.map
+npm notice 20.7kB dist/emit-html.js
+npm notice 2.9kB dist/format-definition.cjs
+npm notice 245B dist/format-definition.d.cts
+npm notice 282B dist/format-definition.d.cts.map
+npm notice 244B dist/format-definition.d.ts
+npm notice 281B dist/format-definition.d.ts.map
+npm notice 1.3kB dist/format-definition.js
+npm notice 1.5kB dist/header-action.cjs
+npm notice 173B dist/header-action.d.cts
+npm notice 209B dist/header-action.d.cts.map
+npm notice 172B dist/header-action.d.ts
+npm notice 208B dist/header-action.d.ts.map
+npm notice 305B dist/header-action.js
+npm notice 1.9kB dist/index.cjs
+npm notice 290B dist/index.d.cts
+npm notice 289B dist/index.d.cts.map
+npm notice 289B dist/index.d.ts
+npm notice 288B dist/index.d.ts.map
+npm notice 187B dist/index.js
+npm notice 2.8kB dist/inline-assets.cjs
+npm notice 436B dist/inline-assets.d.cts
+npm notice 494B dist/inline-assets.d.cts.map
+npm notice 435B dist/inline-assets.d.ts
+npm notice 493B dist/inline-assets.d.ts.map
+npm notice 1.5kB dist/inline-assets.js
+npm notice 1.7kB dist/internal/base64.cjs
+npm notice 102B dist/internal/base64.d.cts
+npm notice 172B dist/internal/base64.d.cts.map
+npm notice 101B dist/internal/base64.d.ts
+npm notice 171B dist/internal/base64.d.ts.map
+npm notice 554B dist/internal/base64.js
+npm notice 1.5kB dist/internal/escape-html.cjs
+npm notice 160B dist/internal/escape-html.d.cts
+npm notice 234B dist/internal/escape-html.d.cts.map
+npm notice 159B dist/internal/escape-html.d.ts
+npm notice 233B dist/internal/escape-html.d.ts.map
+npm notice 294B dist/internal/escape-html.js
+npm notice 1.9kB dist/substitute-assets.cjs
+npm notice 150B dist/substitute-assets.d.cts
+npm notice 230B dist/substitute-assets.d.cts.map
+npm notice 149B dist/substitute-assets.d.ts
+npm notice 229B dist/substitute-assets.d.ts.map
+npm notice 603B dist/substitute-assets.js
+npm notice 585B dist/types.cjs
+npm notice 368B dist/types.d.cts
+npm notice 460B dist/types.d.cts.map
+npm notice 367B dist/types.d.ts
+npm notice 459B dist/types.d.ts.map
+npm notice 0B dist/types.js
+npm notice 1.8kB dist/wrap-document.cjs
+npm notice 159B dist/wrap-document.d.cts
+npm notice 250B dist/wrap-document.d.cts.map
+npm notice 158B dist/wrap-document.d.ts
+npm notice 249B dist/wrap-document.d.ts.map
+npm notice 544B dist/wrap-document.js
+npm notice 2.4kB package.json
+npm notice Tarball Details
+npm notice name: @anvilkit/plugin-export-html
+npm notice version: 0.1.0-alpha.0
+npm notice filename: anvilkit-plugin-export-html-0.1.0-alpha.0.tgz
+npm notice package size: 23.3 kB
+npm notice unpacked size: 103.6 kB
+npm notice shasum: 82f92a645d7308c8f14c44d3f9b7b7d9f5d5f2b5
+npm notice integrity: sha512-0kx5jLEgG0mt8[...]AjnguaCNnJ8oA==
+npm notice total files: 75
+npm notice
+anvilkit-plugin-export-html-0.1.0-alpha.0.tgz
+
