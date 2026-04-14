@@ -1,0 +1,942 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "@anvilkit/validator",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 1,
+			"name": "ValidationIssue",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"children": [
+				{
+					"id": 3,
+					"name": "code",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types.ts",
+							"line": 3,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L3"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 6,
+					"name": "componentName",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types.ts",
+							"line": 6,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L6"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 2,
+					"name": "level",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types.ts",
+							"line": 2,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L2"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "error"
+							},
+							{
+								"type": "literal",
+								"value": "warning"
+							}
+						]
+					}
+				},
+				{
+					"id": 4,
+					"name": "message",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types.ts",
+							"line": 4,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L4"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 5,
+					"name": "path",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types.ts",
+							"line": 5,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L5"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "intrinsic",
+										"name": "number"
+									}
+								]
+							}
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						3,
+						6,
+						2,
+						4,
+						5
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types.ts",
+					"line": 1,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L1"
+				}
+			]
+		},
+		{
+			"id": 7,
+			"name": "ValidationResult",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"children": [
+				{
+					"id": 9,
+					"name": "issues",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types.ts",
+							"line": 11,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L11"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 1,
+								"name": "ValidationIssue",
+								"package": "@anvilkit/validator"
+							}
+						}
+					}
+				},
+				{
+					"id": 8,
+					"name": "valid",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types.ts",
+							"line": 10,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L10"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						9,
+						8
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types.ts",
+					"line": 9,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/types.ts#L9"
+				}
+			]
+		},
+		{
+			"id": 10,
+			"name": "validateAiOutput",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "validate-ai-output.ts",
+					"line": 67,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-ai-output.ts#L67"
+				}
+			],
+			"signatures": [
+				{
+					"id": 11,
+					"name": "validateAiOutput",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "validate-ai-output.ts",
+							"line": 67,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-ai-output.ts#L67"
+						}
+					],
+					"parameters": [
+						{
+							"id": 12,
+							"name": "response",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						},
+						{
+							"id": 13,
+							"name": "availableComponents",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ai.ts",
+											"qualifiedName": "AiComponentSchema"
+										},
+										"name": "AiComponentSchema",
+										"package": "@anvilkit/core"
+									}
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/ai.ts",
+							"qualifiedName": "AiValidationResult"
+						},
+						"name": "AiValidationResult",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 14,
+			"name": "validateComponentConfig",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "validate-component-config.ts",
+					"line": 15,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-component-config.ts#L15"
+				}
+			],
+			"signatures": [
+				{
+					"id": 15,
+					"name": "validateComponentConfig",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "validate-component-config.ts",
+							"line": 15,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/e450a6d2487557d3f22bfa4a53d4e524c04970d2/packages/validator/src/validate-component-config.ts#L15"
+						}
+					],
+					"typeParameters": [
+						{
+							"id": 16,
+							"name": "C",
+							"variant": "typeParam",
+							"kind": 131072,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@puckeditor/core",
+									"packagePath": "dist/actions-BkBoKAc5.d.ts",
+									"qualifiedName": "Config"
+								},
+								"name": "Config",
+								"package": "@puckeditor/core"
+							}
+						}
+					],
+					"parameters": [
+						{
+							"id": 17,
+							"name": "config",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 16,
+								"name": "C",
+								"package": "@anvilkit/validator",
+								"refersToTypeParameter": true
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 7,
+						"name": "ValidationResult",
+						"package": "@anvilkit/validator"
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Interfaces",
+			"children": [
+				1,
+				7
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				10,
+				14
+			]
+		}
+	],
+	"packageName": "@anvilkit/validator",
+	"readme": [
+		{
+			"kind": "text",
+			"text": "# @anvilkit/validator\n\nExport-readiness validation for Puck component configs and AI-generated output.\n\n> **Alpha status (0.1.x).** Both "
+		},
+		{
+			"kind": "code",
+			"text": "`validateComponentConfig`"
+		},
+		{
+			"kind": "text",
+			"text": " and "
+		},
+		{
+			"kind": "code",
+			"text": "`validateAiOutput`"
+		},
+		{
+			"kind": "text",
+			"text": " are implemented and tested.\n\n## Quickstart\n\n### Validating a Puck component config\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "```ts\nimport { validateComponentConfig } from \"@anvilkit/validator\";\n\nconst result = validateComponentConfig(puckConfig);\nif (!result.valid) {\n  console.error(\"Config issues:\", result.issues);\n}\n```"
+		},
+		{
+			"kind": "text",
+			"text": "\n\n### Validating LLM-generated PageIR\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "```ts\nimport { validateAiOutput } from \"@anvilkit/validator\";\n\nconst result = validateAiOutput(llmResponse, availableComponents);\nif (!result.valid) {\n  // Do NOT dispatch to Puck — surface issues back to the AI retry loop.\n  console.error(\"AI output rejected:\", result.issues);\n}\n```"
+		},
+		{
+			"kind": "text",
+			"text": "\n\n## Error Codes — "
+		},
+		{
+			"kind": "code",
+			"text": "`validateComponentConfig`"
+		},
+		{
+			"kind": "text",
+			"text": "\n\n| Code | Level | Description |\n|------|-------|-------------|\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`E_MISSING_RENDER`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | "
+		},
+		{
+			"kind": "code",
+			"text": "`component.render`"
+		},
+		{
+			"kind": "text",
+			"text": " is not a function |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`E_MISSING_FIELDS`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | "
+		},
+		{
+			"kind": "code",
+			"text": "`component.fields`"
+		},
+		{
+			"kind": "text",
+			"text": " is not an object |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`E_NON_SERIALIZABLE_DEFAULT`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | A default prop value fails JSON serialization |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`E_FIELD_SHAPE_INVALID`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | A field does not match the Puck Field union |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`E_ASYNC_RENDER`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | "
+		},
+		{
+			"kind": "code",
+			"text": "`component.render`"
+		},
+		{
+			"kind": "text",
+			"text": " is an async function (Puck does not support async render) |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`W_MISSING_DESCRIPTION`"
+		},
+		{
+			"kind": "text",
+			"text": " | warning | "
+		},
+		{
+			"kind": "code",
+			"text": "`component.metadata?.description`"
+		},
+		{
+			"kind": "text",
+			"text": " is empty or undefined |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`W_UNKNOWN_FIELD_TYPE`"
+		},
+		{
+			"kind": "text",
+			"text": " | warning | Field type is not one of the 10 AiFieldType cases |\n\n### Why "
+		},
+		{
+			"kind": "code",
+			"text": "`E_ASYNC_RENDER`"
+		},
+		{
+			"kind": "text",
+			"text": " is a hard failure\n\nPuck renders components synchronously during its reconciliation loop. An async render function silently breaks — it returns a Promise object instead of React elements, which Puck coerces to "
+		},
+		{
+			"kind": "code",
+			"text": "`[object Promise]`"
+		},
+		{
+			"kind": "text",
+			"text": " or a blank node. This is impossible to debug from the editor, so we fail hard at validation time.\n\n## Issue Codes — "
+		},
+		{
+			"kind": "code",
+			"text": "`validateAiOutput`"
+		},
+		{
+			"kind": "text",
+			"text": "\n\nCodes are embedded as a "
+		},
+		{
+			"kind": "code",
+			"text": "`[CODE]`"
+		},
+		{
+			"kind": "text",
+			"text": " prefix in each "
+		},
+		{
+			"kind": "code",
+			"text": "`AiValidationIssue.message`"
+		},
+		{
+			"kind": "text",
+			"text": ". Callers (notably the AI copilot retry loop in Phase 4) switch on them.\n\n| Code | Severity | Description |\n|------|----------|-------------|\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`INVALID_STRUCTURE`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | Response is not an object, missing "
+		},
+		{
+			"kind": "code",
+			"text": "`root`"
+		},
+		{
+			"kind": "text",
+			"text": ", or "
+		},
+		{
+			"kind": "code",
+			"text": "`type`"
+		},
+		{
+			"kind": "text",
+			"text": " is not a string |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`UNSUPPORTED_VERSION`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | "
+		},
+		{
+			"kind": "code",
+			"text": "`PageIR.version`"
+		},
+		{
+			"kind": "text",
+			"text": " is not "
+		},
+		{
+			"kind": "code",
+			"text": "`\"1\"`"
+		},
+		{
+			"kind": "text",
+			"text": " |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`UNKNOWN_COMPONENT`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | Node "
+		},
+		{
+			"kind": "code",
+			"text": "`type`"
+		},
+		{
+			"kind": "text",
+			"text": " is not in "
+		},
+		{
+			"kind": "code",
+			"text": "`availableComponents`"
+		},
+		{
+			"kind": "text",
+			"text": " (may include a closest-match suggestion) |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`MISSING_REQUIRED_FIELD`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | A required field is absent from "
+		},
+		{
+			"kind": "code",
+			"text": "`node.props`"
+		},
+		{
+			"kind": "text",
+			"text": " |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`INVALID_FIELD_TYPE`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | A field value does not match the declared "
+		},
+		{
+			"kind": "code",
+			"text": "`AiFieldType`"
+		},
+		{
+			"kind": "text",
+			"text": " |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`INVALID_ENUM_VALUE`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | A "
+		},
+		{
+			"kind": "code",
+			"text": "`select`"
+		},
+		{
+			"kind": "text",
+			"text": " field received a value outside the declared options |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`INVALID_ASSET`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | An entry in "
+		},
+		{
+			"kind": "code",
+			"text": "`PageIR.assets`"
+		},
+		{
+			"kind": "text",
+			"text": " is malformed (bad "
+		},
+		{
+			"kind": "code",
+			"text": "`kind`"
+		},
+		{
+			"kind": "text",
+			"text": ", missing "
+		},
+		{
+			"kind": "code",
+			"text": "`url`"
+		},
+		{
+			"kind": "text",
+			"text": ", etc.) |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`MAX_DEPTH_EXCEEDED`"
+		},
+		{
+			"kind": "text",
+			"text": " | error | Node tree exceeds the hard cap of 16 levels (DoS guard) |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`UNKNOWN_FIELD`"
+		},
+		{
+			"kind": "text",
+			"text": " | warn | A prop is not declared in the component's "
+		},
+		{
+			"kind": "code",
+			"text": "`AiComponentSchema.fields`"
+		},
+		{
+			"kind": "text",
+			"text": " |\n\n### Trust boundary\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "`validateAiOutput`"
+		},
+		{
+			"kind": "text",
+			"text": " is the only thing standing between untrusted LLM output and "
+		},
+		{
+			"kind": "code",
+			"text": "`puckApi.dispatch`"
+		},
+		{
+			"kind": "text",
+			"text": ". If "
+		},
+		{
+			"kind": "code",
+			"text": "`result.valid === false`"
+		},
+		{
+			"kind": "text",
+			"text": ", the caller MUST NOT apply the response. Per architecture §9, validation failure surfaces immediately; retry logic is Phase 4.\n\n## Dependency contract\n\n| Allowed | Forbidden |\n|---------|-----------|\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`@anvilkit/schema`"
+		},
+		{
+			"kind": "text",
+			"text": " (runtime) | "
+		},
+		{
+			"kind": "code",
+			"text": "`@anvilkit/ir`"
+		},
+		{
+			"kind": "text",
+			"text": ", React, plugins |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`@anvilkit/utils`"
+		},
+		{
+			"kind": "text",
+			"text": " (runtime) | |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`zod`"
+		},
+		{
+			"kind": "text",
+			"text": " (runtime) | |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`@anvilkit/core`"
+		},
+		{
+			"kind": "text",
+			"text": " (types-only) | |\n| "
+		},
+		{
+			"kind": "code",
+			"text": "`@puckeditor/core`"
+		},
+		{
+			"kind": "text",
+			"text": " (peer, types-only) | |"
+		}
+	],
+	"symbolIdMap": {
+		"0": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue"
+		},
+		"2": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.level"
+		},
+		"3": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.code"
+		},
+		"4": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.message"
+		},
+		"5": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.path"
+		},
+		"6": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.componentName"
+		},
+		"7": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationResult"
+		},
+		"8": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationResult.valid"
+		},
+		"9": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationResult.issues"
+		},
+		"10": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-ai-output.ts",
+			"qualifiedName": "validateAiOutput"
+		},
+		"11": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-ai-output.ts",
+			"qualifiedName": "validateAiOutput"
+		},
+		"12": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-ai-output.ts",
+			"qualifiedName": "response"
+		},
+		"13": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-ai-output.ts",
+			"qualifiedName": "availableComponents"
+		},
+		"14": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-component-config.ts",
+			"qualifiedName": "validateComponentConfig"
+		},
+		"15": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-component-config.ts",
+			"qualifiedName": "validateComponentConfig"
+		},
+		"16": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-component-config.ts",
+			"qualifiedName": "C"
+		},
+		"17": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-component-config.ts",
+			"qualifiedName": "config"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/index.ts",
+			"2": "README.md",
+			"3": ""
+		},
+		"reflections": {
+			"1": 0,
+			"2": 0,
+			"3": 0
+		}
+	}
+}

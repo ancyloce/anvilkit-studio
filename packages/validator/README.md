@@ -4,6 +4,12 @@ Export-readiness validation for Puck component configs and AI-generated output.
 
 > **Alpha status (0.1.x).** Both `validateComponentConfig` and `validateAiOutput` are implemented and tested.
 
+## Install
+
+```bash
+pnpm add @anvilkit/validator @puckeditor/core
+```
+
 ## Quickstart
 
 ### Validating a Puck component config
@@ -28,6 +34,14 @@ if (!result.valid) {
   console.error("AI output rejected:", result.issues);
 }
 ```
+
+## Phase 3 references
+
+See the [Phase 3 plan](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
+(`M3 — @anvilkit/validator`) and the
+[architecture package catalog](../../docs/ai-context/anvilkit-architecture.md)
+(`§7 — @anvilkit/validator [Planned]`) for the validator's trust
+boundary and dependency rules.
 
 ## Error Codes — `validateComponentConfig`
 
@@ -74,3 +88,9 @@ Codes are embedded as a `[CODE]` prefix in each `AiValidationIssue.message`. Cal
 | `zod` (runtime) | |
 | `@anvilkit/core` (types-only) | |
 | `@puckeditor/core` (peer, types-only) | |
+
+## Peer dependencies
+
+| Package | Version |
+| ------- | ------- |
+| `@puckeditor/core` | `^0.19.0` |
