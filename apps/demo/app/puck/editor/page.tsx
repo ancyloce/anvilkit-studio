@@ -8,7 +8,7 @@ import { createHtmlExportPlugin, htmlFormat } from "@anvilkit/plugin-export-html
 import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
 	createDemoData,
 	createDemoModeHref,
@@ -53,6 +53,15 @@ export default function PuckEditorPage() {
 	const [aiError, setAiError] = useState<string | null>(null);
 	const [aiStatus, setAiStatus] = useState<"idle" | "pending">("idle");
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
+	// Memoized so the plugins array reference stays stable across
+	// renders. Without this, each render passes a fresh array literal
+	// to `<Studio>`, whose compile effect re-fires, unmounts the
+	// runtime, and resets Puck's data back to the `publishedData`
+	// prop — wiping any AI-generated content instantly.
+	const plugins = useMemo(
+		() => [smokeTestPlugin, htmlExportPlugin, aiCopilotPlugin],
+		[],
+	);
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -212,7 +221,7 @@ export default function PuckEditorPage() {
 				<Studio
 					puckConfig={demoConfig}
 					data={publishedData}
-					plugins={[smokeTestPlugin, htmlExportPlugin, aiCopilotPlugin]}
+					plugins={plugins}
 					onPublish={handlePublish}
 				/>
 			</section>
