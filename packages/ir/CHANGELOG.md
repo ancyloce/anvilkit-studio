@@ -1,15 +1,23 @@
 # @anvilkit/ir
 
-## 0.1.0-alpha.0 — 2026-04-11
+## 0.1.0-alpha.0 — 2026-04-14
 
-Initial scaffold for Phase 3 IR layer. Ships the public barrel
-(`puckDataToIR`, `irToPuckData`, `collectAssets`, `identifySlots`)
-as throwing stubs so downstream packages (`@anvilkit/plugin-export-html`,
-`@anvilkit/plugin-ai-copilot`) can pin against the final public shape
-while real implementations land in `phase3-003` (core transforms +
-round-trip) and `phase3-004` (asset + slot helpers + snapshot
-fixtures).
+### Added
 
-See [`phase3-002`](../../docs/tasks/phase3-002-ir-scaffold.md) for
-scope and [`phase-3-export-ai-pipeline-plan.md`](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
-§4.2 and §5 M1 for how this package fits into the export pipeline.
+- **Transforms** — `puckDataToIR`, `irToPuckData`, `collectAssets`,
+  and `identifySlots` as the public Page IR round-trip and asset/slot
+  inspection surface for downstream exporters and AI tooling.
+- **Quality gates** — `check:publint`, `check:circular`,
+  `check:react-free-runtime`, `check:peer-deps`,
+  `check:bundle-budget` (6 KB gzipped limit), and
+  `check:api-snapshot`.
+
+### Notes
+
+- **Alpha release.** The package is still in the `0.1.0-alpha.x`
+  line; consumers should pin exact versions until the public API is
+  declared stable.
+- **IR contract is now release-gated.** The TypeDoc snapshot,
+  round-trip tests, and bundle/dependency gates are the release
+  contract for this package. Any future `PageIR` shape change still
+  requires the documented minor-bump workflow.

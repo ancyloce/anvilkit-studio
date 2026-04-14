@@ -12,6 +12,12 @@ React, no DOM, and no other `@anvilkit/*` runtime.
 > The IR shape is **frozen at end of M1** — any change requires a
 > Core minor bump and an `ir_shape_changed` changeset.
 
+## Install
+
+```bash
+pnpm add @anvilkit/ir @puckeditor/core
+```
+
 ## Quickstart
 
 ```ts
@@ -28,6 +34,14 @@ const ir = puckDataToIR(data, config);
 const roundTripped = irToPuckData(ir);
 ```
 
+## Phase 3 references
+
+See the [Phase 3 plan](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
+(`M1 — @anvilkit/ir`) and the
+[architecture package catalog](../../docs/ai-context/anvilkit-architecture.md)
+(`§7 — @anvilkit/ir [Planned]`) for the IR contract, dependency
+direction, and release expectations.
+
 ## Public API
 
 | Export           | Signature                                                          | Purpose                                                                                              |
@@ -36,6 +50,12 @@ const roundTripped = irToPuckData(ir);
 | `irToPuckData`   | `(ir: PageIR) => Data`                                             | Reverse of `puckDataToIR` — used for round-trip tests and the AI copilot's `setData` dispatch.       |
 | `collectAssets`  | `(node: PageIRNode) => readonly PageIRAsset[]`                     | Walk a sub-tree and collect every referenced asset, deduplicated.                                    |
 | `identifySlots`  | `(config: Config) => Map<string, readonly string[]>`               | Inspect a Puck `Config` and return the slot-field keys declared on each component.                   |
+
+## Peer dependencies
+
+| Package | Version |
+| ------- | ------- |
+| `@puckeditor/core` | `^0.21.0` |
 
 ## Dependency contract
 
