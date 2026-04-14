@@ -9,12 +9,24 @@ feeds into its system prompt.
 > **Alpha status (0.1.x).** `configToAiContext`, `identifySlotFields`,
 > `extractFieldSchema`, and `isJsonSerializable` are implemented and tested.
 
+## Install
+
+```bash
+pnpm add @anvilkit/schema @puckeditor/core
+```
+
 ## Quickstart
 
 ```ts
 import { configToAiContext } from "@anvilkit/schema";
+import type { Config } from "@puckeditor/core";
+
+declare const puckConfig: Config;
+
 const ctx = configToAiContext(puckConfig);
-// ctx.availableComponents is ready to ship to an LLM
+const firstComponent = ctx.availableComponents[0];
+
+console.log(firstComponent?.componentName);
 ```
 
 ### Per-field extraction
@@ -27,6 +39,14 @@ const puckField: Field = { type: "text" };
 const schema = extractFieldSchema("title", puckField);
 // => { name: "title", type: "text" }
 ```
+
+## Phase 3 references
+
+See the [Phase 3 plan](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
+(`M2 — @anvilkit/schema`) and the
+[architecture package catalog](../../docs/ai-context/anvilkit-architecture.md)
+(`§7 — @anvilkit/schema [Planned]`) for the schema-derivation role
+and dependency boundary.
 
 ## Public API
 
@@ -55,3 +75,9 @@ This is conservative — override via `opts.required` if needed.
 | ------------------------------------ | ----------------------------------------------------------------------- |
 | `@anvilkit/utils` (runtime)          | `@anvilkit/ir`, `@anvilkit/validator`, `@anvilkit/core` runtime         |
 | `@puckeditor/core` (peer, types-only)| React, ReactDOM, any plugin package, any DOM API                        |
+
+## Peer dependencies
+
+| Package | Version |
+| ------- | ------- |
+| `@puckeditor/core` | `^0.21.0` |
