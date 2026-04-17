@@ -9,6 +9,11 @@ import {
 	defaultProps as blogListDefaultProps,
 } from "@anvilkit/blog-list";
 import {
+	type ButtonProps,
+	componentConfig as buttonComponentConfig,
+	defaultProps as buttonDefaultProps,
+} from "@anvilkit/button";
+import {
 	type HelpsProps,
 	componentConfig as helpsComponentConfig,
 	defaultProps as helpsDefaultProps,
@@ -18,6 +23,11 @@ import {
 	componentConfig as heroComponentConfig,
 	defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
+import {
+	type InputProps,
+	componentConfig as inputComponentConfig,
+	defaultProps as inputDefaultProps,
+} from "@anvilkit/input";
 import {
 	type LogoCloudsProps,
 	componentConfig as logoCloudsComponentConfig,
@@ -48,8 +58,10 @@ import type { Config, Data } from "@puckeditor/core";
 export type DemoComponents = {
 	BentoGrid: BentoGridProps;
 	BlogList: BlogListProps;
+	Button: ButtonProps;
 	Hero: HeroProps;
 	Helps: HelpsProps;
+	Input: InputProps;
 	LogoClouds: LogoCloudsProps;
 	Navbar: NavbarProps;
 	PricingMinimal: PricingMinimalProps;
@@ -78,12 +90,22 @@ export const demoConfig: Config<DemoComponents> = {
 				"LogoClouds",
 			],
 		},
+		actions: {
+			title: "Actions",
+			components: ["Button"],
+		},
+		forms: {
+			title: "Forms",
+			components: ["Input"],
+		},
 	},
 	components: {
 		BentoGrid: bentoGridComponentConfig,
 		BlogList: blogListComponentConfig,
+		Button: buttonComponentConfig,
 		Hero: heroComponentConfig,
 		Helps: helpsComponentConfig,
+		Input: inputComponentConfig,
 		LogoClouds: logoCloudsComponentConfig,
 		Navbar: navbarComponentConfig,
 		PricingMinimal: pricingMinimalComponentConfig,
@@ -157,6 +179,20 @@ export function createDemoData(): Data<DemoComponents> {
 				props: {
 					id: "logo-clouds-primary",
 					...logoCloudsDefaultProps,
+				},
+			},
+			{
+				type: "Input",
+				props: {
+					id: "input-primary",
+					...inputDefaultProps,
+				},
+			},
+			{
+				type: "Button",
+				props: {
+					id: "button-primary",
+					...buttonDefaultProps,
 				},
 			},
 		],

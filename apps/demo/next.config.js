@@ -6,9 +6,11 @@ const nextConfig = {
 	transpilePackages: [
 		"@anvilkit/bento-grid",
 		"@anvilkit/blog-list",
+		"@anvilkit/button",
 		"@anvilkit/core",
 		"@anvilkit/hero",
 		"@anvilkit/helps",
+		"@anvilkit/input",
 		"@anvilkit/ir",
 		"@anvilkit/logo-clouds",
 		"@anvilkit/navbar",
