@@ -10,7 +10,11 @@
     "test": "turbo run test",
     "test:watch": "vitest",
     "changeset": "changeset",
-    "changeset:status": "changeset status"
+    "changeset:status": "changeset status",
+    "publint": "turbo run publint",
+    "madge": "madge --circular --extensions ts,tsx packages/",
+    "docs:dev": "turbo run docs:dev",
+    "docs:build": "turbo run docs:build"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.9",
@@ -22,7 +26,9 @@
     "@types/node": "^22.15.3",
     "@vitest/coverage-v8": "^4.1.4",
     "jsdom": "^29.0.2",
+    "madge": "^8.0.0",
     "prettier": "^3.8.1",
+    "publint": "^0.3.18",
     "turbo": "^2.8.20",
     "typescript": "6.0.2",
     "vitest": "^4.1.4",

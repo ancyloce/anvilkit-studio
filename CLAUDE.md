@@ -97,7 +97,7 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 - TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
 
 ### Continuous Integration
-`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 10.33.0 / Node 20, then runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`. A separate `publish-ui.yml` workflow exists for the `@anvilkit/ui` package.
+`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 10.33.0 / Node 20, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dependency gate), `pnpm test`, `pnpm build`, `pnpm publint` (exports validation), per-package release gates, and Playwright E2E tests. A separate `publish-ui.yml` workflow exists for the `@anvilkit/ui` package.
 
 **Typecheck script naming:** the workspace normalizes on `typecheck` (not `check-types`) across every package and the Turbo task graph. The components submodule (`packages/components/`) already used `typecheck` for each component package, so the root and direct-workspace packages (`ui`, `utils`, `vitest-config`, `apps/demo`) were renamed to match. Do not reintroduce `check-types`.
 
@@ -124,6 +124,8 @@ Submodules: `packages/components`, `packages/plugins/plugin-ai-copilot`, `packag
 - typecheck: pnpm typecheck
 - lint: pnpm lint
 - test: pnpm test
+- madge: pnpm madge (circular dependency detection)
+- publint: pnpm publint (package.json exports validation)
 
 knip and shellcheck are intentionally skipped: neither is installed in this repo,
 and the only `.sh` files live under `node_modules/`. Reintroduce them here if that

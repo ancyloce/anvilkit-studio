@@ -24,6 +24,24 @@
     "e2e": {
       "cache": false,
       "dependsOn": ["^build"]
+    },
+    "publint": {
+      "dependsOn": ["^build"]
+    },
+    "docs:build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "astro.config.mjs",
+        "package.json",
+        "tsconfig.json",
+        "src/**",
+        "public/**"
+      ],
+      "outputs": ["dist/**", ".astro/**"]
+    },
+    "docs:dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

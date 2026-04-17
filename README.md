@@ -1,6 +1,6 @@
 # AnvilKit Studio
 
-AnvilKit Studio is currently a Puck-first component library monorepo.
+AnvilKit Studio is currently a Puck-first component library monorepo. See the [Contributing Guide](CONTRIBUTING.md) to get started.
 
 Today this repo contains:
 
@@ -61,7 +61,16 @@ The shared Puck config lives in `apps/demo/lib/puck-demo.ts`.
 
 ## Continuous Integration
 
-`.github/workflows/ci.yml` runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` on every pull request (pnpm 10.33.0 / Node 20, submodules pulled recursively).
+`.github/workflows/ci.yml` runs on every pull request (pnpm 10.33.0 / Node 20, submodules pulled recursively):
+
+1. `pnpm lint` — Biome lint
+2. `pnpm typecheck` — TypeScript validation
+3. `pnpm madge` — circular dependency detection (`madge --circular` across `packages/`)
+4. `pnpm test` — Vitest
+5. `pnpm build` — build all packages
+6. `pnpm publint` — validate `package.json` exports fields
+7. Per-package release gates (`check:all`) for core, ir, schema, validator, and plugins
+8. Playwright E2E tests against the demo app
 
 ## Architecture Context
 
