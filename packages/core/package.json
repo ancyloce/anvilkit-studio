@@ -117,6 +117,7 @@
 		"typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
 		"test": "vitest run",
 		"test:watch": "vitest",
+		"publint": "publint",
 		"check:publint": "publint .",
 		"check:circular": "madge --circular --extensions ts,tsx src/",
 		"check:react-free-runtime": "node ./scripts/check-react-free.mjs",

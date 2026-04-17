@@ -8,25 +8,45 @@
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
 		},
 		"./globals.css": "./src/globals.css",
 		"./*": {
-			"types": "./dist/*.d.ts",
-			"import": "./dist/*.js",
-			"require": "./dist/*.cjs"
+			"import": {
+				"types": "./dist/*.d.ts",
+				"default": "./dist/*.js"
+			},
+			"require": {
+				"types": "./dist/*.d.cts",
+				"default": "./dist/*.cjs"
+			}
 		},
 		"./hooks/*": {
-			"types": "./dist/hooks/*.d.ts",
-			"import": "./dist/hooks/*.js",
-			"require": "./dist/hooks/*.cjs"
+			"import": {
+				"types": "./dist/hooks/*.d.ts",
+				"default": "./dist/hooks/*.js"
+			},
+			"require": {
+				"types": "./dist/hooks/*.d.cts",
+				"default": "./dist/hooks/*.cjs"
+			}
 		},
 		"./lib/*": {
-			"types": "./dist/lib/*.d.ts",
-			"import": "./dist/lib/*.js",
-			"require": "./dist/lib/*.cjs"
+			"import": {
+				"types": "./dist/lib/*.d.ts",
+				"default": "./dist/lib/*.js"
+			},
+			"require": {
+				"types": "./dist/lib/*.d.cts",
+				"default": "./dist/lib/*.cjs"
+			}
 		}
 	},
 	"files": [
@@ -51,7 +71,8 @@
 		"generate:component": "turbo gen react-component",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
-		"test:watch": "vitest"
+		"test:watch": "vitest",
+		"publint": "publint"
 	},
 	"devDependencies": {
 		"@anvilkit/biome-config": "workspace:*",
