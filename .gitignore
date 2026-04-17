@@ -44,5 +44,6 @@ output
 
 # Docs
 docs/
+!apps/docs/
 
 .changeset/
