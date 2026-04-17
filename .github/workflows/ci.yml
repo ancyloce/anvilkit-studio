@@ -45,11 +45,23 @@ jobs:
       - name: Typecheck workspace
         run: pnpm typecheck
 
+      - name: Madge — detect circular dependencies
+        run: pnpm madge
+
       - name: Test workspace
         run: pnpm test
 
       - name: Build workspace
         run: pnpm build
+
+      # Phase 4 (`phase4-001`): build the Starlight docs site on every
+      # PR. A broken docs build fails CI so drifted component docs,
+      # sidebar entries, and ADR references can't land unnoticed.
+      - name: Build docs site
+        run: pnpm turbo run docs:build
+
+      - name: Publint — validate package.json exports
+        run: pnpm publint
 
       # `check:all` aggregates the `@anvilkit/core` release gates from
       # `core-015`: publint, circular-dep scan (madge), the
