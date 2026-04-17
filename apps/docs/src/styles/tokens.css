@@ -1,0 +1,43 @@
+/*
+ * AnvilKit docs theme tokens.
+ *
+ * Sourced from @anvilkit/tailwind-config/shadcn so the docs site shares the
+ * same shadcn-style light/dark palette the demo app and component packages
+ * consume. Starlight's own theme variables are rewired to these tokens so
+ * headings, chrome, and callouts all match the design system.
+ */
+
+@import "@anvilkit/tailwind-config/shadcn";
+
+:root {
+	--sl-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+	--sl-color-accent-low: color-mix(in oklab, var(--primary) 20%, transparent);
+	--sl-color-accent: var(--primary);
+	--sl-color-accent-high: var(--primary-foreground);
+	--sl-color-white: var(--foreground);
+	--sl-color-gray-1: var(--muted-foreground);
+	--sl-color-gray-2: var(--muted-foreground);
+	--sl-color-gray-3: var(--border);
+	--sl-color-gray-4: var(--border);
+	--sl-color-gray-5: var(--muted);
+	--sl-color-gray-6: var(--muted);
+	--sl-color-black: var(--background);
+}
+
+:root[data-theme="light"] {
+	--sl-color-bg: var(--background);
+	--sl-color-bg-nav: var(--background);
+	--sl-color-bg-sidebar: var(--sidebar);
+	--sl-color-text: var(--foreground);
+	--sl-color-text-accent: var(--primary);
+	--sl-color-hairline: var(--border);
+}
+
+:root[data-theme="dark"] {
+	--sl-color-bg: var(--background);
+	--sl-color-bg-nav: var(--background);
+	--sl-color-bg-sidebar: var(--sidebar);
+	--sl-color-text: var(--foreground);
+	--sl-color-text-accent: var(--primary);
+	--sl-color-hairline: var(--border);
+}

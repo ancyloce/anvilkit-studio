@@ -1,0 +1,22 @@
+# build output
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# environment
+.env
+.env.production
+
+# macOS
+.DS_Store
+
+# turbo
+.turbo/

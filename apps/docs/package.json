@@ -1,0 +1,27 @@
+{
+	"name": "@anvilkit/docs-site",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "astro dev --host 0.0.0.0 --port 4321",
+		"docs:dev": "astro dev --host 0.0.0.0 --port 4321",
+		"build": "astro build",
+		"docs:build": "astro build",
+		"preview": "astro preview --host 0.0.0.0 --port 4321",
+		"astro": "astro",
+		"typecheck": "astro check"
+	},
+	"dependencies": {
+		"@anvilkit/tailwind-config": "workspace:*",
+		"@astrojs/starlight": "^0.38.3",
+		"@tailwindcss/vite": "4.2.2",
+		"astro": "^6.1.7",
+		"sharp": "^0.33.5",
+		"tailwindcss": "4.2.2"
+	},
+	"devDependencies": {
+		"@astrojs/check": "^0.9.4",
+		"typescript": "5.9.2"
+	}
+}
