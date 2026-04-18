@@ -1,4 +1,5 @@
 // @ts-check
+import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -18,6 +19,7 @@ export default defineConfig({
 		plugins: [/** @type {any} */ (tailwindcss())],
 	},
 	integrations: [
+		react(),
 		starlight({
 			title: "AnvilKit",
 			description:
@@ -40,14 +42,10 @@ export default defineConfig({
 				},
 				{
 					label: "Components",
-					collapsed: true,
-					items: [
-						{
-							label: "Coming soon",
-							link: "#",
-							badge: { text: "TBD", variant: "caution" },
-						},
-					],
+					collapsed: false,
+					// Auto-populated from src/content/docs/components/*.mdx,
+					// which phase4-002's generator writes during prebuild.
+					autogenerate: { directory: "components" },
 				},
 				{
 					label: "Guides",

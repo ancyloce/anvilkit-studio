@@ -4,6 +4,9 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"generate:components": "jiti scripts/generate-component-pages.ts",
+		"prebuild": "pnpm generate:components",
+		"predev": "pnpm generate:components",
 		"dev": "astro dev --host 0.0.0.0 --port 4321",
 		"docs:dev": "astro dev --host 0.0.0.0 --port 4321",
 		"build": "astro build",
@@ -13,15 +16,34 @@
 		"typecheck": "astro check"
 	},
 	"dependencies": {
+		"@anvilkit/bento-grid": "workspace:*",
+		"@anvilkit/blog-list": "workspace:*",
+		"@anvilkit/button": "workspace:*",
+		"@anvilkit/helps": "workspace:*",
+		"@anvilkit/hero": "workspace:*",
+		"@anvilkit/input": "workspace:*",
+		"@anvilkit/logo-clouds": "workspace:*",
+		"@anvilkit/navbar": "workspace:*",
+		"@anvilkit/pricing-minimal": "workspace:*",
+		"@anvilkit/section": "workspace:*",
+		"@anvilkit/statistics": "workspace:*",
 		"@anvilkit/tailwind-config": "workspace:*",
+		"@anvilkit/ui": "workspace:*",
+		"@astrojs/react": "^5.0.3",
 		"@astrojs/starlight": "^0.38.3",
+		"@puckeditor/core": "^0.21.1",
 		"@tailwindcss/vite": "4.2.2",
 		"astro": "^6.1.7",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
 		"sharp": "^0.33.5",
 		"tailwindcss": "4.2.2"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.4",
+		"@types/react": "19.2.14",
+		"@types/react-dom": "19.2.3",
+		"jiti": "^2.6.1",
 		"typescript": "5.9.2"
 	}
 }
