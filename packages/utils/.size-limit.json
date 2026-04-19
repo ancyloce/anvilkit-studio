@@ -1,0 +1,9 @@
+[
+	{
+		"name": "@anvilkit/utils",
+		"path": "dist/index.js",
+		"limit": "2 KB",
+		"gzip": true,
+		"ignore": ["react", "react-dom"]
+	}
+]
