@@ -11,6 +11,11 @@ import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
 	testDir: "./tests",
+	// Vitest owns the `tests/guides/**` tree (Phase 4 plugin-authoring
+	// guide code-block harness, `phase4-006`). Excluding it here keeps
+	// Playwright from trying to drive a unit-test file as a browser
+	// spec.
+	testIgnore: ["**/guides/**"],
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 2 : 0,

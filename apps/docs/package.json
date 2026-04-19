@@ -16,6 +16,8 @@
 		"preview": "astro preview --host 0.0.0.0 --port 4321",
 		"astro": "astro",
 		"typecheck": "astro check",
+		"test": "vitest run",
+		"test:watch": "vitest",
 		"e2e": "playwright test",
 		"e2e:install": "playwright install --with-deps chromium"
 	},
@@ -48,6 +50,7 @@
 		"tailwindcss": "4.2.2"
 	},
 	"devDependencies": {
+		"@anvilkit/example-usage-counter": "workspace:*",
 		"@anvilkit/schema": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
 		"@anvilkit/validator": "workspace:*",
@@ -57,6 +60,7 @@
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",
 		"jiti": "^2.6.1",
-		"typescript": "5.9.2"
+		"typescript": "5.9.2",
+		"vitest": "^4.1.4"
 	}
 }

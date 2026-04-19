@@ -506,6 +506,8 @@ on every docs build — see \`apps/docs/scripts/generate-component-pages.ts\`.
 Prefer to explore interactively? [Open the playground](/playground/) to drop any of
 these 11 components onto a live Puck canvas.
 
+Writing your own? Start with the [component authoring guide](/guides/component-authoring/).
+
 | Component | Package | Summary |
 |-----------|---------|---------|
 ${rows}

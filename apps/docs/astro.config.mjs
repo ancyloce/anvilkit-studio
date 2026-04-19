@@ -49,12 +49,15 @@ export default defineConfig({
 				},
 				{
 					label: "Guides",
-					collapsed: true,
+					collapsed: false,
 					items: [
 						{
-							label: "Coming soon",
-							link: "#",
-							badge: { text: "TBD", variant: "caution" },
+							label: "Component authoring",
+							slug: "guides/component-authoring",
+						},
+						{
+							label: "Plugin authoring",
+							slug: "guides/plugin-authoring",
 						},
 					],
 				},
