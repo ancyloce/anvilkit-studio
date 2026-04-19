@@ -1,0 +1,9 @@
+[
+	{
+		"name": "@anvilkit/validator",
+		"path": "dist/index.js",
+		"limit": "10 KB",
+		"gzip": true,
+		"ignore": ["@puckeditor/core", "@anvilkit/ir", "@anvilkit/schema", "@anvilkit/utils", "zod"]
+	}
+]
