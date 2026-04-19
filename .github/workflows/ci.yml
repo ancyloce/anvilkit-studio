@@ -57,6 +57,15 @@ jobs:
       # Phase 4 (`phase4-001`): build the Starlight docs site on every
       # PR. A broken docs build fails CI so drifted component docs,
       # sidebar entries, and ADR references can't land unnoticed.
+      #
+      # Phase 4 (`phase4-005`): this step is a **correctness** gate.
+      # The **deploy** gate lives on Vercel (`vercel.json` at repo
+      # root) and posts its own GitHub check with the preview URL.
+      # The Vercel check is informational from CI's perspective — a
+      # failing Vercel build surfaces in the PR UI but does not fail
+      # this workflow, and conversely a failing CI build does not
+      # suppress the Vercel preview. The two builds are intentionally
+      # independent so a regression in either surfaces before merge.
       - name: Build docs site
         run: pnpm turbo run docs:build
 
