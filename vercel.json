@@ -1,0 +1,11 @@
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"buildCommand": "pnpm install --frozen-lockfile && pnpm -F @anvilkit/docs-site build",
+	"outputDirectory": "apps/docs/dist",
+	"installCommand": "echo 'install handled by buildCommand'",
+	"framework": null,
+	"ignoreCommand": "bash -c 'if [ \"$VERCEL_ENV\" = \"production\" ]; then exit 1; fi; git diff --quiet HEAD^ HEAD -- apps/docs packages/components packages/core'",
+	"github": {
+		"silent": false
+	}
+}

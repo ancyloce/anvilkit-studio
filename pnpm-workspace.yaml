@@ -4,5 +4,6 @@ packages:
   - "packages/plugins/*"
   - "packages/configs/*"
   - "packages/components/src/*"
+  - "examples/plugins/*"
 allowBuilds:
   msw: false
