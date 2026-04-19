@@ -1,0 +1,207 @@
+/*
+ * Playground layout — scoped class names so the page can render
+ * outside the Starlight shell without inheriting its content grid.
+ */
+
+:root {
+	color-scheme: light dark;
+}
+
+body {
+	margin: 0;
+	font-family: var(--sl-font, ui-sans-serif, system-ui, sans-serif);
+	background: var(--background, #fafafa);
+	color: var(--foreground, #111);
+}
+
+.anvilkit-playground__topbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem 1.5rem;
+	border-bottom: 1px solid var(--border, #e5e5e5);
+	background: var(--background, #fff);
+	font-size: 0.875rem;
+}
+
+.anvilkit-playground__topbar a {
+	color: inherit;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.anvilkit-playground__topbar a:hover {
+	text-decoration: underline;
+}
+
+.anvilkit-playground__topbar-links {
+	display: inline-flex;
+	gap: 1rem;
+}
+
+.anvilkit-playground {
+	display: grid;
+	gap: 1.25rem;
+	padding: 1.5rem;
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+.anvilkit-playground__header {
+	display: grid;
+	gap: 1rem;
+	align-items: start;
+}
+
+@media (min-width: 768px) {
+	.anvilkit-playground__header {
+		grid-template-columns: minmax(0, 1fr) auto;
+	}
+}
+
+.anvilkit-playground__eyebrow {
+	margin: 0;
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: var(--muted-foreground, #666);
+}
+
+.anvilkit-playground__title {
+	margin: 0.25rem 0 0.5rem;
+	font-size: clamp(1.5rem, 2.5vw, 2rem);
+	line-height: 1.15;
+}
+
+.anvilkit-playground__lede {
+	margin: 0;
+	max-width: 60ch;
+	color: var(--muted-foreground, #444);
+	line-height: 1.5;
+}
+
+.anvilkit-playground__actions {
+	display: inline-flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	align-self: end;
+}
+
+.anvilkit-playground__button {
+	appearance: none;
+	border: 1px solid var(--border, #d4d4d4);
+	background: var(--background, #fff);
+	color: inherit;
+	padding: 0.55rem 1rem;
+	border-radius: 0.65rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.anvilkit-playground__button:hover {
+	border-color: var(--primary, #2563eb);
+}
+
+.anvilkit-playground__button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.anvilkit-playground__button--primary {
+	background: var(--primary, #2563eb);
+	color: var(--primary-foreground, #fff);
+	border-color: transparent;
+}
+
+.anvilkit-playground__button--primary:hover {
+	filter: brightness(1.05);
+	border-color: transparent;
+}
+
+.anvilkit-playground__panel {
+	display: grid;
+	gap: 0.75rem;
+	padding: 1rem 1.25rem;
+	border: 1px solid var(--border, #e5e5e5);
+	border-radius: 0.85rem;
+	background: color-mix(
+		in oklab,
+		var(--background, #fff) 95%,
+		var(--muted, #f4f4f4) 5%
+	);
+}
+
+.anvilkit-playground__panel-title {
+	margin: 0;
+	font-size: 1.1rem;
+}
+
+.anvilkit-playground__panel-lede {
+	margin: 0;
+	color: var(--muted-foreground, #555);
+	line-height: 1.5;
+}
+
+.anvilkit-playground__toggle {
+	display: inline-flex;
+	gap: 0.5rem;
+	align-items: center;
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.anvilkit-playground__ai {
+	display: grid;
+	gap: 0.75rem;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: end;
+}
+
+.anvilkit-playground__field {
+	display: grid;
+	gap: 0.35rem;
+}
+
+.anvilkit-playground__field-label {
+	font-size: 0.75rem;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--muted-foreground, #666);
+}
+
+.anvilkit-playground__ai textarea {
+	padding: 0.6rem 0.75rem;
+	border: 1px solid var(--border, #d4d4d4);
+	border-radius: 0.5rem;
+	font-family: inherit;
+	font-size: 0.95rem;
+	resize: vertical;
+	background: var(--background, #fff);
+	color: inherit;
+}
+
+.anvilkit-playground__canvas {
+	min-height: 600px;
+	border: 1px solid var(--border, #e5e5e5);
+	border-radius: 0.85rem;
+	overflow: hidden;
+	background: var(--background, #fff);
+}
+
+.anvilkit-playground__error {
+	margin: 0;
+	color: #b91c1c;
+	font-size: 0.875rem;
+}
+
+.anvilkit-playground__status {
+	margin: 0;
+	font-size: 0.8rem;
+	color: var(--muted-foreground, #666);
+	min-height: 1rem;
+}

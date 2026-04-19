@@ -423,7 +423,7 @@ import { ${componentName}, defaultProps as __anvilkitDefaultProps } from "${pkgN
 import "${pkgName}/styles.css";
 
 <div class="anvilkit-component-meta">
-	<code>${pkgName}</code> <span>·</span> <span>v${pkgVersion}</span>
+	<code>${pkgName}</code> <span>·</span> <span>v${pkgVersion}</span> <span>·</span> <a href="/playground/">Try it in the playground →</a>
 </div>
 
 ## Live preview
@@ -502,6 +502,9 @@ description: Auto-generated catalog of every @anvilkit/* Puck-native component p
 
 This catalog is regenerated from each component's \`metadata\` export and \`README.md\`
 on every docs build — see \`apps/docs/scripts/generate-component-pages.ts\`.
+
+Prefer to explore interactively? [Open the playground](/playground/) to drop any of
+these 11 components onto a live Puck canvas.
 
 | Component | Package | Summary |
 |-----------|---------|---------|

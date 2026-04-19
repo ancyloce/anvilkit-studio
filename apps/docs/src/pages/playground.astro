@@ -1,0 +1,42 @@
+---
+/**
+ * Interactive playground route (`phase4-004`).
+ *
+ * A single-page Astro route outside Starlight's content layer so we
+ * can host the full-bleed <Studio> canvas without the docs chrome
+ * fighting for layout. The React island is mounted with
+ * `client:only="react"` because Puck reaches for `window` during
+ * setup and cannot be server-rendered.
+ */
+import PlaygroundIsland from "../components/Playground.tsx";
+import "../styles/tokens.css";
+import "../styles/playground.css";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Playground · AnvilKit</title>
+		<meta
+			name="description"
+			content="Live AnvilKit playground with all 11 components, HTML export, and a mock AI copilot."
+		/>
+		<link rel="canonical" href="https://anvilkit.dev/playground/" />
+	</head>
+	<body>
+		<nav class="anvilkit-playground__topbar">
+			<a href="/" class="anvilkit-playground__brand">← AnvilKit docs</a>
+			<div class="anvilkit-playground__topbar-links">
+				<a href="/components/">Components</a>
+				<a
+					href="https://github.com/ancyloce/anvilkit-studio"
+					rel="noreferrer"
+					target="_blank">GitHub</a
+				>
+			</div>
+		</nav>
+		<PlaygroundIsland client:only="react" />
+	</body>
+</html>

@@ -28,3 +28,8 @@ yarn-error.log*
 
 # turbo
 .turbo/
+
+# playwright (phase4-004)
+playwright-report/
+test-results/
+.playwright/

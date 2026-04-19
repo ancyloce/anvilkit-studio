@@ -68,12 +68,13 @@ export default defineConfig({
 				},
 				{
 					label: "Playground",
-					collapsed: true,
+					collapsed: false,
 					items: [
 						{
-							label: "Coming soon",
-							link: "#",
-							badge: { text: "TBD", variant: "caution" },
+							label: "Interactive playground",
+							link: "/playground/",
+							badge: { text: "Live", variant: "tip" },
+							attrs: { "data-testid": "sidebar-playground-link" },
 						},
 					],
 				},
