@@ -1,0 +1,9 @@
+[
+	{
+		"name": "@anvilkit/ir",
+		"path": "dist/index.js",
+		"limit": "6 KB",
+		"gzip": true,
+		"ignore": ["@puckeditor/core", "@anvilkit/utils"]
+	}
+]
