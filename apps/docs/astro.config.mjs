@@ -61,13 +61,10 @@ export default defineConfig({
 				{
 					label: "API Reference",
 					collapsed: true,
-					items: [
-						{
-							label: "Coming soon",
-							link: "#",
-							badge: { text: "TBD", variant: "caution" },
-						},
-					],
+					// Auto-populated from src/content/docs/api/*, which
+					// phase4-003's generator (`scripts/generate-api-pages.ts`)
+					// emits during prebuild via TypeDoc.
+					autogenerate: { directory: "api" },
 				},
 				{
 					label: "Playground",

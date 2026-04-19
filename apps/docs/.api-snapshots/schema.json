@@ -1,0 +1,688 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@anvilkit/schema",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 1,
+      "name": "ConfigToAiContextOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 2,
+          "name": "include",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "config-to-ai-context.ts",
+              "line": 21,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L21"
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "intrinsic",
+              "name": "string"
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            2
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "config-to-ai-context.ts",
+          "line": 20,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L20"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "ExtractFieldSchemaOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 10,
+          "name": "description",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "extract-field-schema.ts",
+              "line": 8,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L8"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 9,
+          "name": "required",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "extract-field-schema.ts",
+              "line": 7,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L7"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            10,
+            9
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "extract-field-schema.ts",
+          "line": 6,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L6"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "IsJsonSerializableOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 22,
+          "name": "dateAsIso",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "is-json-serializable.ts",
+              "line": 2,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/is-json-serializable.ts#L2"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            22
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "is-json-serializable.ts",
+          "line": 1,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/is-json-serializable.ts#L1"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "configToAiContext",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "config-to-ai-context.ts",
+          "line": 24,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L24"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 4,
+          "name": "configToAiContext",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "config-to-ai-context.ts",
+              "line": 24,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L24"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 5,
+              "name": "C",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-BkBoKAc5.d.ts",
+                  "qualifiedName": "Config"
+                },
+                "name": "Config",
+                "package": "@puckeditor/core"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 6,
+              "name": "config",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 5,
+                "name": "C",
+                "package": "@anvilkit/schema",
+                "refersToTypeParameter": true
+              }
+            },
+            {
+              "id": 7,
+              "name": "opts",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {
+                "isOptional": true
+              },
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "ConfigToAiContextOptions",
+                "package": "@anvilkit/schema"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@anvilkit/core",
+              "packagePath": "src/types/ai.ts",
+              "qualifiedName": "AiGenerationContext"
+            },
+            "name": "AiGenerationContext",
+            "package": "@anvilkit/core"
+          }
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "extractFieldSchema",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "extract-field-schema.ts",
+          "line": 11,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L11"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 12,
+          "name": "extractFieldSchema",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "extract-field-schema.ts",
+              "line": 11,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L11"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 13,
+              "name": "name",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "id": 14,
+              "name": "field",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-BkBoKAc5.d.ts",
+                  "qualifiedName": "Field"
+                },
+                "name": "Field",
+                "package": "@puckeditor/core"
+              }
+            },
+            {
+              "id": 15,
+              "name": "opts",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {
+                "isOptional": true
+              },
+              "type": {
+                "type": "reference",
+                "target": 8,
+                "name": "ExtractFieldSchemaOptions",
+                "package": "@anvilkit/schema"
+              }
+            },
+            {
+              "id": 16,
+              "name": "_depth",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {
+                "isOptional": true
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@anvilkit/core",
+              "packagePath": "src/types/ai.ts",
+              "qualifiedName": "AiFieldSchema"
+            },
+            "name": "AiFieldSchema",
+            "package": "@anvilkit/core"
+          }
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "identifySlotFields",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "identify-slot-fields.ts",
+          "line": 3,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/identify-slot-fields.ts#L3"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 18,
+          "name": "identifySlotFields",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "identify-slot-fields.ts",
+              "line": 3,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/identify-slot-fields.ts#L3"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 19,
+              "name": "C",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-BkBoKAc5.d.ts",
+                  "qualifiedName": "Config"
+                },
+                "name": "Config",
+                "package": "@puckeditor/core"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 20,
+              "name": "config",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 19,
+                "name": "C",
+                "package": "@anvilkit/schema",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es2015.collection.d.ts",
+              "qualifiedName": "Map"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              }
+            ],
+            "name": "Map",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "isJsonSerializable",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "is-json-serializable.ts",
+          "line": 5,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/is-json-serializable.ts#L5"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 24,
+          "name": "isJsonSerializable",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "is-json-serializable.ts",
+              "line": 5,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/is-json-serializable.ts#L5"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 25,
+              "name": "value",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            },
+            {
+              "id": 26,
+              "name": "opts",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {
+                "isOptional": true
+              },
+              "type": {
+                "type": "reference",
+                "target": 21,
+                "name": "IsJsonSerializableOptions",
+                "package": "@anvilkit/schema"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Interfaces",
+      "children": [
+        1,
+        8,
+        21
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        3,
+        11,
+        17,
+        23
+      ]
+    }
+  ],
+  "packageName": "@anvilkit/schema",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "ConfigToAiContextOptions"
+    },
+    "2": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "ConfigToAiContextOptions.include"
+    },
+    "3": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "configToAiContext"
+    },
+    "4": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "configToAiContext"
+    },
+    "5": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "C"
+    },
+    "6": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "config"
+    },
+    "7": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "opts"
+    },
+    "8": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "ExtractFieldSchemaOptions"
+    },
+    "9": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "ExtractFieldSchemaOptions.required"
+    },
+    "10": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "ExtractFieldSchemaOptions.description"
+    },
+    "11": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "extractFieldSchema"
+    },
+    "12": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "extractFieldSchema"
+    },
+    "13": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "name"
+    },
+    "14": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "field"
+    },
+    "15": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "opts"
+    },
+    "16": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "_depth"
+    },
+    "17": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "identifySlotFields"
+    },
+    "18": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "identifySlotFields"
+    },
+    "19": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "C"
+    },
+    "20": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "config"
+    },
+    "21": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "IsJsonSerializableOptions"
+    },
+    "22": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "IsJsonSerializableOptions.dateAsIso"
+    },
+    "23": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "isJsonSerializable"
+    },
+    "24": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "isJsonSerializable"
+    },
+    "25": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "value"
+    },
+    "26": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "opts"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

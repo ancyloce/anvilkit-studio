@@ -1,0 +1,516 @@
+{
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@anvilkit/validator",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 1,
+      "name": "ValidationIssue",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 3,
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "types.ts",
+              "line": 3,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L3"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 6,
+          "name": "componentName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "types.ts",
+              "line": 6,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L6"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 2,
+          "name": "level",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "types.ts",
+              "line": 2,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L2"
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "error"
+              },
+              {
+                "type": "literal",
+                "value": "warning"
+              }
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "name": "message",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "types.ts",
+              "line": 4,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L4"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 5,
+          "name": "path",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "types.ts",
+              "line": 5,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L5"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            3,
+            6,
+            2,
+            4,
+            5
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "types.ts",
+          "line": 1,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L1"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "ValidationResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 9,
+          "name": "issues",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "types.ts",
+              "line": 11,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L11"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 1,
+                "name": "ValidationIssue",
+                "package": "@anvilkit/validator"
+              }
+            }
+          }
+        },
+        {
+          "id": 8,
+          "name": "valid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "types.ts",
+              "line": 10,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L10"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            9,
+            8
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "types.ts",
+          "line": 9,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L9"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "validateAiOutput",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validate-ai-output.ts",
+          "line": 67,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-ai-output.ts#L67"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 11,
+          "name": "validateAiOutput",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "validate-ai-output.ts",
+              "line": 67,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-ai-output.ts#L67"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 12,
+              "name": "response",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            },
+            {
+              "id": 13,
+              "name": "availableComponents",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/core",
+                      "packagePath": "src/types/ai.ts",
+                      "qualifiedName": "AiComponentSchema"
+                    },
+                    "name": "AiComponentSchema",
+                    "package": "@anvilkit/core"
+                  }
+                }
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@anvilkit/core",
+              "packagePath": "src/types/ai.ts",
+              "qualifiedName": "AiValidationResult"
+            },
+            "name": "AiValidationResult",
+            "package": "@anvilkit/core"
+          }
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "validateComponentConfig",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validate-component-config.ts",
+          "line": 15,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-component-config.ts#L15"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 15,
+          "name": "validateComponentConfig",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "validate-component-config.ts",
+              "line": 15,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-component-config.ts#L15"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 16,
+              "name": "C",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-BkBoKAc5.d.ts",
+                  "qualifiedName": "Config"
+                },
+                "name": "Config",
+                "package": "@puckeditor/core"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 17,
+              "name": "config",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 16,
+                "name": "C",
+                "package": "@anvilkit/validator",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 7,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Interfaces",
+      "children": [
+        1,
+        7
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        10,
+        14
+      ]
+    }
+  ],
+  "packageName": "@anvilkit/validator",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue"
+    },
+    "2": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.level"
+    },
+    "3": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.code"
+    },
+    "4": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.message"
+    },
+    "5": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.path"
+    },
+    "6": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.componentName"
+    },
+    "7": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationResult"
+    },
+    "8": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationResult.valid"
+    },
+    "9": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationResult.issues"
+    },
+    "10": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "validateAiOutput"
+    },
+    "11": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "validateAiOutput"
+    },
+    "12": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "response"
+    },
+    "13": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "availableComponents"
+    },
+    "14": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "validateComponentConfig"
+    },
+    "15": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "validateComponentConfig"
+    },
+    "16": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "C"
+    },
+    "17": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "config"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

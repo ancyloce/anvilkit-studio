@@ -5,8 +5,10 @@
 	"type": "module",
 	"scripts": {
 		"generate:components": "jiti scripts/generate-component-pages.ts",
-		"prebuild": "pnpm generate:components",
-		"predev": "pnpm generate:components",
+		"generate:api": "jiti scripts/generate-api-pages.ts",
+		"generate:all": "pnpm generate:components && pnpm generate:api",
+		"prebuild": "pnpm generate:all",
+		"predev": "pnpm generate:all",
 		"dev": "astro dev --host 0.0.0.0 --port 4321",
 		"docs:dev": "astro dev --host 0.0.0.0 --port 4321",
 		"build": "astro build",
@@ -40,6 +42,11 @@
 		"tailwindcss": "4.2.2"
 	},
 	"devDependencies": {
+		"@anvilkit/core": "workspace:*",
+		"@anvilkit/ir": "workspace:*",
+		"@anvilkit/schema": "workspace:*",
+		"@anvilkit/utils": "workspace:*",
+		"@anvilkit/validator": "workspace:*",
 		"@astrojs/check": "^0.9.4",
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",
