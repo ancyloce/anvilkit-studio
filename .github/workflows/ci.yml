@@ -101,10 +101,31 @@ jobs:
       - name: Run demo E2E tests
         run: pnpm --filter demo e2e
 
-      - name: Upload Playwright report
+      - name: Upload demo Playwright report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-demo
           path: apps/demo/playwright-report/
+          retention-days: 7
+
+      # Phase 4 (`phase4-004`): docs site playground smoke test. The
+      # spec boots the Starlight preview server, asserts all 11
+      # component palette entries, drives the HTML export button,
+      # and verifies the localStorage round-trip. The demo step
+      # above already installed the Chromium browser binary — we
+      # just need the `@anvilkit/docs-site` Playwright config to
+      # pick it up.
+      - name: Install Playwright browsers (docs)
+        run: pnpm --filter @anvilkit/docs-site exec playwright install --with-deps chromium
+
+      - name: Run docs E2E tests
+        run: pnpm --filter @anvilkit/docs-site e2e
+
+      - name: Upload docs Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-docs
+          path: apps/docs/playwright-report/
           retention-days: 7
