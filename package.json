@@ -30,6 +30,8 @@
     "prettier": "^3.8.1",
     "publint": "^0.3.18",
     "turbo": "^2.8.20",
+    "typedoc": "^0.28.18",
+    "typedoc-plugin-markdown": "^4.4.0",
     "typescript": "6.0.2",
     "vitest": "^4.1.4",
     "zod": "^4.3.0",
