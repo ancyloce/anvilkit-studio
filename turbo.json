@@ -28,6 +28,15 @@
     "publint": {
       "dependsOn": ["^build"]
     },
+    "size": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "dist/**",
+        ".size-limit.json",
+        "package.json"
+      ],
+      "outputs": []
+    },
     "docs:build": {
       "dependsOn": ["^build"],
       "inputs": [

@@ -5,5 +5,6 @@ packages:
   - "packages/configs/*"
   - "packages/components/src/*"
   - "examples/plugins/*"
+  - "examples/ai-adapters/*"
 allowBuilds:
   msw: false

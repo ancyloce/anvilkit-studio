@@ -47,3 +47,4 @@ docs/
 !apps/docs/
 
 .changeset/
+.idea/
