@@ -1,0 +1,20 @@
+{
+	"name": "@anvilkit/example-ai-adapter-fetch",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Example generatePage() adapter that POSTs to a host-owned backend route. Provider-agnostic. Reference implementation for phase4-010.",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"typecheck": "tsc --noEmit -p tsconfig.json"
+	},
+	"dependencies": {
+		"@anvilkit/plugin-ai-copilot": "workspace:*",
+		"@anvilkit/core": "workspace:*"
+	},
+	"devDependencies": {
+		"typescript": "6.0.2"
+	}
+}

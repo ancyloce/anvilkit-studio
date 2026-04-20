@@ -1,0 +1,22 @@
+{
+	"name": "@anvilkit/example-ai-adapter-openai",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Example generatePage() adapter backed by OpenAI's Chat Completions API. Reference implementation for phase4-010.",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"typecheck": "tsc --noEmit -p tsconfig.json"
+	},
+	"dependencies": {
+		"@anvilkit/plugin-ai-copilot": "workspace:*",
+		"@anvilkit/core": "workspace:*",
+		"openai": "^4.76.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.3",
+		"typescript": "6.0.2"
+	}
+}
