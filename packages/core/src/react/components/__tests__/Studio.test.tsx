@@ -247,14 +247,25 @@ describe("<Studio> — onChange / onDataChange lifecycle", () => {
 
 		await act(async () => {
 			puckMockState.lastProps?.onChange?.(nextData);
-			// Let the microtask queue drain so the fire-and-forget
-			// `lifecycle.emit("onDataChange")` promise can resolve.
+			// Let the microtask queue drain so the consumer's `onChange`
+			// (fired synchronously) can resolve. The plugin
+			// `onDataChange` hook is debounced, so it fires on a
+			// timeout — assert it via `waitFor` below.
 			await Promise.resolve();
 		});
 
-		expect(onDataChangeHook).toHaveBeenCalledTimes(1);
+		// Consumer onChange is NOT debounced — it's the raw Puck
+		// callback forwarded verbatim.
 		expect(consumerOnChange).toHaveBeenCalledTimes(1);
 		expect(consumerOnChange).toHaveBeenCalledWith(nextData);
+
+		// Plugin onDataChange is debounced by `<Studio>` to avoid
+		// keystroke-rate flooding. Wait for the debounced fire — the
+		// default timeout generously exceeds the 250ms debounce window
+		// configured in `Studio.tsx`.
+		await waitFor(() => {
+			expect(onDataChangeHook).toHaveBeenCalledTimes(1);
+		});
 	});
 });
 

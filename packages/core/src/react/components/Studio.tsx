@@ -94,6 +94,7 @@ import { StudioRuntimeProvider } from "../hooks/use-studio.js";
 import { mergeOverrides } from "../overrides/merge-overrides.js";
 import { useAiStore } from "../stores/ai-store.js";
 import { useExportStore } from "../stores/export-store.js";
+import { useThemeStore } from "../stores/theme-store.js";
 
 /**
  * Props accepted by {@link Studio}. Mirrors the subset of `<Puck>`'s
@@ -174,6 +175,151 @@ const EMPTY_DATA: PuckData = {
 	content: [],
 	zones: {},
 };
+
+/**
+ * Debounce window (ms) for `onDataChange` plugin hooks. Puck's
+ * `onChange` fires on every keystroke; a naive fire-and-forget loop
+ * floods autosave / telemetry plugins with 20 requests/second during
+ * typing. 250 ms strikes a balance between "feels live" and "does not
+ * hammer the network" — plugins that need every keystroke can opt in
+ * to Puck's own `onChange` via a consumer `onChange` prop.
+ */
+const DATA_CHANGE_DEBOUNCE_MS = 250;
+
+/**
+ * Identity tag appended to the plugin fingerprint when a plugin
+ * cannot be structurally serialized (captures closures, Symbols,
+ * etc.). `WeakMap`-backed so the tag stays stable for the life of
+ * the plugin object; two separate constructions of the same adapter
+ * get distinct tags, which is exactly what we want — their backing
+ * closures may differ.
+ */
+const pluginIdentityTags = new WeakMap<object, string>();
+let pluginIdentityCounter = 0;
+
+function identityTagFor(value: object): string {
+	let existing = pluginIdentityTags.get(value);
+	if (existing === undefined) {
+		pluginIdentityCounter += 1;
+		existing = `#${pluginIdentityCounter}`;
+		pluginIdentityTags.set(value, existing);
+	}
+	return existing;
+}
+
+/**
+ * Structural fingerprint for the plugin array. `StudioPlugin` objects
+ * are hashed by their `meta` block (ids are unique and version-bumped
+ * intentionally); `PuckPlugin` objects and anything else fall back to
+ * an identity tag so a *different* object produces a *different*
+ * fingerprint. An inline array of the same plugins produces the same
+ * string on every render, which keeps the compile effect from
+ * thrashing under the idiomatic React pattern.
+ */
+function fingerprintPlugins(
+	plugins: readonly (StudioPlugin | PuckPlugin)[] | undefined,
+): string {
+	if (plugins === undefined || plugins.length === 0) {
+		return "[]";
+	}
+	const parts: string[] = [];
+	for (const plugin of plugins) {
+		if (
+			plugin !== null &&
+			typeof plugin === "object" &&
+			"meta" in plugin &&
+			plugin.meta !== null &&
+			typeof plugin.meta === "object"
+		) {
+			const meta = plugin.meta as {
+				id?: unknown;
+				version?: unknown;
+				coreVersion?: unknown;
+			};
+			parts.push(
+				`studio:${escapeFingerprintSegment(String(meta.id))}@${escapeFingerprintSegment(String(meta.version))}/${escapeFingerprintSegment(String(meta.coreVersion))}`,
+			);
+			continue;
+		}
+		if (plugin !== null && typeof plugin === "object") {
+			parts.push(`puck:${identityTagFor(plugin)}`);
+			continue;
+		}
+		parts.push(`other:${escapeFingerprintSegment(String(plugin))}`);
+	}
+	return parts.join("|");
+}
+
+/**
+ * Escape the fingerprint segment separator. A `meta.id` that ever
+ * contains `|` or `\` would otherwise collide with a neighbor's
+ * segment boundary — extremely unlikely given reverse-DNS plugin id
+ * conventions, but cheap to close.
+ */
+function escapeFingerprintSegment(segment: string): string {
+	return segment.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
+}
+
+/**
+ * Case-insensitive substrings that mark a log-meta key as sensitive.
+ * The default `ctx.log` passes meta straight to `console`, which in
+ * dev tools is trivially copy-pasted into screenshots and bug
+ * reports. This is a minimum-viable redaction; a host-provided
+ * logger (planned post-alpha) will take over the real contract.
+ */
+const REDACTED_META_KEYS = [
+	"token",
+	"secret",
+	"password",
+	"apikey",
+	"api_key",
+	"authorization",
+	"cookie",
+	"bearer",
+] as const;
+
+function shouldRedactKey(key: string): boolean {
+	const normalized = key.toLowerCase();
+	for (const needle of REDACTED_META_KEYS) {
+		if (normalized.includes(needle)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function redactLogMeta(meta: Record<string, unknown>): Record<string, unknown> {
+	// Shallow copy is sufficient — the contract is "don't print
+	// obvious secrets," not "deep-scrub arbitrary nested structures."
+	// Plugins that pass deeply nested meta with secrets in leaves can
+	// upgrade to a host-provided logger when that ships.
+	const out: Record<string, unknown> = {};
+	for (const [key, value] of Object.entries(meta)) {
+		out[key] = shouldRedactKey(key) ? "[REDACTED]" : value;
+	}
+	return out;
+}
+
+/**
+ * Structural fingerprint for the `config` prop. `JSON.stringify` is
+ * cheap for the shallow-ish partial shape `StudioConfig` accepts and
+ * order-insensitive at the value level, though not at the key level —
+ * which matches how we want merge precedence to work: swapping keys
+ * is a genuinely different config.
+ */
+function fingerprintConfig(config: unknown): string {
+	if (config === undefined || config === null) {
+		return "null";
+	}
+	try {
+		return JSON.stringify(config);
+	} catch {
+		// Circular reference or BigInt — fall back to identity so a
+		// new object reference still re-runs compile but we do not
+		// crash the component tree.
+		return identityTagFor(config as object);
+	}
+}
 
 /**
  * Error thrown by {@link StudioPluginContext.getPuckApi} when a
@@ -277,6 +423,23 @@ export function Studio(props: StudioProps): ReactElement | null {
 	const puckApiRef = useRef<GetPuckSnapshot | null>(null);
 
 	// ------------------------------------------------------------------
+	// SSR-safe rehydration. The three Zustand stores are declared with
+	// `skipHydration: true` so they do not synchronously read
+	// `localStorage` at module evaluation — that read would fire on
+	// the server (no storage) and again on the client (with storage),
+	// producing a React 19 hydration mismatch for any component that
+	// subscribes to a persisted field. Kicking rehydrate off in a
+	// mount-time effect guarantees the first server-rendered HTML and
+	// the first client render agree, and the persisted state flows in
+	// on the next tick.
+	// ------------------------------------------------------------------
+	useEffect(() => {
+		void useAiStore.persist.rehydrate();
+		void useExportStore.persist.rehydrate();
+		void useThemeStore.persist.rehydrate();
+	}, []);
+
+	// ------------------------------------------------------------------
 	// 2. Resolve plugins, build the studio config, and compile. All
 	//    three steps run in a single async effect so the Zod-heavy
 	//    `createStudioConfig` can be loaded via **dynamic import** and
@@ -301,6 +464,29 @@ export function Studio(props: StudioProps): ReactElement | null {
 		readonly ctx: StudioPluginContext;
 	} | null>(null);
 
+	// Structural fingerprint of `plugins` + `config` so the compile
+	// effect does not thrash when a parent re-render hands us a new
+	// array/object reference with identical contents — the idiomatic
+	// `<Studio plugins={[...]} config={{ ... }} />` pattern in Next.js
+	// App Router and Puck's own examples otherwise re-runs
+	// compilePlugins() on every navigation event.
+	//
+	// The hash is stable across renders: two arrays containing the
+	// same plugin meta hash to the same string, and
+	// `JSON.stringify(config)` is order-sensitive only at the key
+	// level, not reference level. Plugin objects that cannot be
+	// structurally fingerprinted (functions captured in closures) fall
+	// through to a per-plugin identity marker so the hash still
+	// changes when the plugin array is genuinely different.
+	const pluginsFingerprint = useMemo(
+		() => fingerprintPlugins(plugins),
+		[plugins],
+	);
+	const configFingerprint = useMemo(
+		() => fingerprintConfig(config),
+		[config],
+	);
+
 	useEffect(() => {
 		let cancelled = false;
 		const basePlugins = plugins ?? [];
@@ -313,6 +499,9 @@ export function Studio(props: StudioProps): ReactElement | null {
 			const { createStudioConfig } = await import(
 				"../../config/create-config.js"
 			);
+			if (cancelled) {
+				return;
+			}
 			const studioConfig = createStudioConfig(config);
 
 			let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] =
@@ -323,6 +512,9 @@ export function Studio(props: StudioProps): ReactElement | null {
 				const { aiHostAdapter } = await import(
 					"../../compat/ai-host-adapter.js"
 				);
+				if (cancelled) {
+					return;
+				}
 				resolvedPlugins = [aiHostAdapter({ aiHost }), ...basePlugins];
 			}
 
@@ -348,6 +540,9 @@ export function Studio(props: StudioProps): ReactElement | null {
 					// is a later feature — route every severity to its
 					// matching `console` method so plugin authors can
 					// still observe emit output during development.
+					// Meta is redacted first so a plugin that passes an
+					// auth token or user prompt through `ctx.log(...)`
+					// doesn't trivially leak it into the browser console.
 					const method =
 						level === "error"
 							? "error"
@@ -356,7 +551,10 @@ export function Studio(props: StudioProps): ReactElement | null {
 								: level === "debug"
 									? "debug"
 									: "info";
-					console[method](`[studio] ${message}`, meta ?? {});
+					console[method](
+						`[studio] ${message}`,
+						meta === undefined ? {} : redactLogMeta(meta),
+					);
 				},
 				emit: () => {
 					// The plugin-to-plugin event bus is scoped to a
@@ -367,13 +565,18 @@ export function Studio(props: StudioProps): ReactElement | null {
 			};
 
 			try {
-				const runtime = await compilePlugins(resolvedPlugins, ctx);
+				const runtime = await compilePlugins(resolvedPlugins, ctx, {
+					lifecycle: { onDataChangeDebounceMs: DATA_CHANGE_DEBOUNCE_MS },
+				});
 				if (cancelled) {
 					return;
 				}
 				setCompiled({ runtime, studioConfig, ctx });
 			} catch (error) {
 				if (cancelled) {
+					// Suppress stale-setup logs — a later effect
+					// supersedes this one and logging here would be
+					// misleading.
 					return;
 				}
 				// Compilation errors are already typed
@@ -388,13 +591,25 @@ export function Studio(props: StudioProps): ReactElement | null {
 		return () => {
 			cancelled = true;
 		};
-	}, [plugins, aiHost, config]);
+		// Fingerprints intentionally replace the raw references:
+		// inline `<Studio plugins={[...]} config={{ ... }} />` creates
+		// fresh references on every parent render, which would
+		// otherwise tear down and rebuild the runtime each time.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [pluginsFingerprint, aiHost, configFingerprint]);
 
 	// ------------------------------------------------------------------
 	// 3. Populate the export store once the runtime is ready. Writing
 	//    through the store's setter is deliberate — the store exposes a
 	//    `setAvailableFormats` action that accepts a list, no reason to
 	//    go through `setState` directly.
+	//
+	//    Also seed the theme store from `studioConfig.theme.defaultMode`
+	//    so the config block is actually load-bearing — it was dead
+	//    prior to this wiring. Only applied when the persisted mode is
+	//    still at its `"system"` default: a user who has explicitly
+	//    picked a preference on a prior visit should not have their
+	//    choice silently overwritten by a host-set default.
 	// ------------------------------------------------------------------
 	useEffect(() => {
 		if (compiled === null) {
@@ -403,6 +618,12 @@ export function Studio(props: StudioProps): ReactElement | null {
 		useExportStore
 			.getState()
 			.setAvailableFormats([...compiled.runtime.exportFormats.keys()]);
+
+		const theme = compiled.studioConfig.theme;
+		const currentMode = useThemeStore.getState().mode;
+		if (currentMode === "system" && theme.defaultMode !== "system") {
+			useThemeStore.getState().setMode(theme.defaultMode);
+		}
 	}, [compiled]);
 
 	// ------------------------------------------------------------------
@@ -431,6 +652,12 @@ export function Studio(props: StudioProps): ReactElement | null {
 		const { runtime, ctx } = compiled;
 		return () => {
 			void runtime.lifecycle.emit("onDestroy", ctx);
+			// Tear down the lifecycle manager so any pending
+			// `onDataChange` debounce timer does not fire after the
+			// host has dropped its reference to the runtime (which
+			// would run hooks against a stale ctx whose
+			// `getPuckApi()` now throws).
+			runtime.lifecycle.dispose();
 			useExportStore.getState().reset();
 			useAiStore.getState().reset();
 		};

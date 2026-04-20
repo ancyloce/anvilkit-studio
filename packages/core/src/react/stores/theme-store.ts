@@ -151,6 +151,11 @@ export const useThemeStore = create<ThemeState>()(
 			partialize: (state): ThemeStorePartial => ({
 				mode: state.mode,
 			}),
+			// SSR safety: skip synchronous rehydration so the server
+			// and first-client render agree on the initial `"system"`
+			// default. `<Studio>` rehydrates from a mount-time effect,
+			// after which `mode` reflects the persisted preference.
+			skipHydration: true,
 		},
 	),
 );

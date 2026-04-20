@@ -33,6 +33,21 @@
  * plugin state. Subscribers fire **after** the plugin hooks have
  * settled for that event, so tests can assert final state safely.
  *
+ * ### `onDataChange` debouncing — test vs. production contract
+ *
+ * `createLifecycleManager(registrations)` defaults to **no debounce**
+ * (`onDataChangeDebounceMs: 0`) so unit tests that drive `emit(...)`
+ * directly observe hooks firing synchronously after each call. The
+ * `<Studio>` shell opts in at 250 ms via
+ * {@link CompilePluginsOptions} so keystroke-rate `onChange` events
+ * coalesce before they reach autosave / telemetry plugins.
+ *
+ * The consequence for plugin authors: a hook observed firing 20×
+ * during a unit test may only fire once in production behind
+ * `<Studio>`. Tests that pin per-keystroke counts should either pass
+ * the same debounce option the shell uses or add their own quiet
+ * period before asserting.
+ *
  * ### Zero React, zero Puck
  *
  * The payload type for data-bearing events is a bare `PuckData`
@@ -50,6 +65,25 @@ import type {
 	StudioPluginRegistration,
 } from "../types/plugin.js";
 import { StudioPluginError } from "./errors.js";
+
+/**
+ * Best-effort `.message` extraction. Used when wrapping an unknown
+ * rejection so the wrapper's `message` still carries a readable root
+ * cause for log pipelines that only render `err.message`.
+ */
+function extractErrorMessage(error: unknown): string {
+	if (error instanceof Error && typeof error.message === "string") {
+		return error.message;
+	}
+	if (typeof error === "string") {
+		return error;
+	}
+	try {
+		return String(error);
+	} catch {
+		return "<unserializable error>";
+	}
+}
 
 /**
  * The closed union of lifecycle event names the runtime fires.
@@ -106,6 +140,47 @@ export interface LifecycleManager {
 		event: LifecycleEventName,
 		handler: LifecycleSubscriber,
 	) => () => void;
+
+	/**
+	 * Release any in-flight debounce timers and forget every live
+	 * subscriber so the manager can be garbage-collected cleanly.
+	 *
+	 * `<Studio>` calls this from the unmount cleanup that follows
+	 * `onDestroy`. Without it, a pending `onDataChange` debounce
+	 * timer would fire after the host dropped its reference to the
+	 * runtime — running plugin hooks against a stale context whose
+	 * `getPuckApi()` now throws.
+	 *
+	 * Safe to call multiple times; subsequent calls are no-ops.
+	 */
+	readonly dispose: () => void;
+}
+
+/**
+ * Options accepted by {@link createLifecycleManager}.
+ */
+export interface LifecycleManagerOptions {
+	/**
+	 * Coalesce rapid `onDataChange` emits into a single hook
+	 * invocation after this many milliseconds of quiet. `<Studio>`
+	 * opts in with a sensible default so plugin authors don't need to
+	 * debounce every `onDataChange` hook by hand — an autosave plugin
+	 * posting to `/api/draft` otherwise floods the backend on every
+	 * keystroke.
+	 *
+	 * - `0` (or omitted) → preserves pre-debounce behavior: every
+	 *   emit synchronously schedules hook invocation.
+	 * - `> 0` → only the most recent emit within a sliding window
+	 *   fires; earlier payloads are dropped. Subscribers observe the
+	 *   same debounced fire, so in-process observers stay consistent
+	 *   with the plugin hooks they complement.
+	 *
+	 * The debounce covers `onDataChange` only. Every other event
+	 * fires synchronously because they carry veto (`onBeforePublish`)
+	 * or one-shot (`onInit` / `onDestroy` / `onAfterPublish`)
+	 * semantics where coalescing would be wrong.
+	 */
+	readonly onDataChangeDebounceMs?: number;
 }
 
 /**
@@ -118,9 +193,12 @@ export interface LifecycleManager {
  *
  * @param registrations - The aggregated registrations returned by
  * each plugin's `register()` method, in plugin declaration order.
+ * @param options - Optional {@link LifecycleManagerOptions}; see the
+ * field docs for semantics.
  */
 export function createLifecycleManager(
 	registrations: readonly StudioPluginRegistration[],
+	options: LifecycleManagerOptions = {},
 ): LifecycleManager {
 	// Subscribers bucketed by event name. A fresh `Set` per event
 	// makes unsubscribe O(1) and avoids iteration-order footguns when
@@ -185,6 +263,37 @@ export function createLifecycleManager(
 	}
 
 	/**
+	 * Parallel-emit path for `onDataChange` shared between the direct
+	 * (`debounceMs === 0`) and debounced codepaths. Factored out so
+	 * the debounce timer can run the same fan-out without duplicating
+	 * the `Promise.allSettled` + per-reject log logic.
+	 */
+	async function runDataChange(
+		ctx: StudioPluginContext,
+		payload: PuckData | undefined,
+	): Promise<void> {
+		const settled = await Promise.allSettled(
+			registrations.map((registration) =>
+				invokeHook("onDataChange", registration, ctx, payload),
+			),
+		);
+		for (const [index, result] of settled.entries()) {
+			if (result.status === "rejected") {
+				const registration = registrations[index];
+				if (!registration) {
+					continue;
+				}
+				ctx.log(
+					"error",
+					`Plugin "${registration.meta.id}" threw during onDataChange`,
+					{ error: result.reason },
+				);
+			}
+		}
+		fireSubscribers("onDataChange", ctx, payload);
+	}
+
+	/**
 	 * Fire every subscriber for an event, swallowing any handler
 	 * errors. Subscribers are observers, not control-flow gates —
 	 * a throwing handler must never crash the editor.
@@ -205,11 +314,41 @@ export function createLifecycleManager(
 		}
 	}
 
+	// Debounce state for `onDataChange`. `pending.timer` is the
+	// scheduled callback; `pending.ctx` and `pending.payload` hold the
+	// most recent emit so the deferred fire sees the latest values.
+	// Every other event bypasses this entirely.
+	const debounceMs = options.onDataChangeDebounceMs ?? 0;
+	let pendingDataChange: {
+		timer: ReturnType<typeof setTimeout>;
+		ctx: StudioPluginContext;
+		payload: PuckData | undefined;
+	} | null = null;
+
 	async function emit(
 		event: LifecycleEventName,
 		ctx: StudioPluginContext,
 		payload?: PuckData,
 	): Promise<void> {
+		if (event === "onDataChange" && debounceMs > 0) {
+			// Coalesce rapid emits. The returned promise resolves
+			// immediately — upstream callers are fire-and-forget and
+			// do not await the hook settlement in the first place.
+			if (pendingDataChange !== null) {
+				clearTimeout(pendingDataChange.timer);
+			}
+			const timer = setTimeout(() => {
+				const snapshot = pendingDataChange;
+				pendingDataChange = null;
+				if (snapshot === null) {
+					return;
+				}
+				void runDataChange(snapshot.ctx, snapshot.payload);
+			}, debounceMs);
+			pendingDataChange = { timer, ctx, payload };
+			return;
+		}
+
 		if (event === "onBeforePublish") {
 			// Sequential — the first rejection aborts the rest so a
 			// validation plugin can veto publish.
@@ -221,15 +360,26 @@ export function createLifecycleManager(
 						throw error;
 					}
 					// Wrap anything that is not already a StudioPluginError
-					// so the host always sees a typed runtime error.
+					// so the host always sees a typed runtime error. Fold
+					// the cause's message into the wrapper message so UIs
+					// that only render `err.message` (DevTools panels,
+					// Sentry, most error boundaries) still expose the root
+					// reason to the user.
 					throw new StudioPluginError(
 						registration.meta.id,
-						`Plugin "${registration.meta.id}" threw during onBeforePublish`,
+						`Plugin "${registration.meta.id}" threw during onBeforePublish: ${extractErrorMessage(error)}`,
 						{ cause: error },
 					);
 				}
 			}
 			fireSubscribers(event, ctx, payload);
+			return;
+		}
+
+		if (event === "onDataChange") {
+			// Direct path when debouncing is disabled — preserves the
+			// pre-debounce `await emit(...)` semantics tests rely on.
+			await runDataChange(ctx, payload);
 			return;
 		}
 
@@ -258,6 +408,16 @@ export function createLifecycleManager(
 		fireSubscribers(event, ctx, payload);
 	}
 
+	function dispose(): void {
+		if (pendingDataChange !== null) {
+			clearTimeout(pendingDataChange.timer);
+			pendingDataChange = null;
+		}
+		for (const event of Object.keys(subscribers) as LifecycleEventName[]) {
+			subscribers[event].clear();
+		}
+	}
+
 	function subscribe(
 		event: LifecycleEventName,
 		handler: LifecycleSubscriber,
@@ -268,5 +428,5 @@ export function createLifecycleManager(
 		};
 	}
 
-	return { emit, subscribe };
+	return { emit, subscribe, dispose };
 }

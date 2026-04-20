@@ -181,9 +181,39 @@ function formatZodIssues(error: z.ZodError): string {
 	const lines = error.issues.map((issue) => {
 		const path =
 			issue.path.length > 0
-				? issue.path.map((segment) => String(segment)).join(".")
+				? renderZodPath(issue.path)
 				: "<root>";
 		return `  - ${path}: ${issue.message}`;
 	});
 	return `StudioConfig validation failed:\n${lines.join("\n")}`;
+}
+
+/**
+ * Render a Zod issue path so dotted or otherwise-ambiguous keys stay
+ * unambiguous in the rendered error message. Numeric segments become
+ * `[0]` / `[1]` (array indices), keys that contain a `.` — legal
+ * inside `experimental`'s `z.record(z.string(), z.unknown())` because
+ * the record key type is just `string` — are wrapped in brackets with
+ * the inner quotes escaped. Everything else joins with `.` so the
+ * common case reads the way operators expect.
+ */
+function renderZodPath(path: readonly PropertyKey[]): string {
+	let out = "";
+	for (const segment of path) {
+		if (typeof segment === "number") {
+			out += `[${segment}]`;
+			continue;
+		}
+		const asString = String(segment);
+		if (/[.[\]"]/.test(asString)) {
+			const escaped = asString.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+			out += `["${escaped}"]`;
+			continue;
+		}
+		if (out.length > 0) {
+			out += ".";
+		}
+		out += asString;
+	}
+	return out;
 }

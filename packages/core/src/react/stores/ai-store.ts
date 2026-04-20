@@ -221,6 +221,14 @@ export const useAiStore = create<AiState>()(
 			partialize: (state): AiStorePartial => ({
 				history: state.history.slice(-HISTORY_PERSIST_LIMIT),
 			}),
+			// SSR safety: server render cannot see `localStorage`, so
+			// synchronous rehydration at module evaluation would
+			// produce a server/client hydration mismatch. `<Studio>`
+			// calls `useAiStore.persist.rehydrate()` from a
+			// mount-time effect (browser-only), which keeps the first
+			// server-rendered HTML aligned with the first client
+			// render while still restoring the user's history.
+			skipHydration: true,
 		},
 	),
 );

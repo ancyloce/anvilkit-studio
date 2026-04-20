@@ -100,11 +100,63 @@ const EXTERNAL_PEERS = [
  */
 const FORBIDDEN_STRINGS = ["prop is deprecated"];
 
+/**
+ * Walk `src/` and return the most recent file-mtime across every
+ * source file. Used to detect a stale `dist/` that was built against
+ * an earlier revision of the source — running the budget check on
+ * stale output is actively misleading, so we rebuild first.
+ */
+async function latestSrcMtime(dir) {
+	let newest = 0;
+	const entries = await readdir(dir, { withFileTypes: true });
+	for (const entry of entries) {
+		const full = resolve(dir, entry.name);
+		if (entry.isDirectory()) {
+			newest = Math.max(newest, await latestSrcMtime(full));
+			continue;
+		}
+		const info = await stat(full);
+		newest = Math.max(newest, info.mtimeMs);
+	}
+	return newest;
+}
+
 async function ensureDistExists() {
+	const SRC_DIR = resolve(PACKAGE_ROOT, "src");
+	let distStat = null;
 	try {
-		await stat(DIST_ENTRY);
+		distStat = await stat(DIST_ENTRY);
 	} catch {
 		console.log("check-bundle-budget: dist/ missing — running `rslib build`…");
+		execSync("pnpm exec rslib build", {
+			cwd: PACKAGE_ROOT,
+			stdio: "inherit",
+		});
+		return;
+	}
+
+	// Rebuild when any source file is newer than the emitted entry.
+	// `rslib` is fast enough that the extra build is cheaper than
+	// debugging a false-positive budget pass against stale output.
+	try {
+		const srcMtime = await latestSrcMtime(SRC_DIR);
+		if (srcMtime > distStat.mtimeMs) {
+			console.log(
+				"check-bundle-budget: dist/ is older than src/ — running `rslib build`…",
+			);
+			execSync("pnpm exec rslib build", {
+				cwd: PACKAGE_ROOT,
+				stdio: "inherit",
+			});
+		}
+	} catch (err) {
+		// Walking src/ should never fail in practice, but treat the
+		// unexpected as a signal to rebuild defensively rather than
+		// silently trust stale output.
+		console.log(
+			"check-bundle-budget: staleness check failed — rebuilding defensively",
+			err,
+		);
 		execSync("pnpm exec rslib build", {
 			cwd: PACKAGE_ROOT,
 			stdio: "inherit",

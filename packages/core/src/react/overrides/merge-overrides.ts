@@ -140,9 +140,11 @@ export function mergeOverrides(
 	const accumulator: Record<string, unknown> = {};
 
 	for (const slice of overridesList) {
-		// Guard against `undefined` / `null` entries — a defensive
-		// check so consumers can pass `props.overrides ?? {}`-style
-		// values without tripping over an accidental nullish entry.
+		// Defensive against `null` / `undefined` entries even though the
+		// parameter type forbids them: `[...runtime.overrides, consumer]`
+		// is a common caller pattern where `consumer` may be absent, and
+		// tests pin this tolerance so the helper stays robust under
+		// `as unknown as` casts from callers.
 		if (slice === null || slice === undefined) {
 			continue;
 		}

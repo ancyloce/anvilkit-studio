@@ -31,19 +31,28 @@
  * Env vars are strings; the schema validators below are typed. To
  * bridge the gap, each value is coerced in this priority order:
  *
- * 1. **Boolean aliases** — `"true"` and `"1"` become `true`; `"false"`
+ * 1. **Explicit type prefixes** (new) — `num:1`, `bool:true`, and
+ *    `str:123` pin the coerced type regardless of the heuristics
+ *    below. Use these to disambiguate integer fields that need
+ *    value `0` or `1` (`ANVILKIT_AI__MAX_RETRIES=num:1`), force a
+ *    string literal that looks numeric
+ *    (`ANVILKIT_BRANDING__APP_NAME=str:404`), or spell an explicit
+ *    boolean (`ANVILKIT_FEATURES__ENABLE_EXPORT=bool:1`).
+ * 2. **Boolean aliases** — `"true"` and `"1"` become `true`; `"false"`
  *    and `"0"` become `false`. This follows the `DEBUG=1` convention
  *    operators expect and matches the spec in `core-011`.
- * 2. **Finite numbers** — if `Number(value)` is finite (rejecting
+ * 3. **Finite numbers** — if `Number(value)` is finite (rejecting
  *    `"NaN"`, `"Infinity"`, `""`, and whitespace-only strings), the
  *    numeric value is used.
- * 3. **String fallback** — anything else is passed through verbatim.
+ * 4. **String fallback** — anything else is passed through verbatim.
  *
  * The `"1"` ↔ `true` alias is intentional: env vars that feed integer
  * fields (e.g. `ANVILKIT_AI__MAX_RETRIES=1`) cannot be represented
- * via the `"1"` literal and must use `"2"` or higher. This is a
+ * via the `"1"` literal and must use the explicit `num:` prefix
+ * (or `"2"` and higher for unambiguous integers). This is a
  * documented trade-off — it lets the more common `FEATURES__*=1`
- * case work the way operators expect.
+ * case work the way operators expect while keeping integer `0` / `1`
+ * reachable for the operators who need it.
  *
  * ### Unknown keys
  *
@@ -125,9 +134,43 @@ function segmentToCamelCase(segment: string): string {
  * so the unit tests can pin each rule individually.
  */
 function coerceValue(raw: string): string | number | boolean {
+	// Explicit type prefixes take the highest priority so operators
+	// can always escape the heuristics below. The prefix itself is
+	// stripped; anything after the colon is interpreted according to
+	// the pinned type.
+	if (raw.startsWith("str:")) {
+		return raw.slice(4);
+	}
+	if (raw.startsWith("num:")) {
+		const trimmed = raw.slice(4).trim();
+		const asNumber = Number(trimmed);
+		// An invalid `num:` value is a loud error rather than a silent
+		// fall-through to string — the operator explicitly asked for a
+		// number.
+		if (trimmed.length === 0 || !Number.isFinite(asNumber)) {
+			throw new TypeError(
+				`parseStudioEnv: value "${raw}" used the num: prefix but is not a finite number`,
+			);
+		}
+		return asNumber;
+	}
+	if (raw.startsWith("bool:")) {
+		const tail = raw.slice(5).trim().toLowerCase();
+		if (tail === "true" || tail === "1") {
+			return true;
+		}
+		if (tail === "false" || tail === "0") {
+			return false;
+		}
+		throw new TypeError(
+			`parseStudioEnv: value "${raw}" used the bool: prefix but is not "true"/"false"/"1"/"0"`,
+		);
+	}
+
 	// Boolean aliases first — `"1"` matches both the boolean and the
 	// number rules, and operator ergonomics around `DEBUG=1` / `FLAG=0`
-	// argue for boolean winning.
+	// argue for boolean winning. Operators who need integer `0`/`1`
+	// specifically can reach for the `num:` prefix above.
 	if (raw === "true" || raw === "1") {
 		return true;
 	}
@@ -153,11 +196,16 @@ function coerceValue(raw: string): string | number | boolean {
 
 /**
  * Walk `path` into `target`, creating intermediate plain objects as
- * needed, and assign `value` at the leaf. Intermediate nodes that
- * already exist but are not plain objects are overwritten — the env
- * parser owns the partial shape it is constructing, and a colliding
- * non-object value at a parent path indicates a malformed env set
- * that the schema validation will flag anyway.
+ * needed, and assign `value` at the leaf.
+ *
+ * Collisions between a scalar and a nested object at the same path
+ * are **loud**: setting both `ANVILKIT_FEATURES=1` and
+ * `ANVILKIT_FEATURES__ENABLE_EXPORT=1` throws a `TypeError` instead
+ * of silently letting one overwrite the other based on env iteration
+ * order. Schema validation would eventually reject the scalar form
+ * anyway — failing at parse time with the exact colliding paths
+ * saves the operator a debugging detour through `StudioConfigError`
+ * output.
  */
 function setNested(
 	target: Record<string, unknown>,
@@ -170,17 +218,40 @@ function setNested(
 		const existing = node[key];
 		if (
 			existing !== null &&
+			existing !== undefined &&
 			typeof existing === "object" &&
 			!Array.isArray(existing)
 		) {
 			node = existing as Record<string, unknown>;
 			continue;
 		}
+		if (existing !== undefined) {
+			throw new TypeError(
+				`parseStudioEnv: env vars collide at path "${path
+					.slice(0, i + 1)
+					.join(
+						".",
+					)}" — a scalar value and a nested object cannot coexist. Remove one of the conflicting ANVILKIT_* env vars.`,
+			);
+		}
 		const next: Record<string, unknown> = {};
 		node[key] = next;
 		node = next;
 	}
 	const leafKey = path[path.length - 1] as string;
+	const existingLeaf = node[leafKey];
+	if (
+		existingLeaf !== undefined &&
+		typeof existingLeaf === "object" &&
+		existingLeaf !== null &&
+		!Array.isArray(existingLeaf)
+	) {
+		throw new TypeError(
+			`parseStudioEnv: env vars collide at path "${path.join(
+				".",
+			)}" — a scalar value and a nested object cannot coexist. Remove one of the conflicting ANVILKIT_* env vars.`,
+		);
+	}
 	node[leafKey] = value;
 }
 

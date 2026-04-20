@@ -48,6 +48,7 @@ import { StudioPluginError } from "./errors.js";
 import {
 	createLifecycleManager,
 	type LifecycleManager,
+	type LifecycleManagerOptions,
 } from "./lifecycle-manager.js";
 import { CORE_VERSION } from "./version.js";
 
@@ -65,6 +66,15 @@ export interface StudioRuntime {
 	 * the runtime does not re-read fields from here after compile.
 	 */
 	readonly pluginMeta: readonly StudioPluginMeta[];
+	/**
+	 * The raw plugin registrations in declaration order, as returned
+	 * by each plugin's `register()`. Primarily consumed by the
+	 * `@anvilkit/core/testing` harness so unit tests can drive a
+	 * single plugin's lifecycle hooks without re-implementing the
+	 * compile-time invariant checks (structural guard, coreVersion
+	 * range, duplicate-id detection).
+	 */
+	readonly registrations: readonly StudioPluginRegistration[];
 	/**
 	 * The lifecycle dispatcher. See
 	 * {@link createLifecycleManager}.
@@ -105,43 +115,249 @@ export interface StudioRuntime {
 }
 
 /**
- * Minimal, intentionally-naive semver range check.
- *
- * The runtime supports the two forms Studio plugins actually use in
- * the alpha line:
- *
- * 1. Exact match — `"0.1.0-alpha.0"` matches only the current Core.
- * 2. Caret / tilde prefix — `"^0.1.0-alpha"` or `"~0.1.0"` matches
- *    any Core version whose `CORE_VERSION` starts with the stripped
- *    base.
- *
- * **Deliberately not** pulling in `semver` yet — this check stays
- * well under the "~30 lines" threshold the task brief allows before
- * introducing the dependency. If plugins start needing richer ranges
- * (`>=0.1.0 <0.2.0`, disjunctions, etc.) add `semver` then.
+ * Parsed semver tuple. `prerelease` segments are split on `.` and
+ * kept as a mixed string / number array — numeric segments compare
+ * numerically, string segments compare lexicographically, matching
+ * the semver 2.0 precedence rules.
  */
-function isCoreVersionCompatible(requested: string): boolean {
-	// Strip a single leading range operator. Anything else is treated
-	// as an exact-version literal.
-	const stripped = requested.replace(/^[\^~]/, "").trim();
-	if (stripped.length === 0) {
+interface ParsedSemver {
+	readonly major: number;
+	readonly minor: number;
+	readonly patch: number;
+	readonly prerelease: readonly (string | number)[];
+}
+
+/**
+ * Parse a semver-ish string into its components. Returns `null` on
+ * malformed input so callers can treat unparseable ranges as
+ * unsatisfied (loud failure at the call site, not silent truthy).
+ *
+ * The regex mirrors the "strict" production in the semver spec's
+ * BNF, minus the build metadata suffix — plugins do not use `+build`
+ * tags and accepting them complicates range semantics without
+ * payoff.
+ */
+function parseSemver(input: string): ParsedSemver | null {
+	const match =
+		/^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/.exec(input.trim());
+	if (match === null) {
+		return null;
+	}
+	const [, majorS, minorS, patchS, prereleaseS] = match;
+	const prerelease: (string | number)[] = [];
+	if (prereleaseS !== undefined) {
+		for (const segment of prereleaseS.split(".")) {
+			if (segment.length === 0) {
+				return null;
+			}
+			prerelease.push(
+				/^\d+$/.test(segment) ? Number(segment) : segment,
+			);
+		}
+	}
+	return {
+		major: Number(majorS),
+		minor: Number(minorS),
+		patch: Number(patchS),
+		prerelease,
+	};
+}
+
+/**
+ * Compare two parsed semver tuples per the semver 2.0 precedence
+ * rules. Returns a negative number, zero, or a positive number in
+ * the style of `Array.prototype.sort`.
+ */
+function compareSemver(a: ParsedSemver, b: ParsedSemver): number {
+	if (a.major !== b.major) return a.major - b.major;
+	if (a.minor !== b.minor) return a.minor - b.minor;
+	if (a.patch !== b.patch) return a.patch - b.patch;
+
+	// A version without prerelease > a version with prerelease.
+	if (a.prerelease.length === 0 && b.prerelease.length === 0) return 0;
+	if (a.prerelease.length === 0) return 1;
+	if (b.prerelease.length === 0) return -1;
+
+	const min = Math.min(a.prerelease.length, b.prerelease.length);
+	for (let i = 0; i < min; i++) {
+		const segA = a.prerelease[i] as string | number;
+		const segB = b.prerelease[i] as string | number;
+		const numA = typeof segA === "number";
+		const numB = typeof segB === "number";
+		if (numA && numB) {
+			if (segA !== segB) return (segA as number) - (segB as number);
+			continue;
+		}
+		if (numA) return -1;
+		if (numB) return 1;
+		if (segA !== segB) return segA < segB ? -1 : 1;
+	}
+	return a.prerelease.length - b.prerelease.length;
+}
+
+/**
+ * Semver range check for plugin `coreVersion` declarations.
+ *
+ * Supports the four forms Studio plugins use:
+ *
+ * 1. Exact — `"0.1.0-alpha.0"` matches only that exact version.
+ * 2. Caret — `"^X.Y.Z"` matches every version in the left-most
+ *    non-zero component's range. `^1.2.3` matches `>=1.2.3 <2.0.0`;
+ *    `^0.2.3` matches `>=0.2.3 <0.3.0`; `^0.0.3` matches
+ *    `>=0.0.3 <0.0.4`. Prerelease ranges only match prereleases of
+ *    the same `[major, minor, patch]` tuple, per semver 2.0.
+ * 3. Tilde — `"~X.Y.Z"` matches every version with the same
+ *    `[major, minor]` tuple (or `[major, minor, patch]` prerelease
+ *    series when the range itself carries a prerelease).
+ * 4. Prefix wildcard — `"X"` or `"X.Y"` (no operator) match any
+ *    version starting with those components. Kept for parity with
+ *    `npm install` conventions; rarely used by plugins.
+ *
+ * Returns `false` for malformed input so a typo surfaces as a loud
+ * "coreVersion does not match" error instead of a silent accept.
+ */
+function isCoreVersionCompatible(
+	requested: string,
+	installedRaw: string = CORE_VERSION,
+): boolean {
+	const installed = parseSemver(installedRaw);
+	if (installed === null) {
 		return false;
 	}
 
-	if (CORE_VERSION === stripped) {
-		return true;
+	const trimmed = requested.trim();
+	if (trimmed.length === 0) {
+		return false;
 	}
 
-	// `^0.1.0-alpha` against `0.1.0-alpha.0` → the installed version
-	// should start with the stripped range and be followed by either
-	// end-of-string or a `.` / `-` separator. Anything else (e.g.
-	// `^0.1` against `0.10.0`) would otherwise be a false positive.
-	if (CORE_VERSION.startsWith(stripped)) {
-		const nextChar = CORE_VERSION.charAt(stripped.length);
-		return nextChar === "" || nextChar === "." || nextChar === "-";
+	// Exact match short-circuit: a literal version string is accepted
+	// only when it parses identically to the installed tuple.
+	if (!/^[\^~]/.test(trimmed) && /^\d+\.\d+\.\d+/.test(trimmed)) {
+		const exact = parseSemver(trimmed);
+		if (exact === null) return false;
+		return compareSemver(exact, installed) === 0;
 	}
 
-	return false;
+	// Operator-prefixed ranges.
+	if (trimmed.startsWith("^")) {
+		return satisfiesCaret(trimmed.slice(1).trim(), installed);
+	}
+	if (trimmed.startsWith("~")) {
+		return satisfiesTilde(trimmed.slice(1).trim(), installed);
+	}
+
+	// Prefix wildcard fallback: `"0"` / `"0.1"` etc.
+	return satisfiesPrefix(trimmed, installed);
+}
+
+/**
+ * Caret range: `^X.Y.Z` matches `>= X.Y.Z` up to (but not including)
+ * the next version that bumps the left-most non-zero component.
+ * Prereleases only satisfy a caret range when their
+ * `[major, minor, patch]` tuple matches the range's tuple — this
+ * prevents `0.2.0-alpha` from slipping into `^0.1.0`.
+ */
+function satisfiesCaret(range: string, installed: ParsedSemver): boolean {
+	const base = parseSemver(range);
+	if (base === null) return false;
+
+	// Prerelease in range → only match same-tuple prereleases.
+	if (base.prerelease.length > 0) {
+		if (
+			installed.major !== base.major ||
+			installed.minor !== base.minor ||
+			installed.patch !== base.patch
+		) {
+			return false;
+		}
+		return compareSemver(installed, base) >= 0;
+	}
+
+	// Installed prerelease with no range prerelease → only same tuple.
+	if (installed.prerelease.length > 0) {
+		if (
+			installed.major !== base.major ||
+			installed.minor !== base.minor ||
+			installed.patch !== base.patch
+		) {
+			return false;
+		}
+	}
+
+	if (compareSemver(installed, base) < 0) return false;
+
+	// Upper bound: bump the left-most non-zero component.
+	if (base.major > 0) {
+		return installed.major === base.major;
+	}
+	if (base.minor > 0) {
+		return installed.major === 0 && installed.minor === base.minor;
+	}
+	return (
+		installed.major === 0 &&
+		installed.minor === 0 &&
+		installed.patch === base.patch
+	);
+}
+
+/**
+ * Tilde range: `~X.Y.Z` matches any `X.Y.*` release. When the range
+ * carries a prerelease, the match narrows to same-tuple prereleases
+ * (identical to caret's prerelease rule).
+ */
+function satisfiesTilde(range: string, installed: ParsedSemver): boolean {
+	const base = parseSemver(range);
+	if (base === null) return false;
+
+	if (base.prerelease.length > 0) {
+		if (
+			installed.major !== base.major ||
+			installed.minor !== base.minor ||
+			installed.patch !== base.patch
+		) {
+			return false;
+		}
+		return compareSemver(installed, base) >= 0;
+	}
+
+	if (installed.prerelease.length > 0) {
+		if (
+			installed.major !== base.major ||
+			installed.minor !== base.minor ||
+			installed.patch !== base.patch
+		) {
+			return false;
+		}
+	}
+
+	if (compareSemver(installed, base) < 0) return false;
+	return installed.major === base.major && installed.minor === base.minor;
+}
+
+/**
+ * Prefix wildcard: `"0"` or `"0.1"` matches any installed version
+ * starting with those components. Falls back to the exact-match
+ * path when three components are present.
+ */
+function satisfiesPrefix(range: string, installed: ParsedSemver): boolean {
+	const parts = range.split(".");
+	if (parts.length === 0 || parts.length > 3) return false;
+	for (const part of parts) {
+		if (!/^\d+$/.test(part)) return false;
+	}
+	const [majorS, minorS, patchS] = parts;
+	if (majorS !== undefined && Number(majorS) !== installed.major) {
+		return false;
+	}
+	if (minorS !== undefined && Number(minorS) !== installed.minor) {
+		return false;
+	}
+	if (patchS !== undefined && Number(patchS) !== installed.patch) {
+		return false;
+	}
+	// Prefix ranges without a prerelease suffix exclude prereleases,
+	// matching npm's default behavior.
+	return installed.prerelease.length === 0;
 }
 
 /**
@@ -159,9 +375,24 @@ function isCoreVersionCompatible(requested: string): boolean {
  * @param ctx - The {@link StudioPluginContext} each Studio plugin's
  * `register()` method receives.
  */
+/**
+ * Options forwarded to `compilePlugins` callers that want to
+ * customize downstream runtime behavior. Today only the lifecycle
+ * manager's debounce option is exposed — extend as new knobs appear.
+ */
+export interface CompilePluginsOptions {
+	/**
+	 * Options forwarded verbatim to {@link createLifecycleManager}.
+	 * See {@link LifecycleManagerOptions.onDataChangeDebounceMs} for
+	 * the rationale behind the default `<Studio>` picks.
+	 */
+	readonly lifecycle?: LifecycleManagerOptions;
+}
+
 export async function compilePlugins(
 	plugins: readonly (StudioPlugin | PuckPlugin)[],
 	ctx: StudioPluginContext,
+	options: CompilePluginsOptions = {},
 ): Promise<StudioRuntime> {
 	const pluginMeta: StudioPluginMeta[] = [];
 	const registrations: StudioPluginRegistration[] = [];
@@ -169,6 +400,11 @@ export async function compilePlugins(
 	// Track the plugin that first registered each export format id
 	// so duplicate-id errors can name both plugins.
 	const exportOwners = new Map<string, string>();
+	// Track the index of the plugin that registered each meta.id so a
+	// second plugin with the same id produces a loud compile error
+	// instead of silently coexisting (which would duplicate lifecycle
+	// hook invocations and double-register header actions).
+	const pluginIdOwners = new Set<string>();
 	const headerActions: StudioHeaderAction[] = [];
 	const puckPlugins: PuckPlugin[] = [];
 	const overrides: Partial<PuckOverrides>[] = [];
@@ -176,6 +412,14 @@ export async function compilePlugins(
 	for (const [index, plugin] of plugins.entries()) {
 		if (isStudioPlugin(plugin)) {
 			const meta = plugin.meta;
+
+			if (pluginIdOwners.has(meta.id)) {
+				throw new StudioPluginError(
+					meta.id,
+					`Plugin "${meta.id}" is registered more than once. Plugin meta.id must be unique across the plugin array.`,
+				);
+			}
+			pluginIdOwners.add(meta.id);
 
 			if (!isCoreVersionCompatible(meta.coreVersion)) {
 				throw new StudioPluginError(
@@ -254,7 +498,8 @@ export async function compilePlugins(
 
 	return {
 		pluginMeta,
-		lifecycle: createLifecycleManager(registrations),
+		registrations,
+		lifecycle: createLifecycleManager(registrations, options.lifecycle),
 		exportFormats,
 		headerActions,
 		overrides,

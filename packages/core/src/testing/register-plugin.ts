@@ -1,4 +1,9 @@
-import type { StudioPlugin, StudioPluginContext, StudioPluginRegistration } from "../types/plugin.js";
+import { compilePlugins } from "../runtime/compile-plugins.js";
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+	StudioPluginRegistration,
+} from "../types/plugin.js";
 
 import type { FakeStudioContext } from "./create-fake-studio-context.js";
 import { createFakeStudioContext } from "./create-fake-studio-context.js";
@@ -21,12 +26,17 @@ export interface PluginLifecycleHarness {
 
 /**
  * Thin plugin-lifecycle harness for tests. Registers the plugin
- * against a `FakeStudioContext` and returns handles for driving
- * lifecycle hooks individually. Host-agnostic; no React imports.
+ * through the **same** `compilePlugins()` path the `<Studio>` shell
+ * uses, so a plugin that fails production's compile-time invariants
+ * (structural guard, coreVersion range, duplicate meta.id across a
+ * multi-plugin test, `register()` rejection) fails the test with the
+ * same error the host will see. This closes the gap Codex flagged in
+ * the pass-1 review: previously `registerPlugin` called
+ * `plugin.register(ctx)` directly and tests could quietly pass
+ * against a plugin production would reject.
  *
- * A fuller RTL-based `renderPluginInHost` helper is tracked as a
- * follow-up once React-free tests settle (see
- * `docs/tasks/phase4-progress.md`).
+ * Host-agnostic; no React imports. A fuller RTL-based
+ * `renderPluginInHost` helper is tracked as a follow-up.
  */
 function isFakeStudioContext(
 	ctx: StudioPluginContext | undefined,
@@ -52,7 +62,19 @@ export async function registerPlugin(
 	const ctx: FakeStudioContext = isFakeStudioContext(options.ctx)
 		? options.ctx
 		: createFakeStudioContext(options.ctx);
-	const registration = await plugin.register(ctx);
+
+	// Route through `compilePlugins` so compile-time invariants
+	// (structural shape, coreVersion range, duplicate id detection)
+	// are enforced identically to production. `registrations` carries
+	// the raw per-plugin registration we hand back to test authors.
+	const runtime = await compilePlugins([plugin], ctx);
+	const registration = runtime.registrations[0];
+	if (registration === undefined) {
+		throw new Error(
+			`registerPlugin: compilePlugins did not return a registration for "${plugin.meta.id}"`,
+		);
+	}
+
 	return {
 		ctx,
 		registration,

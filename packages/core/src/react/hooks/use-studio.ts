@@ -36,6 +36,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-014-studio-component.md | core-014}
  */
 
+import { useMemo } from "react";
 import { getStrictContext } from "@anvilkit/utils";
 
 import type { StudioRuntime } from "../../runtime/compile-plugins.js";
@@ -110,15 +111,18 @@ export interface UseStudioResult {
  */
 export function useStudio(): UseStudioResult {
 	const runtime = useStudioRuntime();
-	// A fresh object on every render is intentionally cheap: the
-	// referenced sub-fields are all stable references owned by the
-	// runtime, so downstream memoization keyed on them still hits.
-	// Wrapping in `useMemo` would add noise for no observable win —
-	// the runtime reference itself is stable across renders, so any
-	// consumer that cares can memoize on `runtime.pluginMeta` etc.
-	return {
-		plugins: runtime.pluginMeta,
-		exportFormats: runtime.exportFormats,
-		headerActions: runtime.headerActions,
-	};
+	// Memoize the projection keyed on `runtime`. Consumers who
+	// destructure and pass `plugins`, `exportFormats`, or
+	// `headerActions` into memoized children should not re-render
+	// those children on every parent render just because `useStudio()`
+	// returned a fresh outer object. The runtime reference is stable
+	// for the life of a given compiled state, so this is near-free.
+	return useMemo(
+		() => ({
+			plugins: runtime.pluginMeta,
+			exportFormats: runtime.exportFormats,
+			headerActions: runtime.headerActions,
+		}),
+		[runtime],
+	);
 }
