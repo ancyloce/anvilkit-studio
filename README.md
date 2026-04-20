@@ -1,15 +1,18 @@
 # AnvilKit Studio
 
-AnvilKit Studio is currently a Puck-first component library monorepo. See the [Contributing Guide](CONTRIBUTING.md) to get started.
+AnvilKit Studio is a monorepo of Puck-native React component packages, a Studio runtime, and a plugin ecosystem.
 
-Today this repo contains:
+> **AnvilKit Studio v1.0.0-beta is available.** Install with `pnpm add @anvilkit/core@^1.0.0-beta`. See the [migration guide](docs/migration/0.x-to-1.0-beta.md), the [aggregate changelog](CHANGELOG.md), or [file beta feedback](docs/beta-feedback/README.md).
 
-- 11 independently publishable `@anvilkit/*` component packages in `packages/components`
-- `@anvilkit/ui`, a shared UI primitives package
-- shared private config packages in `packages/configs/*`
-- `apps/demo`, a Next.js app that validates the same Puck config in editor and render mode
+## What's new in 1.0.0-beta
 
-Packages such as `@anvilkit/core`, unified `@anvilkit/plugins`, `@anvilkit/ir`, `@anvilkit/schema`, and `@anvilkit/validator` do not exist in this repository today.
+- **Studio runtime (`@anvilkit/core@1.0.0-beta.0`).** `<Studio>` React shell, `StudioConfigSchema` (Zod-validated config), `compilePlugins`, the `StudioPlugin` contract, and the `StudioError` family — pinned, docs-backed, and gated by a 25 KB gzipped entry-chunk budget.
+- **Headless pipeline (`@anvilkit/ir`, `@anvilkit/schema`, `@anvilkit/validator` → `1.0.0-beta.0`).** Round-trip `puckDataToIR` / `irToPuckData`, `configToAiContext` for AI prompts, and `validateAiOutput` / `validateComponentConfig` with documented error codes. Three validator gaps from the phase4-014 security review (`INVALID_ROOT_TYPE`, `INVALID_CHILDREN`, `NON_SERIALIZABLE_PROP`) are closed with flipped-pin tests.
+- **Export pipeline (`@anvilkit/plugin-export-html@1.0.0-beta.0`).** First real exporter, with the 24-test XSS/URL/CSS-injection hostile-input battery enforcing the escape contract in CI.
+- **AI copilot (`@anvilkit/plugin-ai-copilot@1.0.0-beta.0`).** Headless `createAiCopilotPlugin`, a mock generator (`@anvilkit/plugin-ai-copilot/mock`) for CI harnesses, and structured `ai-copilot:error` events — including an 18-test malformed-PageIR / oversized-input / prompt-injection battery.
+- **Docs site ([`docs.anvilkit.dev`](https://anvilkit.dev)).** Starlight-powered, with a generated component catalog, TypeDoc API reference, guides for component / plugin / generator / export / AI workflows, and an interactive Puck playground.
+- **Plugin scaffolder (`create-anvilkit-plugin`).** `pnpm dlx create-anvilkit-plugin --name my-plugin --display "My Plugin" --category rail-panel` generates a buildable plugin skeleton wired to `@anvilkit/core/testing`.
+- **Shared UI (`@anvilkit/ui@1.0.0-beta.0`).** First public npm publish of the shared primitives used across every component package.
 
 ## Quick Start
 
