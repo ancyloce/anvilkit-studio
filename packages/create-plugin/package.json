@@ -1,0 +1,32 @@
+{
+	"name": "create-anvilkit-plugin",
+	"version": "0.1.0",
+	"description": "Scaffolder for @anvilkit/* StudioPlugin packages. Generates a buildable plugin skeleton with tests, rslib build, biome config, and a minimal createXxxPlugin() factory.",
+	"type": "module",
+	"bin": {
+		"create-anvilkit-plugin": "./dist/index.js"
+	},
+	"files": [
+		"dist",
+		"templates",
+		"README.md"
+	],
+	"license": "MIT",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"dev": "tsc -p tsconfig.json --watch",
+		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"test": "vitest run"
+	},
+	"engines": {
+		"node": ">=20.19"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.3",
+		"typescript": "6.0.2",
+		"vitest": "^4.1.4"
+	}
+}
