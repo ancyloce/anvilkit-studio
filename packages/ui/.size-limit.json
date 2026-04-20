@@ -1,0 +1,14 @@
+[
+	{
+		"name": "@anvilkit/ui (full index — tracks total surface)",
+		"path": "dist/index.js",
+		"limit": "160 KB",
+		"gzip": true,
+		"ignore": [
+			"react",
+			"react-dom",
+			"react/jsx-runtime",
+			"react/jsx-dev-runtime"
+		]
+	}
+]
