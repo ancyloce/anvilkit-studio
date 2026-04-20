@@ -7,3 +7,6 @@
 [submodule "packages/plugins/plugin-export-html"]
 	path = packages/plugins/plugin-export-html
 	url = https://github.com/ancyloce/anvilkit-plugin-export-html.git
+[submodule "packages/plugins/plugin-export-react"]
+	path = packages/plugins/plugin-export-react
+	url = https://github.com/ancyloce/anvilkit-plugin-export-react.git
