@@ -56,8 +56,16 @@ export default defineConfig({
 							slug: "guides/component-authoring",
 						},
 						{
+							label: "Generator usage",
+							slug: "guides/generator-usage",
+						},
+						{
 							label: "Plugin authoring",
 							slug: "guides/plugin-authoring",
+						},
+						{
+							label: "Export pipeline",
+							slug: "guides/export-pipeline",
 						},
 					],
 				},
