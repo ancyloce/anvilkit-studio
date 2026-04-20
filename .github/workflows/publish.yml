@@ -1,0 +1,81 @@
+name: Publish
+
+# phase4-017 — auto-publish on merge to main when changesets exist.
+# Uses the Changesets release action to:
+#   1. Either open a "Version packages" PR that bumps versions and
+#      consumes pending changesets, OR
+#   2. When that PR is merged back to main, publish the bumped
+#      versions to npm with the current pre-release dist-tag.
+#
+# During beta, run `pnpm changeset pre enter beta` locally once so
+# `.changeset/pre.json` exists. The release action reads that file
+# and publishes under the `beta` dist-tag automatically.
+#
+# NPM_TOKEN must be a granular, automation-scoped token scoped to
+# the @anvilkit/* packages + create-anvilkit-plugin. Rotate on any
+# suspected compromise — this workflow is the only thing that needs it.
+
+on:
+  push:
+    branches: [main]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Version + publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      # Changesets sanity. Runs the repo's full check:all for the
+      # publishable runtime cone before version/publish, so a broken
+      # tree never hits npm.
+      - name: Run release gates
+        run: |
+          pnpm --filter @anvilkit/core check:all
+          for pkg in @anvilkit/ir @anvilkit/schema @anvilkit/validator \
+                     @anvilkit/plugin-export-html @anvilkit/plugin-ai-copilot; do
+            pnpm --filter "$pkg" check:all
+          done
+
+      # `publish: pnpm release` runs the repo's own release script
+      # (versions consumed, tags cut, then `changeset publish`).
+      # Without changesets, the action opens the "Version packages"
+      # PR instead of publishing — zero-op otherwise.
+      - name: Create Release PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm exec changeset publish
+          version: pnpm exec changeset version
+          commit: "chore: version packages"
+          title: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

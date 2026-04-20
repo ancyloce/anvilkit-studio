@@ -95,6 +95,35 @@ jobs:
             pnpm --filter "$pkg" check:all
           done
 
+      # Phase 4 (`phase4-016`): per-package gzip budgets via size-limit.
+      # Covers the publishable runtime + plugin + component packages
+      # (8 runtime/plugin entries; 11 component entries). Each package
+      # ships its own `.size-limit.json` with a tuned budget (see
+      # `docs/tasks/phase4-progress.md` §phase4-016 for baselines).
+      - name: Bundle-size budgets (size-limit)
+        run: |
+          pnpm \
+            --filter @anvilkit/utils \
+            --filter @anvilkit/ir \
+            --filter @anvilkit/schema \
+            --filter @anvilkit/validator \
+            --filter @anvilkit/ui \
+            --filter @anvilkit/core \
+            --filter @anvilkit/plugin-export-html \
+            --filter @anvilkit/plugin-ai-copilot \
+            --filter @anvilkit/bento-grid \
+            --filter @anvilkit/blog-list \
+            --filter @anvilkit/button \
+            --filter @anvilkit/helps \
+            --filter @anvilkit/hero \
+            --filter @anvilkit/input \
+            --filter @anvilkit/logo-clouds \
+            --filter @anvilkit/navbar \
+            --filter @anvilkit/pricing-minimal \
+            --filter @anvilkit/section \
+            --filter @anvilkit/statistics \
+            size
+
       # Phase 3 M0 (`phase3-001`): Playwright + demo E2E harness. The
       # smoke spec loads `/puck/editor`, waits for `<Studio>` to
       # hydrate, and asserts `smokeTestPlugin.onInit` logs to the

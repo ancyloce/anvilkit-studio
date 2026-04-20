@@ -1,0 +1,73 @@
+name: Bench
+
+# phase4-015 — performance regression gate.
+# Runs `pnpm bench` on every PR, comparing results against
+# `bench/baseline.json` (committed). Fails the job on >20%
+# regression in `meanMs` or >10% regression in `bytes`. Sub-
+# millisecond benches are tracked but not gated (noise floor);
+# see `bench/index.ts`.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  bench:
+    name: Performance regression gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Bench harness imports from @anvilkit/plugin-export-html/dist
+      # and @anvilkit/ir/dist, so the build must run first.
+      - name: Build packages consumed by benches
+        run: |
+          pnpm --filter @anvilkit/utils \
+               --filter @anvilkit/ir \
+               --filter @anvilkit/schema \
+               --filter @anvilkit/core \
+               --filter @anvilkit/plugin-export-html \
+               build
+
+      - name: Run benches
+        id: bench
+        env:
+          BENCH_SUMMARY_PATH: bench-summary.md
+        run: pnpm bench
+
+      - name: Upload bench summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-summary
+          path: bench-summary.md
+          retention-days: 14
+
+      # Post the summary table as a PR comment so regressions show up
+      # inline next to the diff.
+      - name: Comment bench results on PR
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: phase4-015-bench
+          path: bench-summary.md

@@ -1,0 +1,98 @@
+name: Generator smoke
+
+# phase4-013 — weekly smoke test for the published
+# `create-anvilkit-plugin` generator.
+#
+# Runs `pnpm dlx create-anvilkit-plugin@latest` against a tmp
+# directory with representative flags, then installs, builds, and
+# tests the generated output. Fails and pings the maintainer on
+# regression.
+#
+# Intentionally OUT of PR gating: this exercises the published
+# tarball, not the current branch. Per-PR safety for the scaffolder
+# is covered by `pnpm -F create-anvilkit-plugin test` in `ci.yml`.
+
+on:
+  schedule:
+    # Mondays 06:47 UTC — off-peak, weekly.
+    - cron: "47 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Scaffold, install, build, test the published generator
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    timeout-minutes: 15
+    steps:
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Scaffold a plugin from the latest published generator
+        id: scaffold
+        run: |
+          WORKDIR="$(mktemp -d)"
+          echo "workdir=$WORKDIR" >> "$GITHUB_OUTPUT"
+          cd "$WORKDIR"
+          pnpm dlx create-anvilkit-plugin@latest \
+            --name hello-plugin \
+            --display "Hello Plugin" \
+            --category rail-panel \
+            --dir "$WORKDIR"
+
+      - name: Install generated package
+        working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
+        run: pnpm install --ignore-workspace --no-frozen-lockfile
+
+      - name: Build generated package
+        working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
+        run: pnpm build
+
+      - name: Test generated package
+        working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
+        run: pnpm test
+
+      - name: Publint generated package
+        working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
+        run: pnpm publint
+
+      # Open / reuse an issue if anything above failed. Avoids
+      # silent cron failures — maintainer gets a PR-like ping.
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "generator-smoke: scaffold regression";
+            const body = `Generator smoke failed on ${new Date().toISOString()}. ` +
+              `See run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "generator-smoke",
+            });
+            if (existing.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing[0].number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["generator-smoke", "bug"],
+              });
+            }

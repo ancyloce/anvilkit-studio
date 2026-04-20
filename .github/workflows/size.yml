@@ -1,0 +1,50 @@
+name: Size
+
+# phase4-016: bundle-size budgets per publishable package.
+# The `Bundle-size budgets` step in ci.yml is the hard gate — it
+# enforces per-package limits from each `.size-limit.json`.
+# This workflow adds the PR comment / size diff visualisation via
+# `andresz1/size-limit-action`, which compares the PR branch against
+# the base branch and posts a table to the PR.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  size:
+    name: Size diff (gzip)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      # `andresz1/size-limit-action` runs `pnpm install` + `pnpm build`
+      # + `pnpm size` itself. Point it at the root — the root script
+      # fans out via `turbo run size` which picks up every package
+      # that defines the task.
+      #
+      # Do NOT pass `skip_step: install`: `pnpm/action-setup` above uses
+      # `run_install: false`, so nothing else on this job runs
+      # `pnpm install`. Skipping the action's install phase would
+      # leave `node_modules` empty before `pnpm build` and fail the
+      # check on every PR (codex review, phase4-batch, P1).
+      - uses: andresz1/size-limit-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          package_manager: pnpm
+          script: size
