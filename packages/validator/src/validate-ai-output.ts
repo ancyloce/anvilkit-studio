@@ -118,9 +118,23 @@ export function validateAiOutput(
 		(c: { componentName: string }) => c.componentName,
 	);
 
-	if (res.root && typeof res.root === "object") {
+	if (res.root && typeof res.root === "object" && !Array.isArray(res.root)) {
+		const rootNode = res.root as Record<string, unknown>;
+		// phase4-014 F-1: root.type must be exactly "__root__". Accepting
+		// any other string was silent drift; plugins downstream rely on
+		// the invariant.
+		if (rootNode.type !== "__root__") {
+			issues.push({
+				path: "root.type",
+				message:
+					'[INVALID_ROOT_TYPE] Root node must have type "__root__", got "' +
+					String(rootNode.type) +
+					'".',
+				severity: "error",
+			});
+		}
 		walkNode(
-			res.root as Record<string, unknown>,
+			rootNode,
 			["root"],
 			componentMap,
 			componentNames,
@@ -190,6 +204,25 @@ function walkNode(
 			const props = node.props;
 			if (typeof props === "object" && props !== null) {
 				const propsRecord = props as Record<string, unknown>;
+				// phase4-014 F-3: reject non-JSON-serialisable prop values
+				// (functions, symbols, bigints). Upstream Zod schemas use
+				// `unknown()` which accepted them silently.
+				const nonSer = findNonSerializablePath(
+					propsRecord,
+					[...pathSegments, "props"],
+					new WeakSet(),
+					0,
+				);
+				if (nonSer) {
+					issues.push({
+						path: nonSer.path,
+						message:
+							"[NON_SERIALIZABLE_PROP] Prop value is not JSON-serialisable (" +
+							nonSer.reason +
+							"). PageIR values must round-trip through JSON.",
+						severity: "error",
+					});
+				}
 				const propsSchema = makeComponentPropsSchema(
 					componentSchema.fields,
 					componentSchema.componentName,
@@ -254,20 +287,86 @@ function walkNode(
 		}
 	}
 
+	// phase4-014 F-2: `children` must be an array when present. Previously
+	// a non-array slipped through validation and crashed the plugin
+	// pipeline at `irToPuckPatch` with `.map is not a function`.
 	const children = node.children;
-	if (Array.isArray(children)) {
-		for (let i = 0; i < children.length; i++) {
-			const child = children[i];
-			if (typeof child === "object" && child !== null) {
-				walkNode(
-					child as Record<string, unknown>,
-					[...pathSegments, "children", i],
-					componentMap,
-					componentNames,
-					issues,
-					depth + 1,
-				);
+	if (children !== undefined) {
+		if (!Array.isArray(children)) {
+			issues.push({
+				path: buildPath([...pathSegments, "children"]),
+				message:
+					"[INVALID_CHILDREN] children must be an array when present, got " +
+					(children === null ? "null" : typeof children) +
+					".",
+				severity: "error",
+			});
+		} else {
+			for (let i = 0; i < children.length; i++) {
+				const child = children[i];
+				if (typeof child === "object" && child !== null) {
+					walkNode(
+						child as Record<string, unknown>,
+						[...pathSegments, "children", i],
+						componentMap,
+						componentNames,
+						issues,
+						depth + 1,
+					);
+				}
 			}
 		}
 	}
+}
+
+/**
+ * Recursive JSON-serialisability check. phase4-014 F-3: prop values
+ * must round-trip through JSON. Functions, symbols, and bigints
+ * silently broke `structuredClone` + `localStorage` rehydration even
+ * though the upstream Zod schema accepted them as `unknown()`.
+ *
+ * Cycles are caught via the `seen` WeakSet; max traversal depth is
+ * {@link MAX_DEPTH} to match the node-walk budget.
+ */
+function findNonSerializablePath(
+	value: unknown,
+	path: readonly (string | number)[],
+	seen: WeakSet<object>,
+	depth: number,
+): { path: string; reason: string } | null {
+	if (value === null || value === undefined) return null;
+	const t = typeof value;
+	if (t === "string" || t === "number" || t === "boolean") return null;
+	if (t === "function") {
+		return { path: buildPath(path), reason: "function" };
+	}
+	if (t === "symbol") {
+		return { path: buildPath(path), reason: "symbol" };
+	}
+	if (t === "bigint") {
+		return { path: buildPath(path), reason: "bigint" };
+	}
+	if (t !== "object") {
+		return { path: buildPath(path), reason: t };
+	}
+	if (depth > MAX_DEPTH) {
+		return { path: buildPath(path), reason: "exceeds-max-depth" };
+	}
+	const obj = value as object;
+	if (seen.has(obj)) {
+		return { path: buildPath(path), reason: "circular" };
+	}
+	seen.add(obj);
+	if (Array.isArray(value)) {
+		for (let i = 0; i < value.length; i++) {
+			const hit = findNonSerializablePath(value[i], [...path, i], seen, depth + 1);
+			if (hit) return hit;
+		}
+		return null;
+	}
+	for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+		const hit = findNonSerializablePath(v, [...path, k], seen, depth + 1);
+		if (hit) return hit;
+	}
+	return null;
 }
