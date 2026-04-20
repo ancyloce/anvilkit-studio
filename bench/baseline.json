@@ -1,0 +1,58 @@
+{
+  "html-export": {
+    "meanMs": 1.4692313841642277,
+    "hz": 1076.0546372327813,
+    "bytes": 39534,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "ir-roundtrip": {
+    "meanMs": 0.9251435373406232,
+    "hz": 1851.3567220948332,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:Hero": {
+    "meanMs": 0.010155883581584818,
+    "hz": 181931.3685867352,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:Section": {
+    "meanMs": 0.003066439080482429,
+    "hz": 565474.4975472122,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:Statistics": {
+    "meanMs": 0.0072819651682113585,
+    "hz": 343574.0851469989,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:BentoGrid": {
+    "meanMs": 0.022153780977703322,
+    "hz": 125343.76300545613,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:BlogList": {
+    "meanMs": 0.011049568896550564,
+    "hz": 225816.86194926046,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:Navbar": {
+    "meanMs": 0.006689272698893391,
+    "hz": 312942.7803234016,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:PricingMinimal": {
+    "meanMs": 0.01338283003969742,
+    "hz": 151423.57181389094,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:LogoClouds": {
+    "meanMs": 0.020865899360135016,
+    "hz": 89033.85303641683,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  },
+  "component-render:Helps": {
+    "meanMs": 0.004412752827829784,
+    "hz": 382826.81367832713,
+    "recordedAt": "2026-04-19T21:06:04.398Z"
+  }
+}
