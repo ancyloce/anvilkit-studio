@@ -7,7 +7,7 @@
 **Task index:** [`docs/tasks/`](../tasks/) (`phase3-001` … `phase3-015`)
 **Reference implementation:** [`ancyloce/anvilkit-puck-studio`](https://github.com/ancyloce/anvilkit-puck-studio) (prior art for IR/HTML exporter)
 **Status:** Shipped
-**Shipped:** 2026-04-14 — see [phase3-015 quality gates + release readiness](../tasks/phase3-015-quality-gates-release.md) and its [review report](../code-review/phase3/phase3-015-review.md).
+**Shipped:** 2026-04-14 — task files and per-task reviews pruned post-ship; outcomes captured in per-package CHANGELOGs and the [aggregate release notes](../../CHANGELOG.md).
 
 ---
 
