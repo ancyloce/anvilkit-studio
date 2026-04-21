@@ -26,6 +26,7 @@
 		"@anvilkit/navbar": "workspace:*",
 		"@anvilkit/plugin-ai-copilot": "workspace:*",
 		"@anvilkit/plugin-export-html": "workspace:*",
+		"@anvilkit/plugin-export-react": "workspace:*",
 		"@anvilkit/pricing-minimal": "workspace:*",
 		"@anvilkit/schema": "workspace:*",
 		"@anvilkit/section": "workspace:*",

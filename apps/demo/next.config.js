@@ -16,6 +16,7 @@ const nextConfig = {
 		"@anvilkit/navbar",
 		"@anvilkit/plugin-ai-copilot",
 		"@anvilkit/plugin-export-html",
+		"@anvilkit/plugin-export-react",
 		"@anvilkit/pricing-minimal",
 		"@anvilkit/schema",
 		"@anvilkit/section",
