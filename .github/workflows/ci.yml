@@ -91,7 +91,7 @@ jobs:
       # duplicating five near-identical step entries.
       - name: Run Phase 3 package release gates
         run: |
-          for pkg in @anvilkit/ir @anvilkit/schema @anvilkit/validator @anvilkit/plugin-export-html @anvilkit/plugin-ai-copilot; do
+          for pkg in @anvilkit/ir @anvilkit/schema @anvilkit/validator @anvilkit/plugin-export-html @anvilkit/plugin-export-react @anvilkit/plugin-ai-copilot; do
             pnpm --filter "$pkg" check:all
           done
 
@@ -110,6 +110,7 @@ jobs:
             --filter @anvilkit/ui \
             --filter @anvilkit/core \
             --filter @anvilkit/plugin-export-html \
+            --filter @anvilkit/plugin-export-react \
             --filter @anvilkit/plugin-ai-copilot \
             --filter @anvilkit/bento-grid \
             --filter @anvilkit/blog-list \
