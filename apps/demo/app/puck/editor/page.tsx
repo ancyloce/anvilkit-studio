@@ -5,6 +5,10 @@ import { puckDataToIR } from "@anvilkit/ir";
 import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
 import { createHtmlExportPlugin, htmlFormat } from "@anvilkit/plugin-export-html";
+import {
+	createReactExportPlugin,
+	reactFormat,
+} from "@anvilkit/plugin-export-react";
 import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,6 +28,10 @@ import styles from "../puck.module.css";
 // the plugins (which would bust the AI copilot's WeakMap cache and
 // re-run compilePlugins inside <Studio>).
 const htmlExportPlugin = createHtmlExportPlugin();
+const reactExportPlugin = createReactExportPlugin({
+	syntax: "tsx",
+	assetStrategy: "url-prop",
+});
 const aiCopilotPlugin = createAiCopilotPlugin({
 	puckConfig: demoConfig as unknown as Config,
 	generatePage: createMockGeneratePage({ delayMs: 300 }),
@@ -59,7 +67,7 @@ export default function PuckEditorPage() {
 	// runtime, and resets Puck's data back to the `publishedData`
 	// prop — wiping any AI-generated content instantly.
 	const plugins = useMemo(
-		() => [smokeTestPlugin, htmlExportPlugin, aiCopilotPlugin],
+		() => [smokeTestPlugin, htmlExportPlugin, reactExportPlugin, aiCopilotPlugin],
 		[],
 	);
 
@@ -109,6 +117,35 @@ export default function PuckEditorPage() {
 			});
 		} catch (error) {
 			console.error("[demo] export failed", error);
+		}
+	}
+
+	async function handleExportReact() {
+		try {
+			const ir = puckDataToIR(
+				publishedData,
+				demoConfig as unknown as Config,
+			);
+			const result = await reactFormat.run(ir, { syntax: "tsx" });
+			const blobPart =
+				typeof result.content === "string"
+					? result.content
+					: new Uint8Array(result.content);
+			const blob = new Blob([blobPart], { type: reactFormat.mimeType });
+			const url = URL.createObjectURL(blob);
+			const anchor = document.createElement("a");
+			anchor.href = url;
+			anchor.download = result.filename;
+			document.body.appendChild(anchor);
+			anchor.click();
+			anchor.remove();
+			URL.revokeObjectURL(url);
+			console.log("[demo] exported react", {
+				filename: result.filename,
+				byteLength: result.content.length,
+			});
+		} catch (error) {
+			console.error("[demo] export react failed", error);
 		}
 	}
 
@@ -208,6 +245,13 @@ export default function PuckEditorPage() {
 						onClick={handleExportHtml}
 					>
 						Download HTML
+					</button>
+					<button
+						type="button"
+						className={styles.secondaryAction}
+						onClick={handleExportReact}
+					>
+						Export React
 					</button>
 				</div>
 				{aiError !== null ? (
