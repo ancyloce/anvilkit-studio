@@ -1,0 +1,14 @@
+{
+	"root": {
+		"props": {}
+	},
+	"content": [
+		{
+			"type": "Hero",
+			"props": {
+				"id": "hero-1"
+			}
+		}
+	],
+	"zones": {}
+}

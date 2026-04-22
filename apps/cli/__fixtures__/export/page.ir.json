@@ -1,0 +1,17 @@
+{
+	"version": "1",
+	"root": {
+		"id": "root",
+		"type": "__root__",
+		"props": {},
+		"children": [
+			{
+				"id": "hero-1",
+				"type": "Hero",
+				"props": {}
+			}
+		]
+	},
+	"assets": [],
+	"metadata": {}
+}
