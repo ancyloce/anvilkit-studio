@@ -1,0 +1,61 @@
+{
+	"name": "anvilkit",
+	"version": "0.1.0",
+	"description": "ESM-only CLI scaffold for Anvilkit Studio.",
+	"type": "module",
+	"bin": {
+		"anvilkit": "./dist/bin/anvilkit.mjs"
+	},
+	"files": [
+		"dist",
+		"src/scaffolds",
+		"README.md"
+	],
+	"license": "MIT",
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=20.19"
+	},
+	"dependencies": {
+		"@clack/prompts": "^0.8.2",
+		"@anvilkit/core": "workspace:*",
+		"@anvilkit/ir": "workspace:*",
+		"@anvilkit/plugin-ai-copilot": "workspace:*",
+		"@anvilkit/plugin-export-html": "workspace:*",
+		"@anvilkit/plugin-export-react": "workspace:*",
+		"@anvilkit/schema": "workspace:*",
+		"@anvilkit/validator": "workspace:*",
+		"cac": "^6.7.14",
+		"jiti": "^2.4.2",
+		"picocolors": "^1.1.1"
+	},
+	"scripts": {
+		"build": "rslib build",
+		"postbuild": "node ./scripts/postbuild.mjs",
+		"dev": "rslib build --watch",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"typecheck": "tsc --noEmit",
+		"lint": "pnpm exec biome lint package.json tsconfig.json rslib.config.ts vitest.config.ts scripts src",
+		"format": "pnpm exec biome check --write package.json tsconfig.json rslib.config.ts vitest.config.ts scripts src",
+		"publint": "publint",
+		"check:publint": "publint",
+		"check:circular": "madge --circular --extensions ts src/",
+		"check:react-free-runtime": "! grep -R -E \"from ['\\\"]react['\\\"]\" src/ --exclude-dir=scaffolds",
+		"check:all": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime"
+	},
+	"devDependencies": {
+		"@anvilkit/biome-config": "workspace:*",
+		"@anvilkit/typescript-config": "workspace:*",
+		"@anvilkit/vitest-config": "workspace:*",
+		"@rslib/core": "^0.20.1",
+		"@types/node": "^22.15.3",
+		"madge": "^8.0.0",
+		"publint": "^0.3.18",
+		"typescript": "6.0.2",
+		"vitest": "^4.1.4"
+	}
+}

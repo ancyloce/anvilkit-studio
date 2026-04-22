@@ -1,0 +1,18 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.9/schema.json",
+	"root": false,
+	"files": {
+		"includes": [
+			"package.json",
+			"tsconfig.json",
+			"rslib.config.ts",
+			"vitest.config.ts",
+			"scripts/**/*.mjs",
+			"src/**/*.ts",
+			"!src/scaffolds/**",
+			"!__fixtures__/**",
+			"!dist/**"
+		]
+	},
+	"extends": ["@anvilkit/biome-config/base"]
+}
