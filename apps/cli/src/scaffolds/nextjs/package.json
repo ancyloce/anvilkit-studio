@@ -1,0 +1,26 @@
+{
+	"name": "__NAME__",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"typecheck": "next typegen && tsc --noEmit"
+	},
+	"dependencies": {
+		"@anvilkit/core": "0.1.0-alpha.0",
+		"@anvilkit/ir": "0.1.0-alpha.0",
+		"@puckeditor/core": "^0.21.1",
+		"next": "16.2.0",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.3",
+		"@types/react": "19.2.14",
+		"@types/react-dom": "19.2.3",
+		"typescript": "6.0.2"
+	}
+}
