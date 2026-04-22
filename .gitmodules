@@ -10,3 +10,9 @@
 [submodule "packages/plugins/plugin-export-react"]
 	path = packages/plugins/plugin-export-react
 	url = https://github.com/ancyloce/anvilkit-plugin-export-react.git
+[submodule "packages/plugins/plugin-asset-manager"]
+	path = packages/plugins/plugin-asset-manager
+	url = https://github.com/ancyloce/anvilkit-plugin-asset-manager.git
+[submodule "packages/plugins/plugin-version-history"]
+	path = packages/plugins/plugin-version-history
+	url = https://github.com/ancyloce/anvilkit-plugin-version-history.git
