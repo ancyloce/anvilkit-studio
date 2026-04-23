@@ -45,6 +45,7 @@ function makeCtx() {
 		studioConfig,
 		log,
 		emit,
+		registerAssetResolver: vi.fn(),
 	};
 
 	return { ctx, log, emit };

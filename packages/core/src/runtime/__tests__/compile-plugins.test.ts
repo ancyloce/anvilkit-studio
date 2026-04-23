@@ -47,6 +47,7 @@ function makeCtx(): StudioPluginContext {
 		studioConfig,
 		log: vi.fn(),
 		emit: vi.fn(),
+		registerAssetResolver: vi.fn(),
 	};
 }
 
@@ -189,6 +190,26 @@ describe("compilePlugins — happy paths", () => {
 			"action-a",
 			"action-b",
 		]);
+	});
+
+	it("collects asset resolvers registered through the plugin context", async () => {
+		const resolver = vi.fn();
+		const ctx = makeCtx();
+		const runtime = await compilePlugins(
+			[
+				makePlugin("com.example.assets", {
+					register: (meta) => {
+						ctx.registerAssetResolver(resolver);
+						return {
+							meta,
+						};
+					},
+				}),
+			],
+			ctx,
+		);
+
+		expect(runtime.assetResolvers).toEqual([resolver]);
 	});
 });
 

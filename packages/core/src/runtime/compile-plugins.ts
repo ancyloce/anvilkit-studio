@@ -37,6 +37,7 @@ import type {
 
 import type { ExportFormatDefinition } from "../types/export.js";
 import type {
+	IRAssetResolver,
 	StudioHeaderAction,
 	StudioPlugin,
 	StudioPluginContext,
@@ -85,6 +86,13 @@ export interface StudioRuntime {
 	 * preserving plugin-declared insertion order.
 	 */
 	readonly exportFormats: ReadonlyMap<string, ExportFormatDefinition>;
+	/**
+	 * Runtime-registered asset resolvers, in registration order.
+	 *
+	 * Exporters that support asset URL rewriting consult this list and
+	 * stop at the first resolver that returns a non-null result.
+	 */
+	readonly assetResolvers: readonly IRAssetResolver[];
 	/**
 	 * Header action descriptors in the order they were contributed.
 	 * Duplicate ids pass through here — `core-009`'s
@@ -389,6 +397,11 @@ export interface CompilePluginsOptions {
 	readonly lifecycle?: LifecycleManagerOptions;
 }
 
+const baseAssetResolverRegistrarByContext = new WeakMap<
+	StudioPluginContext,
+	StudioPluginContext["registerAssetResolver"]
+>();
+
 export async function compilePlugins(
 	plugins: readonly (StudioPlugin | PuckPlugin)[],
 	ctx: StudioPluginContext,
@@ -397,6 +410,7 @@ export async function compilePlugins(
 	const pluginMeta: StudioPluginMeta[] = [];
 	const registrations: StudioPluginRegistration[] = [];
 	const exportFormats = new Map<string, ExportFormatDefinition>();
+	const assetResolvers: IRAssetResolver[] = [];
 	// Track the plugin that first registered each export format id
 	// so duplicate-id errors can name both plugins.
 	const exportOwners = new Map<string, string>();
@@ -408,6 +422,18 @@ export async function compilePlugins(
 	const headerActions: StudioHeaderAction[] = [];
 	const puckPlugins: PuckPlugin[] = [];
 	const overrides: Partial<PuckOverrides>[] = [];
+	const baseRegisterAssetResolver =
+		baseAssetResolverRegistrarByContext.get(ctx) ?? ctx.registerAssetResolver;
+
+	baseAssetResolverRegistrarByContext.set(ctx, baseRegisterAssetResolver);
+	(
+		ctx as {
+			registerAssetResolver: StudioPluginContext["registerAssetResolver"];
+		}
+	).registerAssetResolver = (resolver) => {
+		assetResolvers.push(resolver);
+		baseRegisterAssetResolver(resolver);
+	};
 
 	for (const [index, plugin] of plugins.entries()) {
 		if (isStudioPlugin(plugin)) {
@@ -501,6 +527,7 @@ export async function compilePlugins(
 		registrations,
 		lifecycle: createLifecycleManager(registrations, options.lifecycle),
 		exportFormats,
+		assetResolvers,
 		headerActions,
 		overrides,
 		puckPlugins,
