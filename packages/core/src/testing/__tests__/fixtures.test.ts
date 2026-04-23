@@ -27,6 +27,13 @@ describe("createFakeStudioContext", () => {
 		expect(ctx._mocks.emitCalls).toEqual([["x", { p: 1 }]]);
 	});
 
+	it("records registered asset resolvers on _mocks.assetResolvers", () => {
+		const ctx = createFakeStudioContext();
+		const resolver = () => null;
+		ctx.registerAssetResolver(resolver);
+		expect(ctx._mocks.assetResolvers).toEqual([resolver]);
+	});
+
 	it("records dispatch calls on _mocks.dispatchCalls", () => {
 		const ctx = createFakeStudioContext();
 		ctx.getPuckApi().dispatch({ type: "setData" } as never);

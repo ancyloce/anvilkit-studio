@@ -1,7 +1,10 @@
 import type { Config as PuckConfig, PuckApi } from "@puckeditor/core";
 
 import { StudioConfigSchema } from "../config/schema.js";
-import type { StudioPluginContext } from "../types/plugin.js";
+import type {
+	IRAssetResolver,
+	StudioPluginContext,
+} from "../types/plugin.js";
 
 /**
  * Shape returned by {@link createFakeStudioContext}. Extends the
@@ -21,6 +24,8 @@ export interface FakeStudioContext<
 		]>;
 		/** All `ctx.emit()` calls in order. */
 		readonly emitCalls: Array<readonly [string, unknown]>;
+		/** All asset resolvers registered through `ctx.registerAssetResolver()`. */
+		readonly assetResolvers: IRAssetResolver[];
 		/** The dispatch mock attached to the fake `getPuckApi()`. */
 		readonly dispatchCalls: unknown[][];
 	};
@@ -34,6 +39,7 @@ export interface FakeStudioContextOverrides<
 	readonly studioConfig?: StudioPluginContext<UserConfig>["studioConfig"];
 	readonly log?: StudioPluginContext<UserConfig>["log"];
 	readonly emit?: StudioPluginContext<UserConfig>["emit"];
+	readonly registerAssetResolver?: StudioPluginContext<UserConfig>["registerAssetResolver"];
 }
 
 /**
@@ -59,6 +65,8 @@ export function createFakeStudioContext<
 ): FakeStudioContext<UserConfig> {
 	const logCalls: FakeStudioContext<UserConfig>["_mocks"]["logCalls"] = [];
 	const emitCalls: FakeStudioContext<UserConfig>["_mocks"]["emitCalls"] = [];
+	const assetResolvers: FakeStudioContext<UserConfig>["_mocks"]["assetResolvers"] =
+		[];
 	const dispatchCalls: FakeStudioContext<UserConfig>["_mocks"]["dispatchCalls"] = [];
 
 	const defaultPuckApi = {
@@ -83,6 +91,11 @@ export function createFakeStudioContext<
 			((event, payload) => {
 				emitCalls.push([event, payload]);
 			}),
-		_mocks: { logCalls, emitCalls, dispatchCalls },
+		registerAssetResolver:
+			overrides.registerAssetResolver ??
+			((resolver) => {
+				assetResolvers.push(resolver);
+			}),
+		_mocks: { logCalls, emitCalls, assetResolvers, dispatchCalls },
 	};
 }
