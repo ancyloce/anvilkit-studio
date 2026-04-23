@@ -4413,6 +4413,29 @@
 												"qualifiedName": "ExportFormatDefinition.Opts",
 												"refersToTypeParameter": true
 											}
+										},
+										{
+											"id": 611,
+											"name": "ctx",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Optional runtime context for additive export hooks."
+													}
+												]
+											},
+											"type": {
+												"type": "reference",
+												"target": 612,
+												"name": "ExportFormatRunContext",
+												"package": "@anvilkit/core"
+											}
 										}
 									],
 									"type": {
@@ -6493,6 +6516,86 @@
 							]
 						}
 					}
+				},
+				{
+					"id": 606,
+					"name": "dispose",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Release any in-flight debounce timers and forget every live\nsubscriber so the manager can be garbage-collected cleanly.\n\n"
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " calls this from the unmount cleanup that follows\n"
+							},
+							{
+								"kind": "code",
+								"text": "`onDestroy`"
+							},
+							{
+								"kind": "text",
+								"text": ". Without it, a pending "
+							},
+							{
+								"kind": "code",
+								"text": "`onDataChange`"
+							},
+							{
+								"kind": "text",
+								"text": " debounce\ntimer would fire after the host dropped its reference to the\nruntime — running plugin hooks against a stale context whose\n"
+							},
+							{
+								"kind": "code",
+								"text": "`getPuckApi()`"
+							},
+							{
+								"kind": "text",
+								"text": " now throws.\n\nSafe to call multiple times; subsequent calls are no-ops."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/lifecycle-manager.ts",
+							"line": 156,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L156"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 625,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 626,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
+					}
 				}
 			],
 			"groups": [
@@ -6500,7 +6603,8 @@
 					"title": "Properties",
 					"children": [
 						19,
-						25
+						25,
+						606
 					]
 				}
 			],
@@ -11019,6 +11123,77 @@
 							]
 						}
 					}
+				},
+				{
+					"id": 619,
+					"name": "registerAssetResolver",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Register a runtime asset resolver for export-time URL rewrites.\n\nResolvers are consulted by export formats that opt into the\nasset-resolution pipeline. A resolver should return "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " for\nURLs it does not own, and a rewritten URL when it does."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 196,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L196"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 623,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 624,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 620,
+											"name": "resolver",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": 617,
+												"name": "IRAssetResolver",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
+					}
 				}
 			],
 			"groups": [
@@ -11029,7 +11204,8 @@
 						526,
 						529,
 						557,
-						532
+						532,
+						619
 					]
 				}
 			],
@@ -14610,6 +14786,110 @@
 							}
 						}
 					}
+				},
+				{
+					"id": 607,
+					"name": "registrations",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The raw plugin registrations in declaration order, as returned\nby each plugin's "
+							},
+							{
+								"kind": "code",
+								"text": "`register()`"
+							},
+							{
+								"kind": "text",
+								"text": ". Primarily consumed by the\n"
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/testing`"
+							},
+							{
+								"kind": "text",
+								"text": " harness so unit tests can drive a\nsingle plugin's lifecycle hooks without re-implementing the\ncompile-time invariant checks (structural guard, coreVersion\nrange, duplicate-id detection)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 78,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L78"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 599,
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "@puckeditor/core",
+											"packagePath": "dist/actions-BkBoKAc5.d.ts",
+											"qualifiedName": "Config"
+										},
+										"name": "Config",
+										"package": "@puckeditor/core"
+									}
+								],
+								"name": "StudioPluginRegistration",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 608,
+					"name": "assetResolvers",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Runtime-registered asset resolvers, in registration order.\n\nExporters that support asset URL rewriting consult this list and\nstop at the first resolver that returns a non-null result."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 95,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L95"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 617,
+								"name": "IRAssetResolver",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
 				}
 			],
 			"groups": [
@@ -14621,7 +14901,9 @@
 						39,
 						42,
 						38,
-						43
+						43,
+						607,
+						608
 					]
 				}
 			],
@@ -18025,6 +18307,24 @@
 								"name": "StudioPluginContext",
 								"package": "@anvilkit/core"
 							}
+						},
+						{
+							"id": 609,
+							"name": "options",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/runtime/compile-plugins.ts",
+									"qualifiedName": "CompilePluginsOptions"
+								},
+								"name": "CompilePluginsOptions",
+								"package": "@anvilkit/core"
+							},
+							"defaultValue": "{}"
 						}
 					],
 					"type": {
@@ -18489,6 +18789,46 @@
 									}
 								}
 							}
+						},
+						{
+							"id": 610,
+							"name": "options",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Optional "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "LifecycleManagerOptions",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/runtime/lifecycle-manager.ts",
+											"qualifiedName": "LifecycleManagerOptions"
+										}
+									},
+									{
+										"kind": "text",
+										"text": "; see the\nfield docs for semantics."
+									}
+								]
+							},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/runtime/lifecycle-manager.ts",
+									"qualifiedName": "LifecycleManagerOptions"
+								},
+								"name": "LifecycleManagerOptions",
+								"package": "@anvilkit/core"
+							},
+							"defaultValue": "{}"
 						}
 					],
 					"type": {
@@ -24564,6 +24904,248 @@
 					}
 				}
 			]
+		},
+		{
+			"id": 612,
+			"name": "ExportFormatRunContext",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"children": [
+				{
+					"id": 613,
+					"name": "assetResolvers",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/export.ts",
+							"line": 120,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L120"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 617,
+								"name": "IRAssetResolver",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						613
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types/export.ts",
+					"line": 119,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L119"
+				}
+			]
+		},
+		{
+			"id": 614,
+			"name": "AssetResolution",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"children": [
+				{
+					"id": 616,
+					"name": "meta",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 98,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L98"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "intrinsic",
+										"name": "unknown"
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 615,
+					"name": "url",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 97,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L97"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						616,
+						615
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types/plugin.ts",
+					"line": 96,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L96"
+				}
+			]
+		},
+		{
+			"id": 617,
+			"name": "IRAssetResolver",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "types/plugin.ts",
+					"line": 101,
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L101"
+				}
+			],
+			"type": {
+				"type": "reflection",
+				"declaration": {
+					"id": 621,
+					"name": "__type",
+					"variant": "declaration",
+					"kind": 65536,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 622,
+							"name": "__type",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"parameters": [
+								{
+									"id": 618,
+									"name": "url",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Promise"
+										},
+										"typeArguments": [
+											{
+												"type": "union",
+												"types": [
+													{
+														"type": "reference",
+														"target": 614,
+														"name": "AssetResolution",
+														"package": "@anvilkit/core"
+													},
+													{
+														"type": "literal",
+														"value": null
+													}
+												]
+											}
+										],
+										"name": "Promise",
+										"package": "typescript"
+									},
+									{
+										"type": "reference",
+										"target": 614,
+										"name": "AssetResolution",
+										"package": "@anvilkit/core"
+									},
+									{
+										"type": "literal",
+										"value": null
+									}
+								]
+							}
+						}
+					]
+				}
+			}
 		}
 	],
 	"groups": [
@@ -24609,7 +25191,9 @@
 				309,
 				37,
 				408,
-				351
+				351,
+				612,
+				614
 			]
 		},
 		{
@@ -24623,7 +25207,8 @@
 				458,
 				517,
 				406,
-				407
+				407,
+				617
 			]
 		},
 		{
@@ -28094,6 +28679,81 @@
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
 			"qualifiedName": "StudioPluginRegistration.exportFormats"
+		},
+		"606": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleManager.dispose"
+		},
+		"607": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.registrations"
+		},
+		"608": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.assetResolvers"
+		},
+		"609": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "options"
+		},
+		"610": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "options"
+		},
+		"611": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/export.ts",
+			"qualifiedName": "ctx"
+		},
+		"612": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/export.ts",
+			"qualifiedName": "ExportFormatRunContext"
+		},
+		"613": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/export.ts",
+			"qualifiedName": "ExportFormatRunContext.assetResolvers"
+		},
+		"614": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "AssetResolution"
+		},
+		"615": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "AssetResolution.url"
+		},
+		"616": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "AssetResolution.meta"
+		},
+		"617": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "IRAssetResolver"
+		},
+		"618": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "url"
+		},
+		"619": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioPluginContext.registerAssetResolver"
+		},
+		"620": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "resolver"
 		}
 	},
 	"files": {
