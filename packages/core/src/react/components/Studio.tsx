@@ -487,6 +487,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		[config],
 	);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime.
 	useEffect(() => {
 		let cancelled = false;
 		const basePlugins = plugins ?? [];
@@ -562,6 +563,11 @@ export function Studio(props: StudioProps): ReactElement | null {
 					// `emit` is a silent no-op so plugins that call it
 					// at lifecycle time do not crash.
 				},
+				registerAssetResolver: () => {
+					// `compilePlugins()` swaps this no-op for a runtime-backed
+					// collector before any plugin registration or lifecycle
+					// hook runs.
+				},
 			};
 
 			try {
@@ -591,11 +597,6 @@ export function Studio(props: StudioProps): ReactElement | null {
 		return () => {
 			cancelled = true;
 		};
-		// Fingerprints intentionally replace the raw references:
-		// inline `<Studio plugins={[...]} config={{ ... }} />` creates
-		// fresh references on every parent render, which would
-		// otherwise tear down and rebuild the runtime each time.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pluginsFingerprint, aiHost, configFingerprint]);
 
 	// ------------------------------------------------------------------
