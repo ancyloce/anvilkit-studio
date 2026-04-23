@@ -11,6 +11,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { runHtmlExportBench } from "./html-export.bench.js";
+import { runIrDiffBench } from "./ir-diff.bench.js";
 import { runIrRoundtripBench } from "./ir-roundtrip.bench.js";
 import { runComponentRenderBench } from "./component-render.bench.js";
 import type {
@@ -134,6 +135,7 @@ async function main(): Promise<void> {
 
 	const allResults: BenchResult[] = [];
 	allResults.push(await runHtmlExportBench());
+	allResults.push(await runIrDiffBench());
 	allResults.push(await runIrRoundtripBench());
 	allResults.push(...(await runComponentRenderBench()));
 
