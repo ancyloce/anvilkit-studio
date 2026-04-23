@@ -130,6 +130,9 @@ describe("StudioPlugin type contract", () => {
 			emit: () => {
 				/* no-op */
 			},
+			registerAssetResolver: () => {
+				/* no-op */
+			},
 		};
 		void ctx;
 	});

@@ -29,6 +29,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-006-types-domain.md | core-006}
  */
 
+import type { IRAssetResolver } from "./asset-resolver.js";
 import type { PageIR } from "./ir.js";
 
 /**
@@ -115,6 +116,10 @@ export type ExportOptions<
 	T extends Record<string, unknown> = Record<string, unknown>,
 > = T;
 
+export interface ExportFormatRunContext {
+	readonly assetResolvers?: readonly IRAssetResolver[];
+}
+
 /**
  * The return value of a successful {@link ExportFormatDefinition.run}
  * call.
@@ -161,7 +166,7 @@ export interface ExportResult {
  * registry (`core-009`) and dispatches to the matching `id` when the
  * host calls `exportAs(formatId, options)`.
  *
- * ### `run(ir, options)` contract
+ * ### `run(ir, options, ctx?)` contract
  *
  * The `run` callback receives a fully-normalized {@link PageIR}, not
  * a Puck `Data`. The IR normalization step (Puck `Data` → `PageIR`)
@@ -219,9 +224,11 @@ export interface ExportFormatDefinition<
 	 *
 	 * @param ir - The normalized page IR. Deeply read-only.
 	 * @param options - Format-specific option bag.
+	 * @param ctx - Optional runtime context for additive export hooks.
 	 */
 	readonly run: (
 		ir: PageIR,
 		options: ExportOptions<Opts>,
+		ctx?: ExportFormatRunContext,
 	) => Promise<ExportResult>;
 }

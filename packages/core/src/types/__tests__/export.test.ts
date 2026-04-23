@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 import type {
 	ExportFormatDefinition,
 	ExportOptions,
+	ExportFormatRunContext,
 	ExportResult,
 	ExportWarning,
 } from "../export.js";
@@ -77,6 +78,16 @@ describe("ExportFormatDefinition type contract", () => {
 		// @ts-expect-error — `inlineStyles` must be a boolean.
 		const invalidOpts: ExportOptions<HtmlOpts> = { inlineStyles: "yes" };
 		void invalidOpts;
+	});
+
+	it("accepts an optional run context with asset resolvers", () => {
+		const run: ExportFormatDefinition["run"] = async (_ir, _options, ctx) => {
+			const runtimeCtx: ExportFormatRunContext | undefined = ctx;
+			void runtimeCtx?.assetResolvers;
+			return { content: "", filename: "page.txt" };
+		};
+
+		void run;
 	});
 
 	it("ExportResult accepts string OR Uint8Array content", () => {

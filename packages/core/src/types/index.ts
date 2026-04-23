@@ -18,6 +18,7 @@ export type { ComponentPackageManifest, StudioConfig } from "./config.js";
 export type {
 	ExportFormatDefinition,
 	ExportOptions,
+	ExportFormatRunContext,
 	ExportResult,
 	ExportWarning,
 	ExportWarningLevel,
@@ -29,6 +30,8 @@ export type {
 	PageIRNode,
 } from "./ir.js";
 export type {
+	AssetResolution,
+	IRAssetResolver,
 	StudioHeaderAction,
 	StudioLogLevel,
 	StudioPlugin,

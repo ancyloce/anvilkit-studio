@@ -93,6 +93,10 @@ export interface StudioPluginMeta {
 	readonly description?: string;
 }
 
+export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
+
+import type { IRAssetResolver } from "./asset-resolver.js";
+
 /**
  * Read / write / observe handle passed to every plugin lifecycle call.
  *
@@ -176,6 +180,15 @@ export interface StudioPluginContext<
 	 * @param payload - Optional payload. Defaults to `undefined`.
 	 */
 	readonly emit: (event: string, payload?: unknown) => void;
+
+	/**
+	 * Register a runtime asset resolver for export-time URL rewrites.
+	 *
+	 * Resolvers are consulted by export formats that opt into the
+	 * asset-resolution pipeline. A resolver should return `null` for
+	 * URLs it does not own, and a rewritten URL when it does.
+	 */
+	readonly registerAssetResolver: (resolver: IRAssetResolver) => void;
 }
 
 /**
