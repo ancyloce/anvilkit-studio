@@ -177,6 +177,9 @@ importers:
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-ai-copilot
+      '@anvilkit/plugin-asset-manager':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-asset-manager
       '@anvilkit/plugin-export-html':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-export-html
@@ -973,6 +976,76 @@ importers:
         specifier: ^4.1.4
         version: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.2))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
+  packages/plugins/plugin-asset-manager:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../../ir
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../ui
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../configs/vitest-config
+      '@puckeditor/core':
+        specifier: ^0.21.1
+        version: 0.21.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      '@rslib/core':
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@6.0.2)
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      axe-core:
+        specifier: 4.11.3
+        version: 4.11.3
+      esbuild:
+        specifier: ^0.25.12
+        version: 0.25.12
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.2)
+      publint:
+        specifier: ^0.3.18
+        version: 0.3.18
+      react:
+        specifier: ^19.2.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.4(react@19.2.4)
+      typedoc:
+        specifier: ^0.28.18
+        version: 0.28.18(typescript@6.0.2)
+      typescript:
+        specifier: 6.0.2
+        version: 6.0.2
+      vitest:
+        specifier: ^4.1.4
+        version: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.2))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+      vitest-axe:
+        specifier: ^0.1.0
+        version: 0.1.0(vitest@4.1.4)
+
   packages/plugins/plugin-export-html:
     dependencies:
       '@anvilkit/core':
@@ -1082,6 +1155,79 @@ importers:
       vitest:
         specifier: ^4.1.4
         version: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.2))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+
+  packages/plugins/plugin-version-history:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../../ir
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../ui
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../configs/vitest-config
+      '@puckeditor/core':
+        specifier: ^0.21.1
+        version: 0.21.1(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+      '@rslib/core':
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@6.0.2)
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      axe-core:
+        specifier: 4.11.3
+        version: 4.11.3
+      esbuild:
+        specifier: ^0.25.12
+        version: 0.25.12
+      fast-check:
+        specifier: ^4.3.0
+        version: 4.7.0
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.2)
+      publint:
+        specifier: ^0.3.18
+        version: 0.3.18
+      react:
+        specifier: ^19.2.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.4(react@19.2.4)
+      typedoc:
+        specifier: ^0.28.18
+        version: 0.28.18(typescript@6.0.2)
+      typescript:
+        specifier: 6.0.2
+        version: 6.0.2
+      vitest:
+        specifier: ^4.1.4
+        version: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.2))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+      vitest-axe:
+        specifier: ^0.1.0
+        version: 0.1.0(vitest@4.1.4)
 
   packages/schema:
     dependencies:
@@ -4884,6 +5030,10 @@ packages:
   extendable-error@0.1.7:
     resolution: {integrity: sha512-UOiS2in6/Q0FK0R0q6UY9vYpQ21mr/Qn1KOnte7vsACuNJf514WvCCUHSRCPcgjPT2bAhNIJdlE6bVap1GKmeg==}
 
+  fast-check@4.7.0:
+    resolution: {integrity: sha512-NsZRtqvSSoCP0HbNjUD+r1JH8zqZalyp6gLY9e7OYs7NK9b6AHOs2baBFeBG7bVNsuoukh89x2Yg3rPsul8ziQ==}
+    engines: {node: '>=12.17.0'}
+
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
@@ -5592,6 +5742,9 @@ packages:
   locate-path@5.0.0:
     resolution: {integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==}
     engines: {node: '>=8'}
+
+  lodash-es@4.18.1:
+    resolution: {integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==}
 
   lodash.startcase@4.4.0:
     resolution: {integrity: sha512-+WKqsK294HMSc2jEbNgpHpd0JfIBhp7rEV4aqXWqFr6AlXov+SlcgB1Fv01y2kGe3Gc8nMW7VA0SrGuSkRfIEg==}
@@ -6409,6 +6562,9 @@ packages:
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+
+  pure-rand@8.4.0:
+    resolution: {integrity: sha512-IoM8YF/jY0hiugFo/wOWqfmarlE6J0wc6fDK1PhftMk7MGhVZl88sZimmqBBFomLOCSmcCCpsfj7wXASCpvK9A==}
 
   qs@6.15.0:
     resolution: {integrity: sha512-mAZTtNCeetKMH+pSjrb76NAM8V9a05I9aBZOHztWy/UqcJdQYNsf59vrRKWnojAT9Y+GbIvoTBC++CPHqpDBhQ==}
@@ -7445,6 +7601,11 @@ packages:
     peerDependenciesMeta:
       vite:
         optional: true
+
+  vitest-axe@0.1.0:
+    resolution: {integrity: sha512-jvtXxeQPg8R/2ANTY8QicA5pvvdRP4F0FsVUAHANJ46YCDASie/cuhlSzu0DGcLmZvGBSBNsNuK3HqfaeknyvA==}
+    peerDependencies:
+      vitest: '>=0.16.0'
 
   vitest@4.1.4:
     resolution: {integrity: sha512-tFuJqTxKb8AvfyqMfnavXdzfy3h3sWZRWwfluGbkeR7n0HUev+FmNgZ8SDrRBTVrVCjgH5cA21qGbCffMNtWvg==}
@@ -11947,6 +12108,10 @@ snapshots:
 
   extendable-error@0.1.7: {}
 
+  fast-check@4.7.0:
+    dependencies:
+      pure-rand: 8.4.0
+
   fast-deep-equal@3.1.3: {}
 
   fast-equals@5.2.2: {}
@@ -12709,6 +12874,8 @@ snapshots:
   locate-path@5.0.0:
     dependencies:
       p-locate: 4.1.0
+
+  lodash-es@4.18.1: {}
 
   lodash.startcase@4.4.0: {}
 
@@ -13909,6 +14076,8 @@ snapshots:
   punycode.js@2.3.1: {}
 
   punycode@2.3.1: {}
+
+  pure-rand@8.4.0: {}
 
   qs@6.15.0:
     dependencies:
@@ -15148,6 +15317,16 @@ snapshots:
   vitefu@1.1.3(vite@7.3.2(@types/node@22.15.3)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)):
     optionalDependencies:
       vite: 7.3.2(@types/node@22.15.3)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)
+
+  vitest-axe@0.1.0(vitest@4.1.4):
+    dependencies:
+      aria-query: 5.3.2
+      axe-core: 4.11.3
+      chalk: 5.6.2
+      dom-accessibility-api: 0.5.16
+      lodash-es: 4.18.1
+      redent: 3.0.0
+      vitest: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.2))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
   vitest@4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@15.11.7)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@5.9.2))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)):
     dependencies:
