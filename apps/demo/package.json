@@ -25,6 +25,7 @@
 		"@anvilkit/logo-clouds": "workspace:*",
 		"@anvilkit/navbar": "workspace:*",
 		"@anvilkit/plugin-ai-copilot": "workspace:*",
+		"@anvilkit/plugin-asset-manager": "workspace:*",
 		"@anvilkit/plugin-export-html": "workspace:*",
 		"@anvilkit/plugin-export-react": "workspace:*",
 		"@anvilkit/pricing-minimal": "workspace:*",
