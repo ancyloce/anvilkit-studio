@@ -4,6 +4,7 @@ packages:
   - "packages/plugins/*"
   - "packages/configs/*"
   - "packages/components/src/*"
+  - "packages/templates/*"
   - "examples/plugins/*"
   - "examples/ai-adapters/*"
 allowBuilds:
