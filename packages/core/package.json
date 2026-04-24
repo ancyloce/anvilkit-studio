@@ -76,6 +76,16 @@
 				"types": "./dist/testing/index.d.cts",
 				"default": "./dist/testing/index.cjs"
 			}
+		},
+		"./templates": {
+			"import": {
+				"types": "./dist/templates/index.d.ts",
+				"default": "./dist/templates/index.js"
+			},
+			"require": {
+				"types": "./dist/templates/index.d.cts",
+				"default": "./dist/templates/index.cjs"
+			}
 		}
 	},
 	"files": [
@@ -135,7 +145,8 @@
 		"check:peer-deps": "node ./scripts/check-peer-deps.mjs",
 		"check:bundle-budget": "node ./scripts/check-bundle-budget.mjs",
 		"check:api-snapshot": "typedoc --json ./api/api-snapshot.json --entryPoints ./src/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
-		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot",
+		"check:api-snapshot-templates": "typedoc --json ./api/api-snapshot.templates.json --entryPoints ./src/templates/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
+		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot && pnpm check:api-snapshot-templates",
 		"size": "size-limit"
 	}
 }

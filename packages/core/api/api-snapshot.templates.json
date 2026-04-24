@@ -1,0 +1,1260 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "@anvilkit/core",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 18,
+			"name": "AnvilkitTemplate",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A first-party or third-party Anvilkit template — a\n"
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "AnvilkitTemplateManifest",
+						"target": 12
+					},
+					{
+						"kind": "text",
+						"text": " plus the full\n"
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "PageIR",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/ir.ts",
+							"qualifiedName": "PageIR"
+						}
+					},
+					{
+						"kind": "text",
+						"text": " tree that composes it.\n\nShipped as the default export of a "
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/template-<slug>`"
+					},
+					{
+						"kind": "text",
+						"text": "\npackage. The CLI "
+					},
+					{
+						"kind": "code",
+						"text": "`anvilkit init --template <slug>`"
+					},
+					{
+						"kind": "text",
+						"text": " resolves this\nobject, writes the IR to the scaffolded project, and installs the\npackages listed in "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "AnvilkitTemplateManifest.packages",
+						"target": 17
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 22,
+					"name": "description",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "One-sentence description surfaced in the catalog card and the\nCLI picker. Should read as a prose sentence ending in a period."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 94,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 15,
+						"name": "AnvilkitTemplateManifest.description"
+					}
+				},
+				{
+					"id": 21,
+					"name": "name",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Human-readable display name, e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"Landing — SaaS\"`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 89,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 14,
+						"name": "AnvilkitTemplateManifest.name"
+					}
+				},
+				{
+					"id": 24,
+					"name": "packages",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Component packages the template depends on, in a deterministic\norder (alphabetical by package name is the convention first-\nparty seeds follow). Consumers must treat this list as closed —\na template may not reference components outside the listed set."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 103,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 9,
+								"name": "AnvilkitTemplatePackage",
+								"package": "@anvilkit/core"
+							}
+						}
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 17,
+						"name": "AnvilkitTemplateManifest.packages"
+					}
+				},
+				{
+					"id": 19,
+					"name": "pageIR",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The template's page tree. Must validate against the component\nschemas of every package listed in "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "packages",
+								"target": 17
+							},
+							{
+								"kind": "text",
+								"text": " — first-\nparty templates enforce this in CI via\n"
+							},
+							{
+								"kind": "code",
+								"text": "`validateAiOutput(pageIR, availableComponents)`"
+							},
+							{
+								"kind": "text",
+								"text": " (see\n"
+							},
+							{
+								"kind": "code",
+								"text": "`phase5-017`"
+							},
+							{
+								"kind": "text",
+								"text": " acceptance criteria)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 124,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/ir.ts",
+							"qualifiedName": "PageIR"
+						},
+						"name": "PageIR",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 23,
+					"name": "preview",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Static thumbnail — see "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "AnvilkitTemplatePreview",
+								"target": 4
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 96,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 4,
+						"name": "AnvilkitTemplatePreview",
+						"package": "@anvilkit/core"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 16,
+						"name": "AnvilkitTemplateManifest.preview"
+					}
+				},
+				{
+					"id": 20,
+					"name": "slug",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true,
+						"isInherited": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable URL-safe identifier. Lowercase, hyphen-separated. Used by\nthe CLI ("
+							},
+							{
+								"kind": "code",
+								"text": "`--template <slug>`"
+							},
+							{
+								"kind": "text",
+								"text": ") and by the docs route\n("
+							},
+							{
+								"kind": "code",
+								"text": "`/templates/<slug>`"
+							},
+							{
+								"kind": "text",
+								"text": ")."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 87,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"inheritedFrom": {
+						"type": "reference",
+						"target": 13,
+						"name": "AnvilkitTemplateManifest.slug"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						22,
+						21,
+						24,
+						19,
+						23,
+						20
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 116,
+					"character": 17
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"target": 12,
+					"name": "AnvilkitTemplateManifest",
+					"package": "@anvilkit/core"
+				}
+			]
+		},
+		{
+			"id": 12,
+			"name": "AnvilkitTemplateManifest",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The metadata half of a template — everything a catalog listing\nneeds to render a card, without loading the full "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "PageIR",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/ir.ts",
+							"qualifiedName": "PageIR"
+						}
+					},
+					{
+						"kind": "text",
+						"text": ".\n\nSplit out from "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "AnvilkitTemplate",
+						"target": 18
+					},
+					{
+						"kind": "text",
+						"text": " so downstream UIs can type\na lightweight listing (e.g. "
+					},
+					{
+						"kind": "code",
+						"text": "`AnvilkitTemplateManifest[]`"
+					},
+					{
+						"kind": "text",
+						"text": ") without\nmaterializing every template's tree. The docs-site catalog route\n("
+					},
+					{
+						"kind": "code",
+						"text": "`phase5-018`"
+					},
+					{
+						"kind": "text",
+						"text": ") ships this shape in its static catalog JSON."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 15,
+					"name": "description",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "One-sentence description surfaced in the catalog card and the\nCLI picker. Should read as a prose sentence ending in a period."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 94,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 14,
+					"name": "name",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Human-readable display name, e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"Landing — SaaS\"`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 89,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 17,
+					"name": "packages",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Component packages the template depends on, in a deterministic\norder (alphabetical by package name is the convention first-\nparty seeds follow). Consumers must treat this list as closed —\na template may not reference components outside the listed set."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 103,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 9,
+								"name": "AnvilkitTemplatePackage",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 16,
+					"name": "preview",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Static thumbnail — see "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "AnvilkitTemplatePreview",
+								"target": 4
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 96,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 4,
+						"name": "AnvilkitTemplatePreview",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 13,
+					"name": "slug",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable URL-safe identifier. Lowercase, hyphen-separated. Used by\nthe CLI ("
+							},
+							{
+								"kind": "code",
+								"text": "`--template <slug>`"
+							},
+							{
+								"kind": "text",
+								"text": ") and by the docs route\n("
+							},
+							{
+								"kind": "code",
+								"text": "`/templates/<slug>`"
+							},
+							{
+								"kind": "text",
+								"text": ")."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 87,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						15,
+						14,
+						17,
+						16,
+						13
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 81,
+					"character": 17
+				}
+			],
+			"extendedBy": [
+				{
+					"type": "reference",
+					"target": 18,
+					"name": "AnvilkitTemplate"
+				}
+			]
+		},
+		{
+			"id": 9,
+			"name": "AnvilkitTemplatePackage",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A single entry in a template's "
+					},
+					{
+						"kind": "code",
+						"text": "`packages`"
+					},
+					{
+						"kind": "text",
+						"text": " manifest — the name and\nversion of a component package the template's "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "PageIR",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/ir.ts",
+							"qualifiedName": "PageIR"
+						}
+					},
+					{
+						"kind": "text",
+						"text": "\ndepends on.\n\nTemplates enumerate their package graph explicitly (rather than\nderiving it from "
+					},
+					{
+						"kind": "code",
+						"text": "`pageIR`"
+					},
+					{
+						"kind": "text",
+						"text": ") so a docs catalog can list dependencies\nwithout walking the tree and so a future installer can resolve a\nlockfile from the manifest alone."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 10,
+					"name": "name",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "npm package name, e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"@anvilkit/hero\"`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 67,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 11,
+					"name": "version",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Semver range or exact version, e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"^1.0.0\"`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 69,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						10,
+						11
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 65,
+					"character": 17
+				}
+			]
+		},
+		{
+			"id": 4,
+			"name": "AnvilkitTemplatePreview",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A static preview image for a template — produced once per template\nby the Playwright capture pipeline ("
+					},
+					{
+						"kind": "code",
+						"text": "`phase5-017`"
+					},
+					{
+						"kind": "text",
+						"text": "). Consumed by the\ndocs catalog and CLI picker to render a thumbnail before the\ntemplate's full IR is loaded.\n\nDimensions are carried alongside the URL so catalog layouts can\nreserve space without a network round-trip, and "
+					},
+					{
+						"kind": "code",
+						"text": "`alt`"
+					},
+					{
+						"kind": "text",
+						"text": " is required\n(not optional) so every catalog card has accessible text by\ndefault."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 8,
+					"name": "alt",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Non-empty alternative text describing the preview. Required — a\ntemplate that ships a preview must also ship accessible text."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 52,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 7,
+					"name": "height",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Intrinsic height of the preview in pixels."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 47,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 5,
+					"name": "src",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Absolute or package-relative URL to the preview image. Templates\ntypically ship a "
+							},
+							{
+								"kind": "code",
+								"text": "`preview.png`"
+							},
+							{
+								"kind": "text",
+								"text": " adjacent to their "
+							},
+							{
+								"kind": "code",
+								"text": "`package.json`"
+							},
+							{
+								"kind": "text",
+								"text": "\nand set "
+							},
+							{
+								"kind": "code",
+								"text": "`src`"
+							},
+							{
+								"kind": "text",
+								"text": " to "
+							},
+							{
+								"kind": "code",
+								"text": "`\"./preview.png\"`"
+							},
+							{
+								"kind": "text",
+								"text": "; the docs-site generator\nrewrites this to a CDN URL at build time."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 43,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 6,
+					"name": "width",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Intrinsic width of the preview in pixels."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 45,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						8,
+						7,
+						5,
+						6
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 36,
+					"character": 17
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "isAnvilkitTemplate",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 142,
+					"character": 16
+				}
+			],
+			"signatures": [
+				{
+					"id": 2,
+					"name": "isAnvilkitTemplate",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Structural type guard for "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "AnvilkitTemplate",
+								"target": 18
+							},
+							{
+								"kind": "text",
+								"text": ".\n\nDeliberately shallow: it verifies the top-level keys that matter\nfor the docs catalog and CLI pickers (slug / name / description /\npreview / packages / pageIR.version) and does **not** re-validate\nthe component tree. Deep validation is the validator package's\njob ("
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/validator`"
+							},
+							{
+								"kind": "text",
+								"text": "), run once per template at build time\nin CI."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@returns",
+								"content": [
+									{
+										"kind": "code",
+										"text": "`true`"
+									},
+									{
+										"kind": "text",
+										"text": " iff "
+									},
+									{
+										"kind": "code",
+										"text": "`value`"
+									},
+									{
+										"kind": "text",
+										"text": " is an object that conforms to the\n  surface-level "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "AnvilkitTemplate",
+										"target": 18
+									},
+									{
+										"kind": "text",
+										"text": " contract."
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 142,
+							"character": 16
+						}
+					],
+					"parameters": [
+						{
+							"id": 3,
+							"name": "value",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Any value, typically the default export of a\n  third-party "
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/template-*`"
+									},
+									{
+										"kind": "text",
+										"text": " package."
+									}
+								]
+							},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "predicate",
+						"name": "value",
+						"asserts": false,
+						"targetType": {
+							"type": "reference",
+							"target": 18,
+							"name": "AnvilkitTemplate",
+							"package": "@anvilkit/core"
+						}
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Interfaces",
+			"children": [
+				18,
+				12,
+				9,
+				4
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				1
+			]
+		}
+	],
+	"packageName": "@anvilkit/core",
+	"symbolIdMap": {
+		"0": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "isAnvilkitTemplate"
+		},
+		"2": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "isAnvilkitTemplate"
+		},
+		"3": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "value"
+		},
+		"4": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePreview"
+		},
+		"5": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePreview.src"
+		},
+		"6": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePreview.width"
+		},
+		"7": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePreview.height"
+		},
+		"8": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePreview.alt"
+		},
+		"9": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePackage"
+		},
+		"10": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePackage.name"
+		},
+		"11": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplatePackage.version"
+		},
+		"12": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest"
+		},
+		"13": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.slug"
+		},
+		"14": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.name"
+		},
+		"15": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.description"
+		},
+		"16": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.preview"
+		},
+		"17": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.packages"
+		},
+		"18": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplate"
+		},
+		"19": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplate.pageIR"
+		},
+		"20": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.slug"
+		},
+		"21": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.name"
+		},
+		"22": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.description"
+		},
+		"23": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.preview"
+		},
+		"24": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/templates/index.ts",
+			"qualifiedName": "AnvilkitTemplateManifest.packages"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/templates/index.ts"
+		},
+		"reflections": {
+			"1": 0
+		}
+	}
+}
