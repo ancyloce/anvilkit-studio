@@ -38,22 +38,71 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Bench harness imports from @anvilkit/plugin-export-html/dist
-      # and @anvilkit/ir/dist, so the build must run first.
+      # Bench harness imports from @anvilkit/plugin-export-html/dist,
+      # @anvilkit/ir/dist, @anvilkit/plugin-version-history/dist, and
+      # every @anvilkit/<component>/dist — so all of them must be
+      # built before the bench runs. phase5-019 phase4-015 added the
+      # per-component React render bench (component-render:*) that
+      # pulls from each component package.
       - name: Build packages consumed by benches
         run: |
           pnpm --filter @anvilkit/utils \
                --filter @anvilkit/ir \
                --filter @anvilkit/schema \
                --filter @anvilkit/core \
+               --filter @anvilkit/ui \
                --filter @anvilkit/plugin-export-html \
+               --filter @anvilkit/plugin-version-history \
+               --filter '@anvilkit/bento-grid' \
+               --filter '@anvilkit/blog-list' \
+               --filter '@anvilkit/button' \
+               --filter '@anvilkit/helps' \
+               --filter '@anvilkit/hero' \
+               --filter '@anvilkit/input' \
+               --filter '@anvilkit/logo-clouds' \
+               --filter '@anvilkit/navbar' \
+               --filter '@anvilkit/pricing-minimal' \
+               --filter '@anvilkit/section' \
+               --filter '@anvilkit/statistics' \
                build
+
+      # phase5-019 phase4-015 — the Playwright editor-load bench
+      # measures `/puck/editor` TTI against a real `next start`. Build
+      # the demo + launch it in the background, wait for readiness,
+      # then hand off to the bench. `editor-load.bench.ts` also
+      # self-skips if the URL is not reachable (local-dev fallback),
+      # so this step is the one that turns the bench from "skipped"
+      # to "measured" in CI.
+      - name: Build demo for editor-load bench
+        run: pnpm --filter demo build
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Start demo in background
+        run: |
+          pnpm --filter demo exec next start -p 3000 &
+          echo "demo_pid=$!" >> "$GITHUB_ENV"
+          # Wait up to 60s for the server to become reachable.
+          for i in $(seq 1 60); do
+            if curl -sf -o /dev/null http://localhost:3000/puck/editor; then
+              echo "demo reachable after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::warning::demo not reachable after 60s — editor-load bench will skip"
 
       - name: Run benches
         id: bench
         env:
           BENCH_SUMMARY_PATH: bench-summary.md
+          ANVILKIT_EDITOR_URL: http://localhost:3000/puck/editor
         run: pnpm bench
+
+      - name: Stop demo
+        if: always() && env.demo_pid
+        run: kill "${demo_pid}" 2>/dev/null || true
 
       - name: Upload bench summary
         if: always()

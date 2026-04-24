@@ -1,15 +1,29 @@
 name: Publish
 
-# phase4-017 — auto-publish on merge to main when changesets exist.
-# Uses the Changesets release action to:
-#   1. Either open a "Version packages" PR that bumps versions and
-#      consumes pending changesets, OR
-#   2. When that PR is merged back to main, publish the bumped
-#      versions to npm with the current pre-release dist-tag.
+# phase4-017 + phase5-019 — auto-publish on merge to main when
+# changesets exist, with explicit ceremony hooks for the
+# beta → 1.0 → GA transitions.
 #
-# During beta, run `pnpm changeset pre enter beta` locally once so
-# `.changeset/pre.json` exists. The release action reads that file
-# and publishes under the `beta` dist-tag automatically.
+# Normal flow (push to main): the Changesets release action either
+#   1. opens a "Version packages" PR that bumps versions and consumes
+#      pending changesets, OR
+#   2. when that PR merges, publishes the bumped versions to npm
+#      under the current dist-tag (`beta` during pre-release,
+#      `latest` after exit).
+#
+# Ceremony flow (workflow_dispatch): the maintainer picks a `mode`:
+#   - `auto`          — default, same as the push-triggered flow.
+#   - `enter-beta`    — one-shot: `pnpm changeset pre enter beta`
+#                        + commit + push. Flips the repo into
+#                        pre-release state before the first beta cut.
+#                        No-op if already in pre state.
+#   - `exit-beta`     — one-shot: `pnpm changeset pre exit` + commit
+#                        + push. Flips back to `latest` dist-tag for
+#                        the `v1.0.0` GA cut. No-op if not in pre.
+#   - `publish-only`  — skips the auto-ceremony detection and just
+#                        runs the changesets publish step. Useful
+#                        when a prior `enter-beta`/`exit-beta` job
+#                        already landed its commit.
 #
 # NPM_TOKEN must be a granular, automation-scoped token scoped to
 # the @anvilkit/* packages + create-anvilkit-plugin. Rotate on any
@@ -18,13 +32,84 @@ name: Publish
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Release mode"
+        required: true
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - enter-beta
+          - exit-beta
+          - publish-only
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  ceremony:
+    name: Ceremony (enter-beta / exit-beta)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && (inputs.mode == 'enter-beta' || inputs.mode == 'exit-beta')
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Enter beta (idempotent)
+        if: inputs.mode == 'enter-beta'
+        run: |
+          if [ -f .changeset/pre.json ]; then
+            echo "Already in pre-release state — nothing to do."
+            exit 0
+          fi
+          pnpm exec changeset pre enter beta
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .changeset/pre.json
+          git commit -m "chore(release): enter beta pre-release state"
+          git push origin main
+
+      - name: Exit beta (idempotent)
+        if: inputs.mode == 'exit-beta'
+        run: |
+          if [ ! -f .changeset/pre.json ]; then
+            echo "Not in pre-release state — nothing to do."
+            exit 0
+          fi
+          pnpm exec changeset pre exit
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .changeset/pre.json
+          git commit -m "chore(release): exit beta pre-release state"
+          git push origin main
+
   release:
     name: Version + publish
     runs-on: ubuntu-latest
+    needs: [ceremony]
+    # Run after ceremony (if any) finishes OR skips. `always()` keeps
+    # this job reachable when `ceremony` is skipped (push flow).
+    if: always() && (needs.ceremony.result == 'success' || needs.ceremony.result == 'skipped')
     permissions:
       contents: write
       pull-requests: write
@@ -53,6 +138,17 @@ jobs:
       - name: Build all packages
         run: pnpm build
 
+      - name: Report current release state
+        run: |
+          if [ -f .changeset/pre.json ]; then
+            echo "Changesets pre-release mode: ACTIVE (dist-tag = beta)"
+            cat .changeset/pre.json
+          else
+            echo "Changesets pre-release mode: INACTIVE (dist-tag = latest)"
+          fi
+          echo "Pending changesets:"
+          ls -la .changeset/*.md 2>/dev/null | grep -v README.md || echo "  (none)"
+
       # Changesets sanity. Runs the repo's full check:all for the
       # publishable runtime cone before version/publish, so a broken
       # tree never hits npm.
@@ -70,6 +166,7 @@ jobs:
       # PR instead of publishing — zero-op otherwise.
       - name: Create Release PR or Publish
         id: changesets
+        if: github.event_name == 'push' || inputs.mode == 'auto' || inputs.mode == 'publish-only'
         uses: changesets/action@v1
         with:
           publish: pnpm exec changeset publish

@@ -36,12 +36,32 @@ jobs:
         with:
           node-version: 20
 
+      # Pre-flight: confirm `@latest` resolves on npm. Catches the
+      # "first-GA not yet cut" state explicitly with a readable error
+      # instead of letting `pnpm dlx` fail with a generic resolution
+      # message. phase5-019 phase4-013 — the first `@latest` publish
+      # flips this step from a no-op past its first run.
+      - name: Verify create-anvilkit-plugin@latest exists on npm
+        id: check-dist-tag
+        run: |
+          set -e
+          VERSION="$(npm view create-anvilkit-plugin@latest version 2>/dev/null || echo '')"
+          if [ -z "$VERSION" ]; then
+            echo "::error::create-anvilkit-plugin has no @latest dist-tag on npm."
+            echo "::error::Trigger publish.yml with mode=publish-only after merging the Version PR,"
+            echo "::error::or run 'npm dist-tag add create-anvilkit-plugin@<version> latest' manually."
+            exit 1
+          fi
+          echo "Resolved create-anvilkit-plugin@latest => $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Scaffold a plugin from the latest published generator
         id: scaffold
         run: |
           WORKDIR="$(mktemp -d)"
           echo "workdir=$WORKDIR" >> "$GITHUB_OUTPUT"
           cd "$WORKDIR"
+          echo "Using create-anvilkit-plugin@${{ steps.check-dist-tag.outputs.version }}"
           pnpm dlx create-anvilkit-plugin@latest \
             --name hello-plugin \
             --display "Hello Plugin" \
