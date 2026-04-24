@@ -48,6 +48,14 @@ export default defineConfig({
 					autogenerate: { directory: "components" },
 				},
 				{
+					label: "Templates",
+					collapsed: false,
+					// Auto-populated from src/content/docs/templates/*.mdx,
+					// written by `scripts/generate-template-pages.mjs` at
+					// prebuild time (phase5-018).
+					autogenerate: { directory: "templates" },
+				},
+				{
 					label: "Guides",
 					collapsed: false,
 					items: [

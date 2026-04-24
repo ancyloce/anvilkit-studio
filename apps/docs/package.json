@@ -6,7 +6,8 @@
 	"scripts": {
 		"generate:components": "jiti scripts/generate-component-pages.ts",
 		"generate:api": "jiti scripts/generate-api-pages.ts",
-		"generate:all": "pnpm generate:components && pnpm generate:api",
+		"generate:templates": "node scripts/generate-template-pages.mjs",
+		"generate:all": "pnpm generate:components && pnpm generate:api && pnpm generate:templates",
 		"prebuild": "pnpm generate:all",
 		"predev": "pnpm generate:all",
 		"dev": "astro dev --host 0.0.0.0 --port 4321",
