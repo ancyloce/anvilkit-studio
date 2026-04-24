@@ -6,6 +6,7 @@ import {
 	missingDescriptionConfig,
 	missingFieldsConfig,
 	missingRenderConfig,
+	nestedNonSerializableDefaultConfig,
 	nonSerializableDefaultConfig,
 	unknownFieldTypeConfig,
 } from "./fixtures/invalid-configs.js";
@@ -78,6 +79,25 @@ describe("validateComponentConfig", () => {
 			"Broken",
 			"defaultProps",
 			"action",
+		]);
+	});
+
+	// ----- phase5-019 F-3: nested non-serializable defaults -----
+	it("reports E_NON_SERIALIZABLE_DEFAULT for a function buried inside a nested default prop", () => {
+		const result = validateComponentConfig(
+			nestedNonSerializableDefaultConfig,
+		);
+		expect(result.valid).toBe(false);
+		const issue = result.issues.find(
+			(i) => i.code === "E_NON_SERIALIZABLE_DEFAULT",
+		);
+		expect(issue).toBeDefined();
+		expect(issue!.componentName).toBe("Broken");
+		expect(issue!.path).toEqual([
+			"components",
+			"Broken",
+			"defaultProps",
+			"settings",
 		]);
 	});
 

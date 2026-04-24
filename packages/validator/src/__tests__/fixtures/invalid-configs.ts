@@ -59,6 +59,26 @@ export const nonSerializableDefaultConfig: Config = {
 	},
 };
 
+export const nestedNonSerializableDefaultConfig: Config = {
+	components: {
+		Broken: {
+			render: noop,
+			fields: {
+				settings: { type: "text" },
+			},
+			defaultProps: {
+				settings: {
+					layout: {
+						onPress: (() => {
+							/* noop */
+						}) as unknown,
+					},
+				} as unknown,
+			},
+		} as Config["components"][string],
+	},
+};
+
 export const missingDescriptionConfig: Config = {
 	components: {
 		Broken: {
