@@ -1,0 +1,40 @@
+{
+	"name": "@anvilkit/template-changelog",
+	"version": "0.1.0-alpha.0",
+	"description": "Changelog page — navbar, section heading, blog-list for entries.",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./page-ir.json": "./src/page-ir.json",
+		"./preview.png": "./preview.png"
+	},
+	"files": [
+		"dist",
+		"src/page-ir.json",
+		"preview.png",
+		"README.md"
+	],
+	"license": "MIT",
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"peerDependencies": {
+		"@anvilkit/core": "workspace:*"
+	},
+	"devDependencies": {
+		"@anvilkit/core": "workspace:*",
+		"@anvilkit/typescript-config": "workspace:*",
+		"typescript": "6.0.2"
+	},
+	"scripts": {
+		"build": "tsc",
+		"typecheck": "tsc --noEmit",
+		"clean": "rm -rf dist"
+	}
+}

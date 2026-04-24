@@ -1,0 +1,30 @@
+{
+	"version": "1",
+	"root": {
+		"id": "root",
+		"type": "__root__",
+		"props": {},
+		"children": [
+			{
+				"id": "navbar-1",
+				"type": "Navbar",
+				"props": {}
+			},
+			{
+				"id": "heading-1",
+				"type": "Section",
+				"props": {}
+			},
+			{
+				"id": "entries-1",
+				"type": "BlogList",
+				"props": {}
+			}
+		]
+	},
+	"assets": [],
+	"metadata": {
+		"title": "Changelog",
+		"description": "Navbar, section heading, and blog-list repurposed as the entry stream."
+	}
+}

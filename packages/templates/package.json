@@ -1,0 +1,20 @@
+{
+	"name": "@anvilkit/templates-workspace",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Aggregator scripts for the @anvilkit/template-* seed packages (phase5-017). Not published.",
+	"type": "module",
+	"scripts": {
+		"build": "pnpm --filter '@anvilkit/template-*' build",
+		"typecheck": "pnpm --filter '@anvilkit/template-*' typecheck",
+		"clean": "pnpm --filter '@anvilkit/template-*' clean",
+		"verify": "node scripts/verify-templates.mjs",
+		"scaffold:package-jsons": "node scripts/scaffold-package-jsons.mjs",
+		"scaffold:tsconfigs": "node scripts/scaffold-tsconfigs.mjs",
+		"scaffold:sources": "node scripts/scaffold-sources.mjs",
+		"scaffold:page-irs": "node scripts/scaffold-page-irs.mjs",
+		"scaffold:placeholders": "node scripts/write-placeholder-previews.mjs",
+		"scaffold": "pnpm scaffold:package-jsons && pnpm scaffold:tsconfigs && pnpm scaffold:sources && pnpm scaffold:page-irs && pnpm scaffold:placeholders",
+		"capture-previews": "tsx scripts/capture-template-previews.ts"
+	}
+}

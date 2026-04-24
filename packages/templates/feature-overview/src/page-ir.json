@@ -1,0 +1,40 @@
+{
+	"version": "1",
+	"root": {
+		"id": "root",
+		"type": "__root__",
+		"props": {},
+		"children": [
+			{
+				"id": "navbar-1",
+				"type": "Navbar",
+				"props": {}
+			},
+			{
+				"id": "hero-1",
+				"type": "Hero",
+				"props": {}
+			},
+			{
+				"id": "features-1",
+				"type": "BentoGrid",
+				"props": {}
+			},
+			{
+				"id": "stats-1",
+				"type": "Statistics",
+				"props": {}
+			},
+			{
+				"id": "faq-1",
+				"type": "Helps",
+				"props": {}
+			}
+		]
+	},
+	"assets": [],
+	"metadata": {
+		"title": "Feature Overview",
+		"description": "Navbar, hero, bento feature grid, statistics, and FAQ."
+	}
+}
