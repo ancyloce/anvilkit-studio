@@ -86,6 +86,20 @@ function walkValue(
 	}
 }
 
+function walkNode(
+	node: PageIRNode | { props: Record<string, unknown> },
+	seen: Map<string, PageIRAsset>,
+	derive: (url: string) => string,
+): void {
+	walkValue(node.props, seen, derive);
+
+	if ("children" in node && Array.isArray(node.children)) {
+		for (const child of node.children) {
+			walkNode(child, seen, derive);
+		}
+	}
+}
+
 /**
  * Walk a node's props and collect every asset reference into a
  * deduplicated, deterministically-ordered list.
@@ -108,15 +122,7 @@ export function collectAssets(
 	const derive = opts?.deriveId ?? deriveAssetId;
 	const seen = new Map<string, PageIRAsset>();
 
-	// Walk this node's props
-	walkValue(node.props, seen, derive);
-
-	// Walk children recursively if present
-	if ("children" in node && Array.isArray(node.children)) {
-		for (const child of node.children) {
-			walkValue(child.props, seen, derive);
-		}
-	}
+	walkNode(node, seen, derive);
 
 	return [...seen.values()];
 }

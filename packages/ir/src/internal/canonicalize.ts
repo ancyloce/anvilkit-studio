@@ -4,7 +4,7 @@
  * - Alphabetical key sort
  * - `undefined` values stripped
  * - `Date` instances coerced to ISO strings
- * - Function values dropped (caller handles the warning)
+ * - Function and other non-JSON values dropped (caller handles warnings)
  *
  * @internal — not part of the public `@anvilkit/ir` surface.
  */
@@ -16,42 +16,149 @@ function isFunction(value: unknown): value is (...args: unknown[]) => unknown {
 	return typeof value === "function";
 }
 
+const OMIT = Symbol("canonicalize.omit");
+
+type CanonicalValue = unknown | typeof OMIT;
+
+function isObject(value: unknown): value is Record<string, unknown> {
+	return value !== null && typeof value === "object";
+}
+
+function appendObjectPath(parent: string, key: string): string {
+	return parent.length === 0 ? key : `${parent}.${key}`;
+}
+
+function appendArrayPath(parent: string, index: number): string {
+	return `${parent}[${index}]`;
+}
+
+function canonicalizeValue(
+	value: unknown,
+	path: string,
+	droppedFunctions: string[],
+	droppedCircularRefs: string[],
+	droppedUnsupportedValues: string[],
+	ancestors: WeakSet<object>,
+): CanonicalValue {
+	if (value === undefined) return OMIT;
+
+	if (isFunction(value)) {
+		droppedFunctions.push(path);
+		return OMIT;
+	}
+
+	if (typeof value === "symbol" || typeof value === "bigint") {
+		droppedUnsupportedValues.push(path);
+		return OMIT;
+	}
+
+	if (value instanceof Date) {
+		return value.toISOString();
+	}
+
+	if (Array.isArray(value)) {
+		if (ancestors.has(value)) {
+			droppedCircularRefs.push(path);
+			return OMIT;
+		}
+
+		ancestors.add(value);
+		const result: unknown[] = [];
+
+		for (let index = 0; index < value.length; index += 1) {
+			const canonical = canonicalizeValue(
+				value[index],
+				appendArrayPath(path, index),
+				droppedFunctions,
+				droppedCircularRefs,
+				droppedUnsupportedValues,
+				ancestors,
+			);
+
+			if (canonical !== OMIT) {
+				result.push(canonical);
+			}
+		}
+
+		ancestors.delete(value);
+		return result;
+	}
+
+	if (isObject(value)) {
+		if (ancestors.has(value)) {
+			droppedCircularRefs.push(path);
+			return OMIT;
+		}
+
+		ancestors.add(value);
+		const result: Record<string, unknown> = {};
+
+		for (const key of Object.keys(value).sort()) {
+			const canonical = canonicalizeValue(
+				value[key],
+				appendObjectPath(path, key),
+				droppedFunctions,
+				droppedCircularRefs,
+				droppedUnsupportedValues,
+				ancestors,
+			);
+
+			if (canonical !== OMIT) {
+				result[key] = canonical;
+			}
+		}
+
+		ancestors.delete(value);
+		return result;
+	}
+
+	return value;
+}
+
 /**
  * Canonicalize a props bag:
  *
- * 1. Sort keys alphabetically.
+ * 1. Sort object keys alphabetically at every level.
  * 2. Strip `undefined` values.
  * 3. Coerce `Date` → ISO string.
- * 4. Drop function values (returns the dropped key names).
+ * 4. Drop function and non-JSON values (returns dropped paths).
+ * 5. Guard circular references.
  *
  * Does **not** mutate the input.
  */
 export function canonicalizeProps(raw: Record<string, unknown>): {
 	props: Readonly<Record<string, unknown>>;
 	droppedFunctions: readonly string[];
+	droppedCircularRefs: readonly string[];
+	droppedUnsupportedValues: readonly string[];
 } {
 	const sorted: Record<string, unknown> = {};
 	const droppedFunctions: string[] = [];
+	const droppedCircularRefs: string[] = [];
+	const droppedUnsupportedValues: string[] = [];
+	const ancestors = new WeakSet<object>();
 
 	for (const key of Object.keys(raw).sort()) {
-		const value = raw[key];
+		const canonical = canonicalizeValue(
+			raw[key],
+			key,
+			droppedFunctions,
+			droppedCircularRefs,
+			droppedUnsupportedValues,
+			ancestors,
+		);
 
-		if (value === undefined) continue;
-
-		if (isFunction(value)) {
-			droppedFunctions.push(key);
-			continue;
+		if (canonical !== OMIT) {
+			sorted[key] = canonical;
 		}
-
-		if (value instanceof Date) {
-			sorted[key] = value.toISOString();
-			continue;
-		}
-
-		sorted[key] = value;
 	}
 
-	return { props: sorted, droppedFunctions };
+	return {
+		props: sorted,
+		droppedFunctions,
+		droppedCircularRefs,
+		droppedUnsupportedValues,
+	};
 }
 
 /**
