@@ -17,6 +17,7 @@ const __dirname = dirname(__filename);
 const PACKAGE_ROOT = resolve(__dirname, "..");
 const API_SNAPSHOT_PATH = resolve(PACKAGE_ROOT, "api/api-snapshot.json");
 const PNPM_BIN = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+const UPDATE = process.argv.includes("--update");
 
 function run(command, args) {
 	const result = spawnSync(command, args, {
@@ -37,15 +38,11 @@ function main() {
 	const typedocStatus = run(PNPM_BIN, [
 		"exec",
 		"typedoc",
+		"--options",
+		"./typedoc.json",
 		"--json",
 		tempSnapshotPath,
 		"--disableSources",
-		"--entryPoints",
-		"./src/index.ts",
-		"--tsconfig",
-		"./tsconfig.json",
-		"--logLevel",
-		"Warn",
 	]);
 
 	if (typedocStatus !== 0) {
@@ -64,10 +61,16 @@ function main() {
 		return;
 	}
 
-	copyFileSync(tempSnapshotPath, API_SNAPSHOT_PATH);
+	if (UPDATE) {
+		copyFileSync(tempSnapshotPath, API_SNAPSHOT_PATH);
+		rmSync(tempDir, { force: true, recursive: true });
+		console.log("check-api-snapshot: UPDATED — api/api-snapshot.json.");
+		return;
+	}
+
 	rmSync(tempDir, { force: true, recursive: true });
 	console.error(
-		"check-api-snapshot: FAIL — api/api-snapshot.json changed after regeneration. Commit the updated snapshot.",
+		"check-api-snapshot: FAIL — api/api-snapshot.json is out of date. Run `pnpm update:api-snapshot` and commit the result.",
 	);
 	process.exit(1);
 }

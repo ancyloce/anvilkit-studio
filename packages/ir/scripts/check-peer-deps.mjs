@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const PACKAGE_ROOT = resolve(__dirname, "..");
 const PACKAGE_JSON = resolve(PACKAGE_ROOT, "package.json");
-const REQUIRED_PEERS = ["@puckeditor/core"];
+const REQUIRED_PEERS = ["@anvilkit/core", "@puckeditor/core"];
 
 async function main() {
 	const pkg = JSON.parse(await readFile(PACKAGE_JSON, "utf8"));
