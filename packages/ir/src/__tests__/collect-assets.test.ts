@@ -131,6 +131,20 @@ describe("collectAssets", () => {
 		expect(assets).toHaveLength(1);
 	});
 
+	it("finds assets on grandchildren", () => {
+		const assets = collectAssets(
+			node({}, [
+				node({}, [
+					node({
+						src: "https://cdn.example.com/grandchild.png",
+					}),
+				]),
+			]),
+		);
+		expect(assets).toHaveLength(1);
+		expect(assets[0]!.url).toBe("https://cdn.example.com/grandchild.png");
+	});
+
 	// ----- Determinism -----
 
 	it("produces the same ids for the same input across two calls", () => {

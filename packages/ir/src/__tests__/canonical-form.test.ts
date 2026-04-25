@@ -1,5 +1,5 @@
 import type { Config, Data } from "@puckeditor/core";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { puckDataToIR } from "../puck-data-to-ir.js";
 import { allDemoFixtures } from "./fixtures/demo-fixtures.js";
 
@@ -108,6 +108,118 @@ describe("canonical form", () => {
 		const ir = puckDataToIR(data, config, { now: FIXED_CLOCK });
 		const node = ir.root.children![0]!;
 		expect(node.props.createdAt).toBe("2025-01-15T12:00:00.000Z");
+	});
+
+	it("canonicalizes nested arrays and objects into serializable props", () => {
+		const data: Data = {
+			root: {},
+			content: [
+				{
+					type: "Test",
+					props: {
+						id: "test-1",
+						cards: [
+							{
+								z: 3,
+								onClick: () => {
+									/* intentionally empty for test */
+								},
+								startsAt: new Date("2025-02-01T12:00:00.000Z"),
+								drop: undefined,
+								nested: { b: 2, a: 1 },
+							},
+						],
+						items: [
+							undefined,
+							() => {
+								/* intentionally empty for test */
+							},
+							"keep",
+						],
+					} as Record<string, unknown> & { id: string },
+				},
+			],
+		};
+		const config: Config = {
+			components: {
+				Test: { render: noop, fields: {} },
+			},
+		};
+		const warnings: unknown[] = [];
+
+		const ir = puckDataToIR(data, config, {
+			now: FIXED_CLOCK,
+			onWarning: (w) => warnings.push(w),
+		});
+		const node = ir.root.children![0]!;
+
+		expect(node.props).toEqual({
+			cards: [
+				{
+					nested: { a: 1, b: 2 },
+					startsAt: "2025-02-01T12:00:00.000Z",
+					z: 3,
+				},
+			],
+			items: ["keep"],
+		});
+		expect(
+			Object.keys(
+				((node.props.cards as Record<string, unknown>[])[0]!.nested ??
+					{}) as Record<string, unknown>,
+			),
+		).toEqual(["a", "b"]);
+		expect(JSON.parse(JSON.stringify(node.props))).toEqual(node.props);
+		expect(warnings).toHaveLength(2);
+		expect(warnings).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					code: "FUNCTION_PROP_DROPPED",
+					message: expect.stringContaining("cards[0].onClick"),
+				}),
+				expect.objectContaining({
+					code: "FUNCTION_PROP_DROPPED",
+					message: expect.stringContaining("items[1]"),
+				}),
+			]),
+		);
+	});
+
+	it("drops circular props with a path-aware warning", () => {
+		const circular: Record<string, unknown> = { label: "ok" };
+		circular.self = circular;
+		const data: Data = {
+			root: {},
+			content: [
+				{
+					type: "Test",
+					props: {
+						id: "test-1",
+						circular,
+					} as Record<string, unknown> & { id: string },
+				},
+			],
+		};
+		const config: Config = {
+			components: {
+				Test: { render: noop, fields: {} },
+			},
+		};
+		const warnings: unknown[] = [];
+
+		const ir = puckDataToIR(data, config, {
+			now: FIXED_CLOCK,
+			onWarning: (w) => warnings.push(w),
+		});
+		const node = ir.root.children![0]!;
+
+		expect(node.props).toEqual({ circular: { label: "ok" } });
+		expect(warnings).toEqual([
+			expect.objectContaining({
+				code: "CIRCULAR_PROP_DROPPED",
+				message: expect.stringContaining("circular.self"),
+			}),
+		]);
 	});
 
 	it("output IR is deeply frozen", () => {
