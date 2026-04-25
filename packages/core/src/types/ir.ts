@@ -126,6 +126,19 @@ export interface PageIRNode {
 	 */
 	readonly props: Readonly<Record<string, unknown>>;
 	/**
+	 * Optional parent slot/zone name this node belongs to.
+	 *
+	 * Top-level nodes in the root content omit this field. Nested
+	 * nodes produced from a Puck slot field carry the slot field key
+	 * here so `irToPuckData()` can rebuild the correct parent prop.
+	 */
+	readonly slot?: string;
+	/**
+	 * Distinguishes modern Puck slot fields from legacy `data.zones`
+	 * entries when {@link slot} is present. Omitted means `"slot"`.
+	 */
+	readonly slotKind?: "slot" | "zone";
+	/**
 	 * Optional child nodes. Absent on leaf nodes.
 	 */
 	readonly children?: readonly PageIRNode[];
