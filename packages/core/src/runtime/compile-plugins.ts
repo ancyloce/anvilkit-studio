@@ -146,8 +146,9 @@ interface ParsedSemver {
  * payoff.
  */
 function parseSemver(input: string): ParsedSemver | null {
-	const match =
-		/^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/.exec(input.trim());
+	const match = /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/.exec(
+		input.trim(),
+	);
 	if (match === null) {
 		return null;
 	}
@@ -158,9 +159,7 @@ function parseSemver(input: string): ParsedSemver | null {
 			if (segment.length === 0) {
 				return null;
 			}
-			prerelease.push(
-				/^\d+$/.test(segment) ? Number(segment) : segment,
-			);
+			prerelease.push(/^\d+$/.test(segment) ? Number(segment) : segment);
 		}
 	}
 	return {
@@ -224,7 +223,7 @@ function compareSemver(a: ParsedSemver, b: ParsedSemver): number {
  * Returns `false` for malformed input so a typo surfaces as a loud
  * "coreVersion does not match" error instead of a silent accept.
  */
-function isCoreVersionCompatible(
+export function isCoreVersionCompatible(
 	requested: string,
 	installedRaw: string = CORE_VERSION,
 ): boolean {
@@ -397,11 +396,6 @@ export interface CompilePluginsOptions {
 	readonly lifecycle?: LifecycleManagerOptions;
 }
 
-const baseAssetResolverRegistrarByContext = new WeakMap<
-	StudioPluginContext,
-	StudioPluginContext["registerAssetResolver"]
->();
-
 export async function compilePlugins(
 	plugins: readonly (StudioPlugin | PuckPlugin)[],
 	ctx: StudioPluginContext,
@@ -422,17 +416,12 @@ export async function compilePlugins(
 	const headerActions: StudioHeaderAction[] = [];
 	const puckPlugins: PuckPlugin[] = [];
 	const overrides: Partial<PuckOverrides>[] = [];
-	const baseRegisterAssetResolver =
-		baseAssetResolverRegistrarByContext.get(ctx) ?? ctx.registerAssetResolver;
-
-	baseAssetResolverRegistrarByContext.set(ctx, baseRegisterAssetResolver);
-	(
-		ctx as {
-			registerAssetResolver: StudioPluginContext["registerAssetResolver"];
-		}
-	).registerAssetResolver = (resolver) => {
-		assetResolvers.push(resolver);
-		baseRegisterAssetResolver(resolver);
+	const pluginCtx: StudioPluginContext = {
+		...ctx,
+		registerAssetResolver: (resolver) => {
+			assetResolvers.push(resolver);
+			ctx.registerAssetResolver(resolver);
+		},
 	};
 
 	for (const [index, plugin] of plugins.entries()) {
@@ -456,7 +445,7 @@ export async function compilePlugins(
 
 			let registration: StudioPluginRegistration;
 			try {
-				registration = await plugin.register(ctx);
+				registration = await plugin.register(pluginCtx);
 			} catch (error) {
 				if (error instanceof StudioPluginError) {
 					throw error;

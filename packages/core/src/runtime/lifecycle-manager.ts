@@ -210,6 +210,7 @@ export function createLifecycleManager(
 		onAfterPublish: new Set(),
 		onDestroy: new Set(),
 	};
+	let disposed = false;
 
 	/**
 	 * Resolve the hook function a given registration contributes for
@@ -277,6 +278,9 @@ export function createLifecycleManager(
 				invokeHook("onDataChange", registration, ctx, payload),
 			),
 		);
+		if (disposed) {
+			return;
+		}
 		for (const [index, result] of settled.entries()) {
 			if (result.status === "rejected") {
 				const registration = registrations[index];
@@ -330,6 +334,10 @@ export function createLifecycleManager(
 		ctx: StudioPluginContext,
 		payload?: PuckData,
 	): Promise<void> {
+		if (disposed) {
+			return;
+		}
+
 		if (event === "onDataChange" && debounceMs > 0) {
 			// Coalesce rapid emits. The returned promise resolves
 			// immediately — upstream callers are fire-and-forget and
@@ -338,6 +346,9 @@ export function createLifecycleManager(
 				clearTimeout(pendingDataChange.timer);
 			}
 			const timer = setTimeout(() => {
+				if (disposed) {
+					return;
+				}
 				const snapshot = pendingDataChange;
 				pendingDataChange = null;
 				if (snapshot === null) {
@@ -390,6 +401,9 @@ export function createLifecycleManager(
 				invokeHook(event, registration, ctx, payload),
 			),
 		);
+		if (disposed) {
+			return;
+		}
 
 		for (const [index, result] of settled.entries()) {
 			if (result.status === "rejected") {
@@ -409,6 +423,7 @@ export function createLifecycleManager(
 	}
 
 	function dispose(): void {
+		disposed = true;
 		if (pendingDataChange !== null) {
 			clearTimeout(pendingDataChange.timer);
 			pendingDataChange = null;

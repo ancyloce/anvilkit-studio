@@ -213,6 +213,32 @@ describe("createLifecycleManager — onDataChange / onAfterPublish", () => {
 			expect.objectContaining({ error: expect.any(Error) }),
 		);
 	});
+
+	it("does not log in-flight parallel hook rejections after dispose", async () => {
+		let rejectHook: ((error: Error) => void) | undefined;
+		const lifecycle = createLifecycleManager([
+			makeRegistration("slow", {
+				onAfterPublish() {
+					return new Promise<void>((_resolve, reject) => {
+						rejectHook = reject;
+					});
+				},
+			}),
+		]);
+
+		const { ctx, log } = makeCtx();
+		const emitPromise = lifecycle.emit("onAfterPublish", ctx, {
+			root: { props: {} },
+			content: [],
+			zones: {},
+		});
+
+		lifecycle.dispose();
+		rejectHook?.(new Error("late failure"));
+
+		await expect(emitPromise).resolves.toBeUndefined();
+		expect(log).not.toHaveBeenCalled();
+	});
 });
 
 describe("createLifecycleManager — subscribe", () => {

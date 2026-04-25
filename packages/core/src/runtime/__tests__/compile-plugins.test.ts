@@ -32,7 +32,7 @@ import type {
 	StudioPluginMeta,
 	StudioPluginRegistration,
 } from "../../types/plugin.js";
-import { compilePlugins } from "../compile-plugins.js";
+import { compilePlugins, isCoreVersionCompatible } from "../compile-plugins.js";
 import { StudioPluginError } from "../errors.js";
 import { CORE_VERSION } from "../version.js";
 
@@ -64,6 +64,7 @@ function makePlugin(
 		coreVersion?: string;
 		register?: (
 			meta: StudioPluginMeta,
+			ctx: StudioPluginContext,
 		) => StudioPluginRegistration | Promise<StudioPluginRegistration>;
 	} = {},
 ): StudioPlugin {
@@ -76,7 +77,7 @@ function makePlugin(
 	const register = options.register ?? ((m) => ({ meta: m }));
 	return {
 		meta,
-		register: () => register(meta),
+		register: (ctx) => register(meta, ctx),
 	};
 }
 
@@ -195,11 +196,12 @@ describe("compilePlugins — happy paths", () => {
 	it("collects asset resolvers registered through the plugin context", async () => {
 		const resolver = vi.fn();
 		const ctx = makeCtx();
+		const originalRegisterAssetResolver = ctx.registerAssetResolver;
 		const runtime = await compilePlugins(
 			[
 				makePlugin("com.example.assets", {
-					register: (meta) => {
-						ctx.registerAssetResolver(resolver);
+					register: (meta, pluginCtx) => {
+						pluginCtx.registerAssetResolver(resolver);
 						return {
 							meta,
 						};
@@ -210,6 +212,8 @@ describe("compilePlugins — happy paths", () => {
 		);
 
 		expect(runtime.assetResolvers).toEqual([resolver]);
+		expect(ctx.registerAssetResolver).toBe(originalRegisterAssetResolver);
+		expect(originalRegisterAssetResolver).toHaveBeenCalledWith(resolver);
 	});
 });
 
@@ -271,6 +275,122 @@ describe("compilePlugins — duplicate export format ids", () => {
 				return true;
 			},
 		);
+	});
+});
+
+// ----------------------------------------------------------------------
+// Semver edge cases (F5 in docs/code-review/packages-core-review.md).
+//
+// `isCoreVersionCompatible` re-implements semver range matching so the
+// runtime stays dependency-free. The tests below pin the corners that
+// are easy to regress: caret on `0.0.x`, prerelease ordering, three-
+// segment prefix ranges, and malformed input.
+// ----------------------------------------------------------------------
+
+describe("isCoreVersionCompatible — caret semantics", () => {
+	it.each<[string, string, boolean]>([
+		// `^0.0.x` should pin to that exact patch (caret on a 0.0.x
+		// version behaves as exact). Bumping the patch falls out of
+		// range; bumping anything else is also a miss.
+		["^0.0.3", "0.0.3", true],
+		["^0.0.3", "0.0.4", false],
+		["^0.0.3", "0.0.2", false],
+		["^0.0.3", "0.1.0", false],
+
+		// `^0.Y.Z` should match the same minor, any patch >= base.
+		["^0.2.3", "0.2.3", true],
+		["^0.2.3", "0.2.9", true],
+		["^0.2.3", "0.3.0", false],
+		["^0.2.3", "0.2.2", false],
+
+		// `^X.Y.Z` should match the same major, any minor.patch >= base.
+		["^1.2.3", "1.2.3", true],
+		["^1.2.3", "1.2.4", true],
+		["^1.2.3", "1.9.0", true],
+		["^1.2.3", "2.0.0", false],
+	])("%s against %s → %s", (range, installed, expected) => {
+		expect(isCoreVersionCompatible(range, installed)).toBe(expected);
+	});
+});
+
+describe("isCoreVersionCompatible — prerelease ordering", () => {
+	it.each<[string, string, boolean]>([
+		// Same numeric prerelease segment ordering (alpha.1 < alpha.2).
+		["1.2.3-alpha.1", "1.2.3-alpha.2", false],
+		["1.2.3-alpha.2", "1.2.3-alpha.2", true],
+		["1.2.3-alpha.2", "1.2.3-alpha.1", false],
+		// Caret with prerelease only matches same-tuple prereleases.
+		["^1.2.3-alpha.0", "1.2.3-alpha.0", true],
+		["^1.2.3-alpha.0", "1.2.3-alpha.1", true],
+		["^1.2.3-alpha.0", "1.2.4-alpha.0", false],
+		["^1.2.3-alpha.0", "1.2.3", true],
+		// String prerelease segments compared lexically.
+		["1.2.3-beta", "1.2.3-alpha", false],
+		["1.2.3-alpha", "1.2.3-beta", false],
+	])("%s against %s → %s", (range, installed, expected) => {
+		expect(isCoreVersionCompatible(range, installed)).toBe(expected);
+	});
+});
+
+describe("isCoreVersionCompatible — three-segment prefix and exact", () => {
+	it.each<[string, string, boolean]>([
+		// Bare `X.Y.Z` should accept the exact installed version only.
+		["1.2.3", "1.2.3", true],
+		["1.2.3", "1.2.4", false],
+		["1.2.3", "1.3.0", false],
+		// Two-segment prefix (`X.Y`) matches any patch on that minor.
+		["1.2", "1.2.0", true],
+		["1.2", "1.2.99", true],
+		["1.2", "1.3.0", false],
+		// One-segment prefix (`X`) matches any minor / patch.
+		["1", "1.0.0", true],
+		["1", "1.99.99", true],
+		["1", "2.0.0", false],
+		// Prefix ranges exclude prereleases by default.
+		["1", "1.0.0-alpha.0", false],
+		["1.2", "1.2.0-alpha.0", false],
+	])("%s against %s → %s", (range, installed, expected) => {
+		expect(isCoreVersionCompatible(range, installed)).toBe(expected);
+	});
+});
+
+describe("isCoreVersionCompatible — malformed input", () => {
+	it.each<[string, string]>([
+		["1.2.3.4", "1.2.3"],
+		["v1.2.3", "1.2.3"],
+		["1.2", "1.2.3"], // technically a prefix; passed in as installed-only test below
+		["", "1.2.3"],
+		["   ", "1.2.3"],
+		["abc", "1.2.3"],
+		["^", "1.2.3"],
+		["~", "1.2.3"],
+		["1.2.3-", "1.2.3"],
+	])("rejects malformed range %s (installed %s)", (range, installed) => {
+		// `"1.2"` here is a valid prefix range and DOES match `1.2.3`,
+		// so allow that one case through; the rest must be loud fails.
+		const result = isCoreVersionCompatible(range, installed);
+		if (range.trim() === "1.2") {
+			expect(result).toBe(true);
+		} else {
+			expect(result).toBe(false);
+		}
+	});
+
+	it.each<[string]>([
+		["1.2.3.4"],
+		["v1.2.3"],
+		["abc"],
+		[""],
+		[".1.2"],
+	])("rejects malformed installed version %s", (installed) => {
+		expect(isCoreVersionCompatible("^1.2.3", installed)).toBe(false);
+	});
+
+	it("trims surrounding whitespace before parsing the range", () => {
+		// Trailing / leading whitespace is plausible operator-error
+		// (copy-paste from a YAML field), so the parser tolerates it
+		// instead of failing closed on a near-miss.
+		expect(isCoreVersionCompatible("  ^1.2.3  ", "1.2.3")).toBe(true);
 	});
 });
 
