@@ -1,0 +1,14 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "../packages/configs/typescript-config/base.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": false,
+		"noEmit": true,
+		"types": ["node"],
+		"resolveJsonModule": true,
+		"jsx": "react-jsx"
+	},
+	"include": ["**/*.ts", "**/*.mjs", "types.d.ts"],
+	"exclude": ["node_modules"]
+}

@@ -131,5 +131,5 @@ function mutateHundredNodeIR(ir: PageIR): PageIR {
 	});
 	sections[2]?.children?.splice(0, 1);
 
-	return next;
+	return next as unknown as PageIR;
 }

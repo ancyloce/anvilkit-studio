@@ -10,10 +10,12 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { runComponentEmitBench } from "./component-emit.bench.js";
+import { runComponentRenderBench } from "./component-render.bench.js";
+import { runEditorLoadBench } from "./editor-load.bench.js";
 import { runHtmlExportBench } from "./html-export.bench.js";
 import { runIrDiffBench } from "./ir-diff.bench.js";
 import { runIrRoundtripBench } from "./ir-roundtrip.bench.js";
-import { runComponentRenderBench } from "./component-render.bench.js";
 import type {
 	BenchBaseline,
 	BenchBaselineEntry,
@@ -55,6 +57,23 @@ function toBaselineEntry(result: BenchResult): BenchBaselineEntry {
 
 function compare(results: BenchResult[], baseline: BenchBaseline): BenchComparison[] {
 	return results.map((r) => {
+		// NaN means the bench detected its preconditions weren't met
+		// and returned a sentinel (e.g. `editor-load` when the demo
+		// isn't reachable). Treat as skipped — do not regress, do not
+		// update baseline, do not fail.
+		if (Number.isNaN(r.meanMs)) {
+			return {
+				name: r.name,
+				meanMs: r.meanMs,
+				baselineMeanMs: baseline[r.name]?.meanMs ?? null,
+				meanDeltaPct: null,
+				bytes: r.bytes,
+				baselineBytes: baseline[r.name]?.bytes,
+				bytesDeltaPct: null,
+				regression: false,
+				reasons: ["skipped (preconditions not met)"],
+			};
+		}
 		const b = baseline[r.name];
 		if (!b) {
 			return {
@@ -109,7 +128,7 @@ function formatTable(comparisons: BenchComparison[]): string {
 		"| ----- | --------: | -------: | ------ | ----: | ------- | ------ |",
 	);
 	for (const c of comparisons) {
-		const mean = c.meanMs.toFixed(3);
+		const mean = Number.isNaN(c.meanMs) ? "—" : c.meanMs.toFixed(3);
 		const base = c.baselineMeanMs !== null ? c.baselineMeanMs.toFixed(3) : "—";
 		const meanDelta =
 			c.meanDeltaPct !== null ? `${c.meanDeltaPct >= 0 ? "+" : ""}${c.meanDeltaPct.toFixed(1)}%` : "—";
@@ -120,11 +139,13 @@ function formatTable(comparisons: BenchComparison[]): string {
 				: "—";
 		const status = c.regression
 			? `FAIL: ${c.reasons.join("; ")}`
-			: c.baselineMeanMs === null
-				? "new"
-				: c.baselineMeanMs < NOISE_FLOOR_MS
-					? "ok (sub-ms: no gate)"
-					: "ok";
+			: Number.isNaN(c.meanMs)
+				? "skipped"
+				: c.baselineMeanMs === null
+					? "new"
+					: c.baselineMeanMs < NOISE_FLOOR_MS
+						? "ok (sub-ms: no gate)"
+						: "ok";
 		lines.push(`| ${c.name} | ${mean} | ${base} | ${meanDelta} | ${bytes} | ${bytesDelta} | ${status} |`);
 	}
 	return lines.join("\n");
@@ -137,13 +158,23 @@ async function main(): Promise<void> {
 	allResults.push(await runHtmlExportBench());
 	allResults.push(await runIrDiffBench());
 	allResults.push(await runIrRoundtripBench());
+	allResults.push(...(await runComponentEmitBench()));
 	allResults.push(...(await runComponentRenderBench()));
+	allResults.push(...(await runEditorLoadBench()));
 
 	if (updateMode) {
-		const next: BenchBaseline = {};
-		for (const r of allResults) next[r.name] = toBaselineEntry(r);
+		// Preserve existing baseline entries for benches that returned
+		// NaN on this run — skipping a bench must NOT erase its pinned
+		// baseline. Only overwrite entries we measured successfully.
+		const next: BenchBaseline = { ...readBaseline() };
+		for (const r of allResults) {
+			if (Number.isNaN(r.meanMs)) continue;
+			next[r.name] = toBaselineEntry(r);
+		}
 		writeBaseline(next);
-		console.log(`bench: updated ${BASELINE_PATH} with ${allResults.length} entries.`);
+		console.log(
+			`bench: updated ${BASELINE_PATH} with ${allResults.filter((r) => !Number.isNaN(r.meanMs)).length} measured entries.`,
+		);
 		return;
 	}
 

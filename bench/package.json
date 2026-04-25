@@ -1,0 +1,7 @@
+{
+	"name": "@anvilkit/bench",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Bench harness (phase4-015 / phase5-019). Not a workspace member — tsx runs these files from the repo root against hoisted dependencies.",
+	"type": "module"
+}
