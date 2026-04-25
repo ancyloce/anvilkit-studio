@@ -260,13 +260,20 @@ function setNested(
  * {@link StudioConfig}.
  *
  * Pure function — accepts the env bag as a parameter so tests can
- * pass synthetic inputs without mutating `process.env`. Never throws.
+ * pass synthetic inputs without mutating `process.env`.
  *
  * @param env - The env bag to walk. Defaults to `process.env` when
  * that global exists, otherwise an empty object.
  * @returns A partial config shape. Keys that do not match the
- * `ANVILKIT_` prefix, keys whose value is `undefined`, and keys that
- * split into an empty segment are silently skipped.
+ * `ANVILKIT_` prefix and keys whose value is `undefined` are skipped.
+ * @throws {TypeError} When two `ANVILKIT_*` env vars collide on the
+ * same path — e.g. setting both `ANVILKIT_FEATURES=1` and
+ * `ANVILKIT_FEATURES__ENABLE_EXPORT=1` (a scalar and a nested object
+ * cannot coexist at the same key). Also thrown when an explicit
+ * `num:` / `bool:` type prefix carries an uncoercible value, or when
+ * the env var name contains an empty nested path segment. These cases
+ * are operator-actionable: the message names the bad path or key so
+ * the host process can be reconfigured.
  */
 export function parseStudioEnv(
 	env: Record<string, string | undefined> = defaultEnv(),
@@ -287,11 +294,10 @@ export function parseStudioEnv(
 		}
 
 		const segments = tail.split(SEPARATOR);
-		// A malformed key like `ANVILKIT_A____B` (four underscores)
-		// splits into `["A", "", "B"]`; skip the whole entry rather
-		// than try to guess the author's intent.
 		if (segments.some((segment) => segment.length === 0)) {
-			continue;
+			throw new TypeError(
+				`parseStudioEnv: env var "${rawKey}" contains an empty path segment. Use "${SEPARATOR}" only between non-empty path parts.`,
+			);
 		}
 
 		const path = segments.map(segmentToCamelCase);

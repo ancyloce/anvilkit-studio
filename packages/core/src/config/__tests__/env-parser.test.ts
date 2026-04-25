@@ -88,14 +88,20 @@ describe("parseStudioEnv — nested-path separator", () => {
 		});
 	});
 
-	it("skips malformed keys with empty segments", () => {
+	it("throws for malformed keys with empty segments", () => {
 		// Four underscores in a row → one empty segment in the split.
-		// Treat the whole entry as malformed and drop it rather than
-		// guess intent.
-		const result = parseStudioEnv({
-			ANVILKIT_FOO____BAR: "true",
-		});
-		expect(result).toEqual({});
+		// Treat the whole entry as operator-actionable config error
+		// rather than guessing intent.
+		expect(() =>
+			parseStudioEnv({
+				ANVILKIT_FOO____BAR: "true",
+			}),
+		).toThrow(TypeError);
+		expect(() =>
+			parseStudioEnv({
+				ANVILKIT_FOO____BAR: "true",
+			}),
+		).toThrow(/ANVILKIT_FOO____BAR/);
 	});
 });
 
@@ -190,6 +196,46 @@ describe("parseStudioEnv — value coercion", () => {
 			ANVILKIT_BRANDING__APP_NAME: "Custom Studio",
 		});
 		expect(result.branding?.appName).toBe("Custom Studio");
+	});
+});
+
+describe("parseStudioEnv — collisions", () => {
+	it("throws TypeError when a scalar and a nested object collide on the parent", () => {
+		// `ANVILKIT_FEATURES=1` projects a scalar at `features`;
+		// `ANVILKIT_FEATURES__ENABLE_EXPORT=1` projects a nested object at the
+		// same path. Object iteration order is unspecified, so the parser must
+		// reject the conflict loudly rather than letting one silently win.
+		expect(() =>
+			parseStudioEnv({
+				ANVILKIT_FEATURES: "1",
+				ANVILKIT_FEATURES__ENABLE_EXPORT: "1",
+			}),
+		).toThrow(TypeError);
+	});
+
+	it("includes the colliding path in the error message", () => {
+		try {
+			parseStudioEnv({
+				ANVILKIT_FEATURES: "1",
+				ANVILKIT_FEATURES__ENABLE_EXPORT: "1",
+			});
+			throw new Error("expected parseStudioEnv to throw");
+		} catch (error) {
+			expect(error).toBeInstanceOf(TypeError);
+			expect((error as Error).message).toContain("features");
+			expect((error as Error).message).toContain("ANVILKIT_");
+		}
+	});
+
+	it("throws when a leaf collides with an existing nested object", () => {
+		// Reverse iteration: the nested object lands first, then the scalar
+		// at the same key tries to overwrite it.
+		expect(() =>
+			parseStudioEnv({
+				ANVILKIT_FEATURES__ENABLE_EXPORT: "1",
+				ANVILKIT_FEATURES: "1",
+			}),
+		).toThrow(TypeError);
 	});
 });
 
