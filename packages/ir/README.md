@@ -15,7 +15,7 @@ React, no DOM, and no other `@anvilkit/*` runtime.
 ## Install
 
 ```bash
-pnpm add @anvilkit/ir @puckeditor/core
+pnpm add @anvilkit/ir @anvilkit/core @puckeditor/core
 ```
 
 ## Quickstart
@@ -55,13 +55,14 @@ direction, and release expectations.
 
 | Package | Version |
 | ------- | ------- |
+| `@anvilkit/core` | `0.1.0-alpha.0` |
 | `@puckeditor/core` | `^0.21.0` |
 
 ## Dependency contract
 
 | Allowed                       | Forbidden                                                               |
 | ----------------------------- | ----------------------------------------------------------------------- |
-| `@anvilkit/utils` (runtime)   | `@anvilkit/schema`, `@anvilkit/validator`, `@anvilkit/core` runtime     |
+| `@anvilkit/utils` (runtime), `@anvilkit/core` (peer, types-only) | `@anvilkit/schema`, `@anvilkit/validator`, `@anvilkit/core` runtime |
 | `@puckeditor/core` (peer, types-only) | React, ReactDOM, any plugin package, any DOM API                |
 
 CI enforces these with `madge --circular`, `check:react-free-runtime`,

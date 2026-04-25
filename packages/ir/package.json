@@ -17,14 +17,44 @@
 				"default": "./dist/index.cjs"
 			}
 		},
-		"./*": {
+		"./collect-assets": {
 			"import": {
-				"types": "./dist/*.d.ts",
-				"default": "./dist/*.js"
+				"types": "./dist/collect-assets.d.ts",
+				"default": "./dist/collect-assets.js"
 			},
 			"require": {
-				"types": "./dist/*.d.cts",
-				"default": "./dist/*.cjs"
+				"types": "./dist/collect-assets.d.cts",
+				"default": "./dist/collect-assets.cjs"
+			}
+		},
+		"./identify-slots": {
+			"import": {
+				"types": "./dist/identify-slots.d.ts",
+				"default": "./dist/identify-slots.js"
+			},
+			"require": {
+				"types": "./dist/identify-slots.d.cts",
+				"default": "./dist/identify-slots.cjs"
+			}
+		},
+		"./ir-to-puck-data": {
+			"import": {
+				"types": "./dist/ir-to-puck-data.d.ts",
+				"default": "./dist/ir-to-puck-data.js"
+			},
+			"require": {
+				"types": "./dist/ir-to-puck-data.d.cts",
+				"default": "./dist/ir-to-puck-data.cjs"
+			}
+		},
+		"./puck-data-to-ir": {
+			"import": {
+				"types": "./dist/puck-data-to-ir.d.ts",
+				"default": "./dist/puck-data-to-ir.js"
+			},
+			"require": {
+				"types": "./dist/puck-data-to-ir.d.cts",
+				"default": "./dist/puck-data-to-ir.cjs"
 			}
 		}
 	},
@@ -37,9 +67,13 @@
 		"access": "public"
 	},
 	"peerDependencies": {
+		"@anvilkit/core": "0.1.0-alpha.0",
 		"@puckeditor/core": "^0.21.0"
 	},
 	"peerDependenciesMeta": {
+		"@anvilkit/core": {
+			"optional": false
+		},
 		"@puckeditor/core": {
 			"optional": false
 		}
@@ -55,14 +89,15 @@
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"publint": "publint",
-		"check:publint": "publint",
+		"publint": "node ./scripts/check-publint.mjs",
+		"check:publint": "node ./scripts/check-publint.mjs",
 		"check:circular": "madge --circular --extensions ts src/",
 		"check:react-free-runtime": "node ./scripts/check-react-free.mjs",
 		"check:peer-deps": "node ./scripts/check-peer-deps.mjs",
 		"check:bundle-budget": "node ./scripts/check-bundle-budget.mjs",
 		"check:api-snapshot": "node ./scripts/check-api-snapshot.mjs",
 		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot",
+		"update:api-snapshot": "node ./scripts/check-api-snapshot.mjs --update",
 		"size": "size-limit"
 	},
 	"devDependencies": {

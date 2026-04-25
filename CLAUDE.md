@@ -10,15 +10,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```
 anvilkit-studio/
-├── apps/demo/              # Next.js demo app for validating components
+├── apps/
+│   ├── demo/               # Next.js demo app for validating components
+│   ├── docs/               # @anvilkit/docs-site — Starlight docs (Astro)
+│   └── cli/                # `anvilkit` CLI scaffold
+├── bench/                  # tinybench perf harness (component/IR/export)
 ├── packages/
 │   ├── components/         # Git submodule → @anvilkit/* component packages
+│   ├── core/               # @anvilkit/core — runtime, plugin engine, <Studio> shell
+│   ├── ir/                 # @anvilkit/ir — Headless Page IR transforms
+│   ├── schema/             # @anvilkit/schema — AI-friendly schema derivation
+│   ├── validator/          # @anvilkit/validator — Puck Config validator
 │   ├── ui/                 # @anvilkit/ui — shared UI primitives
+│   ├── utils/              # @anvilkit/utils — shared helpers
+│   ├── templates/          # @anvilkit/template-* — page template packages
+│   ├── create-plugin/      # `create-anvilkit-plugin` scaffolder
 │   ├── configs/
-│   │   ├── biome-config/   # Shared Biome lint/format config
-│   │   ├── tailwind-config/# Shared Tailwind + shadcn tokens
-│   │   └── typescript-config/
-│   └── plugins/            # Git submodules (plugin-ai-copilot, plugin-export-html)
+│   │   ├── biome-config/
+│   │   ├── tailwind-config/
+│   │   ├── typescript-config/
+│   │   └── vitest-config/
+│   └── plugins/            # Git submodules (see Git Submodules below)
 ```
 
 **Package manager**: pnpm 10.33.0 (strictly pinned). **Orchestration**: Turbo.
@@ -35,6 +47,13 @@ pnpm lint         # Biome lint
 pnpm format       # Prettier format (TS/TSX/MD)
 pnpm typecheck    # TypeScript type checking across workspace
 pnpm test         # Run Vitest across every workspace package (via Turbo cache)
+pnpm madge        # Circular dependency scan (packages/, ts+tsx)
+pnpm publint      # Validate package.json exports across publishable packages
+pnpm size         # size-limit gzip budgets per publishable package
+pnpm bench        # Run tinybench perf harness against ./bench/baseline.json
+pnpm bench:update # Re-record bench baselines
+pnpm docs:dev     # Starlight docs site dev server (apps/docs, port 4321)
+pnpm docs:build   # Build the Starlight docs site
 ```
 
 ### Components workspace (`packages/components/`)
@@ -61,7 +80,19 @@ pnpm dev          # Next.js dev server (port 3000)
 pnpm build        # Production build
 pnpm lint         # Biome lint
 pnpm typecheck    # next typegen + tsc
+pnpm e2e          # Playwright E2E (smoke + export + AI copilot specs)
+pnpm e2e:install  # One-time: install Chromium for Playwright
 ```
+
+### Docs site (`apps/docs/` — `@anvilkit/docs-site`)
+```bash
+pnpm docs:dev     # Astro dev server (port 4321) — runs generate:all first
+pnpm docs:build   # Astro build → apps/docs/dist (deployed to Vercel)
+pnpm typecheck    # astro check
+pnpm e2e          # Docs playground Playwright spec
+```
+Generators (`scripts/generate-*`) emit MDX for component pages, API
+references, and template pages before every build.
 
 ## Key Architecture Decisions
 
@@ -84,7 +115,7 @@ The demo validates components via two Puck modes:
 - `/puck/editor` — interactive builder
 - `/puck/render` — server-side render (RSC-compatible)
 
-Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from each imported component package. As of April 2026, 9 of the 11 published component packages are wired here — `@anvilkit/button` and `@anvilkit/input` are published but not yet integrated into the demo. When adding a new component to the demo, update this file and `apps/demo/next.config.js` (`transpilePackages`).
+Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from each imported component package. All 11 published component packages are currently wired here. When adding a new component to the demo, update this file and `apps/demo/next.config.js` (`transpilePackages`).
 
 ### Styling
 - **Tailwind CSS 4** (`tailwindcss` 4.2.2 via `@tailwindcss/postcss`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"` (CSS-first config, no `tailwind.config.js`)
@@ -97,7 +128,9 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 - TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
 
 ### Continuous Integration
-`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 10.33.0 / Node 20, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dependency gate), `pnpm test`, `pnpm build`, `pnpm publint` (exports validation), per-package release gates, and Playwright E2E tests. A separate `publish-ui.yml` workflow exists for the `@anvilkit/ui` package.
+`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 10.33.0 / Node 20, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Starlight build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
+
+Other workflows: `publish.yml`, `publish-ui.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `vercel.json` and posts an independent GitHub check — it does not block CI, and CI does not block it.
 
 **Typecheck script naming:** the workspace normalizes on `typecheck` (not `check-types`) across every package and the Turbo task graph. The components submodule (`packages/components/`) already used `typecheck` for each component package, so the root and direct-workspace packages (`ui`, `utils`, `vitest-config`, `apps/demo`) were renamed to match. Do not reintroduce `check-types`.
 
@@ -117,7 +150,13 @@ Full component rules and conventions are documented in `packages/components/AGEN
 git submodule update --init --recursive  # Initialize after cloning
 ```
 
-Submodules: `packages/components`, `packages/plugins/plugin-ai-copilot`, `packages/plugins/plugin-export-html`
+Submodules:
+- `packages/components`
+- `packages/plugins/plugin-ai-copilot`
+- `packages/plugins/plugin-asset-manager`
+- `packages/plugins/plugin-export-html`
+- `packages/plugins/plugin-export-react`
+- `packages/plugins/plugin-version-history`
 
 ## Health Stack
 
