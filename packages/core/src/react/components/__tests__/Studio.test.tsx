@@ -32,6 +32,7 @@
 
 import type { Config as PuckConfig, Data as PuckData } from "@puckeditor/core";
 import { act, render, renderHook, waitFor } from "@testing-library/react";
+import type { ReactElement } from "react";
 import {
 	afterEach,
 	beforeEach,
@@ -270,6 +271,87 @@ describe("<Studio> — onChange / onDataChange lifecycle", () => {
 });
 
 // ----------------------------------------------------------------------
+// Handler identity stability.
+// ----------------------------------------------------------------------
+
+describe("<Studio> — handler identity stability", () => {
+	it("keeps onChange/onPublish prop identity stable across parent re-renders with fresh inline handlers", async () => {
+		// Idiomatic usage (README Quickstart) passes inline arrows for
+		// `onChange` / `onPublish`. Without late-binding refs, every
+		// parent render would produce new useCallback identities and
+		// hand a fresh `onChange` prop into Puck on every keystroke.
+		// This test pins the late-binding contract: handler identity
+		// must NOT change when only the consumer's callback identity
+		// changes.
+		function Wrapper({ tick }: { tick: number }): ReactElement {
+			return (
+				<Studio
+					puckConfig={MINIMAL_PUCK_CONFIG}
+					plugins={[]}
+					onChange={() => {
+						// Inline arrow → new identity each render.
+						void tick;
+					}}
+					onPublish={() => {
+						void tick;
+					}}
+				/>
+			);
+		}
+
+		const { container, rerender } = render(<Wrapper tick={0} />);
+
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		const firstOnChange = puckMockState.lastProps?.onChange;
+		const firstOnPublish = puckMockState.lastProps?.onPublish;
+		expect(firstOnChange).toBeDefined();
+		expect(firstOnPublish).toBeDefined();
+
+		rerender(<Wrapper tick={1} />);
+		rerender(<Wrapper tick={2} />);
+
+		expect(puckMockState.lastProps?.onChange).toBe(firstOnChange);
+		expect(puckMockState.lastProps?.onPublish).toBe(firstOnPublish);
+	});
+
+	it("invokes the latest onChange closure even when the handler identity is stable", async () => {
+		// The flip side of the contract: late-binding must NOT freeze
+		// the closure at mount time. The most-recently-rendered
+		// `onChange` prop should be the one that fires when Puck calls
+		// the forwarded handler.
+		const calls: number[] = [];
+		function Wrapper({ tick }: { tick: number }): ReactElement {
+			return (
+				<Studio
+					puckConfig={MINIMAL_PUCK_CONFIG}
+					plugins={[]}
+					onChange={() => {
+						calls.push(tick);
+					}}
+				/>
+			);
+		}
+
+		const { container, rerender } = render(<Wrapper tick={0} />);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		rerender(<Wrapper tick={42} />);
+
+		await act(async () => {
+			puckMockState.lastProps?.onChange?.(EMPTY_DATA);
+			await Promise.resolve();
+		});
+
+		expect(calls).toEqual([42]);
+	});
+});
+
+// ----------------------------------------------------------------------
 // Lifecycle — onBeforePublish veto.
 // ----------------------------------------------------------------------
 
@@ -327,6 +409,82 @@ describe("<Studio> — onBeforePublish veto", () => {
 		// Our abort path logged through console.error. Validate the
 		// spy saw at least one call so we know the abort ran.
 		expect(errorSpy).toHaveBeenCalled();
+	});
+
+	it("uses the onPublish callback associated with the publish click, even if the parent re-renders during onBeforePublish", async () => {
+		// `onBeforePublish` can be async (e.g. server-side validation).
+		// If the parent re-renders with a fresh `onPublish` while the
+		// hook is awaiting, we must NOT switch to the newer callback
+		// mid-publish — the user clicked Publish associated with the
+		// callback that was current at click time. A late-bound ref
+		// read after the await would silently swap callbacks; the fix
+		// snapshots `onPublishRef.current` at the start of the handler.
+		let resolveBeforePublish: (() => void) | null = null;
+		const beforePublishGate = new Promise<void>((resolve) => {
+			resolveBeforePublish = resolve;
+		});
+
+		const validatorPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.async-validator"),
+			register() {
+				return {
+					meta: buildMeta("com.example.async-validator"),
+					hooks: {
+						onBeforePublish: async () => {
+							await beforePublishGate;
+						},
+					},
+				};
+			},
+		};
+
+		const firstOnPublish = vi.fn();
+		const secondOnPublish = vi.fn();
+
+		function Wrapper({
+			handler,
+		}: {
+			handler: (data: PuckData) => void;
+		}): ReactElement {
+			return (
+				<Studio
+					puckConfig={MINIMAL_PUCK_CONFIG}
+					plugins={[validatorPlugin]}
+					onPublish={handler}
+				/>
+			);
+		}
+
+		const { container, rerender } = render(
+			<Wrapper handler={firstOnPublish} />,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		// Trigger publish — `onBeforePublish` is now blocked on the gate.
+		await act(async () => {
+			puckMockState.lastProps?.onPublish?.(EMPTY_DATA);
+			await Promise.resolve();
+		});
+
+		// While the validator awaits, the parent re-renders with a
+		// different `onPublish` reference.
+		rerender(<Wrapper handler={secondOnPublish} />);
+
+		// Now resolve the validator and let the publish flow drain.
+		await act(async () => {
+			resolveBeforePublish?.();
+			await Promise.resolve();
+			await Promise.resolve();
+			await Promise.resolve();
+		});
+
+		// The handler captured at click time must be the one that
+		// runs — the post-await ref swap should NOT redirect to the
+		// fresh handler.
+		expect(firstOnPublish).toHaveBeenCalledTimes(1);
+		expect(secondOnPublish).not.toHaveBeenCalled();
 	});
 
 	it("runs consumer onPublish and onAfterPublish on a successful publish", async () => {

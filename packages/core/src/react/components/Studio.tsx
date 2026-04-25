@@ -60,25 +60,26 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-014-studio-component.md | core-014}
  */
 
+import type { DeepPartial } from "@anvilkit/utils";
 import {
 	Puck,
-	useGetPuck,
 	type Config as PuckConfig,
 	type Data as PuckData,
 	type Overrides as PuckOverrides,
 	type Plugin as PuckPlugin,
+	useGetPuck,
 } from "@puckeditor/core";
 import {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
 	type ReactElement,
 	type ReactNode,
 	type RefObject,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
 } from "react";
-import type { DeepPartial } from "@anvilkit/utils";
 
 import { StudioConfigProvider } from "../../config/provider.js";
 import {
@@ -86,10 +87,7 @@ import {
 	type StudioRuntime,
 } from "../../runtime/compile-plugins.js";
 import type { StudioConfig } from "../../types/config.js";
-import type {
-	StudioPlugin,
-	StudioPluginContext,
-} from "../../types/plugin.js";
+import type { StudioPlugin, StudioPluginContext } from "../../types/plugin.js";
 import { StudioRuntimeProvider } from "../hooks/use-studio.js";
 import { mergeOverrides } from "../overrides/merge-overrides.js";
 import { useAiStore } from "../stores/ai-store.js";
@@ -236,6 +234,11 @@ function fingerprintPlugins(
 				version?: unknown;
 				coreVersion?: unknown;
 			};
+			// Meta is the fingerprint contract for Studio plugins:
+			// `compilePlugins()` rejects duplicate `meta.id` values,
+			// so plugin authors that wrap/delegate another plugin must
+			// publish their own id or version bump when registration
+			// behavior changes.
 			parts.push(
 				`studio:${escapeFingerprintSegment(String(meta.id))}@${escapeFingerprintSegment(String(meta.version))}/${escapeFingerprintSegment(String(meta.coreVersion))}`,
 			);
@@ -329,7 +332,8 @@ function fingerprintConfig(config: unknown): string {
  */
 const PUCK_API_UNBOUND_MESSAGE =
 	"StudioPluginContext.getPuckApi() was called before <Puck> finished mounting. " +
-	"Move the call into a header action or lifecycle hook so it runs after first render.";
+	"Move the call into a header action or a post-mount lifecycle hook " +
+	"(`onDataChange`, `onBeforePublish`, `onAfterPublish`) so it runs after Puck's effect-time binder has captured the API.";
 
 /**
  * Type alias for the snapshot-getter function Puck's `useGetPuck`
@@ -414,7 +418,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 	//    below, which is `null` until the first render inside Puck.
 	// ------------------------------------------------------------------
 	const dataRef = useRef<PuckData>(data ?? EMPTY_DATA);
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (data !== undefined) {
 			dataRef.current = data;
 		}
@@ -482,10 +486,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		() => fingerprintPlugins(plugins),
 		[plugins],
 	);
-	const configFingerprint = useMemo(
-		() => fingerprintConfig(config),
-		[config],
-	);
+	const configFingerprint = useMemo(() => fingerprintConfig(config), [config]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime.
 	useEffect(() => {
@@ -505,8 +506,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 			}
 			const studioConfig = createStudioConfig(config);
 
-			let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] =
-				basePlugins;
+			let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] = basePlugins;
 			if (aiHost !== undefined) {
 				// Dynamic import keeps the adapter tree-shakable: apps
 				// that never pass `aiHost` do not bundle this module.
@@ -531,9 +531,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 					if (snapshot === null) {
 						throw new Error(PUCK_API_UNBOUND_MESSAGE);
 					}
-					return snapshot() as ReturnType<
-						StudioPluginContext["getPuckApi"]
-					>;
+					return snapshot() as ReturnType<StudioPluginContext["getPuckApi"]>;
 				},
 				studioConfig,
 				log: (level, message, meta) => {
@@ -564,9 +562,9 @@ export function Studio(props: StudioProps): ReactElement | null {
 					// at lifecycle time do not crash.
 				},
 				registerAssetResolver: () => {
-					// `compilePlugins()` swaps this no-op for a runtime-backed
-					// collector before any plugin registration or lifecycle
-					// hook runs.
+					// `compilePlugins()` passes plugins a wrapper context with
+					// a runtime-backed collector, keeping this base context
+					// immutable for the rest of the Studio shell.
 				},
 			};
 
@@ -661,6 +659,8 @@ export function Studio(props: StudioProps): ReactElement | null {
 			runtime.lifecycle.dispose();
 			useExportStore.getState().reset();
 			useAiStore.getState().reset();
+			// Theme is a user preference that persists across Studio
+			// sessions, so it intentionally survives runtime teardown.
 		};
 	}, [compiled]);
 
@@ -694,9 +694,29 @@ export function Studio(props: StudioProps): ReactElement | null {
 	}, [compiled, consumerOverrides]);
 
 	// ------------------------------------------------------------------
-	// 7. Puck `onChange` handler: update the data ref, fan out to the
-	//    lifecycle bus (`onDataChange`), then forward to the consumer.
+	// 7. Puck `onChange` / `onPublish` handlers.
+	//
+	//    Idiomatic usage passes inline arrows for these props, so each
+	//    parent render produces a new identity. Late-binding through
+	//    refs keeps the memoized handler identity stable across parent
+	//    re-renders → Puck does not see a fresh `onChange` prop on
+	//    every keystroke. We still want the latest closure to be
+	//    invoked, so the effect below mirrors the prop into the ref
+	//    on every render.
+	//
+	//    `useLayoutEffect` (not `useEffect`) so the refs are updated
+	//    synchronously after commit — before any child layout effects
+	//    fire and before browser paint. A passive `useEffect` runs
+	//    after paint, leaving a window where a child layout effect or
+	//    an immediate publish can read a stale closure.
 	// ------------------------------------------------------------------
+	const onChangeRef = useRef(onChange);
+	const onPublishRef = useRef(onPublish);
+	useLayoutEffect(() => {
+		onChangeRef.current = onChange;
+		onPublishRef.current = onPublish;
+	}, [onChange, onPublish]);
+
 	const handleChange = useCallback(
 		(nextData: PuckData): void => {
 			dataRef.current = nextData;
@@ -707,9 +727,9 @@ export function Studio(props: StudioProps): ReactElement | null {
 					nextData,
 				);
 			}
-			onChange?.(nextData);
+			onChangeRef.current?.(nextData);
 		},
-		[compiled, onChange],
+		[compiled],
 	);
 
 	// ------------------------------------------------------------------
@@ -720,6 +740,15 @@ export function Studio(props: StudioProps): ReactElement | null {
 	// ------------------------------------------------------------------
 	const handlePublish = useCallback(
 		(nextData: PuckData): void => {
+			// Capture the consumer callback BEFORE the async
+			// `onBeforePublish` await. If the parent re-renders with a
+			// different `onPublish` while a hook is validating, reading
+			// `onPublishRef.current` after the await would call the
+			// newer handler — a race that surfaces as "publish ran
+			// against a function the user never associated with this
+			// publish event." Snapshotting here pins one publish
+			// operation to one consumer callback.
+			const consumerOnPublish = onPublishRef.current;
 			void (async () => {
 				if (compiled !== null) {
 					try {
@@ -729,16 +758,13 @@ export function Studio(props: StudioProps): ReactElement | null {
 							nextData,
 						);
 					} catch (error) {
-						console.error(
-							"[studio] publish aborted by plugin:",
-							error,
-						);
+						console.error("[studio] publish aborted by plugin:", error);
 						return;
 					}
 				}
 
 				try {
-					await onPublish?.(nextData);
+					await consumerOnPublish?.(nextData);
 				} catch (error) {
 					console.error("[studio] consumer onPublish threw:", error);
 					// Deliberately do NOT fire `onAfterPublish` — an
@@ -756,7 +782,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 				}
 			})();
 		},
-		[compiled, onPublish],
+		[compiled],
 	);
 
 	// ------------------------------------------------------------------
