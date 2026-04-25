@@ -10,7 +10,7 @@ describe("__FACTORY__", () => {
 	it("returns a StudioPlugin with the expected meta", () => {
 		const plugin = __FACTORY__();
 		expect(plugin.meta.id).toBe("anvilkit-plugin-__NAME__");
-		expect(plugin.meta.name).toBe("__DISPLAY__");
+		expect(plugin.meta.name).toBe("__DISPLAY_STRING__");
 	});
 
 	it("logs an info line on onInit", async () => {
@@ -20,7 +20,7 @@ describe("__FACTORY__", () => {
 
 		const lastLog = harness.ctx._mocks.logCalls.at(-1);
 		expect(lastLog?.[0]).toBe("info");
-		expect(lastLog?.[1]).toBe("__DISPLAY__ initialised");
+		expect(lastLog?.[1]).toBe("__DISPLAY_STRING__ initialised");
 		expect(lastLog?.[2]).toMatchObject({ label: "hello" });
 	});
 

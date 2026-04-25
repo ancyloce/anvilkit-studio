@@ -1,7 +1,7 @@
 {
 	"name": "@anvilkit/plugin-__NAME__",
 	"version": "0.0.0",
-	"description": "__DISPLAY__ — Anvilkit StudioPlugin (category: __CATEGORY__).",
+	"description": "__DISPLAY_STRING__ - Anvilkit StudioPlugin (category: __CATEGORY__).",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
@@ -35,12 +35,12 @@
 		"publint": "publint"
 	},
 	"peerDependencies": {
-		"@anvilkit/core": ">=0.1.0-alpha.0",
+		"@anvilkit/core": "__CORE_VERSION_RANGE__",
 		"@puckeditor/core": "^0.21.0",
 		"react": "^18 || ^19"
 	},
 	"devDependencies": {
-		"@anvilkit/core": ">=0.1.0-alpha.0",
+		"@anvilkit/core": "__CORE_VERSION_RANGE__",
 		"@puckeditor/core": "^0.21.1",
 		"@rslib/core": "^0.20.1",
 		"@types/node": "^22.15.3",

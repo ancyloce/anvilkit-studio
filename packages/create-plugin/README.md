@@ -23,7 +23,8 @@ pnpm dlx create-anvilkit-plugin
 | `--name`     | Package slug (folder name + `@anvilkit/plugin-<slug>`)   |
 | `--display`  | Human-readable plugin name                               |
 | `--category` | `export`, `ai`, `rail-panel`, or `custom`                |
-| `--dir`      | Target directory (default: cwd)                          |
+| `--dir`      | Parent directory for the generated folder (default: cwd) |
+| `--force`    | Overwrite files in an existing non-empty target folder   |
 | `--help`     | Show help                                                |
 
 ## What you get

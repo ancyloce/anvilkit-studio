@@ -1,5 +1,5 @@
 /**
- * @anvilkit/plugin-__NAME__ — __DISPLAY__ (category: __CATEGORY__).
+ * @anvilkit/plugin-__NAME__ - __DISPLAY_COMMENT__ (category: __CATEGORY__).
  *
  * See the plugin authoring guide for the full StudioPlugin contract:
  *   https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/src/content/docs/guides/plugin-authoring.mdx
@@ -12,10 +12,10 @@ import type {
 
 const META: StudioPluginMeta = {
 	id: "anvilkit-plugin-__NAME__",
-	name: "__DISPLAY__",
+	name: "__DISPLAY_STRING__",
 	version: "0.0.0",
-	coreVersion: "^0.1.0-alpha",
-	description: "__DISPLAY__ (category: __CATEGORY__).",
+	coreVersion: "__CORE_VERSION_RANGE__",
+	description: "__DISPLAY_STRING__ (category: __CATEGORY__).",
 };
 
 export interface __CLASSNAME__PluginOptions {
@@ -27,7 +27,7 @@ export interface __CLASSNAME__PluginOptions {
 }
 
 /**
- * Create the __DISPLAY__ plugin.
+ * Create the __DISPLAY_COMMENT__ plugin.
  *
  * The factory pattern keeps the plugin stateless at module scope so
  * a host can register multiple instances with different options.

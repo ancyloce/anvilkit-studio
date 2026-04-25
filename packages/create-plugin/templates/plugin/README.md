@@ -1,6 +1,6 @@
 # @anvilkit/plugin-__NAME__
 
-__DISPLAY__ — Anvilkit StudioPlugin (category: __CATEGORY__).
+__DISPLAY_MARKDOWN__ - Anvilkit StudioPlugin (category: __CATEGORY__).
 
 ## Install
 
@@ -10,14 +10,14 @@ pnpm add @anvilkit/plugin-__NAME__
 
 ## Use
 
-```ts
-import { createStudioConfig } from "@anvilkit/core";
+```tsx
+import { Studio } from "@anvilkit/core";
 import { __FACTORY__ } from "@anvilkit/plugin-__NAME__";
 
-export const studioConfig = createStudioConfig({
-	plugins: [__FACTORY__({ label: "production" })],
-	// …your Puck config
-});
+<Studio
+	puckConfig={puckConfig}
+	plugins={[__FACTORY__({ label: "production" })]}
+/>
 ```
 
 ## Develop
