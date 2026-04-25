@@ -142,6 +142,28 @@ You can also build the config object yourself via
 `useStudioConfig()`. Both live at the `@anvilkit/core/config` subpath
 if you want to strip the React layer out of a non-UI consumer.
 
+> **Hoist heavy selectors.** `useStudioConfig(selector)` and the
+> Zustand store hooks (`useExportStore`, `useThemeStore`, `useAiStore`)
+> re-run their selector on every render — the config is static so this
+> is cheap, but a selector that does non-trivial work (deep mapping,
+> array allocation, JSON walk) should be **hoisted to module scope**
+> rather than declared inline. Inline selectors create a new function
+> identity on every render, which can re-run the selector against
+> identical inputs:
+>
+> ```tsx
+> // Avoid — new selector identity every render:
+> const features = useStudioConfig((cfg) => cfg.features);
+>
+> // Prefer — hoisted, stable identity:
+> const selectFeatures = (cfg: StudioConfig) => cfg.features;
+> const features = useStudioConfig(selectFeatures);
+> ```
+>
+> Light selectors (one property access) are fine inline — the
+> guidance only kicks in when the selector body would be expensive
+> to repeat.
+
 ## Migrating from `aiHost`
 
 The legacy `aiHost` string prop is still supported through a compat
