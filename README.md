@@ -3,6 +3,8 @@
 AnvilKit Studio is a monorepo of Puck-native React component packages, a Studio runtime, and a plugin ecosystem.
 
 > **AnvilKit Studio v1.0.0-beta is available.** Install with `pnpm add @anvilkit/core@^1.0.0-beta`. See the [migration guide](docs/migration/0.x-to-1.0-beta.md), the [aggregate changelog](CHANGELOG.md), or [file beta feedback](docs/beta-feedback/README.md).
+>
+> **Looking ahead:** the [LTS policy](docs/policies/lts.md) and the [`beta → 1.0.0` migration notes](docs/migration/1.0-beta-to-1.0.md) are drafted and take effect on the day `v1.0.0` ships.
 
 ## What's new in 1.0.0-beta
 
