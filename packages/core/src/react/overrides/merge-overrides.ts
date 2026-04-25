@@ -220,7 +220,7 @@ function composeRenderFunc(
 			// the `children` the new override receives. This is the
 			// per-key curry — a flat spread merge would drop `prev`
 			// entirely.
-			children: prev({ ...props }),
+			children: prev(props),
 		});
 }
 
