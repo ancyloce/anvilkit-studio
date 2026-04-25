@@ -38,10 +38,7 @@
 
 import type { Data as PuckData } from "@puckeditor/core";
 
-import type {
-	StudioPlugin,
-	StudioPluginContext,
-} from "../types/plugin.js";
+import type { StudioPlugin, StudioPluginContext } from "../types/plugin.js";
 
 /**
  * Configuration accepted by {@link aiHostAdapter}.
@@ -84,8 +81,7 @@ export interface AiHostAdapterOptions {
  * here so the warning text is build-deterministic and the
  * `console.warn` call can be string-matched in tests.
  */
-const MIGRATION_DOCS_URL =
-	"https://anvilkit.dev/docs/migrations/ai-host";
+const MIGRATION_DOCS_URL = "https://anvilkit.dev/docs/migrations/ai-host";
 
 /**
  * Frozen warning message. Hoisted to module scope so the
@@ -109,6 +105,102 @@ const DEFAULT_TIMEOUT_MS = 30_000;
 const MAX_RESPONSE_BYTES = 1_048_576;
 
 /**
+ * Sentinel error used by {@link readBoundedResponseBody} to signal
+ * "the stream produced more bytes than {@link MAX_RESPONSE_BYTES}
+ * allows; the read aborted before reading the entire body." The
+ * caller distinguishes this from a generic network failure so the
+ * log message can name the cap rather than the network.
+ */
+class ResponseTooLargeError extends Error {
+	constructor(public readonly bytesRead: number) {
+		super(
+			`aiHost response exceeded ${MAX_RESPONSE_BYTES} bytes (read ${bytesRead} before aborting)`,
+		);
+		this.name = "ResponseTooLargeError";
+	}
+}
+
+/**
+ * Stream the response body into a bounded buffer.
+ *
+ * `Content-Length` is advisory — HTTP/2 and chunked transfer-encoding
+ * routinely omit it, and a malicious endpoint can simply lie. The
+ * caller already does an early-reject when a `Content-Length` larger
+ * than the cap is declared; this helper closes the loophole by
+ * counting bytes as they arrive and aborting once the running total
+ * crosses {@link MAX_RESPONSE_BYTES}.
+ *
+ * Falls back to `response.text()` if `response.body` is not a
+ * `ReadableStream` (some test mocks and intermediaries omit it). In
+ * the fallback path the entire body is buffered, but that's only
+ * reachable from controlled environments — production fetch always
+ * exposes a stream.
+ */
+async function readBoundedResponseBody(
+	response: Response,
+	limit: number,
+): Promise<string> {
+	const body = response.body as ReadableStream<Uint8Array> | null | undefined;
+	if (
+		body === null ||
+		body === undefined ||
+		typeof body.getReader !== "function"
+	) {
+		// Fallback for shapes that omit `body` (some mocks, some
+		// intermediaries). We can still post-check the resulting
+		// string length so the cap is enforced — just less promptly.
+		const text = await response.text();
+		// `String.prototype.length` is a UTF-16 code-unit count, which
+		// systematically under-counts the UTF-8 byte length used by the
+		// streaming path: a single 4-byte UTF-8 emoji is 2 UTF-16 units,
+		// and a 3-byte CJK glyph is 1 unit. A non-ASCII payload could
+		// otherwise sneak past the cap here even though the streaming
+		// path would have rejected it. Re-encode and measure bytes so
+		// both paths enforce exactly the same `MAX_RESPONSE_BYTES` ceiling.
+		const byteCount = new TextEncoder().encode(text).byteLength;
+		if (byteCount > limit) {
+			throw new ResponseTooLargeError(byteCount);
+		}
+		return text;
+	}
+
+	const reader = body.getReader();
+	const decoder = new TextDecoder("utf-8");
+	const chunks: string[] = [];
+	let bytesRead = 0;
+	try {
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) {
+				break;
+			}
+			if (value === undefined) {
+				continue;
+			}
+			bytesRead += value.byteLength;
+			if (bytesRead > limit) {
+				// Best-effort cancel so the underlying connection can
+				// be closed promptly; ignore any cancel rejection
+				// because we're already in the throw path.
+				try {
+					await reader.cancel();
+				} catch {
+					/* ignore */
+				}
+				throw new ResponseTooLargeError(bytesRead);
+			}
+			chunks.push(decoder.decode(value, { stream: true }));
+		}
+		// Flush any trailing multi-byte sequence still buffered in the
+		// streaming decoder.
+		chunks.push(decoder.decode());
+	} finally {
+		reader.releaseLock?.();
+	}
+	return chunks.join("");
+}
+
+/**
  * Plain-JS structural validator for the Puck `Data` shape.
  *
  * Intentionally dependency-free — importing Zod here would drag the
@@ -117,16 +209,20 @@ const MAX_RESPONSE_BYTES = 1_048_576;
  * narrow (`{ root, content, zones }`), so a hand-rolled check is
  * both cheaper and more defensible than a schema.
  *
- * The validator recurses into `content` and `zones` so a hostile
- * endpoint cannot smuggle a string-typed component entry past the
- * gate — Puck renders component props into the DOM, and some
- * component packages pass strings through verbatim, which is the
- * load-bearing XSS surface the adapter needs to close.
+ * The validator recurses into `content` and `zones` and checks every
+ * component `type` against the mounted Puck config so a hostile
+ * endpoint cannot smuggle an unknown component entry past the gate —
+ * Puck renders component props into the DOM, and some component
+ * packages pass strings through verbatim, which is the load-bearing
+ * XSS surface the adapter needs to close.
  *
  * Anything that fails this check is logged and refused — preferring
  * a noisy log over an XSS-shaped dispatch into the editor.
  */
-function isPuckDataShape(value: unknown): value is Partial<PuckData> {
+function isPuckDataShape(
+	value: unknown,
+	componentTypes: ReadonlySet<string>,
+): value is Partial<PuckData> {
 	if (!isPlainRecord(value)) {
 		return false;
 	}
@@ -135,11 +231,17 @@ function isPuckDataShape(value: unknown): value is Partial<PuckData> {
 		return false;
 	}
 
-	if (value.content !== undefined && !isPuckContentShape(value.content)) {
+	if (
+		value.content !== undefined &&
+		!isPuckContentShape(value.content, componentTypes)
+	) {
 		return false;
 	}
 
-	if (value.zones !== undefined && !isPuckZonesShape(value.zones)) {
+	if (
+		value.zones !== undefined &&
+		!isPuckZonesShape(value.zones, componentTypes)
+	) {
 		return false;
 	}
 
@@ -151,9 +253,7 @@ function isPuckDataShape(value: unknown): value is Partial<PuckData> {
  * Used wherever the validator needs a plain `{ ... }` object.
  */
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
-	return (
-		value !== null && typeof value === "object" && !Array.isArray(value)
-	);
+	return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 /**
@@ -177,12 +277,15 @@ function isPuckRootShape(value: unknown): boolean {
  * Anything else is a protocol violation the adapter refuses to pass
  * into Puck.
  */
-function isPuckContentShape(value: unknown): boolean {
+function isPuckContentShape(
+	value: unknown,
+	componentTypes: ReadonlySet<string>,
+): boolean {
 	if (!Array.isArray(value)) {
 		return false;
 	}
 	for (const entry of value) {
-		if (!isPuckContentEntry(entry)) {
+		if (!isPuckContentEntry(entry, componentTypes)) {
 			return false;
 		}
 	}
@@ -195,11 +298,17 @@ function isPuckContentShape(value: unknown): boolean {
  * function disguised via `{ type: "<script>", ... }`). `props`, if
  * present, must be a plain record.
  */
-function isPuckContentEntry(value: unknown): boolean {
+function isPuckContentEntry(
+	value: unknown,
+	componentTypes: ReadonlySet<string>,
+): boolean {
 	if (!isPlainRecord(value)) {
 		return false;
 	}
 	if (typeof value.type !== "string") {
+		return false;
+	}
+	if (!componentTypes.has(value.type)) {
 		return false;
 	}
 	if (value.props !== undefined && !isPlainRecord(value.props)) {
@@ -212,12 +321,15 @@ function isPuckContentEntry(value: unknown): boolean {
  * Validate the `zones` map: a record where each value is a Puck
  * content array (same shape validated by {@link isPuckContentShape}).
  */
-function isPuckZonesShape(value: unknown): boolean {
+function isPuckZonesShape(
+	value: unknown,
+	componentTypes: ReadonlySet<string>,
+): boolean {
 	if (!isPlainRecord(value)) {
 		return false;
 	}
 	for (const entry of Object.values(value)) {
-		if (!isPuckContentShape(entry)) {
+		if (!isPuckContentShape(entry, componentTypes)) {
 			return false;
 		}
 	}
@@ -320,29 +432,53 @@ export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
 									return;
 								}
 
-								// `Content-Length` is advisory — a hostile
-								// endpoint can omit it — but when present we
-								// fail fast instead of buffering the whole
-								// blob. `response.headers` is optional on the
-								// shapes tests / intermediaries pass through,
-								// so guard both layers.
+								// `Content-Length` is advisory — HTTP/2 and
+								// chunked transfer-encoding routinely omit it,
+								// and a malicious endpoint can simply lie or
+								// under-report. We keep the header as an
+								// early-reject fast path (saves a round-trip
+								// through the streaming reader for honest
+								// oversize responses), but the load-bearing
+								// enforcement happens in
+								// `readBoundedResponseBody` below, which
+								// counts bytes as the stream arrives and
+								// aborts once the cap is crossed.
 								const declaredLength =
-									response.headers?.get?.(
-										"content-length",
-									) ?? null;
+									response.headers?.get?.("content-length") ?? null;
 								if (
 									declaredLength !== null &&
 									Number(declaredLength) > MAX_RESPONSE_BYTES
 								) {
-									ctx.log(
-										"error",
-										"aiHost response exceeds size limit",
-										{
-											endpoint,
-											contentLength: declaredLength,
-											limit: MAX_RESPONSE_BYTES,
-										},
+									ctx.log("error", "aiHost response exceeds size limit", {
+										endpoint,
+										contentLength: declaredLength,
+										limit: MAX_RESPONSE_BYTES,
+									});
+									return;
+								}
+
+								// Stream the body into a bounded buffer so a
+								// chunked / HTTP-2 / lying-Content-Length
+								// response cannot OOM the editor tab.
+								let bodyText: string;
+								try {
+									bodyText = await readBoundedResponseBody(
+										response,
+										MAX_RESPONSE_BYTES,
 									);
+								} catch (readError) {
+									if (readError instanceof ResponseTooLargeError) {
+										ctx.log("error", "aiHost response exceeds size limit", {
+											endpoint,
+											bytesRead: readError.bytesRead,
+											limit: MAX_RESPONSE_BYTES,
+										});
+										return;
+									}
+									ctx.log("error", "aiHost response stream read failed", {
+										endpoint,
+										error: readError,
+									});
 									return;
 								}
 
@@ -354,26 +490,30 @@ export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
 								// check is logged and dropped.
 								let parsed: unknown;
 								try {
-									parsed = await response.json();
+									parsed = JSON.parse(bodyText);
 								} catch (parseError) {
-									ctx.log(
-										"error",
-										"aiHost response was not valid JSON",
-										{ endpoint, error: parseError },
-									);
+									ctx.log("error", "aiHost response was not valid JSON", {
+										endpoint,
+										error: parseError,
+									});
 									return;
 								}
 
-								if (!isPuckDataShape(parsed)) {
+								const puckApi = ctx.getPuckApi();
+								const componentTypes = new Set(
+									Object.keys(puckApi.config.components),
+								);
+
+								if (!isPuckDataShape(parsed, componentTypes)) {
 									ctx.log(
 										"error",
-										"aiHost response did not match Puck Data shape; dispatch refused",
+										"aiHost response did not match Puck Data shape or registered component types; dispatch refused",
 										{ endpoint },
 									);
 									return;
 								}
 
-								ctx.getPuckApi().dispatch({
+								puckApi.dispatch({
 									type: "setData",
 									data: parsed,
 								});
