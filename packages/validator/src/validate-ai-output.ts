@@ -12,9 +12,8 @@ import {
 	unknown,
 } from "zod/mini";
 import { closestMatch } from "./internal/closest-match.js";
+import { MAX_DEPTH } from "./internal/constants.js";
 import { makeComponentPropsSchema } from "./internal/make-zod-schema.js";
-
-const MAX_DEPTH = 16;
 
 const assetKinds = [
 	"image",
@@ -269,19 +268,11 @@ function walkNode(
 				severity: "error",
 			});
 		} else if (propsRecord) {
-			const propsSchema = makeComponentPropsSchema(
-				componentSchema.fields,
-				componentSchema.componentName,
-			);
+			const propsSchema = makeComponentPropsSchema(componentSchema.fields);
 			const result = propsSchema.safeParse(propsRecord);
 
 			if (!result.success) {
-				const zodIssues = result.error.issues.map((issue) => ({
-					path: issue.path,
-					message: issue.message,
-					code: issue.code,
-				}));
-				for (const zi of zodIssues) {
+				for (const zi of result.error.issues) {
 					const normalizedIssuePath = zi.path.map((segment) =>
 						typeof segment === "symbol" ? String(segment) : segment,
 					);
@@ -291,6 +282,9 @@ function walkNode(
 						...normalizedIssuePath,
 					]);
 
+					// Unknown-key warnings come from the manual loop below —
+					// the props schema is a looseObject, so Zod never emits
+					// `unrecognized_keys` here.
 					let code = "INVALID_FIELD_TYPE";
 					if (
 						zi.code === "invalid_type" &&
@@ -299,14 +293,12 @@ function walkNode(
 						code = "MISSING_REQUIRED_FIELD";
 					} else if (zi.code === "invalid_value") {
 						code = "INVALID_ENUM_VALUE";
-					} else if (zi.code === "unrecognized_keys") {
-						code = "UNKNOWN_FIELD";
 					}
 
 					issues.push({
 						path: fullPath,
 						message: "[" + code + "] " + zi.message,
-						severity: code === "UNKNOWN_FIELD" ? "warn" : "error",
+						severity: "error",
 					});
 				}
 			}
