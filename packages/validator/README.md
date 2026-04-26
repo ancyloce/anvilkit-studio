@@ -49,15 +49,22 @@ boundary and dependency rules.
 |------|-------|-------------|
 | `E_MISSING_RENDER` | error | `component.render` is not a function |
 | `E_MISSING_FIELDS` | error | `component.fields` is not an object |
-| `E_NON_SERIALIZABLE_DEFAULT` | error | A default prop value fails JSON serialization |
+| `E_NON_SERIALIZABLE_DEFAULT` | error | A default prop value fails JSON serialization (checked recursively — a function buried inside a nested object still trips this) |
 | `E_FIELD_SHAPE_INVALID` | error | A field does not match the Puck Field union |
 | `E_ASYNC_RENDER` | error | `component.render` is an async function (Puck does not support async render) |
 | `W_MISSING_DESCRIPTION` | warning | `component.metadata?.description` is empty or undefined |
-| `W_UNKNOWN_FIELD_TYPE` | warning | Field type is not one of the 10 AiFieldType cases |
+| `W_UNKNOWN_FIELD_TYPE` | warning | Field `type` is not one of the 11 known Puck field types: `text`, `textarea`, `richtext`, `number`, `select`, `radio`, `array`, `object`, `external`, `custom`, `slot`. (Note: this is the Puck-native field union, not the smaller 10-member `AiFieldType` used by `validateAiOutput`.) |
 
 ### Why `E_ASYNC_RENDER` is a hard failure
 
 Puck renders components synchronously during its reconciliation loop. An async render function silently breaks — it returns a Promise object instead of React elements, which Puck coerces to `[object Promise]` or a blank node. This is impossible to debug from the editor, so we fail hard at validation time.
+
+**Detection limit.** The check uses `renderValue.constructor?.name === "AsyncFunction"`, which catches native, unminified `async function` and `async () =>` declarations. It does **not** catch:
+
+- async functions transpiled to ES2016 or below (they become regular generator-driven functions whose `constructor.name` is `"Function"`)
+- `async`-returning functions wrapped by `bind()` or by HOFs (memoize, throttle, etc.)
+
+If your build pipeline transpiles async syntax, audit render functions manually — the validator may give a clean bill of health on a function that will silently break in Puck.
 
 ## Issue Codes — `validateAiOutput`
 
