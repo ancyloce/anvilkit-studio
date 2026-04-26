@@ -143,6 +143,30 @@ describe("validateAiOutput", () => {
 		expect(issue!.path).toBe("assets.0");
 	});
 
+	it("reports INVALID_STRUCTURE when assets is missing", () => {
+		const ir = {
+			version: "1",
+			root: { id: "root", type: "__root__", props: {}, children: [] },
+			metadata: {},
+		};
+		const result = validateAiOutput(ir, schemas);
+		expect(result.valid).toBe(false);
+		const issue = result.issues.find((i) => i.path === "assets");
+		expect(issue?.message).toContain("[INVALID_STRUCTURE]");
+	});
+
+	it("reports INVALID_STRUCTURE when metadata is missing", () => {
+		const ir = {
+			version: "1",
+			root: { id: "root", type: "__root__", props: {}, children: [] },
+			assets: [],
+		};
+		const result = validateAiOutput(ir, schemas);
+		expect(result.valid).toBe(false);
+		const issue = result.issues.find((i) => i.path === "metadata");
+		expect(issue?.message).toContain("[INVALID_STRUCTURE]");
+	});
+
 	it("reports UNSUPPORTED_VERSION for wrong version", () => {
 		const ir = {
 			version: "2",
@@ -185,6 +209,61 @@ describe("validateAiOutput", () => {
 		);
 		expect(issue).toBeDefined();
 		expect(issue!.path).toBe("root.children.0.children.0.type");
+	});
+
+	it("reports INVALID_STRUCTURE for missing root props", () => {
+		const ir = {
+			version: "1",
+			root: { id: "root", type: "__root__", children: [] },
+			assets: [],
+			metadata: {},
+		};
+		const result = validateAiOutput(ir, schemas);
+		expect(result.valid).toBe(false);
+		const issue = result.issues.find((i) => i.path === "root.props");
+		expect(issue?.message).toContain("[INVALID_STRUCTURE]");
+	});
+
+	it("reports INVALID_STRUCTURE for missing node id and props", () => {
+		const ir = {
+			version: "1",
+			root: {
+				id: "root",
+				type: "__root__",
+				props: {},
+				children: [{ type: "Hero" }],
+			},
+			assets: [],
+			metadata: {},
+		};
+		const result = validateAiOutput(ir, schemas);
+		expect(result.valid).toBe(false);
+		expect(
+			result.issues.find((i) => i.path === "root.children.0.id"),
+		).toBeDefined();
+		expect(
+			result.issues.find((i) => i.path === "root.children.0.props"),
+		).toBeDefined();
+	});
+
+	it("reports INVALID_CHILD when children contains a non-object entry", () => {
+		const ir = {
+			version: "1",
+			root: {
+				id: "root",
+				type: "__root__",
+				props: {},
+				children: ["Hero"],
+			},
+			assets: [],
+			metadata: {},
+		};
+		const result = validateAiOutput(ir, schemas);
+		expect(result.valid).toBe(false);
+		const issue = result.issues.find((i) =>
+			i.message.includes("[INVALID_CHILD]"),
+		);
+		expect(issue?.path).toBe("root.children.0");
 	});
 
 	it("reports INVALID_STRUCTURE for non-object response", () => {

@@ -36,6 +36,10 @@ function buildPath(segments: readonly (string | number)[]): string {
 	return segments.join(".");
 }
 
+function isRecordLike(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function hasValueAtPath(
 	value: Record<string, unknown>,
 	path: readonly PropertyKey[],
@@ -92,7 +96,13 @@ export function validateAiOutput(
 		});
 	}
 
-	if (Array.isArray(res.assets)) {
+	if (!Array.isArray(res.assets)) {
+		issues.push({
+			path: "assets",
+			message: "[INVALID_STRUCTURE] assets must be an array.",
+			severity: "error",
+		});
+	} else {
 		for (let i = 0; i < res.assets.length; i++) {
 			const asset = res.assets[i];
 			const result = assetSchema.safeParse(asset);
@@ -110,6 +120,14 @@ export function validateAiOutput(
 		}
 	}
 
+	if (!isRecordLike(res.metadata)) {
+		issues.push({
+			path: "metadata",
+			message: "[INVALID_STRUCTURE] metadata must be an object.",
+			severity: "error",
+		});
+	}
+
 	const componentMap = new Map<string, AiComponentSchema>();
 	for (const comp of availableComponents) {
 		componentMap.set(comp.componentName, comp);
@@ -118,7 +136,7 @@ export function validateAiOutput(
 		(c: { componentName: string }) => c.componentName,
 	);
 
-	if (res.root && typeof res.root === "object" && !Array.isArray(res.root)) {
+	if (isRecordLike(res.root)) {
 		const rootNode = res.root as Record<string, unknown>;
 		// phase4-014 F-1: root.type must be exactly "__root__". Accepting
 		// any other string was silent drift; plugins downstream rely on
@@ -133,14 +151,7 @@ export function validateAiOutput(
 				severity: "error",
 			});
 		}
-		walkNode(
-			rootNode,
-			["root"],
-			componentMap,
-			componentNames,
-			issues,
-			0,
-		);
+		walkNode(rootNode, ["root"], componentMap, componentNames, issues, 0);
 	} else {
 		issues.push({
 			path: "root",
@@ -173,6 +184,63 @@ function walkNode(
 	}
 
 	const nodeType = node.type;
+	const nodeProps = node.props;
+	let propsRecord: Record<string, unknown> | undefined;
+
+	if (typeof node.id !== "string") {
+		issues.push({
+			path: buildPath([...pathSegments, "id"]),
+			message: "[INVALID_STRUCTURE] Node is missing a string 'id' property.",
+			severity: "error",
+		});
+	}
+
+	if (isRecordLike(nodeProps)) {
+		propsRecord = nodeProps;
+		const nonSer = findNonSerializablePath(
+			propsRecord,
+			[...pathSegments, "props"],
+			new WeakSet(),
+			0,
+		);
+		if (nonSer) {
+			issues.push({
+				path: nonSer.path,
+				message:
+					"[NON_SERIALIZABLE_PROP] Prop value is not JSON-serialisable (" +
+					nonSer.reason +
+					"). PageIR values must round-trip through JSON.",
+				severity: "error",
+			});
+		}
+	} else {
+		issues.push({
+			path: buildPath([...pathSegments, "props"]),
+			message: "[INVALID_STRUCTURE] Node props must be an object.",
+			severity: "error",
+		});
+	}
+
+	if (node.slot !== undefined && typeof node.slot !== "string") {
+		issues.push({
+			path: buildPath([...pathSegments, "slot"]),
+			message: "[INVALID_STRUCTURE] Node slot must be a string when present.",
+			severity: "error",
+		});
+	}
+
+	if (
+		node.slotKind !== undefined &&
+		node.slotKind !== "slot" &&
+		node.slotKind !== "zone"
+	) {
+		issues.push({
+			path: buildPath([...pathSegments, "slotKind"]),
+			message:
+				'[INVALID_STRUCTURE] Node slotKind must be "slot" or "zone" when present.',
+			severity: "error",
+		});
+	}
 
 	if (typeof nodeType !== "string") {
 		issues.push({
@@ -200,88 +268,65 @@ function walkNode(
 					suggestionText,
 				severity: "error",
 			});
-		} else {
-			const props = node.props;
-			if (typeof props === "object" && props !== null) {
-				const propsRecord = props as Record<string, unknown>;
-				// phase4-014 F-3: reject non-JSON-serialisable prop values
-				// (functions, symbols, bigints). Upstream Zod schemas use
-				// `unknown()` which accepted them silently.
-				const nonSer = findNonSerializablePath(
-					propsRecord,
-					[...pathSegments, "props"],
-					new WeakSet(),
-					0,
-				);
-				if (nonSer) {
+		} else if (propsRecord) {
+			const propsSchema = makeComponentPropsSchema(
+				componentSchema.fields,
+				componentSchema.componentName,
+			);
+			const result = propsSchema.safeParse(propsRecord);
+
+			if (!result.success) {
+				const zodIssues = result.error.issues.map((issue) => ({
+					path: issue.path,
+					message: issue.message,
+					code: issue.code,
+				}));
+				for (const zi of zodIssues) {
+					const normalizedIssuePath = zi.path.map((segment) =>
+						typeof segment === "symbol" ? String(segment) : segment,
+					);
+					const fullPath = buildPath([
+						...pathSegments,
+						"props",
+						...normalizedIssuePath,
+					]);
+
+					let code = "INVALID_FIELD_TYPE";
+					if (
+						zi.code === "invalid_type" &&
+						!hasValueAtPath(propsRecord, zi.path)
+					) {
+						code = "MISSING_REQUIRED_FIELD";
+					} else if (zi.code === "invalid_value") {
+						code = "INVALID_ENUM_VALUE";
+					} else if (zi.code === "unrecognized_keys") {
+						code = "UNKNOWN_FIELD";
+					}
+
 					issues.push({
-						path: nonSer.path,
-						message:
-							"[NON_SERIALIZABLE_PROP] Prop value is not JSON-serialisable (" +
-							nonSer.reason +
-							"). PageIR values must round-trip through JSON.",
-						severity: "error",
+						path: fullPath,
+						message: "[" + code + "] " + zi.message,
+						severity: code === "UNKNOWN_FIELD" ? "warn" : "error",
 					});
 				}
-				const propsSchema = makeComponentPropsSchema(
-					componentSchema.fields,
-					componentSchema.componentName,
-				);
-				const result = propsSchema.safeParse(propsRecord);
+			}
 
-				if (!result.success) {
-					const zodIssues = result.error.issues.map((issue) => ({
-						path: issue.path,
-						message: issue.message,
-						code: issue.code,
-					}));
-					for (const zi of zodIssues) {
-						const normalizedIssuePath = zi.path.map((segment) =>
-							typeof segment === "symbol" ? String(segment) : segment,
-						);
-						const fullPath = buildPath([
-							...pathSegments,
-							"props",
-							...normalizedIssuePath,
-						]);
-
-						let code = "INVALID_FIELD_TYPE";
-						if (
-							zi.code === "invalid_type" &&
-							!hasValueAtPath(propsRecord, zi.path)
-						) {
-							code = "MISSING_REQUIRED_FIELD";
-						} else if (zi.code === "invalid_value") {
-							code = "INVALID_ENUM_VALUE";
-						} else if (zi.code === "unrecognized_keys") {
-							code = "UNKNOWN_FIELD";
-						}
-
-						issues.push({
-							path: fullPath,
-							message: "[" + code + "] " + zi.message,
-							severity: code === "UNKNOWN_FIELD" ? "warn" : "error",
-						});
-					}
-				}
-
-				const knownFieldNames = new Set(
-					componentSchema.fields.map((f: { name: string }) => f.name),
-				);
-				for (const propKey of Object.keys(propsRecord)) {
-					if (propKey === "id") continue;
-					if (!knownFieldNames.has(propKey)) {
-						issues.push({
-							path: buildPath([...pathSegments, "props", propKey]),
-							message:
-								'[UNKNOWN_FIELD] Property "' +
-								propKey +
-								'" is not defined in the schema for "' +
-								nodeType +
-								'".',
-							severity: "warn",
-						});
-					}
+			const knownFieldNames = new Set(
+				componentSchema.fields.map((f: { name: string }) => f.name),
+			);
+			for (const propKey of Object.keys(propsRecord)) {
+				if (propKey === "id") continue;
+				if (!knownFieldNames.has(propKey)) {
+					issues.push({
+						path: buildPath([...pathSegments, "props", propKey]),
+						message:
+							'[UNKNOWN_FIELD] Property "' +
+							propKey +
+							'" is not defined in the schema for "' +
+							nodeType +
+							'".',
+						severity: "warn",
+					});
 				}
 			}
 		}
@@ -304,15 +349,21 @@ function walkNode(
 		} else {
 			for (let i = 0; i < children.length; i++) {
 				const child = children[i];
-				if (typeof child === "object" && child !== null) {
+				if (isRecordLike(child)) {
 					walkNode(
-						child as Record<string, unknown>,
+						child,
 						[...pathSegments, "children", i],
 						componentMap,
 						componentNames,
 						issues,
 						depth + 1,
 					);
+				} else {
+					issues.push({
+						path: buildPath([...pathSegments, "children", i]),
+						message: "[INVALID_CHILD] children entries must be objects.",
+						severity: "error",
+					});
 				}
 			}
 		}
@@ -359,7 +410,12 @@ function findNonSerializablePath(
 	seen.add(obj);
 	if (Array.isArray(value)) {
 		for (let i = 0; i < value.length; i++) {
-			const hit = findNonSerializablePath(value[i], [...path, i], seen, depth + 1);
+			const hit = findNonSerializablePath(
+				value[i],
+				[...path, i],
+				seen,
+				depth + 1,
+			);
 			if (hit) return hit;
 		}
 		return null;
