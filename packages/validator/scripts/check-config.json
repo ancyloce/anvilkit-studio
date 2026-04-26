@@ -1,3 +1,4 @@
 {
-	"budgetGzippedBytes": 12288
+	"budgetGzippedBytes": 12288,
+	"forbiddenStrings": ["react/jsx-runtime", "react/jsx-dev-runtime"]
 }
