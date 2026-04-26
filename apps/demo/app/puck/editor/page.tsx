@@ -8,17 +8,15 @@ import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
 import {
 	createAssetManagerPlugin,
 	dataUrlUploader,
+	getAssetRegistry,
 	type UploadResult,
+	uploadAsset,
 } from "@anvilkit/plugin-asset-manager";
 import { createHtmlExportPlugin, htmlFormat } from "@anvilkit/plugin-export-html";
 import {
 	createReactExportPlugin,
 	reactFormat,
 } from "@anvilkit/plugin-export-react";
-import {
-	getAssetRegistry,
-	uploadAsset,
-} from "@anvilkit/plugin-asset-manager/plugin";
 import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
