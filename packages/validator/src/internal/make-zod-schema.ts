@@ -12,8 +12,7 @@ import {
 	type ZodMiniType,
 	unknown,
 } from "zod/mini";
-
-const MAX_DEPTH = 16;
+import { MAX_DEPTH } from "./constants.js";
 
 export function makeZodSchemaForField(
 	field: AiFieldSchema,
@@ -77,30 +76,12 @@ export function makeZodSchemaForField(
 	return schema;
 }
 
-const componentSchemaCache = new Map<string, ZodMiniType>();
-
 export function makeComponentPropsSchema(
 	fields: readonly AiFieldSchema[],
-	cacheKey?: string,
 ): ZodMiniType {
-	if (cacheKey && componentSchemaCache.has(cacheKey)) {
-		return componentSchemaCache.get(cacheKey)!;
-	}
-
 	const shape: Record<string, ZodMiniType> = {};
 	for (const field of fields) {
 		shape[field.name] = makeZodSchemaForField(field);
 	}
-
-	const schema = looseObject(shape);
-
-	if (cacheKey) {
-		componentSchemaCache.set(cacheKey, schema);
-	}
-
-	return schema;
-}
-
-export function clearSchemaCache(): void {
-	componentSchemaCache.clear();
+	return looseObject(shape);
 }

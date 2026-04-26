@@ -1,22 +1,29 @@
 function levenshtein(a: string, b: string): number {
 	const m = a.length;
 	const n = b.length;
-	const dp: number[][] = Array.from({ length: m + 1 }, () =>
-		Array.from({ length: n + 1 }, () => 0),
-	);
-	for (let i = 0; i <= m; i++) dp[i]![0] = i;
-	for (let j = 0; j <= n; j++) dp[0]![j] = j;
+	if (m === 0) return n;
+	if (n === 0) return m;
+
+	let prev = new Array<number>(n + 1);
+	let curr = new Array<number>(n + 1);
+	for (let j = 0; j <= n; j++) prev[j] = j;
+
 	for (let i = 1; i <= m; i++) {
+		curr[0] = i;
+		const ai = a.charCodeAt(i - 1);
 		for (let j = 1; j <= n; j++) {
-			const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-			dp[i]![j] = Math.min(
-				dp[i - 1]![j]! + 1,
-				dp[i]![j - 1]! + 1,
-				dp[i - 1]![j - 1]! + cost,
-			);
+			const cost = ai === b.charCodeAt(j - 1) ? 0 : 1;
+			const del = prev[j]! + 1;
+			const ins = curr[j - 1]! + 1;
+			const sub = prev[j - 1]! + cost;
+			curr[j] = del < ins ? (del < sub ? del : sub) : ins < sub ? ins : sub;
 		}
+		const tmp = prev;
+		prev = curr;
+		curr = tmp;
 	}
-	return dp[m]![n]!;
+
+	return prev[n]!;
 }
 
 export function closestMatch(
