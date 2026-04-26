@@ -8,13 +8,285 @@
 	"children": [
 		{
 			"id": 1,
+			"name": "AiValidationIssue",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A single issue produced by validating an LLM's response against\nthe expected component/field shape.\n\n"
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/validator`"
+					},
+					{
+						"kind": "text",
+						"text": " (Phase 3) owns the runtime check that emits\nthese; Core just owns the shape so validator output flows through\na stable contract."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 3,
+					"name": "message",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Human-readable message describing what went wrong. Suitable\nfor display in a dev console or a toast."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 2,
+					"name": "path",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "JSON-pointer-style path to the offending value inside the LLM\nresponse (e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"content.0.props.title\"`"
+							},
+							{
+								"kind": "text",
+								"text": "). Empty string means\nthe issue applies to the response as a whole."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 4,
+					"name": "severity",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Severity of the issue.\n\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`\"warn\"`"
+							},
+							{
+								"kind": "text",
+								"text": " — the response is usable but suspect (e.g. an\n  unexpected extra field).\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`\"error\"`"
+							},
+							{
+								"kind": "text",
+								"text": " — the response is unusable (e.g. required field\n  missing, wrong type)."
+							}
+						]
+					},
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "error"
+							},
+							{
+								"type": "literal",
+								"value": "warn"
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						3,
+						2,
+						4
+					]
+				}
+			]
+		},
+		{
+			"id": 5,
+			"name": "AiValidationResult",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The outcome of validating an LLM response.\n\n"
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "valid",
+						"target": 6
+					},
+					{
+						"kind": "text",
+						"text": " is "
+					},
+					{
+						"kind": "code",
+						"text": "`true`"
+					},
+					{
+						"kind": "text",
+						"text": " only when the response contains zero\nissues with "
+					},
+					{
+						"kind": "code",
+						"text": "`severity: \"error\"`"
+					},
+					{
+						"kind": "text",
+						"text": " — "
+					},
+					{
+						"kind": "code",
+						"text": "`\"warn\"`"
+					},
+					{
+						"kind": "text",
+						"text": "-level issues may be\npresent even when the response is considered valid."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 7,
+					"name": "issues",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The full list of issues found. Empty array when the response\npassed without complaint."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 1,
+								"name": "AiValidationIssue",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 6,
+					"name": "valid",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "code",
+								"text": "`true`"
+							},
+							{
+								"kind": "text",
+								"text": " iff the response contains no "
+							},
+							{
+								"kind": "code",
+								"text": "`severity: \"error\"`"
+							},
+							{
+								"kind": "text",
+								"text": "\nissues. A valid response may still carry "
+							},
+							{
+								"kind": "code",
+								"text": "`\"warn\"`"
+							},
+							{
+								"kind": "text",
+								"text": " entries in\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "issues",
+								"target": 7
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						7,
+						6
+					]
+				}
+			]
+		},
+		{
+			"id": 8,
 			"name": "ValidationIssue",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 3,
+					"id": 10,
 					"name": "code",
 					"variant": "declaration",
 					"kind": 1024,
@@ -27,7 +299,7 @@
 					}
 				},
 				{
-					"id": 6,
+					"id": 13,
 					"name": "componentName",
 					"variant": "declaration",
 					"kind": 1024,
@@ -41,7 +313,7 @@
 					}
 				},
 				{
-					"id": 2,
+					"id": 9,
 					"name": "level",
 					"variant": "declaration",
 					"kind": 1024,
@@ -63,7 +335,7 @@
 					}
 				},
 				{
-					"id": 4,
+					"id": 11,
 					"name": "message",
 					"variant": "declaration",
 					"kind": 1024,
@@ -76,7 +348,7 @@
 					}
 				},
 				{
-					"id": 5,
+					"id": 12,
 					"name": "path",
 					"variant": "declaration",
 					"kind": 1024,
@@ -109,24 +381,24 @@
 				{
 					"title": "Properties",
 					"children": [
-						3,
-						6,
-						2,
-						4,
-						5
+						10,
+						13,
+						9,
+						11,
+						12
 					]
 				}
 			]
 		},
 		{
-			"id": 7,
+			"id": 14,
 			"name": "ValidationResult",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 9,
+					"id": 16,
 					"name": "issues",
 					"variant": "declaration",
 					"kind": 1024,
@@ -140,7 +412,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 1,
+								"target": 8,
 								"name": "ValidationIssue",
 								"package": "@anvilkit/validator"
 							}
@@ -148,7 +420,7 @@
 					}
 				},
 				{
-					"id": 8,
+					"id": 15,
 					"name": "valid",
 					"variant": "declaration",
 					"kind": 1024,
@@ -165,28 +437,28 @@
 				{
 					"title": "Properties",
 					"children": [
-						9,
-						8
+						16,
+						15
 					]
 				}
 			]
 		},
 		{
-			"id": 10,
+			"id": 17,
 			"name": "validateAiOutput",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 11,
+					"id": 18,
 					"name": "validateAiOutput",
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
 					"parameters": [
 						{
-							"id": 12,
+							"id": 19,
 							"name": "response",
 							"variant": "param",
 							"kind": 32768,
@@ -197,7 +469,7 @@
 							}
 						},
 						{
-							"id": 13,
+							"id": 20,
 							"name": "availableComponents",
 							"variant": "param",
 							"kind": 32768,
@@ -223,11 +495,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/types/ai.ts",
-							"qualifiedName": "AiValidationResult"
-						},
+						"target": 5,
 						"name": "AiValidationResult",
 						"package": "@anvilkit/core"
 					}
@@ -235,21 +503,21 @@
 			]
 		},
 		{
-			"id": 14,
+			"id": 21,
 			"name": "validateComponentConfig",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 15,
+					"id": 22,
 					"name": "validateComponentConfig",
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
 					"typeParameters": [
 						{
-							"id": 16,
+							"id": 23,
 							"name": "C",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -268,14 +536,14 @@
 					],
 					"parameters": [
 						{
-							"id": 17,
+							"id": 24,
 							"name": "config",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 16,
+								"target": 23,
 								"name": "C",
 								"package": "@anvilkit/validator",
 								"refersToTypeParameter": true
@@ -284,7 +552,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 7,
+						"target": 14,
 						"name": "ValidationResult",
 						"package": "@anvilkit/validator"
 					}
@@ -297,498 +565,20 @@
 			"title": "Interfaces",
 			"children": [
 				1,
-				7
+				5,
+				8,
+				14
 			]
 		},
 		{
 			"title": "Functions",
 			"children": [
-				10,
-				14
+				17,
+				21
 			]
 		}
 	],
 	"packageName": "@anvilkit/validator",
-	"readme": [
-		{
-			"kind": "text",
-			"text": "# @anvilkit/validator\n\nExport-readiness validation for Puck component configs and AI-generated output.\n\n> **Alpha status (0.1.x).** Both "
-		},
-		{
-			"kind": "code",
-			"text": "`validateComponentConfig`"
-		},
-		{
-			"kind": "text",
-			"text": " and "
-		},
-		{
-			"kind": "code",
-			"text": "`validateAiOutput`"
-		},
-		{
-			"kind": "text",
-			"text": " are implemented and tested.\n\n## Install\n\n"
-		},
-		{
-			"kind": "code",
-			"text": "```bash\npnpm add @anvilkit/validator @puckeditor/core\n```"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n## Quickstart\n\n### Validating a Puck component config\n\n"
-		},
-		{
-			"kind": "code",
-			"text": "```ts\nimport { validateComponentConfig } from \"@anvilkit/validator\";\n\nconst result = validateComponentConfig(puckConfig);\nif (!result.valid) {\n  console.error(\"Config issues:\", result.issues);\n}\n```"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n### Validating LLM-generated PageIR\n\n"
-		},
-		{
-			"kind": "code",
-			"text": "```ts\nimport { validateAiOutput } from \"@anvilkit/validator\";\n\nconst result = validateAiOutput(llmResponse, availableComponents);\nif (!result.valid) {\n  // Do NOT dispatch to Puck — surface issues back to the AI retry loop.\n  console.error(\"AI output rejected:\", result.issues);\n}\n```"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n## Phase 3 references\n\nSee the [Phase 3 plan]("
-		},
-		{
-			"kind": "relative-link",
-			"text": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
-			"target": 2
-		},
-		{
-			"kind": "text",
-			"text": ")\n("
-		},
-		{
-			"kind": "code",
-			"text": "`M3 — @anvilkit/validator`"
-		},
-		{
-			"kind": "text",
-			"text": ") and the\n[architecture package catalog]("
-		},
-		{
-			"kind": "relative-link",
-			"text": "../../docs/ai-context/anvilkit-architecture.md",
-			"target": 3
-		},
-		{
-			"kind": "text",
-			"text": ")\n("
-		},
-		{
-			"kind": "code",
-			"text": "`§7 — @anvilkit/validator [Planned]`"
-		},
-		{
-			"kind": "text",
-			"text": ") for the validator's trust\nboundary and dependency rules.\n\n## Error Codes — "
-		},
-		{
-			"kind": "code",
-			"text": "`validateComponentConfig`"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n| Code | Level | Description |\n|------|-------|-------------|\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`E_MISSING_RENDER`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | "
-		},
-		{
-			"kind": "code",
-			"text": "`component.render`"
-		},
-		{
-			"kind": "text",
-			"text": " is not a function |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`E_MISSING_FIELDS`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | "
-		},
-		{
-			"kind": "code",
-			"text": "`component.fields`"
-		},
-		{
-			"kind": "text",
-			"text": " is not an object |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`E_NON_SERIALIZABLE_DEFAULT`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | A default prop value fails JSON serialization |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`E_FIELD_SHAPE_INVALID`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | A field does not match the Puck Field union |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`E_ASYNC_RENDER`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | "
-		},
-		{
-			"kind": "code",
-			"text": "`component.render`"
-		},
-		{
-			"kind": "text",
-			"text": " is an async function (Puck does not support async render) |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`W_MISSING_DESCRIPTION`"
-		},
-		{
-			"kind": "text",
-			"text": " | warning | "
-		},
-		{
-			"kind": "code",
-			"text": "`component.metadata?.description`"
-		},
-		{
-			"kind": "text",
-			"text": " is empty or undefined |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`W_UNKNOWN_FIELD_TYPE`"
-		},
-		{
-			"kind": "text",
-			"text": " | warning | Field type is not one of the 10 AiFieldType cases |\n\n### Why "
-		},
-		{
-			"kind": "code",
-			"text": "`E_ASYNC_RENDER`"
-		},
-		{
-			"kind": "text",
-			"text": " is a hard failure\n\nPuck renders components synchronously during its reconciliation loop. An async render function silently breaks — it returns a Promise object instead of React elements, which Puck coerces to "
-		},
-		{
-			"kind": "code",
-			"text": "`[object Promise]`"
-		},
-		{
-			"kind": "text",
-			"text": " or a blank node. This is impossible to debug from the editor, so we fail hard at validation time.\n\n## Issue Codes — "
-		},
-		{
-			"kind": "code",
-			"text": "`validateAiOutput`"
-		},
-		{
-			"kind": "text",
-			"text": "\n\nCodes are embedded as a "
-		},
-		{
-			"kind": "code",
-			"text": "`[CODE]`"
-		},
-		{
-			"kind": "text",
-			"text": " prefix in each "
-		},
-		{
-			"kind": "code",
-			"text": "`AiValidationIssue.message`"
-		},
-		{
-			"kind": "text",
-			"text": ". Callers (notably the AI copilot retry loop in Phase 4) switch on them.\n\n| Code | Severity | Description |\n|------|----------|-------------|\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`INVALID_STRUCTURE`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | Response is not an object, missing "
-		},
-		{
-			"kind": "code",
-			"text": "`root`"
-		},
-		{
-			"kind": "text",
-			"text": ", or "
-		},
-		{
-			"kind": "code",
-			"text": "`type`"
-		},
-		{
-			"kind": "text",
-			"text": " is not a string |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`UNSUPPORTED_VERSION`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | "
-		},
-		{
-			"kind": "code",
-			"text": "`PageIR.version`"
-		},
-		{
-			"kind": "text",
-			"text": " is not "
-		},
-		{
-			"kind": "code",
-			"text": "`\"1\"`"
-		},
-		{
-			"kind": "text",
-			"text": " |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`UNKNOWN_COMPONENT`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | Node "
-		},
-		{
-			"kind": "code",
-			"text": "`type`"
-		},
-		{
-			"kind": "text",
-			"text": " is not in "
-		},
-		{
-			"kind": "code",
-			"text": "`availableComponents`"
-		},
-		{
-			"kind": "text",
-			"text": " (may include a closest-match suggestion) |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`MISSING_REQUIRED_FIELD`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | A required field is absent from "
-		},
-		{
-			"kind": "code",
-			"text": "`node.props`"
-		},
-		{
-			"kind": "text",
-			"text": " |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`INVALID_FIELD_TYPE`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | A field value does not match the declared "
-		},
-		{
-			"kind": "code",
-			"text": "`AiFieldType`"
-		},
-		{
-			"kind": "text",
-			"text": " |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`INVALID_ENUM_VALUE`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | A "
-		},
-		{
-			"kind": "code",
-			"text": "`select`"
-		},
-		{
-			"kind": "text",
-			"text": " field received a value outside the declared options |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`INVALID_ASSET`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | An entry in "
-		},
-		{
-			"kind": "code",
-			"text": "`PageIR.assets`"
-		},
-		{
-			"kind": "text",
-			"text": " is malformed (bad "
-		},
-		{
-			"kind": "code",
-			"text": "`kind`"
-		},
-		{
-			"kind": "text",
-			"text": ", missing "
-		},
-		{
-			"kind": "code",
-			"text": "`url`"
-		},
-		{
-			"kind": "text",
-			"text": ", etc.) |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`MAX_DEPTH_EXCEEDED`"
-		},
-		{
-			"kind": "text",
-			"text": " | error | Node tree exceeds the hard cap of 16 levels (DoS guard) |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`UNKNOWN_FIELD`"
-		},
-		{
-			"kind": "text",
-			"text": " | warn | A prop is not declared in the component's "
-		},
-		{
-			"kind": "code",
-			"text": "`AiComponentSchema.fields`"
-		},
-		{
-			"kind": "text",
-			"text": " |\n\n### Trust boundary\n\n"
-		},
-		{
-			"kind": "code",
-			"text": "`validateAiOutput`"
-		},
-		{
-			"kind": "text",
-			"text": " is the only thing standing between untrusted LLM output and "
-		},
-		{
-			"kind": "code",
-			"text": "`puckApi.dispatch`"
-		},
-		{
-			"kind": "text",
-			"text": ". If "
-		},
-		{
-			"kind": "code",
-			"text": "`result.valid === false`"
-		},
-		{
-			"kind": "text",
-			"text": ", the caller MUST NOT apply the response. Per architecture §9, validation failure surfaces immediately; retry logic is Phase 4.\n\n## Dependency contract\n\n| Allowed | Forbidden |\n|---------|-----------|\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/schema`"
-		},
-		{
-			"kind": "text",
-			"text": " (runtime) | "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/ir`"
-		},
-		{
-			"kind": "text",
-			"text": ", React, plugins |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/utils`"
-		},
-		{
-			"kind": "text",
-			"text": " (runtime) | |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`zod`"
-		},
-		{
-			"kind": "text",
-			"text": " (runtime) | |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/core`"
-		},
-		{
-			"kind": "text",
-			"text": " (types-only) | |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@puckeditor/core`"
-		},
-		{
-			"kind": "text",
-			"text": " (peer, types-only) | |\n\n## Peer dependencies\n\n| Package | Version |\n| ------- | ------- |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@puckeditor/core`"
-		},
-		{
-			"kind": "text",
-			"text": " | "
-		},
-		{
-			"kind": "code",
-			"text": "`^0.19.0`"
-		},
-		{
-			"kind": "text",
-			"text": " |"
-		}
-	],
 	"symbolIdMap": {
 		"0": {
 			"packageName": "@anvilkit/validator",
@@ -796,86 +586,121 @@
 			"qualifiedName": ""
 		},
 		"1": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/ai.ts",
+			"qualifiedName": "AiValidationIssue"
 		},
 		"2": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.level"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/ai.ts",
+			"qualifiedName": "AiValidationIssue.path"
 		},
 		"3": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.code"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/ai.ts",
+			"qualifiedName": "AiValidationIssue.message"
 		},
 		"4": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.message"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/ai.ts",
+			"qualifiedName": "AiValidationIssue.severity"
 		},
 		"5": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.path"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/ai.ts",
+			"qualifiedName": "AiValidationResult"
 		},
 		"6": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.componentName"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/ai.ts",
+			"qualifiedName": "AiValidationResult.valid"
 		},
 		"7": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationResult"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/ai.ts",
+			"qualifiedName": "AiValidationResult.issues"
 		},
 		"8": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationResult.valid"
+			"qualifiedName": "ValidationIssue"
 		},
 		"9": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationResult.issues"
+			"qualifiedName": "ValidationIssue.level"
 		},
 		"10": {
 			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-ai-output.ts",
-			"qualifiedName": "validateAiOutput"
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.code"
 		},
 		"11": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.message"
+		},
+		"12": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.path"
+		},
+		"13": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationIssue.componentName"
+		},
+		"14": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationResult"
+		},
+		"15": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationResult.valid"
+		},
+		"16": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/types.ts",
+			"qualifiedName": "ValidationResult.issues"
+		},
+		"17": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-ai-output.ts",
 			"qualifiedName": "validateAiOutput"
 		},
-		"12": {
+		"18": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-ai-output.ts",
+			"qualifiedName": "validateAiOutput"
+		},
+		"19": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-ai-output.ts",
 			"qualifiedName": "response"
 		},
-		"13": {
+		"20": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-ai-output.ts",
 			"qualifiedName": "availableComponents"
 		},
-		"14": {
+		"21": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-component-config.ts",
 			"qualifiedName": "validateComponentConfig"
 		},
-		"15": {
+		"22": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-component-config.ts",
 			"qualifiedName": "validateComponentConfig"
 		},
-		"16": {
+		"23": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-component-config.ts",
 			"qualifiedName": "C"
 		},
-		"17": {
+		"24": {
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-component-config.ts",
 			"qualifiedName": "config"
@@ -883,16 +708,10 @@
 	},
 	"files": {
 		"entries": {
-			"1": "src/index.ts",
-			"2": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
-			"3": "../../docs/ai-context/anvilkit-architecture.md",
-			"4": "README.md",
-			"5": ""
+			"1": "src/index.ts"
 		},
 		"reflections": {
-			"1": 0,
-			"4": 0,
-			"5": 0
+			"1": 0
 		}
 	}
 }
