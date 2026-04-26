@@ -114,4 +114,85 @@ describe("puckDataToIR", () => {
 		expect("id" in ir.root.props).toBe(false);
 		expect(ir.root.props).toEqual({ title: "Page" });
 	});
+
+	it("preserves explicit top-level assets from Puck data", () => {
+		const data = {
+			root: {},
+			content: [],
+			assets: [
+				{
+					id: "asset-1",
+					kind: "image",
+					url: "asset://asset-1",
+					meta: {
+						mimeType: "image/png",
+						size: 5,
+					},
+				},
+			],
+		} as unknown as Data;
+		const config: Config = { components: {} };
+
+		const ir = puckDataToIR(data, config, { now: FIXED_CLOCK });
+
+		expect(ir.assets).toEqual([
+			{
+				id: "asset-1",
+				kind: "image",
+				url: "asset://asset-1",
+				meta: {
+					mimeType: "image/png",
+					size: 5,
+				},
+			},
+		]);
+	});
+
+	it("prefers explicit asset metadata when props reference the same URL", () => {
+		const data = {
+			root: {},
+			content: [
+				{
+					type: "Hero",
+					props: {
+						id: "hero-1",
+						backgroundSrc: "asset://asset-1",
+					},
+				},
+			],
+			assets: [
+				{
+					id: "asset-1",
+					kind: "image",
+					url: "asset://asset-1",
+					meta: {
+						mimeType: "image/png",
+					},
+				},
+			],
+		} as unknown as Data;
+		const config: Config = {
+			components: {
+				Hero: {
+					render: noop,
+					fields: {
+						backgroundSrc: { type: "text" },
+					},
+				},
+			},
+		};
+
+		const ir = puckDataToIR(data, config, { now: FIXED_CLOCK });
+
+		expect(ir.assets).toEqual([
+			{
+				id: "asset-1",
+				kind: "image",
+				url: "asset://asset-1",
+				meta: {
+					mimeType: "image/png",
+				},
+			},
+		]);
+	});
 });

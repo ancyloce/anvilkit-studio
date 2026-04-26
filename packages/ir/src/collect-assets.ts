@@ -43,7 +43,7 @@ function classifyUrl(url: string): PageIRAsset["kind"] {
  * asset reference.
  */
 const ASSET_KEY_PATTERN =
-	/^(src|imageUrl|imageSrc|url|videoUrl|videoSrc|fontUrl|scriptUrl|styleUrl)$/;
+	/^(src|imageUrl|imageSrc|url|videoUrl|videoSrc|fontUrl|scriptUrl|styleUrl|backgroundSrc|backgroundImage|poster|thumbnailSrc)$/;
 
 // ---------------------------------------------------------------------------
 // Recursive walker

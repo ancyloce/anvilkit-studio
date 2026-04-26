@@ -1,6 +1,7 @@
 import type {
 	ExportWarning,
 	PageIR,
+	PageIRAsset,
 	PageIRMetadata,
 	PageIRNode,
 } from "@anvilkit/core/types";
@@ -11,6 +12,7 @@ import { canonicalizeProps, deepFreeze } from "./internal/canonicalize.js";
 
 type PuckContentItem = Data["content"][number];
 type SlotKind = "slot" | "zone";
+type PuckDataWithAssets = Data & { readonly assets?: readonly unknown[] };
 
 interface ParentSlot {
 	readonly name: string;
@@ -46,7 +48,9 @@ function splitZoneKey(zoneKey: string): readonly [string, string] | null {
 
 function groupZonesByParent(data: Data): Map<string, readonly ZoneEntry[]> {
 	const zonesByParent = new Map<string, ZoneEntry[]>();
-	const zones = data.zones as Record<string, readonly PuckContentItem[]> | undefined;
+	const zones = data.zones as
+		| Record<string, readonly PuckContentItem[]>
+		| undefined;
 
 	if (!zones) return zonesByParent;
 
@@ -72,6 +76,69 @@ function groupZonesByParent(data: Data): Map<string, readonly ZoneEntry[]> {
 	}
 
 	return zonesByParent;
+}
+
+function isAssetKind(value: unknown): value is PageIRAsset["kind"] {
+	return (
+		value === "image" ||
+		value === "video" ||
+		value === "font" ||
+		value === "script" ||
+		value === "style" ||
+		value === "other"
+	);
+}
+
+function collectExplicitAssets(data: Data): readonly PageIRAsset[] {
+	const assets = (data as PuckDataWithAssets).assets;
+	if (!Array.isArray(assets)) {
+		return [];
+	}
+
+	const explicitAssets: PageIRAsset[] = [];
+	for (const asset of assets) {
+		if (asset === null || typeof asset !== "object") {
+			continue;
+		}
+
+		const record = asset as Record<string, unknown>;
+		if (
+			typeof record.id !== "string" ||
+			record.id.trim() === "" ||
+			typeof record.url !== "string" ||
+			record.url.trim() === "" ||
+			!isAssetKind(record.kind)
+		) {
+			continue;
+		}
+
+		const meta = record.meta;
+		explicitAssets.push({
+			id: record.id.trim(),
+			kind: record.kind,
+			url: record.url.trim(),
+			...(meta !== null && typeof meta === "object" && !Array.isArray(meta)
+				? { meta: { ...(meta as Record<string, unknown>) } }
+				: {}),
+		});
+	}
+
+	return explicitAssets;
+}
+
+function mergeAssetsByUrl(
+	explicitAssets: readonly PageIRAsset[],
+	collectedAssets: readonly PageIRAsset[],
+): readonly PageIRAsset[] {
+	const assetsByUrl = new Map<string, PageIRAsset>();
+
+	for (const asset of [...explicitAssets, ...collectedAssets]) {
+		if (!assetsByUrl.has(asset.url)) {
+			assetsByUrl.set(asset.url, asset);
+		}
+	}
+
+	return [...assetsByUrl.values()];
 }
 
 function emitCanonicalWarnings(
@@ -232,7 +299,10 @@ export function puckDataToIR(
 	};
 
 	// --- Collect all assets across the tree (delegates to collectAssets) ---
-	const assets = collectAssets(root);
+	const assets = mergeAssetsByUrl(
+		collectExplicitAssets(data),
+		collectAssets(root),
+	);
 
 	// --- Metadata ---
 	const metadata: PageIRMetadata = {

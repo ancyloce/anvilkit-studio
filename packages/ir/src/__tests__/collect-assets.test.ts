@@ -93,8 +93,22 @@ describe("collectAssets", () => {
 
 	// ----- Prop key patterns -----
 
-	it("collects from src, imageUrl, imageSrc, url, videoUrl, videoSrc keys", () => {
-		const keys = ["src", "imageUrl", "imageSrc", "url", "videoUrl", "videoSrc"];
+	it("collects from known asset-shaped prop keys", () => {
+		const keys = [
+			"src",
+			"imageUrl",
+			"imageSrc",
+			"url",
+			"videoUrl",
+			"videoSrc",
+			"fontUrl",
+			"scriptUrl",
+			"styleUrl",
+			"backgroundSrc",
+			"backgroundImage",
+			"poster",
+			"thumbnailSrc",
+		];
 		for (const key of keys) {
 			const assets = collectAssets(
 				node({ [key]: "https://cdn.example.com/photo.png" }),
