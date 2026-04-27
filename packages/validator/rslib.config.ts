@@ -39,7 +39,6 @@ export default defineConfig({
 			"@anvilkit/core",
 			"@anvilkit/ir",
 			"@anvilkit/schema",
-			"@anvilkit/utils",
 			"@puckeditor/core",
 			"zod",
 		],
