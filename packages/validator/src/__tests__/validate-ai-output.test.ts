@@ -281,4 +281,129 @@ describe("validateAiOutput", () => {
 			expect(issue.message.length).toBeGreaterThan(0);
 		}
 	});
+
+	it("tolerates extra properties on assets (looseObject contract)", () => {
+		const ir = {
+			version: "1",
+			root: { id: "root", type: "__root__", props: {}, children: [] },
+			assets: [
+				{
+					id: "a1",
+					kind: "image",
+					url: "https://example.com/a.png",
+					extra: 1,
+					nested: { foo: "bar" },
+				},
+			],
+			metadata: {},
+		};
+		const result = validateAiOutput(ir, schemas);
+		const issue = result.issues.find((i) => i.message.includes("[INVALID_ASSET]"));
+		expect(issue).toBeUndefined();
+	});
+
+	it("tolerates unknown extra top-level keys on the response", () => {
+		// validateAiOutput intentionally does not reject unknown top-level
+		// keys — this leaves room for forward-compatible additions to
+		// PageIR without breaking existing validators in the field.
+		const ir = {
+			version: "1",
+			root: { id: "root", type: "__root__", props: {}, children: [] },
+			assets: [],
+			metadata: {},
+			futureField: "tolerated",
+			anotherOne: { nested: true },
+		};
+		const result = validateAiOutput(ir, schemas);
+		expect(result.valid).toBe(true);
+	});
+
+	it("includes [INVALID_ASSET] details in a human-readable form", () => {
+		const ir = {
+			version: "1",
+			root: { id: "root", type: "__root__", props: {}, children: [] },
+			assets: [{ id: "a1", kind: "badkind", url: "https://example.com/a.png" }],
+			metadata: {},
+		};
+		const result = validateAiOutput(ir, schemas);
+		const issue = result.issues.find((i) => i.message.includes("[INVALID_ASSET]"));
+		expect(issue).toBeDefined();
+		// The message should not be a JSON-encoded Zod issue array.
+		expect(issue!.message.startsWith("[INVALID_ASSET]")).toBe(true);
+		expect(issue!.message).not.toMatch(/^\[INVALID_ASSET\][^[]*\[\s*\{/);
+	});
+
+	it("documents the path-with-dots ambiguity (current behavior)", () => {
+		// A field literally named "foo.bar" collides with the dot-joined
+		// path format. Locking the current behavior so a silent change in
+		// 1.0 (e.g. switching to JSON Pointer) is explicit.
+		const dottedSchema: AiComponentSchema = {
+			componentName: "Dotted",
+			description: "Component with a dotted field name",
+			fields: [{ name: "foo.bar", type: "text", required: true }],
+		};
+		const ir = makeValidIR([
+			{ type: "Dotted", props: { id: "d1" } },
+		]);
+		const result = validateAiOutput(ir, [dottedSchema]);
+		const missing = result.issues.find((i) =>
+			i.message.includes("[MISSING_REQUIRED_FIELD]"),
+		);
+		expect(missing).toBeDefined();
+		// Path is dot-joined: ambiguous between "foo.bar" and "foo" → "bar".
+		expect(missing!.path).toBe("root.children.0.props.foo.bar");
+	});
+
+	describe("MAX_DEPTH_EXCEEDED off-by-one (Finding §3)", () => {
+		// Build a chain of N nested children. The root is depth 0; each
+		// child increments depth. With MAX_NODE_DEPTH=16, depths 0..15 (16
+		// levels) must pass and depth 16 (17 levels) must error.
+		function buildChain(levels: number): unknown {
+			let node: Record<string, unknown> = {
+				id: "leaf",
+				type: "Section",
+				props: { id: "leaf" },
+			};
+			for (let i = levels - 2; i >= 0; i--) {
+				node = {
+					id: "n" + i,
+					type: "Section",
+					props: { id: "n" + i },
+					children: [node],
+				};
+			}
+			return {
+				version: "1",
+				root: {
+					id: "root",
+					type: "__root__",
+					props: {},
+					children: [node],
+				},
+				assets: [],
+				metadata: {},
+			};
+		}
+
+		it("accepts a tree at exactly 16 levels", () => {
+			// Root + 15 nested = 16 levels (deepest at depth 15).
+			const ir = buildChain(15);
+			const result = validateAiOutput(ir, schemas);
+			const cap = result.issues.find((i) =>
+				i.message.includes("[MAX_DEPTH_EXCEEDED]"),
+			);
+			expect(cap).toBeUndefined();
+		});
+
+		it("rejects a tree at 17 levels", () => {
+			// Root + 16 nested = 17 levels (deepest at depth 16).
+			const ir = buildChain(16);
+			const result = validateAiOutput(ir, schemas);
+			const cap = result.issues.find((i) =>
+				i.message.includes("[MAX_DEPTH_EXCEEDED]"),
+			);
+			expect(cap).toBeDefined();
+			expect(cap!.message).toContain("16");
+		});
+	});
 });

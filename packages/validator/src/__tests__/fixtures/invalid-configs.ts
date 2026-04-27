@@ -100,3 +100,33 @@ export const unknownFieldTypeConfig: Config = {
 		},
 	},
 };
+
+export const cyclicDefaultConfig: Config = (() => {
+	const cyclic: Record<string, unknown> = { name: "self" };
+	cyclic.self = cyclic;
+	return {
+		components: {
+			Broken: {
+				render: noop,
+				fields: {
+					profile: { type: "text" },
+				},
+				defaultProps: {
+					profile: cyclic as unknown,
+				},
+			} as Config["components"][string],
+		},
+	};
+})();
+
+export const nullMetadataConfig: Config = {
+	components: {
+		Broken: {
+			render: noop,
+			fields: {
+				title: { type: "text" },
+			},
+			metadata: null as unknown as Config["components"][string]["metadata"],
+		},
+	},
+};

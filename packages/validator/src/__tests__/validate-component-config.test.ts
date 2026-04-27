@@ -2,12 +2,14 @@ import { describe, expect, it } from "vitest";
 import { validateComponentConfig } from "../validate-component-config.js";
 import {
 	asyncRenderConfig,
+	cyclicDefaultConfig,
 	invalidFieldShapeConfig,
 	missingDescriptionConfig,
 	missingFieldsConfig,
 	missingRenderConfig,
 	nestedNonSerializableDefaultConfig,
 	nonSerializableDefaultConfig,
+	nullMetadataConfig,
 	unknownFieldTypeConfig,
 } from "./fixtures/invalid-configs.js";
 import { validConfig } from "./fixtures/valid-config.js";
@@ -144,5 +146,31 @@ describe("validateComponentConfig", () => {
 	it("reports multiple issues for multiple problems", () => {
 		const result = validateComponentConfig(missingRenderConfig);
 		expect(result.issues.length).toBeGreaterThanOrEqual(2);
+	});
+
+	// ----- Cyclic defaults flow through to E_NON_SERIALIZABLE_DEFAULT -----
+	it("reports E_NON_SERIALIZABLE_DEFAULT for a cyclic default prop", () => {
+		const result = validateComponentConfig(cyclicDefaultConfig);
+		expect(result.valid).toBe(false);
+		const issue = result.issues.find(
+			(i) => i.code === "E_NON_SERIALIZABLE_DEFAULT",
+		);
+		expect(issue).toBeDefined();
+		expect(issue!.componentName).toBe("Broken");
+		expect(issue!.path).toEqual([
+			"components",
+			"Broken",
+			"defaultProps",
+			"profile",
+		]);
+	});
+
+	// ----- metadata: null behaves like missing metadata -----
+	it("treats metadata: null as missing description (W_MISSING_DESCRIPTION)", () => {
+		const result = validateComponentConfig(nullMetadataConfig);
+		const issue = result.issues.find((i) => i.code === "W_MISSING_DESCRIPTION");
+		expect(issue).toBeDefined();
+		expect(issue!.level).toBe("warning");
+		expect(result.valid).toBe(true);
 	});
 });

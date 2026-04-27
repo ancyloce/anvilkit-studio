@@ -110,6 +110,36 @@ describe("validateAiOutput — NON_SERIALIZABLE_PROP (phase4-014 F-3)", () => {
 		expect(issue!.message).toContain("circular");
 	});
 
+	it("accepts a DAG where sibling subtrees share an object reference", () => {
+		// A shared object (e.g. a default theme reused across props) is
+		// perfectly JSON-serialisable — it is duplicated on stringify, not
+		// rejected. The walk must not flag this as a cycle just because
+		// the same reference appears twice on different branches.
+		const shared = { foo: 1, bar: { baz: 2 } };
+		const ir = wrap({
+			title: "Hello",
+			meta: { left: shared, right: shared },
+		});
+		const result = validateAiOutput(ir, schemas);
+		const nonSer = result.issues.find((i) =>
+			i.message.includes("[NON_SERIALIZABLE_PROP]"),
+		);
+		expect(nonSer).toBeUndefined();
+	});
+
+	it("accepts a shared object referenced from multiple array entries", () => {
+		const shared = { repeated: true };
+		const ir = wrap({
+			title: "Hello",
+			meta: [shared, shared, { other: shared }],
+		});
+		const result = validateAiOutput(ir, schemas);
+		const nonSer = result.issues.find((i) =>
+			i.message.includes("[NON_SERIALIZABLE_PROP]"),
+		);
+		expect(nonSer).toBeUndefined();
+	});
+
 	it("accepts deeply-nested pure JSON values", () => {
 		const ir = wrap({
 			title: "Hello",
