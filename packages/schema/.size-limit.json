@@ -4,6 +4,6 @@
 		"path": "dist/index.js",
 		"limit": "8 KB",
 		"gzip": true,
-		"ignore": ["@puckeditor/core", "@anvilkit/ir", "@anvilkit/utils", "zod"]
+		"ignore": ["@puckeditor/core", "@anvilkit/ir", "zod"]
 	}
 ]
