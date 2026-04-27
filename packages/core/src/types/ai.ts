@@ -99,13 +99,39 @@ export interface AiFieldSchema {
 	 */
 	readonly options?: readonly { readonly label: string; readonly value: string }[];
 	/**
-	 * For `type: "array"` fields, the schema of a single item. For
-	 * `type: "object"` fields, a pseudo-schema describing one key of
-	 * the object (caller may provide several by nesting).
+	 * For `type: "array"` fields, the schema of a single item. When the
+	 * item is itself an object, the item carries its own
+	 * {@link properties} listing the typed sub-fields.
+	 *
+	 * Absent on scalar field types and on `type: "object"` (which uses
+	 * {@link properties} directly).
+	 */
+	readonly itemSchema?: AiFieldSchema;
+	/**
+	 * For `type: "object"` fields (and `type: "array"` items whose
+	 * `itemSchema.type === "object"`), the typed sub-fields of the
+	 * object. Each entry is a fully-formed {@link AiFieldSchema} so
+	 * the LLM and the validator can reason about nested structure
+	 * without parsing free-form descriptions.
 	 *
 	 * Absent on scalar field types.
 	 */
-	readonly itemSchema?: AiFieldSchema;
+	readonly properties?: readonly AiFieldSchema[];
+	/**
+	 * For slot fields (mapped to `type: "object"`), the list of
+	 * component names that may be inserted into the slot. When
+	 * omitted, any registered component is allowed.
+	 *
+	 * Mirrors Puck's `allow` array on slot field definitions.
+	 */
+	readonly allow?: readonly string[];
+	/**
+	 * For slot fields (mapped to `type: "object"`), the list of
+	 * component names that may *not* be inserted into the slot.
+	 *
+	 * Mirrors Puck's `disallow` array on slot field definitions.
+	 */
+	readonly disallow?: readonly string[];
 }
 
 /**
