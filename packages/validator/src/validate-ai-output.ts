@@ -12,7 +12,7 @@ import {
 	unknown,
 } from "zod/mini";
 import { closestMatch } from "./internal/closest-match.js";
-import { MAX_DEPTH } from "./internal/constants.js";
+import { MAX_NODE_DEPTH, MAX_PROP_DEPTH } from "./internal/constants.js";
 import { makeComponentPropsSchema } from "./internal/make-zod-schema.js";
 
 const assetKinds = [
@@ -106,13 +106,16 @@ export function validateAiOutput(
 			const asset = res.assets[i];
 			const result = assetSchema.safeParse(asset);
 			if (!result.success) {
+				const firstIssue = result.error.issues[0];
+				const detail = firstIssue
+					? firstIssue.path.length > 0
+						? firstIssue.path.join(".") + ": " + firstIssue.message
+						: firstIssue.message
+					: "unknown validation error";
 				issues.push({
 					path: buildPath(["assets", i]),
 					message:
-						"[INVALID_ASSET] Asset at index " +
-						i +
-						" is malformed: " +
-						result.error.message,
+						"[INVALID_ASSET] Asset at index " + i + " is malformed: " + detail,
 					severity: "error",
 				});
 			}
@@ -173,10 +176,13 @@ function walkNode(
 	issues: AiValidationIssue[],
 	depth: number,
 ): void {
-	if (depth > MAX_DEPTH) {
+	if (depth >= MAX_NODE_DEPTH) {
 		issues.push({
 			path: buildPath(pathSegments),
-			message: "[MAX_DEPTH_EXCEEDED] Node tree exceeds maximum depth of 16.",
+			message:
+				"[MAX_DEPTH_EXCEEDED] Node tree exceeds maximum depth of " +
+				MAX_NODE_DEPTH +
+				".",
 			severity: "error",
 		});
 		return;
@@ -368,13 +374,15 @@ function walkNode(
  * silently broke `structuredClone` + `localStorage` rehydration even
  * though the upstream Zod schema accepted them as `unknown()`.
  *
- * Cycles are caught via the `seen` WeakSet; max traversal depth is
- * {@link MAX_DEPTH} to match the node-walk budget.
+ * `ancestors` tracks the active recursion path only — entries are
+ * removed on the way back up so that a value shared by sibling
+ * subtrees (a perfectly serialisable DAG) is not misreported as a
+ * cycle. True self-references still trip the check on the way down.
  */
 function findNonSerializablePath(
 	value: unknown,
 	path: readonly (string | number)[],
-	seen: WeakSet<object>,
+	ancestors: WeakSet<object>,
 	depth: number,
 ): { path: string; reason: string } | null {
 	if (value === null || value === undefined) return null;
@@ -392,29 +400,38 @@ function findNonSerializablePath(
 	if (t !== "object") {
 		return { path: buildPath(path), reason: t };
 	}
-	if (depth > MAX_DEPTH) {
+	if (depth > MAX_PROP_DEPTH) {
 		return { path: buildPath(path), reason: "exceeds-max-depth" };
 	}
 	const obj = value as object;
-	if (seen.has(obj)) {
+	if (ancestors.has(obj)) {
 		return { path: buildPath(path), reason: "circular" };
 	}
-	seen.add(obj);
-	if (Array.isArray(value)) {
-		for (let i = 0; i < value.length; i++) {
+	ancestors.add(obj);
+	try {
+		if (Array.isArray(value)) {
+			for (let i = 0; i < value.length; i++) {
+				const hit = findNonSerializablePath(
+					value[i],
+					[...path, i],
+					ancestors,
+					depth + 1,
+				);
+				if (hit) return hit;
+			}
+			return null;
+		}
+		for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
 			const hit = findNonSerializablePath(
-				value[i],
-				[...path, i],
-				seen,
+				v,
+				[...path, k],
+				ancestors,
 				depth + 1,
 			);
 			if (hit) return hit;
 		}
 		return null;
+	} finally {
+		ancestors.delete(obj);
 	}
-	for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
-		const hit = findNonSerializablePath(v, [...path, k], seen, depth + 1);
-		if (hit) return hit;
-	}
-	return null;
 }
