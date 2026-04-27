@@ -12,14 +12,14 @@ import {
 	type ZodMiniType,
 	unknown,
 } from "zod/mini";
-import { MAX_DEPTH } from "./constants.js";
+import { MAX_NODE_DEPTH } from "./constants.js";
 
 export function makeZodSchemaForField(
 	field: AiFieldSchema,
 	depth?: number,
 ): ZodMiniType {
 	const d = depth ?? 0;
-	if (d > MAX_DEPTH) {
+	if (d > MAX_NODE_DEPTH) {
 		return unknown();
 	}
 
