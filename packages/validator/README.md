@@ -86,13 +86,21 @@ Codes are embedded as a `[CODE]` prefix in each `AiValidationIssue.message`. Cal
 
 `validateAiOutput` is the only thing standing between untrusted LLM output and `puckApi.dispatch`. If `result.valid === false`, the caller MUST NOT apply the response. Per architecture §9, validation failure surfaces immediately; retry logic is Phase 4.
 
+### Validation depth limits
+
+- **Node tree:** capped at 16 nesting levels (depths `0…15`). A 17-level tree errors with `[MAX_DEPTH_EXCEEDED]`.
+- **Prop values:** capped at 64 nesting levels. The looser cap exists so a deeply-nested theme dictionary or config object passed as a prop still validates.
+
+### `object`-typed fields are not deeply validated
+
+Fields declared with `type: "object"` in `AiComponentSchema` are validated as `record(string, unknown)` — any object passes regardless of inner shape. The schema does not currently carry inner field information for object props; if you need shape-level checks, model the inner fields explicitly or perform the check downstream. The recursive `[NON_SERIALIZABLE_PROP]` walk still applies, so functions / symbols / bigints buried in an object prop are still rejected.
+
 ## Dependency contract
 
 | Allowed | Forbidden |
 |---------|-----------|
 | `@anvilkit/schema` (runtime) | `@anvilkit/ir`, React, plugins |
-| `@anvilkit/utils` (runtime) | |
-| `zod` (runtime) | |
+| `zod` (runtime) | `@anvilkit/utils` |
 | `@anvilkit/core` (types-only) | |
 | `@puckeditor/core` (peer, types-only) | |
 
