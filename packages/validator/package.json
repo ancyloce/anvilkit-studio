@@ -46,7 +46,6 @@
 	},
 	"dependencies": {
 		"@anvilkit/schema": "workspace:*",
-		"@anvilkit/utils": "workspace:*",
 		"zod": "^4.3.0"
 	},
 	"scripts": {
