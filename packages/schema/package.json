@@ -44,9 +44,6 @@
 			"optional": false
 		}
 	},
-	"dependencies": {
-		"@anvilkit/utils": "workspace:*"
-	},
 	"scripts": {
 		"build": "rslib build",
 		"dev": "rslib build --watch",
