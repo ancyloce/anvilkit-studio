@@ -9,14 +9,14 @@
   component configs into AI-safe prompt context.
 - **Quality gates** — `check:publint`, `check:circular`,
   `check:react-free-runtime`, `check:peer-deps`,
-  `check:bundle-budget` (6 KB gzipped limit), and
+  `check:bundle-budget` (8 KB gzipped limit), and
   `check:api-snapshot`.
 
 ### Notes
 
 - **Alpha release.** The public API may still change during the
   `0.1.0-alpha.x` line; consumers should pin exact versions.
-- **Required-field inference remains heuristic.** Puck does not expose
-  a first-class required flag, so `extractFieldSchema()` and
-  `configToAiContext()` still infer requiredness from the available
-  field metadata.
+- **Required fields are opt-in.** Puck does not expose a first-class
+  required flag, so `extractFieldSchema()` and `configToAiContext()`
+  omit `required` unless the caller explicitly passes
+  `opts.required`. The AI copilot treats absence as optional.
