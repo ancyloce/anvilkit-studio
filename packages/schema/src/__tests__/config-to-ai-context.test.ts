@@ -73,6 +73,17 @@ describe("configToAiContext", () => {
 		expect(names).toEqual(["Footer", "Hero"]);
 	});
 
+	it("throws when include references components not present in the config", () => {
+		const config: Config = {
+			components: {
+				Hero: { render: noop, fields: { title: { type: "text" } } },
+			},
+		};
+		expect(() =>
+			configToAiContext(config, { include: ["Hero", "Heroo"] }),
+		).toThrow(/Heroo/);
+	});
+
 	it("handles single-component config", () => {
 		const config: Config = {
 			components: {
@@ -91,7 +102,7 @@ describe("configToAiContext", () => {
 		expect(ctx.availableComponents).toHaveLength(0);
 	});
 
-	it("maps slot fields to type object with description", () => {
+	it("maps slot fields to type object with structured allow list", () => {
 		const config: Config = {
 			components: {
 				Layout: {
@@ -106,7 +117,7 @@ describe("configToAiContext", () => {
 		const field = ctx.availableComponents[0].fields[0];
 		expect(field.type).toBe("object");
 		expect(field.description).toContain("Slot");
-		expect(field.description).toContain("Hero");
+		expect(field.allow).toEqual(["Hero", "Button"]);
 	});
 
 	it("maps array fields correctly", () => {

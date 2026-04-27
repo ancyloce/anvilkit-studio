@@ -114,4 +114,40 @@ describe("isJsonSerializable", () => {
 		obj.key = "value";
 		expect(isJsonSerializable(obj)).toBe(true);
 	});
+
+	// ----- DAGs (shared but acyclic references) -----
+	it("returns true for shared object references in a DAG", () => {
+		const shared = { name: "shared" };
+		expect(isJsonSerializable({ a: shared, b: shared })).toBe(true);
+	});
+
+	it("returns true for shared array references in a DAG", () => {
+		const shared = [1, 2, 3];
+		expect(isJsonSerializable({ a: shared, b: shared })).toBe(true);
+	});
+
+	it("returns true when the same object appears multiple times in an array", () => {
+		const shared = { foo: "bar" };
+		expect(isJsonSerializable([shared, shared, shared])).toBe(true);
+	});
+
+	// ----- Genuine cycles still rejected -----
+	it("returns false for self-referencing objects", () => {
+		const obj: Record<string, unknown> = {};
+		obj.self = obj;
+		expect(isJsonSerializable(obj)).toBe(false);
+	});
+
+	it("returns false for self-referencing arrays", () => {
+		const arr: unknown[] = [];
+		arr.push(arr);
+		expect(isJsonSerializable(arr)).toBe(false);
+	});
+
+	it("returns false for indirect cycles", () => {
+		const a: Record<string, unknown> = {};
+		const b: Record<string, unknown> = { a };
+		a.b = b;
+		expect(isJsonSerializable(a)).toBe(false);
+	});
 });
