@@ -1,7 +1,10 @@
 import type { AiFieldSchema } from "@anvilkit/core/types";
 import type { Field } from "@puckeditor/core";
 
-const MAX_DEPTH = 8;
+// Per-tree depth budget. Mirrors @anvilkit/validator's MAX_DEPTH so a
+// schema this package emits is always parseable by the validator.
+// Bumping this is a contract change.
+const MAX_DEPTH = 16;
 
 export interface ExtractFieldSchemaOptions {
 	required?: boolean;
@@ -12,9 +15,16 @@ export function extractFieldSchema(
 	name: string,
 	field: Field,
 	opts?: ExtractFieldSchemaOptions,
-	_depth?: number,
 ): AiFieldSchema {
-	const depth = _depth ?? 0;
+	return extractFieldSchemaInner(name, field, opts, 0);
+}
+
+function extractFieldSchemaInner(
+	name: string,
+	field: Field,
+	opts: ExtractFieldSchemaOptions | undefined,
+	depth: number,
+): AiFieldSchema {
 	if (depth > MAX_DEPTH) {
 		throw new Error(
 			`[@anvilkit/schema] Max recursion depth (${MAX_DEPTH}) exceeded at field "${name}". Check for cyclic field definitions.`,
@@ -46,8 +56,18 @@ export function extractFieldSchema(
 
 		case "select":
 		case "radio": {
-			const options = Array.isArray(field.options)
-				? field.options.map((opt) => ({
+			const rawOptions = Array.isArray(field.options) ? field.options : undefined;
+
+			if (
+				rawOptions &&
+				rawOptions.length > 0 &&
+				rawOptions.every((opt) => typeof opt.value === "boolean")
+			) {
+				return { ...base, type: "boolean" };
+			}
+
+			const options = rawOptions
+				? rawOptions.map((opt) => ({
 						label: String(opt.label),
 						value: String(opt.value),
 					}))
@@ -58,13 +78,17 @@ export function extractFieldSchema(
 		case "array": {
 			const arrayFields = (field as { arrayFields?: Record<string, Field> })
 				.arrayFields;
-			if (arrayFields && typeof arrayFields === "object") {
-				const itemFields: AiFieldSchema[] = [];
-				for (const [key, subField] of Object.entries(arrayFields)) {
-					itemFields.push(
-						extractFieldSchema(key, subField as Field, undefined, depth + 1),
-					);
-				}
+			if (
+				arrayFields &&
+				typeof arrayFields === "object" &&
+				!Array.isArray(arrayFields)
+			) {
+				const itemFields: AiFieldSchema[] = Object.entries(arrayFields)
+					.map(([key, subField]) =>
+						extractFieldSchemaInner(key, subField as Field, undefined, depth + 1),
+					)
+					.sort((a, b) => a.name.localeCompare(b.name));
+
 				if (itemFields.length === 1) {
 					return { ...base, type: "array", itemSchema: itemFields[0] };
 				}
@@ -75,7 +99,7 @@ export function extractFieldSchema(
 						itemSchema: {
 							name: "item",
 							type: "object",
-							description: `Object with fields: ${itemFields.map((f) => f.name).join(", ")}`,
+							properties: itemFields,
 						},
 					};
 				}
@@ -86,22 +110,22 @@ export function extractFieldSchema(
 		case "object": {
 			const objectFields = (field as { objectFields?: Record<string, Field> })
 				.objectFields;
-			if (objectFields && typeof objectFields === "object") {
-				const subFields: AiFieldSchema[] = [];
-				for (const [key, subField] of Object.entries(objectFields)) {
-					subFields.push(
-						extractFieldSchema(key, subField as Field, undefined, depth + 1),
-					);
-				}
+			if (
+				objectFields &&
+				typeof objectFields === "object" &&
+				!Array.isArray(objectFields)
+			) {
+				const subFields: AiFieldSchema[] = Object.entries(objectFields)
+					.map(([key, subField]) =>
+						extractFieldSchemaInner(key, subField as Field, undefined, depth + 1),
+					)
+					.sort((a, b) => a.name.localeCompare(b.name));
+
 				if (subFields.length > 0) {
 					return {
 						...base,
 						type: "object",
-						itemSchema: {
-							name: "properties",
-							type: "object",
-							description: `Object with fields: ${subFields.map((f) => f.name).join(", ")}`,
-						},
+						properties: subFields,
 					};
 				}
 			}
@@ -126,20 +150,21 @@ export function extractFieldSchema(
 					"Custom field with a bespoke renderer. The LLM cannot generate values for this field.",
 			};
 
-		case "slot":
+		case "slot": {
+			const allow = (field as { allow?: string[] }).allow;
+			const disallow = (field as { disallow?: string[] }).disallow;
 			return {
 				...base,
 				type: "object",
-				description: `Slot field — accepts nested child components.${
-					(field as { allow?: string[] }).allow
-						? ` Allowed: ${(field as { allow?: string[] }).allow!.join(", ")}.`
-						: ""
-				}${
-					(field as { disallow?: string[] }).disallow
-						? ` Disallowed: ${(field as { disallow?: string[] }).disallow!.join(", ")}.`
-						: ""
-				}`,
+				description: "Slot field — accepts nested child components.",
+				...(Array.isArray(allow) && allow.length > 0
+					? { allow: [...allow] }
+					: {}),
+				...(Array.isArray(disallow) && disallow.length > 0
+					? { disallow: [...disallow] }
+					: {}),
 			};
+		}
 
 		default:
 			return {

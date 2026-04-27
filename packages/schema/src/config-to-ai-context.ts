@@ -6,7 +6,6 @@ import type {
 import type { Config } from "@puckeditor/core";
 
 import { extractFieldSchema } from "./extract-field-schema.js";
-import { identifySlotFields } from "./identify-slot-fields.js";
 
 type ExtractableField = Parameters<typeof extractFieldSchema>[1];
 
@@ -29,36 +28,34 @@ export function configToAiContext<C extends Config>(
 		string,
 		SchemaComponentConfig
 	>;
+
+	if (opts?.include) {
+		const missing = opts.include.filter((name) => !(name in components));
+		if (missing.length > 0) {
+			throw new Error(
+				`[@anvilkit/schema] configToAiContext: include[] references components not present in config: ${missing.join(", ")}`,
+			);
+		}
+	}
+
 	const includeSet = opts?.include ? new Set(opts.include) : undefined;
-	const slotFieldsByComponent = identifySlotFields(config);
-	const availableComponents: AiComponentSchema[] = [];
 
-	for (const componentName of slotFieldsByComponent.keys()) {
-		if (includeSet && !includeSet.has(componentName)) {
-			continue;
-		}
+	const componentNames = Object.keys(components)
+		.filter((name) => !includeSet || includeSet.has(name))
+		.sort((a, b) => a.localeCompare(b));
 
-		const component = components[componentName];
-
-		if (!component) {
-			continue;
-		}
-
+	const availableComponents: AiComponentSchema[] = componentNames.map((name) => {
+		const component = components[name]!;
 		const fields: AiFieldSchema[] = Object.entries(component.fields ?? {})
-			.sort(([a], [b]) => a.localeCompare(b))
 			.map(([fieldKey, field]) => extractFieldSchema(fieldKey, field))
 			.sort((a, b) => a.name.localeCompare(b.name));
 
-		availableComponents.push({
-			componentName,
+		return {
+			componentName: name,
 			description: component.metadata?.description ?? "",
 			fields,
-		});
-	}
-
-	availableComponents.sort((a, b) =>
-		a.componentName.localeCompare(b.componentName),
-	);
+		};
+	});
 
 	return { availableComponents };
 }

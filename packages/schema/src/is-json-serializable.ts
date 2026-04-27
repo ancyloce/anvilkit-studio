@@ -6,13 +6,13 @@ export function isJsonSerializable(
 	value: unknown,
 	opts?: IsJsonSerializableOptions,
 ): boolean {
-	return check(value, opts, new WeakSet());
+	return check(value, opts, new Set());
 }
 
 function check(
 	value: unknown,
 	opts: IsJsonSerializableOptions | undefined,
-	seen: WeakSet<object>,
+	ancestors: Set<object>,
 ): boolean {
 	if (value === null) return true;
 	if (value === undefined) return false;
@@ -45,14 +45,16 @@ function check(
 		return false;
 	}
 
-	if (seen.has(value as object)) return false;
-	seen.add(value as object);
+	const obj = value as object;
+	if (ancestors.has(obj)) return false;
+	ancestors.add(obj);
 
-	if (Array.isArray(value)) {
-		return value.every((item) => check(item, opts, seen));
-	}
+	const result = Array.isArray(value)
+		? value.every((item) => check(item, opts, ancestors))
+		: Object.values(value as Record<string, unknown>).every((v) =>
+				check(v, opts, ancestors),
+			);
 
-	return Object.values(value as Record<string, unknown>).every((v) =>
-		check(v, opts, seen),
-	);
+	ancestors.delete(obj);
+	return result;
 }
