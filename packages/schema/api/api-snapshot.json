@@ -84,14 +84,14 @@
 			]
 		},
 		{
-			"id": 21,
+			"id": 20,
 			"name": "IsJsonSerializableOptions",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 22,
+					"id": 21,
 					"name": "dateAsIso",
 					"variant": "declaration",
 					"kind": 1024,
@@ -108,7 +108,7 @@
 				{
 					"title": "Properties",
 					"children": [
-						22
+						21
 					]
 				}
 			]
@@ -245,19 +245,6 @@
 								"name": "ExtractFieldSchemaOptions",
 								"package": "@anvilkit/schema"
 							}
-						},
-						{
-							"id": 16,
-							"name": "_depth",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {
-								"isOptional": true
-							},
-							"type": {
-								"type": "intrinsic",
-								"name": "number"
-							}
 						}
 					],
 					"type": {
@@ -274,21 +261,21 @@
 			]
 		},
 		{
-			"id": 17,
+			"id": 16,
 			"name": "identifySlotFields",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 18,
+					"id": 17,
 					"name": "identifySlotFields",
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
 					"typeParameters": [
 						{
-							"id": 19,
+							"id": 18,
 							"name": "C",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -307,14 +294,14 @@
 					],
 					"parameters": [
 						{
-							"id": 20,
+							"id": 19,
 							"name": "config",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 19,
+								"target": 18,
 								"name": "C",
 								"package": "@anvilkit/schema",
 								"refersToTypeParameter": true
@@ -352,21 +339,21 @@
 			]
 		},
 		{
-			"id": 23,
+			"id": 22,
 			"name": "isJsonSerializable",
 			"variant": "declaration",
 			"kind": 64,
 			"flags": {},
 			"signatures": [
 				{
-					"id": 24,
+					"id": 23,
 					"name": "isJsonSerializable",
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
 					"parameters": [
 						{
-							"id": 25,
+							"id": 24,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -377,7 +364,7 @@
 							}
 						},
 						{
-							"id": 26,
+							"id": 25,
 							"name": "opts",
 							"variant": "param",
 							"kind": 32768,
@@ -386,7 +373,7 @@
 							},
 							"type": {
 								"type": "reference",
-								"target": 21,
+								"target": 20,
 								"name": "IsJsonSerializableOptions",
 								"package": "@anvilkit/schema"
 							}
@@ -406,7 +393,7 @@
 			"children": [
 				1,
 				8,
-				21
+				20
 			]
 		},
 		{
@@ -414,326 +401,12 @@
 			"children": [
 				3,
 				11,
-				17,
-				23
+				16,
+				22
 			]
 		}
 	],
 	"packageName": "@anvilkit/schema",
-	"readme": [
-		{
-			"kind": "text",
-			"text": "# @anvilkit/schema\n\nDerive AI-friendly component schemas from a Puck "
-		},
-		{
-			"kind": "code",
-			"text": "`Config`"
-		},
-		{
-			"kind": "text",
-			"text": ". The primary\nexports — "
-		},
-		{
-			"kind": "code",
-			"text": "`configToAiContext`"
-		},
-		{
-			"kind": "text",
-			"text": " and "
-		},
-		{
-			"kind": "code",
-			"text": "`extractFieldSchema`"
-		},
-		{
-			"kind": "text",
-			"text": " — map Puck config\nand field definitions to ["
-		},
-		{
-			"kind": "code",
-			"text": "`AiGenerationContext`"
-		},
-		{
-			"kind": "text",
-			"text": "]("
-		},
-		{
-			"kind": "relative-link",
-			"text": "../core/src/types/ai.ts",
-			"target": 2
-		},
-		{
-			"kind": "text",
-			"text": ")\nand ["
-		},
-		{
-			"kind": "code",
-			"text": "`AiFieldSchema`"
-		},
-		{
-			"kind": "text",
-			"text": "]("
-		},
-		{
-			"kind": "relative-link",
-			"text": "../core/src/types/ai.ts",
-			"target": 2
-		},
-		{
-			"kind": "text",
-			"text": ") that the AI copilot plugin\nfeeds into its system prompt.\n\n> **Alpha status (0.1.x).** "
-		},
-		{
-			"kind": "code",
-			"text": "`configToAiContext`"
-		},
-		{
-			"kind": "text",
-			"text": ", "
-		},
-		{
-			"kind": "code",
-			"text": "`identifySlotFields`"
-		},
-		{
-			"kind": "text",
-			"text": ",\n> "
-		},
-		{
-			"kind": "code",
-			"text": "`extractFieldSchema`"
-		},
-		{
-			"kind": "text",
-			"text": ", and "
-		},
-		{
-			"kind": "code",
-			"text": "`isJsonSerializable`"
-		},
-		{
-			"kind": "text",
-			"text": " are implemented and tested.\n\n## Install\n\n"
-		},
-		{
-			"kind": "code",
-			"text": "```bash\npnpm add @anvilkit/schema @puckeditor/core\n```"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n## Quickstart\n\n"
-		},
-		{
-			"kind": "code",
-			"text": "```ts\nimport { configToAiContext } from \"@anvilkit/schema\";\nimport type { Config } from \"@puckeditor/core\";\n\ndeclare const puckConfig: Config;\n\nconst ctx = configToAiContext(puckConfig);\nconst firstComponent = ctx.availableComponents[0];\n\nconsole.log(firstComponent?.componentName);\n```"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n### Per-field extraction\n\n"
-		},
-		{
-			"kind": "code",
-			"text": "```ts\nimport { extractFieldSchema } from \"@anvilkit/schema\";\nimport type { Field } from \"@puckeditor/core\";\n\nconst puckField: Field = { type: \"text\" };\nconst schema = extractFieldSchema(\"title\", puckField);\n// => { name: \"title\", type: \"text\" }\n```"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n## Phase 3 references\n\nSee the [Phase 3 plan]("
-		},
-		{
-			"kind": "relative-link",
-			"text": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
-			"target": 3
-		},
-		{
-			"kind": "text",
-			"text": ")\n("
-		},
-		{
-			"kind": "code",
-			"text": "`M2 — @anvilkit/schema`"
-		},
-		{
-			"kind": "text",
-			"text": ") and the\n[architecture package catalog]("
-		},
-		{
-			"kind": "relative-link",
-			"text": "../../docs/ai-context/anvilkit-architecture.md",
-			"target": 4
-		},
-		{
-			"kind": "text",
-			"text": ")\n("
-		},
-		{
-			"kind": "code",
-			"text": "`§7 — @anvilkit/schema [Planned]`"
-		},
-		{
-			"kind": "text",
-			"text": ") for the schema-derivation role\nand dependency boundary.\n\n## Public API\n\n| Export                    | Signature                                                              | Purpose                                                       |\n| ------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------- |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`configToAiContext`"
-		},
-		{
-			"kind": "text",
-			"text": "       | "
-		},
-		{
-			"kind": "code",
-			"text": "`(config: Config, opts?) => AiGenerationContext`"
-		},
-		{
-			"kind": "text",
-			"text": "                       | Derive full AI context from a Puck config.                    |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`identifySlotFields`"
-		},
-		{
-			"kind": "text",
-			"text": "     | "
-		},
-		{
-			"kind": "code",
-			"text": "`(config: Config) => Map<string, readonly string[]>`"
-		},
-		{
-			"kind": "text",
-			"text": "                   | Identify slot fields per component.                           |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`extractFieldSchema`"
-		},
-		{
-			"kind": "text",
-			"text": "     | "
-		},
-		{
-			"kind": "code",
-			"text": "`(name: string, field: Field, opts?) => AiFieldSchema`"
-		},
-		{
-			"kind": "text",
-			"text": "                 | Map a single Puck field to an AI-friendly schema.             |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`isJsonSerializable`"
-		},
-		{
-			"kind": "text",
-			"text": "     | "
-		},
-		{
-			"kind": "code",
-			"text": "`(value: unknown, opts?) => boolean`"
-		},
-		{
-			"kind": "text",
-			"text": "                                   | Check if a value is safe for JSON serialization.              |\n\n### "
-		},
-		{
-			"kind": "code",
-			"text": "`ConfigToAiContextOptions`"
-		},
-		{
-			"kind": "text",
-			"text": "\n\n| Option     | Type       | Default     | Description                                    |\n| ---------- | ---------- | ----------- | ---------------------------------------------- |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`include`"
-		},
-		{
-			"kind": "text",
-			"text": "  | "
-		},
-		{
-			"kind": "code",
-			"text": "`string[]`"
-		},
-		{
-			"kind": "text",
-			"text": " | all components | Whitelist a subset of components to include. |\n\n## Required heuristic\n\nPuck does not expose a per-field "
-		},
-		{
-			"kind": "code",
-			"text": "`required`"
-		},
-		{
-			"kind": "text",
-			"text": " flag. The heuristic used:\na field is considered required when its label is present and not empty.\nThis is conservative — override via "
-		},
-		{
-			"kind": "code",
-			"text": "`opts.required`"
-		},
-		{
-			"kind": "text",
-			"text": " if needed.\n\n## Dependency contract\n\n| Allowed                              | Forbidden                                                               |\n| ------------------------------------ | ----------------------------------------------------------------------- |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/utils`"
-		},
-		{
-			"kind": "text",
-			"text": " (runtime)          | "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/ir`"
-		},
-		{
-			"kind": "text",
-			"text": ", "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/validator`"
-		},
-		{
-			"kind": "text",
-			"text": ", "
-		},
-		{
-			"kind": "code",
-			"text": "`@anvilkit/core`"
-		},
-		{
-			"kind": "text",
-			"text": " runtime         |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@puckeditor/core`"
-		},
-		{
-			"kind": "text",
-			"text": " (peer, types-only)| React, ReactDOM, any plugin package, any DOM API                        |\n\n## Peer dependencies\n\n| Package | Version |\n| ------- | ------- |\n| "
-		},
-		{
-			"kind": "code",
-			"text": "`@puckeditor/core`"
-		},
-		{
-			"kind": "text",
-			"text": " | "
-		},
-		{
-			"kind": "code",
-			"text": "`^0.21.0`"
-		},
-		{
-			"kind": "text",
-			"text": " |"
-		}
-	],
 	"symbolIdMap": {
 		"0": {
 			"packageName": "@anvilkit/schema",
@@ -817,8 +490,8 @@
 		},
 		"16": {
 			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "_depth"
+			"packagePath": "src/identify-slot-fields.ts",
+			"qualifiedName": "identifySlotFields"
 		},
 		"17": {
 			"packageName": "@anvilkit/schema",
@@ -828,27 +501,27 @@
 		"18": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/identify-slot-fields.ts",
-			"qualifiedName": "identifySlotFields"
+			"qualifiedName": "C"
 		},
 		"19": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/identify-slot-fields.ts",
-			"qualifiedName": "C"
-		},
-		"20": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/identify-slot-fields.ts",
 			"qualifiedName": "config"
 		},
-		"21": {
+		"20": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/is-json-serializable.ts",
 			"qualifiedName": "IsJsonSerializableOptions"
 		},
-		"22": {
+		"21": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/is-json-serializable.ts",
 			"qualifiedName": "IsJsonSerializableOptions.dateAsIso"
+		},
+		"22": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/is-json-serializable.ts",
+			"qualifiedName": "isJsonSerializable"
 		},
 		"23": {
 			"packageName": "@anvilkit/schema",
@@ -858,14 +531,9 @@
 		"24": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/is-json-serializable.ts",
-			"qualifiedName": "isJsonSerializable"
-		},
-		"25": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/is-json-serializable.ts",
 			"qualifiedName": "value"
 		},
-		"26": {
+		"25": {
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/is-json-serializable.ts",
 			"qualifiedName": "opts"
@@ -873,17 +541,10 @@
 	},
 	"files": {
 		"entries": {
-			"1": "src/index.ts",
-			"2": "../core/src/types/ai.ts",
-			"3": "../../docs/plans/phase-3-export-ai-pipeline-plan.md",
-			"4": "../../docs/ai-context/anvilkit-architecture.md",
-			"5": "README.md",
-			"6": ""
+			"1": "src/index.ts"
 		},
 		"reflections": {
-			"1": 0,
-			"5": 0,
-			"6": 0
+			"1": 0
 		}
 	}
 }
