@@ -63,17 +63,18 @@ and dependency boundary.
 | ---------- | ---------- | ----------- | ---------------------------------------------- |
 | `include`  | `string[]` | all components | Whitelist a subset of components to include. |
 
-## Required heuristic
+## Required fields
 
-Puck does not expose a per-field `required` flag. The heuristic used:
-a field is considered required when its label is present and not empty.
-This is conservative — override via `opts.required` if needed.
+Puck does not expose a per-field `required` flag, so derived schemas
+omit `required` by default — the AI copilot treats absence as
+optional. Callers that know better can override per call by passing
+`opts.required` to `extractFieldSchema()`.
 
 ## Dependency contract
 
 | Allowed                              | Forbidden                                                               |
 | ------------------------------------ | ----------------------------------------------------------------------- |
-| `@anvilkit/utils` (runtime)          | `@anvilkit/ir`, `@anvilkit/validator`, `@anvilkit/core` runtime         |
+| (no runtime deps)                    | `@anvilkit/ir`, `@anvilkit/validator`, `@anvilkit/core` runtime         |
 | `@puckeditor/core` (peer, types-only)| React, ReactDOM, any plugin package, any DOM API                        |
 
 ## Peer dependencies
