@@ -124,6 +124,8 @@ This prompts you to select affected packages and describe the change. The genera
 
 **Do not** hand-edit `version` fields in `package.json` — Changesets manages all version bumps.
 
+Release leads: see [`docs/release/release-runbook.md`](docs/release/release-runbook.md) for the `publish.yml` workflow modes, pre-flight checks, rollback procedure, and smoke verification.
+
 ## PR Expectations
 
 Before opening a PR, confirm all of these pass locally:
