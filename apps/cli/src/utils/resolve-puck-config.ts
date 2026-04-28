@@ -57,12 +57,14 @@ function resolveModuleConfig(loadedModule: unknown): unknown {
 		return undefined;
 	}
 
-	const defaultExport = "default" in loadedModule ? loadedModule.default : undefined;
+	const defaultExport =
+		"default" in loadedModule ? loadedModule.default : undefined;
 	if (isObjectLike(defaultExport)) {
 		return defaultExport;
 	}
 
-	const namedConfig = "config" in loadedModule ? loadedModule.config : undefined;
+	const namedConfig =
+		"config" in loadedModule ? loadedModule.config : undefined;
 	if (isObjectLike(namedConfig)) {
 		return namedConfig;
 	}

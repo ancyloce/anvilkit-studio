@@ -3,12 +3,16 @@ import pc from "picocolors";
 
 export function formatPretty(result: ValidationResult): string {
 	const issueLines = result.issues.map((issue) => formatIssue(issue));
-	const errorCount = result.issues.filter((issue) => issue.level === "error").length;
+	const errorCount = result.issues.filter(
+		(issue) => issue.level === "error",
+	).length;
 	const warningCount = result.issues.filter(
 		(issue) => issue.level === "warning",
 	).length;
 
-	return [...issueLines, `${errorCount} errors, ${warningCount} warnings`].join("\n");
+	return [...issueLines, `${errorCount} errors, ${warningCount} warnings`].join(
+		"\n",
+	);
 }
 
 export function formatJson(result: ValidationResult): string {

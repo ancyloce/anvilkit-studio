@@ -1,12 +1,12 @@
 import { Buffer } from "node:buffer";
 import type { PageIR } from "@anvilkit/core/types";
 import {
-	htmlFormat,
 	type HtmlExportOptions,
+	htmlFormat,
 } from "@anvilkit/plugin-export-html";
 import {
-	reactFormat,
 	type ReactExportOptions,
+	reactFormat,
 } from "@anvilkit/plugin-export-react";
 
 import { CliError } from "./errors.js";
@@ -29,7 +29,9 @@ export async function dispatchFormat(
 	options: FormatDispatchOptions,
 ): Promise<FormatDispatchResult> {
 	if (options.format === "html") {
-		return normalizeExportResult(await htmlFormat.run(ir, htmlOptionsFromFlags(options)));
+		return normalizeExportResult(
+			await htmlFormat.run(ir, htmlOptionsFromFlags(options)),
+		);
 	}
 
 	if (options.format === "react") {

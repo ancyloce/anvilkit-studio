@@ -21,9 +21,11 @@ export interface PromptSelectOptions<T> {
 type ClackPromptsModule = typeof import("@clack/prompts");
 
 export function isInteractive(): boolean {
-	return Boolean(process.stdin.isTTY) &&
+	return (
+		Boolean(process.stdin.isTTY) &&
 		!process.env.CI &&
-		!process.argv.includes("--no-input");
+		!process.argv.includes("--no-input")
+	);
 }
 
 export async function promptText({

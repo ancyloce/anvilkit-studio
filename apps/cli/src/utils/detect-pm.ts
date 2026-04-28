@@ -13,7 +13,9 @@ const LOCKFILE_TO_PM: ReadonlyArray<readonly [string, PackageManager]> = [
 ];
 
 export function detectPm(cwd: string): PackageManager {
-	const pmFromUserAgent = parsePmFromUserAgent(process.env.npm_config_user_agent);
+	const pmFromUserAgent = parsePmFromUserAgent(
+		process.env.npm_config_user_agent,
+	);
 	if (pmFromUserAgent !== undefined) {
 		return pmFromUserAgent;
 	}

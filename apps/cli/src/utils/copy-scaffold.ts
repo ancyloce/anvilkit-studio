@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 export interface CopyScaffoldOptions {
@@ -15,7 +15,11 @@ export function copyScaffold({
 	copyDirectory(sourceDir, targetDir, name);
 }
 
-function copyDirectory(sourceDir: string, targetDir: string, name: string): void {
+function copyDirectory(
+	sourceDir: string,
+	targetDir: string,
+	name: string,
+): void {
 	mkdirSync(targetDir, { recursive: true });
 
 	for (const entry of readdirSync(sourceDir, { withFileTypes: true })) {

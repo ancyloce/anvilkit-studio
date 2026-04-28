@@ -4,11 +4,11 @@ import { createJiti } from "jiti";
 
 import { CliError } from "./errors.js";
 
-export { defineConfig } from "./define-anvilkit-config.js";
 export type {
 	AnvilkitUserConfig,
 	GeneratePageFn,
 } from "./define-anvilkit-config.js";
+export { defineConfig } from "./define-anvilkit-config.js";
 
 const CONFIG_CANDIDATES = [
 	"anvilkit.config.ts",
@@ -27,9 +27,9 @@ export interface LoadedAnvilkitConfig<TConfig = unknown> {
 export async function loadAnvilkitConfig(
 	cwd: string,
 ): Promise<LoadedAnvilkitConfig | null> {
-	const configPath = CONFIG_CANDIDATES.map((candidate) => resolve(cwd, candidate)).find(
-		(candidate) => existsSync(candidate),
-	);
+	const configPath = CONFIG_CANDIDATES.map((candidate) =>
+		resolve(cwd, candidate),
+	).find((candidate) => existsSync(candidate));
 
 	if (configPath === undefined) {
 		return null;
