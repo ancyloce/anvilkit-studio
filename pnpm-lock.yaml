@@ -937,6 +937,9 @@ importers:
       '@anvilkit/utils':
         specifier: workspace:*
         version: link:../utils
+      zod:
+        specifier: ^4.3.0
+        version: 4.3.6
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
@@ -962,6 +965,9 @@ importers:
       esbuild:
         specifier: ^0.25.12
         version: 0.25.12
+      fast-check:
+        specifier: ^4.3.0
+        version: 4.7.0
       madge:
         specifier: ^8.0.0
         version: 8.0.0(typescript@6.0.2)
