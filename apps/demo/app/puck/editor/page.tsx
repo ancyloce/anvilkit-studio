@@ -1,10 +1,18 @@
 "use client";
 
 import { Studio, StudioConfigSchema, compilePlugins } from "@anvilkit/core";
-import type { ExportWarning, PageIR, StudioPluginContext } from "@anvilkit/core/types";
+import type {
+	AiSectionSelection,
+	ExportWarning,
+	PageIR,
+	StudioPluginContext,
+} from "@anvilkit/core/types";
 import { puckDataToIR } from "@anvilkit/ir";
 import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
-import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
+import {
+	createMockGeneratePage,
+	createMockGenerateSection,
+} from "@anvilkit/plugin-ai-copilot/mock";
 import {
 	createAssetManagerPlugin,
 	dataUrlUploader,
@@ -17,6 +25,11 @@ import {
 	createReactExportPlugin,
 	reactFormat,
 } from "@anvilkit/plugin-export-react";
+import {
+	AiPromptPanel,
+	type AiPromptPanelIssue,
+	type AiPromptPanelSelection,
+} from "@anvilkit/ui";
 import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -44,6 +57,7 @@ const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 const aiCopilotPlugin = createAiCopilotPlugin({
 	puckConfig: demoConfig as unknown as Config,
 	generatePage: createMockGeneratePage({ delayMs: 300 }),
+	generateSection: createMockGenerateSection({ delayMs: 300 }),
 	timeoutMs: 5_000,
 	forwardCurrentData: true,
 });
@@ -211,6 +225,12 @@ export default function PuckEditorPage() {
 	const [prompt, setPrompt] = useState("");
 	const [aiError, setAiError] = useState<string | null>(null);
 	const [aiStatus, setAiStatus] = useState<"idle" | "pending">("idle");
+	const [aiIssues, setAiIssues] = useState<readonly AiPromptPanelIssue[]>([]);
+	// Phase 6 / M9 demo: a manual toggle stands in for Puck-driven
+	// selection until the plan-§5.4 selection bridge lands. Flipping
+	// this state is what swaps the AI panel between "Generate page"
+	// and "Regenerate selection".
+	const [aiSelectionActive, setAiSelectionActive] = useState(false);
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
 	// Memoized so the plugins array reference stays stable across
 	// renders. Without this, each render passes a fresh array literal
@@ -399,20 +419,38 @@ export default function PuckEditorPage() {
 		}
 	}
 
-	async function handleGenerate() {
-		const trimmed = prompt.trim();
-		if (trimmed.length === 0) {
-			setAiError("Enter a prompt first.");
-			return;
-		}
+	async function handleGenerate(trimmedPrompt: string) {
 		setAiError(null);
+		setAiIssues([]);
 		setAiStatus("pending");
 		try {
-			await aiCopilotPlugin.runGeneration(trimmed);
+			await aiCopilotPlugin.runGeneration(trimmedPrompt);
 		} catch (error) {
 			const message = error instanceof Error ? error.message : String(error);
 			setAiError(message);
 			console.error("[demo] ai generation failed", error);
+		} finally {
+			setAiStatus("idle");
+		}
+	}
+
+	async function handleRegenerate(
+		trimmedPrompt: string,
+		selection: AiPromptPanelSelection,
+	) {
+		setAiError(null);
+		setAiIssues([]);
+		setAiStatus("pending");
+		try {
+			const irSelection: AiSectionSelection = {
+				zoneId: selection.zoneId,
+				nodeIds: selection.nodeIds,
+			};
+			await aiCopilotPlugin.regenerateSelection(trimmedPrompt, irSelection);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			setAiError(message);
+			console.error("[demo] ai section regeneration failed", error);
 		} finally {
 			setAiStatus("idle");
 		}
@@ -457,37 +495,22 @@ export default function PuckEditorPage() {
 					<p className={styles.lede}>
 						Type a prompt that matches a mock fixture (e.g. &ldquo;a hero for a
 						SaaS landing page&rdquo;) and hit Generate to see the canvas
-						update. Use Download HTML to export the current canvas as a
-						standalone document.
+						update. Toggle &ldquo;Simulate hero selection&rdquo; to switch the
+						panel into Phase 6 / M9 section-regeneration mode and rewrite just
+						the hero subtree.
 					</p>
 				</div>
-				<label htmlFor="ai-prompt" style={{ display: "grid", gap: "0.5rem" }}>
-					<span className={styles.eyebrow}>Prompt</span>
-					<textarea
-						id="ai-prompt"
-						name="ai-prompt"
-						value={prompt}
-						onChange={(event) => setPrompt(event.target.value)}
-						rows={3}
-						placeholder="a hero for a SaaS landing page"
-						style={{
-							padding: "0.75rem",
-							borderRadius: "0.75rem",
-							border: "1px solid var(--demo-panel-border)",
-							fontFamily: "inherit",
-							fontSize: "0.95rem",
-							resize: "vertical",
-						}}
-					/>
-				</label>
 				<div className={styles.actions}>
 					<button
 						type="button"
-						className={styles.primaryAction}
-						onClick={handleGenerate}
-						disabled={aiStatus === "pending"}
+						data-testid="ai-toggle-section"
+						className={styles.secondaryAction}
+						aria-pressed={aiSelectionActive}
+						onClick={() => setAiSelectionActive((prev) => !prev)}
 					>
-						{aiStatus === "pending" ? "Generating…" : "Generate"}
+						{aiSelectionActive
+							? "Clear hero selection"
+							: "Simulate hero selection"}
 					</button>
 					<button
 						type="button"
@@ -504,8 +527,34 @@ export default function PuckEditorPage() {
 						Export React
 					</button>
 				</div>
+				<AiPromptPanel
+					prompt={prompt}
+					onPromptChange={setPrompt}
+					selection={
+						aiSelectionActive
+							? {
+									zoneId: "root-zone",
+									nodeIds: ["hero-primary"],
+									nodeLabels: ["Hero"],
+								}
+							: null
+					}
+					status={aiStatus}
+					error={aiError}
+					issues={aiIssues}
+					onGenerate={(trimmed) => {
+						void handleGenerate(trimmed);
+					}}
+					onRegenerate={(trimmed, selection) => {
+						void handleRegenerate(trimmed, selection);
+					}}
+				/>
 				{aiError !== null ? (
-					<p role="alert" data-testid="ai-error" style={{ color: "crimson" }}>
+					<p
+						role="alert"
+						data-testid="ai-error"
+						style={{ display: "none" }}
+					>
 						{aiError}
 					</p>
 				) : null}
