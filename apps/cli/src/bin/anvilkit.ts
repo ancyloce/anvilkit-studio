@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cac, type CAC } from "cac";
+import { type CAC, cac } from "cac";
 
+import { register as registerAdd } from "../commands/add.js";
 import { register as registerExport } from "../commands/export.js";
 import { register as registerGenerate } from "../commands/generate.js";
 import { register as registerInit } from "../commands/init.js";
@@ -23,6 +24,7 @@ export function createCli(): CAC {
 	cli.version(readPackageVersion(), "-V, --version");
 
 	registerInit(cli);
+	registerAdd(cli);
 	registerValidate(cli);
 	registerExport(cli);
 	registerGenerate(cli);
@@ -53,7 +55,9 @@ function formatError(error: unknown): { exitCode: number; message: string } {
 	};
 }
 
-export async function main(argv: readonly string[] = process.argv): Promise<number> {
+export async function main(
+	argv: readonly string[] = process.argv,
+): Promise<number> {
 	const cli = createCli();
 	const previousExitCode = process.exitCode;
 
