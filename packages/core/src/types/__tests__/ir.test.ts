@@ -15,6 +15,7 @@ import type {
 	PageIRAsset,
 	PageIRMetadata,
 	PageIRNode,
+	PageIRNodeMeta,
 } from "../ir.js";
 
 describe("PageIR type contract", () => {
@@ -125,6 +126,47 @@ describe("PageIR type contract", () => {
 
 		const partial: PageIRMetadata = { title: "Only a title" };
 		void partial;
+	});
+
+	it("PageIRNodeMeta makes every field optional", () => {
+		const empty: PageIRNodeMeta = {};
+		void empty;
+
+		const locked: PageIRNodeMeta = { locked: true };
+		void locked;
+
+		const fullyPopulated: PageIRNodeMeta = {
+			locked: false,
+			owner: "team-marketing",
+			version: "1.2.3",
+			notes: "Hero copy locked pending legal review.",
+		};
+		void fullyPopulated;
+	});
+
+	it("PageIRNode.meta is optional and omission preserves the 1.0 shape", () => {
+		const withoutMeta: PageIRNode = {
+			id: "n1",
+			type: "Hero",
+			props: {},
+		};
+		void withoutMeta;
+
+		const withMeta: PageIRNode = {
+			id: "n2",
+			type: "PricingTable",
+			props: {},
+			meta: { locked: true, owner: "platform" },
+		};
+		void withMeta;
+
+		// @ts-expect-error — `locked` must be boolean, not string.
+		const wrongLockedType: PageIRNodeMeta = { locked: "yes" };
+		void wrongLockedType;
+
+		// @ts-expect-error — unknown meta key rejected at the type level.
+		const unknownMetaKey: PageIRNodeMeta = { foo: "bar" };
+		void unknownMetaKey;
 	});
 
 	it("PageIR rejects a tree missing `assets` or `metadata`", () => {

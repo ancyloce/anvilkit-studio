@@ -80,6 +80,48 @@ export interface PageIRAsset {
 }
 
 /**
+ * Authoring-time metadata attached to a {@link PageIRNode}.
+ *
+ * Added in `@anvilkit/ir@0.22` (Phase 6 / M10) as an additive,
+ * round-trip-safe extension. Hosts populate these fields opt-in via
+ * `migratePageIR` (`@anvilkit/ir/migrations`) or by carrying them
+ * forward from a previous edit; `puckDataToIR()` itself MUST NOT
+ * synthesize `meta`, so omitting it round-trips losslessly with
+ * pre-1.1 documents.
+ *
+ * Field caps are runtime-enforced contracts (not type-level
+ * constraints) — the matching Zod schema lives in
+ * `@anvilkit/ir/migrations` and `@anvilkit/validator`'s section
+ * checker. Keeping caps off the type surface preserves the
+ * "zero runtime code" rule of this file.
+ */
+export interface PageIRNodeMeta {
+	/**
+	 * When `true`, the editor SHOULD treat this node and its subtree
+	 * as locked: surface a lock indicator and refuse mutating
+	 * dispatches scoped to the subtree. Authoring concept only —
+	 * exporters ignore the field.
+	 */
+	readonly locked?: boolean;
+	/**
+	 * Opaque host-owned identifier for the author/team that owns
+	 * this node. Capped at 256 characters at runtime.
+	 */
+	readonly owner?: string;
+	/**
+	 * Host-versioning string for this node. Runtime contract: must
+	 * match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional
+	 * pre-release / build suffix).
+	 */
+	readonly version?: string;
+	/**
+	 * Freeform author notes scoped to this node. Capped at 512
+	 * characters at runtime.
+	 */
+	readonly notes?: string;
+}
+
+/**
  * A single node in the page IR tree.
  *
  * Structurally recursive: every node may carry a `children` array of
@@ -149,6 +191,15 @@ export interface PageIRNode {
 	 * — exporters deduplicate by {@link PageIRAsset.id}.
 	 */
 	readonly assets?: readonly PageIRAsset[];
+	/**
+	 * Optional authoring-time metadata. See {@link PageIRNodeMeta}.
+	 *
+	 * Additive in `@anvilkit/ir@0.22` (Phase 6 / M10). Round-trip
+	 * safe: when absent, every Phase 3/5 invariant (e.g. byte-equal
+	 * `puckDataToIR` output across runs) is preserved. Exporters
+	 * MUST NOT consume `meta`; it is an authoring contract only.
+	 */
+	readonly meta?: PageIRNodeMeta;
 }
 
 /**

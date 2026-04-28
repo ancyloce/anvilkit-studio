@@ -34,6 +34,7 @@ export type {
 	PageIRAsset,
 	PageIRMetadata,
 	PageIRNode,
+	PageIRNodeMeta,
 } from "./ir.js";
 export type {
 	AssetResolution,
