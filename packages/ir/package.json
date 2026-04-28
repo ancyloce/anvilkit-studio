@@ -56,6 +56,16 @@
 				"types": "./dist/puck-data-to-ir.d.cts",
 				"default": "./dist/puck-data-to-ir.cjs"
 			}
+		},
+		"./migrations": {
+			"import": {
+				"types": "./dist/migrations/index.d.ts",
+				"default": "./dist/migrations/index.js"
+			},
+			"require": {
+				"types": "./dist/migrations/index.d.cts",
+				"default": "./dist/migrations/index.cjs"
+			}
 		}
 	},
 	"files": [
@@ -79,7 +89,8 @@
 		}
 	},
 	"dependencies": {
-		"@anvilkit/utils": "workspace:*"
+		"@anvilkit/utils": "workspace:*",
+		"zod": "^4.3.0"
 	},
 	"scripts": {
 		"build": "rslib build",
@@ -109,6 +120,7 @@
 		"@rslib/core": "^0.20.1",
 		"@types/node": "^22.15.3",
 		"esbuild": "^0.25.12",
+		"fast-check": "^4.3.0",
 		"madge": "^8.0.0",
 		"publint": "^0.3.18",
 		"typedoc": "^0.28.18",

@@ -1,7 +1,7 @@
 {
 	"$schema": "https://typedoc.org/schema.json",
 	"extends": ["../../typedoc.base.json"],
-	"entryPoints": ["./src/index.ts"],
+	"entryPoints": ["./src/index.ts", "./src/migrations/index.ts"],
 	"tsconfig": "./tsconfig.json",
 	"name": "@anvilkit/ir"
 }

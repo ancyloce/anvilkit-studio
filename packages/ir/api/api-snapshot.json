@@ -7,351 +7,42 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 13,
-			"name": "PuckDataToIROptions",
+			"id": 1,
+			"name": "index",
 			"variant": "declaration",
-			"kind": 256,
+			"kind": 2,
 			"flags": {},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "Options accepted by "
-					},
-					{
-						"kind": "inline-tag",
-						"tag": "@link",
-						"text": "puckDataToIR",
-						"target": 21
-					},
-					{
-						"kind": "text",
-						"text": "."
-					}
-				]
-			},
 			"children": [
 				{
-					"id": 14,
-					"name": "now",
+					"id": 27,
+					"name": "PuckDataToIROptions",
 					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Injectable clock — defaults to "
-							},
-							{
-								"kind": "code",
-								"text": "`() => new Date()`"
-							},
-							{
-								"kind": "text",
-								"text": ".\nPass a fixed value in tests so "
-							},
-							{
-								"kind": "code",
-								"text": "`metadata.createdAt`"
-							},
-							{
-								"kind": "text",
-								"text": " is stable."
-							}
-						]
-					},
-					"type": {
-						"type": "reflection",
-						"declaration": {
-							"id": 15,
-							"name": "__type",
-							"variant": "declaration",
-							"kind": 65536,
-							"flags": {},
-							"signatures": [
-								{
-									"id": 16,
-									"name": "__type",
-									"variant": "signature",
-									"kind": 4096,
-									"flags": {},
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "typescript",
-											"packagePath": "lib/lib.es5.d.ts",
-											"qualifiedName": "Date"
-										},
-										"name": "Date",
-										"package": "typescript"
-									}
-								}
-							]
-						}
-					}
-				},
-				{
-					"id": 17,
-					"name": "onWarning",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Optional callback that receives non-fatal warnings during the\ntransform (e.g. function-valued props being dropped)."
-							}
-						]
-					},
-					"type": {
-						"type": "reflection",
-						"declaration": {
-							"id": 18,
-							"name": "__type",
-							"variant": "declaration",
-							"kind": 65536,
-							"flags": {},
-							"signatures": [
-								{
-									"id": 19,
-									"name": "__type",
-									"variant": "signature",
-									"kind": 4096,
-									"flags": {},
-									"parameters": [
-										{
-											"id": 20,
-											"name": "warning",
-											"variant": "param",
-											"kind": 32768,
-											"flags": {},
-											"type": {
-												"type": "reference",
-												"target": {
-													"packageName": "@anvilkit/core",
-													"packagePath": "src/types/export.ts",
-													"qualifiedName": "ExportWarning"
-												},
-												"name": "ExportWarning",
-												"package": "@anvilkit/core"
-											}
-										}
-									],
-									"type": {
-										"type": "intrinsic",
-										"name": "void"
-									}
-								}
-							]
-						}
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [
-						14,
-						17
-					]
-				}
-			]
-		},
-		{
-			"id": 1,
-			"name": "collectAssets",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"comment": {
-				"summary": [],
-				"blockTags": [
-					{
-						"tag": "@file",
-						"content": [
-							{
-								"kind": "text",
-								"text": "Public barrel for "
-							},
-							{
-								"kind": "code",
-								"text": "`@anvilkit/ir`"
-							},
-							{
-								"kind": "text",
-								"text": ".\n\nThe IR package is the single source of truth for turning Puck\n"
-							},
-							{
-								"kind": "code",
-								"text": "`Data`"
-							},
-							{
-								"kind": "text",
-								"text": " into a normalized "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "PageIR"
-							},
-							{
-								"kind": "text",
-								"text": " document, and for round-\ntripping it back. Every Anvilkit export format (HTML today,\nReact/JSON/MDX later) consumes IR — never raw Puck "
-							},
-							{
-								"kind": "code",
-								"text": "`Data`"
-							},
-							{
-								"kind": "text",
-								"text": " — so\nthis barrel is the entry point every downstream package pins\nagainst."
-							}
-						]
-					},
-					{
-						"tag": "@see",
-						"content": [
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "file://./../../../docs/tasks/phase3-002-ir-scaffold.md | phase3-002"
-							}
-						]
-					}
-				]
-			},
-			"signatures": [
-				{
-					"id": 2,
-					"name": "collectAssets",
-					"variant": "signature",
-					"kind": 4096,
+					"kind": 256,
 					"flags": {},
 					"comment": {
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Walk a node's props and collect every asset reference into a\ndeduplicated, deterministically-ordered list.\n\nUsed by "
-							},
-							{
-								"kind": "code",
-								"text": "`puckDataToIR`"
-							},
-							{
-								"kind": "text",
-								"text": " to populate the root\n"
+								"text": "Options accepted by "
 							},
 							{
 								"kind": "inline-tag",
 								"tag": "@link",
-								"text": "PageIR.assets"
+								"text": "puckDataToIR",
+								"target": 35
 							},
 							{
 								"kind": "text",
-								"text": " manifest, and by node-scoped exporters\nthat want to resolve only their own slice of the asset graph.\n\n**Does not fetch or read files** — asset collection is purely\nstatic analysis of prop values."
-							}
-						],
-						"blockTags": [
-							{
-								"tag": "@returns",
-								"content": [
-									{
-										"kind": "text",
-										"text": "A deduplicated list of assets, ordered by first encounter."
-									}
-								]
+								"text": "."
 							}
 						]
 					},
-					"parameters": [
+					"children": [
 						{
-							"id": 3,
-							"name": "node",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "The node (or Puck content item) to walk."
-									}
-								]
-							},
-							"type": {
-								"type": "union",
-								"types": [
-									{
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/ir.ts",
-											"qualifiedName": "PageIRNode"
-										},
-										"name": "PageIRNode",
-										"package": "@anvilkit/core"
-									},
-									{
-										"type": "reflection",
-										"declaration": {
-											"id": 4,
-											"name": "__type",
-											"variant": "declaration",
-											"kind": 65536,
-											"flags": {},
-											"children": [
-												{
-													"id": 5,
-													"name": "props",
-													"variant": "declaration",
-													"kind": 1024,
-													"flags": {},
-													"type": {
-														"type": "reference",
-														"target": {
-															"packageName": "typescript",
-															"packagePath": "lib/lib.es5.d.ts",
-															"qualifiedName": "Record"
-														},
-														"typeArguments": [
-															{
-																"type": "intrinsic",
-																"name": "string"
-															},
-															{
-																"type": "intrinsic",
-																"name": "unknown"
-															}
-														],
-														"name": "Record",
-														"package": "typescript"
-													}
-												}
-											],
-											"groups": [
-												{
-													"title": "Properties",
-													"children": [
-														5
-													]
-												}
-											]
-										}
-									}
-								]
-							}
-						},
-						{
-							"id": 6,
-							"name": "opts",
-							"variant": "param",
-							"kind": 32768,
+							"id": 28,
+							"name": "now",
+							"variant": "declaration",
+							"kind": 1024,
 							"flags": {
 								"isOptional": true
 							},
@@ -359,294 +50,149 @@
 								"summary": [
 									{
 										"kind": "text",
-										"text": "See "
+										"text": "Injectable clock — defaults to "
 									},
 									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "CollectAssetsOptions",
-										"target": {
-											"packageName": "@anvilkit/ir",
-											"packagePath": "src/collect-assets.ts",
-											"qualifiedName": "CollectAssetsOptions"
-										}
+										"kind": "code",
+										"text": "`() => new Date()`"
 									},
 									{
 										"kind": "text",
-										"text": "."
+										"text": ".\nPass a fixed value in tests so "
+									},
+									{
+										"kind": "code",
+										"text": "`metadata.createdAt`"
+									},
+									{
+										"kind": "text",
+										"text": " is stable."
 									}
 								]
 							},
 							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@anvilkit/ir",
-									"packagePath": "src/collect-assets.ts",
-									"qualifiedName": "CollectAssetsOptions"
-								},
-								"name": "CollectAssetsOptions",
-								"package": "@anvilkit/ir"
+								"type": "reflection",
+								"declaration": {
+									"id": 29,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 30,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Date"
+												},
+												"name": "Date",
+												"package": "typescript"
+											}
+										}
+									]
+								}
 							}
-						}
-					],
-					"type": {
-						"type": "typeOperator",
-						"operator": "readonly",
-						"target": {
-							"type": "array",
-							"elementType": {
-								"type": "reference",
-								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/ir.ts",
-									"qualifiedName": "PageIRAsset"
-								},
-								"name": "PageIRAsset",
-								"package": "@anvilkit/core"
-							}
-						}
-					}
-				}
-			]
-		},
-		{
-			"id": 7,
-			"name": "identifySlots",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"signatures": [
-				{
-					"id": 8,
-					"name": "identifySlots",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Inspect a Puck "
-							},
-							{
-								"kind": "code",
-								"text": "`Config`"
-							},
-							{
-								"kind": "text",
-								"text": " and return the set of field keys that\nbehave as "
-							},
-							{
-								"kind": "code",
-								"text": "`slot`"
-							},
-							{
-								"kind": "text",
-								"text": " (nested child-tree) fields, grouped by\ncomponent name.\n\nThe IR transform uses this to decide which prop values should be\ndescended into as "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "import(\"@anvilkit/core/types\").PageIRNode.children | PageIRNode.children"
-							},
-							{
-								"kind": "text",
-								"text": "\nversus copied verbatim into "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "import(\"@anvilkit/core/types\").PageIRNode.props | PageIRNode.props"
-							},
-							{
-								"kind": "text",
-								"text": ".\n\n### Detection heuristic\n\nA field is considered a slot if its "
-							},
-							{
-								"kind": "code",
-								"text": "`type`"
-							},
-							{
-								"kind": "text",
-								"text": " is "
-							},
-							{
-								"kind": "code",
-								"text": "`\"slot\"`"
-							},
-							{
-								"kind": "text",
-								"text": " (Puck's\nexplicit slot field type). This covers Puck 0.19+ where slot\nfields are first-class citizens in the field schema."
-							}
-						],
-						"blockTags": [
-							{
-								"tag": "@returns",
-								"content": [
-									{
-										"kind": "text",
-										"text": "A map from component name to the list of slot-field keys\n  declared on that component. Components with no slots are\n  included with an empty array."
-									}
-								]
-							}
-						]
-					},
-					"parameters": [
+						},
 						{
-							"id": 9,
-							"name": "config",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
+							"id": 31,
+							"name": "onWarning",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isOptional": true
+							},
 							"comment": {
 								"summary": [
 									{
 										"kind": "text",
-										"text": "The Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Config`"
-									},
-									{
-										"kind": "text",
-										"text": " to inspect."
+										"text": "Optional callback that receives non-fatal warnings during the\ntransform (e.g. function-valued props being dropped)."
 									}
 								]
 							},
 							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-BkBoKAc5.d.ts",
-									"qualifiedName": "Config"
-								},
-								"name": "Config",
-								"package": "@puckeditor/core"
+								"type": "reflection",
+								"declaration": {
+									"id": 32,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 33,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"parameters": [
+												{
+													"id": 34,
+													"name": "warning",
+													"variant": "param",
+													"kind": 32768,
+													"flags": {},
+													"type": {
+														"type": "reference",
+														"target": {
+															"packageName": "@anvilkit/core",
+															"packagePath": "src/types/export.ts",
+															"qualifiedName": "ExportWarning"
+														},
+														"name": "ExportWarning",
+														"package": "@anvilkit/core"
+													}
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "void"
+											}
+										}
+									]
+								}
 							}
 						}
 					],
-					"type": {
-						"type": "reference",
-						"target": {
-							"packageName": "typescript",
-							"packagePath": "lib/lib.es2015.collection.d.ts",
-							"qualifiedName": "Map"
-						},
-						"typeArguments": [
-							{
-								"type": "intrinsic",
-								"name": "string"
-							},
-							{
-								"type": "typeOperator",
-								"operator": "readonly",
-								"target": {
-									"type": "array",
-									"elementType": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								}
-							}
-						],
-						"name": "Map",
-						"package": "typescript"
-					}
-				}
-			]
-		},
-		{
-			"id": 10,
-			"name": "irToPuckData",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"signatures": [
+					"groups": [
+						{
+							"title": "Properties",
+							"children": [
+								28,
+								31
+							]
+						}
+					]
+				},
 				{
-					"id": 11,
-					"name": "irToPuckData",
-					"variant": "signature",
-					"kind": 4096,
+					"id": 15,
+					"name": "collectAssets",
+					"variant": "declaration",
+					"kind": 64,
 					"flags": {},
 					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Reverse of "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "puckDataToIR",
-								"target": 21
-							},
-							{
-								"kind": "text",
-								"text": ": rebuild a Puck "
-							},
-							{
-								"kind": "code",
-								"text": "`Data`"
-							},
-							{
-								"kind": "text",
-								"text": " document\nfrom a "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "PageIR",
-								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/ir.ts",
-									"qualifiedName": "PageIR"
-								}
-							},
-							{
-								"kind": "text",
-								"text": ".\n\nThis function proves the round-trip guarantee — the invariant\n"
-							},
-							{
-								"kind": "code",
-								"text": "`irToPuckData(puckDataToIR(d)) ≡ d`"
-							},
-							{
-								"kind": "text",
-								"text": " is what lets us snapshot\ntest IR shapes without drift. It is also the entry point the AI\ncopilot plugin uses to turn a validated LLM "
-							},
-							{
-								"kind": "code",
-								"text": "`PageIR`"
-							},
-							{
-								"kind": "text",
-								"text": " response\nback into a "
-							},
-							{
-								"kind": "code",
-								"text": "`setData`"
-							},
-							{
-								"kind": "text",
-								"text": " payload.\n\nReturns a plain (un-frozen) Puck "
-							},
-							{
-								"kind": "code",
-								"text": "`Data`"
-							},
-							{
-								"kind": "text",
-								"text": " so Puck can mutate it."
-							}
-						],
+						"summary": [],
 						"blockTags": [
 							{
-								"tag": "@returns",
+								"tag": "@file",
 								"content": [
 									{
 										"kind": "text",
-										"text": "A Puck "
+										"text": "Public barrel for "
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/ir`"
+									},
+									{
+										"kind": "text",
+										"text": ".\n\nThe IR package is the single source of truth for turning Puck\n"
 									},
 									{
 										"kind": "code",
@@ -654,27 +200,692 @@
 									},
 									{
 										"kind": "text",
-										"text": " equivalent to the IR input."
+										"text": " into a normalized "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "PageIR"
+									},
+									{
+										"kind": "text",
+										"text": " document, and for round-\ntripping it back. Every Anvilkit export format (HTML today,\nReact/JSON/MDX later) consumes IR — never raw Puck "
+									},
+									{
+										"kind": "code",
+										"text": "`Data`"
+									},
+									{
+										"kind": "text",
+										"text": " — so\nthis barrel is the entry point every downstream package pins\nagainst."
+									}
+								]
+							},
+							{
+								"tag": "@see",
+								"content": [
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "file://./../../../docs/tasks/phase3-002-ir-scaffold.md | phase3-002"
 									}
 								]
 							}
 						]
 					},
-					"parameters": [
+					"signatures": [
 						{
-							"id": 12,
-							"name": "ir",
-							"variant": "param",
-							"kind": 32768,
+							"id": 16,
+							"name": "collectAssets",
+							"variant": "signature",
+							"kind": 4096,
 							"flags": {},
 							"comment": {
 								"summary": [
 									{
 										"kind": "text",
-										"text": "The page IR document to rehydrate."
+										"text": "Walk a node's props and collect every asset reference into a\ndeduplicated, deterministically-ordered list.\n\nUsed by "
+									},
+									{
+										"kind": "code",
+										"text": "`puckDataToIR`"
+									},
+									{
+										"kind": "text",
+										"text": " to populate the root\n"
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "PageIR.assets"
+									},
+									{
+										"kind": "text",
+										"text": " manifest, and by node-scoped exporters\nthat want to resolve only their own slice of the asset graph.\n\n**Does not fetch or read files** — asset collection is purely\nstatic analysis of prop values."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@returns",
+										"content": [
+											{
+												"kind": "text",
+												"text": "A deduplicated list of assets, ordered by first encounter."
+											}
+										]
 									}
 								]
 							},
+							"parameters": [
+								{
+									"id": 17,
+									"name": "node",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "The node (or Puck content item) to walk."
+											}
+										]
+									},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/ir.ts",
+													"qualifiedName": "PageIRNode"
+												},
+												"name": "PageIRNode",
+												"package": "@anvilkit/core"
+											},
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 18,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 19,
+															"name": "props",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {},
+															"type": {
+																"type": "reference",
+																"target": {
+																	"packageName": "typescript",
+																	"packagePath": "lib/lib.es5.d.ts",
+																	"qualifiedName": "Record"
+																},
+																"typeArguments": [
+																	{
+																		"type": "intrinsic",
+																		"name": "string"
+																	},
+																	{
+																		"type": "intrinsic",
+																		"name": "unknown"
+																	}
+																],
+																"name": "Record",
+																"package": "typescript"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																19
+															]
+														}
+													]
+												}
+											}
+										]
+									}
+								},
+								{
+									"id": 20,
+									"name": "opts",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "See "
+											},
+											{
+												"kind": "inline-tag",
+												"tag": "@link",
+												"text": "CollectAssetsOptions",
+												"target": {
+													"packageName": "@anvilkit/ir",
+													"packagePath": "src/collect-assets.ts",
+													"qualifiedName": "CollectAssetsOptions"
+												}
+											},
+											{
+												"kind": "text",
+												"text": "."
+											}
+										]
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/ir",
+											"packagePath": "src/collect-assets.ts",
+											"qualifiedName": "CollectAssetsOptions"
+										},
+										"name": "CollectAssetsOptions",
+										"package": "@anvilkit/ir"
+									}
+								}
+							],
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIRAsset"
+										},
+										"name": "PageIRAsset",
+										"package": "@anvilkit/core"
+									}
+								}
+							}
+						}
+					]
+				},
+				{
+					"id": 21,
+					"name": "identifySlots",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 22,
+							"name": "identifySlots",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Inspect a Puck "
+									},
+									{
+										"kind": "code",
+										"text": "`Config`"
+									},
+									{
+										"kind": "text",
+										"text": " and return the set of field keys that\nbehave as "
+									},
+									{
+										"kind": "code",
+										"text": "`slot`"
+									},
+									{
+										"kind": "text",
+										"text": " (nested child-tree) fields, grouped by\ncomponent name.\n\nThe IR transform uses this to decide which prop values should be\ndescended into as "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "import(\"@anvilkit/core/types\").PageIRNode.children | PageIRNode.children"
+									},
+									{
+										"kind": "text",
+										"text": "\nversus copied verbatim into "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "import(\"@anvilkit/core/types\").PageIRNode.props | PageIRNode.props"
+									},
+									{
+										"kind": "text",
+										"text": ".\n\n### Detection heuristic\n\nA field is considered a slot if its "
+									},
+									{
+										"kind": "code",
+										"text": "`type`"
+									},
+									{
+										"kind": "text",
+										"text": " is "
+									},
+									{
+										"kind": "code",
+										"text": "`\"slot\"`"
+									},
+									{
+										"kind": "text",
+										"text": " (Puck's\nexplicit slot field type). This covers Puck 0.19+ where slot\nfields are first-class citizens in the field schema."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@returns",
+										"content": [
+											{
+												"kind": "text",
+												"text": "A map from component name to the list of slot-field keys\n  declared on that component. Components with no slots are\n  included with an empty array."
+											}
+										]
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 23,
+									"name": "config",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "The Puck "
+											},
+											{
+												"kind": "code",
+												"text": "`Config`"
+											},
+											{
+												"kind": "text",
+												"text": " to inspect."
+											}
+										]
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@puckeditor/core",
+											"packagePath": "dist/actions-BkBoKAc5.d.ts",
+											"qualifiedName": "Config"
+										},
+										"name": "Config",
+										"package": "@puckeditor/core"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es2015.collection.d.ts",
+									"qualifiedName": "Map"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									}
+								],
+								"name": "Map",
+								"package": "typescript"
+							}
+						}
+					]
+				},
+				{
+					"id": 24,
+					"name": "irToPuckData",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 25,
+							"name": "irToPuckData",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Reverse of "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "puckDataToIR",
+										"target": 35
+									},
+									{
+										"kind": "text",
+										"text": ": rebuild a Puck "
+									},
+									{
+										"kind": "code",
+										"text": "`Data`"
+									},
+									{
+										"kind": "text",
+										"text": " document\nfrom a "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "PageIR",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIR"
+										}
+									},
+									{
+										"kind": "text",
+										"text": ".\n\nThis function proves the round-trip guarantee — the invariant\n"
+									},
+									{
+										"kind": "code",
+										"text": "`irToPuckData(puckDataToIR(d)) ≡ d`"
+									},
+									{
+										"kind": "text",
+										"text": " is what lets us snapshot\ntest IR shapes without drift. It is also the entry point the AI\ncopilot plugin uses to turn a validated LLM "
+									},
+									{
+										"kind": "code",
+										"text": "`PageIR`"
+									},
+									{
+										"kind": "text",
+										"text": " response\nback into a "
+									},
+									{
+										"kind": "code",
+										"text": "`setData`"
+									},
+									{
+										"kind": "text",
+										"text": " payload.\n\nReturns a plain (un-frozen) Puck "
+									},
+									{
+										"kind": "code",
+										"text": "`Data`"
+									},
+									{
+										"kind": "text",
+										"text": " so Puck can mutate it."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@returns",
+										"content": [
+											{
+												"kind": "text",
+												"text": "A Puck "
+											},
+											{
+												"kind": "code",
+												"text": "`Data`"
+											},
+											{
+												"kind": "text",
+												"text": " equivalent to the IR input."
+											}
+										]
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 26,
+									"name": "ir",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "The page IR document to rehydrate."
+											}
+										]
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIR"
+										},
+										"name": "PageIR",
+										"package": "@anvilkit/core"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@puckeditor/core",
+									"packagePath": "dist/actions-BkBoKAc5.d.ts",
+									"qualifiedName": "Data"
+								},
+								"name": "Data",
+								"package": "@puckeditor/core"
+							}
+						}
+					]
+				},
+				{
+					"id": 35,
+					"name": "puckDataToIR",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 36,
+							"name": "puckDataToIR",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Transform a Puck "
+									},
+									{
+										"kind": "code",
+										"text": "`Data`"
+									},
+									{
+										"kind": "text",
+										"text": " document into a normalized "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "PageIR",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIR"
+										}
+									},
+									{
+										"kind": "text",
+										"text": ".\n\nThis is the primary entry point every Anvilkit export format\nconsumes. Given a Puck "
+									},
+									{
+										"kind": "code",
+										"text": "`Data`"
+									},
+									{
+										"kind": "text",
+										"text": " and its matching "
+									},
+									{
+										"kind": "code",
+										"text": "`Config`"
+									},
+									{
+										"kind": "text",
+										"text": ", the\nresult is a pure, JSON-serializable, deeply-frozen "
+									},
+									{
+										"kind": "code",
+										"text": "`PageIR`"
+									},
+									{
+										"kind": "text",
+										"text": " with\nstable node ids, canonicalized (sorted) props, and a flat asset\nmanifest."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@returns",
+										"content": [
+											{
+												"kind": "text",
+												"text": "The normalized, frozen page IR document."
+											}
+										]
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 37,
+									"name": "data",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Puck editor document to normalize."
+											}
+										]
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@puckeditor/core",
+											"packagePath": "dist/actions-BkBoKAc5.d.ts",
+											"qualifiedName": "Data"
+										},
+										"name": "Data",
+										"package": "@puckeditor/core"
+									}
+								},
+								{
+									"id": 38,
+									"name": "_config",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Puck "
+											},
+											{
+												"kind": "code",
+												"text": "`Config`"
+											},
+											{
+												"kind": "text",
+												"text": " matching "
+											},
+											{
+												"kind": "code",
+												"text": "`data`"
+											},
+											{
+												"kind": "text",
+												"text": " (used by phase3-004\n  helpers; lightly used in the base transform)."
+											}
+										]
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@puckeditor/core",
+											"packagePath": "dist/actions-BkBoKAc5.d.ts",
+											"qualifiedName": "Config"
+										},
+										"name": "Config",
+										"package": "@puckeditor/core"
+									}
+								},
+								{
+									"id": 39,
+									"name": "opts",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "See "
+											},
+											{
+												"kind": "inline-tag",
+												"tag": "@link",
+												"text": "PuckDataToIROptions",
+												"target": 27
+											},
+											{
+												"kind": "text",
+												"text": "."
+											}
+										]
+									},
+									"type": {
+										"type": "reference",
+										"target": 27,
+										"name": "PuckDataToIROptions",
+										"package": "@anvilkit/ir"
+									}
+								}
+							],
 							"type": {
 								"type": "reference",
 								"target": {
@@ -686,184 +897,695 @@
 								"package": "@anvilkit/core"
 							}
 						}
-					],
-					"type": {
-						"type": "reference",
-						"target": {
-							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-BkBoKAc5.d.ts",
-							"qualifiedName": "Data"
-						},
-						"name": "Data",
-						"package": "@puckeditor/core"
-					}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Interfaces",
+					"children": [
+						27
+					]
+				},
+				{
+					"title": "Functions",
+					"children": [
+						15,
+						21,
+						24,
+						35
+					]
 				}
 			]
 		},
 		{
-			"id": 21,
-			"name": "puckDataToIR",
+			"id": 2,
+			"name": "migrations",
 			"variant": "declaration",
-			"kind": 64,
+			"kind": 2,
 			"flags": {},
-			"signatures": [
+			"children": [
 				{
-					"id": 22,
-					"name": "puckDataToIR",
-					"variant": "signature",
-					"kind": 4096,
+					"id": 40,
+					"name": "PageIRNodeMetaError",
+					"variant": "declaration",
+					"kind": 128,
+					"flags": {},
+					"children": [
+						{
+							"id": 41,
+							"name": "constructor",
+							"variant": "declaration",
+							"kind": 512,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 42,
+									"name": "PageIRNodeMetaError",
+									"variant": "signature",
+									"kind": 16384,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 43,
+											"name": "issues",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "reference",
+														"target": 45,
+														"name": "NodeMetaValidationIssue",
+														"package": "@anvilkit/ir"
+													}
+												}
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 40,
+										"name": "PageIRNodeMetaError",
+										"package": "@anvilkit/ir"
+									},
+									"overwrites": {
+										"type": "reference",
+										"target": -1,
+										"name": "Error.constructor",
+										"package": "typescript"
+									}
+								}
+							],
+							"overwrites": {
+								"type": "reference",
+								"target": -1,
+								"name": "Error.constructor",
+								"package": "typescript"
+							}
+						},
+						{
+							"id": 44,
+							"name": "issues",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": 45,
+										"name": "NodeMetaValidationIssue",
+										"package": "@anvilkit/ir"
+									}
+								}
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Constructors",
+							"children": [
+								41
+							]
+						},
+						{
+							"title": "Properties",
+							"children": [
+								44
+							]
+						}
+					],
+					"extendedTypes": [
+						{
+							"type": "reference",
+							"target": {
+								"packageName": "typescript",
+								"packagePath": "lib/lib.es5.d.ts",
+								"qualifiedName": "Error"
+							},
+							"name": "Error",
+							"package": "typescript"
+						}
+					]
+				},
+				{
+					"id": 45,
+					"name": "NodeMetaValidationIssue",
+					"variant": "declaration",
+					"kind": 256,
 					"flags": {},
 					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Transform a Puck "
-							},
-							{
-								"kind": "code",
-								"text": "`Data`"
-							},
-							{
-								"kind": "text",
-								"text": " document into a normalized "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "PageIR",
-								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/ir.ts",
-									"qualifiedName": "PageIR"
-								}
-							},
-							{
-								"kind": "text",
-								"text": ".\n\nThis is the primary entry point every Anvilkit export format\nconsumes. Given a Puck "
-							},
-							{
-								"kind": "code",
-								"text": "`Data`"
-							},
-							{
-								"kind": "text",
-								"text": " and its matching "
-							},
-							{
-								"kind": "code",
-								"text": "`Config`"
-							},
-							{
-								"kind": "text",
-								"text": ", the\nresult is a pure, JSON-serializable, deeply-frozen "
-							},
-							{
-								"kind": "code",
-								"text": "`PageIR`"
-							},
-							{
-								"kind": "text",
-								"text": " with\nstable node ids, canonicalized (sorted) props, and a flat asset\nmanifest."
-							}
-						],
+						"summary": [],
 						"blockTags": [
 							{
-								"tag": "@returns",
+								"tag": "@file",
 								"content": [
 									{
 										"kind": "text",
-										"text": "The normalized, frozen page IR document."
+										"text": "Public error class for "
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/ir/migrations`"
+									},
+									{
+										"kind": "text",
+										"text": " cap\nviolations. Lives outside "
+									},
+									{
+										"kind": "code",
+										"text": "`internal/`"
+									},
+									{
+										"kind": "text",
+										"text": " so TypeDoc surfaces it on\nthe public api-snapshot — consumers "
+									},
+									{
+										"kind": "code",
+										"text": "`instanceof`"
+									},
+									{
+										"kind": "text",
+										"text": " against this\nclass to recover from invalid "
+									},
+									{
+										"kind": "code",
+										"text": "`meta`"
+									},
+									{
+										"kind": "text",
+										"text": " payloads."
 									}
 								]
 							}
 						]
 					},
-					"parameters": [
+					"children": [
 						{
-							"id": 23,
-							"name": "data",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Puck editor document to normalize."
-									}
-								]
-							},
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-BkBoKAc5.d.ts",
-									"qualifiedName": "Data"
-								},
-								"name": "Data",
-								"package": "@puckeditor/core"
-							}
-						},
-						{
-							"id": 24,
-							"name": "_config",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"comment": {
-								"summary": [
-									{
-										"kind": "text",
-										"text": "Puck "
-									},
-									{
-										"kind": "code",
-										"text": "`Config`"
-									},
-									{
-										"kind": "text",
-										"text": " matching "
-									},
-									{
-										"kind": "code",
-										"text": "`data`"
-									},
-									{
-										"kind": "text",
-										"text": " (used by phase3-004\n  helpers; lightly used in the base transform)."
-									}
-								]
-							},
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-BkBoKAc5.d.ts",
-									"qualifiedName": "Config"
-								},
-								"name": "Config",
-								"package": "@puckeditor/core"
-							}
-						},
-						{
-							"id": 25,
-							"name": "opts",
-							"variant": "param",
-							"kind": 32768,
+							"id": 46,
+							"name": "code",
+							"variant": "declaration",
+							"kind": 1024,
 							"flags": {
-								"isOptional": true
+								"isReadonly": true
+							},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 47,
+							"name": "message",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 48,
+							"name": "path",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "number"
+											}
+										]
+									}
+								}
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"children": [
+								46,
+								47,
+								48
+							]
+						}
+					]
+				},
+				{
+					"id": 12,
+					"name": "PageIRMigrationOptions",
+					"variant": "declaration",
+					"kind": 256,
+					"flags": {},
+					"children": [
+						{
+							"id": 13,
+							"name": "from",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
 							},
 							"comment": {
 								"summary": [
 									{
 										"kind": "text",
-										"text": "See "
+										"text": "Peer-range label of the document being migrated."
+									}
+								]
+							},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "literal",
+										"value": "0.21"
+									},
+									{
+										"type": "literal",
+										"value": "0.22"
+									}
+								]
+							}
+						},
+						{
+							"id": 14,
+							"name": "to",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Target peer-range label."
+									}
+								]
+							},
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "literal",
+										"value": "0.21"
+									},
+									{
+										"type": "literal",
+										"value": "0.22"
+									}
+								]
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"children": [
+								13,
+								14
+							]
+						}
+					]
+				},
+				{
+					"id": 11,
+					"name": "PageIRMigrationVersion",
+					"variant": "declaration",
+					"kind": 2097152,
+					"flags": {},
+					"type": {
+						"type": "indexedAccess",
+						"indexType": {
+							"type": "intrinsic",
+							"name": "number"
+						},
+						"objectType": {
+							"type": "query",
+							"queryType": {
+								"type": "reference",
+								"target": 10,
+								"name": "MIGRATION_VERSIONS",
+								"package": "@anvilkit/ir"
+							}
+						}
+					}
+				},
+				{
+					"id": 10,
+					"name": "MIGRATION_VERSIONS",
+					"variant": "declaration",
+					"kind": 32,
+					"flags": {
+						"isConst": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The peer-range labels that "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "migratePageIR",
+								"target": 3
+							},
+							{
+								"kind": "text",
+								"text": " accepts.\n\n"
+							},
+							{
+								"kind": "code",
+								"text": "`\"0.21\"`"
+							},
+							{
+								"kind": "text",
+								"text": " is the "
+							},
+							{
+								"kind": "code",
+								"text": "`1.0`"
+							},
+							{
+								"kind": "text",
+								"text": " GA peer range (no "
+							},
+							{
+								"kind": "code",
+								"text": "`meta`"
+							},
+							{
+								"kind": "text",
+								"text": "); "
+							},
+							{
+								"kind": "code",
+								"text": "`\"0.22\"`"
+							},
+							{
+								"kind": "text",
+								"text": " is the\n"
+							},
+							{
+								"kind": "code",
+								"text": "`1.1`"
+							},
+							{
+								"kind": "text",
+								"text": " peer range (additive "
+							},
+							{
+								"kind": "code",
+								"text": "`meta`"
+							},
+							{
+								"kind": "text",
+								"text": "). The values map to\n"
+							},
+							{
+								"kind": "code",
+								"text": "`@puckeditor/core`"
+							},
+							{
+								"kind": "text",
+								"text": " peer-range labels rather than to the IR\ndocument's own "
+							},
+							{
+								"kind": "code",
+								"text": "`version`"
+							},
+							{
+								"kind": "text",
+								"text": " literal — the IR literal stays "
+							},
+							{
+								"kind": "code",
+								"text": "`\"1\"`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "tuple",
+							"elements": [
+								{
+									"type": "literal",
+									"value": "0.21"
+								},
+								{
+									"type": "literal",
+									"value": "0.22"
+								}
+							]
+						}
+					},
+					"defaultValue": "..."
+				},
+				{
+					"id": 7,
+					"name": "downgradePageIR",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 8,
+							"name": "downgradePageIR",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Recursively strip "
+									},
+									{
+										"kind": "code",
+										"text": "`meta`"
+									},
+									{
+										"kind": "text",
+										"text": " from every node in a "
 									},
 									{
 										"kind": "inline-tag",
 										"tag": "@link",
-										"text": "PuckDataToIROptions",
-										"target": 13
+										"text": "PageIR",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIR"
+										}
+									},
+									{
+										"kind": "text",
+										"text": ".\n\nUse when surfacing IR to a "
+									},
+									{
+										"kind": "code",
+										"text": "`1.0`"
+									},
+									{
+										"kind": "text",
+										"text": " consumer that pins against the\npre-"
+									},
+									{
+										"kind": "code",
+										"text": "`meta`"
+									},
+									{
+										"kind": "text",
+										"text": " contract. Always returns a fresh, frozen tree — even\nwhen the input had no "
+									},
+									{
+										"kind": "code",
+										"text": "`meta`"
+									},
+									{
+										"kind": "text",
+										"text": " to strip — so callers can safely\ncache the result."
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 9,
+									"name": "ir",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIR"
+										},
+										"name": "PageIR",
+										"package": "@anvilkit/core"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/ir.ts",
+									"qualifiedName": "PageIR"
+								},
+								"name": "PageIR",
+								"package": "@anvilkit/core"
+							}
+						}
+					]
+				},
+				{
+					"id": 3,
+					"name": "migratePageIR",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 4,
+							"name": "migratePageIR",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Migrate a "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "PageIR",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIR"
+										}
+									},
+									{
+										"kind": "text",
+										"text": " document between peer-range labels.\n\n- Pure no-op when "
+									},
+									{
+										"kind": "code",
+										"text": "`from === to`"
+									},
+									{
+										"kind": "text",
+										"text": " AND every node has "
+									},
+									{
+										"kind": "code",
+										"text": "`meta === undefined`"
+									},
+									{
+										"kind": "text",
+										"text": ".\n  Returns the original reference.\n- Validates every "
+									},
+									{
+										"kind": "code",
+										"text": "`node.meta`"
+									},
+									{
+										"kind": "text",
+										"text": " (when present) against the runtime\n  caps documented on\n  "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "import(\"@anvilkit/core/types\").PageIRNodeMeta | PageIRNodeMeta"
+									},
+									{
+										"kind": "text",
+										"text": ".\n  Throws "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "PageIRNodeMetaError",
+										"target": 40
+									},
+									{
+										"kind": "text",
+										"text": " on the first invalid node.\n- Returns a structurally cloned, frozen IR when validation\n  succeeds with at least one populated "
+									},
+									{
+										"kind": "code",
+										"text": "`meta`"
+									},
+									{
+										"kind": "text",
+										"text": ". The clone preserves\n  "
+									},
+									{
+										"kind": "code",
+										"text": "`meta`"
+									},
+									{
+										"kind": "text",
+										"text": " byte-for-byte; it never synthesizes new fields.\n\nImportantly, this helper NEVER bumps "
+									},
+									{
+										"kind": "code",
+										"text": "`ir.version`"
+									},
+									{
+										"kind": "text",
+										"text": ". The literal\nstays "
+									},
+									{
+										"kind": "code",
+										"text": "`\"1\"`"
+									},
+									{
+										"kind": "text",
+										"text": " across "
+									},
+									{
+										"kind": "code",
+										"text": "`0.21 ↔ 0.22`"
 									},
 									{
 										"kind": "text",
@@ -871,184 +1593,348 @@
 									}
 								]
 							},
+							"parameters": [
+								{
+									"id": 5,
+									"name": "ir",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/ir.ts",
+											"qualifiedName": "PageIR"
+										},
+										"name": "PageIR",
+										"package": "@anvilkit/core"
+									}
+								},
+								{
+									"id": 6,
+									"name": "options",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 12,
+										"name": "PageIRMigrationOptions",
+										"package": "@anvilkit/ir"
+									}
+								}
+							],
 							"type": {
 								"type": "reference",
-								"target": 13,
-								"name": "PuckDataToIROptions",
-								"package": "@anvilkit/ir"
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/ir.ts",
+									"qualifiedName": "PageIR"
+								},
+								"name": "PageIR",
+								"package": "@anvilkit/core"
 							}
 						}
-					],
-					"type": {
-						"type": "reference",
-						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/types/ir.ts",
-							"qualifiedName": "PageIR"
-						},
-						"name": "PageIR",
-						"package": "@anvilkit/core"
-					}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Classes",
+					"children": [
+						40
+					]
+				},
+				{
+					"title": "Interfaces",
+					"children": [
+						45,
+						12
+					]
+				},
+				{
+					"title": "Type Aliases",
+					"children": [
+						11
+					]
+				},
+				{
+					"title": "Variables",
+					"children": [
+						10
+					]
+				},
+				{
+					"title": "Functions",
+					"children": [
+						7,
+						3
+					]
 				}
 			]
 		}
 	],
 	"groups": [
 		{
-			"title": "Interfaces",
-			"children": [
-				13
-			]
-		},
-		{
-			"title": "Functions",
+			"title": "Modules",
 			"children": [
 				1,
-				7,
-				10,
-				21
+				2
 			]
 		}
 	],
 	"packageName": "@anvilkit/ir",
 	"symbolIdMap": {
-		"0": {
+		"1": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/index.ts",
 			"qualifiedName": ""
 		},
-		"1": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "collectAssets"
-		},
 		"2": {
 			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": ""
+		},
+		"3": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "migratePageIR"
+		},
+		"4": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "migratePageIR"
+		},
+		"5": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "ir"
+		},
+		"6": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "options"
+		},
+		"7": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "downgradePageIR"
+		},
+		"8": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "downgradePageIR"
+		},
+		"9": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "ir"
+		},
+		"10": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "MIGRATION_VERSIONS"
+		},
+		"11": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "PageIRMigrationVersion"
+		},
+		"12": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "PageIRMigrationOptions"
+		},
+		"13": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "PageIRMigrationOptions.from"
+		},
+		"14": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/index.ts",
+			"qualifiedName": "PageIRMigrationOptions.to"
+		},
+		"15": {
+			"packageName": "@anvilkit/ir",
 			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "collectAssets"
 		},
-		"3": {
+		"16": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/collect-assets.ts",
+			"qualifiedName": "collectAssets"
+		},
+		"17": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "node"
 		},
-		"4": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "__type"
-		},
-		"5": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "__type.props"
-		},
-		"6": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/collect-assets.ts",
-			"qualifiedName": "opts"
-		},
-		"7": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "identifySlots"
-		},
-		"8": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "identifySlots"
-		},
-		"9": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "config"
-		},
-		"10": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "irToPuckData"
-		},
-		"11": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "irToPuckData"
-		},
-		"12": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/ir-to-puck-data.ts",
-			"qualifiedName": "ir"
-		},
-		"13": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions"
-		},
-		"14": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions.now"
-		},
-		"15": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"16": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"17": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions.onWarning"
-		},
 		"18": {
 			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
+			"packagePath": "src/collect-assets.ts",
 			"qualifiedName": "__type"
 		},
 		"19": {
 			"packageName": "@anvilkit/ir",
+			"packagePath": "src/collect-assets.ts",
+			"qualifiedName": "__type.props"
+		},
+		"20": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/collect-assets.ts",
+			"qualifiedName": "opts"
+		},
+		"21": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/identify-slots.ts",
+			"qualifiedName": "identifySlots"
+		},
+		"22": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/identify-slots.ts",
+			"qualifiedName": "identifySlots"
+		},
+		"23": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/identify-slots.ts",
+			"qualifiedName": "config"
+		},
+		"24": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/ir-to-puck-data.ts",
+			"qualifiedName": "irToPuckData"
+		},
+		"25": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/ir-to-puck-data.ts",
+			"qualifiedName": "irToPuckData"
+		},
+		"26": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/ir-to-puck-data.ts",
+			"qualifiedName": "ir"
+		},
+		"27": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "PuckDataToIROptions"
+		},
+		"28": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "PuckDataToIROptions.now"
+		},
+		"29": {
+			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "__type"
 		},
-		"20": {
+		"30": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"31": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "PuckDataToIROptions.onWarning"
+		},
+		"32": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"33": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"34": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "warning"
 		},
-		"21": {
+		"35": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "puckDataToIR"
 		},
-		"22": {
+		"36": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "puckDataToIR"
 		},
-		"23": {
+		"37": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "data"
 		},
-		"24": {
+		"38": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "_config"
 		},
-		"25": {
+		"39": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "opts"
+		},
+		"40": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "PageIRNodeMetaError"
+		},
+		"41": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "PageIRNodeMetaError.__constructor"
+		},
+		"42": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "PageIRNodeMetaError"
+		},
+		"43": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "issues"
+		},
+		"44": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "PageIRNodeMetaError.issues"
+		},
+		"45": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "NodeMetaValidationIssue"
+		},
+		"46": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "NodeMetaValidationIssue.code"
+		},
+		"47": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "NodeMetaValidationIssue.message"
+		},
+		"48": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/migrations/error.ts",
+			"qualifiedName": "NodeMetaValidationIssue.path"
 		}
 	},
 	"files": {
 		"entries": {
-			"1": "src/index.ts"
+			"1": "src/index.ts",
+			"2": "src/migrations/index.ts"
 		},
 		"reflections": {
-			"1": 0
+			"1": 1,
+			"2": 2
 		}
 	}
 }
