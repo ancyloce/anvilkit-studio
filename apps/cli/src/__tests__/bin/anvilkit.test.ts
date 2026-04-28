@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -7,10 +7,14 @@ import { describe, expect, it } from "vitest";
 const packageRoot = fileURLToPath(new URL("../../../", import.meta.url));
 
 function runCli(args: readonly string[]) {
-	return spawnSync("node", ["--import", "tsx", "src/bin/anvilkit.ts", ...args], {
-		cwd: packageRoot,
-		encoding: "utf8",
-	});
+	return spawnSync(
+		"node",
+		["--import", "tsx", "src/bin/anvilkit.ts", ...args],
+		{
+			cwd: packageRoot,
+			encoding: "utf8",
+		},
+	);
 }
 
 describe("anvilkit bin", () => {

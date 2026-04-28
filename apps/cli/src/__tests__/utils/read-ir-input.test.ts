@@ -10,7 +10,9 @@ import { readIrInput } from "../../utils/read-ir-input.js";
 const directoriesToClean: string[] = [];
 
 function fixturePath(name: string): string {
-	return fileURLToPath(new URL(`../../../__fixtures__/export/${name}`, import.meta.url));
+	return fileURLToPath(
+		new URL(`../../../__fixtures__/export/${name}`, import.meta.url),
+	);
 }
 
 function makeTempDir(prefix = "anvilkit-read-ir-"): string {

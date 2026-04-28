@@ -1,8 +1,8 @@
 import { spawnSync } from "node:child_process";
 import {
 	existsSync,
-	mkdtempSync,
 	mkdirSync,
+	mkdtempSync,
 	readFileSync,
 	rmSync,
 	writeFileSync,
@@ -10,22 +10,23 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-
-import { afterEach, describe, expect, it, vi } from "vitest";
-
-import { CliError } from "../../utils/errors.js";
 import type { CAC } from "cac";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { register, runExport } from "../../commands/export.js";
+import { CliError } from "../../utils/errors.js";
 
 const directoriesToClean: string[] = [];
 const spawnProbe = spawnSync("node", ["-e", "process.exit(0)"], {
 	encoding: "utf8",
 });
-const describeSubprocess = spawnProbe.error === undefined ? describe : describe.skip;
+const describeSubprocess =
+	spawnProbe.error === undefined ? describe : describe.skip;
 const packageRoot = fileURLToPath(new URL("../../../", import.meta.url));
 
 function fixturePath(name: string): string {
-	return fileURLToPath(new URL(`../../../__fixtures__/export/${name}`, import.meta.url));
+	return fileURLToPath(
+		new URL(`../../../__fixtures__/export/${name}`, import.meta.url),
+	);
 }
 
 function makeTempDir(prefix = "anvilkit-export-"): string {
@@ -35,10 +36,14 @@ function makeTempDir(prefix = "anvilkit-export-"): string {
 }
 
 function runCli(args: readonly string[]) {
-	return spawnSync("node", ["--import", "tsx", "src/bin/anvilkit.ts", ...args], {
-		cwd: packageRoot,
-		encoding: "utf8",
-	});
+	return spawnSync(
+		"node",
+		["--import", "tsx", "src/bin/anvilkit.ts", ...args],
+		{
+			cwd: packageRoot,
+			encoding: "utf8",
+		},
+	);
 }
 
 afterEach(() => {

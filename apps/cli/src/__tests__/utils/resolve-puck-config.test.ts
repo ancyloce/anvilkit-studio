@@ -71,7 +71,9 @@ describe("resolvePuckConfig", () => {
 	it("throws FILE_NOT_FOUND when the file is missing", async () => {
 		const missingPath = join(makeTempDir(), "missing.ts");
 
-		await expect(resolvePuckConfig(missingPath)).rejects.toBeInstanceOf(CliError);
+		await expect(resolvePuckConfig(missingPath)).rejects.toBeInstanceOf(
+			CliError,
+		);
 		await expect(resolvePuckConfig(missingPath)).rejects.toMatchObject({
 			code: "FILE_NOT_FOUND",
 			exitCode: 2,
@@ -94,7 +96,11 @@ describe("resolvePuckConfig", () => {
 		const directory = makeTempDir();
 		const configPath = join(directory, "broken-config.ts");
 
-		writeFileSync(configPath, 'throw new Error("broken puck config");\n', "utf8");
+		writeFileSync(
+			configPath,
+			'throw new Error("broken puck config");\n',
+			"utf8",
+		);
 
 		await expect(resolvePuckConfig(configPath)).rejects.toMatchObject({
 			code: "CONFIG_LOAD_FAILED",

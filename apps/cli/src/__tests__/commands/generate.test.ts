@@ -1,8 +1,8 @@
 import {
 	copyFileSync,
 	existsSync,
-	mkdtempSync,
 	mkdirSync,
+	mkdtempSync,
 	readFileSync,
 	rmSync,
 } from "node:fs";
@@ -12,15 +12,16 @@ import { fileURLToPath } from "node:url";
 
 import { configToAiContext } from "@anvilkit/schema";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import { resolvePuckConfig } from "../../utils/resolve-puck-config.js";
 import { runGenerate } from "../../commands/generate.js";
+import { resolvePuckConfig } from "../../utils/resolve-puck-config.js";
 
 const directoriesToClean: string[] = [];
 const originalCwd = process.cwd();
 
 function fixturePath(name: string): string {
-	return fileURLToPath(new URL(`../../../__fixtures__/generate/${name}`, import.meta.url));
+	return fileURLToPath(
+		new URL(`../../../__fixtures__/generate/${name}`, import.meta.url),
+	);
 }
 
 function sourcePath(name: string): string {
@@ -40,7 +41,10 @@ function makeFixtureCwd(configFixtureName: string): string {
 
 	mkdirSync(fixtureDir, { recursive: true });
 	mkdirSync(utilsDir, { recursive: true });
-	copyFileSync(fixturePath(configFixtureName), join(fixtureDir, "anvilkit.config.ts"));
+	copyFileSync(
+		fixturePath(configFixtureName),
+		join(fixtureDir, "anvilkit.config.ts"),
+	);
 	copyFileSync(
 		sourcePath("define-anvilkit-config.ts"),
 		join(utilsDir, "define-anvilkit-config.ts"),
@@ -60,23 +64,25 @@ async function withCwd<T>(cwd: string, run: () => Promise<T>): Promise<T> {
 	}
 }
 
-async function captureOutput<T>(
-	run: () => Promise<T>,
-): Promise<{ readonly result: T; readonly stdout: string; readonly stderr: string }> {
+async function captureOutput<T>(run: () => Promise<T>): Promise<{
+	readonly result: T;
+	readonly stdout: string;
+	readonly stderr: string;
+}> {
 	let stdout = "";
 	let stderr = "";
-	const stdoutSpy = vi.spyOn(process.stdout, "write").mockImplementation(
-		((chunk: unknown) => {
-			stdout += toText(chunk);
-			return true;
-		}) as typeof process.stdout.write,
-	);
-	const stderrSpy = vi.spyOn(process.stderr, "write").mockImplementation(
-		((chunk: unknown) => {
-			stderr += toText(chunk);
-			return true;
-		}) as typeof process.stderr.write,
-	);
+	const stdoutSpy = vi.spyOn(process.stdout, "write").mockImplementation(((
+		chunk: unknown,
+	) => {
+		stdout += toText(chunk);
+		return true;
+	}) as typeof process.stdout.write);
+	const stderrSpy = vi.spyOn(process.stderr, "write").mockImplementation(((
+		chunk: unknown,
+	) => {
+		stderr += toText(chunk);
+		return true;
+	}) as typeof process.stderr.write);
 
 	try {
 		const result = await run();
@@ -115,7 +121,9 @@ afterEach(() => {
 
 describe("runGenerate", () => {
 	it("writes a validated PageIR to a file with --mock", async () => {
-		const cwd = fileURLToPath(new URL("../../../__fixtures__/generate", import.meta.url));
+		const cwd = fileURLToPath(
+			new URL("../../../__fixtures__/generate", import.meta.url),
+		);
 		const outPath = join(makeTempDir(), "generated.json");
 		const context = await loadFixtureContext();
 
@@ -134,8 +142,9 @@ describe("runGenerate", () => {
 		expect(stderr).toBe("");
 
 		const ir = JSON.parse(readFileSync(outPath, "utf8")) as unknown;
-		const validation = await import("@anvilkit/validator").then(({ validateAiOutput }) =>
-			validateAiOutput(ir, context.availableComponents),
+		const validation = await import("@anvilkit/validator").then(
+			({ validateAiOutput }) =>
+				validateAiOutput(ir, context.availableComponents),
 		);
 
 		expect(validation.valid).toBe(true);
@@ -143,7 +152,9 @@ describe("runGenerate", () => {
 	});
 
 	it("streams valid JSON to stdout with --mock --out -", async () => {
-		const cwd = fileURLToPath(new URL("../../../__fixtures__/generate", import.meta.url));
+		const cwd = fileURLToPath(
+			new URL("../../../__fixtures__/generate", import.meta.url),
+		);
 		const context = await loadFixtureContext();
 		const { validateAiOutput } = await import("@anvilkit/validator");
 

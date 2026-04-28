@@ -1,31 +1,36 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-
-import { afterEach, describe, expect, it, vi } from "vitest";
-
-import { CliError } from "../../utils/errors.js";
 import type { CAC } from "cac";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { register, runValidate } from "../../commands/validate.js";
+import { CliError } from "../../utils/errors.js";
 
 const spawnProbe = spawnSync("node", ["-e", "process.exit(0)"], {
 	encoding: "utf8",
 });
-const describeSubprocess = spawnProbe.error === undefined ? describe : describe.skip;
+const describeSubprocess =
+	spawnProbe.error === undefined ? describe : describe.skip;
 const packageRoot = fileURLToPath(new URL("../../../", import.meta.url));
 const directoriesToClean: string[] = [];
 
 function fixturePath(name: string): string {
-	return fileURLToPath(new URL(`../../../__fixtures__/validate/${name}`, import.meta.url));
+	return fileURLToPath(
+		new URL(`../../../__fixtures__/validate/${name}`, import.meta.url),
+	);
 }
 
 function runCli(args: readonly string[]) {
-	return spawnSync("node", ["--import", "tsx", "src/bin/anvilkit.ts", ...args], {
-		cwd: packageRoot,
-		encoding: "utf8",
-	});
+	return spawnSync(
+		"node",
+		["--import", "tsx", "src/bin/anvilkit.ts", ...args],
+		{
+			cwd: packageRoot,
+			encoding: "utf8",
+		},
+	);
 }
 
 afterEach(() => {
@@ -80,7 +85,9 @@ describeSubprocess("validate command", () => {
 	it("fails with FILE_NOT_FOUND for a missing config file", () => {
 		const result = runCli([
 			"validate",
-			fileURLToPath(new URL("../../../__fixtures__/validate/missing.ts", import.meta.url)),
+			fileURLToPath(
+				new URL("../../../__fixtures__/validate/missing.ts", import.meta.url),
+			),
 		]);
 
 		expect(result.status).toBe(2);
@@ -130,7 +137,10 @@ describe("runValidate", () => {
 		expect(option).toHaveBeenCalledTimes(2);
 
 		const handler = action.mock.calls[0]?.[0] as
-			| ((file: string, options?: { format?: "pretty" | "json" }) => Promise<void>)
+			| ((
+					file: string,
+					options?: { format?: "pretty" | "json" },
+			  ) => Promise<void>)
 			| undefined;
 		expect(handler).toBeTypeOf("function");
 
@@ -206,12 +216,12 @@ describe("runValidate", () => {
 function captureWrites(stream: NodeJS.WriteStream): () => string {
 	const chunks: string[] = [];
 
-	vi.spyOn(stream, "write").mockImplementation(
-		((chunk: string | Uint8Array) => {
-			chunks.push(String(chunk));
-			return true;
-		}) as never,
-	);
+	vi.spyOn(stream, "write").mockImplementation(((
+		chunk: string | Uint8Array,
+	) => {
+		chunks.push(String(chunk));
+		return true;
+	}) as never);
 
 	return () => chunks.join("");
 }

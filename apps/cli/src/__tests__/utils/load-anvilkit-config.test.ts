@@ -56,7 +56,9 @@ describe("loadAnvilkitConfig", () => {
 			"utf8",
 		);
 
-		await expect(loadAnvilkitConfig(directory)).rejects.toBeInstanceOf(CliError);
+		await expect(loadAnvilkitConfig(directory)).rejects.toBeInstanceOf(
+			CliError,
+		);
 		await expect(loadAnvilkitConfig(directory)).rejects.toMatchObject({
 			code: "CONFIG_LOAD_FAILED",
 			exitCode: 1,

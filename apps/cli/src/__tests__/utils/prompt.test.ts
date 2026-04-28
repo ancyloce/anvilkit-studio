@@ -3,7 +3,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { promptText } from "../../utils/prompt.js";
 
 const originalArgv = [...process.argv];
-const stdinIsTTYDescriptor = Object.getOwnPropertyDescriptor(process.stdin, "isTTY");
+const stdinIsTTYDescriptor = Object.getOwnPropertyDescriptor(
+	process.stdin,
+	"isTTY",
+);
 
 afterEach(() => {
 	process.argv = [...originalArgv];

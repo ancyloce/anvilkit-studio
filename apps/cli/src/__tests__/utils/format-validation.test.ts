@@ -29,7 +29,9 @@ describe("format validation helpers", () => {
 
 		expect(lines).toHaveLength(3);
 		expect(lines[0]).toContain("[E_MISSING_RENDER] Hero —");
-		expect(lines[1]).toContain("[W_UNKNOWN_FIELD_TYPE] components.Hero.fields.tone.type —");
+		expect(lines[1]).toContain(
+			"[W_UNKNOWN_FIELD_TYPE] components.Hero.fields.tone.type —",
+		);
 		expect(lines[2]).toBe("1 errors, 1 warnings");
 	});
 

@@ -1,7 +1,14 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
+import {
+	existsSync,
+	mkdirSync,
+	mkdtempSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { afterEach, describe, expect, it } from "vitest";
@@ -16,14 +23,18 @@ function makeTempDir(): string {
 }
 
 function runCli(args: readonly string[], env?: NodeJS.ProcessEnv) {
-	return spawnSync("node", ["--import", "tsx", "src/bin/anvilkit.ts", ...args], {
-		cwd: packageRoot,
-		encoding: "utf8",
-		env: {
-			...process.env,
-			...env,
+	return spawnSync(
+		"node",
+		["--import", "tsx", "src/bin/anvilkit.ts", ...args],
+		{
+			cwd: packageRoot,
+			encoding: "utf8",
+			env: {
+				...process.env,
+				...env,
+			},
 		},
-	});
+	);
 }
 
 afterEach(() => {
@@ -36,18 +47,17 @@ describe("init command", () => {
 	it("scaffolds a new project into an empty directory", () => {
 		const tempRoot = makeTempDir();
 		const targetDir = join(tempRoot, "marketing-site");
-		const result = runCli(
-			["init", targetDir, "--pm", "npm", "--no-input"],
-			{ ANVILKIT_SKIP_INSTALL: "1" },
-		);
+		const result = runCli(["init", targetDir, "--pm", "npm", "--no-input"], {
+			ANVILKIT_SKIP_INSTALL: "1",
+		});
 
 		expect(result.status).toBe(0);
 		expect(result.stdout).toBe("");
 		expect(result.stderr).toContain("Created marketing-site");
 		expect(existsSync(join(targetDir, "package.json"))).toBe(true);
-		expect(existsSync(join(targetDir, "app", "puck", "[...puck]", "page.tsx"))).toBe(
-			true,
-		);
+		expect(
+			existsSync(join(targetDir, "app", "puck", "[...puck]", "page.tsx")),
+		).toBe(true);
 	});
 
 	it("fails when the target directory is not empty without --force", () => {
@@ -56,10 +66,9 @@ describe("init command", () => {
 		mkdirSync(targetDir, { recursive: true });
 		writeFileSync(join(targetDir, "keep.txt"), "occupied\n", "utf8");
 
-		const result = runCli(
-			["init", targetDir, "--pm", "npm", "--no-input"],
-			{ ANVILKIT_SKIP_INSTALL: "1" },
-		);
+		const result = runCli(["init", targetDir, "--pm", "npm", "--no-input"], {
+			ANVILKIT_SKIP_INSTALL: "1",
+		});
 
 		expect(result.status).toBe(2);
 		expect(result.stderr).toContain("[DIR_NOT_EMPTY]");
