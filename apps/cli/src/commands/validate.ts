@@ -1,8 +1,10 @@
-import { validateComponentConfig, type ValidationResult } from "@anvilkit/validator";
+import {
+	type ValidationResult,
+	validateComponentConfig,
+} from "@anvilkit/validator";
 import type { CAC } from "cac";
-
-import { formatJson, formatPretty } from "../utils/format-validation.js";
 import { CliError } from "../utils/errors.js";
+import { formatJson, formatPretty } from "../utils/format-validation.js";
 import { success } from "../utils/logger.js";
 import { resolvePuckConfig } from "../utils/resolve-puck-config.js";
 
@@ -13,7 +15,8 @@ export interface ValidateCommandOptions {
 }
 
 export function register(cli: CAC): void {
-	cli.command("validate <file>", "Validate a source file against Anvilkit rules")
+	cli
+		.command("validate <file>", "Validate a source file against Anvilkit rules")
 		.option("--format <format>", "Output format")
 		.option("--no-input", "Disable prompts")
 		.action(async (file?: string, options?: ValidateCommandOptions) => {

@@ -22,7 +22,8 @@ export interface ExportCommandOptions {
 }
 
 export function register(cli: CAC): void {
-	cli.command("export <input>", "Export input using an Anvilkit formatter")
+	cli
+		.command("export <input>", "Export input using an Anvilkit formatter")
 		.option("--format <format>", "Target export format")
 		.option("--out <dir>", "Output directory")
 		.option("--from <source>", "Input source adapter")

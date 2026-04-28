@@ -23,7 +23,11 @@ export interface GenerateCommandOptions {
 }
 
 export function register(cli: CAC): void {
-	cli.command("generate <prompt>", "Generate structured output from an Anvilkit prompt")
+	cli
+		.command(
+			"generate <prompt>",
+			"Generate structured output from an Anvilkit prompt",
+		)
 		.option("--config <path>", "Path to an Anvilkit config file")
 		.option("--out <path>", "Output path or - for stdout")
 		.option("--mock", "Use mock generation output")
@@ -74,16 +78,24 @@ export async function runGenerate(
 		});
 	}
 
-	const generatePage = await resolveGeneratePage(loadedConfig.config, Boolean(options.mock));
+	const generatePage = await resolveGeneratePage(
+		loadedConfig.config,
+		Boolean(options.mock),
+	);
 	const { config } = await resolvePuckConfig(options.config);
 	const generationContext = configToAiContext(
 		config as Parameters<typeof configToAiContext>[0],
 	);
 	const ir = await generatePage(prompt, generationContext);
-	const validation = validateAiOutput(ir, generationContext.availableComponents);
+	const validation = validateAiOutput(
+		ir,
+		generationContext.availableComponents,
+	);
 
 	if (!validation.valid) {
-		process.stderr.write(`${formatValidationIssues(validation.issues, format)}\n`);
+		process.stderr.write(
+			`${formatValidationIssues(validation.issues, format)}\n`,
+		);
 		return 1;
 	}
 
@@ -108,7 +120,9 @@ async function resolveGeneratePage(
 		return createMockGeneratePage();
 	}
 
-	const userConfig = isAnvilkitUserConfig(loadedConfig) ? loadedConfig : undefined;
+	const userConfig = isAnvilkitUserConfig(loadedConfig)
+		? loadedConfig
+		: undefined;
 	if (typeof userConfig?.generatePage !== "function") {
 		throw new CliError({
 			code: "MISSING_GENERATE_PAGE",
@@ -144,15 +158,21 @@ function formatValidationIssues(
 		return JSON.stringify(issues, null, 2);
 	}
 
-	const errorCount = issues.filter((issue) => issue.severity === "error").length;
-	const warningCount = issues.filter((issue) => issue.severity === "warn").length;
+	const errorCount = issues.filter(
+		(issue) => issue.severity === "error",
+	).length;
+	const warningCount = issues.filter(
+		(issue) => issue.severity === "warn",
+	).length;
 	const lines = issues.map((issue) => {
 		const target = issue.path === "" ? "<root>" : issue.path;
 		const symbol = issue.severity === "error" ? "×" : "!";
 		return `${symbol} ${target} ${issue.message}`;
 	});
 
-	return [...lines, `${errorCount} errors, ${warningCount} warnings`].join("\n");
+	return [...lines, `${errorCount} errors, ${warningCount} warnings`].join(
+		"\n",
+	);
 }
 
 function isAnvilkitUserConfig(value: unknown): value is AnvilkitUserConfig {

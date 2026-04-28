@@ -1,14 +1,21 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import {
+	existsSync,
+	mkdirSync,
+	readdirSync,
+	readFileSync,
+	statSync,
+	writeFileSync,
+} from "node:fs";
 import { basename, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { CAC } from "cac";
 
 import { copyScaffold } from "../utils/copy-scaffold.js";
 import {
-	PACKAGE_MANAGERS,
 	detectPm,
 	isPackageManager,
+	PACKAGE_MANAGERS,
 	type PackageManager,
 } from "../utils/detect-pm.js";
 import { CliError } from "../utils/errors.js";
@@ -33,7 +40,8 @@ const DEFAULT_TEMPLATE_VERSION = "0.1.0-alpha.0";
 const TEMPLATE_ASSIGNMENT_MARKER = "const seedPageIR: PageIR = defaultPageIR;";
 
 export function register(cli: CAC): void {
-	cli.command("init [dir]", "Scaffold a new Anvilkit project")
+	cli
+		.command("init [dir]", "Scaffold a new Anvilkit project")
 		.option("--template <slug>", "Template slug")
 		.option("--pm <pm>", "Package manager")
 		.option("--force", "Overwrite existing files")
@@ -142,7 +150,9 @@ function ensureTargetDirReady(targetDir: string, force: boolean): void {
 		});
 	}
 
-	const visibleEntries = readdirSync(targetDir).filter((entry) => entry !== ".git");
+	const visibleEntries = readdirSync(targetDir).filter(
+		(entry) => entry !== ".git",
+	);
 	if (visibleEntries.length > 0 && !force) {
 		throw new CliError({
 			code: "DIR_NOT_EMPTY",
@@ -190,7 +200,13 @@ function hydrateTemplate(targetDir: string, templateSlug: string): void {
 		"utf8",
 	);
 
-	const editorPagePath = resolve(targetDir, "app", "puck", "[...puck]", "page.tsx");
+	const editorPagePath = resolve(
+		targetDir,
+		"app",
+		"puck",
+		"[...puck]",
+		"page.tsx",
+	);
 	const editorPage = readFileSync(editorPagePath, "utf8");
 	const importLine = `import { pageIR as initialData } from "${templatePackage}";`;
 
@@ -199,7 +215,8 @@ function hydrateTemplate(targetDir: string, templateSlug: string): void {
 		throw new CliError({
 			code: "SCAFFOLD_INVALID",
 			exitCode: 1,
-			message: "The embedded scaffold route is missing the template hydration marker.",
+			message:
+				"The embedded scaffold route is missing the template hydration marker.",
 		});
 	}
 
@@ -213,13 +230,16 @@ function hydrateTemplate(targetDir: string, templateSlug: string): void {
 	);
 }
 
-function insertImportAfterUseClient(source: string, importLine: string): string {
+function insertImportAfterUseClient(
+	source: string,
+	importLine: string,
+): string {
 	if (source.includes(importLine)) {
 		return source;
 	}
 
-	if (source.startsWith("\"use client\";")) {
-		return source.replace("\"use client\";", `"use client";\n\n${importLine}`);
+	if (source.startsWith('"use client";')) {
+		return source.replace('"use client";', `"use client";\n\n${importLine}`);
 	}
 
 	return `${importLine}\n${source}`;
@@ -235,7 +255,10 @@ function sortDependencies(
 	);
 }
 
-function installDependencies(targetDir: string, packageManager: PackageManager): void {
+function installDependencies(
+	targetDir: string,
+	packageManager: PackageManager,
+): void {
 	if (process.env.ANVILKIT_SKIP_INSTALL === "1") {
 		logger.info("Skipping dependency install because ANVILKIT_SKIP_INSTALL=1");
 		return;
