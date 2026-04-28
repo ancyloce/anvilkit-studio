@@ -86,6 +86,16 @@
 				"types": "./dist/templates/index.d.cts",
 				"default": "./dist/templates/index.cjs"
 			}
+		},
+		"./section": {
+			"import": {
+				"types": "./dist/section/index.d.ts",
+				"default": "./dist/section/index.js"
+			},
+			"require": {
+				"types": "./dist/section/index.d.cts",
+				"default": "./dist/section/index.cjs"
+			}
 		}
 	},
 	"files": [
