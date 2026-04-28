@@ -1,3 +1,4 @@
+export * from "./ai-prompt-panel";
 export * from "./animated-grid-pattern";
 export * from "./animated-shiny-text";
 export * from "./aspect-ratio";
