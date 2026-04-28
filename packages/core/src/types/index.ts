@@ -14,6 +14,12 @@ export type {
 	AiValidationIssue,
 	AiValidationResult,
 } from "./ai.js";
+export type {
+	AiSectionContext,
+	AiSectionPatch,
+	AiSectionSelection,
+	ConfigToAiSectionContextOptions,
+} from "./ai-section.js";
 export type { ComponentPackageManifest, StudioConfig } from "./config.js";
 export type {
 	ExportFormatDefinition,
