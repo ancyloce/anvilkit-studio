@@ -24,9 +24,9 @@
           "sources": [
             {
               "fileName": "config-to-ai-context.ts",
-              "line": 21,
+              "line": 20,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L21"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L20"
             }
           ],
           "type": {
@@ -49,9 +49,9 @@
       "sources": [
         {
           "fileName": "config-to-ai-context.ts",
-          "line": 20,
+          "line": 19,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L20"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L19"
         }
       ]
     },
@@ -73,9 +73,9 @@
           "sources": [
             {
               "fileName": "extract-field-schema.ts",
-              "line": 8,
+              "line": 11,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L8"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L11"
             }
           ],
           "type": {
@@ -94,9 +94,9 @@
           "sources": [
             {
               "fileName": "extract-field-schema.ts",
-              "line": 7,
+              "line": 10,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L7"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L10"
             }
           ],
           "type": {
@@ -117,21 +117,21 @@
       "sources": [
         {
           "fileName": "extract-field-schema.ts",
-          "line": 6,
+          "line": 9,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L6"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L9"
         }
       ]
     },
     {
-      "id": 21,
+      "id": 20,
       "name": "IsJsonSerializableOptions",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 22,
+          "id": 21,
           "name": "dateAsIso",
           "variant": "declaration",
           "kind": 1024,
@@ -156,7 +156,7 @@
         {
           "title": "Properties",
           "children": [
-            22
+            21
           ]
         }
       ],
@@ -178,9 +178,9 @@
       "sources": [
         {
           "fileName": "config-to-ai-context.ts",
-          "line": 24,
+          "line": 23,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L24"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L23"
         }
       ],
       "signatures": [
@@ -193,9 +193,9 @@
           "sources": [
             {
               "fileName": "config-to-ai-context.ts",
-              "line": 24,
+              "line": 23,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L24"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L23"
             }
           ],
           "typeParameters": [
@@ -270,9 +270,9 @@
       "sources": [
         {
           "fileName": "extract-field-schema.ts",
-          "line": 11,
+          "line": 14,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L11"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L14"
         }
       ],
       "signatures": [
@@ -285,9 +285,9 @@
           "sources": [
             {
               "fileName": "extract-field-schema.ts",
-              "line": 11,
+              "line": 14,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L11"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L14"
             }
           ],
           "parameters": [
@@ -333,19 +333,6 @@
                 "name": "ExtractFieldSchemaOptions",
                 "package": "@anvilkit/schema"
               }
-            },
-            {
-              "id": 16,
-              "name": "_depth",
-              "variant": "param",
-              "kind": 32768,
-              "flags": {
-                "isOptional": true
-              },
-              "type": {
-                "type": "intrinsic",
-                "name": "number"
-              }
             }
           ],
           "type": {
@@ -362,7 +349,7 @@
       ]
     },
     {
-      "id": 17,
+      "id": 16,
       "name": "identifySlotFields",
       "variant": "declaration",
       "kind": 64,
@@ -377,7 +364,7 @@
       ],
       "signatures": [
         {
-          "id": 18,
+          "id": 17,
           "name": "identifySlotFields",
           "variant": "signature",
           "kind": 4096,
@@ -392,7 +379,7 @@
           ],
           "typeParameters": [
             {
-              "id": 19,
+              "id": 18,
               "name": "C",
               "variant": "typeParam",
               "kind": 131072,
@@ -411,14 +398,14 @@
           ],
           "parameters": [
             {
-              "id": 20,
+              "id": 19,
               "name": "config",
               "variant": "param",
               "kind": 32768,
               "flags": {},
               "type": {
                 "type": "reference",
-                "target": 19,
+                "target": 18,
                 "name": "C",
                 "package": "@anvilkit/schema",
                 "refersToTypeParameter": true
@@ -456,7 +443,7 @@
       ]
     },
     {
-      "id": 23,
+      "id": 22,
       "name": "isJsonSerializable",
       "variant": "declaration",
       "kind": 64,
@@ -471,7 +458,7 @@
       ],
       "signatures": [
         {
-          "id": 24,
+          "id": 23,
           "name": "isJsonSerializable",
           "variant": "signature",
           "kind": 4096,
@@ -486,7 +473,7 @@
           ],
           "parameters": [
             {
-              "id": 25,
+              "id": 24,
               "name": "value",
               "variant": "param",
               "kind": 32768,
@@ -497,7 +484,7 @@
               }
             },
             {
-              "id": 26,
+              "id": 25,
               "name": "opts",
               "variant": "param",
               "kind": 32768,
@@ -506,7 +493,7 @@
               },
               "type": {
                 "type": "reference",
-                "target": 21,
+                "target": 20,
                 "name": "IsJsonSerializableOptions",
                 "package": "@anvilkit/schema"
               }
@@ -526,7 +513,7 @@
       "children": [
         1,
         8,
-        21
+        20
       ]
     },
     {
@@ -534,8 +521,8 @@
       "children": [
         3,
         11,
-        17,
-        23
+        16,
+        22
       ]
     }
   ],
@@ -623,8 +610,8 @@
     },
     "16": {
       "packageName": "@anvilkit/schema",
-      "packagePath": "src/extract-field-schema.ts",
-      "qualifiedName": "_depth"
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "identifySlotFields"
     },
     "17": {
       "packageName": "@anvilkit/schema",
@@ -634,27 +621,27 @@
     "18": {
       "packageName": "@anvilkit/schema",
       "packagePath": "src/identify-slot-fields.ts",
-      "qualifiedName": "identifySlotFields"
+      "qualifiedName": "C"
     },
     "19": {
       "packageName": "@anvilkit/schema",
       "packagePath": "src/identify-slot-fields.ts",
-      "qualifiedName": "C"
-    },
-    "20": {
-      "packageName": "@anvilkit/schema",
-      "packagePath": "src/identify-slot-fields.ts",
       "qualifiedName": "config"
     },
-    "21": {
+    "20": {
       "packageName": "@anvilkit/schema",
       "packagePath": "src/is-json-serializable.ts",
       "qualifiedName": "IsJsonSerializableOptions"
     },
-    "22": {
+    "21": {
       "packageName": "@anvilkit/schema",
       "packagePath": "src/is-json-serializable.ts",
       "qualifiedName": "IsJsonSerializableOptions.dateAsIso"
+    },
+    "22": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "isJsonSerializable"
     },
     "23": {
       "packageName": "@anvilkit/schema",
@@ -664,14 +651,9 @@
     "24": {
       "packageName": "@anvilkit/schema",
       "packagePath": "src/is-json-serializable.ts",
-      "qualifiedName": "isJsonSerializable"
-    },
-    "25": {
-      "packageName": "@anvilkit/schema",
-      "packagePath": "src/is-json-serializable.ts",
       "qualifiedName": "value"
     },
-    "26": {
+    "25": {
       "packageName": "@anvilkit/schema",
       "packagePath": "src/is-json-serializable.ts",
       "qualifiedName": "opts"

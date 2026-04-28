@@ -66,9 +66,9 @@
           "sources": [
             {
               "fileName": "puck-data-to-ir.ts",
-              "line": 20,
+              "line": 35,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L20"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L35"
             }
           ],
           "type": {
@@ -120,9 +120,9 @@
           "sources": [
             {
               "fileName": "puck-data-to-ir.ts",
-              "line": 25,
+              "line": 40,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L25"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L40"
             }
           ],
           "type": {
@@ -181,9 +181,9 @@
       "sources": [
         {
           "fileName": "puck-data-to-ir.ts",
-          "line": 15,
+          "line": 30,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L15"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L30"
         }
       ]
     },
@@ -253,9 +253,9 @@
       "sources": [
         {
           "fileName": "collect-assets.ts",
-          "line": 104,
+          "line": 118,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L104"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L118"
         }
       ],
       "signatures": [
@@ -304,9 +304,9 @@
           "sources": [
             {
               "fileName": "collect-assets.ts",
-              "line": 104,
+              "line": 118,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L104"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L118"
             }
           ],
           "parameters": [
@@ -355,9 +355,9 @@
                           "sources": [
                             {
                               "fileName": "collect-assets.ts",
-                              "line": 105,
+                              "line": 119,
                               "character": 22,
-                              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L105"
+                              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L119"
                             }
                           ],
                           "type": {
@@ -629,9 +629,9 @@
       "sources": [
         {
           "fileName": "ir-to-puck-data.ts",
-          "line": 19,
+          "line": 41,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L19"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L41"
         }
       ],
       "signatures": [
@@ -735,9 +735,9 @@
           "sources": [
             {
               "fileName": "ir-to-puck-data.ts",
-              "line": 19,
+              "line": 41,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L19"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L41"
             }
           ],
           "parameters": [
@@ -789,9 +789,9 @@
       "sources": [
         {
           "fileName": "puck-data-to-ir.ts",
-          "line": 43,
+          "line": 193,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L43"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L193"
         }
       ],
       "signatures": [
@@ -869,9 +869,9 @@
           "sources": [
             {
               "fileName": "puck-data-to-ir.ts",
-              "line": 43,
+              "line": 193,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L43"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L193"
             }
           ],
           "parameters": [
