@@ -1,0 +1,194 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string"
+		},
+		"feedVersion": {
+			"type": "string",
+			"const": "1"
+		},
+		"generatedAt": {
+			"type": "string",
+			"format": "date-time",
+			"pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+		},
+		"entries": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"slug": {
+						"type": "string",
+						"pattern": "^[a-z0-9][a-z0-9-]{1,63}$"
+					},
+					"kind": {
+						"type": "string",
+						"enum": [
+							"plugin",
+							"template",
+							"component"
+						]
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 120
+					},
+					"description": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 512
+					},
+					"packageName": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 214
+					},
+					"version": {
+						"type": "string",
+						"pattern": "^\\d+\\.\\d+\\.\\d+(?:-[\\w.-]+)?(?:\\+[\\w.-]+)?$"
+					},
+					"category": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 64
+					},
+					"tags": {
+						"default": [],
+						"maxItems": 16,
+						"type": "array",
+						"items": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 48
+						}
+					},
+					"publisher": {
+						"type": "string",
+						"enum": [
+							"first-party",
+							"verified",
+							"community"
+						]
+					},
+					"verified": {
+						"type": "boolean"
+					},
+					"scorecard": {
+						"type": "object",
+						"properties": {
+							"passed": {
+								"type": "boolean"
+							},
+							"ranAt": {
+								"type": "string",
+								"format": "date-time",
+								"pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+							},
+							"commit": {
+								"type": "string",
+								"pattern": "^[a-f0-9]{7,40}$"
+							},
+							"checks": {
+								"type": "object",
+								"propertyNames": {
+									"type": "string"
+								},
+								"additionalProperties": {
+									"type": "boolean"
+								}
+							},
+							"notes": {
+								"type": "string",
+								"maxLength": 512
+							}
+						},
+						"required": [
+							"passed"
+						],
+						"additionalProperties": false
+					},
+					"repository": {
+						"type": "string",
+						"format": "uri"
+					},
+					"homepage": {
+						"type": "string",
+						"format": "uri"
+					},
+					"preview": {
+						"type": "string",
+						"pattern": "^\\/[\\w/.-]*$"
+					},
+					"addedAt": {
+						"type": "string",
+						"format": "date-time",
+						"pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+					},
+					"installSpec": {
+						"default": {
+							"mutates": [],
+							"scaffoldOnly": false,
+							"peerInstalls": []
+						},
+						"type": "object",
+						"properties": {
+							"mutates": {
+								"default": [],
+								"type": "array",
+								"items": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 255
+								}
+							},
+							"scaffoldOnly": {
+								"default": false,
+								"type": "boolean"
+							},
+							"peerInstalls": {
+								"default": [],
+								"maxItems": 8,
+								"type": "array",
+								"items": {
+									"type": "string",
+									"minLength": 1,
+									"maxLength": 214
+								}
+							}
+						},
+						"required": [
+							"mutates",
+							"scaffoldOnly",
+							"peerInstalls"
+						],
+						"additionalProperties": false
+					}
+				},
+				"required": [
+					"slug",
+					"kind",
+					"name",
+					"description",
+					"packageName",
+					"version",
+					"category",
+					"tags",
+					"publisher",
+					"verified",
+					"addedAt",
+					"installSpec"
+				],
+				"additionalProperties": false
+			}
+		}
+	},
+	"required": [
+		"feedVersion",
+		"generatedAt",
+		"entries"
+	],
+	"additionalProperties": false
+}

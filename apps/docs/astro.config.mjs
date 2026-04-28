@@ -97,6 +97,18 @@ export default defineConfig({
 						},
 					],
 				},
+				{
+					label: "Marketplace",
+					collapsed: false,
+					items: [
+						{
+							label: "Plugins, templates, components",
+							link: "/marketplace/",
+							badge: { text: "New", variant: "note" },
+							attrs: { "data-testid": "sidebar-marketplace-link" },
+						},
+					],
+				},
 			],
 		}),
 	],

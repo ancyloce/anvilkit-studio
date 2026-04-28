@@ -1,0 +1,85 @@
+---
+import MarketplaceCatalog, {
+	type CatalogEntry,
+} from "../components/MarketplaceCatalog.tsx";
+/**
+ * Marketplace catalog route (`phase6-012`).
+ *
+ * Imports the registry feed as a static JSON module so Astro
+ * inlines it during the prerender step — no fs reads at runtime.
+ * Hydrates a React island (`MarketplaceCatalog`) with the full
+ * entry list, projected down to the fields the UI needs. Lives
+ * outside the Starlight content tree so the filter UI can take
+ * full-bleed width without the docs chrome competing for layout
+ * (mirrors `/playground/`'s pattern).
+ */
+import feedJson from "../registry/feed.json";
+import "../styles/tokens.css";
+import "../styles/marketplace.css";
+
+interface RawEntry {
+	slug: string;
+	kind: CatalogEntry["kind"];
+	name: string;
+	description: string;
+	packageName: string;
+	version: string;
+	category: string;
+	tags?: string[];
+	publisher: CatalogEntry["publisher"];
+	verified: boolean;
+	repository?: string;
+	homepage?: string;
+}
+
+// biome-ignore lint/correctness/noUnusedVariables: consumed by the .astro template below
+const entries: CatalogEntry[] = (feedJson.entries as RawEntry[]).map(
+	(entry) => ({
+		slug: entry.slug,
+		kind: entry.kind,
+		name: entry.name,
+		description: entry.description,
+		packageName: entry.packageName,
+		version: entry.version,
+		category: entry.category,
+		tags: entry.tags ?? [],
+		publisher: entry.publisher,
+		verified: entry.verified,
+		repository: entry.repository,
+		homepage: entry.homepage,
+	}),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Marketplace · AnvilKit</title>
+		<meta
+			name="description"
+			content="Browse first-party and verified third-party AnvilKit plugins, templates, and components. Install with `npx anvilkit add <slug>`."
+		/>
+		<link rel="canonical" href="https://anvilkit.dev/marketplace/" />
+	</head>
+	<body>
+		<nav class="anvilkit-marketplace__topbar">
+			<a href="/">← AnvilKit docs</a>
+			<div>
+				<a href="/components/">Components</a>
+				{" · "}
+				<a href="/templates/">Templates</a>
+				{" · "}
+				<a href="/playground/">Playground</a>
+				{" · "}
+				<a
+					href="https://github.com/ancyloce/anvilkit-studio"
+					rel="noreferrer"
+					target="_blank">GitHub</a
+				>
+			</div>
+		</nav>
+		<MarketplaceCatalog entries={entries} client:load />
+	</body>
+</html>

@@ -160,7 +160,10 @@ function main() {
 	const slugs = readdirSync(TEMPLATES_ROOT, { withFileTypes: true })
 		.filter(
 			(d) =>
-				d.isDirectory() && d.name !== "scripts" && d.name !== "node_modules",
+				d.isDirectory() &&
+				!d.name.startsWith(".") &&
+				d.name !== "scripts" &&
+				d.name !== "node_modules",
 		)
 		.map((d) => d.name)
 		.sort();

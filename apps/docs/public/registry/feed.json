@@ -1,0 +1,558 @@
+{
+	"$schema": "/registry/feed.schema.json",
+	"feedVersion": "1",
+	"generatedAt": "2026-04-28T00:00:00.000Z",
+	"entries": [
+		{
+			"slug": "blog-article",
+			"kind": "template",
+			"name": "Blog article page",
+			"description": "Blog article page — navbar, article section, related-posts CTA.",
+			"packageName": "@anvilkit/template-blog-article",
+			"version": "0.1.0-alpha.0",
+			"category": "blog",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/blog-article/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "blog-index",
+			"kind": "template",
+			"name": "Blog index page",
+			"description": "Blog index page — navbar, section heading, post list.",
+			"packageName": "@anvilkit/template-blog-index",
+			"version": "0.1.0-alpha.0",
+			"category": "blog",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/blog-index/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "landing-agency",
+			"kind": "template",
+			"name": "Landing page for an agency",
+			"description": "Landing page for an agency — hero, services bento, statistics, testimonial section.",
+			"packageName": "@anvilkit/template-landing-agency",
+			"version": "0.1.0-alpha.0",
+			"category": "landing",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/landing-agency/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "landing-docs",
+			"kind": "template",
+			"name": "Landing page for a developer-tool documentation site",
+			"description": "Landing page for a developer-tool documentation site — hero, feature grid, FAQ.",
+			"packageName": "@anvilkit/template-landing-docs",
+			"version": "0.1.0-alpha.0",
+			"category": "landing",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/landing-docs/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "landing-saas",
+			"kind": "template",
+			"name": "Landing page for a SaaS product",
+			"description": "Landing page for a SaaS product — hero, logo cloud, bento features, pricing, FAQ.",
+			"packageName": "@anvilkit/template-landing-saas",
+			"version": "0.1.0-alpha.0",
+			"category": "landing",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/landing-saas/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "feature-overview",
+			"kind": "template",
+			"name": "Product feature overview",
+			"description": "Product feature overview — hero, bento feature grid, statistics, FAQ.",
+			"packageName": "@anvilkit/template-feature-overview",
+			"version": "0.1.0-alpha.0",
+			"category": "marketing",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/feature-overview/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "pricing-comparison",
+			"kind": "template",
+			"name": "Standalone pricing page",
+			"description": "Standalone pricing page — hero banner, pricing tiers, comparison FAQ.",
+			"packageName": "@anvilkit/template-pricing-comparison",
+			"version": "0.1.0-alpha.0",
+			"category": "marketing",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/pricing-comparison/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "about",
+			"kind": "template",
+			"name": "About page",
+			"description": "About page — hero, mission section, statistics, customer logo cloud.",
+			"packageName": "@anvilkit/template-about",
+			"version": "0.1.0-alpha.0",
+			"category": "system",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/about/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "changelog",
+			"kind": "template",
+			"name": "Changelog page",
+			"description": "Changelog page — navbar, section heading, blog-list for entries.",
+			"packageName": "@anvilkit/template-changelog",
+			"version": "0.1.0-alpha.0",
+			"category": "system",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/changelog/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "contact",
+			"kind": "template",
+			"name": "Contact page",
+			"description": "Contact page — navbar, contact section, inline email + message form with submit button.",
+			"packageName": "@anvilkit/template-contact",
+			"version": "0.1.0-alpha.0",
+			"category": "system",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"preview": "/templates/contact/preview.png",
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-ai-copilot",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-ai-copilot",
+			"description": "Headless AI copilot plugin for Anvilkit Studio (Puck-native page builder).",
+			"packageName": "@anvilkit/plugin-ai-copilot",
+			"version": "0.1.0-alpha.0",
+			"category": "ai",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-asset-manager",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-asset-manager",
+			"description": "Headless asset manager plugin for Anvilkit Studio with host-provided uploads and optional React UI.",
+			"packageName": "@anvilkit/plugin-asset-manager",
+			"version": "0.1.0-alpha.0",
+			"category": "assets",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-export-html",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-export-html",
+			"description": "HTML export format for Anvilkit Studio (Puck-native headless page builder).",
+			"packageName": "@anvilkit/plugin-export-html",
+			"version": "0.1.0-alpha.0",
+			"category": "export",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-export-react",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-export-react",
+			"description": "React (.tsx/.jsx) export format for Anvilkit Studio — emits React source from PageIR.",
+			"packageName": "@anvilkit/plugin-export-react",
+			"version": "1.0.0-beta.0",
+			"category": "export",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-version-history",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-version-history",
+			"description": "Headless version history plugin for Anvilkit Studio — snapshot storage via host-provided adapters.",
+			"packageName": "@anvilkit/plugin-version-history",
+			"version": "0.1.0-alpha.0",
+			"category": "history",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "bento-grid",
+			"kind": "component",
+			"name": "@anvilkit/bento-grid",
+			"description": "Anvilkit Puck-native Bento Grid component.",
+			"packageName": "@anvilkit/bento-grid",
+			"version": "0.0.2",
+			"category": "content",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "blog-list",
+			"kind": "component",
+			"name": "@anvilkit/blog-list",
+			"description": "Anvilkit Puck-native blog-list component.",
+			"packageName": "@anvilkit/blog-list",
+			"version": "0.0.2",
+			"category": "content",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "helps",
+			"kind": "component",
+			"name": "@anvilkit/helps",
+			"description": "Anvilkit Puck-native helps component.",
+			"packageName": "@anvilkit/helps",
+			"version": "0.0.2",
+			"category": "content",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "logo-clouds",
+			"kind": "component",
+			"name": "@anvilkit/logo-clouds",
+			"description": "Anvilkit Puck-native logo-clouds component.",
+			"packageName": "@anvilkit/logo-clouds",
+			"version": "0.0.2",
+			"category": "content",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "pricing-minimal",
+			"kind": "component",
+			"name": "@anvilkit/pricing-minimal",
+			"description": "Anvilkit Puck-native pricing minimal component.",
+			"packageName": "@anvilkit/pricing-minimal",
+			"version": "0.0.2",
+			"category": "content",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "statistics",
+			"kind": "component",
+			"name": "@anvilkit/statistics",
+			"description": "Anvilkit Puck-native statistics component.",
+			"packageName": "@anvilkit/statistics",
+			"version": "0.0.2",
+			"category": "content",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "hero",
+			"kind": "component",
+			"name": "@anvilkit/hero",
+			"description": "Anvilkit Puck-native hero component.",
+			"packageName": "@anvilkit/hero",
+			"version": "0.0.2",
+			"category": "layout",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "navbar",
+			"kind": "component",
+			"name": "@anvilkit/navbar",
+			"description": "Anvilkit Puck-native navbar component.",
+			"packageName": "@anvilkit/navbar",
+			"version": "0.0.2",
+			"category": "layout",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "section",
+			"kind": "component",
+			"name": "@anvilkit/section",
+			"description": "Anvilkit Puck-native section component.",
+			"packageName": "@anvilkit/section",
+			"version": "0.0.2",
+			"category": "layout",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "button",
+			"kind": "component",
+			"name": "@anvilkit/button",
+			"description": "Anvilkit Puck-native button component.",
+			"packageName": "@anvilkit/button",
+			"version": "0.0.2",
+			"category": "primitives",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "input",
+			"kind": "component",
+			"name": "@anvilkit/input",
+			"description": "Anvilkit Puck-native input component.",
+			"packageName": "@anvilkit/input",
+			"version": "0.0.2",
+			"category": "primitives",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		}
+	]
+}

@@ -665,7 +665,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportFormatDefinition",
-                "target": 453
+                "target": 477
               },
               {
                 "kind": "text",
@@ -2262,6 +2262,1268 @@
       ]
     },
     {
+      "id": 444,
+      "name": "AiSectionContext",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "The LLM-shaped view of a section-level regeneration request.\n\nProduced by "
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/schema/section`"
+          },
+          {
+            "kind": "text",
+            "text": "'s "
+          },
+          {
+            "kind": "code",
+            "text": "`configToAiSectionContext()`"
+          },
+          {
+            "kind": "text",
+            "text": "\nfrom a Puck "
+          },
+          {
+            "kind": "code",
+            "text": "`Config`"
+          },
+          {
+            "kind": "text",
+            "text": " + an "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "AiSectionSelection",
+            "target": 457
+          },
+          {
+            "kind": "text",
+            "text": ". Passed into the\nhost-supplied "
+          },
+          {
+            "kind": "code",
+            "text": "`generateSection(ctx, prompt)`"
+          },
+          {
+            "kind": "text",
+            "text": " callback and again into\n"
+          },
+          {
+            "kind": "code",
+            "text": "`validateAiSectionPatch(patch, ctx)`"
+          },
+          {
+            "kind": "text",
+            "text": " after the LLM responds.\n\nClosed shape: every field is intentional. Hosts must not stuff\narbitrary metadata onto this object — open extension is reserved for\na Phase 7 major bump."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 450,
+          "name": "allowResize",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether a size-changing replacement is permitted. Driven by\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "ConfigToAiSectionContextOptions.allowResize",
+                "target": 467
+              },
+              {
+                "kind": "text",
+                "text": "; defaults to\n"
+              },
+              {
+                "kind": "code",
+                "text": "`false`"
+              },
+              {
+                "kind": "text",
+                "text": " so single-subtree-replacement is the safe default."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 204,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L204"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 448,
+          "name": "availableComponents",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The components the LLM may emit inside this zone, already\nnarrowed by the zone's allow / disallow lists.\n\nEach entry has the same shape as\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiGenerationContext.availableComponents",
+                "target": 433
+              },
+              {
+                "kind": "text",
+                "text": " so the validator\napplies identical field-level rules at section and page\ngranularity.\n\nThe list is sorted by "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiComponentSchema.componentName",
+                "target": 414
+              },
+              {
+                "kind": "text",
+                "text": " for\ndeterministic prompts."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 192,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L192"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 413,
+                "name": "AiComponentSchema",
+                "package": "@anvilkit/core"
+              }
+            }
+          }
+        },
+        {
+          "id": 449,
+          "name": "currentNodes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional snapshot of the subtrees being replaced. Forwarded from\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionSelection.currentNodes",
+                "target": 460
+              },
+              {
+                "kind": "text",
+                "text": ". Lets the prompt builder\ninclude \"rewrite THIS subtree\" context."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 198,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L198"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 518,
+                "name": "PageIRNode",
+                "package": "@anvilkit/core"
+              }
+            }
+          }
+        },
+        {
+          "id": 452,
+          "name": "locale",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional BCP 47 locale hint. Mirrors\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiGenerationContext.locale",
+                "target": 436
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 214,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L214"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 447,
+          "name": "nodeIds",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The selected node IDs in author-visible order. Forwarded from\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionSelection.nodeIds",
+                "target": 459
+              },
+              {
+                "kind": "text",
+                "text": "; an emitted patch must\npreserve this order (and length, when\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "allowResize",
+                "target": 450
+              },
+              {
+                "kind": "text",
+                "text": " is "
+              },
+              {
+                "kind": "code",
+                "text": "`false`"
+              },
+              {
+                "kind": "text",
+                "text": ")."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 179,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L179"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 451,
+          "name": "theme",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional theme hint forwarded onto the prompt. Mirrors\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiGenerationContext.theme",
+                "target": 435
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 209,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L209"
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "light"
+              },
+              {
+                "type": "literal",
+                "value": "dark"
+              }
+            ]
+          }
+        },
+        {
+          "id": 445,
+          "name": "zoneId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The zone the selection lives inside. Forwarded from\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionSelection.zoneId",
+                "target": 458
+              },
+              {
+                "kind": "text",
+                "text": " so the validator can verify\nthat the LLM's emitted "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionPatch.zoneId",
+                "target": 454
+              },
+              {
+                "kind": "text",
+                "text": " matches."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 166,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L166"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 446,
+          "name": "zoneKind",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional Puck zone discriminator — "
+              },
+              {
+                "kind": "code",
+                "text": "`\"slot\"`"
+              },
+              {
+                "kind": "text",
+                "text": ", "
+              },
+              {
+                "kind": "code",
+                "text": "`\"zone\"`"
+              },
+              {
+                "kind": "text",
+                "text": ", or omitted\nfor the root zone. Forwarded from\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionSelection.zoneKind",
+                "target": 463
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 172,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L172"
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "slot"
+              },
+              {
+                "type": "literal",
+                "value": "zone"
+              }
+            ]
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            450,
+            448,
+            449,
+            452,
+            447,
+            451,
+            445,
+            446
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "types/ai-section.ts",
+          "line": 160,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L160"
+        }
+      ]
+    },
+    {
+      "id": 453,
+      "name": "AiSectionPatch",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "The LLM's response to a section-level regeneration request.\n\nReplaces "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "nodeIds",
+            "target": 455
+          },
+          {
+            "kind": "text",
+            "text": " inside "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "zoneId",
+            "target": 454
+          },
+          {
+            "kind": "text",
+            "text": " with "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "replacement",
+            "target": 456
+          },
+          {
+            "kind": "text",
+            "text": "\nvia "
+          },
+          {
+            "kind": "code",
+            "text": "`puckApi.dispatch({ type: \"setData\", data: applyPatch(...) })`"
+          },
+          {
+            "kind": "text",
+            "text": ",\npreserving surrounding canvas (selection, sidebar, scroll).\n\nValidation lives in "
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/validator/section`"
+          },
+          {
+            "kind": "text",
+            "text": "'s\n"
+          },
+          {
+            "kind": "code",
+            "text": "`validateAiSectionPatch()`"
+          },
+          {
+            "kind": "text",
+            "text": "; Core only owns the type."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 455,
+          "name": "nodeIds",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The node IDs being replaced. Must equal\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.nodeIds",
+                "target": 447
+              },
+              {
+                "kind": "text",
+                "text": " (same order, same length unless\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.allowResize",
+                "target": 450
+              },
+              {
+                "kind": "text",
+                "text": " is "
+              },
+              {
+                "kind": "code",
+                "text": "`true`"
+              },
+              {
+                "kind": "text",
+                "text": ")."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 239,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L239"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 456,
+          "name": "replacement",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The new subtrees, in the order they should appear in the zone\nafter the replacement is applied. Each node is fully formed\n"
+              },
+              {
+                "kind": "code",
+                "text": "`PageIRNode`"
+              },
+              {
+                "kind": "text",
+                "text": " shape — the validator runs the same per-node rules\nas "
+              },
+              {
+                "kind": "code",
+                "text": "`validateAiOutput`"
+              },
+              {
+                "kind": "text",
+                "text": ", scoped to this subtree only."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 246,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L246"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 518,
+                "name": "PageIRNode",
+                "package": "@anvilkit/core"
+              }
+            }
+          }
+        },
+        {
+          "id": 454,
+          "name": "zoneId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The zone the patch applies to. Must match\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.zoneId",
+                "target": 445
+              },
+              {
+                "kind": "text",
+                "text": " — patches that target a different\nzone are rejected with code "
+              },
+              {
+                "kind": "code",
+                "text": "`PATCH_SHAPE`"
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 233,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L233"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            455,
+            456,
+            454
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "types/ai-section.ts",
+          "line": 227,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L227"
+        }
+      ]
+    },
+    {
+      "id": 457,
+      "name": "AiSectionSelection",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "The editor's description of which nodes the author selected before\nasking for a section-level regeneration.\n\nBuilt by the AI copilot plugin from Puck's selection state plus the\nsurrounding zone metadata. Passed verbatim into\n"
+          },
+          {
+            "kind": "code",
+            "text": "`configToAiSectionContext()`"
+          },
+          {
+            "kind": "text",
+            "text": " to derive an LLM-shaped\n"
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "AiSectionContext",
+            "target": 444
+          },
+          {
+            "kind": "text",
+            "text": ".\n\nSelection lives inside a single zone — root, a legacy "
+          },
+          {
+            "kind": "code",
+            "text": "`data.zones`"
+          },
+          {
+            "kind": "text",
+            "text": "\nentry, or a modern slot field. The "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "zoneId",
+            "target": 458
+          },
+          {
+            "kind": "text",
+            "text": " discriminates;\n"
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "allow",
+            "target": 461
+          },
+          {
+            "kind": "text",
+            "text": " / "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "disallow",
+            "target": 462
+          },
+          {
+            "kind": "text",
+            "text": " mirror the parent slot's allow-list\nif the selection is slot-scoped."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 461,
+          "name": "allow",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional zone-scoped allow-list, mirroring the\n"
+              },
+              {
+                "kind": "code",
+                "text": "`allow`"
+              },
+              {
+                "kind": "text",
+                "text": " array on Puck slot field definitions.\n\nWhen present, "
+              },
+              {
+                "kind": "code",
+                "text": "`configToAiSectionContext()`"
+              },
+              {
+                "kind": "text",
+                "text": " narrows\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.availableComponents",
+                "target": 448
+              },
+              {
+                "kind": "text",
+                "text": " to this set. Absent\nmeans \"every registered component is permitted in this zone\"\n(the root-zone default)."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 103,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L103"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 460,
+          "name": "currentNodes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional snapshot of the current node subtrees being replaced.\n\nWhen provided, "
+              },
+              {
+                "kind": "code",
+                "text": "`configToAiSectionContext()`"
+              },
+              {
+                "kind": "text",
+                "text": " forwards this onto\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.currentNodes",
+                "target": 449
+              },
+              {
+                "kind": "text",
+                "text": " so the prompt builder can\ninclude \"before\" content. Hosts that have already loaded a\n"
+              },
+              {
+                "kind": "code",
+                "text": "`PageIR`"
+              },
+              {
+                "kind": "text",
+                "text": " have this for free; hosts that drive Puck without a\nnormalized IR may omit it."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 93,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L93"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 518,
+                "name": "PageIRNode",
+                "package": "@anvilkit/core"
+              }
+            }
+          }
+        },
+        {
+          "id": 462,
+          "name": "disallow",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional zone-scoped disallow-list, mirroring the "
+              },
+              {
+                "kind": "code",
+                "text": "`disallow`"
+              },
+              {
+                "kind": "text",
+                "text": " array\non Puck slot field definitions. Applied after "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "allow",
+                "target": 461
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 108,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L108"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 459,
+          "name": "nodeIds",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Selected node IDs, in author-visible order.\n\nLength must be ≥ 1 — selecting zero nodes is the page-level flow,\nnot the section flow. The order is preserved into\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionPatch.nodeIds",
+                "target": 455
+              },
+              {
+                "kind": "text",
+                "text": " so the validator can match\npositions when "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.allowResize",
+                "target": 450
+              },
+              {
+                "kind": "text",
+                "text": " is "
+              },
+              {
+                "kind": "code",
+                "text": "`false`"
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 83,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L83"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          }
+        },
+        {
+          "id": 458,
+          "name": "zoneId",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The Puck zone identifier containing the selection.\n\n- For root content: Puck's root zone id (typically "
+              },
+              {
+                "kind": "code",
+                "text": "`\"root-zone\"`"
+              },
+              {
+                "kind": "text",
+                "text": "\n  or the empty string, depending on Puck version).\n- For legacy "
+              },
+              {
+                "kind": "code",
+                "text": "`data.zones`"
+              },
+              {
+                "kind": "text",
+                "text": " entries: the dotted key Puck uses\n  ("
+              },
+              {
+                "kind": "code",
+                "text": "`${parentId}:${zoneName}`"
+              },
+              {
+                "kind": "text",
+                "text": ").\n- For modern slot fields: the slot field's path inside the parent\n  component.\n\nOpaque to "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext",
+                "target": 444
+              },
+              {
+                "kind": "text",
+                "text": " consumers — only the validator\ncompares it against incoming "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionPatch.zoneId",
+                "target": 454
+              },
+              {
+                "kind": "text",
+                "text": " values."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 74,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L74"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 463,
+          "name": "zoneKind",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional Puck zone hint — "
+              },
+              {
+                "kind": "code",
+                "text": "`\"slot\"`"
+              },
+              {
+                "kind": "text",
+                "text": " for modern slot fields,\n"
+              },
+              {
+                "kind": "code",
+                "text": "`\"zone\"`"
+              },
+              {
+                "kind": "text",
+                "text": " for legacy "
+              },
+              {
+                "kind": "code",
+                "text": "`data.zones`"
+              },
+              {
+                "kind": "text",
+                "text": " entries, omitted for the root\nzone. Forwarded to "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.zoneKind",
+                "target": 446
+              },
+              {
+                "kind": "text",
+                "text": "; the\nvalidator uses it as a sanity check when "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "allow",
+                "target": 461
+              },
+              {
+                "kind": "text",
+                "text": " is empty."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 115,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L115"
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "slot"
+              },
+              {
+                "type": "literal",
+                "value": "zone"
+              }
+            ]
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            461,
+            460,
+            462,
+            459,
+            458,
+            463
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "types/ai-section.ts",
+          "line": 60,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L60"
+        }
+      ]
+    },
+    {
       "id": 357,
       "name": "AiState",
       "variant": "declaration",
@@ -3186,7 +4448,7 @@
       ]
     },
     {
-      "id": 502,
+      "id": 532,
       "name": "AssetResolution",
       "variant": "declaration",
       "kind": 256,
@@ -3217,7 +4479,7 @@
       },
       "children": [
         {
-          "id": 504,
+          "id": 534,
           "name": "meta",
           "variant": "declaration",
           "kind": 1024,
@@ -3267,7 +4529,7 @@
           }
         },
         {
-          "id": 503,
+          "id": 533,
           "name": "url",
           "variant": "declaration",
           "kind": 1024,
@@ -3292,8 +4554,8 @@
         {
           "title": "Properties",
           "children": [
-            504,
-            503
+            534,
+            533
           ]
         }
       ],
@@ -3307,7 +4569,7 @@
       ]
     },
     {
-      "id": 444,
+      "id": 468,
       "name": "ComponentPackageManifest",
       "variant": "declaration",
       "kind": 256,
@@ -3386,7 +4648,7 @@
       },
       "children": [
         {
-          "id": 448,
+          "id": 472,
           "name": "displayName",
           "variant": "declaration",
           "kind": 1024,
@@ -3431,7 +4693,7 @@
           }
         },
         {
-          "id": 451,
+          "id": 475,
           "name": "entry",
           "variant": "declaration",
           "kind": 1024,
@@ -3476,7 +4738,7 @@
           }
         },
         {
-          "id": 445,
+          "id": 469,
           "name": "name",
           "variant": "declaration",
           "kind": 1024,
@@ -3513,7 +4775,7 @@
           }
         },
         {
-          "id": 449,
+          "id": 473,
           "name": "scaffoldType",
           "variant": "declaration",
           "kind": 1024,
@@ -3587,7 +4849,7 @@
           }
         },
         {
-          "id": 450,
+          "id": 474,
           "name": "schemaVersion",
           "variant": "declaration",
           "kind": 1024,
@@ -3616,7 +4878,7 @@
           }
         },
         {
-          "id": 447,
+          "id": 471,
           "name": "slug",
           "variant": "declaration",
           "kind": 1024,
@@ -3669,7 +4931,7 @@
           }
         },
         {
-          "id": 446,
+          "id": 470,
           "name": "version",
           "variant": "declaration",
           "kind": 1024,
@@ -3710,13 +4972,13 @@
         {
           "title": "Properties",
           "children": [
-            448,
-            451,
-            445,
-            449,
-            450,
-            447,
-            446
+            472,
+            475,
+            469,
+            473,
+            474,
+            471,
+            470
           ]
         }
       ],
@@ -3726,6 +4988,248 @@
           "line": 55,
           "character": 17,
           "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L55"
+        }
+      ]
+    },
+    {
+      "id": 464,
+      "name": "ConfigToAiSectionContextOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Optional environment hints for "
+          },
+          {
+            "kind": "code",
+            "text": "`configToAiSectionContext()`"
+          },
+          {
+            "kind": "text",
+            "text": ".\n\nMirrors the per-call hints on "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "AiGenerationContext",
+            "target": 432
+          },
+          {
+            "kind": "text",
+            "text": " (theme,\nlocale) so a host that already builds a page-level context can reuse\nthe same hint object for both flows."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 467,
+          "name": "allowResize",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "When "
+              },
+              {
+                "kind": "code",
+                "text": "`true`"
+              },
+              {
+                "kind": "text",
+                "text": ", the resulting context's "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.allowResize",
+                "target": 450
+              },
+              {
+                "kind": "text",
+                "text": "\nis set so the LLM (and the validator) accepts a "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionPatch",
+                "target": 453
+              },
+              {
+                "kind": "text",
+                "text": "\nwhose "
+              },
+              {
+                "kind": "code",
+                "text": "`replacement.length`"
+              },
+              {
+                "kind": "text",
+                "text": " ≠ "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionSelection.nodeIds",
+                "target": 459
+              },
+              {
+                "kind": "text",
+                "text": ".length.\n\nDefaults to "
+              },
+              {
+                "kind": "code",
+                "text": "`false`"
+              },
+              {
+                "kind": "text",
+                "text": " — Phase 6 / M9 ships size-preserving patches\nonly. Hosts wanting \"split this hero into three sections\" must opt\nin explicitly."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 145,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L145"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 466,
+          "name": "locale",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional BCP 47 language tag forwarded onto\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.locale",
+                "target": 452
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 135,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L135"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 465,
+          "name": "theme",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional theme hint ("
+              },
+              {
+                "kind": "code",
+                "text": "`\"light\"`"
+              },
+              {
+                "kind": "text",
+                "text": " | "
+              },
+              {
+                "kind": "code",
+                "text": "`\"dark\"`"
+              },
+              {
+                "kind": "text",
+                "text": ") forwarded onto\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "AiSectionContext.theme",
+                "target": 451
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ai-section.ts",
+              "line": 130,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L130"
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "light"
+              },
+              {
+                "type": "literal",
+                "value": "dark"
+              }
+            ]
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            467,
+            466,
+            465
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "types/ai-section.ts",
+          "line": 125,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L125"
         }
       ]
     },
@@ -3836,7 +5340,7 @@
       ]
     },
     {
-      "id": 453,
+      "id": 477,
       "name": "ExportFormatDefinition",
       "variant": "declaration",
       "kind": 256,
@@ -3900,7 +5404,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIR",
-            "target": 479
+            "target": 503
           },
           {
             "kind": "text",
@@ -3942,7 +5446,7 @@
       },
       "children": [
         {
-          "id": 457,
+          "id": 481,
           "name": "extension",
           "variant": "declaration",
           "kind": 1024,
@@ -4003,7 +5507,7 @@
           }
         },
         {
-          "id": 455,
+          "id": 479,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -4064,7 +5568,7 @@
           }
         },
         {
-          "id": 456,
+          "id": 480,
           "name": "label",
           "variant": "declaration",
           "kind": 1024,
@@ -4117,7 +5621,7 @@
           }
         },
         {
-          "id": 458,
+          "id": 482,
           "name": "mimeType",
           "variant": "declaration",
           "kind": 1024,
@@ -4186,7 +5690,7 @@
           }
         },
         {
-          "id": 459,
+          "id": 483,
           "name": "run",
           "variant": "declaration",
           "kind": 1024,
@@ -4203,7 +5707,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIR",
-                "target": 479
+                "target": 503
               },
               {
                 "kind": "text",
@@ -4213,7 +5717,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportOptions",
-                "target": 465
+                "target": 489
               },
               {
                 "kind": "text",
@@ -4240,21 +5744,21 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 460,
+              "id": 484,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 461,
+                  "id": 485,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 462,
+                      "id": 486,
                       "name": "ir",
                       "variant": "param",
                       "kind": 32768,
@@ -4269,13 +5773,13 @@
                       },
                       "type": {
                         "type": "reference",
-                        "target": 479,
+                        "target": 503,
                         "name": "PageIR",
                         "package": "@anvilkit/core"
                       }
                     },
                     {
-                      "id": 463,
+                      "id": 487,
                       "name": "options",
                       "variant": "param",
                       "kind": 32768,
@@ -4290,7 +5794,7 @@
                       },
                       "type": {
                         "type": "reference",
-                        "target": 454,
+                        "target": 478,
                         "name": "Opts",
                         "package": "@anvilkit/core",
                         "qualifiedName": "ExportFormatDefinition.Opts",
@@ -4298,7 +5802,7 @@
                       }
                     },
                     {
-                      "id": 464,
+                      "id": 488,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
@@ -4315,7 +5819,7 @@
                       },
                       "type": {
                         "type": "reference",
-                        "target": 467,
+                        "target": 491,
                         "name": "ExportFormatRunContext",
                         "package": "@anvilkit/core"
                       }
@@ -4331,7 +5835,7 @@
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 469,
+                        "target": 493,
                         "name": "ExportResult",
                         "package": "@anvilkit/core"
                       }
@@ -4349,11 +5853,11 @@
         {
           "title": "Properties",
           "children": [
-            457,
-            455,
-            456,
-            458,
-            459
+            481,
+            479,
+            480,
+            482,
+            483
           ]
         }
       ],
@@ -4367,7 +5871,7 @@
       ],
       "typeParameters": [
         {
-          "id": 454,
+          "id": 478,
           "name": "Opts",
           "variant": "typeParam",
           "kind": 131072,
@@ -4382,7 +5886,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportOptions",
-                "target": 465
+                "target": 489
               },
               {
                 "kind": "text",
@@ -4442,14 +5946,14 @@
       ]
     },
     {
-      "id": 467,
+      "id": 491,
       "name": "ExportFormatRunContext",
       "variant": "declaration",
       "kind": 256,
       "flags": {},
       "children": [
         {
-          "id": 468,
+          "id": 492,
           "name": "assetResolvers",
           "variant": "declaration",
           "kind": 1024,
@@ -4472,7 +5976,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 505,
+                "target": 535,
                 "name": "IRAssetResolver",
                 "package": "@anvilkit/core"
               }
@@ -4484,7 +5988,7 @@
         {
           "title": "Properties",
           "children": [
-            468
+            492
           ]
         }
       ],
@@ -4603,7 +6107,7 @@
                     "types": [
                       {
                         "type": "reference",
-                        "target": 453,
+                        "target": 477,
                         "typeArguments": [
                           {
                             "type": "reference",
@@ -4770,7 +6274,7 @@
                     "type": "array",
                     "elementType": {
                       "type": "reference",
-                      "target": 453,
+                      "target": 477,
                       "typeArguments": [
                         {
                           "type": "reference",
@@ -4872,7 +6376,7 @@
       ]
     },
     {
-      "id": 469,
+      "id": 493,
       "name": "ExportResult",
       "variant": "declaration",
       "kind": 256,
@@ -4887,7 +6391,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "ExportFormatDefinition.run",
-            "target": 459
+            "target": 483
           },
           {
             "kind": "text",
@@ -4897,7 +6401,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "content",
-            "target": 470
+            "target": 494
           },
           {
             "kind": "text",
@@ -4963,7 +6467,7 @@
       },
       "children": [
         {
-          "id": 470,
+          "id": 494,
           "name": "content",
           "variant": "declaration",
           "kind": 1024,
@@ -5035,7 +6539,7 @@
           }
         },
         {
-          "id": 471,
+          "id": 495,
           "name": "filename",
           "variant": "declaration",
           "kind": 1024,
@@ -5080,7 +6584,7 @@
           }
         },
         {
-          "id": 472,
+          "id": 496,
           "name": "warnings",
           "variant": "declaration",
           "kind": 1024,
@@ -5098,7 +6602,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportWarning",
-                "target": 473
+                "target": 497
               },
               {
                 "kind": "text",
@@ -5121,7 +6625,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 473,
+                "target": 497,
                 "name": "ExportWarning",
                 "package": "@anvilkit/core"
               }
@@ -5133,9 +6637,9 @@
         {
           "title": "Properties",
           "children": [
-            470,
-            471,
-            472
+            494,
+            495,
+            496
           ]
         }
       ],
@@ -5793,7 +7297,7 @@
       ]
     },
     {
-      "id": 473,
+      "id": 497,
       "name": "ExportWarning",
       "variant": "declaration",
       "kind": 256,
@@ -5832,7 +7336,7 @@
       },
       "children": [
         {
-          "id": 475,
+          "id": 499,
           "name": "code",
           "variant": "declaration",
           "kind": 1024,
@@ -5869,7 +7373,7 @@
           }
         },
         {
-          "id": 474,
+          "id": 498,
           "name": "level",
           "variant": "declaration",
           "kind": 1024,
@@ -5886,7 +7390,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportWarningLevel",
-                "target": 478
+                "target": 502
               },
               {
                 "kind": "text",
@@ -5904,13 +7408,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 478,
+            "target": 502,
             "name": "ExportWarningLevel",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 476,
+          "id": 500,
           "name": "message",
           "variant": "declaration",
           "kind": 1024,
@@ -5939,7 +7443,7 @@
           }
         },
         {
-          "id": 477,
+          "id": 501,
           "name": "nodeId",
           "variant": "declaration",
           "kind": 1024,
@@ -5957,7 +7461,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRNode.id",
-                "target": 495
+                "target": 519
               },
               {
                 "kind": "text",
@@ -5983,10 +7487,10 @@
         {
           "title": "Properties",
           "children": [
-            475,
-            474,
-            476,
-            477
+            499,
+            498,
+            500,
+            501
           ]
         }
       ],
@@ -6075,7 +7579,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportFormatDefinition.id",
-                "target": 455
+                "target": 479
               },
               {
                 "kind": "text",
@@ -6381,7 +7885,7 @@
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "name": "StudioPluginContext",
                         "package": "@anvilkit/core"
                       }
@@ -6557,7 +8061,7 @@
       ]
     },
     {
-      "id": 479,
+      "id": 503,
       "name": "PageIR",
       "variant": "declaration",
       "kind": 256,
@@ -6597,7 +8101,7 @@
       },
       "children": [
         {
-          "id": 482,
+          "id": 506,
           "name": "assets",
           "variant": "declaration",
           "kind": 1024,
@@ -6614,7 +8118,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRNode.assets",
-                "target": 501
+                "target": 525
               },
               {
                 "kind": "text",
@@ -6625,9 +8129,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 214,
+              "line": 265,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L214"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L265"
             }
           ],
           "type": {
@@ -6637,7 +8141,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 484,
+                "target": 508,
                 "name": "PageIRAsset",
                 "package": "@anvilkit/core"
               }
@@ -6645,7 +8149,7 @@
           }
         },
         {
-          "id": 483,
+          "id": 507,
           "name": "metadata",
           "variant": "declaration",
           "kind": 1024,
@@ -6662,7 +8166,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRMetadata",
-                "target": 489
+                "target": 513
               },
               {
                 "kind": "text",
@@ -6673,20 +8177,20 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 218,
+              "line": 269,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L218"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L269"
             }
           ],
           "type": {
             "type": "reference",
-            "target": 489,
+            "target": 513,
             "name": "PageIRMetadata",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 481,
+          "id": 505,
           "name": "root",
           "variant": "declaration",
           "kind": 1024,
@@ -6704,20 +8208,20 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 207,
+              "line": 258,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L207"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L258"
             }
           ],
           "type": {
             "type": "reference",
-            "target": 494,
+            "target": 518,
             "name": "PageIRNode",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 480,
+          "id": 504,
           "name": "version",
           "variant": "declaration",
           "kind": 1024,
@@ -6759,9 +8263,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 201,
+              "line": 252,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L201"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L252"
             }
           ],
           "type": {
@@ -6774,24 +8278,24 @@
         {
           "title": "Properties",
           "children": [
-            482,
-            483,
-            481,
-            480
+            506,
+            507,
+            505,
+            504
           ]
         }
       ],
       "sources": [
         {
           "fileName": "types/ir.ts",
-          "line": 191,
+          "line": 242,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L191"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L242"
         }
       ]
     },
     {
-      "id": 484,
+      "id": 508,
       "name": "PageIRAsset",
       "variant": "declaration",
       "kind": 256,
@@ -6806,7 +8310,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIR",
-            "target": 479
+            "target": 503
           },
           {
             "kind": "text",
@@ -6816,7 +8320,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIRNode",
-            "target": 494
+            "target": 518
           },
           {
             "kind": "text",
@@ -6826,7 +8330,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIRAsset.id",
-            "target": 485
+            "target": 509
           },
           {
             "kind": "text",
@@ -6836,7 +8340,7 @@
       },
       "children": [
         {
-          "id": 485,
+          "id": 509,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -6865,7 +8369,7 @@
           }
         },
         {
-          "id": 486,
+          "id": 510,
           "name": "kind",
           "variant": "declaration",
           "kind": 1024,
@@ -6927,7 +8431,7 @@
           }
         },
         {
-          "id": 488,
+          "id": 512,
           "name": "meta",
           "variant": "declaration",
           "kind": 1024,
@@ -6993,7 +8497,7 @@
           }
         },
         {
-          "id": 487,
+          "id": 511,
           "name": "url",
           "variant": "declaration",
           "kind": 1024,
@@ -7026,10 +8530,10 @@
         {
           "title": "Properties",
           "children": [
-            485,
-            486,
-            488,
-            487
+            509,
+            510,
+            512,
+            511
           ]
         }
       ],
@@ -7043,7 +8547,7 @@
       ]
     },
     {
-      "id": 489,
+      "id": 513,
       "name": "PageIRMetadata",
       "variant": "declaration",
       "kind": 256,
@@ -7074,7 +8578,7 @@
       },
       "children": [
         {
-          "id": 492,
+          "id": 516,
           "name": "createdAt",
           "variant": "declaration",
           "kind": 1024,
@@ -7093,9 +8597,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 177,
+              "line": 228,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L177"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L228"
             }
           ],
           "type": {
@@ -7104,7 +8608,7 @@
           }
         },
         {
-          "id": 491,
+          "id": 515,
           "name": "description",
           "variant": "declaration",
           "kind": 1024,
@@ -7131,9 +8635,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 173,
+              "line": 224,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L173"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L224"
             }
           ],
           "type": {
@@ -7142,7 +8646,7 @@
           }
         },
         {
-          "id": 490,
+          "id": 514,
           "name": "title",
           "variant": "declaration",
           "kind": 1024,
@@ -7169,9 +8673,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 168,
+              "line": 219,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L168"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L219"
             }
           ],
           "type": {
@@ -7180,7 +8684,7 @@
           }
         },
         {
-          "id": 493,
+          "id": 517,
           "name": "updatedAt",
           "variant": "declaration",
           "kind": 1024,
@@ -7199,9 +8703,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 181,
+              "line": 232,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L181"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L232"
             }
           ],
           "type": {
@@ -7214,24 +8718,24 @@
         {
           "title": "Properties",
           "children": [
-            492,
-            491,
-            490,
-            493
+            516,
+            515,
+            514,
+            517
           ]
         }
       ],
       "sources": [
         {
           "fileName": "types/ir.ts",
-          "line": 164,
+          "line": 215,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L164"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L215"
         }
       ]
     },
     {
-      "id": 494,
+      "id": 518,
       "name": "PageIRNode",
       "variant": "declaration",
       "kind": 256,
@@ -7278,7 +8782,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "id",
-            "target": 495
+            "target": 519
           },
           {
             "kind": "text",
@@ -7288,7 +8792,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIR",
-            "target": 479
+            "target": 503
           },
           {
             "kind": "text",
@@ -7298,7 +8802,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "type",
-            "target": 496
+            "target": 520
           },
           {
             "kind": "text",
@@ -7340,7 +8844,7 @@
       },
       "children": [
         {
-          "id": 501,
+          "id": 525,
           "name": "assets",
           "variant": "declaration",
           "kind": 1024,
@@ -7358,7 +8862,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIR.assets",
-                "target": 482
+                "target": 506
               },
               {
                 "kind": "text",
@@ -7368,7 +8872,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRAsset.id",
-                "target": 485
+                "target": 509
               },
               {
                 "kind": "text",
@@ -7379,9 +8883,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 151,
+              "line": 193,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L151"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L193"
             }
           ],
           "type": {
@@ -7391,7 +8895,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 484,
+                "target": 508,
                 "name": "PageIRAsset",
                 "package": "@anvilkit/core"
               }
@@ -7399,7 +8903,7 @@
           }
         },
         {
-          "id": 500,
+          "id": 524,
           "name": "children",
           "variant": "declaration",
           "kind": 1024,
@@ -7418,9 +8922,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 144,
+              "line": 186,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L144"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L186"
             }
           ],
           "type": {
@@ -7430,7 +8934,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 494,
+                "target": 518,
                 "name": "PageIRNode",
                 "package": "@anvilkit/core"
               }
@@ -7438,7 +8942,7 @@
           }
         },
         {
-          "id": 495,
+          "id": 519,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -7455,7 +8959,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIR",
-                "target": 479
+                "target": 503
               },
               {
                 "kind": "text",
@@ -7466,9 +8970,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 114,
+              "line": 156,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L114"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L156"
             }
           ],
           "type": {
@@ -7477,7 +8981,73 @@
           }
         },
         {
-          "id": 497,
+          "id": 526,
+          "name": "meta",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional authoring-time metadata. See "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "PageIRNodeMeta",
+                "target": 527
+              },
+              {
+                "kind": "text",
+                "text": ".\n\nAdditive in "
+              },
+              {
+                "kind": "code",
+                "text": "`@anvilkit/ir@0.22`"
+              },
+              {
+                "kind": "text",
+                "text": " (Phase 6 / M10). Round-trip\nsafe: when absent, every Phase 3/5 invariant (e.g. byte-equal\n"
+              },
+              {
+                "kind": "code",
+                "text": "`puckDataToIR`"
+              },
+              {
+                "kind": "text",
+                "text": " output across runs) is preserved. Exporters\nMUST NOT consume "
+              },
+              {
+                "kind": "code",
+                "text": "`meta`"
+              },
+              {
+                "kind": "text",
+                "text": "; it is an authoring contract only."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ir.ts",
+              "line": 202,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L202"
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 527,
+            "name": "PageIRNodeMeta",
+            "package": "@anvilkit/core"
+          }
+        },
+        {
+          "id": 521,
           "name": "props",
           "variant": "declaration",
           "kind": 1024,
@@ -7495,9 +9065,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 127,
+              "line": 169,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L127"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L169"
             }
           ],
           "type": {
@@ -7534,7 +9104,7 @@
           }
         },
         {
-          "id": 498,
+          "id": 522,
           "name": "slot",
           "variant": "declaration",
           "kind": 1024,
@@ -7561,9 +9131,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 135,
+              "line": 177,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L135"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L177"
             }
           ],
           "type": {
@@ -7572,7 +9142,7 @@
           }
         },
         {
-          "id": 499,
+          "id": 523,
           "name": "slotKind",
           "variant": "declaration",
           "kind": 1024,
@@ -7598,7 +9168,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "slot",
-                "target": 498
+                "target": 522
               },
               {
                 "kind": "text",
@@ -7617,9 +9187,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 140,
+              "line": 182,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L140"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L182"
             }
           ],
           "type": {
@@ -7637,7 +9207,7 @@
           }
         },
         {
-          "id": 496,
+          "id": 520,
           "name": "type",
           "variant": "declaration",
           "kind": 1024,
@@ -7671,9 +9241,9 @@
           "sources": [
             {
               "fileName": "types/ir.ts",
-              "line": 120,
+              "line": 162,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L120"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L162"
             }
           ],
           "type": {
@@ -7686,22 +9256,261 @@
         {
           "title": "Properties",
           "children": [
-            501,
-            500,
-            495,
-            497,
-            498,
-            499,
-            496
+            525,
+            524,
+            519,
+            526,
+            521,
+            522,
+            523,
+            520
           ]
         }
       ],
       "sources": [
         {
           "fileName": "types/ir.ts",
-          "line": 108,
+          "line": 150,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L108"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L150"
+        }
+      ]
+    },
+    {
+      "id": 527,
+      "name": "PageIRNodeMeta",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Authoring-time metadata attached to a "
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "PageIRNode",
+            "target": 518
+          },
+          {
+            "kind": "text",
+            "text": ".\n\nAdded in "
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/ir@0.22`"
+          },
+          {
+            "kind": "text",
+            "text": " (Phase 6 / M10) as an additive,\nround-trip-safe extension. Hosts populate these fields opt-in via\n"
+          },
+          {
+            "kind": "code",
+            "text": "`migratePageIR`"
+          },
+          {
+            "kind": "text",
+            "text": " ("
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/ir/migrations`"
+          },
+          {
+            "kind": "text",
+            "text": ") or by carrying them\nforward from a previous edit; "
+          },
+          {
+            "kind": "code",
+            "text": "`puckDataToIR()`"
+          },
+          {
+            "kind": "text",
+            "text": " itself MUST NOT\nsynthesize "
+          },
+          {
+            "kind": "code",
+            "text": "`meta`"
+          },
+          {
+            "kind": "text",
+            "text": ", so omitting it round-trips losslessly with\npre-1.1 documents.\n\nField caps are runtime-enforced contracts (not type-level\nconstraints) — the matching Zod schema lives in\n"
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/ir/migrations`"
+          },
+          {
+            "kind": "text",
+            "text": " and "
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/validator`"
+          },
+          {
+            "kind": "text",
+            "text": "'s section\nchecker. Keeping caps off the type surface preserves the\n\"zero runtime code\" rule of this file."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 528,
+          "name": "locked",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "When "
+              },
+              {
+                "kind": "code",
+                "text": "`true`"
+              },
+              {
+                "kind": "text",
+                "text": ", the editor SHOULD treat this node and its subtree\nas locked: surface a lock indicator and refuse mutating\ndispatches scoped to the subtree. Authoring concept only —\nexporters ignore the field."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ir.ts",
+              "line": 105,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L105"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 531,
+          "name": "notes",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Freeform author notes scoped to this node. Capped at 512\ncharacters at runtime."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ir.ts",
+              "line": 121,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L121"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 529,
+          "name": "owner",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Opaque host-owned identifier for the author/team that owns\nthis node. Capped at 256 characters at runtime."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ir.ts",
+              "line": 110,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L110"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 530,
+          "name": "version",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Host-versioning string for this node. Runtime contract: must\nmatch a semver-shaped regex ("
+              },
+              {
+                "kind": "code",
+                "text": "`MAJOR.MINOR.PATCH`"
+              },
+              {
+                "kind": "text",
+                "text": " with optional\npre-release / build suffix)."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/ir.ts",
+              "line": 116,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L116"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            528,
+            531,
+            529,
+            530
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "types/ir.ts",
+          "line": 98,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L98"
         }
       ]
     },
@@ -8712,7 +10521,7 @@
       ]
     },
     {
-      "id": 509,
+      "id": 539,
       "name": "StudioHeaderAction",
       "variant": "declaration",
       "kind": 256,
@@ -8727,7 +10536,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPluginRegistration.headerActions",
-            "target": 614
+            "target": 644
           },
           {
             "kind": "text",
@@ -8745,7 +10554,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "icon",
-            "target": 512
+            "target": 542
           },
           {
             "kind": "text",
@@ -8763,7 +10572,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "label",
-            "target": 511
+            "target": 541
           },
           {
             "kind": "text",
@@ -8874,7 +10683,7 @@
       },
       "children": [
         {
-          "id": 519,
+          "id": 549,
           "name": "disabled",
           "variant": "declaration",
           "kind": 1024,
@@ -8892,7 +10701,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginContext",
-                "target": 530
+                "target": 560
               },
               {
                 "kind": "text",
@@ -8935,28 +10744,28 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 520,
+              "id": 550,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 521,
+                  "id": 551,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 522,
+                      "id": 552,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "name": "StudioPluginContext",
                         "package": "@anvilkit/core"
                       }
@@ -8972,7 +10781,7 @@
           }
         },
         {
-          "id": 513,
+          "id": 543,
           "name": "group",
           "variant": "declaration",
           "kind": 1024,
@@ -9047,7 +10856,7 @@
           }
         },
         {
-          "id": 512,
+          "id": 542,
           "name": "icon",
           "variant": "declaration",
           "kind": 1024,
@@ -9125,7 +10934,7 @@
           }
         },
         {
-          "id": 510,
+          "id": 540,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -9178,7 +10987,7 @@
           }
         },
         {
-          "id": 511,
+          "id": 541,
           "name": "label",
           "variant": "declaration",
           "kind": 1024,
@@ -9207,7 +11016,7 @@
           }
         },
         {
-          "id": 515,
+          "id": 545,
           "name": "onClick",
           "variant": "declaration",
           "kind": 1024,
@@ -9224,7 +11033,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginContext",
-                "target": 530
+                "target": 560
               },
               {
                 "kind": "text",
@@ -9275,28 +11084,28 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 516,
+              "id": 546,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 517,
+                  "id": 547,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 518,
+                      "id": 548,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "name": "StudioPluginContext",
                         "package": "@anvilkit/core"
                       }
@@ -9333,7 +11142,7 @@
           }
         },
         {
-          "id": 514,
+          "id": 544,
           "name": "order",
           "variant": "declaration",
           "kind": 1024,
@@ -9391,7 +11200,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "id",
-                "target": 510
+                "target": 540
               },
               {
                 "kind": "text",
@@ -9417,13 +11226,13 @@
         {
           "title": "Properties",
           "children": [
-            519,
-            513,
-            512,
-            510,
-            511,
-            515,
-            514
+            549,
+            543,
+            542,
+            540,
+            541,
+            545,
+            544
           ]
         }
       ],
@@ -9437,7 +11246,7 @@
       ]
     },
     {
-      "id": 524,
+      "id": 554,
       "name": "StudioPlugin",
       "variant": "declaration",
       "kind": 256,
@@ -9468,7 +11277,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPluginRegistration",
-            "target": 609
+            "target": 639
           },
           {
             "kind": "text",
@@ -9497,7 +11306,7 @@
       },
       "children": [
         {
-          "id": 526,
+          "id": 556,
           "name": "meta",
           "variant": "declaration",
           "kind": 1024,
@@ -9514,7 +11323,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginMeta",
-                "target": 603
+                "target": 633
               },
               {
                 "kind": "text",
@@ -9532,13 +11341,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 603,
+            "target": 633,
             "name": "StudioPluginMeta",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 527,
+          "id": 557,
           "name": "register",
           "variant": "declaration",
           "kind": 2048,
@@ -9553,7 +11362,7 @@
           ],
           "signatures": [
             {
-              "id": 528,
+              "id": 558,
               "name": "register",
               "variant": "signature",
               "kind": 4096,
@@ -9592,7 +11401,7 @@
               ],
               "parameters": [
                 {
-                  "id": 529,
+                  "id": 559,
                   "name": "ctx",
                   "variant": "param",
                   "kind": 32768,
@@ -9607,7 +11416,7 @@
                         "kind": "inline-tag",
                         "tag": "@link",
                         "text": "StudioPluginContext",
-                        "target": 530
+                        "target": 560
                       },
                       {
                         "kind": "text",
@@ -9617,11 +11426,11 @@
                   },
                   "type": {
                     "type": "reference",
-                    "target": 530,
+                    "target": 560,
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 525,
+                        "target": 555,
                         "name": "UserConfig",
                         "package": "@anvilkit/core",
                         "qualifiedName": "StudioPlugin.UserConfig",
@@ -9638,11 +11447,11 @@
                 "types": [
                   {
                     "type": "reference",
-                    "target": 609,
+                    "target": 639,
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 525,
+                        "target": 555,
                         "name": "UserConfig",
                         "package": "@anvilkit/core",
                         "qualifiedName": "StudioPlugin.UserConfig",
@@ -9662,11 +11471,11 @@
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 609,
+                        "target": 639,
                         "typeArguments": [
                           {
                             "type": "reference",
-                            "target": 525,
+                            "target": 555,
                             "name": "UserConfig",
                             "package": "@anvilkit/core",
                             "qualifiedName": "StudioPlugin.UserConfig",
@@ -9690,13 +11499,13 @@
         {
           "title": "Properties",
           "children": [
-            526
+            556
           ]
         },
         {
           "title": "Methods",
           "children": [
-            527
+            557
           ]
         }
       ],
@@ -9710,7 +11519,7 @@
       ],
       "typeParameters": [
         {
-          "id": 525,
+          "id": 555,
           "name": "UserConfig",
           "variant": "typeParam",
           "kind": 131072,
@@ -9749,7 +11558,7 @@
       ]
     },
     {
-      "id": 530,
+      "id": 560,
       "name": "StudioPluginContext",
       "variant": "declaration",
       "kind": 256,
@@ -9764,7 +11573,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "getData",
-            "target": 532
+            "target": 562
           },
           {
             "kind": "text",
@@ -9774,7 +11583,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "studioConfig",
-            "target": 538
+            "target": 568
           },
           {
             "kind": "text",
@@ -9792,7 +11601,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "log",
-            "target": 563
+            "target": 593
           },
           {
             "kind": "text",
@@ -9802,7 +11611,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "emit",
-            "target": 569
+            "target": 599
           },
           {
             "kind": "text",
@@ -9820,7 +11629,7 @@
       },
       "children": [
         {
-          "id": 569,
+          "id": 599,
           "name": "emit",
           "variant": "declaration",
           "kind": 1024,
@@ -9846,21 +11655,21 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 570,
+              "id": 600,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 571,
+                  "id": 601,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 572,
+                      "id": 602,
                       "name": "event",
                       "variant": "param",
                       "kind": 32768,
@@ -9879,7 +11688,7 @@
                       }
                     },
                     {
-                      "id": 573,
+                      "id": 603,
                       "name": "payload",
                       "variant": "param",
                       "kind": 32768,
@@ -9918,7 +11727,7 @@
           }
         },
         {
-          "id": 532,
+          "id": 562,
           "name": "getData",
           "variant": "declaration",
           "kind": 1024,
@@ -9935,7 +11744,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginLifecycleHooks.onDataChange",
-                "target": 584
+                "target": 614
               },
               {
                 "kind": "text",
@@ -9954,14 +11763,14 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 533,
+              "id": 563,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 534,
+                  "id": 564,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
@@ -9982,7 +11791,7 @@
           }
         },
         {
-          "id": 535,
+          "id": 565,
           "name": "getPuckApi",
           "variant": "declaration",
           "kind": 1024,
@@ -10064,14 +11873,14 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 536,
+              "id": 566,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 537,
+                  "id": 567,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
@@ -10086,7 +11895,7 @@
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 531,
+                        "target": 561,
                         "name": "UserConfig",
                         "package": "@anvilkit/core",
                         "qualifiedName": "StudioPluginContext.UserConfig",
@@ -10102,7 +11911,7 @@
           }
         },
         {
-          "id": 563,
+          "id": 593,
           "name": "log",
           "variant": "declaration",
           "kind": 1024,
@@ -10128,21 +11937,21 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 564,
+              "id": 594,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 565,
+                  "id": 595,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 566,
+                      "id": 596,
                       "name": "level",
                       "variant": "param",
                       "kind": 32768,
@@ -10157,7 +11966,7 @@
                             "kind": "inline-tag",
                             "tag": "@link",
                             "text": "StudioLogLevel",
-                            "target": 523
+                            "target": 553
                           },
                           {
                             "kind": "text",
@@ -10167,13 +11976,13 @@
                       },
                       "type": {
                         "type": "reference",
-                        "target": 523,
+                        "target": 553,
                         "name": "StudioLogLevel",
                         "package": "@anvilkit/core"
                       }
                     },
                     {
-                      "id": 567,
+                      "id": 597,
                       "name": "message",
                       "variant": "param",
                       "kind": 32768,
@@ -10192,7 +12001,7 @@
                       }
                     },
                     {
-                      "id": 568,
+                      "id": 598,
                       "name": "meta",
                       "variant": "param",
                       "kind": 32768,
@@ -10251,7 +12060,7 @@
           }
         },
         {
-          "id": 574,
+          "id": 604,
           "name": "registerAssetResolver",
           "variant": "declaration",
           "kind": 1024,
@@ -10285,28 +12094,28 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 575,
+              "id": 605,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 576,
+                  "id": 606,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 577,
+                      "id": 607,
                       "name": "resolver",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 505,
+                        "target": 535,
                         "name": "IRAssetResolver",
                         "package": "@anvilkit/core"
                       }
@@ -10322,7 +12131,7 @@
           }
         },
         {
-          "id": 538,
+          "id": 568,
           "name": "studioConfig",
           "variant": "declaration",
           "kind": 1024,
@@ -10364,14 +12173,14 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 539,
+              "id": 569,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "children": [
                 {
-                  "id": 558,
+                  "id": 588,
                   "name": "ai",
                   "variant": "declaration",
                   "kind": 1024,
@@ -10403,14 +12212,14 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 559,
+                      "id": 589,
                       "name": "__type",
                       "variant": "declaration",
                       "kind": 65536,
                       "flags": {},
                       "children": [
                         {
-                          "id": 561,
+                          "id": 591,
                           "name": "defaultModel",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10448,7 +12257,7 @@
                           "defaultValue": "..."
                         },
                         {
-                          "id": 560,
+                          "id": 590,
                           "name": "maxRetries",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10496,8 +12305,8 @@
                         {
                           "title": "Properties",
                           "children": [
-                            561,
-                            560
+                            591,
+                            590
                           ]
                         }
                       ]
@@ -10506,7 +12315,7 @@
                   "defaultValue": "..."
                 },
                 {
-                  "id": 545,
+                  "id": 575,
                   "name": "branding",
                   "variant": "declaration",
                   "kind": 1024,
@@ -10530,14 +12339,14 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 546,
+                      "id": 576,
                       "name": "__type",
                       "variant": "declaration",
                       "kind": 65536,
                       "flags": {},
                       "children": [
                         {
-                          "id": 547,
+                          "id": 577,
                           "name": "appName",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10573,7 +12382,7 @@
                           "defaultValue": "..."
                         },
                         {
-                          "id": 548,
+                          "id": 578,
                           "name": "logoUrl",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10611,7 +12420,7 @@
                           "defaultValue": "..."
                         },
                         {
-                          "id": 549,
+                          "id": 579,
                           "name": "primaryColor",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10653,9 +12462,9 @@
                         {
                           "title": "Properties",
                           "children": [
-                            547,
-                            548,
-                            549
+                            577,
+                            578,
+                            579
                           ]
                         }
                       ]
@@ -10664,7 +12473,7 @@
                   "defaultValue": "..."
                 },
                 {
-                  "id": 562,
+                  "id": 592,
                   "name": "experimental",
                   "variant": "declaration",
                   "kind": 1024,
@@ -10716,7 +12525,7 @@
                   "defaultValue": "..."
                 },
                 {
-                  "id": 554,
+                  "id": 584,
                   "name": "export",
                   "variant": "declaration",
                   "kind": 1024,
@@ -10740,14 +12549,14 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 555,
+                      "id": 585,
                       "name": "__type",
                       "variant": "declaration",
                       "kind": 65536,
                       "flags": {},
                       "children": [
                         {
-                          "id": 557,
+                          "id": 587,
                           "name": "defaultFormat",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10793,7 +12602,7 @@
                           "defaultValue": "..."
                         },
                         {
-                          "id": 556,
+                          "id": 586,
                           "name": "filenamePrefix",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10841,8 +12650,8 @@
                         {
                           "title": "Properties",
                           "children": [
-                            557,
-                            556
+                            587,
+                            586
                           ]
                         }
                       ]
@@ -10851,7 +12660,7 @@
                   "defaultValue": "..."
                 },
                 {
-                  "id": 540,
+                  "id": 570,
                   "name": "features",
                   "variant": "declaration",
                   "kind": 1024,
@@ -10883,14 +12692,14 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 541,
+                      "id": 571,
                       "name": "__type",
                       "variant": "declaration",
                       "kind": 65536,
                       "flags": {},
                       "children": [
                         {
-                          "id": 543,
+                          "id": 573,
                           "name": "enableAi",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10934,7 +12743,7 @@
                           "defaultValue": "..."
                         },
                         {
-                          "id": 544,
+                          "id": 574,
                           "name": "enableCollaboration",
                           "variant": "declaration",
                           "kind": 1024,
@@ -10978,7 +12787,7 @@
                           "defaultValue": "..."
                         },
                         {
-                          "id": 542,
+                          "id": 572,
                           "name": "enableExport",
                           "variant": "declaration",
                           "kind": 1024,
@@ -11050,9 +12859,9 @@
                         {
                           "title": "Properties",
                           "children": [
-                            543,
-                            544,
-                            542
+                            573,
+                            574,
+                            572
                           ]
                         }
                       ]
@@ -11061,7 +12870,7 @@
                   "defaultValue": "..."
                 },
                 {
-                  "id": 550,
+                  "id": 580,
                   "name": "theme",
                   "variant": "declaration",
                   "kind": 1024,
@@ -11085,14 +12894,14 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 551,
+                      "id": 581,
                       "name": "__type",
                       "variant": "declaration",
                       "kind": 65536,
                       "flags": {},
                       "children": [
                         {
-                          "id": 553,
+                          "id": 583,
                           "name": "allowToggle",
                           "variant": "declaration",
                           "kind": 1024,
@@ -11136,7 +12945,7 @@
                           "defaultValue": "..."
                         },
                         {
-                          "id": 552,
+                          "id": 582,
                           "name": "defaultMode",
                           "variant": "declaration",
                           "kind": 1024,
@@ -11213,8 +13022,8 @@
                         {
                           "title": "Properties",
                           "children": [
-                            553,
-                            552
+                            583,
+                            582
                           ]
                         }
                       ]
@@ -11227,12 +13036,12 @@
                 {
                   "title": "Properties",
                   "children": [
-                    558,
-                    545,
-                    562,
-                    554,
-                    540,
-                    550
+                    588,
+                    575,
+                    592,
+                    584,
+                    570,
+                    580
                   ]
                 }
               ]
@@ -11244,12 +13053,12 @@
         {
           "title": "Properties",
           "children": [
-            569,
-            532,
-            535,
-            563,
-            574,
-            538
+            599,
+            562,
+            565,
+            593,
+            604,
+            568
           ]
         }
       ],
@@ -11263,7 +13072,7 @@
       ],
       "typeParameters": [
         {
-          "id": 531,
+          "id": 561,
           "name": "UserConfig",
           "variant": "typeParam",
           "kind": 131072,
@@ -11302,7 +13111,7 @@
       ]
     },
     {
-      "id": 578,
+      "id": 608,
       "name": "StudioPluginLifecycleHooks",
       "variant": "declaration",
       "kind": 256,
@@ -11357,7 +13166,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "onBeforePublish",
-            "target": 589
+            "target": 619
           },
           {
             "kind": "text",
@@ -11375,7 +13184,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPluginContext",
-            "target": 530
+            "target": 560
           },
           {
             "kind": "text",
@@ -11385,7 +13194,7 @@
       },
       "children": [
         {
-          "id": 594,
+          "id": 624,
           "name": "onAfterPublish",
           "variant": "declaration",
           "kind": 1024,
@@ -11412,32 +13221,32 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 595,
+              "id": 625,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 596,
+                  "id": 626,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 597,
+                      "id": 627,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "typeArguments": [
                           {
                             "type": "reference",
-                            "target": 579,
+                            "target": 609,
                             "name": "UserConfig",
                             "package": "@anvilkit/core",
                             "qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -11449,7 +13258,7 @@
                       }
                     },
                     {
-                      "id": 598,
+                      "id": 628,
                       "name": "data",
                       "variant": "param",
                       "kind": 32768,
@@ -11497,7 +13306,7 @@
           }
         },
         {
-          "id": 589,
+          "id": 619,
           "name": "onBeforePublish",
           "variant": "declaration",
           "kind": 1024,
@@ -11532,32 +13341,32 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 590,
+              "id": 620,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 591,
+                  "id": 621,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 592,
+                      "id": 622,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "typeArguments": [
                           {
                             "type": "reference",
-                            "target": 579,
+                            "target": 609,
                             "name": "UserConfig",
                             "package": "@anvilkit/core",
                             "qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -11569,7 +13378,7 @@
                       }
                     },
                     {
-                      "id": 593,
+                      "id": 623,
                       "name": "data",
                       "variant": "param",
                       "kind": 32768,
@@ -11617,7 +13426,7 @@
           }
         },
         {
-          "id": 584,
+          "id": 614,
           "name": "onDataChange",
           "variant": "declaration",
           "kind": 1024,
@@ -11668,32 +13477,32 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 585,
+              "id": 615,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 586,
+                  "id": 616,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 587,
+                      "id": 617,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "typeArguments": [
                           {
                             "type": "reference",
-                            "target": 579,
+                            "target": 609,
                             "name": "UserConfig",
                             "package": "@anvilkit/core",
                             "qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -11705,7 +13514,7 @@
                       }
                     },
                     {
-                      "id": 588,
+                      "id": 618,
                       "name": "data",
                       "variant": "param",
                       "kind": 32768,
@@ -11753,7 +13562,7 @@
           }
         },
         {
-          "id": 599,
+          "id": 629,
           "name": "onDestroy",
           "variant": "declaration",
           "kind": 1024,
@@ -11788,32 +13597,32 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 600,
+              "id": 630,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 601,
+                  "id": 631,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 602,
+                      "id": 632,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "typeArguments": [
                           {
                             "type": "reference",
-                            "target": 579,
+                            "target": 609,
                             "name": "UserConfig",
                             "package": "@anvilkit/core",
                             "qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -11856,7 +13665,7 @@
           }
         },
         {
-          "id": 580,
+          "id": 610,
           "name": "onInit",
           "variant": "declaration",
           "kind": 1024,
@@ -11899,32 +13708,32 @@
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 581,
+              "id": 611,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 582,
+                  "id": 612,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 583,
+                      "id": 613,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 530,
+                        "target": 560,
                         "typeArguments": [
                           {
                             "type": "reference",
-                            "target": 579,
+                            "target": 609,
                             "name": "UserConfig",
                             "package": "@anvilkit/core",
                             "qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -11971,11 +13780,11 @@
         {
           "title": "Properties",
           "children": [
-            594,
-            589,
-            584,
-            599,
-            580
+            624,
+            619,
+            614,
+            629,
+            610
           ]
         }
       ],
@@ -11989,7 +13798,7 @@
       ],
       "typeParameters": [
         {
-          "id": 579,
+          "id": 609,
           "name": "UserConfig",
           "variant": "typeParam",
           "kind": 131072,
@@ -12004,7 +13813,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginContext",
-                "target": 530
+                "target": 560
               },
               {
                 "kind": "text",
@@ -12038,7 +13847,7 @@
       ]
     },
     {
-      "id": 603,
+      "id": 633,
       "name": "StudioPluginMeta",
       "variant": "declaration",
       "kind": 256,
@@ -12061,7 +13870,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPluginMeta.coreVersion",
-            "target": 607
+            "target": 637
           },
           {
             "kind": "text",
@@ -12079,7 +13888,7 @@
       },
       "children": [
         {
-          "id": 607,
+          "id": 637,
           "name": "coreVersion",
           "variant": "declaration",
           "kind": 1024,
@@ -12140,7 +13949,7 @@
           }
         },
         {
-          "id": 608,
+          "id": 638,
           "name": "description",
           "variant": "declaration",
           "kind": 1024,
@@ -12170,7 +13979,7 @@
           }
         },
         {
-          "id": 604,
+          "id": 634,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -12223,7 +14032,7 @@
           }
         },
         {
-          "id": 605,
+          "id": 635,
           "name": "name",
           "variant": "declaration",
           "kind": 1024,
@@ -12252,7 +14061,7 @@
           }
         },
         {
-          "id": 606,
+          "id": 636,
           "name": "version",
           "variant": "declaration",
           "kind": 1024,
@@ -12277,7 +14086,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "coreVersion",
-                "target": 607
+                "target": 637
               },
               {
                 "kind": "text",
@@ -12303,11 +14112,11 @@
         {
           "title": "Properties",
           "children": [
-            607,
-            608,
-            604,
-            605,
-            606
+            637,
+            638,
+            634,
+            635,
+            636
           ]
         }
       ],
@@ -12321,7 +14130,7 @@
       ]
     },
     {
-      "id": 609,
+      "id": 639,
       "name": "StudioPluginRegistration",
       "variant": "declaration",
       "kind": 256,
@@ -12344,7 +14153,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "meta",
-            "target": 611
+            "target": 641
           },
           {
             "kind": "text",
@@ -12450,7 +14259,7 @@
       },
       "children": [
         {
-          "id": 615,
+          "id": 645,
           "name": "exportFormats",
           "variant": "declaration",
           "kind": 1024,
@@ -12489,7 +14298,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 453,
+                "target": 477,
                 "typeArguments": [
                   {
                     "type": "reference",
@@ -12519,7 +14328,7 @@
           }
         },
         {
-          "id": 614,
+          "id": 644,
           "name": "headerActions",
           "variant": "declaration",
           "kind": 1024,
@@ -12558,7 +14367,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 509,
+                "target": 539,
                 "name": "StudioHeaderAction",
                 "package": "@anvilkit/core"
               }
@@ -12566,7 +14375,7 @@
           }
         },
         {
-          "id": 612,
+          "id": 642,
           "name": "hooks",
           "variant": "declaration",
           "kind": 1024,
@@ -12584,7 +14393,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginLifecycleHooks",
-                "target": 578
+                "target": 608
               },
               {
                 "kind": "text",
@@ -12602,11 +14411,11 @@
           ],
           "type": {
             "type": "reference",
-            "target": 578,
+            "target": 608,
             "typeArguments": [
               {
                 "type": "reference",
-                "target": 610,
+                "target": 640,
                 "name": "UserConfig",
                 "package": "@anvilkit/core",
                 "qualifiedName": "StudioPluginRegistration.UserConfig",
@@ -12618,7 +14427,7 @@
           }
         },
         {
-          "id": 611,
+          "id": 641,
           "name": "meta",
           "variant": "declaration",
           "kind": 1024,
@@ -12635,7 +14444,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginMeta",
-                "target": 603
+                "target": 633
               },
               {
                 "kind": "text",
@@ -12653,13 +14462,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 603,
+            "target": 633,
             "name": "StudioPluginMeta",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 613,
+          "id": 643,
           "name": "overrides",
           "variant": "declaration",
           "kind": 1024,
@@ -12725,7 +14534,7 @@
                 "typeArguments": [
                   {
                     "type": "reference",
-                    "target": 610,
+                    "target": 640,
                     "name": "UserConfig",
                     "package": "@anvilkit/core",
                     "qualifiedName": "StudioPluginRegistration.UserConfig",
@@ -12745,11 +14554,11 @@
         {
           "title": "Properties",
           "children": [
-            615,
-            614,
-            612,
-            611,
-            613
+            645,
+            644,
+            642,
+            641,
+            643
           ]
         }
       ],
@@ -12763,7 +14572,7 @@
       ],
       "typeParameters": [
         {
-          "id": 610,
+          "id": 640,
           "name": "UserConfig",
           "variant": "typeParam",
           "kind": 131072,
@@ -12778,7 +14587,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginLifecycleHooks",
-                "target": 578
+                "target": 608
               },
               {
                 "kind": "text",
@@ -13978,7 +15787,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginContext.getData",
-                "target": 532
+                "target": 562
               },
               {
                 "kind": "text",
@@ -14301,7 +16110,7 @@
                 "types": [
                   {
                     "type": "reference",
-                    "target": 524,
+                    "target": 554,
                     "typeArguments": [
                       {
                         "type": "reference",
@@ -14488,7 +16297,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 505,
+                "target": 535,
                 "name": "IRAssetResolver",
                 "package": "@anvilkit/core"
               }
@@ -14513,7 +16322,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportFormatDefinition.id",
-                "target": 455
+                "target": 479
               },
               {
                 "kind": "text",
@@ -14543,7 +16352,7 @@
               },
               {
                 "type": "reference",
-                "target": 453,
+                "target": 477,
                 "typeArguments": [
                   {
                     "type": "reference",
@@ -14621,7 +16430,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 509,
+                "target": 539,
                 "name": "StudioHeaderAction",
                 "package": "@anvilkit/core"
               }
@@ -14812,7 +16621,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 603,
+                "target": 633,
                 "name": "StudioPluginMeta",
                 "package": "@anvilkit/core"
               }
@@ -14916,7 +16725,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 609,
+                "target": 639,
                 "typeArguments": [
                   {
                     "type": "reference",
@@ -15341,7 +17150,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportFormatDefinition.id",
-                "target": 455
+                "target": 479
               },
               {
                 "kind": "text",
@@ -15379,7 +17188,7 @@
               },
               {
                 "type": "reference",
-                "target": 453,
+                "target": 477,
                 "typeArguments": [
                   {
                     "type": "reference",
@@ -15457,7 +17266,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 509,
+                "target": 539,
                 "name": "StudioHeaderAction",
                 "package": "@anvilkit/core"
               }
@@ -15490,7 +17299,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPlugin",
-                "target": 524
+                "target": 554
               },
               {
                 "kind": "text",
@@ -15513,7 +17322,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 603,
+                "target": 633,
                 "name": "StudioPluginMeta",
                 "package": "@anvilkit/core"
               }
@@ -15617,7 +17426,7 @@
       }
     },
     {
-      "id": 465,
+      "id": 489,
       "name": "ExportOptions",
       "variant": "declaration",
       "kind": 2097152,
@@ -15632,7 +17441,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "ExportFormatDefinition.run",
-            "target": 459
+            "target": 483
           },
           {
             "kind": "text",
@@ -15677,7 +17486,7 @@
       ],
       "typeParameters": [
         {
-          "id": 466,
+          "id": 490,
           "name": "T",
           "variant": "typeParam",
           "kind": 131072,
@@ -15742,14 +17551,14 @@
       ],
       "type": {
         "type": "reference",
-        "target": 466,
+        "target": 490,
         "name": "T",
         "package": "@anvilkit/core",
         "refersToTypeParameter": true
       }
     },
     {
-      "id": 478,
+      "id": 502,
       "name": "ExportWarningLevel",
       "variant": "declaration",
       "kind": 2097152,
@@ -15837,7 +17646,7 @@
       }
     },
     {
-      "id": 505,
+      "id": 535,
       "name": "IRAssetResolver",
       "variant": "declaration",
       "kind": 2097152,
@@ -15853,21 +17662,21 @@
       "type": {
         "type": "reflection",
         "declaration": {
-          "id": 506,
+          "id": 536,
           "name": "__type",
           "variant": "declaration",
           "kind": 65536,
           "flags": {},
           "signatures": [
             {
-              "id": 507,
+              "id": 537,
               "name": "__type",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "parameters": [
                 {
-                  "id": 508,
+                  "id": 538,
                   "name": "url",
                   "variant": "param",
                   "kind": 32768,
@@ -15894,7 +17703,7 @@
                         "types": [
                           {
                             "type": "reference",
-                            "target": 502,
+                            "target": 532,
                             "name": "AssetResolution",
                             "package": "@anvilkit/core"
                           },
@@ -15910,7 +17719,7 @@
                   },
                   {
                     "type": "reference",
-                    "target": 502,
+                    "target": 532,
                     "name": "AssetResolution",
                     "package": "@anvilkit/core"
                   },
@@ -15941,7 +17750,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPluginLifecycleHooks",
-            "target": 578
+            "target": 608
           },
           {
             "kind": "text",
@@ -16063,7 +17872,7 @@
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 530,
+                    "target": 560,
                     "name": "StudioPluginContext",
                     "package": "@anvilkit/core"
                   }
@@ -16106,7 +17915,7 @@
       }
     },
     {
-      "id": 452,
+      "id": 476,
       "name": "StudioConfig",
       "variant": "declaration",
       "kind": 2097152,
@@ -16226,7 +18035,7 @@
       }
     },
     {
-      "id": 523,
+      "id": 553,
       "name": "StudioLogLevel",
       "variant": "declaration",
       "kind": 2097152,
@@ -16241,7 +18050,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPluginContext.log",
-            "target": 563
+            "target": 593
           },
           {
             "kind": "text",
@@ -16489,7 +18298,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginMeta.coreVersion",
-                "target": 607
+                "target": 637
               },
               {
                 "kind": "text",
@@ -18337,7 +20146,7 @@
                     "types": [
                       {
                         "type": "reference",
-                        "target": 524,
+                        "target": 554,
                         "typeArguments": [
                           {
                             "type": "reference",
@@ -18376,7 +20185,7 @@
               "flags": {},
               "type": {
                 "type": "reference",
-                "target": 530,
+                "target": 560,
                 "name": "StudioPluginContext",
                 "package": "@anvilkit/core"
               }
@@ -18541,7 +20350,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "StudioPluginRegistration",
-                    "target": 609
+                    "target": 639
                   },
                   {
                     "kind": "text",
@@ -18556,7 +20365,7 @@
                   "type": "array",
                   "elementType": {
                     "type": "reference",
-                    "target": 509,
+                    "target": 539,
                     "name": "StudioHeaderAction",
                     "package": "@anvilkit/core"
                   }
@@ -18568,7 +20377,7 @@
             "type": "array",
             "elementType": {
               "type": "reference",
-              "target": 509,
+              "target": 539,
               "name": "StudioHeaderAction",
               "package": "@anvilkit/core"
             }
@@ -18617,7 +20426,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportFormatDefinition",
-                "target": 453
+                "target": 477
               },
               {
                 "kind": "text",
@@ -18723,7 +20532,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "StudioPluginRegistration",
-                    "target": 609
+                    "target": 639
                   },
                   {
                     "kind": "text",
@@ -18738,7 +20547,7 @@
                   "type": "array",
                   "elementType": {
                     "type": "reference",
-                    "target": 453,
+                    "target": 477,
                     "typeArguments": [
                       {
                         "type": "reference",
@@ -18844,7 +20653,7 @@
                   "type": "array",
                   "elementType": {
                     "type": "reference",
-                    "target": 609,
+                    "target": 639,
                     "typeArguments": [
                       {
                         "type": "reference",
@@ -18944,7 +20753,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioConfig",
-                "target": 452
+                "target": 476
               },
               {
                 "kind": "text",
@@ -19085,7 +20894,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "StudioConfig",
-                    "target": 452
+                    "target": 476
                   },
                   {
                     "kind": "text",
@@ -21153,7 +22962,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPlugin",
-                "target": 524
+                "target": 554
               },
               {
                 "kind": "text",
@@ -21263,7 +23072,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPlugin",
-                "target": 524
+                "target": 554
               },
               {
                 "kind": "text",
@@ -21297,7 +23106,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPluginMeta",
-                "target": 603
+                "target": 633
               },
               {
                 "kind": "text",
@@ -21332,7 +23141,7 @@
             "asserts": false,
             "targetType": {
               "type": "reference",
-              "target": 524,
+              "target": 554,
               "typeArguments": [
                 {
                   "type": "reference",
@@ -21613,7 +23422,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioConfig",
-                "target": 452
+                "target": 476
               },
               {
                 "kind": "text",
@@ -22849,7 +24658,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioConfig",
-                "target": 452
+                "target": 476
               },
               {
                 "kind": "text",
@@ -23076,7 +24885,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioConfig",
-                "target": 452
+                "target": 476
               },
               {
                 "kind": "text",
@@ -24023,7 +25832,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioConfig",
-                "target": 452
+                "target": 476
               },
               {
                 "kind": "text",
@@ -25049,31 +26858,36 @@
         418,
         432,
         354,
+        444,
+        453,
+        457,
         357,
         437,
         441,
-        502,
-        444,
+        532,
+        468,
+        464,
         98,
-        453,
-        467,
+        477,
+        491,
         2,
-        469,
+        493,
         373,
-        473,
+        497,
         393,
         18,
-        479,
-        484,
-        489,
-        494,
+        503,
+        508,
+        513,
+        518,
+        527,
         100,
-        509,
-        524,
-        530,
-        578,
-        603,
-        609,
+        539,
+        554,
+        560,
+        608,
+        633,
+        639,
         300,
         40,
         399,
@@ -25084,13 +26898,13 @@
       "title": "Type Aliases",
       "children": [
         431,
-        465,
-        478,
-        505,
+        489,
+        502,
+        535,
         17,
         35,
-        452,
-        523,
+        476,
+        553,
         397,
         398
       ]
@@ -27318,603 +29132,603 @@
     },
     "444": {
       "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext"
+    },
+    "445": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.zoneId"
+    },
+    "446": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.zoneKind"
+    },
+    "447": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.nodeIds"
+    },
+    "448": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.availableComponents"
+    },
+    "449": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.currentNodes"
+    },
+    "450": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.allowResize"
+    },
+    "451": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.theme"
+    },
+    "452": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionContext.locale"
+    },
+    "453": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionPatch"
+    },
+    "454": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionPatch.zoneId"
+    },
+    "455": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionPatch.nodeIds"
+    },
+    "456": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionPatch.replacement"
+    },
+    "457": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionSelection"
+    },
+    "458": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionSelection.zoneId"
+    },
+    "459": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionSelection.nodeIds"
+    },
+    "460": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionSelection.currentNodes"
+    },
+    "461": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionSelection.allow"
+    },
+    "462": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionSelection.disallow"
+    },
+    "463": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "AiSectionSelection.zoneKind"
+    },
+    "464": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "ConfigToAiSectionContextOptions"
+    },
+    "465": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "ConfigToAiSectionContextOptions.theme"
+    },
+    "466": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "ConfigToAiSectionContextOptions.locale"
+    },
+    "467": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ai-section.ts",
+      "qualifiedName": "ConfigToAiSectionContextOptions.allowResize"
+    },
+    "468": {
+      "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest"
     },
-    "445": {
+    "469": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest.name"
     },
-    "446": {
+    "470": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest.version"
     },
-    "447": {
+    "471": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest.slug"
     },
-    "448": {
+    "472": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest.displayName"
     },
-    "449": {
+    "473": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest.scaffoldType"
     },
-    "450": {
+    "474": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest.schemaVersion"
     },
-    "451": {
+    "475": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "ComponentPackageManifest.entry"
     },
-    "452": {
+    "476": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/config.ts",
       "qualifiedName": "StudioConfig"
     },
-    "453": {
+    "477": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatDefinition"
     },
-    "454": {
+    "478": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatDefinition.Opts"
     },
-    "455": {
+    "479": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatDefinition.id"
     },
-    "456": {
+    "480": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatDefinition.label"
     },
-    "457": {
+    "481": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatDefinition.extension"
     },
-    "458": {
+    "482": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatDefinition.mimeType"
     },
-    "459": {
+    "483": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatDefinition.run"
     },
-    "460": {
+    "484": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "__type"
     },
-    "461": {
+    "485": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "__type"
     },
-    "462": {
+    "486": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ir"
     },
-    "463": {
+    "487": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "options"
     },
-    "464": {
+    "488": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ctx"
     },
-    "465": {
+    "489": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportOptions"
     },
-    "466": {
+    "490": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "T"
     },
-    "467": {
+    "491": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatRunContext"
     },
-    "468": {
+    "492": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportFormatRunContext.assetResolvers"
     },
-    "469": {
+    "493": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportResult"
     },
-    "470": {
+    "494": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportResult.content"
     },
-    "471": {
+    "495": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportResult.filename"
     },
-    "472": {
+    "496": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportResult.warnings"
     },
-    "473": {
+    "497": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportWarning"
     },
-    "474": {
+    "498": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportWarning.level"
     },
-    "475": {
+    "499": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportWarning.code"
     },
-    "476": {
+    "500": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportWarning.message"
     },
-    "477": {
+    "501": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportWarning.nodeId"
     },
-    "478": {
+    "502": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
       "qualifiedName": "ExportWarningLevel"
     },
-    "479": {
+    "503": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIR"
     },
-    "480": {
+    "504": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIR.version"
     },
-    "481": {
+    "505": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIR.root"
     },
-    "482": {
+    "506": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIR.assets"
     },
-    "483": {
+    "507": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIR.metadata"
     },
-    "484": {
+    "508": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRAsset"
     },
-    "485": {
+    "509": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRAsset.id"
     },
-    "486": {
+    "510": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRAsset.kind"
     },
-    "487": {
+    "511": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRAsset.url"
     },
-    "488": {
+    "512": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRAsset.meta"
     },
-    "489": {
+    "513": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRMetadata"
     },
-    "490": {
+    "514": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRMetadata.title"
     },
-    "491": {
+    "515": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRMetadata.description"
     },
-    "492": {
+    "516": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRMetadata.createdAt"
     },
-    "493": {
+    "517": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRMetadata.updatedAt"
     },
-    "494": {
+    "518": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode"
     },
-    "495": {
+    "519": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode.id"
     },
-    "496": {
+    "520": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode.type"
     },
-    "497": {
+    "521": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode.props"
     },
-    "498": {
+    "522": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode.slot"
     },
-    "499": {
+    "523": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode.slotKind"
     },
-    "500": {
+    "524": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode.children"
     },
-    "501": {
+    "525": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
       "qualifiedName": "PageIRNode.assets"
     },
-    "502": {
+    "526": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ir.ts",
+      "qualifiedName": "PageIRNode.meta"
+    },
+    "527": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ir.ts",
+      "qualifiedName": "PageIRNodeMeta"
+    },
+    "528": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ir.ts",
+      "qualifiedName": "PageIRNodeMeta.locked"
+    },
+    "529": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ir.ts",
+      "qualifiedName": "PageIRNodeMeta.owner"
+    },
+    "530": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ir.ts",
+      "qualifiedName": "PageIRNodeMeta.version"
+    },
+    "531": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/ir.ts",
+      "qualifiedName": "PageIRNodeMeta.notes"
+    },
+    "532": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
       "qualifiedName": "AssetResolution"
     },
-    "503": {
+    "533": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
       "qualifiedName": "AssetResolution.url"
     },
-    "504": {
+    "534": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
       "qualifiedName": "AssetResolution.meta"
     },
-    "505": {
+    "535": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
       "qualifiedName": "IRAssetResolver"
     },
-    "506": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "__type"
-    },
-    "507": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "__type"
-    },
-    "508": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "url"
-    },
-    "509": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction"
-    },
-    "510": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.id"
-    },
-    "511": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.label"
-    },
-    "512": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.icon"
-    },
-    "513": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.group"
-    },
-    "514": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.order"
-    },
-    "515": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.onClick"
-    },
-    "516": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
-    },
-    "517": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
-    },
-    "518": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
-    },
-    "519": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.disabled"
-    },
-    "520": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
-    },
-    "521": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
-    },
-    "522": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
-    },
-    "523": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioLogLevel"
-    },
-    "524": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPlugin"
-    },
-    "525": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPlugin.UserConfig"
-    },
-    "526": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPlugin.meta"
-    },
-    "527": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPlugin.register"
-    },
-    "528": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPlugin.register"
-    },
-    "529": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
-    },
-    "530": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext"
-    },
-    "531": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext.UserConfig"
-    },
-    "532": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext.getData"
-    },
-    "533": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
-    },
-    "534": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
-    },
-    "535": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext.getPuckApi"
-    },
     "536": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
+      "packagePath": "src/types/asset-resolver.ts",
       "qualifiedName": "__type"
     },
     "537": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
+      "packagePath": "src/types/asset-resolver.ts",
       "qualifiedName": "__type"
     },
     "538": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext.studioConfig"
+      "packagePath": "src/types/asset-resolver.ts",
+      "qualifiedName": "url"
     },
     "539": {
-      "packageName": "zod",
-      "packagePath": "v4/core/util.d.cts",
-      "qualifiedName": "__type"
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction"
     },
     "540": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "features"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction.id"
     },
     "541": {
-      "packageName": "zod",
-      "packagePath": "v4/core/util.d.cts",
-      "qualifiedName": "__type"
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction.label"
     },
     "542": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "enableExport"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction.icon"
     },
     "543": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "enableAi"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction.group"
     },
     "544": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "enableCollaboration"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction.order"
     },
     "545": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "branding"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction.onClick"
     },
     "546": {
-      "packageName": "zod",
-      "packagePath": "v4/core/util.d.cts",
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
       "qualifiedName": "__type"
     },
     "547": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "appName"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
     },
     "548": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "logoUrl"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "ctx"
     },
     "549": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "primaryColor"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioHeaderAction.disabled"
     },
     "550": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "theme"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
     },
     "551": {
-      "packageName": "zod",
-      "packagePath": "v4/core/util.d.cts",
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
       "qualifiedName": "__type"
     },
     "552": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "defaultMode"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "ctx"
     },
     "553": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "allowToggle"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioLogLevel"
     },
     "554": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "export"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPlugin"
     },
     "555": {
-      "packageName": "zod",
-      "packagePath": "v4/core/util.d.cts",
-      "qualifiedName": "__type"
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPlugin.UserConfig"
     },
     "556": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "filenamePrefix"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPlugin.meta"
     },
     "557": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "defaultFormat"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPlugin.register"
     },
     "558": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "ai"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPlugin.register"
     },
     "559": {
-      "packageName": "zod",
-      "packagePath": "v4/core/util.d.cts",
-      "qualifiedName": "__type"
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "ctx"
     },
     "560": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "maxRetries"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginContext"
     },
     "561": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "defaultModel"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginContext.UserConfig"
     },
     "562": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/config/schema.ts",
-      "qualifiedName": "experimental"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginContext.getData"
     },
     "563": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext.log"
+      "qualifiedName": "__type"
     },
     "564": {
       "packageName": "@anvilkit/core",
@@ -27924,152 +29738,152 @@
     "565": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "StudioPluginContext.getPuckApi"
     },
     "566": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "level"
+      "qualifiedName": "__type"
     },
     "567": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "message"
+      "qualifiedName": "__type"
     },
     "568": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "meta"
+      "qualifiedName": "StudioPluginContext.studioConfig"
     },
     "569": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext.emit"
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
+      "qualifiedName": "__type"
     },
     "570": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "features"
     },
     "571": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
       "qualifiedName": "__type"
     },
     "572": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "event"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "enableExport"
     },
     "573": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "payload"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "enableAi"
     },
     "574": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginContext.registerAssetResolver"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "enableCollaboration"
     },
     "575": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "branding"
     },
     "576": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
       "qualifiedName": "__type"
     },
     "577": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "resolver"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "appName"
     },
     "578": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginLifecycleHooks"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "logoUrl"
     },
     "579": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginLifecycleHooks.UserConfig"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "primaryColor"
     },
     "580": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginLifecycleHooks.onInit"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "theme"
     },
     "581": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
       "qualifiedName": "__type"
     },
     "582": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "defaultMode"
     },
     "583": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "allowToggle"
     },
     "584": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginLifecycleHooks.onDataChange"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "export"
     },
     "585": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
       "qualifiedName": "__type"
     },
     "586": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "filenamePrefix"
     },
     "587": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "defaultFormat"
     },
     "588": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "data"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "ai"
     },
     "589": {
-      "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginLifecycleHooks.onBeforePublish"
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
+      "qualifiedName": "__type"
     },
     "590": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "maxRetries"
     },
     "591": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "defaultModel"
     },
     "592": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
+      "packagePath": "src/config/schema.ts",
+      "qualifiedName": "experimental"
     },
     "593": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "data"
+      "qualifiedName": "StudioPluginContext.log"
     },
     "594": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginLifecycleHooks.onAfterPublish"
+      "qualifiedName": "__type"
     },
     "595": {
       "packageName": "@anvilkit/core",
@@ -28079,22 +29893,22 @@
     "596": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "level"
     },
     "597": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
+      "qualifiedName": "message"
     },
     "598": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "data"
+      "qualifiedName": "meta"
     },
     "599": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginLifecycleHooks.onDestroy"
+      "qualifiedName": "StudioPluginContext.emit"
     },
     "600": {
       "packageName": "@anvilkit/core",
@@ -28109,69 +29923,219 @@
     "602": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "ctx"
+      "qualifiedName": "event"
     },
     "603": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginMeta"
+      "qualifiedName": "payload"
     },
     "604": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginMeta.id"
+      "qualifiedName": "StudioPluginContext.registerAssetResolver"
     },
     "605": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginMeta.name"
+      "qualifiedName": "__type"
     },
     "606": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginMeta.version"
+      "qualifiedName": "__type"
     },
     "607": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginMeta.coreVersion"
+      "qualifiedName": "resolver"
     },
     "608": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginMeta.description"
+      "qualifiedName": "StudioPluginLifecycleHooks"
     },
     "609": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginRegistration"
+      "qualifiedName": "StudioPluginLifecycleHooks.UserConfig"
     },
     "610": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginRegistration.UserConfig"
+      "qualifiedName": "StudioPluginLifecycleHooks.onInit"
     },
     "611": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginRegistration.meta"
+      "qualifiedName": "__type"
     },
     "612": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginRegistration.hooks"
+      "qualifiedName": "__type"
     },
     "613": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginRegistration.overrides"
+      "qualifiedName": "ctx"
     },
     "614": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioPluginRegistration.headerActions"
+      "qualifiedName": "StudioPluginLifecycleHooks.onDataChange"
     },
     "615": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "616": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "617": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "ctx"
+    },
+    "618": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "data"
+    },
+    "619": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginLifecycleHooks.onBeforePublish"
+    },
+    "620": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "621": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "622": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "ctx"
+    },
+    "623": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "data"
+    },
+    "624": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginLifecycleHooks.onAfterPublish"
+    },
+    "625": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "626": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "627": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "ctx"
+    },
+    "628": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "data"
+    },
+    "629": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginLifecycleHooks.onDestroy"
+    },
+    "630": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "631": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "__type"
+    },
+    "632": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "ctx"
+    },
+    "633": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginMeta"
+    },
+    "634": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginMeta.id"
+    },
+    "635": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginMeta.name"
+    },
+    "636": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginMeta.version"
+    },
+    "637": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginMeta.coreVersion"
+    },
+    "638": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginMeta.description"
+    },
+    "639": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginRegistration"
+    },
+    "640": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginRegistration.UserConfig"
+    },
+    "641": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginRegistration.meta"
+    },
+    "642": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginRegistration.hooks"
+    },
+    "643": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginRegistration.overrides"
+    },
+    "644": {
+      "packageName": "@anvilkit/core",
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "StudioPluginRegistration.headerActions"
+    },
+    "645": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
       "qualifiedName": "StudioPluginRegistration.exportFormats"
