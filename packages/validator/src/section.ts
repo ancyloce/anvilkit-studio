@@ -26,6 +26,7 @@ import { closestMatch } from "./internal/closest-match.js";
 import { MAX_NODE_DEPTH } from "./internal/constants.js";
 import { findNonSerializablePath } from "./internal/find-non-serializable-path.js";
 import { makeComponentPropsSchema } from "./internal/make-zod-schema.js";
+import { validateNodeMeta } from "./internal/validate-node-meta.js";
 import type { ValidationIssue, ValidationResult } from "./types.js";
 
 const SECTION_CODES = {
@@ -280,6 +281,18 @@ function walkNode(
 			message: 'Node slotKind must be "slot" or "zone" when present.',
 			path: [...pathSegments, "slotKind"],
 		});
+	}
+
+	if (nodeRecord.meta !== undefined) {
+		const metaIssues = validateNodeMeta(nodeRecord.meta);
+		for (const metaIssue of metaIssues) {
+			issues.push({
+				level: "error",
+				code: SECTION_CODES.INVALID_NODE,
+				message: `Invalid meta: ${metaIssue.message}`,
+				path: [...pathSegments, "meta", ...metaIssue.path],
+			});
+		}
 	}
 
 	if (typeof nodeType !== "string") {
