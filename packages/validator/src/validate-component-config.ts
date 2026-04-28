@@ -1,5 +1,5 @@
-import { isJsonSerializable } from "@anvilkit/schema";
 import type { Config } from "@puckeditor/core";
+import { findNonSerializablePath } from "./internal/find-non-serializable-path.js";
 import {
 	knownFieldTypeSet,
 	makeFieldZodSchema,
@@ -84,12 +84,19 @@ export function validateComponentConfig<C extends Config>(
 
 		if (isObjectLike(defaultPropsValue)) {
 			for (const [propName, propValue] of Object.entries(defaultPropsValue)) {
-				if (!isJsonSerializable(propValue)) {
+				const hit = findNonSerializablePath(
+					propValue,
+					[propName],
+					new WeakSet(),
+					0,
+				);
+				if (hit) {
+					const dotted = hit.path.join(".");
 					issues.push({
 						level: "error",
 						code: "E_NON_SERIALIZABLE_DEFAULT",
-						message: `Default prop "${propName}" in "${componentName}" is not JSON-serializable.`,
-						path: ["components", componentName, "defaultProps", propName],
+						message: `Default prop "${dotted}" in "${componentName}" is not JSON-serializable (${hit.reason}).`,
+						path: ["components", componentName, "defaultProps", ...hit.path],
 						componentName,
 					});
 				}

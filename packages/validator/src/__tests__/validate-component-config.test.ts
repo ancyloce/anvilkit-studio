@@ -82,6 +82,7 @@ describe("validateComponentConfig", () => {
 			"defaultProps",
 			"action",
 		]);
+		expect(issue!.message).toContain("function");
 	});
 
 	// ----- phase5-019 F-3: nested non-serializable defaults -----
@@ -100,7 +101,11 @@ describe("validateComponentConfig", () => {
 			"Broken",
 			"defaultProps",
 			"settings",
+			"layout",
+			"onPress",
 		]);
+		expect(issue!.message).toContain("settings.layout.onPress");
+		expect(issue!.message).toContain("function");
 	});
 
 	// ----- W_MISSING_DESCRIPTION -----
@@ -162,7 +167,9 @@ describe("validateComponentConfig", () => {
 			"Broken",
 			"defaultProps",
 			"profile",
+			"self",
 		]);
+		expect(issue!.message).toContain("circular");
 	});
 
 	// ----- metadata: null behaves like missing metadata -----

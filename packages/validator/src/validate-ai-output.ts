@@ -12,7 +12,8 @@ import {
 	unknown,
 } from "zod/mini";
 import { closestMatch } from "./internal/closest-match.js";
-import { MAX_NODE_DEPTH, MAX_PROP_DEPTH } from "./internal/constants.js";
+import { MAX_NODE_DEPTH } from "./internal/constants.js";
+import { findNonSerializablePath } from "./internal/find-non-serializable-path.js";
 import { makeComponentPropsSchema } from "./internal/make-zod-schema.js";
 
 const assetKinds = [
@@ -210,7 +211,7 @@ function walkNode(
 		);
 		if (nonSer) {
 			issues.push({
-				path: nonSer.path,
+				path: buildPath(nonSer.path),
 				message:
 					"[NON_SERIALIZABLE_PROP] Prop value is not JSON-serialisable (" +
 					nonSer.reason +
@@ -368,70 +369,3 @@ function walkNode(
 	}
 }
 
-/**
- * Recursive JSON-serialisability check. phase4-014 F-3: prop values
- * must round-trip through JSON. Functions, symbols, and bigints
- * silently broke `structuredClone` + `localStorage` rehydration even
- * though the upstream Zod schema accepted them as `unknown()`.
- *
- * `ancestors` tracks the active recursion path only — entries are
- * removed on the way back up so that a value shared by sibling
- * subtrees (a perfectly serialisable DAG) is not misreported as a
- * cycle. True self-references still trip the check on the way down.
- */
-function findNonSerializablePath(
-	value: unknown,
-	path: readonly (string | number)[],
-	ancestors: WeakSet<object>,
-	depth: number,
-): { path: string; reason: string } | null {
-	if (value === null || value === undefined) return null;
-	const t = typeof value;
-	if (t === "string" || t === "number" || t === "boolean") return null;
-	if (t === "function") {
-		return { path: buildPath(path), reason: "function" };
-	}
-	if (t === "symbol") {
-		return { path: buildPath(path), reason: "symbol" };
-	}
-	if (t === "bigint") {
-		return { path: buildPath(path), reason: "bigint" };
-	}
-	if (t !== "object") {
-		return { path: buildPath(path), reason: t };
-	}
-	if (depth > MAX_PROP_DEPTH) {
-		return { path: buildPath(path), reason: "exceeds-max-depth" };
-	}
-	const obj = value as object;
-	if (ancestors.has(obj)) {
-		return { path: buildPath(path), reason: "circular" };
-	}
-	ancestors.add(obj);
-	try {
-		if (Array.isArray(value)) {
-			for (let i = 0; i < value.length; i++) {
-				const hit = findNonSerializablePath(
-					value[i],
-					[...path, i],
-					ancestors,
-					depth + 1,
-				);
-				if (hit) return hit;
-			}
-			return null;
-		}
-		for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
-			const hit = findNonSerializablePath(
-				v,
-				[...path, k],
-				ancestors,
-				depth + 1,
-			);
-			if (hit) return hit;
-		}
-		return null;
-	} finally {
-		ancestors.delete(obj);
-	}
-}
