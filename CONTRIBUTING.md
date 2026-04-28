@@ -65,13 +65,13 @@ The workspace enforces a strict dependency DAG. Violations are caught by `pnpm m
 
 **Forbidden edges:**
 
-| Rule | Rationale |
-|------|-----------|
-| `@anvilkit/utils` has **zero** runtime dependencies | Leaf node of the DAG; any import is a bug |
+| Rule                                                                         | Rationale                                                      |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `@anvilkit/utils` has **zero** runtime dependencies                          | Leaf node of the DAG; any import is a bug                      |
 | `@anvilkit/ir`, `@anvilkit/schema`, `@anvilkit/validator` never import React | These are isomorphic — they must run in Node and edge runtimes |
-| `@anvilkit/ui` never imports `@anvilkit/core` or plugins | UI primitives are Studio-agnostic |
-| `@anvilkit/core` never imports plugins | The shell doesn't know the plugin set |
-| No package imports an app | Data flows upward only |
+| `@anvilkit/ui` never imports `@anvilkit/core` or plugins                     | UI primitives are Studio-agnostic                              |
+| `@anvilkit/core` never imports plugins                                       | The shell doesn't know the plugin set                          |
+| No package imports an app                                                    | Data flows upward only                                         |
 
 **Dependency direction** (each arrow means "depends on"):
 
@@ -125,6 +125,18 @@ This prompts you to select affected packages and describe the change. The genera
 **Do not** hand-edit `version` fields in `package.json` — Changesets manages all version bumps.
 
 Release leads: see [`docs/release/release-runbook.md`](docs/release/release-runbook.md) for the `publish.yml` workflow modes, pre-flight checks, rollback procedure, and smoke verification.
+
+## Marketplace Submission
+
+Plugins, templates, and components published under a community npm scope can be listed in the AnvilKit marketplace. To submit:
+
+1. Open a PR that adds a single entry to [`apps/docs/src/registry/feed.json`](apps/docs/src/registry/feed.json), matching the schema in [`apps/docs/src/registry/feed.schema.ts`](apps/docs/src/registry/feed.schema.ts).
+2. Include in the PR description: the published npm version, a runnable `npx anvilkit add <slug>` snippet, and the resulting `puck-config.ts` diff.
+3. CI runs `.github/workflows/marketplace-scorecard.yml` automatically. Failing the scorecard blocks merge.
+4. A maintainer performs the manual review checklist in [`docs/policies/marketplace-governance.md`](docs/policies/marketplace-governance.md) §4 within 48 hours of the PR being opened.
+5. On merge, the entry appears at [`/marketplace`](https://docs.anvilkit.dev/marketplace) on the next docs deploy.
+
+For the full submission, review, and removal policy, see [`docs/policies/marketplace-governance.md`](docs/policies/marketplace-governance.md). For the feed format, see [`docs/policies/marketplace-feed.md`](docs/policies/marketplace-feed.md). For the trust boundary that the registry relies on, see [`docs/security/plugin-trust-model.md`](docs/security/plugin-trust-model.md).
 
 ## PR Expectations
 
