@@ -10536,7 +10536,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioPluginRegistration.headerActions",
-						"target": 644
+						"target": 647
 					},
 					{
 						"kind": "text",
@@ -10736,9 +10736,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 300,
+							"line": 311,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L300"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L311"
 						}
 					],
 					"type": {
@@ -10832,9 +10832,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 260,
+							"line": 271,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L260"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L271"
 						}
 					],
 					"type": {
@@ -10923,9 +10923,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 248,
+							"line": 259,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L248"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L259"
 						}
 					],
 					"type": {
@@ -10976,9 +10976,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 225,
+							"line": 236,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L225"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L236"
 						}
 					],
 					"type": {
@@ -11005,9 +11005,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 235,
+							"line": 246,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L235"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L246"
 						}
 					],
 					"type": {
@@ -11076,9 +11076,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 288,
+							"line": 299,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L288"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L299"
 						}
 					],
 					"type": {
@@ -11211,9 +11211,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 271,
+							"line": 282,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L271"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L282"
 						}
 					],
 					"type": {
@@ -11239,9 +11239,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 216,
+					"line": 227,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L216"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L227"
 				}
 			]
 		},
@@ -11277,7 +11277,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioPluginRegistration",
-						"target": 639
+						"target": 642
 					},
 					{
 						"kind": "text",
@@ -11323,7 +11323,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginMeta",
-								"target": 633
+								"target": 636
 							},
 							{
 								"kind": "text",
@@ -11334,14 +11334,14 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 501,
+							"line": 512,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L501"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L512"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": 633,
+						"target": 636,
 						"name": "StudioPluginMeta",
 						"package": "@anvilkit/core"
 					}
@@ -11355,9 +11355,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 511,
+							"line": 522,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L511"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L522"
 						}
 					],
 					"signatures": [
@@ -11394,9 +11394,9 @@
 							"sources": [
 								{
 									"fileName": "types/plugin.ts",
-									"line": 511,
+									"line": 522,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L511"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L522"
 								}
 							],
 							"parameters": [
@@ -11447,7 +11447,7 @@
 								"types": [
 									{
 										"type": "reference",
-										"target": 639,
+										"target": 642,
 										"typeArguments": [
 											{
 												"type": "reference",
@@ -11471,7 +11471,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 639,
+												"target": 642,
 												"typeArguments": [
 													{
 														"type": "reference",
@@ -11512,9 +11512,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 495,
+					"line": 506,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L495"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L506"
 				}
 			],
 			"typeParameters": [
@@ -11727,6 +11727,72 @@
 					}
 				},
 				{
+					"id": 608,
+					"name": "getAssetResolvers",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Return the asset resolvers registered for the current compiled\nruntime, in registration order.\n\nCore supplies this on the context passed to "
+							},
+							{
+								"kind": "code",
+								"text": "`register()`"
+							},
+							{
+								"kind": "text",
+								"text": " so plugins\ncan close over the resolver list for later header-action exports.\nHand-written test contexts may omit it; export formats should treat\nabsence as an empty resolver list."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 202,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L202"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 609,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 610,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"target": 535,
+												"name": "IRAssetResolver",
+												"package": "@anvilkit/core"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
 					"id": 562,
 					"name": "getData",
 					"variant": "declaration",
@@ -11744,7 +11810,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginLifecycleHooks.onDataChange",
-								"target": 614
+								"target": 617
 							},
 							{
 								"kind": "text",
@@ -13054,6 +13120,7 @@
 					"title": "Properties",
 					"children": [
 						599,
+						608,
 						562,
 						565,
 						593,
@@ -13111,7 +13178,7 @@
 			]
 		},
 		{
-			"id": 608,
+			"id": 611,
 			"name": "StudioPluginLifecycleHooks",
 			"variant": "declaration",
 			"kind": 256,
@@ -13166,7 +13233,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "onBeforePublish",
-						"target": 619
+						"target": 622
 					},
 					{
 						"kind": "text",
@@ -13194,7 +13261,7 @@
 			},
 			"children": [
 				{
-					"id": 624,
+					"id": 627,
 					"name": "onAfterPublish",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13213,29 +13280,29 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 368,
+							"line": 379,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L368"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L379"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 625,
+							"id": 628,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 626,
+									"id": 629,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 627,
+											"id": 630,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -13246,7 +13313,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 609,
+														"target": 612,
 														"name": "UserConfig",
 														"package": "@anvilkit/core",
 														"qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -13258,7 +13325,7 @@
 											}
 										},
 										{
-											"id": 628,
+											"id": 631,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -13306,7 +13373,7 @@
 					}
 				},
 				{
-					"id": 619,
+					"id": 622,
 					"name": "onBeforePublish",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13333,29 +13400,29 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 359,
+							"line": 370,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L359"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L370"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 620,
+							"id": 623,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 621,
+									"id": 624,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 622,
+											"id": 625,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -13366,7 +13433,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 609,
+														"target": 612,
 														"name": "UserConfig",
 														"package": "@anvilkit/core",
 														"qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -13378,7 +13445,7 @@
 											}
 										},
 										{
-											"id": 623,
+											"id": 626,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -13426,7 +13493,7 @@
 					}
 				},
 				{
-					"id": 614,
+					"id": 617,
 					"name": "onDataChange",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13469,29 +13536,29 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 349,
+							"line": 360,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L349"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L360"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 615,
+							"id": 618,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 616,
+									"id": 619,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 617,
+											"id": 620,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -13502,7 +13569,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 609,
+														"target": 612,
 														"name": "UserConfig",
 														"package": "@anvilkit/core",
 														"qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -13514,7 +13581,7 @@
 											}
 										},
 										{
-											"id": 618,
+											"id": 621,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -13562,7 +13629,7 @@
 					}
 				},
 				{
-					"id": 629,
+					"id": 632,
 					"name": "onDestroy",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13589,29 +13656,29 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 377,
+							"line": 388,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L377"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L388"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 630,
+							"id": 633,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 631,
+									"id": 634,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 632,
+											"id": 635,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -13622,7 +13689,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 609,
+														"target": 612,
 														"name": "UserConfig",
 														"package": "@anvilkit/core",
 														"qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -13665,7 +13732,7 @@
 					}
 				},
 				{
-					"id": 610,
+					"id": 613,
 					"name": "onInit",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13700,29 +13767,29 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 339,
+							"line": 350,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L339"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L350"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 611,
+							"id": 614,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 612,
+									"id": 615,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 613,
+											"id": 616,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -13733,7 +13800,7 @@
 												"typeArguments": [
 													{
 														"type": "reference",
-														"target": 609,
+														"target": 612,
 														"name": "UserConfig",
 														"package": "@anvilkit/core",
 														"qualifiedName": "StudioPluginLifecycleHooks.UserConfig",
@@ -13780,25 +13847,25 @@
 				{
 					"title": "Properties",
 					"children": [
-						624,
-						619,
-						614,
-						629,
-						610
+						627,
+						622,
+						617,
+						632,
+						613
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 331,
+					"line": 342,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L331"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L342"
 				}
 			],
 			"typeParameters": [
 				{
-					"id": 609,
+					"id": 612,
 					"name": "UserConfig",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -13847,7 +13914,7 @@
 			]
 		},
 		{
-			"id": 633,
+			"id": 636,
 			"name": "StudioPluginMeta",
 			"variant": "declaration",
 			"kind": 256,
@@ -13870,7 +13937,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioPluginMeta.coreVersion",
-						"target": 637
+						"target": 640
 					},
 					{
 						"kind": "text",
@@ -13888,7 +13955,7 @@
 			},
 			"children": [
 				{
-					"id": 637,
+					"id": 640,
 					"name": "coreVersion",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13949,7 +14016,7 @@
 					}
 				},
 				{
-					"id": 638,
+					"id": 641,
 					"name": "description",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13979,7 +14046,7 @@
 					}
 				},
 				{
-					"id": 634,
+					"id": 637,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14032,7 +14099,7 @@
 					}
 				},
 				{
-					"id": 635,
+					"id": 638,
 					"name": "name",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14061,7 +14128,7 @@
 					}
 				},
 				{
-					"id": 636,
+					"id": 639,
 					"name": "version",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14086,7 +14153,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "coreVersion",
-								"target": 637
+								"target": 640
 							},
 							{
 								"kind": "text",
@@ -14112,11 +14179,11 @@
 				{
 					"title": "Properties",
 					"children": [
+						640,
+						641,
 						637,
 						638,
-						634,
-						635,
-						636
+						639
 					]
 				}
 			],
@@ -14130,7 +14197,7 @@
 			]
 		},
 		{
-			"id": 639,
+			"id": 642,
 			"name": "StudioPluginRegistration",
 			"variant": "declaration",
 			"kind": 256,
@@ -14153,7 +14220,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "meta",
-						"target": 641
+						"target": 644
 					},
 					{
 						"kind": "text",
@@ -14259,7 +14326,7 @@
 			},
 			"children": [
 				{
-					"id": 645,
+					"id": 648,
 					"name": "exportFormats",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14286,9 +14353,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 454,
+							"line": 465,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L454"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L465"
 						}
 					],
 					"type": {
@@ -14328,7 +14395,7 @@
 					}
 				},
 				{
-					"id": 644,
+					"id": 647,
 					"name": "headerActions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14355,9 +14422,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 445,
+							"line": 456,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L445"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L456"
 						}
 					],
 					"type": {
@@ -14375,7 +14442,7 @@
 					}
 				},
 				{
-					"id": 642,
+					"id": 645,
 					"name": "hooks",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14393,7 +14460,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginLifecycleHooks",
-								"target": 608
+								"target": 611
 							},
 							{
 								"kind": "text",
@@ -14404,18 +14471,18 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 424,
+							"line": 435,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L424"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L435"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": 608,
+						"target": 611,
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 640,
+								"target": 643,
 								"name": "UserConfig",
 								"package": "@anvilkit/core",
 								"qualifiedName": "StudioPluginRegistration.UserConfig",
@@ -14427,7 +14494,7 @@
 					}
 				},
 				{
-					"id": 641,
+					"id": 644,
 					"name": "meta",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14444,7 +14511,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginMeta",
-								"target": 633
+								"target": 636
 							},
 							{
 								"kind": "text",
@@ -14455,20 +14522,20 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 417,
+							"line": 428,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L417"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L428"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": 633,
+						"target": 636,
 						"name": "StudioPluginMeta",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 643,
+					"id": 646,
 					"name": "overrides",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14511,9 +14578,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 435,
+							"line": 446,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L435"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L446"
 						}
 					],
 					"type": {
@@ -14534,7 +14601,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 640,
+										"target": 643,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"qualifiedName": "StudioPluginRegistration.UserConfig",
@@ -14554,25 +14621,25 @@
 				{
 					"title": "Properties",
 					"children": [
+						648,
+						647,
 						645,
 						644,
-						642,
-						641,
-						643
+						646
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 406,
+					"line": 417,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L406"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L417"
 				}
 			],
 			"typeParameters": [
 				{
-					"id": 640,
+					"id": 643,
 					"name": "UserConfig",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -14587,7 +14654,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginLifecycleHooks",
-								"target": 608
+								"target": 611
 							},
 							{
 								"kind": "text",
@@ -16621,7 +16688,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 633,
+								"target": 636,
 								"name": "StudioPluginMeta",
 								"package": "@anvilkit/core"
 							}
@@ -16725,7 +16792,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 639,
+								"target": 642,
 								"typeArguments": [
 									{
 										"type": "reference",
@@ -17322,7 +17389,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 633,
+								"target": 636,
 								"name": "StudioPluginMeta",
 								"package": "@anvilkit/core"
 							}
@@ -17750,7 +17817,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioPluginLifecycleHooks",
-						"target": 608
+						"target": 611
 					},
 					{
 						"kind": "text",
@@ -18298,7 +18365,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginMeta.coreVersion",
-								"target": 637
+								"target": 640
 							},
 							{
 								"kind": "text",
@@ -20350,7 +20417,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "StudioPluginRegistration",
-										"target": 639
+										"target": 642
 									},
 									{
 										"kind": "text",
@@ -20532,7 +20599,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "StudioPluginRegistration",
-										"target": 639
+										"target": 642
 									},
 									{
 										"kind": "text",
@@ -20653,7 +20720,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 639,
+										"target": 642,
 										"typeArguments": [
 											{
 												"type": "reference",
@@ -23102,7 +23169,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginMeta",
-								"target": 633
+								"target": 636
 							},
 							{
 								"kind": "text",
@@ -26881,9 +26948,9 @@
 				539,
 				554,
 				560,
-				608,
-				633,
-				639,
+				611,
+				636,
+				642,
 				300,
 				40,
 				399,
@@ -29949,37 +30016,37 @@
 		"608": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginLifecycleHooks"
+			"qualifiedName": "StudioPluginContext.getAssetResolvers"
 		},
 		"609": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginLifecycleHooks.UserConfig"
+			"qualifiedName": "__type"
 		},
 		"610": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginLifecycleHooks.onInit"
+			"qualifiedName": "__type"
 		},
 		"611": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioPluginLifecycleHooks"
 		},
 		"612": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioPluginLifecycleHooks.UserConfig"
 		},
 		"613": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "StudioPluginLifecycleHooks.onInit"
 		},
 		"614": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginLifecycleHooks.onDataChange"
+			"qualifiedName": "__type"
 		},
 		"615": {
 			"packageName": "@anvilkit/core",
@@ -29989,149 +30056,164 @@
 		"616": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ctx"
 		},
 		"617": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "StudioPluginLifecycleHooks.onDataChange"
 		},
 		"618": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"619": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginLifecycleHooks.onBeforePublish"
+			"qualifiedName": "__type"
 		},
 		"620": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ctx"
 		},
 		"621": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "data"
 		},
 		"622": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "StudioPluginLifecycleHooks.onBeforePublish"
 		},
 		"623": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"624": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginLifecycleHooks.onAfterPublish"
+			"qualifiedName": "__type"
 		},
 		"625": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ctx"
 		},
 		"626": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "data"
 		},
 		"627": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "StudioPluginLifecycleHooks.onAfterPublish"
 		},
 		"628": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"629": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginLifecycleHooks.onDestroy"
+			"qualifiedName": "__type"
 		},
 		"630": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ctx"
 		},
 		"631": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "data"
 		},
 		"632": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "StudioPluginLifecycleHooks.onDestroy"
 		},
 		"633": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginMeta"
+			"qualifiedName": "__type"
 		},
 		"634": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginMeta.id"
+			"qualifiedName": "__type"
 		},
 		"635": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginMeta.name"
+			"qualifiedName": "ctx"
 		},
 		"636": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginMeta.version"
+			"qualifiedName": "StudioPluginMeta"
 		},
 		"637": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginMeta.coreVersion"
+			"qualifiedName": "StudioPluginMeta.id"
 		},
 		"638": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginMeta.description"
+			"qualifiedName": "StudioPluginMeta.name"
 		},
 		"639": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginRegistration"
+			"qualifiedName": "StudioPluginMeta.version"
 		},
 		"640": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginRegistration.UserConfig"
+			"qualifiedName": "StudioPluginMeta.coreVersion"
 		},
 		"641": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginRegistration.meta"
+			"qualifiedName": "StudioPluginMeta.description"
 		},
 		"642": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginRegistration.hooks"
+			"qualifiedName": "StudioPluginRegistration"
 		},
 		"643": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginRegistration.overrides"
+			"qualifiedName": "StudioPluginRegistration.UserConfig"
 		},
 		"644": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioPluginRegistration.headerActions"
+			"qualifiedName": "StudioPluginRegistration.meta"
 		},
 		"645": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioPluginRegistration.hooks"
+		},
+		"646": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioPluginRegistration.overrides"
+		},
+		"647": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioPluginRegistration.headerActions"
+		},
+		"648": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
 			"qualifiedName": "StudioPluginRegistration.exportFormats"
