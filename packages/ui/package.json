@@ -18,6 +18,26 @@
 			}
 		},
 		"./globals.css": "./src/globals.css",
+		"./presence": {
+			"import": {
+				"types": "./dist/presence/index.d.ts",
+				"default": "./dist/presence/index.js"
+			},
+			"require": {
+				"types": "./dist/presence/index.d.cts",
+				"default": "./dist/presence/index.cjs"
+			}
+		},
+		"./presence/*": {
+			"import": {
+				"types": "./dist/presence/*.d.ts",
+				"default": "./dist/presence/*.js"
+			},
+			"require": {
+				"types": "./dist/presence/*.d.cts",
+				"default": "./dist/presence/*.cjs"
+			}
+		},
 		"./*": {
 			"import": {
 				"types": "./dist/*.d.ts",

@@ -10,5 +10,17 @@
 			"react/jsx-runtime",
 			"react/jsx-dev-runtime"
 		]
+	},
+	{
+		"name": "@anvilkit/ui/presence",
+		"path": "dist/presence/index.js",
+		"limit": "8 KB",
+		"gzip": true,
+		"ignore": [
+			"react",
+			"react-dom",
+			"react/jsx-runtime",
+			"react/jsx-dev-runtime"
+		]
 	}
 ]
