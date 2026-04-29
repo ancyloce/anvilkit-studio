@@ -189,6 +189,17 @@ export interface StudioPluginContext<
 	 * URLs it does not own, and a rewritten URL when it does.
 	 */
 	readonly registerAssetResolver: (resolver: IRAssetResolver) => void;
+
+	/**
+	 * Return the asset resolvers registered for the current compiled
+	 * runtime, in registration order.
+	 *
+	 * Core supplies this on the context passed to `register()` so plugins
+	 * can close over the resolver list for later header-action exports.
+	 * Hand-written test contexts may omit it; export formats should treat
+	 * absence as an empty resolver list.
+	 */
+	readonly getAssetResolvers?: () => readonly IRAssetResolver[];
 }
 
 /**
