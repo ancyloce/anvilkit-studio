@@ -16,3 +16,6 @@
 [submodule "packages/plugins/plugin-version-history"]
 	path = packages/plugins/plugin-version-history
 	url = https://github.com/ancyloce/anvilkit-plugin-version-history.git
+[submodule "packages/plugins/plugin-collab-yjs"]
+	path = packages/plugins/plugin-collab-yjs
+	url = https://github.com/ancyloce/anvilkit-plugin-collab-yjs.git
