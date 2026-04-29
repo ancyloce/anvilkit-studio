@@ -37,6 +37,22 @@ Verify everything works:
 pnpm lint && pnpm typecheck && pnpm test && pnpm build
 ```
 
+## Migration Guides
+
+Upgrading between AnvilKit versions? Each release has a dedicated
+guide enumerating additive surfaces, behavioural fixes, and any
+required code changes. The current guides:
+
+- [`docs/migration/0.x-to-1.0-beta.md`](docs/migration/0.x-to-1.0-beta.md)
+  — `0.1.0-alpha.x` → `1.0.0-beta`.
+- [`docs/migration/1.0-beta-to-1.0.md`](docs/migration/1.0-beta-to-1.0.md)
+  — `1.0.0-beta` → `1.0.0` GA.
+- [`docs/migration/1.0-to-1.1.md`](docs/migration/1.0-to-1.1.md)
+  — `1.0.0` → `1.1.0` GA (purely additive).
+
+Long-term support guarantees and the per-channel patch windows live
+in [`docs/policies/lts.md`](docs/policies/lts.md).
+
 ## Workspace Layout
 
 ```
