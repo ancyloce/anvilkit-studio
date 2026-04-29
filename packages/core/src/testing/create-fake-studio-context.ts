@@ -40,6 +40,7 @@ export interface FakeStudioContextOverrides<
 	readonly log?: StudioPluginContext<UserConfig>["log"];
 	readonly emit?: StudioPluginContext<UserConfig>["emit"];
 	readonly registerAssetResolver?: StudioPluginContext<UserConfig>["registerAssetResolver"];
+	readonly getAssetResolvers?: StudioPluginContext<UserConfig>["getAssetResolvers"];
 }
 
 /**
@@ -96,6 +97,7 @@ export function createFakeStudioContext<
 			((resolver) => {
 				assetResolvers.push(resolver);
 			}),
+		getAssetResolvers: overrides.getAssetResolvers ?? (() => assetResolvers),
 		_mocks: { logCalls, emitCalls, assetResolvers, dispatchCalls },
 	};
 }
