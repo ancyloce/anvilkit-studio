@@ -215,6 +215,35 @@ describe("compilePlugins — happy paths", () => {
 		expect(ctx.registerAssetResolver).toBe(originalRegisterAssetResolver);
 		expect(originalRegisterAssetResolver).toHaveBeenCalledWith(resolver);
 	});
+
+	it("exposes registered asset resolvers through the plugin context", async () => {
+		const firstResolver = vi.fn();
+		const secondResolver = vi.fn();
+		let afterFirstRegistration: readonly unknown[] = [];
+		let afterSecondRegistration: readonly unknown[] = [];
+
+		await compilePlugins(
+			[
+				makePlugin("com.example.asset-context", {
+					register: (meta, pluginCtx) => {
+						pluginCtx.registerAssetResolver(firstResolver);
+						afterFirstRegistration = [
+							...(pluginCtx.getAssetResolvers?.() ?? []),
+						];
+						pluginCtx.registerAssetResolver(secondResolver);
+						afterSecondRegistration = [
+							...(pluginCtx.getAssetResolvers?.() ?? []),
+						];
+						return { meta };
+					},
+				}),
+			],
+			makeCtx(),
+		);
+
+		expect(afterFirstRegistration).toEqual([firstResolver]);
+		expect(afterSecondRegistration).toEqual([firstResolver, secondResolver]);
+	});
 });
 
 describe("compilePlugins — version check", () => {

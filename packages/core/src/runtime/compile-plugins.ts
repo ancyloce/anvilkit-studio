@@ -422,6 +422,7 @@ export async function compilePlugins(
 			assetResolvers.push(resolver);
 			ctx.registerAssetResolver(resolver);
 		},
+		getAssetResolvers: () => assetResolvers,
 	};
 
 	for (const [index, plugin] of plugins.entries()) {
