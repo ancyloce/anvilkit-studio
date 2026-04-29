@@ -30,7 +30,13 @@ import {
 	type AiPromptPanelIssue,
 	type AiPromptPanelSelection,
 } from "@anvilkit/ui";
+import {
+	PresenceLayer,
+	type PresenceStateFrame,
+	usePresence,
+} from "@anvilkit/ui/presence";
 import type { Config, Data } from "@puckeditor/core";
+import { createCollabDemoBundle } from "../../../lib/collab-demo";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
@@ -231,15 +237,47 @@ export default function PuckEditorPage() {
 	// this state is what swaps the AI panel between "Generate page"
 	// and "Regenerate selection".
 	const [aiSelectionActive, setAiSelectionActive] = useState(false);
+	const [collabEnabled, setCollabEnabled] = useState(false);
+	const [collabPeerId, setCollabPeerId] = useState("alice");
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
+
+	// Hoisted Yjs Doc + plugin: rebuilt only when collab toggles or the
+	// peer identity changes. Building the bundle re-instantiates the
+	// adapter, so we keep this memoized so the plugins array stays
+	// stable across re-renders that don't touch collab state.
+	const collabBundle = useMemo(
+		() =>
+			collabEnabled
+				? createCollabDemoBundle(demoConfig as unknown as Config, collabPeerId)
+				: null,
+		[collabEnabled, collabPeerId],
+	);
+
 	// Memoized so the plugins array reference stays stable across
 	// renders. Without this, each render passes a fresh array literal
 	// to `<Studio>`, whose compile effect re-fires, unmounts the
 	// runtime, and resets Puck's data back to the `publishedData`
 	// prop — wiping any AI-generated content instantly.
 	const plugins = useMemo(
-		() => [smokeTestPlugin, htmlExportPlugin, reactExportPlugin, aiCopilotPlugin],
-		[],
+		() => {
+			const base = [
+				smokeTestPlugin,
+				htmlExportPlugin,
+				reactExportPlugin,
+				aiCopilotPlugin,
+			];
+			return collabBundle ? [...base, collabBundle.plugin] : base;
+		},
+		[collabBundle],
+	);
+
+	const presenceSelf = useMemo(
+		() => ({ id: collabPeerId, displayName: collabPeerId }),
+		[collabPeerId],
+	);
+	const { peers: collabPeers, updateSelf } = usePresence(
+		collabBundle?.adapter.presence,
+		{ self: presenceSelf },
 	);
 
 	useEffect(() => {
@@ -249,7 +287,23 @@ export default function PuckEditorPage() {
 		if (incomingData !== null) {
 			setPublishedData(getDemoDataFromSearchParam(incomingData));
 		}
+		setCollabEnabled(params.get("collab") === "1");
+		const peerOverride = params.get("peer");
+		if (peerOverride && peerOverride.length > 0) {
+			setCollabPeerId(peerOverride);
+		}
 	}, []);
+
+	useEffect(() => {
+		if (!collabBundle) return;
+		const handler = (event: MouseEvent) => {
+			updateSelf({
+				cursor: { x: event.clientX, y: event.clientY },
+			});
+		};
+		window.addEventListener("mousemove", handler, { passive: true });
+		return () => window.removeEventListener("mousemove", handler);
+	}, [collabBundle, updateSelf]);
 
 	async function ensureAssetManagerHarness(): Promise<AssetManagerTestHarness> {
 		const harness = await createAssetManagerTestHarness();
@@ -657,13 +711,23 @@ export default function PuckEditorPage() {
 				</section>
 			) : null}
 
-			<section className={styles.panel}>
+			<section
+				className={styles.panel}
+				style={{ position: "relative" }}
+				data-testid="studio-mount"
+				data-collab={collabEnabled ? "1" : "0"}
+			>
 				<Studio
 					puckConfig={demoConfig}
 					data={publishedData}
 					plugins={plugins}
 					onPublish={handlePublish}
 				/>
+				{collabEnabled ? (
+					<PresenceLayer
+						peers={collabPeers as readonly PresenceStateFrame[]}
+					/>
+				) : null}
 			</section>
 
 			<section className={styles.snapshot}>
