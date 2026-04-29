@@ -237,7 +237,15 @@ describe("§4 — HTML exporter walkthrough", () => {
 	});
 
 	it("createHtmlExportPlugin registers both an export format and a header action", async () => {
-		const runtime = await compilePlugins([createHtmlExportPlugin()], makeCtx());
+		const runtime = await compilePlugins(
+			[
+				createHtmlExportPlugin({
+					buildIR: () =>
+						puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK }),
+				}),
+			],
+			makeCtx(),
+		);
 		expect(runtime.exportFormats.has("html")).toBe(true);
 		expect(runtime.headerActions.map((a) => a.id)).toContain("export-html");
 	});
@@ -271,11 +279,17 @@ describe("§5 — Asset inlining", () => {
 				props: {},
 				children: [
 					{
-						id: "hero-1",
-						type: "Hero",
+						id: "blog-1",
+						type: "BlogList",
 						props: {
-							headline: "Assets inline when they fit.",
-							description: "",
+							posts: [
+								{
+									title: "Assets inline when they fit.",
+									description: "Small image payloads become data URLs.",
+									imageSrc: "https://cdn.example.com/tiny.jpg",
+									imageAlt: "Tiny cover",
+								},
+							],
 						},
 					},
 				],
@@ -301,6 +315,7 @@ describe("§5 — Asset inlining", () => {
 		});
 
 		expect(typeof content).toBe("string");
+		expect(content).toContain("data:image/jpeg;base64,AQIDBA");
 		expect(Array.isArray(warnings)).toBe(true);
 	});
 });
