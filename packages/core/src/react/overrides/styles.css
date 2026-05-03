@@ -1,0 +1,34 @@
+/**
+ * @file CSS sidecar for `@anvilkit/core` Studio chrome.
+ *
+ * Imported by host apps via `import "@anvilkit/core/styles.css"`.
+ * Bridges the internal `--ak-studio-*` token contract (PRD §7.2) to
+ * the existing shadcn / Tailwind v4 vars from
+ * `@anvilkit/tailwind-config/shadcn`. Hosts already importing those
+ * tokens automatically theme the Studio chrome — no extra Tailwind
+ * scanning over `packages/core` required.
+ */
+
+@import "tailwindcss";
+
+:root {
+	--ak-studio-bg: var(--background);
+	--ak-studio-fg: var(--foreground);
+	--ak-studio-panel: var(--card);
+	--ak-studio-panel-fg: var(--card-foreground);
+	--ak-studio-border: var(--border);
+	--ak-studio-muted: var(--muted);
+	--ak-studio-muted-fg: var(--muted-foreground);
+	--ak-studio-accent: var(--accent);
+	--ak-studio-accent-fg: var(--accent-foreground);
+	--ak-studio-ring: var(--ring);
+}
+
+.dark {
+	/*
+	 * Intentionally empty: every `--ak-studio-*` var bridges to a
+	 * shadcn var that already flips on `.dark`, so dark mode is
+	 * inherited automatically. Add overrides here only if a Studio
+	 * token needs to diverge from its shadcn source in dark mode.
+	 */
+}
