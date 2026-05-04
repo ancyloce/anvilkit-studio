@@ -19,11 +19,11 @@
 import { Puck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { useChromeProps } from "../context/chrome-props.js";
-import { StudioHeader, type StudioHeaderProps } from "./StudioHeader.js";
-import { StudioSidebar } from "./StudioSidebar.js";
-import { StudioToolbar } from "./StudioToolbar.js";
-import { StudioViewportPreview } from "./StudioViewportPreview.js";
+import { useChromeProps } from "../context/chrome-props";
+import { StudioHeader, type StudioHeaderProps } from "./StudioHeader";
+import { StudioSidebar } from "./StudioSidebar";
+import { StudioToolbar } from "./StudioToolbar";
+import { StudioViewportPreview } from "./StudioViewportPreview";
 
 export type StudioLayoutProps = StudioHeaderProps;
 

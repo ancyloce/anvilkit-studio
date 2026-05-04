@@ -8,24 +8,24 @@
 
 import { type FormEvent, type ReactNode, useEffect, useState } from "react";
 
-import type { StudioAsset } from "../../../../../../types/sidebar.js";
-import { Button } from "../../../../primitives/button.js";
+import type { StudioAsset } from "../../../../../../types/sidebar";
+import { Button } from "../../../../primitives/button";
 import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "../../../../primitives/dialog.js";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../../../../primitives/dialog";
 import {
-	Field,
-	FieldError,
-	FieldGroup,
-	FieldLabel,
-} from "../../../../primitives/field.js";
-import { Input } from "../../../../primitives/input.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "../../../../primitives/field";
+import { Input } from "../../../../primitives/input";
+import { useMsg } from "../../../../state/editor-i18n-store";
 
 export interface RenameAssetDialogProps {
 	readonly asset: StudioAsset | null;

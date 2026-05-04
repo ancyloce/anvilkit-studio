@@ -25,8 +25,8 @@ import {
 	useState,
 } from "react";
 
-import { useMsg } from "../../../state/editor-i18n-store.js";
-import { useLayerSplitRatio } from "../../../state/hooks.js";
+import { useMsg } from "../../../state/editor-i18n-store";
+import { useLayerSplitRatio } from "../../../state/hooks";
 
 const KEY_NUDGE = 0.02;
 const RATIO_MIN = 0.15;

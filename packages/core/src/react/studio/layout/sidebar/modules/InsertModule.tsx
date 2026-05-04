@@ -16,9 +16,9 @@
 import { Puck } from "@puckeditor/core";
 import { type ReactNode, useMemo } from "react";
 
-import { useSetSidebarHeaderActions } from "../SidebarHeaderActionsContext.js";
-import { InsertSearchBar } from "./insert/InsertSearchBar.js";
-import { InsertViewToggle } from "./insert/InsertViewToggle.js";
+import { useSetSidebarHeaderActions } from "../SidebarHeaderActionsContext";
+import { InsertSearchBar } from "./insert/InsertSearchBar";
+import { InsertViewToggle } from "./insert/InsertViewToggle";
 
 export function InsertModule(): ReactNode {
 	// Stable element so the header-actions slot is only updated on

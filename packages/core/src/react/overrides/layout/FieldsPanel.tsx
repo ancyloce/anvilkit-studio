@@ -10,9 +10,9 @@
 import { ChevronRight } from "lucide-react";
 import { type ReactNode } from "react";
 
-import { useMsg } from "../../studio/state/editor-i18n-store.js";
-import { useBreadcrumbs } from "../utils/breadcrumbs.js";
-import { cn } from "../utils/cn.js";
+import { useMsg } from "../../studio/state/editor-i18n-store";
+import { useBreadcrumbs } from "../utils/breadcrumbs";
+import { cn } from "../utils/cn";
 
 interface ItemSelector {
 	readonly index: number;

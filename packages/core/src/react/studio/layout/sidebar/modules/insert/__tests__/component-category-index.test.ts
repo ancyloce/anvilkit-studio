@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import {
 	buildComponentCategoryIndex,
 	getComponentCategory,
-} from "../component-category-index.js";
+} from "../component-category-index";
 
 function fakeConfig(
 	categories: PuckConfig["categories"],

@@ -23,7 +23,7 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useExportStore } from "../export-store.js";
+import { useExportStore } from "../export-store";
 
 const STORAGE_KEY = "anvilkit-core-export";
 

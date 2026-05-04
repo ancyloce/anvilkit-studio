@@ -6,13 +6,13 @@
  * wires the singleton into `<Studio>` behind a dynamic import.
  */
 
-export { mergeOverrides } from "./merge-overrides.js";
+export { mergeOverrides } from "./merge-overrides";
 export {
 	createStudioOverrides,
 	studioOverrides,
-} from "./preset.js";
+} from "./preset";
 export {
 	type CreateStudioOverridesOptions,
 	type DefaultOverrideSlot,
 	type StudioChromeMode,
-} from "./types.js";
+} from "./types";

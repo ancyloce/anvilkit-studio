@@ -9,12 +9,12 @@
 import { type ReactNode } from "react";
 
 import {
-	ToggleGroup,
-	ToggleGroupItem,
-} from "../../../../primitives/toggle-group.js";
-import type { AssetCategoryFilter } from "../../../../state/editor-ui-store.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
-import { useAssetCategoryFilter } from "../../../../state/hooks.js";
+  ToggleGroup,
+  ToggleGroupItem,
+} from "../../../../primitives/toggle-group";
+import type { AssetCategoryFilter } from "../../../../state/editor-ui-store";
+import { useMsg } from "../../../../state/editor-i18n-store";
+import { useAssetCategoryFilter } from "../../../../state/hooks";
 
 export function ImageFilterStrip(): ReactNode {
 	const msg = useMsg();

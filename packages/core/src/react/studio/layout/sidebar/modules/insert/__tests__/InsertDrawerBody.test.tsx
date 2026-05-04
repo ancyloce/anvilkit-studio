@@ -25,17 +25,17 @@ import {
 } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { StudioInsertSection } from "../../../../../../../types/sidebar.js";
+import type { StudioInsertSection } from "../../../../../../../types/sidebar";
 import {
-	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-	useEditorUiStore,
-	type SidebarRegistryStoreApi,
-} from "../../../../../state/index.js";
-import { DEFAULT_INSERT_SECTIONS } from "../default-sections.js";
-import { InsertDrawerBody } from "../InsertDrawerBody.js";
+  createSidebarRegistryStore,
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  SidebarRegistryProvider,
+  useEditorUiStore,
+  type SidebarRegistryStoreApi,
+} from "../../../../../state/index";
+import { DEFAULT_INSERT_SECTIONS } from "../default-sections";
+import { InsertDrawerBody } from "../InsertDrawerBody";
 
 const FAKE_CONFIG: PuckConfig = {
 	categories: {

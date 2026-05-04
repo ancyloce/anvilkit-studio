@@ -23,7 +23,7 @@
  * @see {@link ../../../../../../../docs/PRD/StudioSidebar_Modules_Addition_Claude.md | PRD §5.4}
  */
 
-import type { StudioInsertSection } from "../../../../../../types/sidebar.js";
+import type { StudioInsertSection } from "../../../../../../types/sidebar";
 
 export const DEFAULT_INSERT_SECTIONS: readonly StudioInsertSection[] = [
 	{

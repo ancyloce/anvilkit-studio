@@ -15,8 +15,8 @@ import type {
 	CopyCategoryFilter,
 	EditorTab,
 	EditorUiState,
-} from "./editor-ui-store.js";
-import { useEditorUiStoreApi } from "./EditorUiStoreProvider.js";
+} from "./editor-ui-store";
+import { useEditorUiStoreApi } from "./EditorUiStoreProvider";
 
 export function useEditorUiStore<TResult>(
 	selector: (state: EditorUiState) => TResult,

@@ -39,7 +39,7 @@
 import { useMemo } from "react";
 import { getStrictContext } from "@anvilkit/utils";
 
-import type { StudioRuntime } from "../../runtime/compile-plugins.js";
+import type { StudioRuntime } from "../../runtime/compile-plugins";
 
 /**
  * Strict context pair for the compiled {@link StudioRuntime}.

@@ -30,18 +30,15 @@ import {
 	useRef,
 } from "react";
 
-import { useMsg } from "../../state/editor-i18n-store.js";
+import { useMsg } from "../../state/editor-i18n-store";
+import { useActiveTab, useEditorUiStore } from "../../state/hooks";
+import type { EditorTab } from "../../state/editor-ui-store";
+import { Button } from "../../primitives/button";
 import {
-	useActiveTab,
-	useEditorUiStore,
-} from "../../state/hooks.js";
-import type { EditorTab } from "../../state/editor-ui-store.js";
-import { Button } from "../../primitives/button.js";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../../primitives/tooltip.js";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../primitives/tooltip";
 
 export const SIDEBAR_PANEL_ID = "ak-sidebar-panel";
 

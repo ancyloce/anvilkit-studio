@@ -8,9 +8,9 @@
 import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { StudioCopySnippet } from "../../../../types/sidebar.js";
-import { EditorI18nStoreProvider } from "../editor-i18n-store.js";
-import { useInsertSnippet } from "../useInsertSnippet.js";
+import type { StudioCopySnippet } from "../../../../types/sidebar";
+import { EditorI18nStoreProvider } from "../editor-i18n-store";
+import { useInsertSnippet } from "../useInsertSnippet";
 import type { ReactNode } from "react";
 
 const dispatch = vi.fn();

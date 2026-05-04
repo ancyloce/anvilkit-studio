@@ -7,8 +7,8 @@
  * canvas frame stretches to the surrounding container.
  */
 
-import type { StudioViewport } from "./viewports.js";
-import { DEFAULT_VIEWPORTS } from "./viewports.js";
+import type { StudioViewport } from "./viewports";
+import { DEFAULT_VIEWPORTS } from "./viewports";
 
 export const FULL_WIDTH_VIEWPORT: StudioViewport = {
 	label: "full",

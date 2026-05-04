@@ -14,14 +14,14 @@
 import { X as CloseIcon } from "lucide-react";
 import { type KeyboardEvent, type ReactNode, useCallback } from "react";
 
-import { useMsg } from "../../state/editor-i18n-store.js";
-import { Button } from "../../primitives/button.js";
+import { useMsg } from "../../state/editor-i18n-store";
+import { Button } from "../../primitives/button";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../../primitives/tooltip.js";
-import { SIDEBAR_PANEL_ID } from "./SidebarRail.js";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../primitives/tooltip";
+import { SIDEBAR_PANEL_ID } from "./SidebarRail";
 
 export interface SidebarPanelProps {
 	/** Pre-resolved module title (caller invokes `useMsg`). */

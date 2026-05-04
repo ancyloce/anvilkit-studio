@@ -33,7 +33,7 @@ import { render } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import { mergeOverrides } from "../merge-overrides.js";
+import { mergeOverrides } from "../merge-overrides";
 
 /**
  * Synthetic render helper that takes a merged `fieldLabel`

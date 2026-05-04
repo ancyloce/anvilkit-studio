@@ -9,16 +9,16 @@ import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
-	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-} from "../../../../state/index.js";
+  createSidebarRegistryStore,
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  SidebarRegistryProvider,
+} from "../../../../state/index";
 import {
-	SidebarHeaderActionsProvider,
-	useSidebarHeaderActions,
-} from "../../SidebarHeaderActionsContext.js";
-import { InsertModule } from "../InsertModule.js";
+  SidebarHeaderActionsProvider,
+  useSidebarHeaderActions,
+} from "../../SidebarHeaderActionsContext";
+import { InsertModule } from "../InsertModule";
 
 vi.mock("@puckeditor/core", () => ({
 	Puck: { Components: () => <div data-testid="puck-components-mock" /> },

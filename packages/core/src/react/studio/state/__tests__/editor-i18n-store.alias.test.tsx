@@ -16,10 +16,7 @@ import { renderHook } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import {
-	EditorI18nStoreProvider,
-	useMsg,
-} from "../editor-i18n-store.js";
+import { EditorI18nStoreProvider, useMsg } from "../editor-i18n-store";
 
 function wrap(messages?: Readonly<Record<string, string>>) {
 	return ({ children }: { children: ReactNode }) => (

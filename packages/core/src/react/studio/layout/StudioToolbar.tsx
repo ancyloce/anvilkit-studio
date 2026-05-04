@@ -16,29 +16,19 @@ import {
 } from "lucide-react";
 import { type ReactNode, useCallback, useMemo } from "react";
 
-import { useMsg } from "../state/editor-i18n-store.js";
+import { useMsg } from "../state/editor-i18n-store";
+import { useCanvasViewport, useCanvasZoom } from "../state/hooks";
+import { useStudioPagesSource } from "../context/pages-source";
+import { FULL_WIDTH_VIEWPORTS, type StudioViewport } from "../ui/index";
+import { Button } from "../primitives/button";
 import {
-	useCanvasViewport,
-	useCanvasZoom,
-} from "../state/hooks.js";
-import { useStudioPagesSource } from "../context/pages-source.js";
-import {
-	FULL_WIDTH_VIEWPORTS,
-	type StudioViewport,
-} from "../ui/index.js";
-import { Button } from "../primitives/button.js";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "../primitives/dropdown-menu.js";
-import { Separator } from "../primitives/separator.js";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../primitives/tooltip.js";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../primitives/dropdown-menu";
+import { Separator } from "../primitives/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
 
 const ZOOM_STEP = 0.1;
 const ZOOM_MIN = 0.5;

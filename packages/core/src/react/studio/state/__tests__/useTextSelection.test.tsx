@@ -9,7 +9,7 @@
 import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { useSelectedItem, useTextSelection } from "../useTextSelection.js";
+import { useSelectedItem, useTextSelection } from "../useTextSelection";
 
 let mockSelectedItem: { readonly type: string; readonly props: Record<string, unknown> } | null = null;
 

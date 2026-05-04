@@ -14,12 +14,12 @@ import { Inbox } from "lucide-react";
 import type { ReactNode } from "react";
 
 import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyMedia,
-} from "../../../../primitives/empty.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+} from "../../../../primitives/empty";
+import { useMsg } from "../../../../state/editor-i18n-store";
 
 export interface InsertEmptyStateProps {
 	readonly variant: "library" | "search";

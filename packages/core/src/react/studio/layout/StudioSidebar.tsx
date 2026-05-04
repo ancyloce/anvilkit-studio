@@ -14,26 +14,23 @@
 
 import { type ReactNode, type RefObject, useCallback, useRef } from "react";
 
-import { useMsg } from "../state/editor-i18n-store.js";
+import { useMsg } from "../state/editor-i18n-store";
+import { useActiveTab, useEditorUiStore } from "../state/hooks";
+import type { EditorTab } from "../state/editor-ui-store";
+import { ImageModule } from "./sidebar/modules/ImageModule";
+import { InsertModule } from "./sidebar/modules/InsertModule";
+import { LayerModule } from "./sidebar/modules/LayerModule";
+import { TextModule } from "./sidebar/modules/TextModule";
 import {
-	useActiveTab,
-	useEditorUiStore,
-} from "../state/hooks.js";
-import type { EditorTab } from "../state/editor-ui-store.js";
-import { ImageModule } from "./sidebar/modules/ImageModule.js";
-import { InsertModule } from "./sidebar/modules/InsertModule.js";
-import { LayerModule } from "./sidebar/modules/LayerModule.js";
-import { TextModule } from "./sidebar/modules/TextModule.js";
+  SidebarHeaderActionsProvider,
+  useSidebarHeaderActions,
+} from "./sidebar/SidebarHeaderActionsContext";
 import {
-	SidebarHeaderActionsProvider,
-	useSidebarHeaderActions,
-} from "./sidebar/SidebarHeaderActionsContext.js";
-import {
-	SidebarRail,
-	type SidebarRailHandle,
-	railTabId,
-} from "./sidebar/SidebarRail.js";
-import { SidebarPanel } from "./sidebar/SidebarPanel.js";
+  SidebarRail,
+  type SidebarRailHandle,
+  railTabId,
+} from "./sidebar/SidebarRail";
+import { SidebarPanel } from "./sidebar/SidebarPanel";
 
 const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
 	insert: "studio.module.insert.name",

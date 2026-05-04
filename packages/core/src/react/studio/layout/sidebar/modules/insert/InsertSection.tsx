@@ -13,14 +13,14 @@
 import type { ReactNode } from "react";
 
 import {
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "../../../../primitives/accordion.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
-import type { ComponentViewMode } from "../../../../state/editor-ui-store.js";
-import { InsertTileGrid } from "./InsertTileGrid.js";
-import { InsertTileList } from "./InsertTileList.js";
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../../../primitives/accordion";
+import { useMsg } from "../../../../state/editor-i18n-store";
+import type { ComponentViewMode } from "../../../../state/editor-ui-store";
+import { InsertTileGrid } from "./InsertTileGrid";
+import { InsertTileList } from "./InsertTileList";
 
 export interface InsertSectionProps {
 	readonly id: string;

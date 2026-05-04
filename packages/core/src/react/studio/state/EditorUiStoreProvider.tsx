@@ -17,10 +17,7 @@ import {
 	useState,
 } from "react";
 
-import {
-	createEditorUiStore,
-	type EditorUiStoreApi,
-} from "./editor-ui-store.js";
+import { createEditorUiStore, type EditorUiStoreApi } from "./editor-ui-store";
 
 const EditorUiStoreContext = createContext<EditorUiStoreApi | null>(null);
 

@@ -10,21 +10,18 @@
  * editor stack settles (PRD §12 follow-up).
  */
 
-import type {
-	FieldProps,
-	Overrides as PuckOverrides,
-} from "@puckeditor/core";
+import type { FieldProps, Overrides as PuckOverrides } from "@puckeditor/core";
 import type { FunctionComponent, ReactNode } from "react";
 
-import { ArrayField } from "./ArrayField.js";
-import { ExternalField } from "./ExternalField.js";
-import { NumberField } from "./NumberField.js";
-import { ObjectField } from "./ObjectField.js";
-import { RadioField } from "./RadioField.js";
-import { SelectField } from "./SelectField.js";
-import { SlotField } from "./SlotField.js";
-import { TextareaField } from "./TextareaField.js";
-import { TextField } from "./TextField.js";
+import { ArrayField } from "./ArrayField";
+import { ExternalField } from "./ExternalField";
+import { NumberField } from "./NumberField";
+import { ObjectField } from "./ObjectField";
+import { RadioField } from "./RadioField";
+import { SelectField } from "./SelectField";
+import { SlotField } from "./SlotField";
+import { TextareaField } from "./TextareaField";
+import { TextField } from "./TextField";
 
 export {
 	ArrayField,
@@ -34,8 +31,8 @@ export {
 	RadioField,
 	SelectField,
 	SlotField,
-	TextField,
 	TextareaField,
+	TextField,
 };
 
 export type FieldTypeRenderer = FunctionComponent<

@@ -10,7 +10,7 @@
 
 import { createContext, type ReactNode, useContext } from "react";
 
-import type { SidebarRegistryStoreApi } from "./sidebar-registry-store.js";
+import type { SidebarRegistryStoreApi } from "./sidebar-registry-store";
 
 const SidebarRegistryContext = createContext<SidebarRegistryStoreApi | null>(
 	null,

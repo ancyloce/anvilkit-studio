@@ -8,17 +8,20 @@
  */
 
 import type {
-	ExternalField as PuckExternalField,
-	FieldProps,
+  FieldProps,
+  ExternalField as PuckExternalField,
 } from "@puckeditor/core";
 import { ChevronDown, X } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 
-import { Button } from "../../../studio/primitives/button.js";
-import { Input } from "../../../studio/primitives/input.js";
-import { ScrollArea } from "../../../studio/primitives/scroll-area.js";
+import { Button } from "@/primitives/button";
+import { Card, CardContent } from "@/primitives/card";
+import { Empty, EmptyDescription, EmptyTitle } from "@/primitives/empty";
+import { Input } from "@/primitives/input";
+import { ScrollArea } from "@/primitives/scroll-area";
+import { Spinner } from "@/primitives/spinner";
 
-import type { FieldRendererProps } from "./TextField.js";
+import type { FieldRendererProps } from "./TextField";
 
 interface ExternalFieldRendererProps
 	extends FieldProps<
@@ -117,80 +120,85 @@ export function ExternalField({
 	}, [open, query, field]);
 
 	const summary =
-		value === null || value === undefined
-			? null
-			: (field.getItemSummary?.(value, undefined) as ReactNode | undefined) ??
-				summarize(value);
+    value === null || value === undefined
+      ? null
+      : ((field.getItemSummary?.(value, undefined) as ReactNode | undefined) ??
+        summarize(value));
 
 	return (
-		<div className="flex flex-col gap-1">
-			<div className="flex items-center gap-1">
-				<Button
-					id={id}
-					variant="outline"
-					size="sm"
-					disabled={readOnly}
-					onClick={() => setOpen((p) => !p)}
-				>
-					<span>{summary === null ? (field.placeholder ?? "Select…") : summary}</span>
-					<ChevronDown />
-				</Button>
-				{value !== null && value !== undefined && readOnly !== true ? (
-					<Button
-						variant="ghost"
-						size="icon"
-						aria-label="Clear"
-						onClick={() => onChange(null as never)}
-					>
-						<X />
-					</Button>
-				) : null}
-			</div>
-			{open ? (
-				<div className="rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] p-2">
-					{field.showSearch !== false ? (
-						<Input
-							value={query}
-							onChange={(event) => setQuery(event.target.value)}
-							placeholder="Search…"
-							name={`${name}-search`}
-						/>
-					) : null}
-					<ScrollArea className="mt-2 max-h-48">
-						<div className="px-1">
-							{loading ? (
-								<p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
-									Loading…
-								</p>
-							) : rows.length === 0 ? (
-								<p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
-									No results.
-								</p>
-							) : (
-								<ul className="flex flex-col">
-									{rows.map((row) => (
-										<li key={rowKey(row)}>
-											<Button
-												variant="ghost"
-												size="sm"
-												className="w-full rounded-sm px-2 py-1 text-left text-sm hover:bg-[var(--ak-studio-muted)]"
-												onClick={() => {
-													onChange(row.mapped as never);
-													setOpen(false);
-												}}
-											>
-												{row.summary}
-											</Button>
-										</li>
-									))}
-								</ul>
-							)}
-						</div>
-					</ScrollArea>
-				</div>
-			) : null}
-		</div>
-	);
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center gap-1">
+        <Button
+          id={id}
+          variant="outline"
+          size="sm"
+          disabled={readOnly}
+          onClick={() => setOpen((p) => !p)}
+        >
+          <span>
+            {summary === null ? (field.placeholder ?? "Select…") : summary}
+          </span>
+          <ChevronDown />
+        </Button>
+        {value !== null && value !== undefined && readOnly !== true ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Clear"
+            onClick={() => onChange(null as never)}
+          >
+            <X />
+          </Button>
+        ) : null}
+      </div>
+      {open ? (
+        <Card size="sm">
+          <CardContent className="flex flex-col gap-2">
+            {field.showSearch !== false ? (
+              <Input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search…"
+                name={`${name}-search`}
+              />
+            ) : null}
+            <ScrollArea className="max-h-48">
+              {loading ? (
+                <Empty className="border-0 p-3">
+                  <Spinner />
+                </Empty>
+              ) : rows.length === 0 ? (
+                <Empty className="border-0 p-3">
+                  <EmptyTitle>No results</EmptyTitle>
+                  <EmptyDescription>
+                    Try a different search term.
+                  </EmptyDescription>
+                </Empty>
+              ) : (
+                <ul className="flex flex-col">
+                  {rows.map((row) => (
+                    <li key={rowKey(row)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-start"
+                        onClick={() => {
+                          onChange(row.mapped as never);
+                          setOpen(false);
+                        }}
+                      >
+                        {row.summary}
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      ) : null}
+    </div>
+  );
 }
 
 export type { FieldProps as PuckFieldProps };

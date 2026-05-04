@@ -11,25 +11,20 @@
  */
 
 import type {
-	ArrayField as PuckArrayField,
 	FieldProps,
+	ArrayField as PuckArrayField,
 } from "@puckeditor/core";
-import {
-	ArrowDown,
-	ArrowUp,
-	Copy,
-	Plus,
-	Trash2,
-} from "lucide-react";
-import {
-	Children,
-	type ReactNode,
-	isValidElement,
-} from "react";
+import { ArrowDown, ArrowUp, Copy, Plus, Trash2 } from "lucide-react";
+import { Children, isValidElement, type ReactNode } from "react";
 
-import { Button } from "../../../studio/primitives/button.js";
-
-import type { FieldRendererProps } from "./TextField.js";
+import { Button } from "@/primitives/button";
+import {
+	Card,
+	CardAction,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@/primitives/card";
 
 type ArrayValue = readonly Record<string, unknown>[];
 
@@ -108,18 +103,18 @@ export function ArrayField({
 	return (
 		<div className="flex flex-col gap-1.5">
 			{items.map((_item, index) => (
-				<div
+				<Card
 					// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
 					key={index}
-					className="rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] p-2"
+					size="sm"
 				>
-					<div className="mb-1.5 flex items-center justify-between gap-2">
-						<span className="text-xs font-medium text-[var(--ak-studio-muted-fg)]">
+					<CardHeader>
+						<CardTitle className="text-xs text-muted-foreground">
 							{field.getItemSummary?.(items[index] ?? {}, index) ??
 								`Item ${index + 1}`}
-						</span>
+						</CardTitle>
 						{readOnly !== true ? (
-							<div className="flex items-center gap-0.5">
+							<CardAction className="flex items-center gap-0.5">
 								<Button
 									variant="ghost"
 									size="icon"
@@ -156,11 +151,11 @@ export function ArrayField({
 								>
 									<Trash2 />
 								</Button>
-							</div>
+							</CardAction>
 						) : null}
-					</div>
-					{childArray[index] ?? null}
-				</div>
+					</CardHeader>
+					<CardContent>{childArray[index] ?? null}</CardContent>
+				</Card>
 			))}
 			{readOnly !== true ? (
 				<Button

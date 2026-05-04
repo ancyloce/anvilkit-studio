@@ -23,9 +23,9 @@
 import { useGetPuck, type ComponentData as PuckComponentData } from "@puckeditor/core";
 import { useCallback } from "react";
 
-import type { StudioCopySnippet } from "../../../types/sidebar.js";
+import type { StudioCopySnippet } from "../../../types/sidebar";
 import { toast } from "sonner";
-import { useMsg } from "./editor-i18n-store.js";
+import { useMsg } from "./editor-i18n-store";
 
 export type InsertSnippetCommand = (snippet: StudioCopySnippet) => void;
 

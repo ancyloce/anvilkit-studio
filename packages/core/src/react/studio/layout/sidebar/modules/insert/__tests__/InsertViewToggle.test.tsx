@@ -8,11 +8,11 @@ import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	useEditorUiStore,
-} from "../../../../../state/index.js";
-import { InsertViewToggle } from "../InsertViewToggle.js";
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  useEditorUiStore,
+} from "../../../../../state/index";
+import { InsertViewToggle } from "../InsertViewToggle";
 
 afterEach(cleanup);
 

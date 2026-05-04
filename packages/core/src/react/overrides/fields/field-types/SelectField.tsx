@@ -1,18 +1,29 @@
 /**
- * @file Default renderer for Puck `select` fields. Uses a native
- * `<select>` for v1 — the chrome's other dropdowns can move to Base
- * UI Select later if richer keyboard / search behaviors land.
+ * @file Default renderer for Puck `select` fields. Built on the Base
+ * UI Select primitive for richer keyboard / search behavior.
+ *
+ * Puck options can carry any serializable value (string, number,
+ * boolean, object). Base UI's Item only accepts a string `value`, so
+ * we serialize each option's value through `optionKey()` and resolve
+ * back to the original on selection. The `items` prop carries the
+ * key→label map so `<SelectValue>` renders the label automatically.
  */
 
 import type {
 	FieldProps,
 	SelectField as PuckSelectField,
 } from "@puckeditor/core";
-import { type ReactNode } from "react";
+import { type ReactNode, useMemo } from "react";
 
-import { cn } from "../../utils/cn.js";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/primitives/select";
 
-import type { FieldRendererProps } from "./TextField.js";
+import type { FieldRendererProps } from "./TextField";
 
 type OptionValue = string | number | boolean | undefined | null | object;
 
@@ -31,31 +42,48 @@ export function SelectField({
 	id,
 	name,
 }: FieldRendererProps<PuckSelectField, OptionValue | undefined>): ReactNode {
+	const items = useMemo(
+    () =>
+      field.options.map((option) => ({
+        label: option.label,
+        value: optionKey(option.value as OptionValue),
+      })),
+    [field.options],
+  );
+
 	return (
-		<select
-			id={id}
-			name={name}
-			value={value === undefined ? "" : optionKey(value)}
-			disabled={readOnly}
-			className={cn(
-				"flex h-8 w-full rounded-md border border-[var(--ak-studio-border)] bg-transparent px-2 text-sm",
-				"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]",
-				"disabled:cursor-not-allowed disabled:opacity-50",
-			)}
-			onChange={(event) => {
-				if (readOnly === true) return;
-				const raw = event.target.value;
-				const match = field.options.find((opt) => optionKey(opt.value) === raw);
-				onChange((match?.value ?? raw) as OptionValue);
-			}}
-		>
-			{field.options.map((option) => (
-				<option key={optionKey(option.value)} value={optionKey(option.value)}>
-					{option.label}
-				</option>
-			))}
-		</select>
-	);
+    <Select
+      items={items}
+      value={value === undefined ? null : optionKey(value)}
+      onValueChange={(next) => {
+        if (readOnly === true) return;
+        if (next === null || next === "") {
+          onChange(undefined as never);
+          return;
+        }
+        const match = field.options.find(
+          (opt) => optionKey(opt.value as OptionValue) === next,
+        );
+        onChange((match?.value ?? next) as never);
+      }}
+      disabled={readOnly}
+      name={name}
+    >
+      <SelectTrigger id={id} className="w-full">
+        <SelectValue placeholder="Select…" />
+      </SelectTrigger>
+      <SelectContent>
+        {field.options.map((option) => (
+          <SelectItem
+            key={optionKey(option.value as OptionValue)}
+            value={optionKey(option.value as OptionValue)}
+          >
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 }
 
 export type { FieldProps as PuckFieldProps };

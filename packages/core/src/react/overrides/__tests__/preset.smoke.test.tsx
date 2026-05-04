@@ -13,7 +13,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 afterEach(cleanup);
 
-import { studioOverrides } from "../preset.js";
+import { studioOverrides } from "../preset";
 
 describe("studioOverrides preset smoke", () => {
 	it("populates every chrome-owned slot", () => {

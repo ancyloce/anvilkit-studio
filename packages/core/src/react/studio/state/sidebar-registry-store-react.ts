@@ -9,8 +9,8 @@
 
 import { useStore } from "zustand";
 
-import type { SidebarRegistryState } from "./sidebar-registry-store.js";
-import { useSidebarRegistryStoreApi } from "./SidebarRegistryProvider.js";
+import type { SidebarRegistryState } from "./sidebar-registry-store";
+import { useSidebarRegistryStoreApi } from "./SidebarRegistryProvider";
 
 /**
  * Generic selector hook for the sidebar registry. Throws when called

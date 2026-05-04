@@ -9,9 +9,8 @@ import type {
 } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { cn } from "../../utils/cn.js";
-
-import type { FieldRendererProps } from "./TextField.js";
+import { Card, CardContent } from "@/primitives/card";
+import { cn } from "@/utils/cn";
 
 interface ObjectFieldRendererProps
 	extends FieldProps<
@@ -27,14 +26,9 @@ export function ObjectField({
 	children,
 }: ObjectFieldRendererProps): ReactNode {
 	return (
-		<div
-			className={cn(
-				"flex flex-col gap-2 rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] p-2",
-				readOnly === true ? "opacity-70" : null,
-			)}
-		>
-			{children}
-		</div>
+		<Card size="sm" className={cn(readOnly === true && "opacity-70")}>
+			<CardContent className="flex flex-col gap-2">{children}</CardContent>
+		</Card>
 	);
 }
 

@@ -4,7 +4,7 @@
  * Wraps Puck's iframe slot, injects the `--ak-studio-*` CSS-var
  * snapshot (`IFRAME_THEME_CSS`) into the iframe's `<head>`, and
  * forcibly resets host page-level scroll/sizing rules that Puck's
- * `CopyHostStyles` mirrors into the iframe (e.g. Next.js scaffold
+ * `CopyHostStyles` mirrors into the iframe (e.g. Next scaffold
  * `html, body { overflow-x: hidden }`, which the CSS spec promotes
  * to a second scroll container stacked on the iframe's root one).
  *
@@ -17,10 +17,7 @@
 
 import { type ReactNode, useEffect } from "react";
 
-import {
-	IFRAME_THEME_CSS,
-	IFRAME_THEME_STYLE_ID,
-} from "../theme/iframe-theme.js";
+import { IFRAME_THEME_CSS, IFRAME_THEME_STYLE_ID } from "../theme/iframe-theme";
 
 export interface CanvasIframeOverrideProps {
 	readonly children: ReactNode;

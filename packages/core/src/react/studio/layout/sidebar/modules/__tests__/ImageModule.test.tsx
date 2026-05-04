@@ -11,16 +11,16 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { StudioAssetSource } from "../../../../../../types/sidebar.js";
+import type { StudioAssetSource } from "../../../../../../types/sidebar";
 import {
-	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-	type SidebarRegistryStoreApi,
-} from "../../../../state/index.js";
-import { SidebarHeaderActionsProvider } from "../../SidebarHeaderActionsContext.js";
-import { ImageModule } from "../ImageModule.js";
+  createSidebarRegistryStore,
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  SidebarRegistryProvider,
+  type SidebarRegistryStoreApi,
+} from "../../../../state/index";
+import { SidebarHeaderActionsProvider } from "../../SidebarHeaderActionsContext";
+import { ImageModule } from "../ImageModule";
 
 const dispatch = vi.fn();
 const mockPuckSnapshot = {

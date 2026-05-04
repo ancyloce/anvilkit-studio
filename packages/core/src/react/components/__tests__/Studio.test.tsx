@@ -43,14 +43,11 @@ import {
 	type MockInstance,
 } from "vitest";
 
-import type {
-	StudioPlugin,
-	StudioPluginMeta,
-} from "../../../types/plugin.js";
-import { useAiStore } from "../../stores/ai-store.js";
-import { useExportStore } from "../../stores/export-store.js";
-import { useStudio } from "../../hooks/use-studio.js";
-import { Studio } from "../Studio.js";
+import type { StudioPlugin, StudioPluginMeta } from "../../../types/plugin";
+import { useAiStore } from "../../stores/ai-store";
+import { useExportStore } from "../../stores/export-store";
+import { useStudio } from "../../hooks/use-studio";
+import { Studio } from "../Studio";
 
 // ----------------------------------------------------------------------
 // Mock `@puckeditor/core` with a minimal stand-in.
@@ -617,7 +614,7 @@ describe("<Studio> — legacy aiHost compat", () => {
 
 		// Reimport Studio AFTER resetting modules so its dynamic
 		// import of `ai-host-adapter` pulls the fresh instance.
-		const { Studio: FreshStudio } = await import("../Studio.js");
+		const { Studio: FreshStudio } = await import("../Studio");
 
 		const { container, unmount } = render(
 			<FreshStudio

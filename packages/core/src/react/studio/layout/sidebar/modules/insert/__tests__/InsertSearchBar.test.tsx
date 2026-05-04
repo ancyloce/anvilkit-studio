@@ -8,11 +8,11 @@ import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	useEditorUiStore,
-} from "../../../../../state/index.js";
-import { InsertSearchBar } from "../InsertSearchBar.js";
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  useEditorUiStore,
+} from "../../../../../state/index";
+import { InsertSearchBar } from "../InsertSearchBar";
 
 afterEach(() => {
 	cleanup();

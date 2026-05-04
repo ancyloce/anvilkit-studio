@@ -28,25 +28,25 @@ import {
 } from "react";
 
 import type {
-	StudioAsset,
-	StudioAssetUploadEvent,
-} from "../../../../../types/sidebar.js";
+  StudioAsset,
+  StudioAssetUploadEvent,
+} from "../../../../../types/sidebar";
 import { toast } from "sonner";
-import { useMsg } from "../../../state/editor-i18n-store.js";
-import { useAssetCategoryFilter } from "../../../state/hooks.js";
-import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react.js";
-import { useSetSidebarHeaderActions } from "../SidebarHeaderActionsContext.js";
-import { EmptyState } from "../shared/EmptyState.js";
-import { AssetGrid, type UploadingTile } from "./image/AssetGrid.js";
-import { ImageFilterStrip } from "./image/ImageFilterStrip.js";
-import { ImageSearchBar } from "./image/ImageSearchBar.js";
-import { ImageUploadButton } from "./image/ImageUploadButton.js";
-import { RenameAssetDialog } from "./image/RenameAssetDialog.js";
-import { UploadDropZone } from "./image/UploadDropZone.js";
+import { useMsg } from "../../../state/editor-i18n-store";
+import { useAssetCategoryFilter } from "../../../state/hooks";
+import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react";
+import { useSetSidebarHeaderActions } from "../SidebarHeaderActionsContext";
+import { EmptyState } from "../shared/EmptyState";
+import { AssetGrid, type UploadingTile } from "./image/AssetGrid";
+import { ImageFilterStrip } from "./image/ImageFilterStrip";
+import { ImageSearchBar } from "./image/ImageSearchBar";
+import { ImageUploadButton } from "./image/ImageUploadButton";
+import { RenameAssetDialog } from "./image/RenameAssetDialog";
+import { UploadDropZone } from "./image/UploadDropZone";
 import {
-	kindToComponentName,
-	kindToPropsForInsert,
-} from "./image/infer-asset-kind.js";
+  kindToComponentName,
+  kindToPropsForInsert,
+} from "./image/infer-asset-kind";
 
 const PROGRESS_INITIAL = 0.05;
 

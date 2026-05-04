@@ -31,7 +31,7 @@ import type {
 	StudioInsertSection,
 	StudioLayerQuickAdd,
 	StudioSidebarUnregister,
-} from "../../../types/sidebar.js";
+} from "../../../types/sidebar";
 
 export interface SidebarRegistryState {
 	readonly insertSections: ReadonlyMap<string, StudioInsertSection>;

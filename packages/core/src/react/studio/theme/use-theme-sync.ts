@@ -18,11 +18,11 @@
 
 import { useEffect } from "react";
 
-import { useThemeStore } from "../../stores/theme-store.js";
+import { useThemeStore } from "../../stores/theme-store";
 import {
 	IFRAME_THEME_CSS,
 	IFRAME_THEME_STYLE_ID,
-} from "./iframe-theme.js";
+} from "./iframe-theme";
 
 const MEDIA_QUERY = "(prefers-color-scheme: dark)";
 

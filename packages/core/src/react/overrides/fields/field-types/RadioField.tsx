@@ -1,6 +1,12 @@
 /**
- * @file Default renderer for Puck `radio` fields. Plain HTML radios —
- * accessibility comes free.
+ * @file Default renderer for Puck `radio` fields. Built on the
+ * ToggleGroup primitive — Base UI's exclusive-select semantics
+ * (`multiple: false`) match radio behavior, with a segmented-control
+ * presentation.
+ *
+ * Puck options can carry any serializable value, so each option is
+ * serialized to a string via `optionKey()` and resolved back on
+ * selection.
  */
 
 import type {
@@ -9,9 +15,9 @@ import type {
 } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { cn } from "../../utils/cn.js";
+import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
 
-import type { FieldRendererProps } from "./TextField.js";
+import type { FieldRendererProps } from "./TextField";
 
 type OptionValue = string | number | boolean | undefined | null | object;
 
@@ -23,48 +29,41 @@ function optionKey(value: OptionValue): string {
 }
 
 export function RadioField({
-	field,
-	value,
-	onChange,
-	readOnly,
-	id,
-	name,
+  field,
+  value,
+  onChange,
+  readOnly,
 }: FieldRendererProps<PuckRadioField, OptionValue | undefined>): ReactNode {
-	const groupName = id ?? name;
-	return (
-		<div role="radiogroup" className="flex flex-col gap-1">
-			{field.options.map((option) => {
-				const optionId = `${groupName}-${optionKey(option.value)}`;
-				const checked =
-					value !== undefined && optionKey(option.value) === optionKey(value);
-				return (
-					<label
-						key={optionId}
-						htmlFor={optionId}
-						className={cn(
-							"flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 text-sm",
-							"hover:bg-[var(--ak-studio-muted)]",
-							readOnly === true ? "cursor-not-allowed opacity-70" : null,
-						)}
-					>
-						<input
-							id={optionId}
-							type="radio"
-							name={groupName}
-							value={optionKey(option.value)}
-							checked={checked}
-							disabled={readOnly}
-							onChange={() => {
-								if (readOnly === true) return;
-								onChange(option.value as OptionValue);
-							}}
-						/>
-						<span>{option.label}</span>
-					</label>
-				);
-			})}
-		</div>
-	);
+  const selected = value === undefined ? [] : [optionKey(value)];
+
+  return (
+    <ToggleGroup
+      value={selected}
+      onValueChange={(next) => {
+        if (readOnly === true) return;
+        const key = next[0];
+        if (key === undefined) {
+          onChange(undefined as never);
+          return;
+        }
+        const match = field.options.find(
+          (opt) => optionKey(opt.value as OptionValue) === key,
+        );
+        onChange((match?.value ?? key) as never);
+      }}
+      disabled={readOnly}
+      variant="outline"
+    >
+      {field.options.map((option) => (
+        <ToggleGroupItem
+          key={optionKey(option.value as OptionValue)}
+          value={optionKey(option.value as OptionValue)}
+        >
+          {option.label}
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
+  );
 }
 
 export type { FieldProps as PuckFieldProps };

@@ -25,10 +25,10 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type {
-	StudioHeaderAction,
-	StudioPluginContext,
-} from "../../../../types/plugin.js";
-import { HeaderActions } from "../HeaderActions.js";
+  StudioHeaderAction,
+  StudioPluginContext,
+} from "../../../../types/plugin";
+import { HeaderActions } from "../HeaderActions";
 
 afterEach(cleanup);
 

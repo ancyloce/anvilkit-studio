@@ -6,7 +6,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { FULL_WIDTH_VIEWPORTS, mergeStudioUi } from "../index.js";
+import { FULL_WIDTH_VIEWPORTS, mergeStudioUi } from "../index";
 
 describe("mergeStudioUi", () => {
 	it("returns the full-width viewport defaults when consumer is undefined", () => {

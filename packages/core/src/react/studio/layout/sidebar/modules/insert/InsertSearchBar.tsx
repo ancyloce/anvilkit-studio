@@ -23,12 +23,12 @@ import {
 } from "react";
 
 import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-} from "../../../../primitives/input-group.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
-import { useDrawerSearch } from "../../../../state/hooks.js";
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../../../../primitives/input-group";
+import { useMsg } from "../../../../state/editor-i18n-store";
+import { useDrawerSearch } from "../../../../state/hooks";
 
 const DEBOUNCE_MS = 150;
 

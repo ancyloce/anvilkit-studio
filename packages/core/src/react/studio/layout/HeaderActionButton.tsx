@@ -9,16 +9,12 @@ import * as Icons from "lucide-react";
 import { type ComponentType, type ReactNode, useCallback, useState } from "react";
 
 import type {
-	StudioHeaderAction,
-	StudioPluginContext,
-} from "../../../types/plugin.js";
-import { Button } from "../primitives/button.js";
-import { DropdownMenuItem } from "../primitives/dropdown-menu.js";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../primitives/tooltip.js";
+  StudioHeaderAction,
+  StudioPluginContext,
+} from "../../../types/plugin";
+import { Button } from "../primitives/button";
+import { DropdownMenuItem } from "../primitives/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
 
 type LucideIconComponent = ComponentType<{ className?: string }>;
 

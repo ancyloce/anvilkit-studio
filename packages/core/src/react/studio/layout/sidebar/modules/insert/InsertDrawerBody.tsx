@@ -22,19 +22,19 @@ import {
 	useMemo,
 } from "react";
 
-import type { StudioInsertSection } from "../../../../../../types/sidebar.js";
-import { Accordion } from "../../../../primitives/accordion.js";
+import type { StudioInsertSection } from "../../../../../../types/sidebar";
+import { Accordion } from "../../../../primitives/accordion";
 import {
-	useComponentViewMode,
-	useDrawerSearch,
-	useInsertSectionsExpanded,
-	useSidebarRegistry,
-} from "../../../../state/index.js";
-import { buildComponentCategoryIndex } from "./component-category-index.js";
-import { InsertEmptyState } from "./InsertEmptyState.js";
-import { InsertSection } from "./InsertSection.js";
-import { InsertTileGrid } from "./InsertTileGrid.js";
-import { InsertTileList } from "./InsertTileList.js";
+  useComponentViewMode,
+  useDrawerSearch,
+  useInsertSectionsExpanded,
+  useSidebarRegistry,
+} from "../../../../state/index";
+import { buildComponentCategoryIndex } from "./component-category-index";
+import { InsertEmptyState } from "./InsertEmptyState";
+import { InsertSection } from "./InsertSection";
+import { InsertTileGrid } from "./InsertTileGrid";
+import { InsertTileList } from "./InsertTileList";
 
 interface DrawerItemElementProps {
 	readonly name?: string;

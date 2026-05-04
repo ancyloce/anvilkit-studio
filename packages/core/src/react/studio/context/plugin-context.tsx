@@ -18,7 +18,7 @@
 
 import { createContext, type ReactNode, useContext } from "react";
 
-import type { StudioPluginContext } from "../../../types/plugin.js";
+import type { StudioPluginContext } from "../../../types/plugin";
 
 const StudioPluginContextContext =
 	createContext<StudioPluginContext | null>(null);

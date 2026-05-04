@@ -13,9 +13,9 @@ import type {
 } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { Input } from "../../../studio/primitives/input.js";
+import { Input } from "@/primitives/input";
 
-import type { FieldRendererProps } from "./TextField.js";
+import type { FieldRendererProps } from "./TextField";
 
 export function NumberField({
 	field,

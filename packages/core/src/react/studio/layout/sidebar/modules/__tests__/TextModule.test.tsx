@@ -12,16 +12,16 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { StudioCopySnippetPack } from "../../../../../../types/sidebar.js";
+import type { StudioCopySnippetPack } from "../../../../../../types/sidebar";
 import {
-	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-	type SidebarRegistryStoreApi,
-} from "../../../../state/index.js";
-import { SidebarHeaderActionsProvider } from "../../SidebarHeaderActionsContext.js";
-import { TextModule } from "../TextModule.js";
+  createSidebarRegistryStore,
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  SidebarRegistryProvider,
+  type SidebarRegistryStoreApi,
+} from "../../../../state/index";
+import { SidebarHeaderActionsProvider } from "../../SidebarHeaderActionsContext";
+import { TextModule } from "../TextModule";
 
 const dispatch = vi.fn();
 const getSelectorForId = vi.fn();

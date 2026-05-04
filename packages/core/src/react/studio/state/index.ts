@@ -16,12 +16,12 @@ export {
 	type EditorTab,
 	type EditorUiState,
 	type EditorUiStoreApi,
-} from "./editor-ui-store.js";
+} from "./editor-ui-store";
 export {
 	EditorUiStoreProvider,
 	type EditorUiStoreProviderProps,
 	useEditorUiStoreApi,
-} from "./EditorUiStoreProvider.js";
+} from "./EditorUiStoreProvider";
 export {
 	useActiveTab,
 	useAssetCategoryFilter,
@@ -34,21 +34,21 @@ export {
 	useInsertSectionsExpanded,
 	useLayerSplitRatio,
 	usePagesExpanded,
-} from "./hooks.js";
+} from "./hooks";
 export {
 	EditorI18nStoreProvider,
 	type EditorI18nStoreProviderProps,
 	useMsg,
-} from "./editor-i18n-store.js";
+} from "./editor-i18n-store";
 export {
 	createSidebarRegistryStore,
 	type SidebarRegistryState,
 	type SidebarRegistryStoreApi,
-} from "./sidebar-registry-store.js";
+} from "./sidebar-registry-store";
 export {
 	SidebarRegistryProvider,
 	type SidebarRegistryProviderProps,
 	useSidebarRegistryStoreApi,
 	useSidebarRegistryStoreApiOrNull,
-} from "./SidebarRegistryProvider.js";
-export { useSidebarRegistry } from "./sidebar-registry-store-react.js";
+} from "./SidebarRegistryProvider";
+export { useSidebarRegistry } from "./sidebar-registry-store-react";

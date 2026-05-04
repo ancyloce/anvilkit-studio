@@ -11,7 +11,7 @@
 
 import type { ReactNode } from "react";
 
-import { InsertDrawerBody } from "../../studio/layout/sidebar/modules/insert/InsertDrawerBody.js";
+import { InsertDrawerBody } from "../../studio/layout/sidebar/modules/insert/InsertDrawerBody";
 
 export interface EditorDrawerProps {
 	readonly children: ReactNode;

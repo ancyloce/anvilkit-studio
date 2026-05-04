@@ -5,7 +5,7 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { createEditorUiStore } from "../editor-ui-store.js";
+import { createEditorUiStore } from "../editor-ui-store";
 
 interface PersistableStoreApi {
 	readonly persist: {

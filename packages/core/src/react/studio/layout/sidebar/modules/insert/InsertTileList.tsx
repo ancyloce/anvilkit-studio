@@ -9,7 +9,7 @@
 
 import { type ReactNode, isValidElement } from "react";
 
-import { cn } from "../../../../../overrides/utils/cn.js";
+import { cn } from "../../../../../overrides/utils/cn";
 
 export interface InsertTileListProps {
 	readonly children: readonly ReactNode[];

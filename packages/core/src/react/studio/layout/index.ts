@@ -9,13 +9,13 @@
 export {
 	HeaderActionButton,
 	type HeaderActionButtonProps,
-} from "./HeaderActionButton.js";
-export { HeaderActions, type HeaderActionsProps } from "./HeaderActions.js";
-export { StudioHeader, type StudioHeaderProps } from "./StudioHeader.js";
-export { StudioLayout, type StudioLayoutProps } from "./StudioLayout.js";
-export { StudioSidebar } from "./StudioSidebar.js";
-export { StudioToolbar } from "./StudioToolbar.js";
+} from "./HeaderActionButton";
+export { HeaderActions, type HeaderActionsProps } from "./HeaderActions";
+export { StudioHeader, type StudioHeaderProps } from "./StudioHeader";
+export { StudioLayout, type StudioLayoutProps } from "./StudioLayout";
+export { StudioSidebar } from "./StudioSidebar";
+export { StudioToolbar } from "./StudioToolbar";
 export {
 	StudioViewportPreview,
 	type StudioViewportPreviewProps,
-} from "./StudioViewportPreview.js";
+} from "./StudioViewportPreview";

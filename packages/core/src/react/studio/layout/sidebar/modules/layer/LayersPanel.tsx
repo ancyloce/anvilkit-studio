@@ -28,27 +28,27 @@ import {
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 
 import type {
-	StudioLayerQuickAdd,
-	StudioLayerQuickAddInserter,
-} from "../../../../../../types/sidebar.js";
-import type { StudioPage } from "../../../../../../types/pages.js";
-import { useStudioPagesSource } from "../../../../context/pages-source.js";
+  StudioLayerQuickAdd,
+  StudioLayerQuickAddInserter,
+} from "../../../../../../types/sidebar";
+import type { StudioPage } from "../../../../../../types/pages";
+import { useStudioPagesSource } from "../../../../context/pages-source";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "../../../../primitives/dropdown-menu.js";
-import { Button } from "../../../../primitives/button.js";
-import { ScrollArea } from "../../../../primitives/scroll-area.js";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../../../primitives/dropdown-menu";
+import { Button } from "../../../../primitives/button";
+import { ScrollArea } from "../../../../primitives/scroll-area";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../../../../primitives/tooltip.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
-import { useSidebarRegistry } from "../../../../state/sidebar-registry-store-react.js";
-import { EmptyState } from "../../shared/EmptyState.js";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../../../primitives/tooltip";
+import { useMsg } from "../../../../state/editor-i18n-store";
+import { useSidebarRegistry } from "../../../../state/sidebar-registry-store-react";
+import { EmptyState } from "../../shared/EmptyState";
 
 interface BuiltInQuickAdd {
 	readonly id: string;

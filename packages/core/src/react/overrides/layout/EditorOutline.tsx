@@ -11,9 +11,9 @@
 import { Puck, useGetPuck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { useMsg } from "../../studio/state/editor-i18n-store.js";
-import { ScrollArea } from "../../studio/primitives/scroll-area.js";
-import { Separator } from "../../studio/primitives/separator.js";
+import { useMsg } from "../../studio/state/editor-i18n-store";
+import { ScrollArea } from "../../studio/primitives/scroll-area";
+import { Separator } from "../../studio/primitives/separator";
 
 export function EditorOutline(): ReactNode {
 	const msg = useMsg();

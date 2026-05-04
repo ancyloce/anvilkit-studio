@@ -17,7 +17,7 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useAiStore } from "../ai-store.js";
+import { useAiStore } from "../ai-store";
 
 const STORAGE_KEY = "anvilkit-core-ai";
 

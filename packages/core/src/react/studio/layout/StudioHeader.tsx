@@ -10,20 +10,13 @@
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
 import { type ReactNode } from "react";
 
-import { cn } from "../../overrides/utils/cn.js";
-import { useMsg } from "../state/editor-i18n-store.js";
-import {
-	Avatar,
-	AvatarFallback,
-} from "../primitives/avatar.js";
-import { Button } from "../primitives/button.js";
-import { Separator } from "../primitives/separator.js";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../primitives/tooltip.js";
-import { HeaderActions } from "./HeaderActions.js";
+import { cn } from "../../overrides/utils/cn";
+import { useMsg } from "../state/editor-i18n-store";
+import { Avatar, AvatarFallback } from "../primitives/avatar";
+import { Button } from "../primitives/button";
+import { Separator } from "../primitives/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
+import { HeaderActions } from "./HeaderActions";
 
 export interface StudioHeaderProps {
 	readonly onBack?: () => void;

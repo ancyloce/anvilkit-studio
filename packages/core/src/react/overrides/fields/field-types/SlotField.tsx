@@ -4,18 +4,14 @@
  * picks up the chrome's panel styling.
  */
 
-import type {
-	FieldProps,
-	SlotField as PuckSlotField,
-} from "@puckeditor/core";
+import type { FieldProps, SlotField as PuckSlotField } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import type { FieldRendererProps } from "./TextField.js";
+import type { FieldRendererProps } from "./TextField";
 
-interface SlotFieldRendererProps
-	extends FieldProps<PuckSlotField, unknown> {
-	readonly name: string;
-	readonly children: ReactNode;
+interface SlotFieldRendererProps extends FieldProps<PuckSlotField, unknown> {
+  readonly name: string;
+  readonly children: ReactNode;
 }
 
 export function SlotField({ children }: SlotFieldRendererProps): ReactNode {

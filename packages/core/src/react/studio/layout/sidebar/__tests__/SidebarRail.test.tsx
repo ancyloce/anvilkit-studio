@@ -11,10 +11,10 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { useStore } from "zustand";
 
 import {
-	EditorUiStoreProvider,
-	useEditorUiStoreApi,
-} from "../../../state/EditorUiStoreProvider.js";
-import { SidebarRail, type SidebarRailHandle } from "../SidebarRail.js";
+  EditorUiStoreProvider,
+  useEditorUiStoreApi,
+} from "../../../state/EditorUiStoreProvider";
+import { SidebarRail, type SidebarRailHandle } from "../SidebarRail";
 
 afterEach(cleanup);
 

@@ -11,10 +11,10 @@
 
 import { type ReactNode } from "react";
 
-import { useLayerSplitRatio } from "../../../state/hooks.js";
-import { Splitter } from "../shared/Splitter.js";
-import { LayersPanel } from "./layer/LayersPanel.js";
-import { PagesPanel } from "./layer/PagesPanel.js";
+import { useLayerSplitRatio } from "../../../state/hooks";
+import { Splitter } from "../shared/Splitter";
+import { LayersPanel } from "./layer/LayersPanel";
+import { PagesPanel } from "./layer/PagesPanel";
 
 export function LayerModule(): ReactNode {
 	const [ratio] = useLayerSplitRatio();

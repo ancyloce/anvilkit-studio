@@ -10,14 +10,14 @@
 
 import { type ReactNode } from "react";
 
-import type { StudioCopySnippet } from "../../../../../../types/sidebar.js";
-import { cn } from "../../../../../overrides/utils/cn.js";
-import { Button } from "../../../../primitives/button.js";
+import type { StudioCopySnippet } from "../../../../../../types/sidebar";
+import { cn } from "../../../../../overrides/utils/cn";
+import { Button } from "../../../../primitives/button";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../../../../primitives/tooltip.js";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../../../primitives/tooltip";
 
 export interface SnippetRowProps {
 	readonly snippet: StudioCopySnippet;

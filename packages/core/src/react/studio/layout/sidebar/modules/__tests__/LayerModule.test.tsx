@@ -10,15 +10,15 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { StudioPagesSource } from "../../../../../../types/pages.js";
-import { StudioPagesSourceProvider } from "../../../../context/pages-source.js";
+import type { StudioPagesSource } from "../../../../../../types/pages";
+import { StudioPagesSourceProvider } from "../../../../context/pages-source";
 import {
-	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-} from "../../../../state/index.js";
-import { LayerModule } from "../LayerModule.js";
+  createSidebarRegistryStore,
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  SidebarRegistryProvider,
+} from "../../../../state/index";
+import { LayerModule } from "../LayerModule";
 
 vi.mock("@puckeditor/core", () => ({
 	Puck: { Outline: () => <div data-testid="puck-outline-mock" /> },

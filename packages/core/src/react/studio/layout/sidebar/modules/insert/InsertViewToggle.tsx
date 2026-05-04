@@ -10,17 +10,17 @@ import { LayoutGrid, List } from "lucide-react";
 import type { ReactNode } from "react";
 
 import {
-	ToggleGroup,
-	ToggleGroupItem,
-} from "../../../../primitives/toggle-group.js";
+  ToggleGroup,
+  ToggleGroupItem,
+} from "../../../../primitives/toggle-group";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../../../../primitives/tooltip.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
-import { useComponentViewMode } from "../../../../state/hooks.js";
-import type { ComponentViewMode } from "../../../../state/editor-ui-store.js";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../../../primitives/tooltip";
+import { useMsg } from "../../../../state/editor-i18n-store";
+import { useComponentViewMode } from "../../../../state/hooks";
+import type { ComponentViewMode } from "../../../../state/editor-ui-store";
 
 export function InsertViewToggle(): ReactNode {
 	const msg = useMsg();

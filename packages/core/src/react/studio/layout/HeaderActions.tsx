@@ -14,21 +14,21 @@
 import { MoreHorizontal } from "lucide-react";
 import { type ReactNode, useMemo } from "react";
 
-import { composeHeaderActions } from "../../../runtime/header-actions.js";
+import { composeHeaderActions } from "../../../runtime/header-actions";
 import type {
-	StudioHeaderAction,
-	StudioPluginContext,
-} from "../../../types/plugin.js";
-import { useStudioRuntime } from "../../hooks/use-studio.js";
-import { useStudioPluginContextOrNull } from "../context/plugin-context.js";
-import { Button } from "../primitives/button.js";
+  StudioHeaderAction,
+  StudioPluginContext,
+} from "../../../types/plugin";
+import { useStudioRuntime } from "../../hooks/use-studio";
+import { useStudioPluginContextOrNull } from "../context/plugin-context";
+import { Button } from "../primitives/button";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuTrigger,
-} from "../primitives/dropdown-menu.js";
-import { useMsg } from "../state/editor-i18n-store.js";
-import { HeaderActionButton } from "./HeaderActionButton.js";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../primitives/dropdown-menu";
+import { useMsg } from "../state/editor-i18n-store";
+import { HeaderActionButton } from "./HeaderActionButton";
 
 export interface HeaderActionsProps {
 	/**

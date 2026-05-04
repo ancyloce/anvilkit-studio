@@ -8,8 +8,8 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { EditorI18nStoreProvider } from "../../../state/editor-i18n-store.js";
-import { SidebarPanel } from "../SidebarPanel.js";
+import { EditorI18nStoreProvider } from "../../../state/editor-i18n-store";
+import { SidebarPanel } from "../SidebarPanel";
 
 afterEach(cleanup);
 

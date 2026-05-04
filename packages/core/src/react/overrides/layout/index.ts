@@ -1,11 +1,11 @@
-export { DrawerItem, type DrawerItemProps } from "./DrawerItem.js";
-export { EditorDrawer, type EditorDrawerProps } from "./EditorDrawer.js";
-export { EditorOutline } from "./EditorOutline.js";
+export { DrawerItem, type DrawerItemProps } from "./DrawerItem";
+export { EditorDrawer, type EditorDrawerProps } from "./EditorDrawer";
+export { EditorOutline } from "./EditorOutline";
 export {
 	FieldLabel,
 	type FieldLabelOverrideProps,
-} from "./FieldLabel.js";
+} from "./FieldLabel";
 export {
 	FieldsPanel,
 	type FieldsPanelOverrideProps,
-} from "./FieldsPanel.js";
+} from "./FieldsPanel";

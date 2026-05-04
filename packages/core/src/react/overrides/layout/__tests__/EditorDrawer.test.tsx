@@ -13,13 +13,13 @@ import type { ReactElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
-	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-} from "../../../studio/state/index.js";
-import { DEFAULT_INSERT_SECTIONS } from "../../../studio/layout/sidebar/modules/insert/default-sections.js";
-import { EditorDrawer } from "../EditorDrawer.js";
+  createSidebarRegistryStore,
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  SidebarRegistryProvider,
+} from "../../../studio/state/index";
+import { DEFAULT_INSERT_SECTIONS } from "../../../studio/layout/sidebar/modules/insert/default-sections";
+import { EditorDrawer } from "../EditorDrawer";
 
 const FAKE_CONFIG: PuckConfig = {
 	categories: { navigation: { components: ["Navbar"] } },

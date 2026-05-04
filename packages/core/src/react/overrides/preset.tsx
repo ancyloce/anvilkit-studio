@@ -14,20 +14,20 @@
 import type { Overrides as PuckOverrides } from "@puckeditor/core";
 
 import {
-	ActionBar,
-	CanvasIframe,
-	CanvasPreview,
-	ComponentOverlay,
-} from "./canvas/index.js";
-import { defaultFieldTypes } from "./fields/field-types/index.js";
+  ActionBar,
+  CanvasIframe,
+  CanvasPreview,
+  ComponentOverlay,
+} from "./canvas/index";
+import { defaultFieldTypes } from "./fields/field-types/index";
 import {
-	DrawerItem,
-	EditorDrawer,
-	FieldLabel,
-	FieldsPanel,
-} from "./layout/index.js";
-import type { CreateStudioOverridesOptions } from "./types.js";
-import { StudioLayout } from "../studio/layout/StudioLayout.js";
+  DrawerItem,
+  EditorDrawer,
+  FieldLabel,
+  FieldsPanel,
+} from "./layout/index";
+import type { CreateStudioOverridesOptions } from "./types";
+import { StudioLayout } from "../studio/layout/StudioLayout";
 
 /**
  * Build the default override set. Per-slot wrappers convert the

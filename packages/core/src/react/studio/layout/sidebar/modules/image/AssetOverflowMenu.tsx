@@ -16,25 +16,25 @@ import { MoreHorizontal, Pencil, Trash2, Upload, Link } from "lucide-react";
 import { type ReactNode, useState } from "react";
 
 import type {
-	StudioAsset,
-	StudioAssetAction,
-	StudioAssetSource,
-} from "../../../../../../types/sidebar.js";
+  StudioAsset,
+  StudioAssetAction,
+  StudioAssetSource,
+} from "../../../../../../types/sidebar";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "../../../../primitives/dropdown-menu.js";
-import { Button } from "../../../../primitives/button.js";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../../../primitives/dropdown-menu";
+import { Button } from "../../../../primitives/button";
 import { toast } from "sonner";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "../../../../primitives/tooltip.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../../../primitives/tooltip";
+import { useMsg } from "../../../../state/editor-i18n-store";
 
 export interface AssetOverflowMenuProps {
 	readonly asset: StudioAsset;

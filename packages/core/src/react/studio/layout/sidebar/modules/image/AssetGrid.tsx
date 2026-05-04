@@ -13,17 +13,17 @@
 import { type ReactNode } from "react";
 
 import type {
-	StudioAsset,
-	StudioAssetAction,
-	StudioAssetSource,
-} from "../../../../../../types/sidebar.js";
-import { Skeleton } from "../../../../primitives/skeleton.js";
-import type { AssetCategoryFilter } from "../../../../state/editor-ui-store.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
-import { AssetAudioRow } from "./AssetAudioRow.js";
-import { AssetImageTile } from "./AssetImageTile.js";
-import { AssetOverflowMenu } from "./AssetOverflowMenu.js";
-import { AssetVideoCard } from "./AssetVideoCard.js";
+  StudioAsset,
+  StudioAssetAction,
+  StudioAssetSource,
+} from "../../../../../../types/sidebar";
+import { Skeleton } from "../../../../primitives/skeleton";
+import type { AssetCategoryFilter } from "../../../../state/editor-ui-store";
+import { useMsg } from "../../../../state/editor-i18n-store";
+import { AssetAudioRow } from "./AssetAudioRow";
+import { AssetImageTile } from "./AssetImageTile";
+import { AssetOverflowMenu } from "./AssetOverflowMenu";
+import { AssetVideoCard } from "./AssetVideoCard";
 
 export interface UploadingTile {
 	readonly id: string;

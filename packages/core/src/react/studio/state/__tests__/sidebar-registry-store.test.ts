@@ -18,8 +18,8 @@ import type {
 	StudioCopySnippetPack,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
-} from "../../../../types/sidebar.js";
-import { createSidebarRegistryStore } from "../sidebar-registry-store.js";
+} from "../../../../types/sidebar";
+import { createSidebarRegistryStore } from "../sidebar-registry-store";
 
 const SECTION: StudioInsertSection = {
 	id: "recommended",

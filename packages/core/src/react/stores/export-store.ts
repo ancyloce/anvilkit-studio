@@ -223,7 +223,7 @@ export const useExportStore = create<ExportState>()(
 			// SSR safety: defer rehydration until `<Studio>` mounts a
 			// browser-only effect. Reading `localStorage` synchronously
 			// at module evaluation time produces a hydration mismatch
-			// in Next.js App Router / any SSR-ish host.
+			// in Next App Router / any SSR-ish host.
 			skipHydration: true,
 		},
 	),

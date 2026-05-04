@@ -11,7 +11,7 @@
 
 import type { UiState, Viewports } from "@puckeditor/core";
 
-import { FULL_WIDTH_VIEWPORTS } from "./full-width-viewports.js";
+import { FULL_WIDTH_VIEWPORTS } from "./full-width-viewports";
 
 /**
  * Subset of `UiState` `<Studio>` accepts as a partial override. Kept

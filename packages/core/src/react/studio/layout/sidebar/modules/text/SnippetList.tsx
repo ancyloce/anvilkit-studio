@@ -20,19 +20,19 @@
 import { type ReactNode, useMemo } from "react";
 
 import type {
-	StudioCopySnippet,
-	StudioCopySnippetCategory,
-} from "../../../../../../types/sidebar.js";
+  StudioCopySnippet,
+  StudioCopySnippetCategory,
+} from "../../../../../../types/sidebar";
 import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "../../../../primitives/accordion.js";
-import { useMsg } from "../../../../state/editor-i18n-store.js";
-import type { CopyCategoryFilter } from "../../../../state/editor-ui-store.js";
-import { EmptyState } from "../../shared/EmptyState.js";
-import { SnippetRow } from "./SnippetRow.js";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../../../primitives/accordion";
+import { useMsg } from "../../../../state/editor-i18n-store";
+import type { CopyCategoryFilter } from "../../../../state/editor-ui-store";
+import { EmptyState } from "../../shared/EmptyState";
+import { SnippetRow } from "./SnippetRow";
 
 const BUILTIN_CATEGORY_KEYS: Readonly<Record<string, string>> = {
 	basic: "studio.module.text.category.basic",

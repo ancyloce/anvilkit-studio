@@ -15,7 +15,10 @@
 			"@/utils/cn": ["src/react/overrides/utils/cn.ts"],
 			"@/utils/*": ["src/react/overrides/utils/*"],
 			"@/hooks": ["src/react/studio/hooks"],
-			"@/hooks/*": ["src/react/studio/hooks/*"]
+			"@/hooks/*": ["src/react/studio/hooks/*"],
+			"@/runtime": ["src/runtime"],
+			"@/types": ["src/types"],
+			"@/stores": ["src/react/stores"],
 		},
 		"strictNullChecks": true,
 		"useDefineForClassFields": true,

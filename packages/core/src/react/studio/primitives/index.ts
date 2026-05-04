@@ -10,10 +10,10 @@ export {
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from "./accordion.js";
-export { Avatar, AvatarFallback, AvatarImage } from "./avatar.js";
-export { Button, buttonVariants } from "./button.js";
-export { Checkbox } from "./checkbox.js";
+} from "./accordion";
+export { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+export { Button, buttonVariants } from "./button";
+export { Checkbox } from "./checkbox";
 export {
 	Dialog,
 	DialogClose,
@@ -25,7 +25,7 @@ export {
 	DialogPortal,
 	DialogTitle,
 	DialogTrigger,
-} from "./dialog.js";
+} from "./dialog";
 export {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -42,7 +42,7 @@ export {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
-} from "./dropdown-menu.js";
+} from "./dropdown-menu";
 export {
 	Empty,
 	EmptyContent,
@@ -50,7 +50,7 @@ export {
 	EmptyHeader,
 	EmptyMedia,
 	EmptyTitle,
-} from "./empty.js";
+} from "./empty";
 export {
 	Field,
 	FieldContent,
@@ -62,8 +62,8 @@ export {
 	FieldSeparator,
 	FieldSet,
 	FieldTitle,
-} from "./field.js";
-export { Input } from "./input.js";
+} from "./field";
+export { Input } from "./input";
 export {
 	InputGroup,
 	InputGroupAddon,
@@ -71,26 +71,26 @@ export {
 	InputGroupInput,
 	InputGroupTextarea,
 	InputGroupText,
-} from "./input-group.js";
-export { Label } from "./label.js";
-export { Popover, PopoverContent, PopoverTrigger } from "./popover.js";
-export { ScrollArea, ScrollBar } from "./scroll-area.js";
-export { Separator } from "./separator.js";
-export { Skeleton } from "./skeleton.js";
-export { Toaster } from "./sonner.js";
+} from "./input-group";
+export { Label } from "./label";
+export { Popover, PopoverContent, PopoverTrigger } from "./popover";
+export { ScrollArea, ScrollBar } from "./scroll-area";
+export { Separator } from "./separator";
+export { Skeleton } from "./skeleton";
+export { Toaster } from "./sonner";
 export {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
 	tabsListVariants,
-} from "./tabs.js";
-export { Textarea } from "./textarea.js";
-export { Toggle, toggleVariants } from "./toggle.js";
-export { ToggleGroup, ToggleGroupItem } from "./toggle-group.js";
+} from "./tabs";
+export { Textarea } from "./textarea";
+export { Toggle, toggleVariants } from "./toggle";
+export { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 export {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from "./tooltip.js";
+} from "./tooltip";

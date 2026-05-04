@@ -21,16 +21,16 @@
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 
 import type {
-	StudioCopySnippet,
-	StudioCopySnippetPack,
-} from "../../../../../types/sidebar.js";
-import { useCopyCategoryFilter } from "../../../state/hooks.js";
-import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react.js";
-import { useInsertSnippet } from "../../../state/useInsertSnippet.js";
-import { useTextSelection } from "../../../state/useTextSelection.js";
-import { SnippetList } from "./text/SnippetList.js";
-import { TextFilterStrip } from "./text/TextFilterStrip.js";
-import { TextSearchBar } from "./text/TextSearchBar.js";
+  StudioCopySnippet,
+  StudioCopySnippetPack,
+} from "../../../../../types/sidebar";
+import { useCopyCategoryFilter } from "../../../state/hooks";
+import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react";
+import { useInsertSnippet } from "../../../state/useInsertSnippet";
+import { useTextSelection } from "../../../state/useTextSelection";
+import { SnippetList } from "./text/SnippetList";
+import { TextFilterStrip } from "./text/TextFilterStrip";
+import { TextSearchBar } from "./text/TextSearchBar";
 
 function flattenPacks(
 	packs: ReadonlyMap<string, StudioCopySnippetPack>,

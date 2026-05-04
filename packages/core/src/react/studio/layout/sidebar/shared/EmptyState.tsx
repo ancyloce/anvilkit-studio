@@ -10,11 +10,11 @@
 import type { ReactNode } from "react";
 
 import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyMedia,
-} from "../../../primitives/empty.js";
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+} from "../../../primitives/empty";
 
 export interface EmptyStateProps {
 	readonly message: string;

@@ -11,4 +11,4 @@
 export {
 	IFRAME_THEME_CSS,
 	IFRAME_THEME_STYLE_ID,
-} from "../../studio/theme/iframe-theme.js";
+} from "../../studio/theme/iframe-theme";

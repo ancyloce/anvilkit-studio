@@ -7,8 +7,8 @@
 import { cleanup, renderHook, act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { useThemeStore } from "../../../stores/theme-store.js";
-import { useThemeSync } from "../use-theme-sync.js";
+import { useThemeStore } from "../../../stores/theme-store";
+import { useThemeSync } from "../use-theme-sync";
 
 beforeEach(() => {
 	document.documentElement.classList.remove("dark");

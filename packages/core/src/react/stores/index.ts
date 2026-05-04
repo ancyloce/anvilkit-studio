@@ -54,15 +54,15 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-export { useAiStore, type AiState, type AiHistoryEntry } from "./ai-store.js";
+export { useAiStore, type AiState, type AiHistoryEntry } from "./ai-store";
 export {
 	useExportStore,
 	type ExportState,
 	type LastExportRecord,
-} from "./export-store.js";
+} from "./export-store";
 export {
 	useThemeStore,
 	type ThemeMode,
 	type ThemeResolved,
 	type ThemeState,
-} from "./theme-store.js";
+} from "./theme-store";

@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { ToggleGroup, ToggleGroupItem } from "../toggle-group.js";
+import { ToggleGroup, ToggleGroupItem } from "../toggle-group";
 
 afterEach(cleanup);
 

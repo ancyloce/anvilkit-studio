@@ -11,11 +11,11 @@ import type { ReactElement } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	useEditorUiStore,
-} from "../../../../state/index.js";
-import { Splitter } from "../Splitter.js";
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  useEditorUiStore,
+} from "../../../../state/index";
+import { Splitter } from "../Splitter";
 
 afterEach(cleanup);
 
