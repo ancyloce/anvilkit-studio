@@ -63,9 +63,9 @@ const fieldTypeIcons = {
 } satisfies Record<FieldLabelDataType, LucideIcon>;
 
 const rootClassName =
-  "flex w-full flex-col items-stretch gap-1.5 text-sm text-[var(--ak-studio-fg)]";
+  "flex w-full flex-col items-stretch gap-2 text-sm text-[var(--ak-studio-fg)]";
 const labelClassName =
-  "flex min-h-4 w-fit items-center gap-1.5 text-xs font-medium leading-none text-[var(--ak-studio-muted-fg)]";
+  "flex w-fit items-center gap-1.5 text-xs font-medium leading-none text-[var(--ak-studio-muted-fg)]";
 const iconClassName =
   "flex size-3.5 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] [&>svg]:size-3.5 [&>svg]:shrink-0";
 

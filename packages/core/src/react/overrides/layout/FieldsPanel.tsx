@@ -35,46 +35,46 @@ export function FieldsPanel({
 	const crumbs = useBreadcrumbs();
 
 	return (
-		<div className={cn("flex h-full min-h-0 flex-col gap-2", className)}>
-			{crumbs.length > 0 ? (
-				<nav
-					aria-label="selection breadcrumbs"
-					className="flex items-center gap-0.5 text-xs text-[var(--ak-studio-muted-fg)]"
-				>
-					{crumbs.map((crumb, index) => (
-						<span key={crumb.id} className="flex items-center gap-0.5">
-							<span
-								className={
-									index === crumbs.length - 1
-										? "font-medium text-[var(--ak-studio-fg)]"
-										: ""
-								}
-							>
-								{crumb.label}
-							</span>
-							{index < crumbs.length - 1 ? (
-								<ChevronRight className="size-3 opacity-60" />
-							) : null}
-						</span>
-					))}
-				</nav>
-			) : null}
-			<div className="flex-1 overflow-auto">
-				{itemSelector === null || itemSelector === undefined ? (
-					<p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
-						{msg("studio.fields.empty")}
-					</p>
-				) : (
-					<div
-						className={cn(
-							"flex flex-col gap-3",
-							isLoading ? "animate-pulse opacity-70" : null,
-						)}
-					>
-						{children}
-					</div>
-				)}
-			</div>
-		</div>
-	);
+    <div className={cn("flex h-full min-h-0 flex-col gap-2", className)}>
+      {crumbs.length > 0 ? (
+        <nav
+          aria-label="selection breadcrumbs"
+          className="flex items-center gap-0.5 text-xs text-[var(--ak-studio-muted-fg)]"
+        >
+          {crumbs.map((crumb, index) => (
+            <span key={crumb.id} className="flex items-center gap-0.5">
+              <span
+                className={
+                  index === crumbs.length - 1
+                    ? "font-medium text-[var(--ak-studio-fg)]"
+                    : ""
+                }
+              >
+                {crumb.label}
+              </span>
+              {index < crumbs.length - 1 ? (
+                <ChevronRight className="size-3 opacity-60" />
+              ) : null}
+            </span>
+          ))}
+        </nav>
+      ) : null}
+      <div className="flex-1 overflow-auto">
+        {itemSelector === null || itemSelector === undefined ? (
+          <p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
+            {msg("studio.fields.empty")}
+          </p>
+        ) : (
+          <div
+            className={cn(
+              "flex flex-col gap-0",
+              isLoading ? "animate-pulse opacity-70" : null,
+            )}
+          >
+            {children}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
