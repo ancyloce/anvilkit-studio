@@ -1,0 +1,47 @@
+/**
+ * @file `image` module filter strip — All / Images / Videos / Audio.
+ *
+ * Single-select segmented control bound to the persisted
+ * `assetCategoryFilter` slice (PRD §7.4 / §9.2). Selection survives
+ * reload — that's why this is a slice, not local state.
+ */
+
+import { type ReactNode } from "react";
+
+import { ToggleGroup } from "../../../../primitives/ToggleGroup.js";
+import type { AssetCategoryFilter } from "../../../../state/editor-ui-store.js";
+import { useMsg } from "../../../../state/editor-i18n-store.js";
+import { useAssetCategoryFilter } from "../../../../state/hooks.js";
+
+export function ImageFilterStrip(): ReactNode {
+	const msg = useMsg();
+	const [value, setValue] = useAssetCategoryFilter();
+
+	const handleChange = (next: readonly AssetCategoryFilter[]): void => {
+		const picked = next[0];
+		if (picked === undefined) return;
+		setValue(picked);
+	};
+
+	return (
+		<ToggleGroup.Root<AssetCategoryFilter>
+			value={[value]}
+			onValueChange={handleChange}
+			aria-label={msg("studio.module.image.name")}
+			data-testid="ak-image-filter"
+		>
+			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="all">
+				{msg("studio.module.image.filter.all")}
+			</ToggleGroup.Item>
+			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="images">
+				{msg("studio.module.image.filter.images")}
+			</ToggleGroup.Item>
+			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="videos">
+				{msg("studio.module.image.filter.videos")}
+			</ToggleGroup.Item>
+			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="audio">
+				{msg("studio.module.image.filter.audio")}
+			</ToggleGroup.Item>
+		</ToggleGroup.Root>
+	);
+}
