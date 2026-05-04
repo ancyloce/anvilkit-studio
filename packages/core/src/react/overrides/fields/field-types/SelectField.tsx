@@ -23,6 +23,7 @@ import {
 	SelectValue,
 } from "@/primitives/select";
 
+import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 type OptionValue = string | number | boolean | undefined | null | object;
@@ -52,37 +53,45 @@ export function SelectField({
 	);
 
 	return (
-		<Select
-			items={items}
-			value={value === undefined ? null : optionKey(value)}
-			onValueChange={(next) => {
-				if (readOnly === true) return;
-				if (next === null || next === "") {
-					onChange(undefined as never);
-					return;
-				}
-				const match = field.options.find(
-					(opt) => optionKey(opt.value as OptionValue) === next,
-				);
-				onChange((match?.value ?? next) as never);
-			}}
-			disabled={readOnly}
-			name={name}
+		<FieldLabel
+			icon={field.labelIcon}
+			label={field.label ?? name}
+			type="select"
+			el="div"
+			readOnly={readOnly}
 		>
-			<SelectTrigger id={id} className="w-full">
-				<SelectValue placeholder="Select…" />
-			</SelectTrigger>
-			<SelectContent>
-				{field.options.map((option) => (
-					<SelectItem
-						key={optionKey(option.value as OptionValue)}
-						value={optionKey(option.value as OptionValue)}
-					>
-						{option.label}
-					</SelectItem>
-				))}
-			</SelectContent>
-		</Select>
+			<Select
+				items={items}
+				value={value === undefined ? null : optionKey(value)}
+				onValueChange={(next) => {
+					if (readOnly === true) return;
+					if (next === null || next === "") {
+						onChange(undefined as never);
+						return;
+					}
+					const match = field.options.find(
+						(opt) => optionKey(opt.value as OptionValue) === next,
+					);
+					onChange((match?.value ?? next) as never);
+				}}
+				disabled={readOnly}
+				name={name}
+			>
+				<SelectTrigger id={id} className="w-full">
+					<SelectValue placeholder="Select…" />
+				</SelectTrigger>
+				<SelectContent>
+					{field.options.map((option) => (
+						<SelectItem
+							key={optionKey(option.value as OptionValue)}
+							value={optionKey(option.value as OptionValue)}
+						>
+							{option.label}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
+		</FieldLabel>
 	);
 }
 

@@ -3,6 +3,7 @@ export { EditorDrawer, type EditorDrawerProps } from "./EditorDrawer";
 export { EditorOutline } from "./EditorOutline";
 export {
 	FieldLabel,
+	type FieldLabelDataType,
 	type FieldLabelOverrideProps,
 } from "./FieldLabel";
 export {

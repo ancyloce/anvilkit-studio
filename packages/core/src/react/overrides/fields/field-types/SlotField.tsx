@@ -7,6 +7,7 @@
 import type { FieldProps, SlotField as PuckSlotField } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
+import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 interface SlotFieldRendererProps extends FieldProps<PuckSlotField, unknown> {
@@ -14,11 +15,24 @@ interface SlotFieldRendererProps extends FieldProps<PuckSlotField, unknown> {
 	readonly children: ReactNode;
 }
 
-export function SlotField({ children }: SlotFieldRendererProps): ReactNode {
+export function SlotField({
+	field,
+	readOnly,
+	name,
+	children,
+}: SlotFieldRendererProps): ReactNode {
 	return (
-		<div className="rounded-md border border-dashed border-[var(--ak-studio-border)] bg-[var(--ak-studio-bg)] p-2">
-			{children}
-		</div>
+		<FieldLabel
+			icon={field.labelIcon}
+			label={field.label ?? name}
+			type="slot"
+			el="div"
+			readOnly={readOnly}
+		>
+			<div className="rounded-md border border-dashed border-[var(--ak-studio-border)] bg-[var(--ak-studio-bg)] p-2">
+				{children}
+			</div>
+		</FieldLabel>
 	);
 }
 

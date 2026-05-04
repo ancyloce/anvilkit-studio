@@ -10,6 +10,7 @@ import { type ReactNode } from "react";
 
 import { Textarea } from "@/primitives/textarea";
 
+import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 export function TextareaField({
@@ -21,18 +22,25 @@ export function TextareaField({
 	name,
 }: FieldRendererProps<PuckTextareaField, string | undefined>): ReactNode {
 	return (
-		<Textarea
-			id={id}
-			name={name}
-			value={value ?? ""}
-			placeholder={field.placeholder}
+		<FieldLabel
+			icon={field.labelIcon}
+			label={field.label ?? name}
+			type="textarea"
 			readOnly={readOnly}
-			rows={4}
-			onChange={(event) => {
-				if (readOnly === true) return;
-				onChange(event.target.value);
-			}}
-		/>
+		>
+			<Textarea
+				id={id}
+				name={name}
+				value={value ?? ""}
+				placeholder={field.placeholder}
+				readOnly={readOnly}
+				rows={4}
+				onChange={(event) => {
+					if (readOnly === true) return;
+					onChange(event.target.value);
+				}}
+			/>
+		</FieldLabel>
 	);
 }
 

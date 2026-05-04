@@ -26,6 +26,8 @@ import {
 	CardTitle,
 } from "@/primitives/card";
 
+import { FieldLabel } from "../../layout/FieldLabel";
+
 type ArrayValue = readonly Record<string, unknown>[];
 
 interface ArrayFieldRendererProps
@@ -60,6 +62,7 @@ export function ArrayField({
 	value,
 	onChange,
 	readOnly,
+	name,
 	children,
 }: ArrayFieldRendererProps): ReactNode {
 	const items = toArray(value);
@@ -101,74 +104,82 @@ export function ArrayField({
 	}
 
 	return (
-		<div className="flex flex-col gap-1.5">
-			{items.map((_item, index) => (
-				<Card
-					// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
-					key={index}
-					size="sm"
-				>
-					<CardHeader>
-						<CardTitle className="text-xs text-muted-foreground">
-							{field.getItemSummary?.(items[index] ?? {}, index) ??
-								`Item ${index + 1}`}
-						</CardTitle>
-						{readOnly !== true ? (
-							<CardAction className="flex items-center gap-0.5">
-								<Button
-									variant="ghost"
-									size="icon"
-									aria-label="Move up"
-									disabled={index === 0}
-									onClick={() => move(index, index - 1)}
-								>
-									<ArrowUp />
-								</Button>
-								<Button
-									variant="ghost"
-									size="icon"
-									aria-label="Move down"
-									disabled={index === items.length - 1}
-									onClick={() => move(index, index + 1)}
-								>
-									<ArrowDown />
-								</Button>
-								<Button
-									variant="ghost"
-									size="icon"
-									aria-label="Duplicate"
-									disabled={items.length >= max}
-									onClick={() => duplicate(index)}
-								>
-									<Copy />
-								</Button>
-								<Button
-									variant="ghost"
-									size="icon"
-									aria-label="Remove"
-									disabled={items.length <= min}
-									onClick={() => remove(index)}
-								>
-									<Trash2 />
-								</Button>
-							</CardAction>
-						) : null}
-					</CardHeader>
-					<CardContent>{childArray[index] ?? null}</CardContent>
-				</Card>
-			))}
-			{readOnly !== true ? (
-				<Button
-					variant="outline"
-					size="sm"
-					disabled={items.length >= max}
-					onClick={add}
-				>
-					<Plus />
-					<span>Add item</span>
-				</Button>
-			) : null}
-		</div>
+		<FieldLabel
+			icon={field.labelIcon}
+			label={field.label ?? name}
+			type="array"
+			el="div"
+			readOnly={readOnly}
+		>
+			<div className="flex flex-col gap-1.5">
+				{items.map((_item, index) => (
+					<Card
+						// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
+						key={index}
+						size="sm"
+					>
+						<CardHeader>
+							<CardTitle className="text-xs text-muted-foreground">
+								{field.getItemSummary?.(items[index] ?? {}, index) ??
+									`Item ${index + 1}`}
+							</CardTitle>
+							{readOnly !== true ? (
+								<CardAction className="flex items-center gap-0.5">
+									<Button
+										variant="ghost"
+										size="icon"
+										aria-label="Move up"
+										disabled={index === 0}
+										onClick={() => move(index, index - 1)}
+									>
+										<ArrowUp />
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										aria-label="Move down"
+										disabled={index === items.length - 1}
+										onClick={() => move(index, index + 1)}
+									>
+										<ArrowDown />
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										aria-label="Duplicate"
+										disabled={items.length >= max}
+										onClick={() => duplicate(index)}
+									>
+										<Copy />
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										aria-label="Remove"
+										disabled={items.length <= min}
+										onClick={() => remove(index)}
+									>
+										<Trash2 />
+									</Button>
+								</CardAction>
+							) : null}
+						</CardHeader>
+						<CardContent>{childArray[index] ?? null}</CardContent>
+					</Card>
+				))}
+				{readOnly !== true ? (
+					<Button
+						variant="outline"
+						size="sm"
+						disabled={items.length >= max}
+						onClick={add}
+					>
+						<Plus />
+						<span>Add item</span>
+					</Button>
+				) : null}
+			</div>
+		</FieldLabel>
 	);
 }
 

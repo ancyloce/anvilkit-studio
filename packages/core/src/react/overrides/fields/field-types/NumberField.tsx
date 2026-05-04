@@ -15,6 +15,7 @@ import { type ReactNode } from "react";
 
 import { Input } from "@/primitives/input";
 
+import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 export function NumberField({
@@ -26,29 +27,36 @@ export function NumberField({
 	name,
 }: FieldRendererProps<PuckNumberField, number | undefined>): ReactNode {
 	return (
-		<Input
-			id={id}
-			name={name}
+		<FieldLabel
+			icon={field.labelIcon}
+			label={field.label ?? name}
 			type="number"
-			value={value === undefined ? "" : value}
-			placeholder={field.placeholder}
 			readOnly={readOnly}
-			min={field.min}
-			max={field.max}
-			step={field.step}
-			onChange={(event) => {
-				if (readOnly === true) return;
-				const raw = event.target.value;
-				if (raw === "") {
-					onChange(undefined as never);
-					return;
-				}
-				const next = Number(raw);
-				if (Number.isFinite(next)) {
-					onChange(next);
-				}
-			}}
-		/>
+		>
+			<Input
+				id={id}
+				name={name}
+				type="number"
+				value={value === undefined ? "" : value}
+				placeholder={field.placeholder}
+				readOnly={readOnly}
+				min={field.min}
+				max={field.max}
+				step={field.step}
+				onChange={(event) => {
+					if (readOnly === true) return;
+					const raw = event.target.value;
+					if (raw === "") {
+						onChange(undefined as never);
+						return;
+					}
+					const next = Number(raw);
+					if (Number.isFinite(next)) {
+						onChange(next);
+					}
+				}}
+			/>
+		</FieldLabel>
 	);
 }
 
