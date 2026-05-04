@@ -78,6 +78,16 @@ export default defineConfig({
 					],
 				},
 				{
+					label: "Core",
+					collapsed: false,
+					items: [
+						{
+							label: "Studio overrides",
+							slug: "core/overrides",
+						},
+					],
+				},
+				{
 					label: "API Reference",
 					collapsed: true,
 					// Auto-populated from src/content/docs/api/*, which
