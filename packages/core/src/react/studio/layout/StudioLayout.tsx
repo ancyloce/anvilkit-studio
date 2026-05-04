@@ -19,6 +19,7 @@
 import { Puck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
+import { useChromeProps } from "../context/chrome-props.js";
 import { StudioHeader, type StudioHeaderProps } from "./StudioHeader.js";
 import { StudioSidebar } from "./StudioSidebar.js";
 import { StudioToolbar } from "./StudioToolbar.js";
@@ -26,7 +27,14 @@ import { StudioViewportPreview } from "./StudioViewportPreview.js";
 
 export type StudioLayoutProps = StudioHeaderProps;
 
-export function StudioLayout(props: StudioLayoutProps): ReactNode {
+export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
+	// `<StudioLayout>` is mounted from the `puck` override slot with
+	// no props (the override callback receives `{ children }` only),
+	// so the header props come from `<ChromePropsProvider>` set up by
+	// `<Studio>`. The optional `propOverrides` lets tests pass props
+	// directly without wrapping in a provider.
+	const ctxProps = useChromeProps();
+	const props: StudioHeaderProps = { ...ctxProps, ...propOverrides };
 	return (
 		<div className="flex h-screen min-h-0 flex-col bg-[var(--ak-studio-bg)] text-[var(--ak-studio-fg)]">
 			<StudioHeader {...props} />

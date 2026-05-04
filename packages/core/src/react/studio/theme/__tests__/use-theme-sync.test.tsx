@@ -4,7 +4,7 @@
  * `document.documentElement` (PRD §3.4).
  */
 
-import { renderHook, act } from "@testing-library/react";
+import { cleanup, renderHook, act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { useThemeStore } from "../../../stores/theme-store.js";
@@ -33,6 +33,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+	cleanup();
 	document.documentElement.classList.remove("dark");
 	useThemeStore.getState().reset();
 });

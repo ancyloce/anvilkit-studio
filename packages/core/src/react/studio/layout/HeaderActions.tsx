@@ -22,6 +22,7 @@ import type {
 import { useStudioRuntime } from "../../hooks/use-studio.js";
 import { useStudioPluginContextOrNull } from "../context/plugin-context.js";
 import { Button } from "../primitives/Button.js";
+import { useMsg } from "../state/editor-i18n-store.js";
 import { HeaderActionButton } from "./HeaderActionButton.js";
 
 export interface HeaderActionsProps {
@@ -127,6 +128,7 @@ interface OverflowMenuProps {
  */
 function OverflowMenu({ actions, ctx }: OverflowMenuProps): ReactNode {
 	const [open, setOpen] = useState(false);
+	const msg = useMsg();
 	return (
 		<div className="relative">
 			<Button
@@ -134,6 +136,7 @@ function OverflowMenu({ actions, ctx }: OverflowMenuProps): ReactNode {
 				size="icon"
 				aria-haspopup="menu"
 				aria-expanded={open}
+				aria-label={msg("studio.headerActions.overflow")}
 				onClick={() => setOpen((p) => !p)}
 			>
 				<MoreHorizontal />
