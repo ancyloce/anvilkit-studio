@@ -31,6 +31,15 @@ export interface StudioPage {
 	 * drafts, etc.).
 	 */
 	readonly route?: boolean;
+	/**
+	 * `true` for the page currently loaded into the canvas. The host
+	 * computes this from its routing state during {@link StudioPagesSource.list}
+	 * and re-emits via `subscribe()` when the active page changes. The
+	 * sidebar renders the row with the `--ak-studio-accent` background
+	 * (PRD §6.2). Optional — sources that omit it always render every
+	 * row inactive.
+	 */
+	readonly active?: boolean;
 }
 
 /**
