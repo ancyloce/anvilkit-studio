@@ -60,6 +60,14 @@ const reactExportPlugin = createReactExportPlugin({
 	syntax: "tsx",
 	assetStrategy: "url-prop",
 });
+// Live asset-manager plugin: drives the sidebar's `image` module via the
+// `StudioAssetSource` registered on `onInit`. Uses the data URL uploader
+// so the demo works fully in-browser without a server-side persistence
+// dependency. The `?e2e=asset-manager` harness keeps its own instance.
+const liveAssetManagerPlugin = createAssetManagerPlugin({
+	uploader: dataUrlUploader(),
+	urlAllowlist: ["http", "https", "blob", "data"],
+});
 const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 const aiCopilotPlugin = createAiCopilotPlugin({
 	puckConfig: demoConfig as unknown as Config,
@@ -277,6 +285,7 @@ export default function PuckEditorPage() {
 				htmlExportPlugin,
 				reactExportPlugin,
 				aiCopilotPlugin,
+				liveAssetManagerPlugin,
 			];
 			return collabBundle ? [...base, collabBundle.plugin] : base;
 		},
