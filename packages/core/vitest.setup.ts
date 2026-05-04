@@ -36,3 +36,19 @@ if (
 		}),
 	});
 }
+
+// jsdom does not implement `Element.getAnimations()` — Base UI's
+// `ScrollArea` calls it from a deferred timeout on mount, which would
+// otherwise raise an unhandled rejection mid-test. Returning an empty
+// array matches the spec for an element with no animations.
+if (
+	typeof Element !== "undefined" &&
+	typeof (Element.prototype as { getAnimations?: unknown }).getAnimations !==
+		"function"
+) {
+	Object.defineProperty(Element.prototype, "getAnimations", {
+		writable: true,
+		configurable: true,
+		value: () => [],
+	});
+}
