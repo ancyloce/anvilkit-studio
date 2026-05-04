@@ -100,6 +100,7 @@ import { useExportStore } from "../stores/export-store.js";
 import { useThemeStore } from "../stores/theme-store.js";
 import { ChromePropsProvider } from "../studio/context/chrome-props.js";
 import { StudioPluginContextProvider } from "../studio/context/plugin-context.js";
+import { DEFAULT_INSERT_SECTIONS } from "../studio/layout/sidebar/modules/insert/default-sections.js";
 import {
 	createSidebarRegistryStore,
 	EditorI18nStoreProvider,
@@ -532,9 +533,21 @@ export function Studio(props: StudioProps): ReactElement | null {
 	// sections, layer quick-adds, asset source / actions, copy snippet
 	// packs) through `ctx.register*` — those calls land in this store
 	// and the sidebar reads from it via the provider below.
-	const [sidebarRegistryStore] = useState<SidebarRegistryStoreApi>(() =>
-		createSidebarRegistryStore(),
-	);
+	//
+	// Default `insert` sections (`recommended` / `navigation` / `top` /
+	// `team`) are seeded synchronously here so the first paint of the
+	// `insert` module already shows the sectioned library — registering
+	// them in a `useEffect` would produce a one-frame flash of "no
+	// sections" before hydration. Plugins that call
+	// `registerInsertSection()` later merge into the same registry
+	// without conflict.
+	const [sidebarRegistryStore] = useState<SidebarRegistryStoreApi>(() => {
+		const store = createSidebarRegistryStore();
+		for (const section of DEFAULT_INSERT_SECTIONS) {
+			store.getState().registerInsertSection(section);
+		}
+		return store;
+	});
 
 	// ------------------------------------------------------------------
 	// SSR-safe rehydration. The three Zustand stores are declared with
