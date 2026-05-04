@@ -1,9 +1,11 @@
 /**
- * @file Canvas toolbar — viewport selector, zoom, undo, redo.
+ * @file Canvas toolbar — viewport dropdown, undo / redo, zoom, home.
  */
 
 import { useGetPuck } from "@puckeditor/core";
 import {
+	ChevronDown,
+	Home,
 	Monitor,
 	Redo2,
 	Smartphone,
@@ -12,18 +14,25 @@ import {
 	ZoomIn,
 	ZoomOut,
 } from "lucide-react";
-import { type ReactNode, useMemo } from "react";
+import { type ReactNode, useCallback, useMemo } from "react";
 
-import {
-	FULL_WIDTH_VIEWPORTS,
-	type StudioViewport,
-} from "../ui/index.js";
+import { useMsg } from "../state/editor-i18n-store.js";
 import {
 	useCanvasViewport,
 	useCanvasZoom,
 } from "../state/hooks.js";
-import { useMsg } from "../state/editor-i18n-store.js";
+import { useStudioPagesSource } from "../context/pages-source.js";
+import {
+	FULL_WIDTH_VIEWPORTS,
+	type StudioViewport,
+} from "../ui/index.js";
 import { Button } from "../primitives/button.js";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "../primitives/dropdown-menu.js";
 import { Separator } from "../primitives/separator.js";
 import {
 	Tooltip,
@@ -36,19 +45,29 @@ const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 2;
 
 const VIEWPORT_ICON: Record<StudioViewport["label"], ReactNode> = {
-	mobile: <Smartphone />,
-	tablet: <Tablet />,
-	desktop: <Monitor />,
-	full: <Monitor />,
+	mobile: <Smartphone className="size-4" aria-hidden="true" />,
+	tablet: <Tablet className="size-4" aria-hidden="true" />,
+	desktop: <Monitor className="size-4" aria-hidden="true" />,
+	full: <Monitor className="size-4" aria-hidden="true" />,
 };
+
+function formatViewportWidth(width: StudioViewport["width"]): string {
+	if (typeof width === "number") return `${width}px`;
+	return width;
+}
 
 export function StudioToolbar(): ReactNode {
 	const msg = useMsg();
 	const [viewport, setViewport] = useCanvasViewport();
 	const [zoom, setZoom] = useCanvasZoom();
 	const getPuck = useGetPuck();
+	const pagesSource = useStudioPagesSource();
 
 	const viewports = useMemo(() => FULL_WIDTH_VIEWPORTS, []);
+	const activeViewport = useMemo(
+		() => viewports.find((vp) => vp.label === viewport) ?? viewports[0],
+		[viewport, viewports],
+	);
 
 	const undo = (): void => {
 		getPuck().history.back();
@@ -57,30 +76,93 @@ export function StudioToolbar(): ReactNode {
 		getPuck().history.forward();
 	};
 
+	const goHome = useCallback(async () => {
+		if (pagesSource === undefined) return;
+		const list = await pagesSource.list();
+		const first = list[0];
+		if (first === undefined) return;
+		pagesSource.onSelect?.(first.id);
+	}, [pagesSource]);
+
+	const homeDisabled = pagesSource === undefined;
+
 	return (
 		<div className="flex h-10 items-center gap-1 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-bg)] px-3">
-			<div className="flex items-center gap-0.5">
-				{viewports.map((vp) => (
-					<Tooltip key={vp.label}>
-						<TooltipTrigger
-							render={
-								<span className="inline-flex">
-									<Button
-										variant={viewport === vp.label ? "default" : "ghost"}
-										size="icon"
-										onClick={() => setViewport(vp.label)}
-									>
-										{VIEWPORT_ICON[vp.label]}
-									</Button>
+			<DropdownMenu>
+				<DropdownMenuTrigger
+					render={
+						<Button
+							variant="ghost"
+							size="sm"
+							className="gap-1.5 px-2 text-[var(--ak-studio-fg)]"
+						>
+							{activeViewport ? VIEWPORT_ICON[activeViewport.label] : null}
+							<span className="text-xs font-medium">
+								{activeViewport
+									? msg(
+											`studio.toolbar.viewport.${activeViewport.label}`,
+										)
+									: msg("studio.actions.viewport")}
+							</span>
+							<ChevronDown
+								className="size-3 text-[var(--ak-studio-muted-fg)]"
+								aria-hidden="true"
+							/>
+							{activeViewport ? (
+								<span className="ms-1 text-xs tabular-nums text-[var(--ak-studio-muted-fg)]">
+									{formatViewportWidth(activeViewport.width)}
 								</span>
-							}
-						/>
-						<TooltipContent>{vp.label}</TooltipContent>
-					</Tooltip>
-				))}
-			</div>
-			<Separator orientation="vertical" className="mx-1 h-6" />
-			<div className="flex items-center gap-0.5">
+							) : null}
+						</Button>
+					}
+				/>
+				<DropdownMenuContent align="start">
+					{viewports.map((vp) => (
+						<DropdownMenuItem
+							key={vp.label}
+							onClick={() => setViewport(vp.label)}
+							className="gap-2"
+						>
+							{VIEWPORT_ICON[vp.label]}
+							<span className="grow text-xs">
+								{msg(`studio.toolbar.viewport.${vp.label}`)}
+							</span>
+							<span className="text-xs tabular-nums text-muted-foreground">
+								{formatViewportWidth(vp.width)}
+							</span>
+						</DropdownMenuItem>
+					))}
+				</DropdownMenuContent>
+			</DropdownMenu>
+
+			<div className="ms-auto flex items-center gap-0.5">
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<span className="inline-flex">
+								<Button variant="ghost" size="icon" onClick={undo}>
+									<Undo2 />
+								</Button>
+							</span>
+						}
+					/>
+					<TooltipContent>{msg("studio.actions.undo")}</TooltipContent>
+				</Tooltip>
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<span className="inline-flex">
+								<Button variant="ghost" size="icon" onClick={redo}>
+									<Redo2 />
+								</Button>
+							</span>
+						}
+					/>
+					<TooltipContent>{msg("studio.actions.redo")}</TooltipContent>
+				</Tooltip>
+
+				<Separator orientation="vertical" className="mx-1 h-6" />
+
 				<Tooltip>
 					<TooltipTrigger
 						render={
@@ -118,32 +200,33 @@ export function StudioToolbar(): ReactNode {
 					/>
 					<TooltipContent>{msg("studio.actions.zoomIn")}</TooltipContent>
 				</Tooltip>
+
+				<Separator orientation="vertical" className="mx-1 h-6" />
+
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<span className="inline-flex">
+								<Button
+									variant="ghost"
+									size="sm"
+									className="gap-1.5"
+									onClick={() => {
+										void goHome();
+									}}
+									disabled={homeDisabled}
+								>
+									<Home className="size-4" aria-hidden="true" />
+									<span className="text-xs font-medium">
+										{msg("studio.actions.home")}
+									</span>
+								</Button>
+							</span>
+						}
+					/>
+					<TooltipContent>{msg("studio.actions.home")}</TooltipContent>
+				</Tooltip>
 			</div>
-			<Separator orientation="vertical" className="mx-1 h-6" />
-			<Tooltip>
-				<TooltipTrigger
-					render={
-						<span className="inline-flex">
-							<Button variant="ghost" size="icon" onClick={undo}>
-								<Undo2 />
-							</Button>
-						</span>
-					}
-				/>
-				<TooltipContent>{msg("studio.actions.undo")}</TooltipContent>
-			</Tooltip>
-			<Tooltip>
-				<TooltipTrigger
-					render={
-						<span className="inline-flex">
-							<Button variant="ghost" size="icon" onClick={redo}>
-								<Redo2 />
-							</Button>
-						</span>
-					}
-				/>
-				<TooltipContent>{msg("studio.actions.redo")}</TooltipContent>
-			</Tooltip>
 		</div>
 	);
 }

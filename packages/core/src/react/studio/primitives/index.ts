@@ -11,6 +11,7 @@ export {
 	AccordionItem,
 	AccordionTrigger,
 } from "./accordion.js";
+export { Avatar, AvatarFallback, AvatarImage } from "./avatar.js";
 export { Button, buttonVariants } from "./button.js";
 export { Checkbox } from "./checkbox.js";
 export {
