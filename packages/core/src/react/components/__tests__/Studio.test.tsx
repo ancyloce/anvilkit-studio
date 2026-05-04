@@ -32,7 +32,7 @@
 
 import type { Config as PuckConfig, Data as PuckData } from "@puckeditor/core";
 import { act, render, renderHook, waitFor } from "@testing-library/react";
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import {
 	afterEach,
 	beforeEach,
@@ -647,5 +647,223 @@ describe("<Studio> — legacy aiHost compat", () => {
 
 		unmount();
 		warnSpy.mockRestore();
+	});
+});
+
+// ----------------------------------------------------------------------
+// Chrome mode (Phase 5).
+// ----------------------------------------------------------------------
+
+describe("<Studio> — chrome modes", () => {
+	it("default `chrome` is anvilkit and prepends the studio override preset to the merge pipeline", async () => {
+		const { container } = render(
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[]} />,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		// The default preset claims the `puck` slot for `<StudioLayout>`.
+		// Plus our internal `<PuckApiBinder>` wraps the result. Together
+		// they produce a function override on `puck`.
+		const overrides = puckMockState.lastProps?.overrides;
+		expect(overrides).toBeDefined();
+		expect(typeof (overrides as Record<string, unknown>).puck).toBe("function");
+		// `fieldTypes` registry is part of the preset.
+		expect((overrides as Record<string, unknown>).fieldTypes).toBeDefined();
+	});
+
+	it("`chrome=\"puck\"` skips the preset and matches the pre-Phase-5 override shape", async () => {
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[]}
+				chrome="puck"
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		const overrides = puckMockState.lastProps?.overrides;
+		expect(overrides).toBeDefined();
+		// Only the internal `<PuckApiBinder>` claims the `puck` slot —
+		// no `fieldTypes` registry, no other chrome slots.
+		expect(typeof (overrides as Record<string, unknown>).puck).toBe("function");
+		expect((overrides as Record<string, unknown>).fieldTypes).toBeUndefined();
+		expect((overrides as Record<string, unknown>).drawer).toBeUndefined();
+		expect((overrides as Record<string, unknown>).fieldLabel).toBeUndefined();
+		expect((overrides as Record<string, unknown>).iframe).toBeUndefined();
+	});
+
+	it("`chrome=\"anvilkit\"` applies full-width-viewport defaults via mergeStudioUi", async () => {
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[]}
+				chrome="anvilkit"
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		const ui = (puckMockState.lastProps as { ui?: { viewports?: { options?: unknown[] } } }).ui;
+		expect(ui).toBeDefined();
+		expect(ui?.viewports?.options).toBeDefined();
+		// Default block ships 4 viewports (mobile / tablet / desktop / full).
+		expect((ui?.viewports?.options as unknown[])).toHaveLength(4);
+	});
+
+	it("`chrome=\"puck\"` does not apply ui defaults when consumer omitted them", async () => {
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[]}
+				chrome="puck"
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		const ui = (puckMockState.lastProps as { ui?: unknown }).ui;
+		expect(ui).toBeUndefined();
+	});
+
+	it("forwards onAction and viewports to <Puck> in both chrome modes", async () => {
+		const onAction = vi.fn();
+		const viewports = [
+			{ label: "tiny", width: 200, height: "auto" as const },
+		];
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[]}
+				chrome="puck"
+				onAction={onAction as never}
+				viewports={viewports as never}
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		expect(
+			(puckMockState.lastProps as { onAction?: unknown }).onAction,
+		).toBe(onAction);
+		expect(
+			(puckMockState.lastProps as { viewports?: unknown }).viewports,
+		).toBe(viewports);
+	});
+
+	it("composes [studioOverrides, plugin, consumer] in correct nesting order", async () => {
+		// Three-layer regression: a plugin AND a consumer both touch
+		// the `fieldLabel` slot. The default preset also ships a
+		// `fieldLabel`. Final order should be:
+		//   default (innermost) → plugin → consumer (outermost)
+		const pluginRegistration: StudioPlugin = {
+			meta: buildMeta("com.example.plugin"),
+			register() {
+				return {
+					meta: buildMeta("com.example.plugin"),
+					overrides: {
+						fieldLabel: ({ children, label }) => (
+							<span data-layer="plugin">
+								[plugin:{label}]{children}[/plugin]
+							</span>
+						),
+					},
+				};
+			},
+		};
+		const consumerOverrides = {
+			fieldLabel: ({ children, label }: { children?: ReactNode; label: string }) => (
+				<span data-layer="consumer">
+					[consumer:{label}]{children}[/consumer]
+				</span>
+			),
+		};
+
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[pluginRegistration]}
+				overrides={consumerOverrides as never}
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		const overrides = puckMockState.lastProps?.overrides as
+			| { fieldLabel?: (props: unknown) => ReactElement }
+			| undefined;
+		expect(overrides?.fieldLabel).toBeDefined();
+		const composed = overrides?.fieldLabel?.({
+			label: "Title",
+			children: "INNER",
+		});
+		const { container: c2 } = render(composed as ReactElement);
+		const html = c2.innerHTML;
+		// Outermost layer should be consumer; plugin sits between
+		// consumer and the default preset's FieldLabel.
+		const consumerIdx = html.indexOf("data-layer=\"consumer\"");
+		const pluginIdx = html.indexOf("data-layer=\"plugin\"");
+		expect(consumerIdx).toBeGreaterThanOrEqual(0);
+		expect(pluginIdx).toBeGreaterThan(consumerIdx);
+		// Default preset's FieldLabel renders the label as text inside
+		// the innermost wrapper.
+		expect(html).toContain("Title");
+		expect(html).toContain("INNER");
+	});
+
+	it("composes fieldTypes per inner type across [default, plugin, consumer]", async () => {
+		const pluginRegistration: StudioPlugin = {
+			meta: buildMeta("com.example.field-plugin"),
+			register() {
+				return {
+					meta: buildMeta("com.example.field-plugin"),
+					overrides: {
+						fieldTypes: {
+							text: ({ children }: { children?: ReactNode }) => (
+								<span data-layer="plugin-text">{children}</span>
+							),
+						},
+					} as never,
+				};
+			},
+		};
+		const consumerOverrides = {
+			fieldTypes: {
+				text: ({ children }: { children?: ReactNode }) => (
+					<span data-layer="consumer-text">{children}</span>
+				),
+			},
+		};
+
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[pluginRegistration]}
+				overrides={consumerOverrides as never}
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		const overrides = puckMockState.lastProps?.overrides as
+			| { fieldTypes?: { text?: (props: unknown) => ReactElement } }
+			| undefined;
+		expect(overrides?.fieldTypes?.text).toBeDefined();
+		const composed = overrides?.fieldTypes?.text?.({
+			children: "VAL",
+			name: "title",
+			field: { type: "text" },
+			value: "",
+			onChange: () => undefined,
+		});
+		const { container: c2 } = render(composed as ReactElement);
+		const html = c2.innerHTML;
+		expect(html).toContain("data-layer=\"plugin-text\"");
+		expect(html).toContain("data-layer=\"consumer-text\"");
+		// Consumer (registered LAST) is outermost.
+		const consumerIdx = html.indexOf("data-layer=\"consumer-text\"");
+		const pluginIdx = html.indexOf("data-layer=\"plugin-text\"");
+		expect(consumerIdx).toBeLessThan(pluginIdx);
 	});
 });

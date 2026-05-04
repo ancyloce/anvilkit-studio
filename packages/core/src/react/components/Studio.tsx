@@ -65,11 +65,15 @@ import {
 	Puck,
 	type Config as PuckConfig,
 	type Data as PuckData,
+	type OnAction as PuckOnAction,
 	type Overrides as PuckOverrides,
 	type Plugin as PuckPlugin,
+	type UiState as PuckUiState,
+	type Viewports as PuckViewports,
 	useGetPuck,
 } from "@puckeditor/core";
 import {
+	type ComponentType,
 	type ReactElement,
 	type ReactNode,
 	type RefObject,
@@ -90,9 +94,32 @@ import type { StudioConfig } from "../../types/config.js";
 import type { StudioPlugin, StudioPluginContext } from "../../types/plugin.js";
 import { StudioRuntimeProvider } from "../hooks/use-studio.js";
 import { mergeOverrides } from "../overrides/merge-overrides.js";
+import type { StudioChromeMode } from "../overrides/types.js";
 import { useAiStore } from "../stores/ai-store.js";
 import { useExportStore } from "../stores/export-store.js";
 import { useThemeStore } from "../stores/theme-store.js";
+import { ChromePropsProvider } from "../studio/context/chrome-props.js";
+import { StudioPluginContextProvider } from "../studio/context/plugin-context.js";
+import {
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+} from "../studio/state/index.js";
+import { useThemeSync } from "../studio/theme/use-theme-sync.js";
+import { mergeStudioUi } from "../studio/ui/merge-studio-ui.js";
+
+const DEFAULT_STORE_ID = "default";
+const DEFAULT_CHROME_MODE: StudioChromeMode = "anvilkit";
+
+/**
+ * Tiny hook-runner so `useThemeSync` can sit inside the provider
+ * tree without `<Studio>` itself becoming a hook-only consumer of
+ * the store. Returns null — this component only exists for its
+ * effect.
+ */
+function ThemeSyncBoundary(): null {
+	useThemeSync();
+	return null;
+}
 
 /**
  * Props accepted by {@link Studio}. Mirrors the subset of `<Puck>`'s
@@ -161,6 +188,64 @@ export interface StudioProps {
 	 * `@anvilkit/plugins/ai-generation`.
 	 */
 	readonly aiHost?: string;
+	/**
+	 * Which chrome to render. `"anvilkit"` (the default) prepends the
+	 * default override preset and mounts the AnvilKit Studio shell.
+	 * `"puck"` is a single-prop opt-out that ships the raw
+	 * `@puckeditor/core` UI — bit-for-bit identical to the pre-Phase-5
+	 * `<Studio>` output (PRD §6.1 + §11 decision 1).
+	 */
+	readonly chrome?: StudioChromeMode;
+	/**
+	 * Initial Puck `UiState` partial. When `chrome="anvilkit"`, this
+	 * is merged with the chrome's full-width-viewport defaults via
+	 * `mergeStudioUi()` so consumers can preset the sidebar
+	 * visibility, viewport selection, etc. without losing the
+	 * chrome's defaults.
+	 */
+	readonly ui?: Partial<PuckUiState>;
+	/**
+	 * Forwarded to `<Puck onAction>` — fires on every Puck action
+	 * dispatch (insert / move / delete / etc.). Independent of
+	 * `onChange`, which fires once per debounced data update.
+	 */
+	readonly onAction?: PuckOnAction<PuckData>;
+	/**
+	 * Forwarded to `<Puck viewports>`. Overrides the chrome's
+	 * full-width-viewport default block when provided.
+	 */
+	readonly viewports?: PuckViewports;
+	/**
+	 * Per-instance store id (default `"default"`). Persisted
+	 * `EditorUiState` keys live under `anvilkit-ui-${storeId}`, so
+	 * two `<Studio>` instances on the same page should pass distinct
+	 * ids to avoid collisions.
+	 */
+	readonly storeId?: string;
+	/**
+	 * Optional "back" handler for the chrome's header. Hidden when
+	 * absent.
+	 */
+	readonly onBack?: () => void;
+	/**
+	 * Optional "save draft" handler. The header surfaces a button
+	 * when this is provided.
+	 */
+	readonly onSaveDraft?: () => void | Promise<void>;
+	/**
+	 * Drives the "save draft" button's loading state. Host owns the
+	 * boolean — `<Studio>` only renders it.
+	 */
+	readonly isSavingDraft?: boolean;
+	/**
+	 * Timestamp of the last successful save. Renders as a relative
+	 * time hint next to the publish button.
+	 */
+	readonly lastSavedAt?: Date | null;
+	/**
+	 * Drives the "Publish" button's loading state.
+	 */
+	readonly isPublishing?: boolean;
 }
 
 /**
@@ -409,7 +494,18 @@ export function Studio(props: StudioProps): ReactElement | null {
 		onChange,
 		onPublish,
 		aiHost,
+		chrome = DEFAULT_CHROME_MODE,
+		ui,
+		onAction,
+		viewports,
+		storeId = DEFAULT_STORE_ID,
+		onBack,
+		onSaveDraft,
+		isSavingDraft,
+		lastSavedAt,
+		isPublishing,
 	} = props;
+	const isAnvilkit = chrome === "anvilkit";
 
 	// ------------------------------------------------------------------
 	// 1. Refs for the plugin context. `getData()` is a late-bound
@@ -468,6 +564,16 @@ export function Studio(props: StudioProps): ReactElement | null {
 		readonly ctx: StudioPluginContext;
 	} | null>(null);
 
+	// Dynamically-loaded AnvilKit chrome assets. Stays `null` for
+	// `chrome="puck"`, keeping the preset + layout out of the
+	// `<Studio>` entry chunk. The compile effect populates it during
+	// the same async setup pass that loads `createStudioConfig`, so
+	// host apps see a single render gap for both.
+	const [chromeAssets, setChromeAssets] = useState<{
+		readonly studioOverrides: Partial<PuckOverrides>;
+		readonly StudioLayout: ComponentType<unknown>;
+	} | null>(null);
+
 	// Structural fingerprint of `plugins` + `config` so the compile
 	// effect does not thrash when a parent re-render hands us a new
 	// array/object reference with identical contents — the idiomatic
@@ -505,6 +611,25 @@ export function Studio(props: StudioProps): ReactElement | null {
 				return;
 			}
 			const studioConfig = createStudioConfig(config);
+
+			// AnvilKit chrome assets — preset + layout — load as
+			// separate async chunks. The `chrome="puck"` path skips
+			// both imports entirely so the entry bundle for hosts that
+			// pin to the legacy chrome stays under budget.
+			let nextChromeAssets: typeof chromeAssets = null;
+			if (isAnvilkit) {
+				const [presetMod, layoutMod] = await Promise.all([
+					import("../overrides/preset.js"),
+					import("../studio/layout/StudioLayout.js"),
+				]);
+				if (cancelled) {
+					return;
+				}
+				nextChromeAssets = {
+					studioOverrides: presetMod.studioOverrides,
+					StudioLayout: layoutMod.StudioLayout as ComponentType<unknown>,
+				};
+			}
 
 			let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] = basePlugins;
 			if (aiHost !== undefined) {
@@ -576,6 +701,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 					return;
 				}
 				setCompiled({ runtime, studioConfig, ctx });
+				setChromeAssets(nextChromeAssets);
 			} catch (error) {
 				if (cancelled) {
 					// Suppress stale-setup logs — a later effect
@@ -595,7 +721,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		return () => {
 			cancelled = true;
 		};
-	}, [pluginsFingerprint, aiHost, configFingerprint]);
+	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit]);
 
 	// ------------------------------------------------------------------
 	// 3. Populate the export store once the runtime is ready. Writing
@@ -672,6 +798,13 @@ export function Studio(props: StudioProps): ReactElement | null {
 	// ------------------------------------------------------------------
 	const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
 		const base: Partial<PuckOverrides>[] = [];
+		// Default chrome preset is INNERMOST when `chrome="anvilkit"`
+		// — plugins can wrap and consumers can wrap further out.
+		// `chrome="puck"` skips the prepend, so the merge result is
+		// bit-for-bit what `<Studio>` produced before Phase 5.
+		if (isAnvilkit && chromeAssets !== null) {
+			base.push(chromeAssets.studioOverrides);
+		}
 		if (compiled !== null) {
 			base.push(...compiled.runtime.overrides);
 		}
@@ -691,7 +824,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		});
 
 		return mergeOverrides(base);
-	}, [compiled, consumerOverrides]);
+	}, [compiled, consumerOverrides, isAnvilkit, chromeAssets]);
 
 	// ------------------------------------------------------------------
 	// 7. Puck `onChange` / `onPublish` handlers.
@@ -793,18 +926,79 @@ export function Studio(props: StudioProps): ReactElement | null {
 	if (compiled === null) {
 		return null;
 	}
+	// AnvilKit chrome must wait for the dynamically-loaded preset +
+	// layout to resolve before rendering, otherwise `<Puck>` would
+	// see plain Puck overrides without the chrome's `puck` slot
+	// wrapping `<StudioLayout>`. Hold the `null` render until both
+	// state slots agree.
+	if (isAnvilkit && chromeAssets === null) {
+		return null;
+	}
 
+	const puckUi = isAnvilkit ? mergeStudioUi(ui) : ui;
+	const puckElement = (
+		<Puck
+			config={puckConfig}
+			data={data ?? EMPTY_DATA}
+			overrides={mergedOverrides}
+			onChange={handleChange}
+			onPublish={handlePublish}
+			plugins={[...compiled.runtime.puckPlugins]}
+			ui={puckUi}
+			onAction={onAction}
+			viewports={viewports}
+		/>
+	);
+
+	if (!isAnvilkit) {
+		// Bit-for-bit pre-Phase-5 output: same provider stack, same
+		// JSX nesting. The new `ui` / `onAction` / `viewports` props
+		// pass through to `<Puck>` only if the consumer set them.
+		return (
+			<StudioConfigProvider config={compiled.studioConfig}>
+				<StudioRuntimeProvider value={compiled.runtime}>
+					{puckElement}
+				</StudioRuntimeProvider>
+			</StudioConfigProvider>
+		);
+	}
+
+	// AnvilKit chrome: layered providers around `<Puck>`. Order from
+	// outermost to innermost — config / runtime first so descendants
+	// can read them; plugin context next so chrome components
+	// (header actions, etc.) see the live ctx; per-instance editor
+	// stores last so the chrome reads its own state slice without
+	// reaching higher.
+	//
+	// `<ThemeSyncBoundary />` sits inside the editor stores so its
+	// effect can read the theme store (already a global) but writes
+	// the resolved value where every chrome surface picks it up.
+	// `_chromeAssets` is referenced so the linter does not flag it
+	// as an unused destructure — the actual `<StudioLayout>` mount
+	// happens inside the `puck` slot of `studioOverrides`.
+	const _chromeAssets = chromeAssets;
+	void _chromeAssets;
 	return (
 		<StudioConfigProvider config={compiled.studioConfig}>
 			<StudioRuntimeProvider value={compiled.runtime}>
-				<Puck
-					config={puckConfig}
-					data={data ?? EMPTY_DATA}
-					overrides={mergedOverrides}
-					onChange={handleChange}
-					onPublish={handlePublish}
-					plugins={[...compiled.runtime.puckPlugins]}
-				/>
+				<StudioPluginContextProvider value={compiled.ctx}>
+					<EditorUiStoreProvider storeId={storeId}>
+						<EditorI18nStoreProvider>
+							<ChromePropsProvider
+								value={{
+									onBack,
+									onSaveDraft,
+									isSavingDraft,
+									lastSavedAt,
+									isPublishing,
+								}}
+							>
+								<ThemeSyncBoundary />
+								{puckElement}
+							</ChromePropsProvider>
+						</EditorI18nStoreProvider>
+					</EditorUiStoreProvider>
+				</StudioPluginContextProvider>
 			</StudioRuntimeProvider>
 		</StudioConfigProvider>
 	);
