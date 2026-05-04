@@ -101,8 +101,11 @@ import { useThemeStore } from "../stores/theme-store.js";
 import { ChromePropsProvider } from "../studio/context/chrome-props.js";
 import { StudioPluginContextProvider } from "../studio/context/plugin-context.js";
 import {
+	createSidebarRegistryStore,
 	EditorI18nStoreProvider,
 	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+	type SidebarRegistryStoreApi,
 } from "../studio/state/index.js";
 import { useThemeSync } from "../studio/theme/use-theme-sync.js";
 import { mergeStudioUi } from "../studio/ui/merge-studio-ui.js";
@@ -523,6 +526,17 @@ export function Studio(props: StudioProps): ReactElement | null {
 	const puckApiRef = useRef<GetPuckSnapshot | null>(null);
 
 	// ------------------------------------------------------------------
+	// Per-instance sidebar registry. Created lazily inside `useState`
+	// so React's strict-mode double-invocation does not produce two
+	// stores during dev. Plugins register sidebar surfaces (insert
+	// sections, layer quick-adds, asset source / actions, copy snippet
+	// packs) through `ctx.register*` — those calls land in this store
+	// and the sidebar reads from it via the provider below.
+	const [sidebarRegistryStore] = useState<SidebarRegistryStoreApi>(() =>
+		createSidebarRegistryStore(),
+	);
+
+	// ------------------------------------------------------------------
 	// SSR-safe rehydration. The three Zustand stores are declared with
 	// `skipHydration: true` so they do not synchronously read
 	// `localStorage` at module evaluation — that read would fire on
@@ -691,6 +705,16 @@ export function Studio(props: StudioProps): ReactElement | null {
 					// a runtime-backed collector, keeping this base context
 					// immutable for the rest of the Studio shell.
 				},
+				registerInsertSection: (section) =>
+					sidebarRegistryStore.getState().registerInsertSection(section),
+				registerLayerQuickAdd: (item) =>
+					sidebarRegistryStore.getState().registerLayerQuickAdd(item),
+				registerAssetSource: (source) =>
+					sidebarRegistryStore.getState().registerAssetSource(source),
+				registerAssetAction: (action) =>
+					sidebarRegistryStore.getState().registerAssetAction(action),
+				registerCopySnippetPack: (pack) =>
+					sidebarRegistryStore.getState().registerCopySnippetPack(pack),
 			};
 
 			try {
@@ -982,22 +1006,24 @@ export function Studio(props: StudioProps): ReactElement | null {
 		<StudioConfigProvider config={compiled.studioConfig}>
 			<StudioRuntimeProvider value={compiled.runtime}>
 				<StudioPluginContextProvider value={compiled.ctx}>
-					<EditorUiStoreProvider storeId={storeId}>
-						<EditorI18nStoreProvider>
-							<ChromePropsProvider
-								value={{
-									onBack,
-									onSaveDraft,
-									isSavingDraft,
-									lastSavedAt,
-									isPublishing,
-								}}
-							>
-								<ThemeSyncBoundary />
-								{puckElement}
-							</ChromePropsProvider>
-						</EditorI18nStoreProvider>
-					</EditorUiStoreProvider>
+					<SidebarRegistryProvider value={sidebarRegistryStore}>
+						<EditorUiStoreProvider storeId={storeId}>
+							<EditorI18nStoreProvider>
+								<ChromePropsProvider
+									value={{
+										onBack,
+										onSaveDraft,
+										isSavingDraft,
+										lastSavedAt,
+										isPublishing,
+									}}
+								>
+									<ThemeSyncBoundary />
+									{puckElement}
+								</ChromePropsProvider>
+							</EditorI18nStoreProvider>
+						</EditorUiStoreProvider>
+					</SidebarRegistryProvider>
 				</StudioPluginContextProvider>
 			</StudioRuntimeProvider>
 		</StudioConfigProvider>
