@@ -11,6 +11,7 @@ import type { ReactElement } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
+	EditorI18nStoreProvider,
 	EditorUiStoreProvider,
 	useEditorUiStore,
 } from "../../../../state/index.js";
@@ -20,11 +21,13 @@ afterEach(cleanup);
 
 function Setup({ children }: { readonly children: ReactElement }): ReactElement {
 	return (
-		<EditorUiStoreProvider
-			storeId={`splitter-${Math.random().toString(36).slice(2)}`}
-		>
-			{children}
-		</EditorUiStoreProvider>
+		<EditorI18nStoreProvider>
+			<EditorUiStoreProvider
+				storeId={`splitter-${Math.random().toString(36).slice(2)}`}
+			>
+				{children}
+			</EditorUiStoreProvider>
+		</EditorI18nStoreProvider>
 	);
 }
 
@@ -65,6 +68,66 @@ describe("Splitter", () => {
 
 		fireEvent.keyDown(splitter, { key: "ArrowUp" });
 		expect(screen.getByTestId("ratio-probe").textContent).toBe("0.4000");
+	});
+
+	it("resolves the localized aria-label by default", () => {
+		render(
+			<Setup>
+				<Splitter />
+			</Setup>,
+		);
+		const splitter = screen.getByTestId("ak-layer-splitter");
+		expect(splitter.getAttribute("aria-label")).toBe(
+			"Resize Pages and Layers panels",
+		);
+	});
+
+	it("respects an explicit ariaLabel prop override", () => {
+		render(
+			<Setup>
+				<Splitter ariaLabel="Custom label" />
+			</Setup>,
+		);
+		expect(
+			screen.getByTestId("ak-layer-splitter").getAttribute("aria-label"),
+		).toBe("Custom label");
+	});
+
+	it("flips data-dragging on pointer drag and clears it on release", () => {
+		render(
+			<Setup>
+				<Splitter />
+			</Setup>,
+		);
+		const splitter = screen.getByTestId("ak-layer-splitter");
+		expect(splitter.getAttribute("data-dragging")).toBeNull();
+
+		fireEvent.pointerDown(splitter, { pointerId: 1, clientY: 100 });
+		expect(splitter.getAttribute("data-dragging")).toBe("true");
+
+		fireEvent.pointerUp(splitter, { pointerId: 1, clientY: 120 });
+		expect(splitter.getAttribute("data-dragging")).toBeNull();
+	});
+
+	it("suppresses Puck preview iframe pointer-events during drag", () => {
+		const iframe = document.createElement("iframe");
+		iframe.id = "preview-frame-test";
+		iframe.style.pointerEvents = "auto";
+		document.body.appendChild(iframe);
+		try {
+			render(
+				<Setup>
+					<Splitter />
+				</Setup>,
+			);
+			const splitter = screen.getByTestId("ak-layer-splitter");
+			fireEvent.pointerDown(splitter, { pointerId: 1, clientY: 100 });
+			expect(iframe.style.pointerEvents).toBe("none");
+			fireEvent.pointerUp(splitter, { pointerId: 1, clientY: 120 });
+			expect(iframe.style.pointerEvents).toBe("auto");
+		} finally {
+			iframe.remove();
+		}
 	});
 
 	it("clamps to 0.15 on Home and 0.85 on End", () => {

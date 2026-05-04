@@ -10,41 +10,91 @@
  * The store-side clamp means we don't need to clamp here — passing
  * an out-of-range value to `setLayerSplitRatio` is safe.
  *
- * Pointer-events on the canvas iframe are NOT yet suppressed during
- * drag (a planned hardening item — see the build plan §9 risks).
+ * During pointer drag we set `pointer-events: none` on the live Puck
+ * preview iframe so the captured pointer is never poached when the
+ * cursor crosses the canvas. The previous inline value is stashed
+ * and restored on `pointerup` / `pointercancel` / unmount.
  */
 
-import { type PointerEvent, type ReactNode, useCallback, useRef } from "react";
+import {
+	type PointerEvent,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
+import { useMsg } from "../../../state/editor-i18n-store.js";
 import { useLayerSplitRatio } from "../../../state/hooks.js";
 
 const KEY_NUDGE = 0.02;
 const RATIO_MIN = 0.15;
 const RATIO_MAX = 0.85;
+const PUCK_IFRAME_SELECTOR = 'iframe[id^="preview-frame"]';
 
 export interface SplitterProps {
 	/**
-	 * Optional ARIA label for the separator. Falls back to a generic
-	 * "Resize panel" string — callers should pass a localized label
-	 * when the surrounding context warrants one.
+	 * Optional ARIA label override for the separator. When omitted the
+	 * splitter resolves `studio.module.layer.splitter.label` through the
+	 * Studio i18n catalog.
 	 */
 	readonly ariaLabel?: string;
 }
 
 export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
+	const msg = useMsg();
 	const [ratio, setRatio] = useLayerSplitRatio();
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const draggingRef = useRef(false);
+	const [dragging, setDragging] = useState(false);
+	// Track the iframe whose pointerEvents we suppressed (and the
+	// previous inline value) so we restore exactly what we found —
+	// even if React unmounts mid-drag.
+	const iframeRef = useRef<HTMLIFrameElement | null>(null);
+	const iframePointerEventsRef = useRef<string>("");
+
+	const suppressIframePointer = useCallback(() => {
+		const iframe = document.querySelector<HTMLIFrameElement>(
+			PUCK_IFRAME_SELECTOR,
+		);
+		if (iframe === null) return;
+		iframeRef.current = iframe;
+		iframePointerEventsRef.current = iframe.style.pointerEvents;
+		iframe.style.pointerEvents = "none";
+	}, []);
+
+	const restoreIframePointer = useCallback(() => {
+		const iframe = iframeRef.current;
+		if (iframe === null) return;
+		iframe.style.pointerEvents = iframePointerEventsRef.current;
+		iframeRef.current = null;
+		iframePointerEventsRef.current = "";
+	}, []);
+
+	useEffect(() => {
+		return () => {
+			restoreIframePointer();
+			document.body.style.cursor = "";
+		};
+	}, [restoreIframePointer]);
 
 	const handlePointerDown = useCallback(
 		(event: PointerEvent<HTMLDivElement>) => {
 			event.preventDefault();
 			const target = event.currentTarget;
-			target.setPointerCapture(event.pointerId);
+			try {
+				target.setPointerCapture(event.pointerId);
+			} catch {
+				// jsdom and a few older Safari versions reject capture for
+				// synthetic pointers; the drag still works without it.
+			}
 			draggingRef.current = true;
+			setDragging(true);
 			document.body.style.cursor = "row-resize";
+			suppressIframePointer();
 		},
-		[],
+		[suppressIframePointer],
 	);
 
 	const handlePointerMove = useCallback(
@@ -69,10 +119,16 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 		(event: PointerEvent<HTMLDivElement>) => {
 			if (!draggingRef.current) return;
 			draggingRef.current = false;
-			event.currentTarget.releasePointerCapture(event.pointerId);
+			setDragging(false);
+			try {
+				event.currentTarget.releasePointerCapture(event.pointerId);
+			} catch {
+				// See note in handlePointerDown.
+			}
 			document.body.style.cursor = "";
+			restoreIframePointer();
 		},
-		[],
+		[restoreIframePointer],
 	);
 
 	const handleKeyDown = useCallback(
@@ -108,9 +164,10 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 			aria-valuemin={RATIO_MIN}
 			aria-valuemax={RATIO_MAX}
 			aria-valuenow={ratio}
-			aria-label={ariaLabel ?? "Resize panel"}
+			aria-label={ariaLabel ?? msg("studio.module.layer.splitter.label")}
 			tabIndex={0}
 			data-testid="ak-layer-splitter"
+			data-dragging={dragging ? "true" : undefined}
 			onPointerDown={handlePointerDown}
 			onPointerMove={handlePointerMove}
 			onPointerUp={handlePointerUp}
