@@ -17,6 +17,10 @@ export default mergeConfig(
 		test: {
 			name: "@anvilkit/core",
 			passWithNoTests: true,
+			setupFiles: [
+				"@anvilkit/vitest-config/setup/jest-dom",
+				"./vitest.setup.ts",
+			],
 		},
 	}),
 );

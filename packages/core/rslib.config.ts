@@ -42,6 +42,12 @@ export default defineConfig({
 	],
 	output: {
 		target: "web",
+		copy: [
+			{
+				from: "./src/react/overrides/styles.css",
+				to: "./react/overrides/styles.css",
+			},
+		],
 	},
 	plugins: [pluginReact()],
 });

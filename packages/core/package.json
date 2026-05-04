@@ -96,13 +96,26 @@
 				"types": "./dist/section/index.d.cts",
 				"default": "./dist/section/index.cjs"
 			}
-		}
+		},
+		"./react/overrides": {
+			"import": {
+				"types": "./dist/react/overrides/index.d.ts",
+				"default": "./dist/react/overrides/index.js"
+			},
+			"require": {
+				"types": "./dist/react/overrides/index.d.cts",
+				"default": "./dist/react/overrides/index.cjs"
+			}
+		},
+		"./styles.css": "./dist/react/overrides/styles.css"
 	},
 	"files": [
 		"dist"
 	],
 	"license": "MIT",
-	"sideEffects": false,
+	"sideEffects": [
+		"**/*.css"
+	],
 	"publishConfig": {
 		"access": "public"
 	},
@@ -114,6 +127,10 @@
 	"dependencies": {
 		"@anvilkit/ui": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
+		"@base-ui/react": "^1.4.1",
+		"clsx": "^2.1.1",
+		"lucide-react": "^1.7.0",
+		"tailwind-merge": "^3.5.0",
 		"zod": "^4.3.0",
 		"zustand": "^5.0.0"
 	},
@@ -121,24 +138,24 @@
 		"@anvilkit/biome-config": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
-		"@puckeditor/core": "^0.21.1",
-		"@rsbuild/plugin-react": "^1.4.6",
-		"@rslib/core": "^0.20.1",
+		"@puckeditor/core": "^0.21.2",
+		"@rsbuild/plugin-react": "^2.0.0",
+		"@rslib/core": "^0.21.3",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.2",
-		"@types/node": "^22.15.3",
-		"@types/react": "19.2.14",
-		"@types/react-dom": "19.2.3",
-		"esbuild": "^0.25.12",
-		"jsdom": "^29.0.2",
+		"@types/node": "^25.6.0",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"esbuild": "^0.28.0",
+		"jsdom": "^29.1.1",
 		"madge": "^8.0.0",
 		"publint": "^0.3.18",
-		"react": "^19.2.4",
-		"react-dom": "^19.2.4",
-		"typedoc": "^0.28.18",
-		"typedoc-plugin-markdown": "^4.4.0",
-		"typescript": "6.0.2",
-		"vitest": "^4.1.4"
+		"react": "^19.2.5",
+		"react-dom": "^19.2.5",
+		"typedoc": "^0.28.19",
+		"typedoc-plugin-markdown": "^4.11.0",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.5"
 	},
 	"scripts": {
 		"build": "rslib build",
