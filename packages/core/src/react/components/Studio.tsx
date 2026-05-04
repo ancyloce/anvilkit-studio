@@ -91,6 +91,7 @@ import {
 	type StudioRuntime,
 } from "../../runtime/compile-plugins.js";
 import type { StudioConfig } from "../../types/config.js";
+import type { StudioPagesSource } from "../../types/pages.js";
 import type { StudioPlugin, StudioPluginContext } from "../../types/plugin.js";
 import { StudioRuntimeProvider } from "../hooks/use-studio.js";
 import { mergeOverrides } from "../overrides/merge-overrides.js";
@@ -99,6 +100,7 @@ import { useAiStore } from "../stores/ai-store.js";
 import { useExportStore } from "../stores/export-store.js";
 import { useThemeStore } from "../stores/theme-store.js";
 import { ChromePropsProvider } from "../studio/context/chrome-props.js";
+import { StudioPagesSourceProvider } from "../studio/context/pages-source.js";
 import { StudioPluginContextProvider } from "../studio/context/plugin-context.js";
 import { DEFAULT_INSERT_SECTIONS } from "../studio/layout/sidebar/modules/insert/default-sections.js";
 import {
@@ -250,6 +252,15 @@ export interface StudioProps {
 	 * Drives the "Publish" button's loading state.
 	 */
 	readonly isPublishing?: boolean;
+	/**
+	 * Optional pages source for the sidebar's `layer` module. The host
+	 * supplies the page list and routing callbacks; the sidebar renders
+	 * the rows, route badge, and "+" add-page dialog. When omitted, the
+	 * Pages sub-panel renders the `studio.module.layer.pages.empty`
+	 * state (PRD §6.4). Ignored when `chrome="puck"` (no AnvilKit
+	 * sidebar).
+	 */
+	readonly pages?: StudioPagesSource;
 }
 
 /**
@@ -508,6 +519,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		isSavingDraft,
 		lastSavedAt,
 		isPublishing,
+		pages,
 	} = props;
 	const isAnvilkit = chrome === "anvilkit";
 
@@ -1020,22 +1032,24 @@ export function Studio(props: StudioProps): ReactElement | null {
 			<StudioRuntimeProvider value={compiled.runtime}>
 				<StudioPluginContextProvider value={compiled.ctx}>
 					<SidebarRegistryProvider value={sidebarRegistryStore}>
-						<EditorUiStoreProvider storeId={storeId}>
-							<EditorI18nStoreProvider>
-								<ChromePropsProvider
-									value={{
-										onBack,
-										onSaveDraft,
-										isSavingDraft,
-										lastSavedAt,
-										isPublishing,
-									}}
-								>
-									<ThemeSyncBoundary />
-									{puckElement}
-								</ChromePropsProvider>
-							</EditorI18nStoreProvider>
-						</EditorUiStoreProvider>
+						<StudioPagesSourceProvider value={pages}>
+							<EditorUiStoreProvider storeId={storeId}>
+								<EditorI18nStoreProvider>
+									<ChromePropsProvider
+										value={{
+											onBack,
+											onSaveDraft,
+											isSavingDraft,
+											lastSavedAt,
+											isPublishing,
+										}}
+									>
+										<ThemeSyncBoundary />
+										{puckElement}
+									</ChromePropsProvider>
+								</EditorI18nStoreProvider>
+							</EditorUiStoreProvider>
+						</StudioPagesSourceProvider>
 					</SidebarRegistryProvider>
 				</StudioPluginContextProvider>
 			</StudioRuntimeProvider>
