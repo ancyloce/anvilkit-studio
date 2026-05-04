@@ -7,9 +7,13 @@
  * `@anvilkit/tailwind-config/shadcn`. Hosts already importing those
  * tokens automatically theme the Studio chrome — no extra Tailwind
  * scanning over `packages/core` required.
+ *
+ * NOTE: this file deliberately does NOT `@import "tailwindcss"`.
+ * The host's own entry CSS (typically `globals.css` →
+ * `@anvilkit/tailwind-config/shadcn`) is responsible for loading
+ * Tailwind. Re-importing it from a deep dist path breaks
+ * resolution under webpack/postcss.
  */
-
-@import "tailwindcss";
 
 :root {
 	--ak-studio-bg: var(--background);
