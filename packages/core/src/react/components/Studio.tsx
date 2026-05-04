@@ -263,6 +263,20 @@ export interface StudioProps {
 	 * sidebar).
 	 */
 	readonly pages?: StudioPagesSource;
+	/**
+	 * Per-instance i18n overrides forwarded to
+	 * {@link EditorI18nStoreProvider}. Keys are message ids
+	 * (`studio.module.*`); values are the localized strings.
+	 *
+	 * The provider also honors PRD §10.2 deprecated-key aliases — an
+	 * override on a legacy `studio.tab.*` key resolves through the
+	 * alias map for callers asking the new key, until the deprecation
+	 * window closes. The exhaustive resolution-order test lives at
+	 * `state/__tests__/editor-i18n-store.alias.test.tsx`.
+	 *
+	 * Ignored when `chrome="puck"` (no AnvilKit i18n surface).
+	 */
+	readonly messages?: Readonly<Record<string, string>>;
 }
 
 /**
@@ -522,6 +536,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		lastSavedAt,
 		isPublishing,
 		pages,
+		messages,
 	} = props;
 	const isAnvilkit = chrome === "anvilkit";
 
@@ -1036,7 +1051,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 					<SidebarRegistryProvider value={sidebarRegistryStore}>
 						<StudioPagesSourceProvider value={pages}>
 							<EditorUiStoreProvider storeId={storeId}>
-								<EditorI18nStoreProvider>
+								<EditorI18nStoreProvider messages={messages}>
 									<ChromePropsProvider
 										value={{
 											onBack,
