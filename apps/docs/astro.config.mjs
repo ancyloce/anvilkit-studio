@@ -85,6 +85,10 @@ export default defineConfig({
 							label: "Studio overrides",
 							slug: "core/overrides",
 						},
+						{
+							label: "Sidebar modules",
+							slug: "core/studio-sidebar",
+						},
 					],
 				},
 				{
