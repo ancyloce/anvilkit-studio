@@ -10,8 +10,12 @@
 import { Upload } from "lucide-react";
 import { type ReactNode } from "react";
 
-import { IconButton } from "../../../../primitives/IconButton.js";
-import { Tooltip } from "../../../../primitives/Tooltip.js";
+import { Button } from "../../../../primitives/button.js";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../../../../primitives/tooltip.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 
 export interface ImageUploadButtonProps {
@@ -26,16 +30,24 @@ export function ImageUploadButton({
 	const msg = useMsg();
 	const label = msg("studio.module.image.upload");
 	return (
-		<Tooltip content={label} side="bottom">
-			<IconButton
-				size="sm"
-				onClick={onClick}
-				disabled={disabled === true}
-				aria-label={label}
-				data-testid="ak-image-upload"
-			>
-				<Upload size={14} aria-hidden="true" />
-			</IconButton>
+		<Tooltip>
+			<TooltipTrigger
+				render={
+					<span className="inline-flex">
+						<Button
+							size="icon-sm"
+							variant="ghost"
+							onClick={onClick}
+							disabled={disabled === true}
+							aria-label={label}
+							data-testid="ak-image-upload"
+						>
+							<Upload aria-hidden="true" />
+						</Button>
+					</span>
+				}
+			/>
+			<TooltipContent side="bottom">{label}</TooltipContent>
 		</Tooltip>
 	);
 }

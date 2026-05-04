@@ -1,23 +1,78 @@
 /**
- * @file `text` module placeholder (Phase B / D2).
+ * @file `text` module body — Copywriting (PRD §8).
  *
- * The real implementation lands in D7 (categories, filter strip,
- * search, snippet rows with selection-aware insert, registered copy
- * snippet packs).
+ * Reads `copyPacks` registered via `StudioPluginContext.registerCopySnippetPack`
+ * from the per-instance sidebar registry, flattens them into a single
+ * snippet list, and renders a filter strip + search + grouped snippet
+ * list. Clicking a row replaces the `text` prop on the currently-
+ * selected canvas Text element via {@link useInsertSnippet}; rows dim
+ * reactively when no compatible selection exists, driven by
+ * {@link useTextSelection}.
+ *
+ * State:
+ * - `searchTerm` — local transient string (PRD §9.3 — copy search not
+ *   persisted). The {@link TextSearchBar} owns the visible draft and
+ *   propagates a debounced 150 ms value.
+ * - Filter and accordion grouping are derived inside
+ *   {@link SnippetList} — this shell only owns search and composes
+ *   children.
  */
 
-import { type ReactNode } from "react";
+import { type ReactNode, useCallback, useMemo, useState } from "react";
 
-import { useMsg } from "../../../state/editor-i18n-store.js";
+import type {
+	StudioCopySnippet,
+	StudioCopySnippetPack,
+} from "../../../../../types/sidebar.js";
+import { useCopyCategoryFilter } from "../../../state/hooks.js";
+import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react.js";
+import { useInsertSnippet } from "../../../state/useInsertSnippet.js";
+import { useTextSelection } from "../../../state/useTextSelection.js";
+import { SnippetList } from "./text/SnippetList.js";
+import { TextFilterStrip } from "./text/TextFilterStrip.js";
+import { TextSearchBar } from "./text/TextSearchBar.js";
+
+function flattenPacks(
+	packs: ReadonlyMap<string, StudioCopySnippetPack>,
+): readonly StudioCopySnippet[] {
+	const out: StudioCopySnippet[] = [];
+	for (const pack of packs.values()) {
+		for (const snippet of pack.snippets) {
+			out.push(snippet);
+		}
+	}
+	return out;
+}
 
 export function TextModule(): ReactNode {
-	const msg = useMsg();
+	const packs = useSidebarRegistry((state): ReadonlyMap<string, StudioCopySnippetPack> => state.copyPacks);
+	const [categoryFilter] = useCopyCategoryFilter();
+	const [searchTerm, setSearchTerm] = useState("");
+
+	const snippets = useMemo(() => flattenPacks(packs), [packs]);
+
+	const { isCompatibleTextSelection } = useTextSelection();
+	const insertSnippet = useInsertSnippet();
+
+	const handleSearch = useCallback((next: string) => {
+		setSearchTerm(next);
+	}, []);
+
 	return (
-		<div
-			data-testid="ak-module-text"
-			className="p-4 text-sm text-[var(--ak-studio-muted-fg)]"
-		>
-			{msg("studio.module.text.name")} — D7 placeholder.
+		<div data-testid="ak-module-text" className="flex h-full flex-col">
+			<div className="flex shrink-0 flex-col gap-2 border-b border-[var(--ak-studio-border)] p-2">
+				<TextFilterStrip />
+				<TextSearchBar onChange={handleSearch} />
+			</div>
+			<div className="min-h-0 flex-1 overflow-auto">
+				<SnippetList
+					snippets={snippets}
+					categoryFilter={categoryFilter}
+					searchTerm={searchTerm}
+					disabled={!isCompatibleTextSelection}
+					onInsert={insertSnippet}
+				/>
+			</div>
 		</div>
 	);
 }

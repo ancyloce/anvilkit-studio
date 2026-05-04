@@ -10,9 +10,24 @@
 import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
 import { useStudioPagesSource } from "../../../../context/pages-source.js";
-import { Button } from "../../../../primitives/Button.js";
-import { Dialog } from "../../../../primitives/Dialog.js";
-import { Input } from "../../../../primitives/Input.js";
+import { Button } from "../../../../primitives/button.js";
+import { Checkbox } from "../../../../primitives/checkbox.js";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "../../../../primitives/dialog.js";
+import {
+	Field,
+	FieldContent,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "../../../../primitives/field.js";
+import { Input } from "../../../../primitives/input.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 
 export interface AddPageDialogProps {
@@ -85,21 +100,29 @@ export function AddPageDialog({
 		submitting ||
 		form.title.trim().length === 0 ||
 		(form.route && !form.path.startsWith("/"));
+	const titleId = "ak-layer-add-page-title";
+	const pathId = "ak-layer-add-page-path";
+	const routeId = "ak-layer-add-page-route";
 
 	return (
-		<Dialog.Root open={open} onOpenChange={handleOpenChange}>
-			<Dialog.Portal>
-				<Dialog.Backdrop />
-				<Dialog.Popup data-testid="ak-layer-add-page-dialog">
-					<Dialog.Title>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
+			<DialogContent
+				data-testid="ak-layer-add-page-dialog"
+				showCloseButton={false}
+			>
+				<DialogHeader>
+					<DialogTitle>
 						{msg("studio.module.layer.pages.dialog.title")}
-					</Dialog.Title>
-					<form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-						<label className="flex flex-col gap-1 text-sm">
-							<span className="text-[var(--ak-studio-muted-fg)]">
+					</DialogTitle>
+				</DialogHeader>
+				<form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+					<FieldGroup>
+						<Field>
+							<FieldLabel htmlFor={titleId}>
 								{msg("studio.module.layer.pages.dialog.field.title")}
-							</span>
+							</FieldLabel>
 							<Input
+								id={titleId}
 								value={form.title}
 								onChange={(event) =>
 									setForm((prev) => ({ ...prev, title: event.target.value }))
@@ -107,12 +130,13 @@ export function AddPageDialog({
 								required
 								data-testid="ak-layer-add-page-title"
 							/>
-						</label>
-						<label className="flex flex-col gap-1 text-sm">
-							<span className="text-[var(--ak-studio-muted-fg)]">
+						</Field>
+						<Field>
+							<FieldLabel htmlFor={pathId}>
 								{msg("studio.module.layer.pages.dialog.field.path")}
-							</span>
+							</FieldLabel>
 							<Input
+								id={pathId}
 								value={form.path}
 								onChange={(event) =>
 									setForm((prev) => ({ ...prev, path: event.target.value }))
@@ -120,31 +144,29 @@ export function AddPageDialog({
 								placeholder="/about"
 								data-testid="ak-layer-add-page-path"
 							/>
-						</label>
-						<label className="flex items-center gap-2 text-sm">
-							<input
-								type="checkbox"
+						</Field>
+						<Field orientation="horizontal">
+							<Checkbox
+								id={routeId}
 								checked={form.route}
-								onChange={(event) =>
-									setForm((prev) => ({ ...prev, route: event.target.checked }))
+								onCheckedChange={(checked) =>
+									setForm((prev) => ({ ...prev, route: checked === true }))
 								}
 								data-testid="ak-layer-add-page-route"
 							/>
-							<span className="text-[var(--ak-studio-fg)]">
-								{msg("studio.module.layer.pages.dialog.field.route")}
-							</span>
-						</label>
+							<FieldContent>
+								<FieldLabel htmlFor={routeId}>
+									{msg("studio.module.layer.pages.dialog.field.route")}
+								</FieldLabel>
+							</FieldContent>
+						</Field>
 						{error !== null ? (
-							<p
-								role="alert"
-								className="text-xs text-red-600 dark:text-red-400"
-								data-testid="ak-layer-add-page-error"
-							>
+							<FieldError data-testid="ak-layer-add-page-error">
 								{error}
-							</p>
+							</FieldError>
 						) : null}
-						<div className="mt-2 flex justify-end gap-2">
-							<Dialog.Close
+						<DialogFooter className="mt-2">
+							<DialogClose
 								render={
 									<Button variant="ghost" type="button">
 										{msg("studio.module.layer.pages.dialog.cancel")}
@@ -158,10 +180,10 @@ export function AddPageDialog({
 							>
 								{msg("studio.module.layer.pages.dialog.submit")}
 							</Button>
-						</div>
-					</form>
-				</Dialog.Popup>
-			</Dialog.Portal>
-		</Dialog.Root>
+						</DialogFooter>
+					</FieldGroup>
+				</form>
+			</DialogContent>
+		</Dialog>
 	);
 }

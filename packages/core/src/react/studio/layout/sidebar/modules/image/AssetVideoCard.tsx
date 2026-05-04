@@ -7,6 +7,7 @@ import { Play } from "lucide-react";
 import { type ReactNode } from "react";
 
 import type { StudioAsset } from "../../../../../../types/sidebar.js";
+import { Button } from "../../../../primitives/button.js";
 
 export interface AssetVideoCardProps {
 	readonly asset: StudioAsset;
@@ -24,10 +25,10 @@ export function AssetVideoCard({
 			className="group relative flex flex-col gap-1 text-xs"
 			data-testid={`ak-image-video-${asset.id}`}
 		>
-			<button
-				type="button"
+			<Button
+				variant="ghost"
 				onClick={onClick}
-				className="relative aspect-video overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-black transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
+				className="relative aspect-video h-auto w-full overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-black p-0 transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}
 			>
 				{asset.thumbnailUrl !== undefined ? (
@@ -49,7 +50,7 @@ export function AssetVideoCard({
 				<span className="absolute inset-0 flex items-center justify-center bg-black/30 text-white">
 					<Play className="size-6 fill-current" aria-hidden="true" />
 				</span>
-			</button>
+			</Button>
 			<div className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
 				{menu}
 			</div>

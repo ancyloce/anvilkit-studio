@@ -5,7 +5,7 @@
 import type { FieldProps, TextField as PuckTextField } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { Input } from "../../../studio/primitives/Input.js";
+import { Input } from "../../../studio/primitives/input.js";
 
 export interface FieldRendererProps<F, V>
 	extends FieldProps<F, V> {

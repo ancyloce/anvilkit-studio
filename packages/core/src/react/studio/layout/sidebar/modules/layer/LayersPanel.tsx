@@ -33,10 +33,19 @@ import type {
 } from "../../../../../../types/sidebar.js";
 import type { StudioPage } from "../../../../../../types/pages.js";
 import { useStudioPagesSource } from "../../../../context/pages-source.js";
-import { DropdownMenu } from "../../../../primitives/DropdownMenu.js";
-import { IconButton } from "../../../../primitives/IconButton.js";
-import { ScrollArea } from "../../../../primitives/ScrollArea.js";
-import { Tooltip } from "../../../../primitives/Tooltip.js";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "../../../../primitives/dropdown-menu.js";
+import { Button } from "../../../../primitives/button.js";
+import { ScrollArea } from "../../../../primitives/scroll-area.js";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../../../../primitives/tooltip.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 import { useSidebarRegistry } from "../../../../state/sidebar-registry-store-react.js";
 import { EmptyState } from "../../shared/EmptyState.js";
@@ -180,45 +189,55 @@ export function LayersPanel(): ReactNode {
 				<h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--ak-studio-muted-fg)]">
 					{msg("studio.module.layer.layers.title")}
 				</h3>
-				<DropdownMenu.Root>
-					<Tooltip content={msg("studio.module.layer.layers.add")}>
-						<DropdownMenu.Trigger
+				<DropdownMenu>
+					<Tooltip>
+						<TooltipTrigger
 							render={
-								<IconButton
-									size="sm"
-									aria-label={msg("studio.module.layer.layers.add")}
-									data-testid="ak-layer-layers-add"
-								>
-									<Plus className="size-4" aria-hidden="true" />
-								</IconButton>
+								<span className="inline-flex">
+									<DropdownMenuTrigger
+										render={
+											<Button
+												size="icon-sm"
+												variant="ghost"
+												aria-label={msg("studio.module.layer.layers.add")}
+												data-testid="ak-layer-layers-add"
+											/>
+										}
+									>
+										<Plus aria-hidden="true" />
+									</DropdownMenuTrigger>
+								</span>
 							}
 						/>
+						<TooltipContent>
+							{msg("studio.module.layer.layers.add")}
+						</TooltipContent>
 					</Tooltip>
-					<DropdownMenu.Portal>
-						<DropdownMenu.Positioner align="end" sideOffset={4}>
-							<DropdownMenu.Popup data-testid="ak-layer-quickadd-popup">
-								{quickAdds.length === 0 ? (
-									<div className="px-2 py-1.5 text-xs text-[var(--ak-studio-muted-fg)]">
-										{msg("studio.module.layer.layers.empty")}
-									</div>
-								) : (
-									quickAdds.map((entry) => (
-										<DropdownMenu.Item
-											key={entry.id}
-											onClick={() => {
-												void entry.run();
-											}}
-											data-testid={`ak-layer-quickadd-${entry.id}`}
-										>
-											{entry.icon}
-											<span>{entry.label}</span>
-										</DropdownMenu.Item>
-									))
-								)}
-							</DropdownMenu.Popup>
-						</DropdownMenu.Positioner>
-					</DropdownMenu.Portal>
-				</DropdownMenu.Root>
+					<DropdownMenuContent
+						align="end"
+						sideOffset={4}
+						data-testid="ak-layer-quickadd-popup"
+					>
+						{quickAdds.length === 0 ? (
+							<div className="px-2 py-1.5 text-xs text-muted-foreground">
+								{msg("studio.module.layer.layers.empty")}
+							</div>
+						) : (
+							quickAdds.map((entry) => (
+								<DropdownMenuItem
+									key={entry.id}
+									onClick={() => {
+										void entry.run();
+									}}
+									data-testid={`ak-layer-quickadd-${entry.id}`}
+								>
+									{entry.icon}
+									<span>{entry.label}</span>
+								</DropdownMenuItem>
+							))
+						)}
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 			<div className="min-h-0 flex-1">
 				{hasNoSource || !hasActivePage ? (
@@ -227,8 +246,10 @@ export function LayersPanel(): ReactNode {
 						testId="ak-layer-layers-empty"
 					/>
 				) : (
-					<ScrollArea viewportClassName="px-1 py-2">
-						<Puck.Outline />
+					<ScrollArea>
+						<div className="px-1 py-2">
+							<Puck.Outline />
+						</div>
 					</ScrollArea>
 				)}
 			</div>

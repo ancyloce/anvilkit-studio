@@ -17,9 +17,13 @@ import { type ReactNode, useCallback, useEffect, useState } from "react";
 import type { StudioPage } from "../../../../../../types/pages.js";
 import { cn } from "../../../../../overrides/utils/cn.js";
 import { useStudioPagesSource } from "../../../../context/pages-source.js";
-import { IconButton } from "../../../../primitives/IconButton.js";
-import { ScrollArea } from "../../../../primitives/ScrollArea.js";
-import { Tooltip } from "../../../../primitives/Tooltip.js";
+import { Button } from "../../../../primitives/button.js";
+import { ScrollArea } from "../../../../primitives/scroll-area.js";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../../../../primitives/tooltip.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 import { EmptyState } from "../../shared/EmptyState.js";
 import { AddPageDialog } from "./AddPageDialog.js";
@@ -67,15 +71,25 @@ export function PagesPanel(): ReactNode {
 				<h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--ak-studio-muted-fg)]">
 					{msg("studio.module.layer.pages.title")}
 				</h3>
-				<Tooltip content={msg("studio.module.layer.pages.add")}>
-					<IconButton
-						size="sm"
-						aria-label={msg("studio.module.layer.pages.add")}
-						onClick={() => setDialogOpen(true)}
-						data-testid="ak-layer-pages-add"
-					>
-						<Plus className="size-4" aria-hidden="true" />
-					</IconButton>
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<span className="inline-flex">
+								<Button
+									size="icon-sm"
+									variant="ghost"
+									aria-label={msg("studio.module.layer.pages.add")}
+									onClick={() => setDialogOpen(true)}
+									data-testid="ak-layer-pages-add"
+								>
+									<Plus aria-hidden="true" />
+								</Button>
+							</span>
+						}
+					/>
+					<TooltipContent>
+						{msg("studio.module.layer.pages.add")}
+					</TooltipContent>
 				</Tooltip>
 			</div>
 			<div className="min-h-0 flex-1">
@@ -85,19 +99,21 @@ export function PagesPanel(): ReactNode {
 						testId="ak-layer-pages-empty"
 					/>
 				) : (
-					<ScrollArea viewportClassName="px-1 py-1">
-						<ul role="list" className="flex flex-col gap-0.5">
-							{pages.map((page) => (
-								<PageRow
-									key={page.id}
-									page={page}
-									onSelect={handleSelect}
-									routeBadgeLabel={msg(
-										"studio.module.layer.pages.routeBadge",
-									)}
-								/>
-							))}
-						</ul>
+					<ScrollArea>
+						<div className="px-1 py-1">
+							<ul role="list" className="flex flex-col gap-0.5">
+								{pages.map((page) => (
+									<PageRow
+										key={page.id}
+										page={page}
+										onSelect={handleSelect}
+										routeBadgeLabel={msg(
+											"studio.module.layer.pages.routeBadge",
+										)}
+									/>
+								))}
+							</ul>
+						</div>
 					</ScrollArea>
 				)}
 			</div>
@@ -116,14 +132,15 @@ function PageRow({ page, onSelect, routeBadgeLabel }: PageRowProps): ReactNode {
 	const label = page.title.length > 0 ? page.title : (page.path ?? page.id);
 	return (
 		<li role="listitem">
-			<button
-				type="button"
+			<Button
+				variant="ghost"
+				size="sm"
 				onClick={() => onSelect(page.id)}
 				aria-current={page.active === true ? "page" : undefined}
 				data-active={page.active === true ? "true" : undefined}
 				data-testid={`ak-layer-page-row-${page.id}`}
 				className={cn(
-					"flex w-full items-center gap-2 rounded-sm px-2 py-1 text-left text-sm",
+					"h-auto w-full justify-start gap-2 rounded-sm px-2 py-1 text-left text-sm font-normal",
 					"text-[var(--ak-studio-fg)] outline-none",
 					"hover:bg-[var(--ak-studio-muted)]",
 					"focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]",
@@ -132,14 +149,21 @@ function PageRow({ page, onSelect, routeBadgeLabel }: PageRowProps): ReactNode {
 			>
 				<span className="min-w-0 flex-1 truncate">{label}</span>
 				{page.route === true ? (
-					<Tooltip content={routeBadgeLabel}>
-						<Globe
-							className="size-3.5 shrink-0 text-[var(--ak-studio-muted-fg)]"
-							aria-label={routeBadgeLabel}
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<span className="inline-flex">
+									<Globe
+										className="size-3.5 shrink-0 text-[var(--ak-studio-muted-fg)]"
+										aria-label={routeBadgeLabel}
+									/>
+								</span>
+							}
 						/>
+						<TooltipContent>{routeBadgeLabel}</TooltipContent>
 					</Tooltip>
 				) : null}
-			</button>
+			</Button>
 		</li>
 	);
 }

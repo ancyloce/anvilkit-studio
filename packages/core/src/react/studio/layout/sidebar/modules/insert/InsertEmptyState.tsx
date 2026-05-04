@@ -13,6 +13,12 @@
 import { Inbox } from "lucide-react";
 import type { ReactNode } from "react";
 
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+} from "../../../../primitives/empty.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 
 export interface InsertEmptyStateProps {
@@ -27,17 +33,18 @@ const VARIANT_KEY: Readonly<Record<InsertEmptyStateProps["variant"], string>> = 
 export function InsertEmptyState({ variant }: InsertEmptyStateProps): ReactNode {
 	const msg = useMsg();
 	return (
-		<div
+		<Empty
 			data-testid={`ak-insert-empty-${variant}`}
-			className="flex flex-col items-center justify-center gap-2 px-4 py-8 text-center"
+			className="border-0 px-4 py-8"
 		>
-			<Inbox
-				className="size-6 text-[var(--ak-studio-muted-fg)]"
-				aria-hidden="true"
-			/>
-			<p className="text-xs text-[var(--ak-studio-muted-fg)]">
-				{msg(VARIANT_KEY[variant])}
-			</p>
-		</div>
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					<Inbox aria-hidden="true" />
+				</EmptyMedia>
+				<EmptyDescription className="text-xs">
+					{msg(VARIANT_KEY[variant])}
+				</EmptyDescription>
+			</EmptyHeader>
+		</Empty>
 	);
 }

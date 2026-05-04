@@ -12,8 +12,8 @@ import { Puck, useGetPuck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
 import { useMsg } from "../../studio/state/editor-i18n-store.js";
-import { ScrollArea } from "../../studio/primitives/ScrollArea.js";
-import { Separator } from "../../studio/primitives/Separator.js";
+import { ScrollArea } from "../../studio/primitives/scroll-area.js";
+import { Separator } from "../../studio/primitives/separator.js";
 
 export function EditorOutline(): ReactNode {
 	const msg = useMsg();
@@ -23,8 +23,10 @@ export function EditorOutline(): ReactNode {
 
 	return (
 		<div className="flex flex-col">
-			<ScrollArea className="max-h-[60vh]" viewportClassName="px-1 py-2">
-				<Puck.Outline />
+			<ScrollArea className="max-h-[60vh]">
+				<div className="px-1 py-2">
+					<Puck.Outline />
+				</div>
 			</ScrollArea>
 			<Separator className="my-2" />
 			<div className="px-2 py-1 text-xs text-[var(--ak-studio-muted-fg)]">

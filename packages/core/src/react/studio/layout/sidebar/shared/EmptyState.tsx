@@ -9,6 +9,13 @@
 
 import type { ReactNode } from "react";
 
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+} from "../../../primitives/empty.js";
+
 export interface EmptyStateProps {
 	readonly message: string;
 	readonly icon?: ReactNode;
@@ -17,12 +24,13 @@ export interface EmptyStateProps {
 
 export function EmptyState({ message, icon, testId }: EmptyStateProps): ReactNode {
 	return (
-		<div
-			data-testid={testId}
-			className="flex flex-col items-center justify-center gap-2 px-4 py-8 text-center"
-		>
-			{icon}
-			<p className="text-xs text-[var(--ak-studio-muted-fg)]">{message}</p>
-		</div>
+		<Empty data-testid={testId} className="border-0 px-4 py-8">
+			<EmptyHeader>
+				{icon !== undefined ? (
+					<EmptyMedia variant="icon">{icon}</EmptyMedia>
+				) : null}
+				<EmptyDescription className="text-xs">{message}</EmptyDescription>
+			</EmptyHeader>
+		</Empty>
 	);
 }

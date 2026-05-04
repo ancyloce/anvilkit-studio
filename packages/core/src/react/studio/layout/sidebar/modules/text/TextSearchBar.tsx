@@ -1,11 +1,11 @@
 /**
- * @file `image` module search input.
+ * @file `text` module search input.
  *
- * Mirrors `InsertSearchBar` but writes to a parent-controlled callback
- * instead of a store slice — PRD §9.3 explicitly excludes asset search
- * from persistence. The parent owns the debounced query and threads it
- * into the asset filter pipeline; this component is a controlled input
- * that emits a debounced 150 ms `onChange`.
+ * Mirrors {@link ../image/ImageSearchBar.tsx} — debounced 150 ms,
+ * parent-controlled, transient (PRD §9.3 — copy search is not
+ * persisted). The parent threads the debounced query into the snippet
+ * filter pipeline; this component owns the visible draft state for
+ * keystroke responsiveness.
  */
 
 import { Search } from "lucide-react";
@@ -27,11 +27,11 @@ import { useMsg } from "../../../../state/editor-i18n-store.js";
 
 const DEBOUNCE_MS = 150;
 
-export interface ImageSearchBarProps {
+export interface TextSearchBarProps {
 	readonly onChange: (next: string) => void;
 }
 
-export function ImageSearchBar({ onChange }: ImageSearchBarProps): ReactNode {
+export function TextSearchBar({ onChange }: TextSearchBarProps): ReactNode {
 	const msg = useMsg();
 	const [draft, setDraft] = useState("");
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -59,7 +59,7 @@ export function ImageSearchBar({ onChange }: ImageSearchBarProps): ReactNode {
 		[onChange],
 	);
 
-	const placeholder = msg("studio.module.image.search.placeholder");
+	const placeholder = msg("studio.module.text.search.placeholder");
 
 	return (
 		<InputGroup>
@@ -72,7 +72,7 @@ export function ImageSearchBar({ onChange }: ImageSearchBarProps): ReactNode {
 				onChange={handleChange}
 				placeholder={placeholder}
 				aria-label={placeholder}
-				data-testid="ak-image-search"
+				data-testid="ak-text-search"
 			/>
 		</InputGroup>
 	);

@@ -13,7 +13,7 @@ import type {
 } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { Input } from "../../../studio/primitives/Input.js";
+import { Input } from "../../../studio/primitives/input.js";
 
 import type { FieldRendererProps } from "./TextField.js";
 

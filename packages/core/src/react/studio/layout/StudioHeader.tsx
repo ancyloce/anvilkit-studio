@@ -12,8 +12,8 @@ import { type ReactNode } from "react";
 
 import { useThemeStore } from "../../stores/theme-store.js";
 import { useMsg } from "../state/editor-i18n-store.js";
-import { Button } from "../primitives/Button.js";
-import { Separator } from "../primitives/Separator.js";
+import { Button } from "../primitives/button.js";
+import { Separator } from "../primitives/separator.js";
 import { HeaderActions } from "./HeaderActions.js";
 
 export interface StudioHeaderProps {

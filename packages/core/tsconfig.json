@@ -7,6 +7,22 @@
 		"moduleResolution": "bundler",
 		"outDir": "dist",
 		"rootDir": "src",
+		"paths": {
+			"@anvilkit/core/react/studio": ["src/react/studio"],
+			"@anvilkit/core/react/studio/*": ["src/react/studio/*"],
+			"@anvilkit/core/react/studio/primitives": [
+				"src/react/studio/primitives"
+			],
+			"@anvilkit/core/react/studio/primitives/*": [
+				"src/react/studio/primitives/*"
+			],
+			"@anvilkit/core/react/overrides/utils/cn": [
+				"src/react/overrides/utils/cn.ts"
+			],
+			"@anvilkit/core/react/overrides/utils/*": [
+				"src/react/overrides/utils/*"
+			]
+		},
 		"strictNullChecks": true,
 		"useDefineForClassFields": true,
 		"verbatimModuleSyntax": true

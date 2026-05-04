@@ -17,7 +17,7 @@ import type {
 	StudioAssetAction,
 	StudioAssetSource,
 } from "../../../../../../types/sidebar.js";
-import { Skeleton } from "../../../../primitives/Skeleton.js";
+import { Skeleton } from "../../../../primitives/skeleton.js";
 import type { AssetCategoryFilter } from "../../../../state/editor-ui-store.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 import { AssetAudioRow } from "./AssetAudioRow.js";

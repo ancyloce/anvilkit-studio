@@ -8,7 +8,10 @@
 
 import { type ReactNode } from "react";
 
-import { ToggleGroup } from "../../../../primitives/ToggleGroup.js";
+import {
+	ToggleGroup,
+	ToggleGroupItem,
+} from "../../../../primitives/toggle-group.js";
 import type { AssetCategoryFilter } from "../../../../state/editor-ui-store.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 import { useAssetCategoryFilter } from "../../../../state/hooks.js";
@@ -17,31 +20,33 @@ export function ImageFilterStrip(): ReactNode {
 	const msg = useMsg();
 	const [value, setValue] = useAssetCategoryFilter();
 
-	const handleChange = (next: readonly AssetCategoryFilter[]): void => {
-		const picked = next[0];
+	const handleChange = (next: readonly string[]): void => {
+		const picked = next[0] as AssetCategoryFilter | undefined;
 		if (picked === undefined) return;
 		setValue(picked);
 	};
 
 	return (
-		<ToggleGroup.Root<AssetCategoryFilter>
+		<ToggleGroup
 			value={[value]}
 			onValueChange={handleChange}
 			aria-label={msg("studio.module.image.name")}
 			data-testid="ak-image-filter"
+			size="sm"
+			spacing={1}
 		>
-			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="all">
+			<ToggleGroupItem value="all">
 				{msg("studio.module.image.filter.all")}
-			</ToggleGroup.Item>
-			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="images">
+			</ToggleGroupItem>
+			<ToggleGroupItem value="images">
 				{msg("studio.module.image.filter.images")}
-			</ToggleGroup.Item>
-			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="videos">
+			</ToggleGroupItem>
+			<ToggleGroupItem value="videos">
 				{msg("studio.module.image.filter.videos")}
-			</ToggleGroup.Item>
-			<ToggleGroup.Item<AssetCategoryFilter> size="sm" value="audio">
+			</ToggleGroupItem>
+			<ToggleGroupItem value="audio">
 				{msg("studio.module.image.filter.audio")}
-			</ToggleGroup.Item>
-		</ToggleGroup.Root>
+			</ToggleGroupItem>
+		</ToggleGroup>
 	);
 }

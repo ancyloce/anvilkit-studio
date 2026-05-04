@@ -123,19 +123,16 @@ describe("HeaderActions composition + grouping", () => {
 		expect(screen.getByRole("button", { name: "Export React" })).toBeInTheDocument();
 		// Overflow opens to expose the menu items
 		fireEvent.click(screen.getByRole("button", { name: "More actions" }));
-		expect(screen.getByRole("button", { name: "Open history" })).toBeInTheDocument();
+		expect(screen.getByRole("menuitem", { name: "Open history" })).toBeInTheDocument();
 
 		// 5 plugin buttons total + 1 overflow trigger
-		const allButtons = screen.getAllByRole("button");
-		const labels = allButtons.map((el) => el.textContent ?? "");
-		const pluginLabels = labels.filter(
-			(label) =>
-				label.includes("Export HTML") ||
-				label.includes("Save snapshot") ||
-				label.includes("Upload asset") ||
-				label.includes("Export React") ||
-				label.includes("Open history"),
-		);
+		const pluginLabels = [
+			screen.getByRole("button", { name: "Export HTML" }),
+			screen.getByRole("button", { name: "Save snapshot" }),
+			screen.getByRole("button", { name: "Upload asset" }),
+			screen.getByRole("button", { name: "Export React" }),
+			screen.getByRole("menuitem", { name: "Open history" }),
+		];
 		expect(pluginLabels).toHaveLength(5);
 	});
 

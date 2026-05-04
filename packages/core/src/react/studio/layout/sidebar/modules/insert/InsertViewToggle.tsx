@@ -9,8 +9,15 @@
 import { LayoutGrid, List } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { ToggleGroup } from "../../../../primitives/ToggleGroup.js";
-import { Tooltip } from "../../../../primitives/Tooltip.js";
+import {
+	ToggleGroup,
+	ToggleGroupItem,
+} from "../../../../primitives/toggle-group.js";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../../../../primitives/tooltip.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 import { useComponentViewMode } from "../../../../state/hooks.js";
 import type { ComponentViewMode } from "../../../../state/editor-ui-store.js";
@@ -19,36 +26,54 @@ export function InsertViewToggle(): ReactNode {
 	const msg = useMsg();
 	const [mode, setMode] = useComponentViewMode();
 
-	const handleChange = (next: readonly ComponentViewMode[]): void => {
-		const value = next[0];
+	const handleChange = (next: readonly string[]): void => {
+		const value = next[0] as ComponentViewMode | undefined;
 		if (value === undefined) return;
 		setMode(value);
 	};
 
 	return (
-		<ToggleGroup.Root<ComponentViewMode>
+		<ToggleGroup
 			value={[mode]}
 			onValueChange={handleChange}
 			aria-label={msg("studio.module.insert.view.grid")}
+			size="sm"
+			spacing={1}
 		>
-			<Tooltip content={msg("studio.module.insert.view.grid")} side="bottom">
-				<ToggleGroup.Item<ComponentViewMode>
-					value="grid"
-					size="sm"
-					aria-label={msg("studio.module.insert.view.grid")}
-				>
-					<LayoutGrid size={14} aria-hidden="true" />
-				</ToggleGroup.Item>
+			<Tooltip>
+				<TooltipTrigger
+					render={
+						<span className="inline-flex">
+							<ToggleGroupItem
+								value="grid"
+								aria-label={msg("studio.module.insert.view.grid")}
+							>
+								<LayoutGrid aria-hidden="true" />
+							</ToggleGroupItem>
+						</span>
+					}
+				/>
+				<TooltipContent side="bottom">
+					{msg("studio.module.insert.view.grid")}
+				</TooltipContent>
 			</Tooltip>
-			<Tooltip content={msg("studio.module.insert.view.list")} side="bottom">
-				<ToggleGroup.Item<ComponentViewMode>
-					value="list"
-					size="sm"
-					aria-label={msg("studio.module.insert.view.list")}
-				>
-					<List size={14} aria-hidden="true" />
-				</ToggleGroup.Item>
+			<Tooltip>
+				<TooltipTrigger
+					render={
+						<span className="inline-flex">
+							<ToggleGroupItem
+								value="list"
+								aria-label={msg("studio.module.insert.view.list")}
+							>
+								<List aria-hidden="true" />
+							</ToggleGroupItem>
+						</span>
+					}
+				/>
+				<TooltipContent side="bottom">
+					{msg("studio.module.insert.view.list")}
+				</TooltipContent>
 			</Tooltip>
-		</ToggleGroup.Root>
+		</ToggleGroup>
 	);
 }

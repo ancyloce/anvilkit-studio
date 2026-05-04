@@ -9,9 +9,22 @@
 import { type FormEvent, type ReactNode, useEffect, useState } from "react";
 
 import type { StudioAsset } from "../../../../../../types/sidebar.js";
-import { Button } from "../../../../primitives/Button.js";
-import { Dialog } from "../../../../primitives/Dialog.js";
-import { Input } from "../../../../primitives/Input.js";
+import { Button } from "../../../../primitives/button.js";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "../../../../primitives/dialog.js";
+import {
+	Field,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "../../../../primitives/field.js";
+import { Input } from "../../../../primitives/input.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 
 export interface RenameAssetDialogProps {
@@ -55,31 +68,37 @@ export function RenameAssetDialog({
 			setSubmitting(false);
 		}
 	};
+	const inputId = "ak-image-rename-input";
 
 	return (
-		<Dialog.Root open={asset !== null} onOpenChange={onOpenChange}>
-			<Dialog.Portal>
-				<Dialog.Backdrop />
-				<Dialog.Popup data-testid="ak-image-rename-dialog">
-					<Dialog.Title>{msg("studio.module.image.actions.rename")}</Dialog.Title>
-					<form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-						<Input
-							value={draft}
-							onChange={(event) => setDraft(event.target.value)}
-							autoFocus
-							required
-							data-testid="ak-image-rename-input"
-						/>
+		<Dialog open={asset !== null} onOpenChange={onOpenChange}>
+			<DialogContent
+				data-testid="ak-image-rename-dialog"
+				showCloseButton={false}
+			>
+				<DialogHeader>
+					<DialogTitle>{msg("studio.module.image.actions.rename")}</DialogTitle>
+				</DialogHeader>
+				<form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+					<FieldGroup>
+						<Field>
+							<FieldLabel htmlFor={inputId}>
+								{msg("studio.module.image.actions.rename")}
+							</FieldLabel>
+							<Input
+								id={inputId}
+								value={draft}
+								onChange={(event) => setDraft(event.target.value)}
+								autoFocus
+								required
+								data-testid="ak-image-rename-input"
+							/>
+						</Field>
 						{error !== null ? (
-							<p
-								role="alert"
-								className="text-xs text-red-600 dark:text-red-400"
-							>
-								{error}
-							</p>
+							<FieldError>{error}</FieldError>
 						) : null}
-						<div className="mt-2 flex justify-end gap-2">
-							<Dialog.Close
+						<DialogFooter className="mt-2">
+							<DialogClose
 								render={
 									<Button variant="ghost" type="button">
 										{msg("studio.module.layer.pages.dialog.cancel")}
@@ -93,10 +112,10 @@ export function RenameAssetDialog({
 							>
 								{msg("studio.module.image.actions.rename")}
 							</Button>
-						</div>
-					</form>
-				</Dialog.Popup>
-			</Dialog.Portal>
-		</Dialog.Root>
+						</DialogFooter>
+					</FieldGroup>
+				</form>
+			</DialogContent>
+		</Dialog>
 	);
 }

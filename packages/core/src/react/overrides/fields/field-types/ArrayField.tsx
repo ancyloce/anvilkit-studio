@@ -27,7 +27,7 @@ import {
 	isValidElement,
 } from "react";
 
-import { Button } from "../../../studio/primitives/Button.js";
+import { Button } from "../../../studio/primitives/button.js";
 
 import type { FieldRendererProps } from "./TextField.js";
 

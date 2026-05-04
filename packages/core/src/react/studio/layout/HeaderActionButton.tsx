@@ -12,8 +12,13 @@ import type {
 	StudioHeaderAction,
 	StudioPluginContext,
 } from "../../../types/plugin.js";
-import { Button } from "../primitives/Button.js";
-import { Tooltip } from "../primitives/Tooltip.js";
+import { Button } from "../primitives/button.js";
+import { DropdownMenuItem } from "../primitives/dropdown-menu.js";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../primitives/tooltip.js";
 
 type LucideIconComponent = ComponentType<{ className?: string }>;
 
@@ -70,17 +75,15 @@ export function HeaderActionButton({
 
 	if (variant === "menuitem") {
 		return (
-			<button
-				type="button"
+			<DropdownMenuItem
 				disabled={disabled}
 				onClick={() => {
 					void handleClick();
 				}}
-				className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm hover:bg-[var(--ak-studio-muted)] disabled:opacity-50"
 			>
 				{iconNode}
 				<span>{action.label}</span>
-			</button>
+			</DropdownMenuItem>
 		);
 	}
 
@@ -101,7 +104,14 @@ export function HeaderActionButton({
 	);
 
 	if (action.icon !== undefined && action.label.length > 0) {
-		return <Tooltip content={action.label}>{button}</Tooltip>;
+		return (
+			<Tooltip>
+				<TooltipTrigger
+					render={<span className="inline-flex">{button}</span>}
+				/>
+				<TooltipContent>{action.label}</TooltipContent>
+			</Tooltip>
+		);
 	}
 	return button;
 }

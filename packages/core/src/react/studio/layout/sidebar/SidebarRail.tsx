@@ -1,7 +1,7 @@
 /**
  * @file Vertical icon rail for the four sidebar modules (PRD §4.1).
  *
- * Renders one 44×44 px `IconButton` per module (`insert`, `layer`,
+ * Renders one 44×44 px shadcn `Button` per module (`insert`, `layer`,
  * `image`, `text`) with the click-active-to-collapse semantics in
  * PRD §3.2: clicking an inactive icon switches modules and expands
  * the panel; clicking the *already-active* icon collapses the panel
@@ -35,8 +35,12 @@ import {
 	useEditorUiStore,
 } from "../../state/hooks.js";
 import type { EditorTab } from "../../state/editor-ui-store.js";
-import { IconButton } from "../../primitives/IconButton.js";
-import { Tooltip } from "../../primitives/Tooltip.js";
+import { Button } from "../../primitives/button.js";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../../primitives/tooltip.js";
 
 export const SIDEBAR_PANEL_ID = "ak-sidebar-panel";
 
@@ -151,20 +155,28 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(function SidebarRail(
 			{RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => {
 				const selected = activeTab === key && !drawerCollapsed;
 				return (
-					<Tooltip key={key} content={msg(labelKey)} side="right">
-						<IconButton
-							id={railTabId(key)}
-							role="tab"
-							size="rail"
-							variant="rail"
-							aria-controls={SIDEBAR_PANEL_ID}
-							aria-selected={selected}
-							aria-label={msg(labelKey)}
-							tabIndex={activeTab === key ? 0 : -1}
-							onClick={() => activate(key)}
-						>
-							<Icon size={20} aria-hidden="true" />
-						</IconButton>
+					<Tooltip key={key}>
+						<TooltipTrigger
+							render={
+								<span className="inline-flex">
+									<Button
+										id={railTabId(key)}
+										role="tab"
+										size="icon-lg"
+										variant={selected ? "secondary" : "ghost"}
+										className="size-11"
+										aria-controls={SIDEBAR_PANEL_ID}
+										aria-selected={selected}
+										aria-label={msg(labelKey)}
+										tabIndex={activeTab === key ? 0 : -1}
+										onClick={() => activate(key)}
+									>
+										<Icon aria-hidden="true" />
+									</Button>
+								</span>
+							}
+						/>
+						<TooltipContent side="right">{msg(labelKey)}</TooltipContent>
 					</Tooltip>
 				);
 			})}

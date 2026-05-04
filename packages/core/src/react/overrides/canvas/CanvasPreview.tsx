@@ -11,10 +11,10 @@ import { type ReactNode } from "react";
 
 export function CanvasPreview(): ReactNode {
 	return (
-		<div className="flex min-h-full items-start justify-center bg-[var(--ak-studio-muted)] p-6">
-			<div className="w-full bg-[var(--ak-studio-bg)] shadow-sm">
-				<Puck.Preview />
-			</div>
-		</div>
-	);
+    <div className="flex min-h-full min-h-screen overflow-hidden items-start justify-center bg-[var(--ak-studio-muted)] p-6">
+      <div className="w-full h-screen bg-[var(--ak-studio-bg)] shadow-sm">
+        <Puck.Preview />
+      </div>
+    </div>
+  );
 }

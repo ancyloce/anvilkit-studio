@@ -23,7 +23,7 @@ import {
 } from "react";
 
 import type { StudioInsertSection } from "../../../../../../types/sidebar.js";
-import { Accordion } from "../../../../primitives/Accordion.js";
+import { Accordion } from "../../../../primitives/accordion.js";
 import {
 	useComponentViewMode,
 	useDrawerSearch,
@@ -152,7 +152,7 @@ export function InsertDrawerBody({
 	);
 
 	return (
-		<Accordion.Root value={expandedIds} onValueChange={handleAccordionChange}>
+		<Accordion value={expandedIds} onValueChange={handleAccordionChange}>
 			{visibleSections.map((section) => (
 				<InsertSection
 					key={section.id}
@@ -163,6 +163,6 @@ export function InsertDrawerBody({
 					{(sectionItems.get(section.id) ?? []) as readonly ReactElement[]}
 				</InsertSection>
 			))}
-		</Accordion.Root>
+		</Accordion>
 	);
 }

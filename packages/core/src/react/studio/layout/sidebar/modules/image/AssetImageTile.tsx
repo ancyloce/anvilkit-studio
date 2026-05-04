@@ -6,6 +6,7 @@
 import { type ReactNode } from "react";
 
 import type { StudioAsset } from "../../../../../../types/sidebar.js";
+import { Button } from "../../../../primitives/button.js";
 
 export interface AssetImageTileProps {
 	readonly asset: StudioAsset;
@@ -24,10 +25,10 @@ export function AssetImageTile({
 			className="group relative flex flex-col gap-1 text-xs"
 			data-testid={`ak-image-tile-${asset.id}`}
 		>
-			<button
-				type="button"
+			<Button
+				variant="ghost"
 				onClick={onClick}
-				className="relative aspect-square overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
+				className="relative aspect-square h-auto w-full overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] p-0 transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}
 			>
 				<img
@@ -37,7 +38,7 @@ export function AssetImageTile({
 					decoding="async"
 					className="size-full object-cover"
 				/>
-			</button>
+			</Button>
 			<div className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
 				{menu}
 			</div>

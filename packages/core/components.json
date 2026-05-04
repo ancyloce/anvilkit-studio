@@ -1,0 +1,23 @@
+{
+	"$schema": "https://ui.shadcn.com/schema.json",
+	"style": "base-nova",
+	"rsc": false,
+	"tsx": true,
+	"tailwind": {
+		"config": "",
+		"css": "../configs/tailwind-config/shadcn.css",
+		"baseColor": "neutral",
+		"cssVariables": true
+	},
+	"iconLibrary": "lucide",
+	"rtl": false,
+	"menuColor": "default",
+	"menuAccent": "subtle",
+	"aliases": {
+		"components": "@anvilkit/core/react/studio",
+		"utils": "@anvilkit/core/react/overrides/utils/cn",
+		"ui": "@anvilkit/core/react/studio/primitives",
+		"lib": "@anvilkit/core/react/overrides/utils",
+		"hooks": "@anvilkit/core/react/studio/hooks"
+	}
+}

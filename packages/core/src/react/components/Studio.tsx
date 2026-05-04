@@ -103,6 +103,8 @@ import { ChromePropsProvider } from "../studio/context/chrome-props.js";
 import { StudioPagesSourceProvider } from "../studio/context/pages-source.js";
 import { StudioPluginContextProvider } from "../studio/context/plugin-context.js";
 import { DEFAULT_INSERT_SECTIONS } from "../studio/layout/sidebar/modules/insert/default-sections.js";
+import { Toaster } from "../studio/primitives/sonner.js";
+import { TooltipProvider } from "../studio/primitives/tooltip.js";
 import {
 	createSidebarRegistryStore,
 	EditorI18nStoreProvider,
@@ -1044,8 +1046,11 @@ export function Studio(props: StudioProps): ReactElement | null {
 											isPublishing,
 										}}
 									>
-										<ThemeSyncBoundary />
-										{puckElement}
+										<TooltipProvider delay={200}>
+											<ThemeSyncBoundary />
+											<Toaster position="bottom-right" closeButton />
+											{puckElement}
+										</TooltipProvider>
 									</ChromePropsProvider>
 								</EditorI18nStoreProvider>
 							</EditorUiStoreProvider>

@@ -22,7 +22,11 @@ import {
 	useState,
 } from "react";
 
-import { Input } from "../../../../primitives/Input.js";
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+} from "../../../../primitives/input-group.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 import { useDrawerSearch } from "../../../../state/hooks.js";
 
@@ -60,19 +64,17 @@ export function InsertSearchBar(): ReactNode {
 	const placeholder = msg("studio.module.insert.search.placeholder");
 
 	return (
-		<div className="relative">
-			<Search
-				className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-[var(--ak-studio-muted-fg)]"
-				aria-hidden="true"
-			/>
-			<Input
+		<InputGroup>
+			<InputGroupAddon>
+				<Search aria-hidden="true" />
+			</InputGroupAddon>
+			<InputGroupInput
 				type="search"
 				value={draft}
 				onChange={handleChange}
 				placeholder={placeholder}
 				aria-label={placeholder}
-				className="pl-7"
 			/>
-		</div>
+		</InputGroup>
 	);
 }

@@ -14,9 +14,9 @@ import type {
 import { ChevronDown, X } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 
-import { Button } from "../../../studio/primitives/Button.js";
-import { Input } from "../../../studio/primitives/Input.js";
-import { ScrollArea } from "../../../studio/primitives/ScrollArea.js";
+import { Button } from "../../../studio/primitives/button.js";
+import { Input } from "../../../studio/primitives/input.js";
+import { ScrollArea } from "../../../studio/primitives/scroll-area.js";
 
 import type { FieldRendererProps } from "./TextField.js";
 
@@ -51,6 +51,20 @@ function summarize(row: unknown): string {
 		asString(obj.name) ||
 		asString(obj.id) ||
 		"(item)"
+	);
+}
+
+function rowKey(row: ExternalRow): string {
+	const raw =
+		row.raw !== null && typeof row.raw === "object"
+			? (row.raw as Record<string, unknown>)
+			: undefined;
+	return (
+		asString(row.mapped.id) ||
+		asString(row.mapped.key) ||
+		asString(raw?.id) ||
+		asString(raw?.key) ||
+		row.summary
 	);
 }
 
@@ -142,33 +156,36 @@ export function ExternalField({
 							name={`${name}-search`}
 						/>
 					) : null}
-					<ScrollArea className="mt-2 max-h-48" viewportClassName="px-1">
-						{loading ? (
-							<p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
-								Loading…
-							</p>
-						) : rows.length === 0 ? (
-							<p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
-								No results.
-							</p>
-						) : (
-							<ul className="flex flex-col">
-								{rows.map((row, index) => (
-									<li key={index}>
-										<button
-											type="button"
-											className="w-full rounded-sm px-2 py-1 text-left text-sm hover:bg-[var(--ak-studio-muted)]"
-											onClick={() => {
-												onChange(row.mapped as never);
-												setOpen(false);
-											}}
-										>
-											{row.summary}
-										</button>
-									</li>
-								))}
-							</ul>
-						)}
+					<ScrollArea className="mt-2 max-h-48">
+						<div className="px-1">
+							{loading ? (
+								<p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
+									Loading…
+								</p>
+							) : rows.length === 0 ? (
+								<p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
+									No results.
+								</p>
+							) : (
+								<ul className="flex flex-col">
+									{rows.map((row) => (
+										<li key={rowKey(row)}>
+											<Button
+												variant="ghost"
+												size="sm"
+												className="w-full rounded-sm px-2 py-1 text-left text-sm hover:bg-[var(--ak-studio-muted)]"
+												onClick={() => {
+													onChange(row.mapped as never);
+													setOpen(false);
+												}}
+											>
+												{row.summary}
+											</Button>
+										</li>
+									))}
+								</ul>
+							)}
+						</div>
 					</ScrollArea>
 				</div>
 			) : null}

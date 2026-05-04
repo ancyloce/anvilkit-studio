@@ -31,7 +31,7 @@ import type {
 	StudioAsset,
 	StudioAssetUploadEvent,
 } from "../../../../../types/sidebar.js";
-import { studioToast } from "../../../primitives/Toast.js";
+import { toast } from "sonner";
 import { useMsg } from "../../../state/editor-i18n-store.js";
 import { useAssetCategoryFilter } from "../../../state/hooks.js";
 import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react.js";
@@ -136,11 +136,11 @@ export function ImageModule(): ReactNode {
 							),
 						);
 					} else if (event.type === "error") {
-						studioToast.error(msg("studio.module.image.upload.error"));
+						toast.error(msg("studio.module.image.upload.error"));
 					}
 				});
 			} catch {
-				studioToast.error(msg("studio.module.image.upload.error"));
+				toast.error(msg("studio.module.image.upload.error"));
 			} finally {
 				setUploadingTiles((prev) =>
 					prev.filter(
@@ -221,7 +221,7 @@ export function ImageModule(): ReactNode {
 			try {
 				await source.replace?.(targetId, file);
 			} catch {
-				studioToast.error(msg("studio.module.image.upload.error"));
+				toast.error(msg("studio.module.image.upload.error"));
 			}
 		},
 		[msg, source],

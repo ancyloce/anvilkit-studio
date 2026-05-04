@@ -34,8 +34,8 @@ vi.mock("@puckeditor/core", () => ({
 	useGetPuck: () => () => mockPuckSnapshot,
 }));
 
-vi.mock("../../../../primitives/Toast.js", () => ({
-	studioToast: {
+vi.mock("sonner", () => ({
+	toast: {
 		success: vi.fn(),
 		error: vi.fn(),
 		warning: vi.fn(),

@@ -38,3 +38,29 @@
 	 * token needs to diverge from its shadcn source in dark mode.
 	 */
 }
+
+::-webkit-scrollbar {
+	width: 4px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--ak-studio-muted);
+	border-radius: 20px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+	background: var(--ak-studio-muted);
+}
+
+* {
+	scrollbar-color: var(--ak-studio-muted) transparent;
+	scrollbar-width: thin;
+}
+
+.dark * {
+	scrollbar-color: var(--ak-studio-muted) transparent;
+}

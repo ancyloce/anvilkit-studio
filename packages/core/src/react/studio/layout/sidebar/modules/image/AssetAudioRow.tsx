@@ -7,6 +7,7 @@ import { Music } from "lucide-react";
 import { type ReactNode } from "react";
 
 import type { StudioAsset } from "../../../../../../types/sidebar.js";
+import { Button } from "../../../../primitives/button.js";
 
 export interface AssetAudioRowProps {
 	readonly asset: StudioAsset;
@@ -24,10 +25,11 @@ export function AssetAudioRow({
 			className="group flex items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-xs hover:border-[var(--ak-studio-border)] hover:bg-[var(--ak-studio-muted)]"
 			data-testid={`ak-image-audio-${asset.id}`}
 		>
-			<button
-				type="button"
+			<Button
+				variant="ghost"
+				size="sm"
 				onClick={onClick}
-				className="flex flex-1 items-center gap-2 text-start text-[var(--ak-studio-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
+				className="h-auto flex-1 justify-start gap-2 p-0 text-start font-normal text-[var(--ak-studio-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}
 			>
 				<Music
@@ -42,7 +44,7 @@ export function AssetAudioRow({
 						{formatSize(asset.size)}
 					</span>
 				) : null}
-			</button>
+			</Button>
 			<div className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
 				{menu}
 			</div>

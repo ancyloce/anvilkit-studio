@@ -20,10 +20,20 @@ import type {
 	StudioAssetAction,
 	StudioAssetSource,
 } from "../../../../../../types/sidebar.js";
-import { DropdownMenu } from "../../../../primitives/DropdownMenu.js";
-import { IconButton } from "../../../../primitives/IconButton.js";
-import { studioToast } from "../../../../primitives/Toast.js";
-import { Tooltip } from "../../../../primitives/Tooltip.js";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "../../../../primitives/dropdown-menu.js";
+import { Button } from "../../../../primitives/button.js";
+import { toast } from "sonner";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../../../../primitives/tooltip.js";
 import { useMsg } from "../../../../state/editor-i18n-store.js";
 
 export interface AssetOverflowMenuProps {
@@ -51,9 +61,9 @@ export function AssetOverflowMenu({
 			const url =
 				(await source.getUrl?.(asset.id)) ?? asset.url ?? "";
 			await navigator.clipboard.writeText(url);
-			studioToast.success(msg("studio.module.image.actions.copyUrl"));
+			toast.success(msg("studio.module.image.actions.copyUrl"));
 		} catch (error) {
-			studioToast.error(
+			toast.error(
 				error instanceof Error ? error.message : String(error),
 			);
 		} finally {
@@ -69,83 +79,95 @@ export function AssetOverflowMenu({
 		try {
 			await source.delete?.(asset.id);
 		} catch (error) {
-			studioToast.error(
+			toast.error(
 				error instanceof Error ? error.message : String(error),
 			);
 		}
 	};
 
 	return (
-		<DropdownMenu.Root>
-			<Tooltip content={msg("studio.module.image.actions.more")}>
-				<DropdownMenu.Trigger
+		<DropdownMenu>
+			<Tooltip>
+				<TooltipTrigger
 					render={
-						<IconButton
-							size="sm"
-							aria-label={msg("studio.module.image.actions.more")}
-							data-testid={`ak-image-overflow-${asset.id}`}
-						>
-							<MoreHorizontal className="size-4" aria-hidden="true" />
-						</IconButton>
+						<span className="inline-flex">
+							<DropdownMenuTrigger
+								render={
+									<Button
+										size="icon-sm"
+										variant="ghost"
+										aria-label={msg("studio.module.image.actions.more")}
+										data-testid={`ak-image-overflow-${asset.id}`}
+									/>
+								}
+							>
+								<MoreHorizontal aria-hidden="true" />
+							</DropdownMenuTrigger>
+						</span>
 					}
 				/>
+				<TooltipContent>
+					{msg("studio.module.image.actions.more")}
+				</TooltipContent>
 			</Tooltip>
-			<DropdownMenu.Portal>
-				<DropdownMenu.Positioner align="end" sideOffset={4}>
-					<DropdownMenu.Popup data-testid={`ak-image-overflow-popup-${asset.id}`}>
-						<DropdownMenu.Item onClick={() => onRename(asset)}>
-							<Pencil className="size-4" aria-hidden="true" />
-							<span>{msg("studio.module.image.actions.rename")}</span>
-						</DropdownMenu.Item>
-						<DropdownMenu.Item onClick={() => onReplace(asset)}>
-							<Upload className="size-4" aria-hidden="true" />
-							<span>{msg("studio.module.image.actions.replace")}</span>
-						</DropdownMenu.Item>
-						<DropdownMenu.Item
-							onClick={() => {
-								void handleCopy();
-							}}
-						>
-							<Link className="size-4" aria-hidden="true" />
-							<span>{msg("studio.module.image.actions.copyUrl")}</span>
-						</DropdownMenu.Item>
-						<DropdownMenu.Item
-							tone="destructive"
-							onClick={() => {
-								void handleDelete();
-							}}
-						>
-							<Trash2 className="size-4" aria-hidden="true" />
-							<span>{msg("studio.module.image.actions.delete")}</span>
-						</DropdownMenu.Item>
-						{pluginActions.length > 0 ? (
-							<>
-								<DropdownMenu.Separator />
-								{pluginActions.map((action) => (
-									<DropdownMenu.Item
-										key={action.id}
-										tone={action.tone === "destructive" ? "destructive" : "default"}
-										onClick={() => {
-											void action.run({
-												asset,
-												log: () => {
-													// Plugin actions can pass a real logger via the
-													// hosting plugin context; the sidebar provides a
-													// no-op fallback so action.run can be called
-													// without an external dependency injection.
-												},
-											});
-										}}
-										data-testid={`ak-image-action-${action.id}`}
-									>
-										<span>{msg(action.labelKey)}</span>
-									</DropdownMenu.Item>
-								))}
-							</>
-						) : null}
-					</DropdownMenu.Popup>
-				</DropdownMenu.Positioner>
-			</DropdownMenu.Portal>
-		</DropdownMenu.Root>
+			<DropdownMenuContent
+				align="end"
+				sideOffset={4}
+				data-testid={`ak-image-overflow-popup-${asset.id}`}
+			>
+				<DropdownMenuItem onClick={() => onRename(asset)}>
+					<Pencil aria-hidden="true" />
+					<span>{msg("studio.module.image.actions.rename")}</span>
+				</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => onReplace(asset)}>
+					<Upload aria-hidden="true" />
+					<span>{msg("studio.module.image.actions.replace")}</span>
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() => {
+						void handleCopy();
+					}}
+				>
+					<Link aria-hidden="true" />
+					<span>{msg("studio.module.image.actions.copyUrl")}</span>
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					variant="destructive"
+					onClick={() => {
+						void handleDelete();
+					}}
+				>
+					<Trash2 aria-hidden="true" />
+					<span>{msg("studio.module.image.actions.delete")}</span>
+				</DropdownMenuItem>
+				{pluginActions.length > 0 ? (
+					<>
+						<DropdownMenuSeparator />
+						{pluginActions.map((action) => (
+							<DropdownMenuItem
+								key={action.id}
+								variant={
+									action.tone === "destructive" ? "destructive" : "default"
+								}
+								onClick={() => {
+									void action.run({
+										asset,
+										log: () => {
+											// Plugin actions can pass a real logger via the
+											// hosting plugin context; the sidebar provides a
+											// no-op fallback so action.run can be called
+											// without an external dependency injection.
+										},
+									});
+								}}
+								data-testid={`ak-image-action-${action.id}`}
+							>
+								<span>{msg(action.labelKey)}</span>
+							</DropdownMenuItem>
+						))}
+					</>
+				) : null}
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 }

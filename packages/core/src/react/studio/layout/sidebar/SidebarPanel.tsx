@@ -15,8 +15,12 @@ import { X as CloseIcon } from "lucide-react";
 import { type KeyboardEvent, type ReactNode, useCallback } from "react";
 
 import { useMsg } from "../../state/editor-i18n-store.js";
-import { IconButton } from "../../primitives/IconButton.js";
-import { Tooltip } from "../../primitives/Tooltip.js";
+import { Button } from "../../primitives/button.js";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "../../primitives/tooltip.js";
 import { SIDEBAR_PANEL_ID } from "./SidebarRail.js";
 
 export interface SidebarPanelProps {
@@ -73,16 +77,25 @@ export function SidebarPanel({
 				{actions !== undefined ? (
 					<div className="flex items-center gap-1">{actions}</div>
 				) : null}
-				<Tooltip content={msg("studio.sidebar.close")} side="bottom">
-					<IconButton
-						type="button"
-						size="sm"
-						variant="ghost"
-						aria-label={msg("studio.sidebar.close")}
-						onClick={onClose}
-					>
-						<CloseIcon size={16} aria-hidden="true" />
-					</IconButton>
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<span className="inline-flex">
+								<Button
+									type="button"
+									size="icon-sm"
+									variant="ghost"
+									aria-label={msg("studio.sidebar.close")}
+									onClick={onClose}
+								>
+									<CloseIcon aria-hidden="true" />
+								</Button>
+							</span>
+						}
+					/>
+					<TooltipContent side="bottom">
+						{msg("studio.sidebar.close")}
+					</TooltipContent>
 				</Tooltip>
 			</header>
 			<div className="min-h-0 flex-1 overflow-auto">{children}</div>
