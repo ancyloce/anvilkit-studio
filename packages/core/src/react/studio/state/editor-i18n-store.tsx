@@ -92,6 +92,9 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.layer.pages.dialog.cancel": "Cancel",
 	"studio.module.layer.pages.dialog.error.path":
 		"Path must start with `/` for route pages.",
+	// Layer module — splitter ARIA label (Phase D polish).
+	"studio.module.layer.splitter.label":
+		"Resize Pages and Layers panels",
 
 	// Module: image (PRD §7).
 	"studio.module.image.name": "Assets",
