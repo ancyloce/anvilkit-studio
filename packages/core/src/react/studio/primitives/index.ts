@@ -1,34 +1,95 @@
 /**
- * @file Internal primitives barrel.
+ * @file Internal shadcn/ui primitive barrel.
  *
- * NOT EXPORTED publicly (PRD §7.3). Layout components reach in via
- * relative imports. The package's `react/overrides` subpath
- * deliberately does not re-export anything from this directory.
+ * These are internal Studio primitives only. Public consumers should
+ * import Studio through `@anvilkit/core/react`, not this directory.
  */
 
-export { Accordion, type AccordionTriggerProps, type AccordionTriggerVariants } from "./Accordion.js";
-export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from "./Button.js";
-export { Dialog } from "./Dialog.js";
+export {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "./accordion.js";
+export { Button, buttonVariants } from "./button.js";
+export { Checkbox } from "./checkbox.js";
+export {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogOverlay,
+	DialogPortal,
+	DialogTitle,
+	DialogTrigger,
+} from "./dialog.js";
 export {
 	DropdownMenu,
-	type DropdownMenuItemProps,
-	type DropdownMenuItemVariants,
-} from "./DropdownMenu.js";
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuPortal,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
+	DropdownMenuSeparator,
+	DropdownMenuShortcut,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
+	DropdownMenuTrigger,
+} from "./dropdown-menu.js";
 export {
-	IconButton,
-	type IconButtonProps,
-	type IconButtonVariants,
-} from "./IconButton.js";
-export { Input, type InputProps } from "./Input.js";
-export { Popover, type PopoverPopupProps, type PopoverPopupVariants } from "./Popover.js";
-export { ScrollArea, type ScrollAreaProps } from "./ScrollArea.js";
-export { Separator, type SeparatorProps } from "./Separator.js";
-export { Skeleton, type SkeletonProps, type SkeletonVariants } from "./Skeleton.js";
-export { Tabs } from "./Tabs.js";
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "./empty.js";
 export {
-	StudioToaster,
-	type StudioToasterProps,
-	studioToast,
-} from "./Toast.js";
-export { ToggleGroup, type ToggleGroupItemVariants } from "./ToggleGroup.js";
-export { Tooltip, type TooltipProps } from "./Tooltip.js";
+	Field,
+	FieldContent,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+	FieldLegend,
+	FieldSeparator,
+	FieldSet,
+	FieldTitle,
+} from "./field.js";
+export { Input } from "./input.js";
+export {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupButton,
+	InputGroupInput,
+	InputGroupTextarea,
+	InputGroupText,
+} from "./input-group.js";
+export { Label } from "./label.js";
+export { Popover, PopoverContent, PopoverTrigger } from "./popover.js";
+export { ScrollArea, ScrollBar } from "./scroll-area.js";
+export { Separator } from "./separator.js";
+export { Skeleton } from "./skeleton.js";
+export { Toaster } from "./sonner.js";
+export {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+	tabsListVariants,
+} from "./tabs.js";
+export { Textarea } from "./textarea.js";
+export { Toggle, toggleVariants } from "./toggle.js";
+export { ToggleGroup, ToggleGroupItem } from "./toggle-group.js";
+export {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "./tooltip.js";

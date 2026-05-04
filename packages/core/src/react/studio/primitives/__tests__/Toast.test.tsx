@@ -1,32 +1,19 @@
-/**
- * @file Smoke test for the Toast primitive.
- *
- * Verifies the `<StudioToaster>` host mounts without crashing and
- * exposes a sonner-managed region. We don't drive a real toast through
- * the imperative helper here — that requires sonner's queue runtime
- * which is exercised in the higher-level module tests in Phase E/F.
- */
-
 import { cleanup, render } from "@testing-library/react";
+import { toast } from "sonner";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { StudioToaster, studioToast } from "../Toast.js";
+import { Toaster } from "../sonner.js";
 
 afterEach(cleanup);
 
-describe("StudioToaster", () => {
+describe("Toaster", () => {
 	it("mounts without throwing", () => {
-		// Only assertion is "render does not throw"; sonner's actual
-		// region only mounts after the first toast (sonner v2 lazy-
-		// initializes its DOM), so we don't query the region here.
-		// Phase E/F integration tests fire a real toast and assert on
-		// the rendered item.
-		expect(() => render(<StudioToaster />)).not.toThrow();
+		expect(() => render(<Toaster />)).not.toThrow();
 	});
 
-	it("exposes studioToast as a callable handle", () => {
-		expect(typeof studioToast).toBe("function");
-		expect(typeof studioToast.error).toBe("function");
-		expect(typeof studioToast.success).toBe("function");
+	it("uses sonner's toast handle", () => {
+		expect(typeof toast).toBe("function");
+		expect(typeof toast.error).toBe("function");
+		expect(typeof toast.success).toBe("function");
 	});
 });
