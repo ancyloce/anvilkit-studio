@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-04-28T00:00:00.000Z",
+	"generatedAt": "2026-05-04T18:42:58.623Z",
 	"entries": [
 		{
 			"slug": "blog-article",
@@ -315,6 +315,26 @@
 			"publisher": "first-party",
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-collab-yjs",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-collab-yjs",
+			"description": "Alpha-channel Yjs CRDT collaboration plugin for Anvilkit Studio. Implements the SnapshotAdapter v2 contract over a host-provided transport.",
+			"packageName": "@anvilkit/plugin-collab-yjs",
+			"version": "0.1.0-alpha.0",
+			"category": "studio",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-05-04T18:42:58.623Z",
 			"installSpec": {
 				"mutates": [
 					"lib/puck-config.ts"

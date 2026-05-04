@@ -28,7 +28,9 @@
 			}
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"license": "MIT",
 	"sideEffects": false,
 	"publishConfig": {
@@ -65,7 +67,7 @@
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
 		"typedoc": "^0.28.18",
-		"typedoc-plugin-markdown": "^4.4.0",
+		"typedoc-plugin-markdown": "^4.11.0",
 		"typescript": "6.0.2",
 		"vitest": "^4.1.4"
 	}
