@@ -8,20 +8,14 @@
 		"outDir": "dist",
 		"rootDir": "src",
 		"paths": {
-			"@anvilkit/core/react/studio": ["src/react/studio"],
-			"@anvilkit/core/react/studio/*": ["src/react/studio/*"],
-			"@anvilkit/core/react/studio/primitives": [
-				"src/react/studio/primitives"
-			],
-			"@anvilkit/core/react/studio/primitives/*": [
-				"src/react/studio/primitives/*"
-			],
-			"@anvilkit/core/react/overrides/utils/cn": [
-				"src/react/overrides/utils/cn.ts"
-			],
-			"@anvilkit/core/react/overrides/utils/*": [
-				"src/react/overrides/utils/*"
-			]
+			"@/studio": ["src/react/studio"],
+			"@/studio/*": ["src/react/studio/*"],
+			"@/primitives": ["src/react/studio/primitives"],
+			"@/primitives/*": ["src/react/studio/primitives/*"],
+			"@/utils/cn": ["src/react/overrides/utils/cn.ts"],
+			"@/utils/*": ["src/react/overrides/utils/*"],
+			"@/hooks": ["src/react/studio/hooks"],
+			"@/hooks/*": ["src/react/studio/hooks/*"]
 		},
 		"strictNullChecks": true,
 		"useDefineForClassFields": true,
