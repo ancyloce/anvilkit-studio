@@ -78,6 +78,20 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.layer.layers.title": "Layers",
 	"studio.module.layer.layers.add": "Insert layer",
 	"studio.module.layer.layers.empty": "Select a page to see its layers.",
+	// Layer module — quick-add primitive labels (Phase D).
+	"studio.module.layer.layers.add.layout": "Layout",
+	"studio.module.layer.layers.add.row": "Row",
+	"studio.module.layer.layers.add.column": "Column",
+	"studio.module.layer.layers.add.text": "Text",
+	// Layer module — Add Page dialog strings (Phase D).
+	"studio.module.layer.pages.dialog.title": "Add page",
+	"studio.module.layer.pages.dialog.field.title": "Title",
+	"studio.module.layer.pages.dialog.field.path": "Path",
+	"studio.module.layer.pages.dialog.field.route": "Public route",
+	"studio.module.layer.pages.dialog.submit": "Create page",
+	"studio.module.layer.pages.dialog.cancel": "Cancel",
+	"studio.module.layer.pages.dialog.error.path":
+		"Path must start with `/` for route pages.",
 
 	// Module: image (PRD §7).
 	"studio.module.image.name": "Assets",
