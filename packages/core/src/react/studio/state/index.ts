@@ -51,3 +51,4 @@ export {
 	useSidebarRegistryStoreApi,
 	useSidebarRegistryStoreApiOrNull,
 } from "./SidebarRegistryProvider.js";
+export { useSidebarRegistry } from "./sidebar-registry-store-react.js";
