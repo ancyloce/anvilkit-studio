@@ -37,6 +37,11 @@ export type {
 	PageIRNodeMeta,
 } from "./ir.js";
 export type {
+	StudioPage,
+	StudioPageCreateInput,
+	StudioPagesSource,
+} from "./pages.js";
+export type {
 	AssetResolution,
 	IRAssetResolver,
 	StudioHeaderAction,
@@ -47,3 +52,19 @@ export type {
 	StudioPluginMeta,
 	StudioPluginRegistration,
 } from "./plugin.js";
+export type {
+	StudioAsset,
+	StudioAssetAction,
+	StudioAssetKind,
+	StudioAssetSource,
+	StudioAssetUploadEvent,
+	StudioAssetUploadListener,
+	StudioCopySnippet,
+	StudioCopySnippetCategory,
+	StudioCopySnippetPack,
+	StudioInsertSection,
+	StudioInsertSectionPredicate,
+	StudioLayerQuickAdd,
+	StudioLayerQuickAddInserter,
+	StudioSidebarUnregister,
+} from "./sidebar.js";

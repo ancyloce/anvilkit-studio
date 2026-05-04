@@ -96,6 +96,14 @@ export interface StudioPluginMeta {
 export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
 
 import type { IRAssetResolver } from "./asset-resolver.js";
+import type {
+	StudioAssetAction,
+	StudioAssetSource,
+	StudioCopySnippetPack,
+	StudioInsertSection,
+	StudioLayerQuickAdd,
+	StudioSidebarUnregister,
+} from "./sidebar.js";
 
 /**
  * Read / write / observe handle passed to every plugin lifecycle call.
@@ -200,6 +208,73 @@ export interface StudioPluginContext<
 	 * absence as an empty resolver list.
 	 */
 	readonly getAssetResolvers?: () => readonly IRAssetResolver[];
+
+	/**
+	 * Register a custom section in the sidebar's `insert` module.
+	 *
+	 * Default sections (`recommended`, `navigation`, `top`, `team`)
+	 * are seeded by `@anvilkit/core` from each component's metadata
+	 * category. Plugins use this surface to add curated groupings
+	 * (e.g. brand-template sections, AI-generated picks).
+	 *
+	 * Returns an `unregister()` handle the plugin's `onDestroy` hook
+	 * should call to clean up — a remount with a different plugin set
+	 * never carries over stale registrations.
+	 *
+	 * Optional because hand-written test contexts may omit it; the
+	 * runtime always provides it on the live `<Studio>` ctx.
+	 */
+	readonly registerInsertSection?: (
+		section: StudioInsertSection,
+	) => StudioSidebarUnregister;
+
+	/**
+	 * Register a primitive in the sidebar's `layer` module quick-add
+	 * popover. Built-ins (Layout / Row / Column / Text) come from
+	 * `@anvilkit/core`; plugins use this surface to add custom
+	 * primitives (e.g. branded heroes, marketing rows).
+	 *
+	 * Returns an `unregister()` handle.
+	 */
+	readonly registerLayerQuickAdd?: (
+		item: StudioLayerQuickAdd,
+	) => StudioSidebarUnregister;
+
+	/**
+	 * Register the `StudioAssetSource` backing the sidebar's `image`
+	 * module. v1 supports a single source — last-write-wins; the
+	 * sidebar shows `studio.module.image.pluginMissing` until a
+	 * source is registered.
+	 *
+	 * Returns an `unregister()` handle that clears the source iff it
+	 * still matches the one captured in its closure (so a chain of
+	 * register / re-register / unregister calls behaves predictably).
+	 */
+	readonly registerAssetSource?: (
+		source: StudioAssetSource,
+	) => StudioSidebarUnregister;
+
+	/**
+	 * Register a plugin-contributed entry in the per-asset overflow
+	 * `…` menu. Built-ins (Rename / Replace / Copy URL / Delete) come
+	 * from the asset source itself.
+	 *
+	 * Returns an `unregister()` handle.
+	 */
+	readonly registerAssetAction?: (
+		action: StudioAssetAction,
+	) => StudioSidebarUnregister;
+
+	/**
+	 * Register a snippet pack consumed by the sidebar's `text` module.
+	 * Multiple packs may be registered; the module merges them in
+	 * registration order.
+	 *
+	 * Returns an `unregister()` handle.
+	 */
+	readonly registerCopySnippetPack?: (
+		pack: StudioCopySnippetPack,
+	) => StudioSidebarUnregister;
 }
 
 /**
