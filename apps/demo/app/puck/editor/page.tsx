@@ -37,6 +37,7 @@ import {
 } from "@anvilkit/ui/presence";
 import type { Config, Data } from "@puckeditor/core";
 import { createCollabDemoBundle } from "../../../lib/collab-demo";
+import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
@@ -245,6 +246,12 @@ export default function PuckEditorPage() {
 		"anvilkit",
 	);
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
+
+	// Per-mount in-memory pages source for the layer sidebar module.
+	// Stable identity (`useMemo` with no deps) so the source's internal
+	// active-page state survives re-renders. The source itself owns
+	// active-page tracking and re-emits via `subscribe()` on `onSelect`.
+	const pagesSource = useMemo(() => createDemoPagesSource(), []);
 
 	// Hoisted Yjs Doc + plugin: rebuilt only when collab toggles or the
 	// peer identity changes. Building the bundle re-instantiates the
@@ -758,6 +765,7 @@ export default function PuckEditorPage() {
 					plugins={plugins}
 					onPublish={handlePublish}
 					chrome={chromeMode}
+					pages={pagesSource}
 				/>
 				{collabEnabled ? (
 					<PresenceLayer
