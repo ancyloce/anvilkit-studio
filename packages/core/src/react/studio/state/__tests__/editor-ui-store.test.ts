@@ -27,12 +27,12 @@ describe("createEditorUiStore", () => {
 		const a = createEditorUiStore({ storeId: "a" });
 		const b = createEditorUiStore({ storeId: "b" });
 
-		a.getState().setActiveTab("outline");
+		a.getState().setActiveTab("layer");
 		b.getState().setActiveTab("insert");
 
 		const aStored = window.localStorage.getItem("anvilkit-ui-a");
 		const bStored = window.localStorage.getItem("anvilkit-ui-b");
-		expect(aStored).toContain("outline");
+		expect(aStored).toContain("layer");
 		expect(bStored).toContain("insert");
 		expect(aStored).not.toBe(bStored);
 	});
@@ -47,7 +47,7 @@ describe("createEditorUiStore", () => {
 
 	it("rehydrates persisted slice across instances", async () => {
 		const first = createEditorUiStore({ storeId: "rehydrate" });
-		first.getState().setActiveTab("outline");
+		first.getState().setActiveTab("layer");
 		first.getState().setCanvasZoom(1.25);
 		first.getState().setDrawerSearch("transient");
 
@@ -56,7 +56,7 @@ describe("createEditorUiStore", () => {
 		const second = createEditorUiStore({ storeId: "rehydrate" });
 		await (second as unknown as PersistableStoreApi).persist.rehydrate();
 		const state = second.getState();
-		expect(state.activeTab).toBe("outline");
+		expect(state.activeTab).toBe("layer");
 		expect(state.canvasZoom).toBe(1.25);
 		expect(state.drawerSearch).toBe("");
 	});
@@ -64,7 +64,7 @@ describe("createEditorUiStore", () => {
 	it("reset() returns every field to defaults", () => {
 		const store = createEditorUiStore({ storeId: "reset" });
 		const state = store.getState();
-		state.setActiveTab("outline");
+		state.setActiveTab("layer");
 		state.setDrawerSearch("query");
 		state.setCanvasZoom(2);
 		state.setDrawerCollapsed(true);

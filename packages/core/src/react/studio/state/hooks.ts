@@ -9,7 +9,13 @@
 
 import { useStore } from "zustand";
 
-import type { EditorTab, EditorUiState } from "./editor-ui-store.js";
+import type {
+	AssetCategoryFilter,
+	ComponentViewMode,
+	CopyCategoryFilter,
+	EditorTab,
+	EditorUiState,
+} from "./editor-ui-store.js";
 import { useEditorUiStoreApi } from "./EditorUiStoreProvider.js";
 
 export function useEditorUiStore<TResult>(
@@ -46,5 +52,56 @@ export function useCanvasViewport(): readonly [
 ] {
 	const value = useEditorUiStore((s) => s.canvasViewport);
 	const set = useEditorUiStore((s) => s.setCanvasViewport);
+	return [value, set];
+}
+
+export function useComponentViewMode(): readonly [
+	ComponentViewMode,
+	(mode: ComponentViewMode) => void,
+] {
+	const value = useEditorUiStore((s) => s.componentViewMode);
+	const set = useEditorUiStore((s) => s.setComponentViewMode);
+	return [value, set];
+}
+
+export function useInsertSectionsExpanded(): readonly [
+	Readonly<Record<string, boolean>>,
+	(id: string, expanded: boolean) => void,
+] {
+	const value = useEditorUiStore((s) => s.insertSectionsExpanded);
+	const set = useEditorUiStore((s) => s.setInsertSectionExpanded);
+	return [value, set];
+}
+
+export function useAssetCategoryFilter(): readonly [
+	AssetCategoryFilter,
+	(filter: AssetCategoryFilter) => void,
+] {
+	const value = useEditorUiStore((s) => s.assetCategoryFilter);
+	const set = useEditorUiStore((s) => s.setAssetCategoryFilter);
+	return [value, set];
+}
+
+export function useCopyCategoryFilter(): readonly [
+	CopyCategoryFilter,
+	(filter: CopyCategoryFilter) => void,
+] {
+	const value = useEditorUiStore((s) => s.copyCategoryFilter);
+	const set = useEditorUiStore((s) => s.setCopyCategoryFilter);
+	return [value, set];
+}
+
+export function usePagesExpanded(): readonly [
+	Readonly<Record<string, boolean>>,
+	(id: string, expanded: boolean) => void,
+] {
+	const value = useEditorUiStore((s) => s.pagesExpanded);
+	const set = useEditorUiStore((s) => s.setPageExpanded);
+	return [value, set];
+}
+
+export function useLayerSplitRatio(): readonly [number, (ratio: number) => void] {
+	const value = useEditorUiStore((s) => s.layerSplitRatio);
+	const set = useEditorUiStore((s) => s.setLayerSplitRatio);
 	return [value, set];
 }
