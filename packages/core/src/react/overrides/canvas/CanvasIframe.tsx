@@ -1,14 +1,18 @@
 /**
  * @file `CanvasIframe` — Puck `iframe` override.
  *
- * Wraps Puck's iframe slot and injects the `--ak-studio-*` CSS-var
- * snapshot (`IFRAME_THEME_CSS`) into the iframe's `<head>` so canvas
- * content theme-syncs with the surrounding chrome.
+ * Wraps Puck's iframe slot, injects the `--ak-studio-*` CSS-var
+ * snapshot (`IFRAME_THEME_CSS`) into the iframe's `<head>`, and
+ * forcibly resets host page-level scroll/sizing rules that Puck's
+ * `CopyHostStyles` mirrors into the iframe (e.g. Next.js scaffold
+ * `html, body { overflow-x: hidden }`, which the CSS spec promotes
+ * to a second scroll container stacked on the iframe's root one).
  *
- * The iframe `Document` is supplied by Puck. The injection is
- * idempotent: if the `<style>` tag already exists (e.g. when
- * `useThemeSync` injected it on mount), this override does not
- * duplicate it.
+ * The CSS-var injection is idempotent. The scroll/sizing reset is
+ * applied as inline styles on `<html>` and `<body>` so it beats any
+ * stylesheet rule (including `!important`) regardless of cascade
+ * order — `CopyHostStyles` may mirror styles after our `<style>` tag
+ * lands, so a stylesheet-only override is racy.
  */
 
 import { type ReactNode, useEffect } from "react";
@@ -23,17 +27,39 @@ export interface CanvasIframeOverrideProps {
 	readonly document?: Document;
 }
 
+function applyScrollReset(doc: Document): void {
+	const html = doc.documentElement;
+	const body = doc.body;
+	if (html === null || body === null) return;
+	for (const el of [html, body]) {
+		el.style.setProperty("overflow", "visible", "important");
+		el.style.setProperty("max-width", "none", "important");
+	}
+}
+
 export function CanvasIframe({
 	children,
 	document: iframeDoc,
 }: CanvasIframeOverrideProps): ReactNode {
 	useEffect(() => {
 		if (iframeDoc === undefined) return;
-		if (iframeDoc.getElementById(IFRAME_THEME_STYLE_ID) !== null) return;
-		const style = iframeDoc.createElement("style");
-		style.id = IFRAME_THEME_STYLE_ID;
-		style.textContent = IFRAME_THEME_CSS;
-		iframeDoc.head.appendChild(style);
+		if (iframeDoc.getElementById(IFRAME_THEME_STYLE_ID) === null) {
+			const style = iframeDoc.createElement("style");
+			style.id = IFRAME_THEME_STYLE_ID;
+			style.textContent = IFRAME_THEME_CSS;
+			iframeDoc.head.appendChild(style);
+		}
+		applyScrollReset(iframeDoc);
+		const observer = new MutationObserver(() => applyScrollReset(iframeDoc));
+		observer.observe(iframeDoc.documentElement, {
+			attributes: true,
+			attributeFilter: ["style"],
+		});
+		observer.observe(iframeDoc.body, {
+			attributes: true,
+			attributeFilter: ["style"],
+		});
+		return () => observer.disconnect();
 	}, [iframeDoc]);
 
 	return <>{children}</>;

@@ -32,4 +32,20 @@ const TOKEN_BLOCK = `:root,
 	background-color: var(--ak-studio-bg);
 }`;
 
-export const IFRAME_THEME_CSS = TOKEN_BLOCK;
+/*
+ * Neutralize host page-level rules that Puck's CopyHostStyles pulls
+ * into the iframe. Hosts often set `html, body { overflow-x: hidden;
+ * max-width: 100vw }` for the outer page; per CSS spec, pairing a
+ * non-visible overflow on one axis with `visible` on the other
+ * promotes the unspecified axis to `auto`, turning both <html> and
+ * <body> into scroll containers — that's the two stacked vertical
+ * scrollbars at the canvas's right edge. `!important` is required
+ * because the host stylesheet wins on cascade order otherwise.
+ */
+const IFRAME_RESET_BLOCK = `html,
+body {
+	overflow: visible !important;
+	max-width: none !important;
+}`;
+
+export const IFRAME_THEME_CSS = `${TOKEN_BLOCK}\n${IFRAME_RESET_BLOCK}`;
