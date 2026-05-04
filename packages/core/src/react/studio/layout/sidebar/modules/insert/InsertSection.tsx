@@ -40,10 +40,14 @@ export function InsertSection({
 	const Tiles = viewMode === "grid" ? InsertTileGrid : InsertTileList;
 
 	return (
-		<AccordionItem value={id} data-testid={`ak-insert-section-${id}`}>
-			<AccordionTrigger className="min-h-8 px-2 py-1.5">
+		<AccordionItem
+			value={id}
+			data-testid={`ak-insert-section-${id}`}
+			className="border-b-0"
+		>
+			<AccordionTrigger className="min-h-8 px-2 py-1.5 text-xs font-medium uppercase tracking-wide text-[var(--ak-studio-muted-fg)] hover:no-underline">
 				<span className="grow truncate">{msg(titleKey)}</span>
-				<span className="text-[10px] text-muted-foreground">
+				<span className="me-1 text-[10px] tabular-nums text-muted-foreground">
 					{count}
 				</span>
 			</AccordionTrigger>

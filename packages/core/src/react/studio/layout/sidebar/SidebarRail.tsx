@@ -18,6 +18,7 @@ import {
 	Image as ImageIcon,
 	Layers as LayersIcon,
 	LayoutGrid as LayoutGridIcon,
+	Plus as PlusIcon,
 	Type as TypeIcon,
 } from "lucide-react";
 import {
@@ -55,7 +56,7 @@ interface RailModule {
 }
 
 const RAIL_MODULES: readonly RailModule[] = [
-	{ key: "insert", icon: LayoutGridIcon, labelKey: "studio.module.insert.name" },
+	{ key: "insert", icon: PlusIcon, labelKey: "studio.module.insert.name" },
 	{ key: "layer", icon: LayersIcon, labelKey: "studio.module.layer.name" },
 	{ key: "image", icon: ImageIcon, labelKey: "studio.module.image.name" },
 	{ key: "text", icon: TypeIcon, labelKey: "studio.module.text.name" },
@@ -145,14 +146,24 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(function SidebarRail(
 
 	return (
 		<div
-			ref={containerRef}
-			role="tablist"
-			aria-orientation="vertical"
-			onKeyDown={handleKeyDown}
-			className="flex h-full shrink-0 flex-col items-center gap-1 border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] py-2"
+			className="flex h-full shrink-0 flex-col items-center gap-2 border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] py-2"
 			style={{ inlineSize: "var(--ak-studio-rail-width)" }}
 		>
-			{RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => {
+			<div
+				role="presentation"
+				aria-hidden="true"
+				className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+			>
+				<RailBrandMark />
+			</div>
+			<div
+				ref={containerRef}
+				role="tablist"
+				aria-orientation="vertical"
+				onKeyDown={handleKeyDown}
+				className="flex flex-col items-center gap-1"
+			>
+				{RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => {
 				const selected = activeTab === key && !drawerCollapsed;
 				return (
 					<Tooltip key={key}>
@@ -180,6 +191,23 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(function SidebarRail(
 					</Tooltip>
 				);
 			})}
+			</div>
 		</div>
 	);
 });
+
+function RailBrandMark(): ReactNode {
+	return (
+		<svg
+			viewBox="0 0 24 24"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			className="size-4"
+			aria-hidden="true"
+		>
+			<rect x="4" y="13" width="3" height="7" rx="1" fill="currentColor" />
+			<rect x="10.5" y="9" width="3" height="11" rx="1" fill="currentColor" />
+			<rect x="17" y="5" width="3" height="15" rx="1" fill="currentColor" />
+		</svg>
+	);
+}

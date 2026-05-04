@@ -28,7 +28,7 @@ export function InsertTileGrid({
 	return (
 		<div
 			data-testid="ak-insert-tile-grid"
-			className={cn("grid grid-cols-2 gap-1.5 p-2", className)}
+			className={cn("grid grid-cols-3 gap-2 p-2", className)}
 		>
 			{children.map((child, index) => {
 				const key = isValidElement(child)
@@ -37,7 +37,7 @@ export function InsertTileGrid({
 				return (
 					<div
 						key={key}
-						className="flex aspect-square items-center justify-center overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] p-2 text-center text-xs text-[var(--ak-studio-fg)] transition-colors hover:border-[var(--ak-studio-accent)]"
+						className="group flex aspect-[4/3] items-end justify-stretch overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-gradient-to-br from-[var(--ak-studio-panel)] to-[var(--ak-studio-bg)] p-1.5 text-left text-[10px] leading-tight text-[var(--ak-studio-fg)] transition-colors hover:border-[var(--ak-studio-accent)] [&_button]:flex [&_button]:size-full [&_button]:flex-col [&_button]:items-start [&_button]:justify-end [&_button]:bg-transparent [&_button]:p-0 [&_button]:text-[10px] [&_button]:text-[var(--ak-studio-muted-fg)] [&_button:hover]:text-[var(--ak-studio-fg)]"
 					>
 						{child}
 					</div>

@@ -64,9 +64,12 @@ export function InsertSearchBar(): ReactNode {
 	const placeholder = msg("studio.module.insert.search.placeholder");
 
 	return (
-		<InputGroup>
+		<InputGroup className="rounded-full bg-[var(--ak-studio-panel)] px-1">
 			<InputGroupAddon>
-				<Search aria-hidden="true" />
+				<Search
+					aria-hidden="true"
+					className="text-[var(--ak-studio-muted-fg)]"
+				/>
 			</InputGroupAddon>
 			<InputGroupInput
 				type="search"
@@ -74,6 +77,7 @@ export function InsertSearchBar(): ReactNode {
 				onChange={handleChange}
 				placeholder={placeholder}
 				aria-label={placeholder}
+				className="text-xs"
 			/>
 		</InputGroup>
 	);
