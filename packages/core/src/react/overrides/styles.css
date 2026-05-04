@@ -26,6 +26,8 @@
 	--ak-studio-accent: var(--accent);
 	--ak-studio-accent-fg: var(--accent-foreground);
 	--ak-studio-ring: var(--ring);
+	--ak-studio-rail-width: 44px;
+	--ak-studio-panel-width: 280px;
 }
 
 .dark {
