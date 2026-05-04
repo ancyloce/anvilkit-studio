@@ -45,7 +45,7 @@ export function StudioViewportPreview({
 					transform: `scale(${zoom})`,
 					transformOrigin: "top center",
 				}}
-				className="flex min-h-full flex-col bg-[var(--ak-studio-bg)] shadow-md transition-[width] duration-200"
+				className="flex min-h-full flex-col self-stretch bg-[var(--ak-studio-bg)] shadow-md transition-[width] duration-200"
 			>
 				<Puck.Preview />
 			</div>
