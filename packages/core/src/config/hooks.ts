@@ -45,7 +45,7 @@
 
 import { useMemo } from "react";
 
-import type { StudioConfig } from "@/types/config.js";
+import type { StudioConfig } from "@/types/config";
 import { useStudioConfigContext } from "./provider.js";
 
 /**

@@ -20,10 +20,10 @@
 
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { createStudioConfig } from "@/config/create-config.js";
-import { StudioConfigSchema } from "@/config/schema.js";
-import { StudioConfigError } from "@/runtime/errors.js";
-import type { StudioConfig } from "@/types/config.js";
+import { createStudioConfig } from "@/config/create-config";
+import { StudioConfigSchema } from "@/config/schema";
+import { StudioConfigError } from "@/runtime/errors";
+import type { StudioConfig } from "@/types/config";
 
 describe("createStudioConfig — no-argument equivalence", () => {
 	it("returns the same shape as StudioConfigSchema.parse({}) with no args", () => {

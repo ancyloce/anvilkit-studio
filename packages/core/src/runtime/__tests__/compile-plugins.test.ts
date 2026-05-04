@@ -20,21 +20,21 @@ import { fileURLToPath } from "node:url";
 import type { Plugin as PuckPlugin } from "@puckeditor/core";
 import { describe, expect, it, vi } from "vitest";
 
-import { StudioConfigSchema } from "@/config/schema.js";
+import { StudioConfigSchema } from "@/config/schema";
 import {
 	compilePlugins,
 	isCoreVersionCompatible,
-} from "@/runtime/compile-plugins.js";
-import { StudioPluginError } from "@/runtime/errors.js";
-import { CORE_VERSION } from "@/runtime/version.js";
-import type { ExportFormatDefinition, ExportResult } from "@/types/export.js";
+} from "@/runtime/compile-plugins";
+import { StudioPluginError } from "@/runtime/errors";
+import { CORE_VERSION } from "@/runtime/version";
+import type { ExportFormatDefinition, ExportResult } from "@/types/export";
 import type {
 	StudioHeaderAction,
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginMeta,
 	StudioPluginRegistration,
-} from "@/types/plugin.js";
+} from "@/types/plugin";
 
 const studioConfig = StudioConfigSchema.parse({});
 

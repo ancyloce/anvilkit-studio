@@ -15,10 +15,10 @@
 
 import { describe, expect, it } from "vitest";
 
-import { createStudioConfig } from "@/config/create-config.js";
-import { compilePlugins } from "@/runtime/compile-plugins.js";
-import { createSidebarRegistryStore } from "@/state/sidebar-registry-store.js";
-import type { StudioPlugin, StudioPluginContext } from "@/types/plugin.js";
+import { createStudioConfig } from "@/config/create-config";
+import { compilePlugins } from "@/runtime/compile-plugins";
+import { createSidebarRegistryStore } from "@/state/sidebar-registry-store";
+import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
 
 function buildCtx(
 	registry: ReturnType<typeof createSidebarRegistryStore>,

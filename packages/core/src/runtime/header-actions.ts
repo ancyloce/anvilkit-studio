@@ -38,13 +38,13 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md | core-009}
  */
 
-import type { StudioHeaderAction } from "@/types/plugin.js";
+import type { StudioHeaderAction } from "@/types/plugin";
 import { StudioPluginError } from "./errors.js";
 
 // Re-export the type so consumers that import from
 // `@anvilkit/core/runtime` can pull `StudioHeaderAction` and
 // `composeHeaderActions` from a single subpath.
-export type { StudioHeaderAction } from "@/types/plugin.js";
+export type { StudioHeaderAction } from "@/types/plugin";
 
 /**
  * Numeric weight assigned to each header action group, used as the

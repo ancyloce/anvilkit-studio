@@ -17,4 +17,4 @@ export type {
 	AiSectionPatch,
 	AiSectionSelection,
 	ConfigToAiSectionContextOptions,
-} from "@/types/ai-section.js";
+} from "@/types/ai-section";

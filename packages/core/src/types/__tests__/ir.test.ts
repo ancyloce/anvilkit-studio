@@ -16,7 +16,7 @@ import type {
 	PageIRMetadata,
 	PageIRNode,
 	PageIRNodeMeta,
-} from "@/types/ir.js";
+} from "@/types/ir";
 
 describe("PageIR type contract", () => {
 	it("accepts a minimal single-node PageIR", () => {

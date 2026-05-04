@@ -26,9 +26,9 @@ import { act, render, screen } from "@testing-library/react";
 import { StrictMode, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createStudioConfig } from "@/config/create-config.js";
-import { useStudioConfig } from "@/config/hooks.js";
-import { StudioConfigProvider } from "@/config/provider.js";
+import { createStudioConfig } from "@/config/create-config";
+import { useStudioConfig } from "@/config/hooks";
+import { StudioConfigProvider } from "@/config/provider";
 
 describe("useStudioConfig — missing provider", () => {
 	// React logs caught render errors to console.error; silence the

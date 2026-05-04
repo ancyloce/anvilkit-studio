@@ -35,7 +35,7 @@ import type {
 	Plugin as PuckPlugin,
 } from "@puckeditor/core";
 
-import type { ExportFormatDefinition } from "@/types/export.js";
+import type { ExportFormatDefinition } from "@/types/export";
 import type {
 	IRAssetResolver,
 	StudioHeaderAction,
@@ -43,7 +43,7 @@ import type {
 	StudioPluginContext,
 	StudioPluginMeta,
 	StudioPluginRegistration,
-} from "@/types/plugin.js";
+} from "@/types/plugin";
 import { isPuckPlugin, isStudioPlugin } from "./detect-plugin.js";
 import { StudioPluginError } from "./errors.js";
 import {

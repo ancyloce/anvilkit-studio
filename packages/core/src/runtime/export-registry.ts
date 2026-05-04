@@ -39,7 +39,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md | core-009}
  */
 
-import type { ExportFormatDefinition } from "@/types/export.js";
+import type { ExportFormatDefinition } from "@/types/export";
 import { StudioPluginError } from "./errors.js";
 
 /**

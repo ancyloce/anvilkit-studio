@@ -18,14 +18,14 @@
 
 import { describe, expect, it } from "vitest";
 
-import { StudioConfigSchema } from "@/config/schema.js";
+import { StudioConfigSchema } from "@/config/schema";
 import type {
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginLifecycleHooks,
 	StudioPluginMeta,
 	StudioPluginRegistration,
-} from "@/types/plugin.js";
+} from "@/types/plugin";
 
 const testStudioConfig = StudioConfigSchema.parse({});
 

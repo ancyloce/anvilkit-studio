@@ -77,7 +77,7 @@
 
 import type { DeepPartial } from "@anvilkit/utils";
 
-import type { StudioConfig } from "@/types/config.js";
+import type { StudioConfig } from "@/types/config";
 
 /**
  * Required prefix for every env var consumed by {@link parseStudioEnv}.

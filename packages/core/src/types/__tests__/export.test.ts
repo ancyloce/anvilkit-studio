@@ -14,8 +14,8 @@ import type {
 	ExportOptions,
 	ExportResult,
 	ExportWarning,
-} from "@/types/export.js";
-import type { PageIR } from "@/types/ir.js";
+} from "@/types/export";
+import type { PageIR } from "@/types/ir";
 
 describe("ExportFormatDefinition type contract", () => {
 	it("accepts a minimal text-format definition", () => {

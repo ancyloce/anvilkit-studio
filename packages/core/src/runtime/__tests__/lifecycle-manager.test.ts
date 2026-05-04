@@ -12,13 +12,13 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { StudioConfigSchema } from "@/config/schema.js";
-import { StudioPluginError } from "@/runtime/errors.js";
-import { createLifecycleManager } from "@/runtime/lifecycle-manager.js";
+import { StudioConfigSchema } from "@/config/schema";
+import { StudioPluginError } from "@/runtime/errors";
+import { createLifecycleManager } from "@/runtime/lifecycle-manager";
 import type {
 	StudioPluginContext,
 	StudioPluginRegistration,
-} from "@/types/plugin.js";
+} from "@/types/plugin";
 
 const studioConfig = StudioConfigSchema.parse({});
 

@@ -14,9 +14,9 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { StudioPluginError } from "@/runtime/errors.js";
-import { composeHeaderActions } from "@/runtime/header-actions.js";
-import type { StudioHeaderAction } from "@/types/plugin.js";
+import { StudioPluginError } from "@/runtime/errors";
+import { composeHeaderActions } from "@/runtime/header-actions";
+import type { StudioHeaderAction } from "@/types/plugin";
 
 /**
  * Build a minimal valid {@link StudioHeaderAction}. The required

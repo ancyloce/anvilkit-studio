@@ -4,8 +4,8 @@ import {
 	createFakePageIR,
 	createFakeStudioContext,
 	registerPlugin,
-} from "@/testing/index.js";
-import type { StudioPlugin } from "@/types/plugin.js";
+} from "@/testing/index";
+import type { StudioPlugin } from "@/types/plugin";
 
 describe("createFakeStudioContext", () => {
 	it("returns defaults matching StudioPluginContext shape", () => {

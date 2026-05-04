@@ -1,4 +1,4 @@
-import type { PageIR, PageIRNode } from "@/types/ir.js";
+import type { PageIR, PageIRNode } from "@/types/ir";
 
 export interface CreateFakePageIROverrides {
 	/** Override the root id (default `"root"`). */

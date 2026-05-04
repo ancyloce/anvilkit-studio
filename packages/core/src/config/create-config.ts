@@ -55,8 +55,8 @@
 import { type DeepPartial, deepMerge } from "@anvilkit/utils";
 import { z } from "zod";
 
-import { StudioConfigError } from "@/runtime/errors.js";
-import type { StudioConfig } from "@/types/config.js";
+import { StudioConfigError } from "@/runtime/errors";
+import type { StudioConfig } from "@/types/config";
 import { parseStudioEnv } from "./env-parser.js";
 import { StudioConfigSchema } from "./schema.js";
 

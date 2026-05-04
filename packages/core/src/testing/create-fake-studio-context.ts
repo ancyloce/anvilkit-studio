@@ -1,7 +1,7 @@
 import type { PuckApi, Config as PuckConfig } from "@puckeditor/core";
 
-import { StudioConfigSchema } from "@/config/schema.js";
-import type { IRAssetResolver, StudioPluginContext } from "@/types/plugin.js";
+import { StudioConfigSchema } from "@/config/schema";
+import type { IRAssetResolver, StudioPluginContext } from "@/types/plugin";
 
 /**
  * Shape returned by {@link createFakeStudioContext}. Extends the
