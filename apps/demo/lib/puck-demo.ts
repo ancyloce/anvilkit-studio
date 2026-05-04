@@ -256,6 +256,48 @@ export const demoCopySnippetPlugin: StudioPlugin = {
 	},
 };
 
+const demoLayerQuickAddPluginMeta: StudioPluginMeta = {
+	id: "anvilkit-demo-layer-quickadd",
+	name: "Demo Layer Quick-Add",
+	version: "0.0.1",
+	coreVersion: "^0.1.0-alpha",
+	description:
+		"Registers a demo layer quick-add so the Layers '+' popover has a clickable entry in the demo (the demo's Puck config does not register the Layout/Row/Column/Text built-ins).",
+};
+
+export const demoLayerQuickAddPlugin: StudioPlugin = {
+	meta: demoLayerQuickAddPluginMeta,
+	register() {
+		let unregister: StudioSidebarUnregister | null = null;
+		return {
+			meta: demoLayerQuickAddPluginMeta,
+			hooks: {
+				onInit: (ctx) => {
+					unregister =
+						ctx.registerLayerQuickAdd?.({
+							id: "demo-add-hero",
+							labelKey: "demo.layer.quickadd.hero",
+							order: 10,
+							insert: ({ puckApi }) => {
+								puckApi.dispatch({
+									type: "insert",
+									componentType: "Hero",
+									destinationIndex:
+										puckApi.appState.data.content.length,
+									destinationZone: "default-zone",
+								});
+							},
+						}) ?? null;
+				},
+				onDestroy: () => {
+					unregister?.();
+					unregister = null;
+				},
+			},
+		};
+	},
+};
+
 export function getDemoDataFromSearchParam(
 	value: string | string[] | null | undefined,
 ) {

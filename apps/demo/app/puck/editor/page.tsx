@@ -45,6 +45,7 @@ import {
 	createDemoData,
 	createDemoModeHref,
 	demoCopySnippetPlugin,
+	demoLayerQuickAddPlugin,
 	type DemoComponents,
 	demoConfig,
 	demoDataSearchParam,
@@ -254,6 +255,26 @@ export default function PuckEditorPage() {
 	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">(
 		"anvilkit",
 	);
+	// Phase G E2E hook: `?messageOverrides=<urlencoded JSON>` drives
+	// `<Studio messages>` so the sidebar-modules spec can exercise the
+	// PRD §10.2 alias map at runtime (legacy `studio.tab.*` keys
+	// resolve through the new `studio.module.*` namespace).
+	const [messageOverrides, setMessageOverrides] = useState<
+		Readonly<Record<string, string>> | undefined
+	>(undefined);
+	// Default labels owned by the demo (not the core catalog) — covers
+	// the demo-only plugin keys. Merged with query-param overrides so
+	// the alias-map spec can layer on top.
+	const demoMessages = useMemo<Readonly<Record<string, string>>>(
+		() => ({
+			"demo.layer.quickadd.hero": "Add demo Hero",
+		}),
+		[],
+	);
+	const studioMessages = useMemo<Readonly<Record<string, string>>>(
+		() => ({ ...demoMessages, ...(messageOverrides ?? {}) }),
+		[demoMessages, messageOverrides],
+	);
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
 
 	// Per-mount in-memory pages source for the layer sidebar module.
@@ -288,6 +309,7 @@ export default function PuckEditorPage() {
 				aiCopilotPlugin,
 				liveAssetManagerPlugin,
 				demoCopySnippetPlugin,
+				demoLayerQuickAddPlugin,
 			];
 			return collabBundle ? [...base, collabBundle.plugin] : base;
 		},
@@ -316,6 +338,23 @@ export default function PuckEditorPage() {
 			setCollabPeerId(peerOverride);
 		}
 		setChromeMode(params.get("chrome") === "puck" ? "puck" : "anvilkit");
+		const rawOverrides = params.get("messageOverrides");
+		if (rawOverrides !== null && rawOverrides.length > 0) {
+			try {
+				const parsed = JSON.parse(rawOverrides) as unknown;
+				if (
+					parsed !== null &&
+					typeof parsed === "object" &&
+					!Array.isArray(parsed)
+				) {
+					setMessageOverrides(
+						parsed as Readonly<Record<string, string>>,
+					);
+				}
+			} catch {
+				// Malformed query input — fall through with no overrides.
+			}
+		}
 	}, []);
 
 	useEffect(() => {
@@ -777,6 +816,7 @@ export default function PuckEditorPage() {
 					onPublish={handlePublish}
 					chrome={chromeMode}
 					pages={pagesSource}
+					messages={studioMessages}
 				/>
 				{collabEnabled ? (
 					<PresenceLayer
