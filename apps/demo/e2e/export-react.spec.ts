@@ -17,9 +17,15 @@ test("React export downloads a .tsx file with the Hero import", async ({
 		)
 		.toBe(true);
 
+	// Scope to the demo's AI-copilot panel: the AnvilKit chrome's
+	// header now also contributes an "Export React" button via the
+	// `@anvilkit/plugin-export-react` plugin, so the bare regex
+	// matches twice. The demo's panel button drives the file-download
+	// path this test exercises.
 	const [download] = await Promise.all([
 		page.waitForEvent("download"),
 		page
+			.getByLabel("AI copilot + HTML export")
 			.getByRole("button", { name: /export react/i })
 			.click({ force: true }),
 	]);

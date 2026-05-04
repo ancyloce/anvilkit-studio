@@ -239,6 +239,11 @@ export default function PuckEditorPage() {
 	const [aiSelectionActive, setAiSelectionActive] = useState(false);
 	const [collabEnabled, setCollabEnabled] = useState(false);
 	const [collabPeerId, setCollabPeerId] = useState("alice");
+	// Phase 6: `?chrome=puck` opts out of the AnvilKit chrome and
+	// renders the raw Puck editor for visual regression checks.
+	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">(
+		"anvilkit",
+	);
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
 
 	// Hoisted Yjs Doc + plugin: rebuilt only when collab toggles or the
@@ -292,6 +297,7 @@ export default function PuckEditorPage() {
 		if (peerOverride && peerOverride.length > 0) {
 			setCollabPeerId(peerOverride);
 		}
+		setChromeMode(params.get("chrome") === "puck" ? "puck" : "anvilkit");
 	}, []);
 
 	useEffect(() => {
@@ -716,12 +722,42 @@ export default function PuckEditorPage() {
 				style={{ position: "relative" }}
 				data-testid="studio-mount"
 				data-collab={collabEnabled ? "1" : "0"}
+				data-chrome={chromeMode}
 			>
+				<div
+					style={{
+						display: "flex",
+						gap: "0.5rem",
+						padding: "0.5rem 0.75rem",
+						borderBottom: "1px solid var(--demo-panel-border)",
+						alignItems: "center",
+						fontSize: "0.85rem",
+					}}
+				>
+					<span style={{ color: "var(--demo-muted-text)" }}>Chrome:</span>
+					<a
+						href="?chrome=anvilkit"
+						aria-current={chromeMode === "anvilkit" ? "page" : undefined}
+						className={styles.secondaryAction}
+						data-testid="chrome-toggle-anvilkit"
+					>
+						AnvilKit
+					</a>
+					<a
+						href="?chrome=puck"
+						aria-current={chromeMode === "puck" ? "page" : undefined}
+						className={styles.secondaryAction}
+						data-testid="chrome-toggle-puck"
+					>
+						Raw Puck
+					</a>
+				</div>
 				<Studio
 					puckConfig={demoConfig}
 					data={publishedData}
 					plugins={plugins}
 					onPublish={handlePublish}
+					chrome={chromeMode}
 				/>
 				{collabEnabled ? (
 					<PresenceLayer

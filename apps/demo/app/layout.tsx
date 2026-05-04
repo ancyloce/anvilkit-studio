@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "@puckeditor/core/puck.css";
+import "@anvilkit/core/styles.css";
 import "@anvilkit/bento-grid/styles.css";
 import "@anvilkit/blog-list/styles.css";
 import "@anvilkit/hero/styles.css";
