@@ -1,0 +1,168 @@
+/**
+ * @file Tests for `LayerModule` and its `PagesPanel` sub-panel.
+ *
+ * Covers the integration between the pages source contract and the
+ * UI: list rendering, route badge, active-row highlight, onSelect
+ * callback, and the empty state when no source is registered.
+ */
+
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import type { ReactElement, ReactNode } from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import type { StudioPagesSource } from "../../../../../../types/pages.js";
+import { StudioPagesSourceProvider } from "../../../../context/pages-source.js";
+import {
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+} from "../../../../state/index.js";
+import { LayerModule } from "../LayerModule.js";
+
+vi.mock("@puckeditor/core", () => ({
+	Puck: { Outline: () => <div data-testid="puck-outline-mock" /> },
+	useGetPuck: () => () => ({
+		config: { components: { Layout: {}, Row: {}, Column: {}, Text: {} } },
+		appState: { data: { content: [] } },
+		dispatch: () => undefined,
+		selectedItem: null,
+	}),
+}));
+
+afterEach(cleanup);
+
+interface SetupOptions {
+	readonly pages?: StudioPagesSource;
+}
+
+function Setup({
+	children,
+	pages,
+}: { readonly children: ReactNode } & SetupOptions): ReactElement {
+	const registry = createSidebarRegistryStore();
+	return (
+		<EditorI18nStoreProvider>
+			<EditorUiStoreProvider
+				storeId={`layer-${Math.random().toString(36).slice(2)}`}
+			>
+				<SidebarRegistryProvider value={registry}>
+					<StudioPagesSourceProvider value={pages}>
+						{children}
+					</StudioPagesSourceProvider>
+				</SidebarRegistryProvider>
+			</EditorUiStoreProvider>
+		</EditorI18nStoreProvider>
+	);
+}
+
+describe("LayerModule", () => {
+	it("renders both Pages and Layers empty states when no pages source is registered", () => {
+		render(
+			<Setup>
+				<LayerModule />
+			</Setup>,
+		);
+		expect(screen.getByTestId("ak-layer-pages-empty")).toBeTruthy();
+		expect(screen.getByTestId("ak-layer-layers-empty")).toBeTruthy();
+	});
+
+	it("renders the page list from the source and surfaces the route badge", async () => {
+		const pages = [
+			{ id: "home", title: "Home", active: true },
+			{ id: "list", title: "/list", path: "/list", route: true },
+		];
+		const source: StudioPagesSource = {
+			list: () => pages,
+		};
+		render(
+			<Setup pages={source}>
+				<LayerModule />
+			</Setup>,
+		);
+		await vi.waitFor(() => {
+			expect(screen.getByTestId("ak-layer-page-row-home")).toBeTruthy();
+		});
+		const homeRow = screen.getByTestId("ak-layer-page-row-home");
+		expect(homeRow.getAttribute("aria-current")).toBe("page");
+		expect(screen.getByTestId("ak-layer-page-row-list")).toBeTruthy();
+		// Globe icon for the route page.
+		expect(screen.getByLabelText("Route page")).toBeTruthy();
+	});
+
+	it("calls onSelect when a page row is clicked", async () => {
+		const onSelect = vi.fn();
+		const pages = [{ id: "home", title: "Home", active: true }];
+		const source: StudioPagesSource = {
+			list: () => pages,
+			onSelect,
+		};
+		render(
+			<Setup pages={source}>
+				<LayerModule />
+			</Setup>,
+		);
+		await vi.waitFor(() => {
+			expect(screen.getByTestId("ak-layer-page-row-home")).toBeTruthy();
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-page-row-home"));
+		expect(onSelect).toHaveBeenCalledWith("home");
+	});
+
+	it("re-fetches the list when the source emits via subscribe", async () => {
+		const listeners = new Set<() => void>();
+		let pages: { id: string; title: string; active?: boolean }[] = [
+			{ id: "home", title: "Home", active: true },
+		];
+		const source: StudioPagesSource = {
+			list: () => pages,
+			subscribe: (listener) => {
+				listeners.add(listener);
+				return () => {
+					listeners.delete(listener);
+				};
+			},
+		};
+		render(
+			<Setup pages={source}>
+				<LayerModule />
+			</Setup>,
+		);
+		await vi.waitFor(() => {
+			expect(screen.getByTestId("ak-layer-page-row-home")).toBeTruthy();
+		});
+		// Mutate and emit — the panel should pick the new entry up.
+		pages = [
+			...pages,
+			{ id: "added", title: "Added page" },
+		];
+		for (const listener of listeners) listener();
+		await vi.waitFor(() => {
+			expect(screen.getByTestId("ak-layer-page-row-added")).toBeTruthy();
+		});
+	});
+
+	it("renders <Puck.Outline /> when an active page exists", async () => {
+		const source: StudioPagesSource = {
+			list: () => [{ id: "home", title: "Home", active: true }],
+		};
+		render(
+			<Setup pages={source}>
+				<LayerModule />
+			</Setup>,
+		);
+		await vi.waitFor(() => {
+			expect(screen.getByTestId("puck-outline-mock")).toBeTruthy();
+		});
+	});
+
+	it("opens the AddPageDialog when the + button is clicked", () => {
+		render(
+			<Setup>
+				<LayerModule />
+			</Setup>,
+		);
+		fireEvent.click(screen.getByTestId("ak-layer-pages-add"));
+		expect(screen.getByTestId("ak-layer-add-page-dialog")).toBeTruthy();
+	});
+});

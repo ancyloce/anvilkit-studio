@@ -1,22 +1,34 @@
 /**
- * @file `layer` module placeholder (Phase B / D2).
+ * @file `layer` module — Pages & Layers workspace (PRD §6).
  *
- * The real implementation lands in D4 (Pages sub-panel + AddPage
- * dialog + Layers sub-panel hosting `<Puck.Outline />` + splitter).
+ * Stacks `<PagesPanel />` over `<LayersPanel />` inside a CSS Grid
+ * whose row template is driven by `useLayerSplitRatio()`. The middle
+ * `<Splitter />` row is a thin drag handle (4 px) that updates the
+ * ratio. `minmax(96px, …fr)` clamps each half so the splitter cannot
+ * collapse either pane below the minimum-readable size called out in
+ * PRD §6.6.
  */
 
 import { type ReactNode } from "react";
 
-import { useMsg } from "../../../state/editor-i18n-store.js";
+import { useLayerSplitRatio } from "../../../state/hooks.js";
+import { Splitter } from "../shared/Splitter.js";
+import { LayersPanel } from "./layer/LayersPanel.js";
+import { PagesPanel } from "./layer/PagesPanel.js";
 
 export function LayerModule(): ReactNode {
-	const msg = useMsg();
+	const [ratio] = useLayerSplitRatio();
 	return (
 		<div
 			data-testid="ak-module-layer"
-			className="p-4 text-sm text-[var(--ak-studio-muted-fg)]"
+			className="grid h-full min-h-0 w-full"
+			style={{
+				gridTemplateRows: `minmax(96px, ${ratio}fr) auto minmax(96px, ${1 - ratio}fr)`,
+			}}
 		>
-			{msg("studio.module.layer.name")} — D4 placeholder.
+			<PagesPanel />
+			<Splitter />
+			<LayersPanel />
 		</div>
 	);
 }
