@@ -53,7 +53,14 @@ import {
 	componentConfig as statisticsComponentConfig,
 	defaultProps as statisticsDefaultProps,
 } from "@anvilkit/statistics";
+import type {
+	StudioPlugin,
+	StudioPluginMeta,
+	StudioSidebarUnregister,
+} from "@anvilkit/core";
 import type { Config, Data } from "@puckeditor/core";
+
+import { demoCopySnippetPack } from "./demo-copy-snippet-pack";
 
 export type DemoComponents = {
 	BentoGrid: BentoGridProps;
@@ -213,6 +220,41 @@ export function createDemoModeHref(
 
 	return `${pathname}?${searchParams.toString()}`;
 }
+
+/**
+ * Tiny inline `StudioPlugin` that registers the demo Copywriting
+ * snippet pack with the sidebar's `text` module on `onInit` and
+ * cleans up on `onDestroy`. Snippet content lives in
+ * {@link ./demo-copy-snippet-pack.ts}; this shell exists only to wire
+ * it through `ctx.registerCopySnippetPack`.
+ */
+const demoCopySnippetPluginMeta: StudioPluginMeta = {
+	id: "anvilkit-demo-copy-snippets",
+	name: "Demo Copywriting Snippets",
+	version: "0.0.1",
+	coreVersion: "^0.1.0-alpha",
+	description:
+		"Registers the English demo copy pack with the StudioSidebar `text` module.",
+};
+
+export const demoCopySnippetPlugin: StudioPlugin = {
+	meta: demoCopySnippetPluginMeta,
+	register() {
+		let unregister: StudioSidebarUnregister | null = null;
+		return {
+			meta: demoCopySnippetPluginMeta,
+			hooks: {
+				onInit: (ctx) => {
+					unregister = ctx.registerCopySnippetPack?.(demoCopySnippetPack) ?? null;
+				},
+				onDestroy: () => {
+					unregister?.();
+					unregister = null;
+				},
+			},
+		};
+	},
+};
 
 export function getDemoDataFromSearchParam(
 	value: string | string[] | null | undefined,

@@ -44,6 +44,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import {
 	createDemoData,
 	createDemoModeHref,
+	demoCopySnippetPlugin,
 	type DemoComponents,
 	demoConfig,
 	demoDataSearchParam,
@@ -286,6 +287,7 @@ export default function PuckEditorPage() {
 				reactExportPlugin,
 				aiCopilotPlugin,
 				liveAssetManagerPlugin,
+				demoCopySnippetPlugin,
 			];
 			return collabBundle ? [...base, collabBundle.plugin] : base;
 		},
