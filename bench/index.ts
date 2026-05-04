@@ -16,6 +16,7 @@ import { runEditorLoadBench } from "./editor-load.bench.js";
 import { runHtmlExportBench } from "./html-export.bench.js";
 import { runIrDiffBench } from "./ir-diff.bench.js";
 import { runIrRoundtripBench } from "./ir-roundtrip.bench.js";
+import { runSidebarSwitchBench } from "./sidebar-switch.bench.js";
 import type {
 	BenchBaseline,
 	BenchBaselineEntry,
@@ -51,6 +52,7 @@ function toBaselineEntry(result: BenchResult): BenchBaselineEntry {
 		meanMs: result.meanMs,
 		hz: result.hz,
 		...(result.bytes !== undefined ? { bytes: result.bytes } : {}),
+		...(result.p95Ms !== undefined ? { p95Ms: result.p95Ms } : {}),
 		recordedAt: new Date().toISOString(),
 	};
 }
@@ -161,6 +163,7 @@ async function main(): Promise<void> {
 	allResults.push(...(await runComponentEmitBench()));
 	allResults.push(...(await runComponentRenderBench()));
 	allResults.push(...(await runEditorLoadBench()));
+	allResults.push(...(await runSidebarSwitchBench()));
 
 	if (updateMode) {
 		// Preserve existing baseline entries for benches that returned

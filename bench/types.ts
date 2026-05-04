@@ -7,12 +7,19 @@ export interface BenchResult {
 	readonly hz: number;
 	/** Output size, in bytes. Only set for byte-producing benches (html-export). */
 	readonly bytes?: number;
+	/**
+	 * 95th-percentile duration, in ms. Optional — set by benches whose
+	 * acceptance gate is a tail-latency budget rather than a mean
+	 * (PRD §2.6 module-switch contract: p95 < 100 ms).
+	 */
+	readonly p95Ms?: number;
 }
 
 export interface BenchBaselineEntry {
 	readonly meanMs: number;
 	readonly hz: number;
 	readonly bytes?: number;
+	readonly p95Ms?: number;
 	/** ISO-8601 timestamp when the baseline row was last written. */
 	readonly recordedAt: string;
 }
