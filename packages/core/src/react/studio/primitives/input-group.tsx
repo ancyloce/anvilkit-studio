@@ -1,12 +1,10 @@
-"use client"
-
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "../../overrides/utils/cn.js"
-import { Button } from "./button.js"
-import { Input } from "./input.js"
-import { Textarea } from "./textarea.js"
+import { cn } from "@/utils/cn"
+import { Button } from "@/primitives/button"
+import { Input } from "@/primitives/input"
+import { Textarea } from "@/primitives/textarea"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
