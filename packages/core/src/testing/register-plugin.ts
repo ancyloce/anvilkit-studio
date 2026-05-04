@@ -1,9 +1,9 @@
-import { compilePlugins } from "../runtime/compile-plugins.js";
+import { compilePlugins } from "@/runtime/compile-plugins.js";
 import type {
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginRegistration,
-} from "../types/plugin.js";
+} from "@/types/plugin.js";
 
 import type { FakeStudioContext } from "./create-fake-studio-context.js";
 import { createFakeStudioContext } from "./create-fake-studio-context.js";

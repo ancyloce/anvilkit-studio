@@ -14,23 +14,26 @@ import { Inbox } from "lucide-react";
 import type { ReactNode } from "react";
 
 import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-} from "../../../../primitives/empty";
-import { useMsg } from "../../../../state/editor-i18n-store";
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+} from "@/primitives/empty";
+import { useMsg } from "@/state/editor-i18n-store";
 
 export interface InsertEmptyStateProps {
 	readonly variant: "library" | "search";
 }
 
-const VARIANT_KEY: Readonly<Record<InsertEmptyStateProps["variant"], string>> = {
-	library: "studio.module.insert.empty",
-	search: "studio.module.insert.search.empty",
-};
+const VARIANT_KEY: Readonly<Record<InsertEmptyStateProps["variant"], string>> =
+	{
+		library: "studio.module.insert.empty",
+		search: "studio.module.insert.search.empty",
+	};
 
-export function InsertEmptyState({ variant }: InsertEmptyStateProps): ReactNode {
+export function InsertEmptyState({
+	variant,
+}: InsertEmptyStateProps): ReactNode {
 	const msg = useMsg();
 	return (
 		<Empty

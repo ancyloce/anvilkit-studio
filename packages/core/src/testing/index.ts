@@ -11,12 +11,13 @@
  * the subpath name, which pins consumers to a version-aligned
  * fixture.
  */
+
+export { createFakePageIR } from "./create-fake-page-ir.js";
 export type {
 	FakeStudioContext,
 	FakeStudioContextOverrides,
 } from "./create-fake-studio-context.js";
 export { createFakeStudioContext } from "./create-fake-studio-context.js";
-export { createFakePageIR } from "./create-fake-page-ir.js";
 export type {
 	PluginLifecycleHarness,
 	RegisterPluginOptions,

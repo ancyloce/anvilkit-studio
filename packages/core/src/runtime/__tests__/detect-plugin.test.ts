@@ -8,9 +8,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-
-import type { StudioPlugin } from "../../types/plugin.js";
-import { isPuckPlugin, isStudioPlugin } from "../detect-plugin.js";
+import { isPuckPlugin, isStudioPlugin } from "@/runtime/detect-plugin.js";
+import type { StudioPlugin } from "@/types/plugin.js";
 
 function makeStudioPlugin(): StudioPlugin {
 	return {

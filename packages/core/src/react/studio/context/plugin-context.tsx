@@ -18,10 +18,11 @@
 
 import { createContext, type ReactNode, useContext } from "react";
 
-import type { StudioPluginContext } from "../../../types/plugin";
+import type { StudioPluginContext } from "@/types/plugin";
 
-const StudioPluginContextContext =
-	createContext<StudioPluginContext | null>(null);
+const StudioPluginContextContext = createContext<StudioPluginContext | null>(
+	null,
+);
 
 export interface StudioPluginContextProviderProps {
 	readonly value: StudioPluginContext;

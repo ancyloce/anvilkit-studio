@@ -10,13 +10,9 @@
 import { Upload } from "lucide-react";
 import { type ReactNode } from "react";
 
-import { Button } from "../../../../primitives/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../../../primitives/tooltip";
-import { useMsg } from "../../../../state/editor-i18n-store";
+import { Button } from "@/primitives/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-store";
 
 export interface ImageUploadButtonProps {
 	readonly onClick: () => void;

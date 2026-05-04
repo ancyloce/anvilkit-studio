@@ -17,22 +17,20 @@
 import {
 	cleanup,
 	fireEvent,
-	render,
 	type RenderResult,
+	render,
 	screen,
 	waitFor,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import type {
-  StudioHeaderAction,
-  StudioPluginContext,
-} from "../../../../types/plugin";
-import { HeaderActions } from "../HeaderActions";
+import { HeaderActions } from "@/layout/HeaderActions";
+import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
 
 afterEach(cleanup);
 
-function createCtx(overrides?: Partial<StudioPluginContext>): StudioPluginContext {
+function createCtx(
+	overrides?: Partial<StudioPluginContext>,
+): StudioPluginContext {
 	const log = vi.fn();
 	const studioConfig = {} as StudioPluginContext["studioConfig"];
 	const ctx: StudioPluginContext = {
@@ -41,8 +39,7 @@ function createCtx(overrides?: Partial<StudioPluginContext>): StudioPluginContex
 			content: [],
 			zones: {},
 		}),
-		getPuckApi: () =>
-			({}) as ReturnType<StudioPluginContext["getPuckApi"]>,
+		getPuckApi: () => ({}) as ReturnType<StudioPluginContext["getPuckApi"]>,
 		studioConfig,
 		log,
 		emit: () => undefined,
@@ -57,13 +54,15 @@ function createCtx(overrides?: Partial<StudioPluginContext>): StudioPluginContex
  * is 5 buttons across all three groups so the test asserts the
  * full grouping/ordering surface in one render.
  */
-function buildFixture(onClicks: {
-	assetManager?: () => void | Promise<void>;
-	exportHtml?: () => void | Promise<void>;
-	exportReact?: () => void | Promise<void>;
-	versionSave?: () => void | Promise<void>;
-	versionOpen?: () => void | Promise<void>;
-} = {}): readonly StudioHeaderAction[] {
+function buildFixture(
+	onClicks: {
+		assetManager?: () => void | Promise<void>;
+		exportHtml?: () => void | Promise<void>;
+		exportReact?: () => void | Promise<void>;
+		versionSave?: () => void | Promise<void>;
+		versionOpen?: () => void | Promise<void>;
+	} = {},
+): readonly StudioHeaderAction[] {
 	return [
 		{
 			id: "export-html",
@@ -116,14 +115,24 @@ describe("HeaderActions composition + grouping", () => {
 		mount(buildFixture(), ctx);
 
 		// Primary
-		expect(screen.getByRole("button", { name: "Export HTML" })).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: "Export HTML" }),
+		).toBeInTheDocument();
 		// Secondary (3)
-		expect(screen.getByRole("button", { name: "Save snapshot" })).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "Upload asset" })).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "Export React" })).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: "Save snapshot" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: "Upload asset" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: "Export React" }),
+		).toBeInTheDocument();
 		// Overflow opens to expose the menu items
 		fireEvent.click(screen.getByRole("button", { name: "More actions" }));
-		expect(screen.getByRole("menuitem", { name: "Open history" })).toBeInTheDocument();
+		expect(
+			screen.getByRole("menuitem", { name: "Open history" }),
+		).toBeInTheDocument();
 
 		// 5 plugin buttons total + 1 overflow trigger
 		const pluginLabels = [
@@ -139,9 +148,9 @@ describe("HeaderActions composition + grouping", () => {
 	it("orders secondary buttons by their `order` field", () => {
 		const ctx = createCtx();
 		const { container } = mount(buildFixture(), ctx);
-		const buttons = Array.from(
-			container.querySelectorAll("button"),
-		).map((b) => b.textContent ?? "");
+		const buttons = Array.from(container.querySelectorAll("button")).map(
+			(b) => b.textContent ?? "",
+		);
 		// Expected secondary order: Save snapshot (50), Upload asset (100),
 		// Export React (200). Strip out primary/overflow buttons that frame
 		// the secondary group.
@@ -233,7 +242,9 @@ describe("HeaderActions error handling", () => {
 		expect((meta as { message?: string } | undefined)?.message).toBe("boom");
 		// Component still mounted — assertion is presence after the
 		// click + log resolution.
-		expect(screen.getByRole("button", { name: "Broken action" })).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: "Broken action" }),
+		).toBeInTheDocument();
 	});
 
 	it("re-enables the button after a rejection resolves", async () => {

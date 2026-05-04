@@ -17,9 +17,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { createStudioConfig } from "../create-config.js";
-import { useStudioConfig } from "../hooks.js";
-import { StudioConfigProvider } from "../provider.js";
+import { createStudioConfig } from "@/config/create-config.js";
+import { useStudioConfig } from "@/config/hooks.js";
+import { StudioConfigProvider } from "@/config/provider.js";
 
 describe("StudioConfigProvider — rendering", () => {
 	it("renders its children unchanged", () => {

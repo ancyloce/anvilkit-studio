@@ -16,7 +16,7 @@ import { renderHook } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import { EditorI18nStoreProvider, useMsg } from "../editor-i18n-store";
+import { EditorI18nStoreProvider, useMsg } from "@/state/editor-i18n-store";
 
 function wrap(messages?: Readonly<Record<string, string>>) {
 	return ({ children }: { children: ReactNode }) => (
@@ -48,9 +48,7 @@ describe("useMsg — alias resolution", () => {
 		const { result } = renderHook(() => useMsg(), {
 			wrapper: wrap({ "studio.tab.outline": "Outline (legacy)" }),
 		});
-		expect(result.current("studio.module.layer.name")).toBe(
-			"Outline (legacy)",
-		);
+		expect(result.current("studio.module.layer.name")).toBe("Outline (legacy)");
 		// Old key still reads the explicit override.
 		expect(result.current("studio.tab.outline")).toBe("Outline (legacy)");
 	});

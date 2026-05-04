@@ -11,15 +11,14 @@
  */
 
 import { type ReactNode } from "react";
-
+import { Skeleton } from "@/primitives/skeleton";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { AssetCategoryFilter } from "@/state/editor-ui-store";
 import type {
-  StudioAsset,
-  StudioAssetAction,
-  StudioAssetSource,
-} from "../../../../../../types/sidebar";
-import { Skeleton } from "../../../../primitives/skeleton";
-import type { AssetCategoryFilter } from "../../../../state/editor-ui-store";
-import { useMsg } from "../../../../state/editor-i18n-store";
+	StudioAsset,
+	StudioAssetAction,
+	StudioAssetSource,
+} from "@/types/sidebar";
 import { AssetAudioRow } from "./AssetAudioRow";
 import { AssetImageTile } from "./AssetImageTile";
 import { AssetOverflowMenu } from "./AssetOverflowMenu";

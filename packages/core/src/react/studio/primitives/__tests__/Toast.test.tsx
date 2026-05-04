@@ -2,7 +2,7 @@ import { cleanup, render } from "@testing-library/react";
 import { toast } from "sonner";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { Toaster } from "../sonner";
+import { Toaster } from "@/primitives/sonner";
 
 afterEach(cleanup);
 

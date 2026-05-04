@@ -32,10 +32,10 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { StudioConfigSchema } from "../config/schema.js";
-import { compilePlugins } from "../runtime/compile-plugins.js";
-import { isStudioPlugin } from "../runtime/detect-plugin.js";
-import type { StudioPluginContext } from "../types/plugin.js";
+import { StudioConfigSchema } from "@/config/schema.js";
+import { compilePlugins } from "@/runtime/compile-plugins.js";
+import { isStudioPlugin } from "@/runtime/detect-plugin.js";
+import type { StudioPluginContext } from "@/types/plugin.js";
 
 const studioConfig = StudioConfigSchema.parse({});
 

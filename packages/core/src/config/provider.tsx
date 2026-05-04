@@ -41,7 +41,7 @@
 import { getStrictContext } from "@anvilkit/utils";
 import type { ReactNode } from "react";
 
-import type { StudioConfig } from "../types/config.js";
+import type { StudioConfig } from "@/types/config.js";
 
 /**
  * Strict context pair for {@link StudioConfig}. The tuple is

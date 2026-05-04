@@ -26,9 +26,9 @@ import { act, render, screen } from "@testing-library/react";
 import { StrictMode, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createStudioConfig } from "../create-config.js";
-import { useStudioConfig } from "../hooks.js";
-import { StudioConfigProvider } from "../provider.js";
+import { createStudioConfig } from "@/config/create-config.js";
+import { useStudioConfig } from "@/config/hooks.js";
+import { StudioConfigProvider } from "@/config/provider.js";
 
 describe("useStudioConfig — missing provider", () => {
 	// React logs caught render errors to console.error; silence the
@@ -108,9 +108,7 @@ describe("useStudioConfig — inside a provider", () => {
 
 		function Consumer() {
 			const enabled = useStudioConfig((c) => c.features.enableExport);
-			return (
-				<span data-testid="flag">{enabled ? "enabled" : "disabled"}</span>
-			);
+			return <span data-testid="flag">{enabled ? "enabled" : "disabled"}</span>;
 		}
 
 		render(

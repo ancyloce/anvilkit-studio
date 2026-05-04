@@ -8,7 +8,7 @@
  */
 
 import { useStore } from "zustand";
-
+import { useEditorUiStoreApi } from "./EditorUiStoreProvider";
 import type {
 	AssetCategoryFilter,
 	ComponentViewMode,
@@ -16,7 +16,6 @@ import type {
 	EditorTab,
 	EditorUiState,
 } from "./editor-ui-store";
-import { useEditorUiStoreApi } from "./EditorUiStoreProvider";
 
 export function useEditorUiStore<TResult>(
 	selector: (state: EditorUiState) => TResult,
@@ -25,10 +24,7 @@ export function useEditorUiStore<TResult>(
 	return useStore(store, selector);
 }
 
-export function useActiveTab(): readonly [
-	EditorTab,
-	(tab: EditorTab) => void,
-] {
+export function useActiveTab(): readonly [EditorTab, (tab: EditorTab) => void] {
 	const tab = useEditorUiStore((s) => s.activeTab);
 	const set = useEditorUiStore((s) => s.setActiveTab);
 	return [tab, set];
@@ -100,7 +96,10 @@ export function usePagesExpanded(): readonly [
 	return [value, set];
 }
 
-export function useLayerSplitRatio(): readonly [number, (ratio: number) => void] {
+export function useLayerSplitRatio(): readonly [
+	number,
+	(ratio: number) => void,
+] {
 	const value = useEditorUiStore((s) => s.layerSplitRatio);
 	const set = useEditorUiStore((s) => s.setLayerSplitRatio);
 	return [value, set];

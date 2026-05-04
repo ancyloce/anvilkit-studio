@@ -12,22 +12,21 @@
  */
 
 import type { Overrides as PuckOverrides } from "@puckeditor/core";
-
+import { StudioLayout } from "@/layout/StudioLayout";
 import {
-  ActionBar,
-  CanvasIframe,
-  CanvasPreview,
-  ComponentOverlay,
+	ActionBar,
+	CanvasIframe,
+	CanvasPreview,
+	ComponentOverlay,
 } from "./canvas/index";
 import { defaultFieldTypes } from "./fields/field-types/index";
 import {
-  DrawerItem,
-  EditorDrawer,
-  FieldLabel,
-  FieldsPanel,
+	DrawerItem,
+	EditorDrawer,
+	FieldLabel,
+	FieldsPanel,
 } from "./layout/index";
 import type { CreateStudioOverridesOptions } from "./types";
-import { StudioLayout } from "../studio/layout/StudioLayout";
 
 /**
  * Build the default override set. Per-slot wrappers convert the
@@ -50,10 +49,7 @@ export function createStudioOverrides(
 			<DrawerItem name={name}>{children}</DrawerItem>
 		),
 		fields: ({ children, isLoading, itemSelector }) => (
-			<FieldsPanel
-				isLoading={isLoading}
-				itemSelector={itemSelector ?? null}
-			>
+			<FieldsPanel isLoading={isLoading} itemSelector={itemSelector ?? null}>
 				{children}
 			</FieldsPanel>
 		),

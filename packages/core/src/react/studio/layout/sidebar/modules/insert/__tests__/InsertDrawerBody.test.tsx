@@ -17,25 +17,20 @@
  */
 
 import type { Config as PuckConfig } from "@puckeditor/core";
-import { cleanup, render, screen, act } from "@testing-library/react";
-import {
-	type ReactNode,
-	type ReactElement,
-	useEffect,
-} from "react";
+import { act, cleanup, render, screen } from "@testing-library/react";
+import { type ReactElement, type ReactNode, useEffect } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import type { StudioInsertSection } from "../../../../../../../types/sidebar";
+import { DEFAULT_INSERT_SECTIONS } from "@/layout/sidebar/modules/insert/default-sections";
+import { InsertDrawerBody } from "@/layout/sidebar/modules/insert/InsertDrawerBody";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-  useEditorUiStore,
-  type SidebarRegistryStoreApi,
-} from "../../../../../state/index";
-import { DEFAULT_INSERT_SECTIONS } from "../default-sections";
-import { InsertDrawerBody } from "../InsertDrawerBody";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+	type SidebarRegistryStoreApi,
+	useEditorUiStore,
+} from "@/state/index";
+import type { StudioInsertSection } from "@/types/sidebar";
 
 const FAKE_CONFIG: PuckConfig = {
 	categories: {
@@ -81,11 +76,12 @@ interface ProvidersProps {
 }
 
 function Providers({ registry, children }: ProvidersProps): ReactElement {
-	const store =
-		registry ?? createSidebarRegistryStoreWithDefaults();
+	const store = registry ?? createSidebarRegistryStoreWithDefaults();
 	return (
 		<EditorI18nStoreProvider>
-			<EditorUiStoreProvider storeId={`test-${Math.random().toString(36).slice(2)}`}>
+			<EditorUiStoreProvider
+				storeId={`test-${Math.random().toString(36).slice(2)}`}
+			>
 				<SidebarRegistryProvider value={store}>
 					{children}
 				</SidebarRegistryProvider>
@@ -120,9 +116,7 @@ describe("InsertDrawerBody", () => {
 	it("groups items into navigation / top / recommended by predicate (team hidden when empty)", () => {
 		render(
 			<Providers>
-				<InsertDrawerBody>
-					{demoItems()}
-				</InsertDrawerBody>
+				<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
 			</Providers>,
 		);
 
@@ -131,7 +125,9 @@ describe("InsertDrawerBody", () => {
 		const recommended = screen.getByTestId("ak-insert-section-recommended");
 
 		// Navigation: only Navbar.
-		expect(navigation.querySelector('[data-testid="item-Navbar"]')).toBeTruthy();
+		expect(
+			navigation.querySelector('[data-testid="item-Navbar"]'),
+		).toBeTruthy();
 		expect(navigation.querySelector('[data-testid="item-Hero"]')).toBeNull();
 
 		// Top: marketing components.
@@ -139,8 +135,12 @@ describe("InsertDrawerBody", () => {
 		expect(top.querySelector('[data-testid="item-BentoGrid"]')).toBeTruthy();
 
 		// Recommended catch-all: Button + Input.
-		expect(recommended.querySelector('[data-testid="item-Button"]')).toBeTruthy();
-		expect(recommended.querySelector('[data-testid="item-Input"]')).toBeTruthy();
+		expect(
+			recommended.querySelector('[data-testid="item-Button"]'),
+		).toBeTruthy();
+		expect(
+			recommended.querySelector('[data-testid="item-Input"]'),
+		).toBeTruthy();
 
 		// Team has zero matches → not rendered.
 		expect(screen.queryByTestId("ak-insert-section-team")).toBeNull();
@@ -169,9 +169,7 @@ describe("InsertDrawerBody", () => {
 		render(
 			<Providers>
 				<PrimeSearch query="but" />
-				<InsertDrawerBody>
-					{demoItems()}
-				</InsertDrawerBody>
+				<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
 			</Providers>,
 		);
 
@@ -195,18 +193,14 @@ describe("InsertDrawerBody", () => {
 		render(
 			<Providers>
 				<PrimeSearch query="zzznomatch" />
-				<InsertDrawerBody>
-					{demoItems()}
-				</InsertDrawerBody>
+				<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
 			</Providers>,
 		);
 		expect(screen.getByTestId("ak-insert-empty-search")).toBeTruthy();
 	});
 
 	it("uses the grid container in grid view mode and the list container in list view mode", () => {
-		function PrimeView({
-			mode,
-		}: { readonly mode: "grid" | "list" }): null {
+		function PrimeView({ mode }: { readonly mode: "grid" | "list" }): null {
 			const setMode = useEditorUiStore((s) => s.setComponentViewMode);
 			useEffect(() => {
 				setMode(mode);
@@ -217,23 +211,23 @@ describe("InsertDrawerBody", () => {
 		const { rerender } = render(
 			<Providers>
 				<PrimeView mode="grid" />
-				<InsertDrawerBody>
-					{demoItems()}
-				</InsertDrawerBody>
+				<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
 			</Providers>,
 		);
-		expect(screen.queryAllByTestId("ak-insert-tile-grid").length).toBeGreaterThan(0);
+		expect(
+			screen.queryAllByTestId("ak-insert-tile-grid").length,
+		).toBeGreaterThan(0);
 		expect(screen.queryAllByTestId("ak-insert-tile-list").length).toBe(0);
 
 		rerender(
 			<Providers>
 				<PrimeView mode="list" />
-				<InsertDrawerBody>
-					{demoItems()}
-				</InsertDrawerBody>
+				<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
 			</Providers>,
 		);
-		expect(screen.queryAllByTestId("ak-insert-tile-list").length).toBeGreaterThan(0);
+		expect(
+			screen.queryAllByTestId("ak-insert-tile-list").length,
+		).toBeGreaterThan(0);
 		expect(screen.queryAllByTestId("ak-insert-tile-grid").length).toBe(0);
 	});
 
@@ -253,9 +247,7 @@ describe("InsertDrawerBody", () => {
 
 		render(
 			<Providers registry={registry}>
-				<InsertDrawerBody>
-					{demoItems()}
-				</InsertDrawerBody>
+				<InsertDrawerBody>{demoItems()}</InsertDrawerBody>
 			</Providers>,
 		);
 

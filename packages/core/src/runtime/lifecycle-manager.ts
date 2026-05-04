@@ -63,7 +63,7 @@ import type {
 	StudioPluginContext,
 	StudioPluginLifecycleHooks,
 	StudioPluginRegistration,
-} from "../types/plugin.js";
+} from "@/types/plugin.js";
 import { StudioPluginError } from "./errors.js";
 
 /**

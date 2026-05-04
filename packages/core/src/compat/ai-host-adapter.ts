@@ -38,7 +38,7 @@
 
 import type { Data as PuckData } from "@puckeditor/core";
 
-import type { StudioPlugin, StudioPluginContext } from "../types/plugin.js";
+import type { StudioPlugin, StudioPluginContext } from "@/types/plugin.js";
 
 /**
  * Configuration accepted by {@link aiHostAdapter}.

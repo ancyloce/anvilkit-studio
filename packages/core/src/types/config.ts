@@ -23,7 +23,7 @@
 
 import type { z } from "zod";
 
-import type { StudioConfigSchema } from "../config/schema.js";
+import type { StudioConfigSchema } from "@/config/schema.js";
 
 /**
  * Runtime configuration surface for `<Studio>`.

@@ -4,11 +4,11 @@
  * `document.documentElement` (PRD §3.4).
  */
 
-import { cleanup, renderHook, act } from "@testing-library/react";
+import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { useThemeStore } from "../../../stores/theme-store";
-import { useThemeSync } from "../use-theme-sync";
+import { useThemeStore } from "@/stores/theme-store";
+import { useThemeSync } from "@/theme/use-theme-sync";
 
 beforeEach(() => {
 	document.documentElement.classList.remove("dark");

@@ -39,9 +39,7 @@ export function useBreadcrumbs(): readonly BreadcrumbEntry[] {
 			return [];
 		}
 		const data = snapshot.appState.data;
-		const chain: BreadcrumbEntry[] = [
-			{ id: "root", label: "Root" },
-		];
+		const chain: BreadcrumbEntry[] = [{ id: "root", label: "Root" }];
 
 		const zone =
 			selector.zone === undefined || selector.zone === "default-zone"
@@ -56,7 +54,9 @@ export function useBreadcrumbs(): readonly BreadcrumbEntry[] {
 			return chain;
 		}
 		chain.push({
-			id: String(item.props?.id ?? `${selector.zone ?? "root"}:${selector.index}`),
+			id: String(
+				item.props?.id ?? `${selector.zone ?? "root"}:${selector.index}`,
+			),
 			label: item.type,
 		});
 		return chain;

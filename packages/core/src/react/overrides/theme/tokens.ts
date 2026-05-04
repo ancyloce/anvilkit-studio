@@ -45,10 +45,7 @@ export function tokenName(token: StudioToken): string {
  * Resolve a token to its current computed value. Returns the empty
  * string in non-DOM environments and when the variable is unset.
  */
-export function readToken(
-	token: StudioToken,
-	target?: Element,
-): string {
+export function readToken(token: StudioToken, target?: Element): string {
 	if (typeof window === "undefined") return "";
 	const element = target ?? document.documentElement;
 	return window

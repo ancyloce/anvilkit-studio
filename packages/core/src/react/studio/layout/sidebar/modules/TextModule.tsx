@@ -19,15 +19,11 @@
  */
 
 import { type ReactNode, useCallback, useMemo, useState } from "react";
-
-import type {
-  StudioCopySnippet,
-  StudioCopySnippetPack,
-} from "../../../../../types/sidebar";
-import { useCopyCategoryFilter } from "../../../state/hooks";
-import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react";
-import { useInsertSnippet } from "../../../state/useInsertSnippet";
-import { useTextSelection } from "../../../state/useTextSelection";
+import { useCopyCategoryFilter } from "@/state/hooks";
+import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
+import { useInsertSnippet } from "@/state/useInsertSnippet";
+import { useTextSelection } from "@/state/useTextSelection";
+import type { StudioCopySnippet, StudioCopySnippetPack } from "@/types/sidebar";
 import { SnippetList } from "./text/SnippetList";
 import { TextFilterStrip } from "./text/TextFilterStrip";
 import { TextSearchBar } from "./text/TextSearchBar";
@@ -45,7 +41,9 @@ function flattenPacks(
 }
 
 export function TextModule(): ReactNode {
-	const packs = useSidebarRegistry((state): ReadonlyMap<string, StudioCopySnippetPack> => state.copyPacks);
+	const packs = useSidebarRegistry(
+		(state): ReadonlyMap<string, StudioCopySnippetPack> => state.copyPacks,
+	);
 	const [categoryFilter] = useCopyCategoryFilter();
 	const [searchTerm, setSearchTerm] = useState("");
 

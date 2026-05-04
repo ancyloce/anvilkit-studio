@@ -7,13 +7,14 @@
 
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import { EditorI18nStoreProvider } from "../../../state/editor-i18n-store";
-import { SidebarPanel } from "../SidebarPanel";
+import { SidebarPanel } from "@/layout/sidebar/SidebarPanel";
+import { EditorI18nStoreProvider } from "@/state/editor-i18n-store";
 
 afterEach(cleanup);
 
-function renderPanel(props: Partial<React.ComponentProps<typeof SidebarPanel>> = {}) {
+function renderPanel(
+	props: Partial<React.ComponentProps<typeof SidebarPanel>> = {},
+) {
 	const onClose = props.onClose ?? vi.fn();
 	const onEscape = props.onEscape ?? vi.fn();
 	const utils = render(
@@ -77,8 +78,6 @@ describe("SidebarPanel", () => {
 		});
 		expect(screen.getByTestId("custom-action").textContent).toBe("Toggle");
 		// Both action and close button present.
-		expect(
-			screen.getByRole("button", { name: "Close panel" }),
-		).toBeTruthy();
+		expect(screen.getByRole("button", { name: "Close panel" })).toBeTruthy();
 	});
 });

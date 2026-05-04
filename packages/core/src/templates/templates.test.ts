@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-	type AnvilkitTemplate,
-	isAnvilkitTemplate,
-} from "./index.js";
+import { type AnvilkitTemplate, isAnvilkitTemplate } from "./index.js";
 
 function minimalTemplate(): AnvilkitTemplate {
 	return {
@@ -75,7 +72,7 @@ describe("isAnvilkitTemplate", () => {
 		expect(isAnvilkitTemplate(broken)).toBe(false);
 	});
 
-	it("rejects a template whose pageIR.version is not the literal \"1\"", () => {
+	it('rejects a template whose pageIR.version is not the literal "1"', () => {
 		const t = minimalTemplate();
 		const broken = {
 			...t,

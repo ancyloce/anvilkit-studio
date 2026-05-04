@@ -16,11 +16,11 @@ import type {
 import { type ReactNode, useMemo } from "react";
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from "@/primitives/select";
 
 import type { FieldRendererProps } from "./TextField";
@@ -43,47 +43,47 @@ export function SelectField({
 	name,
 }: FieldRendererProps<PuckSelectField, OptionValue | undefined>): ReactNode {
 	const items = useMemo(
-    () =>
-      field.options.map((option) => ({
-        label: option.label,
-        value: optionKey(option.value as OptionValue),
-      })),
-    [field.options],
-  );
+		() =>
+			field.options.map((option) => ({
+				label: option.label,
+				value: optionKey(option.value as OptionValue),
+			})),
+		[field.options],
+	);
 
 	return (
-    <Select
-      items={items}
-      value={value === undefined ? null : optionKey(value)}
-      onValueChange={(next) => {
-        if (readOnly === true) return;
-        if (next === null || next === "") {
-          onChange(undefined as never);
-          return;
-        }
-        const match = field.options.find(
-          (opt) => optionKey(opt.value as OptionValue) === next,
-        );
-        onChange((match?.value ?? next) as never);
-      }}
-      disabled={readOnly}
-      name={name}
-    >
-      <SelectTrigger id={id} className="w-full">
-        <SelectValue placeholder="Select…" />
-      </SelectTrigger>
-      <SelectContent>
-        {field.options.map((option) => (
-          <SelectItem
-            key={optionKey(option.value as OptionValue)}
-            value={optionKey(option.value as OptionValue)}
-          >
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
+		<Select
+			items={items}
+			value={value === undefined ? null : optionKey(value)}
+			onValueChange={(next) => {
+				if (readOnly === true) return;
+				if (next === null || next === "") {
+					onChange(undefined as never);
+					return;
+				}
+				const match = field.options.find(
+					(opt) => optionKey(opt.value as OptionValue) === next,
+				);
+				onChange((match?.value ?? next) as never);
+			}}
+			disabled={readOnly}
+			name={name}
+		>
+			<SelectTrigger id={id} className="w-full">
+				<SelectValue placeholder="Select…" />
+			</SelectTrigger>
+			<SelectContent>
+				{field.options.map((option) => (
+					<SelectItem
+						key={optionKey(option.value as OptionValue)}
+						value={optionKey(option.value as OptionValue)}
+					>
+						{option.label}
+					</SelectItem>
+				))}
+			</SelectContent>
+		</Select>
+	);
 }
 
 export type { FieldProps as PuckFieldProps };

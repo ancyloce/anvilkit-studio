@@ -9,10 +9,9 @@
 
 import { ChevronRight } from "lucide-react";
 import { type ReactNode } from "react";
-
-import { useMsg } from "../../studio/state/editor-i18n-store";
-import { useBreadcrumbs } from "../utils/breadcrumbs";
-import { cn } from "../utils/cn";
+import { useBreadcrumbs } from "@/overrides/utils/breadcrumbs";
+import { useMsg } from "@/state/editor-i18n-store";
+import { cn } from "@/utils/cn";
 
 interface ItemSelector {
 	readonly index: number;
@@ -36,12 +35,7 @@ export function FieldsPanel({
 	const crumbs = useBreadcrumbs();
 
 	return (
-		<div
-			className={cn(
-				"flex h-full min-h-0 flex-col gap-2",
-				className,
-			)}
-		>
+		<div className={cn("flex h-full min-h-0 flex-col gap-2", className)}>
 			{crumbs.length > 0 ? (
 				<nav
 					aria-label="selection breadcrumbs"

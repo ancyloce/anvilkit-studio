@@ -17,7 +17,10 @@
 
 import { type ReactNode, useEffect } from "react";
 
-import { IFRAME_THEME_CSS, IFRAME_THEME_STYLE_ID } from "../theme/iframe-theme";
+import {
+	IFRAME_THEME_CSS,
+	IFRAME_THEME_STYLE_ID,
+} from "@/overrides/theme/iframe-theme";
 
 export interface CanvasIframeOverrideProps {
 	readonly children: ReactNode;

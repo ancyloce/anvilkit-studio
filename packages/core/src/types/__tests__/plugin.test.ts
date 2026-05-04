@@ -18,14 +18,14 @@
 
 import { describe, expect, it } from "vitest";
 
-import { StudioConfigSchema } from "../../config/schema.js";
+import { StudioConfigSchema } from "@/config/schema.js";
 import type {
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginLifecycleHooks,
 	StudioPluginMeta,
 	StudioPluginRegistration,
-} from "../plugin.js";
+} from "@/types/plugin.js";
 
 const testStudioConfig = StudioConfigSchema.parse({});
 
@@ -187,11 +187,11 @@ describe("StudioPlugin type contract", () => {
 	});
 
 	it("StudioLogLevel is restricted to the four severity levels", () => {
-		const level: import("../plugin.js").StudioLogLevel = "info";
+		const level: import("@/types/plugin.js").StudioLogLevel = "info";
 		void level;
 
 		// @ts-expect-error — `trace` is not a valid severity level.
-		const invalidLevel: import("../plugin.js").StudioLogLevel = "trace";
+		const invalidLevel: import("@/types/plugin.js").StudioLogLevel = "trace";
 		void invalidLevel;
 	});
 });

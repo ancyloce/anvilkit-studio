@@ -13,7 +13,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 afterEach(cleanup);
 
-import { studioOverrides } from "../preset";
+import { studioOverrides } from "@/overrides/preset";
 
 describe("studioOverrides preset smoke", () => {
 	it("populates every chrome-owned slot", () => {
@@ -32,9 +32,7 @@ describe("studioOverrides preset smoke", () => {
 	it("renders DrawerItem with the supplied name", () => {
 		const drawerItem = studioOverrides.drawerItem;
 		if (drawerItem === undefined) throw new Error("drawerItem missing");
-		render(
-			<>{drawerItem({ name: "Hero", children: <span>drag</span> })}</>,
-		);
+		render(<>{drawerItem({ name: "Hero", children: <span>drag</span> })}</>);
 		expect(screen.getByText("Hero")).toBeInTheDocument();
 	});
 

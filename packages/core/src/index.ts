@@ -46,56 +46,27 @@
  */
 
 // ---------------------------------------------------------------------------
-// Types (M2 — plugin contract, config shape, domain records)
-// ---------------------------------------------------------------------------
-export type * from "./types/index.js";
-
-// ---------------------------------------------------------------------------
-// Runtime (M3 — React-free plugin engine)
-// ---------------------------------------------------------------------------
-export {
-	CORE_VERSION,
-	type ExportRegistry,
-	type LifecycleEventName,
-	type LifecycleManager,
-	type LifecycleSubscriber,
-	type StudioRuntime,
-	compilePlugins,
-	composeHeaderActions,
-	createExportRegistry,
-	createLifecycleManager,
-	isPuckPlugin,
-	isStudioPlugin,
-	StudioConfigError,
-	StudioError,
-	StudioExportError,
-	StudioPluginError,
-} from "./runtime/index.js";
-
-// ---------------------------------------------------------------------------
 // Config (M4 — Zod schema, layered merge, React provider + hook)
 // ---------------------------------------------------------------------------
 export {
 	type CreateStudioConfigOptions,
-	type StudioConfigProviderProps,
 	createStudioConfig,
 	parseStudioEnv,
 	StudioConfigProvider,
+	type StudioConfigProviderProps,
 	StudioConfigSchema,
 	useStudioConfig,
 } from "./config/index.js";
-
 // ---------------------------------------------------------------------------
 // React (M5 — <Studio> shell, useStudio, mergeOverrides)
 // ---------------------------------------------------------------------------
 export {
+	mergeOverrides,
+	Studio,
 	type StudioProps,
 	type UseStudioResult,
-	Studio,
-	mergeOverrides,
 	useStudio,
 } from "./react/index.js";
-
 // ---------------------------------------------------------------------------
 // React stores (M5 — Studio-level Zustand slices)
 // ---------------------------------------------------------------------------
@@ -111,3 +82,28 @@ export {
 	useExportStore,
 	useThemeStore,
 } from "./react/stores/index.js";
+// ---------------------------------------------------------------------------
+// Runtime (M3 — React-free plugin engine)
+// ---------------------------------------------------------------------------
+export {
+	CORE_VERSION,
+	compilePlugins,
+	composeHeaderActions,
+	createExportRegistry,
+	createLifecycleManager,
+	type ExportRegistry,
+	isPuckPlugin,
+	isStudioPlugin,
+	type LifecycleEventName,
+	type LifecycleManager,
+	type LifecycleSubscriber,
+	StudioConfigError,
+	StudioError,
+	StudioExportError,
+	StudioPluginError,
+	type StudioRuntime,
+} from "./runtime/index.js";
+// ---------------------------------------------------------------------------
+// Types (M2 — plugin contract, config shape, domain records)
+// ---------------------------------------------------------------------------
+export type * from "./types/index.js";

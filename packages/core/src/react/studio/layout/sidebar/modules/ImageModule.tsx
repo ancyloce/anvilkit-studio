@@ -26,27 +26,23 @@ import {
 	useRef,
 	useState,
 } from "react";
-
-import type {
-  StudioAsset,
-  StudioAssetUploadEvent,
-} from "../../../../../types/sidebar";
 import { toast } from "sonner";
-import { useMsg } from "../../../state/editor-i18n-store";
-import { useAssetCategoryFilter } from "../../../state/hooks";
-import { useSidebarRegistry } from "../../../state/sidebar-registry-store-react";
-import { useSetSidebarHeaderActions } from "../SidebarHeaderActionsContext";
-import { EmptyState } from "../shared/EmptyState";
+import { useSetSidebarHeaderActions } from "@/layout/sidebar/SidebarHeaderActionsContext";
+import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
+import { useMsg } from "@/state/editor-i18n-store";
+import { useAssetCategoryFilter } from "@/state/hooks";
+import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
+import type { StudioAsset, StudioAssetUploadEvent } from "@/types/sidebar";
 import { AssetGrid, type UploadingTile } from "./image/AssetGrid";
 import { ImageFilterStrip } from "./image/ImageFilterStrip";
 import { ImageSearchBar } from "./image/ImageSearchBar";
 import { ImageUploadButton } from "./image/ImageUploadButton";
+import {
+	kindToComponentName,
+	kindToPropsForInsert,
+} from "./image/infer-asset-kind";
 import { RenameAssetDialog } from "./image/RenameAssetDialog";
 import { UploadDropZone } from "./image/UploadDropZone";
-import {
-  kindToComponentName,
-  kindToPropsForInsert,
-} from "./image/infer-asset-kind";
 
 const PROGRESS_INITIAL = 0.05;
 
@@ -57,9 +53,9 @@ export function ImageModule(): ReactNode {
 	const [filter] = useAssetCategoryFilter();
 	const [assets, setAssets] = useState<readonly StudioAsset[]>([]);
 	const [query, setQuery] = useState("");
-	const [uploadingTiles, setUploadingTiles] = useState<readonly UploadingTile[]>(
-		[],
-	);
+	const [uploadingTiles, setUploadingTiles] = useState<
+		readonly UploadingTile[]
+	>([]);
 	const [renaming, setRenaming] = useState<StudioAsset | null>(null);
 	const replacingIdRef = useRef<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -101,11 +97,7 @@ export function ImageModule(): ReactNode {
 		const trimmed = query.trim().toLowerCase();
 		if (trimmed === "") return assets;
 		return assets.filter((asset) => {
-			const haystack = [
-				asset.name,
-				asset.mimeType ?? "",
-				...(asset.tags ?? []),
-			]
+			const haystack = [asset.name, asset.mimeType ?? "", ...(asset.tags ?? [])]
 				.join("\n")
 				.toLowerCase();
 			return haystack.includes(trimmed);
@@ -158,10 +150,7 @@ export function ImageModule(): ReactNode {
 
 	const headerActions = useMemo(
 		() => (
-			<ImageUploadButton
-				onClick={handlePickFiles}
-				disabled={source === null}
-			/>
+			<ImageUploadButton onClick={handlePickFiles} disabled={source === null} />
 		),
 		[handlePickFiles, source],
 	);

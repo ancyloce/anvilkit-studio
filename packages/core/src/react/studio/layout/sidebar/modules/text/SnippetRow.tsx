@@ -9,15 +9,10 @@
  */
 
 import { type ReactNode } from "react";
-
-import type { StudioCopySnippet } from "../../../../../../types/sidebar";
-import { cn } from "../../../../../overrides/utils/cn";
-import { Button } from "../../../../primitives/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../../../primitives/tooltip";
+import { Button } from "@/primitives/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import type { StudioCopySnippet } from "@/types/sidebar";
+import { cn } from "@/utils/cn";
 
 export interface SnippetRowProps {
 	readonly snippet: StudioCopySnippet;
@@ -49,7 +44,9 @@ export function SnippetRow({
 							disabled && "opacity-50",
 						)}
 					>
-						<span className="truncate text-xs font-medium">{snippet.title}</span>
+						<span className="truncate text-xs font-medium">
+							{snippet.title}
+						</span>
 						<span className="line-clamp-2 text-xs text-[var(--ak-studio-muted-fg)]">
 							{snippet.body}
 						</span>

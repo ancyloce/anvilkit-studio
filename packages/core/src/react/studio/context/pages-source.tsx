@@ -11,7 +11,7 @@
 
 import { createContext, type ReactNode, useContext } from "react";
 
-import type { StudioPagesSource } from "../../../types/pages";
+import type { StudioPagesSource } from "@/types/pages";
 
 const StudioPagesSourceContext = createContext<StudioPagesSource | undefined>(
 	undefined,

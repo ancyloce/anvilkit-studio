@@ -11,13 +11,9 @@
  */
 
 import { describe, expect, it } from "vitest";
-
-import type {
-	ExportFormatDefinition,
-	ExportResult,
-} from "../../types/export.js";
-import { StudioPluginError } from "../errors.js";
-import { createExportRegistry } from "../export-registry.js";
+import { StudioPluginError } from "@/runtime/errors.js";
+import { createExportRegistry } from "@/runtime/export-registry.js";
+import type { ExportFormatDefinition, ExportResult } from "@/types/export.js";
 
 function makeFormat(id: string): ExportFormatDefinition {
 	return {

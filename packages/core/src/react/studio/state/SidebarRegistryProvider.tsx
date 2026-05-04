@@ -53,8 +53,6 @@ export function useSidebarRegistryStoreApi(): SidebarRegistryStoreApi {
  * tests for components that only conditionally read the registry can
  * mount without the full provider stack.
  */
-export function useSidebarRegistryStoreApiOrNull():
-	| SidebarRegistryStoreApi
-	| null {
+export function useSidebarRegistryStoreApiOrNull(): SidebarRegistryStoreApi | null {
 	return useContext(SidebarRegistryContext);
 }

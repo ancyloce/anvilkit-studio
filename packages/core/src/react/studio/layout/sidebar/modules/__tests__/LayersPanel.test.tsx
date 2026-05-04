@@ -10,17 +10,16 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import type { StudioPagesSource } from "../../../../../../types/pages";
-import { StudioPagesSourceProvider } from "../../../../context/pages-source";
+import { StudioPagesSourceProvider } from "@/context/pages-source";
+import { LayersPanel } from "@/layout/sidebar/modules/layer/LayersPanel";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-  type SidebarRegistryStoreApi,
-} from "../../../../state/index";
-import { LayersPanel } from "../layer/LayersPanel";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+	type SidebarRegistryStoreApi,
+} from "@/state/index";
+import type { StudioPagesSource } from "@/types/pages";
 
 const mockPuckSnapshot = {
 	config: {
@@ -78,12 +77,8 @@ describe("LayersPanel", () => {
 		fireEvent.click(screen.getByTestId("ak-layer-layers-add"));
 		expect(screen.getByTestId("ak-layer-quickadd-builtin:layout")).toBeTruthy();
 		expect(screen.getByTestId("ak-layer-quickadd-builtin:text")).toBeTruthy();
-		expect(
-			screen.queryByTestId("ak-layer-quickadd-builtin:row"),
-		).toBeNull();
-		expect(
-			screen.queryByTestId("ak-layer-quickadd-builtin:column"),
-		).toBeNull();
+		expect(screen.queryByTestId("ak-layer-quickadd-builtin:row")).toBeNull();
+		expect(screen.queryByTestId("ak-layer-quickadd-builtin:column")).toBeNull();
 	});
 
 	it("includes plugin-contributed entries sorted by order", () => {

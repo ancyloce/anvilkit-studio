@@ -9,14 +9,21 @@
 import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { useSelectedItem, useTextSelection } from "../useTextSelection";
+import { useSelectedItem, useTextSelection } from "@/state/useTextSelection";
 
-let mockSelectedItem: { readonly type: string; readonly props: Record<string, unknown> } | null = null;
+let mockSelectedItem: {
+	readonly type: string;
+	readonly props: Record<string, unknown>;
+} | null = null;
 
 vi.mock("@puckeditor/core", () => ({
 	createUsePuck:
 		() =>
-		<T,>(selector: (state: { readonly selectedItem: typeof mockSelectedItem }) => T): T =>
+		<T,>(
+			selector: (state: {
+				readonly selectedItem: typeof mockSelectedItem;
+			}) => T,
+		): T =>
 			selector({ selectedItem: mockSelectedItem }),
 }));
 

@@ -97,11 +97,7 @@ export class StudioPluginError extends StudioError {
 	 */
 	readonly pluginId: string;
 
-	constructor(
-		pluginId: string,
-		message: string,
-		options?: ErrorOptions,
-	) {
+	constructor(pluginId: string, message: string, options?: ErrorOptions) {
 		super(message, options);
 		this.name = "StudioPluginError";
 		this.pluginId = pluginId;
@@ -156,11 +152,7 @@ export class StudioExportError extends StudioError {
 	 */
 	readonly formatId: string;
 
-	constructor(
-		formatId: string,
-		message: string,
-		options?: ErrorOptions,
-	) {
+	constructor(formatId: string, message: string, options?: ErrorOptions) {
 		super(message, options);
 		this.name = "StudioExportError";
 		this.formatId = formatId;

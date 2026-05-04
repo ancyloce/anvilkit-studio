@@ -20,9 +20,14 @@
  * surface can widen this without changing call sites.
  */
 
-import { createUsePuck, type ComponentData as PuckComponentData } from "@puckeditor/core";
+import {
+	createUsePuck,
+	type ComponentData as PuckComponentData,
+} from "@puckeditor/core";
 
-type PuckSelectorHook = <T>(selector: (state: { readonly selectedItem: PuckComponentData | null }) => T) => T;
+type PuckSelectorHook = <T>(
+	selector: (state: { readonly selectedItem: PuckComponentData | null }) => T,
+) => T;
 
 // Lazy-initialized so partial test mocks of `@puckeditor/core` (which
 // historically only stub `useGetPuck`) don't blow up at module-evaluate

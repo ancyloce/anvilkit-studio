@@ -10,11 +10,11 @@
 import type { ReactNode } from "react";
 
 import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-} from "../../../primitives/empty";
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+} from "@/primitives/empty";
 
 export interface EmptyStateProps {
 	readonly message: string;
@@ -22,7 +22,11 @@ export interface EmptyStateProps {
 	readonly testId?: string;
 }
 
-export function EmptyState({ message, icon, testId }: EmptyStateProps): ReactNode {
+export function EmptyState({
+	message,
+	icon,
+	testId,
+}: EmptyStateProps): ReactNode {
 	return (
 		<Empty data-testid={testId} className="border-0 px-4 py-8">
 			<EmptyHeader>

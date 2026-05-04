@@ -8,11 +8,10 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import type { StudioPagesSource } from "../../../../../../types/pages";
-import { StudioPagesSourceProvider } from "../../../../context/pages-source";
-import { EditorI18nStoreProvider } from "../../../../state/index";
-import { AddPageDialog } from "../layer/AddPageDialog";
+import { StudioPagesSourceProvider } from "@/context/pages-source";
+import { AddPageDialog } from "@/layout/sidebar/modules/layer/AddPageDialog";
+import { EditorI18nStoreProvider } from "@/state/index";
+import type { StudioPagesSource } from "@/types/pages";
 
 afterEach(cleanup);
 

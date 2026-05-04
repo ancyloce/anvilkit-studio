@@ -21,15 +21,14 @@ import {
 	type ReactNode,
 	useMemo,
 } from "react";
-
-import type { StudioInsertSection } from "../../../../../../types/sidebar";
-import { Accordion } from "../../../../primitives/accordion";
+import { Accordion } from "@/primitives/accordion";
 import {
-  useComponentViewMode,
-  useDrawerSearch,
-  useInsertSectionsExpanded,
-  useSidebarRegistry,
-} from "../../../../state/index";
+	useComponentViewMode,
+	useDrawerSearch,
+	useInsertSectionsExpanded,
+	useSidebarRegistry,
+} from "@/state/index";
+import type { StudioInsertSection } from "@/types/sidebar";
 import { buildComponentCategoryIndex } from "./component-category-index";
 import { InsertEmptyState } from "./InsertEmptyState";
 import { InsertSection } from "./InsertSection";
@@ -105,8 +104,7 @@ export function InsertDrawerBody({
 				flat.push(child);
 				return;
 			}
-			const category =
-				name !== undefined ? categoryIndex.get(name) : undefined;
+			const category = name !== undefined ? categoryIndex.get(name) : undefined;
 			for (const section of sortedSections) {
 				if (section.predicate(name ?? "", { category })) {
 					items.get(section.id)?.push(child);

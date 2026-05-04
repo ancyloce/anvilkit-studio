@@ -69,8 +69,8 @@ export {
 	InputGroupAddon,
 	InputGroupButton,
 	InputGroupInput,
-	InputGroupTextarea,
 	InputGroupText,
+	InputGroupTextarea,
 } from "./input-group";
 export { Label } from "./label";
 export { Popover, PopoverContent, PopoverTrigger } from "./popover";

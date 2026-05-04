@@ -11,15 +11,14 @@ import type { Config as PuckConfig } from "@puckeditor/core";
 import { cleanup, render, screen } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
+import { DEFAULT_INSERT_SECTIONS } from "@/layout/sidebar/modules/insert/default-sections";
+import { EditorDrawer } from "@/overrides/layout/EditorDrawer";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-} from "../../../studio/state/index";
-import { DEFAULT_INSERT_SECTIONS } from "../../../studio/layout/sidebar/modules/insert/default-sections";
-import { EditorDrawer } from "../EditorDrawer";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+} from "@/state/index";
 
 const FAKE_CONFIG: PuckConfig = {
 	categories: { navigation: { components: ["Navbar"] } },
@@ -38,7 +37,11 @@ vi.mock("@puckeditor/core", async () => {
 
 afterEach(cleanup);
 
-function Setup({ children }: { readonly children: ReactElement }): ReactElement {
+function Setup({
+	children,
+}: {
+	readonly children: ReactElement;
+}): ReactElement {
 	const registry = createSidebarRegistryStore();
 	for (const section of DEFAULT_INSERT_SECTIONS) {
 		registry.getState().registerInsertSection(section);

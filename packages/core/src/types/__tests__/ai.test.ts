@@ -14,7 +14,7 @@ import type {
 	AiGenerationContext,
 	AiValidationIssue,
 	AiValidationResult,
-} from "../ai.js";
+} from "@/types/ai.js";
 
 describe("AI generation contract", () => {
 	it("accepts a minimal AiComponentSchema", () => {

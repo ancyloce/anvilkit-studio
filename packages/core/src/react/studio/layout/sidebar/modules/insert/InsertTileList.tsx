@@ -7,9 +7,9 @@
  * layout so Puck's drag pipeline keeps owning the row.
  */
 
-import { type ReactNode, isValidElement } from "react";
+import { isValidElement, type ReactNode } from "react";
 
-import { cn } from "../../../../../overrides/utils/cn";
+import { cn } from "@/utils/cn";
 
 export interface InsertTileListProps {
 	readonly children: readonly ReactNode[];

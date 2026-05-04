@@ -97,7 +97,10 @@ export interface AiFieldSchema {
 	 * prop) and the human-readable `label` (shown to the LLM so it
 	 * picks the right one).
 	 */
-	readonly options?: readonly { readonly label: string; readonly value: string }[];
+	readonly options?: readonly {
+		readonly label: string;
+		readonly value: string;
+	}[];
 	/**
 	 * For `type: "array"` fields, the schema of a single item. When the
 	 * item is itself an object, the item carries its own

@@ -9,16 +9,15 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import type { StudioPagesSource } from "../../../../../../types/pages";
-import { StudioPagesSourceProvider } from "../../../../context/pages-source";
+import { StudioPagesSourceProvider } from "@/context/pages-source";
+import { LayerModule } from "@/layout/sidebar/modules/LayerModule";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-} from "../../../../state/index";
-import { LayerModule } from "../LayerModule";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+} from "@/state/index";
+import type { StudioPagesSource } from "@/types/pages";
 
 vi.mock("@puckeditor/core", () => ({
 	Puck: { Outline: () => <div data-testid="puck-outline-mock" /> },
@@ -132,10 +131,7 @@ describe("LayerModule", () => {
 			expect(screen.getByTestId("ak-layer-page-row-home")).toBeTruthy();
 		});
 		// Mutate and emit — the panel should pick the new entry up.
-		pages = [
-			...pages,
-			{ id: "added", title: "Added page" },
-		];
+		pages = [...pages, { id: "added", title: "Added page" }];
 		for (const listener of listeners) listener();
 		await vi.waitFor(() => {
 			expect(screen.getByTestId("ak-layer-page-row-added")).toBeTruthy();

@@ -14,10 +14,9 @@
  */
 
 import { describe, expect, it } from "vitest";
-
-import type { StudioHeaderAction } from "../../types/plugin.js";
-import { StudioPluginError } from "../errors.js";
-import { composeHeaderActions } from "../header-actions.js";
+import { StudioPluginError } from "@/runtime/errors.js";
+import { composeHeaderActions } from "@/runtime/header-actions.js";
+import type { StudioHeaderAction } from "@/types/plugin.js";
 
 /**
  * Build a minimal valid {@link StudioHeaderAction}. The required
@@ -113,11 +112,7 @@ describe("composeHeaderActions — id tiebreaker", () => {
 			makeAction("mu", { group: "primary", order: 100 }),
 		]);
 
-		expect(result.map((action) => action.id)).toEqual([
-			"alpha",
-			"mu",
-			"zeta",
-		]);
+		expect(result.map((action) => action.id)).toEqual(["alpha", "mu", "zeta"]);
 	});
 
 	it("yields a stable, deterministic order regardless of input order", () => {
@@ -176,10 +171,7 @@ describe("composeHeaderActions — duplicate detection", () => {
 
 	it("the thrown error names the duplicated id", () => {
 		try {
-			composeHeaderActions([
-				makeAction("publish"),
-				makeAction("publish"),
-			]);
+			composeHeaderActions([makeAction("publish"), makeAction("publish")]);
 			throw new Error("expected composeHeaderActions to throw");
 		} catch (error) {
 			expect(error).toBeInstanceOf(StudioPluginError);

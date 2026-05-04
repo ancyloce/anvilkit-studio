@@ -20,16 +20,20 @@
  *   - Stale selector (selection moved between render and click).
  */
 
-import { useGetPuck, type ComponentData as PuckComponentData } from "@puckeditor/core";
+import {
+	type ComponentData as PuckComponentData,
+	useGetPuck,
+} from "@puckeditor/core";
 import { useCallback } from "react";
-
-import type { StudioCopySnippet } from "../../../types/sidebar";
 import { toast } from "sonner";
+import type { StudioCopySnippet } from "@/types/sidebar";
 import { useMsg } from "./editor-i18n-store";
 
 export type InsertSnippetCommand = (snippet: StudioCopySnippet) => void;
 
-function isCompatibleTextItem(item: PuckComponentData | null | undefined): boolean {
+function isCompatibleTextItem(
+	item: PuckComponentData | null | undefined,
+): boolean {
 	if (item === null || item === undefined) return false;
 	if (item.type !== "Text") return false;
 	const props = item.props as { readonly text?: unknown };

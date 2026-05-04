@@ -18,20 +18,19 @@
  */
 
 import { type ReactNode, useMemo } from "react";
-
-import type {
-  StudioCopySnippet,
-  StudioCopySnippetCategory,
-} from "../../../../../../types/sidebar";
+import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../../../../primitives/accordion";
-import { useMsg } from "../../../../state/editor-i18n-store";
-import type { CopyCategoryFilter } from "../../../../state/editor-ui-store";
-import { EmptyState } from "../../shared/EmptyState";
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/primitives/accordion";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { CopyCategoryFilter } from "@/state/editor-ui-store";
+import type {
+	StudioCopySnippet,
+	StudioCopySnippetCategory,
+} from "@/types/sidebar";
 import { SnippetRow } from "./SnippetRow";
 
 const BUILTIN_CATEGORY_KEYS: Readonly<Record<string, string>> = {
@@ -52,7 +51,8 @@ function matchesSearch(snippet: StudioCopySnippet, query: string): boolean {
 	const needle = query.toLowerCase();
 	if (snippet.title.toLowerCase().includes(needle)) return true;
 	if (snippet.body.toLowerCase().includes(needle)) return true;
-	if (snippet.tags?.some((tag: string) => tag.toLowerCase().includes(needle))) return true;
+	if (snippet.tags?.some((tag: string) => tag.toLowerCase().includes(needle)))
+		return true;
 	return false;
 }
 
@@ -75,7 +75,9 @@ export function SnippetList({
 
 	const filtered = useMemo(() => {
 		return snippets.filter(
-			(s) => matchesCategoryFilter(s, categoryFilter) && matchesSearch(s, searchTerm),
+			(s) =>
+				matchesCategoryFilter(s, categoryFilter) &&
+				matchesSearch(s, searchTerm),
 		);
 	}, [snippets, categoryFilter, searchTerm]);
 
@@ -110,10 +112,7 @@ export function SnippetList({
 	const groupIds = grouped.map(([cat]) => cat);
 
 	return (
-		<Accordion
-			value={groupIds}
-			data-testid="ak-text-snippet-list-grouped"
-		>
+		<Accordion value={groupIds} data-testid="ak-text-snippet-list-grouped">
 			{grouped.map(([category, list]) => (
 				<AccordionItem key={category} value={category}>
 					<AccordionTrigger className="min-h-8 px-2 py-1.5">
@@ -144,7 +143,10 @@ export function SnippetList({
 
 function groupByCategory(
 	snippets: readonly StudioCopySnippet[],
-): readonly (readonly [StudioCopySnippetCategory, readonly StudioCopySnippet[]])[] {
+): readonly (readonly [
+	StudioCopySnippetCategory,
+	readonly StudioCopySnippet[],
+])[] {
 	const map = new Map<StudioCopySnippetCategory, StudioCopySnippet[]>();
 	for (const snippet of snippets) {
 		const list = map.get(snippet.category) ?? [];

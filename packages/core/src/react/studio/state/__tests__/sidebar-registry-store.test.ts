@@ -11,15 +11,14 @@
  */
 
 import { describe, expect, it, vi } from "vitest";
-
+import { createSidebarRegistryStore } from "@/state/sidebar-registry-store";
 import type {
 	StudioAssetAction,
 	StudioAssetSource,
 	StudioCopySnippetPack,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
-} from "../../../../types/sidebar";
-import { createSidebarRegistryStore } from "../sidebar-registry-store";
+} from "@/types/sidebar";
 
 const SECTION: StudioInsertSection = {
 	id: "recommended",
@@ -41,9 +40,7 @@ const ASSET_ACTION: StudioAssetAction = {
 
 const COPY_PACK: StudioCopySnippetPack = {
 	id: "english-base",
-	snippets: [
-		{ id: "s1", category: "basic", title: "Title", body: "Body" },
-	],
+	snippets: [{ id: "s1", category: "basic", title: "Title", body: "Body" }],
 };
 
 const FAKE_ASSET_SOURCE: StudioAssetSource = {
@@ -77,7 +74,10 @@ describe("sidebar-registry-store", () => {
 		const off1 = store.getState().registerAssetSource(FAKE_ASSET_SOURCE);
 		expect(store.getState().assetSource).toBe(FAKE_ASSET_SOURCE);
 
-		const second: StudioAssetSource = { list: () => [], upload: async () => [] };
+		const second: StudioAssetSource = {
+			list: () => [],
+			upload: async () => [],
+		};
 		store.getState().registerAssetSource(second);
 		expect(store.getState().assetSource).toBe(second);
 

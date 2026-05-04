@@ -7,25 +7,19 @@
  */
 
 import { type FormEvent, type ReactNode, useEffect, useState } from "react";
-
-import type { StudioAsset } from "../../../../../../types/sidebar";
-import { Button } from "../../../../primitives/button";
+import { Button } from "@/primitives/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../../../../primitives/dialog";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "../../../../primitives/field";
-import { Input } from "../../../../primitives/input";
-import { useMsg } from "../../../../state/editor-i18n-store";
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/primitives/dialog";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/primitives/field";
+import { Input } from "@/primitives/input";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { StudioAsset } from "@/types/sidebar";
 
 export interface RenameAssetDialogProps {
 	readonly asset: StudioAsset | null;
@@ -51,7 +45,9 @@ export function RenameAssetDialog({
 		}
 	}, [asset]);
 
-	const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+	const handleSubmit = async (
+		event: FormEvent<HTMLFormElement>,
+	): Promise<void> => {
 		event.preventDefault();
 		if (asset === null) return;
 		const trimmed = draft.trim();
@@ -94,9 +90,7 @@ export function RenameAssetDialog({
 								data-testid="ak-image-rename-input"
 							/>
 						</Field>
-						{error !== null ? (
-							<FieldError>{error}</FieldError>
-						) : null}
+						{error !== null ? <FieldError>{error}</FieldError> : null}
 						<DialogFooter className="mt-2">
 							<DialogClose
 								render={

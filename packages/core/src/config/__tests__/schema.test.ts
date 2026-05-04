@@ -17,9 +17,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-
-import type { ComponentPackageManifest, StudioConfig } from "../../types/config.js";
-import { StudioConfigSchema } from "../schema.js";
+import { StudioConfigSchema } from "@/config/schema.js";
+import type { ComponentPackageManifest, StudioConfig } from "@/types/config.js";
 
 describe("StudioConfigSchema — runtime defaults", () => {
 	it("`.parse({})` produces a fully-defaulted config", () => {

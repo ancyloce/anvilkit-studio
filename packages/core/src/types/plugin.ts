@@ -24,10 +24,10 @@
  */
 
 import type {
+	PuckApi,
 	Config as PuckConfig,
 	Data as PuckData,
 	Overrides as PuckOverrides,
-	PuckApi,
 } from "@puckeditor/core";
 
 import type { StudioConfig } from "./config.js";

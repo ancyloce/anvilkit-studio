@@ -19,7 +19,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { parseStudioEnv } from "../env-parser.js";
+import { parseStudioEnv } from "@/config/env-parser.js";
 
 describe("parseStudioEnv — prefix filtering", () => {
 	it("returns an empty object when no key matches the prefix", () => {

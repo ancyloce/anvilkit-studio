@@ -13,14 +13,9 @@
 
 import { X as CloseIcon } from "lucide-react";
 import { type KeyboardEvent, type ReactNode, useCallback } from "react";
-
-import { useMsg } from "../../state/editor-i18n-store";
-import { Button } from "../../primitives/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../primitives/tooltip";
+import { Button } from "@/primitives/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-store";
 import { SIDEBAR_PANEL_ID } from "./SidebarRail";
 
 export interface SidebarPanelProps {

@@ -16,7 +16,7 @@ import type {
 	PageIRMetadata,
 	PageIRNode,
 	PageIRNodeMeta,
-} from "../ir.js";
+} from "@/types/ir.js";
 
 describe("PageIR type contract", () => {
 	it("accepts a minimal single-node PageIR", () => {
@@ -51,9 +51,7 @@ describe("PageIR type contract", () => {
 			type: "Root",
 			props: {},
 			children: [branch],
-			assets: [
-				{ id: "hero-bg", kind: "image", url: "/hero.jpg" },
-			],
+			assets: [{ id: "hero-bg", kind: "image", url: "/hero.jpg" }],
 		};
 		const ir: PageIR = {
 			version: "1",
@@ -94,7 +92,7 @@ describe("PageIR type contract", () => {
 		void invalidKind;
 	});
 
-	it("PageIR.version is the literal string `\"1\"`", () => {
+	it('PageIR.version is the literal string `"1"`', () => {
 		// @ts-expect-error — numeric `1` is not the string literal.
 		const numericVersion: PageIR["version"] = 1;
 		void numericVersion;

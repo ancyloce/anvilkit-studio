@@ -9,17 +9,20 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { afterEach, describe, expect, it } from "vitest";
-
+import { Splitter } from "@/layout/sidebar/shared/Splitter";
 import {
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  useEditorUiStore,
-} from "../../../../state/index";
-import { Splitter } from "../Splitter";
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	useEditorUiStore,
+} from "@/state/index";
 
 afterEach(cleanup);
 
-function Setup({ children }: { readonly children: ReactElement }): ReactElement {
+function Setup({
+	children,
+}: {
+	readonly children: ReactElement;
+}): ReactElement {
 	return (
 		<EditorI18nStoreProvider>
 			<EditorUiStoreProvider

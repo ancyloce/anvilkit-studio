@@ -23,8 +23,8 @@ export type {
 export type { ComponentPackageManifest, StudioConfig } from "./config.js";
 export type {
 	ExportFormatDefinition,
-	ExportOptions,
 	ExportFormatRunContext,
+	ExportOptions,
 	ExportResult,
 	ExportWarning,
 	ExportWarningLevel,

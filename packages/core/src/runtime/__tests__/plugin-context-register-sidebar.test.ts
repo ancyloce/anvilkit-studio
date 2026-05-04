@@ -15,10 +15,10 @@
 
 import { describe, expect, it } from "vitest";
 
-import { createStudioConfig } from "../../config/create-config.js";
-import { createSidebarRegistryStore } from "../../react/studio/state/sidebar-registry-store.js";
-import type { StudioPlugin, StudioPluginContext } from "../../types/plugin.js";
-import { compilePlugins } from "../compile-plugins.js";
+import { createStudioConfig } from "@/config/create-config.js";
+import { compilePlugins } from "@/runtime/compile-plugins.js";
+import { createSidebarRegistryStore } from "@/state/sidebar-registry-store.js";
+import type { StudioPlugin, StudioPluginContext } from "@/types/plugin.js";
 
 function buildCtx(
 	registry: ReturnType<typeof createSidebarRegistryStore>,
@@ -81,9 +81,7 @@ describe("plugin context — register* sidebar helpers", () => {
 					}),
 					innerCtx.registerCopySnippetPack!({
 						id: "pack-1",
-						snippets: [
-							{ id: "s1", category: "basic", title: "T", body: "B" },
-						],
+						snippets: [{ id: "s1", category: "basic", title: "T", body: "B" }],
 					}),
 				);
 				return { meta: plugin.meta };

@@ -19,7 +19,7 @@
 import { Puck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { useChromeProps } from "../context/chrome-props";
+import { useChromeProps } from "@/context/chrome-props";
 import { StudioHeader, type StudioHeaderProps } from "./StudioHeader";
 import { StudioSidebar } from "./StudioSidebar";
 import { StudioToolbar } from "./StudioToolbar";

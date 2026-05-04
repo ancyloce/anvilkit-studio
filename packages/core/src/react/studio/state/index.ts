@@ -7,21 +7,26 @@
  */
 
 export {
+	EditorUiStoreProvider,
+	type EditorUiStoreProviderProps,
+	useEditorUiStoreApi,
+} from "./EditorUiStoreProvider";
+export {
+	EditorI18nStoreProvider,
+	type EditorI18nStoreProviderProps,
+	useMsg,
+} from "./editor-i18n-store";
+export {
 	type AssetCategoryFilter,
 	type ComponentViewMode,
 	type CopyCategoryFilter,
-	createEditorUiStore,
 	type CreateEditorUiStoreOptions,
+	createEditorUiStore,
 	EDITOR_UI_STORE_PERSIST_VERSION,
 	type EditorTab,
 	type EditorUiState,
 	type EditorUiStoreApi,
 } from "./editor-ui-store";
-export {
-	EditorUiStoreProvider,
-	type EditorUiStoreProviderProps,
-	useEditorUiStoreApi,
-} from "./EditorUiStoreProvider";
 export {
 	useActiveTab,
 	useAssetCategoryFilter,
@@ -36,19 +41,14 @@ export {
 	usePagesExpanded,
 } from "./hooks";
 export {
-	EditorI18nStoreProvider,
-	type EditorI18nStoreProviderProps,
-	useMsg,
-} from "./editor-i18n-store";
-export {
-	createSidebarRegistryStore,
-	type SidebarRegistryState,
-	type SidebarRegistryStoreApi,
-} from "./sidebar-registry-store";
-export {
 	SidebarRegistryProvider,
 	type SidebarRegistryProviderProps,
 	useSidebarRegistryStoreApi,
 	useSidebarRegistryStoreApiOrNull,
 } from "./SidebarRegistryProvider";
+export {
+	createSidebarRegistryStore,
+	type SidebarRegistryState,
+	type SidebarRegistryStoreApi,
+} from "./sidebar-registry-store";
 export { useSidebarRegistry } from "./sidebar-registry-store-react";

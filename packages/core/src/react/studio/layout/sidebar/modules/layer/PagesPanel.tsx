@@ -13,19 +13,14 @@
 
 import { Globe, Plus } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
-
-import type { StudioPage } from "../../../../../../types/pages";
-import { cn } from "../../../../../overrides/utils/cn";
-import { useStudioPagesSource } from "../../../../context/pages-source";
-import { Button } from "../../../../primitives/button";
-import { ScrollArea } from "../../../../primitives/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../../../primitives/tooltip";
-import { useMsg } from "../../../../state/editor-i18n-store";
-import { EmptyState } from "../../shared/EmptyState";
+import { useStudioPagesSource } from "@/context/pages-source";
+import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
+import { Button } from "@/primitives/button";
+import { ScrollArea } from "@/primitives/scroll-area";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { StudioPage } from "@/types/pages";
+import { cn } from "@/utils/cn";
 import { AddPageDialog } from "./AddPageDialog";
 
 export function PagesPanel(): ReactNode {

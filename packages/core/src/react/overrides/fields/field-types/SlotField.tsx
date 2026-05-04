@@ -10,8 +10,8 @@ import { type ReactNode } from "react";
 import type { FieldRendererProps } from "./TextField";
 
 interface SlotFieldRendererProps extends FieldProps<PuckSlotField, unknown> {
-  readonly name: string;
-  readonly children: ReactNode;
+	readonly name: string;
+	readonly children: ReactNode;
 }
 
 export function SlotField({ children }: SlotFieldRendererProps): ReactNode {

@@ -20,35 +20,30 @@ import { Puck, useGetPuck } from "@puckeditor/core";
 import {
 	Columns,
 	LayoutGrid,
+	type LucideIcon,
 	Plus,
 	Rows,
 	Type,
-	type LucideIcon,
 } from "lucide-react";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
-
+import { useStudioPagesSource } from "@/context/pages-source";
+import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
+import { Button } from "@/primitives/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/primitives/dropdown-menu";
+import { ScrollArea } from "@/primitives/scroll-area";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-store";
+import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
+import type { StudioPage } from "@/types/pages";
 import type {
-  StudioLayerQuickAdd,
-  StudioLayerQuickAddInserter,
-} from "../../../../../../types/sidebar";
-import type { StudioPage } from "../../../../../../types/pages";
-import { useStudioPagesSource } from "../../../../context/pages-source";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../../../primitives/dropdown-menu";
-import { Button } from "../../../../primitives/button";
-import { ScrollArea } from "../../../../primitives/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../../../primitives/tooltip";
-import { useMsg } from "../../../../state/editor-i18n-store";
-import { useSidebarRegistry } from "../../../../state/sidebar-registry-store-react";
-import { EmptyState } from "../../shared/EmptyState";
+	StudioLayerQuickAdd,
+	StudioLayerQuickAddInserter,
+} from "@/types/sidebar";
 
 interface BuiltInQuickAdd {
 	readonly id: string;

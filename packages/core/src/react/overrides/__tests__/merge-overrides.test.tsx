@@ -33,7 +33,7 @@ import { render } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import { mergeOverrides } from "../merge-overrides";
+import { mergeOverrides } from "@/overrides/merge-overrides";
 
 /**
  * Synthetic render helper that takes a merged `fieldLabel`
@@ -129,15 +129,15 @@ describe("mergeOverrides — per-key composition", () => {
 
 		// Both markers must be present — a flat spread would drop
 		// one of them.
-		expect(html).toContain("data-marker=\"a\"");
-		expect(html).toContain("data-marker=\"b\"");
+		expect(html).toContain('data-marker="a"');
+		expect(html).toContain('data-marker="b"');
 		expect(html).toContain("DEFAULT");
 
 		// And the nesting order must be outer-B → inner-A → default,
 		// because plugin A registered first and should be the
 		// innermost wrapper.
-		const bIndex = html.indexOf("data-marker=\"b\"");
-		const aIndex = html.indexOf("data-marker=\"a\"");
+		const bIndex = html.indexOf('data-marker="b"');
+		const aIndex = html.indexOf('data-marker="a"');
 		const defaultIndex = html.indexOf("DEFAULT");
 		expect(bIndex).toBeLessThan(aIndex);
 		expect(aIndex).toBeLessThan(defaultIndex);
@@ -164,9 +164,9 @@ describe("mergeOverrides — per-key composition", () => {
 
 		// Expected order of appearance in the HTML:
 		// c (outermost) → b → a → DEFAULT.
-		const cIdx = html.indexOf("data-layer=\"c\"");
-		const bIdx = html.indexOf("data-layer=\"b\"");
-		const aIdx = html.indexOf("data-layer=\"a\"");
+		const cIdx = html.indexOf('data-layer="c"');
+		const bIdx = html.indexOf('data-layer="b"');
+		const aIdx = html.indexOf('data-layer="a"');
 		const defIdx = html.indexOf("DEFAULT");
 		expect(cIdx).toBeGreaterThanOrEqual(0);
 		expect(bIdx).toBeGreaterThan(cIdx);
@@ -180,9 +180,9 @@ describe("mergeOverrides — independent keys", () => {
 		const fieldLabelFn: NonNullable<PuckOverrides["fieldLabel"]> = ({
 			children,
 		}) => <span data-kind="field">{children}</span>;
-		const drawerFn: NonNullable<PuckOverrides["drawer"]> = ({
-			children,
-		}) => <div data-kind="drawer">{children}</div>;
+		const drawerFn: NonNullable<PuckOverrides["drawer"]> = ({ children }) => (
+			<div data-kind="drawer">{children}</div>
+		);
 
 		const merged = mergeOverrides([
 			{ fieldLabel: fieldLabelFn },
@@ -249,12 +249,12 @@ describe("mergeOverrides — fieldTypes special case", () => {
 		}
 
 		const { container } = render(textRenderer({ children: "VAL" }));
-		expect(container.innerHTML).toContain("data-level=\"a\"");
-		expect(container.innerHTML).toContain("data-level=\"b\"");
+		expect(container.innerHTML).toContain('data-level="a"');
+		expect(container.innerHTML).toContain('data-level="b"');
 		// Same nesting rule: B (registered last) is outermost, A is
 		// innermost.
-		const bIdx = container.innerHTML.indexOf("data-level=\"b\"");
-		const aIdx = container.innerHTML.indexOf("data-level=\"a\"");
+		const bIdx = container.innerHTML.indexOf('data-level="b"');
+		const aIdx = container.innerHTML.indexOf('data-level="a"');
 		expect(bIdx).toBeLessThan(aIdx);
 	});
 
@@ -271,10 +271,7 @@ describe("mergeOverrides — fieldTypes special case", () => {
 				fieldTypes: { number: numberFn },
 			} as unknown as Partial<PuckOverrides>,
 		]);
-		const fieldTypes = merged.fieldTypes as unknown as Record<
-			string,
-			unknown
-		>;
+		const fieldTypes = merged.fieldTypes as unknown as Record<string, unknown>;
 		expect(fieldTypes.text).toBe(textFn);
 		expect(fieldTypes.number).toBe(numberFn);
 	});

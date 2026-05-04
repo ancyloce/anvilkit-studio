@@ -85,35 +85,32 @@ import {
 	useState,
 } from "react";
 
-import { StudioConfigProvider } from "../../config/provider";
+import { StudioConfigProvider } from "@/config/provider";
+import { ChromePropsProvider } from "@/context/chrome-props";
+import { StudioPagesSourceProvider } from "@/context/pages-source";
+import { StudioPluginContextProvider } from "@/context/plugin-context";
+import { StudioRuntimeProvider } from "@/hooks/use-studio";
+import { DEFAULT_INSERT_SECTIONS } from "@/layout/sidebar/modules/insert/default-sections";
+import { mergeOverrides } from "@/overrides/merge-overrides";
+import type { StudioChromeMode } from "@/overrides/types";
+import { Toaster } from "@/primitives/sonner";
+import { TooltipProvider } from "@/primitives/tooltip";
+import { compilePlugins, type StudioRuntime } from "@/runtime/compile-plugins";
 import {
-  compilePlugins,
-  type StudioRuntime,
-} from "../../runtime/compile-plugins";
-import type { StudioConfig } from "../../types/config";
-import type { StudioPagesSource } from "../../types/pages";
-import type { StudioPlugin, StudioPluginContext } from "../../types/plugin";
-import { StudioRuntimeProvider } from "../hooks/use-studio";
-import { mergeOverrides } from "../overrides/merge-overrides";
-import type { StudioChromeMode } from "../overrides/types";
-import { useAiStore } from "../stores/ai-store";
-import { useExportStore } from "../stores/export-store";
-import { useThemeStore } from "../stores/theme-store";
-import { ChromePropsProvider } from "../studio/context/chrome-props";
-import { StudioPagesSourceProvider } from "../studio/context/pages-source";
-import { StudioPluginContextProvider } from "../studio/context/plugin-context";
-import { DEFAULT_INSERT_SECTIONS } from "../studio/layout/sidebar/modules/insert/default-sections";
-import { Toaster } from "../studio/primitives/sonner";
-import { TooltipProvider } from "../studio/primitives/tooltip";
-import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-  type SidebarRegistryStoreApi,
-} from "../studio/state/index";
-import { useThemeSync } from "../studio/theme/use-theme-sync";
-import { mergeStudioUi } from "../studio/ui/merge-studio-ui";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+	type SidebarRegistryStoreApi,
+} from "@/state/index";
+import { useAiStore } from "@/stores/ai-store";
+import { useExportStore } from "@/stores/export-store";
+import { useThemeStore } from "@/stores/theme-store";
+import { mergeStudioUi } from "@/studio/ui/merge-studio-ui";
+import { useThemeSync } from "@/theme/use-theme-sync";
+import type { StudioConfig } from "@/types/config";
+import type { StudioPagesSource } from "@/types/pages";
+import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
 
 const DEFAULT_STORE_ID = "default";
 const DEFAULT_CHROME_MODE: StudioChromeMode = "anvilkit";
@@ -125,8 +122,8 @@ const DEFAULT_CHROME_MODE: StudioChromeMode = "anvilkit";
  * effect.
  */
 function ThemeSyncBoundary(): null {
-  useThemeSync();
-  return null;
+	useThemeSync();
+	return null;
 }
 
 /**
@@ -140,143 +137,143 @@ function ThemeSyncBoundary(): null {
  * Puck render tree expects.
  */
 export interface StudioProps {
-  /**
-   * The Puck component config the editor operates on. Typically
-   * imported from a host-side module like
-   * `apps/demo/lib/puck-demo.ts` that aggregates every
-   * `@anvilkit/*` component package's `componentConfig` into a
-   * single `PuckConfig`.
-   */
-  readonly puckConfig: PuckConfig;
-  /**
-   * Initial Puck page data. Forwarded to `<Puck>` verbatim and
-   * also captured into a ref so {@link StudioPluginContext.getData}
-   * returns the latest snapshot.
-   */
-  readonly data?: PuckData;
-  /**
-   * StudioPlugins (and/or raw `@puckeditor/core` plugins) to mount.
-   * Order matters for override composition: the first plugin's
-   * overrides become the innermost wrapper, later plugins wrap it.
-   */
-  readonly plugins?: readonly (StudioPlugin | PuckPlugin)[];
-  /**
-   * Layer 3 host overrides forwarded to
-   * {@link createStudioConfig}. `<Studio>` owns the config factory
-   * call so descendants get a single
-   * {@link StudioConfigProvider}-scoped instance.
-   */
-  readonly config?: DeepPartial<StudioConfig>;
-  /**
-   * Consumer-supplied Puck overrides. Composed **outermost** —
-   * after the plugins' overrides — so the consumer always has the
-   * final word on any given slot.
-   */
-  readonly overrides?: Partial<PuckOverrides>;
-  /**
-   * Forwarded to `<Puck onChange>` after the `onDataChange`
-   * lifecycle has fired. Consumers that need the canonical latest
-   * data should read from here rather than calling
-   * `useGetPuck()` inside their own overrides.
-   */
-  readonly onChange?: (data: PuckData) => void;
-  /**
-   * Forwarded to `<Puck onPublish>` **only if** the
-   * `onBeforePublish` lifecycle resolves without throwing. A
-   * plugin that throws from `onBeforePublish` aborts publish and
-   * this callback is not called.
-   */
-  readonly onPublish?: (data: PuckData) => void | Promise<void>;
-  /**
-   * @deprecated Legacy `aiHost` string from the reference
-   * implementation. When provided, `<Studio>` dynamically imports
-   * `@anvilkit/core/compat/ai-host-adapter` and prepends the
-   * resulting adapter to the plugin list. Migrate to
-   * `createAiGenerationPlugin()` from
-   * `@anvilkit/plugins/ai-generation`.
-   */
-  readonly aiHost?: string;
-  /**
-   * Which chrome to render. `"anvilkit"` (the default) prepends the
-   * default override preset and mounts the AnvilKit Studio shell.
-   * `"puck"` is a single-prop opt-out that ships the raw
-   * `@puckeditor/core` UI — bit-for-bit identical to the pre-Phase-5
-   * `<Studio>` output (PRD §6.1 + §11 decision 1).
-   */
-  readonly chrome?: StudioChromeMode;
-  /**
-   * Initial Puck `UiState` partial. When `chrome="anvilkit"`, this
-   * is merged with the chrome's full-width-viewport defaults via
-   * `mergeStudioUi()` so consumers can preset the sidebar
-   * visibility, viewport selection, etc. without losing the
-   * chrome's defaults.
-   */
-  readonly ui?: Partial<PuckUiState>;
-  /**
-   * Forwarded to `<Puck onAction>` — fires on every Puck action
-   * dispatch (insert / move / delete / etc.). Independent of
-   * `onChange`, which fires once per debounced data update.
-   */
-  readonly onAction?: PuckOnAction<PuckData>;
-  /**
-   * Forwarded to `<Puck viewports>`. Overrides the chrome's
-   * full-width-viewport default block when provided.
-   */
-  readonly viewports?: PuckViewports;
-  /**
-   * Per-instance store id (default `"default"`). Persisted
-   * `EditorUiState` keys live under `anvilkit-ui-${storeId}`, so
-   * two `<Studio>` instances on the same page should pass distinct
-   * ids to avoid collisions.
-   */
-  readonly storeId?: string;
-  /**
-   * Optional "back" handler for the chrome's header. Hidden when
-   * absent.
-   */
-  readonly onBack?: () => void;
-  /**
-   * Optional "save draft" handler. The header surfaces a button
-   * when this is provided.
-   */
-  readonly onSaveDraft?: () => void | Promise<void>;
-  /**
-   * Drives the "save draft" button's loading state. Host owns the
-   * boolean — `<Studio>` only renders it.
-   */
-  readonly isSavingDraft?: boolean;
-  /**
-   * Timestamp of the last successful save. Renders as a relative
-   * time hint next to the publish button.
-   */
-  readonly lastSavedAt?: Date | null;
-  /**
-   * Drives the "Publish" button's loading state.
-   */
-  readonly isPublishing?: boolean;
-  /**
-   * Optional pages source for the sidebar's `layer` module. The host
-   * supplies the page list and routing callbacks; the sidebar renders
-   * the rows, route badge, and "+" add-page dialog. When omitted, the
-   * Pages sub-panel renders the `studio.module.layer.pages.empty`
-   * state (PRD §6.4). Ignored when `chrome="puck"` (no AnvilKit
-   * sidebar).
-   */
-  readonly pages?: StudioPagesSource;
-  /**
-   * Per-instance i18n overrides forwarded to
-   * {@link EditorI18nStoreProvider}. Keys are message ids
-   * (`studio.module.*`); values are the localized strings.
-   *
-   * The provider also honors PRD §10.2 deprecated-key aliases — an
-   * override on a legacy `studio.tab.*` key resolves through the
-   * alias map for callers asking the new key, until the deprecation
-   * window closes. The exhaustive resolution-order test lives at
-   * `state/__tests__/editor-i18n-store.alias.test.tsx`.
-   *
-   * Ignored when `chrome="puck"` (no AnvilKit i18n surface).
-   */
-  readonly messages?: Readonly<Record<string, string>>;
+	/**
+	 * The Puck component config the editor operates on. Typically
+	 * imported from a host-side module like
+	 * `apps/demo/lib/puck-demo.ts` that aggregates every
+	 * `@anvilkit/*` component package's `componentConfig` into a
+	 * single `PuckConfig`.
+	 */
+	readonly puckConfig: PuckConfig;
+	/**
+	 * Initial Puck page data. Forwarded to `<Puck>` verbatim and
+	 * also captured into a ref so {@link StudioPluginContext.getData}
+	 * returns the latest snapshot.
+	 */
+	readonly data?: PuckData;
+	/**
+	 * StudioPlugins (and/or raw `@puckeditor/core` plugins) to mount.
+	 * Order matters for override composition: the first plugin's
+	 * overrides become the innermost wrapper, later plugins wrap it.
+	 */
+	readonly plugins?: readonly (StudioPlugin | PuckPlugin)[];
+	/**
+	 * Layer 3 host overrides forwarded to
+	 * {@link createStudioConfig}. `<Studio>` owns the config factory
+	 * call so descendants get a single
+	 * {@link StudioConfigProvider}-scoped instance.
+	 */
+	readonly config?: DeepPartial<StudioConfig>;
+	/**
+	 * Consumer-supplied Puck overrides. Composed **outermost** —
+	 * after the plugins' overrides — so the consumer always has the
+	 * final word on any given slot.
+	 */
+	readonly overrides?: Partial<PuckOverrides>;
+	/**
+	 * Forwarded to `<Puck onChange>` after the `onDataChange`
+	 * lifecycle has fired. Consumers that need the canonical latest
+	 * data should read from here rather than calling
+	 * `useGetPuck()` inside their own overrides.
+	 */
+	readonly onChange?: (data: PuckData) => void;
+	/**
+	 * Forwarded to `<Puck onPublish>` **only if** the
+	 * `onBeforePublish` lifecycle resolves without throwing. A
+	 * plugin that throws from `onBeforePublish` aborts publish and
+	 * this callback is not called.
+	 */
+	readonly onPublish?: (data: PuckData) => void | Promise<void>;
+	/**
+	 * @deprecated Legacy `aiHost` string from the reference
+	 * implementation. When provided, `<Studio>` dynamically imports
+	 * `@anvilkit/core/compat/ai-host-adapter` and prepends the
+	 * resulting adapter to the plugin list. Migrate to
+	 * `createAiGenerationPlugin()` from
+	 * `@anvilkit/plugins/ai-generation`.
+	 */
+	readonly aiHost?: string;
+	/**
+	 * Which chrome to render. `"anvilkit"` (the default) prepends the
+	 * default override preset and mounts the AnvilKit Studio shell.
+	 * `"puck"` is a single-prop opt-out that ships the raw
+	 * `@puckeditor/core` UI — bit-for-bit identical to the pre-Phase-5
+	 * `<Studio>` output (PRD §6.1 + §11 decision 1).
+	 */
+	readonly chrome?: StudioChromeMode;
+	/**
+	 * Initial Puck `UiState` partial. When `chrome="anvilkit"`, this
+	 * is merged with the chrome's full-width-viewport defaults via
+	 * `mergeStudioUi()` so consumers can preset the sidebar
+	 * visibility, viewport selection, etc. without losing the
+	 * chrome's defaults.
+	 */
+	readonly ui?: Partial<PuckUiState>;
+	/**
+	 * Forwarded to `<Puck onAction>` — fires on every Puck action
+	 * dispatch (insert / move / delete / etc.). Independent of
+	 * `onChange`, which fires once per debounced data update.
+	 */
+	readonly onAction?: PuckOnAction<PuckData>;
+	/**
+	 * Forwarded to `<Puck viewports>`. Overrides the chrome's
+	 * full-width-viewport default block when provided.
+	 */
+	readonly viewports?: PuckViewports;
+	/**
+	 * Per-instance store id (default `"default"`). Persisted
+	 * `EditorUiState` keys live under `anvilkit-ui-${storeId}`, so
+	 * two `<Studio>` instances on the same page should pass distinct
+	 * ids to avoid collisions.
+	 */
+	readonly storeId?: string;
+	/**
+	 * Optional "back" handler for the chrome's header. Hidden when
+	 * absent.
+	 */
+	readonly onBack?: () => void;
+	/**
+	 * Optional "save draft" handler. The header surfaces a button
+	 * when this is provided.
+	 */
+	readonly onSaveDraft?: () => void | Promise<void>;
+	/**
+	 * Drives the "save draft" button's loading state. Host owns the
+	 * boolean — `<Studio>` only renders it.
+	 */
+	readonly isSavingDraft?: boolean;
+	/**
+	 * Timestamp of the last successful save. Renders as a relative
+	 * time hint next to the publish button.
+	 */
+	readonly lastSavedAt?: Date | null;
+	/**
+	 * Drives the "Publish" button's loading state.
+	 */
+	readonly isPublishing?: boolean;
+	/**
+	 * Optional pages source for the sidebar's `layer` module. The host
+	 * supplies the page list and routing callbacks; the sidebar renders
+	 * the rows, route badge, and "+" add-page dialog. When omitted, the
+	 * Pages sub-panel renders the `studio.module.layer.pages.empty`
+	 * state (PRD §6.4). Ignored when `chrome="puck"` (no AnvilKit
+	 * sidebar).
+	 */
+	readonly pages?: StudioPagesSource;
+	/**
+	 * Per-instance i18n overrides forwarded to
+	 * {@link EditorI18nStoreProvider}. Keys are message ids
+	 * (`studio.module.*`); values are the localized strings.
+	 *
+	 * The provider also honors PRD §10.2 deprecated-key aliases — an
+	 * override on a legacy `studio.tab.*` key resolves through the
+	 * alias map for callers asking the new key, until the deprecation
+	 * window closes. The exhaustive resolution-order test lives at
+	 * `state/__tests__/editor-i18n-store.alias.test.tsx`.
+	 *
+	 * Ignored when `chrome="puck"` (no AnvilKit i18n surface).
+	 */
+	readonly messages?: Readonly<Record<string, string>>;
 }
 
 /**
@@ -285,9 +282,9 @@ export interface StudioProps {
  * reference stays stable across renders.
  */
 const EMPTY_DATA: PuckData = {
-  root: { props: {} },
-  content: [],
-  zones: {},
+	root: { props: {} },
+	content: [],
+	zones: {},
 };
 
 /**
@@ -312,13 +309,13 @@ const pluginIdentityTags = new WeakMap<object, string>();
 let pluginIdentityCounter = 0;
 
 function identityTagFor(value: object): string {
-  let existing = pluginIdentityTags.get(value);
-  if (existing === undefined) {
-    pluginIdentityCounter += 1;
-    existing = `#${pluginIdentityCounter}`;
-    pluginIdentityTags.set(value, existing);
-  }
-  return existing;
+	let existing = pluginIdentityTags.get(value);
+	if (existing === undefined) {
+		pluginIdentityCounter += 1;
+		existing = `#${pluginIdentityCounter}`;
+		pluginIdentityTags.set(value, existing);
+	}
+	return existing;
 }
 
 /**
@@ -331,42 +328,42 @@ function identityTagFor(value: object): string {
  * thrashing under the idiomatic React pattern.
  */
 function fingerprintPlugins(
-  plugins: readonly (StudioPlugin | PuckPlugin)[] | undefined,
+	plugins: readonly (StudioPlugin | PuckPlugin)[] | undefined,
 ): string {
-  if (plugins === undefined || plugins.length === 0) {
-    return "[]";
-  }
-  const parts: string[] = [];
-  for (const plugin of plugins) {
-    if (
-      plugin !== null &&
-      typeof plugin === "object" &&
-      "meta" in plugin &&
-      plugin.meta !== null &&
-      typeof plugin.meta === "object"
-    ) {
-      const meta = plugin.meta as {
-        id?: unknown;
-        version?: unknown;
-        coreVersion?: unknown;
-      };
-      // Meta is the fingerprint contract for Studio plugins:
-      // `compilePlugins()` rejects duplicate `meta.id` values,
-      // so plugin authors that wrap/delegate another plugin must
-      // publish their own id or version bump when registration
-      // behavior changes.
-      parts.push(
-        `studio:${escapeFingerprintSegment(String(meta.id))}@${escapeFingerprintSegment(String(meta.version))}/${escapeFingerprintSegment(String(meta.coreVersion))}`,
-      );
-      continue;
-    }
-    if (plugin !== null && typeof plugin === "object") {
-      parts.push(`puck:${identityTagFor(plugin)}`);
-      continue;
-    }
-    parts.push(`other:${escapeFingerprintSegment(String(plugin))}`);
-  }
-  return parts.join("|");
+	if (plugins === undefined || plugins.length === 0) {
+		return "[]";
+	}
+	const parts: string[] = [];
+	for (const plugin of plugins) {
+		if (
+			plugin !== null &&
+			typeof plugin === "object" &&
+			"meta" in plugin &&
+			plugin.meta !== null &&
+			typeof plugin.meta === "object"
+		) {
+			const meta = plugin.meta as {
+				id?: unknown;
+				version?: unknown;
+				coreVersion?: unknown;
+			};
+			// Meta is the fingerprint contract for Studio plugins:
+			// `compilePlugins()` rejects duplicate `meta.id` values,
+			// so plugin authors that wrap/delegate another plugin must
+			// publish their own id or version bump when registration
+			// behavior changes.
+			parts.push(
+				`studio:${escapeFingerprintSegment(String(meta.id))}@${escapeFingerprintSegment(String(meta.version))}/${escapeFingerprintSegment(String(meta.coreVersion))}`,
+			);
+			continue;
+		}
+		if (plugin !== null && typeof plugin === "object") {
+			parts.push(`puck:${identityTagFor(plugin)}`);
+			continue;
+		}
+		parts.push(`other:${escapeFingerprintSegment(String(plugin))}`);
+	}
+	return parts.join("|");
 }
 
 /**
@@ -376,7 +373,7 @@ function fingerprintPlugins(
  * conventions, but cheap to close.
  */
 function escapeFingerprintSegment(segment: string): string {
-  return segment.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
+	return segment.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
 }
 
 /**
@@ -387,36 +384,36 @@ function escapeFingerprintSegment(segment: string): string {
  * logger (planned post-alpha) will take over the real contract.
  */
 const REDACTED_META_KEYS = [
-  "token",
-  "secret",
-  "password",
-  "apikey",
-  "api_key",
-  "authorization",
-  "cookie",
-  "bearer",
+	"token",
+	"secret",
+	"password",
+	"apikey",
+	"api_key",
+	"authorization",
+	"cookie",
+	"bearer",
 ] as const;
 
 function shouldRedactKey(key: string): boolean {
-  const normalized = key.toLowerCase();
-  for (const needle of REDACTED_META_KEYS) {
-    if (normalized.includes(needle)) {
-      return true;
-    }
-  }
-  return false;
+	const normalized = key.toLowerCase();
+	for (const needle of REDACTED_META_KEYS) {
+		if (normalized.includes(needle)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 function redactLogMeta(meta: Record<string, unknown>): Record<string, unknown> {
-  // Shallow copy is sufficient — the contract is "don't print
-  // obvious secrets," not "deep-scrub arbitrary nested structures."
-  // Plugins that pass deeply nested meta with secrets in leaves can
-  // upgrade to a host-provided logger when that ships.
-  const out: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(meta)) {
-    out[key] = shouldRedactKey(key) ? "[REDACTED]" : value;
-  }
-  return out;
+	// Shallow copy is sufficient — the contract is "don't print
+	// obvious secrets," not "deep-scrub arbitrary nested structures."
+	// Plugins that pass deeply nested meta with secrets in leaves can
+	// upgrade to a host-provided logger when that ships.
+	const out: Record<string, unknown> = {};
+	for (const [key, value] of Object.entries(meta)) {
+		out[key] = shouldRedactKey(key) ? "[REDACTED]" : value;
+	}
+	return out;
 }
 
 /**
@@ -427,17 +424,17 @@ function redactLogMeta(meta: Record<string, unknown>): Record<string, unknown> {
  * is a genuinely different config.
  */
 function fingerprintConfig(config: unknown): string {
-  if (config === undefined || config === null) {
-    return "null";
-  }
-  try {
-    return JSON.stringify(config);
-  } catch {
-    // Circular reference or BigInt — fall back to identity so a
-    // new object reference still re-runs compile but we do not
-    // crash the component tree.
-    return identityTagFor(config as object);
-  }
+	if (config === undefined || config === null) {
+		return "null";
+	}
+	try {
+		return JSON.stringify(config);
+	} catch {
+		// Circular reference or BigInt — fall back to identity so a
+		// new object reference still re-runs compile but we do not
+		// crash the component tree.
+		return identityTagFor(config as object);
+	}
 }
 
 /**
@@ -447,9 +444,9 @@ function fingerprintConfig(config: unknown): string {
  * to module scope so tests can match on the exact message.
  */
 const PUCK_API_UNBOUND_MESSAGE =
-  "StudioPluginContext.getPuckApi() was called before <Puck> finished mounting. " +
-  "Move the call into a header action or a post-mount lifecycle hook " +
-  "(`onDataChange`, `onBeforePublish`, `onAfterPublish`) so it runs after Puck's effect-time binder has captured the API.";
+	"StudioPluginContext.getPuckApi() was called before <Puck> finished mounting. " +
+	"Move the call into a header action or a post-mount lifecycle hook " +
+	"(`onDataChange`, `onBeforePublish`, `onAfterPublish`) so it runs after Puck's effect-time binder has captured the API.";
 
 /**
  * Type alias for the snapshot-getter function Puck's `useGetPuck`
@@ -471,20 +468,20 @@ type GetPuckSnapshot = ReturnType<typeof useGetPuck>;
  * code should never render it directly.
  */
 function PuckApiBinder({
-  apiRef,
-  children,
+	apiRef,
+	children,
 }: {
-  readonly apiRef: RefObject<GetPuckSnapshot | null>;
-  readonly children: ReactNode;
+	readonly apiRef: RefObject<GetPuckSnapshot | null>;
+	readonly children: ReactNode;
 }): ReactElement {
-  const getPuck = useGetPuck();
-  useEffect(() => {
-    // `useGetPuck` returns a stable snapshot-getter function for
-    // the lifetime of the mount. Re-running on change is cheap and
-    // future-proofs against Puck swapping its internal store.
-    apiRef.current = getPuck;
-  }, [apiRef, getPuck]);
-  return <>{children}</>;
+	const getPuck = useGetPuck();
+	useEffect(() => {
+		// `useGetPuck` returns a stable snapshot-getter function for
+		// the lifetime of the mount. Re-running on change is cheap and
+		// future-proofs against Puck swapping its internal store.
+		apiRef.current = getPuck;
+	}, [apiRef, getPuck]);
+	return <>{children}</>;
 }
 
 /**
@@ -516,559 +513,559 @@ function PuckApiBinder({
  * ```
  */
 export function Studio(props: StudioProps): ReactElement | null {
-  const {
-    puckConfig,
-    data,
-    plugins,
-    config,
-    overrides: consumerOverrides,
-    onChange,
-    onPublish,
-    aiHost,
-    chrome = DEFAULT_CHROME_MODE,
-    ui,
-    onAction,
-    viewports,
-    storeId = DEFAULT_STORE_ID,
-    onBack,
-    onSaveDraft,
-    isSavingDraft,
-    lastSavedAt,
-    isPublishing,
-    pages,
-    messages,
-  } = props;
-  const isAnvilkit = chrome === "anvilkit";
+	const {
+		puckConfig,
+		data,
+		plugins,
+		config,
+		overrides: consumerOverrides,
+		onChange,
+		onPublish,
+		aiHost,
+		chrome = DEFAULT_CHROME_MODE,
+		ui,
+		onAction,
+		viewports,
+		storeId = DEFAULT_STORE_ID,
+		onBack,
+		onSaveDraft,
+		isSavingDraft,
+		lastSavedAt,
+		isPublishing,
+		pages,
+		messages,
+	} = props;
+	const isAnvilkit = chrome === "anvilkit";
 
-  // ------------------------------------------------------------------
-  // 1. Refs for the plugin context. `getData()` is a late-bound
-  //    accessor that always returns the most recent `onChange`
-  //    payload; `getPuckApi()` reads from the `PuckApiBinder` ref
-  //    below, which is `null` until the first render inside Puck.
-  // ------------------------------------------------------------------
-  const dataRef = useRef<PuckData>(data ?? EMPTY_DATA);
-  useLayoutEffect(() => {
-    if (data !== undefined) {
-      dataRef.current = data;
-    }
-  }, [data]);
+	// ------------------------------------------------------------------
+	// 1. Refs for the plugin context. `getData()` is a late-bound
+	//    accessor that always returns the most recent `onChange`
+	//    payload; `getPuckApi()` reads from the `PuckApiBinder` ref
+	//    below, which is `null` until the first render inside Puck.
+	// ------------------------------------------------------------------
+	const dataRef = useRef<PuckData>(data ?? EMPTY_DATA);
+	useLayoutEffect(() => {
+		if (data !== undefined) {
+			dataRef.current = data;
+		}
+	}, [data]);
 
-  const puckApiRef = useRef<GetPuckSnapshot | null>(null);
+	const puckApiRef = useRef<GetPuckSnapshot | null>(null);
 
-  // ------------------------------------------------------------------
-  // Per-instance sidebar registry. Created lazily inside `useState`
-  // so React's strict-mode double-invocation does not produce two
-  // stores during dev. Plugins register sidebar surfaces (insert
-  // sections, layer quick-adds, asset source / actions, copy snippet
-  // packs) through `ctx.register*` — those calls land in this store
-  // and the sidebar reads from it via the provider below.
-  //
-  // Default `insert` sections (`recommended` / `navigation` / `top` /
-  // `team`) are seeded synchronously here so the first paint of the
-  // `insert` module already shows the sectioned library — registering
-  // them in a `useEffect` would produce a one-frame flash of "no
-  // sections" before hydration. Plugins that call
-  // `registerInsertSection()` later merge into the same registry
-  // without conflict.
-  const [sidebarRegistryStore] = useState<SidebarRegistryStoreApi>(() => {
-    const store = createSidebarRegistryStore();
-    for (const section of DEFAULT_INSERT_SECTIONS) {
-      store.getState().registerInsertSection(section);
-    }
-    return store;
-  });
+	// ------------------------------------------------------------------
+	// Per-instance sidebar registry. Created lazily inside `useState`
+	// so React's strict-mode double-invocation does not produce two
+	// stores during dev. Plugins register sidebar surfaces (insert
+	// sections, layer quick-adds, asset source / actions, copy snippet
+	// packs) through `ctx.register*` — those calls land in this store
+	// and the sidebar reads from it via the provider below.
+	//
+	// Default `insert` sections (`recommended` / `navigation` / `top` /
+	// `team`) are seeded synchronously here so the first paint of the
+	// `insert` module already shows the sectioned library — registering
+	// them in a `useEffect` would produce a one-frame flash of "no
+	// sections" before hydration. Plugins that call
+	// `registerInsertSection()` later merge into the same registry
+	// without conflict.
+	const [sidebarRegistryStore] = useState<SidebarRegistryStoreApi>(() => {
+		const store = createSidebarRegistryStore();
+		for (const section of DEFAULT_INSERT_SECTIONS) {
+			store.getState().registerInsertSection(section);
+		}
+		return store;
+	});
 
-  // ------------------------------------------------------------------
-  // SSR-safe rehydration. The three Zustand stores are declared with
-  // `skipHydration: true` so they do not synchronously read
-  // `localStorage` at module evaluation — that read would fire on
-  // the server (no storage) and again on the client (with storage),
-  // producing a React 19 hydration mismatch for any component that
-  // subscribes to a persisted field. Kicking rehydrate off in a
-  // mount-time effect guarantees the first server-rendered HTML and
-  // the first client render agree, and the persisted state flows in
-  // on the next tick.
-  // ------------------------------------------------------------------
-  useEffect(() => {
-    void useAiStore.persist.rehydrate();
-    void useExportStore.persist.rehydrate();
-    void useThemeStore.persist.rehydrate();
-  }, []);
+	// ------------------------------------------------------------------
+	// SSR-safe rehydration. The three Zustand stores are declared with
+	// `skipHydration: true` so they do not synchronously read
+	// `localStorage` at module evaluation — that read would fire on
+	// the server (no storage) and again on the client (with storage),
+	// producing a React 19 hydration mismatch for any component that
+	// subscribes to a persisted field. Kicking rehydrate off in a
+	// mount-time effect guarantees the first server-rendered HTML and
+	// the first client render agree, and the persisted state flows in
+	// on the next tick.
+	// ------------------------------------------------------------------
+	useEffect(() => {
+		void useAiStore.persist.rehydrate();
+		void useExportStore.persist.rehydrate();
+		void useThemeStore.persist.rehydrate();
+	}, []);
 
-  // ------------------------------------------------------------------
-  // 2. Resolve plugins, build the studio config, and compile. All
-  //    three steps run in a single async effect so the Zod-heavy
-  //    `createStudioConfig` can be loaded via **dynamic import** and
-  //    live in an async chunk rather than the main entry bundle.
-  //
-  //    This is a bundle-size trade-off, not a behavioral one: the
-  //    component already renders `null` until `compilePlugins`
-  //    resolves, so folding `createStudioConfig` into that same wait
-  //    adds no user-visible delay — Zod's ~60 KB of locale data just
-  //    happens to load during the same microtask as the plugin
-  //    compile step. The `check:bundle-budget` gate in `core-015`
-  //    enforces this indirection: move `createStudioConfig` back to
-  //    a static import and the gate fails immediately.
-  //
-  //    If `aiHost` is supplied, the compat adapter is also loaded via
-  //    dynamic import (on its own async chunk) and prepended to the
-  //    plugin list before compilation.
-  // ------------------------------------------------------------------
-  const [compiled, setCompiled] = useState<{
-    readonly runtime: StudioRuntime;
-    readonly studioConfig: StudioConfig;
-    readonly ctx: StudioPluginContext;
-  } | null>(null);
+	// ------------------------------------------------------------------
+	// 2. Resolve plugins, build the studio config, and compile. All
+	//    three steps run in a single async effect so the Zod-heavy
+	//    `createStudioConfig` can be loaded via **dynamic import** and
+	//    live in an async chunk rather than the main entry bundle.
+	//
+	//    This is a bundle-size trade-off, not a behavioral one: the
+	//    component already renders `null` until `compilePlugins`
+	//    resolves, so folding `createStudioConfig` into that same wait
+	//    adds no user-visible delay — Zod's ~60 KB of locale data just
+	//    happens to load during the same microtask as the plugin
+	//    compile step. The `check:bundle-budget` gate in `core-015`
+	//    enforces this indirection: move `createStudioConfig` back to
+	//    a static import and the gate fails immediately.
+	//
+	//    If `aiHost` is supplied, the compat adapter is also loaded via
+	//    dynamic import (on its own async chunk) and prepended to the
+	//    plugin list before compilation.
+	// ------------------------------------------------------------------
+	const [compiled, setCompiled] = useState<{
+		readonly runtime: StudioRuntime;
+		readonly studioConfig: StudioConfig;
+		readonly ctx: StudioPluginContext;
+	} | null>(null);
 
-  // Dynamically-loaded AnvilKit chrome assets. Stays `null` for
-  // `chrome="puck"`, keeping the preset + layout out of the
-  // `<Studio>` entry chunk. The compile effect populates it during
-  // the same async setup pass that loads `createStudioConfig`, so
-  // host apps see a single render gap for both.
-  const [chromeAssets, setChromeAssets] = useState<{
-    readonly studioOverrides: Partial<PuckOverrides>;
-    readonly StudioLayout: ComponentType<unknown>;
-  } | null>(null);
+	// Dynamically-loaded AnvilKit chrome assets. Stays `null` for
+	// `chrome="puck"`, keeping the preset + layout out of the
+	// `<Studio>` entry chunk. The compile effect populates it during
+	// the same async setup pass that loads `createStudioConfig`, so
+	// host apps see a single render gap for both.
+	const [chromeAssets, setChromeAssets] = useState<{
+		readonly studioOverrides: Partial<PuckOverrides>;
+		readonly StudioLayout: ComponentType<unknown>;
+	} | null>(null);
 
-  // Structural fingerprint of `plugins` + `config` so the compile
-  // effect does not thrash when a parent re-render hands us a new
-  // array/object reference with identical contents — the idiomatic
-  // `<Studio plugins={[...]} config={{ ... }} />` pattern in Next
-  // App Router and Puck's own examples otherwise re-runs
-  // compilePlugins() on every navigation event.
-  //
-  // The hash is stable across renders: two arrays containing the
-  // same plugin meta hash to the same string, and
-  // `JSON.stringify(config)` is order-sensitive only at the key
-  // level, not reference level. Plugin objects that cannot be
-  // structurally fingerprinted (functions captured in closures) fall
-  // through to a per-plugin identity marker so the hash still
-  // changes when the plugin array is genuinely different.
-  const pluginsFingerprint = useMemo(
-    () => fingerprintPlugins(plugins),
-    [plugins],
-  );
-  const configFingerprint = useMemo(() => fingerprintConfig(config), [config]);
+	// Structural fingerprint of `plugins` + `config` so the compile
+	// effect does not thrash when a parent re-render hands us a new
+	// array/object reference with identical contents — the idiomatic
+	// `<Studio plugins={[...]} config={{ ... }} />` pattern in Next
+	// App Router and Puck's own examples otherwise re-runs
+	// compilePlugins() on every navigation event.
+	//
+	// The hash is stable across renders: two arrays containing the
+	// same plugin meta hash to the same string, and
+	// `JSON.stringify(config)` is order-sensitive only at the key
+	// level, not reference level. Plugin objects that cannot be
+	// structurally fingerprinted (functions captured in closures) fall
+	// through to a per-plugin identity marker so the hash still
+	// changes when the plugin array is genuinely different.
+	const pluginsFingerprint = useMemo(
+		() => fingerprintPlugins(plugins),
+		[plugins],
+	);
+	const configFingerprint = useMemo(() => fingerprintConfig(config), [config]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime.
-  useEffect(() => {
-    let cancelled = false;
-    const basePlugins = plugins ?? [];
+	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime.
+	useEffect(() => {
+		let cancelled = false;
+		const basePlugins = plugins ?? [];
 
-    async function setup(): Promise<void> {
-      // Dynamic import moves `createStudioConfig` (and therefore
-      // all of Zod) into an async chunk. The entry bundle that
-      // ships `{ Studio }` stays under the core-015 25 KB gzipped
-      // budget because of this one indirection.
-      const { createStudioConfig } = await import("../../config/create-config");
-      if (cancelled) {
-        return;
-      }
-      const studioConfig = createStudioConfig(config);
+		async function setup(): Promise<void> {
+			// Dynamic import moves `createStudioConfig` (and therefore
+			// all of Zod) into an async chunk. The entry bundle that
+			// ships `{ Studio }` stays under the core-015 25 KB gzipped
+			// budget because of this one indirection.
+			const { createStudioConfig } = await import("@/config/create-config");
+			if (cancelled) {
+				return;
+			}
+			const studioConfig = createStudioConfig(config);
 
-      // AnvilKit chrome assets — preset + layout — load as
-      // separate async chunks. The `chrome="puck"` path skips
-      // both imports entirely so the entry bundle for hosts that
-      // pin to the legacy chrome stays under budget.
-      let nextChromeAssets: typeof chromeAssets = null;
-      if (isAnvilkit) {
-        const [presetMod, layoutMod] = await Promise.all([
-          import("../overrides/preset"),
-          import("../studio/layout/StudioLayout"),
-        ]);
-        if (cancelled) {
-          return;
-        }
-        nextChromeAssets = {
-          studioOverrides: presetMod.studioOverrides,
-          StudioLayout: layoutMod.StudioLayout as ComponentType<unknown>,
-        };
-      }
+			// AnvilKit chrome assets — preset + layout — load as
+			// separate async chunks. The `chrome="puck"` path skips
+			// both imports entirely so the entry bundle for hosts that
+			// pin to the legacy chrome stays under budget.
+			let nextChromeAssets: typeof chromeAssets = null;
+			if (isAnvilkit) {
+				const [presetMod, layoutMod] = await Promise.all([
+					import("@/overrides/preset"),
+					import("@/layout/StudioLayout"),
+				]);
+				if (cancelled) {
+					return;
+				}
+				nextChromeAssets = {
+					studioOverrides: presetMod.studioOverrides,
+					StudioLayout: layoutMod.StudioLayout as ComponentType<unknown>,
+				};
+			}
 
-      let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] = basePlugins;
-      if (aiHost !== undefined) {
-        // Dynamic import keeps the adapter tree-shakable: apps
-        // that never pass `aiHost` do not bundle this module.
-        const { aiHostAdapter } = await import("../../compat/ai-host-adapter");
-        if (cancelled) {
-          return;
-        }
-        resolvedPlugins = [aiHostAdapter({ aiHost }), ...basePlugins];
-      }
+			let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] = basePlugins;
+			if (aiHost !== undefined) {
+				// Dynamic import keeps the adapter tree-shakable: apps
+				// that never pass `aiHost` do not bundle this module.
+				const { aiHostAdapter } = await import("@/compat/ai-host-adapter");
+				if (cancelled) {
+					return;
+				}
+				resolvedPlugins = [aiHostAdapter({ aiHost }), ...basePlugins];
+			}
 
-      // Build the plugin context against the freshly resolved
-      // `studioConfig` so plugins see the final merged value.
-      // `dataRef` and `puckApiRef` live outside the closure, so
-      // the accessors here stay stable even though `ctx` itself
-      // is rebuilt whenever the config changes.
-      const ctx: StudioPluginContext = {
-        getData: () => dataRef.current,
-        getPuckApi: () => {
-          const snapshot = puckApiRef.current;
-          if (snapshot === null) {
-            throw new Error(PUCK_API_UNBOUND_MESSAGE);
-          }
-          return snapshot() as ReturnType<StudioPluginContext["getPuckApi"]>;
-        },
-        studioConfig,
-        log: (level, message, meta) => {
-          // Cheap console passthrough. A host-provided logger
-          // is a later feature — route every severity to its
-          // matching `console` method so plugin authors can
-          // still observe emit output during development.
-          // Meta is redacted first so a plugin that passes an
-          // auth token or user prompt through `ctx.log(...)`
-          // doesn't trivially leak it into the browser console.
-          const method =
-            level === "error"
-              ? "error"
-              : level === "warn"
-                ? "warn"
-                : level === "debug"
-                  ? "debug"
-                  : "info";
-          console[method](
-            `[studio] ${message}`,
-            meta === undefined ? {} : redactLogMeta(meta),
-          );
-        },
-        emit: () => {
-          // The plugin-to-plugin event bus is scoped to a
-          // later milestone (architecture §12). For now,
-          // `emit` is a silent no-op so plugins that call it
-          // at lifecycle time do not crash.
-        },
-        registerAssetResolver: () => {
-          // `compilePlugins()` passes plugins a wrapper context with
-          // a runtime-backed collector, keeping this base context
-          // immutable for the rest of the Studio shell.
-        },
-        registerInsertSection: (section) =>
-          sidebarRegistryStore.getState().registerInsertSection(section),
-        registerLayerQuickAdd: (item) =>
-          sidebarRegistryStore.getState().registerLayerQuickAdd(item),
-        registerAssetSource: (source) =>
-          sidebarRegistryStore.getState().registerAssetSource(source),
-        registerAssetAction: (action) =>
-          sidebarRegistryStore.getState().registerAssetAction(action),
-        registerCopySnippetPack: (pack) =>
-          sidebarRegistryStore.getState().registerCopySnippetPack(pack),
-      };
+			// Build the plugin context against the freshly resolved
+			// `studioConfig` so plugins see the final merged value.
+			// `dataRef` and `puckApiRef` live outside the closure, so
+			// the accessors here stay stable even though `ctx` itself
+			// is rebuilt whenever the config changes.
+			const ctx: StudioPluginContext = {
+				getData: () => dataRef.current,
+				getPuckApi: () => {
+					const snapshot = puckApiRef.current;
+					if (snapshot === null) {
+						throw new Error(PUCK_API_UNBOUND_MESSAGE);
+					}
+					return snapshot() as ReturnType<StudioPluginContext["getPuckApi"]>;
+				},
+				studioConfig,
+				log: (level, message, meta) => {
+					// Cheap console passthrough. A host-provided logger
+					// is a later feature — route every severity to its
+					// matching `console` method so plugin authors can
+					// still observe emit output during development.
+					// Meta is redacted first so a plugin that passes an
+					// auth token or user prompt through `ctx.log(...)`
+					// doesn't trivially leak it into the browser console.
+					const method =
+						level === "error"
+							? "error"
+							: level === "warn"
+								? "warn"
+								: level === "debug"
+									? "debug"
+									: "info";
+					console[method](
+						`[studio] ${message}`,
+						meta === undefined ? {} : redactLogMeta(meta),
+					);
+				},
+				emit: () => {
+					// The plugin-to-plugin event bus is scoped to a
+					// later milestone (architecture §12). For now,
+					// `emit` is a silent no-op so plugins that call it
+					// at lifecycle time do not crash.
+				},
+				registerAssetResolver: () => {
+					// `compilePlugins()` passes plugins a wrapper context with
+					// a runtime-backed collector, keeping this base context
+					// immutable for the rest of the Studio shell.
+				},
+				registerInsertSection: (section) =>
+					sidebarRegistryStore.getState().registerInsertSection(section),
+				registerLayerQuickAdd: (item) =>
+					sidebarRegistryStore.getState().registerLayerQuickAdd(item),
+				registerAssetSource: (source) =>
+					sidebarRegistryStore.getState().registerAssetSource(source),
+				registerAssetAction: (action) =>
+					sidebarRegistryStore.getState().registerAssetAction(action),
+				registerCopySnippetPack: (pack) =>
+					sidebarRegistryStore.getState().registerCopySnippetPack(pack),
+			};
 
-      try {
-        const runtime = await compilePlugins(resolvedPlugins, ctx, {
-          lifecycle: { onDataChangeDebounceMs: DATA_CHANGE_DEBOUNCE_MS },
-        });
-        if (cancelled) {
-          return;
-        }
-        setCompiled({ runtime, studioConfig, ctx });
-        setChromeAssets(nextChromeAssets);
-      } catch (error) {
-        if (cancelled) {
-          // Suppress stale-setup logs — a later effect
-          // supersedes this one and logging here would be
-          // misleading.
-          return;
-        }
-        // Compilation errors are already typed
-        // `StudioPluginError` — log and leave `compiled` at
-        // `null` so the editor never mounts against a broken
-        // plugin set.
-        console.error("[studio] plugin compilation failed", error);
-      }
-    }
+			try {
+				const runtime = await compilePlugins(resolvedPlugins, ctx, {
+					lifecycle: { onDataChangeDebounceMs: DATA_CHANGE_DEBOUNCE_MS },
+				});
+				if (cancelled) {
+					return;
+				}
+				setCompiled({ runtime, studioConfig, ctx });
+				setChromeAssets(nextChromeAssets);
+			} catch (error) {
+				if (cancelled) {
+					// Suppress stale-setup logs — a later effect
+					// supersedes this one and logging here would be
+					// misleading.
+					return;
+				}
+				// Compilation errors are already typed
+				// `StudioPluginError` — log and leave `compiled` at
+				// `null` so the editor never mounts against a broken
+				// plugin set.
+				console.error("[studio] plugin compilation failed", error);
+			}
+		}
 
-    void setup();
-    return () => {
-      cancelled = true;
-    };
-  }, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit]);
+		void setup();
+		return () => {
+			cancelled = true;
+		};
+	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit]);
 
-  // ------------------------------------------------------------------
-  // 3. Populate the export store once the runtime is ready. Writing
-  //    through the store's setter is deliberate — the store exposes a
-  //    `setAvailableFormats` action that accepts a list, no reason to
-  //    go through `setState` directly.
-  //
-  //    Also seed the theme store from `studioConfig.theme.defaultMode`
-  //    so the config block is actually load-bearing — it was dead
-  //    prior to this wiring. Only applied when the persisted mode is
-  //    still at its `"system"` default: a user who has explicitly
-  //    picked a preference on a prior visit should not have their
-  //    choice silently overwritten by a host-set default.
-  // ------------------------------------------------------------------
-  useEffect(() => {
-    if (compiled === null) {
-      return;
-    }
-    useExportStore
-      .getState()
-      .setAvailableFormats([...compiled.runtime.exportFormats.keys()]);
+	// ------------------------------------------------------------------
+	// 3. Populate the export store once the runtime is ready. Writing
+	//    through the store's setter is deliberate — the store exposes a
+	//    `setAvailableFormats` action that accepts a list, no reason to
+	//    go through `setState` directly.
+	//
+	//    Also seed the theme store from `studioConfig.theme.defaultMode`
+	//    so the config block is actually load-bearing — it was dead
+	//    prior to this wiring. Only applied when the persisted mode is
+	//    still at its `"system"` default: a user who has explicitly
+	//    picked a preference on a prior visit should not have their
+	//    choice silently overwritten by a host-set default.
+	// ------------------------------------------------------------------
+	useEffect(() => {
+		if (compiled === null) {
+			return;
+		}
+		useExportStore
+			.getState()
+			.setAvailableFormats([...compiled.runtime.exportFormats.keys()]);
 
-    const theme = compiled.studioConfig.theme;
-    const currentMode = useThemeStore.getState().mode;
-    if (currentMode === "system" && theme.defaultMode !== "system") {
-      useThemeStore.getState().setMode(theme.defaultMode);
-    }
-  }, [compiled]);
+		const theme = compiled.studioConfig.theme;
+		const currentMode = useThemeStore.getState().mode;
+		if (currentMode === "system" && theme.defaultMode !== "system") {
+			useThemeStore.getState().setMode(theme.defaultMode);
+		}
+	}, [compiled]);
 
-  // ------------------------------------------------------------------
-  // 4. Fire `onInit` exactly once per compiled runtime. `useEffect`'s
-  //    dep array is `[compiled]`, so a remount with a new runtime
-  //    re-fires this correctly.
-  // ------------------------------------------------------------------
-  useEffect(() => {
-    if (compiled === null) {
-      return;
-    }
-    void compiled.runtime.lifecycle.emit("onInit", compiled.ctx);
-  }, [compiled]);
+	// ------------------------------------------------------------------
+	// 4. Fire `onInit` exactly once per compiled runtime. `useEffect`'s
+	//    dep array is `[compiled]`, so a remount with a new runtime
+	//    re-fires this correctly.
+	// ------------------------------------------------------------------
+	useEffect(() => {
+		if (compiled === null) {
+			return;
+		}
+		void compiled.runtime.lifecycle.emit("onInit", compiled.ctx);
+	}, [compiled]);
 
-  // ------------------------------------------------------------------
-  // 5. Unmount cleanup: fire `onDestroy` and reset the Core-owned
-  //    Zustand stores so a subsequent remount with a different plugin
-  //    set never surfaces the previous session's state. Kept as a
-  //    separate effect from step 4 so the cleanup closes over the
-  //    same runtime/ctx pair that fired `onInit`.
-  // ------------------------------------------------------------------
-  useEffect(() => {
-    if (compiled === null) {
-      return;
-    }
-    const { runtime, ctx } = compiled;
-    return () => {
-      void runtime.lifecycle.emit("onDestroy", ctx);
-      // Tear down the lifecycle manager so any pending
-      // `onDataChange` debounce timer does not fire after the
-      // host has dropped its reference to the runtime (which
-      // would run hooks against a stale ctx whose
-      // `getPuckApi()` now throws).
-      runtime.lifecycle.dispose();
-      useExportStore.getState().reset();
-      useAiStore.getState().reset();
-      // Theme is a user preference that persists across Studio
-      // sessions, so it intentionally survives runtime teardown.
-    };
-  }, [compiled]);
+	// ------------------------------------------------------------------
+	// 5. Unmount cleanup: fire `onDestroy` and reset the Core-owned
+	//    Zustand stores so a subsequent remount with a different plugin
+	//    set never surfaces the previous session's state. Kept as a
+	//    separate effect from step 4 so the cleanup closes over the
+	//    same runtime/ctx pair that fired `onInit`.
+	// ------------------------------------------------------------------
+	useEffect(() => {
+		if (compiled === null) {
+			return;
+		}
+		const { runtime, ctx } = compiled;
+		return () => {
+			void runtime.lifecycle.emit("onDestroy", ctx);
+			// Tear down the lifecycle manager so any pending
+			// `onDataChange` debounce timer does not fire after the
+			// host has dropped its reference to the runtime (which
+			// would run hooks against a stale ctx whose
+			// `getPuckApi()` now throws).
+			runtime.lifecycle.dispose();
+			useExportStore.getState().reset();
+			useAiStore.getState().reset();
+			// Theme is a user preference that persists across Studio
+			// sessions, so it intentionally survives runtime teardown.
+		};
+	}, [compiled]);
 
-  // ------------------------------------------------------------------
-  // 6. Compose overrides. `mergeOverrides` threads each plugin's
-  //    contribution through the previous one as `children`, so
-  //    multiple plugins touching the same key all run. Consumer
-  //    overrides are appended last → outermost wrapper.
-  // ------------------------------------------------------------------
-  const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
-    const base: Partial<PuckOverrides>[] = [];
-    // Default chrome preset is INNERMOST when `chrome="anvilkit"`
-    // — plugins can wrap and consumers can wrap further out.
-    // `chrome="puck"` skips the prepend, so the merge result is
-    // bit-for-bit what `<Studio>` produced before Phase 5.
-    if (isAnvilkit && chromeAssets !== null) {
-      base.push(chromeAssets.studioOverrides);
-    }
-    if (compiled !== null) {
-      base.push(...compiled.runtime.overrides);
-    }
-    if (consumerOverrides !== undefined) {
-      base.push(consumerOverrides);
-    }
+	// ------------------------------------------------------------------
+	// 6. Compose overrides. `mergeOverrides` threads each plugin's
+	//    contribution through the previous one as `children`, so
+	//    multiple plugins touching the same key all run. Consumer
+	//    overrides are appended last → outermost wrapper.
+	// ------------------------------------------------------------------
+	const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
+		const base: Partial<PuckOverrides>[] = [];
+		// Default chrome preset is INNERMOST when `chrome="anvilkit"`
+		// — plugins can wrap and consumers can wrap further out.
+		// `chrome="puck"` skips the prepend, so the merge result is
+		// bit-for-bit what `<Studio>` produced before Phase 5.
+		if (isAnvilkit && chromeAssets !== null) {
+			base.push(chromeAssets.studioOverrides);
+		}
+		if (compiled !== null) {
+			base.push(...compiled.runtime.overrides);
+		}
+		if (consumerOverrides !== undefined) {
+			base.push(consumerOverrides);
+		}
 
-    // Add the Puck-API binder as the outermost `puck` override
-    // so it gets a chance to run `useGetPuck()` inside the Puck
-    // subtree on every render. Done via one more entry in the
-    // merge so the binder composes with any consumer `puck`
-    // override instead of clobbering it.
-    base.push({
-      puck: ({ children }) => (
-        <PuckApiBinder apiRef={puckApiRef}>{children}</PuckApiBinder>
-      ),
-    });
+		// Add the Puck-API binder as the outermost `puck` override
+		// so it gets a chance to run `useGetPuck()` inside the Puck
+		// subtree on every render. Done via one more entry in the
+		// merge so the binder composes with any consumer `puck`
+		// override instead of clobbering it.
+		base.push({
+			puck: ({ children }) => (
+				<PuckApiBinder apiRef={puckApiRef}>{children}</PuckApiBinder>
+			),
+		});
 
-    return mergeOverrides(base);
-  }, [compiled, consumerOverrides, isAnvilkit, chromeAssets]);
+		return mergeOverrides(base);
+	}, [compiled, consumerOverrides, isAnvilkit, chromeAssets]);
 
-  // ------------------------------------------------------------------
-  // 7. Puck `onChange` / `onPublish` handlers.
-  //
-  //    Idiomatic usage passes inline arrows for these props, so each
-  //    parent render produces a new identity. Late-binding through
-  //    refs keeps the memoized handler identity stable across parent
-  //    re-renders → Puck does not see a fresh `onChange` prop on
-  //    every keystroke. We still want the latest closure to be
-  //    invoked, so the effect below mirrors the prop into the ref
-  //    on every render.
-  //
-  //    `useLayoutEffect` (not `useEffect`) so the refs are updated
-  //    synchronously after commit — before any child layout effects
-  //    fire and before browser paint. A passive `useEffect` runs
-  //    after paint, leaving a window where a child layout effect or
-  //    an immediate publish can read a stale closure.
-  // ------------------------------------------------------------------
-  const onChangeRef = useRef(onChange);
-  const onPublishRef = useRef(onPublish);
-  useLayoutEffect(() => {
-    onChangeRef.current = onChange;
-    onPublishRef.current = onPublish;
-  }, [onChange, onPublish]);
+	// ------------------------------------------------------------------
+	// 7. Puck `onChange` / `onPublish` handlers.
+	//
+	//    Idiomatic usage passes inline arrows for these props, so each
+	//    parent render produces a new identity. Late-binding through
+	//    refs keeps the memoized handler identity stable across parent
+	//    re-renders → Puck does not see a fresh `onChange` prop on
+	//    every keystroke. We still want the latest closure to be
+	//    invoked, so the effect below mirrors the prop into the ref
+	//    on every render.
+	//
+	//    `useLayoutEffect` (not `useEffect`) so the refs are updated
+	//    synchronously after commit — before any child layout effects
+	//    fire and before browser paint. A passive `useEffect` runs
+	//    after paint, leaving a window where a child layout effect or
+	//    an immediate publish can read a stale closure.
+	// ------------------------------------------------------------------
+	const onChangeRef = useRef(onChange);
+	const onPublishRef = useRef(onPublish);
+	useLayoutEffect(() => {
+		onChangeRef.current = onChange;
+		onPublishRef.current = onPublish;
+	}, [onChange, onPublish]);
 
-  const handleChange = useCallback(
-    (nextData: PuckData): void => {
-      dataRef.current = nextData;
-      if (compiled !== null) {
-        void compiled.runtime.lifecycle.emit(
-          "onDataChange",
-          compiled.ctx,
-          nextData,
-        );
-      }
-      onChangeRef.current?.(nextData);
-    },
-    [compiled],
-  );
+	const handleChange = useCallback(
+		(nextData: PuckData): void => {
+			dataRef.current = nextData;
+			if (compiled !== null) {
+				void compiled.runtime.lifecycle.emit(
+					"onDataChange",
+					compiled.ctx,
+					nextData,
+				);
+			}
+			onChangeRef.current?.(nextData);
+		},
+		[compiled],
+	);
 
-  // ------------------------------------------------------------------
-  // 8. Puck `onPublish` handler: sequential `onBeforePublish` →
-  //    consumer `onPublish` → fire-and-forget `onAfterPublish`. A
-  //    throw from any `onBeforePublish` hook aborts the publish —
-  //    this is the only lifecycle event with veto power.
-  // ------------------------------------------------------------------
-  const handlePublish = useCallback(
-    (nextData: PuckData): void => {
-      // Capture the consumer callback BEFORE the async
-      // `onBeforePublish` await. If the parent re-renders with a
-      // different `onPublish` while a hook is validating, reading
-      // `onPublishRef.current` after the await would call the
-      // newer handler — a race that surfaces as "publish ran
-      // against a function the user never associated with this
-      // publish event." Snapshotting here pins one publish
-      // operation to one consumer callback.
-      const consumerOnPublish = onPublishRef.current;
-      void (async () => {
-        if (compiled !== null) {
-          try {
-            await compiled.runtime.lifecycle.emit(
-              "onBeforePublish",
-              compiled.ctx,
-              nextData,
-            );
-          } catch (error) {
-            console.error("[studio] publish aborted by plugin:", error);
-            return;
-          }
-        }
+	// ------------------------------------------------------------------
+	// 8. Puck `onPublish` handler: sequential `onBeforePublish` →
+	//    consumer `onPublish` → fire-and-forget `onAfterPublish`. A
+	//    throw from any `onBeforePublish` hook aborts the publish —
+	//    this is the only lifecycle event with veto power.
+	// ------------------------------------------------------------------
+	const handlePublish = useCallback(
+		(nextData: PuckData): void => {
+			// Capture the consumer callback BEFORE the async
+			// `onBeforePublish` await. If the parent re-renders with a
+			// different `onPublish` while a hook is validating, reading
+			// `onPublishRef.current` after the await would call the
+			// newer handler — a race that surfaces as "publish ran
+			// against a function the user never associated with this
+			// publish event." Snapshotting here pins one publish
+			// operation to one consumer callback.
+			const consumerOnPublish = onPublishRef.current;
+			void (async () => {
+				if (compiled !== null) {
+					try {
+						await compiled.runtime.lifecycle.emit(
+							"onBeforePublish",
+							compiled.ctx,
+							nextData,
+						);
+					} catch (error) {
+						console.error("[studio] publish aborted by plugin:", error);
+						return;
+					}
+				}
 
-        try {
-          await consumerOnPublish?.(nextData);
-        } catch (error) {
-          console.error("[studio] consumer onPublish threw:", error);
-          // Deliberately do NOT fire `onAfterPublish` — an
-          // `onAfterPublish` following a consumer failure
-          // would imply a success the host never observed.
-          return;
-        }
+				try {
+					await consumerOnPublish?.(nextData);
+				} catch (error) {
+					console.error("[studio] consumer onPublish threw:", error);
+					// Deliberately do NOT fire `onAfterPublish` — an
+					// `onAfterPublish` following a consumer failure
+					// would imply a success the host never observed.
+					return;
+				}
 
-        if (compiled !== null) {
-          void compiled.runtime.lifecycle.emit(
-            "onAfterPublish",
-            compiled.ctx,
-            nextData,
-          );
-        }
-      })();
-    },
-    [compiled],
-  );
+				if (compiled !== null) {
+					void compiled.runtime.lifecycle.emit(
+						"onAfterPublish",
+						compiled.ctx,
+						nextData,
+					);
+				}
+			})();
+		},
+		[compiled],
+	);
 
-  // ------------------------------------------------------------------
-  // 9. Loading state. Deliberately `null` — no spinner, no fallback
-  //    UI. Host apps that want a branded loading state can render one
-  //    above `<Studio>` with their own state management.
-  // ------------------------------------------------------------------
-  if (compiled === null) {
-    return null;
-  }
-  // AnvilKit chrome must wait for the dynamically-loaded preset +
-  // layout to resolve before rendering, otherwise `<Puck>` would
-  // see plain Puck overrides without the chrome's `puck` slot
-  // wrapping `<StudioLayout>`. Hold the `null` render until both
-  // state slots agree.
-  if (isAnvilkit && chromeAssets === null) {
-    return null;
-  }
+	// ------------------------------------------------------------------
+	// 9. Loading state. Deliberately `null` — no spinner, no fallback
+	//    UI. Host apps that want a branded loading state can render one
+	//    above `<Studio>` with their own state management.
+	// ------------------------------------------------------------------
+	if (compiled === null) {
+		return null;
+	}
+	// AnvilKit chrome must wait for the dynamically-loaded preset +
+	// layout to resolve before rendering, otherwise `<Puck>` would
+	// see plain Puck overrides without the chrome's `puck` slot
+	// wrapping `<StudioLayout>`. Hold the `null` render until both
+	// state slots agree.
+	if (isAnvilkit && chromeAssets === null) {
+		return null;
+	}
 
-  const puckUi = isAnvilkit ? mergeStudioUi(ui) : ui;
-  const puckElement = (
-    <Puck
-      config={puckConfig}
-      data={data ?? EMPTY_DATA}
-      overrides={mergedOverrides}
-      onChange={handleChange}
-      onPublish={handlePublish}
-      plugins={[...compiled.runtime.puckPlugins]}
-      ui={puckUi}
-      onAction={onAction}
-      viewports={viewports}
-    />
-  );
+	const puckUi = isAnvilkit ? mergeStudioUi(ui) : ui;
+	const puckElement = (
+		<Puck
+			config={puckConfig}
+			data={data ?? EMPTY_DATA}
+			overrides={mergedOverrides}
+			onChange={handleChange}
+			onPublish={handlePublish}
+			plugins={[...compiled.runtime.puckPlugins]}
+			ui={puckUi}
+			onAction={onAction}
+			viewports={viewports}
+		/>
+	);
 
-  if (!isAnvilkit) {
-    // Bit-for-bit pre-Phase-5 output: same provider stack, same
-    // JSX nesting. The new `ui` / `onAction` / `viewports` props
-    // pass through to `<Puck>` only if the consumer set them.
-    return (
-      <StudioConfigProvider config={compiled.studioConfig}>
-        <StudioRuntimeProvider value={compiled.runtime}>
-          {puckElement}
-        </StudioRuntimeProvider>
-      </StudioConfigProvider>
-    );
-  }
+	if (!isAnvilkit) {
+		// Bit-for-bit pre-Phase-5 output: same provider stack, same
+		// JSX nesting. The new `ui` / `onAction` / `viewports` props
+		// pass through to `<Puck>` only if the consumer set them.
+		return (
+			<StudioConfigProvider config={compiled.studioConfig}>
+				<StudioRuntimeProvider value={compiled.runtime}>
+					{puckElement}
+				</StudioRuntimeProvider>
+			</StudioConfigProvider>
+		);
+	}
 
-  // AnvilKit chrome: layered providers around `<Puck>`. Order from
-  // outermost to innermost — config / runtime first so descendants
-  // can read them; plugin context next so chrome components
-  // (header actions, etc.) see the live ctx; per-instance editor
-  // stores last so the chrome reads its own state slice without
-  // reaching higher.
-  //
-  // `<ThemeSyncBoundary />` sits inside the editor stores so its
-  // effect can read the theme store (already a global) but writes
-  // the resolved value where every chrome surface picks it up.
-  // `_chromeAssets` is referenced so the linter does not flag it
-  // as an unused destructure — the actual `<StudioLayout>` mount
-  // happens inside the `puck` slot of `studioOverrides`.
-  const _chromeAssets = chromeAssets;
-  void _chromeAssets;
-  return (
-    <StudioConfigProvider config={compiled.studioConfig}>
-      <StudioRuntimeProvider value={compiled.runtime}>
-        <StudioPluginContextProvider value={compiled.ctx}>
-          <SidebarRegistryProvider value={sidebarRegistryStore}>
-            <StudioPagesSourceProvider value={pages}>
-              <EditorUiStoreProvider storeId={storeId}>
-                <EditorI18nStoreProvider messages={messages}>
-                  <ChromePropsProvider
-                    value={{
-                      onBack,
-                      onSaveDraft,
-                      isSavingDraft,
-                      lastSavedAt,
-                      isPublishing,
-                    }}
-                  >
-                    <TooltipProvider delay={200}>
-                      <ThemeSyncBoundary />
-                      <Toaster position="bottom-right" closeButton />
-                      {puckElement}
-                    </TooltipProvider>
-                  </ChromePropsProvider>
-                </EditorI18nStoreProvider>
-              </EditorUiStoreProvider>
-            </StudioPagesSourceProvider>
-          </SidebarRegistryProvider>
-        </StudioPluginContextProvider>
-      </StudioRuntimeProvider>
-    </StudioConfigProvider>
-  );
+	// AnvilKit chrome: layered providers around `<Puck>`. Order from
+	// outermost to innermost — config / runtime first so descendants
+	// can read them; plugin context next so chrome components
+	// (header actions, etc.) see the live ctx; per-instance editor
+	// stores last so the chrome reads its own state slice without
+	// reaching higher.
+	//
+	// `<ThemeSyncBoundary />` sits inside the editor stores so its
+	// effect can read the theme store (already a global) but writes
+	// the resolved value where every chrome surface picks it up.
+	// `_chromeAssets` is referenced so the linter does not flag it
+	// as an unused destructure — the actual `<StudioLayout>` mount
+	// happens inside the `puck` slot of `studioOverrides`.
+	const _chromeAssets = chromeAssets;
+	void _chromeAssets;
+	return (
+		<StudioConfigProvider config={compiled.studioConfig}>
+			<StudioRuntimeProvider value={compiled.runtime}>
+				<StudioPluginContextProvider value={compiled.ctx}>
+					<SidebarRegistryProvider value={sidebarRegistryStore}>
+						<StudioPagesSourceProvider value={pages}>
+							<EditorUiStoreProvider storeId={storeId}>
+								<EditorI18nStoreProvider messages={messages}>
+									<ChromePropsProvider
+										value={{
+											onBack,
+											onSaveDraft,
+											isSavingDraft,
+											lastSavedAt,
+											isPublishing,
+										}}
+									>
+										<TooltipProvider delay={200}>
+											<ThemeSyncBoundary />
+											<Toaster position="bottom-right" closeButton />
+											{puckElement}
+										</TooltipProvider>
+									</ChromePropsProvider>
+								</EditorI18nStoreProvider>
+							</EditorUiStoreProvider>
+						</StudioPagesSourceProvider>
+					</SidebarRegistryProvider>
+				</StudioPluginContextProvider>
+			</StudioRuntimeProvider>
+		</StudioConfigProvider>
+	);
 }

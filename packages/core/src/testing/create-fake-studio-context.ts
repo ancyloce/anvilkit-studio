@@ -1,10 +1,7 @@
-import type { Config as PuckConfig, PuckApi } from "@puckeditor/core";
+import type { PuckApi, Config as PuckConfig } from "@puckeditor/core";
 
-import { StudioConfigSchema } from "../config/schema.js";
-import type {
-	IRAssetResolver,
-	StudioPluginContext,
-} from "../types/plugin.js";
+import { StudioConfigSchema } from "@/config/schema.js";
+import type { IRAssetResolver, StudioPluginContext } from "@/types/plugin.js";
 
 /**
  * Shape returned by {@link createFakeStudioContext}. Extends the
@@ -12,16 +9,17 @@ import type {
  * functions so assertions can reach them without
  * `(ctx.log as ReturnType<typeof vi.fn>)` casts.
  */
-export interface FakeStudioContext<
-	UserConfig extends PuckConfig = PuckConfig,
-> extends StudioPluginContext<UserConfig> {
+export interface FakeStudioContext<UserConfig extends PuckConfig = PuckConfig>
+	extends StudioPluginContext<UserConfig> {
 	readonly _mocks: {
 		/** All `ctx.log()` calls in order. */
-		readonly logCalls: Array<readonly [
-			Parameters<StudioPluginContext["log"]>[0],
-			Parameters<StudioPluginContext["log"]>[1],
-			Parameters<StudioPluginContext["log"]>[2],
-		]>;
+		readonly logCalls: Array<
+			readonly [
+				Parameters<StudioPluginContext["log"]>[0],
+				Parameters<StudioPluginContext["log"]>[1],
+				Parameters<StudioPluginContext["log"]>[2],
+			]
+		>;
 		/** All `ctx.emit()` calls in order. */
 		readonly emitCalls: Array<readonly [string, unknown]>;
 		/** All asset resolvers registered through `ctx.registerAssetResolver()`. */
@@ -68,7 +66,8 @@ export function createFakeStudioContext<
 	const emitCalls: FakeStudioContext<UserConfig>["_mocks"]["emitCalls"] = [];
 	const assetResolvers: FakeStudioContext<UserConfig>["_mocks"]["assetResolvers"] =
 		[];
-	const dispatchCalls: FakeStudioContext<UserConfig>["_mocks"]["dispatchCalls"] = [];
+	const dispatchCalls: FakeStudioContext<UserConfig>["_mocks"]["dispatchCalls"] =
+		[];
 
 	const defaultPuckApi = {
 		dispatch: (...args: unknown[]) => {

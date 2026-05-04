@@ -20,11 +20,10 @@
 
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-
-import { StudioConfigError } from "../../runtime/errors.js";
-import type { StudioConfig } from "../../types/config.js";
-import { createStudioConfig } from "../create-config.js";
-import { StudioConfigSchema } from "../schema.js";
+import { createStudioConfig } from "@/config/create-config.js";
+import { StudioConfigSchema } from "@/config/schema.js";
+import { StudioConfigError } from "@/runtime/errors.js";
+import type { StudioConfig } from "@/types/config.js";
 
 describe("createStudioConfig — no-argument equivalence", () => {
 	it("returns the same shape as StudioConfigSchema.parse({}) with no args", () => {
@@ -228,10 +227,7 @@ describe("createStudioConfig — validation failures", () => {
 
 	it("attaches the underlying ZodError via the cause field", () => {
 		try {
-			createStudioConfig(
-				{ ai: { maxRetries: 999 } },
-				{ env: {} },
-			);
+			createStudioConfig({ ai: { maxRetries: 999 } }, { env: {} });
 			throw new Error("expected createStudioConfig to throw");
 		} catch (error) {
 			expect(error).toBeInstanceOf(StudioConfigError);

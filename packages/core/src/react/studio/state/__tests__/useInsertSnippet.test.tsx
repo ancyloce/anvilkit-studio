@@ -6,17 +6,19 @@
  */
 
 import { renderHook } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-
-import type { StudioCopySnippet } from "../../../../types/sidebar";
-import { EditorI18nStoreProvider } from "../editor-i18n-store";
-import { useInsertSnippet } from "../useInsertSnippet";
 import type { ReactNode } from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { EditorI18nStoreProvider } from "@/state/editor-i18n-store";
+import { useInsertSnippet } from "@/state/useInsertSnippet";
+import type { StudioCopySnippet } from "@/types/sidebar";
 
 const dispatch = vi.fn();
 const getSelectorForId = vi.fn();
 const mockSnapshot: {
-	selectedItem: { readonly type: string; readonly props: Record<string, unknown> } | null;
+	selectedItem: {
+		readonly type: string;
+		readonly props: Record<string, unknown>;
+	} | null;
 	dispatch: typeof dispatch;
 	getSelectorForId: typeof getSelectorForId;
 } = {
@@ -120,7 +122,10 @@ describe("useInsertSnippet", () => {
 			readonly type: string;
 			readonly destinationIndex: number;
 			readonly destinationZone: string;
-			readonly data: { readonly type: string; readonly props: Record<string, unknown> };
+			readonly data: {
+				readonly type: string;
+				readonly props: Record<string, unknown>;
+			};
 		};
 		expect(action.type).toBe("replace");
 		expect(action.destinationIndex).toBe(3);

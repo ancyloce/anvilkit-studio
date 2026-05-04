@@ -9,7 +9,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(cleanup);
 
-import { ArrayField } from "../ArrayField";
+import { ArrayField } from "@/overrides/fields/field-types/ArrayField";
 
 const FIELD = {
 	type: "array",

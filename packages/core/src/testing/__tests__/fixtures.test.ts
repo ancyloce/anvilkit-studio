@@ -4,8 +4,8 @@ import {
 	createFakePageIR,
 	createFakeStudioContext,
 	registerPlugin,
-} from "../index.js";
-import type { StudioPlugin } from "../../types/plugin.js";
+} from "@/testing/index.js";
+import type { StudioPlugin } from "@/types/plugin.js";
 
 describe("createFakeStudioContext", () => {
 	it("returns defaults matching StudioPluginContext shape", () => {
@@ -62,9 +62,7 @@ describe("createFakePageIR", () => {
 
 	it("accepts a custom children array", () => {
 		const ir = createFakePageIR({
-			children: [
-				{ id: "s-1", type: "Section", props: { title: "x" } },
-			],
+			children: [{ id: "s-1", type: "Section", props: { title: "x" } }],
 		});
 		expect(ir.root.children?.[0]?.type).toBe("Section");
 	});

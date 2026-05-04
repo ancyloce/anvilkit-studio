@@ -15,20 +15,19 @@ import {
 	ZoomOut,
 } from "lucide-react";
 import { type ReactNode, useCallback, useMemo } from "react";
-
-import { useMsg } from "../state/editor-i18n-store";
-import { useCanvasViewport, useCanvasZoom } from "../state/hooks";
-import { useStudioPagesSource } from "../context/pages-source";
-import { FULL_WIDTH_VIEWPORTS, type StudioViewport } from "../ui/index";
-import { Button } from "../primitives/button";
+import { useStudioPagesSource } from "@/context/pages-source";
+import { Button } from "@/primitives/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../primitives/dropdown-menu";
-import { Separator } from "../primitives/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/primitives/dropdown-menu";
+import { Separator } from "@/primitives/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-store";
+import { useCanvasViewport, useCanvasZoom } from "@/state/hooks";
+import { FULL_WIDTH_VIEWPORTS, type StudioViewport } from "@/studio/ui/index";
 
 const ZOOM_STEP = 0.1;
 const ZOOM_MIN = 0.5;
@@ -89,9 +88,7 @@ export function StudioToolbar(): ReactNode {
 							{activeViewport ? VIEWPORT_ICON[activeViewport.label] : null}
 							<span className="text-xs font-medium">
 								{activeViewport
-									? msg(
-											`studio.toolbar.viewport.${activeViewport.label}`,
-										)
+									? msg(`studio.toolbar.viewport.${activeViewport.label}`)
 									: msg("studio.actions.viewport")}
 							</span>
 							<ChevronDown

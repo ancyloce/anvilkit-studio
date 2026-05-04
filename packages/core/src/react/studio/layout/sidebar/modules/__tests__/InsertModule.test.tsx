@@ -7,18 +7,17 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
+import { InsertModule } from "@/layout/sidebar/modules/InsertModule";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-} from "../../../../state/index";
+	SidebarHeaderActionsProvider,
+	useSidebarHeaderActions,
+} from "@/layout/sidebar/SidebarHeaderActionsContext";
 import {
-  SidebarHeaderActionsProvider,
-  useSidebarHeaderActions,
-} from "../../SidebarHeaderActionsContext";
-import { InsertModule } from "../InsertModule";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+} from "@/state/index";
 
 vi.mock("@puckeditor/core", () => ({
 	Puck: { Components: () => <div data-testid="puck-components-mock" /> },
@@ -46,7 +45,9 @@ function Setup({ children }: { readonly children: ReactNode }): ReactElement {
 				storeId={`module-${Math.random().toString(36).slice(2)}`}
 			>
 				<SidebarRegistryProvider value={registry}>
-					<SidebarHeaderActionsProvider>{children}</SidebarHeaderActionsProvider>
+					<SidebarHeaderActionsProvider>
+						{children}
+					</SidebarHeaderActionsProvider>
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
 		</EditorI18nStoreProvider>
@@ -87,9 +88,9 @@ describe("InsertModule", () => {
 		// The `useEffect` that publishes runs after the first commit;
 		// rerendering the probe picks it up automatically.
 		await vi.waitFor(() => {
-			expect(
-				screen.getByTestId("header-actions-state").textContent,
-			).toBe("present");
+			expect(screen.getByTestId("header-actions-state").textContent).toBe(
+				"present",
+			);
 		});
 		// The published actions include the toggle's grid + list
 		// buttons (label resolves via i18n).
@@ -105,9 +106,9 @@ describe("InsertModule", () => {
 			</Setup>,
 		);
 		await vi.waitFor(() => {
-			expect(
-				screen.getByTestId("header-actions-state").textContent,
-			).toBe("present");
+			expect(screen.getByTestId("header-actions-state").textContent).toBe(
+				"present",
+			);
 		});
 		unmount();
 		// Probe survived the unmount? No — the entire tree is gone.

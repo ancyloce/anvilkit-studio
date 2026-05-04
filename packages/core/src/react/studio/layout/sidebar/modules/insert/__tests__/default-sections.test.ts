@@ -10,7 +10,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { DEFAULT_INSERT_SECTIONS } from "../default-sections";
+import { DEFAULT_INSERT_SECTIONS } from "@/layout/sidebar/modules/insert/default-sections";
 
 function findSection(id: string) {
 	const section = DEFAULT_INSERT_SECTIONS.find((s) => s.id === id);

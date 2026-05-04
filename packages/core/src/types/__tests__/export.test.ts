@@ -10,12 +10,12 @@ import { describe, expect, it } from "vitest";
 
 import type {
 	ExportFormatDefinition,
-	ExportOptions,
 	ExportFormatRunContext,
+	ExportOptions,
 	ExportResult,
 	ExportWarning,
-} from "../export.js";
-import type { PageIR } from "../ir.js";
+} from "@/types/export.js";
+import type { PageIR } from "@/types/ir.js";
 
 describe("ExportFormatDefinition type contract", () => {
 	it("accepts a minimal text-format definition", () => {

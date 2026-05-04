@@ -8,27 +8,35 @@
  * compatible selection), disabled rows carry `opacity-50`.
  */
 
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+	act,
+	cleanup,
+	fireEvent,
+	render,
+	screen,
+} from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
-import type { StudioCopySnippetPack } from "../../../../../../types/sidebar";
+import { TextModule } from "@/layout/sidebar/modules/TextModule";
+import { SidebarHeaderActionsProvider } from "@/layout/sidebar/SidebarHeaderActionsContext";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-  type SidebarRegistryStoreApi,
-} from "../../../../state/index";
-import { SidebarHeaderActionsProvider } from "../../SidebarHeaderActionsContext";
-import { TextModule } from "../TextModule";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+	type SidebarRegistryStoreApi,
+} from "@/state/index";
+import type { StudioCopySnippetPack } from "@/types/sidebar";
 
 const dispatch = vi.fn();
 const getSelectorForId = vi.fn();
 const toastWarning = vi.fn();
 
 const mockSnapshot: {
-	selectedItem: { readonly type: string; readonly props: Record<string, unknown> } | null;
+	selectedItem: {
+		readonly type: string;
+		readonly props: Record<string, unknown>;
+	} | null;
 	dispatch: typeof dispatch;
 	getSelectorForId: typeof getSelectorForId;
 } = {
@@ -41,7 +49,11 @@ vi.mock("@puckeditor/core", () => ({
 	useGetPuck: () => () => mockSnapshot,
 	createUsePuck:
 		() =>
-		<T,>(selector: (state: { readonly selectedItem: typeof mockSnapshot.selectedItem }) => T): T =>
+		<T,>(
+			selector: (state: {
+				readonly selectedItem: typeof mockSnapshot.selectedItem;
+			}) => T,
+		): T =>
 			selector({ selectedItem: mockSnapshot.selectedItem }),
 }));
 
@@ -80,7 +92,9 @@ function Setup({
 				storeId={`text-${Math.random().toString(36).slice(2)}`}
 			>
 				<SidebarRegistryProvider value={store}>
-					<SidebarHeaderActionsProvider>{children}</SidebarHeaderActionsProvider>
+					<SidebarHeaderActionsProvider>
+						{children}
+					</SidebarHeaderActionsProvider>
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
 		</EditorI18nStoreProvider>
@@ -173,7 +187,9 @@ describe("TextModule", () => {
 				</Setup>,
 			);
 
-			const searchInput = screen.getByTestId("ak-text-search") as HTMLInputElement;
+			const searchInput = screen.getByTestId(
+				"ak-text-search",
+			) as HTMLInputElement;
 			fireEvent.change(searchInput, { target: { value: "lipsum" } });
 
 			// Before debounce window elapses, snippets are still grouped.
@@ -204,7 +220,9 @@ describe("TextModule", () => {
 				</Setup>,
 			);
 
-			const searchInput = screen.getByTestId("ak-text-search") as HTMLInputElement;
+			const searchInput = screen.getByTestId(
+				"ak-text-search",
+			) as HTMLInputElement;
 			fireEvent.change(searchInput, { target: { value: "xyz-no-match" } });
 			act(() => {
 				vi.advanceTimersByTime(160);
@@ -235,7 +253,10 @@ describe("TextModule", () => {
 		expect(dispatch).toHaveBeenCalledTimes(1);
 		const action = dispatch.mock.calls[0]?.[0] as {
 			readonly type: string;
-			readonly data: { readonly type: string; readonly props: Record<string, unknown> };
+			readonly data: {
+				readonly type: string;
+				readonly props: Record<string, unknown>;
+			};
 		};
 		expect(action.type).toBe("replace");
 		expect(action.data.type).toBe("Text");

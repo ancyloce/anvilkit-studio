@@ -16,7 +16,7 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useThemeStore } from "../theme-store";
+import { useThemeStore } from "@/stores/theme-store";
 
 const STORAGE_KEY = "anvilkit-core-theme";
 

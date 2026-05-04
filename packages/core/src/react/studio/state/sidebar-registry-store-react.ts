@@ -8,9 +8,8 @@
  */
 
 import { useStore } from "zustand";
-
-import type { SidebarRegistryState } from "./sidebar-registry-store";
 import { useSidebarRegistryStoreApi } from "./SidebarRegistryProvider";
+import type { SidebarRegistryState } from "./sidebar-registry-store";
 
 /**
  * Generic selector hook for the sidebar registry. Throws when called

@@ -10,9 +10,8 @@
  */
 
 import { type ReactNode } from "react";
-
-import { useLayerSplitRatio } from "../../../state/hooks";
-import { Splitter } from "../shared/Splitter";
+import { Splitter } from "@/layout/sidebar/shared/Splitter";
+import { useLayerSplitRatio } from "@/state/hooks";
 import { LayersPanel } from "./layer/LayersPanel";
 import { PagesPanel } from "./layer/PagesPanel";
 

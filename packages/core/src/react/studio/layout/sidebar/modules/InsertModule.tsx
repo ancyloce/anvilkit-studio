@@ -16,7 +16,7 @@
 import { Puck } from "@puckeditor/core";
 import { type ReactNode, useMemo } from "react";
 
-import { useSetSidebarHeaderActions } from "../SidebarHeaderActionsContext";
+import { useSetSidebarHeaderActions } from "@/layout/sidebar/SidebarHeaderActionsContext";
 import { InsertSearchBar } from "./insert/InsertSearchBar";
 import { InsertViewToggle } from "./insert/InsertViewToggle";
 

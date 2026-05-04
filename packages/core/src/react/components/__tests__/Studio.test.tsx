@@ -39,15 +39,14 @@ import {
 	describe,
 	expect,
 	it,
-	vi,
 	type MockInstance,
+	vi,
 } from "vitest";
-
-import type { StudioPlugin, StudioPluginMeta } from "../../../types/plugin";
-import { useAiStore } from "../../stores/ai-store";
-import { useExportStore } from "../../stores/export-store";
-import { useStudio } from "../../hooks/use-studio";
-import { Studio } from "../Studio";
+import { Studio } from "@/components/Studio";
+import { useStudio } from "@/hooks/use-studio";
+import { useAiStore } from "@/stores/ai-store";
+import { useExportStore } from "@/stores/export-store";
+import type { StudioPlugin, StudioPluginMeta } from "@/types/plugin";
 
 // ----------------------------------------------------------------------
 // Mock `@puckeditor/core` with a minimal stand-in.
@@ -105,7 +104,10 @@ const EMPTY_DATA: PuckData = {
 	zones: {},
 };
 
-function buildMeta(id: string, overrides?: Partial<StudioPluginMeta>): StudioPluginMeta {
+function buildMeta(
+	id: string,
+	overrides?: Partial<StudioPluginMeta>,
+): StudioPluginMeta {
 	return {
 		id,
 		name: id,
@@ -132,7 +134,11 @@ afterEach(() => {
 describe("<Studio> — mount and compile", () => {
 	it("initially renders null, then mounts the (mocked) Puck once compile resolves", async () => {
 		const { container } = render(
-			<Studio puckConfig={MINIMAL_PUCK_CONFIG} data={EMPTY_DATA} plugins={[]} />,
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				data={EMPTY_DATA}
+				plugins={[]}
+			/>,
 		);
 
 		// First render is the pre-compile null state — our mock has
@@ -190,10 +196,7 @@ describe("<Studio> — export store population", () => {
 		};
 
 		const { container } = render(
-			<Studio
-				puckConfig={MINIMAL_PUCK_CONFIG}
-				plugins={[pluginWithFormat]}
-			/>,
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[pluginWithFormat]} />,
 		);
 
 		await waitFor(() => {
@@ -572,10 +575,7 @@ describe("<Studio> — unmount cleanup", () => {
 		};
 
 		const { unmount, container } = render(
-			<Studio
-				puckConfig={MINIMAL_PUCK_CONFIG}
-				plugins={[pluginWithFormat]}
-			/>,
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[pluginWithFormat]} />,
 		);
 
 		await waitFor(() => {
@@ -614,7 +614,7 @@ describe("<Studio> — legacy aiHost compat", () => {
 
 		// Reimport Studio AFTER resetting modules so its dynamic
 		// import of `ai-host-adapter` pulls the fresh instance.
-		const { Studio: FreshStudio } = await import("../Studio");
+		const { Studio: FreshStudio } = await import("@/components/Studio");
 
 		const { container, unmount } = render(
 			<FreshStudio
@@ -669,13 +669,9 @@ describe("<Studio> — chrome modes", () => {
 		expect((overrides as Record<string, unknown>).fieldTypes).toBeDefined();
 	});
 
-	it("`chrome=\"puck\"` skips the preset and matches the pre-Phase-5 override shape", async () => {
+	it('`chrome="puck"` skips the preset and matches the pre-Phase-5 override shape', async () => {
 		const { container } = render(
-			<Studio
-				puckConfig={MINIMAL_PUCK_CONFIG}
-				plugins={[]}
-				chrome="puck"
-			/>,
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[]} chrome="puck" />,
 		);
 		await waitFor(() => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
@@ -691,7 +687,7 @@ describe("<Studio> — chrome modes", () => {
 		expect((overrides as Record<string, unknown>).iframe).toBeUndefined();
 	});
 
-	it("`chrome=\"anvilkit\"` applies full-width-viewport defaults via mergeStudioUi", async () => {
+	it('`chrome="anvilkit"` applies full-width-viewport defaults via mergeStudioUi', async () => {
 		const { container } = render(
 			<Studio
 				puckConfig={MINIMAL_PUCK_CONFIG}
@@ -702,20 +698,20 @@ describe("<Studio> — chrome modes", () => {
 		await waitFor(() => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
 		});
-		const ui = (puckMockState.lastProps as { ui?: { viewports?: { options?: unknown[] } } }).ui;
+		const ui = (
+			puckMockState.lastProps as {
+				ui?: { viewports?: { options?: unknown[] } };
+			}
+		).ui;
 		expect(ui).toBeDefined();
 		expect(ui?.viewports?.options).toBeDefined();
 		// Default block ships 4 viewports (mobile / tablet / desktop / full).
-		expect((ui?.viewports?.options as unknown[])).toHaveLength(4);
+		expect(ui?.viewports?.options as unknown[]).toHaveLength(4);
 	});
 
-	it("`chrome=\"puck\"` does not apply ui defaults when consumer omitted them", async () => {
+	it('`chrome="puck"` does not apply ui defaults when consumer omitted them', async () => {
 		const { container } = render(
-			<Studio
-				puckConfig={MINIMAL_PUCK_CONFIG}
-				plugins={[]}
-				chrome="puck"
-			/>,
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[]} chrome="puck" />,
 		);
 		await waitFor(() => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
@@ -726,9 +722,7 @@ describe("<Studio> — chrome modes", () => {
 
 	it("forwards onAction and viewports to <Puck> in both chrome modes", async () => {
 		const onAction = vi.fn();
-		const viewports = [
-			{ label: "tiny", width: 200, height: "auto" as const },
-		];
+		const viewports = [{ label: "tiny", width: 200, height: "auto" as const }];
 		const { container } = render(
 			<Studio
 				puckConfig={MINIMAL_PUCK_CONFIG}
@@ -741,12 +735,12 @@ describe("<Studio> — chrome modes", () => {
 		await waitFor(() => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
 		});
-		expect(
-			(puckMockState.lastProps as { onAction?: unknown }).onAction,
-		).toBe(onAction);
-		expect(
-			(puckMockState.lastProps as { viewports?: unknown }).viewports,
-		).toBe(viewports);
+		expect((puckMockState.lastProps as { onAction?: unknown }).onAction).toBe(
+			onAction,
+		);
+		expect((puckMockState.lastProps as { viewports?: unknown }).viewports).toBe(
+			viewports,
+		);
 	});
 
 	it("composes [studioOverrides, plugin, consumer] in correct nesting order", async () => {
@@ -770,7 +764,13 @@ describe("<Studio> — chrome modes", () => {
 			},
 		};
 		const consumerOverrides = {
-			fieldLabel: ({ children, label }: { children?: ReactNode; label: string }) => (
+			fieldLabel: ({
+				children,
+				label,
+			}: {
+				children?: ReactNode;
+				label: string;
+			}) => (
 				<span data-layer="consumer">
 					[consumer:{label}]{children}[/consumer]
 				</span>
@@ -799,8 +799,8 @@ describe("<Studio> — chrome modes", () => {
 		const html = c2.innerHTML;
 		// Outermost layer should be consumer; plugin sits between
 		// consumer and the default preset's FieldLabel.
-		const consumerIdx = html.indexOf("data-layer=\"consumer\"");
-		const pluginIdx = html.indexOf("data-layer=\"plugin\"");
+		const consumerIdx = html.indexOf('data-layer="consumer"');
+		const pluginIdx = html.indexOf('data-layer="plugin"');
 		expect(consumerIdx).toBeGreaterThanOrEqual(0);
 		expect(pluginIdx).toBeGreaterThan(consumerIdx);
 		// Default preset's FieldLabel renders the label as text inside
@@ -856,11 +856,11 @@ describe("<Studio> — chrome modes", () => {
 		});
 		const { container: c2 } = render(composed as ReactElement);
 		const html = c2.innerHTML;
-		expect(html).toContain("data-layer=\"plugin-text\"");
-		expect(html).toContain("data-layer=\"consumer-text\"");
+		expect(html).toContain('data-layer="plugin-text"');
+		expect(html).toContain('data-layer="consumer-text"');
 		// Consumer (registered LAST) is outermost.
-		const consumerIdx = html.indexOf("data-layer=\"consumer-text\"");
-		const pluginIdx = html.indexOf("data-layer=\"plugin-text\"");
+		const consumerIdx = html.indexOf('data-layer="consumer-text"');
+		const pluginIdx = html.indexOf('data-layer="plugin-text"');
 		expect(consumerIdx).toBeLessThan(pluginIdx);
 	});
 });

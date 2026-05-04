@@ -9,13 +9,12 @@
 
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
 import { type ReactNode } from "react";
-
-import { cn } from "../../overrides/utils/cn";
-import { useMsg } from "../state/editor-i18n-store";
-import { Avatar, AvatarFallback } from "../primitives/avatar";
-import { Button } from "../primitives/button";
-import { Separator } from "../primitives/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
+import { Avatar, AvatarFallback } from "@/primitives/avatar";
+import { Button } from "@/primitives/button";
+import { Separator } from "@/primitives/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-store";
+import { cn } from "@/utils/cn";
 import { HeaderActions } from "./HeaderActions";
 
 export interface StudioHeaderProps {
@@ -81,10 +80,7 @@ export function StudioHeader({
 					<li className="truncate text-[var(--ak-studio-muted-fg)]">
 						{msg("studio.breadcrumb.project")}
 					</li>
-					<li
-						aria-hidden="true"
-						className="text-[var(--ak-studio-muted-fg)]"
-					>
+					<li aria-hidden="true" className="text-[var(--ak-studio-muted-fg)]">
 						<ChevronRight className="size-3.5" />
 					</li>
 					<li className="truncate font-medium text-[var(--ak-studio-fg)]">
@@ -168,30 +164,9 @@ function BrandMark(): ReactNode {
 			className="size-4"
 			aria-hidden="true"
 		>
-			<rect
-				x="4"
-				y="13"
-				width="3"
-				height="7"
-				rx="1"
-				fill="currentColor"
-			/>
-			<rect
-				x="10.5"
-				y="9"
-				width="3"
-				height="11"
-				rx="1"
-				fill="currentColor"
-			/>
-			<rect
-				x="17"
-				y="5"
-				width="3"
-				height="15"
-				rx="1"
-				fill="currentColor"
-			/>
+			<rect x="4" y="13" width="3" height="7" rx="1" fill="currentColor" />
+			<rect x="10.5" y="9" width="3" height="11" rx="1" fill="currentColor" />
+			<rect x="17" y="5" width="3" height="15" rx="1" fill="currentColor" />
 		</svg>
 	);
 }
@@ -209,10 +184,7 @@ function CollaboratorStack(): ReactNode {
 					className="size-7 ring-2 ring-[var(--ak-studio-bg)]"
 				>
 					<AvatarFallback
-						className={cn(
-							"text-[11px] font-semibold",
-							collab.tone,
-						)}
+						className={cn("text-[11px] font-semibold", collab.tone)}
 					>
 						{collab.initial}
 					</AvatarFallback>

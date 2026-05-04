@@ -12,29 +12,24 @@
  * + no-ops.
  */
 
-import { MoreHorizontal, Pencil, Trash2, Upload, Link } from "lucide-react";
+import { Link, MoreHorizontal, Pencil, Trash2, Upload } from "lucide-react";
 import { type ReactNode, useState } from "react";
-
-import type {
-  StudioAsset,
-  StudioAssetAction,
-  StudioAssetSource,
-} from "../../../../../../types/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../../primitives/dropdown-menu";
-import { Button } from "../../../../primitives/button";
 import { toast } from "sonner";
+import { Button } from "@/primitives/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../../../primitives/tooltip";
-import { useMsg } from "../../../../state/editor-i18n-store";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/primitives/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-store";
+import type {
+	StudioAsset,
+	StudioAssetAction,
+	StudioAssetSource,
+} from "@/types/sidebar";
 
 export interface AssetOverflowMenuProps {
 	readonly asset: StudioAsset;
@@ -58,14 +53,11 @@ export function AssetOverflowMenu({
 		if (copying) return;
 		setCopying(true);
 		try {
-			const url =
-				(await source.getUrl?.(asset.id)) ?? asset.url ?? "";
+			const url = (await source.getUrl?.(asset.id)) ?? asset.url ?? "";
 			await navigator.clipboard.writeText(url);
 			toast.success(msg("studio.module.image.actions.copyUrl"));
 		} catch (error) {
-			toast.error(
-				error instanceof Error ? error.message : String(error),
-			);
+			toast.error(error instanceof Error ? error.message : String(error));
 		} finally {
 			setCopying(false);
 		}
@@ -79,9 +71,7 @@ export function AssetOverflowMenu({
 		try {
 			await source.delete?.(asset.id);
 		} catch (error) {
-			toast.error(
-				error instanceof Error ? error.message : String(error),
-			);
+			toast.error(error instanceof Error ? error.message : String(error));
 		}
 	};
 

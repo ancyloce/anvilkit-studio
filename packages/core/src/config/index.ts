@@ -11,13 +11,13 @@
 // import site.
 
 export {
-	createStudioConfig,
 	type CreateStudioConfigOptions,
+	createStudioConfig,
 } from "./create-config.js";
 export { parseStudioEnv } from "./env-parser.js";
+export { useStudioConfig } from "./hooks.js";
 export {
 	StudioConfigProvider,
 	type StudioConfigProviderProps,
 } from "./provider.js";
-export { useStudioConfig } from "./hooks.js";
 export { StudioConfigSchema } from "./schema.js";

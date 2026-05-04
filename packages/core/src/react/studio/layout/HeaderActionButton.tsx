@@ -6,15 +6,16 @@
  */
 
 import * as Icons from "lucide-react";
-import { type ComponentType, type ReactNode, useCallback, useState } from "react";
-
-import type {
-  StudioHeaderAction,
-  StudioPluginContext,
-} from "../../../types/plugin";
-import { Button } from "../primitives/button";
-import { DropdownMenuItem } from "../primitives/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
+import {
+	type ComponentType,
+	type ReactNode,
+	useCallback,
+	useState,
+} from "react";
+import { Button } from "@/primitives/button";
+import { DropdownMenuItem } from "@/primitives/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
 
 type LucideIconComponent = ComponentType<{ className?: string }>;
 
@@ -83,12 +84,15 @@ export function HeaderActionButton({
 		);
 	}
 
-	const buttonVariant =
-		action.group === "primary" ? "default" : "ghost";
+	const buttonVariant = action.group === "primary" ? "default" : "ghost";
 	const button = (
 		<Button
 			variant={buttonVariant}
-			size={action.icon !== undefined && action.label.length === 0 ? "icon" : "default"}
+			size={
+				action.icon !== undefined && action.label.length === 0
+					? "icon"
+					: "default"
+			}
 			disabled={disabled}
 			onClick={() => {
 				void handleClick();

@@ -11,4 +11,4 @@
 // (acceptance criterion #6 of core-010), so a host app that never
 // imports `@anvilkit/core/compat` ships zero adapter bytes.
 
-export { aiHostAdapter, type AiHostAdapterOptions } from "./ai-host-adapter.js";
+export { type AiHostAdapterOptions, aiHostAdapter } from "./ai-host-adapter.js";

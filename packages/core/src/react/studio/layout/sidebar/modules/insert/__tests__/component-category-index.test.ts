@@ -8,11 +8,9 @@ import { describe, expect, it } from "vitest";
 import {
 	buildComponentCategoryIndex,
 	getComponentCategory,
-} from "../component-category-index";
+} from "@/layout/sidebar/modules/insert/component-category-index";
 
-function fakeConfig(
-	categories: PuckConfig["categories"],
-): PuckConfig {
+function fakeConfig(categories: PuckConfig["categories"]): PuckConfig {
 	return {
 		categories,
 		components: {},

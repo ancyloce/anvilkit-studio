@@ -5,10 +5,9 @@
 
 import { Puck } from "@puckeditor/core";
 import { type ReactNode, useMemo } from "react";
-
-import { FULL_WIDTH_VIEWPORTS } from "../ui/index";
-import { useCanvasViewport, useCanvasZoom } from "../state/hooks";
-import { cn } from "../../overrides/utils/cn";
+import { useCanvasViewport, useCanvasZoom } from "@/state/hooks";
+import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
+import { cn } from "@/utils/cn";
 
 export interface StudioViewportPreviewProps {
 	readonly className?: string;

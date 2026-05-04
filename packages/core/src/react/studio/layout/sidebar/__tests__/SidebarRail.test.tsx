@@ -9,12 +9,14 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { useStore } from "zustand";
-
 import {
-  EditorUiStoreProvider,
-  useEditorUiStoreApi,
-} from "../../../state/EditorUiStoreProvider";
-import { SidebarRail, type SidebarRailHandle } from "../SidebarRail";
+	SidebarRail,
+	type SidebarRailHandle,
+} from "@/layout/sidebar/SidebarRail";
+import {
+	EditorUiStoreProvider,
+	useEditorUiStoreApi,
+} from "@/state/EditorUiStoreProvider";
 
 afterEach(cleanup);
 

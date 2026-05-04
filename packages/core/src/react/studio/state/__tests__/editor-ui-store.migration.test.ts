@@ -15,7 +15,7 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { createEditorUiStore } from "../editor-ui-store";
+import { createEditorUiStore } from "@/state/editor-ui-store";
 
 interface PersistableStoreApi {
 	readonly persist: {
@@ -25,7 +25,10 @@ interface PersistableStoreApi {
 
 const STORE_ID_PREFIX = "anvilkit-ui-";
 
-function seedLegacyV1(storeId: string, persisted: Record<string, unknown>): void {
+function seedLegacyV1(
+	storeId: string,
+	persisted: Record<string, unknown>,
+): void {
 	window.localStorage.setItem(
 		`${STORE_ID_PREFIX}${storeId}`,
 		JSON.stringify({ state: persisted, version: 1 }),

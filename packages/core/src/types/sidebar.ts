@@ -14,8 +14,8 @@
  */
 
 import type {
-	ComponentData as PuckComponentData,
 	PuckApi,
+	ComponentData as PuckComponentData,
 } from "@puckeditor/core";
 
 // -----------------------------------------------------------------------------
@@ -129,7 +129,11 @@ export interface StudioAsset {
  * exactly one terminal `done` or `error` event.
  */
 export type StudioAssetUploadEvent =
-	| { readonly type: "progress"; readonly bytesUploaded: number; readonly bytesTotal: number }
+	| {
+			readonly type: "progress";
+			readonly bytesUploaded: number;
+			readonly bytesTotal: number;
+	  }
 	| { readonly type: "done"; readonly asset: StudioAsset }
 	| { readonly type: "error"; readonly message: string };
 

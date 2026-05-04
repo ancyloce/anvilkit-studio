@@ -13,21 +13,17 @@
 
 import { MoreHorizontal } from "lucide-react";
 import { type ReactNode, useMemo } from "react";
-
-import { composeHeaderActions } from "../../../runtime/header-actions";
-import type {
-  StudioHeaderAction,
-  StudioPluginContext,
-} from "../../../types/plugin";
-import { useStudioRuntime } from "../../hooks/use-studio";
-import { useStudioPluginContextOrNull } from "../context/plugin-context";
-import { Button } from "../primitives/button";
+import { useStudioPluginContextOrNull } from "@/context/plugin-context";
+import { useStudioRuntime } from "@/hooks/use-studio";
+import { Button } from "@/primitives/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../primitives/dropdown-menu";
-import { useMsg } from "../state/editor-i18n-store";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/primitives/dropdown-menu";
+import { composeHeaderActions } from "@/runtime/header-actions";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
 import { HeaderActionButton } from "./HeaderActionButton";
 
 export interface HeaderActionsProps {
@@ -51,9 +47,7 @@ interface GroupedActions {
 	readonly overflow: readonly StudioHeaderAction[];
 }
 
-function groupByGroup(
-	composed: readonly StudioHeaderAction[],
-): GroupedActions {
+function groupByGroup(composed: readonly StudioHeaderAction[]): GroupedActions {
 	const primary: StudioHeaderAction[] = [];
 	const secondary: StudioHeaderAction[] = [];
 	const overflow: StudioHeaderAction[] = [];

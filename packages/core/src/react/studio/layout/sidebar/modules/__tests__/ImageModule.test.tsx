@@ -10,17 +10,16 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
-import type { StudioAssetSource } from "../../../../../../types/sidebar";
+import { ImageModule } from "@/layout/sidebar/modules/ImageModule";
+import { SidebarHeaderActionsProvider } from "@/layout/sidebar/SidebarHeaderActionsContext";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-  type SidebarRegistryStoreApi,
-} from "../../../../state/index";
-import { SidebarHeaderActionsProvider } from "../../SidebarHeaderActionsContext";
-import { ImageModule } from "../ImageModule";
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+	type SidebarRegistryStoreApi,
+} from "@/state/index";
+import type { StudioAssetSource } from "@/types/sidebar";
 
 const dispatch = vi.fn();
 const mockPuckSnapshot = {
@@ -63,7 +62,9 @@ function Setup({
 				storeId={`image-${Math.random().toString(36).slice(2)}`}
 			>
 				<SidebarRegistryProvider value={store}>
-					<SidebarHeaderActionsProvider>{children}</SidebarHeaderActionsProvider>
+					<SidebarHeaderActionsProvider>
+						{children}
+					</SidebarHeaderActionsProvider>
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
 		</EditorI18nStoreProvider>
@@ -156,10 +157,12 @@ describe("ImageModule", () => {
 		expect(dispatch).toHaveBeenCalledTimes(1);
 		const action = dispatch.mock.calls[0]?.[0] as {
 			readonly type: string;
-			readonly data: { readonly content: ReadonlyArray<{
-				readonly type: string;
-				readonly props: Record<string, unknown>;
-			}> };
+			readonly data: {
+				readonly content: ReadonlyArray<{
+					readonly type: string;
+					readonly props: Record<string, unknown>;
+				}>;
+			};
 		};
 		expect(action.type).toBe("setData");
 		const inserted = action.data.content[0];

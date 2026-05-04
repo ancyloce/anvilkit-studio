@@ -25,8 +25,8 @@ import {
 	useState,
 } from "react";
 
-import { useMsg } from "../../../state/editor-i18n-store";
-import { useLayerSplitRatio } from "../../../state/hooks";
+import { useMsg } from "@/state/editor-i18n-store";
+import { useLayerSplitRatio } from "@/state/hooks";
 
 const KEY_NUDGE = 0.02;
 const RATIO_MIN = 0.15;
@@ -55,9 +55,8 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 	const iframePointerEventsRef = useRef<string>("");
 
 	const suppressIframePointer = useCallback(() => {
-		const iframe = document.querySelector<HTMLIFrameElement>(
-			PUCK_IFRAME_SELECTOR,
-		);
+		const iframe =
+			document.querySelector<HTMLIFrameElement>(PUCK_IFRAME_SELECTOR);
 		if (iframe === null) return;
 		iframeRef.current = iframe;
 		iframePointerEventsRef.current = iframe.style.pointerEvents;

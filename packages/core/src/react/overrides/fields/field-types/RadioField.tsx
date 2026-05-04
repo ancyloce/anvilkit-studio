@@ -29,41 +29,41 @@ function optionKey(value: OptionValue): string {
 }
 
 export function RadioField({
-  field,
-  value,
-  onChange,
-  readOnly,
+	field,
+	value,
+	onChange,
+	readOnly,
 }: FieldRendererProps<PuckRadioField, OptionValue | undefined>): ReactNode {
-  const selected = value === undefined ? [] : [optionKey(value)];
+	const selected = value === undefined ? [] : [optionKey(value)];
 
-  return (
-    <ToggleGroup
-      value={selected}
-      onValueChange={(next) => {
-        if (readOnly === true) return;
-        const key = next[0];
-        if (key === undefined) {
-          onChange(undefined as never);
-          return;
-        }
-        const match = field.options.find(
-          (opt) => optionKey(opt.value as OptionValue) === key,
-        );
-        onChange((match?.value ?? key) as never);
-      }}
-      disabled={readOnly}
-      variant="outline"
-    >
-      {field.options.map((option) => (
-        <ToggleGroupItem
-          key={optionKey(option.value as OptionValue)}
-          value={optionKey(option.value as OptionValue)}
-        >
-          {option.label}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
-  );
+	return (
+		<ToggleGroup
+			value={selected}
+			onValueChange={(next) => {
+				if (readOnly === true) return;
+				const key = next[0];
+				if (key === undefined) {
+					onChange(undefined as never);
+					return;
+				}
+				const match = field.options.find(
+					(opt) => optionKey(opt.value as OptionValue) === key,
+				);
+				onChange((match?.value ?? key) as never);
+			}}
+			disabled={readOnly}
+			variant="outline"
+		>
+			{field.options.map((option) => (
+				<ToggleGroupItem
+					key={optionKey(option.value as OptionValue)}
+					value={optionKey(option.value as OptionValue)}
+				>
+					{option.label}
+				</ToggleGroupItem>
+			))}
+		</ToggleGroup>
+	);
 }
 
 export type { FieldProps as PuckFieldProps };

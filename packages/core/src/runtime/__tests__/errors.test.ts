@@ -16,7 +16,7 @@ import {
 	StudioError,
 	StudioExportError,
 	StudioPluginError,
-} from "../errors.js";
+} from "@/runtime/errors.js";
 
 describe("StudioError taxonomy", () => {
 	it("StudioPluginError extends StudioError and Error", () => {

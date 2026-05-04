@@ -11,13 +11,10 @@
 
 import { type ReactNode } from "react";
 
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "../../../../primitives/toggle-group";
-import type { CopyCategoryFilter } from "../../../../state/editor-ui-store";
-import { useMsg } from "../../../../state/editor-i18n-store";
-import { useCopyCategoryFilter } from "../../../../state/hooks";
+import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { CopyCategoryFilter } from "@/state/editor-ui-store";
+import { useCopyCategoryFilter } from "@/state/hooks";
 
 export function TextFilterStrip(): ReactNode {
 	const msg = useMsg();

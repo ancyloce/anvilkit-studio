@@ -6,13 +6,12 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it } from "vitest";
-
+import { InsertViewToggle } from "@/layout/sidebar/modules/insert/InsertViewToggle";
 import {
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  useEditorUiStore,
-} from "../../../../../state/index";
-import { InsertViewToggle } from "../InsertViewToggle";
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	useEditorUiStore,
+} from "@/state/index";
 
 afterEach(cleanup);
 

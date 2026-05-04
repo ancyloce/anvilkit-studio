@@ -6,8 +6,8 @@
 // quality gates.
 
 export {
-	type StudioRuntime,
 	compilePlugins,
+	type StudioRuntime,
 } from "./compile-plugins.js";
 export { isPuckPlugin, isStudioPlugin } from "./detect-plugin.js";
 export {
@@ -17,17 +17,17 @@ export {
 	StudioPluginError,
 } from "./errors.js";
 export {
-	type ExportRegistry,
 	createExportRegistry,
+	type ExportRegistry,
 } from "./export-registry.js";
 export {
-	type StudioHeaderAction,
 	composeHeaderActions,
+	type StudioHeaderAction,
 } from "./header-actions.js";
 export {
+	createLifecycleManager,
 	type LifecycleEventName,
 	type LifecycleManager,
 	type LifecycleSubscriber,
-	createLifecycleManager,
 } from "./lifecycle-manager.js";
 export { CORE_VERSION } from "./version.js";

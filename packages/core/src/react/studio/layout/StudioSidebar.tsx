@@ -14,23 +14,23 @@
 
 import { type ReactNode, type RefObject, useCallback, useRef } from "react";
 
-import { useMsg } from "../state/editor-i18n-store";
-import { useActiveTab, useEditorUiStore } from "../state/hooks";
-import type { EditorTab } from "../state/editor-ui-store";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { EditorTab } from "@/state/editor-ui-store";
+import { useActiveTab, useEditorUiStore } from "@/state/hooks";
 import { ImageModule } from "./sidebar/modules/ImageModule";
 import { InsertModule } from "./sidebar/modules/InsertModule";
 import { LayerModule } from "./sidebar/modules/LayerModule";
 import { TextModule } from "./sidebar/modules/TextModule";
 import {
-  SidebarHeaderActionsProvider,
-  useSidebarHeaderActions,
+	SidebarHeaderActionsProvider,
+	useSidebarHeaderActions,
 } from "./sidebar/SidebarHeaderActionsContext";
-import {
-  SidebarRail,
-  type SidebarRailHandle,
-  railTabId,
-} from "./sidebar/SidebarRail";
 import { SidebarPanel } from "./sidebar/SidebarPanel";
+import {
+	railTabId,
+	SidebarRail,
+	type SidebarRailHandle,
+} from "./sidebar/SidebarRail";
 
 const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
 	insert: "studio.module.insert.name",

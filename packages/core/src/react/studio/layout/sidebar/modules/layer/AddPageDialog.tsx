@@ -9,26 +9,26 @@
 
 import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
-import { useStudioPagesSource } from "../../../../context/pages-source";
-import { Button } from "../../../../primitives/button";
-import { Checkbox } from "../../../../primitives/checkbox";
+import { useStudioPagesSource } from "@/context/pages-source";
+import { Button } from "@/primitives/button";
+import { Checkbox } from "@/primitives/checkbox";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../../../../primitives/dialog";
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/primitives/dialog";
 import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "../../../../primitives/field";
-import { Input } from "../../../../primitives/input";
-import { useMsg } from "../../../../state/editor-i18n-store";
+	Field,
+	FieldContent,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "@/primitives/field";
+import { Input } from "@/primitives/input";
+import { useMsg } from "@/state/editor-i18n-store";
 
 export interface AddPageDialogProps {
 	readonly open: boolean;

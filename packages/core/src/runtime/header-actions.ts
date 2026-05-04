@@ -38,13 +38,13 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md | core-009}
  */
 
-import type { StudioHeaderAction } from "../types/plugin.js";
+import type { StudioHeaderAction } from "@/types/plugin.js";
 import { StudioPluginError } from "./errors.js";
 
 // Re-export the type so consumers that import from
 // `@anvilkit/core/runtime` can pull `StudioHeaderAction` and
 // `composeHeaderActions` from a single subpath.
-export type { StudioHeaderAction } from "../types/plugin.js";
+export type { StudioHeaderAction } from "@/types/plugin.js";
 
 /**
  * Numeric weight assigned to each header action group, used as the
@@ -54,10 +54,7 @@ export type { StudioHeaderAction } from "../types/plugin.js";
  * secondary < overflow` is locked into this table; changing it is
  * the only sanctioned way to alter global header ordering.
  */
-const GROUP_WEIGHT: Record<
-	NonNullable<StudioHeaderAction["group"]>,
-	number
-> = {
+const GROUP_WEIGHT: Record<NonNullable<StudioHeaderAction["group"]>, number> = {
 	primary: 0,
 	secondary: 1,
 	overflow: 2,
@@ -106,10 +103,7 @@ function assertUniqueIds(actions: readonly StudioHeaderAction[]): void {
  * `<` / `>` rather than `localeCompare` so the result is stable
  * across locales (and slightly cheaper).
  */
-function compareActions(
-	a: StudioHeaderAction,
-	b: StudioHeaderAction,
-): number {
+function compareActions(a: StudioHeaderAction, b: StudioHeaderAction): number {
 	const aGroup = GROUP_WEIGHT[a.group ?? DEFAULT_GROUP];
 	const bGroup = GROUP_WEIGHT[b.group ?? DEFAULT_GROUP];
 	if (aGroup !== bGroup) {

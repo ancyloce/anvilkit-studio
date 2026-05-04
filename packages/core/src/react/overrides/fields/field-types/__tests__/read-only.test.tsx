@@ -9,11 +9,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(cleanup);
 
-import { NumberField } from "../NumberField";
-import { RadioField } from "../RadioField";
-import { SelectField } from "../SelectField";
-import { TextareaField } from "../TextareaField";
-import { TextField } from "../TextField";
+import { NumberField } from "@/overrides/fields/field-types/NumberField";
+import { RadioField } from "@/overrides/fields/field-types/RadioField";
+import { SelectField } from "@/overrides/fields/field-types/SelectField";
+import { TextareaField } from "@/overrides/fields/field-types/TextareaField";
+import { TextField } from "@/overrides/fields/field-types/TextField";
 
 describe("read-only invariant", () => {
 	it("TextField does not call onChange when readOnly", () => {
@@ -65,46 +65,46 @@ describe("read-only invariant", () => {
 	});
 
 	it("SelectField does not call onChange when readOnly", () => {
-    const onChange = vi.fn();
-    render(
-      <SelectField
-        field={{
-          type: "select",
-          options: [
-            { label: "A", value: "a" },
-            { label: "B", value: "b" },
-          ],
-        }}
-        value="a"
-        onChange={onChange}
-        readOnly
-        name="s"
-      />,
-    );
-    // Trigger is disabled — clicking is a no-op and never opens the popup.
-    fireEvent.click(screen.getByText("A"));
-    expect(onChange).not.toHaveBeenCalled();
-  };);
+		const onChange = vi.fn();
+		render(
+			<SelectField
+				field={{
+					type: "select",
+					options: [
+						{ label: "A", value: "a" },
+						{ label: "B", value: "b" },
+					],
+				}}
+				value="a"
+				onChange={onChange}
+				readOnly
+				name="s"
+			/>,
+		);
+		// Trigger is disabled — clicking is a no-op and never opens the popup.
+		fireEvent.click(screen.getByText("A"));
+		expect(onChange).not.toHaveBeenCalled();
+	});
 
 	it("RadioField does not call onChange when readOnly", () => {
-    const onChange = vi.fn();
-    render(
-      <RadioField
-        field={{
-          type: "radio",
-          options: [
-            { label: "A", value: "a" },
-            { label: "B", value: "b" },
-          ],
-        }}
-        value="a"
-        onChange={onChange}
-        readOnly
-        name="r"
-      />,
-    );
-    // Disabled toggle buttons swallow click events.
-    fireEvent.click(screen.getByRole("button", { name: "B" }));
-    expect(onChange).not.toHaveBeenCalled();
-  };);
+		const onChange = vi.fn();
+		render(
+			<RadioField
+				field={{
+					type: "radio",
+					options: [
+						{ label: "A", value: "a" },
+						{ label: "B", value: "b" },
+					],
+				}}
+				value="a"
+				onChange={onChange}
+				readOnly
+				name="r"
+			/>,
+		);
+		// Disabled toggle buttons swallow click events.
+		fireEvent.click(screen.getByRole("button", { name: "B" }));
+		expect(onChange).not.toHaveBeenCalled();
+	});
 });

@@ -9,11 +9,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(cleanup);
 
-import { NumberField } from "../NumberField";
-import { RadioField } from "../RadioField";
-import { SelectField } from "../SelectField";
-import { TextareaField } from "../TextareaField";
-import { TextField } from "../TextField";
+import { NumberField } from "@/overrides/fields/field-types/NumberField";
+import { RadioField } from "@/overrides/fields/field-types/RadioField";
+import { SelectField } from "@/overrides/fields/field-types/SelectField";
+import { TextareaField } from "@/overrides/fields/field-types/TextareaField";
+import { TextField } from "@/overrides/fields/field-types/TextField";
 
 describe("TextField round-trip", () => {
 	it("emits the new string on change", () => {
@@ -85,26 +85,26 @@ describe("NumberField round-trip", () => {
 
 describe("SelectField round-trip", () => {
 	it("emits the selected option's value", async () => {
-    const onChange = vi.fn();
-    render(
-      <SelectField
-        field={{
-          type: "select",
-          options: [
-            { label: "One", value: "one" },
-            { label: "Two", value: "two" },
-          ],
-        }}
-        value="one"
-        onChange={onChange}
-        name="size"
-      />,
-    );
-    // Open the popup, then click "Two".
-    fireEvent.click(screen.getByText("One"));
-    fireEvent.click(await screen.findByText("Two"));
-    expect(onChange).toHaveBeenCalledWith("two");
-  });
+		const onChange = vi.fn();
+		render(
+			<SelectField
+				field={{
+					type: "select",
+					options: [
+						{ label: "One", value: "one" },
+						{ label: "Two", value: "two" },
+					],
+				}}
+				value="one"
+				onChange={onChange}
+				name="size"
+			/>,
+		);
+		// Open the popup, then click "Two".
+		fireEvent.click(screen.getByText("One"));
+		fireEvent.click(await screen.findByText("Two"));
+		expect(onChange).toHaveBeenCalledWith("two");
+	});
 });
 
 describe("RadioField round-trip", () => {

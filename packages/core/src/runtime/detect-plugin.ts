@@ -29,7 +29,7 @@
 
 import type { Plugin as PuckPlugin } from "@puckeditor/core";
 
-import type { StudioPlugin } from "../types/plugin.js";
+import type { StudioPlugin } from "@/types/plugin.js";
 
 /**
  * Narrow helper — true if `value` is a non-null, non-array object.

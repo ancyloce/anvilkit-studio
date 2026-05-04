@@ -8,7 +8,7 @@
  * sidebar guards against missing keys before dispatching.
  */
 
-import type { StudioAssetKind } from "../../../../../../types/sidebar";
+import type { StudioAssetKind } from "@/types/sidebar";
 
 export function kindToComponentName(kind: StudioAssetKind): string | null {
 	switch (kind) {

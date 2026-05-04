@@ -3,16 +3,21 @@
  * before the input value is committed to `drawerSearch` (PRD §5.4).
  */
 
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+	act,
+	cleanup,
+	fireEvent,
+	render,
+	screen,
+} from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-
+import { InsertSearchBar } from "@/layout/sidebar/modules/insert/InsertSearchBar";
 import {
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  useEditorUiStore,
-} from "../../../../../state/index";
-import { InsertSearchBar } from "../InsertSearchBar";
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	useEditorUiStore,
+} from "@/state/index";
 
 afterEach(() => {
 	cleanup();

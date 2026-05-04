@@ -2,11 +2,11 @@ import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../accordion";
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/primitives/accordion";
 
 afterEach(cleanup);
 
@@ -15,9 +15,7 @@ describe("Accordion", () => {
 		render(
 			<Accordion defaultValue={["one"]}>
 				<AccordionItem value="one">
-					<AccordionTrigger data-testid="trigger">
-						Section one
-					</AccordionTrigger>
+					<AccordionTrigger data-testid="trigger">Section one</AccordionTrigger>
 					<AccordionContent>
 						<p data-testid="panel">Body one</p>
 					</AccordionContent>

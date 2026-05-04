@@ -16,7 +16,7 @@ import {
 	useState,
 } from "react";
 
-import { useMsg } from "../../../../state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-store";
 
 export interface UploadDropZoneProps {
 	readonly onDrop: (files: readonly File[]) => void;

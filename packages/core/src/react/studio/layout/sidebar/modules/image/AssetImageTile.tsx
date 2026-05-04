@@ -4,9 +4,8 @@
  */
 
 import { type ReactNode } from "react";
-
-import type { StudioAsset } from "../../../../../../types/sidebar";
-import { Button } from "../../../../primitives/button";
+import { Button } from "@/primitives/button";
+import type { StudioAsset } from "@/types/sidebar";
 
 export interface AssetImageTileProps {
 	readonly asset: StudioAsset;

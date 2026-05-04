@@ -1,4 +1,4 @@
-import type { PageIR, PageIRNode } from "../types/ir.js";
+import type { PageIR, PageIRNode } from "@/types/ir.js";
 
 export interface CreateFakePageIROverrides {
 	/** Override the root id (default `"root"`). */
@@ -26,17 +26,15 @@ export function createFakePageIR(
 			id: overrides.rootId ?? "root",
 			type: "__root__",
 			props: {},
-			children:
-				overrides.children ?? [
-					{
-						id: "hero-1",
-						type: "Hero",
-						props: { headline: "Hello" },
-					},
-				],
+			children: overrides.children ?? [
+				{
+					id: "hero-1",
+					type: "Hero",
+					props: { headline: "Hello" },
+				},
+			],
 		},
 		assets: overrides.assets ?? [],
-		metadata:
-			overrides.metadata ?? { createdAt: new Date(0).toISOString() },
+		metadata: overrides.metadata ?? { createdAt: new Date(0).toISOString() },
 	};
 }

@@ -20,7 +20,7 @@
  * @see {@link file://./../../../../docs/decisions/003-core-templates-subpath.md | ADR 003}
  */
 
-import type { PageIR } from "../types/ir.js";
+import type { PageIR } from "@/types/ir.js";
 
 /**
  * A static preview image for a template — produced once per template

@@ -52,11 +52,11 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-011-config-runtime.md | core-011}
  */
 
-import { deepMerge, type DeepPartial } from "@anvilkit/utils";
+import { type DeepPartial, deepMerge } from "@anvilkit/utils";
 import { z } from "zod";
 
-import { StudioConfigError } from "../runtime/errors.js";
-import type { StudioConfig } from "../types/config.js";
+import { StudioConfigError } from "@/runtime/errors.js";
+import type { StudioConfig } from "@/types/config.js";
 import { parseStudioEnv } from "./env-parser.js";
 import { StudioConfigSchema } from "./schema.js";
 
@@ -179,10 +179,7 @@ export function createStudioConfig(
  */
 function formatZodIssues(error: z.ZodError): string {
 	const lines = error.issues.map((issue) => {
-		const path =
-			issue.path.length > 0
-				? renderZodPath(issue.path)
-				: "<root>";
+		const path = issue.path.length > 0 ? renderZodPath(issue.path) : "<root>";
 		return `  - ${path}: ${issue.message}`;
 	});
 	return `StudioConfig validation failed:\n${lines.join("\n")}`;
