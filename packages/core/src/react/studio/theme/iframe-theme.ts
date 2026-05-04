@@ -26,6 +26,8 @@ const TOKEN_BLOCK = `:root,
 	--ak-studio-accent: var(--accent);
 	--ak-studio-accent-fg: var(--accent-foreground);
 	--ak-studio-ring: var(--ring);
+	--ak-studio-rail-width: 44px;
+	--ak-studio-panel-width: 280px;
 	color: var(--ak-studio-fg);
 	background-color: var(--ak-studio-bg);
 }`;
