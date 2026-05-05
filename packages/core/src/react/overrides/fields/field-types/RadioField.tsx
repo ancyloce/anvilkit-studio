@@ -15,7 +15,10 @@ import type {
 } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
+import {
+  ToggleGroup,
+  Toggle,
+} from "@/primitives/animate-ui/components/base/toggle-group";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
@@ -39,41 +42,42 @@ export function RadioField({
 	const selected = value === undefined ? [] : [optionKey(value)];
 
 	return (
-		<FieldLabel
-			icon={field.labelIcon}
-			label={field.label ?? name}
-			type="radio"
-			el="div"
-			readOnly={readOnly}
-		>
-			<ToggleGroup
-				value={selected}
-				onValueChange={(next) => {
-					if (readOnly === true) return;
-					const key = next[0];
-					if (key === undefined) {
-						onChange(undefined as never);
-						return;
-					}
-					const match = field.options.find(
-						(opt) => optionKey(opt.value as OptionValue) === key,
-					);
-					onChange((match?.value ?? key) as never);
-				}}
-				disabled={readOnly}
-				variant="outline"
-			>
-				{field.options.map((option) => (
-					<ToggleGroupItem
-						key={optionKey(option.value as OptionValue)}
-						value={optionKey(option.value as OptionValue)}
-					>
-						{option.label}
-					</ToggleGroupItem>
-				))}
-			</ToggleGroup>
-		</FieldLabel>
-	);
+    <FieldLabel
+      icon={field.labelIcon}
+      label={field.label ?? name}
+      type="radio"
+      el="div"
+      readOnly={readOnly}
+    >
+      <ToggleGroup
+        value={selected}
+        onValueChange={(next) => {
+          if (readOnly === true) return;
+          const key = next[0];
+          if (key === undefined) {
+            onChange(undefined as never);
+            return;
+          }
+          const match = field.options.find(
+            (opt) => optionKey(opt.value as OptionValue) === key,
+          );
+          onChange((match?.value ?? key) as never);
+        }}
+        disabled={readOnly}
+        size="sm"
+        variant="outline"
+      >
+        {field.options.map((option) => (
+          <Toggle
+            key={optionKey(option.value as OptionValue)}
+            value={optionKey(option.value as OptionValue)}
+          >
+            {option.label}
+          </Toggle>
+        ))}
+      </ToggleGroup>
+    </FieldLabel>
+  );
 }
 
 export type { FieldProps as PuckFieldProps };

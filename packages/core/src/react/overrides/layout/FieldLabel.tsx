@@ -137,7 +137,7 @@ export function FieldLabel({
             type={type}
           />
         </FieldTitle>
-        {children}
+        <div className="flex flex-col">{children}</div>
       </Field>
     );
   }
@@ -152,7 +152,7 @@ export function FieldLabel({
           type={type}
         />
       </span>
-      {children}
+      <div className="flex flex-col">{children}</div>
     </PrimitiveFieldLabel>
   );
 }
