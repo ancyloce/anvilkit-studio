@@ -17,7 +17,7 @@
     "components": "@/primitives",
     "utils": "@/utils/cn",
     "ui": "@/primitives",
-    "lib": "@/primitives/utils",
+    "lib": "@/primitives/lib",
     "hooks": "@/primitives/hooks"
   },
   "registries": {
