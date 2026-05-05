@@ -9,6 +9,7 @@
 
 import { isValidElement, type ReactNode } from "react";
 
+import { Accordion } from "@/primitives/accordion";
 import { cn } from "@/utils/cn";
 
 export interface InsertTileListProps {
@@ -21,23 +22,20 @@ export function InsertTileList({
 	className,
 }: InsertTileListProps): ReactNode {
 	return (
-		<div
-			data-testid="ak-insert-tile-list"
-			className={cn("flex flex-col gap-0.5 p-1", className)}
-		>
-			{children.map((child, index) => {
-				const key = isValidElement(child)
-					? (child.key ?? `row-${index}`)
-					: `row-${index}`;
-				return (
-					<div
-						key={key}
-						className="flex min-h-9 items-center rounded-md px-1 text-sm text-[var(--ak-studio-fg)] transition-colors hover:bg-[var(--ak-studio-muted)]"
-					>
-						{child}
-					</div>
-				);
-			})}
-		</div>
-	);
+    <Accordion data-testid="ak-insert-tile-list" className={cn(className)}>
+      {children.map((child, index) => {
+        const key = isValidElement(child)
+          ? (child.key ?? `row-${index}`)
+          : `row-${index}`;
+        return (
+          <div
+            key={key}
+            className="flex min-h-9 items-center rounded-md px-1 text-sm text-[var(--ak-studio-fg)] transition-colors hover:bg-[var(--ak-studio-muted)]"
+          >
+            {child}
+          </div>
+        );
+      })}
+    </Accordion>
+  );
 }

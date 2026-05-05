@@ -26,47 +26,25 @@ export function InsertViewToggle(): ReactNode {
 	};
 
 	return (
-		<ToggleGroup
-			value={[mode]}
-			onValueChange={handleChange}
-			aria-label={msg("studio.module.insert.view.grid")}
-			size="sm"
-			spacing={1}
-		>
-			<Tooltip>
-				<TooltipTrigger
-					render={
-						<span className="inline-flex">
-							<ToggleGroupItem
-								value="grid"
-								aria-label={msg("studio.module.insert.view.grid")}
-							>
-								<LayoutGrid aria-hidden="true" />
-							</ToggleGroupItem>
-						</span>
-					}
-				/>
-				<TooltipContent side="bottom">
-					{msg("studio.module.insert.view.grid")}
-				</TooltipContent>
-			</Tooltip>
-			<Tooltip>
-				<TooltipTrigger
-					render={
-						<span className="inline-flex">
-							<ToggleGroupItem
-								value="list"
-								aria-label={msg("studio.module.insert.view.list")}
-							>
-								<List aria-hidden="true" />
-							</ToggleGroupItem>
-						</span>
-					}
-				/>
-				<TooltipContent side="bottom">
-					{msg("studio.module.insert.view.list")}
-				</TooltipContent>
-			</Tooltip>
-		</ToggleGroup>
-	);
+    <ToggleGroup
+      variant="outline"
+      value={[mode]}
+      onValueChange={handleChange}
+      aria-label={msg("studio.module.insert.view.grid")}
+      size="sm"
+    >
+      <ToggleGroupItem
+        value="grid"
+        aria-label={msg("studio.module.insert.view.grid")}
+      >
+        <LayoutGrid aria-hidden="true" />
+      </ToggleGroupItem>
+      <ToggleGroupItem
+        value="list"
+        aria-label={msg("studio.module.insert.view.list")}
+      >
+        <List aria-hidden="true" />
+      </ToggleGroupItem>
+    </ToggleGroup>
+  );
 }
