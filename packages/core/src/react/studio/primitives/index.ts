@@ -92,11 +92,11 @@ export { Skeleton } from "./skeleton";
 export { Toaster } from "./sonner";
 export {
 	Tabs,
-	TabsContent,
 	TabsList,
-	TabsTrigger,
-	tabsListVariants,
-} from "./tabs";
+	TabsTab,
+	TabsPanels,
+	TabsPanel,
+} from "./animate-ui/components/base/tabs";
 export { Textarea } from "./textarea";
 export { Toggle, toggleVariants } from "./toggle";
 export { ToggleGroup, ToggleGroupItem } from "./toggle-group";
