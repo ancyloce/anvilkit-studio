@@ -90,13 +90,7 @@ export { ScrollArea, ScrollBar } from "./scroll-area";
 export { Separator } from "./separator";
 export { Skeleton } from "./skeleton";
 export { Toaster } from "./sonner";
-export {
-	Tabs,
-	TabsList,
-	TabsTab,
-	TabsPanels,
-	TabsPanel,
-} from "./animate-ui/components/base/tabs";
+export { Tabs, TabsList, TabsPanel, TabsPanels, TabsTab } from "./tabs";
 export { Textarea } from "./textarea";
 export { Toggle, toggleVariants } from "./toggle";
 export { ToggleGroup, ToggleGroupItem } from "./toggle-group";

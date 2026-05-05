@@ -43,7 +43,7 @@ type HighlightContextType<T extends string> = {
 };
 
 const HighlightContext = React.createContext<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: animate-ui upstream
   HighlightContextType<any> | undefined
 >(undefined);
 
@@ -328,6 +328,7 @@ function Highlight<T extends React.ElementType = 'div'>({
           ? render(children)
           : render(
               React.Children.map(children, (child, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: animate-ui upstream uses index as the highlight item key
                 <HighlightItem key={index} className={props?.itemsClassName}>
                   {child}
                 </HighlightItem>
