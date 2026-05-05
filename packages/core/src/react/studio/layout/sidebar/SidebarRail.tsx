@@ -1,15 +1,21 @@
 /**
  * @file Vertical icon rail for the four sidebar modules (PRD §4.1).
  *
- * Renders one 44×44 px shadcn `Button` per module (`insert`, `layer`,
- * `image`, `text`) with the click-active-to-collapse semantics in
- * PRD §3.2: clicking an inactive icon switches modules and expands
- * the panel; clicking the *already-active* icon collapses the panel
- * without changing the active module; clicking any icon while
- * collapsed re-expands to that module.
+ * Built on the animate-ui `Tabs` primitive so role/ARIA, roving focus,
+ * and Arrow / Home / End keyboard navigation come from base-ui. The
+ * rail keeps the click-active-to-collapse semantics from PRD §3.2:
+ * clicking an inactive icon switches modules and expands the panel;
+ * clicking the *already-active* icon collapses the panel without
+ * changing the active module; clicking any icon while collapsed
+ * re-expands to that module.
  *
- * Roving-focus + Arrow / Home / End keyboard navigation per PRD §4.3
- * §12. The rail exposes an imperative `focusActive()` handle so the
+ * The collapse-on-active-click case relies on base-ui's prop merge
+ * order — our `onClick` fires before base-ui's, which short-circuits
+ * its `onTabActivation` for an already-active tab. The
+ * switch+expand case is handled in `onValueChange`, which only fires
+ * when the value actually changes.
+ *
+ * `focusActive()` is exposed on the imperative handle so the
  * `SidebarPanel`'s Esc handler can return focus to the active rail
  * tab on collapse.
  */
@@ -22,14 +28,13 @@ import {
 	Type as TypeIcon,
 } from "lucide-react";
 import {
-	forwardRef,
-	type KeyboardEvent,
-	type ReactNode,
-	useCallback,
-	useImperativeHandle,
-	useRef,
+  forwardRef,
+  type ReactNode,
+  useCallback,
+  useImperativeHandle,
+  useRef,
 } from "react";
-import { Button } from "@/primitives/button";
+import { Tabs, TabsList, TabsTab } from "@/primitives/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorTab } from "@/state/editor-ui-store";
@@ -81,109 +86,62 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
 			[activeTab],
 		);
 
-		const activate = useCallback(
-			(key: EditorTab) => {
-				if (drawerCollapsed) {
-					setActiveTab(key);
-					setDrawerCollapsed(false);
-					return;
-				}
-				if (key === activeTab) {
-					setDrawerCollapsed(true);
-					return;
-				}
-				setActiveTab(key);
-			},
-			[activeTab, drawerCollapsed, setActiveTab, setDrawerCollapsed],
-		);
-
-		const handleKeyDown = useCallback(
-			(event: KeyboardEvent<HTMLDivElement>) => {
-				const container = containerRef.current;
-				if (container === null) return;
-				const tabs = Array.from(
-					container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
-				);
-				if (tabs.length === 0) return;
-				const currentIndex = tabs.findIndex(
-					(el) => el === document.activeElement,
-				);
-				let nextIndex = currentIndex;
-				switch (event.key) {
-					case "ArrowDown":
-						nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % tabs.length;
-						break;
-					case "ArrowUp":
-						nextIndex =
-							currentIndex < 0
-								? tabs.length - 1
-								: (currentIndex - 1 + tabs.length) % tabs.length;
-						break;
-					case "Home":
-						nextIndex = 0;
-						break;
-					case "End":
-						nextIndex = tabs.length - 1;
-						break;
-					default:
-						return;
-				}
-				event.preventDefault();
-				tabs[nextIndex]?.focus();
-			},
-			[],
-		);
+		const handleValueChange = useCallback(
+      (next: EditorTab | null) => {
+        if (next == null) return;
+        setActiveTab(next);
+        setDrawerCollapsed(false);
+      },
+      [setActiveTab, setDrawerCollapsed],
+    );
 
 		return (
-			<div
-				className="flex h-full shrink-0 flex-col items-center gap-2 border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] py-2"
-				style={{ inlineSize: "var(--ak-studio-rail-width)" }}
-			>
-				<div
-					role="presentation"
-					aria-hidden="true"
-					className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
-				>
-					<RailBrandMark />
-				</div>
-				<div
-					ref={containerRef}
-					role="tablist"
-					aria-orientation="vertical"
-					onKeyDown={handleKeyDown}
-					className="flex flex-col items-center gap-1"
-				>
-					{RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => {
-						const selected = activeTab === key && !drawerCollapsed;
-						return (
-							<Tooltip key={key}>
-								<TooltipTrigger
-									render={
-										<span className="inline-flex">
-											<Button
-												id={railTabId(key)}
-												role="tab"
-												size="icon-lg"
-												variant={selected ? "secondary" : "ghost"}
-												className="size-11"
-												aria-controls={SIDEBAR_PANEL_ID}
-												aria-selected={selected}
-												aria-label={msg(labelKey)}
-												tabIndex={activeTab === key ? 0 : -1}
-												onClick={() => activate(key)}
-											>
-												<Icon aria-hidden="true" />
-											</Button>
-										</span>
-									}
-								/>
-								<TooltipContent side="right">{msg(labelKey)}</TooltipContent>
-							</Tooltip>
-						);
-					})}
-				</div>
-			</div>
-		);
+      <div
+        ref={containerRef}
+        className="flex h-full shrink-0 flex-col items-center gap-2 border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] py-2"
+        style={{ inlineSize: "var(--ak-studio-rail-width)" }}
+      >
+        <div
+          role="presentation"
+          aria-hidden="true"
+          className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+        >
+          <RailBrandMark />
+        </div>
+        <Tabs
+          orientation="vertical"
+          value={drawerCollapsed ? null : activeTab}
+          onValueChange={handleValueChange}
+          className="contents"
+        >
+          <TabsList className="flex h-fit w-fit flex-col items-center justify-start gap-2 rounded-none bg-transparent p-0 text-current">
+            {RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => (
+              <Tooltip key={key}>
+                <TooltipTrigger
+                  render={
+                    <TabsTab
+                      value={key}
+                      id={railTabId(key)}
+                      aria-controls={SIDEBAR_PANEL_ID}
+                      aria-label={msg(labelKey)}
+                      onClick={() => {
+                        if (key === activeTab && !drawerCollapsed) {
+                          setDrawerCollapsed(true);
+                        }
+                      }}
+                      className="p-2"
+                    >
+                      <Icon aria-hidden="true" />
+                    </TabsTab>
+                  }
+                />
+                <TooltipContent side="right">{msg(labelKey)}</TooltipContent>
+              </Tooltip>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+    );
 	},
 );
 
