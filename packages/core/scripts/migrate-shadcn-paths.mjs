@@ -14,6 +14,15 @@
  *
  * The script runs in three phases:
  *   1. Relocate the shadcn install directories into `primitives/`.
+ *      Each move is a recursive file-level merge: every file under
+ *      the source root is renamed into the matching path under the
+ *      destination, creating parents as needed and overwriting any
+ *      pre-existing file (the freshly installed shadcn copy is the
+ *      authoritative version we want to normalize). The source root
+ *      is removed once empty. This lets `shadcn add` be run
+ *      incrementally — each invocation drops a few new components
+ *      into the same staging dirs, and this script merges them in
+ *      without disturbing primitives already migrated by prior runs.
  *   2. Rewrite cross-references from `@/studio/{hooks,lib}/` to
  *      `@/primitives/{hooks,lib}/`.
  *   3. Normalize animate-ui upstream style — translate eslint-disable
@@ -130,12 +139,7 @@ async function exists(path) {
 	}
 }
 
-async function isEmptyDir(path) {
-	const entries = await readdir(path);
-	return entries.length === 0;
-}
-
-async function* walkSourceFiles(dir) {
+async function* walkAllFiles(dir) {
 	const entries = await readdir(dir, { withFileTypes: true });
 	for (const entry of entries) {
 		const full = join(dir, entry.name);
@@ -143,18 +147,34 @@ async function* walkSourceFiles(dir) {
 			if (entry.name === "node_modules" || entry.name === "dist") {
 				continue;
 			}
-			yield* walkSourceFiles(full);
+			yield* walkAllFiles(full);
 			continue;
 		}
-		if (!entry.isFile()) {
-			continue;
+		if (entry.isFile()) {
+			yield full;
 		}
+	}
+}
+
+async function* walkSourceFiles(dir) {
+	for await (const full of walkAllFiles(dir)) {
 		if (full.endsWith(".ts") || full.endsWith(".tsx")) {
 			yield full;
 		}
 	}
 }
 
+/**
+ * Recursively merge `src/<from>` into `src/<to>`. Each file is renamed
+ * into the matching path under the destination, creating parents as
+ * needed and overwriting any pre-existing destination file — the
+ * source side is the freshly installed shadcn copy, which is what we
+ * want to normalize. The source root is removed once drained.
+ *
+ * Returns `true` when at least one file was relocated, so the caller
+ * can decide whether subsequent passes (import rewrites, style
+ * normalization) have anything new to chew on.
+ */
 async function moveDir(from, to) {
 	const fromAbs = join(SRC, from);
 	const toAbs = join(SRC, to);
@@ -165,27 +185,61 @@ async function moveDir(from, to) {
 		return false;
 	}
 
-	if (await exists(toAbs)) {
-		if (!(await isEmptyDir(toAbs))) {
-			throw new Error(
-				`destination "src/${to}" already exists and is not empty — refusing to overwrite. Resolve manually or remove the destination first.`,
-			);
-		}
+	const sources = [];
+	for await (const filePath of walkAllFiles(fromAbs)) {
+		sources.push(filePath);
+	}
+
+	if (sources.length === 0) {
 		if (DRY_RUN) {
-			console.log(`  ✓ would remove empty destination src/${to}`);
+			console.log(`  ✓ would remove empty source src/${from}`);
 		} else {
-			await rm(toAbs, { recursive: true, force: true });
+			await rm(fromAbs, { recursive: true, force: true });
+			console.log(`  ✓ removed empty source src/${from}`);
+		}
+		return false;
+	}
+
+	let moved = 0;
+	let overwritten = 0;
+	for (const filePath of sources) {
+		const rel = relative(fromAbs, filePath);
+		const destPath = join(toAbs, rel);
+		const willOverwrite = await exists(destPath);
+		if (DRY_RUN) {
+			console.log(
+				`  ✓ would move src/${from}/${rel} → src/${to}/${rel}${
+					willOverwrite ? " (overwrite)" : ""
+				}`,
+			);
+		} else {
+			await mkdir(dirname(destPath), { recursive: true });
+			await rename(filePath, destPath);
+		}
+		moved += 1;
+		if (willOverwrite) {
+			overwritten += 1;
 		}
 	}
 
-	if (DRY_RUN) {
-		console.log(`  ✓ would move ${label}`);
-		return true;
+	if (!DRY_RUN) {
+		await rm(fromAbs, { recursive: true, force: true });
+		// Walk up and remove any source parents that are now empty
+		// (e.g. `src/components/` left behind after `animate-ui/`
+		// moved out). Stop at SRC so we never touch the src root.
+		let parent = dirname(fromAbs);
+		while (parent !== SRC && parent.startsWith(`${SRC}/`)) {
+			const entries = await readdir(parent);
+			if (entries.length > 0) {
+				break;
+			}
+			await rm(parent, { recursive: false, force: true });
+			parent = dirname(parent);
+		}
 	}
-
-	await mkdir(dirname(toAbs), { recursive: true });
-	await rename(fromAbs, toAbs);
-	console.log(`  ✓ moved ${label}`);
+	const verb = DRY_RUN ? "would merge" : "merged";
+	const suffix = overwritten > 0 ? ` (${overwritten} overwritten)` : "";
+	console.log(`  ✓ ${verb} ${moved} file(s) ${label}${suffix}`);
 	return true;
 }
 
