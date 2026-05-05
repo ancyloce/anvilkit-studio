@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * @file `migrate-shadcn-paths` — relocate files installed by the shadcn
- * CLI into the project's primitives tree.
+ * CLI into the project's primitives tree, then normalize known
+ * animate-ui authoring styles that violate this package's lint rules.
  *
  * The shadcn CLI joins each registry item's bare `target` onto the
  * configured `aliases.ui` root, which for animate-ui produces a
@@ -9,11 +10,21 @@
  * `hooks/` and `lib/` folders directly under `src/`. This package
  * keeps every primitive (and its co-located helpers) under
  * `src/react/studio/primitives/`, so each install needs a follow-up
- * move + import rewrite.
+ * move + import rewrite + style normalization.
  *
- * The script is idempotent: missing source directories are skipped,
- * and the import rewrites only fire on the legacy `@/studio/hooks/`
- * and `@/studio/lib/` aliases left behind by the shadcn installer.
+ * The script runs in three phases:
+ *   1. Relocate the shadcn install directories into `primitives/`.
+ *   2. Rewrite cross-references from `@/studio/{hooks,lib}/` to
+ *      `@/primitives/{hooks,lib}/`.
+ *   3. Normalize animate-ui upstream style — translate eslint-disable
+ *      pragmas to `// biome-ignore` (biome doesn't honor eslint
+ *      suppressions), mark known type-only imports under
+ *      `verbatimModuleSyntax: true`, and silence specific lint hits
+ *      that animate-ui ships unsuppressed.
+ *
+ * Every transform is idempotent: missing source directories are
+ * skipped, and each regex's replacement no longer matches its own
+ * pattern, so re-runs are safe.
  *
  * Usage:
  *   pnpm --filter @anvilkit/core migrate:shadcn-paths
@@ -52,6 +63,59 @@ const MOVES = [
 const IMPORT_REWRITES = [
 	[/(['"`])@\/studio\/hooks\//g, "$1@/primitives/hooks/"],
 	[/(['"`])@\/studio\/lib\//g, "$1@/primitives/lib/"],
+];
+
+/**
+ * animate-ui style normalizations applied across `src/` after the
+ * import rewrites. Each entry: `[regex, replacement, label]`.
+ *
+ * Categories:
+ *
+ *   1. **eslint → biome translation.** animate-ui upstream suppresses
+ *      lint hits with `// eslint-disable-next-line ...` comments that
+ *      biome doesn't honor. We rewrite those exact lines to the
+ *      equivalent `// biome-ignore lint/<rule>: animate-ui upstream`
+ *      pragma so the same suppression intent carries over.
+ *
+ *   2. **`verbatimModuleSyntax` type-only imports.** This package
+ *      ships with `verbatimModuleSyntax: true`, but animate-ui mixes
+ *      values and types in a single import. We mark the known
+ *      offenders (`WithAsChild`) as type-only.
+ *
+ *   3. **Un-suppressed lint hits.** A few violations ship without an
+ *      eslint pragma (e.g. `key={index}` inside `Highlight`). We
+ *      inject a targeted `// biome-ignore` line above the offending
+ *      JSX with matching indentation.
+ *
+ * Each replacement is structured so it cannot match its own output —
+ * re-running the script after a fresh `shadcn add` is safe.
+ */
+const ANIMATE_UI_NORMALIZATIONS = [
+	// 1. eslint pragmas → biome-ignore equivalents.
+	[
+		/^([\t ]*)\/\/ eslint-disable-next-line @typescript-eslint\/no-explicit-any\s*$/gm,
+		"$1// biome-ignore lint/suspicious/noExplicitAny: animate-ui upstream",
+		"eslint(no-explicit-any) → biome-ignore",
+	],
+	[
+		/^([\t ]*)\/\/ eslint-disable-next-line react-hooks\/exhaustive-deps\s*$/gm,
+		"$1// biome-ignore lint/correctness/useExhaustiveDependencies: animate-ui upstream uses caller-provided deps array",
+		"eslint(exhaustive-deps) → biome-ignore",
+	],
+	// 2. WithAsChild value/type split for `verbatimModuleSyntax`.
+	[
+		/import\s*\{\s*Slot,\s*WithAsChild\s*\}\s*from\s*(['"])@\/primitives\/animate-ui\/primitives\/animate\/slot\1/g,
+		"import { Slot, type WithAsChild } from $1@/primitives/animate-ui/primitives/animate/slot$1",
+		"WithAsChild → type-only import",
+	],
+	// 3. Un-suppressed `noArrayIndexKey` inside Highlight's
+	//    `React.Children.map`. Anchored to the upstream code shape so
+	//    we don't touch any other `key={index}` site.
+	[
+		/(React\.Children\.map\(children, \(child, index\) => \(\n)([\t ]+)(<HighlightItem key=\{index\})/g,
+		"$1$2// biome-ignore lint/suspicious/noArrayIndexKey: animate-ui upstream uses index as the highlight item key\n$2$3",
+		"HighlightItem key={index} → biome-ignore",
+	],
 ];
 
 async function exists(path) {
@@ -147,6 +211,34 @@ async function rewriteImports(rootDir) {
 	return touched;
 }
 
+async function normalizeAnimateUiStyle(rootDir) {
+	let touched = 0;
+	for await (const file of walkSourceFiles(rootDir)) {
+		const original = await readFile(file, "utf8");
+		let next = original;
+		const labels = [];
+		for (const [pattern, replacement, label] of ANIMATE_UI_NORMALIZATIONS) {
+			const before = next;
+			next = next.replace(pattern, replacement);
+			if (next !== before) {
+				labels.push(label);
+			}
+		}
+		if (next === original) {
+			continue;
+		}
+		const detail = `${relative(PACKAGE_ROOT, file)} (${labels.join(", ")})`;
+		if (DRY_RUN) {
+			console.log(`  ✎ would normalize ${detail}`);
+		} else {
+			await writeFile(file, next, "utf8");
+			console.log(`  ✎ normalized ${detail}`);
+		}
+		touched += 1;
+	}
+	return touched;
+}
+
 async function main() {
 	console.log(
 		`migrate-shadcn-paths${DRY_RUN ? " (dry run)" : ""}: ${relative(process.cwd(), PACKAGE_ROOT) || "."}`,
@@ -168,15 +260,24 @@ async function main() {
 	}
 
 	console.log("Rewriting cross-references in src/:");
-	const touched = await rewriteImports(SRC);
-	if (touched === 0) {
+	const importsTouched = await rewriteImports(SRC);
+	if (importsTouched === 0) {
 		console.log("  • no references to rewrite");
 	}
 	console.log("");
+
+	console.log("Normalizing animate-ui upstream style in src/:");
+	const styleTouched = await normalizeAnimateUiStyle(SRC);
+	if (styleTouched === 0) {
+		console.log("  • nothing to normalize");
+	}
+	console.log("");
+
+	const total = importsTouched + styleTouched;
 	console.log(
 		DRY_RUN
-			? `Dry run complete. ${touched} file(s) would be updated.`
-			: `Done. Updated ${touched} file(s).`,
+			? `Dry run complete. ${total} file edit(s) would occur (${importsTouched} import, ${styleTouched} style).`
+			: `Done. ${total} file edit(s) applied (${importsTouched} import, ${styleTouched} style).`,
 	);
 }
 
