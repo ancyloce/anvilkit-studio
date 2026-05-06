@@ -75,18 +75,20 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 
 [data-ak-overlay] {
 	outline-style: solid;
-	outline-offset: -1px;
 	outline-width: 0;
 	outline-color: transparent;
+	outline-offset: 0;
 }
 
 [data-ak-overlay][data-overlay-state="hover"] {
 	outline-width: 1px;
+	outline-offset: -1px;
 	outline-color: color-mix(in oklab, var(--ak-studio-accent) 30%, transparent);
 }
 
 [data-ak-overlay][data-overlay-state="selected"] {
 	outline-width: 2px;
+	outline-offset: -2px;
 	outline-color: var(--ak-studio-accent);
 }
 
