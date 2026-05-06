@@ -153,3 +153,42 @@
 	[class*="_Layer-chevron_"] {
 	color: var(--ak-studio-layer-selection-fg);
 }
+
+/*
+ * Puck's `_DraggableComponent-overlay_` element ships its own
+ * azure outline (hover + selected). Our `ComponentOverlay`
+ * override now owns the selection visual via the brand accent,
+ * so suppress Puck's outline to avoid a double ring.
+ */
+[class*="_DraggableComponent-overlay_"] {
+	outline: 0 !important;
+	background: transparent !important;
+}
+
+/*
+ * Brand-accent selection ring, owned by the `ComponentOverlay`
+ * override (`[data-ak-overlay]`). Driven from CSS rather than
+ * Tailwind utilities so it works inside the canvas iframe even
+ * when Tailwind's per-utility output is not mirrored across
+ * documents.
+ */
+[data-ak-overlay] {
+	outline-style: solid;
+	outline-offset: -1px;
+	outline-width: 0;
+	outline-color: transparent;
+}
+
+[data-ak-overlay][data-overlay-state="hover"] {
+	outline-width: 1px;
+	outline-color: color-mix(
+		in oklab,
+		var(--ak-studio-accent) 30%,
+		transparent
+	);
+}
+
+[data-ak-overlay][data-overlay-state="selected"] {
+	outline-width: 2px;
+	outline-color: var(--ak-studio-accent);
+}

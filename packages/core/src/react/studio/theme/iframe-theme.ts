@@ -59,4 +59,35 @@ body {
 	max-width: none !important;
 }`;
 
-export const IFRAME_THEME_CSS = `${TOKEN_BLOCK}\n${IFRAME_RESET_BLOCK}`;
+/*
+ * Selection chrome for the `ComponentOverlay` override. Lives here
+ * (in the iframe-injected snapshot) as well as in `overrides/styles.css`
+ * (host-document) so the ring paints in both documents — Puck's canvas
+ * iframe does not inherit host-document utility classes.
+ *
+ * Also suppresses Puck's built-in azure outline on the inner
+ * `_DraggableComponent-overlay_` element so we don't get a double ring.
+ */
+const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
+	outline: 0 !important;
+	background: transparent !important;
+}
+
+[data-ak-overlay] {
+	outline-style: solid;
+	outline-offset: -1px;
+	outline-width: 0;
+	outline-color: transparent;
+}
+
+[data-ak-overlay][data-overlay-state="hover"] {
+	outline-width: 1px;
+	outline-color: color-mix(in oklab, var(--ak-studio-accent) 30%, transparent);
+}
+
+[data-ak-overlay][data-overlay-state="selected"] {
+	outline-width: 2px;
+	outline-color: var(--ak-studio-accent);
+}`;
+
+export const IFRAME_THEME_CSS = `${TOKEN_BLOCK}\n${IFRAME_RESET_BLOCK}\n${IFRAME_SELECTION_BLOCK}`;
