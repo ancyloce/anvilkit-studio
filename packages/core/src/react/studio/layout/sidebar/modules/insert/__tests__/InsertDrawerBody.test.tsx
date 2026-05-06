@@ -58,6 +58,11 @@ interface FakeDrawerItemProps {
 	readonly name: string;
 }
 
+interface FakePuckCategoryProps {
+	readonly title: string;
+	readonly children: ReactNode;
+}
+
 function FakeDrawerItem({ name }: FakeDrawerItemProps): ReactElement {
 	// Mirrors the shape Puck's `<Drawer.Item>` exposes — a button-ish
 	// element with a `name` prop the override reads. The DOM markup is
@@ -67,6 +72,18 @@ function FakeDrawerItem({ name }: FakeDrawerItemProps): ReactElement {
 		<button type="button" data-testid={`item-${name}`}>
 			{name}
 		</button>
+	);
+}
+
+function FakePuckCategory({
+	title,
+	children,
+}: FakePuckCategoryProps): ReactElement {
+	return (
+		<section data-testid={`category-${title}`}>
+			<h3>{title}</h3>
+			{children}
+		</section>
 	);
 }
 
@@ -99,16 +116,32 @@ function createSidebarRegistryStoreWithDefaults(): SidebarRegistryStoreApi {
 }
 
 function demoItems(): ReadonlyArray<ReactElement> {
-	// Returns an *array* (not a fragment) so `React.Children.forEach`
-	// inside `InsertDrawerBody` walks each item — fragments are
-	// surfaced as a single element by Children iteration, which would
-	// hide all five names behind a single un-named child.
+	// Direct leaf shape used by older Puck renders and by consumer
+	// overrides that hand Studio already-flattened drawer items.
 	return [
 		<FakeDrawerItem key="Navbar" name="Navbar" />,
 		<FakeDrawerItem key="Hero" name="Hero" />,
 		<FakeDrawerItem key="BentoGrid" name="BentoGrid" />,
 		<FakeDrawerItem key="Button" name="Button" />,
 		<FakeDrawerItem key="Input" name="Input" />,
+	];
+}
+
+function categorizedDemoItems(): ReadonlyArray<ReactElement> {
+	return [
+		<FakePuckCategory key="navigation" title="NAVIGATION">
+			<FakeDrawerItem name="Navbar" />
+		</FakePuckCategory>,
+		<FakePuckCategory key="marketing" title="MARKETING">
+			<FakeDrawerItem name="Hero" />
+			<FakeDrawerItem name="BentoGrid" />
+		</FakePuckCategory>,
+		<FakePuckCategory key="actions" title="ACTIONS">
+			<FakeDrawerItem name="Button" />
+		</FakePuckCategory>,
+		<FakePuckCategory key="forms" title="FORMS">
+			<FakeDrawerItem name="Input" />
+		</FakePuckCategory>,
 	];
 }
 
@@ -144,6 +177,34 @@ describe("InsertDrawerBody", () => {
 
 		// Team has zero matches → not rendered.
 		expect(screen.queryByTestId("ak-insert-section-team")).toBeNull();
+	});
+
+	it("flattens Puck category wrappers before rendering Studio sections", () => {
+		render(
+			<Providers>
+				<InsertDrawerBody>{categorizedDemoItems()}</InsertDrawerBody>
+			</Providers>,
+		);
+
+		expect(screen.queryByText("NAVIGATION")).toBeNull();
+		expect(screen.queryByText("MARKETING")).toBeNull();
+		expect(screen.queryByText("ACTIONS")).toBeNull();
+
+		const navigation = screen.getByTestId("ak-insert-section-navigation");
+		const top = screen.getByTestId("ak-insert-section-top");
+		const recommended = screen.getByTestId("ak-insert-section-recommended");
+
+		expect(
+			navigation.querySelector('[data-testid="item-Navbar"]'),
+		).toBeTruthy();
+		expect(top.querySelector('[data-testid="item-Hero"]')).toBeTruthy();
+		expect(top.querySelector('[data-testid="item-BentoGrid"]')).toBeTruthy();
+		expect(
+			recommended.querySelector('[data-testid="item-Button"]'),
+		).toBeTruthy();
+		expect(
+			recommended.querySelector('[data-testid="item-Input"]'),
+		).toBeTruthy();
 	});
 
 	it("renders the library-empty state when no Drawer.Items are provided", () => {

@@ -7,10 +7,17 @@
 
 export {
 	Accordion,
-	AccordionContent,
 	AccordionItem,
+	AccordionPanel,
 	AccordionTrigger,
 } from "./accordion";
+export { toggleVariants } from "./animate-ui/components/base/toggle";
+export { Toggle, ToggleGroup } from "./animate-ui/components/base/toggle-group";
+export {
+	Tooltip,
+	TooltipProvider,
+	TooltipTrigger,
+} from "./animate-ui/components/base/tooltip";
 export { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 export { Button, buttonVariants } from "./button";
 export { Checkbox } from "./checkbox";
@@ -92,10 +99,3 @@ export { Skeleton } from "./skeleton";
 export { Toaster } from "./sonner";
 export { Tabs, TabsList, TabsPanel, TabsPanels, TabsTab } from "./tabs";
 export { Textarea } from "./textarea";
-export { toggleVariants } from "./animate-ui/components/base/toggle";
-export { ToggleGroup,Toggle } from "./animate-ui/components/base/toggle-group";
-export {
-	Tooltip,
-	TooltipProvider,
-	TooltipTrigger,
-} from "./animate-ui/components/base/tooltip";

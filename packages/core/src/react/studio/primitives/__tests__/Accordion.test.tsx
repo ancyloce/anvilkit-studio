@@ -3,8 +3,8 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import {
 	Accordion,
-	AccordionContent,
 	AccordionItem,
+	AccordionPanel,
 	AccordionTrigger,
 } from "@/primitives/accordion";
 
@@ -16,9 +16,9 @@ describe("Accordion", () => {
 			<Accordion defaultValue={["one"]}>
 				<AccordionItem value="one">
 					<AccordionTrigger data-testid="trigger">Section one</AccordionTrigger>
-					<AccordionContent>
+					<AccordionPanel>
 						<p data-testid="panel">Body one</p>
-					</AccordionContent>
+					</AccordionPanel>
 				</AccordionItem>
 			</Accordion>,
 		);

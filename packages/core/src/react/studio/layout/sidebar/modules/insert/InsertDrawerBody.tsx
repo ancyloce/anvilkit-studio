@@ -2,11 +2,12 @@
  * @file Sectioned / search / view-toggle renderer for Puck's `drawer`
  * override slot — the heart of the `insert` module (PRD §5).
  *
- * Receives Puck's `<Drawer.Item>` children and routes each one into a
- * registered {@link StudioInsertSection} (or a flat search-result list
- * when the user is searching). Sections come from the per-instance
- * `SidebarRegistryStore`; defaults are seeded by `<Studio>` on mount
- * so the first paint already shows the standard library grouping.
+ * Receives Puck's component-list tree, extracts the named
+ * `<Drawer.Item>` leaves, and routes each one into a registered
+ * {@link StudioInsertSection} (or a flat search-result list when the
+ * user is searching). Sections come from the per-instance
+ * `SidebarRegistryStore`; defaults are seeded by `<Studio>` on mount so
+ * the first paint already shows the standard library grouping.
  *
  * The Drawer.Item children are passed through unmodified — only the
  * surrounding layout (grid vs list) and the predicate-driven grouping
@@ -37,6 +38,7 @@ import { InsertTileList } from "./InsertTileList";
 
 interface DrawerItemElementProps {
 	readonly name?: string;
+	readonly children?: ReactNode;
 }
 
 function matchesQuery(name: string | undefined, query: string): boolean {
@@ -57,6 +59,27 @@ function sortSectionsByOrder(
 			(b.order ?? Number.POSITIVE_INFINITY),
 	);
 	return list;
+}
+
+function collectDrawerItems(
+	children: ReactNode,
+): readonly ReactElement<DrawerItemElementProps>[] {
+	const items: ReactElement<DrawerItemElementProps>[] = [];
+
+	const visit = (node: ReactNode): void => {
+		Children.forEach(node, (child) => {
+			if (!isValidElement(child)) return;
+			const props = child.props as DrawerItemElementProps;
+			if (typeof props.name === "string" && props.name.length > 0) {
+				items.push(child as ReactElement<DrawerItemElementProps>);
+				return;
+			}
+			visit(props.children);
+		});
+	};
+
+	visit(children);
+	return items;
 }
 
 export interface InsertDrawerBodyProps {
@@ -94,24 +117,23 @@ export function InsertDrawerBody({
 		const flat: ReactNode[] = [];
 		let total = 0;
 
-		Children.forEach(children, (child) => {
-			if (!isValidElement(child)) return;
-			const props = child.props as DrawerItemElementProps;
-			const name = props.name;
+		for (const child of collectDrawerItems(children)) {
+			const name = child.props.name;
+			if (name === undefined) continue;
 			total += 1;
 			if (search.length > 0) {
-				if (!matchesQuery(name, search)) return;
+				if (!matchesQuery(name, search)) continue;
 				flat.push(child);
-				return;
+				continue;
 			}
-			const category = name !== undefined ? categoryIndex.get(name) : undefined;
+			const category = categoryIndex.get(name);
 			for (const section of sortedSections) {
-				if (section.predicate(name ?? "", { category })) {
+				if (section.predicate(name, { category })) {
 					items.get(section.id)?.push(child);
-					return;
+					break;
 				}
 			}
-		});
+		}
 
 		return { sectionItems: items, flatMatches: flat, totalItems: total };
 	}, [children, search, sortedSections, categoryIndex]);

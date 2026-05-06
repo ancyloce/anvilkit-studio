@@ -21,8 +21,8 @@ import { type ReactNode, useMemo } from "react";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import {
 	Accordion,
-	AccordionContent,
 	AccordionItem,
+	AccordionPanel,
 	AccordionTrigger,
 } from "@/primitives/accordion";
 import { useMsg } from "@/state/editor-i18n-store";
@@ -123,7 +123,7 @@ export function SnippetList({
 							{list.length}
 						</span>
 					</AccordionTrigger>
-					<AccordionContent className="p-0">
+					<AccordionPanel className="p-0">
 						<div className="flex flex-col gap-1 p-2">
 							{list.map((snippet) => (
 								<SnippetRow
@@ -134,7 +134,7 @@ export function SnippetList({
 								/>
 							))}
 						</div>
-					</AccordionContent>
+					</AccordionPanel>
 				</AccordionItem>
 			))}
 		</Accordion>

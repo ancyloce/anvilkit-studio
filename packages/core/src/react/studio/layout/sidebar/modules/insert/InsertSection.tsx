@@ -13,8 +13,8 @@
 import type { ReactNode } from "react";
 
 import {
-	AccordionContent,
 	AccordionItem,
+	AccordionPanel,
 	AccordionTrigger,
 } from "@/primitives/accordion";
 import { useMsg } from "@/state/editor-i18n-store";
@@ -36,24 +36,20 @@ export function InsertSection({
 	children,
 }: InsertSectionProps): ReactNode {
 	const msg = useMsg();
-	const count = children.length;
 	const Tiles = viewMode === "grid" ? InsertTileGrid : InsertTileList;
 
 	return (
-    <AccordionItem
-      value={id}
-      data-testid={`ak-insert-section-${id}`}
-      className="border-b-0"
-    >
-      <AccordionTrigger className="min-h-8 px-2 py-1.5 text-xs font-medium">
-        <span className="grow truncate">{msg(titleKey)}</span>
-        <span className="me-1 text-[10px] tabular-nums text-muted-foreground">
-          {count}
-        </span>
-      </AccordionTrigger>
-      <AccordionContent className="p-0">
-        <Tiles>{children}</Tiles>
-      </AccordionContent>
-    </AccordionItem>
-  );
+		<AccordionItem
+			value={id}
+			data-testid={`ak-insert-section-${id}`}
+			className="border-b-0"
+		>
+			<AccordionTrigger className="min-h-8 px-2 py-1.5 text-xs font-medium hover:no-underline">
+				<span className="grow truncate">{msg(titleKey)}</span>
+			</AccordionTrigger>
+			<AccordionPanel className="p-0">
+				<Tiles>{children}</Tiles>
+			</AccordionPanel>
+		</AccordionItem>
+	);
 }
