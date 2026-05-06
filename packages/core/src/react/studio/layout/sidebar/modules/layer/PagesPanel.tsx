@@ -60,58 +60,58 @@ export function PagesPanel(): ReactNode {
 	);
 
 	return (
-		<div
-			className="flex shrink-0 flex-col border-b border-[var(--ak-studio-border)]"
-			data-testid="ak-layer-pages"
-		>
-			<div className="flex h-12 shrink-0 items-center justify-between px-4">
-				<h3 className="text-sm font-semibold text-[var(--ak-studio-fg)]">
-					{msg("studio.module.layer.pages.title")}
-				</h3>
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<span className="inline-flex">
-								<Button
-									size="icon-xs"
-									variant="ghost"
-									aria-label={msg("studio.module.layer.pages.add")}
-									onClick={() => setDialogOpen(true)}
-									data-testid="ak-layer-pages-add"
-									className="text-[var(--ak-studio-muted-fg)] hover:bg-[var(--ak-studio-muted)] hover:text-[var(--ak-studio-fg)]"
-								>
-									<Plus aria-hidden="true" />
-								</Button>
-							</span>
-						}
-					/>
-					<TooltipContent>
-						{msg("studio.module.layer.pages.add")}
-					</TooltipContent>
-				</Tooltip>
-			</div>
-			<div className="max-h-52 min-h-0 overflow-auto pb-3">
-				{pages.length === 0 ? (
-					<EmptyState
-						message={msg("studio.module.layer.pages.empty")}
-						testId="ak-layer-pages-empty"
-					/>
-				) : (
-					<ul role="list" className="flex flex-col px-4">
-						{pages.map((page) => (
-							<PageRow
-								key={page.id}
-								page={page}
-								onSelect={handleSelect}
-								routeBadgeLabel={msg("studio.module.layer.pages.routeBadge")}
-							/>
-						))}
-					</ul>
-				)}
-			</div>
-			<AddPageDialog open={dialogOpen} onOpenChange={setDialogOpen} />
-		</div>
-	);
+    <div
+      className="flex shrink-0 flex-col border-b border-[var(--ak-studio-border)]"
+      data-testid="ak-layer-pages"
+    >
+      <div className="flex h-10 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
+        <h3 className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]">
+          {msg("studio.module.layer.pages.title")}
+        </h3>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="inline-flex">
+                <Button
+                  size="icon-xs"
+                  variant="ghost"
+                  aria-label={msg("studio.module.layer.pages.add")}
+                  onClick={() => setDialogOpen(true)}
+                  data-testid="ak-layer-pages-add"
+                  className="text-[var(--ak-studio-muted-fg)] hover:bg-[var(--ak-studio-muted)] hover:text-[var(--ak-studio-fg)]"
+                >
+                  <Plus aria-hidden="true" />
+                </Button>
+              </span>
+            }
+          />
+          <TooltipContent>
+            {msg("studio.module.layer.pages.add")}
+          </TooltipContent>
+        </Tooltip>
+      </div>
+      <div className="max-h-52 min-h-0 overflow-auto py-3">
+        {pages.length === 0 ? (
+          <EmptyState
+            message={msg("studio.module.layer.pages.empty")}
+            testId="ak-layer-pages-empty"
+          />
+        ) : (
+          <ul role="list" className="flex flex-col px-2">
+            {pages.map((page) => (
+              <PageRow
+                key={page.id}
+                page={page}
+                onSelect={handleSelect}
+                routeBadgeLabel={msg("studio.module.layer.pages.routeBadge")}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
+      <AddPageDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+    </div>
+  );
 }
 
 interface PageRowProps {
