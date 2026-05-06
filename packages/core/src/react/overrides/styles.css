@@ -4,9 +4,9 @@
  * Imported by host apps via `import "@anvilkit/core/styles.css"`.
  * Bridges the internal `--ak-studio-*` token contract (PRD §7.2) to
  * the existing shadcn / Tailwind v4 vars from
- * `@anvilkit/tailwind-config/shadcn`. Hosts already importing those
- * tokens automatically theme the Studio chrome — no extra Tailwind
- * scanning over `packages/core` required.
+ * `@anvilkit/tailwind-config/shadcn`. The Studio theme color is pinned
+ * to Tailwind CSS blue-600 so core chrome and controls keep one
+ * consistent brand accent regardless of the host app's shadcn preset.
  *
  * NOTE: this file deliberately does NOT `@import "tailwindcss"`.
  * The host's own entry CSS (typically `globals.css` →
@@ -16,6 +16,9 @@
  */
 
 :root {
+	--ak-studio-blue-600: var(--color-blue-600, oklch(54.6% 0.245 262.881));
+	--ak-studio-theme: var(--ak-studio-blue-600);
+	--ak-studio-theme-fg: oklch(1 0 0);
 	--ak-studio-bg: var(--background);
 	--ak-studio-fg: var(--foreground);
 	--ak-studio-panel: var(--card);
@@ -23,20 +26,31 @@
 	--ak-studio-border: var(--border);
 	--ak-studio-muted: var(--muted);
 	--ak-studio-muted-fg: var(--muted-foreground);
-	--ak-studio-accent: var(--accent);
-	--ak-studio-accent-fg: var(--accent-foreground);
-	--ak-studio-ring: var(--ring);
+	--ak-studio-accent: var(--ak-studio-theme);
+	--ak-studio-accent-fg: var(--ak-studio-theme-fg);
+	--ak-studio-ring: var(--ak-studio-theme);
+	--ak-studio-layer-icon: var(--ak-studio-theme);
+	--ak-studio-layer-selection: var(--ak-studio-theme);
+	--ak-studio-layer-selection-fg: var(--ak-studio-theme-fg);
 	--ak-studio-rail-width: 44px;
 	--ak-studio-panel-width: 280px;
 }
 
 .dark {
 	/*
-	 * Intentionally empty: every `--ak-studio-*` var bridges to a
-	 * shadcn var that already flips on `.dark`, so dark mode is
-	 * inherited automatically. Add overrides here only if a Studio
-	 * token needs to diverge from its shadcn source in dark mode.
+	 * Intentionally empty: neutral `--ak-studio-*` vars bridge to
+	 * shadcn vars that already flip on `.dark`. The theme color stays
+	 * fixed on Tailwind CSS blue-600 across light and dark modes.
 	 */
+}
+
+[data-ak-studio-root],
+[data-ak-studio-theme] {
+	--accent: var(--ak-studio-theme);
+	--accent-foreground: var(--ak-studio-theme-fg);
+	--primary: var(--ak-studio-theme);
+	--primary-foreground: var(--ak-studio-theme-fg);
+	--ring: var(--ak-studio-theme);
 }
 
 ::-webkit-scrollbar {
@@ -63,4 +77,79 @@
 
 .dark * {
 	scrollbar-color: var(--ak-studio-muted) transparent;
+}
+
+[data-ak-layer-outline] [class*="_LayerTree_"] {
+	color: var(--ak-studio-muted-fg);
+	font-family: inherit;
+	font-size: 12px;
+	line-height: 1.25;
+}
+
+[data-ak-layer-outline] [class*="_LayerTree-zoneTitle_"] {
+	display: none;
+}
+
+[data-ak-layer-outline] [class*="_Layer_"] {
+	border: 0;
+	border-radius: 4px;
+	margin-block: 2px;
+}
+
+[data-ak-layer-outline] [class*="_Layer-inner_"] {
+	border: 0;
+	border-radius: 4px;
+}
+
+[data-ak-layer-outline] [class*="_Layer-clickable_"] {
+	min-height: 24px;
+	padding-inline: 4px;
+}
+
+[data-ak-layer-outline] [class*="_Layer-title_"] {
+	gap: 8px;
+	margin: 0;
+	min-width: 0;
+}
+
+[data-ak-layer-outline] [class*="_Layer-chevron_"] {
+	color: var(--ak-studio-muted-fg);
+	display: flex;
+	margin-inline-end: 2px;
+}
+
+[data-ak-layer-outline] [class*="_Layer-icon_"] {
+	color: var(--ak-studio-layer-icon);
+	display: flex;
+	margin-top: 0;
+}
+
+[data-ak-layer-outline] [class*="_Layer-name_"] {
+	color: inherit;
+}
+
+[data-ak-layer-outline] [class*="_Layer-zones_"] {
+	margin-inline-start: 10px;
+}
+
+[data-ak-layer-outline] [class*="_Layer-zones_"] > [class*="_LayerTree_"] {
+	margin-inline-start: 8px;
+}
+
+[data-ak-layer-outline]
+	[class*="_Layer--isSelected_"]
+	> [class*="_Layer-inner_"] {
+	background: var(--ak-studio-layer-selection);
+	color: var(--ak-studio-layer-selection-fg);
+}
+
+[data-ak-layer-outline]
+	[class*="_Layer--isSelected_"]
+	> [class*="_Layer-inner_"]
+	[class*="_Layer-icon_"],
+[data-ak-layer-outline]
+	[class*="_Layer--isSelected_"]
+	> [class*="_Layer-inner_"]
+	[class*="_Layer-chevron_"] {
+	color: var(--ak-studio-layer-selection-fg);
 }
