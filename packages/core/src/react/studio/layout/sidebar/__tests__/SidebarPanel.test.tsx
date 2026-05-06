@@ -80,4 +80,11 @@ describe("SidebarPanel", () => {
 		// Both action and close button present.
 		expect(screen.getByRole("button", { name: "Close panel" })).toBeTruthy();
 	});
+
+	it("can hide the shared header when module chrome owns the section title", () => {
+		renderPanel({ hideHeader: true });
+		expect(screen.queryByRole("heading", { level: 2 })).toBeNull();
+		expect(screen.queryByRole("button", { name: "Close panel" })).toBeNull();
+		expect(screen.getByTestId("body").textContent).toBe("body content");
+	});
 });

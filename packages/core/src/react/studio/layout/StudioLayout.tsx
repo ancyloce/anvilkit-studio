@@ -36,20 +36,23 @@ export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
 	const ctxProps = useChromeProps();
 	const props: StudioHeaderProps = { ...ctxProps, ...propOverrides };
 	return (
-    <div className="flex h-screen min-h-0 flex-col bg-[var(--ak-studio-bg)] text-[var(--ak-studio-fg)]">
-      <StudioHeader {...props} />
-      <div className="flex min-h-0 flex-1 overflow-hidden">
-        <StudioSidebar />
-        <main className="flex min-w-0 flex-1 flex-col">
-          <StudioToolbar />
-          <StudioViewportPreview />
-        </main>
-        <aside className="flex w-72 shrink-0 flex-col border-l border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]">
-          <div className="overflow-auto">
-            <Puck.Fields />
-          </div>
-        </aside>
-      </div>
-    </div>
-  );
+		<div
+			data-ak-studio-root
+			className="flex h-screen min-h-0 flex-col bg-[var(--ak-studio-bg)] text-[var(--ak-studio-fg)]"
+		>
+			<StudioHeader {...props} />
+			<div className="flex min-h-0 flex-1 overflow-hidden">
+				<StudioSidebar />
+				<main className="flex min-w-0 flex-1 flex-col">
+					<StudioToolbar />
+					<StudioViewportPreview />
+				</main>
+				<aside className="flex w-72 shrink-0 flex-col border-l border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]">
+					<div className="overflow-auto">
+						<Puck.Fields />
+					</div>
+				</aside>
+			</div>
+		</div>
+	);
 }

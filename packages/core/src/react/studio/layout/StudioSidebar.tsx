@@ -91,6 +91,7 @@ function StudioSidebarPanelHost({
 			title={msg(MODULE_TITLE_KEYS[activeTab])}
 			activeTabId={railTabId(activeTab)}
 			actions={actions}
+			hideHeader={activeTab === "layer"}
 			onClose={handleClose}
 			onEscape={handleEscape}
 		>

@@ -110,7 +110,10 @@ export function StudioHeader({
 					<TooltipContent>{msg("studio.share")}</TooltipContent>
 				</Tooltip>
 
-				<Separator orientation="vertical" className="h-6" />
+				<Separator
+					orientation="vertical"
+					className="h-6 data-vertical:self-center"
+				/>
 
 				<HeaderActions />
 

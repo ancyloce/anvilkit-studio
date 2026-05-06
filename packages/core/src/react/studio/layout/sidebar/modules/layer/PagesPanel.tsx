@@ -1,22 +1,21 @@
 /**
  * @file `layer/pages` sub-panel (PRD §6.4).
  *
- * Renders the host's page list above the splitter inside the `layer`
- * module. Pulls the list from {@link useStudioPagesSource}; route rows
- * show the globe badge keyed `studio.module.layer.pages.routeBadge`.
- * The "+" header button opens the {@link AddPageDialog}.
+ * Renders the host's page list above the layer outline. Pulls the list
+ * from {@link useStudioPagesSource}; route rows show the globe badge
+ * keyed `studio.module.layer.pages.routeBadge`. The "+" header button
+ * opens the {@link AddPageDialog}.
  *
  * Empty state (no source registered or empty list) renders the
  * `studio.module.layer.pages.empty` message via the shared
  * {@link EmptyState}.
  */
 
-import { Globe, Plus } from "lucide-react";
+import { Globe, Home, Plus } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useStudioPagesSource } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
-import { ScrollArea } from "@/primitives/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { StudioPage } from "@/types/pages";
@@ -61,9 +60,12 @@ export function PagesPanel(): ReactNode {
 	);
 
 	return (
-		<div className="flex h-full min-h-0 flex-col" data-testid="ak-layer-pages">
-			<div className="flex shrink-0 items-center justify-between border-b border-[var(--ak-studio-border)] px-2 py-1.5">
-				<h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--ak-studio-muted-fg)]">
+		<div
+			className="flex shrink-0 flex-col border-b border-[var(--ak-studio-border)]"
+			data-testid="ak-layer-pages"
+		>
+			<div className="flex h-12 shrink-0 items-center justify-between px-4">
+				<h3 className="text-sm font-semibold text-[var(--ak-studio-fg)]">
 					{msg("studio.module.layer.pages.title")}
 				</h3>
 				<Tooltip>
@@ -71,11 +73,12 @@ export function PagesPanel(): ReactNode {
 						render={
 							<span className="inline-flex">
 								<Button
-									size="icon-sm"
+									size="icon-xs"
 									variant="ghost"
 									aria-label={msg("studio.module.layer.pages.add")}
 									onClick={() => setDialogOpen(true)}
 									data-testid="ak-layer-pages-add"
+									className="text-[var(--ak-studio-muted-fg)] hover:bg-[var(--ak-studio-muted)] hover:text-[var(--ak-studio-fg)]"
 								>
 									<Plus aria-hidden="true" />
 								</Button>
@@ -87,29 +90,23 @@ export function PagesPanel(): ReactNode {
 					</TooltipContent>
 				</Tooltip>
 			</div>
-			<div className="min-h-0 flex-1">
+			<div className="max-h-52 min-h-0 overflow-auto pb-3">
 				{pages.length === 0 ? (
 					<EmptyState
 						message={msg("studio.module.layer.pages.empty")}
 						testId="ak-layer-pages-empty"
 					/>
 				) : (
-					<ScrollArea>
-						<div className="px-1 py-1">
-							<ul role="list" className="flex flex-col gap-0.5">
-								{pages.map((page) => (
-									<PageRow
-										key={page.id}
-										page={page}
-										onSelect={handleSelect}
-										routeBadgeLabel={msg(
-											"studio.module.layer.pages.routeBadge",
-										)}
-									/>
-								))}
-							</ul>
-						</div>
-					</ScrollArea>
+					<ul role="list" className="flex flex-col px-4">
+						{pages.map((page) => (
+							<PageRow
+								key={page.id}
+								page={page}
+								onSelect={handleSelect}
+								routeBadgeLabel={msg("studio.module.layer.pages.routeBadge")}
+							/>
+						))}
+					</ul>
 				)}
 			</div>
 			<AddPageDialog open={dialogOpen} onOpenChange={setDialogOpen} />
@@ -125,6 +122,7 @@ interface PageRowProps {
 
 function PageRow({ page, onSelect, routeBadgeLabel }: PageRowProps): ReactNode {
 	const label = page.title.length > 0 ? page.title : (page.path ?? page.id);
+	const isHome = page.id === "home" || label.toLowerCase() === "home";
 	return (
 		<li role="listitem">
 			<Button
@@ -135,15 +133,19 @@ function PageRow({ page, onSelect, routeBadgeLabel }: PageRowProps): ReactNode {
 				data-active={page.active === true ? "true" : undefined}
 				data-testid={`ak-layer-page-row-${page.id}`}
 				className={cn(
-					"h-auto w-full justify-start gap-2 rounded-sm px-2 py-1 text-left text-sm font-normal",
+					"h-6 w-full justify-start gap-2 rounded-sm px-2 py-0 text-left text-xs font-normal",
 					"text-[var(--ak-studio-fg)] outline-none",
 					"hover:bg-[var(--ak-studio-muted)]",
 					"focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]",
-					"data-[active=true]:bg-[var(--ak-studio-accent)] data-[active=true]:text-[var(--ak-studio-accent-fg)]",
+					"data-[active=true]:bg-[var(--ak-studio-muted)] data-[active=true]:text-[var(--ak-studio-fg)]",
 				)}
 			>
-				<span className="min-w-0 flex-1 truncate">{label}</span>
-				{page.route === true ? (
+				{isHome ? (
+					<Home
+						className="size-3.5 shrink-0 text-[var(--ak-studio-muted-fg)]"
+						aria-hidden="true"
+					/>
+				) : page.route === true ? (
 					<Tooltip>
 						<TooltipTrigger
 							render={
@@ -157,7 +159,10 @@ function PageRow({ page, onSelect, routeBadgeLabel }: PageRowProps): ReactNode {
 						/>
 						<TooltipContent>{routeBadgeLabel}</TooltipContent>
 					</Tooltip>
-				) : null}
+				) : (
+					<span className="size-3.5 shrink-0" aria-hidden="true" />
+				)}
+				<span className="min-w-0 flex-1 truncate">{label}</span>
 			</Button>
 		</li>
 	);

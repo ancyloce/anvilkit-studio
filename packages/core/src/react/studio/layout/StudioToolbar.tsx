@@ -148,7 +148,10 @@ export function StudioToolbar(): ReactNode {
 					<TooltipContent>{msg("studio.actions.redo")}</TooltipContent>
 				</Tooltip>
 
-				<Separator orientation="vertical" className="mx-1 h-6" />
+				<Separator
+					orientation="vertical"
+					className="mx-1 h-6 data-vertical:self-center"
+				/>
 
 				<Tooltip>
 					<TooltipTrigger
@@ -188,7 +191,10 @@ export function StudioToolbar(): ReactNode {
 					<TooltipContent>{msg("studio.actions.zoomIn")}</TooltipContent>
 				</Tooltip>
 
-				<Separator orientation="vertical" className="mx-1 h-6" />
+				<Separator
+					orientation="vertical"
+					className="mx-1 h-6 data-vertical:self-center"
+				/>
 
 				<Tooltip>
 					<TooltipTrigger

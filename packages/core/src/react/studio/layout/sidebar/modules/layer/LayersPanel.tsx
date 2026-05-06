@@ -179,9 +179,9 @@ export function LayersPanel(): ReactNode {
 	}, [getPuck, msg, pluginQuickAdds]);
 
 	return (
-		<div className="flex h-full min-h-0 flex-col" data-testid="ak-layer-layers">
-			<div className="flex shrink-0 items-center justify-between border-b border-[var(--ak-studio-border)] px-2 py-1.5">
-				<h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--ak-studio-muted-fg)]">
+		<div className="flex min-h-0 flex-1 flex-col" data-testid="ak-layer-layers">
+			<div className="flex h-11 shrink-0 items-center justify-between px-4">
+				<h3 className="text-sm font-semibold text-[var(--ak-studio-fg)]">
 					{msg("studio.module.layer.layers.title")}
 				</h3>
 				<DropdownMenu>
@@ -192,10 +192,11 @@ export function LayersPanel(): ReactNode {
 									<DropdownMenuTrigger
 										render={
 											<Button
-												size="icon-sm"
+												size="icon-xs"
 												variant="ghost"
 												aria-label={msg("studio.module.layer.layers.add")}
 												data-testid="ak-layer-layers-add"
+												className="text-[var(--ak-studio-muted-fg)] hover:bg-[var(--ak-studio-muted)] hover:text-[var(--ak-studio-fg)]"
 											/>
 										}
 									>
@@ -242,7 +243,7 @@ export function LayersPanel(): ReactNode {
 					/>
 				) : (
 					<ScrollArea>
-						<div className="px-1 py-2">
+						<div data-ak-layer-outline className="px-4 py-1">
 							<Puck.Outline />
 						</div>
 					</ScrollArea>
