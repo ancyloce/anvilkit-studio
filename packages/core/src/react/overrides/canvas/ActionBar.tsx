@@ -3,8 +3,10 @@
  *
  * Wraps Puck's per-component action bar with the chrome's panel
  * styling and surfaces the parent-action button alongside the
- * children (Puck's per-component controls). Position-clamping math
- * lives in `utils/action-bar-position.ts` so it can be tested
+ * children (Puck's per-component controls). The component label
+ * is rendered as a tab in `ComponentOverlay` instead of inline,
+ * so this bar is purely a floating icon toolbar. Position-clamping
+ * math lives in `utils/action-bar-position.ts` so it can be tested
  * independently of React.
  */
 
@@ -25,18 +27,16 @@ export function ActionBar({
 }: ActionBarOverrideProps): ReactNode {
 	return (
 		<div
+			data-ak-action-bar
+			data-component-label={label}
 			className={cn(
-				"flex items-center gap-1 rounded-md border border-[var(--ak-studio-border)]",
-				"bg-[var(--ak-studio-panel)] px-1 py-0.5 text-xs text-[var(--ak-studio-panel-fg)] shadow-sm",
+				"flex items-center gap-0.5 rounded-full px-1.5 py-0.5",
+				"border border-[var(--ak-studio-border)]",
+				"bg-[var(--ak-studio-panel)] text-[var(--ak-studio-panel-fg)] shadow-md",
 			)}
 		>
-			{label !== undefined ? (
-				<span className="px-1 font-medium">{label}</span>
-			) : null}
-			<div className="flex items-center gap-0.5">
-				{parentAction}
-				{children}
-			</div>
+			{parentAction}
+			{children}
 		</div>
 	);
 }
