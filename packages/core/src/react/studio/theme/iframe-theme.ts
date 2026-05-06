@@ -16,6 +16,9 @@ export const IFRAME_THEME_STYLE_ID = "anvilkit-studio-iframe-theme";
 
 const TOKEN_BLOCK = `:root,
 :host {
+	--ak-studio-blue-600: var(--color-blue-600, oklch(54.6% 0.245 262.881));
+	--ak-studio-theme: var(--ak-studio-blue-600);
+	--ak-studio-theme-fg: oklch(1 0 0);
 	--ak-studio-bg: var(--background);
 	--ak-studio-fg: var(--foreground);
 	--ak-studio-panel: var(--card);
@@ -23,11 +26,19 @@ const TOKEN_BLOCK = `:root,
 	--ak-studio-border: var(--border);
 	--ak-studio-muted: var(--muted);
 	--ak-studio-muted-fg: var(--muted-foreground);
-	--ak-studio-accent: var(--accent);
-	--ak-studio-accent-fg: var(--accent-foreground);
-	--ak-studio-ring: var(--ring);
+	--ak-studio-accent: var(--ak-studio-theme);
+	--ak-studio-accent-fg: var(--ak-studio-theme-fg);
+	--ak-studio-ring: var(--ak-studio-theme);
+	--ak-studio-layer-icon: var(--ak-studio-theme);
+	--ak-studio-layer-selection: var(--ak-studio-theme);
+	--ak-studio-layer-selection-fg: var(--ak-studio-theme-fg);
 	--ak-studio-rail-width: 44px;
 	--ak-studio-panel-width: 280px;
+	--accent: var(--ak-studio-theme);
+	--accent-foreground: var(--ak-studio-theme-fg);
+	--primary: var(--ak-studio-theme);
+	--primary-foreground: var(--ak-studio-theme-fg);
+	--ring: var(--ak-studio-theme);
 	color: var(--ak-studio-fg);
 	background-color: var(--ak-studio-bg);
 }`;
