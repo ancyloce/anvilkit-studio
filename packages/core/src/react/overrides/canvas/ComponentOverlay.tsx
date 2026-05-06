@@ -4,12 +4,16 @@
  * Receives `{ children, hover, isSelected, componentId,
  * componentType }` from Puck. Replaces the default outline with a
  * token-themed ring; selection wins over hover in the styling
- * priority. When selected, a small label tab sits flush on the
- * top edge of the outline so the selected component is identifiable
- * at a glance — the floating `ActionBar` no longer carries the
- * label inline. The label is suppressed when the selected component
- * is the topmost child of the root zone, since the tab would render
- * outside the canvas viewport above it.
+ * priority.
+ *
+ * When selected, a small label tab identifies the component.
+ * Default placement is *above* the outline (flush with the top
+ * edge). For the topmost component in the root zone the label
+ * would render outside the canvas viewport, so it flips to
+ * *inside* placement (sitting on the top edge of the component
+ * itself). The position is published as a `data-label-position`
+ * attribute and the actual placement rules live in the CSS
+ * sidecar.
  */
 
 import { useGetPuck } from "@puckeditor/core";
@@ -35,15 +39,18 @@ export function ComponentOverlay({
 	componentType,
 }: ComponentOverlayOverrideProps): ReactNode {
 	const getPuck = useGetPuck();
-	const showLabel = isSelected && !isTopmostInRoot(getPuck, componentId);
+	const labelPosition = isTopmostInRoot(getPuck, componentId)
+		? "inside"
+		: "above";
 
 	return (
 		<div
 			data-ak-overlay
 			data-overlay-state={isSelected ? "selected" : hover ? "hover" : "idle"}
+			data-label-position={labelPosition}
 			className={cn("relative h-full w-full transition-colors")}
 		>
-			{showLabel ? (
+			{isSelected ? (
 				<span data-ak-overlay-label>{componentType}</span>
 			) : null}
 			{children}

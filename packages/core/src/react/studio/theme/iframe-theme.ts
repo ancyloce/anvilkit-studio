@@ -112,6 +112,14 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 .dark [data-ak-overlay-label] {
 	background-color: var(--ak-studio-accent);
 	color: var(--ak-studio-accent-fg);
+}
+
+[data-ak-overlay][data-label-position="inside"] [data-ak-overlay-label] {
+	bottom: auto;
+	top: 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 6px;
 }`;
 
 export const IFRAME_THEME_CSS = `${TOKEN_BLOCK}\n${IFRAME_RESET_BLOCK}\n${IFRAME_SELECTION_BLOCK}`;

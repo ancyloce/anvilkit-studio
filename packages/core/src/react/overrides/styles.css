@@ -225,6 +225,20 @@
 }
 
 /*
+ * When the selected component is the topmost in the root zone,
+ * the default `bottom: 100%` placement would push the tab outside
+ * the canvas viewport. Flip to inside-top placement so the label
+ * stays visible and the rounded corners flip to the bottom.
+ */
+[data-ak-overlay][data-label-position="inside"] [data-ak-overlay-label] {
+	bottom: auto;
+	top: 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 6px;
+}
+
+/*
  * Field separators in Puck's `_PuckFields_` panel default to
  * `--puck-color-grey-09`, which reads slightly off against the
  * chrome's `--ak-studio-border`. Re-point the divider to the
