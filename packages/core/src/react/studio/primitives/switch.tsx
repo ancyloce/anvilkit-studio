@@ -11,6 +11,7 @@ function Switch({
 }) {
 	return (
 		<SwitchPrimitive.Root
+			data-ak-studio-theme
 			data-slot="switch"
 			data-size={size}
 			className={cn(

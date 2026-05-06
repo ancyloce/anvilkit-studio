@@ -107,6 +107,7 @@ function ComboboxContent({
 				className="isolate z-50"
 			>
 				<ComboboxPrimitive.Popup
+					data-ak-studio-theme
 					data-slot="combobox-content"
 					data-chips={!!anchor}
 					className={cn(

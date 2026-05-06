@@ -78,6 +78,7 @@ function SelectContent({
 				className="isolate z-50"
 			>
 				<SelectPrimitive.Popup
+					data-ak-studio-theme
 					data-slot="select-content"
 					data-align-trigger={alignItemWithTrigger}
 					className={cn(

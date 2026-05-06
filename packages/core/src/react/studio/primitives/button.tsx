@@ -48,7 +48,9 @@ function Button({
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
 	return (
 		<ButtonPrimitive
+			data-ak-studio-theme
 			data-slot="button"
+			data-variant={variant}
 			className={cn(buttonVariants({ variant, size, className }))}
 			{...props}
 		/>
