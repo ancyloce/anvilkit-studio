@@ -181,14 +181,58 @@
 
 [data-ak-overlay][data-overlay-state="hover"] {
 	outline-width: 1px;
-	outline-color: color-mix(
-		in oklab,
-		var(--ak-studio-accent) 30%,
-		transparent
-	);
+	outline-color: color-mix(in oklab, var(--ak-studio-accent) 30%, transparent);
 }
 
 [data-ak-overlay][data-overlay-state="selected"] {
 	outline-width: 2px;
 	outline-color: var(--ak-studio-accent);
+}
+
+/*
+ * Selection label tab — sits on the top-left of the outline.
+ * Light mode: soft tinted chip (lighter blue bg + accent text)
+ * so it does not shout against a white canvas.
+ * Dark mode: solid brand-blue chip + white text — the tinted
+ * treatment loses contrast on dark backgrounds.
+ */
+[data-ak-overlay-label] {
+	pointer-events: none;
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	z-index: 10;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1;
+	background-color: color-mix(
+		in oklab,
+		var(--ak-studio-accent) 18%,
+		var(--ak-studio-bg)
+	);
+	color: var(--ak-studio-accent);
+}
+
+.dark [data-ak-overlay-label] {
+	background-color: var(--ak-studio-accent);
+	color: var(--ak-studio-accent-fg);
+}
+
+/*
+ * Field separators in Puck's `_PuckFields_` panel default to
+ * `--puck-color-grey-09`, which reads slightly off against the
+ * chrome's `--ak-studio-border`. Re-point the divider to the
+ * chrome token so the right-side fields panel matches the rest
+ * of the studio (sidebar groups, header, etc.).
+ */
+	[class*="_PuckFields--wrapFields_"]
+	[class*="_PuckFields-field_"]
+	+ [class*="_PuckFields-field_"] {
+	border-top-color: var(--ak-studio-border);
 }

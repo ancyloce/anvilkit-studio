@@ -88,6 +88,30 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 [data-ak-overlay][data-overlay-state="selected"] {
 	outline-width: 2px;
 	outline-color: var(--ak-studio-accent);
+}
+
+[data-ak-overlay-label] {
+	pointer-events: none;
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	z-index: 10;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1;
+	background-color: color-mix(in oklab, var(--ak-studio-accent) 18%, var(--ak-studio-bg));
+	color: var(--ak-studio-accent);
+}
+
+.dark [data-ak-overlay-label] {
+	background-color: var(--ak-studio-accent);
+	color: var(--ak-studio-accent-fg);
 }`;
 
 export const IFRAME_THEME_CSS = `${TOKEN_BLOCK}\n${IFRAME_RESET_BLOCK}\n${IFRAME_SELECTION_BLOCK}`;

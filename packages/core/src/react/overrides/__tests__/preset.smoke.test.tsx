@@ -9,7 +9,17 @@
  */
 
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+// `ComponentOverlay` calls `useGetPuck()` to detect the topmost
+// component and suppress its label. The hook throws outside `<Puck>`,
+// so stub it for these isolated render tests. The selector returned
+// here points to a non-root zone so the label always renders.
+vi.mock("@puckeditor/core", () => ({
+	useGetPuck: () => () => ({
+		getSelectorForId: (_id: string) => ({ index: 1, zone: "some-zone" }),
+	}),
+}));
 
 afterEach(cleanup);
 
