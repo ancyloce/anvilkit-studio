@@ -249,3 +249,21 @@
 	+ [class*="_PuckFields-field_"] {
 	border-top-color: var(--ak-studio-border);
 }
+
+/*
+ * Puck's default `object` field renders a `_ObjectField_` div
+ * hardcoded to `background-color: var(--puck-color-white)` plus
+ * a grey-09 border. In dark mode that paints a white panel inside
+ * the chrome's themed `<Card>` wrapper. Make Puck's wrapper
+ * transparent and drop its border + padding so the surrounding
+ * `<Card>` controls the surface in both modes.
+ */
+[class*="_ObjectField_"] {
+	background-color: transparent !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+}
+
+[class*="_ObjectField-fieldset_"] {
+	padding: 0 !important;
+}
