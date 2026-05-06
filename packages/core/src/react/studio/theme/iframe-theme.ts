@@ -102,13 +102,14 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 	align-items: center;
 	gap: 4px;
 	padding: 4px 8px;
+	padding-top: 6px;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
 	font-size: 11px;
 	font-weight: 500;
 	line-height: 1;
-	background-color: color-mix(in oklab, var(--ak-studio-accent) 18%, var(--ak-studio-bg));
-	color: var(--ak-studio-accent);
+	background-color: var(--ak-studio-accent);
+	color: #fff;
 }
 
 .dark [data-ak-overlay-label] {
