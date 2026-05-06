@@ -10,7 +10,6 @@
 import { ChevronRight } from "lucide-react";
 import { type ReactNode } from "react";
 import { useBreadcrumbs } from "@/overrides/utils/breadcrumbs";
-import { useMsg } from "@/state/editor-i18n-store";
 import { cn } from "@/utils/cn";
 
 interface ItemSelector {
@@ -31,7 +30,6 @@ export function FieldsPanel({
 	itemSelector,
 	className,
 }: FieldsPanelOverrideProps): ReactNode {
-	const msg = useMsg();
 	const crumbs = useBreadcrumbs();
 
 	return (
@@ -60,11 +58,7 @@ export function FieldsPanel({
         </nav>
       ) : null}
       <div className="flex-1 overflow-auto">
-        {itemSelector === null || itemSelector === undefined ? (
-          <p className="px-1 py-2 text-xs text-[var(--ak-studio-muted-fg)]">
-            {msg("studio.fields.empty")}
-          </p>
-        ) : (
+        {itemSelector === null || itemSelector === undefined ? null : (
           <div
             className={cn(
               "flex flex-col gap-0",
