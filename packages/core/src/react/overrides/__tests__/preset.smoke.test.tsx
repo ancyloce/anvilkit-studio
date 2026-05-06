@@ -53,7 +53,7 @@ describe("studioOverrides preset smoke", () => {
 		expect(screen.getByTestId("inner")).toBeInTheDocument();
 	});
 
-	it("renders ComponentOverlay with selected styling", () => {
+	it("renders ComponentOverlay with selected styling and label tab", () => {
 		const componentOverlay = studioOverrides.componentOverlay;
 		if (componentOverlay === undefined)
 			throw new Error("componentOverlay missing");
@@ -69,16 +69,38 @@ describe("studioOverrides preset smoke", () => {
 			</>,
 		);
 		expect(screen.getByTestId("inner-child")).toBeInTheDocument();
-		// Selected state surfaces a `data-overlay-state` attribute.
+		// Selected state surfaces a `data-overlay-state` attribute and the
+		// component label tab.
 		expect(
 			container.querySelector('[data-overlay-state="selected"]'),
 		).not.toBeNull();
+		expect(container.querySelector("[data-ak-overlay-label]")).not.toBeNull();
+		expect(screen.getByText("Hero")).toBeInTheDocument();
 	});
 
-	it("renders ActionBar with label and parent-action slot", () => {
+	it("hides the label tab when ComponentOverlay is not selected", () => {
+		const componentOverlay = studioOverrides.componentOverlay;
+		if (componentOverlay === undefined)
+			throw new Error("componentOverlay missing");
+		const { container } = render(
+			<>
+				{componentOverlay({
+					children: <div>x</div>,
+					hover: true,
+					isSelected: false,
+					componentId: "id-2",
+					componentType: "Hero",
+				})}
+			</>,
+		);
+		expect(container.querySelector("[data-ak-overlay-label]")).toBeNull();
+		expect(screen.queryByText("Hero")).toBeNull();
+	});
+
+	it("renders ActionBar with parent-action and child controls (label moved to overlay tab)", () => {
 		const actionBar = studioOverrides.actionBar;
 		if (actionBar === undefined) throw new Error("actionBar missing");
-		render(
+		const { container } = render(
 			<>
 				{actionBar({
 					label: "Hero",
@@ -87,7 +109,13 @@ describe("studioOverrides preset smoke", () => {
 				})}
 			</>,
 		);
-		expect(screen.getByText("Hero")).toBeInTheDocument();
+		// Label is no longer rendered inline — it surfaces via the overlay
+		// tab. The label string still rides along on a data-attribute for
+		// debugging/automation hooks.
+		expect(screen.queryByText("Hero")).toBeNull();
+		expect(
+			container.querySelector('[data-ak-action-bar][data-component-label="Hero"]'),
+		).not.toBeNull();
 		expect(screen.getByText("parent")).toBeInTheDocument();
 		expect(screen.getByText("child")).toBeInTheDocument();
 	});
