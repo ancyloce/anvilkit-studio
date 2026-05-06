@@ -100,15 +100,33 @@ function StudioSidebarPanelHost({
 	);
 }
 
+interface StudioSidebarSlotProps {
+	readonly railRef: RefObject<SidebarRailHandle | null>;
+}
+
+export function StudioSidebarRail({
+	railRef,
+}: StudioSidebarSlotProps): ReactNode {
+	return <SidebarRail ref={railRef} />;
+}
+
+export function StudioSidebarPanel({
+	railRef,
+}: StudioSidebarSlotProps): ReactNode {
+	return (
+		<SidebarHeaderActionsProvider>
+			<StudioSidebarPanelHost railRef={railRef} />
+		</SidebarHeaderActionsProvider>
+	);
+}
+
 export function StudioSidebar(): ReactNode {
 	const railRef = useRef<SidebarRailHandle | null>(null);
 
 	return (
 		<aside className="flex h-full shrink-0 flex-row">
-			<SidebarRail ref={railRef} />
-			<SidebarHeaderActionsProvider>
-				<StudioSidebarPanelHost railRef={railRef} />
-			</SidebarHeaderActionsProvider>
+			<StudioSidebarRail railRef={railRef} />
+			<StudioSidebarPanel railRef={railRef} />
 		</aside>
 	);
 }

@@ -51,127 +51,98 @@ export function StudioHeader({
 	const msg = useMsg();
 
 	return (
-		<header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-bg)] px-3">
-			<div className="flex items-center gap-1">
-				<div
-					role="presentation"
-					aria-hidden="true"
-					className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
-				>
-					<BrandMark />
-				</div>
-				{onBack !== undefined ? (
-					<Button
-						variant="ghost"
-						size="icon"
-						onClick={onBack}
-						aria-label={msg("studio.back")}
-					>
-						<ChevronLeft />
-					</Button>
-				) : null}
-			</div>
+    <header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onBack ?? (() => window.history.back())}
+        aria-label={msg("studio.back")}
+      >
+        <ChevronLeft />
+      </Button>
+      <nav
+        aria-label="Breadcrumb"
+        className="flex min-w-0 flex-1 items-center justify-center"
+      >
+        <ol className="flex items-center gap-1.5 text-sm">
+          <li className="truncate text-[var(--ak-studio-muted-fg)]">
+            {msg("studio.breadcrumb.project")}
+          </li>
+          <li aria-hidden="true" className="text-[var(--ak-studio-muted-fg)]">
+            <ChevronRight className="size-3.5" />
+          </li>
+          <li className="truncate font-medium text-[var(--ak-studio-fg)]">
+            {msg("studio.breadcrumb.file")}
+          </li>
+        </ol>
+      </nav>
+      <div className="ml-auto flex items-center gap-2">
+        {lastSavedAt !== null ? (
+          <span className="text-xs text-[var(--ak-studio-muted-fg)]">
+            Saved {formatTimestamp(lastSavedAt)}
+          </span>
+        ) : null}
 
-			<nav
-				aria-label="Breadcrumb"
-				className="flex min-w-0 flex-1 items-center justify-center"
-			>
-				<ol className="flex items-center gap-1.5 text-sm">
-					<li className="truncate text-[var(--ak-studio-muted-fg)]">
-						{msg("studio.breadcrumb.project")}
-					</li>
-					<li aria-hidden="true" className="text-[var(--ak-studio-muted-fg)]">
-						<ChevronRight className="size-3.5" />
-					</li>
-					<li className="truncate font-medium text-[var(--ak-studio-fg)]">
-						{msg("studio.breadcrumb.file")}
-					</li>
-				</ol>
-			</nav>
+        <CollaboratorStack />
 
-			<div className="ml-auto flex items-center gap-2">
-				{lastSavedAt !== null ? (
-					<span className="text-xs text-[var(--ak-studio-muted-fg)]">
-						Saved {formatTimestamp(lastSavedAt)}
-					</span>
-				) : null}
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <Users className="size-4" aria-hidden="true" />
+                <span>{msg("studio.share")}</span>
+              </Button>
+            }
+          />
+          <TooltipContent>{msg("studio.share")}</TooltipContent>
+        </Tooltip>
 
-				<CollaboratorStack />
+        <Separator
+          orientation="vertical"
+          className="h-6 data-vertical:self-center"
+        />
 
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<Button variant="outline" size="sm" className="gap-1.5">
-								<Users className="size-4" aria-hidden="true" />
-								<span>{msg("studio.share")}</span>
-							</Button>
-						}
-					/>
-					<TooltipContent>{msg("studio.share")}</TooltipContent>
-				</Tooltip>
+        <HeaderActions />
 
-				<Separator
-					orientation="vertical"
-					className="h-6 data-vertical:self-center"
-				/>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={msg("studio.preview")}
+              >
+                <Play />
+              </Button>
+            }
+          />
+          <TooltipContent>{msg("studio.preview")}</TooltipContent>
+        </Tooltip>
 
-				<HeaderActions />
+        {onSaveDraft !== undefined ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              void onSaveDraft();
+            }}
+            disabled={isSavingDraft}
+          >
+            {msg("studio.saveDraft")}
+          </Button>
+        ) : null}
 
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<Button
-								variant="ghost"
-								size="icon"
-								aria-label={msg("studio.preview")}
-							>
-								<Play />
-							</Button>
-						}
-					/>
-					<TooltipContent>{msg("studio.preview")}</TooltipContent>
-				</Tooltip>
-
-				{onSaveDraft !== undefined ? (
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => {
-							void onSaveDraft();
-						}}
-						disabled={isSavingDraft}
-					>
-						{msg("studio.saveDraft")}
-					</Button>
-				) : null}
-
-				<Button
-					variant="default"
-					size="sm"
-					onClick={onPublishClick}
-					disabled={isPublishing}
-				>
-					{isPublishing ? msg("studio.publishing") : msg("studio.publish")}
-				</Button>
-			</div>
-		</header>
-	);
-}
-
-function BrandMark(): ReactNode {
-	return (
-		<svg
-			viewBox="0 0 24 24"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			className="size-4"
-			aria-hidden="true"
-		>
-			<rect x="4" y="13" width="3" height="7" rx="1" fill="currentColor" />
-			<rect x="10.5" y="9" width="3" height="11" rx="1" fill="currentColor" />
-			<rect x="17" y="5" width="3" height="15" rx="1" fill="currentColor" />
-		</svg>
-	);
+        <Button
+          variant="default"
+          size="sm"
+          onClick={onPublishClick}
+          disabled={isPublishing}
+        >
+          {isPublishing ? msg("studio.publishing") : msg("studio.publish")}
+        </Button>
+      </div>
+    </header>
+  );
 }
 
 function CollaboratorStack(): ReactNode {

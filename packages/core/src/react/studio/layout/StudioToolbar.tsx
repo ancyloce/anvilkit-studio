@@ -76,150 +76,150 @@ export function StudioToolbar(): ReactNode {
 	const homeDisabled = pagesSource === undefined;
 
 	return (
-		<div className="flex h-10 items-center gap-1 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-bg)] px-3">
-			<DropdownMenu>
-				<DropdownMenuTrigger
-					render={
-						<Button
-							variant="ghost"
-							size="sm"
-							className="gap-1.5 px-2 text-[var(--ak-studio-fg)]"
-						>
-							{activeViewport ? VIEWPORT_ICON[activeViewport.label] : null}
-							<span className="text-xs font-medium">
-								{activeViewport
-									? msg(`studio.toolbar.viewport.${activeViewport.label}`)
-									: msg("studio.actions.viewport")}
-							</span>
-							<ChevronDown
-								className="size-3 text-[var(--ak-studio-muted-fg)]"
-								aria-hidden="true"
-							/>
-							{activeViewport ? (
-								<span className="ms-1 text-xs tabular-nums text-[var(--ak-studio-muted-fg)]">
-									{formatViewportWidth(activeViewport.width)}
-								</span>
-							) : null}
-						</Button>
-					}
-				/>
-				<DropdownMenuContent align="start">
-					{viewports.map((vp) => (
-						<DropdownMenuItem
-							key={vp.label}
-							onClick={() => setViewport(vp.label)}
-							className="gap-2"
-						>
-							{VIEWPORT_ICON[vp.label]}
-							<span className="grow text-xs">
-								{msg(`studio.toolbar.viewport.${vp.label}`)}
-							</span>
-							<span className="text-xs tabular-nums text-muted-foreground">
-								{formatViewportWidth(vp.width)}
-							</span>
-						</DropdownMenuItem>
-					))}
-				</DropdownMenuContent>
-			</DropdownMenu>
+    <div className="flex h-10 items-center gap-1 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-1.5 px-2 text-[var(--ak-studio-fg)]"
+            >
+              {activeViewport ? VIEWPORT_ICON[activeViewport.label] : null}
+              <span className="text-xs font-medium">
+                {activeViewport
+                  ? msg(`studio.toolbar.viewport.${activeViewport.label}`)
+                  : msg("studio.actions.viewport")}
+              </span>
+              <ChevronDown
+                className="size-3 text-[var(--ak-studio-muted-fg)]"
+                aria-hidden="true"
+              />
+              {activeViewport ? (
+                <span className="ms-1 text-xs tabular-nums text-[var(--ak-studio-muted-fg)]">
+                  {formatViewportWidth(activeViewport.width)}
+                </span>
+              ) : null}
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="start">
+          {viewports.map((vp) => (
+            <DropdownMenuItem
+              key={vp.label}
+              onClick={() => setViewport(vp.label)}
+              className="gap-2"
+            >
+              {VIEWPORT_ICON[vp.label]}
+              <span className="grow text-xs">
+                {msg(`studio.toolbar.viewport.${vp.label}`)}
+              </span>
+              <span className="text-xs tabular-nums text-muted-foreground">
+                {formatViewportWidth(vp.width)}
+              </span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-			<div className="ms-auto flex items-center gap-0.5">
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<span className="inline-flex">
-								<Button variant="ghost" size="icon" onClick={undo}>
-									<Undo2 />
-								</Button>
-							</span>
-						}
-					/>
-					<TooltipContent>{msg("studio.actions.undo")}</TooltipContent>
-				</Tooltip>
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<span className="inline-flex">
-								<Button variant="ghost" size="icon" onClick={redo}>
-									<Redo2 />
-								</Button>
-							</span>
-						}
-					/>
-					<TooltipContent>{msg("studio.actions.redo")}</TooltipContent>
-				</Tooltip>
+      <div className="ms-auto flex items-center gap-0.5">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="inline-flex">
+                <Button variant="ghost" size="icon" onClick={undo}>
+                  <Undo2 />
+                </Button>
+              </span>
+            }
+          />
+          <TooltipContent>{msg("studio.actions.undo")}</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="inline-flex">
+                <Button variant="ghost" size="icon" onClick={redo}>
+                  <Redo2 />
+                </Button>
+              </span>
+            }
+          />
+          <TooltipContent>{msg("studio.actions.redo")}</TooltipContent>
+        </Tooltip>
 
-				<Separator
-					orientation="vertical"
-					className="mx-1 h-6 data-vertical:self-center"
-				/>
+        <Separator
+          orientation="vertical"
+          className="mx-1 h-6 data-vertical:self-center"
+        />
 
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<span className="inline-flex">
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={() => setZoom(Math.max(ZOOM_MIN, zoom - ZOOM_STEP))}
-									disabled={zoom <= ZOOM_MIN}
-								>
-									<ZoomOut />
-								</Button>
-							</span>
-						}
-					/>
-					<TooltipContent>{msg("studio.actions.zoomOut")}</TooltipContent>
-				</Tooltip>
-				<span className="w-12 text-center text-xs tabular-nums text-[var(--ak-studio-muted-fg)]">
-					{Math.round(zoom * 100)}%
-				</span>
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<span className="inline-flex">
-								<Button
-									variant="ghost"
-									size="icon"
-									onClick={() => setZoom(Math.min(ZOOM_MAX, zoom + ZOOM_STEP))}
-									disabled={zoom >= ZOOM_MAX}
-								>
-									<ZoomIn />
-								</Button>
-							</span>
-						}
-					/>
-					<TooltipContent>{msg("studio.actions.zoomIn")}</TooltipContent>
-				</Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="inline-flex">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setZoom(Math.max(ZOOM_MIN, zoom - ZOOM_STEP))}
+                  disabled={zoom <= ZOOM_MIN}
+                >
+                  <ZoomOut />
+                </Button>
+              </span>
+            }
+          />
+          <TooltipContent>{msg("studio.actions.zoomOut")}</TooltipContent>
+        </Tooltip>
+        <span className="w-12 text-center text-xs tabular-nums text-[var(--ak-studio-muted-fg)]">
+          {Math.round(zoom * 100)}%
+        </span>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="inline-flex">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setZoom(Math.min(ZOOM_MAX, zoom + ZOOM_STEP))}
+                  disabled={zoom >= ZOOM_MAX}
+                >
+                  <ZoomIn />
+                </Button>
+              </span>
+            }
+          />
+          <TooltipContent>{msg("studio.actions.zoomIn")}</TooltipContent>
+        </Tooltip>
 
-				<Separator
-					orientation="vertical"
-					className="mx-1 h-6 data-vertical:self-center"
-				/>
+        <Separator
+          orientation="vertical"
+          className="mx-1 h-6 data-vertical:self-center"
+        />
 
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<span className="inline-flex">
-								<Button
-									variant="ghost"
-									size="sm"
-									className="gap-1.5"
-									onClick={() => {
-										void goHome();
-									}}
-									disabled={homeDisabled}
-								>
-									<Home className="size-4" aria-hidden="true" />
-									<span className="text-xs font-medium">
-										{msg("studio.actions.home")}
-									</span>
-								</Button>
-							</span>
-						}
-					/>
-					<TooltipContent>{msg("studio.actions.home")}</TooltipContent>
-				</Tooltip>
-			</div>
-		</div>
-	);
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="inline-flex">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1.5"
+                  onClick={() => {
+                    void goHome();
+                  }}
+                  disabled={homeDisabled}
+                >
+                  <Home className="size-4" aria-hidden="true" />
+                  <span className="text-xs font-medium">
+                    {msg("studio.actions.home")}
+                  </span>
+                </Button>
+              </span>
+            }
+          />
+          <TooltipContent>{msg("studio.actions.home")}</TooltipContent>
+        </Tooltip>
+      </div>
+    </div>
+  );
 }

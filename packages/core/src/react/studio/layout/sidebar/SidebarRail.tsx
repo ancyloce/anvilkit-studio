@@ -98,15 +98,17 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
 		return (
       <div
         ref={containerRef}
-        className="flex h-full shrink-0 flex-col items-center gap-2 border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] py-2"
+        className="flex h-full shrink-0 flex-col items-center border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]"
         style={{ inlineSize: "var(--ak-studio-rail-width)" }}
       >
-        <div
-          role="presentation"
-          aria-hidden="true"
-          className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
-        >
-          <RailBrandMark />
+        <div className="flex h-14 w-full shrink-0 items-center justify-center border-b border-[var(--ak-studio-border)]">
+          <div
+            role="presentation"
+            aria-hidden="true"
+            className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+          >
+            <RailBrandMark />
+          </div>
         </div>
         <Tabs
           orientation="vertical"
@@ -114,7 +116,7 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
           onValueChange={handleValueChange}
           className="contents"
         >
-          <TabsList className="flex h-fit w-fit flex-col items-center justify-start gap-2 rounded-none bg-transparent p-0 text-current">
+          <TabsList className="flex h-fit w-fit flex-col items-center justify-start gap-2 rounded-none bg-transparent p-0 pt-2 text-current">
             {RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => (
               <Tooltip key={key}>
                 <TooltipTrigger
