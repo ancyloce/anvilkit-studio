@@ -45,10 +45,24 @@ export default defineConfig({
 			use: { ...devices["Desktop Chrome"] },
 		},
 	],
-	webServer: {
-		command: "pnpm dev",
-		url: "http://localhost:3000",
-		reuseExistingServer: !process.env.CI,
-		timeout: 180_000,
-	},
+	webServer: [
+		{
+			command: "pnpm dev",
+			url: "http://localhost:3000",
+			reuseExistingServer: !process.env.CI,
+			timeout: 180_000,
+		},
+		{
+			// y-websocket reference relay for the cross-tab `collab.spec.ts`
+			// scenario. The plugin-collab-yjs submodule ships the script
+			// under examples/. Other suites do not depend on it; the
+			// command is cheap to boot (<200 ms) so always running it
+			// keeps the matrix simple.
+			command:
+				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 1234",
+			url: "http://localhost:1234",
+			reuseExistingServer: !process.env.CI,
+			timeout: 30_000,
+		},
+	],
 });
