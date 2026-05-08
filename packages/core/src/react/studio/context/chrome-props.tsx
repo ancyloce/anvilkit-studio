@@ -18,6 +18,16 @@ export interface ChromeProps {
 	readonly lastSavedAt?: Date | null;
 	readonly isPublishing?: boolean;
 	readonly onPublishClick?: () => void;
+	/**
+	 * Host-supplied download handler invoked from the publish panel's
+	 * Export submenu. Receives a format id from `runtime.exportFormats`
+	 * (e.g. `"json"`, `"html"`, `"react"`); the host is responsible for
+	 * normalizing Puck data to {@link PageIR} via `puckDataToIR`,
+	 * calling `format.run(ir, options)`, and triggering the browser
+	 * download. Optional — the Export submenu disables itself when this
+	 * is omitted.
+	 */
+	readonly onExport?: (formatId: string) => void | Promise<void>;
 }
 
 const ChromePropsContext = createContext<ChromeProps>({});
