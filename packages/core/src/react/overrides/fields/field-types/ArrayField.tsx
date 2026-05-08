@@ -21,9 +21,11 @@ import {
 	type KeyboardEvent,
 	type ReactNode,
 	useEffect,
-	useRef,
 	useState,
 } from "react";
+import { Button } from "@/primitives/button";
+import { Card, CardContent } from "@/primitives/card";
+import { Item, ItemActions, ItemContent } from "@/primitives/item";
 import {
 	Popover,
 	PopoverPopup,
@@ -32,9 +34,6 @@ import {
 	PopoverTitle,
 	PopoverTrigger,
 } from "@/primitives/animate-ui/primitives/base/popover";
-import { Button } from "@/primitives/button";
-import { Card, CardContent } from "@/primitives/card";
-import { Item, ItemActions, ItemContent } from "@/primitives/item";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { cn } from "@/utils/cn";
 
@@ -357,7 +356,6 @@ export function ArrayField({
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 	const [dropIndex, setDropIndex] = useState<number | null>(null);
-	const rowElementsRef = useRef(new Map<number, HTMLDivElement>());
 	const fieldName = name ?? id ?? "items";
 
 	const min = field.min ?? 0;
@@ -514,13 +512,6 @@ export function ArrayField({
 							}}
 						>
 							<Item
-								ref={(element) => {
-									if (element === null) {
-										rowElementsRef.current.delete(index);
-										return;
-									}
-									rowElementsRef.current.set(index, element);
-								}}
 								role="listitem"
 								variant="outline"
 								size="xs"
@@ -603,19 +594,15 @@ export function ArrayField({
 
 							<PopoverPortal>
 								<PopoverPositioner
-									anchor={() => rowElementsRef.current.get(index) ?? null}
 									side="left"
 									align="start"
-									sideOffset={60}
+									sideOffset={64}
 									alignOffset={-14}
-									collisionPadding={8}
-									className="z-50"
 								>
 									<PopoverPopup
-										data-ak-studio-theme
 										initialFocus={false}
 										style={{ maxHeight: PROPERTY_PANEL_MAX_HEIGHT }}
-										className="flex min-h-0 origin-(--transform-origin) flex-col overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden"
+										className="flex min-h-0 w-48 flex-col gap-0 overflow-hidden p-0"
 									>
 										<PopoverTitle className="sr-only">
 											{summaryText}
