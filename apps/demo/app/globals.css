@@ -3,6 +3,7 @@
 @source "./**/*.{ts,tsx}";
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "../../../packages/core/src/react/studio/**/*.{ts,tsx}";
+@source "../../../packages/core/src/react/overrides/**/*.{ts,tsx}";
 
 :root {
   --font-sans: var(--font-geist-sans);
