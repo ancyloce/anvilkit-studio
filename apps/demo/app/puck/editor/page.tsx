@@ -31,12 +31,18 @@ import {
 	type AiPromptPanelSelection,
 } from "@anvilkit/ui";
 import {
-	PresenceLayer,
-	type PresenceStateFrame,
-	usePresence,
-} from "@anvilkit/ui/presence";
+	CollabRoomBar,
+	CollabUIProvider,
+	ConflictNoticeCenter,
+	PresenceLayer as CollabPresenceLayer,
+} from "@anvilkit/collab-ui";
+import { usePresence } from "@anvilkit/ui/presence";
 import type { Config, Data } from "@puckeditor/core";
 import { createCollabDemoBundle } from "../../../lib/collab-demo";
+import {
+	createCollabRelayBundle,
+	type CollabRelayBundle,
+} from "../../../lib/collab-relay-bundle";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -57,7 +63,16 @@ import styles from "../puck.module.css";
 // Hoisted to module scope so React re-renders do not re-instantiate
 // the plugins (which would bust the AI copilot's WeakMap cache and
 // re-run compilePlugins inside <Studio>).
-const htmlExportPlugin = createHtmlExportPlugin();
+//
+// `headerAction: false` opts the HTML plugin out of contributing its
+// own toolbar button — the AnvilKit chrome's `<PublishPanel>` is the
+// single entry point for every registered export format. The React
+// plugin doesn't accept an opt-out flag, but the chrome's
+// `<HeaderActions>` defensively filters any action whose id starts
+// with `export-`, so its toolbar button is hidden too. Both plugins
+// still register their `ExportFormatDefinition` with the runtime,
+// which is what the panel iterates.
+const htmlExportPlugin = createHtmlExportPlugin({ headerAction: false });
 const reactExportPlugin = createReactExportPlugin({
 	syntax: "tsx",
 	assetStrategy: "url-prop",
@@ -197,6 +212,23 @@ function createAssetManagerReactIr(assetId: string): PageIR {
 	};
 }
 
+function downloadExportResult(
+	content: string | Uint8Array,
+	filename: string,
+	mimeType: string,
+): void {
+	const blobPart = typeof content === "string" ? content : new Uint8Array(content);
+	const blob = new Blob([blobPart], { type: mimeType });
+	const url = URL.createObjectURL(blob);
+	const anchor = document.createElement("a");
+	anchor.href = url;
+	anchor.download = filename;
+	document.body.appendChild(anchor);
+	anchor.click();
+	anchor.remove();
+	URL.revokeObjectURL(url);
+}
+
 function formatWarnings(warnings: readonly ExportWarning[] | undefined): string {
 	if (!warnings || warnings.length === 0) {
 		return "none";
@@ -250,6 +282,8 @@ export default function PuckEditorPage() {
 	const [aiSelectionActive, setAiSelectionActive] = useState(false);
 	const [collabEnabled, setCollabEnabled] = useState(false);
 	const [collabPeerId, setCollabPeerId] = useState("alice");
+	const [collabRelayUrl, setCollabRelayUrl] = useState<string | null>(null);
+	const [collabRoom, setCollabRoom] = useState("demo-room");
 	// Phase 6: `?chrome=puck` opts out of the AnvilKit chrome and
 	// renders the raw Puck editor for visual regression checks.
 	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">(
@@ -287,13 +321,37 @@ export default function PuckEditorPage() {
 	// peer identity changes. Building the bundle re-instantiates the
 	// adapter, so we keep this memoized so the plugins array stays
 	// stable across re-renders that don't touch collab state.
-	const collabBundle = useMemo(
-		() =>
-			collabEnabled
-				? createCollabDemoBundle(demoConfig as unknown as Config, collabPeerId)
-				: null,
-		[collabEnabled, collabPeerId],
-	);
+	const collabBundle = useMemo(() => {
+		if (!collabEnabled) return null;
+		if (collabRelayUrl) {
+			const bundle: CollabRelayBundle = createCollabRelayBundle({
+				puckConfig: demoConfig as unknown as Config,
+				peerId: collabPeerId,
+				room: collabRoom,
+				relayUrl: collabRelayUrl,
+			});
+			return bundle;
+		}
+		return createCollabDemoBundle(
+			demoConfig as unknown as Config,
+			collabPeerId,
+		);
+	}, [collabEnabled, collabPeerId, collabRelayUrl, collabRoom]);
+
+	useEffect(() => {
+		// The relay bundle owns a WebSocket; tear it down when the
+		// memoized bundle changes (peer rename, relay toggle) or the
+		// page unmounts. The in-memory `createCollabDemoBundle` has no
+		// relay, so the conditional skip avoids a type narrowing churn.
+		const teardownTarget = collabBundle as
+			| (CollabRelayBundle & { destroy: () => void })
+			| null;
+		return () => {
+			if (teardownTarget && "provider" in teardownTarget) {
+				teardownTarget.destroy();
+			}
+		};
+	}, [collabBundle]);
 
 	// Memoized so the plugins array reference stays stable across
 	// renders. Without this, each render passes a fresh array literal
@@ -320,10 +378,9 @@ export default function PuckEditorPage() {
 		() => ({ id: collabPeerId, displayName: collabPeerId }),
 		[collabPeerId],
 	);
-	const { peers: collabPeers, updateSelf } = usePresence(
-		collabBundle?.adapter.presence,
-		{ self: presenceSelf },
-	);
+	const { updateSelf } = usePresence(collabBundle?.adapter.presence, {
+		self: presenceSelf,
+	});
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -336,6 +393,21 @@ export default function PuckEditorPage() {
 		const peerOverride = params.get("peer");
 		if (peerOverride && peerOverride.length > 0) {
 			setCollabPeerId(peerOverride);
+		}
+		const roomOverride = params.get("room");
+		if (roomOverride && roomOverride.length > 0) {
+			setCollabRoom(roomOverride);
+		}
+		// `?relay=ws` switches the demo onto the y-websocket reference
+		// relay (port comes from `?relayPort=` or NEXT_PUBLIC_COLLAB_RELAY_PORT,
+		// defaulting to 1234). Without it the demo runs in single-tab
+		// in-memory mode and only proves the SnapshotAdapter wiring.
+		if (params.get("relay") === "ws") {
+			const port =
+				params.get("relayPort") ??
+				process.env.NEXT_PUBLIC_COLLAB_RELAY_PORT ??
+				"1234";
+			setCollabRelayUrl(`ws://localhost:${port}`);
 		}
 		setChromeMode(params.get("chrome") === "puck" ? "puck" : "anvilkit");
 		const rawOverrides = params.get("messageOverrides");
@@ -485,19 +557,7 @@ export default function PuckEditorPage() {
 				demoConfig as unknown as Config,
 			);
 			const result = await htmlFormat.run(ir, { title: "Exported Page" });
-			const blobPart =
-				typeof result.content === "string"
-					? result.content
-					: new Uint8Array(result.content);
-			const blob = new Blob([blobPart], { type: htmlFormat.mimeType });
-			const url = URL.createObjectURL(blob);
-			const anchor = document.createElement("a");
-			anchor.href = url;
-			anchor.download = result.filename;
-			document.body.appendChild(anchor);
-			anchor.click();
-			anchor.remove();
-			URL.revokeObjectURL(url);
+			downloadExportResult(result.content, result.filename, htmlFormat.mimeType);
 			console.log("[demo] exported html", {
 				filename: result.filename,
 				byteLength: result.content.length,
@@ -514,25 +574,60 @@ export default function PuckEditorPage() {
 				demoConfig as unknown as Config,
 			);
 			const result = await reactFormat.run(ir, { syntax: "tsx" });
-			const blobPart =
-				typeof result.content === "string"
-					? result.content
-					: new Uint8Array(result.content);
-			const blob = new Blob([blobPart], { type: reactFormat.mimeType });
-			const url = URL.createObjectURL(blob);
-			const anchor = document.createElement("a");
-			anchor.href = url;
-			anchor.download = result.filename;
-			document.body.appendChild(anchor);
-			anchor.click();
-			anchor.remove();
-			URL.revokeObjectURL(url);
+			downloadExportResult(
+				result.content,
+				result.filename,
+				reactFormat.mimeType,
+			);
 			console.log("[demo] exported react", {
 				filename: result.filename,
 				byteLength: result.content.length,
 			});
 		} catch (error) {
 			console.error("[demo] export react failed", error);
+		}
+	}
+
+	// Single dispatcher wired to the AnvilKit chrome's `<PublishPanel>`.
+	// The panel calls `onExport(formatId)`; we look the format up in the
+	// runtime and run it against IR built from the latest published data.
+	// This is the cleanest interface adaptation between the panel UI and
+	// the export plugins — neither side needs to know about the other.
+	async function handleExport(formatId: string) {
+		try {
+			const ir = puckDataToIR(
+				publishedData,
+				demoConfig as unknown as Config,
+			);
+			if (formatId === "html") {
+				const result = await htmlFormat.run(ir, { title: "Exported Page" });
+				downloadExportResult(
+					result.content,
+					result.filename,
+					htmlFormat.mimeType,
+				);
+				return;
+			}
+			if (formatId === "react") {
+				const result = await reactFormat.run(ir, { syntax: "tsx" });
+				downloadExportResult(
+					result.content,
+					result.filename,
+					reactFormat.mimeType,
+				);
+				return;
+			}
+			if (formatId === "json") {
+				downloadExportResult(
+					JSON.stringify(ir, null, 2),
+					"page.json",
+					"application/json",
+				);
+				return;
+			}
+			console.warn("[demo] unknown export format", formatId);
+		} catch (error) {
+			console.error("[demo] export failed", { formatId, error });
 		}
 	}
 
@@ -809,20 +904,43 @@ export default function PuckEditorPage() {
 						Raw Puck
 					</a>
 				</div>
-				<Studio
-					puckConfig={demoConfig}
-					data={publishedData}
-					plugins={plugins}
-					onPublish={handlePublish}
-					chrome={chromeMode}
-					pages={pagesSource}
-					messages={studioMessages}
-				/>
-				{collabEnabled ? (
-					<PresenceLayer
-						peers={collabPeers as readonly PresenceStateFrame[]}
+				{collabEnabled && collabBundle ? (
+					<CollabUIProvider
+						adapter={collabBundle.adapter}
+						self={{
+							id: collabPeerId,
+							displayName: collabPeerId,
+						}}
+					>
+						<CollabRoomBar
+							title="Collaboration demo"
+							subtitle={collabRoom}
+							roomId={collabRoom}
+						/>
+						<Studio
+							puckConfig={demoConfig}
+							data={publishedData}
+							plugins={plugins}
+							onPublish={handlePublish}
+							onExport={handleExport}
+							chrome={chromeMode}
+							pages={pagesSource}
+							messages={studioMessages}
+						/>
+						<CollabPresenceLayer />
+						<ConflictNoticeCenter />
+					</CollabUIProvider>
+				) : (
+					<Studio
+						puckConfig={demoConfig}
+						data={publishedData}
+						plugins={plugins}
+						onPublish={handlePublish}
+						chrome={chromeMode}
+						pages={pagesSource}
+						messages={studioMessages}
 					/>
-				) : null}
+				)}
 			</section>
 
 			<section className={styles.snapshot}>
