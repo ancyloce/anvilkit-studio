@@ -3,8 +3,8 @@
 import {
 	createCollabPlugin,
 	createYjsAdapter,
+	type YjsSnapshotAdapter,
 } from "@anvilkit/plugin-collab-yjs";
-import type { SnapshotAdapter } from "@anvilkit/plugin-version-history";
 import type { Config } from "@puckeditor/core";
 import { Awareness } from "y-protocols/awareness";
 import { Doc as YDoc } from "yjs";
@@ -15,11 +15,11 @@ import { Doc as YDoc } from "yjs";
  * to exercise the SnapshotAdapter v2 wiring and the presence layer
  * in the editor page. A real transport (y-websocket reference relay
  * under packages/plugins/plugin-collab-yjs/examples/) is required
- * for the cross-tab two-session flow.
+ * for the cross-tab two-session flow — see `collab-relay-bundle.ts`.
  */
 export interface CollabDemoBundle {
 	readonly plugin: ReturnType<typeof createCollabPlugin>;
-	readonly adapter: SnapshotAdapter;
+	readonly adapter: YjsSnapshotAdapter;
 	readonly doc: YDoc;
 	readonly awareness: Awareness;
 }
