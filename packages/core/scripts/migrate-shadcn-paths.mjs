@@ -40,7 +40,7 @@
  *   pnpm --filter @anvilkit/core migrate:shadcn-paths -- --dry-run
  */
 
-import { mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, rm, rmdir, stat, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -233,7 +233,7 @@ async function moveDir(from, to) {
 			if (entries.length > 0) {
 				break;
 			}
-			await rm(parent, { recursive: false, force: true });
+			await rmdir(parent);
 			parent = dirname(parent);
 		}
 	}
