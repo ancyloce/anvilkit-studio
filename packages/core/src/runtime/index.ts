@@ -5,6 +5,7 @@
 // remain React-free — architecture constraint enforced in `core-015`
 // quality gates.
 
+export { jsonFormat } from "./built-in-formats/json-format.js";
 export {
 	compilePlugins,
 	type StudioRuntime,
