@@ -7,6 +7,7 @@ const nextConfig = {
 		"@anvilkit/bento-grid",
 		"@anvilkit/blog-list",
 		"@anvilkit/button",
+		"@anvilkit/collab-ui",
 		"@anvilkit/core",
 		"@anvilkit/hero",
 		"@anvilkit/helps",
