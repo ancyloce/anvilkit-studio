@@ -95,6 +95,7 @@ import { mergeOverrides } from "@/overrides/merge-overrides";
 import type { StudioChromeMode } from "@/overrides/types";
 import { Toaster } from "@/primitives/sonner";
 import { TooltipProvider } from "@/primitives/tooltip";
+import { jsonExportPlugin } from "@/runtime/built-in-formats/json-export-plugin";
 import { compilePlugins, type StudioRuntime } from "@/runtime/compile-plugins";
 import {
 	createSidebarRegistryStore,
@@ -251,6 +252,24 @@ export interface StudioProps {
 	 * Drives the "Publish" button's loading state.
 	 */
 	readonly isPublishing?: boolean;
+	/**
+	 * Optional click handler for the panel's "Publish to live" action.
+	 * When omitted, the action is rendered disabled. The Puck `onPublish`
+	 * pipeline (`onBeforePublish` → consumer `onPublish` → `onAfterPublish`)
+	 * still fires through Puck's own publish UI; this handler exists so
+	 * the AnvilKit chrome can offer a header button that the host wires
+	 * to its own publish flow.
+	 */
+	readonly onPublishClick?: () => void;
+	/**
+	 * Optional handler invoked from the publish panel's Export submenu
+	 * with the format id (e.g. `"json"`, `"html"`, `"react"`). The host
+	 * normalizes Puck data to {@link PageIR}, calls
+	 * `runtime.exportFormats.get(formatId).run(ir, options)`, and
+	 * triggers the browser download. Optional — the Export submenu
+	 * disables itself when omitted.
+	 */
+	readonly onExport?: (formatId: string) => void | Promise<void>;
 	/**
 	 * Optional pages source for the sidebar's `layer` module. The host
 	 * supplies the page list and routing callbacks; the sidebar renders
@@ -532,6 +551,8 @@ export function Studio(props: StudioProps): ReactElement | null {
 		isSavingDraft,
 		lastSavedAt,
 		isPublishing,
+		onPublishClick,
+		onExport,
 		pages,
 		messages,
 	} = props;
@@ -682,7 +703,10 @@ export function Studio(props: StudioProps): ReactElement | null {
 				};
 			}
 
-			let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] = basePlugins;
+			let resolvedPlugins: readonly (StudioPlugin | PuckPlugin)[] = [
+				jsonExportPlugin,
+				...basePlugins,
+			];
 			if (aiHost !== undefined) {
 				// Dynamic import keeps the adapter tree-shakable: apps
 				// that never pass `aiHost` do not bundle this module.
@@ -690,7 +714,11 @@ export function Studio(props: StudioProps): ReactElement | null {
 				if (cancelled) {
 					return;
 				}
-				resolvedPlugins = [aiHostAdapter({ aiHost }), ...basePlugins];
+				resolvedPlugins = [
+					aiHostAdapter({ aiHost }),
+					jsonExportPlugin,
+					...basePlugins,
+				];
 			}
 
 			// Build the plugin context against the freshly resolved
@@ -1052,6 +1080,8 @@ export function Studio(props: StudioProps): ReactElement | null {
 											isSavingDraft,
 											lastSavedAt,
 											isPublishing,
+											onPublishClick,
+											onExport,
 										}}
 									>
 										<TooltipProvider delay={200}>
