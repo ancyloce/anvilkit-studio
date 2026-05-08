@@ -66,6 +66,20 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.toolbar.viewport.full": "Full width",
 	"studio.headerActions.overflow": "More actions",
 
+	// Publish panel (consolidated header entry point).
+	"studio.publishPanel.trigger": "Publish",
+	"studio.publishPanel.title": "Publish",
+	"studio.publishPanel.savedRelative": "Saved {time}",
+	"studio.publishPanel.notSaved": "No save yet",
+	"studio.publishPanel.section.document": "Document",
+	"studio.publishPanel.section.export": "Export",
+	"studio.publishPanel.action.save": "Save draft",
+	"studio.publishPanel.action.saving": "Saving…",
+	"studio.publishPanel.action.publish": "Publish to live",
+	"studio.publishPanel.export.empty": "No export formats registered.",
+	"studio.publishPanel.export.unavailable":
+		"Host has not wired an export handler.",
+
 	// Sidebar shell (PRD §4.2).
 	"studio.sidebar.close": "Close panel",
 
