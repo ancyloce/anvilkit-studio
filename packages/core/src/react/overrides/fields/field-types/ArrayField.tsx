@@ -596,13 +596,14 @@ export function ArrayField({
 								<PopoverPositioner
 									side="left"
 									align="start"
-									sideOffset={64}
+									sideOffset={68}
 									alignOffset={-14}
 								>
 									<PopoverPopup
+										data-ak-studio-theme
 										initialFocus={false}
 										style={{ maxHeight: PROPERTY_PANEL_MAX_HEIGHT }}
-										className="flex min-h-0 w-48 flex-col gap-0 overflow-hidden p-0"
+										className="flex min-h-0 w-64 origin-(--transform-origin) flex-col gap-0 overflow-hidden rounded-lg bg-popover p-0 text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden"
 									>
 										<PopoverTitle className="sr-only">
 											{summaryText}
