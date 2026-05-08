@@ -98,10 +98,16 @@ function HeaderActionsContent({
 	readonly actions: readonly StudioHeaderAction[];
 	readonly ctx: StudioPluginContext;
 }): ReactNode {
-	const groups = useMemo<GroupedActions>(
-		() => groupByGroup(composeHeaderActions(actions)),
-		[actions],
-	);
+	const groups = useMemo<GroupedActions>(() => {
+		// Defensive filter: `<PublishPanel>` is the canonical entry point
+		// for every export format registered with the runtime. Plugin
+		// authors normally opt out of contributing a header button via
+		// `headerAction: false`, but if a host forgets to pass that flag
+		// we still hide any `id` starting with `export-` so the toolbar
+		// does not double up on the panel's Export submenu.
+		const filtered = actions.filter((a) => !a.id.startsWith("export-"));
+		return groupByGroup(composeHeaderActions(filtered));
+	}, [actions]);
 
 	return (
 		<div className="flex items-center gap-2">

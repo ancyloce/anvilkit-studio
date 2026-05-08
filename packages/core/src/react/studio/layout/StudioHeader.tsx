@@ -16,14 +16,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
 import { cn } from "@/utils/cn";
 import { HeaderActions } from "./HeaderActions";
+import { PublishPanel } from "./PublishPanel";
 
 export interface StudioHeaderProps {
 	readonly onBack?: () => void;
-	readonly onSaveDraft?: () => void | Promise<void>;
-	readonly isSavingDraft?: boolean;
 	readonly lastSavedAt?: Date | null;
-	readonly isPublishing?: boolean;
-	readonly onPublishClick?: () => void;
 }
 
 interface PlaceholderCollaborator {
@@ -42,11 +39,7 @@ const PLACEHOLDER_OVERFLOW = 2;
 
 export function StudioHeader({
 	onBack,
-	onSaveDraft,
-	isSavingDraft = false,
 	lastSavedAt = null,
-	isPublishing = false,
-	onPublishClick,
 }: StudioHeaderProps): ReactNode {
 	const msg = useMsg();
 
@@ -119,27 +112,7 @@ export function StudioHeader({
           <TooltipContent>{msg("studio.preview")}</TooltipContent>
         </Tooltip>
 
-        {onSaveDraft !== undefined ? (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              void onSaveDraft();
-            }}
-            disabled={isSavingDraft}
-          >
-            {msg("studio.saveDraft")}
-          </Button>
-        ) : null}
-
-        <Button
-          variant="default"
-          size="sm"
-          onClick={onPublishClick}
-          disabled={isPublishing}
-        >
-          {isPublishing ? msg("studio.publishing") : msg("studio.publish")}
-        </Button>
+        <PublishPanel />
       </div>
     </header>
   );

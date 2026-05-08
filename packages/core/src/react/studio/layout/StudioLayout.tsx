@@ -35,9 +35,16 @@ export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// no props (the override callback receives `{ children }` only),
 	// so the header props come from `<ChromePropsProvider>` set up by
 	// `<Studio>`. The optional `propOverrides` lets tests pass props
-	// directly without wrapping in a provider.
-	const ctxProps = useChromeProps();
-	const props: StudioHeaderProps = { ...ctxProps, ...propOverrides };
+	// directly without wrapping in a provider. Save / Publish / Export
+	// callbacks are now consumed inside `<PublishPanel>` directly via
+	// `useChromeProps`, so the header itself only needs `onBack` and
+	// the read-only `lastSavedAt` chip.
+	const { onBack, lastSavedAt } = useChromeProps();
+	const props: StudioHeaderProps = {
+		onBack,
+		lastSavedAt,
+		...propOverrides,
+	};
 	const hasSelection = useStudioPuck(
     (state) => state.appState.ui.itemSelector !== null,
   );
