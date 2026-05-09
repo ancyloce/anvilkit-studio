@@ -8,7 +8,10 @@ packages:
   - "examples/plugins/*"
   - "examples/ai-adapters/*"
 allowBuilds:
-  esbuild: set this to true or false
-  leveldown: set this to true or false
+  esbuild: false
+  leveldown: false
   msw: false
-  sharp: set this to true or false
+  sharp: false
+overrides:
+  react: 19.2.6
+  react-dom: 19.2.6
