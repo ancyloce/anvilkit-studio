@@ -170,6 +170,23 @@ knip and shellcheck are intentionally skipped: neither is installed in this repo
 and the only `.sh` files live under `node_modules/`. Reintroduce them here if that
 ever changes.
 
+## Verification Gates
+- Always run typecheck, lint, and tests after multi-file changes before declaring work complete
+- When refactoring or moving files, search for ALL usage sites (e.g., multiple <Studio> mounts in demos) — never assume a single call site
+- Use `import type` for type-only imports to satisfy verbatimModuleSyntax
+
+## Iframe & Canvas Styling
+- Tailwind utilities and parent-document CSS do NOT reach the canvas iframe — use inline styles or explicit CopyHostStyles injection
+- Before debugging styling issues, suspect stale webpack/dev-server cache and check with a clean rebuild
+
+## i18n Convention
+- Never duplicate bilingual strings inline; always use i18n message keys
+- Do not add language-specific (e.g., Chinese) translation overrides to demo apps unless explicitly requested
+
+## Test Infrastructure Notes
+- E2E tests must use unique room IDs per test and avoid port 1234 collisions (use dynamic ports or kill stale processes first)
+- The repo has known path-alias resolution issues in some test suites — flag this rather than silently skipping tests
+
 ## Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill
