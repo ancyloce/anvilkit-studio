@@ -8,4 +8,7 @@ packages:
   - "examples/plugins/*"
   - "examples/ai-adapters/*"
 allowBuilds:
+  esbuild: set this to true or false
+  leveldown: set this to true or false
   msw: false
+  sharp: set this to true or false
