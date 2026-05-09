@@ -58,9 +58,13 @@ export default defineConfig({
 			// under examples/. Other suites do not depend on it; the
 			// command is cheap to boot (<200 ms) so always running it
 			// keeps the matrix simple.
+			//
+			// Port 11234 (not 1234) sidesteps a known WSL2 binding leak
+			// where a stale Node process can hold 1234 even after it
+			// otherwise exits.
 			command:
-				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 1234",
-			url: "http://localhost:1234",
+				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 11234",
+			url: "http://localhost:11234",
 			reuseExistingServer: !process.env.CI,
 			timeout: 30_000,
 		},
