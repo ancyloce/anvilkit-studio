@@ -261,6 +261,13 @@ export default function PuckEditorPage() {
 	const [publishedData, setPublishedData] = useState<Data<DemoComponents>>(() =>
 		createDemoData(),
 	);
+	// Demo-only Save Draft / Publish state for the consolidated header
+	// publish panel. Real apps would persist drafts to a backend; here we
+	// just stamp a timestamp and route the panel's "Publish to live"
+	// action through the same `handlePublish` flow used by Puck's own
+	// publish button.
+	const [isSavingDraft, setIsSavingDraft] = useState(false);
+	const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
 	const [assetManagerTestMode, setAssetManagerTestMode] = useState(false);
 	const [assetManagerUploadMode, setAssetManagerUploadMode] = useState<
 		"safe" | "rogue"
@@ -400,13 +407,13 @@ export default function PuckEditorPage() {
 		}
 		// `?relay=ws` switches the demo onto the y-websocket reference
 		// relay (port comes from `?relayPort=` or NEXT_PUBLIC_COLLAB_RELAY_PORT,
-		// defaulting to 1234). Without it the demo runs in single-tab
+		// defaulting to 11234). Without it the demo runs in single-tab
 		// in-memory mode and only proves the SnapshotAdapter wiring.
 		if (params.get("relay") === "ws") {
 			const port =
 				params.get("relayPort") ??
 				process.env.NEXT_PUBLIC_COLLAB_RELAY_PORT ??
-				"1234";
+				"11234";
 			setCollabRelayUrl(`ws://localhost:${port}`);
 		}
 		setChromeMode(params.get("chrome") === "puck" ? "puck" : "anvilkit");
@@ -536,6 +543,26 @@ export default function PuckEditorPage() {
 
 		setAssetManagerReactOutput(String(result.content));
 		setAssetManagerReactWarnings(formatWarnings(result.warnings));
+	}
+
+	async function handleSaveDraft() {
+		setIsSavingDraft(true);
+		try {
+			// Stand-in for a real persistence call. The demo just stamps a
+			// timestamp so the publish panel's "Saved Xm ago" line updates.
+			await new Promise((resolve) => setTimeout(resolve, 300));
+			setLastSavedAt(new Date());
+			console.log("[demo] draft saved");
+		} finally {
+			setIsSavingDraft(false);
+		}
+	}
+
+	function handlePublishClick() {
+		// Demo: route the panel's "Publish to live" through the same
+		// flow Puck's own publish button uses. Real apps typically POST
+		// to a backend here.
+		handlePublish(publishedData);
 	}
 
 	function handlePublish(nextPublishedData: Data) {
@@ -922,6 +949,10 @@ export default function PuckEditorPage() {
 							data={publishedData}
 							plugins={plugins}
 							onPublish={handlePublish}
+							onPublishClick={handlePublishClick}
+							onSaveDraft={handleSaveDraft}
+							isSavingDraft={isSavingDraft}
+							lastSavedAt={lastSavedAt}
 							onExport={handleExport}
 							chrome={chromeMode}
 							pages={pagesSource}
@@ -936,6 +967,11 @@ export default function PuckEditorPage() {
 						data={publishedData}
 						plugins={plugins}
 						onPublish={handlePublish}
+						onPublishClick={handlePublishClick}
+						onSaveDraft={handleSaveDraft}
+						isSavingDraft={isSavingDraft}
+						lastSavedAt={lastSavedAt}
+						onExport={handleExport}
 						chrome={chromeMode}
 						pages={pagesSource}
 						messages={studioMessages}
