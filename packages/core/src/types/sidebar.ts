@@ -95,7 +95,13 @@ export interface StudioLayerQuickAdd {
  * which sub-panel layout (image grid / video card / audio row) the
  * sidebar uses for the tile.
  */
-export type StudioAssetKind = "image" | "video" | "audio" | "other";
+export type StudioAssetKind =
+	| "image"
+	| "video"
+	| "audio"
+	| "font"
+	| "document"
+	| "other";
 
 /**
  * A single asset entry returned by a {@link StudioAssetSource}.
