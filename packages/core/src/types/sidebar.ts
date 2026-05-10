@@ -146,6 +146,39 @@ export type StudioAssetUploadEvent =
 export type StudioAssetUploadListener = (event: StudioAssetUploadEvent) => void;
 
 /**
+ * Search / filter / pagination query passed to
+ * {@link StudioAssetSource.listPaginated}. Filters compose with AND
+ * semantics: an asset must satisfy every supplied filter to land in
+ * the page.
+ */
+export interface StudioAssetListQuery {
+	/** Free-text query, matched against id, name, MIME prefix, tags. */
+	readonly query?: string;
+	/** Restrict to one or more asset kinds. */
+	readonly kinds?: readonly StudioAssetKind[];
+	/** Require all listed tags (AND semantics). */
+	readonly tags?: readonly string[];
+	/** Opaque pagination cursor returned by the previous page. */
+	readonly cursor?: string;
+	/** Maximum items per page. Sources may apply their own ceiling. */
+	readonly limit?: number;
+}
+
+/**
+ * Pagination envelope returned by {@link StudioAssetSource.listPaginated}.
+ *
+ * - `items` — the slice for the requested page.
+ * - `total` — total matches across all pages (post-filter).
+ * - `nextCursor` — opaque cursor for the next page, or `undefined`
+ *   when the result set is exhausted.
+ */
+export interface StudioAssetListPage {
+	readonly items: readonly StudioAsset[];
+	readonly total: number;
+	readonly nextCursor: string | undefined;
+}
+
+/**
  * Asset listing + mutation contract registered by an asset-manager
  * plugin via `ctx.registerAssetSource(source)`. The `image` sidebar
  * module reads from this surface; when no source is registered it
@@ -154,6 +187,12 @@ export type StudioAssetUploadListener = (event: StudioAssetUploadEvent) => void;
 export interface StudioAssetSource {
 	/** Return the current asset list (sync or async). */
 	list(): readonly StudioAsset[] | Promise<readonly StudioAsset[]>;
+	/**
+	 * Optional paginated / filtered listing. Remote sources override
+	 * this to push search and pagination to the server; the sidebar
+	 * falls back to {@link StudioAssetSource.list} when omitted.
+	 */
+	listPaginated?(query: StudioAssetListQuery): Promise<StudioAssetListPage>;
 	/**
 	 * Upload one or more files. The optional listener is fired with
 	 * progress envelopes if the source supports streaming progress.
@@ -166,6 +205,8 @@ export interface StudioAssetSource {
 	rename?(assetId: string, nextName: string): Promise<void>;
 	/** Optional in-place replace. */
 	replace?(assetId: string, file: File): Promise<StudioAsset>;
+	/** Optional tag editor. Replaces the asset's tag set in place. */
+	setTags?(assetId: string, tags: readonly string[]): Promise<void>;
 	/** Optional delete. */
 	delete?(assetId: string): Promise<void>;
 	/** Optional URL accessor for "Copy URL". Defaults to `asset.url`. */
@@ -175,6 +216,13 @@ export interface StudioAssetSource {
 	 * listener that re-runs `list()` when fired.
 	 */
 	subscribe?(listener: () => void): () => void;
+	/**
+	 * Optional streaming upload subscription. Fired with the same
+	 * envelope shape `upload()` emits to its inline listener, but
+	 * delivered to every subscriber. Hosts use this to render
+	 * persistent progress UI outside the upload call site.
+	 */
+	subscribeUploads?(listener: StudioAssetUploadListener): () => void;
 }
 
 /**

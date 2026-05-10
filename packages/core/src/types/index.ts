@@ -56,6 +56,8 @@ export type {
 	StudioAsset,
 	StudioAssetAction,
 	StudioAssetKind,
+	StudioAssetListPage,
+	StudioAssetListQuery,
 	StudioAssetSource,
 	StudioAssetUploadEvent,
 	StudioAssetUploadListener,
