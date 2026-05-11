@@ -33,7 +33,7 @@ describe("registry feed", () => {
 
 	const feed = RegistryFeedSchema.parse(raw);
 
-	it("contains 10 templates, 5 plugins, 11 components", () => {
+	it("contains 10 templates, 7 plugins, 11 components", () => {
 		const counts = feed.entries.reduce(
 			(acc, e) => {
 				acc[e.kind]++;
@@ -44,7 +44,7 @@ describe("registry feed", () => {
 				number
 			>,
 		);
-		expect(counts).toEqual({ template: 10, plugin: 5, component: 11 });
+		expect(counts).toEqual({ template: 10, plugin: 7, component: 11 });
 	});
 
 	it("marks every first-party entry as verified", () => {

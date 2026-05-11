@@ -22,9 +22,7 @@ const validHero: PageIR = {
 		id: "root",
 		type: "__root__",
 		props: {},
-		children: [
-			{ id: "hero-1", type: "Hero", props: { title: "Hello" } },
-		],
+		children: [{ id: "hero-1", type: "Hero", props: { title: "Hello" } }],
 	},
 	assets: [],
 	metadata: {},
@@ -37,9 +35,9 @@ const ctxStub = {
 			description: "A marketing hero block with a headline and body.",
 			fields: [
 				{
-					fieldName: "title",
+					name: "title",
 					description: "Headline.",
-					type: "string" as const,
+					type: "text" as const,
 				},
 			],
 		},
@@ -107,9 +105,7 @@ describe("§4 — validator boundary", () => {
 			...validHero,
 			root: {
 				...validHero.root,
-				children: [
-					{ id: "x", type: "NotDeclared", props: {} },
-				],
+				children: [{ id: "x", type: "NotDeclared", props: {} }],
 			},
 		};
 		const result = validateAiOutput(evil, ctxStub.availableComponents);
@@ -163,9 +159,7 @@ describe("§7 — OpenAI adapter (mocked)", () => {
 			chat: {
 				completions: {
 					create: vi.fn().mockResolvedValue({
-						choices: [
-							{ message: { content: JSON.stringify(validHero) } },
-						],
+						choices: [{ message: { content: JSON.stringify(validHero) } }],
 					}),
 				},
 			},
@@ -202,9 +196,11 @@ describe("§7 — OpenAI adapter (mocked)", () => {
 
 describe("§7 — generic fetch adapter", () => {
 	it("POSTs to the endpoint with prompt + component allow-list", async () => {
-		const fetchMock = vi.fn().mockResolvedValue(
-			new Response(JSON.stringify(validHero), { status: 200 }),
-		);
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue(
+				new Response(JSON.stringify(validHero), { status: 200 }),
+			);
 		vi.stubGlobal("fetch", fetchMock);
 
 		function createFetchGeneratePage(endpoint: string): GeneratePageFn {
@@ -215,7 +211,9 @@ describe("§7 — generic fetch adapter", () => {
 					headers: { "content-type": "application/json" },
 					body: JSON.stringify({
 						prompt,
-						availableComponents: ctx.availableComponents.map((c) => c.componentName),
+						availableComponents: ctx.availableComponents.map(
+							(c) => c.componentName,
+						),
 					}),
 				});
 				if (!response.ok) {
@@ -235,15 +233,17 @@ describe("§7 — generic fetch adapter", () => {
 				headers: { "content-type": "application/json" },
 			}),
 		);
-		const body = JSON.parse((fetchMock.mock.calls[0][1] as RequestInit).body as string);
+		const body = JSON.parse(
+			(fetchMock.mock.calls[0][1] as RequestInit).body as string,
+		);
 		expect(body.prompt).toBe("hello");
 		expect(body.availableComponents).toEqual(["Hero"]);
 	});
 
 	it("surfaces a non-2xx response as a thrown error (→ GENERATE_FAILED)", async () => {
-		const fetchMock = vi.fn().mockResolvedValue(
-			new Response("", { status: 500 }),
-		);
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValue(new Response("", { status: 500 }));
 		vi.stubGlobal("fetch", fetchMock);
 
 		function createFetchGeneratePage(endpoint: string): GeneratePageFn {
