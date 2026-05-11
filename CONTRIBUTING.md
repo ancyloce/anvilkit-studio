@@ -4,7 +4,7 @@ Thanks for your interest in contributing to AnvilKit Studio. This guide covers e
 
 ## Prerequisites
 
-- **Node.js** >= 20.19
+- **Node.js** >= 22.13
 - **pnpm** 11.0.9 (exact — the repo enforces this via `packageManager`)
 - **Git** with submodule support
 

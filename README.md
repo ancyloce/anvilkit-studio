@@ -66,7 +66,7 @@ The shared Puck config lives in `apps/demo/lib/puck-demo.ts`.
 
 ## Continuous Integration
 
-`.github/workflows/ci.yml` runs on every pull request (pnpm 11.0.9 / Node 20, submodules pulled recursively):
+`.github/workflows/ci.yml` runs on every pull request (pnpm 11.0.9 / Node 22, submodules pulled recursively):
 
 1. `pnpm lint` — Biome lint
 2. `pnpm typecheck` — TypeScript validation

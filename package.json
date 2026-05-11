@@ -67,7 +67,7 @@
 	},
 	"packageManager": "pnpm@11.0.9",
 	"engines": {
-		"node": ">=20.19"
+		"node": ">=22.13"
 	},
 	"pnpm": {
 		"overrides": {

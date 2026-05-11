@@ -128,7 +128,7 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 - TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
 
 ### Continuous Integration
-`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.0.9 / Node 20, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Starlight build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
+`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.0.9 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Starlight build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
 
 Other workflows: `publish.yml`, `publish-ui.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `vercel.json` and posts an independent GitHub check — it does not block CI, and CI does not block it.
 

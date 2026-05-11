@@ -17,7 +17,7 @@
 		"access": "public"
 	},
 	"engines": {
-		"node": ">=20.19"
+		"node": ">=22.13"
 	},
 	"dependencies": {
 		"@babel/parser": "^7.29.2",

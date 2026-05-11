@@ -24,7 +24,7 @@ Configured by `vercel.json` at the repository root (`phase4-005`).
 | ------------------- | --------------------------------------------------------- |
 | Build command       | `pnpm install --frozen-lockfile && pnpm -F @anvilkit/docs-site build` |
 | Output directory    | `apps/docs/dist`                                          |
-| Node version        | `20` (matches `.github/workflows/ci.yml`)                 |
+| Node version        | `22` (matches `.github/workflows/ci.yml`)                 |
 | Production branch   | `main`                                                    |
 | Production domain   | `docs.anvilkit.dev`                                       |
 
@@ -48,7 +48,7 @@ These steps are performed once in the Vercel dashboard — they can't be express
 
 1. **Create project** — import the `ancyloce/anvilkit-studio` GitHub repo.
 2. **Root Directory:** leave as repo root (`./`). `vercel.json` drives the build from there.
-3. **Node version:** `20.x` (Project Settings → General → Node.js Version).
+3. **Node version:** `22.x` (Project Settings → General → Node.js Version).
 4. **Environment variables:** none required for the docs site today.
 5. **Git Submodules:** enable "Include Git Submodules" so `packages/components`, `packages/plugins/plugin-ai-copilot`, and `packages/plugins/plugin-export-html` check out during the build.
 6. **Custom domain:** add `docs.anvilkit.dev` (Project Settings → Domains) and point the DNS `CNAME` to `cname.vercel-dns.com`.
