@@ -110,39 +110,26 @@ function mount(
 }
 
 describe("HeaderActions composition + grouping", () => {
-	it("renders 5 buttons covering primary/secondary/overflow", () => {
+	it("renders the non-export buttons across primary/secondary/overflow", () => {
 		const ctx = createCtx();
 		mount(buildFixture(), ctx);
 
-		// Primary
-		expect(
-			screen.getByRole("button", { name: "Export HTML" }),
-		).toBeInTheDocument();
-		// Secondary (3)
+		// `id`-starting-with-`export-` actions are filtered out — `<PublishPanel>`
+		// owns the export surface and the toolbar must not double up. That leaves
+		// 2 secondary buttons + 1 overflow menu item from `buildFixture`.
 		expect(
 			screen.getByRole("button", { name: "Save snapshot" }),
 		).toBeInTheDocument();
 		expect(
 			screen.getByRole("button", { name: "Upload asset" }),
 		).toBeInTheDocument();
-		expect(
-			screen.getByRole("button", { name: "Export React" }),
-		).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: "Export HTML" })).toBeNull();
+		expect(screen.queryByRole("button", { name: "Export React" })).toBeNull();
 		// Overflow opens to expose the menu items
 		fireEvent.click(screen.getByRole("button", { name: "More actions" }));
 		expect(
 			screen.getByRole("menuitem", { name: "Open history" }),
 		).toBeInTheDocument();
-
-		// 5 plugin buttons total + 1 overflow trigger
-		const pluginLabels = [
-			screen.getByRole("button", { name: "Export HTML" }),
-			screen.getByRole("button", { name: "Save snapshot" }),
-			screen.getByRole("button", { name: "Upload asset" }),
-			screen.getByRole("button", { name: "Export React" }),
-			screen.getByRole("menuitem", { name: "Open history" }),
-		];
-		expect(pluginLabels).toHaveLength(5);
 	});
 
 	it("orders secondary buttons by their `order` field", () => {
@@ -151,20 +138,12 @@ describe("HeaderActions composition + grouping", () => {
 		const buttons = Array.from(container.querySelectorAll("button")).map(
 			(b) => b.textContent ?? "",
 		);
-		// Expected secondary order: Save snapshot (50), Upload asset (100),
-		// Export React (200). Strip out primary/overflow buttons that frame
-		// the secondary group.
+		// Export buttons are filtered out (see `<PublishPanel>` doc-comment).
+		// Expected secondary order: Save snapshot (50), Upload asset (100).
 		const secondary = buttons.filter(
-			(t) =>
-				t.includes("Save snapshot") ||
-				t.includes("Upload asset") ||
-				t.includes("Export React"),
+			(t) => t.includes("Save snapshot") || t.includes("Upload asset"),
 		);
-		expect(secondary).toEqual([
-			"Save snapshot",
-			"Upload asset",
-			"Export React",
-		]);
+		expect(secondary).toEqual(["Save snapshot", "Upload asset"]);
 	});
 
 	it("renders nothing when both actions and ctx are absent", () => {

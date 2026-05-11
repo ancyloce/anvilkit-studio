@@ -87,6 +87,7 @@ vi.mock("@puckeditor/core", () => {
 			appState: { data: puckMockState.lastProps?.data ?? null },
 			dispatch: () => undefined,
 		}),
+		createUsePuck: () => () => undefined,
 	};
 });
 
@@ -164,8 +165,9 @@ describe("<Studio> — mount and compile", () => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
 		});
 
-		// No formats registered → the export store's list is empty.
-		expect(useExportStore.getState().availableFormats).toEqual([]);
+		// The built-in `jsonExportPlugin` is always prepended, so even with
+		// no consumer plugins the store reports a single `json` format.
+		expect(useExportStore.getState().availableFormats).toEqual(["json"]);
 	});
 });
 
@@ -203,7 +205,10 @@ describe("<Studio> — export store population", () => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
 		});
 
-		expect(useExportStore.getState().availableFormats).toEqual(["html"]);
+		expect(useExportStore.getState().availableFormats).toEqual([
+			"json",
+			"html",
+		]);
 	});
 });
 
@@ -585,7 +590,10 @@ describe("<Studio> — unmount cleanup", () => {
 		// Seed some state so we can prove reset() ran.
 		useAiStore.getState().startGeneration("cached");
 		expect(useAiStore.getState().lastPrompt).toBe("cached");
-		expect(useExportStore.getState().availableFormats).toEqual(["html"]);
+		expect(useExportStore.getState().availableFormats).toEqual([
+			"json",
+			"html",
+		]);
 
 		await act(async () => {
 			unmount();

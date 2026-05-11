@@ -19,6 +19,7 @@ vi.mock("@puckeditor/core", () => ({
 	useGetPuck: () => () => ({
 		getSelectorForId: (_id: string) => ({ index: 1, zone: "some-zone" }),
 	}),
+	createUsePuck: () => () => undefined,
 }));
 
 afterEach(cleanup);
@@ -124,7 +125,9 @@ describe("studioOverrides preset smoke", () => {
 		// debugging/automation hooks.
 		expect(screen.queryByText("Hero")).toBeNull();
 		expect(
-			container.querySelector('[data-ak-action-bar][data-component-label="Hero"]'),
+			container.querySelector(
+				'[data-ak-action-bar][data-component-label="Hero"]',
+			),
 		).not.toBeNull();
 		expect(screen.getByText("parent")).toBeInTheDocument();
 		expect(screen.getByText("child")).toBeInTheDocument();
