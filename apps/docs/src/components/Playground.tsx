@@ -46,7 +46,10 @@ import {
 } from "@anvilkit/navbar";
 import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
-import { createHtmlExportPlugin, htmlFormat } from "@anvilkit/plugin-export-html";
+import {
+	createHtmlExportPlugin,
+	htmlFormat,
+} from "@anvilkit/plugin-export-html";
 import {
 	type PricingMinimalProps,
 	componentConfig as pricingMinimalComponentConfig,
@@ -181,10 +184,7 @@ export default function Playground() {
 	// across toggles. The toggle only gates the UI that triggers
 	// generation; the plugin itself is inert until `runGeneration`
 	// fires.
-	const plugins = useMemo(
-		() => [htmlExportPlugin, aiCopilotPlugin],
-		[],
-	);
+	const plugins = useMemo(() => [htmlExportPlugin, aiCopilotPlugin], []);
 
 	function handleChange(next: Data) {
 		setData(next as unknown as Data<PlaygroundComponents>);
@@ -224,9 +224,7 @@ export default function Playground() {
 			URL.revokeObjectURL(url);
 		} catch (error) {
 			console.error("[playground] export failed", error);
-			setAiError(
-				error instanceof Error ? error.message : "HTML export failed",
-			);
+			setAiError(error instanceof Error ? error.message : "HTML export failed");
 		}
 	}
 
@@ -347,7 +345,7 @@ export default function Playground() {
 
 			<section className="anvilkit-playground__canvas">
 				<Studio
-					puckConfig={playgroundConfig}
+					puckConfig={playgroundConfig as unknown as Config}
 					data={data}
 					plugins={plugins}
 					onChange={handleChange}
@@ -362,7 +360,6 @@ export default function Playground() {
 			>
 				{saveStatus}
 			</p>
-
 		</div>
 	);
 }
