@@ -39,6 +39,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # `packages/components` is a nested pnpm workspace (its own
+      # pnpm-workspace.yaml), so the root install doesn't populate
+      # its `node_modules`. Without this step, turbo's `pnpm run
+      # build` inside a component leaf triggers pnpm 11's
+      # verify-deps-before-run auto-install, which is both slow and
+      # subject to strict-dep-builds errors on first run.
+      - name: Install components workspace
+        # `--config.strictDepBuilds=false` overrides the pnpm 11
+        # default that turns ignored install scripts (esbuild, msw)
+        # into an `[ERR_PNPM_IGNORED_BUILDS]` failure. The components
+        # workspace has no build approvals of its own, so the install
+        # would otherwise abort even though the ignored scripts are
+        # safe to skip.
+        run: pnpm --dir packages/components install --frozen-lockfile --config.strictDepBuilds=false
+
       - name: Lint workspace
         run: pnpm lint
 
