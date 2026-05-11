@@ -205,10 +205,15 @@ describe("<Studio> — export store population", () => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
 		});
 
-		expect(useExportStore.getState().availableFormats).toEqual([
-			"json",
-			"html",
-		]);
+		// `<Studio>` populates the export store from a separate `useEffect`
+		// keyed on `compiled`, which fires *after* the Puck mock first
+		// renders — wait for the store update to land before asserting.
+		await waitFor(() => {
+			expect(useExportStore.getState().availableFormats).toEqual([
+				"json",
+				"html",
+			]);
+		});
 	});
 });
 
