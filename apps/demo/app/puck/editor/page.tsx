@@ -20,7 +20,10 @@ import {
 	type UploadResult,
 	uploadAsset,
 } from "@anvilkit/plugin-asset-manager";
-import { createHtmlExportPlugin, htmlFormat } from "@anvilkit/plugin-export-html";
+import {
+	createHtmlExportPlugin,
+	htmlFormat,
+} from "@anvilkit/plugin-export-html";
 import {
 	createReactExportPlugin,
 	reactFormat,
@@ -83,7 +86,7 @@ const reactExportPlugin = createReactExportPlugin({
 // dependency. The `?e2e=asset-manager` harness keeps its own instance.
 const liveAssetManagerPlugin = createAssetManagerPlugin({
 	uploader: dataUrlUploader(),
-	urlAllowlist: ["http", "https", "blob", "data"],
+	dataUrlAllowlistOptIn: true,
 });
 const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 const aiCopilotPlugin = createAiCopilotPlugin({
@@ -131,7 +134,7 @@ async function createAssetManagerTestHarness(): Promise<AssetManagerTestHarness>
 		[
 			createAssetManagerPlugin({
 				uploader: dataUrlUploader(),
-				urlAllowlist: ["http", "https", "blob", "data"],
+				dataUrlAllowlistOptIn: true,
 			}),
 			createHtmlExportPlugin(),
 			createReactExportPlugin({
@@ -217,7 +220,8 @@ function downloadExportResult(
 	filename: string,
 	mimeType: string,
 ): void {
-	const blobPart = typeof content === "string" ? content : new Uint8Array(content);
+	const blobPart =
+		typeof content === "string" ? content : new Uint8Array(content);
 	const blob = new Blob([blobPart], { type: mimeType });
 	const url = URL.createObjectURL(blob);
 	const anchor = document.createElement("a");
@@ -229,7 +233,9 @@ function downloadExportResult(
 	URL.revokeObjectURL(url);
 }
 
-function formatWarnings(warnings: readonly ExportWarning[] | undefined): string {
+function formatWarnings(
+	warnings: readonly ExportWarning[] | undefined,
+): string {
 	if (!warnings || warnings.length === 0) {
 		return "none";
 	}
@@ -269,12 +275,24 @@ export default function PuckEditorPage() {
 	const [isSavingDraft, setIsSavingDraft] = useState(false);
 	const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
 	const [assetManagerTestMode, setAssetManagerTestMode] = useState(false);
+	// Phase 4 Puck-drag E2E mirrors `publishedData` and intercepts
+	// exports onto `window.__puckData` / `window.__puckExports` so the
+	// spec can assert without parsing iframe contents or downloads.
+	const [puckDragE2eMode, setPuckDragE2eMode] = useState(false);
 	const [assetManagerUploadMode, setAssetManagerUploadMode] = useState<
 		"safe" | "rogue"
 	>("safe");
+	// Phase 4 hardening fixtures: the spec drives different rogue
+	// payloads through the same registry-bypass code path via
+	// `?rogueUrl=...`. Defaults to the legacy `javascript:` URL so the
+	// existing test continues to pass without a query param.
+	const [assetManagerRogueUrl, setAssetManagerRogueUrl] = useState(
+		"javascript:alert(1)",
+	);
 	const [assetManagerStatus, setAssetManagerStatus] = useState("Idle.");
 	const [assetManagerHtmlOutput, setAssetManagerHtmlOutput] = useState("");
-	const [assetManagerHtmlWarnings, setAssetManagerHtmlWarnings] = useState("none");
+	const [assetManagerHtmlWarnings, setAssetManagerHtmlWarnings] =
+		useState("none");
 	const [assetManagerReactOutput, setAssetManagerReactOutput] = useState("");
 	const [assetManagerReactWarnings, setAssetManagerReactWarnings] =
 		useState("none");
@@ -293,9 +311,7 @@ export default function PuckEditorPage() {
 	const [collabRoom, setCollabRoom] = useState("demo-room");
 	// Phase 6: `?chrome=puck` opts out of the AnvilKit chrome and
 	// renders the raw Puck editor for visual regression checks.
-	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">(
-		"anvilkit",
-	);
+	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">("anvilkit");
 	// Phase G E2E hook: `?messageOverrides=<urlencoded JSON>` drives
 	// `<Studio messages>` so the sidebar-modules spec can exercise the
 	// PRD §10.2 alias map at runtime (legacy `studio.tab.*` keys
@@ -365,21 +381,18 @@ export default function PuckEditorPage() {
 	// to `<Studio>`, whose compile effect re-fires, unmounts the
 	// runtime, and resets Puck's data back to the `publishedData`
 	// prop — wiping any AI-generated content instantly.
-	const plugins = useMemo(
-		() => {
-			const base = [
-				smokeTestPlugin,
-				htmlExportPlugin,
-				reactExportPlugin,
-				aiCopilotPlugin,
-				liveAssetManagerPlugin,
-				demoCopySnippetPlugin,
-				demoLayerQuickAddPlugin,
-			];
-			return collabBundle ? [...base, collabBundle.plugin] : base;
-		},
-		[collabBundle],
-	);
+	const plugins = useMemo(() => {
+		const base = [
+			smokeTestPlugin,
+			htmlExportPlugin,
+			reactExportPlugin,
+			aiCopilotPlugin,
+			liveAssetManagerPlugin,
+			demoCopySnippetPlugin,
+			demoLayerQuickAddPlugin,
+		];
+		return collabBundle ? [...base, collabBundle.plugin] : base;
+	}, [collabBundle]);
 
 	const presenceSelf = useMemo(
 		() => ({ id: collabPeerId, displayName: collabPeerId }),
@@ -393,6 +406,11 @@ export default function PuckEditorPage() {
 		const params = new URLSearchParams(window.location.search);
 		const incomingData = params.get(demoDataSearchParam);
 		setAssetManagerTestMode(params.get("e2e") === "asset-manager");
+		setPuckDragE2eMode(params.get("e2e") === "puck-drag");
+		const rogueUrlParam = params.get("rogueUrl");
+		if (rogueUrlParam !== null && rogueUrlParam.length > 0) {
+			setAssetManagerRogueUrl(rogueUrlParam);
+		}
 		if (incomingData !== null) {
 			setPublishedData(getDemoDataFromSearchParam(incomingData));
 		}
@@ -426,15 +444,30 @@ export default function PuckEditorPage() {
 					typeof parsed === "object" &&
 					!Array.isArray(parsed)
 				) {
-					setMessageOverrides(
-						parsed as Readonly<Record<string, string>>,
-					);
+					setMessageOverrides(parsed as Readonly<Record<string, string>>);
 				}
 			} catch {
 				// Malformed query input — fall through with no overrides.
 			}
 		}
 	}, []);
+
+	useEffect(() => {
+		if (!puckDragE2eMode) return;
+		const w = window as unknown as { __puckData?: Data };
+		w.__puckData = publishedData;
+	}, [puckDragE2eMode, publishedData]);
+
+	useEffect(() => {
+		if (!puckDragE2eMode) return;
+		const w = window as unknown as {
+			__puckExportTrigger?: (formatId: string) => Promise<void>;
+		};
+		w.__puckExportTrigger = handleExport;
+		return () => {
+			delete w.__puckExportTrigger;
+		};
+	});
 
 	useEffect(() => {
 		if (!collabBundle) return;
@@ -471,7 +504,9 @@ export default function PuckEditorPage() {
 
 			if (assetManagerUploadMode === "safe") {
 				harness.asset = await uploadAsset(harness.ctx, file);
-				setAssetManagerStatus(`Uploaded ${harness.asset.id} through dataUrlUploader.`);
+				setAssetManagerStatus(
+					`Uploaded ${harness.asset.id} through dataUrlUploader.`,
+				);
 			} else {
 				const registry = getAssetRegistry(harness.ctx);
 				if (!registry) {
@@ -480,14 +515,14 @@ export default function PuckEditorPage() {
 
 				harness.asset = registry.register({
 					id: "asset-rogue",
-					url: "javascript:alert(1)",
+					url: assetManagerRogueUrl,
 					meta: {
 						size: file.size,
 						...(file.type ? { mimeType: file.type } : {}),
 					},
 				});
 				setAssetManagerStatus(
-					'Seeded asset-rogue to simulate a rogue uploader bypassing upload validation.',
+					`Seeded asset-rogue (${assetManagerRogueUrl}) to simulate a rogue uploader bypassing upload validation.`,
 				);
 			}
 		} catch (error) {
@@ -579,12 +614,13 @@ export default function PuckEditorPage() {
 
 	async function handleExportHtml() {
 		try {
-			const ir = puckDataToIR(
-				publishedData,
-				demoConfig as unknown as Config,
-			);
+			const ir = puckDataToIR(publishedData, demoConfig as unknown as Config);
 			const result = await htmlFormat.run(ir, { title: "Exported Page" });
-			downloadExportResult(result.content, result.filename, htmlFormat.mimeType);
+			downloadExportResult(
+				result.content,
+				result.filename,
+				htmlFormat.mimeType,
+			);
 			console.log("[demo] exported html", {
 				filename: result.filename,
 				byteLength: result.content.length,
@@ -596,10 +632,7 @@ export default function PuckEditorPage() {
 
 	async function handleExportReact() {
 		try {
-			const ir = puckDataToIR(
-				publishedData,
-				demoConfig as unknown as Config,
-			);
+			const ir = puckDataToIR(publishedData, demoConfig as unknown as Config);
 			const result = await reactFormat.run(ir, { syntax: "tsx" });
 			downloadExportResult(
 				result.content,
@@ -622,26 +655,43 @@ export default function PuckEditorPage() {
 	// the export plugins — neither side needs to know about the other.
 	async function handleExport(formatId: string) {
 		try {
-			const ir = puckDataToIR(
-				publishedData,
-				demoConfig as unknown as Config,
-			);
+			const ir = puckDataToIR(publishedData, demoConfig as unknown as Config);
 			if (formatId === "html") {
 				const result = await htmlFormat.run(ir, { title: "Exported Page" });
-				downloadExportResult(
-					result.content,
-					result.filename,
-					htmlFormat.mimeType,
-				);
+				if (puckDragE2eMode) {
+					const w = window as unknown as {
+						__puckExports?: { html?: string; react?: string };
+					};
+					w.__puckExports = {
+						...(w.__puckExports ?? {}),
+						html: result.content,
+					};
+				} else {
+					downloadExportResult(
+						result.content,
+						result.filename,
+						htmlFormat.mimeType,
+					);
+				}
 				return;
 			}
 			if (formatId === "react") {
 				const result = await reactFormat.run(ir, { syntax: "tsx" });
-				downloadExportResult(
-					result.content,
-					result.filename,
-					reactFormat.mimeType,
-				);
+				if (puckDragE2eMode) {
+					const w = window as unknown as {
+						__puckExports?: { html?: string; react?: string };
+					};
+					w.__puckExports = {
+						...(w.__puckExports ?? {}),
+						react: result.content,
+					};
+				} else {
+					downloadExportResult(
+						result.content,
+						result.filename,
+						reactFormat.mimeType,
+					);
+				}
 				return;
 			}
 			if (formatId === "json") {
@@ -705,8 +755,8 @@ export default function PuckEditorPage() {
 						section, statistics, blog list, helps, and logo cloud demo.
 					</h1>
 					<p className={styles.lede}>
-						This route mounts {"`<Studio>`"} from `@anvilkit/core` with the
-						same consumer-owned Puck `Config` used by render mode. The demo
+						This route mounts {"`<Studio>`"} from `@anvilkit/core` with the same
+						consumer-owned Puck `Config` used by render mode. The demo
 						`smokeTestPlugin` logs every lifecycle event so you can verify the
 						plugin pipeline end-to-end from the browser console.
 					</p>
@@ -721,7 +771,10 @@ export default function PuckEditorPage() {
 				</div>
 			</section>
 
-			<section className={styles.masthead} aria-labelledby="demo-copilot-heading">
+			<section
+				className={styles.masthead}
+				aria-labelledby="demo-copilot-heading"
+			>
 				<div>
 					<p className={styles.eyebrow}>Plugins</p>
 					<h2
@@ -733,10 +786,10 @@ export default function PuckEditorPage() {
 					</h2>
 					<p className={styles.lede}>
 						Type a prompt that matches a mock fixture (e.g. &ldquo;a hero for a
-						SaaS landing page&rdquo;) and hit Generate to see the canvas
-						update. Toggle &ldquo;Simulate hero selection&rdquo; to switch the
-						panel into Phase 6 / M9 section-regeneration mode and rewrite just
-						the hero subtree.
+						SaaS landing page&rdquo;) and hit Generate to see the canvas update.
+						Toggle &ldquo;Simulate hero selection&rdquo; to switch the panel
+						into Phase 6 / M9 section-regeneration mode and rewrite just the
+						hero subtree.
 					</p>
 				</div>
 				<div className={styles.actions}>
@@ -789,11 +842,7 @@ export default function PuckEditorPage() {
 					}}
 				/>
 				{aiError !== null ? (
-					<p
-						role="alert"
-						data-testid="ai-error"
-						style={{ display: "none" }}
-					>
+					<p role="alert" data-testid="ai-error" style={{ display: "none" }}>
 						{aiError}
 					</p>
 				) : null}
