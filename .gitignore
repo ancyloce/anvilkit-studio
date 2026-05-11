@@ -42,9 +42,10 @@ yarn-error.log*
 output
 
 
-# Docs
-docs/
-!apps/docs/
+# Docs — only the top-level engineering-plans dir. An unanchored
+# `docs/` would also swallow `apps/docs/src/content/docs/`, the
+# Starlight content collection, which has to stay tracked.
+/docs/
 
 .changeset/
 .idea/
