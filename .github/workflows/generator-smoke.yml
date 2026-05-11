@@ -34,7 +34,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       # Pre-flight: confirm `@latest` resolves on npm. Catches the
       # "first-GA not yet cut" state explicitly with a readable error
