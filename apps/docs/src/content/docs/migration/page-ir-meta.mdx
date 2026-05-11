@@ -1,0 +1,100 @@
+---
+title: PageIRNode.meta (1.0 → 1.1)
+description: Migrate authoring metadata (locked, owner, version, notes) on every PageIRNode using @anvilkit/ir/migrations. Round-trip-safe with 1.0 consumers — omitting meta preserves every Phase 5 invariant.
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+`@anvilkit/ir@0.22` (Phase 6 / M10) adds an optional
+`meta?: PageIRNodeMeta` field to every `PageIRNode`. The field carries
+**authoring-time** metadata — `locked`, `owner`, `version`, `notes` —
+that downstream tooling (the version-history sidebar, lock indicators,
+audit logs) reads against. The change is **purely additive** under the
+LTS contract.
+
+```ts
+export interface PageIRNodeMeta {
+	readonly locked?: boolean;   // editor blocks edits when true
+	readonly owner?: string;     // host-owned identifier (≤ 256 chars)
+	readonly version?: string;   // semver-shaped string
+	readonly notes?: string;     // freeform notes (≤ 512 chars)
+}
+```
+
+<Aside type="note">
+The IR document `version` literal stays `"1"` across this transition.
+There is no schema-version bump; `meta` is additive.
+</Aside>
+
+## When to call `migratePageIR`
+
+Use it at the boundary where a host first opts into the additive
+`meta` contract. The helper is a referential **no-op** when no node
+carries `meta` — calling it on a 1.0 document is free.
+
+```ts
+import { migratePageIR } from "@anvilkit/ir/migrations";
+
+const upgraded = migratePageIR(ir, { from: "0.21", to: "0.22" });
+// `upgraded === ir` when meta is absent on every node.
+```
+
+When at least one node populates `meta`, `migratePageIR`:
+
+1. Validates every populated `meta` against the runtime caps —
+   throws `PageIRNodeMetaError` on violation.
+2. Returns a structurally-cloned, frozen IR that preserves `meta`
+   byte-for-byte. Existing fields (`id`, `type`, `props`, `slot`,
+   `children`, `assets`) are passed through unchanged.
+
+## When to call `downgradePageIR`
+
+Use it when surfacing IR to a `1.0` consumer that pins against the
+pre-`meta` contract. `downgradePageIR(ir)` returns a fresh, frozen
+tree with `meta` recursively stripped from every node — even if the
+input had no `meta` to remove.
+
+```ts
+import { downgradePageIR } from "@anvilkit/ir/migrations";
+
+const safeForOldConsumer = downgradePageIR(ir);
+```
+
+`downgradePageIR` is its own fixed point: calling it twice is the
+same as calling it once.
+
+## Field caps (runtime-enforced)
+
+| Field     | Type    | Cap                                                        |
+| --------- | ------- | ---------------------------------------------------------- |
+| `locked`  | boolean | —                                                          |
+| `owner`   | string  | ≤ 256 characters                                           |
+| `version` | string  | semver-shaped (`MAJOR.MINOR.PATCH` with optional pre-rel.) |
+| `notes`   | string  | ≤ 512 characters                                           |
+
+Caps are enforced at runtime by `@anvilkit/ir/migrations` (here) and
+by `@anvilkit/validator`'s section-AI patch checker. They are **not**
+reflected at the type level — the `@anvilkit/core/types` surface
+stays runtime-free, so consumers who only `import type` pay zero
+bytes.
+
+## What `puckDataToIR` will NOT do
+
+`puckDataToIR()` MUST NOT synthesize `meta` on any node. The function
+is unchanged from `1.0`: it reads structural Puck `Data` only and
+produces a `PageIR` that round-trips losslessly. `meta` is host-owned
+metadata you add on top, not a derived value.
+
+A no-synthesis invariant test ships in `@anvilkit/ir`'s test suite to
+guarantee this contract across every demo fixture.
+
+## Compatibility matrix
+
+| Consumer pin     | Document with meta | Document without meta |
+| ---------------- | ------------------ | --------------------- |
+| `@anvilkit/ir@0.21` | unrecognized field, may be dropped on round-trip | round-trips losslessly |
+| `@anvilkit/ir@0.22` | preserved by `migratePageIR`, surfaced by version-history | identical to 0.21 behavior |
+
+The intersection cell — sending a `meta`-bearing document to a
+0.21 consumer — is the only failure mode. Use `downgradePageIR`
+before crossing that boundary.

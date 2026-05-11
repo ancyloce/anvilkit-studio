@@ -1,0 +1,117 @@
+---
+title: AnvilKit
+description: Puck-native React component packages, runtime, and plugin ecosystem.
+template: splash
+banner:
+  content: |
+    AnvilKit Studio <strong>v1.1.0</strong> is GA.
+    <a href="https://github.com/ancyloce/anvilkit-studio/blob/main/docs/announcements/2027-12-v1-1-ga.md">What's new</a>
+    · <a href="https://github.com/ancyloce/anvilkit-studio/blob/main/docs/migration/1.0-to-1.1.md">Migration notes</a>
+    · <a href="https://github.com/ancyloce/anvilkit-studio/blob/main/docs/policies/lts.md">LTS policy</a>
+hero:
+  tagline: Ship Puck-native pages faster. Install only the components you need.
+  actions:
+    - text: Quickstart
+      link: /getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: Open playground
+      link: /playground/
+      icon: rocket
+      variant: secondary
+    - text: View on GitHub
+      link: https://github.com/ancyloce/anvilkit-studio
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+## What's new in v1.1.0
+
+The runtime cone (`@anvilkit/core`, `ir`, `schema`, `validator`, `utils`,
+`ui`) and the five GA plugins (`plugin-ai-copilot`, `plugin-asset-manager`,
+`plugin-export-html`, `plugin-export-react`, `plugin-version-history`) all
+bump to `1.1.0` in lockstep. The release is **purely additive** over `1.0.0`;
+the [LTS commitment](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/policies/lts.md)
+carries forward unchanged.
+
+```bash
+pnpm add @anvilkit/core@^1.1.0 @anvilkit/ir@^1.1.0 \
+         @anvilkit/schema@^1.1.0 @anvilkit/validator@^1.1.0 \
+         @anvilkit/plugin-ai-copilot@^1.1.0 \
+         @anvilkit/plugin-asset-manager@^1.1.0 \
+         @anvilkit/plugin-export-html@^1.1.0 \
+         @anvilkit/plugin-export-react@^1.1.0 \
+         @anvilkit/plugin-version-history@^1.1.0
+```
+
+Realtime collaboration ships separately on the alpha channel — see the
+[announcement](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/announcements/2027-12-v1-1-ga.md)
+§ "Alpha caveats" before installing:
+
+```bash
+pnpm add @anvilkit/plugin-collab-yjs@alpha yjs y-protocols
+```
+
+Read the [migration guide](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/migration/1.0-to-1.1.md)
+for the full additive surface (section-level AI editing, `PageIRNode.meta`,
+`anvilkit add`, `SnapshotAdapter` v2, `@anvilkit/ui/presence`).
+
+## Component packages
+
+Each component ships as its own `@anvilkit/*` npm package, versioned independently
+via Changesets. Install only what you need — there is no umbrella bundle.
+
+<CardGrid>
+	<Card title="@anvilkit/bento-grid" icon="puzzle">
+		Responsive bento-style grid layout.
+	</Card>
+	<Card title="@anvilkit/blog-list" icon="document">
+		Paginated blog post list.
+	</Card>
+	<Card title="@anvilkit/button" icon="rocket">
+		Primary, secondary, and ghost button variants.
+	</Card>
+	<Card title="@anvilkit/helps" icon="information">
+		Help / FAQ accordion section.
+	</Card>
+	<Card title="@anvilkit/hero" icon="star">
+		Configurable hero section with CTAs.
+	</Card>
+	<Card title="@anvilkit/input" icon="pencil">
+		Text input with label and validation.
+	</Card>
+	<Card title="@anvilkit/logo-clouds" icon="approve-check">
+		Customer / partner logo cloud.
+	</Card>
+	<Card title="@anvilkit/navbar" icon="bars">
+		Responsive top navigation bar.
+	</Card>
+	<Card title="@anvilkit/pricing-minimal" icon="seti:crystal">
+		Minimal three-tier pricing table.
+	</Card>
+	<Card title="@anvilkit/section" icon="seti:default">
+		Generic content section wrapper.
+	</Card>
+	<Card title="@anvilkit/statistics" icon="seti:graphql">
+		Metrics / stat highlight block.
+	</Card>
+</CardGrid>
+
+## Runtime & plugins
+
+<CardGrid>
+	<Card title="`<Studio>` runtime" icon="setting">
+		Host Puck inside your Next.js or React app via `@anvilkit/core`.
+	</Card>
+	<Card title="Plugin ecosystem" icon="add-document">
+		Extend Studio with export and AI plugins (`@anvilkit/plugin-*`).
+	</Card>
+</CardGrid>
+
+[Get started →](/getting-started/)
+
+Want to try before you install? [Open the interactive playground](/playground/)
+to drop components onto a live Puck canvas, export the result as HTML, or try
+the mock AI copilot — no setup required.

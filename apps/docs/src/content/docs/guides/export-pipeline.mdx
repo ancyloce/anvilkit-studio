@@ -1,0 +1,580 @@
+---
+title: Export pipeline
+description: How Puck Data becomes downloadable bytes — puckDataToIR, the PageIR contract, ExportFormatDefinition, asset inlining, round-trip invariants, and the snapshot-driven test pattern every exporter ships.
+---
+
+import { Aside, Steps } from "@astrojs/starlight/components";
+
+AnvilKit treats every export — HTML today, React source and PDF
+tomorrow, your custom format next week — as a function of the same
+normalized `PageIR` document. This guide walks through the pipeline
+end-to-end and ships a real, tested JSON exporter as the worked
+example.
+
+<Aside type="tip" title="Code stays green">
+	Every code block below is extracted to
+	[`apps/docs/tests/guides/export-pipeline.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/export-pipeline.test.ts)
+	and runs as a Vitest test in CI. Drift in `@anvilkit/core`,
+	`@anvilkit/ir`, `@anvilkit/plugin-export-html`, or the worked
+	example breaks the build before the docs ship.
+</Aside>
+
+## 1. Pipeline overview
+
+The pipeline has three named stages and one frozen hand-off between
+each pair:
+
+```text
+Puck Data ──puckDataToIR()──▶ PageIR ──ExportFormatDefinition.run()──▶ { content, filename }
+          (from @anvilkit/ir)  (from @anvilkit/core/types)       (string | Uint8Array)
+```
+
+- **Stage 1 — `Puck Data`**: what Puck's editor hands you. Authoring-
+	shaped: component ids, UI state, drag-and-drop metadata. Exporters
+	never see this directly.
+- **Stage 2 — `PageIR`**: the normalized, deep-frozen, JSON-safe tree
+	every exporter consumes. Produced exactly once per export by
+	[`puckDataToIR()`](/api/ir/functions/puckdatatoir/) — function
+	props are dropped as warnings, object keys are canonically sorted,
+	assets are collected into a root-level manifest.
+- **Stage 3 — `ExportFormatDefinition.run(ir, options)`**: your
+	exporter. Receives the frozen IR and format-specific options,
+	returns `Promise<ExportResult>` with a `string` (text formats) or a
+	`Uint8Array` (binary formats) plus a suggested `filename`.
+
+The invariant that makes this work is that the IR normalization step
+runs **exactly once** for the whole pipeline, regardless of how many
+formats are registered. Two exporters registered at the same time see
+byte-identical input, which is how the test harness snapshots two
+different outputs from one normalized fixture.
+
+## 2. The `PageIR` shape
+
+Every type in this section is a `type` export from
+`@anvilkit/core/types` — zero runtime code, zero React, zero
+`@puckeditor/core` dependency at the JS layer. Import them with
+`import type` and they erase at compile time.
+
+```ts
+import type {
+	ExportFormatDefinition,
+	PageIR,
+	PageIRAsset,
+	PageIRMetadata,
+	PageIRNode,
+} from "@anvilkit/core/types";
+```
+
+### 2.1 The root document
+
+```ts
+import type { PageIR } from "@anvilkit/core/types";
+
+const ir: PageIR = {
+	version: "1",
+	root: {
+		id: "root",
+		type: "__root__",
+		props: {},
+		children: [
+			{
+				id: "hero-1",
+				type: "Hero",
+				props: {
+					headline: "Ship updates without friction.",
+					description: "Deterministic exports for internal release pages.",
+				},
+			},
+		],
+	},
+	assets: [],
+	metadata: { createdAt: "2026-04-11T00:00:00.000Z" },
+};
+```
+
+Four top-level keys, all required:
+
+| Key        | Shape                                | Purpose                                                              |
+| ---------- | ------------------------------------ | -------------------------------------------------------------------- |
+| `version`  | literal `"1"`                        | Schema version. A future `"2"` is a breaking change to the IR shape. |
+| `root`     | [`PageIRNode`](/api/core/interfaces/pageirnode/) | Synthetic `__root__` node; its `children` hold the page content. |
+| `assets`   | `readonly PageIRAsset[]`             | Flat, deduplicated manifest of every asset referenced in the tree.   |
+| `metadata` | [`PageIRMetadata`](/api/core/interfaces/pageirmetadata/) | Optional `title`/`description`/`createdAt`/`updatedAt`. |
+
+### 2.2 Nodes
+
+```ts
+import type { PageIRNode } from "@anvilkit/core/types";
+
+const heroNode: PageIRNode = {
+	id: "hero-1",
+	type: "Hero",
+	props: {
+		headline: "Ship updates without friction.",
+		description: "Deterministic HTML exports.",
+	},
+	// `children` is omitted on leaf nodes (not set to []).
+};
+```
+
+- `id` — stable per-node identifier, carried over from Puck's content
+	id so round-trips are lossless.
+- `type` — the component name the node was produced from (`"Hero"`,
+	`"Button"`, `"Section"`). Exporters dispatch on this.
+- `props` — opaque `Readonly<Record<string, unknown>>`. The IR makes
+	no claims about prop shapes; that is the exporter's job.
+- `children` — optional recursive array. Omitted (not empty) on
+	leaves.
+- `assets` — optional node-scoped asset list for exporters that want
+	to resolve just their own slice without walking the whole tree.
+
+### 2.3 Asset references
+
+```ts
+import type { PageIRAsset } from "@anvilkit/core/types";
+
+const cover: PageIRAsset = {
+	id: "a1b2c3",
+	kind: "image",
+	url: "https://cdn.example.com/cover.jpg",
+	meta: { width: 1600, height: 900 },
+};
+```
+
+`kind` is a **closed union**: `"image" | "video" | "font" | "script" |
+"style" | "other"`. Extending the union is a breaking change by
+design — exporters that handle every case at the type level are
+forced to re-check when a new kind lands.
+
+Which prop keys become assets?
+[`collectAssets()`](/api/ir/functions/collectassets/) recognizes
+`src`, `imageUrl`, `imageSrc`, `url`, `videoUrl`, `videoSrc`,
+`fontUrl`, `scriptUrl`, and `styleUrl`. `href` is deliberately
+excluded — it's a navigation link, not an asset.
+
+### 2.4 Slots
+
+A Puck `slot`-type field shows up in IR as a nested array of child
+nodes living on the parent node's `props` bag. Layout components
+(e.g. the `layout` template's `leftColumn`/`rightColumn`) lean on
+this — an empty slot is `[]`, not a missing key.
+
+Use [`identifySlots(config)`](/api/ir/functions/identifyslots/) when
+you need to know, at export time, which prop keys on which
+`type`s are slots. The IR package uses it to tell slot arrays from
+regular data arrays during normalization.
+
+## 3. Writing a new exporter
+
+An exporter is three things:
+
+1. An `ExportFormatDefinition` object — the per-format descriptor.
+2. A `StudioPlugin` that contributes the definition through its
+	`register()` return value's `exportFormats` array.
+3. (Optionally) a `StudioHeaderAction` that drives the export from
+	the Studio toolbar.
+
+The worked example for this guide is
+[`@anvilkit/example-export-json`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json)
+— a minimal JSON exporter. Its entire `run()` fits on one screen:
+
+```ts
+import type {
+	ExportFormatDefinition,
+	PageIR,
+} from "@anvilkit/core/types";
+
+interface JsonExportOptions extends Record<string, unknown> {
+	readonly indent?: number;
+	readonly filename?: string;
+}
+
+export const jsonFormat: ExportFormatDefinition<JsonExportOptions> = {
+	id: "json",
+	label: "JSON",
+	extension: "json",
+	mimeType: "application/json",
+	async run(ir: PageIR, options) {
+		const indent = options.indent ?? 2;
+		const filename = options.filename ?? "page.json";
+		const content = JSON.stringify(ir, null, indent);
+		return { content, filename };
+	},
+};
+```
+
+Wrap it in a `StudioPlugin`:
+
+```ts
+import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core/types";
+import { jsonFormat } from "./json-format.js";
+
+const meta: StudioPluginMeta = {
+	id: "anvilkit-example-export-json",
+	name: "JSON Export",
+	version: "0.1.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+export function createExportJsonPlugin(): StudioPlugin {
+	return {
+		meta,
+		register(_ctx) {
+			return {
+				meta,
+				exportFormats: [jsonFormat],
+			};
+		},
+	};
+}
+```
+
+And register it with the runtime:
+
+```ts
+import { createStudioConfig } from "@anvilkit/core";
+import { createExportJsonPlugin } from "@anvilkit/example-export-json";
+
+const studioConfig = createStudioConfig({
+	plugins: [createExportJsonPlugin()],
+});
+```
+
+Host apps trigger the format by id via
+`useExportStore.exportAs("json", { indent: 0 })`. The runtime looks
+the id up in `runtime.exportFormats`, invokes `run(ir, options)` with
+the freshly-normalized IR, and hands the result back as a `Blob` for
+download.
+
+<Aside type="caution" title="`run` takes IR, not Data">
+	`ExportFormatDefinition.run` is typed against
+	[`PageIR`](/api/core/interfaces/pageir/) — you physically cannot
+	type-check a `run` that takes Puck `Data`. That is the whole
+	reason the IR layer exists: exporters can't accidentally skip
+	normalization.
+</Aside>
+
+## 4. HTML exporter walkthrough
+
+[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+is the reference exporter. Its `format-definition.ts` is the first
+file to read when you start building your own:
+
+```ts
+// packages/plugins/plugin-export-html/src/format-definition.ts
+export const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+	id: "html",
+	label: "HTML",
+	extension: "html",
+	mimeType: "text/html",
+	run: async (ir, options) => {
+		const ctx = makeEmitContext();
+		const { html, usedClassnames, warnings: htmlWarnings, emittedAssetIds } = emitHtml(ir, options, ctx);
+		const { inlined, warnings: assetWarnings } = await inlineAssets(ir.assets, {
+			thresholdBytes: options.inlineAssetThresholdBytes ?? 32_768,
+			...(options.fetchAsset ? { fetchAsset: options.fetchAsset } : {}),
+			emittedAssetIds,
+		});
+		const css = emitCss(usedClassnames, options);
+		const bodyHtml = substituteAssets(html, inlined);
+		const content = wrapDocument({
+			title: options.title ?? ir.metadata.title ?? "Exported Page",
+			description: ir.metadata.description,
+			css,
+			bodyHtml,
+		});
+		return { content, filename: "page.html", warnings: [...htmlWarnings, ...assetWarnings] };
+	},
+};
+```
+
+Five responsibilities, each in its own module:
+
+| Module                   | Responsibility                                                     |
+| ------------------------ | ------------------------------------------------------------------ |
+| `emit-html.ts`           | Walk the IR and emit class-decorated HTML strings per node `type`. |
+| `emit-css.ts`            | Emit the CSS rules for the classnames `emit-html` used.            |
+| `inline-assets.ts`       | Optionally fetch asset bytes and base64-encode emitted images under the threshold. |
+| `substitute-assets.ts`   | Replace `asset-id://…` placeholders in the body with data URIs.    |
+| `wrap-document.ts`       | Wrap the body + CSS into a standalone `<!doctype html>` document.  |
+
+The entire pipeline is deliberately pure — `run()` is `async` because
+asset resolution and host-supplied inlining may await external
+callbacks. Everything else is synchronous string manipulation over a
+deeply-frozen IR.
+
+The plugin shell is a thin wrapper:
+
+```ts
+// create-html-export-plugin.ts — abbreviated
+const htmlExportPluginMeta: StudioPluginMeta = {
+	id: "anvilkit-plugin-export-html",
+	name: "HTML Export",
+	version: "0.1.0-alpha.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+export function createHtmlExportPlugin(opts: HtmlExportOptions = {}): StudioPlugin {
+	return {
+		meta: htmlExportPluginMeta,
+		register(_ctx) {
+			return {
+				meta: htmlExportPluginMeta,
+				exportFormats: [htmlFormat],
+				...(opts.buildIR ? { headerActions: [createExportHtmlHeaderAction(htmlFormat, opts)] } : {}),
+			};
+		},
+	};
+}
+```
+
+Everything you contribute — `exportFormats`, `headerActions`, and
+(not shown) `hooks` / `overrides` — is plain data. The runtime
+composes it at mount time; your plugin code never reaches into the
+React tree.
+
+## 5. Asset inlining strategies
+
+Text-heavy exports (HTML, MDX, React source) usually want some
+inlining so the output is a single self-contained file. Binary
+exports (PDF, ZIP) always inline. Pure-data exports (JSON) never
+inline. The three strategies differ in where the bytes end up.
+
+### 5.1 Base64 inlining (host-controlled HTML)
+
+`@anvilkit/plugin-export-html` can inline any emitted image whose
+decoded size is under `inlineAssetThresholdBytes` (default `32_768`),
+but it only fetches bytes when the host supplies `fetchAsset`. The
+`inlineAssets` helper keeps the shape simple — `Map<assetId, dataUrl>`
+— and the HTML pipeline substitutes on the way out:
+
+```ts
+// Simplified from inline-assets.ts.
+async function inlineSmallImages(assets, { thresholdBytes, fetchAsset, emittedAssetIds }) {
+	const inlined = new Map<string, string>();
+	if (!fetchAsset) return inlined;
+	for (const asset of assets) {
+		if (!emittedAssetIds.has(asset.id)) continue;
+		if (asset.kind !== "image") continue;
+		const { bytes, contentType } = await fetchAsset(asset.url, { maxBytes: thresholdBytes });
+		if (bytes.length > thresholdBytes) continue;
+		inlined.set(asset.id, `data:${contentType};base64,${toBase64(bytes)}`);
+	}
+	return inlined;
+}
+```
+
+Use this when:
+
+- The host downloads a single file and can't re-fetch assets.
+- Assets are small (icons, favicons, sub-32 KB images).
+- You want the file to work offline.
+
+### 5.2 Reference-by-URL
+
+Leave the asset URL as-is and emit a plain `<img src="…">` (or
+equivalent). Best when:
+
+- Assets are large (hero images, videos).
+- The export is consumed in an environment that can reach the
+	original host.
+- You care about output size more than portability.
+
+The default HTML pipeline references URLs. When the host provides a
+fetcher, the pipeline mixes both: inline under the threshold, reference
+the rest. `MISSING_INLINE` warnings (level `"warn"`) call out anything
+that missed the threshold so the host can decide whether to tighten the
+budget or re-host the asset.
+
+### 5.3 Strip the reference entirely
+
+Some exports (JSON snapshots shipped to downstream pipelines, MDX
+bundles rebuilt by a separate asset pass) just want the IR's
+`assets` manifest copied through verbatim. The JSON exporter in this
+guide is the canonical example — it neither fetches nor inlines, it
+just serializes `ir.assets` alongside the node tree.
+
+### 5.4 Asset warnings taxonomy
+
+Every exporter should emit an `ExportWarning[]` for non-fatal
+findings rather than throwing. The HTML plugin uses warning codes such
+as:
+
+- `MISSING_INLINE` — asset exceeded the threshold, left as a URL.
+- `ASSET_FETCH_FAILED` — `fetchAsset()` threw; URL left as-is.
+- `ASSET_FETCH_BLOCKED` — default fetcher rejected a non-http(s) URL.
+- `UNINLINEABLE_ASSET_KIND` — non-image asset was not eligible for data-URI inlining.
+- `ASSET_UNRESOLVED` — no registered resolver owned an `asset://` URL.
+- `UNSUPPORTED_CHILDREN` — a rendered component had nested IR children the exporter cannot preserve yet.
+
+Hard failures (malformed IR, unfixable encoding errors) should throw
+`StudioExportError`, which the runtime catches and surfaces to the
+host. Never return a warning with `level: "error"` for something the
+user cannot recover from.
+
+## 6. Round-trip invariants
+
+The single most important invariant in the pipeline is:
+
+```text
+irToPuckData(puckDataToIR(d)) ≡ d   // up to root-prop canonicalization
+```
+
+[`irToPuckData`](/api/ir/functions/irtopuckdata/) is the reverse of
+`puckDataToIR`. Together they prove that IR is lossless relative to
+the authoring `Data` that produced it. Three concrete payoffs:
+
+1. **AI-generated pages round-trip.** The AI-copilot plugin validates
+	its LLM output as a `PageIR`, then ships it through
+	`irToPuckData` into a `setData` dispatch. Without the invariant,
+	AI edits would drift a bit with every generation.
+2. **Snapshot tests stay byte-stable.** Running `puckDataToIR` twice
+	on the same `Data` produces byte-identical JSON (props are
+	canonically sorted, timestamps are injectable). That's what lets
+	the HTML plugin's golden snapshots pass `toMatchFileSnapshot()`
+	across CI runs.
+3. **Two exporters cannot disagree on "what's on the page".** Since
+	they both consume the same IR, they can't fork over Puck quirks
+	or authoring-only fields.
+
+Test the invariant explicitly — every new exporter should ship a
+`round-trip.test.ts` that proves it for a representative fixture:
+
+```ts
+import { irToPuckData, puckDataToIR } from "@anvilkit/ir";
+import { expect, it } from "vitest";
+
+it("round-trips the demo data through IR without loss", () => {
+	const FIXED_CLOCK = () => new Date("2026-04-11T00:00:00.000Z");
+	const ir = puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK });
+	expect(irToPuckData(ir)).toEqual(demoData);
+});
+```
+
+`FIXED_CLOCK` is the key — `metadata.createdAt` is an ISO string, and
+a floating `new Date()` would defeat snapshot stability. Every
+AnvilKit test that runs the pipeline threads an injected clock
+through `puckDataToIR`'s `opts.now`.
+
+## 7. Testing exporters
+
+`@anvilkit/plugin-export-html` uses three overlapping test layers.
+Copy them — they catch three different classes of regression.
+
+### 7.1 Golden snapshots
+
+One test per fixture, each asserting the exporter output matches a
+committed `.snap.html` file:
+
+```ts
+// Adapted from plugin-export-html/src/__tests__/golden.test.ts
+import { fileURLToPath } from "node:url";
+import { expect, it } from "vitest";
+import { htmlFormat } from "../format-definition.js";
+import { heroFixture } from "./__fixtures__/hero.fixture.js";
+
+const fetchAsset = async () => ({
+	bytes: new Uint8Array([1, 2, 3, 4]),
+	contentType: "image/jpeg",
+});
+
+it("renders the hero fixture to a stable html document", async () => {
+	const result = await htmlFormat.run(heroFixture, {
+		inlineStyles: true,
+		inlineAssetThresholdBytes: 0,
+		title: "Hero",
+		fetchAsset,
+	});
+	expect(result.content).toMatchFileSnapshot(
+		fileURLToPath(new URL("./__snapshots__/hero.snap.html", import.meta.url)),
+	);
+});
+```
+
+`toMatchFileSnapshot` writes on first run and compares on subsequent
+runs. Drift in the exporter, IR shape, or fixture defaults all
+produce a diff you must explicitly accept via `pnpm test -u`.
+
+### 7.2 Round-trip parsing
+
+Golden snapshots pin the *shape* of the output, but they can't
+catch "HTML is technically valid but lost a headline." Parse the
+output with `happy-dom` and re-query it:
+
+```ts
+import { Window } from "happy-dom";
+import { expect, it } from "vitest";
+
+it("preserves hero headline content", async () => {
+	const { content } = await htmlFormat.run(heroFixture, {
+		inlineStyles: true,
+		inlineAssetThresholdBytes: 0,
+		fetchAsset: async () => ({
+			bytes: new Uint8Array([1, 2, 3, 4]),
+			contentType: "image/jpeg",
+		}),
+	});
+	const window = new Window();
+	window.document.write(content as string);
+	window.document.close();
+	expect(
+		window.document.querySelector(".ak-hero__headline")?.textContent,
+	).toContain("Ship updates without friction.");
+});
+```
+
+### 7.3 Registration tests
+
+The third layer asserts the plugin plugs in cleanly. Call
+`compilePlugins([yourPlugin()], ctx)` and check that your format id
+shows up in `runtime.exportFormats`:
+
+```ts
+import { StudioConfigSchema, compilePlugins } from "@anvilkit/core";
+import type { StudioPluginContext } from "@anvilkit/core/types";
+import { expect, it, vi } from "vitest";
+import { createExportJsonPlugin } from "@anvilkit/example-export-json";
+
+const studioConfig = StudioConfigSchema.parse({});
+
+function makeCtx(): StudioPluginContext {
+	return {
+		getData: () => ({ root: { props: {} }, content: [], zones: {} }),
+		getPuckApi: (() => {
+			throw new Error("getPuckApi unused in this test");
+		}) as unknown as StudioPluginContext["getPuckApi"],
+		studioConfig,
+		log: vi.fn(),
+		emit: vi.fn(),
+	};
+}
+
+it("registers the json export format via compilePlugins", async () => {
+	const runtime = await compilePlugins([createExportJsonPlugin()], makeCtx());
+	expect([...runtime.exportFormats.keys()]).toContain("json");
+});
+```
+
+The JSON example ships all three — see
+[`examples/plugins/export-json/src/__tests__/`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json/src/__tests__)
+for the full suite plus a demo-page snapshot that mirrors
+`apps/demo/lib/puck-demo.ts`.
+
+<Aside type="tip" title="One pipeline, three tests, one fixture">
+	Keep all three test layers driving off the same IR fixture. When
+	the fixture changes, you get three distinct signals — output
+	shape (golden), semantic preservation (round-trip parse), and
+	plugin wiring (registration) — from a single source of truth.
+</Aside>
+
+## Reference
+
+- [`puckDataToIR`](/api/ir/functions/puckdatatoir/) — the Puck `Data` → IR transform.
+- [`irToPuckData`](/api/ir/functions/irtopuckdata/) — the reverse, for AI plugins and round-trip tests.
+- [`collectAssets`](/api/ir/functions/collectassets/) — the asset-walker used during normalization.
+- [`identifySlots`](/api/ir/functions/identifyslots/) — slot-detection helper for layout components.
+- [`PageIR`](/api/core/interfaces/pageir/) · [`PageIRNode`](/api/core/interfaces/pageirnode/) · [`PageIRAsset`](/api/core/interfaces/pageirasset/) · [`PageIRMetadata`](/api/core/interfaces/pageirmetadata/) — the IR type surface.
+- [`ExportFormatDefinition`](/api/core/interfaces/exportformatdefinition/) · [`ExportResult`](/api/core/interfaces/exportresult/) · [`ExportWarning`](/api/core/interfaces/exportwarning/) — the exporter contract.
+- Worked JSON exporter: [`examples/plugins/export-json`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json).
+- Reference HTML exporter: [`packages/plugins/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html).
+- Plugin surface for registering the exporter: [Plugin authoring](/guides/plugin-authoring/).

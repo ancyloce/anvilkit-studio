@@ -1,0 +1,116 @@
+---
+title: Quickstart
+description: Install AnvilKit, mount a minimal Studio host, and render your first Puck page.
+---
+
+import { Tabs, TabItem, Steps } from "@astrojs/starlight/components";
+
+AnvilKit is a Puck-native component ecosystem: independently publishable
+components (`@anvilkit/*`), a runtime shell (`@anvilkit/core`), and
+plugins. This guide mounts a minimal Studio host in a React app.
+
+## Prerequisites
+
+- Node.js **≥ 20.19** (matches the workspace `engines` constraint)
+- pnpm, npm, or yarn
+- A React 19 host app (Next.js 16 recommended)
+
+## Install
+
+Pick the components you need — there is no umbrella package.
+
+<Tabs syncKey="pkg">
+	<TabItem label="pnpm">
+
+```bash
+pnpm add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</TabItem>
+	<TabItem label="npm">
+
+```bash
+npm install @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</TabItem>
+	<TabItem label="yarn">
+
+```bash
+yarn add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</TabItem>
+</Tabs>
+
+## Minimal `<Studio>` host
+
+<Steps>
+
+1. Import components and compose a Puck `Config`.
+
+	```tsx
+	// app/studio/config.ts
+	import { componentConfig as hero } from "@anvilkit/hero";
+	import { componentConfig as button } from "@anvilkit/button";
+	import type { Config } from "@puckeditor/core";
+
+	export const config: Config = {
+		components: {
+			Hero: hero,
+			Button: button,
+		},
+	};
+	```
+
+2. Mount `<Studio>` in a client component.
+
+	```tsx
+	// app/studio/page.tsx
+	"use client";
+
+	import { Studio } from "@anvilkit/core";
+	import { config } from "./config";
+
+	export default function StudioPage() {
+		return <Studio config={config} />;
+	}
+	```
+
+3. Import the shared theme tokens in your global stylesheet.
+
+	```css
+	/* app/globals.css */
+	@import "@anvilkit/tailwind-config/shadcn";
+	```
+
+</Steps>
+
+## Scaffold a plugin
+
+Once you're past the minimal host, scaffold a new plugin with the
+published generator — no manual copy-paste of `package.json`,
+`rslib.config.ts`, or boilerplate tests:
+
+```bash
+# non-interactive
+pnpm dlx create-anvilkit-plugin \
+  --name my-plugin \
+  --display "My Plugin" \
+  --category rail-panel
+
+# interactive (TTY only)
+pnpm dlx create-anvilkit-plugin
+```
+
+The output is a ready-to-build package with `@anvilkit/core/testing`
+fixtures wired into a green baseline test. Read the **Plugin
+authoring** guide for the full `StudioPlugin` contract.
+
+## Next steps
+
+- Browse the **Components** catalog for the full list of `@anvilkit/*` packages.
+- Read the **Guides** for plugin authoring, component authoring, and export
+  pipelines.
+- Consult the **API Reference** for `<Studio>`, plugin contracts, and runtime
+  hooks.

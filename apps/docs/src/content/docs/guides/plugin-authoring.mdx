@@ -1,0 +1,469 @@
+---
+title: Plugin authoring
+description: Write a StudioPlugin from scratch — interface, lifecycle hooks, context API, export formats, and a worked example that compiles in CI.
+---
+
+import { Aside, Steps } from "@astrojs/starlight/components";
+
+A `StudioPlugin` is the canonical extension point for `@anvilkit/core`.
+This guide walks through every part of the contract — meta, register
+function, context API, lifecycle hooks, header actions, export
+formats, dispatch semantics, testing — and ends with a worked example
+that ships as a real npm-publishable package and is exercised in CI.
+
+<Aside type="tip" title="Code stays green">
+	Every code block on this page is extracted to
+	[`apps/docs/tests/guides/plugin-authoring.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/plugin-authoring.test.ts)
+	and runs as a Vitest test in CI. If the contract drifts, the
+	build fails before the docs ship.
+</Aside>
+
+## 1. What is a `StudioPlugin`
+
+`@anvilkit/core` accepts a mixed `plugins: (StudioPlugin | PuckPlugin)[]`
+array on its `createStudioConfig` call. The two contracts coexist:
+
+| Capability                                     | `PuckPlugin` | `StudioPlugin` |
+| ---------------------------------------------- | ------------ | -------------- |
+| Override Puck rail / drawer / header slots     | ✅           | ✅             |
+| Subscribe to data changes / publish lifecycle  | ❌           | ✅             |
+| Contribute export formats (`html`, `react`, …) | ❌           | ✅             |
+| Contribute Studio header actions               | ❌           | ✅             |
+| Read the merged `StudioConfig`                 | ❌           | ✅             |
+
+`StudioPlugin` is a superset: it talks to the Puck editor through the
+Puck API and adds cross-cutting concerns Puck itself does not model.
+Core resolves both kinds during `compilePlugins()` so a host can mix
+them freely.
+
+## 2. Minimum viable plugin
+
+The smallest legal plugin is a frozen `meta` block plus a `register()`
+function that returns an empty registration:
+
+```ts
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export function createNoopPlugin(): StudioPlugin {
+	const meta = {
+		id: "com.example.noop",
+		name: "No-op",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	} as const;
+
+	return {
+		meta,
+		register(_ctx) {
+			return { meta };
+		},
+	};
+}
+```
+
+That is enough to pass `compilePlugins()`. Every additional capability
+— hooks, overrides, header actions, export formats — is opt-in and
+appears as a separate field on the registration object.
+
+<Aside type="caution" title="`coreVersion` is a contract">
+	`compilePlugins()` rejects any plugin whose `meta.coreVersion`
+	range does not include the running `CORE_VERSION`. The supported
+	prefixes today are exact (`"0.1.0-alpha.0"`), caret (`"^…"`),
+	and tilde (`"~…"`). A mismatch throws `StudioPluginError` at
+	mount time so the host can fail loud rather than render with
+	a misaligned plugin.
+</Aside>
+
+## 3. The `StudioPluginContext`
+
+Every lifecycle hook and every header action's `onClick` receives a
+`StudioPluginContext`. It is the read / write / observe handle Core
+hands the plugin — no other ambient state is allowed.
+
+| Field          | Purpose                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| `getData()`    | Snapshot of the current Puck `Data` (no subscription is created).                        |
+| `getPuckApi()` | Returns the live `PuckApi`. Use `dispatch` to mutate; see §6.                            |
+| `studioConfig` | Frozen, merged `StudioConfig` (defaults + env + host overrides).                         |
+| `log(level, message, meta?)` | Routes to Core's logger (`debug` / `info` / `warn` / `error`).                |
+| `emit(event, payload?)` | Broadcasts to the in-process plugin event bus.                                      |
+
+Two boundaries are intentional:
+
+1. **No direct store access.** Plugins never `import` Zustand stores.
+   Every mutation flows through `getPuckApi().dispatch()` so Puck's
+   history stack stays the source of truth.
+2. **`studioConfig` is deeply read-only.** Mutating it is a no-op at
+   runtime and may throw in strict mode.
+
+A plugin that just observes the data shape can be implemented as:
+
+```ts
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+} from "@anvilkit/core/types";
+
+export const observerPlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.observer",
+		name: "Observer",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(ctx: StudioPluginContext) {
+		ctx.log("info", "observer plugin registered", {
+			theme: ctx.studioConfig.theme.defaultMode,
+		});
+		return { meta: observerPlugin.meta };
+	},
+};
+```
+
+## 4. Lifecycle hooks
+
+Hooks live on `registration.hooks`. Every hook is optional and may
+return `void` or `Promise<void>`.
+
+| Hook              | Fires                                                                  | Concurrency  |
+| ----------------- | ---------------------------------------------------------------------- | ------------ |
+| `onInit`          | Once, after `compilePlugins()` and before `<Studio>` mounts the editor. | Parallel     |
+| `onDataChange`    | Every Puck `onChange`, with the fresh `data` argument.                 | Parallel     |
+| `onBeforePublish` | Before the host publishes — may throw `StudioPluginError` to abort.    | **Sequential** |
+| `onAfterPublish`  | After a successful publish.                                            | Parallel     |
+| `onDestroy`       | When `<Studio>` unmounts.                                              | Parallel     |
+
+Two ordering rules matter:
+
+1. **Plugin order.** Hooks fire in plugin registration order — i.e.
+   the order of the `plugins: [...]` array passed to
+   `createStudioConfig`.
+2. **Veto semantics.** `onBeforePublish` runs **sequentially**; the
+   first hook to throw aborts the rest and rethrows from the
+   lifecycle dispatcher. Every other event runs through
+   `Promise.allSettled`, so a buggy plugin only logs and never
+   crashes the editor.
+
+```ts
+import type { StudioPlugin } from "@anvilkit/core/types";
+import { StudioPluginError } from "@anvilkit/core";
+
+export const requireHeroPlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.require-hero",
+		name: "Require Hero",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(_ctx) {
+		return {
+			meta: requireHeroPlugin.meta,
+			hooks: {
+				onBeforePublish(_ctx, data) {
+					const hasHero = data.content.some((item) => item.type === "Hero");
+					if (!hasHero) {
+						throw new StudioPluginError(
+							"com.example.require-hero",
+							"Pages must include a Hero block before publish",
+						);
+					}
+				},
+			},
+		};
+	},
+};
+```
+
+## 5. Contributing export formats
+
+An exporter contributes one or more `ExportFormatDefinition`s on
+`registration.exportFormats`. Format `id`s must be globally unique;
+two plugins registering the same id throw `StudioPluginError` at
+compile time.
+
+The runtime hands `run()` a normalized `PageIR` (not a Puck `Data`) so
+the IR normalization step happens exactly once across every exporter.
+
+```ts
+import type {
+	ExportFormatDefinition,
+	StudioPlugin,
+} from "@anvilkit/core/types";
+
+const jsonFormat: ExportFormatDefinition = {
+	id: "json-snapshot",
+	label: "JSON snapshot",
+	extension: "json",
+	mimeType: "application/json",
+	async run(ir, _options) {
+		return {
+			content: JSON.stringify(ir, null, 2),
+			filename: "page.json",
+			warnings: [],
+		};
+	},
+};
+
+export function createJsonSnapshotPlugin(): StudioPlugin {
+	const meta = {
+		id: "com.example.json-snapshot",
+		name: "JSON Snapshot Exporter",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	} as const;
+
+	return {
+		meta,
+		register(_ctx) {
+			return { meta, exportFormats: [jsonFormat] };
+		},
+	};
+}
+```
+
+For the production reference, see
+[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+— it asset-inlines, emits per-component CSS, and round-trips through
+`@anvilkit/ir`.
+
+## 6. Dispatching editor actions
+
+State mutations always flow through `getPuckApi().dispatch()`. The
+two patterns plugins reach for most often are:
+
+```ts
+import type { StudioPluginContext } from "@anvilkit/core/types";
+
+// Pattern A — full replacement (use sparingly; clobbers history).
+export function clearPage(ctx: StudioPluginContext): void {
+	ctx.getPuckApi().dispatch({
+		type: "setData",
+		data: { root: { props: {} }, content: [], zones: {} },
+	});
+}
+
+// Pattern B — surgical action (preserves history; preferred).
+export function insertHero(ctx: StudioPluginContext): void {
+	ctx.getPuckApi().dispatch({
+		type: "insert",
+		componentType: "Hero",
+		destinationZone: "default-zone",
+		destinationIndex: 0,
+	});
+}
+```
+
+Pattern A is simple but rewrites the entire tree, so undo collapses
+to a single step. Pattern B uses Puck's typed `PuckAction` union
+(`insert`, `move`, `remove`, `replace`, `duplicate`, …) and keeps
+history granular. Reach for `setData` only when the new tree truly is
+unrelated to the old one (e.g. opening a saved draft) — every other
+case has a dedicated action.
+
+## 7. Testing plugins
+
+The plugin contract is React-free and synchronous-by-default, so
+plugins can be tested with Vitest in a Node environment. The
+canonical harness is:
+
+1. Build a fake `StudioPluginContext` with `vi.fn()` for `log` and
+   `emit` and a stub `getPuckApi`.
+2. Call `compilePlugins([yourPlugin], ctx)` to get a `StudioRuntime`.
+3. Drive `runtime.lifecycle.emit("onInit" | "onDataChange" | …, ctx, data)`.
+4. Assert on what your plugin recorded — counts, log calls, dispatched
+   actions, contributed header actions on `runtime.headerActions`.
+
+```ts
+import { compilePlugins, StudioConfigSchema } from "@anvilkit/core";
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+} from "@anvilkit/core/types";
+import type { Data as PuckData } from "@puckeditor/core";
+import { describe, expect, it, vi } from "vitest";
+
+const studioConfig = StudioConfigSchema.parse({});
+
+function makeCtx(data: PuckData): StudioPluginContext {
+	return {
+		getData: () => data,
+		getPuckApi: (() => {
+			throw new Error("getPuckApi unused in this test");
+		}) as unknown as StudioPluginContext["getPuckApi"],
+		studioConfig,
+		log: vi.fn(),
+		emit: vi.fn(),
+	};
+}
+
+const samplePlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.sample",
+		name: "Sample",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(_ctx) {
+		return {
+			meta: samplePlugin.meta,
+			hooks: {
+				onInit(ctx) {
+					ctx.log("info", "sample plugin started");
+				},
+			},
+		};
+	},
+};
+
+describe("samplePlugin", () => {
+	it("logs an info line on onInit", async () => {
+		const ctx = makeCtx({ root: { props: {} }, content: [], zones: {} });
+		const runtime = await compilePlugins([samplePlugin], ctx);
+
+		await runtime.lifecycle.emit("onInit", ctx);
+
+		expect(ctx.log).toHaveBeenCalledWith("info", "sample plugin started");
+	});
+});
+```
+
+That single pattern is enough to exercise hooks, header actions,
+export formats, and event-bus emissions without touching React or a
+DOM.
+
+### Prefer `@anvilkit/core/testing` over hand-rolled fakes
+
+Since Phase 4 (`phase4-012`), the same fake context is exported as
+a reusable fixture. Prefer it over rewriting `makeCtx` in every
+test file:
+
+```ts
+import {
+	createFakeStudioContext,
+	createFakePageIR,
+	registerPlugin,
+} from "@anvilkit/core/testing";
+
+const harness = await registerPlugin(samplePlugin);
+await harness.runInit();
+expect(harness.ctx._mocks.logCalls[0]).toEqual([
+	"info",
+	"sample plugin started",
+	undefined,
+]);
+```
+
+`createFakeStudioContext()` returns a fully typed
+`StudioPluginContext` with spy-backed `log` / `emit` /
+`getPuckApi().dispatch`; `_mocks.logCalls` / `_mocks.emitCalls` /
+`_mocks.dispatchCalls` are ordered arrays ready for assertion.
+`createFakePageIR()` builds a minimal valid PageIR for export /
+validator tests. `registerPlugin()` wraps the register + lifecycle
+boilerplate. `create-anvilkit-plugin` scaffolds use these fixtures
+out of the box.
+
+## 8. Worked example — component usage counter
+
+The package
+[`@anvilkit/example-usage-counter`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/usage-counter)
+ships as a real npm-publishable workspace package. It tracks
+`componentType → instanceCount` on every Puck `onChange`, exposes the
+totals through three independent surfaces, and demonstrates four of
+the five plugin-contribution slots in fewer than 100 lines.
+
+### Anatomy
+
+The plugin factory:
+
+```ts
+import type { Data as PuckData } from "@puckeditor/core";
+import type {
+	StudioHeaderAction,
+	StudioPluginContext,
+	StudioPluginMeta,
+} from "@anvilkit/core/types";
+
+const META: StudioPluginMeta = {
+	id: "anvilkit-example-usage-counter",
+	name: "Component Usage Counter",
+	version: "0.1.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+function computeCounts(data: PuckData): Readonly<Record<string, number>> {
+	const counts: Record<string, number> = {};
+	for (const item of data.content) {
+		counts[item.type] = (counts[item.type] ?? 0) + 1;
+	}
+	const zones = data.zones ?? {};
+	for (const zoneKey of Object.keys(zones)) {
+		for (const item of zones[zoneKey] ?? []) {
+			counts[item.type] = (counts[item.type] ?? 0) + 1;
+		}
+	}
+	return counts;
+}
+
+export function createUsageCounterPluginCore() {
+	let counts: Readonly<Record<string, number>> = {};
+
+	function update(next: typeof counts, ctx: StudioPluginContext): void {
+		counts = next;
+		ctx.emit("usage-counter:update", counts);
+	}
+
+	const action: StudioHeaderAction = {
+		id: "usage-counter-log",
+		label: "Log usage counts",
+		icon: "list",
+		group: "overflow",
+		onClick(ctx) {
+			ctx.log("info", "usage-counter:snapshot", { counts });
+		},
+	};
+
+	return {
+		meta: META,
+		getCounts: () => counts,
+		register(_ctx: StudioPluginContext) {
+			return {
+				meta: META,
+				hooks: {
+					onInit: (ctx: StudioPluginContext) =>
+						update(computeCounts(ctx.getData()), ctx),
+					onDataChange: (ctx: StudioPluginContext, data: PuckData) =>
+						update(computeCounts(data), ctx),
+				},
+				headerActions: [action],
+			};
+		},
+	};
+}
+```
+
+### Wiring it up in a host
+
+```ts
+import { createUsageCounterPlugin } from "@anvilkit/example-usage-counter";
+// In the host:
+//   const usageCounter = createUsageCounterPlugin({ verbose: true });
+//   const config = createStudioConfig({ plugins: [usageCounter] });
+//   usageCounter.subscribe((counts) => console.log(counts));
+```
+
+`createUsageCounterPlugin` returns the standard `StudioPlugin` shape
+plus two extra methods (`getCounts()` and `subscribe(fn)`) for hosts
+and tests that want to read the live counts without subscribing to
+the event bus.
+
+### Testing it
+
+The full test file lives at
+[`examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts).
+The harness mirrors §7 — there is nothing plugin-specific about it.
+
+## Reference
+
+- Plugin contract: [`packages/core/src/types/plugin.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts)
+- HTML exporter (production reference): [`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+- AI copilot (event-bus + dispatch reference): [`@anvilkit/plugin-ai-copilot`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-ai-copilot)

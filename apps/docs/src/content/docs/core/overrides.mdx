@@ -1,0 +1,234 @@
+---
+title: Studio overrides
+description: AnvilKit's first-class Puck override preset, chrome modes, and the composition order between defaults, plugins, and consumers.
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+`@anvilkit/core` ships a complete Studio chrome — header, sidebar
+tabs, viewport toolbar, fields panel — as a Puck override preset.
+Hosts that want it just import `<Studio>` and they get it. Hosts
+that want raw Puck flip a single prop. Plugins and consumers can
+extend any slot, and the merge pipeline guarantees deterministic
+ordering between the three layers.
+
+## Chrome modes
+
+`<Studio chrome>` accepts two values:
+
+| Value         | Behavior                                                                 |
+| ------------- | ------------------------------------------------------------------------ |
+| `"anvilkit"` (default) | Mounts the AnvilKit Studio shell with the default override preset and the per-instance editor stores. |
+| `"puck"`      | Skips the preset, mounts raw `@puckeditor/core` `<Puck>`. Bit-for-bit identical to the pre-Studio-overrides release. |
+
+The `"anvilkit"` chrome and the editor stores are loaded via dynamic
+import, so `chrome="puck"` ships none of the chrome bytes — the
+entry bundle stays under the 25 KB gzip budget.
+
+## CSS imports
+
+The chrome reads the `--ak-studio-*` token contract from a CSS
+sidecar that bridges to your existing shadcn / Tailwind v4 vars
+(`--background`, `--foreground`, `--border`, etc.). Two imports are
+required:
+
+```ts title="app/layout.tsx"
+import "@puckeditor/core/puck.css";
+import "@anvilkit/core/styles.css";
+```
+
+The sidecar is a side-effecting import — the `@anvilkit/core`
+package marks `*.css` files as side-effect-bearing so bundlers do
+not tree-shake it.
+
+## Default chrome
+
+```tsx title="app/editor/page.tsx"
+"use client";
+
+import { Studio } from "@anvilkit/core/react";
+import type { Config, Data } from "@puckeditor/core";
+
+export default function EditorPage() {
+	return (
+		<Studio
+			puckConfig={config as Config}
+			data={initialData as Data}
+			plugins={plugins}
+			onPublish={async (data) => {
+				await fetch("/api/publish", {
+					method: "POST",
+					body: JSON.stringify(data),
+				});
+			}}
+		/>
+	);
+}
+```
+
+`chrome` defaults to `"anvilkit"`, so no prop change is required.
+The chrome reads `onBack`, `onSaveDraft`, `isSavingDraft`,
+`lastSavedAt`, `isPublishing` if you want to wire the header
+buttons:
+
+```tsx
+<Studio
+	puckConfig={config}
+	data={data}
+	onBack={() => router.push("/dashboard")}
+	onSaveDraft={async () => {
+		await fetch("/api/draft", { method: "POST" });
+	}}
+	isSavingDraft={isSavingDraft}
+	lastSavedAt={lastSavedAt}
+	isPublishing={isPublishing}
+/>
+```
+
+## Raw Puck escape hatch
+
+If you already shipped a custom chrome and need bit-for-bit parity
+with the pre-Studio-overrides `<Studio>`, set `chrome="puck"`:
+
+```tsx title="app/editor/page.tsx"
+<Studio
+	puckConfig={config}
+	data={data}
+	plugins={plugins}
+	chrome="puck"
+/>
+```
+
+In this mode the default preset is **never** loaded, plugin
+overrides are applied identically to before, and your existing
+`overrides` prop reaches Puck unchanged.
+
+## Consumer override extension
+
+The `overrides` prop on `<Studio>` is the host's outermost layer.
+Anything you contribute composes around the default preset's
+output. To swap one field-type renderer or wrap the field label,
+provide just that slot:
+
+```tsx
+import type { Overrides } from "@puckeditor/core";
+
+const customOverrides: Partial<Overrides> = {
+	fieldTypes: {
+		text: ({ field, value, onChange, name }) => (
+			<input
+				name={name}
+				value={value ?? ""}
+				placeholder={field.placeholder}
+				onChange={(e) => onChange(e.target.value)}
+				className="my-app-input"
+			/>
+		),
+	},
+	fieldLabel: ({ children, label, readOnly }) => (
+		<label className="my-app-label">
+			<span>{label}{readOnly ? " (read-only)" : ""}</span>
+			{children}
+		</label>
+	),
+};
+
+<Studio
+	puckConfig={config}
+	data={data}
+	overrides={customOverrides}
+/>
+```
+
+The default preset's `text` renderer is wrapped by your renderer —
+not replaced — so chrome features such as the read-only marker
+inherit through.
+
+## Plugin override composition
+
+Plugins contribute overrides through their `register()` return
+value. The merge pipeline composes layers in registration order
+with the host as the outermost wrapper:
+
+```
+default preset (innermost)
+  → plugin A
+    → plugin B
+      → consumer (outermost)
+```
+
+For any given slot, every layer that supplies a render function
+runs — none are dropped. This is the contract that lets a plugin
+add a marker without erasing the default preset's chrome:
+
+```ts title="my-plugin/src/plugin.ts"
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export function createBadgePlugin(): StudioPlugin {
+	return {
+		meta: {
+			id: "com.example.badge",
+			name: "Badge",
+			version: "1.0.0",
+			coreVersion: "^0.1.0-alpha",
+		},
+		register() {
+			return {
+				meta: this.meta,
+				overrides: {
+					fieldLabel: ({ children, label }) => (
+						<span data-marker="badge">
+							[badge:{label}] {children}
+						</span>
+					),
+				},
+			};
+		},
+	};
+}
+```
+
+Mounted alongside the default preset, the rendered output for a
+`fieldLabel` is:
+
+1. Outer: consumer's `fieldLabel` (if any).
+2. Middle: every plugin's `fieldLabel` in registration order.
+3. Inner: the default preset's `FieldLabel` with the read-only
+   marker, etc.
+
+The `fieldTypes` registry composes per inner type with the same
+rule — `fieldTypes.text` from a plugin wraps the default preset's
+`TextField`, and a consumer-supplied `fieldTypes.text` wraps the
+plugin.
+
+<Aside type="tip" title="Three-layer regression">
+	The `Studio.test.tsx` suite pins the
+	`default → plugin → consumer` ordering with a regression test
+	that mounts a plugin and a consumer override against the live
+	preset. If the merge contract drifts, CI fails.
+</Aside>
+
+## Migration
+
+`chrome` defaults to `"anvilkit"` — upgrading from a release that
+predates the chrome shows the new look on first reload. Two paths
+forward:
+
+- **Keep the new chrome.** No code changes required. Add the
+  CSS imports above. Wire `onBack` / `onSaveDraft` /
+  `isPublishing` if you want richer header behavior.
+- **Stay on raw Puck.** Add `chrome="puck"` to your `<Studio>`
+  call. The output matches the prior release exactly.
+
+The `chrome="puck"` opt-out is supported indefinitely — the merge
+pipeline simply skips the default preset prepend, so all existing
+plugin overrides keep working.
+
+## API reference
+
+- [`StudioProps`](/api/core/interfaces/studioprops/) — full
+  prop list, including the chrome-mode additions.
+- [`createStudioOverrides`](/api/core/functions/createstudiooverrides/)
+  — factory for tests / tooling that need the preset directly.
+- [`mergeOverrides`](/api/core/functions/mergeoverrides/) — the
+  per-key composition primitive that backs the three-layer merge.
