@@ -664,7 +664,10 @@ export default function PuckEditorPage() {
 					};
 					w.__puckExports = {
 						...(w.__puckExports ?? {}),
-						html: result.content,
+						html:
+							typeof result.content === "string"
+								? result.content
+								: new TextDecoder().decode(result.content),
 					};
 				} else {
 					downloadExportResult(
@@ -683,7 +686,10 @@ export default function PuckEditorPage() {
 					};
 					w.__puckExports = {
 						...(w.__puckExports ?? {}),
-						react: result.content,
+						react:
+							typeof result.content === "string"
+								? result.content
+								: new TextDecoder().decode(result.content),
 					};
 				} else {
 					downloadExportResult(
