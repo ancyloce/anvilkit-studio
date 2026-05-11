@@ -15,3 +15,11 @@ allowBuilds:
 overrides:
   react: 19.2.6
   react-dom: 19.2.6
+  # Pin a single typedoc + typescript pair so typedoc-plugin-markdown's
+  # `instanceof Reflection` check works — otherwise pnpm installs a
+  # separate `typedoc` copy per consuming `typescript` peer version and
+  # the plugin sees two different `Reflection` class instances at
+  # render time and bails with "The page model should be a reflection
+  # when rendering the 'reflection' page kind."
+  typedoc: 0.28.19
+  typescript: 6.0.3
