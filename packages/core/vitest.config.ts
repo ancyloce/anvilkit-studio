@@ -1,4 +1,5 @@
 import { reactLibraryPreset } from "@anvilkit/vitest-config/react-library";
+import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig, mergeConfig } from "vitest/config";
 
 /**
@@ -14,6 +15,7 @@ import { defineConfig, mergeConfig } from "vitest/config";
 export default mergeConfig(
 	reactLibraryPreset,
 	defineConfig({
+		plugins: [tsconfigPaths({ projects: ["./tsconfig.test.json"] })],
 		test: {
 			name: "@anvilkit/core",
 			passWithNoTests: true,

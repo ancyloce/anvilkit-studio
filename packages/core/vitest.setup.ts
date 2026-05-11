@@ -6,13 +6,26 @@
  * crash on import or during effect commit.
  */
 
+import { configure } from "@testing-library/react";
+
+// `<Studio>` does multiple dynamic `import()` calls during mount
+// (chrome assets, Zod-bearing config builder, optional AI compat
+// adapter). Under Vitest's module runner each takes longer to resolve
+// than RTL's 1s `waitFor` default, so tests that assert post-mount
+// state would race the loader. 5s gives every legitimate mount path
+// headroom without masking a genuine hang.
+configure({ asyncUtilTimeout: 5000 });
+
 class ResizeObserverStub {
 	observe(): void {}
 	unobserve(): void {}
 	disconnect(): void {}
 }
 
-if (typeof (globalThis as { ResizeObserver?: unknown }).ResizeObserver === "undefined") {
+if (
+	typeof (globalThis as { ResizeObserver?: unknown }).ResizeObserver ===
+	"undefined"
+) {
 	(globalThis as { ResizeObserver: typeof ResizeObserverStub }).ResizeObserver =
 		ResizeObserverStub;
 }
