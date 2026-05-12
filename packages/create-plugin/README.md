@@ -48,4 +48,4 @@ out of the box.
 ## Reference
 
 - Plugin authoring guide: https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/src/content/docs/guides/plugin-authoring.mdx
-- Phase 4 task: [`phase4-011`](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/tasks/phase4-011-create-plugin-generator.md)
+- StudioPlugin contract: [`@anvilkit/core` README](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/README.md)
