@@ -137,43 +137,76 @@ function preflightAuth() {
 			"  npm whoami: not available (expected for granular scope tokens)",
 		);
 	}
+}
 
-	// Best-effort scope-write probe. `npm access list packages` returns
-	// the packages this token can write to; if @anvilkit/* shows up at
-	// all, the token has scope membership. If nothing shows up under
-	// @anvilkit, we still let the run continue (the token might have
-	// implicit scope-create permission via org membership), but we
-	// warn loudly so the first 404 is interpretable.
-	const access = spawnSync(
+// Returns the set of @anvilkit/* package names the configured npm
+// token can read-write, or `null` when the probe couldn't run (no auth
+// configured, older npm without JSON output, registry outage). `null`
+// means "indeterminate" — callers should skip the check rather than
+// treat it as "no permissions."
+function probeScopeWriteAccess() {
+	const r = spawnSync(
 		"npm",
 		["access", "list", "packages", "--json", "@anvilkit"],
 		{ stdio: ["ignore", "pipe", "pipe"], encoding: "utf8" },
 	);
-	if (access.status === 0) {
-		try {
-			const pkgs = JSON.parse(access.stdout || "{}");
-			const writeable = Object.entries(pkgs)
+	if (r.status !== 0) return null;
+	try {
+		const pkgs = JSON.parse(r.stdout || "{}");
+		return new Set(
+			Object.entries(pkgs)
 				.filter(([, perm]) => perm === "read-write")
-				.map(([name]) => name);
-			if (writeable.length === 0) {
-				console.warn(
-					"  WARN: npm token has no read-write entries under @anvilkit/*.\n" +
-						'        If a bootstrap publish below fails with "404 Not Found - PUT",\n' +
-						"        the token needs scope-create permission. Fix on npmjs.com:\n" +
-						"          1. Ensure the npm account owns the @anvilkit org or scope.\n" +
-						"          2. Issue a Granular Access Token with\n" +
-						'             "Packages and scopes > @anvilkit > Read and write"\n' +
-						'             AND check "Allow creation of new packages".\n' +
-						"          3. Replace the NPM_TOKEN secret in GitHub repo settings.",
-				);
-			} else {
-				console.log(
-					`  token has read-write on ${writeable.length} @anvilkit/* package(s).`,
-				);
-			}
-		} catch {
-			// non-JSON output (older npm) — skip the probe quietly.
-		}
+				.map(([name]) => name),
+		);
+	} catch {
+		return null;
+	}
+}
+
+// Cross-references the token's read-write set against the workspace's
+// in-scope publishable packages and warns about gaps. Catches the case
+// where a granular token uses "Specific packages" allow-listing and a
+// newly added @anvilkit/* package isn't covered — `changeset publish`
+// would otherwise fail with an opaque `404 Not Found - PUT`, which npm
+// returns instead of 403 for per-package permission denials. Runs on
+// every invocation (not just when there's a bootstrap publish to do)
+// so write-scope gaps surface before the real publish step.
+function reportScopeWriteGaps(writable, inScopePackages) {
+	if (writable === null) {
+		// Probe couldn't run — common locally without npm auth. Stay quiet.
+		return;
+	}
+	if (writable.size === 0) {
+		console.warn(
+			"WARN: npm token has no read-write entries under @anvilkit/*.\n" +
+				"  Publishing ANY @anvilkit/* package will fail with `404 Not Found - PUT`.\n" +
+				"  Fix on npmjs.com:\n" +
+				"    1. Ensure the npm account owns the @anvilkit org or scope.\n" +
+				"    2. Issue a Granular Access Token with\n" +
+				'       "Packages and scopes > @anvilkit > Read and write"\n' +
+				'       AND check "Allow creation of new packages".\n' +
+				"    3. Replace the NPM_TOKEN secret in GitHub repo settings.",
+		);
+		return;
+	}
+	console.log(
+		`  token has read-write on ${writable.size} @anvilkit/* package(s).`,
+	);
+	const gaps = inScopePackages
+		.map((p) => p.name)
+		.filter((name) => !writable.has(name));
+	if (gaps.length > 0) {
+		console.warn(
+			`WARN: ${gaps.length} workspace package(s) are NOT in the token's\n` +
+				"  read-write list. `changeset publish` will fail with\n" +
+				"  `404 Not Found - PUT` for each one. (npm returns 404 instead\n" +
+				"  of 403 for per-package permission denials.)\n" +
+				`  Missing: ${gaps.join(", ")}\n\n` +
+				"  Fix: reissue the granular token with SCOPE-level access:\n" +
+				"    Packages and scopes > @anvilkit > Read and write\n" +
+				'    Check "Allow creation of new packages"\n' +
+				"  Then replace the NPM_TOKEN secret in GitHub repo settings.",
+		);
 	}
 }
 
@@ -256,6 +289,12 @@ function main() {
 				`${outOfScope.map((p) => p.name).join(", ")}`,
 		);
 	}
+
+	// Unconditional scope-write probe. Runs even when every package
+	// already exists on npm so that gaps in the token's read-write
+	// allow-list are reported BEFORE `changeset publish` hits an opaque
+	// `404 Not Found - PUT` on a known package.
+	reportScopeWriteGaps(probeScopeWriteAccess(), inScope);
 
 	const missing = [];
 	const skipped = [];
