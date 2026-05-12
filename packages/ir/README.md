@@ -34,13 +34,12 @@ const ir = puckDataToIR(data, config);
 const roundTripped = irToPuckData(ir);
 ```
 
-## Phase 3 references
+## Architecture context
 
-See the [Phase 3 plan](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
-(`M1 — @anvilkit/ir`) and the
-[architecture package catalog](../../docs/ai-context/anvilkit-architecture.md)
-(`§7 — @anvilkit/ir [Planned]`) for the IR contract, dependency
-direction, and release expectations.
+`@anvilkit/ir` is the first of three headless runtime packages
+(`ir`, `schema`, `validator`) that sit between `@anvilkit/core` and
+any export format. See [docs/ai-context/anvilkit-architecture.md](../../docs/ai-context/anvilkit-architecture.md)
+for the full package catalog and trust-boundary discussion.
 
 ## Public API
 
@@ -66,9 +65,8 @@ direction, and release expectations.
 | `@puckeditor/core` (peer, types-only) | React, ReactDOM, any plugin package, any DOM API                |
 
 CI enforces these with `madge --circular`, `check:react-free-runtime`,
-and `check:peer-deps` gates (land in `phase3-015`). See
-[Phase 3 plan §8](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
-and the [architecture doc §8 L441-L487](../../docs/ai-context/anvilkit-architecture.md)
+and `check:peer-deps` gates. See
+[docs/ai-context/anvilkit-architecture.md](../../docs/ai-context/anvilkit-architecture.md)
 for the full rationale.
 
 ## Snapshots
