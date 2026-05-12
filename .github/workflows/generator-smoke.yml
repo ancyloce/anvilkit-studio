@@ -36,27 +36,36 @@ jobs:
         with:
           node-version: 22
 
-      # Pre-flight: confirm `@latest` resolves on npm. Catches the
-      # "first-GA not yet cut" state explicitly with a readable error
-      # instead of letting `pnpm dlx` fail with a generic resolution
-      # message. phase5-019 phase4-013 — the first `@latest` publish
-      # flips this step from a no-op past its first run.
+      # Pre-flight: confirm `@latest` resolves on npm. The first publish
+      # is auto-created by `publish.yml`'s `Auto-create missing npm
+      # packages` step, so an E404 here means publish.yml has not yet
+      # landed the first version. Soft-skip the smoke in that case
+      # (the maintainer doesn't need a weekly false alarm); fail loud
+      # only on unexpected probe errors.
       - name: Verify @anvilkit/create-plugin@latest exists on npm
         id: check-dist-tag
         run: |
+          set +e
+          PROBE_STDERR="$(npm view @anvilkit/create-plugin@latest version 2>&1 >/dev/null)"
+          PROBE_STATUS=$?
           set -e
-          VERSION="$(npm view @anvilkit/create-plugin@latest version 2>/dev/null || echo '')"
-          if [ -z "$VERSION" ]; then
-            echo "::error::@anvilkit/create-plugin has no @latest dist-tag on npm."
-            echo "::error::Trigger publish.yml with mode=publish-only after merging the Version PR,"
-            echo "::error::or run 'npm dist-tag add @anvilkit/create-plugin@<version> latest' manually."
+          if [ $PROBE_STATUS -eq 0 ]; then
+            VERSION="$(npm view @anvilkit/create-plugin@latest version 2>/dev/null)"
+            echo "Resolved @anvilkit/create-plugin@latest => $VERSION"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "should-run=true" >> "$GITHUB_OUTPUT"
+          elif echo "$PROBE_STDERR" | grep -qE "E404|404 Not Found"; then
+            echo "::notice::@anvilkit/create-plugin not yet on npm — first publish has not landed. Skipping smoke."
+            echo "should-run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Unexpected npm probe failure (status $PROBE_STATUS):"
+            echo "$PROBE_STDERR"
             exit 1
           fi
-          echo "Resolved @anvilkit/create-plugin@latest => $VERSION"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Scaffold a plugin from the latest published generator
         id: scaffold
+        if: steps.check-dist-tag.outputs.should-run == 'true'
         run: |
           WORKDIR="$(mktemp -d)"
           echo "workdir=$WORKDIR" >> "$GITHUB_OUTPUT"
@@ -69,18 +78,22 @@ jobs:
             --dir "$WORKDIR"
 
       - name: Install generated package
+        if: steps.check-dist-tag.outputs.should-run == 'true'
         working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
         run: pnpm install --ignore-workspace --no-frozen-lockfile
 
       - name: Build generated package
+        if: steps.check-dist-tag.outputs.should-run == 'true'
         working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
         run: pnpm build
 
       - name: Test generated package
+        if: steps.check-dist-tag.outputs.should-run == 'true'
         working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
         run: pnpm test
 
       - name: Publint generated package
+        if: steps.check-dist-tag.outputs.should-run == 'true'
         working-directory: ${{ steps.scaffold.outputs.workdir }}/hello-plugin
         run: pnpm publint
 
