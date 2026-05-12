@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# demo
 
-## Getting Started
+Validation surface for the AnvilKit component, plugin, and template packages. Not a docs site — for that, see [`apps/docs`](../docs/) (`@anvilkit/docs-site`). The demo is the place where every published `@anvilkit/*` package gets exercised end-to-end through Puck before release.
 
-First, run the development server:
+## What it covers
+
+- `/` — demo hub with links to the editor, renderer, and feature-specific test pages
+- `/puck/editor` — interactive Puck editor wired through `<Studio>` from `@anvilkit/core`
+- `/puck/render` — server-side render of the same payload via `@puckeditor/core/rsc`
+
+Both routes share the Puck `Config` composed in [`lib/puck-demo.ts`](./lib/puck-demo.ts). When adding a new component to the demo, update that file and the `transpilePackages` array in [`next.config.js`](./next.config.js).
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git submodule update --init --recursive   # one-time, from the repo root
+pnpm install                               # one-time, from the repo root
+pnpm --filter demo dev                     # Next.js dev server on :3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+| Script | Purpose |
+| ------ | ------- |
+| `pnpm dev` | Next.js dev server on port 3000 (Webpack) |
+| `pnpm dev:turbopack` | Same, but using Turbopack |
+| `pnpm build` | Production build (`next build`) |
+| `pnpm start` | Serve the production build |
+| `pnpm lint` | Biome lint |
+| `pnpm typecheck` | `next typegen` then `tsc --noEmit` |
+| `pnpm e2e` | Playwright suite under [`e2e/`](./e2e/) |
+| `pnpm e2e:install` | One-time Chromium install for Playwright |
 
-## Learn More
+## Playwright suites
 
-To learn more about Next.js, take a look at the following resources:
+The `e2e/` directory exercises the surface area below. Run a single suite with `pnpm e2e <file>`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `smoke.spec.ts` — editor + renderer boot
+- `button-input-smoke.spec.ts` — `@anvilkit/button` and `@anvilkit/input` smoke
+- `section-ai.spec.ts` — section component AI flow
+- `ai-copilot.spec.ts` — `@anvilkit/plugin-ai-copilot` end-to-end
+- `asset-manager.spec.ts`, `asset-manager-puck-drag.spec.ts` — asset manager plugin
+- `export-html.spec.ts`, `export-react.spec.ts` — exporter plugins
+- `collab.spec.ts`, `presence.spec.ts` — collab plugins
+- `sidebar-modules.spec.ts`, `a11y.spec.ts` — sidebar wiring + accessibility baseline
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The demo depends on every workspace component package via `workspace:*`. After adding a new component package, list it in both `apps/demo/lib/puck-demo.ts` and `transpilePackages` in `apps/demo/next.config.js`.
+- E2E tests must use unique room IDs and avoid port 1234 collisions — see the repo-level [`CLAUDE.md`](../../CLAUDE.md#test-infrastructure-notes).
+- The canvas iframe does **not** inherit Tailwind utilities or parent-document CSS. Use inline styles or explicit `CopyHostStyles` injection when debugging styling that only renders inside the iframe.
