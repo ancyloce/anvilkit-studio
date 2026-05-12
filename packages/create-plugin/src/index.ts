@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * create-anvilkit-plugin — scaffold a ready-to-build StudioPlugin
+ * @anvilkit/create-plugin — scaffold a ready-to-build StudioPlugin
  * package. Two invocation shapes work:
  *
- *   pnpm dlx create-anvilkit-plugin --name my-plugin \
- *                                   --display "My Plugin" \
- *                                   --category rail-panel
+ *   pnpm dlx @anvilkit/create-plugin --name my-plugin \
+ *                                    --display "My Plugin" \
+ *                                    --category rail-panel
  *
- *   pnpm create anvilkit-plugin  (interactive)
+ *   pnpm create @anvilkit/plugin  (interactive)
  *
  * Flags accepted: --name, --display, --category, --dir, --force, --help.
  * Missing flags are prompted for when stdin is a TTY; otherwise
@@ -48,10 +48,10 @@ interface Options {
 }
 
 function printHelp(): void {
-	console.log(`create-anvilkit-plugin — scaffold an Anvilkit StudioPlugin
+	console.log(`@anvilkit/create-plugin — scaffold an Anvilkit StudioPlugin
 
 Usage:
-  create-anvilkit-plugin [flags]
+  pnpm create @anvilkit/plugin [flags]
 
 Flags:
   --name <slug>          Package slug (e.g. my-plugin). Becomes the folder name.
@@ -303,7 +303,7 @@ const isMain =
 if (isMain) {
 	run().catch((err) => {
 		console.error(
-			`create-anvilkit-plugin: ${err instanceof Error ? err.message : String(err)}`,
+			`@anvilkit/create-plugin: ${err instanceof Error ? err.message : String(err)}`,
 		);
 		process.exit(1);
 	});

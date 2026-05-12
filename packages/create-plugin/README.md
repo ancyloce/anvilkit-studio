@@ -1,4 +1,4 @@
-# create-anvilkit-plugin
+# @anvilkit/create-plugin
 
 Scaffold a ready-to-build [Anvilkit Studio](https://github.com/ancyloce/anvilkit-studio)
 StudioPlugin package.
@@ -7,13 +7,13 @@ StudioPlugin package.
 
 ```bash
 # non-interactive
-pnpm dlx create-anvilkit-plugin \
+pnpm create @anvilkit/plugin \
   --name my-plugin \
   --display "My Plugin" \
   --category rail-panel
 
 # interactive (prompts for name, display, category)
-pnpm dlx create-anvilkit-plugin
+pnpm create @anvilkit/plugin
 ```
 
 ## Flags

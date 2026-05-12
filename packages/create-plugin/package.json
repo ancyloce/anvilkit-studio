@@ -1,10 +1,10 @@
 {
-	"name": "create-anvilkit-plugin",
+	"name": "@anvilkit/create-plugin",
 	"version": "0.1.0",
 	"description": "Scaffolder for @anvilkit/* StudioPlugin packages. Generates a buildable plugin skeleton with tests, rslib build, biome config, and a minimal createXxxPlugin() factory.",
 	"type": "module",
 	"bin": {
-		"create-anvilkit-plugin": "./dist/index.js"
+		"create-plugin": "./dist/index.js"
 	},
 	"files": [
 		"dist",

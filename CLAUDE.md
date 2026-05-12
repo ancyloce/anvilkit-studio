@@ -24,7 +24,7 @@ anvilkit-studio/
 │   ├── ui/                 # @anvilkit/ui — shared UI primitives
 │   ├── utils/              # @anvilkit/utils — shared helpers
 │   ├── templates/          # @anvilkit/template-* — page template packages
-│   ├── create-plugin/      # `create-anvilkit-plugin` scaffolder
+│   ├── create-plugin/      # `@anvilkit/create-plugin` scaffolder
 │   ├── configs/
 │   │   ├── biome-config/
 │   │   ├── tailwind-config/

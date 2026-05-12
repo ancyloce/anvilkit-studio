@@ -23,7 +23,7 @@ import { run } from "../index.js";
 let workDir: string;
 
 beforeEach(() => {
-	workDir = mkdtempSync(join(tmpdir(), "create-anvilkit-plugin-"));
+	workDir = mkdtempSync(join(tmpdir(), "anvilkit-create-plugin-"));
 });
 
 afterEach(() => {
@@ -32,7 +32,7 @@ afterEach(() => {
 	}
 });
 
-describe("create-anvilkit-plugin", () => {
+describe("@anvilkit/create-plugin", () => {
 	it("scaffolds a plugin from flag-driven args", async () => {
 		const opts = await run([
 			"--name",

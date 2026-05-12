@@ -44,7 +44,7 @@ Useful root commands:
 | `@anvilkit/ui`           | Shared shadcn-style UI primitives (`Button`, `Card`, presence, …).     |
 | `@anvilkit/utils`        | Zero-dependency leaf helpers (`deepMerge`, `invariant`, …).            |
 | `@anvilkit/template-*`   | 10 seed page templates shipped with v1.0 (`packages/templates/`).      |
-| `create-anvilkit-plugin` | Scaffolder for `@anvilkit/*` StudioPlugin packages.                    |
+| `@anvilkit/create-plugin`| Scaffolder for `@anvilkit/*` StudioPlugin packages.                    |
 
 ### Plugins (`packages/plugins/`, git submodules)
 
