@@ -174,18 +174,18 @@ warning and is scheduled for removal in 0.2.
 // Before — still works, prints a deprecation warning:
 <Studio puckConfig={puckConfig} aiHost="https://ai.example.com" />;
 
-// After — once @anvilkit/plugins/ai-generation ships in Phase 3:
-import { createAiGenerationPlugin } from "@anvilkit/plugins/ai-generation";
+// After — wire AI generation through @anvilkit/plugin-ai-copilot:
+import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 <Studio
   puckConfig={puckConfig}
-  plugins={[createAiGenerationPlugin({ baseUrl: "https://ai.example.com" })]}
+  plugins={[createAiCopilotPlugin({ generatePage: yourGeneratePageFn })]}
 />;
 ```
 
 The compat adapter lives at `@anvilkit/core/compat` and is never
 re-exported from the main barrel. Host apps that never pass `aiHost`
-ship zero adapter bytes — the `check:bundle-budget` gate in
-`core-015` verifies this is the case on every build.
+ship zero adapter bytes — a bundle-budget gate verifies this is the
+case on every build.
 
 ## Exports map
 
