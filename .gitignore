@@ -47,6 +47,5 @@ output
 # Starlight content collection, which has to stay tracked.
 /docs/
 
-.changeset/
 .idea/
 .gstack/
