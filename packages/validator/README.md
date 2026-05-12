@@ -108,4 +108,4 @@ Fields declared with `type: "object"` in `AiComponentSchema` are validated as `r
 
 | Package | Version |
 | ------- | ------- |
-| `@puckeditor/core` | `^0.19.0` |
+| `@puckeditor/core` | `^0.21.2` |
