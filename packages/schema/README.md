@@ -40,13 +40,12 @@ const schema = extractFieldSchema("title", puckField);
 // => { name: "title", type: "text" }
 ```
 
-## Phase 3 references
+## Architecture context
 
-See the [Phase 3 plan](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
-(`M2 — @anvilkit/schema`) and the
-[architecture package catalog](../../docs/ai-context/anvilkit-architecture.md)
-(`§7 — @anvilkit/schema [Planned]`) for the schema-derivation role
-and dependency boundary.
+`@anvilkit/schema` is consumed by `@anvilkit/plugin-ai-copilot` and
+`@anvilkit/validator`. It is React-free and has no `@anvilkit/*`
+runtime dependencies. See [docs/ai-context/anvilkit-architecture.md](../../docs/ai-context/anvilkit-architecture.md)
+for the full package catalog.
 
 ## Public API
 
