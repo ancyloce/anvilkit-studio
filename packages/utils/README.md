@@ -60,4 +60,6 @@ This package intentionally does **not** export:
 - Zustand slice helpers — those belong in `@anvilkit/core/react`.
 - A theme sync hook — ditto.
 
-See `docs/tasks/core-002-utils-scaffold.md` for the full rationale.
+Keeping this package small is what lets every runtime package
+(`core`, `ir`, `schema`, `validator`) depend on it without dragging
+React or DOM globals into the dependency graph.
