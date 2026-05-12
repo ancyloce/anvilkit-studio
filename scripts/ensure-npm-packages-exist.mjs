@@ -114,9 +114,18 @@ function publishMissing(pkg, tag) {
 		"--tag",
 		tag,
 	];
-	// `--provenance` is supported on GitHub-hosted runners with
-	// id-token: write. Skip it locally so dry-runs don't fail.
-	if (process.env.GITHUB_ACTIONS === "true") {
+	// Intentionally NO `--provenance` here. This script only creates
+	// the npm registry entry so the real release flow (`changeset
+	// publish`) can later upload versioned tarballs. Sigstore / Rekor
+	// outages have surfaced as `TLOG_CREATE_ENTRY_ERROR` and blocked
+	// the entire pipeline on bootstrap publishes that don't need
+	// attestation. Set `ENSURE_PROVENANCE=1` to opt back in if
+	// Sigstore is healthy and you specifically want the bootstrap
+	// tarball attested.
+	if (
+		process.env.GITHUB_ACTIONS === "true" &&
+		process.env.ENSURE_PROVENANCE === "1"
+	) {
 		args.push("--provenance");
 	}
 	const r = spawnSync("pnpm", args, {
