@@ -6,8 +6,9 @@ import type { Config } from "@puckeditor/core";
  * component name.
  *
  * The IR transform uses this to decide which prop values should be
- * descended into as {@link import("@anvilkit/core/types").PageIRNode.children | PageIRNode.children}
- * versus copied verbatim into {@link import("@anvilkit/core/types").PageIRNode.props | PageIRNode.props}.
+ * descended into as `PageIRNode.children` versus copied verbatim
+ * into `PageIRNode.props` (`PageIRNode` is declared in
+ * `@anvilkit/core`).
  *
  * ### Detection heuristic
  *

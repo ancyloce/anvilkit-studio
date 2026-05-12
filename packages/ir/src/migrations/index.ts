@@ -13,10 +13,7 @@
 
 import type { PageIR, PageIRNode } from "@anvilkit/core/types";
 
-import {
-	type NodeMetaValidationIssue,
-	PageIRNodeMetaError,
-} from "./error.js";
+import { type NodeMetaValidationIssue, PageIRNodeMetaError } from "./error.js";
 import { stripMetaFromTree } from "./internal/strip-meta.js";
 import {
 	parseNodeMetaOrThrow,
@@ -51,8 +48,7 @@ export interface PageIRMigrationOptions {
  * - Pure no-op when `from === to` AND every node has `meta === undefined`.
  *   Returns the original reference.
  * - Validates every `node.meta` (when present) against the runtime
- *   caps documented on
- *   {@link import("@anvilkit/core/types").PageIRNodeMeta | PageIRNodeMeta}.
+ *   caps documented on `PageIRNodeMeta` (from `@anvilkit/core`).
  *   Throws {@link PageIRNodeMetaError} on the first invalid node.
  * - Returns a structurally cloned, frozen IR when validation
  *   succeeds with at least one populated `meta`. The clone preserves
@@ -140,9 +136,7 @@ function cloneNodePreservingMeta(node: PageIRNode): PageIRNode {
 	if (node.slot !== undefined) cloned.slot = node.slot;
 	if (node.slotKind !== undefined) cloned.slotKind = node.slotKind;
 	if (node.children !== undefined) {
-		cloned.children = Object.freeze(
-			node.children.map(cloneNodePreservingMeta),
-		);
+		cloned.children = Object.freeze(node.children.map(cloneNodePreservingMeta));
 	}
 	if (node.assets !== undefined) cloned.assets = node.assets;
 	if (node.meta !== undefined) {

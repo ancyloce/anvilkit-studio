@@ -203,13 +203,20 @@
 										"text": " into a normalized "
 									},
 									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "PageIR"
+										"kind": "code",
+										"text": "`PageIR`"
 									},
 									{
 										"kind": "text",
-										"text": " document, and for round-\ntripping it back. Every Anvilkit export format (HTML today,\nReact/JSON/MDX later) consumes IR — never raw Puck "
+										"text": " document (declared in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": "), and for round-tripping it back. Every\nAnvilkit export format (HTML today, React/JSON/MDX later)\nconsumes IR — never raw Puck "
 									},
 									{
 										"kind": "code",
@@ -217,17 +224,15 @@
 									},
 									{
 										"kind": "text",
-										"text": " — so\nthis barrel is the entry point every downstream package pins\nagainst."
-									}
-								]
-							},
-							{
-								"tag": "@see",
-								"content": [
+										"text": " — so this barrel is the\nentry point every downstream package pins against.\n\nSee "
+									},
 									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "file://./../../../docs/tasks/phase3-002-ir-scaffold.md | phase3-002"
+										"kind": "code",
+										"text": "`docs/tasks/phase3-002-ir-scaffold.md`"
+									},
+									{
+										"kind": "text",
+										"text": " (phase3-002) for the\nfull scaffold spec."
 									}
 								]
 							}
@@ -252,16 +257,15 @@
 									},
 									{
 										"kind": "text",
-										"text": " to populate the root\n"
+										"text": " to populate the root IR document's\n"
 									},
 									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "PageIR.assets"
+										"kind": "code",
+										"text": "`assets`"
 									},
 									{
 										"kind": "text",
-										"text": " manifest, and by node-scoped exporters\nthat want to resolve only their own slice of the asset graph.\n\n**Does not fetch or read files** — asset collection is purely\nstatic analysis of prop values."
+										"text": " manifest, and by node-scoped exporters that want to\nresolve only their own slice of the asset graph.\n\n**Does not fetch or read files** — asset collection is purely\nstatic analysis of prop values."
 									}
 								],
 								"blockTags": [
@@ -302,7 +306,8 @@
 													"qualifiedName": "PageIRNode"
 												},
 												"name": "PageIRNode",
-												"package": "@anvilkit/core"
+												"package": "@anvilkit/core",
+												"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 											},
 											{
 												"type": "reflection",
@@ -366,21 +371,15 @@
 										"summary": [
 											{
 												"kind": "text",
-												"text": "See "
+												"text": "Optional collection options (currently a "
 											},
 											{
-												"kind": "inline-tag",
-												"tag": "@link",
-												"text": "CollectAssetsOptions",
-												"target": {
-													"packageName": "@anvilkit/ir",
-													"packagePath": "src/collect-assets.ts",
-													"qualifiedName": "CollectAssetsOptions"
-												}
+												"kind": "code",
+												"text": "`deriveId`"
 											},
 											{
 												"kind": "text",
-												"text": "."
+												"text": "\n  callback override)."
 											}
 										]
 									},
@@ -452,22 +451,36 @@
 										"text": " (nested child-tree) fields, grouped by\ncomponent name.\n\nThe IR transform uses this to decide which prop values should be\ndescended into as "
 									},
 									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "import(\"@anvilkit/core/types\").PageIRNode.children | PageIRNode.children"
+										"kind": "code",
+										"text": "`PageIRNode.children`"
 									},
 									{
 										"kind": "text",
-										"text": "\nversus copied verbatim into "
+										"text": " versus copied verbatim\ninto "
 									},
 									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "import(\"@anvilkit/core/types\").PageIRNode.props | PageIRNode.props"
+										"kind": "code",
+										"text": "`PageIRNode.props`"
 									},
 									{
 										"kind": "text",
-										"text": ".\n\n### Detection heuristic\n\nA field is considered a slot if its "
+										"text": " ("
+									},
+									{
+										"kind": "code",
+										"text": "`PageIRNode`"
+									},
+									{
+										"kind": "text",
+										"text": " is declared in\n"
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n\n### Detection heuristic\n\nA field is considered a slot if its "
 									},
 									{
 										"kind": "code",
@@ -604,11 +617,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": {
-											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/ir.ts",
-											"qualifiedName": "PageIR"
-										}
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -690,7 +699,8 @@
 											"qualifiedName": "PageIR"
 										},
 										"name": "PageIR",
-										"package": "@anvilkit/core"
+										"package": "@anvilkit/core",
+										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 									}
 								}
 							],
@@ -738,11 +748,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": {
-											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/ir.ts",
-											"qualifiedName": "PageIR"
-										}
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -894,7 +900,8 @@
 									"qualifiedName": "PageIR"
 								},
 								"name": "PageIR",
-								"package": "@anvilkit/core"
+								"package": "@anvilkit/core",
+								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 							}
 						}
 					]
@@ -1407,11 +1414,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": {
-											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/ir.ts",
-											"qualifiedName": "PageIR"
-										}
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -1458,7 +1461,8 @@
 											"qualifiedName": "PageIR"
 										},
 										"name": "PageIR",
-										"package": "@anvilkit/core"
+										"package": "@anvilkit/core",
+										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 									}
 								}
 							],
@@ -1470,7 +1474,8 @@
 									"qualifiedName": "PageIR"
 								},
 								"name": "PageIR",
-								"package": "@anvilkit/core"
+								"package": "@anvilkit/core",
+								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 							}
 						}
 					]
@@ -1498,11 +1503,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": {
-											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/ir.ts",
-											"qualifiedName": "PageIR"
-										}
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -1530,16 +1531,23 @@
 									},
 									{
 										"kind": "text",
-										"text": " (when present) against the runtime\n  caps documented on\n  "
+										"text": " (when present) against the runtime\n  caps documented on "
 									},
 									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "import(\"@anvilkit/core/types\").PageIRNodeMeta | PageIRNodeMeta"
+										"kind": "code",
+										"text": "`PageIRNodeMeta`"
 									},
 									{
 										"kind": "text",
-										"text": ".\n  Throws "
+										"text": " (from "
+									},
+									{
+										"kind": "code",
+										"text": "`@anvilkit/core`"
+									},
+									{
+										"kind": "text",
+										"text": ").\n  Throws "
 									},
 									{
 										"kind": "inline-tag",
@@ -1608,7 +1616,8 @@
 											"qualifiedName": "PageIR"
 										},
 										"name": "PageIR",
-										"package": "@anvilkit/core"
+										"package": "@anvilkit/core",
+										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 									}
 								},
 								{
@@ -1633,7 +1642,8 @@
 									"qualifiedName": "PageIR"
 								},
 								"name": "PageIR",
-								"package": "@anvilkit/core"
+								"package": "@anvilkit/core",
+								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
 							}
 						}
 					]

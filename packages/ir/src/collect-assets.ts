@@ -104,15 +104,16 @@ function walkNode(
  * Walk a node's props and collect every asset reference into a
  * deduplicated, deterministically-ordered list.
  *
- * Used by `puckDataToIR` to populate the root
- * {@link PageIR.assets} manifest, and by node-scoped exporters
- * that want to resolve only their own slice of the asset graph.
+ * Used by `puckDataToIR` to populate the root IR document's
+ * `assets` manifest, and by node-scoped exporters that want to
+ * resolve only their own slice of the asset graph.
  *
  * **Does not fetch or read files** — asset collection is purely
  * static analysis of prop values.
  *
  * @param node - The node (or Puck content item) to walk.
- * @param opts - See {@link CollectAssetsOptions}.
+ * @param opts - Optional collection options (currently a `deriveId`
+ *   callback override).
  * @returns A deduplicated list of assets, ordered by first encounter.
  */
 export function collectAssets(

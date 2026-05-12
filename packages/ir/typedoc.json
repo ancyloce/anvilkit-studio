@@ -3,5 +3,13 @@
 	"extends": ["../../typedoc.base.json"],
 	"entryPoints": ["./src/index.ts", "./src/migrations/index.ts"],
 	"tsconfig": "./tsconfig.json",
-	"name": "@anvilkit/ir"
+	"name": "@anvilkit/ir",
+	"intentionallyNotExported": ["CollectAssetsOptions"],
+	"externalSymbolLinkMappings": {
+		"@anvilkit/core": {
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts",
+			"PageIRNode": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts",
+			"PageIRNodeMeta": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
+		}
+	}
 }
