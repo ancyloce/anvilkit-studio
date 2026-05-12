@@ -1,9 +1,8 @@
 # `@anvilkit/template-*` — first-party seed templates
 
 This directory hosts the 10 seed `AnvilkitTemplate` packages shipped
-with `v1.0.0` (task `phase5-017`). Each subdirectory is its own
-independently-published npm package under the `@anvilkit/template-*`
-scope.
+with `v1.0`. Each subdirectory is its own independently-published
+npm package under the `@anvilkit/template-*` scope.
 
 ## Contract
 
