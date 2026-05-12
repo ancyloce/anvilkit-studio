@@ -1,0 +1,12 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"extends": ["../../typedoc.base.json"],
+	"entryPoints": ["./src/templates/index.ts"],
+	"tsconfig": "./tsconfig.json",
+	"name": "@anvilkit/core/templates",
+	"externalSymbolLinkMappings": {
+		"@anvilkit/core": {
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
+		}
+	}
+}

@@ -234,7 +234,7 @@ export interface PageIRMetadata {
 
 /**
  * The root IR document — the single argument passed to every
- * {@link import("./export.js").ExportFormatDefinition.run} call.
+ * {@link ExportFormatDefinition.run} call.
  *
  * Produced by `@anvilkit/ir`'s `puckDataToIR()` (Phase 3). Core
  * declares the shape; it does not implement the transformation.

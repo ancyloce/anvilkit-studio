@@ -160,8 +160,7 @@ export interface ExportResult {
 /**
  * The descriptor every exporter plugin contributes to Studio.
  *
- * Registered via {@link
- * import("./plugin.js").StudioPluginRegistration.exportFormats}.
+ * Registered via {@link StudioPluginRegistration.exportFormats}.
  * The runtime collects every registered definition into the export
  * registry (`core-009`) and dispatches to the matching `id` when the
  * host calls `exportAs(formatId, options)`.

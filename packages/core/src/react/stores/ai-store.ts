@@ -94,8 +94,9 @@ export interface AiState {
 	readonly lastError: string | null;
 	/**
 	 * The user's prompt history, oldest first. New prompts are
-	 * appended by {@link startGeneration}; {@link partialize} trims
-	 * to the last 10 entries when persisting, and {@link clearHistory}
+	 * appended by {@link startGeneration}; the Zustand-persist
+	 * `partialize` callback (see `useAiStore` below) trims to the
+	 * last 10 entries when persisting, and {@link clearHistory}
 	 * empties the in-memory array.
 	 */
 	readonly history: readonly AiHistoryEntry[];
@@ -137,6 +138,8 @@ export interface AiState {
  * Persisted slice shape — last 10 history entries only. Declared
  * explicitly so a field rename on {@link AiState} fails to compile
  * here instead of silently dropping the persisted data.
+ *
+ * @internal
  */
 interface AiStorePartial {
 	readonly history: readonly AiHistoryEntry[];

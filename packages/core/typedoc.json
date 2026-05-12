@@ -3,5 +3,27 @@
 	"extends": ["../../typedoc.base.json"],
 	"entryPoints": ["./src/index.ts"],
 	"tsconfig": "./tsconfig.json",
-	"name": "@anvilkit/core"
+	"name": "@anvilkit/core",
+	"intentionallyNotExported": [
+		"AiStorePartial",
+		"ThemeStorePartial",
+		"StudioChromeMode",
+		"CompilePluginsOptions"
+	],
+	"externalSymbolLinkMappings": {
+		"@anvilkit/utils": {
+			"deepMerge": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts",
+			"DeepPartial": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/types.ts"
+		},
+		"@puckeditor/core": {
+			"Overrides": "https://puckeditor.com/docs/api-reference/configuration/overrides",
+			"Plugin": "https://puckeditor.com/docs/extending-puck/plugins"
+		},
+		"@anvilkit/core": {
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts",
+			"EditorI18nStoreProvider": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/state/editor-i18n-store.tsx",
+			"ExportStorePartial": "#",
+			"LifecycleManagerOptions": "#"
+		}
+	}
 }
