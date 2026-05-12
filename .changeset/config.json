@@ -1,0 +1,25 @@
+{
+	"$schema": "https://unpkg.com/@changesets/config@3.1.3/schema.json",
+	"changelog": "@changesets/cli/changelog",
+	"commit": false,
+	"fixed": [
+		[
+			"@anvilkit/core",
+			"@anvilkit/ir",
+			"@anvilkit/schema",
+			"@anvilkit/validator",
+			"@anvilkit/utils",
+			"@anvilkit/ui",
+			"@anvilkit/plugin-ai-copilot",
+			"@anvilkit/plugin-asset-manager",
+			"@anvilkit/plugin-export-html",
+			"@anvilkit/plugin-export-react",
+			"@anvilkit/plugin-version-history"
+		]
+	],
+	"linked": [],
+	"access": "public",
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": ["demo"]
+}
