@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-05-12T05:50:16.930Z",
+	"generatedAt": "2026-05-12T11:49:35.634Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",

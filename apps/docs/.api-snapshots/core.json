@@ -3570,16 +3570,23 @@
               },
               {
                 "kind": "text",
-                "text": "; "
+                "text": "; the Zustand-persist\n"
               },
               {
-                "kind": "inline-tag",
-                "tag": "@link",
-                "text": "partialize"
+                "kind": "code",
+                "text": "`partialize`"
               },
               {
                 "kind": "text",
-                "text": " trims\nto the last 10 entries when persisting, and "
+                "text": " callback (see "
+              },
+              {
+                "kind": "code",
+                "text": "`useAiStore`"
+              },
+              {
+                "kind": "text",
+                "text": " below) trims to the\nlast 10 entries when persisting, and "
               },
               {
                 "kind": "inline-tag",
@@ -3596,9 +3603,9 @@
           "sources": [
             {
               "fileName": "react/stores/ai-store.ts",
-              "line": 101,
+              "line": 102,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L101"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L102"
             }
           ],
           "type": {
@@ -3757,9 +3764,9 @@
           "sources": [
             {
               "fileName": "react/stores/ai-store.ts",
-              "line": 128,
+              "line": 129,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L128"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L129"
             }
           ],
           "signatures": [
@@ -3796,9 +3803,9 @@
               "sources": [
                 {
                   "fileName": "react/stores/ai-store.ts",
-                  "line": 128,
+                  "line": 129,
                   "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L128"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L129"
                 }
               ],
               "type": {
@@ -3817,9 +3824,9 @@
           "sources": [
             {
               "fileName": "react/stores/ai-store.ts",
-              "line": 121,
+              "line": 122,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L121"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L122"
             }
           ],
           "signatures": [
@@ -3872,9 +3879,9 @@
               "sources": [
                 {
                   "fileName": "react/stores/ai-store.ts",
-                  "line": 121,
+                  "line": 122,
                   "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L121"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L122"
                 }
               ],
               "parameters": [
@@ -3919,9 +3926,9 @@
           "sources": [
             {
               "fileName": "react/stores/ai-store.ts",
-              "line": 133,
+              "line": 134,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L133"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L134"
             }
           ],
           "signatures": [
@@ -3952,9 +3959,9 @@
               "sources": [
                 {
                   "fileName": "react/stores/ai-store.ts",
-                  "line": 133,
+                  "line": 134,
                   "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L133"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L134"
                 }
               ],
               "type": {
@@ -3973,9 +3980,9 @@
           "sources": [
             {
               "fileName": "react/stores/ai-store.ts",
-              "line": 113,
+              "line": 114,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L113"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L114"
             }
           ],
           "signatures": [
@@ -4064,9 +4071,9 @@
               "sources": [
                 {
                   "fileName": "react/stores/ai-store.ts",
-                  "line": 113,
+                  "line": 114,
                   "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L113"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L114"
                 }
               ],
               "parameters": [
@@ -5354,7 +5361,8 @@
           {
             "kind": "inline-tag",
             "tag": "@link",
-            "text": "import(\"./plugin.js\").StudioPluginRegistration.exportFormats"
+            "text": "StudioPluginRegistration.exportFormats",
+            "target": 717
           },
           {
             "kind": "text",
@@ -5496,9 +5504,9 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 207,
+              "line": 206,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L207"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L206"
             }
           ],
           "type": {
@@ -5557,9 +5565,9 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 197,
+              "line": 196,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L197"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L196"
             }
           ],
           "type": {
@@ -5610,9 +5618,9 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 202,
+              "line": 201,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L202"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L201"
             }
           ],
           "type": {
@@ -5679,9 +5687,9 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 216,
+              "line": 215,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L216"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L215"
             }
           ],
           "type": {
@@ -5736,9 +5744,9 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 229,
+              "line": 228,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L229"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L228"
             }
           ],
           "type": {
@@ -5864,9 +5872,9 @@
       "sources": [
         {
           "fileName": "types/export.ts",
-          "line": 186,
+          "line": 185,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L186"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L185"
         }
       ],
       "typeParameters": [
@@ -6761,11 +6769,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportStorePartial",
-                "target": {
-                  "packageName": "@anvilkit/core",
-                  "packagePath": "src/react/stores/export-store.ts",
-                  "qualifiedName": "ExportStorePartial"
-                }
+                "target": "#"
               },
               {
                 "kind": "text",
@@ -8075,7 +8079,8 @@
           {
             "kind": "inline-tag",
             "tag": "@link",
-            "text": "import(\"./export.js\").ExportFormatDefinition.run"
+            "text": "ExportFormatDefinition.run",
+            "target": 506
           },
           {
             "kind": "text",
@@ -18673,7 +18678,8 @@
                   }
                 ],
                 "name": "Overrides",
-                "package": "@puckeditor/core"
+                "package": "@puckeditor/core",
+                "externalUrl": "https://puckeditor.com/docs/api-reference/configuration/overrides"
               }
             ],
             "name": "Partial",
@@ -20145,11 +20151,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "EditorI18nStoreProvider",
-                "target": {
-                  "packageName": "@anvilkit/core",
-                  "packagePath": "src/react/studio/state/editor-i18n-store.tsx",
-                  "qualifiedName": "EditorI18nStoreProvider"
-                }
+                "target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/state/editor-i18n-store.tsx"
               },
               {
                 "kind": "text",
@@ -20865,7 +20867,8 @@
                   "qualifiedName": "Overrides"
                 },
                 "name": "Overrides",
-                "package": "@puckeditor/core"
+                "package": "@puckeditor/core",
+                "externalUrl": "https://puckeditor.com/docs/api-reference/configuration/overrides"
               }
             ],
             "name": "Partial",
@@ -20995,7 +20998,8 @@
                       "qualifiedName": "Plugin"
                     },
                     "name": "Plugin",
-                    "package": "@puckeditor/core"
+                    "package": "@puckeditor/core",
+                    "externalUrl": "https://puckeditor.com/docs/extending-puck/plugins"
                   }
                 ]
               }
@@ -21626,7 +21630,8 @@
                       "qualifiedName": "Overrides"
                     },
                     "name": "Overrides",
-                    "package": "@puckeditor/core"
+                    "package": "@puckeditor/core",
+                    "externalUrl": "https://puckeditor.com/docs/api-reference/configuration/overrides"
                   }
                 ],
                 "name": "Partial",
@@ -21726,7 +21731,8 @@
                   "qualifiedName": "Plugin"
                 },
                 "name": "Plugin",
-                "package": "@puckeditor/core"
+                "package": "@puckeditor/core",
+                "externalUrl": "https://puckeditor.com/docs/extending-puck/plugins"
               }
             }
           }
@@ -25757,9 +25763,9 @@
       "sources": [
         {
           "fileName": "react/stores/ai-store.ts",
-          "line": 182,
+          "line": 185,
           "character": 13,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L182"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/ai-store.ts#L185"
         }
       ],
       "type": {
@@ -25909,7 +25915,8 @@
                   "qualifiedName": "ExportStorePartial"
                 },
                 "name": "ExportStorePartial",
-                "package": "@anvilkit/core"
+                "package": "@anvilkit/core",
+                "externalUrl": "#"
               }
             ],
             "name": "WithPersist",
@@ -26080,7 +26087,8 @@
                           "qualifiedName": "Plugin"
                         },
                         "name": "Plugin",
-                        "package": "@puckeditor/core"
+                        "package": "@puckeditor/core",
+                        "externalUrl": "https://puckeditor.com/docs/extending-puck/plugins"
                       }
                     ]
                   }
@@ -26598,11 +26606,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "LifecycleManagerOptions",
-                    "target": {
-                      "packageName": "@anvilkit/core",
-                      "packagePath": "src/runtime/lifecycle-manager.ts",
-                      "qualifiedName": "LifecycleManagerOptions"
-                    }
+                    "target": "#"
                   },
                   {
                     "kind": "text",
@@ -26618,7 +26622,8 @@
                   "qualifiedName": "LifecycleManagerOptions"
                 },
                 "name": "LifecycleManagerOptions",
-                "package": "@anvilkit/core"
+                "package": "@anvilkit/core",
+                "externalUrl": "#"
               },
               "defaultValue": "{}"
             }
@@ -26906,11 +26911,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "deepMerge",
-                "target": {
-                  "packageName": "@anvilkit/utils",
-                  "packagePath": "src/deep-merge.ts",
-                  "qualifiedName": "deepMerge"
-                }
+                "target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts"
               },
               {
                 "kind": "text",
@@ -28977,11 +28978,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PuckPlugin",
-                "target": {
-                  "packageName": "@puckeditor/core",
-                  "packagePath": "dist/actions-C3e2nJ9v.d.ts",
-                  "qualifiedName": "Plugin"
-                }
+                "target": "https://puckeditor.com/docs/extending-puck/plugins"
               },
               {
                 "kind": "text",
@@ -29154,7 +29151,8 @@
                 "qualifiedName": "Plugin"
               },
               "name": "Plugin",
-              "package": "@puckeditor/core"
+              "package": "@puckeditor/core",
+              "externalUrl": "https://puckeditor.com/docs/extending-puck/plugins"
             }
           }
         }
@@ -29327,11 +29325,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PuckOverrides",
-                "target": {
-                  "packageName": "@puckeditor/core",
-                  "packagePath": "dist/actions-C3e2nJ9v.d.ts",
-                  "qualifiedName": "Overrides"
-                }
+                "target": "https://puckeditor.com/docs/api-reference/configuration/overrides"
               },
               {
                 "kind": "text",
@@ -29476,7 +29470,8 @@
                           "qualifiedName": "Overrides"
                         },
                         "name": "Overrides",
-                        "package": "@puckeditor/core"
+                        "package": "@puckeditor/core",
+                        "externalUrl": "https://puckeditor.com/docs/api-reference/configuration/overrides"
                       }
                     ],
                     "name": "Partial",
@@ -29503,6 +29498,7 @@
                 },
                 "name": "PuckOverrides",
                 "package": "@puckeditor/core",
+                "externalUrl": "https://puckeditor.com/docs/api-reference/configuration/overrides",
                 "qualifiedName": "Overrides"
               }
             ],
@@ -29768,11 +29764,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "DeepPartial",
-                "target": {
-                  "packageName": "@anvilkit/utils",
-                  "packagePath": "src/deep-merge.ts",
-                  "qualifiedName": "DeepPartial"
-                }
+                "target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/types.ts"
               },
               {
                 "kind": "text",
