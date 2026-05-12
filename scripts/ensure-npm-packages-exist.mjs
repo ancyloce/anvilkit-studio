@@ -59,6 +59,20 @@ function resolveDistTag() {
 	}
 }
 
+// Names the workflow's NPM_TOKEN is authorized to write. The token is
+// a granular automation token scoped to `@anvilkit/*` (see the header
+// of `.github/workflows/publish.yml`), so any unscoped or out-of-scope
+// publishable workspace package — one that would need its own
+// owner-level token or a separate publish flow — is silently skipped
+// here. Attempting it would PUT against the registry and get
+// `404 Not Found`, which npm returns for both "missing" and
+// "you don't have permission to write here".
+const PUBLISHABLE_SCOPE_PREFIX = "@anvilkit/";
+
+function isInTokenScope(name) {
+	return name.startsWith(PUBLISHABLE_SCOPE_PREFIX);
+}
+
 function enumerateWorkspacePackages() {
 	const out = execSync("pnpm -r --json ls --depth=-1", {
 		cwd: ROOT,
@@ -118,13 +132,23 @@ function main() {
 	const tag = resolveDistTag();
 	const all = enumerateWorkspacePackages();
 	const filtered = FILTER ? all.filter((p) => p.name.includes(FILTER)) : all;
+	const inScope = filtered.filter((p) => isInTokenScope(p.name));
+	const outOfScope = filtered.filter((p) => !isInTokenScope(p.name));
 	console.log(
-		`Scanning ${filtered.length} publishable workspace package(s) ` +
+		`Scanning ${inScope.length} in-scope (${PUBLISHABLE_SCOPE_PREFIX}*) ` +
+			`publishable workspace package(s) ` +
 			`(dist-tag=${tag}${DRY_RUN ? ", dry-run" : ""})...`,
 	);
+	if (outOfScope.length > 0) {
+		console.log(
+			`  skipping ${outOfScope.length} out-of-scope package(s) ` +
+				`(token cannot create unscoped/foreign-scope names): ` +
+				`${outOfScope.map((p) => p.name).join(", ")}`,
+		);
+	}
 
 	const missing = [];
-	for (const pkg of filtered) {
+	for (const pkg of inScope) {
 		const { exists } = npmExists(pkg.name);
 		if (exists) {
 			console.log(`  ok  ${pkg.name}`);

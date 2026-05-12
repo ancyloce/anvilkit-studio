@@ -12,10 +12,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 anvilkit-studio/
 ├── apps/
 │   ├── demo/               # Next.js demo app for validating components
-│   ├── docs/               # @anvilkit/docs-site — Starlight docs (Astro)
-│   └── cli/                # `anvilkit` CLI scaffold
+│   └── docs/               # @anvilkit/docs-site — Starlight docs (Astro)
 ├── bench/                  # tinybench perf harness (component/IR/export)
 ├── packages/
+│   ├── cli/                # @anvilkit/cli — `anvilkit` CLI scaffold
 │   ├── components/         # Git submodule → @anvilkit/* component packages
 │   ├── core/               # @anvilkit/core — runtime, plugin engine, <Studio> shell
 │   ├── ir/                 # @anvilkit/ir — Headless Page IR transforms

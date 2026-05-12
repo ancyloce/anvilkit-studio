@@ -147,82 +147,6 @@ importers:
         specifier: ^5.0.13
         version: 5.0.13(@types/react@19.2.14)(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
 
-  apps/cli:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@anvilkit/ir':
-        specifier: workspace:*
-        version: link:../../packages/ir
-      '@anvilkit/plugin-ai-copilot':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-ai-copilot
-      '@anvilkit/plugin-export-html':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-html
-      '@anvilkit/plugin-export-react':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-react
-      '@anvilkit/schema':
-        specifier: workspace:*
-        version: link:../../packages/schema
-      '@anvilkit/validator':
-        specifier: workspace:*
-        version: link:../../packages/validator
-      '@babel/parser':
-        specifier: ^7.29.2
-        version: 7.29.2
-      '@babel/types':
-        specifier: ^7.29.0
-        version: 7.29.0
-      '@clack/prompts':
-        specifier: ^0.8.2
-        version: 0.8.2
-      cac:
-        specifier: ^6.7.14
-        version: 6.7.14
-      jiti:
-        specifier: ^2.4.2
-        version: 2.6.1
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
-      recast:
-        specifier: ^0.23.11
-        version: 0.23.11
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../packages/configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../packages/configs/vitest-config
-      '@rslib/core':
-        specifier: ^0.20.1
-        version: 0.20.1(typescript@6.0.3)
-      '@types/node':
-        specifier: ^22.15.3
-        version: 22.15.3
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.18
-        version: 0.3.18
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.4
-        version: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
-
   apps/demo:
     dependencies:
       '@anvilkit/bento-grid':
@@ -569,6 +493,82 @@ importers:
       vitest:
         specifier: ^4.1.4
         version: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+
+  packages/cli:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../core
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../ir
+      '@anvilkit/plugin-ai-copilot':
+        specifier: workspace:*
+        version: link:../plugins/plugin-ai-copilot
+      '@anvilkit/plugin-export-html':
+        specifier: workspace:*
+        version: link:../plugins/plugin-export-html
+      '@anvilkit/plugin-export-react':
+        specifier: workspace:*
+        version: link:../plugins/plugin-export-react
+      '@anvilkit/schema':
+        specifier: workspace:*
+        version: link:../schema
+      '@anvilkit/validator':
+        specifier: workspace:*
+        version: link:../validator
+      '@babel/parser':
+        specifier: ^7.29.2
+        version: 7.29.2
+      '@babel/types':
+        specifier: ^7.29.0
+        version: 7.29.0
+      '@clack/prompts':
+        specifier: ^0.8.2
+        version: 0.8.2
+      cac:
+        specifier: ^6.7.14
+        version: 6.7.14
+      jiti:
+        specifier: ^2.4.2
+        version: 2.6.1
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
+      recast:
+        specifier: ^0.23.11
+        version: 0.23.11
+      zod:
+        specifier: ^4.3.6
+        version: 4.4.3
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../configs/vitest-config
+      '@rslib/core':
+        specifier: ^0.20.1
+        version: 0.20.1(typescript@6.0.3)
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.18
+        version: 0.3.20
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.4
+        version: 4.1.5(@types/node@22.15.3)(@vitest/coverage-v8@4.1.5)(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
   packages/components:
     devDependencies:
@@ -12247,7 +12247,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+      vitest: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@15.11.7)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
   '@vitest/coverage-v8@4.1.5(vitest@4.1.5)':
     dependencies:
@@ -12325,6 +12325,15 @@ snapshots:
     optionalDependencies:
       msw: 2.12.14(@types/node@22.15.3)(typescript@6.0.3)
       vite: 8.0.8(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)
+
+  '@vitest/mocker@4.1.5(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))':
+    dependencies:
+      '@vitest/spy': 4.1.5
+      estree-walker: 3.0.3
+      magic-string: 0.30.21
+    optionalDependencies:
+      msw: 2.12.14(@types/node@22.15.3)(typescript@6.0.3)
+      vite: 8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)
 
   '@vitest/mocker@4.1.5(msw@2.12.14(@types/node@25.6.0)(typescript@6.0.3))(vite@8.0.8(@types/node@25.6.0)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))':
     dependencies:
@@ -17050,6 +17059,36 @@ snapshots:
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
       vite: 8.0.8(@types/node@22.15.3)(esbuild@0.25.12)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 22.15.3
+      '@vitest/coverage-v8': 4.1.5(vitest@4.1.5)
+      happy-dom: 20.8.9
+      jsdom: 29.1.1(@noble/hashes@1.8.0)
+    transitivePeerDependencies:
+      - msw
+
+  vitest@4.1.5(@types/node@22.15.3)(@vitest/coverage-v8@4.1.5)(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)):
+    dependencies:
+      '@vitest/expect': 4.1.5
+      '@vitest/mocker': 4.1.5(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+      '@vitest/pretty-format': 4.1.5
+      '@vitest/runner': 4.1.5
+      '@vitest/snapshot': 4.1.5
+      '@vitest/spy': 4.1.5
+      '@vitest/utils': 4.1.5
+      es-module-lexer: 2.0.0
+      expect-type: 1.3.0
+      magic-string: 0.30.21
+      obug: 2.1.1
+      pathe: 2.0.3
+      picomatch: 4.0.4
+      std-env: 4.0.0
+      tinybench: 2.9.0
+      tinyexec: 1.1.1
+      tinyglobby: 0.2.16
+      tinyrainbow: 3.1.0
+      vite: 8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.15.3

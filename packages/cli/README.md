@@ -1,6 +1,6 @@
-# anvilkit
+# @anvilkit/cli
 
-The `anvilkit` CLI — the user-facing entry point for scaffolding, registry installs, validation, export, and AI generation against an Anvilkit Studio project.
+The `anvilkit` CLI — the user-facing entry point for scaffolding, registry installs, validation, export, and AI generation against an Anvilkit Studio project. Published as `@anvilkit/cli` on npm; the installed bin remains `anvilkit`.
 
 ## Commands
 
@@ -39,7 +39,7 @@ The `check:react-free-runtime` gate guarantees `src/` (excluding `scaffolds/`) h
 ## Layout
 
 ```
-apps/cli/
+packages/cli/
 ├── src/
 │   ├── bin/anvilkit.ts        # entry point, command registration
 │   ├── commands/              # init.ts, add.ts, validate.ts, export.ts, generate.ts

@@ -45,6 +45,7 @@ Useful root commands:
 | `@anvilkit/utils`        | Zero-dependency leaf helpers (`deepMerge`, `invariant`, …).            |
 | `@anvilkit/template-*`   | 10 seed page templates shipped with v1.0 (`packages/templates/`).      |
 | `@anvilkit/create-plugin`| Scaffolder for `@anvilkit/*` StudioPlugin packages.                    |
+| `@anvilkit/cli`          | The `anvilkit` CLI — `init`, `add`, `validate`, `export`, `generate`.  |
 
 ### Plugins (`packages/plugins/`, git submodules)
 
@@ -64,7 +65,6 @@ Useful root commands:
 | ------------- | ----------------------------------------------------------------------------- |
 | `apps/demo`   | Next.js validation surface for every published `@anvilkit/*` package.         |
 | `apps/docs`   | Starlight docs site deployed to [docs.anvilkit.dev](https://docs.anvilkit.dev). |
-| `apps/cli`    | The `anvilkit` CLI — `init`, `add`, `validate`, `export`, `generate`.         |
 
 ### Component packages
 
