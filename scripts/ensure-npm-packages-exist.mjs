@@ -103,35 +103,40 @@ function npmExists(name) {
 	);
 }
 
-// Preflight: confirm the configured NPM auth credential can write to
-// the @anvilkit scope before we burn through publish attempts that
-// will 404 because the token lacks scope-create permission. npm
-// returns 404 (not 403) for "no write access to this scope" — the
-// same status it uses for "package missing" — so the bootstrap publish
-// step otherwise fails with a confusing "Not Found" stack trace that
-// reads like a transient registry error. A preflight check turns that
-// into a clear, actionable failure.
+// Best-effort preflight: surface what we can about the configured
+// auth credential before burning publish attempts that will 404
+// because the token lacks scope-create permission. Intentionally
+// non-fatal: granular automation tokens scoped to packages/scopes
+// can publish but often cannot call `/-/whoami` (which represents
+// a user identity these tokens don't carry), so a `whoami` failure
+// is NOT proof the token is broken. The actual publish below is the
+// source of truth; this just adds context to the logs.
 function preflightAuth() {
+	const ping = spawnSync("npm", ["ping"], {
+		stdio: ["ignore", "pipe", "pipe"],
+		encoding: "utf8",
+	});
+	if (ping.status === 0) {
+		console.log("  npm ping: ok");
+	} else {
+		console.warn(
+			`  WARN: npm ping returned ${ping.status} — registry may be unreachable.`,
+		);
+	}
+
 	const who = spawnSync("npm", ["whoami"], {
 		stdio: ["ignore", "pipe", "pipe"],
 		encoding: "utf8",
 	});
-	if (who.status !== 0) {
-		const stderr = (who.stderr || "").trim();
-		throw new Error(
-			`npm auth preflight failed: \`npm whoami\` returned ${who.status}.\n` +
-				`  stderr: ${stderr}\n\n` +
-				`  This means NPM_TOKEN / NODE_AUTH_TOKEN is missing, expired, or\n` +
-				`  not picked up by ~/.npmrc. In CI, confirm the workflow sets\n` +
-				`    env:\n` +
-				`      NPM_TOKEN: \${{ secrets.NPM_TOKEN }}\n` +
-				`      NODE_AUTH_TOKEN: \${{ secrets.NPM_TOKEN }}\n` +
-				`  and that actions/setup-node was configured with\n` +
-				`    registry-url: "https://registry.npmjs.org"`,
+	if (who.status === 0) {
+		console.log(`  npm whoami: ${(who.stdout || "").trim()}`);
+	} else {
+		// Granular tokens scoped to specific packages/scopes commonly
+		// 401 here even when publish works fine. Note it and move on.
+		console.log(
+			"  npm whoami: not available (expected for granular scope tokens)",
 		);
 	}
-	const user = (who.stdout || "").trim();
-	console.log(`  npm whoami: ${user}`);
 
 	// Best-effort scope-write probe. `npm access list packages` returns
 	// the packages this token can write to; if @anvilkit/* shows up at
@@ -152,14 +157,14 @@ function preflightAuth() {
 				.map(([name]) => name);
 			if (writeable.length === 0) {
 				console.warn(
-					`  WARN: npm token has no read-write entries under @anvilkit/*.\n` +
-						`        If a bootstrap publish below fails with "404 Not Found - PUT",\n` +
-						`        the token needs scope-create permission. Fix on npmjs.com:\n` +
-						`          1. Ensure user "${user}" owns the @anvilkit org or scope.\n` +
-						`          2. Issue a Granular Access Token with\n` +
-						`             "Packages and scopes > @anvilkit > Read and write"\n` +
-						`             AND check "Allow creation of new packages".\n` +
-						`          3. Replace the NPM_TOKEN secret in GitHub repo settings.`,
+					"  WARN: npm token has no read-write entries under @anvilkit/*.\n" +
+						'        If a bootstrap publish below fails with "404 Not Found - PUT",\n' +
+						"        the token needs scope-create permission. Fix on npmjs.com:\n" +
+						"          1. Ensure the npm account owns the @anvilkit org or scope.\n" +
+						"          2. Issue a Granular Access Token with\n" +
+						'             "Packages and scopes > @anvilkit > Read and write"\n' +
+						'             AND check "Allow creation of new packages".\n' +
+						"          3. Replace the NPM_TOKEN secret in GitHub repo settings.",
 				);
 			} else {
 				console.log(
