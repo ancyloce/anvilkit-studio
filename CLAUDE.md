@@ -130,7 +130,7 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 ### Continuous Integration
 `.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.0.9 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Starlight build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
 
-Other workflows: `publish.yml`, `publish-ui.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `vercel.json` and posts an independent GitHub check — it does not block CI, and CI does not block it.
+Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `vercel.json` and posts an independent GitHub check — it does not block CI, and CI does not block it.
 
 **Typecheck script naming:** the workspace normalizes on `typecheck` (not `check-types`) across every package and the Turbo task graph. The components submodule (`packages/components/`) already used `typecheck` for each component package, so the root and direct-workspace packages (`ui`, `utils`, `vitest-config`, `apps/demo`) were renamed to match. Do not reintroduce `check-types`.
 
