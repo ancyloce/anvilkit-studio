@@ -35,13 +35,12 @@ if (!result.valid) {
 }
 ```
 
-## Phase 3 references
+## Architecture context
 
-See the [Phase 3 plan](../../docs/plans/phase-3-export-ai-pipeline-plan.md)
-(`M3 — @anvilkit/validator`) and the
-[architecture package catalog](../../docs/ai-context/anvilkit-architecture.md)
-(`§7 — @anvilkit/validator [Planned]`) for the validator's trust
-boundary and dependency rules.
+`@anvilkit/validator` is the trust boundary between untrusted AI
+output and `puckApi.dispatch`. It also gates Puck configs before
+they reach an exporter. See [docs/ai-context/anvilkit-architecture.md](../../docs/ai-context/anvilkit-architecture.md)
+for the package catalog.
 
 ## Error Codes — `validateComponentConfig`
 
