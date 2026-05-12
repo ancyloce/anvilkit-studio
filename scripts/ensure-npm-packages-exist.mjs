@@ -103,6 +103,75 @@ function npmExists(name) {
 	);
 }
 
+// Preflight: confirm the configured NPM auth credential can write to
+// the @anvilkit scope before we burn through publish attempts that
+// will 404 because the token lacks scope-create permission. npm
+// returns 404 (not 403) for "no write access to this scope" — the
+// same status it uses for "package missing" — so the bootstrap publish
+// step otherwise fails with a confusing "Not Found" stack trace that
+// reads like a transient registry error. A preflight check turns that
+// into a clear, actionable failure.
+function preflightAuth() {
+	const who = spawnSync("npm", ["whoami"], {
+		stdio: ["ignore", "pipe", "pipe"],
+		encoding: "utf8",
+	});
+	if (who.status !== 0) {
+		const stderr = (who.stderr || "").trim();
+		throw new Error(
+			`npm auth preflight failed: \`npm whoami\` returned ${who.status}.\n` +
+				`  stderr: ${stderr}\n\n` +
+				`  This means NPM_TOKEN / NODE_AUTH_TOKEN is missing, expired, or\n` +
+				`  not picked up by ~/.npmrc. In CI, confirm the workflow sets\n` +
+				`    env:\n` +
+				`      NPM_TOKEN: \${{ secrets.NPM_TOKEN }}\n` +
+				`      NODE_AUTH_TOKEN: \${{ secrets.NPM_TOKEN }}\n` +
+				`  and that actions/setup-node was configured with\n` +
+				`    registry-url: "https://registry.npmjs.org"`,
+		);
+	}
+	const user = (who.stdout || "").trim();
+	console.log(`  npm whoami: ${user}`);
+
+	// Best-effort scope-write probe. `npm access list packages` returns
+	// the packages this token can write to; if @anvilkit/* shows up at
+	// all, the token has scope membership. If nothing shows up under
+	// @anvilkit, we still let the run continue (the token might have
+	// implicit scope-create permission via org membership), but we
+	// warn loudly so the first 404 is interpretable.
+	const access = spawnSync(
+		"npm",
+		["access", "list", "packages", "--json", "@anvilkit"],
+		{ stdio: ["ignore", "pipe", "pipe"], encoding: "utf8" },
+	);
+	if (access.status === 0) {
+		try {
+			const pkgs = JSON.parse(access.stdout || "{}");
+			const writeable = Object.entries(pkgs)
+				.filter(([, perm]) => perm === "read-write")
+				.map(([name]) => name);
+			if (writeable.length === 0) {
+				console.warn(
+					`  WARN: npm token has no read-write entries under @anvilkit/*.\n` +
+						`        If a bootstrap publish below fails with "404 Not Found - PUT",\n` +
+						`        the token needs scope-create permission. Fix on npmjs.com:\n` +
+						`          1. Ensure user "${user}" owns the @anvilkit org or scope.\n` +
+						`          2. Issue a Granular Access Token with\n` +
+						`             "Packages and scopes > @anvilkit > Read and write"\n` +
+						`             AND check "Allow creation of new packages".\n` +
+						`          3. Replace the NPM_TOKEN secret in GitHub repo settings.`,
+				);
+			} else {
+				console.log(
+					`  token has read-write on ${writeable.length} @anvilkit/* package(s).`,
+				);
+			}
+		} catch {
+			// non-JSON output (older npm) — skip the probe quietly.
+		}
+	}
+}
+
 function publishMissing(pkg, tag) {
 	const args = [
 		"--filter",
@@ -133,9 +202,36 @@ function publishMissing(pkg, tag) {
 		stdio: "inherit",
 	});
 	if (r.status !== 0) {
-		throw new Error(`pnpm publish failed for ${pkg.name} (exit ${r.status}).`);
+		throw new Error(
+			`pnpm publish failed for ${pkg.name} (exit ${r.status}).\n\n` +
+				`  If the failure above was "404 Not Found - PUT ${pkg.name}",\n` +
+				`  the npm token cannot create new packages under @anvilkit.\n` +
+				`  npm returns 404 (not 403) for "no write permission to scope".\n\n` +
+				`  Fix on npmjs.com:\n` +
+				`    1. Log in as the user/org that owns the @anvilkit scope\n` +
+				`       (claim it once via \`npm init --scope=anvilkit\` from a\n` +
+				`       maintainer machine, or create an @anvilkit org).\n` +
+				`    2. Issue a Granular Access Token with\n` +
+				`       "Packages and scopes > @anvilkit > Read and write"\n` +
+				`       AND check "Allow creation of new packages".\n` +
+				`    3. Replace the NPM_TOKEN secret in GitHub repo settings.\n\n` +
+				`  Workaround: publish ${pkg.name} once manually from a\n` +
+				`  maintainer machine, then re-run this workflow:\n` +
+				`    npm login\n` +
+				`    pnpm --filter ${pkg.name} publish --access public --no-git-checks\n\n` +
+				`  Bypass: set ENSURE_SKIP="${pkg.name}" to skip this package in\n` +
+				`  the bootstrap and let the real \`changeset publish\` decide.`,
+		);
 	}
 }
+
+// Comma-separated package names to skip bootstrapping. Use when a
+// scope/token misconfiguration blocks first-publish of a specific new
+// package and you want to unblock CI while the npm-side fix lands.
+const SKIP = (process.env.ENSURE_SKIP || "")
+	.split(",")
+	.map((s) => s.trim())
+	.filter(Boolean);
 
 function main() {
 	const tag = resolveDistTag();
@@ -157,10 +253,14 @@ function main() {
 	}
 
 	const missing = [];
+	const skipped = [];
 	for (const pkg of inScope) {
 		const { exists } = npmExists(pkg.name);
 		if (exists) {
 			console.log(`  ok  ${pkg.name}`);
+		} else if (SKIP.includes(pkg.name)) {
+			console.log(`  skip ${pkg.name}  — ENSURE_SKIP bypass`);
+			skipped.push(pkg);
 		} else {
 			console.log(`  NEW ${pkg.name}@${pkg.version}  — will be created`);
 			missing.push(pkg);
@@ -168,7 +268,14 @@ function main() {
 	}
 
 	if (missing.length === 0) {
-		console.log("All publishable packages exist on npm.");
+		if (skipped.length > 0) {
+			console.log(
+				`Skipped ${skipped.length} package(s) via ENSURE_SKIP; ` +
+					`all other publishable packages exist on npm.`,
+			);
+		} else {
+			console.log("All publishable packages exist on npm.");
+		}
 		return;
 	}
 
@@ -179,6 +286,11 @@ function main() {
 		);
 		return;
 	}
+
+	// Only preflight when there's an actual publish to do — keeps the
+	// idempotent no-op path silent on repeat runs.
+	console.log("\nPreflighting npm auth before bootstrap publishes...");
+	preflightAuth();
 
 	for (const pkg of missing) {
 		console.log(`\nCreating ${pkg.name}@${pkg.version} on npm (tag=${tag})...`);
