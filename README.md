@@ -1,20 +1,10 @@
 # AnvilKit Studio
 
-AnvilKit Studio is a monorepo of Puck-native React component packages, a Studio runtime, and a plugin ecosystem.
+AnvilKit Studio is a monorepo of [Puck](https://puckeditor.com/)-native React component packages, a Studio runtime, and a plugin ecosystem. Components, plugins, and templates are each published as independent `@anvilkit/*` npm packages.
 
-> **AnvilKit Studio v1.0.0-beta is available.** Install with `pnpm add @anvilkit/core@^1.0.0-beta`. See the [migration guide](docs/migration/0.x-to-1.0-beta.md), the [aggregate changelog](CHANGELOG.md), or [file beta feedback](docs/beta-feedback/README.md).
+> **AnvilKit Studio v1.0.0-beta is rolling out.** The runtime cone (`@anvilkit/core`, `ir`, `schema`, `validator`) and the first-party plugins are pinned to the `1.0.0-beta` line. Component packages stay on their independent `0.0.x` cadence and are not bumped to `1.0` with this release. See the [aggregate changelog](CHANGELOG.md), the [migration guide](docs/migration/0.x-to-1.0-beta.md), or [file beta feedback](docs/beta-feedback/README.md).
 >
-> **Looking ahead:** the [LTS policy](docs/policies/lts.md) and the [`beta → 1.0.0` migration notes](docs/migration/1.0-beta-to-1.0.md) are drafted and take effect on the day `v1.0.0` ships.
-
-## What's new in 1.0.0-beta
-
-- **Studio runtime (`@anvilkit/core@1.0.0-beta.0`).** `<Studio>` React shell, `StudioConfigSchema` (Zod-validated config), `compilePlugins`, the `StudioPlugin` contract, and the `StudioError` family — pinned, docs-backed, and gated by a 25 KB gzipped entry-chunk budget.
-- **Headless pipeline (`@anvilkit/ir`, `@anvilkit/schema`, `@anvilkit/validator` → `1.0.0-beta.0`).** Round-trip `puckDataToIR` / `irToPuckData`, `configToAiContext` for AI prompts, and `validateAiOutput` / `validateComponentConfig` with documented error codes. Three validator gaps from the phase4-014 security review (`INVALID_ROOT_TYPE`, `INVALID_CHILDREN`, `NON_SERIALIZABLE_PROP`) are closed with flipped-pin tests.
-- **Export pipeline (`@anvilkit/plugin-export-html@1.0.0-beta.0`).** First real exporter, with the 24-test XSS/URL/CSS-injection hostile-input battery enforcing the escape contract in CI.
-- **AI copilot (`@anvilkit/plugin-ai-copilot@1.0.0-beta.0`).** Headless `createAiCopilotPlugin`, a mock generator (`@anvilkit/plugin-ai-copilot/mock`) for CI harnesses, and structured `ai-copilot:error` events — including an 18-test malformed-PageIR / oversized-input / prompt-injection battery.
-- **Docs site ([`docs.anvilkit.dev`](https://anvilkit.dev)).** Starlight-powered, with a generated component catalog, TypeDoc API reference, guides for component / plugin / generator / export / AI workflows, and an interactive Puck playground.
-- **Plugin scaffolder (`create-anvilkit-plugin`).** `pnpm dlx create-anvilkit-plugin --name my-plugin --display "My Plugin" --category rail-panel` generates a buildable plugin skeleton wired to `@anvilkit/core/testing`.
-- **Shared UI (`@anvilkit/ui@1.0.0-beta.0`).** First public npm publish of the shared primitives used across every component package.
+> **Looking ahead:** the [LTS policy](docs/policies/lts.md) and the [`beta → 1.0` migration notes](docs/migration/1.0-beta-to-1.0.md) take effect on the day `v1.0.0` ships.
 
 ## Quick Start
 
@@ -30,29 +20,63 @@ Open `http://localhost:3000`.
 
 Useful root commands:
 
-- `pnpm dev`
-- `pnpm build`
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm test`
+- `pnpm dev` — Turbo watch mode across every package
+- `pnpm build` — build all packages
+- `pnpm lint` — Biome lint
+- `pnpm typecheck` — TypeScript across the workspace
+- `pnpm test` — Vitest across the workspace
+- `pnpm madge` — circular dependency scan
+- `pnpm publint` — validate `package.json` exports
+- `pnpm size` — per-package gzip budgets via `size-limit`
+- `pnpm bench` — tinybench perf harness against `bench/baseline.json`
+- `pnpm docs:dev` — Starlight docs site on port 4321
 
-## Current Packages
+## Package map
 
-Component packages (11 total):
+### Runtime cone (`packages/`)
 
-- `@anvilkit/button`
-- `@anvilkit/input`
-- `@anvilkit/navbar`
-- `@anvilkit/hero`
-- `@anvilkit/section`
-- `@anvilkit/bento-grid`
-- `@anvilkit/blog-list`
-- `@anvilkit/helps`
-- `@anvilkit/logo-clouds`
-- `@anvilkit/pricing-minimal`
-- `@anvilkit/statistics`
+| Package                  | Role                                                                   |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `@anvilkit/core`         | `<Studio>` shell, plugin engine, lifecycle bus, Zustand stores.        |
+| `@anvilkit/ir`           | Headless Page IR transforms (`puckDataToIR`, `irToPuckData`, …).       |
+| `@anvilkit/schema`       | AI-friendly schema derivation from a Puck `Config`.                    |
+| `@anvilkit/validator`    | Export-readiness validation + AI-output trust boundary.                |
+| `@anvilkit/ui`           | Shared shadcn-style UI primitives (`Button`, `Card`, presence, …).     |
+| `@anvilkit/utils`        | Zero-dependency leaf helpers (`deepMerge`, `invariant`, …).            |
+| `@anvilkit/template-*`   | 10 seed page templates shipped with v1.0 (`packages/templates/`).      |
+| `create-anvilkit-plugin` | Scaffolder for `@anvilkit/*` StudioPlugin packages.                    |
 
-Each component package exports a render component plus `componentConfig`, `defaultProps`, `fields`, and `metadata`. The demo currently wires up 9 of the 11 — `@anvilkit/button` and `@anvilkit/input` are published but not yet imported in `apps/demo/lib/puck-demo.ts`.
+### Plugins (`packages/plugins/`, git submodules)
+
+| Plugin                                | Latest                | Purpose                                                            |
+| ------------------------------------- | --------------------- | ------------------------------------------------------------------ |
+| `@anvilkit/plugin-export-html`        | `1.0.0-beta.0`        | HTML exporter with the XSS / URL / CSS-injection hostile-input battery. |
+| `@anvilkit/plugin-export-react`       | `1.0.0-beta.0`        | React `.tsx` / `.jsx` exporter with AST-snapshot contract.        |
+| `@anvilkit/plugin-ai-copilot`         | `1.0.0-beta.0`        | Headless AI copilot; validator-gated dispatch; `./mock` for CI.   |
+| `@anvilkit/plugin-asset-manager`      | `1.0.0`               | Headless asset uploads with CSP advisor + S3 presigned adapter.   |
+| `@anvilkit/plugin-version-history`    | `1.0.0-beta.0`        | Snapshot persistence via host `SnapshotAdapter`; diff/apply engine. |
+| `@anvilkit/plugin-collab-yjs`         | `0.9.0-rc.0` (`@beta`)| Yjs CRDT collaboration; opt-in native Y.Map tree.                 |
+| `@anvilkit/collab-ui`                 | `0.1.0-rc.0` (`@beta`)| Host UI primitives (room bar, presence layer) for the Yjs plugin. |
+
+### Apps (`apps/`)
+
+| App           | Purpose                                                                       |
+| ------------- | ----------------------------------------------------------------------------- |
+| `apps/demo`   | Next.js validation surface for every published `@anvilkit/*` package.         |
+| `apps/docs`   | Starlight docs site deployed to [docs.anvilkit.dev](https://docs.anvilkit.dev). |
+| `apps/cli`    | The `anvilkit` CLI — `init`, `add`, `validate`, `export`, `generate`.         |
+
+### Component packages
+
+Eleven independently-published component packages live under the
+`packages/components/` submodule:
+
+`@anvilkit/button`, `@anvilkit/input`, `@anvilkit/navbar`, `@anvilkit/hero`,
+`@anvilkit/section`, `@anvilkit/bento-grid`, `@anvilkit/blog-list`,
+`@anvilkit/helps`, `@anvilkit/logo-clouds`, `@anvilkit/pricing-minimal`,
+`@anvilkit/statistics`.
+
+Each exports a render component plus `componentConfig`, `defaultProps`, `fields`, and `metadata`. See `packages/components/AGENTS.md` for component-authoring conventions.
 
 ## Demo App
 
@@ -62,7 +86,20 @@ The demo app is a validation surface, not a docs site.
 - `/puck/editor` runs the client editor flow
 - `/puck/render` renders the same payload through `@puckeditor/core/rsc`
 
-The shared Puck config lives in `apps/demo/lib/puck-demo.ts`.
+The shared Puck config lives in `apps/demo/lib/puck-demo.ts`. When adding a new component, update both `lib/puck-demo.ts` and `transpilePackages` in `apps/demo/next.config.js`.
+
+## Git submodules
+
+After cloning, run `git submodule update --init --recursive`. Submodules:
+
+- `packages/components`
+- `packages/plugins/plugin-ai-copilot`
+- `packages/plugins/plugin-asset-manager`
+- `packages/plugins/plugin-export-html`
+- `packages/plugins/plugin-export-react`
+- `packages/plugins/plugin-version-history`
+- `packages/plugins/plugin-collab-yjs`
+- `packages/plugins/plugin-collab-ui`
 
 ## Continuous Integration
 
@@ -70,13 +107,17 @@ The shared Puck config lives in `apps/demo/lib/puck-demo.ts`.
 
 1. `pnpm lint` — Biome lint
 2. `pnpm typecheck` — TypeScript validation
-3. `pnpm madge` — circular dependency detection (`madge --circular` across `packages/`)
-4. `pnpm test` — Vitest
-5. `pnpm build` — build all packages
-6. `pnpm publint` — validate `package.json` exports fields
-7. Per-package release gates (`check:all`) for core, ir, schema, validator, and plugins
-8. Playwright E2E tests against the demo app
+3. `pnpm madge` — circular dependency scan
+4. `pnpm test` — Vitest across packages
+5. `pnpm build` — build every package
+6. `pnpm turbo run docs:build` — Starlight build gate
+7. `pnpm publint` — `package.json` exports validation
+8. Per-package release gates (`check:all`) for core, ir, schema, validator, and the published plugins
+9. Per-package gzip budgets via `size-limit`
+10. Playwright suites — `apps/demo` (editor + plugin smoke) and `apps/docs` (playground)
 
-## Architecture Context
+The Vercel deploy for the docs site posts an independent GitHub check — it does not block CI, and CI does not block it.
 
-This README describes the repo as it exists today. For the fuller package plan and roadmap, see [docs/ai-context/anvilkit-architecture.md](docs/ai-context/anvilkit-architecture.md).
+## Architecture context
+
+For the fuller package plan and dependency rules, see [docs/ai-context/anvilkit-architecture.md](docs/ai-context/anvilkit-architecture.md). For the live-collab design, see [docs/architecture/realtime-collab.md](docs/architecture/realtime-collab.md). For the export trust boundary, see [docs/security/plugin-trust-model.md](docs/security/plugin-trust-model.md).
