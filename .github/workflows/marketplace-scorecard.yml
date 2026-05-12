@@ -26,12 +26,10 @@ on:
       - "apps/docs/src/registry/feed.json"
       - "apps/docs/src/registry/scorecards/**"
       - "apps/docs/scripts/scorecard-runner.ts"
-      - "packages/templates/**"
       - "packages/plugins/**"
       - "packages/components/src/**"
   schedule:
-    # Wednesdays 07:37 UTC — staggered off templates-smoke (Tue 07:17)
-    # and generator-smoke.
+    # Wednesdays 07:37 UTC — staggered off generator-smoke.
     - cron: "37 7 * * 3"
   workflow_dispatch:
 

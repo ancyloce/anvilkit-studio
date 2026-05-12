@@ -33,7 +33,9 @@ describe("registry feed", () => {
 
 	const feed = RegistryFeedSchema.parse(raw);
 
-	it("contains 10 templates, 7 plugins, 11 components", () => {
+	// Templates are workspace-only (not published to npm) and are
+	// intentionally excluded from the marketplace feed.
+	it("contains 0 templates, 7 plugins, 11 components", () => {
 		const counts = feed.entries.reduce(
 			(acc, e) => {
 				acc[e.kind]++;
@@ -44,7 +46,7 @@ describe("registry feed", () => {
 				number
 			>,
 		);
-		expect(counts).toEqual({ template: 10, plugin: 7, component: 11 });
+		expect(counts).toEqual({ template: 0, plugin: 7, component: 11 });
 	});
 
 	it("marks every first-party entry as verified", () => {
@@ -79,15 +81,6 @@ describe("registry feed", () => {
 					`entry ${entry.slug} (${entry.kind}) failed: ${result.error.message}`,
 				);
 			}
-		}
-	});
-
-	it("ships a preview path for every template that has a preview.png", () => {
-		for (const entry of feed.entries) {
-			if (entry.kind !== "template") continue;
-			expect(entry.preview, entry.slug).toMatch(
-				/^\/templates\/[a-z0-9-]+\/preview\.png$/,
-			);
 		}
 	});
 });

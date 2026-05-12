@@ -40,7 +40,6 @@ import {
 const here = dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = join(here, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
-const TEMPLATES_ROOT = join(WORKSPACE_ROOT, "packages", "templates");
 const PLUGINS_ROOT = join(WORKSPACE_ROOT, "packages", "plugins");
 const COMPONENTS_ROOT = join(WORKSPACE_ROOT, "packages", "components", "src");
 
@@ -95,14 +94,6 @@ function repoUrl(pkg: PackageJson): string | undefined {
 	return url.replace(/^git\+/, "").replace(/\.git$/, "");
 }
 
-function templateCategory(slug: string): string {
-	if (slug.startsWith("landing-")) return "landing";
-	if (slug.startsWith("blog-")) return "blog";
-	if (slug === "feature-overview" || slug === "pricing-comparison")
-		return "marketing";
-	return "system";
-}
-
 function pluginCategory(slug: string): string {
 	if (slug === "plugin-ai-copilot") return "ai";
 	if (slug === "plugin-asset-manager") return "assets";
@@ -116,14 +107,6 @@ function componentCategory(slug: string): string {
 	if (slug === "hero" || slug === "navbar" || slug === "section")
 		return "layout";
 	return "content";
-}
-
-function templateInstallSpec(): RegistryEntry["installSpec"] {
-	return {
-		mutates: ["lib/puck-config.ts", "next.config.js"],
-		scaffoldOnly: false,
-		peerInstalls: [],
-	};
 }
 
 function pluginInstallSpec(): RegistryEntry["installSpec"] {
@@ -167,38 +150,6 @@ function pluginEntries(prior: Map<string, RegistryEntry>): RegistryEntry[] {
 			preview: undefined,
 			addedAt: prior.get(key)?.addedAt ?? SEED_DATE,
 			installSpec: pluginInstallSpec(),
-		});
-	}
-	return entries;
-}
-
-function templateEntries(prior: Map<string, RegistryEntry>): RegistryEntry[] {
-	const entries: RegistryEntry[] = [];
-	for (const slug of listSubdirs(TEMPLATES_ROOT)) {
-		const pkgPath = join(TEMPLATES_ROOT, slug, "package.json");
-		if (!existsSync(pkgPath)) continue;
-		const pkg = readJson<PackageJson>(pkgPath);
-		const key = `template:${slug}`;
-		const previewPath = join(TEMPLATES_ROOT, slug, "preview.png");
-		entries.push({
-			slug,
-			kind: "template",
-			name: pkg.description?.split("—")[0]?.trim() || pkg.name,
-			description: pkg.description ?? pkg.name,
-			packageName: pkg.name,
-			version: pkg.version,
-			category: templateCategory(slug),
-			tags: tagsFromKeywords(pkg.keywords),
-			publisher: "first-party",
-			verified: true,
-			scorecard: undefined,
-			repository: repoUrl(pkg),
-			homepage: pkg.homepage,
-			preview: existsSync(previewPath)
-				? `/templates/${slug}/preview.png`
-				: undefined,
-			addedAt: prior.get(key)?.addedAt ?? SEED_DATE,
-			installSpec: templateInstallSpec(),
 		});
 	}
 	return entries;
@@ -299,12 +250,11 @@ function sortEntries(entries: RegistryEntry[]): RegistryEntry[] {
 
 function main(): void {
 	const prior = loadPriorEntries();
+	// Templates are workspace-only (not published to npm), so they are
+	// intentionally absent from the feed — the marketplace scorecard
+	// can only verify packages it can resolve from the registry.
 	const entries = sortEntries(
-		mergeScorecards([
-			...templateEntries(prior),
-			...pluginEntries(prior),
-			...componentEntries(prior),
-		]),
+		mergeScorecards([...pluginEntries(prior), ...componentEntries(prior)]),
 	);
 
 	const feed: RegistryFeed = {

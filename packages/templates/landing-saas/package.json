@@ -1,6 +1,7 @@
 {
 	"name": "@anvilkit/template-landing-saas",
 	"version": "0.1.0-alpha.0",
+	"private": true,
 	"description": "Landing page for a SaaS product — hero, logo cloud, bento features, pricing, FAQ.",
 	"type": "module",
 	"main": "./dist/index.js",
@@ -21,9 +22,6 @@
 	],
 	"license": "MIT",
 	"sideEffects": false,
-	"publishConfig": {
-		"access": "public"
-	},
 	"peerDependencies": {
 		"@anvilkit/core": "workspace:*"
 	},

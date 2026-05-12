@@ -3,8 +3,9 @@
  *
  * Drives the `/marketplace/` route end-to-end against the production
  * `astro preview` bundle. Asserts the route hydrates, the registry
- * feed renders 26 entries (10 templates + 5 plugins + 11 components),
- * filters narrow the visible set, the verified badge appears on every
+ * feed renders 18 entries (7 plugins + 11 components — templates are
+ * workspace-only and intentionally excluded from the feed), filters
+ * narrow the visible set, the verified badge appears on every
  * first-party card, and every entry exposes a copyable
  * `npx anvilkit add <slug>` install command.
  */
@@ -26,22 +27,24 @@ test.describe("marketplace", () => {
 		await expect(root).toBeVisible();
 
 		const cards = page.getByTestId("marketplace-card");
-		await expect(cards).toHaveCount(26);
+		await expect(cards).toHaveCount(18);
 
 		const verifiedBadges = page.getByTestId("card-badge-verified");
-		await expect(verifiedBadges).toHaveCount(26);
+		await expect(verifiedBadges).toHaveCount(18);
 
+		// Templates are excluded from the feed; the filter chip stays
+		// in the UI but narrows to zero cards.
 		await page.getByTestId("filter-kind-template").click();
-		await expect(page.getByTestId("marketplace-card")).toHaveCount(10);
+		await expect(page.getByTestId("marketplace-card")).toHaveCount(0);
 
 		await page.getByTestId("filter-kind-plugin").click();
-		await expect(page.getByTestId("marketplace-card")).toHaveCount(5);
+		await expect(page.getByTestId("marketplace-card")).toHaveCount(7);
 
 		await page.getByTestId("filter-kind-component").click();
 		await expect(page.getByTestId("marketplace-card")).toHaveCount(11);
 
 		await page.getByTestId("filter-kind-all").click();
-		await expect(page.getByTestId("marketplace-card")).toHaveCount(26);
+		await expect(page.getByTestId("marketplace-card")).toHaveCount(18);
 
 		const search = page.getByTestId("filter-search");
 		await search.fill("hero");
@@ -52,12 +55,12 @@ test.describe("marketplace", () => {
 		);
 
 		await search.fill("");
-		await expect(page.getByTestId("marketplace-card")).toHaveCount(26);
+		await expect(page.getByTestId("marketplace-card")).toHaveCount(18);
 
 		const installCommands = await page
 			.getByTestId("card-install-command")
 			.allInnerTexts();
-		expect(installCommands).toHaveLength(26);
+		expect(installCommands).toHaveLength(18);
 		for (const command of installCommands) {
 			expect(command.startsWith("npx anvilkit add ")).toBe(true);
 		}

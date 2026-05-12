@@ -19,19 +19,23 @@ const root = join(here, "..");
 const templates = [
 	{
 		slug: "landing-saas",
-		description: "Landing page for a SaaS product — hero, logo cloud, bento features, pricing, FAQ.",
+		description:
+			"Landing page for a SaaS product — hero, logo cloud, bento features, pricing, FAQ.",
 	},
 	{
 		slug: "landing-agency",
-		description: "Landing page for an agency — hero, services bento, statistics, testimonial section.",
+		description:
+			"Landing page for an agency — hero, services bento, statistics, testimonial section.",
 	},
 	{
 		slug: "landing-docs",
-		description: "Landing page for a developer-tool documentation site — hero, feature grid, FAQ.",
+		description:
+			"Landing page for a developer-tool documentation site — hero, feature grid, FAQ.",
 	},
 	{
 		slug: "pricing-comparison",
-		description: "Standalone pricing page — hero banner, pricing tiers, comparison FAQ.",
+		description:
+			"Standalone pricing page — hero banner, pricing tiers, comparison FAQ.",
 	},
 	{
 		slug: "blog-index",
@@ -39,23 +43,28 @@ const templates = [
 	},
 	{
 		slug: "blog-article",
-		description: "Blog article page — navbar, article section, related-posts CTA.",
+		description:
+			"Blog article page — navbar, article section, related-posts CTA.",
 	},
 	{
 		slug: "feature-overview",
-		description: "Product feature overview — hero, bento feature grid, statistics, FAQ.",
+		description:
+			"Product feature overview — hero, bento feature grid, statistics, FAQ.",
 	},
 	{
 		slug: "contact",
-		description: "Contact page — navbar, contact section, inline email + message form with submit button.",
+		description:
+			"Contact page — navbar, contact section, inline email + message form with submit button.",
 	},
 	{
 		slug: "about",
-		description: "About page — hero, mission section, statistics, customer logo cloud.",
+		description:
+			"About page — hero, mission section, statistics, customer logo cloud.",
 	},
 	{
 		slug: "changelog",
-		description: "Changelog page — navbar, section heading, blog-list for entries.",
+		description:
+			"Changelog page — navbar, section heading, blog-list for entries.",
 	},
 ];
 
@@ -63,6 +72,7 @@ for (const { slug, description } of templates) {
 	const pkg = {
 		name: `@anvilkit/template-${slug}`,
 		version: "0.1.0-alpha.0",
+		private: true,
 		description,
 		type: "module",
 		main: "./dist/index.js",
@@ -78,9 +88,6 @@ for (const { slug, description } of templates) {
 		files: ["dist", "src/page-ir.json", "preview.png", "README.md"],
 		license: "MIT",
 		sideEffects: false,
-		publishConfig: {
-			access: "public",
-		},
 		peerDependencies: {
 			"@anvilkit/core": "workspace:*",
 		},

@@ -30,21 +30,10 @@ function loadFeedEntries(): RawEntry[] {
 describe("scorecard-runner — first-party entries", () => {
 	const entries = loadFeedEntries();
 
-	it("scores every first-party template against the local workspace", () => {
-		const templates = entries.filter(
-			(e) => e.kind === "template" && e.publisher === "first-party",
-		);
-		expect(templates.length).toBeGreaterThan(0);
-		for (const entry of templates) {
-			const card = runScorecardForEntry(entry, { skipBuild: true });
-			expect(card.slug, entry.slug).toBe(entry.slug);
-			expect(card.kind, entry.slug).toBe("template");
-			expect(card.checks.semver, entry.slug).toBe(true);
-			expect(card.checks.license, entry.slug).toBe(true);
-			expect(card.checks.dependencies, entry.slug).toBe(true);
-			expect(card.checks.noNetwork, entry.slug).toBe(true);
-		}
-	});
+	// Templates are workspace-only (not published to npm) and are
+	// excluded from the registry feed, so the scorecard never runs
+	// against them. The branch still exists in the runner so a
+	// third-party template entry could re-enable this coverage.
 
 	it("scores every first-party plugin against the local workspace", () => {
 		const plugins = entries.filter(
