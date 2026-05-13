@@ -9,9 +9,10 @@
  * word on any field they choose to override.
  */
 
-import type { UiState, Viewports } from "@puckeditor/core";
+import type { UiState, Viewport, Viewports } from "@puckeditor/core";
 
 import { FULL_WIDTH_VIEWPORTS } from "./full-width-viewports";
+import { normalizeStudioViewports, type StudioViewport } from "./viewports";
 
 /**
  * Subset of `UiState` `<Studio>` accepts as a partial override. Kept
@@ -21,11 +22,34 @@ import { FULL_WIDTH_VIEWPORTS } from "./full-width-viewports";
  */
 export type StudioUiPartial = Partial<UiState>;
 
-const DEFAULT_VIEWPORTS_BLOCK: UiState["viewports"] = {
-	current: { width: "100%", height: "auto" },
-	controlsVisible: true,
-	options: [...FULL_WIDTH_VIEWPORTS] as Viewports,
-};
+function createViewportsBlock(
+	viewports: readonly Viewport[] = FULL_WIDTH_VIEWPORTS,
+): UiState["viewports"] {
+	const options = normalizeStudioViewports(viewports);
+	const current =
+		options.find((option) => option.width === "100%") ?? options[0];
+
+	return {
+		current: {
+			width: current?.width ?? "100%",
+			height: current?.height ?? "auto",
+		},
+		controlsVisible: true,
+		options: [...options] as Viewports,
+	};
+}
+
+export function resolveStudioViewports(
+	ui: StudioUiPartial | undefined,
+	viewports?: Viewports,
+): readonly StudioViewport[] {
+	if (viewports !== undefined) {
+		return normalizeStudioViewports(viewports);
+	}
+	return normalizeStudioViewports(
+		ui?.viewports?.options ?? FULL_WIDTH_VIEWPORTS,
+	);
+}
 
 /**
  * Returns the merged `UiState` partial passed to `<Puck ui={...}>`
@@ -36,12 +60,16 @@ const DEFAULT_VIEWPORTS_BLOCK: UiState["viewports"] = {
  */
 export function mergeStudioUi(
 	consumer: StudioUiPartial | undefined,
+	viewports?: Viewports,
 ): StudioUiPartial {
+	const defaultViewportsBlock = createViewportsBlock(
+		viewports ?? FULL_WIDTH_VIEWPORTS,
+	);
 	if (consumer === undefined) {
-		return { viewports: DEFAULT_VIEWPORTS_BLOCK };
+		return { viewports: defaultViewportsBlock };
 	}
 	return {
 		...consumer,
-		viewports: consumer.viewports ?? DEFAULT_VIEWPORTS_BLOCK,
+		viewports: consumer.viewports ?? defaultViewportsBlock,
 	};
 }

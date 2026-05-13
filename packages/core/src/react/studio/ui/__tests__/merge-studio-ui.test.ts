@@ -6,7 +6,11 @@
 
 import { describe, expect, it } from "vitest";
 
-import { FULL_WIDTH_VIEWPORTS, mergeStudioUi } from "@/studio/ui/index";
+import {
+	FULL_WIDTH_VIEWPORTS,
+	mergeStudioUi,
+	resolveStudioViewports,
+} from "@/studio/ui/index";
 
 describe("mergeStudioUi", () => {
 	it("returns the full-width viewport defaults when consumer is undefined", () => {
@@ -30,5 +34,23 @@ describe("mergeStudioUi", () => {
 		const result = mergeStudioUi({ leftSideBarVisible: false });
 		expect(result.leftSideBarVisible).toBe(false);
 		expect(result.viewports?.options).toHaveLength(FULL_WIDTH_VIEWPORTS.length);
+	});
+
+	it("uses the public viewports prop for chrome defaults when supplied", () => {
+		const customViewports = [
+			{ label: "tiny", width: 240, height: "auto" as const },
+			{ label: "wide", width: 1440, height: "auto" as const },
+		];
+		const result = mergeStudioUi(undefined, customViewports);
+		expect(result.viewports?.options).toEqual(customViewports);
+		expect(result.viewports?.current.width).toBe(240);
+	});
+
+	it("resolves the same viewport options for AnvilKit chrome consumers", () => {
+		const customViewports = [{ width: 320, height: "auto" as const }];
+		const result = mergeStudioUi(undefined, customViewports);
+		expect(resolveStudioViewports(result, customViewports)).toEqual([
+			{ label: "viewport-1", width: 320, height: "auto" },
+		]);
 	});
 });
