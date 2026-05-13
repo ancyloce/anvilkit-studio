@@ -5,6 +5,7 @@
 
 import { Puck } from "@puckeditor/core";
 import { type ReactNode, useMemo } from "react";
+import { useChromeProps } from "@/context/chrome-props";
 import { useCanvasViewport, useCanvasZoom } from "@/state/hooks";
 import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
 import { cn } from "@/utils/cn";
@@ -18,12 +19,13 @@ export function StudioViewportPreview({
 }: StudioViewportPreviewProps): ReactNode {
 	const [viewportId] = useCanvasViewport();
 	const [zoom] = useCanvasZoom();
+	const { viewports = FULL_WIDTH_VIEWPORTS } = useChromeProps();
 
 	const viewport = useMemo(
 		() =>
-			FULL_WIDTH_VIEWPORTS.find((vp) => vp.label === viewportId) ??
-			FULL_WIDTH_VIEWPORTS[FULL_WIDTH_VIEWPORTS.length - 1],
-		[viewportId],
+			viewports.find((vp) => vp.label === viewportId) ??
+			viewports[viewports.length - 1],
+		[viewportId, viewports],
 	);
 
 	const width =

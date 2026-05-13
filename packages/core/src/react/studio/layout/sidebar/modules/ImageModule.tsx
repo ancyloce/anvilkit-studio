@@ -29,10 +29,15 @@ import {
 import { toast } from "sonner";
 import { useSetSidebarHeaderActions } from "@/layout/sidebar/SidebarHeaderActionsContext";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
+import { Button } from "@/primitives/button";
 import { useMsg } from "@/state/editor-i18n-store";
 import { useAssetCategoryFilter } from "@/state/hooks";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
-import type { StudioAsset, StudioAssetUploadEvent } from "@/types/sidebar";
+import type {
+	StudioAsset,
+	StudioAssetKind,
+	StudioAssetUploadEvent,
+} from "@/types/sidebar";
 import { AssetGrid, type UploadingTile } from "./image/AssetGrid";
 import { ImageFilterStrip } from "./image/ImageFilterStrip";
 import { ImageSearchBar } from "./image/ImageSearchBar";
@@ -44,7 +49,18 @@ import {
 import { RenameAssetDialog } from "./image/RenameAssetDialog";
 import { UploadDropZone } from "./image/UploadDropZone";
 
+const ASSET_PAGE_LIMIT = 50;
 const PROGRESS_INITIAL = 0.05;
+const IMAGE_FILTER_KINDS: readonly StudioAssetKind[] = ["image", "other"];
+const VIDEO_FILTER_KINDS: readonly StudioAssetKind[] = ["video"];
+const AUDIO_FILTER_KINDS: readonly StudioAssetKind[] = ["audio"];
+
+function filterToKinds(filter: string): readonly StudioAssetKind[] | undefined {
+	if (filter === "images") return IMAGE_FILTER_KINDS;
+	if (filter === "videos") return VIDEO_FILTER_KINDS;
+	if (filter === "audio") return AUDIO_FILTER_KINDS;
+	return undefined;
+}
 
 export function ImageModule(): ReactNode {
 	const msg = useMsg();
@@ -52,6 +68,9 @@ export function ImageModule(): ReactNode {
 	const pluginActionMap = useSidebarRegistry((state) => state.assetActions);
 	const [filter] = useAssetCategoryFilter();
 	const [assets, setAssets] = useState<readonly StudioAsset[]>([]);
+	const [assetsLoading, setAssetsLoading] = useState(false);
+	const [assetsLoadError, setAssetsLoadError] = useState(false);
+	const [nextCursor, setNextCursor] = useState<string | undefined>(undefined);
 	const [query, setQuery] = useState("");
 	const [uploadingTiles, setUploadingTiles] = useState<
 		readonly UploadingTile[]
@@ -61,24 +80,63 @@ export function ImageModule(): ReactNode {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const replaceInputRef = useRef<HTMLInputElement | null>(null);
 	const getPuck = useGetPuck();
+	const usesPaginatedListing = source?.listPaginated !== undefined;
 
 	// Refresh the asset list whenever the source notifies. Mirrors
 	// `LayersPanel`'s pages-source effect.
+	const loadAssets = useCallback(
+		async (
+			cursor?: string,
+			isCancelled: () => boolean = () => false,
+		): Promise<void> => {
+			if (source === null) return;
+			setAssetsLoading(true);
+			setAssetsLoadError(false);
+			try {
+				if (source.listPaginated !== undefined) {
+					const trimmedQuery = query.trim();
+					const page = await source.listPaginated({
+						query: trimmedQuery.length > 0 ? trimmedQuery : undefined,
+						kinds: filterToKinds(filter),
+						cursor,
+						limit: ASSET_PAGE_LIMIT,
+					});
+					if (isCancelled()) return;
+					setAssets((current) =>
+						cursor === undefined ? page.items : [...current, ...page.items],
+					);
+					setNextCursor(page.nextCursor);
+					return;
+				}
+				const next = await Promise.resolve(source.list());
+				if (isCancelled()) return;
+				setAssets(next);
+				setNextCursor(undefined);
+			} catch {
+				if (isCancelled()) return;
+				if (cursor === undefined) {
+					setAssets([]);
+					setNextCursor(undefined);
+				}
+				setAssetsLoadError(true);
+			} finally {
+				if (!isCancelled()) setAssetsLoading(false);
+			}
+		},
+		[filter, query, source],
+	);
+
 	useEffect(() => {
 		if (source === null) {
 			setAssets([]);
+			setNextCursor(undefined);
+			setAssetsLoadError(false);
+			setAssetsLoading(false);
 			return;
 		}
 		let cancelled = false;
 		const refresh = (): void => {
-			const result = source.list();
-			if (result instanceof Promise) {
-				void result.then((next) => {
-					if (!cancelled) setAssets(next);
-				});
-			} else {
-				setAssets(result);
-			}
+			void loadAssets(undefined, () => cancelled);
 		};
 		refresh();
 		const unsubscribe = source.subscribe?.(refresh);
@@ -86,7 +144,7 @@ export function ImageModule(): ReactNode {
 			cancelled = true;
 			unsubscribe?.();
 		};
-	}, [source]);
+	}, [loadAssets, source]);
 
 	const pluginActions = useMemo(
 		() => [...pluginActionMap.values()],
@@ -94,6 +152,7 @@ export function ImageModule(): ReactNode {
 	);
 
 	const filteredAssets = useMemo(() => {
+		if (usesPaginatedListing) return assets;
 		const trimmed = query.trim().toLowerCase();
 		if (trimmed === "") return assets;
 		return assets.filter((asset) => {
@@ -102,7 +161,7 @@ export function ImageModule(): ReactNode {
 				.toLowerCase();
 			return haystack.includes(trimmed);
 		});
-	}, [assets, query]);
+	}, [assets, query, usesPaginatedListing]);
 
 	const handleUpload = useCallback(
 		async (files: readonly File[]): Promise<void> => {
@@ -227,7 +286,8 @@ export function ImageModule(): ReactNode {
 		);
 	}
 
-	const isLibraryEmpty = assets.length === 0;
+	const isLibraryEmpty =
+		assets.length === 0 && uploadingTiles.length === 0 && !assetsLoading;
 	const isFilterEmpty = !isLibraryEmpty && filteredAssets.length === 0;
 
 	return (
@@ -238,7 +298,17 @@ export function ImageModule(): ReactNode {
 			</div>
 			<div className="min-h-0 flex-1 overflow-auto">
 				<UploadDropZone onDrop={handleUpload}>
-					{isLibraryEmpty && uploadingTiles.length === 0 ? (
+					{assetsLoadError && assets.length === 0 ? (
+						<EmptyState
+							message={msg("studio.module.image.loadError")}
+							testId="ak-image-load-error"
+						/>
+					) : assetsLoading && assets.length === 0 ? (
+						<EmptyState
+							message={msg("studio.module.image.loading")}
+							testId="ak-image-loading"
+						/>
+					) : isLibraryEmpty ? (
 						<EmptyState
 							message={msg("studio.module.image.empty")}
 							testId="ak-image-library-empty"
@@ -260,6 +330,20 @@ export function ImageModule(): ReactNode {
 							onReplace={handleStartReplace}
 						/>
 					)}
+					{nextCursor !== undefined ? (
+						<div className="flex justify-center p-2">
+							<Button
+								variant="outline"
+								size="sm"
+								disabled={assetsLoading}
+								onClick={() => {
+									void loadAssets(nextCursor);
+								}}
+							>
+								{msg("studio.module.image.loadMore")}
+							</Button>
+						</div>
+					) : null}
 				</UploadDropZone>
 			</div>
 			<input

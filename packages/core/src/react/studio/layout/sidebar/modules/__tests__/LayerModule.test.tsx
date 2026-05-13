@@ -66,6 +66,21 @@ describe("LayerModule", () => {
 		expect(screen.getByTestId("ak-layer-layers-empty")).toBeTruthy();
 	});
 
+	it("renders page and layer error states when the pages source rejects", async () => {
+		const source: StudioPagesSource = {
+			list: vi.fn().mockRejectedValue(new Error("offline")),
+		};
+		render(
+			<Setup pages={source}>
+				<LayerModule />
+			</Setup>,
+		);
+		await vi.waitFor(() => {
+			expect(screen.getByTestId("ak-layer-pages-error")).toBeTruthy();
+			expect(screen.getByTestId("ak-layer-layers-error")).toBeTruthy();
+		});
+	});
+
 	it("renders the page list from the source and surfaces the route badge", async () => {
 		const pages = [
 			{ id: "home", title: "Home", active: true },

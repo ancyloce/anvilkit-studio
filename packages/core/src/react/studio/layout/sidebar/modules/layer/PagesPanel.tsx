@@ -27,23 +27,29 @@ export function PagesPanel(): ReactNode {
 	const msg = useMsg();
 	const source = useStudioPagesSource();
 	const [pages, setPages] = useState<readonly StudioPage[]>([]);
+	const [loadError, setLoadError] = useState(false);
 	const [dialogOpen, setDialogOpen] = useState(false);
 
 	useEffect(() => {
 		if (source === undefined) {
 			setPages([]);
+			setLoadError(false);
 			return;
 		}
 		let cancelled = false;
 		const refresh = (): void => {
-			const result = source.list();
-			if (result instanceof Promise) {
-				void result.then((next) => {
-					if (!cancelled) setPages(next);
-				});
-			} else {
-				setPages(result);
-			}
+			void (async () => {
+				try {
+					const next = await Promise.resolve(source.list());
+					if (cancelled) return;
+					setPages(next);
+					setLoadError(false);
+				} catch {
+					if (cancelled) return;
+					setPages([]);
+					setLoadError(true);
+				}
+			})();
 		};
 		refresh();
 		const unsubscribe = source.subscribe?.(refresh);
@@ -92,7 +98,12 @@ export function PagesPanel(): ReactNode {
 				</Tooltip>
 			</div>
 			<div className="max-h-52 min-h-0 overflow-auto py-3">
-				{pages.length === 0 ? (
+				{loadError ? (
+					<EmptyState
+						message={msg("studio.module.layer.pages.error")}
+						testId="ak-layer-pages-error"
+					/>
+				) : pages.length === 0 ? (
 					<EmptyState
 						message={msg("studio.module.layer.pages.empty")}
 						testId="ak-layer-pages-empty"

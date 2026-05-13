@@ -28,11 +28,12 @@ import {
 	Type as TypeIcon,
 } from "lucide-react";
 import {
-  forwardRef,
-  type ReactNode,
-  useCallback,
-  useImperativeHandle,
-  useRef,
+	forwardRef,
+	type KeyboardEvent,
+	type ReactNode,
+	useCallback,
+	useImperativeHandle,
+	useRef,
 } from "react";
 import { Tabs, TabsList, TabsTab } from "@/primitives/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
@@ -87,63 +88,94 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
 		);
 
 		const handleValueChange = useCallback(
-      (next: EditorTab | null) => {
-        if (next == null) return;
-        setActiveTab(next);
-        setDrawerCollapsed(false);
-      },
-      [setActiveTab, setDrawerCollapsed],
-    );
+			(next: EditorTab | null) => {
+				if (next == null) return;
+				setActiveTab(next);
+				setDrawerCollapsed(false);
+			},
+			[setActiveTab, setDrawerCollapsed],
+		);
+
+		const handleKeyDown = useCallback(
+			(event: KeyboardEvent<HTMLDivElement>) => {
+				const container = containerRef.current;
+				if (container === null) return;
+				const tabs = Array.from(
+					container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+				);
+				const currentIndex = tabs.indexOf(event.target as HTMLButtonElement);
+				if (currentIndex === -1) return;
+
+				const lastIndex = tabs.length - 1;
+				let nextIndex: number | null = null;
+				if (event.key === "ArrowDown") {
+					nextIndex = currentIndex === lastIndex ? 0 : currentIndex + 1;
+				} else if (event.key === "ArrowUp") {
+					nextIndex = currentIndex === 0 ? lastIndex : currentIndex - 1;
+				} else if (event.key === "Home") {
+					nextIndex = 0;
+				} else if (event.key === "End") {
+					nextIndex = lastIndex;
+				}
+				if (nextIndex === null) return;
+				event.preventDefault();
+				tabs[nextIndex]?.focus();
+			},
+			[],
+		);
 
 		return (
-      <div
-        ref={containerRef}
-        className="flex h-full shrink-0 flex-col items-center border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]"
-        style={{ inlineSize: "var(--ak-studio-rail-width)" }}
-      >
-        <div className="flex h-14 w-full shrink-0 items-center justify-center border-b border-[var(--ak-studio-border)]">
-          <div
-            role="presentation"
-            aria-hidden="true"
-            className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
-          >
-            <RailBrandMark />
-          </div>
-        </div>
-        <Tabs
-          orientation="vertical"
-          value={drawerCollapsed ? null : activeTab}
-          onValueChange={handleValueChange}
-          className="contents"
-        >
-          <TabsList className="flex h-fit w-fit flex-col items-center justify-start gap-2 rounded-none bg-transparent p-0 pt-2 text-current">
-            {RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => (
-              <Tooltip key={key}>
-                <TooltipTrigger
-                  render={
-                    <TabsTab
-                      value={key}
-                      id={railTabId(key)}
-                      aria-controls={SIDEBAR_PANEL_ID}
-                      aria-label={msg(labelKey)}
-                      onClick={() => {
-                        if (key === activeTab && !drawerCollapsed) {
-                          setDrawerCollapsed(true);
-                        }
-                      }}
-                      className="p-2"
-                    >
-                      <Icon aria-hidden="true" />
-                    </TabsTab>
-                  }
-                />
-                <TooltipContent side="right">{msg(labelKey)}</TooltipContent>
-              </Tooltip>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
-    );
+			<div
+				ref={containerRef}
+				className="flex h-full shrink-0 flex-col items-center border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]"
+				style={{ inlineSize: "var(--ak-studio-rail-width)" }}
+			>
+				<div className="flex h-14 w-full shrink-0 items-center justify-center border-b border-[var(--ak-studio-border)]">
+					<div
+						role="presentation"
+						aria-hidden="true"
+						className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+					>
+						<RailBrandMark />
+					</div>
+				</div>
+				<Tabs
+					orientation="vertical"
+					value={drawerCollapsed ? null : activeTab}
+					onValueChange={handleValueChange}
+					className="contents"
+				>
+					<TabsList
+						className="flex h-fit w-fit flex-col items-center justify-start gap-2 rounded-none bg-transparent p-0 pt-2 text-current"
+						onKeyDown={handleKeyDown}
+					>
+						{RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => (
+							<Tooltip key={key}>
+								<TooltipTrigger
+									render={
+										<TabsTab
+											value={key}
+											id={railTabId(key)}
+											aria-controls={SIDEBAR_PANEL_ID}
+											aria-label={msg(labelKey)}
+											onClick={() => {
+												if (key === activeTab && !drawerCollapsed) {
+													setDrawerCollapsed(true);
+												}
+											}}
+											className="p-2"
+										>
+											<Icon aria-hidden="true" />
+										</TabsTab>
+									}
+								/>
+								<TooltipContent side="right">{msg(labelKey)}</TooltipContent>
+							</Tooltip>
+						))}
+					</TabsList>
+				</Tabs>
+			</div>
+		);
 	},
 );
 

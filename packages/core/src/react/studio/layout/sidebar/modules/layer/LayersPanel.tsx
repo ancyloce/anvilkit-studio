@@ -90,23 +90,29 @@ export function LayersPanel(): ReactNode {
 	const msg = useMsg();
 	const source = useStudioPagesSource();
 	const [pages, setPages] = useState<readonly StudioPage[]>([]);
+	const [loadError, setLoadError] = useState(false);
 	const getPuck = useGetPuck();
 
 	useEffect(() => {
 		if (source === undefined) {
 			setPages([]);
+			setLoadError(false);
 			return;
 		}
 		let cancelled = false;
 		const refresh = (): void => {
-			const result = source.list();
-			if (result instanceof Promise) {
-				void result.then((next) => {
-					if (!cancelled) setPages(next);
-				});
-			} else {
-				setPages(result);
-			}
+			void (async () => {
+				try {
+					const next = await Promise.resolve(source.list());
+					if (cancelled) return;
+					setPages(next);
+					setLoadError(false);
+				} catch {
+					if (cancelled) return;
+					setPages([]);
+					setLoadError(true);
+				}
+			})();
 		};
 		refresh();
 		const unsubscribe = source.subscribe?.(refresh);
@@ -179,76 +185,81 @@ export function LayersPanel(): ReactNode {
 	}, [getPuck, msg, pluginQuickAdds]);
 
 	return (
-    <div className="flex min-h-0 flex-1 flex-col" data-testid="ak-layer-layers">
-      <div className="flex h-10 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
-        <h3 className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]">
-          {msg("studio.module.layer.layers.title")}
-        </h3>
-        <DropdownMenu>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <span className="inline-flex">
-                  <DropdownMenuTrigger
-                    render={
-                      <Button
-                        size="icon-xs"
-                        variant="ghost"
-                        aria-label={msg("studio.module.layer.layers.add")}
-                        data-testid="ak-layer-layers-add"
-                        className="text-[var(--ak-studio-muted-fg)] hover:bg-[var(--ak-studio-muted)] hover:text-[var(--ak-studio-fg)]"
-                      />
-                    }
-                  >
-                    <Plus aria-hidden="true" />
-                  </DropdownMenuTrigger>
-                </span>
-              }
-            />
-            <TooltipContent>
-              {msg("studio.module.layer.layers.add")}
-            </TooltipContent>
-          </Tooltip>
-          <DropdownMenuContent
-            align="end"
-            sideOffset={4}
-            data-testid="ak-layer-quickadd-popup"
-          >
-            {quickAdds.length === 0 ? (
-              <div className="px-2 py-1.5 text-xs text-muted-foreground">
-                {msg("studio.module.layer.layers.empty")}
-              </div>
-            ) : (
-              quickAdds.map((entry) => (
-                <DropdownMenuItem
-                  key={entry.id}
-                  onClick={() => {
-                    void entry.run();
-                  }}
-                  data-testid={`ak-layer-quickadd-${entry.id}`}
-                >
-                  {entry.icon}
-                  <span>{entry.label}</span>
-                </DropdownMenuItem>
-              ))
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <div className="min-h-0 flex-1">
-        {hasNoSource || !hasActivePage ? (
-          <EmptyState
-            message={msg("studio.module.layer.layers.empty")}
-            testId="ak-layer-layers-empty"
-          />
-        ) : (
-          <ScrollArea>
-            <div data-ak-layer-outline className="px-2 py-1">
-              <Puck.Outline />
-            </div>
-          </ScrollArea>
-        )}
-      </div>
-    </div>
-  );
+		<div className="flex min-h-0 flex-1 flex-col" data-testid="ak-layer-layers">
+			<div className="flex h-10 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
+				<h3 className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]">
+					{msg("studio.module.layer.layers.title")}
+				</h3>
+				<DropdownMenu>
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<span className="inline-flex">
+									<DropdownMenuTrigger
+										render={
+											<Button
+												size="icon-xs"
+												variant="ghost"
+												aria-label={msg("studio.module.layer.layers.add")}
+												data-testid="ak-layer-layers-add"
+												className="text-[var(--ak-studio-muted-fg)] hover:bg-[var(--ak-studio-muted)] hover:text-[var(--ak-studio-fg)]"
+											/>
+										}
+									>
+										<Plus aria-hidden="true" />
+									</DropdownMenuTrigger>
+								</span>
+							}
+						/>
+						<TooltipContent>
+							{msg("studio.module.layer.layers.add")}
+						</TooltipContent>
+					</Tooltip>
+					<DropdownMenuContent
+						align="end"
+						sideOffset={4}
+						data-testid="ak-layer-quickadd-popup"
+					>
+						{quickAdds.length === 0 ? (
+							<div className="px-2 py-1.5 text-xs text-muted-foreground">
+								{msg("studio.module.layer.layers.empty")}
+							</div>
+						) : (
+							quickAdds.map((entry) => (
+								<DropdownMenuItem
+									key={entry.id}
+									onClick={() => {
+										void entry.run();
+									}}
+									data-testid={`ak-layer-quickadd-${entry.id}`}
+								>
+									{entry.icon}
+									<span>{entry.label}</span>
+								</DropdownMenuItem>
+							))
+						)}
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</div>
+			<div className="min-h-0 flex-1">
+				{loadError ? (
+					<EmptyState
+						message={msg("studio.module.layer.layers.error")}
+						testId="ak-layer-layers-error"
+					/>
+				) : hasNoSource || !hasActivePage ? (
+					<EmptyState
+						message={msg("studio.module.layer.layers.empty")}
+						testId="ak-layer-layers-empty"
+					/>
+				) : (
+					<ScrollArea>
+						<div data-ak-layer-outline className="px-2 py-1">
+							<Puck.Outline />
+						</div>
+					</ScrollArea>
+				)}
+			</div>
+		</div>
+	);
 }

@@ -7,7 +7,13 @@
  * overflow menu surfaces all four built-in actions.
  */
 
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+	cleanup,
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+} from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ImageModule } from "@/layout/sidebar/modules/ImageModule";
@@ -101,7 +107,7 @@ describe("ImageModule", () => {
 		expect(screen.getByTestId("ak-image-plugin-missing")).toBeTruthy();
 	});
 
-	it("renders the library-empty state when the source returns no assets", () => {
+	it("renders the library-empty state when the source returns no assets", async () => {
 		const registry = createSidebarRegistryStore();
 		registry.getState().registerAssetSource(makeSource());
 		render(
@@ -109,7 +115,85 @@ describe("ImageModule", () => {
 				<ImageModule />
 			</Setup>,
 		);
-		expect(screen.getByTestId("ak-image-library-empty")).toBeTruthy();
+		expect(await screen.findByTestId("ak-image-library-empty")).toBeTruthy();
+	});
+
+	it("prefers listPaginated and loads additional pages by cursor", async () => {
+		const registry = createSidebarRegistryStore();
+		const list = vi.fn().mockReturnValue([]);
+		const listPaginated = vi
+			.fn()
+			.mockResolvedValueOnce({
+				items: [
+					{
+						id: "png-1",
+						kind: "image",
+						name: "photo.png",
+						url: "asset://png-1",
+					},
+				],
+				total: 2,
+				nextCursor: "cursor-2",
+			})
+			.mockResolvedValueOnce({
+				items: [
+					{
+						id: "png-2",
+						kind: "image",
+						name: "second.png",
+						url: "asset://png-2",
+					},
+				],
+				total: 2,
+				nextCursor: undefined,
+			});
+		registry
+			.getState()
+			.registerAssetSource(makeSource({ list, listPaginated }));
+
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+
+		expect(await screen.findByLabelText("photo.png")).toBeTruthy();
+		expect(list).not.toHaveBeenCalled();
+		expect(listPaginated).toHaveBeenCalledWith({
+			query: undefined,
+			kinds: undefined,
+			cursor: undefined,
+			limit: 50,
+		});
+
+		fireEvent.click(screen.getByRole("button", { name: "Load more" }));
+
+		expect(await screen.findByLabelText("second.png")).toBeTruthy();
+		expect(listPaginated).toHaveBeenLastCalledWith({
+			query: undefined,
+			kinds: undefined,
+			cursor: "cursor-2",
+			limit: 50,
+		});
+	});
+
+	it("renders an error state when asset listing rejects", async () => {
+		const registry = createSidebarRegistryStore();
+		registry
+			.getState()
+			.registerAssetSource(
+				makeSource({ list: vi.fn().mockRejectedValue(new Error("offline")) }),
+			);
+
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+
+		await waitFor(() => {
+			expect(screen.getByTestId("ak-image-load-error")).toBeTruthy();
+		});
 	});
 
 	it("renders the filter strip and reflects assetCategoryFilter changes", () => {
@@ -129,7 +213,7 @@ describe("ImageModule", () => {
 		expect(items[1]?.getAttribute("data-pressed")).not.toBeNull();
 	});
 
-	it("dispatches a Puck setData when an image tile is clicked, seeded with src and alt", () => {
+	it("dispatches a Puck setData when an image tile is clicked, seeded with src and alt", async () => {
 		mockPuckSnapshot.config.components = { Image: {} };
 		const registry = createSidebarRegistryStore();
 		const source = makeSource({
@@ -151,7 +235,7 @@ describe("ImageModule", () => {
 			</Setup>,
 		);
 
-		const tile = screen.getByLabelText("photo.png");
+		const tile = await screen.findByLabelText("photo.png");
 		fireEvent.click(tile);
 
 		expect(dispatch).toHaveBeenCalledTimes(1);
@@ -171,7 +255,7 @@ describe("ImageModule", () => {
 		expect(inserted?.props["alt"]).toBe("photo.png");
 	});
 
-	it("silently skips insertion when the matching component is not registered", () => {
+	it("silently skips insertion when the matching component is not registered", async () => {
 		mockPuckSnapshot.config.components = {}; // No "Image" key.
 		const registry = createSidebarRegistryStore();
 		const source = makeSource({
@@ -192,11 +276,11 @@ describe("ImageModule", () => {
 			</Setup>,
 		);
 
-		fireEvent.click(screen.getByLabelText("photo.png"));
+		fireEvent.click(await screen.findByLabelText("photo.png"));
 		expect(dispatch).not.toHaveBeenCalled();
 	});
 
-	it("opens the overflow menu and renders all four built-in actions", () => {
+	it("opens the overflow menu and renders all four built-in actions", async () => {
 		const registry = createSidebarRegistryStore();
 		const source = makeSource({
 			list: () => [
@@ -216,7 +300,7 @@ describe("ImageModule", () => {
 			</Setup>,
 		);
 
-		fireEvent.click(screen.getByTestId("ak-image-overflow-png-1"));
+		fireEvent.click(await screen.findByTestId("ak-image-overflow-png-1"));
 		const popup = screen.getByTestId("ak-image-overflow-popup-png-1");
 		const labels = Array.from(popup.querySelectorAll("[role='menuitem']"))
 			.map((el) => el.textContent?.trim())
@@ -226,7 +310,7 @@ describe("ImageModule", () => {
 		);
 	});
 
-	it("appends plugin-contributed asset actions below a separator", () => {
+	it("appends plugin-contributed asset actions below a separator", async () => {
 		const registry = createSidebarRegistryStore();
 		const source = makeSource({
 			list: () => [
@@ -251,7 +335,7 @@ describe("ImageModule", () => {
 			</Setup>,
 		);
 
-		fireEvent.click(screen.getByTestId("ak-image-overflow-png-1"));
+		fireEvent.click(await screen.findByTestId("ak-image-overflow-png-1"));
 		expect(screen.getByTestId("ak-image-action-open-cdn")).toBeTruthy();
 	});
 });

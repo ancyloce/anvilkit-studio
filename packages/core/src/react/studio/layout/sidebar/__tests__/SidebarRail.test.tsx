@@ -102,11 +102,7 @@ describe("SidebarRail", () => {
 		expect(probeRef.current?.tab).toBe("image");
 	});
 
-	// TODO: base-ui's roving-focus handler does not respond to
-	// `fireEvent.keyDown` under jsdom (the listener is attached via a
-	// non-React event binding). Re-enable once we either swap to
-	// `userEvent.keyboard` or move this to a Playwright spec.
-	it.skip("ArrowDown / ArrowUp move roving focus and wrap", () => {
+	it("ArrowDown / ArrowUp move roving focus and wrap", () => {
 		renderRail("rail-arrow");
 		const tabs = screen.getAllByRole("tab");
 		tabs[0]?.focus();
@@ -126,9 +122,7 @@ describe("SidebarRail", () => {
 		expect(document.activeElement).toBe(tabs[0]);
 	});
 
-	// TODO: same base-ui keyboard-binding limitation as the ArrowDown
-	// test above — re-enable when migrated to userEvent / Playwright.
-	it.skip("Home / End jump to first / last tab", () => {
+	it("Home / End jump to first / last tab", () => {
 		renderRail("rail-home-end");
 		const tabs = screen.getAllByRole("tab");
 		tabs[2]?.focus();

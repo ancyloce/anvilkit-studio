@@ -19,14 +19,48 @@ import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
 
 type LucideIconComponent = ComponentType<{ className?: string }>;
 
-function resolveIcon(name: string | undefined): LucideIconComponent | null {
-	if (name === undefined || name.length === 0) return null;
-	const candidate = (Icons as unknown as Record<string, unknown>)[name];
+const LUCIDE_EXPORTS = Icons as unknown as Record<string, unknown>;
+
+function isLucideIconComponent(
+	candidate: unknown,
+): candidate is LucideIconComponent {
 	// Lucide icons are React forwardRef components (objects with `$$typeof`).
 	// The `createLucideIcon` factory is a plain function and is the only
 	// non-component export — exclude it by requiring the object form.
-	if (typeof candidate === "object" && candidate !== null) {
-		return candidate as LucideIconComponent;
+	return typeof candidate === "object" && candidate !== null;
+}
+
+function normalizeIconName(name: string): string {
+	return name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+}
+
+function toPascalCase(name: string): string {
+	return name
+		.split(/[-_\s]+/)
+		.filter((part) => part.length > 0)
+		.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+		.join("");
+}
+
+function resolveIcon(name: string | undefined): LucideIconComponent | null {
+	const trimmed = name?.trim();
+	if (trimmed === undefined || trimmed.length === 0) return null;
+
+	for (const candidateName of [trimmed, toPascalCase(trimmed)]) {
+		const candidate = LUCIDE_EXPORTS[candidateName];
+		if (isLucideIconComponent(candidate)) {
+			return candidate;
+		}
+	}
+
+	const normalized = normalizeIconName(trimmed);
+	for (const [exportName, candidate] of Object.entries(LUCIDE_EXPORTS)) {
+		if (
+			normalizeIconName(exportName) === normalized &&
+			isLucideIconComponent(candidate)
+		) {
+			return candidate;
+		}
 	}
 	return null;
 }
