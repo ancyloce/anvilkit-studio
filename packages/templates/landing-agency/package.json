@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/template-landing-agency",
-	"version": "0.1.0-alpha.0",
+	"version": "1.0.0",
 	"private": true,
 	"description": "Landing page for an agency — hero, services bento, statistics, testimonial section.",
 	"type": "module",

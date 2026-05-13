@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/ir",
-	"version": "0.1.0-alpha.0",
+	"version": "0.1.1",
 	"description": "Headless Page Intermediate Representation (IR) transforms consumed by every Anvilkit export format.",
 	"type": "module",
 	"main": "./dist/index.cjs",
@@ -77,7 +77,7 @@
 		"access": "public"
 	},
 	"peerDependencies": {
-		"@anvilkit/core": "0.1.0-alpha.0",
+		"@anvilkit/core": "0.1.1",
 		"@puckeditor/core": "^0.21.0"
 	},
 	"peerDependenciesMeta": {

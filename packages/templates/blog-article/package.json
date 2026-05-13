@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/template-blog-article",
-	"version": "0.1.0-alpha.0",
+	"version": "1.0.0",
 	"private": true,
 	"description": "Blog article page — navbar, article section, related-posts CTA.",
 	"type": "module",

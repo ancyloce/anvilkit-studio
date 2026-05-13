@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/example-ai-adapter-openai",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"private": true,
 	"description": "Example generatePage() adapter backed by OpenAI's Chat Completions API. Reference implementation for phase4-010.",
 	"type": "module",
