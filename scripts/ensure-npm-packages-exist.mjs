@@ -20,9 +20,12 @@
  *   1. Enumerate workspace packages via `pnpm -r ls --json --depth=-1`.
  *   2. Drop every package marked `private: true`.
  *   3. For each survivor, run `npm view <name> name`. E404 → missing.
- *   4. Resolve the dist-tag from `.changeset/pre.json` (beta if the
+ *   4. For existing packages whose local version is not on npm yet,
+ *      verify the token has read-write access before Changesets gets
+ *      to the opaque `404 Not Found - PUT` publish failure.
+ *   5. Resolve the dist-tag from `.changeset/pre.json` (beta if the
  *      file exists; latest otherwise).
- *   5. Publish missing packages with `pnpm --filter <name> publish
+ *   6. Publish missing packages with `pnpm --filter <name> publish
  *      --access public --no-git-checks --tag <tag>`. Provenance is
  *      added when the workflow runs in a GitHub Actions environment
  *      that exposes the OIDC token.
@@ -47,6 +50,8 @@ const ROOT = process.cwd();
 const DRY_RUN = process.argv.includes("--dry-run");
 const FILTER_ARG = process.argv.find((a) => a.startsWith("--filter="));
 const FILTER = FILTER_ARG ? FILTER_ARG.slice("--filter=".length) : null;
+const STRICT_NPM_ACCESS_PREFLIGHT =
+	process.env.STRICT_NPM_ACCESS_PREFLIGHT === "1";
 
 function resolveDistTag() {
 	const prePath = join(ROOT, ".changeset", "pre.json");
@@ -103,6 +108,22 @@ function npmExists(name) {
 	);
 }
 
+function npmVersionExists(name, version) {
+	const spec = `${name}@${version}`;
+	const r = spawnSync("npm", ["view", spec, "version"], {
+		stdio: ["ignore", "pipe", "pipe"],
+		encoding: "utf8",
+	});
+	if (r.status === 0) return true;
+	const stderr = r.stderr || "";
+	if (stderr.includes("E404") || stderr.includes("404 Not Found")) {
+		return false;
+	}
+	throw new Error(
+		`npm view ${spec} failed with status ${r.status}: ${stderr.trim()}`,
+	);
+}
+
 // Best-effort preflight: surface what we can about the configured
 // auth credential before burning publish attempts that will 404
 // because the token lacks scope-create permission. Intentionally
@@ -150,7 +171,22 @@ function probeScopeWriteAccess() {
 		["access", "list", "packages", "--json", "@anvilkit"],
 		{ stdio: ["ignore", "pipe", "pipe"], encoding: "utf8" },
 	);
-	if (r.status !== 0) return null;
+	if (r.status !== 0) {
+		if (STRICT_NPM_ACCESS_PREFLIGHT) {
+			const detail = (r.stderr || r.stdout || "").trim();
+			throw new Error(
+				"Unable to verify npm token package access.\n" +
+					"  Command: npm access list packages --json @anvilkit\n" +
+					`  Exit: ${r.status}\n` +
+					(detail ? `  npm said: ${detail}\n\n` : "\n") +
+					"Fix: replace the GitHub NPM_TOKEN secret with a granular token\n" +
+					"created by an npm user that owns or can publish @anvilkit/* packages.\n" +
+					"Grant it Packages and scopes > @anvilkit (or the exact package)\n" +
+					'with "Read and write", and keep "Bypass 2FA" enabled.',
+			);
+		}
+		return null;
+	}
 	try {
 		const pkgs = JSON.parse(r.stdout || "{}");
 		return new Set(
@@ -159,6 +195,13 @@ function probeScopeWriteAccess() {
 				.map(([name]) => name),
 		);
 	} catch {
+		if (STRICT_NPM_ACCESS_PREFLIGHT) {
+			throw new Error(
+				"Unable to parse npm package-access output from:\n" +
+					"  npm access list packages --json @anvilkit\n\n" +
+					`Output was:\n${r.stdout}`,
+			);
+		}
 		return null;
 	}
 }
@@ -208,6 +251,45 @@ function reportScopeWriteGaps(writable, inScopePackages) {
 				"  Then replace the NPM_TOKEN secret in GitHub repo settings.",
 		);
 	}
+}
+
+function collectPublishPlan(inScopePackages) {
+	const existing = new Map();
+	const pending = [];
+
+	for (const pkg of inScopePackages) {
+		const { exists } = npmExists(pkg.name);
+		existing.set(pkg.name, exists);
+		if (!exists || !npmVersionExists(pkg.name, pkg.version)) {
+			pending.push({ ...pkg, exists });
+		}
+	}
+
+	return { existing, pending };
+}
+
+function assertWritableForPendingPublishes(writable, pending) {
+	if (writable === null || pending.length === 0) return;
+
+	const existingPending = pending.filter((pkg) => pkg.exists);
+	const gaps = existingPending.filter((pkg) => !writable.has(pkg.name));
+	if (gaps.length === 0) return;
+
+	const formatted = gaps.map((pkg) => `${pkg.name}@${pkg.version}`).join(", ");
+	throw new Error(
+		"NPM_TOKEN cannot publish the package version(s) Changesets is about to upload.\n" +
+			`  Missing read-write access for: ${formatted}\n\n` +
+			"These package names already exist on npm, so this is not a first-publish\n" +
+			"`--access public` problem. npm returns `404 Not Found - PUT` when the\n" +
+			"token is not allowed to write an existing scoped package.\n\n" +
+			"Fix on npmjs.com:\n" +
+			"  1. Create the token while logged in as `anvilkit` or another npm\n" +
+			"     maintainer/owner that can publish the listed package(s).\n" +
+			"  2. In Packages and scopes, grant `@anvilkit` scope-level Read and\n" +
+			"     write access, or grant each listed package exact Read and write\n" +
+			"     access. Organization access alone does not publish packages.\n" +
+			'  3. Keep "Bypass 2FA" enabled and replace the GitHub NPM_TOKEN secret.',
+	);
 }
 
 function publishMissing(pkg, tag) {
@@ -294,12 +376,22 @@ function main() {
 	// already exists on npm so that gaps in the token's read-write
 	// allow-list are reported BEFORE `changeset publish` hits an opaque
 	// `404 Not Found - PUT` on a known package.
-	reportScopeWriteGaps(probeScopeWriteAccess(), inScope);
+	const writable = probeScopeWriteAccess();
+	const publishPlan = collectPublishPlan(inScope);
+	if (publishPlan.pending.length > 0) {
+		console.log(
+			`  pending version(s): ${publishPlan.pending
+				.map((pkg) => `${pkg.name}@${pkg.version}`)
+				.join(", ")}`,
+		);
+	}
+	reportScopeWriteGaps(writable, inScope);
+	assertWritableForPendingPublishes(writable, publishPlan.pending);
 
 	const missing = [];
 	const skipped = [];
 	for (const pkg of inScope) {
-		const { exists } = npmExists(pkg.name);
+		const exists = publishPlan.existing.get(pkg.name) === true;
 		if (exists) {
 			console.log(`  ok  ${pkg.name}`);
 		} else if (SKIP.includes(pkg.name)) {

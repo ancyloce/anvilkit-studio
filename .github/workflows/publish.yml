@@ -28,6 +28,8 @@ name: Publish
 # NPM_TOKEN must be a granular, automation-scoped token scoped to
 # the @anvilkit/* packages. Publish steps expose it as both NPM_TOKEN
 # (for changesets/action) and NODE_AUTH_TOKEN (for setup-node's npmrc).
+# The release job also writes an explicit temp npmrc so every nested
+# npm/pnpm process uses the same token-backed registry configuration.
 # Rotate on any suspected compromise — this workflow is the only thing
 # that needs it.
 
@@ -167,6 +169,33 @@ jobs:
             pnpm --filter "$pkg" check:all
           done
 
+      # `setup-node` creates npm auth config for normal cases, but the
+      # publish chain here is nested (`changesets/action` -> pnpm ->
+      # changeset -> npm publish). Write and export one explicit
+      # userconfig so every child process reads the same registry token.
+      - name: Configure npm publish auth
+        if: github.event_name == 'push' || inputs.mode == 'auto' || inputs.mode == 'publish-only'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "${NODE_AUTH_TOKEN}" ]; then
+            echo "::error::NPM_TOKEN secret is empty; cannot publish to npm."
+            exit 1
+          fi
+
+          umask 077
+          npmrc="${RUNNER_TEMP}/npm-publish.npmrc"
+          {
+            echo "registry=https://registry.npmjs.org/"
+            echo "@anvilkit:registry=https://registry.npmjs.org/"
+            echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}"
+            echo "access=public"
+          } > "${npmrc}"
+
+          echo "NPM_CONFIG_USERCONFIG=${npmrc}" >> "${GITHUB_ENV}"
+          echo "npm_config_userconfig=${npmrc}" >> "${GITHUB_ENV}"
+          echo "Configured npm publish auth at ${npmrc}"
+
       # Pre-publish guard: for any publishable workspace package that
       # has never been published to npm (new package name, rename,
       # freshly added plugin), create the registry entry by running a
@@ -184,6 +213,9 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
+          npm_config_userconfig: ${{ runner.temp }}/npm-publish.npmrc
+          STRICT_NPM_ACCESS_PREFLIGHT: "1"
         run: node scripts/ensure-npm-packages-exist.mjs
 
       # `publish: pnpm release` runs the repo's own release script
@@ -203,3 +235,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
+          npm_config_userconfig: ${{ runner.temp }}/npm-publish.npmrc
