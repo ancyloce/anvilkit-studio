@@ -74,7 +74,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			});
 			return () => {
 				const current = get().insertSections;
-				if (!current.has(section.id)) return;
+				if (current.get(section.id) !== section) return;
 				const next = new Map(current);
 				next.delete(section.id);
 				set({ insertSections: next });
@@ -89,7 +89,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			});
 			return () => {
 				const current = get().layerQuickAdds;
-				if (!current.has(item.id)) return;
+				if (current.get(item.id) !== item) return;
 				const next = new Map(current);
 				next.delete(item.id);
 				set({ layerQuickAdds: next });
@@ -117,7 +117,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			});
 			return () => {
 				const current = get().assetActions;
-				if (!current.has(action.id)) return;
+				if (current.get(action.id) !== action) return;
 				const next = new Map(current);
 				next.delete(action.id);
 				set({ assetActions: next });
@@ -132,7 +132,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			});
 			return () => {
 				const current = get().copyPacks;
-				if (!current.has(pack.id)) return;
+				if (current.get(pack.id) !== pack) return;
 				const next = new Map(current);
 				next.delete(pack.id);
 				set({ copyPacks: next });

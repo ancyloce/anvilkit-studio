@@ -101,9 +101,11 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.layer.pages.add": "Add page",
 	"studio.module.layer.pages.routeBadge": "Route page",
 	"studio.module.layer.pages.empty": "No pages yet.",
+	"studio.module.layer.pages.error": "Could not load pages.",
 	"studio.module.layer.layers.title": "Layers",
 	"studio.module.layer.layers.add": "Insert layer",
 	"studio.module.layer.layers.empty": "Select a page to see its layers.",
+	"studio.module.layer.layers.error": "Could not load layers.",
 	// Layer module — quick-add primitive labels (Phase D).
 	"studio.module.layer.layers.add.layout": "Layout",
 	"studio.module.layer.layers.add.row": "Row",
@@ -131,6 +133,9 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.image.upload.dropZone": "Drop files to upload",
 	"studio.module.image.upload.progress": "Uploading…",
 	"studio.module.image.upload.error": "Upload failed. Try again.",
+	"studio.module.image.loadMore": "Load more",
+	"studio.module.image.loading": "Loading assets…",
+	"studio.module.image.loadError": "Could not load assets. Try again.",
 	"studio.module.image.search.placeholder": "Search assets…",
 	"studio.module.image.empty":
 		"No assets yet. Upload your first asset to get started.",
