@@ -26,8 +26,10 @@ name: Publish
 #                        already landed its commit.
 #
 # NPM_TOKEN must be a granular, automation-scoped token scoped to
-# the @anvilkit/* packages. Rotate on any suspected compromise —
-# this workflow is the only thing that needs it.
+# the @anvilkit/* packages. Publish steps expose it as both NPM_TOKEN
+# (for changesets/action) and NODE_AUTH_TOKEN (for setup-node's npmrc).
+# Rotate on any suspected compromise — this workflow is the only thing
+# that needs it.
 
 on:
   push:
@@ -200,3 +202,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
