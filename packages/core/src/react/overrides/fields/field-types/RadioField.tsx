@@ -5,8 +5,7 @@
  * presentation.
  *
  * Puck options can carry any serializable value, so each option is
- * serialized to a string via `optionKey()` and resolved back on
- * selection.
+ * assigned a stable internal id and resolved back on selection.
  */
 
 import type {
@@ -16,21 +15,18 @@ import type {
 import { type ReactNode } from "react";
 
 import {
-  ToggleGroup,
-  Toggle,
+	Toggle,
+	ToggleGroup,
 } from "@/primitives/animate-ui/components/base/toggle-group";
 
 import { FieldLabel } from "../../layout/FieldLabel";
+import {
+	findOptionIndex,
+	type OptionValue,
+	optionId,
+	optionIndexFromId,
+} from "./option-ids";
 import type { FieldRendererProps } from "./TextField";
-
-type OptionValue = string | number | boolean | undefined | null | object;
-
-function optionKey(value: OptionValue): string {
-	if (value === null) return "null";
-	if (value === undefined) return "";
-	if (typeof value === "object") return JSON.stringify(value);
-	return String(value);
-}
 
 export function RadioField({
 	field,
@@ -39,45 +35,43 @@ export function RadioField({
 	readOnly,
 	name,
 }: FieldRendererProps<PuckRadioField, OptionValue | undefined>): ReactNode {
-	const selected = value === undefined ? [] : [optionKey(value)];
+	const selectedIndex = findOptionIndex(field.options, value);
+	const selected = selectedIndex === -1 ? [] : [optionId(selectedIndex)];
 
 	return (
-    <FieldLabel
-      icon={field.labelIcon}
-      label={field.label ?? name}
-      type="radio"
-      el="div"
-      readOnly={readOnly}
-    >
-      <ToggleGroup
-        value={selected}
-        onValueChange={(next) => {
-          if (readOnly === true) return;
-          const key = next[0];
-          if (key === undefined) {
-            onChange(undefined as never);
-            return;
-          }
-          const match = field.options.find(
-            (opt) => optionKey(opt.value as OptionValue) === key,
-          );
-          onChange((match?.value ?? key) as never);
-        }}
-        disabled={readOnly}
-        size="sm"
-        variant="outline"
-      >
-        {field.options.map((option) => (
-          <Toggle
-            key={optionKey(option.value as OptionValue)}
-            value={optionKey(option.value as OptionValue)}
-          >
-            {option.label}
-          </Toggle>
-        ))}
-      </ToggleGroup>
-    </FieldLabel>
-  );
+		<FieldLabel
+			icon={field.labelIcon}
+			label={field.label ?? name}
+			type="radio"
+			el="div"
+			readOnly={readOnly}
+		>
+			<ToggleGroup
+				value={selected}
+				onValueChange={(next) => {
+					if (readOnly === true) return;
+					const key = next[0];
+					if (key === undefined) {
+						onChange(undefined as never);
+						return;
+					}
+					const index = optionIndexFromId(key);
+					const match = index === null ? undefined : field.options[index];
+					if (match === undefined) return;
+					onChange(match.value as never);
+				}}
+				disabled={readOnly}
+				size="sm"
+				variant="outline"
+			>
+				{field.options.map((option, index) => (
+					<Toggle key={optionId(index)} value={optionId(index)}>
+						{option.label}
+					</Toggle>
+				))}
+			</ToggleGroup>
+		</FieldLabel>
+	);
 }
 
 export type { FieldProps as PuckFieldProps };

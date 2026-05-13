@@ -5,6 +5,7 @@
  */
 
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(cleanup);
@@ -84,11 +85,8 @@ describe("NumberField round-trip", () => {
 });
 
 describe("SelectField round-trip", () => {
-	// TODO: base-ui Select uses portal-rendered popup with its own
-	// focus / pointer handling; `fireEvent.click` against
-	// `screen.getByText("One")` never opens the popup under jsdom.
-	// Re-enable when migrated to userEvent or covered by Playwright.
-	it.skip("emits the selected option's value", async () => {
+	it("emits the selected option's value", async () => {
+		const user = userEvent.setup();
 		const onChange = vi.fn();
 		render(
 			<SelectField
@@ -105,8 +103,8 @@ describe("SelectField round-trip", () => {
 			/>,
 		);
 		// Open the popup, then click "Two".
-		fireEvent.click(screen.getByText("One"));
-		fireEvent.click(await screen.findByText("Two"));
+		await user.click(screen.getByRole("combobox"));
+		await user.click(await screen.findByRole("option", { name: "Two" }));
 		expect(onChange).toHaveBeenCalledWith("two");
 	});
 });
@@ -130,5 +128,45 @@ describe("RadioField round-trip", () => {
 		);
 		fireEvent.click(screen.getByRole("button", { name: "B" }));
 		expect(onChange).toHaveBeenCalledWith("b");
+	});
+
+	it("does not collide null with the string 'null'", () => {
+		const onChange = vi.fn();
+		render(
+			<RadioField
+				field={{
+					type: "radio",
+					options: [
+						{ label: "Null value", value: null },
+						{ label: "String null", value: "null" },
+					],
+				}}
+				value={null}
+				onChange={onChange}
+				name="choice"
+			/>,
+		);
+		fireEvent.click(screen.getByRole("button", { name: "String null" }));
+		expect(onChange).toHaveBeenCalledWith("null");
+	});
+
+	it("does not collide undefined with the empty string", () => {
+		const onChange = vi.fn();
+		render(
+			<RadioField
+				field={{
+					type: "radio",
+					options: [
+						{ label: "Undefined value", value: undefined },
+						{ label: "Empty string", value: "" },
+					],
+				}}
+				value={undefined}
+				onChange={onChange}
+				name="choice"
+			/>,
+		);
+		fireEvent.click(screen.getByRole("button", { name: "Empty string" }));
+		expect(onChange).toHaveBeenCalledWith("");
 	});
 });

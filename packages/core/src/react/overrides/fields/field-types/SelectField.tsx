@@ -4,9 +4,9 @@
  *
  * Puck options can carry any serializable value (string, number,
  * boolean, object). Base UI's Item only accepts a string `value`, so
- * we serialize each option's value through `optionKey()` and resolve
- * back to the original on selection. The `items` prop carries the
- * key→label map so `<SelectValue>` renders the label automatically.
+ * we use stable internal option ids and resolve back to the original
+ * option on selection. The `items` prop carries the id→label map so
+ * `<SelectValue>` renders the label automatically.
  */
 
 import type {
@@ -24,16 +24,13 @@ import {
 } from "@/primitives/select";
 
 import { FieldLabel } from "../../layout/FieldLabel";
+import {
+	findOptionIndex,
+	type OptionValue,
+	optionId,
+	optionIndexFromId,
+} from "./option-ids";
 import type { FieldRendererProps } from "./TextField";
-
-type OptionValue = string | number | boolean | undefined | null | object;
-
-function optionKey(value: OptionValue): string {
-	if (value === null) return "null";
-	if (value === undefined) return "";
-	if (typeof value === "object") return JSON.stringify(value);
-	return String(value);
-}
 
 export function SelectField({
 	field,
@@ -43,11 +40,15 @@ export function SelectField({
 	id,
 	name,
 }: FieldRendererProps<PuckSelectField, OptionValue | undefined>): ReactNode {
+	const selectedIndex = useMemo(
+		() => findOptionIndex(field.options, value),
+		[field.options, value],
+	);
 	const items = useMemo(
 		() =>
-			field.options.map((option) => ({
+			field.options.map((option, index) => ({
 				label: option.label,
-				value: optionKey(option.value as OptionValue),
+				value: optionId(index),
 			})),
 		[field.options],
 	);
@@ -62,17 +63,17 @@ export function SelectField({
 		>
 			<Select
 				items={items}
-				value={value === undefined ? null : optionKey(value)}
+				value={selectedIndex === -1 ? null : optionId(selectedIndex)}
 				onValueChange={(next) => {
 					if (readOnly === true) return;
-					if (next === null || next === "") {
+					if (next === null) {
 						onChange(undefined as never);
 						return;
 					}
-					const match = field.options.find(
-						(opt) => optionKey(opt.value as OptionValue) === next,
-					);
-					onChange((match?.value ?? next) as never);
+					const index = optionIndexFromId(next);
+					const match = index === null ? undefined : field.options[index];
+					if (match === undefined) return;
+					onChange(match.value as never);
 				}}
 				disabled={readOnly}
 				name={name}
@@ -81,11 +82,8 @@ export function SelectField({
 					<SelectValue placeholder="Select…" />
 				</SelectTrigger>
 				<SelectContent>
-					{field.options.map((option) => (
-						<SelectItem
-							key={optionKey(option.value as OptionValue)}
-							value={optionKey(option.value as OptionValue)}
-						>
+					{field.options.map((option, index) => (
+						<SelectItem key={optionId(index)} value={optionId(index)}>
 							{option.label}
 						</SelectItem>
 					))}

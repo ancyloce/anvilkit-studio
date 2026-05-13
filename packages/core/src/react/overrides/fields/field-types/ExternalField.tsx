@@ -84,6 +84,7 @@ export function ExternalField({
 	const [query, setQuery] = useState("");
 	const [rows, setRows] = useState<ExternalRow[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [loadError, setLoadError] = useState(false);
 
 	useEffect(() => {
 		if (!open) return;
@@ -96,6 +97,7 @@ export function ExternalField({
 					filters: {},
 				})) as unknown[] | null;
 				if (cancelled) return;
+				setLoadError(false);
 				const next = (result ?? []).map((raw) => {
 					const mapped =
 						field.mapProp !== undefined
@@ -111,6 +113,11 @@ export function ExternalField({
 					} satisfies ExternalRow;
 				});
 				setRows(next);
+			} catch {
+				if (!cancelled) {
+					setRows([]);
+					setLoadError(true);
+				}
 			} finally {
 				if (!cancelled) setLoading(false);
 			}
@@ -174,6 +181,13 @@ export function ExternalField({
 								{loading ? (
 									<Empty className="border-0 p-3">
 										<Spinner />
+									</Empty>
+								) : loadError ? (
+									<Empty className="border-0 p-3">
+										<EmptyTitle>Could not load results</EmptyTitle>
+										<EmptyDescription>
+											Try a different search term.
+										</EmptyDescription>
 									</Empty>
 								) : rows.length === 0 ? (
 									<Empty className="border-0 p-3">
