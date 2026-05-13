@@ -10,6 +10,7 @@
  */
 
 import { createContext, type ReactNode, useContext } from "react";
+import type { StudioViewport } from "@/studio/ui/viewports";
 
 export interface ChromeProps {
 	readonly onBack?: () => void;
@@ -18,6 +19,7 @@ export interface ChromeProps {
 	readonly lastSavedAt?: Date | null;
 	readonly isPublishing?: boolean;
 	readonly onPublishClick?: () => void;
+	readonly viewports?: readonly StudioViewport[];
 	/**
 	 * Host-supplied download handler invoked from the publish panel's
 	 * Export submenu. Receives a format id from `runtime.exportFormats`
