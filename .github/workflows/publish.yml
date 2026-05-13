@@ -213,7 +213,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
-          STRICT_NPM_ACCESS_PREFLIGHT: "1"
         run: node scripts/ensure-npm-packages-exist.mjs
 
       # `publish: pnpm release` runs the repo's own release script

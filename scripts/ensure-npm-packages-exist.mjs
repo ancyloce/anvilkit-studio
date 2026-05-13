@@ -21,8 +21,8 @@
  *   2. Drop every package marked `private: true`.
  *   3. For each survivor, run `npm view <name> name`. E404 → missing.
  *   4. For existing packages whose local version is not on npm yet,
- *      verify the token has read-write access before Changesets gets
- *      to the opaque `404 Not Found - PUT` publish failure.
+ *      report them before Changesets publishes. If npm allows the
+ *      token to list package permissions, also warn about write gaps.
  *   5. Resolve the dist-tag from `.changeset/pre.json` (beta if the
  *      file exists; latest otherwise).
  *   6. Publish missing packages with `pnpm --filter <name> publish
@@ -50,8 +50,6 @@ const ROOT = process.cwd();
 const DRY_RUN = process.argv.includes("--dry-run");
 const FILTER_ARG = process.argv.find((a) => a.startsWith("--filter="));
 const FILTER = FILTER_ARG ? FILTER_ARG.slice("--filter=".length) : null;
-const STRICT_NPM_ACCESS_PREFLIGHT =
-	process.env.STRICT_NPM_ACCESS_PREFLIGHT === "1";
 
 function resolveDistTag() {
 	const prePath = join(ROOT, ".changeset", "pre.json");
@@ -160,11 +158,10 @@ function preflightAuth() {
 	}
 }
 
-// Returns the set of @anvilkit/* package names the configured npm
-// token can read-write, or `null` when the probe couldn't run (no auth
-// configured, older npm without JSON output, registry outage). `null`
-// means "indeterminate" — callers should skip the check rather than
-// treat it as "no permissions."
+// Returns the set of @anvilkit/* package names the configured npm token
+// can read-write, or `null` when the probe couldn't run. Granular
+// package tokens can publish while still receiving E403 from this org
+// package-listing endpoint, so failures here are advisory.
 function probeScopeWriteAccess() {
 	const r = spawnSync(
 		"npm",
@@ -172,19 +169,15 @@ function probeScopeWriteAccess() {
 		{ stdio: ["ignore", "pipe", "pipe"], encoding: "utf8" },
 	);
 	if (r.status !== 0) {
-		if (STRICT_NPM_ACCESS_PREFLIGHT) {
-			const detail = (r.stderr || r.stdout || "").trim();
-			throw new Error(
-				"Unable to verify npm token package access.\n" +
-					"  Command: npm access list packages --json @anvilkit\n" +
-					`  Exit: ${r.status}\n` +
-					(detail ? `  npm said: ${detail}\n\n` : "\n") +
-					"Fix: replace the GitHub NPM_TOKEN secret with a granular token\n" +
-					"created by an npm user that owns or can publish @anvilkit/* packages.\n" +
-					"Grant it Packages and scopes > @anvilkit (or the exact package)\n" +
-					'with "Read and write", and keep "Bypass 2FA" enabled.',
-			);
-		}
+		const detail = (r.stderr || r.stdout || "").trim();
+		console.warn(
+			"WARN: unable to list npm package access for @anvilkit; " +
+				"continuing because granular publish tokens may not be allowed " +
+				"to call this endpoint.\n" +
+				"  Command: npm access list packages --json @anvilkit\n" +
+				`  Exit: ${r.status}` +
+				(detail ? `\n  npm said: ${detail}` : ""),
+		);
 		return null;
 	}
 	try {
@@ -195,13 +188,10 @@ function probeScopeWriteAccess() {
 				.map(([name]) => name),
 		);
 	} catch {
-		if (STRICT_NPM_ACCESS_PREFLIGHT) {
-			throw new Error(
-				"Unable to parse npm package-access output from:\n" +
-					"  npm access list packages --json @anvilkit\n\n" +
-					`Output was:\n${r.stdout}`,
-			);
-		}
+		console.warn(
+			"WARN: unable to parse npm package-access output; continuing.\n" +
+				`Output was:\n${r.stdout}`,
+		);
 		return null;
 	}
 }
