@@ -167,7 +167,40 @@ describe("<Studio> — mount and compile", () => {
 
 		// The built-in `jsonExportPlugin` is always prepended, so even with
 		// no consumer plugins the store reports a single `json` format.
-		expect(useExportStore.getState().availableFormats).toEqual(["json"]);
+		await waitFor(() => {
+			expect(useExportStore.getState().availableFormats).toEqual(["json"]);
+		});
+	});
+
+	it("routes plugin log records through a host logger with redacted meta", async () => {
+		const logger = vi.fn();
+		const loggingPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.logger"),
+			register(ctx) {
+				ctx.log("warn", "plugin registered", {
+					apiKey: "secret",
+					pluginId: "com.example.logger",
+				});
+				return { meta: buildMeta("com.example.logger") };
+			},
+		};
+
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[loggingPlugin]}
+				logger={logger}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		expect(logger).toHaveBeenCalledWith("warn", "plugin registered", {
+			apiKey: "[REDACTED]",
+			pluginId: "com.example.logger",
+		});
 	});
 });
 
@@ -595,10 +628,12 @@ describe("<Studio> — unmount cleanup", () => {
 		// Seed some state so we can prove reset() ran.
 		useAiStore.getState().startGeneration("cached");
 		expect(useAiStore.getState().lastPrompt).toBe("cached");
-		expect(useExportStore.getState().availableFormats).toEqual([
-			"json",
-			"html",
-		]);
+		await waitFor(() => {
+			expect(useExportStore.getState().availableFormats).toEqual([
+				"json",
+				"html",
+			]);
+		});
 
 		await act(async () => {
 			unmount();
@@ -720,6 +755,30 @@ describe("<Studio> — chrome modes", () => {
 		expect(ui?.viewports?.options).toBeDefined();
 		// Default block ships 4 viewports (mobile / tablet / desktop / full).
 		expect(ui?.viewports?.options as unknown[]).toHaveLength(4);
+	});
+
+	it('`chrome="anvilkit"` uses custom viewports for Puck and chrome ui defaults', async () => {
+		const viewports = [
+			{ label: "tiny", width: 200, height: "auto" as const },
+			{ label: "wide", width: 1440, height: "auto" as const },
+		];
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[]}
+				chrome="anvilkit"
+				viewports={viewports}
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		const props = puckMockState.lastProps as {
+			readonly ui?: { readonly viewports?: { readonly options?: unknown[] } };
+			readonly viewports?: unknown;
+		};
+		expect(props.viewports).toBe(viewports);
+		expect(props.ui?.viewports?.options).toEqual(viewports);
 	});
 
 	it('`chrome="puck"` does not apply ui defaults when consumer omitted them', async () => {

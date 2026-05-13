@@ -107,14 +107,33 @@ import {
 import { useAiStore } from "@/stores/ai-store";
 import { useExportStore } from "@/stores/export-store";
 import { useThemeStore } from "@/stores/theme-store";
-import { mergeStudioUi } from "@/studio/ui/merge-studio-ui";
+import {
+	mergeStudioUi,
+	resolveStudioViewports,
+} from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
-import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
+import type {
+	StudioLogLevel,
+	StudioPlugin,
+	StudioPluginContext,
+} from "@/types/plugin";
 
 const DEFAULT_STORE_ID = "default";
 const DEFAULT_CHROME_MODE: StudioChromeMode = "anvilkit";
+
+export type StudioLogger = (
+	level: StudioLogLevel,
+	message: string,
+	meta?: Readonly<Record<string, unknown>>,
+) => void;
+
+interface CompiledStudioRuntime {
+	readonly runtime: StudioRuntime;
+	readonly studioConfig: StudioConfig;
+	readonly ctx: StudioPluginContext;
+}
 
 /**
  * Tiny hook-runner so `useThemeSync` can sit inside the provider
@@ -271,6 +290,12 @@ export interface StudioProps {
 	 */
 	readonly onExport?: (formatId: string) => void | Promise<void>;
 	/**
+	 * Optional diagnostics sink for plugin log records and Studio
+	 * setup failures. Metadata is shallow-redacted before delivery
+	 * using the same policy as the console fallback.
+	 */
+	readonly logger?: StudioLogger;
+	/**
 	 * Optional pages source for the sidebar's `layer` module. The host
 	 * supplies the page list and routing callbacks; the sidebar renders
 	 * the rows, route badge, and "+" add-page dialog. When omitted, the
@@ -397,10 +422,9 @@ function escapeFingerprintSegment(segment: string): string {
 
 /**
  * Case-insensitive substrings that mark a log-meta key as sensitive.
- * The default `ctx.log` passes meta straight to `console`, which in
- * dev tools is trivially copy-pasted into screenshots and bug
- * reports. This is a minimum-viable redaction; a host-provided
- * logger (planned post-alpha) will take over the real contract.
+ * The default `ctx.log` passes meta to either the host logger or
+ * `console`, which is easily copied into screenshots and bug reports.
+ * This is a minimum-viable redaction layer for both destinations.
  */
 const REDACTED_META_KEYS = [
 	"token",
@@ -423,7 +447,9 @@ function shouldRedactKey(key: string): boolean {
 	return false;
 }
 
-function redactLogMeta(meta: Record<string, unknown>): Record<string, unknown> {
+function redactLogMeta(
+	meta: Readonly<Record<string, unknown>>,
+): Record<string, unknown> {
 	// Shallow copy is sufficient — the contract is "don't print
 	// obvious secrets," not "deep-scrub arbitrary nested structures."
 	// Plugins that pass deeply nested meta with secrets in leaves can
@@ -433,6 +459,59 @@ function redactLogMeta(meta: Record<string, unknown>): Record<string, unknown> {
 		out[key] = shouldRedactKey(key) ? "[REDACTED]" : value;
 	}
 	return out;
+}
+
+function writeStudioLog(
+	logger: StudioLogger | undefined,
+	level: StudioLogLevel,
+	message: string,
+	meta: Readonly<Record<string, unknown>> | undefined,
+): void {
+	const redactedMeta = meta === undefined ? undefined : redactLogMeta(meta);
+	if (logger !== undefined) {
+		try {
+			logger(level, message, redactedMeta);
+		} catch (error) {
+			console.error("[studio] logger threw", error);
+		}
+		return;
+	}
+
+	const method =
+		level === "error"
+			? "error"
+			: level === "warn"
+				? "warn"
+				: level === "debug"
+					? "debug"
+					: "info";
+	console[method](`[studio] ${message}`, redactedMeta ?? {});
+}
+
+function useHydrateRuntimeStores(compiled: CompiledStudioRuntime | null): void {
+	useEffect(() => {
+		if (compiled === null) {
+			return;
+		}
+		useExportStore
+			.getState()
+			.setAvailableFormats([...compiled.runtime.exportFormats.keys()]);
+
+		const theme = compiled.studioConfig.theme;
+		const currentMode = useThemeStore.getState().mode;
+		if (currentMode === "system" && theme.defaultMode !== "system") {
+			useThemeStore.getState().setMode(theme.defaultMode);
+		}
+	}, [compiled]);
+}
+
+function useRuntimeInit(compiled: CompiledStudioRuntime | null): void {
+	useEffect(() => {
+		if (compiled === null) {
+			return;
+		}
+		void compiled.runtime.lifecycle.emit("onInit", compiled.ctx);
+	}, [compiled]);
 }
 
 /**
@@ -553,6 +632,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		isPublishing,
 		onPublishClick,
 		onExport,
+		logger,
 		pages,
 		messages,
 	} = props;
@@ -632,11 +712,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 	//    dynamic import (on its own async chunk) and prepended to the
 	//    plugin list before compilation.
 	// ------------------------------------------------------------------
-	const [compiled, setCompiled] = useState<{
-		readonly runtime: StudioRuntime;
-		readonly studioConfig: StudioConfig;
-		readonly ctx: StudioPluginContext;
-	} | null>(null);
+	const [compiled, setCompiled] = useState<CompiledStudioRuntime | null>(null);
 
 	// Dynamically-loaded AnvilKit chrome assets. Stays `null` for
 	// `chrome="puck"`, keeping the preset + layout out of the
@@ -737,25 +813,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 				},
 				studioConfig,
 				log: (level, message, meta) => {
-					// Cheap console passthrough. A host-provided logger
-					// is a later feature — route every severity to its
-					// matching `console` method so plugin authors can
-					// still observe emit output during development.
-					// Meta is redacted first so a plugin that passes an
-					// auth token or user prompt through `ctx.log(...)`
-					// doesn't trivially leak it into the browser console.
-					const method =
-						level === "error"
-							? "error"
-							: level === "warn"
-								? "warn"
-								: level === "debug"
-									? "debug"
-									: "info";
-					console[method](
-						`[studio] ${message}`,
-						meta === undefined ? {} : redactLogMeta(meta),
-					);
+					writeStudioLog(logger, level, message, meta);
 				},
 				emit: () => {
 					// The plugin-to-plugin event bus is scoped to a
@@ -800,7 +858,9 @@ export function Studio(props: StudioProps): ReactElement | null {
 				// `StudioPluginError` — log and leave `compiled` at
 				// `null` so the editor never mounts against a broken
 				// plugin set.
-				console.error("[studio] plugin compilation failed", error);
+				writeStudioLog(logger, "error", "plugin compilation failed", {
+					error,
+				});
 			}
 		}
 
@@ -808,7 +868,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		return () => {
 			cancelled = true;
 		};
-	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit]);
+	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit, logger]);
 
 	// ------------------------------------------------------------------
 	// 3. Populate the export store once the runtime is ready. Writing
@@ -823,32 +883,14 @@ export function Studio(props: StudioProps): ReactElement | null {
 	//    picked a preference on a prior visit should not have their
 	//    choice silently overwritten by a host-set default.
 	// ------------------------------------------------------------------
-	useEffect(() => {
-		if (compiled === null) {
-			return;
-		}
-		useExportStore
-			.getState()
-			.setAvailableFormats([...compiled.runtime.exportFormats.keys()]);
-
-		const theme = compiled.studioConfig.theme;
-		const currentMode = useThemeStore.getState().mode;
-		if (currentMode === "system" && theme.defaultMode !== "system") {
-			useThemeStore.getState().setMode(theme.defaultMode);
-		}
-	}, [compiled]);
+	useHydrateRuntimeStores(compiled);
 
 	// ------------------------------------------------------------------
 	// 4. Fire `onInit` exactly once per compiled runtime. `useEffect`'s
 	//    dep array is `[compiled]`, so a remount with a new runtime
 	//    re-fires this correctly.
 	// ------------------------------------------------------------------
-	useEffect(() => {
-		if (compiled === null) {
-			return;
-		}
-		void compiled.runtime.lifecycle.emit("onInit", compiled.ctx);
-	}, [compiled]);
+	useRuntimeInit(compiled);
 
 	// ------------------------------------------------------------------
 	// 5. Unmount cleanup: fire `onDestroy` and reset the Core-owned
@@ -1022,7 +1064,10 @@ export function Studio(props: StudioProps): ReactElement | null {
 		return null;
 	}
 
-	const puckUi = isAnvilkit ? mergeStudioUi(ui) : ui;
+	const puckUi = isAnvilkit ? mergeStudioUi(ui, viewports) : ui;
+	const chromeViewports = isAnvilkit
+		? resolveStudioViewports(puckUi, viewports)
+		: undefined;
 	const puckElement = (
 		<Puck
 			config={puckConfig}
@@ -1082,6 +1127,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 											isPublishing,
 											onPublishClick,
 											onExport,
+											viewports: chromeViewports,
 										}}
 									>
 										<TooltipProvider delay={200}>
