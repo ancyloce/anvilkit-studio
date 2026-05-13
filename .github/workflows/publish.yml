@@ -193,7 +193,6 @@ jobs:
           } > "${npmrc}"
 
           echo "NPM_CONFIG_USERCONFIG=${npmrc}" >> "${GITHUB_ENV}"
-          echo "npm_config_userconfig=${npmrc}" >> "${GITHUB_ENV}"
           echo "Configured npm publish auth at ${npmrc}"
 
       # Pre-publish guard: for any publishable workspace package that
@@ -214,7 +213,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
-          npm_config_userconfig: ${{ runner.temp }}/npm-publish.npmrc
           STRICT_NPM_ACCESS_PREFLIGHT: "1"
         run: node scripts/ensure-npm-packages-exist.mjs
 
@@ -236,4 +234,3 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
-          npm_config_userconfig: ${{ runner.temp }}/npm-publish.npmrc
