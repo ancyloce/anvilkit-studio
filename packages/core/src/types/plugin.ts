@@ -4,11 +4,21 @@
  *
  * ### Design rules
  *
- * 1. **Zero React dependency.** Every Puck type below is imported via
+ * 1. **Zero React runtime dependency.** Every Puck type and the React
+ *    `ComponentType` / `ReactNode` references below are imported via
  *    `import type` and erased at compile time. With
  *    `verbatimModuleSyntax: true` in the tsconfig, the emitted `.js`
  *    file contains no reference to `@puckeditor/core` or React — this
  *    file ships as pure type information.
+ *
+ *    Note that the plugin contract DOES reference React types
+ *    ({@link StudioPluginProvider.component}, {@link StudioPluginOverlay.component},
+ *    {@link StudioPluginSlotContribution.component}) — this is an
+ *    intentional boundary change from the original "no React anywhere"
+ *    rule. The `runtime/` layer continues to treat these as opaque
+ *    (the runtime never reads or instantiates them); the React boundary
+ *    is `<Studio>` (`packages/core/src/react/components/Studio.tsx`).
+ *    See architecture §17 for the updated boundary.
  *
  * 2. **No direct store access.** Plugins read state through
  *    {@link StudioPluginContext} and write state through
@@ -23,6 +33,7 @@
  *    specific range.
  */
 
+import type { ComponentType, ReactNode } from "react";
 import type {
 	PuckApi,
 	Config as PuckConfig,
@@ -387,6 +398,144 @@ export interface StudioHeaderAction {
 }
 
 /**
+ * React provider contributed by a plugin via
+ * {@link StudioPluginRegistration.providers}. The Studio shell composes
+ * every contributed provider around the editor tree (inside
+ * `StudioRuntimeProvider`, so each provider's component may call
+ * `useStudio()`).
+ *
+ * ### Composition order
+ *
+ * Providers are sorted ascending by {@link order} (ties break on
+ * registration order). The provider with the **lowest** order ends up
+ * **outermost**, mirroring the conventional "wrap from the outside in"
+ * intuition.
+ *
+ * ### Why `ComponentType` and not `ReactNode`?
+ *
+ * A `ReactNode` would be captured at `register()` time and never
+ * re-render with new hook state inside the provider. Plugins authoring
+ * a provider commonly need their own hooks (e.g. `useEffect` for
+ * presence sync) — those only work when React instantiates the
+ * component fresh on each render pass.
+ */
+export interface StudioPluginProvider {
+	/**
+	 * Stable, globally-unique provider identifier
+	 * (e.g. `"collab-ui"`, `"feature-flags"`). Used for diagnostics and
+	 * for the "first registration wins" rule on duplicate ids.
+	 */
+	readonly id: string;
+
+	/**
+	 * The provider component. Must render its `children` somewhere in
+	 * its tree (otherwise the entire Studio shell becomes empty).
+	 */
+	readonly component: ComponentType<{ children: ReactNode }>;
+
+	/**
+	 * Optional sort key. Lower values render **outermost**. Default
+	 * `100`. Ties break on registration order for determinism.
+	 */
+	readonly order?: number;
+}
+
+/**
+ * Placement targets for plugin-contributed overlays. Each placement
+ * corresponds to a distinct slot inside `<Studio>`:
+ *
+ * - `"viewport"` — rendered **before** the Puck editor, at the top of
+ *   the editor surface. Use for global banners, viewport-scoped
+ *   affordances.
+ * - `"canvas"` — rendered **after** the Puck editor (DOM-wise) so it
+ *   layers above canvas content via CSS. Use for cursors, selection
+ *   rings, presence rings — anything that needs to overlay the
+ *   editing canvas.
+ * - `"notifications"` — rendered last, after all other overlays. Use
+ *   for toast surfaces, conflict-resolution dialogs, and other
+ *   stack-ordered notification UI.
+ */
+export type StudioOverlayPlacement = "canvas" | "viewport" | "notifications";
+
+/**
+ * Top-level overlay contributed by a plugin via
+ * {@link StudioPluginRegistration.overlays}. Overlays render as
+ * siblings of the Puck editor at the placement specified by
+ * {@link placement} (see {@link StudioOverlayPlacement}).
+ *
+ * Overlays cannot inject themselves into Puck slots (that's what
+ * {@link StudioPluginRegistration.overrides} is for) — they live one
+ * level above the editor in the DOM. Common uses: presence cursors,
+ * conflict toasts, comment threads, AI hint bubbles.
+ */
+export interface StudioPluginOverlay {
+	/**
+	 * Stable, globally-unique overlay identifier
+	 * (e.g. `"collab-presence"`, `"collab-conflicts"`).
+	 */
+	readonly id: string;
+
+	/**
+	 * Where Studio should mount the overlay relative to the Puck editor.
+	 * See {@link StudioOverlayPlacement}.
+	 */
+	readonly placement: StudioOverlayPlacement;
+
+	/**
+	 * The overlay component. Receives no props.
+	 */
+	readonly component: ComponentType;
+
+	/**
+	 * Optional sort key within the same placement bucket. Lower values
+	 * render first. Default `100`. Ties break on registration order.
+	 */
+	readonly order?: number;
+}
+
+/**
+ * Identifier of a named chrome slot a plugin can fill. Today only
+ * `"collaborators"` is enumerated (the header collaborator stack); new
+ * slots are added as features land. The string-union form leaves the
+ * type open so plugin authors can target future slots without a Core
+ * type bump.
+ */
+export type StudioSlotId = "collaborators" | (string & {});
+
+/**
+ * Named chrome slot contribution — a plugin claims a specific anchor
+ * (e.g. the header collaborator stack) and supplies the component
+ * Studio should render there.
+ *
+ * ### Precedence
+ *
+ * Slots are single-occupancy. If two plugins contribute the same slot
+ * id, the **first registration wins** and a `warn` is logged via the
+ * plugin context — this matches the {@link StudioHeaderAction} dedupe
+ * policy. Host apps can always override a plugin slot by passing the
+ * corresponding `<Studio>` prop (e.g. `collaboratorsSlot`); the host
+ * prop wins.
+ */
+export interface StudioPluginSlotContribution {
+	/**
+	 * Target slot id. See {@link StudioSlotId} for the enumerated
+	 * values; new slot ids may be introduced without a Core type bump.
+	 */
+	readonly id: StudioSlotId;
+
+	/**
+	 * The component to mount in the slot. Receives no props.
+	 */
+	readonly component: ComponentType;
+
+	/**
+	 * Optional sort key (currently unused because slots are single-
+	 * occupancy, but reserved for future multi-occupancy slots).
+	 */
+	readonly order?: number;
+}
+
+/**
  * Optional lifecycle method bag returned by a plugin's `register()`.
  *
  * Every hook is optional. The lifecycle manager (`core-008`) awaits
@@ -484,6 +633,9 @@ export interface StudioPluginLifecycleHooks<
  * | `overrides`    | `mergeOverrides()` (curried per-key, `core-014`)     |
  * | `headerActions`| `composeHeaderActions()` (`core-009`)                |
  * | `exportFormats`| `createExportRegistry()` (`core-009`)                |
+ * | `providers`    | `<Studio>` shell composition (`core-014`)            |
+ * | `overlays`     | `<Studio>` shell, dispatched by placement            |
+ * | `slots`        | `<Studio>` shell, single-occupancy chrome anchors    |
  *
  * @typeParam UserConfig - Optional Puck config generic. Plumbed to
  * {@link StudioPluginLifecycleHooks} and `PuckOverrides` for strong
@@ -538,6 +690,43 @@ export interface StudioPluginRegistration<
 	 * header action.
 	 */
 	readonly exportFormats?: readonly ExportFormatDefinition[];
+
+	/**
+	 * Optional React provider contributions that wrap the Studio tree.
+	 *
+	 * Sorted ascending by `order` (default `100`); ties break on plugin
+	 * registration order. The provider with the lowest order is
+	 * **outermost** in the rendered tree. All providers compose inside
+	 * `StudioRuntimeProvider`, so each provider's component may call
+	 * `useStudio()`.
+	 *
+	 * See {@link StudioPluginProvider}.
+	 */
+	readonly providers?: readonly StudioPluginProvider[];
+
+	/**
+	 * Optional top-level overlay components rendered as siblings of the
+	 * Puck editor. Each overlay declares a {@link StudioOverlayPlacement}
+	 * to control where Studio mounts it (canvas / viewport /
+	 * notifications).
+	 *
+	 * Sorted within their placement bucket by `order` (default `100`);
+	 * ties break on registration order.
+	 */
+	readonly overlays?: readonly StudioPluginOverlay[];
+
+	/**
+	 * Optional named chrome slot contributions. Slots are single-
+	 * occupancy: if two plugins contribute the same slot id, the first
+	 * registration wins (and a warn is logged via `ctx.log`).
+	 *
+	 * Host apps can always override a plugin slot by passing the
+	 * corresponding `<Studio>` prop (e.g. `collaboratorsSlot`); the host
+	 * prop wins.
+	 *
+	 * See {@link StudioPluginSlotContribution}.
+	 */
+	readonly slots?: readonly StudioPluginSlotContribution[];
 }
 
 /**

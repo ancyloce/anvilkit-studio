@@ -46,11 +46,16 @@ export type {
 	IRAssetResolver,
 	StudioHeaderAction,
 	StudioLogLevel,
+	StudioOverlayPlacement,
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginLifecycleHooks,
 	StudioPluginMeta,
+	StudioPluginOverlay,
+	StudioPluginProvider,
 	StudioPluginRegistration,
+	StudioPluginSlotContribution,
+	StudioSlotId,
 } from "./plugin.js";
 export type {
 	StudioAsset,
