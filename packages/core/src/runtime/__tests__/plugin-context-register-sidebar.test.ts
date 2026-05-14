@@ -42,6 +42,8 @@ function buildCtx(
 			registry.getState().registerAssetAction(action),
 		registerCopySnippetPack: (pack) =>
 			registry.getState().registerCopySnippetPack(pack),
+		registerCopilotPanel: (panel) =>
+			registry.getState().registerCopilotPanel(panel),
 	};
 }
 
@@ -83,6 +85,9 @@ describe("plugin context — register* sidebar helpers", () => {
 						id: "pack-1",
 						snippets: [{ id: "s1", category: "basic", title: "T", body: "B" }],
 					}),
+					innerCtx.registerCopilotPanel!({
+						render: () => null,
+					}),
 				);
 				return { meta: plugin.meta };
 			},
@@ -96,6 +101,7 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(state.assetSource).not.toBeNull();
 		expect(state.assetActions.has("action-1")).toBe(true);
 		expect(state.copyPacks.has("pack-1")).toBe(true);
+		expect(state.copilotPanel).not.toBeNull();
 
 		for (const off of offHandles) off();
 
@@ -105,6 +111,7 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(cleared.assetSource).toBeNull();
 		expect(cleared.assetActions.size).toBe(0);
 		expect(cleared.copyPacks.size).toBe(0);
+		expect(cleared.copilotPanel).toBeNull();
 	});
 
 	it("hand-written contexts may omit the register* helpers", () => {
@@ -127,5 +134,6 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(minimal.registerAssetSource).toBeUndefined();
 		expect(minimal.registerAssetAction).toBeUndefined();
 		expect(minimal.registerCopySnippetPack).toBeUndefined();
+		expect(minimal.registerCopilotPanel).toBeUndefined();
 	});
 });
