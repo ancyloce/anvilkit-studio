@@ -39,10 +39,11 @@ export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// callbacks are now consumed inside `<PublishPanel>` directly via
 	// `useChromeProps`, so the header itself only needs `onBack` and
 	// the read-only `lastSavedAt` chip.
-	const { onBack, lastSavedAt } = useChromeProps();
+	const { onBack, lastSavedAt, collaboratorsSlot } = useChromeProps();
 	const props: StudioHeaderProps = {
 		onBack,
 		lastSavedAt,
+		collaboratorsSlot,
 		...propOverrides,
 	};
 	const hasSelection = useStudioPuck(

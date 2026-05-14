@@ -21,6 +21,14 @@ import { PublishPanel } from "./PublishPanel";
 export interface StudioHeaderProps {
 	readonly onBack?: () => void;
 	readonly lastSavedAt?: Date | null;
+	/**
+	 * Replaces the placeholder `<CollaboratorStack>` between the
+	 * `lastSavedAt` chip and the Share button. When omitted, the
+	 * built-in placeholder avatars are rendered. Host apps with a
+	 * real collaboration backend (e.g. `@anvilkit/collab-ui`'s
+	 * `<PeerAvatarStack>`) pass their own peer-aware widget here.
+	 */
+	readonly collaboratorsSlot?: ReactNode;
 }
 
 interface PlaceholderCollaborator {
@@ -40,6 +48,7 @@ const PLACEHOLDER_OVERFLOW = 2;
 export function StudioHeader({
 	onBack,
 	lastSavedAt = null,
+	collaboratorsSlot,
 }: StudioHeaderProps): ReactNode {
 	const msg = useMsg();
 
@@ -76,7 +85,7 @@ export function StudioHeader({
           </span>
         ) : null}
 
-        <CollaboratorStack />
+        {collaboratorsSlot ?? <CollaboratorStack />}
 
         <Tooltip>
           <TooltipTrigger
