@@ -290,6 +290,15 @@ export interface StudioProps {
 	 */
 	readonly onExport?: (formatId: string) => void | Promise<void>;
 	/**
+	 * Optional replacement for the AnvilKit chrome's placeholder
+	 * `<CollaboratorStack>` (the avatars between the `lastSavedAt`
+	 * chip and the Share button). Host apps with a real
+	 * collaboration backend pass their own peer-aware widget here
+	 * (e.g. `<PeerAvatarStack>` from `@anvilkit/collab-ui`). Ignored
+	 * when `chrome="puck"`.
+	 */
+	readonly collaboratorsSlot?: ReactNode;
+	/**
 	 * Optional diagnostics sink for plugin log records and Studio
 	 * setup failures. Metadata is shallow-redacted before delivery
 	 * using the same policy as the console fallback.
@@ -632,6 +641,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		isPublishing,
 		onPublishClick,
 		onExport,
+		collaboratorsSlot,
 		logger,
 		pages,
 		messages,
@@ -1127,6 +1137,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 											isPublishing,
 											onPublishClick,
 											onExport,
+											collaboratorsSlot,
 											viewports: chromeViewports,
 										}}
 									>
