@@ -9,8 +9,23 @@
  * context instead.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import {
+	type ComponentType,
+	createContext,
+	type ReactNode,
+	useContext,
+} from "react";
 import type { StudioViewport } from "@/studio/ui/viewports";
+
+/**
+ * Accepted shapes for `collaboratorsSlot`. A `ReactNode` is captured
+ * once at the call site and rendered verbatim — good for host apps
+ * passing a static JSX element. A `ComponentType` is instantiated by
+ * the chrome on every render, so its own hooks (presence subscriptions,
+ * etc.) work — that's the shape plugins use via
+ * {@link StudioPluginRegistration.slots}.
+ */
+export type CollaboratorsSlotValue = ReactNode | ComponentType;
 
 export interface ChromeProps {
 	readonly onBack?: () => void;
@@ -22,11 +37,13 @@ export interface ChromeProps {
 	readonly viewports?: readonly StudioViewport[];
 	/**
 	 * Optional replacement for the header's placeholder
-	 * `<CollaboratorStack>`. When provided, the chrome renders this
-	 * node in place of the built-in placeholder. See
-	 * {@link StudioHeaderProps.collaboratorsSlot}.
+	 * `<CollaboratorStack>`. Accepts either a `ReactNode` (rendered
+	 * verbatim) or a `ComponentType` (instantiated on each render so the
+	 * component's own hooks fire). See
+	 * {@link StudioHeaderProps.collaboratorsSlot} and
+	 * {@link CollaboratorsSlotValue}.
 	 */
-	readonly collaboratorsSlot?: ReactNode;
+	readonly collaboratorsSlot?: CollaboratorsSlotValue;
 	/**
 	 * Host-supplied download handler invoked from the publish panel's
 	 * Export submenu. Receives a format id from `runtime.exportFormats`
