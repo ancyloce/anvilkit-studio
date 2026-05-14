@@ -1,4 +1,10 @@
-import { act, cleanup, render, renderHook, screen } from "@testing-library/react";
+import {
+	act,
+	cleanup,
+	render,
+	renderHook,
+	screen,
+} from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -28,12 +34,7 @@ describe("<PresenceCursor>", () => {
 	});
 
 	it("does not render a label when displayName is omitted", () => {
-		render(
-			<PresenceCursor
-				peer={{ id: "anon" }}
-				cursor={{ x: 0, y: 0 }}
-			/>,
-		);
+		render(<PresenceCursor peer={{ id: "anon" }} cursor={{ x: 0, y: 0 }} />);
 		expect(screen.queryByText(/anon/i)).toBeNull();
 	});
 });
@@ -92,6 +93,29 @@ describe("<PresenceLayer>", () => {
 			"[data-slot=presence-selection-ring]",
 		);
 		expect(rings.length).toBe(1);
+	});
+
+	it("can hide cursors without hiding selection rings", () => {
+		const peers: PresenceStateFrame[] = [
+			{
+				peer: { id: "alice", displayName: "Alice" },
+				cursor: { x: 1, y: 2 },
+				selection: { nodeIds: ["hero-1"] },
+			},
+		];
+		const { container } = render(
+			<PresenceLayer
+				peers={peers}
+				showCursors={false}
+				resolveSelectionRect={() => ({ x: 0, y: 0, width: 10, height: 10 })}
+			/>,
+		);
+		expect(
+			container.querySelectorAll("[data-slot=presence-cursor]").length,
+		).toBe(0);
+		expect(
+			container.querySelectorAll("[data-slot=presence-selection-ring]").length,
+		).toBe(1);
 	});
 });
 

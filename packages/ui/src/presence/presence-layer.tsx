@@ -9,6 +9,7 @@ import type { PresenceStateFrame } from "./use-presence";
 
 export interface PresenceLayerProps {
 	readonly peers: readonly PresenceStateFrame[];
+	readonly showCursors?: boolean;
 	/**
 	 * Optional callback so the host can resolve a node ID to its
 	 * current bounding rect. Returning `null` (or omitting the
@@ -35,6 +36,7 @@ const ROOT_CLASSES = "pointer-events-none absolute inset-0 overflow-hidden";
  */
 export function PresenceLayer({
 	peers,
+	showCursors = true,
 	resolveSelectionRect,
 	className,
 }: PresenceLayerProps) {
@@ -48,6 +50,7 @@ export function PresenceLayer({
 				<PeerOverlays
 					key={frame.peer.id}
 					frame={frame}
+					showCursors={showCursors}
 					resolveSelectionRect={resolveSelectionRect}
 				/>
 			))}
@@ -57,9 +60,11 @@ export function PresenceLayer({
 
 function PeerOverlays({
 	frame,
+	showCursors,
 	resolveSelectionRect,
 }: {
 	readonly frame: PresenceStateFrame;
+	readonly showCursors: boolean;
 	readonly resolveSelectionRect?: (
 		nodeId: string,
 	) => PresenceSelectionRingRect | null;
@@ -68,7 +73,7 @@ function PeerOverlays({
 	const selection = frame.selection?.nodeIds ?? [];
 	return (
 		<>
-			{cursor ? (
+			{showCursors && cursor ? (
 				<PresenceCursor peer={frame.peer} cursor={cursor} />
 			) : null}
 			{resolveSelectionRect
