@@ -2,7 +2,6 @@
 
 import { Studio, StudioConfigSchema, compilePlugins } from "@anvilkit/core";
 import type {
-	AiSectionSelection,
 	ExportWarning,
 	PageIR,
 	StudioPluginContext,
@@ -29,11 +28,6 @@ import {
 	reactFormat,
 } from "@anvilkit/plugin-export-react";
 import {
-	AiPromptPanel,
-	type AiPromptPanelIssue,
-	type AiPromptPanelSelection,
-} from "@anvilkit/ui";
-import {
 	CollabSettingsPopover,
 	createCollabPlugin,
 	PeerAvatarStack,
@@ -46,6 +40,7 @@ import {
 	createCollabDemoTransport,
 	createCollabRelayTransport,
 } from "../../../lib/collab-transport";
+import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -103,6 +98,12 @@ const aiCopilotPlugin = createAiCopilotPlugin({
 	timeoutMs: 5_000,
 	forwardCurrentData: true,
 });
+
+// Wires the existing AI copilot plugin into the StudioSidebar's
+// `copilot` module. Hoisted to module scope so the panel registration
+// stays stable across React re-renders (mirrors the other plugins
+// above).
+const copilotSidebarPlugin = createCopilotSidebarPlugin({ aiCopilotPlugin });
 
 interface AssetManagerTestHarness {
 	readonly ctx: StudioPluginContext;
@@ -303,15 +304,6 @@ export default function PuckEditorPage() {
 	const [assetManagerReactOutput, setAssetManagerReactOutput] = useState("");
 	const [assetManagerReactWarnings, setAssetManagerReactWarnings] =
 		useState("none");
-	const [prompt, setPrompt] = useState("");
-	const [aiError, setAiError] = useState<string | null>(null);
-	const [aiStatus, setAiStatus] = useState<"idle" | "pending">("idle");
-	const [aiIssues, setAiIssues] = useState<readonly AiPromptPanelIssue[]>([]);
-	// Phase 6 / M9 demo: a manual toggle stands in for Puck-driven
-	// selection until the plan-§5.4 selection bridge lands. Flipping
-	// this state is what swaps the AI panel between "Generate page"
-	// and "Regenerate selection".
-	const [aiSelectionActive, setAiSelectionActive] = useState(false);
 	const [collabEnabled, setCollabEnabled] = useState(false);
 	const [collabQueryReady, setCollabQueryReady] = useState(false);
 	const [collabPeerOverride, setCollabPeerOverride] = useState<string | null>(
@@ -403,6 +395,7 @@ export default function PuckEditorPage() {
 			htmlExportPlugin,
 			reactExportPlugin,
 			aiCopilotPlugin,
+			copilotSidebarPlugin,
 			liveAssetManagerPlugin,
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
@@ -761,43 +754,6 @@ export default function PuckEditorPage() {
 		}
 	}
 
-	async function handleGenerate(trimmedPrompt: string) {
-		setAiError(null);
-		setAiIssues([]);
-		setAiStatus("pending");
-		try {
-			await aiCopilotPlugin.runGeneration(trimmedPrompt);
-		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
-			setAiError(message);
-			console.error("[demo] ai generation failed", error);
-		} finally {
-			setAiStatus("idle");
-		}
-	}
-
-	async function handleRegenerate(
-		trimmedPrompt: string,
-		selection: AiPromptPanelSelection,
-	) {
-		setAiError(null);
-		setAiIssues([]);
-		setAiStatus("pending");
-		try {
-			const irSelection: AiSectionSelection = {
-				zoneId: selection.zoneId,
-				nodeIds: selection.nodeIds,
-			};
-			await aiCopilotPlugin.regenerateSelection(trimmedPrompt, irSelection);
-		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
-			setAiError(message);
-			console.error("[demo] ai section regeneration failed", error);
-		} finally {
-			setAiStatus("idle");
-		}
-	}
-
 	return (
 		<main className={styles.shell}>
 			<section className={styles.masthead}>
@@ -826,37 +782,26 @@ export default function PuckEditorPage() {
 
 			<section
 				className={styles.masthead}
-				aria-labelledby="demo-copilot-heading"
+				aria-labelledby="demo-exports-heading"
 			>
 				<div>
 					<p className={styles.eyebrow}>Plugins</p>
 					<h2
-						id="demo-copilot-heading"
+						id="demo-exports-heading"
 						className={styles.title}
 						style={{ fontSize: "1.4rem" }}
 					>
-						AI copilot + HTML export
+						Exports
 					</h2>
 					<p className={styles.lede}>
-						Type a prompt that matches a mock fixture (e.g. &ldquo;a hero for a
-						SaaS landing page&rdquo;) and hit Generate to see the canvas update.
-						Toggle &ldquo;Simulate hero selection&rdquo; to switch the panel
-						into Phase 6 / M9 section-regeneration mode and rewrite just the
-						hero subtree.
+						The HTML and React export plugins each contribute a button below.
+						The AI copilot prompt panel now lives in the StudioSidebar — open
+						the &ldquo;AI Copilot&rdquo; tab in the left rail and type a prompt
+						(e.g. &ldquo;a hero for a SaaS landing page&rdquo;) to generate, or
+						use the in-panel toggle to flip to section-regeneration mode.
 					</p>
 				</div>
 				<div className={styles.actions}>
-					<button
-						type="button"
-						data-testid="ai-toggle-section"
-						className={styles.secondaryAction}
-						aria-pressed={aiSelectionActive}
-						onClick={() => setAiSelectionActive((prev) => !prev)}
-					>
-						{aiSelectionActive
-							? "Clear hero selection"
-							: "Simulate hero selection"}
-					</button>
 					<button
 						type="button"
 						className={styles.secondaryAction}
@@ -872,33 +817,6 @@ export default function PuckEditorPage() {
 						Export React
 					</button>
 				</div>
-				<AiPromptPanel
-					prompt={prompt}
-					onPromptChange={setPrompt}
-					selection={
-						aiSelectionActive
-							? {
-									zoneId: "root-zone",
-									nodeIds: ["hero-primary"],
-									nodeLabels: ["Hero"],
-								}
-							: null
-					}
-					status={aiStatus}
-					error={aiError}
-					issues={aiIssues}
-					onGenerate={(trimmed) => {
-						void handleGenerate(trimmed);
-					}}
-					onRegenerate={(trimmed, selection) => {
-						void handleRegenerate(trimmed, selection);
-					}}
-				/>
-				{aiError !== null ? (
-					<p role="alert" data-testid="ai-error" style={{ display: "none" }}>
-						{aiError}
-					</p>
-				) : null}
 			</section>
 
 			{assetManagerTestMode ? (
