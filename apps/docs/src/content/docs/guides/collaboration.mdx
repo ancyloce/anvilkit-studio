@@ -1,0 +1,143 @@
+---
+title: Realtime collaboration
+description: Wire realtime collab into your Studio with one factory call — `createCollabPlugin()` from `@anvilkit/collab-ui` bundles Yjs CRDT data sync, presence cursors, conflict toasts, and a collaborator avatar stack into a single `StudioPlugin`.
+---
+
+import { Aside, Steps } from "@astrojs/starlight/components";
+
+`@anvilkit/collab-ui` ships a single factory that gives a Studio host
+the full realtime collaboration experience: presence cursors, conflict
+diagnostics, a collaborator avatar stack in the header, and Yjs CRDT
+data sync — all behind one `plugins={[...]}` entry, no React wrapper.
+
+## 1. Install
+
+```sh
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs
+```
+
+`@anvilkit/plugin-collab-yjs` is a peer of `@anvilkit/collab-ui` (the
+factory composes the two packages together). Hosts that want the
+adapter without React UI can install only the yjs plugin — see § 4
+below.
+
+## 2. Integration recipe
+
+You own the `Y.Doc` and (optional) `Awareness` instance. The factory
+owns adapter and React UI construction.
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+import { Doc as YDoc } from "yjs";
+import { Awareness } from "y-protocols/awareness";
+
+const doc = new YDoc();
+const awareness = new Awareness(doc);
+
+<Studio
+	puckConfig={myConfig}
+	plugins={[
+		createCollabPlugin({
+			doc,
+			awareness,
+			self: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+			puckConfig: myConfig,
+			onIdentityChange: (next) => {
+				// Mirror identity changes (e.g. from the settings popover)
+				// back into your auth/profile store.
+				updateProfile(next);
+			},
+		}),
+	]}
+/>;
+```
+
+That's it. The plugin contributes:
+
+| Contribution        | What you see                                                  |
+| ------------------- | ------------------------------------------------------------- |
+| `hooks`             | Puck data ↔ Y.Doc CRDT sync (Puck stays the source of truth). |
+| Provider            | `<CollabUIProvider>` wrapping Studio so `useCollabContext` works everywhere. |
+| Canvas overlay      | `<PresenceLayer>` — remote peer cursors and selection rings.  |
+| Notifications overlay | `<ConflictNoticeCenter>` — toast notifications on overlap. |
+| Collaborators slot  | `<PeerAvatarStack>` in the header.                            |
+
+## 3. Common knobs
+
+```tsx
+createCollabPlugin({
+	doc,
+	awareness,
+	self: alice,
+
+	// Validate remote IR before dispatching (defense-in-depth)
+	validateRemoteIR: (ir) => (isWellFormed(ir) ? ir : null),
+	onValidationFailure: (failure) => toast(`Rejected: ${failure.kind}`),
+
+	// RBAC / lock policy applied symmetrically on inbound + outbound
+	policy: {
+		canEdit: (node, peer) => canUserEditNode(peer, node),
+	},
+	onPolicyViolation: (violation) => toast(violation.message),
+
+	// Surface outbound transport failures
+	onSaveError: (error) => toast(`Save failed: ${error}`),
+
+	// Cross-tab persistence
+	persistence: { indexedDb: true, broadcastChannel: true },
+
+	// Opt out of individual UI surfaces
+	presence: { enabled: false },          // hide remote cursors
+	notifications: { enabled: false },     // hide conflict toaster
+	collaboratorsStack: { enabled: false } // host wires its own collaborator widget
+});
+```
+
+When the host passes `collaboratorsSlot` on `<Studio>`, that prop wins
+over the plugin's slot contribution — the host always has the final
+word.
+
+## 4. Power-user path (headless / alt UI)
+
+If you don't need React UI — e.g. a Node sync worker, a server-side IR
+processor, or a custom non-React collaborator chrome — import the
+low-level primitives from `@anvilkit/plugin-collab-yjs` directly:
+
+```ts
+import {
+	createCollabDataPlugin,
+	createYjsAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+
+const adapter = createYjsAdapter({ doc, awareness, peer });
+const plugin = createCollabDataPlugin({ adapter, puckConfig });
+```
+
+<Aside type="caution" title="Renaming note">
+	The data-only factory in `@anvilkit/plugin-collab-yjs` was renamed
+	`createCollabPlugin` → `createCollabDataPlugin` to disambiguate from
+	the consolidated factory in `@anvilkit/collab-ui`. The legacy alias
+	`createCollabPlugin` remains exported for one minor release and
+	emits a one-shot `console.warn` on first call.
+</Aside>
+
+## 5. Composition with Puck's plugin contract
+
+A Studio plugin can ship **any combination** of Puck-shape fields and
+Studio extensions. The consolidated collab plugin uses the Studio
+extensions; you can add Puck-shape fields alongside if you want a
+Collaborators panel in the plugin rail.
+
+| Plugin contribution | Contract  | Target                                                    |
+| ------------------- | --------- | --------------------------------------------------------- |
+| `name` / `label` / `icon` | Puck   | Plugin rail identity                                  |
+| `render`            | Puck      | Plugin rail panel                                         |
+| `overrides`         | Puck (passthrough through Studio) | Inside-`<Puck>` slots          |
+| `hooks`             | Studio    | Lifecycle (onInit / onDataChange / onBeforePublish / …)   |
+| `providers`         | Studio    | Wrap the entire Studio tree                               |
+| `overlays`          | Studio    | Siblings of the editor (canvas / viewport / notifications) |
+| `slots`             | Studio    | Named chrome anchors (`collaborators`)                    |
+
+See the [plugin authoring guide](./plugin-authoring.mdx) for the full
+plugin contract details.
