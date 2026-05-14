@@ -538,7 +538,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-BkBoKAc5.d.ts",
+											"packagePath": "dist/actions-C3e2nJ9v.d.ts",
 											"qualifiedName": "Config"
 										},
 										"name": "Config",
@@ -708,7 +708,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-BkBoKAc5.d.ts",
+									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
 									"qualifiedName": "Data"
 								},
 								"name": "Data",
@@ -810,7 +810,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-BkBoKAc5.d.ts",
+											"packagePath": "dist/actions-C3e2nJ9v.d.ts",
 											"qualifiedName": "Data"
 										},
 										"name": "Data",
@@ -851,7 +851,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-BkBoKAc5.d.ts",
+											"packagePath": "dist/actions-C3e2nJ9v.d.ts",
 											"qualifiedName": "Config"
 										},
 										"name": "Config",
