@@ -35,23 +35,17 @@ import {
 } from "@anvilkit/ui";
 import {
 	CollabSettingsPopover,
-	CollabUIProvider,
-	ConflictNoticeCenter,
+	createCollabPlugin,
 	PeerAvatarStack,
-	PresenceLayer as CollabPresenceLayer,
-	useCollabSelf,
 } from "@anvilkit/collab-ui";
 import type { Config, Data } from "@puckeditor/core";
-import { createCollabDemoBundle } from "../../../lib/collab-demo";
 import { useDemoIdentity } from "../../../lib/collab-identity";
+import { createCollabStudioPlugin } from "../../../lib/collab-studio-plugin";
 import {
-	createCollabRelayBundle,
-	type CollabRelayBundle,
-} from "../../../lib/collab-relay-bundle";
-import {
-	CollabCursorBroadcaster,
-	createCollabStudioPlugin,
-} from "../../../lib/collab-studio-plugin";
+	type CollabTransportBundle,
+	createCollabDemoTransport,
+	createCollabRelayTransport,
+} from "../../../lib/collab-transport";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -365,60 +359,42 @@ export default function PuckEditorPage() {
 	// active-page tracking and re-emits via `subscribe()` on `onSelect`.
 	const pagesSource = useMemo(() => createDemoPagesSource(), []);
 
-	// Hoisted Yjs Doc + plugin: rebuilt only when collab toggles or the
-	// peer identity changes. Building the bundle re-instantiates the
-	// adapter, so we keep this memoized so the plugins array stays
-	// stable across re-renders that don't touch collab state.
-	const collabBundle = useMemo(() => {
+	// Transport bundle: host owns the `Y.Doc`, `Awareness`, and (for the
+	// relay path) the `WebsocketProvider`. The adapter is constructed
+	// internally by `createCollabPlugin()` — see the `plugins` memo
+	// below.
+	const collabTransport = useMemo<CollabTransportBundle | null>(() => {
 		if (!collabEnabled) return null;
 		if (!demoIdentityReady) return null;
 		if (collabRelayUrl) {
-			const bundle: CollabRelayBundle = createCollabRelayBundle({
-				puckConfig: demoConfig as unknown as Config,
-				peer: demoIdentity,
+			return createCollabRelayTransport({
 				room: collabRoom,
 				relayUrl: collabRelayUrl,
 			});
-			return bundle;
 		}
-		return createCollabDemoBundle(
-			demoConfig as unknown as Config,
-			demoIdentity,
-		);
-	}, [
-		collabEnabled,
-		collabRelayUrl,
-		collabRoom,
-		demoIdentity,
-		demoIdentityReady,
-	]);
+		return createCollabDemoTransport();
+	}, [collabEnabled, collabRelayUrl, collabRoom, demoIdentityReady]);
 
 	useEffect(() => {
-		// The relay bundle owns a WebSocket; tear it down when the
-		// memoized bundle changes (peer rename, relay toggle) or the
-		// page unmounts. The in-memory `createCollabDemoBundle` has no
-		// relay, so the conditional skip avoids a type narrowing churn.
-		const teardownTarget = collabBundle as
-			| (CollabRelayBundle & { destroy: () => void })
-			| null;
-		return () => {
-			if (teardownTarget && "provider" in teardownTarget) {
-				teardownTarget.destroy();
-			}
-		};
-	}, [collabBundle]);
+		if (!collabTransport) return;
+		// Bundle owns its own transport teardown (WebSocket close,
+		// awareness destroy, doc destroy). Fires on peer rename, relay
+		// toggle, or page unmount.
+		return () => collabTransport.destroy();
+	}, [collabTransport]);
 
 	// Memoized so the plugins array reference stays stable across
 	// renders. Without this, each render passes a fresh array literal
 	// to `<Studio>`, whose compile effect re-fires, unmounts the
 	// runtime, and resets Puck's data back to the `publishedData`
 	// prop — wiping any AI-generated content instantly.
+	//
+	// `createCollabStudioPlugin` no longer takes the adapter as an
+	// argument — it reads it from `<CollabUIProvider>` context (which
+	// `createCollabPlugin` provides). Same constructor on every render.
 	const collabStudioPlugin = useMemo(
-		() =>
-			collabBundle
-				? createCollabStudioPlugin({ adapter: collabBundle.adapter })
-				: null,
-		[collabBundle],
+		() => (collabTransport ? createCollabStudioPlugin() : null),
+		[collabTransport],
 	);
 
 	const plugins = useMemo(() => {
@@ -431,22 +407,52 @@ export default function PuckEditorPage() {
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
 		];
-		if (collabBundle && collabStudioPlugin) {
-			return [...base, collabBundle.plugin, collabStudioPlugin];
+		if (collabTransport && collabStudioPlugin) {
+			const collabPlugin = createCollabPlugin({
+				doc: collabTransport.doc,
+				awareness: collabTransport.awareness,
+				connectionSource: collabTransport.connectionSource,
+				self: demoIdentity,
+				puckConfig: demoConfig as unknown as Config,
+				onIdentityChange: (next) => {
+					if (
+						typeof next.displayName === "string" &&
+						next.displayName.length > 0
+					) {
+						setDemoIdentityName(next.displayName);
+					}
+				},
+				presence: {
+					className: "!fixed z-[9999]",
+					showCursors: showRemoteCursors,
+					resolveSelectionRect: resolvePuckSelectionRect,
+				},
+				// Host supplies a richer collaborator widget via
+				// `collaboratorsSlot` on `<Studio>`; suppress the plugin's
+				// default `PeerAvatarStack` slot so the two don't fight.
+				collaboratorsStack: { enabled: false },
+			});
+			return [...base, collabPlugin, collabStudioPlugin];
 		}
 		return base;
-	}, [collabBundle, collabStudioPlugin]);
+	}, [
+		collabTransport,
+		collabStudioPlugin,
+		demoIdentity,
+		setDemoIdentityName,
+		showRemoteCursors,
+	]);
 
 	const collaboratorsSlot = useMemo(
 		() =>
-			collabBundle ? (
+			collabTransport ? (
 				<DemoCollaboratorsSlot
 					roomId={collabRoom}
 					showRemoteCursors={showRemoteCursors}
 					onShowRemoteCursorsChange={setShowRemoteCursors}
 				/>
 			) : null,
-		[collabBundle, collabRoom, showRemoteCursors],
+		[collabTransport, collabRoom, showRemoteCursors],
 	);
 
 	useEffect(() => {
@@ -1027,55 +1033,34 @@ export default function PuckEditorPage() {
 						Raw Puck
 					</a>
 				</div>
-				{collabEnabled && collabBundle ? (
-					<CollabUIProvider
-						adapter={collabBundle.adapter}
-						self={{
-							id: demoIdentity.id,
-							displayName: demoIdentity.displayName,
-							color: demoIdentity.color,
-						}}
-					>
-						<CollabIdentitySync onDisplayNameChange={setDemoIdentityName} />
-						<CollabCursorBroadcaster adapter={collabBundle.adapter} />
-						<Studio
-							puckConfig={demoConfig}
-							data={publishedData}
-							plugins={plugins}
-							onPublish={handlePublish}
-							onPublishClick={handlePublishClick}
-							onSaveDraft={handleSaveDraft}
-							isSavingDraft={isSavingDraft}
-							lastSavedAt={lastSavedAt}
-							onExport={handleExport}
-							chrome={chromeMode}
-							pages={pagesSource}
-							messages={studioMessages}
-							collaboratorsSlot={collaboratorsSlot}
-						/>
-						<CollabPresenceLayer
-							className="!fixed z-[9999]"
-							showCursors={showRemoteCursors}
-							resolveSelectionRect={resolvePuckSelectionRect}
-						/>
-						<ConflictNoticeCenter />
-					</CollabUIProvider>
-				) : (
-					<Studio
-						puckConfig={demoConfig}
-						data={publishedData}
-						plugins={plugins}
-						onPublish={handlePublish}
-						onPublishClick={handlePublishClick}
-						onSaveDraft={handleSaveDraft}
-						isSavingDraft={isSavingDraft}
-						lastSavedAt={lastSavedAt}
-						onExport={handleExport}
-						chrome={chromeMode}
-						pages={pagesSource}
-						messages={studioMessages}
-					/>
-				)}
+				{/*
+				  The consolidated `createCollabPlugin()` from `@anvilkit/collab-ui`
+				  is now in the `plugins` array (when `collabEnabled`). It
+				  contributes:
+				    - data sync hooks
+				    - `<CollabUIProvider>` provider wrapping Studio
+				    - presence overlay (canvas) + conflict toaster (notifications)
+				    - identity-sync bridge (wired to `setDemoIdentityName` via the
+				      `onIdentityChange` option)
+				  The wrapper composition that used to live here is no longer
+				  needed; we render one `<Studio>` for both collab-on and
+				  collab-off paths.
+				*/}
+				<Studio
+					puckConfig={demoConfig}
+					data={publishedData}
+					plugins={plugins}
+					onPublish={handlePublish}
+					onPublishClick={handlePublishClick}
+					onSaveDraft={handleSaveDraft}
+					isSavingDraft={isSavingDraft}
+					lastSavedAt={lastSavedAt}
+					onExport={handleExport}
+					chrome={chromeMode}
+					pages={pagesSource}
+					messages={studioMessages}
+					collaboratorsSlot={collaboratorsSlot}
+				/>
 			</section>
 
 			<section className={styles.snapshot}>
@@ -1092,32 +1077,6 @@ export default function PuckEditorPage() {
 			</section>
 		</main>
 	);
-}
-
-/**
- * Watches the collab self peer for displayName changes (the user can
- * edit it via `<CollabSettingsPopover>`) and pushes the new value back
- * up to the demo's localStorage-backed identity. Renders nothing.
- */
-function CollabIdentitySync({
-	onDisplayNameChange,
-}: {
-	onDisplayNameChange: (next: string) => void;
-}): null {
-	const self = useCollabSelf();
-	const lastSyncedRef = useRef<string | null>(null);
-	useEffect(() => {
-		const name = self?.displayName;
-		if (
-			typeof name === "string" &&
-			name.length > 0 &&
-			name !== lastSyncedRef.current
-		) {
-			lastSyncedRef.current = name;
-			onDisplayNameChange(name);
-		}
-	}, [self?.displayName, onDisplayNameChange]);
-	return null;
 }
 
 /**
@@ -1138,10 +1097,7 @@ function DemoCollaboratorsSlot({
 	const roomLink =
 		typeof window === "undefined" ? undefined : window.location.href;
 	return (
-		<div
-			data-testid="collab-peer-stack"
-			className="flex items-center gap-2"
-		>
+		<div data-testid="collab-peer-stack" className="flex items-center gap-2">
 			<PeerAvatarStack maxVisible={4} />
 			<CollabSettingsPopover
 				roomId={roomId}
