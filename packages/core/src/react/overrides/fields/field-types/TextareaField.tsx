@@ -6,12 +6,13 @@ import type {
 	FieldProps,
 	TextareaField as PuckTextareaField,
 } from "@puckeditor/core";
-import { type ReactNode } from "react";
+import { type ReactNode, useCallback } from "react";
 
 import { Textarea } from "@/primitives/textarea";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
+import { useLocalFieldValue } from "./use-local-field-value";
 
 export function TextareaField({
 	field,
@@ -21,6 +22,17 @@ export function TextareaField({
 	id,
 	name,
 }: FieldRendererProps<PuckTextareaField, string | undefined>): ReactNode {
+	const parse = useCallback(
+		(raw: string) => ({ ok: true, value: raw }) as const,
+		[],
+	);
+	const format = useCallback((v: string) => v, []);
+	const handleCommit = useCallback(
+		(next: string) => onChange(next),
+		[onChange],
+	);
+	const { displayValue, onInputChange, onFocus, onBlur } =
+		useLocalFieldValue<string>(value ?? "", parse, format, handleCommit);
 	return (
 		<FieldLabel
 			icon={field.labelIcon}
@@ -31,13 +43,15 @@ export function TextareaField({
 			<Textarea
 				id={id}
 				name={name}
-				value={value ?? ""}
+				value={displayValue}
 				placeholder={field.placeholder}
 				readOnly={readOnly}
 				rows={4}
+				onFocus={onFocus}
+				onBlur={onBlur}
 				onChange={(event) => {
 					if (readOnly === true) return;
-					onChange(event.target.value);
+					onInputChange(event.target.value);
 				}}
 			/>
 		</FieldLabel>

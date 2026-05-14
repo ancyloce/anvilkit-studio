@@ -11,12 +11,13 @@ import type {
 	FieldProps,
 	NumberField as PuckNumberField,
 } from "@puckeditor/core";
-import { type ReactNode } from "react";
+import { type ReactNode, useCallback } from "react";
 
 import { Input } from "@/primitives/input";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
+import { type ParseResult, useLocalFieldValue } from "./use-local-field-value";
 
 export function NumberField({
 	field,
@@ -26,6 +27,27 @@ export function NumberField({
 	id,
 	name,
 }: FieldRendererProps<PuckNumberField, number | undefined>): ReactNode {
+	// Buffer the raw string the user is typing so intermediate states
+	// like `""`, `"-"`, or `"1."` survive a parent re-render. Commit
+	// only when the string parses to a finite number (or to
+	// `undefined` for the empty case), matching the prior outbound
+	// shape exactly.
+	const parse = useCallback((raw: string): ParseResult<number | undefined> => {
+		if (raw === "") return { ok: true, value: undefined };
+		const next = Number(raw);
+		return Number.isFinite(next) ? { ok: true, value: next } : { ok: false };
+	}, []);
+	const format = useCallback(
+		(v: number | undefined) => (v === undefined ? "" : String(v)),
+		[],
+	);
+	const handleCommit = useCallback(
+		(next: number | undefined) => onChange(next as never),
+		[onChange],
+	);
+	const { displayValue, onInputChange, onFocus, onBlur } = useLocalFieldValue<
+		number | undefined
+	>(value, parse, format, handleCommit);
 	return (
 		<FieldLabel
 			icon={field.labelIcon}
@@ -37,23 +59,17 @@ export function NumberField({
 				id={id}
 				name={name}
 				type="number"
-				value={value === undefined ? "" : value}
+				value={displayValue}
 				placeholder={field.placeholder}
 				readOnly={readOnly}
 				min={field.min}
 				max={field.max}
 				step={field.step}
+				onFocus={onFocus}
+				onBlur={onBlur}
 				onChange={(event) => {
 					if (readOnly === true) return;
-					const raw = event.target.value;
-					if (raw === "") {
-						onChange(undefined as never);
-						return;
-					}
-					const next = Number(raw);
-					if (Number.isFinite(next)) {
-						onChange(next);
-					}
+					onInputChange(event.target.value);
 				}}
 			/>
 		</FieldLabel>
