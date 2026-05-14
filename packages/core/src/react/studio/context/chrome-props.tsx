@@ -21,6 +21,13 @@ export interface ChromeProps {
 	readonly onPublishClick?: () => void;
 	readonly viewports?: readonly StudioViewport[];
 	/**
+	 * Optional replacement for the header's placeholder
+	 * `<CollaboratorStack>`. When provided, the chrome renders this
+	 * node in place of the built-in placeholder. See
+	 * {@link StudioHeaderProps.collaboratorsSlot}.
+	 */
+	readonly collaboratorsSlot?: ReactNode;
+	/**
 	 * Host-supplied download handler invoked from the publish panel's
 	 * Export submenu. Receives a format id from `runtime.exportFormats`
 	 * (e.g. `"json"`, `"html"`, `"react"`); the host is responsible for
