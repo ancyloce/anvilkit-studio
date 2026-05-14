@@ -87,6 +87,16 @@ function generateId(): string {
 	return `peer-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+function identityFromPeerOverride(peerOverride: string): DemoIdentity {
+	const trimmed = peerOverride.trim().slice(0, 64) || PLACEHOLDER_NAME;
+	const id = `demo-peer:${trimmed.toLowerCase().replace(/[^a-z0-9_-]+/g, "-")}`;
+	return {
+		id,
+		displayName: trimmed,
+		color: peerColor(id),
+	};
+}
+
 function readStored(): DemoIdentity | null {
 	if (typeof window === "undefined") return null;
 	try {
@@ -151,37 +161,37 @@ export function useDemoIdentity(
 	});
 
 	useEffect(() => {
+		if (options.peerOverride) {
+			setIdentity(identityFromPeerOverride(options.peerOverride));
+			return;
+		}
 		const stored = readStored();
 		if (stored) {
-			setIdentity({
-				...stored,
-				displayName: options.peerOverride || stored.displayName,
-			});
+			setIdentity(stored);
 			return;
 		}
 		const id = generateId();
-		const displayName = options.peerOverride || randomDisplayName();
+		const displayName = randomDisplayName();
 		const fresh: DemoIdentity = {
 			id,
 			displayName,
 			color: peerColor(id),
 		};
-		// Only persist when there is no peer override; otherwise a tab
-		// opened with `?peer=Bob` would clobber the user's saved name.
-		if (!options.peerOverride) {
-			writeStored(fresh);
-		}
+		writeStored(fresh);
 		setIdentity(fresh);
 	}, [options.peerOverride]);
 
-	const setDisplayName = useCallback((next: string) => {
-		setIdentity((prev) => {
-			const trimmed = next.trim().slice(0, 64) || prev.displayName;
-			const updated: DemoIdentity = { ...prev, displayName: trimmed };
-			writeStored(updated);
-			return updated;
-		});
-	}, []);
+	const setDisplayName = useCallback(
+		(next: string) => {
+			setIdentity((prev) => {
+				const trimmed = next.trim().slice(0, 64) || prev.displayName;
+				const updated: DemoIdentity = { ...prev, displayName: trimmed };
+				if (!options.peerOverride) writeStored(updated);
+				return updated;
+			});
+		},
+		[options.peerOverride],
+	);
 
 	return { identity, setDisplayName };
 }

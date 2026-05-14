@@ -24,7 +24,7 @@ function editorUrl(peer: string, room: string): string {
 }
 
 test.describe("collab UI primitives", () => {
-	test("two peers share a room and the sync indicator reaches synced", async ({
+	test("two peers share a room and mount header collaborator controls", async ({
 		browser,
 	}, testInfo) => {
 		// Per-test room avoids awareness cross-talk between parallel
@@ -38,33 +38,25 @@ test.describe("collab UI primitives", () => {
 		await pageA.goto(editorUrl("alice", room));
 		await pageB.goto(editorUrl("bob", room));
 
-		const indicatorA = pageA.locator(
-			"[data-slot=sync-activity-indicator]",
-		);
-		const indicatorB = pageB.locator(
-			"[data-slot=sync-activity-indicator]",
-		);
+		await expect(pageA.getByTestId("studio-mount")).toBeVisible();
+		await expect(pageB.getByTestId("studio-mount")).toBeVisible();
 
-		await expect(indicatorA).toBeVisible();
-		await expect(indicatorB).toBeVisible();
-
-		// Each peer should see its own indicator transition through
-		// connecting → synced once the relay completes the initial sync.
-		await expect(indicatorA).toHaveAttribute("data-status", "synced", {
-			timeout: 15_000,
-		});
-		await expect(indicatorB).toHaveAttribute("data-status", "synced", {
-			timeout: 15_000,
-		});
-
-		// The collab room bar is mounted (composite of indicator +
-		// avatar stack + settings popover).
+		// The AnvilKit chrome renders collaborator controls in the
+		// Studio header rather than the old standalone room bar.
+		await expect(pageA.getByTestId("collab-peer-stack")).toBeVisible();
 		await expect(
-			pageA.locator("[data-slot=collab-room-bar]"),
+			pageA.locator("[data-slot=collab-settings-trigger]"),
 		).toBeVisible();
 		await expect(
-			pageA.getByTestId("collab-room-bar-title"),
-		).toContainText("Collaboration demo");
+			pageA.locator("[data-slot=peer-avatar-stack] [data-peer-id]"),
+		).toHaveCount(2, {
+			timeout: 15_000,
+		});
+		await expect(
+			pageB.locator("[data-slot=peer-avatar-stack] [data-peer-id]"),
+		).toHaveCount(2, {
+			timeout: 15_000,
+		});
 
 		await ctxA.close();
 		await ctxB.close();
@@ -85,9 +77,9 @@ test.describe("collab UI primitives", () => {
 		const stackA = pageA.locator("[data-slot=peer-avatar-stack]");
 		await expect(stackA).toBeVisible();
 
-		// Page A should see Bob's avatar (filtered for self) once
-		// awareness propagates the remote peer's PresenceState frame.
-		await expect(stackA.locator("[data-peer-id]")).toHaveCount(1, {
+		// Page A should see both itself and Bob once awareness
+		// propagates the remote peer's PresenceState frame.
+		await expect(stackA.locator("[data-peer-id]")).toHaveCount(2, {
 			timeout: 15_000,
 		});
 
@@ -102,17 +94,15 @@ test.describe("collab UI primitives", () => {
 		const ctxA = await browser.newContext();
 		const pageA = await ctxA.newPage();
 		await pageA.goto(editorUrl("alice", room));
-		await expect(
-			pageA.locator("[data-slot=sync-activity-indicator]"),
-		).toHaveAttribute("data-status", "synced", { timeout: 15_000 });
+		await expect(pageA.getByTestId("studio-mount")).toBeVisible();
 
 		// The dialog is conditionally rendered, so we verify the slot
 		// stays absent until invoked. The full overlap → toast action
 		// → resync flow requires a deeper IR-edit fixture and is
 		// covered by `force-resync.test.ts` at the unit layer.
-		await expect(
-			pageA.locator("[data-slot=force-resync-dialog]"),
-		).toHaveCount(0);
+		await expect(pageA.locator("[data-slot=force-resync-dialog]")).toHaveCount(
+			0,
+		);
 
 		await ctxA.close();
 	});
