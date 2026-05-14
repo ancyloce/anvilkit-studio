@@ -66,6 +66,7 @@ export type {
 	StudioAssetSource,
 	StudioAssetUploadEvent,
 	StudioAssetUploadListener,
+	StudioCopilotPanel,
 	StudioCopySnippet,
 	StudioCopySnippetCategory,
 	StudioCopySnippetPack,

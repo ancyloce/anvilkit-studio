@@ -13,6 +13,7 @@
  * @see {@link ../../../docs/PRD/StudioSidebar_Modules_Addition_Claude.md | StudioSidebar PRD §11}
  */
 
+import type { ReactNode } from "react";
 import type {
 	PuckApi,
 	ComponentData as PuckComponentData,
@@ -280,6 +281,32 @@ export interface StudioCopySnippetPack {
 	readonly id: string;
 	readonly locale?: string;
 	readonly snippets: readonly StudioCopySnippet[];
+}
+
+// -----------------------------------------------------------------------------
+// `copilot` module — AI Copilot
+// -----------------------------------------------------------------------------
+
+/**
+ * Host-supplied panel body for the sidebar's `copilot` module.
+ * `@anvilkit/core` stays agnostic about any specific AI plugin — the
+ * host (or an integration plugin paired with `@anvilkit/plugin-ai-copilot`)
+ * registers a single panel via `ctx.registerCopilotPanel(panel)` and
+ * owns its own React state, plugin reference, and dispatch wiring.
+ *
+ * Mirrors the {@link StudioAssetSource} shape: v1 supports a single
+ * panel, last-write-wins; the module shows `studio.module.copilot.empty`
+ * until a panel is registered.
+ */
+export interface StudioCopilotPanel {
+	/**
+	 * Render the panel body. Called from the `copilot` module on every
+	 * render; the returned tree is rendered directly inside the sidebar
+	 * panel's body slot. The function is the React component itself —
+	 * implementations may close over plugin references and own their
+	 * internal state via standard hooks.
+	 */
+	readonly render: () => ReactNode;
 }
 
 // -----------------------------------------------------------------------------

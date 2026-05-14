@@ -110,6 +110,7 @@ import type { IRAssetResolver } from "./asset-resolver.js";
 import type {
 	StudioAssetAction,
 	StudioAssetSource,
+	StudioCopilotPanel,
 	StudioCopySnippetPack,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
@@ -285,6 +286,22 @@ export interface StudioPluginContext<
 	 */
 	readonly registerCopySnippetPack?: (
 		pack: StudioCopySnippetPack,
+	) => StudioSidebarUnregister;
+
+	/**
+	 * Register the panel body backing the sidebar's `copilot` module.
+	 * v1 supports a single panel — last-write-wins; the sidebar shows
+	 * `studio.module.copilot.empty` until a panel is registered.
+	 *
+	 * Core stays agnostic about any specific AI plugin; the panel is a
+	 * plain `render()` thunk so integration packages (or hosts) can own
+	 * the React state, plugin reference, and dispatch wiring.
+	 *
+	 * Returns an `unregister()` handle that clears the panel iff it
+	 * still matches the one captured in its closure.
+	 */
+	readonly registerCopilotPanel?: (
+		panel: StudioCopilotPanel,
 	) => StudioSidebarUnregister;
 }
 
