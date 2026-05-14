@@ -121,6 +121,9 @@ import type {
 	StudioLogLevel,
 	StudioPlugin,
 	StudioPluginContext,
+	StudioPluginOverlay,
+	StudioPluginProvider,
+	StudioPluginSlotContribution,
 } from "@/types/plugin";
 
 const DEFAULT_STORE_ID = "default";
@@ -147,6 +150,77 @@ interface CompiledStudioRuntime {
 function ThemeSyncBoundary(): null {
 	useThemeSync();
 	return null;
+}
+
+/**
+ * Reduce a sorted array of plugin-contributed providers into a single
+ * wrapped subtree. The provider at index 0 of the sorted array becomes
+ * the **outermost** wrapper; the rightmost provider sits closest to
+ * the children.
+ *
+ * The caller is responsible for passing providers in already-sorted
+ * order. `compilePlugins()` does the sort (`(order ?? 100,
+ * registrationIndex)`), so consumers of `runtime.providers` can pass
+ * the array verbatim.
+ *
+ * Exported so the contract can be unit-tested without mounting the
+ * entire `<Studio>` shell.
+ */
+export function composePluginProviders(
+	providers: readonly StudioPluginProvider[],
+	children: ReactNode,
+): ReactNode {
+	return providers.reduceRight<ReactNode>((wrapped, provider) => {
+		const ProviderComponent = provider.component;
+		return <ProviderComponent>{wrapped}</ProviderComponent>;
+	}, children);
+}
+
+/**
+ * Partition a flat overlay array into the three placement buckets the
+ * AnvilKit chrome renders. Each overlay surfaces at most once — the
+ * partition is a straightforward filter by `placement`, preserving
+ * input order (which `compilePlugins()` has already sorted by
+ * `(order ?? 100, registrationIndex)`).
+ *
+ * Returns three arrays so the caller can place each bucket at the
+ * correct DOM position around `{puckElement}`.
+ */
+export function splitOverlaysByPlacement(
+	overlays: readonly StudioPluginOverlay[],
+): {
+	readonly viewport: readonly StudioPluginOverlay[];
+	readonly canvas: readonly StudioPluginOverlay[];
+	readonly notifications: readonly StudioPluginOverlay[];
+} {
+	const viewport: StudioPluginOverlay[] = [];
+	const canvas: StudioPluginOverlay[] = [];
+	const notifications: StudioPluginOverlay[] = [];
+	for (const overlay of overlays) {
+		if (overlay.placement === "viewport") viewport.push(overlay);
+		else if (overlay.placement === "canvas") canvas.push(overlay);
+		else if (overlay.placement === "notifications") notifications.push(overlay);
+	}
+	return { viewport, canvas, notifications };
+}
+
+/**
+ * Resolve which `collaboratorsSlot` value the chrome should receive.
+ * Host prop wins over any plugin contribution — this matches the
+ * "host has the final word" composition rule used elsewhere in the
+ * override merge.
+ *
+ * Returns the host value when defined, otherwise the plugin's slot
+ * component (if any), otherwise `undefined` (the chrome's built-in
+ * placeholder takes over downstream via
+ * `renderCollaboratorsSlot`).
+ */
+export function resolveCollaboratorsSlot(
+	hostValue: CollaboratorsSlotValue | undefined,
+	runtimeSlots: ReadonlyMap<string, StudioPluginSlotContribution>,
+): CollaboratorsSlotValue | undefined {
+	if (hostValue !== undefined) return hostValue;
+	return runtimeSlots.get("collaborators")?.component;
 }
 
 /**
@@ -1125,6 +1199,58 @@ export function Studio(props: StudioProps): ReactElement | null {
 	// happens inside the `puck` slot of `studioOverrides`.
 	const _chromeAssets = chromeAssets;
 	void _chromeAssets;
+
+	// Resolve `collaboratorsSlot` precedence: host prop wins over any
+	// plugin slot contribution. When both are absent the chrome's
+	// built-in placeholder kicks in downstream (`renderCollaboratorsSlot`).
+	const resolvedCollaboratorsSlot = resolveCollaboratorsSlot(
+		collaboratorsSlot,
+		compiled.runtime.slots,
+	);
+
+	// Group plugin overlays by placement so each bucket can mount at
+	// the correct DOM position around `{puckElement}`.
+	const {
+		viewport: viewportOverlays,
+		canvas: canvasOverlays,
+		notifications: notificationOverlays,
+	} = splitOverlaysByPlacement(compiled.runtime.overlays);
+
+	// The innermost render: theme sync + toaster + overlays interleaved
+	// with the editor. Overlay placement contract:
+	//   viewport → before {puckElement}
+	//   canvas → after {puckElement} (layers above the editor via CSS)
+	//   notifications → after all canvas overlays (toast / dialog stack)
+	const studioBody = (
+		<TooltipProvider delay={200}>
+			<ThemeSyncBoundary />
+			<Toaster position="bottom-right" closeButton />
+			{viewportOverlays.map((overlay) => {
+				const OverlayComponent = overlay.component;
+				return <OverlayComponent key={overlay.id} />;
+			})}
+			{puckElement}
+			{canvasOverlays.map((overlay) => {
+				const OverlayComponent = overlay.component;
+				return <OverlayComponent key={overlay.id} />;
+			})}
+			{notificationOverlays.map((overlay) => {
+				const OverlayComponent = overlay.component;
+				return <OverlayComponent key={overlay.id} />;
+			})}
+		</TooltipProvider>
+	);
+
+	// Plugin-contributed providers compose **inside** the core provider
+	// stack (so each one may call `useStudio()`, `useChromeProps()`,
+	// `useMsg()`, etc.) and **outside** `<TooltipProvider>` + the
+	// editor render. Lowest-`order` provider is outermost. See
+	// `composePluginProviders` for the fold semantics.
+	const wrappedBody = composePluginProviders(
+		compiled.runtime.providers,
+		studioBody,
+	);
+
 	return (
 		<StudioConfigProvider config={compiled.studioConfig}>
 			<StudioRuntimeProvider value={compiled.runtime}>
@@ -1142,15 +1268,11 @@ export function Studio(props: StudioProps): ReactElement | null {
 											isPublishing,
 											onPublishClick,
 											onExport,
-											collaboratorsSlot,
+											collaboratorsSlot: resolvedCollaboratorsSlot,
 											viewports: chromeViewports,
 										}}
 									>
-										<TooltipProvider delay={200}>
-											<ThemeSyncBoundary />
-											<Toaster position="bottom-right" closeButton />
-											{puckElement}
-										</TooltipProvider>
+										{wrappedBody}
 									</ChromePropsProvider>
 								</EditorI18nStoreProvider>
 							</EditorUiStoreProvider>
