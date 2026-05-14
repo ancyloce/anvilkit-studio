@@ -19,14 +19,17 @@ test("AI copilot generates a Hero from a matching fixture prompt", async ({
 		)
 		.toBe(true);
 
+	// The AI copilot panel lives in the StudioSidebar's `copilot` module
+	// (PRD §11). Open the AI Copilot rail tab before driving the prompt.
+	await page.getByRole("tab", { name: "AI Copilot" }).click({ force: true });
+	await expect(page.getByTestId("ai-prompt-panel-input")).toBeVisible();
+
 	await page.getByLabel(/prompt/i).fill("a hero for a SaaS landing page");
 	// Puck's embedded iframe causes intermittent layout shifts in the
 	// outer page, which makes Playwright's default actionability check
 	// flap. The button is always visible by the time hydration finishes,
 	// so bypass the stability wait via force.
-	await page
-		.getByRole("button", { name: /^generate/i })
-		.click({ force: true });
+	await page.getByRole("button", { name: /^generate/i }).click({ force: true });
 
 	// Hero fixture title: "Ship updates without friction." — see
 	// packages/plugins/plugin-ai-copilot/src/mock/fixtures/hero.fixture.ts.
@@ -42,9 +45,8 @@ test("AI copilot generates a Hero from a matching fixture prompt", async ({
 				}
 				for (const frame of page.frames()) {
 					if (
-						(await frame
-							.getByText(/ship updates without friction/i)
-							.count()) > 0
+						(await frame.getByText(/ship updates without friction/i).count()) >
+						0
 					) {
 						return true;
 					}

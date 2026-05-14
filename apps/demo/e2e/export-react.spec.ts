@@ -17,7 +17,7 @@ test("React export downloads a .tsx file with the Hero import", async ({
 		)
 		.toBe(true);
 
-	// Scope to the demo's AI-copilot panel: the AnvilKit chrome's
+	// Scope to the demo's Exports panel: the AnvilKit chrome's
 	// header now also contributes an "Export React" button via the
 	// `@anvilkit/plugin-export-react` plugin, so the bare regex
 	// matches twice. The demo's panel button drives the file-download
@@ -25,7 +25,7 @@ test("React export downloads a .tsx file with the Hero import", async ({
 	const [download] = await Promise.all([
 		page.waitForEvent("download"),
 		page
-			.getByLabel("AI copilot + HTML export")
+			.getByLabel("Exports")
 			.getByRole("button", { name: /export react/i })
 			.click({ force: true }),
 	]);
@@ -38,7 +38,7 @@ test("React export downloads a .tsx file with the Hero import", async ({
 	const fs = await import("node:fs/promises");
 	const content = await fs.readFile(path, "utf8");
 
-	expect(content).toContain("import { Hero } from \"@anvilkit/hero\"");
+	expect(content).toContain('import { Hero } from "@anvilkit/hero"');
 	expect(content).toContain("export default function Page()");
 	expect(content).toContain("Write fast with");
 	expect(content.length).toBeGreaterThan(100);

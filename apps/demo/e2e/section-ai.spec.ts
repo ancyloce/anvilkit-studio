@@ -55,8 +55,7 @@ test.describe("section-AI regenerate flow (Phase 6 / M9)", () => {
 		// canary the other specs rely on.
 		await expect
 			.poll(
-				() =>
-					consoleMessages.some((text) => text.includes("[smoke] onInit")),
+				() => consoleMessages.some((text) => text.includes("[smoke] onInit")),
 				{
 					timeout: 15_000,
 					message: [
@@ -68,6 +67,11 @@ test.describe("section-AI regenerate flow (Phase 6 / M9)", () => {
 			)
 			.toBe(true);
 
+		// The AI copilot panel lives in the StudioSidebar's `copilot`
+		// module (PRD §11). Open the AI Copilot rail tab before driving
+		// the prompt.
+		await page.getByRole("tab", { name: "AI Copilot" }).click({ force: true });
+
 		const heading = page.getByTestId("ai-prompt-panel-heading");
 		const eyebrow = page.getByTestId("ai-prompt-panel-eyebrow");
 
@@ -76,17 +80,13 @@ test.describe("section-AI regenerate flow (Phase 6 / M9)", () => {
 		await expect(eyebrow).toHaveText("Page flow");
 
 		// (2) Toggle to section mode.
-		await page
-			.getByTestId("ai-toggle-section")
-			.click({ force: true });
+		await page.getByTestId("ai-toggle-section").click({ force: true });
 		await expect(heading).toHaveText("Regenerate selection");
 		await expect(eyebrow).toHaveText("Section flow");
 
 		// (3) Type the prompt and submit.
 		await page.getByTestId("ai-prompt-panel-input").fill(REGEN_HEADLINE);
-		await page
-			.getByTestId("ai-prompt-panel-submit")
-			.click({ force: true });
+		await page.getByTestId("ai-prompt-panel-submit").click({ force: true });
 
 		// (4) The submit button reverts from "Regenerating…" once the
 		// patch is applied. Polling the label is more reliable than
@@ -95,9 +95,8 @@ test.describe("section-AI regenerate flow (Phase 6 / M9)", () => {
 			.poll(
 				async () => {
 					const text =
-						(await page
-							.getByTestId("ai-prompt-panel-submit")
-							.textContent()) ?? "";
+						(await page.getByTestId("ai-prompt-panel-submit").textContent()) ??
+						"";
 					return text.trim();
 				},
 				{ timeout: 10_000 },
@@ -126,7 +125,8 @@ test.describe("section-AI regenerate flow (Phase 6 / M9)", () => {
 				},
 				{
 					timeout: 10_000,
-					message: "Expected the new section headline to render after dispatch.",
+					message:
+						"Expected the new section headline to render after dispatch.",
 				},
 			)
 			.toBe(true);
@@ -156,6 +156,8 @@ test.describe("section-AI regenerate flow (Phase 6 / M9)", () => {
 		page,
 	}) => {
 		await page.goto("/puck/editor");
+
+		await page.getByRole("tab", { name: "AI Copilot" }).click({ force: true });
 
 		const heading = page.getByTestId("ai-prompt-panel-heading");
 		await page.getByTestId("ai-toggle-section").click({ force: true });
