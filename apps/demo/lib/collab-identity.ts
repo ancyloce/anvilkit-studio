@@ -57,12 +57,10 @@ const ANIMALS = [
 ];
 
 /**
- * Deterministic pastel from a stable id hash. Kept in sync with the
- * `peerColor` helper inside `collab-demo.ts` / `collab-relay-bundle.ts`
- * so an identity object produced here yields the same color the bundle
- * would compute internally — the bundle now reads from the identity
- * directly, but keeping the algorithm aligned avoids a silent drift if
- * an upstream change ever stops passing the color through.
+ * Deterministic pastel from a stable id hash. Used to assign a
+ * predictable color per peer so two tabs of the same identity (or two
+ * users with the same `id`) render with matching avatars across all
+ * presence surfaces.
  */
 export function peerColor(seed: string): string {
 	let hash = 0;

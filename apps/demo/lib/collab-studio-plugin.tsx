@@ -1,30 +1,20 @@
 "use client";
 
-import { useCollabSelf } from "@anvilkit/collab-ui";
+import { useCollabAdapter, useCollabSelf } from "@anvilkit/collab-ui";
 import type { StudioPlugin } from "@anvilkit/core/types";
-import type { YjsSnapshotAdapter } from "@anvilkit/plugin-collab-yjs";
 import {
 	createUsePuck,
 	type ComponentData as PuckComponentData,
 } from "@puckeditor/core";
-import {
-	type ReactElement,
-	type ReactNode,
-	useEffect,
-	useMemo,
-} from "react";
-
-export interface CreateCollabStudioPluginOptions {
-	readonly adapter: YjsSnapshotAdapter;
-}
+import { type ReactElement, type ReactNode, useEffect, useMemo } from "react";
 
 const META = {
 	id: "demo-collab-studio-presence",
 	name: "Collab Presence Broadcaster",
-	version: "0.1.0",
+	version: "0.2.0",
 	coreVersion: "^0.1.0-alpha",
 	description:
-		"Broadcasts the local cursor + Puck selection through the collab adapter's awareness channel. Mounted via Puck's `puck` override slot so `usePuckSelection()` (which calls `createUsePuck()` internally) has the surrounding `<Puck>` provider available.",
+		"Broadcasts the local cursor + Puck selection through the collab adapter's awareness channel. Mounted via Puck's `puck` override slot so `useStudioPuck` (which calls `createUsePuck()` internally) has the surrounding `<Puck>` provider available, and reads the adapter from `<CollabUIProvider>` context.",
 } as const;
 
 /**
@@ -42,7 +32,13 @@ const META = {
  * `packages/ui/src/presence/use-presence.ts:75-76`). If two callers
  * each pass a partial frame (one with `cursor`, one with `selection`),
  * they erase each other's fields. Routing cursor and selection through
- * a single component keeps both fields in lock-step every write.
+ * the same {@link PresenceWriter} keeps both fields in lock-step every
+ * write.
+ *
+ * Adapter access goes through `useCollabAdapter()` (from
+ * `@anvilkit/collab-ui`) — the consolidated `createCollabPlugin()`
+ * factory owns adapter construction and exposes it via the
+ * `<CollabUIProvider>` context this plugin's overrides render inside.
  */
 // Local replacement for `@anvilkit/plugin-collab-yjs`'s
 // `usePuckSelection()`. The plugin is published as a submodule that
@@ -80,70 +76,48 @@ function selectSelection(state: PuckSelectionState): string | null {
 	return props.id;
 }
 
-export function createCollabStudioPlugin(
-	options: CreateCollabStudioPluginOptions,
-): StudioPlugin {
-	const { adapter } = options;
-
-	function PresenceBroadcaster(): null {
-		const self = useCollabSelf();
-		const selectedNodeId = useStudioPuck(selectSelection);
-		const selection = useMemo(
-			() =>
-				selectedNodeId === null
-					? null
-					: ({ nodeIds: [selectedNodeId] } as const),
-			[selectedNodeId],
-		);
-		useEffect(() => {
-			selectionRef.current = selection;
-		}, [selection]);
-
-		// Selection-triggered write: re-broadcasts with the latest known
-		// cursor position so the remote ring tracks selection changes
-		// even between mouse moves.
-		useEffect(() => {
-			if (!adapter.presence || !self) return;
-			adapter.presence.update({
-				peer: self,
-				cursor: cursorRef.current ?? undefined,
-				selection: selection ?? undefined,
-			});
-		}, [self, selection]);
-
-		return null;
-	}
-
-	function PuckOverride({ children }: { children: ReactNode }): ReactElement {
-		return (
-			<>
-				<PresenceBroadcaster />
-				{children}
-			</>
-		);
-	}
-
-	return {
-		meta: META,
-		register() {
-			return {
-				meta: META,
-				overrides: {
-					puck: PuckOverride,
-				},
-			};
-		},
-	};
-}
-
-export function CollabCursorBroadcaster({
-	adapter,
-}: CreateCollabStudioPluginOptions): null {
+/**
+ * Combined presence writer — handles BOTH cursor (mouse move) and
+ * selection (Puck selectedItem changes), with both writes carrying the
+ * latest known value of the other field so awareness state stays
+ * coherent.
+ *
+ * Lives inside the Puck override so `useStudioPuck` resolves; uses
+ * `useCollabAdapter()` so the adapter is read from context instead of
+ * received as a prop. This is what lets the consolidated factory hide
+ * the adapter from the host.
+ */
+function PresenceWriter(): null {
+	const adapter = useCollabAdapter();
 	const self = useCollabSelf();
+	const selectedNodeId = useStudioPuck(selectSelection);
+	const selection = useMemo(
+		() =>
+			selectedNodeId === null ? null : ({ nodeIds: [selectedNodeId] } as const),
+		[selectedNodeId],
+	);
+
+	// Keep the latest selection in a ref so the cursor-move handler can
+	// include it without re-attaching listeners on every change.
+	useEffect(() => {
+		selectionRef.current = selection;
+	}, [selection]);
+
+	// Selection-triggered write: re-broadcasts with the latest known
+	// cursor position so the remote ring tracks selection changes
+	// even between mouse moves.
+	useEffect(() => {
+		if (!adapter.presence || !self) return;
+		adapter.presence.update({
+			peer: self,
+			cursor: cursorRef.current ?? undefined,
+			selection: selection ?? undefined,
+		});
+	}, [adapter, self, selection]);
 
 	// Cursor-triggered write: listens to both the parent chrome and
-	// the Puck preview iframe, then translates iframe-relative mouse
-	// coords back into the fixed viewport overlay's coordinate space.
+	// the Puck preview iframe, translating iframe-relative mouse coords
+	// back into the fixed viewport overlay's coordinate space.
 	useEffect(() => {
 		if (!adapter.presence || !self) return;
 		const presence = adapter.presence;
@@ -222,10 +196,43 @@ export function CollabCursorBroadcaster({
 	return null;
 }
 
-// Module-level "last known cursor" so a remount of the broadcaster
-// after a peer-identity change or a chrome-mode toggle preserves the
-// previous cursor coords for the very next selection-triggered write.
-// (Local state would be reset on remount.)
+/**
+ * Studio plugin contributing the presence writer via `overrides.puck`.
+ *
+ * Takes no options: it reads the adapter and the local peer from
+ * `<CollabUIProvider>` context, which the consolidated
+ * `createCollabPlugin()` factory (from `@anvilkit/collab-ui`) provides.
+ * Register this plugin **after** the consolidated factory in your
+ * `plugins` array so its overrides compose on top of any chrome that
+ * the consolidated plugin's providers wrap around.
+ */
+export function createCollabStudioPlugin(): StudioPlugin {
+	function PuckOverride({ children }: { children: ReactNode }): ReactElement {
+		return (
+			<>
+				<PresenceWriter />
+				{children}
+			</>
+		);
+	}
+
+	return {
+		meta: META,
+		register() {
+			return {
+				meta: META,
+				overrides: {
+					puck: PuckOverride,
+				},
+			};
+		},
+	};
+}
+
+// Module-level "last known cursor" so a remount of the writer after a
+// peer-identity change or a chrome-mode toggle preserves the previous
+// cursor coords for the very next selection-triggered write. (Local
+// state would be reset on remount.)
 const cursorRef: {
 	current: CursorCoords | undefined;
 } = { current: undefined };

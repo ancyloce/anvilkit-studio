@@ -14,12 +14,6 @@ import { Doc as YDoc } from "yjs";
  * plugin construction; this bundle only owns what the host genuinely
  * controls: the `Y.Doc`, the `Awareness` channel, the optional
  * `WebsocketProvider`, and a `destroy()` to tear them down.
- *
- * Companion to `collab-demo.ts` / `collab-relay-bundle.ts`, which
- * predate the consolidated factory and still expose `{ plugin, adapter,
- * doc, awareness }` for the legacy wrapper pattern used on
- * `/puck/editor`. The slimmer shape here is what `/puck/editor-consolidated`
- * (and future hosts) consume.
  */
 export interface CollabTransportBundle {
 	readonly doc: YDoc;
