@@ -25,6 +25,7 @@ import {
 	Layers as LayersIcon,
 	LayoutGrid as LayoutGridIcon,
 	Plus as PlusIcon,
+	Sparkles as SparklesIcon,
 	Type as TypeIcon,
 } from "lucide-react";
 import {
@@ -58,6 +59,11 @@ const RAIL_MODULES: readonly RailModule[] = [
 	{ key: "layer", icon: LayersIcon, labelKey: "studio.module.layer.name" },
 	{ key: "image", icon: ImageIcon, labelKey: "studio.module.image.name" },
 	{ key: "text", icon: TypeIcon, labelKey: "studio.module.text.name" },
+	{
+		key: "copilot",
+		icon: SparklesIcon,
+		labelKey: "studio.module.copilot.name",
+	},
 ];
 
 export interface SidebarRailHandle {

@@ -50,14 +50,15 @@ function renderRail(storeId: string, ref?: React.Ref<SidebarRailHandle>) {
 }
 
 describe("SidebarRail", () => {
-	it("renders four rail tabs in PRD order", () => {
+	it("renders five rail tabs in PRD order", () => {
 		renderRail("rail-order");
 		const tabs = screen.getAllByRole("tab");
-		expect(tabs).toHaveLength(4);
+		expect(tabs).toHaveLength(5);
 		expect(tabs[0]?.id).toBe("ak-rail-tab-insert");
 		expect(tabs[1]?.id).toBe("ak-rail-tab-layer");
 		expect(tabs[2]?.id).toBe("ak-rail-tab-image");
 		expect(tabs[3]?.id).toBe("ak-rail-tab-text");
+		expect(tabs[4]?.id).toBe("ak-rail-tab-copilot");
 	});
 
 	it("uses role=tablist with vertical orientation", () => {
@@ -105,6 +106,7 @@ describe("SidebarRail", () => {
 	it("ArrowDown / ArrowUp move roving focus and wrap", () => {
 		renderRail("rail-arrow");
 		const tabs = screen.getAllByRole("tab");
+		const lastIndex = tabs.length - 1;
 		tabs[0]?.focus();
 		expect(document.activeElement).toBe(tabs[0]);
 		// base-ui binds the roving-focus keydown listener to the focused tab,
@@ -116,7 +118,7 @@ describe("SidebarRail", () => {
 		expect(document.activeElement).toBe(tabs[0]);
 		// Wrap from first → last on ArrowUp.
 		fireEvent.keyDown(document.activeElement as Element, { key: "ArrowUp" });
-		expect(document.activeElement).toBe(tabs[3]);
+		expect(document.activeElement).toBe(tabs[lastIndex]);
 		// Wrap from last → first on ArrowDown.
 		fireEvent.keyDown(document.activeElement as Element, { key: "ArrowDown" });
 		expect(document.activeElement).toBe(tabs[0]);
@@ -125,9 +127,10 @@ describe("SidebarRail", () => {
 	it("Home / End jump to first / last tab", () => {
 		renderRail("rail-home-end");
 		const tabs = screen.getAllByRole("tab");
+		const lastIndex = tabs.length - 1;
 		tabs[2]?.focus();
 		fireEvent.keyDown(document.activeElement as Element, { key: "End" });
-		expect(document.activeElement).toBe(tabs[3]);
+		expect(document.activeElement).toBe(tabs[lastIndex]);
 		fireEvent.keyDown(document.activeElement as Element, { key: "Home" });
 		expect(document.activeElement).toBe(tabs[0]);
 	});

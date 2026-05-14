@@ -17,6 +17,7 @@ import { type ReactNode, type RefObject, useCallback, useRef } from "react";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorTab } from "@/state/editor-ui-store";
 import { useActiveTab, useEditorUiStore } from "@/state/hooks";
+import { CopilotModule } from "./sidebar/modules/CopilotModule";
 import { ImageModule } from "./sidebar/modules/ImageModule";
 import { InsertModule } from "./sidebar/modules/InsertModule";
 import { LayerModule } from "./sidebar/modules/LayerModule";
@@ -37,6 +38,7 @@ const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
 	layer: "studio.module.layer.name",
 	image: "studio.module.image.name",
 	text: "studio.module.text.name",
+	copilot: "studio.module.copilot.name",
 };
 
 function renderModuleBody(tab: EditorTab): ReactNode {
@@ -49,6 +51,8 @@ function renderModuleBody(tab: EditorTab): ReactNode {
 			return <ImageModule />;
 		case "text":
 			return <TextModule />;
+		case "copilot":
+			return <CopilotModule />;
 	}
 }
 
