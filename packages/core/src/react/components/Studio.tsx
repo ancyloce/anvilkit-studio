@@ -86,7 +86,10 @@ import {
 } from "react";
 
 import { StudioConfigProvider } from "@/config/provider";
-import { ChromePropsProvider } from "@/context/chrome-props";
+import {
+	ChromePropsProvider,
+	type CollaboratorsSlotValue,
+} from "@/context/chrome-props";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
 import { StudioRuntimeProvider } from "@/hooks/use-studio";
@@ -294,10 +297,12 @@ export interface StudioProps {
 	 * `<CollaboratorStack>` (the avatars between the `lastSavedAt`
 	 * chip and the Share button). Host apps with a real
 	 * collaboration backend pass their own peer-aware widget here
-	 * (e.g. `<PeerAvatarStack>` from `@anvilkit/collab-ui`). Ignored
-	 * when `chrome="puck"`.
+	 * (e.g. `<PeerAvatarStack>` from `@anvilkit/collab-ui`). Accepts
+	 * either a `ReactNode` (rendered verbatim) or a `ComponentType`
+	 * (instantiated on every render so the component's own hooks
+	 * fire). Ignored when `chrome="puck"`.
 	 */
-	readonly collaboratorsSlot?: ReactNode;
+	readonly collaboratorsSlot?: CollaboratorsSlotValue;
 	/**
 	 * Optional diagnostics sink for plugin log records and Studio
 	 * setup failures. Metadata is shallow-redacted before delivery
