@@ -35,7 +35,7 @@
 	"devDependencies": {
 		"@anvilkit/core": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
-		"@puckeditor/core": "^0.21.1",
+		"@puckeditor/core": "^0.21.2",
 		"@rslib/core": "^0.20.1",
 		"@types/node": "^22.15.3",
 		"typescript": "6.0.2",
