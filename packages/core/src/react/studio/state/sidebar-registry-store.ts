@@ -27,6 +27,7 @@ import { createStore, type StoreApi } from "zustand/vanilla";
 import type {
 	StudioAssetAction,
 	StudioAssetSource,
+	StudioCopilotPanel,
 	StudioCopySnippetPack,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
@@ -39,11 +40,13 @@ export interface SidebarRegistryState {
 	readonly assetSource: StudioAssetSource | null;
 	readonly assetActions: ReadonlyMap<string, StudioAssetAction>;
 	readonly copyPacks: ReadonlyMap<string, StudioCopySnippetPack>;
+	readonly copilotPanel: StudioCopilotPanel | null;
 	registerInsertSection(section: StudioInsertSection): StudioSidebarUnregister;
 	registerLayerQuickAdd(item: StudioLayerQuickAdd): StudioSidebarUnregister;
 	registerAssetSource(source: StudioAssetSource): StudioSidebarUnregister;
 	registerAssetAction(action: StudioAssetAction): StudioSidebarUnregister;
 	registerCopySnippetPack(pack: StudioCopySnippetPack): StudioSidebarUnregister;
+	registerCopilotPanel(panel: StudioCopilotPanel): StudioSidebarUnregister;
 }
 
 export type SidebarRegistryStoreApi = StoreApi<SidebarRegistryState>;
@@ -65,6 +68,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 		assetSource: null,
 		assetActions: EMPTY_ACTIONS,
 		copyPacks: EMPTY_PACKS,
+		copilotPanel: null,
 
 		registerInsertSection(section) {
 			set((state) => {
@@ -136,6 +140,19 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 				const next = new Map(current);
 				next.delete(pack.id);
 				set({ copyPacks: next });
+			};
+		},
+
+		registerCopilotPanel(panel) {
+			// `copilot` v1 supports a single panel. Last-write-wins
+			// matches `registerAssetSource` — if a second registration
+			// lands the previous registration's `unregister()` becomes a
+			// no-op.
+			set({ copilotPanel: panel });
+			return () => {
+				if (get().copilotPanel === panel) {
+					set({ copilotPanel: null });
+				}
 			};
 		},
 	}));

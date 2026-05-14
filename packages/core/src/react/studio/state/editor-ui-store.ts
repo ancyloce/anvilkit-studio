@@ -47,7 +47,7 @@
 import { persist } from "zustand/middleware";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
-export type EditorTab = "insert" | "layer" | "image" | "text";
+export type EditorTab = "insert" | "layer" | "image" | "text" | "copilot";
 
 export type ComponentViewMode = "grid" | "list";
 
@@ -130,6 +130,7 @@ const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"layer",
 	"image",
 	"text",
+	"copilot",
 ]);
 
 const VALID_VIEW_MODES: ReadonlySet<ComponentViewMode> = new Set([

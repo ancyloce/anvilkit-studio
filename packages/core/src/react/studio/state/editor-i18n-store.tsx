@@ -158,6 +158,11 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.text.empty": "No copy snippets available.",
 	"studio.module.text.requireSelection":
 		"Select a text element on the canvas to insert copy.",
+
+	// Module: copilot (AI Copilot — host-supplied panel).
+	"studio.module.copilot.name": "AI Copilot",
+	"studio.module.copilot.empty":
+		"Install @anvilkit/plugin-ai-copilot and register a copilot panel to enable AI generation.",
 };
 
 /**

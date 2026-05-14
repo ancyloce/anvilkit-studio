@@ -15,6 +15,7 @@ import { createSidebarRegistryStore } from "@/state/sidebar-registry-store";
 import type {
 	StudioAssetAction,
 	StudioAssetSource,
+	StudioCopilotPanel,
 	StudioCopySnippetPack,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
@@ -46,6 +47,10 @@ const COPY_PACK: StudioCopySnippetPack = {
 const FAKE_ASSET_SOURCE: StudioAssetSource = {
 	list: () => [],
 	upload: async () => [],
+};
+
+const COPILOT_PANEL: StudioCopilotPanel = {
+	render: () => null,
 };
 
 describe("sidebar-registry-store", () => {
@@ -165,6 +170,21 @@ describe("sidebar-registry-store", () => {
 		unregisterOriginal();
 
 		expect(store.getState().copyPacks.get("english-base")).toBe(replacement);
+	});
+
+	it("registerCopilotPanel last-write-wins; matching unregister clears", () => {
+		const store = createSidebarRegistryStore();
+		const off1 = store.getState().registerCopilotPanel(COPILOT_PANEL);
+		expect(store.getState().copilotPanel).toBe(COPILOT_PANEL);
+
+		const second: StudioCopilotPanel = { render: () => null };
+		store.getState().registerCopilotPanel(second);
+		expect(store.getState().copilotPanel).toBe(second);
+
+		// First unregister is now a no-op because the panel no longer
+		// matches the one captured in its closure.
+		off1();
+		expect(store.getState().copilotPanel).toBe(second);
 	});
 
 	it("isolates per-instance registries", () => {
