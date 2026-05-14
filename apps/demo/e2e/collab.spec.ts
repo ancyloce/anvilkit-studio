@@ -13,13 +13,13 @@ import { expect, test } from "@playwright/test";
 
 const RELAY = "ws";
 
-function editorUrl(peer: string, room: string): string {
+function editorUrl(peer: string | null, room: string): string {
 	const params = new URLSearchParams({
 		collab: "1",
 		relay: RELAY,
 		room,
-		peer,
 	});
+	if (peer) params.set("peer", peer);
 	return `/puck/editor?${params.toString()}`;
 }
 
@@ -39,7 +39,15 @@ test.describe("collab UI primitives", () => {
 		await pageB.goto(editorUrl("bob", room));
 
 		await expect(pageA.getByTestId("studio-mount")).toBeVisible();
+		await expect(pageA.getByTestId("studio-mount")).toHaveAttribute(
+			"data-collab",
+			"1",
+		);
 		await expect(pageB.getByTestId("studio-mount")).toBeVisible();
+		await expect(pageB.getByTestId("studio-mount")).toHaveAttribute(
+			"data-collab",
+			"1",
+		);
 
 		// The AnvilKit chrome renders collaborator controls in the
 		// Studio header rather than the old standalone room bar.
@@ -73,6 +81,14 @@ test.describe("collab UI primitives", () => {
 
 		await pageA.goto(editorUrl("alice", room));
 		await pageB.goto(editorUrl("bob", room));
+		await expect(pageA.getByTestId("studio-mount")).toHaveAttribute(
+			"data-collab",
+			"1",
+		);
+		await expect(pageB.getByTestId("studio-mount")).toHaveAttribute(
+			"data-collab",
+			"1",
+		);
 
 		const stackA = pageA.locator("[data-slot=peer-avatar-stack]");
 		await expect(stackA).toBeVisible();
@@ -87,6 +103,39 @@ test.describe("collab UI primitives", () => {
 		await ctxB.close();
 	});
 
+	test("copied room links create distinct same-browser peers and show cursors", async ({
+		browser,
+	}, testInfo) => {
+		const room = `copied-link-${testInfo.workerIndex}-${Date.now()}`;
+		const ctx = await browser.newContext();
+		const pageA = await ctx.newPage();
+		const pageB = await ctx.newPage();
+
+		await pageA.goto(editorUrl(null, room));
+		await expect(pageA.getByTestId("studio-mount")).toHaveAttribute(
+			"data-collab",
+			"1",
+		);
+		await pageB.goto(editorUrl(null, room));
+		await expect(pageB.getByTestId("studio-mount")).toHaveAttribute(
+			"data-collab",
+			"1",
+		);
+
+		await expect(
+			pageB.locator("[data-slot=peer-avatar-stack] [data-peer-id]"),
+		).toHaveCount(2, {
+			timeout: 15_000,
+		});
+
+		await pageA.mouse.move(220, 260);
+		await expect(pageB.locator("[data-slot=presence-cursor]")).toBeVisible({
+			timeout: 15_000,
+		});
+
+		await ctx.close();
+	});
+
 	test("force-resync dialog opens via the conflict toast action", async ({
 		browser,
 	}, testInfo) => {
@@ -94,7 +143,10 @@ test.describe("collab UI primitives", () => {
 		const ctxA = await browser.newContext();
 		const pageA = await ctxA.newPage();
 		await pageA.goto(editorUrl("alice", room));
-		await expect(pageA.getByTestId("studio-mount")).toBeVisible();
+		await expect(pageA.getByTestId("studio-mount")).toHaveAttribute(
+			"data-collab",
+			"1",
+		);
 
 		// The dialog is conditionally rendered, so we verify the slot
 		// stays absent until invoked. The full overlap → toast action

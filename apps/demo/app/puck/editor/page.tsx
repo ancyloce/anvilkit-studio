@@ -48,7 +48,10 @@ import {
 	createCollabRelayBundle,
 	type CollabRelayBundle,
 } from "../../../lib/collab-relay-bundle";
-import { createCollabStudioPlugin } from "../../../lib/collab-studio-plugin";
+import {
+	CollabCursorBroadcaster,
+	createCollabStudioPlugin,
+} from "../../../lib/collab-studio-plugin";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -316,14 +319,21 @@ export default function PuckEditorPage() {
 	// and "Regenerate selection".
 	const [aiSelectionActive, setAiSelectionActive] = useState(false);
 	const [collabEnabled, setCollabEnabled] = useState(false);
+	const [collabQueryReady, setCollabQueryReady] = useState(false);
 	const [collabPeerOverride, setCollabPeerOverride] = useState<string | null>(
 		null,
 	);
 	const [collabRelayUrl, setCollabRelayUrl] = useState<string | null>(null);
 	const [collabRoom, setCollabRoom] = useState("demo-room");
 	const [showRemoteCursors, setShowRemoteCursors] = useState(true);
-	const { identity: demoIdentity, setDisplayName: setDemoIdentityName } =
-		useDemoIdentity({ peerOverride: collabPeerOverride });
+	const {
+		identity: demoIdentity,
+		ready: demoIdentityReady,
+		setDisplayName: setDemoIdentityName,
+	} = useDemoIdentity({
+		enabled: collabQueryReady,
+		peerOverride: collabPeerOverride,
+	});
 	// Phase 6: `?chrome=puck` opts out of the AnvilKit chrome and
 	// renders the raw Puck editor for visual regression checks.
 	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">("anvilkit");
@@ -361,6 +371,7 @@ export default function PuckEditorPage() {
 	// stable across re-renders that don't touch collab state.
 	const collabBundle = useMemo(() => {
 		if (!collabEnabled) return null;
+		if (!demoIdentityReady) return null;
 		if (collabRelayUrl) {
 			const bundle: CollabRelayBundle = createCollabRelayBundle({
 				puckConfig: demoConfig as unknown as Config,
@@ -374,7 +385,13 @@ export default function PuckEditorPage() {
 			demoConfig as unknown as Config,
 			demoIdentity,
 		);
-	}, [collabEnabled, collabRelayUrl, collabRoom, demoIdentity]);
+	}, [
+		collabEnabled,
+		collabRelayUrl,
+		collabRoom,
+		demoIdentity,
+		demoIdentityReady,
+	]);
 
 	useEffect(() => {
 		// The relay bundle owns a WebSocket; tear it down when the
@@ -448,6 +465,8 @@ export default function PuckEditorPage() {
 		const peerOverride = params.get("peer");
 		if (peerOverride && peerOverride.length > 0) {
 			setCollabPeerOverride(peerOverride);
+		} else {
+			setCollabPeerOverride(null);
 		}
 		const roomOverride = params.get("room");
 		if (roomOverride && roomOverride.length > 0) {
@@ -463,8 +482,11 @@ export default function PuckEditorPage() {
 				process.env.NEXT_PUBLIC_COLLAB_RELAY_PORT ??
 				"11234";
 			setCollabRelayUrl(`ws://localhost:${port}`);
+		} else {
+			setCollabRelayUrl(null);
 		}
 		setChromeMode(params.get("chrome") === "puck" ? "puck" : "anvilkit");
+		setCollabQueryReady(true);
 		const rawOverrides = params.get("messageOverrides");
 		if (rawOverrides !== null && rawOverrides.length > 0) {
 			try {
@@ -1015,6 +1037,7 @@ export default function PuckEditorPage() {
 						}}
 					>
 						<CollabIdentitySync onDisplayNameChange={setDemoIdentityName} />
+						<CollabCursorBroadcaster adapter={collabBundle.adapter} />
 						<Studio
 							puckConfig={demoConfig}
 							data={publishedData}
@@ -1031,6 +1054,7 @@ export default function PuckEditorPage() {
 							collaboratorsSlot={collaboratorsSlot}
 						/>
 						<CollabPresenceLayer
+							className="!fixed z-[9999]"
 							showCursors={showRemoteCursors}
 							resolveSelectionRect={resolvePuckSelectionRect}
 						/>

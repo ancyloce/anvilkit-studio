@@ -12,7 +12,6 @@ import {
 	type ReactNode,
 	useEffect,
 	useMemo,
-	useRef,
 } from "react";
 
 export interface CreateCollabStudioPluginOptions {
@@ -69,6 +68,10 @@ interface CursorCoords {
 	readonly y: number;
 }
 
+interface PresenceSelection {
+	readonly nodeIds: readonly string[];
+}
+
 function selectSelection(state: PuckSelectionState): string | null {
 	const item = state.selectedItem;
 	if (item === null) return null;
@@ -92,7 +95,6 @@ export function createCollabStudioPlugin(
 					: ({ nodeIds: [selectedNodeId] } as const),
 			[selectedNodeId],
 		);
-		const selectionRef = useRef(selection);
 		useEffect(() => {
 			selectionRef.current = selection;
 		}, [selection]);
@@ -108,84 +110,6 @@ export function createCollabStudioPlugin(
 				selection: selection ?? undefined,
 			});
 		}, [self, selection]);
-
-		// Cursor-triggered write: listens to both the parent chrome and
-		// the Puck preview iframe, then translates iframe-relative mouse
-		// coords back into the parent overlay's coordinate space.
-		useEffect(() => {
-			if (!adapter.presence || !self) return;
-			const presence = adapter.presence;
-
-			const publishCursor = (cursor: CursorCoords) => {
-				cursorRef.current = cursor;
-				presence.update({
-					peer: self,
-					cursor,
-					selection: selectionRef.current ?? undefined,
-				});
-			};
-
-			const windowHandler = (event: MouseEvent) => {
-				publishCursor({ x: event.clientX, y: event.clientY });
-			};
-
-			let frame: HTMLIFrameElement | null = null;
-			let frameDocument: Document | null = null;
-
-			const frameHandler = (event: MouseEvent) => {
-				if (!frame) return;
-				const rect = frame.getBoundingClientRect();
-				publishCursor({
-					x: rect.left + event.clientX,
-					y: rect.top + event.clientY,
-				});
-			};
-
-			function detachFrameDocument(): void {
-				frameDocument?.removeEventListener("mousemove", frameHandler);
-				frameDocument = null;
-			}
-
-			function detachFrame(): void {
-				detachFrameDocument();
-				frame?.removeEventListener("load", attachFrame);
-				frame = null;
-			}
-
-			function attachFrame(): void {
-				const nextFrame = getPuckPreviewFrame();
-				if (nextFrame !== frame) {
-					detachFrame();
-					frame = nextFrame;
-					frame?.addEventListener("load", attachFrame);
-				}
-
-				const nextDocument = nextFrame
-					? getAccessibleFrameDocument(nextFrame)
-					: null;
-				if (nextDocument === frameDocument) return;
-				detachFrameDocument();
-				frameDocument = nextDocument;
-				frameDocument?.addEventListener("mousemove", frameHandler, {
-					passive: true,
-				});
-			}
-
-			const observer = new MutationObserver(attachFrame);
-			if (document.body) {
-				observer.observe(document.body, { childList: true, subtree: true });
-			}
-			attachFrame();
-
-			window.addEventListener("mousemove", windowHandler, { passive: true });
-			window.addEventListener("focus", attachFrame);
-			return () => {
-				window.removeEventListener("mousemove", windowHandler);
-				window.removeEventListener("focus", attachFrame);
-				observer.disconnect();
-				detachFrame();
-			};
-		}, [self]);
 
 		return null;
 	}
@@ -212,6 +136,92 @@ export function createCollabStudioPlugin(
 	};
 }
 
+export function CollabCursorBroadcaster({
+	adapter,
+}: CreateCollabStudioPluginOptions): null {
+	const self = useCollabSelf();
+
+	// Cursor-triggered write: listens to both the parent chrome and
+	// the Puck preview iframe, then translates iframe-relative mouse
+	// coords back into the fixed viewport overlay's coordinate space.
+	useEffect(() => {
+		if (!adapter.presence || !self) return;
+		const presence = adapter.presence;
+
+		const publishCursor = (cursor: CursorCoords) => {
+			cursorRef.current = cursor;
+			presence.update({
+				peer: self,
+				cursor,
+				selection: selectionRef.current ?? undefined,
+			});
+		};
+
+		const windowHandler = (event: MouseEvent) => {
+			publishCursor({ x: event.clientX, y: event.clientY });
+		};
+
+		let frame: HTMLIFrameElement | null = null;
+		let frameDocument: Document | null = null;
+
+		const frameHandler = (event: MouseEvent) => {
+			if (!frame) return;
+			const rect = frame.getBoundingClientRect();
+			publishCursor({
+				x: rect.left + event.clientX,
+				y: rect.top + event.clientY,
+			});
+		};
+
+		function detachFrameDocument(): void {
+			frameDocument?.removeEventListener("mousemove", frameHandler);
+			frameDocument = null;
+		}
+
+		function detachFrame(): void {
+			detachFrameDocument();
+			frame?.removeEventListener("load", attachFrame);
+			frame = null;
+		}
+
+		function attachFrame(): void {
+			const nextFrame = getPuckPreviewFrame();
+			if (nextFrame !== frame) {
+				detachFrame();
+				frame = nextFrame;
+				frame?.addEventListener("load", attachFrame);
+			}
+
+			const nextDocument = nextFrame
+				? getAccessibleFrameDocument(nextFrame)
+				: null;
+			if (nextDocument === frameDocument) return;
+			detachFrameDocument();
+			frameDocument = nextDocument;
+			frameDocument?.addEventListener("mousemove", frameHandler, {
+				passive: true,
+			});
+		}
+
+		const observer = new MutationObserver(attachFrame);
+		if (document.body) {
+			observer.observe(document.body, { childList: true, subtree: true });
+		}
+		attachFrame();
+
+		window.addEventListener("mousemove", windowHandler, { passive: true });
+		window.addEventListener("focus", attachFrame);
+		return () => {
+			window.removeEventListener("mousemove", windowHandler);
+			window.removeEventListener("focus", attachFrame);
+			observer.disconnect();
+			detachFrame();
+		};
+	}, [adapter, self]);
+
+	return null;
+}
+
 // Module-level "last known cursor" so a remount of the broadcaster
 // after a peer-identity change or a chrome-mode toggle preserves the
 // previous cursor coords for the very next selection-triggered write.
@@ -219,6 +229,10 @@ export function createCollabStudioPlugin(
 const cursorRef: {
 	current: CursorCoords | undefined;
 } = { current: undefined };
+
+const selectionRef: {
+	current: PresenceSelection | null;
+} = { current: null };
 
 function getPuckPreviewFrame(): HTMLIFrameElement | null {
 	return document.querySelector<HTMLIFrameElement>(PUCK_PREVIEW_FRAME_SELECTOR);
