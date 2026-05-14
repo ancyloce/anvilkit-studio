@@ -116,7 +116,7 @@
 		"@anvilkit/core": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
-		"@puckeditor/core": "^0.21.1",
+		"@puckeditor/core": "^0.21.2",
 		"@rslib/core": "^0.20.1",
 		"@types/node": "^22.15.3",
 		"esbuild": "^0.25.12",
