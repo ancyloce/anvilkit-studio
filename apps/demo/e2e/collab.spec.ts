@@ -159,3 +159,59 @@ test.describe("collab UI primitives", () => {
 		await ctxA.close();
 	});
 });
+
+/**
+ * Dual-fixture coverage (task_017): the consolidated factory route
+ * exercises `createCollabPlugin()` from `@anvilkit/collab-ui` — one
+ * factory call, no wrapper composition. The legacy `/puck/editor` route
+ * above stays as the wrapper-pattern fixture. Both should keep working
+ * for the deprecation window.
+ *
+ * The consolidated page is intentionally minimal (no custom
+ * collaborator slot, no cursor broadcaster), so the assertions here
+ * cover only what the consolidated factory itself contributes: header
+ * peer-avatar stack via the plugin's slot contribution, plus visible
+ * collab plumbing through two parallel sessions over the relay.
+ */
+function consolidatedEditorUrl(peer: string | null, room: string): string {
+	const params = new URLSearchParams({
+		relay: RELAY,
+		room,
+	});
+	if (peer) params.set("peer", peer);
+	return `/puck/editor-consolidated?${params.toString()}`;
+}
+
+test.describe("collab — consolidated factory route", () => {
+	test("mounts and surfaces the plugin-contributed peer-avatar stack", async ({
+		browser,
+	}, testInfo) => {
+		const room = `consolidated-${testInfo.workerIndex}-${Date.now()}`;
+		const ctxA = await browser.newContext();
+		const ctxB = await browser.newContext();
+		const pageA = await ctxA.newPage();
+		const pageB = await ctxB.newPage();
+
+		await pageA.goto(consolidatedEditorUrl("alice", room));
+		await pageB.goto(consolidatedEditorUrl("bob", room));
+
+		await expect(pageA.getByTestId("editor-consolidated-root")).toBeVisible();
+		await expect(pageB.getByTestId("editor-consolidated-root")).toBeVisible();
+
+		// The plugin's `collaborators` slot mounts `<PeerAvatarStack>` —
+		// proof that the slot contribution flows through to the chrome's
+		// `collaboratorsSlot` site even though the host passes no
+		// `collaboratorsSlot` prop.
+		await expect(pageA.locator("[data-slot=peer-avatar-stack]")).toBeVisible({
+			timeout: 15_000,
+		});
+		await expect(
+			pageA.locator("[data-slot=peer-avatar-stack] [data-peer-id]"),
+		).toHaveCount(2, {
+			timeout: 15_000,
+		});
+
+		await ctxA.close();
+		await ctxB.close();
+	});
+});
