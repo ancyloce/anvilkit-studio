@@ -42,7 +42,10 @@ import type {
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginMeta,
+	StudioPluginOverlay,
+	StudioPluginProvider,
 	StudioPluginRegistration,
+	StudioPluginSlotContribution,
 } from "@/types/plugin";
 import { isPuckPlugin, isStudioPlugin } from "./detect-plugin.js";
 import { StudioPluginError } from "./errors.js";
@@ -115,6 +118,30 @@ export interface StudioRuntime {
 	 * render) and later plugins wrap it.
 	 */
 	readonly overrides: readonly Partial<PuckOverrides>[];
+	/**
+	 * Plugin-contributed React providers that wrap the Studio tree.
+	 *
+	 * Sorted ascending by `(order ?? 100, registrationIndex)`. The
+	 * provider at index 0 is composed **outermost** by `<Studio>`. The
+	 * runtime layer treats the `component` field as opaque — `<Studio>`
+	 * is the React boundary that instantiates each provider.
+	 */
+	readonly providers: readonly StudioPluginProvider[];
+	/**
+	 * Plugin-contributed top-level overlay components, sorted within
+	 * each placement bucket by `(order ?? 100, registrationIndex)`.
+	 * `<Studio>` dispatches them by `placement` (canvas / viewport /
+	 * notifications).
+	 */
+	readonly overlays: readonly StudioPluginOverlay[];
+	/**
+	 * Plugin-contributed named chrome slot contributions. Single-
+	 * occupancy: if two plugins contribute the same slot id the first
+	 * registration wins (a warn is logged via `ctx.log` on duplicate).
+	 * The host's `<Studio>` prop for the same slot still takes
+	 * precedence — see e.g. `collaboratorsSlot`.
+	 */
+	readonly slots: ReadonlyMap<string, StudioPluginSlotContribution>;
 	/**
 	 * Raw Puck plugin objects, passed through to `<Puck plugins={…}>`
 	 * verbatim. These do not participate in the Studio lifecycle.
@@ -416,6 +443,15 @@ export async function compilePlugins(
 	const headerActions: StudioHeaderAction[] = [];
 	const puckPlugins: PuckPlugin[] = [];
 	const overrides: Partial<PuckOverrides>[] = [];
+	// Stable-sortable buffers: capture (item, registrationIndex) so the
+	// final sort can use the index as a tiebreaker, preserving
+	// declaration order when `order` values tie.
+	const providerEntries: { item: StudioPluginProvider; index: number }[] = [];
+	const overlayEntries: { item: StudioPluginOverlay; index: number }[] = [];
+	const slots = new Map<string, StudioPluginSlotContribution>();
+	// Track which plugin first claimed each slot id so a duplicate warn
+	// can name the original owner.
+	const slotOwners = new Map<string, string>();
 	const pluginCtx: StudioPluginContext = {
 		...ctx,
 		registerAssetResolver: (resolver) => {
@@ -496,6 +532,38 @@ export async function compilePlugins(
 				overrides.push(registration.overrides as Partial<PuckOverrides>);
 			}
 
+			// Providers / overlays / slots: opaque React contributions
+			// the `<Studio>` shell (`core-014`) consumes. The runtime
+			// layer never instantiates these — it only routes them.
+			if (registration.providers) {
+				for (const provider of registration.providers) {
+					providerEntries.push({ item: provider, index });
+				}
+			}
+			if (registration.overlays) {
+				for (const overlay of registration.overlays) {
+					overlayEntries.push({ item: overlay, index });
+				}
+			}
+			if (registration.slots) {
+				for (const slot of registration.slots) {
+					const existingOwner = slotOwners.get(slot.id);
+					if (existingOwner !== undefined) {
+						// First registration wins — warn the host so a
+						// silent collision doesn't go unnoticed, but do not
+						// throw (slots are presentation, not correctness).
+						pluginCtx.log(
+							"warn",
+							`Plugin "${meta.id}" tried to claim slot "${slot.id}" but plugin "${existingOwner}" already registered it. First registration wins.`,
+							{ slotId: slot.id, attemptedBy: meta.id, owner: existingOwner },
+						);
+						continue;
+					}
+					slotOwners.set(slot.id, meta.id);
+					slots.set(slot.id, slot);
+				}
+			}
+
 			continue;
 		}
 
@@ -512,6 +580,29 @@ export async function compilePlugins(
 		);
 	}
 
+	// Stable-sort providers and overlays by `(order ?? 100, index)`.
+	// `Array.prototype.sort` is stable in Node ≥ 12 / all evergreen
+	// browsers, but we encode the registration index in the compare so
+	// the contract holds even if a future engine regresses.
+	const sortedProviders = providerEntries
+		.slice()
+		.sort((a, b) => {
+			const aOrder = a.item.order ?? 100;
+			const bOrder = b.item.order ?? 100;
+			if (aOrder !== bOrder) return aOrder - bOrder;
+			return a.index - b.index;
+		})
+		.map((entry) => entry.item);
+	const sortedOverlays = overlayEntries
+		.slice()
+		.sort((a, b) => {
+			const aOrder = a.item.order ?? 100;
+			const bOrder = b.item.order ?? 100;
+			if (aOrder !== bOrder) return aOrder - bOrder;
+			return a.index - b.index;
+		})
+		.map((entry) => entry.item);
+
 	return {
 		pluginMeta,
 		registrations,
@@ -520,6 +611,9 @@ export async function compilePlugins(
 		assetResolvers,
 		headerActions,
 		overrides,
+		providers: sortedProviders,
+		overlays: sortedOverlays,
+		slots,
 		puckPlugins,
 	};
 }

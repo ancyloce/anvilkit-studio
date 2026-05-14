@@ -449,3 +449,140 @@ describe("compilePlugins — invalid shapes", () => {
 		);
 	});
 });
+
+describe("compilePlugins — providers / overlays / slots aggregation", () => {
+	// Dummy React component references used to assert the runtime
+	// preserves identity through the aggregation pipeline. The runtime
+	// never invokes them — they're opaque to the runtime layer.
+	const A = (() => null) as unknown as Parameters<
+		typeof Object.assign
+	>[0] as never;
+	const B = (() => null) as unknown as never;
+	const C = (() => null) as unknown as never;
+	const D = (() => null) as unknown as never;
+
+	it("sorts providers ascending by order with registration-order ties", async () => {
+		const runtime = await compilePlugins(
+			[
+				makePlugin("p1", {
+					register: (meta) => ({
+						meta,
+						providers: [{ id: "outer", component: A, order: 10 }],
+					}),
+				}),
+				makePlugin("p2", {
+					register: (meta) => ({
+						meta,
+						// Two providers with the default order so registration
+						// order is the tiebreaker.
+						providers: [
+							{ id: "mid-a", component: B },
+							{ id: "mid-b", component: C },
+						],
+					}),
+				}),
+				makePlugin("p3", {
+					register: (meta) => ({
+						meta,
+						providers: [{ id: "inner", component: D, order: 200 }],
+					}),
+				}),
+			],
+			makeCtx(),
+		);
+
+		expect(runtime.providers.map((p) => p.id)).toEqual([
+			"outer",
+			"mid-a",
+			"mid-b",
+			"inner",
+		]);
+	});
+
+	it("preserves placement and order semantics for overlays", async () => {
+		const runtime = await compilePlugins(
+			[
+				makePlugin("p1", {
+					register: (meta) => ({
+						meta,
+						overlays: [
+							{ id: "toast", placement: "notifications", component: A },
+							{ id: "cursor", placement: "canvas", component: B, order: 50 },
+						],
+					}),
+				}),
+				makePlugin("p2", {
+					register: (meta) => ({
+						meta,
+						overlays: [
+							{ id: "banner", placement: "viewport", component: C },
+							{ id: "ring", placement: "canvas", component: D, order: 10 },
+						],
+					}),
+				}),
+			],
+			makeCtx(),
+		);
+
+		// Global sort is ascending by `order` (default 100); placement
+		// dispatching is `<Studio>`'s job, not the runtime's.
+		expect(runtime.overlays.map((o) => o.id)).toEqual([
+			"ring", // order 10
+			"cursor", // order 50
+			"toast", // order 100 (default), registered first
+			"banner", // order 100 (default), registered second
+		]);
+		// Placement metadata round-trips intact.
+		expect(runtime.overlays.find((o) => o.id === "toast")?.placement).toBe(
+			"notifications",
+		);
+		expect(runtime.overlays.find((o) => o.id === "banner")?.placement).toBe(
+			"viewport",
+		);
+	});
+
+	it("uses first-registration-wins for duplicate slot ids and warns via ctx.log", async () => {
+		const ctx = makeCtx();
+
+		const runtime = await compilePlugins(
+			[
+				makePlugin("first", {
+					register: (meta) => ({
+						meta,
+						slots: [{ id: "collaborators", component: A }],
+					}),
+				}),
+				makePlugin("second", {
+					register: (meta) => ({
+						meta,
+						slots: [{ id: "collaborators", component: B }],
+					}),
+				}),
+			],
+			ctx,
+		);
+
+		// Map keeps the first registration; second is rejected.
+		expect(runtime.slots.size).toBe(1);
+		expect(runtime.slots.get("collaborators")?.component).toBe(A);
+
+		// Exactly one warn fires, naming both plugin ids.
+		expect(ctx.log).toHaveBeenCalledTimes(1);
+		expect(ctx.log).toHaveBeenCalledWith(
+			"warn",
+			expect.stringContaining("collaborators"),
+			expect.objectContaining({
+				slotId: "collaborators",
+				attemptedBy: "second",
+				owner: "first",
+			}),
+		);
+	});
+
+	it("returns empty providers/overlays/slots when no plugin contributes them", async () => {
+		const runtime = await compilePlugins([], makeCtx());
+		expect(runtime.providers).toEqual([]);
+		expect(runtime.overlays).toEqual([]);
+		expect(runtime.slots.size).toBe(0);
+	});
+});
