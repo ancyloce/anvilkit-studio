@@ -8,11 +8,12 @@
  */
 
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
-import { type ReactNode } from "react";
+import { createElement, type ReactNode } from "react";
 import { Avatar, AvatarFallback } from "@/primitives/avatar";
 import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import type { CollaboratorsSlotValue } from "@/studio/context/chrome-props";
 import { useMsg } from "@/state/editor-i18n-store";
 import { cn } from "@/utils/cn";
 import { HeaderActions } from "./HeaderActions";
@@ -27,8 +28,37 @@ export interface StudioHeaderProps {
 	 * built-in placeholder avatars are rendered. Host apps with a
 	 * real collaboration backend (e.g. `@anvilkit/collab-ui`'s
 	 * `<PeerAvatarStack>`) pass their own peer-aware widget here.
+	 *
+	 * Accepts a `ReactNode` (rendered verbatim) or a `ComponentType`
+	 * (instantiated on each render). See {@link CollaboratorsSlotValue}.
 	 */
-	readonly collaboratorsSlot?: ReactNode;
+	readonly collaboratorsSlot?: CollaboratorsSlotValue;
+}
+
+/**
+ * Render whichever form of `collaboratorsSlot` the caller supplied.
+ * `ComponentType` values are instantiated via `createElement` so their
+ * own hooks run on every render; `ReactNode` values pass through.
+ *
+ * The "is component" test relies on `typeof value === "function"` —
+ * `ReactNode` is never a bare function (functional components are
+ * `ComponentType`, not `ReactNode`), so the discriminator is safe.
+ *
+ * Exported so the discriminator's contract can be unit-tested without
+ * having to mount the entire `<StudioHeader>` tree (which would require
+ * i18n / Puck / runtime providers).
+ */
+export function renderCollaboratorsSlot(
+	value: CollaboratorsSlotValue | undefined,
+	fallback: ReactNode = <CollaboratorStack />,
+): ReactNode {
+	if (value === undefined || value === null) {
+		return fallback;
+	}
+	if (typeof value === "function") {
+		return createElement(value);
+	}
+	return value;
 }
 
 interface PlaceholderCollaborator {
@@ -53,78 +83,78 @@ export function StudioHeader({
 	const msg = useMsg();
 
 	return (
-    <header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={onBack ?? (() => window.history.back())}
-        aria-label={msg("studio.back")}
-      >
-        <ChevronLeft />
-      </Button>
-      <nav
-        aria-label="Breadcrumb"
-        className="flex min-w-0 flex-1 items-center justify-center"
-      >
-        <ol className="flex items-center gap-1.5 text-sm">
-          <li className="truncate text-[var(--ak-studio-muted-fg)]">
-            {msg("studio.breadcrumb.project")}
-          </li>
-          <li aria-hidden="true" className="text-[var(--ak-studio-muted-fg)]">
-            <ChevronRight className="size-3.5" />
-          </li>
-          <li className="truncate font-medium text-[var(--ak-studio-fg)]">
-            {msg("studio.breadcrumb.file")}
-          </li>
-        </ol>
-      </nav>
-      <div className="ml-auto flex items-center gap-2">
-        {lastSavedAt !== null ? (
-          <span className="text-xs text-[var(--ak-studio-muted-fg)]">
-            Saved {formatTimestamp(lastSavedAt)}
-          </span>
-        ) : null}
+		<header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+			<Button
+				variant="ghost"
+				size="icon"
+				onClick={onBack ?? (() => window.history.back())}
+				aria-label={msg("studio.back")}
+			>
+				<ChevronLeft />
+			</Button>
+			<nav
+				aria-label="Breadcrumb"
+				className="flex min-w-0 flex-1 items-center justify-center"
+			>
+				<ol className="flex items-center gap-1.5 text-sm">
+					<li className="truncate text-[var(--ak-studio-muted-fg)]">
+						{msg("studio.breadcrumb.project")}
+					</li>
+					<li aria-hidden="true" className="text-[var(--ak-studio-muted-fg)]">
+						<ChevronRight className="size-3.5" />
+					</li>
+					<li className="truncate font-medium text-[var(--ak-studio-fg)]">
+						{msg("studio.breadcrumb.file")}
+					</li>
+				</ol>
+			</nav>
+			<div className="ml-auto flex items-center gap-2">
+				{lastSavedAt !== null ? (
+					<span className="text-xs text-[var(--ak-studio-muted-fg)]">
+						Saved {formatTimestamp(lastSavedAt)}
+					</span>
+				) : null}
 
-        {collaboratorsSlot ?? <CollaboratorStack />}
+				{renderCollaboratorsSlot(collaboratorsSlot)}
 
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button variant="outline" size="sm" className="gap-1.5">
-                <Users className="size-4" aria-hidden="true" />
-                <span>{msg("studio.share")}</span>
-              </Button>
-            }
-          />
-          <TooltipContent>{msg("studio.share")}</TooltipContent>
-        </Tooltip>
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<Button variant="outline" size="sm" className="gap-1.5">
+								<Users className="size-4" aria-hidden="true" />
+								<span>{msg("studio.share")}</span>
+							</Button>
+						}
+					/>
+					<TooltipContent>{msg("studio.share")}</TooltipContent>
+				</Tooltip>
 
-        <Separator
-          orientation="vertical"
-          className="h-6 data-vertical:self-center"
-        />
+				<Separator
+					orientation="vertical"
+					className="h-6 data-vertical:self-center"
+				/>
 
-        <HeaderActions />
+				<HeaderActions />
 
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label={msg("studio.preview")}
-              >
-                <Play />
-              </Button>
-            }
-          />
-          <TooltipContent>{msg("studio.preview")}</TooltipContent>
-        </Tooltip>
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<Button
+								variant="ghost"
+								size="icon"
+								aria-label={msg("studio.preview")}
+							>
+								<Play />
+							</Button>
+						}
+					/>
+					<TooltipContent>{msg("studio.preview")}</TooltipContent>
+				</Tooltip>
 
-        <PublishPanel />
-      </div>
-    </header>
-  );
+				<PublishPanel />
+			</div>
+		</header>
+	);
 }
 
 function CollaboratorStack(): ReactNode {
