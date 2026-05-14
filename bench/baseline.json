@@ -1,129 +1,144 @@
 {
-  "html-export": {
-    "meanMs": 0.5119752886386897,
-    "hz": 2126.350100250724,
-    "bytes": 39534,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "ir-roundtrip": {
-    "meanMs": 0.45294130344203526,
-    "hz": 2266.3264203532544,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:Hero": {
-    "meanMs": 1.1856381611374367,
-    "hz": 1019.7084913961537,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:Section": {
-    "meanMs": 0.8981502100538837,
-    "hz": 1305.841129259487,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:Statistics": {
-    "meanMs": 5.410659502702745,
-    "hz": 203.4733011729179,
-    "recordedAt": "2026-04-24T17:12:45.058Z"
-  },
-  "component-render:BentoGrid": {
-    "meanMs": 3.6776894763636134,
-    "hz": 318.992026331334,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:BlogList": {
-    "meanMs": 1.397283529329602,
-    "hz": 878.0161940906676,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:Navbar": {
-    "meanMs": 2.8521679145297743,
-    "hz": 412.88311525212976,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:PricingMinimal": {
-    "meanMs": 8.27204000826445,
-    "hz": 143.71559891533065,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:LogoClouds": {
-    "meanMs": 8.093840653225866,
-    "hz": 133.91376992803973,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:Helps": {
-    "meanMs": 16.158689296875025,
-    "hz": 66.00554263622595,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "ir-diff": {
-    "meanMs": 0.5901460000000043,
-    "hz": 1694.4959382932236,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:Hero": {
-    "meanMs": 0.003652051907580107,
-    "hz": 288488.7617128193,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:Section": {
-    "meanMs": 0.0012681153855903476,
-    "hz": 842999.7595838726,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:Statistics": {
-    "meanMs": 0.0018024407101431884,
-    "hz": 628404.7844751637,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:BentoGrid": {
-    "meanMs": 0.005177099123351915,
-    "hz": 225747.89972719265,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:BlogList": {
-    "meanMs": 0.0027070787208314027,
-    "hz": 393545.7737161292,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:Navbar": {
-    "meanMs": 0.002156554851880531,
-    "hz": 517011.1028202253,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:PricingMinimal": {
-    "meanMs": 0.003736901005146061,
-    "hz": 289746.9650204164,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:LogoClouds": {
-    "meanMs": 0.01457243185350395,
-    "hz": 73070.55859482058,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-emit:Helps": {
-    "meanMs": 0.0016628586964365533,
-    "hz": 647083.7919364239,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:Button": {
-    "meanMs": 0.5961451787842741,
-    "hz": 2204.3954933247796,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "component-render:Input": {
-    "meanMs": 0.819980152458972,
-    "hz": 1502.2976895099268,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "editor-load": {
-    "meanMs": 715.0750000029802,
-    "hz": 1.3984547075423308,
-    "recordedAt": "2026-05-13T19:58:13.497Z"
-  },
-  "sidebar-switch": {
-    "meanMs": 50,
-    "hz": 20,
-    "p95Ms": 100,
-    "recordedAt": "2026-05-04T00:00:00.000Z"
-  }
+	"html-export": {
+		"meanMs": 0.5119752886386897,
+		"hz": 2126.350100250724,
+		"bytes": 39534,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"ir-roundtrip": {
+		"meanMs": 0.45294130344203526,
+		"hz": 2266.3264203532544,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:Hero": {
+		"meanMs": 1.1856381611374367,
+		"hz": 1019.7084913961537,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:Section": {
+		"meanMs": 0.8981502100538837,
+		"hz": 1305.841129259487,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:Statistics": {
+		"meanMs": 5.410659502702745,
+		"hz": 203.4733011729179,
+		"recordedAt": "2026-04-24T17:12:45.058Z"
+	},
+	"component-render:BentoGrid": {
+		"meanMs": 3.6776894763636134,
+		"hz": 318.992026331334,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:BlogList": {
+		"meanMs": 1.397283529329602,
+		"hz": 878.0161940906676,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:Navbar": {
+		"meanMs": 2.8521679145297743,
+		"hz": 412.88311525212976,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:PricingMinimal": {
+		"meanMs": 8.27204000826445,
+		"hz": 143.71559891533065,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:LogoClouds": {
+		"meanMs": 8.093840653225866,
+		"hz": 133.91376992803973,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:Helps": {
+		"meanMs": 16.158689296875025,
+		"hz": 66.00554263622595,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"ir-diff": {
+		"meanMs": 0.5901460000000043,
+		"hz": 1694.4959382932236,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:Hero": {
+		"meanMs": 0.003652051907580107,
+		"hz": 288488.7617128193,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:Section": {
+		"meanMs": 0.0012681153855903476,
+		"hz": 842999.7595838726,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:Statistics": {
+		"meanMs": 0.0018024407101431884,
+		"hz": 628404.7844751637,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:BentoGrid": {
+		"meanMs": 0.005177099123351915,
+		"hz": 225747.89972719265,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:BlogList": {
+		"meanMs": 0.0027070787208314027,
+		"hz": 393545.7737161292,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:Navbar": {
+		"meanMs": 0.002156554851880531,
+		"hz": 517011.1028202253,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:PricingMinimal": {
+		"meanMs": 0.003736901005146061,
+		"hz": 289746.9650204164,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:LogoClouds": {
+		"meanMs": 0.01457243185350395,
+		"hz": 73070.55859482058,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-emit:Helps": {
+		"meanMs": 0.0016628586964365533,
+		"hz": 647083.7919364239,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:Button": {
+		"meanMs": 0.5961451787842741,
+		"hz": 2204.3954933247796,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"component-render:Input": {
+		"meanMs": 0.819980152458972,
+		"hz": 1502.2976895099268,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"editor-load": {
+		"meanMs": 715.0750000029802,
+		"hz": 1.3984547075423308,
+		"recordedAt": "2026-05-13T19:58:13.497Z"
+	},
+	"sidebar-switch": {
+		"meanMs": 50,
+		"hz": 20,
+		"p95Ms": 100,
+		"recordedAt": "2026-05-04T00:00:00.000Z"
+	},
+	"plugin-ai-copilot:apply-section-patch:flat-10": {
+		"meanMs": 0.001,
+		"hz": 1000000,
+		"recordedAt": "2026-05-14T02:13:00.000Z"
+	},
+	"plugin-ai-copilot:apply-section-patch:mixed-100": {
+		"meanMs": 0.003,
+		"hz": 333333,
+		"recordedAt": "2026-05-14T02:13:00.000Z"
+	},
+	"plugin-ai-copilot:apply-section-patch:deep-500": {
+		"meanMs": 0.049,
+		"hz": 20408,
+		"recordedAt": "2026-05-14T02:13:00.000Z"
+	}
 }

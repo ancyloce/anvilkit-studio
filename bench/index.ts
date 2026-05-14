@@ -16,6 +16,7 @@ import { runEditorLoadBench } from "./editor-load.bench.js";
 import { runHtmlExportBench } from "./html-export.bench.js";
 import { runIrDiffBench } from "./ir-diff.bench.js";
 import { runIrRoundtripBench } from "./ir-roundtrip.bench.js";
+import { runApplySectionPatchBench } from "./plugin-ai-copilot.bench.js";
 import { runSidebarSwitchBench } from "./sidebar-switch.bench.js";
 import type {
 	BenchBaseline,
@@ -44,7 +45,11 @@ function readBaseline(): BenchBaseline {
 }
 
 function writeBaseline(baseline: BenchBaseline): void {
-	writeFileSync(BASELINE_PATH, `${JSON.stringify(baseline, null, 2)}\n`, "utf8");
+	writeFileSync(
+		BASELINE_PATH,
+		`${JSON.stringify(baseline, null, 2)}\n`,
+		"utf8",
+	);
 }
 
 function toBaselineEntry(result: BenchResult): BenchBaselineEntry {
@@ -57,7 +62,10 @@ function toBaselineEntry(result: BenchResult): BenchBaselineEntry {
 	};
 }
 
-function compare(results: BenchResult[], baseline: BenchBaseline): BenchComparison[] {
+function compare(
+	results: BenchResult[],
+	baseline: BenchBaseline,
+): BenchComparison[] {
 	return results.map((r) => {
 		// NaN means the bench detected its preconditions weren't met
 		// and returned a sentinel (e.g. `editor-load` when the demo
@@ -133,7 +141,9 @@ function formatTable(comparisons: BenchComparison[]): string {
 		const mean = Number.isNaN(c.meanMs) ? "—" : c.meanMs.toFixed(3);
 		const base = c.baselineMeanMs !== null ? c.baselineMeanMs.toFixed(3) : "—";
 		const meanDelta =
-			c.meanDeltaPct !== null ? `${c.meanDeltaPct >= 0 ? "+" : ""}${c.meanDeltaPct.toFixed(1)}%` : "—";
+			c.meanDeltaPct !== null
+				? `${c.meanDeltaPct >= 0 ? "+" : ""}${c.meanDeltaPct.toFixed(1)}%`
+				: "—";
 		const bytes = c.bytes !== undefined ? String(c.bytes) : "—";
 		const bytesDelta =
 			c.bytesDeltaPct !== null
@@ -148,7 +158,9 @@ function formatTable(comparisons: BenchComparison[]): string {
 					: c.baselineMeanMs < NOISE_FLOOR_MS
 						? "ok (sub-ms: no gate)"
 						: "ok";
-		lines.push(`| ${c.name} | ${mean} | ${base} | ${meanDelta} | ${bytes} | ${bytesDelta} | ${status} |`);
+		lines.push(
+			`| ${c.name} | ${mean} | ${base} | ${meanDelta} | ${bytes} | ${bytesDelta} | ${status} |`,
+		);
 	}
 	return lines.join("\n");
 }
@@ -164,6 +176,7 @@ async function main(): Promise<void> {
 	allResults.push(...(await runComponentRenderBench()));
 	allResults.push(...(await runEditorLoadBench()));
 	allResults.push(...(await runSidebarSwitchBench()));
+	allResults.push(...(await runApplySectionPatchBench()));
 
 	if (updateMode) {
 		// Preserve existing baseline entries for benches that returned
