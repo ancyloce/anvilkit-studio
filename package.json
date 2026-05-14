@@ -30,6 +30,7 @@
 		"@anvilkit/ir": "workspace:*",
 		"@anvilkit/logo-clouds": "workspace:*",
 		"@anvilkit/navbar": "workspace:*",
+		"@anvilkit/plugin-ai-copilot": "workspace:*",
 		"@anvilkit/plugin-export-html": "workspace:*",
 		"@anvilkit/plugin-version-history": "workspace:*",
 		"@anvilkit/pricing-minimal": "workspace:*",
