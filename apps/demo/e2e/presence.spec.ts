@@ -3,16 +3,10 @@
  *
  * Asserts that the demo editor mounts the `<PresenceLayer>` from
  * `@anvilkit/ui/presence` when `?collab=1` is set, and that the
- * collab plugin instantiates without console errors.
- *
- * The cross-tab two-session flow that proves "an edit in session A
- * appears in session B within 500 ms over the y-websocket reference
- * relay" is gated behind the `RUN_COLLAB_E2E` env var because it
- * requires the y-websocket relay (under
- * `packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs`)
- * to be running. CI does not currently spawn the relay; the alpha
- * channel framing in `docs/architecture/realtime-collab.md` covers
- * the manual verification path.
+ * collab plugin instantiates without console errors. Also covers the
+ * cross-tab two-session flow over the y-websocket reference relay
+ * that Playwright boots automatically via the `webServer` entry in
+ * `playwright.config.ts` (port 11234).
  */
 
 import { expect, test } from "@playwright/test";
@@ -54,32 +48,32 @@ test("editor does NOT mount presence layer without ?collab=1", async ({
 	await expect(page.locator("[data-slot=presence-layer]")).toHaveCount(0);
 });
 
-test.describe("two-session sync (gated)", () => {
-	test.skip(
-		!process.env.RUN_COLLAB_E2E,
-		"set RUN_COLLAB_E2E=1 with a y-websocket relay running on ws://localhost:1234",
-	);
-
-	test("an edit in session A is observable in session B (manual)", async ({
+test.describe("two-session sync over the y-websocket relay", () => {
+	test("both sessions mount the presence layer against the same room", async ({
 		browser,
 	}) => {
 		const ctxA = await browser.newContext();
 		const ctxB = await browser.newContext();
 		const pageA = await ctxA.newPage();
 		const pageB = await ctxB.newPage();
-		await pageA.goto("/puck/editor?collab=1&peer=alice");
-		await pageB.goto("/puck/editor?collab=1&peer=bob");
+		const room = `presence-spec-${Date.now()}`;
+		await pageA.goto(
+			`/puck/editor?collab=1&peer=alice&room=${room}&relay=ws&relayPort=11234`,
+		);
+		await pageB.goto(
+			`/puck/editor?collab=1&peer=bob&room=${room}&relay=ws&relayPort=11234`,
+		);
 
 		await expect(pageA.getByTestId("studio-mount")).toBeVisible();
 		await expect(pageB.getByTestId("studio-mount")).toBeVisible();
 
-		await pageA.mouse.move(200, 300);
+		await expect(pageA.locator("[data-slot=presence-layer]")).toBeAttached();
+		await expect(pageB.locator("[data-slot=presence-layer]")).toBeAttached();
 
-		// Without the relay the cursors don't actually sync; this
-		// scaffold is here so a maintainer who runs the relay can
-		// extend the spec into a real assertion against the remote
-		// peer's cursor.
-		await pageB.locator("[data-slot=presence-layer]").waitFor();
+		// Push a cursor update from A; the relay-backed awareness lets B
+		// pick it up. We just assert both layers are alive — finer-grain
+		// cursor-position assertions live in `collab.spec.ts`.
+		await pageA.mouse.move(200, 300);
 
 		await ctxA.close();
 		await ctxB.close();

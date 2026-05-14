@@ -8,6 +8,7 @@ import {
 import type { Config } from "@puckeditor/core";
 import { Awareness } from "y-protocols/awareness";
 import { Doc as YDoc } from "yjs";
+import { peerColor } from "./collab-identity";
 
 /**
  * Build a single-process collab plugin for the demo. The Y.Doc is
@@ -24,28 +25,28 @@ export interface CollabDemoBundle {
 	readonly awareness: Awareness;
 }
 
+export interface CollabPeer {
+	readonly id: string;
+	readonly displayName: string;
+	readonly color?: string;
+}
+
 export function createCollabDemoBundle(
 	puckConfig: Config,
-	peerId: string,
+	peer: CollabPeer,
 ): CollabDemoBundle {
 	const doc = new YDoc();
 	const awareness = new Awareness(doc);
+	const localPeer = {
+		id: peer.id,
+		displayName: peer.displayName,
+		color: peer.color ?? peerColor(peer.id),
+	};
 	const adapter = createYjsAdapter({
 		doc,
 		awareness,
-		peer: { id: peerId, displayName: peerId, color: peerColor(peerId) },
+		peer: localPeer,
 	});
-	const plugin = createCollabPlugin({ adapter, puckConfig });
+	const plugin = createCollabPlugin({ adapter, puckConfig, localPeer });
 	return { plugin, adapter, doc, awareness };
-}
-
-function peerColor(peerId: string): string {
-	// Deterministic pastel from peer id hash, so the cursor color is
-	// stable across reloads of the same session.
-	let hash = 0;
-	for (const ch of peerId) {
-		hash = (hash * 31 + ch.charCodeAt(0)) | 0;
-	}
-	const hue = ((hash % 360) + 360) % 360;
-	return `hsl(${hue}, 70%, 55%)`;
 }

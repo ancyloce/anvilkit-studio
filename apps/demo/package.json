@@ -4,8 +4,10 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"dev": "next dev --webpack --port 3000",
-		"dev:turbopack": "next dev --port 3000",
+		"dev": "next dev --webpack",
+		"dev:turbopack": "next dev",
+		"dev:collab": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-11234} & RELAY_PID=$!; trap 'kill $RELAY_PID 2>/dev/null' EXIT INT TERM; next dev --webpack",
+		"relay": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-11234}",
 		"build": "next build --webpack",
 		"start": "next start",
 		"lint": "pnpm exec biome lint .",

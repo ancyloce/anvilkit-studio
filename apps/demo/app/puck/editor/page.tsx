@@ -34,22 +34,32 @@ import {
 	type AiPromptPanelSelection,
 } from "@anvilkit/ui";
 import {
-	CollabRoomBar,
+	CollabSettingsPopover,
 	CollabUIProvider,
 	ConflictNoticeCenter,
+	PeerAvatarStack,
 	PresenceLayer as CollabPresenceLayer,
+	useCollabSelf,
 } from "@anvilkit/collab-ui";
-import { usePresence } from "@anvilkit/ui/presence";
 import type { Config, Data } from "@puckeditor/core";
 import { createCollabDemoBundle } from "../../../lib/collab-demo";
+import { useDemoIdentity } from "../../../lib/collab-identity";
 import {
 	createCollabRelayBundle,
 	type CollabRelayBundle,
 } from "../../../lib/collab-relay-bundle";
+import { createCollabStudioPlugin } from "../../../lib/collab-studio-plugin";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import {
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	type ChangeEvent,
+	type ReactNode,
+} from "react";
 import {
 	createDemoData,
 	createDemoModeHref,
@@ -306,9 +316,14 @@ export default function PuckEditorPage() {
 	// and "Regenerate selection".
 	const [aiSelectionActive, setAiSelectionActive] = useState(false);
 	const [collabEnabled, setCollabEnabled] = useState(false);
-	const [collabPeerId, setCollabPeerId] = useState("alice");
+	const [collabPeerOverride, setCollabPeerOverride] = useState<string | null>(
+		null,
+	);
 	const [collabRelayUrl, setCollabRelayUrl] = useState<string | null>(null);
 	const [collabRoom, setCollabRoom] = useState("demo-room");
+	const [showRemoteCursors, setShowRemoteCursors] = useState(true);
+	const { identity: demoIdentity, setDisplayName: setDemoIdentityName } =
+		useDemoIdentity({ peerOverride: collabPeerOverride });
 	// Phase 6: `?chrome=puck` opts out of the AnvilKit chrome and
 	// renders the raw Puck editor for visual regression checks.
 	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">("anvilkit");
@@ -349,7 +364,7 @@ export default function PuckEditorPage() {
 		if (collabRelayUrl) {
 			const bundle: CollabRelayBundle = createCollabRelayBundle({
 				puckConfig: demoConfig as unknown as Config,
-				peerId: collabPeerId,
+				peer: demoIdentity,
 				room: collabRoom,
 				relayUrl: collabRelayUrl,
 			});
@@ -357,9 +372,9 @@ export default function PuckEditorPage() {
 		}
 		return createCollabDemoBundle(
 			demoConfig as unknown as Config,
-			collabPeerId,
+			demoIdentity,
 		);
-	}, [collabEnabled, collabPeerId, collabRelayUrl, collabRoom]);
+	}, [collabEnabled, collabRelayUrl, collabRoom, demoIdentity]);
 
 	useEffect(() => {
 		// The relay bundle owns a WebSocket; tear it down when the
@@ -381,6 +396,14 @@ export default function PuckEditorPage() {
 	// to `<Studio>`, whose compile effect re-fires, unmounts the
 	// runtime, and resets Puck's data back to the `publishedData`
 	// prop — wiping any AI-generated content instantly.
+	const collabStudioPlugin = useMemo(
+		() =>
+			collabBundle
+				? createCollabStudioPlugin({ adapter: collabBundle.adapter })
+				: null,
+		[collabBundle],
+	);
+
 	const plugins = useMemo(() => {
 		const base = [
 			smokeTestPlugin,
@@ -391,16 +414,23 @@ export default function PuckEditorPage() {
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
 		];
-		return collabBundle ? [...base, collabBundle.plugin] : base;
-	}, [collabBundle]);
+		if (collabBundle && collabStudioPlugin) {
+			return [...base, collabBundle.plugin, collabStudioPlugin];
+		}
+		return base;
+	}, [collabBundle, collabStudioPlugin]);
 
-	const presenceSelf = useMemo(
-		() => ({ id: collabPeerId, displayName: collabPeerId }),
-		[collabPeerId],
+	const collaboratorsSlot = useMemo(
+		() =>
+			collabBundle ? (
+				<DemoCollaboratorsSlot
+					roomId={collabRoom}
+					showRemoteCursors={showRemoteCursors}
+					onShowRemoteCursorsChange={setShowRemoteCursors}
+				/>
+			) : null,
+		[collabBundle, collabRoom, showRemoteCursors],
 	);
-	const { updateSelf } = usePresence(collabBundle?.adapter.presence, {
-		self: presenceSelf,
-	});
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -417,7 +447,7 @@ export default function PuckEditorPage() {
 		setCollabEnabled(params.get("collab") === "1");
 		const peerOverride = params.get("peer");
 		if (peerOverride && peerOverride.length > 0) {
-			setCollabPeerId(peerOverride);
+			setCollabPeerOverride(peerOverride);
 		}
 		const roomOverride = params.get("room");
 		if (roomOverride && roomOverride.length > 0) {
@@ -468,17 +498,6 @@ export default function PuckEditorPage() {
 			delete w.__puckExportTrigger;
 		};
 	});
-
-	useEffect(() => {
-		if (!collabBundle) return;
-		const handler = (event: MouseEvent) => {
-			updateSelf({
-				cursor: { x: event.clientX, y: event.clientY },
-			});
-		};
-		window.addEventListener("mousemove", handler, { passive: true });
-		return () => window.removeEventListener("mousemove", handler);
-	}, [collabBundle, updateSelf]);
 
 	async function ensureAssetManagerHarness(): Promise<AssetManagerTestHarness> {
 		const harness = await createAssetManagerTestHarness();
@@ -990,15 +1009,12 @@ export default function PuckEditorPage() {
 					<CollabUIProvider
 						adapter={collabBundle.adapter}
 						self={{
-							id: collabPeerId,
-							displayName: collabPeerId,
+							id: demoIdentity.id,
+							displayName: demoIdentity.displayName,
+							color: demoIdentity.color,
 						}}
 					>
-						<CollabRoomBar
-							title="Collaboration demo"
-							subtitle={collabRoom}
-							roomId={collabRoom}
-						/>
+						<CollabIdentitySync onDisplayNameChange={setDemoIdentityName} />
 						<Studio
 							puckConfig={demoConfig}
 							data={publishedData}
@@ -1012,8 +1028,12 @@ export default function PuckEditorPage() {
 							chrome={chromeMode}
 							pages={pagesSource}
 							messages={studioMessages}
+							collaboratorsSlot={collaboratorsSlot}
 						/>
-						<CollabPresenceLayer />
+						<CollabPresenceLayer
+							showCursors={showRemoteCursors}
+							resolveSelectionRect={resolvePuckSelectionRect}
+						/>
 						<ConflictNoticeCenter />
 					</CollabUIProvider>
 				) : (
@@ -1048,4 +1068,102 @@ export default function PuckEditorPage() {
 			</section>
 		</main>
 	);
+}
+
+/**
+ * Watches the collab self peer for displayName changes (the user can
+ * edit it via `<CollabSettingsPopover>`) and pushes the new value back
+ * up to the demo's localStorage-backed identity. Renders nothing.
+ */
+function CollabIdentitySync({
+	onDisplayNameChange,
+}: {
+	onDisplayNameChange: (next: string) => void;
+}): null {
+	const self = useCollabSelf();
+	const lastSyncedRef = useRef<string | null>(null);
+	useEffect(() => {
+		const name = self?.displayName;
+		if (
+			typeof name === "string" &&
+			name.length > 0 &&
+			name !== lastSyncedRef.current
+		) {
+			lastSyncedRef.current = name;
+			onDisplayNameChange(name);
+		}
+	}, [self?.displayName, onDisplayNameChange]);
+	return null;
+}
+
+/**
+ * Replaces the placeholder `<CollaboratorStack>` in the StudioHeader
+ * with real-time peer avatars + a settings popover that lets the user
+ * rename themselves and copy the room URL. Reads peers from the
+ * surrounding `<CollabUIProvider>` context.
+ */
+function DemoCollaboratorsSlot({
+	roomId,
+	showRemoteCursors,
+	onShowRemoteCursorsChange,
+}: {
+	roomId: string;
+	showRemoteCursors: boolean;
+	onShowRemoteCursorsChange: (show: boolean) => void;
+}): ReactNode {
+	const roomLink =
+		typeof window === "undefined" ? undefined : window.location.href;
+	return (
+		<div
+			data-testid="collab-peer-stack"
+			className="flex items-center gap-2"
+		>
+			<PeerAvatarStack maxVisible={4} />
+			<CollabSettingsPopover
+				roomId={roomId}
+				roomLink={roomLink}
+				initialShowRemoteCursors={showRemoteCursors}
+				onShowRemoteCursorsChange={onShowRemoteCursorsChange}
+			/>
+		</div>
+	);
+}
+
+/**
+ * Maps a Puck node id to its bounding rect in the parent document's
+ * coordinate space so `<PresenceSelectionRing>` can position itself
+ * over the iframed canvas. Returns `null` when the node isn't in the
+ * DOM yet (the next presence render will retry).
+ *
+ * Puck renders the canvas inside `iframe#preview-frame`; component
+ * elements aren't reachable from the parent document directly, so we
+ * pick up the iframe's `contentDocument`, run a multi-selector probe
+ * (Puck has changed its wrapper attribute across versions), then add
+ * the iframe's own bounding offset.
+ */
+function resolvePuckSelectionRect(
+	nodeId: string,
+): { x: number; y: number; width: number; height: number } | null {
+	if (typeof window === "undefined") return null;
+	const iframe = document.querySelector<HTMLIFrameElement>(
+		"iframe#preview-frame",
+	);
+	const doc = iframe?.contentDocument;
+	if (!iframe || !doc) return null;
+	const escaped =
+		typeof CSS !== "undefined" && typeof CSS.escape === "function"
+			? CSS.escape(nodeId)
+			: nodeId.replace(/"/g, '\\"');
+	const probe = doc.querySelector<HTMLElement>(
+		`[data-rfd-draggable-id="${escaped}"], [data-puck-component-id="${escaped}"], [data-puck-id="${escaped}"], [data-id="${escaped}"], #${escaped}`,
+	);
+	if (!probe) return null;
+	const inner = probe.getBoundingClientRect();
+	const outer = iframe.getBoundingClientRect();
+	return {
+		x: inner.left + outer.left,
+		y: inner.top + outer.top,
+		width: inner.width,
+		height: inner.height,
+	};
 }

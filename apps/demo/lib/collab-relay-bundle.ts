@@ -11,6 +11,8 @@ import type { Config } from "@puckeditor/core";
 import { Awareness } from "y-protocols/awareness";
 import { WebsocketProvider } from "y-websocket";
 import { Doc as YDoc } from "yjs";
+import type { CollabPeer } from "./collab-demo";
+import { peerColor } from "./collab-identity";
 
 export interface CollabRelayBundle {
 	readonly plugin: ReturnType<typeof createCollabPlugin>;
@@ -23,7 +25,7 @@ export interface CollabRelayBundle {
 
 export interface CreateCollabRelayBundleOptions {
 	readonly puckConfig: Config;
-	readonly peerId: string;
+	readonly peer: CollabPeer;
 	readonly room: string;
 	readonly relayUrl: string;
 }
@@ -40,12 +42,10 @@ export function createCollabRelayBundle(
 ): CollabRelayBundle {
 	const doc = new YDoc();
 	const awareness = new Awareness(doc);
-	const provider = new WebsocketProvider(
-		options.relayUrl,
-		options.room,
-		doc,
-		{ awareness, connect: true },
-	);
+	const provider = new WebsocketProvider(options.relayUrl, options.room, doc, {
+		awareness,
+		connect: true,
+	});
 
 	let queuedEdits = 0;
 	doc.on("update", (_update: Uint8Array, origin: unknown) => {
@@ -88,19 +88,21 @@ export function createCollabRelayBundle(
 		};
 	};
 
+	const localPeer = {
+		id: options.peer.id,
+		displayName: options.peer.displayName,
+		color: options.peer.color ?? peerColor(options.peer.id),
+	};
 	const adapter = createYjsAdapter({
 		doc,
 		awareness,
-		peer: {
-			id: options.peerId,
-			displayName: options.peerId,
-			color: peerColor(options.peerId),
-		},
+		peer: localPeer,
 		connectionSource,
 	});
 	const plugin = createCollabPlugin({
 		adapter,
 		puckConfig: options.puckConfig,
+		localPeer,
 	});
 
 	return {
@@ -139,13 +141,4 @@ function mapProviderStatus(
 				backoffMs: 250,
 			};
 	}
-}
-
-function peerColor(peerId: string): string {
-	let hash = 0;
-	for (const ch of peerId) {
-		hash = (hash * 31 + ch.charCodeAt(0)) | 0;
-	}
-	const hue = ((hash % 360) + 360) % 360;
-	return `hsl(${hue}, 70%, 55%)`;
 }
