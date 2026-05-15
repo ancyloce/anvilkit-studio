@@ -1083,6 +1083,9 @@ importers:
       '@anvilkit/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../ui
       '@anvilkit/vitest-config':
         specifier: workspace:*
         version: link:../../configs/vitest-config
@@ -1210,15 +1213,18 @@ importers:
       '@anvilkit/utils':
         specifier: workspace:*
         version: link:../../utils
-      '@base-ui/react':
-        specifier: ^1.3.0
-        version: 1.4.1(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@base-ui-components/react':
+        specifier: 1.0.0-rc.0
+        version: 1.0.0-rc.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
       lucide-react:
         specifier: ^1.7.0
         version: 1.7.0(react@19.2.6)
+      motion:
+        specifier: ^12.38.0
+        version: 12.38.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       sonner:
         specifier: ^2.0.4
         version: 2.0.7(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -1720,6 +1726,9 @@ importers:
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.6)
+      input-otp:
+        specifier: ^1.4.2
+        version: 1.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       lucide-react:
         specifier: ^1.7.0
         version: 1.7.0(react@19.2.6)
@@ -1762,7 +1771,7 @@ importers:
         version: link:../configs/vitest-config
       '@rsbuild/plugin-react':
         specifier: ^1.4.6
-        version: 1.4.6(@rsbuild/core@2.0.0-beta.10)
+        version: 1.4.6(@rsbuild/core@2.0.3)
       '@rslib/core':
         specifier: ^0.20.1
         version: 0.20.1(typescript@6.0.3)
@@ -6420,6 +6429,12 @@ packages:
 
   inline-style-parser@0.2.7:
     resolution: {integrity: sha512-Nb2ctOyNR8DqQoR0OwRG95uNWIC0C1lCgf5Naz5H6Ji72KZ8OcFZLz2P5sNgwlyoJ8Yif11oMuYs5pBQa86csA==}
+
+  input-otp@1.4.2:
+    resolution: {integrity: sha512-l3jWwYNvrEa6NTCt7BECfCm48GvwuZzkoeG3gBL2w4CHeOXW3eKFmf9UNYkNfYc3mxMrthMnxjIE07MT0zLBQA==}
+    peerDependencies:
+      react: 19.2.6
+      react-dom: 19.2.6
 
   ip-address@10.1.0:
     resolution: {integrity: sha512-XXADHxXmvT9+CRxhXg56LJovE+bmWnEWB78LB83VZTprKTmaC5QfruXocxzTZ2Kl0DNwKuBdlIhjL8LeY8Sf8Q==}
@@ -11503,15 +11518,6 @@ snapshots:
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
 
-  '@rsbuild/plugin-react@1.4.6(@rsbuild/core@2.0.0-beta.10)':
-    dependencies:
-      '@rspack/plugin-react-refresh': 1.6.1(react-refresh@0.18.0)
-      react-refresh: 0.18.0
-    optionalDependencies:
-      '@rsbuild/core': 2.0.0-beta.10
-    transitivePeerDependencies:
-      - webpack-hot-middleware
-
   '@rsbuild/plugin-react@1.4.6(@rsbuild/core@2.0.3)':
     dependencies:
       '@rspack/plugin-react-refresh': 1.6.1(react-refresh@0.18.0)
@@ -12278,7 +12284,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.4(@types/node@25.5.0)(@vitest/coverage-v8@4.1.4)(happy-dom@20.8.9)(jsdom@29.0.2(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@25.5.0)(typescript@6.0.3))(vite@8.0.8(@types/node@25.5.0)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
+      vitest: 4.1.4(@types/node@22.15.3)(@vitest/coverage-v8@4.1.4)(happy-dom@15.11.7)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.12.14(@types/node@22.15.3)(typescript@6.0.3))(vite@8.0.8(@types/node@22.15.3)(esbuild@0.28.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
 
   '@vitest/coverage-v8@4.1.5(vitest@4.1.5)':
     dependencies:
@@ -14037,6 +14043,11 @@ snapshots:
   ini@1.3.8: {}
 
   inline-style-parser@0.2.7: {}
+
+  input-otp@1.4.2(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+    dependencies:
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
 
   ip-address@10.1.0: {}
 
