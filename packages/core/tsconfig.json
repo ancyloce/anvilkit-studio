@@ -14,6 +14,8 @@
 			"@/primitives/*": ["src/react/studio/primitives/*"],
 			"@/state": ["src/react/studio/state"],
 			"@/state/*": ["src/react/studio/state/*"],
+			"@/canvas-drop": ["src/react/studio/canvas-drop"],
+			"@/canvas-drop/*": ["src/react/studio/canvas-drop/*"],
 			"@/context": ["src/react/studio/context"],
 			"@/context/*": ["src/react/studio/context/*"],
 			"@/layout": ["src/react/studio/layout"],

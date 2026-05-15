@@ -17,6 +17,7 @@
 
 import { type ReactNode, useEffect } from "react";
 
+import { CanvasDropMount } from "@/canvas-drop";
 import {
 	IFRAME_THEME_CSS,
 	IFRAME_THEME_STYLE_ID,
@@ -62,5 +63,10 @@ export function CanvasIframe({
 		return () => observer.disconnect();
 	}, [iframeDoc]);
 
-	return <>{children}</>;
+	return (
+		<>
+			<CanvasDropMount document={iframeDoc} />
+			{children}
+		</>
+	);
 }
