@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/example-ai-adapter-fetch",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": true,
 	"description": "Example generatePage() adapter that POSTs to a host-owned backend route. Provider-agnostic. Reference implementation for phase4-010.",
 	"type": "module",

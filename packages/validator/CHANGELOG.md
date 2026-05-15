@@ -1,5 +1,11 @@
 # @anvilkit/validator
 
+## 0.1.2
+
+### Patch Changes
+
+- @anvilkit/schema@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @anvilkit/example-ai-adapter-fetch
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @anvilkit/core@0.1.2
+  - @anvilkit/plugin-ai-copilot@0.1.2
+
 ## 0.0.1
 
 ### Patch Changes

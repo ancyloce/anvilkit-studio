@@ -1,5 +1,35 @@
 # @anvilkit/core
 
+## 0.1.2
+
+### Patch Changes
+
+- Add `registerHistoryPanel` slot to the StudioSidebar.
+
+  `StudioPluginContext` gains an optional `registerHistoryPanel(panel)`
+  method that mirrors the existing `registerCopilotPanel`: single panel
+  per `<Studio>` mount, last-write-wins, returns an `unregister()` handle.
+  The sidebar gets a sixth rail tab (`history`, clock icon) that renders
+  the registered panel body or shows the `studio.module.history.empty`
+  empty state.
+
+  Integration packages paired with `@anvilkit/plugin-version-history`
+  (or hosts that own their own snapshot UI) can now mount a sidebar
+  panel without forking core. Pattern matches the existing copilot slot:
+
+  ```ts
+  ctx.registerHistoryPanel?.({
+    render: () => <VersionHistoryUI adapter={adapter} currentIR={ir} onRestore={restore} />,
+  });
+  ```
+
+  The persisted `EditorTab` schema bumps from version 2 to 3. The
+  existing `migrate` callback already coerces unknown `activeTab` values
+  to the default via `VALID_ACTIVE_TABS`, so older payloads land on the
+  default tab without manual intervention.
+  - @anvilkit/utils@0.1.2
+  - @anvilkit/ui@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
