@@ -13,6 +13,7 @@
 import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core";
 import type {
 	StudioCopilotPanel,
+	StudioPluginContext,
 	StudioSidebarUnregister,
 } from "@anvilkit/core/types";
 import type { AiCopilotPluginInstance } from "@anvilkit/plugin-ai-copilot";
@@ -27,6 +28,50 @@ interface CopilotSidebarPluginOptions {
 	readonly aiCopilotPlugin: AiCopilotPluginInstance;
 }
 
+interface CopilotSidebarPanelProps extends CopilotSidebarPluginOptions {
+	/**
+	 * Live Puck-data accessor. The "Simulate hero selection" toggle must
+	 * pin the id of whatever Hero is *currently* on the canvas — after a
+	 * page generation that id is `hero-fallback` / `hero-1` / etc., not
+	 * the seeded `hero-primary`. Hardcoding the seeded id made
+	 * regenerate-selection throw `APPLY_FAILED` once the canvas had been
+	 * regenerated. Throws before the plugin's `onInit` runs;
+	 * {@link resolveHeroNodeId} treats that as "fall back to the seeded
+	 * id".
+	 */
+	readonly getData: () => ReturnType<StudioPluginContext["getData"]>;
+}
+
+const HERO_TYPE = "Hero";
+const FALLBACK_HERO_ID = "hero-primary";
+
+/**
+ * Resolve the id of the first Hero component on the live canvas so the
+ * simulated section selection always targets a node that actually
+ * exists. Falls back to the seeded demo id when data isn't available
+ * yet or no Hero is present.
+ */
+function resolveHeroNodeId(
+	getData: CopilotSidebarPanelProps["getData"],
+): string {
+	let data: ReturnType<StudioPluginContext["getData"]>;
+	try {
+		data = getData();
+	} catch {
+		return FALLBACK_HERO_ID;
+	}
+	const content = (data?.content ?? []) as ReadonlyArray<{
+		type?: string;
+		props?: { id?: unknown };
+	}>;
+	for (const item of content) {
+		if (item.type === HERO_TYPE && typeof item.props?.id === "string") {
+			return item.props.id;
+		}
+	}
+	return FALLBACK_HERO_ID;
+}
+
 const meta: StudioPluginMeta = {
 	id: "anvilkit-demo-copilot-sidebar",
 	name: "Demo Copilot Sidebar",
@@ -38,19 +83,20 @@ const meta: StudioPluginMeta = {
 
 function CopilotSidebarPanel({
 	aiCopilotPlugin,
-}: CopilotSidebarPluginOptions): ReactElement {
+	getData,
+}: CopilotSidebarPanelProps): ReactElement {
 	const [selectionActive, setSelectionActive] = useState(false);
 
 	const selection: AiPromptPanelSelection | null = selectionActive
 		? {
 				zoneId: "root-zone",
-				nodeIds: ["hero-primary"],
+				nodeIds: [resolveHeroNodeId(getData)],
 				nodeLabels: ["Hero"],
 			}
 		: null;
 
 	return (
-		<div className="flex flex-col gap-3">
+		<div className="flex h-full flex-col gap-3">
 			<MotionButton asChild hoverScale={1.02} tapScale={0.97}>
 				<button
 					type="button"
@@ -78,7 +124,7 @@ function CopilotSidebarPanel({
 			<AiCopilotPanel
 				plugin={aiCopilotPlugin}
 				selection={selection}
-				brandName="Claude Cowork"
+				brandName="Pagix Ai Copilot"
 				models={[
 					{ id: "claude-sonnet-4-6", label: "Sonnet 4.6" },
 					{ id: "claude-opus-4-7", label: "Opus 4.7" },
@@ -92,9 +138,19 @@ function CopilotSidebarPanel({
 export function createCopilotSidebarPlugin(
 	options: CopilotSidebarPluginOptions,
 ): StudioPlugin {
+	let ctxRef: StudioPluginContext | null = null;
+	const getLiveData = (): ReturnType<StudioPluginContext["getData"]> => {
+		if (!ctxRef) {
+			throw new Error("copilot-sidebar-plugin: getData before onInit");
+		}
+		return ctxRef.getData();
+	};
 	const panel: StudioCopilotPanel = {
 		render: () => (
-			<CopilotSidebarPanel aiCopilotPlugin={options.aiCopilotPlugin} />
+			<CopilotSidebarPanel
+				aiCopilotPlugin={options.aiCopilotPlugin}
+				getData={getLiveData}
+			/>
 		),
 	};
 
@@ -106,11 +162,13 @@ export function createCopilotSidebarPlugin(
 				meta,
 				hooks: {
 					onInit: (ctx) => {
+						ctxRef = ctx;
 						unregister = ctx.registerCopilotPanel?.(panel) ?? null;
 					},
 					onDestroy: () => {
 						unregister?.();
 						unregister = null;
+						ctxRef = null;
 					},
 				},
 			};
