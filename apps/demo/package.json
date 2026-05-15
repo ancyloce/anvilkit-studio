@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "next dev --webpack",
 		"dev:turbopack": "next dev",
-		"dev:collab": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-11234} & RELAY_PID=$!; trap 'kill $RELAY_PID 2>/dev/null' EXIT INT TERM; next dev --webpack",
+		"dev:collab": "node scripts/dev-collab.mjs",
 		"relay": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-11234}",
 		"build": "next build --webpack",
 		"start": "next start",
