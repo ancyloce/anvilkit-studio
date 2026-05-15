@@ -3,25 +3,23 @@
  * the StudioSidebar's `copilot` module.
  *
  * Core stays agnostic about any specific AI plugin; this small plugin
- * registers the panel body (`<AiPromptPanel>` + the simulate-selection
- * toggle the M9 E2E spec relies on) via `ctx.registerCopilotPanel`,
- * closing over the host's `AiCopilotPluginInstance` so the registered
- * React component can call the plugin's imperative
- * `runGeneration` / `regenerateSelection` methods directly.
+ * registers the panel body (`<AiCopilotPanel>` from the plugin's
+ * `./react` subpath plus the simulate-selection toggle the M9 E2E spec
+ * relies on) via `ctx.registerCopilotPanel`, closing over the host's
+ * `AiCopilotPluginInstance` so the registered React component can call
+ * the plugin's imperative methods directly.
  */
 
 import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core";
 import type {
-	AiSectionSelection,
 	StudioCopilotPanel,
 	StudioSidebarUnregister,
 } from "@anvilkit/core/types";
 import type { AiCopilotPluginInstance } from "@anvilkit/plugin-ai-copilot";
-import {
-	AiPromptPanel,
-	type AiPromptPanelIssue,
-	type AiPromptPanelSelection,
-} from "@anvilkit/ui";
+import { AiCopilotPanel } from "@anvilkit/plugin-ai-copilot/react";
+import { Ripple } from "@anvilkit/ui";
+import { Button as MotionButton } from "@anvilkit/ui/components/animate-ui/primitives/buttons/button";
+import type { AiPromptPanelSelection } from "@anvilkit/ui";
 import type { ReactElement } from "react";
 import { useState } from "react";
 
@@ -41,10 +39,6 @@ const meta: StudioPluginMeta = {
 function CopilotSidebarPanel({
 	aiCopilotPlugin,
 }: CopilotSidebarPluginOptions): ReactElement {
-	const [prompt, setPrompt] = useState("");
-	const [status, setStatus] = useState<"idle" | "pending">("idle");
-	const [error, setError] = useState<string | null>(null);
-	const [issues] = useState<readonly AiPromptPanelIssue[]>([]);
 	const [selectionActive, setSelectionActive] = useState(false);
 
 	const selection: AiPromptPanelSelection | null = selectionActive
@@ -55,69 +49,32 @@ function CopilotSidebarPanel({
 			}
 		: null;
 
-	async function handleGenerate(trimmed: string): Promise<void> {
-		setError(null);
-		setStatus("pending");
-		try {
-			await aiCopilotPlugin.runGeneration(trimmed);
-		} catch (err) {
-			setError(err instanceof Error ? err.message : String(err));
-			console.error("[demo] ai generation failed", err);
-		} finally {
-			setStatus("idle");
-		}
-	}
-
-	async function handleRegenerate(
-		trimmed: string,
-		sel: AiPromptPanelSelection,
-	): Promise<void> {
-		setError(null);
-		setStatus("pending");
-		try {
-			const irSelection: AiSectionSelection = {
-				zoneId: sel.zoneId,
-				nodeIds: sel.nodeIds,
-			};
-			await aiCopilotPlugin.regenerateSelection(trimmed, irSelection);
-		} catch (err) {
-			setError(err instanceof Error ? err.message : String(err));
-			console.error("[demo] ai section regeneration failed", err);
-		} finally {
-			setStatus("idle");
-		}
-	}
-
 	return (
 		<div className="flex flex-col gap-3">
-			<button
-				type="button"
-				data-testid="ai-toggle-section"
-				aria-pressed={selectionActive}
-				onClick={() => setSelectionActive((prev) => !prev)}
-				className="self-start rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3 py-1.5 text-xs font-medium text-[var(--ak-studio-fg)] hover:bg-[var(--ak-studio-border)]"
-			>
-				{selectionActive ? "Clear hero selection" : "Simulate hero selection"}
-			</button>
-			<AiPromptPanel
-				prompt={prompt}
-				onPromptChange={setPrompt}
-				selection={selection}
-				status={status}
-				error={error}
-				issues={issues}
-				onGenerate={(trimmed) => {
-					void handleGenerate(trimmed);
-				}}
-				onRegenerate={(trimmed, sel) => {
-					void handleRegenerate(trimmed, sel);
-				}}
-			/>
-			{error !== null ? (
-				<p role="alert" data-testid="ai-error" style={{ display: "none" }}>
-					{error}
-				</p>
-			) : null}
+			<MotionButton asChild hoverScale={1.02} tapScale={0.97}>
+				<button
+					type="button"
+					data-testid="ai-toggle-section"
+					aria-pressed={selectionActive}
+					onClick={() => setSelectionActive((prev) => !prev)}
+					className="relative self-start overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3 py-1.5 text-xs font-medium text-[var(--ak-studio-fg)] hover:bg-[var(--ak-studio-border)]"
+				>
+					<span className="relative z-10">
+						{selectionActive
+							? "Clear hero selection"
+							: "Simulate hero selection"}
+					</span>
+					{selectionActive ? (
+						<Ripple
+							mainCircleSize={60}
+							mainCircleOpacity={0.18}
+							numCircles={3}
+							className="opacity-40"
+						/>
+					) : null}
+				</button>
+			</MotionButton>
+			<AiCopilotPanel plugin={aiCopilotPlugin} selection={selection} />
 		</div>
 	);
 }
