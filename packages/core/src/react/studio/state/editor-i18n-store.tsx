@@ -160,6 +160,8 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.text.empty": "No copy snippets available.",
 	"studio.module.text.requireSelection":
 		"Select a text element on the canvas to insert copy.",
+	"studio.module.text.requireTarget":
+		"Drop the snippet onto a text element on the canvas to replace it.",
 
 	// Module: copilot (AI Copilot — host-supplied panel).
 	"studio.module.copilot.name": "AI Copilot",
