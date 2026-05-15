@@ -156,6 +156,67 @@ describe("TextModule", () => {
 		expect(screen.getByText("Brand copy")).toBeTruthy();
 	});
 
+	it("allows grouped snippet categories to stay independently expanded", () => {
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerCopySnippetPack(samplePack);
+
+		render(
+			<Setup registry={registry}>
+				<TextModule />
+			</Setup>,
+		);
+
+		const basicTrigger = screen.getByRole("button", { name: /Basic copy/ });
+		const brandTrigger = screen.getByRole("button", { name: /Brand copy/ });
+
+		expect(basicTrigger.getAttribute("aria-expanded")).toBe("true");
+		expect(brandTrigger.getAttribute("aria-expanded")).toBe("true");
+
+		fireEvent.click(basicTrigger);
+
+		expect(basicTrigger.getAttribute("aria-expanded")).toBe("false");
+		expect(brandTrigger.getAttribute("aria-expanded")).toBe("true");
+
+		fireEvent.click(basicTrigger);
+
+		expect(basicTrigger.getAttribute("aria-expanded")).toBe("true");
+		expect(brandTrigger.getAttribute("aria-expanded")).toBe("true");
+	});
+
+	it("constrains lengthy snippet text within the sidebar row", () => {
+		const registry = createSidebarRegistryStore();
+		const longTitle =
+			"An exceptionally long launch announcement headline that should not push the sidebar wider";
+		const longBody =
+			"Trusted by product teams shipping polished pages with copy that continues far beyond the width of the sidebar preview row.";
+		registry.getState().registerCopySnippetPack({
+			id: "long-copy-pack",
+			locale: "en",
+			snippets: [
+				{
+					id: "long-copy",
+					category: "basic",
+					title: longTitle,
+					body: longBody,
+				},
+			],
+		});
+
+		render(
+			<Setup registry={registry}>
+				<TextModule />
+			</Setup>,
+		);
+
+		expect(screen.getByTestId("ak-text-snippet-long-copy").className).toContain(
+			"min-w-0",
+		);
+		expect(screen.getByText(longTitle).className).toContain("truncate");
+		expect(screen.getByText(longTitle).className).toContain("w-full");
+		expect(screen.getByText(longBody).className).toContain("break-words");
+		expect(screen.getByText(longBody).className).toContain("w-full");
+	});
+
 	it("filter strip toggles category and hides non-matching snippets", () => {
 		const registry = createSidebarRegistryStore();
 		registry.getState().registerCopySnippetPack(samplePack);

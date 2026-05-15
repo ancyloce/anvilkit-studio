@@ -17,14 +17,20 @@
  * the message is generic enough to read sensibly in both cases.
  */
 
-import { type ReactNode, useMemo } from "react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import {
 	Accordion,
 	AccordionItem,
 	AccordionPanel,
 	AccordionTrigger,
-} from "@/primitives/accordion";
+} from "@/primitives/animate-ui/components/base/accordion";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { CopyCategoryFilter } from "@/state/editor-ui-store";
 import type {
@@ -81,6 +87,19 @@ export function SnippetList({
 		);
 	}, [snippets, categoryFilter, searchTerm]);
 
+	const grouped = useMemo(() => groupByCategory(filtered), [filtered]);
+	const groupIds = useMemo(() => grouped.map(([cat]) => cat), [grouped]);
+	const [openGroupIds, setOpenGroupIds] =
+		useState<StudioCopySnippetCategory[]>(groupIds);
+
+	useEffect(() => {
+		setOpenGroupIds(groupIds);
+	}, [groupIds]);
+
+	const handleAccordionChange = useCallback((next: readonly string[]): void => {
+		setOpenGroupIds([...next] as StudioCopySnippetCategory[]);
+	}, []);
+
 	if (filtered.length === 0) {
 		return (
 			<EmptyState
@@ -108,18 +127,20 @@ export function SnippetList({
 		);
 	}
 
-	const grouped = groupByCategory(filtered);
-	const groupIds = grouped.map(([cat]) => cat);
-
 	return (
-		<Accordion value={groupIds} data-testid="ak-text-snippet-list-grouped">
+		<Accordion
+			multiple
+			value={openGroupIds}
+			onValueChange={handleAccordionChange}
+			data-testid="ak-text-snippet-list-grouped"
+		>
 			{grouped.map(([category, list]) => (
 				<AccordionItem key={category} value={category}>
 					<AccordionTrigger className="min-h-8 px-2 py-1.5">
-						<span className="grow truncate">
+						<span className="min-w-0 grow truncate">
 							{categoryLabel(category, msg)}
 						</span>
-						<span className="text-[10px] text-muted-foreground">
+						<span className="shrink-0 text-[10px] text-muted-foreground">
 							{list.length}
 						</span>
 					</AccordionTrigger>
