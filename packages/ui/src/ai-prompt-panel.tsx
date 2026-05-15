@@ -1,14 +1,8 @@
+"use client";
+
 /**
  * @file `<AiPromptPanel>` — selection-aware prompt panel for the AI
  * copilot.
- *
- * The Phase 6 / M9 sibling to the original 1.0 "Generate page" prompt.
- * The component renders a single `<textarea>` + submit affordance whose
- * mode is driven by the active Puck selection: zero selection switches
- * to whole-page generation (1.0 behavior); ≥ 1 selected node switches
- * to "Regenerate selection" so the host can call
- * `regenerateSelection(prompt, selection)` against
- * `@anvilkit/plugin-ai-copilot`.
  *
  * Pure presentation. The parent owns: the prompt string, the pending
  * status, the selection identity, and the submit handlers. The panel
@@ -16,47 +10,37 @@
  * the same primitive works in `apps/demo`, downstream Studio shells,
  * and component tests.
  *
- * Diagnostics: the panel surfaces a free-form `error` message (e.g.
- * a network failure) plus a structured `issues` list (one row per
- * `validateAiSectionPatch` issue). Both render inline below the
- * textarea so the author sees feedback without leaving the panel.
+ * Motion: the heading gradient-sweeps at rest and shimmers while a
+ * generation is pending; the description fades in on mode switch; the
+ * diagnostics block slides in via AnimatePresence; the submit button
+ * has a tactile hover/tap scale and a cross-fade label swap. Decoration
+ * is reserved for the heading — the body stays calm so author attention
+ * stays on the prompt.
  */
 
 import * as React from "react";
+import { AnimatePresence, motion } from "motion/react";
 
 import { Button } from "./button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "./card";
 import { Separator } from "./separator";
 import { Textarea } from "./textarea";
+import { Button as MotionButton } from "./components/animate-ui/primitives/buttons/button";
+import { GradientText } from "./components/animate-ui/primitives/texts/gradient";
+import { ShimmeringText } from "./components/animate-ui/primitives/texts/shimmering";
 
-/**
- * Lightweight description of the active Puck selection. Mirrors the
- * minimum surface `regenerateSelection()` needs without forcing the UI
- * package to depend on `@anvilkit/core/types` directly — keeps the
- * primitive importable from any host.
- */
 export interface AiPromptPanelSelection {
-	/**
-	 * Stable Puck zone id (root content, legacy zone, or slot zone).
-	 * Surfaced to the user as "Replacing in <zoneId>".
-	 */
 	readonly zoneId: string;
-	/**
-	 * Selected node ids in author-visible order.
-	 */
 	readonly nodeIds: readonly string[];
-	/**
-	 * Optional human-readable label per node (e.g. component type), used
-	 * to make the "Replacing 1 node" summary more legible. Falls back to
-	 * the node ids themselves when omitted.
-	 */
 	readonly nodeLabels?: readonly string[];
 }
 
-/**
- * One row in the inline diagnostics list. Matches the structured
- * payload `@anvilkit/plugin-ai-copilot` emits on `ai-copilot:error`.
- */
 export interface AiPromptPanelIssue {
 	readonly path: string;
 	readonly message: string;
@@ -64,65 +48,32 @@ export interface AiPromptPanelIssue {
 }
 
 export interface AiPromptPanelProps {
-	/**
-	 * Controlled prompt value.
-	 */
 	readonly prompt: string;
 	readonly onPromptChange: (next: string) => void;
-	/**
-	 * Active selection, or `null` for whole-page mode.
-	 *
-	 * The component switches mode purely on the truthiness + length of
-	 * `selection.nodeIds`: an empty list is treated identically to
-	 * `null` so callers don't need a special-case check.
-	 */
 	readonly selection?: AiPromptPanelSelection | null;
-	/**
-	 * Submission handler for the page-level flow. Required — the panel
-	 * always supports page mode.
-	 */
 	readonly onGenerate: (prompt: string) => void;
-	/**
-	 * Submission handler for the section-level flow. When omitted, the
-	 * panel still renders the section UI but disables the submit button
-	 * and surfaces a hint that the host has not wired
-	 * `regenerateSelection`.
-	 */
 	readonly onRegenerate?: (
 		prompt: string,
 		selection: AiPromptPanelSelection,
 	) => void;
-	/**
-	 * Generation status. `"pending"` disables the submit button and
-	 * shows a loading label.
-	 */
 	readonly status?: "idle" | "pending";
-	/**
-	 * Free-form error message rendered below the textarea (e.g. a
-	 * timeout or network failure). Plain text — no HTML.
-	 */
 	readonly error?: string | null;
-	/**
-	 * Structured diagnostics list. Errors render in red, warnings in
-	 * muted text. Empty array hides the section.
-	 */
 	readonly issues?: readonly AiPromptPanelIssue[];
-	/**
-	 * Optional hint shown when a section is selected — typically a
-	 * sentence telling the author what will be replaced. Falls back to
-	 * a default summary derived from `selection`.
-	 */
 	readonly sectionDescription?: string;
-	/**
-	 * Optional placeholder for the textarea. Defaults change with mode
-	 * to nudge the author toward useful prompt text.
-	 */
 	readonly placeholder?: string;
 	readonly className?: string;
 }
 
 const DEFAULT_PAGE_PLACEHOLDER = "a hero for a SaaS landing page";
 const DEFAULT_SECTION_PLACEHOLDER = "rewrite this hero in a punchier voice";
+
+const HEADING_GRADIENT =
+	"linear-gradient(90deg, var(--primary) 0%, hsl(280 90% 65%) 50%, var(--primary) 100%)";
+const HEADING_SWEEP = {
+	duration: 14,
+	repeat: Infinity,
+	ease: "linear",
+} as const;
 
 function summarizeSelection(selection: AiPromptPanelSelection): string {
 	const labels = selection.nodeLabels ?? selection.nodeIds;
@@ -166,7 +117,8 @@ function AiPromptPanel(props: AiPromptPanelProps): React.ReactElement {
 		placeholder ??
 		(isSectionMode ? DEFAULT_SECTION_PLACEHOLDER : DEFAULT_PAGE_PLACEHOLDER);
 
-	const errorIssues = issues?.filter((issue) => issue.severity === "error") ?? [];
+	const errorIssues =
+		issues?.filter((issue) => issue.severity === "error") ?? [];
 	const warnIssues = issues?.filter((issue) => issue.severity === "warn") ?? [];
 	const hasDiagnostics =
 		error !== null ||
@@ -187,6 +139,9 @@ function AiPromptPanel(props: AiPromptPanelProps): React.ReactElement {
 		}
 	}
 
+	const buttonLabel = isPending ? pendingLabel : submitLabel;
+	const modeKey = isSectionMode ? "section" : "page";
+
 	return (
 		<Card
 			data-slot="ai-prompt-panel"
@@ -194,12 +149,42 @@ function AiPromptPanel(props: AiPromptPanelProps): React.ReactElement {
 			className={className}
 		>
 			<CardHeader>
-				<CardTitle data-testid="ai-prompt-panel-eyebrow" className="text-xs uppercase tracking-wide text-muted-foreground">
+				<span
+					data-testid="ai-prompt-panel-eyebrow"
+					className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground"
+				>
+					<span aria-hidden className="size-1.5 rounded-full bg-primary/60" />
 					{eyebrow}
+				</span>
+				<CardTitle data-testid="ai-prompt-panel-heading">
+					{isPending ? (
+						<ShimmeringText
+							text={heading}
+							duration={1.4}
+							color="var(--muted-foreground)"
+							shimmeringColor="var(--foreground)"
+						/>
+					) : (
+						<GradientText
+							text={heading}
+							gradient={HEADING_GRADIENT}
+							transition={HEADING_SWEEP}
+						/>
+					)}
 				</CardTitle>
-				<CardTitle data-testid="ai-prompt-panel-heading">{heading}</CardTitle>
 				<CardDescription data-testid="ai-prompt-panel-description">
-					{description}
+					<AnimatePresence mode="wait" initial={false}>
+						<motion.span
+							key={modeKey}
+							initial={{ opacity: 0, y: 4 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: -4 }}
+							transition={{ duration: 0.2, ease: "easeOut" }}
+							style={{ display: "inline-block" }}
+						>
+							{description}
+						</motion.span>
+					</AnimatePresence>
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-3">
@@ -221,80 +206,115 @@ function AiPromptPanel(props: AiPromptPanelProps): React.ReactElement {
 					/>
 				</label>
 				<div className="flex flex-wrap items-center gap-2">
-					<Button
-						type="button"
-						data-testid="ai-prompt-panel-submit"
-						onClick={handleSubmit}
-						disabled={submitDisabled}
+					<MotionButton
+						asChild
+						hoverScale={submitDisabled ? 1 : 1.02}
+						tapScale={submitDisabled ? 1 : 0.97}
 					>
-						{isPending ? pendingLabel : submitLabel}
-					</Button>
+						<Button
+							type="button"
+							data-testid="ai-prompt-panel-submit"
+							onClick={handleSubmit}
+							disabled={submitDisabled}
+						>
+							<AnimatePresence mode="wait" initial={false}>
+								<motion.span
+									key={buttonLabel}
+									initial={{ opacity: 0, y: 4 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, y: -4 }}
+									transition={{ duration: 0.15 }}
+									style={{ display: "inline-block" }}
+								>
+									{buttonLabel}
+								</motion.span>
+							</AnimatePresence>
+						</Button>
+					</MotionButton>
 					{isSectionMode ? (
 						<span className="text-xs text-muted-foreground">
 							The surrounding canvas stays untouched.
 						</span>
 					) : null}
 				</div>
-				{hasDiagnostics ? (
-					<>
-						<Separator />
-						<div
-							role="status"
-							data-testid="ai-prompt-panel-diagnostics"
-							className="flex flex-col gap-2 text-sm"
+				<AnimatePresence initial={false}>
+					{hasDiagnostics ? (
+						<motion.div
+							key="diagnostics"
+							initial={{ opacity: 0, height: 0 }}
+							animate={{ opacity: 1, height: "auto" }}
+							exit={{ opacity: 0, height: 0 }}
+							transition={{ duration: 0.22, ease: "easeOut" }}
+							style={{ overflow: "hidden" }}
 						>
-							{sectionHandlerMissing ? (
-								<p className="text-destructive">
-									This host has not wired a section regenerator. Configure{" "}
-									<code className="font-mono text-xs">generateSection</code>{" "}
-									on <code className="font-mono text-xs">createAiCopilotPlugin</code>{" "}
-									to enable section regeneration.
-								</p>
-							) : null}
-							{error !== null ? (
-								<p
-									role="alert"
-									data-testid="ai-prompt-panel-error"
-									className="text-destructive"
+							<div className="flex flex-col gap-2 pt-1">
+								<Separator />
+								<div
+									role="status"
+									data-testid="ai-prompt-panel-diagnostics"
+									className="flex flex-col gap-2 text-sm"
 								>
-									{error}
-								</p>
-							) : null}
-							{errorIssues.length > 0 ? (
-								<ul
-									data-testid="ai-prompt-panel-error-issues"
-									className="flex flex-col gap-1 list-disc pl-5 text-destructive"
-								>
-									{errorIssues.map((issue, index) => (
-										<li
-											key={`${issue.path}:${index}`}
-											className="break-words"
+									{sectionHandlerMissing ? (
+										<p className="text-destructive">
+											This host has not wired a section regenerator. Configure{" "}
+											<code className="font-mono text-xs">generateSection</code>{" "}
+											on{" "}
+											<code className="font-mono text-xs">
+												createAiCopilotPlugin
+											</code>{" "}
+											to enable section regeneration.
+										</p>
+									) : null}
+									{error !== null ? (
+										<p
+											role="alert"
+											data-testid="ai-prompt-panel-error"
+											className="text-destructive"
 										>
-											<span className="font-mono text-xs">{issue.path || "(root)"}</span>{" "}
-											— {issue.message}
-										</li>
-									))}
-								</ul>
-							) : null}
-							{warnIssues.length > 0 ? (
-								<ul
-									data-testid="ai-prompt-panel-warn-issues"
-									className="flex flex-col gap-1 list-disc pl-5 text-muted-foreground"
-								>
-									{warnIssues.map((issue, index) => (
-										<li
-											key={`${issue.path}:${index}`}
-											className="break-words"
+											{error}
+										</p>
+									) : null}
+									{errorIssues.length > 0 ? (
+										<ul
+											data-testid="ai-prompt-panel-error-issues"
+											className="flex list-disc flex-col gap-1 pl-5 text-destructive"
 										>
-											<span className="font-mono text-xs">{issue.path || "(root)"}</span>{" "}
-											— {issue.message}
-										</li>
-									))}
-								</ul>
-							) : null}
-						</div>
-					</>
-				) : null}
+											{errorIssues.map((issue, index) => (
+												<li
+													key={`${issue.path}:${index}`}
+													className="break-words"
+												>
+													<span className="font-mono text-xs">
+														{issue.path || "(root)"}
+													</span>{" "}
+													— {issue.message}
+												</li>
+											))}
+										</ul>
+									) : null}
+									{warnIssues.length > 0 ? (
+										<ul
+											data-testid="ai-prompt-panel-warn-issues"
+											className="flex list-disc flex-col gap-1 pl-5 text-muted-foreground"
+										>
+											{warnIssues.map((issue, index) => (
+												<li
+													key={`${issue.path}:${index}`}
+													className="break-words"
+												>
+													<span className="font-mono text-xs">
+														{issue.path || "(root)"}
+													</span>{" "}
+													— {issue.message}
+												</li>
+											))}
+										</ul>
+									) : null}
+								</div>
+							</div>
+						</motion.div>
+					) : null}
+				</AnimatePresence>
 			</CardContent>
 		</Card>
 	);
