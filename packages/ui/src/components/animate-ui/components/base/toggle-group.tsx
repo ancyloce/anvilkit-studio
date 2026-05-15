@@ -10,7 +10,7 @@ import {
   type ToggleGroupProps as ToggleGroupPrimitiveProps,
   type ToggleProps as TogglePrimitiveProps,
 } from '@anvilkit/ui/components/animate-ui/primitives/base/toggle-group';
-import { toggleVariants } from '@anvilkit/ui/animate-ui/components/base/toggle';
+import { toggleVariants } from '@anvilkit/ui/components/animate-ui/components/base/toggle';
 import { cn } from '@anvilkit/ui/lib/utils';
 import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
 

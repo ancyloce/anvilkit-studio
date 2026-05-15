@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { HTMLMotionProps, motion, type Transition } from 'motion/react';
+import { motion, type HTMLMotionProps, type Transition } from 'motion/react';
 
 import {
   TooltipProvider,
@@ -37,13 +37,23 @@ function AvatarContainer({
       align={align}
       alignOffset={alignOffset}
     >
-      <TooltipTrigger render={<motion.div data-slot="avatar-container" initial="initial" whileHover="hover" whileTap="hover" style={{ position: 'relative', zIndex }} />}><motion.div
-                      variants={{
-                        initial: { y: 0 },
-                        hover: { y: translate },
-                      }}
-                      {...props}
-                    /></TooltipTrigger>
+      <TooltipTrigger asChild>
+        <motion.div
+          data-slot="avatar-container"
+          initial="initial"
+          whileHover="hover"
+          whileTap="hover"
+          style={{ position: 'relative', zIndex }}
+        >
+          <motion.div
+            variants={{
+              initial: { y: 0 },
+              hover: { y: translate },
+            }}
+            {...props}
+          />
+        </motion.div>
+      </TooltipTrigger>
     </Tooltip>
   );
 }
@@ -93,6 +103,7 @@ function AvatarGroup({
       >
         {children?.map((child, index) => (
           <AvatarContainer
+            // biome-ignore lint/suspicious/noArrayIndexKey: animate-ui upstream uses index as the avatar stacking key; the ordered list is static
             key={index}
             zIndex={
               invertOverlap ? React.Children.count(children) - index : index
