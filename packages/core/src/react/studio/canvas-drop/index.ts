@@ -17,6 +17,19 @@ export {
 	readDropPayload,
 } from "./drag-payload";
 export {
+	collectStringPaths,
+	findImageTargetAt,
+	findStringPropPath,
+	findTextElementAt,
+	findUrlPropPath,
+	getAtPath,
+	hasReplaceableTarget,
+	looksLikeImageUrl,
+	normalizeUrl,
+	type PropPath,
+	setPropAtPath,
+} from "./resolve-field-path";
+export {
 	resolveImageTargetProp,
 	resolveTextTargetProp,
 } from "./resolve-target-prop";

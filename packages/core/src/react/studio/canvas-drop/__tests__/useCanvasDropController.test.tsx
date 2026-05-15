@@ -293,4 +293,119 @@ describe("useCanvasDropController", () => {
 		expect(dispatch).not.toHaveBeenCalled();
 		expect(toastWarning).not.toHaveBeenCalled();
 	});
+
+	function appendText(tag: string, r: DOMRect, text: string): void {
+		const node = document.createElement(tag);
+		node.appendChild(document.createTextNode(text));
+		node.getBoundingClientRect = () => r;
+		target.appendChild(node);
+	}
+
+	function dropAt(
+		payload: Parameters<typeof encodeDropPayload>[1],
+		x: number,
+		y: number,
+	): void {
+		const dt = createDataTransfer();
+		encodeDropPayload(dt, payload);
+		document.dispatchEvent(
+			makeDragEvent("drop", dt, { clientX: x, clientY: y }),
+		);
+	}
+
+	it("replaces the corresponding prop under the cursor, not the first candidate", () => {
+		appendText("h1", rectAt(0, 0, 100, 40), "Old headline");
+		appendText("p", rectAt(0, 50, 100, 40), "Old description");
+		getItemById.mockReturnValue({
+			type: "Hero",
+			props: {
+				id: "t-1",
+				headline: "Old headline",
+				description: "Old description",
+			},
+		});
+		getSelectorForId.mockReturnValue({ index: 0, zone: "default-zone" });
+
+		renderHook(() => useCanvasDropController(document), { wrapper });
+		dropAt({ kind: "text", body: "NEW BODY" }, 5, 60);
+
+		expect(dispatch).toHaveBeenCalledTimes(1);
+		const props = (
+			dispatch.mock.calls[0]?.[0] as {
+				data: { props: Record<string, unknown> };
+			}
+		).data.props;
+		expect(props["description"]).toBe("NEW BODY");
+		expect(props["headline"]).toBe("Old headline");
+		expect(toastWarning).not.toHaveBeenCalled();
+	});
+
+	it("replaces an array-nested prop path", () => {
+		appendText("span", rectAt(0, 0, 40, 20), "Pro");
+		getItemById.mockReturnValue({
+			type: "Pricing",
+			props: {
+				id: "t-1",
+				plans: [
+					{ id: "p0", name: "Free" },
+					{ id: "p1", name: "Pro" },
+				],
+			},
+		});
+		getSelectorForId.mockReturnValue({ index: 0, zone: "default-zone" });
+
+		renderHook(() => useCanvasDropController(document), { wrapper });
+		dropAt({ kind: "text", body: "Team" }, 5, 5);
+
+		const props = (
+			dispatch.mock.calls[0]?.[0] as {
+				data: { props: { plans: { name: string }[] } };
+			}
+		).data.props;
+		expect(props.plans[1]?.name).toBe("Team");
+		expect(props.plans[0]?.name).toBe("Free");
+	});
+
+	it("replaces the matching image src and syncs a sibling alt", () => {
+		const img = document.createElement("img");
+		img.setAttribute("src", "/a.png");
+		img.getBoundingClientRect = () => rectAt(0, 0, 50, 50);
+		target.appendChild(img);
+		getItemById.mockReturnValue({
+			type: "Gallery",
+			props: { id: "t-1", gallery: [{ id: "g0", src: "/a.png", alt: "A" }] },
+		});
+		getSelectorForId.mockReturnValue({ index: 0, zone: "default-zone" });
+
+		renderHook(() => useCanvasDropController(document), { wrapper });
+		dropAt({ kind: "image", url: "/new.png", alt: "New alt" }, 5, 5);
+
+		const props = (
+			dispatch.mock.calls[0]?.[0] as {
+				data: { props: { gallery: { src: string; alt: string }[] } };
+			}
+		).data.props;
+		expect(props.gallery[0]?.src).toBe("/new.png");
+		expect(props.gallery[0]?.alt).toBe("New alt");
+	});
+
+	it("falls back to the candidate prop when the rendered text matches no prop", () => {
+		appendText("p", rectAt(0, 0, 100, 100), "Rendered, not stored");
+		getItemById.mockReturnValue({
+			type: "Text",
+			props: { id: "t-1", text: "stored value" },
+		});
+		getSelectorForId.mockReturnValue({ index: 0, zone: "default-zone" });
+
+		renderHook(() => useCanvasDropController(document), { wrapper });
+		dropAt({ kind: "text", body: "FALLBACK" }, 5, 5);
+
+		const props = (
+			dispatch.mock.calls[0]?.[0] as {
+				data: { props: Record<string, unknown> };
+			}
+		).data.props;
+		expect(props["text"]).toBe("FALLBACK");
+		expect(toastWarning).not.toHaveBeenCalled();
+	});
 });

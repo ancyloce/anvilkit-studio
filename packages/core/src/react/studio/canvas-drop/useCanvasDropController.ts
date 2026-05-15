@@ -36,11 +36,20 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { useMsg } from "@/state/editor-i18n-store";
 import {
-	type CanvasDropKind,
 	hasCanvasDropPayload,
 	peekDropKind,
 	readDropPayload,
 } from "./drag-payload";
+import {
+	findImageTargetAt,
+	findStringPropPath,
+	findTextElementAt,
+	findUrlPropPath,
+	getAtPath,
+	hasReplaceableTarget,
+	type PropPath,
+	setPropAtPath,
+} from "./resolve-field-path";
 import {
 	resolveImageTargetProp,
 	resolveTextTargetProp,
@@ -53,10 +62,12 @@ const PUCK_COMPONENT_ATTR = "data-puck-component";
 const PUCK_COMPONENT_SELECTOR = `[${PUCK_COMPONENT_ATTR}]`;
 const IMAGE_ALT_COMPANIONS = ["alt", "title"] as const;
 
-interface ResolvedTarget {
+interface ResolvedComponent {
 	readonly id: string;
-	readonly prop: string;
 	readonly element: Element;
+	readonly item: PuckComponentData & {
+		readonly props: { readonly id: string } & Record<string, unknown>;
+	};
 }
 
 /**
@@ -122,24 +133,21 @@ export function useCanvasDropController(doc: Document | undefined): void {
 			}
 		};
 
-		const resolveTarget = (
+		const resolveComponent = (
 			clientX: number,
 			clientY: number,
-			kind: CanvasDropKind,
-		): ResolvedTarget | null => {
+		): ResolvedComponent | null => {
 			const wrapper = resolveComponentElementAt(doc, clientX, clientY);
 			if (wrapper === null) return null;
 			const id = wrapper.getAttribute(PUCK_COMPONENT_ATTR);
 			if (id === null || id === "") return null;
-			const snapshot = getPuck();
-			const item = snapshot.getItemById(id);
+			const item = getPuck().getItemById(id);
 			if (item === undefined) return null;
-			const prop =
-				kind === "text"
-					? resolveTextTargetProp(item, snapshot.config)
-					: resolveImageTargetProp(item, snapshot.config);
-			if (prop === null) return null;
-			return { id, prop, element: wrapper };
+			return {
+				id,
+				element: wrapper,
+				item: item as ResolvedComponent["item"],
+			};
 		};
 
 		const onDragEnter = (event: DragEvent): void => {
@@ -164,10 +172,11 @@ export function useCanvasDropController(doc: Document | undefined): void {
 
 			const kind = peekDropKind(dt);
 			const target =
-				kind === null
-					? null
-					: resolveTarget(event.clientX, event.clientY, kind);
-			if (target === null) {
+				kind === null ? null : resolveComponent(event.clientX, event.clientY);
+			if (
+				target === null ||
+				!hasReplaceableTarget(target.item.props, kind as "text" | "image")
+			) {
 				clearHighlight();
 				return;
 			}
@@ -197,39 +206,85 @@ export function useCanvasDropController(doc: Document | undefined): void {
 					? "studio.module.text.requireTarget"
 					: "studio.module.image.requireTarget";
 
-			const target = resolveTarget(event.clientX, event.clientY, payload.kind);
+			const target = resolveComponent(event.clientX, event.clientY);
 			if (target === null) {
 				toast.warning(msg(warnKey));
 				return;
 			}
 
 			const snapshot = getPuck();
-			const item = snapshot.getItemById(target.id);
 			const selector = snapshot.getSelectorForId(target.id);
-			if (item === undefined || selector === undefined) {
+			if (selector === undefined) {
 				// Race: node moved/removed between dragover and drop.
 				toast.warning(msg(warnKey));
 				return;
 			}
 
-			// `getItemById` returns a Puck node whose props carry `id`;
-			// narrow so the rebuilt `replace` payload keeps that shape
-			// (mirrors `state/useInsertSnippet.ts`).
-			const targetItem = item as PuckComponentData & {
-				readonly props: { readonly id: string } & Record<string, unknown>;
-			};
+			const targetItem = target.item;
 			const value = payload.kind === "text" ? payload.body : payload.url;
-			const nextProps: { id: string } & Record<string, unknown> = {
-				...targetItem.props,
-				[target.prop]: value,
-			};
-			// Best-effort: keep an existing alt/title companion in sync
-			// with the new image. Never *adds* a prop the component
-			// didn't already declare.
-			if (payload.kind === "image" && payload.alt !== "") {
-				for (const companion of IMAGE_ALT_COMPANIONS) {
-					if (Object.hasOwn(targetItem.props, companion)) {
-						nextProps[companion] = payload.alt;
+
+			// 1. Position heuristic — replace the prop whose value renders
+			//    under the cursor (the *corresponding* text/image).
+			let path: PropPath | null = null;
+			if (payload.kind === "text") {
+				const hitText = findTextElementAt(
+					target.element,
+					event.clientX,
+					event.clientY,
+				);
+				path =
+					hitText === null
+						? null
+						: findStringPropPath(targetItem.props, hitText);
+			} else {
+				const hitUrl = findImageTargetAt(
+					target.element,
+					event.clientX,
+					event.clientY,
+				);
+				path =
+					hitUrl === null ? null : findUrlPropPath(targetItem.props, hitUrl);
+			}
+
+			let nextProps: { id: string } & Record<string, unknown>;
+			if (path !== null) {
+				nextProps = setPropAtPath(targetItem.props, path, value);
+				// Keep an existing alt/title companion (sibling of the
+				// replaced image prop) in sync. Never *adds* a prop.
+				if (payload.kind === "image" && payload.alt !== "") {
+					const parent = path.slice(0, -1);
+					const parentObj = getAtPath(nextProps, parent);
+					if (parentObj !== null && typeof parentObj === "object") {
+						for (const companion of IMAGE_ALT_COMPANIONS) {
+							if (Object.hasOwn(parentObj, companion)) {
+								nextProps = setPropAtPath(
+									nextProps,
+									[...parent, companion],
+									payload.alt,
+								);
+							}
+						}
+					}
+				}
+			} else {
+				// 2. Fallback — top-level candidate prop (the prior
+				//    heuristic; keeps bare Text/Image + bg-image-only
+				//    components working when value matching can't pin a
+				//    prop, e.g. empty/duplicated values).
+				const prop =
+					payload.kind === "text"
+						? resolveTextTargetProp(targetItem, snapshot.config)
+						: resolveImageTargetProp(targetItem, snapshot.config);
+				if (prop === null) {
+					toast.warning(msg(warnKey));
+					return;
+				}
+				nextProps = { ...targetItem.props, [prop]: value };
+				if (payload.kind === "image" && payload.alt !== "") {
+					for (const companion of IMAGE_ALT_COMPANIONS) {
+						if (Object.hasOwn(targetItem.props, companion)) {
+							nextProps[companion] = payload.alt;
+						}
 					}
 				}
 			}
