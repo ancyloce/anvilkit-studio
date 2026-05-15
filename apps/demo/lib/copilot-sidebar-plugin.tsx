@@ -74,7 +74,17 @@ function CopilotSidebarPanel({
 					) : null}
 				</button>
 			</MotionButton>
-			<AiCopilotPanel plugin={aiCopilotPlugin} selection={selection} />
+			{/* model id is informational only — the plugin does not yet route generation by model */}
+			<AiCopilotPanel
+				plugin={aiCopilotPlugin}
+				selection={selection}
+				brandName="Claude Cowork"
+				models={[
+					{ id: "claude-sonnet-4-6", label: "Sonnet 4.6" },
+					{ id: "claude-opus-4-7", label: "Opus 4.7" },
+				]}
+				defaultModelId="claude-sonnet-4-6"
+			/>
 		</div>
 	);
 }
