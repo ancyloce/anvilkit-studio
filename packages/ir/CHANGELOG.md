@@ -1,5 +1,13 @@
 # @anvilkit/ir
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [2438917]
+  - @anvilkit/core@0.1.3
+  - @anvilkit/utils@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

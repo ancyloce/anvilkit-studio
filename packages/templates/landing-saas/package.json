@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/template-landing-saas",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"private": true,
 	"description": "Landing page for a SaaS product — hero, logo cloud, bento features, pricing, FAQ.",
 	"type": "module",
