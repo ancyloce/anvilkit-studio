@@ -42,6 +42,7 @@ import {
 } from "../../../lib/collab-transport";
 import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
+import { createDemoVersionHistoryPlugins } from "../../../lib/history-sidebar-plugin";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -104,6 +105,18 @@ const aiCopilotPlugin = createAiCopilotPlugin({
 // stays stable across React re-renders (mirrors the other plugins
 // above).
 const copilotSidebarPlugin = createCopilotSidebarPlugin({ aiCopilotPlugin });
+
+// Pairs the headless `@anvilkit/plugin-version-history` plugin with a
+// thin sidebar-panel registration so the StudioSidebar's `history`
+// module renders snapshot save/list/diff/restore. Same module-scope
+// hoist as the copilot pair so registrations stay stable across
+// re-renders. localStorage adapter persists across reloads.
+const {
+	versionHistoryPlugin: demoVersionHistoryPlugin,
+	sidebarPlugin: historySidebarPlugin,
+} = createDemoVersionHistoryPlugins({
+	puckConfig: demoConfig as unknown as Config,
+});
 
 interface AssetManagerTestHarness {
 	readonly ctx: StudioPluginContext;
@@ -396,6 +409,8 @@ export default function PuckEditorPage() {
 			reactExportPlugin,
 			aiCopilotPlugin,
 			copilotSidebarPlugin,
+			demoVersionHistoryPlugin,
+			historySidebarPlugin,
 			liveAssetManagerPlugin,
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,

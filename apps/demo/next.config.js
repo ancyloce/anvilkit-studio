@@ -19,6 +19,7 @@ const nextConfig = {
 		"@anvilkit/plugin-collab-yjs",
 		"@anvilkit/plugin-export-html",
 		"@anvilkit/plugin-export-react",
+		"@anvilkit/plugin-version-history",
 		"@anvilkit/pricing-minimal",
 		"@anvilkit/schema",
 		"@anvilkit/section",
