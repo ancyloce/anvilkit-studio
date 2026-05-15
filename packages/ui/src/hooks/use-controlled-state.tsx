@@ -5,7 +5,8 @@ interface CommonControlledStateProps<T> {
   defaultValue?: T;
 }
 
-export function useControlledState<T, Rest extends unknown[] = []>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useControlledState<T, Rest extends any[] = []>(
   props: CommonControlledStateProps<T> & {
     onChange?: (value: T, ...args: Rest) => void;
   },
