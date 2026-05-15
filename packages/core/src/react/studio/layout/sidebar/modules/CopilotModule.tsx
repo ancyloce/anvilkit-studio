@@ -37,7 +37,7 @@ export function CopilotModule(): ReactNode {
 	}
 
 	return (
-		<div data-testid="ak-module-copilot" className="flex h-full flex-col p-2">
+		<div data-testid="ak-module-copilot" className="flex h-full flex-col">
 			{panel.render()}
 		</div>
 	);
