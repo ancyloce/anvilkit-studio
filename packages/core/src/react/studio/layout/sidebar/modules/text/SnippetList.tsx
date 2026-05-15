@@ -112,7 +112,7 @@ export function SnippetList({
 	if (searchTerm.length > 0) {
 		return (
 			<div
-				className="flex flex-col gap-1 p-2"
+				className="flex min-w-0 flex-col gap-1 p-2"
 				data-testid="ak-text-snippet-list-flat"
 			>
 				{filtered.map((snippet) => (
@@ -135,8 +135,12 @@ export function SnippetList({
 			data-testid="ak-text-snippet-list-grouped"
 		>
 			{grouped.map(([category, list]) => (
-				<AccordionItem key={category} value={category}>
-					<AccordionTrigger className="min-h-8 px-2 py-1.5">
+				<AccordionItem
+					key={category}
+					value={category}
+					className="min-w-0"
+				>
+					<AccordionTrigger className="min-h-8 items-center px-2 py-1.5">
 						<span className="min-w-0 grow truncate">
 							{categoryLabel(category, msg)}
 						</span>
@@ -144,8 +148,8 @@ export function SnippetList({
 							{list.length}
 						</span>
 					</AccordionTrigger>
-					<AccordionPanel className="p-0">
-						<div className="flex flex-col gap-1 p-2">
+					<AccordionPanel keepRendered className="p-0">
+						<div className="flex min-w-0 flex-col gap-1 p-2">
 							{list.map((snippet) => (
 								<SnippetRow
 									key={snippet.id}
