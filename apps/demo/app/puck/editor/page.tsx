@@ -1,6 +1,7 @@
 "use client";
 
 import { Studio, StudioConfigSchema, compilePlugins } from "@anvilkit/core";
+import type { StudioPlugin } from "@anvilkit/core";
 import type {
 	ExportWarning,
 	PageIR,
@@ -117,6 +118,28 @@ const {
 } = createDemoVersionHistoryPlugins({
 	puckConfig: demoConfig as unknown as Config,
 });
+
+// Demo chrome: drop the "Upload asset" / "Save snapshot" / "Open
+// history" toolbar buttons from the StudioHeader. The plugins still
+// power their sidebar modules (image picker, history panel) and
+// register every other artifact with the runtime — only their
+// `headerActions` block is stripped. Module-scope so the wrapped
+// references stay stable across re-renders, matching the hoist
+// rationale for the plugins above.
+function withoutHeaderActions(plugin: StudioPlugin): StudioPlugin {
+	return {
+		meta: plugin.meta,
+		async register(ctx) {
+			const { headerActions: _omitted, ...rest } =
+				await plugin.register(ctx);
+			return rest;
+		},
+	};
+}
+const assetManagerNoHeaderPlugin = withoutHeaderActions(liveAssetManagerPlugin);
+const versionHistoryNoHeaderPlugin = withoutHeaderActions(
+	demoVersionHistoryPlugin,
+);
 
 interface AssetManagerTestHarness {
 	readonly ctx: StudioPluginContext;
@@ -409,9 +432,9 @@ export default function PuckEditorPage() {
 			reactExportPlugin,
 			aiCopilotPlugin,
 			copilotSidebarPlugin,
-			demoVersionHistoryPlugin,
+			versionHistoryNoHeaderPlugin,
 			historySidebarPlugin,
-			liveAssetManagerPlugin,
+			assetManagerNoHeaderPlugin,
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
 		];
