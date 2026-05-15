@@ -16,7 +16,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "A first-party or third-party Anvilkit template — a\n"
+						"text": "A first-party or third-party Anvilkit template — a\r\n"
 					},
 					{
 						"kind": "inline-tag",
@@ -26,7 +26,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " plus the full\n"
+						"text": " plus the full\r\n"
 					},
 					{
 						"kind": "inline-tag",
@@ -36,7 +36,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " tree that composes it.\n\nShipped as the default export of a "
+						"text": " tree that composes it.\r\n\r\nShipped as the default export of a "
 					},
 					{
 						"kind": "code",
@@ -44,7 +44,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "\npackage. The CLI "
+						"text": "\r\npackage. The CLI "
 					},
 					{
 						"kind": "code",
@@ -52,7 +52,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " resolves this\nobject, writes the IR to the scaffolded project, and installs the\npackages listed in "
+						"text": " resolves this\r\nobject, writes the IR to the scaffolded project, and installs the\r\npackages listed in "
 					},
 					{
 						"kind": "inline-tag",
@@ -80,7 +80,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "One-sentence description surfaced in the catalog card and the\nCLI picker. Should read as a prose sentence ending in a period."
+								"text": "One-sentence description surfaced in the catalog card and the\r\nCLI picker. Should read as a prose sentence ending in a period."
 							}
 						]
 					},
@@ -158,7 +158,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Component packages the template depends on, in a deterministic\norder (alphabetical by package name is the convention first-\nparty seeds follow). Consumers must treat this list as closed —\na template may not reference components outside the listed set."
+								"text": "Component packages the template depends on, in a deterministic\r\norder (alphabetical by package name is the convention first-\r\nparty seeds follow). Consumers must treat this list as closed —\r\na template may not reference components outside the listed set."
 							}
 						]
 					},
@@ -201,7 +201,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "The template's page tree. Must validate against the component\nschemas of every package listed in "
+								"text": "The template's page tree. Must validate against the component\r\nschemas of every package listed in "
 							},
 							{
 								"kind": "inline-tag",
@@ -211,7 +211,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " — first-\nparty templates enforce this in CI via\n"
+								"text": " — first-\r\nparty templates enforce this in CI via\r\n"
 							},
 							{
 								"kind": "code",
@@ -219,7 +219,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " (see\n"
+								"text": " (see\r\n"
 							},
 							{
 								"kind": "code",
@@ -311,7 +311,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Stable URL-safe identifier. Lowercase, hyphen-separated. Used by\nthe CLI ("
+								"text": "Stable URL-safe identifier. Lowercase, hyphen-separated. Used by\r\nthe CLI ("
 							},
 							{
 								"kind": "code",
@@ -319,7 +319,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ") and by the docs route\n("
+								"text": ") and by the docs route\r\n("
 							},
 							{
 								"kind": "code",
@@ -390,7 +390,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "The metadata half of a template — everything a catalog listing\nneeds to render a card, without loading the full "
+						"text": "The metadata half of a template — everything a catalog listing\r\nneeds to render a card, without loading the full "
 					},
 					{
 						"kind": "inline-tag",
@@ -400,7 +400,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ".\n\nSplit out from "
+						"text": ".\r\n\r\nSplit out from "
 					},
 					{
 						"kind": "inline-tag",
@@ -410,7 +410,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " so downstream UIs can type\na lightweight listing (e.g. "
+						"text": " so downstream UIs can type\r\na lightweight listing (e.g. "
 					},
 					{
 						"kind": "code",
@@ -418,7 +418,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ") without\nmaterializing every template's tree. The docs-site catalog route\n("
+						"text": ") without\r\nmaterializing every template's tree. The docs-site catalog route\r\n("
 					},
 					{
 						"kind": "code",
@@ -443,7 +443,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "One-sentence description surfaced in the catalog card and the\nCLI picker. Should read as a prose sentence ending in a period."
+								"text": "One-sentence description surfaced in the catalog card and the\r\nCLI picker. Should read as a prose sentence ending in a period."
 							}
 						]
 					},
@@ -509,7 +509,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Component packages the template depends on, in a deterministic\norder (alphabetical by package name is the convention first-\nparty seeds follow). Consumers must treat this list as closed —\na template may not reference components outside the listed set."
+								"text": "Component packages the template depends on, in a deterministic\r\norder (alphabetical by package name is the convention first-\r\nparty seeds follow). Consumers must treat this list as closed —\r\na template may not reference components outside the listed set."
 							}
 						]
 					},
@@ -588,7 +588,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Stable URL-safe identifier. Lowercase, hyphen-separated. Used by\nthe CLI ("
+								"text": "Stable URL-safe identifier. Lowercase, hyphen-separated. Used by\r\nthe CLI ("
 							},
 							{
 								"kind": "code",
@@ -596,7 +596,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ") and by the docs route\n("
+								"text": ") and by the docs route\r\n("
 							},
 							{
 								"kind": "code",
@@ -668,7 +668,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " manifest — the name and\nversion of a component package the template's "
+						"text": " manifest — the name and\r\nversion of a component package the template's "
 					},
 					{
 						"kind": "inline-tag",
@@ -678,7 +678,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "\ndepends on.\n\nTemplates enumerate their package graph explicitly (rather than\nderiving it from "
+						"text": "\r\ndepends on.\r\n\r\nTemplates enumerate their package graph explicitly (rather than\r\nderiving it from "
 					},
 					{
 						"kind": "code",
@@ -686,7 +686,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ") so a docs catalog can list dependencies\nwithout walking the tree and so a future installer can resolve a\nlockfile from the manifest alone."
+						"text": ") so a docs catalog can list dependencies\r\nwithout walking the tree and so a future installer can resolve a\r\nlockfile from the manifest alone."
 					}
 				]
 			},
@@ -794,7 +794,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "A static preview image for a template — produced once per template\nby the Playwright capture pipeline ("
+						"text": "A static preview image for a template — produced once per template\r\nby the Playwright capture pipeline ("
 					},
 					{
 						"kind": "code",
@@ -802,7 +802,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "). Consumed by the\ndocs catalog and CLI picker to render a thumbnail before the\ntemplate's full IR is loaded.\n\nDimensions are carried alongside the URL so catalog layouts can\nreserve space without a network round-trip, and "
+						"text": "). Consumed by the\r\ndocs catalog and CLI picker to render a thumbnail before the\r\ntemplate's full IR is loaded.\r\n\r\nDimensions are carried alongside the URL so catalog layouts can\r\nreserve space without a network round-trip, and "
 					},
 					{
 						"kind": "code",
@@ -810,7 +810,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " is required\n(not optional) so every catalog card has accessible text by\ndefault."
+						"text": " is required\r\n(not optional) so every catalog card has accessible text by\r\ndefault."
 					}
 				]
 			},
@@ -827,7 +827,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Non-empty alternative text describing the preview. Required — a\ntemplate that ships a preview must also ship accessible text."
+								"text": "Non-empty alternative text describing the preview. Required — a\r\ntemplate that ships a preview must also ship accessible text."
 							}
 						]
 					},
@@ -885,7 +885,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Absolute or package-relative URL to the preview image. Templates\ntypically ship a "
+								"text": "Absolute or package-relative URL to the preview image. Templates\r\ntypically ship a "
 							},
 							{
 								"kind": "code",
@@ -901,7 +901,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\nand set "
+								"text": "\r\nand set "
 							},
 							{
 								"kind": "code",
@@ -917,7 +917,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "; the docs-site generator\nrewrites this to a CDN URL at build time."
+								"text": "; the docs-site generator\r\nrewrites this to a CDN URL at build time."
 							}
 						]
 					},
@@ -1019,7 +1019,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\n\nDeliberately shallow: it verifies the top-level keys that matter\nfor the docs catalog and CLI pickers (slug / name / description /\npreview / packages / pageIR.version) and does **not** re-validate\nthe component tree. Deep validation is the validator package's\njob ("
+								"text": ".\r\n\r\nDeliberately shallow: it verifies the top-level keys that matter\r\nfor the docs catalog and CLI pickers (slug / name / description /\r\npreview / packages / pageIR.version) and does **not** re-validate\r\nthe component tree. Deep validation is the validator package's\r\njob ("
 							},
 							{
 								"kind": "code",
@@ -1027,7 +1027,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "), run once per template at build time\nin CI."
+								"text": "), run once per template at build time\r\nin CI."
 							}
 						],
 						"blockTags": [
@@ -1048,7 +1048,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " is an object that conforms to the\n  surface-level "
+										"text": " is an object that conforms to the\r\n  surface-level "
 									},
 									{
 										"kind": "inline-tag",
@@ -1083,7 +1083,7 @@
 								"summary": [
 									{
 										"kind": "text",
-										"text": "Any value, typically the default export of a\n  third-party "
+										"text": "Any value, typically the default export of a\r\n  third-party "
 									},
 									{
 										"kind": "code",
