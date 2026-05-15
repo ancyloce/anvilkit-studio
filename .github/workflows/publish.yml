@@ -119,10 +119,21 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
+      # RELEASE_PAT (a fine-grained PAT or GitHub App token) is used
+      # instead of the default GITHUB_TOKEN so changesets/action can
+      # open the "Version packages" PR. The default token is blocked
+      # from creating PRs unless the repo-wide "Allow GitHub Actions
+      # to create and approve pull requests" setting is enabled; using
+      # a PAT here keeps that restrictive default. The PAT also drives
+      # the branch push and recursive submodule checkout below, and —
+      # unlike GITHUB_TOKEN — its pushes trigger CI on the version PR.
+      # Required scopes: Contents: read/write, Pull requests:
+      # read/write on this repo and every submodule repo.
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_PAT }}
 
       - uses: pnpm/action-setup@v4
         with:
@@ -229,7 +240,10 @@ jobs:
           commit: "chore: version packages"
           title: "chore: version packages"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # PAT (not GITHUB_TOKEN) so the action can create the
+          # release PR with the repo-wide Actions-create-PR setting
+          # left disabled. See the checkout step note above.
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
