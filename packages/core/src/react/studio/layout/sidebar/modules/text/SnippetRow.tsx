@@ -8,7 +8,8 @@
  * the insert command can surface the explanatory toast.
  */
 
-import { type ReactNode } from "react";
+import { type DragEvent, type ReactNode } from "react";
+import { encodeDropPayload } from "@/canvas-drop";
 import { Button } from "@/primitives/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import type { StudioCopySnippet } from "@/types/sidebar";
@@ -33,6 +34,14 @@ export function SnippetRow({
 						variant="ghost"
 						size="sm"
 						onClick={() => onClick(snippet)}
+						draggable
+						onDragStart={(event: DragEvent<HTMLButtonElement>) => {
+							encodeDropPayload(event.dataTransfer, {
+								kind: "text",
+								body: snippet.body,
+							});
+							event.dataTransfer.effectAllowed = "copy";
+						}}
 						aria-disabled={disabled || undefined}
 						data-disabled={disabled || undefined}
 						data-testid={`ak-text-snippet-${snippet.id}`}

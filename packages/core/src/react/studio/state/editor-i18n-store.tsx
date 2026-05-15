@@ -146,6 +146,8 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.image.actions.replace": "Replace",
 	"studio.module.image.actions.copyUrl": "Copy URL",
 	"studio.module.image.actions.delete": "Delete",
+	"studio.module.image.requireTarget":
+		"Drop the asset onto an image element on the canvas to replace it.",
 
 	// Module: text (PRD §8).
 	"studio.module.text.name": "Copywriting",

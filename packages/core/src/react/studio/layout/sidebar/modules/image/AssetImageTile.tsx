@@ -3,7 +3,8 @@
  * an overflow menu top-right and a filename caption below.
  */
 
-import { type ReactNode } from "react";
+import { type DragEvent, type ReactNode } from "react";
+import { encodeDropPayload } from "@/canvas-drop";
 import { Button } from "@/primitives/button";
 import type { StudioAsset } from "@/types/sidebar";
 
@@ -27,6 +28,15 @@ export function AssetImageTile({
 			<Button
 				variant="ghost"
 				onClick={onClick}
+				draggable
+				onDragStart={(event: DragEvent<HTMLButtonElement>) => {
+					encodeDropPayload(event.dataTransfer, {
+						kind: "image",
+						url: asset.url,
+						alt: asset.name,
+					});
+					event.dataTransfer.effectAllowed = "copy";
+				}}
 				className="relative aspect-square h-auto w-full overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] p-0 transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}
 			>

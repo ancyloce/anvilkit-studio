@@ -123,6 +123,19 @@ const IFRAME_SELECTION_BLOCK = `[class*="_DraggableComponent-overlay_"] {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 6px;
+}
+
+/*
+ * Drop-target highlight for sidebar → canvas drag-and-drop
+ * replacement (canvas-drop/useCanvasDropController). Painted on the
+ * Puck component wrapper under the pointer while a compatible text or
+ * image payload is being dragged. \`!important\` so it reads clearly
+ * over arbitrary component styling.
+ */
+[data-ak-drop-target] {
+	outline: 2px dashed var(--ak-studio-accent) !important;
+	outline-offset: -2px !important;
+	background-color: color-mix(in oklab, var(--ak-studio-accent) 10%, transparent) !important;
 }`;
 
 export const IFRAME_THEME_CSS = `${TOKEN_BLOCK}\n${IFRAME_RESET_BLOCK}\n${IFRAME_SELECTION_BLOCK}`;
