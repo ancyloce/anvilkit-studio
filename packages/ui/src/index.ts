@@ -24,6 +24,7 @@ export * from "./progress";
 export * from "./rainbow-button";
 export * from "./ripple";
 export * from "./safari";
+export * from "./scroll-area";
 export * from "./separator";
 export * from "./shimmer-button";
 export * from "./textarea";
