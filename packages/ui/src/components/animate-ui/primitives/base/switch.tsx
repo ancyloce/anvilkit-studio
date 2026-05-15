@@ -10,8 +10,8 @@ import {
   type LegacyAnimationControls,
 } from 'motion/react';
 
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context.d';
-import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state.d';
+import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
+import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state';
 
 type SwitchContextType = {
   isChecked: boolean;

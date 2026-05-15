@@ -12,7 +12,7 @@ import {
 } from '@anvilkit/ui/components/animate-ui/primitives/base/toggle-group';
 import { toggleVariants } from '@anvilkit/ui/animate-ui/components/base/toggle';
 import { cn } from '@anvilkit/ui/lib/utils';
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context.d';
+import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
 
 const [ToggleGroupProvider, useToggleGroup] =
   getStrictContext<VariantProps<typeof toggleVariants>>('ToggleGroupContext');

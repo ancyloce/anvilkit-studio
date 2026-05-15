@@ -10,8 +10,8 @@ import {
   type HighlightItemProps,
   type HighlightProps,
 } from '@anvilkit/ui/components/animate-ui/primitives/effects/highlight';
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context.d';
-import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state.d';
+import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
+import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state';
 import { useDataState } from '@anvilkit/ui/hooks/use-data-state';
 
 type MenuActiveValueContextType = {

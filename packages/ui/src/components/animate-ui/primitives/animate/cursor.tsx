@@ -10,7 +10,7 @@ import {
   type SpringOptions,
 } from 'motion/react';
 
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context.d';
+import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
 import { Slot, type WithAsChild } from '@anvilkit/ui/components/animate-ui/primitives/animate/slot';
 
 type CursorContextType = {
