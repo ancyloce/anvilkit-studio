@@ -310,6 +310,32 @@ export interface StudioCopilotPanel {
 }
 
 // -----------------------------------------------------------------------------
+// `history` module — Version History
+// -----------------------------------------------------------------------------
+
+/**
+ * Host-supplied panel body for the sidebar's `history` module.
+ * `@anvilkit/core` stays agnostic about any specific snapshot store —
+ * the host (or an integration plugin paired with
+ * `@anvilkit/plugin-version-history`) registers a single panel via
+ * `ctx.registerHistoryPanel(panel)` and owns its own React state,
+ * adapter reference, and restore-dispatch wiring.
+ *
+ * Mirrors {@link StudioCopilotPanel} and {@link StudioAssetSource}: v1
+ * supports a single panel, last-write-wins; the module shows
+ * `studio.module.history.empty` until a panel is registered.
+ */
+export interface StudioHistoryPanel {
+	/**
+	 * Render the panel body. Called from the `history` module on every
+	 * render; the returned tree is rendered directly inside the sidebar
+	 * panel's body slot. Implementations may close over an adapter
+	 * reference and own their internal state via standard hooks.
+	 */
+	readonly render: () => ReactNode;
+}
+
+// -----------------------------------------------------------------------------
 // Common
 // -----------------------------------------------------------------------------
 

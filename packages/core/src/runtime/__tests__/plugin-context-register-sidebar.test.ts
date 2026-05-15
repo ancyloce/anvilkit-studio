@@ -44,6 +44,8 @@ function buildCtx(
 			registry.getState().registerCopySnippetPack(pack),
 		registerCopilotPanel: (panel) =>
 			registry.getState().registerCopilotPanel(panel),
+		registerHistoryPanel: (panel) =>
+			registry.getState().registerHistoryPanel(panel),
 	};
 }
 
@@ -88,6 +90,9 @@ describe("plugin context — register* sidebar helpers", () => {
 					innerCtx.registerCopilotPanel!({
 						render: () => null,
 					}),
+					innerCtx.registerHistoryPanel!({
+						render: () => null,
+					}),
 				);
 				return { meta: plugin.meta };
 			},
@@ -102,6 +107,7 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(state.assetActions.has("action-1")).toBe(true);
 		expect(state.copyPacks.has("pack-1")).toBe(true);
 		expect(state.copilotPanel).not.toBeNull();
+		expect(state.historyPanel).not.toBeNull();
 
 		for (const off of offHandles) off();
 
@@ -112,6 +118,7 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(cleared.assetActions.size).toBe(0);
 		expect(cleared.copyPacks.size).toBe(0);
 		expect(cleared.copilotPanel).toBeNull();
+		expect(cleared.historyPanel).toBeNull();
 	});
 
 	it("hand-written contexts may omit the register* helpers", () => {
@@ -135,5 +142,6 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(minimal.registerAssetAction).toBeUndefined();
 		expect(minimal.registerCopySnippetPack).toBeUndefined();
 		expect(minimal.registerCopilotPanel).toBeUndefined();
+		expect(minimal.registerHistoryPanel).toBeUndefined();
 	});
 });

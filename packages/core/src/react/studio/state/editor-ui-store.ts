@@ -47,7 +47,13 @@
 import { persist } from "zustand/middleware";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
-export type EditorTab = "insert" | "layer" | "image" | "text" | "copilot";
+export type EditorTab =
+	| "insert"
+	| "layer"
+	| "image"
+	| "text"
+	| "copilot"
+	| "history";
 
 export type ComponentViewMode = "grid" | "list";
 
@@ -122,8 +128,13 @@ interface EditorUiPersistedSlice {
 	readonly layerSplitRatio: number;
 }
 
-/** Persist schema version — bumped to 2 with the v1 → v2 migration. */
-export const EDITOR_UI_STORE_PERSIST_VERSION = 2;
+/**
+ * Persist schema version — bumped to 3 when the `history` tab joined
+ * the {@link EditorTab} union. The migrate callback already coerces
+ * unknown `activeTab` values to the default via {@link VALID_ACTIVE_TABS},
+ * so the bump just invalidates v2 caches written by builds in between.
+ */
+export const EDITOR_UI_STORE_PERSIST_VERSION = 3;
 
 const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"insert",
@@ -131,6 +142,7 @@ const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"image",
 	"text",
 	"copilot",
+	"history",
 ]);
 
 const VALID_VIEW_MODES: ReadonlySet<ComponentViewMode> = new Set([

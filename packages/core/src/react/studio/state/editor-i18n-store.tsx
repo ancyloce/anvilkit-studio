@@ -163,6 +163,11 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.copilot.name": "AI Copilot",
 	"studio.module.copilot.empty":
 		"Install @anvilkit/plugin-ai-copilot and register a copilot panel to enable AI generation.",
+
+	// Module: history (Version History — host-supplied panel).
+	"studio.module.history.name": "History",
+	"studio.module.history.empty":
+		"Install @anvilkit/plugin-version-history and register a history panel to view snapshots.",
 };
 
 /**

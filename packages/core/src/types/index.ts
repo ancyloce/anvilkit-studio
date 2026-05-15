@@ -70,6 +70,7 @@ export type {
 	StudioCopySnippet,
 	StudioCopySnippetCategory,
 	StudioCopySnippetPack,
+	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioInsertSectionPredicate,
 	StudioLayerQuickAdd,

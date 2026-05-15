@@ -21,6 +21,7 @@
  */
 
 import {
+	History as HistoryIcon,
 	Image as ImageIcon,
 	Layers as LayersIcon,
 	LayoutGrid as LayoutGridIcon,
@@ -63,6 +64,11 @@ const RAIL_MODULES: readonly RailModule[] = [
 		key: "copilot",
 		icon: SparklesIcon,
 		labelKey: "studio.module.copilot.name",
+	},
+	{
+		key: "history",
+		icon: HistoryIcon,
+		labelKey: "studio.module.history.name",
 	},
 ];
 

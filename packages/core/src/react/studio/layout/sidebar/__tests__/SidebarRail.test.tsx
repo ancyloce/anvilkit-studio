@@ -50,15 +50,16 @@ function renderRail(storeId: string, ref?: React.Ref<SidebarRailHandle>) {
 }
 
 describe("SidebarRail", () => {
-	it("renders five rail tabs in PRD order", () => {
+	it("renders six rail tabs in PRD order", () => {
 		renderRail("rail-order");
 		const tabs = screen.getAllByRole("tab");
-		expect(tabs).toHaveLength(5);
+		expect(tabs).toHaveLength(6);
 		expect(tabs[0]?.id).toBe("ak-rail-tab-insert");
 		expect(tabs[1]?.id).toBe("ak-rail-tab-layer");
 		expect(tabs[2]?.id).toBe("ak-rail-tab-image");
 		expect(tabs[3]?.id).toBe("ak-rail-tab-text");
 		expect(tabs[4]?.id).toBe("ak-rail-tab-copilot");
+		expect(tabs[5]?.id).toBe("ak-rail-tab-history");
 	});
 
 	it("uses role=tablist with vertical orientation", () => {

@@ -927,6 +927,8 @@ export function Studio(props: StudioProps): ReactElement | null {
 					sidebarRegistryStore.getState().registerCopySnippetPack(pack),
 				registerCopilotPanel: (panel) =>
 					sidebarRegistryStore.getState().registerCopilotPanel(panel),
+				registerHistoryPanel: (panel) =>
+					sidebarRegistryStore.getState().registerHistoryPanel(panel),
 			};
 
 			try {

@@ -112,6 +112,7 @@ import type {
 	StudioAssetSource,
 	StudioCopilotPanel,
 	StudioCopySnippetPack,
+	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
 	StudioSidebarUnregister,
@@ -302,6 +303,22 @@ export interface StudioPluginContext<
 	 */
 	readonly registerCopilotPanel?: (
 		panel: StudioCopilotPanel,
+	) => StudioSidebarUnregister;
+
+	/**
+	 * Register the panel body backing the sidebar's `history` module.
+	 * v1 supports a single panel — last-write-wins; the sidebar shows
+	 * `studio.module.history.empty` until a panel is registered.
+	 *
+	 * Core stays agnostic about any specific snapshot store; the panel
+	 * is a plain `render()` thunk so integration packages (or hosts)
+	 * can own the React state, adapter reference, and restore dispatch.
+	 *
+	 * Returns an `unregister()` handle that clears the panel iff it
+	 * still matches the one captured in its closure.
+	 */
+	readonly registerHistoryPanel?: (
+		panel: StudioHistoryPanel,
 	) => StudioSidebarUnregister;
 }
 

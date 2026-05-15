@@ -29,6 +29,7 @@ import type {
 	StudioAssetSource,
 	StudioCopilotPanel,
 	StudioCopySnippetPack,
+	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
 	StudioSidebarUnregister,
@@ -41,12 +42,14 @@ export interface SidebarRegistryState {
 	readonly assetActions: ReadonlyMap<string, StudioAssetAction>;
 	readonly copyPacks: ReadonlyMap<string, StudioCopySnippetPack>;
 	readonly copilotPanel: StudioCopilotPanel | null;
+	readonly historyPanel: StudioHistoryPanel | null;
 	registerInsertSection(section: StudioInsertSection): StudioSidebarUnregister;
 	registerLayerQuickAdd(item: StudioLayerQuickAdd): StudioSidebarUnregister;
 	registerAssetSource(source: StudioAssetSource): StudioSidebarUnregister;
 	registerAssetAction(action: StudioAssetAction): StudioSidebarUnregister;
 	registerCopySnippetPack(pack: StudioCopySnippetPack): StudioSidebarUnregister;
 	registerCopilotPanel(panel: StudioCopilotPanel): StudioSidebarUnregister;
+	registerHistoryPanel(panel: StudioHistoryPanel): StudioSidebarUnregister;
 }
 
 export type SidebarRegistryStoreApi = StoreApi<SidebarRegistryState>;
@@ -69,6 +72,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 		assetActions: EMPTY_ACTIONS,
 		copyPacks: EMPTY_PACKS,
 		copilotPanel: null,
+		historyPanel: null,
 
 		registerInsertSection(section) {
 			set((state) => {
@@ -152,6 +156,17 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			return () => {
 				if (get().copilotPanel === panel) {
 					set({ copilotPanel: null });
+				}
+			};
+		},
+
+		registerHistoryPanel(panel) {
+			// `history` v1 supports a single panel; same last-write-wins
+			// shape as `registerCopilotPanel` / `registerAssetSource`.
+			set({ historyPanel: panel });
+			return () => {
+				if (get().historyPanel === panel) {
+					set({ historyPanel: null });
 				}
 			};
 		},
