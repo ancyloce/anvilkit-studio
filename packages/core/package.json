@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/core",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Anvilkit Studio runtime — types, plugin engine, React shell, and config system for the Puck-native visual editor.",
 	"type": "module",
 	"main": "./dist/index.cjs",

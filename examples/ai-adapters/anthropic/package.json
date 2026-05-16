@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/example-ai-adapter-anthropic",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"private": true,
 	"description": "Example generatePage() adapter backed by Anthropic's Claude API. Reference implementation for phase4-010.",
 	"type": "module",

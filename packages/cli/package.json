@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/cli",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "ESM-only CLI scaffold for Anvilkit Studio.",
 	"type": "module",
 	"bin": {
