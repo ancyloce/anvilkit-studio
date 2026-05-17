@@ -79,6 +79,7 @@ import {
 	type RefObject,
 	useCallback,
 	useEffect,
+	useId,
 	useLayoutEffect,
 	useMemo,
 	useRef,
@@ -106,10 +107,19 @@ import {
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 	type SidebarRegistryStoreApi,
+	StudioRootProvider,
 } from "@/state/index";
-import { useAiStore } from "@/stores/ai-store";
-import { useExportStore } from "@/stores/export-store";
-import { useThemeStore } from "@/stores/theme-store";
+import {
+	type AiStoreApi,
+	AiStoreProvider,
+	createAiStore,
+	createExportStore,
+	createThemeStore,
+	type ExportStoreApi,
+	ExportStoreProvider,
+	type ThemeStoreApi,
+	ThemeStoreProvider,
+} from "@/stores/index";
 import {
 	mergeStudioUi,
 	resolveStudioViewports,
@@ -126,7 +136,13 @@ import type {
 	StudioPluginSlotContribution,
 } from "@/types/plugin";
 
-const DEFAULT_STORE_ID = "default";
+/**
+ * Prefix for the per-instance fallback `storeId` derived from
+ * `useId()` when the host omits the prop. Replaces the old shared
+ * `"default"` literal so two `<Studio>` instances never collide on
+ * persisted store keys (review finding H3).
+ */
+const FALLBACK_STORE_ID_PREFIX = "anvilkit";
 const DEFAULT_CHROME_MODE: StudioChromeMode = "anvilkit";
 
 export type StudioLogger = (
@@ -172,7 +188,7 @@ export function composePluginProviders(
 ): ReactNode {
 	return providers.reduceRight<ReactNode>((wrapped, provider) => {
 		const ProviderComponent = provider.component;
-		return <ProviderComponent>{wrapped}</ProviderComponent>;
+		return <ProviderComponent key={provider.id}>{wrapped}</ProviderComponent>;
 	}, children);
 }
 
@@ -479,13 +495,14 @@ function fingerprintPlugins(
 				version?: unknown;
 				coreVersion?: unknown;
 			};
-			// Meta is the fingerprint contract for Studio plugins:
-			// `compilePlugins()` rejects duplicate `meta.id` values,
-			// so plugin authors that wrap/delegate another plugin must
-			// publish their own id or version bump when registration
-			// behavior changes.
+			// Meta identifies the plugin; the appended `#<identityTag>`
+			// (WeakMap-stable per object, distinct per construction) makes
+			// a host recreating a plugin with the same `meta` but new
+			// runtime options/closures/header-action behavior observable
+			// to the compile effect, so stale registrations are rebuilt.
+			// `compilePlugins()` still rejects duplicate `meta.id` values.
 			parts.push(
-				`studio:${escapeFingerprintSegment(String(meta.id))}@${escapeFingerprintSegment(String(meta.version))}/${escapeFingerprintSegment(String(meta.coreVersion))}`,
+				`studio:${escapeFingerprintSegment(String(meta.id))}@${escapeFingerprintSegment(String(meta.version))}/${escapeFingerprintSegment(String(meta.coreVersion))}#${identityTagFor(plugin)}`,
 			);
 			continue;
 		}
@@ -576,21 +593,25 @@ function writeStudioLog(
 	console[method](`[studio] ${message}`, redactedMeta ?? {});
 }
 
-function useHydrateRuntimeStores(compiled: CompiledStudioRuntime | null): void {
+function useHydrateRuntimeStores(
+	compiled: CompiledStudioRuntime | null,
+	exportStore: ExportStoreApi,
+	themeStore: ThemeStoreApi,
+): void {
 	useEffect(() => {
 		if (compiled === null) {
 			return;
 		}
-		useExportStore
+		exportStore
 			.getState()
 			.setAvailableFormats([...compiled.runtime.exportFormats.keys()]);
 
 		const theme = compiled.studioConfig.theme;
-		const currentMode = useThemeStore.getState().mode;
+		const currentMode = themeStore.getState().mode;
 		if (currentMode === "system" && theme.defaultMode !== "system") {
-			useThemeStore.getState().setMode(theme.defaultMode);
+			themeStore.getState().setMode(theme.defaultMode);
 		}
-	}, [compiled]);
+	}, [compiled, exportStore, themeStore]);
 }
 
 function useRuntimeInit(compiled: CompiledStudioRuntime | null): void {
@@ -712,7 +733,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 		ui,
 		onAction,
 		viewports,
-		storeId = DEFAULT_STORE_ID,
+		storeId,
 		onBack,
 		onSaveDraft,
 		isSavingDraft,
@@ -742,6 +763,21 @@ export function Studio(props: StudioProps): ReactElement | null {
 
 	const puckApiRef = useRef<GetPuckSnapshot | null>(null);
 
+	// Monotonic compile generation. Bumped at the start of every
+	// compile pass and again on effect cleanup, so an in-flight async
+	// setup whose generation no longer matches the latest one bails
+	// out instead of committing a superseded runtime. Replaces the
+	// per-effect `cancelled` boolean with a value that also lets us
+	// distinguish "this run was superseded" from "first mount".
+	const compileGenerationRef = useRef(0);
+
+	// Root element of this Studio instance. Provided via
+	// `StudioRootProvider` so iframe DOM queries (`use-theme-sync`,
+	// `Splitter`) scope to THIS editor's subtree — Puck hardcodes
+	// `id="preview-frame"`, so two editors otherwise both resolve the
+	// first iframe (review finding H3).
+	const rootRef = useRef<HTMLDivElement>(null);
+
 	// ------------------------------------------------------------------
 	// Per-instance sidebar registry. Created lazily inside `useState`
 	// so React's strict-mode double-invocation does not produce two
@@ -766,21 +802,28 @@ export function Studio(props: StudioProps): ReactElement | null {
 	});
 
 	// ------------------------------------------------------------------
-	// SSR-safe rehydration. The three Zustand stores are declared with
-	// `skipHydration: true` so they do not synchronously read
-	// `localStorage` at module evaluation — that read would fire on
-	// the server (no storage) and again on the client (with storage),
-	// producing a React 19 hydration mismatch for any component that
-	// subscribes to a persisted field. Kicking rehydrate off in a
-	// mount-time effect guarantees the first server-rendered HTML and
-	// the first client render agree, and the persisted state flows in
-	// on the next tick.
+	// Per-instance store id + the three Core-owned stores. The host
+	// rarely passes `storeId`; deriving a stable per-mount fallback
+	// from `useId()` (instead of the old shared `"default"`) keeps two
+	// `<Studio>` instances on one page from colliding on persisted
+	// keys (review finding H3). The store instances are created here so
+	// `<Studio>` can both wire them into the providers below and drive
+	// them imperatively (export-format hydration, unmount reset). Each
+	// provider owns SSR-safe rehydration (`skipHydration` + a
+	// mount-time effect), so no rehydrate effect lives here anymore.
 	// ------------------------------------------------------------------
-	useEffect(() => {
-		void useAiStore.persist.rehydrate();
-		void useExportStore.persist.rehydrate();
-		void useThemeStore.persist.rehydrate();
-	}, []);
+	const reactId = useId();
+	const resolvedStoreId =
+		storeId ?? `${FALLBACK_STORE_ID_PREFIX}-${reactId.replace(/:/g, "")}`;
+	const [themeStore] = useState<ThemeStoreApi>(() =>
+		createThemeStore({ storeId: resolvedStoreId }),
+	);
+	const [exportStore] = useState<ExportStoreApi>(() =>
+		createExportStore({ storeId: resolvedStoreId }),
+	);
+	const [aiStore] = useState<AiStoreApi>(() =>
+		createAiStore({ storeId: resolvedStoreId }),
+	);
 
 	// ------------------------------------------------------------------
 	// 2. Resolve plugins, build the studio config, and compile. All
@@ -835,7 +878,17 @@ export function Studio(props: StudioProps): ReactElement | null {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime.
 	useEffect(() => {
-		let cancelled = false;
+		// Start a new compile generation and immediately tear down the
+		// previously compiled runtime + chrome. This fails closed: while
+		// plugins/config/chrome change (or if the new compile rejects),
+		// the editor renders the `null` loading state instead of keeping
+		// stale plugin hooks, providers, sidebar registrations, and
+		// header actions mounted for a plugin set the host has replaced.
+		compileGenerationRef.current += 1;
+		const myGen = compileGenerationRef.current;
+		const isStale = (): boolean => myGen !== compileGenerationRef.current;
+		setCompiled(null);
+		setChromeAssets(null);
 		const basePlugins = plugins ?? [];
 
 		async function setup(): Promise<void> {
@@ -844,7 +897,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 			// ships `{ Studio }` stays under the core-015 25 KB gzipped
 			// budget because of this one indirection.
 			const { createStudioConfig } = await import("@/config/create-config");
-			if (cancelled) {
+			if (isStale()) {
 				return;
 			}
 			const studioConfig = createStudioConfig(config);
@@ -859,7 +912,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 					import("@/overrides/preset"),
 					import("@/layout/StudioLayout"),
 				]);
-				if (cancelled) {
+				if (isStale()) {
 					return;
 				}
 				nextChromeAssets = {
@@ -876,7 +929,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 				// Dynamic import keeps the adapter tree-shakable: apps
 				// that never pass `aiHost` do not bundle this module.
 				const { aiHostAdapter } = await import("@/compat/ai-host-adapter");
-				if (cancelled) {
+				if (isStale()) {
 					return;
 				}
 				resolvedPlugins = [
@@ -935,22 +988,24 @@ export function Studio(props: StudioProps): ReactElement | null {
 				const runtime = await compilePlugins(resolvedPlugins, ctx, {
 					lifecycle: { onDataChangeDebounceMs: DATA_CHANGE_DEBOUNCE_MS },
 				});
-				if (cancelled) {
+				if (isStale()) {
 					return;
 				}
 				setCompiled({ runtime, studioConfig, ctx });
 				setChromeAssets(nextChromeAssets);
 			} catch (error) {
-				if (cancelled) {
-					// Suppress stale-setup logs — a later effect
-					// supersedes this one and logging here would be
-					// misleading.
+				if (isStale()) {
+					// Suppress stale-setup logs — a later compile
+					// generation supersedes this one and logging here
+					// would be misleading.
 					return;
 				}
 				// Compilation errors are already typed
-				// `StudioPluginError` — log and leave `compiled` at
-				// `null` so the editor never mounts against a broken
-				// plugin set.
+				// `StudioPluginError`. `compiled`/`chromeAssets` were
+				// cleared at the top of this pass and are left `null`, so
+				// a failed recompile fails closed — the editor never
+				// keeps the host's previous (now-replaced) plugin set
+				// mounted, nor mounts against a broken one.
 				writeStudioLog(logger, "error", "plugin compilation failed", {
 					error,
 				});
@@ -959,7 +1014,10 @@ export function Studio(props: StudioProps): ReactElement | null {
 
 		void setup();
 		return () => {
-			cancelled = true;
+			// Invalidate this generation so an in-flight `setup()` whose
+			// async work resolves after teardown sees `isStale()` and
+			// never commits a superseded runtime.
+			compileGenerationRef.current += 1;
 		};
 	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit, logger]);
 
@@ -976,7 +1034,7 @@ export function Studio(props: StudioProps): ReactElement | null {
 	//    picked a preference on a prior visit should not have their
 	//    choice silently overwritten by a host-set default.
 	// ------------------------------------------------------------------
-	useHydrateRuntimeStores(compiled);
+	useHydrateRuntimeStores(compiled, exportStore, themeStore);
 
 	// ------------------------------------------------------------------
 	// 4. Fire `onInit` exactly once per compiled runtime. `useEffect`'s
@@ -1005,12 +1063,12 @@ export function Studio(props: StudioProps): ReactElement | null {
 			// would run hooks against a stale ctx whose
 			// `getPuckApi()` now throws).
 			runtime.lifecycle.dispose();
-			useExportStore.getState().reset();
-			useAiStore.getState().reset();
+			exportStore.getState().reset();
+			aiStore.getState().reset();
 			// Theme is a user preference that persists across Studio
 			// sessions, so it intentionally survives runtime teardown.
 		};
-	}, [compiled]);
+	}, [compiled, exportStore, aiStore]);
 
 	// ------------------------------------------------------------------
 	// 6. Compose overrides. `mergeOverrides` threads each plugin's
@@ -1261,24 +1319,40 @@ export function Studio(props: StudioProps): ReactElement | null {
 				<StudioPluginContextProvider value={compiled.ctx}>
 					<SidebarRegistryProvider value={sidebarRegistryStore}>
 						<StudioPagesSourceProvider value={pages}>
-							<EditorUiStoreProvider storeId={storeId}>
-								<EditorI18nStoreProvider messages={messages}>
-									<ChromePropsProvider
-										value={{
-											onBack,
-											onSaveDraft,
-											isSavingDraft,
-											lastSavedAt,
-											isPublishing,
-											onPublishClick,
-											onExport,
-											collaboratorsSlot: resolvedCollaboratorsSlot,
-											viewports: chromeViewports,
-										}}
+							<EditorUiStoreProvider storeId={resolvedStoreId}>
+								<ThemeStoreProvider
+									storeId={resolvedStoreId}
+									store={themeStore}
+								>
+									<ExportStoreProvider
+										storeId={resolvedStoreId}
+										store={exportStore}
 									>
-										{wrappedBody}
-									</ChromePropsProvider>
-								</EditorI18nStoreProvider>
+										<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
+											<EditorI18nStoreProvider messages={messages}>
+												<ChromePropsProvider
+													value={{
+														onBack,
+														onSaveDraft,
+														isSavingDraft,
+														lastSavedAt,
+														isPublishing,
+														onPublishClick,
+														onExport,
+														collaboratorsSlot: resolvedCollaboratorsSlot,
+														viewports: chromeViewports,
+													}}
+												>
+													<StudioRootProvider rootRef={rootRef}>
+														<div ref={rootRef} style={{ display: "contents" }}>
+															{wrappedBody}
+														</div>
+													</StudioRootProvider>
+												</ChromePropsProvider>
+											</EditorI18nStoreProvider>
+										</AiStoreProvider>
+									</ExportStoreProvider>
+								</ThemeStoreProvider>
 							</EditorUiStoreProvider>
 						</StudioPagesSourceProvider>
 					</SidebarRegistryProvider>

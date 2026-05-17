@@ -17,7 +17,7 @@
  * - An empty plugins array mounts cleanly and writes an empty
  *   `availableFormats` list into `useExportStore`.
  * - A plugin registering an export format has that format available
- *   via `useExportStore.getState().availableFormats` after mount.
+ *   via `exportStore().getState().availableFormats` after mount.
  * - The `onDataChange` lifecycle hook fires when Puck calls the
  *   forwarded `onChange` handler, and the consumer's own
  *   `onChange` is called afterwards.
@@ -44,9 +44,40 @@ import {
 } from "vitest";
 import { Studio } from "@/components/Studio";
 import { useStudio } from "@/hooks/use-studio";
-import { useAiStore } from "@/stores/ai-store";
-import { useExportStore } from "@/stores/export-store";
+import {
+	type AiStoreApi,
+	type ExportStoreApi,
+	useAiStoreApi,
+	useExportStoreApi,
+} from "@/stores/index";
 import type { StudioPlugin, StudioPluginMeta } from "@/types/plugin";
+
+// Post-H3 the export/AI stores are per-`<Studio>` instances created
+// internally. A probe rendered inside the (mocked) Puck — which sits
+// within Studio's provider stack — captures the live instances so
+// these tests can seed and assert state exactly as before.
+let capturedExportStore: ExportStoreApi | null = null;
+let capturedAiStore: AiStoreApi | null = null;
+
+function StoreProbe(): ReactNode {
+	capturedExportStore = useExportStoreApi();
+	capturedAiStore = useAiStoreApi();
+	return null;
+}
+
+function exportStore(): ExportStoreApi {
+	if (capturedExportStore === null) {
+		throw new Error("export store not captured — Studio not mounted yet");
+	}
+	return capturedExportStore;
+}
+
+function aiStore(): AiStoreApi {
+	if (capturedAiStore === null) {
+		throw new Error("ai store not captured — Studio not mounted yet");
+	}
+	return capturedAiStore;
+}
 
 // ----------------------------------------------------------------------
 // Mock `@puckeditor/core` with a minimal stand-in.
@@ -80,6 +111,7 @@ vi.mock("@puckeditor/core", () => {
 					<span data-testid="puck-plugin-count">
 						{props.plugins?.length ?? 0}
 					</span>
+					<StoreProbe />
 				</div>
 			);
 		},
@@ -113,15 +145,18 @@ function buildMeta(
 		id,
 		name: id,
 		version: "1.0.0",
-		coreVersion: "^0.1.0-alpha",
+		coreVersion: "^0.1.0",
 		...overrides,
 	};
 }
 
 beforeEach(() => {
 	puckMockState.lastProps = null;
-	useExportStore.setState(useExportStore.getInitialState(), true);
-	useAiStore.setState(useAiStore.getInitialState(), true);
+	// Stores are now per-instance and created fresh on each <Studio>
+	// mount, so there is no singleton to reset — just drop the
+	// captured refs from the previous test.
+	capturedExportStore = null;
+	capturedAiStore = null;
 });
 
 afterEach(() => {
@@ -168,7 +203,7 @@ describe("<Studio> — mount and compile", () => {
 		// The built-in `jsonExportPlugin` is always prepended, so even with
 		// no consumer plugins the store reports a single `json` format.
 		await waitFor(() => {
-			expect(useExportStore.getState().availableFormats).toEqual(["json"]);
+			expect(exportStore().getState().availableFormats).toEqual(["json"]);
 		});
 	});
 
@@ -242,7 +277,7 @@ describe("<Studio> — export store population", () => {
 		// keyed on `compiled`, which fires *after* the Puck mock first
 		// renders — wait for the store update to land before asserting.
 		await waitFor(() => {
-			expect(useExportStore.getState().availableFormats).toEqual([
+			expect(exportStore().getState().availableFormats).toEqual([
 				"json",
 				"html",
 			]);
@@ -626,10 +661,10 @@ describe("<Studio> — unmount cleanup", () => {
 		});
 
 		// Seed some state so we can prove reset() ran.
-		useAiStore.getState().startGeneration("cached");
-		expect(useAiStore.getState().lastPrompt).toBe("cached");
+		aiStore().getState().startGeneration("cached");
+		expect(aiStore().getState().lastPrompt).toBe("cached");
 		await waitFor(() => {
-			expect(useExportStore.getState().availableFormats).toEqual([
+			expect(exportStore().getState().availableFormats).toEqual([
 				"json",
 				"html",
 			]);
@@ -641,8 +676,8 @@ describe("<Studio> — unmount cleanup", () => {
 		});
 
 		expect(onDestroyHook).toHaveBeenCalledTimes(1);
-		expect(useExportStore.getState().availableFormats).toEqual([]);
-		expect(useAiStore.getState().lastPrompt).toBeNull();
+		expect(exportStore().getState().availableFormats).toEqual([]);
+		expect(aiStore().getState().lastPrompt).toBeNull();
 	});
 });
 
