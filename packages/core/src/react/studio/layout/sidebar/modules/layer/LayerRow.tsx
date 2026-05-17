@@ -17,6 +17,7 @@ import { Box, ChevronDown, ChevronRight, GripVertical } from "lucide-react";
 import { type KeyboardEvent, type ReactNode, useCallback } from "react";
 import { cn } from "@/overrides/utils/cn";
 import { useMsg } from "@/state/editor-i18n-store";
+import { useScrollComponentIntoView } from "./use-scroll-component-into-view";
 import type { LayerNode } from "./use-layer-tree";
 
 interface LayerRowProps {
@@ -39,6 +40,7 @@ export function LayerRow({
 }: LayerRowProps): ReactNode {
 	const msg = useMsg();
 	const getPuck = useGetPuck();
+	const scrollIntoView = useScrollComponentIntoView();
 
 	const {
 		attributes,
@@ -59,7 +61,8 @@ export function LayerRow({
 		const selector = getPuck().getSelectorForId(node.id);
 		if (selector === undefined) return;
 		getPuck().dispatch({ type: "setUi", ui: { itemSelector: selector } });
-	}, [getPuck, node.id]);
+		scrollIntoView(node.id);
+	}, [getPuck, node.id, scrollIntoView]);
 
 	const handleGripKeyDown = useCallback(
 		(event: KeyboardEvent<HTMLButtonElement>): void => {
