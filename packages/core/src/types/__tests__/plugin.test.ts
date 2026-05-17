@@ -36,7 +36,7 @@ describe("StudioPlugin type contract", () => {
 				id: "com.example.minimal",
 				name: "Minimal",
 				version: "1.0.0",
-				coreVersion: "^0.1.0-alpha",
+				coreVersion: "^0.1.0",
 			},
 			register() {
 				return { meta: plugin.meta };
@@ -52,7 +52,7 @@ describe("StudioPlugin type contract", () => {
 				id: "com.example.async",
 				name: "Async",
 				version: "1.0.0",
-				coreVersion: "^0.1.0-alpha",
+				coreVersion: "^0.1.0",
 			},
 			async register() {
 				return { meta: plugin.meta };
@@ -67,7 +67,7 @@ describe("StudioPlugin type contract", () => {
 				id: "com.example.full",
 				name: "Full",
 				version: "1.2.3",
-				coreVersion: "^0.1.0-alpha",
+				coreVersion: "^0.1.0",
 				description: "Exercises every corner of the plugin contract",
 			},
 			register(ctx) {
@@ -142,7 +142,7 @@ describe("StudioPlugin type contract", () => {
 			id: "com.example.required",
 			name: "Required",
 			version: "1.0.0",
-			coreVersion: "^0.1.0-alpha",
+			coreVersion: "^0.1.0",
 		};
 		void meta;
 
@@ -158,7 +158,7 @@ describe("StudioPlugin type contract", () => {
 		const missingId: StudioPluginMeta = {
 			name: "No id",
 			version: "1.0.0",
-			coreVersion: "^0.1.0-alpha",
+			coreVersion: "^0.1.0",
 		};
 		void missingId;
 	});
@@ -172,7 +172,7 @@ describe("StudioPlugin type contract", () => {
 						id: "x",
 						name: "x",
 						version: "1.0.0",
-						coreVersion: "^0.1.0-alpha",
+						coreVersion: "^0.1.0",
 					},
 				};
 			},

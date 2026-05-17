@@ -89,7 +89,7 @@ export interface StudioPluginMeta {
 
 	/**
 	 * Semver range of `@anvilkit/core` this plugin targets
-	 * (e.g. `"^0.1.0-alpha"`).
+	 * (e.g. `"^0.1.0"`).
 	 *
 	 * `compilePlugins()` validates this against the installed Core
 	 * version. A mismatch throws `StudioPluginError` at compile time
@@ -720,8 +720,7 @@ export interface StudioPluginRegistration<
 	 * Optional export format definitions.
 	 *
 	 * Registered into the export registry at compile time; consumed by
-	 * `useExportStore.exportAs(formatId)` from the host app or a
-	 * header action.
+	 * the host's export action or a header action.
 	 */
 	readonly exportFormats?: readonly ExportFormatDefinition[];
 
@@ -784,7 +783,7 @@ export interface StudioPluginRegistration<
  *     id: "com.example.telemetry",
  *     name: "Telemetry",
  *     version: "1.0.0",
- *     coreVersion: "^0.1.0-alpha",
+ *     coreVersion: "^0.1.0",
  *   },
  *   register(ctx) {
  *     return {
