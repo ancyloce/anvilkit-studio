@@ -20,26 +20,9 @@
  * surface can widen this without changing call sites.
  */
 
-import {
-	createUsePuck,
-	type ComponentData as PuckComponentData,
-} from "@puckeditor/core";
+import { type ComponentData as PuckComponentData } from "@puckeditor/core";
 
-type PuckSelectorHook = <T>(
-	selector: (state: { readonly selectedItem: PuckComponentData | null }) => T,
-) => T;
-
-// Lazy-initialized so partial test mocks of `@puckeditor/core` (which
-// historically only stub `useGetPuck`) don't blow up at module-evaluate
-// time when the consuming module is imported transitively. The first
-// hook call constructs the selector hook; subsequent calls reuse it.
-let _usePuckSelection: PuckSelectorHook | null = null;
-function getUsePuckSelection(): PuckSelectorHook {
-	if (_usePuckSelection === null) {
-		_usePuckSelection = createUsePuck() as unknown as PuckSelectorHook;
-	}
-	return _usePuckSelection;
-}
+import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
 
 /**
  * The currently-selected canvas item, or `null` when nothing is
@@ -48,8 +31,9 @@ function getUsePuckSelection(): PuckSelectorHook {
  * re-renders fire only when the reference changes.
  */
 export function useSelectedItem(): PuckComponentData | null {
-	const usePuckSelection = getUsePuckSelection();
-	return usePuckSelection((s) => s.selectedItem ?? null);
+	return useReactivePuck(
+		(s) => (s.selectedItem ?? null) as PuckComponentData | null,
+	);
 }
 
 /**

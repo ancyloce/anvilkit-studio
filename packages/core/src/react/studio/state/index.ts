@@ -12,6 +12,12 @@ export {
 	useEditorUiStoreApi,
 } from "./EditorUiStoreProvider";
 export {
+	resolveQueryRoot,
+	StudioRootProvider,
+	type StudioRootProviderProps,
+	useStudioRootRef,
+} from "./StudioRootProvider";
+export {
 	EditorI18nStoreProvider,
 	type EditorI18nStoreProviderProps,
 	useMsg,
