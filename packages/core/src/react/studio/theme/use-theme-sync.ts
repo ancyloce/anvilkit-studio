@@ -18,7 +18,8 @@
 
 import { useEffect } from "react";
 
-import { useThemeStore } from "@/stores/theme-store";
+import { resolveQueryRoot, useStudioRootRef } from "@/state/index";
+import { useThemeStore } from "@/stores/index";
 import { IFRAME_THEME_CSS, IFRAME_THEME_STYLE_ID } from "./iframe-theme";
 
 const MEDIA_QUERY = "(prefers-color-scheme: dark)";
@@ -40,9 +41,15 @@ function injectIframeStyle(doc: Document): void {
 	doc.head.appendChild(style);
 }
 
-function findPuckIframe(): HTMLIFrameElement | null {
+// Puck hardcodes `id="preview-frame"` (no override prop), so with two
+// `<Studio>` instances on one page the ids are duplicated. Scoping the
+// query to this editor's root subtree disambiguates them; falling back
+// to `document` preserves single-editor / test behavior. (Puck's own
+// internal global lookup of this id is an upstream limitation we can't
+// fix from here.)
+function findPuckIframe(root: ParentNode): HTMLIFrameElement | null {
 	if (typeof document === "undefined") return null;
-	return document.querySelector<HTMLIFrameElement>("iframe#preview-frame");
+	return root.querySelector<HTMLIFrameElement>("iframe#preview-frame");
 }
 
 /**
@@ -56,6 +63,7 @@ function findPuckIframe(): HTMLIFrameElement | null {
 export function useThemeSync(): void {
 	const mode = useThemeStore((s) => s.mode);
 	const setResolved = useThemeStore((s) => s.setResolved);
+	const rootRef = useStudioRootRef();
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -72,7 +80,7 @@ export function useThemeSync(): void {
 			setResolved(resolved);
 			applyClass(document.documentElement, resolved === "dark");
 
-			const iframe = findPuckIframe();
+			const iframe = findPuckIframe(resolveQueryRoot(rootRef));
 			const doc = iframe?.contentDocument;
 			if (doc !== null && doc !== undefined) {
 				injectIframeStyle(doc);
@@ -91,5 +99,5 @@ export function useThemeSync(): void {
 		return () => {
 			media.removeEventListener("change", listener);
 		};
-	}, [mode, setResolved]);
+	}, [mode, setResolved, rootRef]);
 }
