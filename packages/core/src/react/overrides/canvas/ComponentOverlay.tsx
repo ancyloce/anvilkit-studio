@@ -16,10 +16,10 @@
  * sidecar.
  */
 
-import { useGetPuck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
 import { cn } from "@/utils/cn";
+import { useReactivePuck } from "../utils/use-reactive-puck";
 
 const ROOT_DROPPABLE_ID = "root:default-zone";
 
@@ -38,10 +38,18 @@ export function ComponentOverlay({
 	componentId,
 	componentType,
 }: ComponentOverlayOverrideProps): ReactNode {
-	const getPuck = useGetPuck();
-	const labelPosition = isTopmostInRoot(getPuck, componentId)
-		? "inside"
-		: "above";
+	// Reactive: label placement depends on the component's position in
+	// the tree, which changes on reorder/move. Selecting a primitive
+	// boolean keeps re-renders limited to actual placement flips.
+	const isTopmost = useReactivePuck((s) => {
+		const selector = s.getSelectorForId(componentId);
+		return (
+			selector !== undefined &&
+			selector.index === 0 &&
+			selector.zone === ROOT_DROPPABLE_ID
+		);
+	});
+	const labelPosition = isTopmost ? "inside" : "above";
 
 	return (
 		<div
@@ -50,19 +58,8 @@ export function ComponentOverlay({
 			data-label-position={labelPosition}
 			className={cn("relative h-full w-full transition-colors")}
 		>
-			{isSelected ? (
-				<span data-ak-overlay-label>{componentType}</span>
-			) : null}
+			{isSelected ? <span data-ak-overlay-label>{componentType}</span> : null}
 			{children}
 		</div>
 	);
-}
-
-function isTopmostInRoot(
-	getPuck: ReturnType<typeof useGetPuck>,
-	componentId: string,
-): boolean {
-	const selector = getPuck().getSelectorForId(componentId);
-	if (selector === undefined) return false;
-	return selector.index === 0 && selector.zone === ROOT_DROPPABLE_ID;
 }
