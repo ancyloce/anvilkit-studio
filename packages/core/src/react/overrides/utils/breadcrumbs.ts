@@ -10,8 +10,8 @@
  * returns one descriptor per ancestor.
  */
 
-import { useGetPuck } from "@puckeditor/core";
 import { useMemo } from "react";
+import { useReactivePuck } from "./use-reactive-puck";
 
 /**
  * One row in the breadcrumb chain. `id` is the Puck item id (or
@@ -31,14 +31,15 @@ export interface BreadcrumbEntry {
  * a placeholder or skip the breadcrumbs row entirely.
  */
 export function useBreadcrumbs(): readonly BreadcrumbEntry[] {
-	const getPuck = useGetPuck();
+	// Reactive: breadcrumbs must refresh when the selection or page
+	// data changes. Each selector projects a stable Puck reference, so
+	// the memo only recomputes when one of them actually changes.
+	const selector = useReactivePuck((s) => s.appState.ui.itemSelector);
+	const data = useReactivePuck((s) => s.appState.data);
 	return useMemo(() => {
-		const snapshot = getPuck();
-		const selector = snapshot.appState.ui.itemSelector;
 		if (selector === null) {
 			return [];
 		}
-		const data = snapshot.appState.data;
 		const chain: BreadcrumbEntry[] = [{ id: "root", label: "Root" }];
 
 		const zone =
@@ -60,5 +61,5 @@ export function useBreadcrumbs(): readonly BreadcrumbEntry[] {
 			label: item.type,
 		});
 		return chain;
-	}, [getPuck]);
+	}, [selector, data]);
 }
