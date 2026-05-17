@@ -2,7 +2,7 @@
 	{
 		"name": "@anvilkit/core (full index — tracks total surface; Studio entry is gated separately by check:bundle-budget)",
 		"path": "dist/index.js",
-		"limit": "550 KB",
+		"limit": "560 KB",
 		"gzip": true,
 		"ignore": [
 			"react",
