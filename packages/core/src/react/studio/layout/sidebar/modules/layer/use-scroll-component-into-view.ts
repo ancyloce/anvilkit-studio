@@ -10,9 +10,11 @@
  *
  * The iframe is found with the same scoped lookup the theme sync uses
  * (`useStudioRootRef` + `resolveQueryRoot`, then `iframe#preview-frame`)
- * so multiple `<Studio>` mounts on one page stay isolated. A selection
- * change can trigger an iframe re-render, so a miss is retried once on
- * the iframe's next animation frame.
+ * so multiple `<Studio>` mounts on one page stay isolated. The scroll
+ * is instant and re-asserted on the iframe's next animation frame
+ * because the preceding `setUi` selection dispatch re-renders the
+ * iframe (overlay mount), which would cancel a smooth animation and
+ * can leave the first jump at a stale offset.
  */
 
 import { useCallback } from "react";
@@ -41,19 +43,26 @@ export function useScrollComponentIntoView(): (componentId: string) => void {
 			const doc = iframe?.contentDocument ?? null;
 			if (doc === null) return;
 
+			// Instant, not smooth: callers invoke this right after a Puck
+			// `setUi` selection dispatch, which re-renders the iframe to
+			// mount the selection overlay. A `behavior: "smooth"`
+			// animation gets cancelled by that re-render/layout and the
+			// canvas never moves. An instant jump completes before the
+			// re-render; a second pass on the iframe's next animation
+			// frame re-asserts the position after the overlay mounts (and
+			// covers a component that mounts late).
 			const scroll = (): boolean => {
 				const el = findComponentEl(doc, componentId);
 				if (el === null) return false;
-				el.scrollIntoView({ behavior: "smooth", block: "center" });
+				el.scrollIntoView({ block: "center", inline: "nearest" });
 				return true;
 			};
 
-			if (!scroll()) {
-				const win = iframe?.contentWindow ?? null;
-				win?.requestAnimationFrame(() => {
-					scroll();
-				});
-			}
+			scroll();
+			const win = iframe?.contentWindow ?? null;
+			win?.requestAnimationFrame(() => {
+				scroll();
+			});
 		},
 		[rootRef],
 	);
