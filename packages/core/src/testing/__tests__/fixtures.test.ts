@@ -75,7 +75,7 @@ describe("registerPlugin", () => {
 				id: "fixture.unit",
 				name: "Fixture unit",
 				version: "1.0.0",
-				coreVersion: "^0.1.0-alpha",
+				coreVersion: "^0.1.0",
 			},
 			register(_ctx) {
 				return {
