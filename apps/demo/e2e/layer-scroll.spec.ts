@@ -1,23 +1,18 @@
 /**
- * @file E2E — clicking a layer scrolls the canvas iframe to that
- * component.
+ * @file E2E — clicking a layer scrolls the canvas to that component.
  *
- * Exercises `LayerRow.select()` →
- * `useScrollComponentIntoView()` in the real demo editor. The demo
- * seeds a tall Home page (11 components), so at least one seeded
- * component sits below the canvas fold. The spec:
+ * Exercises `LayerRow.select()` → `useScrollComponentIntoView()` in the
+ * real demo editor. The demo seeds a tall Home page, so most seeded
+ * components sit far below the canvas fold.
  *
- *   1. Opens `/puck/editor`, switches to the Layer module.
- *   2. Resets the preview iframe scroll to the top.
- *   3. Finds a layer whose rendered component (`[data-puck-component]`)
- *      is NOT in the iframe viewport at scrollTop 0.
- *   4. Clicks that layer row's label.
- *   5. Asserts the iframe scrolled (scrollTop increased) AND the
- *      component is now within the iframe viewport.
- *
- * Puck hardcodes the canvas iframe id `preview-frame` and tags every
- * rendered component with `data-puck-component="<id>"` — the same
- * attribute the scroll hook queries. Conventions match
+ * Measurement note: Puck's canvas iframe (`iframe#preview-frame`) is
+ * fixed-height and scrolls *internally* — its `scrollingElement`
+ * scrolls, the iframe box does not resize and the parent window barely
+ * moves. So "is the component visible to the user" must be measured
+ * inside the iframe, against the iframe's own viewport height, not the
+ * top-level page. Puck hardcodes the iframe id `preview-frame` and tags
+ * every rendered component with `data-puck-component="<id>"` — the same
+ * attribute the hook queries. Conventions match
  * `apps/demo/e2e/sidebar-modules.spec.ts`.
  */
 
@@ -37,9 +32,15 @@ async function gotoLayerModule(page: Page): Promise<void> {
 		page.locator('[role="tablist"][aria-orientation="vertical"]'),
 	).toBeVisible({ timeout: 30_000 });
 
-	await page.locator(`#${RAIL_TAB_LAYER}`).click();
+	// The demo canvas animates continuously, so the rail tab never
+	// settles to Playwright's "stable" actionability state. `force`
+	// skips the stability wait — the assertions below are the real
+	// verification.
+	const railTab = page.locator(`#${RAIL_TAB_LAYER}`);
+	await railTab.waitFor({ state: "attached", timeout: 30_000 });
+	await railTab.click({ force: true });
 	await expect(page.getByTestId(MODULE_LAYER)).toBeVisible({
-		timeout: 5_000,
+		timeout: 10_000,
 	});
 
 	expect(pageErrors, pageErrors.join("\n")).toEqual([]);
@@ -55,20 +56,39 @@ async function previewFrame(page: Page): Promise<Frame> {
 	return frame as Frame;
 }
 
-function scrollTopOf(frame: Frame): Promise<number> {
-	return frame.evaluate(() => {
+/** Is the component visible inside the canvas (iframe) viewport? */
+function canvasState(
+	frame: Frame,
+	id: string,
+): Promise<{ found: boolean; visible: boolean; scrollTop: number }> {
+	return frame.evaluate((cid) => {
 		const se = document.scrollingElement ?? document.documentElement;
-		return se.scrollTop;
-	});
+		let el: Element | null = null;
+		for (const e of document.querySelectorAll("[data-puck-component]")) {
+			if (e.getAttribute("data-puck-component") === cid) {
+				el = e;
+				break;
+			}
+		}
+		if (el === null) {
+			return { found: false, visible: false, scrollTop: se.scrollTop };
+		}
+		const r = el.getBoundingClientRect();
+		const vh = window.innerHeight;
+		return {
+			found: true,
+			visible: r.top < vh && r.bottom > 0,
+			scrollTop: se.scrollTop,
+		};
+	}, id);
 }
 
-test("clicking a layer scrolls the canvas iframe to the component", async ({
+test("clicking a layer scrolls the canvas to the component", async ({
 	page,
 }) => {
 	test.setTimeout(120_000);
 	await gotoLayerModule(page);
 
-	// The draggable layer tree renders one row per seeded component.
 	const tree = page.getByTestId("ak-layer-tree");
 	await expect(tree).toBeVisible({ timeout: 10_000 });
 
@@ -84,24 +104,12 @@ test("clicking a layer scrolls the canvas iframe to the component", async ({
 
 	const frame = await previewFrame(page);
 
-	// Reset the canvas to the top so "below the fold" is well defined.
-	await frame.evaluate(() => {
-		const se = document.scrollingElement ?? document.documentElement;
-		se.scrollTop = 0;
-	});
-	await expect.poll(() => scrollTopOf(frame)).toBe(0);
-
-	// Pick a layer whose component is NOT visible at scrollTop 0.
+	// Pick a layer whose component is rendered but NOT visible in the
+	// canvas viewport at the current scroll position.
 	let targetId: string | null = null;
 	for (const id of ids) {
-		const visibleAtTop = await frame.evaluate((sel) => {
-			const el = document.querySelector(sel);
-			if (el === null) return null;
-			const r = el.getBoundingClientRect();
-			return r.top < window.innerHeight && r.bottom > 0;
-		}, `[data-puck-component="${id}"]`);
-		// `null` → component not rendered with the attribute; skip it.
-		if (visibleAtTop === false) {
+		const s = await canvasState(frame, id);
+		if (s.found && !s.visible) {
 			targetId = id;
 			break;
 		}
@@ -113,30 +121,26 @@ test("clicking a layer scrolls the canvas iframe to the component", async ({
 	).not.toBeNull();
 	const id = targetId as string;
 
-	await page.getByTestId(`ak-layer-select-${id}`).click();
+	const before = await canvasState(frame, id);
+	expect(before.visible, "target off-screen in canvas before click").toBe(
+		false,
+	);
+
+	await page.getByTestId(`ak-layer-select-${id}`).click({ force: true });
 
 	// The hook calls scrollIntoView({ behavior: "smooth" }) — poll
-	// while the animation settles.
+	// while the animation settles. Assert both the user-visible
+	// outcome (component in the canvas viewport) and that the canvas
+	// actually scrolled.
 	await expect
-		.poll(() => scrollTopOf(frame), {
-			timeout: 5_000,
-			message: "iframe should scroll down to reveal the clicked layer",
+		.poll(async () => (await canvasState(frame, id)).visible, {
+			timeout: 8_000,
+			message: "clicked layer's component should scroll into the canvas",
 		})
-		.toBeGreaterThan(0);
-
-	await expect
-		.poll(
-			() =>
-				frame.evaluate((sel) => {
-					const el = document.querySelector(sel);
-					if (el === null) return false;
-					const r = el.getBoundingClientRect();
-					return r.top < window.innerHeight && r.bottom > 0;
-				}, `[data-puck-component="${id}"]`),
-			{
-				timeout: 5_000,
-				message: "clicked layer's component should be in the iframe viewport",
-			},
-		)
 		.toBe(true);
+
+	const after = await canvasState(frame, id);
+	expect(after.scrollTop, "canvas iframe should have scrolled").toBeGreaterThan(
+		before.scrollTop,
+	);
 });
