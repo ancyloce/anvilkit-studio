@@ -1237,10 +1237,25 @@ export function Studio(props: StudioProps): ReactElement | null {
 		// Bit-for-bit pre-Phase-5 output: same provider stack, same
 		// JSX nesting. The new `ui` / `onAction` / `viewports` props
 		// pass through to `<Puck>` only if the consumer set them.
+		// The three Core-owned stores are chrome-agnostic — a host on
+		// the legacy `chrome="puck"` path may still mount panels that
+		// read `useExportStore` / `useAiStore` / `useThemeStore`, and
+		// each `<Studio>` must stay isolated (H3). Root ref scopes any
+		// iframe query to this instance's subtree.
 		return (
 			<StudioConfigProvider config={compiled.studioConfig}>
 				<StudioRuntimeProvider value={compiled.runtime}>
-					{puckElement}
+					<ThemeStoreProvider storeId={resolvedStoreId} store={themeStore}>
+						<ExportStoreProvider storeId={resolvedStoreId} store={exportStore}>
+							<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
+								<StudioRootProvider rootRef={rootRef}>
+									<div ref={rootRef} style={{ display: "contents" }}>
+										{puckElement}
+									</div>
+								</StudioRootProvider>
+							</AiStoreProvider>
+						</ExportStoreProvider>
+					</ThemeStoreProvider>
 				</StudioRuntimeProvider>
 			</StudioConfigProvider>
 		);

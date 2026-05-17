@@ -32,7 +32,7 @@
 
 import type { Config as PuckConfig, Data as PuckData } from "@puckeditor/core";
 import { act, render, renderHook, waitFor } from "@testing-library/react";
-import type { ReactElement, ReactNode } from "react";
+import { Component, type ReactElement, type ReactNode } from "react";
 import {
 	afterEach,
 	beforeEach,
@@ -63,6 +63,25 @@ function StoreProbe(): ReactNode {
 	capturedExportStore = useExportStoreApi();
 	capturedAiStore = useAiStoreApi();
 	return null;
+}
+
+// The aiHost test uses `vi.resetModules()` + a fresh `import()`, so
+// the FreshStudio's store providers come from a different module
+// graph than this file's `useExportStoreApi`/`useAiStoreApi` imports —
+// the probe's context lookup then legitimately fails. That test does
+// not need captured stores, so swallow the probe error and still
+// render the puck-mock marker. Same-graph tests are unaffected.
+class ProbeBoundary extends Component<
+	{ children: ReactNode },
+	{ failed: boolean }
+> {
+	state = { failed: false };
+	static getDerivedStateFromError(): { failed: boolean } {
+		return { failed: true };
+	}
+	render(): ReactNode {
+		return this.state.failed ? null : this.props.children;
+	}
 }
 
 function exportStore(): ExportStoreApi {
@@ -111,7 +130,9 @@ vi.mock("@puckeditor/core", () => {
 					<span data-testid="puck-plugin-count">
 						{props.plugins?.length ?? 0}
 					</span>
-					<StoreProbe />
+					<ProbeBoundary>
+						<StoreProbe />
+					</ProbeBoundary>
 				</div>
 			);
 		},
