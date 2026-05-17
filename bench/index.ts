@@ -17,6 +17,7 @@ import { runHtmlExportBench } from "./html-export.bench.js";
 import { runIrDiffBench } from "./ir-diff.bench.js";
 import { runIrRoundtripBench } from "./ir-roundtrip.bench.js";
 import { runApplySectionPatchBench } from "./plugin-ai-copilot.bench.js";
+import { runCollabYjsBench } from "./plugin-collab-yjs.bench.js";
 import { runSidebarSwitchBench } from "./sidebar-switch.bench.js";
 import type {
 	BenchBaseline,
@@ -177,6 +178,7 @@ async function main(): Promise<void> {
 	allResults.push(...(await runEditorLoadBench()));
 	allResults.push(...(await runSidebarSwitchBench()));
 	allResults.push(...(await runApplySectionPatchBench()));
+	allResults.push(...(await runCollabYjsBench()));
 
 	if (updateMode) {
 		// Preserve existing baseline entries for benches that returned
