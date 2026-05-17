@@ -77,7 +77,7 @@ export interface UseStudioResult {
 	/**
 	 * Registered export formats indexed by
 	 * {@link ExportFormatDefinition.id}. Reading the keys gives the
-	 * host app the same list `useExportStore.getState().availableFormats`
+	 * host app the same list `useExportStore((s) => s.availableFormats)`
 	 * exposes, minus the reactivity — consumers that need reactive
 	 * re-renders should subscribe to the export store instead.
 	 */
