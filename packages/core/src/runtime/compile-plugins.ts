@@ -238,11 +238,13 @@ function compareSemver(a: ParsedSemver, b: ParsedSemver): number {
  * 2. Caret — `"^X.Y.Z"` matches every version in the left-most
  *    non-zero component's range. `^1.2.3` matches `>=1.2.3 <2.0.0`;
  *    `^0.2.3` matches `>=0.2.3 <0.3.0`; `^0.0.3` matches
- *    `>=0.0.3 <0.0.4`. Prerelease ranges only match prereleases of
- *    the same `[major, minor, patch]` tuple, per semver 2.0.
+ *    `>=0.0.3 <0.0.4`. A prerelease on the lower bound (`^0.1.0-alpha`)
+ *    only restricts which *prerelease* installs qualify; a stable
+ *    install in the window still matches (`0.1.3` ✓), per npm
+ *    `semver.satisfies` semantics. See {@link prereleaseAllowed}.
  * 3. Tilde — `"~X.Y.Z"` matches every version with the same
- *    `[major, minor]` tuple (or `[major, minor, patch]` prerelease
- *    series when the range itself carries a prerelease).
+ *    `[major, minor]` tuple and `>= X.Y.Z`, with the same prerelease
+ *    admission rule as caret.
  * 4. Prefix wildcard — `"X"` or `"X.Y"` (no operator) match any
  *    version starting with those components. Kept for parity with
  *    `npm install` conventions; rarely used by plugins.
@@ -285,87 +287,81 @@ export function isCoreVersionCompatible(
 }
 
 /**
- * Caret range: `^X.Y.Z` matches `>= X.Y.Z` up to (but not including)
- * the next version that bumps the left-most non-zero component.
- * Prereleases only satisfy a caret range when their
- * `[major, minor, patch]` tuple matches the range's tuple — this
- * prevents `0.2.0-alpha` from slipping into `^0.1.0`.
+ * node-semver's prerelease admission rule, the corner this module used
+ * to get wrong. A build that itself carries a prerelease tag only
+ * satisfies a range when the matching comparator shares its
+ * `[major, minor, patch]` tuple *and* also carries a prerelease. A
+ * stable release is never gated by a prerelease that appears only on a
+ * range's lower bound: `0.1.3` satisfies `^0.1.0-alpha` exactly like
+ * npm's `semver.satisfies`, because the prerelease restriction is about
+ * the version under test, not the range. The earlier implementation
+ * required every match to share the range's tuple whenever the range
+ * carried a prerelease, which wrongly rejected stable `0.1.3` against
+ * `^0.1.0-alpha` and stalled `<Studio>` with an opaque compat error.
  */
-function satisfiesCaret(range: string, installed: ParsedSemver): boolean {
-	const base = parseSemver(range);
-	if (base === null) return false;
-
-	// Prerelease in range → only match same-tuple prereleases.
-	if (base.prerelease.length > 0) {
-		if (
-			installed.major !== base.major ||
-			installed.minor !== base.minor ||
-			installed.patch !== base.patch
-		) {
-			return false;
-		}
-		return compareSemver(installed, base) >= 0;
+function prereleaseAllowed(
+	base: ParsedSemver,
+	installed: ParsedSemver,
+): boolean {
+	if (installed.prerelease.length === 0) {
+		return true;
 	}
-
-	// Installed prerelease with no range prerelease → only same tuple.
-	if (installed.prerelease.length > 0) {
-		if (
-			installed.major !== base.major ||
-			installed.minor !== base.minor ||
-			installed.patch !== base.patch
-		) {
-			return false;
-		}
-	}
-
-	if (compareSemver(installed, base) < 0) return false;
-
-	// Upper bound: bump the left-most non-zero component.
-	if (base.major > 0) {
-		return installed.major === base.major;
-	}
-	if (base.minor > 0) {
-		return installed.major === 0 && installed.minor === base.minor;
+	if (base.prerelease.length === 0) {
+		return false;
 	}
 	return (
-		installed.major === 0 &&
-		installed.minor === 0 &&
+		installed.major === base.major &&
+		installed.minor === base.minor &&
 		installed.patch === base.patch
 	);
 }
 
 /**
- * Tilde range: `~X.Y.Z` matches any `X.Y.*` release. When the range
- * carries a prerelease, the match narrows to same-tuple prereleases
- * (identical to caret's prerelease rule).
+ * Caret range: `^X.Y.Z` matches `>= X.Y.Z` up to (but not including)
+ * the next version that bumps the left-most non-zero component. A
+ * prerelease on the range's lower bound only narrows which *prerelease*
+ * installs qualify (see {@link prereleaseAllowed}); stable installs in
+ * the `[lower, upper)` window always pass — so `^0.1.0-alpha` still
+ * keeps `0.2.0-alpha` out (upper bound) while letting `0.1.3` in.
+ */
+function satisfiesCaret(range: string, installed: ParsedSemver): boolean {
+	const base = parseSemver(range);
+	if (base === null) return false;
+
+	// Lower bound (prerelease-aware compare).
+	if (compareSemver(installed, base) < 0) return false;
+
+	// Upper bound: bump the left-most non-zero component.
+	let withinUpper: boolean;
+	if (base.major > 0) {
+		withinUpper = installed.major === base.major;
+	} else if (base.minor > 0) {
+		withinUpper = installed.major === 0 && installed.minor === base.minor;
+	} else {
+		withinUpper =
+			installed.major === 0 &&
+			installed.minor === 0 &&
+			installed.patch === base.patch;
+	}
+	if (!withinUpper) return false;
+
+	return prereleaseAllowed(base, installed);
+}
+
+/**
+ * Tilde range: `~X.Y.Z` matches any `X.Y.*` release `>= X.Y.Z`. A
+ * prerelease on the range's lower bound follows the same
+ * {@link prereleaseAllowed} admission rule as caret.
  */
 function satisfiesTilde(range: string, installed: ParsedSemver): boolean {
 	const base = parseSemver(range);
 	if (base === null) return false;
 
-	if (base.prerelease.length > 0) {
-		if (
-			installed.major !== base.major ||
-			installed.minor !== base.minor ||
-			installed.patch !== base.patch
-		) {
-			return false;
-		}
-		return compareSemver(installed, base) >= 0;
-	}
-
-	if (installed.prerelease.length > 0) {
-		if (
-			installed.major !== base.major ||
-			installed.minor !== base.minor ||
-			installed.patch !== base.patch
-		) {
-			return false;
-		}
-	}
-
 	if (compareSemver(installed, base) < 0) return false;
-	return installed.major === base.major && installed.minor === base.minor;
+	if (installed.major !== base.major || installed.minor !== base.minor) {
+		return false;
+	}
+	return prereleaseAllowed(base, installed);
 }
 
 /**

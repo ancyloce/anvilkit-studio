@@ -361,6 +361,41 @@ describe("isCoreVersionCompatible — prerelease ordering", () => {
 	});
 });
 
+// ----------------------------------------------------------------------
+// Regression: a prerelease on a caret/tilde *lower bound* must NOT gate
+// out stable installs in the range window. `^0.1.0-alpha` against
+// installed `0.1.3` previously returned false, so `<Studio>` died with
+// `Plugin "..." requires @anvilkit/core "^0.1.0-alpha" but the installed
+// version is "0.1.3"`. Every row here is cross-checked against npm's
+// `semver.satisfies` (190-combo parity sweep in the investigation).
+// ----------------------------------------------------------------------
+
+describe("isCoreVersionCompatible — prerelease lower bound admits stable", () => {
+	it.each<[string, string, boolean]>([
+		// The exact failing case from the bug report.
+		["^0.1.0-alpha", "0.1.3", true],
+		["~0.1.0-alpha", "0.1.3", true],
+		// Stable install at/above the prerelease lower bound.
+		["^0.1.0-alpha", "0.1.0", true],
+		["^1.2.3-alpha.0", "1.9.0", true],
+		["~1.2.3-alpha.0", "1.2.9", true],
+		// Upper bound is still enforced — prerelease on the lower bound
+		// does not let a higher minor/major prerelease leak in.
+		["^0.1.0-alpha", "0.2.0-alpha", false],
+		["^0.1.0-alpha", "0.2.0", false],
+		["~0.1.0-alpha", "0.2.0", false],
+		// Same-tuple prerelease admission still works both ways.
+		["^0.1.0-alpha", "0.1.0-beta", true],
+		["^0.1.0-alpha", "0.1.0-alpha", true],
+		// A prerelease install below the prerelease lower bound is out.
+		["^0.1.0-beta", "0.1.0-alpha", false],
+		// Prerelease install, different tuple, range has no prerelease.
+		["^1.2.3", "1.5.0-alpha", false],
+	])("%s against %s → %s", (range, installed, expected) => {
+		expect(isCoreVersionCompatible(range, installed)).toBe(expected);
+	});
+});
+
 describe("isCoreVersionCompatible — three-segment prefix and exact", () => {
 	it.each<[string, string, boolean]>([
 		// Bare `X.Y.Z` should accept the exact installed version only.
