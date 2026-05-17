@@ -19,6 +19,7 @@ import type {
 	StudioAssetAction,
 	StudioAssetSource,
 } from "@/types/sidebar";
+import { Windowed } from "@/primitives/Windowed";
 import { AssetAudioRow } from "./AssetAudioRow";
 import { AssetImageTile } from "./AssetImageTile";
 import { AssetOverflowMenu } from "./AssetOverflowMenu";
@@ -104,14 +105,20 @@ export function AssetGrid({
 						</p>
 					</div>
 				))}
-				{images.map((asset) => (
-					<AssetImageTile
-						key={asset.id}
-						asset={asset}
-						onClick={() => onAssetClick(asset)}
-						menu={renderMenu(asset)}
-					/>
-				))}
+				<Windowed
+					items={images}
+					itemKey={(asset) => asset.id}
+					estimateSize={112}
+					lanes={3}
+					data-testid="ak-image-section-images-window"
+					renderItem={(asset) => (
+						<AssetImageTile
+							asset={asset}
+							onClick={() => onAssetClick(asset)}
+							menu={renderMenu(asset)}
+						/>
+					)}
+				/>
 			</div>,
 		);
 	}
@@ -123,14 +130,19 @@ export function AssetGrid({
 				className="flex flex-col gap-2 p-2"
 				data-testid="ak-image-section-videos"
 			>
-				{videos.map((asset) => (
-					<AssetVideoCard
-						key={asset.id}
-						asset={asset}
-						onClick={() => onAssetClick(asset)}
-						menu={renderMenu(asset)}
-					/>
-				))}
+				<Windowed
+					items={videos}
+					itemKey={(asset) => asset.id}
+					estimateSize={140}
+					data-testid="ak-image-section-videos-window"
+					renderItem={(asset) => (
+						<AssetVideoCard
+							asset={asset}
+							onClick={() => onAssetClick(asset)}
+							menu={renderMenu(asset)}
+						/>
+					)}
+				/>
 			</div>,
 		);
 	}
@@ -142,14 +154,19 @@ export function AssetGrid({
 				className="flex flex-col gap-1 p-2"
 				data-testid="ak-image-section-audio"
 			>
-				{audio.map((asset) => (
-					<AssetAudioRow
-						key={asset.id}
-						asset={asset}
-						onClick={() => onAssetClick(asset)}
-						menu={renderMenu(asset)}
-					/>
-				))}
+				<Windowed
+					items={audio}
+					itemKey={(asset) => asset.id}
+					estimateSize={48}
+					data-testid="ak-image-section-audio-window"
+					renderItem={(asset) => (
+						<AssetAudioRow
+							asset={asset}
+							onClick={() => onAssetClick(asset)}
+							menu={renderMenu(asset)}
+						/>
+					)}
+				/>
 			</div>,
 		);
 	}
