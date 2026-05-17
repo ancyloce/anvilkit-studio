@@ -44,8 +44,8 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { createStore, type StoreApi } from "zustand/vanilla";
 
 /**
  * The user-facing theme preference. Matches the enum in
@@ -118,44 +118,54 @@ const INITIAL_STATE = {
 	resolved: "light" as ThemeResolved,
 } as const;
 
+export interface CreateThemeStoreOptions {
+	readonly storeId: string;
+}
+
+export type ThemeStoreApi = StoreApi<ThemeState>;
+
 /**
- * Zustand store for Studio theme preference.
+ * Build a fresh per-`<Studio>` theme store. The persistence key is
+ * namespaced by `storeId` so two editors on the same page never
+ * collide on `localStorage` or bleed preference state into each other.
+ * Consume via {@link ThemeStoreProvider} + the `useThemeStore`
+ * selector hook (re-exported from the provider module).
  *
  * @example
- * // Header toggle:
- * const mode = useThemeStore((s) => s.mode);
- * const setMode = useThemeStore((s) => s.setMode);
- *
- * // Root style layer:
- * const resolved = useThemeStore((s) => s.resolved);
- * return <div className={`anvilkit-${resolved}`}>{children}</div>;
+ * const store = createThemeStore({ storeId: "a" });
+ * store.getState().setMode("dark");
  */
-export const useThemeStore = create<ThemeState>()(
-	persist(
-		(set) => ({
-			...INITIAL_STATE,
-			setMode(mode) {
-				set({ mode });
-			},
-			setResolved(resolved) {
-				set({ resolved });
-			},
-			reset() {
-				set({ ...INITIAL_STATE });
-			},
-		}),
-		{
-			name: "anvilkit-core-theme",
-			// Persist `mode` only. See the file header for why
-			// `resolved` cannot and should not be persisted.
-			partialize: (state): ThemeStorePartial => ({
-				mode: state.mode,
+export function createThemeStore(
+	options: CreateThemeStoreOptions,
+): ThemeStoreApi {
+	const { storeId } = options;
+	return createStore<ThemeState>()(
+		persist(
+			(set) => ({
+				...INITIAL_STATE,
+				setMode(mode) {
+					set({ mode });
+				},
+				setResolved(resolved) {
+					set({ resolved });
+				},
+				reset() {
+					set({ ...INITIAL_STATE });
+				},
 			}),
-			// SSR safety: skip synchronous rehydration so the server
-			// and first-client render agree on the initial `"system"`
-			// default. `<Studio>` rehydrates from a mount-time effect,
-			// after which `mode` reflects the persisted preference.
-			skipHydration: true,
-		},
-	),
-);
+			{
+				name: `anvilkit-core-theme-${storeId}`,
+				// Persist `mode` only. See the file header for why
+				// `resolved` cannot and should not be persisted.
+				partialize: (state): ThemeStorePartial => ({
+					mode: state.mode,
+				}),
+				// SSR safety: skip synchronous rehydration so the server
+				// and first-client render agree on the initial `"system"`
+				// default. The provider rehydrates from a mount-time
+				// effect, after which `mode` reflects the persisted value.
+				skipHydration: true,
+			},
+		),
+	);
+}

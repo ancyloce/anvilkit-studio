@@ -47,8 +47,8 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { createStore, type StoreApi } from "zustand/vanilla";
 
 /**
  * A single prompt in {@link AiState.history}. The entry is
@@ -182,56 +182,72 @@ const HISTORY_PERSIST_LIMIT = 10;
  *   useAiStore.getState().finishGeneration(false, String(err));
  * }
  */
-export const useAiStore = create<AiState>()(
-	persist(
-		(set) => ({
-			...INITIAL_STATE,
-			startGeneration(prompt) {
-				set((state) => ({
-					isGenerating: true,
-					lastPrompt: prompt,
-					// Starting a new run clears the previous error so the
-					// UI does not show a stale failure next to a fresh
-					// in-flight spinner.
-					lastError: null,
-					history: [...state.history, { prompt, at: Date.now() }],
-				}));
-			},
-			finishGeneration(ok, error) {
-				set({
-					isGenerating: false,
-					// On success, clear any prior error. On failure,
-					// record the error string (coerced to `null` if the
-					// caller omitted it, keeping the field a strict
-					// `string | null`).
-					lastError: ok ? null : (error ?? null),
-				});
-			},
-			clearHistory() {
-				set({ history: [] });
-			},
-			reset() {
-				set({ ...INITIAL_STATE });
-			},
-		}),
-		{
-			name: "anvilkit-core-ai",
-			// Persist only the last N history entries. Slicing inside
-			// `partialize` means the bound is enforced at write time;
-			// the in-memory `history` array can legitimately grow
-			// larger during a long session and the next `set` simply
-			// trims it on the way to disk.
-			partialize: (state): AiStorePartial => ({
-				history: state.history.slice(-HISTORY_PERSIST_LIMIT),
+export interface CreateAiStoreOptions {
+	readonly storeId: string;
+}
+
+export type AiStoreApi = StoreApi<AiState>;
+
+/**
+ * Build a fresh per-`<Studio>` AI store. The persistence key is
+ * namespaced by `storeId` so two concurrent editors never bleed
+ * in-flight generation state or prompt history into each other.
+ * Consume via {@link AiStoreProvider} + the `useAiStore` selector
+ * hook.
+ */
+export function createAiStore(options: CreateAiStoreOptions): AiStoreApi {
+	const { storeId } = options;
+	return createStore<AiState>()(
+		persist(
+			(set) => ({
+				...INITIAL_STATE,
+				startGeneration(prompt) {
+					set((state) => ({
+						isGenerating: true,
+						lastPrompt: prompt,
+						// Starting a new run clears the previous error so the
+						// UI does not show a stale failure next to a fresh
+						// in-flight spinner.
+						lastError: null,
+						history: [...state.history, { prompt, at: Date.now() }],
+					}));
+				},
+				finishGeneration(ok, error) {
+					set({
+						isGenerating: false,
+						// On success, clear any prior error. On failure,
+						// record the error string (coerced to `null` if the
+						// caller omitted it, keeping the field a strict
+						// `string | null`).
+						lastError: ok ? null : (error ?? null),
+					});
+				},
+				clearHistory() {
+					set({ history: [] });
+				},
+				reset() {
+					set({ ...INITIAL_STATE });
+				},
 			}),
-			// SSR safety: server render cannot see `localStorage`, so
-			// synchronous rehydration at module evaluation would
-			// produce a server/client hydration mismatch. `<Studio>`
-			// calls `useAiStore.persist.rehydrate()` from a
-			// mount-time effect (browser-only), which keeps the first
-			// server-rendered HTML aligned with the first client
-			// render while still restoring the user's history.
-			skipHydration: true,
-		},
-	),
-);
+			{
+				name: `anvilkit-core-ai-${storeId}`,
+				// Persist only the last N history entries. Slicing inside
+				// `partialize` means the bound is enforced at write time;
+				// the in-memory `history` array can legitimately grow
+				// larger during a long session and the next `set` simply
+				// trims it on the way to disk.
+				partialize: (state): AiStorePartial => ({
+					history: state.history.slice(-HISTORY_PERSIST_LIMIT),
+				}),
+				// SSR safety: server render cannot see `localStorage`, so
+				// synchronous rehydration at module evaluation would
+				// produce a server/client hydration mismatch. `<Studio>`
+				// calls `useAiStore.persist.rehydrate()` from a
+				// mount-time effect (browser-only), which keeps the first
+				// server-rendered HTML aligned with the first client
+				// render while still restoring the user's history.
+				skipHydration: true,
+			},
+		),
+	);
+}

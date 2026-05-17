@@ -17,47 +17,54 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useAiStore } from "@/stores/ai-store";
+import { createAiStore, type AiStoreApi } from "@/stores/ai-store";
 
-const STORAGE_KEY = "anvilkit-core-ai";
+type PersistableStore = { persist: { rehydrate(): Promise<void> } };
+function persistOf(store: AiStoreApi): PersistableStore {
+	return store as unknown as PersistableStore;
+}
+
+const STORE_ID = "test";
+const STORAGE_KEY = `anvilkit-core-ai-${STORE_ID}`;
+let store: AiStoreApi;
 
 beforeEach(() => {
 	localStorage.clear();
-	useAiStore.setState(useAiStore.getInitialState(), true);
+	store = createAiStore({ storeId: STORE_ID });
 });
 
 describe("useAiStore — initial state", () => {
 	it("starts with isGenerating === false", () => {
-		expect(useAiStore.getState().isGenerating).toBe(false);
+		expect(store.getState().isGenerating).toBe(false);
 	});
 
 	it("starts with null lastPrompt and lastError", () => {
-		expect(useAiStore.getState().lastPrompt).toBeNull();
-		expect(useAiStore.getState().lastError).toBeNull();
+		expect(store.getState().lastPrompt).toBeNull();
+		expect(store.getState().lastError).toBeNull();
 	});
 
 	it("starts with empty history", () => {
-		expect(useAiStore.getState().history).toEqual([]);
+		expect(store.getState().history).toEqual([]);
 	});
 });
 
 describe("useAiStore — startGeneration", () => {
 	it("flips isGenerating to true", () => {
-		useAiStore.getState().startGeneration("hello world");
-		expect(useAiStore.getState().isGenerating).toBe(true);
+		store.getState().startGeneration("hello world");
+		expect(store.getState().isGenerating).toBe(true);
 	});
 
 	it("stores the prompt as lastPrompt", () => {
-		useAiStore.getState().startGeneration("hello world");
-		expect(useAiStore.getState().lastPrompt).toBe("hello world");
+		store.getState().startGeneration("hello world");
+		expect(store.getState().lastPrompt).toBe("hello world");
 	});
 
 	it("appends a history entry with a current timestamp", () => {
 		const before = Date.now();
-		useAiStore.getState().startGeneration("hello world");
+		store.getState().startGeneration("hello world");
 		const after = Date.now();
 
-		const history = useAiStore.getState().history;
+		const history = store.getState().history;
 		expect(history).toHaveLength(1);
 		expect(history[0]?.prompt).toBe("hello world");
 		expect(history[0]?.at).toBeGreaterThanOrEqual(before);
@@ -65,17 +72,17 @@ describe("useAiStore — startGeneration", () => {
 	});
 
 	it("clears a prior error when starting a new generation", () => {
-		useAiStore.getState().finishGeneration(false, "nope");
-		expect(useAiStore.getState().lastError).toBe("nope");
-		useAiStore.getState().startGeneration("retry");
-		expect(useAiStore.getState().lastError).toBeNull();
+		store.getState().finishGeneration(false, "nope");
+		expect(store.getState().lastError).toBe("nope");
+		store.getState().startGeneration("retry");
+		expect(store.getState().lastError).toBeNull();
 	});
 
 	it("preserves prior history entries on each new call", () => {
-		useAiStore.getState().startGeneration("one");
-		useAiStore.getState().startGeneration("two");
-		useAiStore.getState().startGeneration("three");
-		expect(useAiStore.getState().history.map((h) => h.prompt)).toEqual([
+		store.getState().startGeneration("one");
+		store.getState().startGeneration("two");
+		store.getState().startGeneration("three");
+		expect(store.getState().history.map((h: { prompt: string }) => h.prompt)).toEqual([
 			"one",
 			"two",
 			"three",
@@ -85,58 +92,58 @@ describe("useAiStore — startGeneration", () => {
 
 describe("useAiStore — finishGeneration", () => {
 	it("clears isGenerating on success and leaves lastError null", () => {
-		useAiStore.getState().startGeneration("hello");
-		useAiStore.getState().finishGeneration(true);
-		expect(useAiStore.getState().isGenerating).toBe(false);
-		expect(useAiStore.getState().lastError).toBeNull();
+		store.getState().startGeneration("hello");
+		store.getState().finishGeneration(true);
+		expect(store.getState().isGenerating).toBe(false);
+		expect(store.getState().lastError).toBeNull();
 	});
 
 	it("clears isGenerating on failure and records the error message", () => {
-		useAiStore.getState().startGeneration("hello");
-		useAiStore.getState().finishGeneration(false, "rate limited");
-		expect(useAiStore.getState().isGenerating).toBe(false);
-		expect(useAiStore.getState().lastError).toBe("rate limited");
+		store.getState().startGeneration("hello");
+		store.getState().finishGeneration(false, "rate limited");
+		expect(store.getState().isGenerating).toBe(false);
+		expect(store.getState().lastError).toBe("rate limited");
 	});
 
 	it("records null when finishGeneration(false) is called without an error string", () => {
-		useAiStore.getState().startGeneration("hello");
-		useAiStore.getState().finishGeneration(false);
-		expect(useAiStore.getState().lastError).toBeNull();
+		store.getState().startGeneration("hello");
+		store.getState().finishGeneration(false);
+		expect(store.getState().lastError).toBeNull();
 	});
 
 	it("clears a prior error on the next successful finish", () => {
-		useAiStore.getState().startGeneration("hello");
-		useAiStore.getState().finishGeneration(false, "nope");
-		useAiStore.getState().startGeneration("retry");
-		useAiStore.getState().finishGeneration(true);
-		expect(useAiStore.getState().lastError).toBeNull();
+		store.getState().startGeneration("hello");
+		store.getState().finishGeneration(false, "nope");
+		store.getState().startGeneration("retry");
+		store.getState().finishGeneration(true);
+		expect(store.getState().lastError).toBeNull();
 	});
 });
 
 describe("useAiStore — clearHistory", () => {
 	it("empties the history array", () => {
-		useAiStore.getState().startGeneration("one");
-		useAiStore.getState().startGeneration("two");
-		useAiStore.getState().clearHistory();
-		expect(useAiStore.getState().history).toEqual([]);
+		store.getState().startGeneration("one");
+		store.getState().startGeneration("two");
+		store.getState().clearHistory();
+		expect(store.getState().history).toEqual([]);
 	});
 
 	it("leaves lastPrompt intact", () => {
-		useAiStore.getState().startGeneration("only one");
-		useAiStore.getState().clearHistory();
-		expect(useAiStore.getState().lastPrompt).toBe("only one");
+		store.getState().startGeneration("only one");
+		store.getState().clearHistory();
+		expect(store.getState().lastPrompt).toBe("only one");
 	});
 });
 
 describe("useAiStore — reset()", () => {
 	it("returns every field to initial state", () => {
-		const store = useAiStore.getState();
-		store.startGeneration("hello");
-		store.finishGeneration(false, "boom");
+		const actions = store.getState();
+		actions.startGeneration("hello");
+		actions.finishGeneration(false, "boom");
 
-		useAiStore.getState().reset();
+		store.getState().reset();
 
-		const after = useAiStore.getState();
+		const after = store.getState();
 		expect(after.isGenerating).toBe(false);
 		expect(after.lastPrompt).toBeNull();
 		expect(after.lastError).toBeNull();
@@ -144,20 +151,20 @@ describe("useAiStore — reset()", () => {
 	});
 
 	it("leaves the action functions intact", () => {
-		useAiStore.getState().startGeneration("hello");
-		useAiStore.getState().reset();
+		store.getState().startGeneration("hello");
+		store.getState().reset();
 		// Next startGeneration still works — reset must shallow-merge
 		// the initial state, not replace the whole store.
-		useAiStore.getState().startGeneration("post-reset");
-		expect(useAiStore.getState().lastPrompt).toBe("post-reset");
+		store.getState().startGeneration("post-reset");
+		expect(store.getState().lastPrompt).toBe("post-reset");
 	});
 });
 
 describe("useAiStore — persist / partialize", () => {
 	it("writes only `history` to localStorage", () => {
-		const store = useAiStore.getState();
-		store.startGeneration("one");
-		store.finishGeneration(false, "boom");
+		const actions = store.getState();
+		actions.startGeneration("one");
+		actions.finishGeneration(false, "boom");
 
 		const raw = localStorage.getItem(STORAGE_KEY);
 		expect(raw).not.toBeNull();
@@ -174,7 +181,7 @@ describe("useAiStore — persist / partialize", () => {
 	it("trims the persisted history to the last 10 entries", () => {
 		// Push 15 prompts; partialize should only serialize the tail 10.
 		for (let i = 0; i < 15; i += 1) {
-			useAiStore.getState().startGeneration(`prompt-${i}`);
+			store.getState().startGeneration(`prompt-${i}`);
 		}
 
 		const raw = localStorage.getItem(STORAGE_KEY) as string;
@@ -196,9 +203,9 @@ describe("useAiStore — persist / partialize", () => {
 			}),
 		);
 
-		await useAiStore.persist.rehydrate();
+		await persistOf(store).persist.rehydrate();
 
-		const state = useAiStore.getState();
+		const state = store.getState();
 		expect(state.history).toEqual([{ prompt: "cached", at: 1234 }]);
 		expect(state.isGenerating).toBe(false);
 		expect(state.lastError).toBeNull();

@@ -23,39 +23,46 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useExportStore } from "@/stores/export-store";
+import { createExportStore, type ExportStoreApi } from "@/stores/export-store";
 
-const STORAGE_KEY = "anvilkit-core-export";
+type PersistableStore = { persist: { rehydrate(): Promise<void> } };
+function persistOf(store: ExportStoreApi): PersistableStore {
+	return store as unknown as PersistableStore;
+}
+
+const STORE_ID = "test";
+const STORAGE_KEY = `anvilkit-core-export-${STORE_ID}`;
+let store: ExportStoreApi;
 
 beforeEach(() => {
 	// Clear the persisted blob first so a stale write from a prior
 	// case cannot leak into the next setState/rehydrate cycle.
 	localStorage.clear();
-	useExportStore.setState(useExportStore.getInitialState(), true);
+	store = createExportStore({ storeId: STORE_ID });
 });
 
 describe("useExportStore — initial state", () => {
 	it("starts with empty availableFormats", () => {
-		expect(useExportStore.getState().availableFormats).toEqual([]);
+		expect(store.getState().availableFormats).toEqual([]);
 	});
 
 	it("starts with null currentFormat", () => {
-		expect(useExportStore.getState().currentFormat).toBeNull();
+		expect(store.getState().currentFormat).toBeNull();
 	});
 
 	it("starts with isExporting === false", () => {
-		expect(useExportStore.getState().isExporting).toBe(false);
+		expect(store.getState().isExporting).toBe(false);
 	});
 
 	it("starts with null lastExport", () => {
-		expect(useExportStore.getState().lastExport).toBeNull();
+		expect(store.getState().lastExport).toBeNull();
 	});
 });
 
 describe("useExportStore — setters", () => {
 	it("setAvailableFormats replaces the list", () => {
-		useExportStore.getState().setAvailableFormats(["html", "react", "json"]);
-		expect(useExportStore.getState().availableFormats).toEqual([
+		store.getState().setAvailableFormats(["html", "react", "json"]);
+		expect(store.getState().availableFormats).toEqual([
 			"html",
 			"react",
 			"json",
@@ -63,29 +70,29 @@ describe("useExportStore — setters", () => {
 	});
 
 	it("setCurrentFormat stores the id", () => {
-		useExportStore.getState().setCurrentFormat("html");
-		expect(useExportStore.getState().currentFormat).toBe("html");
+		store.getState().setCurrentFormat("html");
+		expect(store.getState().currentFormat).toBe("html");
 	});
 
 	it("setCurrentFormat(null) clears the selection", () => {
-		useExportStore.getState().setCurrentFormat("html");
-		useExportStore.getState().setCurrentFormat(null);
-		expect(useExportStore.getState().currentFormat).toBeNull();
+		store.getState().setCurrentFormat("html");
+		store.getState().setCurrentFormat(null);
+		expect(store.getState().currentFormat).toBeNull();
 	});
 
 	it("setIsExporting flips the flag", () => {
-		useExportStore.getState().setIsExporting(true);
-		expect(useExportStore.getState().isExporting).toBe(true);
-		useExportStore.getState().setIsExporting(false);
-		expect(useExportStore.getState().isExporting).toBe(false);
+		store.getState().setIsExporting(true);
+		expect(store.getState().isExporting).toBe(true);
+		store.getState().setIsExporting(false);
+		expect(store.getState().isExporting).toBe(false);
 	});
 
 	it("recordExport builds a LastExportRecord with a timestamp", () => {
 		const before = Date.now();
-		useExportStore.getState().recordExport("html", true);
+		store.getState().recordExport("html", true);
 		const after = Date.now();
 
-		const record = useExportStore.getState().lastExport;
+		const record = store.getState().lastExport;
 		expect(record).not.toBeNull();
 		expect(record?.formatId).toBe("html");
 		expect(record?.ok).toBe(true);
@@ -97,29 +104,29 @@ describe("useExportStore — setters", () => {
 	});
 
 	it("recordExport(false) records a failed run", () => {
-		useExportStore.getState().recordExport("pdf", false);
-		expect(useExportStore.getState().lastExport?.ok).toBe(false);
+		store.getState().recordExport("pdf", false);
+		expect(store.getState().lastExport?.ok).toBe(false);
 	});
 
 	it("recordExport overwrites the previous record", () => {
-		useExportStore.getState().recordExport("html", true);
-		useExportStore.getState().recordExport("react", false);
-		expect(useExportStore.getState().lastExport?.formatId).toBe("react");
-		expect(useExportStore.getState().lastExport?.ok).toBe(false);
+		store.getState().recordExport("html", true);
+		store.getState().recordExport("react", false);
+		expect(store.getState().lastExport?.formatId).toBe("react");
+		expect(store.getState().lastExport?.ok).toBe(false);
 	});
 });
 
 describe("useExportStore — reset()", () => {
 	it("returns every field to initial state", () => {
-		const store = useExportStore.getState();
-		store.setAvailableFormats(["html"]);
-		store.setCurrentFormat("html");
-		store.setIsExporting(true);
-		store.recordExport("html", true);
+		const actions = store.getState();
+		actions.setAvailableFormats(["html"]);
+		actions.setCurrentFormat("html");
+		actions.setIsExporting(true);
+		actions.recordExport("html", true);
 
-		useExportStore.getState().reset();
+		store.getState().reset();
 
-		const after = useExportStore.getState();
+		const after = store.getState();
 		expect(after.availableFormats).toEqual([]);
 		expect(after.currentFormat).toBeNull();
 		expect(after.isExporting).toBe(false);
@@ -127,23 +134,23 @@ describe("useExportStore — reset()", () => {
 	});
 
 	it("leaves the action functions intact so subsequent setters still work", () => {
-		useExportStore.getState().setCurrentFormat("html");
-		useExportStore.getState().reset();
+		store.getState().setCurrentFormat("html");
+		store.getState().reset();
 		// If reset had clobbered the actions, this next call would
 		// throw — it's the sanity check that `set({ ...INITIAL_STATE })`
 		// uses a shallow merge that preserves the setters.
-		useExportStore.getState().setCurrentFormat("react");
-		expect(useExportStore.getState().currentFormat).toBe("react");
+		store.getState().setCurrentFormat("react");
+		expect(store.getState().currentFormat).toBe("react");
 	});
 });
 
 describe("useExportStore — persist / partialize", () => {
 	it("writes only `currentFormat` to localStorage", () => {
-		const store = useExportStore.getState();
-		store.setAvailableFormats(["html", "react"]);
-		store.setCurrentFormat("html");
-		store.setIsExporting(true);
-		store.recordExport("html", true);
+		const actions = store.getState();
+		actions.setAvailableFormats(["html", "react"]);
+		actions.setCurrentFormat("html");
+		actions.setIsExporting(true);
+		actions.recordExport("html", true);
 
 		const raw = localStorage.getItem(STORAGE_KEY);
 		expect(raw).not.toBeNull();
@@ -161,7 +168,7 @@ describe("useExportStore — persist / partialize", () => {
 	});
 
 	it("uses the `anvilkit-core-export` storage key", () => {
-		useExportStore.getState().setCurrentFormat("html");
+		store.getState().setCurrentFormat("html");
 		expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull();
 	});
 
@@ -174,9 +181,9 @@ describe("useExportStore — persist / partialize", () => {
 			JSON.stringify({ state: { currentFormat: "pdf" }, version: 0 }),
 		);
 
-		await useExportStore.persist.rehydrate();
+		await persistOf(store).persist.rehydrate();
 
-		const state = useExportStore.getState();
+		const state = store.getState();
 		expect(state.currentFormat).toBe("pdf");
 		// Ephemeral fields stayed at their initial values — the
 		// rehydrate merge only touches the keys that were in the
@@ -190,7 +197,7 @@ describe("useExportStore — persist / partialize", () => {
 		// Zustand v5 surfaces `getInitialState` on the store hook
 		// itself. Pinning it here protects the `beforeEach` reset
 		// path against an accidental regression.
-		const initial = useExportStore.getInitialState();
+		const initial = store.getInitialState();
 		expect(initial.currentFormat).toBeNull();
 		expect(initial.isExporting).toBe(false);
 		expect(initial.availableFormats).toEqual([]);

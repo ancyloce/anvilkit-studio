@@ -44,8 +44,8 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { createStore, type StoreApi } from "zustand/vanilla";
 
 /**
  * A single entry in {@link ExportState.lastExport} — the record of
@@ -193,38 +193,55 @@ const INITIAL_STATE = {
  *   useExportStore.getState().setIsExporting(false);
  * }
  */
-export const useExportStore = create<ExportState>()(
-	persist(
-		(set) => ({
-			...INITIAL_STATE,
-			setAvailableFormats(ids) {
-				set({ availableFormats: ids });
-			},
-			setCurrentFormat(id) {
-				set({ currentFormat: id });
-			},
-			setIsExporting(value) {
-				set({ isExporting: value });
-			},
-			recordExport(formatId, ok) {
-				set({ lastExport: { formatId, at: Date.now(), ok } });
-			},
-			reset() {
-				set({ ...INITIAL_STATE });
-			},
-		}),
-		{
-			name: "anvilkit-core-export",
-			// Persist only `currentFormat`. Every other field is
-			// ephemeral for the reasons documented in the file header.
-			partialize: (state): ExportStorePartial => ({
-				currentFormat: state.currentFormat,
+export interface CreateExportStoreOptions {
+	readonly storeId: string;
+}
+
+export type ExportStoreApi = StoreApi<ExportState>;
+
+/**
+ * Build a fresh per-`<Studio>` export store. The persistence key is
+ * namespaced by `storeId` so two concurrent editors never share
+ * in-flight export state or available-format lists. Consume via
+ * {@link ExportStoreProvider} + the `useExportStore` selector hook.
+ */
+export function createExportStore(
+	options: CreateExportStoreOptions,
+): ExportStoreApi {
+	const { storeId } = options;
+	return createStore<ExportState>()(
+		persist(
+			(set) => ({
+				...INITIAL_STATE,
+				setAvailableFormats(ids) {
+					set({ availableFormats: ids });
+				},
+				setCurrentFormat(id) {
+					set({ currentFormat: id });
+				},
+				setIsExporting(value) {
+					set({ isExporting: value });
+				},
+				recordExport(formatId, ok) {
+					set({ lastExport: { formatId, at: Date.now(), ok } });
+				},
+				reset() {
+					set({ ...INITIAL_STATE });
+				},
 			}),
-			// SSR safety: defer rehydration until `<Studio>` mounts a
-			// browser-only effect. Reading `localStorage` synchronously
-			// at module evaluation time produces a hydration mismatch
-			// in Next App Router / any SSR-ish host.
-			skipHydration: true,
-		},
-	),
-);
+			{
+				name: `anvilkit-core-export-${storeId}`,
+				// Persist only `currentFormat`. Every other field is
+				// ephemeral for the reasons documented in the file header.
+				partialize: (state): ExportStorePartial => ({
+					currentFormat: state.currentFormat,
+				}),
+				// SSR safety: defer rehydration until the provider mounts
+				// a browser-only effect. Reading `localStorage`
+				// synchronously at module-eval produces a hydration
+				// mismatch in Next App Router / any SSR-ish host.
+				skipHydration: true,
+			},
+		),
+	);
+}

@@ -16,82 +16,89 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useThemeStore } from "@/stores/theme-store";
+import { createThemeStore, type ThemeStoreApi } from "@/stores/theme-store";
 
-const STORAGE_KEY = "anvilkit-core-theme";
+type PersistableStore = { persist: { rehydrate(): Promise<void> } };
+function persistOf(store: ThemeStoreApi): PersistableStore {
+	return store as unknown as PersistableStore;
+}
+
+const STORE_ID = "test";
+const STORAGE_KEY = `anvilkit-core-theme-${STORE_ID}`;
+let store: ThemeStoreApi;
 
 beforeEach(() => {
 	localStorage.clear();
-	useThemeStore.setState(useThemeStore.getInitialState(), true);
+	store = createThemeStore({ storeId: STORE_ID });
 });
 
 describe("useThemeStore — initial state", () => {
 	it("starts with mode === 'system' to match StudioConfigSchema", () => {
-		expect(useThemeStore.getState().mode).toBe("system");
+		expect(store.getState().mode).toBe("system");
 	});
 
 	it("starts with resolved === 'light' as a pre-mount fallback", () => {
-		expect(useThemeStore.getState().resolved).toBe("light");
+		expect(store.getState().resolved).toBe("light");
 	});
 });
 
 describe("useThemeStore — setters", () => {
 	it("setMode updates the preference", () => {
-		useThemeStore.getState().setMode("dark");
-		expect(useThemeStore.getState().mode).toBe("dark");
+		store.getState().setMode("dark");
+		expect(store.getState().mode).toBe("dark");
 	});
 
 	it("setMode accepts 'light', 'dark', and 'system'", () => {
-		useThemeStore.getState().setMode("dark");
-		expect(useThemeStore.getState().mode).toBe("dark");
-		useThemeStore.getState().setMode("light");
-		expect(useThemeStore.getState().mode).toBe("light");
-		useThemeStore.getState().setMode("system");
-		expect(useThemeStore.getState().mode).toBe("system");
+		store.getState().setMode("dark");
+		expect(store.getState().mode).toBe("dark");
+		store.getState().setMode("light");
+		expect(store.getState().mode).toBe("light");
+		store.getState().setMode("system");
+		expect(store.getState().mode).toBe("system");
 	});
 
 	it("setResolved updates the on-screen value", () => {
-		useThemeStore.getState().setResolved("dark");
-		expect(useThemeStore.getState().resolved).toBe("dark");
+		store.getState().setResolved("dark");
+		expect(store.getState().resolved).toBe("dark");
 	});
 
 	it("mode and resolved are independent fields", () => {
 		// Preference is "system" but OS resolves to dark — the two
 		// must track independently so the toggle button can show
 		// "System" while the page paints dark.
-		useThemeStore.getState().setMode("system");
-		useThemeStore.getState().setResolved("dark");
-		expect(useThemeStore.getState().mode).toBe("system");
-		expect(useThemeStore.getState().resolved).toBe("dark");
+		store.getState().setMode("system");
+		store.getState().setResolved("dark");
+		expect(store.getState().mode).toBe("system");
+		expect(store.getState().resolved).toBe("dark");
 	});
 });
 
 describe("useThemeStore — reset()", () => {
 	it("returns every field to initial state", () => {
-		const store = useThemeStore.getState();
-		store.setMode("dark");
-		store.setResolved("dark");
+		const actions = store.getState();
+		actions.setMode("dark");
+		actions.setResolved("dark");
 
-		useThemeStore.getState().reset();
+		store.getState().reset();
 
-		const after = useThemeStore.getState();
+		const after = store.getState();
 		expect(after.mode).toBe("system");
 		expect(after.resolved).toBe("light");
 	});
 
 	it("leaves the action functions intact", () => {
-		useThemeStore.getState().setMode("dark");
-		useThemeStore.getState().reset();
-		useThemeStore.getState().setMode("light");
-		expect(useThemeStore.getState().mode).toBe("light");
+		store.getState().setMode("dark");
+		store.getState().reset();
+		store.getState().setMode("light");
+		expect(store.getState().mode).toBe("light");
 	});
 });
 
 describe("useThemeStore — persist / partialize", () => {
 	it("writes only `mode` to localStorage", () => {
-		const store = useThemeStore.getState();
-		store.setMode("dark");
-		store.setResolved("dark");
+		const actions = store.getState();
+		actions.setMode("dark");
+		actions.setResolved("dark");
 
 		const raw = localStorage.getItem(STORAGE_KEY);
 		expect(raw).not.toBeNull();
@@ -105,7 +112,7 @@ describe("useThemeStore — persist / partialize", () => {
 	});
 
 	it("uses the `anvilkit-core-theme` storage key", () => {
-		useThemeStore.getState().setMode("dark");
+		store.getState().setMode("dark");
 		expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull();
 	});
 
@@ -115,9 +122,9 @@ describe("useThemeStore — persist / partialize", () => {
 			JSON.stringify({ state: { mode: "dark" }, version: 0 }),
 		);
 
-		await useThemeStore.persist.rehydrate();
+		await persistOf(store).persist.rehydrate();
 
-		const state = useThemeStore.getState();
+		const state = store.getState();
 		expect(state.mode).toBe("dark");
 		// `resolved` is not in the persisted blob, so it stays at the
 		// pre-mount fallback. `<Studio>` updates it via matchMedia

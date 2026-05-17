@@ -36,11 +36,15 @@
  *
  * ### Module-level singletons
  *
- * Every Zustand store here is a module-scoped singleton. Two
- * `<Studio>` components mounted on the same page therefore share
- * state — an intentional MVP trade-off documented in `core-013`. A
- * future `StudioScope` / React-context-keyed store factory is
- * possible but is explicitly out of scope for the 0.1.x line.
+ * Each store is a **per-instance factory** (`createThemeStore` /
+ * `createExportStore` / `createAiStore`) wired per `<Studio>` mount
+ * via its `*StoreProvider`, mirroring `createEditorUiStore`.
+ * Persistence keys are namespaced by `storeId`, so two editors on one
+ * page keep fully independent state. The `useThemeStore` /
+ * `useExportStore` / `useAiStore` selector hooks keep the original
+ * `useX((s) => s.field)` call shape but now read the active context
+ * store and must run inside a `<Studio>` (review finding H3 — this is
+ * the previously-deferred store-factory work).
  *
  * ### Persistence
  *
@@ -54,15 +58,43 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-export { type AiHistoryEntry, type AiState, useAiStore } from "./ai-store";
 export {
+	type AiHistoryEntry,
+	type AiState,
+	type AiStoreApi,
+	createAiStore,
+	type CreateAiStoreOptions,
+} from "./ai-store";
+export {
+	AiStoreProvider,
+	type AiStoreProviderProps,
+	useAiStore,
+	useAiStoreApi,
+} from "./AiStoreProvider";
+export {
+	createExportStore,
+	type CreateExportStoreOptions,
 	type ExportState,
+	type ExportStoreApi,
 	type LastExportRecord,
-	useExportStore,
 } from "./export-store";
 export {
+	ExportStoreProvider,
+	type ExportStoreProviderProps,
+	useExportStore,
+	useExportStoreApi,
+} from "./ExportStoreProvider";
+export {
+	createThemeStore,
+	type CreateThemeStoreOptions,
 	type ThemeMode,
 	type ThemeResolved,
 	type ThemeState,
-	useThemeStore,
+	type ThemeStoreApi,
 } from "./theme-store";
+export {
+	ThemeStoreProvider,
+	type ThemeStoreProviderProps,
+	useThemeStore,
+	useThemeStoreApi,
+} from "./ThemeStoreProvider";
