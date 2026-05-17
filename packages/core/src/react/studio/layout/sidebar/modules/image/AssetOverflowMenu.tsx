@@ -5,11 +5,11 @@
  * contributions from `sidebar-registry-store.assetActions` append below
  * a separator.
  *
- * Built-ins are **always rendered** — the registry contract guarantees
- * the source exposes `rename` / `replace` / `delete` after E.7's
- * registry extension. If a host wires a custom source that omits any
- * of those methods, the menu item still renders but its handler logs
- * + no-ops.
+ * `rename` / `replace` / `delete` are **optional** on
+ * `StudioAssetSource`, so each item renders only when the source
+ * actually implements it — surfacing an action that silently no-ops
+ * looks like a successful mutation that changed nothing. `Copy URL`
+ * is always available (falls back to `asset.url`).
  */
 
 import { Link, MoreHorizontal, Pencil, Trash2, Upload } from "lucide-react";
@@ -105,14 +105,18 @@ export function AssetOverflowMenu({
 				sideOffset={4}
 				data-testid={`ak-image-overflow-popup-${asset.id}`}
 			>
-				<DropdownMenuItem onClick={() => onRename(asset)}>
-					<Pencil aria-hidden="true" />
-					<span>{msg("studio.module.image.actions.rename")}</span>
-				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => onReplace(asset)}>
-					<Upload aria-hidden="true" />
-					<span>{msg("studio.module.image.actions.replace")}</span>
-				</DropdownMenuItem>
+				{source.rename !== undefined ? (
+					<DropdownMenuItem onClick={() => onRename(asset)}>
+						<Pencil aria-hidden="true" />
+						<span>{msg("studio.module.image.actions.rename")}</span>
+					</DropdownMenuItem>
+				) : null}
+				{source.replace !== undefined ? (
+					<DropdownMenuItem onClick={() => onReplace(asset)}>
+						<Upload aria-hidden="true" />
+						<span>{msg("studio.module.image.actions.replace")}</span>
+					</DropdownMenuItem>
+				) : null}
 				<DropdownMenuItem
 					onClick={() => {
 						void handleCopy();
@@ -121,15 +125,17 @@ export function AssetOverflowMenu({
 					<Link aria-hidden="true" />
 					<span>{msg("studio.module.image.actions.copyUrl")}</span>
 				</DropdownMenuItem>
-				<DropdownMenuItem
-					variant="destructive"
-					onClick={() => {
-						void handleDelete();
-					}}
-				>
-					<Trash2 aria-hidden="true" />
-					<span>{msg("studio.module.image.actions.delete")}</span>
-				</DropdownMenuItem>
+				{source.delete !== undefined ? (
+					<DropdownMenuItem
+						variant="destructive"
+						onClick={() => {
+							void handleDelete();
+						}}
+					>
+						<Trash2 aria-hidden="true" />
+						<span>{msg("studio.module.image.actions.delete")}</span>
+					</DropdownMenuItem>
+				) : null}
 				{pluginActions.length > 0 ? (
 					<>
 						<DropdownMenuSeparator />

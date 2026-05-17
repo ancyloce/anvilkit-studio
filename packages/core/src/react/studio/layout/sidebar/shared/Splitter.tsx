@@ -27,6 +27,7 @@ import {
 
 import { useMsg } from "@/state/editor-i18n-store";
 import { useLayerSplitRatio } from "@/state/hooks";
+import { resolveQueryRoot, useStudioRootRef } from "@/state/index";
 
 const KEY_NUDGE = 0.02;
 const RATIO_MIN = 0.15;
@@ -53,15 +54,21 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 	// even if React unmounts mid-drag.
 	const iframeRef = useRef<HTMLIFrameElement | null>(null);
 	const iframePointerEventsRef = useRef<string>("");
+	// Scope the iframe lookup to THIS Studio's root subtree — Puck
+	// hardcodes `id^="preview-frame"`, so a global query would suppress
+	// the wrong editor's iframe when two are on one page (finding H3).
+	const rootRef = useStudioRootRef();
 
 	const suppressIframePointer = useCallback(() => {
 		const iframe =
-			document.querySelector<HTMLIFrameElement>(PUCK_IFRAME_SELECTOR);
+			resolveQueryRoot(rootRef).querySelector<HTMLIFrameElement>(
+				PUCK_IFRAME_SELECTOR,
+			);
 		if (iframe === null) return;
 		iframeRef.current = iframe;
 		iframePointerEventsRef.current = iframe.style.pointerEvents;
 		iframe.style.pointerEvents = "none";
-	}, []);
+	}, [rootRef]);
 
 	const restoreIframePointer = useCallback(() => {
 		const iframe = iframeRef.current;

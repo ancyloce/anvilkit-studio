@@ -150,7 +150,10 @@ export function LayersPanel(): ReactNode {
 						type: "insert",
 						componentType: entry.componentName,
 						destinationIndex: liveSnapshot.appState.data.content.length,
-						destinationZone: "default-zone",
+						// Puck's compound root-zone key is `root:default-zone`;
+						// the bare `default-zone` misses `state.indexes.zones`
+						// / `walkAppState` keys and the insert silently no-ops.
+						destinationZone: "root:default-zone",
 					});
 				},
 			});

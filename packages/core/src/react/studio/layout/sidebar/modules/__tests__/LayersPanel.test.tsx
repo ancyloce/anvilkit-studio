@@ -127,7 +127,9 @@ describe("LayersPanel", () => {
 			expect.objectContaining({
 				type: "insert",
 				componentType: "Text",
-				destinationZone: "default-zone",
+				// Puck's compound root-zone key — bare `default-zone` no-ops.
+				destinationZone: "root:default-zone",
+				destinationIndex: 0,
 			}),
 		);
 	});

@@ -31,6 +31,10 @@ import { useSetSidebarHeaderActions } from "@/layout/sidebar/SidebarHeaderAction
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import { useMsg } from "@/state/editor-i18n-store";
+import {
+	appendComponentToRoot,
+	generateNodeId,
+} from "@/state/insert-component-node";
 import { useAssetCategoryFilter } from "@/state/hooks";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 import type {
@@ -219,30 +223,12 @@ export function ImageModule(): ReactNode {
 		(asset: StudioAsset): void => {
 			const componentName = kindToComponentName(asset.kind);
 			if (componentName === null) return;
-			const snapshot = getPuck();
-			const components = snapshot.config.components ?? {};
-			if (!Object.hasOwn(components, componentName)) {
-				return;
-			}
-			const id =
-				typeof crypto !== "undefined" && "randomUUID" in crypto
-					? `${componentName}-${crypto.randomUUID().slice(0, 8)}`
-					: `${componentName}-${Date.now().toString(36)}`;
-			const newNode = {
-				type: componentName,
-				props: {
-					id,
-					...kindToPropsForInsert(asset.kind, asset.url, asset.name),
-				},
-			};
-			const currentData = snapshot.appState.data;
-			const nextData = {
-				...currentData,
-				content: [...(currentData.content ?? []), newNode],
-			};
-			snapshot.dispatch({
-				type: "setData",
-				data: nextData as unknown as typeof currentData,
+			// Centralized, zone-preserving append against the latest
+			// snapshot (review finding M2). No-ops if the component is
+			// not registered in the live Puck config.
+			appendComponentToRoot(getPuck(), componentName, {
+				id: generateNodeId(componentName),
+				...kindToPropsForInsert(asset.kind, asset.url, asset.name),
 			});
 		},
 		[getPuck],
