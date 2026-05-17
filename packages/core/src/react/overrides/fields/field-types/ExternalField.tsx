@@ -12,7 +12,7 @@ import type {
 	ExternalField as PuckExternalField,
 } from "@puckeditor/core";
 import { ChevronDown, X } from "lucide-react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/primitives/button";
 import { Card, CardContent } from "@/primitives/card";
@@ -58,6 +58,21 @@ function summarize(row: unknown): string {
 	);
 }
 
+// Debounce window for query → fetch, matching the sidebar search bars
+// (`ImageSearchBar`, `TextSearchBar`). Keeps remote CMS sources from
+// firing a request per keystroke.
+const QUERY_DEBOUNCE_MS = 150;
+
+// `fetchList` is typed by Puck as `(params: { query, filters }) => …`.
+// We additionally pass an `AbortSignal` so cooperative hosts can cancel
+// in-flight network work; hosts that ignore the extra property are
+// unaffected (the local cancellation flag still prevents stale writes).
+type FetchListWithSignal = (params: {
+	query: string;
+	filters: Record<string, unknown>;
+	signal?: AbortSignal;
+}) => Promise<unknown[] | null>;
+
 function rowKey(row: ExternalRow): string {
 	const raw =
 		row.raw !== null && typeof row.raw === "object"
@@ -81,20 +96,50 @@ export function ExternalField({
 	name,
 }: ExternalFieldRendererProps): ReactNode {
 	const [open, setOpen] = useState(false);
-	const [query, setQuery] = useState("");
+	// Seed query/filters from Puck's documented external-field contract.
+	// Ignoring `initialQuery` / `initialFilters` silently changes the
+	// result set a host configured.
+	const [query, setQuery] = useState(() => field.initialQuery ?? "");
+	const [debouncedQuery, setDebouncedQuery] = useState(
+		() => field.initialQuery ?? "",
+	);
+	const [filters, setFilters] = useState<Record<string, unknown>>(() => ({
+		...(field.initialFilters ?? {}),
+	}));
 	const [rows, setRows] = useState<ExternalRow[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [loadError, setLoadError] = useState(false);
+	const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	// Debounce query → fetch. Typing updates `query` (and the input)
+	// immediately; the fetch only sees `debouncedQuery`.
+	useEffect(() => {
+		if (debounceTimerRef.current !== null) {
+			clearTimeout(debounceTimerRef.current);
+		}
+		debounceTimerRef.current = setTimeout(() => {
+			setDebouncedQuery(query);
+			debounceTimerRef.current = null;
+		}, QUERY_DEBOUNCE_MS);
+		return () => {
+			if (debounceTimerRef.current !== null) {
+				clearTimeout(debounceTimerRef.current);
+				debounceTimerRef.current = null;
+			}
+		};
+	}, [query]);
 
 	useEffect(() => {
 		if (!open) return;
 		let cancelled = false;
+		const controller = new AbortController();
 		setLoading(true);
 		void (async () => {
 			try {
-				const result = (await field.fetchList({
-					query,
-					filters: {},
+				const result = (await (field.fetchList as FetchListWithSignal)({
+					query: debouncedQuery,
+					filters,
+					signal: controller.signal,
 				})) as unknown[] | null;
 				if (cancelled) return;
 				setLoadError(false);
@@ -124,8 +169,11 @@ export function ExternalField({
 		})();
 		return () => {
 			cancelled = true;
+			// Abort cooperative in-flight network work and prevent stale
+			// resolution from a superseded query/filter set.
+			controller.abort();
 		};
-	}, [open, query, field]);
+	}, [open, debouncedQuery, filters, field]);
 
 	const summary =
 		value === null || value === undefined
@@ -169,6 +217,29 @@ export function ExternalField({
 				{open ? (
 					<Card size="sm">
 						<CardContent className="flex flex-col gap-2">
+							{field.filterFields !== undefined
+								? Object.entries(field.filterFields).map(
+										([filterKey, filterField]) => (
+											<Input
+												key={filterKey}
+												value={asString(filters[filterKey])}
+												onChange={(event) =>
+													setFilters((prev) => ({
+														...prev,
+														[filterKey]: event.target.value,
+													}))
+												}
+												placeholder={
+													("label" in filterField &&
+													typeof filterField.label === "string"
+														? filterField.label
+														: undefined) ?? filterKey
+												}
+												name={`${name}-filter-${filterKey}`}
+											/>
+										),
+									)
+								: null}
 							{field.showSearch !== false ? (
 								<Input
 									value={query}

@@ -362,7 +362,10 @@ export function ArrayField({
 	const max = field.max ?? Number.POSITIVE_INFINITY;
 
 	useEffect(() => {
-		if (openIndex !== null && openIndex > items.length) {
+		// `>=`, not `>`: when an external update shrinks a 3-item array
+		// to 2 while index 2 is open, `2 > 2` is false but index 2 is no
+		// longer a valid item, so the stale panel must still close.
+		if (openIndex !== null && openIndex >= items.length) {
 			setOpenIndex(null);
 		}
 	}, [items.length, openIndex]);

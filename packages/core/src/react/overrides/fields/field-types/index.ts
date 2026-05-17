@@ -42,17 +42,73 @@ export type FieldTypeRenderer = FunctionComponent<
 export type FieldTypeRegistry = NonNullable<PuckOverrides["fieldTypes"]>;
 
 /**
+ * Puck `Field.type` literals this registry can supply. `richtext` and
+ * `custom` are intentionally absent (see file header). Used both as
+ * the compile-time key set (`Record<FieldTypeKey, …>`) and the
+ * runtime guard in {@link defineFieldTypeRegistry}.
+ */
+const FIELD_TYPE_KEYS = [
+	"text",
+	"textarea",
+	"number",
+	"select",
+	"radio",
+	"array",
+	"object",
+	"slot",
+	"external",
+] as const;
+
+export type FieldTypeKey = (typeof FIELD_TYPE_KEYS)[number];
+
+const KNOWN_FIELD_TYPES: ReadonlySet<string> = new Set(FIELD_TYPE_KEYS);
+
+/**
+ * The single, documented type-erasure boundary. Each concrete `*Field`
+ * component has its own precise prop type; Puck's `fieldTypes` generic
+ * flattens them to one signature and validates props at call time.
+ * Accepting `FunctionComponent<never>` lets every concrete renderer be
+ * passed without a call-site cast (a narrower-props function is
+ * assignable to a `never`-props one), so the cast lives here once
+ * instead of being repeated per entry.
+ */
+function asFieldRenderer(
+	component: FunctionComponent<never>,
+): FieldTypeRenderer {
+	return component as unknown as FieldTypeRenderer;
+}
+
+/**
+ * Build the Puck `fieldTypes` registry from a fully-keyed renderer map.
+ * `Record<FieldTypeKey, …>` enforces — at compile time — that every
+ * supported key is present and no unknown key is added; the runtime
+ * guard turns any stray key into a loud error instead of a silently
+ * dropped renderer. The lone unavoidable registry-shape cast is kept
+ * here, not duplicated at every renderer.
+ */
+export function defineFieldTypeRegistry(
+	renderers: Record<FieldTypeKey, FieldTypeRenderer>,
+): FieldTypeRegistry {
+	for (const key of Object.keys(renderers)) {
+		if (!KNOWN_FIELD_TYPES.has(key)) {
+			throw new Error(`Unknown field type in registry: "${key}"`);
+		}
+	}
+	return renderers as unknown as FieldTypeRegistry;
+}
+
+/**
  * Default field-type registry. Keys match Puck `Field.type` literals
  * exactly. `richtext` and `custom` are intentionally absent.
  */
-export const defaultFieldTypes = {
-	text: TextField as unknown as FieldTypeRenderer,
-	textarea: TextareaField as unknown as FieldTypeRenderer,
-	number: NumberField as unknown as FieldTypeRenderer,
-	select: SelectField as unknown as FieldTypeRenderer,
-	radio: RadioField as unknown as FieldTypeRenderer,
-	array: ArrayField as unknown as FieldTypeRenderer,
-	object: ObjectField as unknown as FieldTypeRenderer,
-	slot: SlotField as unknown as FieldTypeRenderer,
-	external: ExternalField as unknown as FieldTypeRenderer,
-} as unknown as FieldTypeRegistry;
+export const defaultFieldTypes = defineFieldTypeRegistry({
+	text: asFieldRenderer(TextField),
+	textarea: asFieldRenderer(TextareaField),
+	number: asFieldRenderer(NumberField),
+	select: asFieldRenderer(SelectField),
+	radio: asFieldRenderer(RadioField),
+	array: asFieldRenderer(ArrayField),
+	object: asFieldRenderer(ObjectField),
+	slot: asFieldRenderer(SlotField),
+	external: asFieldRenderer(ExternalField),
+} satisfies Record<FieldTypeKey, FieldTypeRenderer>);

@@ -158,6 +158,45 @@ describe("ArrayField", () => {
 		expect(next[0]).toBe(items[0]);
 	});
 
+	it("closes a stale open panel when an external update shrinks the array to the open index (M4)", () => {
+		const items3 = [
+			{ name: "A", price: "$1" },
+			{ name: "B", price: "$2" },
+			{ name: "C", price: "$3" },
+		];
+		const { rerender } = render(
+			<ArrayField
+				// biome-ignore lint/suspicious/noExplicitAny: test fixture
+				field={PLAN_FIELD as any}
+				value={items3}
+				onChange={vi.fn()}
+				name="plans"
+			/>,
+		);
+
+		// Open the LAST item (index 2).
+		fireEvent.click(screen.getByRole("button", { name: "Edit C" }));
+		expect(screen.getByDisplayValue("C")).toBeInTheDocument();
+
+		// External update shrinks 3 → 2. openIndex (2) === items.length
+		// (2): the old `>` guard left it open; `>=` must close it.
+		rerender(
+			<ArrayField
+				// biome-ignore lint/suspicious/noExplicitAny: test fixture
+				field={PLAN_FIELD as any}
+				value={[
+					{ name: "A", price: "$1" },
+					{ name: "B", price: "$2" },
+				]}
+				onChange={vi.fn()}
+				name="plans"
+			/>,
+		);
+
+		expect(screen.queryByDisplayValue("C")).toBeNull();
+		expect(screen.queryByDisplayValue("$3")).toBeNull();
+	});
+
 	it("removes the indexed item on delete", () => {
 		const onChange = vi.fn();
 		const items = [
