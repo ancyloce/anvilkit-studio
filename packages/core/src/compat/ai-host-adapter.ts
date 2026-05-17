@@ -389,7 +389,7 @@ export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
 		id: "anvilkit-compat-ai-host",
 		name: "Legacy aiHost Adapter",
 		version: "0.1.0-alpha.0",
-		coreVersion: "^0.1.0-alpha",
+		coreVersion: "^0.1.0",
 	} as const;
 
 	return {

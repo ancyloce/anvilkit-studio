@@ -81,7 +81,7 @@ describe("aiHostAdapter — plugin shape", () => {
 
 		expect(isStudioPlugin(plugin)).toBe(true);
 		expect(plugin.meta.id).toBe("anvilkit-compat-ai-host");
-		expect(plugin.meta.coreVersion).toBe("^0.1.0-alpha");
+		expect(plugin.meta.coreVersion).toBe("^0.1.0");
 	});
 
 	it("compiles cleanly through compilePlugins()", async () => {
