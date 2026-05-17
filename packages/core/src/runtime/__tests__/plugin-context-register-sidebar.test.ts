@@ -60,7 +60,7 @@ describe("plugin context — register* sidebar helpers", () => {
 				id: "com.example.sidebar",
 				name: "Sidebar test",
 				version: "1.0.0",
-				coreVersion: "^0.1.0-alpha",
+				coreVersion: "^0.1.0",
 			},
 			register(innerCtx) {
 				offHandles.push(

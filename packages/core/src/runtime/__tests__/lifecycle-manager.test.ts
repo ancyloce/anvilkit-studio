@@ -60,7 +60,7 @@ function makeRegistration(
 			id,
 			name: id,
 			version: "1.0.0",
-			coreVersion: "^0.1.0-alpha",
+			coreVersion: "^0.1.0",
 		},
 		hooks,
 	};

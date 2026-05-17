@@ -17,7 +17,7 @@ function makeStudioPlugin(): StudioPlugin {
 			id: "com.example.telemetry",
 			name: "Telemetry",
 			version: "1.0.0",
-			coreVersion: "^0.1.0-alpha",
+			coreVersion: "^0.1.0",
 		},
 		register() {
 			return { meta: { ...this.meta } };
@@ -48,7 +48,7 @@ describe("isStudioPlugin", () => {
 	it("returns false when `meta.id` is missing", () => {
 		expect(
 			isStudioPlugin({
-				meta: { coreVersion: "^0.1.0-alpha" },
+				meta: { coreVersion: "^0.1.0" },
 				register: () => ({}),
 			}),
 		).toBe(false);
@@ -66,7 +66,7 @@ describe("isStudioPlugin", () => {
 	it("returns false when `register` is not a function", () => {
 		expect(
 			isStudioPlugin({
-				meta: { id: "com.example.x", coreVersion: "^0.1.0-alpha" },
+				meta: { id: "com.example.x", coreVersion: "^0.1.0" },
 				register: "not-a-function",
 			}),
 		).toBe(false);
@@ -75,7 +75,7 @@ describe("isStudioPlugin", () => {
 	it("returns false when `meta.id` is an empty string", () => {
 		expect(
 			isStudioPlugin({
-				meta: { id: "", coreVersion: "^0.1.0-alpha" },
+				meta: { id: "", coreVersion: "^0.1.0" },
 				register: () => ({}),
 			}),
 		).toBe(false);
