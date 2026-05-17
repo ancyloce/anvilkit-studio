@@ -8,17 +8,19 @@
  * mounts this component directly inside the sidebar tab.
  */
 
-import { Puck, useGetPuck } from "@puckeditor/core";
+import { Puck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { Separator } from "@/primitives/separator";
 import { useMsg } from "@/state/editor-i18n-store";
+import { useReactivePuck } from "../utils/use-reactive-puck";
 
 export function EditorOutline(): ReactNode {
 	const msg = useMsg();
-	const getPuck = useGetPuck();
-	const snapshot = getPuck();
-	const selected = snapshot.selectedItem;
+	// Reactive: the selection summary must update live as the canvas
+	// selection changes (a non-subscribing `useGetPuck()` snapshot read
+	// here would go stale until an unrelated re-render).
+	const selected = useReactivePuck((s) => s.selectedItem ?? null);
 
 	return (
 		<div className="flex flex-col">
