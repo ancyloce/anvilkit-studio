@@ -15,6 +15,7 @@
 		"size": "turbo run size",
 		"bench": "tsx --import ./bench/bench-env.mjs bench/index.ts",
 		"bench:update": "tsx --import ./bench/bench-env.mjs bench/index.ts --update-baseline",
+		"bench:collab-highload": "tsx bench/scenarios/collab-yjs-highload.ts",
 		"madge": "madge --circular --extensions ts,tsx packages/",
 		"docs:dev": "turbo run docs:dev",
 		"docs:build": "turbo run docs:build"
