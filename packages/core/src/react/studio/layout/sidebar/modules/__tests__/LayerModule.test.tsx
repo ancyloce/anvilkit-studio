@@ -19,14 +19,25 @@ import {
 } from "@/state/index";
 import type { StudioPagesSource } from "@/types/pages";
 
+const layerSnapshot = {
+	config: { components: { Layout: {}, Row: {}, Column: {}, Text: {} } },
+	appState: {
+		data: { content: [] as unknown[], zones: {} as Record<string, unknown[]> },
+		ui: { itemSelector: null },
+	},
+	dispatch: () => undefined,
+	selectedItem: null as { props?: { id?: string } } | null,
+	getSelectorForId: () => undefined,
+	getItemById: () => undefined,
+};
+
 vi.mock("@puckeditor/core", () => ({
 	Puck: { Outline: () => <div data-testid="puck-outline-mock" /> },
-	useGetPuck: () => () => ({
-		config: { components: { Layout: {}, Row: {}, Column: {}, Text: {} } },
-		appState: { data: { content: [] } },
-		dispatch: () => undefined,
-		selectedItem: null,
-	}),
+	useGetPuck: () => () => layerSnapshot,
+	createUsePuck:
+		() =>
+		<T,>(selector: (snapshot: typeof layerSnapshot) => T): T =>
+			selector(layerSnapshot),
 }));
 
 afterEach(cleanup);
@@ -153,7 +164,7 @@ describe("LayerModule", () => {
 		});
 	});
 
-	it("renders <Puck.Outline /> when an active page exists", async () => {
+	it("renders the draggable layer tree when an active page exists", async () => {
 		const source: StudioPagesSource = {
 			list: () => [{ id: "home", title: "Home", active: true }],
 		};
@@ -162,8 +173,9 @@ describe("LayerModule", () => {
 				<LayerModule />
 			</Setup>,
 		);
+		// Empty content → the tree renders its empty affordance.
 		await vi.waitFor(() => {
-			expect(screen.getByTestId("puck-outline-mock")).toBeTruthy();
+			expect(screen.getByTestId("ak-layer-tree-empty")).toBeTruthy();
 		});
 	});
 

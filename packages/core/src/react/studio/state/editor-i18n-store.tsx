@@ -122,6 +122,16 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 		"Path must start with `/` for route pages.",
 	// Layer module — splitter ARIA label (Phase D polish).
 	"studio.module.layer.splitter.label": "Resize Pages and Layers panels",
+	// Layer module — draggable layer tree (drag-and-drop reordering).
+	"studio.module.layer.layers.tree.empty": "This page has no layers yet.",
+	"studio.module.layer.layers.tree.dragHandle": "Drag to reorder layer",
+	"studio.module.layer.layers.tree.expand": "Expand",
+	"studio.module.layer.layers.tree.collapse": "Collapse",
+	"studio.module.layer.layers.tree.instructions":
+		"Press space or enter to pick up a layer. Use the arrow keys to move it. Press space or enter again to drop it, or escape to cancel.",
+	"studio.module.layer.layers.tree.announce.start": "Picked up layer",
+	"studio.module.layer.layers.tree.announce.moved": "Dropped layer",
+	"studio.module.layer.layers.tree.announce.cancelled": "Reordering cancelled.",
 
 	// Module: image (PRD §7).
 	"studio.module.image.name": "Assets",

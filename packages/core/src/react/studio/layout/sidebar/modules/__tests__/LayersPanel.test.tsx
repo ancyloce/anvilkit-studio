@@ -25,14 +25,31 @@ const mockPuckSnapshot = {
 	config: {
 		components: {} as Record<string, unknown>,
 	},
-	appState: { data: { content: [] } },
+	appState: {
+		data: { content: [], zones: {} } as {
+			content: unknown[];
+			zones: Record<string, unknown[]>;
+		},
+		ui: { itemSelector: null as { index: number; zone: string } | null },
+	},
 	dispatch: vi.fn(),
-	selectedItem: null,
+	selectedItem: null as { props?: { id?: string } } | null,
+	getSelectorForId: vi.fn(
+		(): { index: number; zone: string } | undefined => undefined,
+	),
+	getItemById: vi.fn((): unknown => undefined),
 };
 
 vi.mock("@puckeditor/core", () => ({
 	Puck: { Outline: () => <div data-testid="puck-outline-mock" /> },
 	useGetPuck: () => () => mockPuckSnapshot,
+	// `LayerTree` reads reactive state via `useReactivePuck` →
+	// `createUsePuck()`. The real hook subscribes; the test double just
+	// projects the current snapshot synchronously.
+	createUsePuck:
+		() =>
+		<T,>(selector: (snapshot: typeof mockPuckSnapshot) => T): T =>
+			selector(mockPuckSnapshot),
 }));
 
 afterEach(() => {

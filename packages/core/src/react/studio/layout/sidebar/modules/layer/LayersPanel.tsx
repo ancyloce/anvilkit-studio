@@ -16,7 +16,7 @@
  * and skip the outline (PRD §6.7).
  */
 
-import { Puck, useGetPuck } from "@puckeditor/core";
+import { useGetPuck } from "@puckeditor/core";
 import {
 	Columns,
 	LayoutGrid,
@@ -44,6 +44,7 @@ import type {
 	StudioLayerQuickAdd,
 	StudioLayerQuickAddInserter,
 } from "@/types/sidebar";
+import { LayerTree } from "./LayerTree";
 
 interface BuiltInQuickAdd {
 	readonly id: string;
@@ -258,7 +259,7 @@ export function LayersPanel(): ReactNode {
 				) : (
 					<ScrollArea>
 						<div data-ak-layer-outline className="px-2 py-1">
-							<Puck.Outline />
+							<LayerTree />
 						</div>
 					</ScrollArea>
 				)}
