@@ -552,6 +552,47 @@ function shouldRedactKey(key: string): boolean {
 	return false;
 }
 
+/**
+ * `Error`'s `name`/`message`/`stack`/`cause` are non-enumerable own
+ * properties, so an `Error` passed as log meta survives `Object.entries`
+ * but serializes to `{}` (or `{ "name": ... }`) under `JSON.stringify`.
+ * Every meta destination this layer targets — the Next.js dev overlay,
+ * `JSON.stringify`-based host loggers, copy-pasted bug reports — would
+ * otherwise destroy the actual failure detail. Normalize to a plain,
+ * fully-enumerable shape so the message and stack survive the boundary.
+ *
+ * `cause` is normalized recursively because wrapper errors carry the
+ * real reason there: `compilePlugins` rejects with a generic
+ * `StudioPluginError("Plugin \"x\" failed to register")` whose
+ * `{ cause }` holds the developer-facing detail. Without unwrapping
+ * `cause`, "[studio] plugin compilation failed" still loses the only
+ * actionable line. Depth-bounded so a cyclic `cause` chain can't
+ * recurse forever.
+ */
+function normalizeLogError(
+	error: Error,
+	depth: number,
+): Record<string, unknown> {
+	const normalized: Record<string, unknown> = {
+		name: error.name,
+		message: error.message,
+		stack: error.stack,
+	};
+	const { cause } = error;
+	if (cause !== undefined && depth > 0) {
+		normalized.cause =
+			cause instanceof Error ? normalizeLogError(cause, depth - 1) : cause;
+	}
+	return normalized;
+}
+
+function normalizeLogValue(value: unknown): unknown {
+	if (value instanceof Error) {
+		return normalizeLogError(value, 4);
+	}
+	return value;
+}
+
 function redactLogMeta(
 	meta: Readonly<Record<string, unknown>>,
 ): Record<string, unknown> {
@@ -561,7 +602,7 @@ function redactLogMeta(
 	// upgrade to a host-provided logger when that ships.
 	const out: Record<string, unknown> = {};
 	for (const [key, value] of Object.entries(meta)) {
-		out[key] = shouldRedactKey(key) ? "[REDACTED]" : value;
+		out[key] = shouldRedactKey(key) ? "[REDACTED]" : normalizeLogValue(value);
 	}
 	return out;
 }

@@ -258,6 +258,61 @@ describe("<Studio> — mount and compile", () => {
 			pluginId: "com.example.logger",
 		});
 	});
+
+	it("delivers a serializable error when plugin compilation fails", async () => {
+		// Regression: `Error`'s name/message/stack are non-enumerable, so
+		// an Error passed as log meta used to JSON-serialize to `{}` —
+		// the Next.js dev overlay, JSON.stringify host loggers, and
+		// copy-pasted bug reports all lost the real failure detail
+		// ("[studio] plugin compilation failed {}").
+		const logger = vi.fn();
+		const failingPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.broken"),
+			register() {
+				throw new Error("boom-compile-failure-detail");
+			},
+		};
+
+		render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[failingPlugin]}
+				logger={logger}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(logger).toHaveBeenCalledWith(
+				"error",
+				"plugin compilation failed",
+				expect.objectContaining({
+					error: expect.objectContaining({
+						name: "StudioPluginError",
+						message: expect.stringContaining("failed to register"),
+						stack: expect.any(String),
+						// compilePlugins wraps the thrown error; the real
+						// developer-facing reason lives on the (also
+						// non-enumerable) `cause`.
+						cause: expect.objectContaining({
+							message: expect.stringContaining("boom-compile-failure-detail"),
+						}),
+					}),
+				}),
+			);
+		});
+
+		// The full failure chain — wrapper message AND root cause — must
+		// survive JSON serialization. This is exactly what the Next.js
+		// overlay / host loggers / copy-pasted bug reports see; before
+		// the fix it collapsed to `{}`.
+		const failureCall = logger.mock.calls.find(
+			(call) => call[1] === "plugin compilation failed",
+		);
+		expect(failureCall).toBeDefined();
+		const serialized = JSON.stringify(failureCall?.[2]);
+		expect(serialized).toContain("failed to register");
+		expect(serialized).toContain("boom-compile-failure-detail");
+	});
 });
 
 // ----------------------------------------------------------------------
