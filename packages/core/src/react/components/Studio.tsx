@@ -655,13 +655,25 @@ function useHydrateRuntimeStores(
 	}, [compiled, exportStore, themeStore]);
 }
 
-function useRuntimeInit(compiled: CompiledStudioRuntime | null): void {
+function useRuntimeInit(
+	compiled: CompiledStudioRuntime | null,
+	onInitPromiseRef: RefObject<Promise<void> | null>,
+): void {
 	useEffect(() => {
 		if (compiled === null) {
+			onInitPromiseRef.current = null;
 			return;
 		}
-		void compiled.runtime.lifecycle.emit("onInit", compiled.ctx);
-	}, [compiled]);
+		// Capture the emit promise so the post-mount `onReady` trigger
+		// can chain strictly after `onInit` has been dispatched (and
+		// settled), regardless of whether the Puck-API binder's effect
+		// fires before or after this parent effect in the commit.
+		onInitPromiseRef.current = compiled.runtime.lifecycle.emit(
+			"onInit",
+			compiled.ctx,
+		);
+		void onInitPromiseRef.current;
+	}, [compiled, onInitPromiseRef]);
 }
 
 /**
@@ -694,7 +706,7 @@ function fingerprintConfig(config: unknown): string {
 const PUCK_API_UNBOUND_MESSAGE =
 	"StudioPluginContext.getPuckApi() was called before <Puck> finished mounting. " +
 	"Move the call into a header action or a post-mount lifecycle hook " +
-	"(`onDataChange`, `onBeforePublish`, `onAfterPublish`) so it runs after Puck's effect-time binder has captured the API.";
+	"(`onReady`, `onDataChange`, `onBeforePublish`, `onAfterPublish`) so it runs after Puck's effect-time binder has captured the API.";
 
 /**
  * Type alias for the snapshot-getter function Puck's `useGetPuck`
@@ -717,9 +729,11 @@ type GetPuckSnapshot = ReturnType<typeof useGetPuck>;
  */
 function PuckApiBinder({
 	apiRef,
+	onBound,
 	children,
 }: {
 	readonly apiRef: RefObject<GetPuckSnapshot | null>;
+	readonly onBound?: () => void;
 	readonly children: ReactNode;
 }): ReactElement {
 	const getPuck = useGetPuck();
@@ -728,7 +742,12 @@ function PuckApiBinder({
 		// the lifetime of the mount. Re-running on change is cheap and
 		// future-proofs against Puck swapping its internal store.
 		apiRef.current = getPuck;
-	}, [apiRef, getPuck]);
+		// Signal that `getPuckApi()` is now safe to call. The Studio
+		// side dedupes per compiled runtime, so re-running this effect
+		// (StrictMode double-invoke, getPuck identity churn, recompile)
+		// fires `onReady` at most once per runtime.
+		onBound?.();
+	}, [apiRef, getPuck, onBound]);
 	return <>{children}</>;
 }
 
@@ -803,6 +822,13 @@ export function Studio(props: StudioProps): ReactElement | null {
 	}, [data]);
 
 	const puckApiRef = useRef<GetPuckSnapshot | null>(null);
+	// Holds the `onInit` emit promise for the current compiled runtime
+	// so `onReady` can chain strictly after it. `readyFiredForRef`
+	// tracks the runtime `onReady` already fired for, so a recompile
+	// (new runtime → new `onInit`) correctly re-fires it while
+	// re-renders / StrictMode double-invokes do not.
+	const onInitPromiseRef = useRef<Promise<void> | null>(null);
+	const readyFiredForRef = useRef<CompiledStudioRuntime | null>(null);
 
 	// Monotonic compile generation. Bumped at the start of every
 	// compile pass and again on effect cleanup, so an in-flight async
@@ -1082,7 +1108,28 @@ export function Studio(props: StudioProps): ReactElement | null {
 	//    dep array is `[compiled]`, so a remount with a new runtime
 	//    re-fires this correctly.
 	// ------------------------------------------------------------------
-	useRuntimeInit(compiled);
+	useRuntimeInit(compiled, onInitPromiseRef);
+
+	// Fired by the Puck-API binder's effect once `getPuckApi()` is
+	// safe to call. Emits `onReady` exactly once per compiled runtime,
+	// strictly after `onInit` has settled — `queueMicrotask` defers
+	// past the synchronous effect flush so `useRuntimeInit`'s parent
+	// effect has populated `onInitPromiseRef` even when the binder's
+	// child effect ran first.
+	const handlePuckBound = useCallback((): void => {
+		if (compiled === null || readyFiredForRef.current === compiled) {
+			return;
+		}
+		readyFiredForRef.current = compiled;
+		const runtime = compiled;
+		queueMicrotask(() => {
+			const initDone = Promise.resolve(onInitPromiseRef.current ?? undefined);
+			const fireReady = (): void => {
+				void runtime.runtime.lifecycle.emit("onReady", runtime.ctx);
+			};
+			initDone.then(fireReady, fireReady);
+		});
+	}, [compiled]);
 
 	// ------------------------------------------------------------------
 	// 5. Unmount cleanup: fire `onDestroy` and reset the Core-owned
@@ -1140,12 +1187,14 @@ export function Studio(props: StudioProps): ReactElement | null {
 		// override instead of clobbering it.
 		base.push({
 			puck: ({ children }) => (
-				<PuckApiBinder apiRef={puckApiRef}>{children}</PuckApiBinder>
+				<PuckApiBinder apiRef={puckApiRef} onBound={handlePuckBound}>
+					{children}
+				</PuckApiBinder>
 			),
 		});
 
 		return mergeOverrides(base);
-	}, [compiled, consumerOverrides, isAnvilkit, chromeAssets]);
+	}, [compiled, consumerOverrides, isAnvilkit, chromeAssets, handlePuckBound]);
 
 	// ------------------------------------------------------------------
 	// 7. Puck `onChange` / `onPublish` handlers.
