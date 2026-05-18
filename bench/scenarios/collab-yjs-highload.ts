@@ -35,23 +35,123 @@
  */
 import { spawn } from "node:child_process";
 import { once } from "node:events";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { createServer } from "node:net";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import type { PageIR } from "@anvilkit/core/types";
-import { createYjsAdapter } from "@anvilkit/plugin-collab-yjs";
-import { Doc as YDoc } from "yjs";
 
 import {
 	INSTRUMENTATION,
 	make2000NodeIR,
+	makeNodeLabelMutator,
 	PROBE_NODE_ID,
 	PROBE_PREFIX,
-	withNodeLabel,
 } from "./highload-fixtures.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+
+// Up to ~100 providers + the relay child each attach process/exit
+// listeners; the default limit of 10 would spam MaxListeners warnings.
+process.setMaxListeners(0);
+
+/**
+ * `@anvilkit/plugin-collab-yjs` is a git submodule with its OWN pnpm
+ * workspace — it is NOT symlinked into the repo-root `node_modules`,
+ * and neither are its `yjs` / `y-websocket` / `ws` deps. The bench
+ * harness is "not a workspace member" (see `bench/package.json`), so
+ * a bare `import "@anvilkit/plugin-collab-yjs"` fails under plain
+ * `tsx` here (the existing `bench/plugin-collab-yjs.bench.ts` has the
+ * same latent issue; it only resolves in CI after a recursive install
+ * hoists everything).
+ *
+ * Resolve every Yjs-ecosystem module from the submodule package's own
+ * resolution root via `createRequire`. This both makes the script
+ * runnable from a plain checkout AND guarantees a SINGLE shared `yjs`
+ * instance across the adapter, the provider, and our own `Y.Doc` —
+ * mixing two `yjs` copies would break the library's `instanceof`
+ * checks silently.
+ */
+const COLLAB_PKG_DIR = join(HERE, "../../packages/plugins/plugin-collab-yjs");
+
+interface CollabAdapter {
+	save: (ir: PageIR, meta: Record<string, unknown>) => unknown;
+	subscribe: (cb: (ir: PageIR) => void) => () => void;
+	metrics?: () => unknown;
+	destroy?: () => void;
+}
+
+interface CollabRuntime {
+	YDoc: new () => {
+		destroy: () => void;
+	};
+	WebsocketProvider: new (
+		url: string,
+		room: string,
+		doc: object,
+		opts: Record<string, unknown>,
+	) => {
+		on: (ev: string, cb: (arg: boolean) => void) => void;
+		destroy: () => void;
+	};
+	WS: unknown;
+	createYjsAdapter: (opts: {
+		doc: object;
+		peer: { id: string };
+	}) => CollabAdapter;
+}
+
+let runtimePromise: Promise<CollabRuntime> | undefined;
+
+function loadCollabRuntime(): Promise<CollabRuntime> {
+	if (runtimePromise) return runtimePromise;
+	runtimePromise = (async () => {
+		const requireFromCollab = createRequire(
+			join(COLLAB_PKG_DIR, "package.json"),
+		);
+
+		/**
+		 * Resolve a package's **ESM** entry from its `package.json`.
+		 *
+		 * `require.resolve(spec)` returns the CJS `main`
+		 * (e.g. `yjs/dist/yjs.cjs`), but the plugin dist does
+		 * `import "yjs"` which Node resolves to yjs's ESM entry. Loading
+		 * both yields TWO yjs instances → broken `instanceof` →
+		 * "Unexpected content type". yjs, y-websocket and ws all expose
+		 * `exports["."].import`; picking it makes our `Y.Doc`,
+		 * `y-websocket` and the plugin share the single ESM yjs.
+		 */
+		const importEsm = async (specifier: string) => {
+			const pkgJsonPath = requireFromCollab.resolve(
+				`${specifier}/package.json`,
+			);
+			const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf8")) as {
+				exports?: { ["."]?: { import?: string } };
+				module?: string;
+				main?: string;
+			};
+			const rel =
+				pkg.exports?.["."]?.import ?? pkg.module ?? pkg.main ?? "index.js";
+			return import(pathToFileURL(join(dirname(pkgJsonPath), rel)).href);
+		};
+
+		const yjs = await importEsm("yjs");
+		const yws = await importEsm("y-websocket");
+		const ws = await importEsm("ws");
+		const collab = await import(
+			pathToFileURL(join(COLLAB_PKG_DIR, "dist/index.js")).href
+		);
+
+		return {
+			YDoc: yjs.Doc,
+			WebsocketProvider: yws.WebsocketProvider,
+			WS: ws.default ?? ws.WebSocket ?? ws,
+			createYjsAdapter: collab.createYjsAdapter,
+		} as CollabRuntime;
+	})();
+	return runtimePromise;
+}
 
 // ---------------------------------------------------------------- config
 const NODE_COUNT = intEnv("NODE_COUNT", 2000);
@@ -61,6 +161,7 @@ const PROBE_RATE_MS = intEnv("PROBE_RATE_MS", 1000);
 const RUN_DURATION_MS = intEnv("RUN_DURATION_MS", 60_000);
 const SAMPLE_MS = intEnv("SAMPLE_MS", 2000);
 const PEER_STAGGER_MS = intEnv("PEER_STAGGER_MS", 60);
+const PEER_SYNC_TIMEOUT_MS = intEnv("PEER_SYNC_TIMEOUT_MS", 5000);
 const DEMO_BASE = process.env.ANVILKIT_DEMO_URL ?? "http://localhost:3000";
 const ROOM = `highload-${Date.now()}`;
 const REPORT_PATH = join(HERE, "collab-yjs-highload-report.md");
@@ -166,7 +267,7 @@ async function spawnRelay(port: number): Promise<() => Promise<void>> {
 // ---------------------------------------------------------------- peers
 interface Peer {
 	readonly id: string;
-	readonly adapter: ReturnType<typeof createYjsAdapter>;
+	readonly adapter: CollabAdapter;
 	readonly destroy: () => void;
 }
 
@@ -175,14 +276,14 @@ async function createPeer(
 	relayUrl: string,
 	subscribe?: (ir: PageIR) => void,
 ): Promise<Peer> {
-	const { WebsocketProvider } = await import("y-websocket");
-	const WS = (await import("ws")).default;
+	const { YDoc, WebsocketProvider, WS, createYjsAdapter } =
+		await loadCollabRuntime();
 	const doc = new YDoc();
 	const provider = new WebsocketProvider(relayUrl, ROOM, doc, {
 		connect: true,
 		// Node 21+ has a global WebSocket, but pin the polyfill so this
 		// works on any supported Node without depending on that.
-		WebSocketPolyfill: WS as unknown as typeof WebSocket,
+		WebSocketPolyfill: WS,
 	});
 	const adapter = createYjsAdapter({ doc, peer: { id } });
 	if (subscribe) adapter.subscribe(subscribe);
@@ -197,7 +298,7 @@ async function createPeer(
 		provider.on("sync", (s: boolean) => {
 			if (s) done();
 		});
-		setTimeout(done, 8000);
+		setTimeout(done, PEER_SYNC_TIMEOUT_MS);
 	});
 
 	return {
@@ -246,6 +347,8 @@ async function main(): Promise<void> {
 	const peers: Peer[] = [];
 	const timers: NodeJS.Timeout[] = [];
 	let browser: import("playwright").Browser | undefined;
+	let page: import("playwright").Page | undefined;
+	let reported = false;
 
 	// Adapter-layer sync latency: receive time − stamp, decoded via
 	// the SAME native-tree path the browser's adapter uses.
@@ -285,56 +388,73 @@ async function main(): Promise<void> {
 		peers.push(observer);
 
 		// 3. Collaborator peers — staggered connect, disjoint edits.
+		// A single peer failing to connect must not abort the run.
 		console.log(`connecting ${PEER_COUNT} collaborator peers…`);
 		for (let i = 0; i < PEER_COUNT; i += 1) {
-			const peer = await createPeer(`collab-${i}`, relayUrl);
+			let peer: Peer;
+			try {
+				peer = await createPeer(`collab-${i}`, relayUrl);
+			} catch (e) {
+				console.warn(`collab-${i} failed to connect: ${String(e)}`);
+				continue;
+			}
 			peers.push(peer);
 			const nodeId = `n-${i % NODE_COUNT}`;
+			const mutate = makeNodeLabelMutator(baseIR, nodeId);
 			let counter = 0;
 			timers.push(
 				setInterval(() => {
 					counter += 1;
-					peer.adapter.save(
-						withNodeLabel(baseIR, nodeId, `p${i}#${counter}`),
-						{},
-					);
+					peer.adapter.save(mutate(`p${i}#${counter}`), {});
 				}, EDIT_RATE_MS),
 			);
+			if (i % 10 === 0) {
+				console.log(`  …${i + 1}/${PEER_COUNT} peers connected`);
+			}
 			if (PEER_STAGGER_MS > 0) {
 				await new Promise((r) => setTimeout(r, PEER_STAGGER_MS));
 			}
 		}
-		console.log(`${peers.length - 2} collaborators active`);
+		console.log(`${Math.max(0, peers.length - 2)} collaborators active`);
 
 		// 4. Probe peer — steady timestamp on the dedicated node.
 		const probe = await createPeer("probe", relayUrl);
 		peers.push(probe);
+		const probeMutate = makeNodeLabelMutator(baseIR, PROBE_NODE_ID);
 		timers.push(
 			setInterval(() => {
-				probe.adapter.save(
-					withNodeLabel(baseIR, PROBE_NODE_ID, `${PROBE_PREFIX}${Date.now()}`),
-					{},
-				);
+				probe.adapter.save(probeMutate(`${PROBE_PREFIX}${Date.now()}`), {});
 			}, PROBE_RATE_MS),
 		);
 
 		// 5. Real browser editor.
 		const { chromium } = await import("playwright");
-		browser = await chromium.launch();
+		// Headless Chromium parks `requestAnimationFrame` when it
+		// thinks the page is backgrounded/occluded — without these
+		// flags the rAF jank sampler records zero frames. Long Tasks
+		// still work regardless, but we want both signals.
+		browser = await chromium.launch({
+			args: [
+				"--disable-background-timer-throttling",
+				"--disable-backgrounding-occluded-windows",
+				"--disable-renderer-backgrounding",
+			],
+		});
 		const context = await browser.newContext({
 			viewport: { width: 1440, height: 900 },
 		});
-		const page = await context.newPage();
-		await page.addInitScript(INSTRUMENTATION);
-		const cdp = await context.newCDPSession(page);
+		page = await context.newPage();
+		const pg = page;
+		await pg.addInitScript(INSTRUMENTATION);
+		const cdp = await context.newCDPSession(pg);
 		await cdp.send("Performance.enable");
 
 		const url =
 			`${editorUrl}?collab=1&relay=ws&relayPort=${port}` +
-			`&room=${ROOM}&peer=browser-observer&chrome=puck`;
+			`&room=${ROOM}&peer=browser-observer`;
 		const navStart = Date.now();
-		await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
-		await page.waitForSelector('[data-testid="puck-editor"], .Puck', {
+		await pg.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
+		await pg.waitForSelector('[data-testid="puck-editor"], .Puck', {
 			timeout: 60_000,
 		});
 
@@ -345,7 +465,7 @@ async function main(): Promise<void> {
 		};
 		const countHydrated = async (): Promise<number> => {
 			try {
-				const handle = await page
+				const handle = await pg
 					.locator("iframe#preview-frame")
 					.elementHandle({ timeout: 2000 });
 				const frame = handle ? await handle.contentFrame() : null;
@@ -359,15 +479,18 @@ async function main(): Promise<void> {
 		};
 		const readProbeInBrowser = async (): Promise<void> => {
 			try {
-				const handle = await page
+				const handle = await pg
 					.locator("iframe#preview-frame")
 					.elementHandle({ timeout: 1000 });
 				const frame = handle ? await handle.contentFrame() : null;
 				if (!frame) return;
-				const text = await frame.evaluate((id: string) => {
-					const el = document.querySelector(`[data-puck-component="${id}"]`);
-					return el ? el.textContent : null;
-				}, PROBE_NODE_ID);
+				// Scan the whole canvas for the sentinel rather than a
+				// single component id — robust to how Puck wraps/labels
+				// the rendered Button and to transient re-mounts.
+				const text = await frame.evaluate((prefix: string) => {
+					const i = document.body.innerText.indexOf(prefix);
+					return i < 0 ? null : document.body.innerText.slice(i, i + 40);
+				}, PROBE_PREFIX);
 				if (!text) return;
 				const i = text.indexOf(PROBE_PREFIX);
 				if (i < 0) return;
@@ -405,27 +528,27 @@ async function main(): Promise<void> {
 				: `hydration gate FAILED — peaked at ${maxHydrated}/${NODE_COUNT}`,
 		);
 
-		// 6. Sustained sampling loop under load.
+		// 6. Sustained sampling loop under load. Ticks fast so the
+		// poll-limited browser-visible latency has usable resolution;
+		// heap/RSS are sampled on the slower SAMPLE_MS cadence.
+		const PROBE_POLL_MS = 250;
 		const runDeadline = Date.now() + RUN_DURATION_MS;
+		let lastHeapAt = 0;
 		while (Date.now() < runDeadline) {
-			const elapsed = Date.now() - startedAt;
-			const heap = await readHeap();
-			if (Number.isFinite(heap)) heapSamples.push([elapsed, heap]);
-			rssSamples.push([elapsed, process.memoryUsage().rss]);
+			const now = Date.now();
+			const elapsed = now - startedAt;
+			if (now - lastHeapAt >= SAMPLE_MS) {
+				lastHeapAt = now;
+				const heap = await readHeap();
+				if (Number.isFinite(heap)) heapSamples.push([elapsed, heap]);
+				rssSamples.push([elapsed, process.memoryUsage().rss]);
+			}
 			await readProbeInBrowser();
-			await new Promise((r) => setTimeout(r, SAMPLE_MS));
+			await new Promise((r) => setTimeout(r, PROBE_POLL_MS));
 		}
 
 		// 7. Drain injected instrumentation.
-		const perf = await page.evaluate(
-			() =>
-				(window as unknown as { __perf: PerfBag }).__perf ?? {
-					startedAt: 0,
-					frames: [],
-					longtasks: [],
-				},
-		);
-
+		const perf = await drainPerf(pg);
 		writeReport({
 			gatePassed,
 			maxHydrated,
@@ -434,12 +557,43 @@ async function main(): Promise<void> {
 			e2eLatencies,
 			heapSamples,
 			rssSamples,
+			blocks: perf.blocks,
+			heartbeatMs: perf.heartbeatMs,
 			frames: perf.frames,
 			longtasks: perf.longtasks,
-			actualPeers: peers.length - 3, // minus seed/observer/probe
+			actualPeers: Math.max(0, peers.length - 3), // minus seed/observer/probe
 		});
+		reported = true;
 	} finally {
 		for (const t of timers) clearInterval(t);
+		// Resilient reporting: if the load/measurement phase threw or was
+		// killed mid-flight (e.g. the host could not sustain PEER_COUNT),
+		// still emit a report with whatever was collected so the run is
+		// never silently lost.
+		if (!reported) {
+			const perf = page
+				? await drainPerf(page).catch(() => EMPTY_PERF)
+				: EMPTY_PERF;
+			try {
+				writeReport({
+					gatePassed,
+					maxHydrated,
+					renderCompleteMs,
+					adapterLatencies,
+					e2eLatencies,
+					heapSamples,
+					rssSamples,
+					blocks: perf.blocks,
+					heartbeatMs: perf.heartbeatMs,
+					frames: perf.frames,
+					longtasks: perf.longtasks,
+					actualPeers: Math.max(0, peers.length - 3),
+					partial: true,
+				});
+			} catch (e) {
+				console.error("failed to write partial report:", e);
+			}
+		}
 		if (browser) await browser.close().catch(() => undefined);
 		for (const p of peers) {
 			try {
@@ -454,8 +608,35 @@ async function main(): Promise<void> {
 
 interface PerfBag {
 	startedAt: number;
+	heartbeatMs: number;
+	blocks: number[];
 	frames: number[];
 	longtasks: Array<{ start: number; duration: number }>;
+}
+
+const EMPTY_PERF: PerfBag = {
+	startedAt: 0,
+	heartbeatMs: 100,
+	blocks: [],
+	frames: [],
+	longtasks: [],
+};
+
+async function drainPerf(pg: import("playwright").Page): Promise<PerfBag> {
+	try {
+		return await pg.evaluate(
+			() =>
+				(window as unknown as { __perf?: PerfBag }).__perf ?? {
+					startedAt: 0,
+					heartbeatMs: 100,
+					blocks: [],
+					frames: [],
+					longtasks: [],
+				},
+		);
+	} catch {
+		return EMPTY_PERF;
+	}
 }
 
 function findProbeLabel(ir: PageIR): string | undefined {
@@ -479,18 +660,31 @@ interface ReportInput {
 	e2eLatencies: number[];
 	heapSamples: Array<[number, number]>;
 	rssSamples: Array<[number, number]>;
+	blocks: number[];
+	heartbeatMs: number;
 	frames: number[];
 	longtasks: Array<{ start: number; duration: number }>;
 	actualPeers: number;
+	partial?: boolean;
 }
 
 function writeReport(r: ReportInput): void {
 	const JANK_MS = 50;
 	const FREEZE_MS = 200;
+	const runMin = RUN_DURATION_MS / 60_000;
+
+	// Primary jank signal: setInterval heartbeat excess (headless-safe).
+	// A block sample is the ms the main thread was unavailable beyond
+	// the expected heartbeat gap in that ~100ms window.
+	const jankBlocks = r.blocks.filter((d) => d > JANK_MS);
+	const freezeBlocks = r.blocks.filter((d) => d > FREEZE_MS);
+	const worstBlock = r.blocks.length ? Math.max(...r.blocks) : Number.NaN;
+	const totalBlockedMs = r.blocks.reduce((acc, d) => acc + Math.max(0, d), 0);
+
+	// Supplementary rAF signal (usually empty headless).
 	const jank = r.frames.filter((d) => d > JANK_MS);
 	const freezes = r.frames.filter((d) => d > FREEZE_MS);
 	const worstFrame = r.frames.length ? Math.max(...r.frames) : Number.NaN;
-	const runMin = RUN_DURATION_MS / 60_000;
 	// Total Blocking Time: sum of (longtask − 50ms) over all long tasks.
 	const tbt = r.longtasks.reduce(
 		(acc, t) => acc + Math.max(0, t.duration - 50),
@@ -511,6 +705,17 @@ function writeReport(r: ReportInput): void {
 	p("");
 	p(`Generated: ${new Date().toISOString()}`);
 	p("");
+	if (r.partial) {
+		p(
+			"> ⚠️ **PARTIAL RUN.** The load/measurement phase aborted before " +
+				"completing (most likely the host could not sustain the " +
+				`requested ${PEER_COUNT} peers × ${NODE_COUNT}-node docs in one ` +
+				"process — Risk #3). Figures below reflect only what was " +
+				`collected with **${Math.max(0, r.actualPeers)}** peers actually ` +
+				"connected. Re-run with a lower `PEER_COUNT`.",
+		);
+		p("");
+	}
 	p("## Scenario");
 	p("");
 	p("| Parameter | Value |");
@@ -565,30 +770,50 @@ function writeReport(r: ReportInput): void {
 	p(
 		"_Adapter-layer is the precise number: relay round-trip + native-tree " +
 			"decode — the same code path the browser's adapter runs. Browser " +
-			`end-to-end is sampled every ~${SAMPLE_MS} ms so its resolution is ` +
+			"end-to-end is polled every ~250 ms so its resolution is " +
 			"bounded by that interval; treat it as directional._",
 	);
 	p("");
 
 	p("## 3. UI lag / freeze frequency");
 	p("");
+	p(
+		"Primary signal: a 100ms `setInterval` heartbeat injected into the " +
+			"editor. Excess gap between ticks = time the main thread was " +
+			"blocked (what the user perceives as stutter/freeze). This is " +
+			"headless-safe; rAF is parked headless and shown only if captured.",
+	);
+	p("");
 	p("| Metric | Value |");
 	p("| --- | --- |");
-	p(`| Frames sampled | ${r.frames.length} |`);
+	p(`| Heartbeat samples | ${r.blocks.length} (${r.heartbeatMs}ms target) |`);
 	p(
-		`| Jank frames (>${JANK_MS} ms) | ${jank.length} (${(
-			jank.length / Math.max(runMin, 0.01)
+		`| Jank events (block >${JANK_MS} ms) | ${jankBlocks.length} (${(
+			jankBlocks.length / Math.max(runMin, 0.01)
 		).toFixed(1)}/min) |`,
 	);
 	p(
-		`| Freeze frames (>${FREEZE_MS} ms) | ${freezes.length} (${(
-			freezes.length / Math.max(runMin, 0.01)
+		`| Freeze events (block >${FREEZE_MS} ms) | ${freezeBlocks.length} (${(
+			freezeBlocks.length / Math.max(runMin, 0.01)
 		).toFixed(1)}/min) |`,
 	);
-	p(`| Worst frame interval | ${ms(worstFrame)} |`);
+	p(`| Worst single block | ${ms(worstBlock)} |`);
+	p(`| Total blocked time | ${ms(totalBlockedMs)} |`);
+	if (r.frames.length > 0) {
+		p(
+			`| rAF jank frames (>${JANK_MS} ms) | ${jank.length} ` +
+				`(worst ${ms(worstFrame)}, ${freezes.length} >${FREEZE_MS}ms) |`,
+		);
+	}
 	p("");
 
-	p("## 4. Frame drops & blocking incidents");
+	p("## 4. Frame drops & blocking incidents (Long Tasks API)");
+	p("");
+	p(
+		"Corroborating signal from the Long Tasks API (works headless). " +
+			"Total Blocking Time = Σ(task − 50ms); each long task is a frame " +
+			"the compositor could not produce.",
+	);
 	p("");
 	p("| Metric | Value |");
 	p("| --- | --- |");
@@ -647,10 +872,11 @@ function writeReport(r: ReportInput): void {
 			`${r.actualPeers} concurrent editors.`,
 	);
 	p(
-		`- Blocking incidents: **${freezes.length}** freezes >${FREEZE_MS} ms, ` +
-			`Total Blocking Time **${ms(tbt)}** over ${(
-				RUN_DURATION_MS / 1000
-			).toFixed(0)} s.`,
+		`- Blocking incidents: **${freezeBlocks.length}** freezes >${FREEZE_MS} ms ` +
+			`(heartbeat), worst block **${ms(worstBlock)}**; Long-Tasks Total ` +
+			`Blocking Time **${ms(tbt)}** over ${(RUN_DURATION_MS / 1000).toFixed(
+				0,
+			)} s.`,
 	);
 	p("- Caveats (read before acting on these numbers):");
 	p(
@@ -669,12 +895,22 @@ function writeReport(r: ReportInput): void {
 			"sub-millisecond on one host — fine for relative latency.",
 	);
 	p(
-		"  4. Headless Chromium frame timing differs from headed; jank counts " +
-			"are a directional indicator, not an absolute FPS guarantee.",
+		"  4. Headless Chromium frame timing differs from headed; the " +
+			"heartbeat is the headless-safe jank signal (rAF is parked).",
+	);
+	p(
+		"  5. **Browser end-to-end latency may read `n/a`.** The plugin's " +
+			"H1 inbound scheduler flushes remote updates on " +
+			"`requestAnimationFrame`, which headless Chromium parks — so " +
+			"post-hydration repaints (and the visible probe) may never land " +
+			"headless even though the relay/adapter deliver them on time " +
+			"(see the adapter-layer number, which is the real sync latency). " +
+			"To capture browser-visible latency, run headed under Xvfb: " +
+			"`xvfb-run -a pnpm bench:collab-highload` with a headed launch.",
 	);
 	if (!r.gatePassed) {
 		p(
-			"  5. **Hydration gate failed** — every figure above reflects a " +
+			"  6. **Hydration gate failed** — every figure above reflects a " +
 				"partial document; do not quote them as a 2000-node result.",
 		);
 	}

@@ -97,6 +97,33 @@ export function withNodeLabel(
 }
 
 /**
+ * Allocation-lean variant of {@link withNodeLabel} for the hot edit
+ * loop. Builds the `{root,children}` spine **once** per peer (children
+ * array reused across ticks, every sibling object shared by reference);
+ * each tick only swaps in a fresh `{...props,label}` for the one owned
+ * node. With dozens of peers each saving twice a second over a
+ * 2000-node doc, re-`map()`-ing the array every tick is the dominant
+ * GC pressure — this removes it.
+ */
+export function makeNodeLabelMutator(
+	ir: PageIR,
+	nodeId: string,
+): (label: string) => PageIR {
+	const srcChildren = ir.root.children ?? [];
+	const idx = srcChildren.findIndex((c) => c.id === nodeId);
+	const children = srcChildren.slice();
+	const target = srcChildren[idx];
+	const root = { ...ir.root, children };
+	const next: PageIR = { ...ir, root };
+	return (label: string) => {
+		if (idx >= 0 && target) {
+			children[idx] = { ...target, props: { ...target.props, label } };
+		}
+		return next;
+	};
+}
+
+/**
  * Injected via `page.addInitScript` BEFORE navigation. Accumulates
  * main-thread health into `window.__perf`:
  *
@@ -107,6 +134,13 @@ export function withNodeLabel(
  *   PerformanceObserver. Present in modern headless Chromium; the rAF
  *   sampler is the robust fallback if the entry type is unsupported.
  *
+ * A `setInterval` "heartbeat" is the PRIMARY jank signal: headless
+ * Chromium parks `requestAnimationFrame` (which also gates the
+ * plugin's H1 inbound scheduler), so rAF deltas are often empty
+ * headless. Timers keep running with the anti-throttle launch flags,
+ * so the gap between successive 100ms ticks minus 100ms is real
+ * main-thread blocking the user would perceive as stutter/freeze.
+ *
  * Heap is NOT sampled here — the orchestrator reads
  * `Performance.getMetrics` over CDP instead (more reliable than
  * `performance.memory`, which is gated/quantized).
@@ -114,12 +148,24 @@ export function withNodeLabel(
 export const INSTRUMENTATION = String.raw`
 (() => {
   if (window.__perf) return;
+  var HEARTBEAT_MS = 100;
   const perf = {
     startedAt: Date.now(),
+    heartbeatMs: HEARTBEAT_MS,
+    blocks: [],
     frames: [],
     longtasks: [],
   };
   window.__perf = perf;
+
+  // Primary jank signal: excess wall-time between fixed-interval
+  // ticks = time the main thread was blocked in that window.
+  let prev = performance.now();
+  setInterval(() => {
+    const now = performance.now();
+    perf.blocks.push(now - prev - HEARTBEAT_MS);
+    prev = now;
+  }, HEARTBEAT_MS);
 
   let last = performance.now();
   function tick(now) {
