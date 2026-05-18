@@ -12,7 +12,7 @@ motion components used by the marketing surfaces.
 pnpm add @anvilkit/ui react react-dom
 ```
 
-`react` and `react-dom` are peer dependencies (`>=19`). Tailwind is
+`react` and `react-dom` are peer dependencies (`>=19.0.0`). Tailwind is
 not a peer dep, but `globals.css` is published for consumers that
 want the shadcn-style token layer.
 

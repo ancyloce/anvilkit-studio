@@ -75,7 +75,7 @@ export function createAutosavePlugin(endpoint: string): StudioPlugin {
       id: "com.example.autosave",
       name: "Autosave",
       version: "1.0.0",
-      coreVersion: "^0.1.0-alpha",
+      coreVersion: "^0.1.3",
     },
     register() {
       return {
@@ -83,7 +83,7 @@ export function createAutosavePlugin(endpoint: string): StudioPlugin {
           id: "com.example.autosave",
           name: "Autosave",
           version: "1.0.0",
-          coreVersion: "^0.1.0-alpha",
+          coreVersion: "^0.1.3",
         },
         hooks: {
           onDataChange: async (ctx, data) => {

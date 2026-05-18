@@ -54,7 +54,7 @@ for the full package catalog and trust-boundary discussion.
 
 | Package | Version |
 | ------- | ------- |
-| `@anvilkit/core` | `0.1.0-alpha.0` |
+| `@anvilkit/core` | `0.1.3` |
 | `@puckeditor/core` | `^0.21.0` |
 
 ## Dependency contract
