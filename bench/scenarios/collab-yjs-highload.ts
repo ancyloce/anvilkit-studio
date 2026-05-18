@@ -387,6 +387,19 @@ async function main(): Promise<void> {
 		});
 		peers.push(observer);
 
+		// Edit-load timers are *created* here but only *started* after
+		// the browser has mounted and passed the hydration gate. Starting
+		// the 12-peer + probe firehose (≈24 saves/s) before the browser
+		// has hydrated the 2000-node doc starves the renderer main thread
+		// — the initial 2000-node render is already ~26s of Long Tasks on
+		// its own, and the firehose layered on top means Playwright's
+		// `waitForSelector(studio-mount, {state:'visible'})` never gets a
+		// free main thread to confirm visibility within its 60s budget
+		// (root cause of the prior gate timeouts). Deferring also makes
+		// "node rendering completion time" a clean number instead of
+		// render-cost-conflated-with-sync-under-load.
+		const startEditTimers: Array<() => void> = [];
+
 		// 3. Collaborator peers — staggered connect, disjoint edits.
 		// A single peer failing to connect must not abort the run.
 		console.log(`connecting ${PEER_COUNT} collaborator peers…`);
@@ -402,12 +415,14 @@ async function main(): Promise<void> {
 			const nodeId = `n-${i % NODE_COUNT}`;
 			const mutate = makeNodeLabelMutator(baseIR, nodeId);
 			let counter = 0;
-			timers.push(
-				setInterval(() => {
-					counter += 1;
-					peer.adapter.save(mutate(`p${i}#${counter}`), {});
-				}, EDIT_RATE_MS),
-			);
+			startEditTimers.push(() => {
+				timers.push(
+					setInterval(() => {
+						counter += 1;
+						peer.adapter.save(mutate(`p${i}#${counter}`), {});
+					}, EDIT_RATE_MS),
+				);
+			});
 			if (i % 10 === 0) {
 				console.log(`  …${i + 1}/${PEER_COUNT} peers connected`);
 			}
@@ -421,11 +436,13 @@ async function main(): Promise<void> {
 		const probe = await createPeer("probe", relayUrl);
 		peers.push(probe);
 		const probeMutate = makeNodeLabelMutator(baseIR, PROBE_NODE_ID);
-		timers.push(
-			setInterval(() => {
-				probe.adapter.save(probeMutate(`${PROBE_PREFIX}${Date.now()}`), {});
-			}, PROBE_RATE_MS),
-		);
+		startEditTimers.push(() => {
+			timers.push(
+				setInterval(() => {
+					probe.adapter.save(probeMutate(`${PROBE_PREFIX}${Date.now()}`), {});
+				}, PROBE_RATE_MS),
+			);
+		});
 
 		// 5. Real browser editor.
 		const { chromium } = await import("playwright");
@@ -454,7 +471,12 @@ async function main(): Promise<void> {
 			`&room=${ROOM}&peer=browser-observer`;
 		const navStart = Date.now();
 		await pg.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
-		await pg.waitForSelector('[data-testid="puck-editor"], .Puck', {
+		// `studio-mount` is the demo's editor shell; it mounts before the
+		// 2000-node Y.Doc is synced/converted, so it separates "shell up"
+		// from "nodes hydrated" (the latter is the 90s node-count gate
+		// below). The old `.Puck` wait raced the full 2000-node main-thread
+		// hydration and timed out before the gate could run.
+		await pg.waitForSelector('[data-testid="studio-mount"]', {
 			timeout: 60_000,
 		});
 
@@ -508,7 +530,14 @@ async function main(): Promise<void> {
 		const gateDeadline = Date.now() + 90_000;
 		let stable = 0;
 		while (Date.now() < gateDeadline) {
-			const c = await countHydrated();
+			// `countHydrated` does an untimed `frame.evaluate`; if the
+			// renderer is pinned mid-hydration it would never resolve and
+			// the gate loop would hang past its own 90s deadline.
+			const c = await withTimeout(
+				countHydrated(),
+				HYDRATION_CALL_TIMEOUT_MS,
+				0,
+			);
 			maxHydrated = Math.max(maxHydrated, c);
 			if (c >= NODE_COUNT * HYDRATION_GATE) {
 				stable += 1;
@@ -528,27 +557,54 @@ async function main(): Promise<void> {
 				: `hydration gate FAILED — peaked at ${maxHydrated}/${NODE_COUNT}`,
 		);
 
+		// Now that the browser has mounted and hydrated (or the gate
+		// timed out), release the concurrent-edit firehose. From here
+		// the sampling window measures real steady-state behaviour under
+		// ${PEER_COUNT} editors, not render-vs-sync contention.
+		for (const start of startEditTimers) start();
+		console.log(`edit load started — ${startEditTimers.length} timers`);
+
 		// 6. Sustained sampling loop under load. Ticks fast so the
 		// poll-limited browser-visible latency has usable resolution;
 		// heap/RSS are sampled on the slower SAMPLE_MS cadence.
 		const PROBE_POLL_MS = 250;
 		const runDeadline = Date.now() + RUN_DURATION_MS;
 		let lastHeapAt = 0;
+		let watchdogTrips = 0;
 		while (Date.now() < runDeadline) {
 			const now = Date.now();
 			const elapsed = now - startedAt;
 			if (now - lastHeapAt >= SAMPLE_MS) {
 				lastHeapAt = now;
-				const heap = await readHeap();
+				const heap = await withTimeout(
+					readHeap(),
+					HEAP_CALL_TIMEOUT_MS,
+					Number.NaN,
+				);
 				if (Number.isFinite(heap)) heapSamples.push([elapsed, heap]);
+				else watchdogTrips += 1;
 				rssSamples.push([elapsed, process.memoryUsage().rss]);
 			}
-			await readProbeInBrowser();
+			const probed = await withTimeout(
+				readProbeInBrowser().then(() => true),
+				PROBE_CALL_TIMEOUT_MS,
+				false,
+			);
+			if (!probed) watchdogTrips += 1;
 			await new Promise((r) => setTimeout(r, PROBE_POLL_MS));
 		}
 
-		// 7. Drain injected instrumentation.
-		const perf = await drainPerf(pg);
+		// 7. Drain injected instrumentation. Also watchdog-bounded: a
+		// pinned renderer makes `drainPerf`'s page.evaluate hang too, so
+		// without this the report would never be written even though the
+		// loop above exited cleanly.
+		const perf = await withTimeout(drainPerf(pg), DRAIN_TIMEOUT_MS, EMPTY_PERF);
+		// A run the watchdog had to rescue (instrumentation undrainable,
+		// or many sampling calls timed out under a pinned renderer) is
+		// honestly a degraded read — flag it so the figures aren't
+		// quoted as a clean steady-state result.
+		const watchdogDegraded =
+			perf === EMPTY_PERF || watchdogTrips >= 5 || !gatePassed;
 		writeReport({
 			gatePassed,
 			maxHydrated,
@@ -562,7 +618,13 @@ async function main(): Promise<void> {
 			frames: perf.frames,
 			longtasks: perf.longtasks,
 			actualPeers: Math.max(0, peers.length - 3), // minus seed/observer/probe
+			partial: watchdogDegraded,
 		});
+		if (watchdogDegraded) {
+			console.log(
+				`report written (watchdog-degraded: trips=${watchdogTrips}, drain=${perf === EMPTY_PERF ? "timed-out" : "ok"})`,
+			);
+		}
 		reported = true;
 	} finally {
 		for (const t of timers) clearInterval(t);
@@ -572,7 +634,7 @@ async function main(): Promise<void> {
 		// never silently lost.
 		if (!reported) {
 			const perf = page
-				? await drainPerf(page).catch(() => EMPTY_PERF)
+				? await withTimeout(drainPerf(page), DRAIN_TIMEOUT_MS, EMPTY_PERF)
 				: EMPTY_PERF;
 			try {
 				writeReport({
@@ -621,6 +683,43 @@ const EMPTY_PERF: PerfBag = {
 	frames: [],
 	longtasks: [],
 };
+
+/**
+ * Sampling watchdog. When the renderer main thread is pinned (the exact
+ * high-load failure mode this benchmark exists to measure), Playwright
+ * `evaluate`/`elementHandle` and CDP calls queue behind it and may
+ * never resolve. Without a per-call deadline the sampling loop's
+ * `while (Date.now() < runDeadline)` is never re-evaluated (it's stuck
+ * inside an `await`), the 60s wall budget is silently ignored, and the
+ * run hangs forever instead of writing a report — so a saturated
+ * renderer (a real, reportable result) looked identical to a frozen
+ * harness.
+ *
+ * Racing every page/CDP call against a wall-clock timer bounds each
+ * loop iteration, so the loop always reaches the deadline and
+ * `writeReport`. On timeout we resolve to `fallback` and move on; the
+ * orphaned promise is neutralised so it can't surface later as an
+ * unhandled rejection.
+ */
+function withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	const guard = new Promise<T>((resolve) => {
+		timer = setTimeout(() => resolve(fallback), ms);
+	});
+	const tracked = p
+		.then((v) => v)
+		.catch(() => fallback)
+		.finally(() => {
+			if (timer !== undefined) clearTimeout(timer);
+		});
+	return Promise.race([tracked, guard]);
+}
+
+/** Per-call watchdog budgets (ms). Generous: only fire on a true wedge. */
+const HEAP_CALL_TIMEOUT_MS = 4_000;
+const PROBE_CALL_TIMEOUT_MS = 3_000;
+const HYDRATION_CALL_TIMEOUT_MS = 5_000;
+const DRAIN_TIMEOUT_MS = 8_000;
 
 async function drainPerf(pg: import("playwright").Page): Promise<PerfBag> {
 	try {
