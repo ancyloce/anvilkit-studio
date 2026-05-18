@@ -610,6 +610,19 @@ export interface StudioPluginLifecycleHooks<
 	) => void | Promise<void>;
 
 	/**
+	 * Fires exactly once, after `<Puck>` has mounted and its
+	 * effect-time API binder has captured `getPuckApi()` — i.e. the
+	 * first moment a plugin may safely call `ctx.getPuckApi()`. Fires
+	 * after `onInit` has been dispatched. Use for one-time setup that
+	 * must touch the live Puck API on first paint (e.g. collab
+	 * hydration of a preloaded snapshot) — work that is too early in
+	 * `onInit`, where the binder does not yet exist.
+	 */
+	readonly onReady?: (
+		ctx: StudioPluginContext<UserConfig>,
+	) => void | Promise<void>;
+
+	/**
 	 * Fires on every Puck `onChange` with the fresh data snapshot.
 	 *
 	 * The `data` argument is passed directly so the plugin does not
