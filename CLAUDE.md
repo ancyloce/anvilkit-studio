@@ -174,6 +174,7 @@ ever changes.
 - Always run typecheck, lint, and tests after multi-file changes before declaring work complete
 - When refactoring or moving files, search for ALL usage sites (e.g., multiple <Studio> mounts in demos) — never assume a single call site
 - Use `import type` for type-only imports to satisfy verbatimModuleSyntax
+- Comments should be concise and efficient, directly stating the core intent of functions/methods, avoiding redundant descriptions.
 
 ## Iframe & Canvas Styling
 - Tailwind utilities and parent-document CSS do NOT reach the canvas iframe — use inline styles or explicit CopyHostStyles injection
