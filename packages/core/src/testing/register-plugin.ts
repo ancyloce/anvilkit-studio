@@ -20,6 +20,11 @@ export interface PluginLifecycleHarness {
 	 * the hook settles — safe to `await` even for sync hooks.
 	 */
 	readonly runInit: () => Promise<void>;
+	/**
+	 * Fire `hooks.onReady` if present — the post-mount hook the real
+	 * `<Studio>` shell emits once `getPuckApi()` is bound.
+	 */
+	readonly runReady: () => Promise<void>;
 	/** Fire `hooks.onDestroy` if present. */
 	readonly runDestroy: () => Promise<void>;
 }
@@ -80,6 +85,9 @@ export async function registerPlugin(
 		registration,
 		async runInit() {
 			await registration.hooks?.onInit?.(ctx);
+		},
+		async runReady() {
+			await registration.hooks?.onReady?.(ctx);
 		},
 		async runDestroy() {
 			await registration.hooks?.onDestroy?.(ctx);
