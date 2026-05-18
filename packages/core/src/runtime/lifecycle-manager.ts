@@ -94,6 +94,7 @@ function extractErrorMessage(error: unknown): string {
  */
 export type LifecycleEventName =
 	| "onInit"
+	| "onReady"
 	| "onDataChange"
 	| "onBeforePublish"
 	| "onAfterPublish"
@@ -205,6 +206,7 @@ export function createLifecycleManager(
 	// a handler detaches itself mid-broadcast.
 	const subscribers: Record<LifecycleEventName, Set<LifecycleSubscriber>> = {
 		onInit: new Set(),
+		onReady: new Set(),
 		onDataChange: new Set(),
 		onBeforePublish: new Set(),
 		onAfterPublish: new Set(),

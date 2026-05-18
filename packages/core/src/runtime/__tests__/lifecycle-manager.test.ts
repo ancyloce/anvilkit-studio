@@ -303,3 +303,51 @@ describe("createLifecycleManager — subscribe", () => {
 		);
 	});
 });
+
+describe("createLifecycleManager — onReady", () => {
+	it("invokes every plugin's onReady hook in parallel and fires subscribers", async () => {
+		const calls: string[] = [];
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				async onReady() {
+					await Promise.resolve();
+					calls.push("a");
+				},
+			}),
+			makeRegistration("b", {
+				onReady() {
+					calls.push("b");
+				},
+			}),
+		]);
+		const subscriber = vi.fn();
+		lifecycle.subscribe("onReady", subscriber);
+
+		const { ctx } = makeCtx();
+		await lifecycle.emit("onReady", ctx);
+
+		expect(calls.sort()).toEqual(["a", "b"]);
+		expect(subscriber).toHaveBeenCalledTimes(1);
+	});
+
+	it("a throwing onReady hook is logged but does not abort the others", async () => {
+		const ok = vi.fn();
+		const lifecycle = createLifecycleManager([
+			makeRegistration("bad", {
+				onReady() {
+					throw new Error("boom");
+				},
+			}),
+			makeRegistration("good", { onReady: ok }),
+		]);
+
+		const { ctx, log } = makeCtx();
+		await expect(lifecycle.emit("onReady", ctx)).resolves.toBeUndefined();
+		expect(ok).toHaveBeenCalledTimes(1);
+		expect(log).toHaveBeenCalledWith(
+			"error",
+			expect.stringContaining("onReady"),
+			expect.objectContaining({ error: expect.any(Error) }),
+		);
+	});
+});
