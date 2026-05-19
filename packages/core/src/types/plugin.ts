@@ -32,13 +32,12 @@
  *    release). `StudioPluginMeta.coreVersion` lets plugins opt in to a
  *    specific range.
  *
- *    Exception (additive, backward-compatible): {@link StudioPlugin}
- *    gained an optional, defaulted second generic `Contributes` and a
- *    phantom-only `__contributes?` marker so `<Studio>` can infer the
- *    capability types a plugin set contributes. Existing one-argument
- *    `StudioPlugin` references and `{ meta, register }` literals stay
- *    valid and the runtime is untouched (the marker is never present at
- *    runtime), so no `coreVersion` bump is required.
+ *    Additive-only opt-in: {@link StudioPluginContributing} is a *new*
+ *    sub-interface keyed by a `unique symbol` so plugin authors can
+ *    advertise a `Contributes` capability surface that `<Studio>`
+ *    consumers recover via {@link InferPluginContributions}. The base
+ *    {@link StudioPlugin} shape and variance are unchanged, so existing
+ *    plugins and `coreVersion` ranges keep working without modification.
  */
 
 import type { ComponentType, ReactNode } from "react";
@@ -865,10 +864,7 @@ export interface StudioPluginRegistration<
  * };
  * ```
  */
-export interface StudioPlugin<
-	UserConfig extends PuckConfig = PuckConfig,
-	Contributes = unknown,
-> {
+export interface StudioPlugin<UserConfig extends PuckConfig = PuckConfig> {
 	/**
 	 * Frozen plugin metadata.
 	 *
@@ -889,33 +885,40 @@ export interface StudioPlugin<
 	):
 		| StudioPluginRegistration<UserConfig>
 		| Promise<StudioPluginRegistration<UserConfig>>;
-
-	/**
-	 * Phantom type marker — **never present at runtime**. It exists only
-	 * so `<Studio>` can infer, via {@link InferPluginContributions}, the
-	 * union of capability types a plugin set contributes. Plugins declare
-	 * it through {@link StudioPluginContributing}; consumers never set it.
-	 */
-	readonly __contributes?: Contributes;
 }
+
+/**
+ * Module-private capability brand for {@link StudioPluginContributing}.
+ *
+ * A `unique symbol` property name lives in its own namespace, so adding
+ * it to a sub-interface leaves the base {@link StudioPlugin} shape (and
+ * its variance) untouched. The property never exists at runtime — the
+ * brand carries the `Contributes` type only, and consumers interact
+ * exclusively through {@link StudioPluginContributing} and
+ * {@link InferPluginContributions}.
+ */
+declare const StudioPluginContributesBrand: unique symbol;
 
 /**
  * A `StudioPlugin` that advertises a `Contributes` capability surface.
  *
  * Plugin authors annotate their factory's return type with this so the
- * contributed types flow into `<Studio>` inference without the plugin
- * needing to import Puck's `Config`:
+ * contributed types are recoverable via {@link InferPluginContributions}:
  *
  * ```ts
  * export function createThingPlugin(): StudioPluginContributing<ThingApi> {
  *   return { meta, register };
  * }
  * ```
+ *
+ * Implementation note: the brand property is `unique symbol`-keyed and
+ * optional, so a plain `{ meta, register }` literal still satisfies the
+ * type and no runtime value is ever produced.
  */
-export type StudioPluginContributing<Contributes> = StudioPlugin<
-	PuckConfig,
-	Contributes
->;
+export interface StudioPluginContributing<Contributes>
+	extends StudioPlugin<PuckConfig> {
+	readonly [StudioPluginContributesBrand]?: Contributes;
+}
 
 /** Either a Studio plugin or a raw `@puckeditor/core` plugin. */
 export type StudioAnyPlugin<UserConfig extends PuckConfig = PuckConfig> =
@@ -925,15 +928,14 @@ export type StudioAnyPlugin<UserConfig extends PuckConfig = PuckConfig> =
 /**
  * Infer the union of contribution types from a plugins tuple.
  *
- * Raw Puck plugins (and plugins that declare no contribution) collapse
- * to `never`, so the result is exactly the capabilities the Studio
- * plugins in the array expose.
+ * Distributes over the tuple, picks up the branded `Contributes` from
+ * any {@link StudioPluginContributing} element, and collapses everything
+ * else (raw `StudioPlugin`, `PuckPlugin`, …) to `never`.
  */
 export type InferPluginContributions<Plugins extends readonly unknown[]> = {
-	[Index in keyof Plugins]: Plugins[Index] extends StudioPlugin<
-		infer _Config,
-		infer Contributes
-	>
+	[Index in keyof Plugins]: Plugins[Index] extends {
+		readonly [StudioPluginContributesBrand]?: infer Contributes;
+	}
 		? Contributes
 		: never;
 }[number];
