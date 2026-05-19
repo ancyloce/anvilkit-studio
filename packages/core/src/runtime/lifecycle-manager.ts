@@ -101,6 +101,34 @@ export type LifecycleEventName =
 	| "onDestroy";
 
 /**
+ * Engine-owned lifecycle phase (architecture §6 A2). The shell drives
+ * transitions with {@link LifecycleManager.advanceTo}; the engine owns
+ * the ordering and dedupe that used to live as three cooperating refs
+ * in the React shell (`onInitPromise` / `readyFiredFor` / the
+ * `queueMicrotask` + `.then(fireReady, fireReady)` chain).
+ *
+ * - `compiled` — manager just constructed, no lifecycle event fired.
+ * - `init` — `advanceTo("init")` fired `onInit`; its settle promise is
+ *   recorded so `onReady` can chain strictly after it.
+ * - `ready` — `advanceTo("ready")` was called (Puck API bound); the
+ *   engine will fire `onReady` exactly once, after `onInit` settles.
+ * - `running` — steady state after `onReady`; `onDataChange` /
+ *   `onBeforePublish` / `onAfterPublish` flow through `emit`.
+ * - `destroyed` — terminal; `advanceTo` is a no-op afterwards.
+ *
+ * Transitions are **monotonic and lenient**: a repeat or stale call
+ * (React StrictMode double-invoke, a late binder effect) is a no-op,
+ * never a throw — a lifecycle bookkeeping signal must not crash the
+ * editor in any environment.
+ */
+export type LifecyclePhase =
+	| "compiled"
+	| "init"
+	| "ready"
+	| "running"
+	| "destroyed";
+
+/**
  * Handler signature registered via {@link LifecycleManager.subscribe}.
  *
  * Receives the same `ctx` and `payload` the plugin hooks receive so
@@ -141,6 +169,38 @@ export interface LifecycleManager {
 		event: LifecycleEventName,
 		handler: LifecycleSubscriber,
 	) => () => void;
+
+	/** The current engine-owned {@link LifecyclePhase}. */
+	readonly phase: () => LifecyclePhase;
+
+	/**
+	 * Advance the engine lifecycle phase (architecture §6 A2). The
+	 * shell calls this instead of hand-orchestrating `onInit`/`onReady`
+	 * timing:
+	 *
+	 * - `advanceTo("init", ctx)` — from `compiled`: fires `onInit` and
+	 *   records its settle promise. Idempotent past `init`.
+	 * - `advanceTo("ready", ctx)` — from `init` (Puck API bound): the
+	 *   engine fires `onReady` **exactly once**, strictly after
+	 *   `onInit` has settled, then enters `running`. Calling it before
+	 *   `init`, or twice, is a no-op (the dedupe `readyFiredFor` used
+	 *   to do, now phase state).
+	 * - `advanceTo("destroyed", ctx)` — terminal marker; `onDestroy`
+	 *   itself is still emitted by the shell's unmount cleanup so it
+	 *   closes over the same runtime/ctx pair.
+	 * - `advanceTo("running", ctx)` — **no-op for callers.** `running`
+	 *   is engine-internal: the engine sets it itself in the
+	 *   post-`onInit` continuation. `phase()` *reports* `"running"`
+	 *   once `onReady` has fired, but it cannot be *commanded* — a
+	 *   caller-driven `running` would race the continuation and skip
+	 *   `onReady`.
+	 *
+	 * `onInit`'s non-veto contract is unchanged and now **explicit**: a
+	 * throwing `onInit` hook is logged (existing swallow) and does
+	 * **not** suppress `onReady`. The transition is monotonic + lenient
+	 * (stale/repeat calls no-op) so StrictMode double-invoke is safe.
+	 */
+	readonly advanceTo: (phase: LifecyclePhase, ctx: StudioPluginContext) => void;
 
 	/**
 	 * Release any in-flight debounce timers and forget every live
@@ -213,6 +273,107 @@ export function createLifecycleManager(
 		onDestroy: new Set(),
 	};
 	let disposed = false;
+
+	// Engine-owned lifecycle phase machine (A2). Replaces the shell's
+	// `onInitPromise` / `readyFiredFor` / `queueMicrotask` triad.
+	let currentPhase: LifecyclePhase = "compiled";
+	// Settle promise for `onInit`, recorded by `advanceTo("init")` so
+	// `onReady` can chain strictly after it (resolves even if an
+	// `onInit` hook threw — non-veto contract, unchanged).
+	let onInitSettled: Promise<void> | null = null;
+	// `advanceTo("ready")` may arrive *before* `advanceTo("init")`:
+	// `<PuckApiBinder>`'s child effect commits before the controller's
+	// parent `init` effect (React fires child effects first). Rather
+	// than make correctness depend on shell effect ordering (the old
+	// `queueMicrotask` hack), the engine records the request and
+	// honors it the moment `init` fires. Order-independent by design.
+	let readyRequested = false;
+
+	function phase(): LifecyclePhase {
+		return currentPhase;
+	}
+
+	/**
+	 * Schedule the one `onReady` for this runtime: enter `ready`, then
+	 * fire `onReady` strictly after `onInit` settles, then enter
+	 * `running`. `emit("onInit")` never rejects (hook throws are
+	 * logged + swallowed — non-veto), so a single `.then` suffices.
+	 * Idempotent: only runs from the `init` phase.
+	 */
+	function scheduleReady(ctx: StudioPluginContext): void {
+		if (currentPhase !== "init") {
+			return;
+		}
+		currentPhase = "ready";
+		const settled = onInitSettled ?? Promise.resolve();
+		settled.then(() => {
+			if (disposed || currentPhase !== "ready") {
+				return;
+			}
+			currentPhase = "running";
+			void emit("onReady", ctx);
+		}, undefined);
+	}
+
+	function advanceTo(target: LifecyclePhase, ctx: StudioPluginContext): void {
+		if (disposed || currentPhase === "destroyed") {
+			return;
+		}
+
+		if (target === "destroyed") {
+			// Terminal marker — `onDestroy` is still emitted by the
+			// shell's unmount cleanup so it closes over the exact
+			// runtime/ctx pair that fired `onInit`. Cancel any pending
+			// debounced `onDataChange`: its timer only checks
+			// `disposed`, so without this a public caller that does
+			// `advanceTo("destroyed")` without `dispose()` could still
+			// run `onDataChange` hooks after the documented terminal
+			// phase (codex-review P2).
+			currentPhase = "destroyed";
+			if (pendingDataChange !== null) {
+				clearTimeout(pendingDataChange.timer);
+				pendingDataChange = null;
+			}
+			return;
+		}
+
+		if (target === "init") {
+			// Only a direct compiled → init step fires `onInit`.
+			// Idempotent past `init` (StrictMode double-invoke).
+			if (currentPhase !== "compiled") {
+				return;
+			}
+			currentPhase = "init";
+			onInitSettled = emit("onInit", ctx);
+			void onInitSettled;
+			// A `ready` that raced ahead of `init` was deferred — honor
+			// it now so ordering does not depend on which effect
+			// committed first.
+			if (readyRequested) {
+				scheduleReady(ctx);
+			}
+			return;
+		}
+
+		if (target === "ready") {
+			// Remember the request even if it arrives before `init`;
+			// `advanceTo("init")` will honor it. Idempotent — the
+			// `scheduleReady` phase guard makes a repeat call a no-op.
+			readyRequested = true;
+			scheduleReady(ctx);
+			return;
+		}
+
+		// `running` is an **engine-internal, observable-only** phase: it
+		// is set solely by `scheduleReady`'s post-`onInit` continuation,
+		// never by a caller. An external `advanceTo("running")` is a
+		// deliberate no-op — honoring it from `ready` would flip
+		// `currentPhase` out from under that continuation, whose
+		// `currentPhase !== "ready"` guard would then skip `onReady`
+		// entirely (codex-review P2). `phase()` still *reports*
+		// `"running"` once `onReady` has fired; it just cannot be
+		// *commanded*.
+	}
 
 	/**
 	 * Resolve the hook function a given registration contributes for
@@ -340,6 +501,18 @@ export function createLifecycleManager(
 			return;
 		}
 
+		// `destroyed` is a documented terminal phase, and `advanceTo`
+		// is now public — so honor it here, not only via `dispose()`.
+		// A direct runtime consumer that calls `advanceTo("destroyed")`
+		// must not be able to keep running `onDataChange` /
+		// `onAfterPublish` / etc. afterwards. `onDestroy` itself is
+		// exempt: the shell deliberately advances to `destroyed`
+		// *before* emitting `onDestroy` (so a late onInit-settle
+		// continuation cannot fire `onReady`), then disposes.
+		if (currentPhase === "destroyed" && event !== "onDestroy") {
+			return;
+		}
+
 		if (event === "onDataChange" && debounceMs > 0) {
 			// Coalesce rapid emits. The returned promise resolves
 			// immediately — upstream callers are fire-and-forget and
@@ -348,7 +521,10 @@ export function createLifecycleManager(
 				clearTimeout(pendingDataChange.timer);
 			}
 			const timer = setTimeout(() => {
-				if (disposed) {
+				// Belt-and-suspenders: `advanceTo("destroyed")` already
+				// clears this timer, but guard the terminal phase here
+				// too so no debounced `onDataChange` can run post-destroy.
+				if (disposed || currentPhase === "destroyed") {
 					return;
 				}
 				const snapshot = pendingDataChange;
@@ -426,6 +602,9 @@ export function createLifecycleManager(
 
 	function dispose(): void {
 		disposed = true;
+		// Terminal phase so any `onInit`-settle `.then` that resolves
+		// after teardown does not fire a late `onReady`.
+		currentPhase = "destroyed";
 		if (pendingDataChange !== null) {
 			clearTimeout(pendingDataChange.timer);
 			pendingDataChange = null;
@@ -445,5 +624,5 @@ export function createLifecycleManager(
 		};
 	}
 
-	return { emit, subscribe, dispose };
+	return { emit, subscribe, dispose, phase, advanceTo };
 }

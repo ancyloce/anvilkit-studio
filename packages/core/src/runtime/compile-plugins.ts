@@ -49,6 +49,7 @@ import type {
 } from "@/types/plugin";
 import { isPuckPlugin, isStudioPlugin } from "./detect-plugin.js";
 import { StudioPluginError } from "./errors.js";
+import { createSingleOccupancyRegistry } from "./single-occupancy-registry.js";
 import {
 	createLifecycleManager,
 	type LifecycleManager,
@@ -444,10 +445,6 @@ export async function compilePlugins(
 	// declaration order when `order` values tie.
 	const providerEntries: { item: StudioPluginProvider; index: number }[] = [];
 	const overlayEntries: { item: StudioPluginOverlay; index: number }[] = [];
-	const slots = new Map<string, StudioPluginSlotContribution>();
-	// Track which plugin first claimed each slot id so a duplicate warn
-	// can name the original owner.
-	const slotOwners = new Map<string, string>();
 	const pluginCtx: StudioPluginContext = {
 		...ctx,
 		registerAssetResolver: (resolver) => {
@@ -456,6 +453,25 @@ export async function compilePlugins(
 		},
 		getAssetResolvers: () => assetResolvers,
 	};
+	// Slots are single-occupancy with a "first registration wins"
+	// policy. The policy is now a value (A4) instead of an imperative
+	// has()/warn()/continue dance; `onConflict` keeps the exact
+	// host-facing warn at this layer.
+	const slotRegistry =
+		createSingleOccupancyRegistry<StudioPluginSlotContribution>({
+			conflict: "first",
+			onConflict: (info) => {
+				pluginCtx.log(
+					"warn",
+					`Plugin "${info.incomingOwner}" tried to claim slot "${info.id}" but plugin "${info.currentOwner}" already registered it. First registration wins.`,
+					{
+						slotId: info.id,
+						attemptedBy: info.incomingOwner,
+						owner: info.currentOwner,
+					},
+				);
+			},
+		});
 
 	for (const [index, plugin] of plugins.entries()) {
 		if (isStudioPlugin(plugin)) {
@@ -543,20 +559,10 @@ export async function compilePlugins(
 			}
 			if (registration.slots) {
 				for (const slot of registration.slots) {
-					const existingOwner = slotOwners.get(slot.id);
-					if (existingOwner !== undefined) {
-						// First registration wins — warn the host so a
-						// silent collision doesn't go unnoticed, but do not
-						// throw (slots are presentation, not correctness).
-						pluginCtx.log(
-							"warn",
-							`Plugin "${meta.id}" tried to claim slot "${slot.id}" but plugin "${existingOwner}" already registered it. First registration wins.`,
-							{ slotId: slot.id, attemptedBy: meta.id, owner: existingOwner },
-						);
-						continue;
-					}
-					slotOwners.set(slot.id, meta.id);
-					slots.set(slot.id, slot);
+					// Single-occupancy: registry enforces "first wins"
+					// and fires the warn via onConflict. Slots are
+					// presentation, not correctness, so no throw.
+					slotRegistry.claim(slot.id, meta.id, slot);
 				}
 			}
 
@@ -609,7 +615,7 @@ export async function compilePlugins(
 		overrides,
 		providers: sortedProviders,
 		overlays: sortedOverlays,
-		slots,
+		slots: new Map(slotRegistry.entries()),
 		puckPlugins,
 	};
 }

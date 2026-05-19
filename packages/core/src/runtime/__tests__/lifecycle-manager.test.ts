@@ -351,3 +351,233 @@ describe("createLifecycleManager — onReady", () => {
 		);
 	});
 });
+
+describe("createLifecycleManager — phase machine (A2)", () => {
+	const flush = () => new Promise((r) => setTimeout(r, 0));
+
+	it("starts in `compiled` and fires onInit on advanceTo('init')", async () => {
+		const order: string[] = [];
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				onInit() {
+					order.push("onInit");
+				},
+				onReady() {
+					order.push("onReady");
+				},
+			}),
+		]);
+		const { ctx } = makeCtx();
+
+		expect(lifecycle.phase()).toBe("compiled");
+
+		lifecycle.advanceTo("init", ctx);
+		expect(lifecycle.phase()).toBe("init");
+		await flush();
+		expect(order).toEqual(["onInit"]);
+
+		lifecycle.advanceTo("ready", ctx);
+		await flush();
+		expect(order).toEqual(["onInit", "onReady"]);
+		expect(lifecycle.phase()).toBe("running");
+	});
+
+	it("is order-independent: advanceTo('ready') before 'init' still fires onReady once, after onInit", async () => {
+		const order: string[] = [];
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				onInit() {
+					order.push("onInit");
+				},
+				onReady() {
+					order.push("onReady");
+				},
+			}),
+		]);
+		const { ctx } = makeCtx();
+
+		// Binder effect commits before the controller's init effect.
+		lifecycle.advanceTo("ready", ctx);
+		expect(lifecycle.phase()).toBe("compiled");
+		lifecycle.advanceTo("init", ctx);
+		await flush();
+
+		expect(order).toEqual(["onInit", "onReady"]);
+		expect(lifecycle.phase()).toBe("running");
+	});
+
+	it("dedupes: repeated advanceTo('ready') fires onReady exactly once", async () => {
+		let readyCount = 0;
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				onReady() {
+					readyCount += 1;
+				},
+			}),
+		]);
+		const { ctx } = makeCtx();
+
+		lifecycle.advanceTo("init", ctx);
+		lifecycle.advanceTo("ready", ctx);
+		lifecycle.advanceTo("ready", ctx);
+		lifecycle.advanceTo("ready", ctx);
+		await flush();
+
+		expect(readyCount).toBe(1);
+	});
+
+	it("still fires onReady when an onInit hook throws (non-veto, documented A2 decision)", async () => {
+		const order: string[] = [];
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				onInit() {
+					order.push("onInit");
+					throw new Error("onInit boom");
+				},
+				onReady() {
+					order.push("onReady");
+				},
+			}),
+		]);
+		const { ctx, log } = makeCtx();
+
+		lifecycle.advanceTo("init", ctx);
+		lifecycle.advanceTo("ready", ctx);
+		await flush();
+
+		// onInit threw → logged (existing swallow), and onReady still
+		// fires: onInit is non-veto by contract.
+		expect(order).toEqual(["onInit", "onReady"]);
+		expect(log).toHaveBeenCalledWith(
+			"error",
+			expect.stringContaining("onInit"),
+			expect.objectContaining({ error: expect.anything() }),
+		);
+	});
+
+	it("does not fire a late onReady after dispose()", async () => {
+		let readyCount = 0;
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				async onInit() {
+					await new Promise((r) => setTimeout(r, 10));
+				},
+				onReady() {
+					readyCount += 1;
+				},
+			}),
+		]);
+		const { ctx } = makeCtx();
+
+		lifecycle.advanceTo("init", ctx);
+		lifecycle.advanceTo("ready", ctx);
+		lifecycle.dispose(); // before onInit's 10ms settle
+		expect(lifecycle.phase()).toBe("destroyed");
+		await new Promise((r) => setTimeout(r, 25));
+
+		expect(readyCount).toBe(0);
+	});
+
+	it("external advanceTo('running') cannot skip onReady (codex-review P2)", async () => {
+		let readyCount = 0;
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				async onInit() {
+					// Async settle opens the window an external
+					// `advanceTo("running")` could exploit.
+					await new Promise((r) => setTimeout(r, 10));
+				},
+				onReady() {
+					readyCount += 1;
+				},
+			}),
+		]);
+		const { ctx } = makeCtx();
+
+		lifecycle.advanceTo("init", ctx);
+		lifecycle.advanceTo("ready", ctx);
+		// A caller (the public surface accepts "running") tries to jump
+		// the phase before onInit settles — must be a no-op, not a
+		// way to bypass the onReady continuation.
+		lifecycle.advanceTo("running", ctx);
+		expect(lifecycle.phase()).toBe("ready");
+		await new Promise((r) => setTimeout(r, 25));
+
+		expect(readyCount).toBe(1);
+		expect(lifecycle.phase()).toBe("running"); // set by the engine
+	});
+
+	it("after advanceTo('destroyed'), emit() blocks all events except onDestroy (codex-review P2)", async () => {
+		const seen: string[] = [];
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				onDataChange() {
+					seen.push("onDataChange");
+				},
+				onAfterPublish() {
+					seen.push("onAfterPublish");
+				},
+				onDestroy() {
+					seen.push("onDestroy");
+				},
+			}),
+		]);
+		const { ctx } = makeCtx();
+		const data = { root: { props: {} }, content: [], zones: {} };
+
+		lifecycle.advanceTo("destroyed", ctx);
+		// Public caller did NOT dispose() — terminal phase must still
+		// stop later non-onDestroy emits.
+		await lifecycle.emit("onDataChange", ctx, data);
+		await lifecycle.emit("onAfterPublish", ctx, data);
+		// The shell's own teardown order (destroyed → onDestroy →
+		// dispose) must still deliver onDestroy.
+		await lifecycle.emit("onDestroy", ctx);
+
+		expect(seen).toEqual(["onDestroy"]);
+	});
+
+	it("advanceTo('destroyed') cancels a pending debounced onDataChange (codex-review P2)", async () => {
+		let dataChangeCount = 0;
+		const lifecycle = createLifecycleManager(
+			[
+				makeRegistration("a", {
+					onDataChange() {
+						dataChangeCount += 1;
+					},
+				}),
+			],
+			{ onDataChangeDebounceMs: 15 },
+		);
+		const { ctx } = makeCtx();
+		const data = { root: { props: {} }, content: [], zones: {} };
+
+		// Schedule a debounced onDataChange, then go terminal WITHOUT
+		// dispose() (public-caller path).
+		void lifecycle.emit("onDataChange", ctx, data);
+		lifecycle.advanceTo("destroyed", ctx);
+		await new Promise((r) => setTimeout(r, 40)); // past the 15ms debounce
+
+		expect(dataChangeCount).toBe(0);
+	});
+
+	it("advanceTo is inert after `destroyed`", async () => {
+		let initCount = 0;
+		const lifecycle = createLifecycleManager([
+			makeRegistration("a", {
+				onInit() {
+					initCount += 1;
+				},
+			}),
+		]);
+		const { ctx } = makeCtx();
+
+		lifecycle.advanceTo("destroyed", ctx);
+		expect(lifecycle.phase()).toBe("destroyed");
+		lifecycle.advanceTo("init", ctx);
+		await flush();
+
+		expect(initCount).toBe(0);
+		expect(lifecycle.phase()).toBe("destroyed");
+	});
+});

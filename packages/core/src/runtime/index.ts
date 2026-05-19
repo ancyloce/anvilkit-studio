@@ -29,6 +29,7 @@ export {
 	createLifecycleManager,
 	type LifecycleEventName,
 	type LifecycleManager,
+	type LifecyclePhase,
 	type LifecycleSubscriber,
 } from "./lifecycle-manager.js";
 export { CORE_VERSION } from "./version.js";
