@@ -2,34 +2,19 @@
  * @file React context provider for the per-instance editor UI store.
  *
  * The provider owns one `EditorUiStoreApi` per `<Studio>` mount,
- * keyed by `storeId`. The store is created lazily inside `useState`
- * so React's strict-mode double-invocation does not produce two
- * stores during dev. A mount-time effect kicks `persist.rehydrate()`
- * — SSR never reads `localStorage`, the client picks up the
- * persisted slice on the next tick.
+ * keyed by `storeId`, via the shared {@link useRehydratedStore} hook
+ * (lazy create, `storeId` re-targeting, deferred rehydration). The
+ * subtree is gated on `hydrated` so children never paint with
+ * `INITIAL_STATE` and then flip to the persisted slice — SSR never
+ * reads `localStorage`; see `useRehydratedStore` for the contract.
  */
 
-import {
-	createContext,
-	type ReactNode,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { createContext, type ReactNode, useContext } from "react";
 
+import { useRehydratedStore } from "@/stores/use-rehydrated-store";
 import { createEditorUiStore, type EditorUiStoreApi } from "./editor-ui-store";
 
 const EditorUiStoreContext = createContext<EditorUiStoreApi | null>(null);
-
-interface PersistableStore {
-	readonly persist: {
-		rehydrate(): void | Promise<void>;
-	};
-}
-
-function withPersistApi(store: EditorUiStoreApi): PersistableStore {
-	return store as unknown as PersistableStore;
-}
 
 export interface EditorUiStoreProviderProps {
 	readonly storeId: string;
@@ -40,16 +25,13 @@ export function EditorUiStoreProvider({
 	storeId,
 	children,
 }: EditorUiStoreProviderProps): ReactNode {
-	const [store] = useState(() => createEditorUiStore({ storeId }));
-	useEffect(() => {
-		// Stores created with `skipHydration: true` need an explicit
-		// rehydrate call once the client environment is ready. This
-		// effect runs only on the client, so `localStorage` is safe.
-		void withPersistApi(store).persist.rehydrate();
-	}, [store]);
+	const { store, hydrated } = useRehydratedStore(storeId, createEditorUiStore);
+	// Gate the subtree until the persisted UI slice is rehydrated so
+	// the sidebar / active tab / canvas viewport never paint with
+	// INITIAL_STATE then flip. See `useRehydratedStore` (SSR-safe).
 	return (
 		<EditorUiStoreContext.Provider value={store}>
-			{children}
+			{hydrated ? children : null}
 		</EditorUiStoreContext.Provider>
 	);
 }
