@@ -59,12 +59,15 @@ export default defineConfig({
 			// command is cheap to boot (<200 ms) so always running it
 			// keeps the matrix simple.
 			//
-			// Port 11234 (not 1234) sidesteps a known WSL2 binding leak
-			// where a stale Node process can hold 1234 even after it
-			// otherwise exits.
+			// Port 21234 (not 1234 or 11234) sidesteps WSL2 binding leaks
+			// and Windows-host port reservations (Hyper-V dynamic exclusion
+			// ranges can include both 1234 and 11234 depending on the
+			// machine, surfacing as a misleading EADDRINUSE even when
+			// `/proc/net/tcp*` is empty). Keep in sync with the
+			// `COLLAB_RELAY_PORT` default in `apps/demo/scripts/dev-collab.mjs`.
 			command:
-				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 11234",
-			url: "http://localhost:11234",
+				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21234",
+			url: "http://localhost:21234",
 			reuseExistingServer: !process.env.CI,
 			timeout: 30_000,
 		},

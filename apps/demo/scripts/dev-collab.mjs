@@ -22,14 +22,18 @@
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, readlinkSync } from "node:fs";
 
 const demoDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const relayScript = resolve(
 	demoDir,
 	"../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs",
 );
-const relayPort = process.env.COLLAB_RELAY_PORT || "11234";
+// Default 21234 (not 11234/1234): WSL2 + Windows-host port reservations
+// (Hyper-V dynamic exclusion ranges) commonly block both lower ports,
+// surfacing as a misleading EADDRINUSE even when `/proc/net/tcp*` is empty.
+// Keep in sync with `apps/demo/playwright.config.ts`.
+const relayPort = process.env.COLLAB_RELAY_PORT || "21234";
 const nextArgs = ["dev", "--webpack", ...process.argv.slice(2)];
 
 const OWNER = String(process.pid);
@@ -93,6 +97,90 @@ function reap(pids, reason) {
 // Recover from a prior SIGKILLed run: kill only orphans (owning supervisor
 // dead). A concurrent healthy run has a live owner and is left untouched.
 reap(taggedPids("orphan"), "orphaned");
+
+// Belt-and-suspenders for relays started OUTSIDE this supervisor (manual
+// `node examples/y-websocket-server.mjs`, a Playwright fixture, etc.) —
+// those are untagged so `taggedPids` won't see them, and they cause the
+// EADDRINUSE the user sees here. Scan /proc for the actual port holder,
+// and only SIGKILL it if its cmdline names the relay script. This never
+// touches an unrelated process that happens to occupy the configured port.
+function relayPortHolders(port) {
+	if (process.platform !== "linux") return [];
+	const targetHex = Number(port).toString(16).toUpperCase().padStart(4, "0");
+	const inodes = new Set();
+	for (const fn of ["/proc/net/tcp", "/proc/net/tcp6"]) {
+		let body;
+		try {
+			body = readFileSync(fn, "utf8");
+		} catch {
+			continue;
+		}
+		for (const line of body.split("\n").slice(1)) {
+			const parts = line.trim().split(/\s+/);
+			if (parts.length < 10) continue;
+			// st "0A" = TCP_LISTEN; local "HEX:PORTHEX".
+			if (parts[3] !== "0A") continue;
+			if (!parts[1].endsWith(`:${targetHex}`)) continue;
+			if (parts[9] && parts[9] !== "0") inodes.add(parts[9]);
+		}
+	}
+	if (inodes.size === 0) return [];
+	const hits = [];
+	let procs;
+	try {
+		procs = readdirSync("/proc");
+	} catch {
+		return hits;
+	}
+	for (const p of procs) {
+		if (!/^\d+$/.test(p) || p === OWNER) continue;
+		let fds;
+		try {
+			fds = readdirSync(`/proc/${p}/fd`);
+		} catch {
+			continue;
+		}
+		let owned = false;
+		for (const fd of fds) {
+			let link;
+			try {
+				link = readlinkSync(`/proc/${p}/fd/${fd}`);
+			} catch {
+				continue;
+			}
+			const m = /^socket:\[(\d+)\]$/.exec(link);
+			if (m && inodes.has(m[1])) {
+				owned = true;
+				break;
+			}
+		}
+		if (owned) hits.push(p);
+	}
+	return hits;
+}
+
+function reapStaleRelayOnPort(port) {
+	for (const pid of relayPortHolders(port)) {
+		let cmd = "";
+		try {
+			cmd = readFileSync(`/proc/${pid}/cmdline`, "utf8");
+		} catch {
+			continue;
+		}
+		// Match only the y-websocket relay; never kill arbitrary holders.
+		if (!cmd.includes("y-websocket-server.mjs")) continue;
+		try {
+			process.kill(Number(pid), "SIGKILL");
+			console.log(
+				`[dev:collab] reaped stale relay holding :${port} (pid ${pid})`,
+			);
+		} catch {
+			/* gone */
+		}
+	}
+}
+
+reapStaleRelayOnPort(Number(relayPort));
 
 const children = [];
 let shuttingDown = false;

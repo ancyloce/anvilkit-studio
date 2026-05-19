@@ -6,7 +6,7 @@
  * collab plugin instantiates without console errors. Also covers the
  * cross-tab two-session flow over the y-websocket reference relay
  * that Playwright boots automatically via the `webServer` entry in
- * `playwright.config.ts` (port 11234).
+ * `playwright.config.ts` (port 21234).
  */
 
 import { expect, test } from "@playwright/test";
@@ -58,10 +58,10 @@ test.describe("two-session sync over the y-websocket relay", () => {
 		const pageB = await ctxB.newPage();
 		const room = `presence-spec-${Date.now()}`;
 		await pageA.goto(
-			`/puck/editor?collab=1&peer=alice&room=${room}&relay=ws&relayPort=11234`,
+			`/puck/editor?collab=1&peer=alice&room=${room}&relay=ws&relayPort=21234`,
 		);
 		await pageB.goto(
-			`/puck/editor?collab=1&peer=bob&room=${room}&relay=ws&relayPort=11234`,
+			`/puck/editor?collab=1&peer=bob&room=${room}&relay=ws&relayPort=21234`,
 		);
 
 		await expect(pageA.getByTestId("studio-mount")).toBeVisible();

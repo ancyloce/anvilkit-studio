@@ -7,7 +7,7 @@
 		"dev": "next dev --webpack",
 		"dev:turbopack": "next dev",
 		"dev:collab": "node scripts/dev-collab.mjs",
-		"relay": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-11234}",
+		"relay": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-21234}",
 		"build": "next build --webpack",
 		"start": "next start",
 		"lint": "pnpm exec biome lint .",

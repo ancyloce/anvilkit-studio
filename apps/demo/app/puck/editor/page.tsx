@@ -130,8 +130,7 @@ function withoutHeaderActions(plugin: StudioPlugin): StudioPlugin {
 	return {
 		meta: plugin.meta,
 		async register(ctx) {
-			const { headerActions: _omitted, ...rest } =
-				await plugin.register(ctx);
+			const { headerActions: _omitted, ...rest } = await plugin.register(ctx);
 			return rest;
 		},
 	};
@@ -511,13 +510,15 @@ export default function PuckEditorPage() {
 		}
 		// `?relay=ws` switches the demo onto the y-websocket reference
 		// relay (port comes from `?relayPort=` or NEXT_PUBLIC_COLLAB_RELAY_PORT,
-		// defaulting to 11234). Without it the demo runs in single-tab
-		// in-memory mode and only proves the SnapshotAdapter wiring.
+		// defaulting to 21234 — keep in sync with `scripts/dev-collab.mjs`
+		// and `playwright.config.ts`). Without it the demo runs in
+		// single-tab in-memory mode and only proves the SnapshotAdapter
+		// wiring.
 		if (params.get("relay") === "ws") {
 			const port =
 				params.get("relayPort") ??
 				process.env.NEXT_PUBLIC_COLLAB_RELAY_PORT ??
-				"11234";
+				"21234";
 			setCollabRelayUrl(`ws://localhost:${port}`);
 		} else {
 			setCollabRelayUrl(null);
