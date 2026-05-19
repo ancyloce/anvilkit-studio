@@ -3,6 +3,11 @@
  *
  * See the plugin authoring guide for the full StudioPlugin contract:
  *   https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/src/content/docs/guides/plugin-authoring.mdx
+ *
+ * Subpath-export coupling: this plugin imports from
+ * `@anvilkit/core/types` and (in tests) `@anvilkit/core/testing`.
+ * Both subpaths are part of the documented @anvilkit/core public API
+ * and are covered by the core package's release gates.
  */
 import type {
 	StudioPlugin,
@@ -38,6 +43,11 @@ export function __FACTORY__(
 	return {
 		meta: META,
 		register(_ctx: StudioPluginContext) {
+			// TODO: wire your Puck surface here. Return additional
+			// fields (e.g. `puckExtensions`, custom `hooks`) alongside
+			// `meta`/`hooks` as needed. The plugin authoring guide
+			// enumerates every supported extension point:
+			// https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/src/content/docs/guides/plugin-authoring.mdx
 			return {
 				meta: META,
 				hooks: {

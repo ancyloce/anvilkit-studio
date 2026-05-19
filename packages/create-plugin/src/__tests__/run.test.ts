@@ -177,6 +177,50 @@ describe("@anvilkit/create-plugin", () => {
 		expect(src).toContain("export function createPlugin123Plugin");
 	});
 
+	it("does not double-suffix Plugin when the slug already ends in Plugin", async () => {
+		// Slug `9` -> camelCase `9` -> identifier-start fails ->
+		// endsWith("Plugin") is false -> prefixBase stays `9` ->
+		// className `Plugin9`, factory `createPlugin9Plugin`.
+		await run([
+			"--name",
+			"9",
+			"--display",
+			"Nine",
+			"--category",
+			"custom",
+			"--dir",
+			workDir,
+		]);
+		const src = readFileSync(join(workDir, "9", "src", "index.ts"), "utf8");
+		expect(src).toContain("export interface Plugin9PluginOptions");
+		expect(src).toContain("export function createPlugin9Plugin");
+		expect(src).not.toContain("Plugin9PluginPluginOptions");
+		expect(src).not.toContain("createPlugin9PluginPlugin");
+	});
+
+	it("scaffolds with only @anvilkit/core as a peer dependency", async () => {
+		await run([
+			"--name",
+			"lean-plugin",
+			"--display",
+			"Lean",
+			"--category",
+			"custom",
+			"--dir",
+			workDir,
+		]);
+		const pkg = JSON.parse(
+			readFileSync(join(workDir, "lean-plugin", "package.json"), "utf8"),
+		) as {
+			devDependencies: Record<string, string>;
+			peerDependencies: Record<string, string>;
+		};
+		expect(Object.keys(pkg.peerDependencies)).toEqual(["@anvilkit/core"]);
+		expect(pkg.devDependencies).not.toHaveProperty("react");
+		expect(pkg.devDependencies).not.toHaveProperty("@types/react");
+		expect(pkg.devDependencies).not.toHaveProperty("@puckeditor/core");
+	});
+
 	it("rejects an invalid category", async () => {
 		await expect(
 			run([
@@ -257,8 +301,8 @@ describe("@anvilkit/create-plugin", () => {
 			peerDependencies: Record<string, string>;
 		};
 		expect(pkg.name).toBe("@anvilkit/plugin-existing-plugin");
-		expect(pkg.peerDependencies["@anvilkit/core"]).toBe("^0.1.0-alpha");
-		expect(pkg.devDependencies["@anvilkit/core"]).toBe("^0.1.0-alpha");
+		expect(pkg.peerDependencies["@anvilkit/core"]).toBe(">=0.1.0-alpha <0.2.0");
+		expect(pkg.devDependencies["@anvilkit/core"]).toBe(">=0.1.0-alpha <0.2.0");
 	});
 
 	it("slugifies user-provided name (spaces, mixed case)", async () => {

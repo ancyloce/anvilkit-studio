@@ -9,9 +9,9 @@
  *
  *   pnpm create @anvilkit/plugin  (interactive)
  *
- * Flags accepted: --name, --display, --category, --dir, --force, --help.
- * Missing flags are prompted for when stdin is a TTY; otherwise
- * the CLI errors so CI invocations fail loud.
+ * Flags accepted: --name, --display, --category, --dir, --force,
+ * --help, --version. Missing flags are prompted for when stdin is a
+ * TTY; otherwise the CLI errors so CI invocations fail loud.
  *
  * Reference: phase4-011.
  */
@@ -36,8 +36,27 @@ const __dirname = dirname(__filename);
 const TEMPLATE_ROOT = resolve(__dirname, "..", "templates", "plugin");
 
 const VALID_CATEGORIES = ["export", "ai", "rail-panel", "custom"] as const;
-const CORE_VERSION_RANGE = "^0.1.0-alpha";
+// Caret-on-prerelease is semver-quirky in pnpm: `^0.1.0-alpha`
+// only accepts other `0.1.0-*` prereleases, not `0.1.1-alpha` etc.
+// Use an explicit band so prereleases on later patches resolve cleanly.
+const CORE_VERSION_RANGE = ">=0.1.0-alpha <0.2.0";
 type Category = (typeof VALID_CATEGORIES)[number];
+
+const TEXT_EXTENSIONS = new Set([
+	".cjs",
+	".js",
+	".json",
+	".md",
+	".mjs",
+	".ts",
+	".yaml",
+	".yml",
+]);
+
+function isTextFile(path: string): boolean {
+	const dot = path.lastIndexOf(".");
+	return dot >= 0 && TEXT_EXTENSIONS.has(path.slice(dot));
+}
 
 interface Options {
 	readonly name: string;
@@ -58,8 +77,11 @@ Flags:
   --display <label>      Human-readable plugin name (e.g. "My Plugin").
   --category <category>  One of: ${VALID_CATEGORIES.join(", ")}
   --dir <path>           Parent directory for the generated folder (default: cwd).
-  --force                Overwrite files in an existing non-empty target folder.
-  --help                 Show this help.
+  --force                Overwrite template files in an existing non-empty target
+                         folder. Files NOT in the template are kept. No backup,
+                         no confirmation prompt.
+  --help, -h             Show this help.
+  --version, -v          Print the installed CLI version.
 
 Interactive:
   If a flag is missing and stdin is a TTY, the CLI prompts for it.
@@ -100,7 +122,11 @@ async function promptFor(question: string, fallback?: string): Promise<string> {
 	try {
 		const suffix = fallback ? ` [${fallback}]` : "";
 		const answer = (await rl.question(`${question}${suffix}: `)).trim();
-		return answer || fallback || "";
+		const result = answer || fallback || "";
+		if (!result) {
+			throw new Error(`A value for "${question}" is required.`);
+		}
+		return result;
 	} finally {
 		rl.close();
 	}
@@ -131,19 +157,21 @@ async function resolveOptions(
 			"custom",
 		);
 	}
-	const category = VALID_CATEGORIES.includes(categoryRaw as Category)
-		? (categoryRaw as Category)
-		: (() => {
-				throw new Error(
-					`Invalid --category "${categoryRaw}". Must be one of: ${VALID_CATEGORIES.join(", ")}`,
-				);
-			})();
+	if (!VALID_CATEGORIES.includes(categoryRaw as Category)) {
+		throw new Error(
+			`Invalid --category "${categoryRaw}". Must be one of: ${VALID_CATEGORIES.join(", ")}`,
+		);
+	}
+	const category = categoryRaw as Category;
 
 	const dir = resolve(flags.dir ?? process.cwd(), name);
 	return { name, display, category, dir, force: flags.force ?? false };
 }
 
 function escapeStringLiteralContent(value: string): string {
+	// JSON.stringify wraps the value in quotes; slice removes them.
+	// JSON allows raw U+2028/U+2029, but they're invalid in older JS
+	// string literals and trip some minifiers - escape explicitly.
 	return JSON.stringify(value)
 		.slice(1, -1)
 		.replaceAll("\u2028", "\\u2028")
@@ -200,8 +228,10 @@ function renderTemplate(
 		__NAME__: opts.name,
 	} satisfies Record<string, string>;
 
+	// Single source of truth: the alternation tracks the replacement keys.
+	const tokenRegex = new RegExp(Object.keys(replacements).join("|"), "g");
 	return template.replace(
-		/__CATEGORY__|__CLASSNAME__|__CORE_VERSION_RANGE__|__DISPLAY_COMMENT__|__DISPLAY_MARKDOWN__|__DISPLAY_STRING__|__FACTORY__|__NAME__/g,
+		tokenRegex,
 		(token) => replacements[token as keyof typeof replacements],
 	);
 }
@@ -215,7 +245,11 @@ function copyTemplateTree(
 	mkdirSync(targetDir, { recursive: true });
 	for (const entry of readdirSync(sourceDir)) {
 		const sourcePath = join(sourceDir, entry);
-		// Template file names can contain __NAME__ etc. too.
+		// Filenames go through the same substitution pipeline as contents.
+		// Today only `__NAME__` appears in filenames (see
+		// templates/plugin/src/__tests__/__NAME__.test.ts). Be careful
+		// adding tokens whose substitution output could contain
+		// file-system-unsafe characters.
 		const renderedName = renderTemplate(entry, opts, className);
 		const targetPath = join(targetDir, renderedName);
 		const stat = statSync(sourcePath);
@@ -227,18 +261,7 @@ function copyTemplateTree(
 		// placeholders. Binary files (we don't ship any currently, but
 		// guard so adding one doesn't silently corrupt the output) are
 		// copied byte-for-byte.
-		const textExtensions = [
-			".json",
-			".ts",
-			".md",
-			".mjs",
-			".cjs",
-			".yml",
-			".yaml",
-			".js",
-		];
-		const isText = textExtensions.some((ext) => sourcePath.endsWith(ext));
-		if (isText) {
+		if (isTextFile(sourcePath)) {
 			const content = readFileSync(sourcePath, "utf8");
 			writeFileSync(
 				targetPath,
@@ -254,9 +277,11 @@ function copyTemplateTree(
 export async function run(
 	argv: readonly string[] = process.argv.slice(2),
 ): Promise<Options> {
-	if (argv.includes("--help") || argv.includes("-h")) {
-		printHelp();
-		process.exit(0);
+	if (!existsSync(TEMPLATE_ROOT)) {
+		throw new Error(
+			`Internal error: template root not found at ${TEMPLATE_ROOT}. ` +
+				"This is a packaging bug - please file an issue.",
+		);
 	}
 
 	const { values } = parseArgs({
@@ -296,12 +321,33 @@ export async function run(
 	return opts;
 }
 
+function readPackageVersion(): string {
+	try {
+		const pkgPath = resolve(__dirname, "..", "package.json");
+		const pkg = JSON.parse(readFileSync(pkgPath, "utf8")) as {
+			version?: string;
+		};
+		return pkg.version ?? "unknown";
+	} catch {
+		return "unknown";
+	}
+}
+
 // Only run when invoked as a CLI. `import` from tests stays side-effect-free.
 const isMain =
 	process.argv[1] !== undefined &&
-	resolve(process.argv[1]) === resolve(__filename);
+	resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
-	run().catch((err) => {
+	const argv = process.argv.slice(2);
+	if (argv.includes("--help") || argv.includes("-h")) {
+		printHelp();
+		process.exit(0);
+	}
+	if (argv.includes("--version") || argv.includes("-v")) {
+		console.log(readPackageVersion());
+		process.exit(0);
+	}
+	run(argv).catch((err) => {
 		console.error(
 			`@anvilkit/create-plugin: ${err instanceof Error ? err.message : String(err)}`,
 		);

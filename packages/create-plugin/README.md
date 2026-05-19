@@ -18,14 +18,15 @@ pnpm create @anvilkit/plugin
 
 ## Flags
 
-| Flag         | Description                                              |
-| ------------ | -------------------------------------------------------- |
-| `--name`     | Package slug (folder name + `@anvilkit/plugin-<slug>`)   |
-| `--display`  | Human-readable plugin name                               |
-| `--category` | `export`, `ai`, `rail-panel`, or `custom`                |
-| `--dir`      | Parent directory for the generated folder (default: cwd) |
-| `--force`    | Overwrite files in an existing non-empty target folder   |
-| `--help`     | Show help                                                |
+| Flag        | Description                                                                                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `--name`    | Package slug (folder name + `@anvilkit/plugin-<slug>`)                                                                   |
+| `--display` | Human-readable plugin name                                                                                               |
+| `--category`| `export`, `ai`, `rail-panel`, or `custom`                                                                                |
+| `--dir`     | Parent directory for the generated folder (default: cwd)                                                                 |
+| `--force`   | Overwrite template files in an existing non-empty target folder. Files NOT in the template are kept. No backup, no prompt.|
+| `--help`    | Show help                                                                                                                |
+| `--version` | Print the installed CLI version                                                                                          |
 
 ## What you get
 
