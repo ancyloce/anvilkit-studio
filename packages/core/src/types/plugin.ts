@@ -197,6 +197,16 @@ export interface StudioPluginContext<
 	 * Event names are free-form strings — Core does not enforce a
 	 * schema. Subscribers validate payloads themselves.
 	 *
+	 * @reserved **Not implemented yet (architecture §12).** The
+	 * plugin-to-plugin bus has no delivery: calling `emit` is inert,
+	 * never throws, and no subscriber receives the event. The
+	 * `<Studio>` shell logs a warning on the first call per plugin
+	 * context (every environment — rate-limited to once) so the inert
+	 * contract is discoverable without reading the implementation. Do
+	 * not rely on delivery until a concrete subscribe API and ordering
+	 * semantics are documented here. The signature is stable; only the
+	 * runtime behavior changes when the bus ships.
+	 *
 	 * @param event - Event name (plugin-defined).
 	 * @param payload - Optional payload. Defaults to `undefined`.
 	 */
@@ -321,6 +331,29 @@ export interface StudioPluginContext<
 		panel: StudioHistoryPanel,
 	) => StudioSidebarUnregister;
 }
+
+/**
+ * Store-isolation invariant (A4): plugins mutate Studio **only**
+ * through the typed `register*` thunks and lifecycle hooks above —
+ * never a raw store handle. The `<Studio>` shell enforces this by
+ * *construction* (the ctx object it builds simply omits any store
+ * reference). The assertion below makes that intent fail-loud: if a
+ * `*Store` / `*store` key is ever added to `StudioPluginContext`,
+ * `_AssertTrue` receives `false` and violates its `extends true`
+ * constraint, so `typecheck` fails — forcing a deliberate decision
+ * rather than a silent leak of the engine's write side to plugins.
+ *
+ * Pure type space — emits **zero** runtime JS, preserving the
+ * type-only purity of `src/types/` (no `const`, no `void`).
+ */
+type _AssertTrue<_T extends true> = never;
+type _StoreHandleKeys = Extract<
+	keyof StudioPluginContext,
+	`${string}Store` | `${string}store`
+>;
+type _AssertNoStoreHandleOnContext = _AssertTrue<
+	[_StoreHandleKeys] extends [never] ? true : false
+>;
 
 /**
  * Header action descriptor, contributed by plugins via
