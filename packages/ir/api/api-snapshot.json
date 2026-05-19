@@ -621,15 +621,39 @@
 									},
 									{
 										"kind": "text",
-										"text": ".\n\nThis function proves the round-trip guarantee — the invariant\n"
+										"text": ".\n\nThis function backs the round-trip guarantee: for serializable,\nalready-canonical Puck "
 									},
 									{
 										"kind": "code",
-										"text": "`irToPuckData(puckDataToIR(d)) ≡ d`"
+										"text": "`Data`"
 									},
 									{
 										"kind": "text",
-										"text": " is what lets us snapshot\ntest IR shapes without drift. It is also the entry point the AI\ncopilot plugin uses to turn a validated LLM "
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`irToPuckData(puckDataToIR(d))`"
+									},
+									{
+										"kind": "text",
+										"text": " is\n*structurally equivalent* to "
+									},
+									{
+										"kind": "code",
+										"text": "`d`"
+									},
+									{
+										"kind": "text",
+										"text": ". (The forward transform is\nintentionally normalizing — it sorts keys and drops\nfunctions/"
+									},
+									{
+										"kind": "code",
+										"text": "`undefined`"
+									},
+									{
+										"kind": "text",
+										"text": "/non-JSON values — so the equivalence is\nstructural, not byte-for-byte, for non-canonical input.) That\nguarantee is what lets us snapshot-test IR shapes without drift.\nIt is also the entry point the AI copilot plugin uses to turn a\nvalidated LLM "
 									},
 									{
 										"kind": "code",
@@ -637,7 +661,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " response\nback into a "
+										"text": " response back into a "
 									},
 									{
 										"kind": "code",
@@ -819,7 +843,7 @@
 								},
 								{
 									"id": 38,
-									"name": "_config",
+									"name": "config",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
@@ -843,7 +867,25 @@
 											},
 											{
 												"kind": "text",
-												"text": " (used by phase3-004\n  helpers; lightly used in the base transform)."
+												"text": ". **Required** — used\n  by "
+											},
+											{
+												"kind": "inline-tag",
+												"tag": "@link",
+												"text": "identifySlots",
+												"target": 21
+											},
+											{
+												"kind": "text",
+												"text": " to tell slot fields (descended into as\n  "
+											},
+											{
+												"kind": "code",
+												"text": "`children`"
+											},
+											{
+												"kind": "text",
+												"text": ") apart from plain serializable props."
 											}
 										]
 									},
@@ -1557,7 +1599,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " on the first invalid node.\n- Returns a structurally cloned, frozen IR when validation\n  succeeds with at least one populated "
+										"text": " on the first invalid node.\n- Returns a frozen IR with a freshly rebuilt node spine when\n  validation succeeds with at least one populated "
 									},
 									{
 										"kind": "code",
@@ -1565,7 +1607,23 @@
 									},
 									{
 										"kind": "text",
-										"text": ". The clone preserves\n  "
+										"text": ". The\n  rebuild is structural only: "
+									},
+									{
+										"kind": "code",
+										"text": "`props`"
+									},
+									{
+										"kind": "text",
+										"text": ", "
+									},
+									{
+										"kind": "code",
+										"text": "`assets`"
+									},
+									{
+										"kind": "text",
+										"text": ", and "
 									},
 									{
 										"kind": "code",
@@ -1573,7 +1631,15 @@
 									},
 									{
 										"kind": "text",
-										"text": " byte-for-byte; it never synthesizes new fields.\n\nImportantly, this helper NEVER bumps "
+										"text": " are\n  carried over by reference (not deep-cloned) and "
+									},
+									{
+										"kind": "code",
+										"text": "`meta`"
+									},
+									{
+										"kind": "text",
+										"text": " is\n  preserved byte-for-byte; no new fields are synthesized.\n\nImportantly, this helper NEVER bumps "
 									},
 									{
 										"kind": "code",
@@ -1884,7 +1950,7 @@
 		"38": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "_config"
+			"qualifiedName": "config"
 		},
 		"39": {
 			"packageName": "@anvilkit/ir",
