@@ -131,13 +131,7 @@ export interface ChromeAssets {
 type PuckDataFor<UserConfig extends PuckConfig> =
 	UserGenerics<UserConfig>["UserData"];
 
-export interface StudioProps<
-	UserConfig extends PuckConfig = PuckConfig,
-	Plugins extends readonly (
-		| StudioPlugin<UserConfig>
-		| PuckPlugin<UserConfig>
-	)[] = readonly (StudioPlugin<UserConfig> | PuckPlugin<UserConfig>)[],
-> {
+export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	/**
 	 * The Puck component config the editor operates on. Typically
 	 * imported from a host-side module like
@@ -162,13 +156,17 @@ export interface StudioProps<
 	 * Order matters for override composition: the first plugin's
 	 * overrides become the innermost wrapper, later plugins wrap it.
 	 *
-	 * Typed as the literal `Plugins` tuple so the concrete plugin types
-	 * are preserved (not widened) at the prop boundary — this is what
-	 * lets a consumer recover the contributed capability types via
-	 * {@link InferPluginContributions}. The runtime still erases to the
-	 * default at the `compilePlugins` boundary.
+	 * Consumers that want to recover the contributed capability types
+	 * from this set can declare the array `as const` and apply
+	 * {@link InferPluginContributions}`<typeof plugins>` — the tuple
+	 * preserves each plugin's `StudioPlugin<_, Contributes>` parameter,
+	 * which the helper distributes into a union. The runtime erases at
+	 * the `compilePlugins` boundary regardless.
 	 */
-	readonly plugins?: Plugins;
+	readonly plugins?: readonly (
+		| StudioPlugin<UserConfig>
+		| PuckPlugin<UserConfig>
+	)[];
 	/**
 	 * Layer 3 host overrides forwarded to `createStudioConfig`.
 	 * `<Studio>` owns the config factory call so descendants get a

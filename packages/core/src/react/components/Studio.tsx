@@ -62,7 +62,6 @@ import { useThemeSync } from "@/theme/use-theme-sync";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type {
-	StudioAnyPlugin,
 	StudioPluginOverlay,
 	StudioPluginProvider,
 	StudioPluginSlotContribution,
@@ -172,11 +171,9 @@ export function resolveCollaboratorsSlot(
  * }
  * ```
  */
-export function Studio<
-	UserConfig extends PuckConfig = PuckConfig,
-	Plugins extends
-		readonly StudioAnyPlugin<UserConfig>[] = readonly StudioAnyPlugin<UserConfig>[],
->(props: StudioProps<UserConfig, Plugins>): ReactElement | null {
+export function Studio<UserConfig extends PuckConfig = PuckConfig>(
+	props: StudioProps<UserConfig>,
+): ReactElement | null {
 	const {
 		puckConfig,
 		data,

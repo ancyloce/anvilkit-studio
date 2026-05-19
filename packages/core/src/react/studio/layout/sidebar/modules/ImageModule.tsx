@@ -211,7 +211,11 @@ export function ImageModule(): ReactNode {
 										: tile,
 								),
 							);
-						} else if (event.type === "error") {
+						} else if (
+							event.type === "error" &&
+							!abortController.signal.aborted
+						) {
+							// Suppress error events from a cancelled batch.
 							toast.error(msg("studio.module.image.upload.error"));
 						}
 					},
