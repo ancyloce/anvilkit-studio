@@ -31,6 +31,14 @@
  *    a Core major bump (or, during alpha, a new `0.1.0-alpha.N`
  *    release). `StudioPluginMeta.coreVersion` lets plugins opt in to a
  *    specific range.
+ *
+ *    Exception (additive, backward-compatible): {@link StudioPlugin}
+ *    gained an optional, defaulted second generic `Contributes` and a
+ *    phantom-only `__contributes?` marker so `<Studio>` can infer the
+ *    capability types a plugin set contributes. Existing one-argument
+ *    `StudioPlugin` references and `{ meta, register }` literals stay
+ *    valid and the runtime is untouched (the marker is never present at
+ *    runtime), so no `coreVersion` bump is required.
  */
 
 import type { ComponentType, ReactNode } from "react";
@@ -38,6 +46,7 @@ import type {
 	PuckApi,
 	Config as PuckConfig,
 	Data as PuckData,
+	Plugin as PuckPlugin,
 	Overrides as PuckOverrides,
 } from "@puckeditor/core";
 
@@ -856,7 +865,10 @@ export interface StudioPluginRegistration<
  * };
  * ```
  */
-export interface StudioPlugin<UserConfig extends PuckConfig = PuckConfig> {
+export interface StudioPlugin<
+	UserConfig extends PuckConfig = PuckConfig,
+	Contributes = unknown,
+> {
 	/**
 	 * Frozen plugin metadata.
 	 *
@@ -877,4 +889,51 @@ export interface StudioPlugin<UserConfig extends PuckConfig = PuckConfig> {
 	):
 		| StudioPluginRegistration<UserConfig>
 		| Promise<StudioPluginRegistration<UserConfig>>;
+
+	/**
+	 * Phantom type marker — **never present at runtime**. It exists only
+	 * so `<Studio>` can infer, via {@link InferPluginContributions}, the
+	 * union of capability types a plugin set contributes. Plugins declare
+	 * it through {@link StudioPluginContributing}; consumers never set it.
+	 */
+	readonly __contributes?: Contributes;
 }
+
+/**
+ * A `StudioPlugin` that advertises a `Contributes` capability surface.
+ *
+ * Plugin authors annotate their factory's return type with this so the
+ * contributed types flow into `<Studio>` inference without the plugin
+ * needing to import Puck's `Config`:
+ *
+ * ```ts
+ * export function createThingPlugin(): StudioPluginContributing<ThingApi> {
+ *   return { meta, register };
+ * }
+ * ```
+ */
+export type StudioPluginContributing<Contributes> = StudioPlugin<
+	PuckConfig,
+	Contributes
+>;
+
+/** Either a Studio plugin or a raw `@puckeditor/core` plugin. */
+export type StudioAnyPlugin<UserConfig extends PuckConfig = PuckConfig> =
+	| StudioPlugin<UserConfig>
+	| PuckPlugin<UserConfig>;
+
+/**
+ * Infer the union of contribution types from a plugins tuple.
+ *
+ * Raw Puck plugins (and plugins that declare no contribution) collapse
+ * to `never`, so the result is exactly the capabilities the Studio
+ * plugins in the array expose.
+ */
+export type InferPluginContributions<Plugins extends readonly unknown[]> = {
+	[Index in keyof Plugins]: Plugins[Index] extends StudioPlugin<
+		infer _Config,
+		infer Contributes
+	>
+		? Contributes
+		: never;
+}[number];

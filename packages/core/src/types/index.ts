@@ -47,11 +47,14 @@ export type {
 } from "./pages.js";
 export type {
 	AssetResolution,
+	InferPluginContributions,
 	IRAssetResolver,
+	StudioAnyPlugin,
 	StudioHeaderAction,
 	StudioLogLevel,
 	StudioOverlayPlacement,
 	StudioPlugin,
+	StudioPluginContributing,
 	StudioPluginContext,
 	StudioPluginLifecycleHooks,
 	StudioPluginMeta,

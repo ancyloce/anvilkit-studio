@@ -20,7 +20,9 @@ import { describe, expect, it } from "vitest";
 
 import { StudioConfigSchema } from "@/config/schema";
 import type {
+	InferPluginContributions,
 	StudioPlugin,
+	StudioPluginContributing,
 	StudioPluginContext,
 	StudioPluginLifecycleHooks,
 	StudioPluginMeta,
@@ -193,5 +195,74 @@ describe("StudioPlugin type contract", () => {
 		// @ts-expect-error — `trace` is not a valid severity level.
 		const invalidLevel: import("@/types/plugin.js").StudioLogLevel = "trace";
 		void invalidLevel;
+	});
+});
+
+describe("plugin contribution inference", () => {
+	const fakeMeta: StudioPluginMeta = {
+		id: "com.example.contrib",
+		name: "Contrib",
+		version: "1.0.0",
+		coreVersion: "^0.1.0",
+	};
+
+	it("StudioPluginContributing carries the Contributes parameter", () => {
+		interface FakeApi {
+			readonly thing: string;
+		}
+
+		const plugin: StudioPluginContributing<FakeApi> = {
+			meta: fakeMeta,
+			register: () => ({ meta: fakeMeta }),
+		};
+		void plugin;
+	});
+
+	it("InferPluginContributions infers the union from a tuple", () => {
+		interface ApiA {
+			readonly a: number;
+		}
+		interface ApiB {
+			readonly b: string;
+		}
+
+		const pluginA: StudioPluginContributing<ApiA> = {
+			meta: fakeMeta,
+			register: () => ({ meta: fakeMeta }),
+		};
+		const pluginB: StudioPluginContributing<ApiB> = {
+			meta: fakeMeta,
+			register: () => ({ meta: fakeMeta }),
+		};
+
+		const plugins = [pluginA, pluginB] as const;
+		type Contributed = InferPluginContributions<typeof plugins>;
+
+		const okA: Contributed = { a: 1 };
+		const okB: Contributed = { b: "x" };
+		void okA;
+		void okB;
+
+		// @ts-expect-error — value matches neither ApiA nor ApiB.
+		const bad: Contributed = { c: true };
+		void bad;
+	});
+
+	it("InferPluginContributions ignores non-Studio plugins in the tuple", () => {
+		interface ApiA {
+			readonly a: number;
+		}
+
+		const studioPlugin: StudioPluginContributing<ApiA> = {
+			meta: fakeMeta,
+			register: () => ({ meta: fakeMeta }),
+		};
+		const rawPuckPlugin = { overrides: {} } as const;
+
+		const plugins = [studioPlugin, rawPuckPlugin] as const;
+		type Contributed = InferPluginContributions<typeof plugins>;
+
+		const value: Contributed = { a: 7 };
+		void value;
 	});
 });

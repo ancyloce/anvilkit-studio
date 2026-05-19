@@ -196,11 +196,14 @@ export interface StudioAssetSource {
 	listPaginated?(query: StudioAssetListQuery): Promise<StudioAssetListPage>;
 	/**
 	 * Upload one or more files. The optional listener is fired with
-	 * progress envelopes if the source supports streaming progress.
+	 * progress envelopes if the source supports streaming progress. Pass
+	 * an `AbortSignal` to cancel an in-flight batch (e.g. on unmount);
+	 * sources that support cancellation reject with an `AbortError`.
 	 */
 	upload(
 		files: readonly File[],
 		listener?: StudioAssetUploadListener,
+		signal?: AbortSignal,
 	): Promise<readonly StudioAsset[]>;
 	/** Optional rename. Sidebar hides the menu item when omitted. */
 	rename?(assetId: string, nextName: string): Promise<void>;
