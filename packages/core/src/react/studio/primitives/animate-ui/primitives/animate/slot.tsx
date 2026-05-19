@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { motion, isMotionComponent, type HTMLMotionProps } from 'motion/react';
-import { cn } from '@/utils/cn';
+import * as React from "react";
+import { motion, isMotionComponent, type HTMLMotionProps } from "motion/react";
+import { cn } from "@/utils/cn";
 
 type AnyProps = Record<string, unknown>;
 
 type DOMMotionProps<T extends HTMLElement = HTMLElement> = Omit<
   HTMLMotionProps<keyof HTMLElementTagNameMap>,
-  'ref'
+  "ref"
 > & { ref?: React.Ref<T> };
 
 type WithAsChild<Base extends object> =
@@ -16,7 +16,12 @@ type WithAsChild<Base extends object> =
   | (Base & { asChild?: false | undefined });
 
 type SlotProps<T extends HTMLElement = HTMLElement> = {
-  // biome-ignore lint/suspicious/noExplicitAny: animate-ui upstream
+  // Adapter edge: callers do `const C = asChild ? Slot : motion.div`
+  // then `<C>{children}</C>`, so `children` must stay assignable to
+  // `motion.div`'s `ReactNode`. Slot itself narrows to a single
+  // element at runtime via `React.isValidElement` below; a stricter
+  // static type here breaks the union with `motion.div`.
+  // biome-ignore lint/suspicious/noExplicitAny: see comment above
   children?: any;
 } & DOMMotionProps<T>;
 
@@ -26,7 +31,7 @@ function mergeRefs<T>(
   return (node) => {
     refs.forEach((ref) => {
       if (!ref) return;
-      if (typeof ref === 'function') {
+      if (typeof ref === "function") {
         ref(node);
       } else {
         (ref as React.RefObject<T | null>).current = node;
@@ -64,7 +69,7 @@ function Slot<T extends HTMLElement = HTMLElement>({
   ...props
 }: SlotProps<T>) {
   const isAlreadyMotion =
-    typeof children.type === 'object' &&
+    typeof children.type === "object" &&
     children.type !== null &&
     isMotionComponent(children.type);
 

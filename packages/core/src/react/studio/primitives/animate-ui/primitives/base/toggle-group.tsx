@@ -1,37 +1,45 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Toggle as TogglePrimitive } from '@base-ui-components/react/toggle';
-import { ToggleGroup as ToggleGroupPrimitive } from '@base-ui-components/react/toggle-group';
-import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
+import * as React from "react";
+import { Toggle as TogglePrimitive } from "@base-ui-components/react/toggle";
+import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui-components/react/toggle-group";
+import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 
 import {
   Highlight,
   HighlightItem,
   type HighlightItemProps,
   type HighlightProps,
-} from '@/primitives/animate-ui/primitives/effects/highlight';
-import { getStrictContext } from '@/primitives/lib/get-strict-context';
-import { useControlledState } from '@/primitives/hooks/use-controlled-state';
+} from "@/primitives/animate-ui/primitives/effects/highlight";
+import { getStrictContext } from "@/primitives/lib/get-strict-context";
+import { useControlledState } from "@/primitives/hooks/use-controlled-state";
+
+type ToggleGroupProps = React.ComponentProps<typeof ToggleGroupPrimitive>;
+
+// Anchored to Base UI's own contract (`value?: readonly any[]`) rather
+// than a bare local `any[]`; the element type is intrinsic to the
+// upstream toggle-group API (values are arbitrary). Strip `readonly`
+// because the controlled-state hook stores a mutable array.
+type ToggleGroupValue =
+  NonNullable<ToggleGroupProps["value"]> extends readonly (infer E)[]
+    ? E[]
+    : never;
 
 type ToggleGroupContextType = {
-  // biome-ignore lint/suspicious/noExplicitAny: animate-ui upstream
-  value: any[];
-  setValue: ToggleGroupProps['onValueChange'];
+  value: ToggleGroupValue;
+  setValue: ToggleGroupProps["onValueChange"];
   multiple: boolean | undefined;
 };
 
 const [ToggleGroupProvider, useToggleGroup] =
-  getStrictContext<ToggleGroupContextType>('ToggleGroupContext');
-
-type ToggleGroupProps = React.ComponentProps<typeof ToggleGroupPrimitive>;
+  getStrictContext<ToggleGroupContextType>("ToggleGroupContext");
 
 function ToggleGroup(props: ToggleGroupProps) {
   const [value, setValue] = useControlledState({
-    // biome-ignore lint/suspicious/noExplicitAny: animate-ui upstream
-    value: props.value as any[],
-    // biome-ignore lint/suspicious/noExplicitAny: animate-ui upstream
-    defaultValue: props.defaultValue as any[],
+    // Adapter edge: Base UI hands back `readonly any[]`; the hook
+    // owns a mutable array, so strip `readonly` via the derived type.
+    value: props.value as ToggleGroupValue | undefined,
+    defaultValue: props.defaultValue as ToggleGroupValue | undefined,
     onChange: props.onValueChange,
   });
 
@@ -48,9 +56,9 @@ function ToggleGroup(props: ToggleGroupProps) {
 
 type ToggleProps = Omit<
   React.ComponentProps<typeof TogglePrimitive>,
-  'render'
+  "render"
 > &
-  HTMLMotionProps<'button'>;
+  HTMLMotionProps<"button">;
 
 function Toggle({
   value,
@@ -80,10 +88,10 @@ function Toggle({
   );
 }
 
-type ToggleGroupHighlightProps = Omit<HighlightProps, 'controlledItems'>;
+type ToggleGroupHighlightProps = Omit<HighlightProps, "controlledItems">;
 
 function ToggleGroupHighlight({
-  transition = { type: 'spring', stiffness: 200, damping: 25 },
+  transition = { type: "spring", stiffness: 200, damping: 25 },
   ...props
 }: ToggleGroupHighlightProps) {
   const { value } = useToggleGroup();
@@ -101,7 +109,7 @@ function ToggleGroupHighlight({
 }
 
 type ToggleHighlightProps = HighlightItemProps &
-  HTMLMotionProps<'div'> & {
+  HTMLMotionProps<"div"> & {
     children: React.ReactElement;
   };
 
@@ -123,14 +131,14 @@ function ToggleHighlight({ children, style, ...props }: ToggleHighlightProps) {
   if (multiple && React.isValidElement(children)) {
     const isActive = props.value && value && value.includes(props.value);
 
-    const element = children as React.ReactElement<React.ComponentProps<'div'>>;
+    const element = children as React.ReactElement<React.ComponentProps<"div">>;
 
     return React.cloneElement(
       children,
       {
         style: {
           ...element.props.style,
-          position: 'relative',
+          position: "relative",
         },
         ...element.props,
       },
@@ -139,7 +147,7 @@ function ToggleHighlight({ children, style, ...props }: ToggleHighlightProps) {
           {isActive && (
             <motion.div
               data-slot="toggle-highlight"
-              style={{ position: 'absolute', inset: 0, zIndex: 0, ...style }}
+              style={{ position: "absolute", inset: 0, zIndex: 0, ...style }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -150,7 +158,7 @@ function ToggleHighlight({ children, style, ...props }: ToggleHighlightProps) {
 
         <div
           style={{
-            position: 'relative',
+            position: "relative",
             zIndex: 1,
           }}
         >
