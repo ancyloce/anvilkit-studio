@@ -14,6 +14,20 @@
  *    build. This resolves `core-010` acceptance criterion #6 and is
  *    the reason `src/compat/` is a separate subpath barrel that the
  *    root `index.ts` does **not** re-export from.
+ * 3. **The anvilkit chrome path tree-shakes its icon set.** The
+ *    chrome (`StudioLayout` → `HeaderActionButton`) is loaded by a
+ *    dynamic `import()` from inside `<Studio>`, so it never counts
+ *    against the entry budget above and a `import * as Icons from
+ *    "lucide-react"` regression there would be invisible to (1)
+ *    (review §2.3). We separately bundle the built chrome module and
+ *    hold it under its own (generously-sized) budget: with explicit
+ *    named icon imports it sits at its primitive-dominated baseline;
+ *    pulling all of `lucide-react` blows far past it.
+ *    Unlike the `<Studio>` entry (resolved through the package
+ *    `exports` map on purpose), the chrome module is **not** a public
+ *    export, so this measurement intentionally points at the built
+ *    `dist/` file — it is asserting an internal bundle property, not
+ *    a consumer-facing one.
  *
  * ### How the check works
  *
@@ -54,7 +68,14 @@
  */
 
 import { execSync } from "node:child_process";
-import { mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import {
+	mkdir,
+	readFile,
+	readdir,
+	rm,
+	stat,
+	writeFile,
+} from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
@@ -68,9 +89,29 @@ const DIST_ENTRY = resolve(PACKAGE_ROOT, "dist/index.js");
 const TMP_DIR = resolve(PACKAGE_ROOT, ".bundle-check");
 const ENTRY_FILE = resolve(TMP_DIR, "studio-entry.mjs");
 const OUT_DIR = resolve(TMP_DIR, "out");
+const CHROME_ENTRY_FILE = resolve(TMP_DIR, "chrome-entry.mjs");
+const CHROME_OUT_DIR = resolve(TMP_DIR, "out-chrome");
+const CHROME_MODULE = resolve(
+	PACKAGE_ROOT,
+	"dist/react/studio/layout/HeaderActionButton.js",
+);
 
 /** Firm budget — raise only with a changeset justification. */
 const BUDGET_GZIPPED_BYTES = 25 * 1024;
+
+/**
+ * Chrome-path budget — the gzipped cost of the header-action chrome
+ * module and everything it pulls (its UI primitives + the curated
+ * Lucide icon set). With explicit named icon imports this sits around
+ * ~69 KB gz (primitives dominate; the 9 icons are a rounding error).
+ * A `import * as Icons from "lucide-react"` regression makes the
+ * library un-tree-shakeable and pulls the *entire* icon set (the
+ * minified lucide ESM alone is ~1 MB raw), blowing far past this.
+ * Headroom is intentionally generous so ordinary primitive churn does
+ * not false-fail; a deliberate heavy addition raises the budget with
+ * a changeset justification, exactly like the `<Studio>` budget.
+ */
+const CHROME_BUDGET_GZIPPED_BYTES = 96 * 1024;
 
 /** Peers: host-provided, never counted against the core budget. */
 const EXTERNAL_PEERS = [
@@ -164,18 +205,29 @@ async function ensureDistExists() {
 	}
 }
 
-async function writeEntry() {
+async function writeEntries() {
 	await rm(TMP_DIR, { recursive: true, force: true });
 	await mkdir(TMP_DIR, { recursive: true });
-	// Import from the package name, not a relative dist path, so
-	// esbuild resolves through the published exports map exactly the
+	// Studio: import from the package name, not a relative dist path,
+	// so esbuild resolves through the published exports map exactly the
 	// way a consumer would. Pointing at `../dist/index.js` directly
 	// would sidestep the exports map and give a misleading bundle.
-	const body = `export { Studio } from "@anvilkit/core";\n`;
-	await writeFile(ENTRY_FILE, body, "utf8");
+	await writeFile(
+		ENTRY_FILE,
+		`export { Studio } from "@anvilkit/core";\n`,
+		"utf8",
+	);
+	// Chrome: the chrome module is NOT a public export, so this
+	// intentionally points at the built dist file (see file header
+	// rationale #3) — it asserts an internal bundle property.
+	await writeFile(
+		CHROME_ENTRY_FILE,
+		`export { HeaderActionButton } from ${JSON.stringify(CHROME_MODULE)};\n`,
+		"utf8",
+	);
 }
 
-async function bundle() {
+async function bundle(entryFile, outDir) {
 	// `splitting: true` turns dynamic `import()` calls in the source
 	// into separate chunks — exactly what real host bundlers (Next.js,
 	// Vite, Rspack) do by default. Without splitting, esbuild inlines
@@ -188,8 +240,8 @@ async function bundle() {
 	// so they correctly do not count toward the "cost of adopting
 	// `<Studio>`" budget.
 	const result = await build({
-		entryPoints: [ENTRY_FILE],
-		outdir: OUT_DIR,
+		entryPoints: [entryFile],
+		outdir: outDir,
 		bundle: true,
 		format: "esm",
 		platform: "browser",
@@ -230,51 +282,67 @@ async function findEntryChunk(metafile) {
 	);
 }
 
-async function main() {
-	await ensureDistExists();
-	await writeEntry();
-	const metafile = await bundle();
+/**
+ * Bundle one entry, gzip its entry chunk, print the report line, and
+ * return `{ gzippedBytes, text, over }`. `text` is the un-gzipped
+ * entry-chunk source (used for the `aiHostAdapter` leak grep).
+ */
+async function measureEntry(label, entryFile, outDir, budget) {
+	const metafile = await bundle(entryFile, outDir);
 	const entryChunkPath = await findEntryChunk(metafile);
 
 	const raw = await readFile(entryChunkPath);
-	const rawBytes = raw.length;
-	const gzipped = gzipSync(raw, { level: 9 });
-	const gzippedBytes = gzipped.length;
+	const gzippedBytes = gzipSync(raw, { level: 9 }).length;
+	const pct = ((gzippedBytes / budget) * 100).toFixed(1);
 
-	const text = raw.toString("utf8");
-	const leaks = FORBIDDEN_STRINGS.filter((needle) => text.includes(needle));
-
-	const pct = ((gzippedBytes / BUDGET_GZIPPED_BYTES) * 100).toFixed(1);
-	console.log("check-bundle-budget: <Studio> entry bundle");
+	console.log(`check-bundle-budget: ${label}`);
 	console.log(`  entry chunk: ${basename(entryChunkPath)}`);
-	console.log(`  raw:         ${rawBytes.toLocaleString()} bytes`);
+	console.log(`  raw:         ${raw.length.toLocaleString()} bytes`);
 	console.log(
-		`  gzipped:     ${gzippedBytes.toLocaleString()} bytes (${pct}% of ${BUDGET_GZIPPED_BYTES.toLocaleString()} B budget)`,
+		`  gzipped:     ${gzippedBytes.toLocaleString()} bytes (${pct}% of ${budget.toLocaleString()} B budget)`,
 	);
 
-	// List split chunks (informational). These are async chunks that
-	// only load on demand — the budget excludes them on purpose.
-	const allFiles = await readdir(OUT_DIR);
-	const asyncChunks = allFiles.filter(
+	// Informational: async chunks load on demand and are excluded.
+	const asyncChunks = (await readdir(outDir)).filter(
 		(f) => f !== basename(entryChunkPath) && f.endsWith(".js"),
 	);
 	if (asyncChunks.length > 0) {
 		console.log(`  async chunks (not counted): ${asyncChunks.join(", ")}`);
 	}
 
+	return {
+		gzippedBytes,
+		text: raw.toString("utf8"),
+		over: gzippedBytes - budget,
+	};
+}
+
+async function main() {
+	await ensureDistExists();
+	await writeEntries();
+
 	let failed = false;
 
-	if (gzippedBytes > BUDGET_GZIPPED_BYTES) {
+	// 1. <Studio> entry budget + compat tree-shake assertion.
+	const studio = await measureEntry(
+		"<Studio> entry bundle",
+		ENTRY_FILE,
+		OUT_DIR,
+		BUDGET_GZIPPED_BYTES,
+	);
+	if (studio.over > 0) {
 		console.error("");
 		console.error(
-			`check-bundle-budget: FAIL — entry chunk is ${gzippedBytes - BUDGET_GZIPPED_BYTES} bytes over the ${BUDGET_GZIPPED_BYTES}-byte budget.`,
+			`check-bundle-budget: FAIL — <Studio> entry chunk is ${studio.over} bytes over the ${BUDGET_GZIPPED_BYTES}-byte budget.`,
 		);
 		console.error(
 			"Raise the budget in a changeset only if a legitimate feature justifies it.",
 		);
 		failed = true;
 	}
-
+	const leaks = FORBIDDEN_STRINGS.filter((needle) =>
+		studio.text.includes(needle),
+	);
 	if (leaks.length > 0) {
 		console.error("");
 		console.error(
@@ -282,6 +350,25 @@ async function main() {
 		);
 		console.error(
 			"`aiHostAdapter` leaked into the default entry chunk. Fix by ensuring src/index.ts does not re-export from src/compat/ and that <Studio> loads the adapter via dynamic `import()` only.",
+		);
+		failed = true;
+	}
+
+	// 2. Chrome-path budget — guards the curated Lucide icon set
+	//    against a `import * as Icons` tree-shaking regression.
+	const chrome = await measureEntry(
+		"anvilkit chrome bundle (HeaderActionButton)",
+		CHROME_ENTRY_FILE,
+		CHROME_OUT_DIR,
+		CHROME_BUDGET_GZIPPED_BYTES,
+	);
+	if (chrome.over > 0) {
+		console.error("");
+		console.error(
+			`check-bundle-budget: FAIL — chrome bundle is ${chrome.over} bytes over the ${CHROME_BUDGET_GZIPPED_BYTES}-byte budget.`,
+		);
+		console.error(
+			'Likely a `import * as Icons from "lucide-react"` regression in HeaderActionButton.tsx — use explicit named icon imports (the ICON_REGISTRY).',
 		);
 		failed = true;
 	}
