@@ -299,6 +299,18 @@ export function createLifecycleManager(
 	 * `running`. `emit("onInit")` never rejects (hook throws are
 	 * logged + swallowed — non-veto), so a single `.then` suffices.
 	 * Idempotent: only runs from the `init` phase.
+	 *
+	 * **Engine invariants (relied on by callers; do not weaken):**
+	 * - `advanceTo` is **idempotent** and **non-reentrant** — concurrent
+	 *   callers are serialized by the single-threaded `currentPhase`
+	 *   field, and a repeat transition for the same runtime is a no-op
+	 *   (StrictMode double-invoke / error-boundary remount safe).
+	 * - `onReady` and the debounced `onDataChange` are intentionally
+	 *   **fire-and-forget**: the engine calls `void emit(...)` and never
+	 *   awaits it. `emit()` returns `Promise<void>` for *internal*
+	 *   sequencing (e.g. `onBeforePublish`), not as a "the engine
+	 *   finished this hook" signal — a caller that assumes `onReady`
+	 *   completed before some later step will silently race.
 	 */
 	function scheduleReady(ctx: StudioPluginContext): void {
 		if (currentPhase !== "init") {
@@ -446,6 +458,11 @@ export function createLifecycleManager(
 		}
 		for (const [index, result] of settled.entries()) {
 			if (result.status === "rejected") {
+				// `Promise.allSettled` preserves input order, so `settled`
+				// is 1:1 with `registrations` — this lookup is always
+				// present. The guard is a `noUncheckedIndexedAccess`
+				// formality (strips `| undefined`), not real
+				// defensiveness, and is structurally unreachable.
 				const registration = registrations[index];
 				if (!registration) {
 					continue;
@@ -585,6 +602,9 @@ export function createLifecycleManager(
 
 		for (const [index, result] of settled.entries()) {
 			if (result.status === "rejected") {
+				// 1:1 with `registrations` (allSettled preserves order);
+				// the guard is a `noUncheckedIndexedAccess` formality,
+				// structurally unreachable — not real defensiveness.
 				const registration = registrations[index];
 				if (!registration) {
 					continue;

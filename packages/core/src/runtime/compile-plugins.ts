@@ -215,12 +215,16 @@ function compareSemver(a: ParsedSemver, b: ParsedSemver): number {
 
 	const min = Math.min(a.prerelease.length, b.prerelease.length);
 	for (let i = 0; i < min; i++) {
-		const segA = a.prerelease[i] as string | number;
-		const segB = b.prerelease[i] as string | number;
+		// `i < min <= length`, so the element is present — the assertion
+		// only strips the `| undefined` `noUncheckedIndexedAccess` adds.
+		const segA: string | number = a.prerelease[i] as string | number;
+		const segB: string | number = b.prerelease[i] as string | number;
 		const numA = typeof segA === "number";
 		const numB = typeof segB === "number";
 		if (numA && numB) {
-			if (segA !== segB) return (segA as number) - (segB as number);
+			// `numA && numB` already narrows both to `number` (aliased
+			// type-guard) — no re-cast needed.
+			if (segA !== segB) return segA - segB;
 			continue;
 		}
 		if (numA) return -1;
