@@ -19,6 +19,7 @@
 import { describe, expect, it } from "vitest";
 
 import { StudioConfigSchema } from "@/config/schema";
+import { defineStudioPlugin } from "@/types/plugin";
 import type {
 	InferPluginContributions,
 	StudioPlugin,
@@ -211,10 +212,11 @@ describe("plugin contribution inference", () => {
 			readonly thing: string;
 		}
 
-		const plugin: StudioPluginContributing<FakeApi> = {
-			meta: fakeMeta,
-			register: () => ({ meta: fakeMeta }),
-		};
+		const plugin: StudioPluginContributing<FakeApi> =
+			defineStudioPlugin<FakeApi>({
+				meta: fakeMeta,
+				register: () => ({ meta: fakeMeta }),
+			});
 		void plugin;
 	});
 
@@ -226,14 +228,14 @@ describe("plugin contribution inference", () => {
 			readonly b: string;
 		}
 
-		const pluginA: StudioPluginContributing<ApiA> = {
+		const pluginA = defineStudioPlugin<ApiA>({
 			meta: fakeMeta,
 			register: () => ({ meta: fakeMeta }),
-		};
-		const pluginB: StudioPluginContributing<ApiB> = {
+		});
+		const pluginB = defineStudioPlugin<ApiB>({
 			meta: fakeMeta,
 			register: () => ({ meta: fakeMeta }),
-		};
+		});
 
 		const plugins = [pluginA, pluginB] as const;
 		type Contributed = InferPluginContributions<typeof plugins>;
@@ -248,21 +250,31 @@ describe("plugin contribution inference", () => {
 		void bad;
 	});
 
-	it("InferPluginContributions ignores non-Studio plugins in the tuple", () => {
+	it("InferPluginContributions ignores unbranded plugins in the tuple", () => {
 		interface ApiA {
 			readonly a: number;
 		}
 
-		const studioPlugin: StudioPluginContributing<ApiA> = {
+		const studioPlugin = defineStudioPlugin<ApiA>({
+			meta: fakeMeta,
+			register: () => ({ meta: fakeMeta }),
+		});
+		// A plain `StudioPlugin` literal (no brand) and a raw Puck plugin
+		// must collapse to `never`, NOT contribute `unknown` to the union.
+		const plainStudioPlugin: StudioPlugin = {
 			meta: fakeMeta,
 			register: () => ({ meta: fakeMeta }),
 		};
 		const rawPuckPlugin = { overrides: {} } as const;
 
-		const plugins = [studioPlugin, rawPuckPlugin] as const;
+		const plugins = [studioPlugin, plainStudioPlugin, rawPuckPlugin] as const;
 		type Contributed = InferPluginContributions<typeof plugins>;
 
 		const value: Contributed = { a: 7 };
 		void value;
+
+		// @ts-expect-error — `unknown` would accept this; `ApiA` does not.
+		const bad: Contributed = "anything";
+		void bad;
 	});
 });

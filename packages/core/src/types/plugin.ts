@@ -902,22 +902,43 @@ declare const StudioPluginContributesBrand: unique symbol;
 /**
  * A `StudioPlugin` that advertises a `Contributes` capability surface.
  *
- * Plugin authors annotate their factory's return type with this so the
- * contributed types are recoverable via {@link InferPluginContributions}:
+ * Plugin authors return one via {@link defineStudioPlugin} so the
+ * contributed types are recoverable through
+ * {@link InferPluginContributions}:
  *
  * ```ts
  * export function createThingPlugin(): StudioPluginContributing<ThingApi> {
- *   return { meta, register };
+ *   return defineStudioPlugin<ThingApi>({ meta, register });
  * }
  * ```
  *
- * Implementation note: the brand property is `unique symbol`-keyed and
- * optional, so a plain `{ meta, register }` literal still satisfies the
- * type and no runtime value is ever produced.
+ * Implementation note: the brand property is required at the type level
+ * (so unbranded `StudioPlugin` cannot accidentally satisfy
+ * {@link InferPluginContributions} and contribute `unknown` to the
+ * inferred union) but is `unique symbol`-keyed, so it never collides
+ * with real properties and is erased at runtime — no value is ever
+ * produced or read. The required-but-erased shape is fulfilled by the
+ * type-only cast inside `defineStudioPlugin`.
  */
 export interface StudioPluginContributing<Contributes>
 	extends StudioPlugin<PuckConfig> {
-	readonly [StudioPluginContributesBrand]?: Contributes;
+	readonly [StudioPluginContributesBrand]: Contributes;
+}
+
+/**
+ * Brand a plain `StudioPlugin` literal as
+ * {@link StudioPluginContributing}`<Contributes>`.
+ *
+ * Pure type-level cast — the runtime value is the same object the caller
+ * passed in. Exists because the brand property is required on the
+ * sub-interface (to prevent inference pollution) but has no runtime
+ * representation; this helper concentrates the unavoidable `as` cast in
+ * one place so plugin authors don't sprinkle it across factories.
+ */
+export function defineStudioPlugin<Contributes>(
+	plugin: StudioPlugin<PuckConfig>,
+): StudioPluginContributing<Contributes> {
+	return plugin as StudioPluginContributing<Contributes>;
 }
 
 /** Either a Studio plugin or a raw `@puckeditor/core` plugin. */
@@ -930,11 +951,13 @@ export type StudioAnyPlugin<UserConfig extends PuckConfig = PuckConfig> =
  *
  * Distributes over the tuple, picks up the branded `Contributes` from
  * any {@link StudioPluginContributing} element, and collapses everything
- * else (raw `StudioPlugin`, `PuckPlugin`, …) to `never`.
+ * else (raw `StudioPlugin`, `PuckPlugin`, …) to `never`. The brand key
+ * on the conditional is **required** (not `?`), so an unbranded
+ * `StudioPlugin` does not match and cannot contribute `unknown`.
  */
 export type InferPluginContributions<Plugins extends readonly unknown[]> = {
 	[Index in keyof Plugins]: Plugins[Index] extends {
-		readonly [StudioPluginContributesBrand]?: infer Contributes;
+		readonly [StudioPluginContributesBrand]: infer Contributes;
 	}
 		? Contributes
 		: never;

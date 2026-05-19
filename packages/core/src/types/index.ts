@@ -64,6 +64,7 @@ export type {
 	StudioPluginSlotContribution,
 	StudioSlotId,
 } from "./plugin.js";
+export { defineStudioPlugin } from "./plugin.js";
 export type {
 	StudioAsset,
 	StudioAssetAction,
