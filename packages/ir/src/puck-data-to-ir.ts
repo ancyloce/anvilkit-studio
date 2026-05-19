@@ -6,9 +6,11 @@ import type {
 	PageIRNode,
 } from "@anvilkit/core/types";
 import type { Config, Data } from "@puckeditor/core";
-import { collectAssets } from "./collect-assets.js";
 import { identifySlots } from "./identify-slots.js";
+import { collectNodeOwnAssets } from "./internal/asset-walker.js";
 import { canonicalizeProps, deepFreeze } from "./internal/canonicalize.js";
+import { deriveAssetId } from "./internal/derive-asset-id.js";
+import { MAX_TREE_DEPTH, type Mutable } from "./internal/types.js";
 
 type PuckContentItem = Data["content"][number];
 type SlotKind = "slot" | "zone";
@@ -185,32 +187,62 @@ function emitCanonicalWarnings(
  * manifest.
  *
  * @param data   - Puck editor document to normalize.
- * @param _config - Puck `Config` matching `data` (used by phase3-004
- *   helpers; lightly used in the base transform).
+ * @param config - Puck `Config` matching `data`. **Required** — used
+ *   by {@link identifySlots} to tell slot fields (descended into as
+ *   `children`) apart from plain serializable props.
  * @param opts   - See {@link PuckDataToIROptions}.
  * @returns The normalized, frozen page IR document.
  */
 export function puckDataToIR(
 	data: Data,
-	_config: Config,
+	config: Config,
 	opts?: PuckDataToIROptions,
 ): PageIR {
 	const now = opts?.now ?? (() => new Date());
 	const onWarning = opts?.onWarning;
-	const slotMap = identifySlots(_config);
+	const slotMap = identifySlots(config);
 	const zonesByParent = groupZonesByParent(data);
+	let synthesizedIdCounter = 0;
 
 	function mapContent(
 		content: readonly PuckContentItem[],
-		parentSlot?: ParentSlot,
+		parentSlot: ParentSlot | undefined,
+		depth: number,
 	): PageIRNode[] {
-		return content.map((item) => mapItem(item, parentSlot));
+		if (depth > MAX_TREE_DEPTH) {
+			onWarning?.({
+				level: "warn",
+				code: "MAX_DEPTH_EXCEEDED",
+				message: `Page tree exceeded the maximum depth of ${MAX_TREE_DEPTH}; deeper nodes were dropped to avoid a stack overflow.`,
+			});
+			return [];
+		}
+		return content.map((item) => mapItem(item, parentSlot, depth));
 	}
 
-	function mapItem(item: PuckContentItem, parentSlot?: ParentSlot): PageIRNode {
-		const rawProps = item.props as Record<string, unknown> & { id: string };
-		const { id, ...restProps } = rawProps;
+	function mapItem(
+		item: PuckContentItem,
+		parentSlot: ParentSlot | undefined,
+		depth: number,
+	): PageIRNode {
+		const rawProps = (
+			item.props && typeof item.props === "object" ? item.props : {}
+		) as Record<string, unknown>;
 		const type = item.type as string;
+		const rawId = rawProps.id;
+		let id: string;
+		if (typeof rawId === "string" && rawId.trim() !== "") {
+			id = rawId;
+		} else {
+			id = `anvilkit-missing-id-${synthesizedIdCounter++}`;
+			onWarning?.({
+				level: "warn",
+				code: "MISSING_NODE_ID",
+				message: `Component "${type}" was missing a string \`props.id\`; synthesized "${id}". Round-trip stability is not guaranteed for this node.`,
+				nodeId: id,
+			});
+		}
+		const { id: _discardedId, ...restProps } = rawProps;
 		const slotKeys = slotMap.get(type) ?? [];
 		const propsForIR: Record<string, unknown> = { ...restProps };
 		const children: PageIRNode[] = [];
@@ -223,10 +255,11 @@ export function puckDataToIR(
 				delete propsForIR[slotKey];
 				populatedSlotProps.add(slotKey);
 				children.push(
-					...mapContent(slotValue as readonly PuckContentItem[], {
-						name: slotKey,
-						kind: "slot",
-					}),
+					...mapContent(
+						slotValue as readonly PuckContentItem[],
+						{ name: slotKey, kind: "slot" },
+						depth + 1,
+					),
 				);
 			}
 		}
@@ -235,10 +268,11 @@ export function puckDataToIR(
 			if (populatedSlotProps.has(zone.name)) continue;
 
 			children.push(
-				...mapContent(zone.content, {
-					name: zone.name,
-					kind: "zone",
-				}),
+				...mapContent(
+					zone.content,
+					{ name: zone.name, kind: "zone" },
+					depth + 1,
+				),
 			);
 		}
 
@@ -255,22 +289,28 @@ export function puckDataToIR(
 			...(children.length > 0 ? { children } : {}),
 		};
 
-		const nodeAssets = collectAssets(node);
-		if (nodeAssets.length > 0) {
-			(node as { assets?: typeof nodeAssets }).assets = nodeAssets;
-		}
-
 		return node;
 	}
 
 	// --- Build child nodes from data.content and root-level legacy zones ---
-	const children = mapContent(data.content);
+	let rootContent: readonly PuckContentItem[];
+	if (Array.isArray(data.content)) {
+		rootContent = data.content;
+	} else {
+		rootContent = [];
+		if (data.content !== undefined) {
+			onWarning?.({
+				level: "warn",
+				code: "INVALID_CONTENT",
+				message: "`data.content` was not an array; treated as empty.",
+			});
+		}
+	}
+
+	const children = mapContent(rootContent, undefined, 0);
 	for (const zone of zonesByParent.get("root") ?? []) {
 		children.push(
-			...mapContent(zone.content, {
-				name: zone.name,
-				kind: "zone",
-			}),
+			...mapContent(zone.content, { name: zone.name, kind: "zone" }, 0),
 		);
 	}
 
@@ -298,11 +338,58 @@ export function puckDataToIR(
 		...(children.length > 0 ? { children } : {}),
 	};
 
-	// --- Collect all assets across the tree (delegates to collectAssets) ---
-	const assets = mergeAssetsByUrl(
-		collectExplicitAssets(data),
-		collectAssets(root),
-	);
+	// --- Collect all assets in a single post-build pass ---
+	// `collectInto` walks the tree exactly once: each node's own
+	// prop assets first, then its children in order (dedup by url,
+	// keep first). This reproduces the previous per-node + root
+	// pre-order/first-encounter ordering while turning the O(N²)
+	// repeated-subtree walk into a single O(N) traversal. It attaches
+	// each node's `assets` slice as it unwinds — except the synthetic
+	// root, which (as before) only feeds the document-level manifest.
+	function collectInto(
+		node: PageIRNode,
+		isRoot: boolean,
+	): readonly PageIRAsset[] {
+		const local = new Map<string, PageIRAsset>();
+
+		for (const asset of collectNodeOwnAssets(
+			node.props as Record<string, unknown>,
+			deriveAssetId,
+		)) {
+			if (!local.has(asset.url)) local.set(asset.url, asset);
+		}
+
+		for (const child of node.children ?? []) {
+			for (const asset of collectInto(child, false)) {
+				if (!local.has(asset.url)) local.set(asset.url, asset);
+			}
+		}
+
+		const collected = [...local.values()];
+		if (!isRoot && collected.length > 0) {
+			(node as Mutable<PageIRNode>).assets = collected;
+		}
+		return collected;
+	}
+
+	const collectedAssets = collectInto(root, true);
+	const assets = mergeAssetsByUrl(collectExplicitAssets(data), collectedAssets);
+
+	// Unify ids: rewrite every `node.assets` entry to the canonical
+	// manifest entry sharing its url, so an explicit asset's id and a
+	// collected asset's FNV id never disagree for the same url.
+	const assetByUrl = new Map(assets.map((asset) => [asset.url, asset]));
+	function unifyAssetIds(node: PageIRNode): void {
+		if (node.assets !== undefined) {
+			(node as Mutable<PageIRNode>).assets = node.assets.map(
+				(asset) => assetByUrl.get(asset.url) ?? asset,
+			);
+		}
+		for (const child of node.children ?? []) {
+			unifyAssetIds(child);
+		}
+	}
+	unifyAssetIds(root);
 
 	// --- Metadata ---
 	const metadata: PageIRMetadata = {

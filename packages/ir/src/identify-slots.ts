@@ -1,6 +1,14 @@
 import type { Config } from "@puckeditor/core";
 
 /**
+ * Per-`Config` memo. `Config` identity is stable for the lifetime of
+ * an editor session, so callers that re-derive IR on every keystroke
+ * pay the O(components·fields) scan once. `WeakMap` keeps this from
+ * pinning configs in memory.
+ */
+const slotCache = new WeakMap<Config, Map<string, readonly string[]>>();
+
+/**
  * Inspect a Puck `Config` and return the set of field keys that
  * behave as `slot` (nested child-tree) fields, grouped by
  * component name.
@@ -22,6 +30,13 @@ import type { Config } from "@puckeditor/core";
  *   included with an empty array.
  */
 export function identifySlots(config: Config): Map<string, readonly string[]> {
+	// Return a fresh Map view each call: callers historically receive
+	// an owned Map and the cache must not be mutable through the
+	// public return value. The copy is O(components) — still far
+	// cheaper than the O(components·fields) scan it replaces.
+	const cached = slotCache.get(config);
+	if (cached) return new Map(cached);
+
 	const result = new Map<string, readonly string[]>();
 
 	for (const [name, componentConfig] of Object.entries(
@@ -43,8 +58,9 @@ export function identifySlots(config: Config): Map<string, readonly string[]> {
 			}
 		}
 
-		result.set(name, slotKeys.sort());
+		result.set(name, Object.freeze(slotKeys.sort()));
 	}
 
-	return result;
+	slotCache.set(config, result);
+	return new Map(result);
 }

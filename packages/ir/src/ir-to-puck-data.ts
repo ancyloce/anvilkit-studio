@@ -1,13 +1,7 @@
-import type { PageIR } from "@anvilkit/core/types";
+import type { PageIR, PageIRNode } from "@anvilkit/core/types";
 import type { Data } from "@puckeditor/core";
 
 type PuckContentItem = Data["content"][number];
-type SlotKind = "slot" | "zone";
-type PageIRNodeWithSlots = PageIR["root"] & {
-	readonly slot?: string;
-	readonly slotKind?: SlotKind;
-	readonly children?: readonly PageIRNodeWithSlots[];
-};
 
 const DEFAULT_NESTED_SLOT = "children";
 
@@ -27,11 +21,15 @@ function appendSlotContent(
  * Reverse of {@link puckDataToIR}: rebuild a Puck `Data` document
  * from a {@link PageIR}.
  *
- * This function proves the round-trip guarantee — the invariant
- * `irToPuckData(puckDataToIR(d)) ≡ d` is what lets us snapshot
- * test IR shapes without drift. It is also the entry point the AI
- * copilot plugin uses to turn a validated LLM `PageIR` response
- * back into a `setData` payload.
+ * This function backs the round-trip guarantee: for serializable,
+ * already-canonical Puck `Data`, `irToPuckData(puckDataToIR(d))` is
+ * *structurally equivalent* to `d`. (The forward transform is
+ * intentionally normalizing — it sorts keys and drops
+ * functions/`undefined`/non-JSON values — so the equivalence is
+ * structural, not byte-for-byte, for non-canonical input.) That
+ * guarantee is what lets us snapshot-test IR shapes without drift.
+ * It is also the entry point the AI copilot plugin uses to turn a
+ * validated LLM `PageIR` response back into a `setData` payload.
  *
  * Returns a plain (un-frozen) Puck `Data` so Puck can mutate it.
  *
@@ -41,7 +39,7 @@ function appendSlotContent(
 export function irToPuckData(ir: PageIR): Data {
 	const zones: Record<string, PuckContentItem[]> = {};
 
-	function nodeToContent(node: PageIRNodeWithSlots): PuckContentItem {
+	function nodeToContent(node: PageIRNode): PuckContentItem {
 		const props: Record<string, unknown> = {
 			id: node.id,
 			...(node.props as Record<string, unknown>),
@@ -74,7 +72,7 @@ export function irToPuckData(ir: PageIR): Data {
 		...(ir.root.props as Record<string, unknown>),
 	};
 
-	const rootNode = ir.root as PageIRNodeWithSlots;
+	const rootNode = ir.root;
 
 	for (const child of rootNode.children ?? []) {
 		const childContent = nodeToContent(child);
