@@ -1,0 +1,5911 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "@anvilkit/core",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 25,
+			"name": "StudioConfigError",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Thrown when Studio configuration validation fails.\r\n\r\nRaised by "
+					},
+					{
+						"kind": "code",
+						"text": "`createStudioConfig()`"
+					},
+					{
+						"kind": "text",
+						"text": " ("
+					},
+					{
+						"kind": "code",
+						"text": "`core-011`"
+					},
+					{
+						"kind": "text",
+						"text": ") when the Zod schema\r\nrejects the merged configuration. The underlying "
+					},
+					{
+						"kind": "code",
+						"text": "`ZodError`"
+					},
+					{
+						"kind": "text",
+						"text": " is\r\nattached via the standard ES2022 "
+					},
+					{
+						"kind": "code",
+						"text": "`cause`"
+					},
+					{
+						"kind": "text",
+						"text": " field so host apps can\r\ndrill into the per-field issues.\r\n\r\nKept here (not in "
+					},
+					{
+						"kind": "code",
+						"text": "`src/config/`"
+					},
+					{
+						"kind": "text",
+						"text": ") so every runtime error ships as\r\na single, tree-shakeable module under "
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/core/runtime`"
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 26,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 124,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L124"
+						}
+					],
+					"signatures": [
+						{
+							"id": 27,
+							"name": "StudioConfigError",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "runtime/errors.ts",
+									"line": 124,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L124"
+								}
+							],
+							"parameters": [
+								{
+									"id": 28,
+									"name": "message",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 29,
+									"name": "options",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es2022.error.d.ts",
+											"qualifiedName": "ErrorOptions"
+										},
+										"name": "ErrorOptions",
+										"package": "typescript"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 25,
+								"name": "StudioConfigError",
+								"package": "@anvilkit/core"
+							},
+							"overwrites": {
+								"type": "reference",
+								"target": 33,
+								"name": "StudioError.constructor"
+							}
+						}
+					],
+					"overwrites": {
+						"type": "reference",
+						"target": 32,
+						"name": "StudioError.constructor"
+					}
+				},
+				{
+					"id": 30,
+					"name": "code",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable failure code for config errors. See "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioError.code",
+								"target": 36
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 122,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L122"
+						}
+					],
+					"type": {
+						"type": "literal",
+						"value": "StudioConfigError"
+					},
+					"defaultValue": "\"StudioConfigError\"",
+					"overwrites": {
+						"type": "reference",
+						"target": 36,
+						"name": "StudioError.code"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						26
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						30
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/errors.ts",
+					"line": 118,
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L118"
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"target": 31,
+					"name": "StudioError",
+					"package": "@anvilkit/core"
+				}
+			]
+		},
+		{
+			"id": 31,
+			"name": "StudioError",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {
+				"isAbstract": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Abstract base class for every "
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/core`"
+					},
+					{
+						"kind": "text",
+						"text": " runtime error.\r\n\r\nNever thrown directly — subclass instead. The abstract "
+					},
+					{
+						"kind": "code",
+						"text": "`code`"
+					},
+					{
+						"kind": "text",
+						"text": " field\r\nforces every concrete subclass to declare a stable, machine-readable\r\nidentifier, which host apps use to branch on specific failure modes\r\nwithout string-matching on the message.\r\n\r\nThe "
+					},
+					{
+						"kind": "code",
+						"text": "`Object.setPrototypeOf(this, new.target.prototype)`"
+					},
+					{
+						"kind": "text",
+						"text": " call in the\r\nconstructor guarantees "
+					},
+					{
+						"kind": "code",
+						"text": "`instanceof`"
+					},
+					{
+						"kind": "text",
+						"text": " works correctly across the\r\nprototype chain even when the runtime is transpiled to older ES\r\ntargets or consumed via CJS interop. With "
+					},
+					{
+						"kind": "code",
+						"text": "`target: ES2022`"
+					},
+					{
+						"kind": "text",
+						"text": " it is\r\na harmless no-op — kept so the code remains portable."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 32,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 59,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59"
+						}
+					],
+					"signatures": [
+						{
+							"id": 33,
+							"name": "StudioError",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "runtime/errors.ts",
+									"line": 59,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59"
+								}
+							],
+							"parameters": [
+								{
+									"id": 34,
+									"name": "message",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 35,
+									"name": "options",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es2022.error.d.ts",
+											"qualifiedName": "ErrorOptions"
+										},
+										"name": "ErrorOptions",
+										"package": "typescript"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 31,
+								"name": "StudioError",
+								"package": "@anvilkit/core"
+							},
+							"overwrites": {
+								"type": "reference",
+								"target": -1,
+								"name": "Error.constructor",
+								"package": "typescript"
+							}
+						}
+					],
+					"overwrites": {
+						"type": "reference",
+						"target": -1,
+						"name": "Error.constructor",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 36,
+					"name": "code",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isAbstract": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable, machine-readable failure identifier.\r\n\r\nSubclasses must override this with a constant literal so host\r\napps can branch on "
+							},
+							{
+								"kind": "code",
+								"text": "`err.code`"
+							},
+							{
+								"kind": "text",
+								"text": " without string-matching on the\r\nhuman-readable message."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 57,
+							"character": 19,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L57"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						32
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						36
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/errors.ts",
+					"line": 49,
+					"character": 22,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L49"
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"target": {
+						"packageName": "typescript",
+						"packagePath": "lib/lib.es5.d.ts",
+						"qualifiedName": "Error"
+					},
+					"name": "Error",
+					"package": "typescript"
+				}
+			],
+			"extendedBy": [
+				{
+					"type": "reference",
+					"target": 25,
+					"name": "StudioConfigError"
+				},
+				{
+					"type": "reference",
+					"target": 37,
+					"name": "StudioExportError"
+				},
+				{
+					"type": "reference",
+					"target": 45,
+					"name": "StudioPluginError"
+				}
+			]
+		},
+		{
+			"id": 37,
+			"name": "StudioExportError",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Thrown when a registered export format's "
+					},
+					{
+						"kind": "code",
+						"text": "`run()`"
+					},
+					{
+						"kind": "text",
+						"text": " implementation\r\nfails.\r\n\r\nRaised by the export pipeline ("
+					},
+					{
+						"kind": "code",
+						"text": "`core-009`"
+					},
+					{
+						"kind": "text",
+						"text": ") when a format throws or\r\nreturns a rejected promise. The "
+					},
+					{
+						"kind": "code",
+						"text": "`formatId`"
+					},
+					{
+						"kind": "text",
+						"text": " field identifies which\r\nformat failed so host apps can surface a targeted message\r\n(\"HTML export failed: …\") without introspecting the cause.\r\n\r\nAdvisory diagnostics should flow through "
+					},
+					{
+						"kind": "code",
+						"text": "`ExportResult.warnings`"
+					},
+					{
+						"kind": "text",
+						"text": "\r\ninstead — this error is reserved for hard failures where no\r\ncontent could be produced at all."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 38,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 155,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L155"
+						}
+					],
+					"signatures": [
+						{
+							"id": 39,
+							"name": "StudioExportError",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "runtime/errors.ts",
+									"line": 155,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L155"
+								}
+							],
+							"parameters": [
+								{
+									"id": 40,
+									"name": "formatId",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 41,
+									"name": "message",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 42,
+									"name": "options",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es2022.error.d.ts",
+											"qualifiedName": "ErrorOptions"
+										},
+										"name": "ErrorOptions",
+										"package": "typescript"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 37,
+								"name": "StudioExportError",
+								"package": "@anvilkit/core"
+							},
+							"overwrites": {
+								"type": "reference",
+								"target": 33,
+								"name": "StudioError.constructor"
+							}
+						}
+					],
+					"overwrites": {
+						"type": "reference",
+						"target": 32,
+						"name": "StudioError.constructor"
+					}
+				},
+				{
+					"id": 43,
+					"name": "code",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable failure code for export errors. See "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioError.code",
+								"target": 36
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 147,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L147"
+						}
+					],
+					"type": {
+						"type": "literal",
+						"value": "StudioExportError"
+					},
+					"defaultValue": "\"StudioExportError\"",
+					"overwrites": {
+						"type": "reference",
+						"target": 36,
+						"name": "StudioError.code"
+					}
+				},
+				{
+					"id": 44,
+					"name": "formatId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The "
+							},
+							{
+								"kind": "code",
+								"text": "`id`"
+							},
+							{
+								"kind": "text",
+								"text": " of the "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "ExportFormatDefinition"
+							},
+							{
+								"kind": "text",
+								"text": " whose "
+							},
+							{
+								"kind": "code",
+								"text": "`run()`"
+							},
+							{
+								"kind": "text",
+								"text": "\r\nmethod threw."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 153,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L153"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						38
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						43,
+						44
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/errors.ts",
+					"line": 143,
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L143"
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"target": 31,
+					"name": "StudioError",
+					"package": "@anvilkit/core"
+				}
+			]
+		},
+		{
+			"id": 45,
+			"name": "StudioPluginError",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Thrown when plugin compilation or lifecycle invocation fails.\r\n\r\nRaised by "
+					},
+					{
+						"kind": "code",
+						"text": "`compilePlugins()`"
+					},
+					{
+						"kind": "text",
+						"text": " for:\r\n\r\n- Structurally invalid plugin objects (fails both "
+					},
+					{
+						"kind": "code",
+						"text": "`isStudioPlugin`"
+					},
+					{
+						"kind": "text",
+						"text": "\r\n  and "
+					},
+					{
+						"kind": "code",
+						"text": "`isPuckPlugin`"
+					},
+					{
+						"kind": "text",
+						"text": ").\r\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`StudioPluginMeta.coreVersion`"
+					},
+					{
+						"kind": "text",
+						"text": " mismatch against the running\r\n  Core version.\r\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`plugin.register()`"
+					},
+					{
+						"kind": "text",
+						"text": " throwing synchronously or rejecting.\r\n- Duplicate export format ids across plugins.\r\n\r\nAlso raised by "
+					},
+					{
+						"kind": "code",
+						"text": "`createLifecycleManager().emit(\"onBeforePublish\",\r\n…)`"
+					},
+					{
+						"kind": "text",
+						"text": " when a hook throws — "
+					},
+					{
+						"kind": "code",
+						"text": "`onBeforePublish`"
+					},
+					{
+						"kind": "text",
+						"text": " is the only hook whose\r\nerrors abort the publish and propagate to the host.\r\n\r\nThe "
+					},
+					{
+						"kind": "code",
+						"text": "`pluginId`"
+					},
+					{
+						"kind": "text",
+						"text": " field pinpoints the offending plugin so host apps\r\ncan surface a precise error message even if several plugins are\r\nloaded."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 46,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 100,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L100"
+						}
+					],
+					"signatures": [
+						{
+							"id": 47,
+							"name": "StudioPluginError",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "runtime/errors.ts",
+									"line": 100,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L100"
+								}
+							],
+							"parameters": [
+								{
+									"id": 48,
+									"name": "pluginId",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 49,
+									"name": "message",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 50,
+									"name": "options",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es2022.error.d.ts",
+											"qualifiedName": "ErrorOptions"
+										},
+										"name": "ErrorOptions",
+										"package": "typescript"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 45,
+								"name": "StudioPluginError",
+								"package": "@anvilkit/core"
+							},
+							"overwrites": {
+								"type": "reference",
+								"target": 33,
+								"name": "StudioError.constructor"
+							}
+						}
+					],
+					"overwrites": {
+						"type": "reference",
+						"target": 32,
+						"name": "StudioError.constructor"
+					}
+				},
+				{
+					"id": 51,
+					"name": "code",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable failure code for plugin errors. See "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioError.code",
+								"target": 36
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 89,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L89"
+						}
+					],
+					"type": {
+						"type": "literal",
+						"value": "StudioPluginError"
+					},
+					"defaultValue": "\"StudioPluginError\"",
+					"overwrites": {
+						"type": "reference",
+						"target": 36,
+						"name": "StudioError.code"
+					}
+				},
+				{
+					"id": 52,
+					"name": "pluginId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The "
+							},
+							{
+								"kind": "code",
+								"text": "`meta.id`"
+							},
+							{
+								"kind": "text",
+								"text": " of the plugin that caused the failure.\r\n\r\nFor errors that involve two plugins (e.g. a duplicate export\r\nformat id) this field holds the second plugin's id, and both\r\nids appear in the error message."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/errors.ts",
+							"line": 98,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L98"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						46
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						51,
+						52
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/errors.ts",
+					"line": 85,
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L85"
+				}
+			],
+			"extendedTypes": [
+				{
+					"type": "reference",
+					"target": 31,
+					"name": "StudioError",
+					"package": "@anvilkit/core"
+				}
+			]
+		},
+		{
+			"id": 56,
+			"name": "ExportRegistry",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Read-only lookup interface returned by "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "createExportRegistry",
+						"target": 53
+					},
+					{
+						"kind": "text",
+						"text": ".\r\n\r\nMethods are documented on the factory's return statement — see\r\n"
+					},
+					{
+						"kind": "code",
+						"text": "`createExportRegistry`"
+					},
+					{
+						"kind": "text",
+						"text": " below for the exact semantics of each one."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 60,
+					"name": "get",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Return the format registered under "
+							},
+							{
+								"kind": "code",
+								"text": "`id`"
+							},
+							{
+								"kind": "text",
+								"text": ", or "
+							},
+							{
+								"kind": "code",
+								"text": "`undefined`"
+							},
+							{
+								"kind": "text",
+								"text": " if no\r\nsuch format exists."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/export-registry.ts",
+							"line": 65,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L65"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 61,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 62,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 63,
+											"name": "id",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/export.ts",
+													"qualifiedName": "ExportFormatDefinition"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "typescript",
+															"packagePath": "lib/lib.es5.d.ts",
+															"qualifiedName": "Record"
+														},
+														"typeArguments": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "unknown"
+															}
+														],
+														"name": "Record",
+														"package": "typescript"
+													}
+												],
+												"name": "ExportFormatDefinition",
+												"package": "@anvilkit/core"
+											},
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 64,
+					"name": "has",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Return "
+							},
+							{
+								"kind": "code",
+								"text": "`true`"
+							},
+							{
+								"kind": "text",
+								"text": " if a format with the given "
+							},
+							{
+								"kind": "code",
+								"text": "`id`"
+							},
+							{
+								"kind": "text",
+								"text": " is registered."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/export-registry.ts",
+							"line": 70,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L70"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 65,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 66,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 67,
+											"name": "id",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "boolean"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 57,
+					"name": "list",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Return every registered format, in the order they were passed\r\nto "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "createExportRegistry",
+								"target": 53
+							},
+							{
+								"kind": "text",
+								"text": ".\r\n\r\nThe returned array is a fresh snapshot — mutating it does not\r\naffect the registry."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/export-registry.ts",
+							"line": 59,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L59"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 58,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 59,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"target": {
+												"packageName": "@anvilkit/core",
+												"packagePath": "src/types/export.ts",
+												"qualifiedName": "ExportFormatDefinition"
+											},
+											"typeArguments": [
+												{
+													"type": "reference",
+													"target": {
+														"packageName": "typescript",
+														"packagePath": "lib/lib.es5.d.ts",
+														"qualifiedName": "Record"
+													},
+													"typeArguments": [
+														{
+															"type": "intrinsic",
+															"name": "string"
+														},
+														{
+															"type": "intrinsic",
+															"name": "unknown"
+														}
+													],
+													"name": "Record",
+													"package": "typescript"
+												}
+											],
+											"name": "ExportFormatDefinition",
+											"package": "@anvilkit/core"
+										}
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 68,
+					"name": "size",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Return the number of registered formats."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/export-registry.ts",
+							"line": 75,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L75"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 69,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 70,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							]
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						60,
+						64,
+						57,
+						68
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/export-registry.ts",
+					"line": 51,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L51"
+				}
+			]
+		},
+		{
+			"id": 93,
+			"name": "LifecycleManager",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The public shape returned by "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "createLifecycleManager",
+						"target": 88
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 110,
+					"name": "advanceTo",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Advance the engine lifecycle phase (architecture §6 A2). The\nshell calls this instead of hand-orchestrating "
+							},
+							{
+								"kind": "code",
+								"text": "`onInit`"
+							},
+							{
+								"kind": "text",
+								"text": "/"
+							},
+							{
+								"kind": "code",
+								"text": "`onReady`"
+							},
+							{
+								"kind": "text",
+								"text": "\ntiming:\n\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`advanceTo(\"init\", ctx)`"
+							},
+							{
+								"kind": "text",
+								"text": " — from "
+							},
+							{
+								"kind": "code",
+								"text": "`compiled`"
+							},
+							{
+								"kind": "text",
+								"text": ": fires "
+							},
+							{
+								"kind": "code",
+								"text": "`onInit`"
+							},
+							{
+								"kind": "text",
+								"text": " and\n  records its settle promise. Idempotent past "
+							},
+							{
+								"kind": "code",
+								"text": "`init`"
+							},
+							{
+								"kind": "text",
+								"text": ".\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`advanceTo(\"ready\", ctx)`"
+							},
+							{
+								"kind": "text",
+								"text": " — from "
+							},
+							{
+								"kind": "code",
+								"text": "`init`"
+							},
+							{
+								"kind": "text",
+								"text": " (Puck API bound): the\n  engine fires "
+							},
+							{
+								"kind": "code",
+								"text": "`onReady`"
+							},
+							{
+								"kind": "text",
+								"text": " **exactly once**, strictly after\n  "
+							},
+							{
+								"kind": "code",
+								"text": "`onInit`"
+							},
+							{
+								"kind": "text",
+								"text": " has settled, then enters "
+							},
+							{
+								"kind": "code",
+								"text": "`running`"
+							},
+							{
+								"kind": "text",
+								"text": ". Calling it before\n  "
+							},
+							{
+								"kind": "code",
+								"text": "`init`"
+							},
+							{
+								"kind": "text",
+								"text": ", or twice, is a no-op (the dedupe "
+							},
+							{
+								"kind": "code",
+								"text": "`readyFiredFor`"
+							},
+							{
+								"kind": "text",
+								"text": " used\n  to do, now phase state).\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`advanceTo(\"destroyed\", ctx)`"
+							},
+							{
+								"kind": "text",
+								"text": " — terminal marker; "
+							},
+							{
+								"kind": "code",
+								"text": "`onDestroy`"
+							},
+							{
+								"kind": "text",
+								"text": "\n  itself is still emitted by the shell's unmount cleanup so it\n  closes over the same runtime/ctx pair.\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`advanceTo(\"running\", ctx)`"
+							},
+							{
+								"kind": "text",
+								"text": " — **no-op for callers.** "
+							},
+							{
+								"kind": "code",
+								"text": "`running`"
+							},
+							{
+								"kind": "text",
+								"text": "\n  is engine-internal: the engine sets it itself in the\n  post-"
+							},
+							{
+								"kind": "code",
+								"text": "`onInit`"
+							},
+							{
+								"kind": "text",
+								"text": " continuation. "
+							},
+							{
+								"kind": "code",
+								"text": "`phase()`"
+							},
+							{
+								"kind": "text",
+								"text": " *reports* "
+							},
+							{
+								"kind": "code",
+								"text": "`\"running\"`"
+							},
+							{
+								"kind": "text",
+								"text": "\n  once "
+							},
+							{
+								"kind": "code",
+								"text": "`onReady`"
+							},
+							{
+								"kind": "text",
+								"text": " has fired, but it cannot be *commanded* — a\n  caller-driven "
+							},
+							{
+								"kind": "code",
+								"text": "`running`"
+							},
+							{
+								"kind": "text",
+								"text": " would race the continuation and skip\n  "
+							},
+							{
+								"kind": "code",
+								"text": "`onReady`"
+							},
+							{
+								"kind": "text",
+								"text": ".\n\n"
+							},
+							{
+								"kind": "code",
+								"text": "`onInit`"
+							},
+							{
+								"kind": "text",
+								"text": "'s non-veto contract is unchanged and now **explicit**: a\nthrowing "
+							},
+							{
+								"kind": "code",
+								"text": "`onInit`"
+							},
+							{
+								"kind": "text",
+								"text": " hook is logged (existing swallow) and does\n**not** suppress "
+							},
+							{
+								"kind": "code",
+								"text": "`onReady`"
+							},
+							{
+								"kind": "text",
+								"text": ". The transition is monotonic + lenient\n(stale/repeat calls no-op) so StrictMode double-invoke is safe."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/lifecycle-manager.ts",
+							"line": 203,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L203"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 111,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 112,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 113,
+											"name": "phase",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": 118,
+												"name": "LifecyclePhase",
+												"package": "@anvilkit/core"
+											}
+										},
+										{
+											"id": 114,
+											"name": "ctx",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/plugin.ts",
+													"qualifiedName": "StudioPluginContext"
+												},
+												"name": "StudioPluginContext",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 115,
+					"name": "dispose",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Release any in-flight debounce timers and forget every live\nsubscriber so the manager can be garbage-collected cleanly.\n\n"
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " calls this from the unmount cleanup that follows\n"
+							},
+							{
+								"kind": "code",
+								"text": "`onDestroy`"
+							},
+							{
+								"kind": "text",
+								"text": ". Without it, a pending "
+							},
+							{
+								"kind": "code",
+								"text": "`onDataChange`"
+							},
+							{
+								"kind": "text",
+								"text": " debounce\ntimer would fire after the host dropped its reference to the\nruntime — running plugin hooks against a stale context whose\n"
+							},
+							{
+								"kind": "code",
+								"text": "`getPuckApi()`"
+							},
+							{
+								"kind": "text",
+								"text": " now throws.\n\nSafe to call multiple times; subsequent calls are no-ops."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/lifecycle-manager.ts",
+							"line": 217,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L217"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 116,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 117,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 94,
+					"name": "emit",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Fire the named lifecycle event through every registered plugin\nand every live subscriber.\n\nResolves once every plugin hook has settled (sequentially for\n"
+							},
+							{
+								"kind": "code",
+								"text": "`onBeforePublish`"
+							},
+							{
+								"kind": "text",
+								"text": ", in parallel otherwise) and all subscribers\nhave been invoked. Rethrows the first "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPluginError",
+								"target": 45
+							},
+							{
+								"kind": "text",
+								"text": "\ncaught during "
+							},
+							{
+								"kind": "code",
+								"text": "`onBeforePublish`"
+							},
+							{
+								"kind": "text",
+								"text": " and swallows everything else\nthrough "
+							},
+							{
+								"kind": "code",
+								"text": "`ctx.log(\"error\", …)`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/lifecycle-manager.ts",
+							"line": 156,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L156"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 95,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 96,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 97,
+											"name": "event",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": 92,
+												"name": "LifecycleEventName",
+												"package": "@anvilkit/core"
+											}
+										},
+										{
+											"id": 98,
+											"name": "ctx",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/plugin.ts",
+													"qualifiedName": "StudioPluginContext"
+												},
+												"name": "StudioPluginContext",
+												"package": "@anvilkit/core"
+											}
+										},
+										{
+											"id": 99,
+											"name": "payload",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {
+												"isOptional": true
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@puckeditor/core",
+													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"qualifiedName": "Data"
+												},
+												"name": "Data",
+												"package": "@puckeditor/core"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Promise"
+										},
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "void"
+											}
+										],
+										"name": "Promise",
+										"package": "typescript"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 107,
+					"name": "phase",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The current engine-owned "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "LifecyclePhase",
+								"target": 118
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/lifecycle-manager.ts",
+							"line": 174,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L174"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 108,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 109,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 118,
+										"name": "LifecyclePhase",
+										"package": "@anvilkit/core"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 100,
+					"name": "subscribe",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Register an observer for a single event."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/lifecycle-manager.ts",
+							"line": 168,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L168"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 101,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 102,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"comment": {
+										"summary": [],
+										"blockTags": [
+											{
+												"tag": "@returns",
+												"content": [
+													{
+														"kind": "text",
+														"text": "An unsubscribe function. Calling it is idempotent and\ndetaches the handler immediately."
+													}
+												]
+											}
+										]
+									},
+									"parameters": [
+										{
+											"id": 103,
+											"name": "event",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": 92,
+												"name": "LifecycleEventName",
+												"package": "@anvilkit/core"
+											}
+										},
+										{
+											"id": 104,
+											"name": "handler",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": 119,
+												"name": "LifecycleSubscriber",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 105,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"signatures": [
+												{
+													"id": 106,
+													"name": "__type",
+													"variant": "signature",
+													"kind": 4096,
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "void"
+													}
+												}
+											]
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						110,
+						115,
+						94,
+						107,
+						100
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/lifecycle-manager.ts",
+					"line": 145,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L145"
+				}
+			]
+		},
+		{
+			"id": 74,
+			"name": "StudioHeaderAction",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Header action descriptor, contributed by plugins via\n"
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "StudioPluginRegistration.headerActions",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/plugin.ts",
+							"qualifiedName": "StudioPluginRegistration.headerActions"
+						}
+					},
+					{
+						"kind": "text",
+						"text": ".\n\nPlugins author header actions as **plain data** — no React, no\ncomponents, no closures over render-time state. The Studio shell\n("
+					},
+					{
+						"kind": "code",
+						"text": "`core-014`"
+					},
+					{
+						"kind": "text",
+						"text": ") is responsible for resolving the "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "icon",
+						"target": 77
+					},
+					{
+						"kind": "text",
+						"text": " string\nto a "
+					},
+					{
+						"kind": "code",
+						"text": "`lucide-react`"
+					},
+					{
+						"kind": "text",
+						"text": " icon element, rendering the "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "label",
+						"target": 76
+					},
+					{
+						"kind": "text",
+						"text": ", and\nwiring up "
+					},
+					{
+						"kind": "code",
+						"text": "`onClick`"
+					},
+					{
+						"kind": "text",
+						"text": " / "
+					},
+					{
+						"kind": "code",
+						"text": "`disabled`"
+					},
+					{
+						"kind": "text",
+						"text": " to the live React tree at runtime.\n\nKeeping the type free of "
+					},
+					{
+						"kind": "code",
+						"text": "`ReactNode`"
+					},
+					{
+						"kind": "text",
+						"text": " / "
+					},
+					{
+						"kind": "code",
+						"text": "`ComponentType`"
+					},
+					{
+						"kind": "text",
+						"text": " lets the\n"
+					},
+					{
+						"kind": "code",
+						"text": "`runtime/`"
+					},
+					{
+						"kind": "text",
+						"text": " layer stay React-free (architecture §17) and lets test\ncode compare action arrays with structural equality.\n\nThe full shape was finalized in "
+					},
+					{
+						"kind": "code",
+						"text": "`core-009`"
+					},
+					{
+						"kind": "text",
+						"text": " alongside\n"
+					},
+					{
+						"kind": "code",
+						"text": "`composeHeaderActions()`"
+					},
+					{
+						"kind": "text",
+						"text": ". The interface lives in "
+					},
+					{
+						"kind": "code",
+						"text": "`src/types/`"
+					},
+					{
+						"kind": "text",
+						"text": " so\n"
+					},
+					{
+						"kind": "code",
+						"text": "`StudioPluginRegistration`"
+					},
+					{
+						"kind": "text",
+						"text": " can reference it without crossing the\ntypes → runtime boundary; "
+					},
+					{
+						"kind": "code",
+						"text": "`composeHeaderActions()`"
+					},
+					{
+						"kind": "text",
+						"text": " re-exports it\nfor callers that import from "
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/core/runtime`"
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				],
+				"blockTags": [
+					{
+						"tag": "@see",
+						"content": [
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "core-009",
+								"target": "https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md"
+							}
+						]
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 84,
+					"name": "disabled",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional predicate that disables the action based on live\ncontext. Called on every render of the header (cheap by\nconvention — do not perform async work or expensive\ncomputation here).\n\nReceives the same "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPluginContext",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginContext"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " as "
+							},
+							{
+								"kind": "code",
+								"text": "`onClick`"
+							},
+							{
+								"kind": "text",
+								"text": ".\nReturn "
+							},
+							{
+								"kind": "code",
+								"text": "`true`"
+							},
+							{
+								"kind": "text",
+								"text": " to disable the button, "
+							},
+							{
+								"kind": "code",
+								"text": "`false`"
+							},
+							{
+								"kind": "text",
+								"text": " (or omit) to\nenable it."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 464,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L464"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 85,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 86,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 87,
+											"name": "ctx",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/plugin.ts",
+													"qualifiedName": "StudioPluginContext"
+												},
+												"name": "StudioPluginContext",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "boolean"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 78,
+					"name": "group",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Display group the action belongs to. Used by\n"
+							},
+							{
+								"kind": "code",
+								"text": "`composeHeaderActions()`"
+							},
+							{
+								"kind": "text",
+								"text": " as the primary sort key.\n\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`\"primary\"`"
+							},
+							{
+								"kind": "text",
+								"text": " — high-emphasis call-to-action (e.g. \"Publish\").\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`\"secondary\"`"
+							},
+							{
+								"kind": "text",
+								"text": " — normal toolbar action (e.g. \"Save Draft\").\n  **Default** when omitted — most actions belong here.\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`\"overflow\"`"
+							},
+							{
+								"kind": "text",
+								"text": " — collapsed into the \"…\" menu when space is\n  tight (e.g. \"Generate with AI\", \"Download HTML\")."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 424,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L424"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "primary"
+							},
+							{
+								"type": "literal",
+								"value": "secondary"
+							},
+							{
+								"type": "literal",
+								"value": "overflow"
+							}
+						]
+					}
+				},
+				{
+					"id": 77,
+					"name": "icon",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional "
+							},
+							{
+								"kind": "code",
+								"text": "`lucide-react`"
+							},
+							{
+								"kind": "text",
+								"text": " icon **name** (e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"download\"`"
+							},
+							{
+								"kind": "text",
+								"text": ",\n"
+							},
+							{
+								"kind": "code",
+								"text": "`\"sparkles\"`"
+							},
+							{
+								"kind": "text",
+								"text": "). Resolved to a real icon component at render time\nby the Studio shell.\n\n**Why a string and not a "
+							},
+							{
+								"kind": "code",
+								"text": "`ComponentType`"
+							},
+							{
+								"kind": "text",
+								"text": "?** The "
+							},
+							{
+								"kind": "code",
+								"text": "`runtime/`"
+							},
+							{
+								"kind": "text",
+								"text": " layer\ncannot import React, and plugin-contributed action arrays must\nstay serializable enough that lifecycle tests can compare them\nwith "
+							},
+							{
+								"kind": "code",
+								"text": "`toEqual`"
+							},
+							{
+								"kind": "text",
+								"text": ". The string-name indirection lets the renderer\nown React while the protocol stays headless."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 412,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L412"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 75,
+					"name": "id",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Stable, globally-unique identifier for the action\n(e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"export-html\"`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`\"publish\"`"
+							},
+							{
+								"kind": "text",
+								"text": "). "
+							},
+							{
+								"kind": "code",
+								"text": "`composeHeaderActions()`"
+							},
+							{
+								"kind": "text",
+								"text": "\nrejects duplicate ids across all contributing plugins.\n\nConvention: lowercase, hyphen-separated, no namespace prefix —\nthe runtime treats ids as opaque strings."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 389,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L389"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 76,
+					"name": "label",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Human-readable label rendered inside the button (or shown in\nthe overflow menu) by the Studio shell.\n\nRequired so plugin authors cannot ship a button with no visible\naffordance. Localization is the host app's responsibility — the\nruntime treats this as an opaque display string."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 399,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L399"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 80,
+					"name": "onClick",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Click handler invoked by the Studio shell when the user\nactivates the action. Receives the same\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPluginContext",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginContext"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " the lifecycle hooks receive, so\nthe action can read live page data, call\n"
+							},
+							{
+								"kind": "code",
+								"text": "`getPuckApi().dispatch()`"
+							},
+							{
+								"kind": "text",
+								"text": ", log diagnostics, or "
+							},
+							{
+								"kind": "code",
+								"text": "`emit`"
+							},
+							{
+								"kind": "text",
+								"text": " events\nto other plugins.\n\nThe runtime awaits the returned promise (if any) before\nre-enabling the button — host apps are free to render a\nloading affordance during the wait.\n\nErrors thrown from "
+							},
+							{
+								"kind": "code",
+								"text": "`onClick`"
+							},
+							{
+								"kind": "text",
+								"text": " are caught by the shell and routed\nthrough "
+							},
+							{
+								"kind": "code",
+								"text": "`ctx.log(\"error\", …)`"
+							},
+							{
+								"kind": "text",
+								"text": "; they do not crash the editor."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 452,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L452"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 81,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 82,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 83,
+											"name": "ctx",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/plugin.ts",
+													"qualifiedName": "StudioPluginContext"
+												},
+												"name": "StudioPluginContext",
+												"package": "@anvilkit/core"
+											}
+										}
+									],
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "void"
+											},
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Promise"
+												},
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "void"
+													}
+												],
+												"name": "Promise",
+												"package": "typescript"
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 79,
+					"name": "order",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Per-group ordering hint. Lower values render first; the default\nis "
+							},
+							{
+								"kind": "code",
+								"text": "`100`"
+							},
+							{
+								"kind": "text",
+								"text": " so plugin authors can interleave their actions with\nbuilt-ins (which conventionally use round numbers like "
+							},
+							{
+								"kind": "code",
+								"text": "`0`"
+							},
+							{
+								"kind": "text",
+								"text": ",\n"
+							},
+							{
+								"kind": "code",
+								"text": "`100`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`200`"
+							},
+							{
+								"kind": "text",
+								"text": ").\n\nWithin a group, actions are sorted ascending by "
+							},
+							{
+								"kind": "code",
+								"text": "`order`"
+							},
+							{
+								"kind": "text",
+								"text": ". Ties\nbreak on "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "id",
+								"target": 75
+							},
+							{
+								"kind": "text",
+								"text": " for determinism."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 435,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L435"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						84,
+						78,
+						77,
+						75,
+						76,
+						80,
+						79
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types/plugin.ts",
+					"line": 380,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L380"
+				}
+			]
+		},
+		{
+			"id": 7,
+			"name": "StudioRuntime",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The compiled, ready-to-mount output of "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "compilePlugins",
+						"target": 2
+					},
+					{
+						"kind": "text",
+						"text": ".\r\n\r\nFields are documented on the return statement of "
+					},
+					{
+						"kind": "code",
+						"text": "`compilePlugins`"
+					},
+					{
+						"kind": "text",
+						"text": "\r\n— see inline JSDoc there for the lifecycle / merge semantics of\r\neach one."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 12,
+					"name": "assetResolvers",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Runtime-registered asset resolvers, in registration order.\r\n\r\nExporters that support asset URL rewriting consult this list and\r\nstop at the first resolver that returns a non-null result."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 99,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L99"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/asset-resolver.ts",
+									"qualifiedName": "IRAssetResolver"
+								},
+								"name": "IRAssetResolver",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 11,
+					"name": "exportFormats",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Export formats indexed by "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "ExportFormatDefinition.id",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/export.ts",
+									"qualifiedName": "ExportFormatDefinition.id"
+								}
+							},
+							{
+								"kind": "text",
+								"text": ",\r\npreserving plugin-declared insertion order."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 92,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L92"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es2015.collection.d.ts",
+							"qualifiedName": "ReadonlyMap"
+						},
+						"typeArguments": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/export.ts",
+									"qualifiedName": "ExportFormatDefinition"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Record"
+										},
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "unknown"
+											}
+										],
+										"name": "Record",
+										"package": "typescript"
+									}
+								],
+								"name": "ExportFormatDefinition",
+								"package": "@anvilkit/core"
+							}
+						],
+						"name": "ReadonlyMap",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 13,
+					"name": "headerActions",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Header action descriptors in the order they were contributed.\r\nDuplicate ids pass through here — "
+							},
+							{
+								"kind": "code",
+								"text": "`core-009`"
+							},
+							{
+								"kind": "text",
+								"text": "'s\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`composeHeaderActions()`"
+							},
+							{
+								"kind": "text",
+								"text": " is responsible for dedupe/ordering."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 105,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L105"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 74,
+								"name": "StudioHeaderAction",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 10,
+					"name": "lifecycle",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The lifecycle dispatcher. See\r\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "createLifecycleManager",
+								"target": 88
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 87,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L87"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 93,
+						"name": "LifecycleManager",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 16,
+					"name": "overlays",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Plugin-contributed top-level overlay components, sorted within\r\neach placement bucket by "
+							},
+							{
+								"kind": "code",
+								"text": "`(order ?? 100, registrationIndex)`"
+							},
+							{
+								"kind": "text",
+								"text": ".\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " dispatches them by "
+							},
+							{
+								"kind": "code",
+								"text": "`placement`"
+							},
+							{
+								"kind": "text",
+								"text": " (canvas / viewport /\r\nnotifications)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 137,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L137"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginOverlay"
+								},
+								"name": "StudioPluginOverlay",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 14,
+					"name": "overrides",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Plugin-contributed Puck override slices, in registration order.\r\n\r\nThis is the **raw** per-plugin array — "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " ("
+							},
+							{
+								"kind": "code",
+								"text": "`core-014`"
+							},
+							{
+								"kind": "text",
+								"text": ")\r\nruns it through "
+							},
+							{
+								"kind": "code",
+								"text": "`mergeOverrides([...runtime.overrides, consumer])`"
+							},
+							{
+								"kind": "text",
+								"text": "\r\nto produce the curried-per-key merge Puck actually receives.\r\nKeeping the array un-composed here means the "
+							},
+							{
+								"kind": "code",
+								"text": "`runtime/`"
+							},
+							{
+								"kind": "text",
+								"text": " layer\r\nstays React-free (architecture §17) and the "
+							},
+							{
+								"kind": "code",
+								"text": "`react/`"
+							},
+							{
+								"kind": "text",
+								"text": " layer owns\r\nthe composition step.\r\n\r\nEntries appear in plugin registration order, first-registered\r\nfirst — so when "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "mergeOverrides"
+							},
+							{
+								"kind": "text",
+								"text": " folds them, the first\r\nplugin becomes the innermost wrapper (closest to the default\r\nrender) and later plugins wrap it."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 121,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L121"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Partial"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "@puckeditor/core",
+											"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+											"qualifiedName": "Overrides"
+										},
+										"name": "Overrides",
+										"package": "@puckeditor/core",
+										"externalUrl": "https://puckeditor.com/docs/api-reference/configuration/overrides"
+									}
+								],
+								"name": "Partial",
+								"package": "typescript"
+							}
+						}
+					}
+				},
+				{
+					"id": 8,
+					"name": "pluginMeta",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The "
+							},
+							{
+								"kind": "code",
+								"text": "`meta`"
+							},
+							{
+								"kind": "text",
+								"text": " block of every Studio plugin that successfully\r\nregistered, in declaration order. Diagnostic surface only —\r\nthe runtime does not re-read fields from here after compile."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 73,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L73"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginMeta"
+								},
+								"name": "StudioPluginMeta",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 15,
+					"name": "providers",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Plugin-contributed React providers that wrap the Studio tree.\r\n\r\nSorted ascending by "
+							},
+							{
+								"kind": "code",
+								"text": "`(order ?? 100, registrationIndex)`"
+							},
+							{
+								"kind": "text",
+								"text": ". The\r\nprovider at index 0 is composed **outermost** by "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": ". The\r\nruntime layer treats the "
+							},
+							{
+								"kind": "code",
+								"text": "`component`"
+							},
+							{
+								"kind": "text",
+								"text": " field as opaque — "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": "\r\nis the React boundary that instantiates each provider."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 130,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L130"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginProvider"
+								},
+								"name": "StudioPluginProvider",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 18,
+					"name": "puckPlugins",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Raw Puck plugin objects, passed through to "
+							},
+							{
+								"kind": "code",
+								"text": "`<Puck plugins={…}>`"
+							},
+							{
+								"kind": "text",
+								"text": "\r\nverbatim. These do not participate in the Studio lifecycle."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 150,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L150"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@puckeditor/core",
+									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+									"qualifiedName": "Plugin"
+								},
+								"name": "Plugin",
+								"package": "@puckeditor/core",
+								"externalUrl": "https://puckeditor.com/docs/extending-puck/plugins"
+							}
+						}
+					}
+				},
+				{
+					"id": 9,
+					"name": "registrations",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The raw plugin registrations in declaration order, as returned\r\nby each plugin's "
+							},
+							{
+								"kind": "code",
+								"text": "`register()`"
+							},
+							{
+								"kind": "text",
+								"text": ". Primarily consumed by the\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/testing`"
+							},
+							{
+								"kind": "text",
+								"text": " harness so unit tests can drive a\r\nsingle plugin's lifecycle hooks without re-implementing the\r\ncompile-time invariant checks (structural guard, coreVersion\r\nrange, duplicate-id detection)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 82,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L82"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginRegistration"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "@puckeditor/core",
+											"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+											"qualifiedName": "Config"
+										},
+										"name": "Config",
+										"package": "@puckeditor/core"
+									}
+								],
+								"name": "StudioPluginRegistration",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 17,
+					"name": "slots",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Plugin-contributed named chrome slot contributions. Single-\r\noccupancy: if two plugins contribute the same slot id the first\r\nregistration wins (a warn is logged via "
+							},
+							{
+								"kind": "code",
+								"text": "`ctx.log`"
+							},
+							{
+								"kind": "text",
+								"text": " on duplicate).\r\nThe host's "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " prop for the same slot still takes\r\nprecedence — see e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`collaboratorsSlot`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 145,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L145"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es2015.collection.d.ts",
+							"qualifiedName": "ReadonlyMap"
+						},
+						"typeArguments": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginSlotContribution"
+								},
+								"name": "StudioPluginSlotContribution",
+								"package": "@anvilkit/core"
+							}
+						],
+						"name": "ReadonlyMap",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						12,
+						11,
+						13,
+						10,
+						16,
+						14,
+						8,
+						15,
+						18,
+						9,
+						17
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "runtime/compile-plugins.ts",
+					"line": 67,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L67"
+				}
+			]
+		},
+		{
+			"id": 92,
+			"name": "LifecycleEventName",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The closed union of lifecycle event names the runtime fires.\n\nMirrors the optional keys on "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "StudioPluginLifecycleHooks",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/plugin.ts",
+							"qualifiedName": "StudioPluginLifecycleHooks"
+						}
+					},
+					{
+						"kind": "text",
+						"text": "\none-for-one, so adding a new hook there is a compile-time forcing\nfunction to update this union (and the "
+					},
+					{
+						"kind": "code",
+						"text": "`emit`"
+					},
+					{
+						"kind": "text",
+						"text": " dispatch table)."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "runtime/lifecycle-manager.ts",
+					"line": 95,
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L95"
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "literal",
+						"value": "onInit"
+					},
+					{
+						"type": "literal",
+						"value": "onReady"
+					},
+					{
+						"type": "literal",
+						"value": "onDataChange"
+					},
+					{
+						"type": "literal",
+						"value": "onBeforePublish"
+					},
+					{
+						"type": "literal",
+						"value": "onAfterPublish"
+					},
+					{
+						"type": "literal",
+						"value": "onDestroy"
+					}
+				]
+			}
+		},
+		{
+			"id": 118,
+			"name": "LifecyclePhase",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Engine-owned lifecycle phase (architecture §6 A2). The shell drives\ntransitions with "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "LifecycleManager.advanceTo",
+						"target": 110
+					},
+					{
+						"kind": "text",
+						"text": "; the engine owns\nthe ordering and dedupe that used to live as three cooperating refs\nin the React shell ("
+					},
+					{
+						"kind": "code",
+						"text": "`onInitPromise`"
+					},
+					{
+						"kind": "text",
+						"text": " / "
+					},
+					{
+						"kind": "code",
+						"text": "`readyFiredFor`"
+					},
+					{
+						"kind": "text",
+						"text": " / the\n"
+					},
+					{
+						"kind": "code",
+						"text": "`queueMicrotask`"
+					},
+					{
+						"kind": "text",
+						"text": " + "
+					},
+					{
+						"kind": "code",
+						"text": "`.then(fireReady, fireReady)`"
+					},
+					{
+						"kind": "text",
+						"text": " chain).\n\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`compiled`"
+					},
+					{
+						"kind": "text",
+						"text": " — manager just constructed, no lifecycle event fired.\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`init`"
+					},
+					{
+						"kind": "text",
+						"text": " — "
+					},
+					{
+						"kind": "code",
+						"text": "`advanceTo(\"init\")`"
+					},
+					{
+						"kind": "text",
+						"text": " fired "
+					},
+					{
+						"kind": "code",
+						"text": "`onInit`"
+					},
+					{
+						"kind": "text",
+						"text": "; its settle promise is\n  recorded so "
+					},
+					{
+						"kind": "code",
+						"text": "`onReady`"
+					},
+					{
+						"kind": "text",
+						"text": " can chain strictly after it.\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`ready`"
+					},
+					{
+						"kind": "text",
+						"text": " — "
+					},
+					{
+						"kind": "code",
+						"text": "`advanceTo(\"ready\")`"
+					},
+					{
+						"kind": "text",
+						"text": " was called (Puck API bound); the\n  engine will fire "
+					},
+					{
+						"kind": "code",
+						"text": "`onReady`"
+					},
+					{
+						"kind": "text",
+						"text": " exactly once, after "
+					},
+					{
+						"kind": "code",
+						"text": "`onInit`"
+					},
+					{
+						"kind": "text",
+						"text": " settles.\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`running`"
+					},
+					{
+						"kind": "text",
+						"text": " — steady state after "
+					},
+					{
+						"kind": "code",
+						"text": "`onReady`"
+					},
+					{
+						"kind": "text",
+						"text": "; "
+					},
+					{
+						"kind": "code",
+						"text": "`onDataChange`"
+					},
+					{
+						"kind": "text",
+						"text": " /\n  "
+					},
+					{
+						"kind": "code",
+						"text": "`onBeforePublish`"
+					},
+					{
+						"kind": "text",
+						"text": " / "
+					},
+					{
+						"kind": "code",
+						"text": "`onAfterPublish`"
+					},
+					{
+						"kind": "text",
+						"text": " flow through "
+					},
+					{
+						"kind": "code",
+						"text": "`emit`"
+					},
+					{
+						"kind": "text",
+						"text": ".\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`destroyed`"
+					},
+					{
+						"kind": "text",
+						"text": " — terminal; "
+					},
+					{
+						"kind": "code",
+						"text": "`advanceTo`"
+					},
+					{
+						"kind": "text",
+						"text": " is a no-op afterwards.\n\nTransitions are **monotonic and lenient**: a repeat or stale call\n(React StrictMode double-invoke, a late binder effect) is a no-op,\nnever a throw — a lifecycle bookkeeping signal must not crash the\neditor in any environment."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "runtime/lifecycle-manager.ts",
+					"line": 124,
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L124"
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "literal",
+						"value": "compiled"
+					},
+					{
+						"type": "literal",
+						"value": "init"
+					},
+					{
+						"type": "literal",
+						"value": "ready"
+					},
+					{
+						"type": "literal",
+						"value": "running"
+					},
+					{
+						"type": "literal",
+						"value": "destroyed"
+					}
+				]
+			}
+		},
+		{
+			"id": 119,
+			"name": "LifecycleSubscriber",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Handler signature registered via "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "LifecycleManager.subscribe",
+						"target": 100
+					},
+					{
+						"kind": "text",
+						"text": ".\n\nReceives the same "
+					},
+					{
+						"kind": "code",
+						"text": "`ctx`"
+					},
+					{
+						"kind": "text",
+						"text": " and "
+					},
+					{
+						"kind": "code",
+						"text": "`payload`"
+					},
+					{
+						"kind": "text",
+						"text": " the plugin hooks receive so\nobservers can inspect the live state of the running session."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "runtime/lifecycle-manager.ts",
+					"line": 137,
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L137"
+				}
+			],
+			"type": {
+				"type": "reflection",
+				"declaration": {
+					"id": 120,
+					"name": "__type",
+					"variant": "declaration",
+					"kind": 65536,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 121,
+							"name": "__type",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"parameters": [
+								{
+									"id": 122,
+									"name": "ctx",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/plugin.ts",
+											"qualifiedName": "StudioPluginContext"
+										},
+										"name": "StudioPluginContext",
+										"package": "@anvilkit/core"
+									}
+								},
+								{
+									"id": 123,
+									"name": "payload",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@puckeditor/core",
+													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"qualifiedName": "Data"
+												},
+												"name": "PuckData",
+												"package": "@puckeditor/core",
+												"qualifiedName": "Data"
+											},
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				}
+			}
+		},
+		{
+			"id": 124,
+			"name": "CORE_VERSION",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [],
+				"blockTags": [
+					{
+						"tag": "@file",
+						"content": [
+							{
+								"kind": "text",
+								"text": "The running version of "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core`"
+							},
+							{
+								"kind": "text",
+								"text": ".\r\n\r\nHand-maintained to match the "
+							},
+							{
+								"kind": "code",
+								"text": "`version`"
+							},
+							{
+								"kind": "text",
+								"text": " field of\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`packages/core/package.json`"
+							},
+							{
+								"kind": "text",
+								"text": ". A colocated test asserts the two stay\r\nin sync, so any drift is caught at "
+							},
+							{
+								"kind": "code",
+								"text": "`pnpm test`"
+							},
+							{
+								"kind": "text",
+								"text": " time rather than at\r\nplugin-load time in a downstream host.\r\n\r\nThis constant is the reference value "
+							},
+							{
+								"kind": "code",
+								"text": "`compilePlugins()`"
+							},
+							{
+								"kind": "text",
+								"text": " uses to\r\nvalidate every "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPluginMeta.coreVersion"
+							},
+							{
+								"kind": "text",
+								"text": " declaration at\r\ncompile time. See "
+							},
+							{
+								"kind": "code",
+								"text": "`runtime/compile-plugins.ts`"
+							},
+							{
+								"kind": "text",
+								"text": " for the range check.\r\n\r\n### Why hand-maintained instead of generated?\r\n\r\nRslib's bundleless build preserves a 1:1 "
+							},
+							{
+								"kind": "code",
+								"text": "`src → dist`"
+							},
+							{
+								"kind": "text",
+								"text": " mapping, and\r\nwiring a codegen step to stamp "
+							},
+							{
+								"kind": "code",
+								"text": "`package.json`"
+							},
+							{
+								"kind": "text",
+								"text": "'s version into this\r\nfile would add build-order complexity for a single string. The test\r\nin "
+							},
+							{
+								"kind": "code",
+								"text": "`version.test.ts`"
+							},
+							{
+								"kind": "text",
+								"text": " is the forcing function that keeps the two in\r\nsync, which is simpler and equally robust."
+							}
+						]
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "runtime/version.ts",
+					"line": 21,
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/version.ts#L21"
+				}
+			],
+			"type": {
+				"type": "literal",
+				"value": "0.1.3"
+			},
+			"defaultValue": "\"0.1.3\""
+		},
+		{
+			"id": 1,
+			"name": "jsonFormat",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"sources": [
+				{
+					"fileName": "runtime/built-in-formats/json-format.ts",
+					"line": 3,
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/built-in-formats/json-format.ts#L3"
+				}
+			],
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "@anvilkit/core",
+					"packagePath": "src/types/export.ts",
+					"qualifiedName": "ExportFormatDefinition"
+				},
+				"name": "ExportFormatDefinition",
+				"package": "@anvilkit/core"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 2,
+			"name": "compilePlugins",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "runtime/compile-plugins.ts",
+					"line": 423,
+					"character": 22,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L423"
+				}
+			],
+			"signatures": [
+				{
+					"id": 3,
+					"name": "compilePlugins",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 423,
+							"character": 22,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L423"
+						}
+					],
+					"parameters": [
+						{
+							"id": 4,
+							"name": "plugins",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/plugin.ts",
+													"qualifiedName": "StudioPlugin"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "@puckeditor/core",
+															"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+															"qualifiedName": "Config"
+														},
+														"name": "Config",
+														"package": "@puckeditor/core"
+													}
+												],
+												"name": "StudioPlugin",
+												"package": "@anvilkit/core"
+											},
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@puckeditor/core",
+													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"qualifiedName": "Plugin"
+												},
+												"name": "Plugin",
+												"package": "@puckeditor/core",
+												"externalUrl": "https://puckeditor.com/docs/extending-puck/plugins"
+											}
+										]
+									}
+								}
+							}
+						},
+						{
+							"id": 5,
+							"name": "ctx",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPluginContext"
+								},
+								"name": "StudioPluginContext",
+								"package": "@anvilkit/core"
+							}
+						},
+						{
+							"id": 6,
+							"name": "options",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/runtime/compile-plugins.ts",
+									"qualifiedName": "CompilePluginsOptions"
+								},
+								"name": "CompilePluginsOptions",
+								"package": "@anvilkit/core"
+							},
+							"defaultValue": "{}"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Promise"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": 7,
+								"name": "StudioRuntime",
+								"package": "@anvilkit/core"
+							}
+						],
+						"name": "Promise",
+						"package": "typescript"
+					}
+				}
+			]
+		},
+		{
+			"id": 71,
+			"name": "composeHeaderActions",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "runtime/header-actions.ts",
+					"line": 148,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L148"
+				}
+			],
+			"signatures": [
+				{
+					"id": 72,
+					"name": "composeHeaderActions",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Sort and validate the flat list of plugin-contributed header\r\nactions into the canonical render order.\r\n\r\nPure: no logging, no React, no mutation of the input array. The\r\nreturned array is a fresh copy so callers can mutate it freely\r\n(e.g. to attach React keys at render time) without affecting any\r\nother consumer."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@returns",
+								"content": [
+									{
+										"kind": "text",
+										"text": "A new array sorted by "
+									},
+									{
+										"kind": "code",
+										"text": "`(group, order, id)`"
+									},
+									{
+										"kind": "text",
+										"text": "."
+									}
+								]
+							},
+							{
+								"tag": "@throws",
+								"content": [
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "StudioPluginError",
+										"target": 45
+									},
+									{
+										"kind": "text",
+										"text": " when two actions share the same\r\n"
+									},
+									{
+										"kind": "code",
+										"text": "`id`"
+									},
+									{
+										"kind": "text",
+										"text": ". The error's "
+									},
+									{
+										"kind": "code",
+										"text": "`pluginId`"
+									},
+									{
+										"kind": "text",
+										"text": " field is set to the duplicated\r\naction id; "
+									},
+									{
+										"kind": "code",
+										"text": "`compilePlugins()`"
+									},
+									{
+										"kind": "text",
+										"text": " provides richer attribution at the\r\nlayer above when it knows which plugin contributed each action."
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/header-actions.ts",
+							"line": 148,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L148"
+						}
+					],
+					"parameters": [
+						{
+							"id": 73,
+							"name": "actions",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Flat array of action descriptors, typically\r\nbuilt by concatenating the "
+									},
+									{
+										"kind": "code",
+										"text": "`headerActions`"
+									},
+									{
+										"kind": "text",
+										"text": " field of every\r\n"
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "StudioPluginRegistration"
+									},
+									{
+										"kind": "text",
+										"text": " the host app loaded."
+									}
+								]
+							},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": 74,
+										"name": "StudioHeaderAction",
+										"package": "@anvilkit/core"
+									}
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "reference",
+							"target": 74,
+							"name": "StudioHeaderAction",
+							"package": "@anvilkit/core"
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 53,
+			"name": "createExportRegistry",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "runtime/export-registry.ts",
+					"line": 98,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L98"
+				}
+			],
+			"signatures": [
+				{
+					"id": 54,
+					"name": "createExportRegistry",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Build an "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "ExportRegistry",
+								"target": 56
+							},
+							{
+								"kind": "text",
+								"text": " from a flat array of\r\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "ExportFormatDefinition",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/export.ts",
+									"qualifiedName": "ExportFormatDefinition"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " objects.\r\n\r\nThe factory walks the array exactly once, validates that every\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`id`"
+							},
+							{
+								"kind": "text",
+								"text": " is unique, and folds the formats into an insertion-ordered\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`Map`"
+							},
+							{
+								"kind": "text",
+								"text": ". Subsequent calls to "
+							},
+							{
+								"kind": "code",
+								"text": "`list()`"
+							},
+							{
+								"kind": "text",
+								"text": " return the formats in the\r\nsame order they appeared in the input — host apps can rely on\r\nthis for stable export-menu ordering."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@throws",
+								"content": [
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "StudioPluginError",
+										"target": 45
+									},
+									{
+										"kind": "text",
+										"text": " if two formats share the same\r\n"
+									},
+									{
+										"kind": "code",
+										"text": "`id`"
+									},
+									{
+										"kind": "text",
+										"text": ". The error's "
+									},
+									{
+										"kind": "code",
+										"text": "`pluginId`"
+									},
+									{
+										"kind": "text",
+										"text": " field is set to the conflicting\r\nformat id (the registry layer does not know which plugin\r\ncontributed the format — "
+									},
+									{
+										"kind": "code",
+										"text": "`compilePlugins()`"
+									},
+									{
+										"kind": "text",
+										"text": " provides that\r\nattribution at the layer above)."
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/export-registry.ts",
+							"line": 98,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L98"
+						}
+					],
+					"parameters": [
+						{
+							"id": 55,
+							"name": "formats",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "The flat array of export formats. Typically\r\nbuilt by walking the "
+									},
+									{
+										"kind": "code",
+										"text": "`exportFormats`"
+									},
+									{
+										"kind": "text",
+										"text": " field of every\r\n"
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "StudioPluginRegistration"
+									},
+									{
+										"kind": "text",
+										"text": " the host app is loading."
+									}
+								]
+							},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/export.ts",
+											"qualifiedName": "ExportFormatDefinition"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Record"
+												},
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													},
+													{
+														"type": "intrinsic",
+														"name": "unknown"
+													}
+												],
+												"name": "Record",
+												"package": "typescript"
+											}
+										],
+										"name": "ExportFormatDefinition",
+										"package": "@anvilkit/core"
+									}
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 56,
+						"name": "ExportRegistry",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 88,
+			"name": "createLifecycleManager",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "runtime/lifecycle-manager.ts",
+					"line": 260,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L260"
+				}
+			],
+			"signatures": [
+				{
+					"id": 89,
+					"name": "createLifecycleManager",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Create a lifecycle manager bound to a frozen array of plugin\nregistrations.\n\nThe registrations are snapshotted at construction time — adding\nor removing plugins at runtime would require rebuilding the\nmanager, which mirrors Puck's mount-time plugin array semantics."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/lifecycle-manager.ts",
+							"line": 260,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L260"
+						}
+					],
+					"parameters": [
+						{
+							"id": 90,
+							"name": "registrations",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "The aggregated registrations returned by\neach plugin's "
+									},
+									{
+										"kind": "code",
+										"text": "`register()`"
+									},
+									{
+										"kind": "text",
+										"text": " method, in plugin declaration order."
+									}
+								]
+							},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/plugin.ts",
+											"qualifiedName": "StudioPluginRegistration"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "@puckeditor/core",
+													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"qualifiedName": "Config"
+												},
+												"name": "Config",
+												"package": "@puckeditor/core"
+											}
+										],
+										"name": "StudioPluginRegistration",
+										"package": "@anvilkit/core"
+									}
+								}
+							}
+						},
+						{
+							"id": 91,
+							"name": "options",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Optional "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "LifecycleManagerOptions",
+										"target": "#"
+									},
+									{
+										"kind": "text",
+										"text": "; see the\nfield docs for semantics."
+									}
+								]
+							},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/runtime/lifecycle-manager.ts",
+									"qualifiedName": "LifecycleManagerOptions"
+								},
+								"name": "LifecycleManagerOptions",
+								"package": "@anvilkit/core",
+								"externalUrl": "#"
+							},
+							"defaultValue": "{}"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 93,
+						"name": "LifecycleManager",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 19,
+			"name": "isPuckPlugin",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "runtime/detect-plugin.ts",
+					"line": 114,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L114"
+				}
+			],
+			"signatures": [
+				{
+					"id": 20,
+					"name": "isPuckPlugin",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Type guard that returns "
+							},
+							{
+								"kind": "code",
+								"text": "`true`"
+							},
+							{
+								"kind": "text",
+								"text": " if "
+							},
+							{
+								"kind": "code",
+								"text": "`value`"
+							},
+							{
+								"kind": "text",
+								"text": " conforms to the\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`@puckeditor/core`"
+							},
+							{
+								"kind": "text",
+								"text": " "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "PuckPlugin",
+								"target": "https://puckeditor.com/docs/extending-puck/plugins"
+							},
+							{
+								"kind": "text",
+								"text": " shape.\r\n\r\nPuck's plugin type is a bag of optional fields ("
+							},
+							{
+								"kind": "code",
+								"text": "`overrides`"
+							},
+							{
+								"kind": "text",
+								"text": ",\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`fieldTransforms`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`render`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`icon`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`label`"
+							},
+							{
+								"kind": "text",
+								"text": ", "
+							},
+							{
+								"kind": "code",
+								"text": "`name`"
+							},
+							{
+								"kind": "text",
+								"text": ",\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`mobilePanelHeight`"
+							},
+							{
+								"kind": "text",
+								"text": ") — there is no single required field to pin\r\nthe check on. This guard looks for **any** of the distinctive Puck\r\ncontribution surfaces:\r\n\r\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`overrides`"
+							},
+							{
+								"kind": "text",
+								"text": " — slot component overrides.\r\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`fieldTransforms`"
+							},
+							{
+								"kind": "text",
+								"text": " — custom field renderers.\r\n- "
+							},
+							{
+								"kind": "code",
+								"text": "`render`"
+							},
+							{
+								"kind": "text",
+								"text": " — a plugin-provided side panel or toolbar.\r\n\r\nAn object that contributes none of those is either a vacuous\r\nplugin (which callers should author as a "
+							},
+							{
+								"kind": "code",
+								"text": "`StudioPlugin`"
+							},
+							{
+								"kind": "text",
+								"text": " instead)\r\nor something that was handed to the runtime by mistake. Rejecting\r\nthe empty object here means "
+							},
+							{
+								"kind": "code",
+								"text": "`compilePlugins([{}])`"
+							},
+							{
+								"kind": "text",
+								"text": " throws a clean\r\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPluginError",
+								"target": 45
+							},
+							{
+								"kind": "text",
+								"text": " instead of silently registering a no-op.\r\n\r\nCrucially, this guard **also** rejects anything that looks like a\r\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPlugin",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPlugin"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " — the two guards are mutually exclusive so\r\n"
+							},
+							{
+								"kind": "code",
+								"text": "`compilePlugins`"
+							},
+							{
+								"kind": "text",
+								"text": " can dispatch on a single "
+							},
+							{
+								"kind": "code",
+								"text": "`if / else`"
+							},
+							{
+								"kind": "text",
+								"text": " branch.\r\n\r\nPure, synchronous, no side effects."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/detect-plugin.ts",
+							"line": 114,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L114"
+						}
+					],
+					"parameters": [
+						{
+							"id": 21,
+							"name": "value",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "predicate",
+						"name": "value",
+						"asserts": false,
+						"targetType": {
+							"type": "reference",
+							"target": {
+								"packageName": "@puckeditor/core",
+								"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+								"qualifiedName": "Plugin"
+							},
+							"name": "Plugin",
+							"package": "@puckeditor/core",
+							"externalUrl": "https://puckeditor.com/docs/extending-puck/plugins"
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 22,
+			"name": "isStudioPlugin",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "runtime/detect-plugin.ts",
+					"line": 65,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L65"
+				}
+			],
+			"signatures": [
+				{
+					"id": 23,
+					"name": "isStudioPlugin",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Type guard that returns "
+							},
+							{
+								"kind": "code",
+								"text": "`true`"
+							},
+							{
+								"kind": "text",
+								"text": " if "
+							},
+							{
+								"kind": "code",
+								"text": "`value`"
+							},
+							{
+								"kind": "text",
+								"text": " conforms to the\r\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPlugin",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/plugin.ts",
+									"qualifiedName": "StudioPlugin"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " shape.\r\n\r\nThe check is intentionally minimal — it validates the three fields\r\nthe runtime actually reads during compilation:\r\n\r\n1. "
+							},
+							{
+								"kind": "code",
+								"text": "`meta.id`"
+							},
+							{
+								"kind": "text",
+								"text": " is a non-empty string.\r\n2. "
+							},
+							{
+								"kind": "code",
+								"text": "`meta.coreVersion`"
+							},
+							{
+								"kind": "text",
+								"text": " is a non-empty string.\r\n3. "
+							},
+							{
+								"kind": "code",
+								"text": "`register`"
+							},
+							{
+								"kind": "text",
+								"text": " is a function.\r\n\r\nEverything else on "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioPluginMeta"
+							},
+							{
+								"kind": "text",
+								"text": " (name, version,\r\ndescription) is advisory and not required for the runtime to make\r\nforward progress. A plugin that passes this guard but omits those\r\nfields will still compile; the type system is the forcing function\r\nfor completeness at authoring time.\r\n\r\nPure, synchronous, no side effects."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/detect-plugin.ts",
+							"line": 65,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L65"
+						}
+					],
+					"parameters": [
+						{
+							"id": 24,
+							"name": "value",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "predicate",
+						"name": "value",
+						"asserts": false,
+						"targetType": {
+							"type": "reference",
+							"target": {
+								"packageName": "@anvilkit/core",
+								"packagePath": "src/types/plugin.ts",
+								"qualifiedName": "StudioPlugin"
+							},
+							"typeArguments": [
+								{
+									"type": "reference",
+									"target": {
+										"packageName": "@puckeditor/core",
+										"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+										"qualifiedName": "Config"
+									},
+									"name": "Config",
+									"package": "@puckeditor/core"
+								}
+							],
+							"name": "StudioPlugin",
+							"package": "@anvilkit/core"
+						}
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Classes",
+			"children": [
+				25,
+				31,
+				37,
+				45
+			]
+		},
+		{
+			"title": "Interfaces",
+			"children": [
+				56,
+				93,
+				74,
+				7
+			]
+		},
+		{
+			"title": "Type Aliases",
+			"children": [
+				92,
+				118,
+				119
+			]
+		},
+		{
+			"title": "Variables",
+			"children": [
+				124,
+				1
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				2,
+				71,
+				53,
+				88,
+				19,
+				22
+			]
+		}
+	],
+	"packageName": "@anvilkit/core",
+	"symbolIdMap": {
+		"0": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/built-in-formats/json-format.ts",
+			"qualifiedName": "jsonFormat"
+		},
+		"2": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "compilePlugins"
+		},
+		"3": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "compilePlugins"
+		},
+		"4": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "plugins"
+		},
+		"5": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "ctx"
+		},
+		"6": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "options"
+		},
+		"7": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime"
+		},
+		"8": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.pluginMeta"
+		},
+		"9": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.registrations"
+		},
+		"10": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.lifecycle"
+		},
+		"11": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.exportFormats"
+		},
+		"12": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.assetResolvers"
+		},
+		"13": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.headerActions"
+		},
+		"14": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.overrides"
+		},
+		"15": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.providers"
+		},
+		"16": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.overlays"
+		},
+		"17": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.slots"
+		},
+		"18": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.puckPlugins"
+		},
+		"19": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "isPuckPlugin"
+		},
+		"20": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "isPuckPlugin"
+		},
+		"21": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "value"
+		},
+		"22": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "isStudioPlugin"
+		},
+		"23": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "isStudioPlugin"
+		},
+		"24": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "value"
+		},
+		"25": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioConfigError"
+		},
+		"26": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioConfigError.__constructor"
+		},
+		"27": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioConfigError"
+		},
+		"28": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "message"
+		},
+		"29": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "options"
+		},
+		"30": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioConfigError.code"
+		},
+		"31": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioError"
+		},
+		"32": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioError.__constructor"
+		},
+		"33": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioError"
+		},
+		"34": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "message"
+		},
+		"35": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "options"
+		},
+		"36": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioError.code"
+		},
+		"37": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioExportError"
+		},
+		"38": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioExportError.__constructor"
+		},
+		"39": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioExportError"
+		},
+		"40": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "formatId"
+		},
+		"41": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "message"
+		},
+		"42": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "options"
+		},
+		"43": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioExportError.code"
+		},
+		"44": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioExportError.formatId"
+		},
+		"45": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioPluginError"
+		},
+		"46": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioPluginError.__constructor"
+		},
+		"47": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioPluginError"
+		},
+		"48": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "pluginId"
+		},
+		"49": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "message"
+		},
+		"50": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "options"
+		},
+		"51": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioPluginError.code"
+		},
+		"52": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioPluginError.pluginId"
+		},
+		"53": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "createExportRegistry"
+		},
+		"54": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "createExportRegistry"
+		},
+		"55": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "formats"
+		},
+		"56": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "ExportRegistry"
+		},
+		"57": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "ExportRegistry.list"
+		},
+		"58": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"59": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"60": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "ExportRegistry.get"
+		},
+		"61": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"62": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"63": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "id"
+		},
+		"64": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "ExportRegistry.has"
+		},
+		"65": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"66": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"67": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "id"
+		},
+		"68": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "ExportRegistry.size"
+		},
+		"69": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"70": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
+		},
+		"71": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/header-actions.ts",
+			"qualifiedName": "composeHeaderActions"
+		},
+		"72": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/header-actions.ts",
+			"qualifiedName": "composeHeaderActions"
+		},
+		"73": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/header-actions.ts",
+			"qualifiedName": "actions"
+		},
+		"74": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction"
+		},
+		"75": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.id"
+		},
+		"76": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.label"
+		},
+		"77": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.icon"
+		},
+		"78": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.group"
+		},
+		"79": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.order"
+		},
+		"80": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.onClick"
+		},
+		"81": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "__type"
+		},
+		"82": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "__type"
+		},
+		"83": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "ctx"
+		},
+		"84": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.disabled"
+		},
+		"85": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "__type"
+		},
+		"86": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "__type"
+		},
+		"87": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "ctx"
+		},
+		"88": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "createLifecycleManager"
+		},
+		"89": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "createLifecycleManager"
+		},
+		"90": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "registrations"
+		},
+		"91": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "options"
+		},
+		"92": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleEventName"
+		},
+		"93": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleManager"
+		},
+		"94": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleManager.emit"
+		},
+		"95": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"96": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"97": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "event"
+		},
+		"98": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "ctx"
+		},
+		"99": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "payload"
+		},
+		"100": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleManager.subscribe"
+		},
+		"101": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"102": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"103": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "event"
+		},
+		"104": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "handler"
+		},
+		"105": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"106": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"107": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleManager.phase"
+		},
+		"108": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"109": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"110": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleManager.advanceTo"
+		},
+		"111": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"112": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"113": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "phase"
+		},
+		"114": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "ctx"
+		},
+		"115": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleManager.dispose"
+		},
+		"116": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"117": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"118": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecyclePhase"
+		},
+		"119": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "LifecycleSubscriber"
+		},
+		"120": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"121": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
+		},
+		"122": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "ctx"
+		},
+		"123": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "payload"
+		},
+		"124": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/version.ts",
+			"qualifiedName": "CORE_VERSION"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/runtime/index.ts"
+		},
+		"reflections": {
+			"1": 0
+		}
+	}
+}
