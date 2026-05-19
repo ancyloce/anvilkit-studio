@@ -5,7 +5,17 @@
  * overflow menu and the toolbar render plugin actions identically.
  */
 
-import * as Icons from "lucide-react";
+import {
+	Camera,
+	Code,
+	Download,
+	History,
+	Monitor,
+	Smartphone,
+	Sparkles,
+	Tablet,
+	Upload,
+} from "lucide-react";
 import {
 	type ComponentType,
 	type ReactNode,
@@ -19,50 +29,47 @@ import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
 
 type LucideIconComponent = ComponentType<{ className?: string }>;
 
-const LUCIDE_EXPORTS = Icons as unknown as Record<string, unknown>;
-
-function isLucideIconComponent(
-	candidate: unknown,
-): candidate is LucideIconComponent {
-	// Lucide icons are React forwardRef components (objects with `$$typeof`).
-	// The `createLucideIcon` factory is a plain function and is the only
-	// non-component export — exclude it by requiring the object form.
-	return typeof candidate === "object" && candidate !== null;
-}
+/**
+ * Curated set of icons the chrome may render for plugin header
+ * actions. Explicit **named** imports (not `import * as Icons`) so
+ * esbuild/rslib tree-shake the chrome bundle down to exactly these —
+ * a namespace import + dynamic key access retains every Lucide icon
+ * (review §2.3). To support a new `action.icon` value, add its named
+ * import here; the chrome-path bundle-budget gate measures the cost.
+ *
+ * Keys are PascalCase Lucide export names; {@link resolveIcon}
+ * matches case/separator-insensitively so a plugin may pass
+ * `"download"`, `"Download"`, or `"down_load"`.
+ */
+const ICON_REGISTRY: Record<string, LucideIconComponent> = {
+	Camera,
+	Code,
+	Download,
+	History,
+	Monitor,
+	Smartphone,
+	Sparkles,
+	Tablet,
+	Upload,
+};
 
 function normalizeIconName(name: string): string {
 	return name.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
 }
 
-function toPascalCase(name: string): string {
-	return name
-		.split(/[-_\s]+/)
-		.filter((part) => part.length > 0)
-		.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-		.join("");
-}
+/** Pre-normalized index so lookup is O(1) and case/separator-blind. */
+const NORMALIZED_ICON_REGISTRY: Record<string, LucideIconComponent> =
+	Object.fromEntries(
+		Object.entries(ICON_REGISTRY).map(([key, icon]) => [
+			normalizeIconName(key),
+			icon,
+		]),
+	);
 
 function resolveIcon(name: string | undefined): LucideIconComponent | null {
 	const trimmed = name?.trim();
 	if (trimmed === undefined || trimmed.length === 0) return null;
-
-	for (const candidateName of [trimmed, toPascalCase(trimmed)]) {
-		const candidate = LUCIDE_EXPORTS[candidateName];
-		if (isLucideIconComponent(candidate)) {
-			return candidate;
-		}
-	}
-
-	const normalized = normalizeIconName(trimmed);
-	for (const [exportName, candidate] of Object.entries(LUCIDE_EXPORTS)) {
-		if (
-			normalizeIconName(exportName) === normalized &&
-			isLucideIconComponent(candidate)
-		) {
-			return candidate;
-		}
-	}
-	return null;
+	return NORMALIZED_ICON_REGISTRY[normalizeIconName(trimmed)] ?? null;
 }
 
 export interface HeaderActionButtonProps {
