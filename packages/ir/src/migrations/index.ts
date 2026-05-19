@@ -13,6 +13,7 @@
 
 import type { PageIR, PageIRNode } from "@anvilkit/core/types";
 
+import type { Mutable } from "../internal/types.js";
 import { type NodeMetaValidationIssue, PageIRNodeMetaError } from "./error.js";
 import { stripMetaFromTree } from "./internal/strip-meta.js";
 import {
@@ -50,9 +51,11 @@ export interface PageIRMigrationOptions {
  * - Validates every `node.meta` (when present) against the runtime
  *   caps documented on `PageIRNodeMeta` (from `@anvilkit/core`).
  *   Throws {@link PageIRNodeMetaError} on the first invalid node.
- * - Returns a structurally cloned, frozen IR when validation
- *   succeeds with at least one populated `meta`. The clone preserves
- *   `meta` byte-for-byte; it never synthesizes new fields.
+ * - Returns a frozen IR with a freshly rebuilt node spine when
+ *   validation succeeds with at least one populated `meta`. The
+ *   rebuild is structural only: `props`, `assets`, and `meta` are
+ *   carried over by reference (not deep-cloned) and `meta` is
+ *   preserved byte-for-byte; no new fields are synthesized.
  *
  * Importantly, this helper NEVER bumps `ir.version`. The literal
  * stays `"1"` across `0.21 ↔ 0.22`.
@@ -160,5 +163,3 @@ function cloneNodePreservingMeta(node: PageIRNode): PageIRNode {
 export function downgradePageIR(ir: PageIR): PageIR {
 	return stripMetaFromTree(ir);
 }
-
-type Mutable<T> = { -readonly [P in keyof T]: T[P] };

@@ -10,6 +10,8 @@
 
 import type { PageIR, PageIRNode } from "@anvilkit/core/types";
 
+import type { Mutable } from "../../internal/types.js";
+
 export function stripMetaFromTree(ir: PageIR): PageIR {
 	return Object.freeze({
 		...ir,
@@ -36,5 +38,3 @@ function stripMetaFromNode(node: PageIRNode): PageIRNode {
 
 	return Object.freeze(stripped);
 }
-
-type Mutable<T> = { -readonly [P in keyof T]: T[P] };
