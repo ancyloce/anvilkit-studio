@@ -14,7 +14,7 @@ import { useGetPuck } from "@puckeditor/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Box, ChevronDown, ChevronRight, GripVertical } from "lucide-react";
-import { type KeyboardEvent, type ReactNode, useCallback } from "react";
+import { type KeyboardEvent, memo, type ReactNode, useCallback } from "react";
 import { cn } from "@/overrides/utils/cn";
 import { useMsg } from "@/state/editor-i18n-store";
 import { useScrollComponentIntoView } from "./use-scroll-component-into-view";
@@ -27,10 +27,15 @@ interface LayerRowProps {
 	readonly hasChildren: boolean;
 	/** Number of siblings in `node.zone` — clamps keyboard reorder. */
 	readonly siblingCount: number;
-	readonly onToggleExpand: () => void;
+	/**
+	 * Stable per-tree toggle handler. Takes `(id, next)` rather than a
+	 * per-row closure so its identity is constant across renders and
+	 * the `React.memo` boundary actually holds at large node counts.
+	 */
+	readonly onToggleExpand: (id: string, next: boolean) => void;
 }
 
-export function LayerRow({
+function LayerRowImpl({
 	node,
 	selected,
 	expanded,
@@ -134,7 +139,7 @@ export function LayerRow({
 						aria-expanded={expanded}
 						data-testid={`ak-layer-toggle-${node.id}`}
 						className="flex size-5 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] hover:text-[var(--ak-studio-fg)]"
-						onClick={onToggleExpand}
+						onClick={() => onToggleExpand(node.id, !expanded)}
 					>
 						{expanded ? (
 							<ChevronDown className="size-3.5" aria-hidden="true" />
@@ -164,3 +169,11 @@ export function LayerRow({
 		</div>
 	);
 }
+
+/**
+ * Memoized so a selection change re-renders only the rows whose
+ * `selected`/`expanded` actually flipped, not the entire visible
+ * subtree (review §2.3 — editor jank at 100+ nodes). Holds only
+ * because `onToggleExpand` is a stable per-tree handler.
+ */
+export const LayerRow = memo(LayerRowImpl);

@@ -33,10 +33,11 @@ import {
 	sortableKeyboardCoordinates,
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { type ReactNode, useCallback, useMemo, useState } from "react";
+import { memo, type ReactNode, useCallback, useMemo, useState } from "react";
 import { cn } from "@/overrides/utils/cn";
 import { useMsg } from "@/state/editor-i18n-store";
 import { useEditorUiStore } from "@/state/hooks";
+import type { EditorUiState } from "@/state/editor-ui-store";
 import { LayerRow } from "./LayerRow";
 import {
 	collectSubtreeZones,
@@ -58,15 +59,35 @@ const collisionDetection: CollisionDetection = (args) => {
 		: rectIntersection(args);
 };
 
+// Module-scope selectors so their identity is stable across renders
+// (an inline `(s) => …` allocates a new function each render, which
+// defeats memoization further down the tree).
+const selectOutlineExpanded = (
+	s: EditorUiState,
+): Readonly<Record<string, boolean>> => s.outlineExpanded;
+const selectSetOutlineExpanded = (
+	s: EditorUiState,
+): ((id: string, expanded: boolean) => void) => s.setOutlineExpanded;
+
 interface LayerZoneProps {
 	readonly zoneKey: string;
 	readonly nodes: readonly LayerNode[];
 	readonly selectedId: string | null;
 }
 
-function LayerZone({ zoneKey, nodes, selectedId }: LayerZoneProps): ReactNode {
-	const outlineExpanded = useEditorUiStore((s) => s.outlineExpanded);
-	const setOutlineExpanded = useEditorUiStore((s) => s.setOutlineExpanded);
+function LayerZoneImpl({
+	zoneKey,
+	nodes,
+	selectedId,
+}: LayerZoneProps): ReactNode {
+	const outlineExpanded = useEditorUiStore(selectOutlineExpanded);
+	const setOutlineExpanded = useEditorUiStore(selectSetOutlineExpanded);
+	// One stable handler for every row in this zone: keeps the
+	// `LayerRow` `React.memo` boundary intact on selection changes.
+	const handleToggle = useCallback(
+		(id: string, next: boolean): void => setOutlineExpanded(id, next),
+		[setOutlineExpanded],
+	);
 
 	const { setNodeRef, isOver } = useDroppable({
 		id: `${ZONE_PREFIX}${zoneKey}`,
@@ -97,7 +118,7 @@ function LayerZone({ zoneKey, nodes, selectedId }: LayerZoneProps): ReactNode {
 								expanded={expanded}
 								hasChildren={hasChildren}
 								siblingCount={nodes.length}
-								onToggleExpand={() => setOutlineExpanded(node.id, !expanded)}
+								onToggleExpand={handleToggle}
 							/>
 							{hasChildren && expanded
 								? node.childZones.map((childZone) => (
@@ -116,6 +137,15 @@ function LayerZone({ zoneKey, nodes, selectedId }: LayerZoneProps): ReactNode {
 		</SortableContext>
 	);
 }
+
+/**
+ * Memoized so an unrelated `LayerTree` re-render (e.g. drag-overlay
+ * `activeId` state) does not re-render every zone — and a selection
+ * change only re-renders zones whose `selectedId`/`nodes` changed,
+ * not the whole tree (review §2.3). The recursive child below refers
+ * to this memoized binding.
+ */
+const LayerZone = memo(LayerZoneImpl);
 
 export function LayerTree(): ReactNode {
 	const msg = useMsg();
