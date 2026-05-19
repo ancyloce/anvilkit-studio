@@ -103,9 +103,21 @@ export function useThemeSync(): void {
     }
     const media = window.matchMedia(MEDIA_QUERY);
     const listener = (): void => apply();
-    media.addEventListener("change", listener);
-    return () => {
-      media.removeEventListener("change", listener);
-    };
+    // Legacy WebKit/WebViews expose `matchMedia` but the returned
+    // `MediaQueryList` only supports the deprecated `addListener`
+    // /`removeListener` API, not `addEventListener`. Prefer the modern
+    // API, fall back to the legacy one, and bail if neither exists.
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", listener);
+      return () => {
+        media.removeEventListener("change", listener);
+      };
+    }
+    if (typeof media.addListener === "function") {
+      media.addListener(listener);
+      return () => {
+        media.removeListener?.(listener);
+      };
+    }
   }, [mode, setResolved, rootRef]);
 }
