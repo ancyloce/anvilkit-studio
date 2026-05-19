@@ -103,7 +103,9 @@ export interface CompiledStudioRuntime {
 /** Dynamically-loaded AnvilKit chrome assets (null on `chrome="puck"`). */
 export interface ChromeAssets {
 	readonly studioOverrides: Partial<PuckOverrides>;
-	readonly StudioLayout: import("react").ComponentType<unknown>;
+	readonly StudioLayout: import("react").ComponentType<
+		import("@/layout/StudioLayout").StudioLayoutProps
+	>;
 }
 
 /**
@@ -354,6 +356,53 @@ function fingerprintPlugins(
  * reference re-compiles, which is the safe, correct choice. Pure-JSON
  * configs keep the cheap structural hash (no recompile thrash).
  */
+// Dev-only footgun detector: a host that passes an inline
+// `config={{ experimental: { transform: fn } }}` without memoizing
+// gets a fresh identity every render (the safe identity fallback
+// below), which re-runs the whole dynamic-import + `compilePlugins`
+// effect each parent render. We can't fix it for them (dropping the
+// function would be unsafe) but a one-shot warn surfaces it.
+let _nonJsonFingerprintWarned = false;
+let _lastNonJsonProjection: string | undefined;
+let _lastNonJsonRef: object | undefined;
+
+/**
+ * `NODE_ENV` via `globalThis` — mirrors `config/env-parser`'s
+ * environment-agnostic accessor (core's tsconfig has no `@types/node`
+ * in `types`, so the bare `process` identifier is untyped). Absent ⇒
+ * `undefined` ⇒ treated as non-production (the warn is harmless).
+ */
+function nodeEnv(): string | undefined {
+	return (
+		globalThis as unknown as { process?: { env?: Record<string, string> } }
+	).process?.env?.NODE_ENV;
+}
+
+function warnRepeatedConfigRecompile(config: object, projection: string): void {
+	if (
+		nodeEnv() === "production" ||
+		_nonJsonFingerprintWarned ||
+		_lastNonJsonRef === undefined
+	) {
+		_lastNonJsonProjection = projection;
+		_lastNonJsonRef = config;
+		return;
+	}
+	// New object identity but structurally-equal projection ⇒ the host
+	// is re-creating the same config inline every render.
+	if (_lastNonJsonRef !== config && _lastNonJsonProjection === projection) {
+		_nonJsonFingerprintWarned = true;
+		console.warn(
+			"[studio] `config` contains a function/symbol/bigint and is not " +
+				"referentially stable across renders. Every render now re-runs " +
+				"the full plugin compile. Memoize the config (or hoist it) so " +
+				"`<Studio>` can skip the recompile. (Logged once.)",
+		);
+	}
+	_lastNonJsonProjection = projection;
+	_lastNonJsonRef = config;
+}
+
 function fingerprintConfig(config: unknown): string {
 	if (config === undefined || config === null) {
 		return "null";
@@ -371,6 +420,7 @@ function fingerprintConfig(config: unknown): string {
 		// (e.g. a bare function). Either way, the string lost
 		// information → fall back to identity.
 		if (hasNonJson || json === undefined) {
+			warnRepeatedConfigRecompile(config as object, json ?? "<non-json>");
 			return `id:${identityTagFor(config as object)}`;
 		}
 		return json;
@@ -482,10 +532,35 @@ function useHydrateRuntimeStores(
 			.setAvailableFormats([...compiled.runtime.exportFormats.keys()]);
 
 		const theme = compiled.studioConfig.theme;
-		const currentMode = themeStore.getState().mode;
-		if (currentMode === "system" && theme.defaultMode !== "system") {
-			themeStore.getState().setMode(theme.defaultMode);
+		// Apply `defaultMode` only to a user with no persisted
+		// preference. The store starts at `"system"` *and* reports
+		// `"system"` before rehydration, so writing here pre-hydration
+		// would clobber a persisted `"light"`/`"dark"` the moment it
+		// loads. `ThemeStoreProvider`'s rehydrate is gated behind the
+		// hydration boundary, so wait for `onFinishHydration` (or run
+		// now if already hydrated) and decide against the *rehydrated*
+		// mode.
+		const applyDefaultMode = (): void => {
+			if (theme.defaultMode === "system") {
+				return;
+			}
+			if (themeStore.getState().mode === "system") {
+				themeStore.getState().setMode(theme.defaultMode);
+			}
+		};
+		const persist = (
+			themeStore as unknown as {
+				persist: {
+					hasHydrated(): boolean;
+					onFinishHydration(cb: () => void): () => void;
+				};
+			}
+		).persist;
+		if (persist.hasHydrated()) {
+			applyDefaultMode();
+			return;
 		}
+		return persist.onFinishHydration(applyDefaultMode);
 	}, [compiled, exportStore, themeStore]);
 }
 
@@ -585,6 +660,28 @@ export function useStudioController(props: StudioProps): StudioControllerState {
 	// onInit/onReady bookkeeping into the engine phase machine).
 	const identityRef = useRef<RuntimeIdentity>({ generation: 0 });
 
+	// Single-flight publish chain: serialize overlapping publishes so
+	// the onBeforePublish → onPublish → onAfterPublish chains never
+	// interleave. The tail promise is replaced on every call; each
+	// queued task awaits the previous tail.
+	const publishQueueRef = useRef<Promise<void>>(Promise.resolve());
+	// Flipped by the teardown effect's cleanup. A slow consumer
+	// onPublish can resolve after dispose(); this lets the queued
+	// continuation skip a post-dispose onAfterPublish emit against a
+	// disposed runtime / reset stores.
+	const disposedRef = useRef(false);
+
+	// `onReady` dedupe per `(runtime, getPuck)` pair. The engine phase
+	// machine is already idempotent for a given runtime, but Puck can
+	// re-initialize mid-session (new `getPuck`) while `compiled` is
+	// unchanged; this skips the redundant `advanceTo("ready")` churn so
+	// the intent ("ready is driven exactly once per runtime") is
+	// legible at the call site and not solely an engine invariant.
+	const readyDrivenRef = useRef<{
+		runtime: CompiledStudioRuntime;
+		getPuck: GetPuckSnapshot;
+	} | null>(null);
+
 	const rootRef = useRef<HTMLDivElement>(null);
 
 	const [sidebarRegistryStore] = useState<SidebarRegistryStoreApi>(() => {
@@ -648,7 +745,7 @@ export function useStudioController(props: StudioProps): StudioControllerState {
 				}
 				nextChromeAssets = {
 					studioOverrides: presetMod.studioOverrides,
-					StudioLayout: layoutMod.StudioLayout as ChromeAssets["StudioLayout"],
+					StudioLayout: layoutMod.StudioLayout,
 				};
 			}
 
@@ -761,6 +858,22 @@ export function useStudioController(props: StudioProps): StudioControllerState {
 		if (compiled === null) {
 			return;
 		}
+		// Skip a repeat `advanceTo("ready")` for the same runtime + the
+		// same bound `getPuck`. `puckApiRef.current` is the live binder
+		// identity (set by `PuckApiBinder` immediately before `onBound`).
+		const driven = readyDrivenRef.current;
+		const getPuck = puckApiRef.current;
+		if (
+			driven !== null &&
+			driven.runtime === compiled &&
+			getPuck !== null &&
+			driven.getPuck === getPuck
+		) {
+			return;
+		}
+		if (getPuck !== null) {
+			readyDrivenRef.current = { runtime: compiled, getPuck };
+		}
 		compiled.runtime.lifecycle.advanceTo("ready", compiled.ctx);
 	}, [compiled]);
 
@@ -768,8 +881,14 @@ export function useStudioController(props: StudioProps): StudioControllerState {
 		if (compiled === null) {
 			return;
 		}
+		// Re-arm the post-dispose guard for this runtime (a remount via
+		// a new `compiled` gets a fresh teardown window).
+		disposedRef.current = false;
 		const { runtime, ctx } = compiled;
 		return () => {
+			// Mark disposed *before* dispose()/store resets so an
+			// in-flight queued publish bails out of `onAfterPublish`.
+			disposedRef.current = true;
 			// `onDestroy` stays a shell-emitted event so it closes over
 			// the exact runtime/ctx pair that fired `onInit`; the phase
 			// marker keeps a late `onInit`-settle `.then` from firing a
@@ -833,12 +952,29 @@ export function useStudioController(props: StudioProps): StudioControllerState {
 	const handlePublish = useCallback(
 		(nextData: PuckData): void => {
 			const consumerOnPublish = onPublishRef.current;
-			void (async () => {
-				if (compiled !== null) {
+			// Capture the runtime + compile generation synchronously, at
+			// call time, before any await.
+			const runtimeAtCall = compiled;
+			const myGen = identityRef.current.generation;
+			// The plugin lifecycle emits are runtime-bound: skip them if
+			// the runtime was disposed or superseded by a recompile while
+			// this publish sat in the queue. The consumer callback is
+			// NOT gated — dropping a host's save would be data loss.
+			const runtimeLive = (): boolean =>
+				!disposedRef.current &&
+				identityRef.current.generation === myGen &&
+				runtimeAtCall !== null;
+
+			// Single-flight: chain onto the queue tail so overlapping
+			// publishes serialize (onBeforePublish → onPublish →
+			// onAfterPublish never interleave). `.catch` keeps the chain
+			// alive — one failed publish must not poison the next.
+			const task = publishQueueRef.current.then(async () => {
+				if (runtimeAtCall !== null && runtimeLive()) {
 					try {
-						await compiled.runtime.lifecycle.emit(
+						await runtimeAtCall.runtime.lifecycle.emit(
 							"onBeforePublish",
-							compiled.ctx,
+							runtimeAtCall.ctx,
 							nextData,
 						);
 					} catch (error) {
@@ -854,14 +990,17 @@ export function useStudioController(props: StudioProps): StudioControllerState {
 					return;
 				}
 
-				if (compiled !== null) {
-					void compiled.runtime.lifecycle.emit(
+				if (runtimeAtCall !== null && runtimeLive()) {
+					await runtimeAtCall.runtime.lifecycle.emit(
 						"onAfterPublish",
-						compiled.ctx,
+						runtimeAtCall.ctx,
 						nextData,
 					);
 				}
-			})();
+			});
+			publishQueueRef.current = task.catch(() => {
+				// Swallowed: a failed publish must not poison the queue.
+			});
 		},
 		[compiled],
 	);
