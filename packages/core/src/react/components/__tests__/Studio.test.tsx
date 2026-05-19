@@ -259,6 +259,49 @@ describe("<Studio> — mount and compile", () => {
 		});
 	});
 
+	it("warns once per ctx that ctx.emit is reserved/inert (A4)", async () => {
+		const logger = vi.fn();
+		const emittingPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.emitter"),
+			register(ctx) {
+				// Reserved bus: must not throw, must not stay silent.
+				ctx.emit("my-event", { a: 1 });
+				ctx.emit("my-event-again");
+				return { meta: buildMeta("com.example.emitter") };
+			},
+		};
+
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[emittingPlugin]}
+				logger={logger}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		const emitWarnings = logger.mock.calls.filter(
+			(call) =>
+				call[0] === "warn" &&
+				typeof call[1] === "string" &&
+				call[1].includes("reserved and inert"),
+		);
+		// Exactly one warn for the whole ctx, even though emit was
+		// called twice — and it names the first event.
+		expect(emitWarnings).toHaveLength(1);
+		const firstWarn = emitWarnings[0];
+		// Explicit guard so `noUncheckedIndexedAccess` narrows the
+		// tuple before we read [1]/[2] (codex-review P2).
+		if (firstWarn === undefined) {
+			throw new Error("expected exactly one ctx.emit reserved warning");
+		}
+		expect(firstWarn[1]).toContain('ctx.emit("my-event")');
+		expect(firstWarn[2]).toMatchObject({ event: "my-event" });
+	});
+
 	it("delivers a serializable error when plugin compilation fails", async () => {
 		// Regression: `Error`'s name/message/stack are non-enumerable, so
 		// an Error passed as log meta used to JSON-serialize to `{}` —
