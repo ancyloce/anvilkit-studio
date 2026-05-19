@@ -25,6 +25,15 @@ import { Fragment, type ReactNode, useRef } from "react";
 
 export interface WindowedProps<T> {
 	readonly items: readonly T[];
+	/**
+	 * Renders one item. **Must be `useCallback`-stable.** This is a
+	 * large-list performance primitive; a fresh inline
+	 * `renderItem={(it) => <Row item={it} />}` allocates a new function
+	 * every parent render, which re-renders every row (virtualized or
+	 * not) and defeats the entire purpose of windowing. Define it once
+	 * with `useCallback` (or hoist it) and keep its dependency list
+	 * minimal. (Review §2.3.)
+	 */
 	readonly renderItem: (item: T, index: number) => ReactNode;
 	readonly itemKey: (item: T, index: number) => string;
 	/** Estimated row height in px (one lane row for grids). */
