@@ -3,26 +3,13 @@
  * See `ThemeStoreProvider` for the shared pattern rationale.
  */
 
-import {
-	createContext,
-	type ReactNode,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import { useStore } from "zustand";
 
 import { type AiState, type AiStoreApi, createAiStore } from "./ai-store";
+import { useRehydratedStore } from "./use-rehydrated-store";
 
 const AiStoreContext = createContext<AiStoreApi | null>(null);
-
-interface PersistableStore {
-	readonly persist: { rehydrate(): void | Promise<void> };
-}
-
-function withPersistApi(store: AiStoreApi): PersistableStore {
-	return store as unknown as PersistableStore;
-}
 
 export interface AiStoreProviderProps {
 	readonly storeId: string;
@@ -35,12 +22,16 @@ export function AiStoreProvider({
 	store: injected,
 	children,
 }: AiStoreProviderProps): ReactNode {
-	const [store] = useState(() => injected ?? createAiStore({ storeId }));
-	useEffect(() => {
-		void withPersistApi(store).persist.rehydrate();
-	}, [store]);
+	const { store, hydrated } = useRehydratedStore(
+		storeId,
+		createAiStore,
+		injected,
+	);
+	// Gate until rehydrated — see `useRehydratedStore` (SSR-safe).
 	return (
-		<AiStoreContext.Provider value={store}>{children}</AiStoreContext.Provider>
+		<AiStoreContext.Provider value={store}>
+			{hydrated ? children : null}
+		</AiStoreContext.Provider>
 	);
 }
 

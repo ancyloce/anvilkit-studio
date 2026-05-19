@@ -3,13 +3,7 @@
  * See `ThemeStoreProvider` for the shared pattern rationale.
  */
 
-import {
-	createContext,
-	type ReactNode,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import { useStore } from "zustand";
 
 import {
@@ -17,16 +11,9 @@ import {
 	type ExportState,
 	type ExportStoreApi,
 } from "./export-store";
+import { useRehydratedStore } from "./use-rehydrated-store";
 
 const ExportStoreContext = createContext<ExportStoreApi | null>(null);
-
-interface PersistableStore {
-	readonly persist: { rehydrate(): void | Promise<void> };
-}
-
-function withPersistApi(store: ExportStoreApi): PersistableStore {
-	return store as unknown as PersistableStore;
-}
 
 export interface ExportStoreProviderProps {
 	readonly storeId: string;
@@ -39,13 +26,15 @@ export function ExportStoreProvider({
 	store: injected,
 	children,
 }: ExportStoreProviderProps): ReactNode {
-	const [store] = useState(() => injected ?? createExportStore({ storeId }));
-	useEffect(() => {
-		void withPersistApi(store).persist.rehydrate();
-	}, [store]);
+	const { store, hydrated } = useRehydratedStore(
+		storeId,
+		createExportStore,
+		injected,
+	);
+	// Gate until rehydrated — see `useRehydratedStore` (SSR-safe).
 	return (
 		<ExportStoreContext.Provider value={store}>
-			{children}
+			{hydrated ? children : null}
 		</ExportStoreContext.Provider>
 	);
 }
