@@ -462,6 +462,81 @@ The full test file lives at
 [`examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts).
 The harness mirrors §7 — there is nothing plugin-specific about it.
 
+## 9. Plugin config & type safety
+
+### Plugin types do not propagate to `<Studio>`
+
+This is a **deliberate architectural decision**, not a gap to work
+around. `<Studio>` is *not* generic over its plugin set: passing
+`plugins={[myPlugin]}` does not flow `myPlugin`'s config type into
+`config`, and `config.experimental` is typed `Record<string, unknown>`.
+
+Why: core decouples its type version from every plugin's. A plugin can
+ship a new major independently of `@anvilkit/core`, and no plugin
+upgrade ever forces a core type bump. The cost is that the host
+`<Studio>` boundary gives **no compile-time validation or IDE
+autocomplete for plugin-specific config** — but inside a plugin's own
+`register()` body, `StudioPluginContext<UserConfig>` is fully typed, so
+plugin authors keep full safety where they write plugin code.
+
+**Plugin config is validated at runtime via Zod**, not at the
+`<Studio>` type boundary. `createStudioConfig()` runs the
+`StudioConfigSchema` (`config.experimental` is
+`z.record(z.string(), z.unknown())`), so a malformed config fails fast
+at startup with a Zod error — just not at `tsc` time.
+
+### Typing your plugin's `experimental` config yourself
+
+Core exposes a module-augmentation slot, `StudioExperimentalConfig`.
+Add your keys with declaration merging to get intellisense + checking
+for *your* plugin's config without core depending on your types:
+
+```ts
+declare module "@anvilkit/core" {
+  interface StudioExperimentalConfig {
+    myPlugin?: { apiKey: string; debug?: boolean };
+  }
+}
+
+// Now this is type-checked and autocompleted:
+const config = createStudioConfig({
+  experimental: { myPlugin: { apiKey: "…" } },
+});
+```
+
+The slot is intersected with the open `Record<string, unknown>`, so it
+is purely additive — unaugmented keys keep working untyped and no
+existing config breaks. The runtime still validates via Zod regardless.
+
+### Footgun: memoize a `config` that contains functions
+
+`<Studio>` fingerprints `config` to decide when to recompile plugins.
+A pure-JSON config uses a cheap structural hash. But if `config`
+contains a **function, symbol, or bigint** (e.g.
+`config={{ experimental: { transform: fn } }}`), structural hashing
+would silently drop it, so core safely falls back to **reference
+identity** instead. Consequence: an *inline* non-JSON config object
+gets a fresh identity every render, re-running the entire plugin
+compile on every parent render.
+
+Fix: memoize (or hoist) any config that carries non-JSON values.
+
+```tsx
+// ❌ recompiles every render
+<Studio config={{ experimental: { transform: (n) => n } }} />
+
+// ✅ stable identity → compiles once
+const config = useMemo(
+  () => ({ experimental: { transform: (n) => n } }),
+  [],
+);
+<Studio config={config} />
+```
+
+In development, core logs a one-shot `console.warn` when it detects
+this pattern (the same structural config arriving with a new identity
+on consecutive renders).
+
 ## Reference
 
 - Plugin contract: [`packages/core/src/types/plugin.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts)
