@@ -22,7 +22,12 @@ import { createUsePuck, type useGetPuck } from "@puckeditor/core";
 
 export type PuckSnapshot = ReturnType<ReturnType<typeof useGetPuck>>;
 
-type ReactivePuckHook = <T>(selector: (snapshot: PuckSnapshot) => T) => T;
+// Derived from Puck's real `createUsePuck` signature (not
+// `as unknown as`) so a breaking change to that signature fails to
+// compile here instead of silently. Structurally `<T>(selector:
+// (snapshot: PuckSnapshot) => T) => T` — `PuckSnapshot` is exactly
+// `createUsePuck`'s selector-state type.
+type ReactivePuckHook = ReturnType<typeof createUsePuck>;
 
 let _useReactivePuck: ReactivePuckHook | null = null;
 
@@ -34,7 +39,7 @@ let _useReactivePuck: ReactivePuckHook | null = null;
  */
 export function useReactivePuck<T>(selector: (snapshot: PuckSnapshot) => T): T {
 	if (_useReactivePuck === null) {
-		_useReactivePuck = createUsePuck() as unknown as ReactivePuckHook;
+		_useReactivePuck = createUsePuck();
 	}
 	return _useReactivePuck(selector);
 }
