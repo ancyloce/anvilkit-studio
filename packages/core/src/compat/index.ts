@@ -10,5 +10,9 @@
 // (`packages/core/src/index.ts`) does not re-export from this file
 // (acceptance criterion #6 of core-010), so a host app that never
 // imports `@anvilkit/core/compat` ships zero adapter bytes.
+//
+// DEPRECATED since 0.1.x. Removal target: v2.0.0 (a major bump, per
+// docs/policies/lts.md §5 — never a minor). Supported through every
+// v1.x minor. See the `@deprecated` markers in ./ai-host-adapter.ts.
 
 export { type AiHostAdapterOptions, aiHostAdapter } from "./ai-host-adapter.js";

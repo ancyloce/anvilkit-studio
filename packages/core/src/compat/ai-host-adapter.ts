@@ -24,6 +24,22 @@
  *    file in a future minor release without touching the rest of the
  *    public API.
  *
+ * ### Deprecation timeline
+ *
+ * This adapter is **deprecated** in favor of
+ * `createAiGenerationPlugin()` from `@anvilkit/plugins/ai-generation`.
+ * Per the LTS policy (`docs/policies/lts.md` §5), removal triggers a
+ * **major** bump — never a minor — and lands no earlier than two
+ * minors after the deprecation ships. Concretely:
+ *
+ * - **Deprecated:** since `0.1.x` (this marker).
+ * - **Runtime warning:** one-shot `console.warn` (already shipping).
+ * - **Removal target:** `v2.0.0` — the first major after the `v1.x`
+ *   LTS line. The adapter is supported through every `v1.x` minor.
+ *
+ * Do not retarget removal to a minor (e.g. `0.3.0`): that violates
+ * the LTS deprecation policy.
+ *
  * ### Zero React, zero Puck runtime imports
  *
  * The only imports are `import type` references to the plugin
@@ -47,6 +63,9 @@ import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
  * a single string base URL and an optional path override. Anything
  * richer (auth headers, retry, streaming) belongs to the real
  * `@anvilkit/plugins/ai-generation` package.
+ *
+ * @deprecated Since `0.1.x`. Part of the legacy `aiHost` compat
+ * surface; removal target `v2.0.0` (see {@link aiHostAdapter}).
  */
 export interface AiHostAdapterOptions {
 	/**
@@ -359,6 +378,11 @@ let warned = false;
  * so unused imports can be tree-shaken away by ESM bundlers.
  *
  * @param options - The legacy {@link AiHostAdapterOptions}.
+ *
+ * @deprecated Since `0.1.x`. Migrate to `createAiGenerationPlugin()`
+ * from `@anvilkit/plugins/ai-generation`. Removal target: `v2.0.0`
+ * (removal is a major bump per `docs/policies/lts.md` §5). Supported
+ * through every `v1.x` minor.
  *
  * @example
  * ```ts
