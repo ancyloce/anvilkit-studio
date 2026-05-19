@@ -180,11 +180,13 @@
 		"check:publint": "publint .",
 		"check:circular": "madge --circular --extensions ts,tsx src/",
 		"check:react-free-runtime": "node ./scripts/check-react-free.mjs",
+		"check:no-headless-import": "node ./scripts/check-no-headless-import.mjs",
 		"check:peer-deps": "node ./scripts/check-peer-deps.mjs",
 		"check:bundle-budget": "node ./scripts/check-bundle-budget.mjs",
 		"check:api-snapshot": "typedoc --json ./api/api-snapshot.json --entryPoints ./src/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
+		"check:api-snapshot-runtime": "typedoc --json ./api/api-snapshot.runtime.json --entryPoints ./src/runtime/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
 		"check:api-snapshot-templates": "typedoc --options ./typedoc.templates.json --json ./api/api-snapshot.templates.json",
-		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot && pnpm check:api-snapshot-templates",
+		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:no-headless-import && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot && pnpm check:api-snapshot-runtime && pnpm check:api-snapshot-templates",
 		"migrate:shadcn-paths": "node ./scripts/migrate-shadcn-paths.mjs",
 		"size": "size-limit"
 	}
