@@ -408,6 +408,16 @@ export interface StudioHeaderAction {
 	 * stay serializable enough that lifecycle tests can compare them
 	 * with `toEqual`. The string-name indirection lets the renderer
 	 * own React while the protocol stays headless.
+	 *
+	 * **Resolvable set.** The shell resolves against a *curated*
+	 * registry (not all of `lucide-react`) so the chrome bundle
+	 * tree-shakes to only the icons it ships — a namespace import would
+	 * retain every Lucide icon. Name matching is case/separator
+	 * insensitive (`"download"`, `"Download"`, `"down-load"` all
+	 * resolve). A name outside the registry resolves to no icon (the
+	 * label still renders). To add an icon, extend `ICON_REGISTRY` in
+	 * `react/studio/layout/HeaderActionButton.tsx` (and the chrome-path
+	 * bundle-budget gate covers the size impact).
 	 */
 	readonly icon?: string;
 

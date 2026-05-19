@@ -39,7 +39,47 @@ import type { StudioConfigSchema } from "@/config/schema";
  *
  * @see {@link StudioConfigSchema} for the authoritative shape.
  */
-export type StudioConfig = z.infer<typeof StudioConfigSchema>;
+type InferredStudioConfig = z.infer<typeof StudioConfigSchema>;
+
+/**
+ * Module-augmentation slot for plugin-specific `experimental` config.
+ *
+ * Plugin types are deliberately **not** propagated into `<Studio>`
+ * (core decouples its type version from every plugin's — see the
+ * "Plugin config & type safety" section in the plugin-authoring
+ * guide). The runtime still validates `config.experimental` via Zod
+ * (`z.record(z.string(), z.unknown())`); this interface is the
+ * *opt-in compile-time* counterpart. A plugin (or host app) adds
+ * intellisense + checking for its own keys with declaration merging:
+ *
+ * ```ts
+ * declare module "@anvilkit/core" {
+ *   interface StudioExperimentalConfig {
+ *     myPlugin?: { apiKey: string; debug?: boolean };
+ *   }
+ * }
+ * ```
+ *
+ * It is intentionally empty by default and intersected (not replaced)
+ * with the open `Record<string, unknown>`, so this stays purely
+ * additive — no existing config breaks, and unaugmented keys keep
+ * working untyped.
+ */
+// Intentionally empty — this is a declaration-merging slot, not a
+// concrete shape. Plugins/hosts extend it via `declare module`.
+export interface StudioExperimentalConfig {}
+
+/**
+ * Runtime configuration surface for `<Studio>`. Identical to the
+ * Zod-inferred shape except `experimental` also carries any keys a
+ * plugin/host declared on {@link StudioExperimentalConfig} — the
+ * runtime/type single-source-of-truth is unchanged (the schema still
+ * accepts any record); this only *adds* optional typed keys.
+ */
+export type StudioConfig = Omit<InferredStudioConfig, "experimental"> & {
+	readonly experimental: InferredStudioConfig["experimental"] &
+		Partial<StudioExperimentalConfig>;
+};
 
 /**
  * Runtime-discoverable metadata for an `@anvilkit/<slug>` component

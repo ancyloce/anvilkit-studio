@@ -20,7 +20,11 @@ export type {
 	AiSectionSelection,
 	ConfigToAiSectionContextOptions,
 } from "./ai-section.js";
-export type { ComponentPackageManifest, StudioConfig } from "./config.js";
+export type {
+	ComponentPackageManifest,
+	StudioConfig,
+	StudioExperimentalConfig,
+} from "./config.js";
 export type {
 	ExportFormatDefinition,
 	ExportFormatRunContext,
