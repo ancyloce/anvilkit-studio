@@ -44,15 +44,15 @@ for the package catalog.
 
 ## Error Codes — `validateComponentConfig`
 
-| Code | Level | Description |
-|------|-------|-------------|
-| `E_MISSING_RENDER` | error | `component.render` is not a function |
-| `E_MISSING_FIELDS` | error | `component.fields` is not an object |
-| `E_NON_SERIALIZABLE_DEFAULT` | error | A default prop value fails JSON serialization (checked recursively — a function buried inside a nested object still trips this) |
-| `E_FIELD_SHAPE_INVALID` | error | A field does not match the Puck Field union |
-| `E_ASYNC_RENDER` | error | `component.render` is an async function (Puck does not support async render) |
-| `W_MISSING_DESCRIPTION` | warning | `component.metadata?.description` is empty or undefined |
-| `W_UNKNOWN_FIELD_TYPE` | warning | Field `type` is not one of the 11 known Puck field types: `text`, `textarea`, `richtext`, `number`, `select`, `radio`, `array`, `object`, `external`, `custom`, `slot`. (Note: this is the Puck-native field union, not the smaller 10-member `AiFieldType` used by `validateAiOutput`.) |
+| Code                         | Level   | Description                                                                                                                                                                                                                                                                              |
+| ---------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `E_MISSING_RENDER`           | error   | `component.render` is not a function                                                                                                                                                                                                                                                     |
+| `E_MISSING_FIELDS`           | error   | `component.fields` is not an object                                                                                                                                                                                                                                                      |
+| `E_NON_SERIALIZABLE_DEFAULT` | error   | A default prop value fails JSON serialization (checked recursively — a function buried inside a nested object still trips this)                                                                                                                                                          |
+| `E_FIELD_SHAPE_INVALID`      | error   | A field does not match the Puck Field union                                                                                                                                                                                                                                              |
+| `E_ASYNC_RENDER`             | error   | `component.render` is an async function (Puck does not support async render)                                                                                                                                                                                                             |
+| `W_MISSING_DESCRIPTION`      | warning | `component.metadata?.description` is empty or undefined                                                                                                                                                                                                                                  |
+| `W_UNKNOWN_FIELD_TYPE`       | warning | Field `type` is not one of the 11 known Puck field types: `text`, `textarea`, `richtext`, `number`, `select`, `radio`, `array`, `object`, `external`, `custom`, `slot`. (Note: this is the Puck-native field union, not the smaller 10-member `AiFieldType` used by `validateAiOutput`.) |
 
 ### Why `E_ASYNC_RENDER` is a hard failure
 
@@ -69,17 +69,17 @@ If your build pipeline transpiles async syntax, audit render functions manually 
 
 Codes are embedded as a `[CODE]` prefix in each `AiValidationIssue.message`. Callers (notably the AI copilot retry loop in Phase 4) switch on them.
 
-| Code | Severity | Description |
-|------|----------|-------------|
-| `INVALID_STRUCTURE` | error | Response is not an object, missing `root`, or `type` is not a string |
-| `UNSUPPORTED_VERSION` | error | `PageIR.version` is not `"1"` |
-| `UNKNOWN_COMPONENT` | error | Node `type` is not in `availableComponents` (may include a closest-match suggestion) |
-| `MISSING_REQUIRED_FIELD` | error | A required field is absent from `node.props` |
-| `INVALID_FIELD_TYPE` | error | A field value does not match the declared `AiFieldType` |
-| `INVALID_ENUM_VALUE` | error | A `select` field received a value outside the declared options |
-| `INVALID_ASSET` | error | An entry in `PageIR.assets` is malformed (bad `kind`, missing `url`, etc.) |
-| `MAX_DEPTH_EXCEEDED` | error | Node tree exceeds the hard cap of 16 levels (DoS guard) |
-| `UNKNOWN_FIELD` | warn | A prop is not declared in the component's `AiComponentSchema.fields` |
+| Code                     | Severity | Description                                                                          |
+| ------------------------ | -------- | ------------------------------------------------------------------------------------ |
+| `INVALID_STRUCTURE`      | error    | Response is not an object, missing `root`, or `type` is not a string                 |
+| `UNSUPPORTED_VERSION`    | error    | `PageIR.version` is not `"1"`                                                        |
+| `UNKNOWN_COMPONENT`      | error    | Node `type` is not in `availableComponents` (may include a closest-match suggestion) |
+| `MISSING_REQUIRED_FIELD` | error    | A required field is absent from `node.props`                                         |
+| `INVALID_FIELD_TYPE`     | error    | A field value does not match the declared `AiFieldType`                              |
+| `INVALID_ENUM_VALUE`     | error    | A `select` field received a value outside the declared options                       |
+| `INVALID_ASSET`          | error    | An entry in `PageIR.assets` is malformed (bad `kind`, missing `url`, etc.)           |
+| `MAX_DEPTH_EXCEEDED`     | error    | Node tree exceeds the hard cap of 16 levels (DoS guard)                              |
+| `UNKNOWN_FIELD`          | warn     | A prop is not declared in the component's `AiComponentSchema.fields`                 |
 
 ### Trust boundary
 
@@ -96,15 +96,15 @@ Fields declared with `type: "object"` in `AiComponentSchema` are validated as `r
 
 ## Dependency contract
 
-| Allowed | Forbidden |
-|---------|-----------|
-| `@anvilkit/schema` (runtime) | `@anvilkit/ir`, React, plugins |
-| `zod` (runtime) | `@anvilkit/utils` |
-| `@anvilkit/core` (types-only) | |
-| `@puckeditor/core` (peer, types-only) | |
+| Allowed                               | Forbidden                      |
+| ------------------------------------- | ------------------------------ |
+| `@anvilkit/schema` (runtime)          | `@anvilkit/ir`, React, plugins |
+| `zod` (runtime)                       | `@anvilkit/utils`              |
+| `@anvilkit/core` (types-only)         |                                |
+| `@puckeditor/core` (peer, types-only) |                                |
 
 ## Peer dependencies
 
-| Package | Version |
-| ------- | ------- |
+| Package            | Version   |
+| ------------------ | --------- |
 | `@puckeditor/core` | `^0.21.2` |
