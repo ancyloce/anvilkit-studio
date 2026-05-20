@@ -43,6 +43,10 @@ export type {
 export type {
   StudioPage,
   StudioPageCreateInput,
+  StudioPageRenameInput,
+  StudioPageReorderInput,
+  StudioPageSeo,
+  StudioPageSettingsInput,
   StudioPagesSource,
 } from "./pages.js";
 export type {
