@@ -40,6 +40,7 @@ anvilkit-studio/
 ## Commands
 
 ### Root workspace
+
 ```bash
 pnpm dev          # Turbo watch mode for all packages
 pnpm build        # Build all packages
@@ -57,6 +58,7 @@ pnpm docs:build   # Build the Starlight docs site
 ```
 
 ### Components workspace (`packages/components/`)
+
 ```bash
 pnpm dev          # Watch mode (Rslib)
 pnpm build        # Build all component packages
@@ -75,6 +77,7 @@ pnpm release      # Version + build + publish to npm
 ```
 
 ### Demo app (`apps/demo/`)
+
 ```bash
 pnpm dev          # Next.js dev server (port 3000)
 pnpm build        # Production build
@@ -85,24 +88,29 @@ pnpm e2e:install  # One-time: install Chromium for Playwright
 ```
 
 ### Docs site (`apps/docs/` — `@anvilkit/docs-site`)
+
 ```bash
 pnpm docs:dev     # Astro dev server (port 4321) — runs generate:all first
 pnpm docs:build   # Astro build → apps/docs/dist (deployed to Vercel)
 pnpm typecheck    # astro check
 pnpm e2e          # Docs playground Playwright spec
 ```
+
 Generators (`scripts/generate-*`) emit MDX for component pages, API
 references, and template pages before every build.
 
 ## Key Architecture Decisions
 
 ### Component Publishing Model
+
 - Each component is its own npm package (`@anvilkit/<slug>`), versioned independently via Changesets.
 - No umbrella package — consumers install only what they need.
 - Built with **Rslib** (Rust bundler) → outputs CJS + ESM + `.d.ts` types.
 
 ### Puck Component Contract
+
 Each component package must export:
+
 - `componentConfig: ComponentConfig` — the Puck config object (fields, defaultProps, render)
 - `defaultProps` — serializable default values
 - `fields` — Puck field definitions
@@ -111,23 +119,28 @@ Each component package must export:
 The render component must accept only serializable props (no functions, no refs at the top level).
 
 ### Demo App Integration
+
 The demo validates components via two Puck modes:
+
 - `/puck/editor` — interactive builder
 - `/puck/render` — server-side render (RSC-compatible)
 
 Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from each imported component package. All 11 published component packages are currently wired here. When adding a new component to the demo, update this file and `apps/demo/next.config.js` (`transpilePackages`).
 
 ### Styling
+
 - **Tailwind CSS 4** (`tailwindcss` 4.2.2 via `@tailwindcss/postcss`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"` (CSS-first config, no `tailwind.config.js`)
 - shadcn-style CSS variable tokens (light/dark mode)
 - All components must be responsive (mobile/tablet/desktop) and theme-aware
 
 ### Linting & Formatting
+
 - **Biome** handles both lint and format across all packages
 - **Prettier** is used at root level for `.ts/.tsx/.md` files
 - TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
 
 ### Continuous Integration
+
 `.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.1.3 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Starlight build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
 
 Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `vercel.json` and posts an independent GitHub check — it does not block CI, and CI does not block it.
@@ -151,6 +164,7 @@ git submodule update --init --recursive  # Initialize after cloning
 ```
 
 Submodules:
+
 - `packages/components`
 - `packages/plugins/plugin-ai-copilot`
 - `packages/plugins/plugin-asset-manager`
@@ -173,35 +187,43 @@ and the only `.sh` files live under `node_modules/`. Reintroduce them here if th
 ever changes.
 
 ## Verification Gates
+
 - Always run typecheck, lint, and tests after multi-file changes
 - When tests fail due to pre-existing infrastructure issues (path aliases, missing dist folders), report this clearly rather than skipping verification
 - Build dependent packages (`pnpm build`) before assuming module resolution errors are code issues
 
 ## Demo & Mount Consistency
+
 - When wiring new props or plugins to Studio components, search for ALL <Studio> mounts in the demo (e.g., default and collab paths) and wire each one
 - After UI/prop changes, grep for component usage across demo/ before declaring done
 
 ## Sub-agent usage
+
 - Before refactoring a component or threading new props/plugins, spawn an Explore sub-agent to enumerate every call site (file:line) and report wiring status — do not start editing until the enumeration is complete
-- Use sub-agents for parallel exploration when investigating across plugin packages or submodules (e.g., "find every adapter that implements X" across packages/plugins/*); keep the main context focused on synthesis and edits
+- Use sub-agents for parallel exploration when investigating across plugin packages or submodules (e.g., "find every adapter that implements X" across packages/plugins/\*); keep the main context focused on synthesis and edits
 - Do not delegate the actual edits — sub-agents enumerate and report, the main agent decides and writes
 
 ## Safe Deletion
+
 - Before deleting any file, grep the repo for inbound references (imports, paths in JSON/MD, test fixtures). Present a deletion list with reference counts; wait for my approval before any rm.
 
 ## Iframe & Canvas Styling
+
 - Tailwind utilities and parent-document CSS do NOT reach the canvas iframe — use inline styles or explicit CopyHostStyles injection
 - Before debugging styling issues, suspect stale webpack/dev-server cache and check with a clean rebuild
 
 ## TypeScript Conventions
+
 - Use `import type` for type-only imports (verbatimModuleSyntax is enforced)
 - Watch for circular dependencies; prefer inlining small type references over cross-module imports when cycles form
 
 ## i18n Convention
+
 - Never duplicate bilingual strings inline; always use i18n message keys
 - Do not add language-specific (e.g., Chinese) translation overrides to demo apps unless explicitly requested
 
 ## Test Infrastructure Notes
+
 - E2E tests must use unique room IDs per test and avoid port 1234 collisions (use dynamic ports or kill stale processes first)
 - The repo has known path-alias resolution issues in some test suites — flag this rather than silently skipping tests
 
@@ -212,6 +234,7 @@ tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
 The skill has specialized workflows that produce better results than ad-hoc answers.
 
 Key routing rules:
+
 - Product ideas, "is this worth building", brainstorming → invoke office-hours
 - Bugs, errors, "why is this broken", 500 errors → invoke investigate
 - Ship, deploy, push, create PR → invoke ship
