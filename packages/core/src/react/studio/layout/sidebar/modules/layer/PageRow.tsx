@@ -1,34 +1,239 @@
 /**
  * @file Single row in the Pages panel (PRD §6.4; plan 0004 P2).
  *
- * Extracted from the inline component previously declared inside
- * `PagesPanel.tsx`. Visual + a11y contract preserved verbatim — only
- * the file location changed in this task. Capability-gated row
- * actions land in later P2 tasks.
+ * Capability-gated row affordances: the overflow menu surfaces an
+ * action only when the host's `StudioPagesSource` implements the
+ * matching callback. Rename and Delete additionally require
+ * `page.locked !== true`; Duplicate and Settings have no `locked`
+ * gate. When no action would render, the overflow trigger itself
+ * is suppressed.
+ *
+ * The component is purposely callback-only — it never reaches back
+ * to `useStudioPagesSource()` — so tests can drive it with plain
+ * `vi.fn()` mocks and the parent panel keeps source-orchestration
+ * concerns in one place.
  */
 
-import { Globe, Home } from "lucide-react";
-import type { ReactNode } from "react";
+import {
+	Copy,
+	Globe,
+	Home,
+	MoreHorizontal,
+	Pencil,
+	Trash2,
+} from "lucide-react";
+import {
+	type KeyboardEvent as ReactKeyboardEvent,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
+import { Button } from "@/primitives/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/primitives/dropdown-menu";
+import { Input } from "@/primitives/input";
 import { Item, ItemMedia } from "@/primitives/item";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import type { StudioPage } from "@/types/pages";
+import { useMsg } from "@/state/editor-i18n-store";
+import type { StudioPage, StudioPagesSource } from "@/types/pages";
 import { cn } from "@/utils/cn";
+import { PageDeleteConfirmDialog } from "./PageDeleteConfirmDialog";
 
 export interface PageRowProps {
 	readonly page: StudioPage;
 	readonly onSelect: (id: string) => void;
 	readonly routeBadgeLabel: string;
+	readonly onRename?: StudioPagesSource["onRename"];
+	readonly onDelete?: StudioPagesSource["onDelete"];
+	readonly onDuplicate?: StudioPagesSource["onDuplicate"];
+	readonly onUpdateSettings?: StudioPagesSource["onUpdateSettings"];
 }
+
+type RowMode = "view" | "renaming";
 
 export function PageRow({
 	page,
 	onSelect,
 	routeBadgeLabel,
+	onRename,
+	onDelete,
+	onDuplicate,
+	onUpdateSettings,
 }: PageRowProps): ReactNode {
+	const msg = useMsg();
 	const label = page.title.length > 0 ? page.title : (page.path ?? page.id);
 	const isHome = page.id === "home" || label.toLowerCase() === "home";
+
+	const locked = page.locked === true;
+	const canRename = typeof onRename === "function" && !locked;
+	const canDelete = typeof onDelete === "function" && !locked;
+	const canDuplicate = typeof onDuplicate === "function";
+	const canSettings = typeof onUpdateSettings === "function";
+	const hasAnyAction = canRename || canDuplicate || canDelete || canSettings;
+
+	const [confirmingDelete, setConfirmingDelete] = useState(false);
+	const [duplicating, setDuplicating] = useState(false);
+
+	const handleDeleteConfirm = useCallback(async (): Promise<void> => {
+		if (typeof onDelete !== "function") return;
+		await onDelete(page.id);
+	}, [onDelete, page.id]);
+
+	const handleDuplicate = useCallback(async (): Promise<void> => {
+		if (typeof onDuplicate !== "function" || duplicating) return;
+		setDuplicating(true);
+		try {
+			const result = await onDuplicate(page.id);
+			if (
+				result !== undefined &&
+				result !== null &&
+				typeof result === "object" &&
+				"id" in result &&
+				typeof result.id === "string"
+			) {
+				onSelect(result.id);
+			}
+		} finally {
+			setDuplicating(false);
+		}
+	}, [duplicating, onDuplicate, onSelect, page.id]);
+
+	const [mode, setMode] = useState<RowMode>("view");
+	const [draft, setDraft] = useState<string>(page.title);
+	const [pending, setPending] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const inputRef = useRef<HTMLInputElement | null>(null);
+
+	useEffect(() => {
+		if (mode === "renaming") inputRef.current?.focus();
+	}, [mode]);
+
+	const startRename = useCallback(() => {
+		setDraft(page.title);
+		setError(null);
+		setMode("renaming");
+	}, [page.title]);
+
+	const exitRename = useCallback(() => {
+		setMode("view");
+		setPending(false);
+		setError(null);
+	}, []);
+
+	const commit = useCallback(async (): Promise<void> => {
+		if (pending) return;
+		const next = draft.trim();
+		if (next.length === 0) {
+			setError(msg("studio.module.layer.pages.rename.error.empty"));
+			return;
+		}
+		if (next === page.title) {
+			exitRename();
+			return;
+		}
+		if (typeof onRename !== "function") {
+			exitRename();
+			return;
+		}
+		setPending(true);
+		setError(null);
+		try {
+			await onRename({ id: page.id, title: next });
+			exitRename();
+		} catch (err) {
+			setError(err instanceof Error ? err.message : String(err));
+			setPending(false);
+		}
+	}, [draft, exitRename, msg, onRename, page.id, page.title, pending]);
+
+	const handleKeyDown = useCallback(
+		(event: ReactKeyboardEvent<HTMLInputElement>) => {
+			if (event.key === "Enter") {
+				event.preventDefault();
+				void commit();
+			} else if (event.key === "Escape") {
+				event.preventDefault();
+				exitRename();
+			}
+		},
+		[commit, exitRename],
+	);
+
+	const handleBlur = useCallback(() => {
+		if (pending) return;
+		void commit();
+	}, [commit, pending]);
+
+	const icon: ReactNode = isHome ? (
+		<Home className="size-3.5" aria-hidden="true" />
+	) : page.route === true ? (
+		<Tooltip>
+			<TooltipTrigger
+				render={
+					<span className="inline-flex">
+						<Globe className="size-3.5" aria-label={routeBadgeLabel} />
+					</span>
+				}
+			/>
+			<TooltipContent>{routeBadgeLabel}</TooltipContent>
+		</Tooltip>
+	) : (
+		<span className="size-3.5" aria-hidden="true" />
+	);
+
+	if (mode === "renaming") {
+		return (
+			<li role="listitem">
+				<div
+					className={cn(
+						"flex h-6 items-center gap-2 rounded-sm border-0 px-2 py-0 text-xs",
+						"text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
+						"bg-[var(--ak-pages-muted,var(--ak-studio-muted))]",
+					)}
+					data-testid={`ak-layer-page-row-${page.id}`}
+					data-renaming="true"
+				>
+					<ItemMedia
+						variant="icon"
+						className="text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))]"
+					>
+						{icon}
+					</ItemMedia>
+					<Input
+						ref={inputRef}
+						aria-label={msg("studio.module.layer.pages.rename.placeholder")}
+						placeholder={msg("studio.module.layer.pages.rename.placeholder")}
+						value={draft}
+						disabled={pending}
+						onChange={(event) => setDraft(event.target.value)}
+						onKeyDown={handleKeyDown}
+						onBlur={handleBlur}
+						data-testid={`ak-layer-page-row-${page.id}-rename-input`}
+						className="h-5 min-w-0 flex-1 px-1 text-xs"
+					/>
+				</div>
+				{error !== null ? (
+					<p
+						role="alert"
+						className="px-2 pt-1 text-[10px] text-[var(--ak-pages-danger-bg,var(--destructive))]"
+						data-testid={`ak-layer-page-row-${page.id}-rename-error`}
+					>
+						{error}
+					</p>
+				) : null}
+			</li>
+		);
+	}
+
 	return (
-		<li role="listitem">
+		<li role="listitem" className="group/page-row relative">
 			<Item
 				size="xs"
 				render={
@@ -46,31 +251,95 @@ export function PageRow({
 					"hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))]",
 					"focus-visible:ring-2 focus-visible:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
 					"data-[active=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[active=true]:text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
+					hasAnyAction ? "pr-7" : "",
 				)}
 			>
 				<ItemMedia
 					variant="icon"
 					className="text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))]"
 				>
-					{isHome ? (
-						<Home className="size-3.5" aria-hidden="true" />
-					) : page.route === true ? (
-						<Tooltip>
-							<TooltipTrigger
-								render={
-									<span className="inline-flex">
-										<Globe className="size-3.5" aria-label={routeBadgeLabel} />
-									</span>
-								}
-							/>
-							<TooltipContent>{routeBadgeLabel}</TooltipContent>
-						</Tooltip>
-					) : (
-						<span className="size-3.5" aria-hidden="true" />
-					)}
+					{icon}
 				</ItemMedia>
 				<span className="min-w-0 flex-1 truncate">{label}</span>
 			</Item>
+			{hasAnyAction ? (
+				<div className="pointer-events-none absolute top-1/2 right-1 -translate-y-1/2 opacity-0 transition-opacity group-hover/page-row:opacity-100 group-focus-within/page-row:opacity-100 data-[menu-open=true]:opacity-100">
+					<DropdownMenu>
+						<DropdownMenuTrigger
+							render={
+								<Button
+									size="icon-xs"
+									variant="ghost"
+									aria-label={msg("studio.module.layer.pages.menu.trigger")}
+									data-testid={`ak-layer-page-row-${page.id}-menu`}
+									className="pointer-events-auto h-5 w-5 text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))] hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] hover:text-[var(--ak-pages-fg,var(--ak-studio-fg))]"
+								/>
+							}
+						>
+							<MoreHorizontal aria-hidden="true" />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent
+							align="end"
+							sideOffset={4}
+							data-testid={`ak-layer-page-row-${page.id}-menu-popup`}
+						>
+							{canRename ? (
+								<DropdownMenuItem
+									onClick={startRename}
+									data-testid={`ak-layer-page-row-${page.id}-menu-rename`}
+								>
+									<Pencil aria-hidden="true" />
+									<span>{msg("studio.module.layer.pages.menu.rename")}</span>
+								</DropdownMenuItem>
+							) : null}
+							{canDuplicate ? (
+								<DropdownMenuItem
+									disabled={duplicating}
+									onClick={() => {
+										void handleDuplicate();
+									}}
+									data-testid={`ak-layer-page-row-${page.id}-menu-duplicate`}
+								>
+									<Copy aria-hidden="true" />
+									<span>{msg("studio.module.layer.pages.menu.duplicate")}</span>
+								</DropdownMenuItem>
+							) : null}
+							{canSettings ? (
+								<DropdownMenuItem
+									onClick={() => {
+										// P2 stub: PageSettingsDialog ships in P3 and will
+										// open here. Capability-gated on `onUpdateSettings`.
+									}}
+									data-testid={`ak-layer-page-row-${page.id}-menu-settings`}
+								>
+									<span>{msg("studio.module.layer.pages.menu.settings")}</span>
+								</DropdownMenuItem>
+							) : null}
+							{canDelete && (canRename || canSettings) ? (
+								<DropdownMenuSeparator />
+							) : null}
+							{canDelete ? (
+								<DropdownMenuItem
+									variant="destructive"
+									onClick={() => setConfirmingDelete(true)}
+									data-testid={`ak-layer-page-row-${page.id}-menu-delete`}
+								>
+									<Trash2 aria-hidden="true" />
+									<span>{msg("studio.module.layer.pages.menu.delete")}</span>
+								</DropdownMenuItem>
+							) : null}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
+			) : null}
+			{canDelete ? (
+				<PageDeleteConfirmDialog
+					open={confirmingDelete}
+					onOpenChange={setConfirmingDelete}
+					page={page}
+					onConfirm={handleDeleteConfirm}
+				/>
+			) : null}
 		</li>
 	);
 }

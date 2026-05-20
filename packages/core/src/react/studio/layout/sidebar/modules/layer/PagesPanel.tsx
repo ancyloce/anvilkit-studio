@@ -89,6 +89,10 @@ export function PagesPanel(): ReactNode {
 								page={page}
 								onSelect={handleSelect}
 								routeBadgeLabel={msg("studio.module.layer.pages.routeBadge")}
+								onRename={source?.onRename?.bind(source)}
+								onDelete={source?.onDelete?.bind(source)}
+								onDuplicate={source?.onDuplicate?.bind(source)}
+								onUpdateSettings={source?.onUpdateSettings?.bind(source)}
 							/>
 						))}
 					</ul>
@@ -96,59 +100,5 @@ export function PagesPanel(): ReactNode {
 			</div>
 			<AddPageDialog open={dialogOpen} onOpenChange={setDialogOpen} />
 		</div>
-	);
-}
-
-interface PageRowProps {
-	readonly page: StudioPage;
-	readonly onSelect: (id: string) => void;
-	readonly routeBadgeLabel: string;
-}
-
-function PageRow({ page, onSelect, routeBadgeLabel }: PageRowProps): ReactNode {
-	const label = page.title.length > 0 ? page.title : (page.path ?? page.id);
-	const isHome = page.id === "home" || label.toLowerCase() === "home";
-	return (
-		<li role="listitem">
-			<Item
-				size="xs"
-				render={
-					<button
-						type="button"
-						onClick={() => onSelect(page.id)}
-						aria-current={page.active === true ? "page" : undefined}
-						data-active={page.active === true ? "true" : undefined}
-						data-testid={`ak-layer-page-row-${page.id}`}
-					/>
-				}
-				className={cn(
-					"h-6 gap-2 rounded-sm border-0 px-2 py-0 text-left text-xs font-normal",
-					"text-[var(--ak-studio-fg)]",
-					"hover:bg-[var(--ak-studio-muted)]",
-					"focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]",
-					"data-[active=true]:bg-[var(--ak-studio-muted)] data-[active=true]:text-[var(--ak-studio-fg)]",
-				)}
-			>
-				<ItemMedia variant="icon" className="text-[var(--ak-studio-muted-fg)]">
-					{isHome ? (
-						<Home className="size-3.5" aria-hidden="true" />
-					) : page.route === true ? (
-						<Tooltip>
-							<TooltipTrigger
-								render={
-									<span className="inline-flex">
-										<Globe className="size-3.5" aria-label={routeBadgeLabel} />
-									</span>
-								}
-							/>
-							<TooltipContent>{routeBadgeLabel}</TooltipContent>
-						</Tooltip>
-					) : (
-						<span className="size-3.5" aria-hidden="true" />
-					)}
-				</ItemMedia>
-				<span className="min-w-0 flex-1 truncate">{label}</span>
-			</Item>
-		</li>
 	);
 }
