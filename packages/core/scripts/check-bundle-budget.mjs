@@ -249,7 +249,12 @@ async function bundle(entryFile, outDir) {
 		minify: true,
 		treeShaking: true,
 		splitting: true,
-		external: EXTERNAL_PEERS,
+		// Side-effect CSS imports inside `dist/` (e.g. co-located
+		// component token sheets) are a runtime concern for the host
+		// bundler — they are not JS bytes we ship through this budget.
+		// Mark `*.css` as external so esbuild leaves the import alone
+		// instead of failing to resolve it.
+		external: [...EXTERNAL_PEERS, "*.css"],
 		absWorkingDir: PACKAGE_ROOT,
 		logLevel: "error",
 		write: true,
