@@ -60,9 +60,9 @@
 import type { Data as PuckData } from "@puckeditor/core";
 
 import type {
-	StudioPluginContext,
-	StudioPluginLifecycleHooks,
-	StudioPluginRegistration,
+  StudioPluginContext,
+  StudioPluginLifecycleHooks,
+  StudioPluginRegistration,
 } from "@/types/plugin";
 import { StudioPluginError } from "./errors.js";
 
@@ -72,17 +72,17 @@ import { StudioPluginError } from "./errors.js";
  * cause for log pipelines that only render `err.message`.
  */
 function extractErrorMessage(error: unknown): string {
-	if (error instanceof Error && typeof error.message === "string") {
-		return error.message;
-	}
-	if (typeof error === "string") {
-		return error;
-	}
-	try {
-		return String(error);
-	} catch {
-		return "<unserializable error>";
-	}
+  if (error instanceof Error && typeof error.message === "string") {
+    return error.message;
+  }
+  if (typeof error === "string") {
+    return error;
+  }
+  try {
+    return String(error);
+  } catch {
+    return "<unserializable error>";
+  }
 }
 
 /**
@@ -93,12 +93,12 @@ function extractErrorMessage(error: unknown): string {
  * function to update this union (and the `emit` dispatch table).
  */
 export type LifecycleEventName =
-	| "onInit"
-	| "onReady"
-	| "onDataChange"
-	| "onBeforePublish"
-	| "onAfterPublish"
-	| "onDestroy";
+  | "onInit"
+  | "onReady"
+  | "onDataChange"
+  | "onBeforePublish"
+  | "onAfterPublish"
+  | "onDestroy";
 
 /**
  * Engine-owned lifecycle phase (architecture §6 A2). The shell drives
@@ -122,11 +122,11 @@ export type LifecycleEventName =
  * editor in any environment.
  */
 export type LifecyclePhase =
-	| "compiled"
-	| "init"
-	| "ready"
-	| "running"
-	| "destroyed";
+  | "compiled"
+  | "init"
+  | "ready"
+  | "running"
+  | "destroyed";
 
 /**
  * Handler signature registered via {@link LifecycleManager.subscribe}.
@@ -135,113 +135,113 @@ export type LifecyclePhase =
  * observers can inspect the live state of the running session.
  */
 export type LifecycleSubscriber = (
-	ctx: StudioPluginContext,
-	payload: PuckData | undefined,
+  ctx: StudioPluginContext,
+  payload: PuckData | undefined,
 ) => void;
 
 /**
  * The public shape returned by {@link createLifecycleManager}.
  */
 export interface LifecycleManager {
-	/**
-	 * Fire the named lifecycle event through every registered plugin
-	 * and every live subscriber.
-	 *
-	 * Resolves once every plugin hook has settled (sequentially for
-	 * `onBeforePublish`, in parallel otherwise) and all subscribers
-	 * have been invoked. Rethrows the first {@link StudioPluginError}
-	 * caught during `onBeforePublish` and swallows everything else
-	 * through `ctx.log("error", …)`.
-	 */
-	readonly emit: (
-		event: LifecycleEventName,
-		ctx: StudioPluginContext,
-		payload?: PuckData,
-	) => Promise<void>;
+  /**
+   * Fire the named lifecycle event through every registered plugin
+   * and every live subscriber.
+   *
+   * Resolves once every plugin hook has settled (sequentially for
+   * `onBeforePublish`, in parallel otherwise) and all subscribers
+   * have been invoked. Rethrows the first {@link StudioPluginError}
+   * caught during `onBeforePublish` and swallows everything else
+   * through `ctx.log("error", …)`.
+   */
+  readonly emit: (
+    event: LifecycleEventName,
+    ctx: StudioPluginContext,
+    payload?: PuckData,
+  ) => Promise<void>;
 
-	/**
-	 * Register an observer for a single event.
-	 *
-	 * @returns An unsubscribe function. Calling it is idempotent and
-	 * detaches the handler immediately.
-	 */
-	readonly subscribe: (
-		event: LifecycleEventName,
-		handler: LifecycleSubscriber,
-	) => () => void;
+  /**
+   * Register an observer for a single event.
+   *
+   * @returns An unsubscribe function. Calling it is idempotent and
+   * detaches the handler immediately.
+   */
+  readonly subscribe: (
+    event: LifecycleEventName,
+    handler: LifecycleSubscriber,
+  ) => () => void;
 
-	/** The current engine-owned {@link LifecyclePhase}. */
-	readonly phase: () => LifecyclePhase;
+  /** The current engine-owned {@link LifecyclePhase}. */
+  readonly phase: () => LifecyclePhase;
 
-	/**
-	 * Advance the engine lifecycle phase (architecture §6 A2). The
-	 * shell calls this instead of hand-orchestrating `onInit`/`onReady`
-	 * timing:
-	 *
-	 * - `advanceTo("init", ctx)` — from `compiled`: fires `onInit` and
-	 *   records its settle promise. Idempotent past `init`.
-	 * - `advanceTo("ready", ctx)` — from `init` (Puck API bound): the
-	 *   engine fires `onReady` **exactly once**, strictly after
-	 *   `onInit` has settled, then enters `running`. Calling it before
-	 *   `init`, or twice, is a no-op (the dedupe `readyFiredFor` used
-	 *   to do, now phase state).
-	 * - `advanceTo("destroyed", ctx)` — terminal marker; `onDestroy`
-	 *   itself is still emitted by the shell's unmount cleanup so it
-	 *   closes over the same runtime/ctx pair.
-	 * - `advanceTo("running", ctx)` — **no-op for callers.** `running`
-	 *   is engine-internal: the engine sets it itself in the
-	 *   post-`onInit` continuation. `phase()` *reports* `"running"`
-	 *   once `onReady` has fired, but it cannot be *commanded* — a
-	 *   caller-driven `running` would race the continuation and skip
-	 *   `onReady`.
-	 *
-	 * `onInit`'s non-veto contract is unchanged and now **explicit**: a
-	 * throwing `onInit` hook is logged (existing swallow) and does
-	 * **not** suppress `onReady`. The transition is monotonic + lenient
-	 * (stale/repeat calls no-op) so StrictMode double-invoke is safe.
-	 */
-	readonly advanceTo: (phase: LifecyclePhase, ctx: StudioPluginContext) => void;
+  /**
+   * Advance the engine lifecycle phase (architecture §6 A2). The
+   * shell calls this instead of hand-orchestrating `onInit`/`onReady`
+   * timing:
+   *
+   * - `advanceTo("init", ctx)` — from `compiled`: fires `onInit` and
+   *   records its settle promise. Idempotent past `init`.
+   * - `advanceTo("ready", ctx)` — from `init` (Puck API bound): the
+   *   engine fires `onReady` **exactly once**, strictly after
+   *   `onInit` has settled, then enters `running`. Calling it before
+   *   `init`, or twice, is a no-op (the dedupe `readyFiredFor` used
+   *   to do, now phase state).
+   * - `advanceTo("destroyed", ctx)` — terminal marker; `onDestroy`
+   *   itself is still emitted by the shell's unmount cleanup so it
+   *   closes over the same runtime/ctx pair.
+   * - `advanceTo("running", ctx)` — **no-op for callers.** `running`
+   *   is engine-internal: the engine sets it itself in the
+   *   post-`onInit` continuation. `phase()` *reports* `"running"`
+   *   once `onReady` has fired, but it cannot be *commanded* — a
+   *   caller-driven `running` would race the continuation and skip
+   *   `onReady`.
+   *
+   * `onInit`'s non-veto contract is unchanged and now **explicit**: a
+   * throwing `onInit` hook is logged (existing swallow) and does
+   * **not** suppress `onReady`. The transition is monotonic + lenient
+   * (stale/repeat calls no-op) so StrictMode double-invoke is safe.
+   */
+  readonly advanceTo: (phase: LifecyclePhase, ctx: StudioPluginContext) => void;
 
-	/**
-	 * Release any in-flight debounce timers and forget every live
-	 * subscriber so the manager can be garbage-collected cleanly.
-	 *
-	 * `<Studio>` calls this from the unmount cleanup that follows
-	 * `onDestroy`. Without it, a pending `onDataChange` debounce
-	 * timer would fire after the host dropped its reference to the
-	 * runtime — running plugin hooks against a stale context whose
-	 * `getPuckApi()` now throws.
-	 *
-	 * Safe to call multiple times; subsequent calls are no-ops.
-	 */
-	readonly dispose: () => void;
+  /**
+   * Release any in-flight debounce timers and forget every live
+   * subscriber so the manager can be garbage-collected cleanly.
+   *
+   * `<Studio>` calls this from the unmount cleanup that follows
+   * `onDestroy`. Without it, a pending `onDataChange` debounce
+   * timer would fire after the host dropped its reference to the
+   * runtime — running plugin hooks against a stale context whose
+   * `getPuckApi()` now throws.
+   *
+   * Safe to call multiple times; subsequent calls are no-ops.
+   */
+  readonly dispose: () => void;
 }
 
 /**
  * Options accepted by {@link createLifecycleManager}.
  */
 export interface LifecycleManagerOptions {
-	/**
-	 * Coalesce rapid `onDataChange` emits into a single hook
-	 * invocation after this many milliseconds of quiet. `<Studio>`
-	 * opts in with a sensible default so plugin authors don't need to
-	 * debounce every `onDataChange` hook by hand — an autosave plugin
-	 * posting to `/api/draft` otherwise floods the backend on every
-	 * keystroke.
-	 *
-	 * - `0` (or omitted) → preserves pre-debounce behavior: every
-	 *   emit synchronously schedules hook invocation.
-	 * - `> 0` → only the most recent emit within a sliding window
-	 *   fires; earlier payloads are dropped. Subscribers observe the
-	 *   same debounced fire, so in-process observers stay consistent
-	 *   with the plugin hooks they complement.
-	 *
-	 * The debounce covers `onDataChange` only. Every other event
-	 * fires synchronously because they carry veto (`onBeforePublish`)
-	 * or one-shot (`onInit` / `onDestroy` / `onAfterPublish`)
-	 * semantics where coalescing would be wrong.
-	 */
-	readonly onDataChangeDebounceMs?: number;
+  /**
+   * Coalesce rapid `onDataChange` emits into a single hook
+   * invocation after this many milliseconds of quiet. `<Studio>`
+   * opts in with a sensible default so plugin authors don't need to
+   * debounce every `onDataChange` hook by hand — an autosave plugin
+   * posting to `/api/draft` otherwise floods the backend on every
+   * keystroke.
+   *
+   * - `0` (or omitted) → preserves pre-debounce behavior: every
+   *   emit synchronously schedules hook invocation.
+   * - `> 0` → only the most recent emit within a sliding window
+   *   fires; earlier payloads are dropped. Subscribers observe the
+   *   same debounced fire, so in-process observers stay consistent
+   *   with the plugin hooks they complement.
+   *
+   * The debounce covers `onDataChange` only. Every other event
+   * fires synchronously because they carry veto (`onBeforePublish`)
+   * or one-shot (`onInit` / `onDestroy` / `onAfterPublish`)
+   * semantics where coalescing would be wrong.
+   */
+  readonly onDataChangeDebounceMs?: number;
 }
 
 /**
@@ -258,391 +258,391 @@ export interface LifecycleManagerOptions {
  * field docs for semantics.
  */
 export function createLifecycleManager(
-	registrations: readonly StudioPluginRegistration[],
-	options: LifecycleManagerOptions = {},
+  registrations: readonly StudioPluginRegistration[],
+  options: LifecycleManagerOptions = {},
 ): LifecycleManager {
-	// Subscribers bucketed by event name. A fresh `Set` per event
-	// makes unsubscribe O(1) and avoids iteration-order footguns when
-	// a handler detaches itself mid-broadcast.
-	const subscribers: Record<LifecycleEventName, Set<LifecycleSubscriber>> = {
-		onInit: new Set(),
-		onReady: new Set(),
-		onDataChange: new Set(),
-		onBeforePublish: new Set(),
-		onAfterPublish: new Set(),
-		onDestroy: new Set(),
-	};
-	let disposed = false;
+  // Subscribers bucketed by event name. A fresh `Set` per event
+  // makes unsubscribe O(1) and avoids iteration-order footguns when
+  // a handler detaches itself mid-broadcast.
+  const subscribers: Record<LifecycleEventName, Set<LifecycleSubscriber>> = {
+    onInit: new Set(),
+    onReady: new Set(),
+    onDataChange: new Set(),
+    onBeforePublish: new Set(),
+    onAfterPublish: new Set(),
+    onDestroy: new Set(),
+  };
+  let disposed = false;
 
-	// Engine-owned lifecycle phase machine (A2). Replaces the shell's
-	// `onInitPromise` / `readyFiredFor` / `queueMicrotask` triad.
-	let currentPhase: LifecyclePhase = "compiled";
-	// Settle promise for `onInit`, recorded by `advanceTo("init")` so
-	// `onReady` can chain strictly after it (resolves even if an
-	// `onInit` hook threw — non-veto contract, unchanged).
-	let onInitSettled: Promise<void> | null = null;
-	// `advanceTo("ready")` may arrive *before* `advanceTo("init")`:
-	// `<PuckApiBinder>`'s child effect commits before the controller's
-	// parent `init` effect (React fires child effects first). Rather
-	// than make correctness depend on shell effect ordering (the old
-	// `queueMicrotask` hack), the engine records the request and
-	// honors it the moment `init` fires. Order-independent by design.
-	let readyRequested = false;
+  // Engine-owned lifecycle phase machine (A2). Replaces the shell's
+  // `onInitPromise` / `readyFiredFor` / `queueMicrotask` triad.
+  let currentPhase: LifecyclePhase = "compiled";
+  // Settle promise for `onInit`, recorded by `advanceTo("init")` so
+  // `onReady` can chain strictly after it (resolves even if an
+  // `onInit` hook threw — non-veto contract, unchanged).
+  let onInitSettled: Promise<void> | null = null;
+  // `advanceTo("ready")` may arrive *before* `advanceTo("init")`:
+  // `<PuckApiBinder>`'s child effect commits before the controller's
+  // parent `init` effect (React fires child effects first). Rather
+  // than make correctness depend on shell effect ordering (the old
+  // `queueMicrotask` hack), the engine records the request and
+  // honors it the moment `init` fires. Order-independent by design.
+  let readyRequested = false;
 
-	function phase(): LifecyclePhase {
-		return currentPhase;
-	}
+  function phase(): LifecyclePhase {
+    return currentPhase;
+  }
 
-	/**
-	 * Schedule the one `onReady` for this runtime: enter `ready`, then
-	 * fire `onReady` strictly after `onInit` settles, then enter
-	 * `running`. `emit("onInit")` never rejects (hook throws are
-	 * logged + swallowed — non-veto), so a single `.then` suffices.
-	 * Idempotent: only runs from the `init` phase.
-	 *
-	 * **Engine invariants (relied on by callers; do not weaken):**
-	 * - `advanceTo` is **idempotent** and **non-reentrant** — concurrent
-	 *   callers are serialized by the single-threaded `currentPhase`
-	 *   field, and a repeat transition for the same runtime is a no-op
-	 *   (StrictMode double-invoke / error-boundary remount safe).
-	 * - `onReady` and the debounced `onDataChange` are intentionally
-	 *   **fire-and-forget**: the engine calls `void emit(...)` and never
-	 *   awaits it. `emit()` returns `Promise<void>` for *internal*
-	 *   sequencing (e.g. `onBeforePublish`), not as a "the engine
-	 *   finished this hook" signal — a caller that assumes `onReady`
-	 *   completed before some later step will silently race.
-	 */
-	function scheduleReady(ctx: StudioPluginContext): void {
-		if (currentPhase !== "init") {
-			return;
-		}
-		currentPhase = "ready";
-		const settled = onInitSettled ?? Promise.resolve();
-		settled.then(() => {
-			if (disposed || currentPhase !== "ready") {
-				return;
-			}
-			currentPhase = "running";
-			void emit("onReady", ctx);
-		}, undefined);
-	}
+  /**
+   * Schedule the one `onReady` for this runtime: enter `ready`, then
+   * fire `onReady` strictly after `onInit` settles, then enter
+   * `running`. `emit("onInit")` never rejects (hook throws are
+   * logged + swallowed — non-veto), so a single `.then` suffices.
+   * Idempotent: only runs from the `init` phase.
+   *
+   * **Engine invariants (relied on by callers; do not weaken):**
+   * - `advanceTo` is **idempotent** and **non-reentrant** — concurrent
+   *   callers are serialized by the single-threaded `currentPhase`
+   *   field, and a repeat transition for the same runtime is a no-op
+   *   (StrictMode double-invoke / error-boundary remount safe).
+   * - `onReady` and the debounced `onDataChange` are intentionally
+   *   **fire-and-forget**: the engine calls `void emit(...)` and never
+   *   awaits it. `emit()` returns `Promise<void>` for *internal*
+   *   sequencing (e.g. `onBeforePublish`), not as a "the engine
+   *   finished this hook" signal — a caller that assumes `onReady`
+   *   completed before some later step will silently race.
+   */
+  function scheduleReady(ctx: StudioPluginContext): void {
+    if (currentPhase !== "init") {
+      return;
+    }
+    currentPhase = "ready";
+    const settled = onInitSettled ?? Promise.resolve();
+    settled.then(() => {
+      if (disposed || currentPhase !== "ready") {
+        return;
+      }
+      currentPhase = "running";
+      void emit("onReady", ctx);
+    }, undefined);
+  }
 
-	function advanceTo(target: LifecyclePhase, ctx: StudioPluginContext): void {
-		if (disposed || currentPhase === "destroyed") {
-			return;
-		}
+  function advanceTo(target: LifecyclePhase, ctx: StudioPluginContext): void {
+    if (disposed || currentPhase === "destroyed") {
+      return;
+    }
 
-		if (target === "destroyed") {
-			// Terminal marker — `onDestroy` is still emitted by the
-			// shell's unmount cleanup so it closes over the exact
-			// runtime/ctx pair that fired `onInit`. Cancel any pending
-			// debounced `onDataChange`: its timer only checks
-			// `disposed`, so without this a public caller that does
-			// `advanceTo("destroyed")` without `dispose()` could still
-			// run `onDataChange` hooks after the documented terminal
-			// phase (codex-review P2).
-			currentPhase = "destroyed";
-			if (pendingDataChange !== null) {
-				clearTimeout(pendingDataChange.timer);
-				pendingDataChange = null;
-			}
-			return;
-		}
+    if (target === "destroyed") {
+      // Terminal marker — `onDestroy` is still emitted by the
+      // shell's unmount cleanup so it closes over the exact
+      // runtime/ctx pair that fired `onInit`. Cancel any pending
+      // debounced `onDataChange`: its timer only checks
+      // `disposed`, so without this a public caller that does
+      // `advanceTo("destroyed")` without `dispose()` could still
+      // run `onDataChange` hooks after the documented terminal
+      // phase (codex-review P2).
+      currentPhase = "destroyed";
+      if (pendingDataChange !== null) {
+        clearTimeout(pendingDataChange.timer);
+        pendingDataChange = null;
+      }
+      return;
+    }
 
-		if (target === "init") {
-			// Only a direct compiled → init step fires `onInit`.
-			// Idempotent past `init` (StrictMode double-invoke).
-			if (currentPhase !== "compiled") {
-				return;
-			}
-			currentPhase = "init";
-			onInitSettled = emit("onInit", ctx);
-			void onInitSettled;
-			// A `ready` that raced ahead of `init` was deferred — honor
-			// it now so ordering does not depend on which effect
-			// committed first.
-			if (readyRequested) {
-				scheduleReady(ctx);
-			}
-			return;
-		}
+    if (target === "init") {
+      // Only a direct compiled → init step fires `onInit`.
+      // Idempotent past `init` (StrictMode double-invoke).
+      if (currentPhase !== "compiled") {
+        return;
+      }
+      currentPhase = "init";
+      onInitSettled = emit("onInit", ctx);
+      void onInitSettled;
+      // A `ready` that raced ahead of `init` was deferred — honor
+      // it now so ordering does not depend on which effect
+      // committed first.
+      if (readyRequested) {
+        scheduleReady(ctx);
+      }
+      return;
+    }
 
-		if (target === "ready") {
-			// Remember the request even if it arrives before `init`;
-			// `advanceTo("init")` will honor it. Idempotent — the
-			// `scheduleReady` phase guard makes a repeat call a no-op.
-			readyRequested = true;
-			scheduleReady(ctx);
-			return;
-		}
+    if (target === "ready") {
+      // Remember the request even if it arrives before `init`;
+      // `advanceTo("init")` will honor it. Idempotent — the
+      // `scheduleReady` phase guard makes a repeat call a no-op.
+      readyRequested = true;
+      scheduleReady(ctx);
+      return;
+    }
 
-		// `running` is an **engine-internal, observable-only** phase: it
-		// is set solely by `scheduleReady`'s post-`onInit` continuation,
-		// never by a caller. An external `advanceTo("running")` is a
-		// deliberate no-op — honoring it from `ready` would flip
-		// `currentPhase` out from under that continuation, whose
-		// `currentPhase !== "ready"` guard would then skip `onReady`
-		// entirely (codex-review P2). `phase()` still *reports*
-		// `"running"` once `onReady` has fired; it just cannot be
-		// *commanded*.
-	}
+    // `running` is an **engine-internal, observable-only** phase: it
+    // is set solely by `scheduleReady`'s post-`onInit` continuation,
+    // never by a caller. An external `advanceTo("running")` is a
+    // deliberate no-op — honoring it from `ready` would flip
+    // `currentPhase` out from under that continuation, whose
+    // `currentPhase !== "ready"` guard would then skip `onReady`
+    // entirely (codex-review P2). `phase()` still *reports*
+    // `"running"` once `onReady` has fired; it just cannot be
+    // *commanded*.
+  }
 
-	/**
-	 * Resolve the hook function a given registration contributes for
-	 * the named event, or `undefined` if the plugin did not opt in.
-	 *
-	 * Typed narrowly so the callers see the exact hook signature
-	 * instead of a union of every possible hook.
-	 */
-	function getHook(
-		registration: StudioPluginRegistration,
-		event: LifecycleEventName,
-	): StudioPluginLifecycleHooks[LifecycleEventName] | undefined {
-		return registration.hooks?.[event];
-	}
+  /**
+   * Resolve the hook function a given registration contributes for
+   * the named event, or `undefined` if the plugin did not opt in.
+   *
+   * Typed narrowly so the callers see the exact hook signature
+   * instead of a union of every possible hook.
+   */
+  function getHook(
+    registration: StudioPluginRegistration,
+    event: LifecycleEventName,
+  ): StudioPluginLifecycleHooks[LifecycleEventName] | undefined {
+    return registration.hooks?.[event];
+  }
 
-	/**
-	 * Invoke a single plugin hook, normalizing its signature so both
-	 * no-payload events (`onInit`, `onDestroy`) and data-bearing
-	 * events (`onDataChange`, `onBeforePublish`, `onAfterPublish`)
-	 * go through the same call site.
-	 *
-	 * Always returns a promise so callers can uniformly `await` or
-	 * feed into `Promise.allSettled`.
-	 */
-	function invokeHook(
-		event: LifecycleEventName,
-		registration: StudioPluginRegistration,
-		ctx: StudioPluginContext,
-		payload: PuckData | undefined,
-	): Promise<void> {
-		const hook = getHook(registration, event);
-		if (!hook) {
-			return Promise.resolve();
-		}
+  /**
+   * Invoke a single plugin hook, normalizing its signature so both
+   * no-payload events (`onInit`, `onDestroy`) and data-bearing
+   * events (`onDataChange`, `onBeforePublish`, `onAfterPublish`)
+   * go through the same call site.
+   *
+   * Always returns a promise so callers can uniformly `await` or
+   * feed into `Promise.allSettled`.
+   */
+  function invokeHook(
+    event: LifecycleEventName,
+    registration: StudioPluginRegistration,
+    ctx: StudioPluginContext,
+    payload: PuckData | undefined,
+  ): Promise<void> {
+    const hook = getHook(registration, event);
+    if (!hook) {
+      return Promise.resolve();
+    }
 
-		// Cast through `unknown` — the union of hook signatures is
-		// mutually exclusive on payload arity and TypeScript cannot
-		// prove the dispatch table matches at this level of
-		// indirection. The runtime invariant is enforced by the
-		// `LifecycleEventName` union.
-		const run = hook as (
-			ctx: StudioPluginContext,
-			payload?: PuckData,
-		) => void | Promise<void>;
+    // Cast through `unknown` — the union of hook signatures is
+    // mutually exclusive on payload arity and TypeScript cannot
+    // prove the dispatch table matches at this level of
+    // indirection. The runtime invariant is enforced by the
+    // `LifecycleEventName` union.
+    const run = hook as (
+      ctx: StudioPluginContext,
+      payload?: PuckData,
+    ) => void | Promise<void>;
 
-		try {
-			return Promise.resolve(run(ctx, payload));
-		} catch (error) {
-			return Promise.reject(error);
-		}
-	}
+    try {
+      return Promise.resolve(run(ctx, payload));
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 
-	/**
-	 * Parallel-emit path for `onDataChange` shared between the direct
-	 * (`debounceMs === 0`) and debounced codepaths. Factored out so
-	 * the debounce timer can run the same fan-out without duplicating
-	 * the `Promise.allSettled` + per-reject log logic.
-	 */
-	async function runDataChange(
-		ctx: StudioPluginContext,
-		payload: PuckData | undefined,
-	): Promise<void> {
-		const settled = await Promise.allSettled(
-			registrations.map((registration) =>
-				invokeHook("onDataChange", registration, ctx, payload),
-			),
-		);
-		if (disposed) {
-			return;
-		}
-		for (const [index, result] of settled.entries()) {
-			if (result.status === "rejected") {
-				// `Promise.allSettled` preserves input order, so `settled`
-				// is 1:1 with `registrations` — this lookup is always
-				// present. The guard is a `noUncheckedIndexedAccess`
-				// formality (strips `| undefined`), not real
-				// defensiveness, and is structurally unreachable.
-				const registration = registrations[index];
-				if (!registration) {
-					continue;
-				}
-				ctx.log(
-					"error",
-					`Plugin "${registration.meta.id}" threw during onDataChange`,
-					{ error: result.reason },
-				);
-			}
-		}
-		fireSubscribers("onDataChange", ctx, payload);
-	}
+  /**
+   * Parallel-emit path for `onDataChange` shared between the direct
+   * (`debounceMs === 0`) and debounced codepaths. Factored out so
+   * the debounce timer can run the same fan-out without duplicating
+   * the `Promise.allSettled` + per-reject log logic.
+   */
+  async function runDataChange(
+    ctx: StudioPluginContext,
+    payload: PuckData | undefined,
+  ): Promise<void> {
+    const settled = await Promise.allSettled(
+      registrations.map((registration) =>
+        invokeHook("onDataChange", registration, ctx, payload),
+      ),
+    );
+    if (disposed) {
+      return;
+    }
+    for (const [index, result] of settled.entries()) {
+      if (result.status === "rejected") {
+        // `Promise.allSettled` preserves input order, so `settled`
+        // is 1:1 with `registrations` — this lookup is always
+        // present. The guard is a `noUncheckedIndexedAccess`
+        // formality (strips `| undefined`), not real
+        // defensiveness, and is structurally unreachable.
+        const registration = registrations[index];
+        if (!registration) {
+          continue;
+        }
+        ctx.log(
+          "error",
+          `Plugin "${registration.meta.id}" threw during onDataChange`,
+          { error: result.reason },
+        );
+      }
+    }
+    fireSubscribers("onDataChange", ctx, payload);
+  }
 
-	/**
-	 * Fire every subscriber for an event, swallowing any handler
-	 * errors. Subscribers are observers, not control-flow gates —
-	 * a throwing handler must never crash the editor.
-	 */
-	function fireSubscribers(
-		event: LifecycleEventName,
-		ctx: StudioPluginContext,
-		payload: PuckData | undefined,
-	): void {
-		for (const handler of subscribers[event]) {
-			try {
-				handler(ctx, payload);
-			} catch (error) {
-				ctx.log("error", `Lifecycle subscriber for "${event}" threw`, {
-					error,
-				});
-			}
-		}
-	}
+  /**
+   * Fire every subscriber for an event, swallowing any handler
+   * errors. Subscribers are observers, not control-flow gates —
+   * a throwing handler must never crash the editor.
+   */
+  function fireSubscribers(
+    event: LifecycleEventName,
+    ctx: StudioPluginContext,
+    payload: PuckData | undefined,
+  ): void {
+    for (const handler of subscribers[event]) {
+      try {
+        handler(ctx, payload);
+      } catch (error) {
+        ctx.log("error", `Lifecycle subscriber for "${event}" threw`, {
+          error,
+        });
+      }
+    }
+  }
 
-	// Debounce state for `onDataChange`. `pending.timer` is the
-	// scheduled callback; `pending.ctx` and `pending.payload` hold the
-	// most recent emit so the deferred fire sees the latest values.
-	// Every other event bypasses this entirely.
-	const debounceMs = options.onDataChangeDebounceMs ?? 0;
-	let pendingDataChange: {
-		timer: ReturnType<typeof setTimeout>;
-		ctx: StudioPluginContext;
-		payload: PuckData | undefined;
-	} | null = null;
+  // Debounce state for `onDataChange`. `pending.timer` is the
+  // scheduled callback; `pending.ctx` and `pending.payload` hold the
+  // most recent emit so the deferred fire sees the latest values.
+  // Every other event bypasses this entirely.
+  const debounceMs = options.onDataChangeDebounceMs ?? 0;
+  let pendingDataChange: {
+    timer: ReturnType<typeof setTimeout>;
+    ctx: StudioPluginContext;
+    payload: PuckData | undefined;
+  } | null = null;
 
-	async function emit(
-		event: LifecycleEventName,
-		ctx: StudioPluginContext,
-		payload?: PuckData,
-	): Promise<void> {
-		if (disposed) {
-			return;
-		}
+  async function emit(
+    event: LifecycleEventName,
+    ctx: StudioPluginContext,
+    payload?: PuckData,
+  ): Promise<void> {
+    if (disposed) {
+      return;
+    }
 
-		// `destroyed` is a documented terminal phase, and `advanceTo`
-		// is now public — so honor it here, not only via `dispose()`.
-		// A direct runtime consumer that calls `advanceTo("destroyed")`
-		// must not be able to keep running `onDataChange` /
-		// `onAfterPublish` / etc. afterwards. `onDestroy` itself is
-		// exempt: the shell deliberately advances to `destroyed`
-		// *before* emitting `onDestroy` (so a late onInit-settle
-		// continuation cannot fire `onReady`), then disposes.
-		if (currentPhase === "destroyed" && event !== "onDestroy") {
-			return;
-		}
+    // `destroyed` is a documented terminal phase, and `advanceTo`
+    // is now public — so honor it here, not only via `dispose()`.
+    // A direct runtime consumer that calls `advanceTo("destroyed")`
+    // must not be able to keep running `onDataChange` /
+    // `onAfterPublish` / etc. afterwards. `onDestroy` itself is
+    // exempt: the shell deliberately advances to `destroyed`
+    // *before* emitting `onDestroy` (so a late onInit-settle
+    // continuation cannot fire `onReady`), then disposes.
+    if (currentPhase === "destroyed" && event !== "onDestroy") {
+      return;
+    }
 
-		if (event === "onDataChange" && debounceMs > 0) {
-			// Coalesce rapid emits. The returned promise resolves
-			// immediately — upstream callers are fire-and-forget and
-			// do not await the hook settlement in the first place.
-			if (pendingDataChange !== null) {
-				clearTimeout(pendingDataChange.timer);
-			}
-			const timer = setTimeout(() => {
-				// Belt-and-suspenders: `advanceTo("destroyed")` already
-				// clears this timer, but guard the terminal phase here
-				// too so no debounced `onDataChange` can run post-destroy.
-				if (disposed || currentPhase === "destroyed") {
-					return;
-				}
-				const snapshot = pendingDataChange;
-				pendingDataChange = null;
-				if (snapshot === null) {
-					return;
-				}
-				void runDataChange(snapshot.ctx, snapshot.payload);
-			}, debounceMs);
-			pendingDataChange = { timer, ctx, payload };
-			return;
-		}
+    if (event === "onDataChange" && debounceMs > 0) {
+      // Coalesce rapid emits. The returned promise resolves
+      // immediately — upstream callers are fire-and-forget and
+      // do not await the hook settlement in the first place.
+      if (pendingDataChange !== null) {
+        clearTimeout(pendingDataChange.timer);
+      }
+      const timer = setTimeout(() => {
+        // Belt-and-suspenders: `advanceTo("destroyed")` already
+        // clears this timer, but guard the terminal phase here
+        // too so no debounced `onDataChange` can run post-destroy.
+        if (disposed || currentPhase === "destroyed") {
+          return;
+        }
+        const snapshot = pendingDataChange;
+        pendingDataChange = null;
+        if (snapshot === null) {
+          return;
+        }
+        void runDataChange(snapshot.ctx, snapshot.payload);
+      }, debounceMs);
+      pendingDataChange = { timer, ctx, payload };
+      return;
+    }
 
-		if (event === "onBeforePublish") {
-			// Sequential — the first rejection aborts the rest so a
-			// validation plugin can veto publish.
-			for (const registration of registrations) {
-				try {
-					await invokeHook(event, registration, ctx, payload);
-				} catch (error) {
-					if (error instanceof StudioPluginError) {
-						throw error;
-					}
-					// Wrap anything that is not already a StudioPluginError
-					// so the host always sees a typed runtime error. Fold
-					// the cause's message into the wrapper message so UIs
-					// that only render `err.message` (DevTools panels,
-					// Sentry, most error boundaries) still expose the root
-					// reason to the user.
-					throw new StudioPluginError(
-						registration.meta.id,
-						`Plugin "${registration.meta.id}" threw during onBeforePublish: ${extractErrorMessage(error)}`,
-						{ cause: error },
-					);
-				}
-			}
-			fireSubscribers(event, ctx, payload);
-			return;
-		}
+    if (event === "onBeforePublish") {
+      // Sequential — the first rejection aborts the rest so a
+      // validation plugin can veto publish.
+      for (const registration of registrations) {
+        try {
+          await invokeHook(event, registration, ctx, payload);
+        } catch (error) {
+          if (error instanceof StudioPluginError) {
+            throw error;
+          }
+          // Wrap anything that is not already a StudioPluginError
+          // so the host always sees a typed runtime error. Fold
+          // the cause's message into the wrapper message so UIs
+          // that only render `err.message` (DevTools panels,
+          // Sentry, most error boundaries) still expose the root
+          // reason to the user.
+          throw new StudioPluginError(
+            registration.meta.id,
+            `Plugin "${registration.meta.id}" threw during onBeforePublish: ${extractErrorMessage(error)}`,
+            { cause: error },
+          );
+        }
+      }
+      fireSubscribers(event, ctx, payload);
+      return;
+    }
 
-		if (event === "onDataChange") {
-			// Direct path when debouncing is disabled — preserves the
-			// pre-debounce `await emit(...)` semantics tests rely on.
-			await runDataChange(ctx, payload);
-			return;
-		}
+    if (event === "onDataChange") {
+      // Direct path when debouncing is disabled — preserves the
+      // pre-debounce `await emit(...)` semantics tests rely on.
+      await runDataChange(ctx, payload);
+      return;
+    }
 
-		// Every other event: run in parallel and log-then-swallow any
-		// rejections.
-		const settled = await Promise.allSettled(
-			registrations.map((registration) =>
-				invokeHook(event, registration, ctx, payload),
-			),
-		);
-		if (disposed) {
-			return;
-		}
+    // Every other event: run in parallel and log-then-swallow any
+    // rejections.
+    const settled = await Promise.allSettled(
+      registrations.map((registration) =>
+        invokeHook(event, registration, ctx, payload),
+      ),
+    );
+    if (disposed) {
+      return;
+    }
 
-		for (const [index, result] of settled.entries()) {
-			if (result.status === "rejected") {
-				// 1:1 with `registrations` (allSettled preserves order);
-				// the guard is a `noUncheckedIndexedAccess` formality,
-				// structurally unreachable — not real defensiveness.
-				const registration = registrations[index];
-				if (!registration) {
-					continue;
-				}
-				ctx.log(
-					"error",
-					`Plugin "${registration.meta.id}" threw during ${event}`,
-					{ error: result.reason },
-				);
-			}
-		}
+    for (const [index, result] of settled.entries()) {
+      if (result.status === "rejected") {
+        // 1:1 with `registrations` (allSettled preserves order);
+        // the guard is a `noUncheckedIndexedAccess` formality,
+        // structurally unreachable — not real defensiveness.
+        const registration = registrations[index];
+        if (!registration) {
+          continue;
+        }
+        ctx.log(
+          "error",
+          `Plugin "${registration.meta.id}" threw during ${event}`,
+          { error: result.reason },
+        );
+      }
+    }
 
-		fireSubscribers(event, ctx, payload);
-	}
+    fireSubscribers(event, ctx, payload);
+  }
 
-	function dispose(): void {
-		disposed = true;
-		// Terminal phase so any `onInit`-settle `.then` that resolves
-		// after teardown does not fire a late `onReady`.
-		currentPhase = "destroyed";
-		if (pendingDataChange !== null) {
-			clearTimeout(pendingDataChange.timer);
-			pendingDataChange = null;
-		}
-		for (const event of Object.keys(subscribers) as LifecycleEventName[]) {
-			subscribers[event].clear();
-		}
-	}
+  function dispose(): void {
+    disposed = true;
+    // Terminal phase so any `onInit`-settle `.then` that resolves
+    // after teardown does not fire a late `onReady`.
+    currentPhase = "destroyed";
+    if (pendingDataChange !== null) {
+      clearTimeout(pendingDataChange.timer);
+      pendingDataChange = null;
+    }
+    for (const event of Object.keys(subscribers) as LifecycleEventName[]) {
+      subscribers[event].clear();
+    }
+  }
 
-	function subscribe(
-		event: LifecycleEventName,
-		handler: LifecycleSubscriber,
-	): () => void {
-		subscribers[event].add(handler);
-		return () => {
-			subscribers[event].delete(handler);
-		};
-	}
+  function subscribe(
+    event: LifecycleEventName,
+    handler: LifecycleSubscriber,
+  ): () => void {
+    subscribers[event].add(handler);
+    return () => {
+      subscribers[event].delete(handler);
+    };
+  }
 
-	return { emit, subscribe, dispose, phase, advanceTo };
+  return { emit, subscribe, dispose, phase, advanceTo };
 }

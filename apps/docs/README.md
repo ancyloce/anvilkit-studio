@@ -20,13 +20,13 @@ The `prebuild` / `predev` hooks run `scripts/generate-component-pages.ts` and `s
 
 Configured by `vercel.json` at the repository root.
 
-| Setting             | Value                                                     |
-| ------------------- | --------------------------------------------------------- |
-| Build command       | `pnpm install --frozen-lockfile && pnpm -F @anvilkit/docs-site build` |
-| Output directory    | `apps/docs/dist`                                          |
-| Node version        | `22` (matches `.github/workflows/ci.yml`)                 |
-| Production branch   | `main`                                                    |
-| Production domain   | `docs.anvilkit.dev`                                       |
+| Setting           | Value                                                                 |
+| ----------------- | --------------------------------------------------------------------- |
+| Build command     | `pnpm install --frozen-lockfile && pnpm -F @anvilkit/docs-site build` |
+| Output directory  | `apps/docs/dist`                                                      |
+| Node version      | `22` (matches `.github/workflows/ci.yml`)                             |
+| Production branch | `main`                                                                |
+| Production domain | `docs.anvilkit.dev`                                                   |
 
 ### Preview behavior
 

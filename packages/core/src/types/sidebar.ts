@@ -15,8 +15,8 @@
 
 import type { ReactNode } from "react";
 import type {
-	PuckApi,
-	ComponentData as PuckComponentData,
+  PuckApi,
+  ComponentData as PuckComponentData,
 } from "@puckeditor/core";
 
 // -----------------------------------------------------------------------------
@@ -30,8 +30,8 @@ import type {
  * via the second argument.
  */
 export type StudioInsertSectionPredicate = (
-	componentName: string,
-	metadata: { readonly category?: string } | undefined,
+  componentName: string,
+  metadata: { readonly category?: string } | undefined,
 ) => boolean;
 
 /**
@@ -41,20 +41,20 @@ export type StudioInsertSectionPredicate = (
  * can register additional sections via `registerInsertSection()`.
  */
 export interface StudioInsertSection {
-	/** Stable id. Used as the persisted-expansion key. */
-	readonly id: string;
-	/**
-	 * i18n key for the section header label
-	 * (e.g. `"studio.module.insert.section.recommended"`).
-	 */
-	readonly titleKey: string;
-	/**
-	 * Filter that decides which components fall into this section.
-	 * The first matching section wins — order matters.
-	 */
-	readonly predicate: StudioInsertSectionPredicate;
-	/** Optional explicit position; lower renders first. */
-	readonly order?: number;
+  /** Stable id. Used as the persisted-expansion key. */
+  readonly id: string;
+  /**
+   * i18n key for the section header label
+   * (e.g. `"studio.module.insert.section.recommended"`).
+   */
+  readonly titleKey: string;
+  /**
+   * Filter that decides which components fall into this section.
+   * The first matching section wins — order matters.
+   */
+  readonly predicate: StudioInsertSectionPredicate;
+  /** Optional explicit position; lower renders first. */
+  readonly order?: number;
 }
 
 // -----------------------------------------------------------------------------
@@ -68,8 +68,8 @@ export interface StudioInsertSection {
  * primitive into the canvas.
  */
 export type StudioLayerQuickAddInserter = (api: {
-	readonly puckApi: PuckApi;
-	readonly currentSelection: PuckComponentData | null;
+  readonly puckApi: PuckApi;
+  readonly currentSelection: PuckComponentData | null;
 }) => void | Promise<void>;
 
 /**
@@ -78,13 +78,13 @@ export type StudioLayerQuickAddInserter = (api: {
  * `@anvilkit/core`; plugins can append their own.
  */
 export interface StudioLayerQuickAdd {
-	readonly id: string;
-	/** i18n key for the row label. */
-	readonly labelKey: string;
-	/** Optional `lucide-react` icon name. */
-	readonly icon?: string;
-	readonly insert: StudioLayerQuickAddInserter;
-	readonly order?: number;
+  readonly id: string;
+  /** i18n key for the row label. */
+  readonly labelKey: string;
+  /** Optional `lucide-react` icon name. */
+  readonly icon?: string;
+  readonly insert: StudioLayerQuickAddInserter;
+  readonly order?: number;
 }
 
 // -----------------------------------------------------------------------------
@@ -97,12 +97,12 @@ export interface StudioLayerQuickAdd {
  * sidebar uses for the tile.
  */
 export type StudioAssetKind =
-	| "image"
-	| "video"
-	| "audio"
-	| "font"
-	| "document"
-	| "other";
+  | "image"
+  | "video"
+  | "audio"
+  | "font"
+  | "document"
+  | "other";
 
 /**
  * A single asset entry returned by a {@link StudioAssetSource}.
@@ -112,20 +112,20 @@ export type StudioAssetKind =
  * sidebar to render.
  */
 export interface StudioAsset {
-	readonly id: string;
-	readonly kind: StudioAssetKind;
-	/** Display name shown beneath the tile. */
-	readonly name: string;
-	/** URL the canvas inserts when the user clicks the tile. */
-	readonly url: string;
-	/** Optional thumbnail URL. Falls back to `url` for images. */
-	readonly thumbnailUrl?: string;
-	/** Optional MIME type. Used for filter accuracy when `kind` is `"other"`. */
-	readonly mimeType?: string;
-	/** Optional tags surfaced by the search input. */
-	readonly tags?: readonly string[];
-	/** Optional size in bytes — surfaced in tooltips. */
-	readonly size?: number;
+  readonly id: string;
+  readonly kind: StudioAssetKind;
+  /** Display name shown beneath the tile. */
+  readonly name: string;
+  /** URL the canvas inserts when the user clicks the tile. */
+  readonly url: string;
+  /** Optional thumbnail URL. Falls back to `url` for images. */
+  readonly thumbnailUrl?: string;
+  /** Optional MIME type. Used for filter accuracy when `kind` is `"other"`. */
+  readonly mimeType?: string;
+  /** Optional tags surfaced by the search input. */
+  readonly tags?: readonly string[];
+  /** Optional size in bytes — surfaced in tooltips. */
+  readonly size?: number;
 }
 
 /**
@@ -136,13 +136,13 @@ export interface StudioAsset {
  * exactly one terminal `done` or `error` event.
  */
 export type StudioAssetUploadEvent =
-	| {
-			readonly type: "progress";
-			readonly bytesUploaded: number;
-			readonly bytesTotal: number;
-	  }
-	| { readonly type: "done"; readonly asset: StudioAsset }
-	| { readonly type: "error"; readonly message: string };
+  | {
+      readonly type: "progress";
+      readonly bytesUploaded: number;
+      readonly bytesTotal: number;
+    }
+  | { readonly type: "done"; readonly asset: StudioAsset }
+  | { readonly type: "error"; readonly message: string };
 
 export type StudioAssetUploadListener = (event: StudioAssetUploadEvent) => void;
 
@@ -153,16 +153,16 @@ export type StudioAssetUploadListener = (event: StudioAssetUploadEvent) => void;
  * the page.
  */
 export interface StudioAssetListQuery {
-	/** Free-text query, matched against id, name, MIME prefix, tags. */
-	readonly query?: string;
-	/** Restrict to one or more asset kinds. */
-	readonly kinds?: readonly StudioAssetKind[];
-	/** Require all listed tags (AND semantics). */
-	readonly tags?: readonly string[];
-	/** Opaque pagination cursor returned by the previous page. */
-	readonly cursor?: string;
-	/** Maximum items per page. Sources may apply their own ceiling. */
-	readonly limit?: number;
+  /** Free-text query, matched against id, name, MIME prefix, tags. */
+  readonly query?: string;
+  /** Restrict to one or more asset kinds. */
+  readonly kinds?: readonly StudioAssetKind[];
+  /** Require all listed tags (AND semantics). */
+  readonly tags?: readonly string[];
+  /** Opaque pagination cursor returned by the previous page. */
+  readonly cursor?: string;
+  /** Maximum items per page. Sources may apply their own ceiling. */
+  readonly limit?: number;
 }
 
 /**
@@ -174,9 +174,9 @@ export interface StudioAssetListQuery {
  *   when the result set is exhausted.
  */
 export interface StudioAssetListPage {
-	readonly items: readonly StudioAsset[];
-	readonly total: number;
-	readonly nextCursor: string | undefined;
+  readonly items: readonly StudioAsset[];
+  readonly total: number;
+  readonly nextCursor: string | undefined;
 }
 
 /**
@@ -186,47 +186,47 @@ export interface StudioAssetListPage {
  * shows the `studio.module.image.pluginMissing` empty state.
  */
 export interface StudioAssetSource {
-	/** Return the current asset list (sync or async). */
-	list(): readonly StudioAsset[] | Promise<readonly StudioAsset[]>;
-	/**
-	 * Optional paginated / filtered listing. Remote sources override
-	 * this to push search and pagination to the server; the sidebar
-	 * falls back to {@link StudioAssetSource.list} when omitted.
-	 */
-	listPaginated?(query: StudioAssetListQuery): Promise<StudioAssetListPage>;
-	/**
-	 * Upload one or more files. The optional listener is fired with
-	 * progress envelopes if the source supports streaming progress. Pass
-	 * an `AbortSignal` to cancel an in-flight batch (e.g. on unmount);
-	 * sources that support cancellation reject with an `AbortError`.
-	 */
-	upload(
-		files: readonly File[],
-		listener?: StudioAssetUploadListener,
-		signal?: AbortSignal,
-	): Promise<readonly StudioAsset[]>;
-	/** Optional rename. Sidebar hides the menu item when omitted. */
-	rename?(assetId: string, nextName: string): Promise<void>;
-	/** Optional in-place replace. */
-	replace?(assetId: string, file: File): Promise<StudioAsset>;
-	/** Optional tag editor. Replaces the asset's tag set in place. */
-	setTags?(assetId: string, tags: readonly string[]): Promise<void>;
-	/** Optional delete. */
-	delete?(assetId: string): Promise<void>;
-	/** Optional URL accessor for "Copy URL". Defaults to `asset.url`. */
-	getUrl?(assetId: string): string | Promise<string>;
-	/**
-	 * Optional subscription. The sidebar calls it on mount with a
-	 * listener that re-runs `list()` when fired.
-	 */
-	subscribe?(listener: () => void): () => void;
-	/**
-	 * Optional streaming upload subscription. Fired with the same
-	 * envelope shape `upload()` emits to its inline listener, but
-	 * delivered to every subscriber. Hosts use this to render
-	 * persistent progress UI outside the upload call site.
-	 */
-	subscribeUploads?(listener: StudioAssetUploadListener): () => void;
+  /** Return the current asset list (sync or async). */
+  list(): readonly StudioAsset[] | Promise<readonly StudioAsset[]>;
+  /**
+   * Optional paginated / filtered listing. Remote sources override
+   * this to push search and pagination to the server; the sidebar
+   * falls back to {@link StudioAssetSource.list} when omitted.
+   */
+  listPaginated?(query: StudioAssetListQuery): Promise<StudioAssetListPage>;
+  /**
+   * Upload one or more files. The optional listener is fired with
+   * progress envelopes if the source supports streaming progress. Pass
+   * an `AbortSignal` to cancel an in-flight batch (e.g. on unmount);
+   * sources that support cancellation reject with an `AbortError`.
+   */
+  upload(
+    files: readonly File[],
+    listener?: StudioAssetUploadListener,
+    signal?: AbortSignal,
+  ): Promise<readonly StudioAsset[]>;
+  /** Optional rename. Sidebar hides the menu item when omitted. */
+  rename?(assetId: string, nextName: string): Promise<void>;
+  /** Optional in-place replace. */
+  replace?(assetId: string, file: File): Promise<StudioAsset>;
+  /** Optional tag editor. Replaces the asset's tag set in place. */
+  setTags?(assetId: string, tags: readonly string[]): Promise<void>;
+  /** Optional delete. */
+  delete?(assetId: string): Promise<void>;
+  /** Optional URL accessor for "Copy URL". Defaults to `asset.url`. */
+  getUrl?(assetId: string): string | Promise<string>;
+  /**
+   * Optional subscription. The sidebar calls it on mount with a
+   * listener that re-runs `list()` when fired.
+   */
+  subscribe?(listener: () => void): () => void;
+  /**
+   * Optional streaming upload subscription. Fired with the same
+   * envelope shape `upload()` emits to its inline listener, but
+   * delivered to every subscriber. Hosts use this to render
+   * persistent progress UI outside the upload call site.
+   */
+  subscribeUploads?(listener: StudioAssetUploadListener): () => void;
 }
 
 /**
@@ -235,24 +235,24 @@ export interface StudioAssetSource {
  * itself; this surface lets plugins add commands like "Open in CDN".
  */
 export interface StudioAssetAction {
-	readonly id: string;
-	/** i18n key for the menu item label. */
-	readonly labelKey: string;
-	/** Optional `lucide-react` icon name. */
-	readonly icon?: string;
-	/** Optional `"destructive"` tone for danger items. */
-	readonly tone?: "default" | "destructive";
-	readonly run: (input: {
-		readonly asset: StudioAsset;
-		// `level` mirrors `StudioLogLevel` from `./plugin.js` inline to
-		// keep `types/sidebar.ts` free of imports from `plugin.ts`
-		// (`plugin.ts` already imports from here — see madge gate).
-		readonly log: (
-			level: "debug" | "info" | "warn" | "error",
-			message: string,
-			meta?: Readonly<Record<string, unknown>>,
-		) => void;
-	}) => void | Promise<void>;
+  readonly id: string;
+  /** i18n key for the menu item label. */
+  readonly labelKey: string;
+  /** Optional `lucide-react` icon name. */
+  readonly icon?: string;
+  /** Optional `"destructive"` tone for danger items. */
+  readonly tone?: "default" | "destructive";
+  readonly run: (input: {
+    readonly asset: StudioAsset;
+    // `level` mirrors `StudioLogLevel` from `./plugin.js` inline to
+    // keep `types/sidebar.ts` free of imports from `plugin.ts`
+    // (`plugin.ts` already imports from here — see madge gate).
+    readonly log: (
+      level: "debug" | "info" | "warn" | "error",
+      message: string,
+      meta?: Readonly<Record<string, unknown>>,
+    ) => void;
+  }) => void | Promise<void>;
 }
 
 // -----------------------------------------------------------------------------
@@ -267,11 +267,11 @@ export interface StudioAssetAction {
 export type StudioCopySnippetCategory = "basic" | "brand" | (string & {});
 
 export interface StudioCopySnippet {
-	readonly id: string;
-	readonly category: StudioCopySnippetCategory;
-	readonly title: string;
-	readonly body: string;
-	readonly tags?: readonly string[];
+  readonly id: string;
+  readonly category: StudioCopySnippetCategory;
+  readonly title: string;
+  readonly body: string;
+  readonly tags?: readonly string[];
 }
 
 /**
@@ -281,9 +281,9 @@ export interface StudioCopySnippet {
  * locale (the v1 sidebar does not auto-switch — the host decides).
  */
 export interface StudioCopySnippetPack {
-	readonly id: string;
-	readonly locale?: string;
-	readonly snippets: readonly StudioCopySnippet[];
+  readonly id: string;
+  readonly locale?: string;
+  readonly snippets: readonly StudioCopySnippet[];
 }
 
 // -----------------------------------------------------------------------------
@@ -302,14 +302,14 @@ export interface StudioCopySnippetPack {
  * until a panel is registered.
  */
 export interface StudioCopilotPanel {
-	/**
-	 * Render the panel body. Called from the `copilot` module on every
-	 * render; the returned tree is rendered directly inside the sidebar
-	 * panel's body slot. The function is the React component itself —
-	 * implementations may close over plugin references and own their
-	 * internal state via standard hooks.
-	 */
-	readonly render: () => ReactNode;
+  /**
+   * Render the panel body. Called from the `copilot` module on every
+   * render; the returned tree is rendered directly inside the sidebar
+   * panel's body slot. The function is the React component itself —
+   * implementations may close over plugin references and own their
+   * internal state via standard hooks.
+   */
+  readonly render: () => ReactNode;
 }
 
 // -----------------------------------------------------------------------------
@@ -329,13 +329,13 @@ export interface StudioCopilotPanel {
  * `studio.module.history.empty` until a panel is registered.
  */
 export interface StudioHistoryPanel {
-	/**
-	 * Render the panel body. Called from the `history` module on every
-	 * render; the returned tree is rendered directly inside the sidebar
-	 * panel's body slot. Implementations may close over an adapter
-	 * reference and own their internal state via standard hooks.
-	 */
-	readonly render: () => ReactNode;
+  /**
+   * Render the panel body. Called from the `history` module on every
+   * render; the returned tree is rendered directly inside the sidebar
+   * panel's body slot. Implementations may close over an adapter
+   * reference and own their internal state via standard hooks.
+   */
+  readonly render: () => ReactNode;
 }
 
 // -----------------------------------------------------------------------------

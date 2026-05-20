@@ -40,7 +40,7 @@ import type { StudioPlugin } from "@/types/plugin";
  * field lookups.
  */
 function isPlainObject(value: unknown): value is Record<string, unknown> {
-	return typeof value === "object" && value !== null && !Array.isArray(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 /**
@@ -63,26 +63,26 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
  * Pure, synchronous, no side effects.
  */
 export function isStudioPlugin(value: unknown): value is StudioPlugin {
-	if (!isPlainObject(value)) {
-		return false;
-	}
+  if (!isPlainObject(value)) {
+    return false;
+  }
 
-	const meta = (value as { meta?: unknown }).meta;
-	if (!isPlainObject(meta)) {
-		return false;
-	}
+  const meta = (value as { meta?: unknown }).meta;
+  if (!isPlainObject(meta)) {
+    return false;
+  }
 
-	const id = (meta as { id?: unknown }).id;
-	const coreVersion = (meta as { coreVersion?: unknown }).coreVersion;
-	if (typeof id !== "string" || id.length === 0) {
-		return false;
-	}
-	if (typeof coreVersion !== "string" || coreVersion.length === 0) {
-		return false;
-	}
+  const id = (meta as { id?: unknown }).id;
+  const coreVersion = (meta as { coreVersion?: unknown }).coreVersion;
+  if (typeof id !== "string" || id.length === 0) {
+    return false;
+  }
+  if (typeof coreVersion !== "string" || coreVersion.length === 0) {
+    return false;
+  }
 
-	const register = (value as { register?: unknown }).register;
-	return typeof register === "function";
+  const register = (value as { register?: unknown }).register;
+  return typeof register === "function";
 }
 
 /**
@@ -112,20 +112,20 @@ export function isStudioPlugin(value: unknown): value is StudioPlugin {
  * Pure, synchronous, no side effects.
  */
 export function isPuckPlugin(value: unknown): value is PuckPlugin {
-	if (!isPlainObject(value)) {
-		return false;
-	}
+  if (!isPlainObject(value)) {
+    return false;
+  }
 
-	// A StudioPlugin is never a PuckPlugin — the `register()` method
-	// is the discriminator.
-	if (typeof (value as { register?: unknown }).register === "function") {
-		return false;
-	}
+  // A StudioPlugin is never a PuckPlugin — the `register()` method
+  // is the discriminator.
+  if (typeof (value as { register?: unknown }).register === "function") {
+    return false;
+  }
 
-	const hasOverrides = "overrides" in value && isPlainObject(value.overrides);
-	const hasFieldTransforms =
-		"fieldTransforms" in value && isPlainObject(value.fieldTransforms);
-	const hasRender = "render" in value && typeof value.render === "function";
+  const hasOverrides = "overrides" in value && isPlainObject(value.overrides);
+  const hasFieldTransforms =
+    "fieldTransforms" in value && isPlainObject(value.fieldTransforms);
+  const hasRender = "render" in value && typeof value.render === "function";
 
-	return hasOverrides || hasFieldTransforms || hasRender;
+  return hasOverrides || hasFieldTransforms || hasRender;
 }

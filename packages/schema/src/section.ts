@@ -14,9 +14,9 @@
  */
 
 import type {
-	AiSectionContext,
-	AiSectionSelection,
-	ConfigToAiSectionContextOptions,
+  AiSectionContext,
+  AiSectionSelection,
+  ConfigToAiSectionContextOptions,
 } from "@anvilkit/core/types";
 import type { Config } from "@puckeditor/core";
 
@@ -49,72 +49,72 @@ import { configToAiContext } from "./config-to-ai-context.js";
  *   `selection.allow` references a component not registered in `config`.
  */
 export function configToAiSectionContext<C extends Config>(
-	config: C,
-	selection: AiSectionSelection,
-	opts?: ConfigToAiSectionContextOptions,
+  config: C,
+  selection: AiSectionSelection,
+  opts?: ConfigToAiSectionContextOptions,
 ): AiSectionContext {
-	if (selection.nodeIds.length === 0) {
-		throw new Error(
-			"[@anvilkit/schema] configToAiSectionContext: selection.nodeIds must contain at least one id; use the page-level configToAiContext() for empty selections.",
-		);
-	}
+  if (selection.nodeIds.length === 0) {
+    throw new Error(
+      "[@anvilkit/schema] configToAiSectionContext: selection.nodeIds must contain at least one id; use the page-level configToAiContext() for empty selections.",
+    );
+  }
 
-	const registered = new Set(Object.keys(config.components ?? {}));
+  const registered = new Set(Object.keys(config.components ?? {}));
 
-	if (selection.allow) {
-		const missing = selection.allow.filter((name) => !registered.has(name));
-		if (missing.length > 0) {
-			throw new Error(
-				`[@anvilkit/schema] configToAiSectionContext: selection.allow references components not present in config: ${missing.join(", ")}`,
-			);
-		}
-	}
+  if (selection.allow) {
+    const missing = selection.allow.filter((name) => !registered.has(name));
+    if (missing.length > 0) {
+      throw new Error(
+        `[@anvilkit/schema] configToAiSectionContext: selection.allow references components not present in config: ${missing.join(", ")}`,
+      );
+    }
+  }
 
-	const baseContext = selection.allow
-		? configToAiContext(config, { include: [...selection.allow] })
-		: configToAiContext(config);
+  const baseContext = selection.allow
+    ? configToAiContext(config, { include: [...selection.allow] })
+    : configToAiContext(config);
 
-	const disallowSet = selection.disallow
-		? new Set(selection.disallow)
-		: undefined;
+  const disallowSet = selection.disallow
+    ? new Set(selection.disallow)
+    : undefined;
 
-	const availableComponents = disallowSet
-		? baseContext.availableComponents.filter(
-				(component) => !disallowSet.has(component.componentName),
-			)
-		: baseContext.availableComponents;
+  const availableComponents = disallowSet
+    ? baseContext.availableComponents.filter(
+        (component) => !disallowSet.has(component.componentName),
+      )
+    : baseContext.availableComponents;
 
-	const result: {
-		zoneId: string;
-		zoneKind?: "slot" | "zone";
-		nodeIds: readonly string[];
-		availableComponents: typeof availableComponents;
-		currentNodes?: AiSectionSelection["currentNodes"];
-		allowResize: boolean;
-		theme?: "light" | "dark";
-		locale?: string;
-	} = {
-		zoneId: selection.zoneId,
-		nodeIds: [...selection.nodeIds],
-		availableComponents,
-		allowResize: opts?.allowResize === true,
-	};
+  const result: {
+    zoneId: string;
+    zoneKind?: "slot" | "zone";
+    nodeIds: readonly string[];
+    availableComponents: typeof availableComponents;
+    currentNodes?: AiSectionSelection["currentNodes"];
+    allowResize: boolean;
+    theme?: "light" | "dark";
+    locale?: string;
+  } = {
+    zoneId: selection.zoneId,
+    nodeIds: [...selection.nodeIds],
+    availableComponents,
+    allowResize: opts?.allowResize === true,
+  };
 
-	if (selection.zoneKind !== undefined) {
-		result.zoneKind = selection.zoneKind;
-	}
+  if (selection.zoneKind !== undefined) {
+    result.zoneKind = selection.zoneKind;
+  }
 
-	if (selection.currentNodes !== undefined) {
-		result.currentNodes = selection.currentNodes;
-	}
+  if (selection.currentNodes !== undefined) {
+    result.currentNodes = selection.currentNodes;
+  }
 
-	if (opts?.theme !== undefined) {
-		result.theme = opts.theme;
-	}
+  if (opts?.theme !== undefined) {
+    result.theme = opts.theme;
+  }
 
-	if (opts?.locale !== undefined) {
-		result.locale = opts.locale;
-	}
+  if (opts?.locale !== undefined) {
+    result.locale = opts.locale;
+  }
 
-	return result;
+  return result;
 }

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 import {
   CursorProvider as CursorProviderPrimitive,
@@ -9,10 +9,10 @@ import {
   type CursorContainerProps as CursorContainerPropsPrimitive,
   type CursorProps as CursorPropsPrimitive,
   type CursorFollowProps as CursorFollowPropsPrimitive,
-} from '@anvilkit/ui/components/animate-ui/primitives/animate/cursor';
-import { cn } from '@anvilkit/ui/lib/utils';
+} from "@anvilkit/ui/components/animate-ui/primitives/animate/cursor";
+import { cn } from "@anvilkit/ui/lib/utils";
 
-type CursorProviderProps = Omit<CursorProviderPropsPrimitive, 'children'> &
+type CursorProviderProps = Omit<CursorProviderPropsPrimitive, "children"> &
   CursorContainerPropsPrimitive;
 
 function CursorProvider({ global, ...props }: CursorProviderProps) {
@@ -23,13 +23,13 @@ function CursorProvider({ global, ...props }: CursorProviderProps) {
   );
 }
 
-type CursorProps = Omit<CursorPropsPrimitive, 'children' | 'asChild'>;
+type CursorProps = Omit<CursorPropsPrimitive, "children" | "asChild">;
 
 function Cursor({ className, ...props }: CursorProps) {
   return (
     <CursorPrimitive {...props} asChild>
       <svg
-        className={cn('size-6 text-foreground', className)}
+        className={cn("size-6 text-foreground", className)}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 40 40"
       >
@@ -42,7 +42,7 @@ function Cursor({ className, ...props }: CursorProps) {
   );
 }
 
-type CursorFollowProps = Omit<CursorFollowPropsPrimitive, 'asChild'>;
+type CursorFollowProps = Omit<CursorFollowPropsPrimitive, "asChild">;
 
 function CursorFollow({
   className,
@@ -60,7 +60,7 @@ function CursorFollow({
     >
       <div
         className={cn(
-          'bg-foreground rounded-md text-background px-2 py-1 text-sm',
+          "bg-foreground rounded-md text-background px-2 py-1 text-sm",
           className,
         )}
       >

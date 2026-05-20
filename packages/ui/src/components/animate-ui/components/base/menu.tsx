@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 import {
   Menu as MenuPrimitive,
@@ -37,9 +37,9 @@ import {
   type MenuShortcutProps as MenuShortcutPrimitiveProps,
   type MenuSubmenuProps as MenuSubmenuPrimitiveProps,
   type MenuSubmenuTriggerProps as MenuSubmenuTriggerPrimitiveProps,
-} from '@anvilkit/ui/components/animate-ui/primitives/base/menu';
-import { cn } from '@anvilkit/ui/lib/utils';
-import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react';
+} from "@anvilkit/ui/components/animate-ui/primitives/base/menu";
+import { cn } from "@anvilkit/ui/lib/utils";
+import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 
 type MenuProps = MenuPrimitiveProps;
 
@@ -82,7 +82,7 @@ function MenuPanel({
           transition={transition}
           id={id}
           className={cn(
-            'bg-popover text-popover-foreground max-h-(--available-height) min-w-[8rem] origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-none',
+            "bg-popover text-popover-foreground max-h-(--available-height) min-w-[8rem] origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md outline-none",
             className,
           )}
         >
@@ -110,7 +110,7 @@ function MenuGroupLabel({ className, inset, ...props }: MenuGroupLabelProps) {
     <MenuGroupLabelPrimitive
       data-inset={inset}
       className={cn(
-        'px-2 py-1.5 text-sm font-medium data-[inset]:pl-8',
+        "px-2 py-1.5 text-sm font-medium data-[inset]:pl-8",
         className,
       )}
       {...props}
@@ -120,22 +120,22 @@ function MenuGroupLabel({ className, inset, ...props }: MenuGroupLabelProps) {
 
 type MenuItemProps = MenuItemPrimitiveProps & {
   inset?: boolean;
-  variant?: 'default' | 'destructive';
+  variant?: "default" | "destructive";
 };
 
 function MenuItem({
   className,
   inset,
-  variant = 'default',
+  variant = "default",
   disabled,
   ...props
 }: MenuItemProps) {
   return (
     <MenuHighlightItemPrimitive
       activeClassName={
-        variant === 'destructive'
-          ? 'bg-destructive/10 dark:bg-destructive/20'
-          : ''
+        variant === "destructive"
+          ? "bg-destructive/10 dark:bg-destructive/20"
+          : ""
       }
       disabled={disabled}
     >
@@ -227,7 +227,7 @@ type MenuSeparatorProps = MenuSeparatorPrimitiveProps;
 function MenuSeparator({ className, ...props }: MenuSeparatorProps) {
   return (
     <MenuSeparatorPrimitive
-      className={cn('bg-border -mx-1 my-1 h-px', className)}
+      className={cn("bg-border -mx-1 my-1 h-px", className)}
       {...props}
     />
   );
@@ -239,7 +239,7 @@ function MenuShortcut({ className, ...props }: MenuShortcutProps) {
   return (
     <MenuShortcutPrimitive
       className={cn(
-        'text-muted-foreground ml-auto text-xs tracking-widest',
+        "text-muted-foreground ml-auto text-xs tracking-widest",
         className,
       )}
       {...props}
@@ -277,8 +277,8 @@ function MenuSubmenuTrigger({
         disabled={disabled}
         data-inset={inset}
         className={cn(
-          'focus:text-accent-foreground data-[state=open]:text-accent-foreground flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8',
-          'aria-[expanded=true]:[&_[data-slot=chevron]]:rotate-90 [&_[data-slot=chevron]]:transition-transform [&_[data-slot=chevron]]:duration-300 [&_[data-slot=chevron]]:ease-in-out',
+          "focus:text-accent-foreground data-[state=open]:text-accent-foreground flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8",
+          "aria-[expanded=true]:[&_[data-slot=chevron]]:rotate-90 [&_[data-slot=chevron]]:transition-transform [&_[data-slot=chevron]]:duration-300 [&_[data-slot=chevron]]:ease-in-out",
           className,
         )}
         {...props}
@@ -314,7 +314,7 @@ function MenuSubmenuPanel({
           transition={transition}
           id={id}
           className={cn(
-            'bg-popover text-popover-foreground max-h-(--available-height) min-w-[8rem] origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md',
+            "bg-popover text-popover-foreground max-h-(--available-height) min-w-[8rem] origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md",
             className,
           )}
         >

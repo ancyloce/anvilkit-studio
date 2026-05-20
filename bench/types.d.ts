@@ -4,6 +4,6 @@
 // At runtime the `bench/css-shim.loader.mjs` module hook routes
 // these imports to an empty module.
 declare module "*.css" {
-	const content: string;
-	export default content;
+  const content: string;
+  export default content;
 }

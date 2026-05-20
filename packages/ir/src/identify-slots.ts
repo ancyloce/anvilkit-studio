@@ -30,37 +30,37 @@ const slotCache = new WeakMap<Config, Map<string, readonly string[]>>();
  *   included with an empty array.
  */
 export function identifySlots(config: Config): Map<string, readonly string[]> {
-	// Return a fresh Map view each call: callers historically receive
-	// an owned Map and the cache must not be mutable through the
-	// public return value. The copy is O(components) — still far
-	// cheaper than the O(components·fields) scan it replaces.
-	const cached = slotCache.get(config);
-	if (cached) return new Map(cached);
+  // Return a fresh Map view each call: callers historically receive
+  // an owned Map and the cache must not be mutable through the
+  // public return value. The copy is O(components) — still far
+  // cheaper than the O(components·fields) scan it replaces.
+  const cached = slotCache.get(config);
+  if (cached) return new Map(cached);
 
-	const result = new Map<string, readonly string[]>();
+  const result = new Map<string, readonly string[]>();
 
-	for (const [name, componentConfig] of Object.entries(
-		config.components ?? {},
-	)) {
-		const slotKeys: string[] = [];
-		const fields = componentConfig.fields;
+  for (const [name, componentConfig] of Object.entries(
+    config.components ?? {},
+  )) {
+    const slotKeys: string[] = [];
+    const fields = componentConfig.fields;
 
-		if (fields && typeof fields === "object") {
-			for (const [fieldKey, fieldDef] of Object.entries(fields)) {
-				if (
-					fieldDef &&
-					typeof fieldDef === "object" &&
-					"type" in fieldDef &&
-					fieldDef.type === "slot"
-				) {
-					slotKeys.push(fieldKey);
-				}
-			}
-		}
+    if (fields && typeof fields === "object") {
+      for (const [fieldKey, fieldDef] of Object.entries(fields)) {
+        if (
+          fieldDef &&
+          typeof fieldDef === "object" &&
+          "type" in fieldDef &&
+          fieldDef.type === "slot"
+        ) {
+          slotKeys.push(fieldKey);
+        }
+      }
+    }
 
-		result.set(name, Object.freeze(slotKeys.sort()));
-	}
+    result.set(name, Object.freeze(slotKeys.sort()));
+  }
 
-	slotCache.set(config, result);
-	return new Map(result);
+  slotCache.set(config, result);
+  return new Map(result);
 }

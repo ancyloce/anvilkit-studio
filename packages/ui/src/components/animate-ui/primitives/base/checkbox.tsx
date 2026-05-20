@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Checkbox as CheckboxPrimitive } from '@base-ui-components/react/checkbox';
+import * as React from "react";
+import { Checkbox as CheckboxPrimitive } from "@base-ui-components/react/checkbox";
 import {
   motion,
   type HTMLMotionProps,
   type SVGMotionProps,
-} from 'motion/react';
+} from "motion/react";
 
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
-import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state';
+import { getStrictContext } from "@anvilkit/ui/lib/get-strict-context";
+import { useControlledState } from "@anvilkit/ui/hooks/use-controlled-state";
 
 type CheckboxContextType = {
   isChecked: boolean;
-  setIsChecked: CheckboxProps['onCheckedChange'];
+  setIsChecked: CheckboxProps["onCheckedChange"];
   isIndeterminate: boolean | undefined;
 };
 
 const [CheckboxProvider, useCheckbox] =
-  getStrictContext<CheckboxContextType>('CheckboxContext');
+  getStrictContext<CheckboxContextType>("CheckboxContext");
 
 type CheckboxProps = Omit<
   React.ComponentProps<typeof CheckboxPrimitive.Root>,
-  'render'
+  "render"
 > &
-  HTMLMotionProps<'button'>;
+  HTMLMotionProps<"button">;
 
 function Checkbox({
   name,
@@ -96,7 +96,7 @@ function CheckboxIndicator(props: CheckboxIndicatorProps) {
           strokeWidth="3.5"
           stroke="currentColor"
           initial="unchecked"
-          animate={isChecked ? 'checked' : 'unchecked'}
+          animate={isChecked ? "checked" : "unchecked"}
           {...props}
         >
           {isIndeterminate ? (

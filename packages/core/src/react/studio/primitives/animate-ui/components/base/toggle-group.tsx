@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { type VariantProps } from 'class-variance-authority';
+import * as React from "react";
+import { type VariantProps } from "class-variance-authority";
 
 import {
   ToggleGroup as ToggleGroupPrimitive,
@@ -9,13 +9,13 @@ import {
   useToggleGroup as useToggleGroupPrimitive,
   type ToggleGroupProps as ToggleGroupPrimitiveProps,
   type ToggleProps as TogglePrimitiveProps,
-} from '@/primitives/animate-ui/primitives/base/toggle-group';
-import { toggleVariants } from '@/primitives/animate-ui/components/base/toggle';
-import { cn } from '@/utils/cn';
-import { getStrictContext } from '@/primitives/lib/get-strict-context';
+} from "@/primitives/animate-ui/primitives/base/toggle-group";
+import { toggleVariants } from "@/primitives/animate-ui/components/base/toggle";
+import { cn } from "@/utils/cn";
+import { getStrictContext } from "@/primitives/lib/get-strict-context";
 
 const [ToggleGroupProvider, useToggleGroup] =
-  getStrictContext<VariantProps<typeof toggleVariants>>('ToggleGroupContext');
+  getStrictContext<VariantProps<typeof toggleVariants>>("ToggleGroupContext");
 
 type ToggleGroupProps = ToggleGroupPrimitiveProps &
   VariantProps<typeof toggleVariants>;
@@ -33,7 +33,7 @@ function ToggleGroup({
       data-variant={variant}
       data-size={size}
       className={cn(
-        'group/toggle-group flex gap-0.5 w-fit items-center rounded-lg data-[variant=outline]:shadow-xs data-[variant=outline]:border data-[variant=outline]:p-0.5',
+        "group/toggle-group flex gap-0.5 w-fit items-center rounded-lg data-[variant=outline]:shadow-xs data-[variant=outline]:border data-[variant=outline]:p-0.5",
         className,
       )}
       multiple={multiple}
@@ -61,7 +61,7 @@ function Toggle({ className, children, variant, size, ...props }: ToggleProps) {
   return (
     <ToggleHighlightPrimitive
       value={props.value?.toString()}
-      className={cn(multiple && 'bg-accent rounded-md')}
+      className={cn(multiple && "bg-accent rounded-md")}
     >
       <TogglePrimitive
         data-variant={contextVariant || variant}
@@ -71,7 +71,7 @@ function Toggle({ className, children, variant, size, ...props }: ToggleProps) {
             variant: contextVariant || variant,
             size: contextSize || size,
           }),
-          'min-w-0 border-0 flex-1 shrink-0 shadow-none rounded-md focus:z-10 focus-visible:z-10',
+          "min-w-0 border-0 flex-1 shrink-0 shadow-none rounded-md focus:z-10 focus-visible:z-10",
           className,
         )}
         {...props}

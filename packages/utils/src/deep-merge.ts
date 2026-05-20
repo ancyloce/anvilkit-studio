@@ -3,11 +3,12 @@
  * leaving array element types alone. Used by `deepMerge` to accept
  * layered config patches.
  */
-export type DeepPartial<T> = T extends ReadonlyArray<infer _U>
-	? T
-	: T extends object
-		? { [K in keyof T]?: DeepPartial<T[K]> }
-		: T;
+export type DeepPartial<T> =
+  T extends ReadonlyArray<infer _U>
+    ? T
+    : T extends object
+      ? { [K in keyof T]?: DeepPartial<T[K]> }
+      : T;
 
 /**
  * Keys that must never be assigned through `deepMerge` to avoid
@@ -52,35 +53,35 @@ const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
  * // => { tags: ["c"] }   // arrays are replaced, not merged
  */
 export function deepMerge<T>(
-	target: T,
-	...sources: ReadonlyArray<DeepPartial<T> | undefined>
+  target: T,
+  ...sources: ReadonlyArray<DeepPartial<T> | undefined>
 ): T {
-	let result: unknown = isPlainObject(target) ? { ...target } : target;
-	for (const source of sources) {
-		if (source === undefined) continue;
-		result = mergeInto(result, source);
-	}
-	return result as T;
+  let result: unknown = isPlainObject(target) ? { ...target } : target;
+  for (const source of sources) {
+    if (source === undefined) continue;
+    result = mergeInto(result, source);
+  }
+  return result as T;
 }
 
 function mergeInto(target: unknown, source: unknown): unknown {
-	if (!isPlainObject(source)) {
-		return source;
-	}
-	const base: Record<string, unknown> = isPlainObject(target)
-		? { ...target }
-		: {};
-	for (const key of Object.keys(source)) {
-		if (FORBIDDEN_KEYS.has(key)) continue;
-		const sourceValue = source[key];
-		const targetValue = base[key];
-		if (isPlainObject(sourceValue) && isPlainObject(targetValue)) {
-			base[key] = mergeInto(targetValue, sourceValue);
-		} else {
-			base[key] = sourceValue;
-		}
-	}
-	return base;
+  if (!isPlainObject(source)) {
+    return source;
+  }
+  const base: Record<string, unknown> = isPlainObject(target)
+    ? { ...target }
+    : {};
+  for (const key of Object.keys(source)) {
+    if (FORBIDDEN_KEYS.has(key)) continue;
+    const sourceValue = source[key];
+    const targetValue = base[key];
+    if (isPlainObject(sourceValue) && isPlainObject(targetValue)) {
+      base[key] = mergeInto(targetValue, sourceValue);
+    } else {
+      base[key] = sourceValue;
+    }
+  }
+  return base;
 }
 
 /**
@@ -89,7 +90,7 @@ function mergeInto(target: unknown, source: unknown): unknown {
  * `null` (the latter accommodates `Object.create(null)` records).
  */
 function isPlainObject(value: unknown): value is Record<string, unknown> {
-	if (value === null || typeof value !== "object") return false;
-	const proto = Object.getPrototypeOf(value);
-	return proto === null || proto === Object.prototype;
+  if (value === null || typeof value !== "object") return false;
+  const proto = Object.getPrototypeOf(value);
+  return proto === null || proto === Object.prototype;
 }

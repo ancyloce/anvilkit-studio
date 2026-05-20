@@ -43,26 +43,26 @@ for the full package catalog and trust-boundary discussion.
 
 ## Public API
 
-| Export           | Signature                                                          | Purpose                                                                                              |
-| ---------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| `puckDataToIR`   | `(data: Data, config: Config) => PageIR`                           | Normalize a Puck document into a JSON-serializable `PageIR`.                                         |
-| `irToPuckData`   | `(ir: PageIR) => Data`                                             | Reverse of `puckDataToIR` — used for round-trip tests and the AI copilot's `setData` dispatch.       |
-| `collectAssets`  | `(node: PageIRNode) => readonly PageIRAsset[]`                     | Walk a sub-tree and collect every referenced asset, deduplicated.                                    |
-| `identifySlots`  | `(config: Config) => Map<string, readonly string[]>`               | Inspect a Puck `Config` and return the slot-field keys declared on each component.                   |
+| Export          | Signature                                            | Purpose                                                                                        |
+| --------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `puckDataToIR`  | `(data: Data, config: Config) => PageIR`             | Normalize a Puck document into a JSON-serializable `PageIR`.                                   |
+| `irToPuckData`  | `(ir: PageIR) => Data`                               | Reverse of `puckDataToIR` — used for round-trip tests and the AI copilot's `setData` dispatch. |
+| `collectAssets` | `(node: PageIRNode) => readonly PageIRAsset[]`       | Walk a sub-tree and collect every referenced asset, deduplicated.                              |
+| `identifySlots` | `(config: Config) => Map<string, readonly string[]>` | Inspect a Puck `Config` and return the slot-field keys declared on each component.             |
 
 ## Peer dependencies
 
-| Package | Version |
-| ------- | ------- |
-| `@anvilkit/core` | `0.1.3` |
+| Package            | Version   |
+| ------------------ | --------- |
+| `@anvilkit/core`   | `0.1.3`   |
 | `@puckeditor/core` | `^0.21.0` |
 
 ## Dependency contract
 
-| Allowed                       | Forbidden                                                               |
-| ----------------------------- | ----------------------------------------------------------------------- |
+| Allowed                                                          | Forbidden                                                           |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------- |
 | `@anvilkit/utils` (runtime), `@anvilkit/core` (peer, types-only) | `@anvilkit/schema`, `@anvilkit/validator`, `@anvilkit/core` runtime |
-| `@puckeditor/core` (peer, types-only) | React, ReactDOM, any plugin package, any DOM API                |
+| `@puckeditor/core` (peer, types-only)                            | React, ReactDOM, any plugin package, any DOM API                    |
 
 CI enforces these with `madge --circular`, `check:react-free-runtime`,
 and `check:peer-deps` gates. See

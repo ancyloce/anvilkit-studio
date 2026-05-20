@@ -18,14 +18,14 @@
  */
 
 import type {
-	Config as PuckConfig,
-	Data as PuckData,
-	OnAction as PuckOnAction,
-	Overrides as PuckOverrides,
-	Plugin as PuckPlugin,
-	UiState as PuckUiState,
-	UserGenerics,
-	Viewports as PuckViewports,
+  Config as PuckConfig,
+  Data as PuckData,
+  OnAction as PuckOnAction,
+  Overrides as PuckOverrides,
+  Plugin as PuckPlugin,
+  UiState as PuckUiState,
+  UserGenerics,
+  Viewports as PuckViewports,
 } from "@puckeditor/core";
 import { Puck } from "@puckeditor/core";
 import type { ReactElement, ReactNode } from "react";
@@ -34,8 +34,8 @@ import type { DeepPartial } from "@anvilkit/utils";
 
 import { StudioConfigProvider } from "@/config/provider";
 import {
-	ChromePropsProvider,
-	type CollaboratorsSlotValue,
+  ChromePropsProvider,
+  type CollaboratorsSlotValue,
 } from "@/context/chrome-props";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
@@ -44,34 +44,34 @@ import type { StudioChromeMode } from "@/overrides/types";
 import { Toaster } from "@/primitives/sonner";
 import { TooltipProvider } from "@/primitives/tooltip";
 import {
-	EditorI18nStoreProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-	StudioRootProvider,
+  EditorI18nStoreProvider,
+  EditorUiStoreProvider,
+  SidebarRegistryProvider,
+  StudioRootProvider,
 } from "@/state/index";
 import {
-	AiStoreProvider,
-	ExportStoreProvider,
-	ThemeStoreProvider,
+  AiStoreProvider,
+  ExportStoreProvider,
+  ThemeStoreProvider,
 } from "@/stores/index";
 import {
-	mergeStudioUi,
-	resolveStudioViewports,
+  mergeStudioUi,
+  resolveStudioViewports,
 } from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type {
-	StudioPluginOverlay,
-	StudioPluginProvider,
-	StudioPluginSlotContribution,
+  StudioPluginOverlay,
+  StudioPluginProvider,
+  StudioPluginSlotContribution,
 } from "@/types/plugin";
 
 import {
-	EMPTY_DATA,
-	type StudioLogger,
-	type StudioProps,
-	useStudioController,
+  EMPTY_DATA,
+  type StudioLogger,
+  type StudioProps,
+  useStudioController,
 } from "./use-studio-controller";
 
 // Re-exported so the public `@anvilkit/core/react` path
@@ -86,8 +86,8 @@ export type { StudioLogger, StudioProps } from "./use-studio-controller";
  * store. Returns null — this component only exists for its effect.
  */
 function ThemeSyncBoundary(): null {
-	useThemeSync();
-	return null;
+  useThemeSync();
+  return null;
 }
 
 /**
@@ -100,13 +100,13 @@ function ThemeSyncBoundary(): null {
  * unit-testable without mounting the whole shell.
  */
 export function composePluginProviders(
-	providers: readonly StudioPluginProvider[],
-	children: ReactNode,
+  providers: readonly StudioPluginProvider[],
+  children: ReactNode,
 ): ReactNode {
-	return providers.reduceRight<ReactNode>((wrapped, provider) => {
-		const ProviderComponent = provider.component;
-		return <ProviderComponent key={provider.id}>{wrapped}</ProviderComponent>;
-	}, children);
+  return providers.reduceRight<ReactNode>((wrapped, provider) => {
+    const ProviderComponent = provider.component;
+    return <ProviderComponent key={provider.id}>{wrapped}</ProviderComponent>;
+  }, children);
 }
 
 /**
@@ -115,21 +115,21 @@ export function composePluginProviders(
  * `compilePlugins()`).
  */
 export function splitOverlaysByPlacement(
-	overlays: readonly StudioPluginOverlay[],
+  overlays: readonly StudioPluginOverlay[],
 ): {
-	readonly viewport: readonly StudioPluginOverlay[];
-	readonly canvas: readonly StudioPluginOverlay[];
-	readonly notifications: readonly StudioPluginOverlay[];
+  readonly viewport: readonly StudioPluginOverlay[];
+  readonly canvas: readonly StudioPluginOverlay[];
+  readonly notifications: readonly StudioPluginOverlay[];
 } {
-	const viewport: StudioPluginOverlay[] = [];
-	const canvas: StudioPluginOverlay[] = [];
-	const notifications: StudioPluginOverlay[] = [];
-	for (const overlay of overlays) {
-		if (overlay.placement === "viewport") viewport.push(overlay);
-		else if (overlay.placement === "canvas") canvas.push(overlay);
-		else if (overlay.placement === "notifications") notifications.push(overlay);
-	}
-	return { viewport, canvas, notifications };
+  const viewport: StudioPluginOverlay[] = [];
+  const canvas: StudioPluginOverlay[] = [];
+  const notifications: StudioPluginOverlay[] = [];
+  for (const overlay of overlays) {
+    if (overlay.placement === "viewport") viewport.push(overlay);
+    else if (overlay.placement === "canvas") canvas.push(overlay);
+    else if (overlay.placement === "notifications") notifications.push(overlay);
+  }
+  return { viewport, canvas, notifications };
 }
 
 /**
@@ -137,11 +137,11 @@ export function splitOverlaysByPlacement(
  * Host prop wins over any plugin contribution.
  */
 export function resolveCollaboratorsSlot(
-	hostValue: CollaboratorsSlotValue | undefined,
-	runtimeSlots: ReadonlyMap<string, StudioPluginSlotContribution>,
+  hostValue: CollaboratorsSlotValue | undefined,
+  runtimeSlots: ReadonlyMap<string, StudioPluginSlotContribution>,
 ): CollaboratorsSlotValue | undefined {
-	if (hostValue !== undefined) return hostValue;
-	return runtimeSlots.get("collaborators")?.component;
+  if (hostValue !== undefined) return hostValue;
+  return runtimeSlots.get("collaborators")?.component;
 }
 
 /**
@@ -172,201 +172,201 @@ export function resolveCollaboratorsSlot(
  * ```
  */
 export function Studio<UserConfig extends PuckConfig = PuckConfig>(
-	props: StudioProps<UserConfig>,
+  props: StudioProps<UserConfig>,
 ): ReactElement | null {
-	const {
-		puckConfig,
-		data,
-		ui,
-		onAction,
-		viewports,
-		onBack,
-		onSaveDraft,
-		isSavingDraft,
-		lastSavedAt,
-		isPublishing,
-		onPublishClick,
-		onExport,
-		collaboratorsSlot,
-		pages,
-		messages,
-	} = props;
+  const {
+    puckConfig,
+    data,
+    ui,
+    onAction,
+    viewports,
+    onBack,
+    onSaveDraft,
+    isSavingDraft,
+    lastSavedAt,
+    isPublishing,
+    onPublishClick,
+    onExport,
+    collaboratorsSlot,
+    pages,
+    messages,
+  } = props;
 
-	const {
-		isAnvilkit,
-		compiled,
-		chromeAssets,
-		mergedOverrides,
-		handleChange,
-		handlePublish,
-		themeStore,
-		exportStore,
-		aiStore,
-		sidebarRegistryStore,
-		resolvedStoreId,
-		rootRef,
-	} = useStudioController(props);
+  const {
+    isAnvilkit,
+    compiled,
+    chromeAssets,
+    mergedOverrides,
+    handleChange,
+    handlePublish,
+    themeStore,
+    exportStore,
+    aiStore,
+    sidebarRegistryStore,
+    resolvedStoreId,
+    rootRef,
+  } = useStudioController(props);
 
-	// Loading state. Deliberately `null` — no spinner, no fallback UI.
-	// Host apps that want a branded loading state render one above
-	// `<Studio>` with their own state management.
-	if (compiled === null) {
-		return null;
-	}
-	// AnvilKit chrome must wait for the dynamically-loaded preset +
-	// layout before rendering, otherwise `<Puck>` would see plain Puck
-	// overrides without the chrome's `puck` slot wrapping
-	// `<StudioLayout>`. Hold `null` until both state slots agree.
-	if (isAnvilkit && chromeAssets === null) {
-		return null;
-	}
+  // Loading state. Deliberately `null` — no spinner, no fallback UI.
+  // Host apps that want a branded loading state render one above
+  // `<Studio>` with their own state management.
+  if (compiled === null) {
+    return null;
+  }
+  // AnvilKit chrome must wait for the dynamically-loaded preset +
+  // layout before rendering, otherwise `<Puck>` would see plain Puck
+  // overrides without the chrome's `puck` slot wrapping
+  // `<StudioLayout>`. Hold `null` until both state slots agree.
+  if (isAnvilkit && chromeAssets === null) {
+    return null;
+  }
 
-	const puckUi = isAnvilkit ? mergeStudioUi(ui, viewports) : ui;
-	const chromeViewports = isAnvilkit
-		? resolveStudioViewports(puckUi, viewports)
-		: undefined;
-	// `<Puck>` infers `UserConfig` from `config={puckConfig}`. The
-	// controller's runtime is deliberately non-generic, so its outputs
-	// come back as the broad default; these localized casts are the
-	// generic→default boundary (mirrors use-studio-controller.ts).
-	// `EMPTY_DATA` is a structurally-valid empty `Data` for any config.
-	type PuckDataFor = UserGenerics<UserConfig>["UserData"];
-	const puckElement = (
-		<Puck<UserConfig>
-			config={puckConfig}
-			data={data ?? (EMPTY_DATA as PuckDataFor)}
-			overrides={mergedOverrides as Partial<PuckOverrides<UserConfig>>}
-			onChange={handleChange as (data: PuckDataFor) => void}
-			onPublish={handlePublish as (data: PuckDataFor) => void}
-			plugins={[...compiled.runtime.puckPlugins] as PuckPlugin<UserConfig>[]}
-			ui={puckUi}
-			onAction={onAction}
-			viewports={viewports}
-		/>
-	);
+  const puckUi = isAnvilkit ? mergeStudioUi(ui, viewports) : ui;
+  const chromeViewports = isAnvilkit
+    ? resolveStudioViewports(puckUi, viewports)
+    : undefined;
+  // `<Puck>` infers `UserConfig` from `config={puckConfig}`. The
+  // controller's runtime is deliberately non-generic, so its outputs
+  // come back as the broad default; these localized casts are the
+  // generic→default boundary (mirrors use-studio-controller.ts).
+  // `EMPTY_DATA` is a structurally-valid empty `Data` for any config.
+  type PuckDataFor = UserGenerics<UserConfig>["UserData"];
+  const puckElement = (
+    <Puck<UserConfig>
+      config={puckConfig}
+      data={data ?? (EMPTY_DATA as PuckDataFor)}
+      overrides={mergedOverrides as Partial<PuckOverrides<UserConfig>>}
+      onChange={handleChange as (data: PuckDataFor) => void}
+      onPublish={handlePublish as (data: PuckDataFor) => void}
+      plugins={[...compiled.runtime.puckPlugins] as PuckPlugin<UserConfig>[]}
+      ui={puckUi}
+      onAction={onAction}
+      viewports={viewports}
+    />
+  );
 
-	if (!isAnvilkit) {
-		// Bit-for-bit pre-Phase-5 output: same provider stack, same JSX
-		// nesting. The three Core-owned stores are chrome-agnostic — a
-		// host on the legacy `chrome="puck"` path may still mount panels
-		// that read `useExportStore` / `useAiStore` / `useThemeStore`,
-		// and each `<Studio>` must stay isolated (H3). Root ref scopes
-		// any iframe query to this instance's subtree.
-		return (
-			<StudioConfigProvider config={compiled.studioConfig}>
-				<StudioRuntimeProvider value={compiled.runtime}>
-					<ThemeStoreProvider storeId={resolvedStoreId} store={themeStore}>
-						<ExportStoreProvider storeId={resolvedStoreId} store={exportStore}>
-							<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
-								<StudioRootProvider rootRef={rootRef}>
-									<div ref={rootRef} style={{ display: "contents" }}>
-										{puckElement}
-									</div>
-								</StudioRootProvider>
-							</AiStoreProvider>
-						</ExportStoreProvider>
-					</ThemeStoreProvider>
-				</StudioRuntimeProvider>
-			</StudioConfigProvider>
-		);
-	}
+  if (!isAnvilkit) {
+    // Bit-for-bit pre-Phase-5 output: same provider stack, same JSX
+    // nesting. The three Core-owned stores are chrome-agnostic — a
+    // host on the legacy `chrome="puck"` path may still mount panels
+    // that read `useExportStore` / `useAiStore` / `useThemeStore`,
+    // and each `<Studio>` must stay isolated (H3). Root ref scopes
+    // any iframe query to this instance's subtree.
+    return (
+      <StudioConfigProvider config={compiled.studioConfig}>
+        <StudioRuntimeProvider value={compiled.runtime}>
+          <ThemeStoreProvider storeId={resolvedStoreId} store={themeStore}>
+            <ExportStoreProvider storeId={resolvedStoreId} store={exportStore}>
+              <AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
+                <StudioRootProvider rootRef={rootRef}>
+                  <div ref={rootRef} style={{ display: "contents" }}>
+                    {puckElement}
+                  </div>
+                </StudioRootProvider>
+              </AiStoreProvider>
+            </ExportStoreProvider>
+          </ThemeStoreProvider>
+        </StudioRuntimeProvider>
+      </StudioConfigProvider>
+    );
+  }
 
-	// AnvilKit chrome: layered providers around `<Puck>`. Order from
-	// outermost to innermost — config / runtime first so descendants
-	// can read them; plugin context next so chrome components see the
-	// live ctx; per-instance editor stores last so the chrome reads
-	// its own state slice without reaching higher.
-	//
-	// `<ThemeSyncBoundary />` sits inside the editor stores so its
-	// effect can read the theme store but writes the resolved value
-	// where every chrome surface picks it up. `chromeAssets` is held
-	// only for the loading gate above — the actual `<StudioLayout>`
-	// mount happens inside the `puck` slot of `studioOverrides`.
-	const resolvedCollaboratorsSlot = resolveCollaboratorsSlot(
-		collaboratorsSlot,
-		compiled.runtime.slots,
-	);
+  // AnvilKit chrome: layered providers around `<Puck>`. Order from
+  // outermost to innermost — config / runtime first so descendants
+  // can read them; plugin context next so chrome components see the
+  // live ctx; per-instance editor stores last so the chrome reads
+  // its own state slice without reaching higher.
+  //
+  // `<ThemeSyncBoundary />` sits inside the editor stores so its
+  // effect can read the theme store but writes the resolved value
+  // where every chrome surface picks it up. `chromeAssets` is held
+  // only for the loading gate above — the actual `<StudioLayout>`
+  // mount happens inside the `puck` slot of `studioOverrides`.
+  const resolvedCollaboratorsSlot = resolveCollaboratorsSlot(
+    collaboratorsSlot,
+    compiled.runtime.slots,
+  );
 
-	const {
-		viewport: viewportOverlays,
-		canvas: canvasOverlays,
-		notifications: notificationOverlays,
-	} = splitOverlaysByPlacement(compiled.runtime.overlays);
+  const {
+    viewport: viewportOverlays,
+    canvas: canvasOverlays,
+    notifications: notificationOverlays,
+  } = splitOverlaysByPlacement(compiled.runtime.overlays);
 
-	const studioBody = (
-		<TooltipProvider delay={200}>
-			<ThemeSyncBoundary />
-			<Toaster position="bottom-right" closeButton />
-			{viewportOverlays.map((overlay) => {
-				const OverlayComponent = overlay.component;
-				return <OverlayComponent key={overlay.id} />;
-			})}
-			{puckElement}
-			{canvasOverlays.map((overlay) => {
-				const OverlayComponent = overlay.component;
-				return <OverlayComponent key={overlay.id} />;
-			})}
-			{notificationOverlays.map((overlay) => {
-				const OverlayComponent = overlay.component;
-				return <OverlayComponent key={overlay.id} />;
-			})}
-		</TooltipProvider>
-	);
+  const studioBody = (
+    <TooltipProvider delay={200}>
+      <ThemeSyncBoundary />
+      <Toaster position="bottom-right" closeButton />
+      {viewportOverlays.map((overlay) => {
+        const OverlayComponent = overlay.component;
+        return <OverlayComponent key={overlay.id} />;
+      })}
+      {puckElement}
+      {canvasOverlays.map((overlay) => {
+        const OverlayComponent = overlay.component;
+        return <OverlayComponent key={overlay.id} />;
+      })}
+      {notificationOverlays.map((overlay) => {
+        const OverlayComponent = overlay.component;
+        return <OverlayComponent key={overlay.id} />;
+      })}
+    </TooltipProvider>
+  );
 
-	// Plugin-contributed providers compose **inside** the core provider
-	// stack (so each may call `useStudio()`, `useChromeProps()`,
-	// `useMsg()`, etc.) and **outside** `<TooltipProvider>` + the
-	// editor render. Lowest-`order` provider is outermost.
-	const wrappedBody = composePluginProviders(
-		compiled.runtime.providers,
-		studioBody,
-	);
+  // Plugin-contributed providers compose **inside** the core provider
+  // stack (so each may call `useStudio()`, `useChromeProps()`,
+  // `useMsg()`, etc.) and **outside** `<TooltipProvider>` + the
+  // editor render. Lowest-`order` provider is outermost.
+  const wrappedBody = composePluginProviders(
+    compiled.runtime.providers,
+    studioBody,
+  );
 
-	return (
-		<StudioConfigProvider config={compiled.studioConfig}>
-			<StudioRuntimeProvider value={compiled.runtime}>
-				<StudioPluginContextProvider value={compiled.ctx}>
-					<SidebarRegistryProvider value={sidebarRegistryStore}>
-						<StudioPagesSourceProvider value={pages}>
-							<EditorUiStoreProvider storeId={resolvedStoreId}>
-								<ThemeStoreProvider
-									storeId={resolvedStoreId}
-									store={themeStore}
-								>
-									<ExportStoreProvider
-										storeId={resolvedStoreId}
-										store={exportStore}
-									>
-										<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
-											<EditorI18nStoreProvider messages={messages}>
-												<ChromePropsProvider
-													value={{
-														onBack,
-														onSaveDraft,
-														isSavingDraft,
-														lastSavedAt,
-														isPublishing,
-														onPublishClick,
-														onExport,
-														collaboratorsSlot: resolvedCollaboratorsSlot,
-														viewports: chromeViewports,
-													}}
-												>
-													<StudioRootProvider rootRef={rootRef}>
-														<div ref={rootRef} style={{ display: "contents" }}>
-															{wrappedBody}
-														</div>
-													</StudioRootProvider>
-												</ChromePropsProvider>
-											</EditorI18nStoreProvider>
-										</AiStoreProvider>
-									</ExportStoreProvider>
-								</ThemeStoreProvider>
-							</EditorUiStoreProvider>
-						</StudioPagesSourceProvider>
-					</SidebarRegistryProvider>
-				</StudioPluginContextProvider>
-			</StudioRuntimeProvider>
-		</StudioConfigProvider>
-	);
+  return (
+    <StudioConfigProvider config={compiled.studioConfig}>
+      <StudioRuntimeProvider value={compiled.runtime}>
+        <StudioPluginContextProvider value={compiled.ctx}>
+          <SidebarRegistryProvider value={sidebarRegistryStore}>
+            <StudioPagesSourceProvider value={pages}>
+              <EditorUiStoreProvider storeId={resolvedStoreId}>
+                <ThemeStoreProvider
+                  storeId={resolvedStoreId}
+                  store={themeStore}
+                >
+                  <ExportStoreProvider
+                    storeId={resolvedStoreId}
+                    store={exportStore}
+                  >
+                    <AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
+                      <EditorI18nStoreProvider messages={messages}>
+                        <ChromePropsProvider
+                          value={{
+                            onBack,
+                            onSaveDraft,
+                            isSavingDraft,
+                            lastSavedAt,
+                            isPublishing,
+                            onPublishClick,
+                            onExport,
+                            collaboratorsSlot: resolvedCollaboratorsSlot,
+                            viewports: chromeViewports,
+                          }}
+                        >
+                          <StudioRootProvider rootRef={rootRef}>
+                            <div ref={rootRef} style={{ display: "contents" }}>
+                              {wrappedBody}
+                            </div>
+                          </StudioRootProvider>
+                        </ChromePropsProvider>
+                      </EditorI18nStoreProvider>
+                    </AiStoreProvider>
+                  </ExportStoreProvider>
+                </ThemeStoreProvider>
+              </EditorUiStoreProvider>
+            </StudioPagesSourceProvider>
+          </SidebarRegistryProvider>
+        </StudioPluginContextProvider>
+      </StudioRuntimeProvider>
+    </StudioConfigProvider>
+  );
 }

@@ -10,13 +10,13 @@ cost for these primitives.
 
 ## Public API
 
-| Export              | Signature                                                          | Summary                                                                                     |
-| ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| `generateId`        | `(prefix?: string) => string`                                      | RFC 4122 v4 UUID (via `crypto.randomUUID()`) with optional prefix.                          |
-| `deepMerge`         | `<T>(target: T, ...sources: DeepPartial<T>[]) => T`                | Recursive plain-object merge. **Arrays are replaced**, not concatenated.                    |
-| `invariant`         | `(condition: unknown, message: string) => asserts condition`       | Throws `Error(message)` when `condition` is falsy; narrows the type for the caller.         |
-| `debounce`          | `<T>(fn: T, wait: number) => T & { cancel(): void }`               | Leading-edge-off debounce with a `.cancel()` method to drop a pending call.                 |
-| `getStrictContext`  | `<T>(name: string) => [Provider<T>, () => T]`                      | React context + hook pair that throws a descriptive error when used outside its provider.   |
+| Export             | Signature                                                    | Summary                                                                                   |
+| ------------------ | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `generateId`       | `(prefix?: string) => string`                                | RFC 4122 v4 UUID (via `crypto.randomUUID()`) with optional prefix.                        |
+| `deepMerge`        | `<T>(target: T, ...sources: DeepPartial<T>[]) => T`          | Recursive plain-object merge. **Arrays are replaced**, not concatenated.                  |
+| `invariant`        | `(condition: unknown, message: string) => asserts condition` | Throws `Error(message)` when `condition` is falsy; narrows the type for the caller.       |
+| `debounce`         | `<T>(fn: T, wait: number) => T & { cancel(): void }`         | Leading-edge-off debounce with a `.cancel()` method to drop a pending call.               |
+| `getStrictContext` | `<T>(name: string) => [Provider<T>, () => T]`                | React context + hook pair that throws a descriptive error when used outside its provider. |
 
 `getStrictContext` is the only helper that touches React, and `react`
 is declared as an **optional peer dependency**. Consumers that do not

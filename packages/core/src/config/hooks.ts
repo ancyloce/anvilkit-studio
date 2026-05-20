@@ -77,11 +77,11 @@ export function useStudioConfig(): StudioConfig;
  */
 export function useStudioConfig<T>(selector: (config: StudioConfig) => T): T;
 export function useStudioConfig<T>(
-	selector?: (config: StudioConfig) => T,
+  selector?: (config: StudioConfig) => T,
 ): StudioConfig | T {
-	const config = useStudioConfigContext();
-	return useMemo(
-		() => (selector ? selector(config) : config),
-		[config, selector],
-	);
+  const config = useStudioConfigContext();
+  return useMemo(
+    () => (selector ? selector(config) : config),
+    [config, selector],
+  );
 }

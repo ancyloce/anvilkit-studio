@@ -25,65 +25,65 @@ import { fileURLToPath } from "node:url";
 // them up through workspace hoisting.
 
 interface PageIR {
-	readonly version: "1";
-	readonly root: unknown;
-	readonly assets: readonly unknown[];
-	readonly metadata: unknown;
+  readonly version: "1";
+  readonly root: unknown;
+  readonly assets: readonly unknown[];
+  readonly metadata: unknown;
 }
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..");
 const RENDER_URL =
-	process.env.ANVILKIT_RENDER_URL ?? "http://localhost:3000/puck/render";
+  process.env.ANVILKIT_RENDER_URL ?? "http://localhost:3000/puck/render";
 const MAX_PREVIEW_BYTES = 200 * 1024;
 
 async function main() {
-	const { chromium } = await import("playwright");
-	const sharp = (await import("sharp")).default;
+  const { chromium } = await import("playwright");
+  const sharp = (await import("sharp")).default;
 
-	const browser = await chromium.launch();
-	const context = await browser.newContext({
-		viewport: { width: 1200, height: 675 },
-		deviceScaleFactor: 1,
-	});
+  const browser = await chromium.launch();
+  const context = await browser.newContext({
+    viewport: { width: 1200, height: 675 },
+    deviceScaleFactor: 1,
+  });
 
-	const slugs = readdirSync(root, { withFileTypes: true })
-		.filter((d) => d.isDirectory() && d.name !== "scripts")
-		.map((d) => d.name)
-		.sort();
+  const slugs = readdirSync(root, { withFileTypes: true })
+    .filter((d) => d.isDirectory() && d.name !== "scripts")
+    .map((d) => d.name)
+    .sort();
 
-	for (const slug of slugs) {
-		const irPath = join(root, slug, "src", "page-ir.json");
-		if (!existsSync(irPath)) continue;
+  for (const slug of slugs) {
+    const irPath = join(root, slug, "src", "page-ir.json");
+    if (!existsSync(irPath)) continue;
 
-		const ir = JSON.parse(readFileSync(irPath, "utf8")) as PageIR;
-		const url = `${RENDER_URL}?data=${encodeURIComponent(JSON.stringify(ir))}`;
+    const ir = JSON.parse(readFileSync(irPath, "utf8")) as PageIR;
+    const url = `${RENDER_URL}?data=${encodeURIComponent(JSON.stringify(ir))}`;
 
-		const page = await context.newPage();
-		await page.goto(url, { waitUntil: "networkidle" });
-		const raw = await page.screenshot({ fullPage: false, type: "png" });
-		await page.close();
+    const page = await context.newPage();
+    await page.goto(url, { waitUntil: "networkidle" });
+    const raw = await page.screenshot({ fullPage: false, type: "png" });
+    await page.close();
 
-		const compressed = await sharp(raw)
-			.png({ quality: 80, compressionLevel: 9 })
-			.toBuffer();
+    const compressed = await sharp(raw)
+      .png({ quality: 80, compressionLevel: 9 })
+      .toBuffer();
 
-		if (compressed.byteLength > MAX_PREVIEW_BYTES) {
-			throw new Error(
-				`${slug}: preview.png is ${compressed.byteLength} bytes, over the 200 KB budget`,
-			);
-		}
+    if (compressed.byteLength > MAX_PREVIEW_BYTES) {
+      throw new Error(
+        `${slug}: preview.png is ${compressed.byteLength} bytes, over the 200 KB budget`,
+      );
+    }
 
-		writeFileSync(join(root, slug, "preview.png"), compressed);
-		console.log(
-			`ok ${slug.padEnd(22)} ${(compressed.byteLength / 1024).toFixed(1)} KB`,
-		);
-	}
+    writeFileSync(join(root, slug, "preview.png"), compressed);
+    console.log(
+      `ok ${slug.padEnd(22)} ${(compressed.byteLength / 1024).toFixed(1)} KB`,
+    );
+  }
 
-	await browser.close();
+  await browser.close();
 }
 
 main().catch((err) => {
-	console.error(err);
-	process.exit(1);
+  console.error(err);
+  process.exit(1);
 });

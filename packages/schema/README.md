@@ -49,18 +49,18 @@ for the full package catalog.
 
 ## Public API
 
-| Export                    | Signature                                                              | Purpose                                                       |
-| ------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `configToAiContext`       | `(config: Config, opts?) => AiGenerationContext`                       | Derive full AI context from a Puck config.                    |
-| `identifySlotFields`     | `(config: Config) => Map<string, readonly string[]>`                   | Identify slot fields per component.                           |
-| `extractFieldSchema`     | `(name: string, field: Field, opts?) => AiFieldSchema`                 | Map a single Puck field to an AI-friendly schema.             |
-| `isJsonSerializable`     | `(value: unknown, opts?) => boolean`                                   | Check if a value is safe for JSON serialization.              |
+| Export               | Signature                                              | Purpose                                           |
+| -------------------- | ------------------------------------------------------ | ------------------------------------------------- |
+| `configToAiContext`  | `(config: Config, opts?) => AiGenerationContext`       | Derive full AI context from a Puck config.        |
+| `identifySlotFields` | `(config: Config) => Map<string, readonly string[]>`   | Identify slot fields per component.               |
+| `extractFieldSchema` | `(name: string, field: Field, opts?) => AiFieldSchema` | Map a single Puck field to an AI-friendly schema. |
+| `isJsonSerializable` | `(value: unknown, opts?) => boolean`                   | Check if a value is safe for JSON serialization.  |
 
 ### `ConfigToAiContextOptions`
 
-| Option     | Type       | Default     | Description                                    |
-| ---------- | ---------- | ----------- | ---------------------------------------------- |
-| `include`  | `string[]` | all components | Whitelist a subset of components to include. |
+| Option    | Type       | Default        | Description                                  |
+| --------- | ---------- | -------------- | -------------------------------------------- |
+| `include` | `string[]` | all components | Whitelist a subset of components to include. |
 
 ## Required fields
 
@@ -71,13 +71,13 @@ optional. Callers that know better can override per call by passing
 
 ## Dependency contract
 
-| Allowed                              | Forbidden                                                               |
-| ------------------------------------ | ----------------------------------------------------------------------- |
-| (no runtime deps)                    | `@anvilkit/ir`, `@anvilkit/validator`, `@anvilkit/core` runtime         |
-| `@puckeditor/core` (peer, types-only)| React, ReactDOM, any plugin package, any DOM API                        |
+| Allowed                               | Forbidden                                                       |
+| ------------------------------------- | --------------------------------------------------------------- |
+| (no runtime deps)                     | `@anvilkit/ir`, `@anvilkit/validator`, `@anvilkit/core` runtime |
+| `@puckeditor/core` (peer, types-only) | React, ReactDOM, any plugin package, any DOM API                |
 
 ## Peer dependencies
 
-| Package | Version |
-| ------- | ------- |
+| Package            | Version   |
+| ------------------ | --------- |
 | `@puckeditor/core` | `^0.21.0` |

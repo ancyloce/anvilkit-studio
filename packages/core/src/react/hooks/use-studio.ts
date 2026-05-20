@@ -51,7 +51,7 @@ import type { StudioRuntime } from "@/runtime/compile-plugins";
  *   from the package barrel; public consumers use {@link useStudio}.
  */
 const [StudioRuntimeProvider, useStudioRuntime] =
-	getStrictContext<StudioRuntime>("Studio");
+  getStrictContext<StudioRuntime>("Studio");
 
 export { StudioRuntimeProvider, useStudioRuntime };
 
@@ -67,28 +67,28 @@ export { StudioRuntimeProvider, useStudioRuntime };
  * export run from the return value.
  */
 export interface UseStudioResult {
-	/**
-	 * The `meta` block of every {@link StudioPlugin} that successfully
-	 * registered, in declaration order. Suitable for a "plugins
-	 * loaded" diagnostic panel; not suitable for plugin-to-plugin
-	 * communication (use the lifecycle event bus for that).
-	 */
-	readonly plugins: StudioRuntime["pluginMeta"];
-	/**
-	 * Registered export formats indexed by
-	 * {@link ExportFormatDefinition.id}. Reading the keys gives the
-	 * host app the same list `useExportStore((s) => s.availableFormats)`
-	 * exposes, minus the reactivity — consumers that need reactive
-	 * re-renders should subscribe to the export store instead.
-	 */
-	readonly exportFormats: StudioRuntime["exportFormats"];
-	/**
-	 * Header action descriptors in plugin registration order.
-	 * `composeHeaderActions()` (`core-009`) turns these into rendered
-	 * React nodes at the header level — this field gives consumers
-	 * the raw data for custom UIs.
-	 */
-	readonly headerActions: StudioRuntime["headerActions"];
+  /**
+   * The `meta` block of every {@link StudioPlugin} that successfully
+   * registered, in declaration order. Suitable for a "plugins
+   * loaded" diagnostic panel; not suitable for plugin-to-plugin
+   * communication (use the lifecycle event bus for that).
+   */
+  readonly plugins: StudioRuntime["pluginMeta"];
+  /**
+   * Registered export formats indexed by
+   * {@link ExportFormatDefinition.id}. Reading the keys gives the
+   * host app the same list `useExportStore((s) => s.availableFormats)`
+   * exposes, minus the reactivity — consumers that need reactive
+   * re-renders should subscribe to the export store instead.
+   */
+  readonly exportFormats: StudioRuntime["exportFormats"];
+  /**
+   * Header action descriptors in plugin registration order.
+   * `composeHeaderActions()` (`core-009`) turns these into rendered
+   * React nodes at the header level — this field gives consumers
+   * the raw data for custom UIs.
+   */
+  readonly headerActions: StudioRuntime["headerActions"];
 }
 
 /**
@@ -110,19 +110,19 @@ export interface UseStudioResult {
  * ```
  */
 export function useStudio(): UseStudioResult {
-	const runtime = useStudioRuntime();
-	// Memoize the projection keyed on `runtime`. Consumers who
-	// destructure and pass `plugins`, `exportFormats`, or
-	// `headerActions` into memoized children should not re-render
-	// those children on every parent render just because `useStudio()`
-	// returned a fresh outer object. The runtime reference is stable
-	// for the life of a given compiled state, so this is near-free.
-	return useMemo(
-		() => ({
-			plugins: runtime.pluginMeta,
-			exportFormats: runtime.exportFormats,
-			headerActions: runtime.headerActions,
-		}),
-		[runtime],
-	);
+  const runtime = useStudioRuntime();
+  // Memoize the projection keyed on `runtime`. Consumers who
+  // destructure and pass `plugins`, `exportFormats`, or
+  // `headerActions` into memoized children should not re-render
+  // those children on every parent render just because `useStudio()`
+  // returned a fresh outer object. The runtime reference is stable
+  // for the life of a given compiled state, so this is near-free.
+  return useMemo(
+    () => ({
+      plugins: runtime.pluginMeta,
+      exportFormats: runtime.exportFormats,
+      headerActions: runtime.headerActions,
+    }),
+    [runtime],
+  );
 }

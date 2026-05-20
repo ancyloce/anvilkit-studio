@@ -21,8 +21,8 @@
  */
 
 import {
-	type ComponentData as PuckComponentData,
-	useGetPuck,
+  type ComponentData as PuckComponentData,
+  useGetPuck,
 } from "@puckeditor/core";
 import { useCallback } from "react";
 import { toast } from "sonner";
@@ -32,12 +32,12 @@ import { useMsg } from "./editor-i18n-store";
 export type InsertSnippetCommand = (snippet: StudioCopySnippet) => void;
 
 function isCompatibleTextItem(
-	item: PuckComponentData | null | undefined,
+  item: PuckComponentData | null | undefined,
 ): boolean {
-	if (item === null || item === undefined) return false;
-	if (item.type !== "Text") return false;
-	const props = item.props as { readonly text?: unknown };
-	return typeof props.text === "string";
+  if (item === null || item === undefined) return false;
+  if (item.type !== "Text") return false;
+  const props = item.props as { readonly text?: unknown };
+  return typeof props.text === "string";
 }
 
 /**
@@ -46,45 +46,45 @@ function isCompatibleTextItem(
  * no compatible selection exists.
  */
 export function useInsertSnippet(): InsertSnippetCommand {
-	const getPuck = useGetPuck();
-	const msg = useMsg();
+  const getPuck = useGetPuck();
+  const msg = useMsg();
 
-	return useCallback(
-		(snippet: StudioCopySnippet) => {
-			const snapshot = getPuck();
-			const selected = snapshot.selectedItem ?? null;
+  return useCallback(
+    (snippet: StudioCopySnippet) => {
+      const snapshot = getPuck();
+      const selected = snapshot.selectedItem ?? null;
 
-			if (!isCompatibleTextItem(selected)) {
-				toast.warning(msg("studio.module.text.requireSelection"));
-				return;
-			}
+      if (!isCompatibleTextItem(selected)) {
+        toast.warning(msg("studio.module.text.requireSelection"));
+        return;
+      }
 
-			// `selected` is non-null and Text-shaped — narrow it.
-			const selectedItem = selected as PuckComponentData & {
-				readonly props: { readonly id: string; readonly text: string };
-			};
-			const selectorId = selectedItem.props.id;
-			const selector = snapshot.getSelectorForId(selectorId);
-			if (selector === undefined) {
-				// Race: selection moved or the node was removed between the
-				// render that produced the snippet click and this dispatch.
-				toast.warning(msg("studio.module.text.requireSelection"));
-				return;
-			}
+      // `selected` is non-null and Text-shaped — narrow it.
+      const selectedItem = selected as PuckComponentData & {
+        readonly props: { readonly id: string; readonly text: string };
+      };
+      const selectorId = selectedItem.props.id;
+      const selector = snapshot.getSelectorForId(selectorId);
+      if (selector === undefined) {
+        // Race: selection moved or the node was removed between the
+        // render that produced the snippet click and this dispatch.
+        toast.warning(msg("studio.module.text.requireSelection"));
+        return;
+      }
 
-			snapshot.dispatch({
-				type: "replace",
-				destinationIndex: selector.index,
-				destinationZone: selector.zone,
-				data: {
-					...selectedItem,
-					props: {
-						...selectedItem.props,
-						text: snippet.body,
-					},
-				},
-			});
-		},
-		[getPuck, msg],
-	);
+      snapshot.dispatch({
+        type: "replace",
+        destinationIndex: selector.index,
+        destinationZone: selector.zone,
+        data: {
+          ...selectedItem,
+          props: {
+            ...selectedItem.props,
+            text: snippet.body,
+          },
+        },
+      });
+    },
+    [getPuck, msg],
+  );
 }

@@ -16,16 +16,16 @@ import type { ComponentViewMode } from "@/state/editor-ui-store";
 import { useComponentViewMode } from "@/state/hooks";
 
 export function InsertViewToggle(): ReactNode {
-	const msg = useMsg();
-	const [mode, setMode] = useComponentViewMode();
+  const msg = useMsg();
+  const [mode, setMode] = useComponentViewMode();
 
-	const handleChange = (next: readonly string[]): void => {
-		const value = next[0] as ComponentViewMode | undefined;
-		if (value === undefined) return;
-		setMode(value);
-	};
+  const handleChange = (next: readonly string[]): void => {
+    const value = next[0] as ComponentViewMode | undefined;
+    if (value === undefined) return;
+    setMode(value);
+  };
 
-	return (
+  return (
     <ToggleGroup
       variant="outline"
       value={[mode]}

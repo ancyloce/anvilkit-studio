@@ -1,6 +1,6 @@
-# @anvilkit/plugin-__NAME__
+# @anvilkit/plugin-**NAME**
 
-__DISPLAY_MARKDOWN__ - Anvilkit StudioPlugin (category: __CATEGORY__).
+**DISPLAY_MARKDOWN** - Anvilkit StudioPlugin (category: **CATEGORY**).
 
 ## Install
 
@@ -15,9 +15,9 @@ import { Studio } from "@anvilkit/core";
 import { __FACTORY__ } from "@anvilkit/plugin-__NAME__";
 
 <Studio
-	puckConfig={puckConfig}
-	plugins={[__FACTORY__({ label: "production" })]}
-/>
+  puckConfig={puckConfig}
+  plugins={[__FACTORY__({ label: "production" })]}
+/>;
 ```
 
 ## Develop

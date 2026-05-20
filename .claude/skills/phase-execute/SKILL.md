@@ -112,7 +112,7 @@ If a gate fails:
 For phases touching specific packages, add the package-local gates too:
 
 - `@anvilkit/core` → `pnpm --filter @anvilkit/core check:all`
-- IR / schema / validator / plugin-export-* / plugin-ai-copilot → their
+- IR / schema / validator / plugin-export-\* / plugin-ai-copilot → their
   Phase 3 release gates
 - Any publishable package → `pnpm publint` and `pnpm size`
 
@@ -135,7 +135,7 @@ Then halt for `continue` / `next`.
 When all tasks in the phase are done:
 
 - Run the full repo gates once more (typecheck + lint + test + build + madge
-  + publint where applicable).
+  - publint where applicable).
 - Produce a phase summary: tasks completed, total test delta, files touched,
   any open follow-ups, any pre-existing infra issues encountered.
 - Ask whether to advance to the next phase or stop.

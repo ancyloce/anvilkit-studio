@@ -7,12 +7,9 @@
  */
 
 export { mergeOverrides } from "./merge-overrides";
+export { createStudioOverrides, studioOverrides } from "./preset";
 export {
-	createStudioOverrides,
-	studioOverrides,
-} from "./preset";
-export {
-	type CreateStudioOverridesOptions,
-	type DefaultOverrideSlot,
-	type StudioChromeMode,
+  type CreateStudioOverridesOptions,
+  type DefaultOverrideSlot,
+  type StudioChromeMode,
 } from "./types";

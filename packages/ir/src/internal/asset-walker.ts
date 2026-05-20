@@ -23,12 +23,12 @@ const SCRIPT_EXTS = /\.js(\?|$)/i;
 const STYLE_EXTS = /\.css(\?|$)/i;
 
 export function classifyUrl(url: string): PageIRAsset["kind"] {
-	if (IMAGE_EXTS.test(url)) return "image";
-	if (VIDEO_EXTS.test(url)) return "video";
-	if (FONT_EXTS.test(url)) return "font";
-	if (SCRIPT_EXTS.test(url)) return "script";
-	if (STYLE_EXTS.test(url)) return "style";
-	return "other";
+  if (IMAGE_EXTS.test(url)) return "image";
+  if (VIDEO_EXTS.test(url)) return "video";
+  if (FONT_EXTS.test(url)) return "font";
+  if (SCRIPT_EXTS.test(url)) return "script";
+  if (STYLE_EXTS.test(url)) return "style";
+  return "other";
 }
 
 /**
@@ -40,7 +40,7 @@ export function classifyUrl(url: string): PageIRAsset["kind"] {
  * asset reference.
  */
 export const ASSET_KEY_PATTERN =
-	/^(src|imageUrl|imageSrc|url|videoUrl|videoSrc|fontUrl|scriptUrl|styleUrl|backgroundSrc|backgroundImage|poster|thumbnailSrc)$/;
+  /^(src|imageUrl|imageSrc|url|videoUrl|videoSrc|fontUrl|scriptUrl|styleUrl|backgroundSrc|backgroundImage|poster|thumbnailSrc)$/;
 
 /**
  * Walk a prop value tree (object/array), pushing every asset hit
@@ -49,40 +49,40 @@ export const ASSET_KEY_PATTERN =
  * `onWarning` channel accept truncation as the safe fallback.
  */
 export function walkValueIntoMap(
-	value: unknown,
-	seen: Map<string, PageIRAsset>,
-	derive: (url: string) => string,
-	depth: number,
+  value: unknown,
+  seen: Map<string, PageIRAsset>,
+  derive: (url: string) => string,
+  depth: number,
 ): void {
-	if (value === null || value === undefined) return;
-	if (depth > MAX_TREE_DEPTH) return;
+  if (value === null || value === undefined) return;
+  if (depth > MAX_TREE_DEPTH) return;
 
-	if (Array.isArray(value)) {
-		for (const item of value) {
-			walkValueIntoMap(item, seen, derive, depth + 1);
-		}
-		return;
-	}
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      walkValueIntoMap(item, seen, derive, depth + 1);
+    }
+    return;
+  }
 
-	if (typeof value === "object") {
-		const obj = value as Record<string, unknown>;
-		for (const [key, val] of Object.entries(obj)) {
-			if (
-				ASSET_KEY_PATTERN.test(key) &&
-				typeof val === "string" &&
-				val !== ""
-			) {
-				if (!seen.has(val)) {
-					seen.set(val, {
-						id: derive(val),
-						kind: classifyUrl(val),
-						url: val,
-					});
-				}
-			}
-			walkValueIntoMap(val, seen, derive, depth + 1);
-		}
-	}
+  if (typeof value === "object") {
+    const obj = value as Record<string, unknown>;
+    for (const [key, val] of Object.entries(obj)) {
+      if (
+        ASSET_KEY_PATTERN.test(key) &&
+        typeof val === "string" &&
+        val !== ""
+      ) {
+        if (!seen.has(val)) {
+          seen.set(val, {
+            id: derive(val),
+            kind: classifyUrl(val),
+            url: val,
+          });
+        }
+      }
+      walkValueIntoMap(val, seen, derive, depth + 1);
+    }
+  }
 }
 
 /**
@@ -90,20 +90,20 @@ export function walkValueIntoMap(
  * in order (pre-order DFS). Used by the public `collectAssets`.
  */
 export function walkNodeIntoMap(
-	node: PageIRNode | { props: Record<string, unknown> },
-	seen: Map<string, PageIRAsset>,
-	derive: (url: string) => string,
-	depth: number,
+  node: PageIRNode | { props: Record<string, unknown> },
+  seen: Map<string, PageIRAsset>,
+  derive: (url: string) => string,
+  depth: number,
 ): void {
-	if (depth > MAX_TREE_DEPTH) return;
+  if (depth > MAX_TREE_DEPTH) return;
 
-	walkValueIntoMap(node.props, seen, derive, 0);
+  walkValueIntoMap(node.props, seen, derive, 0);
 
-	if ("children" in node && Array.isArray(node.children)) {
-		for (const child of node.children) {
-			walkNodeIntoMap(child, seen, derive, depth + 1);
-		}
-	}
+  if ("children" in node && Array.isArray(node.children)) {
+    for (const child of node.children) {
+      walkNodeIntoMap(child, seen, derive, depth + 1);
+    }
+  }
 }
 
 /**
@@ -113,10 +113,10 @@ export function walkNodeIntoMap(
  * by unioning this with child results in child order.
  */
 export function collectNodeOwnAssets(
-	props: Record<string, unknown>,
-	derive: (url: string) => string,
+  props: Record<string, unknown>,
+  derive: (url: string) => string,
 ): PageIRAsset[] {
-	const seen = new Map<string, PageIRAsset>();
-	walkValueIntoMap(props, seen, derive, 0);
-	return [...seen.values()];
+  const seen = new Map<string, PageIRAsset>();
+  walkValueIntoMap(props, seen, derive, 0);
+  return [...seen.values()];
 }

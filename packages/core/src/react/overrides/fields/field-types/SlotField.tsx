@@ -11,29 +11,29 @@ import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 interface SlotFieldRendererProps extends FieldProps<PuckSlotField, unknown> {
-	readonly name: string;
-	readonly children: ReactNode;
+  readonly name: string;
+  readonly children: ReactNode;
 }
 
 export function SlotField({
-	field,
-	readOnly,
-	name,
-	children,
+  field,
+  readOnly,
+  name,
+  children,
 }: SlotFieldRendererProps): ReactNode {
-	return (
-		<FieldLabel
-			icon={field.labelIcon}
-			label={field.label ?? name}
-			type="slot"
-			el="div"
-			readOnly={readOnly}
-		>
-			<div className="rounded-md border border-dashed border-[var(--ak-studio-border)] bg-[var(--ak-studio-bg)] p-2">
-				{children}
-			</div>
-		</FieldLabel>
-	);
+  return (
+    <FieldLabel
+      icon={field.labelIcon}
+      label={field.label ?? name}
+      type="slot"
+      el="div"
+      readOnly={readOnly}
+    >
+      <div className="rounded-md border border-dashed border-[var(--ak-studio-border)] bg-[var(--ak-studio-bg)] p-2">
+        {children}
+      </div>
+    </FieldLabel>
+  );
 }
 
 export type { FieldProps as PuckFieldProps };

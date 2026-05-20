@@ -19,11 +19,11 @@ import type { PageIR, PageIRNode } from "@anvilkit/core/types";
  * single `<button>`/`<a>`, no nested slots, no images.
  */
 export const BUTTON_DEFAULT_PROPS = {
-	label: "Save changes",
-	variant: "primary",
-	disabled: false,
-	href: "",
-	openInNewTab: false,
+  label: "Save changes",
+  variant: "primary",
+  disabled: false,
+  href: "",
+  openInNewTab: false,
 } as const;
 
 /** Node id whose `label` the probe peer stamps with a timestamp. */
@@ -33,9 +33,9 @@ export const PROBE_NODE_ID = "n-probe";
 export const PROBE_PREFIX = "__probe:";
 
 export interface BuiltDoc {
-	readonly ir: PageIR;
-	/** Ids of the editable (collaborator-mutated) nodes, in order. */
-	readonly editableIds: readonly string[];
+  readonly ir: PageIR;
+  /** Ids of the editable (collaborator-mutated) nodes, in order. */
+  readonly editableIds: readonly string[];
 }
 
 /**
@@ -46,35 +46,35 @@ export interface BuiltDoc {
  * `data-puck-component="<id>"`.
  */
 export function make2000NodeIR(count: number): BuiltDoc {
-	const editableIds: string[] = [];
-	const children: PageIRNode[] = [];
+  const editableIds: string[] = [];
+  const children: PageIRNode[] = [];
 
-	for (let i = 0; i < count; i += 1) {
-		const id = `n-${i}`;
-		editableIds.push(id);
-		children.push({
-			id,
-			type: "Button",
-			props: { ...BUTTON_DEFAULT_PROPS, label: `Button ${i}` },
-		});
-	}
+  for (let i = 0; i < count; i += 1) {
+    const id = `n-${i}`;
+    editableIds.push(id);
+    children.push({
+      id,
+      type: "Button",
+      props: { ...BUTTON_DEFAULT_PROPS, label: `Button ${i}` },
+    });
+  }
 
-	// Dedicated probe node lives at the end so collaborator edits to
-	// `n-0..n-(count-1)` never collide with the latency sentinel.
-	children.push({
-		id: PROBE_NODE_ID,
-		type: "Button",
-		props: { ...BUTTON_DEFAULT_PROPS, label: "probe-idle" },
-	});
+  // Dedicated probe node lives at the end so collaborator edits to
+  // `n-0..n-(count-1)` never collide with the latency sentinel.
+  children.push({
+    id: PROBE_NODE_ID,
+    type: "Button",
+    props: { ...BUTTON_DEFAULT_PROPS, label: "probe-idle" },
+  });
 
-	const ir: PageIR = {
-		version: "1",
-		root: { id: "root", type: "Root", props: {}, children },
-		assets: [],
-		metadata: {},
-	};
+  const ir: PageIR = {
+    version: "1",
+    root: { id: "root", type: "Root", props: {}, children },
+    assets: [],
+    metadata: {},
+  };
 
-	return { ir, editableIds };
+  return { ir, editableIds };
 }
 
 /**
@@ -84,16 +84,16 @@ export function make2000NodeIR(count: number): BuiltDoc {
  * encode + native-tree apply, not by fixture churn.
  */
 export function withNodeLabel(
-	ir: PageIR,
-	nodeId: string,
-	label: string,
+  ir: PageIR,
+  nodeId: string,
+  label: string,
 ): PageIR {
-	const children = (ir.root.children ?? []).map((child) =>
-		child.id === nodeId
-			? { ...child, props: { ...child.props, label } }
-			: child,
-	);
-	return { ...ir, root: { ...ir.root, children } };
+  const children = (ir.root.children ?? []).map((child) =>
+    child.id === nodeId
+      ? { ...child, props: { ...child.props, label } }
+      : child,
+  );
+  return { ...ir, root: { ...ir.root, children } };
 }
 
 /**
@@ -106,21 +106,21 @@ export function withNodeLabel(
  * GC pressure — this removes it.
  */
 export function makeNodeLabelMutator(
-	ir: PageIR,
-	nodeId: string,
+  ir: PageIR,
+  nodeId: string,
 ): (label: string) => PageIR {
-	const srcChildren = ir.root.children ?? [];
-	const idx = srcChildren.findIndex((c) => c.id === nodeId);
-	const children = srcChildren.slice();
-	const target = srcChildren[idx];
-	const root = { ...ir.root, children };
-	const next: PageIR = { ...ir, root };
-	return (label: string) => {
-		if (idx >= 0 && target) {
-			children[idx] = { ...target, props: { ...target.props, label } };
-		}
-		return next;
-	};
+  const srcChildren = ir.root.children ?? [];
+  const idx = srcChildren.findIndex((c) => c.id === nodeId);
+  const children = srcChildren.slice();
+  const target = srcChildren[idx];
+  const root = { ...ir.root, children };
+  const next: PageIR = { ...ir, root };
+  return (label: string) => {
+    if (idx >= 0 && target) {
+      children[idx] = { ...target, props: { ...target.props, label } };
+    }
+    return next;
+  };
 }
 
 /**

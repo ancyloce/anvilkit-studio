@@ -15,7 +15,7 @@ import { MAX_TREE_DEPTH } from "./types.js";
  * Returns `true` if `value` is a function (arrow, method, constructor).
  */
 function isFunction(value: unknown): value is (...args: unknown[]) => unknown {
-	return typeof value === "function";
+  return typeof value === "function";
 }
 
 const OMIT = Symbol("canonicalize.omit");
@@ -26,112 +26,112 @@ const OMIT = Symbol("canonicalize.omit");
  * erases the brand) so callers are type-narrowed at every guard.
  */
 function isOmit(value: unknown): value is typeof OMIT {
-	return value === OMIT;
+  return value === OMIT;
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
-	return value !== null && typeof value === "object";
+  return value !== null && typeof value === "object";
 }
 
 function appendObjectPath(parent: string, key: string): string {
-	return parent.length === 0 ? key : `${parent}.${key}`;
+  return parent.length === 0 ? key : `${parent}.${key}`;
 }
 
 function appendArrayPath(parent: string, index: number): string {
-	return `${parent}[${index}]`;
+  return `${parent}[${index}]`;
 }
 
 function canonicalizeValue(
-	value: unknown,
-	path: string,
-	droppedFunctions: string[],
-	droppedCircularRefs: string[],
-	droppedUnsupportedValues: string[],
-	ancestors: WeakSet<object>,
-	depth: number,
+  value: unknown,
+  path: string,
+  droppedFunctions: string[],
+  droppedCircularRefs: string[],
+  droppedUnsupportedValues: string[],
+  ancestors: WeakSet<object>,
+  depth: number,
 ): unknown {
-	if (value === undefined) return OMIT;
+  if (value === undefined) return OMIT;
 
-	if (isFunction(value)) {
-		droppedFunctions.push(path);
-		return OMIT;
-	}
+  if (isFunction(value)) {
+    droppedFunctions.push(path);
+    return OMIT;
+  }
 
-	if (typeof value === "symbol" || typeof value === "bigint") {
-		droppedUnsupportedValues.push(path);
-		return OMIT;
-	}
+  if (typeof value === "symbol" || typeof value === "bigint") {
+    droppedUnsupportedValues.push(path);
+    return OMIT;
+  }
 
-	// Truncate pathologically deep prop trees rather than overflow
-	// the stack; the dropped path surfaces as a serialization warning.
-	if (depth > MAX_TREE_DEPTH) {
-		droppedUnsupportedValues.push(path);
-		return OMIT;
-	}
+  // Truncate pathologically deep prop trees rather than overflow
+  // the stack; the dropped path surfaces as a serialization warning.
+  if (depth > MAX_TREE_DEPTH) {
+    droppedUnsupportedValues.push(path);
+    return OMIT;
+  }
 
-	if (value instanceof Date) {
-		return value.toISOString();
-	}
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
 
-	if (Array.isArray(value)) {
-		if (ancestors.has(value)) {
-			droppedCircularRefs.push(path);
-			return OMIT;
-		}
+  if (Array.isArray(value)) {
+    if (ancestors.has(value)) {
+      droppedCircularRefs.push(path);
+      return OMIT;
+    }
 
-		ancestors.add(value);
-		const result: unknown[] = [];
+    ancestors.add(value);
+    const result: unknown[] = [];
 
-		for (let index = 0; index < value.length; index += 1) {
-			const canonical = canonicalizeValue(
-				value[index],
-				appendArrayPath(path, index),
-				droppedFunctions,
-				droppedCircularRefs,
-				droppedUnsupportedValues,
-				ancestors,
-				depth + 1,
-			);
+    for (let index = 0; index < value.length; index += 1) {
+      const canonical = canonicalizeValue(
+        value[index],
+        appendArrayPath(path, index),
+        droppedFunctions,
+        droppedCircularRefs,
+        droppedUnsupportedValues,
+        ancestors,
+        depth + 1,
+      );
 
-			if (!isOmit(canonical)) {
-				result.push(canonical);
-			}
-		}
+      if (!isOmit(canonical)) {
+        result.push(canonical);
+      }
+    }
 
-		ancestors.delete(value);
-		return result;
-	}
+    ancestors.delete(value);
+    return result;
+  }
 
-	if (isObject(value)) {
-		if (ancestors.has(value)) {
-			droppedCircularRefs.push(path);
-			return OMIT;
-		}
+  if (isObject(value)) {
+    if (ancestors.has(value)) {
+      droppedCircularRefs.push(path);
+      return OMIT;
+    }
 
-		ancestors.add(value);
-		const result: Record<string, unknown> = {};
+    ancestors.add(value);
+    const result: Record<string, unknown> = {};
 
-		for (const key of Object.keys(value).sort()) {
-			const canonical = canonicalizeValue(
-				value[key],
-				appendObjectPath(path, key),
-				droppedFunctions,
-				droppedCircularRefs,
-				droppedUnsupportedValues,
-				ancestors,
-				depth + 1,
-			);
+    for (const key of Object.keys(value).sort()) {
+      const canonical = canonicalizeValue(
+        value[key],
+        appendObjectPath(path, key),
+        droppedFunctions,
+        droppedCircularRefs,
+        droppedUnsupportedValues,
+        ancestors,
+        depth + 1,
+      );
 
-			if (!isOmit(canonical)) {
-				result[key] = canonical;
-			}
-		}
+      if (!isOmit(canonical)) {
+        result[key] = canonical;
+      }
+    }
 
-		ancestors.delete(value);
-		return result;
-	}
+    ancestors.delete(value);
+    return result;
+  }
 
-	return value;
+  return value;
 }
 
 /**
@@ -146,39 +146,39 @@ function canonicalizeValue(
  * Does **not** mutate the input.
  */
 export function canonicalizeProps(raw: Record<string, unknown>): {
-	props: Readonly<Record<string, unknown>>;
-	droppedFunctions: readonly string[];
-	droppedCircularRefs: readonly string[];
-	droppedUnsupportedValues: readonly string[];
+  props: Readonly<Record<string, unknown>>;
+  droppedFunctions: readonly string[];
+  droppedCircularRefs: readonly string[];
+  droppedUnsupportedValues: readonly string[];
 } {
-	const sorted: Record<string, unknown> = {};
-	const droppedFunctions: string[] = [];
-	const droppedCircularRefs: string[] = [];
-	const droppedUnsupportedValues: string[] = [];
-	const ancestors = new WeakSet<object>();
+  const sorted: Record<string, unknown> = {};
+  const droppedFunctions: string[] = [];
+  const droppedCircularRefs: string[] = [];
+  const droppedUnsupportedValues: string[] = [];
+  const ancestors = new WeakSet<object>();
 
-	for (const key of Object.keys(raw).sort()) {
-		const canonical = canonicalizeValue(
-			raw[key],
-			key,
-			droppedFunctions,
-			droppedCircularRefs,
-			droppedUnsupportedValues,
-			ancestors,
-			0,
-		);
+  for (const key of Object.keys(raw).sort()) {
+    const canonical = canonicalizeValue(
+      raw[key],
+      key,
+      droppedFunctions,
+      droppedCircularRefs,
+      droppedUnsupportedValues,
+      ancestors,
+      0,
+    );
 
-		if (!isOmit(canonical)) {
-			sorted[key] = canonical;
-		}
-	}
+    if (!isOmit(canonical)) {
+      sorted[key] = canonical;
+    }
+  }
 
-	return {
-		props: sorted,
-		droppedFunctions,
-		droppedCircularRefs,
-		droppedUnsupportedValues,
-	};
+  return {
+    props: sorted,
+    droppedFunctions,
+    droppedCircularRefs,
+    droppedUnsupportedValues,
+  };
 }
 
 /**
@@ -186,26 +186,26 @@ export function canonicalizeProps(raw: Record<string, unknown>): {
  * Primitives and already-frozen values are skipped.
  */
 export function deepFreeze<T>(obj: T): T {
-	freezeWithDepth(obj, 0);
-	return obj;
+  freezeWithDepth(obj, 0);
+  return obj;
 }
 
 function freezeWithDepth(obj: unknown, depth: number): void {
-	if (obj === null || typeof obj !== "object") return;
-	if (Object.isFrozen(obj)) return;
-	// Stop past the depth cap rather than overflow; truncation only
-	// leaves the deepest nodes unfrozen, which is safe.
-	if (depth > MAX_TREE_DEPTH) return;
+  if (obj === null || typeof obj !== "object") return;
+  if (Object.isFrozen(obj)) return;
+  // Stop past the depth cap rather than overflow; truncation only
+  // leaves the deepest nodes unfrozen, which is safe.
+  if (depth > MAX_TREE_DEPTH) return;
 
-	Object.freeze(obj);
+  Object.freeze(obj);
 
-	for (const value of Object.values(obj as Record<string, unknown>)) {
-		if (
-			value !== null &&
-			typeof value === "object" &&
-			!Object.isFrozen(value)
-		) {
-			freezeWithDepth(value, depth + 1);
-		}
-	}
+  for (const value of Object.values(obj as Record<string, unknown>)) {
+    if (
+      value !== null &&
+      typeof value === "object" &&
+      !Object.isFrozen(value)
+    ) {
+      freezeWithDepth(value, depth + 1);
+    }
+  }
 }

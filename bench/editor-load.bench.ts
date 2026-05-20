@@ -45,9 +45,10 @@
 import type { BenchResult } from "./types.js";
 
 const EDITOR_URL =
-	process.env.ANVILKIT_EDITOR_URL ?? "http://localhost:3000/puck/editor";
+  process.env.ANVILKIT_EDITOR_URL ?? "http://localhost:3000/puck/editor";
 const READY_SELECTOR =
-	process.env.ANVILKIT_EDITOR_READY_SELECTOR ?? '[data-testid="puck-editor"], .Puck';
+  process.env.ANVILKIT_EDITOR_READY_SELECTOR ??
+  '[data-testid="puck-editor"], .Puck';
 
 /**
  * Number of back-to-back navigations to average. Smaller than the
@@ -55,85 +56,88 @@ const READY_SELECTOR =
  * on a cold CI VM — 5 iterations keeps total bench time bounded.
  */
 const ITERATIONS = Number.parseInt(
-	process.env.ANVILKIT_EDITOR_BENCH_ITERATIONS ?? "5",
-	10,
+  process.env.ANVILKIT_EDITOR_BENCH_ITERATIONS ?? "5",
+  10,
 );
 
 async function probeDemo(): Promise<boolean> {
-	try {
-		const res = await fetch(EDITOR_URL, { redirect: "manual" });
-		return res.status === 200 || res.status === 302 || res.status === 301;
-	} catch {
-		return false;
-	}
+  try {
+    const res = await fetch(EDITOR_URL, { redirect: "manual" });
+    return res.status === 200 || res.status === 302 || res.status === 301;
+  } catch {
+    return false;
+  }
 }
 
 export async function runEditorLoadBench(): Promise<BenchResult[]> {
-	const reachable = await probeDemo();
-	if (!reachable) {
-		console.warn(
-			`bench: editor-load — ${EDITOR_URL} not reachable, skipping. ` +
-				`Start the demo (\`pnpm --filter demo start\`) or set ANVILKIT_EDITOR_URL to measure.`,
-		);
-		return [
-			{
-				name: "editor-load",
-				meanMs: Number.NaN,
-				hz: Number.NaN,
-			},
-		];
-	}
+  const reachable = await probeDemo();
+  if (!reachable) {
+    console.warn(
+      `bench: editor-load — ${EDITOR_URL} not reachable, skipping. ` +
+        `Start the demo (\`pnpm --filter demo start\`) or set ANVILKIT_EDITOR_URL to measure.`,
+    );
+    return [
+      {
+        name: "editor-load",
+        meanMs: Number.NaN,
+        hz: Number.NaN,
+      },
+    ];
+  }
 
-	const { chromium } = await import("playwright");
-	const browser = await chromium.launch();
-	const context = await browser.newContext({
-		viewport: { width: 1280, height: 800 },
-	});
+  const { chromium } = await import("playwright");
+  const browser = await chromium.launch();
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 800 },
+  });
 
-	const samples: number[] = [];
-	for (let i = 0; i < ITERATIONS; i += 1) {
-		const page = await context.newPage();
-		const startNav = Date.now();
-		try {
-			await page.goto(EDITOR_URL, { waitUntil: "domcontentloaded", timeout: 30_000 });
-			await page.waitForSelector(READY_SELECTOR, { timeout: 30_000 });
-		} catch (err) {
-			console.warn(
-				`bench: editor-load — navigation or selector wait failed on iteration ${i}: ${(err as Error).message}`,
-			);
-			await page.close();
-			continue;
-		}
-		const domMs = await page.evaluate(() => performance.now());
-		samples.push(domMs);
-		await page.close();
-		// First iteration warm-up only — drop its sample.
-		if (i === 0 && samples.length > 0) {
-			samples.pop();
-		}
-		void startNav;
-	}
+  const samples: number[] = [];
+  for (let i = 0; i < ITERATIONS; i += 1) {
+    const page = await context.newPage();
+    const startNav = Date.now();
+    try {
+      await page.goto(EDITOR_URL, {
+        waitUntil: "domcontentloaded",
+        timeout: 30_000,
+      });
+      await page.waitForSelector(READY_SELECTOR, { timeout: 30_000 });
+    } catch (err) {
+      console.warn(
+        `bench: editor-load — navigation or selector wait failed on iteration ${i}: ${(err as Error).message}`,
+      );
+      await page.close();
+      continue;
+    }
+    const domMs = await page.evaluate(() => performance.now());
+    samples.push(domMs);
+    await page.close();
+    // First iteration warm-up only — drop its sample.
+    if (i === 0 && samples.length > 0) {
+      samples.pop();
+    }
+    void startNav;
+  }
 
-	await context.close();
-	await browser.close();
+  await context.close();
+  await browser.close();
 
-	if (samples.length === 0) {
-		console.warn("bench: editor-load — zero usable samples, skipping.");
-		return [
-			{
-				name: "editor-load",
-				meanMs: Number.NaN,
-				hz: Number.NaN,
-			},
-		];
-	}
+  if (samples.length === 0) {
+    console.warn("bench: editor-load — zero usable samples, skipping.");
+    return [
+      {
+        name: "editor-load",
+        meanMs: Number.NaN,
+        hz: Number.NaN,
+      },
+    ];
+  }
 
-	const meanMs = samples.reduce((sum, v) => sum + v, 0) / samples.length;
-	return [
-		{
-			name: "editor-load",
-			meanMs,
-			hz: 1000 / meanMs,
-		},
-	];
+  const meanMs = samples.reduce((sum, v) => sum + v, 0) / samples.length;
+  return [
+    {
+      name: "editor-load",
+      meanMs,
+      hz: 1000 / meanMs,
+    },
+  ];
 }

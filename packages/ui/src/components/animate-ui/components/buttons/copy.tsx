@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { AnimatePresence, motion } from 'motion/react';
-import { CheckIcon, CopyIcon } from 'lucide-react';
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { AnimatePresence, motion } from "motion/react";
+import { CheckIcon, CopyIcon } from "lucide-react";
 
 import {
   Button as ButtonPrimitive,
   type ButtonProps as ButtonPrimitiveProps,
-} from '@anvilkit/ui/components/animate-ui/primitives/buttons/button';
-import { cn } from '@anvilkit/ui/lib/utils';
-import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state';
+} from "@anvilkit/ui/components/animate-ui/primitives/buttons/button";
+import { cn } from "@anvilkit/ui/lib/utils";
+import { useControlledState } from "@anvilkit/ui/hooks/use-controlled-state";
 
 const buttonVariants = cva(
   "flex items-center justify-center rounded-md transition-[box-shadow,_color,_background-color,_border-color,_outline-color,_text-decoration-color,_fill,_stroke] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -44,7 +44,7 @@ const buttonVariants = cva(
   },
 );
 
-type CopyButtonProps = Omit<ButtonPrimitiveProps, 'children'> &
+type CopyButtonProps = Omit<ButtonPrimitiveProps, "children"> &
   VariantProps<typeof buttonVariants> & {
     content: string;
     copied?: boolean;
@@ -84,7 +84,7 @@ function CopyButton({
             }, delay);
           })
           .catch((error) => {
-            console.error('Error copying command', error);
+            console.error("Error copying command", error);
           });
       }
     },
@@ -102,11 +102,11 @@ function CopyButton({
     >
       <AnimatePresence mode="popLayout">
         <motion.span
-          key={isCopied ? 'check' : 'copy'}
+          key={isCopied ? "check" : "copy"}
           data-slot="copy-button-icon"
-          initial={{ scale: 0, opacity: 0.4, filter: 'blur(4px)' }}
-          animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-          exit={{ scale: 0, opacity: 0.4, filter: 'blur(4px)' }}
+          initial={{ scale: 0, opacity: 0.4, filter: "blur(4px)" }}
+          animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+          exit={{ scale: 0, opacity: 0.4, filter: "blur(4px)" }}
           transition={{ duration: 0.25 }}
         >
           <Icon />

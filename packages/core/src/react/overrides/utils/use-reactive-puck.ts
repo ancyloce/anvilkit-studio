@@ -38,8 +38,8 @@ let _useReactivePuck: ReactivePuckHook | null = null;
  * reference) to avoid re-rendering on unrelated state changes.
  */
 export function useReactivePuck<T>(selector: (snapshot: PuckSnapshot) => T): T {
-	if (_useReactivePuck === null) {
-		_useReactivePuck = createUsePuck();
-	}
-	return _useReactivePuck(selector);
+  if (_useReactivePuck === null) {
+    _useReactivePuck = createUsePuck();
+  }
+  return _useReactivePuck(selector);
 }

@@ -15,35 +15,35 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
 
 export interface ImageUploadButtonProps {
-	readonly onClick: () => void;
-	readonly disabled?: boolean;
+  readonly onClick: () => void;
+  readonly disabled?: boolean;
 }
 
 export function ImageUploadButton({
-	onClick,
-	disabled,
+  onClick,
+  disabled,
 }: ImageUploadButtonProps): ReactNode {
-	const msg = useMsg();
-	const label = msg("studio.module.image.upload");
-	return (
-		<Tooltip>
-			<TooltipTrigger
-				render={
-					<span className="inline-flex">
-						<Button
-							size="icon-sm"
-							variant="ghost"
-							onClick={onClick}
-							disabled={disabled === true}
-							aria-label={label}
-							data-testid="ak-image-upload"
-						>
-							<Upload aria-hidden="true" />
-						</Button>
-					</span>
-				}
-			/>
-			<TooltipContent side="bottom">{label}</TooltipContent>
-		</Tooltip>
-	);
+  const msg = useMsg();
+  const label = msg("studio.module.image.upload");
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <span className="inline-flex">
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              onClick={onClick}
+              disabled={disabled === true}
+              aria-label={label}
+              data-testid="ak-image-upload"
+            >
+              <Upload aria-hidden="true" />
+            </Button>
+          </span>
+        }
+      />
+      <TooltipContent side="bottom">{label}</TooltipContent>
+    </Tooltip>
+  );
 }

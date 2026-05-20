@@ -24,44 +24,44 @@ import { InsertModule } from "./sidebar/modules/InsertModule";
 import { LayerModule } from "./sidebar/modules/LayerModule";
 import { TextModule } from "./sidebar/modules/TextModule";
 import {
-	SidebarHeaderActionsProvider,
-	useSidebarHeaderActions,
+  SidebarHeaderActionsProvider,
+  useSidebarHeaderActions,
 } from "./sidebar/SidebarHeaderActionsContext";
 import { SidebarPanel } from "./sidebar/SidebarPanel";
 import {
-	railTabId,
-	SidebarRail,
-	type SidebarRailHandle,
+  railTabId,
+  SidebarRail,
+  type SidebarRailHandle,
 } from "./sidebar/SidebarRail";
 
 const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
-	insert: "studio.module.insert.name",
-	layer: "studio.module.layer.name",
-	image: "studio.module.image.name",
-	text: "studio.module.text.name",
-	copilot: "studio.module.copilot.name",
-	history: "studio.module.history.name",
+  insert: "studio.module.insert.name",
+  layer: "studio.module.layer.name",
+  image: "studio.module.image.name",
+  text: "studio.module.text.name",
+  copilot: "studio.module.copilot.name",
+  history: "studio.module.history.name",
 };
 
 function renderModuleBody(tab: EditorTab): ReactNode {
-	switch (tab) {
-		case "insert":
-			return <InsertModule />;
-		case "layer":
-			return <LayerModule />;
-		case "image":
-			return <ImageModule />;
-		case "text":
-			return <TextModule />;
-		case "copilot":
-			return <CopilotModule />;
-		case "history":
-			return <HistoryModule />;
-	}
+  switch (tab) {
+    case "insert":
+      return <InsertModule />;
+    case "layer":
+      return <LayerModule />;
+    case "image":
+      return <ImageModule />;
+    case "text":
+      return <TextModule />;
+    case "copilot":
+      return <CopilotModule />;
+    case "history":
+      return <HistoryModule />;
+  }
 }
 
 interface StudioSidebarPanelHostProps {
-	readonly railRef: RefObject<SidebarRailHandle | null>;
+  readonly railRef: RefObject<SidebarRailHandle | null>;
 }
 
 /**
@@ -72,69 +72,69 @@ interface StudioSidebarPanelHostProps {
  * `×` close lives.
  */
 function StudioSidebarPanelHost({
-	railRef,
+  railRef,
 }: StudioSidebarPanelHostProps): ReactNode {
-	const msg = useMsg();
-	const [activeTab] = useActiveTab();
-	const drawerCollapsed = useEditorUiStore((s) => s.drawerCollapsed);
-	const setDrawerCollapsed = useEditorUiStore((s) => s.setDrawerCollapsed);
-	const actions = useSidebarHeaderActions();
+  const msg = useMsg();
+  const [activeTab] = useActiveTab();
+  const drawerCollapsed = useEditorUiStore((s) => s.drawerCollapsed);
+  const setDrawerCollapsed = useEditorUiStore((s) => s.setDrawerCollapsed);
+  const actions = useSidebarHeaderActions();
 
-	const handleClose = useCallback(() => {
-		setDrawerCollapsed(true);
-	}, [setDrawerCollapsed]);
+  const handleClose = useCallback(() => {
+    setDrawerCollapsed(true);
+  }, [setDrawerCollapsed]);
 
-	const handleEscape = useCallback(() => {
-		setDrawerCollapsed(true);
-		// Defer focus restoration until after the panel unmounts.
-		queueMicrotask(() => {
-			railRef.current?.focusActive();
-		});
-	}, [railRef, setDrawerCollapsed]);
+  const handleEscape = useCallback(() => {
+    setDrawerCollapsed(true);
+    // Defer focus restoration until after the panel unmounts.
+    queueMicrotask(() => {
+      railRef.current?.focusActive();
+    });
+  }, [railRef, setDrawerCollapsed]);
 
-	if (drawerCollapsed) return null;
+  if (drawerCollapsed) return null;
 
-	return (
-		<SidebarPanel
-			title={msg(MODULE_TITLE_KEYS[activeTab])}
-			activeTabId={railTabId(activeTab)}
-			actions={actions}
-			hideHeader={activeTab === "layer"}
-			onClose={handleClose}
-			onEscape={handleEscape}
-		>
-			{renderModuleBody(activeTab)}
-		</SidebarPanel>
-	);
+  return (
+    <SidebarPanel
+      title={msg(MODULE_TITLE_KEYS[activeTab])}
+      activeTabId={railTabId(activeTab)}
+      actions={actions}
+      hideHeader={activeTab === "layer"}
+      onClose={handleClose}
+      onEscape={handleEscape}
+    >
+      {renderModuleBody(activeTab)}
+    </SidebarPanel>
+  );
 }
 
 interface StudioSidebarSlotProps {
-	readonly railRef: RefObject<SidebarRailHandle | null>;
+  readonly railRef: RefObject<SidebarRailHandle | null>;
 }
 
 export function StudioSidebarRail({
-	railRef,
+  railRef,
 }: StudioSidebarSlotProps): ReactNode {
-	return <SidebarRail ref={railRef} />;
+  return <SidebarRail ref={railRef} />;
 }
 
 export function StudioSidebarPanel({
-	railRef,
+  railRef,
 }: StudioSidebarSlotProps): ReactNode {
-	return (
-		<SidebarHeaderActionsProvider>
-			<StudioSidebarPanelHost railRef={railRef} />
-		</SidebarHeaderActionsProvider>
-	);
+  return (
+    <SidebarHeaderActionsProvider>
+      <StudioSidebarPanelHost railRef={railRef} />
+    </SidebarHeaderActionsProvider>
+  );
 }
 
 export function StudioSidebar(): ReactNode {
-	const railRef = useRef<SidebarRailHandle | null>(null);
+  const railRef = useRef<SidebarRailHandle | null>(null);
 
-	return (
-		<aside className="flex h-full shrink-0 flex-row">
-			<StudioSidebarRail railRef={railRef} />
-			<StudioSidebarPanel railRef={railRef} />
-		</aside>
-	);
+  return (
+    <aside className="flex h-full shrink-0 flex-row">
+      <StudioSidebarRail railRef={railRef} />
+      <StudioSidebarPanel railRef={railRef} />
+    </aside>
+  );
 }

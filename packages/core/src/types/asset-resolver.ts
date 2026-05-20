@@ -4,10 +4,10 @@
  */
 
 export interface AssetResolution {
-	readonly url: string;
-	readonly meta?: Readonly<Record<string, unknown>>;
+  readonly url: string;
+  readonly meta?: Readonly<Record<string, unknown>>;
 }
 
 export type IRAssetResolver = (
-	url: string,
+  url: string,
 ) => Promise<AssetResolution | null> | AssetResolution | null;

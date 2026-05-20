@@ -18,8 +18,8 @@ import { useReactivePuck } from "./use-reactive-puck";
  * `"root"` for the page root) and `label` is what the UI renders.
  */
 export interface BreadcrumbEntry {
-	readonly id: string;
-	readonly label: string;
+  readonly id: string;
+  readonly label: string;
 }
 
 /**
@@ -31,35 +31,35 @@ export interface BreadcrumbEntry {
  * a placeholder or skip the breadcrumbs row entirely.
  */
 export function useBreadcrumbs(): readonly BreadcrumbEntry[] {
-	// Reactive: breadcrumbs must refresh when the selection or page
-	// data changes. Each selector projects a stable Puck reference, so
-	// the memo only recomputes when one of them actually changes.
-	const selector = useReactivePuck((s) => s.appState.ui.itemSelector);
-	const data = useReactivePuck((s) => s.appState.data);
-	return useMemo(() => {
-		if (selector === null) {
-			return [];
-		}
-		const chain: BreadcrumbEntry[] = [{ id: "root", label: "Root" }];
+  // Reactive: breadcrumbs must refresh when the selection or page
+  // data changes. Each selector projects a stable Puck reference, so
+  // the memo only recomputes when one of them actually changes.
+  const selector = useReactivePuck((s) => s.appState.ui.itemSelector);
+  const data = useReactivePuck((s) => s.appState.data);
+  return useMemo(() => {
+    if (selector === null) {
+      return [];
+    }
+    const chain: BreadcrumbEntry[] = [{ id: "root", label: "Root" }];
 
-		const zone =
-			selector.zone === undefined || selector.zone === "default-zone"
-				? data.content
-				: data.zones?.[selector.zone];
-		if (zone === undefined) {
-			return chain;
-		}
+    const zone =
+      selector.zone === undefined || selector.zone === "default-zone"
+        ? data.content
+        : data.zones?.[selector.zone];
+    if (zone === undefined) {
+      return chain;
+    }
 
-		const item = zone[selector.index];
-		if (item === undefined) {
-			return chain;
-		}
-		chain.push({
-			id: String(
-				item.props?.id ?? `${selector.zone ?? "root"}:${selector.index}`,
-			),
-			label: item.type,
-		});
-		return chain;
-	}, [selector, data]);
+    const item = zone[selector.index];
+    if (item === undefined) {
+      return chain;
+    }
+    chain.push({
+      id: String(
+        item.props?.id ?? `${selector.zone ?? "root"}:${selector.index}`,
+      ),
+      label: item.type,
+    });
+    return chain;
+  }, [selector, data]);
 }

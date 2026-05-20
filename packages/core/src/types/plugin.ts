@@ -42,11 +42,11 @@
 
 import type { ComponentType, ReactNode } from "react";
 import type {
-	PuckApi,
-	Config as PuckConfig,
-	Data as PuckData,
-	Plugin as PuckPlugin,
-	Overrides as PuckOverrides,
+  PuckApi,
+  Config as PuckConfig,
+  Data as PuckData,
+  Plugin as PuckPlugin,
+  Overrides as PuckOverrides,
 } from "@puckeditor/core";
 
 import type { StudioConfig } from "./config.js";
@@ -70,60 +70,60 @@ export type StudioLogLevel = "debug" | "info" | "warn" | "error";
  * `compilePlugins()` time.
  */
 export interface StudioPluginMeta {
-	/**
-	 * Stable, globally-unique plugin identifier.
-	 *
-	 * Convention: reverse-dns or namespaced slug, e.g.
-	 * `"@anvilkit/plugin-export-html"` or `"com.example.ai-copilot"`.
-	 * The runtime rejects duplicate ids during `compilePlugins()`.
-	 */
-	readonly id: string;
+  /**
+   * Stable, globally-unique plugin identifier.
+   *
+   * Convention: reverse-dns or namespaced slug, e.g.
+   * `"@anvilkit/plugin-export-html"` or `"com.example.ai-copilot"`.
+   * The runtime rejects duplicate ids during `compilePlugins()`.
+   */
+  readonly id: string;
 
-	/**
-	 * Human-readable display name for the plugin.
-	 *
-	 * Surfaced in logs, error messages, and (optionally) in the Studio
-	 * UI's plugin list.
-	 */
-	readonly name: string;
+  /**
+   * Human-readable display name for the plugin.
+   *
+   * Surfaced in logs, error messages, and (optionally) in the Studio
+   * UI's plugin list.
+   */
+  readonly name: string;
 
-	/**
-	 * The plugin's own semver version (e.g. `"1.2.3"`).
-	 *
-	 * Distinct from {@link coreVersion}. Used for diagnostics only —
-	 * the runtime does not gate behavior on this field.
-	 */
-	readonly version: string;
+  /**
+   * The plugin's own semver version (e.g. `"1.2.3"`).
+   *
+   * Distinct from {@link coreVersion}. Used for diagnostics only —
+   * the runtime does not gate behavior on this field.
+   */
+  readonly version: string;
 
-	/**
-	 * Semver range of `@anvilkit/core` this plugin targets
-	 * (e.g. `"^0.1.0"`).
-	 *
-	 * `compilePlugins()` validates this against the installed Core
-	 * version. A mismatch throws `StudioPluginError` at compile time
-	 * so host apps fail loud rather than rendering with a misaligned
-	 * plugin.
-	 */
-	readonly coreVersion: string;
+  /**
+   * Semver range of `@anvilkit/core` this plugin targets
+   * (e.g. `"^0.1.0"`).
+   *
+   * `compilePlugins()` validates this against the installed Core
+   * version. A mismatch throws `StudioPluginError` at compile time
+   * so host apps fail loud rather than rendering with a misaligned
+   * plugin.
+   */
+  readonly coreVersion: string;
 
-	/**
-	 * Optional one-line description of what the plugin does.
-	 */
-	readonly description?: string;
+  /**
+   * Optional one-line description of what the plugin does.
+   */
+  readonly description?: string;
 }
 
 export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
 
 import type { IRAssetResolver } from "./asset-resolver.js";
 import type {
-	StudioAssetAction,
-	StudioAssetSource,
-	StudioCopilotPanel,
-	StudioCopySnippetPack,
-	StudioHistoryPanel,
-	StudioInsertSection,
-	StudioLayerQuickAdd,
-	StudioSidebarUnregister,
+  StudioAssetAction,
+  StudioAssetSource,
+  StudioCopilotPanel,
+  StudioCopySnippetPack,
+  StudioHistoryPanel,
+  StudioInsertSection,
+  StudioLayerQuickAdd,
+  StudioSidebarUnregister,
 } from "./sidebar.js";
 
 /**
@@ -154,190 +154,190 @@ import type {
  * receive fully-typed component data. Defaults to the Puck default.
  */
 export interface StudioPluginContext<
-	UserConfig extends PuckConfig = PuckConfig,
+  UserConfig extends PuckConfig = PuckConfig,
 > {
-	/**
-	 * Return a snapshot of the current Puck page data.
-	 *
-	 * Calling this does not subscribe the plugin to future changes —
-	 * use the {@link StudioPluginLifecycleHooks.onDataChange} hook to
-	 * react to data updates.
-	 */
-	readonly getData: () => PuckData;
+  /**
+   * Return a snapshot of the current Puck page data.
+   *
+   * Calling this does not subscribe the plugin to future changes —
+   * use the {@link StudioPluginLifecycleHooks.onDataChange} hook to
+   * react to data updates.
+   */
+  readonly getData: () => PuckData;
 
-	/**
-	 * Return the live Puck API for dispatching actions.
-	 *
-	 * Use `getPuckApi().dispatch({ type: "setData", data })` to mutate
-	 * page data. Other dispatch actions (`move`, `insert`, `remove`,
-	 * `replace`, …) are also available — see the `@puckeditor/core`
-	 * `PuckAction` union for the full list.
-	 */
-	readonly getPuckApi: () => PuckApi<UserConfig>;
+  /**
+   * Return the live Puck API for dispatching actions.
+   *
+   * Use `getPuckApi().dispatch({ type: "setData", data })` to mutate
+   * page data. Other dispatch actions (`move`, `insert`, `remove`,
+   * `replace`, …) are also available — see the `@puckeditor/core`
+   * `PuckAction` union for the full list.
+   */
+  readonly getPuckApi: () => PuckApi<UserConfig>;
 
-	/**
-	 * The frozen, merged Studio configuration for the current session.
-	 *
-	 * Produced by `createStudioConfig()` (`core-011`) after layering
-	 * defaults, environment variables, and host overrides. Plugins must
-	 * treat this as deeply read-only — mutating it has no effect on
-	 * the runtime and may throw in strict mode.
-	 */
-	readonly studioConfig: StudioConfig;
+  /**
+   * The frozen, merged Studio configuration for the current session.
+   *
+   * Produced by `createStudioConfig()` (`core-011`) after layering
+   * defaults, environment variables, and host overrides. Plugins must
+   * treat this as deeply read-only — mutating it has no effect on
+   * the runtime and may throw in strict mode.
+   */
+  readonly studioConfig: StudioConfig;
 
-	/**
-	 * Emit a structured log record at the given severity level.
-	 *
-	 * @param level - Severity; see {@link StudioLogLevel}.
-	 * @param message - Human-readable summary.
-	 * @param meta - Optional structured context (forwarded verbatim to
-	 * the sink).
-	 */
-	readonly log: (
-		level: StudioLogLevel,
-		message: string,
-		meta?: Readonly<Record<string, unknown>>,
-	) => void;
+  /**
+   * Emit a structured log record at the given severity level.
+   *
+   * @param level - Severity; see {@link StudioLogLevel}.
+   * @param message - Human-readable summary.
+   * @param meta - Optional structured context (forwarded verbatim to
+   * the sink).
+   */
+  readonly log: (
+    level: StudioLogLevel,
+    message: string,
+    meta?: Readonly<Record<string, unknown>>,
+  ) => void;
 
-	/**
-	 * Broadcast an event to the Studio plugin event bus.
-	 *
-	 * Event names are free-form strings — Core does not enforce a
-	 * schema. Subscribers validate payloads themselves.
-	 *
-	 * @reserved **Not implemented yet (architecture §12).** The
-	 * plugin-to-plugin bus has no delivery: calling `emit` is inert,
-	 * never throws, and no subscriber receives the event. The
-	 * `<Studio>` shell logs a warning on the first call per plugin
-	 * context (every environment — rate-limited to once) so the inert
-	 * contract is discoverable without reading the implementation. Do
-	 * not rely on delivery until a concrete subscribe API and ordering
-	 * semantics are documented here. The signature is stable; only the
-	 * runtime behavior changes when the bus ships.
-	 *
-	 * @param event - Event name (plugin-defined).
-	 * @param payload - Optional payload. Defaults to `undefined`.
-	 */
-	readonly emit: (event: string, payload?: unknown) => void;
+  /**
+   * Broadcast an event to the Studio plugin event bus.
+   *
+   * Event names are free-form strings — Core does not enforce a
+   * schema. Subscribers validate payloads themselves.
+   *
+   * @reserved **Not implemented yet (architecture §12).** The
+   * plugin-to-plugin bus has no delivery: calling `emit` is inert,
+   * never throws, and no subscriber receives the event. The
+   * `<Studio>` shell logs a warning on the first call per plugin
+   * context (every environment — rate-limited to once) so the inert
+   * contract is discoverable without reading the implementation. Do
+   * not rely on delivery until a concrete subscribe API and ordering
+   * semantics are documented here. The signature is stable; only the
+   * runtime behavior changes when the bus ships.
+   *
+   * @param event - Event name (plugin-defined).
+   * @param payload - Optional payload. Defaults to `undefined`.
+   */
+  readonly emit: (event: string, payload?: unknown) => void;
 
-	/**
-	 * Register a runtime asset resolver for export-time URL rewrites.
-	 *
-	 * Resolvers are consulted by export formats that opt into the
-	 * asset-resolution pipeline. A resolver should return `null` for
-	 * URLs it does not own, and a rewritten URL when it does.
-	 */
-	readonly registerAssetResolver: (resolver: IRAssetResolver) => void;
+  /**
+   * Register a runtime asset resolver for export-time URL rewrites.
+   *
+   * Resolvers are consulted by export formats that opt into the
+   * asset-resolution pipeline. A resolver should return `null` for
+   * URLs it does not own, and a rewritten URL when it does.
+   */
+  readonly registerAssetResolver: (resolver: IRAssetResolver) => void;
 
-	/**
-	 * Return the asset resolvers registered for the current compiled
-	 * runtime, in registration order.
-	 *
-	 * Core supplies this on the context passed to `register()` so plugins
-	 * can close over the resolver list for later header-action exports.
-	 * Hand-written test contexts may omit it; export formats should treat
-	 * absence as an empty resolver list.
-	 */
-	readonly getAssetResolvers?: () => readonly IRAssetResolver[];
+  /**
+   * Return the asset resolvers registered for the current compiled
+   * runtime, in registration order.
+   *
+   * Core supplies this on the context passed to `register()` so plugins
+   * can close over the resolver list for later header-action exports.
+   * Hand-written test contexts may omit it; export formats should treat
+   * absence as an empty resolver list.
+   */
+  readonly getAssetResolvers?: () => readonly IRAssetResolver[];
 
-	/**
-	 * Register a custom section in the sidebar's `insert` module.
-	 *
-	 * Default sections (`recommended`, `navigation`, `top`, `team`)
-	 * are seeded by `@anvilkit/core` from each component's metadata
-	 * category. Plugins use this surface to add curated groupings
-	 * (e.g. brand-template sections, AI-generated picks).
-	 *
-	 * Returns an `unregister()` handle the plugin's `onDestroy` hook
-	 * should call to clean up — a remount with a different plugin set
-	 * never carries over stale registrations.
-	 *
-	 * Optional because hand-written test contexts may omit it; the
-	 * runtime always provides it on the live `<Studio>` ctx.
-	 */
-	readonly registerInsertSection?: (
-		section: StudioInsertSection,
-	) => StudioSidebarUnregister;
+  /**
+   * Register a custom section in the sidebar's `insert` module.
+   *
+   * Default sections (`recommended`, `navigation`, `top`, `team`)
+   * are seeded by `@anvilkit/core` from each component's metadata
+   * category. Plugins use this surface to add curated groupings
+   * (e.g. brand-template sections, AI-generated picks).
+   *
+   * Returns an `unregister()` handle the plugin's `onDestroy` hook
+   * should call to clean up — a remount with a different plugin set
+   * never carries over stale registrations.
+   *
+   * Optional because hand-written test contexts may omit it; the
+   * runtime always provides it on the live `<Studio>` ctx.
+   */
+  readonly registerInsertSection?: (
+    section: StudioInsertSection,
+  ) => StudioSidebarUnregister;
 
-	/**
-	 * Register a primitive in the sidebar's `layer` module quick-add
-	 * popover. Built-ins (Layout / Row / Column / Text) come from
-	 * `@anvilkit/core`; plugins use this surface to add custom
-	 * primitives (e.g. branded heroes, marketing rows).
-	 *
-	 * Returns an `unregister()` handle.
-	 */
-	readonly registerLayerQuickAdd?: (
-		item: StudioLayerQuickAdd,
-	) => StudioSidebarUnregister;
+  /**
+   * Register a primitive in the sidebar's `layer` module quick-add
+   * popover. Built-ins (Layout / Row / Column / Text) come from
+   * `@anvilkit/core`; plugins use this surface to add custom
+   * primitives (e.g. branded heroes, marketing rows).
+   *
+   * Returns an `unregister()` handle.
+   */
+  readonly registerLayerQuickAdd?: (
+    item: StudioLayerQuickAdd,
+  ) => StudioSidebarUnregister;
 
-	/**
-	 * Register the `StudioAssetSource` backing the sidebar's `image`
-	 * module. v1 supports a single source — last-write-wins; the
-	 * sidebar shows `studio.module.image.pluginMissing` until a
-	 * source is registered.
-	 *
-	 * Returns an `unregister()` handle that clears the source iff it
-	 * still matches the one captured in its closure (so a chain of
-	 * register / re-register / unregister calls behaves predictably).
-	 */
-	readonly registerAssetSource?: (
-		source: StudioAssetSource,
-	) => StudioSidebarUnregister;
+  /**
+   * Register the `StudioAssetSource` backing the sidebar's `image`
+   * module. v1 supports a single source — last-write-wins; the
+   * sidebar shows `studio.module.image.pluginMissing` until a
+   * source is registered.
+   *
+   * Returns an `unregister()` handle that clears the source iff it
+   * still matches the one captured in its closure (so a chain of
+   * register / re-register / unregister calls behaves predictably).
+   */
+  readonly registerAssetSource?: (
+    source: StudioAssetSource,
+  ) => StudioSidebarUnregister;
 
-	/**
-	 * Register a plugin-contributed entry in the per-asset overflow
-	 * `…` menu. Built-ins (Rename / Replace / Copy URL / Delete) come
-	 * from the asset source itself.
-	 *
-	 * Returns an `unregister()` handle.
-	 */
-	readonly registerAssetAction?: (
-		action: StudioAssetAction,
-	) => StudioSidebarUnregister;
+  /**
+   * Register a plugin-contributed entry in the per-asset overflow
+   * `…` menu. Built-ins (Rename / Replace / Copy URL / Delete) come
+   * from the asset source itself.
+   *
+   * Returns an `unregister()` handle.
+   */
+  readonly registerAssetAction?: (
+    action: StudioAssetAction,
+  ) => StudioSidebarUnregister;
 
-	/**
-	 * Register a snippet pack consumed by the sidebar's `text` module.
-	 * Multiple packs may be registered; the module merges them in
-	 * registration order.
-	 *
-	 * Returns an `unregister()` handle.
-	 */
-	readonly registerCopySnippetPack?: (
-		pack: StudioCopySnippetPack,
-	) => StudioSidebarUnregister;
+  /**
+   * Register a snippet pack consumed by the sidebar's `text` module.
+   * Multiple packs may be registered; the module merges them in
+   * registration order.
+   *
+   * Returns an `unregister()` handle.
+   */
+  readonly registerCopySnippetPack?: (
+    pack: StudioCopySnippetPack,
+  ) => StudioSidebarUnregister;
 
-	/**
-	 * Register the panel body backing the sidebar's `copilot` module.
-	 * v1 supports a single panel — last-write-wins; the sidebar shows
-	 * `studio.module.copilot.empty` until a panel is registered.
-	 *
-	 * Core stays agnostic about any specific AI plugin; the panel is a
-	 * plain `render()` thunk so integration packages (or hosts) can own
-	 * the React state, plugin reference, and dispatch wiring.
-	 *
-	 * Returns an `unregister()` handle that clears the panel iff it
-	 * still matches the one captured in its closure.
-	 */
-	readonly registerCopilotPanel?: (
-		panel: StudioCopilotPanel,
-	) => StudioSidebarUnregister;
+  /**
+   * Register the panel body backing the sidebar's `copilot` module.
+   * v1 supports a single panel — last-write-wins; the sidebar shows
+   * `studio.module.copilot.empty` until a panel is registered.
+   *
+   * Core stays agnostic about any specific AI plugin; the panel is a
+   * plain `render()` thunk so integration packages (or hosts) can own
+   * the React state, plugin reference, and dispatch wiring.
+   *
+   * Returns an `unregister()` handle that clears the panel iff it
+   * still matches the one captured in its closure.
+   */
+  readonly registerCopilotPanel?: (
+    panel: StudioCopilotPanel,
+  ) => StudioSidebarUnregister;
 
-	/**
-	 * Register the panel body backing the sidebar's `history` module.
-	 * v1 supports a single panel — last-write-wins; the sidebar shows
-	 * `studio.module.history.empty` until a panel is registered.
-	 *
-	 * Core stays agnostic about any specific snapshot store; the panel
-	 * is a plain `render()` thunk so integration packages (or hosts)
-	 * can own the React state, adapter reference, and restore dispatch.
-	 *
-	 * Returns an `unregister()` handle that clears the panel iff it
-	 * still matches the one captured in its closure.
-	 */
-	readonly registerHistoryPanel?: (
-		panel: StudioHistoryPanel,
-	) => StudioSidebarUnregister;
+  /**
+   * Register the panel body backing the sidebar's `history` module.
+   * v1 supports a single panel — last-write-wins; the sidebar shows
+   * `studio.module.history.empty` until a panel is registered.
+   *
+   * Core stays agnostic about any specific snapshot store; the panel
+   * is a plain `render()` thunk so integration packages (or hosts)
+   * can own the React state, adapter reference, and restore dispatch.
+   *
+   * Returns an `unregister()` handle that clears the panel iff it
+   * still matches the one captured in its closure.
+   */
+  readonly registerHistoryPanel?: (
+    panel: StudioHistoryPanel,
+  ) => StudioSidebarUnregister;
 }
 
 /**
@@ -356,11 +356,11 @@ export interface StudioPluginContext<
  */
 type _AssertTrue<_T extends true> = never;
 type _StoreHandleKeys = Extract<
-	keyof StudioPluginContext,
-	`${string}Store` | `${string}store`
+  keyof StudioPluginContext,
+  `${string}Store` | `${string}store`
 >;
 type _AssertNoStoreHandleOnContext = _AssertTrue<
-	[_StoreHandleKeys] extends [never] ? true : false
+  [_StoreHandleKeys] extends [never] ? true : false
 >;
 
 /**
@@ -386,100 +386,100 @@ type _AssertNoStoreHandleOnContext = _AssertTrue<
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md | core-009}
  */
 export interface StudioHeaderAction {
-	/**
-	 * Stable, globally-unique identifier for the action
-	 * (e.g. `"export-html"`, `"publish"`). `composeHeaderActions()`
-	 * rejects duplicate ids across all contributing plugins.
-	 *
-	 * Convention: lowercase, hyphen-separated, no namespace prefix —
-	 * the runtime treats ids as opaque strings.
-	 */
-	readonly id: string;
+  /**
+   * Stable, globally-unique identifier for the action
+   * (e.g. `"export-html"`, `"publish"`). `composeHeaderActions()`
+   * rejects duplicate ids across all contributing plugins.
+   *
+   * Convention: lowercase, hyphen-separated, no namespace prefix —
+   * the runtime treats ids as opaque strings.
+   */
+  readonly id: string;
 
-	/**
-	 * Human-readable label rendered inside the button (or shown in
-	 * the overflow menu) by the Studio shell.
-	 *
-	 * Required so plugin authors cannot ship a button with no visible
-	 * affordance. Localization is the host app's responsibility — the
-	 * runtime treats this as an opaque display string.
-	 */
-	readonly label: string;
+  /**
+   * Human-readable label rendered inside the button (or shown in
+   * the overflow menu) by the Studio shell.
+   *
+   * Required so plugin authors cannot ship a button with no visible
+   * affordance. Localization is the host app's responsibility — the
+   * runtime treats this as an opaque display string.
+   */
+  readonly label: string;
 
-	/**
-	 * Optional `lucide-react` icon **name** (e.g. `"download"`,
-	 * `"sparkles"`). Resolved to a real icon component at render time
-	 * by the Studio shell.
-	 *
-	 * **Why a string and not a `ComponentType`?** The `runtime/` layer
-	 * cannot import React, and plugin-contributed action arrays must
-	 * stay serializable enough that lifecycle tests can compare them
-	 * with `toEqual`. The string-name indirection lets the renderer
-	 * own React while the protocol stays headless.
-	 *
-	 * **Resolvable set.** The shell resolves against a *curated*
-	 * registry (not all of `lucide-react`) so the chrome bundle
-	 * tree-shakes to only the icons it ships — a namespace import would
-	 * retain every Lucide icon. Name matching is case/separator
-	 * insensitive (`"download"`, `"Download"`, `"down-load"` all
-	 * resolve). A name outside the registry resolves to no icon (the
-	 * label still renders). To add an icon, extend `ICON_REGISTRY` in
-	 * `react/studio/layout/HeaderActionButton.tsx` (and the chrome-path
-	 * bundle-budget gate covers the size impact).
-	 */
-	readonly icon?: string;
+  /**
+   * Optional `lucide-react` icon **name** (e.g. `"download"`,
+   * `"sparkles"`). Resolved to a real icon component at render time
+   * by the Studio shell.
+   *
+   * **Why a string and not a `ComponentType`?** The `runtime/` layer
+   * cannot import React, and plugin-contributed action arrays must
+   * stay serializable enough that lifecycle tests can compare them
+   * with `toEqual`. The string-name indirection lets the renderer
+   * own React while the protocol stays headless.
+   *
+   * **Resolvable set.** The shell resolves against a *curated*
+   * registry (not all of `lucide-react`) so the chrome bundle
+   * tree-shakes to only the icons it ships — a namespace import would
+   * retain every Lucide icon. Name matching is case/separator
+   * insensitive (`"download"`, `"Download"`, `"down-load"` all
+   * resolve). A name outside the registry resolves to no icon (the
+   * label still renders). To add an icon, extend `ICON_REGISTRY` in
+   * `react/studio/layout/HeaderActionButton.tsx` (and the chrome-path
+   * bundle-budget gate covers the size impact).
+   */
+  readonly icon?: string;
 
-	/**
-	 * Display group the action belongs to. Used by
-	 * `composeHeaderActions()` as the primary sort key.
-	 *
-	 * - `"primary"` — high-emphasis call-to-action (e.g. "Publish").
-	 * - `"secondary"` — normal toolbar action (e.g. "Save Draft").
-	 *   **Default** when omitted — most actions belong here.
-	 * - `"overflow"` — collapsed into the "…" menu when space is
-	 *   tight (e.g. "Generate with AI", "Download HTML").
-	 */
-	readonly group?: "primary" | "secondary" | "overflow";
+  /**
+   * Display group the action belongs to. Used by
+   * `composeHeaderActions()` as the primary sort key.
+   *
+   * - `"primary"` — high-emphasis call-to-action (e.g. "Publish").
+   * - `"secondary"` — normal toolbar action (e.g. "Save Draft").
+   *   **Default** when omitted — most actions belong here.
+   * - `"overflow"` — collapsed into the "…" menu when space is
+   *   tight (e.g. "Generate with AI", "Download HTML").
+   */
+  readonly group?: "primary" | "secondary" | "overflow";
 
-	/**
-	 * Per-group ordering hint. Lower values render first; the default
-	 * is `100` so plugin authors can interleave their actions with
-	 * built-ins (which conventionally use round numbers like `0`,
-	 * `100`, `200`).
-	 *
-	 * Within a group, actions are sorted ascending by `order`. Ties
-	 * break on {@link id} for determinism.
-	 */
-	readonly order?: number;
+  /**
+   * Per-group ordering hint. Lower values render first; the default
+   * is `100` so plugin authors can interleave their actions with
+   * built-ins (which conventionally use round numbers like `0`,
+   * `100`, `200`).
+   *
+   * Within a group, actions are sorted ascending by `order`. Ties
+   * break on {@link id} for determinism.
+   */
+  readonly order?: number;
 
-	/**
-	 * Click handler invoked by the Studio shell when the user
-	 * activates the action. Receives the same
-	 * {@link StudioPluginContext} the lifecycle hooks receive, so
-	 * the action can read live page data, call
-	 * `getPuckApi().dispatch()`, log diagnostics, or `emit` events
-	 * to other plugins.
-	 *
-	 * The runtime awaits the returned promise (if any) before
-	 * re-enabling the button — host apps are free to render a
-	 * loading affordance during the wait.
-	 *
-	 * Errors thrown from `onClick` are caught by the shell and routed
-	 * through `ctx.log("error", …)`; they do not crash the editor.
-	 */
-	readonly onClick: (ctx: StudioPluginContext) => void | Promise<void>;
+  /**
+   * Click handler invoked by the Studio shell when the user
+   * activates the action. Receives the same
+   * {@link StudioPluginContext} the lifecycle hooks receive, so
+   * the action can read live page data, call
+   * `getPuckApi().dispatch()`, log diagnostics, or `emit` events
+   * to other plugins.
+   *
+   * The runtime awaits the returned promise (if any) before
+   * re-enabling the button — host apps are free to render a
+   * loading affordance during the wait.
+   *
+   * Errors thrown from `onClick` are caught by the shell and routed
+   * through `ctx.log("error", …)`; they do not crash the editor.
+   */
+  readonly onClick: (ctx: StudioPluginContext) => void | Promise<void>;
 
-	/**
-	 * Optional predicate that disables the action based on live
-	 * context. Called on every render of the header (cheap by
-	 * convention — do not perform async work or expensive
-	 * computation here).
-	 *
-	 * Receives the same {@link StudioPluginContext} as `onClick`.
-	 * Return `true` to disable the button, `false` (or omit) to
-	 * enable it.
-	 */
-	readonly disabled?: (ctx: StudioPluginContext) => boolean;
+  /**
+   * Optional predicate that disables the action based on live
+   * context. Called on every render of the header (cheap by
+   * convention — do not perform async work or expensive
+   * computation here).
+   *
+   * Receives the same {@link StudioPluginContext} as `onClick`.
+   * Return `true` to disable the button, `false` (or omit) to
+   * enable it.
+   */
+  readonly disabled?: (ctx: StudioPluginContext) => boolean;
 }
 
 /**
@@ -505,24 +505,24 @@ export interface StudioHeaderAction {
  * component fresh on each render pass.
  */
 export interface StudioPluginProvider {
-	/**
-	 * Stable, globally-unique provider identifier
-	 * (e.g. `"collab-ui"`, `"feature-flags"`). Used for diagnostics and
-	 * for the "first registration wins" rule on duplicate ids.
-	 */
-	readonly id: string;
+  /**
+   * Stable, globally-unique provider identifier
+   * (e.g. `"collab-ui"`, `"feature-flags"`). Used for diagnostics and
+   * for the "first registration wins" rule on duplicate ids.
+   */
+  readonly id: string;
 
-	/**
-	 * The provider component. Must render its `children` somewhere in
-	 * its tree (otherwise the entire Studio shell becomes empty).
-	 */
-	readonly component: ComponentType<{ children: ReactNode }>;
+  /**
+   * The provider component. Must render its `children` somewhere in
+   * its tree (otherwise the entire Studio shell becomes empty).
+   */
+  readonly component: ComponentType<{ children: ReactNode }>;
 
-	/**
-	 * Optional sort key. Lower values render **outermost**. Default
-	 * `100`. Ties break on registration order for determinism.
-	 */
-	readonly order?: number;
+  /**
+   * Optional sort key. Lower values render **outermost**. Default
+   * `100`. Ties break on registration order for determinism.
+   */
+  readonly order?: number;
 }
 
 /**
@@ -554,28 +554,28 @@ export type StudioOverlayPlacement = "canvas" | "viewport" | "notifications";
  * conflict toasts, comment threads, AI hint bubbles.
  */
 export interface StudioPluginOverlay {
-	/**
-	 * Stable, globally-unique overlay identifier
-	 * (e.g. `"collab-presence"`, `"collab-conflicts"`).
-	 */
-	readonly id: string;
+  /**
+   * Stable, globally-unique overlay identifier
+   * (e.g. `"collab-presence"`, `"collab-conflicts"`).
+   */
+  readonly id: string;
 
-	/**
-	 * Where Studio should mount the overlay relative to the Puck editor.
-	 * See {@link StudioOverlayPlacement}.
-	 */
-	readonly placement: StudioOverlayPlacement;
+  /**
+   * Where Studio should mount the overlay relative to the Puck editor.
+   * See {@link StudioOverlayPlacement}.
+   */
+  readonly placement: StudioOverlayPlacement;
 
-	/**
-	 * The overlay component. Receives no props.
-	 */
-	readonly component: ComponentType;
+  /**
+   * The overlay component. Receives no props.
+   */
+  readonly component: ComponentType;
 
-	/**
-	 * Optional sort key within the same placement bucket. Lower values
-	 * render first. Default `100`. Ties break on registration order.
-	 */
-	readonly order?: number;
+  /**
+   * Optional sort key within the same placement bucket. Lower values
+   * render first. Default `100`. Ties break on registration order.
+   */
+  readonly order?: number;
 }
 
 /**
@@ -602,22 +602,22 @@ export type StudioSlotId = "collaborators" | (string & {});
  * prop wins.
  */
 export interface StudioPluginSlotContribution {
-	/**
-	 * Target slot id. See {@link StudioSlotId} for the enumerated
-	 * values; new slot ids may be introduced without a Core type bump.
-	 */
-	readonly id: StudioSlotId;
+  /**
+   * Target slot id. See {@link StudioSlotId} for the enumerated
+   * values; new slot ids may be introduced without a Core type bump.
+   */
+  readonly id: StudioSlotId;
 
-	/**
-	 * The component to mount in the slot. Receives no props.
-	 */
-	readonly component: ComponentType;
+  /**
+   * The component to mount in the slot. Receives no props.
+   */
+  readonly component: ComponentType;
 
-	/**
-	 * Optional sort key (currently unused because slots are single-
-	 * occupancy, but reserved for future multi-occupancy slots).
-	 */
-	readonly order?: number;
+  /**
+   * Optional sort key (currently unused because slots are single-
+   * occupancy, but reserved for future multi-occupancy slots).
+   */
+  readonly order?: number;
 }
 
 /**
@@ -649,67 +649,67 @@ export interface StudioPluginSlotContribution {
  * one on {@link StudioPluginContext} and defaults to Puck's default.
  */
 export interface StudioPluginLifecycleHooks<
-	UserConfig extends PuckConfig = PuckConfig,
+  UserConfig extends PuckConfig = PuckConfig,
 > {
-	/**
-	 * Fires exactly once, after `compilePlugins()` succeeds and before
-	 * `<Studio>` mounts the Puck editor. Use for one-time setup
-	 * (subscribing to external data, priming caches, etc.).
-	 */
-	readonly onInit?: (
-		ctx: StudioPluginContext<UserConfig>,
-	) => void | Promise<void>;
+  /**
+   * Fires exactly once, after `compilePlugins()` succeeds and before
+   * `<Studio>` mounts the Puck editor. Use for one-time setup
+   * (subscribing to external data, priming caches, etc.).
+   */
+  readonly onInit?: (
+    ctx: StudioPluginContext<UserConfig>,
+  ) => void | Promise<void>;
 
-	/**
-	 * Fires exactly once, after `<Puck>` has mounted and its
-	 * effect-time API binder has captured `getPuckApi()` — i.e. the
-	 * first moment a plugin may safely call `ctx.getPuckApi()`. Fires
-	 * after `onInit` has been dispatched. Use for one-time setup that
-	 * must touch the live Puck API on first paint (e.g. collab
-	 * hydration of a preloaded snapshot) — work that is too early in
-	 * `onInit`, where the binder does not yet exist.
-	 */
-	readonly onReady?: (
-		ctx: StudioPluginContext<UserConfig>,
-	) => void | Promise<void>;
+  /**
+   * Fires exactly once, after `<Puck>` has mounted and its
+   * effect-time API binder has captured `getPuckApi()` — i.e. the
+   * first moment a plugin may safely call `ctx.getPuckApi()`. Fires
+   * after `onInit` has been dispatched. Use for one-time setup that
+   * must touch the live Puck API on first paint (e.g. collab
+   * hydration of a preloaded snapshot) — work that is too early in
+   * `onInit`, where the binder does not yet exist.
+   */
+  readonly onReady?: (
+    ctx: StudioPluginContext<UserConfig>,
+  ) => void | Promise<void>;
 
-	/**
-	 * Fires on every Puck `onChange` with the fresh data snapshot.
-	 *
-	 * The `data` argument is passed directly so the plugin does not
-	 * need to re-read it from `ctx.getData()`.
-	 */
-	readonly onDataChange?: (
-		ctx: StudioPluginContext<UserConfig>,
-		data: PuckData,
-	) => void | Promise<void>;
+  /**
+   * Fires on every Puck `onChange` with the fresh data snapshot.
+   *
+   * The `data` argument is passed directly so the plugin does not
+   * need to re-read it from `ctx.getData()`.
+   */
+  readonly onDataChange?: (
+    ctx: StudioPluginContext<UserConfig>,
+    data: PuckData,
+  ) => void | Promise<void>;
 
-	/**
-	 * Fires before the host app publishes. May throw
-	 * `StudioPluginError` to abort the publish (e.g. validation
-	 * failure, missing required fields).
-	 */
-	readonly onBeforePublish?: (
-		ctx: StudioPluginContext<UserConfig>,
-		data: PuckData,
-	) => void | Promise<void>;
+  /**
+   * Fires before the host app publishes. May throw
+   * `StudioPluginError` to abort the publish (e.g. validation
+   * failure, missing required fields).
+   */
+  readonly onBeforePublish?: (
+    ctx: StudioPluginContext<UserConfig>,
+    data: PuckData,
+  ) => void | Promise<void>;
 
-	/**
-	 * Fires after the host app successfully publishes. Use for
-	 * post-publish side-effects like cache invalidation or telemetry.
-	 */
-	readonly onAfterPublish?: (
-		ctx: StudioPluginContext<UserConfig>,
-		data: PuckData,
-	) => void | Promise<void>;
+  /**
+   * Fires after the host app successfully publishes. Use for
+   * post-publish side-effects like cache invalidation or telemetry.
+   */
+  readonly onAfterPublish?: (
+    ctx: StudioPluginContext<UserConfig>,
+    data: PuckData,
+  ) => void | Promise<void>;
 
-	/**
-	 * Fires when `<Studio>` unmounts. Use for cleanup — subscriptions,
-	 * timers, event listeners, intervals, etc.
-	 */
-	readonly onDestroy?: (
-		ctx: StudioPluginContext<UserConfig>,
-	) => void | Promise<void>;
+  /**
+   * Fires when `<Studio>` unmounts. Use for cleanup — subscriptions,
+   * timers, event listeners, intervals, etc.
+   */
+  readonly onDestroy?: (
+    ctx: StudioPluginContext<UserConfig>,
+  ) => void | Promise<void>;
 }
 
 /**
@@ -740,90 +740,90 @@ export interface StudioPluginLifecycleHooks<
  * typing.
  */
 export interface StudioPluginRegistration<
-	UserConfig extends PuckConfig = PuckConfig,
+  UserConfig extends PuckConfig = PuckConfig,
 > {
-	/**
-	 * Echo of the owning plugin's {@link StudioPluginMeta}.
-	 *
-	 * Duplicated here (rather than read from the plugin object) so the
-	 * runtime can associate every registered artifact — override,
-	 * hook, header action, export format — with its source plugin for
-	 * diagnostics and error attribution.
-	 */
-	readonly meta: StudioPluginMeta;
+  /**
+   * Echo of the owning plugin's {@link StudioPluginMeta}.
+   *
+   * Duplicated here (rather than read from the plugin object) so the
+   * runtime can associate every registered artifact — override,
+   * hook, header action, export format — with its source plugin for
+   * diagnostics and error attribution.
+   */
+  readonly meta: StudioPluginMeta;
 
-	/**
-	 * Optional lifecycle hooks bag.
-	 *
-	 * See {@link StudioPluginLifecycleHooks}.
-	 */
-	readonly hooks?: StudioPluginLifecycleHooks<UserConfig>;
+  /**
+   * Optional lifecycle hooks bag.
+   *
+   * See {@link StudioPluginLifecycleHooks}.
+   */
+  readonly hooks?: StudioPluginLifecycleHooks<UserConfig>;
 
-	/**
-	 * Optional Puck override slot contributions.
-	 *
-	 * Merged **per-key and curried** by `mergeOverrides()` — two
-	 * plugins that both contribute a `header` override are composed so
-	 * both run (innermost plugin first), not one-replaces-the-other.
-	 * See architecture §18 for the curried-per-key rationale and
-	 * `core-014` for the implementation.
-	 */
-	readonly overrides?: Partial<PuckOverrides<UserConfig>>;
+  /**
+   * Optional Puck override slot contributions.
+   *
+   * Merged **per-key and curried** by `mergeOverrides()` — two
+   * plugins that both contribute a `header` override are composed so
+   * both run (innermost plugin first), not one-replaces-the-other.
+   * See architecture §18 for the curried-per-key rationale and
+   * `core-014` for the implementation.
+   */
+  readonly overrides?: Partial<PuckOverrides<UserConfig>>;
 
-	/**
-	 * Optional header action descriptors.
-	 *
-	 * Pure data; `composeHeaderActions()` turns them into rendered
-	 * React nodes. Kept as data (not components) so the runtime can
-	 * stay React-free and so core can serialize header state for
-	 * tests.
-	 */
-	readonly headerActions?: readonly StudioHeaderAction[];
+  /**
+   * Optional header action descriptors.
+   *
+   * Pure data; `composeHeaderActions()` turns them into rendered
+   * React nodes. Kept as data (not components) so the runtime can
+   * stay React-free and so core can serialize header state for
+   * tests.
+   */
+  readonly headerActions?: readonly StudioHeaderAction[];
 
-	/**
-	 * Optional export format definitions.
-	 *
-	 * Registered into the export registry at compile time; consumed by
-	 * the host's export action or a header action.
-	 */
-	readonly exportFormats?: readonly ExportFormatDefinition[];
+  /**
+   * Optional export format definitions.
+   *
+   * Registered into the export registry at compile time; consumed by
+   * the host's export action or a header action.
+   */
+  readonly exportFormats?: readonly ExportFormatDefinition[];
 
-	/**
-	 * Optional React provider contributions that wrap the Studio tree.
-	 *
-	 * Sorted ascending by `order` (default `100`); ties break on plugin
-	 * registration order. The provider with the lowest order is
-	 * **outermost** in the rendered tree. All providers compose inside
-	 * `StudioRuntimeProvider`, so each provider's component may call
-	 * `useStudio()`.
-	 *
-	 * See {@link StudioPluginProvider}.
-	 */
-	readonly providers?: readonly StudioPluginProvider[];
+  /**
+   * Optional React provider contributions that wrap the Studio tree.
+   *
+   * Sorted ascending by `order` (default `100`); ties break on plugin
+   * registration order. The provider with the lowest order is
+   * **outermost** in the rendered tree. All providers compose inside
+   * `StudioRuntimeProvider`, so each provider's component may call
+   * `useStudio()`.
+   *
+   * See {@link StudioPluginProvider}.
+   */
+  readonly providers?: readonly StudioPluginProvider[];
 
-	/**
-	 * Optional top-level overlay components rendered as siblings of the
-	 * Puck editor. Each overlay declares a {@link StudioOverlayPlacement}
-	 * to control where Studio mounts it (canvas / viewport /
-	 * notifications).
-	 *
-	 * Sorted within their placement bucket by `order` (default `100`);
-	 * ties break on registration order.
-	 */
-	readonly overlays?: readonly StudioPluginOverlay[];
+  /**
+   * Optional top-level overlay components rendered as siblings of the
+   * Puck editor. Each overlay declares a {@link StudioOverlayPlacement}
+   * to control where Studio mounts it (canvas / viewport /
+   * notifications).
+   *
+   * Sorted within their placement bucket by `order` (default `100`);
+   * ties break on registration order.
+   */
+  readonly overlays?: readonly StudioPluginOverlay[];
 
-	/**
-	 * Optional named chrome slot contributions. Slots are single-
-	 * occupancy: if two plugins contribute the same slot id, the first
-	 * registration wins (and a warn is logged via `ctx.log`).
-	 *
-	 * Host apps can always override a plugin slot by passing the
-	 * corresponding `<Studio>` prop (e.g. `collaboratorsSlot`); the host
-	 * prop wins.
-	 *
-	 * See {@link StudioPluginSlotContribution}.
-	 */
-	readonly slots?: readonly StudioPluginSlotContribution[];
+  /**
+   * Optional named chrome slot contributions. Slots are single-
+   * occupancy: if two plugins contribute the same slot id, the first
+   * registration wins (and a warn is logged via `ctx.log`).
+   *
+   * Host apps can always override a plugin slot by passing the
+   * corresponding `<Studio>` prop (e.g. `collaboratorsSlot`); the host
+   * prop wins.
+   *
+   * See {@link StudioPluginSlotContribution}.
+   */
+  readonly slots?: readonly StudioPluginSlotContribution[];
 }
 
 /**
@@ -865,26 +865,26 @@ export interface StudioPluginRegistration<
  * ```
  */
 export interface StudioPlugin<UserConfig extends PuckConfig = PuckConfig> {
-	/**
-	 * Frozen plugin metadata.
-	 *
-	 * See {@link StudioPluginMeta}.
-	 */
-	readonly meta: StudioPluginMeta;
+  /**
+   * Frozen plugin metadata.
+   *
+   * See {@link StudioPluginMeta}.
+   */
+  readonly meta: StudioPluginMeta;
 
-	/**
-	 * Produce a registration block for the runtime to consume.
-	 *
-	 * Called exactly once per plugin, during `compilePlugins()`. May
-	 * return synchronously or via a `Promise`.
-	 *
-	 * @param ctx - The {@link StudioPluginContext} for this session.
-	 */
-	register(
-		ctx: StudioPluginContext<UserConfig>,
-	):
-		| StudioPluginRegistration<UserConfig>
-		| Promise<StudioPluginRegistration<UserConfig>>;
+  /**
+   * Produce a registration block for the runtime to consume.
+   *
+   * Called exactly once per plugin, during `compilePlugins()`. May
+   * return synchronously or via a `Promise`.
+   *
+   * @param ctx - The {@link StudioPluginContext} for this session.
+   */
+  register(
+    ctx: StudioPluginContext<UserConfig>,
+  ):
+    | StudioPluginRegistration<UserConfig>
+    | Promise<StudioPluginRegistration<UserConfig>>;
 }
 
 /**
@@ -920,9 +920,10 @@ declare const StudioPluginContributesBrand: unique symbol;
  * produced or read. The required-but-erased shape is fulfilled by the
  * type-only cast inside `defineStudioPlugin`.
  */
-export interface StudioPluginContributing<Contributes>
-	extends StudioPlugin<PuckConfig> {
-	readonly [StudioPluginContributesBrand]: Contributes;
+export interface StudioPluginContributing<
+  Contributes,
+> extends StudioPlugin<PuckConfig> {
+  readonly [StudioPluginContributesBrand]: Contributes;
 }
 
 /**
@@ -936,15 +937,15 @@ export interface StudioPluginContributing<Contributes>
  * one place so plugin authors don't sprinkle it across factories.
  */
 export function defineStudioPlugin<Contributes>(
-	plugin: StudioPlugin<PuckConfig>,
+  plugin: StudioPlugin<PuckConfig>,
 ): StudioPluginContributing<Contributes> {
-	return plugin as StudioPluginContributing<Contributes>;
+  return plugin as StudioPluginContributing<Contributes>;
 }
 
 /** Either a Studio plugin or a raw `@puckeditor/core` plugin. */
 export type StudioAnyPlugin<UserConfig extends PuckConfig = PuckConfig> =
-	| StudioPlugin<UserConfig>
-	| PuckPlugin<UserConfig>;
+  | StudioPlugin<UserConfig>
+  | PuckPlugin<UserConfig>;
 
 /**
  * Infer the union of contribution types from a plugins tuple.
@@ -956,9 +957,9 @@ export type StudioAnyPlugin<UserConfig extends PuckConfig = PuckConfig> =
  * `StudioPlugin` does not match and cannot contribute `unknown`.
  */
 export type InferPluginContributions<Plugins extends readonly unknown[]> = {
-	[Index in keyof Plugins]: Plugins[Index] extends {
-		readonly [StudioPluginContributesBrand]: infer Contributes;
-	}
-		? Contributes
-		: never;
+  [Index in keyof Plugins]: Plugins[Index] extends {
+    readonly [StudioPluginContributesBrand]: infer Contributes;
+  }
+    ? Contributes
+    : never;
 }[number];

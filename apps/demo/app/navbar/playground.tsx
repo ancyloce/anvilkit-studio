@@ -1,18 +1,18 @@
 "use client";
 
 import {
-	Navbar,
-	type NavbarAction,
-	type NavbarMenuItem,
-	defaultProps as navbarDefaultProps,
+  Navbar,
+  type NavbarAction,
+  type NavbarMenuItem,
+  defaultProps as navbarDefaultProps,
 } from "@anvilkit/navbar";
 import { Button, buttonVariants } from "@anvilkit/ui/button";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@anvilkit/ui/card";
 import { Input } from "@anvilkit/ui/input";
 import { cn } from "@anvilkit/ui/lib/utils";
@@ -24,239 +24,239 @@ type LogoMode = "text" | "image" | "custom";
 type CustomLogoPreset = "badge" | "monogram" | "stack";
 
 type EditableItem = NavbarMenuItem & {
-	id: string;
+  id: string;
 };
 
 type EditableAction = NavbarAction & {
-	id: string;
+  id: string;
 };
 
 const selectClassName =
   "flex h-8 w-full min-w-0 rounded-lg border border-input px-2.5 py-1 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50";
 
 const textareaClassName =
-	"min-h-40 w-full rounded-2xl border border-border bg-primary px-4 py-4 text-sm leading-6 text-primary-foreground shadow-sm";
+  "min-h-40 w-full rounded-2xl border border-border bg-primary px-4 py-4 text-sm leading-6 text-primary-foreground shadow-sm";
 
 const customLogoOptions: Array<{
-	label: string;
-	value: CustomLogoPreset;
-	description: string;
+  label: string;
+  value: CustomLogoPreset;
+  description: string;
 }> = [
-	{
-		label: "Badge",
-		value: "badge",
-		description: "A rounded status badge with a built-in beta marker.",
-	},
-	{
-		label: "Monogram",
-		value: "monogram",
-		description: "A compact brand monogram with a supporting label.",
-	},
-	{
-		label: "Stack",
-		value: "stack",
-		description: "A stacked wordmark for product or platform navigation.",
-	},
+  {
+    label: "Badge",
+    value: "badge",
+    description: "A rounded status badge with a built-in beta marker.",
+  },
+  {
+    label: "Monogram",
+    value: "monogram",
+    description: "A compact brand monogram with a supporting label.",
+  },
+  {
+    label: "Stack",
+    value: "stack",
+    description: "A stacked wordmark for product or platform navigation.",
+  },
 ];
 
 const variantOptions: Array<NonNullable<NavbarAction["variant"]>> = [
-	"default",
-	"secondary",
-	"outline",
-	"ghost",
-	"link",
-	"destructive",
+  "default",
+  "secondary",
+  "outline",
+  "ghost",
+  "link",
+  "destructive",
 ];
 
 const sizeOptions: Array<NonNullable<NavbarAction["size"]>> = [
-	"sm",
-	"default",
-	"lg",
+  "sm",
+  "default",
+  "lg",
 ];
 
 function createId(prefix: string) {
-	return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+  return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
 function createEditableItem(item?: Partial<NavbarMenuItem>): EditableItem {
-	return {
-		id: createId("item"),
-		href: item?.href ?? "/new-link",
-		label: item?.label ?? "New link",
-	};
+  return {
+    id: createId("item"),
+    href: item?.href ?? "/new-link",
+    label: item?.label ?? "New link",
+  };
 }
 
 function createEditableAction(action?: Partial<NavbarAction>): EditableAction {
-	return {
-		id: createId("action"),
-		disabled: action?.disabled ?? false,
-		href: action?.href ?? "/action",
-		label: action?.label ?? "Action",
-		openInNewTab: action?.openInNewTab ?? false,
-		size: action?.size ?? "lg",
-		variant: action?.variant ?? "secondary",
-	};
+  return {
+    id: createId("action"),
+    disabled: action?.disabled ?? false,
+    href: action?.href ?? "/action",
+    label: action?.label ?? "Action",
+    openInNewTab: action?.openInNewTab ?? false,
+    size: action?.size ?? "lg",
+    variant: action?.variant ?? "secondary",
+  };
 }
 
 function formatCodeString(value: string) {
-	return JSON.stringify(value);
+  return JSON.stringify(value);
 }
 
 function renderCustomLogoNode(
-	preset: CustomLogoPreset,
-	label: string,
+  preset: CustomLogoPreset,
+  label: string,
 ): ReactNode {
-	const brand = label || "Underline";
-	const initials = brand
-		.split(" ")
-		.filter(Boolean)
-		.slice(0, 2)
-		.map((part) => part[0]?.toUpperCase() ?? "")
-		.join("");
+  const brand = label || "Underline";
+  const initials = brand
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
 
-	if (preset === "monogram") {
-		return (
-			<span className="inline-flex items-center gap-3 text-primary-foreground">
-				<span className="inline-flex size-10 items-center justify-center rounded-2xl border border-primary-foreground/18 bg-primary-foreground/10 text-sm font-semibold">
-					{initials || "U"}
-				</span>
-				<span className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-foreground/78">
-					{brand}
-				</span>
-			</span>
-		);
-	}
+  if (preset === "monogram") {
+    return (
+      <span className="inline-flex items-center gap-3 text-primary-foreground">
+        <span className="inline-flex size-10 items-center justify-center rounded-2xl border border-primary-foreground/18 bg-primary-foreground/10 text-sm font-semibold">
+          {initials || "U"}
+        </span>
+        <span className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-foreground/78">
+          {brand}
+        </span>
+      </span>
+    );
+  }
 
-	if (preset === "stack") {
-		return (
-			<span className="inline-flex flex-col leading-none text-primary-foreground">
-				<span className="text-xs font-semibold uppercase tracking-[0.32em] text-primary-foreground/62">
-					Anvilkit
-				</span>
-				<span className="text-lg font-semibold tracking-tight">{brand}</span>
-			</span>
-		);
-	}
+  if (preset === "stack") {
+    return (
+      <span className="inline-flex flex-col leading-none text-primary-foreground">
+        <span className="text-xs font-semibold uppercase tracking-[0.32em] text-primary-foreground/62">
+          Anvilkit
+        </span>
+        <span className="text-lg font-semibold tracking-tight">{brand}</span>
+      </span>
+    );
+  }
 
-	return (
-		<span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/18 bg-primary-foreground/10 px-3 py-2 text-sm font-semibold text-primary-foreground">
-			<span>{brand}</span>
-			<span className="rounded-full bg-primary-foreground px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.24em] text-primary">
-				Beta
-			</span>
-		</span>
-	);
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/18 bg-primary-foreground/10 px-3 py-2 text-sm font-semibold text-primary-foreground">
+      <span>{brand}</span>
+      <span className="rounded-full bg-primary-foreground px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.24em] text-primary">
+        Beta
+      </span>
+    </span>
+  );
 }
 
 function buildLiveSnippet(params: {
-	actions: NavbarAction[];
-	active?: string;
-	items: NavbarMenuItem[];
-	logoHref: string;
-	logoImageUrl: string;
-	logoMode: LogoMode;
-	logoText: string;
+  actions: NavbarAction[];
+  active?: string;
+  items: NavbarMenuItem[];
+  logoHref: string;
+  logoImageUrl: string;
+  logoMode: LogoMode;
+  logoText: string;
 }) {
-	const logoProp =
-		params.logoMode === "image"
-			? `      logo={{ type: "image", imageUrl: ${formatCodeString(params.logoImageUrl)}, alt: ${formatCodeString(params.logoText || "Brand")}, href: ${formatCodeString(params.logoHref)} }}`
-			: `      logo={{ type: "text", text: ${formatCodeString(params.logoText || "Brand")}, href: ${formatCodeString(params.logoHref)} }}`;
+  const logoProp =
+    params.logoMode === "image"
+      ? `      logo={{ type: "image", imageUrl: ${formatCodeString(params.logoImageUrl)}, alt: ${formatCodeString(params.logoText || "Brand")}, href: ${formatCodeString(params.logoHref)} }}`
+      : `      logo={{ type: "text", text: ${formatCodeString(params.logoText || "Brand")}, href: ${formatCodeString(params.logoHref)} }}`;
 
-	const logoNodeProp =
-		params.logoMode === "custom" ? "      logoNode={<BrandMark />}" : null;
+  const logoNodeProp =
+    params.logoMode === "custom" ? "      logoNode={<BrandMark />}" : null;
 
-	const itemLines =
-		params.items.length > 0
-			? params.items
-					.map(
-						(item) =>
-							`        { label: ${formatCodeString(item.label)}, href: ${formatCodeString(item.href)} },`,
-					)
-					.join("\n")
-			: "";
+  const itemLines =
+    params.items.length > 0
+      ? params.items
+          .map(
+            (item) =>
+              `        { label: ${formatCodeString(item.label)}, href: ${formatCodeString(item.href)} },`,
+          )
+          .join("\n")
+      : "";
 
-	const actionLines =
-		params.actions.length > 0
-			? params.actions
-					.map((action) => {
-						const parts = [`label: ${formatCodeString(action.label)}`];
+  const actionLines =
+    params.actions.length > 0
+      ? params.actions
+          .map((action) => {
+            const parts = [`label: ${formatCodeString(action.label)}`];
 
-						if (action.href) {
-							parts.push(`href: ${formatCodeString(action.href)}`);
-						}
+            if (action.href) {
+              parts.push(`href: ${formatCodeString(action.href)}`);
+            }
 
-						if (action.variant && action.variant !== "secondary") {
-							parts.push(`variant: ${formatCodeString(action.variant)}`);
-						}
+            if (action.variant && action.variant !== "secondary") {
+              parts.push(`variant: ${formatCodeString(action.variant)}`);
+            }
 
-						if (action.size && action.size !== "lg") {
-							parts.push(`size: ${formatCodeString(action.size)}`);
-						}
+            if (action.size && action.size !== "lg") {
+              parts.push(`size: ${formatCodeString(action.size)}`);
+            }
 
-						if (action.disabled) {
-							parts.push("disabled: true");
-						}
+            if (action.disabled) {
+              parts.push("disabled: true");
+            }
 
-						if (action.openInNewTab) {
-							parts.push("openInNewTab: true");
-						}
+            if (action.openInNewTab) {
+              parts.push("openInNewTab: true");
+            }
 
-						return `        { ${parts.join(", ")} },`;
-					})
-					.join("\n")
-			: "";
+            return `        { ${parts.join(", ")} },`;
+          })
+          .join("\n")
+      : "";
 
-	return [
-		'import { Navbar } from "@anvilkit/navbar";',
-		"",
-		"export function SiteHeader() {",
-		"  return (",
-		"    <Navbar",
-		logoProp,
-		logoNodeProp,
-		itemLines ? `      items={[\n${itemLines}\n      ]}` : "      items={[]}",
-		actionLines
-			? `      actions={[\n${actionLines}\n      ]}`
-			: "      actions={[]}",
-		params.active ? `      active=${formatCodeString(params.active)}` : null,
-		"    />",
-		"  );",
-		"}",
-	]
-		.filter(Boolean)
-		.join("\n");
+  return [
+    'import { Navbar } from "@anvilkit/navbar";',
+    "",
+    "export function SiteHeader() {",
+    "  return (",
+    "    <Navbar",
+    logoProp,
+    logoNodeProp,
+    itemLines ? `      items={[\n${itemLines}\n      ]}` : "      items={[]}",
+    actionLines
+      ? `      actions={[\n${actionLines}\n      ]}`
+      : "      actions={[]}",
+    params.active ? `      active=${formatCodeString(params.active)}` : null,
+    "    />",
+    "  );",
+    "}",
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function ControlField({
-	children,
-	hint,
-	label,
+  children,
+  hint,
+  label,
 }: {
-	children: ReactNode;
-	hint?: string;
-	label: string;
+  children: ReactNode;
+  hint?: string;
+  label: string;
 }) {
-	return (
-		<div className="grid gap-2 text-sm">
-			<span className="font-medium text-foreground">{label}</span>
-			{children}
-			{hint ? (
-				<span className="text-xs text-muted-foreground">{hint}</span>
-			) : null}
-		</div>
-	);
+  return (
+    <div className="grid gap-2 text-sm">
+      <span className="font-medium text-foreground">{label}</span>
+      {children}
+      {hint ? (
+        <span className="text-xs text-muted-foreground">{hint}</span>
+      ) : null}
+    </div>
+  );
 }
 
 function ToggleField({
-	checked,
-	label,
-	onChange,
+  checked,
+  label,
+  onChange,
 }: {
-	checked: boolean;
-	label: string;
-	onChange: (checked: boolean) => void;
+  checked: boolean;
+  label: string;
+  onChange: (checked: boolean) => void;
 }) {
-	return (
+  return (
     <label className="flex items-center gap-3 rounded-xl border border-border px-3 py-2 text-sm text-foreground">
       <input
         checked={checked}
@@ -270,87 +270,87 @@ function ToggleField({
 }
 
 function CodeCard({
-	code,
-	description,
-	title,
+  code,
+  description,
+  title,
 }: {
-	code: string;
-	description: string;
-	title: string;
+  code: string;
+  description: string;
+  title: string;
 }) {
-	return (
-		<Card className="border-border/70 bg-card/90 shadow-sm">
-			<CardHeader className="border-b border-border/70">
-				<CardTitle>{title}</CardTitle>
-				<CardDescription>{description}</CardDescription>
-			</CardHeader>
-			<CardContent className="pt-4">
-				<pre
-					className={cn(textareaClassName, "overflow-x-auto whitespace-pre")}
-				>
-					<code>{code}</code>
-				</pre>
-			</CardContent>
-		</Card>
-	);
+  return (
+    <Card className="border-border/70 bg-card/90 shadow-sm">
+      <CardHeader className="border-b border-border/70">
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent className="pt-4">
+        <pre
+          className={cn(textareaClassName, "overflow-x-auto whitespace-pre")}
+        >
+          <code>{code}</code>
+        </pre>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function NavbarPlayground() {
-	const [logoMode, setLogoMode] = useState<LogoMode>("text");
-	const [logoText, setLogoText] = useState(
-		navbarDefaultProps.logo.text ?? "Underline",
-	);
-	const [logoHref, setLogoHref] = useState(navbarDefaultProps.logo.href ?? "/");
-	const [logoImageUrl, setLogoImageUrl] = useState("/turborepo-light.svg");
-	const [customLogoPreset, setCustomLogoPreset] =
-		useState<CustomLogoPreset>("badge");
-	const [active, setActive] = useState(navbarDefaultProps.active ?? "");
-	const [editableItems, setEditableItems] = useState<EditableItem[]>(() =>
-		navbarDefaultProps.items.map((item) => createEditableItem(item)),
-	);
-	const [editableActions, setEditableActions] = useState<EditableAction[]>(() =>
-		navbarDefaultProps.actions.map((action) => createEditableAction(action)),
-	);
+  const [logoMode, setLogoMode] = useState<LogoMode>("text");
+  const [logoText, setLogoText] = useState(
+    navbarDefaultProps.logo.text ?? "Underline",
+  );
+  const [logoHref, setLogoHref] = useState(navbarDefaultProps.logo.href ?? "/");
+  const [logoImageUrl, setLogoImageUrl] = useState("/turborepo-light.svg");
+  const [customLogoPreset, setCustomLogoPreset] =
+    useState<CustomLogoPreset>("badge");
+  const [active, setActive] = useState(navbarDefaultProps.active ?? "");
+  const [editableItems, setEditableItems] = useState<EditableItem[]>(() =>
+    navbarDefaultProps.items.map((item) => createEditableItem(item)),
+  );
+  const [editableActions, setEditableActions] = useState<EditableAction[]>(() =>
+    navbarDefaultProps.actions.map((action) => createEditableAction(action)),
+  );
 
-	const items = editableItems.map(({ id: _id, ...item }) => item);
-	const actions = editableActions.map(({ id: _id, ...action }) => action);
-	const logoNode =
-		logoMode === "custom"
-			? renderCustomLogoNode(customLogoPreset, logoText)
-			: undefined;
-	const defaultPreviewActions = navbarDefaultProps.actions.map((action) => ({
-		...action,
-		onClick: (event: MouseEvent<HTMLElement>) => {
-			event.preventDefault();
-		},
-	}));
+  const items = editableItems.map(({ id: _id, ...item }) => item);
+  const actions = editableActions.map(({ id: _id, ...action }) => action);
+  const logoNode =
+    logoMode === "custom"
+      ? renderCustomLogoNode(customLogoPreset, logoText)
+      : undefined;
+  const defaultPreviewActions = navbarDefaultProps.actions.map((action) => ({
+    ...action,
+    onClick: (event: MouseEvent<HTMLElement>) => {
+      event.preventDefault();
+    },
+  }));
 
-	const previewActions = actions.map((action) => ({
-		...action,
-		onClick: (event: MouseEvent<HTMLElement>) => {
-			event.preventDefault();
-		},
-	}));
+  const previewActions = actions.map((action) => ({
+    ...action,
+    onClick: (event: MouseEvent<HTMLElement>) => {
+      event.preventDefault();
+    },
+  }));
 
-	const liveSnippet = buildLiveSnippet({
-		actions,
-		active: active || undefined,
-		items,
-		logoHref,
-		logoImageUrl,
-		logoMode,
-		logoText,
-	});
+  const liveSnippet = buildLiveSnippet({
+    actions,
+    active: active || undefined,
+    items,
+    logoHref,
+    logoImageUrl,
+    logoMode,
+    logoText,
+  });
 
-	const preventPreviewNavigation = (event: MouseEvent<HTMLDivElement>) => {
-		const target = event.target;
+  const preventPreviewNavigation = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target;
 
-		if (target instanceof HTMLElement && target.closest("a")) {
-			event.preventDefault();
-		}
-	};
+    if (target instanceof HTMLElement && target.closest("a")) {
+      event.preventDefault();
+    }
+  };
 
-	return (
+  return (
     <main className="min-h-screen">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(22rem,0.8fr)]">

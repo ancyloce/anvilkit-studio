@@ -24,11 +24,11 @@ import { createUsageCounterPlugin } from "@anvilkit/example-usage-counter";
 const usageCounter = createUsageCounterPlugin({ verbose: true });
 
 const studioConfig = createStudioConfig({
-	plugins: [usageCounter],
+  plugins: [usageCounter],
 });
 
 usageCounter.subscribe((counts) => {
-	console.log(counts);
+  console.log(counts);
 });
 ```
 

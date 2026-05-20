@@ -67,147 +67,147 @@ import { z } from "zod";
  * Consumers: **use `createStudioConfig()`**, not `.parse()` directly.
  */
 export const StudioConfigSchema = z
-	.strictObject({
-		/**
-		 * Feature flag block. Every flag defaults to `false` so a
-		 * fresh install has no surprise behavior enabled — hosts opt
-		 * in explicitly.
-		 */
-		features: z
-			.strictObject({
-				/**
-				 * When `true`, the export registry is compiled and the
-				 * host may call `exportAs(formatId)`. When `false`,
-				 * exporter plugins register but their header actions
-				 * are hidden and `exportAs` throws `StudioExportError`.
-				 */
-				enableExport: z.boolean().default(false),
-				/**
-				 * When `true`, the AI copilot plugin (if installed)
-				 * mounts its panel and the `generatePage()` pipeline
-				 * is active. No-op when the AI plugin is not in the
-				 * host's plugin array.
-				 */
-				enableAi: z.boolean().default(false),
-				/**
-				 * When `true`, the real-time collaboration plugin
-				 * (if installed) mounts its presence / cursor layer.
-				 * Placeholder for post-alpha work — no collaboration
-				 * plugin ships in `0.1.x`.
-				 */
-				enableCollaboration: z.boolean().default(false),
-			})
-			.prefault({}),
-		/**
-		 * Branding block for the editor chrome — app name, logo,
-		 * and accent color surfaced in the Studio header.
-		 */
-		branding: z
-			.strictObject({
-				/**
-				 * Display name shown in the editor header and the
-				 * browser tab. Defaults to `"AnvilKit Studio"` so an
-				 * un-configured host still looks intentional.
-				 */
-				appName: z.string().default("AnvilKit Studio"),
-				/**
-				 * Optional URL of a logo rendered in the header.
-				 * Validated as a URL via `z.url()` (top-level format
-				 * in Zod v4). Omit to fall back to the default
-				 * wordmark.
-				 */
-				logoUrl: z.url().optional(),
-				/**
-				 * Optional primary accent color for the editor
-				 * chrome. Free-form string so hosts can pass a
-				 * CSS variable reference (`"var(--brand)"`) or any
-				 * CSS color value.
-				 */
-				primaryColor: z.string().optional(),
-			})
-			.prefault({}),
-		/**
-		 * Theme block — the initial color mode and whether the
-		 * built-in theme toggle is shown.
-		 */
-		theme: z
-			.strictObject({
-				/**
-				 * Initial color mode. `"system"` respects the user's
-				 * OS preference via `prefers-color-scheme` and is
-				 * the default. `"light"` and `"dark"` force the
-				 * editor into that mode regardless of OS setting.
-				 */
-				defaultMode: z.enum(["light", "dark", "system"]).default("system"),
-				/**
-				 * When `true`, the built-in theme toggle button is
-				 * rendered in the header. Hosts that manage theme
-				 * externally can set this to `false` and drive the
-				 * theme via their own controls.
-				 */
-				allowToggle: z.boolean().default(true),
-			})
-			.prefault({}),
-		/**
-		 * Export pipeline block — configuration for the export
-		 * registry and download flow.
-		 */
-		export: z
-			.strictObject({
-				/**
-				 * Optional id of the format to pre-select in export
-				 * menus (e.g. `"html"`, `"react"`). Resolved at
-				 * runtime against the registered format registry —
-				 * an id that does not match any registered format
-				 * falls back to the first registered format.
-				 */
-				defaultFormat: z.string().optional(),
-				/**
-				 * Filename prefix for downloads. The export pipeline
-				 * appends the format's extension (e.g.
-				 * `"page.html"`). Defaults to `"page"` — hosts
-				 * typically override with a slug derived from the
-				 * current page title.
-				 */
-				filenamePrefix: z.string().default("page"),
-			})
-			.prefault({}),
-		/**
-		 * AI block. Intentionally carries **no credentials** —
-		 * API keys, endpoint URLs, and auth tokens belong to the
-		 * host backend, and the AI copilot plugin factory receives
-		 * a `generatePage()` callback that wraps whatever network
-		 * path the host has set up. Architecture §9 is explicit
-		 * about this boundary.
-		 */
-		ai: z
-			.strictObject({
-				/**
-				 * Optional hint for the AI plugin about which model
-				 * to request by default (e.g. `"claude-opus-4-6"`).
-				 * Plugins are free to ignore this if their host-side
-				 * implementation is locked to a specific model.
-				 */
-				defaultModel: z.string().optional(),
-				/**
-				 * Maximum number of retries for a failed AI
-				 * generation call. Clamped to `[0, 10]` so hosts
-				 * cannot accidentally enable unbounded retry
-				 * storms. Defaults to `3`.
-				 */
-				maxRetries: z.number().int().min(0).max(10).default(3),
-			})
-			.prefault({}),
-		/**
-		 * Grab-bag for experimental flags plugin authors stash
-		 * here to avoid bumping the schema for every opt-in.
-		 *
-		 * Declared as `z.record(z.string(), z.unknown())` (the
-		 * two-argument form required in Zod v4). The inner shape
-		 * is intentionally not validated — consumers that care
-		 * about a specific flag should validate it in their own
-		 * code, not in the root schema.
-		 */
-		experimental: z.record(z.string(), z.unknown()).prefault({}),
-	})
-	.prefault({});
+  .strictObject({
+    /**
+     * Feature flag block. Every flag defaults to `false` so a
+     * fresh install has no surprise behavior enabled — hosts opt
+     * in explicitly.
+     */
+    features: z
+      .strictObject({
+        /**
+         * When `true`, the export registry is compiled and the
+         * host may call `exportAs(formatId)`. When `false`,
+         * exporter plugins register but their header actions
+         * are hidden and `exportAs` throws `StudioExportError`.
+         */
+        enableExport: z.boolean().default(false),
+        /**
+         * When `true`, the AI copilot plugin (if installed)
+         * mounts its panel and the `generatePage()` pipeline
+         * is active. No-op when the AI plugin is not in the
+         * host's plugin array.
+         */
+        enableAi: z.boolean().default(false),
+        /**
+         * When `true`, the real-time collaboration plugin
+         * (if installed) mounts its presence / cursor layer.
+         * Placeholder for post-alpha work — no collaboration
+         * plugin ships in `0.1.x`.
+         */
+        enableCollaboration: z.boolean().default(false),
+      })
+      .prefault({}),
+    /**
+     * Branding block for the editor chrome — app name, logo,
+     * and accent color surfaced in the Studio header.
+     */
+    branding: z
+      .strictObject({
+        /**
+         * Display name shown in the editor header and the
+         * browser tab. Defaults to `"AnvilKit Studio"` so an
+         * un-configured host still looks intentional.
+         */
+        appName: z.string().default("AnvilKit Studio"),
+        /**
+         * Optional URL of a logo rendered in the header.
+         * Validated as a URL via `z.url()` (top-level format
+         * in Zod v4). Omit to fall back to the default
+         * wordmark.
+         */
+        logoUrl: z.url().optional(),
+        /**
+         * Optional primary accent color for the editor
+         * chrome. Free-form string so hosts can pass a
+         * CSS variable reference (`"var(--brand)"`) or any
+         * CSS color value.
+         */
+        primaryColor: z.string().optional(),
+      })
+      .prefault({}),
+    /**
+     * Theme block — the initial color mode and whether the
+     * built-in theme toggle is shown.
+     */
+    theme: z
+      .strictObject({
+        /**
+         * Initial color mode. `"system"` respects the user's
+         * OS preference via `prefers-color-scheme` and is
+         * the default. `"light"` and `"dark"` force the
+         * editor into that mode regardless of OS setting.
+         */
+        defaultMode: z.enum(["light", "dark", "system"]).default("system"),
+        /**
+         * When `true`, the built-in theme toggle button is
+         * rendered in the header. Hosts that manage theme
+         * externally can set this to `false` and drive the
+         * theme via their own controls.
+         */
+        allowToggle: z.boolean().default(true),
+      })
+      .prefault({}),
+    /**
+     * Export pipeline block — configuration for the export
+     * registry and download flow.
+     */
+    export: z
+      .strictObject({
+        /**
+         * Optional id of the format to pre-select in export
+         * menus (e.g. `"html"`, `"react"`). Resolved at
+         * runtime against the registered format registry —
+         * an id that does not match any registered format
+         * falls back to the first registered format.
+         */
+        defaultFormat: z.string().optional(),
+        /**
+         * Filename prefix for downloads. The export pipeline
+         * appends the format's extension (e.g.
+         * `"page.html"`). Defaults to `"page"` — hosts
+         * typically override with a slug derived from the
+         * current page title.
+         */
+        filenamePrefix: z.string().default("page"),
+      })
+      .prefault({}),
+    /**
+     * AI block. Intentionally carries **no credentials** —
+     * API keys, endpoint URLs, and auth tokens belong to the
+     * host backend, and the AI copilot plugin factory receives
+     * a `generatePage()` callback that wraps whatever network
+     * path the host has set up. Architecture §9 is explicit
+     * about this boundary.
+     */
+    ai: z
+      .strictObject({
+        /**
+         * Optional hint for the AI plugin about which model
+         * to request by default (e.g. `"claude-opus-4-6"`).
+         * Plugins are free to ignore this if their host-side
+         * implementation is locked to a specific model.
+         */
+        defaultModel: z.string().optional(),
+        /**
+         * Maximum number of retries for a failed AI
+         * generation call. Clamped to `[0, 10]` so hosts
+         * cannot accidentally enable unbounded retry
+         * storms. Defaults to `3`.
+         */
+        maxRetries: z.number().int().min(0).max(10).default(3),
+      })
+      .prefault({}),
+    /**
+     * Grab-bag for experimental flags plugin authors stash
+     * here to avoid bumping the schema for every opt-in.
+     *
+     * Declared as `z.record(z.string(), z.unknown())` (the
+     * two-argument form required in Zod v4). The inner shape
+     * is intentionally not validated — consumers that care
+     * about a specific flag should validate it in their own
+     * code, not in the root schema.
+     */
+    experimental: z.record(z.string(), z.unknown()).prefault({}),
+  })
+  .prefault({});

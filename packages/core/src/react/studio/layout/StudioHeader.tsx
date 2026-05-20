@@ -20,19 +20,19 @@ import { HeaderActions } from "./HeaderActions";
 import { PublishPanel } from "./PublishPanel";
 
 export interface StudioHeaderProps {
-	readonly onBack?: () => void;
-	readonly lastSavedAt?: Date | null;
-	/**
-	 * Replaces the placeholder `<CollaboratorStack>` between the
-	 * `lastSavedAt` chip and the Share button. When omitted, the
-	 * built-in placeholder avatars are rendered. Host apps with a
-	 * real collaboration backend (e.g. `@anvilkit/collab-ui`'s
-	 * `<PeerAvatarStack>`) pass their own peer-aware widget here.
-	 *
-	 * Accepts a `ReactNode` (rendered verbatim) or a `ComponentType`
-	 * (instantiated on each render). See {@link CollaboratorsSlotValue}.
-	 */
-	readonly collaboratorsSlot?: CollaboratorsSlotValue;
+  readonly onBack?: () => void;
+  readonly lastSavedAt?: Date | null;
+  /**
+   * Replaces the placeholder `<CollaboratorStack>` between the
+   * `lastSavedAt` chip and the Share button. When omitted, the
+   * built-in placeholder avatars are rendered. Host apps with a
+   * real collaboration backend (e.g. `@anvilkit/collab-ui`'s
+   * `<PeerAvatarStack>`) pass their own peer-aware widget here.
+   *
+   * Accepts a `ReactNode` (rendered verbatim) or a `ComponentType`
+   * (instantiated on each render). See {@link CollaboratorsSlotValue}.
+   */
+  readonly collaboratorsSlot?: CollaboratorsSlotValue;
 }
 
 /**
@@ -49,153 +49,153 @@ export interface StudioHeaderProps {
  * i18n / Puck / runtime providers).
  */
 export function renderCollaboratorsSlot(
-	value: CollaboratorsSlotValue | undefined,
-	fallback: ReactNode = <CollaboratorStack />,
+  value: CollaboratorsSlotValue | undefined,
+  fallback: ReactNode = <CollaboratorStack />,
 ): ReactNode {
-	if (value === undefined || value === null) {
-		return fallback;
-	}
-	if (typeof value === "function") {
-		return createElement(value);
-	}
-	return value;
+  if (value === undefined || value === null) {
+    return fallback;
+  }
+  if (typeof value === "function") {
+    return createElement(value);
+  }
+  return value;
 }
 
 interface PlaceholderCollaborator {
-	readonly id: string;
-	readonly initial: string;
-	readonly tone: string;
+  readonly id: string;
+  readonly initial: string;
+  readonly tone: string;
 }
 
 const PLACEHOLDER_COLLABORATORS: readonly PlaceholderCollaborator[] = [
-	{ id: "zhao", initial: "赵", tone: "bg-sky-500 text-white" },
-	{ id: "qian", initial: "钱", tone: "bg-amber-500 text-white" },
-	{ id: "sun", initial: "孙", tone: "bg-emerald-500 text-white" },
+  { id: "zhao", initial: "赵", tone: "bg-sky-500 text-white" },
+  { id: "qian", initial: "钱", tone: "bg-amber-500 text-white" },
+  { id: "sun", initial: "孙", tone: "bg-emerald-500 text-white" },
 ];
 
 const PLACEHOLDER_OVERFLOW = 2;
 
 export function StudioHeader({
-	onBack,
-	lastSavedAt = null,
-	collaboratorsSlot,
+  onBack,
+  lastSavedAt = null,
+  collaboratorsSlot,
 }: StudioHeaderProps): ReactNode {
-	const msg = useMsg();
+  const msg = useMsg();
 
-	return (
-		<header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
-			<Button
-				variant="ghost"
-				size="icon"
-				onClick={onBack ?? (() => window.history.back())}
-				aria-label={msg("studio.back")}
-			>
-				<ChevronLeft />
-			</Button>
-			<nav
-				aria-label="Breadcrumb"
-				className="flex min-w-0 flex-1 items-center justify-center"
-			>
-				<ol className="flex items-center gap-1.5 text-sm">
-					<li className="truncate text-[var(--ak-studio-muted-fg)]">
-						{msg("studio.breadcrumb.project")}
-					</li>
-					<li aria-hidden="true" className="text-[var(--ak-studio-muted-fg)]">
-						<ChevronRight className="size-3.5" />
-					</li>
-					<li className="truncate font-medium text-[var(--ak-studio-fg)]">
-						{msg("studio.breadcrumb.file")}
-					</li>
-				</ol>
-			</nav>
-			<div className="ml-auto flex items-center gap-2">
-				{lastSavedAt !== null ? (
-					<span className="text-xs text-[var(--ak-studio-muted-fg)]">
-						Saved {formatTimestamp(lastSavedAt)}
-					</span>
-				) : null}
+  return (
+    <header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onBack ?? (() => window.history.back())}
+        aria-label={msg("studio.back")}
+      >
+        <ChevronLeft />
+      </Button>
+      <nav
+        aria-label="Breadcrumb"
+        className="flex min-w-0 flex-1 items-center justify-center"
+      >
+        <ol className="flex items-center gap-1.5 text-sm">
+          <li className="truncate text-[var(--ak-studio-muted-fg)]">
+            {msg("studio.breadcrumb.project")}
+          </li>
+          <li aria-hidden="true" className="text-[var(--ak-studio-muted-fg)]">
+            <ChevronRight className="size-3.5" />
+          </li>
+          <li className="truncate font-medium text-[var(--ak-studio-fg)]">
+            {msg("studio.breadcrumb.file")}
+          </li>
+        </ol>
+      </nav>
+      <div className="ml-auto flex items-center gap-2">
+        {lastSavedAt !== null ? (
+          <span className="text-xs text-[var(--ak-studio-muted-fg)]">
+            Saved {formatTimestamp(lastSavedAt)}
+          </span>
+        ) : null}
 
-				{renderCollaboratorsSlot(collaboratorsSlot)}
+        {renderCollaboratorsSlot(collaboratorsSlot)}
 
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<Button variant="outline" size="sm" className="gap-1.5">
-								<Users className="size-4" aria-hidden="true" />
-								<span>{msg("studio.share")}</span>
-							</Button>
-						}
-					/>
-					<TooltipContent>{msg("studio.share")}</TooltipContent>
-				</Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <Users className="size-4" aria-hidden="true" />
+                <span>{msg("studio.share")}</span>
+              </Button>
+            }
+          />
+          <TooltipContent>{msg("studio.share")}</TooltipContent>
+        </Tooltip>
 
-				<Separator
-					orientation="vertical"
-					className="h-6 data-vertical:self-center"
-				/>
+        <Separator
+          orientation="vertical"
+          className="h-6 data-vertical:self-center"
+        />
 
-				<HeaderActions />
+        <HeaderActions />
 
-				<Tooltip>
-					<TooltipTrigger
-						render={
-							<Button
-								variant="ghost"
-								size="icon"
-								aria-label={msg("studio.preview")}
-							>
-								<Play />
-							</Button>
-						}
-					/>
-					<TooltipContent>{msg("studio.preview")}</TooltipContent>
-				</Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={msg("studio.preview")}
+              >
+                <Play />
+              </Button>
+            }
+          />
+          <TooltipContent>{msg("studio.preview")}</TooltipContent>
+        </Tooltip>
 
-				<PublishPanel />
-			</div>
-		</header>
-	);
+        <PublishPanel />
+      </div>
+    </header>
+  );
 }
 
 function CollaboratorStack(): ReactNode {
-	const msg = useMsg();
-	return (
-		<div
-			className="flex items-center -space-x-2"
-			aria-label={msg("studio.collaborators.label")}
-		>
-			{PLACEHOLDER_COLLABORATORS.map((collab) => (
-				<Avatar
-					key={collab.id}
-					className="size-7 ring-2 ring-[var(--ak-studio-bg)]"
-				>
-					<AvatarFallback
-						className={cn("text-[11px] font-semibold", collab.tone)}
-					>
-						{collab.initial}
-					</AvatarFallback>
-				</Avatar>
-			))}
-			<Avatar className="size-7 ring-2 ring-[var(--ak-studio-bg)]">
-				<AvatarFallback className="bg-[var(--ak-studio-panel)] text-[11px] font-semibold text-[var(--ak-studio-fg)]">
-					{msg("studio.collaborators.more").replace(
-						"{count}",
-						String(PLACEHOLDER_OVERFLOW),
-					)}
-				</AvatarFallback>
-			</Avatar>
-		</div>
-	);
+  const msg = useMsg();
+  return (
+    <div
+      className="flex items-center -space-x-2"
+      aria-label={msg("studio.collaborators.label")}
+    >
+      {PLACEHOLDER_COLLABORATORS.map((collab) => (
+        <Avatar
+          key={collab.id}
+          className="size-7 ring-2 ring-[var(--ak-studio-bg)]"
+        >
+          <AvatarFallback
+            className={cn("text-[11px] font-semibold", collab.tone)}
+          >
+            {collab.initial}
+          </AvatarFallback>
+        </Avatar>
+      ))}
+      <Avatar className="size-7 ring-2 ring-[var(--ak-studio-bg)]">
+        <AvatarFallback className="bg-[var(--ak-studio-panel)] text-[11px] font-semibold text-[var(--ak-studio-fg)]">
+          {msg("studio.collaborators.more").replace(
+            "{count}",
+            String(PLACEHOLDER_OVERFLOW),
+          )}
+        </AvatarFallback>
+      </Avatar>
+    </div>
+  );
 }
 
 function formatTimestamp(date: Date): string {
-	const now = Date.now();
-	const diffMs = now - date.getTime();
-	const minutes = Math.floor(diffMs / 60_000);
-	if (minutes < 1) return "just now";
-	if (minutes < 60) return `${minutes}m ago`;
-	return date.toLocaleTimeString(undefined, {
-		hour: "2-digit",
-		minute: "2-digit",
-	});
+  const now = Date.now();
+  const diffMs = now - date.getTime();
+  const minutes = Math.floor(diffMs / 60_000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  return date.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { motion, AnimatePresence, type HTMLMotionProps } from 'motion/react';
+import * as React from "react";
+import { motion, AnimatePresence, type HTMLMotionProps } from "motion/react";
 
 import {
   useIsInView,
   type UseIsInViewOptions,
-} from '@anvilkit/ui/hooks/use-is-in-view';
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
+} from "@anvilkit/ui/hooks/use-is-in-view";
+import { getStrictContext } from "@anvilkit/ui/lib/get-strict-context";
 
 type RotatingTextContextType = {
   currentText: string;
@@ -16,9 +16,9 @@ type RotatingTextContextType = {
 };
 
 const [RotatingTextProvider, useRotatingText] =
-  getStrictContext<RotatingTextContextType>('RotatingTextContext');
+  getStrictContext<RotatingTextContextType>("RotatingTextContext");
 
-type RotatingTextContainerProps = React.ComponentProps<'div'> & {
+type RotatingTextContainerProps = React.ComponentProps<"div"> & {
   text: string | string[];
   duration?: number;
   y?: number;
@@ -33,7 +33,7 @@ function RotatingTextContainer({
   delay = 0,
   style,
   inView = false,
-  inViewMargin = '0px',
+  inViewMargin = "0px",
   inViewOnce = true,
   ...props
 }: RotatingTextContainerProps) {
@@ -68,15 +68,15 @@ function RotatingTextContainer({
     };
   }, [text, duration, delay, inView, isInView]);
 
-  const currentText = Array.isArray(text) ? (text[index] ?? '') : text;
+  const currentText = Array.isArray(text) ? (text[index] ?? "") : text;
 
   return (
     <RotatingTextProvider value={{ currentText, y, isInView }}>
       <div
         ref={localRef}
         style={{
-          overflow: 'hidden',
-          paddingBlock: '0.25rem',
+          overflow: "hidden",
+          paddingBlock: "0.25rem",
           ...style,
         }}
         {...props}
@@ -85,10 +85,10 @@ function RotatingTextContainer({
   );
 }
 
-type RotatingTextProps = Omit<HTMLMotionProps<'div'>, 'children'>;
+type RotatingTextProps = Omit<HTMLMotionProps<"div">, "children">;
 
 function RotatingText({
-  transition = { duration: 0.3, ease: 'easeOut' },
+  transition = { duration: 0.3, ease: "easeOut" },
   ...props
 }: RotatingTextProps) {
   const { currentText, y, isInView } = useRotatingText();

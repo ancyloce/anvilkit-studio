@@ -14,40 +14,40 @@ import { defineConfig } from "@rslib/core";
  * with a proven React + Rslib bundleless setup.
  */
 export default defineConfig({
-	source: {
-		entry: {
-			index: [
-				"./src/**/*.ts",
-				"./src/**/*.tsx",
-				"!./src/**/*.{test,spec}.{ts,tsx}",
-				"!./src/**/__tests__/**",
-			],
-		},
-	},
-	lib: [
-		{
-			bundle: false,
-			dts: {
-				autoExtension: true,
-			},
-			format: "esm",
-		},
-		{
-			bundle: false,
-			dts: {
-				autoExtension: true,
-			},
-			format: "cjs",
-		},
-	],
-	output: {
-		target: "web",
-		copy: [
-			{
-				from: "./src/react/overrides/styles.css",
-				to: "./react/overrides/styles.css",
-			},
-		],
-	},
-	plugins: [pluginReact()],
+  source: {
+    entry: {
+      index: [
+        "./src/**/*.ts",
+        "./src/**/*.tsx",
+        "!./src/**/*.{test,spec}.{ts,tsx}",
+        "!./src/**/__tests__/**",
+      ],
+    },
+  },
+  lib: [
+    {
+      bundle: false,
+      dts: {
+        autoExtension: true,
+      },
+      format: "esm",
+    },
+    {
+      bundle: false,
+      dts: {
+        autoExtension: true,
+      },
+      format: "cjs",
+    },
+  ],
+  output: {
+    target: "web",
+    copy: [
+      {
+        from: "./src/react/overrides/styles.css",
+        to: "./react/overrides/styles.css",
+      },
+    ],
+  },
+  plugins: [pluginReact()],
 });

@@ -56,21 +56,21 @@ import { createStore, type StoreApi } from "zustand/vanilla";
  * detail should subscribe to lifecycle events directly.
  */
 export interface LastExportRecord {
-	/**
-	 * The {@link ExportFormatDefinition.id} of the format that ran.
-	 */
-	readonly formatId: string;
-	/**
-	 * `Date.now()` at the moment the run completed, successfully or
-	 * otherwise.
-	 */
-	readonly at: number;
-	/**
-	 * `true` when the exporter's `run()` resolved without throwing;
-	 * `false` when it threw. An exporter that returns a result with
-	 * `warnings` but does not throw is still considered `ok: true`.
-	 */
-	readonly ok: boolean;
+  /**
+   * The {@link ExportFormatDefinition.id} of the format that ran.
+   */
+  readonly formatId: string;
+  /**
+   * `Date.now()` at the moment the run completed, successfully or
+   * otherwise.
+   */
+  readonly at: number;
+  /**
+   * `true` when the exporter's `run()` resolved without throwing;
+   * `false` when it threw. An exporter that returns a result with
+   * `warnings` but does not throw is still considered `ok: true`.
+   */
+  readonly ok: boolean;
 }
 
 /**
@@ -84,62 +84,62 @@ export interface LastExportRecord {
  * Zustand v5 "split state and actions" pattern.
  */
 export interface ExportState {
-	/**
-	 * Ids of every export format currently registered with the
-	 * runtime, in plugin insertion order. Populated from
-	 * `StudioRuntime.exportFormats` at `<Studio>` mount time
-	 * (`core-014`); tests pass a synthetic list directly.
-	 */
-	readonly availableFormats: readonly string[];
-	/**
-	 * Id of the format the user currently has selected, or `null`
-	 * if nothing is selected yet. Persisted across reloads so the
-	 * user's last choice survives a page refresh — this is the only
-	 * field {@link ExportStorePartial} carries.
-	 */
-	readonly currentFormat: string | null;
-	/**
-	 * `true` while an export run is in flight. **Never persisted** —
-	 * a reload always lands on `false` so the UI can never be stuck
-	 * in a spinner that outlives the request it belonged to.
-	 */
-	readonly isExporting: boolean;
-	/**
-	 * Record of the most recent run, or `null` before any run has
-	 * completed. Ephemeral — a reload clears it.
-	 */
-	readonly lastExport: LastExportRecord | null;
+  /**
+   * Ids of every export format currently registered with the
+   * runtime, in plugin insertion order. Populated from
+   * `StudioRuntime.exportFormats` at `<Studio>` mount time
+   * (`core-014`); tests pass a synthetic list directly.
+   */
+  readonly availableFormats: readonly string[];
+  /**
+   * Id of the format the user currently has selected, or `null`
+   * if nothing is selected yet. Persisted across reloads so the
+   * user's last choice survives a page refresh — this is the only
+   * field {@link ExportStorePartial} carries.
+   */
+  readonly currentFormat: string | null;
+  /**
+   * `true` while an export run is in flight. **Never persisted** —
+   * a reload always lands on `false` so the UI can never be stuck
+   * in a spinner that outlives the request it belonged to.
+   */
+  readonly isExporting: boolean;
+  /**
+   * Record of the most recent run, or `null` before any run has
+   * completed. Ephemeral — a reload clears it.
+   */
+  readonly lastExport: LastExportRecord | null;
 
-	/**
-	 * Replace {@link availableFormats} with a new list. Called once
-	 * at `<Studio>` mount with the ids from
-	 * `StudioRuntime.exportFormats`. Tests pass fresh lists between
-	 * cases.
-	 */
-	setAvailableFormats(ids: readonly string[]): void;
-	/**
-	 * Set the user's currently selected format. Pass `null` to
-	 * clear the selection.
-	 */
-	setCurrentFormat(id: string | null): void;
-	/**
-	 * Flip the in-flight flag. The export pipeline in `<Studio>`
-	 * wraps this around `beforeExport` / `afterExport` lifecycle
-	 * events.
-	 */
-	setIsExporting(value: boolean): void;
-	/**
-	 * Record the outcome of a run and stamp it with `Date.now()`.
-	 * Called from the `afterExport` lifecycle handler (successful
-	 * runs) and the export pipeline's catch block (failed runs).
-	 */
-	recordExport(formatId: string, ok: boolean): void;
-	/**
-	 * Restore every field to its initial state. Uses
-	 * `useExportStore.getInitialState()` under the hood so the
-	 * definition of "initial" lives in exactly one place.
-	 */
-	reset(): void;
+  /**
+   * Replace {@link availableFormats} with a new list. Called once
+   * at `<Studio>` mount with the ids from
+   * `StudioRuntime.exportFormats`. Tests pass fresh lists between
+   * cases.
+   */
+  setAvailableFormats(ids: readonly string[]): void;
+  /**
+   * Set the user's currently selected format. Pass `null` to
+   * clear the selection.
+   */
+  setCurrentFormat(id: string | null): void;
+  /**
+   * Flip the in-flight flag. The export pipeline in `<Studio>`
+   * wraps this around `beforeExport` / `afterExport` lifecycle
+   * events.
+   */
+  setIsExporting(value: boolean): void;
+  /**
+   * Record the outcome of a run and stamp it with `Date.now()`.
+   * Called from the `afterExport` lifecycle handler (successful
+   * runs) and the export pipeline's catch block (failed runs).
+   */
+  recordExport(formatId: string, ok: boolean): void;
+  /**
+   * Restore every field to its initial state. Uses
+   * `useExportStore.getInitialState()` under the hood so the
+   * definition of "initial" lives in exactly one place.
+   */
+  reset(): void;
 }
 
 /**
@@ -151,7 +151,7 @@ export interface ExportState {
  * persisted field.
  */
 interface ExportStorePartial {
-	readonly currentFormat: string | null;
+  readonly currentFormat: string | null;
 }
 
 /**
@@ -166,10 +166,10 @@ interface ExportStorePartial {
  * only the read fields and leaves the actions intact.
  */
 const INITIAL_STATE = {
-	availableFormats: [] as readonly string[],
-	currentFormat: null as string | null,
-	isExporting: false,
-	lastExport: null as LastExportRecord | null,
+  availableFormats: [] as readonly string[],
+  currentFormat: null as string | null,
+  isExporting: false,
+  lastExport: null as LastExportRecord | null,
 } as const;
 
 /**
@@ -194,7 +194,7 @@ const INITIAL_STATE = {
  * }
  */
 export interface CreateExportStoreOptions {
-	readonly storeId: string;
+  readonly storeId: string;
 }
 
 export type ExportStoreApi = StoreApi<ExportState>;
@@ -206,42 +206,42 @@ export type ExportStoreApi = StoreApi<ExportState>;
  * {@link ExportStoreProvider} + the `useExportStore` selector hook.
  */
 export function createExportStore(
-	options: CreateExportStoreOptions,
+  options: CreateExportStoreOptions,
 ): ExportStoreApi {
-	const { storeId } = options;
-	return createStore<ExportState>()(
-		persist(
-			(set) => ({
-				...INITIAL_STATE,
-				setAvailableFormats(ids) {
-					set({ availableFormats: ids });
-				},
-				setCurrentFormat(id) {
-					set({ currentFormat: id });
-				},
-				setIsExporting(value) {
-					set({ isExporting: value });
-				},
-				recordExport(formatId, ok) {
-					set({ lastExport: { formatId, at: Date.now(), ok } });
-				},
-				reset() {
-					set({ ...INITIAL_STATE });
-				},
-			}),
-			{
-				name: `anvilkit-core-export-${storeId}`,
-				// Persist only `currentFormat`. Every other field is
-				// ephemeral for the reasons documented in the file header.
-				partialize: (state): ExportStorePartial => ({
-					currentFormat: state.currentFormat,
-				}),
-				// SSR safety: defer rehydration until the provider mounts
-				// a browser-only effect. Reading `localStorage`
-				// synchronously at module-eval produces a hydration
-				// mismatch in Next App Router / any SSR-ish host.
-				skipHydration: true,
-			},
-		),
-	);
+  const { storeId } = options;
+  return createStore<ExportState>()(
+    persist(
+      (set) => ({
+        ...INITIAL_STATE,
+        setAvailableFormats(ids) {
+          set({ availableFormats: ids });
+        },
+        setCurrentFormat(id) {
+          set({ currentFormat: id });
+        },
+        setIsExporting(value) {
+          set({ isExporting: value });
+        },
+        recordExport(formatId, ok) {
+          set({ lastExport: { formatId, at: Date.now(), ok } });
+        },
+        reset() {
+          set({ ...INITIAL_STATE });
+        },
+      }),
+      {
+        name: `anvilkit-core-export-${storeId}`,
+        // Persist only `currentFormat`. Every other field is
+        // ephemeral for the reasons documented in the file header.
+        partialize: (state): ExportStorePartial => ({
+          currentFormat: state.currentFormat,
+        }),
+        // SSR safety: defer rehydration until the provider mounts
+        // a browser-only effect. Reading `localStorage`
+        // synchronously at module-eval produces a hydration
+        // mismatch in Next App Router / any SSR-ish host.
+        skipHydration: true,
+      },
+    ),
+  );
 }

@@ -87,7 +87,9 @@ export function createAutosavePlugin(endpoint: string): StudioPlugin {
         },
         hooks: {
           onDataChange: async (ctx, data) => {
-            ctx.log("debug", "autosaving", { size: JSON.stringify(data).length });
+            ctx.log("debug", "autosaving", {
+              size: JSON.stringify(data).length,
+            });
             await fetch(endpoint, {
               method: "POST",
               body: JSON.stringify(data),
@@ -189,14 +191,14 @@ case on every build.
 
 ## Exports map
 
-| Import                     | Purpose                                                                  |
-| -------------------------- | ------------------------------------------------------------------------ |
-| `@anvilkit/core`           | Main barrel. Re-exports types, runtime, config, react (sans `compat`).   |
-| `@anvilkit/core/types`     | Plugin contract and domain types (AI, export, IR, config).               |
-| `@anvilkit/core/runtime`   | React-free plugin engine (`compilePlugins`, errors, lifecycle manager).  |
-| `@anvilkit/core/config`    | `createStudioConfig`, `StudioConfigSchema`, provider + hook.             |
-| `@anvilkit/core/react`     | `<Studio>`, `useStudio`, `mergeOverrides`, and the Zustand store hooks.  |
-| `@anvilkit/core/compat`    | Legacy compat adapters (`aiHostAdapter`). Tree-shaken unless imported.   |
+| Import                   | Purpose                                                                 |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `@anvilkit/core`         | Main barrel. Re-exports types, runtime, config, react (sans `compat`).  |
+| `@anvilkit/core/types`   | Plugin contract and domain types (AI, export, IR, config).              |
+| `@anvilkit/core/runtime` | React-free plugin engine (`compilePlugins`, errors, lifecycle manager). |
+| `@anvilkit/core/config`  | `createStudioConfig`, `StudioConfigSchema`, provider + hook.            |
+| `@anvilkit/core/react`   | `<Studio>`, `useStudio`, `mergeOverrides`, and the Zustand store hooks. |
+| `@anvilkit/core/compat`  | Legacy compat adapters (`aiHostAdapter`). Tree-shaken unless imported.  |
 
 The `./runtime` subpath is guaranteed React-free — it can be imported
 from server-only code or a CLI without pulling React into your

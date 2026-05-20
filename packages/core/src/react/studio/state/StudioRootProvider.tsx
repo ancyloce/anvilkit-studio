@@ -16,10 +16,10 @@
  */
 
 import {
-	createContext,
-	type ReactNode,
-	type RefObject,
-	useContext,
+  createContext,
+  type ReactNode,
+  type RefObject,
+  useContext,
 } from "react";
 
 type StudioRootRef = RefObject<HTMLElement | null>;
@@ -27,19 +27,19 @@ type StudioRootRef = RefObject<HTMLElement | null>;
 const StudioRootContext = createContext<StudioRootRef | null>(null);
 
 export interface StudioRootProviderProps {
-	readonly rootRef: StudioRootRef;
-	readonly children: ReactNode;
+  readonly rootRef: StudioRootRef;
+  readonly children: ReactNode;
 }
 
 export function StudioRootProvider({
-	rootRef,
-	children,
+  rootRef,
+  children,
 }: StudioRootProviderProps): ReactNode {
-	return (
-		<StudioRootContext.Provider value={rootRef}>
-			{children}
-		</StudioRootContext.Provider>
-	);
+  return (
+    <StudioRootContext.Provider value={rootRef}>
+      {children}
+    </StudioRootContext.Provider>
+  );
 }
 
 /**
@@ -48,7 +48,7 @@ export function StudioRootProvider({
  * `.current`) as "fall back to `document`".
  */
 export function useStudioRootRef(): StudioRootRef | null {
-	return useContext(StudioRootContext);
+  return useContext(StudioRootContext);
 }
 
 /**
@@ -57,5 +57,5 @@ export function useStudioRootRef(): StudioRootRef | null {
  * that preserves single-editor / test behavior).
  */
 export function resolveQueryRoot(ref: StudioRootRef | null): ParentNode {
-	return ref?.current ?? document;
+  return ref?.current ?? document;
 }

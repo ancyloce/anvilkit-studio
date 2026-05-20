@@ -19,27 +19,27 @@
  * The actual URL lives on `path` and is interpreted by the host app.
  */
 export interface StudioPage {
-	/** Stable id, unique within the source. */
-	readonly id: string;
-	/** Human-readable title shown in the row. */
-	readonly title: string;
-	/** Optional path (e.g. `"/about"`). Required for `route=true` rows. */
-	readonly path?: string;
-	/**
-	 * `true` if this page corresponds to a public route (gets the
-	 * globe badge); `false`/omitted for non-route content (templates,
-	 * drafts, etc.).
-	 */
-	readonly route?: boolean;
-	/**
-	 * `true` for the page currently loaded into the canvas. The host
-	 * computes this from its routing state during {@link StudioPagesSource.list}
-	 * and re-emits via `subscribe()` when the active page changes. The
-	 * sidebar renders the row with the `--ak-studio-accent` background
-	 * (PRD §6.2). Optional — sources that omit it always render every
-	 * row inactive.
-	 */
-	readonly active?: boolean;
+  /** Stable id, unique within the source. */
+  readonly id: string;
+  /** Human-readable title shown in the row. */
+  readonly title: string;
+  /** Optional path (e.g. `"/about"`). Required for `route=true` rows. */
+  readonly path?: string;
+  /**
+   * `true` if this page corresponds to a public route (gets the
+   * globe badge); `false`/omitted for non-route content (templates,
+   * drafts, etc.).
+   */
+  readonly route?: boolean;
+  /**
+   * `true` for the page currently loaded into the canvas. The host
+   * computes this from its routing state during {@link StudioPagesSource.list}
+   * and re-emits via `subscribe()` when the active page changes. The
+   * sidebar renders the row with the `--ak-studio-accent` background
+   * (PRD §6.2). Optional — sources that omit it always render every
+   * row inactive.
+   */
+  readonly active?: boolean;
 }
 
 /**
@@ -49,9 +49,9 @@ export interface StudioPage {
  * because not every page is a public route.
  */
 export interface StudioPageCreateInput {
-	readonly title: string;
-	readonly path: string;
-	readonly route?: boolean;
+  readonly title: string;
+  readonly path: string;
+  readonly route?: boolean;
 }
 
 /**
@@ -65,20 +65,20 @@ export interface StudioPageCreateInput {
  * and rely on the sidebar's pull-on-mount semantics.
  */
 export interface StudioPagesSource {
-	/** Return the current page list. May be sync or async. */
-	list(): readonly StudioPage[] | Promise<readonly StudioPage[]>;
-	/**
-	 * Optional subscription. When set, the sidebar calls it on mount
-	 * with a listener and re-runs `list()` whenever the listener fires.
-	 * Returns an `unsubscribe` cleanup.
-	 */
-	subscribe?(listener: () => void): () => void;
-	/** Fired when a page row is clicked. Host routes to that page. */
-	onSelect?(pageId: string): void;
-	/**
-	 * Fired when the `+` add-page dialog is submitted. Host creates
-	 * the page and (optionally) navigates to it. Async result is
-	 * awaited by the dialog so it can show a pending state.
-	 */
-	onCreate?(input: StudioPageCreateInput): void | Promise<void>;
+  /** Return the current page list. May be sync or async. */
+  list(): readonly StudioPage[] | Promise<readonly StudioPage[]>;
+  /**
+   * Optional subscription. When set, the sidebar calls it on mount
+   * with a listener and re-runs `list()` whenever the listener fires.
+   * Returns an `unsubscribe` cleanup.
+   */
+  subscribe?(listener: () => void): () => void;
+  /** Fired when a page row is clicked. Host routes to that page. */
+  onSelect?(pageId: string): void;
+  /**
+   * Fired when the `+` add-page dialog is submitted. Host creates
+   * the page and (optionally) navigates to it. Async result is
+   * awaited by the dialog so it can show a pending state.
+   */
+  onCreate?(input: StudioPageCreateInput): void | Promise<void>;
 }

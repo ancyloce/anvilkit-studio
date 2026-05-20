@@ -5,11 +5,11 @@ anvilkit-studio workspace. Private — not published to npm.
 
 ## Exports
 
-| Import                                | Purpose                                                                                       |
-| ------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `@anvilkit/tailwind-config`           | `theme.css` — the base token layer (light + dark CSS variables).                              |
-| `@anvilkit/tailwind-config/shadcn`    | `shadcn.css` — token layer plus shadcn-style design tokens used by `@anvilkit/ui` primitives. |
-| `@anvilkit/tailwind-config/postcss`   | PostCSS config bundling `@tailwindcss/postcss`. Drop-in for `apps/demo` and `apps/docs`.      |
+| Import                              | Purpose                                                                                       |
+| ----------------------------------- | --------------------------------------------------------------------------------------------- |
+| `@anvilkit/tailwind-config`         | `theme.css` — the base token layer (light + dark CSS variables).                              |
+| `@anvilkit/tailwind-config/shadcn`  | `shadcn.css` — token layer plus shadcn-style design tokens used by `@anvilkit/ui` primitives. |
+| `@anvilkit/tailwind-config/postcss` | PostCSS config bundling `@tailwindcss/postcss`. Drop-in for `apps/demo` and `apps/docs`.      |
 
 ## Usage
 

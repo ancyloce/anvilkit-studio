@@ -1,4 +1,4 @@
-# __NAME__
+# **NAME**
 
 Scaffolded with `anvilkit init`.
 

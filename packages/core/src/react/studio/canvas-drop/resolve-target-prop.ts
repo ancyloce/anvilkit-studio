@@ -30,20 +30,20 @@ import type { ComponentData, Config } from "@puckeditor/core";
 const TEXT_PROP_CANDIDATES = ["text", "title", "heading", "content"] as const;
 
 const IMAGE_PROP_CANDIDATES = [
-	"src",
-	"image",
-	"imageSrc",
-	"imageUrl",
-	"backgroundImage",
-	"bgImage",
-	"coverImage",
+  "src",
+  "image",
+  "imageSrc",
+  "imageUrl",
+  "backgroundImage",
+  "bgImage",
+  "coverImage",
 ] as const;
 
 const TEXT_FIELD_TYPES = new Set(["text", "textarea", "richtext"]);
 const IMAGE_FIELD_TYPES = new Set(["text", "external", "custom"]);
 
 interface FieldLike {
-	readonly type?: string;
+  readonly type?: string;
 }
 
 /**
@@ -51,19 +51,19 @@ interface FieldLike {
  * map when any link in the chain is missing.
  */
 function fieldsFor(
-	config: Config,
-	type: string,
+  config: Config,
+  type: string,
 ): Readonly<Record<string, FieldLike>> {
-	const components = (
-		config as {
-			components?: Record<string, { fields?: Record<string, FieldLike> }>;
-		}
-	).components;
-	return components?.[type]?.fields ?? {};
+  const components = (
+    config as {
+      components?: Record<string, { fields?: Record<string, FieldLike> }>;
+    }
+  ).components;
+  return components?.[type]?.fields ?? {};
 }
 
 function isStringProp(value: unknown): value is string {
-	return typeof value === "string";
+  return typeof value === "string";
 }
 
 /**
@@ -71,26 +71,26 @@ function isStringProp(value: unknown): value is string {
  * when `item` is not a compatible text target.
  */
 export function resolveTextTargetProp(
-	item: ComponentData | null | undefined,
-	config: Config,
+  item: ComponentData | null | undefined,
+  config: Config,
 ): string | null {
-	if (item === null || item === undefined) return null;
-	const props = item.props as Record<string, unknown>;
+  if (item === null || item === undefined) return null;
+  const props = item.props as Record<string, unknown>;
 
-	// Locked v1 predicate — no field metadata required.
-	if (item.type === "Text" && isStringProp(props["text"])) {
-		return "text";
-	}
+  // Locked v1 predicate — no field metadata required.
+  if (item.type === "Text" && isStringProp(props["text"])) {
+    return "text";
+  }
 
-	const fields = fieldsFor(config, item.type);
-	for (const candidate of TEXT_PROP_CANDIDATES) {
-		if (!isStringProp(props[candidate])) continue;
-		const fieldType = fields[candidate]?.type;
-		if (fieldType !== undefined && TEXT_FIELD_TYPES.has(fieldType)) {
-			return candidate;
-		}
-	}
-	return null;
+  const fields = fieldsFor(config, item.type);
+  for (const candidate of TEXT_PROP_CANDIDATES) {
+    if (!isStringProp(props[candidate])) continue;
+    const fieldType = fields[candidate]?.type;
+    if (fieldType !== undefined && TEXT_FIELD_TYPES.has(fieldType)) {
+      return candidate;
+    }
+  }
+  return null;
 }
 
 /**
@@ -98,28 +98,28 @@ export function resolveTextTargetProp(
  * when `item` is not a compatible image target.
  */
 export function resolveImageTargetProp(
-	item: ComponentData | null | undefined,
-	config: Config,
+  item: ComponentData | null | undefined,
+  config: Config,
 ): string | null {
-	if (item === null || item === undefined) return null;
-	const props = item.props as Record<string, unknown>;
+  if (item === null || item === undefined) return null;
+  const props = item.props as Record<string, unknown>;
 
-	// Canonical Image component — matches the sidebar's insert contract.
-	if (item.type === "Image") return "src";
+  // Canonical Image component — matches the sidebar's insert contract.
+  if (item.type === "Image") return "src";
 
-	const fields = fieldsFor(config, item.type);
-	for (const candidate of IMAGE_PROP_CANDIDATES) {
-		if (!Object.hasOwn(props, candidate)) continue;
-		const value = props[candidate];
-		// An image URL prop is either an existing string or unset.
-		if (value !== undefined && typeof value !== "string") continue;
-		const fieldType = fields[candidate]?.type;
-		// When a field is registered it must look like an image picker;
-		// when none is registered the candidate name (already an
-		// image-named allowlist entry) is sufficient.
-		if (fieldType === undefined || IMAGE_FIELD_TYPES.has(fieldType)) {
-			return candidate;
-		}
-	}
-	return null;
+  const fields = fieldsFor(config, item.type);
+  for (const candidate of IMAGE_PROP_CANDIDATES) {
+    if (!Object.hasOwn(props, candidate)) continue;
+    const value = props[candidate];
+    // An image URL prop is either an existing string or unset.
+    if (value !== undefined && typeof value !== "string") continue;
+    const fieldType = fields[candidate]?.type;
+    // When a field is registered it must look like an image picker;
+    // when none is registered the candidate name (already an
+    // image-named allowlist entry) is sufficient.
+    if (fieldType === undefined || IMAGE_FIELD_TYPES.has(fieldType)) {
+      return candidate;
+    }
+  }
+  return null;
 }

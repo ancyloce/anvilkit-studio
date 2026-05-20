@@ -15,26 +15,26 @@
  */
 
 import {
-	createContext,
-	type Dispatch,
-	type ReactNode,
-	type SetStateAction,
-	useContext,
-	useEffect,
-	useMemo,
-	useState,
+  createContext,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
 
 interface SidebarHeaderActionsContextValue {
-	readonly actions: ReactNode;
-	readonly setActions: Dispatch<SetStateAction<ReactNode>>;
+  readonly actions: ReactNode;
+  readonly setActions: Dispatch<SetStateAction<ReactNode>>;
 }
 
 const SidebarHeaderActionsContext =
-	createContext<SidebarHeaderActionsContextValue | null>(null);
+  createContext<SidebarHeaderActionsContextValue | null>(null);
 
 export interface SidebarHeaderActionsProviderProps {
-	readonly children: ReactNode;
+  readonly children: ReactNode;
 }
 
 /**
@@ -43,15 +43,15 @@ export interface SidebarHeaderActionsProviderProps {
  * time — the active module owns the slot.
  */
 export function SidebarHeaderActionsProvider({
-	children,
+  children,
 }: SidebarHeaderActionsProviderProps): ReactNode {
-	const [actions, setActions] = useState<ReactNode>(null);
-	const value = useMemo(() => ({ actions, setActions }), [actions]);
-	return (
-		<SidebarHeaderActionsContext.Provider value={value}>
-			{children}
-		</SidebarHeaderActionsContext.Provider>
-	);
+  const [actions, setActions] = useState<ReactNode>(null);
+  const value = useMemo(() => ({ actions, setActions }), [actions]);
+  return (
+    <SidebarHeaderActionsContext.Provider value={value}>
+      {children}
+    </SidebarHeaderActionsContext.Provider>
+  );
 }
 
 /**
@@ -60,8 +60,8 @@ export function SidebarHeaderActionsProvider({
  * sidebar tree.
  */
 export function useSidebarHeaderActions(): ReactNode {
-	const ctx = useContext(SidebarHeaderActionsContext);
-	return ctx?.actions ?? null;
+  const ctx = useContext(SidebarHeaderActionsContext);
+  return ctx?.actions ?? null;
 }
 
 /**
@@ -76,12 +76,12 @@ export function useSidebarHeaderActions(): ReactNode {
  * the full sidebar shell.
  */
 export function useSetSidebarHeaderActions(actions: ReactNode): void {
-	const ctx = useContext(SidebarHeaderActionsContext);
-	useEffect(() => {
-		if (ctx === null) return;
-		ctx.setActions(actions);
-		return () => {
-			ctx.setActions(null);
-		};
-	}, [ctx, actions]);
+  const ctx = useContext(SidebarHeaderActionsContext);
+  useEffect(() => {
+    if (ctx === null) return;
+    ctx.setActions(actions);
+    return () => {
+      ctx.setActions(null);
+    };
+  }, [ctx, actions]);
 }

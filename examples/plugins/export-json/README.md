@@ -22,7 +22,7 @@ import { createStudioConfig } from "@anvilkit/core";
 import { createExportJsonPlugin } from "@anvilkit/example-export-json";
 
 const studioConfig = createStudioConfig({
-	plugins: [createExportJsonPlugin()],
+  plugins: [createExportJsonPlugin()],
 });
 ```
 

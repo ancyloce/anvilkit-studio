@@ -12,8 +12,8 @@ import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import { generatePage } from "@anvilkit/example-ai-adapter-openai";
 
 export const aiCopilot = createAiCopilotPlugin({
-	generatePage,
-	puckConfig,
+  generatePage,
+  puckConfig,
 });
 ```
 

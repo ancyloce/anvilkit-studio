@@ -10,21 +10,22 @@ import pageIR from "./page-ir.json" with { type: "json" };
  * directly.
  */
 const template: AnvilkitTemplate = {
-	slug: "blog-article",
-	name: "Blog Article",
-	description: "Navbar, article section with rich prose, and a related-posts CTA button at the foot.",
-	preview: {
-		src: "./preview.png",
-		width: 1200,
-		height: 675,
-		alt: "Blog Article template preview",
-	},
-	packages: [
-		{ name: "@anvilkit/button", version: "^0.0.2" },
-		{ name: "@anvilkit/navbar", version: "^0.0.2" },
-		{ name: "@anvilkit/section", version: "^0.0.2" },
-	],
-	pageIR: pageIR as AnvilkitTemplate["pageIR"],
+  slug: "blog-article",
+  name: "Blog Article",
+  description:
+    "Navbar, article section with rich prose, and a related-posts CTA button at the foot.",
+  preview: {
+    src: "./preview.png",
+    width: 1200,
+    height: 675,
+    alt: "Blog Article template preview",
+  },
+  packages: [
+    { name: "@anvilkit/button", version: "^0.0.2" },
+    { name: "@anvilkit/navbar", version: "^0.0.2" },
+    { name: "@anvilkit/section", version: "^0.0.2" },
+  ],
+  pageIR: pageIR as AnvilkitTemplate["pageIR"],
 };
 
 export default template;

@@ -1,11 +1,14 @@
-import React, { type ComponentPropsWithoutRef, type CSSProperties } from "react"
+import React, {
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+} from "react";
 
-import { cn } from "@anvilkit/ui/lib/utils"
+import { cn } from "@anvilkit/ui/lib/utils";
 
 interface RippleProps extends ComponentPropsWithoutRef<"div"> {
-  mainCircleSize?: number
-  mainCircleOpacity?: number
-  numCircles?: number
+  mainCircleSize?: number;
+  mainCircleOpacity?: number;
+  numCircles?: number;
 }
 
 export const Ripple = React.memo(function Ripple({
@@ -16,8 +19,8 @@ export const Ripple = React.memo(function Ripple({
   ...props
 }: RippleProps) {
   const circles = Array.from({ length: numCircles }, (_, circleIndex) => {
-    const size = mainCircleSize + circleIndex * 70
-    const opacity = mainCircleOpacity - circleIndex * 0.03
+    const size = mainCircleSize + circleIndex * 70;
+    const opacity = mainCircleOpacity - circleIndex * 0.03;
 
     return {
       id: `ripple-${size}`,
@@ -25,19 +28,19 @@ export const Ripple = React.memo(function Ripple({
       size,
       opacity,
       animationDelay: `${circleIndex * 0.06}s`,
-    }
-  })
+    };
+  });
 
   return (
     <div
       className={cn(
         "pointer-events-none absolute inset-0 mask-[linear-gradient(to_bottom,white,transparent)] select-none",
-        className
+        className,
       )}
       {...props}
     >
       {circles.map((circle) => {
-        const borderStyle = "solid"
+        const borderStyle = "solid";
 
         return (
           <div
@@ -59,10 +62,10 @@ export const Ripple = React.memo(function Ripple({
               } as CSSProperties
             }
           />
-        )
+        );
       })}
     </div>
-  )
-})
+  );
+});
 
-Ripple.displayName = "Ripple"
+Ripple.displayName = "Ripple";

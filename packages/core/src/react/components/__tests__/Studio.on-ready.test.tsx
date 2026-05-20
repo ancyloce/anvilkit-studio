@@ -15,21 +15,21 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 // actually mounts and its effect runs (that is what makes
 // getPuckApi() callable and triggers onReady).
 vi.mock("@puckeditor/core", () => ({
-	Puck: ({ overrides }: { overrides?: { puck?: PuckSlot } }) => {
-		const PuckSlot = overrides?.puck ?? (({ children }) => <>{children}</>);
-		return (
-			<div data-testid="puck-mock">
-				<PuckSlot>
-					<div data-testid="puck-inner" />
-				</PuckSlot>
-			</div>
-		);
-	},
-	useGetPuck: () => () => ({
-		appState: { data: { root: { props: {} }, content: [], zones: {} } },
-		dispatch: vi.fn(),
-	}),
-	createUsePuck: () => () => undefined,
+  Puck: ({ overrides }: { overrides?: { puck?: PuckSlot } }) => {
+    const PuckSlot = overrides?.puck ?? (({ children }) => <>{children}</>);
+    return (
+      <div data-testid="puck-mock">
+        <PuckSlot>
+          <div data-testid="puck-inner" />
+        </PuckSlot>
+      </div>
+    );
+  },
+  useGetPuck: () => () => ({
+    appState: { data: { root: { props: {} }, content: [], zones: {} } },
+    dispatch: vi.fn(),
+  }),
+  createUsePuck: () => () => undefined,
 }));
 
 type PuckSlot = (props: { children: ReactNode }) => ReactNode;
@@ -40,55 +40,55 @@ import type { StudioPlugin } from "@/types/plugin";
 afterEach(cleanup);
 
 describe("<Studio> — onReady lifecycle hook (C3)", () => {
-	it("fires onReady once, after onInit, with a working getPuckApi()", async () => {
-		const events: string[] = [];
-		let onReadyGetPuckApiOk = false;
+  it("fires onReady once, after onInit, with a working getPuckApi()", async () => {
+    const events: string[] = [];
+    let onReadyGetPuckApiOk = false;
 
-		const plugin: StudioPlugin = {
-			meta: {
-				id: "test/on-ready",
-				name: "on-ready probe",
-				version: "1.0.0",
-				coreVersion: "^0.1.0",
-			},
-			register() {
-				return {
-					meta: {
-						id: "test/on-ready",
-						name: "on-ready probe",
-						version: "1.0.0",
-						coreVersion: "^0.1.0",
-					},
-					hooks: {
-						onInit() {
-							events.push("onInit");
-						},
-						onReady(ctx) {
-							events.push("onReady");
-							const api = ctx.getPuckApi();
-							onReadyGetPuckApiOk = typeof api.dispatch === "function";
-						},
-					},
-				};
-			},
-		};
+    const plugin: StudioPlugin = {
+      meta: {
+        id: "test/on-ready",
+        name: "on-ready probe",
+        version: "1.0.0",
+        coreVersion: "^0.1.0",
+      },
+      register() {
+        return {
+          meta: {
+            id: "test/on-ready",
+            name: "on-ready probe",
+            version: "1.0.0",
+            coreVersion: "^0.1.0",
+          },
+          hooks: {
+            onInit() {
+              events.push("onInit");
+            },
+            onReady(ctx) {
+              events.push("onReady");
+              const api = ctx.getPuckApi();
+              onReadyGetPuckApiOk = typeof api.dispatch === "function";
+            },
+          },
+        };
+      },
+    };
 
-		render(
-			<Studio
-				chrome="puck"
-				puckConfig={{ components: {} }}
-				plugins={[plugin]}
-			/>,
-		);
+    render(
+      <Studio
+        chrome="puck"
+        puckConfig={{ components: {} }}
+        plugins={[plugin]}
+      />,
+    );
 
-		await waitFor(() => {
-			expect(events).toContain("onReady");
-		});
-		// Settle any trailing re-renders / StrictMode double-invoke.
-		await new Promise((r) => setTimeout(r, 20));
+    await waitFor(() => {
+      expect(events).toContain("onReady");
+    });
+    // Settle any trailing re-renders / StrictMode double-invoke.
+    await new Promise((r) => setTimeout(r, 20));
 
-		expect(onReadyGetPuckApiOk).toBe(true);
-		expect(events.filter((e) => e === "onReady")).toHaveLength(1);
-		expect(events.indexOf("onInit")).toBeLessThan(events.indexOf("onReady"));
-	});
+    expect(onReadyGetPuckApiOk).toBe(true);
+    expect(events.filter((e) => e === "onReady")).toHaveLength(1);
+    expect(events.indexOf("onInit")).toBeLessThan(events.indexOf("onReady"));
+  });
 });

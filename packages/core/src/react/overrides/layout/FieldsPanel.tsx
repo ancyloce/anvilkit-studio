@@ -13,26 +13,26 @@ import { useBreadcrumbs } from "@/overrides/utils/breadcrumbs";
 import { cn } from "@/utils/cn";
 
 interface ItemSelector {
-	readonly index: number;
-	readonly zone?: string;
+  readonly index: number;
+  readonly zone?: string;
 }
 
 export interface FieldsPanelOverrideProps {
-	readonly children: ReactNode;
-	readonly isLoading: boolean;
-	readonly itemSelector?: ItemSelector | null;
-	readonly className?: string;
+  readonly children: ReactNode;
+  readonly isLoading: boolean;
+  readonly itemSelector?: ItemSelector | null;
+  readonly className?: string;
 }
 
 export function FieldsPanel({
-	children,
-	isLoading,
-	itemSelector,
-	className,
+  children,
+  isLoading,
+  itemSelector,
+  className,
 }: FieldsPanelOverrideProps): ReactNode {
-	const crumbs = useBreadcrumbs();
+  const crumbs = useBreadcrumbs();
 
-	return (
+  return (
     <div className={cn("flex h-full min-h-0 flex-col gap-2", className)}>
       {crumbs.length > 0 ? (
         <nav

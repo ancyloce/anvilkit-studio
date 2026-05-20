@@ -17,27 +17,27 @@
 import { z } from "zod";
 
 const SEMVER_PATTERN =
-	/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 export const NODE_META_LIMITS = Object.freeze({
-	ownerMaxLength: 256,
-	notesMaxLength: 512,
-	versionPattern: SEMVER_PATTERN,
+  ownerMaxLength: 256,
+  notesMaxLength: 512,
+  versionPattern: SEMVER_PATTERN,
 } as const);
 
 const NodeMetaSchema = z
-	.object({
-		locked: z.boolean().optional(),
-		owner: z.string().max(NODE_META_LIMITS.ownerMaxLength).optional(),
-		version: z.string().regex(SEMVER_PATTERN).optional(),
-		notes: z.string().max(NODE_META_LIMITS.notesMaxLength).optional(),
-	})
-	.strict();
+  .object({
+    locked: z.boolean().optional(),
+    owner: z.string().max(NODE_META_LIMITS.ownerMaxLength).optional(),
+    version: z.string().regex(SEMVER_PATTERN).optional(),
+    notes: z.string().max(NODE_META_LIMITS.notesMaxLength).optional(),
+  })
+  .strict();
 
 export interface NodeMetaIssue {
-	readonly code: "INVALID_NODE_META";
-	readonly message: string;
-	readonly path: ReadonlyArray<string | number>;
+  readonly code: "INVALID_NODE_META";
+  readonly message: string;
+  readonly path: ReadonlyArray<string | number>;
 }
 
 /**
@@ -50,15 +50,15 @@ export interface NodeMetaIssue {
  * `["replacement", i, "meta", ...issuePath]`).
  */
 export function validateNodeMeta(meta: unknown): readonly NodeMetaIssue[] {
-	const result = NodeMetaSchema.safeParse(meta);
-	if (result.success) {
-		return [];
-	}
-	return result.error.issues.map((issue) => ({
-		code: "INVALID_NODE_META" as const,
-		message: issue.message,
-		path: issue.path.map((segment) =>
-			typeof segment === "symbol" ? segment.toString() : segment,
-		),
-	}));
+  const result = NodeMetaSchema.safeParse(meta);
+  if (result.success) {
+    return [];
+  }
+  return result.error.issues.map((issue) => ({
+    code: "INVALID_NODE_META" as const,
+    message: issue.message,
+    path: issue.path.map((segment) =>
+      typeof segment === "symbol" ? segment.toString() : segment,
+    ),
+  }));
 }

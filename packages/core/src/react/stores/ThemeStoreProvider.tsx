@@ -16,43 +16,43 @@ import { createContext, type ReactNode, useContext } from "react";
 import { useStore } from "zustand";
 
 import {
-	createThemeStore,
-	type ThemeState,
-	type ThemeStoreApi,
+  createThemeStore,
+  type ThemeState,
+  type ThemeStoreApi,
 } from "./theme-store";
 import { useRehydratedStore } from "./use-rehydrated-store";
 
 const ThemeStoreContext = createContext<ThemeStoreApi | null>(null);
 
 export interface ThemeStoreProviderProps {
-	readonly storeId: string;
-	/**
-	 * Optional externally-owned store. `<Studio>` creates the instance
-	 * itself (so it can call `.getState()` imperatively) and passes it
-	 * in; standalone callers omit it and the provider owns one.
-	 */
-	readonly store?: ThemeStoreApi;
-	readonly children: ReactNode;
+  readonly storeId: string;
+  /**
+   * Optional externally-owned store. `<Studio>` creates the instance
+   * itself (so it can call `.getState()` imperatively) and passes it
+   * in; standalone callers omit it and the provider owns one.
+   */
+  readonly store?: ThemeStoreApi;
+  readonly children: ReactNode;
 }
 
 export function ThemeStoreProvider({
-	storeId,
-	store: injected,
-	children,
+  storeId,
+  store: injected,
+  children,
 }: ThemeStoreProviderProps): ReactNode {
-	const { store, hydrated } = useRehydratedStore(
-		storeId,
-		createThemeStore,
-		injected,
-	);
-	// Gate the subtree until the persisted slice is rehydrated so
-	// children never paint with INITIAL_STATE then flip (see
-	// `useRehydratedStore` for the SSR contract).
-	return (
-		<ThemeStoreContext.Provider value={store}>
-			{hydrated ? children : null}
-		</ThemeStoreContext.Provider>
-	);
+  const { store, hydrated } = useRehydratedStore(
+    storeId,
+    createThemeStore,
+    injected,
+  );
+  // Gate the subtree until the persisted slice is rehydrated so
+  // children never paint with INITIAL_STATE then flip (see
+  // `useRehydratedStore` for the SSR contract).
+  return (
+    <ThemeStoreContext.Provider value={store}>
+      {hydrated ? children : null}
+    </ThemeStoreContext.Provider>
+  );
 }
 
 /**
@@ -60,14 +60,14 @@ export function ThemeStoreProvider({
  * `ThemeStoreProvider` so missing wiring fails loudly.
  */
 export function useThemeStoreApi(): ThemeStoreApi {
-	const store = useContext(ThemeStoreContext);
-	if (store === null) {
-		throw new Error(
-			"useThemeStore was called outside of <ThemeStoreProvider>. " +
-				"Ensure the calling component is rendered inside <Studio>.",
-		);
-	}
-	return store;
+  const store = useContext(ThemeStoreContext);
+  if (store === null) {
+    throw new Error(
+      "useThemeStore was called outside of <ThemeStoreProvider>. " +
+        "Ensure the calling component is rendered inside <Studio>.",
+    );
+  }
+  return store;
 }
 
 /**
@@ -75,7 +75,7 @@ export function useThemeStoreApi(): ThemeStoreApi {
  * module-singleton hook: `useThemeStore((s) => s.mode)`.
  */
 export function useThemeStore<TResult>(
-	selector: (state: ThemeState) => TResult,
+  selector: (state: ThemeState) => TResult,
 ): TResult {
-	return useStore(useThemeStoreApi(), selector);
+  return useStore(useThemeStoreApi(), selector);
 }

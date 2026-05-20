@@ -13,9 +13,9 @@ import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import { generatePage } from "@anvilkit/example-ai-adapter-anthropic";
 
 export const aiCopilot = createAiCopilotPlugin({
-	generatePage,
-	puckConfig,
-	timeoutMs: 30_000,
+  generatePage,
+  puckConfig,
+  timeoutMs: 30_000,
 });
 ```
 

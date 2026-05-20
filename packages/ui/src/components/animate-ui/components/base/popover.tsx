@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 import {
   Popover as PopoverPrimitive,
@@ -18,8 +18,8 @@ import {
   type PopoverBackdropProps as PopoverBackdropPrimitiveProps,
   type PopoverTitleProps as PopoverTitlePrimitiveProps,
   type PopoverDescriptionProps as PopoverDescriptionPrimitiveProps,
-} from '@anvilkit/ui/components/animate-ui/primitives/base/popover';
-import { cn } from '@anvilkit/ui/lib/utils';
+} from "@anvilkit/ui/components/animate-ui/primitives/base/popover";
+import { cn } from "@anvilkit/ui/lib/utils";
 
 type PopoverProps = PopoverPrimitiveProps;
 
@@ -38,7 +38,7 @@ type PopoverPanelProps = PopoverPositionerPrimitiveProps &
 
 function PopoverPanel({
   className,
-  align = 'center',
+  align = "center",
   sideOffset = 4,
   initialFocus,
   finalFocus,
@@ -58,7 +58,7 @@ function PopoverPanel({
           initialFocus={initialFocus}
           finalFocus={finalFocus}
           className={cn(
-            'bg-popover text-popover-foreground w-72 rounded-md border p-4 shadow-md outline-hidden origin-(--transform-origin)',
+            "bg-popover text-popover-foreground w-72 rounded-md border p-4 shadow-md outline-hidden origin-(--transform-origin)",
             className,
           )}
           style={style}

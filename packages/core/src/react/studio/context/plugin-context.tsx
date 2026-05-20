@@ -21,34 +21,34 @@ import { createContext, type ReactNode, useContext } from "react";
 import type { StudioPluginContext } from "@/types/plugin";
 
 const StudioPluginContextContext = createContext<StudioPluginContext | null>(
-	null,
+  null,
 );
 
 export interface StudioPluginContextProviderProps {
-	readonly value: StudioPluginContext;
-	readonly children: ReactNode;
+  readonly value: StudioPluginContext;
+  readonly children: ReactNode;
 }
 
 export function StudioPluginContextProvider({
-	value,
-	children,
+  value,
+  children,
 }: StudioPluginContextProviderProps): ReactNode {
-	return (
-		<StudioPluginContextContext.Provider value={value}>
-			{children}
-		</StudioPluginContextContext.Provider>
-	);
+  return (
+    <StudioPluginContextContext.Provider value={value}>
+      {children}
+    </StudioPluginContextContext.Provider>
+  );
 }
 
 export function useStudioPluginContext(): StudioPluginContext {
-	const ctx = useContext(StudioPluginContextContext);
-	if (ctx === null) {
-		throw new Error(
-			"useStudioPluginContext was called outside of <StudioPluginContextProvider>. " +
-				"Ensure the calling component is rendered inside <Studio>.",
-		);
-	}
-	return ctx;
+  const ctx = useContext(StudioPluginContextContext);
+  if (ctx === null) {
+    throw new Error(
+      "useStudioPluginContext was called outside of <StudioPluginContextProvider>. " +
+        "Ensure the calling component is rendered inside <Studio>.",
+    );
+  }
+  return ctx;
 }
 
 /**
@@ -57,5 +57,5 @@ export function useStudioPluginContext(): StudioPluginContext {
  * full provider stack.
  */
 export function useStudioPluginContextOrNull(): StudioPluginContext | null {
-	return useContext(StudioPluginContextContext);
+  return useContext(StudioPluginContextContext);
 }

@@ -16,16 +16,16 @@ are not bumped to `1.0` with this release.
 
 ### Packages at `1.0.0-beta.0`
 
-| Package                            | Notes                                                                                                   | Changelog                                         |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `@anvilkit/core`                   | `<Studio>`, `StudioConfigSchema`, `compilePlugins`, `StudioPlugin` contract, `StudioError` family.      | [packages/core/CHANGELOG.md](packages/core/CHANGELOG.md)                     |
-| `@anvilkit/ir`                     | `puckDataToIR`, `irToPuckData`, `collectAssets`, `identifySlots` — round-trip Page IR.                 | [packages/ir/CHANGELOG.md](packages/ir/CHANGELOG.md)                         |
-| `@anvilkit/schema`                 | `configToAiContext`, `extractFieldSchema`, `identifySlotFields`, `isJsonSerializable`.                 | [packages/schema/CHANGELOG.md](packages/schema/CHANGELOG.md)                 |
-| `@anvilkit/validator`              | `validateComponentConfig`, `validateAiOutput` — closes phase4-014 F-1 / F-2 / F-3.                     | [packages/validator/CHANGELOG.md](packages/validator/CHANGELOG.md)           |
-| `@anvilkit/utils`                  | First public release of the zero-dep helper set.                                                        | [packages/utils/CHANGELOG.md](packages/utils/CHANGELOG.md)                   |
-| `@anvilkit/ui`                     | First public npm publish of the shared primitives.                                                      | [packages/ui/CHANGELOG.md](packages/ui/CHANGELOG.md)                         |
-| `@anvilkit/plugin-export-html`     | First real HTML exporter; 24-test XSS/URL/CSS-injection battery.                                        | [packages/plugins/plugin-export-html/CHANGELOG.md](packages/plugins/plugin-export-html/CHANGELOG.md) |
-| `@anvilkit/plugin-ai-copilot`      | Headless AI copilot + `./mock` subpath; validator-gated generation.                                     | [packages/plugins/plugin-ai-copilot/CHANGELOG.md](packages/plugins/plugin-ai-copilot/CHANGELOG.md)   |
+| Package                        | Notes                                                                                              | Changelog                                                                                            |
+| ------------------------------ | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `@anvilkit/core`               | `<Studio>`, `StudioConfigSchema`, `compilePlugins`, `StudioPlugin` contract, `StudioError` family. | [packages/core/CHANGELOG.md](packages/core/CHANGELOG.md)                                             |
+| `@anvilkit/ir`                 | `puckDataToIR`, `irToPuckData`, `collectAssets`, `identifySlots` — round-trip Page IR.             | [packages/ir/CHANGELOG.md](packages/ir/CHANGELOG.md)                                                 |
+| `@anvilkit/schema`             | `configToAiContext`, `extractFieldSchema`, `identifySlotFields`, `isJsonSerializable`.             | [packages/schema/CHANGELOG.md](packages/schema/CHANGELOG.md)                                         |
+| `@anvilkit/validator`          | `validateComponentConfig`, `validateAiOutput` — closes phase4-014 F-1 / F-2 / F-3.                 | [packages/validator/CHANGELOG.md](packages/validator/CHANGELOG.md)                                   |
+| `@anvilkit/utils`              | First public release of the zero-dep helper set.                                                   | [packages/utils/CHANGELOG.md](packages/utils/CHANGELOG.md)                                           |
+| `@anvilkit/ui`                 | First public npm publish of the shared primitives.                                                 | [packages/ui/CHANGELOG.md](packages/ui/CHANGELOG.md)                                                 |
+| `@anvilkit/plugin-export-html` | First real HTML exporter; 24-test XSS/URL/CSS-injection battery.                                   | [packages/plugins/plugin-export-html/CHANGELOG.md](packages/plugins/plugin-export-html/CHANGELOG.md) |
+| `@anvilkit/plugin-ai-copilot`  | Headless AI copilot + `./mock` subpath; validator-gated generation.                                | [packages/plugins/plugin-ai-copilot/CHANGELOG.md](packages/plugins/plugin-ai-copilot/CHANGELOG.md)   |
 
 Component packages in `packages/components/src/*` remain on their
 existing independent `0.0.x` versions and are not part of this
@@ -75,8 +75,8 @@ continue to mix any currently-published component package.
 
 - **`create-anvilkit-plugin`** — standalone scaffolder for
   `@anvilkit/*` StudioPlugin packages (`pnpm dlx
-  create-anvilkit-plugin --name my-plugin --display "My Plugin"
-  --category rail-panel`). Generates `package.json`, `tsconfig`,
+create-anvilkit-plugin --name my-plugin --display "My Plugin"
+--category rail-panel`). Generates `package.json`, `tsconfig`,
   `biome`, `rslib`, `vitest`, `src/index.ts` factory, baseline test
   using `@anvilkit/core/testing`, and README.
 - **Docs site** at [docs.anvilkit.dev](https://anvilkit.dev) —
@@ -110,7 +110,7 @@ before/after snippets and adapter-level upgrade steps.
 ### Infrastructure
 
 - `.changeset/config.json` pre-release mode: `pnpm changeset pre
-  enter beta` → releases publish with the `beta` dist-tag.
+enter beta` → releases publish with the `beta` dist-tag.
 - CI workflow `publish.yml` auto-publishes on merge to `main` when
   changesets exist. `@anvilkit/ui` has its own `publish-ui.yml`
   workflow for the first public release.

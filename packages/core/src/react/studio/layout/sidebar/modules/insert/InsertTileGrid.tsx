@@ -13,20 +13,20 @@ import { ItemGroup } from "@/primitives";
 import { cn } from "@/utils/cn";
 
 export interface InsertTileGridProps {
-	readonly children: readonly ReactNode[];
-	readonly className?: string;
+  readonly children: readonly ReactNode[];
+  readonly className?: string;
 }
 
 export function InsertTileGrid({
-	children,
-	className,
+  children,
+  className,
 }: InsertTileGridProps): ReactNode {
-	return (
-		<ItemGroup
-			data-testid="ak-insert-tile-grid"
-			className={cn("grid grid-cols-3 gap-2 p-2", className)}
-		>
-			{children}
-		</ItemGroup>
-	);
+  return (
+    <ItemGroup
+      data-testid="ak-insert-tile-grid"
+      className={cn("grid grid-cols-3 gap-2 p-2", className)}
+    >
+      {children}
+    </ItemGroup>
+  );
 }

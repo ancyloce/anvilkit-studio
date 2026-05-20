@@ -13,8 +13,8 @@
  */
 
 export type {
-	AiSectionContext,
-	AiSectionPatch,
-	AiSectionSelection,
-	ConfigToAiSectionContextOptions,
+  AiSectionContext,
+  AiSectionPatch,
+  AiSectionSelection,
+  ConfigToAiSectionContextOptions,
 } from "@/types/ai-section";

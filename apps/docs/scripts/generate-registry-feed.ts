@@ -21,20 +21,20 @@
  */
 
 import {
-	existsSync,
-	mkdirSync,
-	readdirSync,
-	readFileSync,
-	writeFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import {
-	type RegistryEntry,
-	type RegistryEntryKind,
-	type RegistryFeed,
-	RegistryFeedSchema,
+  type RegistryEntry,
+  type RegistryEntryKind,
+  type RegistryFeed,
+  RegistryFeedSchema,
 } from "../src/registry/feed.schema.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -53,245 +53,245 @@ const PUBLIC_SCHEMA_PATH = join(PUBLIC_REGISTRY_DIR, "feed.schema.json");
 const SEED_DATE = process.env.GENERATE_FEED_NOW ?? new Date().toISOString();
 
 type PackageJson = {
-	name: string;
-	version: string;
-	description?: string;
-	repository?: string | { url?: string };
-	homepage?: string;
-	keywords?: string[];
+  name: string;
+  version: string;
+  description?: string;
+  repository?: string | { url?: string };
+  homepage?: string;
+  keywords?: string[];
 };
 
 function readJson<T>(path: string): T {
-	return JSON.parse(readFileSync(path, "utf8")) as T;
+  return JSON.parse(readFileSync(path, "utf8")) as T;
 }
 
 function listSubdirs(
-	root: string,
-	exclude: ReadonlyArray<string> = [],
+  root: string,
+  exclude: ReadonlyArray<string> = [],
 ): string[] {
-	if (!existsSync(root)) return [];
-	const blocked = new Set([...exclude, "scripts", "node_modules", "dist"]);
-	return readdirSync(root, { withFileTypes: true })
-		.filter(
-			(d) => d.isDirectory() && !blocked.has(d.name) && !d.name.startsWith("."),
-		)
-		.map((d) => d.name)
-		.sort();
+  if (!existsSync(root)) return [];
+  const blocked = new Set([...exclude, "scripts", "node_modules", "dist"]);
+  return readdirSync(root, { withFileTypes: true })
+    .filter(
+      (d) => d.isDirectory() && !blocked.has(d.name) && !d.name.startsWith("."),
+    )
+    .map((d) => d.name)
+    .sort();
 }
 
 function tagsFromKeywords(keywords?: string[]): string[] {
-	if (!keywords || keywords.length === 0) return [];
-	return Array.from(new Set(keywords))
-		.filter((k) => /^[a-z0-9][a-z0-9-]{0,47}$/.test(k))
-		.slice(0, 16);
+  if (!keywords || keywords.length === 0) return [];
+  return Array.from(new Set(keywords))
+    .filter((k) => /^[a-z0-9][a-z0-9-]{0,47}$/.test(k))
+    .slice(0, 16);
 }
 
 function repoUrl(pkg: PackageJson): string | undefined {
-	const raw = pkg.repository;
-	if (!raw) return undefined;
-	const url = typeof raw === "string" ? raw : raw.url;
-	if (!url) return undefined;
-	return url.replace(/^git\+/, "").replace(/\.git$/, "");
+  const raw = pkg.repository;
+  if (!raw) return undefined;
+  const url = typeof raw === "string" ? raw : raw.url;
+  if (!url) return undefined;
+  return url.replace(/^git\+/, "").replace(/\.git$/, "");
 }
 
 function pluginCategory(slug: string): string {
-	if (slug === "plugin-ai-copilot") return "ai";
-	if (slug === "plugin-asset-manager") return "assets";
-	if (slug.startsWith("plugin-export-")) return "export";
-	if (slug === "plugin-version-history") return "history";
-	return "studio";
+  if (slug === "plugin-ai-copilot") return "ai";
+  if (slug === "plugin-asset-manager") return "assets";
+  if (slug.startsWith("plugin-export-")) return "export";
+  if (slug === "plugin-version-history") return "history";
+  return "studio";
 }
 
 function componentCategory(slug: string): string {
-	if (slug === "button" || slug === "input") return "primitives";
-	if (slug === "hero" || slug === "navbar" || slug === "section")
-		return "layout";
-	return "content";
+  if (slug === "button" || slug === "input") return "primitives";
+  if (slug === "hero" || slug === "navbar" || slug === "section")
+    return "layout";
+  return "content";
 }
 
 function pluginInstallSpec(): RegistryEntry["installSpec"] {
-	return {
-		mutates: ["lib/puck-config.ts"],
-		scaffoldOnly: false,
-		peerInstalls: [],
-	};
+  return {
+    mutates: ["lib/puck-config.ts"],
+    scaffoldOnly: false,
+    peerInstalls: [],
+  };
 }
 
 function componentInstallSpec(): RegistryEntry["installSpec"] {
-	return {
-		mutates: ["lib/puck-config.ts", "next.config.js"],
-		scaffoldOnly: false,
-		peerInstalls: [],
-	};
+  return {
+    mutates: ["lib/puck-config.ts", "next.config.js"],
+    scaffoldOnly: false,
+    peerInstalls: [],
+  };
 }
 
 function pluginEntries(prior: Map<string, RegistryEntry>): RegistryEntry[] {
-	const entries: RegistryEntry[] = [];
-	for (const slug of listSubdirs(PLUGINS_ROOT)) {
-		const pkgPath = join(PLUGINS_ROOT, slug, "package.json");
-		if (!existsSync(pkgPath)) continue;
-		const pkg = readJson<PackageJson>(pkgPath);
-		const key = `plugin:${slug}`;
-		entries.push({
-			slug,
-			kind: "plugin",
-			name: pkg.name,
-			description:
-				pkg.description ?? `Anvilkit ${slug.replace(/^plugin-/, "")} plugin.`,
-			packageName: pkg.name,
-			version: pkg.version,
-			category: pluginCategory(slug),
-			tags: tagsFromKeywords(pkg.keywords),
-			publisher: "first-party",
-			verified: true,
-			scorecard: undefined,
-			repository: repoUrl(pkg),
-			homepage: pkg.homepage,
-			preview: undefined,
-			addedAt: prior.get(key)?.addedAt ?? SEED_DATE,
-			installSpec: pluginInstallSpec(),
-		});
-	}
-	return entries;
+  const entries: RegistryEntry[] = [];
+  for (const slug of listSubdirs(PLUGINS_ROOT)) {
+    const pkgPath = join(PLUGINS_ROOT, slug, "package.json");
+    if (!existsSync(pkgPath)) continue;
+    const pkg = readJson<PackageJson>(pkgPath);
+    const key = `plugin:${slug}`;
+    entries.push({
+      slug,
+      kind: "plugin",
+      name: pkg.name,
+      description:
+        pkg.description ?? `Anvilkit ${slug.replace(/^plugin-/, "")} plugin.`,
+      packageName: pkg.name,
+      version: pkg.version,
+      category: pluginCategory(slug),
+      tags: tagsFromKeywords(pkg.keywords),
+      publisher: "first-party",
+      verified: true,
+      scorecard: undefined,
+      repository: repoUrl(pkg),
+      homepage: pkg.homepage,
+      preview: undefined,
+      addedAt: prior.get(key)?.addedAt ?? SEED_DATE,
+      installSpec: pluginInstallSpec(),
+    });
+  }
+  return entries;
 }
 
 function componentEntries(prior: Map<string, RegistryEntry>): RegistryEntry[] {
-	const entries: RegistryEntry[] = [];
-	for (const slug of listSubdirs(COMPONENTS_ROOT)) {
-		const pkgPath = join(COMPONENTS_ROOT, slug, "package.json");
-		if (!existsSync(pkgPath)) continue;
-		const pkg = readJson<PackageJson>(pkgPath);
-		const key = `component:${slug}`;
-		entries.push({
-			slug,
-			kind: "component",
-			name: pkg.name,
-			description: pkg.description ?? `Anvilkit ${slug} component.`,
-			packageName: pkg.name,
-			version: pkg.version,
-			category: componentCategory(slug),
-			tags: tagsFromKeywords(pkg.keywords),
-			publisher: "first-party",
-			verified: true,
-			scorecard: undefined,
-			repository: repoUrl(pkg),
-			homepage: pkg.homepage,
-			preview: undefined,
-			addedAt: prior.get(key)?.addedAt ?? SEED_DATE,
-			installSpec: componentInstallSpec(),
-		});
-	}
-	return entries;
+  const entries: RegistryEntry[] = [];
+  for (const slug of listSubdirs(COMPONENTS_ROOT)) {
+    const pkgPath = join(COMPONENTS_ROOT, slug, "package.json");
+    if (!existsSync(pkgPath)) continue;
+    const pkg = readJson<PackageJson>(pkgPath);
+    const key = `component:${slug}`;
+    entries.push({
+      slug,
+      kind: "component",
+      name: pkg.name,
+      description: pkg.description ?? `Anvilkit ${slug} component.`,
+      packageName: pkg.name,
+      version: pkg.version,
+      category: componentCategory(slug),
+      tags: tagsFromKeywords(pkg.keywords),
+      publisher: "first-party",
+      verified: true,
+      scorecard: undefined,
+      repository: repoUrl(pkg),
+      homepage: pkg.homepage,
+      preview: undefined,
+      addedAt: prior.get(key)?.addedAt ?? SEED_DATE,
+      installSpec: componentInstallSpec(),
+    });
+  }
+  return entries;
 }
 
 function loadPriorEntries(): Map<string, RegistryEntry> {
-	if (!existsSync(FEED_OUT_PATH)) return new Map();
-	try {
-		const raw = readJson<unknown>(FEED_OUT_PATH);
-		const parsed = RegistryFeedSchema.safeParse(raw);
-		if (!parsed.success) return new Map();
-		return new Map(parsed.data.entries.map((e) => [`${e.kind}:${e.slug}`, e]));
-	} catch {
-		return new Map();
-	}
+  if (!existsSync(FEED_OUT_PATH)) return new Map();
+  try {
+    const raw = readJson<unknown>(FEED_OUT_PATH);
+    const parsed = RegistryFeedSchema.safeParse(raw);
+    if (!parsed.success) return new Map();
+    return new Map(parsed.data.entries.map((e) => [`${e.kind}:${e.slug}`, e]));
+  } catch {
+    return new Map();
+  }
 }
 
 function loadScorecard(
-	kind: RegistryEntryKind,
-	slug: string,
+  kind: RegistryEntryKind,
+  slug: string,
 ): RegistryEntry["scorecard"] {
-	if (!existsSync(SCORECARDS_DIR)) return undefined;
-	const path = join(SCORECARDS_DIR, `${kind}-${slug}.json`);
-	if (!existsSync(path)) return undefined;
-	try {
-		const raw = readJson<{
-			passed: boolean;
-			ranAt?: string;
-			commit?: string;
-			checks?: Record<string, boolean>;
-			notes?: string;
-		}>(path);
-		return {
-			passed: raw.passed,
-			ranAt: raw.ranAt,
-			commit: raw.commit,
-			checks: raw.checks,
-			notes: raw.notes,
-		};
-	} catch {
-		return undefined;
-	}
+  if (!existsSync(SCORECARDS_DIR)) return undefined;
+  const path = join(SCORECARDS_DIR, `${kind}-${slug}.json`);
+  if (!existsSync(path)) return undefined;
+  try {
+    const raw = readJson<{
+      passed: boolean;
+      ranAt?: string;
+      commit?: string;
+      checks?: Record<string, boolean>;
+      notes?: string;
+    }>(path);
+    return {
+      passed: raw.passed,
+      ranAt: raw.ranAt,
+      commit: raw.commit,
+      checks: raw.checks,
+      notes: raw.notes,
+    };
+  } catch {
+    return undefined;
+  }
 }
 
 function mergeScorecards(entries: RegistryEntry[]): RegistryEntry[] {
-	return entries.map((entry) => {
-		const scorecard = loadScorecard(entry.kind, entry.slug);
-		if (scorecard === undefined) return entry;
-		const verified =
-			entry.publisher === "first-party" || scorecard.passed === true;
-		return { ...entry, scorecard, verified };
-	});
+  return entries.map((entry) => {
+    const scorecard = loadScorecard(entry.kind, entry.slug);
+    if (scorecard === undefined) return entry;
+    const verified =
+      entry.publisher === "first-party" || scorecard.passed === true;
+    return { ...entry, scorecard, verified };
+  });
 }
 
 function sortEntries(entries: RegistryEntry[]): RegistryEntry[] {
-	const kindOrder: Record<RegistryEntryKind, number> = {
-		template: 0,
-		plugin: 1,
-		component: 2,
-	};
-	return [...entries].sort((a, b) => {
-		const k = kindOrder[a.kind] - kindOrder[b.kind];
-		if (k !== 0) return k;
-		const c = a.category.localeCompare(b.category);
-		if (c !== 0) return c;
-		return a.slug.localeCompare(b.slug);
-	});
+  const kindOrder: Record<RegistryEntryKind, number> = {
+    template: 0,
+    plugin: 1,
+    component: 2,
+  };
+  return [...entries].sort((a, b) => {
+    const k = kindOrder[a.kind] - kindOrder[b.kind];
+    if (k !== 0) return k;
+    const c = a.category.localeCompare(b.category);
+    if (c !== 0) return c;
+    return a.slug.localeCompare(b.slug);
+  });
 }
 
 function main(): void {
-	const prior = loadPriorEntries();
-	// Templates are workspace-only (not published to npm), so they are
-	// intentionally absent from the feed — the marketplace scorecard
-	// can only verify packages it can resolve from the registry.
-	const entries = sortEntries(
-		mergeScorecards([...pluginEntries(prior), ...componentEntries(prior)]),
-	);
+  const prior = loadPriorEntries();
+  // Templates are workspace-only (not published to npm), so they are
+  // intentionally absent from the feed — the marketplace scorecard
+  // can only verify packages it can resolve from the registry.
+  const entries = sortEntries(
+    mergeScorecards([...pluginEntries(prior), ...componentEntries(prior)]),
+  );
 
-	const feed: RegistryFeed = {
-		$schema: "/registry/feed.schema.json",
-		feedVersion: "1",
-		generatedAt: SEED_DATE,
-		entries,
-	};
+  const feed: RegistryFeed = {
+    $schema: "/registry/feed.schema.json",
+    feedVersion: "1",
+    generatedAt: SEED_DATE,
+    entries,
+  };
 
-	const validated = RegistryFeedSchema.parse(feed);
+  const validated = RegistryFeedSchema.parse(feed);
 
-	mkdirSync(FEED_OUT_DIR, { recursive: true });
-	mkdirSync(PUBLIC_REGISTRY_DIR, { recursive: true });
+  mkdirSync(FEED_OUT_DIR, { recursive: true });
+  mkdirSync(PUBLIC_REGISTRY_DIR, { recursive: true });
 
-	const serialized = `${JSON.stringify(validated, null, "\t")}\n`;
-	writeFileSync(FEED_OUT_PATH, serialized);
-	writeFileSync(PUBLIC_FEED_PATH, serialized);
+  const serialized = `${JSON.stringify(validated, null, "\t")}\n`;
+  writeFileSync(FEED_OUT_PATH, serialized);
+  writeFileSync(PUBLIC_FEED_PATH, serialized);
 
-	const jsonSchema = z.toJSONSchema(RegistryFeedSchema);
-	writeFileSync(
-		PUBLIC_SCHEMA_PATH,
-		`${JSON.stringify(jsonSchema, null, "\t")}\n`,
-	);
+  const jsonSchema = z.toJSONSchema(RegistryFeedSchema);
+  writeFileSync(
+    PUBLIC_SCHEMA_PATH,
+    `${JSON.stringify(jsonSchema, null, "\t")}\n`,
+  );
 
-	const counts = entries.reduce(
-		(acc, e) => {
-			acc[e.kind]++;
-			return acc;
-		},
-		{ template: 0, plugin: 0, component: 0 } satisfies Record<
-			RegistryEntryKind,
-			number
-		>,
-	);
-	console.log(
-		`wrote registry feed: ${entries.length} entries (${counts.template} templates, ${counts.plugin} plugins, ${counts.component} components)`,
-	);
+  const counts = entries.reduce(
+    (acc, e) => {
+      acc[e.kind]++;
+      return acc;
+    },
+    { template: 0, plugin: 0, component: 0 } satisfies Record<
+      RegistryEntryKind,
+      number
+    >,
+  );
+  console.log(
+    `wrote registry feed: ${entries.length} entries (${counts.template} templates, ${counts.plugin} plugins, ${counts.component} components)`,
+  );
 }
 
 main();

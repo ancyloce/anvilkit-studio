@@ -22,16 +22,16 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Script | Purpose |
-| ------ | ------- |
-| `pnpm dev` | Next.js dev server on port 3000 (Webpack) |
-| `pnpm dev:turbopack` | Same, but using Turbopack |
-| `pnpm build` | Production build (`next build`) |
-| `pnpm start` | Serve the production build |
-| `pnpm lint` | Biome lint |
-| `pnpm typecheck` | `next typegen` then `tsc --noEmit` |
-| `pnpm e2e` | Playwright suite under [`e2e/`](./e2e/) |
-| `pnpm e2e:install` | One-time Chromium install for Playwright |
+| Script               | Purpose                                   |
+| -------------------- | ----------------------------------------- |
+| `pnpm dev`           | Next.js dev server on port 3000 (Webpack) |
+| `pnpm dev:turbopack` | Same, but using Turbopack                 |
+| `pnpm build`         | Production build (`next build`)           |
+| `pnpm start`         | Serve the production build                |
+| `pnpm lint`          | Biome lint                                |
+| `pnpm typecheck`     | `next typegen` then `tsc --noEmit`        |
+| `pnpm e2e`           | Playwright suite under [`e2e/`](./e2e/)   |
+| `pnpm e2e:install`   | One-time Chromium install for Playwright  |
 
 ## Playwright suites
 

@@ -29,47 +29,47 @@
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-	testDir: "./e2e",
-	fullyParallel: true,
-	forbidOnly: !!process.env.CI,
-	retries: process.env.CI ? 2 : 0,
-	workers: process.env.CI ? 1 : undefined,
-	reporter: process.env.CI ? "github" : "list",
-	use: {
-		baseURL: "http://localhost:3000",
-		trace: "on-first-retry",
-	},
-	projects: [
-		{
-			name: "chromium",
-			use: { ...devices["Desktop Chrome"] },
-		},
-	],
-	webServer: [
-		{
-			command: "pnpm dev",
-			url: "http://localhost:3000",
-			reuseExistingServer: !process.env.CI,
-			timeout: 180_000,
-		},
-		{
-			// y-websocket reference relay for the cross-tab `collab.spec.ts`
-			// scenario. The plugin-collab-yjs submodule ships the script
-			// under examples/. Other suites do not depend on it; the
-			// command is cheap to boot (<200 ms) so always running it
-			// keeps the matrix simple.
-			//
-			// Port 21234 (not 1234 or 11234) sidesteps WSL2 binding leaks
-			// and Windows-host port reservations (Hyper-V dynamic exclusion
-			// ranges can include both 1234 and 11234 depending on the
-			// machine, surfacing as a misleading EADDRINUSE even when
-			// `/proc/net/tcp*` is empty). Keep in sync with the
-			// `COLLAB_RELAY_PORT` default in `apps/demo/scripts/dev-collab.mjs`.
-			command:
-				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21234",
-			url: "http://localhost:21234",
-			reuseExistingServer: !process.env.CI,
-			timeout: 30_000,
-		},
-	],
+  testDir: "./e2e",
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: process.env.CI ? "github" : "list",
+  use: {
+    baseURL: "http://localhost:3000",
+    trace: "on-first-retry",
+  },
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+  ],
+  webServer: [
+    {
+      command: "pnpm dev",
+      url: "http://localhost:3000",
+      reuseExistingServer: !process.env.CI,
+      timeout: 180_000,
+    },
+    {
+      // y-websocket reference relay for the cross-tab `collab.spec.ts`
+      // scenario. The plugin-collab-yjs submodule ships the script
+      // under examples/. Other suites do not depend on it; the
+      // command is cheap to boot (<200 ms) so always running it
+      // keeps the matrix simple.
+      //
+      // Port 21234 (not 1234 or 11234) sidesteps WSL2 binding leaks
+      // and Windows-host port reservations (Hyper-V dynamic exclusion
+      // ranges can include both 1234 and 11234 depending on the
+      // machine, surfacing as a misleading EADDRINUSE even when
+      // `/proc/net/tcp*` is empty). Keep in sync with the
+      // `COLLAB_RELAY_PORT` default in `apps/demo/scripts/dev-collab.mjs`.
+      command:
+        "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21234",
+      url: "http://localhost:21234",
+      reuseExistingServer: !process.env.CI,
+      timeout: 30_000,
+    },
+  ],
 });

@@ -21,24 +21,24 @@ import { useMsg } from "@/state/editor-i18n-store";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 
 export function CopilotModule(): ReactNode {
-	const msg = useMsg();
-	const panel = useSidebarRegistry((state) => state.copilotPanel);
+  const msg = useMsg();
+  const panel = useSidebarRegistry((state) => state.copilotPanel);
 
-	if (panel === null) {
-		return (
-			<div data-testid="ak-module-copilot" className="flex h-full flex-col">
-				<EmptyState
-					testId="ak-copilot-empty"
-					message={msg("studio.module.copilot.empty")}
-					icon={<SparklesIcon aria-hidden="true" />}
-				/>
-			</div>
-		);
-	}
+  if (panel === null) {
+    return (
+      <div data-testid="ak-module-copilot" className="flex h-full flex-col">
+        <EmptyState
+          testId="ak-copilot-empty"
+          message={msg("studio.module.copilot.empty")}
+          icon={<SparklesIcon aria-hidden="true" />}
+        />
+      </div>
+    );
+  }
 
-	return (
-		<div data-testid="ak-module-copilot" className="flex h-full flex-col">
-			{panel.render()}
-		</div>
-	);
+  return (
+    <div data-testid="ak-module-copilot" className="flex h-full flex-col">
+      {panel.render()}
+    </div>
+  );
 }

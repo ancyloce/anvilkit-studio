@@ -17,8 +17,8 @@ import type { Mutable } from "../internal/types.js";
 import { type NodeMetaValidationIssue, PageIRNodeMetaError } from "./error.js";
 import { stripMetaFromTree } from "./internal/strip-meta.js";
 import {
-	parseNodeMetaOrThrow,
-	safeParseNodeMeta,
+  parseNodeMetaOrThrow,
+  safeParseNodeMeta,
 } from "./internal/validate-meta.js";
 
 export { PageIRNodeMetaError } from "./error.js";
@@ -37,10 +37,10 @@ export const MIGRATION_VERSIONS = ["0.21", "0.22"] as const;
 export type PageIRMigrationVersion = (typeof MIGRATION_VERSIONS)[number];
 
 export interface PageIRMigrationOptions {
-	/** Peer-range label of the document being migrated. */
-	readonly from: PageIRMigrationVersion;
-	/** Target peer-range label. */
-	readonly to: PageIRMigrationVersion;
+  /** Peer-range label of the document being migrated. */
+  readonly from: PageIRMigrationVersion;
+  /** Target peer-range label. */
+  readonly to: PageIRMigrationVersion;
 }
 
 /**
@@ -61,95 +61,95 @@ export interface PageIRMigrationOptions {
  * stays `"1"` across `0.21 ↔ 0.22`.
  */
 export function migratePageIR(
-	ir: PageIR,
-	options: PageIRMigrationOptions,
+  ir: PageIR,
+  options: PageIRMigrationOptions,
 ): PageIR {
-	assertKnownVersion(options.from, "from");
-	assertKnownVersion(options.to, "to");
+  assertKnownVersion(options.from, "from");
+  assertKnownVersion(options.to, "to");
 
-	const issues: NodeMetaValidationIssue[] = [];
-	const hasAnyMeta = walkAndValidate(ir.root, [], issues);
+  const issues: NodeMetaValidationIssue[] = [];
+  const hasAnyMeta = walkAndValidate(ir.root, [], issues);
 
-	if (issues.length > 0) {
-		throw new PageIRNodeMetaError(issues);
-	}
+  if (issues.length > 0) {
+    throw new PageIRNodeMetaError(issues);
+  }
 
-	if (!hasAnyMeta) {
-		// No-op: every node lacks `meta`, so the input already
-		// satisfies both peer-range contracts. Return the original
-		// reference to preserve referential equality.
-		return ir;
-	}
+  if (!hasAnyMeta) {
+    // No-op: every node lacks `meta`, so the input already
+    // satisfies both peer-range contracts. Return the original
+    // reference to preserve referential equality.
+    return ir;
+  }
 
-	return Object.freeze({
-		...ir,
-		root: cloneNodePreservingMeta(ir.root),
-	});
+  return Object.freeze({
+    ...ir,
+    root: cloneNodePreservingMeta(ir.root),
+  });
 }
 
 function assertKnownVersion(
-	value: string,
-	label: "from" | "to",
+  value: string,
+  label: "from" | "to",
 ): asserts value is PageIRMigrationVersion {
-	if (!MIGRATION_VERSIONS.includes(value as PageIRMigrationVersion)) {
-		throw new RangeError(
-			`migratePageIR: \`${label}\` must be one of ${MIGRATION_VERSIONS.join(", ")}; received "${value}"`,
-		);
-	}
+  if (!MIGRATION_VERSIONS.includes(value as PageIRMigrationVersion)) {
+    throw new RangeError(
+      `migratePageIR: \`${label}\` must be one of ${MIGRATION_VERSIONS.join(", ")}; received "${value}"`,
+    );
+  }
 }
 
 function walkAndValidate(
-	node: PageIRNode,
-	path: ReadonlyArray<string | number>,
-	out: NodeMetaValidationIssue[],
+  node: PageIRNode,
+  path: ReadonlyArray<string | number>,
+  out: NodeMetaValidationIssue[],
 ): boolean {
-	let hasMeta = false;
-	if (node.meta !== undefined) {
-		hasMeta = true;
-		const result = safeParseNodeMeta(node.meta);
-		if (!result.ok) {
-			for (const issue of result.issues) {
-				out.push({
-					code: issue.code,
-					message: issue.message,
-					path: [...path, "meta", ...issue.path],
-				});
-			}
-		}
-	}
-	if (node.children !== undefined) {
-		for (let i = 0; i < node.children.length; i += 1) {
-			const childHasMeta = walkAndValidate(
-				node.children[i]!,
-				[...path, "children", i],
-				out,
-			);
-			hasMeta = hasMeta || childHasMeta;
-		}
-	}
-	return hasMeta;
+  let hasMeta = false;
+  if (node.meta !== undefined) {
+    hasMeta = true;
+    const result = safeParseNodeMeta(node.meta);
+    if (!result.ok) {
+      for (const issue of result.issues) {
+        out.push({
+          code: issue.code,
+          message: issue.message,
+          path: [...path, "meta", ...issue.path],
+        });
+      }
+    }
+  }
+  if (node.children !== undefined) {
+    for (let i = 0; i < node.children.length; i += 1) {
+      const childHasMeta = walkAndValidate(
+        node.children[i]!,
+        [...path, "children", i],
+        out,
+      );
+      hasMeta = hasMeta || childHasMeta;
+    }
+  }
+  return hasMeta;
 }
 
 function cloneNodePreservingMeta(node: PageIRNode): PageIRNode {
-	const cloned: Mutable<PageIRNode> = {
-		id: node.id,
-		type: node.type,
-		props: node.props,
-	};
-	if (node.slot !== undefined) cloned.slot = node.slot;
-	if (node.slotKind !== undefined) cloned.slotKind = node.slotKind;
-	if (node.children !== undefined) {
-		cloned.children = Object.freeze(node.children.map(cloneNodePreservingMeta));
-	}
-	if (node.assets !== undefined) cloned.assets = node.assets;
-	if (node.meta !== undefined) {
-		// Validate-then-pass-through. `parseNodeMetaOrThrow` here
-		// is a defensive belt-and-braces — `walkAndValidate` already
-		// drained the issue list above. If we ever reach this with
-		// invalid meta the throw is a clear bug, not silent data.
-		cloned.meta = parseNodeMetaOrThrow(node.meta);
-	}
-	return Object.freeze(cloned);
+  const cloned: Mutable<PageIRNode> = {
+    id: node.id,
+    type: node.type,
+    props: node.props,
+  };
+  if (node.slot !== undefined) cloned.slot = node.slot;
+  if (node.slotKind !== undefined) cloned.slotKind = node.slotKind;
+  if (node.children !== undefined) {
+    cloned.children = Object.freeze(node.children.map(cloneNodePreservingMeta));
+  }
+  if (node.assets !== undefined) cloned.assets = node.assets;
+  if (node.meta !== undefined) {
+    // Validate-then-pass-through. `parseNodeMetaOrThrow` here
+    // is a defensive belt-and-braces — `walkAndValidate` already
+    // drained the issue list above. If we ever reach this with
+    // invalid meta the throw is a clear bug, not silent data.
+    cloned.meta = parseNodeMetaOrThrow(node.meta);
+  }
+  return Object.freeze(cloned);
 }
 
 /**
@@ -161,5 +161,5 @@ function cloneNodePreservingMeta(node: PageIRNode): PageIRNode {
  * cache the result.
  */
 export function downgradePageIR(ir: PageIR): PageIR {
-	return stripMetaFromTree(ir);
+  return stripMetaFromTree(ir);
 }

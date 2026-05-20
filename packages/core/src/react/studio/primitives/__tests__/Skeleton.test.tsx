@@ -6,11 +6,11 @@ import { Skeleton } from "@/primitives/skeleton";
 afterEach(cleanup);
 
 describe("Skeleton", () => {
-	it("renders the shadcn skeleton surface", () => {
-		render(<Skeleton data-testid="skel" />);
+  it("renders the shadcn skeleton surface", () => {
+    render(<Skeleton data-testid="skel" />);
 
-		const el = screen.getByTestId("skel");
-		expect(el.className).toContain("animate-pulse");
-		expect(el.className).toContain("bg-muted");
-	});
+    const el = screen.getByTestId("skel");
+    expect(el.className).toContain("animate-pulse");
+    expect(el.className).toContain("bg-muted");
+  });
 });

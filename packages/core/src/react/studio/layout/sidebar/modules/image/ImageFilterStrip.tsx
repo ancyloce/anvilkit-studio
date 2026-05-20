@@ -14,36 +14,36 @@ import type { AssetCategoryFilter } from "@/state/editor-ui-store";
 import { useAssetCategoryFilter } from "@/state/hooks";
 
 export function ImageFilterStrip(): ReactNode {
-	const msg = useMsg();
-	const [value, setValue] = useAssetCategoryFilter();
+  const msg = useMsg();
+  const [value, setValue] = useAssetCategoryFilter();
 
-	const handleChange = (next: readonly string[]): void => {
-		const picked = next[0] as AssetCategoryFilter | undefined;
-		if (picked === undefined) return;
-		setValue(picked);
-	};
+  const handleChange = (next: readonly string[]): void => {
+    const picked = next[0] as AssetCategoryFilter | undefined;
+    if (picked === undefined) return;
+    setValue(picked);
+  };
 
-	return (
-		<ToggleGroup
-			value={[value]}
-			onValueChange={handleChange}
-			aria-label={msg("studio.module.image.name")}
-			data-testid="ak-image-filter"
-			size="sm"
-			spacing={1}
-		>
-			<ToggleGroupItem value="all">
-				{msg("studio.module.image.filter.all")}
-			</ToggleGroupItem>
-			<ToggleGroupItem value="images">
-				{msg("studio.module.image.filter.images")}
-			</ToggleGroupItem>
-			<ToggleGroupItem value="videos">
-				{msg("studio.module.image.filter.videos")}
-			</ToggleGroupItem>
-			<ToggleGroupItem value="audio">
-				{msg("studio.module.image.filter.audio")}
-			</ToggleGroupItem>
-		</ToggleGroup>
-	);
+  return (
+    <ToggleGroup
+      value={[value]}
+      onValueChange={handleChange}
+      aria-label={msg("studio.module.image.name")}
+      data-testid="ak-image-filter"
+      size="sm"
+      spacing={1}
+    >
+      <ToggleGroupItem value="all">
+        {msg("studio.module.image.filter.all")}
+      </ToggleGroupItem>
+      <ToggleGroupItem value="images">
+        {msg("studio.module.image.filter.images")}
+      </ToggleGroupItem>
+      <ToggleGroupItem value="videos">
+        {msg("studio.module.image.filter.videos")}
+      </ToggleGroupItem>
+      <ToggleGroupItem value="audio">
+        {msg("studio.module.image.filter.audio")}
+      </ToggleGroupItem>
+    </ToggleGroup>
+  );
 }

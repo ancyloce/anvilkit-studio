@@ -8,7 +8,4 @@
  * working without duplicating the string.
  */
 
-export {
-	IFRAME_THEME_CSS,
-	IFRAME_THEME_STYLE_ID,
-} from "@/theme/iframe-theme";
+export { IFRAME_THEME_CSS, IFRAME_THEME_STYLE_ID } from "@/theme/iframe-theme";

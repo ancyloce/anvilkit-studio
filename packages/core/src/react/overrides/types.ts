@@ -25,13 +25,13 @@ export type StudioChromeMode = "anvilkit" | "puck";
  * change.
  */
 export interface CreateStudioOverridesOptions {
-	/**
-	 * Optional partial field-type registry merged on top of the
-	 * defaults. A consumer that wants to swap one renderer can pass
-	 * `{ fieldTypes: { number: MyNumberField } }` instead of
-	 * cloning the entire registry.
-	 */
-	readonly fieldTypes?: Partial<NonNullable<PuckOverrides["fieldTypes"]>>;
+  /**
+   * Optional partial field-type registry merged on top of the
+   * defaults. A consumer that wants to swap one renderer can pass
+   * `{ fieldTypes: { number: MyNumberField } }` instead of
+   * cloning the entire registry.
+   */
+  readonly fieldTypes?: Partial<NonNullable<PuckOverrides["fieldTypes"]>>;
 }
 
 /**
@@ -51,13 +51,13 @@ export interface CreateStudioOverridesOptions {
  *   `drawerItem`.
  */
 export type DefaultOverrideSlot =
-	| "puck"
-	| "drawer"
-	| "drawerItem"
-	| "fields"
-	| "fieldLabel"
-	| "iframe"
-	| "componentOverlay"
-	| "actionBar"
-	| "preview"
-	| "fieldTypes";
+  | "puck"
+  | "drawer"
+  | "drawerItem"
+  | "fields"
+  | "fieldLabel"
+  | "iframe"
+  | "componentOverlay"
+  | "actionBar"
+  | "preview"
+  | "fieldTypes";

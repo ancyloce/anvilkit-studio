@@ -9,50 +9,50 @@ import { Button } from "@/primitives/button";
 import type { StudioAsset } from "@/types/sidebar";
 
 export interface AssetAudioRowProps {
-	readonly asset: StudioAsset;
-	readonly onClick: () => void;
-	readonly menu: ReactNode;
+  readonly asset: StudioAsset;
+  readonly onClick: () => void;
+  readonly menu: ReactNode;
 }
 
 export function AssetAudioRow({
-	asset,
-	onClick,
-	menu,
+  asset,
+  onClick,
+  menu,
 }: AssetAudioRowProps): ReactNode {
-	return (
-		<div
-			className="group flex items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-xs hover:border-[var(--ak-studio-border)] hover:bg-[var(--ak-studio-muted)]"
-			data-testid={`ak-image-audio-${asset.id}`}
-		>
-			<Button
-				variant="ghost"
-				size="sm"
-				onClick={onClick}
-				className="h-auto flex-1 justify-start gap-2 p-0 text-start font-normal text-[var(--ak-studio-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
-				aria-label={asset.name}
-			>
-				<Music
-					className="size-4 shrink-0 text-[var(--ak-studio-muted-fg)]"
-					aria-hidden="true"
-				/>
-				<span className="truncate" title={asset.name}>
-					{asset.name}
-				</span>
-				{asset.size !== undefined ? (
-					<span className="ms-auto shrink-0 text-[var(--ak-studio-muted-fg)]">
-						{formatSize(asset.size)}
-					</span>
-				) : null}
-			</Button>
-			<div className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-				{menu}
-			</div>
-		</div>
-	);
+  return (
+    <div
+      className="group flex items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-xs hover:border-[var(--ak-studio-border)] hover:bg-[var(--ak-studio-muted)]"
+      data-testid={`ak-image-audio-${asset.id}`}
+    >
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onClick}
+        className="h-auto flex-1 justify-start gap-2 p-0 text-start font-normal text-[var(--ak-studio-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
+        aria-label={asset.name}
+      >
+        <Music
+          className="size-4 shrink-0 text-[var(--ak-studio-muted-fg)]"
+          aria-hidden="true"
+        />
+        <span className="truncate" title={asset.name}>
+          {asset.name}
+        </span>
+        {asset.size !== undefined ? (
+          <span className="ms-auto shrink-0 text-[var(--ak-studio-muted-fg)]">
+            {formatSize(asset.size)}
+          </span>
+        ) : null}
+      </Button>
+      <div className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+        {menu}
+      </div>
+    </div>
+  );
 }
 
 function formatSize(bytes: number): string {
-	if (bytes < 1024) return `${bytes} B`;
-	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }

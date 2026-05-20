@@ -22,81 +22,81 @@ import { useStudioConfig } from "@/config/hooks";
 import { StudioConfigProvider } from "@/config/provider";
 
 describe("StudioConfigProvider — rendering", () => {
-	it("renders its children unchanged", () => {
-		const config = createStudioConfig(undefined, { env: {} });
-		render(
-			<StudioConfigProvider config={config}>
-				<span data-testid="child">hello</span>
-			</StudioConfigProvider>,
-		);
-		expect(screen.getByTestId("child")).toHaveTextContent("hello");
-	});
+  it("renders its children unchanged", () => {
+    const config = createStudioConfig(undefined, { env: {} });
+    render(
+      <StudioConfigProvider config={config}>
+        <span data-testid="child">hello</span>
+      </StudioConfigProvider>,
+    );
+    expect(screen.getByTestId("child")).toHaveTextContent("hello");
+  });
 
-	it("exposes the config to descendants via useStudioConfig()", () => {
-		const config = createStudioConfig(
-			{ branding: { appName: "My Studio" } },
-			{ env: {} },
-		);
+  it("exposes the config to descendants via useStudioConfig()", () => {
+    const config = createStudioConfig(
+      { branding: { appName: "My Studio" } },
+      { env: {} },
+    );
 
-		function Probe() {
-			const received = useStudioConfig();
-			return <span data-testid="probe">{received.branding.appName}</span>;
-		}
+    function Probe() {
+      const received = useStudioConfig();
+      return <span data-testid="probe">{received.branding.appName}</span>;
+    }
 
-		render(
-			<StudioConfigProvider config={config}>
-				<Probe />
-			</StudioConfigProvider>,
-		);
-		expect(screen.getByTestId("probe")).toHaveTextContent("My Studio");
-	});
+    render(
+      <StudioConfigProvider config={config}>
+        <Probe />
+      </StudioConfigProvider>,
+    );
+    expect(screen.getByTestId("probe")).toHaveTextContent("My Studio");
+  });
 
-	it("passes the exact config reference through — no cloning", () => {
-		const config = createStudioConfig(undefined, { env: {} });
-		let seen: unknown;
+  it("passes the exact config reference through — no cloning", () => {
+    const config = createStudioConfig(undefined, { env: {} });
+    let seen: unknown;
 
-		function Probe() {
-			seen = useStudioConfig();
-			return null;
-		}
+    function Probe() {
+      seen = useStudioConfig();
+      return null;
+    }
 
-		render(
-			<StudioConfigProvider config={config}>
-				<Probe />
-			</StudioConfigProvider>,
-		);
-		// Reference equality — the provider must not deep-clone the
-		// config object, otherwise consumers lose the ability to use
-		// `===` as a fast "unchanged config" check.
-		expect(seen).toBe(config);
-	});
+    render(
+      <StudioConfigProvider config={config}>
+        <Probe />
+      </StudioConfigProvider>,
+    );
+    // Reference equality — the provider must not deep-clone the
+    // config object, otherwise consumers lose the ability to use
+    // `===` as a fast "unchanged config" check.
+    expect(seen).toBe(config);
+  });
 
-	it("renders deeply nested descendants that consume the hook", () => {
-		const config = createStudioConfig(
-			{ theme: { defaultMode: "dark" } },
-			{ env: {} },
-		);
+  it("renders deeply nested descendants that consume the hook", () => {
+    const config = createStudioConfig(
+      { theme: { defaultMode: "dark" } },
+      { env: {} },
+    );
 
-		function Leaf() {
-			const mode = useStudioConfig((c) => c.theme.defaultMode);
-			return <span data-testid="leaf">{mode}</span>;
-		}
+    function Leaf() {
+      const mode = useStudioConfig((c) => c.theme.defaultMode);
+      return <span data-testid="leaf">{mode}</span>;
+    }
 
-		function Branch() {
-			return (
-				<div>
-					<Leaf />
-				</div>
-			);
-		}
+    function Branch() {
+      return (
+        <div>
+          <Leaf />
+        </div>
+      );
+    }
 
-		render(
-			<StudioConfigProvider config={config}>
-				<section>
-					<Branch />
-				</section>
-			</StudioConfigProvider>,
-		);
-		expect(screen.getByTestId("leaf")).toHaveTextContent("dark");
-	});
+    render(
+      <StudioConfigProvider config={config}>
+        <section>
+          <Branch />
+        </section>
+      </StudioConfigProvider>,
+    );
+    expect(screen.getByTestId("leaf")).toHaveTextContent("dark");
+  });
 });

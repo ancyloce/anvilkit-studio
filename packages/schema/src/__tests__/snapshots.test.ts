@@ -14,52 +14,52 @@ import { demoConfig } from "./fixtures/demo-config.js";
 const ctx = configToAiContext(demoConfig);
 
 function findComponent(name: string) {
-	return ctx.availableComponents.find((c) => c.componentName === name);
+  return ctx.availableComponents.find((c) => c.componentName === name);
 }
 
 describe("AI context snapshots", () => {
-	it("produces exactly 9 components", () => {
-		expect(ctx.availableComponents).toHaveLength(9);
-	});
+  it("produces exactly 9 components", () => {
+    expect(ctx.availableComponents).toHaveLength(9);
+  });
 
-	it("BentoGrid matches snapshot", () => {
-		expect(findComponent("BentoGrid")).toEqual(bentoGrid);
-	});
+  it("BentoGrid matches snapshot", () => {
+    expect(findComponent("BentoGrid")).toEqual(bentoGrid);
+  });
 
-	it("BlogList matches snapshot", () => {
-		expect(findComponent("BlogList")).toEqual(blogList);
-	});
+  it("BlogList matches snapshot", () => {
+    expect(findComponent("BlogList")).toEqual(blogList);
+  });
 
-	it("Helps matches snapshot", () => {
-		expect(findComponent("Helps")).toEqual(helps);
-	});
+  it("Helps matches snapshot", () => {
+    expect(findComponent("Helps")).toEqual(helps);
+  });
 
-	it("Hero matches snapshot", () => {
-		expect(findComponent("Hero")).toEqual(hero);
-	});
+  it("Hero matches snapshot", () => {
+    expect(findComponent("Hero")).toEqual(hero);
+  });
 
-	it("LogoClouds matches snapshot", () => {
-		expect(findComponent("LogoClouds")).toEqual(logoClouds);
-	});
+  it("LogoClouds matches snapshot", () => {
+    expect(findComponent("LogoClouds")).toEqual(logoClouds);
+  });
 
-	it("Navbar matches snapshot", () => {
-		expect(findComponent("Navbar")).toEqual(navbar);
-	});
+  it("Navbar matches snapshot", () => {
+    expect(findComponent("Navbar")).toEqual(navbar);
+  });
 
-	it("PricingMinimal matches snapshot", () => {
-		expect(findComponent("PricingMinimal")).toEqual(pricingMinimal);
-	});
+  it("PricingMinimal matches snapshot", () => {
+    expect(findComponent("PricingMinimal")).toEqual(pricingMinimal);
+  });
 
-	it("Section matches snapshot", () => {
-		expect(findComponent("Section")).toEqual(section);
-	});
+  it("Section matches snapshot", () => {
+    expect(findComponent("Section")).toEqual(section);
+  });
 
-	it("Statistics matches snapshot", () => {
-		expect(findComponent("Statistics")).toEqual(statistics);
-	});
+  it("Statistics matches snapshot", () => {
+    expect(findComponent("Statistics")).toEqual(statistics);
+  });
 
-	it("running twice produces identical output", () => {
-		const ctx2 = configToAiContext(demoConfig);
-		expect(JSON.stringify(ctx)).toBe(JSON.stringify(ctx2));
-	});
+  it("running twice produces identical output", () => {
+    const ctx2 = configToAiContext(demoConfig);
+    expect(JSON.stringify(ctx)).toBe(JSON.stringify(ctx2));
+  });
 });

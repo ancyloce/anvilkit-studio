@@ -32,46 +32,46 @@
 import { expect, test } from "@playwright/test";
 
 test("editor page mounts and smoke plugin fires onInit", async ({ page }) => {
-	const consoleMessages: string[] = [];
-	const pageErrors: string[] = [];
-	const failedRequests: string[] = [];
+  const consoleMessages: string[] = [];
+  const pageErrors: string[] = [];
+  const failedRequests: string[] = [];
 
-	// Attach BEFORE navigation so we don't miss the initial `onInit`
-	// log that fires as soon as `<Studio>` hydrates. We also capture
-	// `pageerror` and `requestfailed` so a hydration crash or a 404
-	// on a chunk surfaces as a real diagnostic instead of an opaque
-	// timeout.
-	page.on("console", (msg) => {
-		consoleMessages.push(`[${msg.type()}] ${msg.text()}`);
-	});
-	page.on("pageerror", (err) => {
-		pageErrors.push(err.stack ?? err.message);
-	});
-	page.on("requestfailed", (req) => {
-		failedRequests.push(
-			`${req.method()} ${req.url()} — ${req.failure()?.errorText ?? "unknown"}`,
-		);
-	});
+  // Attach BEFORE navigation so we don't miss the initial `onInit`
+  // log that fires as soon as `<Studio>` hydrates. We also capture
+  // `pageerror` and `requestfailed` so a hydration crash or a 404
+  // on a chunk surfaces as a real diagnostic instead of an opaque
+  // timeout.
+  page.on("console", (msg) => {
+    consoleMessages.push(`[${msg.type()}] ${msg.text()}`);
+  });
+  page.on("pageerror", (err) => {
+    pageErrors.push(err.stack ?? err.message);
+  });
+  page.on("requestfailed", (req) => {
+    failedRequests.push(
+      `${req.method()} ${req.url()} — ${req.failure()?.errorText ?? "unknown"}`,
+    );
+  });
 
-	await page.goto("/puck/editor");
+  await page.goto("/puck/editor");
 
-	// Poll for up to 10 s after navigation. On warm runs the log
-	// appears within ~1.5 s; 10 s is the task spec's documented
-	// upper bound for cold client hydration. The `webServer.timeout`
-	// in `playwright.config.ts` covers the Next dev-mode cold
-	// compile separately.
-	await expect
-		.poll(
-			() => consoleMessages.some((text) => text.includes("[smoke] onInit")),
-			{
-				timeout: 10_000,
-				message: [
-					"Expected smokeTestPlugin to log '[smoke] onInit' after hydration.",
-					`Console (last 20): ${JSON.stringify(consoleMessages.slice(-20))}`,
-					`Page errors: ${JSON.stringify(pageErrors)}`,
-					`Failed requests: ${JSON.stringify(failedRequests)}`,
-				].join("\n"),
-			},
-		)
-		.toBe(true);
+  // Poll for up to 10 s after navigation. On warm runs the log
+  // appears within ~1.5 s; 10 s is the task spec's documented
+  // upper bound for cold client hydration. The `webServer.timeout`
+  // in `playwright.config.ts` covers the Next dev-mode cold
+  // compile separately.
+  await expect
+    .poll(
+      () => consoleMessages.some((text) => text.includes("[smoke] onInit")),
+      {
+        timeout: 10_000,
+        message: [
+          "Expected smokeTestPlugin to log '[smoke] onInit' after hydration.",
+          `Console (last 20): ${JSON.stringify(consoleMessages.slice(-20))}`,
+          `Page errors: ${JSON.stringify(pageErrors)}`,
+          `Failed requests: ${JSON.stringify(failedRequests)}`,
+        ].join("\n"),
+      },
+    )
+    .toBe(true);
 });

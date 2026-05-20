@@ -23,10 +23,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export type ParseResult<T> = { ok: true; value: T } | { ok: false };
 
 export interface UseLocalFieldValueResult {
-	readonly displayValue: string;
-	readonly onInputChange: (raw: string) => void;
-	readonly onFocus: () => void;
-	readonly onBlur: () => void;
+  readonly displayValue: string;
+  readonly onInputChange: (raw: string) => void;
+  readonly onFocus: () => void;
+  readonly onBlur: () => void;
 }
 
 /**
@@ -49,59 +49,59 @@ export interface UseLocalFieldValueResult {
  *   stays in lockstep with the user's typing.
  */
 export function useLocalFieldValue<T>(
-	externalValue: T,
-	parse: (raw: string) => ParseResult<T>,
-	format: (value: T) => string,
-	onCommit: (value: T) => void,
+  externalValue: T,
+  parse: (raw: string) => ParseResult<T>,
+  format: (value: T) => string,
+  onCommit: (value: T) => void,
 ): UseLocalFieldValueResult {
-	const [displayValue, setDisplayValue] = useState<string>(() =>
-		format(externalValue),
-	);
-	// `focusedRef` (not `useState`) so toggling focus does not cause an
-	// extra render — the only thing that needs to react to focus
-	// transitions is the external-value sync effect below, and that
-	// reads the ref at run-time.
-	const focusedRef = useRef(false);
-	// Track the latest `format` / `onCommit` so the input handler's
-	// closures stay stable across renders even when consumers pass
-	// inline arrows. Without this, every parent re-render produces a
-	// fresh `onInputChange` identity, which is harmless for behavior
-	// but defeats memoization further down the tree.
-	const formatRef = useRef(format);
-	const onCommitRef = useRef(onCommit);
-	useEffect(() => {
-		formatRef.current = format;
-		onCommitRef.current = onCommit;
-	}, [format, onCommit]);
+  const [displayValue, setDisplayValue] = useState<string>(() =>
+    format(externalValue),
+  );
+  // `focusedRef` (not `useState`) so toggling focus does not cause an
+  // extra render — the only thing that needs to react to focus
+  // transitions is the external-value sync effect below, and that
+  // reads the ref at run-time.
+  const focusedRef = useRef(false);
+  // Track the latest `format` / `onCommit` so the input handler's
+  // closures stay stable across renders even when consumers pass
+  // inline arrows. Without this, every parent re-render produces a
+  // fresh `onInputChange` identity, which is harmless for behavior
+  // but defeats memoization further down the tree.
+  const formatRef = useRef(format);
+  const onCommitRef = useRef(onCommit);
+  useEffect(() => {
+    formatRef.current = format;
+    onCommitRef.current = onCommit;
+  }, [format, onCommit]);
 
-	useEffect(() => {
-		if (!focusedRef.current) {
-			setDisplayValue(formatRef.current(externalValue));
-		}
-	}, [externalValue]);
+  useEffect(() => {
+    if (!focusedRef.current) {
+      setDisplayValue(formatRef.current(externalValue));
+    }
+  }, [externalValue]);
 
-	const onInputChange = useCallback(
-		(raw: string) => {
-			setDisplayValue(raw);
-			const result = parse(raw);
-			if (result.ok) onCommitRef.current(result.value);
-		},
-		[parse],
-	);
+  const onInputChange = useCallback(
+    (raw: string) => {
+      setDisplayValue(raw);
+      const result = parse(raw);
+      if (result.ok) onCommitRef.current(result.value);
+    },
+    [parse],
+  );
 
-	const onFocus = useCallback(() => {
-		focusedRef.current = true;
-	}, []);
+  const onFocus = useCallback(() => {
+    focusedRef.current = true;
+  }, []);
 
-	const onBlur = useCallback(() => {
-		focusedRef.current = false;
-		// Re-sync from the latest external value so any remote write
-		// that arrived during typing becomes visible the instant the
-		// user releases focus. The closure reads `externalValue` from
-		// the outer scope of this render, but the ref-backed
-		// `formatRef` ensures we apply the latest formatter.
-		setDisplayValue(formatRef.current(externalValue));
-	}, [externalValue]);
+  const onBlur = useCallback(() => {
+    focusedRef.current = false;
+    // Re-sync from the latest external value so any remote write
+    // that arrived during typing becomes visible the instant the
+    // user releases focus. The closure reads `externalValue` from
+    // the outer scope of this render, but the ref-backed
+    // `formatRef` ensures we apply the latest formatter.
+    setDisplayValue(formatRef.current(externalValue));
+  }, [externalValue]);
 
-	return { displayValue, onInputChange, onFocus, onBlur };
+  return { displayValue, onInputChange, onFocus, onBlur };
 }

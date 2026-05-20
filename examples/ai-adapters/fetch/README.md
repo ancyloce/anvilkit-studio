@@ -15,8 +15,8 @@ import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import { createFetchGeneratePage } from "@anvilkit/example-ai-adapter-fetch";
 
 export const aiCopilot = createAiCopilotPlugin({
-	generatePage: createFetchGeneratePage("/api/ai/generate-page"),
-	puckConfig,
+  generatePage: createFetchGeneratePage("/api/ai/generate-page"),
+  puckConfig,
 });
 ```
 
@@ -26,8 +26,8 @@ The adapter POSTs:
 
 ```json
 {
-	"prompt": "Build a hero block",
-	"availableComponents": ["Hero", "Section", "Pricing"]
+  "prompt": "Build a hero block",
+  "availableComponents": ["Hero", "Section", "Pricing"]
 }
 ```
 

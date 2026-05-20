@@ -46,20 +46,21 @@ type Unset = typeof UNSET;
  * }
  */
 export function getStrictContext<T>(
-	name: string,
+  name: string,
 ): readonly [Provider<T>, () => T] {
-	const context = createContext<T | Unset>(UNSET);
-	context.displayName = name;
+  const context = createContext<T | Unset>(UNSET);
+  context.displayName = name;
 
-	function useStrictContext(): T {
-		const value = useContext(context);
-		if (value === UNSET) {
-			throw new Error(
-				`\`use${name}\` must be used within <${name}Provider>.`,
-			);
-		}
-		return value;
-	}
+  function useStrictContext(): T {
+    const value = useContext(context);
+    if (value === UNSET) {
+      throw new Error(`\`use${name}\` must be used within <${name}Provider>.`);
+    }
+    return value;
+  }
 
-	return [context.Provider as unknown as Provider<T>, useStrictContext] as const;
+  return [
+    context.Provider as unknown as Provider<T>,
+    useStrictContext,
+  ] as const;
 }

@@ -10,25 +10,26 @@ import pageIR from "./page-ir.json" with { type: "json" };
  * directly.
  */
 const template: AnvilkitTemplate = {
-	slug: "landing-saas",
-	name: "Landing — SaaS",
-	description: "Navbar, hero, logo cloud, bento feature grid, pricing, statistics, and FAQ — the full set for a typical SaaS home page.",
-	preview: {
-		src: "./preview.png",
-		width: 1200,
-		height: 675,
-		alt: "Landing — SaaS template preview",
-	},
-	packages: [
-		{ name: "@anvilkit/bento-grid", version: "^0.0.2" },
-		{ name: "@anvilkit/helps", version: "^0.0.2" },
-		{ name: "@anvilkit/hero", version: "^0.0.2" },
-		{ name: "@anvilkit/logo-clouds", version: "^0.0.2" },
-		{ name: "@anvilkit/navbar", version: "^0.0.2" },
-		{ name: "@anvilkit/pricing-minimal", version: "^0.0.2" },
-		{ name: "@anvilkit/statistics", version: "^0.0.2" },
-	],
-	pageIR: pageIR as AnvilkitTemplate["pageIR"],
+  slug: "landing-saas",
+  name: "Landing — SaaS",
+  description:
+    "Navbar, hero, logo cloud, bento feature grid, pricing, statistics, and FAQ — the full set for a typical SaaS home page.",
+  preview: {
+    src: "./preview.png",
+    width: 1200,
+    height: 675,
+    alt: "Landing — SaaS template preview",
+  },
+  packages: [
+    { name: "@anvilkit/bento-grid", version: "^0.0.2" },
+    { name: "@anvilkit/helps", version: "^0.0.2" },
+    { name: "@anvilkit/hero", version: "^0.0.2" },
+    { name: "@anvilkit/logo-clouds", version: "^0.0.2" },
+    { name: "@anvilkit/navbar", version: "^0.0.2" },
+    { name: "@anvilkit/pricing-minimal", version: "^0.0.2" },
+    { name: "@anvilkit/statistics", version: "^0.0.2" },
+  ],
+  pageIR: pageIR as AnvilkitTemplate["pageIR"],
 };
 
 export default template;

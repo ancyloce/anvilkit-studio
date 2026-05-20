@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
  * positions still render each other's cursors at the right node.
  */
 export interface PresenceCursorCoords {
-	readonly x: number;
-	readonly y: number;
+  readonly x: number;
+  readonly y: number;
 }
 
 /**
@@ -18,7 +18,7 @@ export interface PresenceCursorCoords {
  * selected at once. Empty array means "no selection."
  */
 export interface PresenceSelectionState {
-	readonly nodeIds: readonly string[];
+  readonly nodeIds: readonly string[];
 }
 
 /**
@@ -30,15 +30,15 @@ export interface PresenceSelectionState {
  * the boundary without conversion.
  */
 export interface PresencePeer {
-	readonly id: string;
-	readonly displayName?: string;
-	readonly color?: string;
+  readonly id: string;
+  readonly displayName?: string;
+  readonly color?: string;
 }
 
 export interface PresenceStateFrame {
-	readonly peer: PresencePeer;
-	readonly cursor?: PresenceCursorCoords;
-	readonly selection?: PresenceSelectionState;
+  readonly peer: PresencePeer;
+  readonly cursor?: PresenceCursorCoords;
+  readonly selection?: PresenceSelectionState;
 }
 
 /**
@@ -51,19 +51,19 @@ export interface PresenceStateFrame {
  * the SnapshotAdapter v2 surface satisfies this hook.
  */
 export interface PresenceSource {
-	update(state: PresenceStateFrame): void;
-	onPeerChange(
-		callback: (peers: readonly PresenceStateFrame[]) => void,
-	): () => void;
+  update(state: PresenceStateFrame): void;
+  onPeerChange(
+    callback: (peers: readonly PresenceStateFrame[]) => void,
+  ): () => void;
 }
 
 export interface UsePresenceResult {
-	readonly peers: readonly PresenceStateFrame[];
-	readonly updateSelf: (state: Partial<PresenceStateFrame>) => void;
+  readonly peers: readonly PresenceStateFrame[];
+  readonly updateSelf: (state: Partial<PresenceStateFrame>) => void;
 }
 
 export interface UsePresenceOptions {
-	readonly self: PresencePeer;
+  readonly self: PresencePeer;
 }
 
 /**
@@ -76,28 +76,28 @@ export interface UsePresenceOptions {
  * supplied, matching the v2 contract).
  */
 export function usePresence(
-	source: PresenceSource | undefined,
-	options: UsePresenceOptions,
+  source: PresenceSource | undefined,
+  options: UsePresenceOptions,
 ): UsePresenceResult {
-	const [peers, setPeers] = useState<readonly PresenceStateFrame[]>([]);
-	const selfId = options.self.id;
+  const [peers, setPeers] = useState<readonly PresenceStateFrame[]>([]);
+  const selfId = options.self.id;
 
-	useEffect(() => {
-		if (!source) return;
-		return source.onPeerChange((next) => {
-			setPeers(next.filter((peer) => peer.peer.id !== selfId));
-		});
-	}, [source, selfId]);
+  useEffect(() => {
+    if (!source) return;
+    return source.onPeerChange((next) => {
+      setPeers(next.filter((peer) => peer.peer.id !== selfId));
+    });
+  }, [source, selfId]);
 
-	return {
-		peers,
-		updateSelf(state) {
-			if (!source) return;
-			source.update({
-				peer: options.self,
-				cursor: state.cursor,
-				selection: state.selection,
-			});
-		},
-	};
+  return {
+    peers,
+    updateSelf(state) {
+      if (!source) return;
+      source.update({
+        peer: options.self,
+        cursor: state.cursor,
+        selection: state.selection,
+      });
+    },
+  };
 }

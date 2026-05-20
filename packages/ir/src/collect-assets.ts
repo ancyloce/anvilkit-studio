@@ -6,11 +6,11 @@ import { deriveAssetId } from "./internal/derive-asset-id.js";
  * Options for {@link collectAssets}.
  */
 export interface CollectAssetsOptions {
-	/**
-	 * Custom id derivation function. Defaults to the internal FNV-1a
-	 * hash. Override in tests for deterministic snapshot ids.
-	 */
-	deriveId?: (url: string) => string;
+  /**
+   * Custom id derivation function. Defaults to the internal FNV-1a
+   * hash. Override in tests for deterministic snapshot ids.
+   */
+  deriveId?: (url: string) => string;
 }
 
 /**
@@ -30,13 +30,13 @@ export interface CollectAssetsOptions {
  * @returns A deduplicated list of assets, ordered by first encounter.
  */
 export function collectAssets(
-	node: PageIRNode | { props: Record<string, unknown> },
-	opts?: CollectAssetsOptions,
+  node: PageIRNode | { props: Record<string, unknown> },
+  opts?: CollectAssetsOptions,
 ): readonly PageIRAsset[] {
-	const derive = opts?.deriveId ?? deriveAssetId;
-	const seen = new Map<string, PageIRAsset>();
+  const derive = opts?.deriveId ?? deriveAssetId;
+  const seen = new Map<string, PageIRAsset>();
 
-	walkNodeIntoMap(node, seen, derive, 0);
+  walkNodeIntoMap(node, seen, derive, 0);
 
-	return [...seen.values()];
+  return [...seen.values()];
 }

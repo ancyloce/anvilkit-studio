@@ -48,8 +48,8 @@ the originating findings).
   `SnapshotHistoryModal` migrated from the hand-rolled overlay to the
   shared `@anvilkit/ui` `Dialog`, picking up focus-trap, scroll-lock,
   `Escape`, and focus-restoration. `handleRestore` is now `try/finally`
-  + mounted-ref guarded so the disabled button can never get stuck
-  after a slow restore unmounts the modal.
+  - mounted-ref guarded so the disabled button can never get stuck
+    after a slow restore unmounts the modal.
 - **Collab cache invalidation** — `VersionHistoryUI` now wires the
   optional `SnapshotAdapter.subscribe(onUpdate)` callback to clear its
   in-memory snapshot cache and re-list, so a remote-update from a

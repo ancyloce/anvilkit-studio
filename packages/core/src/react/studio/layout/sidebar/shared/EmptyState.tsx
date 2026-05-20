@@ -10,31 +10,31 @@
 import type { ReactNode } from "react";
 
 import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyMedia,
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
 } from "@/primitives/empty";
 
 export interface EmptyStateProps {
-	readonly message: string;
-	readonly icon?: ReactNode;
-	readonly testId?: string;
+  readonly message: string;
+  readonly icon?: ReactNode;
+  readonly testId?: string;
 }
 
 export function EmptyState({
-	message,
-	icon,
-	testId,
+  message,
+  icon,
+  testId,
 }: EmptyStateProps): ReactNode {
-	return (
-		<Empty data-testid={testId} className="border-0 px-4 py-8">
-			<EmptyHeader>
-				{icon !== undefined ? (
-					<EmptyMedia variant="icon">{icon}</EmptyMedia>
-				) : null}
-				<EmptyDescription className="text-xs">{message}</EmptyDescription>
-			</EmptyHeader>
-		</Empty>
-	);
+  return (
+    <Empty data-testid={testId} className="border-0 px-4 py-8">
+      <EmptyHeader>
+        {icon !== undefined ? (
+          <EmptyMedia variant="icon">{icon}</EmptyMedia>
+        ) : null}
+        <EmptyDescription className="text-xs">{message}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  );
 }

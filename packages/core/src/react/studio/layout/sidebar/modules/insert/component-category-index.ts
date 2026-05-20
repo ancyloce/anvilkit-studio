@@ -25,23 +25,23 @@ import type { Config as PuckConfig } from "@puckeditor/core";
  * category yield `undefined` from {@link getComponentCategory}.
  */
 export function buildComponentCategoryIndex(
-	config: PuckConfig | undefined,
+  config: PuckConfig | undefined,
 ): ReadonlyMap<string, string> {
-	const index = new Map<string, string>();
-	const categories = config?.categories;
-	if (categories === undefined) {
-		return index;
-	}
-	for (const [categoryName, category] of Object.entries(categories)) {
-		const components = category?.components;
-		if (components === undefined) continue;
-		for (const componentName of components) {
-			if (!index.has(componentName)) {
-				index.set(componentName, categoryName);
-			}
-		}
-	}
-	return index;
+  const index = new Map<string, string>();
+  const categories = config?.categories;
+  if (categories === undefined) {
+    return index;
+  }
+  for (const [categoryName, category] of Object.entries(categories)) {
+    const components = category?.components;
+    if (components === undefined) continue;
+    for (const componentName of components) {
+      if (!index.has(componentName)) {
+        index.set(componentName, categoryName);
+      }
+    }
+  }
+  return index;
 }
 
 /**
@@ -49,8 +49,8 @@ export function buildComponentCategoryIndex(
  * components that are not assigned to any category in the Config.
  */
 export function getComponentCategory(
-	index: ReadonlyMap<string, string>,
-	componentName: string,
+  index: ReadonlyMap<string, string>,
+  componentName: string,
 ): string | undefined {
-	return index.get(componentName);
+  return index.get(componentName);
 }

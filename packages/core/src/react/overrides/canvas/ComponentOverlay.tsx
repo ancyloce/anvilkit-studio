@@ -24,42 +24,42 @@ import { useReactivePuck } from "../utils/use-reactive-puck";
 const ROOT_DROPPABLE_ID = "root:default-zone";
 
 export interface ComponentOverlayOverrideProps {
-	readonly children: ReactNode;
-	readonly hover: boolean;
-	readonly isSelected: boolean;
-	readonly componentId: string;
-	readonly componentType: string;
+  readonly children: ReactNode;
+  readonly hover: boolean;
+  readonly isSelected: boolean;
+  readonly componentId: string;
+  readonly componentType: string;
 }
 
 export function ComponentOverlay({
-	children,
-	hover,
-	isSelected,
-	componentId,
-	componentType,
+  children,
+  hover,
+  isSelected,
+  componentId,
+  componentType,
 }: ComponentOverlayOverrideProps): ReactNode {
-	// Reactive: label placement depends on the component's position in
-	// the tree, which changes on reorder/move. Selecting a primitive
-	// boolean keeps re-renders limited to actual placement flips.
-	const isTopmost = useReactivePuck((s) => {
-		const selector = s.getSelectorForId(componentId);
-		return (
-			selector !== undefined &&
-			selector.index === 0 &&
-			selector.zone === ROOT_DROPPABLE_ID
-		);
-	});
-	const labelPosition = isTopmost ? "inside" : "above";
+  // Reactive: label placement depends on the component's position in
+  // the tree, which changes on reorder/move. Selecting a primitive
+  // boolean keeps re-renders limited to actual placement flips.
+  const isTopmost = useReactivePuck((s) => {
+    const selector = s.getSelectorForId(componentId);
+    return (
+      selector !== undefined &&
+      selector.index === 0 &&
+      selector.zone === ROOT_DROPPABLE_ID
+    );
+  });
+  const labelPosition = isTopmost ? "inside" : "above";
 
-	return (
-		<div
-			data-ak-overlay
-			data-overlay-state={isSelected ? "selected" : hover ? "hover" : "idle"}
-			data-label-position={labelPosition}
-			className={cn("relative h-full w-full transition-colors")}
-		>
-			{isSelected ? <span data-ak-overlay-label>{componentType}</span> : null}
-			{children}
-		</div>
-	);
+  return (
+    <div
+      data-ak-overlay
+      data-overlay-state={isSelected ? "selected" : hover ? "hover" : "idle"}
+      data-label-position={labelPosition}
+      className={cn("relative h-full w-full transition-colors")}
+    >
+      {isSelected ? <span data-ak-overlay-label>{componentType}</span> : null}
+      {children}
+    </div>
+  );
 }

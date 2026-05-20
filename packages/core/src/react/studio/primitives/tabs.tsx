@@ -8,14 +8,14 @@
  */
 
 export {
-	Tabs,
-	TabsList,
-	TabsPanel,
-	TabsPanels,
-	TabsTab,
-	type TabsListProps,
-	type TabsPanelProps,
-	type TabsPanelsProps,
-	type TabsProps,
-	type TabsTabProps,
+  Tabs,
+  TabsList,
+  TabsPanel,
+  TabsPanels,
+  TabsTab,
+  type TabsListProps,
+  type TabsPanelProps,
+  type TabsPanelsProps,
+  type TabsProps,
+  type TabsTabProps,
 } from "./animate-ui/components/base/tabs";

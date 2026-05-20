@@ -19,14 +19,14 @@ import type { ViteUserConfig } from "vitest/config";
  * ```
  */
 export const nodePreset = {
-	test: {
-		environment: "node",
-		globals: false,
-		include: [
-			"src/**/*.{test,spec}.ts",
-			"src/**/__tests__/**/*.{test,spec}.ts",
-		],
-		clearMocks: true,
-		restoreMocks: true,
-	},
+  test: {
+    environment: "node",
+    globals: false,
+    include: [
+      "src/**/*.{test,spec}.ts",
+      "src/**/__tests__/**/*.{test,spec}.ts",
+    ],
+    clearMocks: true,
+    restoreMocks: true,
+  },
 } satisfies ViteUserConfig;

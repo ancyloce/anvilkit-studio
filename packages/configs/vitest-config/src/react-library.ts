@@ -27,19 +27,19 @@ import type { ViteUserConfig } from "vitest/config";
  * ```
  */
 export const reactLibraryPreset = {
-	resolve: {
-		dedupe: ["react", "react-dom", "react/jsx-runtime"],
-	},
-	test: {
-		environment: "jsdom",
-		globals: false,
-		setupFiles: ["@anvilkit/vitest-config/setup/jest-dom"],
-		include: [
-			"src/**/*.{test,spec}.{ts,tsx}",
-			"src/**/__tests__/**/*.{test,spec}.{ts,tsx}",
-		],
-		css: true,
-		clearMocks: true,
-		restoreMocks: true,
-	},
+  resolve: {
+    dedupe: ["react", "react-dom", "react/jsx-runtime"],
+  },
+  test: {
+    environment: "jsdom",
+    globals: false,
+    setupFiles: ["@anvilkit/vitest-config/setup/jest-dom"],
+    include: [
+      "src/**/*.{test,spec}.{ts,tsx}",
+      "src/**/__tests__/**/*.{test,spec}.{ts,tsx}",
+    ],
+    css: true,
+    clearMocks: true,
+    restoreMocks: true,
+  },
 } satisfies ViteUserConfig;

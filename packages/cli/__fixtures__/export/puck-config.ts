@@ -1,8 +1,8 @@
 export default {
-	components: {
-		Hero: {
-			fields: {},
-			render: () => null,
-		},
-	},
+  components: {
+    Hero: {
+      fields: {},
+      render: () => null,
+    },
+  },
 };

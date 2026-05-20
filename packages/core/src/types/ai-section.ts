@@ -58,61 +58,61 @@ import type { PageIRNode } from "./ir.js";
  * if the selection is slot-scoped.
  */
 export interface AiSectionSelection {
-	/**
-	 * The Puck zone identifier containing the selection.
-	 *
-	 * - For root content: Puck's root zone id (typically `"root-zone"`
-	 *   or the empty string, depending on Puck version).
-	 * - For legacy `data.zones` entries: the dotted key Puck uses
-	 *   (`${parentId}:${zoneName}`).
-	 * - For modern slot fields: the slot field's path inside the parent
-	 *   component.
-	 *
-	 * Opaque to {@link AiSectionContext} consumers — only the validator
-	 * compares it against incoming {@link AiSectionPatch.zoneId} values.
-	 */
-	readonly zoneId: string;
-	/**
-	 * Selected node IDs, in author-visible order.
-	 *
-	 * Length must be ≥ 1 — selecting zero nodes is the page-level flow,
-	 * not the section flow. The order is preserved into
-	 * {@link AiSectionPatch.nodeIds} so the validator can match
-	 * positions when {@link AiSectionContext.allowResize} is `false`.
-	 */
-	readonly nodeIds: readonly string[];
-	/**
-	 * Optional snapshot of the current node subtrees being replaced.
-	 *
-	 * When provided, `configToAiSectionContext()` forwards this onto
-	 * {@link AiSectionContext.currentNodes} so the prompt builder can
-	 * include "before" content. Hosts that have already loaded a
-	 * `PageIR` have this for free; hosts that drive Puck without a
-	 * normalized IR may omit it.
-	 */
-	readonly currentNodes?: readonly PageIRNode[];
-	/**
-	 * Optional zone-scoped allow-list, mirroring the
-	 * `allow` array on Puck slot field definitions.
-	 *
-	 * When present, `configToAiSectionContext()` narrows
-	 * {@link AiSectionContext.availableComponents} to this set. Absent
-	 * means "every registered component is permitted in this zone"
-	 * (the root-zone default).
-	 */
-	readonly allow?: readonly string[];
-	/**
-	 * Optional zone-scoped disallow-list, mirroring the `disallow` array
-	 * on Puck slot field definitions. Applied after {@link allow}.
-	 */
-	readonly disallow?: readonly string[];
-	/**
-	 * Optional Puck zone hint — `"slot"` for modern slot fields,
-	 * `"zone"` for legacy `data.zones` entries, omitted for the root
-	 * zone. Forwarded to {@link AiSectionContext.zoneKind}; the
-	 * validator uses it as a sanity check when {@link allow} is empty.
-	 */
-	readonly zoneKind?: "slot" | "zone";
+  /**
+   * The Puck zone identifier containing the selection.
+   *
+   * - For root content: Puck's root zone id (typically `"root-zone"`
+   *   or the empty string, depending on Puck version).
+   * - For legacy `data.zones` entries: the dotted key Puck uses
+   *   (`${parentId}:${zoneName}`).
+   * - For modern slot fields: the slot field's path inside the parent
+   *   component.
+   *
+   * Opaque to {@link AiSectionContext} consumers — only the validator
+   * compares it against incoming {@link AiSectionPatch.zoneId} values.
+   */
+  readonly zoneId: string;
+  /**
+   * Selected node IDs, in author-visible order.
+   *
+   * Length must be ≥ 1 — selecting zero nodes is the page-level flow,
+   * not the section flow. The order is preserved into
+   * {@link AiSectionPatch.nodeIds} so the validator can match
+   * positions when {@link AiSectionContext.allowResize} is `false`.
+   */
+  readonly nodeIds: readonly string[];
+  /**
+   * Optional snapshot of the current node subtrees being replaced.
+   *
+   * When provided, `configToAiSectionContext()` forwards this onto
+   * {@link AiSectionContext.currentNodes} so the prompt builder can
+   * include "before" content. Hosts that have already loaded a
+   * `PageIR` have this for free; hosts that drive Puck without a
+   * normalized IR may omit it.
+   */
+  readonly currentNodes?: readonly PageIRNode[];
+  /**
+   * Optional zone-scoped allow-list, mirroring the
+   * `allow` array on Puck slot field definitions.
+   *
+   * When present, `configToAiSectionContext()` narrows
+   * {@link AiSectionContext.availableComponents} to this set. Absent
+   * means "every registered component is permitted in this zone"
+   * (the root-zone default).
+   */
+  readonly allow?: readonly string[];
+  /**
+   * Optional zone-scoped disallow-list, mirroring the `disallow` array
+   * on Puck slot field definitions. Applied after {@link allow}.
+   */
+  readonly disallow?: readonly string[];
+  /**
+   * Optional Puck zone hint — `"slot"` for modern slot fields,
+   * `"zone"` for legacy `data.zones` entries, omitted for the root
+   * zone. Forwarded to {@link AiSectionContext.zoneKind}; the
+   * validator uses it as a sanity check when {@link allow} is empty.
+   */
+  readonly zoneKind?: "slot" | "zone";
 }
 
 /**
@@ -123,26 +123,26 @@ export interface AiSectionSelection {
  * the same hint object for both flows.
  */
 export interface ConfigToAiSectionContextOptions {
-	/**
-	 * Optional theme hint (`"light"` | `"dark"`) forwarded onto
-	 * {@link AiSectionContext.theme}.
-	 */
-	readonly theme?: "light" | "dark";
-	/**
-	 * Optional BCP 47 language tag forwarded onto
-	 * {@link AiSectionContext.locale}.
-	 */
-	readonly locale?: string;
-	/**
-	 * When `true`, the resulting context's {@link AiSectionContext.allowResize}
-	 * is set so the LLM (and the validator) accepts a {@link AiSectionPatch}
-	 * whose `replacement.length` ≠ {@link AiSectionSelection.nodeIds}.length.
-	 *
-	 * Defaults to `false` — Phase 6 / M9 ships size-preserving patches
-	 * only. Hosts wanting "split this hero into three sections" must opt
-	 * in explicitly.
-	 */
-	readonly allowResize?: boolean;
+  /**
+   * Optional theme hint (`"light"` | `"dark"`) forwarded onto
+   * {@link AiSectionContext.theme}.
+   */
+  readonly theme?: "light" | "dark";
+  /**
+   * Optional BCP 47 language tag forwarded onto
+   * {@link AiSectionContext.locale}.
+   */
+  readonly locale?: string;
+  /**
+   * When `true`, the resulting context's {@link AiSectionContext.allowResize}
+   * is set so the LLM (and the validator) accepts a {@link AiSectionPatch}
+   * whose `replacement.length` ≠ {@link AiSectionSelection.nodeIds}.length.
+   *
+   * Defaults to `false` — Phase 6 / M9 ships size-preserving patches
+   * only. Hosts wanting "split this hero into three sections" must opt
+   * in explicitly.
+   */
+  readonly allowResize?: boolean;
 }
 
 /**
@@ -158,60 +158,60 @@ export interface ConfigToAiSectionContextOptions {
  * a Phase 7 major bump.
  */
 export interface AiSectionContext {
-	/**
-	 * The zone the selection lives inside. Forwarded from
-	 * {@link AiSectionSelection.zoneId} so the validator can verify
-	 * that the LLM's emitted {@link AiSectionPatch.zoneId} matches.
-	 */
-	readonly zoneId: string;
-	/**
-	 * Optional Puck zone discriminator — `"slot"`, `"zone"`, or omitted
-	 * for the root zone. Forwarded from
-	 * {@link AiSectionSelection.zoneKind}.
-	 */
-	readonly zoneKind?: "slot" | "zone";
-	/**
-	 * The selected node IDs in author-visible order. Forwarded from
-	 * {@link AiSectionSelection.nodeIds}; an emitted patch must
-	 * preserve this order (and length, when
-	 * {@link allowResize} is `false`).
-	 */
-	readonly nodeIds: readonly string[];
-	/**
-	 * The components the LLM may emit inside this zone, already
-	 * narrowed by the zone's allow / disallow lists.
-	 *
-	 * Each entry has the same shape as
-	 * {@link AiGenerationContext.availableComponents} so the validator
-	 * applies identical field-level rules at section and page
-	 * granularity.
-	 *
-	 * The list is sorted by {@link AiComponentSchema.componentName} for
-	 * deterministic prompts.
-	 */
-	readonly availableComponents: readonly AiComponentSchema[];
-	/**
-	 * Optional snapshot of the subtrees being replaced. Forwarded from
-	 * {@link AiSectionSelection.currentNodes}. Lets the prompt builder
-	 * include "rewrite THIS subtree" context.
-	 */
-	readonly currentNodes?: readonly PageIRNode[];
-	/**
-	 * Whether a size-changing replacement is permitted. Driven by
-	 * {@link ConfigToAiSectionContextOptions.allowResize}; defaults to
-	 * `false` so single-subtree-replacement is the safe default.
-	 */
-	readonly allowResize: boolean;
-	/**
-	 * Optional theme hint forwarded onto the prompt. Mirrors
-	 * {@link AiGenerationContext.theme}.
-	 */
-	readonly theme?: "light" | "dark";
-	/**
-	 * Optional BCP 47 locale hint. Mirrors
-	 * {@link AiGenerationContext.locale}.
-	 */
-	readonly locale?: string;
+  /**
+   * The zone the selection lives inside. Forwarded from
+   * {@link AiSectionSelection.zoneId} so the validator can verify
+   * that the LLM's emitted {@link AiSectionPatch.zoneId} matches.
+   */
+  readonly zoneId: string;
+  /**
+   * Optional Puck zone discriminator — `"slot"`, `"zone"`, or omitted
+   * for the root zone. Forwarded from
+   * {@link AiSectionSelection.zoneKind}.
+   */
+  readonly zoneKind?: "slot" | "zone";
+  /**
+   * The selected node IDs in author-visible order. Forwarded from
+   * {@link AiSectionSelection.nodeIds}; an emitted patch must
+   * preserve this order (and length, when
+   * {@link allowResize} is `false`).
+   */
+  readonly nodeIds: readonly string[];
+  /**
+   * The components the LLM may emit inside this zone, already
+   * narrowed by the zone's allow / disallow lists.
+   *
+   * Each entry has the same shape as
+   * {@link AiGenerationContext.availableComponents} so the validator
+   * applies identical field-level rules at section and page
+   * granularity.
+   *
+   * The list is sorted by {@link AiComponentSchema.componentName} for
+   * deterministic prompts.
+   */
+  readonly availableComponents: readonly AiComponentSchema[];
+  /**
+   * Optional snapshot of the subtrees being replaced. Forwarded from
+   * {@link AiSectionSelection.currentNodes}. Lets the prompt builder
+   * include "rewrite THIS subtree" context.
+   */
+  readonly currentNodes?: readonly PageIRNode[];
+  /**
+   * Whether a size-changing replacement is permitted. Driven by
+   * {@link ConfigToAiSectionContextOptions.allowResize}; defaults to
+   * `false` so single-subtree-replacement is the safe default.
+   */
+  readonly allowResize: boolean;
+  /**
+   * Optional theme hint forwarded onto the prompt. Mirrors
+   * {@link AiGenerationContext.theme}.
+   */
+  readonly theme?: "light" | "dark";
+  /**
+   * Optional BCP 47 locale hint. Mirrors
+   * {@link AiGenerationContext.locale}.
+   */
+  readonly locale?: string;
 }
 
 /**
@@ -225,23 +225,23 @@ export interface AiSectionContext {
  * `validateAiSectionPatch()`; Core only owns the type.
  */
 export interface AiSectionPatch {
-	/**
-	 * The zone the patch applies to. Must match
-	 * {@link AiSectionContext.zoneId} — patches that target a different
-	 * zone are rejected with code `PATCH_SHAPE`.
-	 */
-	readonly zoneId: string;
-	/**
-	 * The node IDs being replaced. Must equal
-	 * {@link AiSectionContext.nodeIds} (same order, same length unless
-	 * {@link AiSectionContext.allowResize} is `true`).
-	 */
-	readonly nodeIds: readonly string[];
-	/**
-	 * The new subtrees, in the order they should appear in the zone
-	 * after the replacement is applied. Each node is fully formed
-	 * `PageIRNode` shape — the validator runs the same per-node rules
-	 * as `validateAiOutput`, scoped to this subtree only.
-	 */
-	readonly replacement: readonly PageIRNode[];
+  /**
+   * The zone the patch applies to. Must match
+   * {@link AiSectionContext.zoneId} — patches that target a different
+   * zone are rejected with code `PATCH_SHAPE`.
+   */
+  readonly zoneId: string;
+  /**
+   * The node IDs being replaced. Must equal
+   * {@link AiSectionContext.nodeIds} (same order, same length unless
+   * {@link AiSectionContext.allowResize} is `true`).
+   */
+  readonly nodeIds: readonly string[];
+  /**
+   * The new subtrees, in the order they should appear in the zone
+   * after the replacement is applied. Each node is fully formed
+   * `PageIRNode` shape — the validator runs the same per-node rules
+   * as `validateAiOutput`, scoped to this subtree only.
+   */
+  readonly replacement: readonly PageIRNode[];
 }

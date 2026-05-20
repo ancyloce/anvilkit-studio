@@ -68,30 +68,30 @@ import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
  * surface; removal target `v2.0.0` (see {@link aiHostAdapter}).
  */
 export interface AiHostAdapterOptions {
-	/**
-	 * Base URL of the legacy AI host (e.g.
-	 * `"https://ai.example.com"`). The adapter appends
-	 * {@link apiPath} (defaulting to `/generate`) and POSTs the
-	 * current Puck data to that URL.
-	 */
-	readonly aiHost: string;
+  /**
+   * Base URL of the legacy AI host (e.g.
+   * `"https://ai.example.com"`). The adapter appends
+   * {@link apiPath} (defaulting to `/generate`) and POSTs the
+   * current Puck data to that URL.
+   */
+  readonly aiHost: string;
 
-	/**
-	 * Optional path appended to {@link aiHost}. Defaults to
-	 * `"/generate"`. Override only if your legacy host exposes the
-	 * generation endpoint at a different route — most consumers
-	 * should leave this unset.
-	 */
-	readonly apiPath?: string;
+  /**
+   * Optional path appended to {@link aiHost}. Defaults to
+   * `"/generate"`. Override only if your legacy host exposes the
+   * generation endpoint at a different route — most consumers
+   * should leave this unset.
+   */
+  readonly apiPath?: string;
 
-	/**
-	 * Optional per-request timeout in milliseconds. Defaults to
-	 * `30_000` (30s) — long enough for legacy single-shot generation,
-	 * short enough that a hung endpoint does not pin the editor
-	 * indefinitely. Aborting produces the same `log("error", ...)`
-	 * path as any other fetch failure.
-	 */
-	readonly timeoutMs?: number;
+  /**
+   * Optional per-request timeout in milliseconds. Defaults to
+   * `30_000` (30s) — long enough for legacy single-shot generation,
+   * short enough that a hung endpoint does not pin the editor
+   * indefinitely. Aborting produces the same `log("error", ...)`
+   * path as any other fetch failure.
+   */
+  readonly timeoutMs?: number;
 }
 
 /**
@@ -131,12 +131,12 @@ const MAX_RESPONSE_BYTES = 1_048_576;
  * log message can name the cap rather than the network.
  */
 class ResponseTooLargeError extends Error {
-	constructor(public readonly bytesRead: number) {
-		super(
-			`aiHost response exceeded ${MAX_RESPONSE_BYTES} bytes (read ${bytesRead} before aborting)`,
-		);
-		this.name = "ResponseTooLargeError";
-	}
+  constructor(public readonly bytesRead: number) {
+    super(
+      `aiHost response exceeded ${MAX_RESPONSE_BYTES} bytes (read ${bytesRead} before aborting)`,
+    );
+    this.name = "ResponseTooLargeError";
+  }
 }
 
 /**
@@ -156,67 +156,67 @@ class ResponseTooLargeError extends Error {
  * exposes a stream.
  */
 async function readBoundedResponseBody(
-	response: Response,
-	limit: number,
+  response: Response,
+  limit: number,
 ): Promise<string> {
-	const body = response.body as ReadableStream<Uint8Array> | null | undefined;
-	if (
-		body === null ||
-		body === undefined ||
-		typeof body.getReader !== "function"
-	) {
-		// Fallback for shapes that omit `body` (some mocks, some
-		// intermediaries). We can still post-check the resulting
-		// string length so the cap is enforced — just less promptly.
-		const text = await response.text();
-		// `String.prototype.length` is a UTF-16 code-unit count, which
-		// systematically under-counts the UTF-8 byte length used by the
-		// streaming path: a single 4-byte UTF-8 emoji is 2 UTF-16 units,
-		// and a 3-byte CJK glyph is 1 unit. A non-ASCII payload could
-		// otherwise sneak past the cap here even though the streaming
-		// path would have rejected it. Re-encode and measure bytes so
-		// both paths enforce exactly the same `MAX_RESPONSE_BYTES` ceiling.
-		const byteCount = new TextEncoder().encode(text).byteLength;
-		if (byteCount > limit) {
-			throw new ResponseTooLargeError(byteCount);
-		}
-		return text;
-	}
+  const body = response.body as ReadableStream<Uint8Array> | null | undefined;
+  if (
+    body === null ||
+    body === undefined ||
+    typeof body.getReader !== "function"
+  ) {
+    // Fallback for shapes that omit `body` (some mocks, some
+    // intermediaries). We can still post-check the resulting
+    // string length so the cap is enforced — just less promptly.
+    const text = await response.text();
+    // `String.prototype.length` is a UTF-16 code-unit count, which
+    // systematically under-counts the UTF-8 byte length used by the
+    // streaming path: a single 4-byte UTF-8 emoji is 2 UTF-16 units,
+    // and a 3-byte CJK glyph is 1 unit. A non-ASCII payload could
+    // otherwise sneak past the cap here even though the streaming
+    // path would have rejected it. Re-encode and measure bytes so
+    // both paths enforce exactly the same `MAX_RESPONSE_BYTES` ceiling.
+    const byteCount = new TextEncoder().encode(text).byteLength;
+    if (byteCount > limit) {
+      throw new ResponseTooLargeError(byteCount);
+    }
+    return text;
+  }
 
-	const reader = body.getReader();
-	const decoder = new TextDecoder("utf-8");
-	const chunks: string[] = [];
-	let bytesRead = 0;
-	try {
-		while (true) {
-			const { done, value } = await reader.read();
-			if (done) {
-				break;
-			}
-			if (value === undefined) {
-				continue;
-			}
-			bytesRead += value.byteLength;
-			if (bytesRead > limit) {
-				// Best-effort cancel so the underlying connection can
-				// be closed promptly; ignore any cancel rejection
-				// because we're already in the throw path.
-				try {
-					await reader.cancel();
-				} catch {
-					/* ignore */
-				}
-				throw new ResponseTooLargeError(bytesRead);
-			}
-			chunks.push(decoder.decode(value, { stream: true }));
-		}
-		// Flush any trailing multi-byte sequence still buffered in the
-		// streaming decoder.
-		chunks.push(decoder.decode());
-	} finally {
-		reader.releaseLock?.();
-	}
-	return chunks.join("");
+  const reader = body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  const chunks: string[] = [];
+  let bytesRead = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      if (value === undefined) {
+        continue;
+      }
+      bytesRead += value.byteLength;
+      if (bytesRead > limit) {
+        // Best-effort cancel so the underlying connection can
+        // be closed promptly; ignore any cancel rejection
+        // because we're already in the throw path.
+        try {
+          await reader.cancel();
+        } catch {
+          /* ignore */
+        }
+        throw new ResponseTooLargeError(bytesRead);
+      }
+      chunks.push(decoder.decode(value, { stream: true }));
+    }
+    // Flush any trailing multi-byte sequence still buffered in the
+    // streaming decoder.
+    chunks.push(decoder.decode());
+  } finally {
+    reader.releaseLock?.();
+  }
+  return chunks.join("");
 }
 
 /**
@@ -239,32 +239,32 @@ async function readBoundedResponseBody(
  * a noisy log over an XSS-shaped dispatch into the editor.
  */
 function isPuckDataShape(
-	value: unknown,
-	componentTypes: ReadonlySet<string>,
+  value: unknown,
+  componentTypes: ReadonlySet<string>,
 ): value is Partial<PuckData> {
-	if (!isPlainRecord(value)) {
-		return false;
-	}
+  if (!isPlainRecord(value)) {
+    return false;
+  }
 
-	if (value.root !== undefined && !isPuckRootShape(value.root)) {
-		return false;
-	}
+  if (value.root !== undefined && !isPuckRootShape(value.root)) {
+    return false;
+  }
 
-	if (
-		value.content !== undefined &&
-		!isPuckContentShape(value.content, componentTypes)
-	) {
-		return false;
-	}
+  if (
+    value.content !== undefined &&
+    !isPuckContentShape(value.content, componentTypes)
+  ) {
+    return false;
+  }
 
-	if (
-		value.zones !== undefined &&
-		!isPuckZonesShape(value.zones, componentTypes)
-	) {
-		return false;
-	}
+  if (
+    value.zones !== undefined &&
+    !isPuckZonesShape(value.zones, componentTypes)
+  ) {
+    return false;
+  }
 
-	return true;
+  return true;
 }
 
 /**
@@ -272,7 +272,7 @@ function isPuckDataShape(
  * Used wherever the validator needs a plain `{ ... }` object.
  */
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
-	return value !== null && typeof value === "object" && !Array.isArray(value);
+  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 /**
@@ -281,13 +281,13 @@ function isPlainRecord(value: unknown): value is Record<string, unknown> {
  * are passed through.
  */
 function isPuckRootShape(value: unknown): boolean {
-	if (!isPlainRecord(value)) {
-		return false;
-	}
-	if (value.props !== undefined && !isPlainRecord(value.props)) {
-		return false;
-	}
-	return true;
+  if (!isPlainRecord(value)) {
+    return false;
+  }
+  if (value.props !== undefined && !isPlainRecord(value.props)) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -297,18 +297,18 @@ function isPuckRootShape(value: unknown): boolean {
  * into Puck.
  */
 function isPuckContentShape(
-	value: unknown,
-	componentTypes: ReadonlySet<string>,
+  value: unknown,
+  componentTypes: ReadonlySet<string>,
 ): boolean {
-	if (!Array.isArray(value)) {
-		return false;
-	}
-	for (const entry of value) {
-		if (!isPuckContentEntry(entry, componentTypes)) {
-			return false;
-		}
-	}
-	return true;
+  if (!Array.isArray(value)) {
+    return false;
+  }
+  for (const entry of value) {
+    if (!isPuckContentEntry(entry, componentTypes)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -318,22 +318,22 @@ function isPuckContentShape(
  * present, must be a plain record.
  */
 function isPuckContentEntry(
-	value: unknown,
-	componentTypes: ReadonlySet<string>,
+  value: unknown,
+  componentTypes: ReadonlySet<string>,
 ): boolean {
-	if (!isPlainRecord(value)) {
-		return false;
-	}
-	if (typeof value.type !== "string") {
-		return false;
-	}
-	if (!componentTypes.has(value.type)) {
-		return false;
-	}
-	if (value.props !== undefined && !isPlainRecord(value.props)) {
-		return false;
-	}
-	return true;
+  if (!isPlainRecord(value)) {
+    return false;
+  }
+  if (typeof value.type !== "string") {
+    return false;
+  }
+  if (!componentTypes.has(value.type)) {
+    return false;
+  }
+  if (value.props !== undefined && !isPlainRecord(value.props)) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -341,18 +341,18 @@ function isPuckContentEntry(
  * content array (same shape validated by {@link isPuckContentShape}).
  */
 function isPuckZonesShape(
-	value: unknown,
-	componentTypes: ReadonlySet<string>,
+  value: unknown,
+  componentTypes: ReadonlySet<string>,
 ): boolean {
-	if (!isPlainRecord(value)) {
-		return false;
-	}
-	for (const entry of Object.values(value)) {
-		if (!isPuckContentShape(entry, componentTypes)) {
-			return false;
-		}
-	}
-	return true;
+  if (!isPlainRecord(value)) {
+    return false;
+  }
+  for (const entry of Object.values(value)) {
+    if (!isPuckContentShape(entry, componentTypes)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -395,177 +395,177 @@ let warned = false;
  * ```
  */
 export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
-	if (!warned) {
-		warned = true;
-		console.warn(DEPRECATION_MESSAGE);
-	}
+  if (!warned) {
+    warned = true;
+    console.warn(DEPRECATION_MESSAGE);
+  }
 
-	// Compute the full endpoint URL once at adapter-creation time so
-	// every onClick invocation reuses the same string. Defaults to
-	// `${aiHost}/generate` per the legacy contract.
-	const endpoint = `${options.aiHost}${options.apiPath ?? "/generate"}`;
-	const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  // Compute the full endpoint URL once at adapter-creation time so
+  // every onClick invocation reuses the same string. Defaults to
+  // `${aiHost}/generate` per the legacy contract.
+  const endpoint = `${options.aiHost}${options.apiPath ?? "/generate"}`;
+  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
-	// `meta` is captured by the closure so the inner `register()`
-	// can hand the same reference back inside the registration —
-	// avoids the `this`-binding fragility of object literal methods.
-	const meta = {
-		id: "anvilkit-compat-ai-host",
-		name: "Legacy aiHost Adapter",
-		version: "0.1.0-alpha.0",
-		coreVersion: "^0.1.0",
-	} as const;
+  // `meta` is captured by the closure so the inner `register()`
+  // can hand the same reference back inside the registration —
+  // avoids the `this`-binding fragility of object literal methods.
+  const meta = {
+    id: "anvilkit-compat-ai-host",
+    name: "Legacy aiHost Adapter",
+    version: "0.1.0-alpha.0",
+    coreVersion: "^0.1.0",
+  } as const;
 
-	return {
-		meta,
-		register() {
-			return {
-				meta,
-				headerActions: [
-					{
-						id: "compat-ai-generate",
-						label: "Generate with AI",
-						group: "secondary",
-						icon: "sparkles",
-						async onClick(ctx: StudioPluginContext) {
-							// AbortController enforces the per-request
-							// timeout even when the endpoint never closes the
-							// response stream. `clearTimeout` below prevents
-							// the abort from firing after a successful
-							// round-trip.
-							const controller = new AbortController();
-							const timeoutId = setTimeout(() => {
-								controller.abort();
-							}, timeoutMs);
-							try {
-								const response = await fetch(endpoint, {
-									method: "POST",
-									headers: { "Content-Type": "application/json" },
-									body: JSON.stringify({
-										currentData: ctx.getData(),
-									}),
-									signal: controller.signal,
-								});
+  return {
+    meta,
+    register() {
+      return {
+        meta,
+        headerActions: [
+          {
+            id: "compat-ai-generate",
+            label: "Generate with AI",
+            group: "secondary",
+            icon: "sparkles",
+            async onClick(ctx: StudioPluginContext) {
+              // AbortController enforces the per-request
+              // timeout even when the endpoint never closes the
+              // response stream. `clearTimeout` below prevents
+              // the abort from firing after a successful
+              // round-trip.
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => {
+                controller.abort();
+              }, timeoutMs);
+              try {
+                const response = await fetch(endpoint, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    currentData: ctx.getData(),
+                  }),
+                  signal: controller.signal,
+                });
 
-								if (!response.ok) {
-									ctx.log(
-										"error",
-										`aiHost request failed with status ${response.status}`,
-										{ endpoint, status: response.status },
-									);
-									return;
-								}
+                if (!response.ok) {
+                  ctx.log(
+                    "error",
+                    `aiHost request failed with status ${response.status}`,
+                    { endpoint, status: response.status },
+                  );
+                  return;
+                }
 
-								// `Content-Length` is advisory — HTTP/2 and
-								// chunked transfer-encoding routinely omit it,
-								// and a malicious endpoint can simply lie or
-								// under-report. We keep the header as an
-								// early-reject fast path (saves a round-trip
-								// through the streaming reader for honest
-								// oversize responses), but the load-bearing
-								// enforcement happens in
-								// `readBoundedResponseBody` below, which
-								// counts bytes as the stream arrives and
-								// aborts once the cap is crossed.
-								const declaredLength =
-									response.headers?.get?.("content-length") ?? null;
-								if (
-									declaredLength !== null &&
-									Number(declaredLength) > MAX_RESPONSE_BYTES
-								) {
-									ctx.log("error", "aiHost response exceeds size limit", {
-										endpoint,
-										contentLength: declaredLength,
-										limit: MAX_RESPONSE_BYTES,
-									});
-									return;
-								}
+                // `Content-Length` is advisory — HTTP/2 and
+                // chunked transfer-encoding routinely omit it,
+                // and a malicious endpoint can simply lie or
+                // under-report. We keep the header as an
+                // early-reject fast path (saves a round-trip
+                // through the streaming reader for honest
+                // oversize responses), but the load-bearing
+                // enforcement happens in
+                // `readBoundedResponseBody` below, which
+                // counts bytes as the stream arrives and
+                // aborts once the cap is crossed.
+                const declaredLength =
+                  response.headers?.get?.("content-length") ?? null;
+                if (
+                  declaredLength !== null &&
+                  Number(declaredLength) > MAX_RESPONSE_BYTES
+                ) {
+                  ctx.log("error", "aiHost response exceeds size limit", {
+                    endpoint,
+                    contentLength: declaredLength,
+                    limit: MAX_RESPONSE_BYTES,
+                  });
+                  return;
+                }
 
-								// Stream the body into a bounded buffer so a
-								// chunked / HTTP-2 / lying-Content-Length
-								// response cannot OOM the editor tab.
-								let bodyText: string;
-								try {
-									bodyText = await readBoundedResponseBody(
-										response,
-										MAX_RESPONSE_BYTES,
-									);
-								} catch (readError) {
-									if (readError instanceof ResponseTooLargeError) {
-										ctx.log("error", "aiHost response exceeds size limit", {
-											endpoint,
-											bytesRead: readError.bytesRead,
-											limit: MAX_RESPONSE_BYTES,
-										});
-										return;
-									}
-									ctx.log("error", "aiHost response stream read failed", {
-										endpoint,
-										error: readError,
-									});
-									return;
-								}
+                // Stream the body into a bounded buffer so a
+                // chunked / HTTP-2 / lying-Content-Length
+                // response cannot OOM the editor tab.
+                let bodyText: string;
+                try {
+                  bodyText = await readBoundedResponseBody(
+                    response,
+                    MAX_RESPONSE_BYTES,
+                  );
+                } catch (readError) {
+                  if (readError instanceof ResponseTooLargeError) {
+                    ctx.log("error", "aiHost response exceeds size limit", {
+                      endpoint,
+                      bytesRead: readError.bytesRead,
+                      limit: MAX_RESPONSE_BYTES,
+                    });
+                    return;
+                  }
+                  ctx.log("error", "aiHost response stream read failed", {
+                    endpoint,
+                    error: readError,
+                  });
+                  return;
+                }
 
-								// A misbehaving or compromised endpoint could
-								// dispatch arbitrary attacker-controlled JSON
-								// into Puck — which renders prop values into
-								// the DOM — so validate the shape BEFORE
-								// dispatch. Anything that fails the structural
-								// check is logged and dropped.
-								let parsed: unknown;
-								try {
-									parsed = JSON.parse(bodyText);
-								} catch (parseError) {
-									ctx.log("error", "aiHost response was not valid JSON", {
-										endpoint,
-										error: parseError,
-									});
-									return;
-								}
+                // A misbehaving or compromised endpoint could
+                // dispatch arbitrary attacker-controlled JSON
+                // into Puck — which renders prop values into
+                // the DOM — so validate the shape BEFORE
+                // dispatch. Anything that fails the structural
+                // check is logged and dropped.
+                let parsed: unknown;
+                try {
+                  parsed = JSON.parse(bodyText);
+                } catch (parseError) {
+                  ctx.log("error", "aiHost response was not valid JSON", {
+                    endpoint,
+                    error: parseError,
+                  });
+                  return;
+                }
 
-								const puckApi = ctx.getPuckApi();
-								const componentTypes = new Set(
-									Object.keys(puckApi.config.components),
-								);
+                const puckApi = ctx.getPuckApi();
+                const componentTypes = new Set(
+                  Object.keys(puckApi.config.components),
+                );
 
-								if (!isPuckDataShape(parsed, componentTypes)) {
-									ctx.log(
-										"error",
-										"aiHost response did not match Puck Data shape or registered component types; dispatch refused",
-										{ endpoint },
-									);
-									return;
-								}
+                if (!isPuckDataShape(parsed, componentTypes)) {
+                  ctx.log(
+                    "error",
+                    "aiHost response did not match Puck Data shape or registered component types; dispatch refused",
+                    { endpoint },
+                  );
+                  return;
+                }
 
-								puckApi.dispatch({
-									type: "setData",
-									data: parsed,
-								});
-							} catch (error) {
-								// Per the spec: minimum-viable error handling.
-								// Log and let the user retry. Retry / backoff
-								// belongs to `@anvilkit/plugins/ai-generation`.
-								// `AbortError` is surfaced with an explicit
-								// hint so operators can distinguish a timeout
-								// from a generic network failure.
-								const isAbort =
-									typeof DOMException !== "undefined" &&
-									error instanceof DOMException &&
-									error.name === "AbortError";
-								ctx.log(
-									"error",
-									isAbort
-										? `aiHost request timed out after ${timeoutMs}ms`
-										: "aiHost request failed",
-									{ endpoint, error },
-								);
-							} finally {
-								clearTimeout(timeoutId);
-							}
-						},
-					},
-				],
-			};
-		},
-	};
+                puckApi.dispatch({
+                  type: "setData",
+                  data: parsed,
+                });
+              } catch (error) {
+                // Per the spec: minimum-viable error handling.
+                // Log and let the user retry. Retry / backoff
+                // belongs to `@anvilkit/plugins/ai-generation`.
+                // `AbortError` is surfaced with an explicit
+                // hint so operators can distinguish a timeout
+                // from a generic network failure.
+                const isAbort =
+                  typeof DOMException !== "undefined" &&
+                  error instanceof DOMException &&
+                  error.name === "AbortError";
+                ctx.log(
+                  "error",
+                  isAbort
+                    ? `aiHost request timed out after ${timeoutMs}ms`
+                    : "aiHost request failed",
+                  { endpoint, error },
+                );
+              } finally {
+                clearTimeout(timeoutId);
+              }
+            },
+          },
+        ],
+      };
+    },
+  };
 }

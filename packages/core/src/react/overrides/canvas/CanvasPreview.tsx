@@ -11,5 +11,5 @@ import { Puck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
 export function CanvasPreview(): ReactNode {
-	return <Puck.Preview />;
+  return <Puck.Preview />;
 }

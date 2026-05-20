@@ -1,32 +1,32 @@
 import { compilePlugins } from "@/runtime/compile-plugins";
 import type {
-	StudioPlugin,
-	StudioPluginContext,
-	StudioPluginRegistration,
+  StudioPlugin,
+  StudioPluginContext,
+  StudioPluginRegistration,
 } from "@/types/plugin";
 
 import type { FakeStudioContext } from "./create-fake-studio-context.js";
 import { createFakeStudioContext } from "./create-fake-studio-context.js";
 
 export interface RegisterPluginOptions {
-	readonly ctx?: StudioPluginContext;
+  readonly ctx?: StudioPluginContext;
 }
 
 export interface PluginLifecycleHarness {
-	readonly ctx: FakeStudioContext;
-	readonly registration: StudioPluginRegistration;
-	/**
-	 * Fire `hooks.onInit` if the plugin registered one. Resolves when
-	 * the hook settles — safe to `await` even for sync hooks.
-	 */
-	readonly runInit: () => Promise<void>;
-	/**
-	 * Fire `hooks.onReady` if present — the post-mount hook the real
-	 * `<Studio>` shell emits once `getPuckApi()` is bound.
-	 */
-	readonly runReady: () => Promise<void>;
-	/** Fire `hooks.onDestroy` if present. */
-	readonly runDestroy: () => Promise<void>;
+  readonly ctx: FakeStudioContext;
+  readonly registration: StudioPluginRegistration;
+  /**
+   * Fire `hooks.onInit` if the plugin registered one. Resolves when
+   * the hook settles — safe to `await` even for sync hooks.
+   */
+  readonly runInit: () => Promise<void>;
+  /**
+   * Fire `hooks.onReady` if present — the post-mount hook the real
+   * `<Studio>` shell emits once `getPuckApi()` is bound.
+   */
+  readonly runReady: () => Promise<void>;
+  /** Fire `hooks.onDestroy` if present. */
+  readonly runDestroy: () => Promise<void>;
 }
 
 /**
@@ -44,53 +44,53 @@ export interface PluginLifecycleHarness {
  * `renderPluginInHost` helper is tracked as a follow-up.
  */
 function isFakeStudioContext(
-	ctx: StudioPluginContext | undefined,
+  ctx: StudioPluginContext | undefined,
 ): ctx is FakeStudioContext {
-	return (
-		ctx !== undefined &&
-		"_mocks" in ctx &&
-		typeof (ctx as FakeStudioContext)._mocks === "object"
-	);
+  return (
+    ctx !== undefined &&
+    "_mocks" in ctx &&
+    typeof (ctx as FakeStudioContext)._mocks === "object"
+  );
 }
 
 export async function registerPlugin(
-	plugin: StudioPlugin,
-	options: RegisterPluginOptions = {},
+  plugin: StudioPlugin,
+  options: RegisterPluginOptions = {},
 ): Promise<PluginLifecycleHarness> {
-	// `harness.ctx` is typed as `FakeStudioContext`, which means
-	// callers expect `ctx._mocks` to exist. If a real
-	// `StudioPluginContext` slipped through `options.ctx`, the
-	// mock-tracking arrays would be undefined at runtime despite
-	// the type. Detect that case and wrap with the helpers from
-	// `createFakeStudioContext` so spy-backed handlers are used.
-	// (codex review, phase4-batch, P2.)
-	const ctx: FakeStudioContext = isFakeStudioContext(options.ctx)
-		? options.ctx
-		: createFakeStudioContext(options.ctx);
+  // `harness.ctx` is typed as `FakeStudioContext`, which means
+  // callers expect `ctx._mocks` to exist. If a real
+  // `StudioPluginContext` slipped through `options.ctx`, the
+  // mock-tracking arrays would be undefined at runtime despite
+  // the type. Detect that case and wrap with the helpers from
+  // `createFakeStudioContext` so spy-backed handlers are used.
+  // (codex review, phase4-batch, P2.)
+  const ctx: FakeStudioContext = isFakeStudioContext(options.ctx)
+    ? options.ctx
+    : createFakeStudioContext(options.ctx);
 
-	// Route through `compilePlugins` so compile-time invariants
-	// (structural shape, coreVersion range, duplicate id detection)
-	// are enforced identically to production. `registrations` carries
-	// the raw per-plugin registration we hand back to test authors.
-	const runtime = await compilePlugins([plugin], ctx);
-	const registration = runtime.registrations[0];
-	if (registration === undefined) {
-		throw new Error(
-			`registerPlugin: compilePlugins did not return a registration for "${plugin.meta.id}"`,
-		);
-	}
+  // Route through `compilePlugins` so compile-time invariants
+  // (structural shape, coreVersion range, duplicate id detection)
+  // are enforced identically to production. `registrations` carries
+  // the raw per-plugin registration we hand back to test authors.
+  const runtime = await compilePlugins([plugin], ctx);
+  const registration = runtime.registrations[0];
+  if (registration === undefined) {
+    throw new Error(
+      `registerPlugin: compilePlugins did not return a registration for "${plugin.meta.id}"`,
+    );
+  }
 
-	return {
-		ctx,
-		registration,
-		async runInit() {
-			await registration.hooks?.onInit?.(ctx);
-		},
-		async runReady() {
-			await registration.hooks?.onReady?.(ctx);
-		},
-		async runDestroy() {
-			await registration.hooks?.onDestroy?.(ctx);
-		},
-	};
+  return {
+    ctx,
+    registration,
+    async runInit() {
+      await registration.hooks?.onInit?.(ctx);
+    },
+    async runReady() {
+      await registration.hooks?.onReady?.(ctx);
+    },
+    async runDestroy() {
+      await registration.hooks?.onDestroy?.(ctx);
+    },
+  };
 }

@@ -14,48 +14,48 @@ import { z } from "zod";
 const SEMVER = /^\d+\.\d+\.\d+(?:-[\w.-]+)?(?:\+[\w.-]+)?$/;
 
 export const RegistryEntryKindSchema = z.enum([
-	"plugin",
-	"template",
-	"component",
+  "plugin",
+  "template",
+  "component",
 ]);
 
 export type RegistryEntryKind = z.infer<typeof RegistryEntryKindSchema>;
 
 export const RegistryPublisherSchema = z.enum([
-	"first-party",
-	"verified",
-	"community",
+  "first-party",
+  "verified",
+  "community",
 ]);
 
 export type RegistryPublisher = z.infer<typeof RegistryPublisherSchema>;
 
 export const RegistryEntryParser = z
-	.object({
-		slug: z.string().min(1),
-		kind: RegistryEntryKindSchema,
-		name: z.string().min(1),
-		description: z.string().min(1),
-		packageName: z.string().min(1),
-		version: z.string().regex(SEMVER, "semver"),
-		publisher: RegistryPublisherSchema,
-		verified: z.boolean(),
-		installSpec: z
-			.object({
-				mutates: z.array(z.string()).default([]),
-				scaffoldOnly: z.boolean().default(false),
-				peerInstalls: z.array(z.string()).max(8).default([]),
-			})
-			.default({ mutates: [], scaffoldOnly: false, peerInstalls: [] }),
-	})
-	.loose();
+  .object({
+    slug: z.string().min(1),
+    kind: RegistryEntryKindSchema,
+    name: z.string().min(1),
+    description: z.string().min(1),
+    packageName: z.string().min(1),
+    version: z.string().regex(SEMVER, "semver"),
+    publisher: RegistryPublisherSchema,
+    verified: z.boolean(),
+    installSpec: z
+      .object({
+        mutates: z.array(z.string()).default([]),
+        scaffoldOnly: z.boolean().default(false),
+        peerInstalls: z.array(z.string()).max(8).default([]),
+      })
+      .default({ mutates: [], scaffoldOnly: false, peerInstalls: [] }),
+  })
+  .loose();
 
 export type RegistryEntry = z.infer<typeof RegistryEntryParser>;
 
 export const RegistryFeedParser = z
-	.object({
-		feedVersion: z.literal("1"),
-		entries: z.array(RegistryEntryParser),
-	})
-	.loose();
+  .object({
+    feedVersion: z.literal("1"),
+    entries: z.array(RegistryEntryParser),
+  })
+  .loose();
 
 export type RegistryFeed = z.infer<typeof RegistryFeedParser>;

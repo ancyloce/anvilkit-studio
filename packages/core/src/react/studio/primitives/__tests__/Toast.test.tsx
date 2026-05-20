@@ -7,13 +7,13 @@ import { Toaster } from "@/primitives/sonner";
 afterEach(cleanup);
 
 describe("Toaster", () => {
-	it("mounts without throwing", () => {
-		expect(() => render(<Toaster />)).not.toThrow();
-	});
+  it("mounts without throwing", () => {
+    expect(() => render(<Toaster />)).not.toThrow();
+  });
 
-	it("uses sonner's toast handle", () => {
-		expect(typeof toast).toBe("function");
-		expect(typeof toast.error).toBe("function");
-		expect(typeof toast.success).toBe("function");
-	});
+  it("uses sonner's toast handle", () => {
+    expect(typeof toast).toBe("function");
+    expect(typeof toast.error).toBe("function");
+    expect(typeof toast.success).toBe("function");
+  });
 });

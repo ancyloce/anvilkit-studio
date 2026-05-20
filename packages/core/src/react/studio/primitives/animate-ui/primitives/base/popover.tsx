@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Popover as PopoverPrimitive } from '@base-ui-components/react/popover';
-import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
+import * as React from "react";
+import { Popover as PopoverPrimitive } from "@base-ui-components/react/popover";
+import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 
-import { getStrictContext } from '@/primitives/lib/get-strict-context';
-import { useControlledState } from '@/primitives/hooks/use-controlled-state';
+import { getStrictContext } from "@/primitives/lib/get-strict-context";
+import { useControlledState } from "@/primitives/hooks/use-controlled-state";
 
 type PopoverContextType = {
   isOpen: boolean;
-  setIsOpen: PopoverProps['onOpenChange'];
+  setIsOpen: PopoverProps["onOpenChange"];
 };
 
 const [PopoverProvider, usePopover] =
-  getStrictContext<PopoverContextType>('PopoverContext');
+  getStrictContext<PopoverContextType>("PopoverContext");
 
 type PopoverProps = React.ComponentProps<typeof PopoverPrimitive.Root>;
 
@@ -45,7 +45,7 @@ function PopoverTrigger(props: PopoverTriggerProps) {
 
 type PopoverPortalProps = Omit<
   React.ComponentProps<typeof PopoverPrimitive.Portal>,
-  'keepMounted'
+  "keepMounted"
 >;
 
 function PopoverPortal(props: PopoverPortalProps) {
@@ -76,14 +76,14 @@ function PopoverPositioner(props: PopoverPositionerProps) {
 
 type PopoverPopupProps = Omit<
   React.ComponentProps<typeof PopoverPrimitive.Popup>,
-  'render'
+  "render"
 > &
-  HTMLMotionProps<'div'>;
+  HTMLMotionProps<"div">;
 
 function PopoverPopup({
   initialFocus,
   finalFocus,
-  transition = { type: 'spring', stiffness: 300, damping: 25 },
+  transition = { type: "spring", stiffness: 300, damping: 25 },
   ...props
 }: PopoverPopupProps) {
   return (

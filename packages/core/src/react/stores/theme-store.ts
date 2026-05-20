@@ -68,33 +68,33 @@ export type ThemeResolved = "light" | "dark";
  * isolation hook.
  */
 export interface ThemeState {
-	/**
-	 * The user's declared preference. Persisted.
-	 */
-	readonly mode: ThemeMode;
-	/**
-	 * The theme currently rendered on screen. **Never persisted**
-	 * — recomputed at mount from `matchMedia` and updated on every
-	 * OS-level preference change. See file header for rationale.
-	 */
-	readonly resolved: ThemeResolved;
-	/**
-	 * Update the user's preference. Typically called from the
-	 * header's theme-toggle button.
-	 */
-	setMode(mode: ThemeMode): void;
-	/**
-	 * Update the resolved on-screen value. Called once at mount
-	 * with `matchMedia("(prefers-color-scheme: dark)").matches`
-	 * and again from a `change` listener inside `<Studio>`.
-	 */
-	setResolved(resolved: ThemeResolved): void;
-	/**
-	 * Restore every field to its initial state. Present for
-	 * symmetry with the other stores in this directory — see
-	 * {@link ExportState.reset}.
-	 */
-	reset(): void;
+  /**
+   * The user's declared preference. Persisted.
+   */
+  readonly mode: ThemeMode;
+  /**
+   * The theme currently rendered on screen. **Never persisted**
+   * — recomputed at mount from `matchMedia` and updated on every
+   * OS-level preference change. See file header for rationale.
+   */
+  readonly resolved: ThemeResolved;
+  /**
+   * Update the user's preference. Typically called from the
+   * header's theme-toggle button.
+   */
+  setMode(mode: ThemeMode): void;
+  /**
+   * Update the resolved on-screen value. Called once at mount
+   * with `matchMedia("(prefers-color-scheme: dark)").matches`
+   * and again from a `change` listener inside `<Studio>`.
+   */
+  setResolved(resolved: ThemeResolved): void;
+  /**
+   * Restore every field to its initial state. Present for
+   * symmetry with the other stores in this directory — see
+   * {@link ExportState.reset}.
+   */
+  reset(): void;
 }
 
 /**
@@ -103,7 +103,7 @@ export interface ThemeState {
  * the persisted value.
  */
 interface ThemeStorePartial {
-	readonly mode: ThemeMode;
+  readonly mode: ThemeMode;
 }
 
 /**
@@ -114,12 +114,12 @@ interface ThemeStorePartial {
  * overwrites almost immediately.
  */
 const INITIAL_STATE = {
-	mode: "system" as ThemeMode,
-	resolved: "light" as ThemeResolved,
+  mode: "system" as ThemeMode,
+  resolved: "light" as ThemeResolved,
 } as const;
 
 export interface CreateThemeStoreOptions {
-	readonly storeId: string;
+  readonly storeId: string;
 }
 
 export type ThemeStoreApi = StoreApi<ThemeState>;
@@ -136,36 +136,36 @@ export type ThemeStoreApi = StoreApi<ThemeState>;
  * store.getState().setMode("dark");
  */
 export function createThemeStore(
-	options: CreateThemeStoreOptions,
+  options: CreateThemeStoreOptions,
 ): ThemeStoreApi {
-	const { storeId } = options;
-	return createStore<ThemeState>()(
-		persist(
-			(set) => ({
-				...INITIAL_STATE,
-				setMode(mode) {
-					set({ mode });
-				},
-				setResolved(resolved) {
-					set({ resolved });
-				},
-				reset() {
-					set({ ...INITIAL_STATE });
-				},
-			}),
-			{
-				name: `anvilkit-core-theme-${storeId}`,
-				// Persist `mode` only. See the file header for why
-				// `resolved` cannot and should not be persisted.
-				partialize: (state): ThemeStorePartial => ({
-					mode: state.mode,
-				}),
-				// SSR safety: skip synchronous rehydration so the server
-				// and first-client render agree on the initial `"system"`
-				// default. The provider rehydrates from a mount-time
-				// effect, after which `mode` reflects the persisted value.
-				skipHydration: true,
-			},
-		),
-	);
+  const { storeId } = options;
+  return createStore<ThemeState>()(
+    persist(
+      (set) => ({
+        ...INITIAL_STATE,
+        setMode(mode) {
+          set({ mode });
+        },
+        setResolved(resolved) {
+          set({ resolved });
+        },
+        reset() {
+          set({ ...INITIAL_STATE });
+        },
+      }),
+      {
+        name: `anvilkit-core-theme-${storeId}`,
+        // Persist `mode` only. See the file header for why
+        // `resolved` cannot and should not be persisted.
+        partialize: (state): ThemeStorePartial => ({
+          mode: state.mode,
+        }),
+        // SSR safety: skip synchronous rehydration so the server
+        // and first-client render agree on the initial `"system"`
+        // default. The provider rehydrates from a mount-time
+        // effect, after which `mode` reflects the persisted value.
+        skipHydration: true,
+      },
+    ),
+  );
 }

@@ -9,36 +9,36 @@
  */
 
 export type StudioToken =
-	| "bg"
-	| "fg"
-	| "panel"
-	| "panel-fg"
-	| "border"
-	| "muted"
-	| "muted-fg"
-	| "accent"
-	| "accent-fg"
-	| "ring";
+  | "bg"
+  | "fg"
+  | "panel"
+  | "panel-fg"
+  | "border"
+  | "muted"
+  | "muted-fg"
+  | "accent"
+  | "accent-fg"
+  | "ring";
 
 export const STUDIO_TOKENS: readonly StudioToken[] = [
-	"bg",
-	"fg",
-	"panel",
-	"panel-fg",
-	"border",
-	"muted",
-	"muted-fg",
-	"accent",
-	"accent-fg",
-	"ring",
+  "bg",
+  "fg",
+  "panel",
+  "panel-fg",
+  "border",
+  "muted",
+  "muted-fg",
+  "accent",
+  "accent-fg",
+  "ring",
 ];
 
 export function tokenVar(token: StudioToken): string {
-	return `var(--ak-studio-${token})`;
+  return `var(--ak-studio-${token})`;
 }
 
 export function tokenName(token: StudioToken): string {
-	return `--ak-studio-${token}`;
+  return `--ak-studio-${token}`;
 }
 
 /**
@@ -46,10 +46,10 @@ export function tokenName(token: StudioToken): string {
  * string in non-DOM environments and when the variable is unset.
  */
 export function readToken(token: StudioToken, target?: Element): string {
-	if (typeof window === "undefined") return "";
-	const element = target ?? document.documentElement;
-	return window
-		.getComputedStyle(element)
-		.getPropertyValue(tokenName(token))
-		.trim();
+  if (typeof window === "undefined") return "";
+  const element = target ?? document.documentElement;
+  return window
+    .getComputedStyle(element)
+    .getPropertyValue(tokenName(token))
+    .trim();
 }

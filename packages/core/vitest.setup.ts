@@ -17,37 +17,37 @@ import { configure } from "@testing-library/react";
 configure({ asyncUtilTimeout: 5000 });
 
 class ResizeObserverStub {
-	observe(): void {}
-	unobserve(): void {}
-	disconnect(): void {}
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
 }
 
 if (
-	typeof (globalThis as { ResizeObserver?: unknown }).ResizeObserver ===
-	"undefined"
+  typeof (globalThis as { ResizeObserver?: unknown }).ResizeObserver ===
+  "undefined"
 ) {
-	(globalThis as { ResizeObserver: typeof ResizeObserverStub }).ResizeObserver =
-		ResizeObserverStub;
+  (globalThis as { ResizeObserver: typeof ResizeObserverStub }).ResizeObserver =
+    ResizeObserverStub;
 }
 
 if (
-	typeof window !== "undefined" &&
-	typeof (window as { matchMedia?: unknown }).matchMedia !== "function"
+  typeof window !== "undefined" &&
+  typeof (window as { matchMedia?: unknown }).matchMedia !== "function"
 ) {
-	Object.defineProperty(window, "matchMedia", {
-		writable: true,
-		configurable: true,
-		value: (query: string) => ({
-			matches: false,
-			media: query,
-			addEventListener: () => undefined,
-			removeEventListener: () => undefined,
-			addListener: () => undefined,
-			removeListener: () => undefined,
-			onchange: null,
-			dispatchEvent: () => false,
-		}),
-	});
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    configurable: true,
+    value: (query: string) => ({
+      matches: false,
+      media: query,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      onchange: null,
+      dispatchEvent: () => false,
+    }),
+  });
 }
 
 // jsdom does not implement `Element.getAnimations()` — Base UI's
@@ -55,13 +55,13 @@ if (
 // otherwise raise an unhandled rejection mid-test. Returning an empty
 // array matches the spec for an element with no animations.
 if (
-	typeof Element !== "undefined" &&
-	typeof (Element.prototype as { getAnimations?: unknown }).getAnimations !==
-		"function"
+  typeof Element !== "undefined" &&
+  typeof (Element.prototype as { getAnimations?: unknown }).getAnimations !==
+    "function"
 ) {
-	Object.defineProperty(Element.prototype, "getAnimations", {
-		writable: true,
-		configurable: true,
-		value: () => [],
-	});
+  Object.defineProperty(Element.prototype, "getAnimations", {
+    writable: true,
+    configurable: true,
+    value: () => [],
+  });
 }

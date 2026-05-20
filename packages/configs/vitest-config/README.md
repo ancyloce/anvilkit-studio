@@ -4,11 +4,11 @@ Shared Vitest presets used across the anvilkit-studio workspace.
 
 This package ships two presets and one setup file:
 
-| Export | Purpose |
-|---|---|
-| `@anvilkit/vitest-config/react-library` | For packages that render React components. Uses `jsdom`, registers `@testing-library/jest-dom` matchers, enables CSS handling. |
-| `@anvilkit/vitest-config/node` | For pure Node packages (no DOM, no React). Used by `@anvilkit/utils` and the headless `src/runtime/` of `@anvilkit/core`. |
-| `@anvilkit/vitest-config/setup/jest-dom` | Setup file that the `react-library` preset wires into `setupFiles`. Consumers do not import it directly. |
+| Export                                   | Purpose                                                                                                                        |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `@anvilkit/vitest-config/react-library`  | For packages that render React components. Uses `jsdom`, registers `@testing-library/jest-dom` matchers, enables CSS handling. |
+| `@anvilkit/vitest-config/node`           | For pure Node packages (no DOM, no React). Used by `@anvilkit/utils` and the headless `src/runtime/` of `@anvilkit/core`.      |
+| `@anvilkit/vitest-config/setup/jest-dom` | Setup file that the `react-library` preset wires into `setupFiles`. Consumers do not import it directly.                       |
 
 ## Usage
 

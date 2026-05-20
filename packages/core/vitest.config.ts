@@ -13,16 +13,16 @@ import { defineConfig, mergeConfig } from "vitest/config";
  * `passWithNoTests: true` so `pnpm test` succeeds on the empty scaffold.
  */
 export default mergeConfig(
-	reactLibraryPreset,
-	defineConfig({
-		plugins: [tsconfigPaths({ projects: ["./tsconfig.test.json"] })],
-		test: {
-			name: "@anvilkit/core",
-			passWithNoTests: true,
-			setupFiles: [
-				"@anvilkit/vitest-config/setup/jest-dom",
-				"./vitest.setup.ts",
-			],
-		},
-	}),
+  reactLibraryPreset,
+  defineConfig({
+    plugins: [tsconfigPaths({ projects: ["./tsconfig.test.json"] })],
+    test: {
+      name: "@anvilkit/core",
+      passWithNoTests: true,
+      setupFiles: [
+        "@anvilkit/vitest-config/setup/jest-dom",
+        "./vitest.setup.ts",
+      ],
+    },
+  }),
 );

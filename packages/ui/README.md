@@ -37,15 +37,15 @@ token at your root scope to retheme every primitive.
 
 ## Layout
 
-| Subpath                  | Contents                                                                                    |
-| ------------------------ | ------------------------------------------------------------------------------------------- |
-| `@anvilkit/ui`           | Main barrel — re-exports every primitive.                                                   |
-| `@anvilkit/ui/button`    | `Button`, `ButtonGroup`, and the `buttonVariants` cva.                                      |
-| `@anvilkit/ui/card`      | `Card`, `CardHeader`, `CardContent`, `CardFooter`.                                          |
-| `@anvilkit/ui/dialog`    | Base-UI dialog wired with the Anvilkit token layer.                                         |
-| `@anvilkit/ui/presence`  | Peer avatars, presence overlays, and cursor primitives used by `@anvilkit/plugin-collab-ui`. |
-| `@anvilkit/ui/hooks/*`   | Stable React hooks (`useMeasure`, etc.) re-exported for downstream packages.                |
-| `@anvilkit/ui/lib/*`     | Internal helpers (`cn`, `cva` builders) — re-exported so component packages share one copy. |
+| Subpath                 | Contents                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------- |
+| `@anvilkit/ui`          | Main barrel — re-exports every primitive.                                                    |
+| `@anvilkit/ui/button`   | `Button`, `ButtonGroup`, and the `buttonVariants` cva.                                       |
+| `@anvilkit/ui/card`     | `Card`, `CardHeader`, `CardContent`, `CardFooter`.                                           |
+| `@anvilkit/ui/dialog`   | Base-UI dialog wired with the Anvilkit token layer.                                          |
+| `@anvilkit/ui/presence` | Peer avatars, presence overlays, and cursor primitives used by `@anvilkit/plugin-collab-ui`. |
+| `@anvilkit/ui/hooks/*`  | Stable React hooks (`useMeasure`, etc.) re-exported for downstream packages.                 |
+| `@anvilkit/ui/lib/*`    | Internal helpers (`cn`, `cva` builders) — re-exported so component packages share one copy.  |
 
 The package is bundled with Rslib and ships CJS, ESM, and `.d.ts`
 types per subpath. `sideEffects` is limited to `*.css` so unused
@@ -58,7 +58,7 @@ package and most plugins consume it. It must not import any other
 `@anvilkit/*` package (no `core`, no `ir`, no `validator`); doing so
 would create a cycle.
 
-| Allowed                                                                       | Forbidden                                              |
-| ----------------------------------------------------------------------------- | ------------------------------------------------------ |
-| React, Radix Slot, Base-UI, Floating UI, `class-variance-authority`, `clsx`   | `@anvilkit/core`, `@anvilkit/ir`, plugin packages      |
-| `lucide-react`, `motion`, `next-themes`, `tailwind-merge`, `shiki`, `embla`   | DOM globals at module-eval time                        |
+| Allowed                                                                     | Forbidden                                         |
+| --------------------------------------------------------------------------- | ------------------------------------------------- |
+| React, Radix Slot, Base-UI, Floating UI, `class-variance-authority`, `clsx` | `@anvilkit/core`, `@anvilkit/ir`, plugin packages |
+| `lucide-react`, `motion`, `next-themes`, `tailwind-merge`, `shiki`, `embla` | DOM globals at module-eval time                   |

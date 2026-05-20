@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Switch as SwitchPrimitives } from '@base-ui-components/react/switch';
+import * as React from "react";
+import { Switch as SwitchPrimitives } from "@base-ui-components/react/switch";
 import {
   motion,
   type TargetAndTransition,
   type VariantLabels,
   type HTMLMotionProps,
   type LegacyAnimationControls,
-} from 'motion/react';
+} from "motion/react";
 
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
-import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state';
+import { getStrictContext } from "@anvilkit/ui/lib/get-strict-context";
+import { useControlledState } from "@anvilkit/ui/hooks/use-controlled-state";
 
 type SwitchContextType = {
   isChecked: boolean;
-  setIsChecked: SwitchProps['onCheckedChange'];
+  setIsChecked: SwitchProps["onCheckedChange"];
   isPressed: boolean;
   setIsPressed: (isPressed: boolean) => void;
 };
 
 const [SwitchProvider, useSwitch] =
-  getStrictContext<SwitchContextType>('SwitchContext');
+  getStrictContext<SwitchContextType>("SwitchContext");
 
 type SwitchProps = Omit<
   React.ComponentProps<typeof SwitchPrimitives.Root>,
-  'render'
+  "render"
 > &
-  HTMLMotionProps<'button'>;
+  HTMLMotionProps<"button">;
 
 function Switch({
   name,
@@ -82,9 +82,9 @@ function Switch({
 
 type SwitchThumbProps = Omit<
   React.ComponentProps<typeof SwitchPrimitives.Thumb>,
-  'render'
+  "render"
 > &
-  HTMLMotionProps<'div'> & {
+  HTMLMotionProps<"div"> & {
     pressedAnimation?:
       | TargetAndTransition
       | VariantLabels
@@ -94,7 +94,7 @@ type SwitchThumbProps = Omit<
 
 function SwitchThumb({
   pressedAnimation,
-  transition = { type: 'spring', stiffness: 300, damping: 25 },
+  transition = { type: "spring", stiffness: 300, damping: 25 },
   ...props
 }: SwitchThumbProps) {
   const { isPressed } = useSwitch();
@@ -115,23 +115,23 @@ function SwitchThumb({
   );
 }
 
-type SwitchIconPosition = 'left' | 'right' | 'thumb';
+type SwitchIconPosition = "left" | "right" | "thumb";
 
-type SwitchIconProps = HTMLMotionProps<'div'> & {
+type SwitchIconProps = HTMLMotionProps<"div"> & {
   position: SwitchIconPosition;
 };
 
 function SwitchIcon({
   position,
-  transition = { type: 'spring', bounce: 0 },
+  transition = { type: "spring", bounce: 0 },
   ...props
 }: SwitchIconProps) {
   const { isChecked } = useSwitch();
 
   const isAnimated = React.useMemo(() => {
-    if (position === 'right') return !isChecked;
-    if (position === 'left') return isChecked;
-    if (position === 'thumb') return true;
+    if (position === "right") return !isChecked;
+    if (position === "left") return isChecked;
+    if (position === "thumb") return true;
     return false;
   }, [position, isChecked]);
 

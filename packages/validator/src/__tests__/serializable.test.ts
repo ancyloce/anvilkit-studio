@@ -16,143 +16,143 @@ import { describe, expect, it } from "vitest";
 import { validateAiOutput } from "../validate-ai-output.js";
 
 const heroSchema: AiComponentSchema = {
-	componentName: "Hero",
-	description: "A hero banner",
-	fields: [
-		{ name: "title", type: "text", required: true },
-		{ name: "meta", type: "text" },
-	],
+  componentName: "Hero",
+  description: "A hero banner",
+  fields: [
+    { name: "title", type: "text", required: true },
+    { name: "meta", type: "text" },
+  ],
 };
 
 const schemas = [heroSchema];
 
 function wrap(props: Record<string, unknown>) {
-	return {
-		version: "1" as const,
-		root: {
-			id: "root",
-			type: "__root__",
-			props: {},
-			children: [{ id: "h1", type: "Hero", props: { id: "h1", ...props } }],
-		},
-		assets: [],
-		metadata: {},
-	};
+  return {
+    version: "1" as const,
+    root: {
+      id: "root",
+      type: "__root__",
+      props: {},
+      children: [{ id: "h1", type: "Hero", props: { id: "h1", ...props } }],
+    },
+    assets: [],
+    metadata: {},
+  };
 }
 
 describe("validateAiOutput — NON_SERIALIZABLE_PROP (phase4-014 F-3)", () => {
-	it("rejects a top-level function-valued prop", () => {
-		const ir = wrap({ title: "Hello", meta: () => "oops" });
-		const result = validateAiOutput(ir, schemas);
-		const issue = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(issue).toBeDefined();
-		expect(issue!.message).toContain("function");
-	});
+  it("rejects a top-level function-valued prop", () => {
+    const ir = wrap({ title: "Hello", meta: () => "oops" });
+    const result = validateAiOutput(ir, schemas);
+    const issue = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(issue).toBeDefined();
+    expect(issue!.message).toContain("function");
+  });
 
-	it("rejects a nested function inside an object prop", () => {
-		const ir = wrap({
-			title: "Hello",
-			meta: { deep: { callback: () => "oops" } },
-		});
-		const result = validateAiOutput(ir, schemas);
-		const issue = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(issue).toBeDefined();
-		expect(issue!.path).toContain("deep");
-		expect(issue!.path).toContain("callback");
-	});
+  it("rejects a nested function inside an object prop", () => {
+    const ir = wrap({
+      title: "Hello",
+      meta: { deep: { callback: () => "oops" } },
+    });
+    const result = validateAiOutput(ir, schemas);
+    const issue = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(issue).toBeDefined();
+    expect(issue!.path).toContain("deep");
+    expect(issue!.path).toContain("callback");
+  });
 
-	it("rejects a function inside an array prop", () => {
-		const ir = wrap({
-			title: "Hello",
-			meta: [1, 2, () => "oops"],
-		});
-		const result = validateAiOutput(ir, schemas);
-		const issue = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(issue).toBeDefined();
-		expect(issue!.path).toContain("meta.2");
-	});
+  it("rejects a function inside an array prop", () => {
+    const ir = wrap({
+      title: "Hello",
+      meta: [1, 2, () => "oops"],
+    });
+    const result = validateAiOutput(ir, schemas);
+    const issue = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(issue).toBeDefined();
+    expect(issue!.path).toContain("meta.2");
+  });
 
-	it("rejects symbol-valued props", () => {
-		const ir = wrap({ title: "Hello", meta: Symbol("bad") });
-		const result = validateAiOutput(ir, schemas);
-		const issue = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(issue).toBeDefined();
-		expect(issue!.message).toContain("symbol");
-	});
+  it("rejects symbol-valued props", () => {
+    const ir = wrap({ title: "Hello", meta: Symbol("bad") });
+    const result = validateAiOutput(ir, schemas);
+    const issue = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(issue).toBeDefined();
+    expect(issue!.message).toContain("symbol");
+  });
 
-	it("rejects bigint-valued props", () => {
-		const ir = wrap({ title: "Hello", meta: BigInt(42) });
-		const result = validateAiOutput(ir, schemas);
-		const issue = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(issue).toBeDefined();
-		expect(issue!.message).toContain("bigint");
-	});
+  it("rejects bigint-valued props", () => {
+    const ir = wrap({ title: "Hello", meta: BigInt(42) });
+    const result = validateAiOutput(ir, schemas);
+    const issue = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(issue).toBeDefined();
+    expect(issue!.message).toContain("bigint");
+  });
 
-	it("rejects cyclic object graphs", () => {
-		const meta: Record<string, unknown> = { a: 1 };
-		meta.self = meta;
-		const ir = wrap({ title: "Hello", meta });
-		const result = validateAiOutput(ir, schemas);
-		const issue = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(issue).toBeDefined();
-		expect(issue!.message).toContain("circular");
-	});
+  it("rejects cyclic object graphs", () => {
+    const meta: Record<string, unknown> = { a: 1 };
+    meta.self = meta;
+    const ir = wrap({ title: "Hello", meta });
+    const result = validateAiOutput(ir, schemas);
+    const issue = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(issue).toBeDefined();
+    expect(issue!.message).toContain("circular");
+  });
 
-	it("accepts a DAG where sibling subtrees share an object reference", () => {
-		// A shared object (e.g. a default theme reused across props) is
-		// perfectly JSON-serialisable — it is duplicated on stringify, not
-		// rejected. The walk must not flag this as a cycle just because
-		// the same reference appears twice on different branches.
-		const shared = { foo: 1, bar: { baz: 2 } };
-		const ir = wrap({
-			title: "Hello",
-			meta: { left: shared, right: shared },
-		});
-		const result = validateAiOutput(ir, schemas);
-		const nonSer = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(nonSer).toBeUndefined();
-	});
+  it("accepts a DAG where sibling subtrees share an object reference", () => {
+    // A shared object (e.g. a default theme reused across props) is
+    // perfectly JSON-serialisable — it is duplicated on stringify, not
+    // rejected. The walk must not flag this as a cycle just because
+    // the same reference appears twice on different branches.
+    const shared = { foo: 1, bar: { baz: 2 } };
+    const ir = wrap({
+      title: "Hello",
+      meta: { left: shared, right: shared },
+    });
+    const result = validateAiOutput(ir, schemas);
+    const nonSer = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(nonSer).toBeUndefined();
+  });
 
-	it("accepts a shared object referenced from multiple array entries", () => {
-		const shared = { repeated: true };
-		const ir = wrap({
-			title: "Hello",
-			meta: [shared, shared, { other: shared }],
-		});
-		const result = validateAiOutput(ir, schemas);
-		const nonSer = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(nonSer).toBeUndefined();
-	});
+  it("accepts a shared object referenced from multiple array entries", () => {
+    const shared = { repeated: true };
+    const ir = wrap({
+      title: "Hello",
+      meta: [shared, shared, { other: shared }],
+    });
+    const result = validateAiOutput(ir, schemas);
+    const nonSer = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(nonSer).toBeUndefined();
+  });
 
-	it("accepts deeply-nested pure JSON values", () => {
-		const ir = wrap({
-			title: "Hello",
-			meta: {
-				nested: {
-					list: [1, "two", true, null, { deeper: { ok: true } }],
-				},
-			},
-		});
-		const result = validateAiOutput(ir, schemas);
-		const nonSer = result.issues.find((i) =>
-			i.message.includes("[NON_SERIALIZABLE_PROP]"),
-		);
-		expect(nonSer).toBeUndefined();
-	});
+  it("accepts deeply-nested pure JSON values", () => {
+    const ir = wrap({
+      title: "Hello",
+      meta: {
+        nested: {
+          list: [1, "two", true, null, { deeper: { ok: true } }],
+        },
+      },
+    });
+    const result = validateAiOutput(ir, schemas);
+    const nonSer = result.issues.find((i) =>
+      i.message.includes("[NON_SERIALIZABLE_PROP]"),
+    );
+    expect(nonSer).toBeUndefined();
+  });
 });

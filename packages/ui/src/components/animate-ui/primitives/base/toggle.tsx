@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Toggle as TogglePrimitive } from '@base-ui-components/react/toggle';
-import { motion, AnimatePresence, type HTMLMotionProps } from 'motion/react';
+import * as React from "react";
+import { Toggle as TogglePrimitive } from "@base-ui-components/react/toggle";
+import { motion, AnimatePresence, type HTMLMotionProps } from "motion/react";
 
-import { getStrictContext } from '@anvilkit/ui/lib/get-strict-context';
-import { useControlledState } from '@anvilkit/ui/hooks/use-controlled-state';
+import { getStrictContext } from "@anvilkit/ui/lib/get-strict-context";
+import { useControlledState } from "@anvilkit/ui/hooks/use-controlled-state";
 
 type ToggleContextType = {
   isPressed: boolean;
-  setIsPressed: ToggleProps['onPressedChange'];
+  setIsPressed: ToggleProps["onPressedChange"];
   disabled?: boolean;
 };
 
 const [ToggleProvider, useToggle] =
-  getStrictContext<ToggleContextType>('ToggleContext');
+  getStrictContext<ToggleContextType>("ToggleContext");
 
 type ToggleProps = Omit<
   React.ComponentProps<typeof TogglePrimitive>,
-  'render'
+  "render"
 > &
-  HTMLMotionProps<'button'>;
+  HTMLMotionProps<"button">;
 
 function Toggle({
   value,
@@ -58,7 +58,7 @@ function Toggle({
   );
 }
 
-type ToggleHighlightProps = HTMLMotionProps<'div'>;
+type ToggleHighlightProps = HTMLMotionProps<"div">;
 
 function ToggleHighlight({ style, ...props }: ToggleHighlightProps) {
   const { isPressed, disabled } = useToggle();
@@ -69,9 +69,9 @@ function ToggleHighlight({ style, ...props }: ToggleHighlightProps) {
         <motion.div
           data-slot="toggle-highlight"
           aria-pressed={isPressed}
-          {...(isPressed && { 'data-pressed': true })}
-          {...(disabled && { 'data-disabled': true })}
-          style={{ position: 'absolute', zIndex: 0, inset: 0, ...style }}
+          {...(isPressed && { "data-pressed": true })}
+          {...(disabled && { "data-disabled": true })}
+          style={{ position: "absolute", zIndex: 0, inset: 0, ...style }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -82,7 +82,7 @@ function ToggleHighlight({ style, ...props }: ToggleHighlightProps) {
   );
 }
 
-type ToggleItemProps = HTMLMotionProps<'div'>;
+type ToggleItemProps = HTMLMotionProps<"div">;
 
 function ToggleItem({ style, ...props }: ToggleItemProps) {
   const { isPressed, disabled } = useToggle();
@@ -91,9 +91,9 @@ function ToggleItem({ style, ...props }: ToggleItemProps) {
     <motion.div
       data-slot="toggle-item"
       aria-pressed={isPressed}
-      {...(isPressed && { 'data-pressed': true })}
-      {...(disabled && { 'data-disabled': true })}
-      style={{ position: 'relative', zIndex: 1, ...style }}
+      {...(isPressed && { "data-pressed": true })}
+      {...(disabled && { "data-disabled": true })}
+      style={{ position: "relative", zIndex: 1, ...style }}
       {...props}
     />
   );

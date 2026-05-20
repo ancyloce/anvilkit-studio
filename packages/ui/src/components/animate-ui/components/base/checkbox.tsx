@@ -1,44 +1,44 @@
-import * as React from 'react';
+import * as React from "react";
 
 import {
   Checkbox as CheckboxPrimitive,
   CheckboxIndicator as CheckboxIndicatorPrimitive,
   type CheckboxProps as CheckboxPrimitiveProps,
-} from '@anvilkit/ui/components/animate-ui/primitives/base/checkbox';
-import { cn } from '@anvilkit/ui/lib/utils';
-import { cva, type VariantProps } from 'class-variance-authority';
+} from "@anvilkit/ui/components/animate-ui/primitives/base/checkbox";
+import { cn } from "@anvilkit/ui/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 
 const checkboxVariants = cva(
-  'peer shrink-0 flex items-center justify-center outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-500 focus-visible:ring-offset-2 [&[data-checked],&[data-indeterminate]]:bg-primary [&[data-checked],&[data-indeterminate]]:text-primary-foreground',
+  "peer shrink-0 flex items-center justify-center outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-500 focus-visible:ring-offset-2 [&[data-checked],&[data-indeterminate]]:bg-primary [&[data-checked],&[data-indeterminate]]:text-primary-foreground",
   {
     variants: {
       variant: {
-        default: 'bg-background border',
-        accent: 'bg-input',
+        default: "bg-background border",
+        accent: "bg-input",
       },
       size: {
-        default: 'size-5 rounded-sm',
-        sm: 'size-4.5 rounded-[5px]',
-        lg: 'size-6 rounded-[7px]',
+        default: "size-5 rounded-sm",
+        sm: "size-4.5 rounded-[5px]",
+        lg: "size-6 rounded-[7px]",
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: "default",
+      size: "default",
     },
   },
 );
 
-const checkboxIndicatorVariants = cva('', {
+const checkboxIndicatorVariants = cva("", {
   variants: {
     size: {
-      default: 'size-3.5',
-      sm: 'size-3',
-      lg: 'size-4',
+      default: "size-3.5",
+      sm: "size-3",
+      lg: "size-4",
     },
   },
   defaultVariants: {
-    size: 'default',
+    size: "default",
   },
 });
 

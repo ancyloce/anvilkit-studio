@@ -31,24 +31,24 @@ import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
  * re-renders fire only when the reference changes.
  */
 export function useSelectedItem(): PuckComponentData | null {
-	return useReactivePuck(
-		(s) => (s.selectedItem ?? null) as PuckComponentData | null,
-	);
+  return useReactivePuck(
+    (s) => (s.selectedItem ?? null) as PuckComponentData | null,
+  );
 }
 
 /**
  * Result of {@link useTextSelection}.
  */
 export interface TextSelectionState {
-	readonly selected: PuckComponentData | null;
-	readonly isCompatibleTextSelection: boolean;
+  readonly selected: PuckComponentData | null;
+  readonly isCompatibleTextSelection: boolean;
 }
 
 function isTextLike(item: PuckComponentData | null): boolean {
-	if (item === null) return false;
-	if (item.type !== "Text") return false;
-	const props = item.props as { readonly text?: unknown };
-	return typeof props.text === "string";
+  if (item === null) return false;
+  if (item.type !== "Text") return false;
+  const props = item.props as { readonly text?: unknown };
+  return typeof props.text === "string";
 }
 
 /**
@@ -57,9 +57,9 @@ function isTextLike(item: PuckComponentData | null): boolean {
  * can render dimmed without recomputing the predicate themselves.
  */
 export function useTextSelection(): TextSelectionState {
-	const selected = useSelectedItem();
-	return {
-		selected,
-		isCompatibleTextSelection: isTextLike(selected),
-	};
+  const selected = useSelectedItem();
+  return {
+    selected,
+    isCompatibleTextSelection: isTextLike(selected),
+  };
 }

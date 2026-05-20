@@ -23,32 +23,32 @@ import { normalizeStudioViewports, type StudioViewport } from "./viewports";
 export type StudioUiPartial = Partial<UiState>;
 
 function createViewportsBlock(
-	viewports: readonly Viewport[] = FULL_WIDTH_VIEWPORTS,
+  viewports: readonly Viewport[] = FULL_WIDTH_VIEWPORTS,
 ): UiState["viewports"] {
-	const options = normalizeStudioViewports(viewports);
-	const current =
-		options.find((option) => option.width === "100%") ?? options[0];
+  const options = normalizeStudioViewports(viewports);
+  const current =
+    options.find((option) => option.width === "100%") ?? options[0];
 
-	return {
-		current: {
-			width: current?.width ?? "100%",
-			height: current?.height ?? "auto",
-		},
-		controlsVisible: true,
-		options: [...options] as Viewports,
-	};
+  return {
+    current: {
+      width: current?.width ?? "100%",
+      height: current?.height ?? "auto",
+    },
+    controlsVisible: true,
+    options: [...options] as Viewports,
+  };
 }
 
 export function resolveStudioViewports(
-	ui: StudioUiPartial | undefined,
-	viewports?: Viewports,
+  ui: StudioUiPartial | undefined,
+  viewports?: Viewports,
 ): readonly StudioViewport[] {
-	if (viewports !== undefined) {
-		return normalizeStudioViewports(viewports);
-	}
-	return normalizeStudioViewports(
-		ui?.viewports?.options ?? FULL_WIDTH_VIEWPORTS,
-	);
+  if (viewports !== undefined) {
+    return normalizeStudioViewports(viewports);
+  }
+  return normalizeStudioViewports(
+    ui?.viewports?.options ?? FULL_WIDTH_VIEWPORTS,
+  );
 }
 
 /**
@@ -59,17 +59,17 @@ export function resolveStudioViewports(
  * `current` that is not also present in `options`.
  */
 export function mergeStudioUi(
-	consumer: StudioUiPartial | undefined,
-	viewports?: Viewports,
+  consumer: StudioUiPartial | undefined,
+  viewports?: Viewports,
 ): StudioUiPartial {
-	const defaultViewportsBlock = createViewportsBlock(
-		viewports ?? FULL_WIDTH_VIEWPORTS,
-	);
-	if (consumer === undefined) {
-		return { viewports: defaultViewportsBlock };
-	}
-	return {
-		...consumer,
-		viewports: consumer.viewports ?? defaultViewportsBlock,
-	};
+  const defaultViewportsBlock = createViewportsBlock(
+    viewports ?? FULL_WIDTH_VIEWPORTS,
+  );
+  if (consumer === undefined) {
+    return { viewports: defaultViewportsBlock };
+  }
+  return {
+    ...consumer,
+    viewports: consumer.viewports ?? defaultViewportsBlock,
+  };
 }

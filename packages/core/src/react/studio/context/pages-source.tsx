@@ -14,23 +14,23 @@ import { createContext, type ReactNode, useContext } from "react";
 import type { StudioPagesSource } from "@/types/pages";
 
 const StudioPagesSourceContext = createContext<StudioPagesSource | undefined>(
-	undefined,
+  undefined,
 );
 
 export interface StudioPagesSourceProviderProps {
-	readonly value: StudioPagesSource | undefined;
-	readonly children: ReactNode;
+  readonly value: StudioPagesSource | undefined;
+  readonly children: ReactNode;
 }
 
 export function StudioPagesSourceProvider({
-	value,
-	children,
+  value,
+  children,
 }: StudioPagesSourceProviderProps): ReactNode {
-	return (
-		<StudioPagesSourceContext.Provider value={value}>
-			{children}
-		</StudioPagesSourceContext.Provider>
-	);
+  return (
+    <StudioPagesSourceContext.Provider value={value}>
+      {children}
+    </StudioPagesSourceContext.Provider>
+  );
 }
 
 /**
@@ -39,5 +39,5 @@ export function StudioPagesSourceProvider({
  * should treat that as the "no pages source" empty state (PRD §6.4).
  */
 export function useStudioPagesSource(): StudioPagesSource | undefined {
-	return useContext(StudioPagesSourceContext);
+  return useContext(StudioPagesSourceContext);
 }

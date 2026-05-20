@@ -31,26 +31,26 @@ export type StudioLayoutProps = StudioHeaderProps;
 const useStudioPuck = createUsePuck();
 
 export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
-	// `<StudioLayout>` is mounted from the `puck` override slot with
-	// no props (the override callback receives `{ children }` only),
-	// so the header props come from `<ChromePropsProvider>` set up by
-	// `<Studio>`. The optional `propOverrides` lets tests pass props
-	// directly without wrapping in a provider. Save / Publish / Export
-	// callbacks are now consumed inside `<PublishPanel>` directly via
-	// `useChromeProps`, so the header itself only needs `onBack` and
-	// the read-only `lastSavedAt` chip.
-	const { onBack, lastSavedAt, collaboratorsSlot } = useChromeProps();
-	const props: StudioHeaderProps = {
-		onBack,
-		lastSavedAt,
-		collaboratorsSlot,
-		...propOverrides,
-	};
-	const hasSelection = useStudioPuck(
+  // `<StudioLayout>` is mounted from the `puck` override slot with
+  // no props (the override callback receives `{ children }` only),
+  // so the header props come from `<ChromePropsProvider>` set up by
+  // `<Studio>`. The optional `propOverrides` lets tests pass props
+  // directly without wrapping in a provider. Save / Publish / Export
+  // callbacks are now consumed inside `<PublishPanel>` directly via
+  // `useChromeProps`, so the header itself only needs `onBack` and
+  // the read-only `lastSavedAt` chip.
+  const { onBack, lastSavedAt, collaboratorsSlot } = useChromeProps();
+  const props: StudioHeaderProps = {
+    onBack,
+    lastSavedAt,
+    collaboratorsSlot,
+    ...propOverrides,
+  };
+  const hasSelection = useStudioPuck(
     (state) => state.appState.ui.itemSelector !== null,
   );
   const railRef = useRef<SidebarRailHandle | null>(null);
-	return (
+  return (
     <div
       data-ak-studio-root
       className="flex h-screen min-h-0 text-[var(--ak-studio-fg)]"

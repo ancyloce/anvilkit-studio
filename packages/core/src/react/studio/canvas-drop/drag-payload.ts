@@ -29,8 +29,8 @@ const IMAGE_MARKER_TYPE = `${ANVILKIT_CANVAS_DROP_TYPE}-image`;
 export type CanvasDropKind = "text" | "image";
 
 export type CanvasDropPayload =
-	| { readonly kind: "text"; readonly body: string }
-	| { readonly kind: "image"; readonly url: string; readonly alt: string };
+  | { readonly kind: "text"; readonly body: string }
+  | { readonly kind: "image"; readonly url: string; readonly alt: string };
 
 /**
  * Serialize a payload onto a drag `DataTransfer`. Sets the private
@@ -38,23 +38,23 @@ export type CanvasDropPayload =
  * plain text input outside the canvas still yields something sane).
  */
 export function encodeDropPayload(
-	dataTransfer: DataTransfer,
-	payload: CanvasDropPayload,
+  dataTransfer: DataTransfer,
+  payload: CanvasDropPayload,
 ): void {
-	dataTransfer.setData(ANVILKIT_CANVAS_DROP_TYPE, JSON.stringify(payload));
-	dataTransfer.setData(
-		payload.kind === "text" ? TEXT_MARKER_TYPE : IMAGE_MARKER_TYPE,
-		"",
-	);
-	dataTransfer.setData(
-		"text/plain",
-		payload.kind === "text" ? payload.body : payload.url,
-	);
+  dataTransfer.setData(ANVILKIT_CANVAS_DROP_TYPE, JSON.stringify(payload));
+  dataTransfer.setData(
+    payload.kind === "text" ? TEXT_MARKER_TYPE : IMAGE_MARKER_TYPE,
+    "",
+  );
+  dataTransfer.setData(
+    "text/plain",
+    payload.kind === "text" ? payload.body : payload.url,
+  );
 }
 
 /** Cheap presence check usable during `dragover` (no body read). */
 export function hasCanvasDropPayload(dataTransfer: DataTransfer): boolean {
-	return Array.from(dataTransfer.types).includes(ANVILKIT_CANVAS_DROP_TYPE);
+  return Array.from(dataTransfer.types).includes(ANVILKIT_CANVAS_DROP_TYPE);
 }
 
 /**
@@ -62,12 +62,12 @@ export function hasCanvasDropPayload(dataTransfer: DataTransfer): boolean {
  * `dragover`. Returns `null` when no/foreign payload is present.
  */
 export function peekDropKind(
-	dataTransfer: DataTransfer,
+  dataTransfer: DataTransfer,
 ): CanvasDropKind | null {
-	const types = Array.from(dataTransfer.types);
-	if (types.includes(IMAGE_MARKER_TYPE)) return "image";
-	if (types.includes(TEXT_MARKER_TYPE)) return "text";
-	return null;
+  const types = Array.from(dataTransfer.types);
+  if (types.includes(IMAGE_MARKER_TYPE)) return "image";
+  if (types.includes(TEXT_MARKER_TYPE)) return "text";
+  return null;
 }
 
 /**
@@ -75,27 +75,27 @@ export function peekDropKind(
  * absent, foreign, or malformed data (never throws).
  */
 export function readDropPayload(
-	dataTransfer: DataTransfer,
+  dataTransfer: DataTransfer,
 ): CanvasDropPayload | null {
-	const raw = dataTransfer.getData(ANVILKIT_CANVAS_DROP_TYPE);
-	if (raw === "") return null;
-	let parsed: unknown;
-	try {
-		parsed = JSON.parse(raw);
-	} catch {
-		return null;
-	}
-	if (parsed === null || typeof parsed !== "object") return null;
-	const candidate = parsed as Record<string, unknown>;
-	if (candidate["kind"] === "text" && typeof candidate["body"] === "string") {
-		return { kind: "text", body: candidate["body"] };
-	}
-	if (
-		candidate["kind"] === "image" &&
-		typeof candidate["url"] === "string" &&
-		typeof candidate["alt"] === "string"
-	) {
-		return { kind: "image", url: candidate["url"], alt: candidate["alt"] };
-	}
-	return null;
+  const raw = dataTransfer.getData(ANVILKIT_CANVAS_DROP_TYPE);
+  if (raw === "") return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  if (parsed === null || typeof parsed !== "object") return null;
+  const candidate = parsed as Record<string, unknown>;
+  if (candidate["kind"] === "text" && typeof candidate["body"] === "string") {
+    return { kind: "text", body: candidate["body"] };
+  }
+  if (
+    candidate["kind"] === "image" &&
+    typeof candidate["url"] === "string" &&
+    typeof candidate["alt"] === "string"
+  ) {
+    return { kind: "image", url: candidate["url"], alt: candidate["alt"] };
+  }
+  return null;
 }
