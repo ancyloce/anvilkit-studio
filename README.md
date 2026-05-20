@@ -35,36 +35,36 @@ Useful root commands:
 
 ### Runtime cone (`packages/`)
 
-| Package                  | Role                                                                   |
-| ------------------------ | ---------------------------------------------------------------------- |
-| `@anvilkit/core`         | `<Studio>` shell, plugin engine, lifecycle bus, Zustand stores.        |
-| `@anvilkit/ir`           | Headless Page IR transforms (`puckDataToIR`, `irToPuckData`, …).       |
-| `@anvilkit/schema`       | AI-friendly schema derivation from a Puck `Config`.                    |
-| `@anvilkit/validator`    | Export-readiness validation + AI-output trust boundary.                |
-| `@anvilkit/ui`           | Shared shadcn-style UI primitives (`Button`, `Card`, presence, …).     |
-| `@anvilkit/utils`        | Zero-dependency leaf helpers (`deepMerge`, `invariant`, …).            |
-| `@anvilkit/template-*`   | 10 seed page templates shipped with v1.0 (`packages/templates/`).      |
-| `@anvilkit/create-plugin`| Scaffolder for `@anvilkit/*` StudioPlugin packages.                    |
-| `@anvilkit/cli`          | The `anvilkit` CLI — `init`, `add`, `validate`, `export`, `generate`.  |
+| Package                   | Role                                                                  |
+| ------------------------- | --------------------------------------------------------------------- |
+| `@anvilkit/core`          | `<Studio>` shell, plugin engine, lifecycle bus, Zustand stores.       |
+| `@anvilkit/ir`            | Headless Page IR transforms (`puckDataToIR`, `irToPuckData`, …).      |
+| `@anvilkit/schema`        | AI-friendly schema derivation from a Puck `Config`.                   |
+| `@anvilkit/validator`     | Export-readiness validation + AI-output trust boundary.               |
+| `@anvilkit/ui`            | Shared shadcn-style UI primitives (`Button`, `Card`, presence, …).    |
+| `@anvilkit/utils`         | Zero-dependency leaf helpers (`deepMerge`, `invariant`, …).           |
+| `@anvilkit/template-*`    | 10 seed page templates shipped with v1.0 (`packages/templates/`).     |
+| `@anvilkit/create-plugin` | Scaffolder for `@anvilkit/*` StudioPlugin packages.                   |
+| `@anvilkit/cli`           | The `anvilkit` CLI — `init`, `add`, `validate`, `export`, `generate`. |
 
 ### Plugins (`packages/plugins/`, git submodules)
 
-| Plugin                                | Latest                | Purpose                                                            |
-| ------------------------------------- | --------------------- | ------------------------------------------------------------------ |
-| `@anvilkit/plugin-export-html`        | `1.0.0-beta.0`        | HTML exporter with the XSS / URL / CSS-injection hostile-input battery. |
-| `@anvilkit/plugin-export-react`       | `1.0.0-beta.0`        | React `.tsx` / `.jsx` exporter with AST-snapshot contract.        |
-| `@anvilkit/plugin-ai-copilot`         | `1.0.0-beta.0`        | Headless AI copilot; validator-gated dispatch; `./mock` for CI.   |
-| `@anvilkit/plugin-asset-manager`      | `1.0.0`               | Headless asset uploads with CSP advisor + S3 presigned adapter.   |
-| `@anvilkit/plugin-version-history`    | `1.0.0-beta.0`        | Snapshot persistence via host `SnapshotAdapter`; diff/apply engine. |
-| `@anvilkit/plugin-collab-yjs`         | `0.9.0-rc.0` (`@beta`)| Yjs CRDT collaboration; opt-in native Y.Map tree.                 |
-| `@anvilkit/collab-ui`                 | `0.1.0-rc.0` (`@beta`)| Host UI primitives (room bar, presence layer) for the Yjs plugin. |
+| Plugin                             | Latest                 | Purpose                                                                 |
+| ---------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
+| `@anvilkit/plugin-export-html`     | `1.0.0-beta.0`         | HTML exporter with the XSS / URL / CSS-injection hostile-input battery. |
+| `@anvilkit/plugin-export-react`    | `1.0.0-beta.0`         | React `.tsx` / `.jsx` exporter with AST-snapshot contract.              |
+| `@anvilkit/plugin-ai-copilot`      | `1.0.0-beta.0`         | Headless AI copilot; validator-gated dispatch; `./mock` for CI.         |
+| `@anvilkit/plugin-asset-manager`   | `1.0.0`                | Headless asset uploads with CSP advisor + S3 presigned adapter.         |
+| `@anvilkit/plugin-version-history` | `1.0.0-beta.0`         | Snapshot persistence via host `SnapshotAdapter`; diff/apply engine.     |
+| `@anvilkit/plugin-collab-yjs`      | `0.9.0-rc.0` (`@beta`) | Yjs CRDT collaboration; opt-in native Y.Map tree.                       |
+| `@anvilkit/collab-ui`              | `0.1.0-rc.0` (`@beta`) | Host UI primitives (room bar, presence layer) for the Yjs plugin.       |
 
 ### Apps (`apps/`)
 
-| App           | Purpose                                                                       |
-| ------------- | ----------------------------------------------------------------------------- |
-| `apps/demo`   | Next.js validation surface for every published `@anvilkit/*` package.         |
-| `apps/docs`   | Starlight docs site deployed to [docs.anvilkit.dev](https://docs.anvilkit.dev). |
+| App         | Purpose                                                                         |
+| ----------- | ------------------------------------------------------------------------------- |
+| `apps/demo` | Next.js validation surface for every published `@anvilkit/*` package.           |
+| `apps/docs` | Starlight docs site deployed to [docs.anvilkit.dev](https://docs.anvilkit.dev). |
 
 ### Component packages
 
