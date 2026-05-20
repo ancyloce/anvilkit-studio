@@ -1,0 +1,51 @@
+/**
+ * @file Scoped `--ak-pages-*` token surface for the Pages panel (P2).
+ *
+ * Tokens are scoped to `.ak-pages-panel` so they cannot leak into
+ * other sidebar surfaces. Every semantic token falls back through
+ * `var(--ak-pages-*, var(--ak-studio-*, …))` so unthemed hosts —
+ * those that import core but never set `--ak-studio-*` — still
+ * render correctly.
+ *
+ * Dark mode overrides primitives only; semantic tokens inherit.
+ */
+
+.ak-pages-panel {
+	/* Primitives — accent + danger families. */
+	--ak-pages-accent-primitive: var(
+		--ak-studio-theme,
+		oklch(54.6% 0.245 262.881)
+	);
+	--ak-pages-accent-fg-primitive: var(--ak-studio-theme-fg, oklch(1 0 0));
+	--ak-pages-danger-primitive: var(--destructive, oklch(57.7% 0.245 27.325));
+	--ak-pages-danger-fg-primitive: oklch(1 0 0);
+
+	/* Semantic — row chrome. */
+	--ak-pages-fg: var(--ak-studio-fg, var(--foreground));
+	--ak-pages-muted: var(--ak-studio-muted, var(--muted));
+	--ak-pages-muted-fg: var(--ak-studio-muted-fg, var(--muted-foreground));
+	--ak-pages-border: var(--ak-studio-border, var(--border));
+	--ak-pages-panel: var(--ak-studio-panel, var(--card));
+	--ak-pages-panel-fg: var(--ak-studio-panel-fg, var(--card-foreground));
+
+	/* Semantic — selection. */
+	--ak-pages-accent: var(--ak-pages-accent-primitive);
+	--ak-pages-accent-fg: var(--ak-pages-accent-fg-primitive);
+	--ak-pages-ring: var(--ak-pages-accent);
+
+	/* Semantic — danger (delete confirm). */
+	--ak-pages-danger-bg: var(--ak-pages-danger-primitive);
+	--ak-pages-danger-fg: var(--ak-pages-danger-fg-primitive);
+
+	/* Semantic — drag/insertion line (consumed in P5). */
+	--ak-pages-dnd-line: var(--ak-pages-accent);
+}
+
+.dark .ak-pages-panel {
+	/* Primitives flip; semantic tokens above inherit without redefinition. */
+	--ak-pages-accent-primitive: var(
+		--ak-studio-theme,
+		oklch(62.3% 0.214 259.815)
+	);
+	--ak-pages-danger-primitive: var(--destructive, oklch(70.4% 0.191 22.216));
+}
