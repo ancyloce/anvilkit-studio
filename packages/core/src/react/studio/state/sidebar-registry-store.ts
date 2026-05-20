@@ -25,31 +25,36 @@
 import { createStore, type StoreApi } from "zustand/vanilla";
 
 import type {
-  StudioAssetAction,
-  StudioAssetSource,
-  StudioCopilotPanel,
-  StudioCopySnippetPack,
-  StudioHistoryPanel,
-  StudioInsertSection,
-  StudioLayerQuickAdd,
-  StudioSidebarUnregister,
+	StudioAssetAction,
+	StudioAssetSource,
+	StudioCopilotPanel,
+	StudioCopySnippetPack,
+	StudioDesignSystemPanel,
+	StudioHistoryPanel,
+	StudioInsertSection,
+	StudioLayerQuickAdd,
+	StudioSidebarUnregister,
 } from "@/types/sidebar";
 
 export interface SidebarRegistryState {
-  readonly insertSections: ReadonlyMap<string, StudioInsertSection>;
-  readonly layerQuickAdds: ReadonlyMap<string, StudioLayerQuickAdd>;
-  readonly assetSource: StudioAssetSource | null;
-  readonly assetActions: ReadonlyMap<string, StudioAssetAction>;
-  readonly copyPacks: ReadonlyMap<string, StudioCopySnippetPack>;
-  readonly copilotPanel: StudioCopilotPanel | null;
-  readonly historyPanel: StudioHistoryPanel | null;
-  registerInsertSection(section: StudioInsertSection): StudioSidebarUnregister;
-  registerLayerQuickAdd(item: StudioLayerQuickAdd): StudioSidebarUnregister;
-  registerAssetSource(source: StudioAssetSource): StudioSidebarUnregister;
-  registerAssetAction(action: StudioAssetAction): StudioSidebarUnregister;
-  registerCopySnippetPack(pack: StudioCopySnippetPack): StudioSidebarUnregister;
-  registerCopilotPanel(panel: StudioCopilotPanel): StudioSidebarUnregister;
-  registerHistoryPanel(panel: StudioHistoryPanel): StudioSidebarUnregister;
+	readonly insertSections: ReadonlyMap<string, StudioInsertSection>;
+	readonly layerQuickAdds: ReadonlyMap<string, StudioLayerQuickAdd>;
+	readonly assetSource: StudioAssetSource | null;
+	readonly assetActions: ReadonlyMap<string, StudioAssetAction>;
+	readonly copyPacks: ReadonlyMap<string, StudioCopySnippetPack>;
+	readonly copilotPanel: StudioCopilotPanel | null;
+	readonly historyPanel: StudioHistoryPanel | null;
+	readonly designSystemPanel: StudioDesignSystemPanel | null;
+	registerInsertSection(section: StudioInsertSection): StudioSidebarUnregister;
+	registerLayerQuickAdd(item: StudioLayerQuickAdd): StudioSidebarUnregister;
+	registerAssetSource(source: StudioAssetSource): StudioSidebarUnregister;
+	registerAssetAction(action: StudioAssetAction): StudioSidebarUnregister;
+	registerCopySnippetPack(pack: StudioCopySnippetPack): StudioSidebarUnregister;
+	registerCopilotPanel(panel: StudioCopilotPanel): StudioSidebarUnregister;
+	registerHistoryPanel(panel: StudioHistoryPanel): StudioSidebarUnregister;
+	registerDesignSystemPanel(
+		panel: StudioDesignSystemPanel,
+	): StudioSidebarUnregister;
 }
 
 export type SidebarRegistryStoreApi = StoreApi<SidebarRegistryState>;
@@ -65,110 +70,123 @@ const EMPTY_PACKS = new Map<string, StudioCopySnippetPack>();
  * `register()` calls from plugins land in the right place.
  */
 export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
-  return createStore<SidebarRegistryState>((set, get) => ({
-    insertSections: EMPTY_INSERT,
-    layerQuickAdds: EMPTY_QUICK,
-    assetSource: null,
-    assetActions: EMPTY_ACTIONS,
-    copyPacks: EMPTY_PACKS,
-    copilotPanel: null,
-    historyPanel: null,
+	return createStore<SidebarRegistryState>((set, get) => ({
+		insertSections: EMPTY_INSERT,
+		layerQuickAdds: EMPTY_QUICK,
+		assetSource: null,
+		assetActions: EMPTY_ACTIONS,
+		copyPacks: EMPTY_PACKS,
+		copilotPanel: null,
+		historyPanel: null,
+		designSystemPanel: null,
 
-    registerInsertSection(section) {
-      set((state) => {
-        const next = new Map(state.insertSections);
-        next.set(section.id, section);
-        return { insertSections: next };
-      });
-      return () => {
-        const current = get().insertSections;
-        if (current.get(section.id) !== section) return;
-        const next = new Map(current);
-        next.delete(section.id);
-        set({ insertSections: next });
-      };
-    },
+		registerInsertSection(section) {
+			set((state) => {
+				const next = new Map(state.insertSections);
+				next.set(section.id, section);
+				return { insertSections: next };
+			});
+			return () => {
+				const current = get().insertSections;
+				if (current.get(section.id) !== section) return;
+				const next = new Map(current);
+				next.delete(section.id);
+				set({ insertSections: next });
+			};
+		},
 
-    registerLayerQuickAdd(item) {
-      set((state) => {
-        const next = new Map(state.layerQuickAdds);
-        next.set(item.id, item);
-        return { layerQuickAdds: next };
-      });
-      return () => {
-        const current = get().layerQuickAdds;
-        if (current.get(item.id) !== item) return;
-        const next = new Map(current);
-        next.delete(item.id);
-        set({ layerQuickAdds: next });
-      };
-    },
+		registerLayerQuickAdd(item) {
+			set((state) => {
+				const next = new Map(state.layerQuickAdds);
+				next.set(item.id, item);
+				return { layerQuickAdds: next };
+			});
+			return () => {
+				const current = get().layerQuickAdds;
+				if (current.get(item.id) !== item) return;
+				const next = new Map(current);
+				next.delete(item.id);
+				set({ layerQuickAdds: next });
+			};
+		},
 
-    registerAssetSource(source) {
-      // `image` v1 supports a single source. Last-write-wins keeps
-      // the contract simple for plugins; if a second plugin tries
-      // to register one we still let it land but the previous
-      // registration's `unregister()` becomes a no-op.
-      set({ assetSource: source });
-      return () => {
-        if (get().assetSource === source) {
-          set({ assetSource: null });
-        }
-      };
-    },
+		registerAssetSource(source) {
+			// `image` v1 supports a single source. Last-write-wins keeps
+			// the contract simple for plugins; if a second plugin tries
+			// to register one we still let it land but the previous
+			// registration's `unregister()` becomes a no-op.
+			set({ assetSource: source });
+			return () => {
+				if (get().assetSource === source) {
+					set({ assetSource: null });
+				}
+			};
+		},
 
-    registerAssetAction(action) {
-      set((state) => {
-        const next = new Map(state.assetActions);
-        next.set(action.id, action);
-        return { assetActions: next };
-      });
-      return () => {
-        const current = get().assetActions;
-        if (current.get(action.id) !== action) return;
-        const next = new Map(current);
-        next.delete(action.id);
-        set({ assetActions: next });
-      };
-    },
+		registerAssetAction(action) {
+			set((state) => {
+				const next = new Map(state.assetActions);
+				next.set(action.id, action);
+				return { assetActions: next };
+			});
+			return () => {
+				const current = get().assetActions;
+				if (current.get(action.id) !== action) return;
+				const next = new Map(current);
+				next.delete(action.id);
+				set({ assetActions: next });
+			};
+		},
 
-    registerCopySnippetPack(pack) {
-      set((state) => {
-        const next = new Map(state.copyPacks);
-        next.set(pack.id, pack);
-        return { copyPacks: next };
-      });
-      return () => {
-        const current = get().copyPacks;
-        if (current.get(pack.id) !== pack) return;
-        const next = new Map(current);
-        next.delete(pack.id);
-        set({ copyPacks: next });
-      };
-    },
+		registerCopySnippetPack(pack) {
+			set((state) => {
+				const next = new Map(state.copyPacks);
+				next.set(pack.id, pack);
+				return { copyPacks: next };
+			});
+			return () => {
+				const current = get().copyPacks;
+				if (current.get(pack.id) !== pack) return;
+				const next = new Map(current);
+				next.delete(pack.id);
+				set({ copyPacks: next });
+			};
+		},
 
-    registerCopilotPanel(panel) {
-      // `copilot` v1 supports a single panel. Last-write-wins
-      // matches `registerAssetSource` — if a second registration
-      // lands the previous registration's `unregister()` becomes a
-      // no-op.
-      set({ copilotPanel: panel });
-      return () => {
-        if (get().copilotPanel === panel) {
-          set({ copilotPanel: null });
-        }
-      };
-    },
+		registerCopilotPanel(panel) {
+			// `copilot` v1 supports a single panel. Last-write-wins
+			// matches `registerAssetSource` — if a second registration
+			// lands the previous registration's `unregister()` becomes a
+			// no-op.
+			set({ copilotPanel: panel });
+			return () => {
+				if (get().copilotPanel === panel) {
+					set({ copilotPanel: null });
+				}
+			};
+		},
 
-    registerHistoryPanel(panel) {
-      // `history` v1 supports a single panel; same last-write-wins
-      // shape as `registerCopilotPanel` / `registerAssetSource`.
-      set({ historyPanel: panel });
-      return () => {
-        if (get().historyPanel === panel) {
-          set({ historyPanel: null });
-        }
-      };
-    },
-  }));
+		registerHistoryPanel(panel) {
+			// `history` v1 supports a single panel; same last-write-wins
+			// shape as `registerCopilotPanel` / `registerAssetSource`.
+			set({ historyPanel: panel });
+			return () => {
+				if (get().historyPanel === panel) {
+					set({ historyPanel: null });
+				}
+			};
+		},
+
+		registerDesignSystemPanel(panel) {
+			// `design-system` v1 supports a single panel; same
+			// last-write-wins shape as `registerCopilotPanel` /
+			// `registerHistoryPanel`.
+			set({ designSystemPanel: panel });
+			return () => {
+				if (get().designSystemPanel === panel) {
+					set({ designSystemPanel: null });
+				}
+			};
+		},
+	}));
 }
