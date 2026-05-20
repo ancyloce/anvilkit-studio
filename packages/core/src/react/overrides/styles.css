@@ -34,14 +34,84 @@
 	--ak-studio-layer-selection-fg: var(--ak-studio-theme-fg);
 	--ak-studio-rail-width: 44px;
 	--ak-studio-panel-width: 280px;
+
+	/*
+	 * `--ak-ds-*` — Design-System tokens (two-tier, PRD 0005).
+	 * Tier 1 (primitives) carries brand + neutral + scale values.
+	 * Tier 2 (semantics) maps roles and falls back to `--ak-studio-*`
+	 * so a host that omits `@anvilkit/plugin-design-system` still
+	 * renders correctly. Dark mode flips primitives only; semantics
+	 * and stored token refs are theme-stable.
+	 */
+	--ak-ds-brand-50: oklch(97% 0.013 254);
+	--ak-ds-brand-100: oklch(94% 0.029 254);
+	--ak-ds-brand-200: oklch(88% 0.059 254);
+	--ak-ds-brand-300: oklch(80% 0.099 254);
+	--ak-ds-brand-400: oklch(70% 0.149 254);
+	--ak-ds-brand-500: oklch(62% 0.197 254);
+	--ak-ds-brand-600: oklch(54.6% 0.245 262.881);
+	--ak-ds-brand-700: oklch(48% 0.218 263);
+	--ak-ds-brand-800: oklch(40% 0.176 263);
+	--ak-ds-brand-900: oklch(32% 0.13 263);
+	--ak-ds-neutral-50: oklch(98.5% 0 0);
+	--ak-ds-neutral-100: oklch(96% 0 0);
+	--ak-ds-neutral-200: oklch(92% 0 0);
+	--ak-ds-neutral-300: oklch(86% 0 0);
+	--ak-ds-neutral-400: oklch(70% 0 0);
+	--ak-ds-neutral-500: oklch(58% 0 0);
+	--ak-ds-neutral-600: oklch(46% 0 0);
+	--ak-ds-neutral-700: oklch(35% 0 0);
+	--ak-ds-neutral-800: oklch(22% 0 0);
+	--ak-ds-neutral-900: oklch(14% 0 0);
+	--ak-ds-space-0: 0;
+	--ak-ds-space-1: 4px;
+	--ak-ds-space-2: 8px;
+	--ak-ds-space-3: 12px;
+	--ak-ds-space-4: 16px;
+	--ak-ds-space-6: 24px;
+	--ak-ds-space-8: 32px;
+	--ak-ds-space-12: 48px;
+	--ak-ds-space-16: 64px;
+	--ak-ds-space-24: 96px;
+	--ak-ds-text-xs: 12px;
+	--ak-ds-text-sm: 14px;
+	--ak-ds-text-base: 16px;
+	--ak-ds-text-lg: 18px;
+	--ak-ds-text-xl: 20px;
+	--ak-ds-text-2xl: 24px;
+	--ak-ds-text-3xl: 30px;
+	--ak-ds-radius-sm: 4px;
+	--ak-ds-radius-md: 8px;
+	--ak-ds-radius-lg: 12px;
+	--ak-ds-bg: var(--ak-ds-neutral-50, var(--ak-studio-bg));
+	--ak-ds-surface: var(--ak-ds-neutral-100, var(--ak-studio-panel));
+	--ak-ds-fg: var(--ak-ds-neutral-900, var(--ak-studio-fg));
+	--ak-ds-fg-muted: var(--ak-ds-neutral-600, var(--ak-studio-muted-fg));
+	--ak-ds-accent: var(--ak-ds-brand-500, var(--ak-studio-accent));
+	--ak-ds-accent-fg: var(--ak-ds-neutral-50, var(--ak-studio-accent-fg));
+	--ak-ds-border: var(--ak-ds-neutral-200, var(--ak-studio-border));
+	--ak-ds-focus-ring: var(--ak-ds-brand-500, var(--ak-studio-ring));
 }
 
 .dark {
 	/*
-	 * Intentionally empty: neutral `--ak-studio-*` vars bridge to
-	 * shadcn vars that already flip on `.dark`. The theme color stays
-	 * fixed on Tailwind CSS blue-600 across light and dark modes.
+	 * `--ak-studio-*` neutrals bridge to shadcn vars that already flip
+	 * on `.dark`, so the chrome side stays empty by design.
+	 *
+	 * `--ak-ds-*` overrides primitives only (PRD 0005 §5.2): semantics
+	 * resolve through the primitives, so they re-bind automatically
+	 * without rewriting stored token refs.
 	 */
+	--ak-ds-neutral-50: oklch(14% 0 0);
+	--ak-ds-neutral-100: oklch(22% 0 0);
+	--ak-ds-neutral-200: oklch(28% 0 0);
+	--ak-ds-neutral-300: oklch(35% 0 0);
+	--ak-ds-neutral-400: oklch(50% 0 0);
+	--ak-ds-neutral-500: oklch(60% 0 0);
+	--ak-ds-neutral-600: oklch(70% 0 0);
+	--ak-ds-neutral-700: oklch(80% 0 0);
+	--ak-ds-neutral-800: oklch(92% 0 0);
+	--ak-ds-neutral-900: oklch(98.5% 0 0);
 }
 
 [data-ak-studio-root],
@@ -244,7 +314,7 @@
  * chrome token so the right-side fields panel matches the rest
  * of the studio (sidebar groups, header, etc.).
  */
-	[class*="_PuckFields--wrapFields_"]
+[class*="_PuckFields--wrapFields_"]
 	[class*="_PuckFields-field_"]
 	+ [class*="_PuckFields-field_"] {
 	border-top-color: var(--ak-studio-border);
