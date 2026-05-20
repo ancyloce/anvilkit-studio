@@ -171,14 +171,21 @@ and the only `.sh` files live under `node_modules/`. Reintroduce them here if th
 ever changes.
 
 ## Verification Gates
-- Always run typecheck, lint, and tests after multi-file changes before declaring work complete
-- When refactoring or moving files, search for ALL usage sites (e.g., multiple <Studio> mounts in demos) — never assume a single call site
-- Use `import type` for type-only imports to satisfy verbatimModuleSyntax
-- Comments should be concise and efficient, directly stating the core intent of functions/methods, avoiding redundant descriptions.
+- Always run typecheck, lint, and tests after multi-file changes
+- When tests fail due to pre-existing infrastructure issues (path aliases, missing dist folders), report this clearly rather than skipping verification
+- Build dependent packages (`pnpm build`) before assuming module resolution errors are code issues
+
+## Demo & Mount Consistency
+- When wiring new props or plugins to Studio components, search for ALL <Studio> mounts in the demo (e.g., default and collab paths) and wire each one
+- After UI/prop changes, grep for component usage across demo/ before declaring done
 
 ## Iframe & Canvas Styling
 - Tailwind utilities and parent-document CSS do NOT reach the canvas iframe — use inline styles or explicit CopyHostStyles injection
 - Before debugging styling issues, suspect stale webpack/dev-server cache and check with a clean rebuild
+
+## TypeScript Conventions
+- Use `import type` for type-only imports (verbatimModuleSyntax is enforced)
+- Watch for circular dependencies; prefer inlining small type references over cross-module imports when cycles form
 
 ## i18n Convention
 - Never duplicate bilingual strings inline; always use i18n message keys
