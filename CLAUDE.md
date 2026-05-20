@@ -154,6 +154,8 @@ Submodules:
 - `packages/components`
 - `packages/plugins/plugin-ai-copilot`
 - `packages/plugins/plugin-asset-manager`
+- `packages/plugins/plugin-collab-ui`
+- `packages/plugins/plugin-collab-yjs`
 - `packages/plugins/plugin-export-html`
 - `packages/plugins/plugin-export-react`
 - `packages/plugins/plugin-version-history`
@@ -178,6 +180,14 @@ ever changes.
 ## Demo & Mount Consistency
 - When wiring new props or plugins to Studio components, search for ALL <Studio> mounts in the demo (e.g., default and collab paths) and wire each one
 - After UI/prop changes, grep for component usage across demo/ before declaring done
+
+## Sub-agent usage
+- Before refactoring a component or threading new props/plugins, spawn an Explore sub-agent to enumerate every call site (file:line) and report wiring status — do not start editing until the enumeration is complete
+- Use sub-agents for parallel exploration when investigating across plugin packages or submodules (e.g., "find every adapter that implements X" across packages/plugins/*); keep the main context focused on synthesis and edits
+- Do not delegate the actual edits — sub-agents enumerate and report, the main agent decides and writes
+
+## Safe Deletion
+- Before deleting any file, grep the repo for inbound references (imports, paths in JSON/MD, test fixtures). Present a deletion list with reference counts; wait for my approval before any rm.
 
 ## Iframe & Canvas Styling
 - Tailwind utilities and parent-document CSS do NOT reach the canvas iframe — use inline styles or explicit CopyHostStyles injection
