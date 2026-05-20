@@ -1,6 +1,12 @@
 "use client";
 
+import {
+	type CanvasIR,
+	createCanvasIR,
+	createPage,
+} from "@anvilkit/canvas-core";
 import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
 const CanvasStudio = dynamic(
 	() => import("@anvilkit/canvas-editor").then((m) => m.CanvasStudio),
@@ -13,6 +19,15 @@ const CanvasStudio = dynamic(
 );
 
 export function CanvasStudioClient({ pageId }: { pageId: string }) {
+	const initialIR = useMemo<CanvasIR>(
+		() =>
+			createCanvasIR({
+				id: pageId,
+				title: pageId,
+				pages: [createPage({ id: pageId, name: pageId })],
+			}),
+		[pageId],
+	);
 	return (
 		<main
 			style={{
@@ -31,7 +46,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 					MVP-1 placeholder. Tools, layers, persistence land in MVP-3 onward.
 				</p>
 			</header>
-			<CanvasStudio pageId={pageId} />
+			<CanvasStudio initialIR={initialIR} activePageId={pageId} />
 		</main>
 	);
 }
