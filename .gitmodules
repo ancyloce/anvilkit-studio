@@ -22,3 +22,18 @@
 [submodule "packages/plugins/plugin-collab-ui"]
 	path = packages/plugins/plugin-collab-ui
 	url = https://github.com/ancyloce/anvilkit-plugin-collab-ui.git
+[submodule "packages/canvas/core"]
+	path = packages/canvas/core
+	url = https://github.com/ancyloce/anvilkit-canvas-core.git
+[submodule "packages/canvas/editor"]
+	path = packages/canvas/editor
+	url = https://github.com/ancyloce/anvilkit-canvas-editor.git
+[submodule "packages/plugins/plugin-canvas-studio"]
+	path = packages/plugins/plugin-canvas-studio
+	url = https://github.com/ancyloce/anvilkit-plugin-canvas-studio.git
+[submodule "packages/plugins/plugin-export-canvas"]
+	path = packages/plugins/plugin-export-canvas
+	url = https://github.com/ancyloce/anvilkit-plugin-export-canvas.git
+[submodule "packages/plugins/plugin-ai-image"]
+	path = packages/plugins/plugin-ai-image
+	url = https://github.com/ancyloce/anvilkit-plugin-ai-image.git
