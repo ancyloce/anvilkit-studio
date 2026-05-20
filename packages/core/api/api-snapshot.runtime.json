@@ -2346,9 +2346,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 482,
-							"character": 11,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L482"
+							"line": 501,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L501"
 						}
 					],
 					"type": {
@@ -2446,9 +2446,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 442,
-							"character": 11,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L442"
+							"line": 461,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L461"
 						}
 					],
 					"type": {
@@ -2585,9 +2585,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 430,
-							"character": 11,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L430"
+							"line": 449,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L449"
 						}
 					],
 					"type": {
@@ -2638,9 +2638,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 397,
-							"character": 11,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L397"
+							"line": 416,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L416"
 						}
 					],
 					"type": {
@@ -2667,9 +2667,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 407,
-							"character": 11,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L407"
+							"line": 426,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L426"
 						}
 					],
 					"type": {
@@ -2742,9 +2742,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 470,
-							"character": 11,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L470"
+							"line": 489,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L489"
 						}
 					],
 					"type": {
@@ -2881,9 +2881,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 453,
-							"character": 11,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L453"
+							"line": 472,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L472"
 						}
 					],
 					"type": {
@@ -2909,9 +2909,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 388,
+					"line": 407,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L388"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L407"
 				}
 			]
 		},
