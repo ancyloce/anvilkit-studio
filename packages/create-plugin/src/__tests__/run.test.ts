@@ -177,10 +177,36 @@ describe("@anvilkit/create-plugin", () => {
 		expect(src).toContain("export function createPlugin123Plugin");
 	});
 
-	it("does not double-suffix Plugin when the slug already ends in Plugin", async () => {
-		// Slug `9` -> camelCase `9` -> identifier-start fails ->
-		// endsWith("Plugin") is false -> prefixBase stays `9` ->
-		// className `Plugin9`, factory `createPlugin9Plugin`.
+	it("does not double-suffix Plugin when the camelCased slug already ends in Plugin", async () => {
+		// Trim branch: slug `1-plugin` -> camelCase `1Plugin` ->
+		// identifier-start fails -> endsWith("Plugin") true ->
+		// prefixBase trimmed to `1` -> className `Plugin1`. Without
+		// the trim the className would be `Plugin1Plugin` and the
+		// factory would be `createPlugin1PluginPlugin`.
+		await run([
+			"--name",
+			"1-plugin",
+			"--display",
+			"One",
+			"--category",
+			"custom",
+			"--dir",
+			workDir,
+		]);
+		const src = readFileSync(
+			join(workDir, "1-plugin", "src", "index.ts"),
+			"utf8",
+		);
+		expect(src).toContain("export interface Plugin1PluginOptions");
+		expect(src).toContain("export function createPlugin1Plugin");
+		expect(src).not.toContain("Plugin1PluginPluginOptions");
+		expect(src).not.toContain("createPlugin1PluginPlugin");
+	});
+
+	it("does not add a Plugin suffix when the camelCased slug does not end in Plugin", async () => {
+		// Else branch: slug `9` -> camelCase `9` -> identifier-start
+		// fails -> endsWith("Plugin") false -> prefixBase stays `9`
+		// -> className `Plugin9`, factory `createPlugin9Plugin`.
 		await run([
 			"--name",
 			"9",
@@ -194,8 +220,6 @@ describe("@anvilkit/create-plugin", () => {
 		const src = readFileSync(join(workDir, "9", "src", "index.ts"), "utf8");
 		expect(src).toContain("export interface Plugin9PluginOptions");
 		expect(src).toContain("export function createPlugin9Plugin");
-		expect(src).not.toContain("Plugin9PluginPluginOptions");
-		expect(src).not.toContain("createPlugin9PluginPlugin");
 	});
 
 	it("scaffolds with only @anvilkit/core as a peer dependency", async () => {
@@ -253,7 +277,7 @@ describe("@anvilkit/create-plugin", () => {
 		).rejects.toThrow(/Unknown option/);
 	});
 
-	it("rejects an existing non-empty target directory unless force is set", async () => {
+	it("rejects an existing non-empty target directory unless overwrite is set", async () => {
 		const root = join(workDir, "existing-plugin");
 		mkdirSync(root);
 		const existingPackage = join(root, "package.json");
@@ -276,7 +300,7 @@ describe("@anvilkit/create-plugin", () => {
 		);
 	});
 
-	it("overwrites generated files in a non-empty target directory when force is set", async () => {
+	it("overwrites generated files in a non-empty target directory when overwrite is set", async () => {
 		const root = join(workDir, "existing-plugin");
 		mkdirSync(root);
 		writeFileSync(join(root, "package.json"), '{"name":"old"}\n', "utf8");
@@ -290,7 +314,7 @@ describe("@anvilkit/create-plugin", () => {
 			"custom",
 			"--dir",
 			workDir,
-			"--force",
+			"--overwrite",
 		]);
 
 		const pkg = JSON.parse(

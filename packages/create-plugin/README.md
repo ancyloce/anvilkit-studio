@@ -24,7 +24,7 @@ pnpm create @anvilkit/plugin
 | `--display` | Human-readable plugin name                                                                                               |
 | `--category`| `export`, `ai`, `rail-panel`, or `custom`                                                                                |
 | `--dir`     | Parent directory for the generated folder (default: cwd)                                                                 |
-| `--force`   | Overwrite template files in an existing non-empty target folder. Files NOT in the template are kept. No backup, no prompt.|
+| `--overwrite`| Overwrite template files in an existing non-empty target folder. Files NOT in the template are kept. No backup, no prompt.|
 | `--help`    | Show help                                                                                                                |
 | `--version` | Print the installed CLI version                                                                                          |
 

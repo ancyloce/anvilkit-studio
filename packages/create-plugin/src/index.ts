@@ -9,7 +9,7 @@
  *
  *   pnpm create @anvilkit/plugin  (interactive)
  *
- * Flags accepted: --name, --display, --category, --dir, --force,
+ * Flags accepted: --name, --display, --category, --dir, --overwrite,
  * --help, --version. Missing flags are prompted for when stdin is a
  * TTY; otherwise the CLI errors so CI invocations fail loud.
  *
@@ -63,7 +63,7 @@ interface Options {
 	readonly display: string;
 	readonly category: Category;
 	readonly dir: string;
-	readonly force: boolean;
+	readonly overwrite: boolean;
 }
 
 function printHelp(): void {
@@ -77,7 +77,7 @@ Flags:
   --display <label>      Human-readable plugin name (e.g. "My Plugin").
   --category <category>  One of: ${VALID_CATEGORIES.join(", ")}
   --dir <path>           Parent directory for the generated folder (default: cwd).
-  --force                Overwrite template files in an existing non-empty target
+  --overwrite            Overwrite template files in an existing non-empty target
                          folder. Files NOT in the template are kept. No backup,
                          no confirmation prompt.
   --help, -h             Show this help.
@@ -134,7 +134,7 @@ async function promptFor(question: string, fallback?: string): Promise<string> {
 
 async function resolveOptions(
 	flags: Partial<Record<"name" | "display" | "category" | "dir", string>> & {
-		readonly force?: boolean;
+		readonly overwrite?: boolean;
 	},
 ): Promise<Options> {
 	let name = flags.name ?? "";
@@ -165,7 +165,7 @@ async function resolveOptions(
 	const category = categoryRaw as Category;
 
 	const dir = resolve(flags.dir ?? process.cwd(), name);
-	return { name, display, category, dir, force: flags.force ?? false };
+	return { name, display, category, dir, overwrite: flags.overwrite ?? false };
 }
 
 function escapeStringLiteralContent(value: string): string {
@@ -192,7 +192,7 @@ function toBlockCommentText(value: string): string {
 
 function assertTargetDirectoryWritable(
 	targetDir: string,
-	force: boolean,
+	overwrite: boolean,
 ): void {
 	if (!existsSync(targetDir)) return;
 
@@ -203,10 +203,10 @@ function assertTargetDirectoryWritable(
 		);
 	}
 
-	if (!force && readdirSync(targetDir).length > 0) {
+	if (!overwrite && readdirSync(targetDir).length > 0) {
 		throw new Error(
 			`Target directory already exists and is not empty: ${targetDir}. ` +
-				"Pass --force to overwrite generated files.",
+				"Pass --overwrite to overwrite template files (non-template files are kept).",
 		);
 	}
 }
@@ -291,7 +291,7 @@ export async function run(
 			display: { type: "string" },
 			category: { type: "string" },
 			dir: { type: "string" },
-			force: { type: "boolean" },
+			overwrite: { type: "boolean" },
 		},
 		strict: true,
 	});
@@ -301,11 +301,11 @@ export async function run(
 		display: typeof values.display === "string" ? values.display : undefined,
 		category: typeof values.category === "string" ? values.category : undefined,
 		dir: typeof values.dir === "string" ? values.dir : undefined,
-		force: values.force === true,
+		overwrite: values.overwrite === true,
 	});
 
 	const className = toCamelCaseClassName(opts.name);
-	assertTargetDirectoryWritable(opts.dir, opts.force);
+	assertTargetDirectoryWritable(opts.dir, opts.overwrite);
 	copyTemplateTree(TEMPLATE_ROOT, opts.dir, opts, className);
 
 	// Post-generation next-step hints.
