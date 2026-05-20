@@ -16,7 +16,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "Thrown when Studio configuration validation fails.\r\n\r\nRaised by "
+						"text": "Thrown when Studio configuration validation fails.\n\nRaised by "
 					},
 					{
 						"kind": "code",
@@ -32,7 +32,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ") when the Zod schema\r\nrejects the merged configuration. The underlying "
+						"text": ") when the Zod schema\nrejects the merged configuration. The underlying "
 					},
 					{
 						"kind": "code",
@@ -40,7 +40,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " is\r\nattached via the standard ES2022 "
+						"text": " is\nattached via the standard ES2022 "
 					},
 					{
 						"kind": "code",
@@ -48,7 +48,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " field so host apps can\r\ndrill into the per-field issues.\r\n\r\nKept here (not in "
+						"text": " field so host apps can\ndrill into the per-field issues.\n\nKept here (not in "
 					},
 					{
 						"kind": "code",
@@ -56,7 +56,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ") so every runtime error ships as\r\na single, tree-shakeable module under "
+						"text": ") so every runtime error ships as\na single, tree-shakeable module under "
 					},
 					{
 						"kind": "code",
@@ -79,7 +79,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 124,
-							"character": 1,
+							"character": 2,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L124"
 						}
 					],
@@ -94,7 +94,7 @@
 								{
 									"fileName": "runtime/errors.ts",
 									"line": 124,
-									"character": 1,
+									"character": 2,
 									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L124"
 								}
 							],
@@ -179,7 +179,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 122,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L122"
 						}
 					],
@@ -246,7 +246,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " runtime error.\r\n\r\nNever thrown directly — subclass instead. The abstract "
+						"text": " runtime error.\n\nNever thrown directly — subclass instead. The abstract "
 					},
 					{
 						"kind": "code",
@@ -254,7 +254,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " field\r\nforces every concrete subclass to declare a stable, machine-readable\r\nidentifier, which host apps use to branch on specific failure modes\r\nwithout string-matching on the message.\r\n\r\nThe "
+						"text": " field\nforces every concrete subclass to declare a stable, machine-readable\nidentifier, which host apps use to branch on specific failure modes\nwithout string-matching on the message.\n\nThe "
 					},
 					{
 						"kind": "code",
@@ -262,7 +262,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " call in the\r\nconstructor guarantees "
+						"text": " call in the\nconstructor guarantees "
 					},
 					{
 						"kind": "code",
@@ -270,7 +270,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " works correctly across the\r\nprototype chain even when the runtime is transpiled to older ES\r\ntargets or consumed via CJS interop. With "
+						"text": " works correctly across the\nprototype chain even when the runtime is transpiled to older ES\ntargets or consumed via CJS interop. With "
 					},
 					{
 						"kind": "code",
@@ -278,7 +278,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " it is\r\na harmless no-op — kept so the code remains portable."
+						"text": " it is\na harmless no-op — kept so the code remains portable."
 					}
 				]
 			},
@@ -293,7 +293,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 59,
-							"character": 1,
+							"character": 2,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59"
 						}
 					],
@@ -308,7 +308,7 @@
 								{
 									"fileName": "runtime/errors.ts",
 									"line": 59,
-									"character": 1,
+									"character": 2,
 									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59"
 								}
 							],
@@ -378,7 +378,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Stable, machine-readable failure identifier.\r\n\r\nSubclasses must override this with a constant literal so host\r\napps can branch on "
+								"text": "Stable, machine-readable failure identifier.\n\nSubclasses must override this with a constant literal so host\napps can branch on "
 							},
 							{
 								"kind": "code",
@@ -386,7 +386,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " without string-matching on the\r\nhuman-readable message."
+								"text": " without string-matching on the\nhuman-readable message."
 							}
 						]
 					},
@@ -394,7 +394,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 57,
-							"character": 19,
+							"character": 20,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L57"
 						}
 					],
@@ -474,7 +474,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " implementation\r\nfails.\r\n\r\nRaised by the export pipeline ("
+						"text": " implementation\nfails.\n\nRaised by the export pipeline ("
 					},
 					{
 						"kind": "code",
@@ -482,7 +482,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ") when a format throws or\r\nreturns a rejected promise. The "
+						"text": ") when a format throws or\nreturns a rejected promise. The "
 					},
 					{
 						"kind": "code",
@@ -490,7 +490,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " field identifies which\r\nformat failed so host apps can surface a targeted message\r\n(\"HTML export failed: …\") without introspecting the cause.\r\n\r\nAdvisory diagnostics should flow through "
+						"text": " field identifies which\nformat failed so host apps can surface a targeted message\n(\"HTML export failed: …\") without introspecting the cause.\n\nAdvisory diagnostics should flow through "
 					},
 					{
 						"kind": "code",
@@ -498,7 +498,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "\r\ninstead — this error is reserved for hard failures where no\r\ncontent could be produced at all."
+						"text": "\ninstead — this error is reserved for hard failures where no\ncontent could be produced at all."
 					}
 				]
 			},
@@ -513,7 +513,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 155,
-							"character": 1,
+							"character": 2,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L155"
 						}
 					],
@@ -528,7 +528,7 @@
 								{
 									"fileName": "runtime/errors.ts",
 									"line": 155,
-									"character": 1,
+									"character": 2,
 									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L155"
 								}
 							],
@@ -624,7 +624,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 147,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L147"
 						}
 					],
@@ -676,7 +676,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\nmethod threw."
+								"text": "\nmethod threw."
 							}
 						]
 					},
@@ -684,7 +684,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 153,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L153"
 						}
 					],
@@ -736,7 +736,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "Thrown when plugin compilation or lifecycle invocation fails.\r\n\r\nRaised by "
+						"text": "Thrown when plugin compilation or lifecycle invocation fails.\n\nRaised by "
 					},
 					{
 						"kind": "code",
@@ -744,7 +744,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " for:\r\n\r\n- Structurally invalid plugin objects (fails both "
+						"text": " for:\n\n- Structurally invalid plugin objects (fails both "
 					},
 					{
 						"kind": "code",
@@ -752,7 +752,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "\r\n  and "
+						"text": "\n  and "
 					},
 					{
 						"kind": "code",
@@ -760,7 +760,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ").\r\n- "
+						"text": ").\n- "
 					},
 					{
 						"kind": "code",
@@ -768,7 +768,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " mismatch against the running\r\n  Core version.\r\n- "
+						"text": " mismatch against the running\n  Core version.\n- "
 					},
 					{
 						"kind": "code",
@@ -776,11 +776,11 @@
 					},
 					{
 						"kind": "text",
-						"text": " throwing synchronously or rejecting.\r\n- Duplicate export format ids across plugins.\r\n\r\nAlso raised by "
+						"text": " throwing synchronously or rejecting.\n- Duplicate export format ids across plugins.\n\nAlso raised by "
 					},
 					{
 						"kind": "code",
-						"text": "`createLifecycleManager().emit(\"onBeforePublish\",\r\n…)`"
+						"text": "`createLifecycleManager().emit(\"onBeforePublish\",\n…)`"
 					},
 					{
 						"kind": "text",
@@ -792,7 +792,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " is the only hook whose\r\nerrors abort the publish and propagate to the host.\r\n\r\nThe "
+						"text": " is the only hook whose\nerrors abort the publish and propagate to the host.\n\nThe "
 					},
 					{
 						"kind": "code",
@@ -800,7 +800,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " field pinpoints the offending plugin so host apps\r\ncan surface a precise error message even if several plugins are\r\nloaded."
+						"text": " field pinpoints the offending plugin so host apps\ncan surface a precise error message even if several plugins are\nloaded."
 					}
 				]
 			},
@@ -815,7 +815,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 100,
-							"character": 1,
+							"character": 2,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L100"
 						}
 					],
@@ -830,7 +830,7 @@
 								{
 									"fileName": "runtime/errors.ts",
 									"line": 100,
-									"character": 1,
+									"character": 2,
 									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L100"
 								}
 							],
@@ -926,7 +926,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 89,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L89"
 						}
 					],
@@ -961,7 +961,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " of the plugin that caused the failure.\r\n\r\nFor errors that involve two plugins (e.g. a duplicate export\r\nformat id) this field holds the second plugin's id, and both\r\nids appear in the error message."
+								"text": " of the plugin that caused the failure.\n\nFor errors that involve two plugins (e.g. a duplicate export\nformat id) this field holds the second plugin's id, and both\nids appear in the error message."
 							}
 						]
 					},
@@ -969,7 +969,7 @@
 						{
 							"fileName": "runtime/errors.ts",
 							"line": 98,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L98"
 						}
 					],
@@ -1031,7 +1031,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ".\r\n\r\nMethods are documented on the factory's return statement — see\r\n"
+						"text": ".\n\nMethods are documented on the factory's return statement — see\n"
 					},
 					{
 						"kind": "code",
@@ -1072,7 +1072,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " if no\r\nsuch format exists."
+								"text": " if no\nsuch format exists."
 							}
 						]
 					},
@@ -1080,7 +1080,7 @@
 						{
 							"fileName": "runtime/export-registry.ts",
 							"line": 65,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L65"
 						}
 					],
@@ -1194,7 +1194,7 @@
 						{
 							"fileName": "runtime/export-registry.ts",
 							"line": 70,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L70"
 						}
 					],
@@ -1247,7 +1247,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Return every registered format, in the order they were passed\r\nto "
+								"text": "Return every registered format, in the order they were passed\nto "
 							},
 							{
 								"kind": "inline-tag",
@@ -1257,7 +1257,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\r\n\r\nThe returned array is a fresh snapshot — mutating it does not\r\naffect the registry."
+								"text": ".\n\nThe returned array is a fresh snapshot — mutating it does not\naffect the registry."
 							}
 						]
 					},
@@ -1265,7 +1265,7 @@
 						{
 							"fileName": "runtime/export-registry.ts",
 							"line": 59,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L59"
 						}
 					],
@@ -1344,7 +1344,7 @@
 						{
 							"fileName": "runtime/export-registry.ts",
 							"line": 75,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L75"
 						}
 					],
@@ -1430,7 +1430,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Advance the engine lifecycle phase (architecture §6 A2). The\r\nshell calls this instead of hand-orchestrating "
+								"text": "Advance the engine lifecycle phase (architecture §6 A2). The\nshell calls this instead of hand-orchestrating "
 							},
 							{
 								"kind": "code",
@@ -1446,7 +1446,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\ntiming:\r\n\r\n- "
+								"text": "\ntiming:\n\n- "
 							},
 							{
 								"kind": "code",
@@ -1470,7 +1470,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " and\r\n  records its settle promise. Idempotent past "
+								"text": " and\n  records its settle promise. Idempotent past "
 							},
 							{
 								"kind": "code",
@@ -1478,7 +1478,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\r\n- "
+								"text": ".\n- "
 							},
 							{
 								"kind": "code",
@@ -1494,7 +1494,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " (Puck API bound): the\r\n  engine fires "
+								"text": " (Puck API bound): the\n  engine fires "
 							},
 							{
 								"kind": "code",
@@ -1502,7 +1502,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " **exactly once**, strictly after\r\n  "
+								"text": " **exactly once**, strictly after\n  "
 							},
 							{
 								"kind": "code",
@@ -1518,7 +1518,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". Calling it before\r\n  "
+								"text": ". Calling it before\n  "
 							},
 							{
 								"kind": "code",
@@ -1534,7 +1534,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " used\r\n  to do, now phase state).\r\n- "
+								"text": " used\n  to do, now phase state).\n- "
 							},
 							{
 								"kind": "code",
@@ -1550,7 +1550,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\n  itself is still emitted by the shell's unmount cleanup so it\r\n  closes over the same runtime/ctx pair.\r\n- "
+								"text": "\n  itself is still emitted by the shell's unmount cleanup so it\n  closes over the same runtime/ctx pair.\n- "
 							},
 							{
 								"kind": "code",
@@ -1566,7 +1566,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\n  is engine-internal: the engine sets it itself in the\r\n  post-"
+								"text": "\n  is engine-internal: the engine sets it itself in the\n  post-"
 							},
 							{
 								"kind": "code",
@@ -1590,7 +1590,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\n  once "
+								"text": "\n  once "
 							},
 							{
 								"kind": "code",
@@ -1598,7 +1598,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " has fired, but it cannot be *commanded* — a\r\n  caller-driven "
+								"text": " has fired, but it cannot be *commanded* — a\n  caller-driven "
 							},
 							{
 								"kind": "code",
@@ -1606,7 +1606,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " would race the continuation and skip\r\n  "
+								"text": " would race the continuation and skip\n  "
 							},
 							{
 								"kind": "code",
@@ -1614,7 +1614,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\r\n\r\n"
+								"text": ".\n\n"
 							},
 							{
 								"kind": "code",
@@ -1622,7 +1622,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "'s non-veto contract is unchanged and now **explicit**: a\r\nthrowing "
+								"text": "'s non-veto contract is unchanged and now **explicit**: a\nthrowing "
 							},
 							{
 								"kind": "code",
@@ -1630,7 +1630,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " hook is logged (existing swallow) and does\r\n**not** suppress "
+								"text": " hook is logged (existing swallow) and does\n**not** suppress "
 							},
 							{
 								"kind": "code",
@@ -1638,7 +1638,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". The transition is monotonic + lenient\r\n(stale/repeat calls no-op) so StrictMode double-invoke is safe."
+								"text": ". The transition is monotonic + lenient\n(stale/repeat calls no-op) so StrictMode double-invoke is safe."
 							}
 						]
 					},
@@ -1646,7 +1646,7 @@
 						{
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 203,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L203"
 						}
 					],
@@ -1718,7 +1718,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Release any in-flight debounce timers and forget every live\r\nsubscriber so the manager can be garbage-collected cleanly.\r\n\r\n"
+								"text": "Release any in-flight debounce timers and forget every live\nsubscriber so the manager can be garbage-collected cleanly.\n\n"
 							},
 							{
 								"kind": "code",
@@ -1726,7 +1726,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " calls this from the unmount cleanup that follows\r\n"
+								"text": " calls this from the unmount cleanup that follows\n"
 							},
 							{
 								"kind": "code",
@@ -1742,7 +1742,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " debounce\r\ntimer would fire after the host dropped its reference to the\r\nruntime — running plugin hooks against a stale context whose\r\n"
+								"text": " debounce\ntimer would fire after the host dropped its reference to the\nruntime — running plugin hooks against a stale context whose\n"
 							},
 							{
 								"kind": "code",
@@ -1750,7 +1750,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " now throws.\r\n\r\nSafe to call multiple times; subsequent calls are no-ops."
+								"text": " now throws.\n\nSafe to call multiple times; subsequent calls are no-ops."
 							}
 						]
 					},
@@ -1758,7 +1758,7 @@
 						{
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 217,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L217"
 						}
 					],
@@ -1798,7 +1798,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Fire the named lifecycle event through every registered plugin\r\nand every live subscriber.\r\n\r\nResolves once every plugin hook has settled (sequentially for\r\n"
+								"text": "Fire the named lifecycle event through every registered plugin\nand every live subscriber.\n\nResolves once every plugin hook has settled (sequentially for\n"
 							},
 							{
 								"kind": "code",
@@ -1806,7 +1806,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ", in parallel otherwise) and all subscribers\r\nhave been invoked. Rethrows the first "
+								"text": ", in parallel otherwise) and all subscribers\nhave been invoked. Rethrows the first "
 							},
 							{
 								"kind": "inline-tag",
@@ -1816,7 +1816,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\ncaught during "
+								"text": "\ncaught during "
 							},
 							{
 								"kind": "code",
@@ -1824,7 +1824,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " and swallows everything else\r\nthrough "
+								"text": " and swallows everything else\nthrough "
 							},
 							{
 								"kind": "code",
@@ -1840,7 +1840,7 @@
 						{
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 156,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L156"
 						}
 					],
@@ -1961,7 +1961,7 @@
 						{
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 174,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L174"
 						}
 					],
@@ -2011,7 +2011,7 @@
 						{
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 168,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L168"
 						}
 					],
@@ -2038,7 +2038,7 @@
 												"content": [
 													{
 														"kind": "text",
-														"text": "An unsubscribe function. Calling it is idempotent and\r\ndetaches the handler immediately."
+														"text": "An unsubscribe function. Calling it is idempotent and\ndetaches the handler immediately."
 													}
 												]
 											}
@@ -2132,7 +2132,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "Header action descriptor, contributed by plugins via\r\n"
+						"text": "Header action descriptor, contributed by plugins via\n"
 					},
 					{
 						"kind": "inline-tag",
@@ -2146,7 +2146,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ".\r\n\r\nPlugins author header actions as **plain data** — no React, no\r\ncomponents, no closures over render-time state. The Studio shell\r\n("
+						"text": ".\n\nPlugins author header actions as **plain data** — no React, no\ncomponents, no closures over render-time state. The Studio shell\n("
 					},
 					{
 						"kind": "code",
@@ -2164,7 +2164,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " string\r\nto a "
+						"text": " string\nto a "
 					},
 					{
 						"kind": "code",
@@ -2182,7 +2182,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ", and\r\nwiring up "
+						"text": ", and\nwiring up "
 					},
 					{
 						"kind": "code",
@@ -2198,7 +2198,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " to the live React tree at runtime.\r\n\r\nKeeping the type free of "
+						"text": " to the live React tree at runtime.\n\nKeeping the type free of "
 					},
 					{
 						"kind": "code",
@@ -2214,7 +2214,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " lets the\r\n"
+						"text": " lets the\n"
 					},
 					{
 						"kind": "code",
@@ -2222,7 +2222,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " layer stay React-free (architecture §17) and lets test\r\ncode compare action arrays with structural equality.\r\n\r\nThe full shape was finalized in "
+						"text": " layer stay React-free (architecture §17) and lets test\ncode compare action arrays with structural equality.\n\nThe full shape was finalized in "
 					},
 					{
 						"kind": "code",
@@ -2230,7 +2230,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " alongside\r\n"
+						"text": " alongside\n"
 					},
 					{
 						"kind": "code",
@@ -2246,7 +2246,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " so\r\n"
+						"text": " so\n"
 					},
 					{
 						"kind": "code",
@@ -2254,7 +2254,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " can reference it without crossing the\r\ntypes → runtime boundary; "
+						"text": " can reference it without crossing the\ntypes → runtime boundary; "
 					},
 					{
 						"kind": "code",
@@ -2262,7 +2262,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " re-exports it\r\nfor callers that import from "
+						"text": " re-exports it\nfor callers that import from "
 					},
 					{
 						"kind": "code",
@@ -2301,7 +2301,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Optional predicate that disables the action based on live\r\ncontext. Called on every render of the header (cheap by\r\nconvention — do not perform async work or expensive\r\ncomputation here).\r\n\r\nReceives the same "
+								"text": "Optional predicate that disables the action based on live\ncontext. Called on every render of the header (cheap by\nconvention — do not perform async work or expensive\ncomputation here).\n\nReceives the same "
 							},
 							{
 								"kind": "inline-tag",
@@ -2323,7 +2323,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\r\nReturn "
+								"text": ".\nReturn "
 							},
 							{
 								"kind": "code",
@@ -2339,16 +2339,16 @@
 							},
 							{
 								"kind": "text",
-								"text": " (or omit) to\r\nenable it."
+								"text": " (or omit) to\nenable it."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 474,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L474"
+							"line": 482,
+							"character": 11,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L482"
 						}
 					],
 					"type": {
@@ -2407,7 +2407,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Display group the action belongs to. Used by\r\n"
+								"text": "Display group the action belongs to. Used by\n"
 							},
 							{
 								"kind": "code",
@@ -2415,7 +2415,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " as the primary sort key.\r\n\r\n- "
+								"text": " as the primary sort key.\n\n- "
 							},
 							{
 								"kind": "code",
@@ -2423,7 +2423,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " — high-emphasis call-to-action (e.g. \"Publish\").\r\n- "
+								"text": " — high-emphasis call-to-action (e.g. \"Publish\").\n- "
 							},
 							{
 								"kind": "code",
@@ -2431,7 +2431,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " — normal toolbar action (e.g. \"Save Draft\").\r\n  **Default** when omitted — most actions belong here.\r\n- "
+								"text": " — normal toolbar action (e.g. \"Save Draft\").\n  **Default** when omitted — most actions belong here.\n- "
 							},
 							{
 								"kind": "code",
@@ -2439,16 +2439,16 @@
 							},
 							{
 								"kind": "text",
-								"text": " — collapsed into the \"…\" menu when space is\r\n  tight (e.g. \"Generate with AI\", \"Download HTML\")."
+								"text": " — collapsed into the \"…\" menu when space is\n  tight (e.g. \"Generate with AI\", \"Download HTML\")."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 434,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L434"
+							"line": 442,
+							"character": 11,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L442"
 						}
 					],
 					"type": {
@@ -2498,7 +2498,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ",\r\n"
+								"text": ",\n"
 							},
 							{
 								"kind": "code",
@@ -2506,7 +2506,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "). Resolved to a real icon component at render time\r\nby the Studio shell.\r\n\r\n**Why a string and not a "
+								"text": "). Resolved to a real icon component at render time\nby the Studio shell.\n\n**Why a string and not a "
 							},
 							{
 								"kind": "code",
@@ -2522,7 +2522,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " layer\r\ncannot import React, and plugin-contributed action arrays must\r\nstay serializable enough that lifecycle tests can compare them\r\nwith "
+								"text": " layer\ncannot import React, and plugin-contributed action arrays must\nstay serializable enough that lifecycle tests can compare them\nwith "
 							},
 							{
 								"kind": "code",
@@ -2530,7 +2530,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". The string-name indirection lets the renderer\r\nown React while the protocol stays headless.\r\n\r\n**Resolvable set.** The shell resolves against a *curated*\r\nregistry (not all of "
+								"text": ". The string-name indirection lets the renderer\nown React while the protocol stays headless.\n\n**Resolvable set.** The shell resolves against a *curated*\nregistry (not all of "
 							},
 							{
 								"kind": "code",
@@ -2538,7 +2538,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ") so the chrome bundle\r\ntree-shakes to only the icons it ships — a namespace import would\r\nretain every Lucide icon. Name matching is case/separator\r\ninsensitive ("
+								"text": ") so the chrome bundle\ntree-shakes to only the icons it ships — a namespace import would\nretain every Lucide icon. Name matching is case/separator\ninsensitive ("
 							},
 							{
 								"kind": "code",
@@ -2562,7 +2562,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " all\r\nresolve). A name outside the registry resolves to no icon (the\r\nlabel still renders). To add an icon, extend "
+								"text": " all\nresolve). A name outside the registry resolves to no icon (the\nlabel still renders). To add an icon, extend "
 							},
 							{
 								"kind": "code",
@@ -2570,7 +2570,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " in\r\n"
+								"text": " in\n"
 							},
 							{
 								"kind": "code",
@@ -2578,16 +2578,16 @@
 							},
 							{
 								"kind": "text",
-								"text": " (and the chrome-path\r\nbundle-budget gate covers the size impact)."
+								"text": " (and the chrome-path\nbundle-budget gate covers the size impact)."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 422,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L422"
+							"line": 430,
+							"character": 11,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L430"
 						}
 					],
 					"type": {
@@ -2607,7 +2607,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Stable, globally-unique identifier for the action\r\n(e.g. "
+								"text": "Stable, globally-unique identifier for the action\n(e.g. "
 							},
 							{
 								"kind": "code",
@@ -2631,16 +2631,16 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\nrejects duplicate ids across all contributing plugins.\r\n\r\nConvention: lowercase, hyphen-separated, no namespace prefix —\r\nthe runtime treats ids as opaque strings."
+								"text": "\nrejects duplicate ids across all contributing plugins.\n\nConvention: lowercase, hyphen-separated, no namespace prefix —\nthe runtime treats ids as opaque strings."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 389,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L389"
+							"line": 397,
+							"character": 11,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L397"
 						}
 					],
 					"type": {
@@ -2660,16 +2660,16 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Human-readable label rendered inside the button (or shown in\r\nthe overflow menu) by the Studio shell.\r\n\r\nRequired so plugin authors cannot ship a button with no visible\r\naffordance. Localization is the host app's responsibility — the\r\nruntime treats this as an opaque display string."
+								"text": "Human-readable label rendered inside the button (or shown in\nthe overflow menu) by the Studio shell.\n\nRequired so plugin authors cannot ship a button with no visible\naffordance. Localization is the host app's responsibility — the\nruntime treats this as an opaque display string."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 399,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L399"
+							"line": 407,
+							"character": 11,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L407"
 						}
 					],
 					"type": {
@@ -2689,7 +2689,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Click handler invoked by the Studio shell when the user\r\nactivates the action. Receives the same\r\n"
+								"text": "Click handler invoked by the Studio shell when the user\nactivates the action. Receives the same\n"
 							},
 							{
 								"kind": "inline-tag",
@@ -2703,7 +2703,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " the lifecycle hooks receive, so\r\nthe action can read live page data, call\r\n"
+								"text": " the lifecycle hooks receive, so\nthe action can read live page data, call\n"
 							},
 							{
 								"kind": "code",
@@ -2719,7 +2719,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " events\r\nto other plugins.\r\n\r\nThe runtime awaits the returned promise (if any) before\r\nre-enabling the button — host apps are free to render a\r\nloading affordance during the wait.\r\n\r\nErrors thrown from "
+								"text": " events\nto other plugins.\n\nThe runtime awaits the returned promise (if any) before\nre-enabling the button — host apps are free to render a\nloading affordance during the wait.\n\nErrors thrown from "
 							},
 							{
 								"kind": "code",
@@ -2727,7 +2727,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " are caught by the shell and routed\r\nthrough "
+								"text": " are caught by the shell and routed\nthrough "
 							},
 							{
 								"kind": "code",
@@ -2742,9 +2742,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 462,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L462"
+							"line": 470,
+							"character": 11,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L470"
 						}
 					],
 					"type": {
@@ -2824,7 +2824,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Per-group ordering hint. Lower values render first; the default\r\nis "
+								"text": "Per-group ordering hint. Lower values render first; the default\nis "
 							},
 							{
 								"kind": "code",
@@ -2832,7 +2832,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " so plugin authors can interleave their actions with\r\nbuilt-ins (which conventionally use round numbers like "
+								"text": " so plugin authors can interleave their actions with\nbuilt-ins (which conventionally use round numbers like "
 							},
 							{
 								"kind": "code",
@@ -2840,7 +2840,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ",\r\n"
+								"text": ",\n"
 							},
 							{
 								"kind": "code",
@@ -2856,7 +2856,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ").\r\n\r\nWithin a group, actions are sorted ascending by "
+								"text": ").\n\nWithin a group, actions are sorted ascending by "
 							},
 							{
 								"kind": "code",
@@ -2864,7 +2864,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". Ties\r\nbreak on "
+								"text": ". Ties\nbreak on "
 							},
 							{
 								"kind": "inline-tag",
@@ -2881,9 +2881,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 445,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L445"
+							"line": 453,
+							"character": 11,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L453"
 						}
 					],
 					"type": {
@@ -2909,9 +2909,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 380,
+					"line": 388,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L380"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L388"
 				}
 			]
 		},
@@ -2935,7 +2935,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ".\r\n\r\nFields are documented on the return statement of "
+						"text": ".\n\nFields are documented on the return statement of "
 					},
 					{
 						"kind": "code",
@@ -2943,7 +2943,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "\r\n— see inline JSDoc there for the lifecycle / merge semantics of\r\neach one."
+						"text": "\n— see inline JSDoc there for the lifecycle / merge semantics of\neach one."
 					}
 				]
 			},
@@ -2960,7 +2960,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Runtime-registered asset resolvers, in registration order.\r\n\r\nExporters that support asset URL rewriting consult this list and\r\nstop at the first resolver that returns a non-null result."
+								"text": "Runtime-registered asset resolvers, in registration order.\n\nExporters that support asset URL rewriting consult this list and\nstop at the first resolver that returns a non-null result."
 							}
 						]
 					},
@@ -2968,7 +2968,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 99,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L99"
 						}
 					],
@@ -3016,7 +3016,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ",\r\npreserving plugin-declared insertion order."
+								"text": ",\npreserving plugin-declared insertion order."
 							}
 						]
 					},
@@ -3024,7 +3024,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 92,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L92"
 						}
 					],
@@ -3089,7 +3089,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Header action descriptors in the order they were contributed.\r\nDuplicate ids pass through here — "
+								"text": "Header action descriptors in the order they were contributed.\nDuplicate ids pass through here — "
 							},
 							{
 								"kind": "code",
@@ -3097,7 +3097,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "'s\r\n"
+								"text": "'s\n"
 							},
 							{
 								"kind": "code",
@@ -3113,7 +3113,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 105,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L105"
 						}
 					],
@@ -3143,7 +3143,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "The lifecycle dispatcher. See\r\n"
+								"text": "The lifecycle dispatcher. See\n"
 							},
 							{
 								"kind": "inline-tag",
@@ -3161,7 +3161,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 87,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L87"
 						}
 					],
@@ -3184,7 +3184,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Plugin-contributed top-level overlay components, sorted within\r\neach placement bucket by "
+								"text": "Plugin-contributed top-level overlay components, sorted within\neach placement bucket by "
 							},
 							{
 								"kind": "code",
@@ -3192,7 +3192,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\r\n"
+								"text": ".\n"
 							},
 							{
 								"kind": "code",
@@ -3208,7 +3208,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " (canvas / viewport /\r\nnotifications)."
+								"text": " (canvas / viewport /\nnotifications)."
 							}
 						]
 					},
@@ -3216,7 +3216,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 137,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L137"
 						}
 					],
@@ -3250,7 +3250,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Plugin-contributed Puck override slices, in registration order.\r\n\r\nThis is the **raw** per-plugin array — "
+								"text": "Plugin-contributed Puck override slices, in registration order.\n\nThis is the **raw** per-plugin array — "
 							},
 							{
 								"kind": "code",
@@ -3266,7 +3266,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ")\r\nruns it through "
+								"text": ")\nruns it through "
 							},
 							{
 								"kind": "code",
@@ -3274,7 +3274,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\nto produce the curried-per-key merge Puck actually receives.\r\nKeeping the array un-composed here means the "
+								"text": "\nto produce the curried-per-key merge Puck actually receives.\nKeeping the array un-composed here means the "
 							},
 							{
 								"kind": "code",
@@ -3282,7 +3282,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " layer\r\nstays React-free (architecture §17) and the "
+								"text": " layer\nstays React-free (architecture §17) and the "
 							},
 							{
 								"kind": "code",
@@ -3290,7 +3290,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " layer owns\r\nthe composition step.\r\n\r\nEntries appear in plugin registration order, first-registered\r\nfirst — so when "
+								"text": " layer owns\nthe composition step.\n\nEntries appear in plugin registration order, first-registered\nfirst — so when "
 							},
 							{
 								"kind": "inline-tag",
@@ -3299,7 +3299,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " folds them, the first\r\nplugin becomes the innermost wrapper (closest to the default\r\nrender) and later plugins wrap it."
+								"text": " folds them, the first\nplugin becomes the innermost wrapper (closest to the default\nrender) and later plugins wrap it."
 							}
 						]
 					},
@@ -3307,7 +3307,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 121,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L121"
 						}
 					],
@@ -3362,7 +3362,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " block of every Studio plugin that successfully\r\nregistered, in declaration order. Diagnostic surface only —\r\nthe runtime does not re-read fields from here after compile."
+								"text": " block of every Studio plugin that successfully\nregistered, in declaration order. Diagnostic surface only —\nthe runtime does not re-read fields from here after compile."
 							}
 						]
 					},
@@ -3370,7 +3370,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 73,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L73"
 						}
 					],
@@ -3404,7 +3404,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Plugin-contributed React providers that wrap the Studio tree.\r\n\r\nSorted ascending by "
+								"text": "Plugin-contributed React providers that wrap the Studio tree.\n\nSorted ascending by "
 							},
 							{
 								"kind": "code",
@@ -3412,7 +3412,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". The\r\nprovider at index 0 is composed **outermost** by "
+								"text": ". The\nprovider at index 0 is composed **outermost** by "
 							},
 							{
 								"kind": "code",
@@ -3420,7 +3420,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". The\r\nruntime layer treats the "
+								"text": ". The\nruntime layer treats the "
 							},
 							{
 								"kind": "code",
@@ -3436,7 +3436,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\nis the React boundary that instantiates each provider."
+								"text": "\nis the React boundary that instantiates each provider."
 							}
 						]
 					},
@@ -3444,7 +3444,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 130,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L130"
 						}
 					],
@@ -3486,7 +3486,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\r\nverbatim. These do not participate in the Studio lifecycle."
+								"text": "\nverbatim. These do not participate in the Studio lifecycle."
 							}
 						]
 					},
@@ -3494,7 +3494,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 150,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L150"
 						}
 					],
@@ -3529,7 +3529,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "The raw plugin registrations in declaration order, as returned\r\nby each plugin's "
+								"text": "The raw plugin registrations in declaration order, as returned\nby each plugin's "
 							},
 							{
 								"kind": "code",
@@ -3537,7 +3537,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". Primarily consumed by the\r\n"
+								"text": ". Primarily consumed by the\n"
 							},
 							{
 								"kind": "code",
@@ -3545,7 +3545,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " harness so unit tests can drive a\r\nsingle plugin's lifecycle hooks without re-implementing the\r\ncompile-time invariant checks (structural guard, coreVersion\r\nrange, duplicate-id detection)."
+								"text": " harness so unit tests can drive a\nsingle plugin's lifecycle hooks without re-implementing the\ncompile-time invariant checks (structural guard, coreVersion\nrange, duplicate-id detection)."
 							}
 						]
 					},
@@ -3553,7 +3553,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 82,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L82"
 						}
 					],
@@ -3599,7 +3599,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Plugin-contributed named chrome slot contributions. Single-\r\noccupancy: if two plugins contribute the same slot id the first\r\nregistration wins (a warn is logged via "
+								"text": "Plugin-contributed named chrome slot contributions. Single-\noccupancy: if two plugins contribute the same slot id the first\nregistration wins (a warn is logged via "
 							},
 							{
 								"kind": "code",
@@ -3607,7 +3607,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " on duplicate).\r\nThe host's "
+								"text": " on duplicate).\nThe host's "
 							},
 							{
 								"kind": "code",
@@ -3615,7 +3615,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " prop for the same slot still takes\r\nprecedence — see e.g. "
+								"text": " prop for the same slot still takes\nprecedence — see e.g. "
 							},
 							{
 								"kind": "code",
@@ -3631,7 +3631,7 @@
 						{
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 145,
-							"character": 10,
+							"character": 11,
 							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L145"
 						}
 					],
@@ -3700,7 +3700,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "The closed union of lifecycle event names the runtime fires.\r\n\r\nMirrors the optional keys on "
+						"text": "The closed union of lifecycle event names the runtime fires.\n\nMirrors the optional keys on "
 					},
 					{
 						"kind": "inline-tag",
@@ -3714,7 +3714,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "\r\none-for-one, so adding a new hook there is a compile-time forcing\r\nfunction to update this union (and the "
+						"text": "\none-for-one, so adding a new hook there is a compile-time forcing\nfunction to update this union (and the "
 					},
 					{
 						"kind": "code",
@@ -3774,7 +3774,7 @@
 				"summary": [
 					{
 						"kind": "text",
-						"text": "Engine-owned lifecycle phase (architecture §6 A2). The shell drives\r\ntransitions with "
+						"text": "Engine-owned lifecycle phase (architecture §6 A2). The shell drives\ntransitions with "
 					},
 					{
 						"kind": "inline-tag",
@@ -3784,7 +3784,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "; the engine owns\r\nthe ordering and dedupe that used to live as three cooperating refs\r\nin the React shell ("
+						"text": "; the engine owns\nthe ordering and dedupe that used to live as three cooperating refs\nin the React shell ("
 					},
 					{
 						"kind": "code",
@@ -3800,7 +3800,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " / the\r\n"
+						"text": " / the\n"
 					},
 					{
 						"kind": "code",
@@ -3816,7 +3816,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " chain).\r\n\r\n- "
+						"text": " chain).\n\n- "
 					},
 					{
 						"kind": "code",
@@ -3824,7 +3824,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " — manager just constructed, no lifecycle event fired.\r\n- "
+						"text": " — manager just constructed, no lifecycle event fired.\n- "
 					},
 					{
 						"kind": "code",
@@ -3848,7 +3848,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "; its settle promise is\r\n  recorded so "
+						"text": "; its settle promise is\n  recorded so "
 					},
 					{
 						"kind": "code",
@@ -3856,7 +3856,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " can chain strictly after it.\r\n- "
+						"text": " can chain strictly after it.\n- "
 					},
 					{
 						"kind": "code",
@@ -3872,7 +3872,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " was called (Puck API bound); the\r\n  engine will fire "
+						"text": " was called (Puck API bound); the\n  engine will fire "
 					},
 					{
 						"kind": "code",
@@ -3888,7 +3888,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " settles.\r\n- "
+						"text": " settles.\n- "
 					},
 					{
 						"kind": "code",
@@ -3912,7 +3912,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " /\r\n  "
+						"text": " /\n  "
 					},
 					{
 						"kind": "code",
@@ -3936,7 +3936,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ".\r\n- "
+						"text": ".\n- "
 					},
 					{
 						"kind": "code",
@@ -3952,7 +3952,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " is a no-op afterwards.\r\n\r\nTransitions are **monotonic and lenient**: a repeat or stale call\r\n(React StrictMode double-invoke, a late binder effect) is a no-op,\r\nnever a throw — a lifecycle bookkeeping signal must not crash the\r\neditor in any environment."
+						"text": " is a no-op afterwards.\n\nTransitions are **monotonic and lenient**: a repeat or stale call\n(React StrictMode double-invoke, a late binder effect) is a no-op,\nnever a throw — a lifecycle bookkeeping signal must not crash the\neditor in any environment."
 					}
 				]
 			},
@@ -4010,7 +4010,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ".\r\n\r\nReceives the same "
+						"text": ".\n\nReceives the same "
 					},
 					{
 						"kind": "code",
@@ -4026,7 +4026,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " the plugin hooks receive so\r\nobservers can inspect the live state of the running session."
+						"text": " the plugin hooks receive so\nobservers can inspect the live state of the running session."
 					}
 				]
 			},
@@ -4132,7 +4132,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\r\n\r\nHand-maintained to match the "
+								"text": ".\n\nHand-maintained to match the "
 							},
 							{
 								"kind": "code",
@@ -4140,7 +4140,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " field of\r\n"
+								"text": " field of\n"
 							},
 							{
 								"kind": "code",
@@ -4148,7 +4148,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ". A colocated test asserts the two stay\r\nin sync, so any drift is caught at "
+								"text": ". A colocated test asserts the two stay\nin sync, so any drift is caught at "
 							},
 							{
 								"kind": "code",
@@ -4156,7 +4156,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " time rather than at\r\nplugin-load time in a downstream host.\r\n\r\nThis constant is the reference value "
+								"text": " time rather than at\nplugin-load time in a downstream host.\n\nThis constant is the reference value "
 							},
 							{
 								"kind": "code",
@@ -4164,7 +4164,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " uses to\r\nvalidate every "
+								"text": " uses to\nvalidate every "
 							},
 							{
 								"kind": "inline-tag",
@@ -4173,7 +4173,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " declaration at\r\ncompile time. See "
+								"text": " declaration at\ncompile time. See "
 							},
 							{
 								"kind": "code",
@@ -4181,7 +4181,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " for the range check.\r\n\r\n### Why hand-maintained instead of generated?\r\n\r\nRslib's bundleless build preserves a 1:1 "
+								"text": " for the range check.\n\n### Why hand-maintained instead of generated?\n\nRslib's bundleless build preserves a 1:1 "
 							},
 							{
 								"kind": "code",
@@ -4189,7 +4189,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " mapping, and\r\nwiring a codegen step to stamp "
+								"text": " mapping, and\nwiring a codegen step to stamp "
 							},
 							{
 								"kind": "code",
@@ -4197,7 +4197,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "'s version into this\r\nfile would add build-order complexity for a single string. The test\r\nin "
+								"text": "'s version into this\nfile would add build-order complexity for a single string. The test\nin "
 							},
 							{
 								"kind": "code",
@@ -4205,7 +4205,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " is the forcing function that keeps the two in\r\nsync, which is simpler and equally robust."
+								"text": " is the forcing function that keeps the two in\nsync, which is simpler and equally robust."
 							}
 						]
 					}
@@ -4417,7 +4417,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Sort and validate the flat list of plugin-contributed header\r\nactions into the canonical render order.\r\n\r\nPure: no logging, no React, no mutation of the input array. The\r\nreturned array is a fresh copy so callers can mutate it freely\r\n(e.g. to attach React keys at render time) without affecting any\r\nother consumer."
+								"text": "Sort and validate the flat list of plugin-contributed header\nactions into the canonical render order.\n\nPure: no logging, no React, no mutation of the input array. The\nreturned array is a fresh copy so callers can mutate it freely\n(e.g. to attach React keys at render time) without affecting any\nother consumer."
 							}
 						],
 						"blockTags": [
@@ -4449,7 +4449,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " when two actions share the same\r\n"
+										"text": " when two actions share the same\n"
 									},
 									{
 										"kind": "code",
@@ -4465,7 +4465,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " field is set to the duplicated\r\naction id; "
+										"text": " field is set to the duplicated\naction id; "
 									},
 									{
 										"kind": "code",
@@ -4473,7 +4473,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " provides richer attribution at the\r\nlayer above when it knows which plugin contributed each action."
+										"text": " provides richer attribution at the\nlayer above when it knows which plugin contributed each action."
 									}
 								]
 							}
@@ -4498,7 +4498,7 @@
 								"summary": [
 									{
 										"kind": "text",
-										"text": "Flat array of action descriptors, typically\r\nbuilt by concatenating the "
+										"text": "Flat array of action descriptors, typically\nbuilt by concatenating the "
 									},
 									{
 										"kind": "code",
@@ -4506,7 +4506,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " field of every\r\n"
+										"text": " field of every\n"
 									},
 									{
 										"kind": "inline-tag",
@@ -4581,7 +4581,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " from a flat array of\r\n"
+								"text": " from a flat array of\n"
 							},
 							{
 								"kind": "inline-tag",
@@ -4595,7 +4595,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " objects.\r\n\r\nThe factory walks the array exactly once, validates that every\r\n"
+								"text": " objects.\n\nThe factory walks the array exactly once, validates that every\n"
 							},
 							{
 								"kind": "code",
@@ -4603,7 +4603,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " is unique, and folds the formats into an insertion-ordered\r\n"
+								"text": " is unique, and folds the formats into an insertion-ordered\n"
 							},
 							{
 								"kind": "code",
@@ -4619,7 +4619,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " return the formats in the\r\nsame order they appeared in the input — host apps can rely on\r\nthis for stable export-menu ordering."
+								"text": " return the formats in the\nsame order they appeared in the input — host apps can rely on\nthis for stable export-menu ordering."
 							}
 						],
 						"blockTags": [
@@ -4634,7 +4634,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " if two formats share the same\r\n"
+										"text": " if two formats share the same\n"
 									},
 									{
 										"kind": "code",
@@ -4650,7 +4650,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " field is set to the conflicting\r\nformat id (the registry layer does not know which plugin\r\ncontributed the format — "
+										"text": " field is set to the conflicting\nformat id (the registry layer does not know which plugin\ncontributed the format — "
 									},
 									{
 										"kind": "code",
@@ -4658,7 +4658,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " provides that\r\nattribution at the layer above)."
+										"text": " provides that\nattribution at the layer above)."
 									}
 								]
 							}
@@ -4683,7 +4683,7 @@
 								"summary": [
 									{
 										"kind": "text",
-										"text": "The flat array of export formats. Typically\r\nbuilt by walking the "
+										"text": "The flat array of export formats. Typically\nbuilt by walking the "
 									},
 									{
 										"kind": "code",
@@ -4691,7 +4691,7 @@
 									},
 									{
 										"kind": "text",
-										"text": " field of every\r\n"
+										"text": " field of every\n"
 									},
 									{
 										"kind": "inline-tag",
@@ -4779,7 +4779,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Create a lifecycle manager bound to a frozen array of plugin\r\nregistrations.\r\n\r\nThe registrations are snapshotted at construction time — adding\r\nor removing plugins at runtime would require rebuilding the\r\nmanager, which mirrors Puck's mount-time plugin array semantics."
+								"text": "Create a lifecycle manager bound to a frozen array of plugin\nregistrations.\n\nThe registrations are snapshotted at construction time — adding\nor removing plugins at runtime would require rebuilding the\nmanager, which mirrors Puck's mount-time plugin array semantics."
 							}
 						]
 					},
@@ -4802,7 +4802,7 @@
 								"summary": [
 									{
 										"kind": "text",
-										"text": "The aggregated registrations returned by\r\neach plugin's "
+										"text": "The aggregated registrations returned by\neach plugin's "
 									},
 									{
 										"kind": "code",
@@ -4864,7 +4864,7 @@
 									},
 									{
 										"kind": "text",
-										"text": "; see the\r\nfield docs for semantics."
+										"text": "; see the\nfield docs for semantics."
 									}
 								]
 							},
@@ -4932,7 +4932,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " conforms to the\r\n"
+								"text": " conforms to the\n"
 							},
 							{
 								"kind": "code",
@@ -4950,7 +4950,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " shape.\r\n\r\nPuck's plugin type is a bag of optional fields ("
+								"text": " shape.\n\nPuck's plugin type is a bag of optional fields ("
 							},
 							{
 								"kind": "code",
@@ -4958,7 +4958,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ",\r\n"
+								"text": ",\n"
 							},
 							{
 								"kind": "code",
@@ -4998,7 +4998,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ",\r\n"
+								"text": ",\n"
 							},
 							{
 								"kind": "code",
@@ -5006,7 +5006,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ") — there is no single required field to pin\r\nthe check on. This guard looks for **any** of the distinctive Puck\r\ncontribution surfaces:\r\n\r\n- "
+								"text": ") — there is no single required field to pin\nthe check on. This guard looks for **any** of the distinctive Puck\ncontribution surfaces:\n\n- "
 							},
 							{
 								"kind": "code",
@@ -5014,7 +5014,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " — slot component overrides.\r\n- "
+								"text": " — slot component overrides.\n- "
 							},
 							{
 								"kind": "code",
@@ -5022,7 +5022,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " — custom field renderers.\r\n- "
+								"text": " — custom field renderers.\n- "
 							},
 							{
 								"kind": "code",
@@ -5030,7 +5030,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " — a plugin-provided side panel or toolbar.\r\n\r\nAn object that contributes none of those is either a vacuous\r\nplugin (which callers should author as a "
+								"text": " — a plugin-provided side panel or toolbar.\n\nAn object that contributes none of those is either a vacuous\nplugin (which callers should author as a "
 							},
 							{
 								"kind": "code",
@@ -5038,7 +5038,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " instead)\r\nor something that was handed to the runtime by mistake. Rejecting\r\nthe empty object here means "
+								"text": " instead)\nor something that was handed to the runtime by mistake. Rejecting\nthe empty object here means "
 							},
 							{
 								"kind": "code",
@@ -5046,7 +5046,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " throws a clean\r\n"
+								"text": " throws a clean\n"
 							},
 							{
 								"kind": "inline-tag",
@@ -5056,7 +5056,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " instead of silently registering a no-op.\r\n\r\nCrucially, this guard **also** rejects anything that looks like a\r\n"
+								"text": " instead of silently registering a no-op.\n\nCrucially, this guard **also** rejects anything that looks like a\n"
 							},
 							{
 								"kind": "inline-tag",
@@ -5070,7 +5070,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " — the two guards are mutually exclusive so\r\n"
+								"text": " — the two guards are mutually exclusive so\n"
 							},
 							{
 								"kind": "code",
@@ -5086,7 +5086,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " branch.\r\n\r\nPure, synchronous, no side effects."
+								"text": " branch.\n\nPure, synchronous, no side effects."
 							}
 						]
 					},
@@ -5171,7 +5171,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " conforms to the\r\n"
+								"text": " conforms to the\n"
 							},
 							{
 								"kind": "inline-tag",
@@ -5185,7 +5185,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " shape.\r\n\r\nThe check is intentionally minimal — it validates the three fields\r\nthe runtime actually reads during compilation:\r\n\r\n1. "
+								"text": " shape.\n\nThe check is intentionally minimal — it validates the three fields\nthe runtime actually reads during compilation:\n\n1. "
 							},
 							{
 								"kind": "code",
@@ -5193,7 +5193,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " is a non-empty string.\r\n2. "
+								"text": " is a non-empty string.\n2. "
 							},
 							{
 								"kind": "code",
@@ -5201,7 +5201,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " is a non-empty string.\r\n3. "
+								"text": " is a non-empty string.\n3. "
 							},
 							{
 								"kind": "code",
@@ -5209,7 +5209,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " is a function.\r\n\r\nEverything else on "
+								"text": " is a function.\n\nEverything else on "
 							},
 							{
 								"kind": "inline-tag",
@@ -5218,7 +5218,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " (name, version,\r\ndescription) is advisory and not required for the runtime to make\r\nforward progress. A plugin that passes this guard but omits those\r\nfields will still compile; the type system is the forcing function\r\nfor completeness at authoring time.\r\n\r\nPure, synchronous, no side effects."
+								"text": " (name, version,\ndescription) is advisory and not required for the runtime to make\nforward progress. A plugin that passes this guard but omits those\nfields will still compile; the type system is the forcing function\nfor completeness at authoring time.\n\nPure, synchronous, no side effects."
 							}
 						]
 					},
