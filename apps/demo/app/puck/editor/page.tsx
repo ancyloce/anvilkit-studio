@@ -1004,7 +1004,7 @@ export default function PuckEditorPage() {
 				  collab-off paths.
 				*/}
 				<Studio
-					puckConfig={demoConfig}
+					puckConfig={demoConfig as unknown as Config}
 					data={publishedData}
 					plugins={plugins}
 					onPublish={handlePublish}
