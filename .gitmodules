@@ -37,3 +37,6 @@
 [submodule "packages/plugins/plugin-ai-image"]
 	path = packages/plugins/plugin-ai-image
 	url = https://github.com/ancyloce/anvilkit-plugin-ai-image.git
+[submodule "packages/plugins/plugin-design-system"]
+	path = packages/plugins/plugin-design-system
+	url = https://github.com/ancyloce/anvilkit-plugin-design-system.git
