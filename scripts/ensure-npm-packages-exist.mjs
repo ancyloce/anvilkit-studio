@@ -16,6 +16,9 @@
  *   --dry-run   Probe only. Kept for local/CI readability; this script
  *               never mutates npm either way.
  *   --filter    Restrict to package names containing this substring.
+ *   --require-write-access
+ *               Fail if npm cannot prove the configured token has
+ *               read-write access to every pending package.
  */
 import { spawnSync } from "node:child_process";
 import {
@@ -30,6 +33,7 @@ import { join, relative } from "node:path";
 
 const ROOT = process.cwd();
 const DRY_RUN = process.argv.includes("--dry-run");
+const REQUIRE_WRITE_ACCESS = process.argv.includes("--require-write-access");
 const FILTER_ARG = process.argv.find((arg) => arg.startsWith("--filter="));
 const FILTER = FILTER_ARG ? FILTER_ARG.slice("--filter=".length) : null;
 
@@ -173,6 +177,106 @@ function writeOutputs(pending) {
 	setOutput("packages", packages.join(","));
 }
 
+function packageScope(name) {
+	const match = name.match(/^(@[^/]+)\//);
+	return match ? match[1] : null;
+}
+
+function canWrite(permission) {
+	if (permission === "read-write") {
+		return true;
+	}
+	if (permission && typeof permission === "object") {
+		return Object.values(permission).some((value) => canWrite(value));
+	}
+	return false;
+}
+
+function listWritablePackages(scope) {
+	const result = spawnSync(
+		"npm",
+		["access", "list", "packages", "--json", scope],
+		{ stdio: ["ignore", "pipe", "pipe"], encoding: "utf8" },
+	);
+	if (result.status !== 0) {
+		const output = `${result.stderr || ""}\n${result.stdout || ""}`.trim();
+		if (!REQUIRE_WRITE_ACCESS) {
+			console.warn(
+				`WARN: unable to verify npm write access for ${scope}; ` +
+					"skipping advisory access check.",
+			);
+			return null;
+		}
+
+		throw new Error(
+			`Unable to verify npm write access for ${scope}.\n` +
+				"Refusing to run `changeset publish` because npm commonly returns " +
+				"`E404 undefined` when the token can read a scoped package but cannot " +
+				"publish a new version.\n\n" +
+				`Command: npm access list packages --json ${scope}\n` +
+				`Exit: ${result.status}` +
+				(output ? `\nOutput:\n${output}\n\n` : "\n\n") +
+				"Fix the GitHub NPM_TOKEN secret so it is created by an npm user " +
+				"that owns or maintains the listed packages and has scope-level " +
+				"Read and write access.",
+		);
+	}
+
+	const parsed = JSON.parse(result.stdout || "{}");
+	return new Set(
+		Object.entries(parsed)
+			.filter(([, permission]) => canWrite(permission))
+			.map(([name]) => name),
+	);
+}
+
+function assertWriteAccess(pending) {
+	if (pending.length === 0) {
+		return;
+	}
+
+	const byScope = new Map();
+	for (const pkg of pending) {
+		const scope = packageScope(pkg.name);
+		if (!scope) {
+			continue;
+		}
+		const scoped = byScope.get(scope) ?? [];
+		scoped.push(pkg);
+		byScope.set(scope, scoped);
+	}
+
+	const missingAccess = [];
+	for (const [scope, packages] of byScope) {
+		const writable = listWritablePackages(scope);
+		if (writable === null) {
+			continue;
+		}
+		for (const pkg of packages) {
+			if (!writable.has(pkg.name)) {
+				missingAccess.push(pkg);
+			}
+		}
+	}
+
+	if (missingAccess.length === 0) {
+		return;
+	}
+
+	throw new Error(
+		"NPM_TOKEN cannot publish every package version selected by " +
+			"package.json comparison.\n" +
+			"npm reports missing read-write access for:\n" +
+			missingAccess.map((pkg) => `  - ${pkg.name}@${pkg.version}`).join("\n") +
+			"\n\nThis is the condition that later appears as `E404 undefined` " +
+			"inside `changeset publish`.\n\n" +
+			"Fix the GitHub NPM_TOKEN secret: create a granular automation token " +
+			"from an npm account that can publish these packages, grant " +
+			"`@anvilkit` scope-level Read and write access, enable 2FA bypass for " +
+			"automation if required by the org, then replace the repository secret.",
+	);
+}
+
 function main() {
 	const all = enumerateWorkspacePackages();
 	const packages = FILTER
@@ -220,6 +324,8 @@ function main() {
 		console.log("All public workspace package.json versions already exist on npm.");
 		return;
 	}
+
+	assertWriteAccess(pending);
 
 	console.log(
 		`Found ${pending.length} package.json version(s) ready to publish: ` +
