@@ -1527,24 +1527,39 @@ importers:
       '@testing-library/react':
         specifier: ^16.3.2
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.19.19
       '@types/react':
         specifier: ^19.2.6
         version: 19.2.15
+      esbuild:
+        specifier: ^0.25.12
+        version: 0.25.12
       jsdom:
         specifier: ^29.0.2
         version: 29.1.1(@noble/hashes@1.8.0)
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.18
+        version: 0.3.21
       react:
         specifier: 19.2.6
         version: 19.2.6
       react-dom:
         specifier: 19.2.6
         version: 19.2.6(react@19.2.6)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
       vitest:
         specifier: ^4.1.7
-        version: 4.1.7(@types/node@25.9.1)(@vitest/coverage-v8@4.1.6(vitest@4.1.6))(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
+        version: 4.1.7(@types/node@22.19.19)(@vitest/coverage-v8@4.1.6(vitest@4.1.6))(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@22.19.19)(typescript@6.0.3))(vite@7.3.3(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
 
   packages/plugins/plugin-export-html:
     dependencies:
@@ -12169,7 +12184,7 @@ snapshots:
 
   '@types/node-fetch@2.6.13':
     dependencies:
-      '@types/node': 25.9.0
+      '@types/node': 25.9.1
       form-data: 4.0.5
 
   '@types/node@12.20.55': {}
@@ -12220,11 +12235,11 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
-      '@types/node': 25.9.0
+      '@types/node': 25.9.1
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 25.9.0
+      '@types/node': 25.9.1
 
   '@types/statuses@2.0.6': {}
 
@@ -12240,7 +12255,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 25.9.0
+      '@types/node': 25.9.1
 
   '@typescript-eslint/project-service@8.59.4(typescript@6.0.3)':
     dependencies:
@@ -12349,6 +12364,15 @@ snapshots:
     optionalDependencies:
       msw: 2.14.6(@types/node@25.9.1)(typescript@6.0.3)
       vite: 7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0)
+
+  '@vitest/mocker@4.1.7(msw@2.14.6(@types/node@22.19.19)(typescript@6.0.3))(vite@7.3.3(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))':
+    dependencies:
+      '@vitest/spy': 4.1.7
+      estree-walker: 3.0.3
+      magic-string: 0.30.21
+    optionalDependencies:
+      msw: 2.14.6(@types/node@22.19.19)(typescript@6.0.3)
+      vite: 7.3.3(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0)
 
   '@vitest/mocker@4.1.7(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))':
     dependencies:
@@ -16878,6 +16902,36 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 25.9.1
+      '@vitest/coverage-v8': 4.1.6(vitest@4.1.6)
+      happy-dom: 20.8.9
+      jsdom: 29.1.1(@noble/hashes@1.8.0)
+    transitivePeerDependencies:
+      - msw
+
+  vitest@4.1.7(@types/node@22.19.19)(@vitest/coverage-v8@4.1.6(vitest@4.1.6))(happy-dom@20.8.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@22.19.19)(typescript@6.0.3))(vite@7.3.3(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0)):
+    dependencies:
+      '@vitest/expect': 4.1.7
+      '@vitest/mocker': 4.1.7(msw@2.14.6(@types/node@22.19.19)(typescript@6.0.3))(vite@7.3.3(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
+      '@vitest/pretty-format': 4.1.7
+      '@vitest/runner': 4.1.7
+      '@vitest/snapshot': 4.1.7
+      '@vitest/spy': 4.1.7
+      '@vitest/utils': 4.1.7
+      es-module-lexer: 2.1.0
+      expect-type: 1.3.0
+      magic-string: 0.30.21
+      obug: 2.1.1
+      pathe: 2.0.3
+      picomatch: 4.0.4
+      std-env: 4.1.0
+      tinybench: 2.9.0
+      tinyexec: 1.1.2
+      tinyglobby: 0.2.16
+      tinyrainbow: 3.1.0
+      vite: 7.3.3(@types/node@22.19.19)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 22.19.19
       '@vitest/coverage-v8': 4.1.6(vitest@4.1.6)
       happy-dom: 20.8.9
       jsdom: 29.1.1(@noble/hashes@1.8.0)
