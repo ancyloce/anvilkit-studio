@@ -9,7 +9,8 @@
 			"react-dom",
 			"react/jsx-runtime",
 			"react/jsx-dev-runtime",
-			"@puckeditor/core"
+			"@puckeditor/core",
+			"*.css"
 		]
 	}
 ]
