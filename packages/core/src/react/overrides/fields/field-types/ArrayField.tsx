@@ -550,8 +550,9 @@ export function ArrayField({
 								<ItemContent className="min-w-0 flex-1 self-stretch gap-0">
 									<PopoverTrigger
 										render={
-											<button
+											<Button
 												type="button"
+												variant="ghost"
 												aria-expanded={openIndex === index}
 												aria-label={`Edit ${summaryText}`}
 												className="flex h-full w-full min-w-0 items-center rounded-md px-1 text-left text-sm font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
