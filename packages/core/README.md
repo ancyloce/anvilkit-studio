@@ -26,6 +26,7 @@ and `@puckeditor/core` >=0.21 work.
 
 ```tsx
 import { Studio } from "@anvilkit/core";
+import "@anvilkit/core/styles.css";
 import type { Config as PuckConfig } from "@puckeditor/core";
 
 const puckConfig: PuckConfig = {
