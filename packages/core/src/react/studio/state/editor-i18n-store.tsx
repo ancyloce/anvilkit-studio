@@ -133,6 +133,32 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 		"Delete “{title}”? This action cannot be undone.",
 	"studio.module.layer.pages.delete.confirm.confirm": "Delete page",
 	"studio.module.layer.pages.delete.confirm.cancel": "Cancel",
+	// Layer module — Page Settings dialog + SEO section (P3).
+	"studio.module.layer.pages.settings.title": "Page settings",
+	"studio.module.layer.pages.settings.field.title": "Title",
+	"studio.module.layer.pages.settings.field.path": "Path",
+	"studio.module.layer.pages.settings.field.route": "Public route",
+	"studio.module.layer.pages.settings.field.description": "Description",
+	"studio.module.layer.pages.settings.seo.heading": "SEO",
+	"studio.module.layer.pages.settings.seo.metaTitle": "Meta title",
+	"studio.module.layer.pages.settings.seo.metaDescription": "Meta description",
+	"studio.module.layer.pages.settings.seo.ogImage": "Open Graph image URL",
+	"studio.module.layer.pages.settings.seo.noindex":
+		"Discourage search engines from indexing this page",
+	"studio.module.layer.pages.settings.submit": "Save changes",
+	"studio.module.layer.pages.settings.cancel": "Cancel",
+	"studio.module.layer.pages.settings.error.path":
+		"Path must start with `/` for route pages.",
+	// Layer module — Pages search (P4).
+	"studio.module.layer.pages.search.placeholder": "Search pages…",
+	"studio.module.layer.pages.search.empty": "No pages match your search.",
+	// Layer module — Pages drag-reorder (P5).
+	"studio.module.layer.pages.tree.dragHandle": "Drag to reorder page",
+	"studio.module.layer.pages.tree.instructions":
+		"Press space or enter to pick up a page. Use the arrow keys to move it. Press space or enter again to drop it, or escape to cancel.",
+	"studio.module.layer.pages.tree.announce.start": "Picked up page",
+	"studio.module.layer.pages.tree.announce.moved": "Dropped page",
+	"studio.module.layer.pages.tree.announce.cancelled": "Reordering cancelled.",
 	// Layer module — splitter ARIA label (Phase D polish).
 	"studio.module.layer.splitter.label": "Resize Pages and Layers panels",
 	// Layer module — draggable layer tree (drag-and-drop reordering).
