@@ -267,8 +267,9 @@ export function PageRow({
 			<Item
 				size="xs"
 				render={
-					<button
+					<Button
 						type="button"
+						variant="ghost"
 						onClick={() => onSelect(page.id)}
 						aria-current={page.active === true ? "page" : undefined}
 						data-active={page.active === true ? "true" : undefined}
@@ -286,18 +287,20 @@ export function PageRow({
 				)}
 			>
 				{canReorder ? (
-					<button
+					<Button
 						{...attributes}
 						{...listeners}
 						ref={setActivatorNodeRef}
 						type="button"
+						variant="ghost"
+						size="icon-xs"
 						aria-label={msg("studio.module.layer.pages.tree.dragHandle")}
 						data-testid={`ak-layer-page-row-${page.id}-drag-handle`}
 						className="-ml-1 flex h-4 w-3 cursor-grab items-center justify-center text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))] opacity-0 group-hover/page-row:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
 						onClick={(event) => event.stopPropagation()}
 					>
 						<GripVertical className="size-3" aria-hidden="true" />
-					</button>
+					</Button>
 				) : null}
 				<ItemMedia
 					variant="icon"
