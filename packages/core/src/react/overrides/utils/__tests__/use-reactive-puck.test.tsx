@@ -15,68 +15,79 @@ import { act, cleanup, renderHook } from "@testing-library/react";
 import { useSyncExternalStore } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import type { PuckSnapshot } from "../use-reactive-puck";
+
+// The `vi.mock("@puckeditor/core")` below replaces the real Puck snapshot
+// (`UsePuckStore<Config>`) with `{ value: number }`. Selectors in this file
+// project through that mock shape and cast back to `PuckSnapshot` at the
+// useReactivePuck boundary.
+type MockSnapshot = { value: number };
+const asMock = (s: PuckSnapshot) => s as unknown as MockSnapshot;
+
 let value = 0;
 const listeners = new Set<() => void>();
 const createUsePuckSpy = vi.fn();
 
 vi.mock("@puckeditor/core", () => ({
-  useGetPuck: () => () => ({ value }),
-  createUsePuck: () => {
-    createUsePuckSpy();
-    return <T,>(selector: (s: { value: number }) => T): T =>
-      useSyncExternalStore(
-        (cb) => {
-          listeners.add(cb);
-          return () => listeners.delete(cb);
-        },
-        () => selector({ value }),
-        () => selector({ value }),
-      );
-  },
+	useGetPuck: () => () => ({ value }),
+	createUsePuck: () => {
+		createUsePuckSpy();
+		return <T,>(selector: (s: { value: number }) => T): T =>
+			useSyncExternalStore(
+				(cb) => {
+					listeners.add(cb);
+					return () => listeners.delete(cb);
+				},
+				() => selector({ value }),
+				() => selector({ value }),
+			);
+	},
 }));
 
 function bump(): void {
-  value += 1;
-  for (const l of listeners) l();
+	value += 1;
+	for (const l of listeners) l();
 }
 
 afterEach(() => {
-  cleanup();
-  value = 0;
-  listeners.clear();
-  createUsePuckSpy.mockClear();
+	cleanup();
+	value = 0;
+	listeners.clear();
+	createUsePuckSpy.mockClear();
 });
 
 describe("useReactivePuck", () => {
-  it("constructs the underlying hook exactly once across renders and call sites", async () => {
-    const { useReactivePuck } = await import("../use-reactive-puck");
+	it("constructs the underlying hook exactly once across renders and call sites", async () => {
+		const { useReactivePuck } = await import("../use-reactive-puck");
 
-    const a = renderHook(() => useReactivePuck((s) => s.value));
-    a.rerender();
-    a.rerender();
-    // A second, independent call site must reuse the same singleton.
-    const b = renderHook(() => useReactivePuck((s) => s.value));
-    b.rerender();
+		const a = renderHook(() => useReactivePuck((s) => asMock(s).value));
+		a.rerender();
+		a.rerender();
+		// A second, independent call site must reuse the same singleton.
+		const b = renderHook(() => useReactivePuck((s) => asMock(s).value));
+		b.rerender();
 
-    expect(createUsePuckSpy).toHaveBeenCalledTimes(1);
-  });
+		expect(createUsePuckSpy).toHaveBeenCalledTimes(1);
+	});
 
-  it("re-evaluates the selector when the subscribed slice changes", async () => {
-    const { useReactivePuck } = await import("../use-reactive-puck");
+	it("re-evaluates the selector when the subscribed slice changes", async () => {
+		const { useReactivePuck } = await import("../use-reactive-puck");
 
-    const selector = vi.fn((s: { value: number }) => s.value);
-    const { result } = renderHook(() => useReactivePuck(selector));
+		const selector = vi.fn((s: MockSnapshot) => s.value);
+		const { result } = renderHook(() =>
+			useReactivePuck((s) => selector(asMock(s))),
+		);
 
-    expect(result.current).toBe(0);
-    const callsAfterMount = selector.mock.calls.length;
+		expect(result.current).toBe(0);
+		const callsAfterMount = selector.mock.calls.length;
 
-    act(() => {
-      bump();
-    });
+		act(() => {
+			bump();
+		});
 
-    expect(result.current).toBe(1);
-    // Selector ran again for the new state — it is reactive, not a
-    // frozen snapshot.
-    expect(selector.mock.calls.length).toBeGreaterThan(callsAfterMount);
-  });
+		expect(result.current).toBe(1);
+		// Selector ran again for the new state — it is reactive, not a
+		// frozen snapshot.
+		expect(selector.mock.calls.length).toBeGreaterThan(callsAfterMount);
+	});
 });
