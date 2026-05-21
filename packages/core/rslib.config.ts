@@ -14,40 +14,57 @@ import { defineConfig } from "@rslib/core";
  * with a proven React + Rslib bundleless setup.
  */
 export default defineConfig({
-  source: {
-    entry: {
-      index: [
-        "./src/**/*.ts",
-        "./src/**/*.tsx",
-        "!./src/**/*.{test,spec}.{ts,tsx}",
-        "!./src/**/__tests__/**",
-      ],
-    },
-  },
-  lib: [
-    {
-      bundle: false,
-      dts: {
-        autoExtension: true,
-      },
-      format: "esm",
-    },
-    {
-      bundle: false,
-      dts: {
-        autoExtension: true,
-      },
-      format: "cjs",
-    },
-  ],
-  output: {
-    target: "web",
-    copy: [
-      {
-        from: "./src/react/overrides/styles.css",
-        to: "./react/overrides/styles.css",
-      },
-    ],
-  },
-  plugins: [pluginReact()],
+	source: {
+		entry: {
+			index: [
+				"./src/**/*.ts",
+				"./src/**/*.tsx",
+				"!./src/**/*.{test,spec}.{ts,tsx}",
+				"!./src/**/__tests__/**",
+			],
+		},
+	},
+	lib: [
+		{
+			bundle: false,
+			dts: {
+				autoExtension: true,
+			},
+			format: "esm",
+		},
+		{
+			bundle: false,
+			dts: {
+				autoExtension: true,
+			},
+			format: "cjs",
+		},
+	],
+	output: {
+		target: "web",
+		copy: [
+			{
+				from: "./src/react/overrides/styles.css",
+				to: "./react/overrides/styles.css",
+			},
+			// Co-located component CSS (e.g. `pages-tokens.css` next to
+			// `PagesPanel.tsx`) is imported via side-effect `import "./*.css"`
+			// from the matching `.tsx` and must ship to `dist/` in the same
+			// relative location so the import resolves at host build time.
+			{
+				from: "./src/**/*.css",
+				to: ({ absoluteFilename }) => {
+					const rel = absoluteFilename
+						.replace(/.*[\\/]src[\\/]/, "")
+						.replace(/[\\]/g, "/");
+					return `./${rel}`;
+				},
+				globOptions: {
+					// The explicit copy above already handles overrides/styles.css.
+					ignore: ["**/react/overrides/styles.css"],
+				},
+			},
+		],
+	},
+	plugins: [pluginReact()],
 });
