@@ -21,12 +21,15 @@ export default mergeConfig(
 			passWithNoTests: true,
 			// The `<Studio>` mount tests await a full compile + RTL render. In
 			// isolation they finish in ~1–2s, but under Turbo's concurrent
-			// full-suite load the jsdom environment is heavily contended and
-			// they intermittently blow the default 5s `testTimeout`. Raise the
-			// ceiling so contention-induced slowness doesn't flake CI; a real
-			// hang still fails, just later.
-			testTimeout: 20000,
-			hookTimeout: 20000,
+			// full-suite load (every package's Vitest cold-transforming the
+			// heavy chrome graph at once) the jsdom environment is heavily
+			// contended and the first mount blows the default 5s ceiling. This
+			// must stay comfortably above the 15s `asyncUtilTimeout` set in
+			// `vitest.setup.ts` so a slow mount plus its follow-up `waitFor`
+			// assertions never trip the test ceiling; a real hang still fails,
+			// just later.
+			testTimeout: 30000,
+			hookTimeout: 30000,
 			setupFiles: [
 				"@anvilkit/vitest-config/setup/jest-dom",
 				"./vitest.setup.ts",
