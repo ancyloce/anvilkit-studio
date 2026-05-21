@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/template-feature-overview",
-	"version": "1.0.2",
+	"version": "2.0.0",
 	"private": true,
 	"description": "Product feature overview — hero, bento feature grid, statistics, FAQ.",
 	"type": "module",

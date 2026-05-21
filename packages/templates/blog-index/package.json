@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/template-blog-index",
-	"version": "1.0.2",
+	"version": "2.0.0",
 	"private": true,
 	"description": "Blog index page — navbar, section heading, post list.",
 	"type": "module",

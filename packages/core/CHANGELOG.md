@@ -1,5 +1,286 @@
 # @anvilkit/core
 
+## 1.0.0
+
+### Minor Changes
+
+- 1132913: Add an optional `signal?: AbortSignal` parameter to `StudioAssetSource.upload()`.
+
+  The sidebar image module now creates an `AbortController` per upload batch and
+  aborts it on unmount / source change, so an in-flight upload stops consuming the
+  host endpoint when the editor navigates away. The parameter is optional and
+  backward compatible — existing sources that ignore it keep working unchanged.
+
+- 3fb8db9: Add the additive core surface that lets `@anvilkit/plugin-design-system`
+  contribute a design-system rail panel and `--ak-ds-*` token vocabulary
+  to hosts that install the plugin. Source-compatible — hosts that don't
+  load the plugin see no behavioural change.
+
+  **Plugin context — new optional callback:**
+  - `StudioPluginContext.registerDesignSystemPanel?(panel)` mirrors the
+    existing `registerCopilotPanel?` / `registerHistoryPanel?` shape:
+    single-occupancy, last-write-wins, idempotent unregister, no
+    panel UI rendered until a plugin registers one. Returns a
+    `StudioSidebarUnregister` for cleanup in `onDestroy`.
+
+  **Sidebar registry store — new slot:**
+  - `sidebarRegistryStore.designSystemPanel: StudioDesignSystemPanel | null`
+    with matching `registerDesignSystemPanel(panel)` setter (matches
+    the copilot/history pattern; capture-and-clear-only-if-still-current).
+
+  **Token CSS plumbing — new `--ak-ds-*` two-tier block:**
+  - `packages/core/src/react/overrides/styles.css` declares
+    primitive ramps (`--ak-ds-brand-{50…900}`,
+    `--ak-ds-neutral-{50…900}`), spacing scale
+    (`--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}`), type ramp
+    (`--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}`), radius scale, plus
+    semantic vars (`--ak-ds-bg`, `--ak-ds-surface`, `--ak-ds-fg`,
+    `--ak-ds-fg-muted`, `--ak-ds-accent`, `--ak-ds-accent-fg`,
+    `--ak-ds-border`, `--ak-ds-focus-ring`). Each semantic falls back
+    to its `--ak-studio-*` chrome equivalent so unthemed hosts render
+    unchanged.
+  - `packages/core/src/react/studio/theme/iframe-theme.ts` mirrors the
+    same declarations into `TOKEN_BLOCK` so host doc + Puck canvas
+    iframe stay in lockstep on theme changes.
+  - `.dark` overrides primitives only — semantics and persisted token
+    refs are theme-stable.
+
+  **Type re-exports:**
+  - `StudioDesignSystemPanel` from `@anvilkit/core/types` parallels
+    `StudioCopilotPanel` / `StudioHistoryPanel`.
+
+  **No behavioural change for hosts that don't install the plugin.**
+  The new optional context callback, sidebar-registry slot, and CSS
+  variables are purely additive. Existing `--ak-studio-*` chrome
+  vocabulary is untouched.
+
+  **Known gap:** the rail tab + sidebar module that _renders_
+  `sidebarRegistryStore.designSystemPanel` has not yet landed — a
+  follow-up will add `"design-system"` to `EditorTab` and the
+  `RAIL_MODULES` table so the panel is reachable from the UI.
+  Registering a panel today populates state that no UI consumes; the
+  plugin's other contributions (`--ak-ds-*` CSS, token-bound field
+  factories, validators) work independently of the rail panel.
+
+- 8e74a25: Add drag-and-drop reordering to the Studio Layers panel.
+
+  The Layers panel previously delegated the whole component tree to Puck's
+  opaque `<Puck.Outline />`, which exposed no drag interaction or visual
+  feedback. It now renders a `@dnd-kit`-powered tree (`LayerTree`) built
+  from a reactive projection of Puck state:
+  - Drag a layer to reorder it within its zone (`reorder`) or into another
+    component's zone (`move`), with a pointer-first collision strategy.
+  - Clear feedback while dragging: a drag overlay, an accent insertion
+    line on the hovered row, and a highlight on the target zone.
+  - Dropping a component into its own descendant zone is rejected (cycle
+    guard); source/destination indices are re-resolved from
+    `getSelectorForId` at drop time so concurrent edits can't corrupt the
+    move.
+  - Accessibility: pointer + keyboard sensors, ArrowUp/ArrowDown reorder
+    on the focused grip, and screen-reader announcements.
+  - Selection and outline expand/collapse remain wired to Puck's
+    `itemSelector` and the existing `outlineExpanded` UI store; the
+    `LayersPanel` props and quick-add behavior are unchanged.
+
+  `@dnd-kit/core`, `@dnd-kit/sortable`, and `@dnd-kit/utilities` are added
+  as runtime dependencies. They load as async chunks, so the `<Studio>`
+  runtime entry budget is unaffected; the aggregate `dist/index.js`
+  size-limit tracker was lifted 550 KB → 560 KB to absorb the surface.
+
+- 8e74a25: **BREAKING:** Per-instance store isolation for multi-editor pages (review finding H3).
+
+  The `useThemeStore` / `useExportStore` / `useAiStore` exports are no longer
+  module-level Zustand singletons. They are now per-`<Studio>` instances behind
+  context providers, mirroring `createEditorUiStore`:
+  - New factories `createThemeStore` / `createExportStore` / `createAiStore`,
+    providers `ThemeStoreProvider` / `ExportStoreProvider` / `AiStoreProvider`,
+    and `useThemeStoreApi` / `useExportStoreApi` / `useAiStoreApi` accessors.
+  - `useThemeStore(selector)` / `useExportStore(selector)` /
+    `useAiStore(selector)` keep the same call shape but now read the active
+    context store and **must be called inside a `<Studio>`**. The previous
+    static surface (`.getState()` / `.setState()` / `.persist`) is gone — use a
+    store instance (via `useXStoreApi()` or `createXStore()`) instead.
+  - Persistence keys are namespaced per `storeId`
+    (`anvilkit-core-{theme,export,ai}-<storeId>`); when the host omits
+    `storeId`, `<Studio>` derives a stable per-instance fallback from
+    `useId()` instead of the old shared `"default"`.
+  - Iframe DOM queries in theme sync and the layer splitter are scoped to each
+    Studio's root subtree (new `StudioRootProvider`), so two editors on one page
+    no longer target the first `iframe#preview-frame`.
+
+  Two `<Studio>` instances on the same page now have fully independent theme,
+  export, and AI state. This executes the store-factory work previously
+  documented as deferred in `react/stores/index.ts`.
+
+- 44a683d: Add multi-page management to `<Studio>`. Hosts can now wire rename,
+  delete, duplicate, drag-reorder, per-page settings, and SEO metadata
+  through new optional callbacks on `StudioPagesSource` — each
+  affordance is capability-gated, so hosts opt in by implementing the
+  matching callback. Search is always available (UI-only). Nothing
+  existing is forced; sources that only implemented
+  `list / subscribe / onSelect / onCreate` continue to compile and
+  render unchanged.
+
+  **New optional callbacks on `StudioPagesSource`:**
+  - `onRename(input)` — inline `Input` on the row; Enter commits, Esc
+    cancels, blur commits, host errors echo inline.
+  - `onDelete(pageId)` — row menu → confirm dialog (danger button via
+    the `--ak-pages-danger-*` token).
+  - `onDuplicate(pageId)` — row menu item. **Sole exception to "no
+    optimistic mutation":** may return the created `StudioPage` so the
+    UI can pre-select it before the `subscribe` round-trip lands.
+  - `onReorder(input)` — drag handle on row hover; keyboard reorder via
+    Space + Arrow + Space (the `@dnd-kit` accessibility recipe);
+    screen-reader announcements wired.
+  - `onUpdateSettings(input)` — opens `PageSettingsDialog` with
+    prefilled fields for title / path / route / description, plus an
+    SEO section (metaTitle / metaDescription / ogImage / noindex). The
+    dialog ships a diffed payload — only changed fields are sent.
+
+  **New optional `StudioPage` fields:**
+  - `description?: string` — surfaced in the settings dialog.
+  - `seo?: StudioPageSeo` — `{ metaTitle?, metaDescription?, ogImage?,
+noindex? }`.
+  - `order?: number` — advisory; `list()` order is still authoritative.
+  - `locked?: boolean` — suppresses Rename + Delete affordances on the
+    row regardless of callback presence.
+
+  **Brand token surface:** scoped `--ak-pages-*` tokens (primitive +
+  semantic tiers) for the panel surface; semantic tokens chain through
+  to `--ak-studio-*`, then to shadcn theme vars, so unthemed hosts
+  render correctly. Dark mode overrides primitives only.
+
+  **Behavioural change — Home icon:** `PageRow` previously selected the
+  Home icon via a legacy `page.id === "home"` string heuristic. It now
+  derives from `StudioPage.locked === true`. Hosts that want the Home
+  icon on their root page must mark it `locked: true` (which also
+  correctly suppresses Rename + Delete on that page — matching the
+  typical "Home is not renamable" intent). Hosts that previously
+  relied on the id-based heuristic without setting `locked` will see
+  the row render with the generic icon instead.
+
+  **No new dependencies.** `@dnd-kit/core`, `@dnd-kit/sortable`, and
+  `@dnd-kit/utilities` are already loaded for the layer tree.
+
+  **Bundle size:** measured at ~373 KB gzipped against the 560 KB
+  budget — no headroom bump needed.
+
+- 1132913: Code-review remediation for the `0.1.2` static analysis of
+  `@anvilkit/plugin-version-history` (see
+  `docs/code-review/plugin-version-history-review-20260519104200.md` for
+  the originating findings).
+
+  **`@anvilkit/plugin-version-history`**
+  - **Storage** — `localStorageAdapter` and `inMemoryAdapter` now share a
+    delta-chain store: every `KEYFRAME_INTERVAL`-th save is a full
+    keyframe and the snapshots in between are stored as the `IRDiff` from
+    the previous record (with the snapshot's own `assets`/`metadata`
+    carried verbatim, since `diffIR` does not model those). `load` walks
+    `base` pointers to the nearest keyframe and replays the diffs with
+    `applyDiff`. A delta is only accepted when a real structural
+    equality check on the reconstructed candidate matches the input, so
+    reconstruction is byte-for-byte lossless. Snapshots written by older
+    versions are raw `PageIR` JSON and are read transparently as
+    keyframes — no migration required.
+  - **Eviction safety** — Deleting a snapshot that other deltas chain
+    back to plans the keyframe-promotions in memory first, frees the
+    target record's bytes, then writes the (strictly larger) full
+    replacements. If a write fails (e.g. `STORAGE_QUOTA_EXCEEDED` mid-way
+    through promotion), the original target is restored so the chain
+    remains reconstructable.
+  - **`deepEqual` (`diff.ts`)** — Rewritten as order-insensitive key-set
+    compare (O(n) instead of O(n log n) per node) with a `seen` pair-map
+    cycle guard so untrusted cyclic prop values cannot infinite-loop.
+    Semantics are unchanged; the `applyDiff` `before`-state checks and
+    the 500-case `diffIR` round-trip property still hold.
+  - **Hash** — `hashPageIR` widened from a 32-bit FNV-1a fingerprint
+    (~50% collision risk at ~65 k snapshots) to four independent 32-bit
+    lanes (128-bit, collision risk negligible). The value remains an
+    opaque string — width is not part of the contract, and old 8-char
+    hashes from prior versions remain valid strings.
+  - **`assertPageIR` (`adapters/local-storage.ts`)** — Now an
+    `asserts value is PageIR` predicate, removing the fragile
+    `as unknown as PageIR` double-cast.
+  - **UI hardening** — Snapshot timestamps render through a new
+    `useFormattedTimestamp` hook that returns the raw ISO during the
+    first render (matching the server payload) and the localized value
+    after mount; if `iso` changes the render path returns the new ISO
+    immediately so no paint shows a stale localized timestamp.
+    `SnapshotHistoryModal` migrated from the hand-rolled overlay to the
+    shared `@anvilkit/ui` `Dialog`, picking up focus-trap, scroll-lock,
+    `Escape`, and focus-restoration. `handleRestore` is now `try/finally`
+    - mounted-ref guarded so the disabled button can never get stuck
+      after a slow restore unmounts the modal.
+  - **Collab cache invalidation** — `VersionHistoryUI` now wires the
+    optional `SnapshotAdapter.subscribe(onUpdate)` callback to clear its
+    in-memory snapshot cache and re-list, so a remote-update from a
+    collaborative adapter never renders a stale diff.
+  - **Opt-in type advertising** — `createVersionHistoryPlugin` now
+    returns `StudioPluginContributing<VersionHistoryContribution>` via
+    the new `defineStudioPlugin` helper, so consumers can recover the
+    contributed adapter/snapshot types from a plugins array using
+    `InferPluginContributions<typeof plugins>`.
+
+  **`@anvilkit/core`** (additive, type-only)
+  - New `StudioPluginContributing<Contributes>` sub-interface, branded
+    with a module-private `unique symbol` so it lives in its own
+    property namespace and leaves the base `StudioPlugin` shape (and
+    variance) untouched.
+  - New `defineStudioPlugin<Contributes>(plugin)` helper that performs
+    the (unavoidable) type-only cast in one place.
+  - New `InferPluginContributions<Plugins>` mapped-tuple helper that
+    distributes over a plugins tuple, picks up the branded `Contributes`
+    union from each `StudioPluginContributing` element, and collapses
+    everything else (raw `StudioPlugin`, `PuckPlugin`, …) to `never`.
+    The brand on the conditional is **required**, so an unbranded
+    `StudioPlugin` cannot pollute the inferred union with `unknown`.
+  - New `StudioAnyPlugin<UserConfig>` alias.
+  - No runtime change, no `coreVersion` bump required — existing plugin
+    shapes, `register` signatures, and the frozen 0.1.x contract are
+    preserved.
+
+  No breaking changes. All adapter-contract, diff property (500 fuzz +
+  200 meta-only), legacy back-compat, delete-re-root, eviction, and
+  core type-inference tests pass.
+
+### Patch Changes
+
+- 8e74a25: Fix `isCoreVersionCompatible` rejecting stable installs against a
+  prerelease-tagged caret/tilde lower bound.
+
+  `satisfiesCaret` / `satisfiesTilde` treated "the range's lower bound
+  carries a prerelease" as "only same-`[major,minor,patch]`-tuple versions
+  may match". That is not the npm/semver rule: a prerelease tag restricts
+  the _version under test_ when it is itself a prerelease, never a stable
+  release inside the range window. So `^0.1.0-alpha` wrongly rejected the
+  stable install `0.1.3`, and any plugin declaring such a `coreVersion`
+  (e.g. the demo's `anvilkit-demo-smoke-test`) failed compilation with
+  `Plugin "..." requires @anvilkit/core "^0.1.0-alpha" but the installed
+version is "0.1.3"`, leaving `<Studio>` rendering nothing.
+
+  The prerelease admission rule is now factored into `prereleaseAllowed`
+  and applied after the normal lower/upper bound checks, matching npm
+  `semver.satisfies` across a full caret/tilde × version parity sweep
+  (190 combinations, zero mismatches). Upper-bound behavior is unchanged
+  — `^0.1.0-alpha` still excludes `0.2.0`/`0.2.0-alpha`.
+
+- 8e74a25: Fix `<Studio>` swallowing the real error on plugin compilation failure.
+
+  `writeStudioLog` passed `Error` instances straight through to host
+  loggers and `console`. `Error`'s `name`/`message`/`stack`/`cause` are
+  non-enumerable own properties, so any serialization of the log meta (the
+  Next.js dev overlay, `JSON.stringify`-based host loggers, copy-pasted
+  bug reports) collapsed the error to `{}` — surfacing only the useless
+  `[studio] plugin compilation failed {}`.
+
+  `redactLogMeta` now normalizes `Error` values to a plain, fully
+  enumerable `{ name, message, stack, cause }` shape, recursing into
+  `cause` (depth-bounded) so wrapper errors like
+  `StudioPluginError("Plugin \"x\" failed to register")` no longer hide
+  the developer-facing root reason. Secret-key redaction is unchanged.
+  - @anvilkit/utils@1.0.0
+  - @anvilkit/ui@1.0.0
+
 ## 0.1.3
 
 ### Patch Changes

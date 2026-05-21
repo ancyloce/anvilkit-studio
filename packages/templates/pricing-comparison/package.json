@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/template-pricing-comparison",
-	"version": "1.0.2",
+	"version": "2.0.0",
 	"private": true,
 	"description": "Standalone pricing page — hero banner, pricing tiers, comparison FAQ.",
 	"type": "module",
