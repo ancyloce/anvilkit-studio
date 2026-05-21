@@ -75,6 +75,10 @@ export default defineConfig({
 							label: "Export pipeline",
 							slug: "guides/export-pipeline",
 						},
+						{
+							label: "Design System plugin",
+							slug: "guides/design-system",
+						},
 					],
 				},
 				{
