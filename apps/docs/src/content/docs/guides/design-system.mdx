@@ -1,0 +1,251 @@
+---
+title: Design System plugin
+description: Token-bound fields, theme switching, off-token warnings, and WCAG-AA contrast publish gating for Studio hosts that install @anvilkit/plugin-design-system.
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+`@anvilkit/plugin-design-system` is a first-party `StudioPlugin` that
+gives a host a design-system vocabulary on top of Puck without
+asking authors to write hex codes or pixel values. It contributes:
+
+- Token-bound `color`, `spacing`, and `typography` fields for any Puck
+  `Config`, backed by a two-tier `--ak-ds-*` token tree.
+- A bundled default token set (brand + neutral ramps, 0–24 spacing
+  scale, type ramp, radius scale) that hosts can deep-merge over.
+- An `onDataChange` walker that flags off-token literal values.
+- An `onBeforePublish` WCAG-AA contrast pair validator that aborts
+  publish on a failing pair.
+- A theme-aware token block — flipping `light` / `dark` swaps
+  primitives only; semantics and persisted token refs are
+  theme-stable.
+
+The plugin slots in through `@anvilkit/core`'s existing seams
+(`compilePlugins`, `mergeOverrides`, `sidebar-registry-store`,
+`lifecycle-manager`); it never imports Puck override internals
+directly.
+
+## 1. Install
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+Peer dependencies (already in the typical Studio host):
+
+- `@puckeditor/core ^0.21.2`
+- `@anvilkit/core` (workspace or matching minor)
+- `react ^18.2.0 || ^19.0.0`
+
+## 2. Minimal host
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin();
+
+export function MyEditor() {
+  return (
+    <Studio
+      puckConfig={config}
+      data={data}
+      plugins={[designSystemPlugin]}
+    />
+  );
+}
+```
+
+The factory is parameterless by default; the bundled token tree
+applies and both validators are enabled. Hoist the factory call to
+module scope so `<Studio>`'s plugin compile pipeline doesn't run on
+every render.
+
+## 3. Token model
+
+The plugin emits two tiers of CSS variables into both the host
+document and the Puck canvas iframe.
+
+**Tier 1 — primitives** (flip in dark mode):
+
+| Namespace | Vars |
+| --- | --- |
+| Brand ramp | `--ak-ds-brand-50` … `--ak-ds-brand-900` |
+| Neutral ramp | `--ak-ds-neutral-50` … `--ak-ds-neutral-900` |
+| Spacing | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}` |
+| Typography | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}` |
+| Radius | `--ak-ds-radius-{sm,md,lg}` |
+
+**Tier 2 — semantics** (theme-stable; each falls back to the
+matching `--ak-studio-*` chrome var so an unthemed host still
+renders):
+
+`--ak-ds-bg`, `--ak-ds-surface`, `--ak-ds-fg`, `--ak-ds-fg-muted`,
+`--ak-ds-accent`, `--ak-ds-accent-fg`, `--ak-ds-border`,
+`--ak-ds-focus-ring`.
+
+Override the bundled defaults with a deep-partial:
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin({
+  tokens: {
+    primitives: {
+      brand: {
+        500: "oklch(62% 0.18 264)",
+        600: "oklch(54% 0.19 264)",
+      },
+    },
+    semantics: {
+      accent: "brand.500",
+    },
+  },
+});
+```
+
+Only the keys you set apply; the rest of the tree is structurally
+shared with `DEFAULT_TOKENS`.
+
+## 4. Token-bound fields
+
+Field factories return Puck `CustomField<string>` renderers. Field
+values persist as **token reference strings** — never resolved
+values — so a token retune flows through every previously-authored
+field without data migration.
+
+```ts
+import {
+  createTokenColorField,
+  createTokenSpacingField,
+  createTokenTypographyField,
+  DEFAULT_TOKENS,
+  resolveTokenRef,
+} from "@anvilkit/plugin-design-system";
+
+const Card = {
+  fields: {
+    background: createTokenColorField({ label: "Surface" }),
+    padding: createTokenSpacingField({ label: "Padding" }),
+    title: createTokenTypographyField({ label: "Title size" }),
+  },
+  defaultProps: {
+    background: "semantic.surface",
+    padding: "space.4",
+    title: "text.lg",
+  },
+  render: ({ background, padding, title }) => (
+    <div
+      style={{
+        background: resolveTokenRef(background, DEFAULT_TOKENS).cssVar,
+        padding: resolveTokenRef(padding, DEFAULT_TOKENS).cssVar,
+        fontSize: resolveTokenRef(title, DEFAULT_TOKENS).cssVar,
+      }}
+    >
+      …
+    </div>
+  ),
+};
+```
+
+Ref grammar:
+
+- `color.<ramp>.<step>` — primitive (e.g. `color.brand.500`).
+- `semantic.<role>` — semantic role (e.g. `semantic.bg`).
+- `space.<key>` — spacing primitive (e.g. `space.4`).
+- `text.<key>` — typography primitive (e.g. `text.lg`).
+- `radius.<key>` — radius primitive.
+
+The React-free token surface (defaults, merge helper, resolver) is
+also available under the `./tokens` subpath if a build pipeline
+wants to skip React resolutions during pure data work:
+
+```ts
+import { DEFAULT_TOKENS, mergeTokens } from "@anvilkit/plugin-design-system/tokens";
+```
+
+## 5. Validation
+
+Both validators are on by default and can be toggled per host:
+
+```ts
+createDesignSystemPlugin({
+  validation: {
+    offToken: true,   // onDataChange — non-blocking warnings
+    contrast: true,   // onBeforePublish — throws on AA failure
+  },
+});
+```
+
+**Off-token warnings** (`onDataChange`) walk the Puck data tree
+parallel-fashion via `Promise.allSettled` and call
+`ctx.log("warn", …)` for every literal value that looks like a
+color or length but isn't in the resolved token tree. Non-blocking
+— authors keep working while warnings surface in the console / host
+log sink.
+
+**Contrast gate** (`onBeforePublish`) walks fg / bg pairs in the
+data tree, computes the WCAG-AA contrast ratio, and throws a
+descriptive `StudioPluginError` for any pair below 4.5:1. Throwing
+inside `onBeforePublish` aborts the Puck publish per
+`@anvilkit/core`'s lifecycle-manager contract — the host's
+`onPublish` never fires.
+
+<Aside type="note" title="Why two validators, not one">
+Off-token warnings are aspirational ("you probably meant a token
+here"). Contrast failures are spec violations ("this fails AA"). One
+is advisory; the other is a hard gate. They run on different
+lifecycle hooks for that reason.
+</Aside>
+
+## 6. Theme switching
+
+Light / dark / system modes flip the **primitives only**; semantic
+roles re-point internally to the appropriate ramp step. Stored token
+refs in author data are theme-stable because they reference the
+semantic / primitive *name*, not its resolved value.
+
+The plugin reuses `@anvilkit/core`'s existing `useThemeStore` +
+`use-theme-sync` plumbing — selecting a mode flips both `<html>`
+(chrome) and the Puck canvas iframe within one paint cycle.
+
+## 7. Status (v0.1)
+
+What's shipping:
+
+- Factory + bundled `DEFAULT_TOKENS` + deep-merge override.
+- Three token-bound field factories (`color`, `spacing`,
+  `typography`) using the `fieldTypes.custom` Puck slot.
+- `TokenProvider` mounted automatically by the plugin's
+  `overrides.fields` wrapper.
+- `onDataChange` off-token walker + `onBeforePublish` contrast
+  validator.
+- `--ak-ds-*` CSS in both host doc and iframe canvas, with `.dark`
+  primitive overrides.
+
+What's not yet user-facing (Phase B back-fill pending in
+`@anvilkit/core`):
+
+- The Design System rail tab + module. The plugin registers a
+  panel via `ctx.registerDesignSystemPanel?({ render })` and
+  `sidebarRegistryStore.designSystemPanel` is populated, but
+  `EditorTab` + `RAIL_MODULES` in `@anvilkit/core` have no
+  `"design-system"` entry yet — the panel state is set but no UI
+  reads it.
+- Token typography ramp UI in the field factory (current scale is
+  bundled but the picker UI shows raw refs; richer preview deferred
+  to v0.2).
+- Components tab in the panel (v0.2 — only Tokens + Theme tabs are
+  implemented in the panel React tree).
+
+<Aside type="note" title="Citation">
+Spec lives at `docs/PRD/0005-design-system-integration-prd.md` and
+the development plan at
+`docs/plans/0005-design-system-integration-dev-plan-2026-05-20.md`
+(repo-local; `docs/` is git-ignored). Core seams referenced:
+`compilePlugins` (`packages/core/src/runtime/compile-plugins.ts`),
+`mergeOverrides` (`packages/core/src/react/overrides/merge-overrides.ts`),
+`sidebar-registry-store`
+(`packages/core/src/react/studio/state/sidebar-registry-store.ts`),
+`lifecycle-manager` (`packages/core/src/runtime/lifecycle-manager.ts`).
+</Aside>
