@@ -110,6 +110,34 @@ export interface StudioPluginMeta {
 	 * Optional one-line description of what the plugin does.
 	 */
 	readonly description?: string;
+
+	/**
+	 * Optional declarative capability hints.
+	 *
+	 * Used by host tooling (settings UIs, plugin discovery) to query
+	 * what surfaces a plugin contributes without compiling it. Purely
+	 * advisory: the runtime continues to drive UI visibility from
+	 * actual `register*()` calls into the sidebar registry, not from
+	 * this flag.
+	 */
+	readonly capabilities?: StudioPluginCapabilities;
+}
+
+/**
+ * Declarative capability flags carried on {@link StudioPluginMeta}.
+ *
+ * Each flag is an optional self-declaration by the plugin author. The
+ * runtime does not enforce these — they exist so host code can list
+ * "all sidebar plugins" or "all plugins exporting HTML" without
+ * mounting the plugin first.
+ */
+export interface StudioPluginCapabilities {
+	/**
+	 * `true` when the plugin contributes sidebar UI (asset source,
+	 * copilot panel, history panel, design-system panel, copy snippet
+	 * pack, etc.).
+	 */
+	readonly sidebar?: boolean;
 }
 
 export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
