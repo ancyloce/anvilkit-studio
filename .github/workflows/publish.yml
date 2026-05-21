@@ -188,11 +188,13 @@ jobs:
             echo "registry=https://registry.npmjs.org/"
             echo "@anvilkit:registry=https://registry.npmjs.org/"
             echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}"
+            echo "always-auth=true"
             echo "access=public"
           } > "${npmrc}"
 
+          cp "${npmrc}" .npmrc
           echo "NPM_CONFIG_USERCONFIG=${npmrc}" >> "${GITHUB_ENV}"
-          echo "Configured npm publish auth at ${npmrc}"
+          echo "Configured npm publish auth at ${npmrc} and workspace .npmrc"
 
       # Pre-publish guard: compare each public workspace package's
       # package.json version against npm. Missing package names fail
@@ -215,4 +217,6 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_ALWAYS_AUTH: "true"
+          NPM_CONFIG_REGISTRY: "https://registry.npmjs.org/"
           NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
