@@ -28,10 +28,9 @@ const require = createRequire(import.meta.url);
 const GUARD = "typeof event.getModifierState === 'function'";
 
 // Both base-ui iterations the monorepo depends on. The legacy
-// `@base-ui-components/react` (rc.0) is still imported by
-// packages/core animate-ui primitives; `@base-ui/react` is the
+// `@base-ui/react` is the
 // renamed package used by packages/ui.
-const PACKAGES = ["@base-ui/react", "@base-ui-components/react"] as const;
+const PACKAGES = ["@base-ui/react"] as const;
 
 function compositeRootFiles(pkg: string): string[] {
   // Resolve the installed package dir from this package's context.
