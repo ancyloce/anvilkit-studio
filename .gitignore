@@ -28,6 +28,7 @@ build
 dist
 packages/**/.bundle-check/
 /**/test-results/
+/**/.turbo
 
 
 # Debug
