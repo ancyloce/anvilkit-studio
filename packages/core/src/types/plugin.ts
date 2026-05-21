@@ -138,6 +138,7 @@ export interface StudioPluginCapabilities {
 	 * pack, etc.).
 	 */
 	readonly sidebar?: boolean;
+	readonly header?: boolean;
 }
 
 export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
