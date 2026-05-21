@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/ir",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "Headless Page Intermediate Representation (IR) transforms consumed by every Anvilkit export format.",
 	"type": "module",
 	"main": "./dist/index.cjs",
