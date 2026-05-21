@@ -211,14 +211,9 @@ and follows the same hoist-the-selector guidance shown above.
 ```tsx
 "use client";
 
-import {
-  useAiStore,
-  useExportStore,
-  useThemeStore,
-} from "@anvilkit/core";
+import { useAiStore, useExportStore, useThemeStore } from "@anvilkit/core";
 
-const selectLastExport = (s: ReturnType<typeof useExportStore>) =>
-  s.lastExport;
+const selectLastExport = (s: ReturnType<typeof useExportStore>) => s.lastExport;
 
 export function ExportStatusBadge() {
   const lastExport = useExportStore(selectLastExport);

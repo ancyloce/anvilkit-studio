@@ -26,35 +26,35 @@
 import type { StudioInsertSection } from "@/types/sidebar";
 
 export const DEFAULT_INSERT_SECTIONS: readonly StudioInsertSection[] = [
-  {
-    id: "navigation",
-    titleKey: "studio.module.insert.section.navigation",
-    predicate: (_componentName, metadata) =>
-      metadata?.category === "navigation",
-    order: 10,
-  },
-  {
-    id: "top",
-    titleKey: "studio.module.insert.section.top",
-    predicate: (_componentName, metadata) => metadata?.category === "marketing",
-    order: 20,
-  },
-  {
-    id: "team",
-    titleKey: "studio.module.insert.section.team",
-    // No built-in metadata category maps to "team" today; the
-    // section sits in the registry so plugins/components that
-    // classify their items as `team` can populate it without
-    // forking the defaults.
-    predicate: () => false,
-    order: 30,
-  },
-  {
-    id: "recommended",
-    titleKey: "studio.module.insert.section.recommended",
-    // Catch-all. Every component that did not match a more-specific
-    // section above lands here so the library is never empty.
-    predicate: () => true,
-    order: 100,
-  },
+	{
+		id: "navigation",
+		titleKey: "studio.module.insert.section.navigation",
+		predicate: (_componentName, metadata) =>
+			metadata?.category === "navigation",
+		order: 10,
+	},
+	{
+		id: "top",
+		titleKey: "studio.module.insert.section.top",
+		predicate: (_componentName, metadata) => metadata?.category === "marketing",
+		order: 20,
+	},
+	{
+		id: "team",
+		titleKey: "studio.module.insert.section.team",
+		// No built-in metadata category maps to "team" today; the
+		// section sits in the registry so plugins/components that
+		// classify their items as `team` can populate it without
+		// forking the defaults.
+		predicate: () => false,
+		order: 30,
+	},
+	{
+		id: "recommended",
+		titleKey: "studio.module.insert.section.recommended",
+		// Catch-all. Every component that did not match a more-specific
+		// section above lands here so the library is never empty.
+		predicate: () => true,
+		order: 100,
+	},
 ];

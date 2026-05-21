@@ -21,19 +21,19 @@ import { InsertSearchBar } from "./insert/InsertSearchBar";
 import { InsertViewToggle } from "./insert/InsertViewToggle";
 
 export function InsertModule(): ReactNode {
-  // Stable element so the header-actions slot is only updated on
-  // mount/unmount, not on every parent re-render.
-  const headerActions = useMemo(() => <InsertViewToggle />, []);
-  useSetSidebarHeaderActions(headerActions);
+	// Stable element so the header-actions slot is only updated on
+	// mount/unmount, not on every parent re-render.
+	const headerActions = useMemo(() => <InsertViewToggle />, []);
+	useSetSidebarHeaderActions(headerActions);
 
-  return (
-    <div data-testid="ak-module-insert" className="flex h-full flex-col">
-      <div className="shrink-0 border-b border-[var(--ak-studio-border)] p-2">
-        <InsertSearchBar />
-      </div>
-      <div className="min-h-0 flex-1">
-        <Puck.Components />
-      </div>
-    </div>
-  );
+	return (
+		<div data-testid="ak-module-insert" className="flex h-full flex-col">
+			<div className="shrink-0 border-b border-[var(--ak-studio-border)] p-2">
+				<InsertSearchBar />
+			</div>
+			<div className="min-h-0 flex-1">
+				<Puck.Components />
+			</div>
+		</div>
+	);
 }

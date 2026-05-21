@@ -60,7 +60,7 @@ import type { StudioConfig } from "@/types/config";
  * verbatim to satisfy the `core-012` acceptance criterion.
  */
 const [StudioConfigContextProvider, useStudioConfigContext] =
-  getStrictContext<StudioConfig>("StudioConfig");
+	getStrictContext<StudioConfig>("StudioConfig");
 
 /**
  * Props for {@link StudioConfigProvider}.
@@ -70,17 +70,17 @@ const [StudioConfigContextProvider, useStudioConfigContext] =
  * catch at the call site.
  */
 export interface StudioConfigProviderProps {
-  /**
-   * The validated config object returned by `createStudioConfig()`.
-   * Treated as deeply read-only; callers that mutate it are in
-   * undefined-behavior territory.
-   */
-  readonly config: StudioConfig;
-  /**
-   * The React subtree that should have access to `config` via
-   * `useStudioConfig()`.
-   */
-  readonly children: ReactNode;
+	/**
+	 * The validated config object returned by `createStudioConfig()`.
+	 * Treated as deeply read-only; callers that mutate it are in
+	 * undefined-behavior territory.
+	 */
+	readonly config: StudioConfig;
+	/**
+	 * The React subtree that should have access to `config` via
+	 * `useStudioConfig()`.
+	 */
+	readonly children: ReactNode;
 }
 
 /**
@@ -97,14 +97,14 @@ export interface StudioConfigProviderProps {
  * );
  */
 export function StudioConfigProvider({
-  config,
-  children,
+	config,
+	children,
 }: StudioConfigProviderProps) {
-  return (
-    <StudioConfigContextProvider value={config}>
-      {children}
-    </StudioConfigContextProvider>
-  );
+	return (
+		<StudioConfigContextProvider value={config}>
+			{children}
+		</StudioConfigContextProvider>
+	);
 }
 
 /**

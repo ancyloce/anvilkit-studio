@@ -107,10 +107,10 @@ const SEPARATOR = "__";
  * `@types/node` while still picking up `process.env` when it exists.
  */
 function defaultEnv(): Record<string, string | undefined> {
-  const root = globalThis as unknown as {
-    process?: { env?: Record<string, string | undefined> };
-  };
-  return root.process?.env ?? {};
+	const root = globalThis as unknown as {
+		process?: { env?: Record<string, string | undefined> };
+	};
+	return root.process?.env ?? {};
 }
 
 /**
@@ -123,9 +123,9 @@ function defaultEnv(): Record<string, string | undefined> {
  * `__` above already guarantees no empty-segment input reaches here.
  */
 function segmentToCamelCase(segment: string): string {
-  return segment
-    .toLowerCase()
-    .replace(/_([a-z0-9])/g, (_match, char: string) => char.toUpperCase());
+	return segment
+		.toLowerCase()
+		.replace(/_([a-z0-9])/g, (_match, char: string) => char.toUpperCase());
 }
 
 /**
@@ -134,64 +134,64 @@ function segmentToCamelCase(segment: string): string {
  * so the unit tests can pin each rule individually.
  */
 function coerceValue(raw: string): string | number | boolean {
-  // Explicit type prefixes take the highest priority so operators
-  // can always escape the heuristics below. The prefix itself is
-  // stripped; anything after the colon is interpreted according to
-  // the pinned type.
-  if (raw.startsWith("str:")) {
-    return raw.slice(4);
-  }
-  if (raw.startsWith("num:")) {
-    const trimmed = raw.slice(4).trim();
-    const asNumber = Number(trimmed);
-    // An invalid `num:` value is a loud error rather than a silent
-    // fall-through to string — the operator explicitly asked for a
-    // number.
-    if (trimmed.length === 0 || !Number.isFinite(asNumber)) {
-      throw new TypeError(
-        `parseStudioEnv: value "${raw}" used the num: prefix but is not a finite number`,
-      );
-    }
-    return asNumber;
-  }
-  if (raw.startsWith("bool:")) {
-    const tail = raw.slice(5).trim().toLowerCase();
-    if (tail === "true" || tail === "1") {
-      return true;
-    }
-    if (tail === "false" || tail === "0") {
-      return false;
-    }
-    throw new TypeError(
-      `parseStudioEnv: value "${raw}" used the bool: prefix but is not "true"/"false"/"1"/"0"`,
-    );
-  }
+	// Explicit type prefixes take the highest priority so operators
+	// can always escape the heuristics below. The prefix itself is
+	// stripped; anything after the colon is interpreted according to
+	// the pinned type.
+	if (raw.startsWith("str:")) {
+		return raw.slice(4);
+	}
+	if (raw.startsWith("num:")) {
+		const trimmed = raw.slice(4).trim();
+		const asNumber = Number(trimmed);
+		// An invalid `num:` value is a loud error rather than a silent
+		// fall-through to string — the operator explicitly asked for a
+		// number.
+		if (trimmed.length === 0 || !Number.isFinite(asNumber)) {
+			throw new TypeError(
+				`parseStudioEnv: value "${raw}" used the num: prefix but is not a finite number`,
+			);
+		}
+		return asNumber;
+	}
+	if (raw.startsWith("bool:")) {
+		const tail = raw.slice(5).trim().toLowerCase();
+		if (tail === "true" || tail === "1") {
+			return true;
+		}
+		if (tail === "false" || tail === "0") {
+			return false;
+		}
+		throw new TypeError(
+			`parseStudioEnv: value "${raw}" used the bool: prefix but is not "true"/"false"/"1"/"0"`,
+		);
+	}
 
-  // Boolean aliases first — `"1"` matches both the boolean and the
-  // number rules, and operator ergonomics around `DEBUG=1` / `FLAG=0`
-  // argue for boolean winning. Operators who need integer `0`/`1`
-  // specifically can reach for the `num:` prefix above.
-  if (raw === "true" || raw === "1") {
-    return true;
-  }
-  if (raw === "false" || raw === "0") {
-    return false;
-  }
+	// Boolean aliases first — `"1"` matches both the boolean and the
+	// number rules, and operator ergonomics around `DEBUG=1` / `FLAG=0`
+	// argue for boolean winning. Operators who need integer `0`/`1`
+	// specifically can reach for the `num:` prefix above.
+	if (raw === "true" || raw === "1") {
+		return true;
+	}
+	if (raw === "false" || raw === "0") {
+		return false;
+	}
 
-  // Number next. `Number("")` and `Number("   ")` both yield `0`,
-  // which is an ugly gotcha — explicitly guard against empty/
-  // whitespace-only input. `"NaN"` / `"Infinity"` fail the
-  // `Number.isFinite` check naturally.
-  const trimmed = raw.trim();
-  if (trimmed.length > 0) {
-    const asNumber = Number(trimmed);
-    if (Number.isFinite(asNumber)) {
-      return asNumber;
-    }
-  }
+	// Number next. `Number("")` and `Number("   ")` both yield `0`,
+	// which is an ugly gotcha — explicitly guard against empty/
+	// whitespace-only input. `"NaN"` / `"Infinity"` fail the
+	// `Number.isFinite` check naturally.
+	const trimmed = raw.trim();
+	if (trimmed.length > 0) {
+		const asNumber = Number(trimmed);
+		if (Number.isFinite(asNumber)) {
+			return asNumber;
+		}
+	}
 
-  // Fallback: hand the raw string back to the caller unchanged.
-  return raw;
+	// Fallback: hand the raw string back to the caller unchanged.
+	return raw;
 }
 
 /**
@@ -208,51 +208,51 @@ function coerceValue(raw: string): string | number | boolean {
  * output.
  */
 function setNested(
-  target: Record<string, unknown>,
-  path: readonly string[],
-  value: unknown,
+	target: Record<string, unknown>,
+	path: readonly string[],
+	value: unknown,
 ): void {
-  let node = target;
-  for (let i = 0; i < path.length - 1; i++) {
-    const key = path[i] as string;
-    const existing = node[key];
-    if (
-      existing !== null &&
-      existing !== undefined &&
-      typeof existing === "object" &&
-      !Array.isArray(existing)
-    ) {
-      node = existing as Record<string, unknown>;
-      continue;
-    }
-    if (existing !== undefined) {
-      throw new TypeError(
-        `parseStudioEnv: env vars collide at path "${path
-          .slice(0, i + 1)
-          .join(
-            ".",
-          )}" — a scalar value and a nested object cannot coexist. Remove one of the conflicting ANVILKIT_* env vars.`,
-      );
-    }
-    const next: Record<string, unknown> = {};
-    node[key] = next;
-    node = next;
-  }
-  const leafKey = path[path.length - 1] as string;
-  const existingLeaf = node[leafKey];
-  if (
-    existingLeaf !== undefined &&
-    typeof existingLeaf === "object" &&
-    existingLeaf !== null &&
-    !Array.isArray(existingLeaf)
-  ) {
-    throw new TypeError(
-      `parseStudioEnv: env vars collide at path "${path.join(
-        ".",
-      )}" — a scalar value and a nested object cannot coexist. Remove one of the conflicting ANVILKIT_* env vars.`,
-    );
-  }
-  node[leafKey] = value;
+	let node = target;
+	for (let i = 0; i < path.length - 1; i++) {
+		const key = path[i] as string;
+		const existing = node[key];
+		if (
+			existing !== null &&
+			existing !== undefined &&
+			typeof existing === "object" &&
+			!Array.isArray(existing)
+		) {
+			node = existing as Record<string, unknown>;
+			continue;
+		}
+		if (existing !== undefined) {
+			throw new TypeError(
+				`parseStudioEnv: env vars collide at path "${path
+					.slice(0, i + 1)
+					.join(
+						".",
+					)}" — a scalar value and a nested object cannot coexist. Remove one of the conflicting ANVILKIT_* env vars.`,
+			);
+		}
+		const next: Record<string, unknown> = {};
+		node[key] = next;
+		node = next;
+	}
+	const leafKey = path[path.length - 1] as string;
+	const existingLeaf = node[leafKey];
+	if (
+		existingLeaf !== undefined &&
+		typeof existingLeaf === "object" &&
+		existingLeaf !== null &&
+		!Array.isArray(existingLeaf)
+	) {
+		throw new TypeError(
+			`parseStudioEnv: env vars collide at path "${path.join(
+				".",
+			)}" — a scalar value and a nested object cannot coexist. Remove one of the conflicting ANVILKIT_* env vars.`,
+		);
+	}
+	node[leafKey] = value;
 }
 
 /**
@@ -276,33 +276,33 @@ function setNested(
  * the host process can be reconfigured.
  */
 export function parseStudioEnv(
-  env: Record<string, string | undefined> = defaultEnv(),
+	env: Record<string, string | undefined> = defaultEnv(),
 ): DeepPartial<StudioConfig> {
-  const result: Record<string, unknown> = {};
+	const result: Record<string, unknown> = {};
 
-  for (const [rawKey, rawValue] of Object.entries(env)) {
-    if (rawValue === undefined) {
-      continue;
-    }
-    if (!rawKey.startsWith(PREFIX)) {
-      continue;
-    }
+	for (const [rawKey, rawValue] of Object.entries(env)) {
+		if (rawValue === undefined) {
+			continue;
+		}
+		if (!rawKey.startsWith(PREFIX)) {
+			continue;
+		}
 
-    const tail = rawKey.slice(PREFIX.length);
-    if (tail.length === 0) {
-      continue;
-    }
+		const tail = rawKey.slice(PREFIX.length);
+		if (tail.length === 0) {
+			continue;
+		}
 
-    const segments = tail.split(SEPARATOR);
-    if (segments.some((segment) => segment.length === 0)) {
-      throw new TypeError(
-        `parseStudioEnv: env var "${rawKey}" contains an empty path segment. Use "${SEPARATOR}" only between non-empty path parts.`,
-      );
-    }
+		const segments = tail.split(SEPARATOR);
+		if (segments.some((segment) => segment.length === 0)) {
+			throw new TypeError(
+				`parseStudioEnv: env var "${rawKey}" contains an empty path segment. Use "${SEPARATOR}" only between non-empty path parts.`,
+			);
+		}
 
-    const path = segments.map(segmentToCamelCase);
-    setNested(result, path, coerceValue(rawValue));
-  }
+		const path = segments.map(segmentToCamelCase);
+		setNested(result, path, coerceValue(rawValue));
+	}
 
-  return result as DeepPartial<StudioConfig>;
+	return result as DeepPartial<StudioConfig>;
 }

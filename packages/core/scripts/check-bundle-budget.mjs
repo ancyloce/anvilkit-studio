@@ -70,8 +70,8 @@
 import { execSync } from "node:child_process";
 import {
 	mkdir,
-	readFile,
 	readdir,
+	readFile,
 	rm,
 	stat,
 	writeFile,

@@ -24,9 +24,9 @@ export type PuckSnapshot = ReturnType<ReturnType<typeof useGetPuck>>;
 
 /** Stable-enough unique id for a freshly inserted node. */
 export function generateNodeId(componentName: string): string {
-  return typeof crypto !== "undefined" && "randomUUID" in crypto
-    ? `${componentName}-${crypto.randomUUID().slice(0, 8)}`
-    : `${componentName}-${Date.now().toString(36)}`;
+	return typeof crypto !== "undefined" && "randomUUID" in crypto
+		? `${componentName}-${crypto.randomUUID().slice(0, 8)}`
+		: `${componentName}-${Date.now().toString(36)}`;
 }
 
 /**
@@ -36,27 +36,27 @@ export function generateNodeId(componentName: string): string {
  * is not registered in the live Puck config.
  */
 export function appendComponentToRoot(
-  snapshot: PuckSnapshot,
-  componentName: string,
-  props: Record<string, unknown>,
+	snapshot: PuckSnapshot,
+	componentName: string,
+	props: Record<string, unknown>,
 ): boolean {
-  const components = snapshot.config.components ?? {};
-  if (!Object.hasOwn(components, componentName)) {
-    return false;
-  }
-  const currentData = snapshot.appState.data;
-  const node = { type: componentName, props };
-  const nextData = {
-    ...currentData,
-    // Spread keeps `root` and `zones` intact; only root content grows.
-    content: [...(currentData.content ?? []), node],
-  };
-  snapshot.dispatch({
-    type: "setData",
-    // Single documented boundary cast: `node` is structurally a
-    // ComponentData but Puck's generic `Data` type cannot be
-    // satisfied without the live Config's component prop map.
-    data: nextData as unknown as typeof currentData,
-  });
-  return true;
+	const components = snapshot.config.components ?? {};
+	if (!Object.hasOwn(components, componentName)) {
+		return false;
+	}
+	const currentData = snapshot.appState.data;
+	const node = { type: componentName, props };
+	const nextData = {
+		...currentData,
+		// Spread keeps `root` and `zones` intact; only root content grows.
+		content: [...(currentData.content ?? []), node],
+	};
+	snapshot.dispatch({
+		type: "setData",
+		// Single documented boundary cast: `node` is structurally a
+		// ComponentData but Puck's generic `Data` type cannot be
+		// satisfied without the live Config's component prop map.
+		data: nextData as unknown as typeof currentData,
+	});
+	return true;
 }

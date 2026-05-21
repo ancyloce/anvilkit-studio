@@ -11,31 +11,31 @@
 import type { StudioAssetKind } from "@/types/sidebar";
 
 export function kindToComponentName(kind: StudioAssetKind): string | null {
-  switch (kind) {
-    case "image":
-      return "Image";
-    case "video":
-      return "Video";
-    case "audio":
-      return "Audio";
-    default:
-      return null;
-  }
+	switch (kind) {
+		case "image":
+			return "Image";
+		case "video":
+			return "Video";
+		case "audio":
+			return "Audio";
+		default:
+			return null;
+	}
 }
 
 export function kindToPropsForInsert(
-  kind: StudioAssetKind,
-  url: string,
-  name: string,
+	kind: StudioAssetKind,
+	url: string,
+	name: string,
 ): Readonly<Record<string, unknown>> {
-  switch (kind) {
-    case "image":
-      return { src: url, alt: name };
-    case "video":
-      return { src: url, title: name };
-    case "audio":
-      return { src: url, title: name };
-    default:
-      return {};
-  }
+	switch (kind) {
+		case "image":
+			return { src: url, alt: name };
+		case "video":
+			return { src: url, title: name };
+		case "audio":
+			return { src: url, title: name };
+		default:
+			return {};
+	}
 }

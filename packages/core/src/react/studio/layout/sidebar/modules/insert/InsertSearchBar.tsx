@@ -14,18 +14,18 @@
 
 import { Search } from "lucide-react";
 import {
-  type ChangeEvent,
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
+	type ChangeEvent,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
 } from "react";
 
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
 } from "@/primitives/input-group";
 import { useMsg } from "@/state/editor-i18n-store";
 import { useDrawerSearch } from "@/state/hooks";
@@ -33,52 +33,52 @@ import { useDrawerSearch } from "@/state/hooks";
 const DEBOUNCE_MS = 150;
 
 export function InsertSearchBar(): ReactNode {
-  const msg = useMsg();
-  const [storeValue, setStoreValue] = useDrawerSearch();
-  const [draft, setDraft] = useState(storeValue);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const msg = useMsg();
+	const [storeValue, setStoreValue] = useDrawerSearch();
+	const [draft, setDraft] = useState(storeValue);
+	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    return () => {
-      if (timerRef.current !== null) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, []);
+	useEffect(() => {
+		return () => {
+			if (timerRef.current !== null) {
+				clearTimeout(timerRef.current);
+			}
+		};
+	}, []);
 
-  const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const next = event.target.value;
-      setDraft(next);
-      if (timerRef.current !== null) {
-        clearTimeout(timerRef.current);
-      }
-      timerRef.current = setTimeout(() => {
-        setStoreValue(next);
-        timerRef.current = null;
-      }, DEBOUNCE_MS);
-    },
-    [setStoreValue],
-  );
+	const handleChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement>) => {
+			const next = event.target.value;
+			setDraft(next);
+			if (timerRef.current !== null) {
+				clearTimeout(timerRef.current);
+			}
+			timerRef.current = setTimeout(() => {
+				setStoreValue(next);
+				timerRef.current = null;
+			}, DEBOUNCE_MS);
+		},
+		[setStoreValue],
+	);
 
-  const placeholder = msg("studio.module.insert.search.placeholder");
+	const placeholder = msg("studio.module.insert.search.placeholder");
 
-  return (
-    <InputGroup className="rounded-full bg-[var(--ak-studio-panel)] px-1">
-      <InputGroupAddon>
-        <Search
-          aria-hidden="true"
-          className="text-[var(--ak-studio-muted-fg)]"
-        />
-      </InputGroupAddon>
-      <InputGroupInput
-        type="search"
-        value={draft}
-        onChange={handleChange}
-        placeholder={placeholder}
-        aria-label={placeholder}
-        className="text-xs"
-      />
-    </InputGroup>
-  );
+	return (
+		<InputGroup className="rounded-full bg-[var(--ak-studio-panel)] px-1">
+			<InputGroupAddon>
+				<Search
+					aria-hidden="true"
+					className="text-[var(--ak-studio-muted-fg)]"
+				/>
+			</InputGroupAddon>
+			<InputGroupInput
+				type="search"
+				value={draft}
+				onChange={handleChange}
+				placeholder={placeholder}
+				aria-label={placeholder}
+				className="text-xs"
+			/>
+		</InputGroup>
+	);
 }

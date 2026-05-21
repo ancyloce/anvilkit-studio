@@ -17,23 +17,23 @@ import { createEditorUiStore, type EditorUiStoreApi } from "./editor-ui-store";
 const EditorUiStoreContext = createContext<EditorUiStoreApi | null>(null);
 
 export interface EditorUiStoreProviderProps {
-  readonly storeId: string;
-  readonly children: ReactNode;
+	readonly storeId: string;
+	readonly children: ReactNode;
 }
 
 export function EditorUiStoreProvider({
-  storeId,
-  children,
+	storeId,
+	children,
 }: EditorUiStoreProviderProps): ReactNode {
-  const { store, hydrated } = useRehydratedStore(storeId, createEditorUiStore);
-  // Gate the subtree until the persisted UI slice is rehydrated so
-  // the sidebar / active tab / canvas viewport never paint with
-  // INITIAL_STATE then flip. See `useRehydratedStore` (SSR-safe).
-  return (
-    <EditorUiStoreContext.Provider value={store}>
-      {hydrated ? children : null}
-    </EditorUiStoreContext.Provider>
-  );
+	const { store, hydrated } = useRehydratedStore(storeId, createEditorUiStore);
+	// Gate the subtree until the persisted UI slice is rehydrated so
+	// the sidebar / active tab / canvas viewport never paint with
+	// INITIAL_STATE then flip. See `useRehydratedStore` (SSR-safe).
+	return (
+		<EditorUiStoreContext.Provider value={store}>
+			{hydrated ? children : null}
+		</EditorUiStoreContext.Provider>
+	);
 }
 
 /**
@@ -42,12 +42,12 @@ export function EditorUiStoreProvider({
  * development.
  */
 export function useEditorUiStoreApi(): EditorUiStoreApi {
-  const store = useContext(EditorUiStoreContext);
-  if (store === null) {
-    throw new Error(
-      "useEditorUiStore was called outside of <EditorUiStoreProvider>. " +
-        "Ensure the calling component is rendered inside <Studio>.",
-    );
-  }
-  return store;
+	const store = useContext(EditorUiStoreContext);
+	if (store === null) {
+		throw new Error(
+			"useEditorUiStore was called outside of <EditorUiStoreProvider>. " +
+				"Ensure the calling component is rendered inside <Studio>.",
+		);
+	}
+	return store;
 }

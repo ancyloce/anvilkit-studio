@@ -8,8 +8,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { computeReorderIndex } from "../use-pages-dnd";
 import type { StudioPage } from "@/types/pages";
+import { computeReorderIndex } from "../use-pages-dnd";
 
 const PAGES: readonly StudioPage[] = [
 	{ id: "home", title: "Home" },

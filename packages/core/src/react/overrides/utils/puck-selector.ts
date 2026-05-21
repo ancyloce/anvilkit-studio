@@ -17,7 +17,7 @@
 import { type PuckSnapshot, useReactivePuck } from "./use-reactive-puck";
 
 export function usePuckSelector<TResult>(
-  selector: (snapshot: PuckSnapshot) => TResult,
+	selector: (snapshot: PuckSnapshot) => TResult,
 ): TResult {
-  return useReactivePuck(selector);
+	return useReactivePuck(selector);
 }

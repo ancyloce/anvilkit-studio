@@ -18,181 +18,181 @@
  */
 
 import {
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
 } from "react";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionPanel,
-  AccordionTrigger,
+	Accordion,
+	AccordionItem,
+	AccordionPanel,
+	AccordionTrigger,
 } from "@/primitives/animate-ui/components/base/accordion";
+import { Windowed } from "@/primitives/Windowed";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { CopyCategoryFilter } from "@/state/editor-ui-store";
 import type {
-  StudioCopySnippet,
-  StudioCopySnippetCategory,
+	StudioCopySnippet,
+	StudioCopySnippetCategory,
 } from "@/types/sidebar";
-import { Windowed } from "@/primitives/Windowed";
 import { SnippetRow } from "./SnippetRow";
 
 const BUILTIN_CATEGORY_KEYS: Readonly<Record<string, string>> = {
-  basic: "studio.module.text.category.basic",
-  brand: "studio.module.text.category.brand",
+	basic: "studio.module.text.category.basic",
+	brand: "studio.module.text.category.brand",
 };
 
 export interface SnippetListProps {
-  readonly snippets: readonly StudioCopySnippet[];
-  readonly categoryFilter: CopyCategoryFilter;
-  readonly searchTerm: string;
-  readonly disabled: boolean;
-  readonly onInsert: (snippet: StudioCopySnippet) => void;
+	readonly snippets: readonly StudioCopySnippet[];
+	readonly categoryFilter: CopyCategoryFilter;
+	readonly searchTerm: string;
+	readonly disabled: boolean;
+	readonly onInsert: (snippet: StudioCopySnippet) => void;
 }
 
 function matchesSearch(snippet: StudioCopySnippet, query: string): boolean {
-  if (query.length === 0) return true;
-  const needle = query.toLowerCase();
-  if (snippet.title.toLowerCase().includes(needle)) return true;
-  if (snippet.body.toLowerCase().includes(needle)) return true;
-  if (snippet.tags?.some((tag: string) => tag.toLowerCase().includes(needle)))
-    return true;
-  return false;
+	if (query.length === 0) return true;
+	const needle = query.toLowerCase();
+	if (snippet.title.toLowerCase().includes(needle)) return true;
+	if (snippet.body.toLowerCase().includes(needle)) return true;
+	if (snippet.tags?.some((tag: string) => tag.toLowerCase().includes(needle)))
+		return true;
+	return false;
 }
 
 function matchesCategoryFilter(
-  snippet: StudioCopySnippet,
-  filter: CopyCategoryFilter,
+	snippet: StudioCopySnippet,
+	filter: CopyCategoryFilter,
 ): boolean {
-  if (filter === "all") return true;
-  return snippet.category === filter;
+	if (filter === "all") return true;
+	return snippet.category === filter;
 }
 
 export function SnippetList({
-  snippets,
-  categoryFilter,
-  searchTerm,
-  disabled,
-  onInsert,
+	snippets,
+	categoryFilter,
+	searchTerm,
+	disabled,
+	onInsert,
 }: SnippetListProps): ReactNode {
-  const msg = useMsg();
+	const msg = useMsg();
 
-  const filtered = useMemo(() => {
-    return snippets.filter(
-      (s) =>
-        matchesCategoryFilter(s, categoryFilter) &&
-        matchesSearch(s, searchTerm),
-    );
-  }, [snippets, categoryFilter, searchTerm]);
+	const filtered = useMemo(() => {
+		return snippets.filter(
+			(s) =>
+				matchesCategoryFilter(s, categoryFilter) &&
+				matchesSearch(s, searchTerm),
+		);
+	}, [snippets, categoryFilter, searchTerm]);
 
-  const grouped = useMemo(() => groupByCategory(filtered), [filtered]);
-  const groupIds = useMemo(() => grouped.map(([cat]) => cat), [grouped]);
-  const [openGroupIds, setOpenGroupIds] =
-    useState<StudioCopySnippetCategory[]>(groupIds);
+	const grouped = useMemo(() => groupByCategory(filtered), [filtered]);
+	const groupIds = useMemo(() => grouped.map(([cat]) => cat), [grouped]);
+	const [openGroupIds, setOpenGroupIds] =
+		useState<StudioCopySnippetCategory[]>(groupIds);
 
-  useEffect(() => {
-    setOpenGroupIds(groupIds);
-  }, [groupIds]);
+	useEffect(() => {
+		setOpenGroupIds(groupIds);
+	}, [groupIds]);
 
-  const handleAccordionChange = useCallback((next: readonly string[]): void => {
-    setOpenGroupIds([...next] as StudioCopySnippetCategory[]);
-  }, []);
+	const handleAccordionChange = useCallback((next: readonly string[]): void => {
+		setOpenGroupIds([...next] as StudioCopySnippetCategory[]);
+	}, []);
 
-  if (filtered.length === 0) {
-    return (
-      <EmptyState
-        message={msg("studio.module.text.empty")}
-        testId="ak-text-empty"
-      />
-    );
-  }
+	if (filtered.length === 0) {
+		return (
+			<EmptyState
+				message={msg("studio.module.text.empty")}
+				testId="ak-text-empty"
+			/>
+		);
+	}
 
-  if (searchTerm.length > 0) {
-    return (
-      <div
-        className="flex min-w-0 flex-col gap-1 p-2"
-        data-testid="ak-text-snippet-list-flat"
-      >
-        <Windowed
-          items={filtered}
-          itemKey={(snippet) => snippet.id}
-          estimateSize={40}
-          data-testid="ak-text-snippet-list-flat-window"
-          renderItem={(snippet) => (
-            <SnippetRow
-              snippet={snippet}
-              disabled={disabled}
-              onClick={onInsert}
-            />
-          )}
-        />
-      </div>
-    );
-  }
+	if (searchTerm.length > 0) {
+		return (
+			<div
+				className="flex min-w-0 flex-col gap-1 p-2"
+				data-testid="ak-text-snippet-list-flat"
+			>
+				<Windowed
+					items={filtered}
+					itemKey={(snippet) => snippet.id}
+					estimateSize={40}
+					data-testid="ak-text-snippet-list-flat-window"
+					renderItem={(snippet) => (
+						<SnippetRow
+							snippet={snippet}
+							disabled={disabled}
+							onClick={onInsert}
+						/>
+					)}
+				/>
+			</div>
+		);
+	}
 
-  return (
-    <Accordion
-      multiple
-      value={openGroupIds}
-      onValueChange={handleAccordionChange}
-      data-testid="ak-text-snippet-list-grouped"
-    >
-      {grouped.map(([category, list]) => (
-        <AccordionItem key={category} value={category} className="min-w-0">
-          <AccordionTrigger className="min-h-8 items-center px-2 py-1.5">
-            <span className="min-w-0 grow truncate">
-              {categoryLabel(category, msg)}
-            </span>
-            <span className="shrink-0 text-[10px] text-muted-foreground">
-              {list.length}
-            </span>
-          </AccordionTrigger>
-          <AccordionPanel keepRendered className="p-0">
-            <div className="flex min-w-0 flex-col gap-1 p-2">
-              <Windowed
-                items={list}
-                itemKey={(snippet) => snippet.id}
-                estimateSize={40}
-                data-testid={`ak-text-snippet-group-window-${category}`}
-                renderItem={(snippet) => (
-                  <SnippetRow
-                    snippet={snippet}
-                    disabled={disabled}
-                    onClick={onInsert}
-                  />
-                )}
-              />
-            </div>
-          </AccordionPanel>
-        </AccordionItem>
-      ))}
-    </Accordion>
-  );
+	return (
+		<Accordion
+			multiple
+			value={openGroupIds}
+			onValueChange={handleAccordionChange}
+			data-testid="ak-text-snippet-list-grouped"
+		>
+			{grouped.map(([category, list]) => (
+				<AccordionItem key={category} value={category} className="min-w-0">
+					<AccordionTrigger className="min-h-8 items-center px-2 py-1.5">
+						<span className="min-w-0 grow truncate">
+							{categoryLabel(category, msg)}
+						</span>
+						<span className="shrink-0 text-[10px] text-muted-foreground">
+							{list.length}
+						</span>
+					</AccordionTrigger>
+					<AccordionPanel keepRendered className="p-0">
+						<div className="flex min-w-0 flex-col gap-1 p-2">
+							<Windowed
+								items={list}
+								itemKey={(snippet) => snippet.id}
+								estimateSize={40}
+								data-testid={`ak-text-snippet-group-window-${category}`}
+								renderItem={(snippet) => (
+									<SnippetRow
+										snippet={snippet}
+										disabled={disabled}
+										onClick={onInsert}
+									/>
+								)}
+							/>
+						</div>
+					</AccordionPanel>
+				</AccordionItem>
+			))}
+		</Accordion>
+	);
 }
 
 function groupByCategory(
-  snippets: readonly StudioCopySnippet[],
+	snippets: readonly StudioCopySnippet[],
 ): readonly (readonly [
-  StudioCopySnippetCategory,
-  readonly StudioCopySnippet[],
+	StudioCopySnippetCategory,
+	readonly StudioCopySnippet[],
 ])[] {
-  const map = new Map<StudioCopySnippetCategory, StudioCopySnippet[]>();
-  for (const snippet of snippets) {
-    const list = map.get(snippet.category) ?? [];
-    list.push(snippet);
-    map.set(snippet.category, list);
-  }
-  return Array.from(map.entries());
+	const map = new Map<StudioCopySnippetCategory, StudioCopySnippet[]>();
+	for (const snippet of snippets) {
+		const list = map.get(snippet.category) ?? [];
+		list.push(snippet);
+		map.set(snippet.category, list);
+	}
+	return Array.from(map.entries());
 }
 
 function categoryLabel(
-  category: StudioCopySnippetCategory,
-  msg: (key: string) => string,
+	category: StudioCopySnippetCategory,
+	msg: (key: string) => string,
 ): string {
-  const builtinKey = BUILTIN_CATEGORY_KEYS[category];
-  if (builtinKey !== undefined) return msg(builtinKey);
-  return category;
+	const builtinKey = BUILTIN_CATEGORY_KEYS[category];
+	if (builtinKey !== undefined) return msg(builtinKey);
+	return category;
 }

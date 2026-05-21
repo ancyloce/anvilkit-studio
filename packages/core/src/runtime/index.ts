@@ -9,25 +9,25 @@ export { jsonFormat } from "./built-in-formats/json-format.js";
 export { compilePlugins, type StudioRuntime } from "./compile-plugins.js";
 export { isPuckPlugin, isStudioPlugin } from "./detect-plugin.js";
 export {
-  StudioConfigError,
-  StudioError,
-  StudioExportError,
-  StudioPluginError,
+	StudioConfigError,
+	StudioError,
+	StudioExportError,
+	StudioPluginError,
 } from "./errors.js";
 export {
-  createExportRegistry,
-  type ExportRegistry,
+	createExportRegistry,
+	type ExportRegistry,
 } from "./export-registry.js";
 export {
-  composeHeaderActions,
-  type StudioHeaderAction,
+	composeHeaderActions,
+	type StudioHeaderAction,
 } from "./header-actions.js";
 export { lazyPlugin, type StudioPluginLoader } from "./lazy-plugin.js";
 export {
-  createLifecycleManager,
-  type LifecycleEventName,
-  type LifecycleManager,
-  type LifecyclePhase,
-  type LifecycleSubscriber,
+	createLifecycleManager,
+	type LifecycleEventName,
+	type LifecycleManager,
+	type LifecyclePhase,
+	type LifecycleSubscriber,
 } from "./lifecycle-manager.js";
 export { CORE_VERSION } from "./version.js";

@@ -1,22 +1,22 @@
 import type {
-  ExportFormatDefinition,
-  PageIR,
-  PageIRMetadata,
+	ExportFormatDefinition,
+	PageIR,
+	PageIRMetadata,
 } from "@anvilkit/core/types";
 
 import type { JsonExportOptions } from "./types.js";
 
 function stripTimestamps(metadata: PageIRMetadata): PageIRMetadata {
-  const { createdAt: _createdAt, updatedAt: _updatedAt, ...rest } = metadata;
-  return rest;
+	const { createdAt: _createdAt, updatedAt: _updatedAt, ...rest } = metadata;
+	return rest;
 }
 
 function prepareForSerialization(ir: PageIR, stripTs: boolean): PageIR {
-  if (!stripTs) return ir;
-  return {
-    ...ir,
-    metadata: stripTimestamps(ir.metadata),
-  };
+	if (!stripTs) return ir;
+	return {
+		...ir,
+		metadata: stripTimestamps(ir.metadata),
+	};
 }
 
 /**
@@ -29,20 +29,20 @@ function prepareForSerialization(ir: PageIR, stripTs: boolean): PageIR {
  * by construction.
  */
 export const jsonFormat: ExportFormatDefinition<JsonExportOptions> = {
-  id: "json",
-  label: "JSON",
-  extension: "json",
-  mimeType: "application/json",
-  async run(ir, options) {
-    const indent = options.indent ?? 2;
-    const filename = options.filename ?? "page.json";
-    const stripTs = options.stripTimestamps ?? false;
-    const payload = prepareForSerialization(ir, stripTs);
-    const content = JSON.stringify(payload, null, indent);
+	id: "json",
+	label: "JSON",
+	extension: "json",
+	mimeType: "application/json",
+	async run(ir, options) {
+		const indent = options.indent ?? 2;
+		const filename = options.filename ?? "page.json";
+		const stripTs = options.stripTimestamps ?? false;
+		const payload = prepareForSerialization(ir, stripTs);
+		const content = JSON.stringify(payload, null, indent);
 
-    return {
-      content,
-      filename,
-    };
-  },
+		return {
+			content,
+			filename,
+		};
+	},
 };

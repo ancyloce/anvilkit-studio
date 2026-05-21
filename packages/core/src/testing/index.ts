@@ -14,12 +14,12 @@
 
 export { createFakePageIR } from "./create-fake-page-ir.js";
 export type {
-  FakeStudioContext,
-  FakeStudioContextOverrides,
+	FakeStudioContext,
+	FakeStudioContextOverrides,
 } from "./create-fake-studio-context.js";
 export { createFakeStudioContext } from "./create-fake-studio-context.js";
 export type {
-  PluginLifecycleHarness,
-  RegisterPluginOptions,
+	PluginLifecycleHarness,
+	RegisterPluginOptions,
 } from "./register-plugin.js";
 export { registerPlugin } from "./register-plugin.js";

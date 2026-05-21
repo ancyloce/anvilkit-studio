@@ -13,28 +13,28 @@ import type { PageIR, PageIRNode } from "@anvilkit/core/types";
 import type { Mutable } from "../../internal/types.js";
 
 export function stripMetaFromTree(ir: PageIR): PageIR {
-  return Object.freeze({
-    ...ir,
-    root: stripMetaFromNode(ir.root),
-  });
+	return Object.freeze({
+		...ir,
+		root: stripMetaFromNode(ir.root),
+	});
 }
 
 function stripMetaFromNode(node: PageIRNode): PageIRNode {
-  const children =
-    node.children !== undefined
-      ? Object.freeze(node.children.map(stripMetaFromNode))
-      : undefined;
+	const children =
+		node.children !== undefined
+			? Object.freeze(node.children.map(stripMetaFromNode))
+			: undefined;
 
-  const stripped: Mutable<PageIRNode> = {
-    id: node.id,
-    type: node.type,
-    props: node.props,
-  };
-  if (node.slot !== undefined) stripped.slot = node.slot;
-  if (node.slotKind !== undefined) stripped.slotKind = node.slotKind;
-  if (children !== undefined) stripped.children = children;
-  if (node.assets !== undefined) stripped.assets = node.assets;
-  // `meta` deliberately omitted — that is the entire point.
+	const stripped: Mutable<PageIRNode> = {
+		id: node.id,
+		type: node.type,
+		props: node.props,
+	};
+	if (node.slot !== undefined) stripped.slot = node.slot;
+	if (node.slotKind !== undefined) stripped.slotKind = node.slotKind;
+	if (children !== undefined) stripped.children = children;
+	if (node.assets !== undefined) stripped.assets = node.assets;
+	// `meta` deliberately omitted — that is the entire point.
 
-  return Object.freeze(stripped);
+	return Object.freeze(stripped);
 }

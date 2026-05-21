@@ -22,12 +22,12 @@ export type UsageCountsListener = (counts: UsageCounts) => void;
  * Optional knobs accepted by {@link createUsageCounterPlugin}.
  */
 export interface UsageCounterOptions {
-  /**
-   * If `true`, every recompute also routes through
-   * `ctx.log("debug", "usage-counter:update", { counts })`. Off by
-   * default to keep host consoles clean.
-   */
-  readonly verbose?: boolean;
+	/**
+	 * If `true`, every recompute also routes through
+	 * `ctx.log("debug", "usage-counter:update", { counts })`. Off by
+	 * default to keep host consoles clean.
+	 */
+	readonly verbose?: boolean;
 }
 
 /**
@@ -38,14 +38,14 @@ export interface UsageCounterOptions {
  * without going through the event bus.
  */
 export interface UsageCounterPlugin extends StudioPlugin {
-  /**
-   * Snapshot of the most recent counts. Returns an empty object
-   * before the first `onDataChange` fires.
-   */
-  readonly getCounts: () => UsageCounts;
-  /**
-   * Register a listener that fires every time counts change.
-   * Returns an unsubscribe function (idempotent).
-   */
-  readonly subscribe: (listener: UsageCountsListener) => () => void;
+	/**
+	 * Snapshot of the most recent counts. Returns an empty object
+	 * before the first `onDataChange` fires.
+	 */
+	readonly getCounts: () => UsageCounts;
+	/**
+	 * Register a listener that fires every time counts change.
+	 * Returns an unsubscribe function (idempotent).
+	 */
+	readonly subscribe: (listener: UsageCountsListener) => () => void;
 }

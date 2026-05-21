@@ -32,7 +32,7 @@ render unchanged.
 
 - `description?: string` — surfaced in the settings dialog.
 - `seo?: StudioPageSeo` — `{ metaTitle?, metaDescription?, ogImage?,
-  noindex? }`.
+noindex? }`.
 - `order?: number` — advisory; `list()` order is still authoritative.
 - `locked?: boolean` — suppresses Rename + Delete affordances on the
   row regardless of callback presence.

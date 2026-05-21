@@ -18,13 +18,13 @@
  * without any bundler config.
  */
 
+import type { Config as PuckConfig } from "@puckeditor/core";
 import type {
 	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginMeta,
 	StudioPluginRegistration,
 } from "@/types/plugin";
-import type { Config as PuckConfig } from "@puckeditor/core";
 
 /**
  * Loader function returning either a plugin module's default export or

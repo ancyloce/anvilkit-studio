@@ -13,16 +13,24 @@ import { defineConfig, mergeConfig } from "vitest/config";
  * `passWithNoTests: true` so `pnpm test` succeeds on the empty scaffold.
  */
 export default mergeConfig(
-  reactLibraryPreset,
-  defineConfig({
-    plugins: [tsconfigPaths({ projects: ["./tsconfig.test.json"] })],
-    test: {
-      name: "@anvilkit/core",
-      passWithNoTests: true,
-      setupFiles: [
-        "@anvilkit/vitest-config/setup/jest-dom",
-        "./vitest.setup.ts",
-      ],
-    },
-  }),
+	reactLibraryPreset,
+	defineConfig({
+		plugins: [tsconfigPaths({ projects: ["./tsconfig.test.json"] })],
+		test: {
+			name: "@anvilkit/core",
+			passWithNoTests: true,
+			// The `<Studio>` mount tests await a full compile + RTL render. In
+			// isolation they finish in ~1–2s, but under Turbo's concurrent
+			// full-suite load the jsdom environment is heavily contended and
+			// they intermittently blow the default 5s `testTimeout`. Raise the
+			// ceiling so contention-induced slowness doesn't flake CI; a real
+			// hang still fails, just later.
+			testTimeout: 20000,
+			hookTimeout: 20000,
+			setupFiles: [
+				"@anvilkit/vitest-config/setup/jest-dom",
+				"./vitest.setup.ts",
+			],
+		},
+	}),
 );

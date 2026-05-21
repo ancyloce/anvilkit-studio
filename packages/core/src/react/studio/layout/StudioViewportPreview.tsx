@@ -11,45 +11,45 @@ import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
 import { cn } from "@/utils/cn";
 
 export interface StudioViewportPreviewProps {
-  readonly className?: string;
+	readonly className?: string;
 }
 
 export function StudioViewportPreview({
-  className,
+	className,
 }: StudioViewportPreviewProps): ReactNode {
-  const [viewportId] = useCanvasViewport();
-  const [zoom] = useCanvasZoom();
-  const { viewports = FULL_WIDTH_VIEWPORTS } = useChromeProps();
+	const [viewportId] = useCanvasViewport();
+	const [zoom] = useCanvasZoom();
+	const { viewports = FULL_WIDTH_VIEWPORTS } = useChromeProps();
 
-  const viewport = useMemo(
-    () =>
-      viewports.find((vp) => vp.label === viewportId) ??
-      viewports[viewports.length - 1],
-    [viewportId, viewports],
-  );
+	const viewport = useMemo(
+		() =>
+			viewports.find((vp) => vp.label === viewportId) ??
+			viewports[viewports.length - 1],
+		[viewportId, viewports],
+	);
 
-  const width =
-    viewport === undefined || viewport.width === "100%"
-      ? "100%"
-      : `${viewport.width}px`;
+	const width =
+		viewport === undefined || viewport.width === "100%"
+			? "100%"
+			: `${viewport.width}px`;
 
-  return (
-    <div
-      className={cn(
-        "flex min-h-0 flex-1 items-start justify-center overflow-auto bg-[var(--ak-studio-muted)] p-6",
-        className,
-      )}
-    >
-      <div
-        style={{
-          width,
-          transform: `scale(${zoom})`,
-          transformOrigin: "top center",
-        }}
-        className="flex min-h-full flex-col self-stretch bg-[var(--ak-studio-bg)] shadow-md transition-[width] duration-200"
-      >
-        <Puck.Preview />
-      </div>
-    </div>
-  );
+	return (
+		<div
+			className={cn(
+				"flex min-h-0 flex-1 items-start justify-center overflow-auto bg-[var(--ak-studio-muted)] p-6",
+				className,
+			)}
+		>
+			<div
+				style={{
+					width,
+					transform: `scale(${zoom})`,
+					transformOrigin: "top center",
+				}}
+				className="flex min-h-full flex-col self-stretch bg-[var(--ak-studio-bg)] shadow-md transition-[width] duration-200"
+			>
+				<Puck.Preview />
+			</div>
+		</div>
+	);
 }

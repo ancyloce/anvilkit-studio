@@ -10,16 +10,16 @@
  * `ArrayField` a11y convention and complements dnd-kit's KeyboardSensor.
  */
 
-import { useGetPuck } from "@puckeditor/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useGetPuck } from "@puckeditor/core";
 import { Box, ChevronDown, ChevronRight, GripVertical } from "lucide-react";
 import { type KeyboardEvent, memo, type ReactNode, useCallback } from "react";
 import { cn } from "@/overrides/utils/cn";
 import { Button } from "@/primitives/button";
 import { useMsg } from "@/state/editor-i18n-store";
-import { useScrollComponentIntoView } from "./use-scroll-component-into-view";
 import type { LayerNode } from "./use-layer-tree";
+import { useScrollComponentIntoView } from "./use-scroll-component-into-view";
 
 interface LayerRowProps {
 	readonly node: LayerNode;

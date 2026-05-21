@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
-import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
-
-import { getStrictContext } from "@/primitives/lib/get-strict-context";
+import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
+import * as React from "react";
 import { useControlledState } from "@/primitives/hooks/use-controlled-state";
+import { getStrictContext } from "@/primitives/lib/get-strict-context";
 
 type AccordionContextType = {
 	value: string | string[] | undefined;
@@ -187,15 +186,15 @@ function AccordionPanel({
 
 export {
 	Accordion,
-	AccordionItem,
 	AccordionHeader,
-	AccordionTrigger,
-	AccordionPanel,
-	useAccordionItem,
-	type AccordionProps,
-	type AccordionItemProps,
 	type AccordionHeaderProps,
-	type AccordionTriggerProps,
-	type AccordionPanelProps,
+	AccordionItem,
 	type AccordionItemContextType,
+	type AccordionItemProps,
+	AccordionPanel,
+	type AccordionPanelProps,
+	type AccordionProps,
+	AccordionTrigger,
+	type AccordionTriggerProps,
+	useAccordionItem,
 };

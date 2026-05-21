@@ -69,14 +69,14 @@ import { StudioConfigSchema } from "./schema.js";
  * toggles — without breaking the public signature.
  */
 export interface CreateStudioConfigOptions {
-  /**
-   * Environment variable bag to consume for Layer 2.
-   *
-   * Defaults to `process.env` when that global is available. Tests
-   * and non-Node runtimes can inject a synthetic bag so the factory
-   * stays deterministic and never touches the real process env.
-   */
-  readonly env?: Record<string, string | undefined>;
+	/**
+	 * Environment variable bag to consume for Layer 2.
+	 *
+	 * Defaults to `process.env` when that global is available. Tests
+	 * and non-Node runtimes can inject a synthetic bag so the factory
+	 * stays deterministic and never touches the real process env.
+	 */
+	readonly env?: Record<string, string | undefined>;
 }
 
 /**
@@ -130,37 +130,37 @@ export interface CreateStudioConfigOptions {
  * ```
  */
 export function createStudioConfig(
-  overrides?: DeepPartial<StudioConfig>,
-  opts?: CreateStudioConfigOptions,
+	overrides?: DeepPartial<StudioConfig>,
+	opts?: CreateStudioConfigOptions,
 ): StudioConfig {
-  // Layer 1: schema defaults. Always a fully-populated StudioConfig
-  // — we rely on this for the deepMerge target so holes in layers
-  // 2 and 3 are backed by real values.
-  const layer1 = StudioConfigSchema.parse({});
+	// Layer 1: schema defaults. Always a fully-populated StudioConfig
+	// — we rely on this for the deepMerge target so holes in layers
+	// 2 and 3 are backed by real values.
+	const layer1 = StudioConfigSchema.parse({});
 
-  // Layer 2: env. Pure function, safe to call with opts?.env being
-  // undefined — parseStudioEnv falls back to process.env (or {} in
-  // non-Node runtimes).
-  const layer2 = parseStudioEnv(opts?.env);
+	// Layer 2: env. Pure function, safe to call with opts?.env being
+	// undefined — parseStudioEnv falls back to process.env (or {} in
+	// non-Node runtimes).
+	const layer2 = parseStudioEnv(opts?.env);
 
-  // Layer 3: host overrides. Forwarded to deepMerge as-is;
-  // `undefined` sources are ignored by deepMerge so no guard is
-  // needed here.
-  const merged = deepMerge(layer1, layer2, overrides);
+	// Layer 3: host overrides. Forwarded to deepMerge as-is;
+	// `undefined` sources are ignored by deepMerge so no guard is
+	// needed here.
+	const merged = deepMerge(layer1, layer2, overrides);
 
-  // Re-validate. The merge may have introduced bad types (env
-  // coercion is best-effort) or unknown top-level keys (a typo in
-  // an env var or override), so we run the full schema again.
-  try {
-    return StudioConfigSchema.parse(merged);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      throw new StudioConfigError(formatZodIssues(error), { cause: error });
-    }
-    // Non-Zod errors are unexpected — rethrow unchanged so the
-    // host sees the original stack.
-    throw error;
-  }
+	// Re-validate. The merge may have introduced bad types (env
+	// coercion is best-effort) or unknown top-level keys (a typo in
+	// an env var or override), so we run the full schema again.
+	try {
+		return StudioConfigSchema.parse(merged);
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			throw new StudioConfigError(formatZodIssues(error), { cause: error });
+		}
+		// Non-Zod errors are unexpected — rethrow unchanged so the
+		// host sees the original stack.
+		throw error;
+	}
 }
 
 /**
@@ -178,11 +178,11 @@ export function createStudioConfig(
  * the wrong shape.
  */
 function formatZodIssues(error: z.ZodError): string {
-  const lines = error.issues.map((issue) => {
-    const path = issue.path.length > 0 ? renderZodPath(issue.path) : "<root>";
-    return `  - ${path}: ${issue.message}`;
-  });
-  return `StudioConfig validation failed:\n${lines.join("\n")}`;
+	const lines = error.issues.map((issue) => {
+		const path = issue.path.length > 0 ? renderZodPath(issue.path) : "<root>";
+		return `  - ${path}: ${issue.message}`;
+	});
+	return `StudioConfig validation failed:\n${lines.join("\n")}`;
 }
 
 /**
@@ -195,22 +195,22 @@ function formatZodIssues(error: z.ZodError): string {
  * common case reads the way operators expect.
  */
 function renderZodPath(path: readonly PropertyKey[]): string {
-  let out = "";
-  for (const segment of path) {
-    if (typeof segment === "number") {
-      out += `[${segment}]`;
-      continue;
-    }
-    const asString = String(segment);
-    if (/[.[\]"]/.test(asString)) {
-      const escaped = asString.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-      out += `["${escaped}"]`;
-      continue;
-    }
-    if (out.length > 0) {
-      out += ".";
-    }
-    out += asString;
-  }
-  return out;
+	let out = "";
+	for (const segment of path) {
+		if (typeof segment === "number") {
+			out += `[${segment}]`;
+			continue;
+		}
+		const asString = String(segment);
+		if (/[.[\]"]/.test(asString)) {
+			const escaped = asString.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+			out += `["${escaped}"]`;
+			continue;
+		}
+		if (out.length > 0) {
+			out += ".";
+		}
+		out += asString;
+	}
+	return out;
 }

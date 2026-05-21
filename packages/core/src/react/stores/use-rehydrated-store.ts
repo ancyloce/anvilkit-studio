@@ -43,15 +43,15 @@
 import { useEffect, useRef, useState } from "react";
 
 interface PersistableStore {
-  readonly persist: {
-    hasHydrated(): boolean;
-    rehydrate(): void | Promise<void>;
-    onFinishHydration(cb: () => void): () => void;
-  };
+	readonly persist: {
+		hasHydrated(): boolean;
+		rehydrate(): void | Promise<void>;
+		onFinishHydration(cb: () => void): () => void;
+	};
 }
 
 function persistApi(store: unknown): PersistableStore["persist"] {
-  return (store as PersistableStore).persist;
+	return (store as PersistableStore).persist;
 }
 
 /**
@@ -65,43 +65,43 @@ function persistApi(store: unknown): PersistableStore["persist"] {
  * @returns the live store plus a `hydrated` flag the provider gates on.
  */
 export function useRehydratedStore<TStore>(
-  storeId: string,
-  create: (opts: { storeId: string }) => TStore,
-  injected?: TStore,
+	storeId: string,
+	create: (opts: { storeId: string }) => TStore,
+	injected?: TStore,
 ): { store: TStore; hydrated: boolean } {
-  // Lazy create; recreate on `storeId` change for the non-injected
-  // path. A ref (not `useState`) so the swap is deterministic in
-  // render without an extra pass; idempotent for an unchanged key.
-  const ref = useRef<{ store: TStore; storeId: string } | null>(null);
-  if (ref.current === null) {
-    ref.current = { store: injected ?? create({ storeId }), storeId };
-  } else if (injected !== undefined && ref.current.store !== injected) {
-    // Controller swapped the injected store (rare): adopt it.
-    ref.current = { store: injected, storeId };
-  } else if (injected === undefined && ref.current.storeId !== storeId) {
-    ref.current = { store: create({ storeId }), storeId };
-  }
-  const store = ref.current.store;
+	// Lazy create; recreate on `storeId` change for the non-injected
+	// path. A ref (not `useState`) so the swap is deterministic in
+	// render without an extra pass; idempotent for an unchanged key.
+	const ref = useRef<{ store: TStore; storeId: string } | null>(null);
+	if (ref.current === null) {
+		ref.current = { store: injected ?? create({ storeId }), storeId };
+	} else if (injected !== undefined && ref.current.store !== injected) {
+		// Controller swapped the injected store (rare): adopt it.
+		ref.current = { store: injected, storeId };
+	} else if (injected === undefined && ref.current.storeId !== storeId) {
+		ref.current = { store: create({ storeId }), storeId };
+	}
+	const store = ref.current.store;
 
-  // Track *which* store the hydrated flag is for, so a `storeId`
-  // re-key (new store identity) reads as not-hydrated for this render
-  // until the effect re-confirms — no re-key flash.
-  const [hydratedStore, setHydratedStore] = useState<TStore | null>(() =>
-    persistApi(store).hasHydrated() ? store : null,
-  );
+	// Track *which* store the hydrated flag is for, so a `storeId`
+	// re-key (new store identity) reads as not-hydrated for this render
+	// until the effect re-confirms — no re-key flash.
+	const [hydratedStore, setHydratedStore] = useState<TStore | null>(() =>
+		persistApi(store).hasHydrated() ? store : null,
+	);
 
-  useEffect(() => {
-    const persist = persistApi(store);
-    if (persist.hasHydrated()) {
-      setHydratedStore(store);
-      return;
-    }
-    const unsub = persist.onFinishHydration(() => setHydratedStore(store));
-    // Deferred (skipHydration) rehydrate. Synchronous localStorage
-    // read; effects never run on the server so this is client-only.
-    void persist.rehydrate();
-    return unsub;
-  }, [store]);
+	useEffect(() => {
+		const persist = persistApi(store);
+		if (persist.hasHydrated()) {
+			setHydratedStore(store);
+			return;
+		}
+		const unsub = persist.onFinishHydration(() => setHydratedStore(store));
+		// Deferred (skipHydration) rehydrate. Synchronous localStorage
+		// read; effects never run on the server so this is client-only.
+		void persist.rehydrate();
+		return unsub;
+	}, [store]);
 
-  return { store, hydrated: hydratedStore === store };
+	return { store, hydrated: hydratedStore === store };
 }

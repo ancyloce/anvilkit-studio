@@ -55,9 +55,9 @@ export type { StudioHeaderAction } from "@/types/plugin";
  * the only sanctioned way to alter global header ordering.
  */
 const GROUP_WEIGHT: Record<NonNullable<StudioHeaderAction["group"]>, number> = {
-  primary: 0,
-  secondary: 1,
-  overflow: 2,
+	primary: 0,
+	secondary: 1,
+	overflow: 2,
 };
 
 /**
@@ -83,16 +83,16 @@ const DEFAULT_ORDER = 100;
  * we can sort with confidence that every action has a unique id.
  */
 function assertUniqueIds(actions: readonly StudioHeaderAction[]): void {
-  const seen = new Set<string>();
-  for (const action of actions) {
-    if (seen.has(action.id)) {
-      throw new StudioPluginError(
-        action.id,
-        `Duplicate header action id "${action.id}" — every action passed to composeHeaderActions must have a unique id`,
-      );
-    }
-    seen.add(action.id);
-  }
+	const seen = new Set<string>();
+	for (const action of actions) {
+		if (seen.has(action.id)) {
+			throw new StudioPluginError(
+				action.id,
+				`Duplicate header action id "${action.id}" — every action passed to composeHeaderActions must have a unique id`,
+			);
+		}
+		seen.add(action.id);
+	}
 }
 
 /**
@@ -104,25 +104,25 @@ function assertUniqueIds(actions: readonly StudioHeaderAction[]): void {
  * across locales (and slightly cheaper).
  */
 function compareActions(a: StudioHeaderAction, b: StudioHeaderAction): number {
-  const aGroup = GROUP_WEIGHT[a.group ?? DEFAULT_GROUP];
-  const bGroup = GROUP_WEIGHT[b.group ?? DEFAULT_GROUP];
-  if (aGroup !== bGroup) {
-    return aGroup - bGroup;
-  }
+	const aGroup = GROUP_WEIGHT[a.group ?? DEFAULT_GROUP];
+	const bGroup = GROUP_WEIGHT[b.group ?? DEFAULT_GROUP];
+	if (aGroup !== bGroup) {
+		return aGroup - bGroup;
+	}
 
-  const aOrder = a.order ?? DEFAULT_ORDER;
-  const bOrder = b.order ?? DEFAULT_ORDER;
-  if (aOrder !== bOrder) {
-    return aOrder - bOrder;
-  }
+	const aOrder = a.order ?? DEFAULT_ORDER;
+	const bOrder = b.order ?? DEFAULT_ORDER;
+	if (aOrder !== bOrder) {
+		return aOrder - bOrder;
+	}
 
-  if (a.id < b.id) {
-    return -1;
-  }
-  if (a.id > b.id) {
-    return 1;
-  }
-  return 0;
+	if (a.id < b.id) {
+		return -1;
+	}
+	if (a.id > b.id) {
+		return 1;
+	}
+	return 0;
 }
 
 /**
@@ -146,11 +146,11 @@ function compareActions(a: StudioHeaderAction, b: StudioHeaderAction): number {
  * layer above when it knows which plugin contributed each action.
  */
 export function composeHeaderActions(
-  actions: readonly StudioHeaderAction[],
+	actions: readonly StudioHeaderAction[],
 ): StudioHeaderAction[] {
-  assertUniqueIds(actions);
-  // `[...actions]` produces a fresh array so we never mutate the
-  // caller's input. The spread is a single allocation — cheap
-  // even for large header surfaces.
-  return [...actions].sort(compareActions);
+	assertUniqueIds(actions);
+	// `[...actions]` produces a fresh array so we never mutate the
+	// caller's input. The spread is a single allocation — cheap
+	// even for large header surfaces.
+	return [...actions].sort(compareActions);
 }

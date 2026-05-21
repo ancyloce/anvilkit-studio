@@ -11,13 +11,13 @@ import type { StudioViewport } from "./viewports";
 import { DEFAULT_VIEWPORTS } from "./viewports";
 
 export const FULL_WIDTH_VIEWPORT: StudioViewport = {
-  label: "full",
-  width: "100%",
-  height: "auto",
-  icon: "Monitor",
+	label: "full",
+	width: "100%",
+	height: "auto",
+	icon: "Monitor",
 };
 
 export const FULL_WIDTH_VIEWPORTS: readonly StudioViewport[] = [
-  ...DEFAULT_VIEWPORTS,
-  FULL_WIDTH_VIEWPORT,
+	...DEFAULT_VIEWPORTS,
+	FULL_WIDTH_VIEWPORT,
 ];

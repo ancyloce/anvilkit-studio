@@ -14,63 +14,63 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { HistoryModule } from "@/layout/sidebar/modules/HistoryModule";
 import {
-  createSidebarRegistryStore,
-  EditorI18nStoreProvider,
-  EditorUiStoreProvider,
-  SidebarRegistryProvider,
-  type SidebarRegistryStoreApi,
+	createSidebarRegistryStore,
+	EditorI18nStoreProvider,
+	EditorUiStoreProvider,
+	SidebarRegistryProvider,
+	type SidebarRegistryStoreApi,
 } from "@/state/index";
 
 afterEach(() => {
-  cleanup();
+	cleanup();
 });
 
 function Setup({
-  children,
-  registry,
+	children,
+	registry,
 }: {
-  readonly children: ReactNode;
-  readonly registry?: SidebarRegistryStoreApi;
+	readonly children: ReactNode;
+	readonly registry?: SidebarRegistryStoreApi;
 }): ReactElement {
-  const store = registry ?? createSidebarRegistryStore();
-  return (
-    <EditorI18nStoreProvider>
-      <EditorUiStoreProvider
-        storeId={`history-${Math.random().toString(36).slice(2)}`}
-      >
-        <SidebarRegistryProvider value={store}>
-          {children}
-        </SidebarRegistryProvider>
-      </EditorUiStoreProvider>
-    </EditorI18nStoreProvider>
-  );
+	const store = registry ?? createSidebarRegistryStore();
+	return (
+		<EditorI18nStoreProvider>
+			<EditorUiStoreProvider
+				storeId={`history-${Math.random().toString(36).slice(2)}`}
+			>
+				<SidebarRegistryProvider value={store}>
+					{children}
+				</SidebarRegistryProvider>
+			</EditorUiStoreProvider>
+		</EditorI18nStoreProvider>
+	);
 }
 
 describe("HistoryModule", () => {
-  it("renders the empty state when no history panel is registered", () => {
-    render(
-      <Setup>
-        <HistoryModule />
-      </Setup>,
-    );
-    expect(screen.getByTestId("ak-history-empty")).toBeTruthy();
-  });
+	it("renders the empty state when no history panel is registered", () => {
+		render(
+			<Setup>
+				<HistoryModule />
+			</Setup>,
+		);
+		expect(screen.getByTestId("ak-history-empty")).toBeTruthy();
+	});
 
-  it("renders the registered panel body", () => {
-    const registry = createSidebarRegistryStore();
-    registry.getState().registerHistoryPanel({
-      render: () => (
-        <div data-testid="ak-history-panel-fixture">history fixture</div>
-      ),
-    });
+	it("renders the registered panel body", () => {
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerHistoryPanel({
+			render: () => (
+				<div data-testid="ak-history-panel-fixture">history fixture</div>
+			),
+		});
 
-    render(
-      <Setup registry={registry}>
-        <HistoryModule />
-      </Setup>,
-    );
+		render(
+			<Setup registry={registry}>
+				<HistoryModule />
+			</Setup>,
+		);
 
-    expect(screen.getByTestId("ak-history-panel-fixture")).toBeTruthy();
-    expect(screen.queryByTestId("ak-history-empty")).toBeNull();
-  });
+		expect(screen.getByTestId("ak-history-panel-fixture")).toBeTruthy();
+		expect(screen.queryByTestId("ak-history-empty")).toBeNull();
+	});
 });

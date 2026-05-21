@@ -11,13 +11,13 @@ import { LayersPanel } from "./layer/LayersPanel";
 import { PagesPanel } from "./layer/PagesPanel";
 
 export function LayerModule(): ReactNode {
-  return (
-    <div
-      data-testid="ak-module-layer"
-      className="flex h-full min-h-0 w-full flex-col overflow-hidden"
-    >
-      <PagesPanel />
-      <LayersPanel />
-    </div>
-  );
+	return (
+		<div
+			data-testid="ak-module-layer"
+			className="flex h-full min-h-0 w-full flex-col overflow-hidden"
+		>
+			<PagesPanel />
+			<LayersPanel />
+		</div>
+	);
 }

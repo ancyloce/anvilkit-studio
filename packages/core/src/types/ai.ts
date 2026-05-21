@@ -43,16 +43,16 @@ import type { Data as PuckData } from "@puckeditor/core";
  * to the AI contract.
  */
 export type AiFieldType =
-  | "text"
-  | "richtext"
-  | "number"
-  | "boolean"
-  | "image"
-  | "url"
-  | "color"
-  | "select"
-  | "array"
-  | "object";
+	| "text"
+	| "richtext"
+	| "number"
+	| "boolean"
+	| "image"
+	| "url"
+	| "color"
+	| "select"
+	| "array"
+	| "object";
 
 /**
  * Description of a single prop on a component, in a shape an LLM can
@@ -68,73 +68,73 @@ export type AiFieldType =
  * nested {@link itemSchema} describing the object shape.
  */
 export interface AiFieldSchema {
-  /**
-   * The prop name on the owning component (e.g. `"title"`,
-   * `"ctaHref"`). Must match the key in the component's
-   * `defaultProps`.
-   */
-  readonly name: string;
-  /**
-   * The field's data type. See {@link AiFieldType}.
-   */
-  readonly type: AiFieldType;
-  /**
-   * Whether the prop must be set for the component to render
-   * correctly. Defaults to `false` when omitted — the LLM will
-   * treat the field as optional.
-   */
-  readonly required?: boolean;
-  /**
-   * Human-readable description of what the prop is for. Forwarded
-   * verbatim into the LLM prompt, so write it in the voice of
-   * instructions to a collaborator ("The headline shown at the
-   * top of the hero section").
-   */
-  readonly description?: string;
-  /**
-   * For `type: "select"` fields, the allowed values. Each option
-   * carries both the machine-readable `value` (written into the
-   * prop) and the human-readable `label` (shown to the LLM so it
-   * picks the right one).
-   */
-  readonly options?: readonly {
-    readonly label: string;
-    readonly value: string;
-  }[];
-  /**
-   * For `type: "array"` fields, the schema of a single item. When the
-   * item is itself an object, the item carries its own
-   * {@link properties} listing the typed sub-fields.
-   *
-   * Absent on scalar field types and on `type: "object"` (which uses
-   * {@link properties} directly).
-   */
-  readonly itemSchema?: AiFieldSchema;
-  /**
-   * For `type: "object"` fields (and `type: "array"` items whose
-   * `itemSchema.type === "object"`), the typed sub-fields of the
-   * object. Each entry is a fully-formed {@link AiFieldSchema} so
-   * the LLM and the validator can reason about nested structure
-   * without parsing free-form descriptions.
-   *
-   * Absent on scalar field types.
-   */
-  readonly properties?: readonly AiFieldSchema[];
-  /**
-   * For slot fields (mapped to `type: "object"`), the list of
-   * component names that may be inserted into the slot. When
-   * omitted, any registered component is allowed.
-   *
-   * Mirrors Puck's `allow` array on slot field definitions.
-   */
-  readonly allow?: readonly string[];
-  /**
-   * For slot fields (mapped to `type: "object"`), the list of
-   * component names that may *not* be inserted into the slot.
-   *
-   * Mirrors Puck's `disallow` array on slot field definitions.
-   */
-  readonly disallow?: readonly string[];
+	/**
+	 * The prop name on the owning component (e.g. `"title"`,
+	 * `"ctaHref"`). Must match the key in the component's
+	 * `defaultProps`.
+	 */
+	readonly name: string;
+	/**
+	 * The field's data type. See {@link AiFieldType}.
+	 */
+	readonly type: AiFieldType;
+	/**
+	 * Whether the prop must be set for the component to render
+	 * correctly. Defaults to `false` when omitted — the LLM will
+	 * treat the field as optional.
+	 */
+	readonly required?: boolean;
+	/**
+	 * Human-readable description of what the prop is for. Forwarded
+	 * verbatim into the LLM prompt, so write it in the voice of
+	 * instructions to a collaborator ("The headline shown at the
+	 * top of the hero section").
+	 */
+	readonly description?: string;
+	/**
+	 * For `type: "select"` fields, the allowed values. Each option
+	 * carries both the machine-readable `value` (written into the
+	 * prop) and the human-readable `label` (shown to the LLM so it
+	 * picks the right one).
+	 */
+	readonly options?: readonly {
+		readonly label: string;
+		readonly value: string;
+	}[];
+	/**
+	 * For `type: "array"` fields, the schema of a single item. When the
+	 * item is itself an object, the item carries its own
+	 * {@link properties} listing the typed sub-fields.
+	 *
+	 * Absent on scalar field types and on `type: "object"` (which uses
+	 * {@link properties} directly).
+	 */
+	readonly itemSchema?: AiFieldSchema;
+	/**
+	 * For `type: "object"` fields (and `type: "array"` items whose
+	 * `itemSchema.type === "object"`), the typed sub-fields of the
+	 * object. Each entry is a fully-formed {@link AiFieldSchema} so
+	 * the LLM and the validator can reason about nested structure
+	 * without parsing free-form descriptions.
+	 *
+	 * Absent on scalar field types.
+	 */
+	readonly properties?: readonly AiFieldSchema[];
+	/**
+	 * For slot fields (mapped to `type: "object"`), the list of
+	 * component names that may be inserted into the slot. When
+	 * omitted, any registered component is allowed.
+	 *
+	 * Mirrors Puck's `allow` array on slot field definitions.
+	 */
+	readonly allow?: readonly string[];
+	/**
+	 * For slot fields (mapped to `type: "object"`), the list of
+	 * component names that may *not* be inserted into the slot.
+	 *
+	 * Mirrors Puck's `disallow` array on slot field definitions.
+	 */
+	readonly disallow?: readonly string[];
 }
 
 /**
@@ -147,29 +147,29 @@ export interface AiFieldSchema {
  * `Config`; Core only owns the destination shape.
  */
 export interface AiComponentSchema {
-  /**
-   * The component name as registered in the Puck config (e.g.
-   * `"Hero"`, `"Button"`, `"Card"`). Matches the `type` used in
-   * Puck's component data.
-   */
-  readonly componentName: string;
-  /**
-   * Human-readable description of what the component does and when
-   * to use it. Forwarded verbatim into the LLM prompt — write it
-   * as guidance to a collaborator.
-   */
-  readonly description: string;
-  /**
-   * The component's props, described field-by-field.
-   */
-  readonly fields: readonly AiFieldSchema[];
-  /**
-   * Optional concrete example of a valid prop bag. The LLM uses
-   * this as a one-shot example of how the fields should look when
-   * populated; leaving it off falls back to zero-shot from the
-   * field descriptions alone.
-   */
-  readonly example?: Readonly<Record<string, unknown>>;
+	/**
+	 * The component name as registered in the Puck config (e.g.
+	 * `"Hero"`, `"Button"`, `"Card"`). Matches the `type` used in
+	 * Puck's component data.
+	 */
+	readonly componentName: string;
+	/**
+	 * Human-readable description of what the component does and when
+	 * to use it. Forwarded verbatim into the LLM prompt — write it
+	 * as guidance to a collaborator.
+	 */
+	readonly description: string;
+	/**
+	 * The component's props, described field-by-field.
+	 */
+	readonly fields: readonly AiFieldSchema[];
+	/**
+	 * Optional concrete example of a valid prop bag. The LLM uses
+	 * this as a one-shot example of how the fields should look when
+	 * populated; leaving it off falls back to zero-shot from the
+	 * field descriptions alone.
+	 */
+	readonly example?: Readonly<Record<string, unknown>>;
 }
 
 /**
@@ -181,29 +181,29 @@ export interface AiComponentSchema {
  * are per-call hints.
  */
 export interface AiGenerationContext {
-  /**
-   * Every component the LLM is allowed to emit, described as an
-   * {@link AiComponentSchema}. The LLM cannot use a component that
-   * is not present in this list.
-   */
-  readonly availableComponents: readonly AiComponentSchema[];
-  /**
-   * Optional snapshot of the current Puck page data. Lets the LLM
-   * generate contextual edits (e.g. "add a CTA to the existing
-   * hero") instead of always producing a full page from scratch.
-   */
-  readonly currentData?: PuckData;
-  /**
-   * Optional theme hint (`"light"` or `"dark"`) so the LLM can
-   * pick appropriate colors, imagery, and tone. Host apps
-   * typically forward the current editor theme.
-   */
-  readonly theme?: "light" | "dark";
-  /**
-   * Optional BCP 47 language tag (e.g. `"en-US"`, `"fr-FR"`) so
-   * the LLM generates copy in the right language.
-   */
-  readonly locale?: string;
+	/**
+	 * Every component the LLM is allowed to emit, described as an
+	 * {@link AiComponentSchema}. The LLM cannot use a component that
+	 * is not present in this list.
+	 */
+	readonly availableComponents: readonly AiComponentSchema[];
+	/**
+	 * Optional snapshot of the current Puck page data. Lets the LLM
+	 * generate contextual edits (e.g. "add a CTA to the existing
+	 * hero") instead of always producing a full page from scratch.
+	 */
+	readonly currentData?: PuckData;
+	/**
+	 * Optional theme hint (`"light"` or `"dark"`) so the LLM can
+	 * pick appropriate colors, imagery, and tone. Host apps
+	 * typically forward the current editor theme.
+	 */
+	readonly theme?: "light" | "dark";
+	/**
+	 * Optional BCP 47 language tag (e.g. `"en-US"`, `"fr-FR"`) so
+	 * the LLM generates copy in the right language.
+	 */
+	readonly locale?: string;
 }
 
 /**
@@ -215,26 +215,26 @@ export interface AiGenerationContext {
  * a stable contract.
  */
 export interface AiValidationIssue {
-  /**
-   * JSON-pointer-style path to the offending value inside the LLM
-   * response (e.g. `"content.0.props.title"`). Empty string means
-   * the issue applies to the response as a whole.
-   */
-  readonly path: string;
-  /**
-   * Human-readable message describing what went wrong. Suitable
-   * for display in a dev console or a toast.
-   */
-  readonly message: string;
-  /**
-   * Severity of the issue.
-   *
-   * - `"warn"` — the response is usable but suspect (e.g. an
-   *   unexpected extra field).
-   * - `"error"` — the response is unusable (e.g. required field
-   *   missing, wrong type).
-   */
-  readonly severity: "error" | "warn";
+	/**
+	 * JSON-pointer-style path to the offending value inside the LLM
+	 * response (e.g. `"content.0.props.title"`). Empty string means
+	 * the issue applies to the response as a whole.
+	 */
+	readonly path: string;
+	/**
+	 * Human-readable message describing what went wrong. Suitable
+	 * for display in a dev console or a toast.
+	 */
+	readonly message: string;
+	/**
+	 * Severity of the issue.
+	 *
+	 * - `"warn"` — the response is usable but suspect (e.g. an
+	 *   unexpected extra field).
+	 * - `"error"` — the response is unusable (e.g. required field
+	 *   missing, wrong type).
+	 */
+	readonly severity: "error" | "warn";
 }
 
 /**
@@ -245,15 +245,15 @@ export interface AiValidationIssue {
  * present even when the response is considered valid.
  */
 export interface AiValidationResult {
-  /**
-   * `true` iff the response contains no `severity: "error"`
-   * issues. A valid response may still carry `"warn"` entries in
-   * {@link issues}.
-   */
-  readonly valid: boolean;
-  /**
-   * The full list of issues found. Empty array when the response
-   * passed without complaint.
-   */
-  readonly issues: readonly AiValidationIssue[];
+	/**
+	 * `true` iff the response contains no `severity: "error"`
+	 * issues. A valid response may still carry `"warn"` entries in
+	 * {@link issues}.
+	 */
+	readonly valid: boolean;
+	/**
+	 * The full list of issues found. Empty array when the response
+	 * passed without complaint.
+	 */
+	readonly issues: readonly AiValidationIssue[];
 }

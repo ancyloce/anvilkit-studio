@@ -23,23 +23,23 @@ import { allDemoFixtures } from "./fixtures/demo-fixtures.js";
 const FIXED_CLOCK = () => new Date("2026-04-11T00:00:00.000Z");
 
 function collectMeta(node: PageIRNode): unknown[] {
-  const here = "meta" in node ? [node.meta] : [];
-  const fromChildren =
-    node.children?.flatMap((child) => collectMeta(child)) ?? [];
-  return [...here, ...fromChildren];
+	const here = "meta" in node ? [node.meta] : [];
+	const fromChildren =
+		node.children?.flatMap((child) => collectMeta(child)) ?? [];
+	return [...here, ...fromChildren];
 }
 
 function flattenMeta(ir: PageIR): unknown[] {
-  return collectMeta(ir.root);
+	return collectMeta(ir.root);
 }
 
 describe("puckDataToIR — no-synthesis invariant on PageIRNode.meta", () => {
-  for (const { name, data, config } of allDemoFixtures) {
-    it(`never synthesizes meta on any node of ${name}`, () => {
-      const ir = puckDataToIR(data, config, { now: FIXED_CLOCK });
-      for (const meta of flattenMeta(ir)) {
-        expect(meta).toBeUndefined();
-      }
-    });
-  }
+	for (const { name, data, config } of allDemoFixtures) {
+		it(`never synthesizes meta on any node of ${name}`, () => {
+			const ir = puckDataToIR(data, config, { now: FIXED_CLOCK });
+			for (const meta of flattenMeta(ir)) {
+				expect(meta).toBeUndefined();
+			}
+		});
+	}
 });

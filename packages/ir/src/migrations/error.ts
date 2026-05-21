@@ -6,19 +6,19 @@
  */
 
 export interface NodeMetaValidationIssue {
-  readonly code: string;
-  readonly message: string;
-  readonly path: ReadonlyArray<string | number>;
+	readonly code: string;
+	readonly message: string;
+	readonly path: ReadonlyArray<string | number>;
 }
 
 export class PageIRNodeMetaError extends Error {
-  readonly issues: readonly NodeMetaValidationIssue[];
-  constructor(issues: readonly NodeMetaValidationIssue[]) {
-    const summary = issues
-      .map((issue) => `${issue.path.join(".") || "<root>"}: ${issue.message}`)
-      .join("; ");
-    super(`PageIRNodeMeta failed validation: ${summary}`);
-    this.name = "PageIRNodeMetaError";
-    this.issues = issues;
-  }
+	readonly issues: readonly NodeMetaValidationIssue[];
+	constructor(issues: readonly NodeMetaValidationIssue[]) {
+		const summary = issues
+			.map((issue) => `${issue.path.join(".") || "<root>"}: ${issue.message}`)
+			.join("; ");
+		super(`PageIRNodeMeta failed validation: ${summary}`);
+		this.name = "PageIRNodeMetaError";
+		this.issues = issues;
+	}
 }

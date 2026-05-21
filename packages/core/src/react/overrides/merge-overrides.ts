@@ -84,8 +84,8 @@ import type { Overrides as PuckOverrides } from "@puckeditor/core";
  * accept, since it must handle every plugin's slice generically.
  */
 type FieldTypesOverride = Record<
-  string,
-  (props: Record<string, unknown>) => unknown
+	string,
+	(props: Record<string, unknown>) => unknown
 >;
 
 /**
@@ -130,64 +130,64 @@ type AnyRenderFunc = (props: Record<string, unknown>) => unknown;
  * ```
  */
 export function mergeOverrides(
-  overridesList: readonly Partial<PuckOverrides>[],
+	overridesList: readonly Partial<PuckOverrides>[],
 ): Partial<PuckOverrides> {
-  // Use a local untyped bag while folding. `PuckOverrides` is too
-  // strict to express "some keys are present, others are not, and
-  // each present key has a different prop shape" in a way that
-  // typechecks inside the loop — we re-assert the final shape on
-  // the way out instead.
-  const accumulator: Record<string, unknown> = {};
+	// Use a local untyped bag while folding. `PuckOverrides` is too
+	// strict to express "some keys are present, others are not, and
+	// each present key has a different prop shape" in a way that
+	// typechecks inside the loop — we re-assert the final shape on
+	// the way out instead.
+	const accumulator: Record<string, unknown> = {};
 
-  for (const slice of overridesList) {
-    // Defensive against `null` / `undefined` entries even though the
-    // parameter type forbids them: `[...runtime.overrides, consumer]`
-    // is a common caller pattern where `consumer` may be absent, and
-    // tests pin this tolerance so the helper stays robust under
-    // `as unknown as` casts from callers.
-    if (slice === null || slice === undefined) {
-      continue;
-    }
+	for (const slice of overridesList) {
+		// Defensive against `null` / `undefined` entries even though the
+		// parameter type forbids them: `[...runtime.overrides, consumer]`
+		// is a common caller pattern where `consumer` may be absent, and
+		// tests pin this tolerance so the helper stays robust under
+		// `as unknown as` casts from callers.
+		if (slice === null || slice === undefined) {
+			continue;
+		}
 
-    for (const key of Object.keys(slice) as Array<keyof PuckOverrides>) {
-      const next = slice[key];
-      if (next === undefined) {
-        // `Partial<Overrides>` permits `key: undefined`; treat it
-        // the same as "key not present" so consumers can opt a
-        // plugin out by explicitly clearing a key.
-        continue;
-      }
+		for (const key of Object.keys(slice) as Array<keyof PuckOverrides>) {
+			const next = slice[key];
+			if (next === undefined) {
+				// `Partial<Overrides>` permits `key: undefined`; treat it
+				// the same as "key not present" so consumers can opt a
+				// plugin out by explicitly clearing a key.
+				continue;
+			}
 
-      if (key === "fieldTypes") {
-        accumulator.fieldTypes = composeFieldTypes(
-          accumulator.fieldTypes as FieldTypesOverride | undefined,
-          next as FieldTypesOverride,
-          key,
-        );
-        continue;
-      }
+			if (key === "fieldTypes") {
+				accumulator.fieldTypes = composeFieldTypes(
+					accumulator.fieldTypes as FieldTypesOverride | undefined,
+					next as FieldTypesOverride,
+					key,
+				);
+				continue;
+			}
 
-      if (typeof next !== "function") {
-        throw new TypeError(
-          `mergeOverrides: override "${String(key)}" must be a function, received ${typeOf(
-            next,
-          )}`,
-        );
-      }
+			if (typeof next !== "function") {
+				throw new TypeError(
+					`mergeOverrides: override "${String(key)}" must be a function, received ${typeOf(
+						next,
+					)}`,
+				);
+			}
 
-      accumulator[key] = composeRenderFunc(
-        accumulator[key] as AnyRenderFunc | undefined,
-        next as AnyRenderFunc,
-      );
-    }
-  }
+			accumulator[key] = composeRenderFunc(
+				accumulator[key] as AnyRenderFunc | undefined,
+				next as AnyRenderFunc,
+			);
+		}
+	}
 
-  // The accumulator is structurally a `Partial<PuckOverrides>` — we
-  // only ever wrote keys that exist on the Puck type and we
-  // validated every value as a function (or as a composed
-  // `fieldTypes` dictionary). The `as` cast is the handoff point
-  // back to Puck's strict typing.
-  return accumulator as Partial<PuckOverrides>;
+	// The accumulator is structurally a `Partial<PuckOverrides>` — we
+	// only ever wrote keys that exist on the Puck type and we
+	// validated every value as a function (or as a composed
+	// `fieldTypes` dictionary). The `as` cast is the handoff point
+	// back to Puck's strict typing.
+	return accumulator as Partial<PuckOverrides>;
 }
 
 /**
@@ -206,22 +206,22 @@ export function mergeOverrides(
  * indistinguishable from letting Puck compose the plugins itself.
  */
 function composeRenderFunc(
-  prev: AnyRenderFunc | undefined,
-  next: AnyRenderFunc,
+	prev: AnyRenderFunc | undefined,
+	next: AnyRenderFunc,
 ): AnyRenderFunc {
-  if (prev === undefined) {
-    return next;
-  }
+	if (prev === undefined) {
+		return next;
+	}
 
-  return (props) =>
-    next({
-      ...props,
-      // Render the prior accumulation first; its output becomes
-      // the `children` the new override receives. This is the
-      // per-key curry — a flat spread merge would drop `prev`
-      // entirely.
-      children: prev(props),
-    });
+	return (props) =>
+		next({
+			...props,
+			// Render the prior accumulation first; its output becomes
+			// the `children` the new override receives. This is the
+			// per-key curry — a flat spread merge would drop `prev`
+			// entirely.
+			children: prev(props),
+		});
 }
 
 /**
@@ -234,31 +234,31 @@ function composeRenderFunc(
  * (`fieldTypes.text`) when a non-function value leaks through.
  */
 function composeFieldTypes(
-  prev: FieldTypesOverride | undefined,
-  next: FieldTypesOverride,
-  parentKey: string,
+	prev: FieldTypesOverride | undefined,
+	next: FieldTypesOverride,
+	parentKey: string,
 ): FieldTypesOverride {
-  // Copy `prev` so we never mutate the caller's dictionary — the
-  // input array is logically read-only even though TypeScript can't
-  // enforce that through the `Partial<PuckOverrides>` cast.
-  const merged: FieldTypesOverride = { ...(prev ?? {}) };
+	// Copy `prev` so we never mutate the caller's dictionary — the
+	// input array is logically read-only even though TypeScript can't
+	// enforce that through the `Partial<PuckOverrides>` cast.
+	const merged: FieldTypesOverride = { ...(prev ?? {}) };
 
-  for (const fieldType of Object.keys(next)) {
-    const candidate = next[fieldType];
-    if (candidate === undefined) {
-      continue;
-    }
-    if (typeof candidate !== "function") {
-      throw new TypeError(
-        `mergeOverrides: override "${parentKey}.${fieldType}" must be a function, received ${typeOf(
-          candidate,
-        )}`,
-      );
-    }
-    merged[fieldType] = composeRenderFunc(merged[fieldType], candidate);
-  }
+	for (const fieldType of Object.keys(next)) {
+		const candidate = next[fieldType];
+		if (candidate === undefined) {
+			continue;
+		}
+		if (typeof candidate !== "function") {
+			throw new TypeError(
+				`mergeOverrides: override "${parentKey}.${fieldType}" must be a function, received ${typeOf(
+					candidate,
+				)}`,
+			);
+		}
+		merged[fieldType] = composeRenderFunc(merged[fieldType], candidate);
+	}
 
-  return merged;
+	return merged;
 }
 
 /**
@@ -267,8 +267,8 @@ function composeFieldTypes(
  * for debugging a bad override slice.
  */
 function typeOf(value: unknown): string {
-  if (value === null) {
-    return "null";
-  }
-  return typeof value;
+	if (value === null) {
+		return "null";
+	}
+	return typeof value;
 }

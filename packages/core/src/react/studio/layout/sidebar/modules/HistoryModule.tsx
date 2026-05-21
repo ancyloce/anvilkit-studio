@@ -22,24 +22,24 @@ import { useMsg } from "@/state/editor-i18n-store";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 
 export function HistoryModule(): ReactNode {
-  const msg = useMsg();
-  const panel = useSidebarRegistry((state) => state.historyPanel);
+	const msg = useMsg();
+	const panel = useSidebarRegistry((state) => state.historyPanel);
 
-  if (panel === null) {
-    return (
-      <div data-testid="ak-module-history" className="flex h-full flex-col">
-        <EmptyState
-          testId="ak-history-empty"
-          message={msg("studio.module.history.empty")}
-          icon={<HistoryIcon aria-hidden="true" />}
-        />
-      </div>
-    );
-  }
+	if (panel === null) {
+		return (
+			<div data-testid="ak-module-history" className="flex h-full flex-col">
+				<EmptyState
+					testId="ak-history-empty"
+					message={msg("studio.module.history.empty")}
+					icon={<HistoryIcon aria-hidden="true" />}
+				/>
+			</div>
+		);
+	}
 
-  return (
-    <div data-testid="ak-module-history" className="flex h-full flex-col p-2">
-      {panel.render()}
-    </div>
-  );
+	return (
+		<div data-testid="ak-module-history" className="flex h-full flex-col p-2">
+			{panel.render()}
+		</div>
+	);
 }

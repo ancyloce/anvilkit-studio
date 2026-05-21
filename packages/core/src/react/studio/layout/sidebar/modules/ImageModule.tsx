@@ -32,11 +32,11 @@ import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
 import { useMsg } from "@/state/editor-i18n-store";
+import { useAssetCategoryFilter } from "@/state/hooks";
 import {
 	appendComponentToRoot,
 	generateNodeId,
 } from "@/state/insert-component-node";
-import { useAssetCategoryFilter } from "@/state/hooks";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 import type {
 	StudioAsset,

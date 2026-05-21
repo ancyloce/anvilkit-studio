@@ -45,38 +45,38 @@
  * to deduplicate by {@link PageIRAsset.id}.
  */
 export interface PageIRAsset {
-  /**
-   * Stable, unique identifier for this asset within the IR.
-   *
-   * Typically a hash of the URL or a caller-provided slug. Exporters
-   * use this for deduplication when the same asset is referenced by
-   * multiple nodes.
-   */
-  readonly id: string;
-  /**
-   * The asset's category.
-   *
-   * Closed union — extending this list is a breaking change to the
-   * IR contract. Use `"other"` for anything that doesn't fit the
-   * named categories rather than introducing an ad-hoc string.
-   */
-  readonly kind: "image" | "video" | "font" | "script" | "style" | "other";
-  /**
-   * Absolute or root-relative URL pointing at the asset.
-   *
-   * Exporters may rewrite this (e.g. to a CDN or a hashed filename)
-   * during serialization — the IR shape does not constrain the
-   * scheme.
-   */
-  readonly url: string;
-  /**
-   * Free-form metadata the producer wants to pass through to
-   * consumers (e.g. `{ width: 1600, height: 900 }` for an image).
-   *
-   * Exporters should treat unknown keys as forward-compatible — a
-   * missing key must not cause a hard failure.
-   */
-  readonly meta?: Readonly<Record<string, unknown>>;
+	/**
+	 * Stable, unique identifier for this asset within the IR.
+	 *
+	 * Typically a hash of the URL or a caller-provided slug. Exporters
+	 * use this for deduplication when the same asset is referenced by
+	 * multiple nodes.
+	 */
+	readonly id: string;
+	/**
+	 * The asset's category.
+	 *
+	 * Closed union — extending this list is a breaking change to the
+	 * IR contract. Use `"other"` for anything that doesn't fit the
+	 * named categories rather than introducing an ad-hoc string.
+	 */
+	readonly kind: "image" | "video" | "font" | "script" | "style" | "other";
+	/**
+	 * Absolute or root-relative URL pointing at the asset.
+	 *
+	 * Exporters may rewrite this (e.g. to a CDN or a hashed filename)
+	 * during serialization — the IR shape does not constrain the
+	 * scheme.
+	 */
+	readonly url: string;
+	/**
+	 * Free-form metadata the producer wants to pass through to
+	 * consumers (e.g. `{ width: 1600, height: 900 }` for an image).
+	 *
+	 * Exporters should treat unknown keys as forward-compatible — a
+	 * missing key must not cause a hard failure.
+	 */
+	readonly meta?: Readonly<Record<string, unknown>>;
 }
 
 /**
@@ -96,29 +96,29 @@ export interface PageIRAsset {
  * "zero runtime code" rule of this file.
  */
 export interface PageIRNodeMeta {
-  /**
-   * When `true`, the editor SHOULD treat this node and its subtree
-   * as locked: surface a lock indicator and refuse mutating
-   * dispatches scoped to the subtree. Authoring concept only —
-   * exporters ignore the field.
-   */
-  readonly locked?: boolean;
-  /**
-   * Opaque host-owned identifier for the author/team that owns
-   * this node. Capped at 256 characters at runtime.
-   */
-  readonly owner?: string;
-  /**
-   * Host-versioning string for this node. Runtime contract: must
-   * match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional
-   * pre-release / build suffix).
-   */
-  readonly version?: string;
-  /**
-   * Freeform author notes scoped to this node. Capped at 512
-   * characters at runtime.
-   */
-  readonly notes?: string;
+	/**
+	 * When `true`, the editor SHOULD treat this node and its subtree
+	 * as locked: surface a lock indicator and refuse mutating
+	 * dispatches scoped to the subtree. Authoring concept only —
+	 * exporters ignore the field.
+	 */
+	readonly locked?: boolean;
+	/**
+	 * Opaque host-owned identifier for the author/team that owns
+	 * this node. Capped at 256 characters at runtime.
+	 */
+	readonly owner?: string;
+	/**
+	 * Host-versioning string for this node. Runtime contract: must
+	 * match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional
+	 * pre-release / build suffix).
+	 */
+	readonly version?: string;
+	/**
+	 * Freeform author notes scoped to this node. Capped at 512
+	 * characters at runtime.
+	 */
+	readonly notes?: string;
 }
 
 /**
@@ -148,58 +148,58 @@ export interface PageIRNodeMeta {
  * explosion.
  */
 export interface PageIRNode {
-  /**
-   * Stable per-node identifier, unique within its owning
-   * {@link PageIR}. Typically carried over from Puck's component
-   * data id so round-tripping is straightforward.
-   */
-  readonly id: string;
-  /**
-   * The component name this node was produced from
-   * (e.g. `"Hero"`, `"Button"`). Exporters dispatch on this value
-   * to select a renderer.
-   */
-  readonly type: string;
-  /**
-   * Serialized prop bag for this node.
-   *
-   * Opaque to the IR — exporters are responsible for interpreting
-   * the keys they care about and ignoring the rest.
-   */
-  readonly props: Readonly<Record<string, unknown>>;
-  /**
-   * Optional parent slot/zone name this node belongs to.
-   *
-   * Top-level nodes in the root content omit this field. Nested
-   * nodes produced from a Puck slot field carry the slot field key
-   * here so `irToPuckData()` can rebuild the correct parent prop.
-   */
-  readonly slot?: string;
-  /**
-   * Distinguishes modern Puck slot fields from legacy `data.zones`
-   * entries when {@link slot} is present. Omitted means `"slot"`.
-   */
-  readonly slotKind?: "slot" | "zone";
-  /**
-   * Optional child nodes. Absent on leaf nodes.
-   */
-  readonly children?: readonly PageIRNode[];
-  /**
-   * Optional assets scoped to this node.
-   *
-   * Duplicates from {@link PageIR.assets} are allowed and expected
-   * — exporters deduplicate by {@link PageIRAsset.id}.
-   */
-  readonly assets?: readonly PageIRAsset[];
-  /**
-   * Optional authoring-time metadata. See {@link PageIRNodeMeta}.
-   *
-   * Additive in `@anvilkit/ir@0.22` (Phase 6 / M10). Round-trip
-   * safe: when absent, every Phase 3/5 invariant (e.g. byte-equal
-   * `puckDataToIR` output across runs) is preserved. Exporters
-   * MUST NOT consume `meta`; it is an authoring contract only.
-   */
-  readonly meta?: PageIRNodeMeta;
+	/**
+	 * Stable per-node identifier, unique within its owning
+	 * {@link PageIR}. Typically carried over from Puck's component
+	 * data id so round-tripping is straightforward.
+	 */
+	readonly id: string;
+	/**
+	 * The component name this node was produced from
+	 * (e.g. `"Hero"`, `"Button"`). Exporters dispatch on this value
+	 * to select a renderer.
+	 */
+	readonly type: string;
+	/**
+	 * Serialized prop bag for this node.
+	 *
+	 * Opaque to the IR — exporters are responsible for interpreting
+	 * the keys they care about and ignoring the rest.
+	 */
+	readonly props: Readonly<Record<string, unknown>>;
+	/**
+	 * Optional parent slot/zone name this node belongs to.
+	 *
+	 * Top-level nodes in the root content omit this field. Nested
+	 * nodes produced from a Puck slot field carry the slot field key
+	 * here so `irToPuckData()` can rebuild the correct parent prop.
+	 */
+	readonly slot?: string;
+	/**
+	 * Distinguishes modern Puck slot fields from legacy `data.zones`
+	 * entries when {@link slot} is present. Omitted means `"slot"`.
+	 */
+	readonly slotKind?: "slot" | "zone";
+	/**
+	 * Optional child nodes. Absent on leaf nodes.
+	 */
+	readonly children?: readonly PageIRNode[];
+	/**
+	 * Optional assets scoped to this node.
+	 *
+	 * Duplicates from {@link PageIR.assets} are allowed and expected
+	 * — exporters deduplicate by {@link PageIRAsset.id}.
+	 */
+	readonly assets?: readonly PageIRAsset[];
+	/**
+	 * Optional authoring-time metadata. See {@link PageIRNodeMeta}.
+	 *
+	 * Additive in `@anvilkit/ir@0.22` (Phase 6 / M10). Round-trip
+	 * safe: when absent, every Phase 3/5 invariant (e.g. byte-equal
+	 * `puckDataToIR` output across runs) is preserved. Exporters
+	 * MUST NOT consume `meta`; it is an authoring contract only.
+	 */
+	readonly meta?: PageIRNodeMeta;
 }
 
 /**
@@ -213,23 +213,23 @@ export interface PageIRNode {
  * remains JSON-serializable without a custom replacer.
  */
 export interface PageIRMetadata {
-  /**
-   * Optional page title (e.g. surfaced in `<title>` and Open Graph).
-   */
-  readonly title?: string;
-  /**
-   * Optional page description (e.g. surfaced in
-   * `<meta name="description">`).
-   */
-  readonly description?: string;
-  /**
-   * Optional ISO 8601 timestamp of page creation.
-   */
-  readonly createdAt?: string;
-  /**
-   * Optional ISO 8601 timestamp of most-recent page update.
-   */
-  readonly updatedAt?: string;
+	/**
+	 * Optional page title (e.g. surfaced in `<title>` and Open Graph).
+	 */
+	readonly title?: string;
+	/**
+	 * Optional page description (e.g. surfaced in
+	 * `<meta name="description">`).
+	 */
+	readonly description?: string;
+	/**
+	 * Optional ISO 8601 timestamp of page creation.
+	 */
+	readonly createdAt?: string;
+	/**
+	 * Optional ISO 8601 timestamp of most-recent page update.
+	 */
+	readonly updatedAt?: string;
 }
 
 /**
@@ -240,31 +240,31 @@ export interface PageIRMetadata {
  * declares the shape; it does not implement the transformation.
  */
 export interface PageIR {
-  /**
-   * Schema version of this IR document.
-   *
-   * Literal `"1"` for the initial contract. A future `"2"` would be
-   * a breaking change to IR shape and requires a migration shim in
-   * `@anvilkit/ir`. String (not number) to avoid JSON
-   * floating-point surprises and to match the convention used by
-   * most serialized IR schemas.
-   */
-  readonly version: "1";
-  /**
-   * The root node of the page tree.
-   *
-   * Exporters walk this recursively to produce output.
-   */
-  readonly root: PageIRNode;
-  /**
-   * Top-level asset manifest. Every asset referenced anywhere in
-   * the tree should appear here exactly once; node-scoped
-   * {@link PageIRNode.assets} entries are an optimization for
-   * exporters that process nodes independently.
-   */
-  readonly assets: readonly PageIRAsset[];
-  /**
-   * Page-level metadata block. See {@link PageIRMetadata}.
-   */
-  readonly metadata: PageIRMetadata;
+	/**
+	 * Schema version of this IR document.
+	 *
+	 * Literal `"1"` for the initial contract. A future `"2"` would be
+	 * a breaking change to IR shape and requires a migration shim in
+	 * `@anvilkit/ir`. String (not number) to avoid JSON
+	 * floating-point surprises and to match the convention used by
+	 * most serialized IR schemas.
+	 */
+	readonly version: "1";
+	/**
+	 * The root node of the page tree.
+	 *
+	 * Exporters walk this recursively to produce output.
+	 */
+	readonly root: PageIRNode;
+	/**
+	 * Top-level asset manifest. Every asset referenced anywhere in
+	 * the tree should appear here exactly once; node-scoped
+	 * {@link PageIRNode.assets} entries are an optimization for
+	 * exporters that process nodes independently.
+	 */
+	readonly assets: readonly PageIRAsset[];
+	/**
+	 * Page-level metadata block. See {@link PageIRMetadata}.
+	 */
+	readonly metadata: PageIRMetadata;
 }

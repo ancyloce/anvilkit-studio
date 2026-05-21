@@ -12,11 +12,11 @@ import { defineConfig, mergeConfig } from "vitest/config";
  * `phase3-003` (round-trip) and `phase3-004` (helpers + snapshots).
  */
 export default mergeConfig(
-  nodePreset,
-  defineConfig({
-    test: {
-      name: "@anvilkit/ir",
-      passWithNoTests: true,
-    },
-  }),
+	nodePreset,
+	defineConfig({
+		test: {
+			name: "@anvilkit/ir",
+			passWithNoTests: true,
+		},
+	}),
 );

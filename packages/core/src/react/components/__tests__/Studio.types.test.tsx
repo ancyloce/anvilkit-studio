@@ -30,64 +30,64 @@ type MyData = UserGenerics<MyConfig>["UserData"];
 // A plugin authored against the host config — exactly what a published
 // `@anvilkit/plugin-*` package would export.
 const typedPlugin: StudioPlugin<MyConfig> = {
-  meta: {
-    id: "com.example.typed",
-    name: "Typed",
-    version: "1.0.0",
-    coreVersion: "^0.1.0",
-  },
-  register(ctx) {
-    // `ctx` must be `StudioPluginContext<MyConfig>` — `getData()`
-    // returns the config-correct data shape.
-    const data: MyData = ctx.getData();
-    void data;
-    return { meta: typedPlugin.meta };
-  },
+	meta: {
+		id: "com.example.typed",
+		name: "Typed",
+		version: "1.0.0",
+		coreVersion: "^0.1.0",
+	},
+	register(ctx) {
+		// `ctx` must be `StudioPluginContext<MyConfig>` — `getData()`
+		// returns the config-correct data shape.
+		const data: MyData = ctx.getData();
+		void data;
+		return { meta: typedPlugin.meta };
+	},
 };
 
 describe("Studio generic boundary", () => {
-  it("threads UserConfig through plugins and callbacks", () => {
-    // The external plugin is assignable to the generic props' list.
-    const props: StudioProps<MyConfig> = {
-      puckConfig: myConfig,
-      plugins: [typedPlugin],
-      onPublish: (data) => {
-        // `data` is narrowed to `MyConfig`'s data shape.
-        const narrowed: MyData = data;
-        void narrowed;
-      },
-      onChange: (data) => {
-        const narrowed: MyData = data;
-        void narrowed;
-      },
-    };
-    void props;
+	it("threads UserConfig through plugins and callbacks", () => {
+		// The external plugin is assignable to the generic props' list.
+		const props: StudioProps<MyConfig> = {
+			puckConfig: myConfig,
+			plugins: [typedPlugin],
+			onPublish: (data) => {
+				// `data` is narrowed to `MyConfig`'s data shape.
+				const narrowed: MyData = data;
+				void narrowed;
+			},
+			onChange: (data) => {
+				const narrowed: MyData = data;
+				void narrowed;
+			},
+		};
+		void props;
 
-    // The component itself accepts the explicit type argument.
-    const el = (
-      <Studio<MyConfig> puckConfig={myConfig} plugins={[typedPlugin]} />
-    );
-    void el;
+		// The component itself accepts the explicit type argument.
+		const el = (
+			<Studio<MyConfig> puckConfig={myConfig} plugins={[typedPlugin]} />
+		);
+		void el;
 
-    expect(true).toBe(true);
-  });
+		expect(true).toBe(true);
+	});
 
-  it("rejects malformed props (negative assertions)", () => {
-    // @ts-expect-error — `puckConfig` is required.
-    const missingConfig: StudioProps<MyConfig> = { plugins: [typedPlugin] };
-    void missingConfig;
+	it("rejects malformed props (negative assertions)", () => {
+		// @ts-expect-error — `puckConfig` is required.
+		const missingConfig: StudioProps<MyConfig> = { plugins: [typedPlugin] };
+		void missingConfig;
 
-    const badPlugins: StudioProps<MyConfig> = {
-      puckConfig: myConfig,
-      // @ts-expect-error — a number is not a Studio/Puck plugin.
-      plugins: [42],
-    };
-    void badPlugins;
+		const badPlugins: StudioProps<MyConfig> = {
+			puckConfig: myConfig,
+			// @ts-expect-error — a number is not a Studio/Puck plugin.
+			plugins: [42],
+		};
+		void badPlugins;
 
-    // @ts-expect-error — `puckConfig` is required on the component.
-    const bad = <Studio<MyConfig> plugins={[typedPlugin]} />;
-    void bad;
+		// @ts-expect-error — `puckConfig` is required on the component.
+		const bad = <Studio<MyConfig> plugins={[typedPlugin]} />;
+		void bad;
 
-    expect(true).toBe(true);
-  });
+		expect(true).toBe(true);
+	});
 });

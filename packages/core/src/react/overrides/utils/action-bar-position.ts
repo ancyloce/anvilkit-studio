@@ -11,23 +11,23 @@
  */
 
 export interface Rect {
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
+	readonly x: number;
+	readonly y: number;
+	readonly width: number;
+	readonly height: number;
 }
 
 export interface ActionBarLayout {
-  readonly x: number;
-  readonly y: number;
+	readonly x: number;
+	readonly y: number;
 }
 
 export interface ComputeActionBarPositionInput {
-  readonly target: Rect;
-  readonly viewport: Rect;
-  readonly bar: { readonly width: number; readonly height: number };
-  readonly zoom: number;
-  readonly margin?: number;
+	readonly target: Rect;
+	readonly viewport: Rect;
+	readonly bar: { readonly width: number; readonly height: number };
+	readonly zoom: number;
+	readonly margin?: number;
 }
 
 /**
@@ -41,28 +41,28 @@ export interface ComputeActionBarPositionInput {
  *   against the canvas edge.
  */
 export function computeActionBarPosition(
-  input: ComputeActionBarPositionInput,
+	input: ComputeActionBarPositionInput,
 ): ActionBarLayout {
-  const { target, viewport, bar, zoom, margin = 4 } = input;
-  const safeZoom = zoom <= 0 ? 1 : zoom;
+	const { target, viewport, bar, zoom, margin = 4 } = input;
+	const safeZoom = zoom <= 0 ? 1 : zoom;
 
-  const desiredX = target.x + target.width - bar.width / safeZoom;
-  const desiredY = target.y - (bar.height + margin) / safeZoom;
+	const desiredX = target.x + target.width - bar.width / safeZoom;
+	const desiredY = target.y - (bar.height + margin) / safeZoom;
 
-  const minX = viewport.x + margin;
-  const maxX = viewport.x + viewport.width - bar.width - margin;
-  const minY = viewport.y + margin;
-  const maxY = viewport.y + viewport.height - bar.height - margin;
+	const minX = viewport.x + margin;
+	const maxX = viewport.x + viewport.width - bar.width - margin;
+	const minY = viewport.y + margin;
+	const maxY = viewport.y + viewport.height - bar.height - margin;
 
-  return {
-    x: clamp(desiredX, minX, maxX),
-    y: clamp(desiredY, minY, maxY),
-  };
+	return {
+		x: clamp(desiredX, minX, maxX),
+		y: clamp(desiredY, minY, maxY),
+	};
 }
 
 function clamp(value: number, min: number, max: number): number {
-  if (max < min) {
-    return min;
-  }
-  return Math.max(min, Math.min(max, value));
+	if (max < min) {
+		return min;
+	}
+	return Math.max(min, Math.min(max, value));
 }

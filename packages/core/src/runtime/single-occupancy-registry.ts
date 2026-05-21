@@ -40,39 +40,39 @@ export type SingleOccupancyConflict = "first" | "last" | "error";
 
 /** Details of a rejected or overriding duplicate claim. */
 export interface SingleOccupancyConflictInfo {
-  /** The contested id. */
-  readonly id: string;
-  /** Plugin id that already owns `id`. */
-  readonly currentOwner: string;
-  /** Plugin id whose duplicate claim triggered the conflict. */
-  readonly incomingOwner: string;
+	/** The contested id. */
+	readonly id: string;
+	/** Plugin id that already owns `id`. */
+	readonly currentOwner: string;
+	/** Plugin id whose duplicate claim triggered the conflict. */
+	readonly incomingOwner: string;
 }
 
 export interface SingleOccupancyOptions {
-  /** Conflict policy. Required — the whole point is to make it explicit. */
-  readonly conflict: SingleOccupancyConflict;
-  /**
-   * Invoked for every duplicate claim, before the policy is applied
-   * (so a `"first"` caller can warn, an `"error"` caller can throw a
-   * typed error). Optional only because `"last"` callers may not care.
-   */
-  readonly onConflict?: (info: SingleOccupancyConflictInfo) => void;
+	/** Conflict policy. Required — the whole point is to make it explicit. */
+	readonly conflict: SingleOccupancyConflict;
+	/**
+	 * Invoked for every duplicate claim, before the policy is applied
+	 * (so a `"first"` caller can warn, an `"error"` caller can throw a
+	 * typed error). Optional only because `"last"` callers may not care.
+	 */
+	readonly onConflict?: (info: SingleOccupancyConflictInfo) => void;
 }
 
 export interface SingleOccupancyRegistry<T> {
-  /**
-   * Attempt to claim `id` for `owner`. Returns `true` if `value` is
-   * now the stored entry for `id` (a fresh claim, or a `"last"`
-   * override), `false` if the claim was dropped (`"first"` policy,
-   * duplicate). For `"error"` policy a duplicate never returns — it
-   * throws.
-   */
-  claim(id: string, owner: string, value: T): boolean;
-  get(id: string): T | undefined;
-  ownerOf(id: string): string | undefined;
-  has(id: string): boolean;
-  readonly size: number;
-  entries(): IterableIterator<[string, T]>;
+	/**
+	 * Attempt to claim `id` for `owner`. Returns `true` if `value` is
+	 * now the stored entry for `id` (a fresh claim, or a `"last"`
+	 * override), `false` if the claim was dropped (`"first"` policy,
+	 * duplicate). For `"error"` policy a duplicate never returns — it
+	 * throws.
+	 */
+	claim(id: string, owner: string, value: T): boolean;
+	get(id: string): T | undefined;
+	ownerOf(id: string): string | undefined;
+	has(id: string): boolean;
+	readonly size: number;
+	entries(): IterableIterator<[string, T]>;
 }
 
 /**
@@ -80,60 +80,60 @@ export interface SingleOccupancyRegistry<T> {
  * backed by a `Map`), so iteration matches plugin registration order.
  */
 export function createSingleOccupancyRegistry<T>(
-  options: SingleOccupancyOptions,
+	options: SingleOccupancyOptions,
 ): SingleOccupancyRegistry<T> {
-  const values = new Map<string, T>();
-  const owners = new Map<string, string>();
-  const { conflict, onConflict } = options;
+	const values = new Map<string, T>();
+	const owners = new Map<string, string>();
+	const { conflict, onConflict } = options;
 
-  return {
-    claim(id, owner, value) {
-      const currentOwner = owners.get(id);
-      if (currentOwner === undefined) {
-        values.set(id, value);
-        owners.set(id, owner);
-        return true;
-      }
+	return {
+		claim(id, owner, value) {
+			const currentOwner = owners.get(id);
+			if (currentOwner === undefined) {
+				values.set(id, value);
+				owners.set(id, owner);
+				return true;
+			}
 
-      const info: SingleOccupancyConflictInfo = {
-        id,
-        currentOwner,
-        incomingOwner: owner,
-      };
-      onConflict?.(info);
+			const info: SingleOccupancyConflictInfo = {
+				id,
+				currentOwner,
+				incomingOwner: owner,
+			};
+			onConflict?.(info);
 
-      if (conflict === "error") {
-        // Safety net: a well-behaved `"error"` caller throws a
-        // typed error inside `onConflict`. If it did not, fail
-        // loud here rather than silently dropping the claim.
-        throw new Error(
-          `single-occupancy id "${id}" claimed by "${owner}" but already owned by "${currentOwner}"`,
-        );
-      }
+			if (conflict === "error") {
+				// Safety net: a well-behaved `"error"` caller throws a
+				// typed error inside `onConflict`. If it did not, fail
+				// loud here rather than silently dropping the claim.
+				throw new Error(
+					`single-occupancy id "${id}" claimed by "${owner}" but already owned by "${currentOwner}"`,
+				);
+			}
 
-      if (conflict === "last") {
-        values.set(id, value);
-        owners.set(id, owner);
-        return true;
-      }
+			if (conflict === "last") {
+				values.set(id, value);
+				owners.set(id, owner);
+				return true;
+			}
 
-      // "first": keep the original, drop the late claim.
-      return false;
-    },
-    get(id) {
-      return values.get(id);
-    },
-    ownerOf(id) {
-      return owners.get(id);
-    },
-    has(id) {
-      return values.has(id);
-    },
-    get size() {
-      return values.size;
-    },
-    entries() {
-      return values.entries();
-    },
-  };
+			// "first": keep the original, drop the late claim.
+			return false;
+		},
+		get(id) {
+			return values.get(id);
+		},
+		ownerOf(id) {
+			return owners.get(id);
+		},
+		has(id) {
+			return values.has(id);
+		},
+		get size() {
+			return values.size;
+		},
+		entries() {
+			return values.entries();
+		},
+	};
 }

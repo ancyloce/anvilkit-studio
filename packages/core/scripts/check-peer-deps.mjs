@@ -69,9 +69,7 @@ async function main() {
 		);
 	}
 	if (leakedToDeps.length > 0) {
-		console.error(
-			`  Leaked into dependencies: ${leakedToDeps.join(", ")}`,
-		);
+		console.error(`  Leaked into dependencies: ${leakedToDeps.join(", ")}`);
 		console.error(
 			`  Remove from \"dependencies\" — having React in dependencies forces a second React copy in host apps.`,
 		);

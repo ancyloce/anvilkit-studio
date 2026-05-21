@@ -11,12 +11,12 @@ import type { ReactNode } from "react";
 import { useCanvasDropController } from "./useCanvasDropController";
 
 export interface CanvasDropMountProps {
-  readonly document?: Document;
+	readonly document?: Document;
 }
 
 export function CanvasDropMount({
-  document: iframeDoc,
+	document: iframeDoc,
 }: CanvasDropMountProps): ReactNode {
-  useCanvasDropController(iframeDoc);
-  return null;
+	useCanvasDropController(iframeDoc);
+	return null;
 }

@@ -58,15 +58,15 @@ import { createStore, type StoreApi } from "zustand/vanilla";
  * tweak a prompt regardless of how it ended.
  */
 export interface AiHistoryEntry {
-  /**
-   * The prompt the user submitted, verbatim.
-   */
-  readonly prompt: string;
-  /**
-   * `Date.now()` at the moment {@link AiState.startGeneration} was
-   * called with this prompt.
-   */
-  readonly at: number;
+	/**
+	 * The prompt the user submitted, verbatim.
+	 */
+	readonly prompt: string;
+	/**
+	 * `Date.now()` at the moment {@link AiState.startGeneration} was
+	 * called with this prompt.
+	 */
+	readonly at: number;
 }
 
 /**
@@ -74,64 +74,64 @@ export interface AiHistoryEntry {
  * actions plus {@link AiState.reset}.
  */
 export interface AiState {
-  /**
-   * `true` while a generation is in flight. **Never persisted**
-   * — a reload always lands on `false` so the UI can never be
-   * stuck in a spinner.
-   */
-  readonly isGenerating: boolean;
-  /**
-   * The prompt currently (or most recently) being generated
-   * against, or `null` before any call has been made. Ephemeral.
-   */
-  readonly lastPrompt: string | null;
-  /**
-   * Error message from the most recent failed call, or `null`
-   * when the most recent call succeeded. **Never persisted** —
-   * showing a stale error after a reload is worse than showing
-   * nothing.
-   */
-  readonly lastError: string | null;
-  /**
-   * The user's prompt history, oldest first. New prompts are
-   * appended by {@link startGeneration}; the Zustand-persist
-   * `partialize` callback (see `useAiStore` below) trims to the
-   * last 10 entries when persisting, and {@link clearHistory}
-   * empties the in-memory array.
-   */
-  readonly history: readonly AiHistoryEntry[];
+	/**
+	 * `true` while a generation is in flight. **Never persisted**
+	 * — a reload always lands on `false` so the UI can never be
+	 * stuck in a spinner.
+	 */
+	readonly isGenerating: boolean;
+	/**
+	 * The prompt currently (or most recently) being generated
+	 * against, or `null` before any call has been made. Ephemeral.
+	 */
+	readonly lastPrompt: string | null;
+	/**
+	 * Error message from the most recent failed call, or `null`
+	 * when the most recent call succeeded. **Never persisted** —
+	 * showing a stale error after a reload is worse than showing
+	 * nothing.
+	 */
+	readonly lastError: string | null;
+	/**
+	 * The user's prompt history, oldest first. New prompts are
+	 * appended by {@link startGeneration}; the Zustand-persist
+	 * `partialize` callback (see `useAiStore` below) trims to the
+	 * last 10 entries when persisting, and {@link clearHistory}
+	 * empties the in-memory array.
+	 */
+	readonly history: readonly AiHistoryEntry[];
 
-  /**
-   * Mark a new generation as in flight. Flips `isGenerating` to
-   * `true`, stashes the prompt in `lastPrompt`, clears any prior
-   * `lastError`, and appends a new {@link AiHistoryEntry} to
-   * `history` with the current timestamp.
-   *
-   * Always pair with a call to {@link finishGeneration} in a
-   * `finally` block, or the store will report a phantom in-flight
-   * state.
-   */
-  startGeneration(prompt: string): void;
-  /**
-   * Clear the in-flight flag. Pass `false` with an `error` string
-   * to record a failure; pass `true` to record success.
-   *
-   * Note the ok-first ordering — it mirrors `recordExport` in the
-   * export store and keeps the two callsites parallel.
-   */
-  finishGeneration(ok: boolean, error?: string): void;
-  /**
-   * Empty the in-memory history array. Persisted storage is
-   * overwritten on the next `set` — there is no explicit
-   * storage-clear call because the next `partialize` run will
-   * write an empty array.
-   */
-  clearHistory(): void;
-  /**
-   * Restore every field to its initial state. See the matching
-   * note on {@link ExportState.reset}.
-   */
-  reset(): void;
+	/**
+	 * Mark a new generation as in flight. Flips `isGenerating` to
+	 * `true`, stashes the prompt in `lastPrompt`, clears any prior
+	 * `lastError`, and appends a new {@link AiHistoryEntry} to
+	 * `history` with the current timestamp.
+	 *
+	 * Always pair with a call to {@link finishGeneration} in a
+	 * `finally` block, or the store will report a phantom in-flight
+	 * state.
+	 */
+	startGeneration(prompt: string): void;
+	/**
+	 * Clear the in-flight flag. Pass `false` with an `error` string
+	 * to record a failure; pass `true` to record success.
+	 *
+	 * Note the ok-first ordering — it mirrors `recordExport` in the
+	 * export store and keeps the two callsites parallel.
+	 */
+	finishGeneration(ok: boolean, error?: string): void;
+	/**
+	 * Empty the in-memory history array. Persisted storage is
+	 * overwritten on the next `set` — there is no explicit
+	 * storage-clear call because the next `partialize` run will
+	 * write an empty array.
+	 */
+	clearHistory(): void;
+	/**
+	 * Restore every field to its initial state. See the matching
+	 * note on {@link ExportState.reset}.
+	 */
+	reset(): void;
 }
 
 /**
@@ -142,7 +142,7 @@ export interface AiState {
  * @internal
  */
 interface AiStorePartial {
-  readonly history: readonly AiHistoryEntry[];
+	readonly history: readonly AiHistoryEntry[];
 }
 
 /**
@@ -151,10 +151,10 @@ interface AiStorePartial {
  * state so the actions survive.
  */
 const INITIAL_STATE = {
-  isGenerating: false,
-  lastPrompt: null as string | null,
-  lastError: null as string | null,
-  history: [] as readonly AiHistoryEntry[],
+	isGenerating: false,
+	lastPrompt: null as string | null,
+	lastError: null as string | null,
+	history: [] as readonly AiHistoryEntry[],
 } as const;
 
 /**
@@ -183,7 +183,7 @@ const HISTORY_PERSIST_LIMIT = 10;
  * }
  */
 export interface CreateAiStoreOptions {
-  readonly storeId: string;
+	readonly storeId: string;
 }
 
 export type AiStoreApi = StoreApi<AiState>;
@@ -196,58 +196,58 @@ export type AiStoreApi = StoreApi<AiState>;
  * hook.
  */
 export function createAiStore(options: CreateAiStoreOptions): AiStoreApi {
-  const { storeId } = options;
-  return createStore<AiState>()(
-    persist(
-      (set) => ({
-        ...INITIAL_STATE,
-        startGeneration(prompt) {
-          set((state) => ({
-            isGenerating: true,
-            lastPrompt: prompt,
-            // Starting a new run clears the previous error so the
-            // UI does not show a stale failure next to a fresh
-            // in-flight spinner.
-            lastError: null,
-            history: [...state.history, { prompt, at: Date.now() }],
-          }));
-        },
-        finishGeneration(ok, error) {
-          set({
-            isGenerating: false,
-            // On success, clear any prior error. On failure,
-            // record the error string (coerced to `null` if the
-            // caller omitted it, keeping the field a strict
-            // `string | null`).
-            lastError: ok ? null : (error ?? null),
-          });
-        },
-        clearHistory() {
-          set({ history: [] });
-        },
-        reset() {
-          set({ ...INITIAL_STATE });
-        },
-      }),
-      {
-        name: `anvilkit-core-ai-${storeId}`,
-        // Persist only the last N history entries. Slicing inside
-        // `partialize` means the bound is enforced at write time;
-        // the in-memory `history` array can legitimately grow
-        // larger during a long session and the next `set` simply
-        // trims it on the way to disk.
-        partialize: (state): AiStorePartial => ({
-          history: state.history.slice(-HISTORY_PERSIST_LIMIT),
-        }),
-        // SSR safety: server render cannot see `localStorage`, so
-        // synchronous rehydration at module evaluation would
-        // produce a server/client hydration mismatch. `<Studio>`
-        // calls `useAiStore.persist.rehydrate()` from a
-        // mount-time effect (browser-only), which keeps the first
-        // server-rendered HTML aligned with the first client
-        // render while still restoring the user's history.
-        skipHydration: true,
-      },
-    ),
-  );
+	const { storeId } = options;
+	return createStore<AiState>()(
+		persist(
+			(set) => ({
+				...INITIAL_STATE,
+				startGeneration(prompt) {
+					set((state) => ({
+						isGenerating: true,
+						lastPrompt: prompt,
+						// Starting a new run clears the previous error so the
+						// UI does not show a stale failure next to a fresh
+						// in-flight spinner.
+						lastError: null,
+						history: [...state.history, { prompt, at: Date.now() }],
+					}));
+				},
+				finishGeneration(ok, error) {
+					set({
+						isGenerating: false,
+						// On success, clear any prior error. On failure,
+						// record the error string (coerced to `null` if the
+						// caller omitted it, keeping the field a strict
+						// `string | null`).
+						lastError: ok ? null : (error ?? null),
+					});
+				},
+				clearHistory() {
+					set({ history: [] });
+				},
+				reset() {
+					set({ ...INITIAL_STATE });
+				},
+			}),
+			{
+				name: `anvilkit-core-ai-${storeId}`,
+				// Persist only the last N history entries. Slicing inside
+				// `partialize` means the bound is enforced at write time;
+				// the in-memory `history` array can legitimately grow
+				// larger during a long session and the next `set` simply
+				// trims it on the way to disk.
+				partialize: (state): AiStorePartial => ({
+					history: state.history.slice(-HISTORY_PERSIST_LIMIT),
+				}),
+				// SSR safety: server render cannot see `localStorage`, so
+				// synchronous rehydration at module evaluation would
+				// produce a server/client hydration mismatch. `<Studio>`
+				// calls `useAiStore.persist.rehydrate()` from a
+				// mount-time effect (browser-only), which keeps the first
+				// server-rendered HTML aligned with the first client
+				// render while still restoring the user's history.
+				skipHydration: true,
+			},
+		),
+	);
 }

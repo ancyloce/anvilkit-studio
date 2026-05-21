@@ -34,22 +34,22 @@ import type { PageIR } from "@/types/ir";
  * default.
  */
 export interface AnvilkitTemplatePreview {
-  /**
-   * Absolute or package-relative URL to the preview image. Templates
-   * typically ship a `preview.png` adjacent to their `package.json`
-   * and set `src` to `"./preview.png"`; the docs-site generator
-   * rewrites this to a CDN URL at build time.
-   */
-  readonly src: string;
-  /** Intrinsic width of the preview in pixels. */
-  readonly width: number;
-  /** Intrinsic height of the preview in pixels. */
-  readonly height: number;
-  /**
-   * Non-empty alternative text describing the preview. Required — a
-   * template that ships a preview must also ship accessible text.
-   */
-  readonly alt: string;
+	/**
+	 * Absolute or package-relative URL to the preview image. Templates
+	 * typically ship a `preview.png` adjacent to their `package.json`
+	 * and set `src` to `"./preview.png"`; the docs-site generator
+	 * rewrites this to a CDN URL at build time.
+	 */
+	readonly src: string;
+	/** Intrinsic width of the preview in pixels. */
+	readonly width: number;
+	/** Intrinsic height of the preview in pixels. */
+	readonly height: number;
+	/**
+	 * Non-empty alternative text describing the preview. Required — a
+	 * template that ships a preview must also ship accessible text.
+	 */
+	readonly alt: string;
 }
 
 /**
@@ -63,10 +63,10 @@ export interface AnvilkitTemplatePreview {
  * lockfile from the manifest alone.
  */
 export interface AnvilkitTemplatePackage {
-  /** npm package name, e.g. `"@anvilkit/hero"`. */
-  readonly name: string;
-  /** Semver range or exact version, e.g. `"^1.0.0"`. */
-  readonly version: string;
+	/** npm package name, e.g. `"@anvilkit/hero"`. */
+	readonly name: string;
+	/** Semver range or exact version, e.g. `"^1.0.0"`. */
+	readonly version: string;
 }
 
 /**
@@ -79,28 +79,28 @@ export interface AnvilkitTemplatePackage {
  * (`phase5-018`) ships this shape in its static catalog JSON.
  */
 export interface AnvilkitTemplateManifest {
-  /**
-   * Stable URL-safe identifier. Lowercase, hyphen-separated. Used by
-   * the CLI (`--template <slug>`) and by the docs route
-   * (`/templates/<slug>`).
-   */
-  readonly slug: string;
-  /** Human-readable display name, e.g. `"Landing — SaaS"`. */
-  readonly name: string;
-  /**
-   * One-sentence description surfaced in the catalog card and the
-   * CLI picker. Should read as a prose sentence ending in a period.
-   */
-  readonly description: string;
-  /** Static thumbnail — see {@link AnvilkitTemplatePreview}. */
-  readonly preview: AnvilkitTemplatePreview;
-  /**
-   * Component packages the template depends on, in a deterministic
-   * order (alphabetical by package name is the convention first-
-   * party seeds follow). Consumers must treat this list as closed —
-   * a template may not reference components outside the listed set.
-   */
-  readonly packages: ReadonlyArray<AnvilkitTemplatePackage>;
+	/**
+	 * Stable URL-safe identifier. Lowercase, hyphen-separated. Used by
+	 * the CLI (`--template <slug>`) and by the docs route
+	 * (`/templates/<slug>`).
+	 */
+	readonly slug: string;
+	/** Human-readable display name, e.g. `"Landing — SaaS"`. */
+	readonly name: string;
+	/**
+	 * One-sentence description surfaced in the catalog card and the
+	 * CLI picker. Should read as a prose sentence ending in a period.
+	 */
+	readonly description: string;
+	/** Static thumbnail — see {@link AnvilkitTemplatePreview}. */
+	readonly preview: AnvilkitTemplatePreview;
+	/**
+	 * Component packages the template depends on, in a deterministic
+	 * order (alphabetical by package name is the convention first-
+	 * party seeds follow). Consumers must treat this list as closed —
+	 * a template may not reference components outside the listed set.
+	 */
+	readonly packages: ReadonlyArray<AnvilkitTemplatePackage>;
 }
 
 /**
@@ -114,14 +114,14 @@ export interface AnvilkitTemplateManifest {
  * packages listed in {@link AnvilkitTemplateManifest.packages}.
  */
 export interface AnvilkitTemplate extends AnvilkitTemplateManifest {
-  /**
-   * The template's page tree. Must validate against the component
-   * schemas of every package listed in {@link packages} — first-
-   * party templates enforce this in CI via
-   * `validateAiOutput(pageIR, availableComponents)` (see
-   * `phase5-017` acceptance criteria).
-   */
-  readonly pageIR: PageIR;
+	/**
+	 * The template's page tree. Must validate against the component
+	 * schemas of every package listed in {@link packages} — first-
+	 * party templates enforce this in CI via
+	 * `validateAiOutput(pageIR, availableComponents)` (see
+	 * `phase5-017` acceptance criteria).
+	 */
+	readonly pageIR: PageIR;
 }
 
 /**
@@ -140,49 +140,49 @@ export interface AnvilkitTemplate extends AnvilkitTemplateManifest {
  *   surface-level {@link AnvilkitTemplate} contract.
  */
 export function isAnvilkitTemplate(value: unknown): value is AnvilkitTemplate {
-  if (value === null || typeof value !== "object") {
-    return false;
-  }
-  const t = value as Record<string, unknown>;
-  if (
-    typeof t.slug !== "string" ||
-    typeof t.name !== "string" ||
-    typeof t.description !== "string"
-  ) {
-    return false;
-  }
-  const preview = t.preview;
-  if (preview === null || typeof preview !== "object") {
-    return false;
-  }
-  const p = preview as Record<string, unknown>;
-  if (
-    typeof p.src !== "string" ||
-    typeof p.width !== "number" ||
-    typeof p.height !== "number" ||
-    typeof p.alt !== "string"
-  ) {
-    return false;
-  }
-  if (!Array.isArray(t.packages)) {
-    return false;
-  }
-  for (const pkg of t.packages) {
-    if (pkg === null || typeof pkg !== "object") {
-      return false;
-    }
-    const entry = pkg as Record<string, unknown>;
-    if (typeof entry.name !== "string" || typeof entry.version !== "string") {
-      return false;
-    }
-  }
-  const pageIR = t.pageIR;
-  if (pageIR === null || typeof pageIR !== "object") {
-    return false;
-  }
-  const ir = pageIR as Record<string, unknown>;
-  if (ir.version !== "1" || ir.root === null || typeof ir.root !== "object") {
-    return false;
-  }
-  return true;
+	if (value === null || typeof value !== "object") {
+		return false;
+	}
+	const t = value as Record<string, unknown>;
+	if (
+		typeof t.slug !== "string" ||
+		typeof t.name !== "string" ||
+		typeof t.description !== "string"
+	) {
+		return false;
+	}
+	const preview = t.preview;
+	if (preview === null || typeof preview !== "object") {
+		return false;
+	}
+	const p = preview as Record<string, unknown>;
+	if (
+		typeof p.src !== "string" ||
+		typeof p.width !== "number" ||
+		typeof p.height !== "number" ||
+		typeof p.alt !== "string"
+	) {
+		return false;
+	}
+	if (!Array.isArray(t.packages)) {
+		return false;
+	}
+	for (const pkg of t.packages) {
+		if (pkg === null || typeof pkg !== "object") {
+			return false;
+		}
+		const entry = pkg as Record<string, unknown>;
+		if (typeof entry.name !== "string" || typeof entry.version !== "string") {
+			return false;
+		}
+	}
+	const pageIR = t.pageIR;
+	if (pageIR === null || typeof pageIR !== "object") {
+		return false;
+	}
+	const ir = pageIR as Record<string, unknown>;
+	if (ir.version !== "1" || ir.root === null || typeof ir.root !== "object") {
+		return false;
+	}
+	return true;
 }

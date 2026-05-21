@@ -25,23 +25,23 @@ import { IFRAME_THEME_CSS, IFRAME_THEME_STYLE_ID } from "./iframe-theme";
 const MEDIA_QUERY = "(prefers-color-scheme: dark)";
 
 function resolveSystemPreference(): "light" | "dark" {
-  if (typeof window === "undefined") return "light";
-  // Older WebViews / constrained or test environments expose `window`
-  // but not `matchMedia`; default to light rather than crashing.
-  if (typeof window.matchMedia !== "function") return "light";
-  return window.matchMedia(MEDIA_QUERY).matches ? "dark" : "light";
+	if (typeof window === "undefined") return "light";
+	// Older WebViews / constrained or test environments expose `window`
+	// but not `matchMedia`; default to light rather than crashing.
+	if (typeof window.matchMedia !== "function") return "light";
+	return window.matchMedia(MEDIA_QUERY).matches ? "dark" : "light";
 }
 
 function applyClass(target: Element, dark: boolean): void {
-  target.classList.toggle("dark", dark);
+	target.classList.toggle("dark", dark);
 }
 
 function injectIframeStyle(doc: Document): void {
-  if (doc.getElementById(IFRAME_THEME_STYLE_ID) !== null) return;
-  const style = doc.createElement("style");
-  style.id = IFRAME_THEME_STYLE_ID;
-  style.textContent = IFRAME_THEME_CSS;
-  doc.head.appendChild(style);
+	if (doc.getElementById(IFRAME_THEME_STYLE_ID) !== null) return;
+	const style = doc.createElement("style");
+	style.id = IFRAME_THEME_STYLE_ID;
+	style.textContent = IFRAME_THEME_CSS;
+	doc.head.appendChild(style);
 }
 
 // Puck hardcodes `id="preview-frame"` (no override prop), so with two
@@ -51,8 +51,8 @@ function injectIframeStyle(doc: Document): void {
 // internal global lookup of this id is an upstream limitation we can't
 // fix from here.)
 function findPuckIframe(root: ParentNode): HTMLIFrameElement | null {
-  if (typeof document === "undefined") return null;
-  return root.querySelector<HTMLIFrameElement>("iframe#preview-frame");
+	if (typeof document === "undefined") return null;
+	return root.querySelector<HTMLIFrameElement>("iframe#preview-frame");
 }
 
 /**
@@ -64,60 +64,60 @@ function findPuckIframe(root: ParentNode): HTMLIFrameElement | null {
  * `<Studio>` once the chrome decides to render.
  */
 export function useThemeSync(): void {
-  const mode = useThemeStore((s) => s.mode);
-  const setResolved = useThemeStore((s) => s.setResolved);
-  const rootRef = useStudioRootRef();
+	const mode = useThemeStore((s) => s.mode);
+	const setResolved = useThemeStore((s) => s.setResolved);
+	const rootRef = useStudioRootRef();
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+	useEffect(() => {
+		if (typeof window === "undefined") return;
 
-    function resolve(): "light" | "dark" {
-      if (mode === "system") {
-        return resolveSystemPreference();
-      }
-      return mode;
-    }
+		function resolve(): "light" | "dark" {
+			if (mode === "system") {
+				return resolveSystemPreference();
+			}
+			return mode;
+		}
 
-    function apply(): void {
-      const resolved = resolve();
-      setResolved(resolved);
-      applyClass(document.documentElement, resolved === "dark");
+		function apply(): void {
+			const resolved = resolve();
+			setResolved(resolved);
+			applyClass(document.documentElement, resolved === "dark");
 
-      const iframe = findPuckIframe(resolveQueryRoot(rootRef));
-      const doc = iframe?.contentDocument;
-      if (doc !== null && doc !== undefined) {
-        injectIframeStyle(doc);
-        applyClass(doc.documentElement, resolved === "dark");
-      }
-    }
+			const iframe = findPuckIframe(resolveQueryRoot(rootRef));
+			const doc = iframe?.contentDocument;
+			if (doc !== null && doc !== undefined) {
+				injectIframeStyle(doc);
+				applyClass(doc.documentElement, resolved === "dark");
+			}
+		}
 
-    apply();
+		apply();
 
-    if (mode !== "system") {
-      return;
-    }
-    // `apply()` already resolved the class above; without `matchMedia`
-    // we simply can't subscribe to live OS-preference changes.
-    if (typeof window.matchMedia !== "function") {
-      return;
-    }
-    const media = window.matchMedia(MEDIA_QUERY);
-    const listener = (): void => apply();
-    // Legacy WebKit/WebViews expose `matchMedia` but the returned
-    // `MediaQueryList` only supports the deprecated `addListener`
-    // /`removeListener` API, not `addEventListener`. Prefer the modern
-    // API, fall back to the legacy one, and bail if neither exists.
-    if (typeof media.addEventListener === "function") {
-      media.addEventListener("change", listener);
-      return () => {
-        media.removeEventListener("change", listener);
-      };
-    }
-    if (typeof media.addListener === "function") {
-      media.addListener(listener);
-      return () => {
-        media.removeListener?.(listener);
-      };
-    }
-  }, [mode, setResolved, rootRef]);
+		if (mode !== "system") {
+			return;
+		}
+		// `apply()` already resolved the class above; without `matchMedia`
+		// we simply can't subscribe to live OS-preference changes.
+		if (typeof window.matchMedia !== "function") {
+			return;
+		}
+		const media = window.matchMedia(MEDIA_QUERY);
+		const listener = (): void => apply();
+		// Legacy WebKit/WebViews expose `matchMedia` but the returned
+		// `MediaQueryList` only supports the deprecated `addListener`
+		// /`removeListener` API, not `addEventListener`. Prefer the modern
+		// API, fall back to the legacy one, and bail if neither exists.
+		if (typeof media.addEventListener === "function") {
+			media.addEventListener("change", listener);
+			return () => {
+				media.removeEventListener("change", listener);
+			};
+		}
+		if (typeof media.addListener === "function") {
+			media.addListener(listener);
+			return () => {
+				media.removeListener?.(listener);
+			};
+		}
+	}, [mode, setResolved, rootRef]);
 }

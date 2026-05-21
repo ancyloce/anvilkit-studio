@@ -29,48 +29,48 @@ import { TextFilterStrip } from "./text/TextFilterStrip";
 import { TextSearchBar } from "./text/TextSearchBar";
 
 function flattenPacks(
-  packs: ReadonlyMap<string, StudioCopySnippetPack>,
+	packs: ReadonlyMap<string, StudioCopySnippetPack>,
 ): readonly StudioCopySnippet[] {
-  const out: StudioCopySnippet[] = [];
-  for (const pack of packs.values()) {
-    for (const snippet of pack.snippets) {
-      out.push(snippet);
-    }
-  }
-  return out;
+	const out: StudioCopySnippet[] = [];
+	for (const pack of packs.values()) {
+		for (const snippet of pack.snippets) {
+			out.push(snippet);
+		}
+	}
+	return out;
 }
 
 export function TextModule(): ReactNode {
-  const packs = useSidebarRegistry(
-    (state): ReadonlyMap<string, StudioCopySnippetPack> => state.copyPacks,
-  );
-  const [categoryFilter] = useCopyCategoryFilter();
-  const [searchTerm, setSearchTerm] = useState("");
+	const packs = useSidebarRegistry(
+		(state): ReadonlyMap<string, StudioCopySnippetPack> => state.copyPacks,
+	);
+	const [categoryFilter] = useCopyCategoryFilter();
+	const [searchTerm, setSearchTerm] = useState("");
 
-  const snippets = useMemo(() => flattenPacks(packs), [packs]);
+	const snippets = useMemo(() => flattenPacks(packs), [packs]);
 
-  const { isCompatibleTextSelection } = useTextSelection();
-  const insertSnippet = useInsertSnippet();
+	const { isCompatibleTextSelection } = useTextSelection();
+	const insertSnippet = useInsertSnippet();
 
-  const handleSearch = useCallback((next: string) => {
-    setSearchTerm(next);
-  }, []);
+	const handleSearch = useCallback((next: string) => {
+		setSearchTerm(next);
+	}, []);
 
-  return (
-    <div data-testid="ak-module-text" className="flex h-full flex-col">
-      <div className="flex shrink-0 flex-col gap-2 border-b border-[var(--ak-studio-border)] p-2">
-        <TextFilterStrip />
-        <TextSearchBar onChange={handleSearch} />
-      </div>
-      <div className="min-h-0 flex-1 overflow-auto">
-        <SnippetList
-          snippets={snippets}
-          categoryFilter={categoryFilter}
-          searchTerm={searchTerm}
-          disabled={!isCompatibleTextSelection}
-          onInsert={insertSnippet}
-        />
-      </div>
-    </div>
-  );
+	return (
+		<div data-testid="ak-module-text" className="flex h-full flex-col">
+			<div className="flex shrink-0 flex-col gap-2 border-b border-[var(--ak-studio-border)] p-2">
+				<TextFilterStrip />
+				<TextSearchBar onChange={handleSearch} />
+			</div>
+			<div className="min-h-0 flex-1 overflow-auto">
+				<SnippetList
+					snippets={snippets}
+					categoryFilter={categoryFilter}
+					searchTerm={searchTerm}
+					disabled={!isCompatibleTextSelection}
+					onInsert={insertSnippet}
+				/>
+			</div>
+		</div>
+	);
 }

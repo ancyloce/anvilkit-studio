@@ -17,33 +17,33 @@ import type { CopyCategoryFilter } from "@/state/editor-ui-store";
 import { useCopyCategoryFilter } from "@/state/hooks";
 
 export function TextFilterStrip(): ReactNode {
-  const msg = useMsg();
-  const [value, setValue] = useCopyCategoryFilter();
+	const msg = useMsg();
+	const [value, setValue] = useCopyCategoryFilter();
 
-  const handleChange = (next: readonly string[]): void => {
-    const picked = next[0] as CopyCategoryFilter | undefined;
-    if (picked === undefined) return;
-    setValue(picked);
-  };
+	const handleChange = (next: readonly string[]): void => {
+		const picked = next[0] as CopyCategoryFilter | undefined;
+		if (picked === undefined) return;
+		setValue(picked);
+	};
 
-  return (
-    <ToggleGroup
-      value={[value]}
-      onValueChange={handleChange}
-      aria-label={msg("studio.module.text.name")}
-      data-testid="ak-text-filter"
-      size="sm"
-      spacing={1}
-    >
-      <ToggleGroupItem value="all">
-        {msg("studio.module.text.filter.all")}
-      </ToggleGroupItem>
-      <ToggleGroupItem value="basic">
-        {msg("studio.module.text.filter.basic")}
-      </ToggleGroupItem>
-      <ToggleGroupItem value="brand">
-        {msg("studio.module.text.filter.brand")}
-      </ToggleGroupItem>
-    </ToggleGroup>
-  );
+	return (
+		<ToggleGroup
+			value={[value]}
+			onValueChange={handleChange}
+			aria-label={msg("studio.module.text.name")}
+			data-testid="ak-text-filter"
+			size="sm"
+			spacing={1}
+		>
+			<ToggleGroupItem value="all">
+				{msg("studio.module.text.filter.all")}
+			</ToggleGroupItem>
+			<ToggleGroupItem value="basic">
+				{msg("studio.module.text.filter.basic")}
+			</ToggleGroupItem>
+			<ToggleGroupItem value="brand">
+				{msg("studio.module.text.filter.brand")}
+			</ToggleGroupItem>
+		</ToggleGroup>
+	);
 }

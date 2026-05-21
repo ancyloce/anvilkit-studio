@@ -17,8 +17,8 @@ import type { SidebarRegistryState } from "./sidebar-registry-store";
  * renders).
  */
 export function useSidebarRegistry<TResult>(
-  selector: (state: SidebarRegistryState) => TResult,
+	selector: (state: SidebarRegistryState) => TResult,
 ): TResult {
-  const store = useSidebarRegistryStoreApi();
-  return useStore(store, selector);
+	const store = useSidebarRegistryStoreApi();
+	return useStore(store, selector);
 }

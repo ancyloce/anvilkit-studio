@@ -23,41 +23,41 @@ export type { NodeMetaValidationIssue };
 export { PageIRNodeMetaError };
 
 const SEMVER_PATTERN =
-  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+	/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 export const PAGE_IR_NODE_META_LIMITS = Object.freeze({
-  ownerMaxLength: 256,
-  notesMaxLength: 512,
-  versionPattern: SEMVER_PATTERN,
+	ownerMaxLength: 256,
+	notesMaxLength: 512,
+	versionPattern: SEMVER_PATTERN,
 } as const);
 
 const PageIRNodeMetaSchema: z.ZodType<PageIRNodeMeta> = z
-  .object({
-    locked: z.boolean().optional(),
-    owner: z
-      .string()
-      .max(PAGE_IR_NODE_META_LIMITS.ownerMaxLength, {
-        message: `owner must be ≤ ${PAGE_IR_NODE_META_LIMITS.ownerMaxLength} characters`,
-      })
-      .optional(),
-    version: z
-      .string()
-      .regex(SEMVER_PATTERN, {
-        message: "version must match the semver pattern MAJOR.MINOR.PATCH",
-      })
-      .optional(),
-    notes: z
-      .string()
-      .max(PAGE_IR_NODE_META_LIMITS.notesMaxLength, {
-        message: `notes must be ≤ ${PAGE_IR_NODE_META_LIMITS.notesMaxLength} characters`,
-      })
-      .optional(),
-  })
-  .strict();
+	.object({
+		locked: z.boolean().optional(),
+		owner: z
+			.string()
+			.max(PAGE_IR_NODE_META_LIMITS.ownerMaxLength, {
+				message: `owner must be ≤ ${PAGE_IR_NODE_META_LIMITS.ownerMaxLength} characters`,
+			})
+			.optional(),
+		version: z
+			.string()
+			.regex(SEMVER_PATTERN, {
+				message: "version must match the semver pattern MAJOR.MINOR.PATCH",
+			})
+			.optional(),
+		notes: z
+			.string()
+			.max(PAGE_IR_NODE_META_LIMITS.notesMaxLength, {
+				message: `notes must be ≤ ${PAGE_IR_NODE_META_LIMITS.notesMaxLength} characters`,
+			})
+			.optional(),
+	})
+	.strict();
 
 export interface NodeMetaValidationResult {
-  readonly ok: boolean;
-  readonly issues: readonly NodeMetaValidationIssue[];
+	readonly ok: boolean;
+	readonly issues: readonly NodeMetaValidationIssue[];
 }
 
 /**
@@ -68,20 +68,20 @@ export interface NodeMetaValidationResult {
  * Intentionally does NOT clone the input — it inspects shape only.
  */
 export function safeParseNodeMeta(meta: unknown): NodeMetaValidationResult {
-  const result = PageIRNodeMetaSchema.safeParse(meta);
-  if (result.success) {
-    return { ok: true, issues: [] };
-  }
-  return {
-    ok: false,
-    issues: result.error.issues.map((issue) => ({
-      code: issue.code,
-      message: issue.message,
-      path: issue.path.map((segment) =>
-        typeof segment === "symbol" ? segment.toString() : segment,
-      ),
-    })),
-  };
+	const result = PageIRNodeMetaSchema.safeParse(meta);
+	if (result.success) {
+		return { ok: true, issues: [] };
+	}
+	return {
+		ok: false,
+		issues: result.error.issues.map((issue) => ({
+			code: issue.code,
+			message: issue.message,
+			path: issue.path.map((segment) =>
+				typeof segment === "symbol" ? segment.toString() : segment,
+			),
+		})),
+	};
 }
 
 /**
@@ -90,9 +90,9 @@ export function safeParseNodeMeta(meta: unknown): NodeMetaValidationResult {
  * otherwise.
  */
 export function parseNodeMetaOrThrow(meta: unknown): PageIRNodeMeta {
-  const result = safeParseNodeMeta(meta);
-  if (!result.ok) {
-    throw new PageIRNodeMetaError(result.issues);
-  }
-  return meta as PageIRNodeMeta;
+	const result = safeParseNodeMeta(meta);
+	if (!result.ok) {
+		throw new PageIRNodeMetaError(result.issues);
+	}
+	return meta as PageIRNodeMeta;
 }

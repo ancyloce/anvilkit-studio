@@ -47,19 +47,19 @@
  * a harmless no-op — kept so the code remains portable.
  */
 export abstract class StudioError extends Error {
-  /**
-   * Stable, machine-readable failure identifier.
-   *
-   * Subclasses must override this with a constant literal so host
-   * apps can branch on `err.code` without string-matching on the
-   * human-readable message.
-   */
-  abstract readonly code: string;
+	/**
+	 * Stable, machine-readable failure identifier.
+	 *
+	 * Subclasses must override this with a constant literal so host
+	 * apps can branch on `err.code` without string-matching on the
+	 * human-readable message.
+	 */
+	abstract readonly code: string;
 
-  constructor(message: string, options?: ErrorOptions) {
-    super(message, options);
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
+	constructor(message: string, options?: ErrorOptions) {
+		super(message, options);
+		Object.setPrototypeOf(this, new.target.prototype);
+	}
 }
 
 /**
@@ -83,25 +83,25 @@ export abstract class StudioError extends Error {
  * loaded.
  */
 export class StudioPluginError extends StudioError {
-  /**
-   * Stable failure code for plugin errors. See {@link StudioError.code}.
-   */
-  readonly code = "StudioPluginError";
+	/**
+	 * Stable failure code for plugin errors. See {@link StudioError.code}.
+	 */
+	readonly code = "StudioPluginError";
 
-  /**
-   * The `meta.id` of the plugin that caused the failure.
-   *
-   * For errors that involve two plugins (e.g. a duplicate export
-   * format id) this field holds the second plugin's id, and both
-   * ids appear in the error message.
-   */
-  readonly pluginId: string;
+	/**
+	 * The `meta.id` of the plugin that caused the failure.
+	 *
+	 * For errors that involve two plugins (e.g. a duplicate export
+	 * format id) this field holds the second plugin's id, and both
+	 * ids appear in the error message.
+	 */
+	readonly pluginId: string;
 
-  constructor(pluginId: string, message: string, options?: ErrorOptions) {
-    super(message, options);
-    this.name = "StudioPluginError";
-    this.pluginId = pluginId;
-  }
+	constructor(pluginId: string, message: string, options?: ErrorOptions) {
+		super(message, options);
+		this.name = "StudioPluginError";
+		this.pluginId = pluginId;
+	}
 }
 
 /**
@@ -116,15 +116,15 @@ export class StudioPluginError extends StudioError {
  * a single, tree-shakeable module under `@anvilkit/core/runtime`.
  */
 export class StudioConfigError extends StudioError {
-  /**
-   * Stable failure code for config errors. See {@link StudioError.code}.
-   */
-  readonly code = "StudioConfigError";
+	/**
+	 * Stable failure code for config errors. See {@link StudioError.code}.
+	 */
+	readonly code = "StudioConfigError";
 
-  constructor(message: string, options?: ErrorOptions) {
-    super(message, options);
-    this.name = "StudioConfigError";
-  }
+	constructor(message: string, options?: ErrorOptions) {
+		super(message, options);
+		this.name = "StudioConfigError";
+	}
 }
 
 /**
@@ -141,20 +141,20 @@ export class StudioConfigError extends StudioError {
  * content could be produced at all.
  */
 export class StudioExportError extends StudioError {
-  /**
-   * Stable failure code for export errors. See {@link StudioError.code}.
-   */
-  readonly code = "StudioExportError";
+	/**
+	 * Stable failure code for export errors. See {@link StudioError.code}.
+	 */
+	readonly code = "StudioExportError";
 
-  /**
-   * The `id` of the {@link ExportFormatDefinition} whose `run()`
-   * method threw.
-   */
-  readonly formatId: string;
+	/**
+	 * The `id` of the {@link ExportFormatDefinition} whose `run()`
+	 * method threw.
+	 */
+	readonly formatId: string;
 
-  constructor(formatId: string, message: string, options?: ErrorOptions) {
-    super(message, options);
-    this.name = "StudioExportError";
-    this.formatId = formatId;
-  }
+	constructor(formatId: string, message: string, options?: ErrorOptions) {
+		super(message, options);
+		this.name = "StudioExportError";
+		this.formatId = formatId;
+	}
 }

@@ -40,7 +40,16 @@
  *   pnpm --filter @anvilkit/core migrate:shadcn-paths -- --dry-run
  */
 
-import { mkdir, readFile, readdir, rename, rm, rmdir, stat, writeFile } from "node:fs/promises";
+import {
+	mkdir,
+	readdir,
+	readFile,
+	rename,
+	rm,
+	rmdir,
+	stat,
+	writeFile,
+} from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -132,7 +141,12 @@ async function exists(path) {
 		await stat(path);
 		return true;
 	} catch (err) {
-		if (err && typeof err === "object" && "code" in err && err.code === "ENOENT") {
+		if (
+			err &&
+			typeof err === "object" &&
+			"code" in err &&
+			err.code === "ENOENT"
+		) {
 			return false;
 		}
 		throw err;
@@ -309,7 +323,9 @@ async function main() {
 	console.log("");
 
 	if (!movedAny) {
-		console.log("Nothing to relocate — all source directories already migrated.");
+		console.log(
+			"Nothing to relocate — all source directories already migrated.",
+		);
 		console.log("");
 	}
 

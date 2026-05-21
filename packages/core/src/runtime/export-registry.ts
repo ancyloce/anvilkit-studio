@@ -49,30 +49,30 @@ import { StudioPluginError } from "./errors.js";
  * `createExportRegistry` below for the exact semantics of each one.
  */
 export interface ExportRegistry {
-  /**
-   * Return every registered format, in the order they were passed
-   * to {@link createExportRegistry}.
-   *
-   * The returned array is a fresh snapshot — mutating it does not
-   * affect the registry.
-   */
-  readonly list: () => ExportFormatDefinition[];
+	/**
+	 * Return every registered format, in the order they were passed
+	 * to {@link createExportRegistry}.
+	 *
+	 * The returned array is a fresh snapshot — mutating it does not
+	 * affect the registry.
+	 */
+	readonly list: () => ExportFormatDefinition[];
 
-  /**
-   * Return the format registered under `id`, or `undefined` if no
-   * such format exists.
-   */
-  readonly get: (id: string) => ExportFormatDefinition | undefined;
+	/**
+	 * Return the format registered under `id`, or `undefined` if no
+	 * such format exists.
+	 */
+	readonly get: (id: string) => ExportFormatDefinition | undefined;
 
-  /**
-   * Return `true` if a format with the given `id` is registered.
-   */
-  readonly has: (id: string) => boolean;
+	/**
+	 * Return `true` if a format with the given `id` is registered.
+	 */
+	readonly has: (id: string) => boolean;
 
-  /**
-   * Return the number of registered formats.
-   */
-  readonly size: () => number;
+	/**
+	 * Return the number of registered formats.
+	 */
+	readonly size: () => number;
 }
 
 /**
@@ -96,26 +96,26 @@ export interface ExportRegistry {
  * attribution at the layer above).
  */
 export function createExportRegistry(
-  formats: readonly ExportFormatDefinition[],
+	formats: readonly ExportFormatDefinition[],
 ): ExportRegistry {
-  // `Map` preserves insertion order per the ECMAScript spec, so the
-  // iteration in `list()` matches the order callers passed in.
-  const store = new Map<string, ExportFormatDefinition>();
+	// `Map` preserves insertion order per the ECMAScript spec, so the
+	// iteration in `list()` matches the order callers passed in.
+	const store = new Map<string, ExportFormatDefinition>();
 
-  for (const format of formats) {
-    if (store.has(format.id)) {
-      throw new StudioPluginError(
-        format.id,
-        `Duplicate export format id "${format.id}" — every format registered with createExportRegistry must have a unique id`,
-      );
-    }
-    store.set(format.id, format);
-  }
+	for (const format of formats) {
+		if (store.has(format.id)) {
+			throw new StudioPluginError(
+				format.id,
+				`Duplicate export format id "${format.id}" — every format registered with createExportRegistry must have a unique id`,
+			);
+		}
+		store.set(format.id, format);
+	}
 
-  return {
-    list: () => Array.from(store.values()),
-    get: (id) => store.get(id),
-    has: (id) => store.has(id),
-    size: () => store.size,
-  };
+	return {
+		list: () => Array.from(store.values()),
+		get: (id) => store.get(id),
+		has: (id) => store.has(id),
+		size: () => store.size,
+	};
 }

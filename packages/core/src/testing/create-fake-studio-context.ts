@@ -9,37 +9,36 @@ import type { IRAssetResolver, StudioPluginContext } from "@/types/plugin";
  * functions so assertions can reach them without
  * `(ctx.log as ReturnType<typeof vi.fn>)` casts.
  */
-export interface FakeStudioContext<
-  UserConfig extends PuckConfig = PuckConfig,
-> extends StudioPluginContext<UserConfig> {
-  readonly _mocks: {
-    /** All `ctx.log()` calls in order. */
-    readonly logCalls: Array<
-      readonly [
-        Parameters<StudioPluginContext["log"]>[0],
-        Parameters<StudioPluginContext["log"]>[1],
-        Parameters<StudioPluginContext["log"]>[2],
-      ]
-    >;
-    /** All `ctx.emit()` calls in order. */
-    readonly emitCalls: Array<readonly [string, unknown]>;
-    /** All asset resolvers registered through `ctx.registerAssetResolver()`. */
-    readonly assetResolvers: IRAssetResolver[];
-    /** The dispatch mock attached to the fake `getPuckApi()`. */
-    readonly dispatchCalls: unknown[][];
-  };
+export interface FakeStudioContext<UserConfig extends PuckConfig = PuckConfig>
+	extends StudioPluginContext<UserConfig> {
+	readonly _mocks: {
+		/** All `ctx.log()` calls in order. */
+		readonly logCalls: Array<
+			readonly [
+				Parameters<StudioPluginContext["log"]>[0],
+				Parameters<StudioPluginContext["log"]>[1],
+				Parameters<StudioPluginContext["log"]>[2],
+			]
+		>;
+		/** All `ctx.emit()` calls in order. */
+		readonly emitCalls: Array<readonly [string, unknown]>;
+		/** All asset resolvers registered through `ctx.registerAssetResolver()`. */
+		readonly assetResolvers: IRAssetResolver[];
+		/** The dispatch mock attached to the fake `getPuckApi()`. */
+		readonly dispatchCalls: unknown[][];
+	};
 }
 
 export interface FakeStudioContextOverrides<
-  UserConfig extends PuckConfig = PuckConfig,
+	UserConfig extends PuckConfig = PuckConfig,
 > {
-  readonly getData?: StudioPluginContext<UserConfig>["getData"];
-  readonly getPuckApi?: StudioPluginContext<UserConfig>["getPuckApi"];
-  readonly studioConfig?: StudioPluginContext<UserConfig>["studioConfig"];
-  readonly log?: StudioPluginContext<UserConfig>["log"];
-  readonly emit?: StudioPluginContext<UserConfig>["emit"];
-  readonly registerAssetResolver?: StudioPluginContext<UserConfig>["registerAssetResolver"];
-  readonly getAssetResolvers?: StudioPluginContext<UserConfig>["getAssetResolvers"];
+	readonly getData?: StudioPluginContext<UserConfig>["getData"];
+	readonly getPuckApi?: StudioPluginContext<UserConfig>["getPuckApi"];
+	readonly studioConfig?: StudioPluginContext<UserConfig>["studioConfig"];
+	readonly log?: StudioPluginContext<UserConfig>["log"];
+	readonly emit?: StudioPluginContext<UserConfig>["emit"];
+	readonly registerAssetResolver?: StudioPluginContext<UserConfig>["registerAssetResolver"];
+	readonly getAssetResolvers?: StudioPluginContext<UserConfig>["getAssetResolvers"];
 }
 
 /**
@@ -59,45 +58,45 @@ export interface FakeStudioContextOverrides<
  * ```
  */
 export function createFakeStudioContext<
-  UserConfig extends PuckConfig = PuckConfig,
+	UserConfig extends PuckConfig = PuckConfig,
 >(
-  overrides: FakeStudioContextOverrides<UserConfig> = {},
+	overrides: FakeStudioContextOverrides<UserConfig> = {},
 ): FakeStudioContext<UserConfig> {
-  const logCalls: FakeStudioContext<UserConfig>["_mocks"]["logCalls"] = [];
-  const emitCalls: FakeStudioContext<UserConfig>["_mocks"]["emitCalls"] = [];
-  const assetResolvers: FakeStudioContext<UserConfig>["_mocks"]["assetResolvers"] =
-    [];
-  const dispatchCalls: FakeStudioContext<UserConfig>["_mocks"]["dispatchCalls"] =
-    [];
+	const logCalls: FakeStudioContext<UserConfig>["_mocks"]["logCalls"] = [];
+	const emitCalls: FakeStudioContext<UserConfig>["_mocks"]["emitCalls"] = [];
+	const assetResolvers: FakeStudioContext<UserConfig>["_mocks"]["assetResolvers"] =
+		[];
+	const dispatchCalls: FakeStudioContext<UserConfig>["_mocks"]["dispatchCalls"] =
+		[];
 
-  const defaultPuckApi = {
-    dispatch: (...args: unknown[]) => {
-      dispatchCalls.push(args);
-    },
-  } as unknown as PuckApi<UserConfig>;
+	const defaultPuckApi = {
+		dispatch: (...args: unknown[]) => {
+			dispatchCalls.push(args);
+		},
+	} as unknown as PuckApi<UserConfig>;
 
-  return {
-    getData:
-      overrides.getData ??
-      (() => ({ root: { props: {} }, content: [], zones: {} })),
-    getPuckApi: overrides.getPuckApi ?? (() => defaultPuckApi),
-    studioConfig: overrides.studioConfig ?? StudioConfigSchema.parse({}),
-    log:
-      overrides.log ??
-      ((level, message, meta) => {
-        logCalls.push([level, message, meta]);
-      }),
-    emit:
-      overrides.emit ??
-      ((event, payload) => {
-        emitCalls.push([event, payload]);
-      }),
-    registerAssetResolver:
-      overrides.registerAssetResolver ??
-      ((resolver) => {
-        assetResolvers.push(resolver);
-      }),
-    getAssetResolvers: overrides.getAssetResolvers ?? (() => assetResolvers),
-    _mocks: { logCalls, emitCalls, assetResolvers, dispatchCalls },
-  };
+	return {
+		getData:
+			overrides.getData ??
+			(() => ({ root: { props: {} }, content: [], zones: {} })),
+		getPuckApi: overrides.getPuckApi ?? (() => defaultPuckApi),
+		studioConfig: overrides.studioConfig ?? StudioConfigSchema.parse({}),
+		log:
+			overrides.log ??
+			((level, message, meta) => {
+				logCalls.push([level, message, meta]);
+			}),
+		emit:
+			overrides.emit ??
+			((event, payload) => {
+				emitCalls.push([event, payload]);
+			}),
+		registerAssetResolver:
+			overrides.registerAssetResolver ??
+			((resolver) => {
+				assetResolvers.push(resolver);
+			}),
+		getAssetResolvers: overrides.getAssetResolvers ?? (() => assetResolvers),
+		_mocks: { logCalls, emitCalls, assetResolvers, dispatchCalls },
+	};
 }

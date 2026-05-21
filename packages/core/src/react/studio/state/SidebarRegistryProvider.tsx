@@ -13,23 +13,23 @@ import { createContext, type ReactNode, useContext } from "react";
 import type { SidebarRegistryStoreApi } from "./sidebar-registry-store";
 
 const SidebarRegistryContext = createContext<SidebarRegistryStoreApi | null>(
-  null,
+	null,
 );
 
 export interface SidebarRegistryProviderProps {
-  readonly value: SidebarRegistryStoreApi;
-  readonly children: ReactNode;
+	readonly value: SidebarRegistryStoreApi;
+	readonly children: ReactNode;
 }
 
 export function SidebarRegistryProvider({
-  value,
-  children,
+	value,
+	children,
 }: SidebarRegistryProviderProps): ReactNode {
-  return (
-    <SidebarRegistryContext.Provider value={value}>
-      {children}
-    </SidebarRegistryContext.Provider>
-  );
+	return (
+		<SidebarRegistryContext.Provider value={value}>
+			{children}
+		</SidebarRegistryContext.Provider>
+	);
 }
 
 /**
@@ -38,14 +38,14 @@ export function SidebarRegistryProvider({
  * during development.
  */
 export function useSidebarRegistryStoreApi(): SidebarRegistryStoreApi {
-  const store = useContext(SidebarRegistryContext);
-  if (store === null) {
-    throw new Error(
-      "useSidebarRegistryStoreApi was called outside of <SidebarRegistryProvider>. " +
-        "Ensure the calling component is rendered inside <Studio>.",
-    );
-  }
-  return store;
+	const store = useContext(SidebarRegistryContext);
+	if (store === null) {
+		throw new Error(
+			"useSidebarRegistryStoreApi was called outside of <SidebarRegistryProvider>. " +
+				"Ensure the calling component is rendered inside <Studio>.",
+		);
+	}
+	return store;
 }
 
 /**
@@ -54,5 +54,5 @@ export function useSidebarRegistryStoreApi(): SidebarRegistryStoreApi {
  * mount without the full provider stack.
  */
 export function useSidebarRegistryStoreApiOrNull(): SidebarRegistryStoreApi | null {
-  return useContext(SidebarRegistryContext);
+	return useContext(SidebarRegistryContext);
 }

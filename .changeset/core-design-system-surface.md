@@ -49,7 +49,7 @@ The new optional context callback, sidebar-registry slot, and CSS
 variables are purely additive. Existing `--ak-studio-*` chrome
 vocabulary is untouched.
 
-**Known gap:** the rail tab + sidebar module that *renders*
+**Known gap:** the rail tab + sidebar module that _renders_
 `sidebarRegistryStore.designSystemPanel` has not yet landed — a
 follow-up will add `"design-system"` to `EditorTab` and the
 `RAIL_MODULES` table so the panel is reachable from the UI.

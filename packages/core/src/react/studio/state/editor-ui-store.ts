@@ -48,12 +48,12 @@ import { persist } from "zustand/middleware";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
 export type EditorTab =
-  | "insert"
-  | "layer"
-  | "image"
-  | "text"
-  | "copilot"
-  | "history";
+	| "insert"
+	| "layer"
+	| "image"
+	| "text"
+	| "copilot"
+	| "history";
 
 export type ComponentViewMode = "grid" | "list";
 
@@ -62,49 +62,49 @@ export type AssetCategoryFilter = "all" | "images" | "videos" | "audio";
 export type CopyCategoryFilter = "all" | "basic" | "brand";
 
 export interface EditorUiState {
-  readonly activeTab: EditorTab;
-  readonly drawerSearch: string;
-  readonly drawerCollapsed: boolean;
-  readonly outlineExpanded: Readonly<Record<string, boolean>>;
-  readonly canvasViewport: string;
-  readonly canvasZoom: number;
-  readonly canvasRootHeight: number;
-  readonly componentViewMode: ComponentViewMode;
-  readonly insertSectionsExpanded: Readonly<Record<string, boolean>>;
-  readonly assetCategoryFilter: AssetCategoryFilter;
-  readonly copyCategoryFilter: CopyCategoryFilter;
-  readonly pagesExpanded: Readonly<Record<string, boolean>>;
-  readonly layerSplitRatio: number;
-  setActiveTab(tab: EditorTab): void;
-  setDrawerSearch(query: string): void;
-  setDrawerCollapsed(collapsed: boolean): void;
-  setOutlineExpanded(id: string, expanded: boolean): void;
-  setCanvasViewport(viewport: string): void;
-  setCanvasZoom(zoom: number): void;
-  setCanvasRootHeight(height: number): void;
-  setComponentViewMode(mode: ComponentViewMode): void;
-  setInsertSectionExpanded(id: string, expanded: boolean): void;
-  setAssetCategoryFilter(filter: AssetCategoryFilter): void;
-  setCopyCategoryFilter(filter: CopyCategoryFilter): void;
-  setPageExpanded(id: string, expanded: boolean): void;
-  setLayerSplitRatio(ratio: number): void;
-  reset(): void;
+	readonly activeTab: EditorTab;
+	readonly drawerSearch: string;
+	readonly drawerCollapsed: boolean;
+	readonly outlineExpanded: Readonly<Record<string, boolean>>;
+	readonly canvasViewport: string;
+	readonly canvasZoom: number;
+	readonly canvasRootHeight: number;
+	readonly componentViewMode: ComponentViewMode;
+	readonly insertSectionsExpanded: Readonly<Record<string, boolean>>;
+	readonly assetCategoryFilter: AssetCategoryFilter;
+	readonly copyCategoryFilter: CopyCategoryFilter;
+	readonly pagesExpanded: Readonly<Record<string, boolean>>;
+	readonly layerSplitRatio: number;
+	setActiveTab(tab: EditorTab): void;
+	setDrawerSearch(query: string): void;
+	setDrawerCollapsed(collapsed: boolean): void;
+	setOutlineExpanded(id: string, expanded: boolean): void;
+	setCanvasViewport(viewport: string): void;
+	setCanvasZoom(zoom: number): void;
+	setCanvasRootHeight(height: number): void;
+	setComponentViewMode(mode: ComponentViewMode): void;
+	setInsertSectionExpanded(id: string, expanded: boolean): void;
+	setAssetCategoryFilter(filter: AssetCategoryFilter): void;
+	setCopyCategoryFilter(filter: CopyCategoryFilter): void;
+	setPageExpanded(id: string, expanded: boolean): void;
+	setLayerSplitRatio(ratio: number): void;
+	reset(): void;
 }
 
 const INITIAL_STATE = {
-  activeTab: "insert" as EditorTab,
-  drawerSearch: "",
-  drawerCollapsed: false,
-  outlineExpanded: {} as Readonly<Record<string, boolean>>,
-  canvasViewport: "desktop",
-  canvasZoom: 1,
-  canvasRootHeight: 0,
-  componentViewMode: "grid" as ComponentViewMode,
-  insertSectionsExpanded: {} as Readonly<Record<string, boolean>>,
-  assetCategoryFilter: "all" as AssetCategoryFilter,
-  copyCategoryFilter: "all" as CopyCategoryFilter,
-  pagesExpanded: {} as Readonly<Record<string, boolean>>,
-  layerSplitRatio: 0.4,
+	activeTab: "insert" as EditorTab,
+	drawerSearch: "",
+	drawerCollapsed: false,
+	outlineExpanded: {} as Readonly<Record<string, boolean>>,
+	canvasViewport: "desktop",
+	canvasZoom: 1,
+	canvasRootHeight: 0,
+	componentViewMode: "grid" as ComponentViewMode,
+	insertSectionsExpanded: {} as Readonly<Record<string, boolean>>,
+	assetCategoryFilter: "all" as AssetCategoryFilter,
+	copyCategoryFilter: "all" as CopyCategoryFilter,
+	pagesExpanded: {} as Readonly<Record<string, boolean>>,
+	layerSplitRatio: 0.4,
 } as const;
 
 /**
@@ -115,17 +115,17 @@ const INITIAL_STATE = {
  * persisted per the policy in PRD §9.3.
  */
 interface EditorUiPersistedSlice {
-  readonly activeTab: EditorTab;
-  readonly drawerCollapsed: boolean;
-  readonly outlineExpanded: Readonly<Record<string, boolean>>;
-  readonly canvasViewport: string;
-  readonly canvasZoom: number;
-  readonly componentViewMode: ComponentViewMode;
-  readonly insertSectionsExpanded: Readonly<Record<string, boolean>>;
-  readonly assetCategoryFilter: AssetCategoryFilter;
-  readonly copyCategoryFilter: CopyCategoryFilter;
-  readonly pagesExpanded: Readonly<Record<string, boolean>>;
-  readonly layerSplitRatio: number;
+	readonly activeTab: EditorTab;
+	readonly drawerCollapsed: boolean;
+	readonly outlineExpanded: Readonly<Record<string, boolean>>;
+	readonly canvasViewport: string;
+	readonly canvasZoom: number;
+	readonly componentViewMode: ComponentViewMode;
+	readonly insertSectionsExpanded: Readonly<Record<string, boolean>>;
+	readonly assetCategoryFilter: AssetCategoryFilter;
+	readonly copyCategoryFilter: CopyCategoryFilter;
+	readonly pagesExpanded: Readonly<Record<string, boolean>>;
+	readonly layerSplitRatio: number;
 }
 
 /**
@@ -137,30 +137,30 @@ interface EditorUiPersistedSlice {
 export const EDITOR_UI_STORE_PERSIST_VERSION = 3;
 
 const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
-  "insert",
-  "layer",
-  "image",
-  "text",
-  "copilot",
-  "history",
+	"insert",
+	"layer",
+	"image",
+	"text",
+	"copilot",
+	"history",
 ]);
 
 const VALID_VIEW_MODES: ReadonlySet<ComponentViewMode> = new Set([
-  "grid",
-  "list",
+	"grid",
+	"list",
 ]);
 
 const VALID_ASSET_FILTERS: ReadonlySet<AssetCategoryFilter> = new Set([
-  "all",
-  "images",
-  "videos",
-  "audio",
+	"all",
+	"images",
+	"videos",
+	"audio",
 ]);
 
 const VALID_COPY_FILTERS: ReadonlySet<CopyCategoryFilter> = new Set([
-  "all",
-  "basic",
-  "brand",
+	"all",
+	"basic",
+	"brand",
 ]);
 
 /**
@@ -173,90 +173,90 @@ const VALID_COPY_FILTERS: ReadonlySet<CopyCategoryFilter> = new Set([
  * downstream coerces back into `EditorUiPersistedSlice`.
  */
 function migratePersistedState(persisted: unknown, _version: number): unknown {
-  if (persisted === null || typeof persisted !== "object") {
-    return INITIAL_STATE;
-  }
-  const source = persisted as Record<string, unknown>;
-  const activeTabRaw = source.activeTab;
-  const activeTab: EditorTab =
-    activeTabRaw === "outline"
-      ? "layer"
-      : typeof activeTabRaw === "string" &&
-          VALID_ACTIVE_TABS.has(activeTabRaw as EditorTab)
-        ? (activeTabRaw as EditorTab)
-        : INITIAL_STATE.activeTab;
+	if (persisted === null || typeof persisted !== "object") {
+		return INITIAL_STATE;
+	}
+	const source = persisted as Record<string, unknown>;
+	const activeTabRaw = source.activeTab;
+	const activeTab: EditorTab =
+		activeTabRaw === "outline"
+			? "layer"
+			: typeof activeTabRaw === "string" &&
+					VALID_ACTIVE_TABS.has(activeTabRaw as EditorTab)
+				? (activeTabRaw as EditorTab)
+				: INITIAL_STATE.activeTab;
 
-  const componentViewMode: ComponentViewMode =
-    typeof source.componentViewMode === "string" &&
-    VALID_VIEW_MODES.has(source.componentViewMode as ComponentViewMode)
-      ? (source.componentViewMode as ComponentViewMode)
-      : INITIAL_STATE.componentViewMode;
+	const componentViewMode: ComponentViewMode =
+		typeof source.componentViewMode === "string" &&
+		VALID_VIEW_MODES.has(source.componentViewMode as ComponentViewMode)
+			? (source.componentViewMode as ComponentViewMode)
+			: INITIAL_STATE.componentViewMode;
 
-  const assetCategoryFilter: AssetCategoryFilter =
-    typeof source.assetCategoryFilter === "string" &&
-    VALID_ASSET_FILTERS.has(source.assetCategoryFilter as AssetCategoryFilter)
-      ? (source.assetCategoryFilter as AssetCategoryFilter)
-      : INITIAL_STATE.assetCategoryFilter;
+	const assetCategoryFilter: AssetCategoryFilter =
+		typeof source.assetCategoryFilter === "string" &&
+		VALID_ASSET_FILTERS.has(source.assetCategoryFilter as AssetCategoryFilter)
+			? (source.assetCategoryFilter as AssetCategoryFilter)
+			: INITIAL_STATE.assetCategoryFilter;
 
-  const copyCategoryFilter: CopyCategoryFilter =
-    typeof source.copyCategoryFilter === "string" &&
-    VALID_COPY_FILTERS.has(source.copyCategoryFilter as CopyCategoryFilter)
-      ? (source.copyCategoryFilter as CopyCategoryFilter)
-      : INITIAL_STATE.copyCategoryFilter;
+	const copyCategoryFilter: CopyCategoryFilter =
+		typeof source.copyCategoryFilter === "string" &&
+		VALID_COPY_FILTERS.has(source.copyCategoryFilter as CopyCategoryFilter)
+			? (source.copyCategoryFilter as CopyCategoryFilter)
+			: INITIAL_STATE.copyCategoryFilter;
 
-  const layerSplitRatio =
-    typeof source.layerSplitRatio === "number" &&
-    Number.isFinite(source.layerSplitRatio)
-      ? clampSplitRatio(source.layerSplitRatio)
-      : INITIAL_STATE.layerSplitRatio;
+	const layerSplitRatio =
+		typeof source.layerSplitRatio === "number" &&
+		Number.isFinite(source.layerSplitRatio)
+			? clampSplitRatio(source.layerSplitRatio)
+			: INITIAL_STATE.layerSplitRatio;
 
-  return {
-    activeTab,
-    drawerCollapsed:
-      typeof source.drawerCollapsed === "boolean"
-        ? source.drawerCollapsed
-        : INITIAL_STATE.drawerCollapsed,
-    outlineExpanded: isStringBoolMap(source.outlineExpanded)
-      ? source.outlineExpanded
-      : INITIAL_STATE.outlineExpanded,
-    canvasViewport:
-      typeof source.canvasViewport === "string"
-        ? source.canvasViewport
-        : INITIAL_STATE.canvasViewport,
-    canvasZoom:
-      typeof source.canvasZoom === "number" &&
-      Number.isFinite(source.canvasZoom)
-        ? source.canvasZoom
-        : INITIAL_STATE.canvasZoom,
-    componentViewMode,
-    insertSectionsExpanded: isStringBoolMap(source.insertSectionsExpanded)
-      ? source.insertSectionsExpanded
-      : INITIAL_STATE.insertSectionsExpanded,
-    assetCategoryFilter,
-    copyCategoryFilter,
-    pagesExpanded: isStringBoolMap(source.pagesExpanded)
-      ? source.pagesExpanded
-      : INITIAL_STATE.pagesExpanded,
-    layerSplitRatio,
-  } satisfies EditorUiPersistedSlice;
+	return {
+		activeTab,
+		drawerCollapsed:
+			typeof source.drawerCollapsed === "boolean"
+				? source.drawerCollapsed
+				: INITIAL_STATE.drawerCollapsed,
+		outlineExpanded: isStringBoolMap(source.outlineExpanded)
+			? source.outlineExpanded
+			: INITIAL_STATE.outlineExpanded,
+		canvasViewport:
+			typeof source.canvasViewport === "string"
+				? source.canvasViewport
+				: INITIAL_STATE.canvasViewport,
+		canvasZoom:
+			typeof source.canvasZoom === "number" &&
+			Number.isFinite(source.canvasZoom)
+				? source.canvasZoom
+				: INITIAL_STATE.canvasZoom,
+		componentViewMode,
+		insertSectionsExpanded: isStringBoolMap(source.insertSectionsExpanded)
+			? source.insertSectionsExpanded
+			: INITIAL_STATE.insertSectionsExpanded,
+		assetCategoryFilter,
+		copyCategoryFilter,
+		pagesExpanded: isStringBoolMap(source.pagesExpanded)
+			? source.pagesExpanded
+			: INITIAL_STATE.pagesExpanded,
+		layerSplitRatio,
+	} satisfies EditorUiPersistedSlice;
 }
 
 function isStringBoolMap(value: unknown): value is Record<string, boolean> {
-  if (value === null || typeof value !== "object") return false;
-  for (const v of Object.values(value)) {
-    if (typeof v !== "boolean") return false;
-  }
-  return true;
+	if (value === null || typeof value !== "object") return false;
+	for (const v of Object.values(value)) {
+		if (typeof v !== "boolean") return false;
+	}
+	return true;
 }
 
 function clampSplitRatio(ratio: number): number {
-  if (ratio < 0.15) return 0.15;
-  if (ratio > 0.85) return 0.85;
-  return ratio;
+	if (ratio < 0.15) return 0.15;
+	if (ratio > 0.85) return 0.85;
+	return ratio;
 }
 
 export interface CreateEditorUiStoreOptions {
-  readonly storeId: string;
+	readonly storeId: string;
 }
 
 export type EditorUiStoreApi = StoreApi<EditorUiState>;
@@ -267,84 +267,84 @@ export type EditorUiStoreApi = StoreApi<EditorUiState>;
  * concurrent stores can coexist without `localStorage` collisions.
  */
 export function createEditorUiStore(
-  options: CreateEditorUiStoreOptions,
+	options: CreateEditorUiStoreOptions,
 ): EditorUiStoreApi {
-  const { storeId } = options;
-  return createStore<EditorUiState>()(
-    persist(
-      (set) => ({
-        ...INITIAL_STATE,
-        setActiveTab(activeTab) {
-          set({ activeTab });
-        },
-        setDrawerSearch(drawerSearch) {
-          set({ drawerSearch });
-        },
-        setDrawerCollapsed(drawerCollapsed) {
-          set({ drawerCollapsed });
-        },
-        setOutlineExpanded(id, expanded) {
-          set((state) => ({
-            outlineExpanded: { ...state.outlineExpanded, [id]: expanded },
-          }));
-        },
-        setCanvasViewport(canvasViewport) {
-          set({ canvasViewport });
-        },
-        setCanvasZoom(canvasZoom) {
-          set({ canvasZoom });
-        },
-        setCanvasRootHeight(canvasRootHeight) {
-          set({ canvasRootHeight });
-        },
-        setComponentViewMode(componentViewMode) {
-          set({ componentViewMode });
-        },
-        setInsertSectionExpanded(id, expanded) {
-          set((state) => ({
-            insertSectionsExpanded: {
-              ...state.insertSectionsExpanded,
-              [id]: expanded,
-            },
-          }));
-        },
-        setAssetCategoryFilter(assetCategoryFilter) {
-          set({ assetCategoryFilter });
-        },
-        setCopyCategoryFilter(copyCategoryFilter) {
-          set({ copyCategoryFilter });
-        },
-        setPageExpanded(id, expanded) {
-          set((state) => ({
-            pagesExpanded: { ...state.pagesExpanded, [id]: expanded },
-          }));
-        },
-        setLayerSplitRatio(layerSplitRatio) {
-          set({ layerSplitRatio: clampSplitRatio(layerSplitRatio) });
-        },
-        reset() {
-          set({ ...INITIAL_STATE });
-        },
-      }),
-      {
-        name: `anvilkit-ui-${storeId}`,
-        version: EDITOR_UI_STORE_PERSIST_VERSION,
-        partialize: (state): EditorUiPersistedSlice => ({
-          activeTab: state.activeTab,
-          drawerCollapsed: state.drawerCollapsed,
-          outlineExpanded: state.outlineExpanded,
-          canvasViewport: state.canvasViewport,
-          canvasZoom: state.canvasZoom,
-          componentViewMode: state.componentViewMode,
-          insertSectionsExpanded: state.insertSectionsExpanded,
-          assetCategoryFilter: state.assetCategoryFilter,
-          copyCategoryFilter: state.copyCategoryFilter,
-          pagesExpanded: state.pagesExpanded,
-          layerSplitRatio: state.layerSplitRatio,
-        }),
-        migrate: migratePersistedState,
-        skipHydration: true,
-      },
-    ),
-  );
+	const { storeId } = options;
+	return createStore<EditorUiState>()(
+		persist(
+			(set) => ({
+				...INITIAL_STATE,
+				setActiveTab(activeTab) {
+					set({ activeTab });
+				},
+				setDrawerSearch(drawerSearch) {
+					set({ drawerSearch });
+				},
+				setDrawerCollapsed(drawerCollapsed) {
+					set({ drawerCollapsed });
+				},
+				setOutlineExpanded(id, expanded) {
+					set((state) => ({
+						outlineExpanded: { ...state.outlineExpanded, [id]: expanded },
+					}));
+				},
+				setCanvasViewport(canvasViewport) {
+					set({ canvasViewport });
+				},
+				setCanvasZoom(canvasZoom) {
+					set({ canvasZoom });
+				},
+				setCanvasRootHeight(canvasRootHeight) {
+					set({ canvasRootHeight });
+				},
+				setComponentViewMode(componentViewMode) {
+					set({ componentViewMode });
+				},
+				setInsertSectionExpanded(id, expanded) {
+					set((state) => ({
+						insertSectionsExpanded: {
+							...state.insertSectionsExpanded,
+							[id]: expanded,
+						},
+					}));
+				},
+				setAssetCategoryFilter(assetCategoryFilter) {
+					set({ assetCategoryFilter });
+				},
+				setCopyCategoryFilter(copyCategoryFilter) {
+					set({ copyCategoryFilter });
+				},
+				setPageExpanded(id, expanded) {
+					set((state) => ({
+						pagesExpanded: { ...state.pagesExpanded, [id]: expanded },
+					}));
+				},
+				setLayerSplitRatio(layerSplitRatio) {
+					set({ layerSplitRatio: clampSplitRatio(layerSplitRatio) });
+				},
+				reset() {
+					set({ ...INITIAL_STATE });
+				},
+			}),
+			{
+				name: `anvilkit-ui-${storeId}`,
+				version: EDITOR_UI_STORE_PERSIST_VERSION,
+				partialize: (state): EditorUiPersistedSlice => ({
+					activeTab: state.activeTab,
+					drawerCollapsed: state.drawerCollapsed,
+					outlineExpanded: state.outlineExpanded,
+					canvasViewport: state.canvasViewport,
+					canvasZoom: state.canvasZoom,
+					componentViewMode: state.componentViewMode,
+					insertSectionsExpanded: state.insertSectionsExpanded,
+					assetCategoryFilter: state.assetCategoryFilter,
+					copyCategoryFilter: state.copyCategoryFilter,
+					pagesExpanded: state.pagesExpanded,
+					layerSplitRatio: state.layerSplitRatio,
+				}),
+				migrate: migratePersistedState,
+				skipHydration: true,
+			},
+		),
+	);
 }

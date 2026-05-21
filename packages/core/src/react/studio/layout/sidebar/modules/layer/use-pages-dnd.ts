@@ -13,13 +13,13 @@
  * surface honest if a host wires `DndContext` directly.
  */
 
+import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import {
 	KeyboardSensor,
 	PointerSensor,
 	useSensor,
 	useSensors,
 } from "@dnd-kit/core";
-import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useCallback, useState } from "react";
 import type { StudioPage, StudioPagesSource } from "@/types/pages";

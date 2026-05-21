@@ -24,19 +24,19 @@ import { TextareaField } from "./TextareaField";
 import { TextField } from "./TextField";
 
 export {
-  ArrayField,
-  ExternalField,
-  NumberField,
-  ObjectField,
-  RadioField,
-  SelectField,
-  SlotField,
-  TextareaField,
-  TextField,
+	ArrayField,
+	ExternalField,
+	NumberField,
+	ObjectField,
+	RadioField,
+	SelectField,
+	SlotField,
+	TextareaField,
+	TextField,
 };
 
 export type FieldTypeRenderer = FunctionComponent<
-  FieldProps & { children: ReactNode; name: string }
+	FieldProps & { children: ReactNode; name: string }
 >;
 
 export type FieldTypeRegistry = NonNullable<PuckOverrides["fieldTypes"]>;
@@ -48,15 +48,15 @@ export type FieldTypeRegistry = NonNullable<PuckOverrides["fieldTypes"]>;
  * runtime guard in {@link defineFieldTypeRegistry}.
  */
 const FIELD_TYPE_KEYS = [
-  "text",
-  "textarea",
-  "number",
-  "select",
-  "radio",
-  "array",
-  "object",
-  "slot",
-  "external",
+	"text",
+	"textarea",
+	"number",
+	"select",
+	"radio",
+	"array",
+	"object",
+	"slot",
+	"external",
 ] as const;
 
 export type FieldTypeKey = (typeof FIELD_TYPE_KEYS)[number];
@@ -73,9 +73,9 @@ const KNOWN_FIELD_TYPES: ReadonlySet<string> = new Set(FIELD_TYPE_KEYS);
  * instead of being repeated per entry.
  */
 function asFieldRenderer(
-  component: FunctionComponent<never>,
+	component: FunctionComponent<never>,
 ): FieldTypeRenderer {
-  return component as unknown as FieldTypeRenderer;
+	return component as unknown as FieldTypeRenderer;
 }
 
 /**
@@ -87,14 +87,14 @@ function asFieldRenderer(
  * here, not duplicated at every renderer.
  */
 export function defineFieldTypeRegistry(
-  renderers: Record<FieldTypeKey, FieldTypeRenderer>,
+	renderers: Record<FieldTypeKey, FieldTypeRenderer>,
 ): FieldTypeRegistry {
-  for (const key of Object.keys(renderers)) {
-    if (!KNOWN_FIELD_TYPES.has(key)) {
-      throw new Error(`Unknown field type in registry: "${key}"`);
-    }
-  }
-  return renderers as unknown as FieldTypeRegistry;
+	for (const key of Object.keys(renderers)) {
+		if (!KNOWN_FIELD_TYPES.has(key)) {
+			throw new Error(`Unknown field type in registry: "${key}"`);
+		}
+	}
+	return renderers as unknown as FieldTypeRegistry;
 }
 
 /**
@@ -102,13 +102,13 @@ export function defineFieldTypeRegistry(
  * exactly. `richtext` and `custom` are intentionally absent.
  */
 export const defaultFieldTypes = defineFieldTypeRegistry({
-  text: asFieldRenderer(TextField),
-  textarea: asFieldRenderer(TextareaField),
-  number: asFieldRenderer(NumberField),
-  select: asFieldRenderer(SelectField),
-  radio: asFieldRenderer(RadioField),
-  array: asFieldRenderer(ArrayField),
-  object: asFieldRenderer(ObjectField),
-  slot: asFieldRenderer(SlotField),
-  external: asFieldRenderer(ExternalField),
+	text: asFieldRenderer(TextField),
+	textarea: asFieldRenderer(TextareaField),
+	number: asFieldRenderer(NumberField),
+	select: asFieldRenderer(SelectField),
+	radio: asFieldRenderer(RadioField),
+	array: asFieldRenderer(ArrayField),
+	object: asFieldRenderer(ObjectField),
+	slot: asFieldRenderer(SlotField),
+	external: asFieldRenderer(ExternalField),
 } satisfies Record<FieldTypeKey, FieldTypeRenderer>);

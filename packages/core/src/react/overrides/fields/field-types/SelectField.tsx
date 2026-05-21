@@ -10,87 +10,87 @@
  */
 
 import type {
-  FieldProps,
-  SelectField as PuckSelectField,
+	FieldProps,
+	SelectField as PuckSelectField,
 } from "@puckeditor/core";
 import { type ReactNode, useMemo } from "react";
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from "@/primitives/select";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import {
-  findOptionIndex,
-  type OptionValue,
-  optionId,
-  optionIndexFromId,
+	findOptionIndex,
+	type OptionValue,
+	optionId,
+	optionIndexFromId,
 } from "./option-ids";
 import type { FieldRendererProps } from "./TextField";
 
 export function SelectField({
-  field,
-  value,
-  onChange,
-  readOnly,
-  id,
-  name,
+	field,
+	value,
+	onChange,
+	readOnly,
+	id,
+	name,
 }: FieldRendererProps<PuckSelectField, OptionValue | undefined>): ReactNode {
-  const selectedIndex = useMemo(
-    () => findOptionIndex(field.options, value),
-    [field.options, value],
-  );
-  const items = useMemo(
-    () =>
-      field.options.map((option, index) => ({
-        label: option.label,
-        value: optionId(index),
-      })),
-    [field.options],
-  );
+	const selectedIndex = useMemo(
+		() => findOptionIndex(field.options, value),
+		[field.options, value],
+	);
+	const items = useMemo(
+		() =>
+			field.options.map((option, index) => ({
+				label: option.label,
+				value: optionId(index),
+			})),
+		[field.options],
+	);
 
-  return (
-    <FieldLabel
-      icon={field.labelIcon}
-      label={field.label ?? name}
-      type="select"
-      el="div"
-      readOnly={readOnly}
-    >
-      <Select
-        items={items}
-        value={selectedIndex === -1 ? null : optionId(selectedIndex)}
-        onValueChange={(next) => {
-          if (readOnly === true) return;
-          if (next === null) {
-            onChange(undefined as never);
-            return;
-          }
-          const index = optionIndexFromId(next);
-          const match = index === null ? undefined : field.options[index];
-          if (match === undefined) return;
-          onChange(match.value as never);
-        }}
-        disabled={readOnly}
-        name={name}
-      >
-        <SelectTrigger id={id} className="w-full">
-          <SelectValue placeholder="Select…" />
-        </SelectTrigger>
-        <SelectContent>
-          {field.options.map((option, index) => (
-            <SelectItem key={optionId(index)} value={optionId(index)}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </FieldLabel>
-  );
+	return (
+		<FieldLabel
+			icon={field.labelIcon}
+			label={field.label ?? name}
+			type="select"
+			el="div"
+			readOnly={readOnly}
+		>
+			<Select
+				items={items}
+				value={selectedIndex === -1 ? null : optionId(selectedIndex)}
+				onValueChange={(next) => {
+					if (readOnly === true) return;
+					if (next === null) {
+						onChange(undefined as never);
+						return;
+					}
+					const index = optionIndexFromId(next);
+					const match = index === null ? undefined : field.options[index];
+					if (match === undefined) return;
+					onChange(match.value as never);
+				}}
+				disabled={readOnly}
+				name={name}
+			>
+				<SelectTrigger id={id} className="w-full">
+					<SelectValue placeholder="Select…" />
+				</SelectTrigger>
+				<SelectContent>
+					{field.options.map((option, index) => (
+						<SelectItem key={optionId(index)} value={optionId(index)}>
+							{option.label}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
+		</FieldLabel>
+	);
 }
 
 export type { FieldProps as PuckFieldProps };

@@ -1,6 +1,6 @@
 export type {
-  AiValidationIssue,
-  AiValidationResult,
+	AiValidationIssue,
+	AiValidationResult,
 } from "@anvilkit/core/types";
 export type { ValidationIssue, ValidationResult } from "./types.js";
 export { validateAiOutput } from "./validate-ai-output.js";

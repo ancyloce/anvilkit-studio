@@ -54,29 +54,29 @@ export type ExportWarningLevel = "info" | "warn" | "error";
  * warning with `level: "error"`.
  */
 export interface ExportWarning {
-  /**
-   * Severity of this warning. See {@link ExportWarningLevel}.
-   */
-  readonly level: ExportWarningLevel;
-  /**
-   * Machine-readable warning code (e.g. `"missing-alt-text"`).
-   *
-   * Stable across releases so host apps can filter or localize.
-   * Codes are plugin-defined; Core does not maintain a registry.
-   */
-  readonly code: string;
-  /**
-   * Human-readable warning message suitable for developer-facing
-   * surfaces (dev console, toast, logs).
-   */
-  readonly message: string;
-  /**
-   * Optional {@link PageIRNode.id} the warning is attached to.
-   *
-   * When present, host UIs may highlight the offending node in the
-   * editor.
-   */
-  readonly nodeId?: string;
+	/**
+	 * Severity of this warning. See {@link ExportWarningLevel}.
+	 */
+	readonly level: ExportWarningLevel;
+	/**
+	 * Machine-readable warning code (e.g. `"missing-alt-text"`).
+	 *
+	 * Stable across releases so host apps can filter or localize.
+	 * Codes are plugin-defined; Core does not maintain a registry.
+	 */
+	readonly code: string;
+	/**
+	 * Human-readable warning message suitable for developer-facing
+	 * surfaces (dev console, toast, logs).
+	 */
+	readonly message: string;
+	/**
+	 * Optional {@link PageIRNode.id} the warning is attached to.
+	 *
+	 * When present, host UIs may highlight the offending node in the
+	 * editor.
+	 */
+	readonly nodeId?: string;
 }
 
 /**
@@ -113,11 +113,11 @@ export interface ExportWarning {
  * about options can omit the type parameter entirely.
  */
 export type ExportOptions<
-  T extends Record<string, unknown> = Record<string, unknown>,
+	T extends Record<string, unknown> = Record<string, unknown>,
 > = T;
 
 export interface ExportFormatRunContext {
-  readonly assetResolvers?: readonly IRAssetResolver[];
+	readonly assetResolvers?: readonly IRAssetResolver[];
 }
 
 /**
@@ -131,30 +131,30 @@ export interface ExportFormatRunContext {
  * `mimeType`, a `Uint8Array` becomes a `Blob` wrapping the raw bytes.
  */
 export interface ExportResult {
-  /**
-   * The serialized output.
-   *
-   * Use `string` for text formats and `Uint8Array` for binary
-   * formats. Do not base64-encode binary content into a string;
-   * host apps handle the two cases differently.
-   */
-  readonly content: string | Uint8Array;
-  /**
-   * The suggested filename for the download, including the
-   * extension (e.g. `"page.html"`, `"page.pdf"`).
-   *
-   * Host apps may override this at the download step, but the
-   * exporter is expected to provide a sensible default.
-   */
-  readonly filename: string;
-  /**
-   * Optional non-fatal diagnostics emitted during the export run.
-   *
-   * See {@link ExportWarning}. Host apps may surface these in a
-   * dev console or toast; the export itself is still considered
-   * successful.
-   */
-  readonly warnings?: readonly ExportWarning[];
+	/**
+	 * The serialized output.
+	 *
+	 * Use `string` for text formats and `Uint8Array` for binary
+	 * formats. Do not base64-encode binary content into a string;
+	 * host apps handle the two cases differently.
+	 */
+	readonly content: string | Uint8Array;
+	/**
+	 * The suggested filename for the download, including the
+	 * extension (e.g. `"page.html"`, `"page.pdf"`).
+	 *
+	 * Host apps may override this at the download step, but the
+	 * exporter is expected to provide a sensible default.
+	 */
+	readonly filename: string;
+	/**
+	 * Optional non-fatal diagnostics emitted during the export run.
+	 *
+	 * See {@link ExportWarning}. Host apps may surface these in a
+	 * dev console or toast; the export itself is still considered
+	 * successful.
+	 */
+	readonly warnings?: readonly ExportWarning[];
 }
 
 /**
@@ -183,51 +183,51 @@ export interface ExportResult {
  * `Record<string, unknown>`.
  */
 export interface ExportFormatDefinition<
-  Opts extends Record<string, unknown> = Record<string, unknown>,
+	Opts extends Record<string, unknown> = Record<string, unknown>,
 > {
-  /**
-   * Stable, globally-unique format identifier (e.g. `"html"`,
-   * `"react"`, `"json"`).
-   *
-   * The runtime rejects duplicate ids at `createExportRegistry()`
-   * time. Convention: lowercase, hyphen-separated, no namespace
-   * prefix — host apps refer to formats by id in their UI.
-   */
-  readonly id: string;
-  /**
-   * Human-readable label surfaced in export menus and dialogs
-   * (e.g. `"HTML"`, `"React source"`, `"JSON snapshot"`).
-   */
-  readonly label: string;
-  /**
-   * File extension (without the leading dot) for downloads in this
-   * format (e.g. `"html"`, `"jsx"`, `"json"`, `"pdf"`).
-   */
-  readonly extension: string;
-  /**
-   * MIME type for the exported content (e.g. `"text/html"`,
-   * `"application/json"`, `"application/pdf"`).
-   *
-   * Used by host apps to set the correct `Blob` type at download
-   * time and to populate the `Content-Type` header when sending
-   * exports over the network.
-   */
-  readonly mimeType: string;
-  /**
-   * Produce the serialized output for a page.
-   *
-   * Receives a normalized {@link PageIR} and a format-specific
-   * {@link ExportOptions} bag. Returns a `Promise<ExportResult>`
-   * — always async so the contract is uniform regardless of
-   * whether a given format happens to run synchronously.
-   *
-   * @param ir - The normalized page IR. Deeply read-only.
-   * @param options - Format-specific option bag.
-   * @param ctx - Optional runtime context for additive export hooks.
-   */
-  readonly run: (
-    ir: PageIR,
-    options: ExportOptions<Opts>,
-    ctx?: ExportFormatRunContext,
-  ) => Promise<ExportResult>;
+	/**
+	 * Stable, globally-unique format identifier (e.g. `"html"`,
+	 * `"react"`, `"json"`).
+	 *
+	 * The runtime rejects duplicate ids at `createExportRegistry()`
+	 * time. Convention: lowercase, hyphen-separated, no namespace
+	 * prefix — host apps refer to formats by id in their UI.
+	 */
+	readonly id: string;
+	/**
+	 * Human-readable label surfaced in export menus and dialogs
+	 * (e.g. `"HTML"`, `"React source"`, `"JSON snapshot"`).
+	 */
+	readonly label: string;
+	/**
+	 * File extension (without the leading dot) for downloads in this
+	 * format (e.g. `"html"`, `"jsx"`, `"json"`, `"pdf"`).
+	 */
+	readonly extension: string;
+	/**
+	 * MIME type for the exported content (e.g. `"text/html"`,
+	 * `"application/json"`, `"application/pdf"`).
+	 *
+	 * Used by host apps to set the correct `Blob` type at download
+	 * time and to populate the `Content-Type` header when sending
+	 * exports over the network.
+	 */
+	readonly mimeType: string;
+	/**
+	 * Produce the serialized output for a page.
+	 *
+	 * Receives a normalized {@link PageIR} and a format-specific
+	 * {@link ExportOptions} bag. Returns a `Promise<ExportResult>`
+	 * — always async so the contract is uniform regardless of
+	 * whether a given format happens to run synchronously.
+	 *
+	 * @param ir - The normalized page IR. Deeply read-only.
+	 * @param options - Format-specific option bag.
+	 * @param ctx - Optional runtime context for additive export hooks.
+	 */
+	readonly run: (
+		ir: PageIR,
+		options: ExportOptions<Opts>,
+		ctx?: ExportFormatRunContext,
+	) => Promise<ExportResult>;
 }

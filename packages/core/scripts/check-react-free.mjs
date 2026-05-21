@@ -117,7 +117,12 @@ async function main() {
 			offenders.push({ file: SCHEMA_FILE, hits: schemaHits });
 		}
 	} catch (err) {
-		if (err && typeof err === "object" && "code" in err && err.code === "ENOENT") {
+		if (
+			err &&
+			typeof err === "object" &&
+			"code" in err &&
+			err.code === "ENOENT"
+		) {
 			console.error(
 				`check-react-free: expected schema file at ${relative(PACKAGE_ROOT, SCHEMA_FILE)} but it was not found.`,
 			);

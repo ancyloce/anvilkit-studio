@@ -19,61 +19,61 @@ import { type ReactNode, useEffect } from "react";
 
 import { CanvasDropMount } from "@/canvas-drop";
 import {
-  IFRAME_THEME_CSS,
-  IFRAME_THEME_STYLE_ID,
+	IFRAME_THEME_CSS,
+	IFRAME_THEME_STYLE_ID,
 } from "@/overrides/theme/iframe-theme";
 
 export interface CanvasIframeOverrideProps {
-  readonly children: ReactNode;
-  readonly document?: Document;
+	readonly children: ReactNode;
+	readonly document?: Document;
 }
 
 function applyScrollReset(doc: Document): void {
-  const html = doc.documentElement;
-  const body = doc.body;
-  if (html === null || body === null) return;
-  for (const el of [html, body]) {
-    el.style.setProperty("overflow", "visible", "important");
-    el.style.setProperty("max-width", "none", "important");
-  }
+	const html = doc.documentElement;
+	const body = doc.body;
+	if (html === null || body === null) return;
+	for (const el of [html, body]) {
+		el.style.setProperty("overflow", "visible", "important");
+		el.style.setProperty("max-width", "none", "important");
+	}
 }
 
 export function CanvasIframe({
-  children,
-  document: iframeDoc,
+	children,
+	document: iframeDoc,
 }: CanvasIframeOverrideProps): ReactNode {
-  useEffect(() => {
-    if (iframeDoc === undefined) return;
-    if (iframeDoc.getElementById(IFRAME_THEME_STYLE_ID) === null) {
-      const style = iframeDoc.createElement("style");
-      style.id = IFRAME_THEME_STYLE_ID;
-      style.textContent = IFRAME_THEME_CSS;
-      iframeDoc.head.appendChild(style);
-    }
-    applyScrollReset(iframeDoc);
-    // Prefer the iframe's own view; some embedded/test environments
-    // don't expose a global `MutationObserver`. The one-time reset
-    // above still applies; we just can't track later style mutations.
-    const Mo =
-      iframeDoc.defaultView?.MutationObserver ??
-      (typeof MutationObserver !== "undefined" ? MutationObserver : undefined);
-    if (Mo === undefined) return;
-    const observer = new Mo(() => applyScrollReset(iframeDoc));
-    observer.observe(iframeDoc.documentElement, {
-      attributes: true,
-      attributeFilter: ["style"],
-    });
-    observer.observe(iframeDoc.body, {
-      attributes: true,
-      attributeFilter: ["style"],
-    });
-    return () => observer.disconnect();
-  }, [iframeDoc]);
+	useEffect(() => {
+		if (iframeDoc === undefined) return;
+		if (iframeDoc.getElementById(IFRAME_THEME_STYLE_ID) === null) {
+			const style = iframeDoc.createElement("style");
+			style.id = IFRAME_THEME_STYLE_ID;
+			style.textContent = IFRAME_THEME_CSS;
+			iframeDoc.head.appendChild(style);
+		}
+		applyScrollReset(iframeDoc);
+		// Prefer the iframe's own view; some embedded/test environments
+		// don't expose a global `MutationObserver`. The one-time reset
+		// above still applies; we just can't track later style mutations.
+		const Mo =
+			iframeDoc.defaultView?.MutationObserver ??
+			(typeof MutationObserver !== "undefined" ? MutationObserver : undefined);
+		if (Mo === undefined) return;
+		const observer = new Mo(() => applyScrollReset(iframeDoc));
+		observer.observe(iframeDoc.documentElement, {
+			attributes: true,
+			attributeFilter: ["style"],
+		});
+		observer.observe(iframeDoc.body, {
+			attributes: true,
+			attributeFilter: ["style"],
+		});
+		return () => observer.disconnect();
+	}, [iframeDoc]);
 
-  return (
-    <>
-      <CanvasDropMount document={iframeDoc} />
-      {children}
-    </>
-  );
+	return (
+		<>
+			<CanvasDropMount document={iframeDoc} />
+			{children}
+		</>
+	);
 }

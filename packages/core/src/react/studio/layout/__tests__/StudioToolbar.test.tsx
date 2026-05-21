@@ -11,64 +11,64 @@ import { EditorI18nStoreProvider, EditorUiStoreProvider } from "@/state/index";
 import type { StudioPagesSource } from "@/types/pages";
 
 const { toastError } = vi.hoisted(() => ({
-  toastError: vi.fn(),
+	toastError: vi.fn(),
 }));
 
 vi.mock("@puckeditor/core", () => ({
-  useGetPuck: () => () => ({
-    history: {
-      back: vi.fn(),
-      forward: vi.fn(),
-    },
-  }),
+	useGetPuck: () => () => ({
+		history: {
+			back: vi.fn(),
+			forward: vi.fn(),
+		},
+	}),
 }));
 
 vi.mock("sonner", () => ({
-  toast: {
-    error: toastError,
-  },
+	toast: {
+		error: toastError,
+	},
 }));
 
 afterEach(() => {
-  cleanup();
-  toastError.mockReset();
+	cleanup();
+	toastError.mockReset();
 });
 
 function Setup({
-  children,
-  pages,
+	children,
+	pages,
 }: {
-  readonly children: ReactNode;
-  readonly pages?: StudioPagesSource;
+	readonly children: ReactNode;
+	readonly pages?: StudioPagesSource;
 }): ReactElement {
-  return (
-    <EditorI18nStoreProvider>
-      <EditorUiStoreProvider
-        storeId={`toolbar-${Math.random().toString(36).slice(2)}`}
-      >
-        <StudioPagesSourceProvider value={pages}>
-          {children}
-        </StudioPagesSourceProvider>
-      </EditorUiStoreProvider>
-    </EditorI18nStoreProvider>
-  );
+	return (
+		<EditorI18nStoreProvider>
+			<EditorUiStoreProvider
+				storeId={`toolbar-${Math.random().toString(36).slice(2)}`}
+			>
+				<StudioPagesSourceProvider value={pages}>
+					{children}
+				</StudioPagesSourceProvider>
+			</EditorUiStoreProvider>
+		</EditorI18nStoreProvider>
+	);
 }
 
 describe("StudioToolbar", () => {
-  it("reports home navigation list failures without an unhandled rejection", async () => {
-    const pages: StudioPagesSource = {
-      list: vi.fn().mockRejectedValue(new Error("offline")),
-    };
-    render(
-      <Setup pages={pages}>
-        <StudioToolbar />
-      </Setup>,
-    );
+	it("reports home navigation list failures without an unhandled rejection", async () => {
+		const pages: StudioPagesSource = {
+			list: vi.fn().mockRejectedValue(new Error("offline")),
+		};
+		render(
+			<Setup pages={pages}>
+				<StudioToolbar />
+			</Setup>,
+		);
 
-    fireEvent.click(screen.getByRole("button", { name: "Home" }));
+		fireEvent.click(screen.getByRole("button", { name: "Home" }));
 
-    await vi.waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith("Could not load pages.");
-    });
-  });
+		await vi.waitFor(() => {
+			expect(toastError).toHaveBeenCalledWith("Could not load pages.");
+		});
+	});
 });

@@ -11,23 +11,23 @@ import type { Viewport } from "@puckeditor/core";
 export type StudioViewportId = "mobile" | "tablet" | "desktop" | "full";
 
 export type StudioViewport = Viewport & {
-  readonly label: StudioViewportId | (string & {});
+	readonly label: StudioViewportId | (string & {});
 };
 
 export const DEFAULT_VIEWPORTS: readonly StudioViewport[] = [
-  { label: "mobile", width: 360, height: "auto", icon: "Smartphone" },
-  { label: "tablet", width: 768, height: "auto", icon: "Tablet" },
-  { label: "desktop", width: 1280, height: "auto", icon: "Monitor" },
+	{ label: "mobile", width: 360, height: "auto", icon: "Smartphone" },
+	{ label: "tablet", width: 768, height: "auto", icon: "Tablet" },
+	{ label: "desktop", width: 1280, height: "auto", icon: "Monitor" },
 ];
 
 export function normalizeStudioViewports(
-  viewports: readonly Viewport[],
+	viewports: readonly Viewport[],
 ): readonly StudioViewport[] {
-  return viewports.map((viewport, index) => ({
-    ...viewport,
-    label:
-      viewport.label === undefined || viewport.label.length === 0
-        ? `viewport-${index + 1}`
-        : viewport.label,
-  }));
+	return viewports.map((viewport, index) => ({
+		...viewport,
+		label:
+			viewport.label === undefined || viewport.label.length === 0
+				? `viewport-${index + 1}`
+				: viewport.label,
+	}));
 }
