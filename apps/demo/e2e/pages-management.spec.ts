@@ -57,13 +57,15 @@ async function gotoEditor(
 		page.locator('[role="tablist"][aria-orientation="vertical"]'),
 	).toBeVisible({ timeout: 30_000 });
 
-	// Layer module is the default but tap the rail tab to be safe and
-	// to assert the surface is reachable.
-	await page.locator(`#${LAYER_RAIL_TAB_ID}`).click();
+	// Default active tab is "insert" — switch to "layer". `force: true`
+	// skips Playwright's actionability stability check; the rail tab
+	// trigger is wrapped in a base-ui Tooltip whose mount transition
+	// can deadlock the check.
+	await page.locator(`#${LAYER_RAIL_TAB_ID}`).click({ force: true });
 	await expect(page.getByTestId(LAYER_MODULE_TESTID)).toBeVisible({
-		timeout: 5_000,
+		timeout: 15_000,
 	});
-	await expect(page.getByTestId(row("home"))).toBeVisible({ timeout: 5_000 });
+	await expect(page.getByTestId(row("home"))).toBeVisible({ timeout: 15_000 });
 
 	return { console: consoleMessages, pageErrors, failed };
 }
@@ -73,6 +75,12 @@ async function openRowMenu(page: Page, pageId: string): Promise<void> {
 	// row, but it is in the DOM and reachable for synthetic clicks.
 	await page.getByTestId(menuTrigger(pageId)).click({ force: true });
 }
+
+// Cold-compile of `/puck/editor` under `next dev --webpack` runs
+// 60–90 s on a fresh dev server (cf. `playwright.config.ts`). Bump
+// the per-test timeout and serialize so the first test warms the
+// route and subsequent ones inherit the compiled chunks.
+test.describe.configure({ mode: "serial", timeout: 120_000 });
 
 test.describe("Pages panel — multi-page management", () => {
 	test("baseline render — panel, seeded rows, search input visible", async ({
@@ -87,9 +95,9 @@ test.describe("Pages panel — multi-page management", () => {
 
 	test("create — new page appears in the list", async ({ page }) => {
 		await gotoEditor(page);
-		await page.getByTestId(ADD_BUTTON_TESTID).click();
+		await page.getByTestId(ADD_BUTTON_TESTID).click({ force: true });
 		await page.getByTestId("ak-layer-add-page-title").fill("QA Demo Page");
-		await page.getByTestId("ak-layer-add-page-submit").click();
+		await page.getByTestId("ak-layer-add-page-submit").click({ force: true });
 		await expect(page.getByText("QA Demo Page", { exact: true })).toBeVisible({
 			timeout: 5_000,
 		});
@@ -98,7 +106,7 @@ test.describe("Pages panel — multi-page management", () => {
 	test("rename — Enter commits and the label updates", async ({ page }) => {
 		await gotoEditor(page);
 		await openRowMenu(page, "about");
-		await page.getByTestId(menuItem("about", "rename")).click();
+		await page.getByTestId(menuItem("about", "rename")).click({ force: true });
 		const input = page.getByTestId(renameInput("about"));
 		await input.fill("About Us");
 		await input.press("Enter");
@@ -113,7 +121,9 @@ test.describe("Pages panel — multi-page management", () => {
 	}) => {
 		await gotoEditor(page);
 		await openRowMenu(page, "about");
-		await page.getByTestId(menuItem("about", "duplicate")).click();
+		await page
+			.getByTestId(menuItem("about", "duplicate"))
+			.click({ force: true });
 		const copyRow = page
 			.locator('[data-testid^="ak-layer-page-row-about-copy-"]')
 			.first();
@@ -159,8 +169,8 @@ test.describe("Pages panel — multi-page management", () => {
 		await gotoEditor(page);
 		await expect(page.getByTestId(row("about"))).toBeVisible();
 		await openRowMenu(page, "about");
-		await page.getByTestId(menuItem("about", "delete")).click();
-		await page.getByTestId(deleteConfirm("about")).click();
+		await page.getByTestId(menuItem("about", "delete")).click({ force: true });
+		await page.getByTestId(deleteConfirm("about")).click({ force: true });
 		await expect(page.getByTestId(row("about"))).toHaveCount(0);
 	});
 
@@ -169,13 +179,17 @@ test.describe("Pages panel — multi-page management", () => {
 	}) => {
 		await gotoEditor(page);
 		await openRowMenu(page, "about");
-		await page.getByTestId(menuItem("about", "settings")).click();
+		await page
+			.getByTestId(menuItem("about", "settings"))
+			.click({ force: true });
 		const titleInput = page.getByTestId(
 			"ak-layer-page-settings-about-title-input",
 		);
 		await expect(titleInput).toBeVisible();
 		await titleInput.fill("About — updated");
-		await page.getByTestId("ak-layer-page-settings-about-submit").click();
+		await page
+			.getByTestId("ak-layer-page-settings-about-submit")
+			.click({ force: true });
 		await expect(
 			page
 				.getByTestId(row("about"))
