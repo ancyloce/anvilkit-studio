@@ -24,7 +24,17 @@ and `@puckeditor/core` >=0.21 work.
 
 ## Quickstart
 
+`<Studio>` wraps `<Puck>`, which is a client-only component. On any
+RSC-capable framework (Next.js App Router, Remix, etc.) the page or
+component that mounts `<Studio>` must opt into a client boundary —
+otherwise the bundler resolves `@puckeditor/core` through its
+`react-server` export condition, which does not expose `Puck`, and
+you'll see `Attempted import error: 'Puck' is not exported from
+'@puckeditor/core'`.
+
 ```tsx
+"use client";
+
 import { Studio } from "@anvilkit/core";
 import "@anvilkit/core/styles.css";
 import type { Config as PuckConfig } from "@puckeditor/core";
@@ -55,6 +65,31 @@ export default function EditorPage() {
 }
 ```
 
+If you'd rather keep the route as a Server Component, split the
+client surface into its own file and import it from the server:
+
+```tsx
+// app/editor/editor-shell.tsx
+"use client";
+
+import { Studio } from "@anvilkit/core";
+import "@anvilkit/core/styles.css";
+import { editorPuckConfig } from "./puck-config";
+
+export function EditorShell() {
+  return <Studio puckConfig={editorPuckConfig} plugins={[]} />;
+}
+```
+
+```tsx
+// app/editor/page.tsx — Server Component
+import { EditorShell } from "./editor-shell";
+
+export default function EditorPage() {
+  return <EditorShell />;
+}
+```
+
 `<Studio>` renders `null` while it resolves the plugin graph, then
 mounts `<Puck>` with the compiled runtime. No spinner by default —
 render your own loading UI above `<Studio>` if you want one.
@@ -76,7 +111,7 @@ export function createAutosavePlugin(endpoint: string): StudioPlugin {
       id: "com.example.autosave",
       name: "Autosave",
       version: "1.0.0",
-      coreVersion: "^0.1.3",
+      coreVersion: "^0.1.4",
     },
     register() {
       return {
@@ -84,7 +119,7 @@ export function createAutosavePlugin(endpoint: string): StudioPlugin {
           id: "com.example.autosave",
           name: "Autosave",
           version: "1.0.0",
-          coreVersion: "^0.1.3",
+          coreVersion: "^0.1.4",
         },
         hooks: {
           onDataChange: async (ctx, data) => {
@@ -166,6 +201,62 @@ if you want to strip the React layer out of a non-UI consumer.
 > Light selectors (one property access) are fine inline — the
 > guidance only kicks in when the selector body would be expensive
 > to repeat.
+
+## Reading Studio state
+
+The three Studio-level Zustand stores expose per-instance state to
+any descendant of `<Studio>`. Each hook accepts an optional selector
+and follows the same hoist-the-selector guidance shown above.
+
+```tsx
+"use client";
+
+import {
+  useAiStore,
+  useExportStore,
+  useThemeStore,
+} from "@anvilkit/core";
+
+const selectLastExport = (s: ReturnType<typeof useExportStore>) =>
+  s.lastExport;
+
+export function ExportStatusBadge() {
+  const lastExport = useExportStore(selectLastExport);
+  const theme = useThemeStore((s) => s.resolved);
+  const isGenerating = useAiStore((s) => s.isGenerating);
+
+  if (isGenerating) return <span>Generating…</span>;
+  if (!lastExport) return null;
+  return (
+    <span data-theme={theme}>
+      Last export: {lastExport.format} · {lastExport.at}
+    </span>
+  );
+}
+```
+
+`useStudio()` projects the compiled plugin runtime (header actions,
+export formats, lifecycle manager) for chrome components that need
+to compose contributions across plugins:
+
+```tsx
+"use client";
+
+import { useStudio } from "@anvilkit/core";
+
+export function HeaderActions() {
+  const { runtime } = useStudio();
+  return (
+    <div className="flex gap-2">
+      {runtime.headerActions.map((action) => (
+        <button key={action.id} onClick={action.onClick}>
+          {action.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
 
 ## Migrating from `aiHost`
 
