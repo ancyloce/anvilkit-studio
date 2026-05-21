@@ -73,9 +73,9 @@
               "sources": [
                 {
                   "fileName": "puck-data-to-ir.ts",
-                  "line": 35,
-                  "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L35"
+                  "line": 37,
+                  "character": 2,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L37"
                 }
               ],
               "type": {
@@ -127,9 +127,9 @@
               "sources": [
                 {
                   "fileName": "puck-data-to-ir.ts",
-                  "line": 40,
-                  "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L40"
+                  "line": 42,
+                  "character": 2,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L42"
                 }
               ],
               "type": {
@@ -188,9 +188,9 @@
           "sources": [
             {
               "fileName": "puck-data-to-ir.ts",
-              "line": 30,
+              "line": 32,
               "character": 17,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L30"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L32"
             }
           ]
         },
@@ -265,9 +265,9 @@
           "sources": [
             {
               "fileName": "collect-assets.ts",
-              "line": 119,
+              "line": 32,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L119"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L32"
             }
           ],
           "signatures": [
@@ -315,9 +315,9 @@
               "sources": [
                 {
                   "fileName": "collect-assets.ts",
-                  "line": 119,
+                  "line": 32,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L119"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L32"
                 }
               ],
               "parameters": [
@@ -367,9 +367,9 @@
                               "sources": [
                                 {
                                   "fileName": "collect-assets.ts",
-                                  "line": 120,
-                                  "character": 22,
-                                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L120"
+                                  "line": 33,
+                                  "character": 23,
+                                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L33"
                                 }
                               ],
                               "type": {
@@ -472,9 +472,9 @@
           "sources": [
             {
               "fileName": "identify-slots.ts",
-              "line": 24,
+              "line": 32,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/identify-slots.ts#L24"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/identify-slots.ts#L32"
             }
           ],
           "signatures": [
@@ -570,9 +570,9 @@
               "sources": [
                 {
                   "fileName": "identify-slots.ts",
-                  "line": 24,
+                  "line": 32,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/identify-slots.ts#L24"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/identify-slots.ts#L32"
                 }
               ],
               "parameters": [
@@ -649,9 +649,9 @@
           "sources": [
             {
               "fileName": "ir-to-puck-data.ts",
-              "line": 41,
+              "line": 39,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L41"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L39"
             }
           ],
           "signatures": [
@@ -693,15 +693,39 @@
                   },
                   {
                     "kind": "text",
-                    "text": ".\n\nThis function proves the round-trip guarantee — the invariant\n"
+                    "text": ".\n\nThis function backs the round-trip guarantee: for serializable,\nalready-canonical Puck "
                   },
                   {
                     "kind": "code",
-                    "text": "`irToPuckData(puckDataToIR(d)) ≡ d`"
+                    "text": "`Data`"
                   },
                   {
                     "kind": "text",
-                    "text": " is what lets us snapshot\ntest IR shapes without drift. It is also the entry point the AI\ncopilot plugin uses to turn a validated LLM "
+                    "text": ", "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`irToPuckData(puckDataToIR(d))`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is\n*structurally equivalent* to "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`d`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ". (The forward transform is\nintentionally normalizing — it sorts keys and drops\nfunctions/"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`undefined`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": "/non-JSON values — so the equivalence is\nstructural, not byte-for-byte, for non-canonical input.) That\nguarantee is what lets us snapshot-test IR shapes without drift.\nIt is also the entry point the AI copilot plugin uses to turn a\nvalidated LLM "
                   },
                   {
                     "kind": "code",
@@ -709,7 +733,7 @@
                   },
                   {
                     "kind": "text",
-                    "text": " response\nback into a "
+                    "text": " response back into a "
                   },
                   {
                     "kind": "code",
@@ -751,9 +775,9 @@
               "sources": [
                 {
                   "fileName": "ir-to-puck-data.ts",
-                  "line": 41,
+                  "line": 39,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L41"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L39"
                 }
               ],
               "parameters": [
@@ -806,9 +830,9 @@
           "sources": [
             {
               "fileName": "puck-data-to-ir.ts",
-              "line": 193,
+              "line": 196,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L193"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L196"
             }
           ],
           "signatures": [
@@ -882,9 +906,9 @@
               "sources": [
                 {
                   "fileName": "puck-data-to-ir.ts",
-                  "line": 193,
+                  "line": 196,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L193"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L196"
                 }
               ],
               "parameters": [
@@ -915,7 +939,7 @@
                 },
                 {
                   "id": 38,
-                  "name": "_config",
+                  "name": "config",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
@@ -939,7 +963,25 @@
                       },
                       {
                         "kind": "text",
-                        "text": " (used by phase3-004\n  helpers; lightly used in the base transform)."
+                        "text": ". **Required** — used\n  by "
+                      },
+                      {
+                        "kind": "inline-tag",
+                        "tag": "@link",
+                        "text": "identifySlots",
+                        "target": 21
+                      },
+                      {
+                        "kind": "text",
+                        "text": " to tell slot fields (descended into as\n  "
+                      },
+                      {
+                        "kind": "code",
+                        "text": "`children`"
+                      },
+                      {
+                        "kind": "text",
+                        "text": ") apart from plain serializable props."
                       }
                     ]
                   },
@@ -1053,7 +1095,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 16,
-                  "character": 1,
+                  "character": 2,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L16"
                 }
               ],
@@ -1068,7 +1110,7 @@
                     {
                       "fileName": "migrations/error.ts",
                       "line": 16,
-                      "character": 1,
+                      "character": 2,
                       "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L16"
                     }
                   ],
@@ -1127,7 +1169,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 15,
-                  "character": 10,
+                  "character": 11,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L15"
                 }
               ],
@@ -1246,7 +1288,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 9,
-                  "character": 10,
+                  "character": 11,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L9"
                 }
               ],
@@ -1267,7 +1309,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 10,
-                  "character": 10,
+                  "character": 11,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L10"
                 }
               ],
@@ -1288,7 +1330,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 11,
-                  "character": 10,
+                  "character": 11,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L11"
                 }
               ],
@@ -1359,9 +1401,9 @@
               "sources": [
                 {
                   "fileName": "migrations/index.ts",
-                  "line": 40,
-                  "character": 10,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L40"
+                  "line": 41,
+                  "character": 11,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L41"
                 }
               ],
               "type": {
@@ -1397,9 +1439,9 @@
               "sources": [
                 {
                   "fileName": "migrations/index.ts",
-                  "line": 42,
-                  "character": 10,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L42"
+                  "line": 43,
+                  "character": 11,
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L43"
                 }
               ],
               "type": {
@@ -1429,9 +1471,9 @@
           "sources": [
             {
               "fileName": "migrations/index.ts",
-              "line": 38,
+              "line": 39,
               "character": 17,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L38"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L39"
             }
           ]
         },
@@ -1444,9 +1486,9 @@
           "sources": [
             {
               "fileName": "migrations/index.ts",
-              "line": 36,
+              "line": 37,
               "character": 12,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L36"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L37"
             }
           ],
           "type": {
@@ -1567,9 +1609,9 @@
           "sources": [
             {
               "fileName": "migrations/index.ts",
-              "line": 34,
+              "line": 35,
               "character": 13,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L34"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L35"
             }
           ],
           "type": {
@@ -1600,9 +1642,9 @@
           "sources": [
             {
               "fileName": "migrations/index.ts",
-              "line": 160,
+              "line": 163,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L160"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L163"
             }
           ],
           "signatures": [
@@ -1665,9 +1707,9 @@
               "sources": [
                 {
                   "fileName": "migrations/index.ts",
-                  "line": 160,
+                  "line": 163,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L160"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L163"
                 }
               ],
               "parameters": [
@@ -1713,9 +1755,9 @@
           "sources": [
             {
               "fileName": "migrations/index.ts",
-              "line": 60,
+              "line": 63,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L60"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L63"
             }
           ],
           "signatures": [
@@ -1789,7 +1831,7 @@
                   },
                   {
                     "kind": "text",
-                    "text": " on the first invalid node.\n- Returns a structurally cloned, frozen IR when validation\n  succeeds with at least one populated "
+                    "text": " on the first invalid node.\n- Returns a frozen IR with a freshly rebuilt node spine when\n  validation succeeds with at least one populated "
                   },
                   {
                     "kind": "code",
@@ -1797,7 +1839,23 @@
                   },
                   {
                     "kind": "text",
-                    "text": ". The clone preserves\n  "
+                    "text": ". The\n  rebuild is structural only: "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`props`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`assets`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", and "
                   },
                   {
                     "kind": "code",
@@ -1805,7 +1863,15 @@
                   },
                   {
                     "kind": "text",
-                    "text": " byte-for-byte; it never synthesizes new fields.\n\nImportantly, this helper NEVER bumps "
+                    "text": " are\n  carried over by reference (not deep-cloned) and "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`meta`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " is\n  preserved byte-for-byte; no new fields are synthesized.\n\nImportantly, this helper NEVER bumps "
                   },
                   {
                     "kind": "code",
@@ -1836,9 +1902,9 @@
               "sources": [
                 {
                   "fileName": "migrations/index.ts",
-                  "line": 60,
+                  "line": 63,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L60"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L63"
                 }
               ],
               "parameters": [
@@ -2132,7 +2198,7 @@
     "38": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/puck-data-to-ir.ts",
-      "qualifiedName": "_config"
+      "qualifiedName": "config"
     },
     "39": {
       "packageName": "@anvilkit/ir",

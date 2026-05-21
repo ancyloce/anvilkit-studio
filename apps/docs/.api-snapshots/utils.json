@@ -100,7 +100,7 @@
                     {
                       "fileName": "debounce.ts",
                       "line": 13,
-                      "character": 1,
+                      "character": 2,
                       "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/debounce.ts#L13"
                     }
                   ],
@@ -507,9 +507,9 @@
       "sources": [
         {
           "fileName": "deep-merge.ts",
-          "line": 54,
+          "line": 55,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L54"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L55"
         }
       ],
       "signatures": [
@@ -643,9 +643,9 @@
           "sources": [
             {
               "fileName": "deep-merge.ts",
-              "line": 54,
+              "line": 55,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L54"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L55"
             }
           ],
           "typeParameters": [

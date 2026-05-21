@@ -25,7 +25,7 @@
             {
               "fileName": "config-to-ai-context.ts",
               "line": 20,
-              "character": 1,
+              "character": 2,
               "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/config-to-ai-context.ts#L20"
             }
           ],
@@ -74,7 +74,7 @@
             {
               "fileName": "extract-field-schema.ts",
               "line": 11,
-              "character": 1,
+              "character": 2,
               "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L11"
             }
           ],
@@ -95,7 +95,7 @@
             {
               "fileName": "extract-field-schema.ts",
               "line": 10,
-              "character": 1,
+              "character": 2,
               "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/extract-field-schema.ts#L10"
             }
           ],
@@ -142,7 +142,7 @@
             {
               "fileName": "is-json-serializable.ts",
               "line": 2,
-              "character": 1,
+              "character": 2,
               "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/is-json-serializable.ts#L2"
             }
           ],
