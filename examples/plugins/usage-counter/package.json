@@ -44,6 +44,7 @@
 	"scripts": {
 		"build": "rslib build",
 		"dev": "rslib build --watch",
+		"format": "pnpm exec biome format --write src rslib.config.ts vitest.config.ts",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest"
