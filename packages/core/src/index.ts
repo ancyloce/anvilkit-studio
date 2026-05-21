@@ -112,6 +112,7 @@ export {
   type ExportRegistry,
   isPuckPlugin,
   isStudioPlugin,
+  lazyPlugin,
   type LifecycleEventName,
   type LifecycleManager,
   type LifecycleSubscriber,
@@ -119,6 +120,7 @@ export {
   StudioError,
   StudioExportError,
   StudioPluginError,
+  type StudioPluginLoader,
   type StudioRuntime,
 } from "./runtime/index.js";
 // ---------------------------------------------------------------------------

@@ -42,6 +42,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorTab } from "@/state/editor-ui-store";
 import { useActiveTab, useEditorUiStore } from "@/state/hooks";
+import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 
 export const SIDEBAR_PANEL_ID = "ak-sidebar-panel";
 
@@ -82,6 +83,15 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
     const [activeTab, setActiveTab] = useActiveTab();
     const drawerCollapsed = useEditorUiStore((s) => s.drawerCollapsed);
     const setDrawerCollapsed = useEditorUiStore((s) => s.setDrawerCollapsed);
+    const visibility = {
+      insert: true,
+      layer: true,
+      image: useSidebarRegistry((s) => s.assetSource !== null),
+      text: useSidebarRegistry((s) => s.copyPacks.size > 0),
+      copilot: useSidebarRegistry((s) => s.copilotPanel !== null),
+      history: useSidebarRegistry((s) => s.historyPanel !== null),
+    } satisfies Record<EditorTab, boolean>;
+    const visibleModules = RAIL_MODULES.filter((m) => visibility[m.key]);
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useImperativeHandle(
@@ -161,7 +171,7 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
             className="flex h-fit w-fit flex-col items-center justify-start gap-2 rounded-none bg-transparent p-0 pt-2 text-current"
             onKeyDown={handleKeyDown}
           >
-            {RAIL_MODULES.map(({ key, icon: Icon, labelKey }) => (
+            {visibleModules.map(({ key, icon: Icon, labelKey }) => (
               <Tooltip key={key}>
                 <TooltipTrigger
                   render={
