@@ -28,20 +28,20 @@ import type { StudioPlugin } from "@anvilkit/core";
  * simplicity.
  */
 export const lazyAssetManagerPlugin: StudioPlugin = lazyPlugin(
-  async () => {
-    const mod = await import("@anvilkit/plugin-asset-manager");
-    return mod.createAssetManagerPlugin({
-      uploader: mod.inMemoryUploader(),
-    });
-  },
-  {
-    id: "@anvilkit/plugin-asset-manager",
-    name: "Asset Manager",
-    version: "0.1.0",
-    coreVersion: "^0.1.0",
-    description: "Sidebar asset library + uploader",
-    capabilities: { sidebar: true },
-  },
+	async () => {
+		const mod = await import("@anvilkit/plugin-asset-manager");
+		return mod.createAssetManagerPlugin({
+			uploader: mod.inMemoryUploader(),
+		});
+	},
+	{
+		id: "@anvilkit/plugin-asset-manager",
+		name: "Asset Manager",
+		version: "0.1.0",
+		coreVersion: "^0.1.0",
+		description: "Sidebar asset library + uploader",
+		capabilities: { sidebar: true },
+	},
 );
 
 /**
@@ -49,18 +49,54 @@ export const lazyAssetManagerPlugin: StudioPlugin = lazyPlugin(
  * included in the `plugins` array.
  */
 export const lazyVersionHistoryPlugin: StudioPlugin = lazyPlugin(
-  async () => {
-    const mod = await import("@anvilkit/plugin-version-history");
-    return mod.createVersionHistoryPlugin({
-      adapter: mod.inMemoryAdapter(),
-    });
-  },
-  {
-    id: "@anvilkit/plugin-version-history",
-    name: "Version History",
-    version: "0.1.0",
-    coreVersion: "^0.1.0",
-    description: "Sidebar history panel + snapshot adapter",
-    capabilities: { sidebar: true },
-  },
+	async () => {
+		const mod = await import("@anvilkit/plugin-version-history");
+		return mod.createVersionHistoryPlugin({
+			adapter: mod.inMemoryAdapter(),
+		});
+	},
+	{
+		id: "@anvilkit/plugin-version-history",
+		name: "Version History",
+		version: "0.1.0",
+		coreVersion: "^0.1.0",
+		description: "Sidebar history panel + snapshot adapter",
+		capabilities: { sidebar: true },
+	},
+);
+
+/**
+ * Lazy-loaded Canvas Studio plugin. This is the heaviest plugin in the
+ * demo — its `register()` pulls `@anvilkit/canvas-editor`, which in turn
+ * pulls Konva + react-konva — so deferring it keeps that whole graph out
+ * of the editor page's initial chunk until `<Studio>` actually mounts.
+ *
+ * The loader runs client-side at `register()` time, so `localStorage` is
+ * available and the persistence adapter is created here (keeping the
+ * adapter import deferred too). The SSR-noop fallback mirrors the
+ * convention used by the standalone canvas route's `CanvasStudioClient`.
+ */
+export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
+	async () => {
+		const mod = await import("@anvilkit/plugin-canvas-studio");
+		const adapter =
+			typeof globalThis.localStorage === "undefined"
+				? {
+						save: () => undefined,
+						load: () => null,
+						list: () => [],
+						delete: () => undefined,
+					}
+				: mod.localStorageCanvasAdapter({ namespace: "demo-canvas" });
+		return mod.createCanvasStudioPlugin({ adapter });
+	},
+	{
+		id: "@anvilkit/plugin-canvas-studio",
+		name: "Canvas Studio",
+		version: "0.1.1",
+		coreVersion: "^0.1.0-alpha",
+		description:
+			"Mounts the Canvas Studio overlay, registers the design-block quick-add, and exposes the design:// asset resolver.",
+		capabilities: { sidebar: true },
+	},
 );

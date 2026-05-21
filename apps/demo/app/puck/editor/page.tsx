@@ -20,10 +20,6 @@ import {
 	type UploadResult,
 	uploadAsset,
 } from "@anvilkit/plugin-asset-manager";
-import {
-	createCanvasStudioPlugin,
-	localStorageCanvasAdapter,
-} from "@anvilkit/plugin-canvas-studio";
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
 import {
 	createHtmlExportPlugin,
@@ -49,6 +45,7 @@ import {
 import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import { createDemoVersionHistoryPlugins } from "../../../lib/history-sidebar-plugin";
+import { lazyCanvasStudioPlugin } from "../../../lib/lazy-plugins";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -105,24 +102,6 @@ const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 // the off-token / WCAG-AA contrast validators wired through the
 // existing `onDataChange` / `onBeforePublish` lifecycle seams.
 const designSystemPlugin = createDesignSystemPlugin();
-
-// Canvas Studio plugin: contributes the mode-switch header action, the
-// full-screen canvas overlay, the `design://` asset resolver, and the
-// DesignBlock layer quick-add. The localStorage adapter keeps designs
-// across page reloads in the demo without a backend.
-const canvasStudioPlugin = createCanvasStudioPlugin({
-	adapter:
-		typeof globalThis.localStorage === "undefined"
-			? // SSR-only — overlay never mounts before client hydration, so a
-				// fake noop adapter is sufficient to keep the constructor pure.
-				{
-					save: () => undefined,
-					load: () => null,
-					list: () => [],
-					delete: () => undefined,
-				}
-			: localStorageCanvasAdapter({ namespace: "demo-canvas" }),
-});
 
 // Editor-only config: extends the shared `demoConfig` with the
 // demo-only `TokenSwatch` component that dogfoods the design-system
@@ -490,7 +469,7 @@ export default function PuckEditorPage() {
 			historySidebarPlugin,
 			assetManagerNoHeaderPlugin,
 			designSystemPlugin,
-			canvasStudioPlugin,
+			lazyCanvasStudioPlugin,
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
 		];
