@@ -74,7 +74,7 @@
                 {
                   "fileName": "puck-data-to-ir.ts",
                   "line": 37,
-                  "character": 2,
+                  "character": 1,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L37"
                 }
               ],
@@ -128,7 +128,7 @@
                 {
                   "fileName": "puck-data-to-ir.ts",
                   "line": 42,
-                  "character": 2,
+                  "character": 1,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L42"
                 }
               ],
@@ -368,7 +368,7 @@
                                 {
                                   "fileName": "collect-assets.ts",
                                   "line": 33,
-                                  "character": 23,
+                                  "character": 22,
                                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L33"
                                 }
                               ],
@@ -1079,14 +1079,14 @@
       "flags": {},
       "children": [
         {
-          "id": 40,
+          "id": 44,
           "name": "PageIRNodeMetaError",
           "variant": "declaration",
           "kind": 128,
           "flags": {},
           "children": [
             {
-              "id": 41,
+              "id": 45,
               "name": "constructor",
               "variant": "declaration",
               "kind": 512,
@@ -1095,13 +1095,13 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 16,
-                  "character": 2,
+                  "character": 1,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L16"
                 }
               ],
               "signatures": [
                 {
-                  "id": 42,
+                  "id": 46,
                   "name": "PageIRNodeMetaError",
                   "variant": "signature",
                   "kind": 16384,
@@ -1110,13 +1110,13 @@
                     {
                       "fileName": "migrations/error.ts",
                       "line": 16,
-                      "character": 2,
+                      "character": 1,
                       "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L16"
                     }
                   ],
                   "parameters": [
                     {
-                      "id": 43,
+                      "id": 47,
                       "name": "issues",
                       "variant": "param",
                       "kind": 32768,
@@ -1128,7 +1128,7 @@
                           "type": "array",
                           "elementType": {
                             "type": "reference",
-                            "target": 45,
+                            "target": 40,
                             "name": "NodeMetaValidationIssue",
                             "package": "@anvilkit/ir"
                           }
@@ -1138,7 +1138,7 @@
                   ],
                   "type": {
                     "type": "reference",
-                    "target": 40,
+                    "target": 44,
                     "name": "PageIRNodeMetaError",
                     "package": "@anvilkit/ir"
                   },
@@ -1158,7 +1158,7 @@
               }
             },
             {
-              "id": 44,
+              "id": 48,
               "name": "issues",
               "variant": "declaration",
               "kind": 1024,
@@ -1169,7 +1169,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 15,
-                  "character": 11,
+                  "character": 10,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L15"
                 }
               ],
@@ -1180,7 +1180,7 @@
                   "type": "array",
                   "elementType": {
                     "type": "reference",
-                    "target": 45,
+                    "target": 40,
                     "name": "NodeMetaValidationIssue",
                     "package": "@anvilkit/ir"
                   }
@@ -1192,13 +1192,13 @@
             {
               "title": "Constructors",
               "children": [
-                41
+                45
               ]
             },
             {
               "title": "Properties",
               "children": [
-                44
+                48
               ]
             }
           ],
@@ -1224,7 +1224,7 @@
           ]
         },
         {
-          "id": 45,
+          "id": 40,
           "name": "NodeMetaValidationIssue",
           "variant": "declaration",
           "kind": 256,
@@ -1277,7 +1277,7 @@
           },
           "children": [
             {
-              "id": 46,
+              "id": 41,
               "name": "code",
               "variant": "declaration",
               "kind": 1024,
@@ -1288,7 +1288,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 9,
-                  "character": 11,
+                  "character": 10,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L9"
                 }
               ],
@@ -1298,7 +1298,7 @@
               }
             },
             {
-              "id": 47,
+              "id": 42,
               "name": "message",
               "variant": "declaration",
               "kind": 1024,
@@ -1309,7 +1309,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 10,
-                  "character": 11,
+                  "character": 10,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L10"
                 }
               ],
@@ -1319,7 +1319,7 @@
               }
             },
             {
-              "id": 48,
+              "id": 43,
               "name": "path",
               "variant": "declaration",
               "kind": 1024,
@@ -1330,7 +1330,7 @@
                 {
                   "fileName": "migrations/error.ts",
                   "line": 11,
-                  "character": 11,
+                  "character": 10,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L11"
                 }
               ],
@@ -1360,9 +1360,9 @@
             {
               "title": "Properties",
               "children": [
-                46,
-                47,
-                48
+                41,
+                42,
+                43
               ]
             }
           ],
@@ -1402,7 +1402,7 @@
                 {
                   "fileName": "migrations/index.ts",
                   "line": 41,
-                  "character": 11,
+                  "character": 10,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L41"
                 }
               ],
@@ -1440,7 +1440,7 @@
                 {
                   "fileName": "migrations/index.ts",
                   "line": 43,
-                  "character": 11,
+                  "character": 10,
                   "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L43"
                 }
               ],
@@ -1827,7 +1827,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "PageIRNodeMetaError",
-                    "target": 40
+                    "target": 44
                   },
                   {
                     "kind": "text",
@@ -1959,13 +1959,13 @@
         {
           "title": "Classes",
           "children": [
-            40
+            44
           ]
         },
         {
           "title": "Interfaces",
           "children": [
-            45,
+            40,
             12
           ]
         },
@@ -2208,47 +2208,47 @@
     "40": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "PageIRNodeMetaError"
+      "qualifiedName": "NodeMetaValidationIssue"
     },
     "41": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "PageIRNodeMetaError.__constructor"
+      "qualifiedName": "NodeMetaValidationIssue.code"
     },
     "42": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "PageIRNodeMetaError"
+      "qualifiedName": "NodeMetaValidationIssue.message"
     },
     "43": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "issues"
+      "qualifiedName": "NodeMetaValidationIssue.path"
     },
     "44": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "PageIRNodeMetaError.issues"
+      "qualifiedName": "PageIRNodeMetaError"
     },
     "45": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "NodeMetaValidationIssue"
+      "qualifiedName": "PageIRNodeMetaError.__constructor"
     },
     "46": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "NodeMetaValidationIssue.code"
+      "qualifiedName": "PageIRNodeMetaError"
     },
     "47": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "NodeMetaValidationIssue.message"
+      "qualifiedName": "issues"
     },
     "48": {
       "packageName": "@anvilkit/ir",
       "packagePath": "src/migrations/error.ts",
-      "qualifiedName": "NodeMetaValidationIssue.path"
+      "qualifiedName": "PageIRNodeMetaError.issues"
     }
   },
   "files": {
