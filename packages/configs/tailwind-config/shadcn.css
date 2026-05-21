@@ -2,6 +2,21 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/*
+ * Scan compiled output of every `@anvilkit/*` workspace package for
+ * Tailwind utility class strings. Paths resolve relative to this file
+ * at `packages/configs/tailwind-config/shadcn.css`, so `../../<pkg>/dist`
+ * walks back up to `packages/` and into each sibling package. Without
+ * these, hosts that import `@anvilkit/tailwind-config/shadcn` would only
+ * get utilities used in their own source files — the Studio chrome,
+ * UI primitives, and plugin surfaces would render without any of the
+ * Tailwind classes baked into their compiled JSX.
+ */
+@source "../../core/dist/**/*.js";
+@source "../../ui/dist/**/*.js";
+@source "../../plugins/*/dist/**/*.js";
+@source "../../components/dist/**/*.js";
+
 @theme inline {
 	--font-heading: var(--font-sans);
 	--color-background: var(--background);

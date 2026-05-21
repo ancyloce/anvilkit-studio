@@ -13,6 +13,13 @@
  * `@anvilkit/tailwind-config/shadcn`) is responsible for loading
  * Tailwind. Re-importing it from a deep dist path breaks
  * resolution under webpack/postcss.
+ *
+ * Tailwind utility class scanning for `@anvilkit/*` packages is wired
+ * into `@anvilkit/tailwind-config/shadcn` via `@source` directives —
+ * see `packages/configs/tailwind-config/shadcn.css`. That keeps the
+ * `import "@anvilkit/core/styles.css"` contract a pure token bridge
+ * while still ensuring the Studio chrome's Tailwind utilities make it
+ * into the host's compiled CSS.
  */
 
 :root {
