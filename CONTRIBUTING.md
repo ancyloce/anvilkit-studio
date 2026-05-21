@@ -5,14 +5,14 @@ Thanks for your interest in contributing to AnvilKit Studio. This guide covers e
 ## Prerequisites
 
 - **Node.js** >= 22.13
-- **pnpm** 11.0.9 (exact — the repo enforces this via `packageManager`)
+- **pnpm** 11.1.3 (exact — the repo enforces this via `packageManager`)
 - **Git** with submodule support
 
 Install pnpm if you don't have it:
 
 ```bash
 corepack enable
-corepack prepare pnpm@11.0.9 --activate
+corepack prepare pnpm@11.1.3 --activate
 ```
 
 ## Initial Setup

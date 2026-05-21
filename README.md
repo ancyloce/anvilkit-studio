@@ -103,7 +103,7 @@ After cloning, run `git submodule update --init --recursive`. Submodules:
 
 ## Continuous Integration
 
-`.github/workflows/ci.yml` runs on every pull request (pnpm 11.0.9 / Node 22, submodules pulled recursively):
+`.github/workflows/ci.yml` runs on every pull request (pnpm 11.1.3 / Node 22, submodules pulled recursively):
 
 1. `pnpm lint` — Biome lint
 2. `pnpm typecheck` — TypeScript validation
