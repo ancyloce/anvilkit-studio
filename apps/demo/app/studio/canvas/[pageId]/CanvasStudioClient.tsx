@@ -46,7 +46,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 					MVP-1 placeholder. Tools, layers, persistence land in MVP-3 onward.
 				</p>
 			</header>
-			<CanvasStudio initialIR={initialIR} activePageId={pageId} />
+			<CanvasStudio initialIR={initialIR} initialActivePageId={pageId} />
 		</main>
 	);
 }
