@@ -205,8 +205,10 @@ jobs:
         id: publish-plan
         if: github.event_name == 'push' || inputs.mode == 'auto' || inputs.mode == 'publish-only'
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npm-publish.npmrc
-        run: node scripts/ensure-npm-packages-exist.mjs --dry-run
+        run: node scripts/ensure-npm-packages-exist.mjs --dry-run --require-publish-auth
 
       # Publish only versions that already exist in package.json and
       # are absent from npm. Version changes must arrive through an

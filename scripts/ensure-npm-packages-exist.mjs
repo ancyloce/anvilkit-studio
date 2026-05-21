@@ -16,6 +16,9 @@
  *   --dry-run   Probe only. Kept for local/CI readability; this script
  *               never mutates npm either way.
  *   --filter    Restrict to package names containing this substring.
+ *   --require-publish-auth
+ *               Verify the npm token identity owns or maintains each
+ *               pending package before the publish step runs.
  */
 import { spawnSync } from "node:child_process";
 import {
@@ -30,6 +33,7 @@ import { join, relative } from "node:path";
 
 const ROOT = process.cwd();
 const DRY_RUN = process.argv.includes("--dry-run");
+const REQUIRE_PUBLISH_AUTH = process.argv.includes("--require-publish-auth");
 const FILTER_ARG = process.argv.find((arg) => arg.startsWith("--filter="));
 const FILTER = FILTER_ARG ? FILTER_ARG.slice("--filter=".length) : null;
 
@@ -173,6 +177,91 @@ function writeOutputs(pending) {
 	setOutput("packages", packages.join(","));
 }
 
+function runNpm(args) {
+	const result = spawnSync("npm", args, {
+		stdio: ["ignore", "pipe", "pipe"],
+		encoding: "utf8",
+	});
+	return {
+		status: result.status,
+		stdout: result.stdout || "",
+		stderr: result.stderr || "",
+		output: `${result.stderr || ""}\n${result.stdout || ""}`.trim(),
+	};
+}
+
+function npmWhoami() {
+	const result = runNpm(["whoami"]);
+	if (result.status === 0) {
+		return result.stdout.trim();
+	}
+
+	throw new Error(
+		"Unable to authenticate with npm before publishing.\n" +
+			"`npm whoami` failed for the configured NPM_TOKEN, so the " +
+			"publish step would later fail with npm auth/permission errors.\n\n" +
+			`Exit: ${result.status}` +
+			(result.output ? `\nOutput:\n${result.output}\n\n` : "\n\n") +
+			"Fix the GitHub NPM_TOKEN secret: create an npm automation or " +
+			"granular token from the account that owns or maintains the " +
+			"@anvilkit packages.",
+	);
+}
+
+function npmOwners(name) {
+	const result = runNpm(["owner", "ls", name]);
+	if (result.status !== 0) {
+		throw new Error(
+			`Unable to read npm owners for ${name} before publishing.\n` +
+				`Exit: ${result.status}` +
+				(result.output ? `\nOutput:\n${result.output}` : ""),
+		);
+	}
+
+	return result.stdout
+		.split(/\r?\n/)
+		.map((line) => line.trim().match(/^([^\s<]+)/)?.[1])
+		.filter(Boolean);
+}
+
+function assertPublishAuth(pending) {
+	if (!REQUIRE_PUBLISH_AUTH || pending.length === 0) {
+		return;
+	}
+
+	const user = npmWhoami();
+	const blocked = [];
+
+	for (const pkg of pending) {
+		const owners = npmOwners(pkg.name);
+		if (!owners.includes(user)) {
+			blocked.push({ ...pkg, owners });
+		}
+	}
+
+	if (blocked.length === 0) {
+		console.log(`npm auth ok: ${user} owns/maintains every pending package.`);
+		return;
+	}
+
+	throw new Error(
+		`NPM_TOKEN authenticates as "${user}", but that account is not listed ` +
+			"as an npm owner/maintainer for every package selected by package.json " +
+			"comparison.\n\n" +
+			"npm returns `404 Not Found - PUT` for this exact permission problem.\n" +
+			"Blocked package(s):\n" +
+			blocked
+				.map(
+					(pkg) =>
+						`  - ${pkg.name}@${pkg.version} (owners: ${pkg.owners.join(", ") || "none"})`,
+				)
+				.join("\n") +
+			"\n\nFix the GitHub NPM_TOKEN secret so it comes from one of the listed " +
+			"owner/maintainer accounts, or add the token's npm user as a maintainer " +
+			"for the blocked package(s).",
+	);
+}
+
 function main() {
 	const all = enumerateWorkspacePackages();
 	const packages = FILTER
@@ -220,6 +309,8 @@ function main() {
 		console.log("All public workspace package.json versions already exist on npm.");
 		return;
 	}
+
+	assertPublishAuth(pending);
 
 	console.log(
 		`Found ${pending.length} package.json version(s) ready to publish: ` +
