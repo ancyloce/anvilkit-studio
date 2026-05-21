@@ -14,15 +14,19 @@
  * concerns in one place.
  */
 
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
 	Copy,
 	Globe,
+	GripVertical,
 	Home,
 	MoreHorizontal,
 	Pencil,
 	Trash2,
 } from "lucide-react";
 import {
+	type CSSProperties,
 	type KeyboardEvent as ReactKeyboardEvent,
 	type ReactNode,
 	useCallback,
@@ -45,6 +49,7 @@ import { useMsg } from "@/state/editor-i18n-store";
 import type { StudioPage, StudioPagesSource } from "@/types/pages";
 import { cn } from "@/utils/cn";
 import { PageDeleteConfirmDialog } from "./PageDeleteConfirmDialog";
+import { PageSettingsDialog } from "./PageSettingsDialog";
 
 export interface PageRowProps {
 	readonly page: StudioPage;
@@ -54,6 +59,7 @@ export interface PageRowProps {
 	readonly onDelete?: StudioPagesSource["onDelete"];
 	readonly onDuplicate?: StudioPagesSource["onDuplicate"];
 	readonly onUpdateSettings?: StudioPagesSource["onUpdateSettings"];
+	readonly onReorder?: StudioPagesSource["onReorder"];
 }
 
 type RowMode = "view" | "renaming";
@@ -66,19 +72,38 @@ export function PageRow({
 	onDelete,
 	onDuplicate,
 	onUpdateSettings,
+	onReorder,
 }: PageRowProps): ReactNode {
 	const msg = useMsg();
 	const label = page.title.length > 0 ? page.title : (page.path ?? page.id);
-	const isHome = page.id === "home" || label.toLowerCase() === "home";
-
 	const locked = page.locked === true;
+	// The Home icon used to be a string heuristic on `page.id === "home"`;
+	// hosts now signal it explicitly via `StudioPage.locked` (PRD §6 risk-6).
+	const isHome = locked;
 	const canRename = typeof onRename === "function" && !locked;
 	const canDelete = typeof onDelete === "function" && !locked;
 	const canDuplicate = typeof onDuplicate === "function";
 	const canSettings = typeof onUpdateSettings === "function";
+	const canReorder = typeof onReorder === "function";
 	const hasAnyAction = canRename || canDuplicate || canDelete || canSettings;
 
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		setActivatorNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({ id: page.id });
+	const sortableStyle: CSSProperties = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isDragging ? 0.4 : undefined,
+	};
+
 	const [confirmingDelete, setConfirmingDelete] = useState(false);
+	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [duplicating, setDuplicating] = useState(false);
 
 	const handleDeleteConfirm = useCallback(async (): Promise<void> => {
@@ -190,7 +215,7 @@ export function PageRow({
 
 	if (mode === "renaming") {
 		return (
-			<li role="listitem">
+			<li ref={setNodeRef} style={sortableStyle} role="listitem">
 				<div
 					className={cn(
 						"flex h-6 items-center gap-2 rounded-sm border-0 px-2 py-0 text-xs",
@@ -233,7 +258,12 @@ export function PageRow({
 	}
 
 	return (
-		<li role="listitem" className="group/page-row relative">
+		<li
+			ref={setNodeRef}
+			style={sortableStyle}
+			role="listitem"
+			className="group/page-row relative"
+		>
 			<Item
 				size="xs"
 				render={
@@ -252,8 +282,23 @@ export function PageRow({
 					"focus-visible:ring-2 focus-visible:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
 					"data-[active=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[active=true]:text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
 					hasAnyAction ? "pr-7" : "",
+					canReorder ? "pl-1" : "",
 				)}
 			>
+				{canReorder ? (
+					<button
+						{...attributes}
+						{...listeners}
+						ref={setActivatorNodeRef}
+						type="button"
+						aria-label={msg("studio.module.layer.pages.tree.dragHandle")}
+						data-testid={`ak-layer-page-row-${page.id}-drag-handle`}
+						className="-ml-1 flex h-4 w-3 cursor-grab items-center justify-center text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))] opacity-0 group-hover/page-row:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
+						onClick={(event) => event.stopPropagation()}
+					>
+						<GripVertical className="size-3" aria-hidden="true" />
+					</button>
+				) : null}
 				<ItemMedia
 					variant="icon"
 					className="text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))]"
@@ -306,10 +351,7 @@ export function PageRow({
 							) : null}
 							{canSettings ? (
 								<DropdownMenuItem
-									onClick={() => {
-										// P2 stub: PageSettingsDialog ships in P3 and will
-										// open here. Capability-gated on `onUpdateSettings`.
-									}}
+									onClick={() => setSettingsOpen(true)}
 									data-testid={`ak-layer-page-row-${page.id}-menu-settings`}
 								>
 									<span>{msg("studio.module.layer.pages.menu.settings")}</span>
@@ -338,6 +380,14 @@ export function PageRow({
 					onOpenChange={setConfirmingDelete}
 					page={page}
 					onConfirm={handleDeleteConfirm}
+				/>
+			) : null}
+			{canSettings && typeof onUpdateSettings === "function" ? (
+				<PageSettingsDialog
+					open={settingsOpen}
+					onOpenChange={setSettingsOpen}
+					page={page}
+					onSubmit={onUpdateSettings}
 				/>
 			) : null}
 		</li>
