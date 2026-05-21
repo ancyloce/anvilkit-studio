@@ -11,7 +11,8 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "tab",
+		"includes": ["**", "!**/*.snap.json"]
 	},
 	"linter": {
 		"enabled": true,
@@ -93,10 +94,7 @@
 				"useNamespaceKeyword": "error"
 			}
 		},
-		"includes": [
-			"**",
-			"!dist/**"
-		]
+		"includes": ["**", "!dist/**"]
 	},
 	"javascript": {
 		"formatter": {
@@ -111,12 +109,7 @@
 	},
 	"overrides": [
 		{
-			"includes": [
-				"**/*.ts",
-				"**/*.tsx",
-				"**/*.mts",
-				"**/*.cts"
-			],
+			"includes": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
 			"linter": {
 				"rules": {
 					"complexity": {
