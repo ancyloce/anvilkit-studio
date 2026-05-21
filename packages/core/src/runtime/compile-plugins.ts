@@ -41,12 +41,14 @@ import type {
   StudioHeaderAction,
   StudioPlugin,
   StudioPluginContext,
+  StudioPluginLifecycleHooks,
   StudioPluginMeta,
   StudioPluginOverlay,
   StudioPluginProvider,
   StudioPluginRegistration,
   StudioPluginSlotContribution,
 } from "@/types/plugin";
+import type { StudioSidebarUnregister } from "@/types/sidebar";
 import { isPuckPlugin, isStudioPlugin } from "./detect-plugin.js";
 import { StudioPluginError } from "./errors.js";
 import { createSingleOccupancyRegistry } from "./single-occupancy-registry.js";
@@ -424,6 +426,86 @@ export interface CompilePluginsOptions {
   readonly lifecycle?: LifecycleManagerOptions;
 }
 
+/**
+ * Wrap the per-instance `pluginCtx` so every sidebar-style register
+ * call (the ones that return an unregister handle) records its handle
+ * in `collected`. Returns a ctx the plugin sees as identical to the
+ * base, plus the same unregister handle the plugin can still call
+ * itself — the registry's `register*` implementations are idempotent
+ * on second unregister, so well-behaved plugins are unaffected.
+ *
+ * Used together with {@link withAutoTeardown} to invoke every
+ * collected handle from `onDestroy`, so a plugin that forgets cleanup
+ * cannot leak sidebar registrations across remounts.
+ */
+function wrapRegisterMethodsForTeardown(
+  pluginCtx: StudioPluginContext,
+  collected: StudioSidebarUnregister[],
+): StudioPluginContext {
+  function track<T>(
+    fn: ((arg: T) => StudioSidebarUnregister) | undefined,
+  ): ((arg: T) => StudioSidebarUnregister) | undefined {
+    if (fn === undefined) return undefined;
+    return (arg) => {
+      const handle = fn(arg);
+      collected.push(handle);
+      return handle;
+    };
+  }
+  return {
+    ...pluginCtx,
+    registerInsertSection: track(pluginCtx.registerInsertSection),
+    registerLayerQuickAdd: track(pluginCtx.registerLayerQuickAdd),
+    registerAssetSource: track(pluginCtx.registerAssetSource),
+    registerAssetAction: track(pluginCtx.registerAssetAction),
+    registerCopySnippetPack: track(pluginCtx.registerCopySnippetPack),
+    registerCopilotPanel: track(pluginCtx.registerCopilotPanel),
+    registerHistoryPanel: track(pluginCtx.registerHistoryPanel),
+    registerDesignSystemPanel: track(pluginCtx.registerDesignSystemPanel),
+  };
+}
+
+/**
+ * Wrap a plugin's lifecycle hooks so the supplied `collected`
+ * unregister handles fire **after** the plugin's own `onDestroy`
+ * (whether it was defined or not). Iterates in LIFO order and
+ * swallows handle errors via `ctx.log` so one bad cleanup cannot
+ * abort the rest of the teardown.
+ */
+function withAutoTeardown<UserConfig extends import("@puckeditor/core").Config>(
+  hooks: StudioPluginLifecycleHooks<UserConfig> | undefined,
+  collected: StudioSidebarUnregister[],
+  pluginId: string,
+): StudioPluginLifecycleHooks<UserConfig> {
+  const userOnDestroy = hooks?.onDestroy;
+  return {
+    ...hooks,
+    onDestroy: async (ctx) => {
+      if (userOnDestroy !== undefined) {
+        try {
+          await userOnDestroy(ctx);
+        } catch (error) {
+          ctx.log("error", `Plugin "${pluginId}" onDestroy threw`, {
+            error: error instanceof Error ? error.message : String(error),
+          });
+        }
+      }
+      for (let i = collected.length - 1; i >= 0; i -= 1) {
+        try {
+          collected[i]?.();
+        } catch (error) {
+          ctx.log(
+            "error",
+            `Plugin "${pluginId}" auto-teardown handle threw`,
+            { error: error instanceof Error ? error.message : String(error) },
+          );
+        }
+      }
+      collected.length = 0;
+    },
+  };
+}
+
 export async function compilePlugins(
   plugins: readonly (StudioPlugin | PuckPlugin)[],
   ctx: StudioPluginContext,
@@ -496,9 +578,15 @@ export async function compilePlugins(
         );
       }
 
+      const collectedUnregisters: StudioSidebarUnregister[] = [];
+      const wrappedCtx = wrapRegisterMethodsForTeardown(
+        pluginCtx,
+        collectedUnregisters,
+      );
+
       let registration: StudioPluginRegistration;
       try {
-        registration = await plugin.register(pluginCtx);
+        registration = await plugin.register(wrappedCtx);
       } catch (error) {
         if (error instanceof StudioPluginError) {
           throw error;
@@ -511,7 +599,14 @@ export async function compilePlugins(
       }
 
       pluginMeta.push(meta);
-      registrations.push(registration);
+      registrations.push({
+        ...registration,
+        hooks: withAutoTeardown(
+          registration.hooks,
+          collectedUnregisters,
+          meta.id,
+        ),
+      });
 
       // Header actions: pass through verbatim. `core-009`'s
       // `composeHeaderActions()` is responsible for dedupe and

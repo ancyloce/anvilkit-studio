@@ -22,6 +22,7 @@ export {
   composeHeaderActions,
   type StudioHeaderAction,
 } from "./header-actions.js";
+export { lazyPlugin, type StudioPluginLoader } from "./lazy-plugin.js";
 export {
   createLifecycleManager,
   type LifecycleEventName,
