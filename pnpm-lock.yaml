@@ -1297,6 +1297,9 @@ importers:
       '@anvilkit/typescript-config':
         specifier: workspace:*
         version: link:../../configs/typescript-config
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../ui
       '@anvilkit/vitest-config':
         specifier: workspace:*
         version: link:../../configs/vitest-config
