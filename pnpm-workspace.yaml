@@ -22,6 +22,9 @@ minimumReleaseAgeExclude:
   - '@vitest/spy@4.1.7'
   - '@vitest/utils@4.1.7'
   - vitest@4.1.7
+patchedDependencies:
+  "@base-ui/react@1.5.0": packages/components/patches/@base-ui__react@1.5.0.patch
+
 overrides:
   react: 19.2.6
   react-dom: 19.2.6

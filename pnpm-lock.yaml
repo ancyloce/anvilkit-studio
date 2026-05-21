@@ -10,6 +10,9 @@ overrides:
   typedoc: 0.28.19
   typescript: 6.0.3
 
+patchedDependencies:
+  '@base-ui/react@1.5.0': 23eec0c95cc21a5cc5be8e6cdf147edc2b0a4ba5dca376f4b0aec280f77a3556
+
 importers:
 
   .:
@@ -1028,7 +1031,7 @@ importers:
         version: link:../utils
       '@base-ui/react':
         specifier: ^1.4.1
-        version: 1.5.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 1.5.0(patch_hash=23eec0c95cc21a5cc5be8e6cdf147edc2b0a4ba5dca376f4b0aec280f77a3556)(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@dnd-kit/core':
         specifier: ^6.3.1
         version: 6.3.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -2040,7 +2043,7 @@ importers:
     dependencies:
       '@base-ui/react':
         specifier: ^1.4.1
-        version: 1.5.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 1.5.0(patch_hash=23eec0c95cc21a5cc5be8e6cdf147edc2b0a4ba5dca376f4b0aec280f77a3556)(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@floating-ui/react':
         specifier: ^0.27.19
         version: 0.27.19(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -9316,7 +9319,7 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@base-ui/react@1.5.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@base-ui/react@1.5.0(patch_hash=23eec0c95cc21a5cc5be8e6cdf147edc2b0a4ba5dca376f4b0aec280f77a3556)(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@babel/runtime': 7.29.2
       '@base-ui/utils': 0.2.9(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
