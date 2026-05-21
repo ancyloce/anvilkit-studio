@@ -1397,6 +1397,9 @@ importers:
       '@anvilkit/core':
         specifier: workspace:*
         version: link:../../core
+      '@anvilkit/design-block':
+        specifier: workspace:*
+        version: link:../../components/src/design-block
       '@anvilkit/plugin-asset-manager':
         specifier: workspace:*
         version: link:../plugin-asset-manager
