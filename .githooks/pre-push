@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+#
+# anvilkit-studio pre-push gate.
+#
+# Runs `check:all` (publint / circular / peer-deps / bundle-budget /
+# api-snapshot, per package) for every workspace package changed since the
+# comparison base, using Turbo's affected-package filter so only what you
+# touched is checked. This is what "require checks before submission" maps to
+# locally — CI re-runs the same gates on the PR.
+#
+# Bypass (use sparingly, e.g. WIP branches): git push --no-verify
+# Change the comparison base:                ANVILKIT_CHECK_BASE=<ref> git push
+#
+# Note: this gates the top-level repo only. The collab/* and components
+# packages are git submodules with their own histories; pushing those is
+# governed by their own hooks, not this one.
+
+set -e
+
+BASE="${ANVILKIT_CHECK_BASE:-origin/main}"
+
+if ! git rev-parse --verify --quiet "$BASE" >/dev/null 2>&1; then
+	echo "pre-push: base ref '$BASE' not found locally — skipping check:all gate." >&2
+	exit 0
+fi
+
+echo "pre-push: running check:all for packages changed since $BASE …"
+exec pnpm run check:push
