@@ -9,7 +9,10 @@ packages:
   - "examples/plugins/*"
   - "examples/ai-adapters/*"
 allowBuilds:
-  '@parcel/watcher': set this to true or false
+  # Pulled in by @tailwindcss/cli (CSS build). Native binding is supplied
+  # by the prebuilt `@parcel/watcher-*` platform packages, so the node-gyp
+  # install script isn't needed at runtime — skip it like the others below.
+  '@parcel/watcher': false
   esbuild: false
   leveldown: false
   msw: false
