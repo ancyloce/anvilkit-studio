@@ -1,6 +1,6 @@
 /**
- * @file Studio header bar — brand mark, breadcrumb, collaborator stack,
- * Share / Preview / Publish actions, plus the `<HeaderActions>` slot.
+ * @file Studio header bar — brand mark, breadcrumb, Share / Preview /
+ * Publish actions, plus the `<HeaderActions>` slot.
  *
  * Pure presentational component. Wiring to runtime / lifecycle lives
  * in the Phase 5 `<Studio>` glue; this file accepts every callback as
@@ -8,77 +8,25 @@
  */
 
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
-import { createElement, type ReactNode } from "react";
-import { Avatar, AvatarFallback } from "@/primitives/avatar";
+import type { ReactNode } from "react";
+import { useStudioPluginContextOrNull } from "@/context/plugin-context";
+import { useStudioRuntime } from "@/hooks/use-studio";
 import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
-import type { CollaboratorsSlotValue } from "@/studio/context/chrome-props";
-import { cn } from "@/utils/cn";
+import type { StudioPluginMeta } from "@/types/plugin";
 import { HeaderActions } from "./HeaderActions";
 import { PublishPanel } from "./PublishPanel";
 
 export interface StudioHeaderProps {
 	readonly onBack?: () => void;
 	readonly lastSavedAt?: Date | null;
-	/**
-	 * Replaces the placeholder `<CollaboratorStack>` between the
-	 * `lastSavedAt` chip and the Share button. When omitted, the
-	 * built-in placeholder avatars are rendered. Host apps with a
-	 * real collaboration backend (e.g. `@anvilkit/collab-ui`'s
-	 * `<PeerAvatarStack>`) pass their own peer-aware widget here.
-	 *
-	 * Accepts a `ReactNode` (rendered verbatim) or a `ComponentType`
-	 * (instantiated on each render). See {@link CollaboratorsSlotValue}.
-	 */
-	readonly collaboratorsSlot?: CollaboratorsSlotValue;
 }
-
-/**
- * Render whichever form of `collaboratorsSlot` the caller supplied.
- * `ComponentType` values are instantiated via `createElement` so their
- * own hooks run on every render; `ReactNode` values pass through.
- *
- * The "is component" test relies on `typeof value === "function"` —
- * `ReactNode` is never a bare function (functional components are
- * `ComponentType`, not `ReactNode`), so the discriminator is safe.
- *
- * Exported so the discriminator's contract can be unit-tested without
- * having to mount the entire `<StudioHeader>` tree (which would require
- * i18n / Puck / runtime providers).
- */
-export function renderCollaboratorsSlot(
-	value: CollaboratorsSlotValue | undefined,
-	fallback: ReactNode = <CollaboratorStack />,
-): ReactNode {
-	if (value === undefined || value === null) {
-		return fallback;
-	}
-	if (typeof value === "function") {
-		return createElement(value);
-	}
-	return value;
-}
-
-interface PlaceholderCollaborator {
-	readonly id: string;
-	readonly initial: string;
-	readonly tone: string;
-}
-
-const PLACEHOLDER_COLLABORATORS: readonly PlaceholderCollaborator[] = [
-	{ id: "zhao", initial: "赵", tone: "bg-sky-500 text-white" },
-	{ id: "qian", initial: "钱", tone: "bg-amber-500 text-white" },
-	{ id: "sun", initial: "孙", tone: "bg-emerald-500 text-white" },
-];
-
-const PLACEHOLDER_OVERFLOW = 2;
 
 export function StudioHeader({
 	onBack,
 	lastSavedAt = null,
-	collaboratorsSlot,
 }: StudioHeaderProps): ReactNode {
 	const msg = useMsg();
 
@@ -115,8 +63,6 @@ export function StudioHeader({
 					</span>
 				) : null}
 
-				{renderCollaboratorsSlot(collaboratorsSlot)}
-
 				<Tooltip>
 					<TooltipTrigger
 						render={
@@ -129,12 +75,7 @@ export function StudioHeader({
 					<TooltipContent>{msg("studio.share")}</TooltipContent>
 				</Tooltip>
 
-				<Separator
-					orientation="vertical"
-					className="h-6 data-vertical:self-center"
-				/>
-
-				<HeaderActions />
+				<HeaderActionsRegion />
 
 				<Tooltip>
 					<TooltipTrigger
@@ -157,34 +98,51 @@ export function StudioHeader({
 	);
 }
 
-function CollaboratorStack(): ReactNode {
-	const msg = useMsg();
+/**
+ * `true` when any registered plugin self-declares the `header`
+ * capability (`meta.capabilities.header === true`).
+ *
+ * Exported so the detection logic can be unit-tested without mounting
+ * the full `<StudioHeader>` tree (which would require i18n / Puck /
+ * runtime providers).
+ */
+export function hasHeaderActionCapability(
+	plugins: readonly StudioPluginMeta[],
+): boolean {
+	return plugins.some((meta) => meta.capabilities?.header === true);
+}
+
+/**
+ * Renders the plugin header-action surface (vertical separator +
+ * `<HeaderActions>`) only when a `header`-capable plugin is configured.
+ *
+ * Mirrors `<HeaderActions>`'s own defensive read: outside of `<Studio>`
+ * (unit tests, previews) there is no plugin context, so we render
+ * nothing rather than letting the strict `useStudioRuntime()` hook
+ * throw. The runtime read happens in the nested component so the hook
+ * is only reached once we know a provider is present.
+ */
+function HeaderActionsRegion(): ReactNode {
+	const ctx = useStudioPluginContextOrNull();
+	if (ctx === null) {
+		return null;
+	}
+	return <HeaderActionsRegionInner />;
+}
+
+function HeaderActionsRegionInner(): ReactNode {
+	const runtime = useStudioRuntime();
+	if (!hasHeaderActionCapability(runtime.pluginMeta)) {
+		return null;
+	}
 	return (
-		<div
-			className="flex items-center -space-x-2"
-			aria-label={msg("studio.collaborators.label")}
-		>
-			{PLACEHOLDER_COLLABORATORS.map((collab) => (
-				<Avatar
-					key={collab.id}
-					className="size-7 ring-2 ring-[var(--ak-studio-bg)]"
-				>
-					<AvatarFallback
-						className={cn("text-[11px] font-semibold", collab.tone)}
-					>
-						{collab.initial}
-					</AvatarFallback>
-				</Avatar>
-			))}
-			<Avatar className="size-7 ring-2 ring-[var(--ak-studio-bg)]">
-				<AvatarFallback className="bg-[var(--ak-studio-panel)] text-[11px] font-semibold text-[var(--ak-studio-fg)]">
-					{msg("studio.collaborators.more").replace(
-						"{count}",
-						String(PLACEHOLDER_OVERFLOW),
-					)}
-				</AvatarFallback>
-			</Avatar>
-		</div>
+		<>
+			<Separator
+				orientation="vertical"
+				className="h-6 data-vertical:self-center"
+			/>
+			<HeaderActions />
+		</>
 	);
 }
 
