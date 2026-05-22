@@ -1,27 +1,145 @@
 /**
- * @file CSS sidecar for `@anvilkit/core` Studio chrome.
+ * @file Self-contained CSS source for the `@anvilkit/core` Studio chrome.
  *
- * Imported by host apps via `import "@anvilkit/core/styles.css"`.
- * Bridges the internal `--ak-studio-*` token contract (PRD §7.2) to
- * the existing shadcn / Tailwind v4 vars from
- * `@anvilkit/tailwind-config/shadcn`. The Studio theme color is pinned
- * to Tailwind CSS blue-600 so core chrome and controls keep one
- * consistent brand accent regardless of the host app's shadcn preset.
+ * SOURCE FILE — this is NOT what host apps import. Tailwind compiles it into
+ * `dist/react/overrides/styles.css` at package-build time
+ * (`pnpm build` → `rslib build && pnpm build:css`). Host apps import the
+ * COMPILED output via `import "@anvilkit/core/styles.css"`.
  *
- * NOTE: this file deliberately does NOT `@import "tailwindcss"`.
- * The host's own entry CSS (typically `globals.css` →
- * `@anvilkit/tailwind-config/shadcn`) is responsible for loading
- * Tailwind. Re-importing it from a deep dist path breaks
- * resolution under webpack/postcss.
+ * The compiled artifact is self-contained so a single import works with ZERO
+ * Tailwind / PostCSS configuration in the host. It ships:
+ *   1. The Tailwind utility classes baked into the compiled chrome — scanned
+ *      from `dist/` via the `@source` directive below.
+ *   2. shadcn design-token DEFAULTS (`--background`, `--card`, `--border`, …)
+ *      so the `--ak-studio-*` bridge resolves. Declared with `:where()`
+ *      (zero specificity) so a host running its own shadcn theme wins.
+ *   3. The `--ak-studio-*` / `--ak-ds-*` token contract (PRD §7.2 / 0005) and
+ *      the Puck DOM overrides.
  *
- * Tailwind utility class scanning for `@anvilkit/*` packages is wired
- * into `@anvilkit/tailwind-config/shadcn` via `@source` directives —
- * see `packages/configs/tailwind-config/shadcn.css`. That keeps the
- * `import "@anvilkit/core/styles.css"` contract a pure token bridge
- * while still ensuring the Studio chrome's Tailwind utilities make it
- * into the host's compiled CSS.
+ * Deliberately PREFLIGHT-FREE: it imports `tailwindcss/theme.css` +
+ * `tailwindcss/utilities.css` only — never bare `@import "tailwindcss"` and
+ * never `tailwindcss/preflight.css`. Preflight is a global element reset; a
+ * library stylesheet must not ship it or it would clobber the host app.
+ *
+ * Puck's own editor chrome CSS is NOT bundled here — it is the host's peer
+ * dependency and must be imported separately, BEFORE this file:
+ *   import "@puckeditor/core/puck.css";
+ *   import "@anvilkit/core/styles.css";
  */
 
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+
+/*
+ * Scan the COMPILED chrome for Tailwind utility class strings. The path is
+ * relative to this source file. `dist/` is gitignored, so this explicit
+ * `@source` is required — Tailwind's automatic detection skips ignored paths.
+ * Build order guarantees `dist/` exists: `rslib build` runs before `build:css`.
+ */
+@source "../../../dist/**/*.js";
+
+/*
+ * shadcn → Tailwind theme bridge: registers `bg-card`, `text-foreground`,
+ * `border-border`, `rounded-lg`, … against the token vars below. Mirrors the
+ * color/radius mappings in `@anvilkit/tailwind-config/shadcn` (kept in sync
+ * with the demo app's working setup).
+ */
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+}
+
+/*
+ * shadcn token DEFAULTS. `:where()` keeps specificity at 0 so a host's own
+ * `:root { --background: … }` (from its shadcn setup) always wins; these
+ * apply only when the host defines nothing. Values mirror the light/dark
+ * presets in `@anvilkit/tailwind-config/shadcn`. Only the tokens referenced
+ * by the `@theme inline` map above are defined — chart/sidebar tokens are
+ * omitted because the chrome does not use them.
+ */
+@layer base {
+	:where(:root) {
+		--background: oklch(1 0 0);
+		--foreground: oklch(0.145 0 0);
+		--card: oklch(1 0 0);
+		--card-foreground: oklch(0.145 0 0);
+		--popover: oklch(1 0 0);
+		--popover-foreground: oklch(0.145 0 0);
+		--primary: oklch(0.205 0 0);
+		--primary-foreground: oklch(0.985 0 0);
+		--secondary: oklch(0.97 0 0);
+		--secondary-foreground: oklch(0.205 0 0);
+		--muted: oklch(0.97 0 0);
+		--muted-foreground: oklch(0.556 0 0);
+		--accent: oklch(0.97 0 0);
+		--accent-foreground: oklch(0.205 0 0);
+		--destructive: oklch(0.577 0.245 27.325);
+		--border: oklch(0.922 0 0);
+		--input: oklch(0.922 0 0);
+		--ring: oklch(0.708 0 0);
+		--radius: 0.625rem;
+	}
+	:where(.dark) {
+		--background: oklch(0.145 0 0);
+		--foreground: oklch(0.985 0 0);
+		--card: oklch(0.205 0 0);
+		--card-foreground: oklch(0.985 0 0);
+		--popover: oklch(0.205 0 0);
+		--popover-foreground: oklch(0.985 0 0);
+		--primary: oklch(0.922 0 0);
+		--primary-foreground: oklch(0.205 0 0);
+		--secondary: oklch(0.269 0 0);
+		--secondary-foreground: oklch(0.985 0 0);
+		--muted: oklch(0.269 0 0);
+		--muted-foreground: oklch(0.708 0 0);
+		--accent: oklch(0.269 0 0);
+		--accent-foreground: oklch(0.985 0 0);
+		--destructive: oklch(0.704 0.191 22.216);
+		--border: oklch(1 0 0 / 10%);
+		--input: oklch(1 0 0 / 15%);
+		--ring: oklch(0.556 0 0);
+	}
+	/*
+	 * shadcn's default border/outline color reset. Universal selector keeps
+	 * specificity at 0, so any host rule wins. Needed because Tailwind v4's
+	 * default border color is `currentColor`; without this, `border` utilities
+	 * in the chrome (and in portaled popovers) would not pick up `--border`.
+	 */
+	* {
+		border-color: var(--border);
+		outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+	}
+}
+
+/*
+ * ----------------------------------------------------------------------------
+ * `--ak-studio-*` token bridge (PRD §7.2). The Studio theme color is pinned to
+ * Tailwind CSS blue-600 so core chrome and controls keep one consistent brand
+ * accent regardless of the host app's shadcn preset.
+ * ----------------------------------------------------------------------------
+ */
 :root {
 	--ak-studio-blue-600: var(--color-blue-600, oklch(54.6% 0.245 262.881));
 	--ak-studio-theme: var(--ak-studio-blue-600);

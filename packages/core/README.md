@@ -36,7 +36,8 @@ you'll see `Attempted import error: 'Puck' is not exported from
 "use client";
 
 import { Studio } from "@anvilkit/core";
-import "@anvilkit/core/styles.css";
+import "@puckeditor/core/puck.css"; // Puck's editor chrome (your peer dep)
+import "@anvilkit/core/styles.css"; // AnvilKit tokens + chrome utilities (self-contained)
 import type { Config as PuckConfig } from "@puckeditor/core";
 
 const puckConfig: PuckConfig = {
@@ -73,6 +74,7 @@ client surface into its own file and import it from the server:
 "use client";
 
 import { Studio } from "@anvilkit/core";
+import "@puckeditor/core/puck.css";
 import "@anvilkit/core/styles.css";
 import { editorPuckConfig } from "./puck-config";
 
@@ -93,6 +95,34 @@ export default function EditorPage() {
 `<Studio>` renders `null` while it resolves the plugin graph, then
 mounts `<Puck>` with the compiled runtime. No spinner by default —
 render your own loading UI above `<Studio>` if you want one.
+
+## Styling
+
+The Studio chrome needs exactly **two stylesheets**, imported once (the
+root layout is the natural place) and in this order:
+
+```tsx
+import "@puckeditor/core/puck.css"; // 1. Puck's editor chrome
+import "@anvilkit/core/styles.css"; // 2. AnvilKit tokens + chrome utilities
+```
+
+1. **`@puckeditor/core/puck.css`** styles Puck's own editor structure —
+   panels, the fields sidebar, the canvas frame, drag handles. It ships
+   with `@puckeditor/core` (your peer dependency), so AnvilKit cannot bundle
+   it. Without this import the editor renders unstyled. Import it **first**
+   so AnvilKit's overrides cascade on top.
+2. **`@anvilkit/core/styles.css`** is **self-contained** — it ships the
+   precompiled Tailwind utilities used by the chrome plus shadcn design-token
+   defaults (`--background`, `--card`, `--border`, …). **No Tailwind or
+   PostCSS configuration is required** in your app to render the chrome, and
+   you do not need to add `@anvilkit/core` to `transpilePackages`.
+
+The token defaults are declared with zero specificity (`:where()`), so if
+your app already runs its own shadcn theme, your `:root` tokens win and the
+Studio chrome inherits your palette. The stylesheet is **preflight-free** by
+design — it ships utilities and tokens only, never Tailwind's global element
+reset, so importing it will not disturb the rest of your app. Your own
+Tailwind setup, if any, stays completely independent.
 
 ## Authoring a StudioPlugin
 

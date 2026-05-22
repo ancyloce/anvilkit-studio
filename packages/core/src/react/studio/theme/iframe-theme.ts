@@ -122,7 +122,7 @@ body {
 
 /*
  * Selection chrome for the `ComponentOverlay` override. Lives here
- * (in the iframe-injected snapshot) as well as in `overrides/styles.css`
+ * (in the iframe-injected snapshot) as well as in `overrides/styles.src.css`
  * (host-document) so the ring paints in both documents — Puck's canvas
  * iframe does not inherit host-document utility classes.
  *

@@ -43,10 +43,6 @@ export default defineConfig({
 	output: {
 		target: "web",
 		copy: [
-			{
-				from: "./src/react/overrides/styles.css",
-				to: "./react/overrides/styles.css",
-			},
 			// Co-located component CSS (e.g. `pages-tokens.css` next to
 			// `PagesPanel.tsx`) is imported via side-effect `import "./*.css"`
 			// from the matching `.tsx` and must ship to `dist/` in the same
@@ -60,8 +56,10 @@ export default defineConfig({
 					return `./${rel}`;
 				},
 				globOptions: {
-					// The explicit copy above already handles overrides/styles.css.
-					ignore: ["**/react/overrides/styles.css"],
+					// `overrides/styles.src.css` is a Tailwind SOURCE compiled to
+					// `dist/react/overrides/styles.css` by the `build:css` step that
+					// runs after `rslib build` — never ship the raw source.
+					ignore: ["**/react/overrides/styles.src.css"],
 				},
 			},
 		],
