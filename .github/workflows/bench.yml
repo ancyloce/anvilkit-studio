@@ -48,7 +48,9 @@ jobs:
       # every @anvilkit/<component>/dist — so all of them must be
       # built before the bench runs. phase5-019 phase4-015 added the
       # per-component React render bench (component-render:*) that
-      # pulls from each component package.
+      # pulls from each component package. I2-4 added canvas-perf.bench.ts,
+      # which imports @anvilkit/canvas-core/dist plus two konva-free deep
+      # subpaths of @anvilkit/canvas-editor/dist (stores/{ai-job,viewport}).
       - name: Build packages consumed by benches
         run: |
           pnpm --filter @anvilkit/utils \
@@ -58,6 +60,8 @@ jobs:
                --filter @anvilkit/ui \
                --filter @anvilkit/plugin-export-html \
                --filter @anvilkit/plugin-version-history \
+               --filter @anvilkit/canvas-core \
+               --filter @anvilkit/canvas-editor \
                --filter '@anvilkit/bento-grid' \
                --filter '@anvilkit/blog-list' \
                --filter '@anvilkit/button' \
