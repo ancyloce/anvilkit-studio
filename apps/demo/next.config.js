@@ -25,6 +25,7 @@ const nextConfig = {
 		"@anvilkit/logo-clouds",
 		"@anvilkit/navbar",
 		"@anvilkit/plugin-ai-copilot",
+		"@anvilkit/plugin-ai-image",
 		"@anvilkit/plugin-asset-manager",
 		"@anvilkit/plugin-canvas-studio",
 		"@anvilkit/plugin-collab-yjs",

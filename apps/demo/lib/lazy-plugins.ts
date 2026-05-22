@@ -17,6 +17,8 @@
 
 import { lazyPlugin } from "@anvilkit/core";
 import type { StudioPlugin } from "@anvilkit/core";
+import { Frame, History, Images } from "lucide-react";
+import { createElement } from "react";
 
 /**
  * Lazy-loaded asset-manager plugin. The
@@ -40,7 +42,8 @@ export const lazyAssetManagerPlugin: StudioPlugin = lazyPlugin(
 		version: "0.1.0",
 		coreVersion: "^0.1.0",
 		description: "Sidebar asset library + uploader",
-		capabilities: { sidebar: true },
+		capabilities: { header: true },
+		icon: createElement(Images),
 	},
 );
 
@@ -61,7 +64,8 @@ export const lazyVersionHistoryPlugin: StudioPlugin = lazyPlugin(
 		version: "0.1.0",
 		coreVersion: "^0.1.0",
 		description: "Sidebar history panel + snapshot adapter",
-		capabilities: { sidebar: true },
+		capabilities: { header: true },
+		icon: createElement(History),
 	},
 );
 
@@ -97,6 +101,7 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 		coreVersion: "^0.1.0-alpha",
 		description:
 			"Mounts the Canvas Studio overlay, registers the design-block quick-add, and exposes the design:// asset resolver.",
-		capabilities: { sidebar: true },
+		capabilities: { header: true },
+		icon: createElement(Frame),
 	},
 );
