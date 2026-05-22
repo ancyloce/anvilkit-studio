@@ -10,6 +10,7 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { runCanvasPerfBench } from "./canvas-perf.bench.js";
 import { runComponentEmitBench } from "./component-emit.bench.js";
 import { runComponentRenderBench } from "./component-render.bench.js";
 import { runEditorLoadBench } from "./editor-load.bench.js";
@@ -20,10 +21,10 @@ import { runApplySectionPatchBench } from "./plugin-ai-copilot.bench.js";
 import { runCollabYjsBench } from "./plugin-collab-yjs.bench.js";
 import { runSidebarSwitchBench } from "./sidebar-switch.bench.js";
 import type {
-  BenchBaseline,
-  BenchBaselineEntry,
-  BenchComparison,
-  BenchResult,
+	BenchBaseline,
+	BenchBaselineEntry,
+	BenchComparison,
+	BenchResult,
 } from "./types.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,182 +42,183 @@ const BYTES_REGRESSION_PCT = 10;
 const NOISE_FLOOR_MS = 0.1;
 
 function readBaseline(): BenchBaseline {
-  if (!existsSync(BASELINE_PATH)) return {};
-  return JSON.parse(readFileSync(BASELINE_PATH, "utf8")) as BenchBaseline;
+	if (!existsSync(BASELINE_PATH)) return {};
+	return JSON.parse(readFileSync(BASELINE_PATH, "utf8")) as BenchBaseline;
 }
 
 function writeBaseline(baseline: BenchBaseline): void {
-  writeFileSync(
-    BASELINE_PATH,
-    `${JSON.stringify(baseline, null, 2)}\n`,
-    "utf8",
-  );
+	writeFileSync(
+		BASELINE_PATH,
+		`${JSON.stringify(baseline, null, 2)}\n`,
+		"utf8",
+	);
 }
 
 function toBaselineEntry(result: BenchResult): BenchBaselineEntry {
-  return {
-    meanMs: result.meanMs,
-    hz: result.hz,
-    ...(result.bytes !== undefined ? { bytes: result.bytes } : {}),
-    ...(result.p95Ms !== undefined ? { p95Ms: result.p95Ms } : {}),
-    recordedAt: new Date().toISOString(),
-  };
+	return {
+		meanMs: result.meanMs,
+		hz: result.hz,
+		...(result.bytes !== undefined ? { bytes: result.bytes } : {}),
+		...(result.p95Ms !== undefined ? { p95Ms: result.p95Ms } : {}),
+		recordedAt: new Date().toISOString(),
+	};
 }
 
 function compare(
-  results: BenchResult[],
-  baseline: BenchBaseline,
+	results: BenchResult[],
+	baseline: BenchBaseline,
 ): BenchComparison[] {
-  return results.map((r) => {
-    // NaN means the bench detected its preconditions weren't met
-    // and returned a sentinel (e.g. `editor-load` when the demo
-    // isn't reachable). Treat as skipped — do not regress, do not
-    // update baseline, do not fail.
-    if (Number.isNaN(r.meanMs)) {
-      return {
-        name: r.name,
-        meanMs: r.meanMs,
-        baselineMeanMs: baseline[r.name]?.meanMs ?? null,
-        meanDeltaPct: null,
-        bytes: r.bytes,
-        baselineBytes: baseline[r.name]?.bytes,
-        bytesDeltaPct: null,
-        regression: false,
-        reasons: ["skipped (preconditions not met)"],
-      };
-    }
-    const b = baseline[r.name];
-    if (!b) {
-      return {
-        name: r.name,
-        meanMs: r.meanMs,
-        baselineMeanMs: null,
-        meanDeltaPct: null,
-        bytes: r.bytes,
-        baselineBytes: undefined,
-        bytesDeltaPct: null,
-        regression: false,
-        reasons: ["no baseline (new bench — run --update-baseline to pin)"],
-      };
-    }
-    const meanDeltaPct = ((r.meanMs - b.meanMs) / b.meanMs) * 100;
-    const bytesDeltaPct =
-      r.bytes !== undefined && b.bytes !== undefined
-        ? ((r.bytes - b.bytes) / b.bytes) * 100
-        : null;
-    const reasons: string[] = [];
-    const belowFloor = b.meanMs < NOISE_FLOOR_MS;
-    if (!belowFloor && meanDeltaPct > MEAN_REGRESSION_PCT) {
-      reasons.push(
-        `meanMs +${meanDeltaPct.toFixed(1)}% (threshold: +${MEAN_REGRESSION_PCT}%)`,
-      );
-    }
-    if (bytesDeltaPct !== null && bytesDeltaPct > BYTES_REGRESSION_PCT) {
-      reasons.push(
-        `bytes +${bytesDeltaPct.toFixed(1)}% (threshold: +${BYTES_REGRESSION_PCT}%)`,
-      );
-    }
-    return {
-      name: r.name,
-      meanMs: r.meanMs,
-      baselineMeanMs: b.meanMs,
-      meanDeltaPct,
-      bytes: r.bytes,
-      baselineBytes: b.bytes,
-      bytesDeltaPct,
-      regression: reasons.length > 0,
-      reasons,
-    };
-  });
+	return results.map((r) => {
+		// NaN means the bench detected its preconditions weren't met
+		// and returned a sentinel (e.g. `editor-load` when the demo
+		// isn't reachable). Treat as skipped — do not regress, do not
+		// update baseline, do not fail.
+		if (Number.isNaN(r.meanMs)) {
+			return {
+				name: r.name,
+				meanMs: r.meanMs,
+				baselineMeanMs: baseline[r.name]?.meanMs ?? null,
+				meanDeltaPct: null,
+				bytes: r.bytes,
+				baselineBytes: baseline[r.name]?.bytes,
+				bytesDeltaPct: null,
+				regression: false,
+				reasons: ["skipped (preconditions not met)"],
+			};
+		}
+		const b = baseline[r.name];
+		if (!b) {
+			return {
+				name: r.name,
+				meanMs: r.meanMs,
+				baselineMeanMs: null,
+				meanDeltaPct: null,
+				bytes: r.bytes,
+				baselineBytes: undefined,
+				bytesDeltaPct: null,
+				regression: false,
+				reasons: ["no baseline (new bench — run --update-baseline to pin)"],
+			};
+		}
+		const meanDeltaPct = ((r.meanMs - b.meanMs) / b.meanMs) * 100;
+		const bytesDeltaPct =
+			r.bytes !== undefined && b.bytes !== undefined
+				? ((r.bytes - b.bytes) / b.bytes) * 100
+				: null;
+		const reasons: string[] = [];
+		const belowFloor = b.meanMs < NOISE_FLOOR_MS;
+		if (!belowFloor && meanDeltaPct > MEAN_REGRESSION_PCT) {
+			reasons.push(
+				`meanMs +${meanDeltaPct.toFixed(1)}% (threshold: +${MEAN_REGRESSION_PCT}%)`,
+			);
+		}
+		if (bytesDeltaPct !== null && bytesDeltaPct > BYTES_REGRESSION_PCT) {
+			reasons.push(
+				`bytes +${bytesDeltaPct.toFixed(1)}% (threshold: +${BYTES_REGRESSION_PCT}%)`,
+			);
+		}
+		return {
+			name: r.name,
+			meanMs: r.meanMs,
+			baselineMeanMs: b.meanMs,
+			meanDeltaPct,
+			bytes: r.bytes,
+			baselineBytes: b.bytes,
+			bytesDeltaPct,
+			regression: reasons.length > 0,
+			reasons,
+		};
+	});
 }
 
 function formatTable(comparisons: BenchComparison[]): string {
-  const lines: string[] = [];
-  lines.push(
-    "| Bench | mean (ms) | baseline | Δ mean | bytes | Δ bytes | status |",
-  );
-  lines.push(
-    "| ----- | --------: | -------: | ------ | ----: | ------- | ------ |",
-  );
-  for (const c of comparisons) {
-    const mean = Number.isNaN(c.meanMs) ? "—" : c.meanMs.toFixed(3);
-    const base = c.baselineMeanMs !== null ? c.baselineMeanMs.toFixed(3) : "—";
-    const meanDelta =
-      c.meanDeltaPct !== null
-        ? `${c.meanDeltaPct >= 0 ? "+" : ""}${c.meanDeltaPct.toFixed(1)}%`
-        : "—";
-    const bytes = c.bytes !== undefined ? String(c.bytes) : "—";
-    const bytesDelta =
-      c.bytesDeltaPct !== null
-        ? `${c.bytesDeltaPct >= 0 ? "+" : ""}${c.bytesDeltaPct.toFixed(1)}%`
-        : "—";
-    const status = c.regression
-      ? `FAIL: ${c.reasons.join("; ")}`
-      : Number.isNaN(c.meanMs)
-        ? "skipped"
-        : c.baselineMeanMs === null
-          ? "new"
-          : c.baselineMeanMs < NOISE_FLOOR_MS
-            ? "ok (sub-ms: no gate)"
-            : "ok";
-    lines.push(
-      `| ${c.name} | ${mean} | ${base} | ${meanDelta} | ${bytes} | ${bytesDelta} | ${status} |`,
-    );
-  }
-  return lines.join("\n");
+	const lines: string[] = [];
+	lines.push(
+		"| Bench | mean (ms) | baseline | Δ mean | bytes | Δ bytes | status |",
+	);
+	lines.push(
+		"| ----- | --------: | -------: | ------ | ----: | ------- | ------ |",
+	);
+	for (const c of comparisons) {
+		const mean = Number.isNaN(c.meanMs) ? "—" : c.meanMs.toFixed(3);
+		const base = c.baselineMeanMs !== null ? c.baselineMeanMs.toFixed(3) : "—";
+		const meanDelta =
+			c.meanDeltaPct !== null
+				? `${c.meanDeltaPct >= 0 ? "+" : ""}${c.meanDeltaPct.toFixed(1)}%`
+				: "—";
+		const bytes = c.bytes !== undefined ? String(c.bytes) : "—";
+		const bytesDelta =
+			c.bytesDeltaPct !== null
+				? `${c.bytesDeltaPct >= 0 ? "+" : ""}${c.bytesDeltaPct.toFixed(1)}%`
+				: "—";
+		const status = c.regression
+			? `FAIL: ${c.reasons.join("; ")}`
+			: Number.isNaN(c.meanMs)
+				? "skipped"
+				: c.baselineMeanMs === null
+					? "new"
+					: c.baselineMeanMs < NOISE_FLOOR_MS
+						? "ok (sub-ms: no gate)"
+						: "ok";
+		lines.push(
+			`| ${c.name} | ${mean} | ${base} | ${meanDelta} | ${bytes} | ${bytesDelta} | ${status} |`,
+		);
+	}
+	return lines.join("\n");
 }
 
 async function main(): Promise<void> {
-  const updateMode = process.argv.includes("--update-baseline");
+	const updateMode = process.argv.includes("--update-baseline");
 
-  const allResults: BenchResult[] = [];
-  allResults.push(await runHtmlExportBench());
-  allResults.push(await runIrDiffBench());
-  allResults.push(await runIrRoundtripBench());
-  allResults.push(...(await runComponentEmitBench()));
-  allResults.push(...(await runComponentRenderBench()));
-  allResults.push(...(await runEditorLoadBench()));
-  allResults.push(...(await runSidebarSwitchBench()));
-  allResults.push(...(await runApplySectionPatchBench()));
-  allResults.push(...(await runCollabYjsBench()));
+	const allResults: BenchResult[] = [];
+	allResults.push(...(await runCanvasPerfBench()));
+	allResults.push(await runHtmlExportBench());
+	allResults.push(await runIrDiffBench());
+	allResults.push(await runIrRoundtripBench());
+	allResults.push(...(await runComponentEmitBench()));
+	allResults.push(...(await runComponentRenderBench()));
+	allResults.push(...(await runEditorLoadBench()));
+	allResults.push(...(await runSidebarSwitchBench()));
+	allResults.push(...(await runApplySectionPatchBench()));
+	allResults.push(...(await runCollabYjsBench()));
 
-  if (updateMode) {
-    // Preserve existing baseline entries for benches that returned
-    // NaN on this run — skipping a bench must NOT erase its pinned
-    // baseline. Only overwrite entries we measured successfully.
-    const next: BenchBaseline = { ...readBaseline() };
-    for (const r of allResults) {
-      if (Number.isNaN(r.meanMs)) continue;
-      next[r.name] = toBaselineEntry(r);
-    }
-    writeBaseline(next);
-    console.log(
-      `bench: updated ${BASELINE_PATH} with ${allResults.filter((r) => !Number.isNaN(r.meanMs)).length} measured entries.`,
-    );
-    return;
-  }
+	if (updateMode) {
+		// Preserve existing baseline entries for benches that returned
+		// NaN on this run — skipping a bench must NOT erase its pinned
+		// baseline. Only overwrite entries we measured successfully.
+		const next: BenchBaseline = { ...readBaseline() };
+		for (const r of allResults) {
+			if (Number.isNaN(r.meanMs)) continue;
+			next[r.name] = toBaselineEntry(r);
+		}
+		writeBaseline(next);
+		console.log(
+			`bench: updated ${BASELINE_PATH} with ${allResults.filter((r) => !Number.isNaN(r.meanMs)).length} measured entries.`,
+		);
+		return;
+	}
 
-  const baseline = readBaseline();
-  const comparisons = compare(allResults, baseline);
-  const table = formatTable(comparisons);
-  console.log(table);
+	const baseline = readBaseline();
+	const comparisons = compare(allResults, baseline);
+	const table = formatTable(comparisons);
+	console.log(table);
 
-  // Emit machine-readable summary for CI PR comment.
-  const summaryPath = process.env.BENCH_SUMMARY_PATH;
-  if (summaryPath) {
-    writeFileSync(summaryPath, `## Bench results\n\n${table}\n`, "utf8");
-  }
+	// Emit machine-readable summary for CI PR comment.
+	const summaryPath = process.env.BENCH_SUMMARY_PATH;
+	if (summaryPath) {
+		writeFileSync(summaryPath, `## Bench results\n\n${table}\n`, "utf8");
+	}
 
-  const failures = comparisons.filter((c) => c.regression);
-  if (failures.length > 0) {
-    console.error(`\nbench: ${failures.length} regression(s) detected.`);
-    process.exit(1);
-  }
-  console.log("\nbench: all within threshold.");
+	const failures = comparisons.filter((c) => c.regression);
+	if (failures.length > 0) {
+		console.error(`\nbench: ${failures.length} regression(s) detected.`);
+		process.exit(1);
+	}
+	console.log("\nbench: all within threshold.");
 }
 
 main().catch((err) => {
-  console.error("bench: crashed");
-  console.error(err);
-  process.exit(2);
+	console.error("bench: crashed");
+	console.error(err);
+	process.exit(2);
 });
