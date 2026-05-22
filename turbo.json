@@ -37,6 +37,10 @@
 		"publint": {
 			"dependsOn": ["^build"]
 		},
+		"check:all": {
+			"dependsOn": ["build"],
+			"cache": false
+		},
 		"size": {
 			"dependsOn": ["build"],
 			"inputs": ["dist/**", ".size-limit.json", "package.json"],
