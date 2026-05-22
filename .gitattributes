@@ -1,0 +1,4 @@
+# Git hook scripts must stay LF-terminated. This repo runs with
+# core.autocrlf=true on Windows/WSL, which would otherwise rewrite the
+# `#!/usr/bin/env sh` shebang to CRLF on checkout and break the hook.
+.githooks/** text eol=lf
