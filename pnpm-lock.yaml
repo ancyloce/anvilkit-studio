@@ -26,6 +26,12 @@ importers:
       '@anvilkit/button':
         specifier: workspace:*
         version: link:packages/components/src/button
+      '@anvilkit/canvas-core':
+        specifier: workspace:*
+        version: link:packages/canvas/core
+      '@anvilkit/canvas-editor':
+        specifier: workspace:*
+        version: link:packages/canvas/editor
       '@anvilkit/core':
         specifier: workspace:*
         version: link:packages/core
