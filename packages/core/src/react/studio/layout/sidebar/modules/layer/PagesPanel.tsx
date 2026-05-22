@@ -6,9 +6,10 @@
  * keyed `studio.module.layer.pages.routeBadge`. The "+" header button
  * opens the {@link AddPageDialog}.
  *
- * Empty state (no source registered or empty list) renders the
- * `studio.module.layer.pages.empty` message via the shared
- * {@link EmptyState}.
+ * When the host passes no `pages` prop the panel renders a synthetic
+ * default "Home" page (via {@link useStudioPagesSourceOrDefault}) rather
+ * than an empty state. The `studio.module.layer.pages.empty` empty state
+ * is still shown when a real source returns an empty list.
  */
 
 import { DndContext, DragOverlay } from "@dnd-kit/core";
@@ -18,7 +19,7 @@ import {
 } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
 import { type ReactNode, useCallback, useMemo, useState } from "react";
-import { useStudioPagesSource } from "@/context/pages-source";
+import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
@@ -33,7 +34,11 @@ import { useSourceList } from "./use-source-list";
 
 export function PagesPanel(): ReactNode {
 	const msg = useMsg();
-	const source = useStudioPagesSource();
+	// Falls back to a synthetic "Home" page when the host passes no
+	// `pages` prop, so the panel shows a default row rather than the
+	// "No pages yet." empty state. A real but empty source still hits
+	// the empty state below.
+	const source = useStudioPagesSourceOrDefault();
 	// `loading` intentionally ignored — behavior unchanged vs. the prior
 	// inline effect; the hook only adds out-of-order protection.
 	const { items: pages, error: loadError } = useSourceList<StudioPage>(source);

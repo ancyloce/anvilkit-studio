@@ -99,6 +99,7 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.layer.name": "Pages & Layers",
 	"studio.module.layer.pages.title": "Pages",
 	"studio.module.layer.pages.add": "Add page",
+	"studio.module.layer.pages.defaultTitle": "Home",
 	"studio.module.layer.pages.routeBadge": "Route page",
 	"studio.module.layer.pages.empty": "No pages yet.",
 	"studio.module.layer.pages.error": "Could not load pages.",

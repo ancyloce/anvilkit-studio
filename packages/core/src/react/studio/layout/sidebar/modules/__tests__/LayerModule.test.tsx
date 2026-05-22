@@ -3,13 +3,17 @@
  *
  * Covers the integration between the pages source contract and the
  * UI: list rendering, route badge, active-row highlight, onSelect
- * callback, and the empty state when no source is registered.
+ * callback, and the synthetic default page rendered when no source is
+ * registered.
  */
 
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { StudioPagesSourceProvider } from "@/context/pages-source";
+import {
+	DEFAULT_PAGES_PAGE_ID,
+	StudioPagesSourceProvider,
+} from "@/context/pages-source";
 import { LayerModule } from "@/layout/sidebar/modules/LayerModule";
 import {
 	createSidebarRegistryStore,
@@ -67,14 +71,24 @@ function Setup({
 }
 
 describe("LayerModule", () => {
-	it("renders both Pages and Layers empty states when no pages source is registered", () => {
+	it("renders a default page and the layer outline when no pages source is registered", async () => {
 		render(
 			<Setup>
 				<LayerModule />
 			</Setup>,
 		);
-		expect(screen.getByTestId("ak-layer-pages-empty")).toBeTruthy();
-		expect(screen.getByTestId("ak-layer-layers-empty")).toBeTruthy();
+		// The synthetic default page row stands in for the host source.
+		await vi.waitFor(() => {
+			expect(
+				screen.getByTestId(`ak-layer-page-row-${DEFAULT_PAGES_PAGE_ID}`),
+			).toBeTruthy();
+		});
+		// Neither empty state renders — the default page is active.
+		expect(screen.queryByTestId("ak-layer-pages-empty")).toBeNull();
+		expect(screen.queryByTestId("ak-layer-layers-empty")).toBeNull();
+		// Layers panel renders the outline; empty Puck content surfaces the
+		// tree's own empty affordance rather than the "select a page" state.
+		expect(screen.getByTestId("ak-layer-tree-empty")).toBeTruthy();
 	});
 
 	it("renders page and layer error states when the pages source rejects", async () => {

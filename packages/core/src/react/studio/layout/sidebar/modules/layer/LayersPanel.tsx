@@ -11,9 +11,11 @@
  * 2. Plugin-contributed entries from `sidebar-registry-store.layerQuickAdds`,
  *    sorted by `order` then `id`.
  *
- * Empty state: when no pages source is registered, or no page is
- * marked `active === true`, render `studio.module.layer.layers.empty`
- * and skip the outline (PRD §6.7).
+ * When the host passes no pages source, a synthetic active "Home" page
+ * stands in (via {@link useStudioPagesSourceOrDefault}) so the outline
+ * renders by default. The `studio.module.layer.layers.empty` empty state
+ * still shows when a real source has pages but none marked
+ * `active === true` (PRD §6.7).
  */
 
 import { useGetPuck } from "@puckeditor/core";
@@ -26,7 +28,7 @@ import {
 	Type,
 } from "lucide-react";
 import { type ReactNode, useMemo } from "react";
-import { useStudioPagesSource } from "@/context/pages-source";
+import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import {
@@ -90,14 +92,17 @@ interface ResolvedQuickAdd {
 
 export function LayersPanel(): ReactNode {
 	const msg = useMsg();
-	const source = useStudioPagesSource();
+	// Falls back to a synthetic active "Home" page when the host passes
+	// no `pages` prop, so the outline renders by default instead of the
+	// "Select a page to see its layers." empty state. A real source with
+	// no active page still hits that empty state via `!hasActivePage`.
+	const source = useStudioPagesSourceOrDefault();
 	// `loading` intentionally ignored — behavior unchanged vs. the prior
 	// inline effect; the hook only adds out-of-order protection.
 	const { items: pages, error: loadError } = useSourceList<StudioPage>(source);
 	const getPuck = useGetPuck();
 
 	const hasActivePage = pages.some((page) => page.active === true);
-	const hasNoSource = source === undefined;
 
 	const pluginQuickAdds = useSidebarRegistry((state) => state.layerQuickAdds);
 
@@ -224,7 +229,7 @@ export function LayersPanel(): ReactNode {
 						message={msg("studio.module.layer.layers.error")}
 						testId="ak-layer-layers-error"
 					/>
-				) : hasNoSource || !hasActivePage ? (
+				) : !hasActivePage ? (
 					<EmptyState
 						message={msg("studio.module.layer.layers.empty")}
 						testId="ak-layer-layers-empty"
