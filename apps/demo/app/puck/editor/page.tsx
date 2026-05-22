@@ -29,11 +29,7 @@ import {
 	createReactExportPlugin,
 	reactFormat,
 } from "@anvilkit/plugin-export-react";
-import {
-	CollabSettingsPopover,
-	createCollabPlugin,
-	PeerAvatarStack,
-} from "@anvilkit/collab-ui";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
 import type { Config, Data } from "@puckeditor/core";
 import { useDemoIdentity } from "../../../lib/collab-identity";
 import { createCollabStudioPlugin } from "../../../lib/collab-studio-plugin";
@@ -48,14 +44,7 @@ import { createDemoVersionHistoryPlugins } from "../../../lib/history-sidebar-pl
 import { lazyCanvasStudioPlugin } from "../../../lib/lazy-plugins";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-	type ChangeEvent,
-	type ReactNode,
-} from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import {
 	createDemoData,
 	createDemoModeHref,
@@ -380,7 +369,7 @@ export default function PuckEditorPage() {
 	);
 	const [collabRelayUrl, setCollabRelayUrl] = useState<string | null>(null);
 	const [collabRoom, setCollabRoom] = useState("demo-room");
-	const [showRemoteCursors, setShowRemoteCursors] = useState(true);
+	const [showRemoteCursors] = useState(true);
 	const {
 		identity: demoIdentity,
 		ready: demoIdentityReady,
@@ -493,10 +482,6 @@ export default function PuckEditorPage() {
 					showCursors: showRemoteCursors,
 					resolveSelectionRect: resolvePuckSelectionRect,
 				},
-				// Host supplies a richer collaborator widget via
-				// `collaboratorsSlot` on `<Studio>`; suppress the plugin's
-				// default `PeerAvatarStack` slot so the two don't fight.
-				collaboratorsStack: { enabled: false },
 			});
 			return [...base, collabPlugin, collabStudioPlugin];
 		}
@@ -508,18 +493,6 @@ export default function PuckEditorPage() {
 		setDemoIdentityName,
 		showRemoteCursors,
 	]);
-
-	const collaboratorsSlot = useMemo(
-		() =>
-			collabTransport ? (
-				<DemoCollaboratorsSlot
-					roomId={collabRoom}
-					showRemoteCursors={showRemoteCursors}
-					onShowRemoteCursorsChange={setShowRemoteCursors}
-				/>
-			) : null,
-		[collabTransport, collabRoom, showRemoteCursors],
-	);
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
@@ -1061,7 +1034,6 @@ export default function PuckEditorPage() {
 					chrome={chromeMode}
 					pages={pagesSource}
 					messages={studioMessages}
-					collaboratorsSlot={collaboratorsSlot}
 				/>
 			</section>
 
@@ -1078,36 +1050,6 @@ export default function PuckEditorPage() {
 				</pre>
 			</section>
 		</main>
-	);
-}
-
-/**
- * Replaces the placeholder `<CollaboratorStack>` in the StudioHeader
- * with real-time peer avatars + a settings popover that lets the user
- * rename themselves and copy the room URL. Reads peers from the
- * surrounding `<CollabUIProvider>` context.
- */
-function DemoCollaboratorsSlot({
-	roomId,
-	showRemoteCursors,
-	onShowRemoteCursorsChange,
-}: {
-	roomId: string;
-	showRemoteCursors: boolean;
-	onShowRemoteCursorsChange: (show: boolean) => void;
-}): ReactNode {
-	const roomLink =
-		typeof window === "undefined" ? undefined : window.location.href;
-	return (
-		<div data-testid="collab-peer-stack" className="flex items-center gap-2">
-			<PeerAvatarStack maxVisible={4} />
-			<CollabSettingsPopover
-				roomId={roomId}
-				roomLink={roomLink}
-				initialShowRemoteCursors={showRemoteCursors}
-				onShowRemoteCursorsChange={onShowRemoteCursorsChange}
-			/>
-		</div>
 	);
 }
 
