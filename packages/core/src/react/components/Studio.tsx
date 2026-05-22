@@ -58,6 +58,7 @@ import { useThemeSync } from "@/theme/use-theme-sync";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPluginOverlay, StudioPluginProvider } from "@/types/plugin";
+import { useKeyEventGuard } from "./use-key-event-guard";
 
 import {
 	EMPTY_DATA,
@@ -170,6 +171,12 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		pages,
 		messages,
 	} = props;
+
+	// Neutralize malformed synthetic keydown/keyup events (e.g. from password
+	// managers / autofill extensions) before they reach Puck's unguarded
+	// `monitorHotkeys` document listener, which would otherwise throw
+	// `TypeError: e.getModifierState is not a function`.
+	useKeyEventGuard();
 
 	const {
 		isAnvilkit,
