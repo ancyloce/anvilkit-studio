@@ -1,6 +1,6 @@
 /**
- * @file Studio header bar — brand mark, breadcrumb, Share / Preview /
- * Publish actions, plus the `<HeaderActions>` slot.
+ * @file Studio header bar — brand mark, breadcrumb, collaborator stack,
+ * Share / Preview / Publish actions, plus the `<HeaderActions>` slot.
  *
  * Pure presentational component. Wiring to runtime / lifecycle lives
  * in the Phase 5 `<Studio>` glue; this file accepts every callback as
@@ -8,14 +8,17 @@
  */
 
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { useStudioPluginContextOrNull } from "@/context/plugin-context";
 import { useStudioRuntime } from "@/hooks/use-studio";
 import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
-import type { StudioPluginMeta } from "@/types/plugin";
+import type {
+	StudioPluginMeta,
+	StudioPluginSlotContribution,
+} from "@/types/plugin";
 import { HeaderActions } from "./HeaderActions";
 import { PublishPanel } from "./PublishPanel";
 
@@ -62,6 +65,8 @@ export function StudioHeader({
 						Saved {formatTimestamp(lastSavedAt)}
 					</span>
 				) : null}
+
+				<CollaboratorsSlotRegion />
 
 				<Tooltip>
 					<TooltipTrigger
@@ -144,6 +149,59 @@ function HeaderActionsRegionInner(): ReactNode {
 			<HeaderActions />
 		</>
 	);
+}
+
+/**
+ * Canonical slot id for the header collaborator-avatar anchor.
+ *
+ * `@anvilkit/collab-ui`'s `createCollabPlugin()` — which wraps the
+ * headless `@anvilkit/plugin-collab-yjs` data plugin — fills this slot
+ * with its `<PeerAvatarStack>`. Core never imports collab-ui: the
+ * avatar UI is delegated entirely through the single-occupancy slot
+ * registry, so the header shows nothing when no collaboration plugin is
+ * configured. Mirrors the {@link StudioSlotId} `"collaborators"` literal.
+ */
+export const COLLABORATORS_SLOT_ID = "collaborators";
+
+/**
+ * Resolve the component a plugin contributed to the collaborators slot,
+ * or `null` when the slot is unfilled.
+ *
+ * Exported so the slot-id contract can be unit-tested without mounting
+ * the full `<StudioHeader>` tree (which would require i18n / runtime /
+ * plugin-context providers).
+ */
+export function selectCollaboratorsSlot(
+	slots: ReadonlyMap<string, StudioPluginSlotContribution>,
+): ComponentType | null {
+	return slots.get(COLLABORATORS_SLOT_ID)?.component ?? null;
+}
+
+/**
+ * Renders the collaborator-avatar slot between the `lastSavedAt` chip
+ * and the Share button.
+ *
+ * Mirrors `<HeaderActionsRegion>`'s defensive read: outside of
+ * `<Studio>` (unit tests, previews) there is no plugin context, so we
+ * render nothing rather than letting the strict `useStudioRuntime()`
+ * hook throw. The runtime read happens in the nested component so the
+ * hook is only reached once we know a provider is present.
+ */
+function CollaboratorsSlotRegion(): ReactNode {
+	const ctx = useStudioPluginContextOrNull();
+	if (ctx === null) {
+		return null;
+	}
+	return <CollaboratorsSlotRegionInner />;
+}
+
+function CollaboratorsSlotRegionInner(): ReactNode {
+	const runtime = useStudioRuntime();
+	const SlotComponent = selectCollaboratorsSlot(runtime.slots);
+	if (SlotComponent === null) {
+		return null;
+	}
+	return <SlotComponent />;
 }
 
 function formatTimestamp(date: Date): string {

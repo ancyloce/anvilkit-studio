@@ -649,11 +649,17 @@ export interface StudioPluginOverlay {
 }
 
 /**
- * Identifier of a named chrome slot a plugin can fill. No slots are
- * enumerated today; the open string form lets plugin authors target
- * future slots without a Core type bump.
+ * Identifier of a named chrome slot a plugin can fill.
+ *
+ * `"collaborators"` is the first enumerated slot: `<StudioHeader>`
+ * renders its single occupant in the header-actions row (collaborator
+ * avatar stacks live here — `@anvilkit/collab-ui` fills it with
+ * `<PeerAvatarStack>`). The open `string` arm keeps the contract
+ * additive, so plugin authors can target future slots without a Core
+ * type bump; the literal exists only to surface autocomplete and
+ * document the anchor.
  */
-export type StudioSlotId = string;
+export type StudioSlotId = "collaborators" | (string & {});
 
 /**
  * Named chrome slot contribution — a plugin claims a specific anchor
