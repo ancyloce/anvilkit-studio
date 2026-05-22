@@ -59,7 +59,6 @@ import {
 	useState,
 } from "react";
 
-import type { CollaboratorsSlotValue } from "@/context/chrome-props";
 import { DEFAULT_INSERT_SECTIONS } from "@/layout/sidebar/modules/insert/default-sections";
 import { mergeOverrides } from "@/overrides/merge-overrides";
 import type { StudioChromeMode } from "@/overrides/types";
@@ -243,12 +242,6 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * triggers the download. The submenu disables itself when omitted.
 	 */
 	readonly onExport?: (formatId: string) => void | Promise<void>;
-	/**
-	 * Optional replacement for the AnvilKit chrome's placeholder
-	 * collaborator stack. Accepts a `ReactNode` or a `ComponentType`.
-	 * Ignored when `chrome="puck"`.
-	 */
-	readonly collaboratorsSlot?: CollaboratorsSlotValue;
 	/**
 	 * Optional diagnostics sink for plugin log records and Studio setup
 	 * failures. Metadata is shallow-redacted before delivery.
@@ -1087,7 +1080,6 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 // Re-export Puck/Studio prop types the view also needs, so `Studio.tsx`
 // has a single import site for controller surface.
 export type {
-	CollaboratorsSlotValue,
 	DeepPartial,
 	PuckConfig,
 	PuckData,

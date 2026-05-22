@@ -32,10 +32,7 @@ import { Puck } from "@puckeditor/core";
 import type { ReactElement, ReactNode } from "react";
 
 import { StudioConfigProvider } from "@/config/provider";
-import {
-	ChromePropsProvider,
-	type CollaboratorsSlotValue,
-} from "@/context/chrome-props";
+import { ChromePropsProvider } from "@/context/chrome-props";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
 import { StudioRuntimeProvider } from "@/hooks/use-studio";
@@ -60,11 +57,7 @@ import {
 import { useThemeSync } from "@/theme/use-theme-sync";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
-import type {
-	StudioPluginOverlay,
-	StudioPluginProvider,
-	StudioPluginSlotContribution,
-} from "@/types/plugin";
+import type { StudioPluginOverlay, StudioPluginProvider } from "@/types/plugin";
 
 import {
 	EMPTY_DATA,
@@ -132,18 +125,6 @@ export function splitOverlaysByPlacement(
 }
 
 /**
- * Resolve which `collaboratorsSlot` value the chrome should receive.
- * Host prop wins over any plugin contribution.
- */
-export function resolveCollaboratorsSlot(
-	hostValue: CollaboratorsSlotValue | undefined,
-	runtimeSlots: ReadonlyMap<string, StudioPluginSlotContribution>,
-): CollaboratorsSlotValue | undefined {
-	if (hostValue !== undefined) return hostValue;
-	return runtimeSlots.get("collaborators")?.component;
-}
-
-/**
  * The public Studio shell. Thin view over {@link useStudioController}:
  * select the loading state, then render the provider stack around
  * `<Puck>`.
@@ -186,7 +167,6 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		isPublishing,
 		onPublishClick,
 		onExport,
-		collaboratorsSlot,
 		pages,
 		messages,
 	} = props;
@@ -281,11 +261,6 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 	// where every chrome surface picks it up. `chromeAssets` is held
 	// only for the loading gate above — the actual `<StudioLayout>`
 	// mount happens inside the `puck` slot of `studioOverrides`.
-	const resolvedCollaboratorsSlot = resolveCollaboratorsSlot(
-		collaboratorsSlot,
-		compiled.runtime.slots,
-	);
-
 	const {
 		viewport: viewportOverlays,
 		canvas: canvasOverlays,
@@ -347,7 +322,6 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 														isPublishing,
 														onPublishClick,
 														onExport,
-														collaboratorsSlot: resolvedCollaboratorsSlot,
 														viewports: chromeViewports,
 													}}
 												>
