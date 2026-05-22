@@ -28081,9 +28081,9 @@
       ],
       "type": {
         "type": "literal",
-        "value": "0.1.4"
+        "value": "0.1.6"
       },
-      "defaultValue": "\"0.1.4\""
+      "defaultValue": "\"0.1.6\""
     },
     {
       "id": 70,
