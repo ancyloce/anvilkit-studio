@@ -112,6 +112,15 @@ export interface StudioPluginMeta {
 	readonly description?: string;
 
 	/**
+	 * Optional display icon for the plugin, surfaced by host tooling
+	 * (plugin lists, settings UIs). A `ReactNode` so callers can pass a
+	 * rendered icon element (e.g. a `lucide-react` icon). Populated in a
+	 * plugin's TypeScript meta, not in `meta/config.json` (JSON cannot
+	 * hold a React node).
+	 */
+	readonly icon?: ReactNode;
+
+	/**
 	 * Optional declarative capability hints.
 	 *
 	 * Used by host tooling (settings UIs, plugin discovery) to query
@@ -124,22 +133,35 @@ export interface StudioPluginMeta {
 }
 
 /**
- * Declarative capability flags carried on {@link StudioPluginMeta}.
+ * Declarative capability hint carried on {@link StudioPluginMeta}.
  *
- * Each flag is an optional self-declaration by the plugin author. The
- * runtime does not enforce these — they exist so host code can list
- * "all sidebar plugins" or "all plugins exporting HTML" without
+ * `sidebar` and `header` are **mutually exclusive** — a plugin
+ * self-declares the single primary surface it contributes, or neither.
+ * Advisory only: the runtime does not enforce these and continues to
+ * drive UI visibility from actual `register*()` calls, not from this
+ * flag. They exist so host code can list "all sidebar plugins" without
  * mounting the plugin first.
+ *
+ * The `never` on the opposite key is what makes the two flags mutually
+ * exclusive (`{ sidebar: true, header: true }` is rejected). Optional
+ * `boolean` (rather than literal `true`) keeps the JSON-sourced
+ * `meta/config.json` spread assignable without a cast.
  */
-export interface StudioPluginCapabilities {
-	/**
-	 * `true` when the plugin contributes sidebar UI (asset source,
-	 * copilot panel, history panel, design-system panel, copy snippet
-	 * pack, etc.).
-	 */
-	readonly sidebar?: boolean;
-	readonly header?: boolean;
-}
+export type StudioPluginCapabilities =
+	| {
+			/**
+			 * `true` when the plugin contributes sidebar UI (asset source,
+			 * copilot panel, history panel, design-system panel, copy
+			 * snippet pack, etc.).
+			 */
+			readonly sidebar?: boolean;
+			readonly header?: never;
+	  }
+	| {
+			/** `true` when the plugin contributes a header action. */
+			readonly header?: boolean;
+			readonly sidebar?: never;
+	  };
 
 export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
 
@@ -627,27 +649,22 @@ export interface StudioPluginOverlay {
 }
 
 /**
- * Identifier of a named chrome slot a plugin can fill. Today only
- * `"collaborators"` is enumerated (the header collaborator stack); new
- * slots are added as features land. The string-union form leaves the
- * type open so plugin authors can target future slots without a Core
- * type bump.
+ * Identifier of a named chrome slot a plugin can fill. No slots are
+ * enumerated today; the open string form lets plugin authors target
+ * future slots without a Core type bump.
  */
-export type StudioSlotId = "collaborators" | (string & {});
+export type StudioSlotId = string;
 
 /**
  * Named chrome slot contribution — a plugin claims a specific anchor
- * (e.g. the header collaborator stack) and supplies the component
- * Studio should render there.
+ * and supplies the component Studio should render there.
  *
  * ### Precedence
  *
  * Slots are single-occupancy. If two plugins contribute the same slot
  * id, the **first registration wins** and a `warn` is logged via the
  * plugin context — this matches the {@link StudioHeaderAction} dedupe
- * policy. Host apps can always override a plugin slot by passing the
- * corresponding `<Studio>` prop (e.g. `collaboratorsSlot`); the host
- * prop wins.
+ * policy.
  */
 export interface StudioPluginSlotContribution {
 	/**
@@ -864,10 +881,6 @@ export interface StudioPluginRegistration<
 	 * Optional named chrome slot contributions. Slots are single-
 	 * occupancy: if two plugins contribute the same slot id, the first
 	 * registration wins (and a warn is logged via `ctx.log`).
-	 *
-	 * Host apps can always override a plugin slot by passing the
-	 * corresponding `<Studio>` prop (e.g. `collaboratorsSlot`); the host
-	 * prop wins.
 	 *
 	 * See {@link StudioPluginSlotContribution}.
 	 */

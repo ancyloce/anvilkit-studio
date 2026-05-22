@@ -141,8 +141,6 @@ export interface StudioRuntime {
 	 * Plugin-contributed named chrome slot contributions. Single-
 	 * occupancy: if two plugins contribute the same slot id the first
 	 * registration wins (a warn is logged via `ctx.log` on duplicate).
-	 * The host's `<Studio>` prop for the same slot still takes
-	 * precedence — see e.g. `collaboratorsSlot`.
 	 */
 	readonly slots: ReadonlyMap<string, StudioPluginSlotContribution>;
 	/**
