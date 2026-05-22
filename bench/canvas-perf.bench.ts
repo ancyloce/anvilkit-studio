@@ -22,7 +22,13 @@ import {
 	createPage,
 	createRect,
 } from "@anvilkit/canvas-core";
-import type { CanvasIR, CanvasNode } from "@anvilkit/canvas-core";
+import type {
+	CanvasAiPlaceholderNode,
+	CanvasIR,
+	CanvasNode,
+} from "@anvilkit/canvas-core";
+import { createAiJobStore } from "@anvilkit/canvas-editor/stores/ai-job-store";
+import { createViewportStore } from "@anvilkit/canvas-editor/stores/viewport-store";
 import type { BenchResult } from "./types.js";
 
 const NODE_COUNTS = [100, 500, 1000] as const;
@@ -34,6 +40,12 @@ const NODE_COUNTS = [100, 500, 1000] as const;
  * and is the more honest "what does dragging in a large scene cost" signal.
  */
 const DRAG_STEPS = 60;
+
+/** AI-placeholder lifecycles created + resolved per churn iteration. */
+const CHURN_COUNT = 100;
+
+/** setPan/setZoom pairs applied per viewport-pan iteration. */
+const PAN_STEPS = 200;
 
 /** Build an IR whose single page's root group holds `count` rect children. */
 function buildScene(count: number): CanvasIR {
@@ -85,6 +97,59 @@ export async function runCanvasPerfBench(): Promise<BenchResult[]> {
 			}
 		});
 	}
+
+	// ai-churn:K — create + register + resolve K ai-placeholder lifecycles. Each
+	// iteration starts from a fresh empty IR and threads the immutable IR through
+	// create (node.create) then resolve (node.update status → "complete"),
+	// alongside the ai-job-store register/complete cycle — the cost of an AI
+	// batch landing then settling on the canvas.
+	bench.add(`canvas:ai-churn:${CHURN_COUNT}`, () => {
+		const store = createAiJobStore();
+		let ir = createCanvasIR({ id: "churn-ir" });
+		const pageId = ir.pages[0]?.id ?? "";
+		for (let i = 0; i < CHURN_COUNT; i += 1) {
+			const node: CanvasAiPlaceholderNode = {
+				id: `ph-${i}`,
+				type: "ai-placeholder",
+				transform: {
+					x: (i % 10) * 110,
+					y: Math.floor(i / 10) * 110,
+					rotation: 0,
+					scaleX: 1,
+					scaleY: 1,
+				},
+				bounds: { width: 100, height: 100 },
+				zIndex: 0,
+				jobId: `job-${i}`,
+				status: "pending",
+			};
+			ir = applyCommand(ir, { type: "node.create", node, pageId }).ir;
+			store.getState().register(`job-${i}`, {
+				nodeId: node.id,
+				abort: () => undefined,
+			});
+		}
+		for (let i = 0; i < CHURN_COUNT; i += 1) {
+			store.getState().complete(`job-${i}`);
+			ir = applyCommand(ir, {
+				type: "node.update",
+				nodeId: `ph-${i}`,
+				kind: "ai-placeholder",
+				patch: { status: "complete" },
+			}).ir;
+		}
+	});
+
+	// pan:viewport — store throughput for a pan/zoom burst. O(1) per set, so this
+	// stays sub-floor (recorded, ungated) — the real pan cost is the Konva
+	// re-render, which is render-bound and lives outside this headless harness.
+	bench.add("canvas:pan:viewport", () => {
+		const store = createViewportStore();
+		for (let i = 0; i < PAN_STEPS; i += 1) {
+			store.getState().setPan(i * 3, i * 2);
+			store.getState().setZoom(1 + (i % 50) * 0.01);
+		}
+	});
 
 	await bench.run();
 

@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-05-22T14:05:20.073Z",
+	"generatedAt": "2026-05-22T16:17:12.932Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",
@@ -209,7 +209,7 @@
 			"name": "@anvilkit/bento-grid",
 			"description": "Anvilkit Puck-native Bento Grid component.",
 			"packageName": "@anvilkit/bento-grid",
-			"version": "0.0.2",
+			"version": "0.1.5",
 			"category": "content",
 			"tags": [],
 			"publisher": "first-party",
@@ -230,7 +230,7 @@
 			"name": "@anvilkit/blog-list",
 			"description": "Anvilkit Puck-native blog-list component.",
 			"packageName": "@anvilkit/blog-list",
-			"version": "0.0.2",
+			"version": "0.1.5",
 			"category": "content",
 			"tags": [],
 			"publisher": "first-party",

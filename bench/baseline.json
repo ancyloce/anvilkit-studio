@@ -140,5 +140,45 @@
 		"meanMs": 0.049,
 		"hz": 20408,
 		"recordedAt": "2026-05-14T02:13:00.000Z"
+	},
+	"canvas:build:100": {
+		"meanMs": 0.018729238888992975,
+		"hz": 53392.452620575634,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
+	},
+	"canvas:build:500": {
+		"meanMs": 0.07916628879036405,
+		"hz": 12631.639240384826,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
+	},
+	"canvas:build:1000": {
+		"meanMs": 0.2,
+		"hz": 5000,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
+	},
+	"canvas:drag:100": {
+		"meanMs": 1,
+		"hz": 1000,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
+	},
+	"canvas:drag:500": {
+		"meanMs": 3.5,
+		"hz": 285.7142857142857,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
+	},
+	"canvas:drag:1000": {
+		"meanMs": 8,
+		"hz": 125,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
+	},
+	"canvas:ai-churn:100": {
+		"meanMs": 3.2,
+		"hz": 312.5,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
+	},
+	"canvas:pan:viewport": {
+		"meanMs": 0.04388048810882671,
+		"hz": 22789.172206105126,
+		"recordedAt": "2026-05-22T16:44:03.142Z"
 	}
 }
