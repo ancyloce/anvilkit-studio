@@ -9,6 +9,7 @@ packages:
   - "examples/plugins/*"
   - "examples/ai-adapters/*"
 allowBuilds:
+  '@parcel/watcher': set this to true or false
   esbuild: false
   leveldown: false
   msw: false
