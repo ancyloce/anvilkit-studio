@@ -224,6 +224,9 @@ importers:
       '@anvilkit/plugin-design-system':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-design-system
+      '@anvilkit/plugin-export-canvas':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-export-canvas
       '@anvilkit/plugin-export-html':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-export-html
@@ -1764,6 +1767,52 @@ importers:
       typedoc:
         specifier: 0.28.19
         version: 0.28.19(typescript@6.0.3)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.7
+        version: 4.1.7(@types/node@25.9.1)(@vitest/coverage-v8@4.1.7)(happy-dom@20.9.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
+
+  packages/plugins/plugin-export-canvas:
+    dependencies:
+      '@anvilkit/canvas-core':
+        specifier: workspace:*
+        version: link:../../canvas/core
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../core
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../configs/vitest-config
+      '@puckeditor/core':
+        specifier: ^0.21.2
+        version: 0.21.2(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+      '@rslib/core':
+        specifier: ^0.21.5
+        version: 0.21.5(typescript@6.0.3)
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.6
+        version: 19.2.6
+      react-dom:
+        specifier: 19.2.6
+        version: 19.2.6(react@19.2.6)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
