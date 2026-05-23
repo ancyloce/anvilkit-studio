@@ -23,6 +23,7 @@ import {
 	canvasToPng,
 	canvasToSvg,
 } from "@anvilkit/plugin-export-canvas";
+import type { BrandKit } from "@anvilkit/canvas-editor";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -37,6 +38,20 @@ const CanvasStudio = dynamic(
 		),
 	},
 );
+
+// Demo brand kit (I3-4). This standalone route renders <CanvasStudio> outside
+// a <Studio> shell, so there's no StudioConfig to read here — we hand it a
+// small fixed kit to exercise the editor's `useBrandKit()` surface. Hosts that
+// mount the canvas inside <Studio> get this mapped from their Studio config by
+// plugin-canvas-studio's CanvasModeOverlay instead.
+const DEMO_BRAND_KIT: BrandKit = {
+	colors: [
+		{ name: "Primary", value: "#2563eb" },
+		{ name: "Accent", value: "#f59e0b" },
+		{ name: "Ink", value: "#0f172a" },
+	],
+	fonts: ["Inter", "Poppins"],
+};
 
 function makeBlankIR(pageId: string): CanvasIR {
 	return createCanvasIR({
@@ -253,6 +268,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 					<CanvasStudio
 						initialIR={initialIR}
 						initialActivePageId={pageId}
+						brandKit={DEMO_BRAND_KIT}
 						onChange={(ir) => {
 							currentIRRef.current = ir;
 							adapter.save(pageId, ir);
