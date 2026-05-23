@@ -1,0 +1,104 @@
+{
+	"version": "1",
+	"id": "slide-title",
+	"title": "Title Slide",
+	"pages": [
+		{
+			"id": "slide-title-1",
+			"name": "Title Slide",
+			"size": {
+				"width": 1920,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0b1020"
+			},
+			"root": {
+				"id": "slide-title-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1920,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "title",
+						"type": "text",
+						"transform": {
+							"x": 260,
+							"y": 380,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1400,
+							"height": 240
+						},
+						"zIndex": 1,
+						"text": "Presentation\nTitle",
+						"fontFamily": "Inter",
+						"fontSize": 120,
+						"fill": "#ffffff",
+						"fontWeight": "800",
+						"align": "center"
+					},
+					{
+						"id": "subtitle",
+						"type": "text",
+						"transform": {
+							"x": 260,
+							"y": 720,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1400,
+							"height": 80
+						},
+						"zIndex": 2,
+						"text": "Subtitle or author name",
+						"fontFamily": "Inter",
+						"fontSize": 48,
+						"fill": "#93c5fd",
+						"align": "center"
+					},
+					{
+						"id": "dot",
+						"type": "ellipse",
+						"transform": {
+							"x": 928,
+							"y": 900,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 64,
+							"height": 64
+						},
+						"zIndex": 3,
+						"fill": "#3b82f6"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

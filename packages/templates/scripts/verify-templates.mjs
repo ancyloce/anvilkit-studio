@@ -16,13 +16,16 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..");
 
 const { isAnvilkitTemplate } = await import(
-	pathToFileURL(
-		join(root, "..", "core", "dist", "templates", "index.js"),
-	).href
+	pathToFileURL(join(root, "..", "core", "dist", "templates", "index.js")).href
 );
 
+// `canvas/` holds @anvilkit/canvas-templates — CanvasIR designs, a
+// different IR than the Puck `AnvilkitTemplate` packages checked here.
+// It is validated against `CanvasIRSchema` by its own Vitest suite.
+const SKIP = new Set(["scripts", "canvas"]);
+
 const slugs = readdirSync(root, { withFileTypes: true })
-	.filter((d) => d.isDirectory() && d.name !== "scripts")
+	.filter((d) => d.isDirectory() && !SKIP.has(d.name))
 	.map((d) => d.name)
 	.sort();
 

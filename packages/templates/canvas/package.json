@@ -1,0 +1,38 @@
+{
+	"name": "@anvilkit/canvas-templates",
+	"version": "0.1.0",
+	"description": "10 starter CanvasIR designs (poster, social, slides, print) for AnvilKit Canvas Studio.",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./*.json": "./dist/*.json"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"license": "MIT",
+	"sideEffects": false,
+	"peerDependencies": {
+		"@anvilkit/canvas-core": "workspace:*"
+	},
+	"devDependencies": {
+		"@anvilkit/canvas-core": "workspace:*",
+		"@anvilkit/typescript-config": "workspace:*",
+		"@anvilkit/vitest-config": "workspace:*",
+		"typescript": "6.0.3",
+		"vitest": "^4.1.7"
+	},
+	"scripts": {
+		"build": "tsc",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"lint": "pnpm exec biome lint package.json tsconfig.json vitest.config.ts src",
+		"clean": "rm -rf dist"
+	}
+}

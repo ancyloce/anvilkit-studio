@@ -1,0 +1,103 @@
+{
+	"version": "1",
+	"id": "presentation-section",
+	"title": "Section Divider",
+	"pages": [
+		{
+			"id": "presentation-section-1",
+			"name": "Section Divider",
+			"size": {
+				"width": 1920,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#111827"
+			},
+			"root": {
+				"id": "presentation-section-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1920,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "section",
+						"type": "text",
+						"transform": {
+							"x": 260,
+							"y": 420,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1400,
+							"height": 60
+						},
+						"zIndex": 1,
+						"text": "Section 01",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#f472b6",
+						"fontWeight": "700"
+					},
+					{
+						"id": "bar",
+						"type": "rect",
+						"transform": {
+							"x": 260,
+							"y": 520,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 80,
+							"height": 8
+						},
+						"zIndex": 2,
+						"fill": "#f472b6"
+					},
+					{
+						"id": "title",
+						"type": "text",
+						"transform": {
+							"x": 260,
+							"y": 560,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1400,
+							"height": 160
+						},
+						"zIndex": 3,
+						"text": "The Next Chapter",
+						"fontFamily": "Inter",
+						"fontSize": 104,
+						"fill": "#ffffff",
+						"fontWeight": "800"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

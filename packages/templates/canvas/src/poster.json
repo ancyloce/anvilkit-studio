@@ -1,0 +1,160 @@
+{
+	"version": "1",
+	"id": "poster",
+	"title": "Event Poster",
+	"pages": [
+		{
+			"id": "poster-1",
+			"name": "Event Poster",
+			"size": {
+				"width": 1080,
+				"height": 1620,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "poster-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1620
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "accent",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1080,
+							"height": 24
+						},
+						"zIndex": 1,
+						"fill": "#f59e0b"
+					},
+					{
+						"id": "eyebrow",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 180,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 920,
+							"height": 60
+						},
+						"zIndex": 2,
+						"text": "PRESENTING",
+						"fontFamily": "Inter",
+						"fontSize": 36,
+						"fill": "#f59e0b",
+						"fontWeight": "600"
+					},
+					{
+						"id": "title",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 260,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 920,
+							"height": 440
+						},
+						"zIndex": 3,
+						"text": "Design\nWithout\nLimits",
+						"fontFamily": "Inter",
+						"fontSize": 140,
+						"fill": "#ffffff",
+						"fontWeight": "800"
+					},
+					{
+						"id": "subtitle",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 760,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 920,
+							"height": 120
+						},
+						"zIndex": 4,
+						"text": "A starter canvas poster you can make your own.",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#cbd5e1"
+					},
+					{
+						"id": "dot",
+						"type": "ellipse",
+						"transform": {
+							"x": 80,
+							"y": 1490,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 64,
+							"height": 64
+						},
+						"zIndex": 5,
+						"fill": "#f59e0b"
+					},
+					{
+						"id": "footer",
+						"type": "text",
+						"transform": {
+							"x": 170,
+							"y": 1500,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 820,
+							"height": 60
+						},
+						"zIndex": 6,
+						"text": "anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 36,
+						"fill": "#94a3b8"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

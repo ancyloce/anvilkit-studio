@@ -1,0 +1,123 @@
+{
+	"version": "1",
+	"id": "slide-16x9",
+	"title": "Content Slide",
+	"pages": [
+		{
+			"id": "slide-16x9-1",
+			"name": "Content Slide",
+			"size": {
+				"width": 1920,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"root": {
+				"id": "slide-16x9-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1920,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "sidebar",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 16,
+							"height": 1080
+						},
+						"zIndex": 1,
+						"fill": "#2563eb"
+					},
+					{
+						"id": "title",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 360,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1200,
+							"height": 140
+						},
+						"zIndex": 2,
+						"text": "Slide Title",
+						"fontFamily": "Inter",
+						"fontSize": 96,
+						"fill": "#0f172a",
+						"fontWeight": "800"
+					},
+					{
+						"id": "body",
+						"type": "text",
+						"transform": {
+							"x": 120,
+							"y": 560,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1400,
+							"height": 300
+						},
+						"zIndex": 3,
+						"text": "Supporting copy goes here. Keep it to a few lines.",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#475569"
+					},
+					{
+						"id": "pagenum",
+						"type": "text",
+						"transform": {
+							"x": 1760,
+							"y": 980,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 120,
+							"height": 60
+						},
+						"zIndex": 4,
+						"text": "01",
+						"fontFamily": "Inter",
+						"fontSize": 36,
+						"fill": "#94a3b8",
+						"align": "right"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

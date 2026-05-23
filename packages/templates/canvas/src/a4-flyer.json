@@ -1,0 +1,144 @@
+{
+	"version": "1",
+	"id": "a4-flyer",
+	"title": "A4 Flyer",
+	"pages": [
+		{
+			"id": "a4-flyer-1",
+			"name": "A4 Flyer",
+			"size": {
+				"width": 210,
+				"height": 297,
+				"unit": "mm",
+				"dpi": 300
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"root": {
+				"id": "a4-flyer-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 210,
+					"height": 297
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "header",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 210,
+							"height": 60
+						},
+						"zIndex": 1,
+						"fill": "#dc2626"
+					},
+					{
+						"id": "brand",
+						"type": "text",
+						"transform": {
+							"x": 16,
+							"y": 22,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 178,
+							"height": 18
+						},
+						"zIndex": 2,
+						"text": "FLYER",
+						"fontFamily": "Inter",
+						"fontSize": 14,
+						"fill": "#ffffff",
+						"fontWeight": "700"
+					},
+					{
+						"id": "headline",
+						"type": "text",
+						"transform": {
+							"x": 16,
+							"y": 90,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 178,
+							"height": 60
+						},
+						"zIndex": 3,
+						"text": "Big Event\nThis Friday",
+						"fontFamily": "Inter",
+						"fontSize": 26,
+						"fill": "#111827",
+						"fontWeight": "800"
+					},
+					{
+						"id": "body",
+						"type": "text",
+						"transform": {
+							"x": 16,
+							"y": 170,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 178,
+							"height": 80
+						},
+						"zIndex": 4,
+						"text": "Details about the event, the venue, and how to RSVP.",
+						"fontFamily": "Inter",
+						"fontSize": 9,
+						"fill": "#374151"
+					},
+					{
+						"id": "footer",
+						"type": "text",
+						"transform": {
+							"x": 16,
+							"y": 275,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 178,
+							"height": 12
+						},
+						"zIndex": 5,
+						"text": "123 Main St · anvilkit.studio",
+						"fontFamily": "Inter",
+						"fontSize": 7,
+						"fill": "#6b7280"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

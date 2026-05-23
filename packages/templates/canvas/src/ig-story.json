@@ -1,0 +1,124 @@
+{
+	"version": "1",
+	"id": "ig-story",
+	"title": "Instagram Story",
+	"pages": [
+		{
+			"id": "ig-story-1",
+			"name": "Instagram Story",
+			"size": {
+				"width": 1080,
+				"height": 1920,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#111827"
+			},
+			"root": {
+				"id": "ig-story-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1920
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "band",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1080,
+							"height": 640
+						},
+						"zIndex": 1,
+						"fill": "#6366f1"
+					},
+					{
+						"id": "kicker",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 720,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 920,
+							"height": 60
+						},
+						"zIndex": 2,
+						"text": "STORY",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#a5b4fc",
+						"fontWeight": "700"
+					},
+					{
+						"id": "headline",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 800,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 920,
+							"height": 420
+						},
+						"zIndex": 3,
+						"text": "Tap to\nlearn more",
+						"fontFamily": "Inter",
+						"fontSize": 110,
+						"fill": "#ffffff",
+						"fontWeight": "800"
+					},
+					{
+						"id": "cta",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 1740,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 920,
+							"height": 80
+						},
+						"zIndex": 4,
+						"text": "Swipe up ↑",
+						"fontFamily": "Inter",
+						"fontSize": 44,
+						"fill": "#e5e7eb",
+						"align": "center"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

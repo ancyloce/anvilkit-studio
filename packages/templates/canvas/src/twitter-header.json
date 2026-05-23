@@ -1,0 +1,102 @@
+{
+	"version": "1",
+	"id": "twitter-header",
+	"title": "Profile Header",
+	"pages": [
+		{
+			"id": "twitter-header-1",
+			"name": "Profile Header",
+			"size": {
+				"width": 1500,
+				"height": 500,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#0f172a"
+			},
+			"root": {
+				"id": "twitter-header-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1500,
+					"height": 500
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "band",
+						"type": "rect",
+						"transform": {
+							"x": 0,
+							"y": 0,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1500,
+							"height": 8
+						},
+						"zIndex": 1,
+						"fill": "#22d3ee"
+					},
+					{
+						"id": "title",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 180,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1000,
+							"height": 100
+						},
+						"zIndex": 2,
+						"text": "Profile Header",
+						"fontFamily": "Inter",
+						"fontSize": 88,
+						"fill": "#ffffff",
+						"fontWeight": "800"
+					},
+					{
+						"id": "tag",
+						"type": "text",
+						"transform": {
+							"x": 80,
+							"y": 300,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 1000,
+							"height": 60
+						},
+						"zIndex": 3,
+						"text": "@handle · what you do",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#94a3b8"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

@@ -1,0 +1,102 @@
+{
+	"version": "1",
+	"id": "fb-cover",
+	"title": "Facebook Cover",
+	"pages": [
+		{
+			"id": "fb-cover-1",
+			"name": "Facebook Cover",
+			"size": {
+				"width": 820,
+				"height": 312,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#1e293b"
+			},
+			"root": {
+				"id": "fb-cover-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 820,
+					"height": 312
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "title",
+						"type": "text",
+						"transform": {
+							"x": 60,
+							"y": 90,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 700,
+							"height": 80
+						},
+						"zIndex": 1,
+						"text": "Your Brand Here",
+						"fontFamily": "Inter",
+						"fontSize": 64,
+						"fill": "#ffffff",
+						"fontWeight": "800"
+					},
+					{
+						"id": "tag",
+						"type": "text",
+						"transform": {
+							"x": 60,
+							"y": 190,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 700,
+							"height": 50
+						},
+						"zIndex": 2,
+						"text": "Tagline goes here",
+						"fontFamily": "Inter",
+						"fontSize": 32,
+						"fill": "#94a3b8"
+					},
+					{
+						"id": "badge",
+						"type": "ellipse",
+						"transform": {
+							"x": 700,
+							"y": 110,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 80,
+							"height": 80
+						},
+						"zIndex": 3,
+						"fill": "#38bdf8"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

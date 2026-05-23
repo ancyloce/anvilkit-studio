@@ -1,0 +1,105 @@
+{
+	"version": "1",
+	"id": "ig-post",
+	"title": "Instagram Post",
+	"pages": [
+		{
+			"id": "ig-post-1",
+			"name": "Instagram Post",
+			"size": {
+				"width": 1080,
+				"height": 1080,
+				"unit": "px"
+			},
+			"background": {
+				"kind": "solid",
+				"value": "#ffffff"
+			},
+			"root": {
+				"id": "ig-post-root",
+				"name": "Root",
+				"type": "group",
+				"transform": {
+					"x": 0,
+					"y": 0,
+					"rotation": 0,
+					"scaleX": 1,
+					"scaleY": 1
+				},
+				"bounds": {
+					"width": 1080,
+					"height": 1080
+				},
+				"zIndex": 0,
+				"children": [
+					{
+						"id": "card",
+						"type": "rect",
+						"transform": {
+							"x": 60,
+							"y": 60,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 960,
+							"height": 960
+						},
+						"zIndex": 1,
+						"fill": "#f1f5f9",
+						"radius": 48
+					},
+					{
+						"id": "title",
+						"type": "text",
+						"transform": {
+							"x": 140,
+							"y": 360,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 240
+						},
+						"zIndex": 2,
+						"text": "Square\nPost",
+						"fontFamily": "Inter",
+						"fontSize": 120,
+						"fill": "#0f172a",
+						"fontWeight": "800",
+						"align": "center"
+					},
+					{
+						"id": "subtitle",
+						"type": "text",
+						"transform": {
+							"x": 140,
+							"y": 620,
+							"rotation": 0,
+							"scaleX": 1,
+							"scaleY": 1
+						},
+						"bounds": {
+							"width": 800,
+							"height": 80
+						},
+						"zIndex": 3,
+						"text": "1080 × 1080",
+						"fontFamily": "Inter",
+						"fontSize": 40,
+						"fill": "#64748b",
+						"align": "center"
+					}
+				]
+			}
+		}
+	],
+	"assets": {},
+	"metadata": {
+		"createdAt": "2026-05-23T00:00:00.000Z",
+		"updatedAt": "2026-05-23T00:00:00.000Z"
+	}
+}

@@ -10,6 +10,7 @@
 		"scaffold:tsconfigs": "node scripts/scaffold-tsconfigs.mjs",
 		"scaffold:sources": "node scripts/scaffold-sources.mjs",
 		"scaffold:page-irs": "node scripts/scaffold-page-irs.mjs",
+		"scaffold:canvas-irs": "node scripts/scaffold-canvas-irs.mjs",
 		"scaffold:placeholders": "node scripts/write-placeholder-previews.mjs",
 		"scaffold": "pnpm scaffold:package-jsons && pnpm scaffold:tsconfigs && pnpm scaffold:sources && pnpm scaffold:page-irs && pnpm scaffold:placeholders",
 		"capture-previews": "tsx scripts/capture-template-previews.ts"
