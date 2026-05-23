@@ -149,6 +149,38 @@ export const StudioConfigSchema = z
 			})
 			.prefault({}),
 		/**
+		 * Brand-kit block (I3-4) — shared colors + font families the
+		 * Canvas Studio editor surfaces (color pickers, font menus) so
+		 * designs stay on-brand. Distinct from `branding`, which styles
+		 * the editor *chrome*: `brandKit` is design content the canvas
+		 * reads via its `useBrandKit()` hook. `plugin-canvas-studio`
+		 * maps these entries to the editor's `BrandKit` shape.
+		 */
+		brandKit: z
+			.strictObject({
+				/**
+				 * Named brand color swatches. Each `value` is any CSS
+				 * color (`"#2563eb"`, `"var(--brand)"`). Empty by default.
+				 */
+				colors: z
+					.array(
+						z.strictObject({
+							/** Human label, e.g. "Primary". */
+							name: z.string(),
+							/** CSS color value. */
+							value: z.string(),
+						}),
+					)
+					.default([]),
+				/**
+				 * Brand font families, e.g. `["Inter", "Poppins"]`. The
+				 * first entry is treated as the brand default. Empty by
+				 * default.
+				 */
+				fonts: z.array(z.string()).default([]),
+			})
+			.prefault({}),
+		/**
 		 * Export pipeline block — configuration for the export
 		 * registry and download flow.
 		 */

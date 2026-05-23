@@ -41,6 +41,9 @@ describe("StudioConfigSchema — runtime defaults", () => {
 		expect(parsed.ai.defaultModel).toBeUndefined();
 		expect(parsed.ai.maxRetries).toBe(3);
 
+		expect(parsed.brandKit.colors).toEqual([]);
+		expect(parsed.brandKit.fonts).toEqual([]);
+
 		expect(parsed.experimental).toEqual({});
 	});
 
@@ -69,6 +72,30 @@ describe("StudioConfigSchema — layered overrides", () => {
 		expect(parsed.branding.appName).toBe("AnvilKit Studio");
 		expect(parsed.theme.defaultMode).toBe("system");
 		expect(parsed.ai.maxRetries).toBe(3);
+	});
+
+	it("accepts a populated brandKit and rejects unknown color keys", () => {
+		const parsed = StudioConfigSchema.parse({
+			brandKit: {
+				colors: [
+					{ name: "Primary", value: "#2563eb" },
+					{ name: "Accent", value: "var(--brand)" },
+				],
+				fonts: ["Inter", "Poppins"],
+			},
+		});
+		expect(parsed.brandKit.colors).toEqual([
+			{ name: "Primary", value: "#2563eb" },
+			{ name: "Accent", value: "var(--brand)" },
+		]);
+		expect(parsed.brandKit.fonts).toEqual(["Inter", "Poppins"]);
+
+		// A color swatch is a strictObject — a stray key fails fast.
+		expect(() =>
+			StudioConfigSchema.parse({
+				brandKit: { colors: [{ name: "Primary", value: "#000", hex: "#000" }] },
+			}),
+		).toThrow();
 	});
 
 	it("accepts a fully-specified config without modification", () => {
@@ -176,6 +203,10 @@ describe("StudioConfig — type-level assertions", () => {
 				primaryColor: "#f00",
 			},
 			theme: { defaultMode: "light", allowToggle: true },
+			brandKit: {
+				colors: [{ name: "Primary", value: "#2563eb" }],
+				fonts: ["Inter"],
+			},
 			export: { defaultFormat: "html", filenamePrefix: "page" },
 			ai: { defaultModel: "claude-opus-4-6", maxRetries: 3 },
 			experimental: {},
