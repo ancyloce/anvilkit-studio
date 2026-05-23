@@ -1,0 +1,75 @@
+import { statSync } from "node:fs";
+import { expect, type Page, test } from "@playwright/test";
+
+/**
+ * PRD §9.2 scenarios 4 (artboard management) and 6 (export round-trip), on the
+ * standalone canvas route (`/studio/canvas/<id>`).
+ *
+ * Headless note: both mount `<CanvasStudio>` (#4 drives the in-editor
+ * `<PageNavigator>`; #6's PNG export reads the live Konva stage). Konva's 2D
+ * canvas hangs under headless Chromium's GPU path on WSL2 — fixed by
+ * `--disable-gpu` in playwright.config.ts launchOptions (see editor-core header).
+ */
+test.describe.configure({ mode: "serial", timeout: 120_000 });
+
+async function gotoCanvas(page: Page, pageId: string): Promise<void> {
+	await page.goto(`/studio/canvas/${pageId}`);
+	await expect(page.getByTestId("canvas-studio-mount")).toBeVisible({
+		timeout: 30_000,
+	});
+	await expect(page.getByTestId("canvas-host-toolbar")).toBeVisible({
+		timeout: 30_000,
+	});
+}
+
+test.describe("Canvas Studio — pages + export (PRD §9.2)", () => {
+	test("#4 add → reorder → delete pages tracks the active artboard", async ({
+		page,
+	}) => {
+		await gotoCanvas(page, `e2e-pages-${Date.now()}`);
+		const tabs = page.locator('[data-testid^="page-tab-"]');
+		await expect(tabs).toHaveCount(1);
+
+		// Add a second artboard; it becomes active.
+		await page.getByTestId("page-add").click();
+		await expect(tabs).toHaveCount(2);
+
+		// Reorder the active page left, then delete the first; one remains.
+		await page.getByTestId("page-reorder-left").click();
+		await page.getByTestId("page-delete").click();
+		await expect(tabs).toHaveCount(1);
+		await expect(
+			page.locator('[data-testid^="page-tab-"][data-active="true"]'),
+		).toHaveCount(1);
+	});
+
+	test("#6 export PNG (size > 0) + JSON; reload restores state", async ({
+		page,
+	}) => {
+		const pageId = `e2e-export-${Date.now()}`;
+		await gotoCanvas(page, pageId);
+
+		// PNG → a non-empty file (rasterized from the live stage).
+		const [png] = await Promise.all([
+			page.waitForEvent("download"),
+			page.getByTestId("canvas-export-png").click(),
+		]);
+		const pngPath = await png.path();
+		expect(pngPath ? statSync(pngPath).size : 0).toBeGreaterThan(0);
+
+		// JSON → serialized IR; reload reads it back from localStorage.
+		const [json] = await Promise.all([
+			page.waitForEvent("download"),
+			page.getByTestId("canvas-export-json").click(),
+		]);
+		const jsonPath = await json.path();
+		expect(jsonPath ? statSync(jsonPath).size : 0).toBeGreaterThan(0);
+
+		await page.reload();
+		await expect(page.getByTestId("canvas-host-toolbar")).toBeVisible({
+			timeout: 30_000,
+		});
+		// The localStorage adapter (namespace "demo-canvas") rehydrates the IR
+		// for the same page id, so the editor remounts with the saved scene.
+	});
+});

@@ -27,17 +27,19 @@ import type { BrandKit } from "@anvilkit/canvas-editor";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import "@anvilkit/canvas-editor/styles.css";
 import { selectAiImageProvider } from "../../../../lib/ai-image/provider-selection";
+import type { StageHandle } from "./CanvasEditorSurface";
 
-const CanvasStudio = dynamic(
-	() => import("@anvilkit/canvas-editor").then((m) => m.CanvasStudio),
-	{
-		ssr: false,
-		loading: () => (
-			<div data-testid="canvas-studio-loading">Loading Canvas Studio…</div>
-		),
-	},
-);
+// The whole editor surface (CanvasStudio + Konva + the host toolbar/panels)
+// loads behind an ssr:false dynamic boundary so Konva and the canvas-editor
+// barrel stay out of this route's static bundle (MVP exit: own chunk).
+const CanvasEditorSurface = dynamic(() => import("./CanvasEditorSurface"), {
+	ssr: false,
+	loading: () => (
+		<div data-testid="canvas-studio-loading">Loading Canvas Studio…</div>
+	),
+});
 
 // Demo brand kit (I3-4). This standalone route renders <CanvasStudio> outside
 // a <Studio> shell, so there's no StudioConfig to read here — we hand it a
@@ -53,12 +55,24 @@ const DEMO_BRAND_KIT: BrandKit = {
 	fonts: ["Inter", "Poppins"],
 };
 
+// The image tool resolves `onPickAsset()` to an asset id and places a node
+// referencing it. Seeding a real (1×1 transparent PNG) asset under that id in
+// every blank design means the placed image resolves to a renderable asset.
+const HOST_IMAGE_ASSET_ID = "demo-host-image";
+const HOST_IMAGE_DATA_URL =
+	"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
 function makeBlankIR(pageId: string): CanvasIR {
-	return createCanvasIR({
+	const ir = createCanvasIR({
 		id: pageId,
 		title: pageId,
 		pages: [createPage({ id: pageId, name: pageId })],
 	});
+	ir.assets[HOST_IMAGE_ASSET_ID] = {
+		id: HOST_IMAGE_ASSET_ID,
+		uri: HOST_IMAGE_DATA_URL,
+	};
+	return ir;
 }
 
 // SSR-safe fallback. The real adapter requires `globalThis.localStorage`,
@@ -69,15 +83,6 @@ const noopAdapter: CanvasPersistenceAdapter = {
 	load: () => null,
 	list: () => [],
 	delete: () => undefined,
-};
-
-/** Minimal structural view of the Konva stage we need for raster export. */
-type StageHandle = {
-	toDataURL: (config?: {
-		pixelRatio?: number;
-		mimeType?: string;
-		quality?: number;
-	}) => string;
 };
 
 /** Trigger a browser download for an export result. */
@@ -130,6 +135,10 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 	// `image.replace` commit (which needs a selected node) does not fire here.
 	// See plan I1-11 "Known limitation"; wiring it needs an `onSelectionChange`
 	// prop on the canvas-editor submodule.
+	// The image tool's asset picker. Returns the seeded host image asset id so
+	// placing an image needs no UI picker in the demo (PRD §9.2 #1/#2).
+	const onPickAsset = useCallback(async () => HOST_IMAGE_ASSET_ID, []);
+
 	const activePageRef = useRef<string>(pageId);
 	const getLayerContext = useCallback<() => AiLayerContext | null>(
 		() =>
@@ -228,47 +237,32 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 					<code>demo-canvas</code> namespace.
 				</p>
 			</header>
-			<nav
-				data-testid="canvas-export-bar"
-				aria-label="Export design"
-				style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
-			>
-				<span style={{ color: "var(--demo-muted-text)" }}>Export:</span>
-				{(["png", "json", "svg", "pdf"] as const).map((format) => (
-					<button
-						key={format}
-						type="button"
-						data-testid={`canvas-export-${format}`}
-						onClick={() => {
-							void exportActive(format);
-						}}
-						style={{
-							padding: "0.25rem 0.75rem",
-							border: "1px solid var(--demo-border, #d1d5db)",
-							borderRadius: 4,
-							background: "var(--demo-surface, #fff)",
-							cursor: "pointer",
-							font: "inherit",
-							textTransform: "uppercase",
-						}}
-					>
-						{format}
-					</button>
-				))}
-			</nav>
 			<div
 				style={{
 					display: "flex",
 					gap: "1rem",
 					alignItems: "stretch",
-					minHeight: "600px",
+					height: "80vh",
 				}}
 			>
-				<div style={{ flex: 1, minWidth: 0 }}>
-					<CanvasStudio
+				<div
+					style={{
+						flex: 1,
+						minWidth: 0,
+						height: "100%",
+						borderRadius: 12,
+						overflow: "hidden",
+						border: "1px solid var(--demo-border, #e2e8f0)",
+					}}
+				>
+					<CanvasEditorSurface
 						initialIR={initialIR}
 						initialActivePageId={pageId}
 						brandKit={DEMO_BRAND_KIT}
+						onPickAsset={onPickAsset}
+						onExport={(format) => {
+							void exportActive(format);
+						}}
 						onChange={(ir) => {
 							currentIRRef.current = ir;
 							adapter.save(pageId, ir);
