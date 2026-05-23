@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-05-22T16:17:12.932Z",
+	"generatedAt": "2026-05-23T19:28:19.589Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",
@@ -35,6 +35,26 @@
 			"publisher": "first-party",
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-export-canvas",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-export-canvas",
+			"description": "Canvas export formats (PNG / JSON / SVG / PDF) for AnvilKit Studio — headless wrappers around @anvilkit/canvas-core serializers, registered via StudioPluginRegistration.exportFormats.",
+			"packageName": "@anvilkit/plugin-export-canvas",
+			"version": "0.1.0",
+			"category": "export",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-05-23T13:22:14.431Z",
 			"installSpec": {
 				"mutates": [
 					"lib/puck-config.ts"
