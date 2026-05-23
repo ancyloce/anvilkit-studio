@@ -35,6 +35,7 @@
 		"@anvilkit/plugin-canvas-studio": "workspace:*",
 		"@anvilkit/plugin-collab-yjs": "workspace:*",
 		"@anvilkit/plugin-design-system": "workspace:*",
+		"@anvilkit/plugin-export-canvas": "workspace:*",
 		"@anvilkit/plugin-export-html": "workspace:*",
 		"@anvilkit/plugin-export-react": "workspace:*",
 		"@anvilkit/plugin-version-history": "workspace:*",

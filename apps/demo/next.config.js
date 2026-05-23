@@ -30,6 +30,7 @@ const nextConfig = {
 		"@anvilkit/plugin-canvas-studio",
 		"@anvilkit/plugin-collab-yjs",
 		"@anvilkit/plugin-design-system",
+		"@anvilkit/plugin-export-canvas",
 		"@anvilkit/plugin-export-html",
 		"@anvilkit/plugin-export-react",
 		"@anvilkit/plugin-version-history",

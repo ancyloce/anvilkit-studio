@@ -17,6 +17,12 @@ import {
 	type CanvasPersistenceAdapter,
 	localStorageCanvasAdapter,
 } from "@anvilkit/plugin-canvas-studio";
+import {
+	canvasToJson,
+	canvasToPdf,
+	canvasToPng,
+	canvasToSvg,
+} from "@anvilkit/plugin-export-canvas";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -49,6 +55,30 @@ const noopAdapter: CanvasPersistenceAdapter = {
 	list: () => [],
 	delete: () => undefined,
 };
+
+/** Minimal structural view of the Konva stage we need for raster export. */
+type StageHandle = {
+	toDataURL: (config?: {
+		pixelRatio?: number;
+		mimeType?: string;
+		quality?: number;
+	}) => string;
+};
+
+/** Trigger a browser download for an export result. */
+function downloadExport(
+	filename: string,
+	content: string | Uint8Array,
+	mimeType: string,
+): void {
+	const blob = new Blob([content as BlobPart], { type: mimeType });
+	const url = URL.createObjectURL(blob);
+	const anchor = document.createElement("a");
+	anchor.href = url;
+	anchor.download = filename;
+	anchor.click();
+	URL.revokeObjectURL(url);
+}
 
 export function CanvasStudioClient({ pageId }: { pageId: string }) {
 	const adapter = useMemo<CanvasPersistenceAdapter>(
@@ -92,12 +122,61 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		[],
 	);
 
+	// I2-3 canvas export. The live Konva stage (captured via onStageReady)
+	// supplies the raster for PNG/PDF; SVG/JSON serialize the IR headlessly via
+	// @anvilkit/plugin-export-canvas. The active artboard is exported.
+	const stageRef = useRef<StageHandle | null>(null);
+	const currentIRRef = useRef<CanvasIR | null>(null);
+	const exportActive = useCallback(
+		async (format: "png" | "json" | "svg" | "pdf") => {
+			const ir = currentIRRef.current;
+			if (!ir) return;
+			const name = ir.title || pageId;
+			const activePage = activePageRef.current;
+			try {
+				if (format === "json") {
+					downloadExport(
+						`${name}.json`,
+						canvasToJson(ir, { pretty: true }),
+						"application/json",
+					);
+					return;
+				}
+				if (format === "svg") {
+					const { svg } = await canvasToSvg(ir, activePage);
+					downloadExport(`${name}.svg`, svg, "image/svg+xml");
+					return;
+				}
+				const stage = stageRef.current;
+				if (!stage) return;
+				const dataUrl = stage.toDataURL({
+					pixelRatio: 2,
+					mimeType: "image/png",
+				});
+				if (format === "png") {
+					downloadExport(`${name}.png`, canvasToPng(dataUrl), "image/png");
+					return;
+				}
+				const { pdf } = await canvasToPdf(ir, {
+					rasters: [{ pageId: activePage, image: dataUrl }],
+					pages: [activePage],
+				});
+				downloadExport(`${name}.pdf`, pdf, "application/pdf");
+			} catch (err) {
+				console.error("canvas export failed", err);
+			}
+		},
+		[pageId],
+	);
+
 	useEffect(() => {
 		let cancelled = false;
 		(async () => {
 			const stored = await Promise.resolve(adapter.load(pageId));
 			if (cancelled) return;
-			setInitialIR(stored ?? makeBlankIR(pageId));
+			const next = stored ?? makeBlankIR(pageId);
+			currentIRRef.current = next;
+			setInitialIR(next);
 		})();
 		return () => {
 			cancelled = true;
@@ -134,6 +213,34 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 					<code>demo-canvas</code> namespace.
 				</p>
 			</header>
+			<nav
+				data-testid="canvas-export-bar"
+				aria-label="Export design"
+				style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
+			>
+				<span style={{ color: "var(--demo-muted-text)" }}>Export:</span>
+				{(["png", "json", "svg", "pdf"] as const).map((format) => (
+					<button
+						key={format}
+						type="button"
+						data-testid={`canvas-export-${format}`}
+						onClick={() => {
+							void exportActive(format);
+						}}
+						style={{
+							padding: "0.25rem 0.75rem",
+							border: "1px solid var(--demo-border, #d1d5db)",
+							borderRadius: 4,
+							background: "var(--demo-surface, #fff)",
+							cursor: "pointer",
+							font: "inherit",
+							textTransform: "uppercase",
+						}}
+					>
+						{format}
+					</button>
+				))}
+			</nav>
 			<div
 				style={{
 					display: "flex",
@@ -147,10 +254,14 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 						initialIR={initialIR}
 						initialActivePageId={pageId}
 						onChange={(ir) => {
+							currentIRRef.current = ir;
 							adapter.save(pageId, ir);
 						}}
 						onActivePageChange={(id) => {
 							activePageRef.current = id;
+						}}
+						onStageReady={(stage) => {
+							stageRef.current = stage;
 						}}
 					/>
 				</div>
