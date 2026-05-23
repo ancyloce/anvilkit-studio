@@ -112,10 +112,9 @@ jobs:
 
       # Phase 4 (`phase4-016`): per-package gzip budgets via size-limit.
       # Covers the publishable runtime + plugin + component packages.
-      # I2-6 added the 4 buildable canvas packages (canvas-core, canvas-editor,
-      # plugin-ai-image, plugin-canvas-studio); plugin-export-canvas is deferred
-      # until it is implemented (I2-3). Each package ships its own
-      # `.size-limit.json` with a tuned budget.
+      # I2-6 added the canvas packages (canvas-core, canvas-editor,
+      # plugin-ai-image, plugin-canvas-studio); I2-3 added plugin-export-canvas.
+      # Each package ships its own `.size-limit.json` with a tuned budget.
       - name: Bundle-size budgets (size-limit)
         run: |
           pnpm \
@@ -134,6 +133,7 @@ jobs:
             --filter @anvilkit/canvas-editor \
             --filter @anvilkit/plugin-ai-image \
             --filter @anvilkit/plugin-canvas-studio \
+            --filter @anvilkit/plugin-export-canvas \
             --filter @anvilkit/bento-grid \
             --filter @anvilkit/blog-list \
             --filter @anvilkit/button \
