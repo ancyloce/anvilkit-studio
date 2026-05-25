@@ -4,11 +4,13 @@ import type { CanvasIR } from "@anvilkit/canvas-core";
 import {
 	type BrandKit,
 	CanvasEditor,
+	CanvasWorkspace,
 	TOOL_RAIL_ITEMS,
 	type ToolDescriptor,
 	type ToolId,
 	useCanvasStudio,
 } from "@anvilkit/canvas-editor";
+import { useSearchParams } from "next/navigation";
 import { useSyncExternalStore } from "react";
 
 /**
@@ -168,10 +170,12 @@ function HostSceneReadout() {
 }
 
 /**
- * The full reference editor, mounted behind the route's `ssr:false` dynamic
- * boundary. `<CanvasEditor>` owns the 4-column shell (tool rail, layer/brand
- * panel, stage bar + floating toolbar + zoom, inspector); the host wires the
- * tool-rail testids, the stage-bar export actions, and the hidden E2E readout.
+ * The reference editor, mounted behind the route's `ssr:false` dynamic
+ * boundary. Defaults to the 4-column `<CanvasEditor>` shell; opt into the
+ * Canva-style `<CanvasWorkspace>` shell with `?shell=workspace` (PRD 0006,
+ * non-breaking). Both share the host callbacks, the export bar, and the hidden
+ * E2E scene readout — under the workspace shell the export bar rides the
+ * header `shareSlot` so the `canvas-export-*` testids still resolve.
  */
 export default function CanvasEditorSurface({
 	initialIR,
@@ -183,6 +187,28 @@ export default function CanvasEditorSurface({
 	onPickAsset,
 	onExport,
 }: CanvasEditorSurfaceProps) {
+	const useWorkspaceShell = useSearchParams().get("shell") === "workspace";
+
+	if (useWorkspaceShell) {
+		return (
+			<CanvasWorkspace
+				initialIR={initialIR}
+				initialActivePageId={initialActivePageId}
+				storeId={initialActivePageId}
+				brandKit={brandKit}
+				onPickAsset={onPickAsset}
+				onChange={(ir) => onChange(ir)}
+				onActivePageChange={onActivePageChange}
+				onStageReady={(stage) => onStageReady(stage)}
+				shareSlot={<StageBarActions onExport={onExport} />}
+			>
+				<div className="sr-only">
+					<HostSceneReadout />
+				</div>
+			</CanvasWorkspace>
+		);
+	}
+
 	return (
 		<CanvasEditor
 			initialIR={initialIR}
