@@ -32,6 +32,8 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 @import "tw-animate-css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Scan the COMPILED chrome for Tailwind utility class strings. The path is
  * relative to this source file. `dist/` is gitignored, so this explicit
