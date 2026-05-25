@@ -4325,9 +4325,9 @@
 			],
 			"type": {
 				"type": "literal",
-				"value": "0.1.7"
+				"value": "0.1.8"
 			},
-			"defaultValue": "\"0.1.7\""
+			"defaultValue": "\"0.1.8\""
 		},
 		{
 			"id": 1,
