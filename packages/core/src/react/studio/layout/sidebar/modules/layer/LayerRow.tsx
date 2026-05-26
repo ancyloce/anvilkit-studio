@@ -92,88 +92,88 @@ function LayerRowImpl({
 	const showDropLine = isOver && active !== null && active.id !== node.id;
 
 	return (
-		<div
-			ref={setNodeRef}
-			data-testid={`ak-layer-node-${node.id}`}
-			style={{
-				transform: CSS.Transform.toString(transform),
-				transition,
-				paddingLeft: `${node.depth * 14 + 4}px`,
-			}}
-			className={cn("relative", isDragging && "opacity-50")}
-		>
-			{showDropLine ? (
-				<span
-					aria-hidden="true"
-					className="pointer-events-none absolute inset-x-1 -top-px h-0.5 rounded bg-[var(--ak-studio-accent)]"
-				/>
-			) : null}
-			<div
-				className={cn(
-					"flex h-7 items-center gap-1 rounded px-1 text-sm",
-					"text-[var(--ak-studio-fg)] hover:bg-[var(--ak-studio-muted)]",
-					selected &&
-						"bg-[var(--ak-studio-muted)] ring-1 ring-[var(--ak-studio-ring)]",
-				)}
-			>
-				<Button
-					ref={setActivatorNodeRef}
-					type="button"
-					variant="ghost"
-					size="icon-xs"
-					aria-label={msg("studio.module.layer.layers.tree.dragHandle")}
-					data-testid={`ak-layer-grip-${node.id}`}
-					className="flex size-5 shrink-0 cursor-grab items-center justify-center text-[var(--ak-studio-muted-fg)] hover:text-[var(--ak-studio-fg)] active:cursor-grabbing"
-					onKeyDown={handleGripKeyDown}
-					{...attributes}
-					{...listeners}
-				>
-					<GripVertical className="size-3.5" aria-hidden="true" />
-				</Button>
+    <div
+      ref={setNodeRef}
+      data-testid={`ak-layer-node-${node.id}`}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        paddingLeft: `${node.depth * 14 + 4}px`,
+      }}
+      className={cn("relative", isDragging && "opacity-50")}
+    >
+      {showDropLine ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-1 -top-px h-0.5 rounded bg-[var(--ak-studio-accent)]"
+        />
+      ) : null}
+      <div
+        className={cn(
+          "flex h-7 items-center gap-1 rounded px-1 text-sm",
+          "text-[var(--ak-studio-fg)] hover:bg-[var(--ak-studio-muted)]",
+          selected &&
+            "bg-[var(--ak-studio-muted)] ring-1 ring-[var(--ak-studio-ring)]",
+        )}
+      >
+        <Button
+          ref={setActivatorNodeRef}
+          type="button"
+          variant="ghost"
+          size="icon-xs"
+          aria-label={msg("studio.module.layer.layers.tree.dragHandle")}
+          data-testid={`ak-layer-grip-${node.id}`}
+          className="flex size-5 shrink-0 cursor-grab items-center justify-center text-[var(--ak-studio-muted-fg)] hover:text-[var(--ak-studio-fg)] active:cursor-grabbing"
+          onKeyDown={handleGripKeyDown}
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="size-3.5" aria-hidden="true" />
+        </Button>
 
-				{hasChildren ? (
-					<Button
-						type="button"
-						variant="ghost"
-						size="icon-xs"
-						aria-label={msg(
-							expanded
-								? "studio.module.layer.layers.tree.collapse"
-								: "studio.module.layer.layers.tree.expand",
-						)}
-						aria-expanded={expanded}
-						data-testid={`ak-layer-toggle-${node.id}`}
-						className="flex size-5 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] hover:text-[var(--ak-studio-fg)]"
-						onClick={() => onToggleExpand(node.id, !expanded)}
-					>
-						{expanded ? (
-							<ChevronDown className="size-3.5" aria-hidden="true" />
-						) : (
-							<ChevronRight className="size-3.5" aria-hidden="true" />
-						)}
-					</Button>
-				) : (
-					<span className="size-5 shrink-0" aria-hidden="true" />
-				)}
+        {hasChildren ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            aria-label={msg(
+              expanded
+                ? "studio.module.layer.layers.tree.collapse"
+                : "studio.module.layer.layers.tree.expand",
+            )}
+            aria-expanded={expanded}
+            data-testid={`ak-layer-toggle-${node.id}`}
+            className="flex size-5 shrink-0 items-center justify-center text-[var(--ak-studio-muted-fg)] hover:text-[var(--ak-studio-fg)]"
+            onClick={() => onToggleExpand(node.id, !expanded)}
+          >
+            {expanded ? (
+              <ChevronDown className="size-3.5" aria-hidden="true" />
+            ) : (
+              <ChevronRight className="size-3.5" aria-hidden="true" />
+            )}
+          </Button>
+        ) : (
+          <span className="size-5 shrink-0" aria-hidden="true" />
+        )}
 
-				<Box
-					className="size-3.5 shrink-0 text-[var(--ak-studio-muted-fg)]"
-					aria-hidden="true"
-				/>
+        <Box
+          className="size-3.5 shrink-0 text-[var(--ak-studio-muted-fg)]"
+          aria-hidden="true"
+        />
 
-				<Button
-					type="button"
-					variant="ghost"
-					aria-selected={selected}
-					data-testid={`ak-layer-select-${node.id}`}
-					className="grow truncate text-left outline-none"
-					onClick={select}
-				>
-					{node.label}
-				</Button>
-			</div>
-		</div>
-	);
+        <Button
+          type="button"
+          variant="ghost"
+          aria-selected={selected}
+          data-testid={`ak-layer-select-${node.id}`}
+          className="grow truncate text-left justify-start outline-none"
+          onClick={select}
+        >
+          {node.label}
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 /**
