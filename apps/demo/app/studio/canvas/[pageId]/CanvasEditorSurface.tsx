@@ -3,25 +3,11 @@
 import type { CanvasIR } from "@anvilkit/canvas-core";
 import {
 	type BrandKit,
+	type CanvasHeaderPlugin,
 	CanvasWorkspace,
 	useCanvasStudio,
 } from "@anvilkit/canvas-editor";
 import { useSyncExternalStore } from "react";
-
-/**
- * Minimal structural view of the Konva stage the host needs for raster export.
- * Konva.Stage is a structural superset, so `<CanvasStudio onStageReady>` (which
- * hands back a real `Konva.Stage`) satisfies it without a cast.
- */
-export type StageHandle = {
-	toDataURL: (config?: {
-		pixelRatio?: number;
-		mimeType?: string;
-		quality?: number;
-	}) => string;
-};
-
-export type ExportFormat = "png" | "json" | "svg" | "pdf";
 
 export interface CanvasEditorSurfaceProps {
 	initialIR: CanvasIR;
@@ -30,36 +16,14 @@ export interface CanvasEditorSurfaceProps {
 	/** Mirrors `<CanvasStudio onChange>`; the host persists + tracks the IR. */
 	onChange: (ir: CanvasIR) => void;
 	onActivePageChange: (pageId: string) => void;
-	onStageReady: (stage: StageHandle | null) => void;
 	/** Required by the `image` tool — resolves the asset id to place. */
 	onPickAsset: () => Promise<string>;
-	/** Export the active artboard in the given format (wired to the stage bar). */
-	onExport: (format: ExportFormat) => void;
-}
-
-const EXPORT_FORMATS: readonly ExportFormat[] = ["png", "json", "svg", "pdf"];
-
-/** Stage-bar export actions (reference Share/Publish slot). */
-function StageBarActions({
-	onExport,
-}: {
-	onExport: (format: ExportFormat) => void;
-}) {
-	return (
-		<div className="flex items-center gap-1.5" data-testid="canvas-export-bar">
-			{EXPORT_FORMATS.map((format) => (
-				<button
-					key={format}
-					type="button"
-					data-testid={`canvas-export-${format}`}
-					onClick={() => onExport(format)}
-					className="inline-flex h-7 items-center rounded-md border border-border px-2.5 text-xs font-medium text-foreground uppercase hover:bg-muted"
-				>
-					{format}
-				</button>
-			))}
-		</div>
-	);
+	/**
+	 * Header plugins rendered in the workspace header. The host passes the
+	 * built-in export popup here (wired with the SVG/PDF serializers from
+	 * `@anvilkit/plugin-export-canvas`).
+	 */
+	headerPlugins: readonly CanvasHeaderPlugin[];
 }
 
 /**
@@ -151,9 +115,10 @@ function HostSceneReadout() {
 /**
  * The reference editor, mounted behind the route's `ssr:false` dynamic
  * boundary. Renders the Canva-style `<CanvasWorkspace>` shell — the editor's
- * single supported layout. The host callbacks and the export bar wire through
- * it; the export bar rides the header `shareSlot` so the `canvas-export-*`
- * testids resolve, and the hidden E2E scene readout rides the host slot.
+ * single supported layout. Export now ships *inside* the editor as a header
+ * plugin (the `canvas-export-*` testids resolve off the header popover); the
+ * host only supplies the SVG/PDF serializers via `headerPlugins`. The hidden
+ * E2E scene readout rides the host slot.
  */
 export default function CanvasEditorSurface({
 	initialIR,
@@ -161,9 +126,8 @@ export default function CanvasEditorSurface({
 	brandKit,
 	onChange,
 	onActivePageChange,
-	onStageReady,
 	onPickAsset,
-	onExport,
+	headerPlugins,
 }: CanvasEditorSurfaceProps) {
 	return (
 		<CanvasWorkspace
@@ -174,8 +138,7 @@ export default function CanvasEditorSurface({
 			onPickAsset={onPickAsset}
 			onChange={(ir) => onChange(ir)}
 			onActivePageChange={onActivePageChange}
-			onStageReady={(stage) => onStageReady(stage)}
-			shareSlot={<StageBarActions onExport={onExport} />}
+			headerPlugins={headerPlugins}
 		>
 			<div className="sr-only">
 				<HostSceneReadout />

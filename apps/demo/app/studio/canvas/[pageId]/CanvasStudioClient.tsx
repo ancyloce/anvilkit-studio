@@ -6,8 +6,12 @@ import {
 	createCanvasIR,
 	createPage,
 } from "@anvilkit/canvas-core";
-import { createAiJobClient } from "@anvilkit/plugin-ai-image";
+import {
+	type BrandKit,
+	createCanvasExportPlugin,
+} from "@anvilkit/canvas-editor";
 import type { PostProcessUpload } from "@anvilkit/plugin-ai-image";
+import { createAiJobClient } from "@anvilkit/plugin-ai-image";
 import { AiImagePanel } from "@anvilkit/plugin-ai-image/react";
 import {
 	createAssetRegistry,
@@ -17,19 +21,12 @@ import {
 	type CanvasPersistenceAdapter,
 	localStorageCanvasAdapter,
 } from "@anvilkit/plugin-canvas-studio";
-import {
-	canvasToJson,
-	canvasToPdf,
-	canvasToPng,
-	canvasToSvg,
-} from "@anvilkit/plugin-export-canvas";
-import type { BrandKit } from "@anvilkit/canvas-editor";
+import { canvasToPdf, canvasToSvg } from "@anvilkit/plugin-export-canvas";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@anvilkit/canvas-editor/styles.css";
 import { selectAiImageProvider } from "../../../../lib/ai-image/provider-selection";
-import type { StageHandle } from "./CanvasEditorSurface";
 
 // The whole editor surface (CanvasStudio + Konva + the host toolbar/panels)
 // loads behind an ssr:false dynamic boundary so Konva and the canvas-editor
@@ -85,21 +82,6 @@ const noopAdapter: CanvasPersistenceAdapter = {
 	delete: () => undefined,
 };
 
-/** Trigger a browser download for an export result. */
-function downloadExport(
-	filename: string,
-	content: string | Uint8Array,
-	mimeType: string,
-): void {
-	const blob = new Blob([content as BlobPart], { type: mimeType });
-	const url = URL.createObjectURL(blob);
-	const anchor = document.createElement("a");
-	anchor.href = url;
-	anchor.download = filename;
-	anchor.click();
-	URL.revokeObjectURL(url);
-}
-
 export function CanvasStudioClient({ pageId }: { pageId: string }) {
 	const adapter = useMemo<CanvasPersistenceAdapter>(
 		() =>
@@ -146,51 +128,44 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 		[],
 	);
 
-	// I2-3 canvas export. The live Konva stage (captured via onStageReady)
-	// supplies the raster for PNG/PDF; SVG/JSON serialize the IR headlessly via
-	// @anvilkit/plugin-export-canvas. The active artboard is exported.
-	const stageRef = useRef<StageHandle | null>(null);
-	const currentIRRef = useRef<CanvasIR | null>(null);
-	const exportActive = useCallback(
-		async (format: "png" | "json" | "svg" | "pdf") => {
-			const ir = currentIRRef.current;
-			if (!ir) return;
-			const name = ir.title || pageId;
-			const activePage = activePageRef.current;
-			try {
-				if (format === "json") {
-					downloadExport(
-						`${name}.json`,
-						canvasToJson(ir, { pretty: true }),
-						"application/json",
-					);
-					return;
-				}
-				if (format === "svg") {
-					const { svg } = await canvasToSvg(ir, activePage);
-					downloadExport(`${name}.svg`, svg, "image/svg+xml");
-					return;
-				}
-				const stage = stageRef.current;
-				if (!stage) return;
-				const dataUrl = stage.toDataURL({
-					pixelRatio: 2,
-					mimeType: "image/png",
-				});
-				if (format === "png") {
-					downloadExport(`${name}.png`, canvasToPng(dataUrl), "image/png");
-					return;
-				}
-				const { pdf } = await canvasToPdf(ir, {
-					rasters: [{ pageId: activePage, image: dataUrl }],
-					pages: [activePage],
-				});
-				downloadExport(`${name}.pdf`, pdf, "application/pdf");
-			} catch (err) {
-				console.error("canvas export failed", err);
-			}
-		},
-		[pageId],
+	// I2-3 canvas export now ships *inside* the editor as a header plugin
+	// (`createCanvasExportPlugin`). PNG/JSON are built in (live stage + IR); the
+	// host only injects the SVG/PDF serializers from @anvilkit/plugin-export-canvas.
+	// The editor passes the live stage + active page through the exporter context,
+	// so no `onStageReady` wiring is needed here. Stable identity (module-level
+	// serializers) keeps the header from re-rendering.
+	const headerPlugins = useMemo(
+		() => [
+			createCanvasExportPlugin({
+				exporters: {
+					svg: async ({ ir, activePageId }) => {
+						const { svg } = await canvasToSvg(ir, activePageId);
+						return {
+							filename: `${ir.title || activePageId}.svg`,
+							data: svg,
+							mimeType: "image/svg+xml",
+						};
+					},
+					pdf: async ({ ir, activePageId, stage }) => {
+						if (!stage) throw new Error("PDF export needs a ready stage.");
+						const dataUrl = stage.toDataURL({
+							pixelRatio: 2,
+							mimeType: "image/png",
+						});
+						const { pdf } = await canvasToPdf(ir, {
+							rasters: [{ pageId: activePageId, image: dataUrl }],
+							pages: [activePageId],
+						});
+						return {
+							filename: `${ir.title || activePageId}.pdf`,
+							data: pdf,
+							mimeType: "application/pdf",
+						};
+					},
+				},
+			}),
+		],
+		[],
 	);
 
 	useEffect(() => {
@@ -199,7 +174,6 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 			const stored = await Promise.resolve(adapter.load(pageId));
 			if (cancelled) return;
 			const next = stored ?? makeBlankIR(pageId);
-			currentIRRef.current = next;
 			setInitialIR(next);
 		})();
 		return () => {
@@ -260,18 +234,12 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 						initialActivePageId={pageId}
 						brandKit={DEMO_BRAND_KIT}
 						onPickAsset={onPickAsset}
-						onExport={(format) => {
-							void exportActive(format);
-						}}
+						headerPlugins={headerPlugins}
 						onChange={(ir) => {
-							currentIRRef.current = ir;
 							adapter.save(pageId, ir);
 						}}
 						onActivePageChange={(id) => {
 							activePageRef.current = id;
-						}}
-						onStageReady={(stage) => {
-							stageRef.current = stage;
 						}}
 					/>
 				</div>
