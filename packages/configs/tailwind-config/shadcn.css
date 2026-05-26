@@ -3,6 +3,19 @@
 @import "shadcn/tailwind.css";
 
 /*
+ * Class-based dark mode. Tailwind v4 defaults the `dark:` variant to the
+ * `prefers-color-scheme: dark` media query, but shadcn flips design tokens
+ * under a `.dark` CLASS (see the `.dark { … }` block below). Without this
+ * declaration the two decouple: tokens follow the `.dark` class while
+ * `dark:` utilities follow the OS preference. Re-declaring `dark` as a class
+ * variant keeps them in lockstep and matches the same line in
+ * `@anvilkit/core` and `@anvilkit/canvas-editor`. Zero-specificity `:where()`
+ * lets a host theme win; the selector covers the `.dark` element itself plus
+ * its descendants.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
  * Scan compiled output of every `@anvilkit/*` workspace package for
  * Tailwind utility class strings. Paths resolve relative to this file
  * at `packages/configs/tailwind-config/shadcn.css`, so `../../<pkg>/dist`
