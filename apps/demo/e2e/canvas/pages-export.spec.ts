@@ -17,7 +17,7 @@ async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 	await expect(page.getByTestId("canvas-studio-mount")).toBeVisible({
 		timeout: 30_000,
 	});
-	await expect(page.getByTestId("canvas-host-toolbar")).toBeVisible({
+	await expect(page.getByTestId("canvas-workspace-root")).toBeVisible({
 		timeout: 30_000,
 	});
 }
@@ -27,19 +27,29 @@ test.describe("Canvas Studio — pages + export (PRD §9.2)", () => {
 		page,
 	}) => {
 		await gotoCanvas(page, `e2e-pages-${Date.now()}`);
-		const tabs = page.locator('[data-testid^="page-tab-"]');
-		await expect(tabs).toHaveCount(1);
+		// The workspace shell stacks artboards as `page-row-<id>` cards.
+		const rows = page.locator('[data-testid^="page-row-"]');
+		await expect(rows).toHaveCount(1);
 
 		// Add a second artboard; it becomes active.
 		await page.getByTestId("page-add").click();
-		await expect(tabs).toHaveCount(2);
+		await expect(rows).toHaveCount(2);
+		const activeRow = page.locator(
+			'[data-testid^="page-row-"][data-active="true"]',
+		);
+		await expect(activeRow).toHaveCount(1);
 
-		// Reorder the active page left, then delete the first; one remains.
-		await page.getByTestId("page-reorder-left").click();
-		await page.getByTestId("page-delete").click();
-		await expect(tabs).toHaveCount(1);
+		// Reorder the active page up, then delete it; one remains active. The
+		// reorder/delete controls are per-row and id-scoped, so reach them through
+		// the active row rather than by a fixed id.
+		await activeRow.locator('[data-testid^="page-reorder-up-"]').click();
+		await page
+			.locator('[data-testid^="page-row-"][data-active="true"]')
+			.locator('[data-testid^="page-delete-"]')
+			.click();
+		await expect(rows).toHaveCount(1);
 		await expect(
-			page.locator('[data-testid^="page-tab-"][data-active="true"]'),
+			page.locator('[data-testid^="page-row-"][data-active="true"]'),
 		).toHaveCount(1);
 	});
 
@@ -66,7 +76,7 @@ test.describe("Canvas Studio — pages + export (PRD §9.2)", () => {
 		expect(jsonPath ? statSync(jsonPath).size : 0).toBeGreaterThan(0);
 
 		await page.reload();
-		await expect(page.getByTestId("canvas-host-toolbar")).toBeVisible({
+		await expect(page.getByTestId("canvas-workspace-root")).toBeVisible({
 			timeout: 30_000,
 		});
 		// The localStorage adapter (namespace "demo-canvas") rehydrates the IR

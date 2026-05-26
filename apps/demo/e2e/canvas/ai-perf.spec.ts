@@ -26,7 +26,9 @@ async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 	await expect(page.getByTestId("canvas-studio-mount")).toBeVisible({
 		timeout: 30_000,
 	});
-	await expect(page.getByTestId("canvas-host-toolbar")).toBeVisible({
+	// The `<CanvasWorkspace>` shell surfaces only after the ssr:false editor
+	// surface finishes its (Konva-bearing) dynamic import.
+	await expect(page.getByTestId("canvas-workspace-root")).toBeVisible({
 		timeout: 30_000,
 	});
 }
@@ -109,11 +111,11 @@ test.describe("Canvas Studio — AI + perf (PRD §9.2)", () => {
 		await expect(page.getByTestId("canvas-node-count")).toHaveText("200");
 
 		// Pan with the hand tool; assert the gesture completes within a coarse
-		// time budget (proxy for "stays responsive" — not a true FPS trace).
-		await page.getByTestId("host-tool-hand").click();
-		const canvas = page
-			.locator('[data-testid="canvas-studio-root"] canvas')
-			.first();
+		// time budget (proxy for "stays responsive" — not a true FPS trace). The
+		// drawing tools live in the workspace shell's Elements panel.
+		await page.getByTestId("panel-dock-elements").click();
+		await page.getByTestId("elements-tool-hand").click();
+		const canvas = page.locator('[data-testid="pages-canvas"] canvas').first();
 		const box = await canvas.boundingBox();
 		if (!box) throw new Error("stage canvas not found");
 		const started = Date.now();

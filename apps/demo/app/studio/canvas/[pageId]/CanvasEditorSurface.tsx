@@ -3,14 +3,9 @@
 import type { CanvasIR } from "@anvilkit/canvas-core";
 import {
 	type BrandKit,
-	CanvasEditor,
 	CanvasWorkspace,
-	TOOL_RAIL_ITEMS,
-	type ToolDescriptor,
-	type ToolId,
 	useCanvasStudio,
 } from "@anvilkit/canvas-editor";
-import { useSearchParams } from "next/navigation";
 import { useSyncExternalStore } from "react";
 
 /**
@@ -42,22 +37,6 @@ export interface CanvasEditorSurfaceProps {
 	onExport: (format: ExportFormat) => void;
 }
 
-// The drawing tools surfaced in the rail. Pen/AI tools are exercised elsewhere
-// (the AI panel), so the demo rail mirrors the original host palette. The rail
-// keeps the `host-tool-${id}` testids the E2E suite drives.
-const HOST_TOOL_IDS: readonly ToolId[] = [
-	"select",
-	"text",
-	"rect",
-	"ellipse",
-	"line",
-	"image",
-	"hand",
-];
-const HOST_TOOLS: readonly ToolDescriptor[] = TOOL_RAIL_ITEMS.filter((t) =>
-	HOST_TOOL_IDS.includes(t.id),
-);
-
 const EXPORT_FORMATS: readonly ExportFormat[] = ["png", "json", "svg", "pdf"];
 
 /** Stage-bar export actions (reference Share/Publish slot). */
@@ -86,8 +65,8 @@ function StageBarActions({
 /**
  * Machine-readable scene readout + imperative controls for the Playwright
  * suite (PRD §9.2). The reference editor shows none of this, so it rides along
- * visually-hidden via `<CanvasEditor>`'s host slot; assertions read it off the
- * DOM (`canvas-ir-debug`) without reaching into Konva.
+ * visually-hidden via `<CanvasWorkspace>`'s host slot; assertions read it off
+ * the DOM (`canvas-ir-debug`) without reaching into Konva.
  */
 function HostSceneReadout() {
 	const ctx = useCanvasStudio();
@@ -171,11 +150,10 @@ function HostSceneReadout() {
 
 /**
  * The reference editor, mounted behind the route's `ssr:false` dynamic
- * boundary. Defaults to the 4-column `<CanvasEditor>` shell; opt into the
- * Canva-style `<CanvasWorkspace>` shell with `?shell=workspace` (PRD 0006,
- * non-breaking). Both share the host callbacks, the export bar, and the hidden
- * E2E scene readout — under the workspace shell the export bar rides the
- * header `shareSlot` so the `canvas-export-*` testids still resolve.
+ * boundary. Renders the Canva-style `<CanvasWorkspace>` shell — the editor's
+ * single supported layout. The host callbacks and the export bar wire through
+ * it; the export bar rides the header `shareSlot` so the `canvas-export-*`
+ * testids resolve, and the hidden E2E scene readout rides the host slot.
  */
 export default function CanvasEditorSurface({
 	initialIR,
@@ -187,43 +165,21 @@ export default function CanvasEditorSurface({
 	onPickAsset,
 	onExport,
 }: CanvasEditorSurfaceProps) {
-	const useWorkspaceShell = useSearchParams().get("shell") === "workspace";
-
-	if (useWorkspaceShell) {
-		return (
-			<CanvasWorkspace
-				initialIR={initialIR}
-				initialActivePageId={initialActivePageId}
-				storeId={initialActivePageId}
-				brandKit={brandKit}
-				onPickAsset={onPickAsset}
-				onChange={(ir) => onChange(ir)}
-				onActivePageChange={onActivePageChange}
-				onStageReady={(stage) => onStageReady(stage)}
-				shareSlot={<StageBarActions onExport={onExport} />}
-			>
-				<div className="sr-only">
-					<HostSceneReadout />
-				</div>
-			</CanvasWorkspace>
-		);
-	}
-
 	return (
-		<CanvasEditor
+		<CanvasWorkspace
 			initialIR={initialIR}
 			initialActivePageId={initialActivePageId}
+			storeId={initialActivePageId}
 			brandKit={brandKit}
 			onPickAsset={onPickAsset}
 			onChange={(ir) => onChange(ir)}
 			onActivePageChange={onActivePageChange}
 			onStageReady={(stage) => onStageReady(stage)}
-			tools={HOST_TOOLS}
-			toolTestId={(id) => `host-tool-${id}`}
-			toolRailTestId="canvas-host-toolbar"
-			stageBarActions={<StageBarActions onExport={onExport} />}
+			shareSlot={<StageBarActions onExport={onExport} />}
 		>
-			<HostSceneReadout />
-		</CanvasEditor>
+			<div className="sr-only">
+				<HostSceneReadout />
+			</div>
+		</CanvasWorkspace>
 	);
 }

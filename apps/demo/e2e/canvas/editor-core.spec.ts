@@ -2,11 +2,11 @@ import { expect, type Page, test } from "@playwright/test";
 
 /**
  * PRD §9.2 scenarios 1–3 — authoring on the standalone canvas route
- * (`/studio/canvas/<id>`). The route mounts `<CanvasStudio>` with a host
- * toolbar + `<LayerPanel>`/`<PropertyInspector>` (task I3-5) so tool selection,
- * node creation, multi-select move, and undo are all drivable through real DOM
- * + real Konva pointer events. Assertions read the host's machine-readable
- * scene readout (`canvas-ir-debug`) rather than reaching into the canvas.
+ * (`/studio/canvas/<id>`). The route mounts the `<CanvasWorkspace>` shell —
+ * Elements-panel tools + Property inspector — so tool selection, node creation,
+ * multi-select move, and undo are all drivable through real DOM + real Konva
+ * pointer events. Assertions read the host's machine-readable scene readout
+ * (`canvas-ir-debug`) rather than reaching into the canvas.
  *
  * BLOCKED (test.fixme) — react-konva `<Stage>` does not render its canvas under
  * React 19.2.6 / Next 16. The editor mounts the host UI + container `<div>`, but
@@ -57,25 +57,26 @@ async function gotoCanvas(page: Page, pageId: string): Promise<void> {
 	await expect(page.getByTestId("canvas-studio-mount")).toBeVisible({
 		timeout: 30_000,
 	});
-	// The host toolbar lives inside <CanvasStudio>, so it surfaces only after the
-	// ssr:false editor surface finishes its (Konva-bearing) dynamic import.
-	await expect(page.getByTestId("canvas-host-toolbar")).toBeVisible({
+	// The `<CanvasWorkspace>` shell surfaces only after the ssr:false editor
+	// surface finishes its (Konva-bearing) dynamic import.
+	await expect(page.getByTestId("canvas-workspace-root")).toBeVisible({
 		timeout: 30_000,
 	});
+	// The drawing tools live in the workspace shell's Elements panel; open it
+	// once so `selectTool` can reach the `elements-tool-*` buttons.
+	await page.getByTestId("panel-dock-elements").click();
 }
 
 async function selectTool(page: Page, tool: string): Promise<void> {
-	await page.getByTestId(`host-tool-${tool}`).click();
-	await expect(page.getByTestId(`host-tool-${tool}`)).toHaveAttribute(
+	await page.getByTestId(`elements-tool-${tool}`).click();
+	await expect(page.getByTestId(`elements-tool-${tool}`)).toHaveAttribute(
 		"data-active",
 		"true",
 	);
 }
 
 async function stageBox(page: Page) {
-	const canvas = page
-		.locator('[data-testid="canvas-studio-root"] canvas')
-		.first();
+	const canvas = page.locator('[data-testid="pages-canvas"] canvas').first();
 	const box = await canvas.boundingBox();
 	if (!box) throw new Error("canvas stage not found");
 	return box;
