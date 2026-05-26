@@ -258,141 +258,145 @@ export function PageRow({
 	}
 
 	return (
-		<li
-			ref={setNodeRef}
-			style={sortableStyle}
-			role="listitem"
-			className="group/page-row relative"
-		>
-			<Item
-				size="xs"
-				render={
-					<Button
-						type="button"
-						variant="ghost"
-						onClick={() => onSelect(page.id)}
-						aria-current={page.active === true ? "page" : undefined}
-						data-active={page.active === true ? "true" : undefined}
-						data-testid={`ak-layer-page-row-${page.id}`}
-					/>
-				}
-				className={cn(
-					"h-6 gap-2 rounded-sm border-0 px-2 py-0 text-left text-xs font-normal",
-					"text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
-					"hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))]",
-					"focus-visible:ring-2 focus-visible:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
-					"data-[active=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[active=true]:text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
-					hasAnyAction ? "pr-7" : "",
-					canReorder ? "pl-1" : "",
-				)}
-			>
-				{canReorder ? (
-					<Button
-						{...attributes}
-						{...listeners}
-						ref={setActivatorNodeRef}
-						type="button"
-						variant="ghost"
-						size="icon-xs"
-						aria-label={msg("studio.module.layer.pages.tree.dragHandle")}
-						data-testid={`ak-layer-page-row-${page.id}-drag-handle`}
-						className="-ml-1 flex h-4 w-3 cursor-grab items-center justify-center text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))] opacity-0 group-hover/page-row:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
-						onClick={(event) => event.stopPropagation()}
-					>
-						<GripVertical className="size-3" aria-hidden="true" />
-					</Button>
-				) : null}
-				<ItemMedia
-					variant="icon"
-					className="text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))]"
-				>
-					{icon}
-				</ItemMedia>
-				<span className="min-w-0 flex-1 truncate">{label}</span>
-			</Item>
-			{hasAnyAction ? (
-				<div className="pointer-events-none absolute top-1/2 right-1 -translate-y-1/2 opacity-0 transition-opacity group-hover/page-row:opacity-100 group-focus-within/page-row:opacity-100 data-[menu-open=true]:opacity-100">
-					<DropdownMenu>
-						<DropdownMenuTrigger
-							render={
-								<Button
-									size="icon-xs"
-									variant="ghost"
-									aria-label={msg("studio.module.layer.pages.menu.trigger")}
-									data-testid={`ak-layer-page-row-${page.id}-menu`}
-									className="pointer-events-auto h-5 w-5 text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))] hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] hover:text-[var(--ak-pages-fg,var(--ak-studio-fg))]"
-								/>
-							}
-						>
-							<MoreHorizontal aria-hidden="true" />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent
-							align="end"
-							sideOffset={4}
-							data-testid={`ak-layer-page-row-${page.id}-menu-popup`}
-						>
-							{canRename ? (
-								<DropdownMenuItem
-									onClick={startRename}
-									data-testid={`ak-layer-page-row-${page.id}-menu-rename`}
-								>
-									<Pencil aria-hidden="true" />
-									<span>{msg("studio.module.layer.pages.menu.rename")}</span>
-								</DropdownMenuItem>
-							) : null}
-							{canDuplicate ? (
-								<DropdownMenuItem
-									disabled={duplicating}
-									onClick={() => {
-										void handleDuplicate();
-									}}
-									data-testid={`ak-layer-page-row-${page.id}-menu-duplicate`}
-								>
-									<Copy aria-hidden="true" />
-									<span>{msg("studio.module.layer.pages.menu.duplicate")}</span>
-								</DropdownMenuItem>
-							) : null}
-							{canSettings ? (
-								<DropdownMenuItem
-									onClick={() => setSettingsOpen(true)}
-									data-testid={`ak-layer-page-row-${page.id}-menu-settings`}
-								>
-									<span>{msg("studio.module.layer.pages.menu.settings")}</span>
-								</DropdownMenuItem>
-							) : null}
-							{canDelete && (canRename || canSettings) ? (
-								<DropdownMenuSeparator />
-							) : null}
-							{canDelete ? (
-								<DropdownMenuItem
-									variant="destructive"
-									onClick={() => setConfirmingDelete(true)}
-									data-testid={`ak-layer-page-row-${page.id}-menu-delete`}
-								>
-									<Trash2 aria-hidden="true" />
-									<span>{msg("studio.module.layer.pages.menu.delete")}</span>
-								</DropdownMenuItem>
-							) : null}
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-			) : null}
-			{canDelete ? (
-				<PageDeleteConfirmDialog
-					open={confirmingDelete}
-					onOpenChange={setConfirmingDelete}
-					page={page}
-					onConfirm={handleDeleteConfirm}
-				/>
-			) : null}
-			{canSettings && typeof onUpdateSettings === "function" ? (
-				<PageSettingsDialog
-					open={settingsOpen}
-					onOpenChange={setSettingsOpen}
-					page={page}
-					onSubmit={onUpdateSettings}
-				/>
-			) : null}
-		</li>
-	);
+    <li
+      ref={setNodeRef}
+      style={sortableStyle}
+      role="listitem"
+      className="group/page-row relative"
+    >
+      <Item
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => onSelect(page.id)}
+            aria-current={page.active === true ? "page" : undefined}
+            data-active={page.active === true ? "true" : undefined}
+            data-testid={`ak-layer-page-row-${page.id}`}
+          />
+        }
+        className={cn(
+          "h-7 rounded-sm border-0 px-2 py-0 text-left text-xs font-normal",
+          "text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
+          "hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))]",
+          "focus-visible:ring-2 focus-visible:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
+          "data-[active=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[active=true]:text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
+          hasAnyAction ? "pr-7" : "",
+          canReorder ? "pl-6" : "",
+        )}
+      >
+        <ItemMedia
+          variant="icon"
+          className="text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))]"
+        >
+          {icon}
+        </ItemMedia>
+        <span className="min-w-0 flex-1 truncate">{label}</span>
+      </Item>
+      {canReorder ? (
+        // The drag handle is a sibling of the select control — not a
+        // child of it — so we never nest one <button> inside another
+        // (invalid HTML / hydration error). Mirrors the overflow-menu
+        // overlay on the right.
+        <div className="pointer-events-none absolute top-1/2 left-1 -translate-y-1/2 opacity-0 transition-opacity group-hover/page-row:opacity-100 group-focus-within/page-row:opacity-100">
+          <Button
+            {...attributes}
+            {...listeners}
+            ref={setActivatorNodeRef}
+            type="button"
+            variant="ghost"
+            size="icon-xs"
+            aria-label={msg("studio.module.layer.pages.tree.dragHandle")}
+            data-testid={`ak-layer-page-row-${page.id}-drag-handle`}
+            className="pointer-events-auto flex h-4 w-3 cursor-grab items-center justify-center text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))] active:cursor-grabbing"
+          >
+            <GripVertical className="size-3" aria-hidden="true" />
+          </Button>
+        </div>
+      ) : null}
+      {hasAnyAction ? (
+        <div className="pointer-events-none absolute top-1/2 right-1 -translate-y-1/2 opacity-0 transition-opacity group-hover/page-row:opacity-100 group-focus-within/page-row:opacity-100 data-[menu-open=true]:opacity-100">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  size="icon-xs"
+                  variant="ghost"
+                  aria-label={msg("studio.module.layer.pages.menu.trigger")}
+                  data-testid={`ak-layer-page-row-${page.id}-menu`}
+                  className="pointer-events-auto h-5 w-5 text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))] hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] hover:text-[var(--ak-pages-fg,var(--ak-studio-fg))]"
+                />
+              }
+            >
+              <MoreHorizontal aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              sideOffset={4}
+              data-testid={`ak-layer-page-row-${page.id}-menu-popup`}
+            >
+              {canRename ? (
+                <DropdownMenuItem
+                  onClick={startRename}
+                  data-testid={`ak-layer-page-row-${page.id}-menu-rename`}
+                >
+                  <Pencil aria-hidden="true" />
+                  <span>{msg("studio.module.layer.pages.menu.rename")}</span>
+                </DropdownMenuItem>
+              ) : null}
+              {canDuplicate ? (
+                <DropdownMenuItem
+                  disabled={duplicating}
+                  onClick={() => {
+                    void handleDuplicate();
+                  }}
+                  data-testid={`ak-layer-page-row-${page.id}-menu-duplicate`}
+                >
+                  <Copy aria-hidden="true" />
+                  <span>{msg("studio.module.layer.pages.menu.duplicate")}</span>
+                </DropdownMenuItem>
+              ) : null}
+              {canSettings ? (
+                <DropdownMenuItem
+                  onClick={() => setSettingsOpen(true)}
+                  data-testid={`ak-layer-page-row-${page.id}-menu-settings`}
+                >
+                  <span>{msg("studio.module.layer.pages.menu.settings")}</span>
+                </DropdownMenuItem>
+              ) : null}
+              {canDelete && (canRename || canSettings) ? (
+                <DropdownMenuSeparator />
+              ) : null}
+              {canDelete ? (
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => setConfirmingDelete(true)}
+                  data-testid={`ak-layer-page-row-${page.id}-menu-delete`}
+                >
+                  <Trash2 aria-hidden="true" />
+                  <span>{msg("studio.module.layer.pages.menu.delete")}</span>
+                </DropdownMenuItem>
+              ) : null}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ) : null}
+      {canDelete ? (
+        <PageDeleteConfirmDialog
+          open={confirmingDelete}
+          onOpenChange={setConfirmingDelete}
+          page={page}
+          onConfirm={handleDeleteConfirm}
+        />
+      ) : null}
+      {canSettings && typeof onUpdateSettings === "function" ? (
+        <PageSettingsDialog
+          open={settingsOpen}
+          onOpenChange={setSettingsOpen}
+          page={page}
+          onSubmit={onUpdateSettings}
+        />
+      ) : null}
+    </li>
+  );
 }
