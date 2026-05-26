@@ -19,6 +19,7 @@
 
 import { createContext, type ReactNode, useContext, useMemo } from "react";
 
+import { useSourceList } from "@/layout/sidebar/modules/layer/use-source-list";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { StudioPage, StudioPagesSource } from "@/types/pages";
 
@@ -83,4 +84,23 @@ export function useStudioPagesSourceOrDefault(): StudioPagesSource {
 		};
 		return { list: () => [defaultPage] };
 	}, [source, msg]);
+}
+
+/**
+ * Read the host's currently-active page — the first row the source marks
+ * `active: true` — or `null` when there is no source, no active row, or
+ * the list has not resolved yet.
+ *
+ * Reads the *raw* source (via {@link useStudioPagesSource}) rather than
+ * the synthetic-default variant, so hosts that pass no `pages` prop yield
+ * `null` and consumers keep their own fallback. Subscribes through
+ * {@link useSourceList} so the value tracks live `onSelect` changes.
+ *
+ * Used by the header breadcrumb to show the active page's title in place
+ * of the static "Untitled file" label.
+ */
+export function useActivePage(): StudioPage | null {
+	const source = useStudioPagesSource();
+	const { items } = useSourceList<StudioPage>(source);
+	return items.find((page) => page.active === true) ?? null;
 }
