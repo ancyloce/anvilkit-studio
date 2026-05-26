@@ -13,6 +13,11 @@ import {
 	componentConfig as buttonComponentConfig,
 	defaultProps as buttonDefaultProps,
 } from "@anvilkit/button";
+import type {
+	StudioPlugin,
+	StudioPluginMeta,
+	StudioSidebarUnregister,
+} from "@anvilkit/core";
 import {
 	type DesignBlockProps,
 	componentConfig as designBlockComponentConfig,
@@ -57,11 +62,6 @@ import {
 	componentConfig as statisticsComponentConfig,
 	defaultProps as statisticsDefaultProps,
 } from "@anvilkit/statistics";
-import type {
-	StudioPlugin,
-	StudioPluginMeta,
-	StudioSidebarUnregister,
-} from "@anvilkit/core";
 import type { Config, Data } from "@puckeditor/core";
 
 import { demoCopySnippetPack } from "./demo-copy-snippet-pack";
@@ -376,7 +376,10 @@ export const demoLayerQuickAddPlugin: StudioPlugin = {
 									type: "insert",
 									componentType: "Hero",
 									destinationIndex: puckApi.appState.data.content.length,
-									destinationZone: "default-zone",
+									// Puck keys root content under "root:default-zone"; a bare
+									// "default-zone" never matches the root zone, so the insert
+									// would silently no-op.
+									destinationZone: "root:default-zone",
 								});
 							},
 						}) ?? null;

@@ -15,10 +15,17 @@
  * registry subscription in `SidebarRail.tsx`.
  */
 
-import { lazyPlugin } from "@anvilkit/core";
 import type { StudioPlugin } from "@anvilkit/core";
+import { lazyPlugin } from "@anvilkit/core";
 import { Frame, History, Images } from "lucide-react";
 import { createElement } from "react";
+
+// Demo host image for the Canvas Studio overlay's `image` tool. A 1×1
+// transparent PNG seeded into every opened design so a placed image resolves
+// to renderable bytes (the standalone /studio/canvas route uses the same id).
+const HOST_IMAGE_ASSET_ID = "demo-host-image";
+const HOST_IMAGE_DATA_URL =
+	"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
 
 /**
  * Lazy-loaded asset-manager plugin. The
@@ -92,7 +99,21 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 						delete: () => undefined,
 					}
 				: mod.localStorageCanvasAdapter({ namespace: "demo-canvas" });
-		return mod.createCanvasStudioPlugin({ adapter });
+		return mod.createCanvasStudioPlugin({
+			adapter,
+			// Demo image picker: the editor's `image` tool resolves this to an
+			// asset id and places a node referencing it. We return a fixed host
+			// image and seed it into every opened design (mirrors the standalone
+			// /studio/canvas route) so placing an image needs no picker UI and
+			// always resolves to renderable bytes.
+			onPickAsset: async () => HOST_IMAGE_ASSET_ID,
+			seedAssets: {
+				[HOST_IMAGE_ASSET_ID]: {
+					id: HOST_IMAGE_ASSET_ID,
+					uri: HOST_IMAGE_DATA_URL,
+				},
+			},
+		});
 	},
 	{
 		id: "@anvilkit/plugin-canvas-studio",
