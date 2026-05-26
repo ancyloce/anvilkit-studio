@@ -5,6 +5,7 @@ import type { StudioPlugin } from "@anvilkit/core";
 import type {
 	ExportWarning,
 	PageIR,
+	StudioPage,
 	StudioPluginContext,
 } from "@anvilkit/core/types";
 import { puckDataToIR } from "@anvilkit/ir";
@@ -44,10 +45,18 @@ import { createDemoVersionHistoryPlugins } from "../../../lib/history-sidebar-pl
 import { lazyCanvasStudioPlugin } from "../../../lib/lazy-plugins";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import {
+	type ChangeEvent,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import {
 	createDemoData,
 	createDemoModeHref,
+	createDemoPagesData,
 	demoCopySnippetPlugin,
 	demoLayerQuickAddPlugin,
 	type DemoComponents,
@@ -408,6 +417,48 @@ export default function PuckEditorPage() {
 	// active-page state survives re-renders. The source itself owns
 	// active-page tracking and re-emits via `subscribe()` on `onSelect`.
 	const pagesSource = useMemo(() => createDemoPagesSource(), []);
+
+	// Per-page canvas content for the layer sidebar. The source owns which
+	// page is active; this map owns each page's Puck document. Clicking a
+	// row fires `source.onSelect` → `subscribe()` → the effect below swaps
+	// `publishedData` to the selected page and remounts `<Studio>` (via the
+	// `key` prop) so Puck re-initializes with the new document. The header
+	// breadcrumb title updates independently in core (it reads the same
+	// source's `active` flag).
+	const pageDataMapRef = useRef<Record<string, Data<DemoComponents>>>(
+		createDemoPagesData(),
+	);
+	// The demo source's `list()` is synchronous; the union return type from
+	// `StudioPagesSource` is narrowed with a cast here.
+	const readActivePageId = useCallback((): string => {
+		const list = pagesSource.list() as readonly StudioPage[];
+		return list.find((page) => page.active)?.id ?? list[0]?.id ?? "home";
+	}, [pagesSource]);
+	const activePageIdRef = useRef<string>(readActivePageId());
+	const [activePageId, setActivePageId] = useState<string>(
+		activePageIdRef.current,
+	);
+
+	useEffect(() => {
+		const syncActivePage = (): void => {
+			const next = readActivePageId();
+			const prev = activePageIdRef.current;
+			if (next === prev) return;
+			// Stash the outgoing page's current document, then load the
+			// incoming one (falling back to the default showcase for pages
+			// created at runtime). The functional updater reads the latest
+			// `publishedData` without re-subscribing on every edit.
+			setPublishedData((current) => {
+				pageDataMapRef.current[prev] = current;
+				return pageDataMapRef.current[next] ?? createDemoData();
+			});
+			activePageIdRef.current = next;
+			setActivePageId(next);
+		};
+		syncActivePage();
+		const unsubscribe = pagesSource.subscribe?.(syncActivePage);
+		return () => unsubscribe?.();
+	}, [pagesSource, readActivePageId]);
 
 	// Transport bundle: host owns the `Y.Doc`, `Awareness`, and (for the
 	// relay path) the `WebsocketProvider`. The adapter is constructed
@@ -1022,6 +1073,15 @@ export default function PuckEditorPage() {
 				  collab-off paths.
 				*/}
 				<Studio
+					// Remount on page switch so Puck re-initializes its draft
+					// from the newly selected page's `data` (Puck owns its
+					// internal document state after mount; a prop change alone
+					// would not reset it). A *stable* `storeId` keeps the
+					// persisted editor UI slice (active rail tab, viewport)
+					// keyed consistently so it rehydrates across the remount
+					// instead of resetting to defaults.
+					key={activePageId}
+					storeId="demo-editor"
 					puckConfig={editorDemoConfig as unknown as Config}
 					data={publishedData}
 					plugins={plugins}
@@ -1042,10 +1102,10 @@ export default function PuckEditorPage() {
 					<h2>Published data snapshot</h2>
 					<p>
 						The editor keeps its own draft state; this snapshot updates when you
-						publish.
+						publish or switch the active page.
 					</p>
 				</div>
-				<pre className={styles.codeBlock}>
+				<pre className={styles.codeBlock} data-testid="ak-demo-data-snapshot">
 					{JSON.stringify(publishedData, null, 2)}
 				</pre>
 			</section>

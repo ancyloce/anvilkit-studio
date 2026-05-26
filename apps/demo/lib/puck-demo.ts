@@ -216,6 +216,88 @@ export function createDemoData(): Data<DemoComponents> {
 	};
 }
 
+/**
+ * Per-page Puck documents for the demo's multi-page layer sidebar, keyed
+ * by the seed page ids in `createDemoPagesSource` (`lib/demo-pages-source`).
+ *
+ * Each page gets a visually distinct composition so selecting a row in the
+ * sidebar obviously swaps the canvas. `home` reuses the full
+ * {@link createDemoData} showcase; the others are lighter single-purpose
+ * layouts (navbar + one hero/feature block). Pages created at runtime, or
+ * any id missing here, fall back to {@link createDemoData} at the call site.
+ */
+export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
+	return {
+		home: createDemoData(),
+		list: {
+			root: {},
+			content: [
+				{ type: "Navbar", props: { id: "list-navbar", ...navbarDefaultProps } },
+				{
+					type: "BlogList",
+					props: { id: "list-blog", ...blogListDefaultProps },
+				},
+			],
+		},
+		team: {
+			root: {},
+			content: [
+				{ type: "Navbar", props: { id: "team-navbar", ...navbarDefaultProps } },
+				{
+					type: "Statistics",
+					props: { id: "team-stats", ...statisticsDefaultProps },
+				},
+			],
+		},
+		about: {
+			root: {},
+			content: [
+				{
+					type: "Navbar",
+					props: { id: "about-navbar", ...navbarDefaultProps },
+				},
+				{ type: "Helps", props: { id: "about-helps", ...helpsDefaultProps } },
+			],
+		},
+		profile: {
+			root: {},
+			content: [
+				{
+					type: "Navbar",
+					props: { id: "profile-navbar", ...navbarDefaultProps },
+				},
+				{ type: "Hero", props: { id: "profile-hero", ...heroDefaultProps } },
+			],
+		},
+		items: {
+			root: {},
+			content: [
+				{
+					type: "Navbar",
+					props: { id: "items-navbar", ...navbarDefaultProps },
+				},
+				{
+					type: "BentoGrid",
+					props: { id: "items-bento", ...bentoGridDefaultProps },
+				},
+			],
+		},
+		product: {
+			root: {},
+			content: [
+				{
+					type: "Navbar",
+					props: { id: "product-navbar", ...navbarDefaultProps },
+				},
+				{
+					type: "PricingMinimal",
+					props: { id: "product-pricing", ...pricingMinimalDefaultProps },
+				},
+			],
+		},
+	};
+}
+
 function getSerializedDemoData(data: Data<DemoComponents>) {
 	return JSON.stringify(data);
 }

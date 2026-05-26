@@ -98,9 +98,45 @@ test.describe("Pages panel — multi-page management", () => {
 		await page.getByTestId(ADD_BUTTON_TESTID).click({ force: true });
 		await page.getByTestId("ak-layer-add-page-title").fill("QA Demo Page");
 		await page.getByTestId("ak-layer-add-page-submit").click({ force: true });
-		await expect(page.getByText("QA Demo Page", { exact: true })).toBeVisible({
+		// Scope to the pages list: a created page becomes active, so its
+		// title now also appears in the header breadcrumb
+		// (`ak-studio-breadcrumb-file`). Asserting within the panel keeps
+		// this test about "the new row appears in the list".
+		await expect(
+			page
+				.getByTestId("ak-layer-pages")
+				.getByText("QA Demo Page", { exact: true }),
+		).toBeVisible({
 			timeout: 5_000,
 		});
+	});
+
+	test("select — activates the row and updates the header breadcrumb title", async ({
+		page,
+	}) => {
+		await gotoEditor(page);
+		const breadcrumb = page.getByTestId("ak-studio-breadcrumb-file");
+		// Home is the seed active page, so the breadcrumb starts on its title.
+		await expect(breadcrumb).toHaveText("Home");
+
+		// Clicking a row fires `onSelect` → the demo source marks it active
+		// → core's breadcrumb reflects the new active page and the demo
+		// swaps the canvas document (remounting <Studio> via `key`).
+		// The snapshot mirrors the active page's Puck document. Home seeds
+		// the full showcase (contains `hero-primary`); About seeds a lighter
+		// navbar + Helps layout (contains `about-helps`).
+		const snapshot = page.getByTestId("ak-demo-data-snapshot");
+		await expect(snapshot).toContainText("hero-primary");
+
+		await page.getByTestId(row("about")).click({ force: true });
+		await expect(page.getByTestId(row("about"))).toHaveAttribute(
+			"aria-current",
+			"page",
+		);
+		await expect(breadcrumb).toHaveText("About");
+		// Canvas content actually swapped to About's document.
+		await expect(snapshot).toContainText("about-helps");
+		await expect(snapshot).not.toContainText("hero-primary");
 	});
 
 	test("rename — Enter commits and the label updates", async ({ page }) => {
