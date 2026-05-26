@@ -23,6 +23,7 @@ import {
 	Home,
 	MoreHorizontal,
 	Pencil,
+	Settings,
 	Trash2,
 } from "lucide-react";
 import {
@@ -370,6 +371,7 @@ export function PageRow({
                   data-testid={`ak-layer-page-row-${page.id}-menu-settings`}
                   className="gap-2.5 px-2.5 py-2"
                 >
+                  <Settings aria-hidden="true" />
                   <span>{msg("studio.module.layer.pages.menu.settings")}</span>
                 </DropdownMenuItem>
               ) : null}
