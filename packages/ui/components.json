@@ -13,9 +13,9 @@
   "menuColor": "default",
   "menuAccent": "subtle",
   "aliases": {
-    "components": "@anvilkit/ui",
+    "components": "@ui-src",
     "utils": "@anvilkit/ui/lib/utils",
-    "ui": "@anvilkit/ui",
+    "ui": "@ui-src",
     "lib": "@anvilkit/ui/lib",
     "hooks": "@anvilkit/ui/hooks"
   },

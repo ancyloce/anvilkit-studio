@@ -8,6 +8,12 @@
 		"outDir": "dist",
 		"rootDir": "src",
 		"paths": {
+			// Source-only alias for shadcn write targets. Distinct from the
+			// published `@anvilkit/ui` name so it is NOT shadowed by the
+			// package `exports` self-reference (which resolves into ./dist).
+			// shadcn falls back to these tsconfig paths → files land in src/.
+			"@ui-src": ["src"],
+			"@ui-src/*": ["src/*"],
 			"@anvilkit/ui": ["src"],
 			"@anvilkit/ui/*": ["src/*"],
 			"@anvilkit/ui/hooks": ["src/hooks"],
