@@ -52,7 +52,7 @@ test.describe("Canvas Studio — Puck bridge (PRD §9.2)", () => {
 		await page.getByRole("button", { name: "Open Canvas" }).click();
 		await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible();
 		// …author on the canvas…
-		await page.getByTestId("canvas-mode-overlay-back").click();
+		await page.getByTestId("workspace-back").click();
 
 		// Back on the page, the block now renders its exported preview asset.
 		await expect(page.getByTestId("design-block")).toBeVisible();
@@ -70,14 +70,14 @@ test.describe("Canvas Studio — Puck bridge (PRD §9.2)", () => {
 		// Round 1: open → edit → back (commits a preview + designId).
 		await page.getByRole("button", { name: "Open Canvas" }).click();
 		await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible();
-		await page.getByTestId("canvas-mode-overlay-back").click();
+		await page.getByTestId("workspace-back").click();
 		await expect(page.getByTestId("design-block")).toBeVisible();
 
 		// Round 2: reopen the same design — state persists via the mode-store +
 		// localStorage adapter (same designId, same IR).
 		await page.getByRole("button", { name: "Open Canvas" }).click();
 		await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible();
-		await page.getByTestId("canvas-mode-overlay-back").click();
+		await page.getByTestId("workspace-back").click();
 		await expect(page.getByTestId("design-block")).toBeVisible();
 	});
 });
