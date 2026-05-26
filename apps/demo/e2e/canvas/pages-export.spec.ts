@@ -59,18 +59,24 @@ test.describe("Canvas Studio — pages + export (PRD §9.2)", () => {
 		const pageId = `e2e-export-${Date.now()}`;
 		await gotoCanvas(page, pageId);
 
-		// PNG → a non-empty file (rasterized from the live stage).
+		// The export controls live in a popover: open it, pick a format card,
+		// then commit via "Export". PNG → a non-empty file (rasterized live).
+		await page.getByTestId("canvas-export-trigger").click();
+		await page.getByTestId("canvas-export-png").click();
 		const [png] = await Promise.all([
 			page.waitForEvent("download"),
-			page.getByTestId("canvas-export-png").click(),
+			page.getByTestId("canvas-export-save").click(),
 		]);
 		const pngPath = await png.path();
 		expect(pngPath ? statSync(pngPath).size : 0).toBeGreaterThan(0);
 
-		// JSON → serialized IR; reload reads it back from localStorage.
+		// Saving closes the popover; reopen, then JSON → serialized IR; reload
+		// reads it back from localStorage.
+		await page.getByTestId("canvas-export-trigger").click();
+		await page.getByTestId("canvas-export-json").click();
 		const [json] = await Promise.all([
 			page.waitForEvent("download"),
-			page.getByTestId("canvas-export-json").click(),
+			page.getByTestId("canvas-export-save").click(),
 		]);
 		const jsonPath = await json.path();
 		expect(jsonPath ? statSync(jsonPath).size : 0).toBeGreaterThan(0);
