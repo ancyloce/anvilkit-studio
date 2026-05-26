@@ -1,7 +1,12 @@
 "use client";
 
-import { Studio, StudioConfigSchema, compilePlugins } from "@anvilkit/core";
+// The Canvas Studio plugin's overlay mounts `<CanvasWorkspace>` from
+// `@anvilkit/canvas-editor`; its compiled (preflight-free) chrome stylesheet
+// must be loaded by the host or the editor shell renders unstyled/blank.
+import "@anvilkit/canvas-editor/styles.css";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
 import type { StudioPlugin } from "@anvilkit/core";
+import { compilePlugins, Studio, StudioConfigSchema } from "@anvilkit/core";
 import type {
 	ExportWarning,
 	PageIR,
@@ -30,8 +35,17 @@ import {
 	createReactExportPlugin,
 	reactFormat,
 } from "@anvilkit/plugin-export-react";
-import { createCollabPlugin } from "@anvilkit/collab-ui";
 import type { Config, Data } from "@puckeditor/core";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+	type ChangeEvent,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { useDemoIdentity } from "../../../lib/collab-identity";
 import { createCollabStudioPlugin } from "../../../lib/collab-studio-plugin";
 import {
@@ -43,25 +57,15 @@ import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin"
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import { createDemoVersionHistoryPlugins } from "../../../lib/history-sidebar-plugin";
 import { lazyCanvasStudioPlugin } from "../../../lib/lazy-plugins";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-	type ChangeEvent,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
 import {
 	createDemoData,
 	createDemoModeHref,
 	createDemoPagesData,
-	demoCopySnippetPlugin,
-	demoLayerQuickAddPlugin,
 	type DemoComponents,
 	demoConfig,
+	demoCopySnippetPlugin,
 	demoDataSearchParam,
+	demoLayerQuickAddPlugin,
 	getDemoDataFromSearchParam,
 } from "../../../lib/puck-demo";
 import { smokeTestPlugin } from "../../../lib/smoke-test-plugin";
