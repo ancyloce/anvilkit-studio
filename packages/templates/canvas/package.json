@@ -1,6 +1,7 @@
 {
 	"name": "@anvilkit/canvas-templates",
 	"version": "0.1.0",
+	"private": true,
 	"description": "10 starter CanvasIR designs (poster, social, slides, print) for AnvilKit Canvas Studio.",
 	"type": "module",
 	"main": "./dist/index.js",
