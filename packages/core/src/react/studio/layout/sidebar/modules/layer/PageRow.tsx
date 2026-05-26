@@ -334,11 +334,18 @@ export function PageRow({
               align="end"
               sideOffset={4}
               data-testid={`ak-layer-page-row-${page.id}-menu-popup`}
+              // Figure-1 menu treatment: the default popup is pinned to the
+              // tiny "…" trigger width (`w-(--anchor-width)`, floored at 128px)
+              // and uses compact 1px padding. Widen it and add breathing room.
+              // Scoped here so the shared dropdown-menu primitive — used by
+              // every other Studio menu — stays untouched.
+              className="w-auto min-w-[216px] p-1.5"
             >
               {canRename ? (
                 <DropdownMenuItem
                   onClick={startRename}
                   data-testid={`ak-layer-page-row-${page.id}-menu-rename`}
+                  className="gap-2.5 px-2.5 py-2"
                 >
                   <Pencil aria-hidden="true" />
                   <span>{msg("studio.module.layer.pages.menu.rename")}</span>
@@ -351,6 +358,7 @@ export function PageRow({
                     void handleDuplicate();
                   }}
                   data-testid={`ak-layer-page-row-${page.id}-menu-duplicate`}
+                  className="gap-2.5 px-2.5 py-2"
                 >
                   <Copy aria-hidden="true" />
                   <span>{msg("studio.module.layer.pages.menu.duplicate")}</span>
@@ -360,18 +368,20 @@ export function PageRow({
                 <DropdownMenuItem
                   onClick={() => setSettingsOpen(true)}
                   data-testid={`ak-layer-page-row-${page.id}-menu-settings`}
+                  className="gap-2.5 px-2.5 py-2"
                 >
                   <span>{msg("studio.module.layer.pages.menu.settings")}</span>
                 </DropdownMenuItem>
               ) : null}
               {canDelete && (canRename || canSettings) ? (
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="-mx-1.5 my-1.5" />
               ) : null}
               {canDelete ? (
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => setConfirmingDelete(true)}
                   data-testid={`ak-layer-page-row-${page.id}-menu-delete`}
+                  className="gap-2.5 px-2.5 py-2"
                 >
                   <Trash2 aria-hidden="true" />
                   <span>{msg("studio.module.layer.pages.menu.delete")}</span>
