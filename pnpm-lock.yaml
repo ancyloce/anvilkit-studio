@@ -56,6 +56,9 @@ importers:
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
         version: link:packages/plugins/plugin-ai-copilot
+      '@anvilkit/plugin-collab-yjs':
+        specifier: workspace:*
+        version: link:packages/plugins/plugin-collab-yjs
       '@anvilkit/plugin-export-html':
         specifier: workspace:*
         version: link:packages/plugins/plugin-export-html
