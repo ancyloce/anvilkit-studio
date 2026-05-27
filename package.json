@@ -72,6 +72,7 @@
 		"typedoc-plugin-markdown": "^4.11.0",
 		"typescript": "6.0.3",
 		"vitest": "^4.1.7",
+		"yjs": "^13.6.30",
 		"zod": "^4.4.3",
 		"zustand": "^5.0.13"
 	},
