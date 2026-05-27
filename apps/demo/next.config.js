@@ -8,6 +8,11 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
 	experimental: {
 		externalDir: true,
+		// Tree-shake the icon/animation barrels out of route bundles
+		// instead of pulling the whole package. `lucide-react` is a
+		// direct dep; `motion` arrives transitively via @anvilkit/core,
+		// /ui, and /collab-ui (all in `transpilePackages`).
+		optimizePackageImports: ["lucide-react", "motion"],
 	},
 	transpilePackages: [
 		"@anvilkit/bento-grid",

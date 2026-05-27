@@ -4,7 +4,6 @@
 // `@anvilkit/canvas-editor`; its compiled (preflight-free) chrome stylesheet
 // must be loaded by the host or the editor shell renders unstyled/blank.
 import "@anvilkit/canvas-editor/styles.css";
-import { createCollabPlugin } from "@anvilkit/collab-ui";
 import type { StudioPlugin } from "@anvilkit/core";
 import { compilePlugins, Studio, StudioConfigSchema } from "@anvilkit/core";
 import type {
@@ -47,7 +46,6 @@ import {
 	useState,
 } from "react";
 import { useDemoIdentity } from "../../../lib/collab-identity";
-import { createCollabStudioPlugin } from "../../../lib/collab-studio-plugin";
 import {
 	type CollabTransportBundle,
 	createCollabDemoTransport,
@@ -468,56 +466,72 @@ export default function PuckEditorPage() {
 	// relay path) the `WebsocketProvider`. The adapter is constructed
 	// internally by `createCollabPlugin()` — see the `plugins` memo
 	// below.
-	const collabTransport = useMemo<CollabTransportBundle | null>(() => {
-		if (!collabEnabled) return null;
-		if (!demoIdentityReady) return null;
-		if (collabRelayUrl) {
-			return createCollabRelayTransport({
-				room: collabRoom,
-				relayUrl: collabRelayUrl,
-			});
-		}
-		return createCollabDemoTransport();
-	}, [collabEnabled, collabRelayUrl, collabRoom, demoIdentityReady]);
+	//
+	// The yjs stack is loaded lazily (the factories `await import("yjs")`
+	// et al.), so the transport resolves a tick after `?collab=1` flips
+	// on. We hold it in state and build it inside an effect. The `cancelled`
+	// flag + `resolved` capture tear down a bundle that finishes resolving
+	// after the deps change or the component unmounts — which also covers
+	// React StrictMode's mount→unmount→mount double-invoke in dev. This
+	// single effect owns both creation and teardown (WebSocket close,
+	// awareness destroy, doc destroy) on peer rename, relay toggle, or
+	// unmount.
+	const [collabTransport, setCollabTransport] =
+		useState<CollabTransportBundle | null>(null);
 
 	useEffect(() => {
-		if (!collabTransport) return;
-		// Bundle owns its own transport teardown (WebSocket close,
-		// awareness destroy, doc destroy). Fires on peer rename, relay
-		// toggle, or page unmount.
-		return () => collabTransport.destroy();
-	}, [collabTransport]);
+		if (!collabEnabled || !demoIdentityReady) {
+			setCollabTransport(null);
+			return;
+		}
+		let cancelled = false;
+		let resolved: CollabTransportBundle | null = null;
+		const build = collabRelayUrl
+			? createCollabRelayTransport({
+					room: collabRoom,
+					relayUrl: collabRelayUrl,
+				})
+			: createCollabDemoTransport();
+		void build.then((bundle) => {
+			if (cancelled) {
+				bundle.destroy();
+				return;
+			}
+			resolved = bundle;
+			setCollabTransport(bundle);
+		});
+		return () => {
+			cancelled = true;
+			resolved?.destroy();
+			setCollabTransport(null);
+		};
+	}, [collabEnabled, demoIdentityReady, collabRelayUrl, collabRoom]);
 
-	// Memoized so the plugins array reference stays stable across
-	// renders. Without this, each render passes a fresh array literal
-	// to `<Studio>`, whose compile effect re-fires, unmounts the
-	// runtime, and resets Puck's data back to the `publishedData`
-	// prop — wiping any AI-generated content instantly.
-	//
-	// `createCollabStudioPlugin` no longer takes the adapter as an
-	// argument — it reads it from `<CollabUIProvider>` context (which
-	// `createCollabPlugin` provides). Same constructor on every render.
-	const collabStudioPlugin = useMemo(
-		() => (collabTransport ? createCollabStudioPlugin() : null),
-		[collabTransport],
-	);
+	// The collab plugins live in `@anvilkit/collab-ui` /
+	// `@anvilkit/plugin-collab-yjs`, which statically pull in the whole
+	// yjs stack (yjs + y-protocols + y-websocket + lib0, ~190 KB). We
+	// import the factories *dynamically*, only once a transport has
+	// resolved (i.e. `?collab=1`), so that stack stays out of the default
+	// editor bundle. Resolved into state, mirroring `collabTransport`;
+	// the `cancelled` flag drops a late resolve after the deps change or
+	// the component unmounts (and covers StrictMode's double-invoke).
+	const [collabPlugins, setCollabPlugins] = useState<
+		readonly StudioPlugin[] | null
+	>(null);
 
-	const plugins = useMemo(() => {
-		const base = [
-			smokeTestPlugin,
-			htmlExportPlugin,
-			reactExportPlugin,
-			aiCopilotPlugin,
-			copilotSidebarPlugin,
-			versionHistoryNoHeaderPlugin,
-			historySidebarPlugin,
-			assetManagerNoHeaderPlugin,
-			designSystemPlugin,
-			lazyCanvasStudioPlugin,
-			demoCopySnippetPlugin,
-			demoLayerQuickAddPlugin,
-		];
-		if (collabTransport && collabStudioPlugin) {
+	useEffect(() => {
+		if (!collabTransport) {
+			setCollabPlugins(null);
+			return;
+		}
+		let cancelled = false;
+		void (async () => {
+			const [{ createCollabPlugin }, { createCollabStudioPlugin }] =
+				await Promise.all([
+					import("@anvilkit/collab-ui"),
+					import("../../../lib/collab-studio-plugin"),
+				]);
+			if (cancelled) return;
 			const collabPlugin = createCollabPlugin({
 				doc: collabTransport.doc,
 				awareness: collabTransport.awareness,
@@ -538,16 +552,39 @@ export default function PuckEditorPage() {
 					resolveSelectionRect: resolvePuckSelectionRect,
 				},
 			});
-			return [...base, collabPlugin, collabStudioPlugin];
-		}
-		return base;
-	}, [
-		collabTransport,
-		collabStudioPlugin,
-		demoIdentity,
-		setDemoIdentityName,
-		showRemoteCursors,
-	]);
+			// `createCollabStudioPlugin` reads the adapter from the
+			// `<CollabUIProvider>` context that `createCollabPlugin`
+			// provides, so it is registered *after* the consolidated
+			// plugin (array order preserved below).
+			setCollabPlugins([collabPlugin, createCollabStudioPlugin()]);
+		})();
+		return () => {
+			cancelled = true;
+		};
+	}, [collabTransport, demoIdentity, setDemoIdentityName, showRemoteCursors]);
+
+	// Memoized so the plugins array reference stays stable across
+	// renders. Without this, each render passes a fresh array literal
+	// to `<Studio>`, whose compile effect re-fires, unmounts the
+	// runtime, and resets Puck's data back to the `publishedData`
+	// prop — wiping any AI-generated content instantly.
+	const plugins = useMemo(() => {
+		const base = [
+			smokeTestPlugin,
+			htmlExportPlugin,
+			reactExportPlugin,
+			aiCopilotPlugin,
+			copilotSidebarPlugin,
+			versionHistoryNoHeaderPlugin,
+			historySidebarPlugin,
+			assetManagerNoHeaderPlugin,
+			designSystemPlugin,
+			lazyCanvasStudioPlugin,
+			demoCopySnippetPlugin,
+			demoLayerQuickAddPlugin,
+		];
+		return collabPlugins ? [...base, ...collabPlugins] : base;
+	}, [collabPlugins]);
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
