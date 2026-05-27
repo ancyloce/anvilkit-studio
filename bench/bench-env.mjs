@@ -52,10 +52,27 @@ if (WANTS_DOM && !globalThis.window) {
 	assign("Element", w.Element);
 	assign("Node", w.Node);
 	assign("getComputedStyle", w.getComputedStyle.bind(w));
-	assign("requestAnimationFrame", (cb) =>
-		setTimeout(() => cb(Date.now()), 16),
-	);
+	assign("requestAnimationFrame", (cb) => setTimeout(() => cb(Date.now()), 16));
 	assign("cancelAnimationFrame", (id) => clearTimeout(id));
+
+	// jsdom ships no `ResizeObserver` / `IntersectionObserver`. `@dnd-kit/dom`
+	// (pulled in by the `@anvilkit/core` editor barrel) references
+	// `ResizeObserver` at module-eval time, so it must exist on `globalThis`
+	// before any editor module loads or the import throws `ResizeObserver is
+	// not defined`. Bench mode never measures layout observation; no-op stubs
+	// are enough to let the modules evaluate and render.
+	class NoopObserver {
+		observe() {}
+		unobserve() {}
+		disconnect() {}
+		takeRecords() {
+			return [];
+		}
+	}
+	assign("ResizeObserver", NoopObserver);
+	if (!globalThis.IntersectionObserver) {
+		assign("IntersectionObserver", NoopObserver);
+	}
 
 	// jsdom ships without a canvas implementation; any component that
 	// touches `<canvas>` (motion / color helpers do) hits a "Not
