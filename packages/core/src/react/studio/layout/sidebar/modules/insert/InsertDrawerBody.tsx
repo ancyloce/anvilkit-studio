@@ -23,7 +23,6 @@ import {
 	useMemo,
 } from "react";
 import { Accordion } from "@/primitives/accordion";
-import { Windowed } from "@/studio/primitives/windowed";
 import {
 	useComponentViewMode,
 	useDrawerSearch,
@@ -36,13 +35,6 @@ import { InsertEmptyState } from "./InsertEmptyState";
 import { InsertSection } from "./InsertSection";
 import { InsertTileGrid } from "./InsertTileGrid";
 import { InsertTileList } from "./InsertTileList";
-
-/**
- * Flat search-result count at/above which the result list is
- * virtualized. Below this it keeps the exact `<FlatTiles>` markup so
- * normal catalogs and existing tests are untouched (review finding M6).
- */
-const FLAT_WINDOW_THRESHOLD = 60;
 
 interface DrawerItemElementProps {
 	readonly name?: string;
@@ -157,28 +149,10 @@ export function InsertDrawerBody({
 			return <InsertEmptyState variant="search" />;
 		}
 		const FlatTiles = viewMode === "grid" ? InsertTileGrid : InsertTileList;
-		// Small result sets keep the exact prior markup (FlatTiles owns
-		// its container/testid). Only very large flat searches switch to
-		// a windowed viewport so the DOM node count stays bounded
-		// (review finding M6).
-		if (flatMatches.length < FLAT_WINDOW_THRESHOLD) {
-			return <FlatTiles>{flatMatches}</FlatTiles>;
-		}
-		return (
-			<div data-testid="ak-insert-flat-window-wrap">
-				<Windowed
-					items={flatMatches}
-					itemKey={(el, i) =>
-						isValidElement(el) && el.key != null ? String(el.key) : `match-${i}`
-					}
-					estimateSize={viewMode === "grid" ? 88 : 40}
-					lanes={viewMode === "grid" ? 3 : 1}
-					threshold={0}
-					data-testid="ak-insert-flat-window"
-					renderItem={(el) => el}
-				/>
-			</div>
-		);
+		// FlatTiles windows internally past `Windowed`'s threshold, so a
+		// large flat search stays DOM-bounded without a bespoke viewport
+		// here; small result sets keep their exact prior markup.
+		return <FlatTiles>{flatMatches}</FlatTiles>;
 	}
 
 	const expandedIds = sortedSections
