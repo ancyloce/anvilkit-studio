@@ -7,7 +7,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { Windowed } from "@/primitives/Windowed";
+import { Windowed } from "@/primitives/windowed";
 
 afterEach(cleanup);
 
