@@ -12,7 +12,7 @@
 
 import { type ReactNode, useMemo } from "react";
 import { Skeleton } from "@/primitives/skeleton";
-import { Windowed } from "@/studio/primitives/windowed";
+import { Windowed } from "@/primitives/windowed";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { AssetCategoryFilter } from "@/state/editor-ui-store";
 import type {

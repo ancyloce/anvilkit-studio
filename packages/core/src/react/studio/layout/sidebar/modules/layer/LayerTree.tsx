@@ -35,7 +35,7 @@ import {
 import { useGetPuck } from "@puckeditor/core";
 import { memo, type ReactNode, useCallback, useMemo, useState } from "react";
 import { cn } from "@/overrides/utils/cn";
-import { Windowed } from "@/studio/primitives/windowed";
+import { Windowed } from "@/primitives/windowed";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorUiState } from "@/state/editor-ui-store";
 import { useEditorUiStore } from "@/state/hooks";
