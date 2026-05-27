@@ -8,7 +8,9 @@
 			"react",
 			"react-dom",
 			"react/jsx-runtime",
-			"react/jsx-dev-runtime"
+			"react/jsx-dev-runtime",
+			"@tanstack/react-virtual",
+			"@tanstack/virtual-core"
 		]
 	},
 	{
