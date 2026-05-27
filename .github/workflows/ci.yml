@@ -115,6 +115,14 @@ jobs:
       # I2-6 added the canvas packages (canvas-core, canvas-editor,
       # plugin-ai-image, plugin-canvas-studio); I2-3 added plugin-export-canvas.
       # Each package ships its own `.size-limit.json` with a tuned budget.
+      # Every component `.size-limit.json` now carries TWO entries — the JS
+      # `dist/index.js` budget and a `dist/styles.css` gzip budget (12 KB) —
+      # so this one step gates both. The CSS budget guards against a component
+      # re-importing `@anvilkit/tailwind-config/shadcn` (the app-level sheet),
+      # which would re-emit preflight + the workspace utility superset (~24 KB)
+      # into the package; `/component` is the per-component, preflight-free entry.
+      # design-block was previously absent from this list (and shipped no
+      # `.size-limit.json`); it now has a config and is enforced here too.
       - name: Bundle-size budgets (size-limit)
         run: |
           pnpm \
@@ -137,6 +145,7 @@ jobs:
             --filter @anvilkit/bento-grid \
             --filter @anvilkit/blog-list \
             --filter @anvilkit/button \
+            --filter @anvilkit/design-block \
             --filter @anvilkit/helps \
             --filter @anvilkit/hero \
             --filter @anvilkit/input \
