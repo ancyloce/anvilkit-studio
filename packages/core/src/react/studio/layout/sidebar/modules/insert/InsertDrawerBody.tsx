@@ -23,7 +23,7 @@ import {
 	useMemo,
 } from "react";
 import { Accordion } from "@/primitives/accordion";
-import { Windowed } from "@/primitives/Windowed";
+import { Windowed } from "@/studio/primitives/windowed";
 import {
 	useComponentViewMode,
 	useDrawerSearch,

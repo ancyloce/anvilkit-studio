@@ -23,7 +23,7 @@ import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
-import { Windowed } from "@/primitives/Windowed";
+import { Windowed } from "@/studio/primitives/windowed";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { StudioPage } from "@/types/pages";
