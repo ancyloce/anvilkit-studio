@@ -61,31 +61,65 @@ function componentId(item: ComponentData): string | null {
 	return typeof id === "string" ? id : null;
 }
 
+/** `parentComponentId → [its compound zone keys]`, in zone insertion order. */
+type ChildZonesByParent = ReadonlyMap<string, readonly string[]>;
+
+/**
+ * Index every zone key by its owning parent in a single O(zones) pass.
+ *
+ * Zone keys are compound `"<parentId>:<slotName>"`, so the parent is the
+ * segment before the first `:`. Previously `buildNodes` rescanned all
+ * zone keys for every node (`Object.keys(zones).filter(startsWith)`),
+ * making tree construction O(nodes × zones); this lookup table makes it
+ * O(nodes + zones). Insertion order of `Object.keys(zones)` is preserved
+ * per parent, so child-zone order is byte-identical to the old filter.
+ */
+function indexZonesByParent(
+	zones: Readonly<Record<string, ComponentList>>,
+): ChildZonesByParent {
+	const byParent = new Map<string, string[]>();
+	for (const zoneKey of Object.keys(zones)) {
+		const colon = zoneKey.indexOf(":");
+		if (colon <= 0) continue;
+		const parentId = zoneKey.slice(0, colon);
+		const existing = byParent.get(parentId);
+		if (existing) {
+			existing.push(zoneKey);
+		} else {
+			byParent.set(parentId, [zoneKey]);
+		}
+	}
+	return byParent;
+}
+
 function buildNodes(
 	items: ComponentList,
 	zone: string,
 	depth: number,
 	zones: Readonly<Record<string, ComponentList>>,
+	childZonesByParent: ChildZonesByParent,
 	labelFor: (type: string) => string,
 ): LayerNode[] {
 	const out: LayerNode[] = [];
 	items.forEach((item, index) => {
 		const id = componentId(item);
 		if (id === null) return;
-		const prefix = `${id}:`;
-		const childZones: LayerChildZone[] = Object.keys(zones)
-			.filter((key) => key.startsWith(prefix))
-			.map((zoneKey) => ({
+		// `id.length + 1` strips the `"<id>:"` prefix to recover the slot
+		// name — identical to the old `prefix.length` slice.
+		const childZones: LayerChildZone[] = (childZonesByParent.get(id) ?? []).map(
+			(zoneKey) => ({
 				zoneKey,
-				slotName: zoneKey.slice(prefix.length),
+				slotName: zoneKey.slice(id.length + 1),
 				items: buildNodes(
 					zones[zoneKey] ?? [],
 					zoneKey,
 					depth + 1,
 					zones,
+					childZonesByParent,
 					labelFor,
 				),
-			}));
+			}),
+		);
 		out.push({
 			id,
 			type: item.type,
@@ -114,16 +148,88 @@ export function useLayerTree(): LayerTreeModel {
 
 	return useMemo<LayerTreeModel>(() => {
 		const zones = (data.zones ?? {}) as Readonly<Record<string, ComponentList>>;
+		const childZonesByParent = indexZonesByParent(zones);
 		const labelFor = (type: string): string => {
 			const entry = components?.[type] as { label?: string } | undefined;
 			return entry?.label ?? type;
 		};
-		const roots = buildNodes(data.content ?? [], ROOT_ZONE, 0, zones, labelFor);
+		const roots = buildNodes(
+			data.content ?? [],
+			ROOT_ZONE,
+			0,
+			zones,
+			childZonesByParent,
+			labelFor,
+		);
 		return {
 			roots,
 			selectedId: typeof selectedId === "string" ? selectedId : null,
 		};
 	}, [data, selectedId, components]);
+}
+
+/**
+ * One row in the **flattened, windowed** Layer-tree render path.
+ *
+ * For large documents the recursive `LayerZone` tree is replaced by a flat
+ * list fed to `<Windowed>`, so DOM node count stays bounded no matter how
+ * deep/wide the document is. A `"node"` row carries everything a `LayerRow`
+ * needs (the node, plus the per-row `hasChildren`/`siblingCount` the nested
+ * renderer derives inline); a `"zone-drop"` row is a droppable placeholder
+ * for an **empty, expanded** child zone so cross-zone drops into it still
+ * land (the nested renderer relies on the zone's own droppable container
+ * for that, which a flat list has no equivalent of).
+ */
+export type LayerFlatRow =
+	| {
+			readonly type: "node";
+			readonly key: string;
+			readonly node: LayerNode;
+			readonly hasChildren: boolean;
+			/** Sibling count in `node.zone` — clamps keyboard reorder. */
+			readonly siblingCount: number;
+	  }
+	| {
+			readonly type: "zone-drop";
+			readonly key: string;
+			readonly zoneKey: string;
+			readonly depth: number;
+	  };
+
+/**
+ * Depth-first flatten of only the **visible** (expanded) rows, mirroring
+ * exactly what the nested `LayerZone` tree renders for a given expansion
+ * state. Collapsed subtrees are skipped; empty expanded zones emit a
+ * `"zone-drop"` placeholder. `outlineExpanded[id] !== false` is the
+ * default-expanded convention shared with `LayerRow`/`LayerZone`.
+ */
+export function flattenVisibleRows(
+	roots: readonly LayerNode[],
+	outlineExpanded: Readonly<Record<string, boolean>>,
+): LayerFlatRow[] {
+	const out: LayerFlatRow[] = [];
+	const walk = (nodes: readonly LayerNode[]): void => {
+		const siblingCount = nodes.length;
+		for (const node of nodes) {
+			const hasChildren = node.childZones.length > 0;
+			out.push({ type: "node", key: node.id, node, hasChildren, siblingCount });
+			if (!hasChildren || outlineExpanded[node.id] === false) continue;
+			for (const childZone of node.childZones) {
+				if (childZone.items.length === 0) {
+					out.push({
+						type: "zone-drop",
+						key: `zone:${childZone.zoneKey}`,
+						zoneKey: childZone.zoneKey,
+						depth: node.depth + 1,
+					});
+				} else {
+					walk(childZone.items);
+				}
+			}
+		}
+	};
+	walk(roots);
+	return out;
 }
 
 /** Depth-first list of `{id, zone, index}` for every node in the tree. */

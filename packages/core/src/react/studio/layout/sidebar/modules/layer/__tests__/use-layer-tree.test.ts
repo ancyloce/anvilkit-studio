@@ -38,6 +38,8 @@ vi.mock("@puckeditor/core", () => ({
 import {
 	collectSubtreeZones,
 	findNode,
+	flattenVisibleRows,
+	type LayerNode,
 	ROOT_ZONE,
 	resolveDrop,
 	useLayerTree,
@@ -135,5 +137,105 @@ describe("useLayerTree", () => {
 		expect(collectSubtreeZones(layout as NonNullable<typeof layout>)).toEqual(
 			new Set(["layout-1:default"]),
 		);
+	});
+
+	it("groups multiple sibling zones under one parent in insertion order", () => {
+		snapshot.appState.data = {
+			content: [{ type: "Layout", props: { id: "layout-1" } }],
+			zones: {
+				"layout-1:default": [{ type: "Text", props: { id: "text-a" } }],
+				"layout-1:footer": [{ type: "Text", props: { id: "text-b" } }],
+				// A different parent whose id shares no prefix collision.
+				"layout-2:default": [{ type: "Text", props: { id: "text-c" } }],
+			},
+		};
+		snapshot.selectedItem = null;
+		snapshot.config.components = { Layout: {}, Text: {} };
+
+		const { result } = renderHook(() => useLayerTree());
+		const layout = result.current.roots[0];
+
+		// Both of layout-1's zones are attached, in object insertion order,
+		// and layout-2's zone is NOT mis-grouped under layout-1.
+		expect(layout?.childZones.map((z) => z.zoneKey)).toEqual([
+			"layout-1:default",
+			"layout-1:footer",
+		]);
+		expect(layout?.childZones.map((z) => z.slotName)).toEqual([
+			"default",
+			"footer",
+		]);
+		expect(layout?.childZones[1]?.items[0]?.id).toBe("text-b");
+		expect(collectSubtreeZones(layout as NonNullable<typeof layout>)).toEqual(
+			new Set(["layout-1:default", "layout-1:footer"]),
+		);
+	});
+});
+
+describe("flattenVisibleRows", () => {
+	// A small hand-built tree:
+	//   layout-1 (root, has child zone "layout-1:default" with text-2)
+	//            (also has an EMPTY zone "layout-1:footer")
+	//   text-1   (root, leaf)
+	const tree: LayerNode[] = [
+		{
+			id: "layout-1",
+			type: "Layout",
+			label: "Layout",
+			zone: ROOT_ZONE,
+			index: 0,
+			depth: 0,
+			childZones: [
+				{
+					zoneKey: "layout-1:default",
+					slotName: "default",
+					items: [
+						{
+							id: "text-2",
+							type: "Text",
+							label: "Text",
+							zone: "layout-1:default",
+							index: 0,
+							depth: 1,
+							childZones: [],
+						},
+					],
+				},
+				{ zoneKey: "layout-1:footer", slotName: "footer", items: [] },
+			],
+		},
+		{
+			id: "text-1",
+			type: "Text",
+			label: "Text",
+			zone: ROOT_ZONE,
+			index: 1,
+			depth: 0,
+			childZones: [],
+		},
+	];
+
+	it("flattens expanded rows depth-first with node + zone-drop placeholders", () => {
+		const rows = flattenVisibleRows(tree, {});
+		expect(rows.map((r) => (r.type === "node" ? r.node.id : r.key))).toEqual([
+			"layout-1",
+			"text-2", // expanded default zone descends
+			"zone:layout-1:footer", // empty expanded zone → placeholder
+			"text-1",
+		]);
+		const layoutRow = rows[0];
+		expect(layoutRow?.type === "node" && layoutRow.hasChildren).toBe(true);
+		expect(layoutRow?.type === "node" && layoutRow.siblingCount).toBe(2);
+		const placeholder = rows[2];
+		expect(placeholder?.type).toBe("zone-drop");
+		expect(placeholder?.type === "zone-drop" && placeholder.depth).toBe(1);
+	});
+
+	it("skips collapsed subtrees (no descendant rows, no placeholders)", () => {
+		const rows = flattenVisibleRows(tree, { "layout-1": false });
+		expect(rows.map((r) => (r.type === "node" ? r.node.id : r.key))).toEqual([
+			"layout-1",
+			"text-1",
+		]);
 	});
 });
