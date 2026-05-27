@@ -133,3 +133,44 @@ describe("PagesPanel — search / filter", () => {
 		expect(screen.queryByTestId("ak-layer-page-row-blog")).toBeTruthy();
 	});
 });
+
+describe("PagesPanel — virtualization", () => {
+	function makePages(n: number): StudioPage[] {
+		return Array.from({ length: n }, (_, i) => ({
+			id: `p-${i}`,
+			title: `Page ${i}`,
+			path: `/p-${i}`,
+		}));
+	}
+
+	it("renders rows inline (no virtualization viewport) below the threshold", async () => {
+		const source: StudioPagesSource = { list: () => makePages(10) };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		expect(await screen.findByTestId("ak-layer-page-row-p-0")).toBeTruthy();
+		expect(screen.queryByTestId("ak-layer-pages-virtualized")).toBeNull();
+		expect(
+			document.querySelectorAll("[data-testid^='ak-layer-page-row-']").length,
+		).toBe(10);
+	});
+
+	it("virtualizes a large list to a bounded DOM slice at/above the threshold", async () => {
+		const total = 60;
+		const source: StudioPagesSource = { list: () => makePages(total) };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		const viewport = await screen.findByTestId("ak-layer-pages-virtualized");
+		expect(viewport.getAttribute("data-virtualized")).toBe("true");
+		// jsdom reports no layout, so the visible window is a bounded slice —
+		// the point is it is never the full dataset.
+		expect(
+			document.querySelectorAll("[data-testid^='ak-layer-page-row-']").length,
+		).toBeLessThan(total);
+	});
+});
