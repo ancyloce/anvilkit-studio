@@ -26,6 +26,13 @@ minimumReleaseAgeExclude:
   - '@vitest/spy@4.1.7'
   - '@vitest/utils@4.1.7'
   - vitest@4.1.7
+  - '@turbo/darwin-64@2.9.15'
+  - '@turbo/darwin-arm64@2.9.15'
+  - '@turbo/linux-64@2.9.15'
+  - '@turbo/linux-arm64@2.9.15'
+  - '@turbo/windows-64@2.9.15'
+  - '@turbo/windows-arm64@2.9.15'
+  - turbo@2.9.15
 patchedDependencies:
   "@base-ui/react@1.5.0": packages/components/patches/@base-ui__react@1.5.0.patch
 
