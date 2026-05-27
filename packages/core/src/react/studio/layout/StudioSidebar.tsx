@@ -12,7 +12,13 @@
  * slot via {@link useSetSidebarHeaderActions}.
  */
 
-import { type ReactNode, type RefObject, useCallback, useRef } from "react";
+import {
+	memo,
+	type ReactNode,
+	type RefObject,
+	useCallback,
+	useRef,
+} from "react";
 
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorTab } from "@/state/editor-ui-store";
@@ -112,13 +118,15 @@ interface StudioSidebarSlotProps {
 	readonly railRef: RefObject<SidebarRailHandle | null>;
 }
 
-export function StudioSidebarRail({
-	railRef,
-}: StudioSidebarSlotProps): ReactNode {
+function StudioSidebarRailImpl({ railRef }: StudioSidebarSlotProps): ReactNode {
 	return <SidebarRail ref={railRef} />;
 }
 
-export function StudioSidebarPanel({
+// `railRef` is a stable ref from `StudioLayout`, so memoizing keeps the
+// rail off the `StudioLayout` re-render path (selection changes).
+export const StudioSidebarRail = memo(StudioSidebarRailImpl);
+
+function StudioSidebarPanelImpl({
 	railRef,
 }: StudioSidebarSlotProps): ReactNode {
 	return (
@@ -127,6 +135,8 @@ export function StudioSidebarPanel({
 		</SidebarHeaderActionsProvider>
 	);
 }
+
+export const StudioSidebarPanel = memo(StudioSidebarPanelImpl);
 
 export function StudioSidebar(): ReactNode {
 	const railRef = useRef<SidebarRailHandle | null>(null);

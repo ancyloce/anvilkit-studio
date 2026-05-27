@@ -8,7 +8,7 @@
  */
 
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
-import type { ComponentType, ReactNode } from "react";
+import { type ComponentType, memo, type ReactNode, useCallback } from "react";
 import { useActivePage } from "@/context/pages-source";
 import { useStudioPluginContextOrNull } from "@/context/plugin-context";
 import { useStudioRuntime } from "@/hooks/use-studio";
@@ -28,11 +28,21 @@ export interface StudioHeaderProps {
 	readonly lastSavedAt?: Date | null;
 }
 
-export function StudioHeader({
+function StudioHeaderImpl({
 	onBack,
 	lastSavedAt = null,
 }: StudioHeaderProps): ReactNode {
 	const msg = useMsg();
+	// Stable identity for the back button so the memo boundary holds when
+	// the host passes a stable `onBack` (or none); falls back to browser
+	// history when unwired.
+	const handleBack = useCallback(() => {
+		if (onBack) {
+			onBack();
+			return;
+		}
+		window.history.back();
+	}, [onBack]);
 	// Reflect the host's active page in the breadcrumb's "file" position.
 	// Falls back to the static `studio.breadcrumb.file` label ("Untitled
 	// file") when no page source is wired or no row is marked active —
@@ -48,7 +58,7 @@ export function StudioHeader({
 			<Button
 				variant="ghost"
 				size="icon"
-				onClick={onBack ?? (() => window.history.back())}
+				onClick={handleBack}
 				aria-label={msg("studio.back")}
 			>
 				<ChevronLeft />
@@ -116,6 +126,11 @@ export function StudioHeader({
 		</header>
 	);
 }
+
+// Memoized so a `StudioLayout` re-render doesn't re-render the header.
+// `StudioLayout` passes a `useMemo`-stabilized props object, so the
+// boundary actually holds across selection changes.
+export const StudioHeader = memo(StudioHeaderImpl);
 
 /**
  * `true` when any registered plugin self-declares the `header`

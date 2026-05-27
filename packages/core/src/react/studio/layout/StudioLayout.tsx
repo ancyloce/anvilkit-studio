@@ -17,7 +17,7 @@
  */
 
 import { createUsePuck, Puck } from "@puckeditor/core";
-import { type ReactNode, useRef } from "react";
+import { memo, type ReactNode, useRef } from "react";
 
 import { useChromeProps } from "@/context/chrome-props";
 import { StudioHeader, type StudioHeaderProps } from "./StudioHeader";
@@ -30,7 +30,7 @@ export type StudioLayoutProps = StudioHeaderProps;
 
 const useStudioPuck = createUsePuck();
 
-export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
+function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// `<StudioLayout>` is mounted from the `puck` override slot with
 	// no props (the override callback receives `{ children }` only),
 	// so the header props come from `<ChromePropsProvider>` set up by
@@ -56,7 +56,10 @@ export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
 		>
 			<StudioSidebarRail railRef={railRef} />
 			<div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-				<StudioHeader {...props} />
+				{/* Discrete props (not a spread object literal) so the
+				    `memo`'d `StudioHeader` boundary holds across this
+				    layout's `hasSelection` re-renders. */}
+				<StudioHeader onBack={props.onBack} lastSavedAt={props.lastSavedAt} />
 				<div className="flex min-h-0 flex-1 overflow-hidden">
 					<StudioSidebarPanel railRef={railRef} />
 					<main className="flex min-w-0 flex-1 flex-col">
@@ -75,3 +78,9 @@ export function StudioLayout(propOverrides: StudioLayoutProps = {}): ReactNode {
 		</div>
 	);
 }
+
+// Memoized so Puck re-rendering the `puck` override slot doesn't force a
+// layout re-render on unrelated parent updates. (Selection changes still
+// re-render via the internal `hasSelection` subscription — the memo'd
+// children above keep that cascade off the panes that don't depend on it.)
+export const StudioLayout = memo(StudioLayoutImpl);

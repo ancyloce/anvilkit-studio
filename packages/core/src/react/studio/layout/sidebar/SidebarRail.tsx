@@ -32,6 +32,7 @@ import {
 import {
 	forwardRef,
 	type KeyboardEvent,
+	memo,
 	type ReactNode,
 	useCallback,
 	useImperativeHandle,
@@ -77,8 +78,8 @@ export interface SidebarRailHandle {
 	focusActive(): void;
 }
 
-export const SidebarRail = forwardRef<SidebarRailHandle>(
-	function SidebarRail(_props, ref): ReactNode {
+export const SidebarRail = memo(
+	forwardRef<SidebarRailHandle>(function SidebarRail(_props, ref): ReactNode {
 		const msg = useMsg();
 		const [activeTab, setActiveTab] = useActiveTab();
 		const drawerCollapsed = useEditorUiStore((s) => s.drawerCollapsed);
@@ -146,6 +147,18 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
 			[],
 		);
 
+		// Collapse-on-active-click (PRD §3.2): clicking the already-active,
+		// expanded tab collapses the panel. Stable identity keyed on the
+		// rail's own state, not a fresh per-tab closure each render.
+		const handleTabClick = useCallback(
+			(tabKey: EditorTab): void => {
+				if (tabKey === activeTab && !drawerCollapsed) {
+					setDrawerCollapsed(true);
+				}
+			},
+			[activeTab, drawerCollapsed, setDrawerCollapsed],
+		);
+
 		return (
 			<div
 				ref={containerRef}
@@ -180,11 +193,7 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
 											id={railTabId(key)}
 											aria-controls={SIDEBAR_PANEL_ID}
 											aria-label={msg(labelKey)}
-											onClick={() => {
-												if (key === activeTab && !drawerCollapsed) {
-													setDrawerCollapsed(true);
-												}
-											}}
+											onClick={() => handleTabClick(key)}
 											className="p-2"
 										>
 											<Icon aria-hidden="true" />
@@ -198,7 +207,7 @@ export const SidebarRail = forwardRef<SidebarRailHandle>(
 				</Tabs>
 			</div>
 		);
-	},
+	}),
 );
 
 function RailBrandMark(): ReactNode {

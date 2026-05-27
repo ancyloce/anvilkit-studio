@@ -14,7 +14,7 @@ import {
 	ZoomIn,
 	ZoomOut,
 } from "lucide-react";
-import { type ReactNode, useCallback, useMemo } from "react";
+import { memo, type ReactNode, useCallback, useMemo } from "react";
 import { toast } from "sonner";
 import { useChromeProps } from "@/context/chrome-props";
 import { useStudioPagesSource } from "@/context/pages-source";
@@ -65,7 +65,7 @@ function viewportLabel(
 	return msg(`studio.toolbar.viewport.${viewport.label}`, viewport.label);
 }
 
-export function StudioToolbar(): ReactNode {
+function StudioToolbarImpl(): ReactNode {
 	const msg = useMsg();
 	const { viewports = FULL_WIDTH_VIEWPORTS } = useChromeProps();
 	const [viewport, setViewport] = useCanvasViewport();
@@ -78,12 +78,20 @@ export function StudioToolbar(): ReactNode {
 		[viewport, viewports],
 	);
 
-	const undo = (): void => {
+	// Stable handler identity so the memo boundary on the Button/Tooltip
+	// children holds across toolbar re-renders.
+	const undo = useCallback((): void => {
 		getPuck().history.back();
-	};
-	const redo = (): void => {
+	}, [getPuck]);
+	const redo = useCallback((): void => {
 		getPuck().history.forward();
-	};
+	}, [getPuck]);
+	const handleViewport = useCallback(
+		(label: string): void => {
+			setViewport(label);
+		},
+		[setViewport],
+	);
 
 	const goHome = useCallback(async () => {
 		if (pagesSource === undefined) return;
@@ -131,7 +139,7 @@ export function StudioToolbar(): ReactNode {
 					{viewports.map((vp) => (
 						<DropdownMenuItem
 							key={vp.label}
-							onClick={() => setViewport(vp.label)}
+							onClick={() => handleViewport(vp.label)}
 							className="gap-2"
 						>
 							{viewportIcon(vp)}
@@ -245,3 +253,8 @@ export function StudioToolbar(): ReactNode {
 		</div>
 	);
 }
+
+// Memoized: the toolbar takes no props, so a `StudioLayout` re-render
+// (selection change) shouldn't re-render it — only its own viewport /
+// zoom / pages-source subscriptions should.
+export const StudioToolbar = memo(StudioToolbarImpl);

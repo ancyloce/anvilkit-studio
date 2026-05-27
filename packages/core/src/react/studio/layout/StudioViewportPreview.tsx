@@ -4,7 +4,7 @@
  */
 
 import { Puck } from "@puckeditor/core";
-import { type ReactNode, useMemo } from "react";
+import { memo, type ReactNode, useMemo } from "react";
 import { useChromeProps } from "@/context/chrome-props";
 import { useCanvasViewport, useCanvasZoom } from "@/state/hooks";
 import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
@@ -14,7 +14,7 @@ export interface StudioViewportPreviewProps {
 	readonly className?: string;
 }
 
-export function StudioViewportPreview({
+function StudioViewportPreviewImpl({
 	className,
 }: StudioViewportPreviewProps): ReactNode {
 	const [viewportId] = useCanvasViewport();
@@ -53,3 +53,8 @@ export function StudioViewportPreview({
 		</div>
 	);
 }
+
+// Memoized so a `StudioLayout` re-render (e.g. selection toggling the
+// fields panel) doesn't re-run the preview wrapper — it only re-renders
+// when its own viewport / zoom store subscriptions change.
+export const StudioViewportPreview = memo(StudioViewportPreviewImpl);
