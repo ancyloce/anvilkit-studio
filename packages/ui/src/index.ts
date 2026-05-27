@@ -35,6 +35,7 @@ export * from "./sheet";
 export * from "./shimmer-button";
 export * from "./slider";
 export * from "./textarea";
+export * from "./windowed";
 export * from "./hooks/use-controlled-state";
 export * from "./hooks/use-is-in-view";
 export * from "./lib/get-strict-context";
