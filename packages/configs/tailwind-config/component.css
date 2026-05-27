@@ -1,0 +1,272 @@
+/**
+ * @file Preflight-free, source-scoped Tailwind base for `@anvilkit/*` COMPONENT
+ *       packages. Import this from a component's `src/styles.css` instead of
+ *       `@anvilkit/tailwind-config/shadcn`.
+ *
+ * Why a separate entry from `./shadcn`?
+ *
+ * `./shadcn` is the APP-level stylesheet: it pulls bare `@import "tailwindcss"`
+ * (which ships Tailwind's global PREFLIGHT reset) and four workspace-wide
+ * `@source` directives that scan `core/`, `ui/`, every `plugins/*` and every
+ * `components/*` `dist/`. That is correct for an app importing it ONCE — it
+ * produces a single sheet with every utility used across the workspace.
+ *
+ * But each component package also imported `./shadcn`, so EVERY component
+ * re-ran those workspace `@source` scans and re-emitted preflight + the full
+ * token/keyframe set + the workspace-wide utility superset. The result was 12
+ * compiled `dist/styles.css` files of ~150–190 KB that were ~96% identical —
+ * the duplication this entry removes.
+ *
+ * This entry, by contrast:
+ *   - is PREFLIGHT-FREE — imports `tailwindcss/theme.css` + `tailwindcss/
+ *     utilities.css` only, never bare `@import "tailwindcss"`. A library
+ *     stylesheet must not ship a global element reset or it clobbers the host.
+ *   - declares NO `@source` — the importing component scans only its own
+ *     `src/**` (plus the specific `ui/src/*.tsx` files it renders), so each
+ *     component emits only the utilities IT uses.
+ *   - still ships the shadcn token DEFAULTS at zero specificity (`:where()`),
+ *     the `@theme inline` color/radius/animation map, and the animation
+ *     keyframes — so a single `import "@anvilkit/<slug>/styles.css"` renders
+ *     standalone with zero Tailwind/PostCSS config, exactly like
+ *     `@anvilkit/core/styles.css`.
+ *
+ * Mirrors the preflight-free contract in `@anvilkit/core` and
+ * `@anvilkit/canvas-editor`. Token values are kept in sync with `./shadcn`.
+ */
+
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/*
+ * Class-based dark mode — keep in lockstep with `./shadcn`, `@anvilkit/core`
+ * and `@anvilkit/canvas-editor`. Zero-specificity `:where()` lets a host theme
+ * win; the selector covers the `.dark` element itself plus its descendants.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+	--font-heading: var(--font-sans);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+	--animate-marquee: marquee var(--duration) infinite linear;
+	--animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+	--animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+	--animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite
+		alternate;
+	--animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+	--animate-ripple: ripple var(--duration, 2s) ease calc(var(--i, 0) * 0.2s)
+		infinite;
+	--animate-shiny-text: shiny-text 8s infinite;
+	--animate-aurora: aurora 8s ease-in-out infinite alternate;
+
+	@keyframes rainbow {
+		0% {
+			background-position: 0%;
+		}
+		100% {
+			background-position: 200%;
+		}
+	}
+
+	@keyframes shimmer-slide {
+		to {
+			transform: translate(calc(100cqw - 100%), 0);
+		}
+	}
+
+	@keyframes spin-around {
+		0% {
+			transform: translateZ(0) rotate(0);
+		}
+		15%,
+		35% {
+			transform: translateZ(0) rotate(90deg);
+		}
+		65%,
+		85% {
+			transform: translateZ(0) rotate(270deg);
+		}
+		100% {
+			transform: translateZ(0) rotate(360deg);
+		}
+	}
+	@keyframes ripple {
+		0%,
+		100% {
+			transform: translate(-50%, -50%) scale(1);
+		}
+		50% {
+			transform: translate(-50%, -50%) scale(0.9);
+		}
+	}
+	@keyframes marquee {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(calc(-100% - var(--gap)));
+		}
+	}
+	@keyframes marquee-vertical {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(calc(-100% - var(--gap)));
+		}
+	}
+	@keyframes aurora {
+		0% {
+			background-position: 0% 50%;
+			transform: rotate(-5deg) scale(0.9);
+		}
+		25% {
+			background-position: 50% 100%;
+			transform: rotate(5deg) scale(1.1);
+		}
+		50% {
+			background-position: 100% 50%;
+			transform: rotate(-3deg) scale(0.95);
+		}
+		75% {
+			background-position: 50% 0%;
+			transform: rotate(3deg) scale(1.05);
+		}
+		100% {
+			background-position: 0% 50%;
+			transform: rotate(-5deg) scale(0.9);
+		}
+	}
+	@keyframes shiny-text {
+		0%,
+		90%,
+		100% {
+			background-position: calc(-100% - var(--shiny-width)) 0;
+		}
+		30%,
+		60% {
+			background-position: calc(100% + var(--shiny-width)) 0;
+		}
+	}
+}
+
+/*
+ * shadcn token DEFAULTS. `:where()` keeps specificity at 0 so a host's own
+ * `:root { --background: … }` (e.g. an app importing `./shadcn`, or its own
+ * shadcn setup) always wins; these apply only when the host defines nothing,
+ * making a standalone component import render correctly with zero config.
+ */
+@layer base {
+	:where(:root) {
+		--background: oklch(1 0 0);
+		--foreground: oklch(0.145 0 0);
+		--card: oklch(1 0 0);
+		--card-foreground: oklch(0.145 0 0);
+		--popover: oklch(1 0 0);
+		--popover-foreground: oklch(0.145 0 0);
+		--primary: oklch(0.205 0 0);
+		--primary-foreground: oklch(0.985 0 0);
+		--secondary: oklch(0.97 0 0);
+		--secondary-foreground: oklch(0.205 0 0);
+		--muted: oklch(0.97 0 0);
+		--muted-foreground: oklch(0.556 0 0);
+		--accent: oklch(0.97 0 0);
+		--accent-foreground: oklch(0.205 0 0);
+		--destructive: oklch(0.577 0.245 27.325);
+		--border: oklch(0.922 0 0);
+		--input: oklch(0.922 0 0);
+		--ring: oklch(0.708 0 0);
+		--chart-1: oklch(0.87 0 0);
+		--chart-2: oklch(0.556 0 0);
+		--chart-3: oklch(0.439 0 0);
+		--chart-4: oklch(0.371 0 0);
+		--chart-5: oklch(0.269 0 0);
+		--radius: 0.625rem;
+		--sidebar: oklch(0.985 0 0);
+		--sidebar-foreground: oklch(0.145 0 0);
+		--sidebar-primary: oklch(0.205 0 0);
+		--sidebar-primary-foreground: oklch(0.985 0 0);
+		--sidebar-accent: oklch(0.97 0 0);
+		--sidebar-accent-foreground: oklch(0.205 0 0);
+		--sidebar-border: oklch(0.922 0 0);
+		--sidebar-ring: oklch(0.708 0 0);
+		--color-1: oklch(66.2% 0.225 25.9);
+		--color-2: oklch(60.4% 0.26 302);
+		--color-3: oklch(69.6% 0.165 251);
+		--color-4: oklch(80.2% 0.134 225);
+		--color-5: oklch(90.7% 0.231 133);
+	}
+	:where(.dark) {
+		--background: oklch(0.145 0 0);
+		--foreground: oklch(0.985 0 0);
+		--card: oklch(0.205 0 0);
+		--card-foreground: oklch(0.985 0 0);
+		--popover: oklch(0.205 0 0);
+		--popover-foreground: oklch(0.985 0 0);
+		--primary: oklch(0.922 0 0);
+		--primary-foreground: oklch(0.205 0 0);
+		--secondary: oklch(0.269 0 0);
+		--secondary-foreground: oklch(0.985 0 0);
+		--muted: oklch(0.269 0 0);
+		--muted-foreground: oklch(0.708 0 0);
+		--accent: oklch(0.269 0 0);
+		--accent-foreground: oklch(0.985 0 0);
+		--destructive: oklch(0.704 0.191 22.216);
+		--border: oklch(1 0 0 / 10%);
+		--input: oklch(1 0 0 / 15%);
+		--ring: oklch(0.556 0 0);
+		--chart-1: oklch(0.87 0 0);
+		--chart-2: oklch(0.556 0 0);
+		--chart-3: oklch(0.439 0 0);
+		--chart-4: oklch(0.371 0 0);
+		--chart-5: oklch(0.269 0 0);
+		--sidebar: oklch(0.205 0 0);
+		--sidebar-foreground: oklch(0.985 0 0);
+		--sidebar-primary: oklch(0.488 0.243 264.376);
+		--sidebar-primary-foreground: oklch(0.985 0 0);
+		--sidebar-accent: oklch(0.269 0 0);
+		--sidebar-accent-foreground: oklch(0.985 0 0);
+		--sidebar-border: oklch(1 0 0 / 10%);
+		--sidebar-ring: oklch(0.556 0 0);
+		--color-1: oklch(66.2% 0.225 25.9);
+		--color-2: oklch(60.4% 0.26 302);
+		--color-3: oklch(69.6% 0.165 251);
+		--color-4: oklch(80.2% 0.134 225);
+		--color-5: oklch(90.7% 0.231 133);
+	}
+	/*
+	 * Tailwind v4's default border color is `currentColor`; re-point border +
+	 * outline utilities to the shadcn tokens. Universal selector keeps
+	 * specificity at 0, so any host rule wins.
+	 */
+	* {
+		border-color: var(--border);
+		outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+	}
+}

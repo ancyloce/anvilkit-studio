@@ -6,6 +6,7 @@
 	"exports": {
 		".": "./theme.css",
 		"./shadcn": "./shadcn.css",
+		"./component": "./component.css",
 		"./postcss": "./postcss.config.mjs"
 	},
 	"dependencies": {
