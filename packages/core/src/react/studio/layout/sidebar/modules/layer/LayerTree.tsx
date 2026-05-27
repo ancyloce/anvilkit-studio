@@ -35,6 +35,7 @@ import {
 import { useGetPuck } from "@puckeditor/core";
 import { memo, type ReactNode, useCallback, useMemo, useState } from "react";
 import { cn } from "@/overrides/utils/cn";
+import { Windowed } from "@/primitives/Windowed";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorUiState } from "@/state/editor-ui-store";
 import { useEditorUiStore } from "@/state/hooks";
@@ -42,6 +43,8 @@ import { LayerRow } from "./LayerRow";
 import {
 	collectSubtreeZones,
 	findNode,
+	type LayerFlatRow,
+	flattenVisibleRows,
 	type LayerNode,
 	ROOT_ZONE,
 	resolveDrop,
@@ -50,6 +53,18 @@ import {
 
 /** Droppable id namespace so zone keys never collide with component ids. */
 const ZONE_PREFIX = "zone:";
+
+/**
+ * At/above this many *visible* rows the tree swaps from the recursive
+ * `LayerZone` renderer to a flat, windowed list (bounded DOM nodes). Below
+ * it the nested renderer is kept byte-identical, preserving the existing
+ * per-zone drag/drop behavior and all its tests.
+ */
+const WINDOW_THRESHOLD = 50;
+/** Approx. `LayerRow` height (h-7 = 28px) for the virtualizer estimate. */
+const ROW_ESTIMATE_PX = 28;
+/** Internal scroll viewport height when the flat path is active. */
+const TREE_VIEWPORT_PX = 480;
 
 /** Pointer-first, rect-fallback collision — the dnd-kit multi-container recipe. */
 const collisionDetection: CollisionDetection = (args) => {
@@ -147,11 +162,76 @@ function LayerZoneImpl({
  */
 const LayerZone = memo(LayerZoneImpl);
 
+/**
+ * Droppable target for an empty, expanded child zone in the flat windowed
+ * path. Carries the same `{ kind: "zone", zone, count: 0 }` drag data the
+ * nested `LayerZone` container exposes, so `handleDragEnd`/`resolveDrop`
+ * treat a drop here identically (append into the empty zone).
+ */
+function LayerZoneDropTarget({
+	zoneKey,
+	depth,
+}: {
+	readonly zoneKey: string;
+	readonly depth: number;
+}): ReactNode {
+	const { setNodeRef, isOver } = useDroppable({
+		id: `${ZONE_PREFIX}${zoneKey}`,
+		data: { kind: "zone", zone: zoneKey, count: 0 },
+	});
+	return (
+		<div
+			ref={setNodeRef}
+			data-testid={`ak-layer-zone-drop-${zoneKey}`}
+			style={{ paddingLeft: `${depth * 14 + 4}px` }}
+			className={cn("min-h-6 rounded", isOver && "bg-[var(--ak-studio-muted)]")}
+		/>
+	);
+}
+
 export function LayerTree(): ReactNode {
 	const msg = useMsg();
 	const getPuck = useGetPuck();
 	const { roots, selectedId } = useLayerTree();
 	const [activeId, setActiveId] = useState<string | null>(null);
+
+	// Read expansion state here (not just per-row) so the flat path can
+	// flatten exactly the visible rows the nested path would render.
+	const outlineExpanded = useEditorUiStore(selectOutlineExpanded);
+	const setOutlineExpanded = useEditorUiStore(selectSetOutlineExpanded);
+	const handleToggle = useCallback(
+		(id: string, next: boolean): void => setOutlineExpanded(id, next),
+		[setOutlineExpanded],
+	);
+
+	const flatRows = useMemo(
+		() => flattenVisibleRows(roots, outlineExpanded),
+		[roots, outlineExpanded],
+	);
+	const useFlat = flatRows.length >= WINDOW_THRESHOLD;
+	const flatNodeIds = useMemo(
+		() => flatRows.flatMap((row) => (row.type === "node" ? [row.node.id] : [])),
+		[flatRows],
+	);
+	const flatRowKey = useCallback((row: LayerFlatRow): string => row.key, []);
+	const renderFlatRow = useCallback(
+		(row: LayerFlatRow): ReactNode => {
+			if (row.type === "zone-drop") {
+				return <LayerZoneDropTarget zoneKey={row.zoneKey} depth={row.depth} />;
+			}
+			return (
+				<LayerRow
+					node={row.node}
+					selected={selectedId === row.node.id}
+					expanded={outlineExpanded[row.node.id] !== false}
+					hasChildren={row.hasChildren}
+					siblingCount={row.siblingCount}
+					onToggleExpand={handleToggle}
+				/>
+			);
+		},
+		[selectedId, outlineExpanded, handleToggle],
+	);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -250,7 +330,33 @@ export function LayerTree(): ReactNode {
 			}}
 		>
 			<div data-testid="ak-layer-tree">
-				<LayerZone zoneKey={ROOT_ZONE} nodes={roots} selectedId={selectedId} />
+				{useFlat ? (
+					// Flat windowed path (large documents): one SortableContext
+					// over every visible node id; each `LayerRow` still carries
+					// its own `{ kind, zone, index }` drag data and self-indents
+					// via `node.depth`, so `handleDragEnd`/`resolveDrop` are
+					// unchanged. Empty expanded zones get a droppable placeholder.
+					<SortableContext
+						items={flatNodeIds}
+						strategy={verticalListSortingStrategy}
+					>
+						<Windowed
+							items={flatRows}
+							itemKey={flatRowKey}
+							renderItem={renderFlatRow}
+							estimateSize={ROW_ESTIMATE_PX}
+							maxHeight={TREE_VIEWPORT_PX}
+							threshold={WINDOW_THRESHOLD}
+							data-testid="ak-layer-tree-virtualized"
+						/>
+					</SortableContext>
+				) : (
+					<LayerZone
+						zoneKey={ROOT_ZONE}
+						nodes={roots}
+						selectedId={selectedId}
+					/>
+				)}
 			</div>
 			<DragOverlay>
 				{activeNode !== null ? (
