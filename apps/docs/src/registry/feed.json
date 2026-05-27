@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-05-26T09:46:05.154Z",
+	"generatedAt": "2026-05-27T01:03:59.162Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",
@@ -149,7 +149,7 @@
 			"name": "@anvilkit/plugin-canvas-studio",
 			"description": "Canvas Studio integration plugin for Anvilkit Studio — mode-switch, design-block bridge, design:// asset resolver.",
 			"packageName": "@anvilkit/plugin-canvas-studio",
-			"version": "0.1.1",
+			"version": "0.1.2",
 			"category": "studio",
 			"tags": [],
 			"publisher": "first-party",
@@ -271,7 +271,7 @@
 			"name": "@anvilkit/design-block",
 			"description": "Anvilkit Puck-native Design Block — embeds a canvas design preview into a Puck page.",
 			"packageName": "@anvilkit/design-block",
-			"version": "0.0.1",
+			"version": "0.0.2",
 			"category": "content",
 			"tags": [],
 			"publisher": "first-party",
