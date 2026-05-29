@@ -1,0 +1,42 @@
+# Fly.io config for the AnvilKit collaboration relay. See README.md for
+# the full runbook (Upstash Redis + `fly deploy` + secrets + the Vercel
+# PUBLIC_COLLAB_WS_URL wiring on the docs site).
+app = "anvilkit-collab"
+primary_region = "iad"
+
+[build]
+
+[env]
+  PORT = "1234"
+  HOCUSPOCUS_NAME = "anvilkit-collab"
+  # Reject WS upgrades from other origins. Set to your docs origin(s),
+  # comma-separated. Add "http://localhost:4321" to point a local docs
+  # build at this relay. Empty/unset = allow any origin.
+  COLLAB_ALLOWED_ORIGINS = "https://anvilkit.dev"
+
+# Secrets (NOT in this file — set with `fly secrets set`):
+#   REDIS_URL          rediss://default:<pwd>@<host>.upstash.io:6379
+#   COLLAB_AUTH_TOKEN  optional; when set, clients must present it
+
+[http_service]
+  internal_port = 1234
+  force_https = true
+  # Scale to zero when idle (cheap demo). Raise min_machines_running to 1
+  # for an always-warm relay (no cold-start delay on first connect).
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  # WebSocket upgrades are proxied transparently by Fly's HTTP handler;
+  # wss://<app>.fly.dev (443) -> internal_port above.
+
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "10s"
+    method = "GET"
+    # Hocuspocus answers plain HTTP GET "/" with a 200.
+    path = "/"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
