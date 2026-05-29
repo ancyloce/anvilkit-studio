@@ -213,6 +213,12 @@ const DEFAULT_MOCK_PROMPT = "a hero for a SaaS landing page";
 // `DEFAULT_RELAY_PORT`. Overridable with PUBLIC_COLLAB_WS_PORT.
 const COLLAB_RELAY_PORT = import.meta.env.PUBLIC_COLLAB_WS_PORT ?? "41234";
 const COLLAB_DEFAULT_ROOM = "playground-room";
+// Full URL of the PRODUCTION relay (deployed apps/collab).
+// Set at build time on the docs deployment; when present it takes
+// priority over the local dev-relay port so the deployed static site
+// gets a real multi-user backend. Empty on local/un-configured builds.
+const COLLAB_WS_URL = import.meta.env.PUBLIC_COLLAB_WS_URL?.trim() ?? "";
+const COLLAB_WS_TOKEN = import.meta.env.PUBLIC_COLLAB_WS_TOKEN?.trim() ?? "";
 
 const PEER_ADJECTIVES = [
 	"Curious",
@@ -400,17 +406,27 @@ export default function Playground() {
 		let destroy: (() => void) | null = null;
 		void (async () => {
 			try {
-				// Derive the relay URL from the current host so WSL2 / LAN
-				// access works. The relay is plain `ws:` and only exists under
-				// local dev/preview; on an https page (the deployed static
-				// site) it can never exist, so skip the probe entirely — a
-				// `wss:` probe would only stall ~1.5s and log a spurious
-				// network error before falling back. Go straight to in-memory.
-				const relayUrl = `ws://${window.location.hostname}:${COLLAB_RELAY_PORT}`;
-				const relayReachable =
-					window.location.protocol === "https:"
-						? false
-						: await probeWebSocket(relayUrl, 1500);
+				let relayUrl: string;
+				let relayToken: string;
+				let relayReachable: boolean;
+				if (COLLAB_WS_URL) {
+					// Production relay (apps/collab on Fly). Works over
+					// wss on the https docs site; longer probe budget for the real
+					// round-trip / a possible scale-to-zero cold start.
+					relayUrl = COLLAB_WS_URL;
+					relayToken = COLLAB_WS_TOKEN;
+					relayReachable = await probeWebSocket(relayUrl, 4000);
+				} else {
+					// Local dev relay (collabRelay() Astro integration), plain ws.
+					// On an https page with no prod URL it can't exist, so skip the
+					// probe (it would only stall + log) and fall back to in-memory.
+					relayUrl = `ws://${window.location.hostname}:${COLLAB_RELAY_PORT}`;
+					relayToken = "";
+					relayReachable =
+						window.location.protocol === "https:"
+							? false
+							: await probeWebSocket(relayUrl, 1500);
+				}
 				if (cancelled) return;
 
 				const {
@@ -420,7 +436,11 @@ export default function Playground() {
 				if (cancelled) return;
 
 				const transport = relayReachable
-					? await createCollabHocuspocusTransport({ url: relayUrl, room })
+					? await createCollabHocuspocusTransport({
+							url: relayUrl,
+							room,
+							token: relayToken,
+						})
 					: await createInMemoryCollabTransport();
 				if (cancelled) {
 					transport.destroy();

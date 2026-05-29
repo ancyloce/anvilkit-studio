@@ -15,4 +15,18 @@ interface ImportMetaEnv {
 	 * `DEFAULT_RELAY_PORT` (41234) when unset.
 	 */
 	readonly PUBLIC_COLLAB_WS_PORT?: string;
+	/**
+	 * Full WebSocket URL of the PRODUCTION collab relay (the deployed
+	 * `apps/collab` on Fly.io), e.g.
+	 * `wss://anvilkit-collab.fly.dev`. When set, the playground's
+	 * `?collab=1` mode connects here (taking priority over the local
+	 * dev-relay port) — this is how the deployed static docs site gets a
+	 * real multi-user backend. Unset → local dev relay / in-memory.
+	 */
+	readonly PUBLIC_COLLAB_WS_URL?: string;
+	/**
+	 * Token sent to the production relay when it is configured with
+	 * `COLLAB_AUTH_TOKEN`. Omit for an open relay.
+	 */
+	readonly PUBLIC_COLLAB_WS_TOKEN?: string;
 }
