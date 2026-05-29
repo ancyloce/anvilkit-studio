@@ -4,10 +4,8 @@ description: Puck-native React component packages, runtime, and plugin ecosystem
 template: splash
 banner:
   content: |
-    AnvilKit Studio <strong>v1.1.0</strong> is GA.
-    <a href="https://github.com/ancyloce/anvilkit-studio/blob/main/docs/announcements/2027-12-v1-1-ga.md">What's new</a>
-    · <a href="https://github.com/ancyloce/anvilkit-studio/blob/main/docs/migration/1.0-to-1.1.md">Migration notes</a>
-    · <a href="https://github.com/ancyloce/anvilkit-studio/blob/main/docs/policies/lts.md">LTS policy</a>
+    AnvilKit is in active development — packages publish independently on the <strong>0.1.x</strong> line.
+    <a href="/getting-started/">Quickstart</a> · <a href="/playground/">Playground</a>
 hero:
   tagline: Ship Puck-native pages faster. Install only the components you need.
   actions:
@@ -27,36 +25,33 @@ hero:
 
 import { Card, CardGrid } from "@astrojs/starlight/components";
 
-## What's new in v1.1.0
+## Install
 
 The runtime cone (`@anvilkit/core`, `ir`, `schema`, `validator`, `utils`,
-`ui`) and the five GA plugins (`plugin-ai-copilot`, `plugin-asset-manager`,
-`plugin-export-html`, `plugin-export-react`, `plugin-version-history`) all
-bump to `1.1.0` in lockstep. The release is **purely additive** over `1.0.0`;
-the [LTS commitment](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/policies/lts.md)
-carries forward unchanged.
+`ui`) and every `@anvilkit/plugin-*` ship as their own npm packages,
+**versioned independently** via Changesets — there is no lockstep release
+train and no umbrella bundle. The line is currently `0.1.x`. Add only what
+you need:
 
 ```bash
-pnpm add @anvilkit/core@^1.1.0 @anvilkit/ir@^1.1.0 \
-         @anvilkit/schema@^1.1.0 @anvilkit/validator@^1.1.0 \
-         @anvilkit/plugin-ai-copilot@^1.1.0 \
-         @anvilkit/plugin-asset-manager@^1.1.0 \
-         @anvilkit/plugin-export-html@^1.1.0 \
-         @anvilkit/plugin-export-react@^1.1.0 \
-         @anvilkit/plugin-version-history@^1.1.0
+pnpm add @anvilkit/core @anvilkit/ir \
+         @anvilkit/schema @anvilkit/validator \
+         @anvilkit/plugin-ai-copilot \
+         @anvilkit/plugin-asset-manager \
+         @anvilkit/plugin-export-html \
+         @anvilkit/plugin-export-react \
+         @anvilkit/plugin-version-history
 ```
 
-Realtime collaboration ships separately on the alpha channel — see the
-[announcement](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/announcements/2027-12-v1-1-ga.md)
-§ "Alpha caveats" before installing:
+Realtime collaboration ships on a pre-release (`next`) dist-tag — read the
+[Collaboration guide](/guides/collaboration/) before installing:
 
 ```bash
-pnpm add @anvilkit/plugin-collab-yjs@alpha yjs y-protocols
+pnpm add @anvilkit/plugin-collab-yjs@next @anvilkit/collab-ui@next yjs y-protocols
 ```
 
-Read the [migration guide](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/migration/1.0-to-1.1.md)
-for the full additive surface (section-level AI editing, `PageIRNode.meta`,
-`anvilkit add`, `SnapshotAdapter` v2, `@anvilkit/ui/presence`).
+The additive `PageIRNode.meta` authoring metadata is documented in the
+[Page IR meta](/migration/page-ir-meta/) migration note.
 
 ## Component packages
 

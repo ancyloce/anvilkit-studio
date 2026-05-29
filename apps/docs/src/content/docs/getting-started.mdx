@@ -11,7 +11,7 @@ plugins. This guide mounts a minimal Studio host in a React app.
 
 ## Prerequisites
 
-- Node.js **≥ 20.19** (matches the workspace `engines` constraint)
+- Node.js **≥ 22.13** (matches the workspace `engines` constraint)
 - pnpm, npm, or yarn
 - A React 19 host app (Next.js 16 recommended)
 
@@ -73,7 +73,7 @@ yarn add @anvilkit/core @anvilkit/hero @anvilkit/button
 	import { config } from "./config";
 
 	export default function StudioPage() {
-		return <Studio config={config} />;
+		return <Studio puckConfig={config} />;
 	}
 	```
 

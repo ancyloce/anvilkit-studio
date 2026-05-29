@@ -1,0 +1,117 @@
+---
+title: Asset Manager plugin
+description: Headless asset uploads, registry search, IR-time resolution, and CSP guidance for Studio hosts that install @anvilkit/plugin-asset-manager.
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+`@anvilkit/plugin-asset-manager` is a first-party headless `StudioPlugin`.
+The **host** provides the upload backend (S3, GCS, custom HTTP); the plugin
+owns validation, an in-memory registry with search, IR-time `asset://`
+resolution, CSP guidance, and — optionally — a React upload/browse UI. Every
+adapter response crosses a strict trust boundary before it is registered.
+
+## 1. Install
+
+```sh
+pnpm add @anvilkit/plugin-asset-manager
+```
+
+Peer dependencies (already in the typical Studio host):
+
+- `@puckeditor/core ^0.21.2`
+- `react ^18.2.0 || ^19.0.0`
+- `react-dom ^18.2.0 || ^19.0.0`
+
+Subpath exports:
+
+- `@anvilkit/plugin-asset-manager` — factory, adapters, validation, CSP advisor, errors.
+- `@anvilkit/plugin-asset-manager/ui` — React UI components.
+- `@anvilkit/plugin-asset-manager/adapters/s3` — production `s3PresignedAdapter`.
+- `@anvilkit/plugin-asset-manager/retry` — `RetryableError` + `withRetry()`.
+- `@anvilkit/plugin-asset-manager/testing` — fixtures for downstream plugin tests.
+
+## 2. Minimal host
+
+The factory takes a required `uploader` adapter. `dataUrlUploader` is dev-only
+(files become in-memory `data:` URLs); swap in `s3PresignedAdapter` or a custom
+`UploadAdapter` for production.
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createAssetManagerPlugin,
+  dataUrlUploader,
+} from "@anvilkit/plugin-asset-manager";
+
+const assetManager = createAssetManagerPlugin({
+  uploader: dataUrlUploader(),
+});
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[assetManager]} />;
+}
+```
+
+Hoist the factory call to module scope so `<Studio>`'s plugin compile pipeline
+doesn't re-run on every render.
+
+## 3. Options
+
+```ts
+interface AssetManagerOptions {
+  readonly uploader: UploadAdapter;
+  readonly maxFileSize?: number;
+  readonly acceptedMimeTypes?: readonly string[];
+  readonly dataUrlAllowlistOptIn?: boolean;     // permit data: URLs (default false)
+  readonly allowMixedScriptHostnames?: boolean; // homoglyph guard (default false)
+  readonly getThumbnail?: (entry: UploadResult) => string | undefined;
+}
+```
+
+An `UploadAdapter` is just a function — the contract is intentionally tiny so a
+custom backend is a one-liner:
+
+```ts
+import type { UploadAdapter } from "@anvilkit/plugin-asset-manager";
+
+const myUploader: UploadAdapter = async (file, options) => {
+  const url = await uploadToMyBackend(file, { signal: options?.signal });
+  return { id: crypto.randomUUID(), url, name: file.name };
+};
+```
+
+## 4. Trust boundary
+
+Every `UploadResult` an adapter returns is run through `validateUploadResult`
+before registration: a scheme allowlist (`http`, `https`, `blob` always; `data:`
+only with `dataUrlAllowlistOptIn`), a path-traversal guard, and an IDN
+homoglyph guard. `javascript:` and `vbscript:` URLs are hard-blocked.
+
+Validation throws `AssetValidationError`; failed `asset://` resolution at
+export time throws `AssetResolutionError`.
+
+## 5. IR-time resolution & CSP
+
+`createIRAssetResolver` / `resolveAssets` turn `asset://<id>` references in the
+Page IR into validated URLs at export or render time. `getRequiredCsp` computes
+the minimum `connect-src` / `img-src` / `media-src` directives the configured
+adapters need:
+
+```ts
+import { getRequiredCsp } from "@anvilkit/plugin-asset-manager";
+
+const csp = getRequiredCsp({ adapters: ["s3"] });
+```
+
+## 6. Optional React UI
+
+The `./ui` subpath ships `UploadButton`, `AssetBrowser`, `AssetCommandPalette`,
+`MetadataPanel`, `ReplaceAssetDialog`, `DeleteAssetDialog`, and the composite
+`AssetManagerUI`. The default (`.`) export imports none of them, so headless
+consumers pay no UI rendering cost.
+
+<Aside type="note" title="Status (alpha, v0.1.5)">
+Public surface may still shift before `v1.0`. Bundle budgets are enforced in
+CI: headless ≤ 6 KB gzip, UI subpath ≤ 12 KB gzip.
+</Aside>

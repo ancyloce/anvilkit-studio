@@ -76,8 +76,36 @@ export default defineConfig({
 							slug: "guides/export-pipeline",
 						},
 						{
+							label: "Pages management",
+							slug: "guides/pages-management",
+						},
+						{
+							label: "AI integration",
+							slug: "guides/ai-integration",
+						},
+						{
 							label: "Design System plugin",
 							slug: "guides/design-system",
+						},
+						{
+							label: "AI Image plugin",
+							slug: "guides/ai-image",
+						},
+						{
+							label: "Asset Manager plugin",
+							slug: "guides/asset-manager",
+						},
+						{
+							label: "Version History plugin",
+							slug: "guides/version-history",
+						},
+						{
+							label: "Canvas Studio plugin",
+							slug: "guides/canvas-studio",
+						},
+						{
+							label: "Collaboration",
+							slug: "guides/collaboration",
 						},
 					],
 				},
@@ -92,6 +120,16 @@ export default defineConfig({
 						{
 							label: "Sidebar modules",
 							slug: "core/studio-sidebar",
+						},
+					],
+				},
+				{
+					label: "Migration",
+					collapsed: false,
+					items: [
+						{
+							label: "Page IR meta",
+							slug: "migration/page-ir-meta",
 						},
 					],
 				},

@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-05-28T14:08:19.219Z",
+	"generatedAt": "2026-05-29T17:10:04.469Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",
@@ -149,7 +149,7 @@
 			"name": "@anvilkit/plugin-canvas-studio",
 			"description": "Canvas Studio integration plugin for Anvilkit Studio — mode-switch, design-block bridge, design:// asset resolver.",
 			"packageName": "@anvilkit/plugin-canvas-studio",
-			"version": "0.1.2",
+			"version": "0.1.3",
 			"category": "studio",
 			"tags": [],
 			"publisher": "first-party",
@@ -169,7 +169,7 @@
 			"name": "@anvilkit/collab-ui",
 			"description": "Host UI primitives for @anvilkit/plugin-collab-yjs. Ships CollabUIProvider plus shadcn-style room bar, peer avatar stack, presence layer, sync indicator, conflict toaster, force-resync dialog, and settings popover.",
 			"packageName": "@anvilkit/collab-ui",
-			"version": "0.1.0-rc.4",
+			"version": "0.1.0-rc.5",
 			"category": "studio",
 			"tags": [],
 			"publisher": "first-party",
@@ -189,7 +189,7 @@
 			"name": "@anvilkit/plugin-collab-yjs",
 			"description": "Release-candidate Yjs CRDT collaboration plugin for Anvilkit Studio. Implements the SnapshotAdapter v2 contract over a host-provided transport, with conflict diagnostics, validation, debouncing, native-tree per-node CRDT merge (now default), snapshot diff API, awareness rate-limit, opt-in IndexedDB + BroadcastChannel cross-tab persistence, a connection-state contract, and force-resync.",
 			"packageName": "@anvilkit/plugin-collab-yjs",
-			"version": "0.10.0-rc.4",
+			"version": "0.10.0-rc.5",
 			"category": "studio",
 			"tags": [],
 			"publisher": "first-party",
