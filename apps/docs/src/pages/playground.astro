@@ -7,6 +7,12 @@
  * fighting for layout. The React island is mounted with
  * `client:only="react"` because Puck reaches for `window` during
  * setup and cannot be server-rendered.
+ *
+ * The island (`../components/Playground.tsx`) wires the full @anvilkit
+ * plugin surface into the live editor for demonstration — HTML/React
+ * export, the mock AI copilot, asset manager, design system, version
+ * history, Canvas Studio, and opt-in collaboration (`?collab=1`) —
+ * mirroring the demo app's Puck editor.
  */
 import PlaygroundIsland from "../components/Playground.tsx";
 import "../styles/tokens.css";
@@ -18,10 +24,11 @@ import "../styles/playground.css";
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light" />
 		<title>Playground · AnvilKit</title>
 		<meta
 			name="description"
-			content="Live AnvilKit playground with all 11 components, HTML export, and a mock AI copilot."
+			content="Live AnvilKit playground — drop the components into the canvas, export HTML/React, try the mock AI copilot, and explore the full @anvilkit plugin surface inside the editor."
 		/>
 		<link rel="canonical" href="https://anvilkit.dev/playground/" />
 	</head>
@@ -38,5 +45,38 @@ import "../styles/playground.css";
 			</div>
 		</nav>
 		<PlaygroundIsland client:only="react" />
+
+		<style is:global>
+			/* FIX: this route is light-only — shadcn's dark palette is keyed
+			   to a `.dark` class that the playground never sets. `playground.css`
+			   declares `:root { color-scheme: light dark }`, so on an OS that
+			   prefers dark the browser flips native controls, scrollbars and
+			   form widgets to dark while the design tokens stay light — a
+			   visible mismatch. Pin the UA scheme to light. `html:root`
+			   out-specifies the plain `:root` rule regardless of source order. */
+			html:root {
+				color-scheme: light;
+			}
+
+			/* FIX: the top bar used a rigid space-between row that could crowd
+			   or clip its links on narrow viewports. Allow it to wrap. */
+			body .anvilkit-playground__topbar {
+				flex-wrap: wrap;
+				gap: 0.5rem 1rem;
+			}
+
+			/* FIX: the mock-AI prompt row was a fixed two-column grid
+			   (textarea + button) that never collapsed, squeezing both on
+			   small screens. Stack them below 600px and let the button align
+			   to the start instead of stretching oddly. */
+			@media (max-width: 600px) {
+				body .anvilkit-playground__ai {
+					grid-template-columns: 1fr;
+				}
+				body .anvilkit-playground__ai .anvilkit-playground__button {
+					justify-self: start;
+				}
+			}
+		</style>
 	</body>
 </html>

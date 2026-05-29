@@ -1,4 +1,8 @@
 import "@puckeditor/core/puck.css";
+// Canvas Studio's overlay mounts `<CanvasWorkspace>` from
+// `@anvilkit/canvas-editor`; its compiled (preflight-free) chrome
+// stylesheet must be loaded by the host or the overlay renders blank.
+import "@anvilkit/canvas-editor/styles.css";
 import "@anvilkit/bento-grid/styles.css";
 import "@anvilkit/blog-list/styles.css";
 import "@anvilkit/helps/styles.css";
@@ -8,358 +12,482 @@ import "@anvilkit/navbar/styles.css";
 import "@anvilkit/pricing-minimal/styles.css";
 import "@anvilkit/section/styles.css";
 import "@anvilkit/statistics/styles.css";
+import "@anvilkit/core/styles.css";
 
 import {
-  type BentoGridProps,
-  componentConfig as bentoGridComponentConfig,
+	type BentoGridProps,
+	componentConfig as bentoGridComponentConfig,
 } from "@anvilkit/bento-grid";
 import {
-  type BlogListProps,
-  componentConfig as blogListComponentConfig,
+	type BlogListProps,
+	componentConfig as blogListComponentConfig,
 } from "@anvilkit/blog-list";
 import {
-  type ButtonProps,
-  componentConfig as buttonComponentConfig,
+	type ButtonProps,
+	componentConfig as buttonComponentConfig,
 } from "@anvilkit/button";
+import type { StudioPlugin } from "@anvilkit/core";
 import { Studio } from "@anvilkit/core";
 import {
-  type HelpsProps,
-  componentConfig as helpsComponentConfig,
+	type HelpsProps,
+	componentConfig as helpsComponentConfig,
 } from "@anvilkit/helps";
 import {
-  type HeroProps,
-  componentConfig as heroComponentConfig,
-  defaultProps as heroDefaultProps,
+	type HeroProps,
+	componentConfig as heroComponentConfig,
+	defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
 import {
-  type InputProps,
-  componentConfig as inputComponentConfig,
+	type InputProps,
+	componentConfig as inputComponentConfig,
 } from "@anvilkit/input";
 import { puckDataToIR } from "@anvilkit/ir";
 import {
-  type LogoCloudsProps,
-  componentConfig as logoCloudsComponentConfig,
+	type LogoCloudsProps,
+	componentConfig as logoCloudsComponentConfig,
 } from "@anvilkit/logo-clouds";
 import {
-  type NavbarProps,
-  componentConfig as navbarComponentConfig,
+	type NavbarProps,
+	componentConfig as navbarComponentConfig,
 } from "@anvilkit/navbar";
 import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
-import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
 import {
-  createHtmlExportPlugin,
-  htmlFormat,
+	createMockGeneratePage,
+	createMockGenerateSection,
+} from "@anvilkit/plugin-ai-copilot/mock";
+import {
+	createAssetManagerPlugin,
+	dataUrlUploader,
+} from "@anvilkit/plugin-asset-manager";
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+import {
+	createHtmlExportPlugin,
+	htmlFormat,
 } from "@anvilkit/plugin-export-html";
+import { createReactExportPlugin } from "@anvilkit/plugin-export-react";
 import {
-  type PricingMinimalProps,
-  componentConfig as pricingMinimalComponentConfig,
+	type PricingMinimalProps,
+	componentConfig as pricingMinimalComponentConfig,
 } from "@anvilkit/pricing-minimal";
 import {
-  type SectionProps,
-  componentConfig as sectionComponentConfig,
+	type SectionProps,
+	componentConfig as sectionComponentConfig,
 } from "@anvilkit/section";
 import {
-  type StatisticsProps,
-  componentConfig as statisticsComponentConfig,
+	type StatisticsProps,
+	componentConfig as statisticsComponentConfig,
 } from "@anvilkit/statistics";
 import type { Config, Data } from "@puckeditor/core";
 import { useEffect, useMemo, useState } from "react";
+import { lazyCanvasStudioPlugin } from "../lib/canvas-studio-lazy";
+import { createDemoVersionHistoryPlugins } from "../lib/history-sidebar-plugin";
 
 type PlaygroundComponents = {
-  BentoGrid: BentoGridProps;
-  BlogList: BlogListProps;
-  Button: ButtonProps;
-  Hero: HeroProps;
-  Helps: HelpsProps;
-  Input: InputProps;
-  LogoClouds: LogoCloudsProps;
-  Navbar: NavbarProps;
-  PricingMinimal: PricingMinimalProps;
-  Section: SectionProps;
-  Statistics: StatisticsProps;
+	BentoGrid: BentoGridProps;
+	BlogList: BlogListProps;
+	Button: ButtonProps;
+	Hero: HeroProps;
+	Helps: HelpsProps;
+	Input: InputProps;
+	LogoClouds: LogoCloudsProps;
+	Navbar: NavbarProps;
+	PricingMinimal: PricingMinimalProps;
+	Section: SectionProps;
+	Statistics: StatisticsProps;
 };
 
 const playgroundConfig: Config<PlaygroundComponents> = {
-  categories: {
-    navigation: { title: "Navigation", components: ["Navbar"] },
-    marketing: {
-      title: "Marketing",
-      components: [
-        "Hero",
-        "PricingMinimal",
-        "BentoGrid",
-        "Section",
-        "Statistics",
-        "BlogList",
-        "Helps",
-        "LogoClouds",
-      ],
-    },
-    actions: { title: "Actions", components: ["Button"] },
-    forms: { title: "Forms", components: ["Input"] },
-  },
-  components: {
-    BentoGrid: bentoGridComponentConfig,
-    BlogList: blogListComponentConfig,
-    Button: buttonComponentConfig,
-    Hero: heroComponentConfig,
-    Helps: helpsComponentConfig,
-    Input: inputComponentConfig,
-    LogoClouds: logoCloudsComponentConfig,
-    Navbar: navbarComponentConfig,
-    PricingMinimal: pricingMinimalComponentConfig,
-    Section: sectionComponentConfig,
-    Statistics: statisticsComponentConfig,
-  },
+	categories: {
+		navigation: { title: "Navigation", components: ["Navbar"] },
+		marketing: {
+			title: "Marketing",
+			components: [
+				"Hero",
+				"PricingMinimal",
+				"BentoGrid",
+				"Section",
+				"Statistics",
+				"BlogList",
+				"Helps",
+				"LogoClouds",
+			],
+		},
+		actions: { title: "Actions", components: ["Button"] },
+		forms: { title: "Forms", components: ["Input"] },
+	},
+	components: {
+		BentoGrid: bentoGridComponentConfig,
+		BlogList: blogListComponentConfig,
+		Button: buttonComponentConfig,
+		Hero: heroComponentConfig,
+		Helps: helpsComponentConfig,
+		Input: inputComponentConfig,
+		LogoClouds: logoCloudsComponentConfig,
+		Navbar: navbarComponentConfig,
+		PricingMinimal: pricingMinimalComponentConfig,
+		Section: sectionComponentConfig,
+		Statistics: statisticsComponentConfig,
+	},
 };
 
 function createInitialData(): Data<PlaygroundComponents> {
-  return {
-    root: {},
-    content: [
-      {
-        type: "Hero",
-        props: { id: "hero-primary", ...heroDefaultProps },
-      },
-    ],
-  };
+	return {
+		root: {},
+		content: [
+			{
+				type: "Hero",
+				props: { id: "hero-primary", ...heroDefaultProps },
+			},
+		],
+	};
 }
 
 const STORAGE_KEY = "anvilkit-playground-data-v1";
 
 // Module-scope singletons so React re-renders don't re-instantiate
 // plugins (which would bust the copilot's WeakMap cache and re-run
-// compilePlugins inside <Studio>).
+// compilePlugins inside <Studio>). This mirrors the demo's
+// `apps/demo/app/puck/editor/page.tsx` plugin set so the docs
+// playground demonstrates the full @anvilkit plugin surface live.
 const htmlExportPlugin = createHtmlExportPlugin();
-const aiCopilotPlugin = createAiCopilotPlugin({
-  puckConfig: playgroundConfig as unknown as Config,
-  generatePage: createMockGeneratePage({ delayMs: 300 }),
-  timeoutMs: 5_000,
-  forwardCurrentData: true,
+const reactExportPlugin = createReactExportPlugin({
+	syntax: "tsx",
+	assetStrategy: "url-prop",
 });
+const aiCopilotPlugin = createAiCopilotPlugin({
+	puckConfig: playgroundConfig as unknown as Config,
+	generatePage: createMockGeneratePage({ delayMs: 300 }),
+	generateSection: createMockGenerateSection({ delayMs: 300 }),
+	timeoutMs: 5_000,
+	forwardCurrentData: true,
+});
+// Asset manager: in-browser `data:` URL uploader so the sidebar's
+// image module works without a server-side persistence backend.
+const assetManagerPlugin = createAssetManagerPlugin({
+	uploader: dataUrlUploader(),
+	dataUrlAllowlistOptIn: true,
+});
+// Design System: token-bound field renderers + off-token / WCAG-AA
+// contrast validators wired through the plugin lifecycle.
+const designSystemPlugin = createDesignSystemPlugin();
+// Version History: headless plugin (header actions) paired with a
+// sidebar panel registration; localStorage-backed snapshot adapter.
+const { versionHistoryPlugin, sidebarPlugin: historySidebarPlugin } =
+	createDemoVersionHistoryPlugins({
+		puckConfig: playgroundConfig as unknown as Config,
+	});
+
+// Always-on base plugin set. Canvas Studio is lazy (Konva is fetched
+// in its own chunk at compile time). Collaboration is opt-in via
+// `?collab=1` — mirrors the demo and keeps the yjs stack out of the
+// default load.
+const basePlugins: readonly StudioPlugin[] = [
+	htmlExportPlugin,
+	reactExportPlugin,
+	aiCopilotPlugin,
+	assetManagerPlugin,
+	designSystemPlugin,
+	versionHistoryPlugin,
+	historySidebarPlugin,
+	lazyCanvasStudioPlugin,
+];
+
+// Stable local peer identity for the collaboration demo. Generated once
+// at module load; the island is `client:only`, so there is no SSR pass
+// to diverge from.
+const playgroundPeer = {
+	id: `playground-${Math.random().toString(36).slice(2, 10)}`,
+	displayName: "You",
+	color: "#6366f1",
+};
 
 const DEFAULT_MOCK_PROMPT = "a hero for a SaaS landing page";
 
 export default function Playground() {
-  const [data, setData] = useState<Data<PlaygroundComponents>>(() =>
-    createInitialData(),
-  );
-  const [aiEnabled, setAiEnabled] = useState(false);
-  const [prompt, setPrompt] = useState(DEFAULT_MOCK_PROMPT);
-  const [aiStatus, setAiStatus] = useState<"idle" | "pending">("idle");
-  const [aiError, setAiError] = useState<string | null>(null);
-  const [saveStatus, setSaveStatus] = useState<string>("");
-  const [hydrated, setHydrated] = useState(false);
+	const [data, setData] = useState<Data<PlaygroundComponents>>(() =>
+		createInitialData(),
+	);
+	const [aiEnabled, setAiEnabled] = useState(false);
+	const [prompt, setPrompt] = useState(DEFAULT_MOCK_PROMPT);
+	const [aiStatus, setAiStatus] = useState<"idle" | "pending">("idle");
+	const [aiError, setAiError] = useState<string | null>(null);
+	const [saveStatus, setSaveStatus] = useState<string>("");
+	const [hydrated, setHydrated] = useState(false);
+	// Collaboration plugins resolve asynchronously (in-memory Yjs
+	// transport + the consolidated `createCollabPlugin()` factory), and
+	// only when the page is opened with `?collab=1`. Null until then.
+	const [collabPlugins, setCollabPlugins] = useState<
+		readonly StudioPlugin[] | null
+	>(null);
 
-  // Hydrate from localStorage after mount so SSR/first-paint matches
-  // the deterministic `createInitialData()` shape — otherwise Astro's
-  // prerender and the client mount would diverge.
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw !== null) {
-        const parsed = JSON.parse(raw) as Data<PlaygroundComponents>;
-        setData(parsed);
-        setSaveStatus("Loaded saved draft from localStorage");
-      }
-    } catch {
-      // Ignore corrupt payloads — fall back to initial data.
-    }
-    setHydrated(true);
-  }, []);
+	// Hydrate from localStorage after mount so SSR/first-paint matches
+	// the deterministic `createInitialData()` shape — otherwise Astro's
+	// prerender and the client mount would diverge.
+	useEffect(() => {
+		try {
+			const raw = window.localStorage.getItem(STORAGE_KEY);
+			if (raw !== null) {
+				const parsed = JSON.parse(raw) as Data<PlaygroundComponents>;
+				setData(parsed);
+				setSaveStatus("Loaded saved draft from localStorage");
+			}
+		} catch {
+			// Ignore corrupt payloads — fall back to initial data.
+		}
+		setHydrated(true);
+	}, []);
 
-  // Persist on every change once hydrated. Skipping the pre-hydrate
-  // write avoids clobbering a real saved draft with the initial
-  // placeholder page on first mount.
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch {
-      // Quota errors are non-fatal here — the user can still edit.
-    }
-  }, [data, hydrated]);
+	// Persist on every change once hydrated. Skipping the pre-hydrate
+	// write avoids clobbering a real saved draft with the initial
+	// placeholder page on first mount.
+	useEffect(() => {
+		if (!hydrated) return;
+		try {
+			window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+		} catch {
+			// Quota errors are non-fatal here — the user can still edit.
+		}
+	}, [data, hydrated]);
 
-  // Always include the AI plugin so its WeakMap cache stays stable
-  // across toggles. The toggle only gates the UI that triggers
-  // generation; the plugin itself is inert until `runGeneration`
-  // fires.
-  const plugins = useMemo(() => [htmlExportPlugin, aiCopilotPlugin], []);
+	// Opt-in collaboration (`?collab=1`). The yjs / y-protocols stack and
+	// the collab-ui factories are dynamically imported so they stay out
+	// of the default playground chunk; an in-memory transport drives the
+	// presence UI single-tab. Mirrors the demo's `?collab=1` path.
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search);
+		if (params.get("collab") !== "1") return;
 
-  function handleChange(next: Data) {
-    setData(next as unknown as Data<PlaygroundComponents>);
-  }
+		let cancelled = false;
+		let destroy: (() => void) | null = null;
+		void (async () => {
+			try {
+				const { createInMemoryCollabTransport } = await import(
+					"../lib/collab-transport"
+				);
+				const transport = await createInMemoryCollabTransport();
+				destroy = transport.destroy;
+				if (cancelled) {
+					transport.destroy();
+					destroy = null;
+					return;
+				}
+				const [{ createCollabPlugin }, { createCollabStudioPlugin }] =
+					await Promise.all([
+						import("@anvilkit/collab-ui"),
+						import("../lib/collab-studio-plugin"),
+					]);
+				if (cancelled) {
+					transport.destroy();
+					destroy = null;
+					return;
+				}
+				const collabPlugin = createCollabPlugin({
+					doc: transport.doc,
+					awareness: transport.awareness,
+					self: playgroundPeer,
+					puckConfig: playgroundConfig as unknown as Config,
+					presence: { className: "!fixed z-[9999]" },
+				});
+				// `createCollabStudioPlugin` reads the adapter from the
+				// `<CollabUIProvider>` context the consolidated factory provides,
+				// so it is registered *after* it (array order preserved).
+				setCollabPlugins([collabPlugin, createCollabStudioPlugin()]);
+				setSaveStatus("Collaboration enabled (in-memory, single tab)");
+			} catch (error) {
+				console.error("[playground] collab init failed", error);
+			}
+		})();
+		return () => {
+			cancelled = true;
+			destroy?.();
+		};
+	}, []);
 
-  function handlePublish(next: Data) {
-    setData(next as unknown as Data<PlaygroundComponents>);
-    setSaveStatus("Published — draft saved to localStorage");
-  }
+	// Full plugin parity with the demo's Puck editor. The AI plugin stays
+	// resident so its WeakMap cache survives the UI toggle; collab plugins
+	// are appended once they resolve (changing the array recompiles the
+	// runtime — acceptable here since it happens right after mount).
+	const plugins = useMemo(
+		() => (collabPlugins ? [...basePlugins, ...collabPlugins] : basePlugins),
+		[collabPlugins],
+	);
 
-  function handleResetDraft() {
-    try {
-      window.localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // Non-fatal.
-    }
-    setData(createInitialData());
-    setSaveStatus("Reset to default draft");
-  }
+	function handleChange(next: Data) {
+		setData(next as unknown as Data<PlaygroundComponents>);
+	}
 
-  async function handleExportHtml() {
-    try {
-      const ir = puckDataToIR(data, playgroundConfig as unknown as Config);
-      const result = await htmlFormat.run(ir, { title: "AnvilKit Playground" });
-      const blobPart =
-        typeof result.content === "string"
-          ? result.content
-          : new Uint8Array(result.content);
-      const blob = new Blob([blobPart], { type: htmlFormat.mimeType });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = result.filename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("[playground] export failed", error);
-      setAiError(error instanceof Error ? error.message : "HTML export failed");
-    }
-  }
+	function handlePublish(next: Data) {
+		setData(next as unknown as Data<PlaygroundComponents>);
+		setSaveStatus("Published — draft saved to localStorage");
+	}
 
-  async function handleGenerate() {
-    const trimmed = prompt.trim();
-    if (trimmed.length === 0) {
-      setAiError("Enter a prompt first.");
-      return;
-    }
-    setAiError(null);
-    setAiStatus("pending");
-    try {
-      await aiCopilotPlugin.runGeneration(trimmed);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      setAiError(message);
-    } finally {
-      setAiStatus("idle");
-    }
-  }
+	function handleResetDraft() {
+		try {
+			window.localStorage.removeItem(STORAGE_KEY);
+		} catch {
+			// Non-fatal.
+		}
+		setData(createInitialData());
+		setSaveStatus("Reset to default draft");
+	}
 
-  return (
-    <div data-testid="playground-root" className="anvilkit-playground">
-      <header className="anvilkit-playground__header">
-        <div>
-          <p className="anvilkit-playground__eyebrow">Interactive playground</p>
-          <h1 className="anvilkit-playground__title">
-            Try AnvilKit without cloning the repo
-          </h1>
-          <p className="anvilkit-playground__lede">
-            Drag any of the 11 <code>@anvilkit/*</code> components into the
-            canvas, export the result as standalone HTML, or try the mock AI
-            copilot to inject a fixture page. Your draft is kept in{" "}
-            <code>localStorage</code>.
-          </p>
-        </div>
-        <div className="anvilkit-playground__actions">
-          <button
-            type="button"
-            className="anvilkit-playground__button anvilkit-playground__button--primary"
-            onClick={handleExportHtml}
-            data-testid="playground-export-html"
-          >
-            Export HTML
-          </button>
-          <button
-            type="button"
-            className="anvilkit-playground__button"
-            onClick={handleResetDraft}
-            data-testid="playground-reset"
-          >
-            Reset draft
-          </button>
-        </div>
-      </header>
+	async function handleExportHtml() {
+		try {
+			const ir = puckDataToIR(data, playgroundConfig as unknown as Config);
+			const result = await htmlFormat.run(ir, { title: "AnvilKit Playground" });
+			const blobPart =
+				typeof result.content === "string"
+					? result.content
+					: new Uint8Array(result.content);
+			const blob = new Blob([blobPart], { type: htmlFormat.mimeType });
+			const url = URL.createObjectURL(blob);
+			const anchor = document.createElement("a");
+			anchor.href = url;
+			anchor.download = result.filename;
+			document.body.appendChild(anchor);
+			anchor.click();
+			anchor.remove();
+			URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error("[playground] export failed", error);
+			setAiError(error instanceof Error ? error.message : "HTML export failed");
+		}
+	}
 
-      <section
-        className="anvilkit-playground__panel"
-        aria-labelledby="playground-ai-heading"
-      >
-        <label className="anvilkit-playground__toggle">
-          <input
-            type="checkbox"
-            checked={aiEnabled}
-            onChange={(event) => setAiEnabled(event.target.checked)}
-            data-testid="playground-ai-toggle"
-          />
-          <span>Try AI (mock)</span>
-        </label>
-        <h2
-          id="playground-ai-heading"
-          className="anvilkit-playground__panel-title"
-        >
-          Mock AI copilot
-        </h2>
-        <p className="anvilkit-playground__panel-lede">
-          Uses the bundled fixture harness. Type a prompt matching a known
-          fixture (e.g. &ldquo;a hero&rdquo;, &ldquo;pricing table&rdquo;,
-          &ldquo;logo cloud&rdquo;) and press Generate.
-        </p>
-        {aiEnabled ? (
-          <div className="anvilkit-playground__ai">
-            <label
-              htmlFor="playground-ai-prompt"
-              className="anvilkit-playground__field"
-            >
-              <span className="anvilkit-playground__field-label">Prompt</span>
-              <textarea
-                id="playground-ai-prompt"
-                name="playground-ai-prompt"
-                value={prompt}
-                onChange={(event) => setPrompt(event.target.value)}
-                rows={2}
-                data-testid="playground-ai-prompt"
-              />
-            </label>
-            <button
-              type="button"
-              className="anvilkit-playground__button anvilkit-playground__button--primary"
-              onClick={handleGenerate}
-              disabled={aiStatus === "pending"}
-              data-testid="playground-ai-generate"
-            >
-              {aiStatus === "pending" ? "Generating…" : "Generate fixture"}
-            </button>
-          </div>
-        ) : null}
-        {aiError !== null ? (
-          <p
-            role="alert"
-            data-testid="playground-ai-error"
-            className="anvilkit-playground__error"
-          >
-            {aiError}
-          </p>
-        ) : null}
-      </section>
+	async function handleGenerate() {
+		const trimmed = prompt.trim();
+		if (trimmed.length === 0) {
+			setAiError("Enter a prompt first.");
+			return;
+		}
+		setAiError(null);
+		setAiStatus("pending");
+		try {
+			await aiCopilotPlugin.runGeneration(trimmed);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			setAiError(message);
+		} finally {
+			setAiStatus("idle");
+		}
+	}
 
-      <section className="anvilkit-playground__canvas">
-        <Studio
-          puckConfig={playgroundConfig as unknown as Config}
-          data={data}
-          plugins={plugins}
-          onChange={handleChange}
-          onPublish={handlePublish}
-        />
-      </section>
+	return (
+		<div data-testid="playground-root" className="anvilkit-playground">
+			<header className="anvilkit-playground__header">
+				<div>
+					<p className="anvilkit-playground__eyebrow">Interactive playground</p>
+					<h1 className="anvilkit-playground__title">
+						Try AnvilKit without cloning the repo
+					</h1>
+					<p className="anvilkit-playground__lede">
+						Drag any of the 11 <code>@anvilkit/*</code> components into the
+						canvas, then explore the full plugin surface live in the editor:
+						HTML/React export, the mock AI copilot, the asset manager, design
+						system, version history, and Canvas Studio. Add{" "}
+						<code>?collab=1</code> to the URL to enable in-memory collaboration.
+						Your draft is kept in <code>localStorage</code>.
+					</p>
+				</div>
+				<div className="anvilkit-playground__actions">
+					<button
+						type="button"
+						className="anvilkit-playground__button anvilkit-playground__button--primary"
+						onClick={handleExportHtml}
+						data-testid="playground-export-html"
+					>
+						Export HTML
+					</button>
+					<button
+						type="button"
+						className="anvilkit-playground__button"
+						onClick={handleResetDraft}
+						data-testid="playground-reset"
+					>
+						Reset draft
+					</button>
+				</div>
+			</header>
 
-      <p
-        className="anvilkit-playground__status"
-        role="status"
-        data-testid="playground-status"
-      >
-        {saveStatus}
-      </p>
-    </div>
-  );
+			<section
+				className="anvilkit-playground__panel"
+				aria-labelledby="playground-ai-heading"
+			>
+				<label className="anvilkit-playground__toggle">
+					<input
+						type="checkbox"
+						checked={aiEnabled}
+						onChange={(event) => setAiEnabled(event.target.checked)}
+						data-testid="playground-ai-toggle"
+					/>
+					<span>Try AI (mock)</span>
+				</label>
+				<h2
+					id="playground-ai-heading"
+					className="anvilkit-playground__panel-title"
+				>
+					Mock AI copilot
+				</h2>
+				<p className="anvilkit-playground__panel-lede">
+					Uses the bundled fixture harness. Type a prompt matching a known
+					fixture (e.g. &ldquo;a hero&rdquo;, &ldquo;pricing table&rdquo;,
+					&ldquo;logo cloud&rdquo;) and press Generate.
+				</p>
+				{aiEnabled ? (
+					<div className="anvilkit-playground__ai">
+						<label
+							htmlFor="playground-ai-prompt"
+							className="anvilkit-playground__field"
+						>
+							<span className="anvilkit-playground__field-label">Prompt</span>
+							<textarea
+								id="playground-ai-prompt"
+								name="playground-ai-prompt"
+								value={prompt}
+								onChange={(event) => setPrompt(event.target.value)}
+								rows={2}
+								data-testid="playground-ai-prompt"
+							/>
+						</label>
+						<button
+							type="button"
+							className="anvilkit-playground__button anvilkit-playground__button--primary"
+							onClick={handleGenerate}
+							disabled={aiStatus === "pending"}
+							data-testid="playground-ai-generate"
+						>
+							{aiStatus === "pending" ? "Generating…" : "Generate fixture"}
+						</button>
+					</div>
+				) : null}
+				{aiError !== null ? (
+					<p
+						role="alert"
+						data-testid="playground-ai-error"
+						className="anvilkit-playground__error"
+					>
+						{aiError}
+					</p>
+				) : null}
+			</section>
+
+			<section className="anvilkit-playground__canvas">
+				<Studio
+					puckConfig={playgroundConfig as unknown as Config}
+					data={data}
+					plugins={plugins}
+					onChange={handleChange}
+					onPublish={handlePublish}
+				/>
+			</section>
+
+			<p
+				className="anvilkit-playground__status"
+				role="status"
+				data-testid="playground-status"
+			>
+				{saveStatus}
+			</p>
+		</div>
+	);
 }
