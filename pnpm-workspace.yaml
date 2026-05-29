@@ -1,5 +1,10 @@
 packages:
   - "apps/*"
+  # apps/collab is a standalone Dockerized Hocuspocus relay deployed to
+  # Fly.io (its own npm lockfile + Docker build, no workspace deps). It has
+  # a different build/deploy lifecycle than the Turbo/Vercel-built apps, so
+  # it is deliberately excluded from the pnpm workspace.
+  - "!apps/collab"
   - "packages/*"
   - "packages/canvas/*"
   - "packages/plugins/*"
