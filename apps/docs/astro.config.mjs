@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import { collabRelay } from "./integrations/collab-relay.mjs";
 
 // Starlight bootstrap for the AnvilKit documentation site (phase4-001).
 // Sidebar groups below are intentionally shells — later Phase 4 tasks
@@ -20,6 +21,11 @@ export default defineConfig({
 	},
 	integrations: [
 		react(),
+		// Auto-starts an embedded Hocuspocus WebSocket relay during
+		// `astro dev` / `astro preview` so the playground's `?collab=1`
+		// mode gets a real multi-tab collaboration backend with no extra
+		// command. See integrations/collab-relay.mjs.
+		collabRelay(),
 		starlight({
 			title: "AnvilKit",
 			description:
