@@ -345,6 +345,12 @@ importers:
       '@anvilkit/button':
         specifier: workspace:*
         version: link:../../packages/components/src/button
+      '@anvilkit/canvas-editor':
+        specifier: workspace:*
+        version: link:../../packages/canvas/editor
+      '@anvilkit/collab-ui':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-collab-ui
       '@anvilkit/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -369,9 +375,27 @@ importers:
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-ai-copilot
+      '@anvilkit/plugin-asset-manager':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-asset-manager
+      '@anvilkit/plugin-canvas-studio':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-canvas-studio
+      '@anvilkit/plugin-collab-yjs':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-collab-yjs
+      '@anvilkit/plugin-design-system':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-design-system
       '@anvilkit/plugin-export-html':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-export-html
+      '@anvilkit/plugin-export-react':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-export-react
+      '@anvilkit/plugin-version-history':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-version-history
       '@anvilkit/pricing-minimal':
         specifier: workspace:*
         version: link:../../packages/components/src/pricing-minimal
@@ -414,6 +438,12 @@ importers:
       tailwindcss:
         specifier: 4.2.2
         version: 4.2.2
+      y-protocols:
+        specifier: ^1.0.7
+        version: 1.0.7(yjs@13.6.30)
+      yjs:
+        specifier: ^13.6.30
+        version: 13.6.30
       zod:
         specifier: ^4.4.3
         version: 4.4.3
