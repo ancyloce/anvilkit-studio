@@ -28,6 +28,10 @@ import {
 } from "@anvilkit/button";
 import type { StudioPlugin } from "@anvilkit/core";
 import { Studio } from "@anvilkit/core";
+import type {
+	ConnectionSource,
+	ConnectionStatus,
+} from "@anvilkit/plugin-collab-yjs";
 import {
 	type HelpsProps,
 	componentConfig as helpsComponentConfig,
@@ -203,6 +207,118 @@ const playgroundPeer = {
 
 const DEFAULT_MOCK_PROMPT = "a hero for a SaaS landing page";
 
+// Port of the local Hocuspocus relay that the `collabRelay()` Astro
+// integration starts automatically during `astro dev` / `astro preview`
+// (integrations/collab-relay.mjs). MUST stay in sync with its
+// `DEFAULT_RELAY_PORT`. Overridable with PUBLIC_COLLAB_WS_PORT.
+const COLLAB_RELAY_PORT = import.meta.env.PUBLIC_COLLAB_WS_PORT ?? "41234";
+const COLLAB_DEFAULT_ROOM = "playground-room";
+
+const PEER_ADJECTIVES = [
+	"Curious",
+	"Daring",
+	"Eager",
+	"Gentle",
+	"Jolly",
+	"Keen",
+	"Lively",
+	"Nimble",
+	"Playful",
+	"Quick",
+	"Sunny",
+	"Swift",
+	"Witty",
+	"Bright",
+] as const;
+const PEER_ANIMALS = [
+	"Falcon",
+	"Otter",
+	"Panda",
+	"Lynx",
+	"Heron",
+	"Badger",
+	"Puffin",
+	"Quokka",
+	"Raven",
+	"Seal",
+	"Tapir",
+	"Wombat",
+	"Yak",
+	"Zebra",
+] as const;
+
+function randomPeerName(): string {
+	const adjective =
+		PEER_ADJECTIVES[Math.floor(Math.random() * PEER_ADJECTIVES.length)];
+	const animal = PEER_ANIMALS[Math.floor(Math.random() * PEER_ANIMALS.length)];
+	return `${adjective} ${animal}`;
+}
+
+type CollabMode = "off" | "relay" | "memory";
+
+function describeConnection(status: ConnectionStatus | null): string {
+	if (status === null) return "Connecting…";
+	switch (status.kind) {
+		case "synced":
+			return "Synced";
+		case "connecting":
+			return "Connecting…";
+		case "reconnecting":
+			return `Reconnecting (attempt ${status.attempt})`;
+		case "offline":
+			return "Offline";
+		case "error":
+			return `Error: ${status.message}`;
+	}
+}
+
+function connectionTone(status: ConnectionStatus | null): string {
+	switch (status?.kind) {
+		case "synced":
+			return "#22c55e";
+		case "connecting":
+		case "reconnecting":
+		case undefined:
+			return "#f59e0b";
+		default:
+			return "#ef4444";
+	}
+}
+
+/**
+ * Briefly open a raw WebSocket to decide whether the local relay is
+ * reachable before committing to the Hocuspocus transport. Avoids the
+ * provider's perpetual reconnect noise on the deployed static site,
+ * where no relay exists and we should silently fall back to in-memory.
+ */
+function probeWebSocket(url: string, timeoutMs: number): Promise<boolean> {
+	return new Promise((resolve) => {
+		let settled = false;
+		let socket: WebSocket | null = null;
+		const finish = (ok: boolean) => {
+			if (settled) return;
+			settled = true;
+			window.clearTimeout(timer);
+			try {
+				socket?.close();
+			} catch {
+				// noop
+			}
+			resolve(ok);
+		};
+		const timer = window.setTimeout(() => finish(false), timeoutMs);
+		try {
+			socket = new WebSocket(url);
+		} catch {
+			finish(false);
+			return;
+		}
+		socket.onopen = () => finish(true);
+		socket.onerror = () => finish(false);
+		socket.onclose = () => finish(false);
+	});
+}
+
 export default function Playground() {
 	const [data, setData] = useState<Data<PlaygroundComponents>>(() =>
 		createInitialData(),
@@ -219,6 +335,13 @@ export default function Playground() {
 	const [collabPlugins, setCollabPlugins] = useState<
 		readonly StudioPlugin[] | null
 	>(null);
+	// Which transport backs the collab session: a real Hocuspocus relay
+	// (multi-tab) or the in-memory single-tab fallback. `off` until
+	// `?collab=1` resolves.
+	const [collabMode, setCollabMode] = useState<CollabMode>("off");
+	const [collabStatus, setCollabStatus] = useState<ConnectionStatus | null>(
+		null,
+	);
 
 	// Hydrate from localStorage after mount so SSR/first-paint matches
 	// the deterministic `createInitialData()` shape — otherwise Astro's
@@ -249,28 +372,62 @@ export default function Playground() {
 		}
 	}, [data, hydrated]);
 
-	// Opt-in collaboration (`?collab=1`). The yjs / y-protocols stack and
-	// the collab-ui factories are dynamically imported so they stay out
-	// of the default playground chunk; an in-memory transport drives the
-	// presence UI single-tab. Mirrors the demo's `?collab=1` path.
+	// Opt-in collaboration (`?collab=1`). Prefers the embedded Hocuspocus
+	// relay that the `collabRelay()` Astro integration auto-starts during
+	// `astro dev` / `astro preview` (real multi-tab backend), and falls
+	// back to an in-memory single-tab transport when no relay answers —
+	// e.g. the deployed static site, which can't host a WebSocket. The
+	// yjs / @hocuspocus/provider stack and the collab-ui factories are
+	// dynamically imported so they stay out of the default chunk.
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
 		if (params.get("collab") !== "1") return;
+
+		const room = params.get("room") || COLLAB_DEFAULT_ROOM;
+		const peerOverride = params.get("peer")?.trim();
+		// Distinct id per tab so two tabs of the same browser appear as
+		// separate peers; distinct name so cursors are tellable apart.
+		const self = {
+			id: `playground-${Math.random().toString(36).slice(2, 10)}`,
+			displayName:
+				peerOverride && peerOverride.length > 0
+					? peerOverride.slice(0, 64)
+					: randomPeerName(),
+			color: playgroundPeer.color,
+		};
 
 		let cancelled = false;
 		let destroy: (() => void) | null = null;
 		void (async () => {
 			try {
-				const { createInMemoryCollabTransport } = await import(
-					"../lib/collab-transport"
-				);
-				const transport = await createInMemoryCollabTransport();
-				destroy = transport.destroy;
+				// Derive the relay URL from the current host so WSL2 / LAN
+				// access works. The relay is plain `ws:` and only exists under
+				// local dev/preview; on an https page (the deployed static
+				// site) it can never exist, so skip the probe entirely — a
+				// `wss:` probe would only stall ~1.5s and log a spurious
+				// network error before falling back. Go straight to in-memory.
+				const relayUrl = `ws://${window.location.hostname}:${COLLAB_RELAY_PORT}`;
+				const relayReachable =
+					window.location.protocol === "https:"
+						? false
+						: await probeWebSocket(relayUrl, 1500);
+				if (cancelled) return;
+
+				const {
+					createCollabHocuspocusTransport,
+					createInMemoryCollabTransport,
+				} = await import("../lib/collab-transport");
+				if (cancelled) return;
+
+				const transport = relayReachable
+					? await createCollabHocuspocusTransport({ url: relayUrl, room })
+					: await createInMemoryCollabTransport();
 				if (cancelled) {
 					transport.destroy();
-					destroy = null;
 					return;
 				}
+				destroy = transport.destroy;
+
 				const [{ createCollabPlugin }, { createCollabStudioPlugin }] =
 					await Promise.all([
 						import("@anvilkit/collab-ui"),
@@ -281,10 +438,24 @@ export default function Playground() {
 					destroy = null;
 					return;
 				}
+
+				// Tee the transport's status emits into the page badge while
+				// still forwarding them to the plugin's sync indicator. Capture
+				// the source in a local so the closure doesn't re-narrow.
+				const source = transport.connectionSource;
+				const connectionSource: ConnectionSource | undefined = source
+					? (emit) =>
+							source((next) => {
+								setCollabStatus(next);
+								emit(next);
+							})
+					: undefined;
+
 				const collabPlugin = createCollabPlugin({
 					doc: transport.doc,
 					awareness: transport.awareness,
-					self: playgroundPeer,
+					connectionSource,
+					self,
 					puckConfig: playgroundConfig as unknown as Config,
 					presence: { className: "!fixed z-[9999]" },
 				});
@@ -292,7 +463,17 @@ export default function Playground() {
 				// `<CollabUIProvider>` context the consolidated factory provides,
 				// so it is registered *after* it (array order preserved).
 				setCollabPlugins([collabPlugin, createCollabStudioPlugin()]);
-				setSaveStatus("Collaboration enabled (in-memory, single tab)");
+				setCollabMode(relayReachable ? "relay" : "memory");
+				setCollabStatus(
+					relayReachable
+						? { kind: "connecting" }
+						: { kind: "synced", since: new Date().toISOString() },
+				);
+				setSaveStatus(
+					relayReachable
+						? `Collaboration enabled — Hocuspocus relay (room "${room}")`
+						: "Collaboration enabled (in-memory fallback — relay not reachable)",
+				);
 			} catch (error) {
 				console.error("[playground] collab init failed", error);
 			}
@@ -385,8 +566,11 @@ export default function Playground() {
 						canvas, then explore the full plugin surface live in the editor:
 						HTML/React export, the mock AI copilot, the asset manager, design
 						system, version history, and Canvas Studio. Add{" "}
-						<code>?collab=1</code> to the URL to enable in-memory collaboration.
-						Your draft is kept in <code>localStorage</code>.
+						<code>?collab=1</code> to the URL to collaborate live — running
+						locally (<code>dev</code>/<code>preview</code>) it connects to an
+						auto-started WebSocket relay for real multi-tab editing; elsewhere
+						it falls back to an in-memory single-tab session. Your draft is kept
+						in <code>localStorage</code>.
 					</p>
 				</div>
 				<div className="anvilkit-playground__actions">
@@ -470,6 +654,37 @@ export default function Playground() {
 					</p>
 				) : null}
 			</section>
+
+			{collabMode !== "off" ? (
+				<section
+					data-testid="playground-collab-status"
+					style={{
+						display: "flex",
+						alignItems: "center",
+						gap: "0.5rem",
+						fontSize: "0.875rem",
+						margin: "0.25rem 0",
+					}}
+				>
+					<span
+						aria-hidden
+						style={{
+							display: "inline-block",
+							width: "0.625rem",
+							height: "0.625rem",
+							borderRadius: "9999px",
+							backgroundColor: connectionTone(collabStatus),
+						}}
+					/>
+					<span style={{ fontWeight: 500 }}>
+						{describeConnection(collabStatus)}
+					</span>
+					<span style={{ color: "#6b7280" }}>
+						·{" "}
+						{collabMode === "relay" ? "Hocuspocus relay" : "in-memory fallback"}
+					</span>
+				</section>
+			) : null}
 
 			<section className="anvilkit-playground__canvas">
 				<Studio
