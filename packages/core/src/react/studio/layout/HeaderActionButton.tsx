@@ -22,6 +22,7 @@ import {
 	useCallback,
 	useState,
 } from "react";
+import { errorToLogMeta } from "@/components/studio-log";
 import { Button } from "@/primitives/button";
 import { DropdownMenuItem } from "@/primitives/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
@@ -96,9 +97,7 @@ function evaluateDisabled(
 		ctx.log(
 			"error",
 			`header action "${action.id}" disabled() threw`,
-			error instanceof Error
-				? { name: error.name, message: error.message, stack: error.stack }
-				: { value: String(error) },
+			errorToLogMeta(error),
 		);
 		return true;
 	}
@@ -125,9 +124,7 @@ export function HeaderActionButton({
 			ctx.log(
 				"error",
 				`header action "${action.id}" threw`,
-				error instanceof Error
-					? { name: error.name, message: error.message, stack: error.stack }
-					: { value: String(error) },
+				errorToLogMeta(error),
 			);
 		} finally {
 			setPending(false);

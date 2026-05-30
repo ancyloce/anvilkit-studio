@@ -24,6 +24,7 @@ import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorTab } from "@/state/editor-ui-store";
 import { useActiveTab, useEditorUiStore } from "@/state/hooks";
 import { CopilotModule } from "./sidebar/modules/CopilotModule";
+import { DesignSystemModule } from "./sidebar/modules/DesignSystemModule";
 import { HistoryModule } from "./sidebar/modules/HistoryModule";
 import { ImageModule } from "./sidebar/modules/ImageModule";
 import { InsertModule } from "./sidebar/modules/InsertModule";
@@ -47,6 +48,7 @@ const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
 	text: "studio.module.text.name",
 	copilot: "studio.module.copilot.name",
 	history: "studio.module.history.name",
+	"design-system": "studio.module.designSystem.name",
 };
 
 function renderModuleBody(tab: EditorTab): ReactNode {
@@ -63,6 +65,8 @@ function renderModuleBody(tab: EditorTab): ReactNode {
 			return <CopilotModule />;
 		case "history":
 			return <HistoryModule />;
+		case "design-system":
+			return <DesignSystemModule />;
 	}
 }
 
