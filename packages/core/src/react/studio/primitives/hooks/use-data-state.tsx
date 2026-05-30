@@ -19,32 +19,38 @@ function useDataState<T extends HTMLElement = HTMLElement>(
 	const localRef = React.useRef<T | null>(null);
 	React.useImperativeHandle(forwardedRef, () => localRef.current as T);
 
-	const getSnapshot = (): DataStateValue => {
+	// RX-1: stabilize both callbacks on `[key]` so `useSyncExternalStore`
+	// does not tear down + recreate the `MutationObserver` on every
+	// commit (`localRef` is a stable ref, so it is not a dependency).
+	const getSnapshot = React.useCallback((): DataStateValue => {
 		const el = localRef.current;
 		return el ? parseDatasetValue(el.getAttribute(`data-${key}`)) : null;
-	};
+	}, [key]);
 
-	const subscribe = (callback: () => void) => {
-		const el = localRef.current;
-		if (!el) {
-			return () => {
-				// no element to observe — no-op cleanup
-			};
-		}
-		const observer = new MutationObserver((records) => {
-			for (const record of records) {
-				if (record.attributeName === `data-${key}`) {
-					callback();
-					break;
-				}
+	const subscribe = React.useCallback(
+		(callback: () => void) => {
+			const el = localRef.current;
+			if (!el) {
+				return () => {
+					// no element to observe — no-op cleanup
+				};
 			}
-		});
-		observer.observe(el, {
-			attributes: true,
-			attributeFilter: [`data-${key}`],
-		});
-		return () => observer.disconnect();
-	};
+			const observer = new MutationObserver((records) => {
+				for (const record of records) {
+					if (record.attributeName === `data-${key}`) {
+						callback();
+						break;
+					}
+				}
+			});
+			observer.observe(el, {
+				attributes: true,
+				attributeFilter: [`data-${key}`],
+			});
+			return () => observer.disconnect();
+		},
+		[key],
+	);
 
 	const value = React.useSyncExternalStore(subscribe, getSnapshot);
 
