@@ -39,11 +39,13 @@ import {
 	useImperativeHandle,
 	useRef,
 } from "react";
+import { useShallow } from "zustand/shallow";
 import { Tabs, TabsList, TabsTab } from "@/primitives/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorTab } from "@/state/editor-ui-store";
 import { useActiveTab, useEditorUiStore } from "@/state/hooks";
+import type { SidebarRegistryState } from "@/state/sidebar-registry-store";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 
 export const SIDEBAR_PANEL_ID = "ak-sidebar-panel";
@@ -56,27 +58,46 @@ interface RailModule {
 	readonly key: EditorTab;
 	readonly icon: typeof LayoutGridIcon;
 	readonly labelKey: string;
+	/**
+	 * Predicate over the sidebar registry deciding whether this module's
+	 * rail tab is shown. Omitted for the always-visible structural
+	 * modules (`insert`, `layer`).
+	 */
+	readonly isVisible?: (registry: SidebarRegistryState) => boolean;
 }
 
 const RAIL_MODULES: readonly RailModule[] = [
 	{ key: "insert", icon: PlusIcon, labelKey: "studio.module.insert.name" },
 	{ key: "layer", icon: LayersIcon, labelKey: "studio.module.layer.name" },
-	{ key: "image", icon: ImageIcon, labelKey: "studio.module.image.name" },
-	{ key: "text", icon: TypeIcon, labelKey: "studio.module.text.name" },
+	{
+		key: "image",
+		icon: ImageIcon,
+		labelKey: "studio.module.image.name",
+		isVisible: (s) => s.assetSource !== null,
+	},
+	{
+		key: "text",
+		icon: TypeIcon,
+		labelKey: "studio.module.text.name",
+		isVisible: (s) => s.copyPacks.size > 0,
+	},
 	{
 		key: "copilot",
 		icon: SparklesIcon,
 		labelKey: "studio.module.copilot.name",
+		isVisible: (s) => s.copilotPanel !== null,
 	},
 	{
 		key: "history",
 		icon: HistoryIcon,
 		labelKey: "studio.module.history.name",
+		isVisible: (s) => s.historyPanel !== null,
 	},
 	{
 		key: "design-system",
 		icon: PaletteIcon,
 		labelKey: "studio.module.designSystem.name",
+		isVisible: (s) => s.designSystemPanel !== null,
 	},
 ];
 
@@ -90,16 +111,13 @@ export const SidebarRail = memo(
 		const [activeTab, setActiveTab] = useActiveTab();
 		const drawerCollapsed = useEditorUiStore((s) => s.drawerCollapsed);
 		const setDrawerCollapsed = useEditorUiStore((s) => s.setDrawerCollapsed);
-		const visibility = {
-			insert: true,
-			layer: true,
-			image: useSidebarRegistry((s) => s.assetSource !== null),
-			text: useSidebarRegistry((s) => s.copyPacks.size > 0),
-			copilot: useSidebarRegistry((s) => s.copilotPanel !== null),
-			history: useSidebarRegistry((s) => s.historyPanel !== null),
-			"design-system": useSidebarRegistry((s) => s.designSystemPanel !== null),
-		} satisfies Record<EditorTab, boolean>;
-		const visibleModules = RAIL_MODULES.filter((m) => visibility[m.key]);
+		// One registry subscription: each module carries its own visibility
+		// predicate (always-visible modules omit it). `useShallow` keeps
+		// `visibleModules` referentially stable while the visible set is
+		// unchanged, since RAIL_MODULES entries have stable identity.
+		const visibleModules = useSidebarRegistry(
+			useShallow((s) => RAIL_MODULES.filter((m) => m.isVisible?.(s) ?? true)),
+		);
 		const containerRef = useRef<HTMLDivElement | null>(null);
 
 		useImperativeHandle(
