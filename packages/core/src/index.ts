@@ -112,6 +112,7 @@ export {
 	type ExportRegistry,
 	isPuckPlugin,
 	isStudioPlugin,
+	jsonFormat,
 	type LifecycleEventName,
 	type LifecycleManager,
 	type LifecycleSubscriber,
@@ -122,8 +123,16 @@ export {
 	StudioPluginError,
 	type StudioPluginLoader,
 	type StudioRuntime,
+	type StudioSidebarContributions,
 } from "./runtime/index.js";
 // ---------------------------------------------------------------------------
 // Types (M2 — plugin contract, config shape, domain records)
 // ---------------------------------------------------------------------------
 export type * from "./types/index.js";
+// `defineStudioPlugin` is the single runtime *value* in the otherwise
+// type-only types layer (a type-branding `as` cast helper). The
+// `export type *` above re-exports it type-only, so it is unreachable
+// as a callable value from the root barrel — surface it explicitly
+// here so `import { defineStudioPlugin } from "@anvilkit/core"` works
+// (review finding AR-d).
+export { defineStudioPlugin } from "./types/plugin.js";
