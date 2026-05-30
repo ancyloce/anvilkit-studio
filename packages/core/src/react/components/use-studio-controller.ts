@@ -78,21 +78,18 @@ import {
 } from "@/stores/index";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
-import type {
-	StudioLogLevel,
-	StudioPlugin,
-	StudioPluginContext,
-} from "@/types/plugin";
+import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
+import {
+	createConfigFingerprinter,
+	fingerprintPlugins,
+} from "./plugin-fingerprint.js";
+import { type StudioLogger, writeStudioLog } from "./studio-log.js";
 
-/**
- * Host-supplied structured logger. Re-exported from `Studio.tsx` so
- * the public surface is unchanged.
- */
-export type StudioLogger = (
-	level: StudioLogLevel,
-	message: string,
-	meta?: Readonly<Record<string, unknown>>,
-) => void;
+// `StudioLogger` + the structured-logging sink (`writeStudioLog`) now
+// live in `studio-log.ts` (review finding RX-b). Re-exported here so the
+// public `@anvilkit/core/react` surface (`{ StudioLogger }`, threaded
+// through `Studio.tsx`) is unchanged.
+export type { StudioLogger };
 
 export interface CompiledStudioRuntime {
 	readonly runtime: StudioRuntime;
@@ -216,6 +213,13 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * Per-instance store id. Persisted `EditorUiState` keys live under
 	 * `anvilkit-ui-${storeId}`, so two `<Studio>` instances on one
 	 * page should pass distinct ids.
+	 *
+	 * **Keep this stable for a given mount** (review finding Z-b/Z-2):
+	 * the injected theme/export/ai stores freeze their resolved store id
+	 * via `useState` at create time and do **not** re-key on a live
+	 * `storeId` change. To re-target persistence (e.g. switch documents),
+	 * remount `<Studio>` with a new React `key` rather than changing
+	 * `storeId` in place.
 	 */
 	readonly storeId?: string;
 	/** Optional "back" handler for the chrome header. Hidden when absent. */
@@ -295,247 +299,6 @@ export const EMPTY_DATA: PuckData = {
  * "does not hammer autosave/telemetry plugins."
  */
 const DATA_CHANGE_DEBOUNCE_MS = 250;
-
-const pluginIdentityTags = new WeakMap<object, string>();
-let pluginIdentityCounter = 0;
-
-function identityTagFor(value: object): string {
-	let existing = pluginIdentityTags.get(value);
-	if (existing === undefined) {
-		pluginIdentityCounter += 1;
-		existing = `#${pluginIdentityCounter}`;
-		pluginIdentityTags.set(value, existing);
-	}
-	return existing;
-}
-
-/**
- * Escape the fingerprint segment separator so a `meta.id` containing
- * `|` or `\` cannot collide with a neighbor's segment boundary.
- */
-function escapeFingerprintSegment(segment: string): string {
-	return segment.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
-}
-
-/**
- * Structural fingerprint for the plugin array. `StudioPlugin` objects
- * hash by `meta` + a WeakMap-stable identity tag (so a host recreating
- * a plugin with the same `meta` but new closures is observable);
- * anything else falls back to an identity tag.
- */
-function fingerprintPlugins(
-	plugins: readonly (StudioPlugin | PuckPlugin)[] | undefined,
-): string {
-	if (plugins === undefined || plugins.length === 0) {
-		return "[]";
-	}
-	const parts: string[] = [];
-	for (const plugin of plugins) {
-		if (
-			plugin !== null &&
-			typeof plugin === "object" &&
-			"meta" in plugin &&
-			plugin.meta !== null &&
-			typeof plugin.meta === "object"
-		) {
-			const meta = plugin.meta as {
-				id?: unknown;
-				version?: unknown;
-				coreVersion?: unknown;
-			};
-			parts.push(
-				`studio:${escapeFingerprintSegment(String(meta.id))}@${escapeFingerprintSegment(String(meta.version))}/${escapeFingerprintSegment(String(meta.coreVersion))}#${identityTagFor(plugin)}`,
-			);
-			continue;
-		}
-		if (plugin !== null && typeof plugin === "object") {
-			parts.push(`puck:${identityTagFor(plugin)}`);
-			continue;
-		}
-		parts.push(`other:${escapeFingerprintSegment(String(plugin))}`);
-	}
-	return parts.join("|");
-}
-
-/**
- * Structural fingerprint for the `config` prop. `JSON.stringify` is
- * cheap for the shallow partial shape and order-sensitive at the key
- * level (a key swap is a genuinely different config).
- *
- * **Non-JSON values fall back to reference identity** (codex-review
- * P2): `StudioConfig.experimental` is a `Record<string, unknown>`, so
- * a host may pass a function/symbol/bigint there. `JSON.stringify`
- * silently drops functions/symbols (and throws on bigint), so two
- * different configs (`{ experimental: { transform: fnA } }` vs
- * `fnB`) would otherwise hash identically (`{"experimental":{}}`) and
- * the compile effect would never re-run — plugins keep seeing a stale
- * `ctx.studioConfig`. When the replacer observes any non-serializable
- * value we cannot structurally compare it, so we key on object
- * identity instead (mirrors {@link fingerprintPlugins}): a new
- * reference re-compiles, which is the safe, correct choice. Pure-JSON
- * configs keep the cheap structural hash (no recompile thrash).
- */
-// Dev-only footgun detector: a host that passes an inline
-// `config={{ experimental: { transform: fn } }}` without memoizing
-// gets a fresh identity every render (the safe identity fallback
-// below), which re-runs the whole dynamic-import + `compilePlugins`
-// effect each parent render. We can't fix it for them (dropping the
-// function would be unsafe) but a one-shot warn surfaces it.
-let _nonJsonFingerprintWarned = false;
-let _lastNonJsonProjection: string | undefined;
-let _lastNonJsonRef: object | undefined;
-
-/**
- * `NODE_ENV` via `globalThis` — mirrors `config/env-parser`'s
- * environment-agnostic accessor (core's tsconfig has no `@types/node`
- * in `types`, so the bare `process` identifier is untyped). Absent ⇒
- * `undefined` ⇒ treated as non-production (the warn is harmless).
- */
-function nodeEnv(): string | undefined {
-	return (
-		globalThis as unknown as { process?: { env?: Record<string, string> } }
-	).process?.env?.NODE_ENV;
-}
-
-function warnRepeatedConfigRecompile(config: object, projection: string): void {
-	if (
-		nodeEnv() === "production" ||
-		_nonJsonFingerprintWarned ||
-		_lastNonJsonRef === undefined
-	) {
-		_lastNonJsonProjection = projection;
-		_lastNonJsonRef = config;
-		return;
-	}
-	// New object identity but structurally-equal projection ⇒ the host
-	// is re-creating the same config inline every render.
-	if (_lastNonJsonRef !== config && _lastNonJsonProjection === projection) {
-		_nonJsonFingerprintWarned = true;
-		console.warn(
-			"[studio] `config` contains a function/symbol/bigint and is not " +
-				"referentially stable across renders. Every render now re-runs " +
-				"the full plugin compile. Memoize the config (or hoist it) so " +
-				"`<Studio>` can skip the recompile. (Logged once.)",
-		);
-	}
-	_lastNonJsonProjection = projection;
-	_lastNonJsonRef = config;
-}
-
-function fingerprintConfig(config: unknown): string {
-	if (config === undefined || config === null) {
-		return "null";
-	}
-	try {
-		let hasNonJson = false;
-		const json = JSON.stringify(config, (_key, value) => {
-			const t = typeof value;
-			if (t === "function" || t === "symbol" || t === "bigint") {
-				hasNonJson = true;
-			}
-			return value;
-		});
-		// `json === undefined` when the whole value is non-serializable
-		// (e.g. a bare function). Either way, the string lost
-		// information → fall back to identity.
-		if (hasNonJson || json === undefined) {
-			warnRepeatedConfigRecompile(config as object, json ?? "<non-json>");
-			return `id:${identityTagFor(config as object)}`;
-		}
-		return json;
-	} catch {
-		return identityTagFor(config as object);
-	}
-}
-
-const REDACTED_META_KEYS = [
-	"token",
-	"secret",
-	"password",
-	"apikey",
-	"api_key",
-	"authorization",
-	"cookie",
-	"bearer",
-] as const;
-
-function shouldRedactKey(key: string): boolean {
-	const normalized = key.toLowerCase();
-	for (const needle of REDACTED_META_KEYS) {
-		if (normalized.includes(needle)) {
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
- * Normalize an `Error` to a fully-enumerable shape so `name`/
- * `message`/`stack`/`cause` survive `JSON.stringify` boundaries (Next
- * dev overlay, host loggers, bug reports). `cause` is unwrapped
- * recursively (depth-bounded) because wrapper errors carry the real
- * reason there.
- */
-function normalizeLogError(
-	error: Error,
-	depth: number,
-): Record<string, unknown> {
-	const normalized: Record<string, unknown> = {
-		name: error.name,
-		message: error.message,
-		stack: error.stack,
-	};
-	const { cause } = error;
-	if (cause !== undefined && depth > 0) {
-		normalized.cause =
-			cause instanceof Error ? normalizeLogError(cause, depth - 1) : cause;
-	}
-	return normalized;
-}
-
-function normalizeLogValue(value: unknown): unknown {
-	if (value instanceof Error) {
-		return normalizeLogError(value, 4);
-	}
-	return value;
-}
-
-function redactLogMeta(
-	meta: Readonly<Record<string, unknown>>,
-): Record<string, unknown> {
-	const out: Record<string, unknown> = {};
-	for (const [key, value] of Object.entries(meta)) {
-		out[key] = shouldRedactKey(key) ? "[REDACTED]" : normalizeLogValue(value);
-	}
-	return out;
-}
-
-export function writeStudioLog(
-	logger: StudioLogger | undefined,
-	level: StudioLogLevel,
-	message: string,
-	meta: Readonly<Record<string, unknown>> | undefined,
-): void {
-	const redactedMeta = meta === undefined ? undefined : redactLogMeta(meta);
-	if (logger !== undefined) {
-		try {
-			logger(level, message, redactedMeta);
-		} catch (error) {
-			console.error("[studio] logger threw", error);
-		}
-		return;
-	}
-
-	const method =
-		level === "error"
-			? "error"
-			: level === "warn"
-				? "warn"
-				: level === "debug"
-					? "debug"
-					: "info";
-	console[method](`[studio] ${message}`, redactedMeta ?? {});
-}
 
 function useHydrateRuntimeStores(
 	compiled: CompiledStudioRuntime | null,
@@ -692,6 +455,12 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// onInit/onReady bookkeeping into the engine phase machine).
 	const identityRef = useRef<RuntimeIdentity>({ generation: 0 });
 
+	// Per-instance config fingerprinter (review finding RX-2): the
+	// dev-only "config is not referentially stable across renders"
+	// warning is now closure-scoped, so two `<Studio>` mounts can no
+	// longer trip each other's one-shot warning.
+	const fingerprintConfigRef = useRef(createConfigFingerprinter());
+
 	// Single-flight publish chain: serialize overlapping publishes so
 	// the onBeforePublish → onPublish → onAfterPublish chains never
 	// interleave. The tail promise is replaced on every call; each
@@ -748,7 +517,10 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			),
 		[plugins],
 	);
-	const configFingerprint = useMemo(() => fingerprintConfig(config), [config]);
+	const configFingerprint = useMemo(
+		() => fingerprintConfigRef.current(config),
+		[config],
+	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime.
 	useEffect(() => {

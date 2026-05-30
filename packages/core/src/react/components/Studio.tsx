@@ -29,10 +29,10 @@ import type {
 	UserGenerics,
 } from "@puckeditor/core";
 import { Puck } from "@puckeditor/core";
-import type { ReactElement, ReactNode } from "react";
+import { type ReactElement, type ReactNode, useMemo } from "react";
 
 import { StudioConfigProvider } from "@/config/provider";
-import { ChromePropsProvider } from "@/context/chrome-props";
+import { type ChromeProps, ChromePropsProvider } from "@/context/chrome-props";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
 import { StudioRuntimeProvider } from "@/hooks/use-studio";
@@ -193,6 +193,42 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		rootRef,
 	} = useStudioController(props);
 
+	// RX-a: memoize the chrome viewport projection and the
+	// `ChromePropsProvider` value so chrome consumers (toolbar / publish /
+	// viewport) stop re-rendering on every `<Studio>` re-render. These
+	// hooks run before the loading guards below to keep hook order
+	// unconditional; the values are simply unused on the `null` paths.
+	const puckUi = useMemo(
+		() => (isAnvilkit ? mergeStudioUi(ui, viewports) : ui),
+		[isAnvilkit, ui, viewports],
+	);
+	const chromeViewports = useMemo(
+		() => (isAnvilkit ? resolveStudioViewports(puckUi, viewports) : undefined),
+		[isAnvilkit, puckUi, viewports],
+	);
+	const chromePropsValue = useMemo<ChromeProps>(
+		() => ({
+			onBack,
+			onSaveDraft,
+			isSavingDraft,
+			lastSavedAt,
+			isPublishing,
+			onPublishClick,
+			onExport,
+			viewports: chromeViewports,
+		}),
+		[
+			onBack,
+			onSaveDraft,
+			isSavingDraft,
+			lastSavedAt,
+			isPublishing,
+			onPublishClick,
+			onExport,
+			chromeViewports,
+		],
+	);
+
 	// Loading state. Deliberately `null` — no spinner, no fallback UI.
 	// Host apps that want a branded loading state render one above
 	// `<Studio>` with their own state management.
@@ -207,10 +243,6 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		return null;
 	}
 
-	const puckUi = isAnvilkit ? mergeStudioUi(ui, viewports) : ui;
-	const chromeViewports = isAnvilkit
-		? resolveStudioViewports(puckUi, viewports)
-		: undefined;
 	// `<Puck>` infers `UserConfig` from `config={puckConfig}`. The
 	// controller's runtime is deliberately non-generic, so its outputs
 	// come back as the broad default; these localized casts are the
@@ -320,18 +352,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 									>
 										<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
 											<EditorI18nStoreProvider messages={messages}>
-												<ChromePropsProvider
-													value={{
-														onBack,
-														onSaveDraft,
-														isSavingDraft,
-														lastSavedAt,
-														isPublishing,
-														onPublishClick,
-														onExport,
-														viewports: chromeViewports,
-													}}
-												>
+												<ChromePropsProvider value={chromePropsValue}>
 													<StudioRootProvider rootRef={rootRef}>
 														<div ref={rootRef} style={{ display: "contents" }}>
 															{wrappedBody}
