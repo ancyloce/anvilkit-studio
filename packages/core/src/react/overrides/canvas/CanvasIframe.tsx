@@ -28,13 +28,29 @@ export interface CanvasIframeOverrideProps {
 	readonly document?: Document;
 }
 
+/** Target inline overrides, as `[property, value]` pairs (all `!important`). */
+const SCROLL_RESET_DECLS: readonly (readonly [string, string])[] = [
+	["overflow", "visible"],
+	["max-width", "none"],
+];
+
 function applyScrollReset(doc: Document): void {
 	const html = doc.documentElement;
 	const body = doc.body;
 	if (html === null || body === null) return;
 	for (const el of [html, body]) {
-		el.style.setProperty("overflow", "visible", "important");
-		el.style.setProperty("max-width", "none", "important");
+		for (const [property, value] of SCROLL_RESET_DECLS) {
+			// Diff-before-write (review finding P-1): only touch the `style`
+			// attribute when a declaration is actually wrong, so the
+			// MutationObserver watching `style` does not re-fire on our own
+			// no-op resets during `CopyHostStyles` churn.
+			if (
+				el.style.getPropertyValue(property) !== value ||
+				el.style.getPropertyPriority(property) !== "important"
+			) {
+				el.style.setProperty(property, value, "important");
+			}
+		}
 	}
 }
 
