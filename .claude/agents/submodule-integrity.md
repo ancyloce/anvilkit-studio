@@ -20,11 +20,10 @@ never commit, push, or run a write/`update` command.**
 
 ## The submodule landscape
 
-There are ~15 submodules and the CLAUDE.md list is stale — **always enumerate from
-`.gitmodules`, never from memory.** As of this writing `git config -f .gitmodules
---get-regexp path` yields:
+There are 14 submodules — **always enumerate from `.gitmodules`, never from memory.**
+As of this writing `git config -f .gitmodules --get-regexp path` yields:
 - `packages/components`
-- twelve plugins under `packages/plugins/`: `plugin-ai-copilot`, `plugin-ai-image`,
+- eleven plugins under `packages/plugins/`: `plugin-ai-copilot`, `plugin-ai-image`,
   `plugin-asset-manager`, `plugin-canvas-studio`, `plugin-collab-ui`, `plugin-collab-yjs`,
   `plugin-design-system`, `plugin-export-canvas`, `plugin-export-html`, `plugin-export-react`,
   `plugin-version-history`
