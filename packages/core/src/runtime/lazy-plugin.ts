@@ -25,6 +25,9 @@ import type {
 	StudioPluginMeta,
 	StudioPluginRegistration,
 } from "@/types/plugin";
+import { StudioPluginError } from "./errors.js";
+import { isCoreVersionCompatible } from "./semver.js";
+import { CORE_VERSION } from "./version.js";
 
 /**
  * Loader function returning either a plugin module's default export or
@@ -62,6 +65,24 @@ export function lazyPlugin<UserConfig extends PuckConfig = PuckConfig>(
 			ctx: StudioPluginContext<UserConfig>,
 		): Promise<StudioPluginRegistration<UserConfig>> {
 			const real = await load();
+			// AR-c: `compilePlugins` gates the *declared* `meta`
+			// (coreVersion + id uniqueness) up-front, but the loaded
+			// module's real meta previously bypassed both gates. Reconcile
+			// them so a lazy plugin cannot smuggle in a mismatched id or an
+			// incompatible coreVersion. Thrown StudioPluginErrors propagate
+			// verbatim through `compilePlugins`' register() catch.
+			if (real.meta.id !== meta.id) {
+				throw new StudioPluginError(
+					meta.id,
+					`Lazy plugin meta.id mismatch: declared "${meta.id}" but the loaded module registered "${real.meta.id}". The up-front meta must match the real plugin so the runtime's id-uniqueness and coreVersion gates are not bypassed.`,
+				);
+			}
+			if (!isCoreVersionCompatible(real.meta.coreVersion)) {
+				throw new StudioPluginError(
+					real.meta.id,
+					`Lazy plugin "${real.meta.id}" requires @anvilkit/core "${real.meta.coreVersion}" but the installed version is "${CORE_VERSION}"`,
+				);
+			}
 			return real.register(ctx);
 		},
 	};

@@ -88,9 +88,15 @@ function extractErrorMessage(error: unknown): string {
 /**
  * The closed union of lifecycle event names the runtime fires.
  *
- * Mirrors the optional keys on {@link StudioPluginLifecycleHooks}
- * one-for-one, so adding a new hook there is a compile-time forcing
- * function to update this union (and the `emit` dispatch table).
+ * Must be kept in sync **by hand** with the optional keys on
+ * {@link StudioPluginLifecycleHooks} — TypeScript does **not** force it
+ * (review finding A-8). `getHook` indexes the wider hooks interface by
+ * this narrower union, so a hook added to the interface but omitted from
+ * this union would simply never be dispatched (a silent no-op), not a
+ * compile error. The forcing function runs the *other* direction: a name
+ * in this union with no matching key in `StudioPluginLifecycleHooks`
+ * fails `getHook`'s return type. When adding a hook, update both this
+ * union and the `emit` dispatch table.
  */
 export type LifecycleEventName =
 	| "onInit"

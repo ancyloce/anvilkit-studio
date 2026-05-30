@@ -21,11 +21,10 @@ import type { Plugin as PuckPlugin } from "@puckeditor/core";
 import { describe, expect, it, vi } from "vitest";
 
 import { StudioConfigSchema } from "@/config/schema";
-import {
-	compilePlugins,
-	isCoreVersionCompatible,
-} from "@/runtime/compile-plugins";
+import { compilePlugins } from "@/runtime/compile-plugins";
 import { StudioPluginError } from "@/runtime/errors";
+// `isCoreVersionCompatible` moved to `runtime/semver.ts` (review A-5).
+import { isCoreVersionCompatible } from "@/runtime/semver";
 import { CORE_VERSION } from "@/runtime/version";
 import type { ExportFormatDefinition, ExportResult } from "@/types/export";
 import type {

@@ -23,6 +23,7 @@ export {
 	type StudioHeaderAction,
 } from "./header-actions.js";
 export { lazyPlugin, type StudioPluginLoader } from "./lazy-plugin.js";
+export type { StudioSidebarContributions } from "./sidebar-registry.js";
 export {
 	createLifecycleManager,
 	type LifecycleEventName,
