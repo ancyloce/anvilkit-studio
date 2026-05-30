@@ -15,7 +15,10 @@
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { createEditorUiStore } from "@/state/editor-ui-store";
+import {
+	createEditorUiStore,
+	EDITOR_UI_STORE_PERSIST_VERSION,
+} from "@/state/editor-ui-store";
 
 interface PersistableStoreApi {
 	readonly persist: {
@@ -87,6 +90,58 @@ describe("editor-ui-store migration", () => {
 		const store = createEditorUiStore({ storeId: "legacy-unknown" });
 		await (store as unknown as PersistableStoreApi).persist.rehydrate();
 		expect(store.getState().activeTab).toBe("insert");
+	});
+});
+
+describe("editor-ui-store sanitizes a corrupt blob at the CURRENT version", () => {
+	// Regression: zustand calls `migrate` only on a version MISMATCH, so a
+	// corrupt blob written at the live version (external corruption, hand-
+	// editing, or a future partialize-shape change that forgets to bump the
+	// version) bypassed the clamp and merged verbatim over the live
+	// defaults. The store now also sanitizes through `merge`, which runs on
+	// every hydrate. These seed at the CURRENT version so the `migrate` path
+	// is NOT exercised — pre-fix they failed (value survived verbatim).
+	function seedCurrent(
+		storeId: string,
+		persisted: Record<string, unknown>,
+	): void {
+		window.localStorage.setItem(
+			`${STORE_ID_PREFIX}${storeId}`,
+			JSON.stringify({
+				state: persisted,
+				version: EDITOR_UI_STORE_PERSIST_VERSION,
+			}),
+		);
+	}
+
+	it("clamps an unknown activeTab to the default", async () => {
+		seedCurrent("corrupt-tab", { activeTab: "garbage" });
+		const store = createEditorUiStore({ storeId: "corrupt-tab" });
+		await (store as unknown as PersistableStoreApi).persist.rehydrate();
+		expect(store.getState().activeTab).toBe("insert");
+	});
+
+	it("clamps an out-of-range layerSplitRatio to [0.15, 0.85]", async () => {
+		seedCurrent("corrupt-split", { activeTab: "insert", layerSplitRatio: 5 });
+		const store = createEditorUiStore({ storeId: "corrupt-split" });
+		await (store as unknown as PersistableStoreApi).persist.rehydrate();
+		expect(store.getState().layerSplitRatio).toBe(0.85);
+	});
+
+	it("falls back to defaults for non-conforming field types", async () => {
+		seedCurrent("corrupt-shape", {
+			activeTab: 123,
+			componentViewMode: "spinny",
+			assetCategoryFilter: true,
+			outlineExpanded: "not-a-map",
+		});
+		const store = createEditorUiStore({ storeId: "corrupt-shape" });
+		await (store as unknown as PersistableStoreApi).persist.rehydrate();
+		const s = store.getState();
+		expect(s.activeTab).toBe("insert");
+		expect(s.componentViewMode).toBe("grid");
+		expect(s.assetCategoryFilter).toBe("all");
+		expect(s.outlineExpanded).toEqual({});
 	});
 });
 

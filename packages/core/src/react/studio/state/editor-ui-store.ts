@@ -167,12 +167,21 @@ const VALID_COPY_FILTERS: ReadonlySet<CopyCategoryFilter> = new Set([
 ]);
 
 /**
- * Migration callback for `persist`. Rewrites legacy `activeTab`
- * values and merges defaults for any missing slice — both forward-
- * compat (older payload, newer code) and backward-compat (the user
- * may have an unknown serialized value in storage).
+ * Sanitize a persisted blob into a valid {@link EditorUiPersistedSlice}.
+ * Rewrites legacy `activeTab` values and clamps every field to its
+ * documented domain (unknown tab → default, out-of-range split ratio →
+ * clamped, non-bool-map → default) — both forward-compat (older payload,
+ * newer code) and backward-compat (the user may have an unknown
+ * serialized value in storage).
  *
- * Returning `unknown` matches `persist`'s API; the merge step
+ * Wired into **both** `migrate` (runs only on a version mismatch) and
+ * `merge` (runs on every hydrate — review finding: zustand skips
+ * `migrate` when the persisted `version` equals the store version, so a
+ * corrupt same-version blob would otherwise merge verbatim). Routing the
+ * clamp through `merge` is what makes the coercion hold at *every*
+ * version, not just on a bump.
+ *
+ * Returning `unknown` matches `persist`'s `migrate` API; the merge step
  * downstream coerces back into `EditorUiPersistedSlice`.
  */
 function migratePersistedState(persisted: unknown, _version: number): unknown {
@@ -370,6 +379,19 @@ export function createEditorUiStore(
 					layerSplitRatio: state.layerSplitRatio,
 				}),
 				migrate: migratePersistedState,
+				// `migrate` only fires on a version mismatch; `merge` runs
+				// on every hydrate. Sanitizing here too clamps a corrupt
+				// blob persisted at the CURRENT version (external/hand-edited
+				// storage, or a future partialize-shape change that forgets
+				// to bump the version) instead of merging it verbatim over
+				// the live defaults.
+				merge: (persisted, current): EditorUiState => ({
+					...current,
+					...(migratePersistedState(
+						persisted,
+						EDITOR_UI_STORE_PERSIST_VERSION,
+					) as EditorUiPersistedSlice),
+				}),
 				skipHydration: true,
 			},
 		),
