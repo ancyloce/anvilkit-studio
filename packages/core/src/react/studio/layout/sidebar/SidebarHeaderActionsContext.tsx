@@ -19,7 +19,7 @@ import {
 	type Dispatch,
 	type ReactNode,
 	type SetStateAction,
-	useContext,
+	use,
 	useEffect,
 	useMemo,
 	useState,
@@ -48,9 +48,9 @@ export function SidebarHeaderActionsProvider({
 	const [actions, setActions] = useState<ReactNode>(null);
 	const value = useMemo(() => ({ actions, setActions }), [actions]);
 	return (
-		<SidebarHeaderActionsContext.Provider value={value}>
+		<SidebarHeaderActionsContext value={value}>
 			{children}
-		</SidebarHeaderActionsContext.Provider>
+		</SidebarHeaderActionsContext>
 	);
 }
 
@@ -60,7 +60,7 @@ export function SidebarHeaderActionsProvider({
  * sidebar tree.
  */
 export function useSidebarHeaderActions(): ReactNode {
-	const ctx = useContext(SidebarHeaderActionsContext);
+	const ctx = use(SidebarHeaderActionsContext);
 	return ctx?.actions ?? null;
 }
 
@@ -76,7 +76,7 @@ export function useSidebarHeaderActions(): ReactNode {
  * the full sidebar shell.
  */
 export function useSetSidebarHeaderActions(actions: ReactNode): void {
-	const ctx = useContext(SidebarHeaderActionsContext);
+	const ctx = use(SidebarHeaderActionsContext);
 	useEffect(() => {
 		if (ctx === null) return;
 		ctx.setActions(actions);

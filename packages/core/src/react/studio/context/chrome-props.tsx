@@ -9,7 +9,7 @@
  * context instead.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, use } from "react";
 import type { StudioViewport } from "@/studio/ui/viewports";
 
 export interface ChromeProps {
@@ -43,13 +43,9 @@ export function ChromePropsProvider({
 	value,
 	children,
 }: ChromePropsProviderProps): ReactNode {
-	return (
-		<ChromePropsContext.Provider value={value}>
-			{children}
-		</ChromePropsContext.Provider>
-	);
+	return <ChromePropsContext value={value}>{children}</ChromePropsContext>;
 }
 
 export function useChromeProps(): ChromeProps {
-	return useContext(ChromePropsContext);
+	return use(ChromePropsContext);
 }

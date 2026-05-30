@@ -3,7 +3,7 @@
  * See `ThemeStoreProvider` for the shared pattern rationale.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, use } from "react";
 import { useStore } from "zustand";
 
 import { type AiState, type AiStoreApi, createAiStore } from "./ai-store";
@@ -29,14 +29,12 @@ export function AiStoreProvider({
 	);
 	// Gate until rehydrated — see `useRehydratedStore` (SSR-safe).
 	return (
-		<AiStoreContext.Provider value={store}>
-			{hydrated ? children : null}
-		</AiStoreContext.Provider>
+		<AiStoreContext value={store}>{hydrated ? children : null}</AiStoreContext>
 	);
 }
 
 export function useAiStoreApi(): AiStoreApi {
-	const store = useContext(AiStoreContext);
+	const store = use(AiStoreContext);
 	if (store === null) {
 		throw new Error(
 			"useAiStore was called outside of <AiStoreProvider>. " +

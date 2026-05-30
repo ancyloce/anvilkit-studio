@@ -12,7 +12,7 @@
  * guarantees.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, use } from "react";
 import { useStore } from "zustand";
 
 import {
@@ -49,9 +49,9 @@ export function ThemeStoreProvider({
 	// children never paint with INITIAL_STATE then flip (see
 	// `useRehydratedStore` for the SSR contract).
 	return (
-		<ThemeStoreContext.Provider value={store}>
+		<ThemeStoreContext value={store}>
 			{hydrated ? children : null}
-		</ThemeStoreContext.Provider>
+		</ThemeStoreContext>
 	);
 }
 
@@ -60,7 +60,7 @@ export function ThemeStoreProvider({
  * `ThemeStoreProvider` so missing wiring fails loudly.
  */
 export function useThemeStoreApi(): ThemeStoreApi {
-	const store = useContext(ThemeStoreContext);
+	const store = use(ThemeStoreContext);
 	if (store === null) {
 		throw new Error(
 			"useThemeStore was called outside of <ThemeStoreProvider>. " +

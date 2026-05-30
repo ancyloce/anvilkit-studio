@@ -16,7 +16,7 @@
  * need raw `ctx`.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, use } from "react";
 
 import type { StudioPluginContext } from "@/types/plugin";
 
@@ -34,14 +34,14 @@ export function StudioPluginContextProvider({
 	children,
 }: StudioPluginContextProviderProps): ReactNode {
 	return (
-		<StudioPluginContextContext.Provider value={value}>
+		<StudioPluginContextContext value={value}>
 			{children}
-		</StudioPluginContextContext.Provider>
+		</StudioPluginContextContext>
 	);
 }
 
 export function useStudioPluginContext(): StudioPluginContext {
-	const ctx = useContext(StudioPluginContextContext);
+	const ctx = use(StudioPluginContextContext);
 	if (ctx === null) {
 		throw new Error(
 			"useStudioPluginContext was called outside of <StudioPluginContextProvider>. " +
@@ -57,5 +57,5 @@ export function useStudioPluginContext(): StudioPluginContext {
  * full provider stack.
  */
 export function useStudioPluginContextOrNull(): StudioPluginContext | null {
-	return useContext(StudioPluginContextContext);
+	return use(StudioPluginContextContext);
 }

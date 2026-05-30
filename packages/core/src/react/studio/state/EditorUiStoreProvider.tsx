@@ -9,7 +9,7 @@
  * reads `localStorage`; see `useRehydratedStore` for the contract.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, use } from "react";
 
 import { useRehydratedStore } from "@/stores/use-rehydrated-store";
 import { createEditorUiStore, type EditorUiStoreApi } from "./editor-ui-store";
@@ -30,9 +30,9 @@ export function EditorUiStoreProvider({
 	// the sidebar / active tab / canvas viewport never paint with
 	// INITIAL_STATE then flip. See `useRehydratedStore` (SSR-safe).
 	return (
-		<EditorUiStoreContext.Provider value={store}>
+		<EditorUiStoreContext value={store}>
 			{hydrated ? children : null}
-		</EditorUiStoreContext.Provider>
+		</EditorUiStoreContext>
 	);
 }
 
@@ -42,7 +42,7 @@ export function EditorUiStoreProvider({
  * development.
  */
 export function useEditorUiStoreApi(): EditorUiStoreApi {
-	const store = useContext(EditorUiStoreContext);
+	const store = use(EditorUiStoreContext);
 	if (store === null) {
 		throw new Error(
 			"useEditorUiStore was called outside of <EditorUiStoreProvider>. " +

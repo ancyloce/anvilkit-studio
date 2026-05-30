@@ -15,12 +15,7 @@
  * tests), preserving existing behavior.
  */
 
-import {
-	createContext,
-	type ReactNode,
-	type RefObject,
-	useContext,
-} from "react";
+import { createContext, type ReactNode, type RefObject, use } from "react";
 
 type StudioRootRef = RefObject<HTMLElement | null>;
 
@@ -35,11 +30,7 @@ export function StudioRootProvider({
 	rootRef,
 	children,
 }: StudioRootProviderProps): ReactNode {
-	return (
-		<StudioRootContext.Provider value={rootRef}>
-			{children}
-		</StudioRootContext.Provider>
-	);
+	return <StudioRootContext value={rootRef}>{children}</StudioRootContext>;
 }
 
 /**
@@ -48,7 +39,7 @@ export function StudioRootProvider({
  * `.current`) as "fall back to `document`".
  */
 export function useStudioRootRef(): StudioRootRef | null {
-	return useContext(StudioRootContext);
+	return use(StudioRootContext);
 }
 
 /**

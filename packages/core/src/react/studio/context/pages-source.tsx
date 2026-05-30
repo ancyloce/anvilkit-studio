@@ -17,7 +17,7 @@
  *     a default "Home" page instead of an empty state.
  */
 
-import { createContext, type ReactNode, useContext, useMemo } from "react";
+import { createContext, type ReactNode, use, useMemo } from "react";
 
 import { useSourceList } from "@/layout/sidebar/modules/layer/use-source-list";
 import { useMsg } from "@/state/editor-i18n-store";
@@ -44,9 +44,9 @@ export function StudioPagesSourceProvider({
 	children,
 }: StudioPagesSourceProviderProps): ReactNode {
 	return (
-		<StudioPagesSourceContext.Provider value={value}>
+		<StudioPagesSourceContext value={value}>
 			{children}
-		</StudioPagesSourceContext.Provider>
+		</StudioPagesSourceContext>
 	);
 }
 
@@ -58,7 +58,7 @@ export function StudioPagesSourceProvider({
  * should prefer {@link useStudioPagesSourceOrDefault}.
  */
 export function useStudioPagesSource(): StudioPagesSource | undefined {
-	return useContext(StudioPagesSourceContext);
+	return use(StudioPagesSourceContext);
 }
 
 /**
@@ -72,7 +72,7 @@ export function useStudioPagesSource(): StudioPagesSource | undefined {
  * to those empty states — the default only stands in for "no source".
  */
 export function useStudioPagesSourceOrDefault(): StudioPagesSource {
-	const source = useContext(StudioPagesSourceContext);
+	const source = use(StudioPagesSourceContext);
 	const msg = useMsg();
 	return useMemo<StudioPagesSource>(() => {
 		if (source !== undefined) return source;

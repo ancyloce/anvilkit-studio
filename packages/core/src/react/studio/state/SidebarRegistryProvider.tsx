@@ -8,7 +8,7 @@
  * consumes them.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, use } from "react";
 
 import type { SidebarRegistryStoreApi } from "./sidebar-registry-store";
 
@@ -26,9 +26,7 @@ export function SidebarRegistryProvider({
 	children,
 }: SidebarRegistryProviderProps): ReactNode {
 	return (
-		<SidebarRegistryContext.Provider value={value}>
-			{children}
-		</SidebarRegistryContext.Provider>
+		<SidebarRegistryContext value={value}>{children}</SidebarRegistryContext>
 	);
 }
 
@@ -38,7 +36,7 @@ export function SidebarRegistryProvider({
  * during development.
  */
 export function useSidebarRegistryStoreApi(): SidebarRegistryStoreApi {
-	const store = useContext(SidebarRegistryContext);
+	const store = use(SidebarRegistryContext);
 	if (store === null) {
 		throw new Error(
 			"useSidebarRegistryStoreApi was called outside of <SidebarRegistryProvider>. " +
@@ -54,5 +52,5 @@ export function useSidebarRegistryStoreApi(): SidebarRegistryStoreApi {
  * mount without the full provider stack.
  */
 export function useSidebarRegistryStoreApiOrNull(): SidebarRegistryStoreApi | null {
-	return useContext(SidebarRegistryContext);
+	return use(SidebarRegistryContext);
 }

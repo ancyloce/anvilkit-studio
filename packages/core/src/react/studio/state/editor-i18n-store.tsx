@@ -38,8 +38,8 @@
 import {
 	createContext,
 	type ReactNode,
+	use,
 	useCallback,
-	useContext,
 	useMemo,
 } from "react";
 
@@ -315,11 +315,7 @@ export function EditorI18nStoreProvider({
 		}),
 		[messages],
 	);
-	return (
-		<EditorI18nContext.Provider value={value}>
-			{children}
-		</EditorI18nContext.Provider>
-	);
+	return <EditorI18nContext value={value}>{children}</EditorI18nContext>;
 }
 
 /**
@@ -335,7 +331,7 @@ export function EditorI18nStoreProvider({
  *   5. The key itself, for visible-fallback debugging.
  */
 export function useMsg(): (key: string, fallback?: string) => string {
-	const ctx = useContext(EditorI18nContext);
+	const ctx = use(EditorI18nContext);
 	const messages = ctx === null ? DEFAULT_MESSAGES : ctx.messages;
 	const overrides = ctx === null ? EMPTY_OVERRIDES : ctx.overrides;
 	return useCallback(

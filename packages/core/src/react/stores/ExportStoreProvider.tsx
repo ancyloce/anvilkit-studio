@@ -3,7 +3,7 @@
  * See `ThemeStoreProvider` for the shared pattern rationale.
  */
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, use } from "react";
 import { useStore } from "zustand";
 
 import {
@@ -33,14 +33,14 @@ export function ExportStoreProvider({
 	);
 	// Gate until rehydrated — see `useRehydratedStore` (SSR-safe).
 	return (
-		<ExportStoreContext.Provider value={store}>
+		<ExportStoreContext value={store}>
 			{hydrated ? children : null}
-		</ExportStoreContext.Provider>
+		</ExportStoreContext>
 	);
 }
 
 export function useExportStoreApi(): ExportStoreApi {
-	const store = useContext(ExportStoreContext);
+	const store = use(ExportStoreContext);
 	if (store === null) {
 		throw new Error(
 			"useExportStore was called outside of <ExportStoreProvider>. " +
