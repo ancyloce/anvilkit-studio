@@ -37,7 +37,7 @@
 		"access": "public"
 	},
 	"peerDependencies": {
-		"react": "^18 || ^19"
+		"react": ">=19.0.0"
 	},
 	"peerDependenciesMeta": {
 		"react": {
