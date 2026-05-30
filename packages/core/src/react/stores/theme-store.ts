@@ -131,10 +131,17 @@ const VALID_THEME_MODES: ReadonlySet<ThemeMode> = new Set([
 ]);
 
 /**
- * Defensive `persist` migration: clamp the persisted `mode` to the
+ * Defensive `persist` sanitizer: clamp the persisted `mode` to the
  * {@link ThemeMode} union so a stale/corrupt blob (e.g. a removed
  * mode, or a non-string) can never poison the live store — it falls
  * back to the `"system"` default instead.
+ *
+ * Wired into **both** `migrate` (version-mismatch path) and `merge`
+ * (runs on every hydrate). zustand skips `migrate` when the persisted
+ * `version` equals the store version, so without the `merge` hook a
+ * corrupt same-version blob would merge verbatim; routing the clamp
+ * through `merge` is what makes the "can never poison" guarantee hold
+ * at *every* version, not just on a bump.
  */
 function migrateThemePersistedState(persisted: unknown): ThemeStorePartial {
 	const source =
@@ -188,6 +195,14 @@ export function createThemeStore(
 				name: `anvilkit-core-theme-${storeId}`,
 				version: THEME_STORE_PERSIST_VERSION,
 				migrate: migrateThemePersistedState,
+				// Sanitize on every hydrate, not just on a version bump:
+				// `migrate` is skipped when the persisted version matches, so
+				// `merge` is the only hook that clamps a corrupt same-version
+				// blob before it reaches the live store.
+				merge: (persisted, current): ThemeState => ({
+					...current,
+					...migrateThemePersistedState(persisted),
+				}),
 				// Persist `mode` only. See the file header for why
 				// `resolved` cannot and should not be persisted.
 				partialize: (state): ThemeStorePartial => ({

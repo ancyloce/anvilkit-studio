@@ -158,6 +158,52 @@ describe("useAiStore — reset()", () => {
 	});
 });
 
+describe("useAiStore — sanitizes a corrupt blob at the CURRENT version", () => {
+	// Regression: zustand calls `migrate` only on a version MISMATCH, so a
+	// corrupt `history` at the live version bypassed the coercion and
+	// merged verbatim — the next `startGeneration` spread then threw
+	// "history is not iterable". The coercion now also runs through
+	// `merge` (every hydrate). `liveVersion()` probes the persisted version
+	// so this stays a match-path test across future bumps.
+	function liveVersion(): number {
+		store.getState().startGeneration("probe");
+		const version = (
+			JSON.parse(localStorage.getItem(STORAGE_KEY) as string) as {
+				version: number;
+			}
+		).version;
+		localStorage.clear();
+		return version;
+	}
+
+	it("coerces a non-array history to [] so startGeneration cannot throw", async () => {
+		const version = liveVersion();
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({ state: { history: 42 }, version }),
+		);
+		const corrupt = createAiStore({ storeId: STORE_ID });
+		await persistOf(corrupt).persist.rehydrate();
+		expect(Array.isArray(corrupt.getState().history)).toBe(true);
+		expect(corrupt.getState().history).toEqual([]);
+		expect(() => corrupt.getState().startGeneration("next")).not.toThrow();
+	});
+
+	it("drops non-conforming history entries", async () => {
+		const version = liveVersion();
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({
+				state: { history: [{ prompt: "ok", at: 1 }, { bad: true }, 7] },
+				version,
+			}),
+		);
+		const corrupt = createAiStore({ storeId: STORE_ID });
+		await persistOf(corrupt).persist.rehydrate();
+		expect(corrupt.getState().history).toEqual([{ prompt: "ok", at: 1 }]);
+	});
+});
+
 describe("useAiStore — persist / partialize", () => {
 	it("writes only `history` to localStorage", () => {
 		const actions = store.getState();

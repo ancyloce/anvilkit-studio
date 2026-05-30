@@ -192,9 +192,17 @@ function isAiHistoryEntry(value: unknown): value is AiHistoryEntry {
 }
 
 /**
- * Defensive `persist` migration: coerce any persisted blob into a valid
+ * Defensive `persist` sanitizer: coerce any persisted blob into a valid
  * {@link AiStorePartial} (drop non-conforming entries, clamp length) so
  * a stale or hand-edited `localStorage` value can never crash hydration.
+ *
+ * Wired into **both** `migrate` (version-mismatch path) and `merge`
+ * (runs on every hydrate). zustand skips `migrate` when the persisted
+ * `version` equals the store version, so without the `merge` hook a
+ * corrupt same-version `history` (e.g. a non-array) would merge verbatim
+ * and the next `startGeneration` spread would throw "not iterable";
+ * routing the coercion through `merge` is what makes the guarantee hold
+ * at *every* version.
  */
 function migrateAiPersistedState(persisted: unknown): AiStorePartial {
 	const source =
@@ -280,6 +288,14 @@ export function createAiStore(options: CreateAiStoreOptions): AiStoreApi {
 				name: `anvilkit-core-ai-${storeId}`,
 				version: AI_STORE_PERSIST_VERSION,
 				migrate: migrateAiPersistedState,
+				// Sanitize on every hydrate, not just on a version bump:
+				// `migrate` is skipped when the persisted version matches, so
+				// `merge` is the only hook that coerces a corrupt same-version
+				// `history` to a valid array before it reaches the live store.
+				merge: (persisted, current): AiState => ({
+					...current,
+					...migrateAiPersistedState(persisted),
+				}),
 				// Persist only the last N history entries. Slicing inside
 				// `partialize` means the bound is enforced at write time;
 				// the in-memory `history` array can legitimately grow

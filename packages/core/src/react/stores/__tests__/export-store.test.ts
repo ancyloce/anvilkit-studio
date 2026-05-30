@@ -144,6 +144,35 @@ describe("useExportStore — reset()", () => {
 	});
 });
 
+describe("useExportStore — sanitizes a corrupt blob at the CURRENT version", () => {
+	// Regression: zustand calls `migrate` only on a version MISMATCH, so a
+	// corrupt `currentFormat` at the live version bypassed the clamp and
+	// merged verbatim. The clamp now also runs through `merge` (every
+	// hydrate). `liveVersion()` probes the persisted version so this stays
+	// a match-path test across future bumps.
+	function liveVersion(): number {
+		store.getState().setCurrentFormat("html");
+		const version = (
+			JSON.parse(localStorage.getItem(STORAGE_KEY) as string) as {
+				version: number;
+			}
+		).version;
+		localStorage.clear();
+		return version;
+	}
+
+	it("clamps a non-string currentFormat to null", async () => {
+		const version = liveVersion();
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({ state: { currentFormat: 42 }, version }),
+		);
+		const corrupt = createExportStore({ storeId: STORE_ID });
+		await persistOf(corrupt).persist.rehydrate();
+		expect(corrupt.getState().currentFormat).toBeNull();
+	});
+});
+
 describe("useExportStore — persist / partialize", () => {
 	it("writes only `currentFormat` to localStorage", () => {
 		const actions = store.getState();

@@ -183,9 +183,14 @@ const INITIAL_STATE = {
 const EXPORT_STORE_PERSIST_VERSION = 1;
 
 /**
- * Defensive `persist` migration: coerce the persisted blob into a valid
+ * Defensive `persist` sanitizer: coerce the persisted blob into a valid
  * {@link ExportStorePartial}. `currentFormat` must be a string or
  * `null`; anything else resets to `null`.
+ *
+ * Wired into **both** `migrate` (version-mismatch path) and `merge`
+ * (runs on every hydrate), so a corrupt `currentFormat` persisted at the
+ * current version is clamped rather than merged verbatim — zustand skips
+ * `migrate` when the persisted version matches.
  */
 function migrateExportPersistedState(persisted: unknown): ExportStorePartial {
 	const source =
@@ -259,6 +264,14 @@ export function createExportStore(
 				name: `anvilkit-core-export-${storeId}`,
 				version: EXPORT_STORE_PERSIST_VERSION,
 				migrate: migrateExportPersistedState,
+				// Sanitize on every hydrate, not just on a version bump:
+				// `migrate` is skipped when the persisted version matches, so
+				// `merge` is the only hook that clamps a corrupt same-version
+				// `currentFormat` before it reaches the live store.
+				merge: (persisted, current): ExportState => ({
+					...current,
+					...migrateExportPersistedState(persisted),
+				}),
 				// Persist only `currentFormat`. Every other field is
 				// ephemeral for the reasons documented in the file header.
 				partialize: (state): ExportStorePartial => ({

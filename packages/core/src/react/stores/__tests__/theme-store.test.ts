@@ -94,6 +94,35 @@ describe("useThemeStore — reset()", () => {
 	});
 });
 
+describe("useThemeStore — sanitizes a corrupt blob at the CURRENT version", () => {
+	// Regression: zustand calls `migrate` only on a version MISMATCH, so a
+	// corrupt blob at the live version bypassed the clamp and merged
+	// verbatim. The clamp now also runs through `merge` (every hydrate).
+	// `liveVersion()` discovers the persisted version by probing so this
+	// stays a match-path test (migrate NOT exercised) across future bumps.
+	function liveVersion(): number {
+		store.getState().setMode("dark");
+		const version = (
+			JSON.parse(localStorage.getItem(STORAGE_KEY) as string) as {
+				version: number;
+			}
+		).version;
+		localStorage.clear();
+		return version;
+	}
+
+	it("clamps an invalid mode to 'system'", async () => {
+		const version = liveVersion();
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({ state: { mode: "neon" }, version }),
+		);
+		const corrupt = createThemeStore({ storeId: STORE_ID });
+		await persistOf(corrupt).persist.rehydrate();
+		expect(corrupt.getState().mode).toBe("system");
+	});
+});
+
 describe("useThemeStore — persist / partialize", () => {
 	it("writes only `mode` to localStorage", () => {
 		const actions = store.getState();
