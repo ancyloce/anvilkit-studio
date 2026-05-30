@@ -10,6 +10,15 @@
 						"command": "jq -r '.tool_input.file_path' | grep -qE '/dist/' && { echo 'Blocked: dist/ is build output (rslib wipes it on rebuild). Edit the source + rebuild instead.' >&2; exit 2; } || true"
 					}
 				]
+			},
+			{
+				"matcher": "Bash",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "jq -r '.tool_input.command' | grep -qE '(^|[;&|({])[[:space:]]*git[[:space:]]+(-[^[:space:]]+[[:space:]]+([^-][^[:space:]]*[[:space:]]+)?)*(commit|push)([[:space:]);&|]|$)' && { echo 'Blocked: in this repo the user handles all git commits and pushes themselves. Leave changes staged or unstaged for them.' >&2; exit 2; } || true"
+					}
+				]
 			}
 		],
 		"PostToolUse": [
@@ -19,6 +28,10 @@
 					{
 						"type": "command",
 						"command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; [ -n \"$f\" ] && pnpm biome check --write --files-ignore-unknown=true \"$f\"; } 2>/dev/null || true"
+					},
+					{
+						"type": "command",
+						"command": "f=$(jq -r '.tool_response.filePath // .tool_input.file_path'); case \"$f\" in *packages/plugins/*.tsx|*packages/canvas/*.tsx) ;; *) exit 0;; esac; case \"$f\" in *__tests__*|*.test.tsx|*.spec.tsx) exit 0;; esac; grep -qE '</[A-Za-z]|/>|<>' \"$f\" 2>/dev/null && ! grep -qE '^import[[:space:]]+(\\*[[:space:]]+as[[:space:]]+)?React([[:space:]]|,)' \"$f\" && { echo 'WARN: JSX but no React binding in' \"$f\" '— this package builds CLASSIC JSX (React.createElement); dist throws \"React is not defined\" at runtime and typecheck will not catch it. Add: import * as React from \"react\";' >&2; exit 2; } || true"
 					}
 				]
 			}
