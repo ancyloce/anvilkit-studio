@@ -116,6 +116,16 @@ export type ExportOptions<
 	T extends Record<string, unknown> = Record<string, unknown>,
 > = T;
 
+/**
+ * Per-run context handed to {@link ExportFormatDefinition.run} for
+ * formats that opt into asset-URL rewriting (review finding TS-c).
+ *
+ * `assetResolvers` is the runtime's registration-ordered resolver list
+ * (sourced from `StudioRuntime.assetResolvers`): a format consults each
+ * resolver in order and stops at the first that returns a non-null
+ * rewrite. Absent or empty ⇒ treat it as "no asset rewriting
+ * configured" and emit URLs verbatim.
+ */
 export interface ExportFormatRunContext {
 	readonly assetResolvers?: readonly IRAssetResolver[];
 }

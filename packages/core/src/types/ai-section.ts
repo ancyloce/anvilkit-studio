@@ -40,7 +40,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/plans/phase-6-plan.md | Phase 6 plan §5.1 Section-level AI patch model}
  */
 
-import type { AiComponentSchema } from "./ai.js";
+import type { AiComponentSchema, AiThemeHint } from "./ai.js";
 import type { PageIRNode } from "./ir.js";
 
 /**
@@ -127,7 +127,7 @@ export interface ConfigToAiSectionContextOptions {
 	 * Optional theme hint (`"light"` | `"dark"`) forwarded onto
 	 * {@link AiSectionContext.theme}.
 	 */
-	readonly theme?: "light" | "dark";
+	readonly theme?: AiThemeHint;
 	/**
 	 * Optional BCP 47 language tag forwarded onto
 	 * {@link AiSectionContext.locale}.
@@ -206,7 +206,7 @@ export interface AiSectionContext {
 	 * Optional theme hint forwarded onto the prompt. Mirrors
 	 * {@link AiGenerationContext.theme}.
 	 */
-	readonly theme?: "light" | "dark";
+	readonly theme?: AiThemeHint;
 	/**
 	 * Optional BCP 47 locale hint. Mirrors
 	 * {@link AiGenerationContext.locale}.

@@ -55,6 +55,16 @@ export type AiFieldType =
 	| "object";
 
 /**
+ * Theme hint forwarded into AI prompts so the model can pick
+ * appropriate colors, imagery, and tone (review finding TS-4). Named
+ * once here rather than inlining `"light" | "dark"` at each AI context
+ * site. (Kept local to the type-only `ai.ts` layer rather than reusing
+ * the react-layer `ThemeResolved`, which would cross the engine
+ * boundary.)
+ */
+export type AiThemeHint = "light" | "dark";
+
+/**
  * Description of a single prop on a component, in a shape an LLM can
  * reason about.
  *
@@ -66,6 +76,19 @@ export type AiFieldType =
  * Recursive: `select` fields carry {@link options}, `array` fields
  * carry {@link itemSchema}, and `object` fields carry their own
  * nested {@link itemSchema} describing the object shape.
+ *
+ * @remarks
+ * The recursive variants are modeled here with **loose optionals**
+ * (`options?` / `itemSchema?` / `properties?`) rather than a
+ * `type`-discriminated union (review finding TS-d). A discriminated
+ * union keyed on {@link AiFieldType} — following the closed-union
+ * precedents elsewhere in this package
+ * (`StudioAssetUploadEvent`, `StudioPluginCapabilities`) — would let
+ * the compiler enforce that `select` carries `options`, `array` carries
+ * `itemSchema`, etc. That refactor is **breaking** for the `0.1.x` AI
+ * contract, so it is deferred to the next contract major; until then,
+ * `@anvilkit/schema`/`@anvilkit/validator` own the per-type invariants
+ * at runtime (Zod).
  */
 export interface AiFieldSchema {
 	/**
@@ -198,7 +221,7 @@ export interface AiGenerationContext {
 	 * pick appropriate colors, imagery, and tone. Host apps
 	 * typically forward the current editor theme.
 	 */
-	readonly theme?: "light" | "dark";
+	readonly theme?: AiThemeHint;
 	/**
 	 * Optional BCP 47 language tag (e.g. `"en-US"`, `"fr-FR"`) so
 	 * the LLM generates copy in the right language.

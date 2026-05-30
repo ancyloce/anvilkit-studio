@@ -23,7 +23,9 @@
 
 import type { z } from "zod";
 
-import type { StudioConfigSchema } from "@/config/schema";
+// TS-b: relative path for consistency with every sibling type module
+// (type-only import — erases either way).
+import type { StudioConfigSchema } from "../config/schema.js";
 
 /**
  * Runtime configuration surface for `<Studio>`.

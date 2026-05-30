@@ -8,8 +8,12 @@
  *    `ComponentType` / `ReactNode` references below are imported via
  *    `import type` and erased at compile time. With
  *    `verbatimModuleSyntax: true` in the tsconfig, the emitted `.js`
- *    file contains no reference to `@puckeditor/core` or React — this
- *    file ships as pure type information.
+ *    file contains no reference to `@puckeditor/core` or React. The one
+ *    intentional runtime *value* is {@link defineStudioPlugin} (a
+ *    type-branding `as`-cast helper at the bottom of the file): it emits
+ *    a trivial identity function but imports no React/Puck runtime, so
+ *    the headless guarantee holds (review finding TS-5/a). Everything
+ *    else in this file ships as pure type information.
  *
  *    Note that the plugin contract DOES reference React types
  *    ({@link StudioPluginProvider.component}, {@link StudioPluginOverlay.component},
