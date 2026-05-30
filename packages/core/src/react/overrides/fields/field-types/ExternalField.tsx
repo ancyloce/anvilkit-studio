@@ -173,7 +173,10 @@ export function ExternalField({
 			// resolution from a superseded query/filter set.
 			controller.abort();
 		};
-	}, [open, debouncedQuery, filters, field]);
+		// RX-d: depend only on the two `field` members the effect reads, so
+		// an un-memoized host `field` object does not re-fire abort+refetch
+		// on every parent render while the popover is open.
+	}, [open, debouncedQuery, filters, field.fetchList, field.mapProp]);
 
 	const summary =
 		value === null || value === undefined
