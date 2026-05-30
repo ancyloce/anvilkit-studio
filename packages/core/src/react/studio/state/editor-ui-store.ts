@@ -53,7 +53,8 @@ export type EditorTab =
 	| "image"
 	| "text"
 	| "copilot"
-	| "history";
+	| "history"
+	| "design-system";
 
 export type ComponentViewMode = "grid" | "list";
 
@@ -129,12 +130,13 @@ interface EditorUiPersistedSlice {
 }
 
 /**
- * Persist schema version — bumped to 3 when the `history` tab joined
- * the {@link EditorTab} union. The migrate callback already coerces
- * unknown `activeTab` values to the default via {@link VALID_ACTIVE_TABS},
- * so the bump just invalidates v2 caches written by builds in between.
+ * Persist schema version — bumped to 4 when the `design-system` tab
+ * joined the {@link EditorTab} union (review finding AR-a); was 3 for
+ * `history`. The migrate callback already coerces unknown `activeTab`
+ * values to the default via {@link VALID_ACTIVE_TABS}, so the bump just
+ * invalidates caches written by builds in between.
  */
-export const EDITOR_UI_STORE_PERSIST_VERSION = 3;
+export const EDITOR_UI_STORE_PERSIST_VERSION = 4;
 
 const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"insert",
@@ -143,6 +145,7 @@ const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"text",
 	"copilot",
 	"history",
+	"design-system",
 ]);
 
 const VALID_VIEW_MODES: ReadonlySet<ComponentViewMode> = new Set([
@@ -255,6 +258,28 @@ function clampSplitRatio(ratio: number): number {
 	return ratio;
 }
 
+/**
+ * Upper bound on a persisted expansion map (review finding Z-e).
+ * Toggling expansion accumulates one key per node id ever touched and
+ * never reclaims keys for deleted nodes, so the persisted blob grew
+ * without bound across a long session. Capping to the most-recently-
+ * inserted N keys (object key order is insertion order) bounds the blob
+ * without needing the live tree at the persistence boundary.
+ */
+const EXPANSION_MAP_PERSIST_LIMIT = 1000;
+
+function capExpansionMap(
+	map: Readonly<Record<string, boolean>>,
+): Readonly<Record<string, boolean>> {
+	const keys = Object.keys(map);
+	if (keys.length <= EXPANSION_MAP_PERSIST_LIMIT) return map;
+	const out: Record<string, boolean> = {};
+	for (const key of keys.slice(-EXPANSION_MAP_PERSIST_LIMIT)) {
+		out[key] = map[key] as boolean;
+	}
+	return out;
+}
+
 export interface CreateEditorUiStoreOptions {
 	readonly storeId: string;
 }
@@ -332,14 +357,16 @@ export function createEditorUiStore(
 				partialize: (state): EditorUiPersistedSlice => ({
 					activeTab: state.activeTab,
 					drawerCollapsed: state.drawerCollapsed,
-					outlineExpanded: state.outlineExpanded,
+					// Z-e: cap the expansion maps so the persisted blob cannot
+					// grow without bound as nodes are toggled then deleted.
+					outlineExpanded: capExpansionMap(state.outlineExpanded),
 					canvasViewport: state.canvasViewport,
 					canvasZoom: state.canvasZoom,
 					componentViewMode: state.componentViewMode,
-					insertSectionsExpanded: state.insertSectionsExpanded,
+					insertSectionsExpanded: capExpansionMap(state.insertSectionsExpanded),
 					assetCategoryFilter: state.assetCategoryFilter,
 					copyCategoryFilter: state.copyCategoryFilter,
-					pagesExpanded: state.pagesExpanded,
+					pagesExpanded: capExpansionMap(state.pagesExpanded),
 					layerSplitRatio: state.layerSplitRatio,
 				}),
 				migrate: migratePersistedState,

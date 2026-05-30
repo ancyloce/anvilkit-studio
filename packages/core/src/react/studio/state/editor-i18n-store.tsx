@@ -7,6 +7,16 @@
  * to register custom strings can do so via `EditorI18nStoreProvider`'s
  * `messages` prop.
  *
+ * > **Naming note (review finding Z-4):** despite the `*-store` filename
+ * > and `EditorI18nStoreProvider` name, this is a **plain React
+ * > context** — it does not use Zustand `createStore`/`persist`/
+ * > `useStore` like the genuine stores beside it. The message catalog is
+ * > immutable per mount, so a context is the right primitive; the
+ * > `Store` naming is retained only for symmetry with the sidebar
+ * > provider stack. Renaming to `EditorI18nProvider` /
+ * > `editor-i18n-context.tsx` is deferred to avoid churn across every
+ * > importer.
+ *
  * ### Deprecated key aliases (PRD §10.2)
  *
  * The Phase B sidebar refactor renamed `studio.tab.insert` →
@@ -222,6 +232,11 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.history.name": "History",
 	"studio.module.history.empty":
 		"Install @anvilkit/plugin-version-history and register a history panel to view snapshots.",
+
+	// Module: design-system (Design System — host-supplied panel).
+	"studio.module.designSystem.name": "Design System",
+	"studio.module.designSystem.empty":
+		"Install @anvilkit/plugin-design-system and register a design-system panel to edit tokens.",
 };
 
 /**

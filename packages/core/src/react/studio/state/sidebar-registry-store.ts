@@ -55,6 +55,12 @@ export interface SidebarRegistryState {
 	registerDesignSystemPanel(
 		panel: StudioDesignSystemPanel,
 	): StudioSidebarUnregister;
+	/**
+	 * Clear every contributed surface back to the empty initial state
+	 * (review finding Z-g). Mainly a test/teardown convenience — the
+	 * per-mount store is normally discarded with its `<Studio>` instance.
+	 */
+	reset(): void;
 }
 
 export type SidebarRegistryStoreApi = StoreApi<SidebarRegistryState>;
@@ -187,6 +193,19 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 					set({ designSystemPanel: null });
 				}
 			};
+		},
+
+		reset() {
+			set({
+				insertSections: EMPTY_INSERT,
+				layerQuickAdds: EMPTY_QUICK,
+				assetSource: null,
+				assetActions: EMPTY_ACTIONS,
+				copyPacks: EMPTY_PACKS,
+				copilotPanel: null,
+				historyPanel: null,
+				designSystemPanel: null,
+			});
 		},
 	}));
 }
