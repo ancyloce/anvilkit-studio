@@ -21,7 +21,7 @@ describe("useSourceList", () => {
 	it("yields empty, non-error, non-loading when no source", () => {
 		const { result } = renderHook(() => useSourceList<number>(undefined));
 		expect(result.current.items).toEqual([]);
-		expect(result.current.error).toBe(false);
+		expect(result.current.hasError).toBe(false);
 		expect(result.current.loading).toBe(false);
 	});
 
@@ -29,7 +29,7 @@ describe("useSourceList", () => {
 		const source: ListSource<string> = { list: () => ["a", "b"] };
 		const { result } = renderHook(() => useSourceList<string>(source));
 		await waitFor(() => expect(result.current.items).toEqual(["a", "b"]));
-		expect(result.current.error).toBe(false);
+		expect(result.current.hasError).toBe(false);
 		expect(result.current.loading).toBe(false);
 	});
 
@@ -38,7 +38,7 @@ describe("useSourceList", () => {
 			list: () => Promise.reject(new Error("boom")),
 		};
 		const { result } = renderHook(() => useSourceList<string>(source));
-		await waitFor(() => expect(result.current.error).toBe(true));
+		await waitFor(() => expect(result.current.hasError).toBe(true));
 		expect(result.current.items).toEqual([]);
 	});
 
@@ -77,7 +77,7 @@ describe("useSourceList", () => {
 			slow.resolve(["stale"]);
 		});
 		expect(result.current.items).toEqual(["fresh"]);
-		expect(result.current.error).toBe(false);
+		expect(result.current.hasError).toBe(false);
 	});
 
 	it("unsubscribes and ignores late resolutions after unmount", async () => {
