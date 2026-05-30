@@ -88,6 +88,39 @@ describe("<Studio> — plugin recompilation on same-meta object replacement", ()
 		await new Promise((r) => setTimeout(r, 30));
 		expect(register).toHaveBeenCalledTimes(1);
 	});
+
+	it("does NOT recompile when only the inline logger identity changes (F-LOGGER)", async () => {
+		const register = vi.fn(() => ({ meta: meta("com.test.logger") }));
+		const plugin: StudioPlugin = {
+			meta: meta("com.test.logger"),
+			register,
+		};
+		const { container, rerender } = render(
+			<Studio
+				puckConfig={{ components: {} }}
+				plugins={[plugin]}
+				logger={() => undefined}
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		expect(register).toHaveBeenCalledTimes(1);
+
+		// Same plugin object, a BRAND-NEW inline logger (fresh identity).
+		// Pre-fix `logger` was a raw dependency of the compile effect, so
+		// this tore down and recompiled the whole plugin set every render;
+		// the logger is now read through a ref, so no recompile happens.
+		rerender(
+			<Studio
+				puckConfig={{ components: {} }}
+				plugins={[plugin]}
+				logger={() => undefined}
+			/>,
+		);
+		await new Promise((r) => setTimeout(r, 30));
+		expect(register).toHaveBeenCalledTimes(1);
+	});
 });
 
 describe("<Studio> — stale runtime is cleared when a recompile fails", () => {

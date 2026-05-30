@@ -461,6 +461,17 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// longer trip each other's one-shot warning.
 	const fingerprintConfigRef = useRef(createConfigFingerprinter());
 
+	// Latest `logger` behind a ref so the compile effect can read it
+	// without listing `logger` as a dependency. `plugins`/`config` are
+	// fingerprinted to tolerate unstable inline references; a raw `logger`
+	// in the compile-effect deps was the one gap — an inline `logger={(…)
+	// => …}` (a brand-new identity every render) tore down and recompiled
+	// the entire plugin set on every parent render (onDestroy → register →
+	// onInit → onReady churn + a `setCompiled(null)` flash). `ctx.log`
+	// reads `loggerRef.current`, so the newest logger is always used
+	// without a recompile.
+	const loggerRef = useRef<StudioLogger | undefined>(logger);
+
 	// Single-flight publish chain: serialize overlapping publishes so
 	// the onBeforePublish → onPublish → onAfterPublish chains never
 	// interleave. The tail promise is replaced on every call; each
@@ -522,7 +533,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		[config],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime, and `logger` is read through `loggerRef` so an unstable inline logger does not trigger a full plugin recompile.
 	useEffect(() => {
 		// New compile generation; tear down the prior runtime + chrome.
 		// Fails closed: while plugins/config/chrome change (or if the
@@ -592,7 +603,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				},
 				studioConfig,
 				log: (level, message, meta) => {
-					writeStudioLog(logger, level, message, meta);
+					writeStudioLog(loggerRef.current, level, message, meta);
 				},
 				emit: (event) => {
 					// Reserved/inert until the event bus ships. Do not
@@ -602,7 +613,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 					if (!emitReservedWarned) {
 						emitReservedWarned = true;
 						writeStudioLog(
-							logger,
+							loggerRef.current,
 							"warn",
 							`ctx.emit("${event}") is reserved and inert: the plugin-to-plugin event bus is not implemented yet (architecture §12). No subscriber will receive this event. This warning fires once per plugin context.`,
 							{ event },
@@ -645,9 +656,14 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				if (isStale()) {
 					return;
 				}
-				writeStudioLog(logger, "error", "plugin compilation failed", {
-					error,
-				});
+				writeStudioLog(
+					loggerRef.current,
+					"error",
+					"plugin compilation failed",
+					{
+						error,
+					},
+				);
 			}
 		}
 
@@ -655,7 +671,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		return () => {
 			identityRef.current.generation += 1;
 		};
-	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit, logger]);
+	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit]);
 
 	useHydrateRuntimeStores(compiled, exportStore, themeStore);
 
@@ -756,7 +772,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	useLayoutEffect(() => {
 		onChangeRef.current = onChange as DefaultOnChange | undefined;
 		onPublishRef.current = onPublish as DefaultOnPublish | undefined;
-	}, [onChange, onPublish]);
+		loggerRef.current = logger;
+	}, [onChange, onPublish, logger]);
 
 	const handleChange = useCallback(
 		(nextData: PuckData): void => {
@@ -802,9 +819,14 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 							nextData,
 						);
 					} catch (error) {
-						writeStudioLog(logger, "error", "publish aborted by plugin", {
-							error,
-						});
+						writeStudioLog(
+							loggerRef.current,
+							"error",
+							"publish aborted by plugin",
+							{
+								error,
+							},
+						);
 						return;
 					}
 				}
@@ -812,9 +834,14 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				try {
 					await consumerOnPublish?.(nextData);
 				} catch (error) {
-					writeStudioLog(logger, "error", "consumer onPublish threw", {
-						error,
-					});
+					writeStudioLog(
+						loggerRef.current,
+						"error",
+						"consumer onPublish threw",
+						{
+							error,
+						},
+					);
 					return;
 				}
 
@@ -830,7 +857,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				// Swallowed: a failed publish must not poison the queue.
 			});
 		},
-		[compiled, logger],
+		[compiled],
 	);
 
 	return {
