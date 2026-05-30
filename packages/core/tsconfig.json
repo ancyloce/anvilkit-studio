@@ -49,7 +49,16 @@
 			"@/types": ["src/types"],
 			"@/types/*": ["src/types/*"]
 		},
-		"strictNullChecks": true,
+		// `strict: true` (inherited from base.json) already implies
+		// `strictNullChecks`, so the local override was redundant and is
+		// dropped (review finding TS-2).
+		//
+		// `exactOptionalPropertyTypes` is intentionally LEFT OFF (review
+		// finding TS-1): the IR contract trades on omit-vs-present, but the
+		// real transform lives in `@anvilkit/ir` (Zod-enforced;
+		// `JSON.stringify` drops `undefined`). Enabling it surfaces ~59
+		// prop-passing mismatches against Puck's own prop types for no
+		// runtime benefit, so the omission is deliberate.
 		"useDefineForClassFields": true,
 		"verbatimModuleSyntax": true
 	},
