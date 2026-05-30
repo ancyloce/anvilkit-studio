@@ -14,7 +14,7 @@ import { encodeDropPayload } from "../drag-payload";
 import {
 	DROP_TARGET_ATTR,
 	useCanvasDropController,
-} from "../useCanvasDropController";
+} from "../use-canvas-drop-controller";
 import { createDataTransfer, makeDragEvent } from "./data-transfer-double";
 
 const dispatch = vi.fn();

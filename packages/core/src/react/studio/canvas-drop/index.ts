@@ -36,4 +36,4 @@ export {
 export {
 	DROP_TARGET_ATTR,
 	useCanvasDropController,
-} from "./useCanvasDropController";
+} from "./use-canvas-drop-controller";

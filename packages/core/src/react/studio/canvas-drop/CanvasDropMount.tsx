@@ -8,7 +8,7 @@
  */
 
 import type { ReactNode } from "react";
-import { useCanvasDropController } from "./useCanvasDropController";
+import { useCanvasDropController } from "./use-canvas-drop-controller";
 
 export interface CanvasDropMountProps {
 	readonly document?: Document;

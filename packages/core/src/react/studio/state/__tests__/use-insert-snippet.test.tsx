@@ -9,7 +9,7 @@ import { renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { EditorI18nStoreProvider } from "@/state/editor-i18n-store";
-import { useInsertSnippet } from "@/state/useInsertSnippet";
+import { useInsertSnippet } from "@/state/use-insert-snippet";
 import type { StudioCopySnippet } from "@/types/sidebar";
 
 const dispatch = vi.fn();

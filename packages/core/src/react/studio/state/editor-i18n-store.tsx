@@ -251,6 +251,11 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.field.array.duplicate": "Duplicate",
 	"studio.field.array.remove": "Remove",
 	"studio.field.array.add": "Add item",
+
+	// Relative timestamps (review finding N-c) — shared by the publish
+	// panel + chrome header via `formatRelativeTimestamp`.
+	"studio.time.justNow": "just now",
+	"studio.time.minutesAgo": "{minutes}m ago",
 };
 
 /**
