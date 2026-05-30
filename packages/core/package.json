@@ -188,8 +188,12 @@
 		"check:bundle-budget": "node ./scripts/check-bundle-budget.mjs",
 		"check:api-snapshot": "typedoc --json ./api/api-snapshot.json --entryPoints ./src/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
 		"check:api-snapshot-runtime": "typedoc --json ./api/api-snapshot.runtime.json --entryPoints ./src/runtime/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
+		"check:api-snapshot-config": "typedoc --json ./api/api-snapshot.config.json --entryPoints ./src/config/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
+		"check:api-snapshot-react": "typedoc --json ./api/api-snapshot.react.json --entryPoints ./src/react/index.ts --tsconfig ./tsconfig.json --logLevel Warn",
 		"check:api-snapshot-templates": "typedoc --options ./typedoc.templates.json --json ./api/api-snapshot.templates.json",
-		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:no-headless-import && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot && pnpm check:api-snapshot-runtime && pnpm check:api-snapshot-templates",
+		"check:api-snapshot-verify": "git diff --exit-code -- ./api",
+		"check:api-snapshot-all": "pnpm check:api-snapshot && pnpm check:api-snapshot-runtime && pnpm check:api-snapshot-config && pnpm check:api-snapshot-react && pnpm check:api-snapshot-templates",
+		"check:all": "pnpm check:publint && pnpm check:circular && pnpm check:react-free-runtime && pnpm check:no-headless-import && pnpm check:peer-deps && pnpm check:bundle-budget && pnpm check:api-snapshot-all && pnpm check:api-snapshot-verify",
 		"migrate:shadcn-paths": "node ./scripts/migrate-shadcn-paths.mjs",
 		"size": "size-limit"
 	}
