@@ -5,7 +5,7 @@
 
 Code-review remediation for the `0.1.2` static analysis of
 `@anvilkit/plugin-version-history` (see
-`docs/code-review/plugin-version-history-review-20260519104200.md` for
+`docs/archive/code-review/plugin-version-history-review-20260519104200.md` for
 the originating findings).
 
 **`@anvilkit/plugin-version-history`**
