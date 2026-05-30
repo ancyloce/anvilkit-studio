@@ -76,6 +76,23 @@ describe("SidebarRail", () => {
 		expect(tabs[5]?.id).toBe("ak-rail-tab-history");
 	});
 
+	it("renders the design-system tab once a panel is registered (AR-a)", () => {
+		// The seam is gated on a registered panel: with none, no tab; with
+		// one, the `design-system` rail tab appears (insert + layer +
+		// design-system = 3 visible).
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerDesignSystemPanel({ render: () => null });
+		render(
+			<EditorUiStoreProvider storeId="rail-design-system">
+				<SidebarRegistryProvider value={registry}>
+					<SidebarRail />
+				</SidebarRegistryProvider>
+			</EditorUiStoreProvider>,
+		);
+		const tabs = screen.getAllByRole("tab");
+		expect(tabs.map((t) => t.id)).toContain("ak-rail-tab-design-system");
+	});
+
 	it("uses role=tablist with vertical orientation", () => {
 		renderRail("rail-tablist");
 		const tablist = screen.getByRole("tablist");

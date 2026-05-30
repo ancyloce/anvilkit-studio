@@ -25,6 +25,7 @@ import {
 	Image as ImageIcon,
 	Layers as LayersIcon,
 	LayoutGrid as LayoutGridIcon,
+	Palette as PaletteIcon,
 	Plus as PlusIcon,
 	Sparkles as SparklesIcon,
 	Type as TypeIcon,
@@ -72,6 +73,11 @@ const RAIL_MODULES: readonly RailModule[] = [
 		icon: HistoryIcon,
 		labelKey: "studio.module.history.name",
 	},
+	{
+		key: "design-system",
+		icon: PaletteIcon,
+		labelKey: "studio.module.designSystem.name",
+	},
 ];
 
 export interface SidebarRailHandle {
@@ -91,6 +97,7 @@ export const SidebarRail = memo(
 			text: useSidebarRegistry((s) => s.copyPacks.size > 0),
 			copilot: useSidebarRegistry((s) => s.copilotPanel !== null),
 			history: useSidebarRegistry((s) => s.historyPanel !== null),
+			"design-system": useSidebarRegistry((s) => s.designSystemPanel !== null),
 		} satisfies Record<EditorTab, boolean>;
 		const visibleModules = RAIL_MODULES.filter((m) => visibility[m.key]);
 		const containerRef = useRef<HTMLDivElement | null>(null);
