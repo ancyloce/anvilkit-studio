@@ -214,7 +214,11 @@ function setNested(
 ): void {
 	let node = target;
 	for (let i = 0; i < path.length - 1; i++) {
-		const key = path[i] as string;
+		// TS-3: narrow with a guard instead of `as string` — `i` is in
+		// bounds so this never actually skips, but it satisfies
+		// `noUncheckedIndexedAccess` without defeating it via a cast.
+		const key = path[i];
+		if (key === undefined) continue;
 		const existing = node[key];
 		if (
 			existing !== null &&
@@ -238,7 +242,10 @@ function setNested(
 		node[key] = next;
 		node = next;
 	}
-	const leafKey = path[path.length - 1] as string;
+	// TS-3: guard instead of `as string` — an empty `path` would yield
+	// `undefined`, so bail rather than cast.
+	const leafKey = path[path.length - 1];
+	if (leafKey === undefined) return;
 	const existingLeaf = node[leafKey];
 	if (
 		existingLeaf !== undefined &&
