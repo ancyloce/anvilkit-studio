@@ -144,6 +144,7 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 
 - **Biome** handles both lint and format across all packages
 - **Prettier** is used at root level for `.ts/.tsx/.md` files
+- Use Biome with tab indentation (not Prettier, which converts tabs to spaces) for all formatting in this repo
 - TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
 
 ### Continuous Integration
@@ -170,16 +171,25 @@ Full component rules and conventions are documented in `packages/components/AGEN
 git submodule update --init --recursive  # Initialize after cloning
 ```
 
-Submodules:
+Submodules (14 total — the canonical source is `.gitmodules`; run
+`git config -f .gitmodules --get-regexp path` rather than trusting this list):
 
 - `packages/components`
-- `packages/plugins/plugin-ai-copilot`
-- `packages/plugins/plugin-asset-manager`
-- `packages/plugins/plugin-collab-ui`
-- `packages/plugins/plugin-collab-yjs`
-- `packages/plugins/plugin-export-html`
-- `packages/plugins/plugin-export-react`
-- `packages/plugins/plugin-version-history`
+- Plugins under `packages/plugins/`:
+  - `plugin-ai-copilot`
+  - `plugin-ai-image`
+  - `plugin-asset-manager`
+  - `plugin-canvas-studio`
+  - `plugin-collab-ui`
+  - `plugin-collab-yjs`
+  - `plugin-design-system`
+  - `plugin-export-canvas`
+  - `plugin-export-html`
+  - `plugin-export-react`
+  - `plugin-version-history`
+- Canvas (direct submodules — `packages/canvas` is a plain directory, not itself a submodule):
+  - `packages/canvas/core`
+  - `packages/canvas/editor`
 
 ## Health Stack
 
@@ -198,6 +208,12 @@ ever changes.
 - Always run typecheck, lint, and tests after multi-file changes
 - When tests fail due to pre-existing infrastructure issues (path aliases, missing dist folders), report this clearly rather than skipping verification
 - Build dependent packages (`pnpm build`) before assuming module resolution errors are code issues
+- Always rebuild the affected package's dist (e.g. `pnpm build`) before declaring a fix complete; unit tests passing is NOT sufficient verification when a running demo/browser executes built code
+
+## Code Review
+
+- When asked for a detailed analysis or code review, deliver it directly rather than pausing to ask scope-clarifying questions; only ask if a hard blocker prevents progress
+- After every code review, run the actual gates (typecheck, lint, tests, build, E2E) and adversarially verify findings against source before reporting them as confirmed
 
 ## Demo & Mount Consistency
 
