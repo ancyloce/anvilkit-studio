@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **anvilkit-studio** is a monorepo for independently publishable Puck-native React component packages. Components are built for [Puck](https://puckeditor.com/) (a headless page builder), each published separately under the `@anvilkit/*` namespace.
 
+## Workflow & Interaction
+
+- When asked for a **code review, analysis, audit, or roadmap**, start producing the deliverable immediately. Do NOT open plan-approval (`ExitPlanMode`) or ask scoping questions first — make reasonable scoping assumptions, state them inline, and only pause if the request is genuinely ambiguous or blocked.
+- Default to autonomous, multi-file execution: chain related fixes in one pass, self-verify through the gates below, and report once when the work survives verification — not after each micro-step.
+- Prefer a root-cause fix plus a regression test over a band-aid. When a first attempt fails verification, iterate rather than stopping to ask how to proceed.
+- Track multi-finding work as numbered items (P0/P1/P2 or R1…/F1…) and drive each to closure.
+
 ## Monorepo Structure
 
 ```
