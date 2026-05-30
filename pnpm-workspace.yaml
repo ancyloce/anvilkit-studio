@@ -39,6 +39,8 @@ minimumReleaseAgeExclude:
   - '@turbo/windows-64@2.9.15'
   - '@turbo/windows-arm64@2.9.15'
   - turbo@2.9.15
+  - oxlint-plugin-react-doctor@0.2.14
+  - react-doctor@0.2.14
 patchedDependencies:
   "@base-ui/react@1.5.0": packages/components/patches/@base-ui__react@1.5.0.patch
 
