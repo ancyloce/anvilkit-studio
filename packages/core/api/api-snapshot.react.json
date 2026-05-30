@@ -8033,9 +8033,9 @@
 			"sources": [
 				{
 					"fileName": "react/stores/AiStoreProvider.tsx",
-					"line": 53,
+					"line": 51,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L53"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L51"
 				}
 			],
 			"signatures": [
@@ -8064,9 +8064,9 @@
 					"sources": [
 						{
 							"fileName": "react/stores/AiStoreProvider.tsx",
-							"line": 53,
+							"line": 51,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L53"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L51"
 						}
 					],
 					"typeParameters": [
@@ -8530,9 +8530,9 @@
 			"sources": [
 				{
 					"fileName": "react/stores/AiStoreProvider.tsx",
-					"line": 38,
+					"line": 36,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L38"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L36"
 				}
 			],
 			"signatures": [
@@ -8545,9 +8545,9 @@
 					"sources": [
 						{
 							"fileName": "react/stores/AiStoreProvider.tsx",
-							"line": 38,
+							"line": 36,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L38"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/stores/AiStoreProvider.tsx#L36"
 						}
 					],
 					"type": {
