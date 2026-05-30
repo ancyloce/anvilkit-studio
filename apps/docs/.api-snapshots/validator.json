@@ -48,7 +48,7 @@
           "sources": [
             {
               "fileName": "core/dist/types/ai.d.ts",
-              "line": 212,
+              "line": 234,
               "character": 13
             }
           ],
@@ -84,7 +84,7 @@
           "sources": [
             {
               "fileName": "core/dist/types/ai.d.ts",
-              "line": 207,
+              "line": 229,
               "character": 13
             }
           ],
@@ -128,7 +128,7 @@
           "sources": [
             {
               "fileName": "core/dist/types/ai.d.ts",
-              "line": 221,
+              "line": 243,
               "character": 13
             }
           ],
@@ -160,7 +160,7 @@
       "sources": [
         {
           "fileName": "core/dist/types/ai.d.ts",
-          "line": 201,
+          "line": 223,
           "character": 17
         }
       ]
@@ -233,7 +233,7 @@
           "sources": [
             {
               "fileName": "core/dist/types/ai.d.ts",
-              "line": 241,
+              "line": 263,
               "character": 13
             }
           ],
@@ -300,7 +300,7 @@
           "sources": [
             {
               "fileName": "core/dist/types/ai.d.ts",
-              "line": 236,
+              "line": 258,
               "character": 13
             }
           ],
@@ -322,7 +322,7 @@
       "sources": [
         {
           "fileName": "core/dist/types/ai.d.ts",
-          "line": 230,
+          "line": 252,
           "character": 17
         }
       ]
