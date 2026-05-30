@@ -19,7 +19,9 @@ import { Copy, GripVertical, Plus, Trash2 } from "lucide-react";
 import {
 	type DragEvent,
 	type KeyboardEvent,
+	memo,
 	type ReactNode,
+	useCallback,
 	useEffect,
 	useState,
 } from "react";
@@ -345,6 +347,188 @@ function ItemFieldsPanel({
 	);
 }
 
+interface ArrayRowProps {
+	readonly field: PuckArrayField<Record<string, unknown>[]>;
+	readonly fieldName: string;
+	readonly id?: string;
+	readonly readOnly?: boolean;
+	readonly index: number;
+	readonly item: Record<string, unknown>;
+	readonly isOpen: boolean;
+	readonly isDragged: boolean;
+	readonly isDropTarget: boolean;
+	readonly canReorder: boolean;
+	readonly disableDuplicate: boolean;
+	readonly disableRemove: boolean;
+	readonly onOpenChange: (index: number, open: boolean) => void;
+	readonly onDragStart: (
+		event: DragEvent<HTMLButtonElement>,
+		index: number,
+	) => void;
+	readonly onDragOver: (
+		event: DragEvent<HTMLDivElement>,
+		index: number,
+	) => void;
+	readonly onDrop: (event: DragEvent<HTMLDivElement>, index: number) => void;
+	readonly onDragEnd: () => void;
+	readonly onHandleKeyDown: (
+		event: KeyboardEvent<HTMLButtonElement>,
+		index: number,
+	) => void;
+	readonly onDuplicate: (index: number) => void;
+	readonly onRemove: (index: number) => void;
+	readonly onItemChange: (
+		index: number,
+		subName: string,
+		value: unknown,
+		uiState?: ChangeUiState,
+	) => void;
+}
+
+/**
+ * One memoized array row (review finding RX-c). Receiving stable
+ * callbacks + per-row scalar props from {@link ArrayField} means a
+ * drag-hover or open/close that touches one row does not re-render
+ * (and re-allocate the closure tree of) every other row.
+ */
+const ArrayRow = memo(function ArrayRow({
+	field,
+	fieldName,
+	id,
+	readOnly,
+	index,
+	item,
+	isOpen,
+	isDragged,
+	isDropTarget,
+	canReorder,
+	disableDuplicate,
+	disableRemove,
+	onOpenChange,
+	onDragStart,
+	onDragOver,
+	onDrop,
+	onDragEnd,
+	onHandleKeyDown,
+	onDuplicate,
+	onRemove,
+	onItemChange,
+}: ArrayRowProps): ReactNode {
+	const summary = getItemSummary(field, item, index);
+	const summaryText = summaryToText(summary, index);
+
+	return (
+		<Popover open={isOpen} onOpenChange={(open) => onOpenChange(index, open)}>
+			<Item
+				role="listitem"
+				variant="outline"
+				size="xs"
+				className={cn(
+					isOpen && "border-ring",
+					isDragged && "opacity-60",
+					isDropTarget && "border-ring bg-muted/50",
+				)}
+				onDragOver={(event) => onDragOver(event, index)}
+				onDrop={(event) => onDrop(event, index)}
+			>
+				<Button
+					type="button"
+					variant="ghost"
+					size="icon-sm"
+					aria-label={`Reorder ${summaryText}`}
+					disabled={!canReorder}
+					draggable={canReorder}
+					className={cn(
+						"text-muted-foreground hover:text-foreground",
+						canReorder && "cursor-grab active:cursor-grabbing",
+					)}
+					onDragStart={(event) => onDragStart(event, index)}
+					onDragEnd={onDragEnd}
+					onKeyDown={(event) => onHandleKeyDown(event, index)}
+				>
+					<GripVertical data-icon="inline-start" aria-hidden="true" />
+				</Button>
+
+				<ItemContent className="min-w-0 flex-1 self-stretch gap-0">
+					<PopoverTrigger
+						render={
+							<Button
+								type="button"
+								variant="ghost"
+								aria-expanded={isOpen}
+								aria-label={`Edit ${summaryText}`}
+								className="flex h-full w-full min-w-0 items-center rounded-md px-1 text-left text-sm font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+							/>
+						}
+					>
+						<span className={cn("truncate", isOpen && "text-primary")}>
+							{summary}
+						</span>
+					</PopoverTrigger>
+				</ItemContent>
+
+				{readOnly !== true ? (
+					<ItemActions className="shrink-0 gap-0.5">
+						<Button
+							type="button"
+							variant="ghost"
+							size="icon-sm"
+							aria-label="Duplicate"
+							disabled={disableDuplicate}
+							onClick={() => onDuplicate(index)}
+						>
+							<Copy data-icon="inline-start" aria-hidden="true" />
+						</Button>
+						<Button
+							type="button"
+							variant="ghost"
+							size="icon-sm"
+							aria-label="Remove"
+							disabled={disableRemove}
+							className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+							onClick={() => onRemove(index)}
+						>
+							<Trash2 data-icon="inline-start" aria-hidden="true" />
+						</Button>
+					</ItemActions>
+				) : null}
+			</Item>
+
+			<PopoverPortal>
+				<PopoverPositioner
+					side="left"
+					align="start"
+					sideOffset={68}
+					alignOffset={-14}
+				>
+					<PopoverPopup
+						data-ak-studio-theme
+						initialFocus={false}
+						style={{ maxHeight: PROPERTY_PANEL_MAX_HEIGHT }}
+						className="flex min-h-0 w-64 origin-(--transform-origin) flex-col gap-0 overflow-hidden rounded-lg bg-popover p-0 text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden"
+					>
+						<PopoverTitle className="sr-only">{summaryText}</PopoverTitle>
+						<ScrollArea className="max-h-[inherit] min-h-0 w-full flex-auto [&>[data-slot=scroll-area-viewport]]:max-h-[inherit]">
+							<div className="p-4">
+								<ItemFieldsPanel
+									field={field}
+									fieldName={fieldName}
+									item={item}
+									index={index}
+									summaryText={summaryText}
+									readOnly={readOnly}
+									id={id}
+									onItemChange={onItemChange}
+								/>
+							</div>
+						</ScrollArea>
+					</PopoverPopup>
+				</PopoverPositioner>
+			</PopoverPortal>
+		</Popover>
+	);
+});
+
 export function ArrayField({
 	field,
 	value,
@@ -371,122 +555,154 @@ export function ArrayField({
 		}
 	}, [items.length, openIndex]);
 
-	function update(next: ArrayValue, uiState?: ChangeUiState): void {
-		if (readOnly === true) return;
-		onChange(next as never, uiState);
-	}
+	// RX-c: stabilize every handler with `useCallback` so the memoized
+	// `ArrayRow` (below) only re-renders rows whose own props change.
+	// `items` is referentially stable across renders while `value` is
+	// unchanged (`toArray` returns the prop verbatim), so these recreate
+	// only on a genuine value/config change — not on drag-hover or
+	// open/close state churn, which is exactly when the memo pays off.
+	const update = useCallback(
+		(next: ArrayValue, uiState?: ChangeUiState): void => {
+			if (readOnly === true) return;
+			onChange(next as never, uiState);
+		},
+		[readOnly, onChange],
+	);
 
-	function updateItem(
-		index: number,
-		subName: string,
-		nextValue: unknown,
-		uiState?: ChangeUiState,
-	): void {
-		const item = items[index];
-		if (item === undefined || item[subName] === nextValue) return;
-		const copy = items.slice();
-		copy[index] = { ...item, [subName]: nextValue };
-		update(copy, uiState);
-	}
+	const updateItem = useCallback(
+		(
+			index: number,
+			subName: string,
+			nextValue: unknown,
+			uiState?: ChangeUiState,
+		): void => {
+			const item = items[index];
+			if (item === undefined || item[subName] === nextValue) return;
+			const copy = items.slice();
+			copy[index] = { ...item, [subName]: nextValue };
+			update(copy, uiState);
+		},
+		[items, update],
+	);
 
-	function add(): void {
+	const add = useCallback((): void => {
 		if (readOnly === true || items.length >= max) return;
 		setOpenIndex(items.length);
 		update([...items, defaultItemAt(field, items.length)]);
-	}
+	}, [readOnly, items, max, field, update]);
 
-	function remove(index: number): void {
-		if (readOnly === true || items.length <= min) return;
-		update(items.filter((_, i) => i !== index));
+	const remove = useCallback(
+		(index: number): void => {
+			if (readOnly === true || items.length <= min) return;
+			update(items.filter((_, i) => i !== index));
+			setOpenIndex((current) => {
+				if (current === null) return null;
+				if (current === index) return null;
+				if (current > index) return current - 1;
+				return current;
+			});
+		},
+		[readOnly, items, min, update],
+	);
+
+	const duplicate = useCallback(
+		(index: number): void => {
+			if (readOnly === true || items.length >= max) return;
+			const copy = items.slice();
+			copy.splice(index + 1, 0, copy[index] as Record<string, unknown>);
+			setOpenIndex(index + 1);
+			update(copy);
+		},
+		[readOnly, items, max, update],
+	);
+
+	const move = useCallback(
+		(from: number, to: number): void => {
+			if (readOnly === true || from === to || to < 0 || to >= items.length) {
+				return;
+			}
+			const copy = items.slice();
+			const [moved] = copy.splice(from, 1);
+			if (moved !== undefined) {
+				copy.splice(to, 0, moved);
+			}
+			setOpenIndex((current) => {
+				if (current === null) return null;
+				if (current === from) return to;
+				if (from < to && current > from && current <= to) return current - 1;
+				if (to < from && current >= to && current < from) return current + 1;
+				return current;
+			});
+			update(copy);
+		},
+		[readOnly, items, update],
+	);
+
+	const handleDragStart = useCallback(
+		(event: DragEvent<HTMLButtonElement>, index: number): void => {
+			if (readOnly === true || items.length < 2) return;
+			setDraggedIndex(index);
+			setDropIndex(index);
+			event.dataTransfer.effectAllowed = "move";
+			event.dataTransfer.setData(ARRAY_ITEM_DRAG_TYPE, String(index));
+			event.dataTransfer.setData("text/plain", String(index));
+		},
+		[readOnly, items.length],
+	);
+
+	const handleDragOver = useCallback(
+		(event: DragEvent<HTMLDivElement>, index: number): void => {
+			if (readOnly === true) return;
+			const from = getDragIndex(event.dataTransfer, draggedIndex);
+			if (from === null || from === index) return;
+			event.preventDefault();
+			event.dataTransfer.dropEffect = "move";
+			setDropIndex(index);
+		},
+		[readOnly, draggedIndex],
+	);
+
+	const handleDrop = useCallback(
+		(event: DragEvent<HTMLDivElement>, index: number): void => {
+			if (readOnly === true) return;
+			event.preventDefault();
+			const from = getDragIndex(event.dataTransfer, draggedIndex);
+			if (from !== null) {
+				move(from, index);
+			}
+			setDraggedIndex(null);
+			setDropIndex(null);
+		},
+		[readOnly, draggedIndex, move],
+	);
+
+	const handleDragEnd = useCallback((): void => {
+		setDraggedIndex(null);
+		setDropIndex(null);
+	}, []);
+
+	const handleHandleKeyDown = useCallback(
+		(event: KeyboardEvent<HTMLButtonElement>, index: number): void => {
+			if (readOnly === true) return;
+			if (event.key === "ArrowUp") {
+				event.preventDefault();
+				move(index, index - 1);
+			}
+			if (event.key === "ArrowDown") {
+				event.preventDefault();
+				move(index, index + 1);
+			}
+		},
+		[readOnly, move],
+	);
+
+	const handleOpenChange = useCallback((index: number, open: boolean): void => {
 		setOpenIndex((current) => {
-			if (current === null) return null;
+			if (open) return index;
 			if (current === index) return null;
-			if (current > index) return current - 1;
 			return current;
 		});
-	}
-
-	function duplicate(index: number): void {
-		if (readOnly === true || items.length >= max) return;
-		const copy = items.slice();
-		copy.splice(index + 1, 0, copy[index] as Record<string, unknown>);
-		setOpenIndex(index + 1);
-		update(copy);
-	}
-
-	function move(from: number, to: number): void {
-		if (readOnly === true || from === to || to < 0 || to >= items.length) {
-			return;
-		}
-		const copy = items.slice();
-		const [moved] = copy.splice(from, 1);
-		if (moved !== undefined) {
-			copy.splice(to, 0, moved);
-		}
-		setOpenIndex((current) => {
-			if (current === null) return null;
-			if (current === from) return to;
-			if (from < to && current > from && current <= to) return current - 1;
-			if (to < from && current >= to && current < from) return current + 1;
-			return current;
-		});
-		update(copy);
-	}
-
-	function handleDragStart(
-		event: DragEvent<HTMLButtonElement>,
-		index: number,
-	): void {
-		if (readOnly === true || items.length < 2) return;
-		setDraggedIndex(index);
-		setDropIndex(index);
-		event.dataTransfer.effectAllowed = "move";
-		event.dataTransfer.setData(ARRAY_ITEM_DRAG_TYPE, String(index));
-		event.dataTransfer.setData("text/plain", String(index));
-	}
-
-	function handleDragOver(
-		event: DragEvent<HTMLDivElement>,
-		index: number,
-	): void {
-		if (readOnly === true) return;
-		const from = getDragIndex(event.dataTransfer, draggedIndex);
-		if (from === null || from === index) return;
-		event.preventDefault();
-		event.dataTransfer.dropEffect = "move";
-		setDropIndex(index);
-	}
-
-	function handleDrop(event: DragEvent<HTMLDivElement>, index: number): void {
-		if (readOnly === true) return;
-		event.preventDefault();
-		const from = getDragIndex(event.dataTransfer, draggedIndex);
-		if (from !== null) {
-			move(from, index);
-		}
-		setDraggedIndex(null);
-		setDropIndex(null);
-	}
-
-	function handleDragEnd(): void {
-		setDraggedIndex(null);
-		setDropIndex(null);
-	}
-
-	function handleHandleKeyDown(
-		event: KeyboardEvent<HTMLButtonElement>,
-		index: number,
-	): void {
-		if (readOnly === true) return;
-		if (event.key === "ArrowUp") {
-			event.preventDefault();
-			move(index, index - 1);
-		}
-		if (event.key === "ArrowDown") {
-			event.preventDefault();
-			move(index, index + 1);
-		}
-	}
+	}, []);
 
 	return (
 		<FieldLabel
@@ -497,142 +713,33 @@ export function ArrayField({
 			readOnly={readOnly}
 		>
 			<div className="flex flex-col gap-3" role="list">
-				{items.map((item, index) => {
-					const summary = getItemSummary(field, item, index);
-					const summaryText = summaryToText(summary, index);
-					const canReorder = readOnly !== true && items.length > 1;
-
-					return (
-						<Popover
-							// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
-							key={index}
-							open={openIndex === index}
-							onOpenChange={(open) => {
-								setOpenIndex((current) => {
-									if (open) return index;
-									if (current === index) return null;
-									return current;
-								});
-							}}
-						>
-							<Item
-								role="listitem"
-								variant="outline"
-								size="xs"
-								className={cn(
-									openIndex === index && "border-ring",
-									draggedIndex === index && "opacity-60",
-									dropIndex === index &&
-										draggedIndex !== index &&
-										"border-ring bg-muted/50",
-								)}
-								onDragOver={(event) => handleDragOver(event, index)}
-								onDrop={(event) => handleDrop(event, index)}
-							>
-								<Button
-									type="button"
-									variant="ghost"
-									size="icon-sm"
-									aria-label={`Reorder ${summaryText}`}
-									disabled={!canReorder}
-									draggable={canReorder}
-									className={cn(
-										"text-muted-foreground hover:text-foreground",
-										canReorder && "cursor-grab active:cursor-grabbing",
-									)}
-									onDragStart={(event) => handleDragStart(event, index)}
-									onDragEnd={handleDragEnd}
-									onKeyDown={(event) => handleHandleKeyDown(event, index)}
-								>
-									<GripVertical data-icon="inline-start" aria-hidden="true" />
-								</Button>
-
-								<ItemContent className="min-w-0 flex-1 self-stretch gap-0">
-									<PopoverTrigger
-										render={
-											<Button
-												type="button"
-												variant="ghost"
-												aria-expanded={openIndex === index}
-												aria-label={`Edit ${summaryText}`}
-												className="flex h-full w-full min-w-0 items-center rounded-md px-1 text-left text-sm font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-											/>
-										}
-									>
-										<span
-											className={cn(
-												"truncate",
-												openIndex === index && "text-primary",
-											)}
-										>
-											{summary}
-										</span>
-									</PopoverTrigger>
-								</ItemContent>
-
-								{readOnly !== true ? (
-									<ItemActions className="shrink-0 gap-0.5">
-										<Button
-											type="button"
-											variant="ghost"
-											size="icon-sm"
-											aria-label="Duplicate"
-											disabled={items.length >= max}
-											onClick={() => duplicate(index)}
-										>
-											<Copy data-icon="inline-start" aria-hidden="true" />
-										</Button>
-										<Button
-											type="button"
-											variant="ghost"
-											size="icon-sm"
-											aria-label="Remove"
-											disabled={items.length <= min}
-											className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-											onClick={() => remove(index)}
-										>
-											<Trash2 data-icon="inline-start" aria-hidden="true" />
-										</Button>
-									</ItemActions>
-								) : null}
-							</Item>
-
-							<PopoverPortal>
-								<PopoverPositioner
-									side="left"
-									align="start"
-									sideOffset={68}
-									alignOffset={-14}
-								>
-									<PopoverPopup
-										data-ak-studio-theme
-										initialFocus={false}
-										style={{ maxHeight: PROPERTY_PANEL_MAX_HEIGHT }}
-										className="flex min-h-0 w-64 origin-(--transform-origin) flex-col gap-0 overflow-hidden rounded-lg bg-popover p-0 text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden"
-									>
-										<PopoverTitle className="sr-only">
-											{summaryText}
-										</PopoverTitle>
-										<ScrollArea className="max-h-[inherit] min-h-0 w-full flex-auto [&>[data-slot=scroll-area-viewport]]:max-h-[inherit]">
-											<div className="p-4">
-												<ItemFieldsPanel
-													field={field}
-													fieldName={fieldName}
-													item={item}
-													index={index}
-													summaryText={summaryText}
-													readOnly={readOnly}
-													id={id}
-													onItemChange={updateItem}
-												/>
-											</div>
-										</ScrollArea>
-									</PopoverPopup>
-								</PopoverPositioner>
-							</PopoverPortal>
-						</Popover>
-					);
-				})}
+				{items.map((item, index) => (
+					<ArrayRow
+						// biome-ignore lint/suspicious/noArrayIndexKey: array fields are reordered by index, not by item id; the index IS the identity here.
+						key={index}
+						field={field}
+						fieldName={fieldName}
+						id={id}
+						readOnly={readOnly}
+						index={index}
+						item={item}
+						isOpen={openIndex === index}
+						isDragged={draggedIndex === index}
+						isDropTarget={dropIndex === index && draggedIndex !== index}
+						canReorder={readOnly !== true && items.length > 1}
+						disableDuplicate={items.length >= max}
+						disableRemove={items.length <= min}
+						onOpenChange={handleOpenChange}
+						onDragStart={handleDragStart}
+						onDragOver={handleDragOver}
+						onDrop={handleDrop}
+						onDragEnd={handleDragEnd}
+						onHandleKeyDown={handleHandleKeyDown}
+						onDuplicate={duplicate}
+						onRemove={remove}
+						onItemChange={updateItem}
+					/>
+				))}
 				{readOnly !== true ? (
 					<Button
 						variant="outline"
