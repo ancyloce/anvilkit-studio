@@ -118,6 +118,37 @@ const INITIAL_STATE = {
 	resolved: "light" as ThemeResolved,
 } as const;
 
+/**
+ * `persist` schema version (review finding Z-a/Z-1). Bump when the
+ * persisted {@link ThemeStorePartial} shape changes.
+ */
+const THEME_STORE_PERSIST_VERSION = 1;
+
+const VALID_THEME_MODES: ReadonlySet<ThemeMode> = new Set([
+	"light",
+	"dark",
+	"system",
+]);
+
+/**
+ * Defensive `persist` migration: clamp the persisted `mode` to the
+ * {@link ThemeMode} union so a stale/corrupt blob (e.g. a removed
+ * mode, or a non-string) can never poison the live store — it falls
+ * back to the `"system"` default instead.
+ */
+function migrateThemePersistedState(persisted: unknown): ThemeStorePartial {
+	const source =
+		typeof persisted === "object" && persisted !== null
+			? (persisted as { mode?: unknown })
+			: {};
+	const mode =
+		typeof source.mode === "string" &&
+		VALID_THEME_MODES.has(source.mode as ThemeMode)
+			? (source.mode as ThemeMode)
+			: INITIAL_STATE.mode;
+	return { mode };
+}
+
 export interface CreateThemeStoreOptions {
 	readonly storeId: string;
 }
@@ -155,6 +186,8 @@ export function createThemeStore(
 			}),
 			{
 				name: `anvilkit-core-theme-${storeId}`,
+				version: THEME_STORE_PERSIST_VERSION,
+				migrate: migrateThemePersistedState,
 				// Persist `mode` only. See the file header for why
 				// `resolved` cannot and should not be persisted.
 				partialize: (state): ThemeStorePartial => ({
