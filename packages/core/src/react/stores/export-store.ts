@@ -135,9 +135,11 @@ export interface ExportState {
 	 */
 	recordExport(formatId: string, ok: boolean): void;
 	/**
-	 * Restore every field to its initial state. Uses
-	 * `useExportStore.getInitialState()` under the hood so the
-	 * definition of "initial" lives in exactly one place.
+	 * Restore every field to its initial state by spreading the
+	 * module-level {@link INITIAL_STATE} constant (a shallow `set`, so
+	 * the action functions survive). The single source of "initial"
+	 * is that constant — there is no `getInitialState()` singleton
+	 * (review finding Z-c/Z-3).
 	 */
 	reset(): void;
 }
@@ -171,6 +173,30 @@ const INITIAL_STATE = {
 	isExporting: false,
 	lastExport: null as LastExportRecord | null,
 } as const;
+
+/**
+ * `persist` schema version (review finding Z-a/Z-1). Bump when the
+ * persisted {@link ExportStorePartial} shape changes; the defensive
+ * {@link migrateExportPersistedState} below clamps any stale/corrupt
+ * blob to a valid shape instead of merging it verbatim.
+ */
+const EXPORT_STORE_PERSIST_VERSION = 1;
+
+/**
+ * Defensive `persist` migration: coerce the persisted blob into a valid
+ * {@link ExportStorePartial}. `currentFormat` must be a string or
+ * `null`; anything else resets to `null`.
+ */
+function migrateExportPersistedState(persisted: unknown): ExportStorePartial {
+	const source =
+		typeof persisted === "object" && persisted !== null
+			? (persisted as { currentFormat?: unknown })
+			: {};
+	return {
+		currentFormat:
+			typeof source.currentFormat === "string" ? source.currentFormat : null,
+	};
+}
 
 /**
  * Zustand store for the export pipeline's view-level state.
@@ -231,6 +257,8 @@ export function createExportStore(
 			}),
 			{
 				name: `anvilkit-core-export-${storeId}`,
+				version: EXPORT_STORE_PERSIST_VERSION,
+				migrate: migrateExportPersistedState,
 				// Persist only `currentFormat`. Every other field is
 				// ephemeral for the reasons documented in the file header.
 				partialize: (state): ExportStorePartial => ({
