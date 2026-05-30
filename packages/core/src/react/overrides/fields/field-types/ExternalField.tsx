@@ -20,6 +20,7 @@ import { Empty, EmptyDescription, EmptyTitle } from "@/primitives/empty";
 import { Input } from "@/primitives/input";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { Spinner } from "@/primitives/spinner";
+import { useMsg } from "@/state/editor-i18n-store";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
@@ -95,6 +96,7 @@ export function ExternalField({
 	id,
 	name,
 }: ExternalFieldRendererProps): ReactNode {
+	const msg = useMsg();
 	const [open, setOpen] = useState(false);
 	// Seed query/filters from Puck's documented external-field contract.
 	// Ignoring `initialQuery` / `initialFilters` silently changes the
@@ -202,7 +204,9 @@ export function ExternalField({
 						onClick={() => setOpen((p) => !p)}
 					>
 						<span>
-							{summary === null ? (field.placeholder ?? "Select…") : summary}
+							{summary === null
+								? (field.placeholder ?? msg("studio.field.placeholder.select"))
+								: summary}
 						</span>
 						<ChevronDown />
 					</Button>
@@ -210,7 +214,7 @@ export function ExternalField({
 						<Button
 							variant="ghost"
 							size="icon"
-							aria-label="Clear"
+							aria-label={msg("studio.field.external.clear")}
 							onClick={() => onChange(null as never)}
 						>
 							<X />
@@ -247,7 +251,7 @@ export function ExternalField({
 								<Input
 									value={query}
 									onChange={(event) => setQuery(event.target.value)}
-									placeholder="Search…"
+									placeholder={msg("studio.field.external.search")}
 									name={`${name}-search`}
 								/>
 							) : null}
@@ -258,7 +262,9 @@ export function ExternalField({
 									</Empty>
 								) : loadError ? (
 									<Empty className="border-0 p-3">
-										<EmptyTitle>Could not load results</EmptyTitle>
+										<EmptyTitle>
+											{msg("studio.field.external.loadError")}
+										</EmptyTitle>
 										<EmptyDescription>
 											Try a different search term.
 										</EmptyDescription>

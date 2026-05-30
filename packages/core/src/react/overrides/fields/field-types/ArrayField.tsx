@@ -38,6 +38,7 @@ import { Card, CardContent } from "@/primitives/card";
 import { FieldLegend, FieldSet } from "@/primitives/field";
 import { Item, ItemActions, ItemContent } from "@/primitives/item";
 import { ScrollArea } from "@/primitives/scroll-area";
+import { useMsg } from "@/state/editor-i18n-store";
 import { cn } from "@/utils/cn";
 
 import { FieldLabel } from "../../layout/FieldLabel";
@@ -414,6 +415,7 @@ const ArrayRow = memo(function ArrayRow({
 	onRemove,
 	onItemChange,
 }: ArrayRowProps): ReactNode {
+	const msg = useMsg();
 	const summary = getItemSummary(field, item, index);
 	const summaryText = summaryToText(summary, index);
 
@@ -435,7 +437,7 @@ const ArrayRow = memo(function ArrayRow({
 					type="button"
 					variant="ghost"
 					size="icon-sm"
-					aria-label={`Reorder ${summaryText}`}
+					aria-label={`${msg("studio.field.array.reorder")} ${summaryText}`}
 					disabled={!canReorder}
 					draggable={canReorder}
 					className={cn(
@@ -456,7 +458,7 @@ const ArrayRow = memo(function ArrayRow({
 								type="button"
 								variant="ghost"
 								aria-expanded={isOpen}
-								aria-label={`Edit ${summaryText}`}
+								aria-label={`${msg("studio.field.array.edit")} ${summaryText}`}
 								className="flex h-full w-full min-w-0 items-center rounded-md px-1 text-left text-sm font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
 							/>
 						}
@@ -473,7 +475,7 @@ const ArrayRow = memo(function ArrayRow({
 							type="button"
 							variant="ghost"
 							size="icon-sm"
-							aria-label="Duplicate"
+							aria-label={msg("studio.field.array.duplicate")}
 							disabled={disableDuplicate}
 							onClick={() => onDuplicate(index)}
 						>
@@ -483,7 +485,7 @@ const ArrayRow = memo(function ArrayRow({
 							type="button"
 							variant="ghost"
 							size="icon-sm"
-							aria-label="Remove"
+							aria-label={msg("studio.field.array.remove")}
 							disabled={disableRemove}
 							className="text-destructive hover:bg-destructive/10 hover:text-destructive"
 							onClick={() => onRemove(index)}
@@ -537,6 +539,7 @@ export function ArrayField({
 	id,
 	name,
 }: ArrayFieldRendererProps): ReactNode {
+	const msg = useMsg();
 	const items = toArray(value);
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
 	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -749,7 +752,7 @@ export function ArrayField({
 						onClick={add}
 					>
 						<Plus data-icon="inline-start" aria-hidden="true" />
-						<span>Add item</span>
+						<span>{msg("studio.field.array.add")}</span>
 					</Button>
 				) : null}
 			</div>

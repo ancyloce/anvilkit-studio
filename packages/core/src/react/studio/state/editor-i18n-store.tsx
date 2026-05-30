@@ -237,6 +237,20 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.designSystem.name": "Design System",
 	"studio.module.designSystem.empty":
 		"Install @anvilkit/plugin-design-system and register a design-system panel to edit tokens.",
+
+	// Field renderers (review finding N-1 — was the one systematic
+	// i18n/a11y gap; these compose inside <EditorI18nStoreProvider> but
+	// previously hardcoded English user-facing + aria-label text).
+	"studio.field.placeholder.select": "Select…",
+	"studio.field.external.search": "Search…",
+	"studio.field.external.clear": "Clear",
+	"studio.field.external.loadError": "Could not load results",
+	"studio.field.external.noResults": "No results",
+	"studio.field.array.reorder": "Reorder",
+	"studio.field.array.edit": "Edit",
+	"studio.field.array.duplicate": "Duplicate",
+	"studio.field.array.remove": "Remove",
+	"studio.field.array.add": "Add item",
 };
 
 /**
