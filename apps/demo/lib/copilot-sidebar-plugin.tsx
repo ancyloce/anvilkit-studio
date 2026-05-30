@@ -30,46 +30,60 @@ interface CopilotSidebarPluginOptions {
 
 interface CopilotSidebarPanelProps extends CopilotSidebarPluginOptions {
   /**
-   * Live Puck-data accessor. The "Simulate hero selection" toggle must
-   * pin the id of whatever Hero is *currently* on the canvas — after a
-   * page generation that id is `hero-fallback` / `hero-1` / etc., not
-   * the seeded `hero-primary`. Hardcoding the seeded id made
-   * regenerate-selection throw `APPLY_FAILED` once the canvas had been
-   * regenerated. Throws before the plugin's `onInit` runs;
-   * {@link resolveHeroNodeId} treats that as "fall back to the seeded
-   * id".
+   * Live Puck-data accessor. The "Simulate selection" toggle must pin a
+   * node that is *currently* on the canvas — after a page generation or
+   * a multi-page swap the seeded `hero-primary` may be gone entirely.
+   * Pinning a non-existent id made regenerate-selection throw
+   * `APPLY_FAILED` (the canvas had no such node to patch). Throws before
+   * the plugin's `onInit` runs; {@link resolveSelectionTarget} treats
+   * that as "no resolvable selection yet".
    */
   readonly getData: () => ReturnType<StudioPluginContext["getData"]>;
 }
 
 const HERO_TYPE = "Hero";
-const FALLBACK_HERO_ID = "hero-primary";
+
+interface SelectionTarget {
+  readonly id: string;
+  readonly label: string;
+}
 
 /**
- * Resolve the id of the first Hero component on the live canvas so the
- * simulated section selection always targets a node that actually
- * exists. Falls back to the seeded demo id when data isn't available
- * yet or no Hero is present.
+ * Resolve a section-selection target that is *guaranteed to exist* on
+ * the live canvas. Prefers the first Hero (the demo's canonical
+ * section), but falls back to the first top-level node of any type so
+ * the toggle still targets a real, contiguous root node on pages that
+ * have no Hero (e.g. the multi-page sidebar's `items` / `list`
+ * layouts). Returns `null` when the canvas is empty or unavailable —
+ * the panel then stays in page mode instead of pinning a node that
+ * isn't there.
  */
-function resolveHeroNodeId(
+function resolveSelectionTarget(
   getData: CopilotSidebarPanelProps["getData"],
-): string {
+): SelectionTarget | null {
   let data: ReturnType<StudioPluginContext["getData"]>;
   try {
     data = getData();
   } catch {
-    return FALLBACK_HERO_ID;
+    return null;
   }
   const content = (data?.content ?? []) as ReadonlyArray<{
     type?: string;
     props?: { id?: unknown };
   }>;
+  let firstNode: SelectionTarget | null = null;
   for (const item of content) {
-    if (item.type === HERO_TYPE && typeof item.props?.id === "string") {
-      return item.props.id;
-    }
+    if (typeof item.props?.id !== "string") continue;
+    const target: SelectionTarget = {
+      id: item.props.id,
+      label: item.type ?? "Section",
+    };
+    // Prefer a Hero so the demo's canonical "regenerate the hero" flow
+    // still resolves to it whenever one is present.
+    if (item.type === HERO_TYPE) return target;
+    firstNode ??= target;
   }
-  return FALLBACK_HERO_ID;
+  return firstNode;
 }
 
 const meta: StudioPluginMeta = {
@@ -87,11 +101,12 @@ function CopilotSidebarPanel({
 }: CopilotSidebarPanelProps): ReactElement {
   const [selectionActive, setSelectionActive] = useState(false);
 
-  const selection: AiPromptPanelSelection | null = selectionActive
+  const target = selectionActive ? resolveSelectionTarget(getData) : null;
+  const selection: AiPromptPanelSelection | null = target
     ? {
         zoneId: "root-zone",
-        nodeIds: [resolveHeroNodeId(getData)],
-        nodeLabels: ["Hero"],
+        nodeIds: [target.id],
+        nodeLabels: [target.label],
       }
     : null;
 
@@ -107,8 +122,8 @@ function CopilotSidebarPanel({
         >
           <span className="relative z-10">
             {selectionActive
-              ? "Clear hero selection"
-              : "Simulate hero selection"}
+              ? "Clear section selection"
+              : "Simulate section selection"}
           </span>
           {selectionActive ? (
             <Ripple
