@@ -2896,9 +2896,9 @@
 											"sources": [
 												{
 													"fileName": "types/config.ts",
-													"line": 80,
+													"line": 82,
 													"character": 10,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L80"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L82"
 												}
 											],
 											"type": {
@@ -3537,9 +3537,9 @@
 			"sources": [
 				{
 					"fileName": "config/env-parser.ts",
-					"line": 278,
+					"line": 285,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/env-parser.ts#L278"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/env-parser.ts#L285"
 				}
 			],
 			"signatures": [
@@ -3668,9 +3668,9 @@
 					"sources": [
 						{
 							"fileName": "config/env-parser.ts",
-							"line": 278,
+							"line": 285,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/env-parser.ts#L278"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/env-parser.ts#L285"
 						}
 					],
 					"parameters": [
@@ -4308,9 +4308,9 @@
 									"sources": [
 										{
 											"fileName": "types/config.ts",
-											"line": 80,
+											"line": 82,
 											"character": 10,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L80"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L82"
 										}
 									],
 									"type": {
