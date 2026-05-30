@@ -28,8 +28,8 @@ export interface SourceListResult<T> {
 	/** `true` while a request is in flight (exposed for symmetry; the
 	 * pages/layers panels intentionally ignore it). */
 	readonly loading: boolean;
-	/** `true` when the most recent `list()` rejected. */
-	readonly error: boolean;
+	/** `true` when the most recent `list()` rejected (N-3). */
+	readonly hasError: boolean;
 }
 
 /**
@@ -43,12 +43,12 @@ export function useSourceList<T>(
 ): SourceListResult<T> {
 	const [items, setItems] = useState<readonly T[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	const [hasError, setHasError] = useState(false);
 
 	useEffect(() => {
 		if (source === undefined) {
 			setItems([]);
-			setError(false);
+			setHasError(false);
 			setLoading(false);
 			return;
 		}
@@ -64,11 +64,11 @@ export function useSourceList<T>(
 					const next = await Promise.resolve(source.list());
 					if (mySeq !== seq) return;
 					setItems(next);
-					setError(false);
+					setHasError(false);
 				} catch {
 					if (mySeq !== seq) return;
 					setItems([]);
-					setError(true);
+					setHasError(true);
 				} finally {
 					if (mySeq === seq) setLoading(false);
 				}
@@ -83,5 +83,5 @@ export function useSourceList<T>(
 		};
 	}, [source]);
 
-	return { items, loading, error };
+	return { items, loading, hasError };
 }

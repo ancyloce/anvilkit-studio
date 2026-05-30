@@ -13,7 +13,6 @@ export {
 export { HeaderActions, type HeaderActionsProps } from "./HeaderActions";
 export { StudioHeader, type StudioHeaderProps } from "./StudioHeader";
 export { StudioLayout, type StudioLayoutProps } from "./StudioLayout";
-export { StudioSidebar } from "./StudioSidebar";
 export { StudioToolbar } from "./StudioToolbar";
 export {
 	StudioViewportPreview,

@@ -16,6 +16,7 @@ import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-store";
+import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import type {
 	StudioPluginMeta,
 	StudioPluginSlotContribution,
@@ -86,7 +87,10 @@ function StudioHeaderImpl({
 			<div className="ml-auto flex items-center gap-2">
 				{lastSavedAt !== null ? (
 					<span className="text-xs text-[var(--ak-studio-muted-fg)]">
-						Saved {formatTimestamp(lastSavedAt)}
+						{msg("studio.publishPanel.savedRelative").replace(
+							"{time}",
+							formatRelativeTimestamp(lastSavedAt, msg),
+						)}
 					</span>
 				) : null}
 
@@ -231,16 +235,4 @@ function CollaboratorsSlotRegionInner(): ReactNode {
 		return null;
 	}
 	return <SlotComponent />;
-}
-
-function formatTimestamp(date: Date): string {
-	const now = Date.now();
-	const diffMs = now - date.getTime();
-	const minutes = Math.floor(diffMs / 60_000);
-	if (minutes < 1) return "just now";
-	if (minutes < 60) return `${minutes}m ago`;
-	return date.toLocaleTimeString(undefined, {
-		hour: "2-digit",
-		minute: "2-digit",
-	});
 }

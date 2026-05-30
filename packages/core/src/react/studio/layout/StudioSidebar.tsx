@@ -12,13 +12,7 @@
  * slot via {@link useSetSidebarHeaderActions}.
  */
 
-import {
-	memo,
-	type ReactNode,
-	type RefObject,
-	useCallback,
-	useRef,
-} from "react";
+import { memo, type ReactNode, type RefObject, useCallback } from "react";
 
 import { useMsg } from "@/state/editor-i18n-store";
 import type { EditorTab } from "@/state/editor-ui-store";
@@ -142,13 +136,6 @@ function StudioSidebarPanelImpl({
 
 export const StudioSidebarPanel = memo(StudioSidebarPanelImpl);
 
-export function StudioSidebar(): ReactNode {
-	const railRef = useRef<SidebarRailHandle | null>(null);
-
-	return (
-		<aside className="flex h-full shrink-0 flex-row">
-			<StudioSidebarRail railRef={railRef} />
-			<StudioSidebarPanel railRef={railRef} />
-		</aside>
-	);
-}
+// N-f: the `StudioSidebar` combined wrapper was deleted — it had no
+// mounts (the layout composes `StudioSidebarRail` + `StudioSidebarPanel`
+// directly) and was not part of the public API.

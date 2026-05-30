@@ -42,7 +42,7 @@ export function PagesPanel(): ReactNode {
 	const source = useStudioPagesSourceOrDefault();
 	// `loading` intentionally ignored — behavior unchanged vs. the prior
 	// inline effect; the hook only adds out-of-order protection.
-	const { items: pages, error: loadError } = useSourceList<StudioPage>(source);
+	const { items: pages, hasError: loadError } = useSourceList<StudioPage>(source);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 

@@ -36,6 +36,7 @@ import {
 } from "@/primitives/animate-ui/primitives/base/popover";
 import { Button } from "@/primitives/button";
 import { useMsg } from "@/state/editor-i18n-store";
+import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import type { ExportFormatDefinition } from "@/types/export";
 
 export function PublishPanel(): ReactNode {
@@ -79,7 +80,7 @@ export function PublishPanel(): ReactNode {
 								{lastSavedAt !== null
 									? msg("studio.publishPanel.savedRelative").replace(
 											"{time}",
-											formatTimestamp(lastSavedAt),
+											formatRelativeTimestamp(lastSavedAt, msg),
 										)
 									: msg("studio.publishPanel.notSaved")}
 							</span>
@@ -188,16 +189,4 @@ function ExportRow({
 			</span>
 		</span>
 	);
-}
-
-function formatTimestamp(date: Date): string {
-	const now = Date.now();
-	const diffMs = now - date.getTime();
-	const minutes = Math.floor(diffMs / 60_000);
-	if (minutes < 1) return "just now";
-	if (minutes < 60) return `${minutes}m ago`;
-	return date.toLocaleTimeString(undefined, {
-		hour: "2-digit",
-		minute: "2-digit",
-	});
 }

@@ -21,8 +21,8 @@
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 import { useCopyCategoryFilter } from "@/state/hooks";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
-import { useInsertSnippet } from "@/state/useInsertSnippet";
-import { useTextSelection } from "@/state/useTextSelection";
+import { useInsertSnippet } from "@/state/use-insert-snippet";
+import { useTextSelection } from "@/state/use-text-selection";
 import type { StudioCopySnippet, StudioCopySnippetPack } from "@/types/sidebar";
 import { SnippetList } from "./text/SnippetList";
 import { TextFilterStrip } from "./text/TextFilterStrip";
