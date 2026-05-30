@@ -12,7 +12,11 @@
 // the host config read path, react/ owns the Studio shell and its
 // slice stores.
 
-export { Studio, type StudioProps } from "./components/Studio";
+export {
+	Studio,
+	type StudioLogger,
+	type StudioProps,
+} from "./components/Studio";
 export { type UseStudioResult, useStudio } from "./hooks/use-studio";
 export { mergeOverrides } from "./overrides/merge-overrides";
 export * from "./stores/index";

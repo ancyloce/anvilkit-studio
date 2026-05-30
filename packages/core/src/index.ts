@@ -63,6 +63,7 @@ export {
 export {
 	mergeOverrides,
 	Studio,
+	type StudioLogger,
 	type StudioProps,
 	type UseStudioResult,
 	useStudio,
@@ -115,6 +116,7 @@ export {
 	jsonFormat,
 	type LifecycleEventName,
 	type LifecycleManager,
+	type LifecyclePhase,
 	type LifecycleSubscriber,
 	lazyPlugin,
 	StudioConfigError,

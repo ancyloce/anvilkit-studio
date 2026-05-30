@@ -11,6 +11,7 @@ export type {
 	AiFieldSchema,
 	AiFieldType,
 	AiGenerationContext,
+	AiThemeHint,
 	AiValidationIssue,
 	AiValidationResult,
 } from "./ai.js";
