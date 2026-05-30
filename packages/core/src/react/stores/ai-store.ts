@@ -166,6 +166,48 @@ const INITIAL_STATE = {
 const HISTORY_PERSIST_LIMIT = 10;
 
 /**
+ * Upper bound on the **in-memory** history array (review finding Z-d).
+ * The persisted slice is capped at {@link HISTORY_PERSIST_LIMIT}, but
+ * the live array previously grew unbounded for the lifetime of a
+ * session. This generous ceiling keeps a long session's recall UI fully
+ * functional while bounding worst-case memory.
+ */
+const HISTORY_MEMORY_LIMIT = 200;
+
+/**
+ * `persist` schema version (review finding Z-a/Z-1). Bump when the
+ * persisted {@link AiStorePartial} shape changes; the defensive
+ * {@link migrateAiPersistedState} below tolerates any stale/corrupt
+ * blob rather than merging it verbatim.
+ */
+const AI_STORE_PERSIST_VERSION = 1;
+
+function isAiHistoryEntry(value: unknown): value is AiHistoryEntry {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		typeof (value as { prompt?: unknown }).prompt === "string" &&
+		typeof (value as { at?: unknown }).at === "number"
+	);
+}
+
+/**
+ * Defensive `persist` migration: coerce any persisted blob into a valid
+ * {@link AiStorePartial} (drop non-conforming entries, clamp length) so
+ * a stale or hand-edited `localStorage` value can never crash hydration.
+ */
+function migrateAiPersistedState(persisted: unknown): AiStorePartial {
+	const source =
+		typeof persisted === "object" && persisted !== null
+			? (persisted as { history?: unknown })
+			: {};
+	const history = Array.isArray(source.history)
+		? source.history.filter(isAiHistoryEntry).slice(-HISTORY_PERSIST_LIMIT)
+		: [];
+	return { history };
+}
+
+/**
  * Zustand store for AI copilot generation state.
  *
  * @example
@@ -209,7 +251,12 @@ export function createAiStore(options: CreateAiStoreOptions): AiStoreApi {
 						// UI does not show a stale failure next to a fresh
 						// in-flight spinner.
 						lastError: null,
-						history: [...state.history, { prompt, at: Date.now() }],
+						// Z-d: cap the in-memory array too, not just the
+						// persisted slice, so a long session cannot grow it
+						// without bound.
+						history: [...state.history, { prompt, at: Date.now() }].slice(
+							-HISTORY_MEMORY_LIMIT,
+						),
 					}));
 				},
 				finishGeneration(ok, error) {
@@ -231,6 +278,8 @@ export function createAiStore(options: CreateAiStoreOptions): AiStoreApi {
 			}),
 			{
 				name: `anvilkit-core-ai-${storeId}`,
+				version: AI_STORE_PERSIST_VERSION,
+				migrate: migrateAiPersistedState,
 				// Persist only the last N history entries. Slicing inside
 				// `partialize` means the bound is enforced at write time;
 				// the in-memory `history` array can legitimately grow
