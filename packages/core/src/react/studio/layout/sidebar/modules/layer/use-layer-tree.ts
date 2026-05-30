@@ -146,14 +146,20 @@ export function useLayerTree(): LayerTreeModel {
 	);
 	const components = useReactivePuck((s) => s.config.components);
 
-	return useMemo<LayerTreeModel>(() => {
+	// Build the recursive projection only when the document data or the
+	// component map changes — NOT on selection (review finding P-a).
+	// `selected` is resolved per-row downstream (`selectedId === node.id`),
+	// so `selectedId` does not belong in the projection memo; including it
+	// forced a full `buildNodes` re-walk + a fresh `roots` ref on every
+	// selection click while the Layers tab was open.
+	const roots = useMemo<readonly LayerNode[]>(() => {
 		const zones = (data.zones ?? {}) as Readonly<Record<string, ComponentList>>;
 		const childZonesByParent = indexZonesByParent(zones);
 		const labelFor = (type: string): string => {
 			const entry = components?.[type] as { label?: string } | undefined;
 			return entry?.label ?? type;
 		};
-		const roots = buildNodes(
+		return buildNodes(
 			data.content ?? [],
 			ROOT_ZONE,
 			0,
@@ -161,11 +167,15 @@ export function useLayerTree(): LayerTreeModel {
 			childZonesByParent,
 			labelFor,
 		);
-		return {
+	}, [data, components]);
+
+	return useMemo<LayerTreeModel>(
+		() => ({
 			roots,
 			selectedId: typeof selectedId === "string" ? selectedId : null,
-		};
-	}, [data, selectedId, components]);
+		}),
+		[roots, selectedId],
+	);
 }
 
 /**
@@ -251,6 +261,19 @@ export function findNode(
 	id: string,
 ): LayerNode | null {
 	return flattenNodes(roots).find((node) => node.id === id) ?? null;
+}
+
+/**
+ * Build an `id → node` index for O(1) lookups (review finding P-2).
+ * Callers memoize this on `roots` so repeated lookups during a drag /
+ * a11y announcements don't each re-walk + allocate a flat node list.
+ */
+export function buildNodeIndex(
+	roots: readonly LayerNode[],
+): ReadonlyMap<string, LayerNode> {
+	const index = new Map<string, LayerNode>();
+	for (const node of flattenNodes(roots)) index.set(node.id, node);
+	return index;
 }
 
 /**

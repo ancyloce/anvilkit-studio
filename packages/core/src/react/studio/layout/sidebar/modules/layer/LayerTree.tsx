@@ -41,8 +41,8 @@ import type { EditorUiState } from "@/state/editor-ui-store";
 import { useEditorUiStore } from "@/state/hooks";
 import { LayerRow } from "./LayerRow";
 import {
+	buildNodeIndex,
 	collectSubtreeZones,
-	findNode,
 	type LayerFlatRow,
 	flattenVisibleRows,
 	type LayerNode,
@@ -195,6 +195,12 @@ export function LayerTree(): ReactNode {
 	const { roots, selectedId } = useLayerTree();
 	const [activeId, setActiveId] = useState<string | null>(null);
 
+	// `id → node` index for O(1) lookups in the drag handlers and a11y
+	// announcements (review finding P-2) — replaces repeated
+	// `findNode(roots, id)` full-tree walks. Rebuilt only when `roots`
+	// changes (a data/component edit), not per render or selection.
+	const nodeById = useMemo(() => buildNodeIndex(roots), [roots]);
+
 	// Read expansion state here (not just per-row) so the flat path can
 	// flatten exactly the visible rows the nested path would render.
 	const outlineExpanded = useEditorUiStore(selectOutlineExpanded);
@@ -270,7 +276,7 @@ export function LayerTree(): ReactNode {
 					? (overData.count ?? 0)
 					: (overData.index ?? 0);
 
-			const draggedNode = findNode(roots, draggedId);
+			const draggedNode = nodeById.get(draggedId) ?? null;
 			const draggedSubtreeZones =
 				draggedNode === null
 					? new Set<string>()
@@ -283,14 +289,15 @@ export function LayerTree(): ReactNode {
 			});
 			if (action !== null) snapshot.dispatch(action);
 		},
-		[getPuck, roots],
+		[getPuck, nodeById],
 	);
 
 	const handleDragCancel = useCallback((): void => {
 		setActiveId(null);
 	}, []);
 
-	const activeNode = activeId === null ? null : findNode(roots, activeId);
+	const activeNode =
+		activeId === null ? null : (nodeById.get(activeId) ?? null);
 
 	if (roots.length === 0) {
 		return (
@@ -317,12 +324,12 @@ export function LayerTree(): ReactNode {
 				announcements: {
 					onDragStart: ({ active }) =>
 						`${msg("studio.module.layer.layers.tree.announce.start")} ${
-							findNode(roots, String(active.id))?.label ?? String(active.id)
+							nodeById.get(String(active.id))?.label ?? String(active.id)
 						}`,
 					onDragOver: () => "",
 					onDragEnd: ({ active }) =>
 						`${msg("studio.module.layer.layers.tree.announce.moved")} ${
-							findNode(roots, String(active.id))?.label ?? String(active.id)
+							nodeById.get(String(active.id))?.label ?? String(active.id)
 						}`,
 					onDragCancel: () =>
 						msg("studio.module.layer.layers.tree.announce.cancelled"),
