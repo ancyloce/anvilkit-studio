@@ -23,6 +23,7 @@ import {
 	SelectValue,
 } from "@/primitives/select";
 
+import { useMsg } from "@/state/editor-i18n-store";
 import { FieldLabel } from "../../layout/FieldLabel";
 import {
 	findOptionIndex,
@@ -40,6 +41,7 @@ export function SelectField({
 	id,
 	name,
 }: FieldRendererProps<PuckSelectField, OptionValue | undefined>): ReactNode {
+	const msg = useMsg();
 	const selectedIndex = useMemo(
 		() => findOptionIndex(field.options, value),
 		[field.options, value],
@@ -79,7 +81,7 @@ export function SelectField({
 				name={name}
 			>
 				<SelectTrigger id={id} className="w-full">
-					<SelectValue placeholder="Select…" />
+					<SelectValue placeholder={msg("studio.field.placeholder.select")} />
 				</SelectTrigger>
 				<SelectContent>
 					{field.options.map((option, index) => (

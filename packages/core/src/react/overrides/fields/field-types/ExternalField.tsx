@@ -271,7 +271,9 @@ export function ExternalField({
 									</Empty>
 								) : rows.length === 0 ? (
 									<Empty className="border-0 p-3">
-										<EmptyTitle>No results</EmptyTitle>
+										<EmptyTitle>
+											{msg("studio.field.external.noResults")}
+										</EmptyTitle>
 										<EmptyDescription>
 											Try a different search term.
 										</EmptyDescription>
