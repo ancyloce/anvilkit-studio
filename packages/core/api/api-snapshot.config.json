@@ -1,0 +1,5935 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "@anvilkit/core",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 1,
+			"name": "CreateStudioConfigOptions",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Options bag for "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "createStudioConfig",
+						"target": 3
+					},
+					{
+						"kind": "text",
+						"text": ".\n\nA nested options object (instead of a second positional arg for\nthe env bag directly) leaves room for future knobs —\ndeprecation handling, plugin discovery overrides, strict mode\ntoggles — without breaking the public signature."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 2,
+					"name": "env",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Environment variable bag to consume for Layer 2.\n\nDefaults to "
+							},
+							{
+								"kind": "code",
+								"text": "`process.env`"
+							},
+							{
+								"kind": "text",
+								"text": " when that global is available. Tests\nand non-Node runtimes can inject a synthetic bag so the factory\nstays deterministic and never touches the real process env."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/create-config.ts",
+							"line": 79,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/create-config.ts#L79"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Record"
+						},
+						"typeArguments": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "intrinsic",
+										"name": "undefined"
+									}
+								]
+							}
+						],
+						"name": "Record",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						2
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "config/create-config.ts",
+					"line": 71,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/create-config.ts#L71"
+				}
+			]
+		},
+		{
+			"id": 89,
+			"name": "StudioConfigProviderProps",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Props for "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "StudioConfigProvider",
+						"target": 86
+					},
+					{
+						"kind": "text",
+						"text": ".\n\nBoth fields are required — the provider never fabricates a default\nconfig, and a childless provider is a bug the type system should\ncatch at the call site."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 91,
+					"name": "children",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The React subtree that should have access to "
+							},
+							{
+								"kind": "code",
+								"text": "`config`"
+							},
+							{
+								"kind": "text",
+								"text": " via\n"
+							},
+							{
+								"kind": "code",
+								"text": "`useStudioConfig()`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/provider.tsx",
+							"line": 83,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L83"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.ReactNode"
+						},
+						"name": "ReactNode",
+						"package": "@types/react",
+						"qualifiedName": "React.ReactNode"
+					}
+				},
+				{
+					"id": 90,
+					"name": "config",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The validated config object returned by "
+							},
+							{
+								"kind": "code",
+								"text": "`createStudioConfig()`"
+							},
+							{
+								"kind": "text",
+								"text": ".\nTreated as deeply read-only; callers that mutate it are in\nundefined-behavior territory."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/provider.tsx",
+							"line": 78,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L78"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/config.ts",
+							"qualifiedName": "StudioConfig"
+						},
+						"name": "StudioConfig",
+						"package": "@anvilkit/core"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						91,
+						90
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "config/provider.tsx",
+					"line": 72,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L72"
+				}
+			]
+		},
+		{
+			"id": 92,
+			"name": "StudioConfigSchema",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The root schema for "
+					},
+					{
+						"kind": "code",
+						"text": "`StudioConfig`"
+					},
+					{
+						"kind": "text",
+						"text": ".\n\nEvery level is wrapped in "
+					},
+					{
+						"kind": "code",
+						"text": "`z.strictObject`"
+					},
+					{
+						"kind": "text",
+						"text": " so unknown keys are\nrejected — a mistyped section name ("
+					},
+					{
+						"kind": "code",
+						"text": "`\"feature\"`"
+					},
+					{
+						"kind": "text",
+						"text": " instead of\n"
+					},
+					{
+						"kind": "code",
+						"text": "`\"features\"`"
+					},
+					{
+						"kind": "text",
+						"text": ") or a typo'd flag ("
+					},
+					{
+						"kind": "code",
+						"text": "`\"enableExprot\"`"
+					},
+					{
+						"kind": "text",
+						"text": " inside\n"
+					},
+					{
+						"kind": "code",
+						"text": "`features`"
+					},
+					{
+						"kind": "text",
+						"text": ") fails the host app's config load rather than silently\ndisappearing.\n\nEvery nested section is wrapped in "
+					},
+					{
+						"kind": "code",
+						"text": "`.prefault({})`"
+					},
+					{
+						"kind": "text",
+						"text": " so callers can\nomit entire sections and still receive the fully-defaulted shape.\nInner fields use plain "
+					},
+					{
+						"kind": "code",
+						"text": "`.default(...)`"
+					},
+					{
+						"kind": "text",
+						"text": " because they are not\nobjects (leaf defaults do not need the pre-parse round-trip).\n\nConsumers: **use "
+					},
+					{
+						"kind": "code",
+						"text": "`createStudioConfig()`"
+					},
+					{
+						"kind": "text",
+						"text": "**, not "
+					},
+					{
+						"kind": "code",
+						"text": "`.parse()`"
+					},
+					{
+						"kind": "text",
+						"text": " directly."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "config/schema.ts",
+					"line": 69,
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L69"
+				}
+			],
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "zod",
+					"packagePath": "v4/classic/schemas.d.cts",
+					"qualifiedName": "ZodPrefault"
+				},
+				"typeArguments": [
+					{
+						"type": "reference",
+						"target": {
+							"packageName": "zod",
+							"packagePath": "v4/classic/schemas.d.cts",
+							"qualifiedName": "ZodObject"
+						},
+						"typeArguments": [
+							{
+								"type": "reflection",
+								"declaration": {
+									"id": 93,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 123,
+											"name": "ai",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "AI block. Intentionally carries **no credentials** —\nAPI keys, endpoint URLs, and auth tokens belong to the\nhost backend, and the AI copilot plugin factory receives\na "
+													},
+													{
+														"kind": "code",
+														"text": "`generatePage()`"
+													},
+													{
+														"kind": "text",
+														"text": " callback that wraps whatever network\npath the host has set up. Architecture §9 is explicit\nabout this boundary."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 215,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L215"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodPrefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodObject"
+														},
+														"typeArguments": [
+															{
+																"type": "reflection",
+																"declaration": {
+																	"id": 124,
+																	"name": "__type",
+																	"variant": "declaration",
+																	"kind": 65536,
+																	"flags": {},
+																	"children": [
+																		{
+																			"id": 125,
+																			"name": "defaultModel",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Optional hint for the AI plugin about which model\nto request by default (e.g. "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"claude-opus-4-6\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ").\nPlugins are free to ignore this if their host-side\nimplementation is locked to a specific model."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 223,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L223"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodOptional"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodString"
+																						},
+																						"name": "ZodString",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodOptional",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 126,
+																			"name": "maxRetries",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Maximum number of retries for a failed AI\ngeneration call. Clamped to "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`[0, 10]`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " so hosts\ncannot accidentally enable unbounded retry\nstorms. Defaults to "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`3`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": "."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 230,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L230"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodNumber"
+																						},
+																						"name": "ZodNumber",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		}
+																	],
+																	"groups": [
+																		{
+																			"title": "Properties",
+																			"children": [
+																				125,
+																				126
+																			]
+																		}
+																	]
+																}
+															},
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/core/schemas.d.cts",
+																	"qualifiedName": "$strict"
+																},
+																"name": "$strict",
+																"package": "zod"
+															}
+														],
+														"name": "ZodObject",
+														"package": "zod"
+													}
+												],
+												"name": "ZodPrefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 99,
+											"name": "branding",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Branding block for the editor chrome — app name, logo,\nand accent color surfaced in the Studio header."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 105,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L105"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodPrefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodObject"
+														},
+														"typeArguments": [
+															{
+																"type": "reflection",
+																"declaration": {
+																	"id": 100,
+																	"name": "__type",
+																	"variant": "declaration",
+																	"kind": 65536,
+																	"flags": {},
+																	"children": [
+																		{
+																			"id": 101,
+																			"name": "appName",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Display name shown in the editor header and the\nbrowser tab. Defaults to "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"AnvilKit Studio\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " so an\nun-configured host still looks intentional."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 112,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L112"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodString"
+																						},
+																						"name": "ZodString",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 102,
+																			"name": "logoUrl",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Optional URL of a logo rendered in the header.\nValidated as a URL via "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`z.url()`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " (top-level format\nin Zod v4). Omit to fall back to the default\nwordmark."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 119,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L119"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodOptional"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodURL"
+																						},
+																						"name": "ZodURL",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodOptional",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 103,
+																			"name": "primaryColor",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Optional primary accent color for the editor\nchrome. Free-form string so hosts can pass a\nCSS variable reference ("
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"var(--brand)\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ") or any\nCSS color value."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 126,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L126"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodOptional"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodString"
+																						},
+																						"name": "ZodString",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodOptional",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		}
+																	],
+																	"groups": [
+																		{
+																			"title": "Properties",
+																			"children": [
+																				101,
+																				102,
+																				103
+																			]
+																		}
+																	]
+																}
+															},
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/core/schemas.d.cts",
+																	"qualifiedName": "$strict"
+																},
+																"name": "$strict",
+																"package": "zod"
+															}
+														],
+														"name": "ZodObject",
+														"package": "zod"
+													}
+												],
+												"name": "ZodPrefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 112,
+											"name": "brandKit",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Brand-kit block (I3-4) — shared colors + font families the\nCanvas Studio editor surfaces (color pickers, font menus) so\ndesigns stay on-brand. Distinct from "
+													},
+													{
+														"kind": "code",
+														"text": "`branding`"
+													},
+													{
+														"kind": "text",
+														"text": ", which styles\nthe editor *chrome*: "
+													},
+													{
+														"kind": "code",
+														"text": "`brandKit`"
+													},
+													{
+														"kind": "text",
+														"text": " is design content the canvas\nreads via its "
+													},
+													{
+														"kind": "code",
+														"text": "`useBrandKit()`"
+													},
+													{
+														"kind": "text",
+														"text": " hook. "
+													},
+													{
+														"kind": "code",
+														"text": "`plugin-canvas-studio`"
+													},
+													{
+														"kind": "text",
+														"text": "\nmaps these entries to the editor's "
+													},
+													{
+														"kind": "code",
+														"text": "`BrandKit`"
+													},
+													{
+														"kind": "text",
+														"text": " shape."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 159,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L159"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodPrefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodObject"
+														},
+														"typeArguments": [
+															{
+																"type": "reflection",
+																"declaration": {
+																	"id": 113,
+																	"name": "__type",
+																	"variant": "declaration",
+																	"kind": 65536,
+																	"flags": {},
+																	"children": [
+																		{
+																			"id": 114,
+																			"name": "colors",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Named brand color swatches. Each "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`value`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " is any CSS\ncolor ("
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"#2563eb\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ", "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"var(--brand)\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": "). Empty by default."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 165,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L165"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodArray"
+																						},
+																						"typeArguments": [
+																							{
+																								"type": "reference",
+																								"target": {
+																									"packageName": "zod",
+																									"packagePath": "v4/classic/schemas.d.cts",
+																									"qualifiedName": "ZodObject"
+																								},
+																								"typeArguments": [
+																									{
+																										"type": "reflection",
+																										"declaration": {
+																											"id": 115,
+																											"name": "__type",
+																											"variant": "declaration",
+																											"kind": 65536,
+																											"flags": {},
+																											"children": [
+																												{
+																													"id": 116,
+																													"name": "name",
+																													"variant": "declaration",
+																													"kind": 1024,
+																													"flags": {},
+																													"comment": {
+																														"summary": [
+																															{
+																																"kind": "text",
+																																"text": "Human label, e.g. \"Primary\"."
+																															}
+																														]
+																													},
+																													"sources": [
+																														{
+																															"fileName": "config/schema.ts",
+																															"line": 169,
+																															"character": 7,
+																															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L169"
+																														}
+																													],
+																													"type": {
+																														"type": "reference",
+																														"target": {
+																															"packageName": "zod",
+																															"packagePath": "v4/classic/schemas.d.cts",
+																															"qualifiedName": "ZodString"
+																														},
+																														"name": "ZodString",
+																														"package": "zod"
+																													},
+																													"defaultValue": "..."
+																												},
+																												{
+																													"id": 117,
+																													"name": "value",
+																													"variant": "declaration",
+																													"kind": 1024,
+																													"flags": {},
+																													"comment": {
+																														"summary": [
+																															{
+																																"kind": "text",
+																																"text": "CSS color value."
+																															}
+																														]
+																													},
+																													"sources": [
+																														{
+																															"fileName": "config/schema.ts",
+																															"line": 171,
+																															"character": 7,
+																															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L171"
+																														}
+																													],
+																													"type": {
+																														"type": "reference",
+																														"target": {
+																															"packageName": "zod",
+																															"packagePath": "v4/classic/schemas.d.cts",
+																															"qualifiedName": "ZodString"
+																														},
+																														"name": "ZodString",
+																														"package": "zod"
+																													},
+																													"defaultValue": "..."
+																												}
+																											],
+																											"groups": [
+																												{
+																													"title": "Properties",
+																													"children": [
+																														116,
+																														117
+																													]
+																												}
+																											]
+																										}
+																									},
+																									{
+																										"type": "reference",
+																										"target": {
+																											"packageName": "zod",
+																											"packagePath": "v4/core/schemas.d.cts",
+																											"qualifiedName": "$strict"
+																										},
+																										"name": "$strict",
+																										"package": "zod"
+																									}
+																								],
+																								"name": "ZodObject",
+																								"package": "zod"
+																							}
+																						],
+																						"name": "ZodArray",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 118,
+																			"name": "fonts",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Brand font families, e.g. "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`[\"Inter\", \"Poppins\"]`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ". The\nfirst entry is treated as the brand default. Empty by\ndefault."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 180,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L180"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodArray"
+																						},
+																						"typeArguments": [
+																							{
+																								"type": "reference",
+																								"target": {
+																									"packageName": "zod",
+																									"packagePath": "v4/classic/schemas.d.cts",
+																									"qualifiedName": "ZodString"
+																								},
+																								"name": "ZodString",
+																								"package": "zod"
+																							}
+																						],
+																						"name": "ZodArray",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		}
+																	],
+																	"groups": [
+																		{
+																			"title": "Properties",
+																			"children": [
+																				114,
+																				118
+																			]
+																		}
+																	]
+																}
+															},
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/core/schemas.d.cts",
+																	"qualifiedName": "$strict"
+																},
+																"name": "$strict",
+																"package": "zod"
+															}
+														],
+														"name": "ZodObject",
+														"package": "zod"
+													}
+												],
+												"name": "ZodPrefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 127,
+											"name": "experimental",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Grab-bag for experimental flags plugin authors stash\nhere to avoid bumping the schema for every opt-in.\n\nDeclared as "
+													},
+													{
+														"kind": "code",
+														"text": "`z.record(z.string(), z.unknown())`"
+													},
+													{
+														"kind": "text",
+														"text": " (the\ntwo-argument form required in Zod v4). The inner shape\nis intentionally not validated — consumers that care\nabout a specific flag should validate it in their own\ncode, not in the root schema."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 243,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L243"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodPrefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodRecord"
+														},
+														"typeArguments": [
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/classic/schemas.d.cts",
+																	"qualifiedName": "ZodString"
+																},
+																"name": "ZodString",
+																"package": "zod"
+															},
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/classic/schemas.d.cts",
+																	"qualifiedName": "ZodUnknown"
+																},
+																"name": "ZodUnknown",
+																"package": "zod"
+															}
+														],
+														"name": "ZodRecord",
+														"package": "zod"
+													}
+												],
+												"name": "ZodPrefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 119,
+											"name": "export",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Export pipeline block — configuration for the export\nregistry and download flow."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 187,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L187"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodPrefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodObject"
+														},
+														"typeArguments": [
+															{
+																"type": "reflection",
+																"declaration": {
+																	"id": 120,
+																	"name": "__type",
+																	"variant": "declaration",
+																	"kind": 65536,
+																	"flags": {},
+																	"children": [
+																		{
+																			"id": 121,
+																			"name": "defaultFormat",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Optional id of the format to pre-select in export\nmenus (e.g. "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"html\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ", "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"react\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": "). Resolved at\nruntime against the registered format registry —\nan id that does not match any registered format\nfalls back to the first registered format."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 196,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L196"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodOptional"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodString"
+																						},
+																						"name": "ZodString",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodOptional",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 122,
+																			"name": "filenamePrefix",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Filename prefix for downloads. The export pipeline\nappends the format's extension (e.g.\n"
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"page.html\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": "). Defaults to "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"page\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " — hosts\ntypically override with a slug derived from the\ncurrent page title."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 204,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L204"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodString"
+																						},
+																						"name": "ZodString",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		}
+																	],
+																	"groups": [
+																		{
+																			"title": "Properties",
+																			"children": [
+																				121,
+																				122
+																			]
+																		}
+																	]
+																}
+															},
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/core/schemas.d.cts",
+																	"qualifiedName": "$strict"
+																},
+																"name": "$strict",
+																"package": "zod"
+															}
+														],
+														"name": "ZodObject",
+														"package": "zod"
+													}
+												],
+												"name": "ZodPrefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 94,
+											"name": "features",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Feature flag block. Every flag defaults to "
+													},
+													{
+														"kind": "code",
+														"text": "`false`"
+													},
+													{
+														"kind": "text",
+														"text": " so a\nfresh install has no surprise behavior enabled — hosts opt\nin explicitly."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 76,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L76"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodPrefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodObject"
+														},
+														"typeArguments": [
+															{
+																"type": "reflection",
+																"declaration": {
+																	"id": 95,
+																	"name": "__type",
+																	"variant": "declaration",
+																	"kind": 65536,
+																	"flags": {},
+																	"children": [
+																		{
+																			"id": 97,
+																			"name": "enableAi",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "When "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`true`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ", the AI copilot plugin (if installed)\nmounts its panel and the "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`generatePage()`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " pipeline\nis active. No-op when the AI plugin is not in the\nhost's plugin array."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 91,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L91"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodBoolean"
+																						},
+																						"name": "ZodBoolean",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 98,
+																			"name": "enableCollaboration",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "When "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`true`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ", the real-time collaboration plugin\n(if installed) mounts its presence / cursor layer.\nPlaceholder for post-alpha work — no collaboration\nplugin ships in "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`0.1.x`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": "."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 98,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L98"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodBoolean"
+																						},
+																						"name": "ZodBoolean",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 96,
+																			"name": "enableExport",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "When "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`true`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ", the export registry is compiled and the\nhost may call "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`exportAs(formatId)`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ". When "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`false`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ",\nexporter plugins register but their header actions\nare hidden and "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`exportAs`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " throws "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`StudioExportError`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": "."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 84,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L84"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodBoolean"
+																						},
+																						"name": "ZodBoolean",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		}
+																	],
+																	"groups": [
+																		{
+																			"title": "Properties",
+																			"children": [
+																				97,
+																				98,
+																				96
+																			]
+																		}
+																	]
+																}
+															},
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/core/schemas.d.cts",
+																	"qualifiedName": "$strict"
+																},
+																"name": "$strict",
+																"package": "zod"
+															}
+														],
+														"name": "ZodObject",
+														"package": "zod"
+													}
+												],
+												"name": "ZodPrefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 104,
+											"name": "theme",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Theme block — the initial color mode and whether the\nbuilt-in theme toggle is shown."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 133,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L133"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodPrefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodObject"
+														},
+														"typeArguments": [
+															{
+																"type": "reflection",
+																"declaration": {
+																	"id": 105,
+																	"name": "__type",
+																	"variant": "declaration",
+																	"kind": 65536,
+																	"flags": {},
+																	"children": [
+																		{
+																			"id": 111,
+																			"name": "allowToggle",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "When "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`true`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": ", the built-in theme toggle button is\nrendered in the header. Hosts that manage theme\nexternally can set this to "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`false`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " and drive the\ntheme via their own controls."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 148,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L148"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodBoolean"
+																						},
+																						"name": "ZodBoolean",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		},
+																		{
+																			"id": 106,
+																			"name": "defaultMode",
+																			"variant": "declaration",
+																			"kind": 1024,
+																			"flags": {},
+																			"comment": {
+																				"summary": [
+																					{
+																						"kind": "text",
+																						"text": "Initial color mode. "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"system\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " respects the user's\nOS preference via "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`prefers-color-scheme`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " and is\nthe default. "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"light\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " and "
+																					},
+																					{
+																						"kind": "code",
+																						"text": "`\"dark\"`"
+																					},
+																					{
+																						"kind": "text",
+																						"text": " force the\neditor into that mode regardless of OS setting."
+																					}
+																				]
+																			},
+																			"sources": [
+																				{
+																					"fileName": "config/schema.ts",
+																					"line": 141,
+																					"character": 4,
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L141"
+																				}
+																			],
+																			"type": {
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodDefault"
+																				},
+																				"typeArguments": [
+																					{
+																						"type": "reference",
+																						"target": {
+																							"packageName": "zod",
+																							"packagePath": "v4/classic/schemas.d.cts",
+																							"qualifiedName": "ZodEnum"
+																						},
+																						"typeArguments": [
+																							{
+																								"type": "reflection",
+																								"declaration": {
+																									"id": 107,
+																									"name": "__type",
+																									"variant": "declaration",
+																									"kind": 65536,
+																									"flags": {},
+																									"children": [
+																										{
+																											"id": 109,
+																											"name": "dark",
+																											"variant": "declaration",
+																											"kind": 1024,
+																											"flags": {},
+																											"type": {
+																												"type": "literal",
+																												"value": "dark"
+																											}
+																										},
+																										{
+																											"id": 108,
+																											"name": "light",
+																											"variant": "declaration",
+																											"kind": 1024,
+																											"flags": {},
+																											"type": {
+																												"type": "literal",
+																												"value": "light"
+																											}
+																										},
+																										{
+																											"id": 110,
+																											"name": "system",
+																											"variant": "declaration",
+																											"kind": 1024,
+																											"flags": {},
+																											"type": {
+																												"type": "literal",
+																												"value": "system"
+																											}
+																										}
+																									],
+																									"groups": [
+																										{
+																											"title": "Properties",
+																											"children": [
+																												109,
+																												108,
+																												110
+																											]
+																										}
+																									]
+																								}
+																							}
+																						],
+																						"name": "ZodEnum",
+																						"package": "zod"
+																					}
+																				],
+																				"name": "ZodDefault",
+																				"package": "zod"
+																			},
+																			"defaultValue": "..."
+																		}
+																	],
+																	"groups": [
+																		{
+																			"title": "Properties",
+																			"children": [
+																				111,
+																				106
+																			]
+																		}
+																	]
+																}
+															},
+															{
+																"type": "reference",
+																"target": {
+																	"packageName": "zod",
+																	"packagePath": "v4/core/schemas.d.cts",
+																	"qualifiedName": "$strict"
+																},
+																"name": "$strict",
+																"package": "zod"
+															}
+														],
+														"name": "ZodObject",
+														"package": "zod"
+													}
+												],
+												"name": "ZodPrefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												123,
+												99,
+												112,
+												127,
+												119,
+												94,
+												104
+											]
+										}
+									]
+								}
+							},
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "zod",
+									"packagePath": "v4/core/schemas.d.cts",
+									"qualifiedName": "$strict"
+								},
+								"name": "$strict",
+								"package": "zod"
+							}
+						],
+						"name": "ZodObject",
+						"package": "zod"
+					}
+				],
+				"name": "ZodPrefault",
+				"package": "zod"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 3,
+			"name": "createStudioConfig",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "config/create-config.ts",
+					"line": 132,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/create-config.ts#L132"
+				}
+			],
+			"signatures": [
+				{
+					"id": 4,
+					"name": "createStudioConfig",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Build a fully validated "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioConfig",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/config.ts",
+									"qualifiedName": "StudioConfig"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " by layering schema\ndefaults, env vars, and explicit host overrides — in that order.\n\n### Layering\n\n1. **Layer 1 — defaults.** "
+							},
+							{
+								"kind": "code",
+								"text": "`StudioConfigSchema.parse({})`"
+							},
+							{
+								"kind": "text",
+								"text": " produces\n   the fully-populated default shape. This is the base target for\n   "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "deepMerge",
+								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts"
+							},
+							{
+								"kind": "text",
+								"text": ", so missing keys in higher layers fall back\n   to real values rather than "
+							},
+							{
+								"kind": "code",
+								"text": "`undefined`"
+							},
+							{
+								"kind": "text",
+								"text": ".\n2. **Layer 2 — env.** "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "parseStudioEnv",
+								"target": 41
+							},
+							{
+								"kind": "text",
+								"text": " walks the env bag\n   for "
+							},
+							{
+								"kind": "code",
+								"text": "`ANVILKIT_*`"
+							},
+							{
+								"kind": "text",
+								"text": " entries and produces a "
+							},
+							{
+								"kind": "code",
+								"text": "`DeepPartial`"
+							},
+							{
+								"kind": "text",
+								"text": " patch.\n3. **Layer 3 — host overrides.** The caller's "
+							},
+							{
+								"kind": "code",
+								"text": "`overrides`"
+							},
+							{
+								"kind": "text",
+								"text": " argument\n   is treated as an opaque "
+							},
+							{
+								"kind": "code",
+								"text": "`DeepPartial`"
+							},
+							{
+								"kind": "text",
+								"text": " and layered last, so it\n   beats both defaults and env.\n\nAfter merging, the result is re-parsed through the schema. This\nre-parse is load-bearing: it re-runs every validator (URL format,\ninteger bounds, enum membership) against the merged shape and\ncatches env-induced type mismatches that layers 1 and 3 would\nhave passed cleanly on their own.\n\n### Errors\n\nAny "
+							},
+							{
+								"kind": "code",
+								"text": "`ZodError`"
+							},
+							{
+								"kind": "text",
+								"text": " raised during the final parse is wrapped in a\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioConfigError",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/runtime/errors.ts",
+									"qualifiedName": "StudioConfigError"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " whose message lists every failing field\nin "
+							},
+							{
+								"kind": "code",
+								"text": "`path: reason`"
+							},
+							{
+								"kind": "text",
+								"text": " form. The underlying "
+							},
+							{
+								"kind": "code",
+								"text": "`ZodError`"
+							},
+							{
+								"kind": "text",
+								"text": " is attached via\n"
+							},
+							{
+								"kind": "code",
+								"text": "`cause`"
+							},
+							{
+								"kind": "text",
+								"text": " so host apps that need structured access can drill in\nwith "
+							},
+							{
+								"kind": "code",
+								"text": "`err.cause as z.ZodError`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@returns",
+								"content": [
+									{
+										"kind": "text",
+										"text": "The merged, validated "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "StudioConfig",
+										"target": {
+											"packageName": "@anvilkit/core",
+											"packagePath": "src/types/config.ts",
+											"qualifiedName": "StudioConfig"
+										}
+									},
+									{
+										"kind": "text",
+										"text": "."
+									}
+								]
+							},
+							{
+								"tag": "@example",
+								"content": [
+									{
+										"kind": "code",
+										"text": "```ts\nconst config = createStudioConfig({\n  features: { enableExport: true },\n  theme: { defaultMode: \"dark\" },\n});\n```"
+									}
+								]
+							},
+							{
+								"tag": "@example",
+								"content": [
+									{
+										"kind": "code",
+										"text": "```ts\n// Test-friendly: inject a synthetic env bag.\nconst config = createStudioConfig(undefined, {\n  env: { ANVILKIT_THEME__DEFAULT_MODE: \"dark\" },\n});\n```"
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/create-config.ts",
+							"line": 132,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/create-config.ts#L132"
+						}
+					],
+					"parameters": [
+						{
+							"id": 5,
+							"name": "overrides",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isOptional": true
+							},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Layer 3 host overrides."
+									}
+								]
+							},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 6,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 32,
+											"name": "ai",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "AI block. Intentionally carries **no credentials** —\nAPI keys, endpoint URLs, and auth tokens belong to the\nhost backend, and the AI copilot plugin factory receives\na "
+													},
+													{
+														"kind": "code",
+														"text": "`generatePage()`"
+													},
+													{
+														"kind": "text",
+														"text": " callback that wraps whatever network\npath the host has set up. Architecture §9 is explicit\nabout this boundary."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 215,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L215"
+												}
+											],
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 33,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 35,
+															"name": "defaultModel",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Optional hint for the AI plugin about which model\nto request by default (e.g. "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"claude-opus-4-6\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ").\nPlugins are free to ignore this if their host-side\nimplementation is locked to a specific model."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 223,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L223"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 34,
+															"name": "maxRetries",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Maximum number of retries for a failed AI\ngeneration call. Clamped to "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`[0, 10]`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " so hosts\ncannot accidentally enable unbounded retry\nstorms. Defaults to "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`3`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 230,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L230"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "number"
+															},
+															"defaultValue": "..."
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																35,
+																34
+															]
+														}
+													]
+												}
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 12,
+											"name": "branding",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Branding block for the editor chrome — app name, logo,\nand accent color surfaced in the Studio header."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 105,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L105"
+												}
+											],
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 13,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 14,
+															"name": "appName",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Display name shown in the editor header and the\nbrowser tab. Defaults to "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"AnvilKit Studio\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " so an\nun-configured host still looks intentional."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 112,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L112"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 15,
+															"name": "logoUrl",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Optional URL of a logo rendered in the header.\nValidated as a URL via "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`z.url()`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " (top-level format\nin Zod v4). Omit to fall back to the default\nwordmark."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 119,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L119"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 16,
+															"name": "primaryColor",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Optional primary accent color for the editor\nchrome. Free-form string so hosts can pass a\nCSS variable reference ("
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"var(--brand)\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ") or any\nCSS color value."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 126,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L126"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															},
+															"defaultValue": "..."
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																14,
+																15,
+																16
+															]
+														}
+													]
+												}
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 21,
+											"name": "brandKit",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Brand-kit block (I3-4) — shared colors + font families the\nCanvas Studio editor surfaces (color pickers, font menus) so\ndesigns stay on-brand. Distinct from "
+													},
+													{
+														"kind": "code",
+														"text": "`branding`"
+													},
+													{
+														"kind": "text",
+														"text": ", which styles\nthe editor *chrome*: "
+													},
+													{
+														"kind": "code",
+														"text": "`brandKit`"
+													},
+													{
+														"kind": "text",
+														"text": " is design content the canvas\nreads via its "
+													},
+													{
+														"kind": "code",
+														"text": "`useBrandKit()`"
+													},
+													{
+														"kind": "text",
+														"text": " hook. "
+													},
+													{
+														"kind": "code",
+														"text": "`plugin-canvas-studio`"
+													},
+													{
+														"kind": "text",
+														"text": "\nmaps these entries to the editor's "
+													},
+													{
+														"kind": "code",
+														"text": "`BrandKit`"
+													},
+													{
+														"kind": "text",
+														"text": " shape."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 159,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L159"
+												}
+											],
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 22,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 23,
+															"name": "colors",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Named brand color swatches. Each "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`value`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " is any CSS\ncolor ("
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"#2563eb\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ", "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"var(--brand)\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "). Empty by default."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 165,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L165"
+																}
+															],
+															"type": {
+																"type": "array",
+																"elementType": {
+																	"type": "reflection",
+																	"declaration": {
+																		"id": 24,
+																		"name": "__type",
+																		"variant": "declaration",
+																		"kind": 65536,
+																		"flags": {},
+																		"children": [
+																			{
+																				"id": 25,
+																				"name": "name",
+																				"variant": "declaration",
+																				"kind": 1024,
+																				"flags": {},
+																				"comment": {
+																					"summary": [
+																						{
+																							"kind": "text",
+																							"text": "Human label, e.g. \"Primary\"."
+																						}
+																					]
+																				},
+																				"sources": [
+																					{
+																						"fileName": "config/schema.ts",
+																						"line": 169,
+																						"character": 7,
+																						"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L169"
+																					}
+																				],
+																				"type": {
+																					"type": "intrinsic",
+																					"name": "string"
+																				},
+																				"defaultValue": "..."
+																			},
+																			{
+																				"id": 26,
+																				"name": "value",
+																				"variant": "declaration",
+																				"kind": 1024,
+																				"flags": {},
+																				"comment": {
+																					"summary": [
+																						{
+																							"kind": "text",
+																							"text": "CSS color value."
+																						}
+																					]
+																				},
+																				"sources": [
+																					{
+																						"fileName": "config/schema.ts",
+																						"line": 171,
+																						"character": 7,
+																						"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L171"
+																					}
+																				],
+																				"type": {
+																					"type": "intrinsic",
+																					"name": "string"
+																				},
+																				"defaultValue": "..."
+																			}
+																		],
+																		"groups": [
+																			{
+																				"title": "Properties",
+																				"children": [
+																					25,
+																					26
+																				]
+																			}
+																		]
+																	}
+																}
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 27,
+															"name": "fonts",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Brand font families, e.g. "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`[\"Inter\", \"Poppins\"]`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ". The\nfirst entry is treated as the brand default. Empty by\ndefault."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 180,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L180"
+																}
+															],
+															"type": {
+																"type": "array",
+																"elementType": {
+																	"type": "intrinsic",
+																	"name": "string"
+																}
+															},
+															"defaultValue": "..."
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																23,
+																27
+															]
+														}
+													]
+												}
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 36,
+											"name": "experimental",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true,
+												"isReadonly": true
+											},
+											"sources": [
+												{
+													"fileName": "types/config.ts",
+													"line": 80,
+													"character": 10,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L80"
+												}
+											],
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 37,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"indexSignatures": [
+														{
+															"id": 38,
+															"name": "__index",
+															"variant": "signature",
+															"kind": 8192,
+															"flags": {},
+															"parameters": [
+																{
+																	"id": 39,
+																	"name": "key",
+																	"variant": "param",
+																	"kind": 32768,
+																	"flags": {},
+																	"type": {
+																		"type": "intrinsic",
+																		"name": "string"
+																	}
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "unknown"
+															}
+														}
+													]
+												}
+											}
+										},
+										{
+											"id": 28,
+											"name": "export",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Export pipeline block — configuration for the export\nregistry and download flow."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 187,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L187"
+												}
+											],
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 29,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 31,
+															"name": "defaultFormat",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Optional id of the format to pre-select in export\nmenus (e.g. "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"html\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ", "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"react\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "). Resolved at\nruntime against the registered format registry —\nan id that does not match any registered format\nfalls back to the first registered format."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 196,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L196"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 30,
+															"name": "filenamePrefix",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Filename prefix for downloads. The export pipeline\nappends the format's extension (e.g.\n"
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"page.html\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "). Defaults to "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"page\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " — hosts\ntypically override with a slug derived from the\ncurrent page title."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 204,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L204"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															},
+															"defaultValue": "..."
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																31,
+																30
+															]
+														}
+													]
+												}
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 7,
+											"name": "features",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Feature flag block. Every flag defaults to "
+													},
+													{
+														"kind": "code",
+														"text": "`false`"
+													},
+													{
+														"kind": "text",
+														"text": " so a\nfresh install has no surprise behavior enabled — hosts opt\nin explicitly."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 76,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L76"
+												}
+											],
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 8,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 10,
+															"name": "enableAi",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "When "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`true`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ", the AI copilot plugin (if installed)\nmounts its panel and the "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`generatePage()`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " pipeline\nis active. No-op when the AI plugin is not in the\nhost's plugin array."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 91,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L91"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "boolean"
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 11,
+															"name": "enableCollaboration",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "When "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`true`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ", the real-time collaboration plugin\n(if installed) mounts its presence / cursor layer.\nPlaceholder for post-alpha work — no collaboration\nplugin ships in "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`0.1.x`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 98,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L98"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "boolean"
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 9,
+															"name": "enableExport",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "When "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`true`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ", the export registry is compiled and the\nhost may call "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`exportAs(formatId)`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ". When "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`false`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ",\nexporter plugins register but their header actions\nare hidden and "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`exportAs`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " throws "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`StudioExportError`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": "."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 84,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L84"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "boolean"
+															},
+															"defaultValue": "..."
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																10,
+																11,
+																9
+															]
+														}
+													]
+												}
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 17,
+											"name": "theme",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {
+												"isOptional": true
+											},
+											"comment": {
+												"summary": [
+													{
+														"kind": "text",
+														"text": "Theme block — the initial color mode and whether the\nbuilt-in theme toggle is shown."
+													}
+												]
+											},
+											"sources": [
+												{
+													"fileName": "config/schema.ts",
+													"line": 133,
+													"character": 2,
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L133"
+												}
+											],
+											"type": {
+												"type": "reflection",
+												"declaration": {
+													"id": 18,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 20,
+															"name": "allowToggle",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "When "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`true`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": ", the built-in theme toggle button is\nrendered in the header. Hosts that manage theme\nexternally can set this to "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`false`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " and drive the\ntheme via their own controls."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 148,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L148"
+																}
+															],
+															"type": {
+																"type": "intrinsic",
+																"name": "boolean"
+															},
+															"defaultValue": "..."
+														},
+														{
+															"id": 19,
+															"name": "defaultMode",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {
+																"isOptional": true
+															},
+															"comment": {
+																"summary": [
+																	{
+																		"kind": "text",
+																		"text": "Initial color mode. "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"system\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " respects the user's\nOS preference via "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`prefers-color-scheme`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " and is\nthe default. "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"light\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " and "
+																	},
+																	{
+																		"kind": "code",
+																		"text": "`\"dark\"`"
+																	},
+																	{
+																		"kind": "text",
+																		"text": " force the\neditor into that mode regardless of OS setting."
+																	}
+																]
+															},
+															"sources": [
+																{
+																	"fileName": "config/schema.ts",
+																	"line": 141,
+																	"character": 4,
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L141"
+																}
+															],
+															"type": {
+																"type": "union",
+																"types": [
+																	{
+																		"type": "literal",
+																		"value": "light"
+																	},
+																	{
+																		"type": "literal",
+																		"value": "dark"
+																	},
+																	{
+																		"type": "literal",
+																		"value": "system"
+																	}
+																]
+															},
+															"defaultValue": "..."
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																20,
+																19
+															]
+														}
+													]
+												}
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												32,
+												12,
+												21,
+												36,
+												28,
+												7,
+												17
+											]
+										}
+									]
+								}
+							}
+						},
+						{
+							"id": 40,
+							"name": "opts",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isOptional": true
+							},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Optional "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "CreateStudioConfigOptions",
+										"target": 1
+									},
+									{
+										"kind": "text",
+										"text": " bag."
+									}
+								]
+							},
+							"type": {
+								"type": "reference",
+								"target": 1,
+								"name": "CreateStudioConfigOptions",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/config.ts",
+							"qualifiedName": "StudioConfig"
+						},
+						"name": "StudioConfig",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 41,
+			"name": "parseStudioEnv",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "config/env-parser.ts",
+					"line": 278,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/env-parser.ts#L278"
+				}
+			],
+			"signatures": [
+				{
+					"id": 42,
+					"name": "parseStudioEnv",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Parse an environment-variable bag into a "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "DeepPartial",
+								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/types.ts"
+							},
+							{
+								"kind": "text",
+								"text": " of\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioConfig",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/config.ts",
+									"qualifiedName": "StudioConfig"
+								}
+							},
+							{
+								"kind": "text",
+								"text": ".\n\nPure function — accepts the env bag as a parameter so tests can\npass synthetic inputs without mutating "
+							},
+							{
+								"kind": "code",
+								"text": "`process.env`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@returns",
+								"content": [
+									{
+										"kind": "text",
+										"text": "A partial config shape. Keys that do not match the\n"
+									},
+									{
+										"kind": "code",
+										"text": "`ANVILKIT_`"
+									},
+									{
+										"kind": "text",
+										"text": " prefix and keys whose value is "
+									},
+									{
+										"kind": "code",
+										"text": "`undefined`"
+									},
+									{
+										"kind": "text",
+										"text": " are skipped."
+									}
+								]
+							},
+							{
+								"tag": "@throws",
+								"content": [
+									{
+										"kind": "text",
+										"text": "When two "
+									},
+									{
+										"kind": "code",
+										"text": "`ANVILKIT_*`"
+									},
+									{
+										"kind": "text",
+										"text": " env vars collide on the\nsame path — e.g. setting both "
+									},
+									{
+										"kind": "code",
+										"text": "`ANVILKIT_FEATURES=1`"
+									},
+									{
+										"kind": "text",
+										"text": " and\n"
+									},
+									{
+										"kind": "code",
+										"text": "`ANVILKIT_FEATURES__ENABLE_EXPORT=1`"
+									},
+									{
+										"kind": "text",
+										"text": " (a scalar and a nested object\ncannot coexist at the same key). Also thrown when an explicit\n"
+									},
+									{
+										"kind": "code",
+										"text": "`num:`"
+									},
+									{
+										"kind": "text",
+										"text": " / "
+									},
+									{
+										"kind": "code",
+										"text": "`bool:`"
+									},
+									{
+										"kind": "text",
+										"text": " type prefix carries an uncoercible value, or when\nthe env var name contains an empty nested path segment. These cases\nare operator-actionable: the message names the bad path or key so\nthe host process can be reconfigured."
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/env-parser.ts",
+							"line": 278,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/env-parser.ts#L278"
+						}
+					],
+					"parameters": [
+						{
+							"id": 43,
+							"name": "env",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "The env bag to walk. Defaults to "
+									},
+									{
+										"kind": "code",
+										"text": "`process.env`"
+									},
+									{
+										"kind": "text",
+										"text": " when\nthat global exists, otherwise an empty object."
+									}
+								]
+							},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											}
+										]
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							},
+							"defaultValue": "..."
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 44,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 70,
+									"name": "ai",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "AI block. Intentionally carries **no credentials** —\nAPI keys, endpoint URLs, and auth tokens belong to the\nhost backend, and the AI copilot plugin factory receives\na "
+											},
+											{
+												"kind": "code",
+												"text": "`generatePage()`"
+											},
+											{
+												"kind": "text",
+												"text": " callback that wraps whatever network\npath the host has set up. Architecture §9 is explicit\nabout this boundary."
+											}
+										]
+									},
+									"sources": [
+										{
+											"fileName": "config/schema.ts",
+											"line": 215,
+											"character": 2,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L215"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 71,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 73,
+													"name": "defaultModel",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Optional hint for the AI plugin about which model\nto request by default (e.g. "
+															},
+															{
+																"kind": "code",
+																"text": "`\"claude-opus-4-6\"`"
+															},
+															{
+																"kind": "text",
+																"text": ").\nPlugins are free to ignore this if their host-side\nimplementation is locked to a specific model."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 223,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L223"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 72,
+													"name": "maxRetries",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Maximum number of retries for a failed AI\ngeneration call. Clamped to "
+															},
+															{
+																"kind": "code",
+																"text": "`[0, 10]`"
+															},
+															{
+																"kind": "text",
+																"text": " so hosts\ncannot accidentally enable unbounded retry\nstorms. Defaults to "
+															},
+															{
+																"kind": "code",
+																"text": "`3`"
+															},
+															{
+																"kind": "text",
+																"text": "."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 230,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L230"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "number"
+													},
+													"defaultValue": "..."
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														73,
+														72
+													]
+												}
+											]
+										}
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 50,
+									"name": "branding",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Branding block for the editor chrome — app name, logo,\nand accent color surfaced in the Studio header."
+											}
+										]
+									},
+									"sources": [
+										{
+											"fileName": "config/schema.ts",
+											"line": 105,
+											"character": 2,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L105"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 51,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 52,
+													"name": "appName",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Display name shown in the editor header and the\nbrowser tab. Defaults to "
+															},
+															{
+																"kind": "code",
+																"text": "`\"AnvilKit Studio\"`"
+															},
+															{
+																"kind": "text",
+																"text": " so an\nun-configured host still looks intentional."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 112,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L112"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 53,
+													"name": "logoUrl",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Optional URL of a logo rendered in the header.\nValidated as a URL via "
+															},
+															{
+																"kind": "code",
+																"text": "`z.url()`"
+															},
+															{
+																"kind": "text",
+																"text": " (top-level format\nin Zod v4). Omit to fall back to the default\nwordmark."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 119,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L119"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 54,
+													"name": "primaryColor",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Optional primary accent color for the editor\nchrome. Free-form string so hosts can pass a\nCSS variable reference ("
+															},
+															{
+																"kind": "code",
+																"text": "`\"var(--brand)\"`"
+															},
+															{
+																"kind": "text",
+																"text": ") or any\nCSS color value."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 126,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L126"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													},
+													"defaultValue": "..."
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														52,
+														53,
+														54
+													]
+												}
+											]
+										}
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 59,
+									"name": "brandKit",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Brand-kit block (I3-4) — shared colors + font families the\nCanvas Studio editor surfaces (color pickers, font menus) so\ndesigns stay on-brand. Distinct from "
+											},
+											{
+												"kind": "code",
+												"text": "`branding`"
+											},
+											{
+												"kind": "text",
+												"text": ", which styles\nthe editor *chrome*: "
+											},
+											{
+												"kind": "code",
+												"text": "`brandKit`"
+											},
+											{
+												"kind": "text",
+												"text": " is design content the canvas\nreads via its "
+											},
+											{
+												"kind": "code",
+												"text": "`useBrandKit()`"
+											},
+											{
+												"kind": "text",
+												"text": " hook. "
+											},
+											{
+												"kind": "code",
+												"text": "`plugin-canvas-studio`"
+											},
+											{
+												"kind": "text",
+												"text": "\nmaps these entries to the editor's "
+											},
+											{
+												"kind": "code",
+												"text": "`BrandKit`"
+											},
+											{
+												"kind": "text",
+												"text": " shape."
+											}
+										]
+									},
+									"sources": [
+										{
+											"fileName": "config/schema.ts",
+											"line": 159,
+											"character": 2,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L159"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 60,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 61,
+													"name": "colors",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Named brand color swatches. Each "
+															},
+															{
+																"kind": "code",
+																"text": "`value`"
+															},
+															{
+																"kind": "text",
+																"text": " is any CSS\ncolor ("
+															},
+															{
+																"kind": "code",
+																"text": "`\"#2563eb\"`"
+															},
+															{
+																"kind": "text",
+																"text": ", "
+															},
+															{
+																"kind": "code",
+																"text": "`\"var(--brand)\"`"
+															},
+															{
+																"kind": "text",
+																"text": "). Empty by default."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 165,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L165"
+														}
+													],
+													"type": {
+														"type": "array",
+														"elementType": {
+															"type": "reflection",
+															"declaration": {
+																"id": 62,
+																"name": "__type",
+																"variant": "declaration",
+																"kind": 65536,
+																"flags": {},
+																"children": [
+																	{
+																		"id": 63,
+																		"name": "name",
+																		"variant": "declaration",
+																		"kind": 1024,
+																		"flags": {},
+																		"comment": {
+																			"summary": [
+																				{
+																					"kind": "text",
+																					"text": "Human label, e.g. \"Primary\"."
+																				}
+																			]
+																		},
+																		"sources": [
+																			{
+																				"fileName": "config/schema.ts",
+																				"line": 169,
+																				"character": 7,
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L169"
+																			}
+																		],
+																		"type": {
+																			"type": "intrinsic",
+																			"name": "string"
+																		},
+																		"defaultValue": "..."
+																	},
+																	{
+																		"id": 64,
+																		"name": "value",
+																		"variant": "declaration",
+																		"kind": 1024,
+																		"flags": {},
+																		"comment": {
+																			"summary": [
+																				{
+																					"kind": "text",
+																					"text": "CSS color value."
+																				}
+																			]
+																		},
+																		"sources": [
+																			{
+																				"fileName": "config/schema.ts",
+																				"line": 171,
+																				"character": 7,
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L171"
+																			}
+																		],
+																		"type": {
+																			"type": "intrinsic",
+																			"name": "string"
+																		},
+																		"defaultValue": "..."
+																	}
+																],
+																"groups": [
+																	{
+																		"title": "Properties",
+																		"children": [
+																			63,
+																			64
+																		]
+																	}
+																]
+															}
+														}
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 65,
+													"name": "fonts",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Brand font families, e.g. "
+															},
+															{
+																"kind": "code",
+																"text": "`[\"Inter\", \"Poppins\"]`"
+															},
+															{
+																"kind": "text",
+																"text": ". The\nfirst entry is treated as the brand default. Empty by\ndefault."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 180,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L180"
+														}
+													],
+													"type": {
+														"type": "array",
+														"elementType": {
+															"type": "intrinsic",
+															"name": "string"
+														}
+													},
+													"defaultValue": "..."
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														61,
+														65
+													]
+												}
+											]
+										}
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 74,
+									"name": "experimental",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true,
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/config.ts",
+											"line": 80,
+											"character": 10,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L80"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 75,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"indexSignatures": [
+												{
+													"id": 76,
+													"name": "__index",
+													"variant": "signature",
+													"kind": 8192,
+													"flags": {},
+													"parameters": [
+														{
+															"id": 77,
+															"name": "key",
+															"variant": "param",
+															"kind": 32768,
+															"flags": {},
+															"type": {
+																"type": "intrinsic",
+																"name": "string"
+															}
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "unknown"
+													}
+												}
+											]
+										}
+									}
+								},
+								{
+									"id": 66,
+									"name": "export",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Export pipeline block — configuration for the export\nregistry and download flow."
+											}
+										]
+									},
+									"sources": [
+										{
+											"fileName": "config/schema.ts",
+											"line": 187,
+											"character": 2,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L187"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 67,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 69,
+													"name": "defaultFormat",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Optional id of the format to pre-select in export\nmenus (e.g. "
+															},
+															{
+																"kind": "code",
+																"text": "`\"html\"`"
+															},
+															{
+																"kind": "text",
+																"text": ", "
+															},
+															{
+																"kind": "code",
+																"text": "`\"react\"`"
+															},
+															{
+																"kind": "text",
+																"text": "). Resolved at\nruntime against the registered format registry —\nan id that does not match any registered format\nfalls back to the first registered format."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 196,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L196"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 68,
+													"name": "filenamePrefix",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Filename prefix for downloads. The export pipeline\nappends the format's extension (e.g.\n"
+															},
+															{
+																"kind": "code",
+																"text": "`\"page.html\"`"
+															},
+															{
+																"kind": "text",
+																"text": "). Defaults to "
+															},
+															{
+																"kind": "code",
+																"text": "`\"page\"`"
+															},
+															{
+																"kind": "text",
+																"text": " — hosts\ntypically override with a slug derived from the\ncurrent page title."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 204,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L204"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													},
+													"defaultValue": "..."
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														69,
+														68
+													]
+												}
+											]
+										}
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 45,
+									"name": "features",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Feature flag block. Every flag defaults to "
+											},
+											{
+												"kind": "code",
+												"text": "`false`"
+											},
+											{
+												"kind": "text",
+												"text": " so a\nfresh install has no surprise behavior enabled — hosts opt\nin explicitly."
+											}
+										]
+									},
+									"sources": [
+										{
+											"fileName": "config/schema.ts",
+											"line": 76,
+											"character": 2,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L76"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 46,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 48,
+													"name": "enableAi",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "When "
+															},
+															{
+																"kind": "code",
+																"text": "`true`"
+															},
+															{
+																"kind": "text",
+																"text": ", the AI copilot plugin (if installed)\nmounts its panel and the "
+															},
+															{
+																"kind": "code",
+																"text": "`generatePage()`"
+															},
+															{
+																"kind": "text",
+																"text": " pipeline\nis active. No-op when the AI plugin is not in the\nhost's plugin array."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 91,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L91"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 49,
+													"name": "enableCollaboration",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "When "
+															},
+															{
+																"kind": "code",
+																"text": "`true`"
+															},
+															{
+																"kind": "text",
+																"text": ", the real-time collaboration plugin\n(if installed) mounts its presence / cursor layer.\nPlaceholder for post-alpha work — no collaboration\nplugin ships in "
+															},
+															{
+																"kind": "code",
+																"text": "`0.1.x`"
+															},
+															{
+																"kind": "text",
+																"text": "."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 98,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L98"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 47,
+													"name": "enableExport",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "When "
+															},
+															{
+																"kind": "code",
+																"text": "`true`"
+															},
+															{
+																"kind": "text",
+																"text": ", the export registry is compiled and the\nhost may call "
+															},
+															{
+																"kind": "code",
+																"text": "`exportAs(formatId)`"
+															},
+															{
+																"kind": "text",
+																"text": ". When "
+															},
+															{
+																"kind": "code",
+																"text": "`false`"
+															},
+															{
+																"kind": "text",
+																"text": ",\nexporter plugins register but their header actions\nare hidden and "
+															},
+															{
+																"kind": "code",
+																"text": "`exportAs`"
+															},
+															{
+																"kind": "text",
+																"text": " throws "
+															},
+															{
+																"kind": "code",
+																"text": "`StudioExportError`"
+															},
+															{
+																"kind": "text",
+																"text": "."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 84,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L84"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													},
+													"defaultValue": "..."
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														48,
+														49,
+														47
+													]
+												}
+											]
+										}
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 55,
+									"name": "theme",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Theme block — the initial color mode and whether the\nbuilt-in theme toggle is shown."
+											}
+										]
+									},
+									"sources": [
+										{
+											"fileName": "config/schema.ts",
+											"line": 133,
+											"character": 2,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L133"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 56,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 58,
+													"name": "allowToggle",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "When "
+															},
+															{
+																"kind": "code",
+																"text": "`true`"
+															},
+															{
+																"kind": "text",
+																"text": ", the built-in theme toggle button is\nrendered in the header. Hosts that manage theme\nexternally can set this to "
+															},
+															{
+																"kind": "code",
+																"text": "`false`"
+															},
+															{
+																"kind": "text",
+																"text": " and drive the\ntheme via their own controls."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 148,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L148"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													},
+													"defaultValue": "..."
+												},
+												{
+													"id": 57,
+													"name": "defaultMode",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "Initial color mode. "
+															},
+															{
+																"kind": "code",
+																"text": "`\"system\"`"
+															},
+															{
+																"kind": "text",
+																"text": " respects the user's\nOS preference via "
+															},
+															{
+																"kind": "code",
+																"text": "`prefers-color-scheme`"
+															},
+															{
+																"kind": "text",
+																"text": " and is\nthe default. "
+															},
+															{
+																"kind": "code",
+																"text": "`\"light\"`"
+															},
+															{
+																"kind": "text",
+																"text": " and "
+															},
+															{
+																"kind": "code",
+																"text": "`\"dark\"`"
+															},
+															{
+																"kind": "text",
+																"text": " force the\neditor into that mode regardless of OS setting."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 141,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L141"
+														}
+													],
+													"type": {
+														"type": "union",
+														"types": [
+															{
+																"type": "literal",
+																"value": "light"
+															},
+															{
+																"type": "literal",
+																"value": "dark"
+															},
+															{
+																"type": "literal",
+																"value": "system"
+															}
+														]
+													},
+													"defaultValue": "..."
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														58,
+														57
+													]
+												}
+											]
+										}
+									},
+									"defaultValue": "..."
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										70,
+										50,
+										59,
+										74,
+										66,
+										45,
+										55
+									]
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 86,
+			"name": "StudioConfigProvider",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "config/provider.tsx",
+					"line": 99,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L99"
+				}
+			],
+			"signatures": [
+				{
+					"id": 87,
+					"name": "StudioConfigProvider",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Make a validated "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioConfig",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/config.ts",
+									"qualifiedName": "StudioConfig"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " available to descendants via\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "useStudioConfig",
+								"target": 78
+							},
+							{
+								"kind": "text",
+								"text": " (exported from "
+							},
+							{
+								"kind": "code",
+								"text": "`./hooks.ts`"
+							},
+							{
+								"kind": "text",
+								"text": ")."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@example",
+								"content": [
+									{
+										"kind": "code",
+										"text": "```ts\nconst config = createStudioConfig({ features: { enableAi: true } });\n\nreturn (\n  <StudioConfigProvider config={config}>\n    <Studio />\n  </StudioConfigProvider>\n);\n```"
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/provider.tsx",
+							"line": 99,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L99"
+						}
+					],
+					"parameters": [
+						{
+							"id": 88,
+							"name": "__namedParameters",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 89,
+								"name": "StudioConfigProviderProps",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "jsx-runtime.d.ts",
+							"qualifiedName": "JSX.Element"
+						},
+						"name": "Element",
+						"package": "@types/react",
+						"qualifiedName": "JSX.Element"
+					}
+				}
+			]
+		},
+		{
+			"id": 78,
+			"name": "useStudioConfig",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "config/hooks.ts",
+					"line": 63,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/hooks.ts#L63"
+				},
+				{
+					"fileName": "config/hooks.ts",
+					"line": 78,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/hooks.ts#L78"
+				},
+				{
+					"fileName": "config/hooks.ts",
+					"line": 79,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/hooks.ts#L79"
+				}
+			],
+			"signatures": [
+				{
+					"id": 79,
+					"name": "useStudioConfig",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Read the full "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioConfig",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/config.ts",
+									"qualifiedName": "StudioConfig"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " from the nearest\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioConfigProvider",
+								"target": 86
+							},
+							{
+								"kind": "text",
+								"text": ". Throws if no provider is mounted\nabove the caller — the error message is surfaced by\n"
+							},
+							{
+								"kind": "code",
+								"text": "`getStrictContext`"
+							},
+							{
+								"kind": "text",
+								"text": " and contains the string "
+							},
+							{
+								"kind": "code",
+								"text": "`\"StudioConfig\"`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@example",
+								"content": [
+									{
+										"kind": "code",
+										"text": "```ts\nfunction Header() {\n  const config = useStudioConfig();\n  return <h1>{config.branding.appName}</h1>;\n}\n```"
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/hooks.ts",
+							"line": 63,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/hooks.ts#L63"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/types/config.ts",
+							"qualifiedName": "StudioConfig"
+						},
+						"name": "StudioConfig",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 80,
+					"name": "useStudioConfig",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Read a projection of "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioConfig",
+								"target": {
+									"packageName": "@anvilkit/core",
+									"packagePath": "src/types/config.ts",
+									"qualifiedName": "StudioConfig"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " through "
+							},
+							{
+								"kind": "code",
+								"text": "`selector`"
+							},
+							{
+								"kind": "text",
+								"text": ". The\nresult is memoized by "
+							},
+							{
+								"kind": "code",
+								"text": "`[config, selector]`"
+							},
+							{
+								"kind": "text",
+								"text": " — see the file header\nfor the trade-off behind that key."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@returns",
+								"content": [
+									{
+										"kind": "text",
+										"text": "The slice produced by "
+									},
+									{
+										"kind": "code",
+										"text": "`selector(config)`"
+									},
+									{
+										"kind": "text",
+										"text": "."
+									}
+								]
+							},
+							{
+								"tag": "@example",
+								"content": [
+									{
+										"kind": "code",
+										"text": "```ts\nconst enableExport = useStudioConfig((c) => c.features.enableExport);\n```"
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "config/hooks.ts",
+							"line": 78,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/hooks.ts#L78"
+						}
+					],
+					"typeParameters": [
+						{
+							"id": 81,
+							"name": "T",
+							"variant": "typeParam",
+							"kind": 131072,
+							"flags": {}
+						}
+					],
+					"parameters": [
+						{
+							"id": 82,
+							"name": "selector",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Pure function that picks a slice of the config.\n  Inline arrow functions are fine; the memo guards cheap\n  primitives and object references stay stable as long as both\n  the config and the selector reference are unchanged."
+									}
+								]
+							},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 83,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 84,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"parameters": [
+												{
+													"id": 85,
+													"name": "config",
+													"variant": "param",
+													"kind": 32768,
+													"flags": {},
+													"type": {
+														"type": "reference",
+														"target": {
+															"packageName": "@anvilkit/core",
+															"packagePath": "src/types/config.ts",
+															"qualifiedName": "StudioConfig"
+														},
+														"name": "StudioConfig",
+														"package": "@anvilkit/core"
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"target": 81,
+												"name": "T",
+												"package": "@anvilkit/core",
+												"refersToTypeParameter": true
+											}
+										}
+									]
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 81,
+						"name": "T",
+						"package": "@anvilkit/core",
+						"refersToTypeParameter": true
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Interfaces",
+			"children": [
+				1,
+				89
+			]
+		},
+		{
+			"title": "Variables",
+			"children": [
+				92
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				3,
+				41,
+				86,
+				78
+			]
+		}
+	],
+	"packageName": "@anvilkit/core",
+	"symbolIdMap": {
+		"0": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/create-config.ts",
+			"qualifiedName": "CreateStudioConfigOptions"
+		},
+		"2": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/create-config.ts",
+			"qualifiedName": "CreateStudioConfigOptions.env"
+		},
+		"3": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/create-config.ts",
+			"qualifiedName": "createStudioConfig"
+		},
+		"4": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/create-config.ts",
+			"qualifiedName": "createStudioConfig"
+		},
+		"5": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/create-config.ts",
+			"qualifiedName": "overrides"
+		},
+		"6": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"7": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "features"
+		},
+		"8": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"9": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableExport"
+		},
+		"10": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableAi"
+		},
+		"11": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableCollaboration"
+		},
+		"12": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "branding"
+		},
+		"13": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"14": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "appName"
+		},
+		"15": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "logoUrl"
+		},
+		"16": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "primaryColor"
+		},
+		"17": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "theme"
+		},
+		"18": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"19": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultMode"
+		},
+		"20": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "allowToggle"
+		},
+		"21": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "brandKit"
+		},
+		"22": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"23": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "colors"
+		},
+		"24": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"25": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "name"
+		},
+		"26": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "value"
+		},
+		"27": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "fonts"
+		},
+		"28": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "export"
+		},
+		"29": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"30": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "filenamePrefix"
+		},
+		"31": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultFormat"
+		},
+		"32": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "ai"
+		},
+		"33": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"34": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "maxRetries"
+		},
+		"35": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultModel"
+		},
+		"36": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/config.ts",
+			"qualifiedName": "experimental"
+		},
+		"37": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"40": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/create-config.ts",
+			"qualifiedName": "opts"
+		},
+		"41": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/env-parser.ts",
+			"qualifiedName": "parseStudioEnv"
+		},
+		"42": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/env-parser.ts",
+			"qualifiedName": "parseStudioEnv"
+		},
+		"43": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/env-parser.ts",
+			"qualifiedName": "env"
+		},
+		"44": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"45": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "features"
+		},
+		"46": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"47": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableExport"
+		},
+		"48": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableAi"
+		},
+		"49": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableCollaboration"
+		},
+		"50": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "branding"
+		},
+		"51": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"52": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "appName"
+		},
+		"53": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "logoUrl"
+		},
+		"54": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "primaryColor"
+		},
+		"55": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "theme"
+		},
+		"56": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"57": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultMode"
+		},
+		"58": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "allowToggle"
+		},
+		"59": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "brandKit"
+		},
+		"60": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"61": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "colors"
+		},
+		"62": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"63": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "name"
+		},
+		"64": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "value"
+		},
+		"65": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "fonts"
+		},
+		"66": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "export"
+		},
+		"67": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"68": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "filenamePrefix"
+		},
+		"69": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultFormat"
+		},
+		"70": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "ai"
+		},
+		"71": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"72": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "maxRetries"
+		},
+		"73": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultModel"
+		},
+		"74": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/config.ts",
+			"qualifiedName": "experimental"
+		},
+		"75": {
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
+		},
+		"78": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "useStudioConfig"
+		},
+		"79": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "useStudioConfig"
+		},
+		"80": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "useStudioConfig"
+		},
+		"81": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "T"
+		},
+		"82": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "selector"
+		},
+		"83": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "__type"
+		},
+		"84": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "__type"
+		},
+		"85": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/hooks.ts",
+			"qualifiedName": "config"
+		},
+		"86": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/provider.tsx",
+			"qualifiedName": "StudioConfigProvider"
+		},
+		"87": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/provider.tsx",
+			"qualifiedName": "StudioConfigProvider"
+		},
+		"88": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/provider.tsx",
+			"qualifiedName": "__0"
+		},
+		"89": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/provider.tsx",
+			"qualifiedName": "StudioConfigProviderProps"
+		},
+		"90": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/provider.tsx",
+			"qualifiedName": "StudioConfigProviderProps.config"
+		},
+		"91": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/provider.tsx",
+			"qualifiedName": "StudioConfigProviderProps.children"
+		},
+		"92": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "StudioConfigSchema"
+		},
+		"93": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"94": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "features"
+		},
+		"95": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"96": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableExport"
+		},
+		"97": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableAi"
+		},
+		"98": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "enableCollaboration"
+		},
+		"99": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "branding"
+		},
+		"100": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"101": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "appName"
+		},
+		"102": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "logoUrl"
+		},
+		"103": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "primaryColor"
+		},
+		"104": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "theme"
+		},
+		"105": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"106": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultMode"
+		},
+		"107": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"108": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "",
+			"qualifiedName": "light"
+		},
+		"109": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "",
+			"qualifiedName": "dark"
+		},
+		"110": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "",
+			"qualifiedName": "system"
+		},
+		"111": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "allowToggle"
+		},
+		"112": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "brandKit"
+		},
+		"113": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"114": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "colors"
+		},
+		"115": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"116": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "name"
+		},
+		"117": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "value"
+		},
+		"118": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "fonts"
+		},
+		"119": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "export"
+		},
+		"120": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"121": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultFormat"
+		},
+		"122": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "filenamePrefix"
+		},
+		"123": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "ai"
+		},
+		"124": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"125": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultModel"
+		},
+		"126": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "maxRetries"
+		},
+		"127": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "experimental"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/config/index.ts"
+		},
+		"reflections": {
+			"1": 0
+		}
+	}
+}
