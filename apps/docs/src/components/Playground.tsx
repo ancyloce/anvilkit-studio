@@ -28,10 +28,6 @@ import {
 } from "@anvilkit/button";
 import type { StudioPlugin } from "@anvilkit/core";
 import { Studio } from "@anvilkit/core";
-import type {
-	ConnectionSource,
-	ConnectionStatus,
-} from "@anvilkit/plugin-collab-yjs";
 import {
 	type HelpsProps,
 	componentConfig as helpsComponentConfig,
@@ -59,16 +55,13 @@ import {
 	createMockGeneratePage,
 	createMockGenerateSection,
 } from "@anvilkit/plugin-ai-copilot/mock";
-import {
-	createAssetManagerPlugin,
-	dataUrlUploader,
-} from "@anvilkit/plugin-asset-manager";
+import type {
+	ConnectionSource,
+	ConnectionStatus,
+} from "@anvilkit/plugin-collab-yjs";
+// Asset-manager / export-html / export-react are loaded lazily — see the
+// `lazy*` wrappers + `loadExportHtml` in `../lib/canvas-studio-lazy`.
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
-import {
-	createHtmlExportPlugin,
-	htmlFormat,
-} from "@anvilkit/plugin-export-html";
-import { createReactExportPlugin } from "@anvilkit/plugin-export-react";
 import {
 	type PricingMinimalProps,
 	componentConfig as pricingMinimalComponentConfig,
@@ -83,8 +76,14 @@ import {
 } from "@anvilkit/statistics";
 import type { Config, Data } from "@puckeditor/core";
 import { useEffect, useMemo, useState } from "react";
-import { lazyCanvasStudioPlugin } from "../lib/canvas-studio-lazy";
-import { createDemoVersionHistoryPlugins } from "../lib/history-sidebar-plugin";
+import {
+	createLazyDemoVersionHistoryPlugins,
+	lazyAssetManagerNoHeaderPlugin,
+	lazyCanvasStudioPlugin,
+	lazyHtmlExportPlugin,
+	lazyReactExportPlugin,
+	loadExportHtml,
+} from "../lib/canvas-studio-lazy";
 
 type PlaygroundComponents = {
 	BentoGrid: BentoGridProps;
@@ -153,11 +152,14 @@ const STORAGE_KEY = "anvilkit-playground-data-v1";
 // compilePlugins inside <Studio>). This mirrors the demo's
 // `apps/demo/app/puck/editor/page.tsx` plugin set so the docs
 // playground demonstrates the full @anvilkit plugin surface live.
-const htmlExportPlugin = createHtmlExportPlugin();
-const reactExportPlugin = createReactExportPlugin({
-	syntax: "tsx",
-	assetStrategy: "url-prop",
-});
+//
+// Step 3.2 — pluggable lazy loading: export-html, export-react,
+// asset-manager, the version-history pair, and canvas-studio are
+// deferred via `lazyPlugin` wrappers (see `../lib/canvas-studio-lazy`),
+// so their package chunks stay out of the playground island's entry
+// bundle until `<Studio>` compiles its plugins. AI Copilot stays eager
+// (`handleGenerate` calls `aiCopilotPlugin.runGeneration` on the live
+// instance) and Design System stays eager (token-bound field renderers).
 const aiCopilotPlugin = createAiCopilotPlugin({
 	puckConfig: playgroundConfig as unknown as Config,
 	generatePage: createMockGeneratePage({ delayMs: 300 }),
@@ -165,31 +167,24 @@ const aiCopilotPlugin = createAiCopilotPlugin({
 	timeoutMs: 5_000,
 	forwardCurrentData: true,
 });
-// Asset manager: in-browser `data:` URL uploader so the sidebar's
-// image module works without a server-side persistence backend.
-const assetManagerPlugin = createAssetManagerPlugin({
-	uploader: dataUrlUploader(),
-	dataUrlAllowlistOptIn: true,
-});
 // Design System: token-bound field renderers + off-token / WCAG-AA
 // contrast validators wired through the plugin lifecycle.
 const designSystemPlugin = createDesignSystemPlugin();
-// Version History: headless plugin (header actions) paired with a
-// sidebar panel registration; localStorage-backed snapshot adapter.
-const { versionHistoryPlugin, sidebarPlugin: historySidebarPlugin } =
-	createDemoVersionHistoryPlugins({
-		puckConfig: playgroundConfig as unknown as Config,
-	});
+// Version History: lazy headless plugin (header action stripped) paired
+// with a lazy sidebar-panel registration; both share one deferred
+// `import()` of the demo factory and its `/ui` chunk.
+const { versionHistoryPlugin, historySidebarPlugin } =
+	createLazyDemoVersionHistoryPlugins(playgroundConfig as unknown as Config);
 
-// Always-on base plugin set. Canvas Studio is lazy (Konva is fetched
-// in its own chunk at compile time). Collaboration is opt-in via
-// `?collab=1` — mirrors the demo and keeps the yjs stack out of the
-// default load.
+// Always-on base plugin set. Canvas Studio, the export plugins, and the
+// asset manager are lazy (their chunks are fetched at compile time).
+// Collaboration is opt-in via `?collab=1` — mirrors the demo and keeps
+// the yjs stack out of the default load.
 const basePlugins: readonly StudioPlugin[] = [
-	htmlExportPlugin,
-	reactExportPlugin,
+	lazyHtmlExportPlugin,
+	lazyReactExportPlugin,
 	aiCopilotPlugin,
-	assetManagerPlugin,
+	lazyAssetManagerNoHeaderPlugin,
 	designSystemPlugin,
 	versionHistoryPlugin,
 	historySidebarPlugin,
@@ -535,6 +530,7 @@ export default function Playground() {
 	async function handleExportHtml() {
 		try {
 			const ir = puckDataToIR(data, playgroundConfig as unknown as Config);
+			const { htmlFormat } = await loadExportHtml();
 			const result = await htmlFormat.run(ir, { title: "AnvilKit Playground" });
 			const blobPart =
 				typeof result.content === "string"
