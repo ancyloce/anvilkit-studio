@@ -22,8 +22,13 @@ export {
 	composeHeaderActions,
 	type StudioHeaderAction,
 } from "./header-actions.js";
-export { lazyPlugin, type StudioPluginLoader } from "./lazy-plugin.js";
-export type { StudioSidebarContributions } from "./sidebar-registry.js";
+export {
+	lazyPlugin,
+	lazyPluginWith,
+	type RegistrationTransform,
+	type StudioPluginLoader,
+	withoutHeaderActions,
+} from "./lazy-plugin.js";
 export {
 	createLifecycleManager,
 	type LifecycleEventName,
@@ -31,4 +36,5 @@ export {
 	type LifecyclePhase,
 	type LifecycleSubscriber,
 } from "./lifecycle-manager.js";
+export type { StudioSidebarContributions } from "./sidebar-registry.js";
 export { CORE_VERSION } from "./version.js";

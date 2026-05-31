@@ -119,6 +119,8 @@ export {
 	type LifecyclePhase,
 	type LifecycleSubscriber,
 	lazyPlugin,
+	lazyPluginWith,
+	type RegistrationTransform,
 	StudioConfigError,
 	StudioError,
 	StudioExportError,
@@ -126,6 +128,7 @@ export {
 	type StudioPluginLoader,
 	type StudioRuntime,
 	type StudioSidebarContributions,
+	withoutHeaderActions,
 } from "./runtime/index.js";
 // ---------------------------------------------------------------------------
 // Types (M2 — plugin contract, config shape, domain records)
