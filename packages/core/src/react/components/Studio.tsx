@@ -170,6 +170,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		onExport,
 		pages,
 		messages,
+		loading,
 	} = props;
 
 	// Neutralize malformed synthetic keydown/keyup events (e.g. from password
@@ -229,18 +230,31 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		],
 	);
 
-	// Loading state. Deliberately `null` — no spinner, no fallback UI.
-	// Host apps that want a branded loading state render one above
-	// `<Studio>` with their own state management.
+	// Loading state. Defaults to bare `null` — no spinner, no fallback
+	// UI — so every host that does not opt in is byte-for-byte
+	// unchanged. A host that passes `loading` gets its node rendered
+	// here instead (3.4 Part 1); it still has the option of rendering
+	// its own loading state above `<Studio>`.
+	//
+	// Note (3.4 Part 2): the real anvilkit chrome (`<StudioLayout>`)
+	// mounts *inside* Puck's `puck` override slot and reads Puck state
+	// via `createUsePuck()`, so it cannot render before `<Puck>` mounts —
+	// and remounting `<Puck>` with a late plugin set tears it down (the
+	// documented data-wipe hazard). The safe progressive-chrome surface
+	// is therefore this host-supplied `loading` node, not an early
+	// `<Puck>` render; an in-Puck progressive shell is left as a
+	// browser-verified follow-up (plan §7).
 	if (compiled === null) {
-		return null;
+		// Fragment-wrap so the node (any `ReactNode`) satisfies the
+		// component's `ReactElement | null` return without widening it.
+		return loading === undefined ? null : <>{loading}</>;
 	}
 	// AnvilKit chrome must wait for the dynamically-loaded preset +
 	// layout before rendering, otherwise `<Puck>` would see plain Puck
 	// overrides without the chrome's `puck` slot wrapping
-	// `<StudioLayout>`. Hold `null` until both state slots agree.
+	// `<StudioLayout>`. Hold the loading node until both state slots agree.
 	if (isAnvilkit && chromeAssets === null) {
-		return null;
+		return loading === undefined ? null : <>{loading}</>;
 	}
 
 	// `<Puck>` infers `UserConfig` from `config={puckConfig}`. The

@@ -217,6 +217,49 @@ describe("<Studio> — mount and compile", () => {
 		expect(puckMockState.lastProps?.plugins).toEqual([]);
 	});
 
+	it("renders the `loading` node in place of bare null pre-compile, then swaps to Puck (3.4 Part 1)", async () => {
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				data={EMPTY_DATA}
+				plugins={[]}
+				loading={<div data-testid="studio-loading">loading…</div>}
+			/>,
+		);
+
+		// Pre-compile: the loading node fills the gate that used to be a
+		// bare `null`. Puck has not mounted yet.
+		expect(
+			container.querySelector("[data-testid=studio-loading]"),
+		).not.toBeNull();
+		expect(puckMockState.lastProps).toBeNull();
+
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		// Post-compile: the loading node is gone, Puck has taken its place.
+		expect(container.querySelector("[data-testid=studio-loading]")).toBeNull();
+	});
+
+	it("keeps the bare-null default when `loading` is omitted (back-compat)", async () => {
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				data={EMPTY_DATA}
+				plugins={[]}
+			/>,
+		);
+
+		// No opt-in → the gate is still empty (byte-for-byte prior behavior).
+		expect(puckMockState.lastProps).toBeNull();
+		expect(container.firstChild).toBeNull();
+
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+	});
+
 	it("mounts cleanly with an empty plugin array", async () => {
 		const { container } = render(
 			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[]} />,

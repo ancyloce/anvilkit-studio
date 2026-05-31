@@ -4,8 +4,15 @@
 
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { HeaderActionButton } from "@/layout/HeaderActionButton";
-import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
+import {
+	HeaderActionButton,
+	HeaderActionPlaceholderButton,
+} from "@/layout/HeaderActionButton";
+import type {
+	StaticHeaderActionPlaceholder,
+	StudioHeaderAction,
+	StudioPluginContext,
+} from "@/types/plugin";
 
 afterEach(cleanup);
 
@@ -72,5 +79,46 @@ describe("HeaderActionButton", () => {
 			'header action "action-throws" disabled() threw',
 			expect.objectContaining({ message: "plugin bug" }),
 		);
+	});
+});
+
+describe("HeaderActionPlaceholderButton (3.3)", () => {
+	function renderPlaceholder(
+		placeholder: StaticHeaderActionPlaceholder,
+	): HTMLElement {
+		const { container } = render(
+			<HeaderActionPlaceholderButton action={placeholder} />,
+		);
+		return container;
+	}
+
+	it("renders a disabled button (no ctx, no onClick) with the label", () => {
+		const container = renderPlaceholder({ id: "publish", label: "Publish" });
+		const button = container.querySelector("button");
+		expect(button).not.toBeNull();
+		expect(button?.disabled).toBe(true);
+		expect(button?.getAttribute("data-header-action-placeholder")).toBe(
+			"publish",
+		);
+		expect(button?.textContent).toContain("Publish");
+	});
+
+	it("resolves a curated icon name the same way the live button does", () => {
+		const container = renderPlaceholder({
+			id: "export",
+			label: "Export",
+			icon: "download",
+		});
+		expect(container.querySelector("svg")).not.toBeNull();
+	});
+
+	it("renders no icon for a name outside the registry (label still shows)", () => {
+		const container = renderPlaceholder({
+			id: "noicon",
+			label: "No Icon",
+			icon: "file-down",
+		});
+		expect(container.querySelector("svg")).toBeNull();
+		expect(container.textContent).toContain("No Icon");
 	});
 });

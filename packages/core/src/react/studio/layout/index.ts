@@ -9,6 +9,8 @@
 export {
 	HeaderActionButton,
 	type HeaderActionButtonProps,
+	HeaderActionPlaceholderButton,
+	type HeaderActionPlaceholderButtonProps,
 } from "./HeaderActionButton";
 export { HeaderActions, type HeaderActionsProps } from "./HeaderActions";
 export { StudioHeader, type StudioHeaderProps } from "./StudioHeader";

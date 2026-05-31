@@ -262,6 +262,25 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * (`studio.module.*`). Ignored when `chrome="puck"`.
 	 */
 	readonly messages?: Readonly<Record<string, string>>;
+	/**
+	 * Optional node rendered in place of the bare `null` `<Studio>`
+	 * returns while the runtime compiles (and, for anvilkit chrome,
+	 * while the chrome assets load). Lets a host supply a branded
+	 * skeleton without wrapping `<Studio>` in its own loading-state
+	 * machine.
+	 *
+	 * Preserves the existing contract: when omitted the gates still
+	 * return `null` (the previous behavior, byte-for-byte). Kept a plain
+	 * `ReactNode` (not a render-prop) so it stays trivially passthrough
+	 * and does not couple the host skeleton to runtime internals — a host
+	 * that wants to paint deferred-plugin toolbar placeholders can compute
+	 * them from its own plugin metas' `staticHeaderActions` (3.3) and
+	 * render them inside this node.
+	 *
+	 * No-op on the legacy `chrome="puck"` path's second gate (which only
+	 * checks `compiled`), exactly as the `null` default was.
+	 */
+	readonly loading?: ReactNode;
 }
 
 /** What the thin `<Studio>` view needs back from the controller. */

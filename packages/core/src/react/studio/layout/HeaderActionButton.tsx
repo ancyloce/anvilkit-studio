@@ -26,7 +26,11 @@ import { errorToLogMeta } from "@/components/studio-log";
 import { Button } from "@/primitives/button";
 import { DropdownMenuItem } from "@/primitives/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
+import type {
+	StaticHeaderActionPlaceholder,
+	StudioHeaderAction,
+	StudioPluginContext,
+} from "@/types/plugin";
 
 type LucideIconComponent = ComponentType<{ className?: string }>;
 
@@ -161,6 +165,60 @@ export function HeaderActionButton({
 			onClick={() => {
 				void handleClick();
 			}}
+		>
+			{iconNode}
+			{action.label.length > 0 ? <span>{action.label}</span> : null}
+		</Button>
+	);
+
+	if (action.icon !== undefined && action.label.length > 0) {
+		return (
+			<Tooltip>
+				<TooltipTrigger
+					render={<span className="inline-flex">{button}</span>}
+				/>
+				<TooltipContent>{action.label}</TooltipContent>
+			</Tooltip>
+		);
+	}
+	return button;
+}
+
+export interface HeaderActionPlaceholderButtonProps {
+	readonly action: StaticHeaderActionPlaceholder;
+}
+
+/**
+ * Render a {@link StaticHeaderActionPlaceholder} — the *disabled*,
+ * non-interactive stand-in shown while a deferred plugin's chunk loads
+ * (3.3). It mirrors {@link HeaderActionButton}'s icon + label + variant
+ * resolution so the placeholder occupies the **exact** geometry the live
+ * button will, then swaps in place with no layout shift.
+ *
+ * Needs no {@link StudioPluginContext}: a placeholder carries no
+ * `onClick` / `disabled` closures (those only exist post-`register()`),
+ * so this renders pure presentation.
+ */
+export function HeaderActionPlaceholderButton({
+	action,
+}: HeaderActionPlaceholderButtonProps): ReactNode {
+	const Icon = resolveIcon(action.icon);
+	const iconNode = Icon === null ? null : <Icon />;
+	const buttonVariant = action.group === "primary" ? "default" : "ghost";
+
+	const button = (
+		<Button
+			variant={buttonVariant}
+			size={
+				action.icon !== undefined && action.label.length === 0
+					? "icon"
+					: "default"
+			}
+			disabled
+			// Placeholder: inert until its plugin's chunk registers a live
+			// action of the same id and the chrome swaps this out.
+			aria-disabled
+			data-header-action-placeholder={action.id}
 		>
 			{iconNode}
 			{action.label.length > 0 ? <span>{action.label}</span> : null}
