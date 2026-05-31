@@ -709,6 +709,27 @@ export default function Playground() {
 					plugins={plugins}
 					onChange={handleChange}
 					onPublish={handlePublish}
+					// 3.4 Part 1: render a skeleton in place of the shell's
+					// bare `null` while the (now lazy — 3.2) plugin chunks
+					// stream in and the runtime compiles. Disappears once
+					// `<Puck>` mounts, so it never interferes with the
+					// playground E2E's `[data-testid="puck-editor"]` wait.
+					loading={
+						<div
+							data-testid="playground-loading"
+							aria-busy="true"
+							style={{
+								display: "flex",
+								minHeight: 600,
+								alignItems: "center",
+								justifyContent: "center",
+								color: "var(--muted-foreground, #666)",
+								fontSize: "0.9rem",
+							}}
+						>
+							Loading editor…
+						</div>
+					}
 				/>
 			</section>
 
