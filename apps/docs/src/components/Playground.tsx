@@ -27,7 +27,7 @@ import {
 	componentConfig as buttonComponentConfig,
 } from "@anvilkit/button";
 import type { StudioPlugin } from "@anvilkit/core";
-import { Studio } from "@anvilkit/core";
+import { Studio, StudioLoadingScreen } from "@anvilkit/core";
 import {
 	type HelpsProps,
 	componentConfig as helpsComponentConfig,
@@ -709,27 +709,13 @@ export default function Playground() {
 					plugins={plugins}
 					onChange={handleChange}
 					onPublish={handlePublish}
-					// 3.4 Part 1: render a skeleton in place of the shell's
-					// bare `null` while the (now lazy — 3.2) plugin chunks
-					// stream in and the runtime compiles. Disappears once
-					// `<Puck>` mounts, so it never interferes with the
+					// 3.4 Part 1: render the core `<StudioLoadingScreen>` skeleton
+					// (skeleton rail/panel/header + spinner-and-text canvas) in
+					// place of the shell's bare `null` while the (now lazy — 3.2)
+					// plugin chunks stream in and the runtime compiles. Disappears
+					// once `<Puck>` mounts, so it never interferes with the
 					// playground E2E's `[data-testid="puck-editor"]` wait.
-					loading={
-						<div
-							data-testid="playground-loading"
-							aria-busy="true"
-							style={{
-								display: "flex",
-								minHeight: 600,
-								alignItems: "center",
-								justifyContent: "center",
-								color: "var(--muted-foreground, #666)",
-								fontSize: "0.9rem",
-							}}
-						>
-							Loading editor…
-						</div>
-					}
+					loading={<StudioLoadingScreen />}
 				/>
 			</section>
 

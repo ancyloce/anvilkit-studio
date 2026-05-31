@@ -5,7 +5,12 @@
 // must be loaded by the host or the editor shell renders unstyled/blank.
 import "@anvilkit/canvas-editor/styles.css";
 import type { StudioPlugin } from "@anvilkit/core";
-import { compilePlugins, Studio, StudioConfigSchema } from "@anvilkit/core";
+import {
+	compilePlugins,
+	Studio,
+	StudioConfigSchema,
+	StudioLoadingScreen,
+} from "@anvilkit/core";
 import type {
 	ExportWarning,
 	PageIR,
@@ -147,65 +152,6 @@ const {
 	versionHistoryPlugin: versionHistoryNoHeaderPlugin,
 	historySidebarPlugin,
 } = createLazyDemoVersionHistoryPlugins(editorDemoConfig as unknown as Config);
-
-/**
- * Host-supplied loading skeleton for the editor `<Studio loading={…}>`
- * (3.4 Part 1). Renders in place of the shell's former bare `null` while
- * the plugin runtime compiles and the chrome assets stream in — now that
- * the heavy plugins are deferred behind `lazyPlugin` (3.2), that window
- * is when their chunks download.
- *
- * Deliberately minimal and dependency-free: a full-frame placeholder
- * (header strip + rail strip + centered status) using the demo's own CSS
- * variables, so it needs no plugin context and adds nothing to the
- * editor entry chunk beyond a few inline-styled divs.
- */
-function EditorSkeleton() {
-	return (
-		<div
-			data-testid="studio-loading-skeleton"
-			aria-busy="true"
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				minHeight: "70vh",
-				border: "1px solid var(--demo-panel-border)",
-				borderRadius: "1.5rem",
-				overflow: "hidden",
-				background: "var(--demo-panel-bg)",
-			}}
-		>
-			<div
-				style={{
-					height: "3rem",
-					borderBottom: "1px solid var(--demo-panel-border)",
-					background: "var(--demo-secondary-bg)",
-				}}
-			/>
-			<div style={{ display: "flex", flex: 1, minHeight: 0 }}>
-				<div
-					style={{
-						width: "3.5rem",
-						borderRight: "1px solid var(--demo-panel-border)",
-						background: "var(--demo-secondary-bg)",
-					}}
-				/>
-				<div
-					style={{
-						flex: 1,
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						color: "var(--demo-muted-text)",
-						fontSize: "0.9rem",
-					}}
-				>
-					Loading editor…
-				</div>
-			</div>
-		</div>
-	);
-}
 
 interface AssetManagerTestHarness {
 	readonly ctx: StudioPluginContext;
@@ -1172,7 +1118,7 @@ export default function PuckEditorPage() {
 					puckConfig={editorDemoConfig as unknown as Config}
 					data={publishedData}
 					plugins={plugins}
-					loading={<EditorSkeleton />}
+					loading={<StudioLoadingScreen />}
 					onPublish={handlePublish}
 					onPublishClick={handlePublishClick}
 					onSaveDraft={handleSaveDraft}
