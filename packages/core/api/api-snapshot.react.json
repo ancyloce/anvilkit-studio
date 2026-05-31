@@ -7,7 +7,7 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 110,
+			"id": 111,
 			"name": "AiHistoryEntry",
 			"variant": "declaration",
 			"kind": 256,
@@ -22,7 +22,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "AiState.history",
-						"target": 117
+						"target": 118
 					},
 					{
 						"kind": "text",
@@ -32,7 +32,7 @@
 			},
 			"children": [
 				{
-					"id": 112,
+					"id": 113,
 					"name": "at",
 					"variant": "declaration",
 					"kind": 1024,
@@ -53,7 +53,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "AiState.startGeneration",
-								"target": 118
+								"target": 119
 							},
 							{
 								"kind": "text",
@@ -75,7 +75,7 @@
 					}
 				},
 				{
-					"id": 111,
+					"id": 112,
 					"name": "prompt",
 					"variant": "declaration",
 					"kind": 1024,
@@ -108,8 +108,8 @@
 				{
 					"title": "Properties",
 					"children": [
-						112,
-						111
+						113,
+						112
 					]
 				}
 			],
@@ -123,7 +123,7 @@
 			]
 		},
 		{
-			"id": 113,
+			"id": 114,
 			"name": "AiState",
 			"variant": "declaration",
 			"kind": 256,
@@ -138,7 +138,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "AiState.reset",
-						"target": 127
+						"target": 128
 					},
 					{
 						"kind": "text",
@@ -148,7 +148,7 @@
 			},
 			"children": [
 				{
-					"id": 117,
+					"id": 118,
 					"name": "history",
 					"variant": "declaration",
 					"kind": 1024,
@@ -165,7 +165,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "startGeneration",
-								"target": 118
+								"target": 119
 							},
 							{
 								"kind": "text",
@@ -191,7 +191,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "clearHistory",
-								"target": 125
+								"target": 126
 							},
 							{
 								"kind": "text",
@@ -214,7 +214,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 110,
+								"target": 111,
 								"name": "AiHistoryEntry",
 								"package": "@anvilkit/core"
 							}
@@ -222,7 +222,7 @@
 					}
 				},
 				{
-					"id": 114,
+					"id": 115,
 					"name": "isGenerating",
 					"variant": "declaration",
 					"kind": 1024,
@@ -263,7 +263,7 @@
 					}
 				},
 				{
-					"id": 116,
+					"id": 117,
 					"name": "lastError",
 					"variant": "declaration",
 					"kind": 1024,
@@ -309,7 +309,7 @@
 					}
 				},
 				{
-					"id": 115,
+					"id": 116,
 					"name": "lastPrompt",
 					"variant": "declaration",
 					"kind": 1024,
@@ -355,7 +355,7 @@
 					}
 				},
 				{
-					"id": 125,
+					"id": 126,
 					"name": "clearHistory",
 					"variant": "declaration",
 					"kind": 2048,
@@ -370,7 +370,7 @@
 					],
 					"signatures": [
 						{
-							"id": 126,
+							"id": 127,
 							"name": "clearHistory",
 							"variant": "signature",
 							"kind": 4096,
@@ -415,7 +415,7 @@
 					]
 				},
 				{
-					"id": 121,
+					"id": 122,
 					"name": "finishGeneration",
 					"variant": "declaration",
 					"kind": 2048,
@@ -430,7 +430,7 @@
 					],
 					"signatures": [
 						{
-							"id": 122,
+							"id": 123,
 							"name": "finishGeneration",
 							"variant": "signature",
 							"kind": 4096,
@@ -485,7 +485,7 @@
 							],
 							"parameters": [
 								{
-									"id": 123,
+									"id": 124,
 									"name": "ok",
 									"variant": "param",
 									"kind": 32768,
@@ -496,7 +496,7 @@
 									}
 								},
 								{
-									"id": 124,
+									"id": 125,
 									"name": "error",
 									"variant": "param",
 									"kind": 32768,
@@ -517,7 +517,7 @@
 					]
 				},
 				{
-					"id": 127,
+					"id": 128,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
@@ -532,7 +532,7 @@
 					],
 					"signatures": [
 						{
-							"id": 128,
+							"id": 129,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -547,7 +547,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "ExportState.reset",
-										"target": 174
+										"target": 175
 									},
 									{
 										"kind": "text",
@@ -571,7 +571,7 @@
 					]
 				},
 				{
-					"id": 118,
+					"id": 119,
 					"name": "startGeneration",
 					"variant": "declaration",
 					"kind": 2048,
@@ -586,7 +586,7 @@
 					],
 					"signatures": [
 						{
-							"id": 119,
+							"id": 120,
 							"name": "startGeneration",
 							"variant": "signature",
 							"kind": 4096,
@@ -633,7 +633,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "AiHistoryEntry",
-										"target": 110
+										"target": 111
 									},
 									{
 										"kind": "text",
@@ -651,7 +651,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "finishGeneration",
-										"target": 121
+										"target": 122
 									},
 									{
 										"kind": "text",
@@ -677,7 +677,7 @@
 							],
 							"parameters": [
 								{
-									"id": 120,
+									"id": 121,
 									"name": "prompt",
 									"variant": "param",
 									"kind": 32768,
@@ -700,19 +700,19 @@
 				{
 					"title": "Properties",
 					"children": [
+						118,
+						115,
 						117,
-						114,
-						116,
-						115
+						116
 					]
 				},
 				{
 					"title": "Methods",
 					"children": [
-						125,
-						121,
-						127,
-						118
+						126,
+						122,
+						128,
+						119
 					]
 				}
 			],
@@ -726,7 +726,7 @@
 			]
 		},
 		{
-			"id": 97,
+			"id": 98,
 			"name": "AiStoreProviderProps",
 			"variant": "declaration",
 			"kind": 256,
@@ -761,7 +761,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useExportStore",
-								"target": 142
+								"target": 143
 							},
 							{
 								"kind": "text",
@@ -771,7 +771,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useAiStore",
-								"target": 101
+								"target": 102
 							},
 							{
 								"kind": "text",
@@ -781,7 +781,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useThemeStore",
-								"target": 188
+								"target": 189
 							},
 							{
 								"kind": "text",
@@ -1116,7 +1116,7 @@
 			},
 			"children": [
 				{
-					"id": 100,
+					"id": 101,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1144,7 +1144,7 @@
 					}
 				},
 				{
-					"id": 99,
+					"id": 100,
 					"name": "store",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1162,13 +1162,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 129,
+						"target": 130,
 						"name": "AiStoreApi",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 98,
+					"id": 99,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1193,9 +1193,9 @@
 				{
 					"title": "Properties",
 					"children": [
+						101,
 						100,
-						99,
-						98
+						99
 					]
 				}
 			],
@@ -1209,7 +1209,7 @@
 			]
 		},
 		{
-			"id": 130,
+			"id": 131,
 			"name": "CreateAiStoreOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -1235,7 +1235,7 @@
 			},
 			"children": [
 				{
-					"id": 131,
+					"id": 132,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1260,7 +1260,7 @@
 				{
 					"title": "Properties",
 					"children": [
-						131
+						132
 					]
 				}
 			],
@@ -1274,7 +1274,7 @@
 			]
 		},
 		{
-			"id": 151,
+			"id": 152,
 			"name": "CreateExportStoreOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -1316,7 +1316,7 @@
 			},
 			"children": [
 				{
-					"id": 152,
+					"id": 153,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1341,7 +1341,7 @@
 				{
 					"title": "Properties",
 					"children": [
-						152
+						153
 					]
 				}
 			],
@@ -1355,14 +1355,14 @@
 			]
 		},
 		{
-			"id": 197,
+			"id": 198,
 			"name": "CreateThemeStoreOptions",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 198,
+					"id": 199,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1387,7 +1387,7 @@
 				{
 					"title": "Properties",
 					"children": [
-						198
+						199
 					]
 				}
 			],
@@ -1401,7 +1401,7 @@
 			]
 		},
 		{
-			"id": 156,
+			"id": 157,
 			"name": "ExportState",
 			"variant": "declaration",
 			"kind": 256,
@@ -1424,7 +1424,7 @@
 			},
 			"children": [
 				{
-					"id": 157,
+					"id": 158,
 					"name": "availableFormats",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1484,7 +1484,7 @@
 					}
 				},
 				{
-					"id": 158,
+					"id": 159,
 					"name": "currentFormat",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1540,7 +1540,7 @@
 					}
 				},
 				{
-					"id": 159,
+					"id": 160,
 					"name": "isExporting",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1581,7 +1581,7 @@
 					}
 				},
 				{
-					"id": 160,
+					"id": 161,
 					"name": "lastExport",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1617,7 +1617,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 177,
+								"target": 178,
 								"name": "LastExportRecord",
 								"package": "@anvilkit/core"
 							},
@@ -1629,7 +1629,7 @@
 					}
 				},
 				{
-					"id": 170,
+					"id": 171,
 					"name": "recordExport",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1644,7 +1644,7 @@
 					],
 					"signatures": [
 						{
-							"id": 171,
+							"id": 172,
 							"name": "recordExport",
 							"variant": "signature",
 							"kind": 4096,
@@ -1683,7 +1683,7 @@
 							],
 							"parameters": [
 								{
-									"id": 172,
+									"id": 173,
 									"name": "formatId",
 									"variant": "param",
 									"kind": 32768,
@@ -1694,7 +1694,7 @@
 									}
 								},
 								{
-									"id": 173,
+									"id": 174,
 									"name": "ok",
 									"variant": "param",
 									"kind": 32768,
@@ -1713,7 +1713,7 @@
 					]
 				},
 				{
-					"id": 174,
+					"id": 175,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1728,7 +1728,7 @@
 					],
 					"signatures": [
 						{
-							"id": 175,
+							"id": 176,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -1787,7 +1787,7 @@
 					]
 				},
 				{
-					"id": 161,
+					"id": 162,
 					"name": "setAvailableFormats",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1802,7 +1802,7 @@
 					],
 					"signatures": [
 						{
-							"id": 162,
+							"id": 163,
 							"name": "setAvailableFormats",
 							"variant": "signature",
 							"kind": 4096,
@@ -1817,7 +1817,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "availableFormats",
-										"target": 157
+										"target": 158
 									},
 									{
 										"kind": "text",
@@ -1851,7 +1851,7 @@
 							],
 							"parameters": [
 								{
-									"id": 163,
+									"id": 164,
 									"name": "ids",
 									"variant": "param",
 									"kind": 32768,
@@ -1877,7 +1877,7 @@
 					]
 				},
 				{
-					"id": 164,
+					"id": 165,
 					"name": "setCurrentFormat",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1892,7 +1892,7 @@
 					],
 					"signatures": [
 						{
-							"id": 165,
+							"id": 166,
 							"name": "setCurrentFormat",
 							"variant": "signature",
 							"kind": 4096,
@@ -1923,7 +1923,7 @@
 							],
 							"parameters": [
 								{
-									"id": 166,
+									"id": 167,
 									"name": "id",
 									"variant": "param",
 									"kind": 32768,
@@ -1951,7 +1951,7 @@
 					]
 				},
 				{
-					"id": 167,
+					"id": 168,
 					"name": "setIsExporting",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1966,7 +1966,7 @@
 					],
 					"signatures": [
 						{
-							"id": 168,
+							"id": 169,
 							"name": "setIsExporting",
 							"variant": "signature",
 							"kind": 4096,
@@ -2013,7 +2013,7 @@
 							],
 							"parameters": [
 								{
-									"id": 169,
+									"id": 170,
 									"name": "value",
 									"variant": "param",
 									"kind": 32768,
@@ -2036,20 +2036,20 @@
 				{
 					"title": "Properties",
 					"children": [
-						157,
 						158,
 						159,
-						160
+						160,
+						161
 					]
 				},
 				{
 					"title": "Methods",
 					"children": [
-						170,
-						174,
-						161,
-						164,
-						167
+						171,
+						175,
+						162,
+						165,
+						168
 					]
 				}
 			],
@@ -2063,14 +2063,14 @@
 			]
 		},
 		{
-			"id": 138,
+			"id": 139,
 			"name": "ExportStoreProviderProps",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 141,
+					"id": 142,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2098,7 +2098,7 @@
 					}
 				},
 				{
-					"id": 140,
+					"id": 141,
 					"name": "store",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2116,13 +2116,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 176,
+						"target": 177,
 						"name": "ExportStoreApi",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 139,
+					"id": 140,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2147,9 +2147,9 @@
 				{
 					"title": "Properties",
 					"children": [
+						142,
 						141,
-						140,
-						139
+						140
 					]
 				}
 			],
@@ -2163,7 +2163,7 @@
 			]
 		},
 		{
-			"id": 177,
+			"id": 178,
 			"name": "LastExportRecord",
 			"variant": "declaration",
 			"kind": 256,
@@ -2178,7 +2178,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "ExportState.lastExport",
-						"target": 160
+						"target": 161
 					},
 					{
 						"kind": "text",
@@ -2188,7 +2188,7 @@
 			},
 			"children": [
 				{
-					"id": 179,
+					"id": 180,
 					"name": "at",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2221,7 +2221,7 @@
 					}
 				},
 				{
-					"id": 178,
+					"id": 179,
 					"name": "formatId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2259,7 +2259,7 @@
 					}
 				},
 				{
-					"id": 180,
+					"id": 181,
 					"name": "ok",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2328,9 +2328,9 @@
 				{
 					"title": "Properties",
 					"children": [
+						180,
 						179,
-						178,
-						180
+						181
 					]
 				}
 			],
@@ -3920,6 +3920,115 @@
 					}
 				},
 				{
+					"id": 85,
+					"name": "loading",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional node rendered in place of the bare "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": "\nreturns while the runtime compiles (and, for anvilkit chrome,\nwhile the chrome assets load). Lets a host supply a branded\nskeleton without wrapping "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " in its own loading-state\nmachine.\n\nPreserves the existing contract: when omitted the gates still\nreturn "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " (the previous behavior, byte-for-byte). Kept a plain\n"
+							},
+							{
+								"kind": "code",
+								"text": "`ReactNode`"
+							},
+							{
+								"kind": "text",
+								"text": " (not a render-prop) so it stays trivially passthrough\nand does not couple the host skeleton to runtime internals — a host\nthat wants to paint deferred-plugin toolbar placeholders can compute\nthem from its own plugin metas' "
+							},
+							{
+								"kind": "code",
+								"text": "`staticHeaderActions`"
+							},
+							{
+								"kind": "text",
+								"text": " (3.3) and\nrender them inside this node.\n\nNo-op on the legacy "
+							},
+							{
+								"kind": "code",
+								"text": "`chrome=\"puck\"`"
+							},
+							{
+								"kind": "text",
+								"text": " path's second gate (which only\nchecks "
+							},
+							{
+								"kind": "code",
+								"text": "`compiled`"
+							},
+							{
+								"kind": "text",
+								"text": "), exactly as the "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " default was."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "react/components/use-studio-controller.ts",
+							"line": 283,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio-controller.ts#L283"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.ReactNode"
+						},
+						"name": "ReactNode",
+						"package": "@types/react",
+						"qualifiedName": "React.ReactNode"
+					}
+				},
+				{
 					"id": 82,
 					"name": "logger",
 					"variant": "declaration",
@@ -5275,6 +5384,7 @@
 						74,
 						72,
 						73,
+						85,
 						82,
 						84,
 						63,
@@ -5335,7 +5445,7 @@
 			]
 		},
 		{
-			"id": 204,
+			"id": 205,
 			"name": "ThemeState",
 			"variant": "declaration",
 			"kind": 256,
@@ -5358,7 +5468,7 @@
 			},
 			"children": [
 				{
-					"id": 205,
+					"id": 206,
 					"name": "mode",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5383,13 +5493,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 202,
+						"target": 203,
 						"name": "ThemeMode",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 206,
+					"id": 207,
 					"name": "resolved",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5422,13 +5532,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 203,
+						"target": 204,
 						"name": "ThemeResolved",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 213,
+					"id": 214,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
@@ -5443,7 +5553,7 @@
 					],
 					"signatures": [
 						{
-							"id": 214,
+							"id": 215,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -5458,7 +5568,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "ExportState.reset",
-										"target": 174
+										"target": 175
 									},
 									{
 										"kind": "text",
@@ -5482,7 +5592,7 @@
 					]
 				},
 				{
-					"id": 207,
+					"id": 208,
 					"name": "setMode",
 					"variant": "declaration",
 					"kind": 2048,
@@ -5497,7 +5607,7 @@
 					],
 					"signatures": [
 						{
-							"id": 208,
+							"id": 209,
 							"name": "setMode",
 							"variant": "signature",
 							"kind": 4096,
@@ -5520,14 +5630,14 @@
 							],
 							"parameters": [
 								{
-									"id": 209,
+									"id": 210,
 									"name": "mode",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 202,
+										"target": 203,
 										"name": "ThemeMode",
 										"package": "@anvilkit/core"
 									}
@@ -5541,7 +5651,7 @@
 					]
 				},
 				{
-					"id": 210,
+					"id": 211,
 					"name": "setResolved",
 					"variant": "declaration",
 					"kind": 2048,
@@ -5556,7 +5666,7 @@
 					],
 					"signatures": [
 						{
-							"id": 211,
+							"id": 212,
 							"name": "setResolved",
 							"variant": "signature",
 							"kind": 4096,
@@ -5603,14 +5713,14 @@
 							],
 							"parameters": [
 								{
-									"id": 212,
+									"id": 213,
 									"name": "resolved",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 203,
+										"target": 204,
 										"name": "ThemeResolved",
 										"package": "@anvilkit/core"
 									}
@@ -5628,16 +5738,16 @@
 				{
 					"title": "Properties",
 					"children": [
-						205,
-						206
+						206,
+						207
 					]
 				},
 				{
 					"title": "Methods",
 					"children": [
-						213,
-						207,
-						210
+						214,
+						208,
+						211
 					]
 				}
 			],
@@ -5651,14 +5761,14 @@
 			]
 		},
 		{
-			"id": 184,
+			"id": 185,
 			"name": "ThemeStoreProviderProps",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 187,
+					"id": 188,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5686,7 +5796,7 @@
 					}
 				},
 				{
-					"id": 186,
+					"id": 187,
 					"name": "store",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5728,13 +5838,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 215,
+						"target": 216,
 						"name": "ThemeStoreApi",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 185,
+					"id": 186,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5759,9 +5869,9 @@
 				{
 					"title": "Properties",
 					"children": [
+						188,
 						187,
-						186,
-						185
+						186
 					]
 				}
 			],
@@ -5775,7 +5885,7 @@
 			]
 		},
 		{
-			"id": 85,
+			"id": 86,
 			"name": "UseStudioResult",
 			"variant": "declaration",
 			"kind": 256,
@@ -5822,7 +5932,7 @@
 			},
 			"children": [
 				{
-					"id": 87,
+					"id": 88,
 					"name": "exportFormats",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5912,7 +6022,7 @@
 					}
 				},
 				{
-					"id": 88,
+					"id": 89,
 					"name": "headerActions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5970,7 +6080,7 @@
 					}
 				},
 				{
-					"id": 86,
+					"id": 87,
 					"name": "plugins",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6033,9 +6143,9 @@
 				{
 					"title": "Properties",
 					"children": [
-						87,
 						88,
-						86
+						89,
+						87
 					]
 				}
 			],
@@ -6049,7 +6159,7 @@
 			]
 		},
 		{
-			"id": 129,
+			"id": 130,
 			"name": "AiStoreApi",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6072,7 +6182,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 113,
+						"target": 114,
 						"name": "AiState",
 						"package": "@anvilkit/core"
 					}
@@ -6082,7 +6192,7 @@
 			}
 		},
 		{
-			"id": 176,
+			"id": 177,
 			"name": "ExportStoreApi",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6105,7 +6215,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 156,
+						"target": 157,
 						"name": "ExportState",
 						"package": "@anvilkit/core"
 					}
@@ -6248,7 +6358,7 @@
 			}
 		},
 		{
-			"id": 202,
+			"id": 203,
 			"name": "ThemeMode",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6296,7 +6406,7 @@
 			}
 		},
 		{
-			"id": 203,
+			"id": 204,
 			"name": "ThemeResolved",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6356,7 +6466,7 @@
 			}
 		},
 		{
-			"id": 215,
+			"id": 216,
 			"name": "ThemeStoreApi",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -6379,7 +6489,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 204,
+						"target": 205,
 						"name": "ThemeState",
 						"package": "@anvilkit/core"
 					}
@@ -6389,7 +6499,7 @@
 			}
 		},
 		{
-			"id": 94,
+			"id": 95,
 			"name": "AiStoreProvider",
 			"variant": "declaration",
 			"kind": 64,
@@ -6424,7 +6534,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useExportStore",
-								"target": 142
+								"target": 143
 							},
 							{
 								"kind": "text",
@@ -6434,7 +6544,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useAiStore",
-								"target": 101
+								"target": 102
 							},
 							{
 								"kind": "text",
@@ -6444,7 +6554,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useThemeStore",
-								"target": 188
+								"target": 189
 							},
 							{
 								"kind": "text",
@@ -6787,7 +6897,7 @@
 			],
 			"signatures": [
 				{
-					"id": 95,
+					"id": 96,
 					"name": "AiStoreProvider",
 					"variant": "signature",
 					"kind": 4096,
@@ -6802,14 +6912,14 @@
 					],
 					"parameters": [
 						{
-							"id": 96,
+							"id": 97,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 97,
+								"target": 98,
 								"name": "AiStoreProviderProps",
 								"package": "@anvilkit/core"
 							}
@@ -6830,7 +6940,7 @@
 			]
 		},
 		{
-			"id": 132,
+			"id": 133,
 			"name": "createAiStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -6845,7 +6955,7 @@
 			],
 			"signatures": [
 				{
-					"id": 133,
+					"id": 134,
 					"name": "createAiStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -6876,7 +6986,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "AiStoreProvider",
-								"target": 94
+								"target": 95
 							},
 							{
 								"kind": "text",
@@ -6902,14 +7012,14 @@
 					],
 					"parameters": [
 						{
-							"id": 134,
+							"id": 135,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 130,
+								"target": 131,
 								"name": "CreateAiStoreOptions",
 								"package": "@anvilkit/core"
 							}
@@ -6917,7 +7027,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 129,
+						"target": 130,
 						"name": "AiStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -6925,7 +7035,7 @@
 			]
 		},
 		{
-			"id": 153,
+			"id": 154,
 			"name": "createExportStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -6940,7 +7050,7 @@
 			],
 			"signatures": [
 				{
-					"id": 154,
+					"id": 155,
 					"name": "createExportStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -6971,7 +7081,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "ExportStoreProvider",
-								"target": 135
+								"target": 136
 							},
 							{
 								"kind": "text",
@@ -6997,14 +7107,14 @@
 					],
 					"parameters": [
 						{
-							"id": 155,
+							"id": 156,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 151,
+								"target": 152,
 								"name": "CreateExportStoreOptions",
 								"package": "@anvilkit/core"
 							}
@@ -7012,7 +7122,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 176,
+						"target": 177,
 						"name": "ExportStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -7020,7 +7130,7 @@
 			]
 		},
 		{
-			"id": 199,
+			"id": 200,
 			"name": "createThemeStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -7035,7 +7145,7 @@
 			],
 			"signatures": [
 				{
-					"id": 200,
+					"id": 201,
 					"name": "createThemeStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -7074,7 +7184,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "ThemeStoreProvider",
-								"target": 181
+								"target": 182
 							},
 							{
 								"kind": "text",
@@ -7111,14 +7221,14 @@
 					],
 					"parameters": [
 						{
-							"id": 201,
+							"id": 202,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 197,
+								"target": 198,
 								"name": "CreateThemeStoreOptions",
 								"package": "@anvilkit/core"
 							}
@@ -7126,7 +7236,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 215,
+						"target": 216,
 						"name": "ThemeStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -7134,7 +7244,7 @@
 			]
 		},
 		{
-			"id": 135,
+			"id": 136,
 			"name": "ExportStoreProvider",
 			"variant": "declaration",
 			"kind": 64,
@@ -7149,7 +7259,7 @@
 			],
 			"signatures": [
 				{
-					"id": 136,
+					"id": 137,
 					"name": "ExportStoreProvider",
 					"variant": "signature",
 					"kind": 4096,
@@ -7164,14 +7274,14 @@
 					],
 					"parameters": [
 						{
-							"id": 137,
+							"id": 138,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 138,
+								"target": 139,
 								"name": "ExportStoreProviderProps",
 								"package": "@anvilkit/core"
 							}
@@ -7192,7 +7302,7 @@
 			]
 		},
 		{
-			"id": 91,
+			"id": 92,
 			"name": "mergeOverrides",
 			"variant": "declaration",
 			"kind": 64,
@@ -7207,7 +7317,7 @@
 			],
 			"signatures": [
 				{
-					"id": 92,
+					"id": 93,
 					"name": "mergeOverrides",
 					"variant": "signature",
 					"kind": 4096,
@@ -7325,7 +7435,7 @@
 					],
 					"parameters": [
 						{
-							"id": 93,
+							"id": 94,
 							"name": "overridesList",
 							"variant": "param",
 							"kind": 32768,
@@ -7584,7 +7694,7 @@
 			]
 		},
 		{
-			"id": 181,
+			"id": 182,
 			"name": "ThemeStoreProvider",
 			"variant": "declaration",
 			"kind": 64,
@@ -7599,7 +7709,7 @@
 			],
 			"signatures": [
 				{
-					"id": 182,
+					"id": 183,
 					"name": "ThemeStoreProvider",
 					"variant": "signature",
 					"kind": 4096,
@@ -7614,14 +7724,14 @@
 					],
 					"parameters": [
 						{
-							"id": 183,
+							"id": 184,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 184,
+								"target": 185,
 								"name": "ThemeStoreProviderProps",
 								"package": "@anvilkit/core"
 							}
@@ -7642,7 +7752,7 @@
 			]
 		},
 		{
-			"id": 101,
+			"id": 102,
 			"name": "useAiStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -7677,7 +7787,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useExportStore",
-								"target": 142
+								"target": 143
 							},
 							{
 								"kind": "text",
@@ -7687,7 +7797,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useAiStore",
-								"target": 101
+								"target": 102
 							},
 							{
 								"kind": "text",
@@ -7697,7 +7807,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useThemeStore",
-								"target": 188
+								"target": 189
 							},
 							{
 								"kind": "text",
@@ -8040,7 +8150,7 @@
 			],
 			"signatures": [
 				{
-					"id": 102,
+					"id": 103,
 					"name": "useAiStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -8071,7 +8181,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 103,
+							"id": 104,
 							"name": "TResult",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -8080,7 +8190,7 @@
 					],
 					"parameters": [
 						{
-							"id": 104,
+							"id": 105,
 							"name": "selector",
 							"variant": "param",
 							"kind": 32768,
@@ -8088,28 +8198,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 105,
+									"id": 106,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 106,
+											"id": 107,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 107,
+													"id": 108,
 													"name": "state",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 113,
+														"target": 114,
 														"name": "AiState",
 														"package": "@anvilkit/core"
 													}
@@ -8117,7 +8227,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 103,
+												"target": 104,
 												"name": "TResult",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -8130,7 +8240,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 103,
+						"target": 104,
 						"name": "TResult",
 						"package": "@anvilkit/core",
 						"refersToTypeParameter": true
@@ -8139,7 +8249,7 @@
 			]
 		},
 		{
-			"id": 108,
+			"id": 109,
 			"name": "useAiStoreApi",
 			"variant": "declaration",
 			"kind": 64,
@@ -8174,7 +8284,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useExportStore",
-								"target": 142
+								"target": 143
 							},
 							{
 								"kind": "text",
@@ -8184,7 +8294,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useAiStore",
-								"target": 101
+								"target": 102
 							},
 							{
 								"kind": "text",
@@ -8194,7 +8304,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "useThemeStore",
-								"target": 188
+								"target": 189
 							},
 							{
 								"kind": "text",
@@ -8537,7 +8647,7 @@
 			],
 			"signatures": [
 				{
-					"id": 109,
+					"id": 110,
 					"name": "useAiStoreApi",
 					"variant": "signature",
 					"kind": 4096,
@@ -8552,7 +8662,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 129,
+						"target": 130,
 						"name": "AiStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -8560,7 +8670,7 @@
 			]
 		},
 		{
-			"id": 142,
+			"id": 143,
 			"name": "useExportStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -8575,7 +8685,7 @@
 			],
 			"signatures": [
 				{
-					"id": 143,
+					"id": 144,
 					"name": "useExportStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -8606,7 +8716,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 144,
+							"id": 145,
 							"name": "TResult",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -8615,7 +8725,7 @@
 					],
 					"parameters": [
 						{
-							"id": 145,
+							"id": 146,
 							"name": "selector",
 							"variant": "param",
 							"kind": 32768,
@@ -8623,28 +8733,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 146,
+									"id": 147,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 147,
+											"id": 148,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 148,
+													"id": 149,
 													"name": "state",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 156,
+														"target": 157,
 														"name": "ExportState",
 														"package": "@anvilkit/core"
 													}
@@ -8652,7 +8762,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 144,
+												"target": 145,
 												"name": "TResult",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -8665,7 +8775,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 144,
+						"target": 145,
 						"name": "TResult",
 						"package": "@anvilkit/core",
 						"refersToTypeParameter": true
@@ -8674,7 +8784,7 @@
 			]
 		},
 		{
-			"id": 149,
+			"id": 150,
 			"name": "useExportStoreApi",
 			"variant": "declaration",
 			"kind": 64,
@@ -8689,7 +8799,7 @@
 			],
 			"signatures": [
 				{
-					"id": 150,
+					"id": 151,
 					"name": "useExportStoreApi",
 					"variant": "signature",
 					"kind": 4096,
@@ -8704,7 +8814,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 176,
+						"target": 177,
 						"name": "ExportStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -8712,7 +8822,7 @@
 			]
 		},
 		{
-			"id": 89,
+			"id": 90,
 			"name": "useStudio",
 			"variant": "declaration",
 			"kind": 64,
@@ -8727,7 +8837,7 @@
 			],
 			"signatures": [
 				{
-					"id": 90,
+					"id": 91,
 					"name": "useStudio",
 					"variant": "signature",
 					"kind": 4096,
@@ -8789,7 +8899,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "UseStudioResult",
-										"target": 85
+										"target": 86
 									},
 									{
 										"kind": "text",
@@ -8818,7 +8928,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 85,
+						"target": 86,
 						"name": "UseStudioResult",
 						"package": "@anvilkit/core"
 					}
@@ -8826,7 +8936,7 @@
 			]
 		},
 		{
-			"id": 188,
+			"id": 189,
 			"name": "useThemeStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -8841,7 +8951,7 @@
 			],
 			"signatures": [
 				{
-					"id": 189,
+					"id": 190,
 					"name": "useThemeStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -8872,7 +8982,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 190,
+							"id": 191,
 							"name": "TResult",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -8881,7 +8991,7 @@
 					],
 					"parameters": [
 						{
-							"id": 191,
+							"id": 192,
 							"name": "selector",
 							"variant": "param",
 							"kind": 32768,
@@ -8889,28 +8999,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 192,
+									"id": 193,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 193,
+											"id": 194,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 194,
+													"id": 195,
 													"name": "state",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 204,
+														"target": 205,
 														"name": "ThemeState",
 														"package": "@anvilkit/core"
 													}
@@ -8918,7 +9028,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 190,
+												"target": 191,
 												"name": "TResult",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -8931,7 +9041,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 190,
+						"target": 191,
 						"name": "TResult",
 						"package": "@anvilkit/core",
 						"refersToTypeParameter": true
@@ -8940,7 +9050,7 @@
 			]
 		},
 		{
-			"id": 195,
+			"id": 196,
 			"name": "useThemeStoreApi",
 			"variant": "declaration",
 			"kind": 64,
@@ -8955,7 +9065,7 @@
 			],
 			"signatures": [
 				{
-					"id": 196,
+					"id": 197,
 					"name": "useThemeStoreApi",
 					"variant": "signature",
 					"kind": 4096,
@@ -8986,7 +9096,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 215,
+						"target": 216,
 						"name": "ThemeStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -8998,50 +9108,50 @@
 		{
 			"title": "Interfaces",
 			"children": [
-				110,
-				113,
-				97,
-				130,
-				151,
-				197,
-				156,
-				138,
-				177,
+				111,
+				114,
+				98,
+				131,
+				152,
+				198,
+				157,
+				139,
+				178,
 				11,
-				204,
-				184,
-				85
+				205,
+				185,
+				86
 			]
 		},
 		{
 			"title": "Type Aliases",
 			"children": [
-				129,
-				176,
+				130,
+				177,
 				5,
-				202,
 				203,
-				215
+				204,
+				216
 			]
 		},
 		{
 			"title": "Functions",
 			"children": [
-				94,
-				132,
-				153,
-				199,
-				135,
-				91,
+				95,
+				133,
+				154,
+				200,
+				136,
+				92,
 				1,
-				181,
-				101,
-				108,
-				142,
-				149,
-				89,
-				188,
-				195
+				182,
+				102,
+				109,
+				143,
+				150,
+				90,
+				189,
+				196
 			]
 		}
 	],
@@ -9464,28 +9574,28 @@
 		},
 		"85": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/hooks/use-studio.ts",
-			"qualifiedName": "UseStudioResult"
+			"packagePath": "src/react/components/use-studio-controller.ts",
+			"qualifiedName": "StudioProps.loading"
 		},
 		"86": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/hooks/use-studio.ts",
-			"qualifiedName": "UseStudioResult.plugins"
+			"qualifiedName": "UseStudioResult"
 		},
 		"87": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/hooks/use-studio.ts",
-			"qualifiedName": "UseStudioResult.exportFormats"
+			"qualifiedName": "UseStudioResult.plugins"
 		},
 		"88": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/hooks/use-studio.ts",
-			"qualifiedName": "UseStudioResult.headerActions"
+			"qualifiedName": "UseStudioResult.exportFormats"
 		},
 		"89": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/hooks/use-studio.ts",
-			"qualifiedName": "useStudio"
+			"qualifiedName": "UseStudioResult.headerActions"
 		},
 		"90": {
 			"packageName": "@anvilkit/core",
@@ -9494,8 +9604,8 @@
 		},
 		"91": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/overrides/merge-overrides.ts",
-			"qualifiedName": "mergeOverrides"
+			"packagePath": "src/react/hooks/use-studio.ts",
+			"qualifiedName": "useStudio"
 		},
 		"92": {
 			"packageName": "@anvilkit/core",
@@ -9505,12 +9615,12 @@
 		"93": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/overrides/merge-overrides.ts",
-			"qualifiedName": "overridesList"
+			"qualifiedName": "mergeOverrides"
 		},
 		"94": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProvider"
+			"packagePath": "src/react/overrides/merge-overrides.ts",
+			"qualifiedName": "overridesList"
 		},
 		"95": {
 			"packageName": "@anvilkit/core",
@@ -9520,32 +9630,32 @@
 		"96": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "__0"
+			"qualifiedName": "AiStoreProvider"
 		},
 		"97": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps"
+			"qualifiedName": "__0"
 		},
 		"98": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps.storeId"
+			"qualifiedName": "AiStoreProviderProps"
 		},
 		"99": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps.store"
+			"qualifiedName": "AiStoreProviderProps.storeId"
 		},
 		"100": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps.children"
+			"qualifiedName": "AiStoreProviderProps.store"
 		},
 		"101": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "useAiStore"
+			"qualifiedName": "AiStoreProviderProps.children"
 		},
 		"102": {
 			"packageName": "@anvilkit/core",
@@ -9555,17 +9665,17 @@
 		"103": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "TResult"
+			"qualifiedName": "useAiStore"
 		},
 		"104": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "selector"
+			"qualifiedName": "TResult"
 		},
 		"105": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "selector"
 		},
 		"106": {
 			"packageName": "@anvilkit/core",
@@ -9575,12 +9685,12 @@
 		"107": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "state"
+			"qualifiedName": "__type"
 		},
 		"108": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/AiStoreProvider.tsx",
-			"qualifiedName": "useAiStoreApi"
+			"qualifiedName": "state"
 		},
 		"109": {
 			"packageName": "@anvilkit/core",
@@ -9589,48 +9699,48 @@
 		},
 		"110": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiHistoryEntry"
+			"packagePath": "src/react/stores/AiStoreProvider.tsx",
+			"qualifiedName": "useAiStoreApi"
 		},
 		"111": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiHistoryEntry.prompt"
+			"qualifiedName": "AiHistoryEntry"
 		},
 		"112": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiHistoryEntry.at"
+			"qualifiedName": "AiHistoryEntry.prompt"
 		},
 		"113": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState"
+			"qualifiedName": "AiHistoryEntry.at"
 		},
 		"114": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.isGenerating"
+			"qualifiedName": "AiState"
 		},
 		"115": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.lastPrompt"
+			"qualifiedName": "AiState.isGenerating"
 		},
 		"116": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.lastError"
+			"qualifiedName": "AiState.lastPrompt"
 		},
 		"117": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.history"
+			"qualifiedName": "AiState.lastError"
 		},
 		"118": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.startGeneration"
+			"qualifiedName": "AiState.history"
 		},
 		"119": {
 			"packageName": "@anvilkit/core",
@@ -9640,12 +9750,12 @@
 		"120": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "prompt"
+			"qualifiedName": "AiState.startGeneration"
 		},
 		"121": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.finishGeneration"
+			"qualifiedName": "prompt"
 		},
 		"122": {
 			"packageName": "@anvilkit/core",
@@ -9655,17 +9765,17 @@
 		"123": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "ok"
+			"qualifiedName": "AiState.finishGeneration"
 		},
 		"124": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "error"
+			"qualifiedName": "ok"
 		},
 		"125": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.clearHistory"
+			"qualifiedName": "error"
 		},
 		"126": {
 			"packageName": "@anvilkit/core",
@@ -9675,7 +9785,7 @@
 		"127": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiState.reset"
+			"qualifiedName": "AiState.clearHistory"
 		},
 		"128": {
 			"packageName": "@anvilkit/core",
@@ -9685,22 +9795,22 @@
 		"129": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "AiStoreApi"
+			"qualifiedName": "AiState.reset"
 		},
 		"130": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "CreateAiStoreOptions"
+			"qualifiedName": "AiStoreApi"
 		},
 		"131": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "CreateAiStoreOptions.storeId"
+			"qualifiedName": "CreateAiStoreOptions"
 		},
 		"132": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "createAiStore"
+			"qualifiedName": "CreateAiStoreOptions.storeId"
 		},
 		"133": {
 			"packageName": "@anvilkit/core",
@@ -9710,12 +9820,12 @@
 		"134": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ai-store.ts",
-			"qualifiedName": "options"
+			"qualifiedName": "createAiStore"
 		},
 		"135": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProvider"
+			"packagePath": "src/react/stores/ai-store.ts",
+			"qualifiedName": "options"
 		},
 		"136": {
 			"packageName": "@anvilkit/core",
@@ -9725,32 +9835,32 @@
 		"137": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "__0"
+			"qualifiedName": "ExportStoreProvider"
 		},
 		"138": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps"
+			"qualifiedName": "__0"
 		},
 		"139": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps.storeId"
+			"qualifiedName": "ExportStoreProviderProps"
 		},
 		"140": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps.store"
+			"qualifiedName": "ExportStoreProviderProps.storeId"
 		},
 		"141": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps.children"
+			"qualifiedName": "ExportStoreProviderProps.store"
 		},
 		"142": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "useExportStore"
+			"qualifiedName": "ExportStoreProviderProps.children"
 		},
 		"143": {
 			"packageName": "@anvilkit/core",
@@ -9760,17 +9870,17 @@
 		"144": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "TResult"
+			"qualifiedName": "useExportStore"
 		},
 		"145": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "selector"
+			"qualifiedName": "TResult"
 		},
 		"146": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "selector"
 		},
 		"147": {
 			"packageName": "@anvilkit/core",
@@ -9780,12 +9890,12 @@
 		"148": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "state"
+			"qualifiedName": "__type"
 		},
 		"149": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
-			"qualifiedName": "useExportStoreApi"
+			"qualifiedName": "state"
 		},
 		"150": {
 			"packageName": "@anvilkit/core",
@@ -9794,18 +9904,18 @@
 		},
 		"151": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "CreateExportStoreOptions"
+			"packagePath": "src/react/stores/ExportStoreProvider.tsx",
+			"qualifiedName": "useExportStoreApi"
 		},
 		"152": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "CreateExportStoreOptions.storeId"
+			"qualifiedName": "CreateExportStoreOptions"
 		},
 		"153": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "createExportStore"
+			"qualifiedName": "CreateExportStoreOptions.storeId"
 		},
 		"154": {
 			"packageName": "@anvilkit/core",
@@ -9815,37 +9925,37 @@
 		"155": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "options"
+			"qualifiedName": "createExportStore"
 		},
 		"156": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState"
+			"qualifiedName": "options"
 		},
 		"157": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.availableFormats"
+			"qualifiedName": "ExportState"
 		},
 		"158": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.currentFormat"
+			"qualifiedName": "ExportState.availableFormats"
 		},
 		"159": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.isExporting"
+			"qualifiedName": "ExportState.currentFormat"
 		},
 		"160": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.lastExport"
+			"qualifiedName": "ExportState.isExporting"
 		},
 		"161": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.setAvailableFormats"
+			"qualifiedName": "ExportState.lastExport"
 		},
 		"162": {
 			"packageName": "@anvilkit/core",
@@ -9855,12 +9965,12 @@
 		"163": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ids"
+			"qualifiedName": "ExportState.setAvailableFormats"
 		},
 		"164": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.setCurrentFormat"
+			"qualifiedName": "ids"
 		},
 		"165": {
 			"packageName": "@anvilkit/core",
@@ -9870,12 +9980,12 @@
 		"166": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "id"
+			"qualifiedName": "ExportState.setCurrentFormat"
 		},
 		"167": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.setIsExporting"
+			"qualifiedName": "id"
 		},
 		"168": {
 			"packageName": "@anvilkit/core",
@@ -9885,12 +9995,12 @@
 		"169": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "value"
+			"qualifiedName": "ExportState.setIsExporting"
 		},
 		"170": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.recordExport"
+			"qualifiedName": "value"
 		},
 		"171": {
 			"packageName": "@anvilkit/core",
@@ -9900,17 +10010,17 @@
 		"172": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "formatId"
+			"qualifiedName": "ExportState.recordExport"
 		},
 		"173": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ok"
+			"qualifiedName": "formatId"
 		},
 		"174": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportState.reset"
+			"qualifiedName": "ok"
 		},
 		"175": {
 			"packageName": "@anvilkit/core",
@@ -9920,32 +10030,32 @@
 		"176": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "ExportStoreApi"
+			"qualifiedName": "ExportState.reset"
 		},
 		"177": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "LastExportRecord"
+			"qualifiedName": "ExportStoreApi"
 		},
 		"178": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "LastExportRecord.formatId"
+			"qualifiedName": "LastExportRecord"
 		},
 		"179": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "LastExportRecord.at"
+			"qualifiedName": "LastExportRecord.formatId"
 		},
 		"180": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/export-store.ts",
-			"qualifiedName": "LastExportRecord.ok"
+			"qualifiedName": "LastExportRecord.at"
 		},
 		"181": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProvider"
+			"packagePath": "src/react/stores/export-store.ts",
+			"qualifiedName": "LastExportRecord.ok"
 		},
 		"182": {
 			"packageName": "@anvilkit/core",
@@ -9955,32 +10065,32 @@
 		"183": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "__0"
+			"qualifiedName": "ThemeStoreProvider"
 		},
 		"184": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps"
+			"qualifiedName": "__0"
 		},
 		"185": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps.storeId"
+			"qualifiedName": "ThemeStoreProviderProps"
 		},
 		"186": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps.store"
+			"qualifiedName": "ThemeStoreProviderProps.storeId"
 		},
 		"187": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps.children"
+			"qualifiedName": "ThemeStoreProviderProps.store"
 		},
 		"188": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "useThemeStore"
+			"qualifiedName": "ThemeStoreProviderProps.children"
 		},
 		"189": {
 			"packageName": "@anvilkit/core",
@@ -9990,17 +10100,17 @@
 		"190": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "TResult"
+			"qualifiedName": "useThemeStore"
 		},
 		"191": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "selector"
+			"qualifiedName": "TResult"
 		},
 		"192": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "selector"
 		},
 		"193": {
 			"packageName": "@anvilkit/core",
@@ -10010,12 +10120,12 @@
 		"194": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "state"
+			"qualifiedName": "__type"
 		},
 		"195": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
-			"qualifiedName": "useThemeStoreApi"
+			"qualifiedName": "state"
 		},
 		"196": {
 			"packageName": "@anvilkit/core",
@@ -10024,18 +10134,18 @@
 		},
 		"197": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "CreateThemeStoreOptions"
+			"packagePath": "src/react/stores/ThemeStoreProvider.tsx",
+			"qualifiedName": "useThemeStoreApi"
 		},
 		"198": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "CreateThemeStoreOptions.storeId"
+			"qualifiedName": "CreateThemeStoreOptions"
 		},
 		"199": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "createThemeStore"
+			"qualifiedName": "CreateThemeStoreOptions.storeId"
 		},
 		"200": {
 			"packageName": "@anvilkit/core",
@@ -10045,37 +10155,37 @@
 		"201": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "options"
+			"qualifiedName": "createThemeStore"
 		},
 		"202": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeMode"
+			"qualifiedName": "options"
 		},
 		"203": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeResolved"
+			"qualifiedName": "ThemeMode"
 		},
 		"204": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeState"
+			"qualifiedName": "ThemeResolved"
 		},
 		"205": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeState.mode"
+			"qualifiedName": "ThemeState"
 		},
 		"206": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeState.resolved"
+			"qualifiedName": "ThemeState.mode"
 		},
 		"207": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeState.setMode"
+			"qualifiedName": "ThemeState.resolved"
 		},
 		"208": {
 			"packageName": "@anvilkit/core",
@@ -10085,12 +10195,12 @@
 		"209": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "mode"
+			"qualifiedName": "ThemeState.setMode"
 		},
 		"210": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeState.setResolved"
+			"qualifiedName": "mode"
 		},
 		"211": {
 			"packageName": "@anvilkit/core",
@@ -10100,12 +10210,12 @@
 		"212": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "resolved"
+			"qualifiedName": "ThemeState.setResolved"
 		},
 		"213": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
-			"qualifiedName": "ThemeState.reset"
+			"qualifiedName": "resolved"
 		},
 		"214": {
 			"packageName": "@anvilkit/core",
@@ -10113,6 +10223,11 @@
 			"qualifiedName": "ThemeState.reset"
 		},
 		"215": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/stores/theme-store.ts",
+			"qualifiedName": "ThemeState.reset"
+		},
+		"216": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/stores/theme-store.ts",
 			"qualifiedName": "ThemeStoreApi"

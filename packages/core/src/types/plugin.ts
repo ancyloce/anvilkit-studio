@@ -134,7 +134,66 @@ export interface StudioPluginMeta {
 	 * this flag.
 	 */
 	readonly capabilities?: StudioPluginCapabilities;
+
+	/**
+	 * Optional **static** header-action declarations — the toolbar
+	 * buttons a plugin will contribute, declared up-front on `meta` so
+	 * the chrome can reserve their slots *before* the plugin's chunk is
+	 * fetched and `register()` runs.
+	 *
+	 * The live {@link StudioHeaderAction}s returned from `register()`
+	 * carry the interactive `onClick` / `disabled` closures, which only
+	 * exist once the plugin is loaded. A {@link StaticHeaderActionPlaceholder}
+	 * is that same descriptor **minus** those two closures — everything
+	 * left (`id`, `label`, the string-name `icon`, `group`, `order`) is
+	 * serializable, so a lazy plugin can advertise its buttons while the
+	 * runtime stays React-free.
+	 *
+	 * A placeholder and the live action that share the **same `id`** are
+	 * one slot: render the placeholder (disabled) while the chunk loads,
+	 * then swap in the live action — positionally stable because both
+	 * sort by the same `(group, order, id)` key. See
+	 * `resolveHeaderActionSlots()` in `@anvilkit/core/runtime`.
+	 *
+	 * Advisory + additive: a plugin that omits this is unchanged, and a
+	 * placeholder whose `id` never gets a live action simply renders as a
+	 * permanently-disabled button (the host's cue that something failed
+	 * to register).
+	 */
+	readonly staticHeaderActions?: readonly StaticHeaderActionPlaceholder[];
+
+	/**
+	 * Optional hint for *when* a deferred (lazy) plugin's chunk should be
+	 * fetched. Advisory only — like {@link capabilities}, the runtime
+	 * does not gate behavior on it; hosts that wrap a plugin with
+	 * `lazyPlugin()` may read it to schedule the loader.
+	 *
+	 * See {@link StudioPluginPrefetch} for the per-value semantics. The
+	 * default (`"mount"`) is today's behavior: `compilePlugins()` awaits
+	 * every `register()`, so the chunk is fetched as soon as `<Studio>`
+	 * compiles its plugin array.
+	 */
+	readonly prefetch?: StudioPluginPrefetch;
 }
+
+/**
+ * When a deferred plugin's chunk should be fetched. Advisory hint on
+ * {@link StudioPluginMeta.prefetch}.
+ *
+ * - `"mount"` — **default / today's behavior.** The loader runs as part
+ *   of `compilePlugins()` when `<Studio>` mounts; the chunk is on the
+ *   compile critical path.
+ * - `"idle"` — the host should defer the loader to first idle
+ *   (`requestIdleCallback`) after first paint, so the chunk does not
+ *   compete with initial render. Useful for surfaces the user is
+ *   unlikely to open immediately.
+ * - `"interaction"` — **reserved / not yet honored.** True click-to-load
+ *   needs incremental plugin registration: `compilePlugins()` currently
+ *   awaits *all* `register()`s and returns a single runtime, so there is
+ *   no mid-session "add one plugin" seam. Declared for forward-compat;
+ *   hosts should treat it as `"idle"` until that seam ships.
+ */
+export type StudioPluginPrefetch = "mount" | "idle" | "interaction";
 
 /**
  * Declarative capability hint carried on {@link StudioPluginMeta}.
@@ -555,6 +614,29 @@ export interface StudioHeaderAction {
 	 */
 	readonly disabled?: (ctx: StudioPluginContext) => boolean;
 }
+
+/**
+ * The **serializable** subset of {@link StudioHeaderAction} a plugin can
+ * declare on {@link StudioPluginMeta.staticHeaderActions} before its
+ * chunk loads — the descriptor **minus** its two live closures
+ * (`onClick`, `disabled`).
+ *
+ * What remains (`id`, `label`, the string-name `icon`, `group`, `order`)
+ * is plain data, so the chrome can reserve a deferred plugin's toolbar
+ * slot during the load window without instantiating React or resolving
+ * the dynamic import. The placeholder and the live action are matched by
+ * `id`; both sort by the same `(group, order, id)` key, so swapping a
+ * placeholder for its live action causes no layout shift.
+ *
+ * Do **not** confuse the placeholder `icon` (a string name resolved via
+ * the chrome's curated `ICON_REGISTRY`) with {@link StudioPluginMeta.icon}
+ * (a `ReactNode`) — only the string-name form keeps this type
+ * serializable and the runtime React-free.
+ */
+export type StaticHeaderActionPlaceholder = Omit<
+	StudioHeaderAction,
+	"onClick" | "disabled"
+>;
 
 /**
  * React provider contributed by a plugin via
