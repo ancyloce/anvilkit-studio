@@ -2371,7 +2371,8 @@
 						{
 							"fileName": "react/studio/layout/StudioLoadingScreen.tsx",
 							"line": 43,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/layout/StudioLoadingScreen.tsx#L43"
 						}
 					],
 					"type": {
@@ -2408,7 +2409,8 @@
 						{
 							"fileName": "react/studio/layout/StudioLoadingScreen.tsx",
 							"line": 41,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/layout/StudioLoadingScreen.tsx#L41"
 						}
 					],
 					"type": {
@@ -2430,7 +2432,8 @@
 				{
 					"fileName": "react/studio/layout/StudioLoadingScreen.tsx",
 					"line": 34,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/layout/StudioLoadingScreen.tsx#L34"
 				}
 			]
 		},
@@ -7777,8 +7780,9 @@
 			"sources": [
 				{
 					"fileName": "react/studio/layout/StudioLoadingScreen.tsx",
-					"line": 93,
-					"character": 16
+					"line": 73,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/layout/StudioLoadingScreen.tsx#L73"
 				}
 			],
 			"signatures": [
@@ -7823,8 +7827,9 @@
 					"sources": [
 						{
 							"fileName": "react/studio/layout/StudioLoadingScreen.tsx",
-							"line": 93,
-							"character": 16
+							"line": 73,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/layout/StudioLoadingScreen.tsx#L73"
 						}
 					],
 					"parameters": [
