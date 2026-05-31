@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/validator",
-	"version": "0.1.6",
+	"version": "0.1.11",
 	"description": "Export-readiness validation for Puck component configs and AI-generated output.",
 	"type": "module",
 	"main": "./dist/index.cjs",

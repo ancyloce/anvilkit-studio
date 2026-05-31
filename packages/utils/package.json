@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/utils",
-	"version": "0.1.6",
+	"version": "0.1.11",
 	"description": "Zero-dependency helpers shared across Anvilkit runtime packages.",
 	"type": "module",
 	"main": "./dist/index.cjs",
