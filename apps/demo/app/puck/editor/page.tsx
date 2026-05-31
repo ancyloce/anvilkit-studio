@@ -18,22 +18,12 @@ import {
 	createMockGeneratePage,
 	createMockGenerateSection,
 } from "@anvilkit/plugin-ai-copilot/mock";
-import {
-	createAssetManagerPlugin,
-	dataUrlUploader,
-	getAssetRegistry,
-	type UploadResult,
-	uploadAsset,
-} from "@anvilkit/plugin-asset-manager";
+// Asset-manager runtime values are loaded lazily (see `lazy-plugins.ts`
+// + the dynamic imports in the export / asset-harness handlers below).
+// Only the `UploadResult` *type* is imported eagerly — `import type` is
+// erased by `verbatimModuleSyntax`, so it pulls no chunk.
+import type { UploadResult } from "@anvilkit/plugin-asset-manager";
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
-import {
-	createHtmlExportPlugin,
-	htmlFormat,
-} from "@anvilkit/plugin-export-html";
-import {
-	createReactExportPlugin,
-	reactFormat,
-} from "@anvilkit/plugin-export-react";
 import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -53,8 +43,16 @@ import {
 } from "../../../lib/collab-transport";
 import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
-import { createDemoVersionHistoryPlugins } from "../../../lib/history-sidebar-plugin";
-import { lazyCanvasStudioPlugin } from "../../../lib/lazy-plugins";
+import {
+	createLazyDemoVersionHistoryPlugins,
+	lazyAssetManagerNoHeaderPlugin,
+	lazyCanvasStudioPlugin,
+	lazyHtmlExportPlugin,
+	lazyReactExportPlugin,
+	loadAssetManager,
+	loadExportHtml,
+	loadExportReact,
+} from "../../../lib/lazy-plugins";
 import {
 	createDemoData,
 	createDemoModeHref,
@@ -70,31 +68,29 @@ import { smokeTestPlugin } from "../../../lib/smoke-test-plugin";
 import { tokenSwatchComponentConfig } from "../../../lib/token-swatch-component";
 import styles from "../puck.module.css";
 
-// Hoisted to module scope so React re-renders do not re-instantiate
-// the plugins (which would bust the AI copilot's WeakMap cache and
-// re-run compilePlugins inside <Studio>).
+// Plugin set (step 3.2 — pluggable lazy loading).
 //
-// `headerAction: false` opts the HTML plugin out of contributing its
-// own toolbar button — the AnvilKit chrome's `<PublishPanel>` is the
-// single entry point for every registered export format. The React
-// plugin doesn't accept an opt-out flag, but the chrome's
-// `<HeaderActions>` defensively filters any action whose id starts
-// with `export-`, so its toolbar button is hidden too. Both plugins
-// still register their `ExportFormatDefinition` with the runtime,
-// which is what the panel iterates.
-const htmlExportPlugin = createHtmlExportPlugin({ headerAction: false });
-const reactExportPlugin = createReactExportPlugin({
-	syntax: "tsx",
-	assetStrategy: "url-prop",
-});
-// Live asset-manager plugin: drives the sidebar's `image` module via the
-// `StudioAssetSource` registered on `onInit`. Uses the data URL uploader
-// so the demo works fully in-browser without a server-side persistence
-// dependency. The `?e2e=asset-manager` harness keeps its own instance.
-const liveAssetManagerPlugin = createAssetManagerPlugin({
-	uploader: dataUrlUploader(),
-	dataUrlAllowlistOptIn: true,
-});
+// The heavy / no-first-paint plugins are deferred via `lazyPlugin`
+// wrappers in `lazy-plugins.ts`, so their package chunks stay out of the
+// `/puck/editor` entry bundle until `<Studio>` compiles its plugins:
+//   - export-html / export-react — publish-panel formats only
+//   - asset-manager — sidebar image module (header action stripped via
+//     the lazy-preserving `lazyPluginWith(withoutHeaderActions)`)
+//   - version-history pair — sidebar history panel (+ its `/ui` chunk)
+//   - canvas-studio — already lazy (pulls Konva + react-konva)
+//
+// AI Copilot and Design System stay EAGER on purpose:
+//   - `copilotSidebarPlugin` closes over the live `aiCopilotPlugin`
+//     instance and renders `<AiCopilotPanel plugin={…}>`, so deferral
+//     would mean restructuring the live-instance panel (and risks the
+//     AI-copilot E2E contract) — out of scope for 3.2.
+//   - `TokenSwatch` (in `editorDemoConfig`, a *static* Puck config
+//     component) pulls the design-system field factories, so the plugin
+//     cannot leave the entry without moving that component first.
+//
+// All wrappers are module-scope constants so React re-renders don't mint
+// new plugin identities (which would churn the fingerprint and re-run
+// `compilePlugins` inside <Studio>, wiping editor/AI data).
 const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 
 // Design System plugin: contributes the `--ak-ds-*` token-bound field
@@ -141,38 +137,75 @@ const aiCopilotPlugin = createAiCopilotPlugin({
 // above).
 const copilotSidebarPlugin = createCopilotSidebarPlugin({ aiCopilotPlugin });
 
-// Pairs the headless `@anvilkit/plugin-version-history` plugin with a
-// thin sidebar-panel registration so the StudioSidebar's `history`
-// module renders snapshot save/list/diff/restore. Same module-scope
-// hoist as the copilot pair so registrations stay stable across
-// re-renders. localStorage adapter persists across reloads.
+// Lazy version-history pair (headless history plugin + sidebar panel).
+// The demo factory eagerly pulls `@anvilkit/plugin-version-history` and
+// its `/ui` subpath, so it is deferred behind one shared `import()` (see
+// `createLazyDemoVersionHistoryPlugins`). The headless plugin's header
+// action is stripped inside the lazy boundary so the chrome owns the
+// toolbar; the sidebar panel registers `StudioHistoryPanel`.
 const {
-	versionHistoryPlugin: demoVersionHistoryPlugin,
-	sidebarPlugin: historySidebarPlugin,
-} = createDemoVersionHistoryPlugins({
-	puckConfig: editorDemoConfig as unknown as Config,
-});
+	versionHistoryPlugin: versionHistoryNoHeaderPlugin,
+	historySidebarPlugin,
+} = createLazyDemoVersionHistoryPlugins(editorDemoConfig as unknown as Config);
 
-// Demo chrome: drop the "Upload asset" / "Save snapshot" / "Open
-// history" toolbar buttons from the StudioHeader. The plugins still
-// power their sidebar modules (image picker, history panel) and
-// register every other artifact with the runtime — only their
-// `headerActions` block is stripped. Module-scope so the wrapped
-// references stay stable across re-renders, matching the hoist
-// rationale for the plugins above.
-function withoutHeaderActions(plugin: StudioPlugin): StudioPlugin {
-	return {
-		meta: plugin.meta,
-		async register(ctx) {
-			const { headerActions: _omitted, ...rest } = await plugin.register(ctx);
-			return rest;
-		},
-	};
+/**
+ * Host-supplied loading skeleton for the editor `<Studio loading={…}>`
+ * (3.4 Part 1). Renders in place of the shell's former bare `null` while
+ * the plugin runtime compiles and the chrome assets stream in — now that
+ * the heavy plugins are deferred behind `lazyPlugin` (3.2), that window
+ * is when their chunks download.
+ *
+ * Deliberately minimal and dependency-free: a full-frame placeholder
+ * (header strip + rail strip + centered status) using the demo's own CSS
+ * variables, so it needs no plugin context and adds nothing to the
+ * editor entry chunk beyond a few inline-styled divs.
+ */
+function EditorSkeleton() {
+	return (
+		<div
+			data-testid="studio-loading-skeleton"
+			aria-busy="true"
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				minHeight: "70vh",
+				border: "1px solid var(--demo-panel-border)",
+				borderRadius: "1.5rem",
+				overflow: "hidden",
+				background: "var(--demo-panel-bg)",
+			}}
+		>
+			<div
+				style={{
+					height: "3rem",
+					borderBottom: "1px solid var(--demo-panel-border)",
+					background: "var(--demo-secondary-bg)",
+				}}
+			/>
+			<div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+				<div
+					style={{
+						width: "3.5rem",
+						borderRight: "1px solid var(--demo-panel-border)",
+						background: "var(--demo-secondary-bg)",
+					}}
+				/>
+				<div
+					style={{
+						flex: 1,
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						color: "var(--demo-muted-text)",
+						fontSize: "0.9rem",
+					}}
+				>
+					Loading editor…
+				</div>
+			</div>
+		</div>
+	);
 }
-const assetManagerNoHeaderPlugin = withoutHeaderActions(liveAssetManagerPlugin);
-const versionHistoryNoHeaderPlugin = withoutHeaderActions(
-	demoVersionHistoryPlugin,
-);
 
 interface AssetManagerTestHarness {
 	readonly ctx: StudioPluginContext;
@@ -207,14 +240,22 @@ function createHeadlessStudioContext(): StudioPluginContext {
 
 async function createAssetManagerTestHarness(): Promise<AssetManagerTestHarness> {
 	const ctx = createHeadlessStudioContext();
+	// Load the plugin factories on demand (the harness only runs under
+	// `?e2e=asset-manager`), reusing the same memoized chunks as the live
+	// lazy plugin entries so no second copy is fetched.
+	const [assetManagerMod, htmlMod, reactMod] = await Promise.all([
+		loadAssetManager(),
+		loadExportHtml(),
+		loadExportReact(),
+	]);
 	const runtime = await compilePlugins(
 		[
-			createAssetManagerPlugin({
-				uploader: dataUrlUploader(),
+			assetManagerMod.createAssetManagerPlugin({
+				uploader: assetManagerMod.dataUrlUploader(),
 				dataUrlAllowlistOptIn: true,
 			}),
-			createHtmlExportPlugin(),
-			createReactExportPlugin({
+			htmlMod.createHtmlExportPlugin(),
+			reactMod.createReactExportPlugin({
 				syntax: "tsx",
 				assetStrategy: "url-prop",
 			}),
@@ -571,13 +612,13 @@ export default function PuckEditorPage() {
 	const plugins = useMemo(() => {
 		const base = [
 			smokeTestPlugin,
-			htmlExportPlugin,
-			reactExportPlugin,
+			lazyHtmlExportPlugin,
+			lazyReactExportPlugin,
 			aiCopilotPlugin,
 			copilotSidebarPlugin,
 			versionHistoryNoHeaderPlugin,
 			historySidebarPlugin,
-			assetManagerNoHeaderPlugin,
+			lazyAssetManagerNoHeaderPlugin,
 			designSystemPlugin,
 			lazyCanvasStudioPlugin,
 			demoCopySnippetPlugin,
@@ -681,6 +722,7 @@ export default function PuckEditorPage() {
 
 		try {
 			const harness = await ensureAssetManagerHarness();
+			const { getAssetRegistry, uploadAsset } = await loadAssetManager();
 
 			if (assetManagerUploadMode === "safe") {
 				harness.asset = await uploadAsset(harness.ctx, file);
@@ -798,6 +840,7 @@ export default function PuckEditorPage() {
 				publishedData,
 				editorDemoConfig as unknown as Config,
 			);
+			const { htmlFormat } = await loadExportHtml();
 			const result = await htmlFormat.run(ir, { title: "Exported Page" });
 			downloadExportResult(
 				result.content,
@@ -819,6 +862,7 @@ export default function PuckEditorPage() {
 				publishedData,
 				editorDemoConfig as unknown as Config,
 			);
+			const { reactFormat } = await loadExportReact();
 			const result = await reactFormat.run(ir, { syntax: "tsx" });
 			downloadExportResult(
 				result.content,
@@ -846,6 +890,7 @@ export default function PuckEditorPage() {
 				editorDemoConfig as unknown as Config,
 			);
 			if (formatId === "html") {
+				const { htmlFormat } = await loadExportHtml();
 				const result = await htmlFormat.run(ir, { title: "Exported Page" });
 				if (puckDragE2eMode) {
 					const w = window as unknown as {
@@ -868,6 +913,7 @@ export default function PuckEditorPage() {
 				return;
 			}
 			if (formatId === "react") {
+				const { reactFormat } = await loadExportReact();
 				const result = await reactFormat.run(ir, { syntax: "tsx" });
 				if (puckDragE2eMode) {
 					const w = window as unknown as {
@@ -1126,6 +1172,7 @@ export default function PuckEditorPage() {
 					puckConfig={editorDemoConfig as unknown as Config}
 					data={publishedData}
 					plugins={plugins}
+					loading={<EditorSkeleton />}
 					onPublish={handlePublish}
 					onPublishClick={handlePublishClick}
 					onSaveDraft={handleSaveDraft}

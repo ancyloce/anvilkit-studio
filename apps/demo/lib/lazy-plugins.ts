@@ -16,9 +16,44 @@
  */
 
 import type { StudioPlugin } from "@anvilkit/core";
-import { lazyPlugin } from "@anvilkit/core";
-import { Frame, History, Images } from "lucide-react";
+import {
+	lazyPlugin,
+	lazyPluginWith,
+	withoutHeaderActions,
+} from "@anvilkit/core";
+import type { Config } from "@puckeditor/core";
+import { FileCode, FileCode2, Frame, History } from "lucide-react";
 import { createElement } from "react";
+
+/**
+ * Collapse repeated `import()` of a plugin package to a single resolved
+ * value. Webpack already dedupes the chunk for an identical specifier,
+ * but memoizing the resolved promise also guarantees one shared module
+ * instance — so a lazy plugin entry's `register()` and any host handler
+ * that needs the same package's named exports never trigger two loads.
+ */
+function memoLoader<T>(load: () => Promise<T>): () => Promise<T> {
+	let promise: Promise<T> | undefined;
+	return () => {
+		promise ??= load();
+		return promise;
+	};
+}
+
+/**
+ * Deferred plugin-package modules. The chunk is fetched on first call.
+ * The editor page imports these so its export handlers and asset-manager
+ * test harness share the exact chunk the lazy plugin entries load.
+ */
+export const loadExportHtml = memoLoader(
+	() => import("@anvilkit/plugin-export-html"),
+);
+export const loadExportReact = memoLoader(
+	() => import("@anvilkit/plugin-export-react"),
+);
+export const loadAssetManager = memoLoader(
+	() => import("@anvilkit/plugin-asset-manager"),
+);
 
 // Demo host image for the Canvas Studio overlay's `image` tool. A 1×1
 // transparent PNG seeded into every opened design so a placed image resolves
@@ -28,53 +63,130 @@ const HOST_IMAGE_DATA_URL =
 	"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
 
 /**
- * Lazy-loaded asset-manager plugin. The
- * `@anvilkit/plugin-asset-manager` chunk is only fetched when this
- * plugin is included in `<Studio plugins={[...]} />`.
- *
- * The host can pass any uploader by augmenting the factory call inside
- * the loader; this demo uses the default in-memory uploader for
- * simplicity.
+ * Lazy HTML-export plugin. Only registers an `ExportFormatDefinition`
+ * (no first-paint pixel), so deferring it cannot cause a layout shift.
+ * `headerAction: false` mirrors the editor's chrome contract: the
+ * AnvilKit `<PublishPanel>` is the single entry point for every format,
+ * so the plugin's own toolbar button is suppressed.
  */
-export const lazyAssetManagerPlugin: StudioPlugin = lazyPlugin(
+export const lazyHtmlExportPlugin: StudioPlugin = lazyPlugin(
 	async () => {
-		const mod = await import("@anvilkit/plugin-asset-manager");
-		return mod.createAssetManagerPlugin({
-			uploader: mod.inMemoryUploader(),
-		});
+		const mod = await loadExportHtml();
+		return mod.createHtmlExportPlugin({ headerAction: false });
 	},
 	{
-		id: "@anvilkit/plugin-asset-manager",
-		name: "Asset Manager",
-		version: "0.1.0",
-		coreVersion: "^0.1.0",
-		description: "Sidebar asset library + uploader",
+		id: "anvilkit-plugin-export-html",
+		name: "HTML Export",
+		version: "0.1.4",
+		coreVersion: "^0.1.0-alpha",
+		description: "Export Puck pages as standalone HTML documents.",
 		capabilities: { header: true },
-		icon: createElement(Images),
+		icon: createElement(FileCode),
 	},
 );
 
 /**
- * Lazy-loaded version-history plugin. Chunk only fetched when
- * included in the `plugins` array.
+ * Lazy React-export plugin. Same rationale as {@link lazyHtmlExportPlugin}
+ * — a publish-panel format with no first-paint surface. The chrome's
+ * `<HeaderActions>` already filters any `export-*` action id, so no
+ * `headerAction` opt-out flag is needed here.
  */
-export const lazyVersionHistoryPlugin: StudioPlugin = lazyPlugin(
+export const lazyReactExportPlugin: StudioPlugin = lazyPlugin(
 	async () => {
-		const mod = await import("@anvilkit/plugin-version-history");
-		return mod.createVersionHistoryPlugin({
-			adapter: mod.inMemoryAdapter(),
+		const mod = await loadExportReact();
+		return mod.createReactExportPlugin({
+			syntax: "tsx",
+			assetStrategy: "url-prop",
 		});
 	},
 	{
-		id: "@anvilkit/plugin-version-history",
-		name: "Version History",
-		version: "0.1.0",
-		coreVersion: "^0.1.0",
-		description: "Sidebar history panel + snapshot adapter",
+		id: "anvilkit-plugin-export-react",
+		name: "React Export",
+		version: "0.1.4",
+		coreVersion: "^0.1.3",
+		description: "Export Puck pages as React (.tsx / .jsx) source files.",
 		capabilities: { header: true },
-		icon: createElement(History),
+		icon: createElement(FileCode2),
 	},
 );
+
+/**
+ * Lazy asset-manager plugin wired for the demo: the `data:` URL uploader
+ * (works fully in-browser, no server) with the header action stripped so
+ * the chrome owns the toolbar. {@link lazyPluginWith} applies the
+ * {@link withoutHeaderActions} transform *inside* the lazy boundary, so
+ * the chunk is still only fetched at `register()` time (the old eager
+ * `withoutHeaderActions(instance)` wrapper forced the import at module
+ * scope). Shares {@link loadAssetManager} with the editor's e2e harness.
+ *
+ * Uses the two-argument `lazyPluginWith(load, transform)` form: the
+ * plugin's `meta` (id, version, `coreVersion`, …) is loaded from the
+ * chunk rather than re-declared here. Safe for this plugin because its
+ * header action is stripped, so the chrome never needs its
+ * `capabilities.header` reserved before the chunk loads (other
+ * header-capable plugins keep the header-action region rendered).
+ */
+export const lazyAssetManagerNoHeaderPlugin: StudioPlugin = lazyPluginWith(
+	async () => {
+		const mod = await loadAssetManager();
+		return mod.createAssetManagerPlugin({
+			uploader: mod.dataUrlUploader(),
+			dataUrlAllowlistOptIn: true,
+		});
+	},
+	withoutHeaderActions,
+);
+
+/**
+ * Lazy version-history pair for the demo. The demo's
+ * `createDemoVersionHistoryPlugins` (in `history-sidebar-plugin.tsx`)
+ * eagerly pulls `@anvilkit/plugin-version-history` + its `/ui` subpath,
+ * so we defer the whole module behind one memoized `import()` and expose
+ * two lazy entries that share it:
+ *   - the headless plugin (header action stripped, chrome owns the
+ *     toolbar), and
+ *   - the sidebar-panel registration.
+ *
+ * `puckConfig` is needed by the sidebar panel to derive IR, so the
+ * factory is parameterized rather than module-scope.
+ */
+export function createLazyDemoVersionHistoryPlugins(puckConfig: Config): {
+	readonly versionHistoryPlugin: StudioPlugin;
+	readonly historySidebarPlugin: StudioPlugin;
+} {
+	const load = memoLoader(async () => {
+		const mod = await import("./history-sidebar-plugin");
+		return mod.createDemoVersionHistoryPlugins({ puckConfig });
+	});
+
+	const versionHistoryPlugin = lazyPluginWith(
+		async () => (await load()).versionHistoryPlugin,
+		{
+			id: "anvilkit-plugin-version-history",
+			name: "Version History",
+			version: "0.1.4",
+			coreVersion: "^0.1.0-alpha",
+			description: "Sidebar history panel + snapshot adapter",
+			capabilities: { header: true },
+			icon: createElement(History),
+		},
+		withoutHeaderActions,
+	);
+
+	const historySidebarPlugin = lazyPlugin(
+		async () => (await load()).sidebarPlugin,
+		{
+			id: "anvilkit-demo-history-sidebar",
+			name: "Demo Version History Sidebar",
+			version: "0.0.1",
+			coreVersion: "^0.1.0-alpha",
+			description:
+				"Registers @anvilkit/plugin-version-history's UI with the StudioSidebar `history` module.",
+		},
+	);
+
+	return { versionHistoryPlugin, historySidebarPlugin };
+}
 
 /**
  * Lazy-loaded Canvas Studio plugin. This is the heaviest plugin in the
