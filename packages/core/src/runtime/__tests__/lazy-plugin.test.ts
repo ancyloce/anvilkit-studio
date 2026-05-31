@@ -199,6 +199,91 @@ describe("lazyPluginWith + withoutHeaderActions", () => {
 	});
 });
 
+describe("lazyPluginWith — two-argument auto-meta form", () => {
+	it("synthesizes meta, strips headerActions, and defers the fetch", async () => {
+		const real = makeRealPlugin(makeMeta({ id: "com.example.real" }), {
+			exportFormats: [makeExportFormat("html")],
+			headerActions: [makeHeaderAction("export-html")],
+		});
+		const load = vi.fn(async () => real);
+		const plugin = lazyPluginWith(load, withoutHeaderActions);
+
+		// Loader is untouched until compile awaits register().
+		expect(load).not.toHaveBeenCalled();
+
+		const runtime = await compilePlugins([plugin], makeCtx());
+
+		expect(load).toHaveBeenCalledTimes(1);
+		expect(real.register).toHaveBeenCalledTimes(1);
+		expect(runtime.exportFormats.has("html")).toBe(true);
+		// The transform still runs inside the lazy boundary.
+		expect(runtime.headerActions).toEqual([]);
+	});
+
+	it("does not reject on id 'mismatch' — the declared id is synthesized", async () => {
+		// A real module whose id could never equal a synthesized placeholder.
+		const real = makeRealPlugin(makeMeta({ id: "com.example.whatever" }));
+		const load = vi.fn(async () => real);
+		const plugin = lazyPluginWith(load, withoutHeaderActions);
+
+		await expect(compilePlugins([plugin], makeCtx())).resolves.toBeDefined();
+		expect(real.register).toHaveBeenCalledTimes(1);
+	});
+
+	it("still enforces the loaded module's real coreVersion, post-fetch", async () => {
+		const real = makeRealPlugin(
+			makeMeta({ id: "com.example.real", coreVersion: "^99.0.0" }),
+		);
+		const load = vi.fn(async () => real);
+		const plugin = lazyPluginWith(load, withoutHeaderActions);
+
+		await expect(compilePlugins([plugin], makeCtx())).rejects.toThrow(
+			StudioPluginError,
+		);
+		// For auto-meta the coreVersion gate is post-fetch, so the loader ran…
+		expect(load).toHaveBeenCalledTimes(1);
+		// …but the real plugin's register() is never reached.
+		expect(real.register).not.toHaveBeenCalled();
+	});
+
+	it("gives each auto-meta plugin a unique placeholder id so two compile together", async () => {
+		const a = makeRealPlugin(makeMeta({ id: "real.a" }), {
+			exportFormats: [makeExportFormat("html")],
+		});
+		const b = makeRealPlugin(makeMeta({ id: "real.b" }), {
+			exportFormats: [makeExportFormat("react")],
+		});
+		const pluginA = lazyPluginWith(async () => a, withoutHeaderActions);
+		const pluginB = lazyPluginWith(async () => b, withoutHeaderActions);
+
+		const runtime = await compilePlugins([pluginA, pluginB], makeCtx());
+
+		expect(runtime.exportFormats.has("html")).toBe(true);
+		expect(runtime.exportFormats.has("react")).toBe(true);
+		// `runtime.pluginMeta` exposes the synthesized placeholder ids (the
+		// real ids live in the loaded modules) — and they are distinct, so
+		// the id-uniqueness gate accepts both.
+		const ids = runtime.pluginMeta.map((m) => m.id);
+		expect(ids).toHaveLength(2);
+		expect(ids[0]).not.toBe(ids[1]);
+		expect(ids).not.toContain("real.a");
+	});
+
+	it("throws if the explicit (3-arg) form omits the transform", () => {
+		// JS-caller guard: the typed overloads already forbid this at compile
+		// time, but a JS host could pass (load, meta) with no transform.
+		const load = vi.fn(async () => makeRealPlugin(makeMeta()));
+		expect(() =>
+			(
+				lazyPluginWith as unknown as (
+					l: typeof load,
+					m: StudioPluginMeta,
+				) => StudioPlugin
+			)(load, makeMeta()),
+		).toThrow(TypeError);
+	});
+});
+
 describe("withoutHeaderActions — pure transform", () => {
 	it("removes the headerActions key and preserves the rest by reference", () => {
 		const meta = makeMeta();

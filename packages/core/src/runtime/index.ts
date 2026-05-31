@@ -20,6 +20,10 @@ export {
 } from "./export-registry.js";
 export {
 	composeHeaderActions,
+	type HeaderActionSlot,
+	resolveHeaderActionSlots,
+	type SortableHeaderAction,
+	type StaticHeaderActionPlaceholder,
 	type StudioHeaderAction,
 } from "./header-actions.js";
 export {

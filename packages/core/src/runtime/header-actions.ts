@@ -38,13 +38,34 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md | core-009}
  */
 
-import type { StudioHeaderAction } from "@/types/plugin";
+import type {
+	StaticHeaderActionPlaceholder,
+	StudioHeaderAction,
+} from "@/types/plugin";
 import { StudioPluginError } from "./errors.js";
 
-// Re-export the type so consumers that import from
-// `@anvilkit/core/runtime` can pull `StudioHeaderAction` and
-// `composeHeaderActions` from a single subpath.
-export type { StudioHeaderAction } from "@/types/plugin";
+// Re-export the types so consumers that import from
+// `@anvilkit/core/runtime` can pull `StudioHeaderAction`,
+// `StaticHeaderActionPlaceholder`, and `composeHeaderActions` from a
+// single subpath.
+export type {
+	StaticHeaderActionPlaceholder,
+	StudioHeaderAction,
+} from "@/types/plugin";
+
+/**
+ * The minimal shape {@link composeHeaderActions} needs to order an
+ * action: only the three sort keys. Both {@link StudioHeaderAction} (live)
+ * and {@link StaticHeaderActionPlaceholder} (declared) satisfy it, so the
+ * exact same ordering applies whether or not the live `onClick` /
+ * `disabled` closures exist yet — that positional parity is what lets a
+ * placeholder swap to its live action with no layout shift.
+ */
+export interface SortableHeaderAction {
+	readonly id: string;
+	readonly group?: StudioHeaderAction["group"];
+	readonly order?: StudioHeaderAction["order"];
+}
 
 /**
  * Numeric weight assigned to each header action group, used as the
@@ -82,7 +103,7 @@ const DEFAULT_ORDER = 100;
  * Hoisted so the sort path stays straight-line — once this returns
  * we can sort with confidence that every action has a unique id.
  */
-function assertUniqueIds(actions: readonly StudioHeaderAction[]): void {
+function assertUniqueIds(actions: readonly SortableHeaderAction[]): void {
 	const seen = new Set<string>();
 	for (const action of actions) {
 		if (seen.has(action.id)) {
@@ -103,7 +124,10 @@ function assertUniqueIds(actions: readonly StudioHeaderAction[]): void {
  * `<` / `>` rather than `localeCompare` so the result is stable
  * across locales (and slightly cheaper).
  */
-function compareActions(a: StudioHeaderAction, b: StudioHeaderAction): number {
+function compareActions(
+	a: SortableHeaderAction,
+	b: SortableHeaderAction,
+): number {
 	const aGroup = GROUP_WEIGHT[a.group ?? DEFAULT_GROUP];
 	const bGroup = GROUP_WEIGHT[b.group ?? DEFAULT_GROUP];
 	if (aGroup !== bGroup) {
@@ -145,12 +169,71 @@ function compareActions(a: StudioHeaderAction, b: StudioHeaderAction): number {
  * action id; `compilePlugins()` provides richer attribution at the
  * layer above when it knows which plugin contributed each action.
  */
-export function composeHeaderActions(
-	actions: readonly StudioHeaderAction[],
-): StudioHeaderAction[] {
+export function composeHeaderActions<T extends SortableHeaderAction>(
+	actions: readonly T[],
+): T[] {
 	assertUniqueIds(actions);
 	// `[...actions]` produces a fresh array so we never mutate the
 	// caller's input. The spread is a single allocation — cheap
 	// even for large header surfaces.
 	return [...actions].sort(compareActions);
+}
+
+/**
+ * One resolved toolbar slot: either a fully-loaded live action or a
+ * static placeholder still awaiting its plugin's chunk.
+ *
+ * The discriminant lets the chrome render the two cases differently — a
+ * placeholder paints disabled (no `onClick`), a live action is
+ * interactive — while {@link resolveHeaderActionSlots} guarantees both
+ * occupy the same `(group, order, id)`-sorted position.
+ */
+export type HeaderActionSlot =
+	| { readonly kind: "live"; readonly action: StudioHeaderAction }
+	| {
+			readonly kind: "placeholder";
+			readonly action: StaticHeaderActionPlaceholder;
+	  };
+
+/**
+ * Coalesce declared placeholders and live header actions into one
+ * ordered slot list, keyed by `id`:
+ *
+ * - An `id` with a **live** action renders that action (the placeholder,
+ *   if any, is superseded — the chunk has landed).
+ * - An `id` with **only** a placeholder renders the placeholder, disabled
+ *   (its chunk is still loading, or never registered the action).
+ *
+ * The merged list is sorted by the shared `(group, order, id)` comparator
+ * so a placeholder and its eventual live action occupy the **same**
+ * position — swapping one for the other never shifts the toolbar.
+ *
+ * Pure + React-free: the chrome owns rendering; this only decides which
+ * descriptor wins each slot and in what order. Unlike
+ * {@link composeHeaderActions}, duplicate `id`s *within* either input are
+ * still rejected (a plugin must not declare the same button twice), but a
+ * placeholder and a live action sharing an `id` is the expected,
+ * non-duplicate case.
+ *
+ * @param placeholders - Static declarations from
+ * {@link StudioPluginMeta.staticHeaderActions} across all plugins.
+ * @param live - Live actions from `register()`, after the runtime
+ * concatenates every plugin's `headerActions`.
+ */
+export function resolveHeaderActionSlots(
+	placeholders: readonly StaticHeaderActionPlaceholder[],
+	live: readonly StudioHeaderAction[],
+): HeaderActionSlot[] {
+	assertUniqueIds(placeholders);
+	assertUniqueIds(live);
+
+	const liveIds = new Set(live.map((action) => action.id));
+	const slots: HeaderActionSlot[] = [
+		...live.map((action): HeaderActionSlot => ({ kind: "live", action })),
+		...placeholders
+			.filter((placeholder) => !liveIds.has(placeholder.id))
+			.map((action): HeaderActionSlot => ({ kind: "placeholder", action })),
+	];
+
+	return slots.sort((a, b) => compareActions(a.action, b.action));
 }
