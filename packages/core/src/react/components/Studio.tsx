@@ -36,6 +36,7 @@ import { type ChromeProps, ChromePropsProvider } from "@/context/chrome-props";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
 import { StudioRuntimeProvider } from "@/hooks/use-studio";
+import { StudioLoadingScreen } from "@/layout/StudioLoadingScreen";
 import type { StudioChromeMode } from "@/overrides/types";
 import { Toaster } from "@/primitives/sonner";
 import { TooltipProvider } from "@/primitives/tooltip";
@@ -230,31 +231,40 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		],
 	);
 
-	// Loading state. Defaults to bare `null` — no spinner, no fallback
-	// UI — so every host that does not opt in is byte-for-byte
-	// unchanged. A host that passes `loading` gets its node rendered
-	// here instead (3.4 Part 1); it still has the option of rendering
-	// its own loading state above `<Studio>`.
+	// Loading state. A host-supplied `loading` node always wins. When
+	// omitted, the anvilkit chrome falls back to the built-in
+	// `<StudioLoadingScreen />` skeleton (skeleton rail/panel/header +
+	// spinner-and-text canvas) so the pre-compile window shows the editor's
+	// shape instead of a blank frame; the legacy `chrome="puck"` path keeps
+	// the bare-`null` default so its output stays byte-for-byte identical to
+	// pre-Phase-5 Puck.
 	//
 	// Note (3.4 Part 2): the real anvilkit chrome (`<StudioLayout>`)
 	// mounts *inside* Puck's `puck` override slot and reads Puck state
 	// via `createUsePuck()`, so it cannot render before `<Puck>` mounts —
 	// and remounting `<Puck>` with a late plugin set tears it down (the
-	// documented data-wipe hazard). The safe progressive-chrome surface
-	// is therefore this host-supplied `loading` node, not an early
-	// `<Puck>` render; an in-Puck progressive shell is left as a
-	// browser-verified follow-up (plan §7).
+	// documented data-wipe hazard). The skeleton below is therefore a
+	// standalone pre-provider view, not an early `<Puck>` render; an
+	// in-Puck progressive shell is left as a browser-verified follow-up
+	// (plan §7).
+	//
+	// Fragment-wrap the host node so any `ReactNode` satisfies the
+	// component's `ReactElement | null` return without widening it.
+	const loadingFallback: ReactElement | null =
+		loading !== undefined ? (
+			<>{loading}</>
+		) : isAnvilkit ? (
+			<StudioLoadingScreen />
+		) : null;
 	if (compiled === null) {
-		// Fragment-wrap so the node (any `ReactNode`) satisfies the
-		// component's `ReactElement | null` return without widening it.
-		return loading === undefined ? null : <>{loading}</>;
+		return loadingFallback;
 	}
 	// AnvilKit chrome must wait for the dynamically-loaded preset +
 	// layout before rendering, otherwise `<Puck>` would see plain Puck
 	// overrides without the chrome's `puck` slot wrapping
 	// `<StudioLayout>`. Hold the loading node until both state slots agree.
 	if (isAnvilkit && chromeAssets === null) {
-		return loading === undefined ? null : <>{loading}</>;
+		return loadingFallback;
 	}
 
 	// `<Puck>` infers `UserConfig` from `config={puckConfig}`. The

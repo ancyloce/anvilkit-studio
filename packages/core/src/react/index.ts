@@ -20,3 +20,7 @@ export {
 export { type UseStudioResult, useStudio } from "./hooks/use-studio";
 export { mergeOverrides } from "./overrides/merge-overrides";
 export * from "./stores/index";
+export {
+	StudioLoadingScreen,
+	type StudioLoadingScreenProps,
+} from "./studio/layout/StudioLoadingScreen";

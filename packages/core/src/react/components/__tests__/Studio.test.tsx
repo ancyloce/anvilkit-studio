@@ -242,7 +242,7 @@ describe("<Studio> — mount and compile", () => {
 		expect(container.querySelector("[data-testid=studio-loading]")).toBeNull();
 	});
 
-	it("keeps the bare-null default when `loading` is omitted (back-compat)", async () => {
+	it("renders the built-in StudioLoadingScreen skeleton on the anvilkit path when `loading` is omitted", async () => {
 		const { container } = render(
 			<Studio
 				puckConfig={MINIMAL_PUCK_CONFIG}
@@ -251,7 +251,34 @@ describe("<Studio> — mount and compile", () => {
 			/>,
 		);
 
-		// No opt-in → the gate is still empty (byte-for-byte prior behavior).
+		// Default chrome is anvilkit → the pre-compile gate now paints the
+		// built-in skeleton (skeleton rail/panel/header + spinner canvas)
+		// instead of bare null. Puck has not mounted yet.
+		expect(
+			container.querySelector("[data-testid=studio-loading]"),
+		).not.toBeNull();
+		expect(puckMockState.lastProps).toBeNull();
+
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		// Post-compile: the skeleton is gone, Puck has taken its place.
+		expect(container.querySelector("[data-testid=studio-loading]")).toBeNull();
+	});
+
+	it('keeps the bare-null default on the legacy `chrome="puck"` path when `loading` is omitted (back-compat)', async () => {
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				data={EMPTY_DATA}
+				plugins={[]}
+				chrome="puck"
+			/>,
+		);
+
+		// Legacy puck path with no opt-in → no built-in skeleton: the gate
+		// is still empty (byte-for-byte prior behavior).
 		expect(puckMockState.lastProps).toBeNull();
 		expect(container.firstChild).toBeNull();
 

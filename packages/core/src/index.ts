@@ -63,6 +63,8 @@ export {
 export {
 	mergeOverrides,
 	Studio,
+	StudioLoadingScreen,
+	type StudioLoadingScreenProps,
 	type StudioLogger,
 	type StudioProps,
 	type UseStudioResult,
