@@ -208,6 +208,23 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.image.actions.delete": "Delete",
 	"studio.module.image.requireTarget":
 		"Drop the asset onto an image element on the canvas to replace it.",
+	"studio.module.image.folder.root": "All assets",
+	"studio.module.image.folder.new": "New folder",
+	"studio.module.image.folder.newPrompt": "Folder name",
+	"studio.module.image.folder.empty": "This folder is empty.",
+	"studio.module.image.source.all": "All",
+	"studio.module.image.source.library": "Library",
+	"studio.module.image.source.unsplash": "Unsplash",
+	"studio.module.image.theme.label": "Themes",
+	"assetManager.unsplash.theme.all": "All",
+	"assetManager.unsplash.theme.nature": "Nature",
+	"assetManager.unsplash.theme.architecture": "Architecture",
+	"assetManager.unsplash.theme.business": "Business",
+	"assetManager.unsplash.theme.food": "Food",
+	"assetManager.unsplash.theme.technology": "Technology",
+	"assetManager.unsplash.theme.travel": "Travel",
+	"assetManager.unsplash.theme.texture": "Texture",
+	"assetManager.unsplash.theme.people": "People",
 
 	// Module: text (PRD §8).
 	"studio.module.text.name": "Copywriting",

@@ -338,4 +338,130 @@ describe("ImageModule", () => {
 		fireEvent.click(await screen.findByTestId("ak-image-overflow-png-1"));
 		expect(screen.getByTestId("ak-image-action-open-cdn")).toBeTruthy();
 	});
+
+	it("renders folder navigation and scopes the query by folder", async () => {
+		const registry = createSidebarRegistryStore();
+		const listPaginated = vi.fn().mockResolvedValue({
+			items: [{ id: "a1", kind: "image", name: "a1.png", url: "asset://a1" }],
+			total: 1,
+			nextCursor: undefined,
+			folders: [
+				{
+					id: "f1",
+					name: "Marketing",
+					parentId: null,
+					counts: { assets: 2, folders: 0 },
+				},
+			],
+			folderPath: [],
+		});
+		const createFolder = vi
+			.fn()
+			.mockResolvedValue({ id: "f2", name: "New", parentId: null });
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated,
+				createFolder,
+			}),
+		);
+
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+
+		// Folder nav renders for a folder-aware source; the initial query is
+		// root-scoped (folderId null), and child folders are listed.
+		expect(await screen.findByTestId("ak-image-folder-nav")).toBeTruthy();
+		const marketing = await screen.findByRole("button", { name: /Marketing/ });
+		expect(listPaginated).toHaveBeenCalledWith(
+			expect.objectContaining({ folderId: null }),
+		);
+
+		// Navigating into a folder re-queries scoped to that folder.
+		fireEvent.click(marketing);
+		await waitFor(() => {
+			expect(listPaginated).toHaveBeenCalledWith(
+				expect.objectContaining({ folderId: "f1" }),
+			);
+		});
+	});
+
+	it("does not render folder nav for a flat (non-folder) source", async () => {
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated: vi.fn().mockResolvedValue({
+					items: [
+						{ id: "a1", kind: "image", name: "a1.png", url: "asset://a1" },
+					],
+					total: 1,
+					nextCursor: undefined,
+				}),
+			}),
+		);
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		await screen.findByLabelText("a1.png");
+		expect(screen.queryByTestId("ak-image-folder-nav")).toBeNull();
+		expect(screen.queryByTestId("ak-image-source-tabs")).toBeNull();
+	});
+
+	it("shows source tabs + theme chips and picks external results on insert", async () => {
+		const registry = createSidebarRegistryStore();
+		const pickResult = vi.fn().mockResolvedValue({
+			id: "unsplash:p1",
+			kind: "image",
+			name: "pic",
+			url: "asset://unsplash:p1",
+			source: "unsplash",
+		});
+		const listPaginated = vi.fn().mockResolvedValue({
+			items: [
+				{
+					id: "unsplash:p1",
+					kind: "image",
+					name: "pic",
+					url: "asset://unsplash:p1",
+					source: "unsplash",
+					thumbnailUrl: "https://images.unsplash.com/p1",
+				},
+			],
+			total: 1,
+			nextCursor: undefined,
+		});
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated,
+				listThemes: () => [
+					{ id: "nature", label: "assetManager.unsplash.theme.nature" },
+				],
+				pickResult,
+			}),
+		);
+
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+
+		expect(await screen.findByTestId("ak-image-source-tabs")).toBeTruthy();
+		// Switch to the Unsplash tab → theme chips appear.
+		fireEvent.click(screen.getByText("Unsplash"));
+		expect(await screen.findByTestId("ak-image-theme-chips")).toBeTruthy();
+
+		// Clicking an external tile picks it (registers + fires the download trigger).
+		fireEvent.click(await screen.findByLabelText("pic"));
+		await waitFor(() => {
+			expect(pickResult).toHaveBeenCalled();
+		});
+	});
 });

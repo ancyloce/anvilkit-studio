@@ -57,6 +57,39 @@ export function AssetImageTile({
 			>
 				{asset.name}
 			</p>
+			{/*
+			 * "Photo by <name> on Unsplash" is Unsplash's REQUIRED, fixed-format
+			 * credit (API guidelines) — intentionally hardcoded, not i18n-keyed.
+			 * The photographer + Unsplash links carry the UTM params the guidelines
+			 * mandate; both stopPropagation so a click credits rather than inserts.
+			 */}
+			{asset.attribution ? (
+				<p
+					className="truncate text-[10px] text-[var(--ak-studio-muted-fg)]"
+					data-testid="ak-image-attribution"
+				>
+					Photo by{" "}
+					<a
+						href={asset.attribution.photographerUrl}
+						target="_blank"
+						rel="noreferrer noopener"
+						className="underline"
+						onClick={(event) => event.stopPropagation()}
+					>
+						{asset.attribution.photographerName}
+					</a>{" "}
+					on{" "}
+					<a
+						href={asset.attribution.sourceUrl}
+						target="_blank"
+						rel="noreferrer noopener"
+						className="underline"
+						onClick={(event) => event.stopPropagation()}
+					>
+						Unsplash
+					</a>
+				</p>
+			) : null}
 		</div>
 	);
 }

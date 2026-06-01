@@ -40,12 +40,17 @@ import {
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 import type {
 	StudioAsset,
+	StudioAssetFolder,
 	StudioAssetKind,
+	StudioAssetTheme,
 	StudioAssetUploadEvent,
 } from "@/types/sidebar";
 import { AssetGrid, type UploadingTile } from "./image/AssetGrid";
+import { FolderNav } from "./image/FolderNav";
 import { ImageFilterStrip } from "./image/ImageFilterStrip";
 import { ImageSearchBar } from "./image/ImageSearchBar";
+import { ImageSourceTabs, type SourceTab } from "./image/ImageSourceTabs";
+import { ImageThemeChips } from "./image/ImageThemeChips";
 import { ImageUploadButton } from "./image/ImageUploadButton";
 import {
 	kindToComponentName,
@@ -84,6 +89,21 @@ export function ImageModule(): ReactNode {
 	const replacingIdRef = useRef<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const replaceInputRef = useRef<HTMLInputElement | null>(null);
+	// Phase-2 folder + source state. `currentFolderId === undefined` ⇒ not yet
+	// navigated (resolves to root for a folder-aware source); `null` ⇒ root.
+	const [currentFolderId, setCurrentFolderId] = useState<
+		string | null | undefined
+	>(undefined);
+	const [activeSource, setActiveSource] = useState<string | undefined>(
+		undefined,
+	);
+	const [folders, setFolders] = useState<readonly StudioAssetFolder[]>([]);
+	const [folderPath, setFolderPath] = useState<readonly StudioAssetFolder[]>(
+		[],
+	);
+	const [sourceTabs, setSourceTabs] = useState<readonly SourceTab[]>([]);
+	const [themes, setThemes] = useState<readonly StudioAssetTheme[]>([]);
+	const [activeTheme, setActiveTheme] = useState<string | undefined>(undefined);
 	const getPuck = useGetPuck();
 	const usesPaginatedListing = source?.listPaginated !== undefined;
 
@@ -110,17 +130,34 @@ export function ImageModule(): ReactNode {
 			try {
 				if (source.listPaginated !== undefined) {
 					const trimmedQuery = query.trim();
+					// Folder scoping only for a folder-aware source; otherwise the
+					// query is byte-identical to before (flat sources unaffected).
+					const folderAware = source.createFolder !== undefined;
+					const effectiveFolderId = folderAware
+						? (currentFolderId ?? null)
+						: undefined;
 					const page = await source.listPaginated({
 						query: trimmedQuery.length > 0 ? trimmedQuery : undefined,
 						kinds: filterToKinds(filter),
 						cursor,
 						limit: ASSET_PAGE_LIMIT,
+						...(effectiveFolderId !== undefined
+							? { folderId: effectiveFolderId }
+							: {}),
+						...(activeSource !== undefined ? { sources: [activeSource] } : {}),
+						...(activeTheme !== undefined
+							? { facets: { "unsplash:theme": [activeTheme] } }
+							: {}),
 					});
 					if (isStale()) return;
 					setAssets((current) =>
 						cursor === undefined ? page.items : [...current, ...page.items],
 					);
 					setNextCursor(page.nextCursor);
+					if (cursor === undefined) {
+						setFolders(page.folders ?? []);
+						setFolderPath(page.folderPath ?? []);
+					}
 					return;
 				}
 				const next = await Promise.resolve(source.list());
@@ -140,7 +177,53 @@ export function ImageModule(): ReactNode {
 				if (!isStale()) setAssetsLoading(false);
 			}
 		},
-		[filter, query, source],
+		[activeSource, activeTheme, currentFolderId, filter, query, source],
+	);
+
+	// Load the source's themes once to decide whether to show source tabs
+	// (a themed source ⇒ Library/Unsplash tabs). Flat sources stay tab-less.
+	useEffect(() => {
+		if (source?.listThemes === undefined) {
+			setSourceTabs([]);
+			setThemes([]);
+			return;
+		}
+		let active = true;
+		void Promise.resolve(source.listThemes())
+			.then((loadedThemes) => {
+				if (!active) return;
+				setThemes(loadedThemes);
+				if (loadedThemes.length > 0) {
+					setSourceTabs([
+						{ id: "local", label: msg("studio.module.image.source.library") },
+						{
+							id: "unsplash",
+							label: msg("studio.module.image.source.unsplash"),
+						},
+					]);
+					setActiveSource((prev) => prev ?? "local");
+				} else {
+					setSourceTabs([]);
+				}
+			})
+			.catch(() => {
+				if (active) setSourceTabs([]);
+			});
+		return () => {
+			active = false;
+		};
+	}, [source, msg]);
+
+	const handleCreateFolder = useCallback(
+		async (name: string): Promise<void> => {
+			if (source?.createFolder === undefined) return;
+			try {
+				await source.createFolder(currentFolderId ?? null, name);
+			} catch {
+				toast.error(msg("studio.module.image.upload.error"));
+			}
+		},
+		[currentFolderId, msg, source],
 	);
 
 	useEffect(() => {
@@ -253,18 +336,38 @@ export function ImageModule(): ReactNode {
 	useSetSidebarHeaderActions(headerActions);
 
 	const handleAssetClick = useCallback(
-		(asset: StudioAsset): void => {
-			const componentName = kindToComponentName(asset.kind);
+		async (asset: StudioAsset): Promise<void> => {
+			let insertable = asset;
+			// External browse results (Unsplash) must be picked first — this
+			// registers the asset + fires the MANDATORY download trigger so its
+			// asset://<id> reference resolves on insert.
+			if (
+				asset.source !== undefined &&
+				asset.source !== "local" &&
+				source?.pickResult !== undefined
+			) {
+				try {
+					insertable = await source.pickResult(asset);
+				} catch {
+					toast.error(msg("studio.module.image.upload.error"));
+					return;
+				}
+			}
+			const componentName = kindToComponentName(insertable.kind);
 			if (componentName === null) return;
 			// Centralized, zone-preserving append against the latest
 			// snapshot (review finding M2). No-ops if the component is
 			// not registered in the live Puck config.
 			appendComponentToRoot(getPuck(), componentName, {
 				id: generateNodeId(componentName),
-				...kindToPropsForInsert(asset.kind, asset.url, asset.name),
+				...kindToPropsForInsert(
+					insertable.kind,
+					insertable.url,
+					insertable.name,
+				),
 			});
 		},
-		[getPuck],
+		[getPuck, msg, source],
 	);
 
 	const handleRenameSubmit = useCallback(
@@ -312,6 +415,32 @@ export function ImageModule(): ReactNode {
 	return (
 		<div data-testid="ak-module-image" className="flex h-full flex-col">
 			<div className="shrink-0 space-y-2 border-b border-[var(--ak-studio-border)] p-2">
+				{sourceTabs.length > 1 ? (
+					<ImageSourceTabs
+						tabs={sourceTabs}
+						active={activeSource ?? sourceTabs[0]?.id ?? "local"}
+						onChange={setActiveSource}
+						ariaLabel={msg("studio.module.image.name")}
+					/>
+				) : null}
+				{activeSource === "unsplash" && themes.length > 0 ? (
+					<ImageThemeChips
+						themes={themes}
+						active={activeTheme}
+						onChange={setActiveTheme}
+					/>
+				) : null}
+				{source.createFolder !== undefined ? (
+					<FolderNav
+						folderPath={folderPath}
+						folders={folders}
+						onNavigate={setCurrentFolderId}
+						onCreateFolder={handleCreateFolder}
+						rootLabel={msg("studio.module.image.folder.root")}
+						newLabel={msg("studio.module.image.folder.new")}
+						newPromptLabel={msg("studio.module.image.folder.newPrompt")}
+					/>
+				) : null}
 				<ImageFilterStrip />
 				<ImageSearchBar onChange={setQuery} />
 			</div>
