@@ -13,47 +13,77 @@ data sync — all behind one `plugins={[...]}` entry, no React wrapper.
 ## 1. Install
 
 ```sh
-pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs
+# the factory + its yjs peer, plus a WebSocket provider for managed mode
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs @hocuspocus/provider
 ```
 
 `@anvilkit/plugin-collab-yjs` is a peer of `@anvilkit/collab-ui` (the
-factory composes the two packages together). Hosts that want the
-adapter without React UI can install only the yjs plugin — see § 4
-below.
+factory composes the two packages together). The provider
+(`@hocuspocus/provider`, or `y-websocket`) is an **optional** peer needed
+only for managed mode (§ 2) — omit it if you bring your own transport or
+run single-tab in-memory. Hosts that want the adapter without React UI can
+install only the yjs plugin — see § 4 below.
 
 ## 2. Integration recipe
 
-You own the `Y.Doc` and (optional) `Awareness` instance. The factory
-owns adapter and React UI construction.
+Set **one** value — the WebSocket relay URL. The plugin owns the entire
+transport: the `Y.Doc`, the `Awareness` channel, the provider, the
+connection-status bridge, and teardown. `room` defaults to
+`"anvilkit-default-room"`, `provider` to `"hocuspocus"`, and `self` to an
+auto-generated anonymous identity, so this is genuinely the whole recipe.
 
 ```tsx
 import { Studio } from "@anvilkit/core";
 import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+<Studio
+	puckConfig={myConfig}
+	plugins={[
+		createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig: myConfig }),
+	]}
+/>;
+```
+
+<Aside type="note" title="Install the provider">
+	Managed mode loads the WebSocket provider **lazily** (it never reaches your
+	initial bundle), so install the one you use — both are optional peers:
+	`@hocuspocus/provider` (the default backend) or `y-websocket` (when you set
+	`provider: "y-websocket"`). If you set `websocketUrl` without installing the
+	provider, the sync indicator shows a clear `error` status and
+	`onConnectionError` fires — never a cryptic bundler failure.
+</Aside>
+
+### Bring your own transport
+
+Already managing the `Y.Doc` / `Awareness` / provider yourself (a custom
+backend, a shared doc, or a host that tees connection status into its own UI)?
+Pass them directly and the factory leaves transport entirely to you — fully
+backward compatible with pre-`websocketUrl` callers:
+
+```tsx
 import { Doc as YDoc } from "yjs";
 import { Awareness } from "y-protocols/awareness";
 
 const doc = new YDoc();
 const awareness = new Awareness(doc);
 
-<Studio
-	puckConfig={myConfig}
-	plugins={[
-		createCollabPlugin({
-			doc,
-			awareness,
-			self: { id: "alice", displayName: "Alice", color: "#f43f5e" },
-			puckConfig: myConfig,
-			onIdentityChange: (next) => {
-				// Mirror identity changes (e.g. from the settings popover)
-				// back into your auth/profile store.
-				updateProfile(next);
-			},
-		}),
-	]}
-/>;
+createCollabPlugin({
+	doc,
+	awareness,
+	self: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+	puckConfig: myConfig,
+	onIdentityChange: (next) => {
+		// Mirror identity changes (e.g. from the settings popover)
+		// back into your auth/profile store.
+		updateProfile(next);
+	},
+});
 ```
 
-That's it. The plugin contributes:
+When both `doc` and `websocketUrl` are passed, `doc` (BYO) wins and a one-time
+dev warning names the ignored field.
+
+The plugin contributes:
 
 | Contribution        | What you see                                                  |
 | ------------------- | ------------------------------------------------------------- |
@@ -67,9 +97,14 @@ That's it. The plugin contributes:
 
 ```tsx
 createCollabPlugin({
-	doc,
-	awareness,
-	self: alice,
+	// Managed-mode transport knobs (all optional; `websocketUrl` is the
+	// only field most hosts set)
+	websocketUrl: "wss://relay.example.com",
+	room: "doc-42", //              default "anvilkit-default-room"
+	provider: "y-websocket", //     default "hocuspocus"
+	token: authToken, //            forwarded to the relay (auth)
+	self: alice, //                 default: auto-generated anonymous identity
+	onConnectionError: (err) => toast.error(String(err)),
 
 	// Validate remote IR before dispatching (defense-in-depth)
 	validateRemoteIR: (ir) => (isWellFormed(ir) ? ir : null),
@@ -88,9 +123,8 @@ createCollabPlugin({
 	persistence: { indexedDb: true, broadcastChannel: true },
 
 	// Opt out of individual UI surfaces
-	presence: { enabled: false },          // hide remote cursors
-	notifications: { enabled: false },     // hide conflict toaster
-	collaboratorsStack: { enabled: false } // host wires its own collaborator widget
+	presence: { enabled: false }, //      hide remote cursors
+	notifications: { enabled: false }, // hide conflict toaster
 });
 ```
 

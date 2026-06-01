@@ -120,9 +120,20 @@ export async function createCollabHocuspocusTransport(
 		// this source after its own dynamic `import()` resolves — by which
 		// point the initial `connected` / `synced` one-shots have usually
 		// already fired and are missed, leaving the indicator stuck on
-		// "connecting". Emit the CURRENT state synchronously on attach.
+		// "connecting". Emit the CURRENT state synchronously on attach. The
+		// middle `websocketProvider?.status` branch (load-bearing — it was
+		// missing from this docs copy) reports a relay that is reachable but
+		// already disconnected as `offline` rather than a stuck `connecting`.
 		if (provider.isSynced) {
 			emit({ kind: "synced", since: new Date().toISOString() });
+		} else if (
+			provider.configuration.websocketProvider?.status === "disconnected"
+		) {
+			emit({
+				kind: "offline",
+				since: new Date().toISOString(),
+				queuedEdits: 0,
+			});
 		} else {
 			emit({ kind: "connecting" });
 		}

@@ -330,9 +330,17 @@ export default function Playground() {
 	const [aiError, setAiError] = useState<string | null>(null);
 	const [saveStatus, setSaveStatus] = useState<string>("");
 	const [hydrated, setHydrated] = useState(false);
-	// Collaboration plugins resolve asynchronously (in-memory Yjs
-	// transport + the consolidated `createCollabPlugin()` factory), and
-	// only when the page is opened with `?collab=1`. Null until then.
+	// Collaboration plugins resolve asynchronously (Yjs transport + the
+	// consolidated `createCollabPlugin()` factory), and only when the page is
+	// opened with `?collab=1`. Null until then.
+	//
+	// The playground intentionally stays on **BYO transport** (passing
+	// `doc`/`awareness`/`connectionSource`) rather than the `websocketUrl`
+	// one-liner: it tees the transport's `ConnectionStatus` into a page-level
+	// badge + mode/save indicators (see the `connectionSource` wrapper below).
+	// The one-liner owns the transport and does not expose that status stream
+	// to the host yet (a `useCollabStatus`-at-host hook is deferred — PRD §11),
+	// exactly like the demo's `/collab` route.
 	const [collabPlugins, setCollabPlugins] = useState<
 		readonly StudioPlugin[] | null
 	>(null);
@@ -472,7 +480,11 @@ export default function Playground() {
 					connectionSource,
 					self,
 					puckConfig: playgroundConfig as unknown as Config,
-					presence: { className: "!fixed z-[9999]" },
+					// `createCollabStudioPlugin` below already broadcasts the local
+					// cursor + selection together; opt out of the plugin's built-in
+					// cursor publisher so the two writers don't clobber each other
+					// (awareness replaces the whole presence frame per update).
+					presence: { className: "!fixed z-[9999]", broadcastCursor: false },
 				});
 				// `createCollabStudioPlugin` reads the adapter from the
 				// `<CollabUIProvider>` context the consolidated factory provides,
