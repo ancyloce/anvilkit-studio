@@ -10592,7 +10592,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioAssetSource",
-						"target": 915
+						"target": 944
 					},
 					{
 						"kind": "text",
@@ -10601,6 +10601,164 @@
 				]
 			},
 			"children": [
+				{
+					"id": 889,
+					"name": "attribution",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Visible attribution for credit-requiring sources (Unsplash). Shown on the tile."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 184,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L184"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 890,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 891,
+									"name": "photographerName",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 185,
+											"character": 11,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L185"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 892,
+									"name": "photographerUrl",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 186,
+											"character": 11,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L186"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 893,
+									"name": "sourceUrl",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 187,
+											"character": 11,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L187"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										891,
+										892,
+										893
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 887,
+					"name": "folderId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional owning folder (PRD 0002 §7). "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": "/absent ⇒ root."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 180,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L180"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				},
 				{
 					"id": 879,
 					"name": "id",
@@ -10612,9 +10770,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 115,
+							"line": 165,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L115"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L165"
 						}
 					],
 					"type": {
@@ -10633,14 +10791,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 116,
+							"line": 166,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L116"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L166"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": 904,
+						"target": 922,
 						"name": "StudioAssetKind",
 						"package": "@anvilkit/core"
 					}
@@ -10681,9 +10839,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 124,
+							"line": 174,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L124"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L174"
 						}
 					],
 					"type": {
@@ -10710,9 +10868,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 118,
+							"line": 168,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L118"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L168"
 						}
 					],
 					"type": {
@@ -10740,14 +10898,60 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 128,
+							"line": 178,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L128"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L178"
 						}
 					],
 					"type": {
 						"type": "intrinsic",
 						"name": "number"
+					}
+				},
+				{
+					"id": 888,
+					"name": "source",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional provenance — which source produced it (e.g. "
+							},
+							{
+								"kind": "code",
+								"text": "`\"local\"`"
+							},
+							{
+								"kind": "text",
+								"text": " | "
+							},
+							{
+								"kind": "code",
+								"text": "`\"unsplash\"`"
+							},
+							{
+								"kind": "text",
+								"text": ")."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 182,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L182"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
 					}
 				},
 				{
@@ -10770,9 +10974,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 126,
+							"line": 176,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L126"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L176"
 						}
 					],
 					"type": {
@@ -10815,9 +11019,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 122,
+							"line": 172,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L122"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L172"
 						}
 					],
 					"type": {
@@ -10844,9 +11048,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 120,
+							"line": 170,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L120"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L170"
 						}
 					],
 					"type": {
@@ -10859,11 +11063,14 @@
 				{
 					"title": "Properties",
 					"children": [
+						889,
+						887,
 						879,
 						880,
 						884,
 						881,
 						886,
+						888,
 						885,
 						883,
 						882
@@ -10873,14 +11080,14 @@
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 114,
+					"line": 164,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L114"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L164"
 				}
 			]
 		},
 		{
-			"id": 887,
+			"id": 894,
 			"name": "StudioAssetAction",
 			"variant": "declaration",
 			"kind": 256,
@@ -10903,7 +11110,7 @@
 			},
 			"children": [
 				{
-					"id": 890,
+					"id": 897,
 					"name": "icon",
 					"variant": "declaration",
 					"kind": 1024,
@@ -10930,9 +11137,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 242,
+							"line": 349,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L242"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L349"
 						}
 					],
 					"type": {
@@ -10941,7 +11148,7 @@
 					}
 				},
 				{
-					"id": 888,
+					"id": 895,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -10951,9 +11158,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 238,
+							"line": 345,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L238"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L345"
 						}
 					],
 					"type": {
@@ -10962,7 +11169,7 @@
 					}
 				},
 				{
-					"id": 889,
+					"id": 896,
 					"name": "labelKey",
 					"variant": "declaration",
 					"kind": 1024,
@@ -10980,9 +11187,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 240,
+							"line": 347,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L240"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L347"
 						}
 					],
 					"type": {
@@ -10991,7 +11198,7 @@
 					}
 				},
 				{
-					"id": 892,
+					"id": 899,
 					"name": "run",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11001,29 +11208,29 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 245,
+							"line": 352,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L245"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L352"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 893,
+							"id": 900,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 894,
+									"id": 901,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 895,
+											"id": 902,
 											"name": "input",
 											"variant": "param",
 											"kind": 32768,
@@ -11031,14 +11238,14 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 896,
+													"id": 903,
 													"name": "__type",
 													"variant": "declaration",
 													"kind": 65536,
 													"flags": {},
 													"children": [
 														{
-															"id": 897,
+															"id": 904,
 															"name": "asset",
 															"variant": "declaration",
 															"kind": 1024,
@@ -11048,9 +11255,9 @@
 															"sources": [
 																{
 																	"fileName": "types/sidebar.ts",
-																	"line": 246,
+																	"line": 353,
 																	"character": 11,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L246"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L353"
 																}
 															],
 															"type": {
@@ -11061,7 +11268,7 @@
 															}
 														},
 														{
-															"id": 898,
+															"id": 905,
 															"name": "log",
 															"variant": "declaration",
 															"kind": 1024,
@@ -11071,29 +11278,29 @@
 															"sources": [
 																{
 																	"fileName": "types/sidebar.ts",
-																	"line": 250,
+																	"line": 357,
 																	"character": 11,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L250"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L357"
 																}
 															],
 															"type": {
 																"type": "reflection",
 																"declaration": {
-																	"id": 899,
+																	"id": 906,
 																	"name": "__type",
 																	"variant": "declaration",
 																	"kind": 65536,
 																	"flags": {},
 																	"signatures": [
 																		{
-																			"id": 900,
+																			"id": 907,
 																			"name": "__type",
 																			"variant": "signature",
 																			"kind": 4096,
 																			"flags": {},
 																			"parameters": [
 																				{
-																					"id": 901,
+																					"id": 908,
 																					"name": "level",
 																					"variant": "param",
 																					"kind": 32768,
@@ -11121,7 +11328,7 @@
 																					}
 																				},
 																				{
-																					"id": 902,
+																					"id": 909,
 																					"name": "message",
 																					"variant": "param",
 																					"kind": 32768,
@@ -11132,7 +11339,7 @@
 																					}
 																				},
 																				{
-																					"id": 903,
+																					"id": 910,
 																					"name": "meta",
 																					"variant": "param",
 																					"kind": 32768,
@@ -11187,8 +11394,8 @@
 														{
 															"title": "Properties",
 															"children": [
-																897,
-																898
+																904,
+																905
 															]
 														}
 													]
@@ -11227,7 +11434,7 @@
 					}
 				},
 				{
-					"id": 891,
+					"id": 898,
 					"name": "tone",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11254,9 +11461,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 244,
+							"line": 351,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L244"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L351"
 						}
 					],
 					"type": {
@@ -11278,25 +11485,342 @@
 				{
 					"title": "Properties",
 					"children": [
-						890,
-						888,
-						889,
-						892,
-						891
+						897,
+						895,
+						896,
+						899,
+						898
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 237,
+					"line": 344,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L237"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L344"
 				}
 			]
 		},
 		{
-			"id": 905,
+			"id": 911,
+			"name": "StudioAssetFolder",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A folder returned by a folder-aware "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "StudioAssetSource",
+						"target": 944
+					},
+					{
+						"kind": "text",
+						"text": " (PRD 0002 §7).\n"
+					},
+					{
+						"kind": "code",
+						"text": "`parentId: null`"
+					},
+					{
+						"kind": "text",
+						"text": " is the root convention. Counts/timestamps are optional so a\nsource can supply a lightweight folder for the tree without them."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 917,
+					"name": "counts",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 118,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L118"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 918,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 919,
+									"name": "assets",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 119,
+											"character": 11,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L119"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 920,
+									"name": "folders",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 120,
+											"character": 11,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L120"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										919,
+										920
+									]
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 915,
+					"name": "createdAt",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 116,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L116"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 912,
+					"name": "id",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 113,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L113"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 921,
+					"name": "meta",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 122,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L122"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "number"
+											},
+											{
+												"type": "intrinsic",
+												"name": "boolean"
+											}
+										]
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 913,
+					"name": "name",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 114,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L114"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 914,
+					"name": "parentId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 115,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L115"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				},
+				{
+					"id": 916,
+					"name": "updatedAt",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 117,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L117"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						917,
+						915,
+						912,
+						921,
+						913,
+						914,
+						916
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types/sidebar.ts",
+					"line": 112,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L112"
+				}
+			]
+		},
+		{
+			"id": 923,
 			"name": "StudioAssetListPage",
 			"variant": "declaration",
 			"kind": 256,
@@ -11311,7 +11835,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioAssetSource.listPaginated",
-						"target": 918
+						"target": 947
 					},
 					{
 						"kind": "text",
@@ -11353,7 +11877,93 @@
 			},
 			"children": [
 				{
-					"id": 906,
+					"id": 928,
+					"name": "folderPath",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Root → … → current folder, for the breadcrumb."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 253,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L253"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 911,
+								"name": "StudioAssetFolder",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 927,
+					"name": "folders",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Child folders of "
+							},
+							{
+								"kind": "code",
+								"text": "`query.folderId`"
+							},
+							{
+								"kind": "text",
+								"text": " (folder-aware sources)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 251,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L251"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 911,
+								"name": "StudioAssetFolder",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 924,
 					"name": "items",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11363,9 +11973,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 177,
+							"line": 247,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L177"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L247"
 						}
 					],
 					"type": {
@@ -11383,7 +11993,7 @@
 					}
 				},
 				{
-					"id": 908,
+					"id": 926,
 					"name": "nextCursor",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11393,9 +12003,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 179,
+							"line": 249,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L179"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L249"
 						}
 					],
 					"type": {
@@ -11413,7 +12023,74 @@
 					}
 				},
 				{
-					"id": 907,
+					"id": 929,
+					"name": "sourceCursors",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Per-source page tokens for federated paging, keyed by source id."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 255,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L255"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											}
+										]
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 925,
 					"name": "total",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11423,9 +12100,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 178,
+							"line": 248,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L178"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L248"
 						}
 					],
 					"type": {
@@ -11438,23 +12115,26 @@
 				{
 					"title": "Properties",
 					"children": [
-						906,
-						908,
-						907
+						928,
+						927,
+						924,
+						926,
+						929,
+						925
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 176,
+					"line": 246,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L176"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L246"
 				}
 			]
 		},
 		{
-			"id": 909,
+			"id": 930,
 			"name": "StudioAssetListQuery",
 			"variant": "declaration",
 			"kind": 256,
@@ -11469,7 +12149,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioAssetSource.listPaginated",
-						"target": 918
+						"target": 947
 					},
 					{
 						"kind": "text",
@@ -11479,7 +12159,7 @@
 			},
 			"children": [
 				{
-					"id": 913,
+					"id": 934,
 					"name": "cursor",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11498,9 +12178,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 163,
+							"line": 223,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L163"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L223"
 						}
 					],
 					"type": {
@@ -11509,7 +12189,127 @@
 					}
 				},
 				{
-					"id": 911,
+					"id": 939,
+					"name": "facets",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Host facet selections, keyed by facet id."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 233,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L233"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				},
+				{
+					"id": 936,
+					"name": "folderId",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Scope to a folder. "
+							},
+							{
+								"kind": "code",
+								"text": "`null`"
+							},
+							{
+								"kind": "text",
+								"text": " = root only; "
+							},
+							{
+								"kind": "code",
+								"text": "`undefined`"
+							},
+							{
+								"kind": "text",
+								"text": " = any folder."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 227,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L227"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "literal",
+								"value": null
+							}
+						]
+					}
+				},
+				{
+					"id": 932,
 					"name": "kinds",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11528,9 +12328,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 159,
+							"line": 219,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L159"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L219"
 						}
 					],
 					"type": {
@@ -11540,7 +12340,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 904,
+								"target": 922,
 								"name": "StudioAssetKind",
 								"package": "@anvilkit/core"
 							}
@@ -11548,7 +12348,7 @@
 					}
 				},
 				{
-					"id": 914,
+					"id": 935,
 					"name": "limit",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11567,9 +12367,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 165,
+							"line": 225,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L165"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L225"
 						}
 					],
 					"type": {
@@ -11578,7 +12378,7 @@
 					}
 				},
 				{
-					"id": 910,
+					"id": 931,
 					"name": "query",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11597,9 +12397,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 157,
+							"line": 217,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L157"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L217"
 						}
 					],
 					"type": {
@@ -11608,7 +12408,114 @@
 					}
 				},
 				{
-					"id": 912,
+					"id": 937,
+					"name": "recursive",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Include assets in descendant folders."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 229,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L229"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 940,
+					"name": "sort",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Sort axis."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 235,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L235"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 941,
+						"name": "StudioAssetSort",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 938,
+					"name": "sources",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Restrict to one or more source ids. "
+							},
+							{
+								"kind": "code",
+								"text": "`undefined`"
+							},
+							{
+								"kind": "text",
+								"text": " = federate all."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 231,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L231"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					}
+				},
+				{
+					"id": 933,
 					"name": "tags",
 					"variant": "declaration",
 					"kind": 1024,
@@ -11627,9 +12534,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 161,
+							"line": 221,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L161"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L221"
 						}
 					],
 					"type": {
@@ -11649,25 +12556,147 @@
 				{
 					"title": "Properties",
 					"children": [
-						913,
-						911,
-						914,
-						910,
-						912
+						934,
+						939,
+						936,
+						932,
+						935,
+						931,
+						937,
+						940,
+						938,
+						933
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 155,
+					"line": 215,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L155"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L215"
 				}
 			]
 		},
 		{
-			"id": 915,
+			"id": 941,
+			"name": "StudioAssetSort",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Sort axis for "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "StudioAssetListQuery",
+						"target": 930
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 943,
+					"name": "direction",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 135,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L135"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "asc"
+							},
+							{
+								"type": "literal",
+								"value": "desc"
+							}
+						]
+					}
+				},
+				{
+					"id": 942,
+					"name": "field",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 134,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L134"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "literal",
+								"value": "name"
+							},
+							{
+								"type": "literal",
+								"value": "recent"
+							},
+							{
+								"type": "literal",
+								"value": "size"
+							},
+							{
+								"type": "literal",
+								"value": "kind"
+							},
+							{
+								"type": "literal",
+								"value": "relevance"
+							}
+						]
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						943,
+						942
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types/sidebar.ts",
+					"line": 133,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L133"
+				}
+			]
+		},
+		{
+			"id": 944,
 			"name": "StudioAssetSource",
 			"variant": "declaration",
 			"kind": 256,
@@ -11706,7 +12735,116 @@
 			},
 			"children": [
 				{
-					"id": 938,
+					"id": 985,
+					"name": "createFolder",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 309,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L309"
+						}
+					],
+					"signatures": [
+						{
+							"id": 986,
+							"name": "createFolder",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Create a folder under "
+									},
+									{
+										"kind": "code",
+										"text": "`parentId`"
+									},
+									{
+										"kind": "text",
+										"text": " ("
+									},
+									{
+										"kind": "code",
+										"text": "`null`"
+									},
+									{
+										"kind": "text",
+										"text": " ⇒ root)."
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 309,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L309"
+								}
+							],
+							"parameters": [
+								{
+									"id": 987,
+									"name": "parentId",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "literal",
+												"value": null
+											}
+										]
+									}
+								},
+								{
+									"id": 988,
+									"name": "name",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Promise"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 911,
+										"name": "StudioAssetFolder",
+										"package": "@anvilkit/core"
+									}
+								],
+								"name": "Promise",
+								"package": "typescript"
+							}
+						}
+					]
+				},
+				{
+					"id": 967,
 					"name": "delete",
 					"variant": "declaration",
 					"kind": 2048,
@@ -11716,14 +12854,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 215,
+							"line": 291,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L215"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L291"
 						}
 					],
 					"signatures": [
 						{
-							"id": 939,
+							"id": 968,
 							"name": "delete",
 							"variant": "signature",
 							"kind": 4096,
@@ -11739,14 +12877,14 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 215,
+									"line": 291,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L215"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L291"
 								}
 							],
 							"parameters": [
 								{
-									"id": 940,
+									"id": 969,
 									"name": "assetId",
 									"variant": "param",
 									"kind": 32768,
@@ -11777,7 +12915,7 @@
 					]
 				},
 				{
-					"id": 941,
+					"id": 970,
 					"name": "getUrl",
 					"variant": "declaration",
 					"kind": 2048,
@@ -11787,14 +12925,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 217,
+							"line": 293,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L217"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L293"
 						}
 					],
 					"signatures": [
 						{
-							"id": 942,
+							"id": 971,
 							"name": "getUrl",
 							"variant": "signature",
 							"kind": 4096,
@@ -11818,14 +12956,14 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 217,
+									"line": 293,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L217"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L293"
 								}
 							],
 							"parameters": [
 								{
-									"id": 943,
+									"id": 972,
 									"name": "assetId",
 									"variant": "param",
 									"kind": 32768,
@@ -11865,7 +13003,7 @@
 					]
 				},
 				{
-					"id": 916,
+					"id": 945,
 					"name": "list",
 					"variant": "declaration",
 					"kind": 2048,
@@ -11873,14 +13011,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 190,
+							"line": 266,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L190"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L266"
 						}
 					],
 					"signatures": [
 						{
-							"id": 917,
+							"id": 946,
 							"name": "list",
 							"variant": "signature",
 							"kind": 4096,
@@ -11896,9 +13034,9 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 190,
+									"line": 266,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L190"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L266"
 								}
 							],
 							"type": {
@@ -11948,7 +13086,7 @@
 					]
 				},
 				{
-					"id": 918,
+					"id": 947,
 					"name": "listPaginated",
 					"variant": "declaration",
 					"kind": 2048,
@@ -11958,14 +13096,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 196,
+							"line": 272,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L196"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L272"
 						}
 					],
 					"signatures": [
 						{
-							"id": 919,
+							"id": 948,
 							"name": "listPaginated",
 							"variant": "signature",
 							"kind": 4096,
@@ -11980,7 +13118,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "StudioAssetSource.list",
-										"target": 916
+										"target": 945
 									},
 									{
 										"kind": "text",
@@ -11991,21 +13129,21 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 196,
+									"line": 272,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L196"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L272"
 								}
 							],
 							"parameters": [
 								{
-									"id": 920,
+									"id": 949,
 									"name": "query",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 909,
+										"target": 930,
 										"name": "StudioAssetListQuery",
 										"package": "@anvilkit/core"
 									}
@@ -12021,7 +13159,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 905,
+										"target": 923,
 										"name": "StudioAssetListPage",
 										"package": "@anvilkit/core"
 									}
@@ -12033,7 +13171,473 @@
 					]
 				},
 				{
-					"id": 926,
+					"id": 1007,
+					"name": "listThemes",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 324,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L324"
+						}
+					],
+					"signatures": [
+						{
+							"id": 1008,
+							"name": "listThemes",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Browse themes for a themed source (e.g. Unsplash topics)."
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 324,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L324"
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"target": 1039,
+												"name": "StudioAssetTheme",
+												"package": "@anvilkit/core"
+											}
+										}
+									},
+									{
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Promise"
+										},
+										"typeArguments": [
+											{
+												"type": "typeOperator",
+												"operator": "readonly",
+												"target": {
+													"type": "array",
+													"elementType": {
+														"type": "reference",
+														"target": 1039,
+														"name": "StudioAssetTheme",
+														"package": "@anvilkit/core"
+													}
+												}
+											}
+										],
+										"name": "Promise",
+										"package": "typescript"
+									}
+								]
+							}
+						}
+					]
+				},
+				{
+					"id": 1003,
+					"name": "moveAsset",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 320,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L320"
+						}
+					],
+					"signatures": [
+						{
+							"id": 1004,
+							"name": "moveAsset",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Move an asset into a folder ("
+									},
+									{
+										"kind": "code",
+										"text": "`null`"
+									},
+									{
+										"kind": "text",
+										"text": " ⇒ root)."
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 320,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L320"
+								}
+							],
+							"parameters": [
+								{
+									"id": 1005,
+									"name": "assetId",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1006,
+									"name": "folderId",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "literal",
+												"value": null
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Promise"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "void"
+									}
+								],
+								"name": "Promise",
+								"package": "typescript"
+							}
+						}
+					]
+				},
+				{
+					"id": 999,
+					"name": "moveFolder",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 318,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L318"
+						}
+					],
+					"signatures": [
+						{
+							"id": 1000,
+							"name": "moveFolder",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 318,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L318"
+								}
+							],
+							"parameters": [
+								{
+									"id": 1001,
+									"name": "id",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1002,
+									"name": "parentId",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "literal",
+												"value": null
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Promise"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 911,
+										"name": "StudioAssetFolder",
+										"package": "@anvilkit/core"
+									}
+								],
+								"name": "Promise",
+								"package": "typescript"
+							}
+						}
+					]
+				},
+				{
+					"id": 1009,
+					"name": "pickResult",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 332,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L332"
+						}
+					],
+					"signatures": [
+						{
+							"id": 1010,
+							"name": "pickResult",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Materialize an external browse result into the catalog — registers it and\nfires any required download trigger (Unsplash) — returning the insertable\nasset whose "
+									},
+									{
+										"kind": "code",
+										"text": "`url`"
+									},
+									{
+										"kind": "text",
+										"text": " now resolves. Local assets need no pick."
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 332,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L332"
+								}
+							],
+							"parameters": [
+								{
+									"id": 1011,
+									"name": "asset",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 878,
+										"name": "StudioAsset",
+										"package": "@anvilkit/core"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Promise"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 878,
+										"name": "StudioAsset",
+										"package": "@anvilkit/core"
+									}
+								],
+								"name": "Promise",
+								"package": "typescript"
+							}
+						}
+					]
+				},
+				{
+					"id": 993,
+					"name": "removeFolder",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 314,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L314"
+						}
+					],
+					"signatures": [
+						{
+							"id": 994,
+							"name": "removeFolder",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 314,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L314"
+								}
+							],
+							"parameters": [
+								{
+									"id": 995,
+									"name": "id",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 996,
+									"name": "opts",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 997,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 998,
+													"name": "cascade",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true,
+														"isReadonly": true
+													},
+													"sources": [
+														{
+															"fileName": "types/sidebar.ts",
+															"line": 316,
+															"character": 20,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L316"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													}
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														998
+													]
+												}
+											]
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Promise"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "void"
+									}
+								],
+								"name": "Promise",
+								"package": "typescript"
+							}
+						}
+					]
+				},
+				{
+					"id": 955,
 					"name": "rename",
 					"variant": "declaration",
 					"kind": 2048,
@@ -12043,14 +13647,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 209,
+							"line": 285,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L209"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L285"
 						}
 					],
 					"signatures": [
 						{
-							"id": 927,
+							"id": 956,
 							"name": "rename",
 							"variant": "signature",
 							"kind": 4096,
@@ -12066,14 +13670,14 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 209,
+									"line": 285,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L209"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L285"
 								}
 							],
 							"parameters": [
 								{
-									"id": 928,
+									"id": 957,
 									"name": "assetId",
 									"variant": "param",
 									"kind": 32768,
@@ -12084,7 +13688,7 @@
 									}
 								},
 								{
-									"id": 929,
+									"id": 958,
 									"name": "nextName",
 									"variant": "param",
 									"kind": 32768,
@@ -12115,7 +13719,83 @@
 					]
 				},
 				{
-					"id": 930,
+					"id": 989,
+					"name": "renameFolder",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 313,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L313"
+						}
+					],
+					"signatures": [
+						{
+							"id": 990,
+							"name": "renameFolder",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 313,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L313"
+								}
+							],
+							"parameters": [
+								{
+									"id": 991,
+									"name": "id",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 992,
+									"name": "name",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Promise"
+								},
+								"typeArguments": [
+									{
+										"type": "reference",
+										"target": 911,
+										"name": "StudioAssetFolder",
+										"package": "@anvilkit/core"
+									}
+								],
+								"name": "Promise",
+								"package": "typescript"
+							}
+						}
+					]
+				},
+				{
+					"id": 959,
 					"name": "replace",
 					"variant": "declaration",
 					"kind": 2048,
@@ -12125,14 +13805,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 211,
+							"line": 287,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L211"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L287"
 						}
 					],
 					"signatures": [
 						{
-							"id": 931,
+							"id": 960,
 							"name": "replace",
 							"variant": "signature",
 							"kind": 4096,
@@ -12148,14 +13828,14 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 211,
+									"line": 287,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L211"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L287"
 								}
 							],
 							"parameters": [
 								{
-									"id": 932,
+									"id": 961,
 									"name": "assetId",
 									"variant": "param",
 									"kind": 32768,
@@ -12166,7 +13846,7 @@
 									}
 								},
 								{
-									"id": 933,
+									"id": 962,
 									"name": "file",
 									"variant": "param",
 									"kind": 32768,
@@ -12205,7 +13885,7 @@
 					]
 				},
 				{
-					"id": 934,
+					"id": 963,
 					"name": "setTags",
 					"variant": "declaration",
 					"kind": 2048,
@@ -12215,14 +13895,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 213,
+							"line": 289,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L213"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L289"
 						}
 					],
 					"signatures": [
 						{
-							"id": 935,
+							"id": 964,
 							"name": "setTags",
 							"variant": "signature",
 							"kind": 4096,
@@ -12238,14 +13918,14 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 213,
+									"line": 289,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L213"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L289"
 								}
 							],
 							"parameters": [
 								{
-									"id": 936,
+									"id": 965,
 									"name": "assetId",
 									"variant": "param",
 									"kind": 32768,
@@ -12256,7 +13936,7 @@
 									}
 								},
 								{
-									"id": 937,
+									"id": 966,
 									"name": "tags",
 									"variant": "param",
 									"kind": 32768,
@@ -12294,7 +13974,7 @@
 					]
 				},
 				{
-					"id": 944,
+					"id": 973,
 					"name": "subscribe",
 					"variant": "declaration",
 					"kind": 2048,
@@ -12304,14 +13984,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 222,
+							"line": 298,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L222"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L298"
 						}
 					],
 					"signatures": [
 						{
-							"id": 945,
+							"id": 974,
 							"name": "subscribe",
 							"variant": "signature",
 							"kind": 4096,
@@ -12335,14 +14015,14 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 222,
+									"line": 298,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L222"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L298"
 								}
 							],
 							"parameters": [
 								{
-									"id": 946,
+									"id": 975,
 									"name": "listener",
 									"variant": "param",
 									"kind": 32768,
@@ -12350,14 +14030,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 947,
+											"id": 976,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 948,
+													"id": 977,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
@@ -12375,14 +14055,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 949,
+									"id": 978,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 950,
+											"id": 979,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -12399,7 +14079,127 @@
 					]
 				},
 				{
-					"id": 951,
+					"id": 1012,
+					"name": "subscribeStatus",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 334,
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L334"
+						}
+					],
+					"signatures": [
+						{
+							"id": 1013,
+							"name": "subscribeStatus",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Subscribe to loading/mutation status (sync sources emit only "
+									},
+									{
+										"kind": "code",
+										"text": "`idle`"
+									},
+									{
+										"kind": "text",
+										"text": ")."
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "types/sidebar.ts",
+									"line": 334,
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L334"
+								}
+							],
+							"parameters": [
+								{
+									"id": 1014,
+									"name": "listener",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 1015,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"signatures": [
+												{
+													"id": 1016,
+													"name": "__type",
+													"variant": "signature",
+													"kind": 4096,
+													"flags": {},
+													"parameters": [
+														{
+															"id": 1017,
+															"name": "status",
+															"variant": "param",
+															"kind": 32768,
+															"flags": {},
+															"type": {
+																"type": "reference",
+																"target": 1020,
+																"name": "StudioAssetSourceStatus",
+																"package": "@anvilkit/core"
+															}
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "void"
+													}
+												}
+											]
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 1018,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 1019,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "void"
+											}
+										}
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"id": 980,
 					"name": "subscribeUploads",
 					"variant": "declaration",
 					"kind": 2048,
@@ -12409,14 +14209,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 229,
+							"line": 305,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L229"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L305"
 						}
 					],
 					"signatures": [
 						{
-							"id": 952,
+							"id": 981,
 							"name": "subscribeUploads",
 							"variant": "signature",
 							"kind": 4096,
@@ -12440,21 +14240,21 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 229,
+									"line": 305,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L229"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L305"
 								}
 							],
 							"parameters": [
 								{
-									"id": 953,
+									"id": 982,
 									"name": "listener",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 967,
+										"target": 1054,
 										"name": "StudioAssetUploadListener",
 										"package": "@anvilkit/core"
 									}
@@ -12463,14 +14263,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 954,
+									"id": 983,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 955,
+											"id": 984,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -12487,7 +14287,7 @@
 					]
 				},
 				{
-					"id": 921,
+					"id": 950,
 					"name": "upload",
 					"variant": "declaration",
 					"kind": 2048,
@@ -12495,14 +14295,14 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 203,
+							"line": 279,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L203"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L279"
 						}
 					],
 					"signatures": [
 						{
-							"id": 922,
+							"id": 951,
 							"name": "upload",
 							"variant": "signature",
 							"kind": 4096,
@@ -12534,14 +14334,14 @@
 							"sources": [
 								{
 									"fileName": "types/sidebar.ts",
-									"line": 203,
+									"line": 279,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L203"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L279"
 								}
 							],
 							"parameters": [
 								{
-									"id": 923,
+									"id": 952,
 									"name": "files",
 									"variant": "param",
 									"kind": 32768,
@@ -12565,7 +14365,7 @@
 									}
 								},
 								{
-									"id": 924,
+									"id": 953,
 									"name": "listener",
 									"variant": "param",
 									"kind": 32768,
@@ -12574,13 +14374,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 967,
+										"target": 1054,
 										"name": "StudioAssetUploadListener",
 										"package": "@anvilkit/core"
 									}
 								},
 								{
-									"id": 925,
+									"id": 954,
 									"name": "signal",
 									"variant": "param",
 									"kind": 32768,
@@ -12632,25 +14432,140 @@
 				{
 					"title": "Methods",
 					"children": [
-						938,
-						941,
-						916,
-						918,
-						926,
-						930,
-						934,
-						944,
-						951,
-						921
+						985,
+						967,
+						970,
+						945,
+						947,
+						1007,
+						1003,
+						999,
+						1009,
+						993,
+						955,
+						989,
+						959,
+						963,
+						973,
+						1012,
+						980,
+						950
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 188,
+					"line": 264,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L188"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L264"
+				}
+			]
+		},
+		{
+			"id": 1039,
+			"name": "StudioAssetTheme",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A browse theme (e.g. an Unsplash topic) exposed by a themed source. "
+					},
+					{
+						"kind": "code",
+						"text": "`label`"
+					},
+					{
+						"kind": "text",
+						"text": " is an i18n key."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 1042,
+					"name": "description",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 129,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L129"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 1040,
+					"name": "id",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 127,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L127"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 1041,
+					"name": "label",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "types/sidebar.ts",
+							"line": 128,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L128"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						1042,
+						1040,
+						1041
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "types/sidebar.ts",
+					"line": 126,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L126"
 				}
 			]
 		},
@@ -12790,7 +14705,7 @@
 			]
 		},
 		{
-			"id": 971,
+			"id": 1058,
 			"name": "StudioCopilotPanel",
 			"variant": "declaration",
 			"kind": 256,
@@ -12837,7 +14752,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioAssetSource",
-						"target": 915
+						"target": 944
 					},
 					{
 						"kind": "text",
@@ -12855,7 +14770,7 @@
 			},
 			"children": [
 				{
-					"id": 972,
+					"id": 1059,
 					"name": "render",
 					"variant": "declaration",
 					"kind": 1024,
@@ -12881,22 +14796,22 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 312,
+							"line": 419,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L312"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L419"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 973,
+							"id": 1060,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 974,
+									"id": 1061,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -12922,28 +14837,28 @@
 				{
 					"title": "Properties",
 					"children": [
-						972
+						1059
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 304,
+					"line": 411,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L304"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L411"
 				}
 			]
 		},
 		{
-			"id": 975,
+			"id": 1062,
 			"name": "StudioCopySnippet",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 979,
+					"id": 1066,
 					"name": "body",
 					"variant": "declaration",
 					"kind": 1024,
@@ -12953,9 +14868,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 273,
+							"line": 380,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L273"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L380"
 						}
 					],
 					"type": {
@@ -12964,7 +14879,7 @@
 					}
 				},
 				{
-					"id": 977,
+					"id": 1064,
 					"name": "category",
 					"variant": "declaration",
 					"kind": 1024,
@@ -12974,20 +14889,20 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 271,
+							"line": 378,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L271"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L378"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": 981,
+						"target": 1068,
 						"name": "StudioCopySnippetCategory",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 976,
+					"id": 1063,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -12997,9 +14912,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 270,
+							"line": 377,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L270"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L377"
 						}
 					],
 					"type": {
@@ -13008,7 +14923,7 @@
 					}
 				},
 				{
-					"id": 980,
+					"id": 1067,
 					"name": "tags",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13019,9 +14934,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 274,
+							"line": 381,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L274"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L381"
 						}
 					],
 					"type": {
@@ -13037,7 +14952,7 @@
 					}
 				},
 				{
-					"id": 978,
+					"id": 1065,
 					"name": "title",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13047,9 +14962,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 272,
+							"line": 379,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L272"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L379"
 						}
 					],
 					"type": {
@@ -13062,25 +14977,25 @@
 				{
 					"title": "Properties",
 					"children": [
-						979,
-						977,
-						976,
-						980,
-						978
+						1066,
+						1064,
+						1063,
+						1067,
+						1065
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 269,
+					"line": 376,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L269"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L376"
 				}
 			]
 		},
 		{
-			"id": 983,
+			"id": 1070,
 			"name": "StudioCopySnippetPack",
 			"variant": "declaration",
 			"kind": 256,
@@ -13111,7 +15026,7 @@
 			},
 			"children": [
 				{
-					"id": 984,
+					"id": 1071,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13121,9 +15036,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 284,
+							"line": 391,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L284"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L391"
 						}
 					],
 					"type": {
@@ -13132,7 +15047,7 @@
 					}
 				},
 				{
-					"id": 985,
+					"id": 1072,
 					"name": "locale",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13143,9 +15058,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 285,
+							"line": 392,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L285"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L392"
 						}
 					],
 					"type": {
@@ -13154,7 +15069,7 @@
 					}
 				},
 				{
-					"id": 986,
+					"id": 1073,
 					"name": "snippets",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13164,9 +15079,9 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 286,
+							"line": 393,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L286"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L393"
 						}
 					],
 					"type": {
@@ -13176,7 +15091,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 975,
+								"target": 1062,
 								"name": "StudioCopySnippet",
 								"package": "@anvilkit/core"
 							}
@@ -13188,23 +15103,23 @@
 				{
 					"title": "Properties",
 					"children": [
-						984,
-						985,
-						986
+						1071,
+						1072,
+						1073
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 283,
+					"line": 390,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L283"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L390"
 				}
 			]
 		},
 		{
-			"id": 987,
+			"id": 1074,
 			"name": "StudioDesignSystemPanel",
 			"variant": "declaration",
 			"kind": 256,
@@ -13251,7 +15166,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioCopilotPanel",
-						"target": 971
+						"target": 1058
 					},
 					{
 						"kind": "text",
@@ -13261,7 +15176,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioHistoryPanel",
-						"target": 991
+						"target": 1078
 					},
 					{
 						"kind": "text",
@@ -13279,7 +15194,7 @@
 			},
 			"children": [
 				{
-					"id": 988,
+					"id": 1075,
 					"name": "render",
 					"variant": "declaration",
 					"kind": 1024,
@@ -13305,22 +15220,22 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 365,
+							"line": 472,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L365"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L472"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 989,
+							"id": 1076,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 990,
+									"id": 1077,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -13346,16 +15261,16 @@
 				{
 					"title": "Properties",
 					"children": [
-						988
+						1075
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 357,
+					"line": 464,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L357"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L464"
 				}
 			]
 		},
@@ -14204,7 +16119,7 @@
 			]
 		},
 		{
-			"id": 991,
+			"id": 1078,
 			"name": "StudioHistoryPanel",
 			"variant": "declaration",
 			"kind": 256,
@@ -14251,7 +16166,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioCopilotPanel",
-						"target": 971
+						"target": 1058
 					},
 					{
 						"kind": "text",
@@ -14261,7 +16176,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioAssetSource",
-						"target": 915
+						"target": 944
 					},
 					{
 						"kind": "text",
@@ -14279,7 +16194,7 @@
 			},
 			"children": [
 				{
-					"id": 992,
+					"id": 1079,
 					"name": "render",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14305,22 +16220,22 @@
 					"sources": [
 						{
 							"fileName": "types/sidebar.ts",
-							"line": 338,
+							"line": 445,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L338"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L445"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 993,
+							"id": 1080,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 994,
+									"id": 1081,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -14346,21 +16261,21 @@
 				{
 					"title": "Properties",
 					"children": [
-						992
+						1079
 					]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 331,
+					"line": 438,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L331"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L438"
 				}
 			]
 		},
 		{
-			"id": 995,
+			"id": 1082,
 			"name": "StudioInsertSection",
 			"variant": "declaration",
 			"kind": 256,
@@ -14431,7 +16346,7 @@
 			},
 			"children": [
 				{
-					"id": 996,
+					"id": 1083,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14460,7 +16375,7 @@
 					}
 				},
 				{
-					"id": 999,
+					"id": 1086,
 					"name": "order",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14490,7 +16405,7 @@
 					}
 				},
 				{
-					"id": 998,
+					"id": 1085,
 					"name": "predicate",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14515,13 +16430,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 1000,
+						"target": 1087,
 						"name": "StudioInsertSectionPredicate",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 997,
+					"id": 1084,
 					"name": "titleKey",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14562,10 +16477,10 @@
 				{
 					"title": "Properties",
 					"children": [
-						996,
-						999,
-						998,
-						997
+						1083,
+						1086,
+						1085,
+						1084
 					]
 				}
 			],
@@ -14579,7 +16494,7 @@
 			]
 		},
 		{
-			"id": 1007,
+			"id": 1094,
 			"name": "StudioLayerQuickAdd",
 			"variant": "declaration",
 			"kind": 256,
@@ -14642,7 +16557,7 @@
 			},
 			"children": [
 				{
-					"id": 1010,
+					"id": 1097,
 					"name": "icon",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14680,7 +16595,7 @@
 					}
 				},
 				{
-					"id": 1008,
+					"id": 1095,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14701,7 +16616,7 @@
 					}
 				},
 				{
-					"id": 1011,
+					"id": 1098,
 					"name": "insert",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14718,13 +16633,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 1013,
+						"target": 1100,
 						"name": "StudioLayerQuickAddInserter",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 1009,
+					"id": 1096,
 					"name": "labelKey",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14753,7 +16668,7 @@
 					}
 				},
 				{
-					"id": 1012,
+					"id": 1099,
 					"name": "order",
 					"variant": "declaration",
 					"kind": 1024,
@@ -14779,11 +16694,11 @@
 				{
 					"title": "Properties",
 					"children": [
-						1010,
-						1008,
-						1011,
-						1009,
-						1012
+						1097,
+						1095,
+						1098,
+						1096,
+						1099
 					]
 				}
 			],
@@ -17928,7 +19843,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 887,
+												"target": 894,
 												"name": "StudioAssetAction",
 												"package": "@anvilkit/core"
 											}
@@ -17936,7 +19851,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -18097,7 +20012,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 915,
+												"target": 944,
 												"name": "StudioAssetSource",
 												"package": "@anvilkit/core"
 											}
@@ -18105,7 +20020,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -18195,7 +20110,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 971,
+												"target": 1058,
 												"name": "StudioCopilotPanel",
 												"package": "@anvilkit/core"
 											}
@@ -18203,7 +20118,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -18277,7 +20192,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 983,
+												"target": 1070,
 												"name": "StudioCopySnippetPack",
 												"package": "@anvilkit/core"
 											}
@@ -18285,7 +20200,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -18375,7 +20290,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 987,
+												"target": 1074,
 												"name": "StudioDesignSystemPanel",
 												"package": "@anvilkit/core"
 											}
@@ -18383,7 +20298,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -18473,7 +20388,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 991,
+												"target": 1078,
 												"name": "StudioHistoryPanel",
 												"package": "@anvilkit/core"
 											}
@@ -18481,7 +20396,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -18611,7 +20526,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 995,
+												"target": 1082,
 												"name": "StudioInsertSection",
 												"package": "@anvilkit/core"
 											}
@@ -18619,7 +20534,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -18701,7 +20616,7 @@
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 1007,
+												"target": 1094,
 												"name": "StudioLayerQuickAdd",
 												"package": "@anvilkit/core"
 											}
@@ -18709,7 +20624,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 1020,
+										"target": 1107,
 										"name": "StudioSidebarUnregister",
 										"package": "@anvilkit/core"
 									}
@@ -26120,7 +28035,7 @@
 							},
 							{
 								"type": "reference",
-								"target": 887,
+								"target": 894,
 								"name": "StudioAssetAction",
 								"package": "@anvilkit/core"
 							}
@@ -26150,7 +28065,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 915,
+								"target": 944,
 								"name": "StudioAssetSource",
 								"package": "@anvilkit/core"
 							},
@@ -26182,7 +28097,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 971,
+								"target": 1058,
 								"name": "StudioCopilotPanel",
 								"package": "@anvilkit/core"
 							},
@@ -26223,7 +28138,7 @@
 							},
 							{
 								"type": "reference",
-								"target": 983,
+								"target": 1070,
 								"name": "StudioCopySnippetPack",
 								"package": "@anvilkit/core"
 							}
@@ -26253,7 +28168,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 987,
+								"target": 1074,
 								"name": "StudioDesignSystemPanel",
 								"package": "@anvilkit/core"
 							},
@@ -26285,7 +28200,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 991,
+								"target": 1078,
 								"name": "StudioHistoryPanel",
 								"package": "@anvilkit/core"
 							},
@@ -26326,7 +28241,7 @@
 							},
 							{
 								"type": "reference",
-								"target": 995,
+								"target": 1082,
 								"name": "StudioInsertSection",
 								"package": "@anvilkit/core"
 							}
@@ -26365,7 +28280,7 @@
 							},
 							{
 								"type": "reference",
-								"target": 1007,
+								"target": 1094,
 								"name": "StudioLayerQuickAdd",
 								"package": "@anvilkit/core"
 							}
@@ -28865,7 +30780,7 @@
 			}
 		},
 		{
-			"id": 904,
+			"id": 922,
 			"name": "StudioAssetKind",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -28880,7 +30795,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioAssetSource",
-						"target": 915
+						"target": 944
 					},
 					{
 						"kind": "text",
@@ -28927,7 +30842,421 @@
 			}
 		},
 		{
-			"id": 956,
+			"id": 1020,
+			"name": "StudioAssetSourceStatus",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Loading / mutation status streamed by a source via\n"
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "StudioAssetSource.subscribeStatus",
+						"target": 1012
+					},
+					{
+						"kind": "text",
+						"text": ". The error variant carries a\nstructural error (no class dependency on a plugin)."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "types/sidebar.ts",
+					"line": 143,
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L143"
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1021,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1022,
+									"name": "phase",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 144,
+											"character": 14,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L144"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "idle"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1022
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1023,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1024,
+									"name": "phase",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 145,
+											"character": 14,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L145"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "loading"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1024
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1025,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1027,
+									"name": "loaded",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 146,
+											"character": 44,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L146"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 1026,
+									"name": "phase",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 146,
+											"character": 14,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L146"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "paginating"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1027,
+										1026
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1028,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1031,
+									"name": "id",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 147,
+											"character": 63,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L147"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1030,
+									"name": "op",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 147,
+											"character": 42,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L147"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 1029,
+									"name": "phase",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 147,
+											"character": 14,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L147"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "mutating"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1031,
+										1030,
+										1029
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 1032,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 1034,
+									"name": "error",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 150,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L150"
+										}
+									],
+									"type": {
+										"type": "reflection",
+										"declaration": {
+											"id": 1035,
+											"name": "__type",
+											"variant": "declaration",
+											"kind": 65536,
+											"flags": {},
+											"children": [
+												{
+													"id": 1037,
+													"name": "code",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true,
+														"isReadonly": true
+													},
+													"sources": [
+														{
+															"fileName": "types/sidebar.ts",
+															"line": 152,
+															"character": 13,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L152"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												},
+												{
+													"id": 1036,
+													"name": "message",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isReadonly": true
+													},
+													"sources": [
+														{
+															"fileName": "types/sidebar.ts",
+															"line": 151,
+															"character": 13,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L151"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												},
+												{
+													"id": 1038,
+													"name": "retryable",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true,
+														"isReadonly": true
+													},
+													"sources": [
+														{
+															"fileName": "types/sidebar.ts",
+															"line": 153,
+															"character": 13,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L153"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													}
+												}
+											],
+											"groups": [
+												{
+													"title": "Properties",
+													"children": [
+														1037,
+														1036,
+														1038
+													]
+												}
+											]
+										}
+									}
+								},
+								{
+									"id": 1033,
+									"name": "phase",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "types/sidebar.ts",
+											"line": 149,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L149"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "error"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										1034,
+										1033
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"id": 1043,
 			"name": "StudioAssetUploadEvent",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -28942,7 +31271,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioAssetSource.upload",
-						"target": 921
+						"target": 950
 					},
 					{
 						"kind": "text",
@@ -28977,9 +31306,9 @@
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 138,
+					"line": 198,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L138"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L198"
 				}
 			],
 			"type": {
@@ -28988,14 +31317,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 957,
+							"id": 1044,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 960,
+									"id": 1047,
 									"name": "bytesTotal",
 									"variant": "declaration",
 									"kind": 1024,
@@ -29005,9 +31334,9 @@
 									"sources": [
 										{
 											"fileName": "types/sidebar.ts",
-											"line": 142,
+											"line": 202,
 											"character": 12,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L142"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L202"
 										}
 									],
 									"type": {
@@ -29016,7 +31345,7 @@
 									}
 								},
 								{
-									"id": 959,
+									"id": 1046,
 									"name": "bytesUploaded",
 									"variant": "declaration",
 									"kind": 1024,
@@ -29026,9 +31355,9 @@
 									"sources": [
 										{
 											"fileName": "types/sidebar.ts",
-											"line": 141,
+											"line": 201,
 											"character": 12,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L141"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L201"
 										}
 									],
 									"type": {
@@ -29037,7 +31366,7 @@
 									}
 								},
 								{
-									"id": 958,
+									"id": 1045,
 									"name": "type",
 									"variant": "declaration",
 									"kind": 1024,
@@ -29047,9 +31376,9 @@
 									"sources": [
 										{
 											"fileName": "types/sidebar.ts",
-											"line": 140,
+											"line": 200,
 											"character": 12,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L140"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L200"
 										}
 									],
 									"type": {
@@ -29062,9 +31391,9 @@
 								{
 									"title": "Properties",
 									"children": [
-										960,
-										959,
-										958
+										1047,
+										1046,
+										1045
 									]
 								}
 							]
@@ -29073,14 +31402,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 961,
+							"id": 1048,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 963,
+									"id": 1050,
 									"name": "asset",
 									"variant": "declaration",
 									"kind": 1024,
@@ -29090,9 +31419,9 @@
 									"sources": [
 										{
 											"fileName": "types/sidebar.ts",
-											"line": 144,
+											"line": 204,
 											"character": 37,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L144"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L204"
 										}
 									],
 									"type": {
@@ -29103,7 +31432,7 @@
 									}
 								},
 								{
-									"id": 962,
+									"id": 1049,
 									"name": "type",
 									"variant": "declaration",
 									"kind": 1024,
@@ -29113,9 +31442,9 @@
 									"sources": [
 										{
 											"fileName": "types/sidebar.ts",
-											"line": 144,
+											"line": 204,
 											"character": 14,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L144"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L204"
 										}
 									],
 									"type": {
@@ -29128,8 +31457,8 @@
 								{
 									"title": "Properties",
 									"children": [
-										963,
-										962
+										1050,
+										1049
 									]
 								}
 							]
@@ -29138,14 +31467,14 @@
 					{
 						"type": "reflection",
 						"declaration": {
-							"id": 964,
+							"id": 1051,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 966,
+									"id": 1053,
 									"name": "message",
 									"variant": "declaration",
 									"kind": 1024,
@@ -29155,9 +31484,9 @@
 									"sources": [
 										{
 											"fileName": "types/sidebar.ts",
-											"line": 145,
+											"line": 205,
 											"character": 38,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L145"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L205"
 										}
 									],
 									"type": {
@@ -29166,7 +31495,7 @@
 									}
 								},
 								{
-									"id": 965,
+									"id": 1052,
 									"name": "type",
 									"variant": "declaration",
 									"kind": 1024,
@@ -29176,9 +31505,9 @@
 									"sources": [
 										{
 											"fileName": "types/sidebar.ts",
-											"line": 145,
+											"line": 205,
 											"character": 14,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L145"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L205"
 										}
 									],
 									"type": {
@@ -29191,8 +31520,8 @@
 								{
 									"title": "Properties",
 									"children": [
-										966,
-										965
+										1053,
+										1052
 									]
 								}
 							]
@@ -29202,7 +31531,7 @@
 			}
 		},
 		{
-			"id": 967,
+			"id": 1054,
 			"name": "StudioAssetUploadListener",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -29210,36 +31539,36 @@
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 147,
+					"line": 207,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L147"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L207"
 				}
 			],
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 968,
+					"id": 1055,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 969,
+							"id": 1056,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 970,
+									"id": 1057,
 									"name": "event",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 956,
+										"target": 1043,
 										"name": "StudioAssetUploadEvent",
 										"package": "@anvilkit/core"
 									}
@@ -29412,7 +31741,7 @@
 			}
 		},
 		{
-			"id": 981,
+			"id": 1068,
 			"name": "StudioCopySnippetCategory",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -29444,9 +31773,9 @@
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 267,
+					"line": 374,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L267"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L374"
 				}
 			],
 			"type": {
@@ -29470,7 +31799,7 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 982,
+									"id": 1069,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
@@ -29483,7 +31812,7 @@
 			}
 		},
 		{
-			"id": 1000,
+			"id": 1087,
 			"name": "StudioInsertSectionPredicate",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -29515,21 +31844,21 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 1001,
+					"id": 1088,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1002,
+							"id": 1089,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1003,
+									"id": 1090,
 									"name": "componentName",
 									"variant": "param",
 									"kind": 32768,
@@ -29540,7 +31869,7 @@
 									}
 								},
 								{
-									"id": 1004,
+									"id": 1091,
 									"name": "metadata",
 									"variant": "param",
 									"kind": 32768,
@@ -29551,14 +31880,14 @@
 											{
 												"type": "reflection",
 												"declaration": {
-													"id": 1005,
+													"id": 1092,
 													"name": "__type",
 													"variant": "declaration",
 													"kind": 65536,
 													"flags": {},
 													"children": [
 														{
-															"id": 1006,
+															"id": 1093,
 															"name": "category",
 															"variant": "declaration",
 															"kind": 1024,
@@ -29584,7 +31913,7 @@
 														{
 															"title": "Properties",
 															"children": [
-																1006
+																1093
 															]
 														}
 													]
@@ -29608,7 +31937,7 @@
 			}
 		},
 		{
-			"id": 1013,
+			"id": 1100,
 			"name": "StudioLayerQuickAddInserter",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -29672,21 +32001,21 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 1014,
+					"id": 1101,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1015,
+							"id": 1102,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 1016,
+									"id": 1103,
 									"name": "api",
 									"variant": "param",
 									"kind": 32768,
@@ -29694,14 +32023,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 1017,
+											"id": 1104,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 1019,
+													"id": 1106,
 													"name": "currentSelection",
 													"variant": "declaration",
 													"kind": 1024,
@@ -29738,7 +32067,7 @@
 													}
 												},
 												{
-													"id": 1018,
+													"id": 1105,
 													"name": "puckApi",
 													"variant": "declaration",
 													"kind": 1024,
@@ -29769,8 +32098,8 @@
 												{
 													"title": "Properties",
 													"children": [
-														1019,
-														1018
+														1106,
+														1105
 													]
 												}
 											]
@@ -30598,7 +32927,7 @@
 			}
 		},
 		{
-			"id": 1020,
+			"id": 1107,
 			"name": "StudioSidebarUnregister",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -30638,22 +32967,22 @@
 			"sources": [
 				{
 					"fileName": "types/sidebar.ts",
-					"line": 378,
+					"line": 485,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L378"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L485"
 				}
 			],
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 1021,
+					"id": 1108,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 1022,
+							"id": 1109,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
@@ -31013,9 +33342,9 @@
 			],
 			"type": {
 				"type": "literal",
-				"value": "0.1.11"
+				"value": "0.1.12"
 			},
-			"defaultValue": "\"0.1.11\""
+			"defaultValue": "\"0.1.12\""
 		},
 		{
 			"id": 395,
@@ -40873,20 +43202,23 @@
 				633,
 				452,
 				878,
-				887,
-				905,
-				909,
-				915,
+				894,
+				911,
+				923,
+				930,
+				941,
+				944,
+				1039,
 				81,
-				971,
-				975,
-				983,
-				987,
+				1058,
+				1062,
+				1070,
+				1074,
 				582,
 				716,
-				991,
-				995,
-				1007,
+				1078,
+				1082,
+				1094,
 				138,
 				638,
 				648,
@@ -40930,20 +43262,21 @@
 				443,
 				713,
 				714,
-				904,
-				956,
-				967,
+				922,
+				1020,
+				1043,
+				1054,
 				579,
-				981,
-				1000,
-				1013,
+				1068,
+				1087,
+				1100,
 				141,
 				730,
 				731,
 				738,
 				484,
 				855,
-				1020,
+				1107,
 				876,
 				302,
 				303,
@@ -45405,67 +47738,67 @@
 		"887": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetAction"
+			"qualifiedName": "StudioAsset.folderId"
 		},
 		"888": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetAction.id"
+			"qualifiedName": "StudioAsset.source"
 		},
 		"889": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetAction.labelKey"
+			"qualifiedName": "StudioAsset.attribution"
 		},
 		"890": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetAction.icon"
+			"qualifiedName": "__type"
 		},
 		"891": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetAction.tone"
+			"qualifiedName": "__type.photographerName"
 		},
 		"892": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetAction.run"
+			"qualifiedName": "__type.photographerUrl"
 		},
 		"893": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "__type.sourceUrl"
 		},
 		"894": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetAction"
 		},
 		"895": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "input"
+			"qualifiedName": "StudioAssetAction.id"
 		},
 		"896": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetAction.labelKey"
 		},
 		"897": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.asset"
+			"qualifiedName": "StudioAssetAction.icon"
 		},
 		"898": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.log"
+			"qualifiedName": "StudioAssetAction.tone"
 		},
 		"899": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetAction.run"
 		},
 		"900": {
 			"packageName": "@anvilkit/core",
@@ -45475,262 +47808,262 @@
 		"901": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "level"
+			"qualifiedName": "__type"
 		},
 		"902": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "message"
+			"qualifiedName": "input"
 		},
 		"903": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "meta"
+			"qualifiedName": "__type"
 		},
 		"904": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetKind"
+			"qualifiedName": "__type.asset"
 		},
 		"905": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListPage"
+			"qualifiedName": "__type.log"
 		},
 		"906": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListPage.items"
+			"qualifiedName": "__type"
 		},
 		"907": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListPage.total"
+			"qualifiedName": "__type"
 		},
 		"908": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListPage.nextCursor"
+			"qualifiedName": "level"
 		},
 		"909": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListQuery"
+			"qualifiedName": "message"
 		},
 		"910": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListQuery.query"
+			"qualifiedName": "meta"
 		},
 		"911": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListQuery.kinds"
+			"qualifiedName": "StudioAssetFolder"
 		},
 		"912": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListQuery.tags"
+			"qualifiedName": "StudioAssetFolder.id"
 		},
 		"913": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListQuery.cursor"
+			"qualifiedName": "StudioAssetFolder.name"
 		},
 		"914": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetListQuery.limit"
+			"qualifiedName": "StudioAssetFolder.parentId"
 		},
 		"915": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource"
+			"qualifiedName": "StudioAssetFolder.createdAt"
 		},
 		"916": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.list"
+			"qualifiedName": "StudioAssetFolder.updatedAt"
 		},
 		"917": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.list"
+			"qualifiedName": "StudioAssetFolder.counts"
 		},
 		"918": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.listPaginated"
+			"qualifiedName": "__type"
 		},
 		"919": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.listPaginated"
+			"qualifiedName": "__type.assets"
 		},
 		"920": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "query"
+			"qualifiedName": "__type.folders"
 		},
 		"921": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.upload"
+			"qualifiedName": "StudioAssetFolder.meta"
 		},
 		"922": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.upload"
+			"qualifiedName": "StudioAssetKind"
 		},
 		"923": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "files"
+			"qualifiedName": "StudioAssetListPage"
 		},
 		"924": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "listener"
+			"qualifiedName": "StudioAssetListPage.items"
 		},
 		"925": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "signal"
+			"qualifiedName": "StudioAssetListPage.total"
 		},
 		"926": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.rename"
+			"qualifiedName": "StudioAssetListPage.nextCursor"
 		},
 		"927": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.rename"
+			"qualifiedName": "StudioAssetListPage.folders"
 		},
 		"928": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "assetId"
+			"qualifiedName": "StudioAssetListPage.folderPath"
 		},
 		"929": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "nextName"
+			"qualifiedName": "StudioAssetListPage.sourceCursors"
 		},
 		"930": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.replace"
+			"qualifiedName": "StudioAssetListQuery"
 		},
 		"931": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.replace"
+			"qualifiedName": "StudioAssetListQuery.query"
 		},
 		"932": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "assetId"
+			"qualifiedName": "StudioAssetListQuery.kinds"
 		},
 		"933": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "file"
+			"qualifiedName": "StudioAssetListQuery.tags"
 		},
 		"934": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.setTags"
+			"qualifiedName": "StudioAssetListQuery.cursor"
 		},
 		"935": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.setTags"
+			"qualifiedName": "StudioAssetListQuery.limit"
 		},
 		"936": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "assetId"
+			"qualifiedName": "StudioAssetListQuery.folderId"
 		},
 		"937": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "tags"
+			"qualifiedName": "StudioAssetListQuery.recursive"
 		},
 		"938": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.delete"
+			"qualifiedName": "StudioAssetListQuery.sources"
 		},
 		"939": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.delete"
+			"qualifiedName": "StudioAssetListQuery.facets"
 		},
 		"940": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "assetId"
+			"qualifiedName": "StudioAssetListQuery.sort"
 		},
 		"941": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.getUrl"
+			"qualifiedName": "StudioAssetSort"
 		},
 		"942": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.getUrl"
+			"qualifiedName": "StudioAssetSort.field"
 		},
 		"943": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "assetId"
+			"qualifiedName": "StudioAssetSort.direction"
 		},
 		"944": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.subscribe"
+			"qualifiedName": "StudioAssetSource"
 		},
 		"945": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.subscribe"
+			"qualifiedName": "StudioAssetSource.list"
 		},
 		"946": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "listener"
+			"qualifiedName": "StudioAssetSource.list"
 		},
 		"947": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.listPaginated"
 		},
 		"948": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.listPaginated"
 		},
 		"949": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "query"
 		},
 		"950": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.upload"
 		},
 		"951": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.subscribeUploads"
+			"qualifiedName": "StudioAssetSource.upload"
 		},
 		"952": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetSource.subscribeUploads"
+			"qualifiedName": "files"
 		},
 		"953": {
 			"packageName": "@anvilkit/core",
@@ -45740,307 +48073,307 @@
 		"954": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "signal"
 		},
 		"955": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.rename"
 		},
 		"956": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetUploadEvent"
+			"qualifiedName": "StudioAssetSource.rename"
 		},
 		"957": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "assetId"
 		},
 		"958": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.type"
+			"qualifiedName": "nextName"
 		},
 		"959": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.bytesUploaded"
+			"qualifiedName": "StudioAssetSource.replace"
 		},
 		"960": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.bytesTotal"
+			"qualifiedName": "StudioAssetSource.replace"
 		},
 		"961": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "assetId"
 		},
 		"962": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.type"
+			"qualifiedName": "file"
 		},
 		"963": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.asset"
+			"qualifiedName": "StudioAssetSource.setTags"
 		},
 		"964": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.setTags"
 		},
 		"965": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.type"
+			"qualifiedName": "assetId"
 		},
 		"966": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.message"
+			"qualifiedName": "tags"
 		},
 		"967": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioAssetUploadListener"
+			"qualifiedName": "StudioAssetSource.delete"
 		},
 		"968": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.delete"
 		},
 		"969": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "assetId"
 		},
 		"970": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "event"
+			"qualifiedName": "StudioAssetSource.getUrl"
 		},
 		"971": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopilotPanel"
+			"qualifiedName": "StudioAssetSource.getUrl"
 		},
 		"972": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopilotPanel.render"
+			"qualifiedName": "assetId"
 		},
 		"973": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.subscribe"
 		},
 		"974": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.subscribe"
 		},
 		"975": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippet"
+			"qualifiedName": "listener"
 		},
 		"976": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippet.id"
+			"qualifiedName": "__type"
 		},
 		"977": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippet.category"
+			"qualifiedName": "__type"
 		},
 		"978": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippet.title"
+			"qualifiedName": "__type"
 		},
 		"979": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippet.body"
+			"qualifiedName": "__type"
 		},
 		"980": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippet.tags"
+			"qualifiedName": "StudioAssetSource.subscribeUploads"
 		},
 		"981": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippetCategory"
+			"qualifiedName": "StudioAssetSource.subscribeUploads"
 		},
 		"982": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "listener"
 		},
 		"983": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippetPack"
+			"qualifiedName": "__type"
 		},
 		"984": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippetPack.id"
+			"qualifiedName": "__type"
 		},
 		"985": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippetPack.locale"
+			"qualifiedName": "StudioAssetSource.createFolder"
 		},
 		"986": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioCopySnippetPack.snippets"
+			"qualifiedName": "StudioAssetSource.createFolder"
 		},
 		"987": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioDesignSystemPanel"
+			"qualifiedName": "parentId"
 		},
 		"988": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioDesignSystemPanel.render"
+			"qualifiedName": "name"
 		},
 		"989": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.renameFolder"
 		},
 		"990": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.renameFolder"
 		},
 		"991": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioHistoryPanel"
+			"qualifiedName": "id"
 		},
 		"992": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioHistoryPanel.render"
+			"qualifiedName": "name"
 		},
 		"993": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.removeFolder"
 		},
 		"994": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioAssetSource.removeFolder"
 		},
 		"995": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioInsertSection"
+			"qualifiedName": "id"
 		},
 		"996": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioInsertSection.id"
+			"qualifiedName": "opts"
 		},
 		"997": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioInsertSection.titleKey"
+			"qualifiedName": "__type"
 		},
 		"998": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioInsertSection.predicate"
+			"qualifiedName": "__type.cascade"
 		},
 		"999": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioInsertSection.order"
+			"qualifiedName": "StudioAssetSource.moveFolder"
 		},
 		"1000": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioInsertSectionPredicate"
+			"qualifiedName": "StudioAssetSource.moveFolder"
 		},
 		"1001": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "id"
 		},
 		"1002": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "parentId"
 		},
 		"1003": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "componentName"
+			"qualifiedName": "StudioAssetSource.moveAsset"
 		},
 		"1004": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "metadata"
+			"qualifiedName": "StudioAssetSource.moveAsset"
 		},
 		"1005": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "assetId"
 		},
 		"1006": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.category"
+			"qualifiedName": "folderId"
 		},
 		"1007": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioLayerQuickAdd"
+			"qualifiedName": "StudioAssetSource.listThemes"
 		},
 		"1008": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioLayerQuickAdd.id"
+			"qualifiedName": "StudioAssetSource.listThemes"
 		},
 		"1009": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioLayerQuickAdd.labelKey"
+			"qualifiedName": "StudioAssetSource.pickResult"
 		},
 		"1010": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioLayerQuickAdd.icon"
+			"qualifiedName": "StudioAssetSource.pickResult"
 		},
 		"1011": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioLayerQuickAdd.insert"
+			"qualifiedName": "asset"
 		},
 		"1012": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioLayerQuickAdd.order"
+			"qualifiedName": "StudioAssetSource.subscribeStatus"
 		},
 		"1013": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioLayerQuickAddInserter"
+			"qualifiedName": "StudioAssetSource.subscribeStatus"
 		},
 		"1014": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "listener"
 		},
 		"1015": {
 			"packageName": "@anvilkit/core",
@@ -46050,27 +48383,27 @@
 		"1016": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "api"
+			"qualifiedName": "__type"
 		},
 		"1017": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "status"
 		},
 		"1018": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.puckApi"
+			"qualifiedName": "__type"
 		},
 		"1019": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "__type.currentSelection"
+			"qualifiedName": "__type"
 		},
 		"1020": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
-			"qualifiedName": "StudioSidebarUnregister"
+			"qualifiedName": "StudioAssetSourceStatus"
 		},
 		"1021": {
 			"packageName": "@anvilkit/core",
@@ -46078,6 +48411,441 @@
 			"qualifiedName": "__type"
 		},
 		"1022": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.phase"
+		},
+		"1023": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1024": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.phase"
+		},
+		"1025": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1026": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.phase"
+		},
+		"1027": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.loaded"
+		},
+		"1028": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1029": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.phase"
+		},
+		"1030": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.op"
+		},
+		"1031": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.id"
+		},
+		"1032": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1033": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.phase"
+		},
+		"1034": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.error"
+		},
+		"1035": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1036": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.message"
+		},
+		"1037": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.code"
+		},
+		"1038": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.retryable"
+		},
+		"1039": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioAssetTheme"
+		},
+		"1040": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioAssetTheme.id"
+		},
+		"1041": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioAssetTheme.label"
+		},
+		"1042": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioAssetTheme.description"
+		},
+		"1043": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioAssetUploadEvent"
+		},
+		"1044": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1045": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.type"
+		},
+		"1046": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.bytesUploaded"
+		},
+		"1047": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.bytesTotal"
+		},
+		"1048": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1049": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.type"
+		},
+		"1050": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.asset"
+		},
+		"1051": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1052": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.type"
+		},
+		"1053": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.message"
+		},
+		"1054": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioAssetUploadListener"
+		},
+		"1055": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1056": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1057": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "event"
+		},
+		"1058": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopilotPanel"
+		},
+		"1059": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopilotPanel.render"
+		},
+		"1060": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1061": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1062": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippet"
+		},
+		"1063": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippet.id"
+		},
+		"1064": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippet.category"
+		},
+		"1065": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippet.title"
+		},
+		"1066": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippet.body"
+		},
+		"1067": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippet.tags"
+		},
+		"1068": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippetCategory"
+		},
+		"1069": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1070": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippetPack"
+		},
+		"1071": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippetPack.id"
+		},
+		"1072": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippetPack.locale"
+		},
+		"1073": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioCopySnippetPack.snippets"
+		},
+		"1074": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioDesignSystemPanel"
+		},
+		"1075": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioDesignSystemPanel.render"
+		},
+		"1076": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1077": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1078": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioHistoryPanel"
+		},
+		"1079": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioHistoryPanel.render"
+		},
+		"1080": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1081": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1082": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioInsertSection"
+		},
+		"1083": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioInsertSection.id"
+		},
+		"1084": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioInsertSection.titleKey"
+		},
+		"1085": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioInsertSection.predicate"
+		},
+		"1086": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioInsertSection.order"
+		},
+		"1087": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioInsertSectionPredicate"
+		},
+		"1088": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1089": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1090": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "componentName"
+		},
+		"1091": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "metadata"
+		},
+		"1092": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1093": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.category"
+		},
+		"1094": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioLayerQuickAdd"
+		},
+		"1095": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioLayerQuickAdd.id"
+		},
+		"1096": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioLayerQuickAdd.labelKey"
+		},
+		"1097": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioLayerQuickAdd.icon"
+		},
+		"1098": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioLayerQuickAdd.insert"
+		},
+		"1099": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioLayerQuickAdd.order"
+		},
+		"1100": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioLayerQuickAddInserter"
+		},
+		"1101": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1102": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1103": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "api"
+		},
+		"1104": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1105": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.puckApi"
+		},
+		"1106": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type.currentSelection"
+		},
+		"1107": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "StudioSidebarUnregister"
+		},
+		"1108": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/types/sidebar.ts",
+			"qualifiedName": "__type"
+		},
+		"1109": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/sidebar.ts",
 			"qualifiedName": "__type"
