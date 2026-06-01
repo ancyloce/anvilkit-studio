@@ -41,11 +41,6 @@ import {
 	useState,
 } from "react";
 import { useDemoIdentity } from "../../../lib/collab-identity";
-import {
-	type CollabTransportBundle,
-	createCollabDemoTransport,
-	createCollabRelayTransport,
-} from "../../../lib/collab-transport";
 import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin";
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import {
@@ -449,65 +444,41 @@ export default function PuckEditorPage() {
 		return () => unsubscribe?.();
 	}, [pagesSource, readActivePageId]);
 
-	// Transport bundle: host owns the `Y.Doc`, `Awareness`, and (for the
-	// relay path) the `WebsocketProvider`. The adapter is constructed
-	// internally by `createCollabPlugin()` — see the `plugins` memo
-	// below.
+	// Collab plugins live in `@anvilkit/collab-ui` / `@anvilkit/plugin-collab-yjs`,
+	// which (together with the provider libs) pull in the whole yjs stack
+	// (~190 KB). We import the factory *dynamically*, only under `?collab=1`, so
+	// that stack stays out of the default editor bundle.
 	//
-	// The yjs stack is loaded lazily (the factories `await import("yjs")`
-	// et al.), so the transport resolves a tick after `?collab=1` flips
-	// on. We hold it in state and build it inside an effect. The `cancelled`
-	// flag + `resolved` capture tear down a bundle that finishes resolving
-	// after the deps change or the component unmounts — which also covers
-	// React StrictMode's mount→unmount→mount double-invoke in dev. This
-	// single effect owns both creation and teardown (WebSocket close,
-	// awareness destroy, doc destroy) on peer rename, relay toggle, or
-	// unmount.
-	const [collabTransport, setCollabTransport] =
-		useState<CollabTransportBundle | null>(null);
-
-	useEffect(() => {
-		if (!collabEnabled || !demoIdentityReady) {
-			setCollabTransport(null);
-			return;
-		}
-		let cancelled = false;
-		let resolved: CollabTransportBundle | null = null;
-		const build = collabRelayUrl
-			? createCollabRelayTransport({
-					room: collabRoom,
-					relayUrl: collabRelayUrl,
-				})
-			: createCollabDemoTransport();
-		void build.then((bundle) => {
-			if (cancelled) {
-				bundle.destroy();
-				return;
-			}
-			resolved = bundle;
-			setCollabTransport(bundle);
-		});
-		return () => {
-			cancelled = true;
-			resolved?.destroy();
-			setCollabTransport(null);
-		};
-	}, [collabEnabled, demoIdentityReady, collabRelayUrl, collabRoom]);
-
-	// The collab plugins live in `@anvilkit/collab-ui` /
-	// `@anvilkit/plugin-collab-yjs`, which statically pull in the whole
-	// yjs stack (yjs + y-protocols + y-websocket + lib0, ~190 KB). We
-	// import the factories *dynamically*, only once a transport has
-	// resolved (i.e. `?collab=1`), so that stack stays out of the default
-	// editor bundle. Resolved into state, mirroring `collabTransport`;
-	// the `cancelled` flag drops a late resolve after the deps change or
-	// the component unmounts (and covers StrictMode's double-invoke).
+	// The consolidated `createCollabPlugin()` now owns the ENTIRE transport
+	// (doc + awareness + provider + status bridge + teardown) — no hand-built
+	// bundle. `?relay=ws` selects the managed y-websocket relay
+	// (`collabRelayUrl`, :21234); with no relay the plugin runs single-tab
+	// in-memory. `createCollabStudioPlugin` still reads the adapter from the
+	// `<CollabUIProvider>` context, so it is registered *after* the consolidated
+	// plugin. The `cancelled` flag drops a late dynamic-import resolve (deps
+	// change / unmount / StrictMode double-invoke); the plugin's own `onDestroy`
+	// disposes the transport when `<Studio>` tears the plugin down.
 	const [collabPlugins, setCollabPlugins] = useState<
 		readonly StudioPlugin[] | null
 	>(null);
 
+	// Read identity / cursor-toggle through refs so they do NOT rebuild the
+	// collab plugin: in managed mode the plugin owns the transport, so a
+	// rebuild would tear down and reconnect the WebSocket. The plugin is built
+	// ONCE per connection-params change (`collabEnabled`/`relay`/`room`); the
+	// initial identity seeds `self`, and later renames flow through the collab
+	// context (`onIdentityChange` + the settings popover), not a plugin rebuild.
+	// This is the recommended pattern for the `websocketUrl` one-liner — it
+	// keeps the socket stable across the host's incidental re-renders.
+	const demoIdentityRef = useRef(demoIdentity);
+	demoIdentityRef.current = demoIdentity;
+	const setDemoIdentityNameRef = useRef(setDemoIdentityName);
+	setDemoIdentityNameRef.current = setDemoIdentityName;
+	const showRemoteCursorsRef = useRef(showRemoteCursors);
+	showRemoteCursorsRef.current = showRemoteCursors;
+
 	useEffect(() => {
-		if (!collabTransport) {
+		if (!collabEnabled || !demoIdentityReady) {
 			setCollabPlugins(null);
 			return;
 		}
@@ -520,35 +491,38 @@ export default function PuckEditorPage() {
 				]);
 			if (cancelled) return;
 			const collabPlugin = createCollabPlugin({
-				doc: collabTransport.doc,
-				awareness: collabTransport.awareness,
-				connectionSource: collabTransport.connectionSource,
-				self: demoIdentity,
+				// `?relay=ws` → managed y-websocket relay; no relay → omit
+				// `websocketUrl` so the plugin runs single-tab in-memory.
+				websocketUrl: collabRelayUrl ?? undefined,
+				provider: "y-websocket",
+				room: collabRoom,
+				self: demoIdentityRef.current,
 				puckConfig: editorDemoConfig as unknown as Config,
 				onIdentityChange: (next) => {
 					if (
 						typeof next.displayName === "string" &&
 						next.displayName.length > 0
 					) {
-						setDemoIdentityName(next.displayName);
+						setDemoIdentityNameRef.current(next.displayName);
 					}
 				},
 				presence: {
 					className: "!fixed z-[9999]",
-					showCursors: showRemoteCursors,
+					showCursors: showRemoteCursorsRef.current,
 					resolveSelectionRect: resolvePuckSelectionRect,
+					// `createCollabStudioPlugin` below already broadcasts the local
+					// cursor *and* selection in one frame; opt out of the plugin's
+					// built-in cursor publisher so the two don't clobber each other
+					// (awareness replaces the whole presence frame per update).
+					broadcastCursor: false,
 				},
 			});
-			// `createCollabStudioPlugin` reads the adapter from the
-			// `<CollabUIProvider>` context that `createCollabPlugin`
-			// provides, so it is registered *after* the consolidated
-			// plugin (array order preserved below).
 			setCollabPlugins([collabPlugin, createCollabStudioPlugin()]);
 		})();
 		return () => {
 			cancelled = true;
 		};
-	}, [collabTransport, demoIdentity, setDemoIdentityName, showRemoteCursors]);
+	}, [collabEnabled, demoIdentityReady, collabRelayUrl, collabRoom]);
 
 	// Memoized so the plugins array reference stays stable across
 	// renders. Without this, each render passes a fresh array literal

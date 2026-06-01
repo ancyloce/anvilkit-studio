@@ -49,12 +49,13 @@ test.describe("collab UI primitives", () => {
       "1",
     );
 
-    // The AnvilKit chrome renders collaborator controls in the
-    // Studio header rather than the old standalone room bar.
-    await expect(pageA.getByTestId("collab-peer-stack")).toBeVisible();
-    await expect(
-      pageA.locator("[data-slot=collab-settings-trigger]"),
-    ).toBeVisible();
+    // The AnvilKit chrome renders the collaborator avatar stack in the
+    // Studio header: the consolidated `createCollabPlugin` contributes it to
+    // the core `collaborators` slot. (The old standalone room bar + its
+    // settings popover are no longer mounted in the demo's consolidated-plugin
+    // editor, so the legacy `collab-peer-stack` / `collab-settings-trigger`
+    // assertions were dropped — the avatar stack below is the live control.)
+    await expect(pageA.locator("[data-slot=peer-avatar-stack]")).toBeVisible();
     await expect(
       pageA.locator("[data-slot=peer-avatar-stack] [data-peer-id]"),
     ).toHaveCount(2, {
