@@ -15,7 +15,7 @@
  * `@puckeditor/core` is mocked.
  */
 
-import { render, waitFor } from "@testing-library/react";
+import { act, render, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { Studio } from "@/components/Studio";
@@ -156,6 +156,59 @@ describe("<Studio> — stale runtime is cleared when a recompile fails", () => {
 
 		await waitFor(() => {
 			expect(container.querySelector("[data-testid=puck-mock]")).toBeNull();
+		});
+	});
+});
+
+describe("<Studio> — a superseded (stale) compile is disposed, not leaked", () => {
+	it("fires onDestroy for a compile whose runtime is built after it was superseded", async () => {
+		let signalRegisterStarted: (() => void) | undefined;
+		const registerV1Started = new Promise<void>((resolve) => {
+			signalRegisterStarted = resolve;
+		});
+		let resolveV1: (() => void) | undefined;
+		const v1Gate = new Promise<void>((resolve) => {
+			resolveV1 = resolve;
+		});
+		const onDestroyV1 = vi.fn();
+		const pluginV1: StudioPlugin = {
+			meta: meta("com.test.stale-async-1"),
+			register: async () => {
+				// Signal that register() is now in-flight (so the runtime is
+				// about to be built), then hold the compile open until we have
+				// superseded it.
+				signalRegisterStarted?.();
+				await v1Gate;
+				return {
+					meta: meta("com.test.stale-async-1"),
+					hooks: { onDestroy: onDestroyV1 },
+				};
+			},
+		};
+		const pluginV2: StudioPlugin = {
+			meta: meta("com.test.stale-async-2"),
+			register: () => ({ meta: meta("com.test.stale-async-2") }),
+		};
+
+		const { rerender } = render(
+			<Studio puckConfig={{ components: {} }} plugins={[pluginV1]} />,
+		);
+		// Wait until V1's register is actually in-flight — past the early
+		// pre-compile `isStale()` guards — so the runtime really gets built.
+		await registerV1Started;
+		// Supersede V1 while its register is held open.
+		rerender(<Studio puckConfig={{ components: {} }} plugins={[pluginV2]} />);
+		// Let V1's register resolve. The controller must detect the built
+		// runtime is stale and tear it down (emit onDestroy) instead of
+		// discarding it with a bare return, which would leak whatever register()
+		// allocated (e.g. a managed collab transport's WebSocket/doc/awareness).
+		await act(async () => {
+			resolveV1?.();
+			await v1Gate;
+		});
+
+		await waitFor(() => {
+			expect(onDestroyV1).toHaveBeenCalledTimes(1);
 		});
 	});
 });

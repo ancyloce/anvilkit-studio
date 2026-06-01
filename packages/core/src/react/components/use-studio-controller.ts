@@ -670,6 +670,17 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 					lifecycle: { onDataChangeDebounceMs: DATA_CHANGE_DEBOUNCE_MS },
 				});
 				if (isStale()) {
+					// This compile was superseded before it could mount (a faster
+					// config/plugin change, or a StrictMode dev double-invoke).
+					// `setCompiled` is never called, so the `[compiled]` teardown
+					// effect never sees this runtime — emit its teardown here, or
+					// any resources a plugin allocated in `register()` leak (e.g. a
+					// managed collab transport's WebSocket + Y.Doc + Awareness).
+					// `onInit` never fired, but `onDestroy` hooks guard on
+					// onInit-set state, so this matches a mount→immediate-unmount.
+					runtime.lifecycle.advanceTo("destroyed", ctx);
+					void runtime.lifecycle.emit("onDestroy", ctx);
+					runtime.lifecycle.dispose();
 					return;
 				}
 				setCompiled({ runtime, studioConfig, ctx });
