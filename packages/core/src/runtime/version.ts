@@ -18,4 +18,4 @@
  * in `version.test.ts` is the forcing function that keeps the two in
  * sync, which is simpler and equally robust.
  */
-export const CORE_VERSION = "0.1.11";
+export const CORE_VERSION = "0.1.12";

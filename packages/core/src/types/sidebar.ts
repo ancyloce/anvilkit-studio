@@ -105,6 +105,56 @@ export type StudioAssetKind =
 	| "other";
 
 /**
+ * A folder returned by a folder-aware {@link StudioAssetSource} (PRD 0002 §7).
+ * `parentId: null` is the root convention. Counts/timestamps are optional so a
+ * source can supply a lightweight folder for the tree without them.
+ */
+export interface StudioAssetFolder {
+	readonly id: string;
+	readonly name: string;
+	readonly parentId: string | null;
+	readonly createdAt?: number;
+	readonly updatedAt?: number;
+	readonly counts?: {
+		readonly assets: number;
+		readonly folders: number;
+	};
+	readonly meta?: Readonly<Record<string, string | number | boolean>>;
+}
+
+/** A browse theme (e.g. an Unsplash topic) exposed by a themed source. `label` is an i18n key. */
+export interface StudioAssetTheme {
+	readonly id: string;
+	readonly label: string;
+	readonly description?: string;
+}
+
+/** Sort axis for {@link StudioAssetListQuery}. */
+export interface StudioAssetSort {
+	readonly field: "recent" | "name" | "size" | "kind" | "relevance";
+	readonly direction?: "asc" | "desc";
+}
+
+/**
+ * Loading / mutation status streamed by a source via
+ * {@link StudioAssetSource.subscribeStatus}. The error variant carries a
+ * structural error (no class dependency on a plugin).
+ */
+export type StudioAssetSourceStatus =
+	| { readonly phase: "idle" }
+	| { readonly phase: "loading" }
+	| { readonly phase: "paginating"; readonly loaded: number }
+	| { readonly phase: "mutating"; readonly op: string; readonly id: string }
+	| {
+			readonly phase: "error";
+			readonly error: {
+				readonly message: string;
+				readonly code?: string;
+				readonly retryable?: boolean;
+			};
+	  };
+
+/**
  * A single asset entry returned by a {@link StudioAssetSource}.
  *
  * The shape is intentionally loose — concrete asset managers can add
@@ -126,6 +176,16 @@ export interface StudioAsset {
 	readonly tags?: readonly string[];
 	/** Optional size in bytes — surfaced in tooltips. */
 	readonly size?: number;
+	/** Optional owning folder (PRD 0002 §7). `null`/absent ⇒ root. */
+	readonly folderId?: string | null;
+	/** Optional provenance — which source produced it (e.g. `"local"` | `"unsplash"`). */
+	readonly source?: string;
+	/** Visible attribution for credit-requiring sources (Unsplash). Shown on the tile. */
+	readonly attribution?: {
+		readonly photographerName: string;
+		readonly photographerUrl: string;
+		readonly sourceUrl: string;
+	};
 }
 
 /**
@@ -163,6 +223,16 @@ export interface StudioAssetListQuery {
 	readonly cursor?: string;
 	/** Maximum items per page. Sources may apply their own ceiling. */
 	readonly limit?: number;
+	/** Scope to a folder. `null` = root only; `undefined` = any folder. */
+	readonly folderId?: string | null;
+	/** Include assets in descendant folders. */
+	readonly recursive?: boolean;
+	/** Restrict to one or more source ids. `undefined` = federate all. */
+	readonly sources?: readonly string[];
+	/** Host facet selections, keyed by facet id. */
+	readonly facets?: Readonly<Record<string, readonly string[]>>;
+	/** Sort axis. */
+	readonly sort?: StudioAssetSort;
 }
 
 /**
@@ -177,6 +247,12 @@ export interface StudioAssetListPage {
 	readonly items: readonly StudioAsset[];
 	readonly total: number;
 	readonly nextCursor: string | undefined;
+	/** Child folders of `query.folderId` (folder-aware sources). */
+	readonly folders?: readonly StudioAssetFolder[];
+	/** Root → … → current folder, for the breadcrumb. */
+	readonly folderPath?: readonly StudioAssetFolder[];
+	/** Per-source page tokens for federated paging, keyed by source id. */
+	readonly sourceCursors?: Readonly<Record<string, string | undefined>>;
 }
 
 /**
@@ -227,6 +303,37 @@ export interface StudioAssetSource {
 	 * persistent progress UI outside the upload call site.
 	 */
 	subscribeUploads?(listener: StudioAssetUploadListener): () => void;
+
+	// ── Folder surface (PRD 0002 §7) — all optional; a flat source omits them ──
+	/** Create a folder under `parentId` (`null` ⇒ root). */
+	createFolder?(
+		parentId: string | null,
+		name: string,
+	): Promise<StudioAssetFolder>;
+	renameFolder?(id: string, name: string): Promise<StudioAssetFolder>;
+	removeFolder?(
+		id: string,
+		opts?: { readonly cascade?: boolean },
+	): Promise<void>;
+	moveFolder?(id: string, parentId: string | null): Promise<StudioAssetFolder>;
+	/** Move an asset into a folder (`null` ⇒ root). */
+	moveAsset?(assetId: string, folderId: string | null): Promise<void>;
+
+	// ── External-source surface (PRD 0002 §8) ──
+	/** Browse themes for a themed source (e.g. Unsplash topics). */
+	listThemes?():
+		| readonly StudioAssetTheme[]
+		| Promise<readonly StudioAssetTheme[]>;
+	/**
+	 * Materialize an external browse result into the catalog — registers it and
+	 * fires any required download trigger (Unsplash) — returning the insertable
+	 * asset whose `url` now resolves. Local assets need no pick.
+	 */
+	pickResult?(asset: StudioAsset): Promise<StudioAsset>;
+	/** Subscribe to loading/mutation status (sync sources emit only `idle`). */
+	subscribeStatus?(
+		listener: (status: StudioAssetSourceStatus) => void,
+	): () => void;
 }
 
 /**
