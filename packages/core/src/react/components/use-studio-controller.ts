@@ -237,8 +237,13 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * Disabled when omitted. The Puck `onPublish` pipeline still fires
 	 * through Puck's own publish UI; this exists so the AnvilKit chrome
 	 * can offer a header button wired to the host's publish flow.
+	 *
+	 * Receives the **live** editor document (read from the Puck API at
+	 * click time), so the host publishes current edits rather than a
+	 * stale snapshot. A `() => void` handler stays assignable (the data
+	 * arg is simply ignored).
 	 */
-	readonly onPublishClick?: () => void;
+	readonly onPublishClick?: (data: PuckData) => void;
 	/**
 	 * Optional handler invoked from the publish panel's Export submenu
 	 * with the format id. The host normalizes Puck data to `PageIR`,
