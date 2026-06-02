@@ -124,7 +124,8 @@ function Virtualized<T>(props: {
 			ref={scrollRef}
 			data-testid={testId}
 			data-virtualized="true"
-			style={{ maxHeight, overflowY: "auto" }}
+			className="overflow-y-auto"
+			style={{ maxHeight }}
 		>
 			<div
 				style={{

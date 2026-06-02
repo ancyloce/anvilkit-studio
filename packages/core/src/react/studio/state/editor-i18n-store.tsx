@@ -201,6 +201,7 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 		"No assets yet. Upload your first asset to get started.",
 	"studio.module.image.pluginMissing":
 		"Install @anvilkit/plugin-asset-manager to manage assets.",
+	"studio.module.image.actions.add": "Add",
 	"studio.module.image.actions.more": "More actions",
 	"studio.module.image.actions.rename": "Rename",
 	"studio.module.image.actions.replace": "Replace",

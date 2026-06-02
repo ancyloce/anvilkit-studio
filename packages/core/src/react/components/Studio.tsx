@@ -301,7 +301,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 						<ExportStoreProvider storeId={resolvedStoreId} store={exportStore}>
 							<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
 								<StudioRootProvider rootRef={rootRef}>
-									<div ref={rootRef} style={{ display: "contents" }}>
+									<div ref={rootRef} className="contents">
 										{puckElement}
 									</div>
 								</StudioRootProvider>
@@ -378,7 +378,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 											<EditorI18nStoreProvider messages={messages}>
 												<ChromePropsProvider value={chromePropsValue}>
 													<StudioRootProvider rootRef={rootRef}>
-														<div ref={rootRef} style={{ display: "contents" }}>
+														<div ref={rootRef} className="contents">
 															{wrappedBody}
 														</div>
 													</StudioRootProvider>
