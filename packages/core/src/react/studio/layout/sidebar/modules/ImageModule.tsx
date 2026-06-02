@@ -47,11 +47,11 @@ import type {
 } from "@/types/sidebar";
 import { AssetGrid, type UploadingTile } from "./image/AssetGrid";
 import { FolderNav } from "./image/FolderNav";
+import { ImageActionsMenu } from "./image/ImageActionsMenu";
 import { ImageFilterStrip } from "./image/ImageFilterStrip";
 import { ImageSearchBar } from "./image/ImageSearchBar";
 import { ImageSourceTabs, type SourceTab } from "./image/ImageSourceTabs";
 import { ImageThemeChips } from "./image/ImageThemeChips";
-import { ImageUploadButton } from "./image/ImageUploadButton";
 import {
 	kindToComponentName,
 	kindToPropsForInsert,
@@ -94,6 +94,10 @@ export function ImageModule(): ReactNode {
 	const [currentFolderId, setCurrentFolderId] = useState<
 		string | null | undefined
 	>(undefined);
+	// Opens the inline "new folder" name input inside `FolderNav`. The trigger
+	// lives in the header actions menu (`ImageActionsMenu`); the input renders in
+	// the folder-nav area so the name is entered in the location it's created.
+	const [creatingFolder, setCreatingFolder] = useState(false);
 	const [activeSource, setActiveSource] = useState<string | undefined>(
 		undefined,
 	);
@@ -106,6 +110,13 @@ export function ImageModule(): ReactNode {
 	const [activeTheme, setActiveTheme] = useState<string | undefined>(undefined);
 	const getPuck = useGetPuck();
 	const usesPaginatedListing = source?.listPaginated !== undefined;
+	// Folder navigation, folder scoping, and the media-kind filter strip apply
+	// ONLY to the local library. An external browse source (e.g. the Unsplash
+	// tab) has no folders and is image-only, so those local-library controls are
+	// hidden and never threaded into its query — leaving just the theme chips +
+	// search. `activeSource === undefined` is the untabbed local-only source;
+	// `"local"` is the explicit Library tab.
+	const isLocalSource = activeSource === undefined || activeSource === "local";
 
 	// Monotonic request id: every `loadAssets` call mints a generation;
 	// only the latest may write state. This drops stale paginated
@@ -135,18 +146,18 @@ export function ImageModule(): ReactNode {
 					// Leaking `folderId` to a folders:false provider makes
 					// `providerCanSatisfy` drop it from the federation, so the Unsplash
 					// grid would return zero results whenever folders are enabled.
-					// `activeSource === undefined` is the untabbed local-only source;
-					// `"local"` is the Library tab. Flat sources stay byte-identical.
+					// Flat sources stay byte-identical (isLocalSource is true when
+					// untabbed). The media-kind filter is likewise local-only — an
+					// external image source must not be queried with kinds:["video"]
+					// (a stale persisted filter) or its grid would return nothing.
 					const folderAware = source.createFolder !== undefined;
-					const folderScoped =
-						folderAware &&
-						(activeSource === undefined || activeSource === "local");
+					const folderScoped = folderAware && isLocalSource;
 					const effectiveFolderId = folderScoped
 						? (currentFolderId ?? null)
 						: undefined;
 					const page = await source.listPaginated({
 						query: trimmedQuery.length > 0 ? trimmedQuery : undefined,
-						kinds: filterToKinds(filter),
+						kinds: isLocalSource ? filterToKinds(filter) : undefined,
 						cursor,
 						limit: ASSET_PAGE_LIMIT,
 						...(effectiveFolderId !== undefined
@@ -185,7 +196,15 @@ export function ImageModule(): ReactNode {
 				if (!isStale()) setAssetsLoading(false);
 			}
 		},
-		[activeSource, activeTheme, currentFolderId, filter, query, source],
+		[
+			activeSource,
+			activeTheme,
+			currentFolderId,
+			filter,
+			isLocalSource,
+			query,
+			source,
+		],
 	);
 
 	// Load the source's themes once to decide whether to show source tabs
@@ -335,11 +354,20 @@ export function ImageModule(): ReactNode {
 		fileInputRef.current?.click();
 	}, []);
 
+	// "New folder" is offered only where the folder nav can host the name input:
+	// a folder-aware LOCAL source (mirrors the FolderNav render gate below).
+	const canCreateFolder = isLocalSource && source?.createFolder !== undefined;
 	const headerActions = useMemo(
 		() => (
-			<ImageUploadButton onClick={handlePickFiles} disabled={source === null} />
+			<ImageActionsMenu
+				onUpload={handlePickFiles}
+				onCreateFolder={
+					canCreateFolder ? () => setCreatingFolder(true) : undefined
+				}
+				disabled={source === null}
+			/>
 		),
-		[handlePickFiles, source],
+		[canCreateFolder, handlePickFiles, source],
 	);
 	useSetSidebarHeaderActions(headerActions);
 
@@ -419,6 +447,11 @@ export function ImageModule(): ReactNode {
 	const isLibraryEmpty =
 		assets.length === 0 && uploadingTiles.length === 0 && !assetsLoading;
 	const isFilterEmpty = !isLibraryEmpty && filteredAssets.length === 0;
+	// The media-kind filter is a local-library control and is hidden on an
+	// external source (e.g. Unsplash). Don't apply it client-side there either:
+	// a persisted `videos`/`audio` selection would otherwise partition every
+	// (image-only) Unsplash result out of the grid with no visible way back.
+	const gridFilter = isLocalSource ? filter : "all";
 
 	return (
 		<div data-testid="ak-module-image" className="flex h-full flex-col">
@@ -438,19 +471,20 @@ export function ImageModule(): ReactNode {
 						onChange={setActiveTheme}
 					/>
 				) : null}
-				{source.createFolder !== undefined ? (
+				{isLocalSource && source.createFolder !== undefined ? (
 					<FolderNav
 						folderPath={folderPath}
 						folders={folders}
 						onNavigate={setCurrentFolderId}
 						onCreateFolder={handleCreateFolder}
+						creating={creatingFolder}
+						onCreatingChange={setCreatingFolder}
 						rootLabel={msg("studio.module.image.folder.root")}
 						navLabel={msg("studio.module.image.folder.nav")}
-						newLabel={msg("studio.module.image.folder.new")}
 						newPromptLabel={msg("studio.module.image.folder.newPrompt")}
 					/>
 				) : null}
-				<ImageFilterStrip />
+				{isLocalSource ? <ImageFilterStrip /> : null}
 				<ImageSearchBar onChange={setQuery} />
 			</div>
 			<div className="min-h-0 flex-1 overflow-auto">
@@ -479,7 +513,7 @@ export function ImageModule(): ReactNode {
 						<AssetGrid
 							assets={filteredAssets}
 							uploadingTiles={uploadingTiles}
-							filter={filter}
+							filter={gridFilter}
 							source={source}
 							pluginActions={pluginActions}
 							onAssetClick={handleAssetClick}

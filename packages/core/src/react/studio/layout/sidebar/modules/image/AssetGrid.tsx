@@ -10,7 +10,7 @@
  * order; with a specific filter, only the matching kind renders.
  */
 
-import { type ReactNode, useMemo } from "react";
+import { type ReactNode, useCallback, useMemo } from "react";
 import { Skeleton } from "@/primitives/skeleton";
 import { Windowed } from "@/primitives/windowed";
 import { useMsg } from "@/state/editor-i18n-store";
@@ -89,6 +89,24 @@ export function AssetGrid({
 		/>
 	);
 
+	// Dragging an external (e.g. Unsplash) result onto the canvas is a "use"
+	// of that asset, so fire the source's `pickResult` to run its MANDATORY
+	// download trigger (and registration) — mirroring the click path. Local
+	// assets need no pick step. Best-effort: a failed trigger must never block
+	// the drag.
+	const handleAssetDragStart = useCallback(
+		(asset: StudioAsset): void => {
+			if (
+				asset.source !== undefined &&
+				asset.source !== "local" &&
+				source.pickResult !== undefined
+			) {
+				void source.pickResult(asset).catch(() => undefined);
+			}
+		},
+		[source],
+	);
+
 	const sections: ReactNode[] = [];
 
 	if (showImages && (images.length > 0 || uploadingTiles.length > 0)) {
@@ -127,6 +145,7 @@ export function AssetGrid({
 						<AssetImageTile
 							asset={asset}
 							onClick={() => onAssetClick(asset)}
+							onDragStartAsset={handleAssetDragStart}
 							menu={renderMenu(asset)}
 						/>
 					)}

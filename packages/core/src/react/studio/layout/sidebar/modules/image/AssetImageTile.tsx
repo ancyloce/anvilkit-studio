@@ -11,12 +11,20 @@ import type { StudioAsset } from "@/types/sidebar";
 export interface AssetImageTileProps {
 	readonly asset: StudioAsset;
 	readonly onClick: () => void;
+	/**
+	 * Fired when the tile starts being dragged, so the host can run the
+	 * source's pick side effects (e.g. Unsplash's MANDATORY download trigger)
+	 * for external assets — the drag bypasses the click path that normally
+	 * runs them.
+	 */
+	readonly onDragStartAsset?: (asset: StudioAsset) => void;
 	readonly menu: ReactNode;
 }
 
 export function AssetImageTile({
 	asset,
 	onClick,
+	onDragStartAsset,
 	menu,
 }: AssetImageTileProps): ReactNode {
 	const src = asset.thumbnailUrl ?? asset.url;
@@ -36,6 +44,7 @@ export function AssetImageTile({
 						alt: asset.name,
 					});
 					event.dataTransfer.effectAllowed = "copy";
+					onDragStartAsset?.(asset);
 				}}
 				className="relative aspect-square h-auto w-full overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] p-0 transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}

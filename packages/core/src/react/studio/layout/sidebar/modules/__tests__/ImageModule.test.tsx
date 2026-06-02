@@ -17,7 +17,10 @@ import {
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ImageModule } from "@/layout/sidebar/modules/ImageModule";
-import { SidebarHeaderActionsProvider } from "@/layout/sidebar/SidebarHeaderActionsContext";
+import {
+	SidebarHeaderActionsProvider,
+	useSidebarHeaderActions,
+} from "@/layout/sidebar/SidebarHeaderActionsContext";
 import {
 	createSidebarRegistryStore,
 	EditorI18nStoreProvider,
@@ -75,6 +78,15 @@ function Setup({
 			</EditorUiStoreProvider>
 		</EditorI18nStoreProvider>
 	);
+}
+
+/**
+ * Renders the header actions a module publishes via
+ * `useSetSidebarHeaderActions` — the real sidebar shell does this, but the unit
+ * harness must opt in to exercise the `ImageModule` header menu.
+ */
+function HeaderActionsOutlet(): ReactNode {
+	return <>{useSidebarHeaderActions()}</>;
 }
 
 function makeSource(
@@ -519,5 +531,172 @@ describe("ImageModule", () => {
 			expect(unsplashCall).toBeTruthy();
 			expect(unsplashCall).not.toHaveProperty("folderId");
 		});
+	});
+
+	it("hides the folder nav + media-kind filter on the Unsplash tab, leaving theme chips + search", async () => {
+		// Local-library chrome (folder breadcrumb + All/Images/Videos/Audio
+		// filter) must not appear on an external browse source — Unsplash has no
+		// folders and is image-only. Only the theme chips + search remain. The
+		// source is BOTH folder-aware (createFolder) and themed (listThemes), so
+		// the gate is the active tab, not the source's capabilities.
+		const registry = createSidebarRegistryStore();
+		const listPaginated = vi.fn().mockResolvedValue({
+			items: [],
+			total: 0,
+			nextCursor: undefined,
+			folders: [],
+			folderPath: [],
+		});
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated,
+				createFolder: vi
+					.fn()
+					.mockResolvedValue({ id: "f1", name: "New", parentId: null }),
+				listThemes: () => [
+					{ id: "nature", label: "assetManager.unsplash.theme.nature" },
+				],
+			}),
+		);
+
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+
+		// Library tab (default): folder-aware ⇒ folder nav + filter strip render.
+		expect(await screen.findByTestId("ak-image-folder-nav")).toBeTruthy();
+		expect(screen.getByTestId("ak-image-filter")).toBeTruthy();
+
+		// Switch to Unsplash ⇒ the local-library controls disappear and the
+		// theme chips appear; only chips + search remain.
+		fireEvent.click(await screen.findByText("Unsplash"));
+		expect(await screen.findByTestId("ak-image-theme-chips")).toBeTruthy();
+		await waitFor(() => {
+			expect(screen.queryByTestId("ak-image-folder-nav")).toBeNull();
+		});
+		expect(screen.queryByTestId("ak-image-filter")).toBeNull();
+		expect(screen.getByTestId("ak-image-search")).toBeTruthy();
+	});
+
+	it("merges upload + new folder behind a single header menu button", async () => {
+		// One icon button publishes to the header; the old standalone upload
+		// button no longer exists. The menu offers Upload + (folder-aware local
+		// source) New folder, and New folder opens the inline name input.
+		const registry = createSidebarRegistryStore();
+		const createFolder = vi
+			.fn()
+			.mockResolvedValue({ id: "f9", name: "Brand", parentId: null });
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated: vi.fn().mockResolvedValue({
+					items: [],
+					total: 0,
+					nextCursor: undefined,
+					folders: [],
+					folderPath: [],
+				}),
+				createFolder,
+			}),
+		);
+
+		render(
+			<Setup registry={registry}>
+				<HeaderActionsOutlet />
+				<ImageModule />
+			</Setup>,
+		);
+
+		const trigger = await screen.findByTestId("ak-image-actions");
+		expect(screen.queryByTestId("ak-image-upload")).toBeNull();
+
+		// Opening the merged button surfaces both create-affordances.
+		fireEvent.click(trigger);
+		expect(await screen.findByTestId("ak-image-action-upload")).toBeTruthy();
+		fireEvent.click(await screen.findByTestId("ak-image-action-new-folder"));
+
+		// New folder opens the inline name input; submitting creates the folder
+		// at the current (root) location.
+		const input = await screen.findByTestId("ak-image-new-folder-input");
+		fireEvent.change(input, { target: { value: "Brand" } });
+		fireEvent.keyDown(input, { key: "Enter" });
+		await waitFor(() => {
+			expect(createFolder).toHaveBeenCalledWith(null, "Brand");
+		});
+	});
+
+	it("omits New folder from the header menu for a flat (non-folder) source", async () => {
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated: vi.fn().mockResolvedValue({
+					items: [],
+					total: 0,
+					nextCursor: undefined,
+				}),
+			}),
+		);
+
+		render(
+			<Setup registry={registry}>
+				<HeaderActionsOutlet />
+				<ImageModule />
+			</Setup>,
+		);
+
+		fireEvent.click(await screen.findByTestId("ak-image-actions"));
+		expect(await screen.findByTestId("ak-image-action-upload")).toBeTruthy();
+		expect(screen.queryByTestId("ak-image-action-new-folder")).toBeNull();
+	});
+
+	it("still shows Unsplash images when a videos/audio filter is persisted", async () => {
+		// Regression: the media-kind filter is hidden on Unsplash, so a persisted
+		// `videos`/`audio` selection (made on Library) must NOT silently partition
+		// the image-only Unsplash results out of the grid — there'd be no visible
+		// control to recover. The external grid ignores the local kind filter.
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated: vi.fn().mockResolvedValue({
+					items: [
+						{
+							id: "unsplash:p1",
+							kind: "image",
+							name: "pic",
+							url: "https://images.unsplash.com/p1",
+							source: "unsplash",
+							thumbnailUrl: "https://images.unsplash.com/p1",
+						},
+					],
+					total: 1,
+					nextCursor: undefined,
+				}),
+				listThemes: () => [
+					{ id: "nature", label: "assetManager.unsplash.theme.nature" },
+				],
+			}),
+		);
+
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+
+		// On Library, select the Videos kind filter (persists to the store).
+		await screen.findByTestId("ak-image-source-tabs");
+		const filterButtons = screen
+			.getByTestId("ak-image-filter")
+			.querySelectorAll("button");
+		fireEvent.click(filterButtons[2]!); // [all, images, videos, audio]
+
+		// Switch to Unsplash → the image result still renders despite filter=videos.
+		fireEvent.click(screen.getByText("Unsplash"));
+		expect(await screen.findByLabelText("pic")).toBeTruthy();
 	});
 });
