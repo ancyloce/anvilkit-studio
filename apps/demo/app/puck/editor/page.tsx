@@ -45,6 +45,7 @@ import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin"
 import { createDemoPagesSource } from "../../../lib/demo-pages-source";
 import {
 	createLazyDemoVersionHistoryPlugins,
+	getDemoAssetRegistry,
 	lazyAssetManagerNoHeaderPlugin,
 	lazyCanvasStudioPlugin,
 	lazyHtmlExportPlugin,
@@ -735,11 +736,13 @@ export default function PuckEditorPage() {
 		}
 	}
 
-	function handlePublishClick() {
-		// Demo: route the panel's "Publish to live" through the same
-		// flow Puck's own publish button uses. Real apps typically POST
-		// to a backend here.
-		handlePublish(publishedData);
+	function handlePublishClick(liveData: Data) {
+		// Demo: route the panel's "Publish to live" through the same flow
+		// Puck's own publish button uses. The chrome now hands us the LIVE
+		// editor document (read from the Puck API at click time), so we
+		// publish current edits rather than the stale `publishedData`
+		// snapshot. Real apps typically POST to a backend here.
+		handlePublish(liveData);
 	}
 
 	function handlePublish(nextPublishedData: Data) {
@@ -750,16 +753,39 @@ export default function PuckEditorPage() {
 		// public Studio surface.
 		const typedData = nextPublishedData as unknown as Data<DemoComponents>;
 		setPublishedData(typedData);
-		router.push(createDemoModeHref("/puck/render", typedData));
+		// The Puck-drag E2E stays on the editor so the export hooks
+		// (`window.__puckExportTrigger`) survive for its export assertions;
+		// real publishing navigates to the render preview.
+		if (!puckDragE2eMode) {
+			router.push(createDemoModeHref("/puck/render", typedData));
+		}
 		console.log("[demo] publish", typedData);
+	}
+
+	// Build export IR and resolve any `asset://<id>` references against the
+	// demo's upload registry, so an inserted asset exports as a real URL
+	// instead of an unresolved `asset://` ref. The plugin keeps its registry
+	// internal, so uploads are mirrored into `getDemoAssetRegistry()`
+	// (`lazy-plugins.ts`); when nothing has been uploaded the IR is returned
+	// as-is.
+	async function buildExportIR() {
+		const ir = puckDataToIR(
+			publishedData,
+			editorDemoConfig as unknown as Config,
+		);
+		const registry = getDemoAssetRegistry();
+		if (registry === undefined) return ir;
+		const { createIRAssetResolver, resolveAssets } = await loadAssetManager();
+		const resolver = createIRAssetResolver({
+			registry,
+			dataUrlAllowlistOptIn: true,
+		});
+		return resolveAssets(ir, resolver);
 	}
 
 	async function handleExportHtml() {
 		try {
-			const ir = puckDataToIR(
-				publishedData,
-				editorDemoConfig as unknown as Config,
-			);
+			const ir = await buildExportIR();
 			const { htmlFormat } = await loadExportHtml();
 			const result = await htmlFormat.run(ir, { title: "Exported Page" });
 			downloadExportResult(
@@ -778,10 +804,7 @@ export default function PuckEditorPage() {
 
 	async function handleExportReact() {
 		try {
-			const ir = puckDataToIR(
-				publishedData,
-				editorDemoConfig as unknown as Config,
-			);
+			const ir = await buildExportIR();
 			const { reactFormat } = await loadExportReact();
 			const result = await reactFormat.run(ir, { syntax: "tsx" });
 			downloadExportResult(
@@ -805,10 +828,7 @@ export default function PuckEditorPage() {
 	// the export plugins — neither side needs to know about the other.
 	async function handleExport(formatId: string) {
 		try {
-			const ir = puckDataToIR(
-				publishedData,
-				editorDemoConfig as unknown as Config,
-			);
+			const ir = await buildExportIR();
 			if (formatId === "html") {
 				const { htmlFormat } = await loadExportHtml();
 				const result = await htmlFormat.run(ir, { title: "Exported Page" });

@@ -21,6 +21,7 @@ import {
 	lazyPluginWith,
 	withoutHeaderActions,
 } from "@anvilkit/core";
+import type { AssetRegistry } from "@anvilkit/plugin-asset-manager";
 import type { Config } from "@puckeditor/core";
 import { FileCode, FileCode2, Frame, History } from "lucide-react";
 import { createElement } from "react";
@@ -126,12 +127,48 @@ export const lazyReactExportPlugin: StudioPlugin = lazyPlugin(
  * `capabilities.header` reserved before the chunk loads (other
  * header-capable plugins keep the header-action region rendered).
  */
+// The plugin keeps its asset registry internal, so the editor's standalone
+// export handlers (`puckDataToIR` + `format.run`) have nothing to resolve
+// `asset://<id>` references against. We mirror every successful upload into
+// this demo-owned registry so {@link getDemoAssetRegistry} can feed
+// `createIRAssetResolver` at export time.
+let demoAssetRegistry: AssetRegistry | undefined;
+
+/** The demo's export-side asset registry (mirrors uploads); `undefined` until the asset plugin registers. */
+export function getDemoAssetRegistry(): AssetRegistry | undefined {
+	return demoAssetRegistry;
+}
+
+// Unsplash is enabled only when the operator opts in via `NEXT_PUBLIC_UNSPLASH_ENABLED`
+// (so the client wires the proxy endpoint) AND sets the server-only
+// `UNSPLASH_ACCESS_KEY` (so `app/api/unsplash/[...path]` can authenticate).
+// Proxy-first: the key never reaches the browser (PRD 0002 §8.3). Absent the
+// flag, the demo omits Unsplash and the sidebar shows just the library + folders.
+const demoUnsplashOptions =
+	process.env.NEXT_PUBLIC_UNSPLASH_ENABLED === "1"
+		? { proxyEndpoint: "/api/unsplash", appName: "anvilkit-demo" }
+		: undefined;
+
 export const lazyAssetManagerNoHeaderPlugin: StudioPlugin = lazyPluginWith(
 	async () => {
 		const mod = await loadAssetManager();
+		demoAssetRegistry ??= mod.createAssetRegistry();
+		const registry = demoAssetRegistry;
+		const baseUploader = mod.dataUrlUploader();
+		const trackedUploader: typeof baseUploader = async (file, options) => {
+			const result = await baseUploader(file, options);
+			// Side-mirror for export resolution; the plugin still registers the
+			// same result into its own internal registry for the sidebar.
+			registry.register(result);
+			return result;
+		};
 		return mod.createAssetManagerPlugin({
-			uploader: mod.dataUrlUploader(),
+			uploader: trackedUploader,
 			dataUrlAllowlistOptIn: true,
+			// Folders default ON in the plugin; set explicitly for clarity so the
+			// demo's Images rail always shows the folder breadcrumb + tree.
+			folders: true,
+			...(demoUnsplashOptions ? { unsplash: demoUnsplashOptions } : {}),
 		});
 	},
 	withoutHeaderActions,

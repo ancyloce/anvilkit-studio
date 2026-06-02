@@ -62,9 +62,16 @@ import {
 	componentConfig as statisticsComponentConfig,
 	defaultProps as statisticsDefaultProps,
 } from "@anvilkit/statistics";
-import type { Config, Data } from "@puckeditor/core";
+import type { ComponentConfig, Config, Data } from "@puckeditor/core";
+import { createElement } from "react";
 
 import { demoCopySnippetPack } from "./demo-copy-snippet-pack";
+
+/** Minimal media component — the insert target for `kindToComponentName("image")`. */
+export type ImageProps = {
+	src: string;
+	alt: string;
+};
 
 export type DemoComponents = {
 	BentoGrid: BentoGridProps;
@@ -73,12 +80,34 @@ export type DemoComponents = {
 	DesignBlock: DesignBlockProps;
 	Hero: HeroProps;
 	Helps: HelpsProps;
+	Image: ImageProps;
 	Input: InputProps;
 	LogoClouds: LogoCloudsProps;
 	Navbar: NavbarProps;
 	PricingMinimal: PricingMinimalProps;
 	Section: SectionProps;
 	Statistics: StatisticsProps;
+};
+
+/**
+ * A deliberately tiny `<img>` component so the asset-manager sidebar's tile-click
+ * insert (`kindToComponentName("image") === "Image"`) resolves to a registered
+ * component. The `src` carries an `asset://<id>` reference that the export
+ * resolver rewrites to a real URL at publish time.
+ */
+const imageComponentConfig: ComponentConfig<ImageProps> = {
+	label: "Image",
+	fields: {
+		src: { type: "text" },
+		alt: { type: "text" },
+	},
+	defaultProps: { src: "", alt: "" },
+	render: ({ src, alt }) =>
+		createElement("img", {
+			src,
+			alt,
+			style: { maxWidth: "100%", height: "auto", display: "block" },
+		}),
 };
 
 export const demoDataSearchParam = "data";
@@ -114,6 +143,10 @@ export const demoConfig: Config<DemoComponents> = {
 			title: "Canvas",
 			components: ["DesignBlock"],
 		},
+		media: {
+			title: "Media",
+			components: ["Image"],
+		},
 	},
 	components: {
 		BentoGrid: bentoGridComponentConfig,
@@ -122,6 +155,7 @@ export const demoConfig: Config<DemoComponents> = {
 		DesignBlock: designBlockComponentConfig,
 		Hero: heroComponentConfig,
 		Helps: helpsComponentConfig,
+		Image: imageComponentConfig,
 		Input: inputComponentConfig,
 		LogoClouds: logoCloudsComponentConfig,
 		Navbar: navbarComponentConfig,
