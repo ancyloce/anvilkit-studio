@@ -102,7 +102,9 @@ test("Unsplash: enable → search → insert fires the download trigger", async 
 	await expect(tabs).toBeVisible();
 
 	// Switch to the Unsplash tab → theme chips + a results query fire.
-	await tabs.getByRole("button", { name: /unsplash/i }).click();
+	// The source switcher is an animate-ui Tabs list, so the tab carries
+	// role="tab" (not "button", as the prior ToggleGroup did).
+	await tabs.getByRole("tab", { name: /unsplash/i }).click();
 	await expect(page.getByTestId("ak-image-theme-chips")).toBeVisible({
 		timeout: 10_000,
 	});
@@ -116,12 +118,15 @@ test("Unsplash: enable → search → insert fires the download trigger", async 
 	await expect(page.getByTestId("ak-image-attribution").first()).toBeVisible();
 
 	// Insert it: pickResult registers the asset, fires the download trigger,
-	// and dispatches an `asset://unsplash:` reference into the page.
+	// and dispatches the REAL hotlinked Unsplash URL into the page (Unsplash
+	// images are hotlinked — never an `asset://` reference, which would render
+	// as a broken image since nothing resolves it in the editor or at render).
 	await tile.locator("button").first().click();
 
 	await expect.poll(() => downloadTriggered, { timeout: 10_000 }).toBe(true);
 
-	// Publish and confirm the inserted Unsplash reference reached the document.
+	// Publish and confirm the inserted hotlinked Unsplash URL reached the
+	// document — and that NO unresolved `asset://` reference leaked in.
 	await page
 		.getByRole("button", { name: "Publish", exact: true })
 		.click({ force: true });
@@ -137,5 +142,12 @@ test("Unsplash: enable → search → insert fires the download trigger", async 
 				}),
 			{ timeout: 10_000 },
 		)
-		.toMatch(/"asset:\/\/unsplash:/);
+		.toMatch(/images\.unsplash\.com\/photo-1/);
+	// And NO unresolved `asset://unsplash:` reference leaked into the document.
+	expect(
+		await page.evaluate(() => {
+			const w = window as unknown as { __puckData?: unknown };
+			return w.__puckData ? JSON.stringify(w.__puckData) : "";
+		}),
+	).not.toContain("asset://unsplash:");
 });

@@ -146,7 +146,19 @@ export function getDemoAssetRegistry(): AssetRegistry | undefined {
 // flag, the demo omits Unsplash and the sidebar shows just the library + folders.
 const demoUnsplashOptions =
 	process.env.NEXT_PUBLIC_UNSPLASH_ENABLED === "1"
-		? { proxyEndpoint: "/api/unsplash", appName: "anvilkit-demo" }
+		? {
+				proxyEndpoint: "/api/unsplash",
+				appName: "anvilkit-demo",
+				// Per-request ceiling so a blocked/flaky network path can't spin the
+				// Images rail forever — a timeout surfaces as a retryable
+				// `PROVIDER_NETWORK` and the sidebar shows "Unsplash unavailable".
+				// 14s is a deliberate backstop ABOVE the proxy route's worst case
+				// (`UNSPLASH_PROXY_TIMEOUT_MS`, default 6s, × 2 attempts ≈ 12s), so
+				// the proxy's own retry + clean 504 surfaces first; this only governs
+				// if the Next route itself wedges. To fail faster, lower BOTH this and
+				// `UNSPLASH_PROXY_TIMEOUT_MS` together.
+				requestTimeoutMs: 14_000,
+			}
 		: undefined;
 
 export const lazyAssetManagerNoHeaderPlugin: StudioPlugin = lazyPluginWith(

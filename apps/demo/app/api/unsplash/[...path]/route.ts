@@ -50,6 +50,53 @@ function isRetryableNetworkError(error: unknown): boolean {
 	);
 }
 
+/** First configured outbound-proxy env var, if any (respects lowercase too). */
+function proxyEnv(): string | undefined {
+	return (
+		process.env.HTTPS_PROXY ||
+		process.env.https_proxy ||
+		process.env.HTTP_PROXY ||
+		process.env.http_proxy ||
+		process.env.ALL_PROXY ||
+		process.env.all_proxy ||
+		undefined
+	);
+}
+
+// Node's global `fetch` IGNORES `HTTP(S)_PROXY`. In environments that only reach
+// the internet through a local/corporate proxy (WSL2, regional proxies, CI
+// behind a gateway — the same one `curl` honors), a direct socket to
+// `api.unsplash.com` stalls on the TLS handshake while the proxy path succeeds.
+// When a proxy env var is set we route the upstream call through undici's
+// `EnvHttpProxyAgent` (which reads `HTTP_PROXY` / `HTTPS_PROXY` / `NO_PROXY`),
+// using undici's OWN `fetch` so the dispatcher is version-matched — the global
+// fetch rejects a dispatcher from a separately-installed undici. Built once,
+// lazily, and only when a proxy is configured, so a proxy-less deployment keeps
+// using the global fetch byte-for-byte. Falls back to global fetch if undici
+// can't be loaded for any reason.
+let upstreamFetchPromise: Promise<typeof fetch> | undefined;
+
+function getUpstreamFetch(): Promise<typeof fetch> {
+	if (proxyEnv() === undefined) return Promise.resolve(fetch);
+	upstreamFetchPromise ??= (async () => {
+		try {
+			const { fetch: undiciFetch, EnvHttpProxyAgent } = await import("undici");
+			const dispatcher = new EnvHttpProxyAgent();
+			return ((
+				input: Parameters<typeof fetch>[0],
+				init?: Parameters<typeof fetch>[1],
+			) =>
+				undiciFetch(input as Parameters<typeof undiciFetch>[0], {
+					...(init as Parameters<typeof undiciFetch>[1]),
+					dispatcher,
+				})) as unknown as typeof fetch;
+		} catch {
+			return fetch;
+		}
+	})();
+	return upstreamFetchPromise;
+}
+
 /**
  * Server-side Unsplash proxy (PRD 0002 §8.3). The asset-manager Unsplash client
  * points its `proxyEndpoint` here and requests
@@ -88,6 +135,8 @@ export async function GET(
 	const search = new URL(req.url).search;
 	const target = `${UNSPLASH_API}/${path.map(encodeURIComponent).join("/")}${search}`;
 	const timeoutMs = resolveTimeoutMs();
+	// Honors HTTP(S)_PROXY when set; otherwise the plain global fetch.
+	const upstreamFetch = await getUpstreamFetch();
 
 	let lastError: unknown;
 	for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
@@ -104,7 +153,7 @@ export async function GET(
 		const signal = signals.length === 1 ? signals[0] : AbortSignal.any(signals);
 
 		try {
-			const upstream = await fetch(target, {
+			const upstream = await upstreamFetch(target, {
 				headers: {
 					Authorization: `Client-ID ${accessKey}`,
 					"Accept-Version": "v1",
@@ -157,8 +206,9 @@ export async function GET(
 		{
 			errors: [
 				"Unsplash upstream is unreachable from this server (network timeout). " +
-					"If you are behind a VPN or corporate proxy, api.unsplash.com may be " +
-					"blocked or tunneled — try disabling it or whitelisting api.unsplash.com.",
+					"The route already routes through HTTP(S)_PROXY when set; if it is " +
+					"still failing, check that the proxy is running and can reach " +
+					"api.unsplash.com (or unset the proxy if direct access is available).",
 			],
 		},
 		{ status: 504 },

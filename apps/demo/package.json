@@ -55,6 +55,7 @@
 		"react-dom": "^19.2.6",
 		"react-konva": "^19.2.4",
 		"replicate": "^1.4.0",
+		"undici": "^8.3.0",
 		"y-protocols": "^1.0.7",
 		"y-websocket": "^3.0.0",
 		"yjs": "^13.6.31"
