@@ -209,6 +209,7 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	"studio.module.image.requireTarget":
 		"Drop the asset onto an image element on the canvas to replace it.",
 	"studio.module.image.folder.root": "All assets",
+	"studio.module.image.folder.nav": "Folders",
 	"studio.module.image.folder.new": "New folder",
 	"studio.module.image.folder.newPrompt": "Folder name",
 	"studio.module.image.folder.empty": "This folder is empty.",

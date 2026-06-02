@@ -130,10 +130,18 @@ export function ImageModule(): ReactNode {
 			try {
 				if (source.listPaginated !== undefined) {
 					const trimmedQuery = query.trim();
-					// Folder scoping only for a folder-aware source; otherwise the
-					// query is byte-identical to before (flat sources unaffected).
+					// Folder scoping applies only to the LOCAL library — never to an
+					// external source tab (e.g. Unsplash) that can't satisfy folders.
+					// Leaking `folderId` to a folders:false provider makes
+					// `providerCanSatisfy` drop it from the federation, so the Unsplash
+					// grid would return zero results whenever folders are enabled.
+					// `activeSource === undefined` is the untabbed local-only source;
+					// `"local"` is the Library tab. Flat sources stay byte-identical.
 					const folderAware = source.createFolder !== undefined;
-					const effectiveFolderId = folderAware
+					const folderScoped =
+						folderAware &&
+						(activeSource === undefined || activeSource === "local");
+					const effectiveFolderId = folderScoped
 						? (currentFolderId ?? null)
 						: undefined;
 					const page = await source.listPaginated({
@@ -437,6 +445,7 @@ export function ImageModule(): ReactNode {
 						onNavigate={setCurrentFolderId}
 						onCreateFolder={handleCreateFolder}
 						rootLabel={msg("studio.module.image.folder.root")}
+						navLabel={msg("studio.module.image.folder.nav")}
 						newLabel={msg("studio.module.image.folder.new")}
 						newPromptLabel={msg("studio.module.image.folder.newPrompt")}
 					/>

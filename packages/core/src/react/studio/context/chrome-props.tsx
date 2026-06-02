@@ -9,6 +9,7 @@
  * context instead.
  */
 
+import type { Data } from "@puckeditor/core";
 import { createContext, type ReactNode, use } from "react";
 import type { StudioViewport } from "@/studio/ui/viewports";
 
@@ -18,7 +19,8 @@ export interface ChromeProps {
 	readonly isSavingDraft?: boolean;
 	readonly lastSavedAt?: Date | null;
 	readonly isPublishing?: boolean;
-	readonly onPublishClick?: () => void;
+	/** Receives the live editor document (read from the Puck API at click time). */
+	readonly onPublishClick?: (data: Data) => void;
 	readonly viewports?: readonly StudioViewport[];
 	/**
 	 * Host-supplied download handler invoked from the publish panel's

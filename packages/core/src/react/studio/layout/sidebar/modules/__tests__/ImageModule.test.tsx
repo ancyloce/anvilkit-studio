@@ -464,4 +464,60 @@ describe("ImageModule", () => {
 			expect(pickResult).toHaveBeenCalled();
 		});
 	});
+
+	it("does not leak folderId to the Unsplash tab when the source is folder-aware", async () => {
+		// Regression: a composite source with folders + Unsplash is BOTH
+		// folder-aware (createFolder defined) AND themed (Unsplash tab). Sending
+		// folderId:null on the Unsplash tab makes providerCanSatisfy drop the
+		// folders:false provider → the picker grid is permanently empty. The
+		// Library tab must still folder-scope; the Unsplash tab must not.
+		const registry = createSidebarRegistryStore();
+		const listPaginated = vi.fn().mockResolvedValue({
+			items: [],
+			total: 0,
+			nextCursor: undefined,
+			folders: [],
+			folderPath: [],
+		});
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated,
+				createFolder: vi
+					.fn()
+					.mockResolvedValue({ id: "f1", name: "New", parentId: null }),
+				listThemes: () => [
+					{ id: "nature", label: "assetManager.unsplash.theme.nature" },
+				],
+			}),
+		);
+
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+
+		// Library tab (default): folder-aware ⇒ query carries folderId:null.
+		await waitFor(() => {
+			expect(listPaginated.mock.calls.some(([q]) => q.folderId === null)).toBe(
+				true,
+			);
+		});
+
+		// Switch to the Unsplash tab.
+		fireEvent.click(await screen.findByText("Unsplash"));
+
+		// The Unsplash query must scope to the unsplash source and must NOT
+		// carry folderId (any value, including null).
+		await waitFor(() => {
+			const unsplashCall = listPaginated.mock.calls
+				.map(([q]) => q)
+				.find(
+					(q) => Array.isArray(q.sources) && q.sources.includes("unsplash"),
+				);
+			expect(unsplashCall).toBeTruthy();
+			expect(unsplashCall).not.toHaveProperty("folderId");
+		});
+	});
 });

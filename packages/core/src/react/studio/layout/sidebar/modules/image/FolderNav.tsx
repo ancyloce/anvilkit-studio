@@ -16,6 +16,7 @@ export function FolderNav({
 	onNavigate,
 	onCreateFolder,
 	rootLabel,
+	navLabel,
 	newLabel,
 	newPromptLabel,
 }: {
@@ -24,6 +25,8 @@ export function FolderNav({
 	readonly onNavigate: (folderId: string | null) => void;
 	readonly onCreateFolder: (name: string) => void;
 	readonly rootLabel: string;
+	/** Accessible name for the breadcrumb landmark (distinct from `rootLabel`). */
+	readonly navLabel: string;
 	readonly newLabel: string;
 	readonly newPromptLabel: string;
 }): ReactNode {
@@ -41,7 +44,7 @@ export function FolderNav({
 		<div data-testid="ak-image-folder-nav" className="space-y-1">
 			<div className="flex items-center justify-between gap-2">
 				<nav
-					aria-label={rootLabel}
+					aria-label={navLabel}
 					className="flex flex-wrap items-center gap-1 text-xs"
 				>
 					<button

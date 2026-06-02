@@ -17,6 +17,7 @@
  * already plumbed.
  */
 
+import { useGetPuck } from "@puckeditor/core";
 import { ChevronDown, Download } from "lucide-react";
 import { type ReactNode } from "react";
 import { useChromeProps } from "@/context/chrome-props";
@@ -36,8 +37,8 @@ import {
 } from "@/primitives/animate-ui/primitives/base/popover";
 import { Button } from "@/primitives/button";
 import { useMsg } from "@/state/editor-i18n-store";
-import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import type { ExportFormatDefinition } from "@/types/export";
+import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 
 export function PublishPanel(): ReactNode {
 	const msg = useMsg();
@@ -49,6 +50,7 @@ export function PublishPanel(): ReactNode {
 		isPublishing = false,
 		onExport,
 	} = useChromeProps();
+	const getPuck = useGetPuck();
 	const runtime = useStudioRuntime();
 	const formats = Array.from(runtime.exportFormats.values());
 	const exportEnabled = onExport !== undefined && formats.length > 0;
@@ -111,7 +113,11 @@ export function PublishPanel(): ReactNode {
 									variant="default"
 									size="sm"
 									className="justify-start"
-									onClick={onPublishClick}
+									onClick={() => {
+										// Read the LIVE document at click time so the host
+										// publishes current edits, not a stale snapshot.
+										onPublishClick?.(getPuck().appState.data);
+									}}
 									disabled={onPublishClick === undefined || isPublishing}
 								>
 									{isPublishing
