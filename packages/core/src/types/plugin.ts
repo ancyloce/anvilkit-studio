@@ -53,17 +53,26 @@ import type {
 } from "@puckeditor/core";
 import type { ComponentType, ReactNode } from "react";
 
+import type { IRAssetResolver } from "./asset-resolver.js";
 import type { StudioConfig } from "./config.js";
 import type { ExportFormatDefinition } from "./export.js";
+import type { StudioLogLevel } from "./log.js";
+import type {
+	StudioAssetAction,
+	StudioAssetSource,
+	StudioCopilotPanel,
+	StudioCopySnippetPack,
+	StudioDesignSystemPanel,
+	StudioHistoryPanel,
+	StudioInsertSection,
+	StudioLayerQuickAdd,
+	StudioSidebarUnregister,
+} from "./sidebar.js";
 
-/**
- * Severity level for {@link StudioPluginContext.log}.
- *
- * Follows the conventional `debug` < `info` < `warn` < `error`
- * ordering. The runtime may route different levels to different sinks
- * (e.g. `error` to a host-provided error reporter).
- */
-export type StudioLogLevel = "debug" | "info" | "warn" | "error";
+// `StudioLogLevel` now lives in the leaf module `./log.js` (so `sidebar.ts`
+// can reference it without a madge cycle); re-exported here so existing
+// `@anvilkit/core/types` and `@/types/plugin` consumers are unaffected.
+export type { StudioLogLevel };
 
 /**
  * Identifying metadata every Studio plugin must declare.
@@ -227,19 +236,6 @@ export type StudioPluginCapabilities =
 	  };
 
 export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
-
-import type { IRAssetResolver } from "./asset-resolver.js";
-import type {
-	StudioAssetAction,
-	StudioAssetSource,
-	StudioCopilotPanel,
-	StudioCopySnippetPack,
-	StudioDesignSystemPanel,
-	StudioHistoryPanel,
-	StudioInsertSection,
-	StudioLayerQuickAdd,
-	StudioSidebarUnregister,
-} from "./sidebar.js";
 
 /**
  * Read / write / observe handle passed to every plugin lifecycle call.

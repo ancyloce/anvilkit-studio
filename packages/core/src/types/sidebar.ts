@@ -18,6 +18,9 @@ import type {
 	ComponentData as PuckComponentData,
 } from "@puckeditor/core";
 import type { ReactNode } from "react";
+// Leaf module (imports nothing), so referencing the shared union here does
+// not re-form the `plugin.ts` ↔ `sidebar.ts` madge cycle.
+import type { StudioLogLevel } from "./log.js";
 
 // -----------------------------------------------------------------------------
 // `insert` module — Component Library
@@ -351,11 +354,8 @@ export interface StudioAssetAction {
 	readonly tone?: "default" | "destructive";
 	readonly run: (input: {
 		readonly asset: StudioAsset;
-		// `level` mirrors `StudioLogLevel` from `./plugin.js` inline to
-		// keep `types/sidebar.ts` free of imports from `plugin.ts`
-		// (`plugin.ts` already imports from here — see madge gate).
 		readonly log: (
-			level: "debug" | "info" | "warn" | "error",
+			level: StudioLogLevel,
 			message: string,
 			meta?: Readonly<Record<string, unknown>>,
 		) => void;

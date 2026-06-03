@@ -254,17 +254,19 @@ function withAutoTeardown<UserConfig extends import("@puckeditor/core").Config>(
 				try {
 					await userOnDestroy(ctx);
 				} catch (error) {
-					ctx.log("error", `Plugin "${pluginId}" onDestroy threw`, {
-						error: error instanceof Error ? error.message : String(error),
-					});
+					// Pass the raw error — `normalizeLogError` (in the sink) folds in
+					// name + message + stack. Pre-extracting `.message` collapses an
+					// empty-message Error to `{}` and discards the stack.
+					ctx.log("error", `Plugin "${pluginId}" onDestroy threw`, { error });
 				}
 			}
 			for (let i = collected.length - 1; i >= 0; i -= 1) {
 				try {
 					collected[i]?.();
 				} catch (error) {
+					// Raw error (see the `onDestroy` catch above).
 					ctx.log("error", `Plugin "${pluginId}" auto-teardown handle threw`, {
-						error: error instanceof Error ? error.message : String(error),
+						error,
 					});
 				}
 			}
