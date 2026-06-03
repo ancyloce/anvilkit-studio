@@ -35,6 +35,22 @@ if (!result.valid) {
 }
 ```
 
+### Gating export on config validity
+
+```ts
+import { validateComponentConfig } from "@anvilkit/validator";
+import type { Config } from "@puckeditor/core";
+
+function assertExportReady(config: Config) {
+  const { valid, issues } = validateComponentConfig(config);
+  if (!valid) {
+    throw new Error(
+      `Config has ${issues.length} blocking issue(s) — fix before export.`,
+    );
+  }
+}
+```
+
 ## Architecture context
 
 `@anvilkit/validator` is the trust boundary between untrusted AI
