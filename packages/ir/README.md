@@ -34,6 +34,30 @@ const ir = puckDataToIR(data, config);
 const roundTripped = irToPuckData(ir);
 ```
 
+### Collect referenced assets
+
+```ts
+import { collectAssets } from "@anvilkit/ir";
+
+// Walk a node sub-tree and gather every referenced asset, deduplicated.
+const assets = collectAssets(ir.root);
+for (const asset of assets) {
+  console.log(asset.kind, asset.url);
+}
+```
+
+### Identify slot fields per component
+
+```ts
+import { identifySlots } from "@anvilkit/ir";
+import type { Config } from "@puckeditor/core";
+
+declare const config: Config;
+
+// Map each component type to the slot-field keys it declares.
+const slotsByComponent = identifySlots(config);
+```
+
 ## Architecture context
 
 `@anvilkit/ir` is the first of three headless runtime packages
@@ -55,7 +79,7 @@ for the full package catalog and trust-boundary discussion.
 | Package            | Version   |
 | ------------------ | --------- |
 | `@anvilkit/core`   | `0.1.3`   |
-| `@puckeditor/core` | `^0.21.0` |
+| `@puckeditor/core` | `^0.21.2` |
 
 ## Dependency contract
 
