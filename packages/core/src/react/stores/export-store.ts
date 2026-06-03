@@ -44,8 +44,9 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-import { persist } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { createStore, type StoreApi } from "zustand/vanilla";
+import { devtoolsEnabled } from "./dev-env.js";
 
 /**
  * A single entry in {@link ExportState.lastExport} — the record of
@@ -241,47 +242,53 @@ export function createExportStore(
 ): ExportStoreApi {
 	const { storeId } = options;
 	return createStore<ExportState>()(
-		persist(
-			(set) => ({
-				...INITIAL_STATE,
-				setAvailableFormats(ids) {
-					set({ availableFormats: ids });
+		devtools(
+			persist(
+				(set) => ({
+					...INITIAL_STATE,
+					setAvailableFormats(ids) {
+						set({ availableFormats: ids });
+					},
+					setCurrentFormat(id) {
+						set({ currentFormat: id });
+					},
+					setIsExporting(value) {
+						set({ isExporting: value });
+					},
+					recordExport(formatId, ok) {
+						set({ lastExport: { formatId, at: Date.now(), ok } });
+					},
+					reset() {
+						set({ ...INITIAL_STATE });
+					},
+				}),
+				{
+					name: `anvilkit-core-export-${storeId}`,
+					version: EXPORT_STORE_PERSIST_VERSION,
+					migrate: migrateExportPersistedState,
+					// Sanitize on every hydrate, not just on a version bump:
+					// `migrate` is skipped when the persisted version matches, so
+					// `merge` is the only hook that clamps a corrupt same-version
+					// `currentFormat` before it reaches the live store.
+					merge: (persisted, current): ExportState => ({
+						...current,
+						...migrateExportPersistedState(persisted),
+					}),
+					// Persist only `currentFormat`. Every other field is
+					// ephemeral for the reasons documented in the file header.
+					partialize: (state): ExportStorePartial => ({
+						currentFormat: state.currentFormat,
+					}),
+					// SSR safety: defer rehydration until the provider mounts
+					// a browser-only effect. Reading `localStorage`
+					// synchronously at module-eval produces a hydration
+					// mismatch in Next App Router / any SSR-ish host.
+					skipHydration: true,
 				},
-				setCurrentFormat(id) {
-					set({ currentFormat: id });
-				},
-				setIsExporting(value) {
-					set({ isExporting: value });
-				},
-				recordExport(formatId, ok) {
-					set({ lastExport: { formatId, at: Date.now(), ok } });
-				},
-				reset() {
-					set({ ...INITIAL_STATE });
-				},
-			}),
+			),
 			{
 				name: `anvilkit-core-export-${storeId}`,
-				version: EXPORT_STORE_PERSIST_VERSION,
-				migrate: migrateExportPersistedState,
-				// Sanitize on every hydrate, not just on a version bump:
-				// `migrate` is skipped when the persisted version matches, so
-				// `merge` is the only hook that clamps a corrupt same-version
-				// `currentFormat` before it reaches the live store.
-				merge: (persisted, current): ExportState => ({
-					...current,
-					...migrateExportPersistedState(persisted),
-				}),
-				// Persist only `currentFormat`. Every other field is
-				// ephemeral for the reasons documented in the file header.
-				partialize: (state): ExportStorePartial => ({
-					currentFormat: state.currentFormat,
-				}),
-				// SSR safety: defer rehydration until the provider mounts
-				// a browser-only effect. Reading `localStorage`
-				// synchronously at module-eval produces a hydration
-				// mismatch in Next App Router / any SSR-ish host.
-				skipHydration: true,
+				enabled: devtoolsEnabled(),
 			},
 		),
 	);

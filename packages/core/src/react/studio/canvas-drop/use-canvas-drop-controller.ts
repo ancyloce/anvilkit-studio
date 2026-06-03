@@ -34,7 +34,7 @@ import {
 } from "@puckeditor/core";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import {
 	type CanvasDropKind,
 	hasCanvasDropPayload,

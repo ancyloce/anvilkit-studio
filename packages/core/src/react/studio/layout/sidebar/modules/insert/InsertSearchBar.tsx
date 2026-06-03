@@ -27,7 +27,7 @@ import {
 	InputGroupAddon,
 	InputGroupInput,
 } from "@/primitives/input-group";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useDrawerSearch } from "@/state/hooks";
 
 const DEBOUNCE_MS = 150;

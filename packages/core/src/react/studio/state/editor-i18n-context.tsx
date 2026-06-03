@@ -1,21 +1,18 @@
 /**
  * @file Minimal i18n stub for Studio chrome (PRD §4.1, §10).
  *
- * v1 ships English-only labels. The store + `useMsg()` hook exist so
- * layout components can already call `useMsg("studio.publish")`
- * today without rewiring when localization lands. Plugins that need
- * to register custom strings can do so via `EditorI18nStoreProvider`'s
- * `messages` prop.
+ * v1 ships English-only labels. The `EditorI18nProvider` + `useMsg()`
+ * hook exist so layout components can already call
+ * `useMsg("studio.publish")` today without rewiring when localization
+ * lands. Plugins that need to register custom strings can do so via
+ * `EditorI18nProvider`'s `messages` prop.
  *
- * > **Naming note (review finding Z-4):** despite the `*-store` filename
- * > and `EditorI18nStoreProvider` name, this is a **plain React
- * > context** — it does not use Zustand `createStore`/`persist`/
+ * > **Naming note (review finding Z-4, resolved):** this is a **plain
+ * > React context** — it does not use Zustand `createStore`/`persist`/
  * > `useStore` like the genuine stores beside it. The message catalog is
- * > immutable per mount, so a context is the right primitive; the
- * > `Store` naming is retained only for symmetry with the sidebar
- * > provider stack. Renaming to `EditorI18nProvider` /
- * > `editor-i18n-context.tsx` is deferred to avoid churn across every
- * > importer.
+ * > immutable per mount, so a context is the right primitive. The module
+ * > and provider were renamed from `editor-i18n-store` /
+ * > `EditorI18nStoreProvider` to drop the misleading `Store` naming.
  *
  * ### Deprecated key aliases (PRD §10.2)
  *
@@ -258,7 +255,7 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 		"Install @anvilkit/plugin-design-system and register a design-system panel to edit tokens.",
 
 	// Field renderers (review finding N-1 — was the one systematic
-	// i18n/a11y gap; these compose inside <EditorI18nStoreProvider> but
+	// i18n/a11y gap; these compose inside <EditorI18nProvider> but
 	// previously hardcoded English user-facing + aria-label text).
 	"studio.field.placeholder.select": "Select…",
 	"studio.field.external.search": "Search…",
@@ -315,15 +312,15 @@ const EditorI18nContext = createContext<EditorI18nContextValue | null>(null);
 
 const EMPTY_OVERRIDES: Readonly<Record<string, string>> = Object.freeze({});
 
-export interface EditorI18nStoreProviderProps {
+export interface EditorI18nProviderProps {
 	readonly children: ReactNode;
 	readonly messages?: Readonly<Record<string, string>>;
 }
 
-export function EditorI18nStoreProvider({
+export function EditorI18nProvider({
 	children,
 	messages,
-}: EditorI18nStoreProviderProps): ReactNode {
+}: EditorI18nProviderProps): ReactNode {
 	const value = useMemo<EditorI18nContextValue>(
 		() => ({
 			messages:

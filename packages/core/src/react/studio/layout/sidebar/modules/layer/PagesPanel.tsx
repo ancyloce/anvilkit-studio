@@ -25,7 +25,7 @@ import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
 import { Windowed } from "@/primitives/windowed";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioPage } from "@/types/pages";
 import { AddPageDialog } from "./AddPageDialog";
 import { PageRow } from "./PageRow";

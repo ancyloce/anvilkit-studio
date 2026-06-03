@@ -44,8 +44,9 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-import { persist } from "zustand/middleware";
-import { createStore, type StoreApi } from "zustand/vanilla";
+import { devtools, persist } from "zustand/middleware";
+import { createStore } from "zustand/vanilla";
+import { devtoolsEnabled } from "./dev-env.js";
 
 /**
  * The user-facing theme preference. Matches the enum in
@@ -160,7 +161,15 @@ export interface CreateThemeStoreOptions {
 	readonly storeId: string;
 }
 
-export type ThemeStoreApi = StoreApi<ThemeState>;
+/**
+ * The vanilla theme store handle. Inferred from {@link createThemeStore} so
+ * it carries the `persist` middleware surface (`hasHydrated`,
+ * `onFinishHydration`, `rehydrate`, …) with full fidelity — consumers reach
+ * `store.persist` directly instead of casting through `unknown`. zustand does
+ * not export `StorePersist`, so deriving the type is the only way to keep it
+ * statically guaranteed rather than asserted.
+ */
+export type ThemeStoreApi = ReturnType<typeof createThemeStore>;
 
 /**
  * Build a fresh per-`<Studio>` theme store. The persistence key is
@@ -173,46 +182,50 @@ export type ThemeStoreApi = StoreApi<ThemeState>;
  * const store = createThemeStore({ storeId: "a" });
  * store.getState().setMode("dark");
  */
-export function createThemeStore(
-	options: CreateThemeStoreOptions,
-): ThemeStoreApi {
+export function createThemeStore(options: CreateThemeStoreOptions) {
 	const { storeId } = options;
 	return createStore<ThemeState>()(
-		persist(
-			(set) => ({
-				...INITIAL_STATE,
-				setMode(mode) {
-					set({ mode });
+		devtools(
+			persist(
+				(set) => ({
+					...INITIAL_STATE,
+					setMode(mode) {
+						set({ mode });
+					},
+					setResolved(resolved) {
+						set({ resolved });
+					},
+					reset() {
+						set({ ...INITIAL_STATE });
+					},
+				}),
+				{
+					name: `anvilkit-core-theme-${storeId}`,
+					version: THEME_STORE_PERSIST_VERSION,
+					migrate: migrateThemePersistedState,
+					// Sanitize on every hydrate, not just on a version bump:
+					// `migrate` is skipped when the persisted version matches, so
+					// `merge` is the only hook that clamps a corrupt same-version
+					// blob before it reaches the live store.
+					merge: (persisted, current): ThemeState => ({
+						...current,
+						...migrateThemePersistedState(persisted),
+					}),
+					// Persist `mode` only. See the file header for why
+					// `resolved` cannot and should not be persisted.
+					partialize: (state): ThemeStorePartial => ({
+						mode: state.mode,
+					}),
+					// SSR safety: skip synchronous rehydration so the server
+					// and first-client render agree on the initial `"system"`
+					// default. The provider rehydrates from a mount-time
+					// effect, after which `mode` reflects the persisted value.
+					skipHydration: true,
 				},
-				setResolved(resolved) {
-					set({ resolved });
-				},
-				reset() {
-					set({ ...INITIAL_STATE });
-				},
-			}),
+			),
 			{
 				name: `anvilkit-core-theme-${storeId}`,
-				version: THEME_STORE_PERSIST_VERSION,
-				migrate: migrateThemePersistedState,
-				// Sanitize on every hydrate, not just on a version bump:
-				// `migrate` is skipped when the persisted version matches, so
-				// `merge` is the only hook that clamps a corrupt same-version
-				// blob before it reaches the live store.
-				merge: (persisted, current): ThemeState => ({
-					...current,
-					...migrateThemePersistedState(persisted),
-				}),
-				// Persist `mode` only. See the file header for why
-				// `resolved` cannot and should not be persisted.
-				partialize: (state): ThemeStorePartial => ({
-					mode: state.mode,
-				}),
-				// SSR safety: skip synchronous rehydration so the server
-				// and first-client render agree on the initial `"system"`
-				// default. The provider rehydrates from a mount-time
-				// effect, after which `mode` reflects the persisted value.
-				skipHydration: true,
+				enabled: devtoolsEnabled(),
 			},
 		),
 	);

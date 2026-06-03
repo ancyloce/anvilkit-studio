@@ -22,7 +22,7 @@ import {
 	MenuTrigger,
 } from "@/primitives/animate-ui/components/base/menu";
 import { Button } from "@/primitives/button";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 
 export interface ImageActionsMenuProps {
 	readonly onUpload: () => void;

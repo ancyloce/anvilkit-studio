@@ -15,7 +15,7 @@ import { useStudioRuntime } from "@/hooks/use-studio";
 import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import type {
 	StudioPluginMeta,

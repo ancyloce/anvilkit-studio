@@ -3,7 +3,7 @@
  *
  * Phase B renamed `studio.tab.{insert,outline}` →
  * `studio.module.{insert,layer}.name`. This suite locks the
- * resolution order documented at the top of `editor-i18n-store.tsx`:
+ * resolution order documented at the top of `editor-i18n-context.tsx`:
  *
  *   1. catalog override of requested key
  *   2. catalog override of legacy alias mapped to requested key
@@ -16,13 +16,13 @@ import { renderHook } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import { EditorI18nStoreProvider, useMsg } from "@/state/editor-i18n-store";
+import { EditorI18nProvider, useMsg } from "@/state/editor-i18n-context";
 
 function wrap(messages?: Readonly<Record<string, string>>) {
 	return ({ children }: { children: ReactNode }) => (
-		<EditorI18nStoreProvider messages={messages}>
+		<EditorI18nProvider messages={messages}>
 			{children}
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

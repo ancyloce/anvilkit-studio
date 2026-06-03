@@ -46,7 +46,7 @@ import {
 import { Input } from "@/primitives/input";
 import { Item, ItemMedia } from "@/primitives/item";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioPage, StudioPagesSource } from "@/types/pages";
 import { cn } from "@/utils/cn";
 import { PageDeleteConfirmDialog } from "./PageDeleteConfirmDialog";

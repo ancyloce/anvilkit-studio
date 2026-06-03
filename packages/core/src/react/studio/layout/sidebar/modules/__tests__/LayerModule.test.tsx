@@ -17,7 +17,7 @@ import {
 import { LayerModule } from "@/layout/sidebar/modules/LayerModule";
 import {
 	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 } from "@/state/index";
@@ -56,7 +56,7 @@ function Setup({
 }: { readonly children: ReactNode } & SetupOptions): ReactElement {
 	const registry = createSidebarRegistryStore();
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`layer-${Math.random().toString(36).slice(2)}`}
 			>
@@ -66,7 +66,7 @@ function Setup({
 					</StudioPagesSourceProvider>
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

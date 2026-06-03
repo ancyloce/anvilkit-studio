@@ -47,8 +47,9 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-013-react-stores.md | core-013}
  */
 
-import { persist } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { createStore, type StoreApi } from "zustand/vanilla";
+import { devtoolsEnabled } from "./dev-env.js";
 
 /**
  * A single prompt in {@link AiState.history}. The entry is
@@ -248,70 +249,76 @@ export type AiStoreApi = StoreApi<AiState>;
 export function createAiStore(options: CreateAiStoreOptions): AiStoreApi {
 	const { storeId } = options;
 	return createStore<AiState>()(
-		persist(
-			(set) => ({
-				...INITIAL_STATE,
-				startGeneration(prompt) {
-					set((state) => ({
-						isGenerating: true,
-						lastPrompt: prompt,
-						// Starting a new run clears the previous error so the
-						// UI does not show a stale failure next to a fresh
-						// in-flight spinner.
-						lastError: null,
-						// Z-d: cap the in-memory array too, not just the
-						// persisted slice, so a long session cannot grow it
-						// without bound.
-						history: [...state.history, { prompt, at: Date.now() }].slice(
-							-HISTORY_MEMORY_LIMIT,
-						),
-					}));
+		devtools(
+			persist(
+				(set) => ({
+					...INITIAL_STATE,
+					startGeneration(prompt) {
+						set((state) => ({
+							isGenerating: true,
+							lastPrompt: prompt,
+							// Starting a new run clears the previous error so the
+							// UI does not show a stale failure next to a fresh
+							// in-flight spinner.
+							lastError: null,
+							// Z-d: cap the in-memory array too, not just the
+							// persisted slice, so a long session cannot grow it
+							// without bound.
+							history: [...state.history, { prompt, at: Date.now() }].slice(
+								-HISTORY_MEMORY_LIMIT,
+							),
+						}));
+					},
+					finishGeneration(ok, error) {
+						set({
+							isGenerating: false,
+							// On success, clear any prior error. On failure,
+							// record the error string (coerced to `null` if the
+							// caller omitted it, keeping the field a strict
+							// `string | null`).
+							lastError: ok ? null : (error ?? null),
+						});
+					},
+					clearHistory() {
+						set({ history: [] });
+					},
+					reset() {
+						set({ ...INITIAL_STATE });
+					},
+				}),
+				{
+					name: `anvilkit-core-ai-${storeId}`,
+					version: AI_STORE_PERSIST_VERSION,
+					migrate: migrateAiPersistedState,
+					// Sanitize on every hydrate, not just on a version bump:
+					// `migrate` is skipped when the persisted version matches, so
+					// `merge` is the only hook that coerces a corrupt same-version
+					// `history` to a valid array before it reaches the live store.
+					merge: (persisted, current): AiState => ({
+						...current,
+						...migrateAiPersistedState(persisted),
+					}),
+					// Persist only the last N history entries. Slicing inside
+					// `partialize` means the bound is enforced at write time;
+					// the in-memory `history` array can legitimately grow
+					// larger during a long session and the next `set` simply
+					// trims it on the way to disk.
+					partialize: (state): AiStorePartial => ({
+						history: state.history.slice(-HISTORY_PERSIST_LIMIT),
+					}),
+					// SSR safety: server render cannot see `localStorage`, so
+					// synchronous rehydration at module evaluation would
+					// produce a server/client hydration mismatch. `<Studio>`
+					// calls `useAiStore.persist.rehydrate()` from a
+					// mount-time effect (browser-only), which keeps the first
+					// server-rendered HTML aligned with the first client
+					// render while still restoring the user's history.
+					skipHydration: true,
 				},
-				finishGeneration(ok, error) {
-					set({
-						isGenerating: false,
-						// On success, clear any prior error. On failure,
-						// record the error string (coerced to `null` if the
-						// caller omitted it, keeping the field a strict
-						// `string | null`).
-						lastError: ok ? null : (error ?? null),
-					});
-				},
-				clearHistory() {
-					set({ history: [] });
-				},
-				reset() {
-					set({ ...INITIAL_STATE });
-				},
-			}),
+			),
 			{
 				name: `anvilkit-core-ai-${storeId}`,
-				version: AI_STORE_PERSIST_VERSION,
-				migrate: migrateAiPersistedState,
-				// Sanitize on every hydrate, not just on a version bump:
-				// `migrate` is skipped when the persisted version matches, so
-				// `merge` is the only hook that coerces a corrupt same-version
-				// `history` to a valid array before it reaches the live store.
-				merge: (persisted, current): AiState => ({
-					...current,
-					...migrateAiPersistedState(persisted),
-				}),
-				// Persist only the last N history entries. Slicing inside
-				// `partialize` means the bound is enforced at write time;
-				// the in-memory `history` array can legitimately grow
-				// larger during a long session and the next `set` simply
-				// trims it on the way to disk.
-				partialize: (state): AiStorePartial => ({
-					history: state.history.slice(-HISTORY_PERSIST_LIMIT),
-				}),
-				// SSR safety: server render cannot see `localStorage`, so
-				// synchronous rehydration at module evaluation would
-				// produce a server/client hydration mismatch. `<Studio>`
-				// calls `useAiStore.persist.rehydrate()` from a
-				// mount-time effect (browser-only), which keeps the first
-				// server-rendered HTML aligned with the first client
-				// render while still restoring the user's history.
-				skipHydration: true,
+				enabled: devtoolsEnabled(),
 			},
 		),
 	);

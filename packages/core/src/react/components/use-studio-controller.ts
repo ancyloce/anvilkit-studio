@@ -276,7 +276,7 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	readonly pages?: StudioPagesSource;
 	/**
 	 * Per-instance i18n overrides forwarded to
-	 * `EditorI18nStoreProvider`. Keys are message ids
+	 * `EditorI18nProvider`. Keys are message ids
 	 * (`studio.module.*`). Ignored when `chrome="puck"`.
 	 */
 	readonly messages?: Readonly<Record<string, string>>;

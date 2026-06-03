@@ -14,7 +14,7 @@ import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { LayersPanel } from "@/layout/sidebar/modules/layer/LayersPanel";
 import {
 	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 	type SidebarRegistryStoreApi,
@@ -69,7 +69,7 @@ function Setup({
 }): ReactElement {
 	const store = registry ?? createSidebarRegistryStore();
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`layers-${Math.random().toString(36).slice(2)}`}
 			>
@@ -79,7 +79,7 @@ function Setup({
 					</StudioPagesSourceProvider>
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

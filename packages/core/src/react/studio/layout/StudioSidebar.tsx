@@ -14,7 +14,7 @@
 
 import { memo, type ReactNode, type RefObject, useCallback } from "react";
 
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { EditorTab } from "@/state/editor-ui-store";
 import { useActiveTab, useEditorUiStore } from "@/state/hooks";
 import { CopilotModule } from "./sidebar/modules/CopilotModule";

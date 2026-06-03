@@ -22,7 +22,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/primitives/dropdown-menu";
 import { composeHeaderActions } from "@/runtime/header-actions";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioHeaderAction, StudioPluginContext } from "@/types/plugin";
 import { HeaderActionButton } from "./HeaderActionButton";
 

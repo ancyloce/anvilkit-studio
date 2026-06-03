@@ -21,7 +21,7 @@ import { TextModule } from "@/layout/sidebar/modules/TextModule";
 import { SidebarHeaderActionsProvider } from "@/layout/sidebar/SidebarHeaderActionsContext";
 import {
 	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 	type SidebarRegistryStoreApi,
@@ -87,7 +87,7 @@ function Setup({
 }): ReactElement {
 	const store = registry ?? createSidebarRegistryStore();
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`text-${Math.random().toString(36).slice(2)}`}
 			>
@@ -97,7 +97,7 @@ function Setup({
 					</SidebarHeaderActionsProvider>
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

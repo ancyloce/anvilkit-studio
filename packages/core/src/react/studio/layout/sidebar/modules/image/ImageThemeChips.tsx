@@ -7,7 +7,7 @@
 import { type ReactNode } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioAssetTheme } from "@/types/sidebar";
 
 export function ImageThemeChips({

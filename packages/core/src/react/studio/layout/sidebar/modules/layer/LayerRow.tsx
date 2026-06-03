@@ -17,7 +17,7 @@ import { Box, ChevronDown, ChevronRight, GripVertical } from "lucide-react";
 import { type KeyboardEvent, memo, type ReactNode, useCallback } from "react";
 import { cn } from "@/overrides/utils/cn";
 import { Button } from "@/primitives/button";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { LayerNode } from "./use-layer-tree";
 import { useScrollComponentIntoView } from "./use-scroll-component-into-view";
 

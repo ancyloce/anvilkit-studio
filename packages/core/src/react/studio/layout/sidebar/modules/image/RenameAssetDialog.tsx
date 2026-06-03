@@ -18,7 +18,7 @@ import {
 } from "@/primitives/dialog";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/primitives/field";
 import { Input } from "@/primitives/input";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioAsset } from "@/types/sidebar";
 
 export interface RenameAssetDialogProps {

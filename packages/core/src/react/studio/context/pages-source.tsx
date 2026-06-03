@@ -20,7 +20,7 @@
 import { createContext, type ReactNode, use, useMemo } from "react";
 
 import { useSourceList } from "@/layout/sidebar/modules/layer/use-source-list";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioPage, StudioPagesSource } from "@/types/pages";
 
 const StudioPagesSourceContext = createContext<StudioPagesSource | undefined>(

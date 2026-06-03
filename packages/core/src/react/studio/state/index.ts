@@ -12,10 +12,10 @@ export {
 	useEditorUiStoreApi,
 } from "./EditorUiStoreProvider";
 export {
-	EditorI18nStoreProvider,
-	type EditorI18nStoreProviderProps,
+	EditorI18nProvider,
+	type EditorI18nProviderProps,
 	useMsg,
-} from "./editor-i18n-store";
+} from "./editor-i18n-context";
 export {
 	type AssetCategoryFilter,
 	type ComponentViewMode,

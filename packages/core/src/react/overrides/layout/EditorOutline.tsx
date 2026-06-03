@@ -12,7 +12,7 @@ import { Puck } from "@puckeditor/core";
 import { type ReactNode } from "react";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { Separator } from "@/primitives/separator";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useReactivePuck } from "../utils/use-reactive-puck";
 
 export function EditorOutline(): ReactNode {

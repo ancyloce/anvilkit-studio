@@ -8,7 +8,7 @@ import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { InsertViewToggle } from "@/layout/sidebar/modules/insert/InsertViewToggle";
 import {
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	useEditorUiStore,
 } from "@/state/index";
@@ -27,13 +27,13 @@ function Probe({
 
 function Setup({ children }: { readonly children: ReactNode }): ReactElement {
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`view-${Math.random().toString(36).slice(2)}`}
 			>
 				{children}
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

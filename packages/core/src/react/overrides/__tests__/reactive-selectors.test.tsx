@@ -56,7 +56,7 @@ vi.mock("@puckeditor/core", () => ({
 import { ComponentOverlay } from "@/overrides/canvas/ComponentOverlay";
 import { EditorOutline } from "@/overrides/layout/EditorOutline";
 import { useBreadcrumbs } from "@/overrides/utils/breadcrumbs";
-import { EditorI18nStoreProvider } from "@/state/index";
+import { EditorI18nProvider } from "@/state/index";
 
 function freshState(): MockPuckState {
 	return {
@@ -76,7 +76,7 @@ afterEach(() => {
 });
 
 function I18n({ children }: { children: ReactNode }): ReactNode {
-	return <EditorI18nStoreProvider>{children}</EditorI18nStoreProvider>;
+	return <EditorI18nProvider>{children}</EditorI18nProvider>;
 }
 
 describe("EditorOutline reacts to selection changes", () => {

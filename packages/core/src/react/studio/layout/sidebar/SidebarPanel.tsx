@@ -16,7 +16,7 @@ import { type KeyboardEvent, type ReactNode, useCallback } from "react";
 import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { SIDEBAR_PANEL_ID } from "./SidebarRail";
 
 export interface SidebarPanelProps {

@@ -71,6 +71,36 @@ const EMPTY_ACTIONS = new Map<string, StudioAssetAction>();
 const EMPTY_PACKS = new Map<string, StudioCopySnippetPack>();
 
 /**
+ * `NODE_ENV` via `globalThis` — mirrors `config/env-parser` and
+ * `plugin-fingerprint` (core's tsconfig has no `@types/node`). Absent ⇒
+ * `undefined` ⇒ treated as non-production (the warn is harmless).
+ */
+function nodeEnv(): string | undefined {
+	return (
+		globalThis as unknown as { process?: { env?: Record<string, string> } }
+	).process?.env?.NODE_ENV;
+}
+
+/**
+ * Dev-only warning when a second plugin overwrites a single-slot surface
+ * (`assetSource` / `copilotPanel` / `historyPanel` / `designSystemPanel`).
+ * Makes the documented last-write-wins contract discoverable: the loser's
+ * `unregister()` silently becomes a no-op, which otherwise looks like a
+ * plugin that registered fine but never takes effect. Skipped when the slot
+ * already holds the *same* object (idempotent re-registration).
+ */
+function warnSlotOverwrite(slot: string): void {
+	if (nodeEnv() === "production") {
+		return;
+	}
+	console.warn(
+		`[studio] A "${slot}" surface is already registered; overwriting it ` +
+			"(last-write-wins). The previous registration's unregister() is now a " +
+			"no-op — only one plugin should contribute this surface.",
+	);
+}
+
+/**
  * Build a fresh per-instance registry store. The provider creates one
  * per `<Studio>` mount and threads it into the plugin context so
  * `register()` calls from plugins land in the right place.
@@ -120,7 +150,11 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			// `image` v1 supports a single source. Last-write-wins keeps
 			// the contract simple for plugins; if a second plugin tries
 			// to register one we still let it land but the previous
-			// registration's `unregister()` becomes a no-op.
+			// registration's `unregister()` becomes a no-op (warned in dev).
+			const existing = get().assetSource;
+			if (existing !== null && existing !== source) {
+				warnSlotOverwrite("assetSource");
+			}
 			set({ assetSource: source });
 			return () => {
 				if (get().assetSource === source) {
@@ -163,7 +197,11 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			// `copilot` v1 supports a single panel. Last-write-wins
 			// matches `registerAssetSource` — if a second registration
 			// lands the previous registration's `unregister()` becomes a
-			// no-op.
+			// no-op (warned in dev).
+			const existing = get().copilotPanel;
+			if (existing !== null && existing !== panel) {
+				warnSlotOverwrite("copilotPanel");
+			}
 			set({ copilotPanel: panel });
 			return () => {
 				if (get().copilotPanel === panel) {
@@ -175,6 +213,10 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 		registerHistoryPanel(panel) {
 			// `history` v1 supports a single panel; same last-write-wins
 			// shape as `registerCopilotPanel` / `registerAssetSource`.
+			const existing = get().historyPanel;
+			if (existing !== null && existing !== panel) {
+				warnSlotOverwrite("historyPanel");
+			}
 			set({ historyPanel: panel });
 			return () => {
 				if (get().historyPanel === panel) {
@@ -187,6 +229,10 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			// `design-system` v1 supports a single panel; same
 			// last-write-wins shape as `registerCopilotPanel` /
 			// `registerHistoryPanel`.
+			const existing = get().designSystemPanel;
+			if (existing !== null && existing !== panel) {
+				warnSlotOverwrite("designSystemPanel");
+			}
 			set({ designSystemPanel: panel });
 			return () => {
 				if (get().designSystemPanel === panel) {

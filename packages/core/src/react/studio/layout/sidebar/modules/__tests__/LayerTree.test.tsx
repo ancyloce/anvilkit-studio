@@ -14,7 +14,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { LayerTree } from "@/layout/sidebar/modules/layer/LayerTree";
-import { EditorI18nStoreProvider, EditorUiStoreProvider } from "@/state/index";
+import { EditorI18nProvider, EditorUiStoreProvider } from "@/state/index";
 
 interface MockNode {
 	type: string;
@@ -54,13 +54,13 @@ afterEach(() => {
 
 function Setup({ children }: { readonly children: ReactNode }): ReactElement {
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`tree-${Math.random().toString(36).slice(2)}`}
 			>
 				{children}
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

@@ -96,11 +96,24 @@ export function useRehydratedStore<TStore>(
 			setHydratedStore(store);
 			return;
 		}
-		const unsub = persist.onFinishHydration(() => setHydratedStore(store));
+		// `cancelled` guards against an *async* `PersistStorage` whose
+		// `rehydrate()` settles after this effect tears down (unmount or a
+		// `storeId` re-key). `unsub` already removes the listener, but the
+		// flag is bulletproof if hydration resolves in the same tick as
+		// teardown — no `setState`-after-unmount warning, no stale flag.
+		let cancelled = false;
+		const unsub = persist.onFinishHydration(() => {
+			if (!cancelled) {
+				setHydratedStore(store);
+			}
+		});
 		// Deferred (skipHydration) rehydrate. Synchronous localStorage
 		// read; effects never run on the server so this is client-only.
 		void persist.rehydrate();
-		return unsub;
+		return () => {
+			cancelled = true;
+			unsub();
+		};
 	}, [store]);
 
 	return { store, hydrated: hydratedStore === store };

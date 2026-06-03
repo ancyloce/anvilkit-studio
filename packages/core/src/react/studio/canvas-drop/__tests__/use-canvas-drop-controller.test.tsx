@@ -9,7 +9,7 @@
 import { cleanup, renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { EditorI18nStoreProvider } from "@/state/editor-i18n-store";
+import { EditorI18nProvider } from "@/state/editor-i18n-context";
 import { encodeDropPayload } from "../drag-payload";
 import {
 	DROP_TARGET_ATTR,
@@ -43,7 +43,7 @@ vi.mock("sonner", () => ({
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-	<EditorI18nStoreProvider>{children}</EditorI18nStoreProvider>
+	<EditorI18nProvider>{children}</EditorI18nProvider>
 );
 
 const RECT = {

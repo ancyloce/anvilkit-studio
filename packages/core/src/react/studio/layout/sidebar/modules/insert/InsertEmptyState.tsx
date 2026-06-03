@@ -19,7 +19,7 @@ import {
 	EmptyHeader,
 	EmptyMedia,
 } from "@/primitives/empty";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 
 export interface InsertEmptyStateProps {
 	readonly variant: "library" | "search";

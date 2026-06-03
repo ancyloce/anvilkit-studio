@@ -12,7 +12,7 @@
 import { type ReactNode } from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/primitives/toggle-group";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { CopyCategoryFilter } from "@/state/editor-ui-store";
 import { useCopyCategoryFilter } from "@/state/hooks";
 

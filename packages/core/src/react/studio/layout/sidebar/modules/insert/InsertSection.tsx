@@ -17,7 +17,7 @@ import {
 	AccordionPanel,
 	AccordionTrigger,
 } from "@/primitives/accordion";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { ComponentViewMode } from "@/state/editor-ui-store";
 import { InsertTileGrid } from "./InsertTileGrid";
 import { InsertTileList } from "./InsertTileList";

@@ -23,7 +23,7 @@ import {
 	SelectValue,
 } from "@/primitives/select";
 
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { FieldLabel } from "../../layout/FieldLabel";
 import {
 	findOptionIndex,

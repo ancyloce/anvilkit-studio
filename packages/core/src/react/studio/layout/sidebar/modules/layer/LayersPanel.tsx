@@ -39,7 +39,7 @@ import {
 } from "@/primitives/dropdown-menu";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 import type { StudioPage } from "@/types/pages";
 import type {

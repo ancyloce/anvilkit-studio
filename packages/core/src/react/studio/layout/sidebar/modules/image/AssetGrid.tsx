@@ -13,7 +13,7 @@
 import { type ReactNode, useCallback, useMemo } from "react";
 import { Skeleton } from "@/primitives/skeleton";
 import { Windowed } from "@/primitives/windowed";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { AssetCategoryFilter } from "@/state/editor-ui-store";
 import type {
 	StudioAsset,

@@ -7,7 +7,7 @@ import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { StudioToolbar } from "@/layout/StudioToolbar";
-import { EditorI18nStoreProvider, EditorUiStoreProvider } from "@/state/index";
+import { EditorI18nProvider, EditorUiStoreProvider } from "@/state/index";
 import type { StudioPagesSource } from "@/types/pages";
 
 const { toastError } = vi.hoisted(() => ({
@@ -42,7 +42,7 @@ function Setup({
 	readonly pages?: StudioPagesSource;
 }): ReactElement {
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`toolbar-${Math.random().toString(36).slice(2)}`}
 			>
@@ -50,7 +50,7 @@ function Setup({
 					{children}
 				</StudioPagesSourceProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

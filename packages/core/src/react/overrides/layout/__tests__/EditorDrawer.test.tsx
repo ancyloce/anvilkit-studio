@@ -16,7 +16,7 @@ import { EditorDrawer } from "@/overrides/layout/EditorDrawer";
 import { Button } from "@/primitives/button";
 import {
 	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 } from "@/state/index";
@@ -48,7 +48,7 @@ function Setup({
 		registry.getState().registerInsertSection(section);
 	}
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`drawer-${Math.random().toString(36).slice(2)}`}
 			>
@@ -56,7 +56,7 @@ function Setup({
 					{children}
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

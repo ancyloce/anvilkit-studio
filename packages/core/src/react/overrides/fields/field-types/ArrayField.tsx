@@ -37,7 +37,7 @@ import { Card, CardContent } from "@/primitives/card";
 import { FieldLegend, FieldSet } from "@/primitives/field";
 import { Item, ItemActions, ItemContent } from "@/primitives/item";
 import { ScrollArea } from "@/primitives/scroll-area";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { cn } from "@/utils/cn";
 
 import { FieldLabel } from "../../layout/FieldLabel";

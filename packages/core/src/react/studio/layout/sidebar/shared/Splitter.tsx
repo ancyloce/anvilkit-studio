@@ -25,7 +25,7 @@ import {
 	useState,
 } from "react";
 
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useLayerSplitRatio } from "@/state/hooks";
 import { resolveQueryRoot, useStudioRootRef } from "@/state/index";
 

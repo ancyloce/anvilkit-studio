@@ -32,7 +32,7 @@ import {
 	AccordionTrigger,
 } from "@/primitives/animate-ui/components/base/accordion";
 import { Windowed } from "@/primitives/windowed";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { CopyCategoryFilter } from "@/state/editor-ui-store";
 import type {
 	StudioCopySnippet,

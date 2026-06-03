@@ -11,7 +11,7 @@ import type { ReactElement } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { Splitter } from "@/layout/sidebar/shared/Splitter";
 import {
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	useEditorUiStore,
 } from "@/state/index";
@@ -24,13 +24,13 @@ function Setup({
 	readonly children: ReactElement;
 }): ReactElement {
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`splitter-${Math.random().toString(36).slice(2)}`}
 			>
 				{children}
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

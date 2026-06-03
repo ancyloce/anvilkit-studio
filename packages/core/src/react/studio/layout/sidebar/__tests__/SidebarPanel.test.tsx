@@ -9,7 +9,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SidebarPanel } from "@/layout/sidebar/SidebarPanel";
 import { Button } from "@/primitives/button";
-import { EditorI18nStoreProvider } from "@/state/editor-i18n-store";
+import { EditorI18nProvider } from "@/state/editor-i18n-context";
 
 afterEach(cleanup);
 
@@ -19,7 +19,7 @@ function renderPanel(
 	const onClose = props.onClose ?? vi.fn();
 	const onEscape = props.onEscape ?? vi.fn();
 	const utils = render(
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<SidebarPanel
 				title="Insert"
 				activeTabId="ak-rail-tab-insert"
@@ -29,7 +29,7 @@ function renderPanel(
 			>
 				<div data-testid="body">body content</div>
 			</SidebarPanel>
-		</EditorI18nStoreProvider>,
+		</EditorI18nProvider>,
 	);
 	return { ...utils, onClose, onEscape };
 }

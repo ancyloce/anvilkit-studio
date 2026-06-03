@@ -10,13 +10,13 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { PageSettingsDialog } from "@/layout/sidebar/modules/layer/PageSettingsDialog";
-import { EditorI18nStoreProvider } from "@/state/index";
+import { EditorI18nProvider } from "@/state/index";
 import type { StudioPage } from "@/types/pages";
 
 afterEach(cleanup);
 
 function Setup({ children }: { readonly children: ReactNode }): ReactElement {
-	return <EditorI18nStoreProvider>{children}</EditorI18nStoreProvider>;
+	return <EditorI18nProvider>{children}</EditorI18nProvider>;
 }
 
 const PAGE: StudioPage = {

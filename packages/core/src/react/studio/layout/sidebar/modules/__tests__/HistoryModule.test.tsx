@@ -15,7 +15,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { HistoryModule } from "@/layout/sidebar/modules/HistoryModule";
 import {
 	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 	type SidebarRegistryStoreApi,
@@ -34,7 +34,7 @@ function Setup({
 }): ReactElement {
 	const store = registry ?? createSidebarRegistryStore();
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`history-${Math.random().toString(36).slice(2)}`}
 			>
@@ -42,7 +42,7 @@ function Setup({
 					{children}
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

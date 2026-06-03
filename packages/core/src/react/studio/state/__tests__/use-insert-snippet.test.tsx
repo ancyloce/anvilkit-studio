@@ -8,7 +8,7 @@
 import { renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { EditorI18nStoreProvider } from "@/state/editor-i18n-store";
+import { EditorI18nProvider } from "@/state/editor-i18n-context";
 import { useInsertSnippet } from "@/state/use-insert-snippet";
 import type { StudioCopySnippet } from "@/types/sidebar";
 
@@ -50,7 +50,7 @@ afterEach(() => {
 });
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-	<EditorI18nStoreProvider>{children}</EditorI18nStoreProvider>
+	<EditorI18nProvider>{children}</EditorI18nProvider>
 );
 
 const snippet: StudioCopySnippet = {

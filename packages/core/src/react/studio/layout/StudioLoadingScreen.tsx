@@ -10,7 +10,7 @@
  * layout shift.
  *
  * **Rendered pre-provider.** The loading gates in `Studio.tsx` `return`
- * *before* the `StudioConfigProvider` / `EditorI18nStoreProvider` /
+ * *before* the `StudioConfigProvider` / `EditorI18nProvider` /
  * theme stack mounts, so this component must NOT call `useMsg()`,
  * `useTheme()`, or any Studio context hook — they would throw. The
  * visible status text is therefore a plain `label` prop (default in

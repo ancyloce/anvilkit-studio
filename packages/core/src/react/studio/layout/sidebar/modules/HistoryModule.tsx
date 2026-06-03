@@ -18,7 +18,7 @@ import { History as HistoryIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useSidebarRegistry } from "@/state/sidebar-registry-store-react";
 
 export function HistoryModule(): ReactNode {

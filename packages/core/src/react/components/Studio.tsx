@@ -41,7 +41,7 @@ import type { StudioChromeMode } from "@/overrides/types";
 import { Toaster } from "@/primitives/sonner";
 import { TooltipProvider } from "@/primitives/tooltip";
 import {
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 	StudioRootProvider,
@@ -375,7 +375,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 										store={exportStore}
 									>
 										<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
-											<EditorI18nStoreProvider messages={messages}>
+											<EditorI18nProvider messages={messages}>
 												<ChromePropsProvider value={chromePropsValue}>
 													<StudioRootProvider rootRef={rootRef}>
 														<div ref={rootRef} className="contents">
@@ -383,7 +383,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 														</div>
 													</StudioRootProvider>
 												</ChromePropsProvider>
-											</EditorI18nStoreProvider>
+											</EditorI18nProvider>
 										</AiStoreProvider>
 									</ExportStoreProvider>
 								</ThemeStoreProvider>

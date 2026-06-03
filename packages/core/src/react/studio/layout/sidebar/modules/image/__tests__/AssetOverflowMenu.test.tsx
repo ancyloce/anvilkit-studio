@@ -15,7 +15,7 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { AssetOverflowMenu } from "@/layout/sidebar/modules/image/AssetOverflowMenu";
-import { EditorI18nStoreProvider } from "@/state/index";
+import { EditorI18nProvider } from "@/state/index";
 import type { StudioAsset, StudioAssetSource } from "@/types/sidebar";
 
 afterEach(cleanup);
@@ -29,7 +29,7 @@ const ASSET: StudioAsset = {
 
 function renderMenu(source: Partial<StudioAssetSource>) {
 	render(
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<AssetOverflowMenu
 				asset={ASSET}
 				source={source as StudioAssetSource}
@@ -37,7 +37,7 @@ function renderMenu(source: Partial<StudioAssetSource>) {
 				onRename={vi.fn()}
 				onReplace={vi.fn()}
 			/>
-		</EditorI18nStoreProvider>,
+		</EditorI18nProvider>,
 	);
 }
 

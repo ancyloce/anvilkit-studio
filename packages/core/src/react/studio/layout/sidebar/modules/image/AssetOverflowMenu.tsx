@@ -24,7 +24,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/primitives/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type {
 	StudioAsset,
 	StudioAssetAction,

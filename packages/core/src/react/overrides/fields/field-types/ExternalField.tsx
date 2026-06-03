@@ -20,7 +20,7 @@ import { Empty, EmptyDescription, EmptyTitle } from "@/primitives/empty";
 import { Input } from "@/primitives/input";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { Spinner } from "@/primitives/spinner";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";

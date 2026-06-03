@@ -19,7 +19,7 @@ import {
 	DialogTitle,
 } from "@/primitives/dialog";
 import { FieldError } from "@/primitives/field";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioPage } from "@/types/pages";
 
 export interface PageDeleteConfirmDialogProps {

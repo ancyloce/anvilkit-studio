@@ -27,7 +27,7 @@ import {
 } from "@/primitives/dropdown-menu";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useCanvasViewport, useCanvasZoom } from "@/state/hooks";
 import { FULL_WIDTH_VIEWPORTS, type StudioViewport } from "@/studio/ui/index";
 

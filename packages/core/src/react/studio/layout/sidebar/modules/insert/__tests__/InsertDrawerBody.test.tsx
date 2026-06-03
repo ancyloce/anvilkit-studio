@@ -25,7 +25,7 @@ import { InsertDrawerBody } from "@/layout/sidebar/modules/insert/InsertDrawerBo
 import { Button } from "@/primitives/button";
 import {
 	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 	type SidebarRegistryStoreApi,
@@ -96,7 +96,7 @@ interface ProvidersProps {
 function Providers({ registry, children }: ProvidersProps): ReactElement {
 	const store = registry ?? createSidebarRegistryStoreWithDefaults();
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`test-${Math.random().toString(36).slice(2)}`}
 			>
@@ -104,7 +104,7 @@ function Providers({ registry, children }: ProvidersProps): ReactElement {
 					{children}
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

@@ -14,7 +14,7 @@ import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { InsertSearchBar } from "@/layout/sidebar/modules/insert/InsertSearchBar";
 import {
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	useEditorUiStore,
 } from "@/state/index";
@@ -32,13 +32,13 @@ function Probe({ onValue }: { readonly onValue: (v: string) => void }): null {
 
 function Setup({ children }: { readonly children: ReactNode }): ReactElement {
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`search-${Math.random().toString(36).slice(2)}`}
 			>
 				{children}
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

@@ -27,7 +27,7 @@ import {
 import { useCallback } from "react";
 import { toast } from "sonner";
 import type { StudioCopySnippet } from "@/types/sidebar";
-import { useMsg } from "./editor-i18n-store";
+import { useMsg } from "./editor-i18n-context";
 
 export type InsertSnippetCommand = (snippet: StudioCopySnippet) => void;
 

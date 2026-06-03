@@ -12,7 +12,7 @@ import type { ReactElement, ReactNode } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { PagesPanel } from "@/layout/sidebar/modules/layer/PagesPanel";
-import { EditorI18nStoreProvider } from "@/state/index";
+import { EditorI18nProvider } from "@/state/index";
 import type { StudioPage, StudioPagesSource } from "@/types/pages";
 
 afterEach(cleanup);
@@ -25,11 +25,11 @@ function Setup({
 	readonly source?: StudioPagesSource;
 }): ReactElement {
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<StudioPagesSourceProvider value={source}>
 				{children}
 			</StudioPagesSourceProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

@@ -14,7 +14,7 @@ import {
 } from "@/layout/sidebar/SidebarHeaderActionsContext";
 import {
 	createSidebarRegistryStore,
-	EditorI18nStoreProvider,
+	EditorI18nProvider,
 	EditorUiStoreProvider,
 	SidebarRegistryProvider,
 } from "@/state/index";
@@ -40,7 +40,7 @@ function HeaderActionsProbe(): ReactElement {
 function Setup({ children }: { readonly children: ReactNode }): ReactElement {
 	const registry = createSidebarRegistryStore();
 	return (
-		<EditorI18nStoreProvider>
+		<EditorI18nProvider>
 			<EditorUiStoreProvider
 				storeId={`module-${Math.random().toString(36).slice(2)}`}
 			>
@@ -50,7 +50,7 @@ function Setup({ children }: { readonly children: ReactNode }): ReactElement {
 					</SidebarHeaderActionsProvider>
 				</SidebarRegistryProvider>
 			</EditorUiStoreProvider>
-		</EditorI18nStoreProvider>
+		</EditorI18nProvider>
 	);
 }
 

@@ -31,7 +31,7 @@ import { useSetSidebarHeaderActions } from "@/layout/sidebar/SidebarHeaderAction
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
-import { useMsg } from "@/state/editor-i18n-store";
+import { useMsg } from "@/state/editor-i18n-context";
 import { useAssetCategoryFilter } from "@/state/hooks";
 import {
 	appendComponentToRoot,

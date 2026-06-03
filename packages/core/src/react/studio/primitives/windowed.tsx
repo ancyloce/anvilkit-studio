@@ -136,7 +136,6 @@ function Virtualized<T>(props: {
 			>
 				{virtualizer.getVirtualItems().map((row) => {
 					const start = row.index * lanes;
-					const slice = items.slice(start, start + lanes);
 					return (
 						<div
 							key={row.key}
@@ -153,9 +152,14 @@ function Virtualized<T>(props: {
 								gap: 8,
 							}}
 						>
-							{slice.map((item, j) => {
+							{/* Index directly into `items` (a fixed `lanes`-sized map)
+							    instead of `items.slice(...)`, which copied a sub-array per
+							    virtual row per render. Trailing cells in a short last row
+							    index past the end → `undefined` → render nothing. */}
+							{Array.from({ length: lanes }, (_unused, j) => {
 								const index = start + j;
-								return (
+								const item = items[index];
+								return item === undefined ? null : (
 									<div key={itemKey(item, index)}>
 										{renderItem(item, index)}
 									</div>
