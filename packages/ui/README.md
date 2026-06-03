@@ -35,6 +35,35 @@ The CSS layer uses shadcn-style CSS variables (`--background`,
 `--foreground`, `--primary`, …) for light + dark mode. Override any
 token at your root scope to retheme every primitive.
 
+### Compose primitives
+
+```tsx
+import { Button } from "@anvilkit/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@anvilkit/ui/card";
+
+export function ContactCard() {
+  return (
+    <Card>
+      <CardHeader>Get in touch</CardHeader>
+      <CardContent>We usually reply within a day.</CardContent>
+      <CardFooter>
+        <Button>Email us</Button>
+      </CardFooter>
+    </Card>
+  );
+}
+```
+
+### Retheme via token overrides
+
+```css
+/* Override shadcn tokens at your root scope to retheme every primitive. */
+:root {
+  --primary: oklch(0.55 0.2 264);
+  --primary-foreground: oklch(0.98 0 0);
+}
+```
+
 ## Layout
 
 | Subpath                 | Contents                                                                                     |
