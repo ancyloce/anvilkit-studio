@@ -24,7 +24,7 @@ jobs:
           submodules: recursive
       - uses: pnpm/action-setup@v6
         with:
-          version: 11.2.2
+          version: 11.5.1
           run_install: false
       - uses: actions/setup-node@v6
         with:
