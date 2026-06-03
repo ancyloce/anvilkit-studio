@@ -22,6 +22,14 @@ export interface BreadcrumbEntry {
 	readonly label: string;
 }
 
+// Sentinels for the reactive descriptor selector. Empty string = nothing
+// selected (empty chain). The NUL marker = a selection that resolves to no
+// concrete item (root-only chain). A resolved selection encodes
+// `<id>\u001f<type>`; the unit separator cannot appear in a Puck id or type.
+const SELECTION_NONE = "";
+const SELECTION_ROOT_ONLY = "\u0000";
+const ID_TYPE_SEP = "\u001f";
+
 /**
  * Walk from the currently selected item to the root, returning a
  * top-down chain. The root is always entry zero, the active item
@@ -31,35 +39,43 @@ export interface BreadcrumbEntry {
  * a placeholder or skip the breadcrumbs row entirely.
  */
 export function useBreadcrumbs(): readonly BreadcrumbEntry[] {
-	// Reactive: breadcrumbs must refresh when the selection or page
-	// data changes. Each selector projects a stable Puck reference, so
-	// the memo only recomputes when one of them actually changes.
-	const selector = useReactivePuck((s) => s.appState.ui.itemSelector);
-	const data = useReactivePuck((s) => s.appState.data);
+	// Subscribe to a primitive fingerprint of the *resolved* selection, NOT the
+	// whole `appState.data` object. Puck swaps `data` by reference on every edit
+	// (including prop-only edits that leave the breadcrumb unchanged), so the old
+	// `s.appState.data` subscription re-rendered the breadcrumb on every
+	// keystroke. Projecting `${id}${type}` (or a sentinel) means the hook
+	// re-renders only when the chain it would render actually changes.
+	const descriptor = useReactivePuck((s) => {
+		const sel = s.appState.ui.itemSelector;
+		if (sel === null) {
+			return SELECTION_NONE;
+		}
+		const data = s.appState.data;
+		const zone =
+			sel.zone === undefined || sel.zone === "default-zone"
+				? data.content
+				: data.zones?.[sel.zone];
+		const item = zone?.[sel.index];
+		if (item === undefined) {
+			return SELECTION_ROOT_ONLY;
+		}
+		const id = String(item.props?.id ?? `${sel.zone ?? "root"}:${sel.index}`);
+		return `${id}${ID_TYPE_SEP}${item.type}`;
+	});
+
 	return useMemo(() => {
-		if (selector === null) {
+		if (descriptor === SELECTION_NONE) {
 			return [];
 		}
 		const chain: BreadcrumbEntry[] = [{ id: "root", label: "Root" }];
-
-		const zone =
-			selector.zone === undefined || selector.zone === "default-zone"
-				? data.content
-				: data.zones?.[selector.zone];
-		if (zone === undefined) {
+		if (descriptor === SELECTION_ROOT_ONLY) {
 			return chain;
 		}
-
-		const item = zone[selector.index];
-		if (item === undefined) {
-			return chain;
-		}
+		const sep = descriptor.indexOf(ID_TYPE_SEP);
 		chain.push({
-			id: String(
-				item.props?.id ?? `${selector.zone ?? "root"}:${selector.index}`,
-			),
-			label: item.type,
+			id: descriptor.slice(0, sep),
+			label: descriptor.slice(sep + 1),
 		});
 		return chain;
-	}, [selector, data]);
+	}, [descriptor]);
 }
