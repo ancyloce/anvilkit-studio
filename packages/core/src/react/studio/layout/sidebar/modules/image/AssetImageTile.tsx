@@ -3,14 +3,14 @@
  * an overflow menu top-right and a filename caption below.
  */
 
-import { type DragEvent, type ReactNode } from "react";
+import { type DragEvent, memo, type ReactNode } from "react";
 import { encodeDropPayload } from "@/canvas-drop";
 import { Button } from "@/primitives/button";
 import type { StudioAsset } from "@/types/sidebar";
 
 export interface AssetImageTileProps {
 	readonly asset: StudioAsset;
-	readonly onClick: () => void;
+	readonly onClick: (asset: StudioAsset) => void;
 	/**
 	 * Fired when the tile starts being dragged, so the host can run the
 	 * source's pick side effects (e.g. Unsplash's MANDATORY download trigger)
@@ -18,14 +18,20 @@ export interface AssetImageTileProps {
 	 * runs them.
 	 */
 	readonly onDragStartAsset?: (asset: StudioAsset) => void;
-	readonly menu: ReactNode;
+	/**
+	 * Builds the per-asset overflow menu. A render-prop (not a prebuilt
+	 * `ReactNode`) so the tile can be `memo`'d: the parent passes one stable
+	 * callback instead of a fresh element per render, and the menu element is
+	 * created inside this tile's own render — only when the tile re-renders.
+	 */
+	readonly renderMenu: (asset: StudioAsset) => ReactNode;
 }
 
-export function AssetImageTile({
+function AssetImageTileImpl({
 	asset,
 	onClick,
 	onDragStartAsset,
-	menu,
+	renderMenu,
 }: AssetImageTileProps): ReactNode {
 	const src = asset.thumbnailUrl ?? asset.url;
 	return (
@@ -35,7 +41,7 @@ export function AssetImageTile({
 		>
 			<Button
 				variant="ghost"
-				onClick={onClick}
+				onClick={() => onClick(asset)}
 				draggable
 				onDragStart={(event: DragEvent<HTMLButtonElement>) => {
 					encodeDropPayload(event.dataTransfer, {
@@ -58,7 +64,7 @@ export function AssetImageTile({
 				/>
 			</Button>
 			<div className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-				{menu}
+				{renderMenu(asset)}
 			</div>
 			<p
 				className="truncate text-[var(--ak-studio-muted-fg)]"
@@ -102,3 +108,11 @@ export function AssetImageTile({
 		</div>
 	);
 }
+
+/**
+ * Memoized so a parent re-render (e.g. an upload `progress` tick) does not
+ * re-render every visible tile — only tiles whose `asset` actually changed.
+ * Effective only because `AssetGrid` passes stable `onClick`/`renderMenu`/
+ * `onDragStartAsset` references.
+ */
+export const AssetImageTile = memo(AssetImageTileImpl);

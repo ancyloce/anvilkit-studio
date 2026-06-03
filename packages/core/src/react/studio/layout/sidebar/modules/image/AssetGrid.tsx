@@ -25,6 +25,9 @@ import { AssetImageTile } from "./AssetImageTile";
 import { AssetOverflowMenu } from "./AssetOverflowMenu";
 import { AssetVideoCard } from "./AssetVideoCard";
 
+/** Stable `Windowed.itemKey` — hoisted so it never re-allocates per render. */
+const assetKey = (asset: StudioAsset): string => asset.id;
+
 export interface UploadingTile {
 	readonly id: string;
 	readonly name: string;
@@ -79,14 +82,19 @@ export function AssetGrid({
 		return { images: img, videos: vid, audio: aud };
 	}, [assets, filter]);
 
-	const renderMenu = (asset: StudioAsset): ReactNode => (
-		<AssetOverflowMenu
-			asset={asset}
-			source={source}
-			pluginActions={pluginActions}
-			onRename={onRename}
-			onReplace={onReplace}
-		/>
+	// Stable across renders so the memoized tiles below can skip re-rendering
+	// when only sibling state (e.g. upload progress) changes.
+	const renderMenu = useCallback(
+		(asset: StudioAsset): ReactNode => (
+			<AssetOverflowMenu
+				asset={asset}
+				source={source}
+				pluginActions={pluginActions}
+				onRename={onRename}
+				onReplace={onReplace}
+			/>
+		),
+		[source, pluginActions, onRename, onReplace],
 	);
 
 	// Dragging an external (e.g. Unsplash) result onto the canvas is a "use"
@@ -105,6 +113,44 @@ export function AssetGrid({
 			}
 		},
 		[source],
+	);
+
+	// `Windowed.renderItem` must be `useCallback`-stable (see windowed.tsx) —
+	// a fresh inline arrow re-renders every windowed row on each parent render
+	// and defeats virtualization. `onClick`/`renderMenu` are passed by stable
+	// reference so the memoized tiles can bail out of unrelated re-renders.
+	const renderImageItem = useCallback(
+		(asset: StudioAsset): ReactNode => (
+			<AssetImageTile
+				asset={asset}
+				onClick={onAssetClick}
+				onDragStartAsset={handleAssetDragStart}
+				renderMenu={renderMenu}
+			/>
+		),
+		[onAssetClick, handleAssetDragStart, renderMenu],
+	);
+
+	const renderVideoItem = useCallback(
+		(asset: StudioAsset): ReactNode => (
+			<AssetVideoCard
+				asset={asset}
+				onClick={onAssetClick}
+				renderMenu={renderMenu}
+			/>
+		),
+		[onAssetClick, renderMenu],
+	);
+
+	const renderAudioItem = useCallback(
+		(asset: StudioAsset): ReactNode => (
+			<AssetAudioRow
+				asset={asset}
+				onClick={onAssetClick}
+				renderMenu={renderMenu}
+			/>
+		),
+		[onAssetClick, renderMenu],
 	);
 
 	const sections: ReactNode[] = [];
@@ -137,18 +183,11 @@ export function AssetGrid({
 				))}
 				<Windowed
 					items={images}
-					itemKey={(asset) => asset.id}
+					itemKey={assetKey}
 					estimateSize={112}
 					lanes={3}
 					data-testid="ak-image-section-images-window"
-					renderItem={(asset) => (
-						<AssetImageTile
-							asset={asset}
-							onClick={() => onAssetClick(asset)}
-							onDragStartAsset={handleAssetDragStart}
-							menu={renderMenu(asset)}
-						/>
-					)}
+					renderItem={renderImageItem}
 				/>
 			</div>,
 		);
@@ -163,16 +202,10 @@ export function AssetGrid({
 			>
 				<Windowed
 					items={videos}
-					itemKey={(asset) => asset.id}
+					itemKey={assetKey}
 					estimateSize={140}
 					data-testid="ak-image-section-videos-window"
-					renderItem={(asset) => (
-						<AssetVideoCard
-							asset={asset}
-							onClick={() => onAssetClick(asset)}
-							menu={renderMenu(asset)}
-						/>
-					)}
+					renderItem={renderVideoItem}
 				/>
 			</div>,
 		);
@@ -187,16 +220,10 @@ export function AssetGrid({
 			>
 				<Windowed
 					items={audio}
-					itemKey={(asset) => asset.id}
+					itemKey={assetKey}
 					estimateSize={48}
 					data-testid="ak-image-section-audio-window"
-					renderItem={(asset) => (
-						<AssetAudioRow
-							asset={asset}
-							onClick={() => onAssetClick(asset)}
-							menu={renderMenu(asset)}
-						/>
-					)}
+					renderItem={renderAudioItem}
 				/>
 			</div>,
 		);

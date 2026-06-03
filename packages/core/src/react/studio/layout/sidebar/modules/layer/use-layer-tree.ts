@@ -16,7 +16,12 @@
  * `LayersPanel.tsx`). Component identity is `item.props.id`.
  */
 
-import type { ComponentData, Data, PuckAction } from "@puckeditor/core";
+import {
+	type ComponentData,
+	type Data,
+	type PuckAction,
+	useGetPuck,
+} from "@puckeditor/core";
 import { useMemo } from "react";
 import { useReactivePuck } from "@/overrides/utils/use-reactive-puck";
 
@@ -59,6 +64,38 @@ type ComponentList = readonly ComponentData[];
 function componentId(item: ComponentData): string | null {
 	const id = (item.props as { id?: unknown } | undefined)?.id;
 	return typeof id === "string" ? id : null;
+}
+
+// ASCII control chars as separators so they can't collide with real
+// component types, ids, or zone keys.
+const FIELD_SEP = "\u001f";
+const ZONE_SEP = "\u001e";
+
+/**
+ * A primitive fingerprint of everything `buildNodes` reads from `data`:
+ * each item's `type` + `id` + order, plus the zone keys (in `Object.keys`
+ * insertion order — `indexZonesByParent` depends on that order) and their
+ * contents. Labels are excluded because they come from `config.components`,
+ * which `useLayerTree` subscribes to separately.
+ *
+ * Puck replaces `appState.data` by reference on every edit (including
+ * prop-only edits the Layer tree does not render). Subscribing to this
+ * signature instead of the whole `data` object means the panel re-renders
+ * and rebuilds the tree only when the structure actually changes.
+ */
+function topologySignature(data: Data): string {
+	const parts: string[] = [];
+	for (const item of data.content ?? []) {
+		parts.push(item.type, componentId(item) ?? "");
+	}
+	const zones = (data.zones ?? {}) as Readonly<Record<string, ComponentList>>;
+	for (const key of Object.keys(zones)) {
+		parts.push(ZONE_SEP, key);
+		for (const item of zones[key] ?? []) {
+			parts.push(item.type, componentId(item) ?? "");
+		}
+	}
+	return parts.join(FIELD_SEP);
 }
 
 /** `parentComponentId → [its compound zone keys]`, in zone insertion order. */
@@ -140,19 +177,31 @@ function buildNodes(
  * structural/selection changes.
  */
 export function useLayerTree(): LayerTreeModel {
-	const data = useReactivePuck((s) => s.appState.data as Data);
+	// Non-subscribing snapshot getter (stable across renders, like the rest of
+	// the codebase treats it). The reactive trigger is `topology` below — the
+	// memo reads fresh `data` from this getter only when it recomputes.
+	const getPuck = useGetPuck();
+	// Subscribe to a primitive structural fingerprint, NOT the whole
+	// `appState.data` object. Puck swaps `data` by reference on every edit
+	// (prop-only edits the tree never renders included), so subscribing to the
+	// object re-walked + re-rendered the entire tree on every keystroke. This
+	// re-renders only when the structure actually changes.
+	const topology = useReactivePuck((s) =>
+		topologySignature(s.appState.data as Data),
+	);
 	const selectedId = useReactivePuck(
 		(s) => (s.selectedItem?.props as { id?: unknown } | undefined)?.id ?? null,
 	);
 	const components = useReactivePuck((s) => s.config.components);
 
-	// Build the recursive projection only when the document data or the
-	// component map changes — NOT on selection (review finding P-a).
-	// `selected` is resolved per-row downstream (`selectedId === node.id`),
-	// so `selectedId` does not belong in the projection memo; including it
-	// forced a full `buildNodes` re-walk + a fresh `roots` ref on every
-	// selection click while the Layers tab was open.
+	// Build the recursive projection only when the document structure
+	// (`topology`) or the component map changes — NOT on selection (review
+	// finding P-a) and NOT on non-structural prop edits. `selected` is resolved
+	// per-row downstream (`selectedId === node.id`), so `selectedId` does not
+	// belong in the projection memo.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: `topology` is the structural fingerprint folded in as the reactive trigger — it intentionally is not referenced in the body (data is read non-reactively through `getPuck`), so prop-only edits that leave `topology` unchanged do not re-walk the tree. Removing it (Biome's suggestion) would make `roots` stale because `getPuck` is referentially stable.
 	const roots = useMemo<readonly LayerNode[]>(() => {
+		const data = getPuck().appState.data as Data;
 		const zones = (data.zones ?? {}) as Readonly<Record<string, ComponentList>>;
 		const childZonesByParent = indexZonesByParent(zones);
 		const labelFor = (type: string): string => {
@@ -167,7 +216,7 @@ export function useLayerTree(): LayerTreeModel {
 			childZonesByParent,
 			labelFor,
 		);
-	}, [data, components]);
+	}, [topology, components, getPuck]);
 
 	return useMemo<LayerTreeModel>(
 		() => ({

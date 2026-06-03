@@ -43,7 +43,11 @@ function fireDragStart(el: Element): { setData: ReturnType<typeof vi.fn> } {
 describe("AssetImageTile — drag", () => {
 	it("encodes the real hotlink url (never an asset:// ref) into the payload", () => {
 		render(
-			<AssetImageTile asset={UNSPLASH_ASSET} onClick={vi.fn()} menu={null} />,
+			<AssetImageTile
+				asset={UNSPLASH_ASSET}
+				onClick={vi.fn()}
+				renderMenu={() => null}
+			/>,
 		);
 		const dt = fireDragStart(
 			screen.getByRole("button", { name: UNSPLASH_ASSET.name }),
@@ -60,7 +64,7 @@ describe("AssetImageTile — drag", () => {
 				asset={UNSPLASH_ASSET}
 				onClick={vi.fn()}
 				onDragStartAsset={onDragStartAsset}
-				menu={null}
+				renderMenu={() => null}
 			/>,
 		);
 		fireDragStart(screen.getByRole("button", { name: UNSPLASH_ASSET.name }));

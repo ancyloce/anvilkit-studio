@@ -4,20 +4,21 @@
  */
 
 import { Play } from "lucide-react";
-import { type ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { Button } from "@/primitives/button";
 import type { StudioAsset } from "@/types/sidebar";
 
 export interface AssetVideoCardProps {
 	readonly asset: StudioAsset;
-	readonly onClick: () => void;
-	readonly menu: ReactNode;
+	readonly onClick: (asset: StudioAsset) => void;
+	/** Builds the per-asset overflow menu (see {@link AssetImageTile}). */
+	readonly renderMenu: (asset: StudioAsset) => ReactNode;
 }
 
-export function AssetVideoCard({
+function AssetVideoCardImpl({
 	asset,
 	onClick,
-	menu,
+	renderMenu,
 }: AssetVideoCardProps): ReactNode {
 	return (
 		<div
@@ -26,7 +27,7 @@ export function AssetVideoCard({
 		>
 			<Button
 				variant="ghost"
-				onClick={onClick}
+				onClick={() => onClick(asset)}
 				className="relative aspect-video h-auto w-full overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-black p-0 transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}
 			>
@@ -51,7 +52,7 @@ export function AssetVideoCard({
 				</span>
 			</Button>
 			<div className="absolute right-1 top-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-				{menu}
+				{renderMenu(asset)}
 			</div>
 			<p
 				className="truncate text-[var(--ak-studio-muted-fg)]"
@@ -62,3 +63,6 @@ export function AssetVideoCard({
 		</div>
 	);
 }
+
+/** Memoized — see {@link AssetImageTile}. */
+export const AssetVideoCard = memo(AssetVideoCardImpl);
