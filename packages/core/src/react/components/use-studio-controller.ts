@@ -106,6 +106,19 @@ export interface ChromeAssets {
 }
 
 /**
+ * The compiled runtime as held in state, tagged with the `compileKey`
+ * (the input-identity token) that produced it and the chrome assets
+ * compiled alongside it. A render whose current `compileKey` no longer
+ * matches a stored runtime's treats it as absent — see `activeCompiled`
+ * in {@link useStudioController}. Internal: consumers receive the public
+ * {@link CompiledStudioRuntime} shape.
+ */
+interface StoredRuntime extends CompiledStudioRuntime {
+	readonly compileKey: object;
+	readonly chromeAssets: ChromeAssets | null;
+}
+
+/**
  * Props accepted by `<Studio>` and consumed by the controller. Lives
  * here (not in `Studio.tsx`) so there is **no import cycle** between
  * the view and its controller — `Studio.tsx` re-exports it to keep the
@@ -544,8 +557,12 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		createAiStore({ storeId: resolvedStoreId }),
 	);
 
-	const [compiled, setCompiled] = useState<CompiledStudioRuntime | null>(null);
-	const [chromeAssets, setChromeAssets] = useState<ChromeAssets | null>(null);
+	// One stored value, tagged with the `compileKey` that produced it.
+	// `setCompiled(null)` on every input change is replaced by deriving
+	// `activeCompiled` below: a stored runtime whose key is stale reads as
+	// absent, so the editor fails closed and the teardown effect disposes
+	// it — without an effect resetting state on a prop change.
+	const [stored, setStored] = useState<StoredRuntime | null>(null);
 
 	const pluginsFingerprint = useMemo(
 		// generic→default boundary: structural hash only; variance-safe.
@@ -560,17 +577,25 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		[config],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: fingerprints intentionally replace raw references so inline arrays/objects do not thrash the runtime, and `logger` is read through `loggerRef` so an unstable inline logger does not trigger a full plugin recompile.
+	// Identity token recomputed only when an input that requires a full
+	// recompile changes. It drives the compile effect's single dependency
+	// and is stored alongside the runtime, so the derived `activeCompiled`
+	// can mask a runtime built for a now-superseded key.
+	const compileKey = useMemo(
+		() => ({ pluginsFingerprint, aiHost, configFingerprint, isAnvilkit }),
+		[pluginsFingerprint, aiHost, configFingerprint, isAnvilkit],
+	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: `compileKey` folds the plugin/config fingerprints + `aiHost` + chrome flag into one token; raw references stay out of the deps so inline arrays/objects do not thrash the runtime, and `logger` is read through `loggerRef` so an unstable inline logger does not trigger a full plugin recompile.
 	useEffect(() => {
-		// New compile generation; tear down the prior runtime + chrome.
-		// Fails closed: while plugins/config/chrome change (or if the
-		// new compile rejects) the editor renders `null` instead of
-		// keeping a superseded plugin set mounted.
+		// New compile generation. The prior runtime is *not* reset to
+		// `null` here: once `compileKey` changes, the derived
+		// `activeCompiled` masks it (fail-closed render) and the
+		// `[activeCompiled]` teardown effect disposes it. This effect owns
+		// only the async compile and its stale-generation guard.
 		identityRef.current.generation += 1;
 		const myGen = identityRef.current.generation;
 		const isStale = (): boolean => myGen !== identityRef.current.generation;
-		setCompiled(null);
-		setChromeAssets(null);
 		// generic→default boundary: the runtime is non-generic.
 		const basePlugins = (plugins ?? []) as readonly (
 			| StudioPlugin
@@ -677,8 +702,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				if (isStale()) {
 					// This compile was superseded before it could mount (a faster
 					// config/plugin change, or a StrictMode dev double-invoke).
-					// `setCompiled` is never called, so the `[compiled]` teardown
-					// effect never sees this runtime — emit its teardown here, or
+					// `setStored` is never called, so the `[activeCompiled]`
+					// teardown effect never sees this runtime — emit its teardown
+					// here, or
 					// any resources a plugin allocated in `register()` leak (e.g. a
 					// managed collab transport's WebSocket + Y.Doc + Awareness).
 					// `onInit` never fired, but `onDestroy` hooks guard on
@@ -688,8 +714,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 					runtime.lifecycle.dispose();
 					return;
 				}
-				setCompiled({ runtime, studioConfig, ctx });
-				setChromeAssets(nextChromeAssets);
+				setStored({
+					runtime,
+					studioConfig,
+					ctx,
+					compileKey,
+					chromeAssets: nextChromeAssets,
+				});
 			} catch (error) {
 				if (isStale()) {
 					return;
@@ -709,11 +740,22 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		return () => {
 			identityRef.current.generation += 1;
 		};
-	}, [pluginsFingerprint, aiHost, configFingerprint, isAnvilkit]);
+	}, [compileKey]);
 
-	useHydrateRuntimeStores(compiled, exportStore, themeStore);
+	// A stored runtime whose `compileKey` no longer matches the current
+	// render is a superseded compile still settling. Masking it here gives
+	// the fail-closed render (`activeCompiled === null` ⇒ no superseded
+	// plugin set mounted) and drives the `[activeCompiled]` teardown effect
+	// to dispose it — both previously triggered by `setCompiled(null)`.
+	const activeStored =
+		stored !== null && stored.compileKey === compileKey ? stored : null;
+	const activeCompiled: CompiledStudioRuntime | null = activeStored;
+	const activeChromeAssets: ChromeAssets | null =
+		activeStored?.chromeAssets ?? null;
 
-	useRuntimeInit(compiled);
+	useHydrateRuntimeStores(activeCompiled, exportStore, themeStore);
+
+	useRuntimeInit(activeCompiled);
 
 	// Fired by the Puck-API binder's effect once `getPuckApi()` is
 	// safe. The engine phase machine (A2) now owns the
@@ -723,7 +765,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// of `init` is a lenient no-op; the binder effect re-runs and
 	// retries, so no microtask defer is needed here.
 	const handlePuckBound = useCallback((): void => {
-		if (compiled === null) {
+		if (activeCompiled === null) {
 			return;
 		}
 		// Skip a repeat `advanceTo("ready")` for the same runtime + the
@@ -733,26 +775,26 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		const getPuck = puckApiRef.current;
 		if (
 			driven !== null &&
-			driven.runtime === compiled &&
+			driven.runtime === activeCompiled &&
 			getPuck !== null &&
 			driven.getPuck === getPuck
 		) {
 			return;
 		}
 		if (getPuck !== null) {
-			readyDrivenRef.current = { runtime: compiled, getPuck };
+			readyDrivenRef.current = { runtime: activeCompiled, getPuck };
 		}
-		compiled.runtime.lifecycle.advanceTo("ready", compiled.ctx);
-	}, [compiled]);
+		activeCompiled.runtime.lifecycle.advanceTo("ready", activeCompiled.ctx);
+	}, [activeCompiled]);
 
 	useEffect(() => {
-		if (compiled === null) {
+		if (activeCompiled === null) {
 			return;
 		}
 		// Re-arm the post-dispose guard for this runtime (a remount via
-		// a new `compiled` gets a fresh teardown window).
+		// a new `activeCompiled` gets a fresh teardown window).
 		disposedRef.current = false;
-		const { runtime, ctx } = compiled;
+		const { runtime, ctx } = activeCompiled;
 		return () => {
 			// Mark disposed *before* dispose()/store resets so an
 			// in-flight queued publish bails out of `onAfterPublish`.
@@ -768,15 +810,15 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			aiStore.getState().reset();
 			// Theme persists across sessions — survives teardown.
 		};
-	}, [compiled, exportStore, aiStore]);
+	}, [activeCompiled, exportStore, aiStore]);
 
 	const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
 		const base: Partial<PuckOverrides>[] = [];
-		if (isAnvilkit && chromeAssets !== null) {
-			base.push(chromeAssets.studioOverrides);
+		if (isAnvilkit && activeChromeAssets !== null) {
+			base.push(activeChromeAssets.studioOverrides);
 		}
-		if (compiled !== null) {
-			base.push(...compiled.runtime.overrides);
+		if (activeCompiled !== null) {
+			base.push(...activeCompiled.runtime.overrides);
 		}
 		if (consumerOverrides !== undefined) {
 			// generic→default boundary: merge operates structurally.
@@ -794,7 +836,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				}),
 		});
 		return mergeOverrides(base);
-	}, [compiled, consumerOverrides, isAnvilkit, chromeAssets, handlePuckBound]);
+	}, [
+		activeCompiled,
+		consumerOverrides,
+		isAnvilkit,
+		activeChromeAssets,
+		handlePuckBound,
+	]);
 
 	// generic→default boundary: the public callbacks are typed against
 	// `PuckDataFor<UserConfig>`; internally Puck hands us the broad
@@ -816,16 +864,16 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const handleChange = useCallback(
 		(nextData: PuckData): void => {
 			dataRef.current = nextData;
-			if (compiled !== null) {
-				void compiled.runtime.lifecycle.emit(
+			if (activeCompiled !== null) {
+				void activeCompiled.runtime.lifecycle.emit(
 					"onDataChange",
-					compiled.ctx,
+					activeCompiled.ctx,
 					nextData,
 				);
 			}
 			onChangeRef.current?.(nextData);
 		},
-		[compiled],
+		[activeCompiled],
 	);
 
 	const handlePublish = useCallback(
@@ -833,7 +881,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			const consumerOnPublish = onPublishRef.current;
 			// Capture the runtime + compile generation synchronously, at
 			// call time, before any await.
-			const runtimeAtCall = compiled;
+			const runtimeAtCall = activeCompiled;
 			const myGen = identityRef.current.generation;
 			// The plugin lifecycle emits are runtime-bound: skip them if
 			// the runtime was disposed or superseded by a recompile while
@@ -895,13 +943,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				// Swallowed: a failed publish must not poison the queue.
 			});
 		},
-		[compiled],
+		[activeCompiled],
 	);
 
 	return {
 		isAnvilkit,
-		compiled,
-		chromeAssets,
+		compiled: activeCompiled,
+		chromeAssets: activeChromeAssets,
 		mergedOverrides,
 		handleChange,
 		handlePublish,
