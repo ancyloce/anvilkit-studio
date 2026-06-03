@@ -535,7 +535,7 @@ test.describe("StudioSidebar — four-module switcher", () => {
     // alias map, an override on the legacy `studio.tab.insert` key
     // resolves through to the new key (PRD §10.2). Resolution
     // order is unit-tested at
-    // `state/__tests__/editor-i18n-store.alias.test.tsx`.
+    // `state/__tests__/editor-i18n-context.alias.test.tsx`.
     await expect(page.locator(`#${RAIL_TAB_ID.insert}`)).toHaveAttribute(
       "aria-label",
       "Custom Insert",
