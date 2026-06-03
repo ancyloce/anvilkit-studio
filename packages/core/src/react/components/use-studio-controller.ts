@@ -370,14 +370,10 @@ function useHydrateRuntimeStores(
 				themeStore.getState().setMode(theme.defaultMode);
 			}
 		};
-		const persist = (
-			themeStore as unknown as {
-				persist: {
-					hasHydrated(): boolean;
-					onFinishHydration(cb: () => void): () => void;
-				};
-			}
-		).persist;
+		// `ThemeStoreApi` now carries the persist middleware surface (it is
+		// inferred from `createThemeStore`), so reach `.persist` directly — no
+		// `as unknown as` erasure of the persist API.
+		const { persist } = themeStore;
 		if (persist.hasHydrated()) {
 			applyDefaultMode();
 			return;
