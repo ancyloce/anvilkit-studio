@@ -52,6 +52,20 @@ const [StudioConfigProvider, useStudioConfig] =
 export { StudioConfigProvider, useStudioConfig };
 ```
 
+`debounce` coalesces rapid calls and exposes `.cancel()` to drop a pending one:
+
+```ts
+import { debounce } from "@anvilkit/utils";
+
+const save = debounce((draft: string) => {
+  void fetch("/api/draft", { method: "POST", body: draft });
+}, 300);
+
+save("first"); // coalesced — only the last call within 300ms runs
+save("second");
+save.cancel(); // drop the pending call entirely
+```
+
 ## Scope
 
 This package intentionally does **not** export:
