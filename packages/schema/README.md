@@ -40,6 +40,29 @@ const schema = extractFieldSchema("title", puckField);
 // => { name: "title", type: "text" }
 ```
 
+### Guarding against non-serializable props
+
+```ts
+import { isJsonSerializable } from "@anvilkit/schema";
+
+isJsonSerializable({ title: "Hello", count: 3 }); // => true
+isJsonSerializable({ onClick: () => {} }); // => false (functions are not serializable)
+```
+
+### Limiting the context to specific components
+
+```ts
+import { configToAiContext } from "@anvilkit/schema";
+import type { Config } from "@puckeditor/core";
+
+declare const puckConfig: Config;
+
+// Whitelist a subset so the AI prompt only sees these components.
+const ctx = configToAiContext(puckConfig, {
+  include: ["Hero", "PricingMinimal"],
+});
+```
+
 ## Architecture context
 
 `@anvilkit/schema` is consumed by `@anvilkit/plugin-ai-copilot` and
