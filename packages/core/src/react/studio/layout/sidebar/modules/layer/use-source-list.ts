@@ -32,6 +32,10 @@ export interface SourceListResult<T> {
 	readonly hasError: boolean;
 }
 
+/** Stable empty result reused for the no-source case so the hook does not
+ * hand back a fresh array reference each render. */
+const EMPTY: readonly never[] = [];
+
 /**
  * Subscribe to an async list source with out-of-order protection.
  *
@@ -41,15 +45,14 @@ export interface SourceListResult<T> {
 export function useSourceList<T>(
 	source: ListSource<T> | undefined,
 ): SourceListResult<T> {
-	const [items, setItems] = useState<readonly T[]>([]);
+	const [items, setItems] = useState<readonly T[]>(EMPTY);
 	const [loading, setLoading] = useState(false);
 	const [hasError, setHasError] = useState(false);
 
 	useEffect(() => {
+		// No source ⇒ nothing to subscribe. The derived return below masks
+		// any state left over from a previous source, so no reset is needed.
 		if (source === undefined) {
-			setItems([]);
-			setHasError(false);
-			setLoading(false);
 			return;
 		}
 		// Generation counter shared across the initial fetch and every
@@ -83,5 +86,12 @@ export function useSourceList<T>(
 		};
 	}, [source]);
 
+	// An undefined source always yields an empty, non-loading, non-error
+	// result. Deriving it here (instead of resetting state in the effect)
+	// means stale `items`/`hasError`/`loading` from a prior source are
+	// never observed.
+	if (source === undefined) {
+		return { items: EMPTY, loading: false, hasError: false };
+	}
 	return { items, loading, hasError };
 }
