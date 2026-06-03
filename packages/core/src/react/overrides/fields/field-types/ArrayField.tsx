@@ -22,7 +22,6 @@ import {
 	memo,
 	type ReactNode,
 	useCallback,
-	useEffect,
 	useState,
 } from "react";
 import {
@@ -549,14 +548,13 @@ export function ArrayField({
 	const min = field.min ?? 0;
 	const max = field.max ?? Number.POSITIVE_INFINITY;
 
-	useEffect(() => {
-		// `>=`, not `>`: when an external update shrinks a 3-item array
-		// to 2 while index 2 is open, `2 > 2` is false but index 2 is no
-		// longer a valid item, so the stale panel must still close.
-		if (openIndex !== null && openIndex >= items.length) {
-			setOpenIndex(null);
-		}
-	}, [items.length, openIndex]);
+	// A stale open index left behind after an external update shrank the
+	// array points past the end. Derive the effective index during render
+	// rather than resetting `openIndex` from an effect (`< items.length`,
+	// i.e. `>=` is closed: shrinking a 3-item array to 2 while index 2 is
+	// open leaves `2 >= 2` true, so the stale panel reads as closed).
+	const effectiveOpenIndex =
+		openIndex !== null && openIndex < items.length ? openIndex : null;
 
 	// RX-c: stabilize every handler with `useCallback` so the memoized
 	// `ArrayRow` (below) only re-renders rows whose own props change.
@@ -726,7 +724,7 @@ export function ArrayField({
 						readOnly={readOnly}
 						index={index}
 						item={item}
-						isOpen={openIndex === index}
+						isOpen={effectiveOpenIndex === index}
 						isDragged={draggedIndex === index}
 						isDropTarget={dropIndex === index && draggedIndex !== index}
 						canReorder={readOnly !== true && items.length > 1}
