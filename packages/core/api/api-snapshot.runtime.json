@@ -2505,9 +2505,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 615,
+							"line": 611,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L615"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L611"
 						}
 					],
 					"type": {
@@ -2605,9 +2605,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 575,
+							"line": 571,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L575"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L571"
 						}
 					],
 					"type": {
@@ -2744,9 +2744,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 563,
+							"line": 559,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L563"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L559"
 						}
 					],
 					"type": {
@@ -2797,9 +2797,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 530,
+							"line": 526,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L530"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L526"
 						}
 					],
 					"type": {
@@ -2826,9 +2826,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 540,
+							"line": 536,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L540"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L536"
 						}
 					],
 					"type": {
@@ -2901,9 +2901,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 603,
+							"line": 599,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L603"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L599"
 						}
 					],
 					"type": {
@@ -3040,9 +3040,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 586,
+							"line": 582,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L586"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L582"
 						}
 					],
 					"type": {
@@ -3068,9 +3068,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 521,
+					"line": 517,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L521"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L517"
 				}
 			]
 		},
@@ -5194,9 +5194,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 636,
+					"line": 632,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L636"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L632"
 				}
 			],
 			"type": {
@@ -5565,9 +5565,9 @@
 			"sources": [
 				{
 					"fileName": "runtime/compile-plugins.ts",
-					"line": 315,
+					"line": 317,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L315"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L317"
 				}
 			],
 			"signatures": [
@@ -5580,9 +5580,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 315,
+							"line": 317,
 							"character": 22,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L315"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L317"
 						}
 					],
 					"parameters": [
