@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-06-01T08:22:24.672Z",
+	"generatedAt": "2026-06-03T00:01:24.515Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",
@@ -29,7 +29,7 @@
 			"name": "@anvilkit/plugin-asset-manager",
 			"description": "Headless asset manager plugin for Anvilkit Studio with host-provided uploads and optional React UI.",
 			"packageName": "@anvilkit/plugin-asset-manager",
-			"version": "0.1.6",
+			"version": "0.1.7",
 			"category": "assets",
 			"tags": [],
 			"publisher": "first-party",
@@ -69,7 +69,7 @@
 			"name": "@anvilkit/plugin-export-html",
 			"description": "HTML export format for Anvilkit Studio (Puck-native headless page builder).",
 			"packageName": "@anvilkit/plugin-export-html",
-			"version": "0.1.4",
+			"version": "0.1.5",
 			"category": "export",
 			"tags": [],
 			"publisher": "first-party",
@@ -250,7 +250,7 @@
 			"name": "@anvilkit/blog-list",
 			"description": "Anvilkit Puck-native blog-list component.",
 			"packageName": "@anvilkit/blog-list",
-			"version": "0.1.5",
+			"version": "0.1.6",
 			"category": "content",
 			"tags": [],
 			"publisher": "first-party",
