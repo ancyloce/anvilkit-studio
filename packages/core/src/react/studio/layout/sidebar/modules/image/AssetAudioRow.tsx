@@ -4,20 +4,21 @@
  */
 
 import { Music } from "lucide-react";
-import { type ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { Button } from "@/primitives/button";
 import type { StudioAsset } from "@/types/sidebar";
 
 export interface AssetAudioRowProps {
 	readonly asset: StudioAsset;
-	readonly onClick: () => void;
-	readonly menu: ReactNode;
+	readonly onClick: (asset: StudioAsset) => void;
+	/** Builds the per-asset overflow menu (see {@link AssetImageTile}). */
+	readonly renderMenu: (asset: StudioAsset) => ReactNode;
 }
 
-export function AssetAudioRow({
+function AssetAudioRowImpl({
 	asset,
 	onClick,
-	menu,
+	renderMenu,
 }: AssetAudioRowProps): ReactNode {
 	return (
 		<div
@@ -27,7 +28,7 @@ export function AssetAudioRow({
 			<Button
 				variant="ghost"
 				size="sm"
-				onClick={onClick}
+				onClick={() => onClick(asset)}
 				className="h-auto flex-1 justify-start gap-2 p-0 text-start font-normal text-[var(--ak-studio-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}
 			>
@@ -45,11 +46,14 @@ export function AssetAudioRow({
 				) : null}
 			</Button>
 			<div className="opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-				{menu}
+				{renderMenu(asset)}
 			</div>
 		</div>
 	);
 }
+
+/** Memoized — see {@link AssetImageTile}. */
+export const AssetAudioRow = memo(AssetAudioRowImpl);
 
 function formatSize(bytes: number): string {
 	if (bytes < 1024) return `${bytes} B`;
