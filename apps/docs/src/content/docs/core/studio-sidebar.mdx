@@ -71,7 +71,7 @@ implementing `StudioAssetSource`.
 All rail tooltips, panel titles, search placeholders, empty-state
 copy, and overflow-menu items resolve through the i18n provider.
 The default English catalog ships in
-[`editor-i18n-context.tsx`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/state/editor-i18n-context.tsx)
+[`editor-i18n-context.tsx`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx)
 under the `studio.module.*` namespace.
 
 Pass overrides via `<Studio messages>`:
@@ -103,7 +103,7 @@ Resolution order (precedence high → low): override of the requested
 key, override of the legacy alias mapped to the requested key,
 default for the requested key, caller-supplied `fallback`, the key
 itself. The exhaustive resolution-order test lives at
-`packages/core/src/react/studio/state/__tests__/editor-i18n-context.alias.test.tsx`.
+`packages/core/src/state/__tests__/editor-i18n-context.alias.test.tsx`.
 
 <Aside type="caution" title="Deprecation window">
 	The alias map ships for **one release** after the four-module
