@@ -93,7 +93,7 @@ const CHROME_ENTRY_FILE = resolve(TMP_DIR, "chrome-entry.mjs");
 const CHROME_OUT_DIR = resolve(TMP_DIR, "out-chrome");
 const CHROME_MODULE = resolve(
 	PACKAGE_ROOT,
-	"dist/react/studio/layout/HeaderActionButton.js",
+	"dist/studio/layout/HeaderActionButton.js",
 );
 
 /** Firm budget — raise only with a changeset justification. */

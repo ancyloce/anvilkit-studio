@@ -9,7 +9,7 @@
  * deeply-nested `components/animate-ui/...` layout plus loose
  * `hooks/` and `lib/` folders directly under `src/`. This package
  * keeps every primitive (and its co-located helpers) under
- * `src/react/studio/primitives/`, so each install needs a follow-up
+ * `src/studio/primitives/`, so each install needs a follow-up
  * move + import rewrite + style normalization.
  *
  * The script runs in three phases:
@@ -65,9 +65,9 @@ const DRY_RUN = process.argv.includes("--dry-run");
  * Order doesn't matter — each move is independent.
  */
 const MOVES = [
-	{ from: "components/animate-ui", to: "react/studio/primitives/animate-ui" },
-	{ from: "hooks", to: "react/studio/primitives/hooks" },
-	{ from: "lib", to: "react/studio/primitives/lib" },
+	{ from: "components/animate-ui", to: "studio/primitives/animate-ui" },
+	{ from: "hooks", to: "studio/primitives/hooks" },
+	{ from: "lib", to: "studio/primitives/lib" },
 ];
 
 /**
