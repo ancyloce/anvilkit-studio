@@ -22,6 +22,7 @@ import {
 } from "@/state/slices/editor-ui-store";
 import { type AiStoreApi, createAiStore } from "./slices/ai-store";
 import { createExportStore, type ExportStoreApi } from "./slices/export-store";
+import { createLocaleStore, type LocaleStoreApi } from "./slices/locale-store";
 import { createThemeStore, type ThemeStoreApi } from "./slices/theme-store";
 
 /** Options for {@link createEditorStore}. Mirrors the per-slice factories. */
@@ -30,20 +31,21 @@ export interface CreateEditorStoreOptions {
 }
 
 /**
- * The four per-instance editor stores, bundled. Each member is the
+ * The five per-instance editor stores, bundled. Each member is the
  * unchanged vanilla store from its existing factory, with its own `persist`
  * key (`anvilkit-core-theme-${id}`, `anvilkit-core-export-${id}`,
- * `anvilkit-core-ai-${id}`, `anvilkit-ui-${id}`).
+ * `anvilkit-core-ai-${id}`, `anvilkit-ui-${id}`, `anvilkit-core-locale-${id}`).
  */
 export interface EditorStoreBundle {
 	readonly theme: ThemeStoreApi;
 	readonly export: ExportStoreApi;
 	readonly ai: AiStoreApi;
 	readonly ui: EditorUiStoreApi;
+	readonly locale: LocaleStoreApi;
 }
 
 /**
- * Create the four editor stores for one `<Studio>` instance. Pure
+ * Create the five editor stores for one `<Studio>` instance. Pure
  * composition of the existing factories — no behavior change to any slice,
  * no persisted-key change.
  */
@@ -55,5 +57,6 @@ export function createEditorStore({
 		export: createExportStore({ storeId }),
 		ai: createAiStore({ storeId }),
 		ui: createEditorUiStore({ storeId }),
+		locale: createLocaleStore({ storeId }),
 	};
 }

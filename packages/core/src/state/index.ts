@@ -109,6 +109,19 @@ export {
 	type LastExportRecord,
 } from "./slices/export-store";
 export {
+	LocaleStoreProvider,
+	type LocaleStoreProviderProps,
+	useLocaleStore,
+	useLocaleStoreApi,
+	useOptionalLocale,
+} from "./slices/LocaleStoreProvider";
+export {
+	type CreateLocaleStoreOptions,
+	createLocaleStore,
+	type LocaleState,
+	type LocaleStoreApi,
+} from "./slices/locale-store";
+export {
 	ThemeStoreProvider,
 	type ThemeStoreProviderProps,
 	useThemeStore,

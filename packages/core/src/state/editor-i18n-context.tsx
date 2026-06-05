@@ -37,10 +37,20 @@ import {
 	type ReactNode,
 	use,
 	useCallback,
+	useEffect,
 	useMemo,
+	useRef,
+	useState,
 } from "react";
+import {
+	loadedPackKey,
+	type MessageBundle,
+	mergeCatalog,
+	type RegistryEntry,
+} from "@/i18n/registry";
+import { useOptionalLocale } from "./slices/LocaleStoreProvider";
 
-const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
+export const DEFAULT_MESSAGES = {
 	"studio.back": "Back",
 	"studio.saveDraft": "Save draft",
 	"studio.publish": "Publish",
@@ -272,7 +282,10 @@ const DEFAULT_MESSAGES: Readonly<Record<string, string>> = {
 	// panel + chrome header via `formatRelativeTimestamp`.
 	"studio.time.justNow": "just now",
 	"studio.time.minutesAgo": "{minutes}m ago",
-};
+	// `satisfies` (not a `: Readonly<Record<string,string>>` annotation) so
+	// `keyof typeof DEFAULT_MESSAGES` recovers the exact key union for
+	// `StudioMessageKey` (the annotation would collapse it to `string`).
+} satisfies Readonly<Record<string, string>>;
 
 /**
  * Maps a deprecated message key (left) to its replacement key (right).
@@ -312,25 +325,104 @@ const EditorI18nContext = createContext<EditorI18nContextValue | null>(null);
 
 const EMPTY_OVERRIDES: Readonly<Record<string, string>> = Object.freeze({});
 
+/**
+ * The core registry entry: namespace `"studio"` carrying the full
+ * {@link DEFAULT_MESSAGES} English catalog (which still includes the
+ * transitional `assetManager.*` keys until P8). `"studio"` is a reserved
+ * namespace exempt from the {@link mergeCatalog} prefix guard, so every key
+ * survives and the resolved catalog is byte-identical to `DEFAULT_MESSAGES`
+ * when this is the only entry.
+ */
+const STUDIO_CORE_ENTRY: RegistryEntry = {
+	namespace: "studio",
+	en: DEFAULT_MESSAGES,
+};
+
+/** No plugin entries — the provider always prepends {@link STUDIO_CORE_ENTRY}. */
+const EMPTY_ENTRIES: readonly RegistryEntry[] = [];
+
+/** Empty initial lazy-pack cache. */
+const EMPTY_PACKS: ReadonlyMap<string, MessageBundle> = new Map();
+
 export interface EditorI18nProviderProps {
 	readonly children: ReactNode;
+	/**
+	 * Per-instance overrides forwarded by `<Studio messages>`. Layered ON
+	 * TOP of the resolved catalog (host always wins), preserving the legacy
+	 * precedence so `useMsg`'s resolution order is unchanged.
+	 */
 	readonly messages?: Readonly<Record<string, string>>;
+	/**
+	 * **Plugin** message bundles (each plugin's slug namespace). `<Studio>`
+	 * passes the compiled `runtime.i18n.entries` here; the core `studio.*`
+	 * entry is prepended internally, so omit this for chrome-only resolution.
+	 */
+	readonly entries?: readonly RegistryEntry[];
 }
 
 export function EditorI18nProvider({
 	children,
 	messages,
+	entries = EMPTY_ENTRIES,
 }: EditorI18nProviderProps): ReactNode {
-	const value = useMemo<EditorI18nContextValue>(
-		() => ({
-			messages:
-				messages === undefined
-					? DEFAULT_MESSAGES
-					: { ...DEFAULT_MESSAGES, ...messages },
-			overrides: messages ?? EMPTY_OVERRIDES,
-		}),
-		[messages],
+	// Active locale, null-tolerant: resolves to "en" when no locale store is
+	// mounted (RSC / tests / legacy path), mirroring `useMsg`'s fallback.
+	const locale = useOptionalLocale();
+
+	// Core `studio.*` entry first, then plugin namespaces — the catalog the
+	// merge + lazy-load resolve against.
+	const allEntries = useMemo<readonly RegistryEntry[]>(
+		() => [STUDIO_CORE_ENTRY, ...entries],
+		[entries],
 	);
+
+	// Lazy locale packs resolved so far, keyed `${namespace}:${locale}`.
+	// English needs no load; non-`en` packs resolve asynchronously and a
+	// successful load triggers a re-render so the catalog upgrades in place.
+	const [loadedPacks, setLoadedPacks] =
+		useState<ReadonlyMap<string, MessageBundle>>(EMPTY_PACKS);
+
+	// Keys already requested (in-flight or done) so a pack is fetched at most
+	// once per `(namespace, locale)`, even across the re-renders each
+	// resolution triggers. A failed load is removed so a later switch retries.
+	const requestedRef = useRef<Set<string>>(new Set());
+
+	useEffect(() => {
+		if (locale === "en") return;
+		for (const entry of allEntries) {
+			if (entry.loadMessages === undefined) continue;
+			const key = loadedPackKey(entry.namespace, locale);
+			if (requestedRef.current.has(key)) continue;
+			requestedRef.current.add(key);
+			entry
+				.loadMessages(locale)
+				.then((bundle) => {
+					// Keyed by locale, so a late write is correct data even if
+					// the user has since switched away — `mergeCatalog` only
+					// reads the *current* locale's keys, so stale writes are
+					// harmless and cached for a switch back.
+					setLoadedPacks((prev) => {
+						const next = new Map(prev);
+						next.set(key, bundle);
+						return next;
+					});
+				})
+				.catch(() => {
+					// Swallow — the namespace stays at its English baseline;
+					// allow a retry on a later switch.
+					requestedRef.current.delete(key);
+				});
+		}
+	}, [allEntries, locale]);
+
+	const value = useMemo<EditorI18nContextValue>(() => {
+		const catalog = mergeCatalog(allEntries, locale, loadedPacks);
+		return {
+			messages: messages === undefined ? catalog : { ...catalog, ...messages },
+			overrides: messages ?? EMPTY_OVERRIDES,
+		};
+	}, [allEntries, locale, loadedPacks, messages]);
+
 	return <EditorI18nContext value={value}>{children}</EditorI18nContext>;
 }
 
@@ -348,7 +440,10 @@ export function EditorI18nProvider({
  */
 export function useMsg(): (key: string, fallback?: string) => string {
 	const ctx = use(EditorI18nContext);
-	const messages = ctx === null ? DEFAULT_MESSAGES : ctx.messages;
+	// Annotated so the `satisfies`-typed DEFAULT_MESSAGES (no string index
+	// signature) is read through the index-signature type for `messages[key]`.
+	const messages: Readonly<Record<string, string>> =
+		ctx === null ? DEFAULT_MESSAGES : ctx.messages;
 	const overrides = ctx === null ? EMPTY_OVERRIDES : ctx.overrides;
 	return useCallback(
 		(key, fallback) => {

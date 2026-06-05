@@ -20,11 +20,13 @@
 import type { ReactNode } from "react";
 import { EditorUiStoreContext } from "@/state/slices/EditorUiStoreProvider";
 import { createEditorUiStore } from "@/state/slices/editor-ui-store";
+import type { EditorStoreBundle } from "./editor-store-bundle";
 import { AiStoreContext } from "./slices/AiStoreProvider";
 import { createAiStore } from "./slices/ai-store";
 import { ExportStoreContext } from "./slices/ExportStoreProvider";
-import type { EditorStoreBundle } from "./editor-store-bundle";
 import { createExportStore } from "./slices/export-store";
+import { LocaleStoreContext } from "./slices/LocaleStoreProvider";
+import { createLocaleStore } from "./slices/locale-store";
 import { ThemeStoreContext } from "./slices/ThemeStoreProvider";
 import { createThemeStore } from "./slices/theme-store";
 import { useRehydratedStore } from "./use-rehydrated-store";
@@ -41,7 +43,7 @@ export interface EditorStoreProviderProps {
 }
 
 /**
- * Supply the four editor-store contexts behind a single hydration gate.
+ * Supply the five editor-store contexts behind a single hydration gate.
  */
 export function EditorStoreProvider({
 	storeId,
@@ -56,24 +58,37 @@ export function EditorStoreProvider({
 	);
 	const ai = useRehydratedStore(storeId, createAiStore, injected?.ai);
 	const ui = useRehydratedStore(storeId, createEditorUiStore, injected?.ui);
+	const locale = useRehydratedStore(
+		storeId,
+		createLocaleStore,
+		injected?.locale,
+	);
 
 	// One combined gate: render `children` only once every slice's persisted
 	// state has rehydrated, so the chrome paints exactly once (no
 	// INITIAL_STATE → persisted flip). This replaces the four serial gates
 	// the per-slice providers each imposed.
 	const hydrated =
-		theme.hydrated && exportSlice.hydrated && ai.hydrated && ui.hydrated;
+		theme.hydrated &&
+		exportSlice.hydrated &&
+		ai.hydrated &&
+		ui.hydrated &&
+		locale.hydrated;
 
 	// Context nesting order matches the pre-Phase-2 stack
 	// (EditorUi → Theme → Export → Ai) so the effective provider graph is
-	// unchanged. The four contexts are independent, so this order is purely
-	// cosmetic — no consumer depends on their relative nesting.
+	// unchanged. The five contexts are independent, so this order is purely
+	// cosmetic — no consumer depends on their relative nesting. `locale` is
+	// innermost (added last; the i18n provider reads it via
+	// `useOptionalLocale`).
 	return (
 		<EditorUiStoreContext value={ui.store}>
 			<ThemeStoreContext value={theme.store}>
 				<ExportStoreContext value={exportSlice.store}>
 					<AiStoreContext value={ai.store}>
-						{hydrated ? children : null}
+						<LocaleStoreContext value={locale.store}>
+							{hydrated ? children : null}
+						</LocaleStoreContext>
 					</AiStoreContext>
 				</ExportStoreContext>
 			</ThemeStoreContext>
