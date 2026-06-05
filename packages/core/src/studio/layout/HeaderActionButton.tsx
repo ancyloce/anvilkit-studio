@@ -26,6 +26,7 @@ import { errorToLogMeta } from "@/components/studio-log";
 import { Button } from "@/primitives/button";
 import { DropdownMenuItem } from "@/primitives/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { useMsg } from "@/state/editor-i18n-context";
 import type {
 	StaticHeaderActionPlaceholder,
 	StudioHeaderAction,
@@ -108,6 +109,23 @@ function evaluateDisabled(
 }
 
 /**
+ * Resolve the visible label for a header action (live or placeholder):
+ * `labelKey` (an i18n key) wins, resolved via `useMsg(labelKey, label)` so
+ * a missing key falls back to the deprecated raw `label`; otherwise the raw
+ * `label`, or `""` for an icon-only action that supplies neither (live
+ * actions with neither are already rejected by `composeHeaderActions`).
+ */
+function resolveActionLabel(
+	action: Pick<StudioHeaderAction, "labelKey" | "label">,
+	msg: (key: string, fallback?: string) => string,
+): string {
+	if (action.labelKey !== undefined) {
+		return msg(action.labelKey, action.label);
+	}
+	return action.label ?? "";
+}
+
+/**
  * Render one header action. Awaits the (possibly async) `onClick`
  * and routes any throw through `ctx.log("error", …)` so a buggy
  * plugin cannot unmount the chrome (PRD §9.2).
@@ -118,6 +136,7 @@ export function HeaderActionButton({
 	variant = "button",
 }: HeaderActionButtonProps): ReactNode {
 	const [pending, setPending] = useState(false);
+	const msg = useMsg();
 	const disabled = evaluateDisabled(action, ctx) || pending;
 
 	const handleClick = useCallback(async (): Promise<void> => {
@@ -137,6 +156,10 @@ export function HeaderActionButton({
 
 	const Icon = resolveIcon(action.icon);
 	const iconNode = Icon === null ? null : <Icon />;
+	// `labelKey` (i18n) wins, with the deprecated raw `label` as the
+	// missing-key fallback; an action with neither is rejected upstream by
+	// `composeHeaderActions`, so `text` is the visible affordance.
+	const text = resolveActionLabel(action, msg);
 
 	if (variant === "menuitem") {
 		return (
@@ -147,7 +170,7 @@ export function HeaderActionButton({
 				}}
 			>
 				{iconNode}
-				<span>{action.label}</span>
+				<span>{text}</span>
 			</DropdownMenuItem>
 		);
 	}
@@ -156,28 +179,24 @@ export function HeaderActionButton({
 	const button = (
 		<Button
 			variant={buttonVariant}
-			size={
-				action.icon !== undefined && action.label.length === 0
-					? "icon"
-					: "default"
-			}
+			size={action.icon !== undefined && text.length === 0 ? "icon" : "default"}
 			disabled={disabled}
 			onClick={() => {
 				void handleClick();
 			}}
 		>
 			{iconNode}
-			{action.label.length > 0 ? <span>{action.label}</span> : null}
+			{text.length > 0 ? <span>{text}</span> : null}
 		</Button>
 	);
 
-	if (action.icon !== undefined && action.label.length > 0) {
+	if (action.icon !== undefined && text.length > 0) {
 		return (
 			<Tooltip>
 				<TooltipTrigger
 					render={<span className="inline-flex">{button}</span>}
 				/>
-				<TooltipContent>{action.label}</TooltipContent>
+				<TooltipContent>{text}</TooltipContent>
 			</Tooltip>
 		);
 	}
@@ -202,18 +221,19 @@ export interface HeaderActionPlaceholderButtonProps {
 export function HeaderActionPlaceholderButton({
 	action,
 }: HeaderActionPlaceholderButtonProps): ReactNode {
+	const msg = useMsg();
 	const Icon = resolveIcon(action.icon);
 	const iconNode = Icon === null ? null : <Icon />;
 	const buttonVariant = action.group === "primary" ? "default" : "ghost";
+	// A reserved slot resolves `labelKey` against the active locale exactly
+	// like the live button, so the pre-chunk-load placeholder shows the
+	// localized label (strictly better than a baked raw string).
+	const text = resolveActionLabel(action, msg);
 
 	const button = (
 		<Button
 			variant={buttonVariant}
-			size={
-				action.icon !== undefined && action.label.length === 0
-					? "icon"
-					: "default"
-			}
+			size={action.icon !== undefined && text.length === 0 ? "icon" : "default"}
 			disabled
 			// Placeholder: inert until its plugin's chunk registers a live
 			// action of the same id and the chrome swaps this out.
@@ -221,17 +241,17 @@ export function HeaderActionPlaceholderButton({
 			data-header-action-placeholder={action.id}
 		>
 			{iconNode}
-			{action.label.length > 0 ? <span>{action.label}</span> : null}
+			{text.length > 0 ? <span>{text}</span> : null}
 		</Button>
 	);
 
-	if (action.icon !== undefined && action.label.length > 0) {
+	if (action.icon !== undefined && text.length > 0) {
 		return (
 			<Tooltip>
 				<TooltipTrigger
 					render={<span className="inline-flex">{button}</span>}
 				/>
-				<TooltipContent>{action.label}</TooltipContent>
+				<TooltipContent>{text}</TooltipContent>
 			</Tooltip>
 		);
 	}

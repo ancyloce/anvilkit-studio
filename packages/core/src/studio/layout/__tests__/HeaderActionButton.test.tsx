@@ -122,3 +122,68 @@ describe("HeaderActionPlaceholderButton (3.3)", () => {
 		expect(container.textContent).toContain("No Icon");
 	});
 });
+
+describe("HeaderActionButton — labelKey resolution (P4)", () => {
+	it("resolves labelKey via useMsg (core key → default English)", () => {
+		const action: StudioHeaderAction = {
+			id: "publish",
+			labelKey: "studio.publish",
+			onClick: vi.fn(),
+		};
+		const { container } = render(
+			<HeaderActionButton action={action} ctx={ctx} />,
+		);
+		// `studio.publish` resolves to the default "Publish" via DEFAULT_MESSAGES.
+		expect(container.textContent).toContain("Publish");
+	});
+
+	it("labelKey wins over a raw label", () => {
+		const action: StudioHeaderAction = {
+			id: "pub2",
+			labelKey: "studio.publish",
+			label: "RAW",
+			onClick: vi.fn(),
+		};
+		const { container } = render(
+			<HeaderActionButton action={action} ctx={ctx} />,
+		);
+		expect(container.textContent).toContain("Publish");
+		expect(container.textContent).not.toContain("RAW");
+	});
+
+	it("falls back to the raw label when the labelKey is unknown", () => {
+		const action: StudioHeaderAction = {
+			id: "fb",
+			labelKey: "no.such.key",
+			label: "Fallback",
+			onClick: vi.fn(),
+		};
+		const { container } = render(
+			<HeaderActionButton action={action} ctx={ctx} />,
+		);
+		expect(container.textContent).toContain("Fallback");
+	});
+
+	it("still renders a raw label-only action unchanged (I2)", () => {
+		const action: StudioHeaderAction = {
+			id: "raw",
+			label: "Plain Label",
+			onClick: vi.fn(),
+		};
+		const { container } = render(
+			<HeaderActionButton action={action} ctx={ctx} />,
+		);
+		expect(container.textContent).toContain("Plain Label");
+	});
+
+	it("placeholder resolves labelKey the same way", () => {
+		const placeholder: StaticHeaderActionPlaceholder = {
+			id: "ph",
+			labelKey: "studio.publish",
+		};
+		const { container } = render(
+			<HeaderActionPlaceholderButton action={placeholder} />,
+		);
+		expect(container.textContent).toContain("Publish");
+	});
+});
