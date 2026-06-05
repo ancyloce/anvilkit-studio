@@ -55,6 +55,8 @@ function makeCtx(
 		studioConfig,
 		log: vi.fn(),
 		emit: vi.fn(),
+		t: (key) => key,
+		registerMessages: () => undefined,
 		registerAssetResolver: vi.fn(),
 		...overrides,
 	};
