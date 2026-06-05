@@ -37,6 +37,8 @@ export interface FakeStudioContextOverrides<
 	readonly studioConfig?: StudioPluginContext<UserConfig>["studioConfig"];
 	readonly log?: StudioPluginContext<UserConfig>["log"];
 	readonly emit?: StudioPluginContext<UserConfig>["emit"];
+	readonly t?: StudioPluginContext<UserConfig>["t"];
+	readonly registerMessages?: StudioPluginContext<UserConfig>["registerMessages"];
 	readonly registerAssetResolver?: StudioPluginContext<UserConfig>["registerAssetResolver"];
 	readonly getAssetResolvers?: StudioPluginContext<UserConfig>["getAssetResolvers"];
 }
@@ -91,6 +93,11 @@ export function createFakeStudioContext<
 			((event, payload) => {
 				emitCalls.push([event, payload]);
 			}),
+		// Default fake resolver: returns the key (or the supplied fallback
+		// is irrelevant here) so assertions that only need a string pass;
+		// override `t` for tests that pin specific resolutions.
+		t: overrides.t ?? ((key) => key),
+		registerMessages: overrides.registerMessages ?? (() => undefined),
 		registerAssetResolver:
 			overrides.registerAssetResolver ??
 			((resolver) => {
