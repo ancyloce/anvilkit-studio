@@ -35,6 +35,8 @@
 			"@/compat/*": ["src/compat/*"],
 			"@/config": ["src/config"],
 			"@/config/*": ["src/config/*"],
+			"@/i18n": ["src/i18n"],
+			"@/i18n/*": ["src/i18n/*"],
 			"@/runtime": ["src/runtime"],
 			"@/runtime/*": ["src/runtime/*"],
 			"@/section": ["src/section"],
