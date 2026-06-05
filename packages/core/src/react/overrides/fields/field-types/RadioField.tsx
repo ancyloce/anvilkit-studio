@@ -17,7 +17,7 @@ import { type ReactNode } from "react";
 import {
 	Toggle,
 	ToggleGroup,
-} from "@/primitives/animate-ui/components/base/toggle-group";
+} from "@/primitives/vendor/animate-ui/components/base/toggle-group";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import {

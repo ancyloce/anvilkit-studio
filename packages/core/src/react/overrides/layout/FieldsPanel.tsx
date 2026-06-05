@@ -10,7 +10,7 @@
 import { ChevronRight } from "lucide-react";
 import { type ReactNode } from "react";
 import { useBreadcrumbs } from "@/overrides/utils/breadcrumbs";
-import { cn } from "@/utils/cn";
+import { cn } from "@/shared/cn";
 
 interface ItemSelector {
 	readonly index: number;

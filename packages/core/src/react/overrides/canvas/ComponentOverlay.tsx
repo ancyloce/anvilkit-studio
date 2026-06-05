@@ -18,7 +18,7 @@
 
 import { type ReactNode } from "react";
 
-import { cn } from "@/utils/cn";
+import { cn } from "@/shared/cn";
 import { useReactivePuck } from "../utils/use-reactive-puck";
 
 const ROOT_DROPPABLE_ID = "root:default-zone";

@@ -69,13 +69,14 @@ import {
 	type SidebarRegistryStoreApi,
 } from "@/state/index";
 import {
+	createEditorStore,
+	type EditorStoreBundle,
+} from "@/state/editor-store-bundle";
+import {
 	type AiStoreApi,
-	createAiStore,
-	createExportStore,
-	createThemeStore,
 	type ExportStoreApi,
 	type ThemeStoreApi,
-} from "@/stores/index";
+} from "@/state/index";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
@@ -315,6 +316,13 @@ export interface StudioControllerState {
 	readonly themeStore: ThemeStoreApi;
 	readonly exportStore: ExportStoreApi;
 	readonly aiStore: AiStoreApi;
+	/**
+	 * The coordinated editor-store bundle (theme/export/ai/ui). The anvilkit
+	 * chrome passes this to the single `<EditorStoreProvider>`; the
+	 * `themeStore`/`exportStore`/`aiStore` fields above are views onto it for
+	 * the legacy puck trio and imperative driving.
+	 */
+	readonly editorStore: EditorStoreBundle;
 	readonly sidebarRegistryStore: SidebarRegistryStoreApi;
 	readonly resolvedStoreId: string;
 	readonly rootRef: RefObject<HTMLDivElement | null>;
@@ -543,15 +551,19 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const reactId = useId();
 	const resolvedStoreId =
 		storeId ?? `${FALLBACK_STORE_ID_PREFIX}-${reactId.replace(/:/g, "")}`;
-	const [themeStore] = useState<ThemeStoreApi>(() =>
-		createThemeStore({ storeId: resolvedStoreId }),
+	// Phase 2: one coordinated bundle (theme/export/ai/ui) created once per
+	// mount, instead of three separate `useState` stores. The four slices keep
+	// their own factories, reducers, and persist keys — `createEditorStore`
+	// just composes them. `themeStore`/`exportStore`/`aiStore` are derived
+	// views onto the bundle so the controller's return shape (and the legacy
+	// `chrome="puck"` provider trio + `useHydrateRuntimeStores`/teardown) are
+	// unchanged.
+	const [editorStore] = useState<EditorStoreBundle>(() =>
+		createEditorStore({ storeId: resolvedStoreId }),
 	);
-	const [exportStore] = useState<ExportStoreApi>(() =>
-		createExportStore({ storeId: resolvedStoreId }),
-	);
-	const [aiStore] = useState<AiStoreApi>(() =>
-		createAiStore({ storeId: resolvedStoreId }),
-	);
+	const themeStore = editorStore.theme;
+	const exportStore = editorStore.export;
+	const aiStore = editorStore.ai;
 
 	// One stored value, tagged with the `compileKey` that produced it.
 	// `setCompiled(null)` on every input change is replaced by deriving
@@ -952,6 +964,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		themeStore,
 		exportStore,
 		aiStore,
+		editorStore,
 		sidebarRegistryStore,
 		resolvedStoreId,
 		rootRef,

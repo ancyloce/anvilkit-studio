@@ -31,34 +31,17 @@ import type {
 import { Puck } from "@puckeditor/core";
 import { type ReactElement, type ReactNode, useMemo } from "react";
 
-import { StudioConfigProvider } from "@/config/provider";
-import { type ChromeProps, ChromePropsProvider } from "@/context/chrome-props";
-import { StudioPagesSourceProvider } from "@/context/pages-source";
-import { StudioPluginContextProvider } from "@/context/plugin-context";
-import { StudioRuntimeProvider } from "@/hooks/use-studio";
+import type { ChromeProps } from "@/context/chrome-props";
 import { StudioLoadingScreen } from "@/layout/StudioLoadingScreen";
-import type { StudioChromeMode } from "@/overrides/types";
 import { Toaster } from "@/primitives/sonner";
 import { TooltipProvider } from "@/primitives/tooltip";
-import {
-	EditorI18nProvider,
-	EditorUiStoreProvider,
-	SidebarRegistryProvider,
-	StudioRootProvider,
-} from "@/state/index";
-import {
-	AiStoreProvider,
-	ExportStoreProvider,
-	ThemeStoreProvider,
-} from "@/stores/index";
 import {
 	mergeStudioUi,
 	resolveStudioViewports,
 } from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
-import type { StudioConfig } from "@/types/config";
-import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPluginOverlay, StudioPluginProvider } from "@/types/plugin";
+import { StudioProviderStack } from "./StudioProviderStack";
 import { useKeyEventGuard } from "./use-key-event-guard";
 
 import {
@@ -190,6 +173,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		themeStore,
 		exportStore,
 		aiStore,
+		editorStore,
 		sidebarRegistryStore,
 		resolvedStoreId,
 		rootRef,
@@ -289,27 +273,24 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 
 	if (!isAnvilkit) {
 		// Bit-for-bit pre-Phase-5 output: same provider stack, same JSX
-		// nesting. The three Core-owned stores are chrome-agnostic — a
-		// host on the legacy `chrome="puck"` path may still mount panels
-		// that read `useExportStore` / `useAiStore` / `useThemeStore`,
-		// and each `<Studio>` must stay isolated (H3). Root ref scopes
-		// any iframe query to this instance's subtree.
+		// nesting — now expressed once in `<StudioProviderStack>`. The three
+		// Core-owned stores are chrome-agnostic — a host on the legacy
+		// `chrome="puck"` path may still mount panels that read
+		// `useExportStore` / `useAiStore` / `useThemeStore`, and each
+		// `<Studio>` must stay isolated (H3).
 		return (
-			<StudioConfigProvider config={compiled.studioConfig}>
-				<StudioRuntimeProvider value={compiled.runtime}>
-					<ThemeStoreProvider storeId={resolvedStoreId} store={themeStore}>
-						<ExportStoreProvider storeId={resolvedStoreId} store={exportStore}>
-							<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
-								<StudioRootProvider rootRef={rootRef}>
-									<div ref={rootRef} className="contents">
-										{puckElement}
-									</div>
-								</StudioRootProvider>
-							</AiStoreProvider>
-						</ExportStoreProvider>
-					</ThemeStoreProvider>
-				</StudioRuntimeProvider>
-			</StudioConfigProvider>
+			<StudioProviderStack
+				isAnvilkit={false}
+				studioConfig={compiled.studioConfig}
+				runtime={compiled.runtime}
+				storeId={resolvedStoreId}
+				themeStore={themeStore}
+				exportStore={exportStore}
+				aiStore={aiStore}
+				rootRef={rootRef}
+			>
+				{puckElement}
+			</StudioProviderStack>
 		);
 	}
 
@@ -360,38 +341,20 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 	);
 
 	return (
-		<StudioConfigProvider config={compiled.studioConfig}>
-			<StudioRuntimeProvider value={compiled.runtime}>
-				<StudioPluginContextProvider value={compiled.ctx}>
-					<SidebarRegistryProvider value={sidebarRegistryStore}>
-						<StudioPagesSourceProvider value={pages}>
-							<EditorUiStoreProvider storeId={resolvedStoreId}>
-								<ThemeStoreProvider
-									storeId={resolvedStoreId}
-									store={themeStore}
-								>
-									<ExportStoreProvider
-										storeId={resolvedStoreId}
-										store={exportStore}
-									>
-										<AiStoreProvider storeId={resolvedStoreId} store={aiStore}>
-											<EditorI18nProvider messages={messages}>
-												<ChromePropsProvider value={chromePropsValue}>
-													<StudioRootProvider rootRef={rootRef}>
-														<div ref={rootRef} className="contents">
-															{wrappedBody}
-														</div>
-													</StudioRootProvider>
-												</ChromePropsProvider>
-											</EditorI18nProvider>
-										</AiStoreProvider>
-									</ExportStoreProvider>
-								</ThemeStoreProvider>
-							</EditorUiStoreProvider>
-						</StudioPagesSourceProvider>
-					</SidebarRegistryProvider>
-				</StudioPluginContextProvider>
-			</StudioRuntimeProvider>
-		</StudioConfigProvider>
+		<StudioProviderStack
+			isAnvilkit
+			studioConfig={compiled.studioConfig}
+			runtime={compiled.runtime}
+			ctx={compiled.ctx}
+			sidebarRegistryStore={sidebarRegistryStore}
+			pages={pages}
+			storeId={resolvedStoreId}
+			editorStore={editorStore}
+			messages={messages}
+			chromePropsValue={chromePropsValue}
+			rootRef={rootRef}
+		>
+			{wrappedBody}
+		</StudioProviderStack>
 	);
 }

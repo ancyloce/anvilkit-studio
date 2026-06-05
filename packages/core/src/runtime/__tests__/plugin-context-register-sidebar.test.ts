@@ -17,7 +17,7 @@ import { describe, expect, it } from "vitest";
 
 import { createStudioConfig } from "@/config/create-config";
 import { compilePlugins } from "@/runtime/compile-plugins";
-import { createSidebarRegistryStore } from "@/state/sidebar-registry-store";
+import { createSidebarRegistryStore } from "@/state/sidebar-registry/sidebar-registry-store";
 import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
 
 function buildCtx(

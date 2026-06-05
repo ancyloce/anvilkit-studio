@@ -37,9 +37,9 @@ import {
 	resolveQueryRoot,
 	StudioRootProvider,
 	useStudioRootRef,
-} from "@/state/index";
-import type { ExportStoreApi, ThemeStoreApi } from "@/stores/index";
-import { useExportStoreApi, useThemeStoreApi } from "@/stores/index";
+} from "@/context/StudioRootProvider";
+import type { ExportStoreApi, ThemeStoreApi } from "@/state/index";
+import { useExportStoreApi, useThemeStoreApi } from "@/state/index";
 
 beforeEach(() => {
 	localStorage.clear();

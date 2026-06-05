@@ -27,7 +27,7 @@ import {
 	FieldTitle,
 	FieldLabel as PrimitiveFieldLabel,
 } from "@/primitives/field";
-import { cn } from "@/utils/cn";
+import { cn } from "@/shared/cn";
 
 export type FieldLabelDataType =
 	| "array"

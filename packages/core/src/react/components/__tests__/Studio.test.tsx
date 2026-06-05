@@ -48,13 +48,13 @@ import {
 	vi,
 } from "vitest";
 import { Studio } from "@/components/Studio";
-import { useStudio } from "@/hooks/use-studio";
+import { useStudio } from "@/components/use-studio";
 import {
 	type AiStoreApi,
 	type ExportStoreApi,
 	useAiStoreApi,
 	useExportStoreApi,
-} from "@/stores/index";
+} from "@/state/index";
 import type { StudioPlugin, StudioPluginMeta } from "@/types/plugin";
 
 // Post-H3 the export/AI stores are per-`<Studio>` instances created

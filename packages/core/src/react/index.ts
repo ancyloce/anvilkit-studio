@@ -13,14 +13,43 @@
 // slice stores.
 
 export {
+	type AiHistoryEntry,
+	type AiState,
+	type AiStoreApi,
+	AiStoreProvider,
+	type AiStoreProviderProps,
+	type CreateAiStoreOptions,
+	type CreateExportStoreOptions,
+	type CreateThemeStoreOptions,
+	createAiStore,
+	createExportStore,
+	createThemeStore,
+	type ExportState,
+	type ExportStoreApi,
+	ExportStoreProvider,
+	type ExportStoreProviderProps,
+	type LastExportRecord,
+	type ThemeMode,
+	type ThemeResolved,
+	type ThemeState,
+	type ThemeStoreApi,
+	ThemeStoreProvider,
+	type ThemeStoreProviderProps,
+	useAiStore,
+	useAiStoreApi,
+	useExportStore,
+	useExportStoreApi,
+	useThemeStore,
+	useThemeStoreApi,
+} from "../state/index";
+export {
+	StudioLoadingScreen,
+	type StudioLoadingScreenProps,
+} from "../studio/layout/StudioLoadingScreen";
+export {
 	Studio,
 	type StudioLogger,
 	type StudioProps,
 } from "./components/Studio";
-export { type UseStudioResult, useStudio } from "./hooks/use-studio";
+export { type UseStudioResult, useStudio } from "./components/use-studio";
 export { mergeOverrides } from "./overrides/merge-overrides";
-export * from "./stores/index";
-export {
-	StudioLoadingScreen,
-	type StudioLoadingScreenProps,
-} from "./studio/layout/StudioLoadingScreen";

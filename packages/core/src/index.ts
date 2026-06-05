@@ -71,39 +71,6 @@ export {
 	useStudio,
 } from "./react/index.js";
 // ---------------------------------------------------------------------------
-// React stores (M5 — Studio-level Zustand slices)
-// ---------------------------------------------------------------------------
-export {
-	type AiHistoryEntry,
-	type AiState,
-	type AiStoreApi,
-	AiStoreProvider,
-	type AiStoreProviderProps,
-	type CreateAiStoreOptions,
-	type CreateExportStoreOptions,
-	type CreateThemeStoreOptions,
-	createAiStore,
-	createExportStore,
-	createThemeStore,
-	type ExportState,
-	type ExportStoreApi,
-	ExportStoreProvider,
-	type ExportStoreProviderProps,
-	type LastExportRecord,
-	type ThemeMode,
-	type ThemeResolved,
-	type ThemeState,
-	type ThemeStoreApi,
-	ThemeStoreProvider,
-	type ThemeStoreProviderProps,
-	useAiStore,
-	useAiStoreApi,
-	useExportStore,
-	useExportStoreApi,
-	useThemeStore,
-	useThemeStoreApi,
-} from "./react/stores/index.js";
-// ---------------------------------------------------------------------------
 // Runtime (M3 — React-free plugin engine)
 // ---------------------------------------------------------------------------
 export {
@@ -135,6 +102,39 @@ export {
 	type StudioSidebarContributions,
 	withoutHeaderActions,
 } from "./runtime/index.js";
+// ---------------------------------------------------------------------------
+// React stores (M5 — Studio-level Zustand slices)
+// ---------------------------------------------------------------------------
+export {
+	type AiHistoryEntry,
+	type AiState,
+	type AiStoreApi,
+	AiStoreProvider,
+	type AiStoreProviderProps,
+	type CreateAiStoreOptions,
+	type CreateExportStoreOptions,
+	type CreateThemeStoreOptions,
+	createAiStore,
+	createExportStore,
+	createThemeStore,
+	type ExportState,
+	type ExportStoreApi,
+	ExportStoreProvider,
+	type ExportStoreProviderProps,
+	type LastExportRecord,
+	type ThemeMode,
+	type ThemeResolved,
+	type ThemeState,
+	type ThemeStoreApi,
+	ThemeStoreProvider,
+	type ThemeStoreProviderProps,
+	useAiStore,
+	useAiStoreApi,
+	useExportStore,
+	useExportStoreApi,
+	useThemeStore,
+	useThemeStoreApi,
+} from "./state/index.js";
 // ---------------------------------------------------------------------------
 // Types (M2 — plugin contract, config shape, domain records)
 // ---------------------------------------------------------------------------

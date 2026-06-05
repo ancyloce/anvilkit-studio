@@ -18,7 +18,7 @@ import type {
 import { cloneElement, isValidElement, type ReactNode } from "react";
 
 import { Card, CardContent } from "@/primitives/card";
-import { cn } from "@/utils/cn";
+import { cn } from "@/shared/cn";
 import { FieldLabel } from "../../layout/FieldLabel";
 
 interface ObjectFieldRendererProps

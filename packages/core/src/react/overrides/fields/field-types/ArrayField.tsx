@@ -31,14 +31,14 @@ import {
 	PopoverPositioner,
 	PopoverTitle,
 	PopoverTrigger,
-} from "@/primitives/animate-ui/primitives/base/popover";
+} from "@/primitives/vendor/animate-ui/primitives/base/popover";
 import { Button } from "@/primitives/button";
 import { Card, CardContent } from "@/primitives/card";
 import { FieldLegend, FieldSet } from "@/primitives/field";
 import { Item, ItemActions, ItemContent } from "@/primitives/item";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { useMsg } from "@/state/editor-i18n-context";
-import { cn } from "@/utils/cn";
+import { cn } from "@/shared/cn";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import { ExternalField } from "./ExternalField";
