@@ -1689,7 +1689,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@anvilkit/core",
-													"packagePath": "src/types/plugin.ts",
+													"packagePath": "src/types/plugin-context.ts",
 													"qualifiedName": "StudioPluginContext"
 												},
 												"name": "StudioPluginContext",
@@ -1883,7 +1883,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@anvilkit/core",
-													"packagePath": "src/types/plugin.ts",
+													"packagePath": "src/types/plugin-context.ts",
 													"qualifiedName": "StudioPluginContext"
 												},
 												"name": "StudioPluginContext",
@@ -2205,15 +2205,15 @@
 						"types": [
 							{
 								"type": "literal",
+								"value": "overflow"
+							},
+							{
+								"type": "literal",
 								"value": "primary"
 							},
 							{
 								"type": "literal",
 								"value": "secondary"
-							},
-							{
-								"type": "literal",
-								"value": "overflow"
 							}
 						]
 					}
@@ -2468,7 +2468,7 @@
 								"text": "StudioPluginContext",
 								"target": {
 									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/plugin.ts",
+									"packagePath": "src/types/plugin-context.ts",
 									"qualifiedName": "StudioPluginContext"
 								}
 							},
@@ -2505,9 +2505,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 611,
+							"line": 349,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L611"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L349"
 						}
 					],
 					"type": {
@@ -2536,7 +2536,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@anvilkit/core",
-													"packagePath": "src/types/plugin.ts",
+													"packagePath": "src/types/plugin-context.ts",
 													"qualifiedName": "StudioPluginContext"
 												},
 												"name": "StudioPluginContext",
@@ -2605,9 +2605,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 571,
+							"line": 309,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L571"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L309"
 						}
 					],
 					"type": {
@@ -2615,15 +2615,15 @@
 						"types": [
 							{
 								"type": "literal",
+								"value": "overflow"
+							},
+							{
+								"type": "literal",
 								"value": "primary"
 							},
 							{
 								"type": "literal",
 								"value": "secondary"
-							},
-							{
-								"type": "literal",
-								"value": "overflow"
 							}
 						]
 					}
@@ -2744,9 +2744,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 559,
+							"line": 297,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L559"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L297"
 						}
 					],
 					"type": {
@@ -2797,9 +2797,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 526,
+							"line": 264,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L526"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L264"
 						}
 					],
 					"type": {
@@ -2826,9 +2826,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 536,
+							"line": 274,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L536"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L274"
 						}
 					],
 					"type": {
@@ -2856,7 +2856,7 @@
 								"text": "StudioPluginContext",
 								"target": {
 									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/plugin.ts",
+									"packagePath": "src/types/plugin-context.ts",
 									"qualifiedName": "StudioPluginContext"
 								}
 							},
@@ -2901,9 +2901,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 599,
+							"line": 337,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L599"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L337"
 						}
 					],
 					"type": {
@@ -2932,7 +2932,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@anvilkit/core",
-													"packagePath": "src/types/plugin.ts",
+													"packagePath": "src/types/plugin-context.ts",
 													"qualifiedName": "StudioPluginContext"
 												},
 												"name": "StudioPluginContext",
@@ -3040,9 +3040,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 582,
+							"line": 320,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L582"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L320"
 						}
 					],
 					"type": {
@@ -3068,9 +3068,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 517,
+					"line": 255,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L517"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L255"
 				}
 			]
 		},
@@ -4849,7 +4849,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/plugin.ts",
+											"packagePath": "src/types/plugin-context.ts",
 											"qualifiedName": "StudioPluginContext"
 										},
 										"name": "StudioPluginContext",
@@ -5194,9 +5194,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 632,
+					"line": 370,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L632"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L370"
 				}
 			],
 			"type": {
@@ -5648,7 +5648,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/plugin.ts",
+									"packagePath": "src/types/plugin-context.ts",
 									"qualifiedName": "StudioPluginContext"
 								},
 								"name": "StudioPluginContext",
