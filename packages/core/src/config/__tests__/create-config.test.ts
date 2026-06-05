@@ -139,6 +139,22 @@ describe("createStudioConfig — layer precedence", () => {
 		expect(config.theme.defaultMode).toBe("light");
 	});
 
+	it("resolves i18n.locale across all three layers (host > env > default)", () => {
+		// Default "en"; env bumps to "zh"; host override wins with "ja".
+		const envOnly = createStudioConfig(undefined, {
+			env: { ANVILKIT_I18N__LOCALE: "zh" },
+		});
+		expect(envOnly.i18n.locale).toBe("zh");
+
+		const hostWins = createStudioConfig(
+			{ i18n: { locale: "ja" } },
+			{ env: { ANVILKIT_I18N__LOCALE: "zh" } },
+		);
+		expect(hostWins.i18n.locale).toBe("ja");
+		// Untouched nested field keeps its default.
+		expect(hostWins.i18n.fallbackLocale).toBe("en");
+	});
+
 	it("does a full three-layer merge with distinct fields at each layer", () => {
 		const config = createStudioConfig(
 			{ features: { enableAi: true } },

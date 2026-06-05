@@ -35,6 +35,10 @@ describe("StudioConfigSchema — runtime defaults", () => {
 		expect(parsed.theme.defaultMode).toBe("system");
 		expect(parsed.theme.allowToggle).toBe(true);
 
+		expect(parsed.i18n.locale).toBe("en");
+		expect(parsed.i18n.fallbackLocale).toBe("en");
+		expect(parsed.i18n.messages).toBeUndefined();
+
 		expect(parsed.export.defaultFormat).toBeUndefined();
 		expect(parsed.export.filenamePrefix).toBe("page");
 
@@ -132,6 +136,28 @@ describe("StudioConfigSchema — layered overrides", () => {
 	});
 });
 
+describe("StudioConfigSchema — i18n block", () => {
+	it("overrides locale while keeping the fallback default", () => {
+		const parsed = StudioConfigSchema.parse({ i18n: { locale: "zh" } });
+		expect(parsed.i18n.locale).toBe("zh");
+		// Nested default: only `locale` was overridden.
+		expect(parsed.i18n.fallbackLocale).toBe("en");
+	});
+
+	it("accepts per-locale message overrides", () => {
+		const parsed = StudioConfigSchema.parse({
+			i18n: { messages: { zh: { "studio.publish": "发布" } } },
+		});
+		expect(parsed.i18n.messages?.zh?.["studio.publish"]).toBe("发布");
+	});
+
+	it("rejects a bare top-level `locale` (must nest under i18n)", () => {
+		// Mirrors the env contract: a bare `ANVILKIT_LOCALE` would map to a
+		// top-level `locale` key, which the root strictObject rejects.
+		expect(() => StudioConfigSchema.parse({ locale: "zh" })).toThrow();
+	});
+});
+
 describe("StudioConfigSchema — strict mode", () => {
 	it("rejects unknown top-level keys", () => {
 		// `.parse()` takes `unknown`, so bad shapes are a runtime
@@ -203,6 +229,7 @@ describe("StudioConfig — type-level assertions", () => {
 				primaryColor: "#f00",
 			},
 			theme: { defaultMode: "light", allowToggle: true },
+			i18n: { locale: "en", fallbackLocale: "en" },
 			brandKit: {
 				colors: [{ name: "Primary", value: "#2563eb" }],
 				fonts: ["Inter"],

@@ -67,6 +67,13 @@ describe("parseStudioEnv — nested-path separator", () => {
 		expect(result).toEqual({ features: { enableExport: true } });
 	});
 
+	it("maps `ANVILKIT_I18N__LOCALE` to `i18n.locale` (digit-bearing segment)", () => {
+		// `segmentToCamelCase` lowercases first, so `I18N` → `i18n` (no
+		// underscore to transform) and `LOCALE` → `locale`.
+		const result = parseStudioEnv({ ANVILKIT_I18N__LOCALE: "zh" });
+		expect(result).toEqual({ i18n: { locale: "zh" } });
+	});
+
 	it("handles three-level paths", () => {
 		// `experimental` is a grab-bag record, so an arbitrary
 		// two-level descendant is a realistic test case.

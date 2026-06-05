@@ -149,6 +149,42 @@ export const StudioConfigSchema = z
 			})
 			.prefault({}),
 		/**
+		 * Internationalization block — the active locale, the fallback
+		 * locale, and optional per-locale message overrides forwarded to
+		 * the editor chrome's i18n catalog.
+		 *
+		 * The env override nests: `ANVILKIT_I18N__LOCALE=zh` maps to
+		 * `i18n.locale` (the `__` separator). A bare `ANVILKIT_LOCALE` is
+		 * rejected — the root schema is `strictObject`, so a top-level
+		 * `locale` key is unknown.
+		 */
+		i18n: z
+			.strictObject({
+				/**
+				 * Active locale (BCP-47-ish tag, e.g. `"en"`, `"zh"`).
+				 * Seeds the per-instance locale store at mount; the built-in
+				 * language toggle (or `setLocale`) overrides it at runtime.
+				 * Defaults to `"en"`.
+				 */
+				locale: z.string().default("en"),
+				/**
+				 * Locale used to back-fill keys missing from the active
+				 * locale's pack. Defaults to `"en"`.
+				 */
+				fallbackLocale: z.string().default("en"),
+				/**
+				 * Optional per-locale message overrides, keyed
+				 * `locale → (messageKey → string)`. Reserved for host-driven
+				 * config overrides; the `<Studio messages>` prop remains the
+				 * per-instance override path. Omit to use the built-in
+				 * English catalog plus any plugin packs.
+				 */
+				messages: z
+					.record(z.string(), z.record(z.string(), z.string()))
+					.optional(),
+			})
+			.prefault({}),
+		/**
 		 * Brand-kit block (I3-4) — shared colors + font families the
 		 * Canvas Studio editor surfaces (color pickers, font menus) so
 		 * designs stay on-brand. Distinct from `branding`, which styles
