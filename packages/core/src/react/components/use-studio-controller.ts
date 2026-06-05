@@ -59,22 +59,23 @@ import {
 	useState,
 } from "react";
 
+import { braceFormatter } from "@/i18n/format";
 import { DEFAULT_INSERT_SECTIONS } from "@/layout/sidebar/modules/insert/default-sections";
 import { mergeOverrides } from "@/overrides/merge-overrides";
 import type { StudioChromeMode } from "@/overrides/types";
 import { jsonExportPlugin } from "@/runtime/built-in-formats/json-export-plugin";
 import { compilePlugins, type StudioRuntime } from "@/runtime/compile-plugins";
-import {
-	createSidebarRegistryStore,
-	type SidebarRegistryStoreApi,
-} from "@/state/index";
+import { DEFAULT_MESSAGES } from "@/state/editor-i18n-context";
 import {
 	createEditorStore,
 	type EditorStoreBundle,
 } from "@/state/editor-store-bundle";
 import {
 	type AiStoreApi,
+	createSidebarRegistryStore,
 	type ExportStoreApi,
+	type LocaleStoreApi,
+	type SidebarRegistryStoreApi,
 	type ThemeStoreApi,
 } from "@/state/index";
 import type { StudioConfig } from "@/types/config";
@@ -352,6 +353,7 @@ function useHydrateRuntimeStores(
 	compiled: CompiledStudioRuntime | null,
 	exportStore: ExportStoreApi,
 	themeStore: ThemeStoreApi,
+	localeStore: LocaleStoreApi,
 ): void {
 	useEffect(() => {
 		if (compiled === null) {
@@ -366,10 +368,9 @@ function useHydrateRuntimeStores(
 		// preference. The store starts at `"system"` *and* reports
 		// `"system"` before rehydration, so writing here pre-hydration
 		// would clobber a persisted `"light"`/`"dark"` the moment it
-		// loads. `ThemeStoreProvider`'s rehydrate is gated behind the
-		// hydration boundary, so wait for `onFinishHydration` (or run
-		// now if already hydrated) and decide against the *rehydrated*
-		// mode.
+		// loads. The store's rehydrate is gated behind the hydration
+		// boundary, so wait for `onFinishHydration` (or run now if
+		// already hydrated) and decide against the *rehydrated* mode.
 		const applyDefaultMode = (): void => {
 			if (theme.defaultMode === "system") {
 				return;
@@ -378,16 +379,48 @@ function useHydrateRuntimeStores(
 				themeStore.getState().setMode(theme.defaultMode);
 			}
 		};
-		// `ThemeStoreApi` now carries the persist middleware surface (it is
-		// inferred from `createThemeStore`), so reach `.persist` directly — no
-		// `as unknown as` erasure of the persist API.
-		const { persist } = themeStore;
-		if (persist.hasHydrated()) {
-			applyDefaultMode();
-			return;
-		}
-		return persist.onFinishHydration(applyDefaultMode);
-	}, [compiled, exportStore, themeStore]);
+
+		// Same shape for locale: `"en"` is the store default, so seed a
+		// non-`"en"` config locale only when the user has no persisted
+		// choice. Never clobbers a persisted `setLocale`. (P3 handoff.)
+		const i18n = compiled.studioConfig.i18n;
+		const applyDefaultLocale = (): void => {
+			if (i18n.locale === "en") {
+				return;
+			}
+			if (localeStore.getState().locale === "en") {
+				localeStore.getState().setLocale(i18n.locale);
+			}
+		};
+
+		// Each store is a separate `persist` instance with its own
+		// hydration; seed each after *its* rehydration and collect the
+		// unsubscribes so the effect tears both down. `*StoreApi` carries
+		// the persist middleware surface (inferred from its factory), so
+		// reach `.persist` directly — no `as unknown as` erasure.
+		const unsubscribers: Array<() => void> = [];
+		const seedWhenHydrated = (
+			persist: {
+				hasHydrated(): boolean;
+				onFinishHydration(callback: () => void): () => void;
+			},
+			apply: () => void,
+		): void => {
+			if (persist.hasHydrated()) {
+				apply();
+				return;
+			}
+			unsubscribers.push(persist.onFinishHydration(apply));
+		};
+		seedWhenHydrated(themeStore.persist, applyDefaultMode);
+		seedWhenHydrated(localeStore.persist, applyDefaultLocale);
+
+		return () => {
+			for (const unsubscribe of unsubscribers) {
+				unsubscribe();
+			}
+		};
+	}, [compiled, exportStore, themeStore, localeStore]);
 }
 
 /**
@@ -564,6 +597,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const themeStore = editorStore.theme;
 	const exportStore = editorStore.export;
 	const aiStore = editorStore.ai;
+	const localeStore = editorStore.locale;
 
 	// One stored value, tagged with the `compileKey` that produced it.
 	// `setCompiled(null)` on every input change is replaced by deriving
@@ -680,6 +714,25 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 						);
 					}
 				},
+				t: (key, vars) => {
+					// React-free snapshot for the config locale: core catalog
+					// plus any `studioConfig.i18n.messages` overrides, brace-
+					// interpolated. Plugin-registered namespaces resolve via
+					// `useMsg` at render, not here.
+					const { locale, messages: localeMessages } = studioConfig.i18n;
+					// `DEFAULT_MESSAGES` is `satisfies`-typed (no string index
+					// signature), so index through the record type for a dynamic key.
+					const coreCatalog: Readonly<Record<string, string>> =
+						DEFAULT_MESSAGES;
+					const raw =
+						localeMessages?.[locale]?.[key] ?? coreCatalog[key] ?? key;
+					return braceFormatter(raw, vars ?? {}, locale);
+				},
+				registerMessages: () => {
+					// compilePlugins() passes plugins a wrapper context with a
+					// runtime-backed message collector (→ `runtime.i18n.entries`);
+					// this base context's no-op keeps the shell immutable.
+				},
 				registerAssetResolver: () => {
 					// compilePlugins() passes plugins a wrapper context
 					// with a runtime-backed collector; this base context
@@ -761,7 +814,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const activeChromeAssets: ChromeAssets | null =
 		activeStored?.chromeAssets ?? null;
 
-	useHydrateRuntimeStores(activeCompiled, exportStore, themeStore);
+	useHydrateRuntimeStores(activeCompiled, exportStore, themeStore, localeStore);
 
 	useRuntimeInit(activeCompiled);
 

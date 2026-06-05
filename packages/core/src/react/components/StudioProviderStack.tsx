@@ -151,7 +151,10 @@ export function StudioProviderStack(
 					<SidebarRegistryProvider value={sidebarRegistryStore}>
 						<StudioPagesSourceProvider value={pages}>
 							<EditorStoreProvider storeId={storeId} store={editorStore}>
-								<EditorI18nProvider messages={messages}>
+								<EditorI18nProvider
+									messages={messages}
+									entries={runtime.i18n.entries}
+								>
 									<ChromePropsProvider value={chromePropsValue}>
 										{rooted}
 									</ChromePropsProvider>
