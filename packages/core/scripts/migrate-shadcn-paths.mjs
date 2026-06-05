@@ -65,9 +65,9 @@ const DRY_RUN = process.argv.includes("--dry-run");
  * Order doesn't matter — each move is independent.
  */
 const MOVES = [
-	{ from: "components/animate-ui", to: "studio/primitives/animate-ui" },
+	{ from: "components/animate-ui", to: "studio/primitives/vendor/animate-ui" },
 	{ from: "hooks", to: "studio/primitives/hooks" },
-	{ from: "lib", to: "studio/primitives/lib" },
+	{ from: "lib", to: "studio/primitives/vendor/lib" },
 ];
 
 /**
@@ -123,7 +123,7 @@ const ANIMATE_UI_NORMALIZATIONS = [
 	// 2. WithAsChild value/type split for `verbatimModuleSyntax`.
 	[
 		/import\s*\{\s*Slot,\s*WithAsChild\s*\}\s*from\s*(['"])@\/primitives\/animate-ui\/primitives\/animate\/slot\1/g,
-		"import { Slot, type WithAsChild } from $1@/primitives/animate-ui/primitives/animate/slot$1",
+		"import { Slot, type WithAsChild } from $1@/primitives/vendor/animate-ui/primitives/animate/slot$1",
 		"WithAsChild → type-only import",
 	],
 	// 3. Un-suppressed `noArrayIndexKey` inside Highlight's
