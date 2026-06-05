@@ -4,8 +4,9 @@ description: |
   Phased PRD-driven execution for anvilkit-studio milestones. Given a PRD or
   plan reference and a target phase, decomposes the phase into atomic tasks,
   presents the plan for approval, then executes one task at a time — running
-  typecheck/lint/test/build gates after each, then an automatic capped
-  Codex review→revise loop (up to 2 revise rounds, output shown verbatim) —
+  typecheck/lint/test/build gates after each, then an optional,
+  `--codex`-gated capped Codex review→revise loop (up to 2 revise rounds,
+  output shown verbatim) —
   and waits for "continue" or "next" before advancing. Codifies the
   M9–M13 / Phase A–G workflow.
   Use when asked to "execute phase X of <plan>", "drive the next phase",
@@ -39,8 +40,12 @@ a target phase. Examples:
 - `/phase-execute docs/PRD/<plan>.md --phase M11`
 - `/phase-execute docs/plans/sidebar-modules.md --phase F`
 - `/phase-execute <plan>` (skill asks which phase)
+- `/phase-execute docs/PRD/<plan>.md --phase M11 --codex` (also run the §5b
+  Codex review inspection after each task)
 
 If no phase is specified, ask which phase to execute before any other work.
+Pass `--codex` to enable the §5b Codex review→revise inspection; it is **off
+by default** and composes with `--autonomous`.
 
 ## Workflow
 
@@ -118,13 +123,18 @@ For phases touching specific packages, add the package-local gates too:
   Phase 3 release gates
 - Any publishable package → `pnpm publint` and `pnpm size`
 
-### 5b. Codex review loop (auto, capped, visible)
+### 5b. Codex review loop (opt-in via `--codex`, capped, visible)
 
-After §5 gates pass and **before** halting for `continue`, run an automatic
-Codex review of the working-tree changes. This loop is **bounded** (cap = 2
-revise rounds, 3 reviews total) and **visible** (verbatim Codex output is
-printed to the user every round). Do **not** ask "should I review?" or
-"should I apply fixes?" — those decisions are owned by this section.
+This loop runs **only when the user passed `--codex`** (see Inputs). Without
+`--codex`, skip §5b entirely and proceed straight to §6 — no `/codex:review`
+call, no revise loop.
+
+When `--codex` is set, after §5 gates pass and **before** halting for
+`continue`, run a Codex review of the working-tree changes. This loop is
+**bounded** (cap = 2 revise rounds, 3 reviews total) and **visible** (verbatim
+Codex output is printed to the user every round). Once `--codex` has enabled
+the loop, do **not** ask "should I review?" or "should I apply fixes?" — those
+decisions are owned by this section.
 
 **Invocation.** Run `/codex:review` non-interactively. Two equivalent paths;
 pick whichever is available in the runtime:
@@ -199,7 +209,8 @@ Task <n>: <title> — DONE
   Notes: <anything surprising; pre-existing failures; follow-ups; codex timeouts>
 ```
 
-Then halt for `continue` / `next`.
+Omit the `Codex:` line when `--codex` was not passed. Then halt for
+`continue` / `next`.
 
 ### 7. Phase completion
 
@@ -209,9 +220,9 @@ When all tasks in the phase are done:
   - publint where applicable).
 - Produce a phase summary: tasks completed, total test delta, files touched,
   any open follow-ups, any pre-existing infra issues encountered.
-- Add a Codex aggregate line: total review rounds across the phase, tasks
-  where the loop hit the cap with blockers still present, and tasks where
-  the review timed out.
+- If `--codex` was passed, add a Codex aggregate line: total review rounds
+  across the phase, tasks where the loop hit the cap with blockers still
+  present, and tasks where the review timed out.
 - Ask whether to advance to the next phase or stop.
 
 ## Hard rules
@@ -225,9 +236,10 @@ When all tasks in the phase are done:
   expand.
 - **Stop on real ambiguity.** If the PRD is unclear about what a phase
   requires, ask before guessing.
-- **Bounded review autonomy.** The §5b Codex review→revise loop runs
-  without asking, up to 2 revise rounds (3 reviews total). After that,
-  halt and surface the remaining findings — never silently keep revising.
+- **Bounded review autonomy.** When `--codex` is passed, the §5b Codex
+  review→revise loop runs without asking, up to 2 revise rounds (3 reviews
+  total). After that, halt and surface the remaining findings — never
+  silently keep revising.
 - **No silent edits.** Always print Codex's verbatim output before any
   revise edit. The user must be able to see what triggered each change.
 
@@ -235,10 +247,29 @@ When all tasks in the phase are done:
 
 If the user invokes with `--autonomous` (or says "run the whole phase /
 milestone without stopping"), skip the per-task `continue` wait but keep the
-per-task gate runs **and the §5b Codex review loop**. Halt only on: gate
-failure after 3 retries, PRD ambiguity, any task requiring `rm` / file
-deletion, or the §5b loop hitting its cap with blockers still present.
+per-task gate runs **and, when `--codex` is also passed, the §5b Codex review
+loop**. Halt only on: gate failure after 3 retries, PRD ambiguity, any task
+requiring `rm` / file deletion, or — with `--codex` — the §5b loop hitting its
+cap with blockers still present.
 
 `--autonomous` does **not** raise the §5b cap. The 2-revise-round / 3-review
 ceiling applies in every mode — uncommitted-tree review timeouts and
 reviewer/executor disagreement make unbounded loops unsafe on this repo.
+
+## Optional: Codex review (`--codex`)
+
+The §5b Codex review→revise inspection is **opt-in**. It runs only when the
+user passes `--codex` (e.g. `/phase-execute <plan> --phase M11 --codex`) or
+explicitly asks for a "codex review" / "security review" / "best-practices
+review" of the phase work.
+
+- **Default (no `--codex`):** run §1–§5 and §6–§7 as written, but **skip
+  §5b**. Do not invoke `/codex:review`, do not print a `Codex:` report line,
+  and do not open a review→revise loop on your own.
+- **With `--codex`:** run the full §5b loop after each task's §5 gates pass —
+  bounded to 2 revise rounds / 3 reviews, verbatim output shown every round,
+  exactly as §5b specifies.
+
+`--codex` composes with `--autonomous`: pass both to run every task without
+the `continue` wait *and* with the Codex inspection after each. Neither flag
+raises the §5b hard cap (2 revise rounds, 3 reviews).
