@@ -176,6 +176,8 @@ function createHeadlessStudioContext(): StudioPluginContext {
 		studioConfig: assetManagerTestStudioConfig,
 		log: () => undefined,
 		emit: () => undefined,
+		t: (key) => key,
+		registerMessages: () => undefined,
 		registerAssetResolver: (_resolver) => undefined,
 	};
 }
