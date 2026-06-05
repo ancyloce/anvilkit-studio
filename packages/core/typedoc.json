@@ -21,7 +21,7 @@
 		},
 		"@anvilkit/core": {
 			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts",
-			"EditorI18nStoreProvider": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/studio/state/editor-i18n-store.tsx",
+			"EditorI18nProvider": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx",
 			"ExportStorePartial": "#",
 			"LifecycleManagerOptions": "#"
 		}
