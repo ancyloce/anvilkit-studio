@@ -2322,7 +2322,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 70,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L70"
 						}
 					],
 					"type": {
@@ -2350,7 +2351,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 65,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L65"
 						}
 					],
 					"type": {
@@ -2372,7 +2374,8 @@
 				{
 					"fileName": "state/slices/ai-store.ts",
 					"line": 61,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L61"
 				}
 			]
 		},
@@ -3712,7 +3715,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 103,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L103"
 						}
 					],
 					"type": {
@@ -3761,7 +3765,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 83,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L83"
 						}
 					],
 					"type": {
@@ -3797,7 +3802,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 95,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L95"
 						}
 					],
 					"type": {
@@ -3842,7 +3848,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 88,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L88"
 						}
 					],
 					"type": {
@@ -3869,7 +3876,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 130,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L130"
 						}
 					],
 					"signatures": [
@@ -3907,7 +3915,8 @@
 								{
 									"fileName": "state/slices/ai-store.ts",
 									"line": 130,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L130"
 								}
 							],
 							"type": {
@@ -3927,7 +3936,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 123,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L123"
 						}
 					],
 					"signatures": [
@@ -3981,7 +3991,8 @@
 								{
 									"fileName": "state/slices/ai-store.ts",
 									"line": 123,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L123"
 								}
 							],
 							"parameters": [
@@ -4027,7 +4038,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 135,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L135"
 						}
 					],
 					"signatures": [
@@ -4059,7 +4071,8 @@
 								{
 									"fileName": "state/slices/ai-store.ts",
 									"line": 135,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L135"
 								}
 							],
 							"type": {
@@ -4079,7 +4092,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 115,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L115"
 						}
 					],
 					"signatures": [
@@ -4169,7 +4183,8 @@
 								{
 									"fileName": "state/slices/ai-store.ts",
 									"line": 115,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L115"
 								}
 							],
 							"parameters": [
@@ -4217,7 +4232,8 @@
 				{
 					"fileName": "state/slices/ai-store.ts",
 					"line": 77,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L77"
 				}
 			]
 		},
@@ -4240,7 +4256,8 @@
 						{
 							"fileName": "state/slices/AiStoreProvider.tsx",
 							"line": 23,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L23"
 						}
 					],
 					"type": {
@@ -4268,7 +4285,8 @@
 						{
 							"fileName": "state/slices/AiStoreProvider.tsx",
 							"line": 22,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L22"
 						}
 					],
 					"type": {
@@ -4290,7 +4308,8 @@
 						{
 							"fileName": "state/slices/AiStoreProvider.tsx",
 							"line": 21,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L21"
 						}
 					],
 					"type": {
@@ -4313,7 +4332,8 @@
 				{
 					"fileName": "state/slices/AiStoreProvider.tsx",
 					"line": 20,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L20"
 				}
 			]
 		},
@@ -5462,7 +5482,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 237,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L237"
 						}
 					],
 					"type": {
@@ -5483,7 +5504,8 @@
 				{
 					"fileName": "state/slices/ai-store.ts",
 					"line": 236,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L236"
 				}
 			]
 		},
@@ -5541,7 +5563,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 229,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L229"
 						}
 					],
 					"type": {
@@ -5562,7 +5585,8 @@
 				{
 					"fileName": "state/slices/export-store.ts",
 					"line": 228,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L228"
 				}
 			]
 		},
@@ -5691,7 +5715,8 @@
 						{
 							"fileName": "state/slices/theme-store.ts",
 							"line": 161,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L161"
 						}
 					],
 					"type": {
@@ -5712,7 +5737,8 @@
 				{
 					"fileName": "state/slices/theme-store.ts",
 					"line": 160,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L160"
 				}
 			]
 		},
@@ -7131,7 +7157,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 94,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L94"
 						}
 					],
 					"type": {
@@ -7184,7 +7211,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 101,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L101"
 						}
 					],
 					"type": {
@@ -7233,7 +7261,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 107,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L107"
 						}
 					],
 					"type": {
@@ -7269,7 +7298,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 112,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L112"
 						}
 					],
 					"type": {
@@ -7298,7 +7328,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 137,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L137"
 						}
 					],
 					"signatures": [
@@ -7336,7 +7367,8 @@
 								{
 									"fileName": "state/slices/export-store.ts",
 									"line": 137,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L137"
 								}
 							],
 							"parameters": [
@@ -7380,7 +7412,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 145,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L145"
 						}
 					],
 					"signatures": [
@@ -7432,7 +7465,8 @@
 								{
 									"fileName": "state/slices/export-store.ts",
 									"line": 145,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L145"
 								}
 							],
 							"type": {
@@ -7452,7 +7486,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 120,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L120"
 						}
 					],
 					"signatures": [
@@ -7500,7 +7535,8 @@
 								{
 									"fileName": "state/slices/export-store.ts",
 									"line": 120,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L120"
 								}
 							],
 							"parameters": [
@@ -7540,7 +7576,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 125,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L125"
 						}
 					],
 					"signatures": [
@@ -7570,7 +7607,8 @@
 								{
 									"fileName": "state/slices/export-store.ts",
 									"line": 125,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L125"
 								}
 							],
 							"parameters": [
@@ -7612,7 +7650,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 131,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L131"
 						}
 					],
 					"signatures": [
@@ -7658,7 +7697,8 @@
 								{
 									"fileName": "state/slices/export-store.ts",
 									"line": 131,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L131"
 								}
 							],
 							"parameters": [
@@ -7707,7 +7747,8 @@
 				{
 					"fileName": "state/slices/export-store.ts",
 					"line": 87,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L87"
 				}
 			]
 		},
@@ -7730,7 +7771,8 @@
 						{
 							"fileName": "state/slices/ExportStoreProvider.tsx",
 							"line": 27,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L27"
 						}
 					],
 					"type": {
@@ -7758,7 +7800,8 @@
 						{
 							"fileName": "state/slices/ExportStoreProvider.tsx",
 							"line": 26,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L26"
 						}
 					],
 					"type": {
@@ -7780,7 +7823,8 @@
 						{
 							"fileName": "state/slices/ExportStoreProvider.tsx",
 							"line": 25,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L25"
 						}
 					],
 					"type": {
@@ -7803,7 +7847,8 @@
 				{
 					"fileName": "state/slices/ExportStoreProvider.tsx",
 					"line": 24,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L24"
 				}
 			]
 		},
@@ -8063,7 +8108,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 68,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L68"
 						}
 					],
 					"type": {
@@ -8101,7 +8147,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 63,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L63"
 						}
 					],
 					"type": {
@@ -8165,7 +8212,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 74,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L74"
 						}
 					],
 					"type": {
@@ -8188,7 +8236,8 @@
 				{
 					"fileName": "state/slices/export-store.ts",
 					"line": 59,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L59"
 				}
 			]
 		},
@@ -16675,7 +16724,8 @@
 						{
 							"fileName": "studio/layout/StudioLoadingScreen.tsx",
 							"line": 43,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L43"
 						}
 					],
 					"type": {
@@ -16712,7 +16762,8 @@
 						{
 							"fileName": "studio/layout/StudioLoadingScreen.tsx",
 							"line": 41,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L41"
 						}
 					],
 					"type": {
@@ -16734,7 +16785,8 @@
 				{
 					"fileName": "studio/layout/StudioLoadingScreen.tsx",
 					"line": 34,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L34"
 				}
 			]
 		},
@@ -19234,7 +19286,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 127,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L127"
 						}
 					],
 					"type": {
@@ -19340,7 +19393,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 147,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L147"
 						}
 					],
 					"type": {
@@ -19406,7 +19460,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 72,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L72"
 						}
 					],
 					"type": {
@@ -19515,7 +19570,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 82,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L82"
 						}
 					],
 					"type": {
@@ -19578,7 +19634,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 102,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L102"
 						}
 					],
 					"type": {
@@ -19743,7 +19800,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 201,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L201"
 						}
 					],
 					"type": {
@@ -19815,7 +19873,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 136,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L136"
 						}
 					],
 					"type": {
@@ -19910,7 +19969,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 190,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L190"
 						}
 					],
 					"type": {
@@ -20007,7 +20067,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 228,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L228"
 						}
 					],
 					"type": {
@@ -20088,7 +20149,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 212,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L212"
 						}
 					],
 					"type": {
@@ -20185,7 +20247,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 262,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L262"
 						}
 					],
 					"type": {
@@ -20282,7 +20345,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 244,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L244"
 						}
 					],
 					"type": {
@@ -20419,7 +20483,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 164,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L164"
 						}
 					],
 					"type": {
@@ -20508,7 +20573,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 176,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L176"
 						}
 					],
 					"type": {
@@ -20588,7 +20654,8 @@
 						{
 							"fileName": "types/plugin-context.ts",
 							"line": 92,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L92"
 						}
 					],
 					"type": {
@@ -20625,7 +20692,8 @@
 				{
 					"fileName": "types/plugin-context.ts",
 					"line": 62,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin-context.ts#L62"
 				}
 			],
 			"typeParameters": [
@@ -28301,7 +28369,8 @@
 						{
 							"fileName": "state/slices/theme-store.ts",
 							"line": 75,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L75"
 						}
 					],
 					"type": {
@@ -28339,7 +28408,8 @@
 						{
 							"fileName": "state/slices/theme-store.ts",
 							"line": 81,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L81"
 						}
 					],
 					"type": {
@@ -28359,7 +28429,8 @@
 						{
 							"fileName": "state/slices/theme-store.ts",
 							"line": 98,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L98"
 						}
 					],
 					"signatures": [
@@ -28391,7 +28462,8 @@
 								{
 									"fileName": "state/slices/theme-store.ts",
 									"line": 98,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L98"
 								}
 							],
 							"type": {
@@ -28411,7 +28483,8 @@
 						{
 							"fileName": "state/slices/theme-store.ts",
 							"line": 86,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L86"
 						}
 					],
 					"signatures": [
@@ -28433,7 +28506,8 @@
 								{
 									"fileName": "state/slices/theme-store.ts",
 									"line": 86,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L86"
 								}
 							],
 							"parameters": [
@@ -28468,7 +28542,8 @@
 						{
 							"fileName": "state/slices/theme-store.ts",
 							"line": 92,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L92"
 						}
 					],
 					"signatures": [
@@ -28514,7 +28589,8 @@
 								{
 									"fileName": "state/slices/theme-store.ts",
 									"line": 92,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L92"
 								}
 							],
 							"parameters": [
@@ -28561,7 +28637,8 @@
 				{
 					"fileName": "state/slices/theme-store.ts",
 					"line": 71,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L71"
 				}
 			]
 		},
@@ -28584,7 +28661,8 @@
 						{
 							"fileName": "state/slices/ThemeStoreProvider.tsx",
 							"line": 43,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L43"
 						}
 					],
 					"type": {
@@ -28636,7 +28714,8 @@
 						{
 							"fileName": "state/slices/ThemeStoreProvider.tsx",
 							"line": 42,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L42"
 						}
 					],
 					"type": {
@@ -28704,7 +28783,8 @@
 						{
 							"fileName": "state/slices/ThemeStoreProvider.tsx",
 							"line": 36,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L36"
 						}
 					],
 					"type": {
@@ -28727,7 +28807,8 @@
 				{
 					"fileName": "state/slices/ThemeStoreProvider.tsx",
 					"line": 35,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L35"
 				}
 			]
 		},
@@ -28816,7 +28897,8 @@
 						{
 							"fileName": "react/components/use-studio.ts",
 							"line": 84,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L84"
 						}
 					],
 					"type": {
@@ -28900,7 +28982,8 @@
 						{
 							"fileName": "react/components/use-studio.ts",
 							"line": 91,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L91"
 						}
 					],
 					"type": {
@@ -28955,7 +29038,8 @@
 						{
 							"fileName": "react/components/use-studio.ts",
 							"line": 76,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L76"
 						}
 					],
 					"type": {
@@ -28987,7 +29071,8 @@
 				{
 					"fileName": "react/components/use-studio.ts",
 					"line": 69,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L69"
 				}
 			]
 		},
@@ -29077,7 +29162,8 @@
 				{
 					"fileName": "state/slices/ai-store.ts",
 					"line": 240,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L240"
 				}
 			],
 			"type": {
@@ -29301,7 +29387,8 @@
 				{
 					"fileName": "state/slices/export-store.ts",
 					"line": 232,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L232"
 				}
 			],
 			"type": {
@@ -33102,7 +33189,8 @@
 				{
 					"fileName": "state/slices/theme-store.ts",
 					"line": 56,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L56"
 				}
 			],
 			"type": {
@@ -33165,7 +33253,8 @@
 				{
 					"fileName": "state/slices/theme-store.ts",
 					"line": 63,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L63"
 				}
 			],
 			"type": {
@@ -33266,7 +33355,8 @@
 				{
 					"fileName": "state/slices/theme-store.ts",
 					"line": 172,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L172"
 				}
 			],
 			"type": {
@@ -35335,7 +35425,8 @@
 				{
 					"fileName": "state/slices/AiStoreProvider.tsx",
 					"line": 26,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L26"
 				}
 			],
 			"signatures": [
@@ -35349,7 +35440,8 @@
 						{
 							"fileName": "state/slices/AiStoreProvider.tsx",
 							"line": 26,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L26"
 						}
 					],
 					"parameters": [
@@ -35694,7 +35786,8 @@
 				{
 					"fileName": "state/slices/ai-store.ts",
 					"line": 249,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L249"
 				}
 			],
 			"signatures": [
@@ -35750,7 +35843,8 @@
 						{
 							"fileName": "state/slices/ai-store.ts",
 							"line": 249,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L249"
 						}
 					],
 					"parameters": [
@@ -35988,7 +36082,8 @@
 				{
 					"fileName": "state/slices/export-store.ts",
 					"line": 240,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L240"
 				}
 			],
 			"signatures": [
@@ -36044,7 +36139,8 @@
 						{
 							"fileName": "state/slices/export-store.ts",
 							"line": 240,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L240"
 						}
 					],
 					"parameters": [
@@ -37868,7 +37964,8 @@
 				{
 					"fileName": "state/slices/theme-store.ts",
 					"line": 185,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L185"
 				}
 			],
 			"signatures": [
@@ -37943,7 +38040,8 @@
 						{
 							"fileName": "state/slices/theme-store.ts",
 							"line": 185,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L185"
 						}
 					],
 					"parameters": [
@@ -38147,7 +38245,8 @@
 				{
 					"fileName": "state/slices/ExportStoreProvider.tsx",
 					"line": 30,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L30"
 				}
 			],
 			"signatures": [
@@ -38161,7 +38260,8 @@
 						{
 							"fileName": "state/slices/ExportStoreProvider.tsx",
 							"line": 30,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L30"
 						}
 					],
 					"parameters": [
@@ -42051,7 +42151,8 @@
 				{
 					"fileName": "studio/layout/StudioLoadingScreen.tsx",
 					"line": 73,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L73"
 				}
 			],
 			"signatures": [
@@ -42097,7 +42198,8 @@
 						{
 							"fileName": "studio/layout/StudioLoadingScreen.tsx",
 							"line": 73,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L73"
 						}
 					],
 					"parameters": [
@@ -42140,7 +42242,8 @@
 				{
 					"fileName": "state/slices/ThemeStoreProvider.tsx",
 					"line": 46,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L46"
 				}
 			],
 			"signatures": [
@@ -42154,7 +42257,8 @@
 						{
 							"fileName": "state/slices/ThemeStoreProvider.tsx",
 							"line": 46,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L46"
 						}
 					],
 					"parameters": [
@@ -42196,7 +42300,8 @@
 				{
 					"fileName": "state/slices/AiStoreProvider.tsx",
 					"line": 57,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L57"
 				}
 			],
 			"signatures": [
@@ -42226,7 +42331,8 @@
 						{
 							"fileName": "state/slices/AiStoreProvider.tsx",
 							"line": 57,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L57"
 						}
 					],
 					"typeParameters": [
@@ -42308,7 +42414,8 @@
 				{
 					"fileName": "state/slices/AiStoreProvider.tsx",
 					"line": 42,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L42"
 				}
 			],
 			"signatures": [
@@ -42322,7 +42429,8 @@
 						{
 							"fileName": "state/slices/AiStoreProvider.tsx",
 							"line": 42,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L42"
 						}
 					],
 					"type": {
@@ -42344,7 +42452,8 @@
 				{
 					"fileName": "state/slices/ExportStoreProvider.tsx",
 					"line": 63,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L63"
 				}
 			],
 			"signatures": [
@@ -42374,7 +42483,8 @@
 						{
 							"fileName": "state/slices/ExportStoreProvider.tsx",
 							"line": 63,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L63"
 						}
 					],
 					"typeParameters": [
@@ -42456,7 +42566,8 @@
 				{
 					"fileName": "state/slices/ExportStoreProvider.tsx",
 					"line": 48,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L48"
 				}
 			],
 			"signatures": [
@@ -42470,7 +42581,8 @@
 						{
 							"fileName": "state/slices/ExportStoreProvider.tsx",
 							"line": 48,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L48"
 						}
 					],
 					"type": {
@@ -42492,7 +42604,8 @@
 				{
 					"fileName": "react/components/use-studio.ts",
 					"line": 112,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L112"
 				}
 			],
 			"signatures": [
@@ -42578,7 +42691,8 @@
 						{
 							"fileName": "react/components/use-studio.ts",
 							"line": 112,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L112"
 						}
 					],
 					"type": {
@@ -43081,7 +43195,8 @@
 				{
 					"fileName": "state/slices/ThemeStoreProvider.tsx",
 					"line": 85,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L85"
 				}
 			],
 			"signatures": [
@@ -43111,7 +43226,8 @@
 						{
 							"fileName": "state/slices/ThemeStoreProvider.tsx",
 							"line": 85,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L85"
 						}
 					],
 					"typeParameters": [
@@ -43193,7 +43309,8 @@
 				{
 					"fileName": "state/slices/ThemeStoreProvider.tsx",
 					"line": 70,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L70"
 				}
 			],
 			"signatures": [
@@ -43223,7 +43340,8 @@
 						{
 							"fileName": "state/slices/ThemeStoreProvider.tsx",
 							"line": 70,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L70"
 						}
 					],
 					"type": {
