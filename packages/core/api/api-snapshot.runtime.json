@@ -7,7 +7,7 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 26,
+			"id": 29,
 			"name": "StudioConfigError",
 			"variant": "declaration",
 			"kind": 128,
@@ -70,7 +70,7 @@
 			},
 			"children": [
 				{
-					"id": 27,
+					"id": 30,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
@@ -85,7 +85,7 @@
 					],
 					"signatures": [
 						{
-							"id": 28,
+							"id": 31,
 							"name": "StudioConfigError",
 							"variant": "signature",
 							"kind": 16384,
@@ -100,7 +100,7 @@
 							],
 							"parameters": [
 								{
-									"id": 29,
+									"id": 32,
 									"name": "message",
 									"variant": "param",
 									"kind": 32768,
@@ -111,7 +111,7 @@
 									}
 								},
 								{
-									"id": 30,
+									"id": 33,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -132,25 +132,25 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 26,
+								"target": 29,
 								"name": "StudioConfigError",
 								"package": "@anvilkit/core"
 							},
 							"overwrites": {
 								"type": "reference",
-								"target": 34,
+								"target": 37,
 								"name": "StudioError.constructor"
 							}
 						}
 					],
 					"overwrites": {
 						"type": "reference",
-						"target": 33,
+						"target": 36,
 						"name": "StudioError.constructor"
 					}
 				},
 				{
-					"id": 31,
+					"id": 34,
 					"name": "code",
 					"variant": "declaration",
 					"kind": 1024,
@@ -167,7 +167,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioError.code",
-								"target": 37
+								"target": 40
 							},
 							{
 								"kind": "text",
@@ -190,7 +190,7 @@
 					"defaultValue": "\"StudioConfigError\"",
 					"overwrites": {
 						"type": "reference",
-						"target": 37,
+						"target": 40,
 						"name": "StudioError.code"
 					}
 				}
@@ -199,13 +199,13 @@
 				{
 					"title": "Constructors",
 					"children": [
-						27
+						30
 					]
 				},
 				{
 					"title": "Properties",
 					"children": [
-						31
+						34
 					]
 				}
 			],
@@ -220,14 +220,14 @@
 			"extendedTypes": [
 				{
 					"type": "reference",
-					"target": 32,
+					"target": 35,
 					"name": "StudioError",
 					"package": "@anvilkit/core"
 				}
 			]
 		},
 		{
-			"id": 32,
+			"id": 35,
 			"name": "StudioError",
 			"variant": "declaration",
 			"kind": 128,
@@ -284,7 +284,7 @@
 			},
 			"children": [
 				{
-					"id": 33,
+					"id": 36,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
@@ -299,7 +299,7 @@
 					],
 					"signatures": [
 						{
-							"id": 34,
+							"id": 37,
 							"name": "StudioError",
 							"variant": "signature",
 							"kind": 16384,
@@ -314,7 +314,7 @@
 							],
 							"parameters": [
 								{
-									"id": 35,
+									"id": 38,
 									"name": "message",
 									"variant": "param",
 									"kind": 32768,
@@ -325,7 +325,7 @@
 									}
 								},
 								{
-									"id": 36,
+									"id": 39,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -346,7 +346,7 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 32,
+								"target": 35,
 								"name": "StudioError",
 								"package": "@anvilkit/core"
 							},
@@ -366,7 +366,7 @@
 					}
 				},
 				{
-					"id": 37,
+					"id": 40,
 					"name": "code",
 					"variant": "declaration",
 					"kind": 1024,
@@ -408,13 +408,13 @@
 				{
 					"title": "Constructors",
 					"children": [
-						33
+						36
 					]
 				},
 				{
 					"title": "Properties",
 					"children": [
-						37
+						40
 					]
 				}
 			],
@@ -441,23 +441,23 @@
 			"extendedBy": [
 				{
 					"type": "reference",
-					"target": 26,
+					"target": 29,
 					"name": "StudioConfigError"
 				},
 				{
 					"type": "reference",
-					"target": 38,
+					"target": 41,
 					"name": "StudioExportError"
 				},
 				{
 					"type": "reference",
-					"target": 46,
+					"target": 49,
 					"name": "StudioPluginError"
 				}
 			]
 		},
 		{
-			"id": 38,
+			"id": 41,
 			"name": "StudioExportError",
 			"variant": "declaration",
 			"kind": 128,
@@ -504,7 +504,7 @@
 			},
 			"children": [
 				{
-					"id": 39,
+					"id": 42,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
@@ -519,7 +519,7 @@
 					],
 					"signatures": [
 						{
-							"id": 40,
+							"id": 43,
 							"name": "StudioExportError",
 							"variant": "signature",
 							"kind": 16384,
@@ -534,7 +534,7 @@
 							],
 							"parameters": [
 								{
-									"id": 41,
+									"id": 44,
 									"name": "formatId",
 									"variant": "param",
 									"kind": 32768,
@@ -545,7 +545,7 @@
 									}
 								},
 								{
-									"id": 42,
+									"id": 45,
 									"name": "message",
 									"variant": "param",
 									"kind": 32768,
@@ -556,7 +556,7 @@
 									}
 								},
 								{
-									"id": 43,
+									"id": 46,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -577,25 +577,25 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 38,
+								"target": 41,
 								"name": "StudioExportError",
 								"package": "@anvilkit/core"
 							},
 							"overwrites": {
 								"type": "reference",
-								"target": 34,
+								"target": 37,
 								"name": "StudioError.constructor"
 							}
 						}
 					],
 					"overwrites": {
 						"type": "reference",
-						"target": 33,
+						"target": 36,
 						"name": "StudioError.constructor"
 					}
 				},
 				{
-					"id": 44,
+					"id": 47,
 					"name": "code",
 					"variant": "declaration",
 					"kind": 1024,
@@ -612,7 +612,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioError.code",
-								"target": 37
+								"target": 40
 							},
 							{
 								"kind": "text",
@@ -635,12 +635,12 @@
 					"defaultValue": "\"StudioExportError\"",
 					"overwrites": {
 						"type": "reference",
-						"target": 37,
+						"target": 40,
 						"name": "StudioError.code"
 					}
 				},
 				{
-					"id": 45,
+					"id": 48,
 					"name": "formatId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -698,14 +698,14 @@
 				{
 					"title": "Constructors",
 					"children": [
-						39
+						42
 					]
 				},
 				{
 					"title": "Properties",
 					"children": [
-						44,
-						45
+						47,
+						48
 					]
 				}
 			],
@@ -720,14 +720,14 @@
 			"extendedTypes": [
 				{
 					"type": "reference",
-					"target": 32,
+					"target": 35,
 					"name": "StudioError",
 					"package": "@anvilkit/core"
 				}
 			]
 		},
 		{
-			"id": 46,
+			"id": 49,
 			"name": "StudioPluginError",
 			"variant": "declaration",
 			"kind": 128,
@@ -806,7 +806,7 @@
 			},
 			"children": [
 				{
-					"id": 47,
+					"id": 50,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
@@ -821,7 +821,7 @@
 					],
 					"signatures": [
 						{
-							"id": 48,
+							"id": 51,
 							"name": "StudioPluginError",
 							"variant": "signature",
 							"kind": 16384,
@@ -836,7 +836,7 @@
 							],
 							"parameters": [
 								{
-									"id": 49,
+									"id": 52,
 									"name": "pluginId",
 									"variant": "param",
 									"kind": 32768,
@@ -847,7 +847,7 @@
 									}
 								},
 								{
-									"id": 50,
+									"id": 53,
 									"name": "message",
 									"variant": "param",
 									"kind": 32768,
@@ -858,7 +858,7 @@
 									}
 								},
 								{
-									"id": 51,
+									"id": 54,
 									"name": "options",
 									"variant": "param",
 									"kind": 32768,
@@ -879,25 +879,25 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 46,
+								"target": 49,
 								"name": "StudioPluginError",
 								"package": "@anvilkit/core"
 							},
 							"overwrites": {
 								"type": "reference",
-								"target": 34,
+								"target": 37,
 								"name": "StudioError.constructor"
 							}
 						}
 					],
 					"overwrites": {
 						"type": "reference",
-						"target": 33,
+						"target": 36,
 						"name": "StudioError.constructor"
 					}
 				},
 				{
-					"id": 52,
+					"id": 55,
 					"name": "code",
 					"variant": "declaration",
 					"kind": 1024,
@@ -914,7 +914,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioError.code",
-								"target": 37
+								"target": 40
 							},
 							{
 								"kind": "text",
@@ -937,12 +937,12 @@
 					"defaultValue": "\"StudioPluginError\"",
 					"overwrites": {
 						"type": "reference",
-						"target": 37,
+						"target": 40,
 						"name": "StudioError.code"
 					}
 				},
 				{
-					"id": 53,
+					"id": 56,
 					"name": "pluginId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -983,14 +983,14 @@
 				{
 					"title": "Constructors",
 					"children": [
-						47
+						50
 					]
 				},
 				{
 					"title": "Properties",
 					"children": [
-						52,
-						53
+						55,
+						56
 					]
 				}
 			],
@@ -1005,14 +1005,14 @@
 			"extendedTypes": [
 				{
 					"type": "reference",
-					"target": 32,
+					"target": 35,
 					"name": "StudioError",
 					"package": "@anvilkit/core"
 				}
 			]
 		},
 		{
-			"id": 57,
+			"id": 60,
 			"name": "ExportRegistry",
 			"variant": "declaration",
 			"kind": 256,
@@ -1027,7 +1027,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "createExportRegistry",
-						"target": 54
+						"target": 57
 					},
 					{
 						"kind": "text",
@@ -1045,7 +1045,7 @@
 			},
 			"children": [
 				{
-					"id": 61,
+					"id": 64,
 					"name": "get",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1087,21 +1087,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 62,
+							"id": 65,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 63,
+									"id": 66,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 64,
+											"id": 67,
 											"name": "id",
 											"variant": "param",
 											"kind": 32768,
@@ -1159,7 +1159,7 @@
 					}
 				},
 				{
-					"id": 65,
+					"id": 68,
 					"name": "has",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1201,21 +1201,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 66,
+							"id": 69,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 67,
+									"id": 70,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 68,
+											"id": 71,
 											"name": "id",
 											"variant": "param",
 											"kind": 32768,
@@ -1236,7 +1236,7 @@
 					}
 				},
 				{
-					"id": 58,
+					"id": 61,
 					"name": "list",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1253,7 +1253,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "createExportRegistry",
-								"target": 54
+								"target": 57
 							},
 							{
 								"kind": "text",
@@ -1272,14 +1272,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 59,
+							"id": 62,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 60,
+									"id": 63,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -1325,7 +1325,7 @@
 					}
 				},
 				{
-					"id": 69,
+					"id": 72,
 					"name": "size",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1351,14 +1351,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 70,
+							"id": 73,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 71,
+									"id": 74,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -1377,10 +1377,10 @@
 				{
 					"title": "Properties",
 					"children": [
+						64,
+						68,
 						61,
-						65,
-						58,
-						69
+						72
 					]
 				}
 			],
@@ -1394,7 +1394,7 @@
 			]
 		},
 		{
-			"id": 136,
+			"id": 140,
 			"name": "LifecycleManager",
 			"variant": "declaration",
 			"kind": 256,
@@ -1409,7 +1409,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "createLifecycleManager",
-						"target": 131
+						"target": 135
 					},
 					{
 						"kind": "text",
@@ -1419,7 +1419,7 @@
 			},
 			"children": [
 				{
-					"id": 153,
+					"id": 157,
 					"name": "advanceTo",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1653,34 +1653,34 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 154,
+							"id": 158,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 155,
+									"id": 159,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 156,
+											"id": 160,
 											"name": "phase",
 											"variant": "param",
 											"kind": 32768,
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 161,
+												"target": 165,
 												"name": "LifecyclePhase",
 												"package": "@anvilkit/core"
 											}
 										},
 										{
-											"id": 157,
+											"id": 161,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -1707,7 +1707,7 @@
 					}
 				},
 				{
-					"id": 158,
+					"id": 162,
 					"name": "dispose",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1765,14 +1765,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 159,
+							"id": 163,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 160,
+									"id": 164,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -1787,7 +1787,7 @@
 					}
 				},
 				{
-					"id": 137,
+					"id": 141,
 					"name": "emit",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1812,7 +1812,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginError",
-								"target": 46
+								"target": 49
 							},
 							{
 								"kind": "text",
@@ -1847,34 +1847,34 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 138,
+							"id": 142,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 139,
+									"id": 143,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 140,
+											"id": 144,
 											"name": "event",
 											"variant": "param",
 											"kind": 32768,
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 135,
+												"target": 139,
 												"name": "LifecycleEventName",
 												"package": "@anvilkit/core"
 											}
 										},
 										{
-											"id": 141,
+											"id": 145,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -1891,7 +1891,7 @@
 											}
 										},
 										{
-											"id": 142,
+											"id": 146,
 											"name": "payload",
 											"variant": "param",
 											"kind": 32768,
@@ -1932,7 +1932,7 @@
 					}
 				},
 				{
-					"id": 150,
+					"id": 154,
 					"name": "phase",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1949,7 +1949,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "LifecyclePhase",
-								"target": 161
+								"target": 165
 							},
 							{
 								"kind": "text",
@@ -1968,21 +1968,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 151,
+							"id": 155,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 152,
+									"id": 156,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 161,
+										"target": 165,
 										"name": "LifecyclePhase",
 										"package": "@anvilkit/core"
 									}
@@ -1992,7 +1992,7 @@
 					}
 				},
 				{
-					"id": 143,
+					"id": 147,
 					"name": "subscribe",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2018,14 +2018,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 144,
+							"id": 148,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 145,
+									"id": 149,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -2046,27 +2046,27 @@
 									},
 									"parameters": [
 										{
-											"id": 146,
+											"id": 150,
 											"name": "event",
 											"variant": "param",
 											"kind": 32768,
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 135,
+												"target": 139,
 												"name": "LifecycleEventName",
 												"package": "@anvilkit/core"
 											}
 										},
 										{
-											"id": 147,
+											"id": 151,
 											"name": "handler",
 											"variant": "param",
 											"kind": 32768,
 											"flags": {},
 											"type": {
 												"type": "reference",
-												"target": 162,
+												"target": 166,
 												"name": "LifecycleSubscriber",
 												"package": "@anvilkit/core"
 											}
@@ -2075,14 +2075,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 148,
+											"id": 152,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"signatures": [
 												{
-													"id": 149,
+													"id": 153,
 													"name": "__type",
 													"variant": "signature",
 													"kind": 4096,
@@ -2105,11 +2105,11 @@
 				{
 					"title": "Properties",
 					"children": [
-						153,
-						158,
-						137,
-						150,
-						143
+						157,
+						162,
+						141,
+						154,
+						147
 					]
 				}
 			],
@@ -2123,7 +2123,7 @@
 			]
 		},
 		{
-			"id": 87,
+			"id": 90,
 			"name": "SortableHeaderAction",
 			"variant": "declaration",
 			"kind": 256,
@@ -2138,7 +2138,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "composeHeaderActions",
-						"target": 72
+						"target": 75
 					},
 					{
 						"kind": "text",
@@ -2148,7 +2148,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioHeaderAction",
-						"target": 92
+						"target": 95
 					},
 					{
 						"kind": "text",
@@ -2158,7 +2158,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StaticHeaderActionPlaceholder",
-						"target": 91
+						"target": 94
 					},
 					{
 						"kind": "text",
@@ -2184,7 +2184,7 @@
 			},
 			"children": [
 				{
-					"id": 89,
+					"id": 92,
 					"name": "group",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2219,7 +2219,7 @@
 					}
 				},
 				{
-					"id": 88,
+					"id": 91,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2240,7 +2240,7 @@
 					}
 				},
 				{
-					"id": 90,
+					"id": 93,
 					"name": "order",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2266,9 +2266,9 @@
 				{
 					"title": "Properties",
 					"children": [
-						89,
-						88,
-						90
+						92,
+						91,
+						93
 					]
 				}
 			],
@@ -2282,7 +2282,7 @@
 			]
 		},
 		{
-			"id": 92,
+			"id": 95,
 			"name": "StudioHeaderAction",
 			"variant": "declaration",
 			"kind": 256,
@@ -2319,7 +2319,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "icon",
-						"target": 95
+						"target": 99
 					},
 					{
 						"kind": "text",
@@ -2337,7 +2337,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "label",
-						"target": 94
+						"target": 98
 					},
 					{
 						"kind": "text",
@@ -2448,7 +2448,7 @@
 			},
 			"children": [
 				{
-					"id": 102,
+					"id": 106,
 					"name": "disabled",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2505,29 +2505,29 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 349,
+							"line": 364,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L349"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L364"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 103,
+							"id": 107,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 104,
+									"id": 108,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 105,
+											"id": 109,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -2554,7 +2554,7 @@
 					}
 				},
 				{
-					"id": 96,
+					"id": 100,
 					"name": "group",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2605,9 +2605,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 309,
+							"line": 324,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L309"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L324"
 						}
 					],
 					"type": {
@@ -2629,7 +2629,7 @@
 					}
 				},
 				{
-					"id": 95,
+					"id": 99,
 					"name": "icon",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2744,9 +2744,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 297,
+							"line": 312,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L297"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L312"
 						}
 					],
 					"type": {
@@ -2755,7 +2755,7 @@
 					}
 				},
 				{
-					"id": 93,
+					"id": 96,
 					"name": "id",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2808,27 +2808,54 @@
 					}
 				},
 				{
-					"id": 94,
+					"id": 98,
 					"name": "label",
 					"variant": "declaration",
 					"kind": 1024,
 					"flags": {
+						"isOptional": true,
 						"isReadonly": true
 					},
 					"comment": {
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Human-readable label rendered inside the button (or shown in\nthe overflow menu) by the Studio shell.\n\nRequired so plugin authors cannot ship a button with no visible\naffordance. Localization is the host app's responsibility — the\nruntime treats this as an opaque display string."
+								"text": "Human-readable label rendered inside the button (or shown in\nthe overflow menu) by the Studio shell.\n\n**Deprecated** in favor of "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "labelKey",
+								"target": 97
+							},
+							{
+								"kind": "text",
+								"text": " (kept one release as the\nfallback). Optional now: an action may instead supply "
+							},
+							{
+								"kind": "code",
+								"text": "`labelKey`"
+							},
+							{
+								"kind": "text",
+								"text": " and\nlet the shell resolve the visible string. Localization of a raw\n"
+							},
+							{
+								"kind": "code",
+								"text": "`label`"
+							},
+							{
+								"kind": "text",
+								"text": " is the host app's responsibility — the runtime treats it as\nan opaque display string."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 274,
+							"line": 289,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L274"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L289"
 						}
 					],
 					"type": {
@@ -2837,7 +2864,103 @@
 					}
 				},
 				{
-					"id": 98,
+					"id": 97,
+					"name": "labelKey",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "i18n message key resolved to the visible label by the Studio shell\nvia "
+							},
+							{
+								"kind": "code",
+								"text": "`useMsg(labelKey, label)`"
+							},
+							{
+								"kind": "text",
+								"text": " at render time — so the button\nlocalizes with the active locale and a lazy reserved slot\n("
+							},
+							{
+								"kind": "code",
+								"text": "`StaticHeaderActionPlaceholder`"
+							},
+							{
+								"kind": "text",
+								"text": ") shows the localized string before\nthe plugin chunk loads. Preferred over "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "label",
+								"target": 98
+							},
+							{
+								"kind": "text",
+								"text": ".\n\nExactly one of "
+							},
+							{
+								"kind": "code",
+								"text": "`labelKey`"
+							},
+							{
+								"kind": "text",
+								"text": " / "
+							},
+							{
+								"kind": "code",
+								"text": "`label`"
+							},
+							{
+								"kind": "text",
+								"text": " must be present;\n"
+							},
+							{
+								"kind": "code",
+								"text": "`composeHeaderActions()`"
+							},
+							{
+								"kind": "text",
+								"text": " rejects an action with neither. When both\nare present, "
+							},
+							{
+								"kind": "code",
+								"text": "`labelKey`"
+							},
+							{
+								"kind": "text",
+								"text": " wins and "
+							},
+							{
+								"kind": "code",
+								"text": "`label`"
+							},
+							{
+								"kind": "text",
+								"text": " is the missing-key fallback."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "types/plugin.ts",
+							"line": 277,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L277"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 102,
 					"name": "onClick",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2901,29 +3024,29 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 337,
+							"line": 352,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L337"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L352"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 99,
+							"id": 103,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 100,
+									"id": 104,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 101,
+											"id": 105,
 											"name": "ctx",
 											"variant": "param",
 											"kind": 32768,
@@ -2971,7 +3094,7 @@
 					}
 				},
 				{
-					"id": 97,
+					"id": 101,
 					"name": "order",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3029,7 +3152,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "id",
-								"target": 93
+								"target": 96
 							},
 							{
 								"kind": "text",
@@ -3040,9 +3163,9 @@
 					"sources": [
 						{
 							"fileName": "types/plugin.ts",
-							"line": 320,
+							"line": 335,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L320"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L335"
 						}
 					],
 					"type": {
@@ -3055,13 +3178,14 @@
 				{
 					"title": "Properties",
 					"children": [
-						102,
+						106,
+						100,
+						99,
 						96,
-						95,
-						93,
-						94,
 						98,
-						97
+						97,
+						102,
+						101
 					]
 				}
 			],
@@ -3126,9 +3250,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 106,
+							"line": 119,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L106"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L119"
 						}
 					],
 					"type": {
@@ -3182,9 +3306,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 99,
+							"line": 112,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L99"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L112"
 						}
 					],
 					"type": {
@@ -3271,9 +3395,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 112,
+							"line": 125,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L112"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L125"
 						}
 					],
 					"type": {
@@ -3283,10 +3407,121 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 92,
+								"target": 95,
 								"name": "StudioHeaderAction",
 								"package": "@anvilkit/core"
 							}
+						}
+					}
+				},
+				{
+					"id": 20,
+					"name": "i18n",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Plugin-contributed i18n message bundles, in registration order,\ncollected React-free during compile via "
+							},
+							{
+								"kind": "code",
+								"text": "`ctx.registerMessages`"
+							},
+							{
+								"kind": "text",
+								"text": ". The\nReact "
+							},
+							{
+								"kind": "code",
+								"text": "`EditorI18nProvider`"
+							},
+							{
+								"kind": "text",
+								"text": " prepends the core "
+							},
+							{
+								"kind": "code",
+								"text": "`studio.*`"
+							},
+							{
+								"kind": "text",
+								"text": " entry and\nmerges these so plugin namespaces join the catalog "
+							},
+							{
+								"kind": "code",
+								"text": "`useMsg`"
+							},
+							{
+								"kind": "text",
+								"text": " resolves."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "runtime/compile-plugins.ts",
+							"line": 186,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L186"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 21,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 22,
+									"name": "entries",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/compile-plugins.ts",
+											"line": 187,
+											"character": 11,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L187"
+										}
+									],
+									"type": {
+										"type": "typeOperator",
+										"operator": "readonly",
+										"target": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/i18n/registry.ts",
+													"qualifiedName": "RegistryEntry"
+												},
+												"name": "RegistryEntry",
+												"package": "@anvilkit/core"
+											}
+										}
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										22
+									]
+								}
+							]
 						}
 					}
 				},
@@ -3308,7 +3543,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "createLifecycleManager",
-								"target": 131
+								"target": 135
 							},
 							{
 								"kind": "text",
@@ -3319,14 +3554,14 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 94,
+							"line": 107,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L94"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L107"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": 136,
+						"target": 140,
 						"name": "LifecycleManager",
 						"package": "@anvilkit/core"
 					}
@@ -3374,9 +3609,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 144,
+							"line": 157,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L144"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L157"
 						}
 					],
 					"type": {
@@ -3465,9 +3700,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 128,
+							"line": 141,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L128"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L141"
 						}
 					],
 					"type": {
@@ -3528,9 +3763,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 80,
+							"line": 93,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L80"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L93"
 						}
 					],
 					"type": {
@@ -3602,9 +3837,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 137,
+							"line": 150,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L137"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L150"
 						}
 					],
 					"type": {
@@ -3652,9 +3887,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 155,
+							"line": 168,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L155"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L168"
 						}
 					],
 					"type": {
@@ -3711,9 +3946,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 89,
+							"line": 102,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L89"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L102"
 						}
 					],
 					"type": {
@@ -3791,14 +4026,14 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 166,
+							"line": 179,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L166"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L179"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": 167,
+						"target": 171,
 						"name": "StudioSidebarContributions",
 						"package": "@anvilkit/core"
 					}
@@ -3830,9 +4065,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 150,
+							"line": 163,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L150"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L163"
 						}
 					],
 					"type": {
@@ -3870,6 +4105,7 @@
 						12,
 						11,
 						13,
+						20,
 						10,
 						16,
 						14,
@@ -3885,14 +4121,14 @@
 			"sources": [
 				{
 					"fileName": "runtime/compile-plugins.ts",
-					"line": 74,
+					"line": 87,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L74"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L87"
 				}
 			]
 		},
 		{
-			"id": 167,
+			"id": 171,
 			"name": "StudioSidebarContributions",
 			"variant": "declaration",
 			"kind": 256,
@@ -3927,7 +4163,7 @@
 			},
 			"children": [
 				{
-					"id": 171,
+					"id": 175,
 					"name": "assetActions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3970,7 +4206,7 @@
 					}
 				},
 				{
-					"id": 170,
+					"id": 174,
 					"name": "assetSource",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4006,7 +4242,7 @@
 					}
 				},
 				{
-					"id": 173,
+					"id": 177,
 					"name": "copilotPanel",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4042,7 +4278,7 @@
 					}
 				},
 				{
-					"id": 172,
+					"id": 176,
 					"name": "copyPacks",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4085,7 +4321,7 @@
 					}
 				},
 				{
-					"id": 175,
+					"id": 179,
 					"name": "designSystemPanel",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4121,7 +4357,7 @@
 					}
 				},
 				{
-					"id": 174,
+					"id": 178,
 					"name": "historyPanel",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4157,7 +4393,7 @@
 					}
 				},
 				{
-					"id": 168,
+					"id": 172,
 					"name": "insertSections",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4200,7 +4436,7 @@
 					}
 				},
 				{
-					"id": 169,
+					"id": 173,
 					"name": "layerQuickAdds",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4247,14 +4483,14 @@
 				{
 					"title": "Properties",
 					"children": [
-						171,
-						170,
-						173,
-						172,
 						175,
 						174,
-						168,
-						169
+						177,
+						176,
+						179,
+						178,
+						172,
+						173
 					]
 				}
 			],
@@ -4268,7 +4504,7 @@
 			]
 		},
 		{
-			"id": 76,
+			"id": 79,
 			"name": "HeaderActionSlot",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -4291,7 +4527,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "resolveHeaderActionSlots",
-						"target": 83
+						"target": 86
 					},
 					{
 						"kind": "text",
@@ -4310,79 +4546,14 @@
 			"sources": [
 				{
 					"fileName": "runtime/header-actions.ts",
-					"line": 191,
+					"line": 217,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L191"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L217"
 				}
 			],
 			"type": {
 				"type": "union",
 				"types": [
-					{
-						"type": "reflection",
-						"declaration": {
-							"id": 77,
-							"name": "__type",
-							"variant": "declaration",
-							"kind": 65536,
-							"flags": {},
-							"children": [
-								{
-									"id": 79,
-									"name": "action",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {
-										"isReadonly": true
-									},
-									"sources": [
-										{
-											"fileName": "runtime/header-actions.ts",
-											"line": 192,
-											"character": 37,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L192"
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": 92,
-										"name": "StudioHeaderAction",
-										"package": "@anvilkit/core"
-									}
-								},
-								{
-									"id": 78,
-									"name": "kind",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {
-										"isReadonly": true
-									},
-									"sources": [
-										{
-											"fileName": "runtime/header-actions.ts",
-											"line": 192,
-											"character": 14,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L192"
-										}
-									],
-									"type": {
-										"type": "literal",
-										"value": "live"
-									}
-								}
-							],
-							"groups": [
-								{
-									"title": "Properties",
-									"children": [
-										79,
-										78
-									]
-								}
-							]
-						}
-					},
 					{
 						"type": "reflection",
 						"declaration": {
@@ -4403,15 +4574,15 @@
 									"sources": [
 										{
 											"fileName": "runtime/header-actions.ts",
-											"line": 195,
-											"character": 12,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L195"
+											"line": 218,
+											"character": 37,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L218"
 										}
 									],
 									"type": {
 										"type": "reference",
-										"target": 91,
-										"name": "StaticHeaderActionPlaceholder",
+										"target": 95,
+										"name": "StudioHeaderAction",
 										"package": "@anvilkit/core"
 									}
 								},
@@ -4426,14 +4597,14 @@
 									"sources": [
 										{
 											"fileName": "runtime/header-actions.ts",
-											"line": 194,
-											"character": 12,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L194"
+											"line": 218,
+											"character": 14,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L218"
 										}
 									],
 									"type": {
 										"type": "literal",
-										"value": "placeholder"
+										"value": "live"
 									}
 								}
 							],
@@ -4447,12 +4618,77 @@
 								}
 							]
 						}
+					},
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 83,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 85,
+									"name": "action",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/header-actions.ts",
+											"line": 221,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L221"
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": 94,
+										"name": "StaticHeaderActionPlaceholder",
+										"package": "@anvilkit/core"
+									}
+								},
+								{
+									"id": 84,
+									"name": "kind",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isReadonly": true
+									},
+									"sources": [
+										{
+											"fileName": "runtime/header-actions.ts",
+											"line": 220,
+											"character": 12,
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L220"
+										}
+									],
+									"type": {
+										"type": "literal",
+										"value": "placeholder"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										85,
+										84
+									]
+								}
+							]
+						}
 					}
 				]
 			}
 		},
 		{
-			"id": 135,
+			"id": 139,
 			"name": "LifecycleEventName",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -4550,7 +4786,7 @@
 			}
 		},
 		{
-			"id": 161,
+			"id": 165,
 			"name": "LifecyclePhase",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -4565,7 +4801,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "LifecycleManager.advanceTo",
-						"target": 153
+						"target": 157
 					},
 					{
 						"kind": "text",
@@ -4776,7 +5012,7 @@
 			}
 		},
 		{
-			"id": 162,
+			"id": 166,
 			"name": "LifecycleSubscriber",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -4791,7 +5027,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "LifecycleManager.subscribe",
-						"target": 143
+						"target": 147
 					},
 					{
 						"kind": "text",
@@ -4826,21 +5062,21 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 163,
+					"id": 167,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 164,
+							"id": 168,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 165,
+									"id": 169,
 									"name": "ctx",
 									"variant": "param",
 									"kind": 32768,
@@ -4857,7 +5093,7 @@
 									}
 								},
 								{
-									"id": 166,
+									"id": 170,
 									"name": "payload",
 									"variant": "param",
 									"kind": 32768,
@@ -4894,7 +5130,7 @@
 			}
 		},
 		{
-			"id": 121,
+			"id": 125,
 			"name": "RegistrationTransform",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -4947,7 +5183,7 @@
 			],
 			"typeParameters": [
 				{
-					"id": 125,
+					"id": 129,
 					"name": "UserConfig",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -4979,21 +5215,21 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 122,
+					"id": 126,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 123,
+							"id": 127,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 124,
+									"id": 128,
 									"name": "registration",
 									"variant": "param",
 									"kind": 32768,
@@ -5008,7 +5244,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 125,
+												"target": 129,
 												"name": "UserConfig",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -5029,7 +5265,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 125,
+										"target": 129,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -5044,7 +5280,7 @@
 			}
 		},
 		{
-			"id": 91,
+			"id": 94,
 			"name": "StaticHeaderActionPlaceholder",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -5059,7 +5295,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "StudioHeaderAction",
-						"target": 92
+						"target": 95
 					},
 					{
 						"kind": "text",
@@ -5194,9 +5430,9 @@
 			"sources": [
 				{
 					"fileName": "types/plugin.ts",
-					"line": 370,
+					"line": 385,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L370"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L385"
 				}
 			],
 			"type": {
@@ -5209,7 +5445,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 92,
+						"target": 95,
 						"name": "StudioHeaderAction",
 						"package": "@anvilkit/core"
 					},
@@ -5232,7 +5468,7 @@
 			}
 		},
 		{
-			"id": 126,
+			"id": 130,
 			"name": "StudioPluginLoader",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -5271,7 +5507,7 @@
 			],
 			"typeParameters": [
 				{
-					"id": 129,
+					"id": 133,
 					"name": "UserConfig",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -5303,14 +5539,14 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 127,
+					"id": 131,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 128,
+							"id": 132,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
@@ -5333,7 +5569,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 129,
+												"target": 133,
 												"name": "UserConfig",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -5352,7 +5588,7 @@
 			}
 		},
 		{
-			"id": 176,
+			"id": 180,
 			"name": "CORE_VERSION",
 			"variant": "declaration",
 			"kind": 32,
@@ -5497,7 +5733,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 130,
+			"id": 134,
 			"name": "withoutHeaderActions",
 			"variant": "declaration",
 			"kind": 32,
@@ -5514,7 +5750,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "RegistrationTransform",
-						"target": 121
+						"target": 125
 					},
 					{
 						"kind": "text",
@@ -5532,7 +5768,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "lazyPluginWith",
-						"target": 111
+						"target": 115
 					},
 					{
 						"kind": "text",
@@ -5550,7 +5786,7 @@
 			],
 			"type": {
 				"type": "reference",
-				"target": 121,
+				"target": 125,
 				"name": "RegistrationTransform",
 				"package": "@anvilkit/core"
 			},
@@ -5565,9 +5801,9 @@
 			"sources": [
 				{
 					"fileName": "runtime/compile-plugins.ts",
-					"line": 317,
+					"line": 339,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L317"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L339"
 				}
 			],
 			"signatures": [
@@ -5580,9 +5816,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/compile-plugins.ts",
-							"line": 317,
+							"line": 339,
 							"character": 22,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L317"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L339"
 						}
 					],
 					"parameters": [
@@ -5696,7 +5932,7 @@
 			]
 		},
 		{
-			"id": 72,
+			"id": 75,
 			"name": "composeHeaderActions",
 			"variant": "declaration",
 			"kind": 64,
@@ -5704,14 +5940,14 @@
 			"sources": [
 				{
 					"fileName": "runtime/header-actions.ts",
-					"line": 172,
+					"line": 197,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L172"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L197"
 				}
 			],
 			"signatures": [
 				{
-					"id": 73,
+					"id": 76,
 					"name": "composeHeaderActions",
 					"variant": "signature",
 					"kind": 4096,
@@ -5748,7 +5984,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "StudioPluginError",
-										"target": 46
+										"target": 49
 									},
 									{
 										"kind": "text",
@@ -5785,21 +6021,21 @@
 					"sources": [
 						{
 							"fileName": "runtime/header-actions.ts",
-							"line": 172,
+							"line": 197,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L172"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L197"
 						}
 					],
 					"typeParameters": [
 						{
-							"id": 74,
+							"id": 77,
 							"name": "T",
 							"variant": "typeParam",
 							"kind": 131072,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 87,
+								"target": 90,
 								"name": "SortableHeaderAction",
 								"package": "@anvilkit/core"
 							}
@@ -5807,7 +6043,7 @@
 					],
 					"parameters": [
 						{
-							"id": 75,
+							"id": 78,
 							"name": "actions",
 							"variant": "param",
 							"kind": 32768,
@@ -5844,7 +6080,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 74,
+										"target": 77,
 										"name": "T",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -5857,7 +6093,7 @@
 						"type": "array",
 						"elementType": {
 							"type": "reference",
-							"target": 74,
+							"target": 77,
 							"name": "T",
 							"package": "@anvilkit/core",
 							"refersToTypeParameter": true
@@ -5867,7 +6103,7 @@
 			]
 		},
 		{
-			"id": 54,
+			"id": 57,
 			"name": "createExportRegistry",
 			"variant": "declaration",
 			"kind": 64,
@@ -5882,7 +6118,7 @@
 			],
 			"signatures": [
 				{
-					"id": 55,
+					"id": 58,
 					"name": "createExportRegistry",
 					"variant": "signature",
 					"kind": 4096,
@@ -5897,7 +6133,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "ExportRegistry",
-								"target": 57
+								"target": 60
 							},
 							{
 								"kind": "text",
@@ -5950,7 +6186,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "StudioPluginError",
-										"target": 46
+										"target": 49
 									},
 									{
 										"kind": "text",
@@ -5994,7 +6230,7 @@
 					],
 					"parameters": [
 						{
-							"id": 56,
+							"id": 59,
 							"name": "formats",
 							"variant": "param",
 							"kind": 32768,
@@ -6067,7 +6303,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 57,
+						"target": 60,
 						"name": "ExportRegistry",
 						"package": "@anvilkit/core"
 					}
@@ -6075,7 +6311,7 @@
 			]
 		},
 		{
-			"id": 131,
+			"id": 135,
 			"name": "createLifecycleManager",
 			"variant": "declaration",
 			"kind": 64,
@@ -6090,7 +6326,7 @@
 			],
 			"signatures": [
 				{
-					"id": 132,
+					"id": 136,
 					"name": "createLifecycleManager",
 					"variant": "signature",
 					"kind": 4096,
@@ -6113,7 +6349,7 @@
 					],
 					"parameters": [
 						{
-							"id": 133,
+							"id": 137,
 							"name": "registrations",
 							"variant": "param",
 							"kind": 32768,
@@ -6165,7 +6401,7 @@
 							}
 						},
 						{
-							"id": 134,
+							"id": 138,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
@@ -6204,7 +6440,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 136,
+						"target": 140,
 						"name": "LifecycleManager",
 						"package": "@anvilkit/core"
 					}
@@ -6212,7 +6448,7 @@
 			]
 		},
 		{
-			"id": 20,
+			"id": 23,
 			"name": "isPuckPlugin",
 			"variant": "declaration",
 			"kind": 64,
@@ -6227,7 +6463,7 @@
 			],
 			"signatures": [
 				{
-					"id": 21,
+					"id": 24,
 					"name": "isPuckPlugin",
 					"variant": "signature",
 					"kind": 4096,
@@ -6372,7 +6608,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "StudioPluginError",
-								"target": 46
+								"target": 49
 							},
 							{
 								"kind": "text",
@@ -6420,7 +6656,7 @@
 					],
 					"parameters": [
 						{
-							"id": 22,
+							"id": 25,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -6451,7 +6687,7 @@
 			]
 		},
 		{
-			"id": 23,
+			"id": 26,
 			"name": "isStudioPlugin",
 			"variant": "declaration",
 			"kind": 64,
@@ -6466,7 +6702,7 @@
 			],
 			"signatures": [
 				{
-					"id": 24,
+					"id": 27,
 					"name": "isStudioPlugin",
 					"variant": "signature",
 					"kind": 4096,
@@ -6552,7 +6788,7 @@
 					],
 					"parameters": [
 						{
-							"id": 25,
+							"id": 28,
 							"name": "value",
 							"variant": "param",
 							"kind": 32768,
@@ -6594,7 +6830,7 @@
 			]
 		},
 		{
-			"id": 106,
+			"id": 110,
 			"name": "lazyPlugin",
 			"variant": "declaration",
 			"kind": 64,
@@ -6609,7 +6845,7 @@
 			],
 			"signatures": [
 				{
-					"id": 107,
+					"id": 111,
 					"name": "lazyPlugin",
 					"variant": "signature",
 					"kind": 4096,
@@ -6691,7 +6927,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 108,
+							"id": 112,
 							"name": "UserConfig",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -6720,18 +6956,18 @@
 					],
 					"parameters": [
 						{
-							"id": 109,
+							"id": 113,
 							"name": "load",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 126,
+								"target": 130,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 108,
+										"target": 112,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -6742,7 +6978,7 @@
 							}
 						},
 						{
-							"id": 110,
+							"id": 114,
 							"name": "meta",
 							"variant": "param",
 							"kind": 32768,
@@ -6769,7 +7005,7 @@
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 108,
+								"target": 112,
 								"name": "UserConfig",
 								"package": "@anvilkit/core",
 								"refersToTypeParameter": true
@@ -6782,7 +7018,7 @@
 			]
 		},
 		{
-			"id": 111,
+			"id": 115,
 			"name": "lazyPluginWith",
 			"variant": "declaration",
 			"kind": 64,
@@ -6809,7 +7045,7 @@
 			],
 			"signatures": [
 				{
-					"id": 112,
+					"id": 116,
 					"name": "lazyPluginWith",
 					"variant": "signature",
 					"kind": 4096,
@@ -6824,7 +7060,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "lazyPlugin",
-								"target": 106
+								"target": 110
 							},
 							{
 								"kind": "text",
@@ -6858,7 +7094,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "lazyPlugin",
-								"target": 106
+								"target": 110
 							},
 							{
 								"kind": "text",
@@ -6900,7 +7136,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "lazyPlugin",
-								"target": 106
+								"target": 110
 							},
 							{
 								"kind": "text",
@@ -6964,7 +7200,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "withoutHeaderActions",
-								"target": 130
+								"target": 134
 							},
 							{
 								"kind": "text",
@@ -7096,7 +7332,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 113,
+							"id": 117,
 							"name": "UserConfig",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -7125,18 +7361,18 @@
 					],
 					"parameters": [
 						{
-							"id": 114,
+							"id": 118,
 							"name": "load",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 126,
+								"target": 130,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 113,
+										"target": 117,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -7147,18 +7383,18 @@
 							}
 						},
 						{
-							"id": 115,
+							"id": 119,
 							"name": "transform",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 121,
+								"target": 125,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 113,
+										"target": 117,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -7179,7 +7415,7 @@
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 113,
+								"target": 117,
 								"name": "UserConfig",
 								"package": "@anvilkit/core",
 								"refersToTypeParameter": true
@@ -7190,7 +7426,7 @@
 					}
 				},
 				{
-					"id": 116,
+					"id": 120,
 					"name": "lazyPluginWith",
 					"variant": "signature",
 					"kind": 4096,
@@ -7205,7 +7441,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "lazyPlugin",
-								"target": 106
+								"target": 110
 							},
 							{
 								"kind": "text",
@@ -7239,7 +7475,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "lazyPlugin",
-								"target": 106
+								"target": 110
 							},
 							{
 								"kind": "text",
@@ -7281,7 +7517,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "lazyPlugin",
-								"target": 106
+								"target": 110
 							},
 							{
 								"kind": "text",
@@ -7345,7 +7581,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "withoutHeaderActions",
-								"target": 130
+								"target": 134
 							},
 							{
 								"kind": "text",
@@ -7477,7 +7713,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 117,
+							"id": 121,
 							"name": "UserConfig",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -7506,18 +7742,18 @@
 					],
 					"parameters": [
 						{
-							"id": 118,
+							"id": 122,
 							"name": "load",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 126,
+								"target": 130,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 117,
+										"target": 121,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -7528,7 +7764,7 @@
 							}
 						},
 						{
-							"id": 119,
+							"id": 123,
 							"name": "meta",
 							"variant": "param",
 							"kind": 32768,
@@ -7545,18 +7781,18 @@
 							}
 						},
 						{
-							"id": 120,
+							"id": 124,
 							"name": "transform",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 121,
+								"target": 125,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 117,
+										"target": 121,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -7577,7 +7813,7 @@
 						"typeArguments": [
 							{
 								"type": "reference",
-								"target": 117,
+								"target": 121,
 								"name": "UserConfig",
 								"package": "@anvilkit/core",
 								"refersToTypeParameter": true
@@ -7590,7 +7826,7 @@
 			]
 		},
 		{
-			"id": 83,
+			"id": 86,
 			"name": "resolveHeaderActionSlots",
 			"variant": "declaration",
 			"kind": 64,
@@ -7598,14 +7834,14 @@
 			"sources": [
 				{
 					"fileName": "runtime/header-actions.ts",
-					"line": 223,
+					"line": 249,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L223"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L249"
 				}
 			],
 			"signatures": [
 				{
-					"id": 84,
+					"id": 87,
 					"name": "resolveHeaderActionSlots",
 					"variant": "signature",
 					"kind": 4096,
@@ -7652,7 +7888,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "composeHeaderActions",
-								"target": 72
+								"target": 75
 							},
 							{
 								"kind": "text",
@@ -7679,14 +7915,14 @@
 					"sources": [
 						{
 							"fileName": "runtime/header-actions.ts",
-							"line": 223,
+							"line": 249,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L223"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L249"
 						}
 					],
 					"parameters": [
 						{
-							"id": 85,
+							"id": 88,
 							"name": "placeholders",
 							"variant": "param",
 							"kind": 32768,
@@ -7715,7 +7951,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 91,
+										"target": 94,
 										"name": "StaticHeaderActionPlaceholder",
 										"package": "@anvilkit/core"
 									}
@@ -7723,7 +7959,7 @@
 							}
 						},
 						{
-							"id": 86,
+							"id": 89,
 							"name": "live",
 							"variant": "param",
 							"kind": 32768,
@@ -7759,7 +7995,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 92,
+										"target": 95,
 										"name": "StudioHeaderAction",
 										"package": "@anvilkit/core"
 									}
@@ -7771,7 +8007,7 @@
 						"type": "array",
 						"elementType": {
 							"type": "reference",
-							"target": 76,
+							"target": 79,
 							"name": "HeaderActionSlot",
 							"package": "@anvilkit/core"
 						}
@@ -7784,55 +8020,55 @@
 		{
 			"title": "Classes",
 			"children": [
-				26,
-				32,
-				38,
-				46
+				29,
+				35,
+				41,
+				49
 			]
 		},
 		{
 			"title": "Interfaces",
 			"children": [
-				57,
-				136,
-				87,
-				92,
+				60,
+				140,
+				90,
+				95,
 				7,
-				167
+				171
 			]
 		},
 		{
 			"title": "Type Aliases",
 			"children": [
-				76,
-				135,
-				161,
-				162,
-				121,
-				91,
-				126
+				79,
+				139,
+				165,
+				166,
+				125,
+				94,
+				130
 			]
 		},
 		{
 			"title": "Variables",
 			"children": [
-				176,
+				180,
 				1,
-				130
+				134
 			]
 		},
 		{
 			"title": "Functions",
 			"children": [
 				2,
-				72,
-				54,
-				131,
-				20,
+				75,
+				57,
+				135,
 				23,
-				106,
-				111,
-				83
+				26,
+				110,
+				115,
+				86
 			]
 		}
 	],
@@ -7940,28 +8176,28 @@
 		},
 		"20": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/detect-plugin.ts",
-			"qualifiedName": "isPuckPlugin"
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "StudioRuntime.i18n"
 		},
 		"21": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/detect-plugin.ts",
-			"qualifiedName": "isPuckPlugin"
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "__type"
 		},
 		"22": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/detect-plugin.ts",
-			"qualifiedName": "value"
+			"packagePath": "src/runtime/compile-plugins.ts",
+			"qualifiedName": "__type.entries"
 		},
 		"23": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/detect-plugin.ts",
-			"qualifiedName": "isStudioPlugin"
+			"qualifiedName": "isPuckPlugin"
 		},
 		"24": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/detect-plugin.ts",
-			"qualifiedName": "isStudioPlugin"
+			"qualifiedName": "isPuckPlugin"
 		},
 		"25": {
 			"packageName": "@anvilkit/core",
@@ -7970,183 +8206,183 @@
 		},
 		"26": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioConfigError"
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "isStudioPlugin"
 		},
 		"27": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioConfigError.__constructor"
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "isStudioPlugin"
 		},
 		"28": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioConfigError"
+			"packagePath": "src/runtime/detect-plugin.ts",
+			"qualifiedName": "value"
 		},
 		"29": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "message"
+			"qualifiedName": "StudioConfigError"
 		},
 		"30": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "options"
+			"qualifiedName": "StudioConfigError.__constructor"
 		},
 		"31": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioConfigError.code"
+			"qualifiedName": "StudioConfigError"
 		},
 		"32": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioError"
+			"qualifiedName": "message"
 		},
 		"33": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioError.__constructor"
+			"qualifiedName": "options"
 		},
 		"34": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioError"
+			"qualifiedName": "StudioConfigError.code"
 		},
 		"35": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "message"
+			"qualifiedName": "StudioError"
 		},
 		"36": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "options"
+			"qualifiedName": "StudioError.__constructor"
 		},
 		"37": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioError.code"
+			"qualifiedName": "StudioError"
 		},
 		"38": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioExportError"
+			"qualifiedName": "message"
 		},
 		"39": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioExportError.__constructor"
+			"qualifiedName": "options"
 		},
 		"40": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioExportError"
+			"qualifiedName": "StudioError.code"
 		},
 		"41": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "formatId"
+			"qualifiedName": "StudioExportError"
 		},
 		"42": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "message"
+			"qualifiedName": "StudioExportError.__constructor"
 		},
 		"43": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "options"
+			"qualifiedName": "StudioExportError"
 		},
 		"44": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioExportError.code"
+			"qualifiedName": "formatId"
 		},
 		"45": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioExportError.formatId"
+			"qualifiedName": "message"
 		},
 		"46": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioPluginError"
+			"qualifiedName": "options"
 		},
 		"47": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioPluginError.__constructor"
+			"qualifiedName": "StudioExportError.code"
 		},
 		"48": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioPluginError"
+			"qualifiedName": "StudioExportError.formatId"
 		},
 		"49": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "pluginId"
+			"qualifiedName": "StudioPluginError"
 		},
 		"50": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "message"
+			"qualifiedName": "StudioPluginError.__constructor"
 		},
 		"51": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "options"
+			"qualifiedName": "StudioPluginError"
 		},
 		"52": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioPluginError.code"
+			"qualifiedName": "pluginId"
 		},
 		"53": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/errors.ts",
-			"qualifiedName": "StudioPluginError.pluginId"
+			"qualifiedName": "message"
 		},
 		"54": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "createExportRegistry"
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "options"
 		},
 		"55": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "createExportRegistry"
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioPluginError.code"
 		},
 		"56": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "formats"
+			"packagePath": "src/runtime/errors.ts",
+			"qualifiedName": "StudioPluginError.pluginId"
 		},
 		"57": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "ExportRegistry"
+			"qualifiedName": "createExportRegistry"
 		},
 		"58": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "ExportRegistry.list"
+			"qualifiedName": "createExportRegistry"
 		},
 		"59": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "formats"
 		},
 		"60": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ExportRegistry"
 		},
 		"61": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "ExportRegistry.get"
+			"qualifiedName": "ExportRegistry.list"
 		},
 		"62": {
 			"packageName": "@anvilkit/core",
@@ -8161,12 +8397,12 @@
 		"64": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "id"
+			"qualifiedName": "ExportRegistry.get"
 		},
 		"65": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "ExportRegistry.has"
+			"qualifiedName": "__type"
 		},
 		"66": {
 			"packageName": "@anvilkit/core",
@@ -8176,17 +8412,17 @@
 		"67": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "id"
 		},
 		"68": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "id"
+			"qualifiedName": "ExportRegistry.has"
 		},
 		"69": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "ExportRegistry.size"
+			"qualifiedName": "__type"
 		},
 		"70": {
 			"packageName": "@anvilkit/core",
@@ -8196,47 +8432,47 @@
 		"71": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/export-registry.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "id"
 		},
 		"72": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "composeHeaderActions"
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "ExportRegistry.size"
 		},
 		"73": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "composeHeaderActions"
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
 		},
 		"74": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "T"
+			"packagePath": "src/runtime/export-registry.ts",
+			"qualifiedName": "__type"
 		},
 		"75": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "actions"
+			"qualifiedName": "composeHeaderActions"
 		},
 		"76": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "HeaderActionSlot"
+			"qualifiedName": "composeHeaderActions"
 		},
 		"77": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "T"
 		},
 		"78": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "__type.kind"
+			"qualifiedName": "actions"
 		},
 		"79": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "__type.action"
+			"qualifiedName": "HeaderActionSlot"
 		},
 		"80": {
 			"packageName": "@anvilkit/core",
@@ -8256,102 +8492,102 @@
 		"83": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "resolveHeaderActionSlots"
+			"qualifiedName": "__type"
 		},
 		"84": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "resolveHeaderActionSlots"
+			"qualifiedName": "__type.kind"
 		},
 		"85": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "placeholders"
+			"qualifiedName": "__type.action"
 		},
 		"86": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "live"
+			"qualifiedName": "resolveHeaderActionSlots"
 		},
 		"87": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "SortableHeaderAction"
+			"qualifiedName": "resolveHeaderActionSlots"
 		},
 		"88": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "SortableHeaderAction.id"
+			"qualifiedName": "placeholders"
 		},
 		"89": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "SortableHeaderAction.group"
+			"qualifiedName": "live"
 		},
 		"90": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/header-actions.ts",
-			"qualifiedName": "SortableHeaderAction.order"
+			"qualifiedName": "SortableHeaderAction"
 		},
 		"91": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StaticHeaderActionPlaceholder"
+			"packagePath": "src/runtime/header-actions.ts",
+			"qualifiedName": "SortableHeaderAction.id"
 		},
 		"92": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction"
+			"packagePath": "src/runtime/header-actions.ts",
+			"qualifiedName": "SortableHeaderAction.group"
 		},
 		"93": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction.id"
+			"packagePath": "src/runtime/header-actions.ts",
+			"qualifiedName": "SortableHeaderAction.order"
 		},
 		"94": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction.label"
+			"qualifiedName": "StaticHeaderActionPlaceholder"
 		},
 		"95": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction.icon"
+			"qualifiedName": "StudioHeaderAction"
 		},
 		"96": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction.group"
+			"qualifiedName": "StudioHeaderAction.id"
 		},
 		"97": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction.order"
+			"qualifiedName": "StudioHeaderAction.labelKey"
 		},
 		"98": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction.onClick"
+			"qualifiedName": "StudioHeaderAction.label"
 		},
 		"99": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioHeaderAction.icon"
 		},
 		"100": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioHeaderAction.group"
 		},
 		"101": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "StudioHeaderAction.order"
 		},
 		"102": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/plugin.ts",
-			"qualifiedName": "StudioHeaderAction.disabled"
+			"qualifiedName": "StudioHeaderAction.onClick"
 		},
 		"103": {
 			"packageName": "@anvilkit/core",
@@ -8370,53 +8606,53 @@
 		},
 		"106": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "lazyPlugin"
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "StudioHeaderAction.disabled"
 		},
 		"107": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "lazyPlugin"
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "__type"
 		},
 		"108": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "UserConfig"
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "__type"
 		},
 		"109": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "load"
+			"packagePath": "src/types/plugin.ts",
+			"qualifiedName": "ctx"
 		},
 		"110": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "meta"
+			"qualifiedName": "lazyPlugin"
 		},
 		"111": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "lazyPluginWith"
+			"qualifiedName": "lazyPlugin"
 		},
 		"112": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "lazyPluginWith"
+			"qualifiedName": "UserConfig"
 		},
 		"113": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "UserConfig"
+			"qualifiedName": "load"
 		},
 		"114": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "load"
+			"qualifiedName": "meta"
 		},
 		"115": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "transform"
+			"qualifiedName": "lazyPluginWith"
 		},
 		"116": {
 			"packageName": "@anvilkit/core",
@@ -8436,42 +8672,42 @@
 		"119": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "meta"
+			"qualifiedName": "transform"
 		},
 		"120": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "transform"
+			"qualifiedName": "lazyPluginWith"
 		},
 		"121": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "RegistrationTransform"
+			"qualifiedName": "UserConfig"
 		},
 		"122": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "load"
 		},
 		"123": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "meta"
 		},
 		"124": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "registration"
+			"qualifiedName": "transform"
 		},
 		"125": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "UserConfig"
+			"qualifiedName": "RegistrationTransform"
 		},
 		"126": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "StudioPluginLoader"
+			"qualifiedName": "__type"
 		},
 		"127": {
 			"packageName": "@anvilkit/core",
@@ -8481,7 +8717,7 @@
 		"128": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "registration"
 		},
 		"129": {
 			"packageName": "@anvilkit/core",
@@ -8491,92 +8727,92 @@
 		"130": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lazy-plugin.ts",
-			"qualifiedName": "withoutHeaderActions"
+			"qualifiedName": "StudioPluginLoader"
 		},
 		"131": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "createLifecycleManager"
+			"packagePath": "src/runtime/lazy-plugin.ts",
+			"qualifiedName": "__type"
 		},
 		"132": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "createLifecycleManager"
+			"packagePath": "src/runtime/lazy-plugin.ts",
+			"qualifiedName": "__type"
 		},
 		"133": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "registrations"
+			"packagePath": "src/runtime/lazy-plugin.ts",
+			"qualifiedName": "UserConfig"
 		},
 		"134": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "options"
+			"packagePath": "src/runtime/lazy-plugin.ts",
+			"qualifiedName": "withoutHeaderActions"
 		},
 		"135": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleEventName"
+			"qualifiedName": "createLifecycleManager"
 		},
 		"136": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleManager"
+			"qualifiedName": "createLifecycleManager"
 		},
 		"137": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleManager.emit"
+			"qualifiedName": "registrations"
 		},
 		"138": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "options"
 		},
 		"139": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "LifecycleEventName"
 		},
 		"140": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "event"
+			"qualifiedName": "LifecycleManager"
 		},
 		"141": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "LifecycleManager.emit"
 		},
 		"142": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "payload"
+			"qualifiedName": "__type"
 		},
 		"143": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleManager.subscribe"
+			"qualifiedName": "__type"
 		},
 		"144": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "event"
 		},
 		"145": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "ctx"
 		},
 		"146": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "event"
+			"qualifiedName": "payload"
 		},
 		"147": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "handler"
+			"qualifiedName": "LifecycleManager.subscribe"
 		},
 		"148": {
 			"packageName": "@anvilkit/core",
@@ -8591,12 +8827,12 @@
 		"150": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleManager.phase"
+			"qualifiedName": "event"
 		},
 		"151": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "handler"
 		},
 		"152": {
 			"packageName": "@anvilkit/core",
@@ -8606,12 +8842,12 @@
 		"153": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleManager.advanceTo"
+			"qualifiedName": "__type"
 		},
 		"154": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "LifecycleManager.phase"
 		},
 		"155": {
 			"packageName": "@anvilkit/core",
@@ -8621,17 +8857,17 @@
 		"156": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "phase"
+			"qualifiedName": "__type"
 		},
 		"157": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "LifecycleManager.advanceTo"
 		},
 		"158": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleManager.dispose"
+			"qualifiedName": "__type"
 		},
 		"159": {
 			"packageName": "@anvilkit/core",
@@ -8641,17 +8877,17 @@
 		"160": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "phase"
 		},
 		"161": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecyclePhase"
+			"qualifiedName": "ctx"
 		},
 		"162": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "LifecycleSubscriber"
+			"qualifiedName": "LifecycleManager.dispose"
 		},
 		"163": {
 			"packageName": "@anvilkit/core",
@@ -8666,59 +8902,79 @@
 		"165": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "ctx"
+			"qualifiedName": "LifecyclePhase"
 		},
 		"166": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/lifecycle-manager.ts",
-			"qualifiedName": "payload"
+			"qualifiedName": "LifecycleSubscriber"
 		},
 		"167": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions"
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
 		},
 		"168": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.insertSections"
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "__type"
 		},
 		"169": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.layerQuickAdds"
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "ctx"
 		},
 		"170": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.assetSource"
+			"packagePath": "src/runtime/lifecycle-manager.ts",
+			"qualifiedName": "payload"
 		},
 		"171": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.assetActions"
+			"qualifiedName": "StudioSidebarContributions"
 		},
 		"172": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.copyPacks"
+			"qualifiedName": "StudioSidebarContributions.insertSections"
 		},
 		"173": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.copilotPanel"
+			"qualifiedName": "StudioSidebarContributions.layerQuickAdds"
 		},
 		"174": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.historyPanel"
+			"qualifiedName": "StudioSidebarContributions.assetSource"
 		},
 		"175": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/sidebar-registry.ts",
-			"qualifiedName": "StudioSidebarContributions.designSystemPanel"
+			"qualifiedName": "StudioSidebarContributions.assetActions"
 		},
 		"176": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/sidebar-registry.ts",
+			"qualifiedName": "StudioSidebarContributions.copyPacks"
+		},
+		"177": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/sidebar-registry.ts",
+			"qualifiedName": "StudioSidebarContributions.copilotPanel"
+		},
+		"178": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/sidebar-registry.ts",
+			"qualifiedName": "StudioSidebarContributions.historyPanel"
+		},
+		"179": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/runtime/sidebar-registry.ts",
+			"qualifiedName": "StudioSidebarContributions.designSystemPanel"
+		},
+		"180": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/runtime/version.ts",
 			"qualifiedName": "CORE_VERSION"

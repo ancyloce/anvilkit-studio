@@ -1,0 +1,1948 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "@anvilkit/core",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 10,
+			"name": "AnvilkitMessages",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Augmentable registry of message keys. Core seeds "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "StudioMessageKey",
+						"target": 11
+					},
+					{
+						"kind": "text",
+						"text": ";\neach plugin merges its namespace keys via declaration merging so "
+					},
+					{
+						"kind": "code",
+						"text": "`useT`"
+					},
+					{
+						"kind": "text",
+						"text": "\nautocompletes them:\n\n"
+					},
+					{
+						"kind": "code",
+						"text": "```ts\ndeclare module \"@anvilkit/core/i18n\" {\n  interface AnvilkitMessages {\n    \"versionHistory.action.save\": string;\n  }\n}\n```"
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "i18n/keys.ts",
+					"line": 31,
+					"character": 17
+				}
+			]
+		},
+		{
+			"id": 47,
+			"name": "EditorI18nProviderProps",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"children": [
+				{
+					"id": 48,
+					"name": "children",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "state/editor-i18n-context.tsx",
+							"line": 348,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L348"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.ReactNode"
+						},
+						"name": "ReactNode",
+						"package": "@types/react",
+						"qualifiedName": "React.ReactNode"
+					}
+				},
+				{
+					"id": 50,
+					"name": "entries",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "**Plugin** message bundles (each plugin's slug namespace). "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": "\npasses the compiled "
+							},
+							{
+								"kind": "code",
+								"text": "`runtime.i18n.entries`"
+							},
+							{
+								"kind": "text",
+								"text": " here; the core "
+							},
+							{
+								"kind": "code",
+								"text": "`studio.*`"
+							},
+							{
+								"kind": "text",
+								"text": "\nentry is prepended internally, so omit this for chrome-only resolution."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "state/editor-i18n-context.tsx",
+							"line": 360,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L360"
+						}
+					],
+					"type": {
+						"type": "typeOperator",
+						"operator": "readonly",
+						"target": {
+							"type": "array",
+							"elementType": {
+								"type": "reference",
+								"target": 30,
+								"name": "RegistryEntry",
+								"package": "@anvilkit/core"
+							}
+						}
+					}
+				},
+				{
+					"id": 49,
+					"name": "messages",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Per-instance overrides forwarded by "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio messages>`"
+							},
+							{
+								"kind": "text",
+								"text": ". Layered ON\nTOP of the resolved catalog (host always wins), preserving the legacy\nprecedence so "
+							},
+							{
+								"kind": "code",
+								"text": "`useMsg`"
+							},
+							{
+								"kind": "text",
+								"text": "'s resolution order is unchanged."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "state/editor-i18n-context.tsx",
+							"line": 354,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L354"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "typescript",
+							"packagePath": "lib/lib.es5.d.ts",
+							"qualifiedName": "Readonly"
+						},
+						"typeArguments": [
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es5.d.ts",
+									"qualifiedName": "Record"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "intrinsic",
+										"name": "string"
+									}
+								],
+								"name": "Record",
+								"package": "typescript"
+							}
+						],
+						"name": "Readonly",
+						"package": "typescript"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						48,
+						50,
+						49
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "state/editor-i18n-context.tsx",
+					"line": 347,
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L347"
+				}
+			]
+		},
+		{
+			"id": 17,
+			"name": "MessageBundle",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A flat "
+					},
+					{
+						"kind": "code",
+						"text": "`key → string`"
+					},
+					{
+						"kind": "text",
+						"text": " map for one namespace at one locale."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "i18n/registry.ts",
+					"line": 23,
+					"character": 17
+				}
+			],
+			"indexSignatures": [
+				{
+					"id": 18,
+					"name": "__index",
+					"variant": "signature",
+					"kind": 8192,
+					"flags": {
+						"isReadonly": true
+					},
+					"sources": [
+						{
+							"fileName": "i18n/registry.ts",
+							"line": 24,
+							"character": 1
+						}
+					],
+					"parameters": [
+						{
+							"id": 19,
+							"name": "key",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			]
+		},
+		{
+			"id": 30,
+			"name": "RegistryEntry",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "One namespace's contribution to the catalog: a static English baseline\nshipped inline, plus an optional lazy loader for other locales."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 32,
+					"name": "en",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "English baseline (static). Keys must be "
+							},
+							{
+								"kind": "code",
+								"text": "`${namespace}.`"
+							},
+							{
+								"kind": "text",
+								"text": "-prefixed (core seeds excepted)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "i18n/registry.ts",
+							"line": 35,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 17,
+						"name": "MessageBundle",
+						"package": "@anvilkit/core"
+					}
+				},
+				{
+					"id": 33,
+					"name": "loadMessages",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Lazy non-English packs. Called at most once per "
+							},
+							{
+								"kind": "code",
+								"text": "`(namespace, locale)`"
+							},
+							{
+								"kind": "text",
+								"text": ";\n**never** for "
+							},
+							{
+								"kind": "code",
+								"text": "`\"en\"`"
+							},
+							{
+								"kind": "text",
+								"text": " (the static "
+							},
+							{
+								"kind": "code",
+								"text": "`en`"
+							},
+							{
+								"kind": "text",
+								"text": " field is the baseline). A\nrejection leaves that namespace at its "
+							},
+							{
+								"kind": "code",
+								"text": "`en`"
+							},
+							{
+								"kind": "text",
+								"text": " strings (§B.3)."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "i18n/registry.ts",
+							"line": 41,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 34,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 35,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 36,
+											"name": "locale",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Promise"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": 17,
+												"name": "MessageBundle",
+												"package": "@anvilkit/core"
+											}
+										],
+										"name": "Promise",
+										"package": "typescript"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 31,
+					"name": "namespace",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Owning namespace — the plugin slug (§A); "
+							},
+							{
+								"kind": "code",
+								"text": "`\"studio\"`"
+							},
+							{
+								"kind": "text",
+								"text": " for core."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "i18n/registry.ts",
+							"line": 33,
+							"character": 10
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						32,
+						33,
+						31
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "i18n/registry.ts",
+					"line": 31,
+					"character": 17
+				}
+			]
+		},
+		{
+			"id": 8,
+			"name": "AnvilkitMessageKey",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Every known message key plus a "
+					},
+					{
+						"kind": "code",
+						"text": "`(string & {})`"
+					},
+					{
+						"kind": "text",
+						"text": " escape hatch so callers\nthat have not augmented "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "AnvilkitMessages",
+						"target": 10
+					},
+					{
+						"kind": "text",
+						"text": " still compile (no hard\nbreak — "
+					},
+					{
+						"kind": "code",
+						"text": "`useMsg`"
+					},
+					{
+						"kind": "text",
+						"text": " stays permissive; only "
+					},
+					{
+						"kind": "code",
+						"text": "`useT`"
+					},
+					{
+						"kind": "text",
+						"text": " opts into the typed keys)."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "i18n/keys.ts",
+					"line": 38,
+					"character": 12
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "reference",
+						"target": 11,
+						"name": "StudioMessageKey",
+						"package": "@anvilkit/core"
+					},
+					{
+						"type": "typeOperator",
+						"operator": "keyof",
+						"target": {
+							"type": "reference",
+							"target": 10,
+							"name": "AnvilkitMessages",
+							"package": "@anvilkit/core"
+						}
+					},
+					{
+						"type": "intersection",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "reflection",
+								"declaration": {
+									"id": 9,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {}
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"id": 12,
+			"name": "Locale",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A BCP-47-ish locale tag. Open string by design (not a closed union)\nso adding a CJK locale needs no core change. "
+					},
+					{
+						"kind": "code",
+						"text": "`\"en\"`"
+					},
+					{
+						"kind": "text",
+						"text": " is the canonical\nbaseline/fallback."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "i18n/registry.ts",
+					"line": 20,
+					"character": 12
+				}
+			],
+			"type": {
+				"type": "intrinsic",
+				"name": "string"
+			}
+		},
+		{
+			"id": 2,
+			"name": "MessageFormatter",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Formats a resolved message with "
+					},
+					{
+						"kind": "code",
+						"text": "`{token}`"
+					},
+					{
+						"kind": "text",
+						"text": " variables for a locale.\n\nThe default leaves **unknown tokens literal** (no throw), matching the\nexisting manual "
+					},
+					{
+						"kind": "code",
+						"text": "`msg(...).replace(\"{minutes}\", …)`"
+					},
+					{
+						"kind": "text",
+						"text": " style so migrating\nthose call sites to "
+					},
+					{
+						"kind": "code",
+						"text": "`useT`"
+					},
+					{
+						"kind": "text",
+						"text": " is behavior-preserving. "
+					},
+					{
+						"kind": "code",
+						"text": "`useMsg`"
+					},
+					{
+						"kind": "text",
+						"text": " does NOT\nformat — it stays a raw-string resolver for the legacy call sites."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "i18n/format.ts",
+					"line": 21,
+					"character": 12
+				}
+			],
+			"type": {
+				"type": "reflection",
+				"declaration": {
+					"id": 3,
+					"name": "__type",
+					"variant": "declaration",
+					"kind": 65536,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 4,
+							"name": "__type",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"parameters": [
+								{
+									"id": 5,
+									"name": "message",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 6,
+									"name": "vars",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Readonly"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Record"
+												},
+												"typeArguments": [
+													{
+														"type": "intrinsic",
+														"name": "string"
+													},
+													{
+														"type": "union",
+														"types": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "number"
+															}
+														]
+													}
+												],
+												"name": "Record",
+												"package": "typescript"
+											}
+										],
+										"name": "Readonly",
+										"package": "typescript"
+									}
+								},
+								{
+									"id": 7,
+									"name": "locale",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 12,
+										"name": "Locale",
+										"package": "@anvilkit/core"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					]
+				}
+			}
+		},
+		{
+			"id": 11,
+			"name": "StudioMessageKey",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Exact union of the core chrome message keys ("
+					},
+					{
+						"kind": "code",
+						"text": "`studio.*`"
+					},
+					{
+						"kind": "text",
+						"text": " plus the\ntransitional "
+					},
+					{
+						"kind": "code",
+						"text": "`assetManager.*`"
+					},
+					{
+						"kind": "text",
+						"text": "). Derived from "
+					},
+					{
+						"kind": "code",
+						"text": "`DEFAULT_MESSAGES`"
+					},
+					{
+						"kind": "text",
+						"text": " via\n"
+					},
+					{
+						"kind": "code",
+						"text": "`keyof typeof`"
+					},
+					{
+						"kind": "text",
+						"text": ", so it updates automatically when keys change — provided\n"
+					},
+					{
+						"kind": "code",
+						"text": "`DEFAULT_MESSAGES`"
+					},
+					{
+						"kind": "text",
+						"text": " keeps its "
+					},
+					{
+						"kind": "code",
+						"text": "`satisfies`"
+					},
+					{
+						"kind": "text",
+						"text": " (not "
+					},
+					{
+						"kind": "code",
+						"text": "`: Record`"
+					},
+					{
+						"kind": "text",
+						"text": ") typing."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "i18n/keys.ts",
+					"line": 16,
+					"character": 12
+				}
+			],
+			"type": {
+				"type": "typeOperator",
+				"operator": "keyof",
+				"target": {
+					"type": "query",
+					"queryType": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/state/editor-i18n-context.tsx",
+							"qualifiedName": "DEFAULT_MESSAGES"
+						},
+						"name": "DEFAULT_MESSAGES",
+						"package": "@anvilkit/core",
+						"preferValues": true
+					}
+				}
+			}
+		},
+		{
+			"id": 1,
+			"name": "braceFormatter",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Default zero-dependency "
+					},
+					{
+						"kind": "code",
+						"text": "`{token}`"
+					},
+					{
+						"kind": "text",
+						"text": " interpolation; unknown tokens stay literal."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "i18n/format.ts",
+					"line": 28,
+					"character": 13
+				}
+			],
+			"type": {
+				"type": "reference",
+				"target": 2,
+				"name": "MessageFormatter",
+				"package": "@anvilkit/core"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 44,
+			"name": "EditorI18nProvider",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "state/editor-i18n-context.tsx",
+					"line": 363,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L363"
+				}
+			],
+			"signatures": [
+				{
+					"id": 45,
+					"name": "EditorI18nProvider",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "state/editor-i18n-context.tsx",
+							"line": 363,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L363"
+						}
+					],
+					"parameters": [
+						{
+							"id": 46,
+							"name": "__namedParameters",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": 47,
+								"name": "EditorI18nProviderProps",
+								"package": "@anvilkit/core"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.ReactNode"
+						},
+						"name": "ReactNode",
+						"package": "@types/react",
+						"qualifiedName": "React.ReactNode"
+					}
+				}
+			]
+		},
+		{
+			"id": 13,
+			"name": "loadedPackKey",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "i18n/registry.ts",
+					"line": 55,
+					"character": 16
+				}
+			],
+			"signatures": [
+				{
+					"id": 14,
+					"name": "loadedPackKey",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Cache key for a resolved lazy pack: "
+							},
+							{
+								"kind": "code",
+								"text": "`${namespace}:${locale}`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "i18n/registry.ts",
+							"line": 55,
+							"character": 16
+						}
+					],
+					"parameters": [
+						{
+							"id": 15,
+							"name": "namespace",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 16,
+							"name": "locale",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			]
+		},
+		{
+			"id": 20,
+			"name": "mergeCatalog",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "i18n/registry.ts",
+					"line": 76,
+					"character": 16
+				}
+			],
+			"signatures": [
+				{
+					"id": 21,
+					"name": "mergeCatalog",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Merge registry entries into a single flat catalog for "
+							},
+							{
+								"kind": "code",
+								"text": "`locale`"
+							},
+							{
+								"kind": "text",
+								"text": ".\n\nResolution (P0 §B.4):\n  1. Entries are applied in array order; core seeds ("
+							},
+							{
+								"kind": "code",
+								"text": "`studio`"
+							},
+							{
+								"kind": "text",
+								"text": ",\n     "
+							},
+							{
+								"kind": "code",
+								"text": "`assetManager`"
+							},
+							{
+								"kind": "text",
+								"text": ") come first so plugins cannot shadow chrome keys.\n  2. Per entry the source bundle is "
+							},
+							{
+								"kind": "code",
+								"text": "`entry.en`"
+							},
+							{
+								"kind": "text",
+								"text": " **overlaid by** the\n     resolved locale pack ("
+							},
+							{
+								"kind": "code",
+								"text": "`loaded.get(`"
+							},
+							{
+								"kind": "text",
+								"text": "${ns}:${locale}"
+							},
+							{
+								"kind": "code",
+								"text": "`)`"
+							},
+							{
+								"kind": "text",
+								"text": ") when present,\n     so a *partial* pack falls back to English per missing key (and a\n     not-yet-loaded pack shows English while it loads).\n  3. Namespace guard: for a non-reserved namespace, a key that does not\n     start with "
+							},
+							{
+								"kind": "code",
+								"text": "`${namespace}.`"
+							},
+							{
+								"kind": "text",
+								"text": " is dropped and reported via\n     "
+							},
+							{
+								"kind": "code",
+								"text": "`onViolation`"
+							},
+							{
+								"kind": "text",
+								"text": " (the provider wires this to "
+							},
+							{
+								"kind": "code",
+								"text": "`ctx.log(\"warn\", …)`"
+							},
+							{
+								"kind": "text",
+								"text": ").\n  4. Exact-key collisions resolve last-write-wins; the guard makes\n     cross-namespace collisions structurally impossible, so in practice\n     only a namespace's own later pack overwrites its own keys."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "i18n/registry.ts",
+							"line": 76,
+							"character": 16
+						}
+					],
+					"parameters": [
+						{
+							"id": 22,
+							"name": "entries",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "typeOperator",
+								"operator": "readonly",
+								"target": {
+									"type": "array",
+									"elementType": {
+										"type": "reference",
+										"target": 30,
+										"name": "RegistryEntry",
+										"package": "@anvilkit/core"
+									}
+								}
+							}
+						},
+						{
+							"id": 23,
+							"name": "locale",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 24,
+							"name": "loaded",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "reference",
+								"target": {
+									"packageName": "typescript",
+									"packagePath": "lib/lib.es2015.collection.d.ts",
+									"qualifiedName": "ReadonlyMap"
+								},
+								"typeArguments": [
+									{
+										"type": "intrinsic",
+										"name": "string"
+									},
+									{
+										"type": "reference",
+										"target": 17,
+										"name": "MessageBundle",
+										"package": "@anvilkit/core"
+									}
+								],
+								"name": "ReadonlyMap",
+								"package": "typescript"
+							}
+						},
+						{
+							"id": 25,
+							"name": "onViolation",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {
+								"isOptional": true
+							},
+							"type": {
+								"type": "reflection",
+								"declaration": {
+									"id": 26,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"signatures": [
+										{
+											"id": 27,
+											"name": "__type",
+											"variant": "signature",
+											"kind": 4096,
+											"flags": {},
+											"parameters": [
+												{
+													"id": 28,
+													"name": "namespace",
+													"variant": "param",
+													"kind": 32768,
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												},
+												{
+													"id": 29,
+													"name": "key",
+													"variant": "param",
+													"kind": 32768,
+													"flags": {},
+													"type": {
+														"type": "intrinsic",
+														"name": "string"
+													}
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "void"
+											}
+										}
+									]
+								}
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 17,
+						"name": "MessageBundle",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		},
+		{
+			"id": 51,
+			"name": "useMsg",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "state/editor-i18n-context.tsx",
+					"line": 441,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L441"
+				}
+			],
+			"signatures": [
+				{
+					"id": 52,
+					"name": "useMsg",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Resolve a message key to the active string.\n\nResolution order (PRD §10.2):\n  1. Explicit override of the requested key.\n  2. Override of a deprecated alias mapped to the requested key\n     (so consumers with "
+							},
+							{
+								"kind": "code",
+								"text": "`studio.tab.outline`"
+							},
+							{
+								"kind": "text",
+								"text": " overrides still see\n     that string when callers ask for "
+							},
+							{
+								"kind": "code",
+								"text": "`studio.module.layer.name`"
+							},
+							{
+								"kind": "text",
+								"text": ").\n  3. Default for the requested key.\n  4. Caller-supplied "
+							},
+							{
+								"kind": "code",
+								"text": "`fallback`"
+							},
+							{
+								"kind": "text",
+								"text": ".\n  5. The key itself, for visible-fallback debugging."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "state/editor-i18n-context.tsx",
+							"line": 441,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L441"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 53,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 54,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 55,
+											"name": "key",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 56,
+											"name": "fallback",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {
+												"isOptional": true
+											},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"id": 37,
+			"name": "useT",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "i18n/use-t.ts",
+					"line": 26,
+					"character": 16
+				}
+			],
+			"signatures": [
+				{
+					"id": 38,
+					"name": "useT",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Reactive, typed message resolver. "
+							},
+							{
+								"kind": "code",
+								"text": "`useT()(key, vars)`"
+							},
+							{
+								"kind": "text",
+								"text": " resolves "
+							},
+							{
+								"kind": "code",
+								"text": "`key`"
+							},
+							{
+								"kind": "text",
+								"text": "\nagainst the active catalog for the active locale and interpolates\n"
+							},
+							{
+								"kind": "code",
+								"text": "`{token}`"
+							},
+							{
+								"kind": "text",
+								"text": " variables. Re-renders on "
+							},
+							{
+								"kind": "code",
+								"text": "`setLocale`"
+							},
+							{
+								"kind": "text",
+								"text": " like "
+							},
+							{
+								"kind": "code",
+								"text": "`useMsg`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "i18n/use-t.ts",
+							"line": 26,
+							"character": 16
+						}
+					],
+					"parameters": [
+						{
+							"id": 39,
+							"name": "formatter",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Override the default brace interpolation (e.g. an\nICU-backed formatter injected by the host). Defaults to\n"
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "braceFormatter",
+										"target": 1
+									},
+									{
+										"kind": "text",
+										"text": "."
+									}
+								]
+							},
+							"type": {
+								"type": "reference",
+								"target": 2,
+								"name": "MessageFormatter",
+								"package": "@anvilkit/core"
+							},
+							"defaultValue": "braceFormatter"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 40,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 41,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 42,
+											"name": "key",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": 8,
+												"name": "AnvilkitMessageKey",
+												"package": "@anvilkit/core"
+											}
+										},
+										{
+											"id": 43,
+											"name": "vars",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {
+												"isOptional": true
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Readonly"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "typescript",
+															"packagePath": "lib/lib.es5.d.ts",
+															"qualifiedName": "Record"
+														},
+														"typeArguments": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "union",
+																"types": [
+																	{
+																		"type": "intrinsic",
+																		"name": "string"
+																	},
+																	{
+																		"type": "intrinsic",
+																		"name": "number"
+																	}
+																]
+															}
+														],
+														"name": "Record",
+														"package": "typescript"
+													}
+												],
+												"name": "Readonly",
+												"package": "typescript"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Interfaces",
+			"children": [
+				10,
+				47,
+				17,
+				30
+			]
+		},
+		{
+			"title": "Type Aliases",
+			"children": [
+				8,
+				12,
+				2,
+				11
+			]
+		},
+		{
+			"title": "Variables",
+			"children": [
+				1
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				44,
+				13,
+				20,
+				51,
+				37
+			]
+		}
+	],
+	"packageName": "@anvilkit/core",
+	"symbolIdMap": {
+		"0": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/format.ts",
+			"qualifiedName": "braceFormatter"
+		},
+		"2": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/format.ts",
+			"qualifiedName": "MessageFormatter"
+		},
+		"3": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/format.ts",
+			"qualifiedName": "__type"
+		},
+		"4": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/format.ts",
+			"qualifiedName": "__type"
+		},
+		"5": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/format.ts",
+			"qualifiedName": "message"
+		},
+		"6": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/format.ts",
+			"qualifiedName": "vars"
+		},
+		"7": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/format.ts",
+			"qualifiedName": "locale"
+		},
+		"8": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/keys.ts",
+			"qualifiedName": "AnvilkitMessageKey"
+		},
+		"9": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/keys.ts",
+			"qualifiedName": "__type"
+		},
+		"10": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/keys.ts",
+			"qualifiedName": "AnvilkitMessages"
+		},
+		"11": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/keys.ts",
+			"qualifiedName": "StudioMessageKey"
+		},
+		"12": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "Locale"
+		},
+		"13": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "loadedPackKey"
+		},
+		"14": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "loadedPackKey"
+		},
+		"15": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "namespace"
+		},
+		"16": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "locale"
+		},
+		"17": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "MessageBundle"
+		},
+		"18": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "MessageBundle.__index"
+		},
+		"20": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "mergeCatalog"
+		},
+		"21": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "mergeCatalog"
+		},
+		"22": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "entries"
+		},
+		"23": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "locale"
+		},
+		"24": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "loaded"
+		},
+		"25": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "onViolation"
+		},
+		"26": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "__type"
+		},
+		"27": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "__type"
+		},
+		"28": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "namespace"
+		},
+		"29": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "key"
+		},
+		"30": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "RegistryEntry"
+		},
+		"31": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "RegistryEntry.namespace"
+		},
+		"32": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "RegistryEntry.en"
+		},
+		"33": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "RegistryEntry.loadMessages"
+		},
+		"34": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "__type"
+		},
+		"35": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "__type"
+		},
+		"36": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/registry.ts",
+			"qualifiedName": "locale"
+		},
+		"37": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/use-t.ts",
+			"qualifiedName": "useT"
+		},
+		"38": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/use-t.ts",
+			"qualifiedName": "useT"
+		},
+		"39": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/use-t.ts",
+			"qualifiedName": "formatter"
+		},
+		"40": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/use-t.ts",
+			"qualifiedName": "__type"
+		},
+		"41": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/use-t.ts",
+			"qualifiedName": "__type"
+		},
+		"42": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/use-t.ts",
+			"qualifiedName": "key"
+		},
+		"43": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/use-t.ts",
+			"qualifiedName": "vars"
+		},
+		"44": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "EditorI18nProvider"
+		},
+		"45": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "EditorI18nProvider"
+		},
+		"46": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "__0"
+		},
+		"47": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "EditorI18nProviderProps"
+		},
+		"48": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "EditorI18nProviderProps.children"
+		},
+		"49": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "EditorI18nProviderProps.messages"
+		},
+		"50": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "EditorI18nProviderProps.entries"
+		},
+		"51": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "useMsg"
+		},
+		"52": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "useMsg"
+		},
+		"53": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "__type"
+		},
+		"54": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "__type"
+		},
+		"55": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "key"
+		},
+		"56": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "fallback"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/i18n/index.ts"
+		},
+		"reflections": {
+			"1": 0
+		}
+	}
+}
