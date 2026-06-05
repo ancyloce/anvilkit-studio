@@ -45,6 +45,8 @@ function makeCtx() {
 		studioConfig,
 		log,
 		emit,
+		t: (key) => key,
+		registerMessages: () => undefined,
 		registerAssetResolver: vi.fn(),
 	};
 

@@ -35,6 +35,7 @@ import type {
 	Plugin as PuckPlugin,
 } from "@puckeditor/core";
 
+import type { RegistryEntry } from "@/i18n/registry";
 import type { ExportFormatDefinition } from "@/types/export";
 import type {
 	IRAssetResolver,
@@ -63,6 +64,18 @@ import {
 } from "./sidebar-registry.js";
 import { createSingleOccupancyRegistry } from "./single-occupancy-registry.js";
 import { CORE_VERSION } from "./version.js";
+
+/**
+ * i18n namespaces owned by core — a plugin may not register messages under
+ * any of these (`compilePlugins` throws). `studio` is the chrome catalog,
+ * `assetManager` is the transitional asset-manager namespace, and `canvas`
+ * is the canvas-editor surface.
+ */
+const RESERVED_I18N_NAMESPACES: ReadonlySet<string> = new Set([
+	"studio",
+	"assetManager",
+	"canvas",
+]);
 
 /**
  * The compiled, ready-to-mount output of {@link compilePlugins}.
@@ -164,6 +177,15 @@ export interface StudioRuntime {
 	 * renders from (both are written in lock-step during compile).
 	 */
 	readonly sidebar: StudioSidebarContributions;
+	/**
+	 * Plugin-contributed i18n message bundles, in registration order,
+	 * collected React-free during compile via `ctx.registerMessages`. The
+	 * React `EditorI18nProvider` prepends the core `studio.*` entry and
+	 * merges these so plugin namespaces join the catalog `useMsg` resolves.
+	 */
+	readonly i18n: {
+		readonly entries: readonly RegistryEntry[];
+	};
 }
 
 /**
@@ -357,8 +379,30 @@ export async function compilePlugins(
 	// declaration order when `order` values tie.
 	const providerEntries: { item: StudioPluginProvider; index: number }[] = [];
 	const overlayEntries: { item: StudioPluginOverlay; index: number }[] = [];
+	// i18n: collect each plugin's namespaced message bundle React-free.
+	// Reserved namespaces are core-owned; a plugin must use its own slug,
+	// and must register a given namespace at most once per compile.
+	const messageEntries: RegistryEntry[] = [];
+	const registeredI18nNamespaces = new Set<string>();
 	const pluginCtx: StudioPluginContext = {
 		...ctx,
+		registerMessages: (entry) => {
+			const { namespace } = entry;
+			if (RESERVED_I18N_NAMESPACES.has(namespace)) {
+				throw new StudioPluginError(
+					namespace,
+					`i18n namespace "${namespace}" is reserved by core — a plugin must register under its own unique slug.`,
+				);
+			}
+			if (registeredI18nNamespaces.has(namespace)) {
+				throw new StudioPluginError(
+					namespace,
+					`i18n namespace "${namespace}" is already registered — each plugin must use a unique namespace and register it once.`,
+				);
+			}
+			registeredI18nNamespaces.add(namespace);
+			messageEntries.push(entry);
+		},
 		registerAssetResolver: (resolver) => {
 			assetResolvers.push(resolver);
 			ctx.registerAssetResolver(resolver);
@@ -570,5 +614,6 @@ export async function compilePlugins(
 		slots: new Map(slotRegistry.entries()),
 		puckPlugins,
 		sidebar: sidebar.snapshot(),
+		i18n: { entries: messageEntries },
 	};
 }

@@ -46,6 +46,8 @@ function makeCtx(): StudioPluginContext {
 		studioConfig,
 		log: vi.fn(),
 		emit: vi.fn(),
+		t: (key) => key,
+		registerMessages: () => undefined,
 		registerAssetResolver: vi.fn(),
 	};
 }
@@ -618,5 +620,55 @@ describe("compilePlugins — providers / overlays / slots aggregation", () => {
 		expect(runtime.providers).toEqual([]);
 		expect(runtime.overlays).toEqual([]);
 		expect(runtime.slots.size).toBe(0);
+	});
+});
+
+describe("compilePlugins — i18n message registration (P4)", () => {
+	it("collects registerMessages contributions into runtime.i18n.entries", async () => {
+		const plugin = makePlugin("p1", {
+			register: (meta, ctx) => {
+				ctx.registerMessages({
+					namespace: "versionHistory",
+					en: { "versionHistory.action.save": "Save" },
+				});
+				return { meta };
+			},
+		});
+		const runtime = await compilePlugins([plugin], makeCtx());
+		expect(runtime.i18n.entries).toHaveLength(1);
+		expect(runtime.i18n.entries[0]?.namespace).toBe("versionHistory");
+		expect(runtime.i18n.entries[0]?.en["versionHistory.action.save"]).toBe(
+			"Save",
+		);
+	});
+
+	it("runtime.i18n.entries is empty when no plugin registers messages", async () => {
+		const runtime = await compilePlugins([], makeCtx());
+		expect(runtime.i18n.entries).toEqual([]);
+	});
+
+	it("rejects a reserved i18n namespace", async () => {
+		const plugin = makePlugin("p-reserved", {
+			register: (meta, ctx) => {
+				ctx.registerMessages({ namespace: "studio", en: {} });
+				return { meta };
+			},
+		});
+		await expect(compilePlugins([plugin], makeCtx())).rejects.toThrow(
+			/reserved/,
+		);
+	});
+
+	it("rejects a duplicate i18n namespace", async () => {
+		const plugin = makePlugin("p-dup", {
+			register: (meta, ctx) => {
+				ctx.registerMessages({ namespace: "dup", en: {} });
+				ctx.registerMessages({ namespace: "dup", en: {} });
+				return { meta };
+			},
+		});
+		await expect(compilePlugins([plugin], makeCtx())).rejects.toThrow(
+			/already registered/,
+		);
 	});
 });

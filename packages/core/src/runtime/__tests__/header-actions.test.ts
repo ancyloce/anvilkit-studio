@@ -182,3 +182,26 @@ describe("composeHeaderActions — duplicate detection", () => {
 		}
 	});
 });
+
+describe("composeHeaderActions — labelKey / label guard (P4)", () => {
+	it("throws when an action has neither labelKey nor label", () => {
+		// `{ id }` satisfies SortableHeaderAction; the guard reads label fields
+		// structurally and rejects an action with no visible affordance.
+		expect(() => composeHeaderActions([{ id: "no-label" }])).toThrow(
+			StudioPluginError,
+		);
+		expect(() => composeHeaderActions([{ id: "no-label" }])).toThrow(/neither/);
+	});
+
+	it("accepts an action with only a labelKey", () => {
+		const result = composeHeaderActions([
+			{ id: "keyed", labelKey: "exportHtml.action.download" },
+		]);
+		expect(result).toHaveLength(1);
+	});
+
+	it("accepts an action with only a (deprecated) label", () => {
+		const result = composeHeaderActions([{ id: "raw", label: "Download" }]);
+		expect(result).toHaveLength(1);
+	});
+});

@@ -31,6 +31,8 @@ function buildCtx(
 		studioConfig: createStudioConfig(),
 		log: () => undefined,
 		emit: () => undefined,
+		t: (key) => key,
+		registerMessages: () => undefined,
 		registerAssetResolver: () => undefined,
 		registerInsertSection: (section) =>
 			registry.getState().registerInsertSection(section),
@@ -141,6 +143,8 @@ describe("plugin context — register* sidebar helpers", () => {
 			studioConfig: createStudioConfig(),
 			log: () => undefined,
 			emit: () => undefined,
+			t: (key) => key,
+			registerMessages: () => undefined,
 			registerAssetResolver: () => undefined,
 		};
 		expect(minimal.registerInsertSection).toBeUndefined();
