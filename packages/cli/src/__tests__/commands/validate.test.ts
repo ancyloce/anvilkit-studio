@@ -223,7 +223,10 @@ function captureWrites(stream: NodeJS.WriteStream): () => string {
 		return true;
 	}) as never);
 
-	return () => chunks.join("");
+	// Strip ANSI color codes so content assertions hold regardless of
+	// FORCE_COLOR / TTY (picocolors colorizes the `✓`/`!` status glyphs).
+	const ansiPattern = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, "g");
+	return () => chunks.join("").replace(ansiPattern, "");
 }
 
 function writeTempConfig(lines: readonly string[]): string {
