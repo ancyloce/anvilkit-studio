@@ -264,14 +264,29 @@ export interface StudioHeaderAction {
 	readonly id: string;
 
 	/**
+	 * i18n message key resolved to the visible label by the Studio shell
+	 * via `useMsg(labelKey, label)` at render time — so the button
+	 * localizes with the active locale and a lazy reserved slot
+	 * (`StaticHeaderActionPlaceholder`) shows the localized string before
+	 * the plugin chunk loads. Preferred over {@link label}.
+	 *
+	 * Exactly one of `labelKey` / `label` must be present;
+	 * `composeHeaderActions()` rejects an action with neither. When both
+	 * are present, `labelKey` wins and `label` is the missing-key fallback.
+	 */
+	readonly labelKey?: string;
+
+	/**
 	 * Human-readable label rendered inside the button (or shown in
 	 * the overflow menu) by the Studio shell.
 	 *
-	 * Required so plugin authors cannot ship a button with no visible
-	 * affordance. Localization is the host app's responsibility — the
-	 * runtime treats this as an opaque display string.
+	 * **Deprecated** in favor of {@link labelKey} (kept one release as the
+	 * fallback). Optional now: an action may instead supply `labelKey` and
+	 * let the shell resolve the visible string. Localization of a raw
+	 * `label` is the host app's responsibility — the runtime treats it as
+	 * an opaque display string.
 	 */
-	readonly label: string;
+	readonly label?: string;
 
 	/**
 	 * Optional `lucide-react` icon **name** (e.g. `"download"`,

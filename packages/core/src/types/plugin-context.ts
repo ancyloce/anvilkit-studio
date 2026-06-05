@@ -17,6 +17,7 @@ import type {
 	Data as PuckData,
 } from "@puckeditor/core";
 
+import type { RegistryEntry } from "@/i18n/registry";
 import type { IRAssetResolver } from "./asset-resolver.js";
 import type { StudioConfig } from "./config.js";
 import type { StudioLogLevel } from "./log.js";
@@ -125,6 +126,33 @@ export interface StudioPluginContext<
 	 * @param payload - Optional payload. Defaults to `undefined`.
 	 */
 	readonly emit: (event: string, payload?: unknown) => void;
+
+	/**
+	 * Resolve an i18n message key to a string for the **config** locale
+	 * (`studioConfig.i18n.locale`), with `{token}` interpolation.
+	 *
+	 * A React-free, non-reactive snapshot for register-time strings and
+	 * `log` messages — it resolves the core `studio.*` catalog plus any
+	 * `studioConfig.i18n.messages` overrides. It does **not** track live
+	 * `setLocale` and does **not** resolve plugin-registered namespaces;
+	 * reactive UI and plugin-owned strings resolve through `useMsg`
+	 * (`@anvilkit/core/i18n`) or a header action's `labelKey` at render.
+	 */
+	readonly t: (
+		key: string,
+		vars?: Readonly<Record<string, string | number>>,
+	) => string;
+
+	/**
+	 * Contribute a namespaced message bundle (static English plus optional
+	 * lazy per-locale packs) to this `<Studio>` instance's i18n catalog.
+	 *
+	 * `entry.namespace` must equal the plugin's slug and must not collide
+	 * with a reserved core namespace (`studio` / `assetManager` / `canvas`)
+	 * or another plugin's namespace — `compilePlugins()` throws otherwise.
+	 * Contributed packs join the catalog resolved by `useMsg` at render.
+	 */
+	readonly registerMessages: (entry: RegistryEntry) => void;
 
 	/**
 	 * Register a runtime asset resolver for export-time URL rewrites.
