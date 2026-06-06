@@ -225,15 +225,6 @@ export const DEFAULT_MESSAGES = {
 	"studio.module.image.source.library": "Library",
 	"studio.module.image.source.unsplash": "Unsplash",
 	"studio.module.image.theme.label": "Themes",
-	"assetManager.unsplash.theme.all": "All",
-	"assetManager.unsplash.theme.nature": "Nature",
-	"assetManager.unsplash.theme.architecture": "Architecture",
-	"assetManager.unsplash.theme.business": "Business",
-	"assetManager.unsplash.theme.food": "Food",
-	"assetManager.unsplash.theme.technology": "Technology",
-	"assetManager.unsplash.theme.travel": "Travel",
-	"assetManager.unsplash.theme.texture": "Texture",
-	"assetManager.unsplash.theme.people": "People",
 
 	// Module: text (PRD §8).
 	"studio.module.text.name": "Copywriting",
@@ -327,11 +318,11 @@ const EMPTY_OVERRIDES: Readonly<Record<string, string>> = Object.freeze({});
 
 /**
  * The core registry entry: namespace `"studio"` carrying the full
- * {@link DEFAULT_MESSAGES} English catalog (which still includes the
- * transitional `assetManager.*` keys until P8). `"studio"` is a reserved
+ * {@link DEFAULT_MESSAGES} English catalog. `"studio"` is a reserved
  * namespace exempt from the {@link mergeCatalog} prefix guard, so every key
  * survives and the resolved catalog is byte-identical to `DEFAULT_MESSAGES`
- * when this is the only entry.
+ * when this is the only entry. Plugin namespaces (e.g. `assetManager`) own
+ * their own keys and register them via `ctx.registerMessages`.
  */
 const STUDIO_CORE_ENTRY: RegistryEntry = {
 	namespace: "studio",

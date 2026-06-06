@@ -67,13 +67,12 @@ import { CORE_VERSION } from "./version.js";
 
 /**
  * i18n namespaces owned by core — a plugin may not register messages under
- * any of these (`compilePlugins` throws). `studio` is the chrome catalog,
- * `assetManager` is the transitional asset-manager namespace, and `canvas`
- * is the canvas-editor surface.
+ * any of these (`compilePlugins` throws). `studio` is the chrome catalog and
+ * `canvas` is the canvas-editor surface. (`assetManager` was reserved
+ * transitionally; `@anvilkit/plugin-asset-manager` now owns it directly.)
  */
 const RESERVED_I18N_NAMESPACES: ReadonlySet<string> = new Set([
 	"studio",
-	"assetManager",
 	"canvas",
 ]);
 

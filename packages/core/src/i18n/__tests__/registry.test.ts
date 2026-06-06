@@ -79,20 +79,19 @@ describe("mergeCatalog", () => {
 		expect(violations).toEqual([["versionHistory", "other.bad"]]);
 	});
 
-	it("exempts reserved core namespaces (studio, assetManager) from the prefix guard", () => {
-		const assetManagerEntry: RegistryEntry = {
-			namespace: "assetManager",
-			// Flat/legacy keys that don't strictly start with `assetManager.`
-			en: { "assetManager.unsplash.theme.nature": "Nature" },
+	it("exempts the reserved core namespace (studio) from the prefix guard", () => {
+		const studioEntry: RegistryEntry = {
+			namespace: "studio",
+			// Flat/legacy keys that don't strictly start with `studio.` are
+			// still kept because `studio` is reserved.
+			en: { "legacy.flat.key": "Legacy", "studio.real.key": "Real" },
 		};
 		const violations: string[] = [];
-		const catalog = mergeCatalog(
-			[assetManagerEntry],
-			"en",
-			EMPTY_LOADED,
-			(ns) => violations.push(ns),
+		const catalog = mergeCatalog([studioEntry], "en", EMPTY_LOADED, (ns) =>
+			violations.push(ns),
 		);
-		expect(catalog["assetManager.unsplash.theme.nature"]).toBe("Nature");
+		expect(catalog["legacy.flat.key"]).toBe("Legacy");
+		expect(catalog["studio.real.key"]).toBe("Real");
 		expect(violations).toEqual([]);
 	});
 

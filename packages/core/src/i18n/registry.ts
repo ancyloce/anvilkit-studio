@@ -43,13 +43,12 @@ export interface RegistryEntry {
 
 /**
  * Reserved core namespaces, exempt from the prefix guard because they
- * legitimately hold the existing flat / legacy keys (`studio.*` plus the
- * transitional `assetManager.*`).
+ * legitimately hold core's flat / legacy keys (`studio.*`). Plugins may not
+ * register under these — {@link compilePlugins} rejects the attempt. The
+ * former transitional `assetManager.*` reservation was released once
+ * `@anvilkit/plugin-asset-manager` took ownership of its own namespace.
  */
-const RESERVED_CORE_NAMESPACES: ReadonlySet<string> = new Set([
-	"studio",
-	"assetManager",
-]);
+const RESERVED_CORE_NAMESPACES: ReadonlySet<string> = new Set(["studio"]);
 
 /** Cache key for a resolved lazy pack: `${namespace}:${locale}`. */
 export function loadedPackKey(namespace: string, locale: Locale): string {
