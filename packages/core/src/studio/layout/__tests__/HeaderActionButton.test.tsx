@@ -23,7 +23,7 @@ const ctx = {
 function renderAction(icon: string): HTMLElement {
 	const action: StudioHeaderAction = {
 		id: `action-${icon}`,
-		label: icon,
+		labelKey: icon,
 		icon,
 		onClick: vi.fn(),
 	};
@@ -60,7 +60,7 @@ describe("HeaderActionButton", () => {
 		const boom = new Error("plugin bug");
 		const action: StudioHeaderAction = {
 			id: "action-throws",
-			label: "Throws",
+			labelKey: "Throws",
 			onClick: vi.fn(),
 			disabled: () => {
 				throw boom;
@@ -93,7 +93,7 @@ describe("HeaderActionPlaceholderButton (3.3)", () => {
 	}
 
 	it("renders a disabled button (no ctx, no onClick) with the label", () => {
-		const container = renderPlaceholder({ id: "publish", label: "Publish" });
+		const container = renderPlaceholder({ id: "publish", labelKey: "Publish" });
 		const button = container.querySelector("button");
 		expect(button).not.toBeNull();
 		expect(button?.disabled).toBe(true);
@@ -106,7 +106,7 @@ describe("HeaderActionPlaceholderButton (3.3)", () => {
 	it("resolves a curated icon name the same way the live button does", () => {
 		const container = renderPlaceholder({
 			id: "export",
-			label: "Export",
+			labelKey: "Export",
 			icon: "download",
 		});
 		expect(container.querySelector("svg")).not.toBeNull();
@@ -115,7 +115,7 @@ describe("HeaderActionPlaceholderButton (3.3)", () => {
 	it("renders no icon for a name outside the registry (label still shows)", () => {
 		const container = renderPlaceholder({
 			id: "noicon",
-			label: "No Icon",
+			labelKey: "No Icon",
 			icon: "file-down",
 		});
 		expect(container.querySelector("svg")).toBeNull();
@@ -135,45 +135,6 @@ describe("HeaderActionButton — labelKey resolution (P4)", () => {
 		);
 		// `studio.publish` resolves to the default "Publish" via DEFAULT_MESSAGES.
 		expect(container.textContent).toContain("Publish");
-	});
-
-	it("labelKey wins over a raw label", () => {
-		const action: StudioHeaderAction = {
-			id: "pub2",
-			labelKey: "studio.publish",
-			label: "RAW",
-			onClick: vi.fn(),
-		};
-		const { container } = render(
-			<HeaderActionButton action={action} ctx={ctx} />,
-		);
-		expect(container.textContent).toContain("Publish");
-		expect(container.textContent).not.toContain("RAW");
-	});
-
-	it("falls back to the raw label when the labelKey is unknown", () => {
-		const action: StudioHeaderAction = {
-			id: "fb",
-			labelKey: "no.such.key",
-			label: "Fallback",
-			onClick: vi.fn(),
-		};
-		const { container } = render(
-			<HeaderActionButton action={action} ctx={ctx} />,
-		);
-		expect(container.textContent).toContain("Fallback");
-	});
-
-	it("still renders a raw label-only action unchanged (I2)", () => {
-		const action: StudioHeaderAction = {
-			id: "raw",
-			label: "Plain Label",
-			onClick: vi.fn(),
-		};
-		const { container } = render(
-			<HeaderActionButton action={action} ctx={ctx} />,
-		);
-		expect(container.textContent).toContain("Plain Label");
 	});
 
 	it("placeholder resolves labelKey the same way", () => {

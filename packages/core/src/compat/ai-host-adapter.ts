@@ -424,7 +424,7 @@ export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
 				headerActions: [
 					{
 						id: "compat-ai-generate",
-						label: "Generate with AI",
+						labelKey: "studio.compat.aiGenerate",
 						group: "secondary",
 						icon: "sparkles",
 						async onClick(ctx: StudioPluginContext) {

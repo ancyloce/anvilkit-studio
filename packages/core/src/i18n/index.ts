@@ -31,3 +31,8 @@ export {
 	type EditorI18nProviderProps,
 	useMsg,
 } from "@/state/editor-i18n-context";
+// The null-tolerant active-locale read. Exposed so locale-aware integrations
+// (e.g. the canvas-editor bridge in plugin-canvas-studio, which can't import
+// `@anvilkit/core` and selects its prop-injected message catalog by locale)
+// can react to `setLocale` exactly like `useMsg`/`useT` do internally.
+export { useOptionalLocale } from "@/state/slices/LocaleStoreProvider";

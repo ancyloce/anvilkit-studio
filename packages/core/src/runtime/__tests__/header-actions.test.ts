@@ -34,7 +34,7 @@ function makeAction(
 ): StudioHeaderAction {
 	return {
 		id,
-		label: options.label ?? id,
+		labelKey: options.label ?? id,
 		...(options.icon !== undefined && { icon: options.icon }),
 		...(options.group !== undefined && { group: options.group }),
 		...(options.order !== undefined && { order: options.order }),
@@ -183,25 +183,23 @@ describe("composeHeaderActions — duplicate detection", () => {
 	});
 });
 
-describe("composeHeaderActions — labelKey / label guard (P4)", () => {
-	it("throws when an action has neither labelKey nor label", () => {
-		// `{ id }` satisfies SortableHeaderAction; the guard reads label fields
+describe("composeHeaderActions — labelKey guard (P4/P8)", () => {
+	it("throws when an action has no labelKey", () => {
+		// `{ id }` satisfies SortableHeaderAction; the guard reads `labelKey`
 		// structurally and rejects an action with no visible affordance.
+		// (The deprecated raw `label` fallback was removed in P8.)
 		expect(() => composeHeaderActions([{ id: "no-label" }])).toThrow(
 			StudioPluginError,
 		);
-		expect(() => composeHeaderActions([{ id: "no-label" }])).toThrow(/neither/);
+		expect(() => composeHeaderActions([{ id: "no-label" }])).toThrow(
+			/labelKey/,
+		);
 	});
 
-	it("accepts an action with only a labelKey", () => {
+	it("accepts an action with a labelKey", () => {
 		const result = composeHeaderActions([
 			{ id: "keyed", labelKey: "exportHtml.action.download" },
 		]);
-		expect(result).toHaveLength(1);
-	});
-
-	it("accepts an action with only a (deprecated) label", () => {
-		const result = composeHeaderActions([{ id: "raw", label: "Download" }]);
 		expect(result).toHaveLength(1);
 	});
 });

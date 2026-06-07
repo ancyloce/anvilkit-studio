@@ -14,22 +14,13 @@
  * > and provider were renamed from `editor-i18n-store` /
  * > `EditorI18nStoreProvider` to drop the misleading `Store` naming.
  *
- * ### Deprecated key aliases (PRD §10.2)
+ * ### Message resolution
  *
- * The Phase B sidebar refactor renamed `studio.tab.insert` →
- * `studio.module.insert.name` and `studio.tab.outline` →
- * `studio.module.layer.name`. Consumers may have already overridden
- * the legacy keys via the provider's `messages` prop, so for one
- * release we keep both old keys in `DEFAULT_MESSAGES` and route an
- * override of the old key to satisfy reads of the new key when no
- * explicit override of the new key exists. Resolution order:
- *
- *   1. Catalog override of the requested key.
- *   2. Catalog override of any deprecated alias mapped to the
- *      requested key.
- *   3. Default for the requested key.
- *   4. Caller-supplied `fallback`.
- *   5. The key itself.
+ * `useMsg` resolves: catalog override → default → caller `fallback` →
+ * the key itself. The Phase B `studio.tab.{insert,outline}` →
+ * `studio.module.{insert,layer}.name` deprecated aliases (and their
+ * legacy `DEFAULT_MESSAGES` keys) were removed in P8 after the
+ * one-release migration window.
  */
 
 import {
@@ -65,8 +56,6 @@ export const DEFAULT_MESSAGES = {
 	"studio.theme.light": "Light theme",
 	"studio.theme.dark": "Dark theme",
 	"studio.theme.system": "Use system theme",
-	"studio.tab.insert": "Insert",
-	"studio.tab.outline": "Outline",
 	"studio.drawer.searchPlaceholder": "Search components…",
 	"studio.drawer.empty": "No components match this search.",
 	"studio.outline.empty": "No components on this page yet.",
@@ -273,39 +262,15 @@ export const DEFAULT_MESSAGES = {
 	// panel + chrome header via `formatRelativeTimestamp`.
 	"studio.time.justNow": "just now",
 	"studio.time.minutesAgo": "{minutes}m ago",
+
+	// Legacy aiHost compat adapter header action
+	// (`src/compat/ai-host-adapter.ts`). Lives in `studio.*` because the
+	// compat shim owns no plugin namespace of its own.
+	"studio.compat.aiGenerate": "Generate with AI",
 	// `satisfies` (not a `: Readonly<Record<string,string>>` annotation) so
 	// `keyof typeof DEFAULT_MESSAGES` recovers the exact key union for
 	// `StudioMessageKey` (the annotation would collapse it to `string`).
 } satisfies Readonly<Record<string, string>>;
-
-/**
- * Maps a deprecated message key (left) to its replacement key (right).
- * When `useMsg()` is called for the *new* key but the consumer only
- * overrode the *old* key, the override is honored via this table.
- *
- * Reverse direction is automatic — `useMsg("studio.tab.insert")` falls
- * through to `studio.module.insert.name`'s default when no override is
- * present, because both keys carry the same English fallback.
- *
- * Aliased for one release; remove when downstream consumers have
- * migrated to the new keys.
- */
-const DEPRECATED_KEY_ALIASES: Readonly<Record<string, string>> = {
-	"studio.tab.insert": "studio.module.insert.name",
-	"studio.tab.outline": "studio.module.layer.name",
-};
-
-/**
- * Inverse lookup: `new-key` → `old-key`. Built once at module load so
- * `useMsg()` resolution stays O(1) per call.
- */
-const REPLACEMENT_TO_LEGACY: Readonly<Record<string, string>> =
-	Object.fromEntries(
-		Object.entries(DEPRECATED_KEY_ALIASES).map(([legacy, replacement]) => [
-			replacement,
-			legacy,
-		]),
-	);
 
 interface EditorI18nContextValue {
 	readonly messages: Readonly<Record<string, string>>;
@@ -422,12 +387,12 @@ export function EditorI18nProvider({
  *
  * Resolution order (PRD §10.2):
  *   1. Explicit override of the requested key.
- *   2. Override of a deprecated alias mapped to the requested key
- *      (so consumers with `studio.tab.outline` overrides still see
- *      that string when callers ask for `studio.module.layer.name`).
- *   3. Default for the requested key.
- *   4. Caller-supplied `fallback`.
- *   5. The key itself, for visible-fallback debugging.
+ *   2. Default for the requested key.
+ *   3. Caller-supplied `fallback`.
+ *   4. The key itself, for visible-fallback debugging.
+ *
+ * (The deprecated-alias step was removed in P8 once downstream consumers
+ * migrated to the new keys.)
  */
 export function useMsg(): (key: string, fallback?: string) => string {
 	const ctx = use(EditorI18nContext);
@@ -439,10 +404,6 @@ export function useMsg(): (key: string, fallback?: string) => string {
 	return useCallback(
 		(key, fallback) => {
 			if (key in overrides) return overrides[key] as string;
-			const legacy = REPLACEMENT_TO_LEGACY[key];
-			if (legacy !== undefined && legacy in overrides) {
-				return overrides[legacy] as string;
-			}
 			return messages[key] ?? fallback ?? key;
 		},
 		[messages, overrides],

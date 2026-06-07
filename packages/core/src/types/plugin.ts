@@ -237,7 +237,7 @@ export type { AssetResolution, IRAssetResolver } from "./asset-resolver.js";
  * Plugins author header actions as **plain data** — no React, no
  * components, no closures over render-time state. The Studio shell
  * (`core-014`) is responsible for resolving the {@link icon} string
- * to a `lucide-react` icon element, rendering the {@link label}, and
+ * to a `lucide-react` icon element, rendering the {@link labelKey}, and
  * wiring up `onClick` / `disabled` to the live React tree at runtime.
  *
  * Keeping the type free of `ReactNode` / `ComponentType` lets the
@@ -265,28 +265,17 @@ export interface StudioHeaderAction {
 
 	/**
 	 * i18n message key resolved to the visible label by the Studio shell
-	 * via `useMsg(labelKey, label)` at render time — so the button
-	 * localizes with the active locale and a lazy reserved slot
+	 * via `useMsg(labelKey)` at render time — so the button localizes with
+	 * the active locale and a lazy reserved slot
 	 * (`StaticHeaderActionPlaceholder`) shows the localized string before
-	 * the plugin chunk loads. Preferred over {@link label}.
+	 * the plugin chunk loads.
 	 *
-	 * Exactly one of `labelKey` / `label` must be present;
-	 * `composeHeaderActions()` rejects an action with neither. When both
-	 * are present, `labelKey` wins and `label` is the missing-key fallback.
+	 * Required. `composeHeaderActions()` rejects an action without it. The
+	 * raw `label` fallback was removed after its one-release deprecation
+	 * window — author the English copy in the plugin's i18n catalog under
+	 * this key instead.
 	 */
-	readonly labelKey?: string;
-
-	/**
-	 * Human-readable label rendered inside the button (or shown in
-	 * the overflow menu) by the Studio shell.
-	 *
-	 * **Deprecated** in favor of {@link labelKey} (kept one release as the
-	 * fallback). Optional now: an action may instead supply `labelKey` and
-	 * let the shell resolve the visible string. Localization of a raw
-	 * `label` is the host app's responsibility — the runtime treats it as
-	 * an opaque display string.
-	 */
-	readonly label?: string;
+	readonly labelKey: string;
 
 	/**
 	 * Optional `lucide-react` icon **name** (e.g. `"download"`,

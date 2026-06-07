@@ -69,9 +69,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 339,
+							"line": 304,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L339"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L304"
 						}
 					],
 					"type": {
@@ -130,9 +130,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 351,
+							"line": 316,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L351"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L316"
 						}
 					],
 					"type": {
@@ -185,9 +185,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 345,
+							"line": 310,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L345"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L310"
 						}
 					],
 					"type": {
@@ -237,9 +237,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 338,
+					"line": 303,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L338"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L303"
 				}
 			]
 		},
@@ -959,9 +959,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 354,
+					"line": 319,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L354"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L319"
 				}
 			],
 			"signatures": [
@@ -974,9 +974,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 354,
+							"line": 319,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L354"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L319"
 						}
 					],
 					"parameters": [
@@ -1329,9 +1329,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 432,
+					"line": 397,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L432"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L397"
 				}
 			],
 			"signatures": [
@@ -1345,23 +1345,7 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Resolve a message key to the active string.\n\nResolution order (PRD §10.2):\n  1. Explicit override of the requested key.\n  2. Override of a deprecated alias mapped to the requested key\n     (so consumers with "
-							},
-							{
-								"kind": "code",
-								"text": "`studio.tab.outline`"
-							},
-							{
-								"kind": "text",
-								"text": " overrides still see\n     that string when callers ask for "
-							},
-							{
-								"kind": "code",
-								"text": "`studio.module.layer.name`"
-							},
-							{
-								"kind": "text",
-								"text": ").\n  3. Default for the requested key.\n  4. Caller-supplied "
+								"text": "Resolve a message key to the active string.\n\nResolution order (PRD §10.2):\n  1. Explicit override of the requested key.\n  2. Default for the requested key.\n  3. Caller-supplied "
 							},
 							{
 								"kind": "code",
@@ -1369,16 +1353,16 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\n  5. The key itself, for visible-fallback debugging."
+								"text": ".\n  4. The key itself, for visible-fallback debugging.\n\n(The deprecated-alias step was removed in P8 once downstream consumers\nmigrated to the new keys.)"
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 432,
+							"line": 397,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L432"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L397"
 						}
 					],
 					"type": {
@@ -1429,6 +1413,98 @@
 								}
 							]
 						}
+					}
+				}
+			]
+		},
+		{
+			"id": 57,
+			"name": "useOptionalLocale",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "state/slices/LocaleStoreProvider.tsx",
+					"line": 110,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/LocaleStoreProvider.tsx#L110"
+				}
+			],
+			"signatures": [
+				{
+					"id": 58,
+					"name": "useOptionalLocale",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Null-tolerant active locale. Returns the store's "
+							},
+							{
+								"kind": "code",
+								"text": "`locale`"
+							},
+							{
+								"kind": "text",
+								"text": " when a\n"
+							},
+							{
+								"kind": "code",
+								"text": "`LocaleStoreContext`"
+							},
+							{
+								"kind": "text",
+								"text": " is present, else "
+							},
+							{
+								"kind": "code",
+								"text": "`\"en\"`"
+							},
+							{
+								"kind": "text",
+								"text": " — so "
+							},
+							{
+								"kind": "code",
+								"text": "`EditorI18nProvider`"
+							},
+							{
+								"kind": "text",
+								"text": "\n(and any standalone / RSC consumer) resolves against English without a\nlocale store, mirroring "
+							},
+							{
+								"kind": "code",
+								"text": "`useMsg`"
+							},
+							{
+								"kind": "text",
+								"text": "'s no-provider fallback. "
+							},
+							{
+								"kind": "code",
+								"text": "`useStore`"
+							},
+							{
+								"kind": "text",
+								"text": " is\nalways called on a non-null store (the context value or the read-only\nfallback), so the hook call stays unconditional."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "state/slices/LocaleStoreProvider.tsx",
+							"line": 110,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/LocaleStoreProvider.tsx#L110"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
 					}
 				}
 			]
@@ -1668,6 +1744,7 @@
 				13,
 				20,
 				51,
+				57,
 				37
 			]
 		}
@@ -1953,6 +2030,16 @@
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/editor-i18n-context.tsx",
 			"qualifiedName": "fallback"
+		},
+		"57": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/LocaleStoreProvider.tsx",
+			"qualifiedName": "useOptionalLocale"
+		},
+		"58": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/LocaleStoreProvider.tsx",
+			"qualifiedName": "useOptionalLocale"
 		}
 	},
 	"files": {

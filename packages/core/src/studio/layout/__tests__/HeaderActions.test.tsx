@@ -68,35 +68,35 @@ function buildFixture(
 	return [
 		{
 			id: "export-html",
-			label: "Export HTML",
+			labelKey: "Export HTML",
 			group: "primary",
 			order: 0,
 			onClick: onClicks.exportHtml ?? (() => undefined),
 		},
 		{
 			id: "version-history-save",
-			label: "Save snapshot",
+			labelKey: "Save snapshot",
 			group: "secondary",
 			order: 50,
 			onClick: onClicks.versionSave ?? (() => undefined),
 		},
 		{
 			id: "asset-manager-upload",
-			label: "Upload asset",
+			labelKey: "Upload asset",
 			group: "secondary",
 			order: 100,
 			onClick: onClicks.assetManager ?? (() => undefined),
 		},
 		{
 			id: "export-react",
-			label: "Export React",
+			labelKey: "Export React",
 			group: "secondary",
 			order: 200,
 			onClick: onClicks.exportReact ?? (() => undefined),
 		},
 		{
 			id: "version-history-open",
-			label: "Open history",
+			labelKey: "Open history",
 			group: "overflow",
 			order: 0,
 			onClick: onClicks.versionOpen ?? (() => undefined),
@@ -160,14 +160,14 @@ describe("HeaderActions disabled predicate", () => {
 		const actions: readonly StudioHeaderAction[] = [
 			{
 				id: "publish",
-				label: "Publish",
+				labelKey: "Publish",
 				group: "primary",
 				disabled: () => true,
 				onClick: () => undefined,
 			},
 			{
 				id: "save",
-				label: "Save",
+				labelKey: "Save",
 				group: "secondary",
 				disabled: () => false,
 				onClick: () => undefined,
@@ -184,7 +184,7 @@ describe("HeaderActions disabled predicate", () => {
 		const actions: readonly StudioHeaderAction[] = [
 			{
 				id: "publish",
-				label: "Publish",
+				labelKey: "Publish",
 				group: "primary",
 				disabled,
 				onClick: () => undefined,
@@ -203,7 +203,7 @@ describe("HeaderActions error handling", () => {
 		const actions: readonly StudioHeaderAction[] = [
 			{
 				id: "broken",
-				label: "Broken action",
+				labelKey: "Broken action",
 				group: "primary",
 				onClick: failing,
 			},
@@ -235,7 +235,7 @@ describe("HeaderActions error handling", () => {
 		const actions: readonly StudioHeaderAction[] = [
 			{
 				id: "broken",
-				label: "Broken action",
+				labelKey: "Broken action",
 				group: "primary",
 				onClick: failing,
 			},
@@ -256,7 +256,7 @@ describe("HeaderActions error handling", () => {
 		const actions: readonly StudioHeaderAction[] = [
 			{
 				id: "sync-throw",
-				label: "Sync throw",
+				labelKey: "Sync throw",
 				group: "primary",
 				onClick: () => {
 					throw new Error("sync boom");

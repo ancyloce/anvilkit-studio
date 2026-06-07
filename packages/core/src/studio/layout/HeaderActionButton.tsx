@@ -109,20 +109,16 @@ function evaluateDisabled(
 }
 
 /**
- * Resolve the visible label for a header action (live or placeholder):
- * `labelKey` (an i18n key) wins, resolved via `useMsg(labelKey, label)` so
- * a missing key falls back to the deprecated raw `label`; otherwise the raw
- * `label`, or `""` for an icon-only action that supplies neither (live
- * actions with neither are already rejected by `composeHeaderActions`).
+ * Resolve the visible label for a header action (live or placeholder) from
+ * its required `labelKey`, via `useMsg(labelKey)` against the active locale.
+ * The deprecated raw `label` fallback was removed after its one-release
+ * window; actions without a `labelKey` are rejected by `composeHeaderActions`.
  */
 function resolveActionLabel(
-	action: Pick<StudioHeaderAction, "labelKey" | "label">,
+	action: Pick<StudioHeaderAction, "labelKey">,
 	msg: (key: string, fallback?: string) => string,
 ): string {
-	if (action.labelKey !== undefined) {
-		return msg(action.labelKey, action.label);
-	}
-	return action.label ?? "";
+	return msg(action.labelKey);
 }
 
 /**
@@ -156,9 +152,9 @@ export function HeaderActionButton({
 
 	const Icon = resolveIcon(action.icon);
 	const iconNode = Icon === null ? null : <Icon />;
-	// `labelKey` (i18n) wins, with the deprecated raw `label` as the
-	// missing-key fallback; an action with neither is rejected upstream by
-	// `composeHeaderActions`, so `text` is the visible affordance.
+	// `labelKey` (i18n) resolves the visible text against the active locale;
+	// an action without one is rejected upstream by `composeHeaderActions`,
+	// so `text` is always a real affordance.
 	const text = resolveActionLabel(action, msg);
 
 	if (variant === "menuitem") {

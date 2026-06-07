@@ -76,7 +76,7 @@ function makeExportFormat(id: string): ExportFormatDefinition {
 }
 
 function makeHeaderAction(id: string): StudioHeaderAction {
-	return { id, label: id, onClick: () => undefined };
+	return { id, labelKey: id, onClick: () => undefined };
 }
 
 /**

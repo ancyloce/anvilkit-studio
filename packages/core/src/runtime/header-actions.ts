@@ -117,25 +117,21 @@ function assertUniqueIds(actions: readonly SortableHeaderAction[]): void {
 }
 
 /**
- * Reject an action that supplies neither `labelKey` nor `label`, so the
- * shell can never render a button with no visible affordance. `labelKey`
- * (an i18n key) is preferred; `label` is the deprecated raw-string
- * fallback — exactly one must be present.
+ * Reject an action that supplies no `labelKey`, so the shell can never
+ * render a button with no visible affordance. `labelKey` (an i18n key) is
+ * required — the deprecated raw-string `label` fallback was removed after
+ * its one-release window.
  *
  * `SortableHeaderAction` carries only the sort keys, but the real objects
- * are full {@link StudioHeaderAction}s, so the label fields are read
- * structurally.
+ * are full {@link StudioHeaderAction}s, so `labelKey` is read structurally.
  */
 function assertHasLabel(actions: readonly SortableHeaderAction[]): void {
 	for (const action of actions) {
-		const labelled = action as {
-			readonly labelKey?: unknown;
-			readonly label?: unknown;
-		};
-		if (labelled.labelKey === undefined && labelled.label === undefined) {
+		const labelled = action as { readonly labelKey?: unknown };
+		if (labelled.labelKey === undefined) {
 			throw new StudioPluginError(
 				action.id,
-				`Header action "${action.id}" has neither "labelKey" nor "label" — one is required so the button has a visible affordance`,
+				`Header action "${action.id}" has no "labelKey" — it is required so the button has a visible (localized) affordance`,
 			);
 		}
 	}

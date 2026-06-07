@@ -38,7 +38,7 @@ function makePlaceholder(
 ): StaticHeaderActionPlaceholder {
 	return {
 		id,
-		label: options.label ?? id,
+		labelKey: options.label ?? id,
 		...(options.icon !== undefined && { icon: options.icon }),
 		...(options.group !== undefined && { group: options.group }),
 		...(options.order !== undefined && { order: options.order }),
@@ -55,7 +55,7 @@ function makeLive(
 ): StudioHeaderAction {
 	return {
 		id,
-		label: options.label ?? id,
+		labelKey: options.label ?? id,
 		...(options.group !== undefined && { group: options.group }),
 		...(options.order !== undefined && { order: options.order }),
 		onClick: () => undefined,
