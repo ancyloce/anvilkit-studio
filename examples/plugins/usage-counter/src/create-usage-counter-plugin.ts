@@ -1,11 +1,10 @@
-import type { Data as PuckData } from "@puckeditor/core";
-
 import type {
 	StudioHeaderAction,
 	StudioPluginContext,
 	StudioPluginMeta,
 	StudioPluginRegistration,
 } from "@anvilkit/core/types";
+import type { Data as PuckData } from "@puckeditor/core";
 
 import type {
 	UsageCounterOptions,
@@ -80,7 +79,11 @@ export function createUsageCounterPlugin(
 
 	const logCountsAction: StudioHeaderAction = {
 		id: "usage-counter-log",
-		label: "Log usage counts",
+		// Header actions are localized by `labelKey` (the raw `label` fallback
+		// was removed in core's P8 cleanup). A production plugin registers the
+		// English text for this key from `register(ctx)` via
+		// `ctx.registerMessages({ namespace: "usageCounter", en: { ... } })`.
+		labelKey: "usageCounter.action.log",
 		icon: "list",
 		group: "overflow",
 		onClick(ctx) {
