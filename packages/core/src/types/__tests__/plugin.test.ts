@@ -97,7 +97,7 @@ describe("StudioPlugin type contract", () => {
 					headerActions: [
 						{
 							id: "full-action",
-							label: "Full",
+							labelKey: "com.example.full.action",
 							onClick: () => undefined,
 						},
 					],

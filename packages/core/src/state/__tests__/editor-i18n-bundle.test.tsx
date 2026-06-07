@@ -13,7 +13,7 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import type { RegistryEntry } from "@/i18n/registry";
+import type { MessageBundle, RegistryEntry } from "@/i18n/registry";
 import { EditorStoreProvider } from "@/state/EditorStoreProvider";
 import { EditorI18nProvider, useMsg } from "@/state/editor-i18n-context";
 import { createEditorStore } from "@/state/editor-store-bundle";
@@ -22,7 +22,7 @@ const entries: readonly RegistryEntry[] = [
 	{
 		namespace: "demo",
 		en: { "demo.greeting": "Hello" },
-		loadMessages: async (locale) =>
+		loadMessages: async (locale): Promise<MessageBundle> =>
 			locale === "zh" ? { "demo.greeting": "你好" } : {},
 	},
 ];

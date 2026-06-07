@@ -18,7 +18,7 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import type { RegistryEntry } from "@/i18n/registry";
+import type { MessageBundle, RegistryEntry } from "@/i18n/registry";
 import { EditorI18nProvider, useMsg } from "@/state/editor-i18n-context";
 import { LocaleStoreProvider } from "@/state/slices/LocaleStoreProvider";
 import { createLocaleStore } from "@/state/slices/locale-store";
@@ -61,7 +61,7 @@ describe("useMsg — registry + locale reactivity", () => {
 		return {
 			namespace: "demo",
 			en: { "demo.greeting": "Hello", "demo.only": "EN only" },
-			loadMessages: async (locale) =>
+			loadMessages: async (locale): Promise<MessageBundle> =>
 				locale === "zh" ? { "demo.greeting": "你好" } : {},
 		};
 	}
