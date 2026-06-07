@@ -20,8 +20,9 @@
 import { useGetPuck } from "@puckeditor/core";
 import { ChevronDown, Download } from "lucide-react";
 import { type ReactNode } from "react";
-import { useChromeProps } from "@/context/chrome-props";
 import { useStudioRuntime } from "@/components/use-studio";
+import { useChromeProps } from "@/context/chrome-props";
+import { Button } from "@/primitives/button";
 import {
 	Menu,
 	MenuItem,
@@ -35,7 +36,6 @@ import {
 	PopoverPositioner,
 	PopoverTrigger,
 } from "@/primitives/vendor/animate-ui/primitives/base/popover";
-import { Button } from "@/primitives/button";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { ExportFormatDefinition } from "@/types/export";
 import { formatRelativeTimestamp } from "@/utils/format-timestamp";
@@ -187,9 +187,12 @@ function ExportRow({
 }: {
 	readonly format: ExportFormatDefinition;
 }): ReactNode {
+	const msg = useMsg();
 	return (
 		<span className="flex w-full items-center justify-between gap-3">
-			<span>{format.label}</span>
+			<span>
+				{format.labelKey ? msg(format.labelKey, format.label) : format.label}
+			</span>
 			<span className="text-xs uppercase text-[var(--ak-studio-muted-fg)]">
 				.{format.extension}
 			</span>

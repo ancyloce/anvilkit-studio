@@ -210,6 +210,14 @@ export interface ExportFormatDefinition<
 	 */
 	readonly label: string;
 	/**
+	 * Optional i18n message key for the label, resolved by the chrome via
+	 * `useMsg(labelKey, label)` at render — so the export menu localizes
+	 * with the active locale. When present it wins; `label` is the
+	 * missing-key fallback. Plugins contribute the key via
+	 * `ctx.registerMessages` under their own namespace.
+	 */
+	readonly labelKey?: string;
+	/**
 	 * File extension (without the leading dot) for downloads in this
 	 * format (e.g. `"html"`, `"jsx"`, `"json"`, `"pdf"`).
 	 */
