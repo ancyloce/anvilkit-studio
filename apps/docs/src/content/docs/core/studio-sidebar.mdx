@@ -87,28 +87,18 @@ Pass overrides via `<Studio messages>`:
 />
 ```
 
-### Deprecated key aliases
-
-The pre-v1 sidebar shipped two top-level keys — `studio.tab.insert`
-and `studio.tab.outline` — that map to the v1 module names. The
-i18n provider keeps an alias map so existing overrides keep
-resolving for one release window:
-
-| Legacy key | Resolves to |
-| :--- | :--- |
-| `studio.tab.insert` | `studio.module.insert.name` |
-| `studio.tab.outline` | `studio.module.layer.name` |
+### Message resolution
 
 Resolution order (precedence high → low): override of the requested
-key, override of the legacy alias mapped to the requested key,
-default for the requested key, caller-supplied `fallback`, the key
-itself. The exhaustive resolution-order test lives at
+key, default for the requested key, caller-supplied `fallback`, the
+key itself. The exhaustive resolution-order test lives at
 `packages/core/src/state/__tests__/editor-i18n-context.alias.test.tsx`.
 
-<Aside type="caution" title="Deprecation window">
-	The alias map ships for **one release** after the four-module
-	sidebar lands. Migrate hosts that override `studio.tab.{insert,outline}`
-	to the new `studio.module.*` keys before the next minor.
+<Aside type="note" title="Removed: legacy tab aliases">
+	The pre-v1 sidebar shipped `studio.tab.insert` / `studio.tab.outline`
+	keys (aliased to the v1 `studio.module.insert.name` /
+	`studio.module.layer.name`). Both the aliases and the legacy keys were
+	**removed**; override the `studio.module.*` keys directly.
 </Aside>
 
 ## CSS variables
