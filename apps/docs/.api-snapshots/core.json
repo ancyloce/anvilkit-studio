@@ -2591,7 +2591,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 666,
+                "target": 667,
                 "name": "PageIRNode",
                 "package": "@anvilkit/core"
               }
@@ -3063,7 +3063,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 666,
+                "target": 667,
                 "name": "PageIRNode",
                 "package": "@anvilkit/core"
               }
@@ -3329,7 +3329,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 666,
+                "target": 667,
                 "name": "PageIRNode",
                 "package": "@anvilkit/core"
               }
@@ -4666,7 +4666,7 @@
       ]
     },
     {
-      "id": 744,
+      "id": 745,
       "name": "AssetResolution",
       "variant": "declaration",
       "kind": 256,
@@ -4697,7 +4697,7 @@
       },
       "children": [
         {
-          "id": 746,
+          "id": 747,
           "name": "meta",
           "variant": "declaration",
           "kind": 1024,
@@ -4747,7 +4747,7 @@
           }
         },
         {
-          "id": 745,
+          "id": 746,
           "name": "url",
           "variant": "declaration",
           "kind": 1024,
@@ -4772,8 +4772,8 @@
         {
           "title": "Properties",
           "children": [
-            746,
-            745
+            747,
+            746
           ]
         }
       ],
@@ -5808,7 +5808,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIR",
-            "target": 651
+            "target": 652
           },
           {
             "kind": "text",
@@ -5850,7 +5850,7 @@
       },
       "children": [
         {
-          "id": 629,
+          "id": 630,
           "name": "extension",
           "variant": "declaration",
           "kind": 1024,
@@ -5900,9 +5900,9 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 216,
+              "line": 224,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L216"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L224"
             }
           ],
           "type": {
@@ -6025,7 +6025,61 @@
           }
         },
         {
-          "id": 630,
+          "id": 629,
+          "name": "labelKey",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Optional i18n message key for the label, resolved by the chrome via\n"
+              },
+              {
+                "kind": "code",
+                "text": "`useMsg(labelKey, label)`"
+              },
+              {
+                "kind": "text",
+                "text": " at render — so the export menu localizes\nwith the active locale. When present it wins; "
+              },
+              {
+                "kind": "code",
+                "text": "`label`"
+              },
+              {
+                "kind": "text",
+                "text": " is the\nmissing-key fallback. Plugins contribute the key via\n"
+              },
+              {
+                "kind": "code",
+                "text": "`ctx.registerMessages`"
+              },
+              {
+                "kind": "text",
+                "text": " under their own namespace."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "types/export.ts",
+              "line": 219,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L219"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 631,
           "name": "mimeType",
           "variant": "declaration",
           "kind": 1024,
@@ -6083,9 +6137,9 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 225,
+              "line": 233,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L225"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L233"
             }
           ],
           "type": {
@@ -6094,7 +6148,7 @@
           }
         },
         {
-          "id": 631,
+          "id": 632,
           "name": "run",
           "variant": "declaration",
           "kind": 1024,
@@ -6111,7 +6165,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIR",
-                "target": 651
+                "target": 652
               },
               {
                 "kind": "text",
@@ -6121,7 +6175,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportOptions",
-                "target": 639
+                "target": 640
               },
               {
                 "kind": "text",
@@ -6140,29 +6194,29 @@
           "sources": [
             {
               "fileName": "types/export.ts",
-              "line": 238,
+              "line": 246,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L238"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L246"
             }
           ],
           "type": {
             "type": "reflection",
             "declaration": {
-              "id": 632,
+              "id": 633,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "signatures": [
                 {
-                  "id": 633,
+                  "id": 634,
                   "name": "__type",
                   "variant": "signature",
                   "kind": 4096,
                   "flags": {},
                   "parameters": [
                     {
-                      "id": 634,
+                      "id": 635,
                       "name": "ir",
                       "variant": "param",
                       "kind": 32768,
@@ -6177,13 +6231,13 @@
                       },
                       "type": {
                         "type": "reference",
-                        "target": 651,
+                        "target": 652,
                         "name": "PageIR",
                         "package": "@anvilkit/core"
                       }
                     },
                     {
-                      "id": 635,
+                      "id": 636,
                       "name": "options",
                       "variant": "param",
                       "kind": 32768,
@@ -6206,7 +6260,7 @@
                       }
                     },
                     {
-                      "id": 636,
+                      "id": 637,
                       "name": "ctx",
                       "variant": "param",
                       "kind": 32768,
@@ -6223,7 +6277,7 @@
                       },
                       "type": {
                         "type": "reference",
-                        "target": 637,
+                        "target": 638,
                         "name": "ExportFormatRunContext",
                         "package": "@anvilkit/core"
                       }
@@ -6239,7 +6293,7 @@
                     "typeArguments": [
                       {
                         "type": "reference",
-                        "target": 641,
+                        "target": 642,
                         "name": "ExportResult",
                         "package": "@anvilkit/core"
                       }
@@ -6257,11 +6311,12 @@
         {
           "title": "Properties",
           "children": [
-            629,
+            630,
             627,
             628,
-            630,
-            631
+            629,
+            631,
+            632
           ]
         }
       ],
@@ -6290,7 +6345,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportOptions",
-                "target": 639
+                "target": 640
               },
               {
                 "kind": "text",
@@ -6350,7 +6405,7 @@
       ]
     },
     {
-      "id": 637,
+      "id": 638,
       "name": "ExportFormatRunContext",
       "variant": "declaration",
       "kind": 256,
@@ -6365,7 +6420,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "ExportFormatDefinition.run",
-            "target": 631
+            "target": 632
           },
           {
             "kind": "text",
@@ -6391,7 +6446,7 @@
       },
       "children": [
         {
-          "id": 638,
+          "id": 639,
           "name": "assetResolvers",
           "variant": "declaration",
           "kind": 1024,
@@ -6414,7 +6469,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 751,
+                "target": 752,
                 "name": "IRAssetResolver",
                 "package": "@anvilkit/core"
               }
@@ -6426,7 +6481,7 @@
         {
           "title": "Properties",
           "children": [
-            638
+            639
           ]
         }
       ],
@@ -6814,7 +6869,7 @@
       ]
     },
     {
-      "id": 641,
+      "id": 642,
       "name": "ExportResult",
       "variant": "declaration",
       "kind": 256,
@@ -6829,7 +6884,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "ExportFormatDefinition.run",
-            "target": 631
+            "target": 632
           },
           {
             "kind": "text",
@@ -6839,7 +6894,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "content",
-            "target": 642
+            "target": 643
           },
           {
             "kind": "text",
@@ -6905,7 +6960,7 @@
       },
       "children": [
         {
-          "id": 642,
+          "id": 643,
           "name": "content",
           "variant": "declaration",
           "kind": 1024,
@@ -6977,7 +7032,7 @@
           }
         },
         {
-          "id": 643,
+          "id": 644,
           "name": "filename",
           "variant": "declaration",
           "kind": 1024,
@@ -7022,7 +7077,7 @@
           }
         },
         {
-          "id": 644,
+          "id": 645,
           "name": "warnings",
           "variant": "declaration",
           "kind": 1024,
@@ -7040,7 +7095,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportWarning",
-                "target": 645
+                "target": 646
               },
               {
                 "kind": "text",
@@ -7063,7 +7118,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 645,
+                "target": 646,
                 "name": "ExportWarning",
                 "package": "@anvilkit/core"
               }
@@ -7075,9 +7130,9 @@
         {
           "title": "Properties",
           "children": [
-            642,
             643,
-            644
+            644,
+            645
           ]
         }
       ],
@@ -7853,7 +7908,7 @@
       ]
     },
     {
-      "id": 645,
+      "id": 646,
       "name": "ExportWarning",
       "variant": "declaration",
       "kind": 256,
@@ -7892,7 +7947,7 @@
       },
       "children": [
         {
-          "id": 647,
+          "id": 648,
           "name": "code",
           "variant": "declaration",
           "kind": 1024,
@@ -7929,7 +7984,7 @@
           }
         },
         {
-          "id": 646,
+          "id": 647,
           "name": "level",
           "variant": "declaration",
           "kind": 1024,
@@ -7946,7 +8001,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "ExportWarningLevel",
-                "target": 650
+                "target": 651
               },
               {
                 "kind": "text",
@@ -7964,13 +8019,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 650,
+            "target": 651,
             "name": "ExportWarningLevel",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 648,
+          "id": 649,
           "name": "message",
           "variant": "declaration",
           "kind": 1024,
@@ -7999,7 +8054,7 @@
           }
         },
         {
-          "id": 649,
+          "id": 650,
           "name": "nodeId",
           "variant": "declaration",
           "kind": 1024,
@@ -8017,7 +8072,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRNode.id",
-                "target": 667
+                "target": 668
               },
               {
                 "kind": "text",
@@ -8043,10 +8098,10 @@
         {
           "title": "Properties",
           "children": [
-            647,
-            646,
             648,
-            649
+            647,
+            649,
+            650
           ]
         }
       ],
@@ -8963,7 +9018,7 @@
       ]
     },
     {
-      "id": 651,
+      "id": 652,
       "name": "PageIR",
       "variant": "declaration",
       "kind": 256,
@@ -8978,7 +9033,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "ExportFormatDefinition.run",
-            "target": 631
+            "target": 632
           },
           {
             "kind": "text",
@@ -9004,7 +9059,7 @@
       },
       "children": [
         {
-          "id": 654,
+          "id": 655,
           "name": "assets",
           "variant": "declaration",
           "kind": 1024,
@@ -9021,7 +9076,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRNode.assets",
-                "target": 673
+                "target": 674
               },
               {
                 "kind": "text",
@@ -9044,7 +9099,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 656,
+                "target": 657,
                 "name": "PageIRAsset",
                 "package": "@anvilkit/core"
               }
@@ -9052,7 +9107,7 @@
           }
         },
         {
-          "id": 655,
+          "id": 656,
           "name": "metadata",
           "variant": "declaration",
           "kind": 1024,
@@ -9069,7 +9124,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRMetadata",
-                "target": 661
+                "target": 662
               },
               {
                 "kind": "text",
@@ -9087,13 +9142,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 661,
+            "target": 662,
             "name": "PageIRMetadata",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 653,
+          "id": 654,
           "name": "root",
           "variant": "declaration",
           "kind": 1024,
@@ -9118,13 +9173,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 666,
+            "target": 667,
             "name": "PageIRNode",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 652,
+          "id": 653,
           "name": "version",
           "variant": "declaration",
           "kind": 1024,
@@ -9181,10 +9236,10 @@
         {
           "title": "Properties",
           "children": [
-            654,
             655,
-            653,
-            652
+            656,
+            654,
+            653
           ]
         }
       ],
@@ -9198,7 +9253,7 @@
       ]
     },
     {
-      "id": 656,
+      "id": 657,
       "name": "PageIRAsset",
       "variant": "declaration",
       "kind": 256,
@@ -9213,7 +9268,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIR",
-            "target": 651
+            "target": 652
           },
           {
             "kind": "text",
@@ -9223,7 +9278,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIRNode",
-            "target": 666
+            "target": 667
           },
           {
             "kind": "text",
@@ -9233,7 +9288,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIRAsset.id",
-            "target": 657
+            "target": 658
           },
           {
             "kind": "text",
@@ -9243,7 +9298,7 @@
       },
       "children": [
         {
-          "id": 657,
+          "id": 658,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -9272,7 +9327,7 @@
           }
         },
         {
-          "id": 658,
+          "id": 659,
           "name": "kind",
           "variant": "declaration",
           "kind": 1024,
@@ -9334,7 +9389,7 @@
           }
         },
         {
-          "id": 660,
+          "id": 661,
           "name": "meta",
           "variant": "declaration",
           "kind": 1024,
@@ -9400,7 +9455,7 @@
           }
         },
         {
-          "id": 659,
+          "id": 660,
           "name": "url",
           "variant": "declaration",
           "kind": 1024,
@@ -9433,10 +9488,10 @@
         {
           "title": "Properties",
           "children": [
-            657,
             658,
-            660,
-            659
+            659,
+            661,
+            660
           ]
         }
       ],
@@ -9450,7 +9505,7 @@
       ]
     },
     {
-      "id": 661,
+      "id": 662,
       "name": "PageIRMetadata",
       "variant": "declaration",
       "kind": 256,
@@ -9481,7 +9536,7 @@
       },
       "children": [
         {
-          "id": 664,
+          "id": 665,
           "name": "createdAt",
           "variant": "declaration",
           "kind": 1024,
@@ -9511,7 +9566,7 @@
           }
         },
         {
-          "id": 663,
+          "id": 664,
           "name": "description",
           "variant": "declaration",
           "kind": 1024,
@@ -9549,7 +9604,7 @@
           }
         },
         {
-          "id": 662,
+          "id": 663,
           "name": "title",
           "variant": "declaration",
           "kind": 1024,
@@ -9587,7 +9642,7 @@
           }
         },
         {
-          "id": 665,
+          "id": 666,
           "name": "updatedAt",
           "variant": "declaration",
           "kind": 1024,
@@ -9621,10 +9676,10 @@
         {
           "title": "Properties",
           "children": [
+            665,
             664,
             663,
-            662,
-            665
+            666
           ]
         }
       ],
@@ -9638,7 +9693,7 @@
       ]
     },
     {
-      "id": 666,
+      "id": 667,
       "name": "PageIRNode",
       "variant": "declaration",
       "kind": 256,
@@ -9685,7 +9740,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "id",
-            "target": 667
+            "target": 668
           },
           {
             "kind": "text",
@@ -9695,7 +9750,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIR",
-            "target": 651
+            "target": 652
           },
           {
             "kind": "text",
@@ -9705,7 +9760,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "type",
-            "target": 668
+            "target": 669
           },
           {
             "kind": "text",
@@ -9747,7 +9802,7 @@
       },
       "children": [
         {
-          "id": 673,
+          "id": 674,
           "name": "assets",
           "variant": "declaration",
           "kind": 1024,
@@ -9765,7 +9820,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIR.assets",
-                "target": 654
+                "target": 655
               },
               {
                 "kind": "text",
@@ -9775,7 +9830,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRAsset.id",
-                "target": 657
+                "target": 658
               },
               {
                 "kind": "text",
@@ -9798,7 +9853,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 656,
+                "target": 657,
                 "name": "PageIRAsset",
                 "package": "@anvilkit/core"
               }
@@ -9806,7 +9861,7 @@
           }
         },
         {
-          "id": 672,
+          "id": 673,
           "name": "children",
           "variant": "declaration",
           "kind": 1024,
@@ -9837,7 +9892,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 666,
+                "target": 667,
                 "name": "PageIRNode",
                 "package": "@anvilkit/core"
               }
@@ -9845,7 +9900,7 @@
           }
         },
         {
-          "id": 667,
+          "id": 668,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -9862,7 +9917,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIR",
-                "target": 651
+                "target": 652
               },
               {
                 "kind": "text",
@@ -9884,7 +9939,7 @@
           }
         },
         {
-          "id": 674,
+          "id": 675,
           "name": "meta",
           "variant": "declaration",
           "kind": 1024,
@@ -9902,7 +9957,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "PageIRNodeMeta",
-                "target": 675
+                "target": 676
               },
               {
                 "kind": "text",
@@ -9944,13 +9999,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 675,
+            "target": 676,
             "name": "PageIRNodeMeta",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 669,
+          "id": 670,
           "name": "props",
           "variant": "declaration",
           "kind": 1024,
@@ -10007,7 +10062,7 @@
           }
         },
         {
-          "id": 670,
+          "id": 671,
           "name": "slot",
           "variant": "declaration",
           "kind": 1024,
@@ -10045,7 +10100,7 @@
           }
         },
         {
-          "id": 671,
+          "id": 672,
           "name": "slotKind",
           "variant": "declaration",
           "kind": 1024,
@@ -10071,7 +10126,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "slot",
-                "target": 670
+                "target": 671
               },
               {
                 "kind": "text",
@@ -10110,7 +10165,7 @@
           }
         },
         {
-          "id": 668,
+          "id": 669,
           "name": "type",
           "variant": "declaration",
           "kind": 1024,
@@ -10159,14 +10214,14 @@
         {
           "title": "Properties",
           "children": [
-            673,
-            672,
-            667,
             674,
-            669,
+            673,
+            668,
+            675,
             670,
             671,
-            668
+            672,
+            669
           ]
         }
       ],
@@ -10180,7 +10235,7 @@
       ]
     },
     {
-      "id": 675,
+      "id": 676,
       "name": "PageIRNodeMeta",
       "variant": "declaration",
       "kind": 256,
@@ -10195,7 +10250,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "PageIRNode",
-            "target": 666
+            "target": 667
           },
           {
             "kind": "text",
@@ -10261,7 +10316,7 @@
       },
       "children": [
         {
-          "id": 676,
+          "id": 677,
           "name": "locked",
           "variant": "declaration",
           "kind": 1024,
@@ -10299,7 +10354,7 @@
           }
         },
         {
-          "id": 679,
+          "id": 680,
           "name": "notes",
           "variant": "declaration",
           "kind": 1024,
@@ -10329,7 +10384,7 @@
           }
         },
         {
-          "id": 677,
+          "id": 678,
           "name": "owner",
           "variant": "declaration",
           "kind": 1024,
@@ -10359,7 +10414,7 @@
           }
         },
         {
-          "id": 678,
+          "id": 679,
           "name": "version",
           "variant": "declaration",
           "kind": 1024,
@@ -10401,10 +10456,10 @@
         {
           "title": "Properties",
           "children": [
-            676,
-            679,
             677,
-            678
+            680,
+            678,
+            679
           ]
         }
       ],
@@ -10443,7 +10498,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioHeaderAction",
-            "target": 758
+            "target": 759
           },
           {
             "kind": "text",
@@ -10453,7 +10508,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StaticHeaderActionPlaceholder",
-            "target": 755
+            "target": 756
           },
           {
             "kind": "text",
@@ -15331,7 +15386,7 @@
       ]
     },
     {
-      "id": 758,
+      "id": 759,
       "name": "StudioHeaderAction",
       "variant": "declaration",
       "kind": 256,
@@ -15381,7 +15436,7 @@
           {
             "kind": "inline-tag",
             "tag": "@link",
-            "text": "label",
+            "text": "labelKey",
             "target": 761
           },
           {
@@ -15546,9 +15601,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 364,
+              "line": 353,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L364"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L353"
             }
           ],
           "type": {
@@ -15642,9 +15697,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 324,
+              "line": 313,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L324"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L313"
             }
           ],
           "type": {
@@ -15781,9 +15836,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 312,
+              "line": 301,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L312"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L301"
             }
           ],
           "type": {
@@ -15792,7 +15847,7 @@
           }
         },
         {
-          "id": 759,
+          "id": 760,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -15846,67 +15901,10 @@
         },
         {
           "id": 761,
-          "name": "label",
-          "variant": "declaration",
-          "kind": 1024,
-          "flags": {
-            "isOptional": true,
-            "isReadonly": true
-          },
-          "comment": {
-            "summary": [
-              {
-                "kind": "text",
-                "text": "Human-readable label rendered inside the button (or shown in\nthe overflow menu) by the Studio shell.\n\n**Deprecated** in favor of "
-              },
-              {
-                "kind": "inline-tag",
-                "tag": "@link",
-                "text": "labelKey",
-                "target": 760
-              },
-              {
-                "kind": "text",
-                "text": " (kept one release as the\nfallback). Optional now: an action may instead supply "
-              },
-              {
-                "kind": "code",
-                "text": "`labelKey`"
-              },
-              {
-                "kind": "text",
-                "text": " and\nlet the shell resolve the visible string. Localization of a raw\n"
-              },
-              {
-                "kind": "code",
-                "text": "`label`"
-              },
-              {
-                "kind": "text",
-                "text": " is the host app's responsibility — the runtime treats it as\nan opaque display string."
-              }
-            ]
-          },
-          "sources": [
-            {
-              "fileName": "types/plugin.ts",
-              "line": 289,
-              "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L289"
-            }
-          ],
-          "type": {
-            "type": "intrinsic",
-            "name": "string"
-          }
-        },
-        {
-          "id": 760,
           "name": "labelKey",
           "variant": "declaration",
           "kind": 1024,
           "flags": {
-            "isOptional": true,
             "isReadonly": true
           },
           "comment": {
@@ -15917,11 +15915,11 @@
               },
               {
                 "kind": "code",
-                "text": "`useMsg(labelKey, label)`"
+                "text": "`useMsg(labelKey)`"
               },
               {
                 "kind": "text",
-                "text": " at render time — so the button\nlocalizes with the active locale and a lazy reserved slot\n("
+                "text": " at render time — so the button localizes with\nthe active locale and a lazy reserved slot\n("
               },
               {
                 "kind": "code",
@@ -15929,33 +15927,7 @@
               },
               {
                 "kind": "text",
-                "text": ") shows the localized string before\nthe plugin chunk loads. Preferred over "
-              },
-              {
-                "kind": "inline-tag",
-                "tag": "@link",
-                "text": "label",
-                "target": 761
-              },
-              {
-                "kind": "text",
-                "text": ".\n\nExactly one of "
-              },
-              {
-                "kind": "code",
-                "text": "`labelKey`"
-              },
-              {
-                "kind": "text",
-                "text": " / "
-              },
-              {
-                "kind": "code",
-                "text": "`label`"
-              },
-              {
-                "kind": "text",
-                "text": " must be present;\n"
+                "text": ") shows the localized string before\nthe plugin chunk loads.\n\nRequired. "
               },
               {
                 "kind": "code",
@@ -15963,15 +15935,7 @@
               },
               {
                 "kind": "text",
-                "text": " rejects an action with neither. When both\nare present, "
-              },
-              {
-                "kind": "code",
-                "text": "`labelKey`"
-              },
-              {
-                "kind": "text",
-                "text": " wins and "
+                "text": " rejects an action without it. The\nraw "
               },
               {
                 "kind": "code",
@@ -15979,16 +15943,16 @@
               },
               {
                 "kind": "text",
-                "text": " is the missing-key fallback."
+                "text": " fallback was removed after its one-release deprecation\nwindow — author the English copy in the plugin's i18n catalog under\nthis key instead."
               }
             ]
           },
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 277,
+              "line": 278,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L277"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L278"
             }
           ],
           "type": {
@@ -16057,9 +16021,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 352,
+              "line": 341,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L352"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L341"
             }
           ],
           "type": {
@@ -16181,7 +16145,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "id",
-                "target": 759
+                "target": 760
               },
               {
                 "kind": "text",
@@ -16192,9 +16156,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 335,
+              "line": 324,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L335"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L324"
             }
           ],
           "type": {
@@ -16210,9 +16174,8 @@
             769,
             763,
             762,
-            759,
-            761,
             760,
+            761,
             765,
             764
           ]
@@ -16915,7 +16878,7 @@
       ]
     },
     {
-      "id": 680,
+      "id": 681,
       "name": "StudioPage",
       "variant": "declaration",
       "kind": 256,
@@ -16962,7 +16925,7 @@
       },
       "children": [
         {
-          "id": 685,
+          "id": 686,
           "name": "active",
           "variant": "declaration",
           "kind": 1024,
@@ -16984,7 +16947,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPagesSource.list",
-                "target": 714
+                "target": 715
               },
               {
                 "kind": "text",
@@ -17022,7 +16985,7 @@
           }
         },
         {
-          "id": 686,
+          "id": 687,
           "name": "description",
           "variant": "declaration",
           "kind": 1024,
@@ -17048,7 +17011,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPageSeo.metaDescription",
-                "target": 703
+                "target": 704
               },
               {
                 "kind": "text",
@@ -17070,7 +17033,7 @@
           }
         },
         {
-          "id": 681,
+          "id": 682,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -17099,7 +17062,7 @@
           }
         },
         {
-          "id": 689,
+          "id": 690,
           "name": "locked",
           "variant": "declaration",
           "kind": 1024,
@@ -17149,7 +17112,7 @@
           }
         },
         {
-          "id": 688,
+          "id": 689,
           "name": "order",
           "variant": "declaration",
           "kind": 1024,
@@ -17167,7 +17130,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioPagesSource.list",
-                "target": 714
+                "target": 715
               },
               {
                 "kind": "text",
@@ -17189,7 +17152,7 @@
           }
         },
         {
-          "id": 683,
+          "id": 684,
           "name": "path",
           "variant": "declaration",
           "kind": 1024,
@@ -17235,7 +17198,7 @@
           }
         },
         {
-          "id": 684,
+          "id": 685,
           "name": "route",
           "variant": "declaration",
           "kind": 1024,
@@ -17277,7 +17240,7 @@
           }
         },
         {
-          "id": 687,
+          "id": 688,
           "name": "seo",
           "variant": "declaration",
           "kind": 1024,
@@ -17303,13 +17266,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 701,
+            "target": 702,
             "name": "StudioPageSeo",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 682,
+          "id": 683,
           "name": "title",
           "variant": "declaration",
           "kind": 1024,
@@ -17342,15 +17305,15 @@
         {
           "title": "Properties",
           "children": [
-            685,
             686,
-            681,
-            689,
-            688,
-            683,
-            684,
             687,
-            682
+            682,
+            690,
+            689,
+            684,
+            685,
+            688,
+            683
           ]
         }
       ],
@@ -17364,7 +17327,7 @@
       ]
     },
     {
-      "id": 690,
+      "id": 691,
       "name": "StudioPageCreateInput",
       "variant": "declaration",
       "kind": 256,
@@ -17379,7 +17342,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPagesSource.onCreate",
-            "target": 726
+            "target": 727
           },
           {
             "kind": "text",
@@ -17405,7 +17368,7 @@
       },
       "children": [
         {
-          "id": 692,
+          "id": 693,
           "name": "path",
           "variant": "declaration",
           "kind": 1024,
@@ -17426,7 +17389,7 @@
           }
         },
         {
-          "id": 693,
+          "id": 694,
           "name": "route",
           "variant": "declaration",
           "kind": 1024,
@@ -17448,7 +17411,7 @@
           }
         },
         {
-          "id": 691,
+          "id": 692,
           "name": "title",
           "variant": "declaration",
           "kind": 1024,
@@ -17473,9 +17436,9 @@
         {
           "title": "Properties",
           "children": [
-            692,
             693,
-            691
+            694,
+            692
           ]
         }
       ],
@@ -17489,7 +17452,7 @@
       ]
     },
     {
-      "id": 694,
+      "id": 695,
       "name": "StudioPageRenameInput",
       "variant": "declaration",
       "kind": 256,
@@ -17504,7 +17467,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPagesSource.onRename",
-            "target": 729
+            "target": 730
           },
           {
             "kind": "text",
@@ -17514,7 +17477,7 @@
       },
       "children": [
         {
-          "id": 695,
+          "id": 696,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -17535,7 +17498,7 @@
           }
         },
         {
-          "id": 697,
+          "id": 698,
           "name": "path",
           "variant": "declaration",
           "kind": 1024,
@@ -17557,7 +17520,7 @@
           }
         },
         {
-          "id": 696,
+          "id": 697,
           "name": "title",
           "variant": "declaration",
           "kind": 1024,
@@ -17582,9 +17545,9 @@
         {
           "title": "Properties",
           "children": [
-            695,
-            697,
-            696
+            696,
+            698,
+            697
           ]
         }
       ],
@@ -17598,7 +17561,7 @@
       ]
     },
     {
-      "id": 698,
+      "id": 699,
       "name": "StudioPageReorderInput",
       "variant": "declaration",
       "kind": 256,
@@ -17613,7 +17576,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPagesSource.onReorder",
-            "target": 738
+            "target": 739
           },
           {
             "kind": "text",
@@ -17623,7 +17586,7 @@
       },
       "children": [
         {
-          "id": 699,
+          "id": 700,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -17644,7 +17607,7 @@
           }
         },
         {
-          "id": 700,
+          "id": 701,
           "name": "toIndex",
           "variant": "declaration",
           "kind": 1024,
@@ -17669,8 +17632,8 @@
         {
           "title": "Properties",
           "children": [
-            699,
-            700
+            700,
+            701
           ]
         }
       ],
@@ -17684,7 +17647,7 @@
       ]
     },
     {
-      "id": 701,
+      "id": 702,
       "name": "StudioPageSeo",
       "variant": "declaration",
       "kind": 256,
@@ -17699,7 +17662,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPagesSource.onUpdateSettings",
-            "target": 741
+            "target": 742
           },
           {
             "kind": "text",
@@ -17709,7 +17672,7 @@
       },
       "children": [
         {
-          "id": 703,
+          "id": 704,
           "name": "metaDescription",
           "variant": "declaration",
           "kind": 1024,
@@ -17731,7 +17694,7 @@
           }
         },
         {
-          "id": 702,
+          "id": 703,
           "name": "metaTitle",
           "variant": "declaration",
           "kind": 1024,
@@ -17753,7 +17716,7 @@
           }
         },
         {
-          "id": 705,
+          "id": 706,
           "name": "noindex",
           "variant": "declaration",
           "kind": 1024,
@@ -17775,7 +17738,7 @@
           }
         },
         {
-          "id": 704,
+          "id": 705,
           "name": "ogImage",
           "variant": "declaration",
           "kind": 1024,
@@ -17801,10 +17764,10 @@
         {
           "title": "Properties",
           "children": [
+            704,
             703,
-            702,
-            705,
-            704
+            706,
+            705
           ]
         }
       ],
@@ -17818,7 +17781,7 @@
       ]
     },
     {
-      "id": 706,
+      "id": 707,
       "name": "StudioPageSettingsInput",
       "variant": "declaration",
       "kind": 256,
@@ -17833,7 +17796,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioPagesSource.onUpdateSettings",
-            "target": 741
+            "target": 742
           },
           {
             "kind": "text",
@@ -17851,7 +17814,7 @@
       },
       "children": [
         {
-          "id": 711,
+          "id": 712,
           "name": "description",
           "variant": "declaration",
           "kind": 1024,
@@ -17873,7 +17836,7 @@
           }
         },
         {
-          "id": 707,
+          "id": 708,
           "name": "id",
           "variant": "declaration",
           "kind": 1024,
@@ -17894,7 +17857,7 @@
           }
         },
         {
-          "id": 709,
+          "id": 710,
           "name": "path",
           "variant": "declaration",
           "kind": 1024,
@@ -17916,7 +17879,7 @@
           }
         },
         {
-          "id": 710,
+          "id": 711,
           "name": "route",
           "variant": "declaration",
           "kind": 1024,
@@ -17938,7 +17901,7 @@
           }
         },
         {
-          "id": 712,
+          "id": 713,
           "name": "seo",
           "variant": "declaration",
           "kind": 1024,
@@ -17956,13 +17919,13 @@
           ],
           "type": {
             "type": "reference",
-            "target": 701,
+            "target": 702,
             "name": "StudioPageSeo",
             "package": "@anvilkit/core"
           }
         },
         {
-          "id": 708,
+          "id": 709,
           "name": "title",
           "variant": "declaration",
           "kind": 1024,
@@ -17988,12 +17951,12 @@
         {
           "title": "Properties",
           "children": [
-            711,
-            707,
-            709,
-            710,
             712,
-            708
+            708,
+            710,
+            711,
+            713,
+            709
           ]
         }
       ],
@@ -18007,7 +17970,7 @@
       ]
     },
     {
-      "id": 713,
+      "id": 714,
       "name": "StudioPagesSource",
       "variant": "declaration",
       "kind": 256,
@@ -18086,7 +18049,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "subscribe",
-            "target": 716
+            "target": 717
           },
           {
             "kind": "text",
@@ -18096,7 +18059,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "list",
-            "target": 714
+            "target": 715
           },
           {
             "kind": "text",
@@ -18106,7 +18069,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "onDuplicate",
-            "target": 735
+            "target": 736
           },
           {
             "kind": "text",
@@ -18116,7 +18079,7 @@
       },
       "children": [
         {
-          "id": 714,
+          "id": 715,
           "name": "list",
           "variant": "declaration",
           "kind": 2048,
@@ -18131,7 +18094,7 @@
           ],
           "signatures": [
             {
-              "id": 715,
+              "id": 716,
               "name": "list",
               "variant": "signature",
               "kind": 4096,
@@ -18162,7 +18125,7 @@
                       "type": "array",
                       "elementType": {
                         "type": "reference",
-                        "target": 680,
+                        "target": 681,
                         "name": "StudioPage",
                         "package": "@anvilkit/core"
                       }
@@ -18183,7 +18146,7 @@
                           "type": "array",
                           "elementType": {
                             "type": "reference",
-                            "target": 680,
+                            "target": 681,
                             "name": "StudioPage",
                             "package": "@anvilkit/core"
                           }
@@ -18199,7 +18162,7 @@
           ]
         },
         {
-          "id": 726,
+          "id": 727,
           "name": "onCreate",
           "variant": "declaration",
           "kind": 2048,
@@ -18216,7 +18179,7 @@
           ],
           "signatures": [
             {
-              "id": 727,
+              "id": 728,
               "name": "onCreate",
               "variant": "signature",
               "kind": 4096,
@@ -18247,14 +18210,14 @@
               ],
               "parameters": [
                 {
-                  "id": 728,
+                  "id": 729,
                   "name": "input",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 690,
+                    "target": 691,
                     "name": "StudioPageCreateInput",
                     "package": "@anvilkit/core"
                   }
@@ -18289,7 +18252,7 @@
           ]
         },
         {
-          "id": 732,
+          "id": 733,
           "name": "onDelete",
           "variant": "declaration",
           "kind": 2048,
@@ -18306,7 +18269,7 @@
           ],
           "signatures": [
             {
-              "id": 733,
+              "id": 734,
               "name": "onDelete",
               "variant": "signature",
               "kind": 4096,
@@ -18321,7 +18284,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "StudioPage.locked",
-                    "target": 689
+                    "target": 690
                   },
                   {
                     "kind": "text",
@@ -18347,7 +18310,7 @@
               ],
               "parameters": [
                 {
-                  "id": 734,
+                  "id": 735,
                   "name": "pageId",
                   "variant": "param",
                   "kind": 32768,
@@ -18387,7 +18350,7 @@
           ]
         },
         {
-          "id": 735,
+          "id": 736,
           "name": "onDuplicate",
           "variant": "declaration",
           "kind": 2048,
@@ -18404,7 +18367,7 @@
           ],
           "signatures": [
             {
-              "id": 736,
+              "id": 737,
               "name": "onDuplicate",
               "variant": "signature",
               "kind": 4096,
@@ -18419,7 +18382,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "StudioPage",
-                    "target": 680
+                    "target": 681
                   },
                   {
                     "kind": "text",
@@ -18461,7 +18424,7 @@
               ],
               "parameters": [
                 {
-                  "id": 737,
+                  "id": 738,
                   "name": "pageId",
                   "variant": "param",
                   "kind": 32768,
@@ -18496,7 +18459,7 @@
                           },
                           {
                             "type": "reference",
-                            "target": 680,
+                            "target": 681,
                             "name": "StudioPage",
                             "package": "@anvilkit/core"
                           }
@@ -18512,7 +18475,7 @@
           ]
         },
         {
-          "id": 729,
+          "id": 730,
           "name": "onRename",
           "variant": "declaration",
           "kind": 2048,
@@ -18529,7 +18492,7 @@
           ],
           "signatures": [
             {
-              "id": 730,
+              "id": 731,
               "name": "onRename",
               "variant": "signature",
               "kind": 4096,
@@ -18544,7 +18507,7 @@
                     "kind": "inline-tag",
                     "tag": "@link",
                     "text": "StudioPage.locked",
-                    "target": 689
+                    "target": 690
                   },
                   {
                     "kind": "text",
@@ -18570,14 +18533,14 @@
               ],
               "parameters": [
                 {
-                  "id": 731,
+                  "id": 732,
                   "name": "input",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 694,
+                    "target": 695,
                     "name": "StudioPageRenameInput",
                     "package": "@anvilkit/core"
                   }
@@ -18612,7 +18575,7 @@
           ]
         },
         {
-          "id": 738,
+          "id": 739,
           "name": "onReorder",
           "variant": "declaration",
           "kind": 2048,
@@ -18629,7 +18592,7 @@
           ],
           "signatures": [
             {
-              "id": 739,
+              "id": 740,
               "name": "onReorder",
               "variant": "signature",
               "kind": 4096,
@@ -18652,14 +18615,14 @@
               ],
               "parameters": [
                 {
-                  "id": 740,
+                  "id": 741,
                   "name": "input",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 698,
+                    "target": 699,
                     "name": "StudioPageReorderInput",
                     "package": "@anvilkit/core"
                   }
@@ -18694,7 +18657,7 @@
           ]
         },
         {
-          "id": 723,
+          "id": 724,
           "name": "onSelect",
           "variant": "declaration",
           "kind": 2048,
@@ -18711,7 +18674,7 @@
           ],
           "signatures": [
             {
-              "id": 724,
+              "id": 725,
               "name": "onSelect",
               "variant": "signature",
               "kind": 4096,
@@ -18734,7 +18697,7 @@
               ],
               "parameters": [
                 {
-                  "id": 725,
+                  "id": 726,
                   "name": "pageId",
                   "variant": "param",
                   "kind": 32768,
@@ -18753,7 +18716,7 @@
           ]
         },
         {
-          "id": 741,
+          "id": 742,
           "name": "onUpdateSettings",
           "variant": "declaration",
           "kind": 2048,
@@ -18770,7 +18733,7 @@
           ],
           "signatures": [
             {
-              "id": 742,
+              "id": 743,
               "name": "onUpdateSettings",
               "variant": "signature",
               "kind": 4096,
@@ -18793,14 +18756,14 @@
               ],
               "parameters": [
                 {
-                  "id": 743,
+                  "id": 744,
                   "name": "input",
                   "variant": "param",
                   "kind": 32768,
                   "flags": {},
                   "type": {
                     "type": "reference",
-                    "target": 706,
+                    "target": 707,
                     "name": "StudioPageSettingsInput",
                     "package": "@anvilkit/core"
                   }
@@ -18835,7 +18798,7 @@
           ]
         },
         {
-          "id": 716,
+          "id": 717,
           "name": "subscribe",
           "variant": "declaration",
           "kind": 2048,
@@ -18852,7 +18815,7 @@
           ],
           "signatures": [
             {
-              "id": 717,
+              "id": 718,
               "name": "subscribe",
               "variant": "signature",
               "kind": 4096,
@@ -18891,7 +18854,7 @@
               ],
               "parameters": [
                 {
-                  "id": 718,
+                  "id": 719,
                   "name": "listener",
                   "variant": "param",
                   "kind": 32768,
@@ -18899,14 +18862,14 @@
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 719,
+                      "id": 720,
                       "name": "__type",
                       "variant": "declaration",
                       "kind": 65536,
                       "flags": {},
                       "signatures": [
                         {
-                          "id": 720,
+                          "id": 721,
                           "name": "__type",
                           "variant": "signature",
                           "kind": 4096,
@@ -18924,14 +18887,14 @@
               "type": {
                 "type": "reflection",
                 "declaration": {
-                  "id": 721,
+                  "id": 722,
                   "name": "__type",
                   "variant": "declaration",
                   "kind": 65536,
                   "flags": {},
                   "signatures": [
                     {
-                      "id": 722,
+                      "id": 723,
                       "name": "__type",
                       "variant": "signature",
                       "kind": 4096,
@@ -18952,15 +18915,15 @@
         {
           "title": "Methods",
           "children": [
-            714,
-            726,
-            732,
-            735,
-            729,
-            738,
-            723,
-            741,
-            716
+            715,
+            727,
+            733,
+            736,
+            730,
+            739,
+            724,
+            742,
+            717
           ]
         }
       ],
@@ -19062,9 +19025,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 775,
+              "line": 764,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L775"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L764"
             }
           ],
           "type": {
@@ -19083,9 +19046,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 785,
+              "line": 774,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L785"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L774"
             }
           ],
           "signatures": [
@@ -19122,9 +19085,9 @@
               "sources": [
                 {
                   "fileName": "types/plugin.ts",
-                  "line": 785,
+                  "line": 774,
                   "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L785"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L774"
                 }
               ],
               "parameters": [
@@ -19240,9 +19203,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 769,
+          "line": 758,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L769"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L758"
         }
       ],
       "typeParameters": [
@@ -19543,7 +19506,7 @@
                       "type": "array",
                       "elementType": {
                         "type": "reference",
-                        "target": 751,
+                        "target": 752,
                         "name": "IRAssetResolver",
                         "package": "@anvilkit/core"
                       }
@@ -20025,7 +19988,7 @@
                       "flags": {},
                       "type": {
                         "type": "reference",
-                        "target": 751,
+                        "target": 752,
                         "name": "IRAssetResolver",
                         "package": "@anvilkit/core"
                       }
@@ -21210,7 +21173,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "InferPluginContributions",
-            "target": 747
+            "target": 748
           },
           {
             "kind": "text",
@@ -21236,7 +21199,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "InferPluginContributions",
-            "target": 747
+            "target": 748
           },
           {
             "kind": "text",
@@ -21280,9 +21243,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 827,
+              "line": 816,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L827"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L816"
             }
           ],
           "type": {
@@ -21324,9 +21287,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 775,
+              "line": 764,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L775"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L764"
             }
           ],
           "type": {
@@ -21352,9 +21315,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 785,
+              "line": 774,
               "character": 1,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L785"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L774"
             }
           ],
           "signatures": [
@@ -21393,9 +21356,9 @@
               "sources": [
                 {
                   "fileName": "types/plugin.ts",
-                  "line": 785,
+                  "line": 774,
                   "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L785"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L774"
                 }
               ],
               "parameters": [
@@ -21528,9 +21491,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 825,
+          "line": 814,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L825"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L814"
         }
       ],
       "typeParameters": [
@@ -21667,9 +21630,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 607,
+              "line": 596,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L607"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L596"
             }
           ],
           "type": {
@@ -21787,9 +21750,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 598,
+              "line": 587,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L598"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L587"
             }
           ],
           "type": {
@@ -21923,9 +21886,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 588,
+              "line": 577,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L588"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L577"
             }
           ],
           "type": {
@@ -22043,9 +22006,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 616,
+              "line": 605,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L616"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L605"
             }
           ],
           "type": {
@@ -22154,9 +22117,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 565,
+              "line": 554,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L565"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L554"
             }
           ],
           "type": {
@@ -22289,9 +22252,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 578,
+              "line": 567,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L578"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L567"
             }
           ],
           "type": {
@@ -22381,9 +22344,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 557,
+          "line": 546,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L557"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L546"
         }
       ],
       "typeParameters": [
@@ -22878,7 +22841,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StudioHeaderAction",
-                "target": 758
+                "target": 759
               },
               {
                 "kind": "text",
@@ -22912,7 +22875,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "StaticHeaderActionPlaceholder",
-                "target": 755
+                "target": 756
               },
               {
                 "kind": "text",
@@ -23015,7 +22978,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 755,
+                "target": 756,
                 "name": "StaticHeaderActionPlaceholder",
                 "package": "@anvilkit/core"
               }
@@ -23169,9 +23132,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 477,
+              "line": 466,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L477"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L466"
             }
           ],
           "type": {
@@ -23221,9 +23184,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 466,
+              "line": 455,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L466"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L455"
             }
           ],
           "type": {
@@ -23259,9 +23222,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 483,
+              "line": 472,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L483"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L472"
             }
           ],
           "type": {
@@ -23298,9 +23261,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 472,
+              "line": 461,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L472"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L461"
             }
           ],
           "type": {
@@ -23325,9 +23288,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 461,
+          "line": 450,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L461"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L450"
         }
       ]
     },
@@ -23449,9 +23412,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 424,
+              "line": 413,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L424"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L413"
             }
           ],
           "type": {
@@ -23480,9 +23443,9 @@
                       "sources": [
                         {
                           "fileName": "types/plugin.ts",
-                          "line": 424,
+                          "line": 413,
                           "character": 37,
-                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L424"
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L413"
                         }
                       ],
                       "type": {
@@ -23549,9 +23512,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 418,
+              "line": 407,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L418"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L407"
             }
           ],
           "type": {
@@ -23587,9 +23550,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 430,
+              "line": 419,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L430"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L419"
             }
           ],
           "type": {
@@ -23611,9 +23574,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 412,
+          "line": 401,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L412"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L401"
         }
       ]
     },
@@ -23822,9 +23785,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 695,
+              "line": 684,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L695"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L684"
             }
           ],
           "type": {
@@ -23891,9 +23854,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 687,
+              "line": 676,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L687"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L676"
             }
           ],
           "type": {
@@ -23903,7 +23866,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 758,
+                "target": 759,
                 "name": "StudioHeaderAction",
                 "package": "@anvilkit/core"
               }
@@ -23940,9 +23903,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 666,
+              "line": 655,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L666"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L655"
             }
           ],
           "type": {
@@ -23991,9 +23954,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 659,
+              "line": 648,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L659"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L648"
             }
           ],
           "type": {
@@ -24049,9 +24012,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 719,
+              "line": 708,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L719"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L708"
             }
           ],
           "type": {
@@ -24112,9 +24075,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 677,
+              "line": 666,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L677"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L666"
             }
           ],
           "type": {
@@ -24213,9 +24176,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 708,
+              "line": 697,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L708"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L697"
             }
           ],
           "type": {
@@ -24270,9 +24233,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 728,
+              "line": 717,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L728"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L717"
             }
           ],
           "type": {
@@ -24308,9 +24271,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 648,
+          "line": 637,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L648"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L637"
         }
       ],
       "typeParameters": [
@@ -24395,7 +24358,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioHeaderAction",
-            "target": 758
+            "target": 759
           },
           {
             "kind": "text",
@@ -24423,9 +24386,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 520,
+              "line": 509,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L520"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L509"
             }
           ],
           "type": {
@@ -24469,9 +24432,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 515,
+              "line": 504,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L515"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L504"
             }
           ],
           "type": {
@@ -24501,9 +24464,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 526,
+              "line": 515,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L526"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L515"
             }
           ],
           "type": {
@@ -24525,9 +24488,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 510,
+          "line": 499,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L510"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L499"
         }
       ]
     },
@@ -27398,7 +27361,7 @@
           ],
           "type": {
             "type": "reference",
-            "target": 713,
+            "target": 714,
             "name": "StudioPagesSource",
             "package": "@anvilkit/core"
           }
@@ -27438,7 +27401,7 @@
                 "kind": "inline-tag",
                 "tag": "@link",
                 "text": "InferPluginContributions",
-                "target": 747
+                "target": 748
               },
               {
                 "kind": "code",
@@ -28005,9 +27968,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 119,
+              "line": 118,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L119"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L118"
             }
           ],
           "type": {
@@ -28017,7 +27980,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 751,
+                "target": 752,
                 "name": "IRAssetResolver",
                 "package": "@anvilkit/core"
               }
@@ -28053,9 +28016,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 112,
+              "line": 111,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L112"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L111"
             }
           ],
           "type": {
@@ -28138,9 +28101,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 125,
+              "line": 124,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L125"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L124"
             }
           ],
           "type": {
@@ -28150,7 +28113,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 758,
+                "target": 759,
                 "name": "StudioHeaderAction",
                 "package": "@anvilkit/core"
               }
@@ -28208,9 +28171,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 186,
+              "line": 185,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L186"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L185"
             }
           ],
           "type": {
@@ -28233,9 +28196,9 @@
                   "sources": [
                     {
                       "fileName": "runtime/compile-plugins.ts",
-                      "line": 187,
+                      "line": 186,
                       "character": 11,
-                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L187"
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L186"
                     }
                   ],
                   "type": {
@@ -28297,9 +28260,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 107,
+              "line": 106,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L107"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L106"
             }
           ],
           "type": {
@@ -28352,9 +28315,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 157,
+              "line": 156,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L157"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L156"
             }
           ],
           "type": {
@@ -28440,9 +28403,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 141,
+              "line": 140,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L141"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L140"
             }
           ],
           "type": {
@@ -28503,9 +28466,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 93,
+              "line": 92,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L93"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L92"
             }
           ],
           "type": {
@@ -28573,9 +28536,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 150,
+              "line": 149,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L150"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L149"
             }
           ],
           "type": {
@@ -28619,9 +28582,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 168,
+              "line": 167,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L168"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L167"
             }
           ],
           "type": {
@@ -28678,9 +28641,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 102,
+              "line": 101,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L102"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L101"
             }
           ],
           "type": {
@@ -28754,9 +28717,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 179,
+              "line": 178,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L179"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L178"
             }
           ],
           "type": {
@@ -28793,9 +28756,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 163,
+              "line": 162,
               "character": 10,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L163"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L162"
             }
           ],
           "type": {
@@ -28845,9 +28808,9 @@
       "sources": [
         {
           "fileName": "runtime/compile-plugins.ts",
-          "line": 87,
+          "line": 86,
           "character": 17,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L87"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L86"
         }
       ]
     },
@@ -29862,7 +29825,7 @@
               "type": "array",
               "elementType": {
                 "type": "reference",
-                "target": 758,
+                "target": 759,
                 "name": "StudioHeaderAction",
                 "package": "@anvilkit/core"
               }
@@ -30115,7 +30078,7 @@
       }
     },
     {
-      "id": 639,
+      "id": 640,
       "name": "ExportOptions",
       "variant": "declaration",
       "kind": 2097152,
@@ -30130,7 +30093,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "ExportFormatDefinition.run",
-            "target": 631
+            "target": 632
           },
           {
             "kind": "text",
@@ -30175,7 +30138,7 @@
       ],
       "typeParameters": [
         {
-          "id": 640,
+          "id": 641,
           "name": "T",
           "variant": "typeParam",
           "kind": 131072,
@@ -30240,7 +30203,7 @@
       ],
       "type": {
         "type": "reference",
-        "target": 640,
+        "target": 641,
         "name": "T",
         "package": "@anvilkit/core",
         "refersToTypeParameter": true
@@ -30280,7 +30243,7 @@
       }
     },
     {
-      "id": 650,
+      "id": 651,
       "name": "ExportWarningLevel",
       "variant": "declaration",
       "kind": 2097152,
@@ -30410,9 +30373,9 @@
       "sources": [
         {
           "fileName": "runtime/header-actions.ts",
-          "line": 217,
+          "line": 213,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L217"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L213"
         }
       ],
       "type": {
@@ -30438,14 +30401,14 @@
                   "sources": [
                     {
                       "fileName": "runtime/header-actions.ts",
-                      "line": 218,
+                      "line": 214,
                       "character": 37,
-                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L218"
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L214"
                     }
                   ],
                   "type": {
                     "type": "reference",
-                    "target": 758,
+                    "target": 759,
                     "name": "StudioHeaderAction",
                     "package": "@anvilkit/core"
                   }
@@ -30461,9 +30424,9 @@
                   "sources": [
                     {
                       "fileName": "runtime/header-actions.ts",
-                      "line": 218,
+                      "line": 214,
                       "character": 14,
-                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L218"
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L214"
                     }
                   ],
                   "type": {
@@ -30503,14 +30466,14 @@
                   "sources": [
                     {
                       "fileName": "runtime/header-actions.ts",
-                      "line": 221,
+                      "line": 217,
                       "character": 12,
-                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L221"
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L217"
                     }
                   ],
                   "type": {
                     "type": "reference",
-                    "target": 755,
+                    "target": 756,
                     "name": "StaticHeaderActionPlaceholder",
                     "package": "@anvilkit/core"
                   }
@@ -30526,9 +30489,9 @@
                   "sources": [
                     {
                       "fileName": "runtime/header-actions.ts",
-                      "line": 220,
+                      "line": 216,
                       "character": 12,
-                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L220"
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L216"
                     }
                   ],
                   "type": {
@@ -30552,7 +30515,7 @@
       }
     },
     {
-      "id": 747,
+      "id": 748,
       "name": "InferPluginContributions",
       "variant": "declaration",
       "kind": 2097152,
@@ -30634,14 +30597,14 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 860,
+          "line": 849,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L860"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L849"
         }
       ],
       "typeParameters": [
         {
-          "id": 750,
+          "id": 751,
           "name": "Plugins",
           "variant": "typeParam",
           "kind": 131072,
@@ -30673,7 +30636,7 @@
             "operator": "keyof",
             "target": {
               "type": "reference",
-              "target": 750,
+              "target": 751,
               "name": "Plugins",
               "package": "@anvilkit/core",
               "refersToTypeParameter": true
@@ -30696,7 +30659,7 @@
               },
               "objectType": {
                 "type": "reference",
-                "target": 750,
+                "target": 751,
                 "name": "Plugins",
                 "package": "@anvilkit/core",
                 "refersToTypeParameter": true
@@ -30705,14 +30668,14 @@
             "extendsType": {
               "type": "reflection",
               "declaration": {
-                "id": 748,
+                "id": 749,
                 "name": "__type",
                 "variant": "declaration",
                 "kind": 65536,
                 "flags": {},
                 "children": [
                   {
-                    "id": 749,
+                    "id": 750,
                     "name": "[StudioPluginContributesBrand]",
                     "variant": "declaration",
                     "kind": 1024,
@@ -30722,9 +30685,9 @@
                     "sources": [
                       {
                         "fileName": "types/plugin.ts",
-                        "line": 862,
+                        "line": 851,
                         "character": 11,
-                        "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L862"
+                        "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L851"
                       }
                     ],
                     "type": {
@@ -30737,7 +30700,7 @@
                   {
                     "title": "Properties",
                     "children": [
-                      749
+                      750
                     ]
                   }
                 ]
@@ -30763,7 +30726,7 @@
       }
     },
     {
-      "id": 751,
+      "id": 752,
       "name": "IRAssetResolver",
       "variant": "declaration",
       "kind": 2097152,
@@ -30779,21 +30742,21 @@
       "type": {
         "type": "reflection",
         "declaration": {
-          "id": 752,
+          "id": 753,
           "name": "__type",
           "variant": "declaration",
           "kind": 65536,
           "flags": {},
           "signatures": [
             {
-              "id": 753,
+              "id": 754,
               "name": "__type",
               "variant": "signature",
               "kind": 4096,
               "flags": {},
               "parameters": [
                 {
-                  "id": 754,
+                  "id": 755,
                   "name": "url",
                   "variant": "param",
                   "kind": 32768,
@@ -30820,7 +30783,7 @@
                         "types": [
                           {
                             "type": "reference",
-                            "target": 744,
+                            "target": 745,
                             "name": "AssetResolution",
                             "package": "@anvilkit/core"
                           },
@@ -30836,7 +30799,7 @@
                   },
                   {
                     "type": "reference",
-                    "target": 744,
+                    "target": 745,
                     "name": "AssetResolution",
                     "package": "@anvilkit/core"
                   },
@@ -31424,7 +31387,7 @@
       }
     },
     {
-      "id": 755,
+      "id": 756,
       "name": "StaticHeaderActionPlaceholder",
       "variant": "declaration",
       "kind": 2097152,
@@ -31439,7 +31402,7 @@
             "kind": "inline-tag",
             "tag": "@link",
             "text": "StudioHeaderAction",
-            "target": 758
+            "target": 759
           },
           {
             "kind": "text",
@@ -31566,9 +31529,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 385,
+          "line": 374,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L385"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L374"
         }
       ],
       "type": {
@@ -31581,7 +31544,7 @@
         "typeArguments": [
           {
             "type": "reference",
-            "target": 758,
+            "target": 759,
             "name": "StudioHeaderAction",
             "package": "@anvilkit/core"
           },
@@ -31604,7 +31567,7 @@
       }
     },
     {
-      "id": 756,
+      "id": 757,
       "name": "StudioAnyPlugin",
       "variant": "declaration",
       "kind": 2097152,
@@ -31628,14 +31591,14 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 847,
+          "line": 836,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L847"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L836"
         }
       ],
       "typeParameters": [
         {
-          "id": 757,
+          "id": 758,
           "name": "UserConfig",
           "variant": "typeParam",
           "kind": 131072,
@@ -31673,7 +31636,7 @@
             "typeArguments": [
               {
                 "type": "reference",
-                "target": 757,
+                "target": 758,
                 "name": "UserConfig",
                 "package": "@anvilkit/core",
                 "refersToTypeParameter": true
@@ -31692,7 +31655,7 @@
             "typeArguments": [
               {
                 "type": "reference",
-                "target": 757,
+                "target": 758,
                 "name": "UserConfig",
                 "package": "@anvilkit/core",
                 "refersToTypeParameter": true
@@ -33354,9 +33317,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 448,
+          "line": 437,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L448"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L437"
         }
       ],
       "type": {
@@ -33998,9 +33961,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 497,
+          "line": 486,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L497"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L486"
         }
       ],
       "type": {
@@ -36718,9 +36681,9 @@
       "sources": [
         {
           "fileName": "runtime/compile-plugins.ts",
-          "line": 339,
+          "line": 338,
           "character": 22,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L339"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L338"
         }
       ],
       "signatures": [
@@ -36733,9 +36696,9 @@
           "sources": [
             {
               "fileName": "runtime/compile-plugins.ts",
-              "line": 339,
+              "line": 338,
               "character": 22,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L339"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L338"
             }
           ],
           "parameters": [
@@ -36849,9 +36812,9 @@
       "sources": [
         {
           "fileName": "runtime/header-actions.ts",
-          "line": 197,
+          "line": 193,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L197"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L193"
         }
       ],
       "signatures": [
@@ -36930,9 +36893,9 @@
           "sources": [
             {
               "fileName": "runtime/header-actions.ts",
-              "line": 197,
+              "line": 193,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L197"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L193"
             }
           ],
           "typeParameters": [
@@ -39688,9 +39651,9 @@
       "sources": [
         {
           "fileName": "types/plugin.ts",
-          "line": 840,
+          "line": 829,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L840"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L829"
         }
       ],
       "signatures": [
@@ -39741,9 +39704,9 @@
           "sources": [
             {
               "fileName": "types/plugin.ts",
-              "line": 840,
+              "line": 829,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L840"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L829"
             }
           ],
           "typeParameters": [
@@ -43349,9 +43312,9 @@
       "sources": [
         {
           "fileName": "runtime/header-actions.ts",
-          "line": 249,
+          "line": 245,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L249"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L245"
         }
       ],
       "signatures": [
@@ -43430,9 +43393,9 @@
           "sources": [
             {
               "fileName": "runtime/header-actions.ts",
-              "line": 249,
+              "line": 245,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L249"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L245"
             }
           ],
           "parameters": [
@@ -43467,7 +43430,7 @@
                   "type": "array",
                   "elementType": {
                     "type": "reference",
-                    "target": 755,
+                    "target": 756,
                     "name": "StaticHeaderActionPlaceholder",
                     "package": "@anvilkit/core"
                   }
@@ -43511,7 +43474,7 @@
                   "type": "array",
                   "elementType": {
                     "type": "reference",
-                    "target": 758,
+                    "target": 759,
                     "name": "StudioHeaderAction",
                     "package": "@anvilkit/core"
                   }
@@ -45280,7 +45243,7 @@
         454,
         582,
         586,
-        744,
+        745,
         613,
         609,
         458,
@@ -45288,19 +45251,19 @@
         1,
         462,
         625,
-        637,
+        638,
         284,
-        641,
+        642,
         473,
         497,
-        645,
+        646,
         501,
         314,
-        651,
-        656,
-        661,
-        666,
-        675,
+        652,
+        657,
+        662,
+        667,
+        676,
         369,
         930,
         946,
@@ -45316,18 +45279,18 @@
         1122,
         1126,
         624,
-        758,
+        759,
         1130,
         1134,
         1146,
         165,
-        680,
-        690,
-        694,
-        698,
-        701,
-        706,
-        713,
+        681,
+        691,
+        695,
+        699,
+        702,
+        707,
+        714,
         775,
         788,
         856,
@@ -45351,18 +45314,18 @@
         575,
         450,
         581,
-        639,
+        640,
         493,
-        650,
+        651,
         299,
-        747,
-        751,
+        748,
+        752,
         313,
         339,
         340,
         360,
-        755,
         756,
+        757,
         974,
         1072,
         1095,
@@ -48489,22 +48452,22 @@
     "629": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportFormatDefinition.extension"
+      "qualifiedName": "ExportFormatDefinition.labelKey"
     },
     "630": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportFormatDefinition.mimeType"
+      "qualifiedName": "ExportFormatDefinition.extension"
     },
     "631": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportFormatDefinition.run"
+      "qualifiedName": "ExportFormatDefinition.mimeType"
     },
     "632": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "ExportFormatDefinition.run"
     },
     "633": {
       "packageName": "@anvilkit/core",
@@ -48514,407 +48477,407 @@
     "634": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ir"
+      "qualifiedName": "__type"
     },
     "635": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "options"
+      "qualifiedName": "ir"
     },
     "636": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ctx"
+      "qualifiedName": "options"
     },
     "637": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportFormatRunContext"
+      "qualifiedName": "ctx"
     },
     "638": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportFormatRunContext.assetResolvers"
+      "qualifiedName": "ExportFormatRunContext"
     },
     "639": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportOptions"
+      "qualifiedName": "ExportFormatRunContext.assetResolvers"
     },
     "640": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "T"
+      "qualifiedName": "ExportOptions"
     },
     "641": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportResult"
+      "qualifiedName": "T"
     },
     "642": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportResult.content"
+      "qualifiedName": "ExportResult"
     },
     "643": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportResult.filename"
+      "qualifiedName": "ExportResult.content"
     },
     "644": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportResult.warnings"
+      "qualifiedName": "ExportResult.filename"
     },
     "645": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportWarning"
+      "qualifiedName": "ExportResult.warnings"
     },
     "646": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportWarning.level"
+      "qualifiedName": "ExportWarning"
     },
     "647": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportWarning.code"
+      "qualifiedName": "ExportWarning.level"
     },
     "648": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportWarning.message"
+      "qualifiedName": "ExportWarning.code"
     },
     "649": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportWarning.nodeId"
+      "qualifiedName": "ExportWarning.message"
     },
     "650": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/export.ts",
-      "qualifiedName": "ExportWarningLevel"
+      "qualifiedName": "ExportWarning.nodeId"
     },
     "651": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIR"
+      "packagePath": "src/types/export.ts",
+      "qualifiedName": "ExportWarningLevel"
     },
     "652": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIR.version"
+      "qualifiedName": "PageIR"
     },
     "653": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIR.root"
+      "qualifiedName": "PageIR.version"
     },
     "654": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIR.assets"
+      "qualifiedName": "PageIR.root"
     },
     "655": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIR.metadata"
+      "qualifiedName": "PageIR.assets"
     },
     "656": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRAsset"
+      "qualifiedName": "PageIR.metadata"
     },
     "657": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRAsset.id"
+      "qualifiedName": "PageIRAsset"
     },
     "658": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRAsset.kind"
+      "qualifiedName": "PageIRAsset.id"
     },
     "659": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRAsset.url"
+      "qualifiedName": "PageIRAsset.kind"
     },
     "660": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRAsset.meta"
+      "qualifiedName": "PageIRAsset.url"
     },
     "661": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRMetadata"
+      "qualifiedName": "PageIRAsset.meta"
     },
     "662": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRMetadata.title"
+      "qualifiedName": "PageIRMetadata"
     },
     "663": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRMetadata.description"
+      "qualifiedName": "PageIRMetadata.title"
     },
     "664": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRMetadata.createdAt"
+      "qualifiedName": "PageIRMetadata.description"
     },
     "665": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRMetadata.updatedAt"
+      "qualifiedName": "PageIRMetadata.createdAt"
     },
     "666": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode"
+      "qualifiedName": "PageIRMetadata.updatedAt"
     },
     "667": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.id"
+      "qualifiedName": "PageIRNode"
     },
     "668": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.type"
+      "qualifiedName": "PageIRNode.id"
     },
     "669": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.props"
+      "qualifiedName": "PageIRNode.type"
     },
     "670": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.slot"
+      "qualifiedName": "PageIRNode.props"
     },
     "671": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.slotKind"
+      "qualifiedName": "PageIRNode.slot"
     },
     "672": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.children"
+      "qualifiedName": "PageIRNode.slotKind"
     },
     "673": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.assets"
+      "qualifiedName": "PageIRNode.children"
     },
     "674": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNode.meta"
+      "qualifiedName": "PageIRNode.assets"
     },
     "675": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNodeMeta"
+      "qualifiedName": "PageIRNode.meta"
     },
     "676": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNodeMeta.locked"
+      "qualifiedName": "PageIRNodeMeta"
     },
     "677": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNodeMeta.owner"
+      "qualifiedName": "PageIRNodeMeta.locked"
     },
     "678": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNodeMeta.version"
+      "qualifiedName": "PageIRNodeMeta.owner"
     },
     "679": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/ir.ts",
-      "qualifiedName": "PageIRNodeMeta.notes"
+      "qualifiedName": "PageIRNodeMeta.version"
     },
     "680": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage"
+      "packagePath": "src/types/ir.ts",
+      "qualifiedName": "PageIRNodeMeta.notes"
     },
     "681": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.id"
+      "qualifiedName": "StudioPage"
     },
     "682": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.title"
+      "qualifiedName": "StudioPage.id"
     },
     "683": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.path"
+      "qualifiedName": "StudioPage.title"
     },
     "684": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.route"
+      "qualifiedName": "StudioPage.path"
     },
     "685": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.active"
+      "qualifiedName": "StudioPage.route"
     },
     "686": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.description"
+      "qualifiedName": "StudioPage.active"
     },
     "687": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.seo"
+      "qualifiedName": "StudioPage.description"
     },
     "688": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.order"
+      "qualifiedName": "StudioPage.seo"
     },
     "689": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPage.locked"
+      "qualifiedName": "StudioPage.order"
     },
     "690": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageCreateInput"
+      "qualifiedName": "StudioPage.locked"
     },
     "691": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageCreateInput.title"
+      "qualifiedName": "StudioPageCreateInput"
     },
     "692": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageCreateInput.path"
+      "qualifiedName": "StudioPageCreateInput.title"
     },
     "693": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageCreateInput.route"
+      "qualifiedName": "StudioPageCreateInput.path"
     },
     "694": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageRenameInput"
+      "qualifiedName": "StudioPageCreateInput.route"
     },
     "695": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageRenameInput.id"
+      "qualifiedName": "StudioPageRenameInput"
     },
     "696": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageRenameInput.title"
+      "qualifiedName": "StudioPageRenameInput.id"
     },
     "697": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageRenameInput.path"
+      "qualifiedName": "StudioPageRenameInput.title"
     },
     "698": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageReorderInput"
+      "qualifiedName": "StudioPageRenameInput.path"
     },
     "699": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageReorderInput.id"
+      "qualifiedName": "StudioPageReorderInput"
     },
     "700": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageReorderInput.toIndex"
+      "qualifiedName": "StudioPageReorderInput.id"
     },
     "701": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSeo"
+      "qualifiedName": "StudioPageReorderInput.toIndex"
     },
     "702": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSeo.metaTitle"
+      "qualifiedName": "StudioPageSeo"
     },
     "703": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSeo.metaDescription"
+      "qualifiedName": "StudioPageSeo.metaTitle"
     },
     "704": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSeo.ogImage"
+      "qualifiedName": "StudioPageSeo.metaDescription"
     },
     "705": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSeo.noindex"
+      "qualifiedName": "StudioPageSeo.ogImage"
     },
     "706": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSettingsInput"
+      "qualifiedName": "StudioPageSeo.noindex"
     },
     "707": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSettingsInput.id"
+      "qualifiedName": "StudioPageSettingsInput"
     },
     "708": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSettingsInput.title"
+      "qualifiedName": "StudioPageSettingsInput.id"
     },
     "709": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSettingsInput.path"
+      "qualifiedName": "StudioPageSettingsInput.title"
     },
     "710": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSettingsInput.route"
+      "qualifiedName": "StudioPageSettingsInput.path"
     },
     "711": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSettingsInput.description"
+      "qualifiedName": "StudioPageSettingsInput.route"
     },
     "712": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPageSettingsInput.seo"
+      "qualifiedName": "StudioPageSettingsInput.description"
     },
     "713": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource"
+      "qualifiedName": "StudioPageSettingsInput.seo"
     },
     "714": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.list"
+      "qualifiedName": "StudioPagesSource"
     },
     "715": {
       "packageName": "@anvilkit/core",
@@ -48924,7 +48887,7 @@
     "716": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.subscribe"
+      "qualifiedName": "StudioPagesSource.list"
     },
     "717": {
       "packageName": "@anvilkit/core",
@@ -48934,12 +48897,12 @@
     "718": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "listener"
+      "qualifiedName": "StudioPagesSource.subscribe"
     },
     "719": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "listener"
     },
     "720": {
       "packageName": "@anvilkit/core",
@@ -48959,7 +48922,7 @@
     "723": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.onSelect"
+      "qualifiedName": "__type"
     },
     "724": {
       "packageName": "@anvilkit/core",
@@ -48969,12 +48932,12 @@
     "725": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "pageId"
+      "qualifiedName": "StudioPagesSource.onSelect"
     },
     "726": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.onCreate"
+      "qualifiedName": "pageId"
     },
     "727": {
       "packageName": "@anvilkit/core",
@@ -48984,12 +48947,12 @@
     "728": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "input"
+      "qualifiedName": "StudioPagesSource.onCreate"
     },
     "729": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.onRename"
+      "qualifiedName": "input"
     },
     "730": {
       "packageName": "@anvilkit/core",
@@ -48999,12 +48962,12 @@
     "731": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "input"
+      "qualifiedName": "StudioPagesSource.onRename"
     },
     "732": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.onDelete"
+      "qualifiedName": "input"
     },
     "733": {
       "packageName": "@anvilkit/core",
@@ -49014,12 +48977,12 @@
     "734": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "pageId"
+      "qualifiedName": "StudioPagesSource.onDelete"
     },
     "735": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.onDuplicate"
+      "qualifiedName": "pageId"
     },
     "736": {
       "packageName": "@anvilkit/core",
@@ -49029,12 +48992,12 @@
     "737": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "pageId"
+      "qualifiedName": "StudioPagesSource.onDuplicate"
     },
     "738": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.onReorder"
+      "qualifiedName": "pageId"
     },
     "739": {
       "packageName": "@anvilkit/core",
@@ -49044,12 +49007,12 @@
     "740": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "input"
+      "qualifiedName": "StudioPagesSource.onReorder"
     },
     "741": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "StudioPagesSource.onUpdateSettings"
+      "qualifiedName": "input"
     },
     "742": {
       "packageName": "@anvilkit/core",
@@ -49059,52 +49022,52 @@
     "743": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/pages.ts",
-      "qualifiedName": "input"
+      "qualifiedName": "StudioPagesSource.onUpdateSettings"
     },
     "744": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "AssetResolution"
+      "packagePath": "src/types/pages.ts",
+      "qualifiedName": "input"
     },
     "745": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "AssetResolution.url"
+      "qualifiedName": "AssetResolution"
     },
     "746": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "AssetResolution.meta"
+      "qualifiedName": "AssetResolution.url"
     },
     "747": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "InferPluginContributions"
+      "packagePath": "src/types/asset-resolver.ts",
+      "qualifiedName": "AssetResolution.meta"
     },
     "748": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "InferPluginContributions"
     },
     "749": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "__type.[StudioPluginContributesBrand]"
+      "qualifiedName": "__type"
     },
     "750": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "Plugins"
+      "qualifiedName": "__type.[StudioPluginContributesBrand]"
     },
     "751": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "IRAssetResolver"
+      "packagePath": "src/types/plugin.ts",
+      "qualifiedName": "Plugins"
     },
     "752": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "IRAssetResolver"
     },
     "753": {
       "packageName": "@anvilkit/core",
@@ -49114,42 +49077,42 @@
     "754": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/asset-resolver.ts",
-      "qualifiedName": "url"
+      "qualifiedName": "__type"
     },
     "755": {
       "packageName": "@anvilkit/core",
-      "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StaticHeaderActionPlaceholder"
+      "packagePath": "src/types/asset-resolver.ts",
+      "qualifiedName": "url"
     },
     "756": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioAnyPlugin"
+      "qualifiedName": "StaticHeaderActionPlaceholder"
     },
     "757": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "UserConfig"
+      "qualifiedName": "StudioAnyPlugin"
     },
     "758": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction"
+      "qualifiedName": "UserConfig"
     },
     "759": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.id"
+      "qualifiedName": "StudioHeaderAction"
     },
     "760": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.labelKey"
+      "qualifiedName": "StudioHeaderAction.id"
     },
     "761": {
       "packageName": "@anvilkit/core",
       "packagePath": "src/types/plugin.ts",
-      "qualifiedName": "StudioHeaderAction.label"
+      "qualifiedName": "StudioHeaderAction.labelKey"
     },
     "762": {
       "packageName": "@anvilkit/core",

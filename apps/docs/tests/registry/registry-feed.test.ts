@@ -35,7 +35,7 @@ describe("registry feed", () => {
 
 	// Templates are workspace-only (not published to npm) and are
 	// intentionally excluded from the marketplace feed.
-	it("contains 0 templates, 10 plugins, 12 components", () => {
+	it("contains 0 templates, 11 plugins, 12 components", () => {
 		const counts = feed.entries.reduce(
 			(acc, e) => {
 				acc[e.kind]++;
@@ -46,7 +46,7 @@ describe("registry feed", () => {
 				number
 			>,
 		);
-		expect(counts).toEqual({ template: 0, plugin: 10, component: 12 });
+		expect(counts).toEqual({ template: 0, plugin: 11, component: 12 });
 	});
 
 	it("marks every first-party entry as verified", () => {
