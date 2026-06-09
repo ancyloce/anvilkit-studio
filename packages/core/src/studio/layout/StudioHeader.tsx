@@ -9,29 +9,36 @@
 
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
 import { type ComponentType, memo, type ReactNode, useCallback } from "react";
+import { useStudioRuntime } from "@/components/use-studio";
 import { useActivePage } from "@/context/pages-source";
 import { useStudioPluginContextOrNull } from "@/context/plugin-context";
-import { useStudioRuntime } from "@/components/use-studio";
 import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
-import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import type {
 	StudioPluginMeta,
 	StudioPluginSlotContribution,
 } from "@/types/plugin";
+import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import { HeaderActions } from "./HeaderActions";
 import { PublishPanel } from "./PublishPanel";
 
 export interface StudioHeaderProps {
 	readonly onBack?: () => void;
 	readonly lastSavedAt?: Date | null;
+	/**
+	 * Host-supplied node rendered in the right-hand action cluster, between
+	 * the plugin header actions and the Preview button. The seam for
+	 * arbitrary host header content (e.g. the `LanguageSwitcher`).
+	 */
+	readonly headerEnd?: ReactNode;
 }
 
 function StudioHeaderImpl({
 	onBack,
 	lastSavedAt = null,
+	headerEnd = null,
 }: StudioHeaderProps): ReactNode {
 	const msg = useMsg();
 	// Stable identity for the back button so the memo boundary holds when
@@ -109,6 +116,8 @@ function StudioHeaderImpl({
 				</Tooltip>
 
 				<HeaderActionsRegion />
+
+				{headerEnd}
 
 				<Tooltip>
 					<TooltipTrigger

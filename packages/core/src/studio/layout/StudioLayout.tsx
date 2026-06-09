@@ -39,10 +39,11 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// callbacks are now consumed inside `<PublishPanel>` directly via
 	// `useChromeProps`, so the header itself only needs `onBack` and
 	// the read-only `lastSavedAt` chip.
-	const { onBack, lastSavedAt } = useChromeProps();
+	const { onBack, lastSavedAt, headerEnd } = useChromeProps();
 	const props: StudioHeaderProps = {
 		onBack,
 		lastSavedAt,
+		headerEnd,
 		...propOverrides,
 	};
 	const hasSelection = useStudioPuck(
@@ -59,7 +60,11 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 				{/* Discrete props (not a spread object literal) so the
 				    `memo`'d `StudioHeader` boundary holds across this
 				    layout's `hasSelection` re-renders. */}
-				<StudioHeader onBack={props.onBack} lastSavedAt={props.lastSavedAt} />
+				<StudioHeader
+					onBack={props.onBack}
+					lastSavedAt={props.lastSavedAt}
+					headerEnd={props.headerEnd}
+				/>
 				<div className="flex min-h-0 flex-1 overflow-hidden">
 					<StudioSidebarPanel railRef={railRef} />
 					<main className="flex min-w-0 flex-1 flex-col">
