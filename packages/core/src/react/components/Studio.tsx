@@ -152,6 +152,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		isPublishing,
 		onPublishClick,
 		onExport,
+		headerEnd,
 		pages,
 		messages,
 		loading,
@@ -201,6 +202,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			isPublishing,
 			onPublishClick,
 			onExport,
+			headerEnd,
 			viewports: chromeViewports,
 		}),
 		[
@@ -211,6 +213,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			isPublishing,
 			onPublishClick,
 			onExport,
+			headerEnd,
 			chromeViewports,
 		],
 	);

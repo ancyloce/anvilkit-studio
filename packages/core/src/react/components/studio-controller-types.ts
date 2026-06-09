@@ -221,6 +221,15 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 */
 	readonly onExport?: (formatId: string) => void | Promise<void>;
 	/**
+	 * Optional host node rendered in the chrome header's right-hand action
+	 * cluster (between the plugin header actions and the Preview / Publish
+	 * controls). The supported seam for arbitrary host header content — e.g.
+	 * `<LanguageSwitcher />` from `@anvilkit/core/i18n`. Ignored when
+	 * `chrome="puck"`. Memoize it host-side so the chrome-props context value
+	 * stays stable across `<Studio>` re-renders.
+	 */
+	readonly headerEnd?: ReactNode;
+	/**
 	 * Optional diagnostics sink for plugin log records and Studio setup
 	 * failures. Metadata is shallow-redacted before delivery.
 	 */
