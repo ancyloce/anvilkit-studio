@@ -32,6 +32,14 @@ export interface ChromeProps {
 	 * is omitted.
 	 */
 	readonly onExport?: (formatId: string) => void | Promise<void>;
+	/**
+	 * Host-supplied node rendered in the chrome header's right-hand action
+	 * cluster (between the plugin header actions and the Preview / Publish
+	 * controls). The seam for arbitrary host header content — e.g. the
+	 * `LanguageSwitcher`. Memoize it host-side to keep this context value
+	 * stable. Ignored when `chrome="puck"`.
+	 */
+	readonly headerEnd?: ReactNode;
 }
 
 const ChromePropsContext = createContext<ChromeProps>({});
