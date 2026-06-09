@@ -3851,6 +3851,75 @@
 					}
 				},
 				{
+					"id": 222,
+					"name": "headerEnd",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional host node rendered in the chrome header's right-hand action\ncluster (between the plugin header actions and the Preview / Publish\ncontrols). The supported seam for arbitrary host header content — e.g.\n"
+							},
+							{
+								"kind": "code",
+								"text": "`<LanguageSwitcher />`"
+							},
+							{
+								"kind": "text",
+								"text": " from "
+							},
+							{
+								"kind": "code",
+								"text": "`@anvilkit/core/i18n`"
+							},
+							{
+								"kind": "text",
+								"text": ". Ignored when\n"
+							},
+							{
+								"kind": "code",
+								"text": "`chrome=\"puck\"`"
+							},
+							{
+								"kind": "text",
+								"text": ". Memoize it host-side so the chrome-props context value\nstays stable across "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": " re-renders."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "react/components/studio-controller-types.ts",
+							"line": 231,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L231"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.ReactNode"
+						},
+						"name": "ReactNode",
+						"package": "@types/react",
+						"qualifiedName": "React.ReactNode"
+					}
+				},
+				{
 					"id": 213,
 					"name": "isPublishing",
 					"variant": "declaration",
@@ -3956,7 +4025,7 @@
 					}
 				},
 				{
-					"id": 225,
+					"id": 226,
 					"name": "loading",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4031,9 +4100,9 @@
 					"sources": [
 						{
 							"fileName": "react/components/studio-controller-types.ts",
-							"line": 260,
+							"line": 269,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L260"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L269"
 						}
 					],
 					"type": {
@@ -4049,7 +4118,7 @@
 					}
 				},
 				{
-					"id": 222,
+					"id": 223,
 					"name": "logger",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4068,9 +4137,9 @@
 					"sources": [
 						{
 							"fileName": "react/components/studio-controller-types.ts",
-							"line": 227,
+							"line": 236,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L227"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L236"
 						}
 					],
 					"type": {
@@ -4081,7 +4150,7 @@
 					}
 				},
 				{
-					"id": 224,
+					"id": 225,
 					"name": "messages",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4124,9 +4193,9 @@
 					"sources": [
 						{
 							"fileName": "react/components/studio-controller-types.ts",
-							"line": 238,
+							"line": 247,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L238"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L247"
 						}
 					],
 					"type": {
@@ -4883,7 +4952,7 @@
 					}
 				},
 				{
-					"id": 223,
+					"id": 224,
 					"name": "pages",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4918,9 +4987,9 @@
 					"sources": [
 						{
 							"fileName": "react/components/studio-controller-types.ts",
-							"line": 232,
+							"line": 241,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L232"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L241"
 						}
 					],
 					"type": {
@@ -5428,12 +5497,13 @@
 						200,
 						144,
 						142,
+						222,
 						213,
 						211,
 						212,
+						226,
+						223,
 						225,
-						222,
-						224,
 						202,
 						205,
 						191,
@@ -5442,7 +5512,7 @@
 						214,
 						208,
 						190,
-						223,
+						224,
 						143,
 						141,
 						204,
@@ -5978,7 +6048,7 @@
 			]
 		},
 		{
-			"id": 226,
+			"id": 227,
 			"name": "UseStudioResult",
 			"variant": "declaration",
 			"kind": 256,
@@ -6025,7 +6095,7 @@
 			},
 			"children": [
 				{
-					"id": 228,
+					"id": 229,
 					"name": "exportFormats",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6115,7 +6185,7 @@
 					}
 				},
 				{
-					"id": 229,
+					"id": 230,
 					"name": "headerActions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6173,7 +6243,7 @@
 					}
 				},
 				{
-					"id": 227,
+					"id": 228,
 					"name": "plugins",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6236,9 +6306,9 @@
 				{
 					"title": "Properties",
 					"children": [
-						228,
 						229,
-						227
+						230,
+						228
 					]
 				}
 			],
@@ -7135,7 +7205,7 @@
 			]
 		},
 		{
-			"id": 232,
+			"id": 233,
 			"name": "mergeOverrides",
 			"variant": "declaration",
 			"kind": 64,
@@ -7150,7 +7220,7 @@
 			],
 			"signatures": [
 				{
-					"id": 233,
+					"id": 234,
 					"name": "mergeOverrides",
 					"variant": "signature",
 					"kind": 4096,
@@ -7268,7 +7338,7 @@
 					],
 					"parameters": [
 						{
-							"id": 234,
+							"id": 235,
 							"name": "overridesList",
 							"variant": "param",
 							"kind": 32768,
@@ -7980,7 +8050,7 @@
 			]
 		},
 		{
-			"id": 230,
+			"id": 231,
 			"name": "useStudio",
 			"variant": "declaration",
 			"kind": 64,
@@ -7995,7 +8065,7 @@
 			],
 			"signatures": [
 				{
-					"id": 231,
+					"id": 232,
 					"name": "useStudio",
 					"variant": "signature",
 					"kind": 4096,
@@ -8057,7 +8127,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "UseStudioResult",
-										"target": 226
+										"target": 227
 									},
 									{
 										"kind": "text",
@@ -8086,7 +8156,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 226,
+						"target": 227,
 						"name": "UseStudioResult",
 						"package": "@anvilkit/core"
 					}
@@ -8283,7 +8353,7 @@
 				139,
 				77,
 				92,
-				226
+				227
 			]
 		},
 		{
@@ -8305,7 +8375,7 @@
 				37,
 				40,
 				64,
-				232,
+				233,
 				129,
 				123,
 				89,
@@ -8313,7 +8383,7 @@
 				103,
 				105,
 				112,
-				230,
+				231,
 				114,
 				121
 			]
@@ -9404,47 +9474,47 @@
 		"222": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.logger"
+			"qualifiedName": "StudioProps.headerEnd"
 		},
 		"223": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.pages"
+			"qualifiedName": "StudioProps.logger"
 		},
 		"224": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.messages"
+			"qualifiedName": "StudioProps.pages"
 		},
 		"225": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.loading"
+			"qualifiedName": "StudioProps.messages"
 		},
 		"226": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult"
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "StudioProps.loading"
 		},
 		"227": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult.plugins"
+			"qualifiedName": "UseStudioResult"
 		},
 		"228": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult.exportFormats"
+			"qualifiedName": "UseStudioResult.plugins"
 		},
 		"229": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult.headerActions"
+			"qualifiedName": "UseStudioResult.exportFormats"
 		},
 		"230": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "useStudio"
+			"qualifiedName": "UseStudioResult.headerActions"
 		},
 		"231": {
 			"packageName": "@anvilkit/core",
@@ -9453,8 +9523,8 @@
 		},
 		"232": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/overrides/merge-overrides.ts",
-			"qualifiedName": "mergeOverrides"
+			"packagePath": "src/react/components/use-studio.ts",
+			"qualifiedName": "useStudio"
 		},
 		"233": {
 			"packageName": "@anvilkit/core",
@@ -9462,6 +9532,11 @@
 			"qualifiedName": "mergeOverrides"
 		},
 		"234": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/overrides/merge-overrides.ts",
+			"qualifiedName": "mergeOverrides"
+		},
+		"235": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/overrides/merge-overrides.ts",
 			"qualifiedName": "overridesList"
