@@ -120,7 +120,8 @@
 		"./styles.css": "./dist/react/overrides/styles.css"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"i18n"
 	],
 	"license": "MIT",
 	"sideEffects": [
