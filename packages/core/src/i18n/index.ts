@@ -36,3 +36,12 @@ export {
 // `@anvilkit/core` and selects its prop-injected message catalog by locale)
 // can react to `setLocale` exactly like `useMsg`/`useT` do internally.
 export { useOptionalLocale } from "@/state/slices/LocaleStoreProvider";
+// Optional end-user locale switcher (drives the locale store). Surfaced here
+// because the i18n subpath is the natural discovery point for it; it is not
+// auto-wired into the chrome, so hosts opt in by rendering it.
+export {
+	LanguageSwitcher,
+	type LanguageSwitcherProps,
+	SUPPORTED_LOCALES,
+	type SupportedLocale,
+} from "@/studio/layout/LanguageSwitcher";

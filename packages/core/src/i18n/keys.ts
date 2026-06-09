@@ -10,8 +10,11 @@ import type { DEFAULT_MESSAGES } from "@/state/editor-i18n-context";
 /**
  * Exact union of the core chrome message keys (`studio.*` plus the
  * transitional `assetManager.*`). Derived from `DEFAULT_MESSAGES` via
- * `keyof typeof`, so it updates automatically when keys change — provided
- * `DEFAULT_MESSAGES` keeps its `satisfies` (not `: Record`) typing.
+ * `keyof typeof`, so it updates automatically when keys change.
+ * `DEFAULT_MESSAGES` is the `i18n/messages/en.json` import; a JSON import
+ * already yields the literal key union, so this stays exact (do not annotate
+ * it as `: Record<string, string>`, which would collapse the union to
+ * `string`).
  */
 export type StudioMessageKey = keyof typeof DEFAULT_MESSAGES;
 
