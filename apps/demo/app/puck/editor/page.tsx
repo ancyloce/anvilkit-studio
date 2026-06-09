@@ -11,6 +11,7 @@ import {
 	StudioConfigSchema,
 	StudioLoadingScreen,
 } from "@anvilkit/core";
+import { LanguageSwitcher } from "@anvilkit/core/i18n";
 import type {
 	ExportWarning,
 	PageIR,
@@ -404,6 +405,11 @@ export default function PuckEditorPage() {
 	// active-page state survives re-renders. The source itself owns
 	// active-page tracking and re-emits via `subscribe()` on `onSelect`.
 	const pagesSource = useMemo(() => createDemoPagesSource(), []);
+
+	// Locale switcher mounted into the chrome header via the `headerEnd` seam.
+	// Memoized (no deps) so the chrome-props context value stays stable across
+	// editor re-renders and the memo'd `<StudioHeader>` boundary holds.
+	const headerEnd = useMemo(() => <LanguageSwitcher />, []);
 
 	// Per-page canvas content for the layer sidebar. The source owns which
 	// page is active; this map owns each page's Puck document. Clicking a
@@ -1124,6 +1130,7 @@ export default function PuckEditorPage() {
 					chrome={chromeMode}
 					pages={pagesSource}
 					messages={studioMessages}
+					headerEnd={headerEnd}
 				/>
 			</section>
 

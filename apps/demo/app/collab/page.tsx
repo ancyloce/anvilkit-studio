@@ -2,6 +2,7 @@
 
 import { createCollabPlugin } from "@anvilkit/collab-ui";
 import { Studio } from "@anvilkit/core";
+import { LanguageSwitcher } from "@anvilkit/core/i18n";
 import type { Config, Data } from "@puckeditor/core";
 import { useMemo, useState } from "react";
 
@@ -48,6 +49,10 @@ export default function CollabDemoPage() {
 		[],
 	);
 
+	// Locale switcher mounted into the chrome header via the `headerEnd` seam.
+	// Memoized so the chrome-props context value stays stable across re-renders.
+	const headerEnd = useMemo(() => <LanguageSwitcher />, []);
+
 	return (
 		<main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
 			<header className="flex flex-col gap-3">
@@ -77,6 +82,7 @@ export default function CollabDemoPage() {
 					data={seedData}
 					plugins={plugins}
 					chrome="anvilkit"
+					headerEnd={headerEnd}
 				/>
 			</section>
 		</main>
