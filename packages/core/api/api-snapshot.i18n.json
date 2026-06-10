@@ -271,7 +271,8 @@
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
 							"line": 56,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L56"
 						}
 					],
 					"type": {
@@ -310,7 +311,8 @@
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
 							"line": 54,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L54"
 						}
 					],
 					"type": {
@@ -341,7 +343,8 @@
 				{
 					"fileName": "studio/layout/LanguageSwitcher.tsx",
 					"line": 49,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L49"
 				}
 			]
 		},
@@ -666,7 +669,8 @@
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
 							"line": 33,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L33"
 						}
 					],
 					"type": {
@@ -710,7 +714,8 @@
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
 							"line": 31,
-							"character": 10
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L31"
 						}
 					],
 					"type": {
@@ -732,7 +737,8 @@
 				{
 					"fileName": "studio/layout/LanguageSwitcher.tsx",
 					"line": 29,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L29"
 				}
 			]
 		},
@@ -1235,7 +1241,8 @@
 				{
 					"fileName": "studio/layout/LanguageSwitcher.tsx",
 					"line": 42,
-					"character": 13
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L42"
 				}
 			],
 			"type": {
@@ -1321,7 +1328,8 @@
 				{
 					"fileName": "studio/layout/LanguageSwitcher.tsx",
 					"line": 63,
-					"character": 16
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L63"
 				}
 			],
 			"signatures": [
@@ -1359,7 +1367,8 @@
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
 							"line": 63,
-							"character": 16
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/LanguageSwitcher.tsx#L63"
 						}
 					],
 					"parameters": [
