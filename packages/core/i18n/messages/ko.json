@@ -13,6 +13,7 @@
 	"studio.theme.light": "라이트 테마",
 	"studio.theme.dark": "다크 테마",
 	"studio.theme.system": "시스템 테마 사용",
+	"studio.theme.label": "테마",
 	"studio.drawer.searchPlaceholder": "컴포넌트 검색…",
 	"studio.drawer.empty": "이 검색과 일치하는 컴포넌트가 없습니다.",
 	"studio.outline.empty": "이 페이지에는 아직 컴포넌트가 없습니다.",

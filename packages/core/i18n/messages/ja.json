@@ -13,6 +13,7 @@
 	"studio.theme.light": "ライトテーマ",
 	"studio.theme.dark": "ダークテーマ",
 	"studio.theme.system": "システムテーマを使用",
+	"studio.theme.label": "テーマ",
 	"studio.drawer.searchPlaceholder": "コンポーネントを検索…",
 	"studio.drawer.empty": "この検索に一致するコンポーネントはありません。",
 	"studio.outline.empty": "このページにはまだコンポーネントがありません。",

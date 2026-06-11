@@ -13,6 +13,7 @@
 	"studio.theme.light": "浅色主题",
 	"studio.theme.dark": "深色主题",
 	"studio.theme.system": "跟随系统主题",
+	"studio.theme.label": "主题",
 	"studio.drawer.searchPlaceholder": "搜索组件…",
 	"studio.drawer.empty": "没有匹配此搜索的组件。",
 	"studio.outline.empty": "此页面尚无组件。",

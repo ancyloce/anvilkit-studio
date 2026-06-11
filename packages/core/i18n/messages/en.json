@@ -13,6 +13,7 @@
 	"studio.theme.light": "Light theme",
 	"studio.theme.dark": "Dark theme",
 	"studio.theme.system": "Use system theme",
+	"studio.theme.label": "Theme",
 	"studio.drawer.searchPlaceholder": "Search components…",
 	"studio.drawer.empty": "No components match this search.",
 	"studio.outline.empty": "No components on this page yet.",
