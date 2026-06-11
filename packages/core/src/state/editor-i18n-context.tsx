@@ -111,8 +111,12 @@ export interface EditorI18nProviderProps {
 	readonly children: ReactNode;
 	/**
 	 * Per-instance overrides forwarded by `<Studio messages>`. Layered ON
-	 * TOP of the resolved catalog (host always wins), preserving the legacy
-	 * precedence so `useMsg`'s resolution order is unchanged.
+	 * TOP of the resolved catalog AND the {@link configMessages} overlay
+	 * (the legacy host prop always wins during its migration window), so a
+	 * prop-only host's `useMsg` resolution is byte-identical.
+	 *
+	 * @deprecated Mirror of the deprecated `<Studio messages>` prop — use
+	 * {@link configMessages} (`config.i18n.messages`). Removal in 0.2.0.
 	 */
 	readonly messages?: Readonly<Record<string, string>>;
 	/**
@@ -121,12 +125,30 @@ export interface EditorI18nProviderProps {
 	 * entry is prepended internally, so omit this for chrome-only resolution.
 	 */
 	readonly entries?: readonly RegistryEntry[];
+	/**
+	 * Per-locale chrome overrides from `config.i18n.messages`
+	 * (config-centric i18n §4.4): the active locale's bundle is overlaid on
+	 * the resolved catalog, back-filled by the {@link fallbackLocale}
+	 * bundle. Beats the catalog (core + lazy packs + plugin entries); loses
+	 * only to the deprecated flat {@link messages} prop.
+	 */
+	readonly configMessages?: Readonly<
+		Record<string, Readonly<Record<string, string>>>
+	>;
+	/**
+	 * `config.i18n.fallbackLocale` — the {@link configMessages} bundle used
+	 * to back-fill keys missing from the active locale's bundle. No effect
+	 * when it equals the active locale or has no bundle.
+	 */
+	readonly fallbackLocale?: string;
 }
 
 export function EditorI18nProvider({
 	children,
 	messages,
 	entries = EMPTY_ENTRIES,
+	configMessages,
+	fallbackLocale,
 }: EditorI18nProviderProps): ReactNode {
 	// Active locale, null-tolerant: resolves to "en" when no locale store is
 	// mounted (RSC / tests / legacy path), mirroring `useMsg`'s fallback.
@@ -180,11 +202,34 @@ export function EditorI18nProvider({
 
 	const value = useMemo<EditorI18nContextValue>(() => {
 		const catalog = mergeCatalog(allEntries, locale, loadedPacks);
-		return {
-			messages: messages === undefined ? catalog : { ...catalog, ...messages },
-			overrides: messages ?? EMPTY_OVERRIDES,
+		// Override precedence (lowest → highest), config-centric i18n §4.4:
+		//   1. catalog — core `en` baseline + lazy packs + plugin entries
+		//   2. config fallback-locale bundle (back-fill, only when distinct)
+		//   3. config active-locale bundle
+		//   4. deprecated flat `<Studio messages>` prop — still wins during
+		//      its migration window so prop-only hosts are byte-identical.
+		// The combined overlay feeds the `overrides` slot so `useMsg`'s
+		// step-1 explicit-override check sees config overrides too.
+		const overlay: Record<string, string> = {
+			...(fallbackLocale !== undefined && fallbackLocale !== locale
+				? configMessages?.[fallbackLocale]
+				: undefined),
+			...configMessages?.[locale],
+			...messages,
 		};
-	}, [allEntries, locale, loadedPacks, messages]);
+		const hasOverlay = Object.keys(overlay).length > 0;
+		return {
+			messages: hasOverlay ? { ...catalog, ...overlay } : catalog,
+			overrides: hasOverlay ? overlay : EMPTY_OVERRIDES,
+		};
+	}, [
+		allEntries,
+		locale,
+		loadedPacks,
+		messages,
+		configMessages,
+		fallbackLocale,
+	]);
 
 	return <EditorI18nContext value={value}>{children}</EditorI18nContext>;
 }

@@ -22,12 +22,22 @@ import {
 } from "@/state/slices/editor-ui-store";
 import { type AiStoreApi, createAiStore } from "./slices/ai-store";
 import { createExportStore, type ExportStoreApi } from "./slices/export-store";
-import { createLocaleStore, type LocaleStoreApi } from "./slices/locale-store";
+import {
+	type CreateLocaleStoreOptions,
+	createLocaleStore,
+	type LocaleStoreApi,
+} from "./slices/locale-store";
 import { createThemeStore, type ThemeStoreApi } from "./slices/theme-store";
 
 /** Options for {@link createEditorStore}. Mirrors the per-slice factories. */
 export interface CreateEditorStoreOptions {
 	readonly storeId: string;
+	/**
+	 * Locale-slice options (config-centric i18n): controlled-mode latch,
+	 * initial locale, and the `requestLocale` listener cell. Omitted ⇒ the
+	 * locale store behaves exactly as before (uncontrolled, persisted).
+	 */
+	readonly locale?: Omit<CreateLocaleStoreOptions, "storeId">;
 }
 
 /**
@@ -51,12 +61,13 @@ export interface EditorStoreBundle {
  */
 export function createEditorStore({
 	storeId,
+	locale,
 }: CreateEditorStoreOptions): EditorStoreBundle {
 	return {
 		theme: createThemeStore({ storeId }),
 		export: createExportStore({ storeId }),
 		ai: createAiStore({ storeId }),
 		ui: createEditorUiStore({ storeId }),
-		locale: createLocaleStore({ storeId }),
+		locale: createLocaleStore({ storeId, ...locale }),
 	};
 }

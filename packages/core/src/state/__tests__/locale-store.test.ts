@@ -112,3 +112,120 @@ describe("locale store — sanitizes a corrupt blob at the CURRENT version", () 
 		expect(store.getState().locale).toBe("zh");
 	});
 });
+
+describe("locale store — requestLocale (uncontrolled)", () => {
+	it("applies the switch (persisting it) and notifies the listener", () => {
+		const seen: string[] = [];
+		const listenerRef = { current: (locale: string) => seen.push(locale) };
+		const notified = createLocaleStore({
+			storeId: STORE_ID,
+			onLocaleRequestRef: listenerRef,
+		});
+		notified.getState().requestLocale("zh");
+		expect(notified.getState().locale).toBe("zh");
+		expect(seen).toEqual(["zh"]);
+		expect(
+			(
+				JSON.parse(localStorage.getItem(STORAGE_KEY) as string) as {
+					state: { locale: string };
+				}
+			).state.locale,
+		).toBe("zh");
+	});
+
+	it("no-ops (no write, no notify) when the locale already matches", () => {
+		const seen: string[] = [];
+		const listenerRef = { current: (locale: string) => seen.push(locale) };
+		const notified = createLocaleStore({
+			storeId: STORE_ID,
+			onLocaleRequestRef: listenerRef,
+		});
+		notified.getState().requestLocale("en");
+		expect(seen).toEqual([]);
+		expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
+	});
+
+	it("reads the listener cell at call time (host can swap per render)", () => {
+		const first: string[] = [];
+		const second: string[] = [];
+		const listenerRef: {
+			current: ((locale: string) => void) | undefined;
+		} = { current: (locale) => first.push(locale) };
+		const notified = createLocaleStore({
+			storeId: STORE_ID,
+			onLocaleRequestRef: listenerRef,
+		});
+		notified.getState().requestLocale("zh");
+		listenerRef.current = (locale) => second.push(locale);
+		notified.getState().requestLocale("ja");
+		expect(first).toEqual(["zh"]);
+		expect(second).toEqual(["ja"]);
+	});
+});
+
+describe("locale store — controlled mode", () => {
+	it("seeds initialLocale synchronously and reset() returns to it", () => {
+		const controlled = createLocaleStore({
+			storeId: STORE_ID,
+			controlled: true,
+			initialLocale: "zh",
+		});
+		expect(controlled.getState().locale).toBe("zh");
+		controlled.getState().setLocale("ja");
+		controlled.getState().reset();
+		expect(controlled.getState().locale).toBe("zh");
+	});
+
+	it("requestLocale notifies WITHOUT writing (controlled-input semantics)", () => {
+		const seen: string[] = [];
+		const controlled = createLocaleStore({
+			storeId: STORE_ID,
+			controlled: true,
+			initialLocale: "zh",
+			onLocaleRequestRef: { current: (locale) => seen.push(locale) },
+		});
+		controlled.getState().requestLocale("ja");
+		expect(controlled.getState().locale).toBe("zh");
+		expect(seen).toEqual(["ja"]);
+	});
+
+	it("never touches localStorage: no reads, no writes, blob preserved", async () => {
+		// Pre-existing uncontrolled blob for the SAME storeId.
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({ state: { locale: "ja" }, version: 1 }),
+		);
+		const controlled = createLocaleStore({
+			storeId: STORE_ID,
+			controlled: true,
+			initialLocale: "zh",
+		});
+		await persistOf(controlled).persist.rehydrate();
+		// Rehydrate is a no-op against the no-op backend — the persisted "ja"
+		// is ignored, not loaded…
+		expect(controlled.getState().locale).toBe("zh");
+		// …and setters write nothing, leaving the blob intact for a later
+		// uncontrolled mount.
+		controlled.getState().setLocale("ko");
+		expect(
+			(
+				JSON.parse(localStorage.getItem(STORAGE_KEY) as string) as {
+					state: { locale: string };
+				}
+			).state.locale,
+		).toBe("ja");
+	});
+
+	it("rehydrate does not clamp a pre-hydration setLocale back to the seed", async () => {
+		// The write-through effect can run before the provider's rehydrate;
+		// the merge sanitizer must fall back to the LIVE locale, not "en".
+		const controlled = createLocaleStore({
+			storeId: STORE_ID,
+			controlled: true,
+			initialLocale: "zh",
+		});
+		controlled.getState().setLocale("ja");
+		await persistOf(controlled).persist.rehydrate();
+		expect(controlled.getState().locale).toBe("ja");
+	});
+});
