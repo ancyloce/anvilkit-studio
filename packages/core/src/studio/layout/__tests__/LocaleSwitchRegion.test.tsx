@@ -39,38 +39,33 @@ function createCtx(): StudioPluginContext {
 	};
 }
 
-function Harness({
-	showLocaleSwitch,
-	storeId,
-}: {
-	readonly showLocaleSwitch: boolean;
-	readonly storeId: string;
-}): ReactNode {
+function renderRegion(showLocaleSwitch: boolean, storeId: string) {
+	// Created OUTSIDE the component tree (stable identities across
+	// re-renders, mirroring how `<Studio>` owns its bundle).
 	const config = StudioConfigSchema.parse({ i18n: { showLocaleSwitch } });
 	const bundle = createEditorStore({ storeId });
-	return (
+	const ctx = createCtx();
+	return render(
 		<StudioConfigProvider config={config}>
-			<StudioPluginContextProvider value={createCtx()}>
+			<StudioPluginContextProvider value={ctx}>
 				<EditorStoreProvider storeId={storeId} store={bundle}>
 					<EditorI18nProvider>
 						<LocaleSwitchRegion />
 					</EditorI18nProvider>
 				</EditorStoreProvider>
 			</StudioPluginContextProvider>
-		</StudioConfigProvider>
+		</StudioConfigProvider>,
 	);
 }
 
 describe("<LocaleSwitchRegion>", () => {
 	it("renders nothing outside <Studio> (no plugin context)", () => {
 		const { container } = render(<LocaleSwitchRegion />);
-		expect(container).toBeEmptyDOMElement();
+		expect(container.childElementCount).toBe(0);
 	});
 
 	it("renders nothing when showLocaleSwitch is off (the default)", async () => {
-		const { container } = render(
-			<Harness showLocaleSwitch={false} storeId="region-off" />,
-		);
+		const { container } = renderRegion(false, "region-off");
 		// The hydration-gated store provider resolves in a microtask; assert
 		// the settled state.
 		await Promise.resolve();
@@ -78,11 +73,11 @@ describe("<LocaleSwitchRegion>", () => {
 	});
 
 	it("renders the LanguageSwitcher when showLocaleSwitch is on", async () => {
-		render(<Harness showLocaleSwitch={true} storeId="region-on" />);
+		renderRegion(true, "region-on");
 		// `studio.language.label` resolves to "Language" (the trigger's
 		// aria-label) once the locale store hydrates and the subtree mounts.
-		expect(
-			await screen.findByRole("button", { name: "Language" }),
-		).toBeInTheDocument();
+		// `findByRole` itself throws when absent — the assertion is the await.
+		const trigger = await screen.findByRole("button", { name: "Language" });
+		expect(trigger.getAttribute("aria-label")).toBe("Language");
 	});
 });

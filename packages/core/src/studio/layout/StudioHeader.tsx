@@ -25,6 +25,7 @@ import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import { HeaderActions } from "./HeaderActions";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { PublishPanel } from "./PublishPanel";
+import { ThemeToggle } from "./ThemeToggle";
 
 export interface StudioHeaderProps {
 	readonly onBack?: () => void;
@@ -119,6 +120,8 @@ function StudioHeaderImpl({
 
 				<HeaderActionsRegion />
 
+				<ThemeToggleRegion />
+
 				<LocaleSwitchRegion />
 
 				{headerEnd}
@@ -195,6 +198,39 @@ function HeaderActionsRegionInner(): ReactNode {
 			<HeaderActions />
 		</>
 	);
+}
+
+/**
+ * Renders the built-in `<ThemeToggle>` in the system-controls cluster
+ * (between the plugin header actions and the locale switcher) when
+ * `config.theme.allowToggle` is on.
+ *
+ * `allowToggle` has defaulted to `true` in the schema since core-011 —
+ * "When `true`, the built-in theme toggle button is rendered in the
+ * header" — but no renderer honored it until now, so shipping this is a
+ * deliberate, announced visual addition for every anvilkit-chrome host.
+ * Hosts that manage theme externally opt out with
+ * `config={{ theme: { allowToggle: false } }}` (live: the controller's
+ * config overlay only covers `i18n`, so a `theme` change recompiles —
+ * which is fine, this is a set-once flag).
+ *
+ * Defensive two-level read + test-only export: same convention as
+ * {@link LocaleSwitchRegion}.
+ */
+export function ThemeToggleRegion(): ReactNode {
+	const ctx = useStudioPluginContextOrNull();
+	if (ctx === null) {
+		return null;
+	}
+	return <ThemeToggleRegionInner />;
+}
+
+function ThemeToggleRegionInner(): ReactNode {
+	const allow = useStudioConfig((config) => config.theme.allowToggle);
+	if (!allow) {
+		return null;
+	}
+	return <ThemeToggle />;
 }
 
 /**
