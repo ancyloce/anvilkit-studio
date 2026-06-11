@@ -229,7 +229,7 @@ describe("StudioConfig — type-level assertions", () => {
 				primaryColor: "#f00",
 			},
 			theme: { defaultMode: "light", allowToggle: true },
-			i18n: { locale: "en", fallbackLocale: "en" },
+			i18n: { locale: "en", fallbackLocale: "en", showLocaleSwitch: false },
 			brandKit: {
 				colors: [{ name: "Primary", value: "#2563eb" }],
 				fonts: ["Inter"],

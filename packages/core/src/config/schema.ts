@@ -150,8 +150,13 @@ export const StudioConfigSchema = z
 			.prefault({}),
 		/**
 		 * Internationalization block — the active locale, the fallback
-		 * locale, and optional per-locale message overrides forwarded to
-		 * the editor chrome's i18n catalog.
+		 * locale, optional per-locale message overrides, and the built-in
+		 * language-switcher flag.
+		 *
+		 * The whole block is **reactive**: it is excluded from the plugin
+		 * compile fingerprint (`stripReactiveConfig`), so changing any
+		 * `i18n.*` value at runtime updates the editor chrome in place —
+		 * no plugin recompile, no editor teardown.
 		 *
 		 * The env override nests: `ANVILKIT_I18N__LOCALE=zh` maps to
 		 * `i18n.locale` (the `__` separator). A bare `ANVILKIT_LOCALE` is
@@ -162,26 +167,50 @@ export const StudioConfigSchema = z
 			.strictObject({
 				/**
 				 * Active locale (BCP-47-ish tag, e.g. `"en"`, `"zh"`).
-				 * Seeds the per-instance locale store at mount; the built-in
-				 * language toggle (or `setLocale`) overrides it at runtime.
-				 * Defaults to `"en"`.
+				 *
+				 * When the host **explicitly sets** this on the raw
+				 * `<Studio config>` prop, the instance is locale-**controlled**:
+				 * this value is authoritative and reactive (changing it switches
+				 * the language live), the built-in `localStorage` persistence is
+				 * bypassed, and internal switch requests (the built-in
+				 * `LanguageSwitcher`) only fire `onLocaleChange` — the host
+				 * applies them by re-rendering with the new value. Controlled-ness
+				 * is latched at mount (remount with a new React `key` to switch
+				 * modes).
+				 *
+				 * When absent, the instance is uncontrolled: the locale store
+				 * defaults to `"en"`, persists per `storeId`, and a non-`"en"`
+				 * value resolved from env (`ANVILKIT_I18N__LOCALE`) seeds the
+				 * store once when no persisted choice exists. Env values never
+				 * trigger controlled mode.
 				 */
 				locale: z.string().default("en"),
 				/**
-				 * Locale used to back-fill keys missing from the active
-				 * locale's pack. Defaults to `"en"`.
+				 * Locale whose {@link messages} entries back-fill keys missing
+				 * from the active locale's overrides. Defaults to `"en"`.
 				 */
 				fallbackLocale: z.string().default("en"),
 				/**
 				 * Optional per-locale message overrides, keyed
-				 * `locale → (messageKey → string)`. Reserved for host-driven
-				 * config overrides; the `<Studio messages>` prop remains the
-				 * per-instance override path. Omit to use the built-in
-				 * English catalog plus any plugin packs.
+				 * `locale → (messageKey → string)`. Applied to the rendered
+				 * chrome catalog for the active locale (with
+				 * {@link fallbackLocale} back-fill) and to `ctx.t`. Beats the
+				 * built-in catalog and plugin packs; the deprecated flat
+				 * `<Studio messages>` prop still wins over these during its
+				 * migration window. Omit to use the built-in English catalog
+				 * plus any plugin packs.
 				 */
 				messages: z
 					.record(z.string(), z.record(z.string(), z.string()))
 					.optional(),
+				/**
+				 * When `true`, the built-in `<LanguageSwitcher>` renders in the
+				 * header between the plugin header actions and the host
+				 * `headerEnd` node. Defaults to `false` (opt-in, like
+				 * `features.*`) so existing mounts — including hosts already
+				 * rendering their own switcher via `headerEnd` — see no change.
+				 */
+				showLocaleSwitch: z.boolean().default(false),
 			})
 			.prefault({}),
 		/**
