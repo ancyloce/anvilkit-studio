@@ -2062,7 +2062,7 @@
 			"flags": {},
 			"children": [
 				{
-					"id": 199,
+					"id": 200,
 					"name": "aiHost",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2138,7 +2138,7 @@
 					}
 				},
 				{
-					"id": 200,
+					"id": 201,
 					"name": "chrome",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2256,7 +2256,7 @@
 							"flags": {},
 							"children": [
 								{
-									"id": 182,
+									"id": 183,
 									"name": "ai",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2282,22 +2282,22 @@
 									"sources": [
 										{
 											"fileName": "config/schema.ts",
-											"line": 251,
+											"line": 280,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L251"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L280"
 										}
 									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 183,
+											"id": 184,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 185,
+													"id": 186,
 													"name": "defaultModel",
 													"variant": "declaration",
 													"kind": 1024,
@@ -2323,9 +2323,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 259,
+															"line": 288,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L259"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L288"
 														}
 													],
 													"type": {
@@ -2335,7 +2335,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 184,
+													"id": 185,
 													"name": "maxRetries",
 													"variant": "declaration",
 													"kind": 1024,
@@ -2369,9 +2369,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 266,
+															"line": 295,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L266"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L295"
 														}
 													],
 													"type": {
@@ -2385,8 +2385,8 @@
 												{
 													"title": "Properties",
 													"children": [
-														185,
-														184
+														186,
+														185
 													]
 												}
 											]
@@ -2557,7 +2557,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 171,
+									"id": 172,
 									"name": "brandKit",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2615,22 +2615,22 @@
 									"sources": [
 										{
 											"fileName": "config/schema.ts",
-											"line": 195,
+											"line": 224,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L195"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L224"
 										}
 									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 172,
+											"id": 173,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 173,
+													"id": 174,
 													"name": "colors",
 													"variant": "declaration",
 													"kind": 1024,
@@ -2672,9 +2672,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 201,
+															"line": 230,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L201"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L230"
 														}
 													],
 													"type": {
@@ -2682,14 +2682,14 @@
 														"elementType": {
 															"type": "reflection",
 															"declaration": {
-																"id": 174,
+																"id": 175,
 																"name": "__type",
 																"variant": "declaration",
 																"kind": 65536,
 																"flags": {},
 																"children": [
 																	{
-																		"id": 175,
+																		"id": 176,
 																		"name": "name",
 																		"variant": "declaration",
 																		"kind": 1024,
@@ -2705,9 +2705,9 @@
 																		"sources": [
 																			{
 																				"fileName": "config/schema.ts",
-																				"line": 205,
+																				"line": 234,
 																				"character": 7,
-																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L205"
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L234"
 																			}
 																		],
 																		"type": {
@@ -2717,7 +2717,7 @@
 																		"defaultValue": "..."
 																	},
 																	{
-																		"id": 176,
+																		"id": 177,
 																		"name": "value",
 																		"variant": "declaration",
 																		"kind": 1024,
@@ -2733,9 +2733,9 @@
 																		"sources": [
 																			{
 																				"fileName": "config/schema.ts",
-																				"line": 207,
+																				"line": 236,
 																				"character": 7,
-																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L207"
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L236"
 																			}
 																		],
 																		"type": {
@@ -2749,8 +2749,8 @@
 																	{
 																		"title": "Properties",
 																		"children": [
-																			175,
-																			176
+																			176,
+																			177
 																		]
 																	}
 																]
@@ -2760,7 +2760,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 177,
+													"id": 178,
 													"name": "fonts",
 													"variant": "declaration",
 													"kind": 1024,
@@ -2786,9 +2786,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 216,
+															"line": 245,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L216"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L245"
 														}
 													],
 													"type": {
@@ -2805,8 +2805,8 @@
 												{
 													"title": "Properties",
 													"children": [
-														173,
-														177
+														174,
+														178
 													]
 												}
 											]
@@ -2815,7 +2815,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 186,
+									"id": 187,
 									"name": "experimental",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2834,21 +2834,21 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 187,
+											"id": 188,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"indexSignatures": [
 												{
-													"id": 188,
+													"id": 189,
 													"name": "__index",
 													"variant": "signature",
 													"kind": 8192,
 													"flags": {},
 													"parameters": [
 														{
-															"id": 189,
+															"id": 190,
 															"name": "key",
 															"variant": "param",
 															"kind": 32768,
@@ -2869,7 +2869,7 @@
 									}
 								},
 								{
-									"id": 178,
+									"id": 179,
 									"name": "export",
 									"variant": "declaration",
 									"kind": 1024,
@@ -2887,22 +2887,22 @@
 									"sources": [
 										{
 											"fileName": "config/schema.ts",
-											"line": 223,
+											"line": 252,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L223"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L252"
 										}
 									],
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 179,
+											"id": 180,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 181,
+													"id": 182,
 													"name": "defaultFormat",
 													"variant": "declaration",
 													"kind": 1024,
@@ -2936,9 +2936,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 232,
+															"line": 261,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L232"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L261"
 														}
 													],
 													"type": {
@@ -2948,7 +2948,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 180,
+													"id": 181,
 													"name": "filenamePrefix",
 													"variant": "declaration",
 													"kind": 1024,
@@ -2982,9 +2982,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 240,
+															"line": 269,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L240"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L269"
 														}
 													],
 													"type": {
@@ -2998,8 +2998,8 @@
 												{
 													"title": "Properties",
 													"children": [
-														181,
-														180
+														182,
+														181
 													]
 												}
 											]
@@ -3237,7 +3237,23 @@
 										"summary": [
 											{
 												"kind": "text",
-												"text": "Internationalization block — the active locale, the fallback\nlocale, and optional per-locale message overrides forwarded to\nthe editor chrome's i18n catalog.\n\nThe env override nests: "
+												"text": "Internationalization block — the active locale, the fallback\nlocale, optional per-locale message overrides, and the built-in\nlanguage-switcher flag.\n\nThe whole block is **reactive**: it is excluded from the plugin\ncompile fingerprint ("
+											},
+											{
+												"kind": "code",
+												"text": "`stripReactiveConfig`"
+											},
+											{
+												"kind": "text",
+												"text": "), so changing any\n"
+											},
+											{
+												"kind": "code",
+												"text": "`i18n.*`"
+											},
+											{
+												"kind": "text",
+												"text": " value at runtime updates the editor chrome in place —\nno plugin recompile, no editor teardown.\n\nThe env override nests: "
 											},
 											{
 												"kind": "code",
@@ -3292,9 +3308,9 @@
 									"sources": [
 										{
 											"fileName": "config/schema.ts",
-											"line": 161,
+											"line": 166,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L161"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L166"
 										}
 									],
 									"type": {
@@ -3318,7 +3334,17 @@
 														"summary": [
 															{
 																"kind": "text",
-																"text": "Locale used to back-fill keys missing from the active\nlocale's pack. Defaults to "
+																"text": "Locale whose "
+															},
+															{
+																"kind": "inline-tag",
+																"tag": "@link",
+																"text": "messages",
+																"target": 165
+															},
+															{
+																"kind": "text",
+																"text": " entries back-fill keys missing\nfrom the active locale's overrides. Defaults to "
 															},
 															{
 																"kind": "code",
@@ -3333,9 +3359,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 174,
+															"line": 192,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L174"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L192"
 														}
 													],
 													"type": {
@@ -3372,15 +3398,47 @@
 															},
 															{
 																"kind": "text",
-																"text": ").\nSeeds the per-instance locale store at mount; the built-in\nlanguage toggle (or "
+																"text": ").\n\nWhen the host **explicitly sets** this on the raw\n"
 															},
 															{
 																"kind": "code",
-																"text": "`setLocale`"
+																"text": "`<Studio config>`"
 															},
 															{
 																"kind": "text",
-																"text": ") overrides it at runtime.\nDefaults to "
+																"text": " prop, the instance is locale-**controlled**:\nthis value is authoritative and reactive (changing it switches\nthe language live), the built-in "
+															},
+															{
+																"kind": "code",
+																"text": "`localStorage`"
+															},
+															{
+																"kind": "text",
+																"text": " persistence is\nbypassed, and internal switch requests (the built-in\n"
+															},
+															{
+																"kind": "code",
+																"text": "`LanguageSwitcher`"
+															},
+															{
+																"kind": "text",
+																"text": ") only fire "
+															},
+															{
+																"kind": "code",
+																"text": "`onLocaleChange`"
+															},
+															{
+																"kind": "text",
+																"text": " — the host\napplies them by re-rendering with the new value. Controlled-ness\nis latched at mount (remount with a new React "
+															},
+															{
+																"kind": "code",
+																"text": "`key`"
+															},
+															{
+																"kind": "text",
+																"text": " to switch\nmodes).\n\nWhen absent, the instance is uncontrolled: the locale store\ndefaults to "
 															},
 															{
 																"kind": "code",
@@ -3388,16 +3446,40 @@
 															},
 															{
 																"kind": "text",
-																"text": "."
+																"text": ", persists per "
+															},
+															{
+																"kind": "code",
+																"text": "`storeId`"
+															},
+															{
+																"kind": "text",
+																"text": ", and a non-"
+															},
+															{
+																"kind": "code",
+																"text": "`\"en\"`"
+															},
+															{
+																"kind": "text",
+																"text": "\nvalue resolved from env ("
+															},
+															{
+																"kind": "code",
+																"text": "`ANVILKIT_I18N__LOCALE`"
+															},
+															{
+																"kind": "text",
+																"text": ") seeds the\nstore once when no persisted choice exists. Env values never\ntrigger controlled mode."
 															}
 														]
 													},
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 169,
+															"line": 187,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L169"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L187"
 														}
 													],
 													"type": {
@@ -3407,7 +3489,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 164,
+													"id": 165,
 													"name": "messages",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3426,7 +3508,25 @@
 															},
 															{
 																"kind": "text",
-																"text": ". Reserved for host-driven\nconfig overrides; the "
+																"text": ". Applied to the rendered\nchrome catalog for the active locale (with\n"
+															},
+															{
+																"kind": "inline-tag",
+																"tag": "@link",
+																"text": "fallbackLocale",
+																"target": 163
+															},
+															{
+																"kind": "text",
+																"text": " back-fill) and to "
+															},
+															{
+																"kind": "code",
+																"text": "`ctx.t`"
+															},
+															{
+																"kind": "text",
+																"text": ". Beats the\nbuilt-in catalog and plugin packs; the deprecated flat\n"
 															},
 															{
 																"kind": "code",
@@ -3434,36 +3534,36 @@
 															},
 															{
 																"kind": "text",
-																"text": " prop remains the\nper-instance override path. Omit to use the built-in\nEnglish catalog plus any plugin packs."
+																"text": " prop still wins over these during its\nmigration window. Omit to use the built-in English catalog\nplus any plugin packs."
 															}
 														]
 													},
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 182,
+															"line": 203,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L182"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L203"
 														}
 													],
 													"type": {
 														"type": "reflection",
 														"declaration": {
-															"id": 165,
+															"id": 166,
 															"name": "__type",
 															"variant": "declaration",
 															"kind": 65536,
 															"flags": {},
 															"indexSignatures": [
 																{
-																	"id": 166,
+																	"id": 167,
 																	"name": "__index",
 																	"variant": "signature",
 																	"kind": 8192,
 																	"flags": {},
 																	"parameters": [
 																		{
-																			"id": 167,
+																			"id": 168,
 																			"name": "key",
 																			"variant": "param",
 																			"kind": 32768,
@@ -3480,21 +3580,21 @@
 																			{
 																				"type": "reflection",
 																				"declaration": {
-																					"id": 168,
+																					"id": 169,
 																					"name": "__type",
 																					"variant": "declaration",
 																					"kind": 65536,
 																					"flags": {},
 																					"indexSignatures": [
 																						{
-																							"id": 169,
+																							"id": 170,
 																							"name": "__index",
 																							"variant": "signature",
 																							"kind": 8192,
 																							"flags": {},
 																							"parameters": [
 																								{
-																									"id": 170,
+																									"id": 171,
 																									"name": "key",
 																									"variant": "param",
 																									"kind": 32768,
@@ -3533,6 +3633,84 @@
 														}
 													},
 													"defaultValue": "..."
+												},
+												{
+													"id": 164,
+													"name": "showLocaleSwitch",
+													"variant": "declaration",
+													"kind": 1024,
+													"flags": {
+														"isOptional": true
+													},
+													"comment": {
+														"summary": [
+															{
+																"kind": "text",
+																"text": "When "
+															},
+															{
+																"kind": "code",
+																"text": "`true`"
+															},
+															{
+																"kind": "text",
+																"text": ", the built-in "
+															},
+															{
+																"kind": "code",
+																"text": "`<LanguageSwitcher>`"
+															},
+															{
+																"kind": "text",
+																"text": " renders in the\nheader between the plugin header actions and the host\n"
+															},
+															{
+																"kind": "code",
+																"text": "`headerEnd`"
+															},
+															{
+																"kind": "text",
+																"text": " node. Defaults to "
+															},
+															{
+																"kind": "code",
+																"text": "`false`"
+															},
+															{
+																"kind": "text",
+																"text": " (opt-in, like\n"
+															},
+															{
+																"kind": "code",
+																"text": "`features.*`"
+															},
+															{
+																"kind": "text",
+																"text": ") so existing mounts — including hosts already\nrendering their own switcher via "
+															},
+															{
+																"kind": "code",
+																"text": "`headerEnd`"
+															},
+															{
+																"kind": "text",
+																"text": " — see no change."
+															}
+														]
+													},
+													"sources": [
+														{
+															"fileName": "config/schema.ts",
+															"line": 213,
+															"character": 4,
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L213"
+														}
+													],
+													"type": {
+														"type": "intrinsic",
+														"name": "boolean"
+													},
+													"defaultValue": "..."
 												}
 											],
 											"groups": [
@@ -3541,6 +3719,7 @@
 													"children": [
 														163,
 														162,
+														165,
 														164
 													]
 												}
@@ -3722,11 +3901,11 @@
 								{
 									"title": "Properties",
 									"children": [
-										182,
+										183,
 										151,
-										171,
-										186,
-										178,
+										172,
+										187,
+										179,
 										146,
 										160,
 										156
@@ -3851,7 +4030,7 @@
 					}
 				},
 				{
-					"id": 222,
+					"id": 223,
 					"name": "headerEnd",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3920,7 +4099,7 @@
 					}
 				},
 				{
-					"id": 213,
+					"id": 214,
 					"name": "isPublishing",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3950,7 +4129,7 @@
 					}
 				},
 				{
-					"id": 211,
+					"id": 212,
 					"name": "isSavingDraft",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3980,7 +4159,7 @@
 					}
 				},
 				{
-					"id": 212,
+					"id": 213,
 					"name": "lastSavedAt",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4025,7 +4204,7 @@
 					}
 				},
 				{
-					"id": 226,
+					"id": 231,
 					"name": "loading",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4100,9 +4279,9 @@
 					"sources": [
 						{
 							"fileName": "react/components/studio-controller-types.ts",
-							"line": 269,
+							"line": 289,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L269"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L289"
 						}
 					],
 					"type": {
@@ -4118,7 +4297,7 @@
 					}
 				},
 				{
-					"id": 223,
+					"id": 224,
 					"name": "logger",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4150,7 +4329,7 @@
 					}
 				},
 				{
-					"id": 225,
+					"id": 226,
 					"name": "messages",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4186,16 +4365,51 @@
 							},
 							{
 								"kind": "text",
-								"text": "."
+								"text": ".\n\nThis flat map is **locale-agnostic** — it applies to every locale —\nand still wins over "
+							},
+							{
+								"kind": "code",
+								"text": "`config.i18n.messages`"
+							},
+							{
+								"kind": "text",
+								"text": " during its migration\nwindow (do not use both)."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@deprecated",
+								"content": [
+									{
+										"kind": "text",
+										"text": "Use "
+									},
+									{
+										"kind": "code",
+										"text": "`config.i18n.messages`"
+									},
+									{
+										"kind": "text",
+										"text": " (a per-locale\n"
+									},
+									{
+										"kind": "code",
+										"text": "`locale → (messageKey → string)`"
+									},
+									{
+										"kind": "text",
+										"text": " map) instead. Removal in 0.2.0."
+									}
+								]
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "react/components/studio-controller-types.ts",
-							"line": 247,
+							"line": 254,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L247"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L254"
 						}
 					],
 					"type": {
@@ -4232,7 +4446,7 @@
 					}
 				},
 				{
-					"id": 202,
+					"id": 203,
 					"name": "onAction",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4344,7 +4558,7 @@
 					}
 				},
 				{
-					"id": 205,
+					"id": 206,
 					"name": "onBack",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4371,14 +4585,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 206,
+							"id": 207,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 207,
+									"id": 208,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -4393,7 +4607,7 @@
 					}
 				},
 				{
-					"id": 191,
+					"id": 192,
 					"name": "onChange",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4436,21 +4650,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 192,
+							"id": 193,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 193,
+									"id": 194,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 194,
+											"id": 195,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -4506,7 +4720,7 @@
 					}
 				},
 				{
-					"id": 218,
+					"id": 219,
 					"name": "onExport",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4549,21 +4763,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 219,
+							"id": 220,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 220,
+									"id": 221,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 221,
+											"id": 222,
 											"name": "formatId",
 											"variant": "param",
 											"kind": 32768,
@@ -4605,7 +4819,109 @@
 					}
 				},
 				{
-					"id": 195,
+					"id": 227,
+					"name": "onLocaleChange",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Locale-change notification (config-centric i18n).\n\n- **Controlled** ("
+							},
+							{
+								"kind": "code",
+								"text": "`config.i18n.locale`"
+							},
+							{
+								"kind": "text",
+								"text": " explicitly set by the host):\n  fired when something inside requests a switch (the built-in\n  "
+							},
+							{
+								"kind": "code",
+								"text": "`LanguageSwitcher`"
+							},
+							{
+								"kind": "text",
+								"text": " when "
+							},
+							{
+								"kind": "code",
+								"text": "`config.i18n.showLocaleSwitch`"
+							},
+							{
+								"kind": "text",
+								"text": " is on); the\n  store does NOT change until the host re-renders with the new\n  "
+							},
+							{
+								"kind": "code",
+								"text": "`config.i18n.locale`"
+							},
+							{
+								"kind": "text",
+								"text": " — exactly like a controlled "
+							},
+							{
+								"kind": "code",
+								"text": "`<input>`"
+							},
+							{
+								"kind": "text",
+								"text": ".\n- **Uncontrolled**: fired *after* the store applied (and persisted)\n  the switch — a sync tap for routers/cookies/analytics; ignoring it\n  changes nothing."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "react/components/studio-controller-types.ts",
+							"line": 267,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L267"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 228,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 229,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 230,
+											"name": "locale",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 196,
 					"name": "onPublish",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4648,21 +4964,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 196,
+							"id": 197,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 197,
+									"id": 198,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 198,
+											"id": 199,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -4739,7 +5055,7 @@
 					}
 				},
 				{
-					"id": 214,
+					"id": 215,
 					"name": "onPublishClick",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4782,21 +5098,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 215,
+							"id": 216,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 216,
+									"id": 217,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 217,
+											"id": 218,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -4823,7 +5139,7 @@
 					}
 				},
 				{
-					"id": 208,
+					"id": 209,
 					"name": "onSaveDraft",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4850,14 +5166,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 209,
+							"id": 210,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 210,
+									"id": 211,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -4893,7 +5209,7 @@
 					}
 				},
 				{
-					"id": 190,
+					"id": 191,
 					"name": "overrides",
 					"variant": "declaration",
 					"kind": 1024,
@@ -4952,7 +5268,7 @@
 					}
 				},
 				{
-					"id": 224,
+					"id": 225,
 					"name": "pages",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5279,7 +5595,7 @@
 					}
 				},
 				{
-					"id": 204,
+					"id": 205,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5373,7 +5689,7 @@
 					}
 				},
 				{
-					"id": 201,
+					"id": 202,
 					"name": "ui",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5445,7 +5761,7 @@
 					}
 				},
 				{
-					"id": 203,
+					"id": 204,
 					"name": "viewports",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5493,31 +5809,32 @@
 				{
 					"title": "Properties",
 					"children": [
-						199,
 						200,
+						201,
 						144,
 						142,
-						222,
-						213,
-						211,
-						212,
-						226,
 						223,
-						225,
-						202,
-						205,
-						191,
-						218,
-						195,
 						214,
-						208,
-						190,
+						212,
+						213,
+						231,
 						224,
+						226,
+						203,
+						206,
+						192,
+						219,
+						227,
+						196,
+						215,
+						209,
+						191,
+						225,
 						143,
 						141,
-						204,
-						201,
-						203
+						205,
+						202,
+						204
 					]
 				}
 			],
@@ -6048,7 +6365,7 @@
 			]
 		},
 		{
-			"id": 227,
+			"id": 232,
 			"name": "UseStudioResult",
 			"variant": "declaration",
 			"kind": 256,
@@ -6095,7 +6412,7 @@
 			},
 			"children": [
 				{
-					"id": 229,
+					"id": 234,
 					"name": "exportFormats",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6185,7 +6502,7 @@
 					}
 				},
 				{
-					"id": 230,
+					"id": 235,
 					"name": "headerActions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6243,7 +6560,7 @@
 					}
 				},
 				{
-					"id": 228,
+					"id": 233,
 					"name": "plugins",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6306,9 +6623,9 @@
 				{
 					"title": "Properties",
 					"children": [
-						229,
-						230,
-						228
+						234,
+						235,
+						233
 					]
 				}
 			],
@@ -7205,7 +7522,7 @@
 			]
 		},
 		{
-			"id": 233,
+			"id": 238,
 			"name": "mergeOverrides",
 			"variant": "declaration",
 			"kind": 64,
@@ -7220,7 +7537,7 @@
 			],
 			"signatures": [
 				{
-					"id": 234,
+					"id": 239,
 					"name": "mergeOverrides",
 					"variant": "signature",
 					"kind": 4096,
@@ -7338,7 +7655,7 @@
 					],
 					"parameters": [
 						{
-							"id": 235,
+							"id": 240,
 							"name": "overridesList",
 							"variant": "param",
 							"kind": 32768,
@@ -8050,7 +8367,7 @@
 			]
 		},
 		{
-			"id": 231,
+			"id": 236,
 			"name": "useStudio",
 			"variant": "declaration",
 			"kind": 64,
@@ -8065,7 +8382,7 @@
 			],
 			"signatures": [
 				{
-					"id": 232,
+					"id": 237,
 					"name": "useStudio",
 					"variant": "signature",
 					"kind": 4096,
@@ -8127,7 +8444,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "UseStudioResult",
-										"target": 227
+										"target": 232
 									},
 									{
 										"kind": "text",
@@ -8156,7 +8473,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 227,
+						"target": 232,
 						"name": "UseStudioResult",
 						"package": "@anvilkit/core"
 					}
@@ -8353,7 +8670,7 @@
 				139,
 				77,
 				92,
-				227
+				232
 			]
 		},
 		{
@@ -8375,7 +8692,7 @@
 				37,
 				40,
 				64,
-				233,
+				238,
 				129,
 				123,
 				89,
@@ -8383,7 +8700,7 @@
 				103,
 				105,
 				112,
-				231,
+				236,
 				114,
 				121
 			]
@@ -9214,117 +9531,117 @@
 		"164": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "messages"
+			"qualifiedName": "showLocaleSwitch"
 		},
 		"165": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "messages"
+		},
+		"166": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
-		"168": {
+		"169": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
-		"171": {
+		"172": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
 			"qualifiedName": "brandKit"
 		},
-		"172": {
+		"173": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
-		"173": {
+		"174": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
 			"qualifiedName": "colors"
 		},
-		"174": {
+		"175": {
 			"packageName": "zod",
 			"packagePath": "v4/core/util.d.cts",
 			"qualifiedName": "__type"
 		},
-		"175": {
+		"176": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
 			"qualifiedName": "name"
 		},
-		"176": {
+		"177": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
 			"qualifiedName": "value"
 		},
-		"177": {
+		"178": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
 			"qualifiedName": "fonts"
 		},
-		"178": {
+		"179": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
 			"qualifiedName": "export"
 		},
-		"179": {
+		"180": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
-		},
-		"180": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "filenamePrefix"
 		},
 		"181": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "defaultFormat"
+			"qualifiedName": "filenamePrefix"
 		},
 		"182": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "ai"
+			"qualifiedName": "defaultFormat"
 		},
 		"183": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "ai"
+		},
+		"184": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
-		},
-		"184": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "maxRetries"
 		},
 		"185": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "defaultModel"
+			"qualifiedName": "maxRetries"
 		},
 		"186": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultModel"
+		},
+		"187": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/types/config.ts",
 			"qualifiedName": "experimental"
 		},
-		"187": {
+		"188": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
-		"190": {
+		"191": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
 			"qualifiedName": "StudioProps.overrides"
 		},
-		"191": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onChange"
-		},
 		"192": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onChange"
 		},
 		"193": {
 			"packageName": "@anvilkit/core",
@@ -9334,17 +9651,17 @@
 		"194": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"195": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onPublish"
+			"qualifiedName": "data"
 		},
 		"196": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onPublish"
 		},
 		"197": {
 			"packageName": "@anvilkit/core",
@@ -9354,47 +9671,47 @@
 		"198": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"199": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.aiHost"
+			"qualifiedName": "data"
 		},
 		"200": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.chrome"
+			"qualifiedName": "StudioProps.aiHost"
 		},
 		"201": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.ui"
+			"qualifiedName": "StudioProps.chrome"
 		},
 		"202": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onAction"
+			"qualifiedName": "StudioProps.ui"
 		},
 		"203": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.viewports"
+			"qualifiedName": "StudioProps.onAction"
 		},
 		"204": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.storeId"
+			"qualifiedName": "StudioProps.viewports"
 		},
 		"205": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onBack"
+			"qualifiedName": "StudioProps.storeId"
 		},
 		"206": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onBack"
 		},
 		"207": {
 			"packageName": "@anvilkit/core",
@@ -9404,12 +9721,12 @@
 		"208": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onSaveDraft"
+			"qualifiedName": "__type"
 		},
 		"209": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onSaveDraft"
 		},
 		"210": {
 			"packageName": "@anvilkit/core",
@@ -9419,27 +9736,27 @@
 		"211": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.isSavingDraft"
+			"qualifiedName": "__type"
 		},
 		"212": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.lastSavedAt"
+			"qualifiedName": "StudioProps.isSavingDraft"
 		},
 		"213": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.isPublishing"
+			"qualifiedName": "StudioProps.lastSavedAt"
 		},
 		"214": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onPublishClick"
+			"qualifiedName": "StudioProps.isPublishing"
 		},
 		"215": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onPublishClick"
 		},
 		"216": {
 			"packageName": "@anvilkit/core",
@@ -9449,17 +9766,17 @@
 		"217": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"218": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onExport"
+			"qualifiedName": "data"
 		},
 		"219": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onExport"
 		},
 		"220": {
 			"packageName": "@anvilkit/core",
@@ -9469,74 +9786,99 @@
 		"221": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "formatId"
+			"qualifiedName": "__type"
 		},
 		"222": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.headerEnd"
+			"qualifiedName": "formatId"
 		},
 		"223": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.logger"
+			"qualifiedName": "StudioProps.headerEnd"
 		},
 		"224": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.pages"
+			"qualifiedName": "StudioProps.logger"
 		},
 		"225": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.messages"
+			"qualifiedName": "StudioProps.pages"
 		},
 		"226": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.loading"
+			"qualifiedName": "StudioProps.messages"
 		},
 		"227": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult"
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "StudioProps.onLocaleChange"
 		},
 		"228": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult.plugins"
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "__type"
 		},
 		"229": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult.exportFormats"
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "__type"
 		},
 		"230": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "UseStudioResult.headerActions"
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "locale"
 		},
 		"231": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "useStudio"
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "StudioProps.loading"
 		},
 		"232": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
-			"qualifiedName": "useStudio"
+			"qualifiedName": "UseStudioResult"
 		},
 		"233": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/overrides/merge-overrides.ts",
-			"qualifiedName": "mergeOverrides"
+			"packagePath": "src/react/components/use-studio.ts",
+			"qualifiedName": "UseStudioResult.plugins"
 		},
 		"234": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/use-studio.ts",
+			"qualifiedName": "UseStudioResult.exportFormats"
+		},
+		"235": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/use-studio.ts",
+			"qualifiedName": "UseStudioResult.headerActions"
+		},
+		"236": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/use-studio.ts",
+			"qualifiedName": "useStudio"
+		},
+		"237": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/use-studio.ts",
+			"qualifiedName": "useStudio"
+		},
+		"238": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/overrides/merge-overrides.ts",
 			"qualifiedName": "mergeOverrides"
 		},
-		"235": {
+		"239": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/overrides/merge-overrides.ts",
+			"qualifiedName": "mergeOverrides"
+		},
+		"240": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/overrides/merge-overrides.ts",
 			"qualifiedName": "overridesList"
