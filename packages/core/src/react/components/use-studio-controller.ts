@@ -80,6 +80,8 @@ import type { StudioPlugin } from "@/types/plugin";
 import {
 	createConfigFingerprinter,
 	fingerprintPlugins,
+	mergeLiveI18n,
+	stripReactiveConfig,
 } from "./plugin-fingerprint.js";
 import { createShellPluginContext } from "./shell-plugin-context.js";
 import type {
@@ -136,6 +138,10 @@ function useHydrateRuntimeStores(
 	exportStore: ExportStoreApi,
 	themeStore: ThemeStoreApi,
 	localeStore: LocaleStoreApi,
+	// Controlled-locale mounts skip the seed-once path entirely — the
+	// write-through effect owns the store, and the config locale must win
+	// over (bypassed) persistence rather than defer to it.
+	localeControlled: boolean,
 ): void {
 	useEffect(() => {
 		if (compiled === null) {
@@ -162,9 +168,12 @@ function useHydrateRuntimeStores(
 			}
 		};
 
-		// Same shape for locale: `"en"` is the store default, so seed a
-		// non-`"en"` config locale only when the user has no persisted
-		// choice. Never clobbers a persisted `setLocale`. (P3 handoff.)
+		// Same shape for locale (uncontrolled mounts only): `"en"` is the
+		// store default, so seed a non-`"en"` config locale — today that can
+		// only come from env, `ANVILKIT_I18N__LOCALE`, since an explicit
+		// host `config.i18n.locale` makes the mount controlled — only when
+		// the user has no persisted choice. Never clobbers a persisted
+		// `setLocale`. (P3 handoff.)
 		const i18n = compiled.studioConfig.i18n;
 		const applyDefaultLocale = (): void => {
 			if (i18n.locale === "en") {
@@ -195,14 +204,16 @@ function useHydrateRuntimeStores(
 			unsubscribers.push(persist.onFinishHydration(apply));
 		};
 		seedWhenHydrated(themeStore.persist, applyDefaultMode);
-		seedWhenHydrated(localeStore.persist, applyDefaultLocale);
+		if (!localeControlled) {
+			seedWhenHydrated(localeStore.persist, applyDefaultLocale);
+		}
 
 		return () => {
 			for (const unsubscribe of unsubscribers) {
 				unsubscribe();
 			}
 		};
-	}, [compiled, exportStore, themeStore, localeStore]);
+	}, [compiled, exportStore, themeStore, localeStore, localeControlled]);
 }
 
 /**
@@ -282,6 +293,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		data,
 		storeId,
 		logger,
+		messages,
+		onLocaleChange,
 	} = props;
 	const isAnvilkit = chrome === "anvilkit";
 
@@ -318,6 +331,25 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// reads `loggerRef.current`, so the newest logger is always used
 	// without a recompile.
 	const loggerRef = useRef<StudioLogger | undefined>(logger);
+
+	// Latest `onLocaleChange` behind a ref (same rationale as `loggerRef`):
+	// the locale store's `requestLocale` reads it at call time, so an inline
+	// handler never re-creates the store or recompiles anything. Created
+	// before the store bundle so the cell can be handed to the factory.
+	const onLocaleChangeRef = useRef<((locale: string) => void) | undefined>(
+		onLocaleChange,
+	);
+
+	// Controlled-locale latch (config-centric i18n §4.2): an explicit host
+	// `config.i18n.locale` on the RAW prop — never the compiled config,
+	// whose schema default `"en"` / env-resolved values must not flip
+	// hosts into controlled mode — at FIRST render decides the mode for
+	// the lifetime of the mount, mirroring the frozen-`storeId` rule.
+	// Remount with a new React `key` to switch modes.
+	const [latchedConfigLocale] = useState<string | undefined>(
+		() => config?.i18n?.locale,
+	);
+	const isLocaleControlled = latchedConfigLocale !== undefined;
 
 	// Single-flight publish chain: serialize overlapping publishes so
 	// the onBeforePublish → onPublish → onAfterPublish chains never
@@ -362,12 +394,27 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// `chrome="puck"` provider trio + `useHydrateRuntimeStores`/teardown) are
 	// unchanged.
 	const [editorStore] = useState<EditorStoreBundle>(() =>
-		createEditorStore({ storeId: resolvedStoreId }),
+		createEditorStore({
+			storeId: resolvedStoreId,
+			locale: {
+				controlled: isLocaleControlled,
+				initialLocale: latchedConfigLocale,
+				onLocaleRequestRef: onLocaleChangeRef,
+			},
+		}),
 	);
 	const themeStore = editorStore.theme;
 	const exportStore = editorStore.export;
 	const aiStore = editorStore.ai;
 	const localeStore = editorStore.locale;
+
+	// Live `i18n` block for `ctx.t` (config-centric i18n §4.6): the ctx
+	// object is frozen per compile, but `ctx.t` must answer in the active
+	// language after a recompile-free `config.i18n.*` change. Kept current
+	// with the live overlay by a layout effect below; `ctx.t` falls back to
+	// its compile-time snapshot while this is still `null` (first compile
+	// in flight / register-time calls).
+	const liveI18nRef = useRef<StudioConfig["i18n"] | null>(null);
 
 	// One stored value, tagged with the `compileKey` that produced it.
 	// `setCompiled(null)` on every input change is replaced by deriving
@@ -384,9 +431,21 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			),
 		[plugins],
 	);
-	const configFingerprint = useMemo(
-		() => fingerprintConfigRef.current(config),
+	// Fingerprint a projection with the reactive `i18n` block REMOVED
+	// (config-centric i18n §4.1): `config.i18n.*` changes update the live
+	// overlay below instead of recompiling the plugin set. Memoized on
+	// `[config]` so the identity-fallback path for non-JSON configs keeps
+	// the host's reference-stability semantics unchanged. If a compile-path
+	// consumer of `config.i18n` is ever added, widen `stripReactiveConfig`
+	// accordingly — the "i18n-only change ⇒ no recompile" RTL test is the
+	// tripwire.
+	const configForFingerprint = useMemo(
+		() => stripReactiveConfig(config),
 		[config],
+	);
+	const configFingerprint = useMemo(
+		() => fingerprintConfigRef.current(configForFingerprint),
+		[configForFingerprint],
 	);
 
 	// Identity token recomputed only when an input that requires a full
@@ -462,6 +521,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				studioConfig,
 				sidebarRegistryStore,
 				loggerRef,
+				localeStore,
+				liveI18nRef,
 			});
 
 			try {
@@ -522,7 +583,134 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const activeChromeAssets: ChromeAssets | null =
 		activeStored?.chromeAssets ?? null;
 
-	useHydrateRuntimeStores(activeCompiled, exportStore, themeStore, localeStore);
+	// ── Reactive `config.i18n` (config-centric i18n §4.1) ────────────────
+	// The block is excluded from `configFingerprint`, so its changes reach
+	// the editor through two recompile-free channels instead: the locale
+	// write-through (controlled mounts) and the `liveStudioConfig` overlay
+	// (every React reader via `StudioConfigProvider`).
+	const rawConfigLocale = config?.i18n?.locale;
+
+	// Controlled write-through: the prop is authoritative. The equality
+	// guard breaks host feedback loops (onLocaleChange → router → rerender
+	// with the same locale ⇒ no write, no churn).
+	useEffect(() => {
+		if (!isLocaleControlled || rawConfigLocale === undefined) {
+			return;
+		}
+		const state = localeStore.getState();
+		if (state.locale !== rawConfigLocale) {
+			state.setLocale(rawConfigLocale);
+		}
+	}, [isLocaleControlled, rawConfigLocale, localeStore]);
+
+	// Mode-flip detector: adding/removing `config.i18n.locale` after mount
+	// is ignored (controlled-ness is latched, like `storeId`) — warn once
+	// so the no-op is discoverable.
+	const localeModeFlipWarnedRef = useRef(false);
+	useEffect(() => {
+		if (localeModeFlipWarnedRef.current) {
+			return;
+		}
+		if ((rawConfigLocale !== undefined) !== isLocaleControlled) {
+			localeModeFlipWarnedRef.current = true;
+			writeStudioLog(
+				loggerRef.current,
+				"warn",
+				`config.i18n.locale was ${
+					isLocaleControlled ? "removed" : "added"
+				} after mount; locale controlled-ness is latched at first render and this change is ignored. Remount <Studio> with a new React key to switch modes.`,
+				undefined,
+			);
+		}
+	}, [rawConfigLocale, isLocaleControlled]);
+
+	// One-shot deprecation warning for the legacy flat `messages` prop.
+	const messagesDeprecationWarnedRef = useRef(false);
+	useEffect(() => {
+		if (messagesDeprecationWarnedRef.current || messages === undefined) {
+			return;
+		}
+		messagesDeprecationWarnedRef.current = true;
+		writeStudioLog(
+			loggerRef.current,
+			"warn",
+			"<Studio messages> is deprecated: use config.i18n.messages (a per-locale `locale → (messageKey → string)` map) instead. The flat prop applies to every locale, still wins over config.i18n.messages during the migration window, and will be removed in 0.2.0.",
+			undefined,
+		);
+	}, [messages]);
+
+	// JSON-stable memo of the raw `i18n` slice so an inline `config`
+	// literal (new identity, same content every render) doesn't churn the
+	// live overlay / config context.
+	const rawI18n = config?.i18n;
+	const rawI18nKey = useMemo(() => {
+		if (rawI18n === undefined) {
+			return "";
+		}
+		try {
+			return JSON.stringify(rawI18n) ?? "";
+		} catch {
+			// Non-JSON content (bigint/circular) — key on best effort; the
+			// fallback constant means such configs only update the overlay
+			// alongside a structural `config` change.
+			return "<non-json>";
+		}
+	}, [rawI18n]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: deliberately keyed on the JSON projection (`rawI18nKey`), not the raw reference — see the memo note above.
+	const stableRawI18n = useMemo(() => rawI18n, [rawI18nKey]);
+
+	// The config React readers see: the compiled (validated) snapshot with
+	// the latest raw `i18n` overlaid. `ctx`/compile internals keep the
+	// frozen `activeCompiled.studioConfig`.
+	const liveStudioConfig = useMemo<StudioConfig | null>(() => {
+		if (activeCompiled === null) {
+			return null;
+		}
+		if (stableRawI18n === undefined) {
+			return activeCompiled.studioConfig;
+		}
+		return {
+			...activeCompiled.studioConfig,
+			i18n: mergeLiveI18n(activeCompiled.studioConfig.i18n, stableRawI18n),
+		};
+	}, [activeCompiled, stableRawI18n]);
+
+	// Keep `ctx.t`'s live view current (layout-timed so plugin lifecycle
+	// hooks firing in effects this same pass read the fresh block).
+	useLayoutEffect(() => {
+		liveI18nRef.current = liveStudioConfig?.i18n ?? null;
+	}, [liveStudioConfig]);
+
+	// Inert-switcher footgun: a controlled mount showing the built-in
+	// switcher without an `onLocaleChange` handler renders a dropdown
+	// whose selections visibly do nothing. Warn once.
+	const inertSwitcherWarnedRef = useRef(false);
+	useEffect(() => {
+		if (inertSwitcherWarnedRef.current) {
+			return;
+		}
+		if (
+			isLocaleControlled &&
+			onLocaleChange === undefined &&
+			liveStudioConfig?.i18n.showLocaleSwitch === true
+		) {
+			inertSwitcherWarnedRef.current = true;
+			writeStudioLog(
+				loggerRef.current,
+				"warn",
+				"config.i18n.showLocaleSwitch is on and config.i18n.locale is host-controlled, but no onLocaleChange handler is set — the built-in LanguageSwitcher will appear inert. Pass onLocaleChange and re-render with the new config.i18n.locale to apply switches.",
+				undefined,
+			);
+		}
+	}, [isLocaleControlled, onLocaleChange, liveStudioConfig]);
+
+	useHydrateRuntimeStores(
+		activeCompiled,
+		exportStore,
+		themeStore,
+		localeStore,
+		isLocaleControlled,
+	);
 
 	useRuntimeInit(activeCompiled);
 
@@ -628,7 +816,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		onChangeRef.current = onChange as DefaultOnChange | undefined;
 		onPublishRef.current = onPublish as DefaultOnPublish | undefined;
 		loggerRef.current = logger;
-	}, [onChange, onPublish, logger]);
+		onLocaleChangeRef.current = onLocaleChange;
+	}, [onChange, onPublish, logger, onLocaleChange]);
 
 	const handleChange = useCallback(
 		(nextData: PuckData): void => {
@@ -718,6 +907,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	return {
 		isAnvilkit,
 		compiled: activeCompiled,
+		liveStudioConfig,
 		chromeAssets: activeChromeAssets,
 		mergedOverrides,
 		handleChange,

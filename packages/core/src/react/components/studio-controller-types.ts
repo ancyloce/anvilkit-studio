@@ -243,8 +243,28 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * Per-instance i18n overrides forwarded to
 	 * `EditorI18nProvider`. Keys are message ids
 	 * (`studio.module.*`). Ignored when `chrome="puck"`.
+	 *
+	 * This flat map is **locale-agnostic** — it applies to every locale —
+	 * and still wins over `config.i18n.messages` during its migration
+	 * window (do not use both).
+	 *
+	 * @deprecated Use `config.i18n.messages` (a per-locale
+	 * `locale → (messageKey → string)` map) instead. Removal in 0.2.0.
 	 */
 	readonly messages?: Readonly<Record<string, string>>;
+	/**
+	 * Locale-change notification (config-centric i18n).
+	 *
+	 * - **Controlled** (`config.i18n.locale` explicitly set by the host):
+	 *   fired when something inside requests a switch (the built-in
+	 *   `LanguageSwitcher` when `config.i18n.showLocaleSwitch` is on); the
+	 *   store does NOT change until the host re-renders with the new
+	 *   `config.i18n.locale` — exactly like a controlled `<input>`.
+	 * - **Uncontrolled**: fired *after* the store applied (and persisted)
+	 *   the switch — a sync tap for routers/cookies/analytics; ignoring it
+	 *   changes nothing.
+	 */
+	readonly onLocaleChange?: (locale: string) => void;
 	/**
 	 * Optional node rendered while the runtime compiles (and, for
 	 * anvilkit chrome, while the lazily-loaded chrome assets resolve).
@@ -273,6 +293,16 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 export interface StudioControllerState {
 	readonly isAnvilkit: boolean;
 	readonly compiled: CompiledStudioRuntime | null;
+	/**
+	 * The compiled `studioConfig` with the host's **latest raw `i18n`**
+	 * overlaid (`mergeLiveI18n`) — the config React readers see. The
+	 * `i18n` block is excluded from the compile fingerprint
+	 * (`stripReactiveConfig`), so a live `config.i18n.*` change updates
+	 * this overlay (and the chrome) without a plugin recompile; the
+	 * `compiled.studioConfig` snapshot stays frozen for `ctx`. `null`
+	 * exactly when {@link compiled} is `null`.
+	 */
+	readonly liveStudioConfig: StudioConfig | null;
 	readonly chromeAssets: ChromeAssets | null;
 	readonly mergedOverrides: Partial<PuckOverrides>;
 	readonly handleChange: (next: PuckData) => void;

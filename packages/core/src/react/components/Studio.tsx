@@ -167,6 +167,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 	const {
 		isAnvilkit,
 		compiled,
+		liveStudioConfig,
 		chromeAssets,
 		mergedOverrides,
 		handleChange,
@@ -254,6 +255,13 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		return loadingFallback;
 	}
 
+	// React readers get the LIVE config (the compiled snapshot with the
+	// host's latest raw `i18n` overlaid — see the controller's
+	// `liveStudioConfig`), so `config.i18n.*` changes reach the chrome
+	// without a plugin recompile. `liveStudioConfig` is null exactly when
+	// `compiled` is, so this fallback is for the type system only.
+	const resolvedStudioConfig = liveStudioConfig ?? compiled.studioConfig;
+
 	// `<Puck>` infers `UserConfig` from `config={puckConfig}`. The
 	// controller's runtime is deliberately non-generic, so its outputs
 	// come back as the broad default; these localized casts are the
@@ -284,7 +292,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		return (
 			<StudioProviderStack
 				isAnvilkit={false}
-				studioConfig={compiled.studioConfig}
+				studioConfig={resolvedStudioConfig}
 				runtime={compiled.runtime}
 				storeId={resolvedStoreId}
 				themeStore={themeStore}
@@ -346,7 +354,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 	return (
 		<StudioProviderStack
 			isAnvilkit
-			studioConfig={compiled.studioConfig}
+			studioConfig={resolvedStudioConfig}
 			runtime={compiled.runtime}
 			ctx={compiled.ctx}
 			sidebarRegistryStore={sidebarRegistryStore}

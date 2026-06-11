@@ -154,6 +154,8 @@ export function StudioProviderStack(
 								<EditorI18nProvider
 									messages={messages}
 									entries={runtime.i18n.entries}
+									configMessages={studioConfig.i18n.messages}
+									fallbackLocale={studioConfig.i18n.fallbackLocale}
 								>
 									<ChromePropsProvider value={chromePropsValue}>
 										{rooted}

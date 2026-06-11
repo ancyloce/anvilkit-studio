@@ -5,7 +5,8 @@
  *
  * This is the immutable shell context: `getData`/`getPuckApi` read live
  * refs, `log`/`emit` route through the host logger, `t` resolves the
- * React-free config-locale catalog, and the `register*` methods proxy to
+ * React-free catalog for the **active** locale (live via the locale store
+ * + the controller's `liveI18nRef`), and the `register*` methods proxy to
  * the per-instance sidebar registry. `compilePlugins()` re-wraps it per
  * plugin with runtime-backed `registerMessages`/`registerAssetResolver`
  * collectors; the base versions here stay inert no-ops so the shell
@@ -17,7 +18,7 @@ import type { RefObject } from "react";
 
 import { braceFormatter } from "@/i18n/format";
 import { DEFAULT_MESSAGES } from "@/state/editor-i18n-context";
-import type { SidebarRegistryStoreApi } from "@/state/index";
+import type { LocaleStoreApi, SidebarRegistryStoreApi } from "@/state/index";
 import type { StudioConfig } from "@/types/config";
 import type { StudioPluginContext } from "@/types/plugin";
 import type { GetPuckSnapshot } from "./studio-controller-types.js";
@@ -40,6 +41,20 @@ interface ShellPluginContextDeps {
 	readonly studioConfig: StudioConfig;
 	readonly sidebarRegistryStore: SidebarRegistryStoreApi;
 	readonly loggerRef: RefObject<StudioLogger | undefined>;
+	/**
+	 * The per-instance locale store — `ctx.t` reads the **active** locale
+	 * via `getState()` (vanilla store, React-free) so plugin strings track
+	 * runtime locale switches instead of freezing at the compile-time
+	 * config value (config-centric i18n §4.6).
+	 */
+	readonly localeStore: LocaleStoreApi;
+	/**
+	 * Live `config.i18n` view maintained by the controller's overlay
+	 * (`mergeLiveI18n`). `null` until the first overlay computes — `ctx.t`
+	 * falls back to its compile-time `studioConfig.i18n` snapshot then
+	 * (register-time calls during the first compile).
+	 */
+	readonly liveI18nRef: RefObject<StudioConfig["i18n"] | null>;
 }
 
 /**
@@ -53,6 +68,8 @@ export function createShellPluginContext({
 	studioConfig,
 	sidebarRegistryStore,
 	loggerRef,
+	localeStore,
+	liveI18nRef,
 }: ShellPluginContextDeps): StudioPluginContext {
 	// `ctx.emit` is reserved (architecture §12 / A4): warn once
 	// per ctx instead of a silent no-op.
@@ -87,15 +104,21 @@ export function createShellPluginContext({
 			}
 		},
 		t: (key, vars) => {
-			// React-free snapshot for the config locale: core catalog
-			// plus any `studioConfig.i18n.messages` overrides, brace-
-			// interpolated. Plugin-registered namespaces resolve via
-			// `useMsg` at render, not here.
-			const { locale, messages: localeMessages } = studioConfig.i18n;
+			// React-free but LIVE (config-centric i18n §4.6): the active
+			// locale comes from the per-instance store (`getState()`, no
+			// React), the `i18n` block from the controller's live overlay
+			// (compile-time snapshot until the first overlay computes). So
+			// `ctx.t` answers in the language the chrome is showing, even
+			// after a recompile-free `config.i18n.*` change. It still never
+			// lazy-loads non-English core packs and never resolves
+			// plugin-registered namespaces — reactive, pack-aware strings
+			// resolve via `useMsg`/`useT` at render.
+			const locale = localeStore.getState().locale;
+			const i18n = liveI18nRef.current ?? studioConfig.i18n;
 			// `DEFAULT_MESSAGES` is `satisfies`-typed (no string index
 			// signature), so index through the record type for a dynamic key.
 			const coreCatalog: Readonly<Record<string, string>> = DEFAULT_MESSAGES;
-			const raw = localeMessages?.[locale]?.[key] ?? coreCatalog[key] ?? key;
+			const raw = i18n.messages?.[locale]?.[key] ?? coreCatalog[key] ?? key;
 			return braceFormatter(raw, vars ?? {}, locale);
 		},
 		registerMessages: () => {
