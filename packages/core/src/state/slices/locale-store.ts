@@ -134,8 +134,12 @@ export interface LocaleRequestListenerRef {
  */
 const NOOP_STATE_STORAGE: StateStorage = {
 	getItem: () => null,
-	setItem: () => {},
-	removeItem: () => {},
+	setItem: () => {
+		// Intentional no-op: controlled mode never persists.
+	},
+	removeItem: () => {
+		// Intentional no-op: controlled mode never persists.
+	},
 };
 
 export interface CreateLocaleStoreOptions {
