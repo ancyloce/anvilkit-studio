@@ -3,13 +3,17 @@
  * per-`<Studio>` locale store.
  *
  * Mount it anywhere inside `<Studio>` (e.g. a header action slot) to let end
- * users switch the active locale. Selecting an entry calls `setLocale`, which
- * re-renders every `useMsg` / `useT` consumer **in place** (no `<Studio>`
- * remount) and triggers the lazy load of that locale's message packs via the
- * registry's `loadMessages` loaders. Missing keys fall back to English.
+ * users switch the active locale. Selecting an entry calls `requestLocale`:
+ * in uncontrolled mounts that applies the switch (re-rendering every
+ * `useMsg` / `useT` consumer **in place** — no `<Studio>` remount — and
+ * triggering the lazy load of that locale's message packs) and notifies the
+ * host's `onLocaleChange`; in controlled mounts (`config.i18n.locale`
+ * host-set) it only notifies, and the host applies the switch by
+ * re-rendering with the new config value. Missing keys fall back to English.
  *
- * It is intentionally **not** auto-wired into the chrome — hosts opt in by
- * rendering it — so adding it changes no existing layout.
+ * Hosts opt in either by rendering it themselves (e.g. via `headerEnd`) or
+ * by setting `config.i18n.showLocaleSwitch: true`, which mounts this
+ * component in the chrome header's right cluster.
  */
 
 import { Languages } from "lucide-react";
@@ -66,13 +70,19 @@ export function LanguageSwitcher({
 }: LanguageSwitcherProps): ReactNode {
 	const msg = useMsg();
 	const locale = useLocaleStore((state) => state.locale);
-	const setLocale = useLocaleStore((state) => state.setLocale);
+	// `requestLocale`, not `setLocale`: in uncontrolled mounts it applies
+	// (persisting, as before) and additionally notifies `onLocaleChange`;
+	// in controlled mounts (`config.i18n.locale` host-set) it notifies
+	// ONLY — the host applies the switch by re-rendering with the new
+	// config value, so the radio selection tracks `locale` like a
+	// controlled <input>.
+	const requestLocale = useLocaleStore((state) => state.requestLocale);
 
 	const handleValueChange = useCallback(
 		(value: unknown): void => {
-			if (typeof value === "string") setLocale(value);
+			if (typeof value === "string") requestLocale(value);
 		},
-		[setLocale],
+		[requestLocale],
 	);
 
 	const active = locales.find((entry) => entry.locale === locale);

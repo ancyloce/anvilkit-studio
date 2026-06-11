@@ -10,6 +10,7 @@
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
 import { type ComponentType, memo, type ReactNode, useCallback } from "react";
 import { useStudioRuntime } from "@/components/use-studio";
+import { useStudioConfig } from "@/config/hooks";
 import { useActivePage } from "@/context/pages-source";
 import { useStudioPluginContextOrNull } from "@/context/plugin-context";
 import { Button } from "@/primitives/button";
@@ -22,6 +23,7 @@ import type {
 } from "@/types/plugin";
 import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import { HeaderActions } from "./HeaderActions";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { PublishPanel } from "./PublishPanel";
 
 export interface StudioHeaderProps {
@@ -117,6 +119,8 @@ function StudioHeaderImpl({
 
 				<HeaderActionsRegion />
 
+				<LocaleSwitchRegion />
+
 				{headerEnd}
 
 				<Tooltip>
@@ -191,6 +195,46 @@ function HeaderActionsRegionInner(): ReactNode {
 			<HeaderActions />
 		</>
 	);
+}
+
+/**
+ * Renders the built-in `<LanguageSwitcher>` between the plugin header
+ * actions and the host `headerEnd` node when
+ * `config.i18n.showLocaleSwitch` is on (default off, so existing mounts —
+ * including hosts already rendering their own switcher via `headerEnd` —
+ * see no change). System chrome groups with the plugin/system actions;
+ * `headerEnd` keeps its documented position as the *last* host slot, so a
+ * host's own switcher would sit visibly adjacent during migration.
+ *
+ * Reads the **live** config (the controller overlays the host's latest raw
+ * `i18n` block), so flipping the flag at runtime shows/hides the switcher
+ * without a plugin recompile.
+ *
+ * Mirrors `<HeaderActionsRegion>`'s defensive two-level read: outside of
+ * `<Studio>` (unit tests, previews) there is no plugin context — and no
+ * config provider — so we render nothing rather than letting the strict
+ * `useStudioConfig()` hook throw.
+ *
+ * Exported so the config-flag gate can be unit-tested without mounting
+ * the full `<StudioHeader>` tree (which would require chrome-props /
+ * export-store / pages providers for `<PublishPanel>` et al.) — same
+ * convention as {@link hasHeaderActionCapability} and
+ * {@link selectCollaboratorsSlot}.
+ */
+export function LocaleSwitchRegion(): ReactNode {
+	const ctx = useStudioPluginContextOrNull();
+	if (ctx === null) {
+		return null;
+	}
+	return <LocaleSwitchRegionInner />;
+}
+
+function LocaleSwitchRegionInner(): ReactNode {
+	const show = useStudioConfig((config) => config.i18n.showLocaleSwitch);
+	if (!show) {
+		return null;
+	}
+	return <LanguageSwitcher />;
 }
 
 /**
