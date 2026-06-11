@@ -11,7 +11,6 @@ import {
 	StudioConfigSchema,
 	StudioLoadingScreen,
 } from "@anvilkit/core";
-import { LanguageSwitcher } from "@anvilkit/core/i18n";
 import type {
 	ExportWarning,
 	PageIR,
@@ -100,6 +99,25 @@ const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 // the off-token / WCAG-AA contrast validators wired through the
 // existing `onDataChange` / `onBeforePublish` lifecycle seams.
 const designSystemPlugin = createDesignSystemPlugin();
+
+// Studio config (Layer 3 host overrides). `showLocaleSwitch` mounts the
+// built-in header LanguageSwitcher (replacing the old
+// `headerEnd={<LanguageSwitcher/>}` wiring). No `i18n.locale` here, so the
+// mount stays UNCONTROLLED: the user's choice persists per `storeId` and
+// `onLocaleChange` below is a pure notification tap. Module scope keeps the
+// reference stable — `config` participates in the plugin-compile
+// fingerprint (its non-`i18n` part), so an inline literal would be wasteful
+// even though the i18n block itself is carve-out-exempt.
+const demoStudioConfig = {
+	i18n: { showLocaleSwitch: true },
+};
+
+// Uncontrolled-mode `onLocaleChange` sink: fires AFTER the store applied
+// (and persisted) a switch — the seam a real host would use to sync a
+// cookie / router segment. Module scope ⇒ referentially stable.
+function handleLocaleChange(locale: string): void {
+	console.info("[demo] studio locale switched →", locale);
+}
 
 // Editor-only config: extends the shared `demoConfig` with the
 // demo-only `TokenSwatch` component that dogfoods the design-system
@@ -406,10 +424,12 @@ export default function PuckEditorPage() {
 	// active-page tracking and re-emits via `subscribe()` on `onSelect`.
 	const pagesSource = useMemo(() => createDemoPagesSource(), []);
 
-	// Locale switcher mounted into the chrome header via the `headerEnd` seam.
-	// Memoized (no deps) so the chrome-props context value stays stable across
-	// editor re-renders and the memo'd `<StudioHeader>` boundary holds.
-	const headerEnd = useMemo(() => <LanguageSwitcher />, []);
+	// Locale switcher: config-centric — `studioConfig.i18n.showLocaleSwitch`
+	// (module-scope DEMO_STUDIO_CONFIG below the component) mounts the
+	// built-in header switcher; the old `headerEnd={<LanguageSwitcher/>}`
+	// seam is gone. Uncontrolled mode (no `i18n.locale` in the config), so
+	// the choice still persists per `storeId` and `onLocaleChange` is just a
+	// notification tap.
 
 	// Per-page canvas content for the layer sidebar. The source owns which
 	// page is active; this map owns each page's Puck document. Clicking a
@@ -1129,8 +1149,9 @@ export default function PuckEditorPage() {
 					onExport={handleExport}
 					chrome={chromeMode}
 					pages={pagesSource}
+					config={demoStudioConfig}
 					messages={studioMessages}
-					headerEnd={headerEnd}
+					onLocaleChange={handleLocaleChange}
 				/>
 			</section>
 

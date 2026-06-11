@@ -2,7 +2,6 @@
 
 import { createCollabPlugin } from "@anvilkit/collab-ui";
 import { Studio } from "@anvilkit/core";
-import { LanguageSwitcher } from "@anvilkit/core/i18n";
 import type { Config, Data } from "@puckeditor/core";
 import { useMemo, useState } from "react";
 
@@ -14,6 +13,16 @@ import { createDemoData, demoConfig } from "../../lib/puck-demo";
 // at the Hocuspocus relay needs nothing else.
 const RELAY_URL =
 	process.env.NEXT_PUBLIC_COLLAB_HOCUSPOCUS_URL ?? "ws://localhost:31234";
+
+// Studio config: mounts the built-in header LanguageSwitcher via
+// `i18n.showLocaleSwitch` (replacing the old `headerEnd` wiring). No
+// `i18n.locale`, so the mount stays uncontrolled (persisted per
+// `storeId`). Module scope keeps the reference stable — and because the
+// `i18n` block is excluded from the plugin-compile fingerprint, flipping
+// it would not tear down the collab WebSocket either way.
+const collabStudioConfig = {
+	i18n: { showLocaleSwitch: true },
+};
 
 /**
  * Zero-config live collaboration demo — the managed-transport one-liner.
@@ -49,10 +58,6 @@ export default function CollabDemoPage() {
 		[],
 	);
 
-	// Locale switcher mounted into the chrome header via the `headerEnd` seam.
-	// Memoized so the chrome-props context value stays stable across re-renders.
-	const headerEnd = useMemo(() => <LanguageSwitcher />, []);
-
 	return (
 		<main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
 			<header className="flex flex-col gap-3">
@@ -82,7 +87,7 @@ export default function CollabDemoPage() {
 					data={seedData}
 					plugins={plugins}
 					chrome="anvilkit"
-					headerEnd={headerEnd}
+					config={collabStudioConfig}
 				/>
 			</section>
 		</main>

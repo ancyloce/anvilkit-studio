@@ -137,6 +137,10 @@ export default defineConfig({
 							label: "Page IR meta",
 							slug: "migration/page-ir-meta",
 						},
+						{
+							label: "Config-centric i18n",
+							slug: "migration/i18n-config",
+						},
 					],
 				},
 				{
