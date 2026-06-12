@@ -1,17 +1,17 @@
 import {
 	type BentoGridProps,
-	componentConfig as bentoGridComponentConfig,
 	defaultProps as bentoGridDefaultProps,
+	createBentoGridConfig,
 } from "@anvilkit/bento-grid";
 import {
 	type BlogListProps,
-	componentConfig as blogListComponentConfig,
 	defaultProps as blogListDefaultProps,
+	createBlogListConfig,
 } from "@anvilkit/blog-list";
 import {
 	type ButtonProps,
-	componentConfig as buttonComponentConfig,
 	defaultProps as buttonDefaultProps,
+	createButtonConfig,
 } from "@anvilkit/button";
 import type {
 	StudioPlugin,
@@ -19,47 +19,47 @@ import type {
 	StudioSidebarUnregister,
 } from "@anvilkit/core";
 import {
+	createDesignBlockConfig,
 	type DesignBlockProps,
-	componentConfig as designBlockComponentConfig,
 } from "@anvilkit/design-block";
 import {
+	createHelpsConfig,
 	type HelpsProps,
-	componentConfig as helpsComponentConfig,
 	defaultProps as helpsDefaultProps,
 } from "@anvilkit/helps";
 import {
+	createHeroConfig,
 	type HeroProps,
-	componentConfig as heroComponentConfig,
 	defaultProps as heroDefaultProps,
 } from "@anvilkit/hero";
 import {
+	createInputConfig,
 	type InputProps,
-	componentConfig as inputComponentConfig,
 	defaultProps as inputDefaultProps,
 } from "@anvilkit/input";
 import {
+	createLogoCloudsConfig,
 	type LogoCloudsProps,
-	componentConfig as logoCloudsComponentConfig,
 	defaultProps as logoCloudsDefaultProps,
 } from "@anvilkit/logo-clouds";
 import {
+	createNavbarConfig,
 	type NavbarProps,
-	componentConfig as navbarComponentConfig,
 	defaultProps as navbarDefaultProps,
 } from "@anvilkit/navbar";
 import {
+	createPricingMinimalConfig,
 	type PricingMinimalProps,
-	componentConfig as pricingMinimalComponentConfig,
 	defaultProps as pricingMinimalDefaultProps,
 } from "@anvilkit/pricing-minimal";
 import {
+	createSectionConfig,
 	type SectionProps,
-	componentConfig as sectionComponentConfig,
 	defaultProps as sectionDefaultProps,
 } from "@anvilkit/section";
 import {
+	createStatisticsConfig,
 	type StatisticsProps,
-	componentConfig as statisticsComponentConfig,
 	defaultProps as statisticsDefaultProps,
 } from "@anvilkit/statistics";
 import type { ComponentConfig, Config, Data } from "@puckeditor/core";
@@ -112,58 +112,71 @@ const imageComponentConfig: ComponentConfig<ImageProps> = {
 
 export const demoDataSearchParam = "data";
 
-export const demoConfig: Config<DemoComponents> = {
-	categories: {
-		navigation: {
-			title: "Navigation",
-			components: ["Navbar"],
+/**
+ * Build the demo Puck config for a locale. Component field/option labels
+ * resolve from each package's bundled catalogs (en/zh/ja/ko) via its
+ * `create<Name>Config({ locale })` factory; unknown locales fall back to
+ * English per key. Category titles and the demo-local `Image` component
+ * are host-owned strings and stay English.
+ */
+export function createDemoConfig(locale?: string): Config<DemoComponents> {
+	const options = locale === undefined ? undefined : { locale };
+	return {
+		categories: {
+			navigation: {
+				title: "Navigation",
+				components: ["Navbar"],
+			},
+			marketing: {
+				title: "Marketing",
+				components: [
+					"Hero",
+					"PricingMinimal",
+					"BentoGrid",
+					"Section",
+					"Statistics",
+					"BlogList",
+					"Helps",
+					"LogoClouds",
+				],
+			},
+			actions: {
+				title: "Actions",
+				components: ["Button"],
+			},
+			forms: {
+				title: "Forms",
+				components: ["Input"],
+			},
+			canvas: {
+				title: "Canvas",
+				components: ["DesignBlock"],
+			},
+			media: {
+				title: "Media",
+				components: ["Image"],
+			},
 		},
-		marketing: {
-			title: "Marketing",
-			components: [
-				"Hero",
-				"PricingMinimal",
-				"BentoGrid",
-				"Section",
-				"Statistics",
-				"BlogList",
-				"Helps",
-				"LogoClouds",
-			],
+		components: {
+			BentoGrid: createBentoGridConfig(options),
+			BlogList: createBlogListConfig(options),
+			Button: createButtonConfig(options),
+			DesignBlock: createDesignBlockConfig(options),
+			Hero: createHeroConfig(options),
+			Helps: createHelpsConfig(options),
+			Image: imageComponentConfig,
+			Input: createInputConfig(options),
+			LogoClouds: createLogoCloudsConfig(options),
+			Navbar: createNavbarConfig(options),
+			PricingMinimal: createPricingMinimalConfig(options),
+			Section: createSectionConfig(options),
+			Statistics: createStatisticsConfig(options),
 		},
-		actions: {
-			title: "Actions",
-			components: ["Button"],
-		},
-		forms: {
-			title: "Forms",
-			components: ["Input"],
-		},
-		canvas: {
-			title: "Canvas",
-			components: ["DesignBlock"],
-		},
-		media: {
-			title: "Media",
-			components: ["Image"],
-		},
-	},
-	components: {
-		BentoGrid: bentoGridComponentConfig,
-		BlogList: blogListComponentConfig,
-		Button: buttonComponentConfig,
-		DesignBlock: designBlockComponentConfig,
-		Hero: heroComponentConfig,
-		Helps: helpsComponentConfig,
-		Image: imageComponentConfig,
-		Input: inputComponentConfig,
-		LogoClouds: logoCloudsComponentConfig,
-		Navbar: navbarComponentConfig,
-		PricingMinimal: pricingMinimalComponentConfig,
-		Section: sectionComponentConfig,
-		Statistics: statisticsComponentConfig,
-	},
-};
+	};
+}
+
+/** Static English demo config — same shape as before the i18n wiring. */
+export const demoConfig: Config<DemoComponents> = createDemoConfig();
 
 export function createDemoData(): Data<DemoComponents> {
 	return {

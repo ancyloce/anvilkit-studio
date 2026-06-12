@@ -3,9 +3,14 @@
 import { createCollabPlugin } from "@anvilkit/collab-ui";
 import { Studio } from "@anvilkit/core";
 import type { Config, Data } from "@puckeditor/core";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { createDemoData, demoConfig } from "../../lib/puck-demo";
+import {
+	createDemoConfig,
+	createDemoData,
+	demoConfig,
+} from "../../lib/puck-demo";
+import { readPersistedStudioLocale } from "../../lib/studio-locale";
 
 // The one value this demo sets: the WebSocket relay URL. Defaults to the local
 // Hocuspocus dev relay (`pnpm --filter demo relay:hocuspocus`, port 31234).
@@ -47,7 +52,9 @@ export default function CollabDemoPage() {
 	const [seedData] = useState<Data>(() => createDemoData() as Data);
 
 	// Built once so `<Studio>`'s compile effect doesn't re-fire (and tear down
-	// the WebSocket) on every incidental re-render.
+	// the WebSocket) on every incidental re-render. The plugin keeps the
+	// stable English `demoConfig` (its internals don't render field labels);
+	// only the `puckConfig` handed to <Studio> below is locale-aware.
 	const plugins = useMemo(
 		() => [
 			createCollabPlugin({
@@ -57,6 +64,27 @@ export default function CollabDemoPage() {
 		],
 		[],
 	);
+
+	// Host-side mirror of the UNCONTROLLED locale store (see /puck/editor for
+	// the long-form rationale): seed from the persisted value on mount, track
+	// switches via onLocaleChange, rebuild the Puck config per locale so
+	// component field labels follow the chrome. Note a locale switch rotates
+	// the compile key, which re-registers the collab plugin — the transport
+	// reconnects and re-syncs from the CRDT (the room stays source of truth).
+	const [studioLocale, setStudioLocale] = useState("en");
+
+	useEffect(() => {
+		setStudioLocale(readPersistedStudioLocale("demo-collab"));
+	}, []);
+
+	const localizedConfig = useMemo(
+		() => (studioLocale === "en" ? demoConfig : createDemoConfig(studioLocale)),
+		[studioLocale],
+	);
+
+	const handleLocaleChange = useCallback((locale: string) => {
+		setStudioLocale(locale);
+	}, []);
 
 	return (
 		<main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
@@ -83,11 +111,12 @@ export default function CollabDemoPage() {
 			<section className="min-h-[640px]" data-testid="ak-collab-studio">
 				<Studio
 					storeId="demo-collab"
-					puckConfig={demoConfig as unknown as Config}
+					puckConfig={localizedConfig as unknown as Config}
 					data={seedData}
 					plugins={plugins}
 					chrome="anvilkit"
 					config={collabStudioConfig}
+					onLocaleChange={handleLocaleChange}
 				/>
 			</section>
 		</main>

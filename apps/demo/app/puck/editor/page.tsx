@@ -55,17 +55,18 @@ import {
 	loadExportReact,
 } from "../../../lib/lazy-plugins";
 import {
+	createDemoConfig,
 	createDemoData,
 	createDemoModeHref,
 	createDemoPagesData,
 	type DemoComponents,
-	demoConfig,
 	demoCopySnippetPlugin,
 	demoDataSearchParam,
 	demoLayerQuickAddPlugin,
 	getDemoDataFromSearchParam,
 } from "../../../lib/puck-demo";
 import { smokeTestPlugin } from "../../../lib/smoke-test-plugin";
+import { readPersistedStudioLocale } from "../../../lib/studio-locale";
 import { tokenSwatchComponentConfig } from "../../../lib/token-swatch-component";
 import styles from "../puck.module.css";
 
@@ -128,20 +129,30 @@ function handleLocaleChange(locale: string): void {
 // `createContext` and so cannot enter the RSC render route's bundle
 // graph. `lib/puck-demo.ts` is imported by `/puck/render`; this
 // editor page is `"use client"` and safe to host the import.
-const editorDemoConfig = {
-	...demoConfig,
-	categories: {
-		...demoConfig.categories,
-		designSystem: {
-			title: "Design System",
-			components: ["TokenSwatch"],
+function createEditorDemoConfig(locale?: string) {
+	const base = createDemoConfig(locale);
+	return {
+		...base,
+		categories: {
+			...base.categories,
+			designSystem: {
+				title: "Design System",
+				components: ["TokenSwatch"],
+			},
 		},
-	},
-	components: {
-		...demoConfig.components,
-		TokenSwatch: tokenSwatchComponentConfig,
-	},
-};
+		components: {
+			...base.components,
+			TokenSwatch: tokenSwatchComponentConfig,
+		},
+	};
+}
+
+// English default. The plugin factories below close over THIS stable
+// reference (their internals — schema derivation, diff labels — stay
+// English); only the `puckConfig` handed to <Studio> is rebuilt per
+// locale inside the component, so a locale switch does not change
+// plugin identities.
+const editorDemoConfig = createEditorDemoConfig();
 
 const aiCopilotPlugin = createAiCopilotPlugin({
 	puckConfig: editorDemoConfig as unknown as Config,
@@ -396,6 +407,35 @@ export default function PuckEditorPage() {
 	// Phase 6: `?chrome=puck` opts out of the AnvilKit chrome and
 	// renders the raw Puck editor for visual regression checks.
 	const [chromeMode, setChromeMode] = useState<"anvilkit" | "puck">("anvilkit");
+
+	// Host-side mirror of Studio's UNCONTROLLED locale store: seeded from
+	// the persisted value on mount (onLocaleChange only fires on switches),
+	// then kept in sync via the wrapped handler below. Drives the
+	// locale-aware Puck config — Puck field labels are plain strings, so
+	// they only change when the config object is rebuilt.
+	const [studioLocale, setStudioLocale] = useState("en");
+
+	useEffect(() => {
+		setStudioLocale(readPersistedStudioLocale("demo-editor"));
+	}, []);
+
+	// Rebuilding puckConfig rotates the plugin-compile key (a deliberate
+	// recompile): the editor re-seeds from `data`, same semantics as the
+	// page-switch remount on <Studio key={activePageId}>. The `en` case
+	// reuses the module-scope object so the mount effect does not
+	// invalidate the initial compile.
+	const localizedEditorConfig = useMemo(
+		() =>
+			studioLocale === "en"
+				? editorDemoConfig
+				: createEditorDemoConfig(studioLocale),
+		[studioLocale],
+	);
+
+	const handleStudioLocaleChange = useCallback((locale: string) => {
+		handleLocaleChange(locale);
+		setStudioLocale(locale);
+	}, []);
 	// Phase G E2E hook: `?messageOverrides=<urlencoded JSON>` drives
 	// `<Studio messages>` so the sidebar-modules spec can exercise the
 	// PRD §10.2 alias map at runtime (legacy `studio.tab.*` keys
@@ -1137,7 +1177,7 @@ export default function PuckEditorPage() {
 					// instead of resetting to defaults.
 					key={activePageId}
 					storeId="demo-editor"
-					puckConfig={editorDemoConfig as unknown as Config}
+					puckConfig={localizedEditorConfig as unknown as Config}
 					data={publishedData}
 					plugins={plugins}
 					loading={<StudioLoadingScreen />}
@@ -1151,7 +1191,7 @@ export default function PuckEditorPage() {
 					pages={pagesSource}
 					config={demoStudioConfig}
 					messages={studioMessages}
-					onLocaleChange={handleLocaleChange}
+					onLocaleChange={handleStudioLocaleChange}
 				/>
 			</section>
 
