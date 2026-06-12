@@ -156,6 +156,10 @@ export function StudioProviderStack(
 									entries={runtime.i18n.entries}
 									configMessages={studioConfig.i18n.messages}
 									fallbackLocale={studioConfig.i18n.fallbackLocale}
+									// A visible switcher means switching is expected — warm the
+									// packs at mount (at-switch chunk loads never settle under
+									// webpack; see EditorI18nProviderProps.warmLocalePacks).
+									warmLocalePacks={studioConfig.i18n.showLocaleSwitch}
 								>
 									<ChromePropsProvider value={chromePropsValue}>
 										{rooted}

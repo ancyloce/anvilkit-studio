@@ -43,3 +43,32 @@ it("live requestLocale('zh') re-resolves chrome strings via the lazy pack", asyn
 	// The zh pack lazy-loads; findByText polls until the catalog upgrades.
 	await expect(screen.findByText("语言")).resolves.toBeTruthy();
 });
+
+it("warmLocalePacks loads every bundled pack at mount, before any switch", async () => {
+	const loaded: string[] = [];
+	const entry = {
+		namespace: "warmProbe",
+		en: { "warmProbe.x": "X" },
+		loadMessages: (locale: string) => {
+			loaded.push(locale);
+			return Promise.resolve({ "warmProbe.x": `X-${locale}` });
+		},
+	};
+
+	function Reader() {
+		const msg = useMsg();
+		return <output>{msg("warmProbe.x")}</output>;
+	}
+
+	render(
+		<EditorStoreProvider storeId="warm-locale-packs-test">
+			<EditorI18nProvider entries={[entry]} warmLocalePacks>
+				<Reader />
+			</EditorI18nProvider>
+		</EditorStoreProvider>,
+	);
+
+	await screen.findByText("X");
+	// All bundled pack locales requested at mount (locale is still "en").
+	expect([...loaded].sort()).toEqual(["ja", "ko", "zh"]);
+});

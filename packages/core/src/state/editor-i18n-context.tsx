@@ -141,6 +141,22 @@ export interface EditorI18nProviderProps {
 	 * when it equals the active locale or has no bundle.
 	 */
 	readonly fallbackLocale?: string;
+	/**
+	 * Load every known locale pack at MOUNT instead of lazily on the first
+	 * switch to that locale. `<Studio>` sets this when
+	 * `config.i18n.showLocaleSwitch` is on (a visible switcher means
+	 * switching is expected).
+	 *
+	 * This is deliberate workaround-grade eagerness: under webpack
+	 * (Next 16, dev AND production builds) a locale-pack chunk requested
+	 * AFTER initial page load downloads and registers but its `import()`
+	 * promise never settles (`ChunkLoadError: … (timeout)`), so an
+	 * at-switch load silently leaves the chrome English. Mount-time
+	 * requests install reliably, so warming converts the broken path into
+	 * the proven one. The at-switch load remains as the fallback for
+	 * locales outside the bundled pack set.
+	 */
+	readonly warmLocalePacks?: boolean;
 }
 
 export function EditorI18nProvider({
@@ -149,6 +165,7 @@ export function EditorI18nProvider({
 	entries = EMPTY_ENTRIES,
 	configMessages,
 	fallbackLocale,
+	warmLocalePacks = false,
 }: EditorI18nProviderProps): ReactNode {
 	// Active locale, null-tolerant: resolves to "en" when no locale store is
 	// mounted (RSC / tests / legacy path), mirroring `useMsg`'s fallback.
@@ -173,40 +190,49 @@ export function EditorI18nProvider({
 	const requestedRef = useRef<Set<string>>(new Set());
 
 	useEffect(() => {
-		if (locale === "en") return;
-		for (const entry of allEntries) {
-			if (entry.loadMessages === undefined) continue;
-			const key = loadedPackKey(entry.namespace, locale);
-			if (requestedRef.current.has(key)) continue;
-			requestedRef.current.add(key);
-			entry
-				.loadMessages(locale)
-				.then((bundle) => {
-					// Keyed by locale, so a late write is correct data even if
-					// the user has since switched away — `mergeCatalog` only
-					// reads the *current* locale's keys, so stale writes are
-					// harmless and cached for a switch back.
-					setLoadedPacks((prev) => {
-						const next = new Map(prev);
-						next.set(key, bundle);
-						return next;
+		// English ships inline per entry; everything else resolves through
+		// `loadMessages`. With `warmLocalePacks` every bundled pack locale is
+		// requested up front (see the prop docs for why mount-time loading is
+		// load-bearing); the active locale is always requested so switches to
+		// locales outside the warm set still resolve.
+		const targets = new Set<string>(
+			warmLocalePacks ? Object.keys(LOCALE_PACKS) : [],
+		);
+		if (locale !== "en") targets.add(locale);
+		for (const target of targets) {
+			for (const entry of allEntries) {
+				if (entry.loadMessages === undefined) continue;
+				const key = loadedPackKey(entry.namespace, target);
+				if (requestedRef.current.has(key)) continue;
+				requestedRef.current.add(key);
+				entry
+					.loadMessages(target)
+					.then((bundle) => {
+						// Keyed by locale, so a late write is correct data even if
+						// the user has since switched away — `mergeCatalog` only
+						// reads the *current* locale's keys, so stale writes are
+						// harmless and cached for a switch back.
+						setLoadedPacks((prev) => {
+							const next = new Map(prev);
+							next.set(key, bundle);
+							return next;
+						});
+					})
+					.catch((error: unknown) => {
+						// The namespace stays at its English baseline; dropping the
+						// key allows a retry on a later switch. Surface the failure
+						// instead of swallowing it: a ChunkLoadError here (e.g. a
+						// stale dev-server chunk graph) otherwise reads as "locale
+						// switch silently does nothing".
+						console.warn(
+							`[studio:i18n] failed to load locale pack "${key}" — keeping the English baseline for this namespace until the next switch`,
+							error,
+						);
+						requestedRef.current.delete(key);
 					});
-				})
-				.catch((error: unknown) => {
-					// The namespace stays at its English baseline; dropping the
-					// key allows a retry on a later switch. Surface the failure
-					// instead of swallowing it: a ChunkLoadError here (e.g. a
-					// stale dev-server chunk graph) otherwise reads as "locale
-					// switch silently does nothing".
-					// biome-ignore lint/suspicious/noConsole: no logger seam in this provider; a silent catch hides every pack-load failure.
-					console.warn(
-						`[studio:i18n] failed to load locale pack "${key}" — keeping the English baseline for this namespace until the next switch`,
-						error,
-					);
-					requestedRef.current.delete(key);
-				});
+			}
 		}
-	}, [allEntries, locale]);
+	}, [allEntries, locale, warmLocalePacks]);
 
 	const value = useMemo<EditorI18nContextValue>(() => {
 		const catalog = mergeCatalog(allEntries, locale, loadedPacks);
