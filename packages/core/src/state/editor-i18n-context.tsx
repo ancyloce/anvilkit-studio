@@ -192,9 +192,17 @@ export function EditorI18nProvider({
 						return next;
 					});
 				})
-				.catch(() => {
-					// Swallow — the namespace stays at its English baseline;
-					// allow a retry on a later switch.
+				.catch((error: unknown) => {
+					// The namespace stays at its English baseline; dropping the
+					// key allows a retry on a later switch. Surface the failure
+					// instead of swallowing it: a ChunkLoadError here (e.g. a
+					// stale dev-server chunk graph) otherwise reads as "locale
+					// switch silently does nothing".
+					// biome-ignore lint/suspicious/noConsole: no logger seam in this provider; a silent catch hides every pack-load failure.
+					console.warn(
+						`[studio:i18n] failed to load locale pack "${key}" — keeping the English baseline for this namespace until the next switch`,
+						error,
+					);
 					requestedRef.current.delete(key);
 				});
 		}
