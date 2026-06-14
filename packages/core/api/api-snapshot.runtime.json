@@ -5608,9 +5608,9 @@
 			],
 			"type": {
 				"type": "literal",
-				"value": "0.1.15"
+				"value": "0.1.16"
 			},
-			"defaultValue": "\"0.1.15\""
+			"defaultValue": "\"0.1.16\""
 		},
 		{
 			"id": 1,
