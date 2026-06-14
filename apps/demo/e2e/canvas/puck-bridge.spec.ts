@@ -1,4 +1,8 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import {
+	gotoEditor,
+	insertDesignBlockAndCommitPreview,
+} from "./design-block-preview.helpers";
 
 /**
  * PRD §9.2 scenarios 8 (DesignBlock ↔ canvas overlay) and 9 (mode-switch
@@ -6,22 +10,15 @@ import { expect, type Page, test } from "@playwright/test";
  * `@anvilkit/plugin-canvas-studio` plugin registers an "Open Canvas" header
  * action + a viewport overlay (`canvas-mode-overlay`).
  *
- * The "Open Canvas" header-action test runs (DOM-only — `/puck/editor` does NOT
- * mount `<CanvasStudio>` until the overlay opens). #8/#9 are `test.fixme`: they
- * open the canvas overlay, whose react-konva `<Stage>` does not render under
- * React 19.2.6 / Next 16 (see editor-core.spec.ts header for the full root
- * cause). `--disable-gpu` in playwright.config.ts prevents the headless-GPU hang.
+ * #8 drives the full insert → open-canvas → commit → preview flow. The Konva
+ * `<Stage>` renders headless thanks to the `--disable-gpu`
+ * /`--disable-software-rasterizer` launch args in playwright.config.ts (plain
+ * headless hangs on GPU; these flags render fine — the earlier "Stage does not
+ * render under React 19/Next 16" claim is stale, see the resolved
+ * CanvasStage StrictMode-destroy fix). #9 (mode-switch persistence) stays
+ * `test.fixme` pending its own reopen-flow rewrite.
  */
-test.describe.configure({ mode: "serial", timeout: 120_000 });
-
-async function gotoEditor(page: Page): Promise<void> {
-	await page.goto("/puck/editor");
-	// Vertical rail tablist is the editor's hydration signal (mirrors
-	// pages-management.spec.ts); the editor cold-compile can take ~30s.
-	await expect(
-		page.locator('[role="tablist"][aria-orientation="vertical"]'),
-	).toBeVisible({ timeout: 30_000 });
-}
+test.describe.configure({ mode: "serial", timeout: 240_000 });
 
 test.describe("Canvas Studio — Puck bridge (PRD §9.2)", () => {
 	test("plugin-canvas-studio registers the Open Canvas header action", async ({
@@ -29,55 +26,47 @@ test.describe("Canvas Studio — Puck bridge (PRD §9.2)", () => {
 	}) => {
 		// Proves the canvas-studio plugin mounted into <Studio> and contributed its
 		// mode-switch header action. Presence is the assertion (the overlay-open
-		// flow is exercised by #8/#9).
+		// flow is exercised by #8).
 		await gotoEditor(page);
 		await expect(
 			page.getByRole("button", { name: "Open Canvas" }),
 		).toBeVisible();
 	});
 
-	test.fixme("#8 DesignBlock overlay save renders a preview asset", async ({
+	test("#8 DesignBlock overlay save renders a preview asset", async ({
 		page,
 	}) => {
 		await gotoEditor(page);
 
-		// Insert a DesignBlock; it starts with no preview.
-		await page
-			.getByRole("button", { name: /design block/i })
-			.first()
-			.click();
-		await expect(page.getByTestId("design-block-empty")).toBeVisible();
+		// Insert a DesignBlock, edit + commit on the canvas (see the helper for the
+		// quick-add insert and the open-event node linkage).
+		const frame = await insertDesignBlockAndCommitPreview(page);
 
-		// Open the canvas overlay, make an edit, return to the page.
-		await page.getByRole("button", { name: "Open Canvas" }).click();
-		await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible();
-		// …author on the canvas…
-		await page.getByTestId("workspace-back").click();
-
-		// Back on the page, the block now renders its exported preview asset.
-		await expect(page.getByTestId("design-block")).toBeVisible();
+		// Back on the page, the block renders its exported preview asset (the
+		// `<figure>`/`<img>`) in place of the empty state. The preview source is a
+		// `blob:` object URL — asserted specifically in
+		// `preview-object-url.verify.spec.ts`.
+		const block = frame.getByTestId("design-block");
+		await expect(block).toBeVisible({ timeout: 20_000 });
+		await expect(block.locator("img")).toHaveAttribute("src", /\S/);
+		await expect(frame.getByTestId("design-block-empty")).toBeHidden();
 	});
 
 	test.fixme("#9 mode-switch canvas → puck → canvas preserves design state", async ({
 		page,
 	}) => {
 		await gotoEditor(page);
-		await page
-			.getByRole("button", { name: /design block/i })
-			.first()
-			.click();
 
-		// Round 1: open → edit → back (commits a preview + designId).
-		await page.getByRole("button", { name: "Open Canvas" }).click();
-		await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible();
-		await page.getByTestId("workspace-back").click();
-		await expect(page.getByTestId("design-block")).toBeVisible();
+		// Round 1: insert → open → commit (writes a preview + designId).
+		const frame = await insertDesignBlockAndCommitPreview(page);
+		await expect(frame.getByTestId("design-block")).toBeVisible();
 
 		// Round 2: reopen the same design — state persists via the mode-store +
-		// localStorage adapter (same designId, same IR).
+		// localStorage adapter (same designId, same IR). TODO: drive the reopen
+		// against the now-linked node and assert IR continuity.
 		await page.getByRole("button", { name: "Open Canvas" }).click();
 		await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible();
 		await page.getByTestId("workspace-back").click();
-		await expect(page.getByTestId("design-block")).toBeVisible();
+		await expect(frame.getByTestId("design-block")).toBeVisible();
 	});
 });
