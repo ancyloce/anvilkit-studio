@@ -44,7 +44,7 @@ const META = {
 // `usePuckSelection()`. The plugin is published as a submodule that
 // pulls in its own copy of `@puckeditor/core` as a peer dep, and pnpm
 // in this workspace currently keeps both 0.21.1 (the plugin's
-// resolved version) AND 0.21.2 (the demo's) in the store. Two
+// resolved version) AND 0.21.3 (the demo's) in the store. Two
 // `@puckeditor/core` copies means two `UsePuckStoreContext` objects:
 // the plugin's `createUsePuck()` hook reads context A while
 // `<Puck>` (used by `<Studio>`) provides context B, so the hook
