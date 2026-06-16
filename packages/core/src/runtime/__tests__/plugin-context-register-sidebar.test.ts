@@ -50,6 +50,7 @@ function buildCtx(
 			registry.getState().registerHistoryPanel(panel),
 		registerDesignSystemPanel: (panel) =>
 			registry.getState().registerDesignSystemPanel(panel),
+		registerSeoPanel: (panel) => registry.getState().registerSeoPanel(panel),
 	};
 }
 
@@ -100,6 +101,9 @@ describe("plugin context — register* sidebar helpers", () => {
 					innerCtx.registerDesignSystemPanel!({
 						render: () => null,
 					}),
+					innerCtx.registerSeoPanel!({
+						render: () => null,
+					}),
 				);
 				return { meta: plugin.meta };
 			},
@@ -116,6 +120,7 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(state.copilotPanel).not.toBeNull();
 		expect(state.historyPanel).not.toBeNull();
 		expect(state.designSystemPanel).not.toBeNull();
+		expect(state.seoPanel).not.toBeNull();
 
 		for (const off of offHandles) off();
 
@@ -128,6 +133,7 @@ describe("plugin context — register* sidebar helpers", () => {
 		expect(cleared.copilotPanel).toBeNull();
 		expect(cleared.historyPanel).toBeNull();
 		expect(cleared.designSystemPanel).toBeNull();
+		expect(cleared.seoPanel).toBeNull();
 	});
 
 	it("hand-written contexts may omit the register* helpers", () => {

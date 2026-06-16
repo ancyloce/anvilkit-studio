@@ -252,6 +252,7 @@ function wrapRegisterMethodsForTeardown(
 		registerCopilotPanel: track(pluginCtx.registerCopilotPanel),
 		registerHistoryPanel: track(pluginCtx.registerHistoryPanel),
 		registerDesignSystemPanel: track(pluginCtx.registerDesignSystemPanel),
+		registerSeoPanel: track(pluginCtx.registerSeoPanel),
 	};
 }
 
@@ -453,6 +454,11 @@ export async function compilePlugins(
 			combineUnregister(
 				sidebar.registerDesignSystemPanel(panel),
 				ctx.registerDesignSystemPanel?.(panel),
+			),
+		registerSeoPanel: (panel) =>
+			combineUnregister(
+				sidebar.registerSeoPanel(panel),
+				ctx.registerSeoPanel?.(panel),
 			),
 	};
 	// Slots are single-occupancy with a "first registration wins"
