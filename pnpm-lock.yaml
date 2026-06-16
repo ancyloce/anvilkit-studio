@@ -85,10 +85,10 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@size-limit/preset-small-lib':
         specifier: ^12.1.0
         version: 12.1.0(size-limit@12.1.0(jiti@2.7.0))
@@ -176,6 +176,9 @@ importers:
 
   apps/demo:
     dependencies:
+      '@anvilkit/analytics-core':
+        specifier: workspace:*
+        version: link:../../packages/analytics/core
       '@anvilkit/bento-grid':
         specifier: workspace:*
         version: link:../../packages/components/src/bento-grid
@@ -567,7 +570,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -591,10 +594,119 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.7
+        version: 4.1.7(@types/node@25.9.1)(@vitest/coverage-v8@4.1.7)(happy-dom@20.9.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
+
+  packages/analytics/core:
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../configs/vitest-config
+      '@rslib/core':
+        specifier: ^0.22.0
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.0
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      posthog-js:
+        specifier: ^1.255.0
+        version: 1.386.6
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.0
+        version: 4.11.0(typedoc@0.28.19(typescript@6.0.3))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.7
+        version: 4.1.7(@types/node@25.9.1)(@vitest/coverage-v8@4.1.7)(happy-dom@20.9.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
+
+  packages/analytics/react:
+    dependencies:
+      '@anvilkit/analytics-core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../configs/vitest-config
+      '@rsbuild/plugin-react':
+        specifier: ^2.0.0
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+      '@rslib/core':
+        specifier: ^0.22.0
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.0
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1(@noble/hashes@1.8.0)
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.6
+        version: 19.2.6
+      react-dom:
+        specifier: 19.2.6
+        version: 19.2.6(react@19.2.6)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.0
+        version: 4.11.0(typedoc@0.28.19(typescript@6.0.3))
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -622,7 +734,7 @@ importers:
         version: link:../../configs/vitest-config
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -665,10 +777,10 @@ importers:
         version: link:../../configs/vitest-config
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@tailwindcss/cli':
         specifier: 4.2.2
         version: 4.2.2
@@ -783,7 +895,7 @@ importers:
         version: link:../configs/vitest-config
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -825,10 +937,10 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@turbo/gen':
         specifier: ^2.9.14
         version: 2.9.14(@types/node@25.9.1)
@@ -1131,6 +1243,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@anvilkit/analytics-core':
+        specifier: workspace:*
+        version: link:../analytics/core
       '@anvilkit/ui':
         specifier: workspace:*
         version: link:../ui
@@ -1197,10 +1312,10 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@tailwindcss/cli':
         specifier: 4.2.2
         version: 4.2.2
@@ -1297,7 +1412,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -1358,10 +1473,10 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -1428,10 +1543,10 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -1504,7 +1619,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -1583,7 +1698,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@testing-library/react':
         specifier: ^16.3.2
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -1665,10 +1780,10 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -1753,7 +1868,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -1823,10 +1938,10 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -1893,7 +2008,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -1939,7 +2054,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -1994,7 +2109,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -2052,7 +2167,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -2115,7 +2230,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -2140,6 +2255,9 @@ importers:
       vitest:
         specifier: ^4.1.7
         version: 4.1.7(@types/node@25.9.1)(@vitest/coverage-v8@4.1.7)(happy-dom@20.9.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
 
   packages/templates: {}
 
@@ -2352,10 +2470,10 @@ importers:
         version: link:../configs/vitest-config
       '@rsbuild/plugin-react':
         specifier: ^2.0.0
-        version: 2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))
+        version: 2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -2403,7 +2521,7 @@ importers:
         version: link:../configs/vitest-config
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -2446,9 +2564,6 @@ importers:
       '@anvilkit/schema':
         specifier: workspace:*
         version: link:../schema
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
@@ -2467,7 +2582,7 @@ importers:
         version: 0.21.3(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
       '@rslib/core':
         specifier: ^0.22.0
-        version: 0.22.0(typescript@6.0.3)
+        version: 0.22.0(core-js@3.49.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^25.9.1
         version: 25.9.1
@@ -2492,6 +2607,9 @@ importers:
       vitest:
         specifier: ^4.1.7
         version: 4.1.7(@types/node@25.9.1)(@vitest/coverage-v8@4.1.7)(happy-dom@20.9.0)(jsdom@29.1.1(@noble/hashes@1.8.0))(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.3)(yaml@2.9.0))
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
 
 packages:
 
@@ -4807,6 +4925,12 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
+  '@posthog/core@1.32.3':
+    resolution: {integrity: sha512-vwOEMfZvGv5XxNWV7p9I52NSmvFNMhyW2IHpIoUHW5jLkgUrknzJW1H/qxVGSIrNNVQkfsoaDFzDhJdg10pgrA==}
+
+  '@posthog/types@1.386.3':
+    resolution: {integrity: sha512-LqJoiQi2eyWn7rCUgnn+D+F3Efp6+04o72bjSX6kWHx0nFaYNC/nJuAIRliDTY/X7GPIUAaHAcSjbMI/9wfX1Q==}
+
   '@preact/signals-core@1.14.2':
     resolution: {integrity: sha512-RZHdBj9ZF4n40Rp4jS052EHHjBWf96P9oNdXPfhQTovCuWY9iQn3Gq+gOTJSgBO9A/JBuPfMOWsSX/lIU9Pc/A==}
 
@@ -5839,6 +5963,9 @@ packages:
   '@types/statuses@2.0.6':
     resolution: {integrity: sha512-xMAgYwceFhRA2zY+XbEA7mxYbA093wdiW8Vu6gZPGWy9cmOyU9XesH1tNcEWsKFd5Vzrqx5T3D38PWx1FIIXkA==}
 
+  '@types/trusted-types@2.0.7':
+    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
+
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
 
@@ -6382,6 +6509,9 @@ packages:
     resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
     engines: {node: '>=18'}
 
+  core-js@3.49.0:
+    resolution: {integrity: sha512-es1U2+YTtzpwkxVLwAFdSpaIMyQaq0PBgm3YD1W3Qpsn1NAmO3KSgZfu+oGSWVu6NvLHoHCV/aYcsE5wiB7ALg==}
+
   cors@2.8.6:
     resolution: {integrity: sha512-tJtZBBHA6vjIAaF6EnIaq6laBBP9aq/Y3ouVJjEfoHbRBcHBAHYcMh/w8LDrk2PvIMMq8gmopa5D4V8RmbrxGw==}
     engines: {node: '>= 0.10'}
@@ -6624,6 +6754,9 @@ packages:
   domhandler@5.0.3:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
+
+  dompurify@3.4.10:
+    resolution: {integrity: sha512-0xzNv0e7oYC6yyuOGZIABPM4qtg3QxLFniDNPP4ZP90wR8Yq3zgwpRbrNiT4N3IKqDbbYFEJLV+JWEs19aZ//w==}
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
@@ -6968,6 +7101,9 @@ packages:
   fetch-blob@3.2.0:
     resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
     engines: {node: ^12.20 || >= 14.13}
+
+  fflate@0.4.8:
+    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
 
   figures@6.1.0:
     resolution: {integrity: sha512-d+l3qxjSesT4V7v2fh+QnmFnUWv9lSpjarhShNTgBOfA0ttejbQUAlHLitbjkoRiDulW0OPoQPYIGhIC8ohejg==}
@@ -8501,9 +8637,15 @@ packages:
     resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
     engines: {node: ^10 || ^12 || >=14}
 
+  posthog-js@1.386.6:
+    resolution: {integrity: sha512-xRcbToRtU07Ojk+VaCCos6I/zD60sNKfWxdeZih0xbncgegIqLZJmBzi4HdkSkXrf14b6HhwMI/s2GxWha5ADQ==}
+
   powershell-utils@0.1.0:
     resolution: {integrity: sha512-dM0jVuXJPsDN6DvRpea484tCUaMiXWjuCn++HGTqUWzGDjv5tZkEZldAJ/UMlqRYGFrD/etByo4/xOuC/snX2A==}
     engines: {node: '>=20'}
+
+  preact@10.29.2:
+    resolution: {integrity: sha512-7tNmwg/7mzzAoB/8kSg6Hl37JraAZw3Z3A0JSY7VXlZwo82Xn0G7wKbNNs2qoF4ZEEsQGTwDAroNdqKs1ofJxQ==}
 
   precinct@12.3.2:
     resolution: {integrity: sha512-JbJevI1K80z8e/WIyDt/4vUN/4qcfBSKKqOjJA4mosPPPb7zODKRJQV7YN7apVWN3k58nZYm/vEsLgEGYmnxwg==}
@@ -8613,6 +8755,9 @@ packages:
 
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
+
+  query-selector-shadow-dom@1.0.1:
+    resolution: {integrity: sha512-lT5yCqEBgfoMYpf3F2xQRK7zEr1rhIIZuceDK6+xRkJQ4NMbHTwXqk4NkwDwQMNqXgG9r9fyHnzwNVs6zV5KRw==}
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
@@ -9828,6 +9973,9 @@ packages:
   web-streams-polyfill@4.0.0-beta.3:
     resolution: {integrity: sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug==}
     engines: {node: '>= 14'}
+
+  web-vitals@5.3.0:
+    resolution: {integrity: sha512-q6LWsLatGYZp5VGBIOvbTj6JBV2nOmC8KvWztXBmwJcfFAzhwKwbOxhUH306XY3CcaZDUlSmSuNPBsCn0bFu+g==}
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -12061,6 +12209,12 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
+  '@posthog/core@1.32.3':
+    dependencies:
+      '@posthog/types': 1.386.3
+
+  '@posthog/types@1.386.3': {}
+
   '@preact/signals-core@1.14.2': {}
 
   '@publint/pack@0.1.4': {}
@@ -12412,26 +12566,28 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.4':
     optional: true
 
-  '@rsbuild/core@2.0.8':
+  '@rsbuild/core@2.0.8(core-js@3.49.0)':
     dependencies:
       '@rspack/core': 2.0.5(@swc/helpers@0.5.23)
       '@swc/helpers': 0.5.23
+    optionalDependencies:
+      core-js: 3.49.0
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
 
-  '@rsbuild/plugin-react@2.0.0(@rsbuild/core@2.0.8)(@rspack/core@2.0.5(@swc/helpers@0.5.23))':
+  '@rsbuild/plugin-react@2.0.0(@rsbuild/core@2.0.8(core-js@3.49.0))(@rspack/core@2.0.5(@swc/helpers@0.5.23))':
     dependencies:
       '@rspack/plugin-react-refresh': 2.0.0(@rspack/core@2.0.5(@swc/helpers@0.5.23))(react-refresh@0.18.0)
       react-refresh: 0.18.0
     optionalDependencies:
-      '@rsbuild/core': 2.0.8
+      '@rsbuild/core': 2.0.8(core-js@3.49.0)
     transitivePeerDependencies:
       - '@rspack/core'
 
-  '@rslib/core@0.22.0(typescript@6.0.3)':
+  '@rslib/core@0.22.0(core-js@3.49.0)(typescript@6.0.3)':
     dependencies:
-      '@rsbuild/core': 2.0.8
-      rsbuild-plugin-dts: 0.22.0(@rsbuild/core@2.0.8)(typescript@6.0.3)
+      '@rsbuild/core': 2.0.8(core-js@3.49.0)
+      rsbuild-plugin-dts: 0.22.0(@rsbuild/core@2.0.8(core-js@3.49.0))(typescript@6.0.3)
     optionalDependencies:
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -13016,6 +13172,9 @@ snapshots:
       '@types/node': 25.9.1
 
   '@types/statuses@2.0.6': {}
+
+  '@types/trusted-types@2.0.7':
+    optional: true
 
   '@types/unist@2.0.11': {}
 
@@ -13670,6 +13829,8 @@ snapshots:
 
   cookie@1.1.1: {}
 
+  core-js@3.49.0: {}
+
   cors@2.8.6:
     dependencies:
       object-assign: 4.1.1
@@ -13899,6 +14060,10 @@ snapshots:
   domhandler@5.0.3:
     dependencies:
       domelementtype: 2.3.0
+
+  dompurify@3.4.10:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
 
   domutils@3.2.2:
     dependencies:
@@ -14384,6 +14549,8 @@ snapshots:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.3.3
+
+  fflate@0.4.8: {}
 
   figures@6.1.0:
     dependencies:
@@ -16309,7 +16476,20 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  posthog-js@1.386.6:
+    dependencies:
+      '@posthog/core': 1.32.3
+      '@posthog/types': 1.386.3
+      core-js: 3.49.0
+      dompurify: 3.4.10
+      fflate: 0.4.8
+      preact: 10.29.2
+      query-selector-shadow-dom: 1.0.1
+      web-vitals: 5.3.0
+
   powershell-utils@0.1.0: {}
+
+  preact@10.29.2: {}
 
   precinct@12.3.2:
     dependencies:
@@ -16455,6 +16635,8 @@ snapshots:
       side-channel: 1.1.0
 
   quansync@0.2.11: {}
+
+  query-selector-shadow-dom@1.0.1: {}
 
   queue-microtask@1.2.3: {}
 
@@ -16866,10 +17048,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.22.0(@rsbuild/core@2.0.8)(typescript@6.0.3):
+  rsbuild-plugin-dts@0.22.0(@rsbuild/core@2.0.8(core-js@3.49.0))(typescript@6.0.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 2.0.8
+      '@rsbuild/core': 2.0.8(core-js@3.49.0)
     optionalDependencies:
       typescript: 6.0.3
 
@@ -17760,6 +17942,8 @@ snapshots:
   web-streams-polyfill@3.3.3: {}
 
   web-streams-polyfill@4.0.0-beta.3: {}
+
+  web-vitals@5.3.0: {}
 
   webidl-conversions@3.0.1: {}
 
