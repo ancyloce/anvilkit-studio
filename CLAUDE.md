@@ -22,6 +22,9 @@ anvilkit-studio/
 │   └── docs/               # @anvilkit/docs-site — Starlight docs (Astro)
 ├── bench/                  # tinybench perf harness (component/IR/export)
 ├── packages/
+│   ├── analytics/          # Git submodules → @anvilkit/analytics-{core,react}
+│   │   ├── core/           # @anvilkit/analytics-core — React-free adapters/catalog/transport
+│   │   └── react/          # @anvilkit/analytics-react — AnalyticsProvider/useTrack
 │   ├── cli/                # @anvilkit/cli — `anvilkit` CLI scaffold
 │   ├── components/         # Git submodule → @anvilkit/* component packages
 │   ├── core/               # @anvilkit/core — runtime, plugin engine, <Studio> shell
@@ -171,7 +174,7 @@ Full component rules and conventions are documented in `packages/components/AGEN
 git submodule update --init --recursive  # Initialize after cloning
 ```
 
-Submodules (14 total — the canonical source is `.gitmodules`; run
+Submodules (16 total — the canonical source is `.gitmodules`; run
 `git config -f .gitmodules --get-regexp path` rather than trusting this list):
 
 - `packages/components`
@@ -190,6 +193,32 @@ Submodules (14 total — the canonical source is `.gitmodules`; run
 - Canvas (direct submodules — `packages/canvas` is a plain directory, not itself a submodule):
   - `packages/canvas/core`
   - `packages/canvas/editor`
+- Analytics (direct submodules — `packages/analytics` is a plain directory, not itself a submodule):
+  - `packages/analytics/core` (`@anvilkit/analytics-core`)
+  - `packages/analytics/react` (`@anvilkit/analytics-react`)
+
+### Submodule convention (REQUIRED for all new modules)
+
+**Every new module — plugins AND standalone packages — is added as a git
+submodule, not an in-tree package.** Group related submodules under a plain
+parent directory (`packages/plugins/`, `packages/canvas/`, `packages/analytics/`)
+that is itself a normal directory, and register each child in `.gitmodules` +
+the matching `pnpm-workspace.yaml` glob (`packages/<group>/*`).
+
+To promote a scaffolded package to a submodule (the maintainer's step — needs a
+remote repo):
+
+```bash
+# 1. Create the GitHub repo (e.g. github.com/ancyloce/anvilkit-<name>), push the
+#    package content to it, then in the superproject:
+git submodule add https://github.com/ancyloce/anvilkit-<name>.git packages/<group>/<name>
+# 2. Add "packages/<group>/*" to pnpm-workspace.yaml if the group is new.
+git config -f .gitmodules --get-regexp path   # verify
+```
+
+Editing submodule content does **not** show in the superproject's `git status` —
+work inside the submodule's own working tree, commit there, then bump the
+gitlink in the superproject (see the canvas/collab submodule memory notes).
 
 ## Health Stack
 
