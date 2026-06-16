@@ -13,6 +13,12 @@
  */
 
 export { collectAssets } from "./collect-assets.js";
+export {
+	DATA_SOURCE_PROP,
+	type DataSourceDirective,
+	getDataSourceDirective,
+	type RemoteCsvDirective,
+} from "./data-source.js";
 export { identifySlots } from "./identify-slots.js";
 export { irToPuckData } from "./ir-to-puck-data.js";
 export type { PuckDataToIROptions } from "./puck-data-to-ir.js";

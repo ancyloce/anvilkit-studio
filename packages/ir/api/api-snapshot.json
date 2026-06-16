@@ -14,7 +14,7 @@
 			"flags": {},
 			"children": [
 				{
-					"id": 27,
+					"id": 35,
 					"name": "PuckDataToIROptions",
 					"variant": "declaration",
 					"kind": 256,
@@ -29,7 +29,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "puckDataToIR",
-								"target": 35
+								"target": 43
 							},
 							{
 								"kind": "text",
@@ -39,7 +39,7 @@
 					},
 					"children": [
 						{
-							"id": 28,
+							"id": 36,
 							"name": "now",
 							"variant": "declaration",
 							"kind": 1024,
@@ -73,14 +73,14 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 29,
+									"id": 37,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 30,
+											"id": 38,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
@@ -101,7 +101,7 @@
 							}
 						},
 						{
-							"id": 31,
+							"id": 39,
 							"name": "onWarning",
 							"variant": "declaration",
 							"kind": 1024,
@@ -119,21 +119,21 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 32,
+									"id": 40,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 33,
+											"id": 41,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 34,
+													"id": 42,
 													"name": "warning",
 													"variant": "param",
 													"kind": 32768,
@@ -164,11 +164,108 @@
 						{
 							"title": "Properties",
 							"children": [
-								28,
-								31
+								36,
+								39
 							]
 						}
 					]
+				},
+				{
+					"id": 26,
+					"name": "RemoteCsvDirective",
+					"variant": "declaration",
+					"kind": 256,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Fetch a CSV and synthesize props from it (the only kind shipped — §8.4)."
+							}
+						]
+					},
+					"children": [
+						{
+							"id": 27,
+							"name": "kind",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"type": {
+								"type": "literal",
+								"value": "remote_csv"
+							}
+						},
+						{
+							"id": 28,
+							"name": "url",
+							"variant": "declaration",
+							"kind": 1024,
+							"flags": {
+								"isReadonly": true
+							},
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"children": [
+								27,
+								28
+							]
+						}
+					]
+				},
+				{
+					"id": 22,
+					"name": "DataSourceDirective",
+					"variant": "declaration",
+					"kind": 2097152,
+					"flags": {},
+					"type": {
+						"type": "reference",
+						"target": 26,
+						"name": "RemoteCsvDirective",
+						"package": "@anvilkit/ir"
+					}
+				},
+				{
+					"id": 21,
+					"name": "DATA_SOURCE_PROP",
+					"variant": "declaration",
+					"kind": 32,
+					"flags": {
+						"isConst": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Reserved prop key carrying a "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "DataSourceDirective",
+								"target": 22
+							},
+							{
+								"kind": "text",
+								"text": " on a node."
+							}
+						]
+					},
+					"type": {
+						"type": "literal",
+						"value": "_dataSource"
+					},
+					"defaultValue": "\"_dataSource\""
 				},
 				{
 					"id": 15,
@@ -416,14 +513,121 @@
 					]
 				},
 				{
-					"id": 21,
+					"id": 23,
+					"name": "getDataSourceDirective",
+					"variant": "declaration",
+					"kind": 64,
+					"flags": {},
+					"signatures": [
+						{
+							"id": 24,
+							"name": "getDataSourceDirective",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Read a "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "DataSourceDirective",
+										"target": 22
+									},
+									{
+										"kind": "text",
+										"text": " off a node's props, or "
+									},
+									{
+										"kind": "code",
+										"text": "`undefined`"
+									},
+									{
+										"kind": "text",
+										"text": " when\nabsent / malformed. Pure + isomorphic."
+									}
+								]
+							},
+							"parameters": [
+								{
+									"id": 25,
+									"name": "props",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Readonly"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "typescript",
+															"packagePath": "lib/lib.es5.d.ts",
+															"qualifiedName": "Record"
+														},
+														"typeArguments": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "unknown"
+															}
+														],
+														"name": "Record",
+														"package": "typescript"
+													}
+												],
+												"name": "Readonly",
+												"package": "typescript"
+											},
+											{
+												"type": "intrinsic",
+												"name": "undefined"
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "reference",
+										"target": 26,
+										"name": "RemoteCsvDirective",
+										"package": "@anvilkit/ir"
+									},
+									{
+										"type": "intrinsic",
+										"name": "undefined"
+									}
+								]
+							}
+						}
+					]
+				},
+				{
+					"id": 29,
 					"name": "identifySlots",
 					"variant": "declaration",
 					"kind": 64,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 22,
+							"id": 30,
 							"name": "identifySlots",
 							"variant": "signature",
 							"kind": 4096,
@@ -513,7 +717,7 @@
 							},
 							"parameters": [
 								{
-									"id": 23,
+									"id": 31,
 									"name": "config",
 									"variant": "param",
 									"kind": 32768,
@@ -577,14 +781,14 @@
 					]
 				},
 				{
-					"id": 24,
+					"id": 32,
 					"name": "irToPuckData",
 					"variant": "declaration",
 					"kind": 64,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 25,
+							"id": 33,
 							"name": "irToPuckData",
 							"variant": "signature",
 							"kind": 4096,
@@ -599,7 +803,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "puckDataToIR",
-										"target": 35
+										"target": 43
 									},
 									{
 										"kind": "text",
@@ -702,7 +906,7 @@
 							},
 							"parameters": [
 								{
-									"id": 26,
+									"id": 34,
 									"name": "ir",
 									"variant": "param",
 									"kind": 32768,
@@ -742,14 +946,14 @@
 					]
 				},
 				{
-					"id": 35,
+					"id": 43,
 					"name": "puckDataToIR",
 					"variant": "declaration",
 					"kind": 64,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 36,
+							"id": 44,
 							"name": "puckDataToIR",
 							"variant": "signature",
 							"kind": 4096,
@@ -817,7 +1021,7 @@
 							},
 							"parameters": [
 								{
-									"id": 37,
+									"id": 45,
 									"name": "data",
 									"variant": "param",
 									"kind": 32768,
@@ -842,7 +1046,7 @@
 									}
 								},
 								{
-									"id": 38,
+									"id": 46,
 									"name": "config",
 									"variant": "param",
 									"kind": 32768,
@@ -873,7 +1077,7 @@
 												"kind": "inline-tag",
 												"tag": "@link",
 												"text": "identifySlots",
-												"target": 21
+												"target": 29
 											},
 											{
 												"kind": "text",
@@ -901,7 +1105,7 @@
 									}
 								},
 								{
-									"id": 39,
+									"id": 47,
 									"name": "opts",
 									"variant": "param",
 									"kind": 32768,
@@ -918,7 +1122,7 @@
 												"kind": "inline-tag",
 												"tag": "@link",
 												"text": "PuckDataToIROptions",
-												"target": 27
+												"target": 35
 											},
 											{
 												"kind": "text",
@@ -928,7 +1132,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 27,
+										"target": 35,
 										"name": "PuckDataToIROptions",
 										"package": "@anvilkit/ir"
 									}
@@ -953,16 +1157,30 @@
 				{
 					"title": "Interfaces",
 					"children": [
-						27
+						35,
+						26
+					]
+				},
+				{
+					"title": "Type Aliases",
+					"children": [
+						22
+					]
+				},
+				{
+					"title": "Variables",
+					"children": [
+						21
 					]
 				},
 				{
 					"title": "Functions",
 					"children": [
 						15,
-						21,
-						24,
-						35
+						23,
+						29,
+						32,
+						43
 					]
 				}
 			]
@@ -975,28 +1193,28 @@
 			"flags": {},
 			"children": [
 				{
-					"id": 44,
+					"id": 52,
 					"name": "PageIRNodeMetaError",
 					"variant": "declaration",
 					"kind": 128,
 					"flags": {},
 					"children": [
 						{
-							"id": 45,
+							"id": 53,
 							"name": "constructor",
 							"variant": "declaration",
 							"kind": 512,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 46,
+									"id": 54,
 									"name": "PageIRNodeMetaError",
 									"variant": "signature",
 									"kind": 16384,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 47,
+											"id": 55,
 											"name": "issues",
 											"variant": "param",
 											"kind": 32768,
@@ -1008,7 +1226,7 @@
 													"type": "array",
 													"elementType": {
 														"type": "reference",
-														"target": 40,
+														"target": 48,
 														"name": "NodeMetaValidationIssue",
 														"package": "@anvilkit/ir"
 													}
@@ -1018,7 +1236,7 @@
 									],
 									"type": {
 										"type": "reference",
-										"target": 44,
+										"target": 52,
 										"name": "PageIRNodeMetaError",
 										"package": "@anvilkit/ir"
 									},
@@ -1038,7 +1256,7 @@
 							}
 						},
 						{
-							"id": 48,
+							"id": 56,
 							"name": "issues",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1052,7 +1270,7 @@
 									"type": "array",
 									"elementType": {
 										"type": "reference",
-										"target": 40,
+										"target": 48,
 										"name": "NodeMetaValidationIssue",
 										"package": "@anvilkit/ir"
 									}
@@ -1064,13 +1282,13 @@
 						{
 							"title": "Constructors",
 							"children": [
-								45
+								53
 							]
 						},
 						{
 							"title": "Properties",
 							"children": [
-								48
+								56
 							]
 						}
 					],
@@ -1088,7 +1306,7 @@
 					]
 				},
 				{
-					"id": 40,
+					"id": 48,
 					"name": "NodeMetaValidationIssue",
 					"variant": "declaration",
 					"kind": 256,
@@ -1141,7 +1359,7 @@
 					},
 					"children": [
 						{
-							"id": 41,
+							"id": 49,
 							"name": "code",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1154,7 +1372,7 @@
 							}
 						},
 						{
-							"id": 42,
+							"id": 50,
 							"name": "message",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1167,7 +1385,7 @@
 							}
 						},
 						{
-							"id": 43,
+							"id": 51,
 							"name": "path",
 							"variant": "declaration",
 							"kind": 1024,
@@ -1200,9 +1418,9 @@
 						{
 							"title": "Properties",
 							"children": [
-								41,
-								42,
-								43
+								49,
+								50,
+								51
 							]
 						}
 					]
@@ -1595,7 +1813,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIRNodeMetaError",
-										"target": 44
+										"target": 52
 									},
 									{
 										"kind": "text",
@@ -1719,13 +1937,13 @@
 				{
 					"title": "Classes",
 					"children": [
-						44
+						52
 					]
 				},
 				{
 					"title": "Interfaces",
 					"children": [
-						40,
+						48,
 						12
 					]
 				},
@@ -1864,140 +2082,180 @@
 		},
 		"21": {
 			"packageName": "@anvilkit/ir",
-			"packagePath": "src/identify-slots.ts",
-			"qualifiedName": "identifySlots"
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "DATA_SOURCE_PROP"
 		},
 		"22": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "DataSourceDirective"
+		},
+		"23": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "getDataSourceDirective"
+		},
+		"24": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "getDataSourceDirective"
+		},
+		"25": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "props"
+		},
+		"26": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "RemoteCsvDirective"
+		},
+		"27": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "RemoteCsvDirective.kind"
+		},
+		"28": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/data-source.ts",
+			"qualifiedName": "RemoteCsvDirective.url"
+		},
+		"29": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/identify-slots.ts",
 			"qualifiedName": "identifySlots"
 		},
-		"23": {
+		"30": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/identify-slots.ts",
+			"qualifiedName": "identifySlots"
+		},
+		"31": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/identify-slots.ts",
 			"qualifiedName": "config"
 		},
-		"24": {
+		"32": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/ir-to-puck-data.ts",
 			"qualifiedName": "irToPuckData"
 		},
-		"25": {
+		"33": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/ir-to-puck-data.ts",
 			"qualifiedName": "irToPuckData"
 		},
-		"26": {
+		"34": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/ir-to-puck-data.ts",
 			"qualifiedName": "ir"
 		},
-		"27": {
+		"35": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "PuckDataToIROptions"
 		},
-		"28": {
+		"36": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
 			"qualifiedName": "PuckDataToIROptions.now"
 		},
-		"29": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"30": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"31": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "PuckDataToIROptions.onWarning"
-		},
-		"32": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"33": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "__type"
-		},
-		"34": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "warning"
-		},
-		"35": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "puckDataToIR"
-		},
-		"36": {
-			"packageName": "@anvilkit/ir",
-			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "puckDataToIR"
-		},
 		"37": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"38": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "config"
+			"qualifiedName": "__type"
 		},
 		"39": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/puck-data-to-ir.ts",
-			"qualifiedName": "opts"
+			"qualifiedName": "PuckDataToIROptions.onWarning"
 		},
 		"40": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"41": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "__type"
+		},
+		"42": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "warning"
+		},
+		"43": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "puckDataToIR"
+		},
+		"44": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "puckDataToIR"
+		},
+		"45": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "data"
+		},
+		"46": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "config"
+		},
+		"47": {
+			"packageName": "@anvilkit/ir",
+			"packagePath": "src/puck-data-to-ir.ts",
+			"qualifiedName": "opts"
+		},
+		"48": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue"
 		},
-		"41": {
+		"49": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue.code"
 		},
-		"42": {
+		"50": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue.message"
 		},
-		"43": {
+		"51": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "NodeMetaValidationIssue.path"
 		},
-		"44": {
+		"52": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError"
 		},
-		"45": {
+		"53": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError.__constructor"
 		},
-		"46": {
+		"54": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError"
 		},
-		"47": {
+		"55": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "issues"
 		},
-		"48": {
+		"56": {
 			"packageName": "@anvilkit/ir",
 			"packagePath": "src/migrations/error.ts",
 			"qualifiedName": "PageIRNodeMetaError.issues"
