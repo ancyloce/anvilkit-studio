@@ -40,3 +40,12 @@
 [submodule "packages/plugins/plugin-design-system"]
 	path = packages/plugins/plugin-design-system
 	url = https://github.com/ancyloce/anvilkit-plugin-design-system.git
+[submodule "packages/plugins/plugin-page-seo"]
+	path = packages/plugins/plugin-page-seo
+	url = https://github.com/ancyloce/anvilkit-plugin-page-seo.git
+[submodule "packages/analytics/core"]
+	path = packages/analytics/core
+	url = https://github.com/ancyloce/anvilkit-analytics-core.git
+[submodule "packages/analytics/react"]
+	path = packages/analytics/react
+	url = https://github.com/ancyloce/anvilkit-analytics-react.git

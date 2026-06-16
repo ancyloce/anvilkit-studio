@@ -711,6 +711,139 @@
           }
         }
       ]
+    },
+    {
+      "id": 25,
+      "name": "validatePagePayload",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-page-payload.ts",
+          "line": 34,
+          "character": 16
+        }
+      ],
+      "signatures": [
+        {
+          "id": 26,
+          "name": "validatePagePayload",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Pure, isomorphic gateway that validates a page payload ("
+              },
+              {
+                "kind": "code",
+                "text": "`root.props`"
+              },
+              {
+                "kind": "text",
+                "text": ")\nagainst the canonical "
+              },
+              {
+                "kind": "code",
+                "text": "`PageRootSchema`"
+              },
+              {
+                "kind": "text",
+                "text": " from "
+              },
+              {
+                "kind": "code",
+                "text": "`@anvilkit/schema`"
+              },
+              {
+                "kind": "text",
+                "text": ".\n\nReuses the existing "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "ValidationResult",
+                "target": 14
+              },
+              {
+                "kind": "text",
+                "text": "/"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "ValidationIssue",
+                "target": 8
+              },
+              {
+                "kind": "text",
+                "text": " shape —\nno new result type — mapping each Zod issue onto a "
+              },
+              {
+                "kind": "code",
+                "text": "`level: \"error\"`"
+              },
+              {
+                "kind": "text",
+                "text": " issue\nwith a symbol-safe "
+              },
+              {
+                "kind": "code",
+                "text": "`path`"
+              },
+              {
+                "kind": "text",
+                "text": " (mirrors the "
+              },
+              {
+                "kind": "code",
+                "text": "`validateAiSectionPatch`"
+              },
+              {
+                "kind": "text",
+                "text": " idiom in\n"
+              },
+              {
+                "kind": "code",
+                "text": "`section.ts`"
+              },
+              {
+                "kind": "text",
+                "text": "). Carries no React import; runs in Node / Edge / browser."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/validate-page-payload.ts",
+              "line": 34,
+              "character": 16
+            }
+          ],
+          "parameters": [
+            {
+              "id": 27,
+              "name": "rootProps",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 14,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
     }
   ],
   "groups": [
@@ -727,7 +860,8 @@
       "title": "Functions",
       "children": [
         17,
-        21
+        21,
+        25
       ]
     }
   ],
@@ -857,6 +991,21 @@
       "packageName": "@anvilkit/validator",
       "packagePath": "src/validate-component-config.ts",
       "qualifiedName": "config"
+    },
+    "25": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePagePayload"
+    },
+    "26": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePagePayload"
+    },
+    "27": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "rootProps"
     }
   },
   "files": {
