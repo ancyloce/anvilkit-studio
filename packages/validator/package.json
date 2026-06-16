@@ -37,16 +37,19 @@
 		"access": "public"
 	},
 	"peerDependencies": {
-		"@puckeditor/core": "^0.21.3"
+		"@puckeditor/core": "^0.21.3",
+		"zod": "^4.4.3"
 	},
 	"peerDependenciesMeta": {
 		"@puckeditor/core": {
 			"optional": false
+		},
+		"zod": {
+			"optional": false
 		}
 	},
 	"dependencies": {
-		"@anvilkit/schema": "workspace:*",
-		"zod": "^4.4.3"
+		"@anvilkit/schema": "workspace:*"
 	},
 	"scripts": {
 		"build": "rslib build",
@@ -80,6 +83,7 @@
 		"typedoc": "^0.28.19",
 		"typedoc-plugin-markdown": "^4.11.0",
 		"typescript": "6.0.3",
-		"vitest": "^4.1.7"
+		"vitest": "^4.1.7",
+		"zod": "^4.4.3"
 	}
 }
