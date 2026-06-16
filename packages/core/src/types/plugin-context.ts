@@ -30,6 +30,7 @@ import type {
 	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
+	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "./sidebar.js";
 
@@ -289,6 +290,14 @@ export interface StudioPluginContext<
 	 */
 	readonly registerDesignSystemPanel?: (
 		panel: StudioDesignSystemPanel,
+	) => StudioSidebarUnregister;
+	/**
+	 * Register the SEO rail panel (PRD 0004 F5). Single-occupancy,
+	 * last-write-wins; returns an `unregister()` handle that clears the panel
+	 * iff it still matches the one captured in its closure.
+	 */
+	readonly registerSeoPanel?: (
+		panel: StudioSeoPanel,
 	) => StudioSidebarUnregister;
 }
 

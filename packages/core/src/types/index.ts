@@ -96,5 +96,6 @@ export type {
 	StudioInsertSectionPredicate,
 	StudioLayerQuickAdd,
 	StudioLayerQuickAddInserter,
+	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "./sidebar.js";

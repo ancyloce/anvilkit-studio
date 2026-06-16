@@ -472,6 +472,17 @@ export interface StudioDesignSystemPanel {
 	readonly render: () => ReactNode;
 }
 
+/**
+ * Host-registered SEO panel (PRD 0004 F5). Mirrors
+ * {@link StudioDesignSystemPanel}: a single panel, last-write-wins; the `seo`
+ * module shows `studio.module.seo.empty` until a panel is registered. The
+ * plugin's panel edits the page's `root.props.seo` via an immutable Puck
+ * dispatch.
+ */
+export interface StudioSeoPanel {
+	readonly render: () => ReactNode;
+}
+
 // -----------------------------------------------------------------------------
 // Common
 // -----------------------------------------------------------------------------
