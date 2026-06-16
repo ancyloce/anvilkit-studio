@@ -15,14 +15,18 @@
 import { memo, type ReactNode, type RefObject, useCallback } from "react";
 
 import { useMsg } from "@/state/editor-i18n-context";
+import {
+	useActiveTab,
+	useEditorUiStore,
+} from "@/state/slices/editor-ui-selectors";
 import type { EditorTab } from "@/state/slices/editor-ui-store";
-import { useActiveTab, useEditorUiStore } from "@/state/slices/editor-ui-selectors";
 import { CopilotModule } from "./sidebar/modules/CopilotModule";
 import { DesignSystemModule } from "./sidebar/modules/DesignSystemModule";
 import { HistoryModule } from "./sidebar/modules/HistoryModule";
 import { ImageModule } from "./sidebar/modules/ImageModule";
 import { InsertModule } from "./sidebar/modules/InsertModule";
 import { LayerModule } from "./sidebar/modules/LayerModule";
+import { SeoModule } from "./sidebar/modules/SeoModule";
 import { TextModule } from "./sidebar/modules/TextModule";
 import {
 	SidebarHeaderActionsProvider,
@@ -43,6 +47,7 @@ const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
 	copilot: "studio.module.copilot.name",
 	history: "studio.module.history.name",
 	"design-system": "studio.module.designSystem.name",
+	seo: "studio.module.seo.name",
 };
 
 function renderModuleBody(tab: EditorTab): ReactNode {
@@ -61,6 +66,8 @@ function renderModuleBody(tab: EditorTab): ReactNode {
 			return <HistoryModule />;
 		case "design-system":
 			return <DesignSystemModule />;
+		case "seo":
+			return <SeoModule />;
 	}
 }
 

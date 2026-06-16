@@ -27,6 +27,7 @@ import {
 	LayoutGrid as LayoutGridIcon,
 	Palette as PaletteIcon,
 	Plus as PlusIcon,
+	Search as SearchIcon,
 	Sparkles as SparklesIcon,
 	Type as TypeIcon,
 } from "lucide-react";
@@ -43,10 +44,13 @@ import { useShallow } from "zustand/shallow";
 import { Tabs, TabsList, TabsTab } from "@/primitives/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
-import type { EditorTab } from "@/state/slices/editor-ui-store";
-import { useActiveTab, useEditorUiStore } from "@/state/slices/editor-ui-selectors";
 import type { SidebarRegistryState } from "@/state/sidebar-registry/sidebar-registry-store";
 import { useSidebarRegistry } from "@/state/sidebar-registry/use-sidebar-registry";
+import {
+	useActiveTab,
+	useEditorUiStore,
+} from "@/state/slices/editor-ui-selectors";
+import type { EditorTab } from "@/state/slices/editor-ui-store";
 
 export const SIDEBAR_PANEL_ID = "ak-sidebar-panel";
 
@@ -98,6 +102,12 @@ const RAIL_MODULES: readonly RailModule[] = [
 		icon: PaletteIcon,
 		labelKey: "studio.module.designSystem.name",
 		isVisible: (s) => s.designSystemPanel !== null,
+	},
+	{
+		key: "seo",
+		icon: SearchIcon,
+		labelKey: "studio.module.seo.name",
+		isVisible: (s) => s.seoPanel !== null,
 	},
 ];
 
