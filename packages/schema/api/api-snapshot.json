@@ -114,6 +114,962 @@
 			]
 		},
 		{
+			"id": 26,
+			"name": "PageRootProps",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "zod",
+					"packagePath": "v4/core/core.d.cts",
+					"qualifiedName": "output"
+				},
+				"typeArguments": [
+					{
+						"type": "query",
+						"queryType": {
+							"type": "reference",
+							"target": 28,
+							"name": "PageRootSchema",
+							"package": "@anvilkit/schema"
+						}
+					}
+				],
+				"name": "z.infer",
+				"package": "zod",
+				"qualifiedName": "output"
+			}
+		},
+		{
+			"id": 27,
+			"name": "PageSeo",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "zod",
+					"packagePath": "v4/core/core.d.cts",
+					"qualifiedName": "output"
+				},
+				"typeArguments": [
+					{
+						"type": "query",
+						"queryType": {
+							"type": "reference",
+							"target": 46,
+							"name": "PageSeoSchema",
+							"package": "@anvilkit/schema"
+						}
+					}
+				],
+				"name": "z.infer",
+				"package": "zod",
+				"qualifiedName": "output"
+			}
+		},
+		{
+			"id": 28,
+			"name": "PageRootSchema",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The authoritative page payload, canonical in Puck "
+					},
+					{
+						"kind": "code",
+						"text": "`root.props`"
+					},
+					{
+						"kind": "text",
+						"text": ". Editor,\nvalidator, storage, and renderer all read this single shape.\n\n"
+					},
+					{
+						"kind": "code",
+						"text": "`z.object`"
+					},
+					{
+						"kind": "text",
+						"text": " (not "
+					},
+					{
+						"kind": "code",
+						"text": "`z.strictObject`"
+					},
+					{
+						"kind": "text",
+						"text": ") so Puck-internal keys (e.g. "
+					},
+					{
+						"kind": "code",
+						"text": "`id`"
+					},
+					{
+						"kind": "text",
+						"text": ") and\nforward-compat fields are stripped rather than rejected."
+					}
+				]
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "zod",
+					"packagePath": "v4/classic/schemas.d.cts",
+					"qualifiedName": "ZodObject"
+				},
+				"typeArguments": [
+					{
+						"type": "reflection",
+						"declaration": {
+							"id": 29,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 38,
+									"name": "parentFolder",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "zod",
+											"packagePath": "v4/classic/schemas.d.cts",
+											"qualifiedName": "ZodDefault"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodString"
+												},
+												"name": "ZodString",
+												"package": "zod"
+											}
+										],
+										"name": "ZodDefault",
+										"package": "zod"
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 39,
+									"name": "seo",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "zod",
+											"packagePath": "v4/classic/schemas.d.cts",
+											"qualifiedName": "ZodPrefault"
+										},
+										"typeArguments": [
+											{
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodObject"
+												},
+												"typeArguments": [
+													{
+														"type": "reflection",
+														"declaration": {
+															"id": 40,
+															"name": "__type",
+															"variant": "declaration",
+															"kind": 65536,
+															"flags": {},
+															"children": [
+																{
+																	"id": 45,
+																	"name": "canonical",
+																	"variant": "declaration",
+																	"kind": 1024,
+																	"flags": {},
+																	"type": {
+																		"type": "reference",
+																		"target": {
+																			"packageName": "zod",
+																			"packagePath": "v4/classic/schemas.d.cts",
+																			"qualifiedName": "ZodOptional"
+																		},
+																		"typeArguments": [
+																			{
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodURL"
+																				},
+																				"name": "ZodURL",
+																				"package": "zod"
+																			}
+																		],
+																		"name": "ZodOptional",
+																		"package": "zod"
+																	},
+																	"defaultValue": "..."
+																},
+																{
+																	"id": 42,
+																	"name": "description",
+																	"variant": "declaration",
+																	"kind": 1024,
+																	"flags": {},
+																	"type": {
+																		"type": "reference",
+																		"target": {
+																			"packageName": "zod",
+																			"packagePath": "v4/classic/schemas.d.cts",
+																			"qualifiedName": "ZodOptional"
+																		},
+																		"typeArguments": [
+																			{
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodString"
+																				},
+																				"name": "ZodString",
+																				"package": "zod"
+																			}
+																		],
+																		"name": "ZodOptional",
+																		"package": "zod"
+																	},
+																	"defaultValue": "..."
+																},
+																{
+																	"id": 44,
+																	"name": "noIndex",
+																	"variant": "declaration",
+																	"kind": 1024,
+																	"flags": {},
+																	"type": {
+																		"type": "reference",
+																		"target": {
+																			"packageName": "zod",
+																			"packagePath": "v4/classic/schemas.d.cts",
+																			"qualifiedName": "ZodDefault"
+																		},
+																		"typeArguments": [
+																			{
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodBoolean"
+																				},
+																				"name": "ZodBoolean",
+																				"package": "zod"
+																			}
+																		],
+																		"name": "ZodDefault",
+																		"package": "zod"
+																	},
+																	"defaultValue": "..."
+																},
+																{
+																	"id": 43,
+																	"name": "ogImage",
+																	"variant": "declaration",
+																	"kind": 1024,
+																	"flags": {},
+																	"type": {
+																		"type": "reference",
+																		"target": {
+																			"packageName": "zod",
+																			"packagePath": "v4/classic/schemas.d.cts",
+																			"qualifiedName": "ZodOptional"
+																		},
+																		"typeArguments": [
+																			{
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodURL"
+																				},
+																				"name": "ZodURL",
+																				"package": "zod"
+																			}
+																		],
+																		"name": "ZodOptional",
+																		"package": "zod"
+																	},
+																	"defaultValue": "..."
+																},
+																{
+																	"id": 41,
+																	"name": "title",
+																	"variant": "declaration",
+																	"kind": 1024,
+																	"flags": {},
+																	"type": {
+																		"type": "reference",
+																		"target": {
+																			"packageName": "zod",
+																			"packagePath": "v4/classic/schemas.d.cts",
+																			"qualifiedName": "ZodOptional"
+																		},
+																		"typeArguments": [
+																			{
+																				"type": "reference",
+																				"target": {
+																					"packageName": "zod",
+																					"packagePath": "v4/classic/schemas.d.cts",
+																					"qualifiedName": "ZodString"
+																				},
+																				"name": "ZodString",
+																				"package": "zod"
+																			}
+																		],
+																		"name": "ZodOptional",
+																		"package": "zod"
+																	},
+																	"defaultValue": "..."
+																}
+															],
+															"groups": [
+																{
+																	"title": "Properties",
+																	"children": [
+																		45,
+																		42,
+																		44,
+																		43,
+																		41
+																	]
+																}
+															]
+														}
+													},
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/core/schemas.d.cts",
+															"qualifiedName": "$strip"
+														},
+														"name": "$strip",
+														"package": "zod"
+													}
+												],
+												"name": "ZodObject",
+												"package": "zod"
+											}
+										],
+										"name": "ZodPrefault",
+										"package": "zod"
+									},
+									"defaultValue": "PageSeoSchema"
+								},
+								{
+									"id": 31,
+									"name": "slug",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "zod",
+											"packagePath": "v4/classic/schemas.d.cts",
+											"qualifiedName": "ZodString"
+										},
+										"name": "ZodString",
+										"package": "zod"
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 32,
+									"name": "status",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "zod",
+											"packagePath": "v4/classic/schemas.d.cts",
+											"qualifiedName": "ZodEnum"
+										},
+										"typeArguments": [
+											{
+												"type": "reflection",
+												"declaration": {
+													"id": 33,
+													"name": "__type",
+													"variant": "declaration",
+													"kind": 65536,
+													"flags": {},
+													"children": [
+														{
+															"id": 36,
+															"name": "archived",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {},
+															"type": {
+																"type": "literal",
+																"value": "archived"
+															}
+														},
+														{
+															"id": 34,
+															"name": "draft",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {},
+															"type": {
+																"type": "literal",
+																"value": "draft"
+															}
+														},
+														{
+															"id": 35,
+															"name": "published",
+															"variant": "declaration",
+															"kind": 1024,
+															"flags": {},
+															"type": {
+																"type": "literal",
+																"value": "published"
+															}
+														}
+													],
+													"groups": [
+														{
+															"title": "Properties",
+															"children": [
+																36,
+																34,
+																35
+															]
+														}
+													]
+												}
+											}
+										],
+										"name": "ZodEnum",
+										"package": "zod"
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 30,
+									"name": "title",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "zod",
+											"packagePath": "v4/classic/schemas.d.cts",
+											"qualifiedName": "ZodString"
+										},
+										"name": "ZodString",
+										"package": "zod"
+									},
+									"defaultValue": "..."
+								},
+								{
+									"id": 37,
+									"name": "version",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "zod",
+											"packagePath": "v4/classic/schemas.d.cts",
+											"qualifiedName": "ZodString"
+										},
+										"name": "ZodString",
+										"package": "zod"
+									},
+									"defaultValue": "..."
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										38,
+										39,
+										31,
+										32,
+										30,
+										37
+									]
+								}
+							]
+						}
+					},
+					{
+						"type": "reference",
+						"target": {
+							"packageName": "zod",
+							"packagePath": "v4/core/schemas.d.cts",
+							"qualifiedName": "$strip"
+						},
+						"name": "$strip",
+						"package": "zod"
+					}
+				],
+				"name": "ZodObject",
+				"package": "zod"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 46,
+			"name": "PageSeoSchema",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Canonical SEO metadata block stored on a page's "
+					},
+					{
+						"kind": "code",
+						"text": "`root.props.seo`"
+					},
+					{
+						"kind": "text",
+						"text": ".\n\nField-name reconciliation with core's "
+					},
+					{
+						"kind": "code",
+						"text": "`StudioPageSeo`"
+					},
+					{
+						"kind": "text",
+						"text": "\n("
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/core`"
+					},
+					{
+						"kind": "text",
+						"text": " → "
+					},
+					{
+						"kind": "code",
+						"text": "`packages/core/src/types/pages.ts`"
+					},
+					{
+						"kind": "text",
+						"text": ") so F4 can project\n"
+					},
+					{
+						"kind": "code",
+						"text": "`root.props.seo`"
+					},
+					{
+						"kind": "text",
+						"text": " into the rail/breadcrumb sidecar losslessly:\n\n| This schema   | core "
+					},
+					{
+						"kind": "code",
+						"text": "`StudioPageSeo`"
+					},
+					{
+						"kind": "text",
+						"text": " | Note                          |\n| :------------ | :------------------- | :---------------------------- |\n| "
+					},
+					{
+						"kind": "code",
+						"text": "`title`"
+					},
+					{
+						"kind": "text",
+						"text": "       | "
+					},
+					{
+						"kind": "code",
+						"text": "`metaTitle`"
+					},
+					{
+						"kind": "text",
+						"text": "          | rename                        |\n| "
+					},
+					{
+						"kind": "code",
+						"text": "`description`"
+					},
+					{
+						"kind": "text",
+						"text": " | "
+					},
+					{
+						"kind": "code",
+						"text": "`metaDescription`"
+					},
+					{
+						"kind": "text",
+						"text": "    | rename                        |\n| "
+					},
+					{
+						"kind": "code",
+						"text": "`ogImage`"
+					},
+					{
+						"kind": "text",
+						"text": "     | "
+					},
+					{
+						"kind": "code",
+						"text": "`ogImage`"
+					},
+					{
+						"kind": "text",
+						"text": "            | identical                     |\n| "
+					},
+					{
+						"kind": "code",
+						"text": "`noIndex`"
+					},
+					{
+						"kind": "text",
+						"text": "     | "
+					},
+					{
+						"kind": "code",
+						"text": "`noindex`"
+					},
+					{
+						"kind": "text",
+						"text": "            | casing differs                |\n| "
+					},
+					{
+						"kind": "code",
+						"text": "`canonical`"
+					},
+					{
+						"kind": "text",
+						"text": "   | —                    | new; no core equivalent yet   |\n\nZod v4 idioms (mirrors "
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/core/src/config/schema.ts`"
+					},
+					{
+						"kind": "text",
+						"text": "):\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`z.url()`"
+					},
+					{
+						"kind": "text",
+						"text": " not "
+					},
+					{
+						"kind": "code",
+						"text": "`z.string().url()`"
+					},
+					{
+						"kind": "text",
+						"text": " — top-level format validators.\n- "
+					},
+					{
+						"kind": "code",
+						"text": "`.prefault({})`"
+					},
+					{
+						"kind": "text",
+						"text": " not "
+					},
+					{
+						"kind": "code",
+						"text": "`.default({})`"
+					},
+					{
+						"kind": "text",
+						"text": " — "
+					},
+					{
+						"kind": "code",
+						"text": "`.default()`"
+					},
+					{
+						"kind": "text",
+						"text": " short-circuits parsing\n  and would yield a literal "
+					},
+					{
+						"kind": "code",
+						"text": "`{}`"
+					},
+					{
+						"kind": "text",
+						"text": "; "
+					},
+					{
+						"kind": "code",
+						"text": "`.prefault({})`"
+					},
+					{
+						"kind": "text",
+						"text": " re-parses so an omitted\n  "
+					},
+					{
+						"kind": "code",
+						"text": "`seo`"
+					},
+					{
+						"kind": "text",
+						"text": " block still resolves to "
+					},
+					{
+						"kind": "code",
+						"text": "`{ noIndex: false }`"
+					},
+					{
+						"kind": "text",
+						"text": "."
+					}
+				]
+			},
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "zod",
+					"packagePath": "v4/classic/schemas.d.cts",
+					"qualifiedName": "ZodPrefault"
+				},
+				"typeArguments": [
+					{
+						"type": "reference",
+						"target": {
+							"packageName": "zod",
+							"packagePath": "v4/classic/schemas.d.cts",
+							"qualifiedName": "ZodObject"
+						},
+						"typeArguments": [
+							{
+								"type": "reflection",
+								"declaration": {
+									"id": 47,
+									"name": "__type",
+									"variant": "declaration",
+									"kind": 65536,
+									"flags": {},
+									"children": [
+										{
+											"id": 52,
+											"name": "canonical",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodOptional"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodURL"
+														},
+														"name": "ZodURL",
+														"package": "zod"
+													}
+												],
+												"name": "ZodOptional",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 49,
+											"name": "description",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodOptional"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodString"
+														},
+														"name": "ZodString",
+														"package": "zod"
+													}
+												],
+												"name": "ZodOptional",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 51,
+											"name": "noIndex",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodDefault"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodBoolean"
+														},
+														"name": "ZodBoolean",
+														"package": "zod"
+													}
+												],
+												"name": "ZodDefault",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 50,
+											"name": "ogImage",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodOptional"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodURL"
+														},
+														"name": "ZodURL",
+														"package": "zod"
+													}
+												],
+												"name": "ZodOptional",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										},
+										{
+											"id": 48,
+											"name": "title",
+											"variant": "declaration",
+											"kind": 1024,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "zod",
+													"packagePath": "v4/classic/schemas.d.cts",
+													"qualifiedName": "ZodOptional"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "zod",
+															"packagePath": "v4/classic/schemas.d.cts",
+															"qualifiedName": "ZodString"
+														},
+														"name": "ZodString",
+														"package": "zod"
+													}
+												],
+												"name": "ZodOptional",
+												"package": "zod"
+											},
+											"defaultValue": "..."
+										}
+									],
+									"groups": [
+										{
+											"title": "Properties",
+											"children": [
+												52,
+												49,
+												51,
+												50,
+												48
+											]
+										}
+									]
+								}
+							},
+							{
+								"type": "reference",
+								"target": {
+									"packageName": "zod",
+									"packagePath": "v4/core/schemas.d.cts",
+									"qualifiedName": "$strip"
+								},
+								"name": "$strip",
+								"package": "zod"
+							}
+						],
+						"name": "ZodObject",
+						"package": "zod"
+					}
+				],
+				"name": "ZodPrefault",
+				"package": "zod"
+			},
+			"defaultValue": "..."
+		},
+		{
 			"id": 3,
 			"name": "configToAiContext",
 			"variant": "declaration",
@@ -397,6 +1353,20 @@
 			]
 		},
 		{
+			"title": "Type Aliases",
+			"children": [
+				26,
+				27
+			]
+		},
+		{
+			"title": "Variables",
+			"children": [
+				28,
+				46
+			]
+		},
+		{
 			"title": "Functions",
 			"children": [
 				3,
@@ -537,6 +1507,141 @@
 			"packageName": "@anvilkit/schema",
 			"packagePath": "src/is-json-serializable.ts",
 			"qualifiedName": "opts"
+		},
+		"26": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "PageRootProps"
+		},
+		"27": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "PageSeo"
+		},
+		"28": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "PageRootSchema"
+		},
+		"29": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"30": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "title"
+		},
+		"31": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "slug"
+		},
+		"32": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "status"
+		},
+		"33": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"34": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "",
+			"qualifiedName": "draft"
+		},
+		"35": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "",
+			"qualifiedName": "published"
+		},
+		"36": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "",
+			"qualifiedName": "archived"
+		},
+		"37": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "version"
+		},
+		"38": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "parentFolder"
+		},
+		"39": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "seo"
+		},
+		"40": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"41": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "title"
+		},
+		"42": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "description"
+		},
+		"43": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "ogImage"
+		},
+		"44": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "noIndex"
+		},
+		"45": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "canonical"
+		},
+		"46": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "PageSeoSchema"
+		},
+		"47": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
+		},
+		"48": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "title"
+		},
+		"49": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "description"
+		},
+		"50": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "ogImage"
+		},
+		"51": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "noIndex"
+		},
+		"52": {
+			"packageName": "@anvilkit/schema",
+			"packagePath": "src/page-root-schema.ts",
+			"qualifiedName": "canonical"
 		}
 	},
 	"files": {
