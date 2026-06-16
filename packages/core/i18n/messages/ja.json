@@ -160,6 +160,8 @@
 	"studio.module.history.empty": "スナップショットを表示するには @anvilkit/plugin-version-history をインストールし、履歴パネルを登録してください。",
 	"studio.module.designSystem.name": "デザインシステム",
 	"studio.module.designSystem.empty": "トークンを編集するには @anvilkit/plugin-design-system をインストールし、デザインシステムパネルを登録してください。",
+	"studio.module.seo.name": "SEO",
+	"studio.module.seo.empty": "ページのメタデータを編集するには @anvilkit/plugin-page-seo をインストールし、SEO パネルを登録してください。",
 	"studio.field.placeholder.select": "選択…",
 	"studio.field.external.search": "検索…",
 	"studio.field.external.clear": "クリア",

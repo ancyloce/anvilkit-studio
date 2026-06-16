@@ -160,6 +160,8 @@
 	"studio.module.history.empty": "安装 @anvilkit/plugin-version-history 并注册历史记录面板以查看快照。",
 	"studio.module.designSystem.name": "设计系统",
 	"studio.module.designSystem.empty": "安装 @anvilkit/plugin-design-system 并注册设计系统面板以编辑令牌。",
+	"studio.module.seo.name": "SEO",
+	"studio.module.seo.empty": "安装 @anvilkit/plugin-page-seo 并注册 SEO 面板以编辑页面元数据。",
 	"studio.field.placeholder.select": "选择…",
 	"studio.field.external.search": "搜索…",
 	"studio.field.external.clear": "清除",

@@ -160,6 +160,8 @@
 	"studio.module.history.empty": "스냅샷을 보려면 @anvilkit/plugin-version-history를 설치하고 기록 패널을 등록하세요.",
 	"studio.module.designSystem.name": "디자인 시스템",
 	"studio.module.designSystem.empty": "토큰을 편집하려면 @anvilkit/plugin-design-system를 설치하고 디자인 시스템 패널을 등록하세요.",
+	"studio.module.seo.name": "SEO",
+	"studio.module.seo.empty": "페이지 메타데이터를 편집하려면 @anvilkit/plugin-page-seo를 설치하고 SEO 패널을 등록하세요.",
 	"studio.field.placeholder.select": "선택…",
 	"studio.field.external.search": "검색…",
 	"studio.field.external.clear": "지우기",

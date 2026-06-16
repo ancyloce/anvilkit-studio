@@ -160,6 +160,8 @@
 	"studio.module.history.empty": "Install @anvilkit/plugin-version-history and register a history panel to view snapshots.",
 	"studio.module.designSystem.name": "Design System",
 	"studio.module.designSystem.empty": "Install @anvilkit/plugin-design-system and register a design-system panel to edit tokens.",
+	"studio.module.seo.name": "SEO",
+	"studio.module.seo.empty": "Install @anvilkit/plugin-page-seo and register an SEO panel to edit page metadata.",
 	"studio.field.placeholder.select": "Select…",
 	"studio.field.external.search": "Search…",
 	"studio.field.external.clear": "Clear",
