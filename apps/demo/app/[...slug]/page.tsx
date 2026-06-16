@@ -3,6 +3,7 @@ import { Render } from "@puckeditor/core/rsc";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
+import { resolveDataSources } from "../../lib/data-source-adapter";
 import { getPage } from "../../lib/page-store";
 import { demoConfig } from "../../lib/puck-demo";
 
@@ -79,6 +80,10 @@ export default async function SlugPage({
 	if (seo?.description !== undefined) jsonLd.description = seo.description;
 	if (seo?.canonical !== undefined) jsonLd.url = seo.canonical;
 
+	// F11: resolve `remote_csv` dataSource directives into plain props before
+	// rendering — the component never fetches.
+	const resolved = await resolveDataSources(page);
+
 	return (
 		<>
 			<script
@@ -86,7 +91,7 @@ export default async function SlugPage({
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw injection.
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
-			<Render config={demoConfig} data={page} />
+			<Render config={demoConfig} data={resolved} />
 		</>
 	);
 }
