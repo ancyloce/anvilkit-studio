@@ -136,6 +136,16 @@ export {
 	useThemeStoreApi,
 } from "./state/index.js";
 // ---------------------------------------------------------------------------
+// Page-root SEO projection (PRD 0004 F4 — root.props ↔ StudioPage/SEO sidecar)
+// ---------------------------------------------------------------------------
+export {
+	type PageRootInput,
+	type PageRootSeoInput,
+	pageRootSeoToStudioPageSeo,
+	pageRootToStudioPageFields,
+	studioPageSeoToPageRootSeo,
+} from "./studio/context/page-root-seo.js";
+// ---------------------------------------------------------------------------
 // Types (M2 — plugin contract, config shape, domain records)
 // ---------------------------------------------------------------------------
 export type * from "./types/index.js";

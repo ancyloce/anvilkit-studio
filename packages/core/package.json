@@ -136,6 +136,7 @@
 		"react-dom": ">=19.0.0"
 	},
 	"dependencies": {
+		"@anvilkit/analytics-core": "workspace:*",
 		"@anvilkit/ui": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
 		"@base-ui/react": "^1.4.1",
