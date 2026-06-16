@@ -15,6 +15,7 @@ const nextConfig = {
 		optimizePackageImports: ["lucide-react", "motion"],
 	},
 	transpilePackages: [
+		"@anvilkit/analytics-core",
 		"@anvilkit/bento-grid",
 		"@anvilkit/blog-list",
 		"@anvilkit/button",

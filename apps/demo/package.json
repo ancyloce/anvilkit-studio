@@ -17,6 +17,7 @@
 		"e2e:install": "playwright install --with-deps chromium"
 	},
 	"dependencies": {
+		"@anvilkit/analytics-core": "workspace:*",
 		"@anvilkit/bento-grid": "workspace:*",
 		"@anvilkit/blog-list": "workspace:*",
 		"@anvilkit/button": "workspace:*",

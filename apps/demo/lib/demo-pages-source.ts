@@ -9,23 +9,43 @@
  * because the menu items only render once a callback is implemented.
  */
 
+import {
+	pageRootToStudioPageFields,
+	studioPageSeoToPageRootSeo,
+} from "@anvilkit/core";
 import type {
 	StudioPage,
 	StudioPageCreateInput,
 	StudioPageRenameInput,
 	StudioPageReorderInput,
-	StudioPageSeo,
 	StudioPageSettingsInput,
 	StudioPagesSource,
 } from "@anvilkit/core/types";
+import type { PageRootProps } from "@anvilkit/schema";
+
+/**
+ * Read/write access to a page's canonical Puck `root.props` (PRD 0004 F4).
+ * The pages-source derives `title`/`seo` from `root.props` instead of holding
+ * a parallel copy, and writes settings/rename edits back into it so the rail,
+ * breadcrumb, and renderer read one source. Optional so callers that don't
+ * provide page data fall back to the seed `title` and carry no SEO.
+ */
+export interface DemoPageRootAccessor {
+	getRootProps(id: string): PageRootProps | undefined;
+	updateRootProps(id: string, patch: Partial<PageRootProps>): void;
+}
 
 interface MutablePage {
 	id: string;
+	/**
+	 * Fallback title used only when a page has no `root.props` yet (e.g. a
+	 * runtime-created/duplicated page before it is activated). The canonical
+	 * title lives in `root.props.title` and is derived in `snapshot()`.
+	 */
 	title: string;
 	path?: string;
 	route?: boolean;
 	description?: string;
-	seo?: StudioPageSeo;
 	locked?: boolean;
 }
 
@@ -47,7 +67,9 @@ export interface DemoPagesSource extends StudioPagesSource {
 	setActivePageId(id: string): void;
 }
 
-export function createDemoPagesSource(): DemoPagesSource {
+export function createDemoPagesSource(
+	accessor?: DemoPageRootAccessor,
+): DemoPagesSource {
 	const pages: MutablePage[] = SEED_PAGES.map((page) => ({ ...page }));
 	let activeId: string = pages[0]?.id ?? "";
 	const listeners = new Set<() => void>();
@@ -57,18 +79,26 @@ export function createDemoPagesSource(): DemoPagesSource {
 	};
 
 	const snapshot = (): readonly StudioPage[] =>
-		pages.map((page) => ({
-			id: page.id,
-			title: page.title,
-			...(page.path !== undefined ? { path: page.path } : {}),
-			...(page.route !== undefined ? { route: page.route } : {}),
-			...(page.description !== undefined
-				? { description: page.description }
-				: {}),
-			...(page.seo !== undefined ? { seo: page.seo } : {}),
-			...(page.locked === true ? { locked: true } : {}),
-			active: page.id === activeId,
-		}));
+		pages.map((page) => {
+			// `title`/`seo` are canonical in the page's Puck `root.props`;
+			// derive them via the core helper. Fall back to the seed `title`
+			// for pages that have no `root.props` yet (runtime-created rows).
+			const derived = pageRootToStudioPageFields(
+				accessor?.getRootProps(page.id),
+			);
+			return {
+				id: page.id,
+				title: derived.title ?? page.title,
+				...(page.path !== undefined ? { path: page.path } : {}),
+				...(page.route !== undefined ? { route: page.route } : {}),
+				...(page.description !== undefined
+					? { description: page.description }
+					: {}),
+				...(derived.seo !== undefined ? { seo: derived.seo } : {}),
+				...(page.locked === true ? { locked: true } : {}),
+				active: page.id === activeId,
+			};
+		});
 
 	const requirePage = (id: string): MutablePage => {
 		const found = pages.find((page) => page.id === id);
@@ -105,8 +135,11 @@ export function createDemoPagesSource(): DemoPagesSource {
 		},
 		onRename(input: StudioPageRenameInput): void {
 			const page = requirePage(input.id);
+			// Keep the sidecar fallback in sync, but write the canonical title
+			// into `root.props` so the derived label and renderer agree.
 			page.title = input.title;
 			if (input.path !== undefined) page.path = input.path;
+			accessor?.updateRootProps(input.id, { title: input.title });
 			notify();
 		},
 		onDelete(pageId: string): void {
@@ -154,11 +187,34 @@ export function createDemoPagesSource(): DemoPagesSource {
 		},
 		onUpdateSettings(input: StudioPageSettingsInput): void {
 			const page = requirePage(input.id);
-			if (input.title !== undefined) page.title = input.title;
+			// Routing + description metadata stays in the sidecar.
 			if (input.path !== undefined) page.path = input.path;
 			if (input.route !== undefined) page.route = input.route;
 			if (input.description !== undefined) page.description = input.description;
-			if (input.seo !== undefined) page.seo = input.seo;
+			// `title` + `seo` are canonical in `root.props` — write them there
+			// (no parallel SEO copy persists in the source). The reverse mapper
+			// renames `StudioPageSeo` fields back to the schema's `seo` shape;
+			// merge over the existing `seo` to preserve `canonical`/`noIndex`.
+			const patch: Partial<PageRootProps> = {};
+			if (input.title !== undefined) {
+				patch.title = input.title;
+				page.title = input.title;
+			}
+			if (input.seo !== undefined) {
+				const current = accessor?.getRootProps(input.id)?.seo;
+				const mapped = studioPageSeoToPageRootSeo(input.seo);
+				patch.seo = {
+					...(current ?? {}),
+					...mapped,
+					noIndex: mapped.noIndex ?? current?.noIndex ?? false,
+				};
+			}
+			if (
+				accessor !== undefined &&
+				(patch.title !== undefined || patch.seo !== undefined)
+			) {
+				accessor.updateRootProps(input.id, patch);
+			}
 			notify();
 		},
 		setActivePageId(id: string): void {

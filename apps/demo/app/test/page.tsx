@@ -1,5 +1,6 @@
 "use client";
 
+import { createConsoleAdapter } from "@anvilkit/analytics-core";
 import { Studio } from "@anvilkit/core";
 import type { Config as PuckConfig } from "@puckeditor/core";
 
@@ -15,11 +16,15 @@ const puckConfig: PuckConfig = {
 	},
 };
 
+// F9: stable module-scope adapter for this minimal test mount.
+const analyticsAdapter = createConsoleAdapter({ source: "studio" });
+
 export default function EditorPage() {
 	return (
 		<Studio
 			puckConfig={puckConfig}
 			plugins={[]}
+			analytics={analyticsAdapter}
 			onPublish={async (data) => {
 				await fetch("/api/publish", {
 					method: "POST",

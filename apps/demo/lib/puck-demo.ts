@@ -52,6 +52,7 @@ import {
 	type PricingMinimalProps,
 	defaultProps as pricingMinimalDefaultProps,
 } from "@anvilkit/pricing-minimal";
+import type { PageRootProps } from "@anvilkit/schema";
 import {
 	createSectionConfig,
 	type SectionProps,
@@ -62,7 +63,7 @@ import {
 	type StatisticsProps,
 	defaultProps as statisticsDefaultProps,
 } from "@anvilkit/statistics";
-import type { ComponentConfig, Config, Data } from "@puckeditor/core";
+import type { ComponentConfig, Config, Data, Fields } from "@puckeditor/core";
 import { createElement } from "react";
 
 import { demoCopySnippetPack } from "./demo-copy-snippet-pack";
@@ -113,13 +114,60 @@ const imageComponentConfig: ComponentConfig<ImageProps> = {
 export const demoDataSearchParam = "data";
 
 /**
+ * Build a schema-valid {@link PageRootProps} payload for a demo page.
+ * `seo` always carries `{ noIndex: false }` so `root.props` parses cleanly
+ * through `validatePagePayload` (PRD 0004 F2). The SEO sub-fields are authored
+ * by the F5 PageSeoPlugin, not seeded here.
+ */
+function demoRootProps(
+	title: string,
+	slug: string,
+	status: PageRootProps["status"] = "published",
+): PageRootProps {
+	return {
+		title,
+		slug,
+		status,
+		version: "1.0.0",
+		parentFolder: "/",
+		seo: { noIndex: false },
+	};
+}
+
+/**
+ * Root inspector fields for the demo page model — title, slug, status,
+ * version, parentFolder. SEO (`root.props.seo`) is intentionally NOT an
+ * inspector field: the F5 PageSeoPlugin owns SEO authoring. `PageRootProps`
+ * makes `seo` required, so Puck's `Fields<PageRootProps>` would demand a `seo`
+ * control; the cast omits it (the full field map is assignable to this 5-key
+ * literal, so the assertion is sound) while keeping `RootProps = PageRootProps`.
+ */
+const demoRootFields = {
+	title: { type: "text", label: "Title" },
+	slug: { type: "text", label: "Slug" },
+	status: {
+		type: "select",
+		label: "Status",
+		options: [
+			{ label: "Draft", value: "draft" },
+			{ label: "Published", value: "published" },
+			{ label: "Archived", value: "archived" },
+		],
+	},
+	version: { type: "text", label: "Version" },
+	parentFolder: { type: "text", label: "Parent folder" },
+} as Fields<PageRootProps>;
+
+/**
  * Build the demo Puck config for a locale. Component field/option labels
  * resolve from each package's bundled catalogs (en/zh/ja/ko) via its
  * `create<Name>Config({ locale })` factory; unknown locales fall back to
  * English per key. Category titles and the demo-local `Image` component
  * are host-owned strings and stay English.
  */
-export function createDemoConfig(locale?: string): Config<DemoComponents> {
+export function createDemoConfig(
+	locale?: string,
+): Config<DemoComponents, PageRootProps> {
 	const options = locale === undefined ? undefined : { locale };
 	return {
 		categories: {
@@ -172,15 +220,20 @@ export function createDemoConfig(locale?: string): Config<DemoComponents> {
 			Section: createSectionConfig(options),
 			Statistics: createStatisticsConfig(options),
 		},
+		root: {
+			fields: demoRootFields,
+			defaultProps: demoRootProps("Untitled", "untitled", "draft"),
+		},
 	};
 }
 
 /** Static English demo config — same shape as before the i18n wiring. */
-export const demoConfig: Config<DemoComponents> = createDemoConfig();
+export const demoConfig: Config<DemoComponents, PageRootProps> =
+	createDemoConfig();
 
-export function createDemoData(): Data<DemoComponents> {
+export function createDemoData(): Data<DemoComponents, PageRootProps> {
 	return {
-		root: {},
+		root: { props: demoRootProps("Home", "home") },
 		content: [
 			{
 				type: "Navbar",
@@ -273,11 +326,14 @@ export function createDemoData(): Data<DemoComponents> {
  * layouts (navbar + one hero/feature block). Pages created at runtime, or
  * any id missing here, fall back to {@link createDemoData} at the call site.
  */
-export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
+export function createDemoPagesData(): Record<
+	string,
+	Data<DemoComponents, PageRootProps>
+> {
 	return {
 		home: createDemoData(),
 		list: {
-			root: {},
+			root: { props: demoRootProps("List", "list") },
 			content: [
 				{ type: "Navbar", props: { id: "list-navbar", ...navbarDefaultProps } },
 				{
@@ -287,7 +343,7 @@ export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
 			],
 		},
 		team: {
-			root: {},
+			root: { props: demoRootProps("Team", "team") },
 			content: [
 				{ type: "Navbar", props: { id: "team-navbar", ...navbarDefaultProps } },
 				{
@@ -297,7 +353,7 @@ export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
 			],
 		},
 		about: {
-			root: {},
+			root: { props: demoRootProps("About", "about") },
 			content: [
 				{
 					type: "Navbar",
@@ -307,7 +363,7 @@ export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
 			],
 		},
 		profile: {
-			root: {},
+			root: { props: demoRootProps("Profile", "profile") },
 			content: [
 				{
 					type: "Navbar",
@@ -317,7 +373,7 @@ export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
 			],
 		},
 		items: {
-			root: {},
+			root: { props: demoRootProps("Items", "items") },
 			content: [
 				{
 					type: "Navbar",
@@ -330,7 +386,7 @@ export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
 			],
 		},
 		product: {
-			root: {},
+			root: { props: demoRootProps("Product", "product") },
 			content: [
 				{
 					type: "Navbar",
@@ -345,13 +401,13 @@ export function createDemoPagesData(): Record<string, Data<DemoComponents>> {
 	};
 }
 
-function getSerializedDemoData(data: Data<DemoComponents>) {
+function getSerializedDemoData(data: Data<DemoComponents, PageRootProps>) {
 	return JSON.stringify(data);
 }
 
 export function createDemoModeHref(
 	pathname: "/puck/editor" | "/puck/render",
-	data: Data<DemoComponents>,
+	data: Data<DemoComponents, PageRootProps>,
 ) {
 	const searchParams = new URLSearchParams({
 		[demoDataSearchParam]: getSerializedDemoData(data),
@@ -450,7 +506,7 @@ export function getDemoDataFromSearchParam(
 	}
 
 	try {
-		return JSON.parse(serializedData) as Data<DemoComponents>;
+		return JSON.parse(serializedData) as Data<DemoComponents, PageRootProps>;
 	} catch {
 		return createDemoData();
 	}

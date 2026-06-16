@@ -4,6 +4,7 @@
 // `@anvilkit/canvas-editor`; its compiled (preflight-free) chrome stylesheet
 // must be loaded by the host or the editor shell renders unstyled/blank.
 import "@anvilkit/canvas-editor/styles.css";
+import { createConsoleAdapter } from "@anvilkit/analytics-core";
 import type { StudioPlugin } from "@anvilkit/core";
 import {
 	compilePlugins,
@@ -29,6 +30,7 @@ import {
 // erased by `verbatimModuleSyntax`, so it pulls no chunk.
 import type { UploadResult } from "@anvilkit/plugin-asset-manager";
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+import type { PageRootProps } from "@anvilkit/schema";
 import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -356,9 +358,9 @@ function formatWarnings(
 export default function PuckEditorPage() {
 	const router = useRouter();
 	const assetManagerHarnessRef = useRef<AssetManagerTestHarness | null>(null);
-	const [publishedData, setPublishedData] = useState<Data<DemoComponents>>(() =>
-		createDemoData(),
-	);
+	const [publishedData, setPublishedData] = useState<
+		Data<DemoComponents, PageRootProps>
+	>(() => createDemoData());
 	// Demo-only Save Draft / Publish state for the consolidated header
 	// publish panel. Real apps would persist drafts to a backend; here we
 	// just stamp a timestamp and route the panel's "Publish to live"
@@ -458,11 +460,51 @@ export default function PuckEditorPage() {
 	);
 	const renderHref = createDemoModeHref("/puck/render", publishedData);
 
+	// F9: editor-side analytics. The console adapter logs the system events
+	// (draft_saved / page_published / component_dropped) emitted by <Studio>.
+	const analyticsAdapter = useMemo(
+		() => createConsoleAdapter({ source: "studio" }),
+		[],
+	);
+
 	// Per-mount in-memory pages source for the layer sidebar module.
 	// Stable identity (`useMemo` with no deps) so the source's internal
 	// active-page state survives re-renders. The source itself owns
 	// active-page tracking and re-emits via `subscribe()` on `onSelect`.
-	const pagesSource = useMemo(() => createDemoPagesSource(), []);
+	const pagesSource = useMemo(
+		() =>
+			createDemoPagesSource({
+				// `title`/`seo` are canonical in each page's Puck `root.props`.
+				// `getRootProps` reads the per-page document map (kept current for
+				// the active page by the sync effect below); `updateRootProps`
+				// writes rename/SEO edits back into it so the rail, breadcrumb, and
+				// renderer all read one source. `getRootProps` deliberately reads
+				// only `pageDataMapRef` (never `activePageIdRef`) — the source's
+				// first `list()` runs during render before `activePageIdRef` is set.
+				getRootProps: (id) => pageDataMapRef.current[id]?.root.props,
+				updateRootProps: (id, patch) => {
+					const applyPatch = (
+						doc: Data<DemoComponents, PageRootProps>,
+					): Data<DemoComponents, PageRootProps> => ({
+						...doc,
+						// Every demo doc carries a full `root.props` (F3); narrow off
+						// the optional so the merge stays a complete `PageRootProps`.
+						root: {
+							...doc.root,
+							props: { ...(doc.root.props as PageRootProps), ...patch },
+						},
+					});
+					const existing = pageDataMapRef.current[id];
+					if (existing !== undefined) {
+						pageDataMapRef.current[id] = applyPatch(existing);
+					}
+					if (id === activePageIdRef.current) {
+						setPublishedData((current) => applyPatch(current));
+					}
+				},
+			}),
+		[],
+	);
 
 	// Locale switcher: config-centric — `studioConfig.i18n.showLocaleSwitch`
 	// (module-scope DEMO_STUDIO_CONFIG below the component) mounts the
@@ -478,9 +520,9 @@ export default function PuckEditorPage() {
 	// `key` prop) so Puck re-initializes with the new document. The header
 	// breadcrumb title updates independently in core (it reads the same
 	// source's `active` flag).
-	const pageDataMapRef = useRef<Record<string, Data<DemoComponents>>>(
-		createDemoPagesData(),
-	);
+	const pageDataMapRef = useRef<
+		Record<string, Data<DemoComponents, PageRootProps>>
+	>(createDemoPagesData());
 	// The demo source's `list()` is synchronous; the union return type from
 	// `StudioPagesSource` is narrowed with a cast here.
 	const readActivePageId = useCallback((): string => {
@@ -512,6 +554,16 @@ export default function PuckEditorPage() {
 		const unsubscribe = pagesSource.subscribe?.(syncActivePage);
 		return () => unsubscribe?.();
 	}, [pagesSource, readActivePageId]);
+
+	// Mirror the active page's live document into the page-data map so the
+	// pages-source derives its title/SEO (from `root.props`) off fresh data
+	// without the source subscribing to Puck. Page swaps stash the outgoing
+	// doc in the effect above; this keeps the *active* entry current between
+	// swaps so `getRootProps(activeId)` never reads a stale snapshot.
+	useEffect(() => {
+		const id = activePageIdRef.current;
+		if (id.length > 0) pageDataMapRef.current[id] = publishedData;
+	}, [publishedData]);
 
 	// Collab plugins live in `@anvilkit/collab-ui` / `@anvilkit/plugin-collab-yjs`,
 	// which (together with the provider libs) pull in the whole yjs stack
@@ -815,11 +867,14 @@ export default function PuckEditorPage() {
 
 	function handlePublish(nextPublishedData: Data) {
 		// `<Studio>` narrows its callback to Puck's default `Data` type.
-		// The demo knows the shape is `Data<DemoComponents>` because
-		// `demoConfig` is the source of truth; assert through `unknown`
+		// The demo knows the shape is `Data<DemoComponents, PageRootProps>`
+		// because `demoConfig` is the source of truth; assert through `unknown`
 		// so the editor state stays strongly typed without forking the
 		// public Studio surface.
-		const typedData = nextPublishedData as unknown as Data<DemoComponents>;
+		const typedData = nextPublishedData as unknown as Data<
+			DemoComponents,
+			PageRootProps
+		>;
 		setPublishedData(typedData);
 		// The Puck-drag E2E stays on the editor so the export hooks
 		// (`window.__puckExportTrigger`) survive for its export assertions;
@@ -1187,6 +1242,7 @@ export default function PuckEditorPage() {
 					isSavingDraft={isSavingDraft}
 					lastSavedAt={lastSavedAt}
 					onExport={handleExport}
+					analytics={analyticsAdapter}
 					chrome={chromeMode}
 					pages={pagesSource}
 					config={demoStudioConfig}
