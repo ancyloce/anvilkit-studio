@@ -33,6 +33,7 @@ import type {
 	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
+	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "@/types/sidebar";
 
@@ -45,6 +46,7 @@ export interface SidebarRegistryState {
 	readonly copilotPanel: StudioCopilotPanel | null;
 	readonly historyPanel: StudioHistoryPanel | null;
 	readonly designSystemPanel: StudioDesignSystemPanel | null;
+	readonly seoPanel: StudioSeoPanel | null;
 	registerInsertSection(section: StudioInsertSection): StudioSidebarUnregister;
 	registerLayerQuickAdd(item: StudioLayerQuickAdd): StudioSidebarUnregister;
 	registerAssetSource(source: StudioAssetSource): StudioSidebarUnregister;
@@ -55,6 +57,7 @@ export interface SidebarRegistryState {
 	registerDesignSystemPanel(
 		panel: StudioDesignSystemPanel,
 	): StudioSidebarUnregister;
+	registerSeoPanel(panel: StudioSeoPanel): StudioSidebarUnregister;
 	/**
 	 * Clear every contributed surface back to the empty initial state
 	 * (review finding Z-g). Mainly a test/teardown convenience — the
@@ -115,6 +118,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 		copilotPanel: null,
 		historyPanel: null,
 		designSystemPanel: null,
+		seoPanel: null,
 
 		registerInsertSection(section) {
 			set((state) => {
@@ -241,6 +245,21 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			};
 		},
 
+		registerSeoPanel(panel) {
+			// `seo` v1 supports a single panel; same last-write-wins shape
+			// as `registerDesignSystemPanel` (PRD 0004 F5).
+			const existing = get().seoPanel;
+			if (existing !== null && existing !== panel) {
+				warnSlotOverwrite("seoPanel");
+			}
+			set({ seoPanel: panel });
+			return () => {
+				if (get().seoPanel === panel) {
+					set({ seoPanel: null });
+				}
+			};
+		},
+
 		reset() {
 			set({
 				insertSections: EMPTY_INSERT,
@@ -251,6 +270,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 				copilotPanel: null,
 				historyPanel: null,
 				designSystemPanel: null,
+				seoPanel: null,
 			});
 		},
 	}));

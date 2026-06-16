@@ -54,7 +54,8 @@ export type EditorTab =
 	| "text"
 	| "copilot"
 	| "history"
-	| "design-system";
+	| "design-system"
+	| "seo";
 
 export type ComponentViewMode = "grid" | "list";
 
@@ -136,7 +137,7 @@ interface EditorUiPersistedSlice {
  * values to the default via {@link VALID_ACTIVE_TABS}, so the bump just
  * invalidates caches written by builds in between.
  */
-export const EDITOR_UI_STORE_PERSIST_VERSION = 4;
+export const EDITOR_UI_STORE_PERSIST_VERSION = 5;
 
 const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"insert",
@@ -146,6 +147,7 @@ const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"copilot",
 	"history",
 	"design-system",
+	"seo",
 ]);
 
 const VALID_VIEW_MODES: ReadonlySet<ComponentViewMode> = new Set([
