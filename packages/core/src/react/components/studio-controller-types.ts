@@ -9,6 +9,7 @@
  * view↔controller import graph are byte-identical.
  */
 
+import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import type { DeepPartial } from "@anvilkit/utils";
 import type {
 	Config as PuckConfig,
@@ -287,6 +288,13 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * `staticHeaderActions` (3.3) and render them inside this node.
 	 */
 	readonly loading?: ReactNode;
+	/**
+	 * Optional analytics adapter (from `@anvilkit/analytics-core`, types-only
+	 * dependency). When set, `<Studio>` emits the system events `draft_saved`
+	 * / `page_published` / `component_dropped` with lightweight props only.
+	 * Omitting it is a complete no-op — `<Studio>` behaves identically.
+	 */
+	readonly analytics?: AnalyticsAdapter;
 }
 
 /** What the thin `<Studio>` view needs back from the controller. */
@@ -307,6 +315,13 @@ export interface StudioControllerState {
 	readonly mergedOverrides: Partial<PuckOverrides>;
 	readonly handleChange: (next: PuckData) => void;
 	readonly handlePublish: (next: PuckData) => void;
+	/** Puck `onAction` wrapped to emit `component_dropped` on insert. */
+	readonly handleAction: PuckOnAction;
+	/**
+	 * Host `onSaveDraft` wrapped to emit `draft_saved`, or `undefined` when the
+	 * host provides no save handler (so the save affordance stays hidden).
+	 */
+	readonly handleSaveDraft?: () => void | Promise<void>;
 	readonly themeStore: ThemeStoreApi;
 	readonly exportStore: ExportStoreApi;
 	readonly aiStore: AiStoreApi;

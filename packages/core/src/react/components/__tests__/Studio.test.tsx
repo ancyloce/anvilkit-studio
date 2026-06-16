@@ -1036,12 +1036,69 @@ describe("<Studio> — chrome modes", () => {
 		await waitFor(() => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
 		});
-		expect((puckMockState.lastProps as { onAction?: unknown }).onAction).toBe(
-			onAction,
-		);
+		// F9: `onAction` is now wrapped (it emits `component_dropped` on insert)
+		// but must still forward verbatim to the host handler.
+		const forwarded = (
+			puckMockState.lastProps as {
+				onAction?: (...args: unknown[]) => void;
+			}
+		).onAction;
+		expect(typeof forwarded).toBe("function");
+		const action = { type: "move" } as never;
+		const appState = {} as never;
+		forwarded?.(action, appState, appState);
+		expect(onAction).toHaveBeenCalledWith(action, appState, appState);
 		expect((puckMockState.lastProps as { viewports?: unknown }).viewports).toBe(
 			viewports,
 		);
+	});
+
+	it("emits F9 system events through the analytics adapter (spy)", async () => {
+		const track = vi.fn();
+		const analytics = {
+			track,
+			identify: vi.fn(),
+			flush: vi.fn(() => Promise.resolve()),
+			updatePrivacyStatus: vi.fn(),
+		};
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[]}
+				chrome="puck"
+				analytics={analytics as never}
+			/>,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		const lastProps = puckMockState.lastProps as {
+			onAction?: (...a: unknown[]) => void;
+			onPublish?: (d: unknown) => void;
+		};
+
+		// component_dropped — fires on a Puck insert action, lightweight props only.
+		lastProps.onAction?.(
+			{
+				type: "insert",
+				componentType: "Heading",
+				destinationZone: "root:default-zone",
+			},
+			{},
+			{},
+		);
+		expect(track).toHaveBeenCalledWith("component_dropped", {
+			component_type: "Heading",
+			zone: "root:default-zone",
+		});
+
+		// page_published — fires after a publish completes.
+		lastProps.onPublish?.({ root: { props: {} }, content: [], zones: {} });
+		await waitFor(() => {
+			expect(track).toHaveBeenCalledWith("page_published", {
+				status_change: "published",
+			});
+		});
 	});
 
 	it("composes [studioOverrides, plugin, consumer] in correct nesting order", async () => {

@@ -32,6 +32,7 @@
  * bridge, which must live inside Puck's subtree.
  */
 
+import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import type { DeepPartial } from "@anvilkit/utils";
 import {
 	type Config as PuckConfig,
@@ -57,7 +58,6 @@ import {
 	useRef,
 	useState,
 } from "react";
-
 import { DEFAULT_INSERT_SECTIONS } from "@/layout/sidebar/modules/insert/default-sections";
 import { mergeOverrides } from "@/overrides/merge-overrides";
 import type { StudioChromeMode } from "@/overrides/types";
@@ -77,6 +77,11 @@ import {
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPlugin } from "@/types/plugin";
+import {
+	trackComponentDropped,
+	trackDraftSaved,
+	trackPagePublished,
+} from "./analytics-events.js";
 import {
 	createConfigFingerprinter,
 	fingerprintPlugins,
@@ -288,6 +293,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		overrides: consumerOverrides,
 		onChange,
 		onPublish,
+		onAction,
+		onSaveDraft,
+		analytics,
 		aiHost,
 		chrome = DEFAULT_CHROME_MODE,
 		data,
@@ -812,12 +820,32 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const onPublishRef = useRef<DefaultOnPublish | undefined>(
 		onPublish as DefaultOnPublish | undefined,
 	);
+	// F9 analytics: latest adapter + host onAction/onSaveDraft behind refs so
+	// the wrapped handlers stay stable while always reading the newest values.
+	const analyticsRef = useRef<AnalyticsAdapter | undefined>(analytics);
+	const onActionRef = useRef<PuckOnAction | undefined>(
+		onAction as PuckOnAction | undefined,
+	);
+	const onSaveDraftRef = useRef<(() => void | Promise<void>) | undefined>(
+		onSaveDraft,
+	);
 	useLayoutEffect(() => {
 		onChangeRef.current = onChange as DefaultOnChange | undefined;
 		onPublishRef.current = onPublish as DefaultOnPublish | undefined;
+		analyticsRef.current = analytics;
+		onActionRef.current = onAction as PuckOnAction | undefined;
+		onSaveDraftRef.current = onSaveDraft;
 		loggerRef.current = logger;
 		onLocaleChangeRef.current = onLocaleChange;
-	}, [onChange, onPublish, logger, onLocaleChange]);
+	}, [
+		onChange,
+		onPublish,
+		analytics,
+		onAction,
+		onSaveDraft,
+		logger,
+		onLocaleChange,
+	]);
 
 	const handleChange = useCallback(
 		(nextData: PuckData): void => {
@@ -889,6 +917,10 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 					return;
 				}
 
+				// F9: publish succeeded (no early return above) — emit the
+				// lightweight system event before plugin `onAfterPublish` runs.
+				trackPagePublished(analyticsRef.current, "published");
+
 				if (runtimeAtCall !== null && runtimeLive()) {
 					await runtimeAtCall.runtime.lifecycle.emit(
 						"onAfterPublish",
@@ -904,6 +936,33 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		[activeCompiled],
 	);
 
+	// F9: wrap Puck `onAction` to emit `component_dropped` on insert, then
+	// forward to the host's handler. Stable identity (reads refs).
+	const handleAction = useCallback<PuckOnAction>((action, appState, prev) => {
+		trackComponentDropped(analyticsRef.current, action);
+		onActionRef.current?.(action, appState, prev);
+	}, []);
+
+	// F9: wrap the host save-draft handler to emit `draft_saved` (with a real
+	// duration) once it resolves. `undefined` when the host has no save handler
+	// so the chrome's save affordance stays hidden.
+	const hasSaveDraft = onSaveDraft !== undefined;
+	const handleSaveDraft = useMemo<(() => Promise<void>) | undefined>(() => {
+		if (!hasSaveDraft) return undefined;
+		return async (): Promise<void> => {
+			const start = Date.now();
+			try {
+				await onSaveDraftRef.current?.();
+			} finally {
+				trackDraftSaved(
+					analyticsRef.current,
+					dataRef.current?.content?.length ?? 0,
+					Date.now() - start,
+				);
+			}
+		};
+	}, [hasSaveDraft]);
+
 	return {
 		isAnvilkit,
 		compiled: activeCompiled,
@@ -912,6 +971,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		mergedOverrides,
 		handleChange,
 		handlePublish,
+		handleAction,
+		handleSaveDraft,
 		themeStore,
 		exportStore,
 		aiStore,

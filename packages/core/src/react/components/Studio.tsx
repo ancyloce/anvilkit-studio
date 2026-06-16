@@ -143,10 +143,8 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		puckConfig,
 		data,
 		ui,
-		onAction,
 		viewports,
 		onBack,
-		onSaveDraft,
 		isSavingDraft,
 		lastSavedAt,
 		isPublishing,
@@ -172,6 +170,8 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		mergedOverrides,
 		handleChange,
 		handlePublish,
+		handleAction,
+		handleSaveDraft,
 		themeStore,
 		exportStore,
 		aiStore,
@@ -197,7 +197,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 	const chromePropsValue = useMemo<ChromeProps>(
 		() => ({
 			onBack,
-			onSaveDraft,
+			onSaveDraft: handleSaveDraft,
 			isSavingDraft,
 			lastSavedAt,
 			isPublishing,
@@ -208,7 +208,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		}),
 		[
 			onBack,
-			onSaveDraft,
+			handleSaveDraft,
 			isSavingDraft,
 			lastSavedAt,
 			isPublishing,
@@ -277,7 +277,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			onPublish={handlePublish as (data: PuckDataFor) => void}
 			plugins={[...compiled.runtime.puckPlugins] as PuckPlugin<UserConfig>[]}
 			ui={puckUi}
-			onAction={onAction}
+			onAction={handleAction}
 			viewports={viewports}
 		/>
 	);
