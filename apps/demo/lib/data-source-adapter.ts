@@ -50,7 +50,10 @@ export async function resolveDataSources(data: DemoData): Promise<DemoData> {
 			);
 			if (directive === undefined) return node;
 			const metrics = await fetchCsvMetrics(directive.url);
-			const next = { ...(node.props as Record<string, unknown>), metrics };
+			const next: Record<string, unknown> = {
+				...(node.props as Record<string, unknown>),
+				metrics,
+			};
 			delete next[DATA_SOURCE_PROP];
 			return { ...node, props: next };
 		}),
