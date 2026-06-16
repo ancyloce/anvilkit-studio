@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"@anvilkit/analytics-core": "workspace:*",
+		"@anvilkit/analytics-react": "workspace:*",
 		"@anvilkit/bento-grid": "workspace:*",
 		"@anvilkit/blog-list": "workspace:*",
 		"@anvilkit/button": "workspace:*",
@@ -37,6 +38,7 @@
 		"@anvilkit/plugin-canvas-studio": "workspace:*",
 		"@anvilkit/plugin-collab-yjs": "workspace:*",
 		"@anvilkit/plugin-design-system": "workspace:*",
+		"@anvilkit/plugin-page-seo": "workspace:*",
 		"@anvilkit/plugin-export-canvas": "workspace:*",
 		"@anvilkit/plugin-export-html": "workspace:*",
 		"@anvilkit/plugin-export-react": "workspace:*",

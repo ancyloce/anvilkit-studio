@@ -16,6 +16,7 @@ const nextConfig = {
 	},
 	transpilePackages: [
 		"@anvilkit/analytics-core",
+		"@anvilkit/analytics-react",
 		"@anvilkit/bento-grid",
 		"@anvilkit/blog-list",
 		"@anvilkit/button",
@@ -36,6 +37,7 @@ const nextConfig = {
 		"@anvilkit/plugin-canvas-studio",
 		"@anvilkit/plugin-collab-yjs",
 		"@anvilkit/plugin-design-system",
+		"@anvilkit/plugin-page-seo",
 		"@anvilkit/plugin-export-canvas",
 		"@anvilkit/plugin-export-html",
 		"@anvilkit/plugin-export-react",

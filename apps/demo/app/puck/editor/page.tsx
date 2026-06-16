@@ -30,6 +30,7 @@ import {
 // erased by `verbatimModuleSyntax`, so it pulls no chunk.
 import type { UploadResult } from "@anvilkit/plugin-asset-manager";
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 import type { PageRootProps } from "@anvilkit/schema";
 import type { Config, Data } from "@puckeditor/core";
 import Link from "next/link";
@@ -56,6 +57,8 @@ import {
 	loadExportHtml,
 	loadExportReact,
 } from "../../../lib/lazy-plugins";
+import { persistPage } from "../../../lib/page-persistence";
+import { pageValidationPlugin } from "../../../lib/page-validation-plugin";
 import {
 	createDemoConfig,
 	createDemoData,
@@ -102,6 +105,8 @@ const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 // the off-token / WCAG-AA contrast validators wired through the
 // existing `onDataChange` / `onBeforePublish` lifecycle seams.
 const designSystemPlugin = createDesignSystemPlugin();
+// F5: the Page SEO rail panel — edits root.props.seo (the canonical page model).
+const pageSeoPlugin = createPageSeoPlugin();
 
 // Studio config (Layer 3 host overrides). `showLocaleSwitch` mounts the
 // built-in header LanguageSwitcher (replacing the old
@@ -653,6 +658,7 @@ export default function PuckEditorPage() {
 	const plugins = useMemo(() => {
 		const base = [
 			smokeTestPlugin,
+			pageValidationPlugin,
 			lazyHtmlExportPlugin,
 			lazyReactExportPlugin,
 			aiCopilotPlugin,
@@ -661,6 +667,7 @@ export default function PuckEditorPage() {
 			historySidebarPlugin,
 			lazyAssetManagerNoHeaderPlugin,
 			designSystemPlugin,
+			pageSeoPlugin,
 			lazyCanvasStudioPlugin,
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
@@ -846,9 +853,13 @@ export default function PuckEditorPage() {
 	async function handleSaveDraft() {
 		setIsSavingDraft(true);
 		try {
-			// Stand-in for a real persistence call. The demo just stamps a
-			// timestamp so the publish panel's "Saved Xm ago" line updates.
-			await new Promise((resolve) => setTimeout(resolve, 300));
+			// F7: validate `root.props` then persist (localStorage / remote).
+			// An invalid payload aborts the save — nothing is written.
+			const result = await persistPage("draft", publishedData);
+			if (!result.ok) {
+				console.error("[demo] save blocked —", result.issue);
+				return;
+			}
 			setLastSavedAt(new Date());
 			console.log("[demo] draft saved");
 		} finally {
@@ -856,12 +867,17 @@ export default function PuckEditorPage() {
 		}
 	}
 
-	function handlePublishClick(liveData: Data) {
-		// Demo: route the panel's "Publish to live" through the same flow
-		// Puck's own publish button uses. The chrome now hands us the LIVE
-		// editor document (read from the Puck API at click time), so we
-		// publish current edits rather than the stale `publishedData`
-		// snapshot. Real apps typically POST to a backend here.
+	async function handlePublishClick(liveData: Data) {
+		// Demo: the chrome panel's "Publish to live" hands us the LIVE editor
+		// document. This path bypasses Puck's publish queue (and thus the
+		// `onBeforePublish` plugin), so F7 validates + persists inline here;
+		// an invalid payload aborts the publish.
+		const typed = liveData as unknown as Data<DemoComponents, PageRootProps>;
+		const result = await persistPage("publish", typed);
+		if (!result.ok) {
+			console.error("[demo] publish blocked —", result.issue);
+			return;
+		}
 		handlePublish(liveData);
 	}
 
