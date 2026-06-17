@@ -179,7 +179,8 @@
         {
           "fileName": "page-root-schema.ts",
           "line": 50,
-          "character": 12
+          "character": 12,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L50"
         }
       ],
       "type": {
@@ -215,7 +216,8 @@
         {
           "fileName": "page-root-schema.ts",
           "line": 51,
-          "character": 12
+          "character": 12,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L51"
         }
       ],
       "type": {
@@ -293,7 +295,8 @@
         {
           "fileName": "page-root-schema.ts",
           "line": 41,
-          "character": 13
+          "character": 13,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L41"
         }
       ],
       "type": {
@@ -323,7 +326,8 @@
                     {
                       "fileName": "page-root-schema.ts",
                       "line": 46,
-                      "character": 1
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L46"
                     }
                   ],
                   "type": {
@@ -360,7 +364,8 @@
                     {
                       "fileName": "page-root-schema.ts",
                       "line": 47,
-                      "character": 1
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L47"
                     }
                   ],
                   "type": {
@@ -398,7 +403,8 @@
                                     {
                                       "fileName": "page-root-schema.ts",
                                       "line": 30,
-                                      "character": 2
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L30"
                                     }
                                   ],
                                   "type": {
@@ -435,7 +441,8 @@
                                     {
                                       "fileName": "page-root-schema.ts",
                                       "line": 27,
-                                      "character": 2
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L27"
                                     }
                                   ],
                                   "type": {
@@ -472,7 +479,8 @@
                                     {
                                       "fileName": "page-root-schema.ts",
                                       "line": 29,
-                                      "character": 2
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L29"
                                     }
                                   ],
                                   "type": {
@@ -509,7 +517,8 @@
                                     {
                                       "fileName": "page-root-schema.ts",
                                       "line": 28,
-                                      "character": 2
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L28"
                                     }
                                   ],
                                   "type": {
@@ -546,7 +555,8 @@
                                     {
                                       "fileName": "page-root-schema.ts",
                                       "line": 26,
-                                      "character": 2
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L26"
                                     }
                                   ],
                                   "type": {
@@ -618,7 +628,8 @@
                     {
                       "fileName": "page-root-schema.ts",
                       "line": 43,
-                      "character": 1
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L43"
                     }
                   ],
                   "type": {
@@ -643,7 +654,8 @@
                     {
                       "fileName": "page-root-schema.ts",
                       "line": 44,
-                      "character": 1
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L44"
                     }
                   ],
                   "type": {
@@ -725,7 +737,8 @@
                     {
                       "fileName": "page-root-schema.ts",
                       "line": 42,
-                      "character": 1
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L42"
                     }
                   ],
                   "type": {
@@ -750,7 +763,8 @@
                     {
                       "fileName": "page-root-schema.ts",
                       "line": 45,
-                      "character": 1
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L45"
                     }
                   ],
                   "type": {
@@ -1017,7 +1031,8 @@
         {
           "fileName": "page-root-schema.ts",
           "line": 24,
-          "character": 13
+          "character": 13,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L24"
         }
       ],
       "type": {
@@ -1055,7 +1070,8 @@
                         {
                           "fileName": "page-root-schema.ts",
                           "line": 30,
-                          "character": 2
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L30"
                         }
                       ],
                       "type": {
@@ -1092,7 +1108,8 @@
                         {
                           "fileName": "page-root-schema.ts",
                           "line": 27,
-                          "character": 2
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L27"
                         }
                       ],
                       "type": {
@@ -1129,7 +1146,8 @@
                         {
                           "fileName": "page-root-schema.ts",
                           "line": 29,
-                          "character": 2
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L29"
                         }
                       ],
                       "type": {
@@ -1166,7 +1184,8 @@
                         {
                           "fileName": "page-root-schema.ts",
                           "line": 28,
-                          "character": 2
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L28"
                         }
                       ],
                       "type": {
@@ -1203,7 +1222,8 @@
                         {
                           "fileName": "page-root-schema.ts",
                           "line": 26,
-                          "character": 2
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L26"
                         }
                       ],
                       "type": {

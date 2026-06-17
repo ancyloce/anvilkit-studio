@@ -722,7 +722,8 @@
         {
           "fileName": "validator/src/validate-page-payload.ts",
           "line": 34,
-          "character": 16
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L34"
         }
       ],
       "signatures": [
@@ -820,7 +821,8 @@
             {
               "fileName": "validator/src/validate-page-payload.ts",
               "line": 34,
-              "character": 16
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L34"
             }
           ],
           "parameters": [

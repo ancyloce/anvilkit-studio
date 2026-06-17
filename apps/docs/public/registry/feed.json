@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-06-16T00:23:16.016Z",
+	"generatedAt": "2026-06-16T16:29:14.279Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",
@@ -215,6 +215,26 @@
 			"publisher": "first-party",
 			"verified": true,
 			"addedAt": "2026-05-21T18:52:54.497Z",
+			"installSpec": {
+				"mutates": [
+					"lib/puck-config.ts"
+				],
+				"scaffoldOnly": false,
+				"peerInstalls": []
+			}
+		},
+		{
+			"slug": "plugin-page-seo",
+			"kind": "plugin",
+			"name": "@anvilkit/plugin-page-seo",
+			"description": "Rail panel that edits a page's SEO metadata (root.props.seo) through the <Studio> plugin contract.",
+			"packageName": "@anvilkit/plugin-page-seo",
+			"version": "0.1.0",
+			"category": "studio",
+			"tags": [],
+			"publisher": "first-party",
+			"verified": true,
+			"addedAt": "2026-06-16T16:29:14.279Z",
 			"installSpec": {
 				"mutates": [
 					"lib/puck-config.ts"
