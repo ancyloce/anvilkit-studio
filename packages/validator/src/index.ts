@@ -5,4 +5,10 @@ export type {
 export type { ValidationIssue, ValidationResult } from "./types.js";
 export { validateAiOutput } from "./validate-ai-output.js";
 export { validateComponentConfig } from "./validate-component-config.js";
-export { validatePagePayload } from "./validate-page-payload.js";
+export {
+	validatePagePayload,
+	validatePageRootProps,
+	validatePublishRequest,
+	validatePuckPageData,
+	validateSaveDraftRequest,
+} from "./validate-page-payload.js";
