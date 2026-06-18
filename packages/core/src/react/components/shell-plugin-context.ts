@@ -149,5 +149,7 @@ export function createShellPluginContext({
 			sidebarRegistryStore.getState().registerDesignSystemPanel(panel),
 		registerSeoPanel: (panel) =>
 			sidebarRegistryStore.getState().registerSeoPanel(panel),
+		registerPageSettingsSeoFields: (fields) =>
+			sidebarRegistryStore.getState().registerPageSettingsSeoFields(fields),
 	};
 }

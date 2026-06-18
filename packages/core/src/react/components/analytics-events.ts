@@ -5,7 +5,10 @@
  * nodes (the forbidden-fields rule). A missing adapter makes every call a no-op.
  */
 
-import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
+import type {
+	AnalyticsAdapter,
+	AnalyticsEventName,
+} from "@anvilkit/analytics-core";
 
 /** The minimal shape of a Puck "insert" action this module reads. */
 export interface InsertActionLike {
@@ -20,7 +23,7 @@ export function trackDraftSaved(
 	componentCount: number,
 	durationMs: number,
 ): void {
-	analytics?.track("draft_saved", {
+	analytics?.track("draft_saved" satisfies AnalyticsEventName, {
 		component_count: componentCount,
 		duration_ms: durationMs,
 	});
@@ -31,7 +34,9 @@ export function trackPagePublished(
 	analytics: AnalyticsAdapter | undefined,
 	statusChange: string,
 ): void {
-	analytics?.track("page_published", { status_change: statusChange });
+	analytics?.track("page_published" satisfies AnalyticsEventName, {
+		status_change: statusChange,
+	});
 }
 
 /**
@@ -43,7 +48,7 @@ export function trackComponentDropped(
 	action: InsertActionLike,
 ): void {
 	if (action.type !== "insert") return;
-	analytics?.track("component_dropped", {
+	analytics?.track("component_dropped" satisfies AnalyticsEventName, {
 		component_type: action.componentType ?? "unknown",
 		zone: action.destinationZone ?? "default",
 	});

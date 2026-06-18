@@ -1,5 +1,18 @@
-import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
+import type {
+	AnalyticsAdapter,
+	AnalyticsEventName,
+} from "@anvilkit/analytics-core";
 import { describe, expect, it, vi } from "vitest";
+
+// M1: the three Studio-owned event names this module emits must stay members of
+// the analytics catalog. The `satisfies` makes a typo or a catalog rename a
+// compile error here, mirroring the per-call-site `satisfies` in the emitters.
+const STUDIO_EVENT_NAMES = [
+	"draft_saved",
+	"page_published",
+	"component_dropped",
+] as const satisfies readonly AnalyticsEventName[];
+
 import {
 	trackComponentDropped,
 	trackDraftSaved,
@@ -82,5 +95,17 @@ describe("no adapter", () => {
 		expect(() =>
 			trackComponentDropped(undefined, { type: "insert" }),
 		).not.toThrow();
+	});
+});
+
+describe("event-name catalog contract", () => {
+	it("emits only names declared in the analytics catalog", () => {
+		// Compile-time enforcement is the `satisfies` on STUDIO_EVENT_NAMES above;
+		// this runtime check documents the contract and pins the exact set.
+		expect(STUDIO_EVENT_NAMES).toEqual([
+			"draft_saved",
+			"page_published",
+			"component_dropped",
+		]);
 	});
 });
