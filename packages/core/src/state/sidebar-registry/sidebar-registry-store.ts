@@ -33,6 +33,7 @@ import type {
 	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
+	StudioPageSettingsSeoFields,
 	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "@/types/sidebar";
@@ -47,6 +48,7 @@ export interface SidebarRegistryState {
 	readonly historyPanel: StudioHistoryPanel | null;
 	readonly designSystemPanel: StudioDesignSystemPanel | null;
 	readonly seoPanel: StudioSeoPanel | null;
+	readonly pageSettingsSeoFields: StudioPageSettingsSeoFields | null;
 	registerInsertSection(section: StudioInsertSection): StudioSidebarUnregister;
 	registerLayerQuickAdd(item: StudioLayerQuickAdd): StudioSidebarUnregister;
 	registerAssetSource(source: StudioAssetSource): StudioSidebarUnregister;
@@ -58,6 +60,9 @@ export interface SidebarRegistryState {
 		panel: StudioDesignSystemPanel,
 	): StudioSidebarUnregister;
 	registerSeoPanel(panel: StudioSeoPanel): StudioSidebarUnregister;
+	registerPageSettingsSeoFields(
+		fields: StudioPageSettingsSeoFields,
+	): StudioSidebarUnregister;
 	/**
 	 * Clear every contributed surface back to the empty initial state
 	 * (review finding Z-g). Mainly a test/teardown convenience — the
@@ -119,6 +124,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 		historyPanel: null,
 		designSystemPanel: null,
 		seoPanel: null,
+		pageSettingsSeoFields: null,
 
 		registerInsertSection(section) {
 			set((state) => {
@@ -260,6 +266,22 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 			};
 		},
 
+		registerPageSettingsSeoFields(fields) {
+			// Single-occupancy, last-write-wins — same shape as
+			// `registerSeoPanel`. Edits any page row's stored SEO via the
+			// page-settings dialog (M4), distinct from the `seo` rail panel.
+			const existing = get().pageSettingsSeoFields;
+			if (existing !== null && existing !== fields) {
+				warnSlotOverwrite("pageSettingsSeoFields");
+			}
+			set({ pageSettingsSeoFields: fields });
+			return () => {
+				if (get().pageSettingsSeoFields === fields) {
+					set({ pageSettingsSeoFields: null });
+				}
+			};
+		},
+
 		reset() {
 			set({
 				insertSections: EMPTY_INSERT,
@@ -271,6 +293,7 @@ export function createSidebarRegistryStore(): SidebarRegistryStoreApi {
 				historyPanel: null,
 				designSystemPanel: null,
 				seoPanel: null,
+				pageSettingsSeoFields: null,
 			});
 		},
 	}));
