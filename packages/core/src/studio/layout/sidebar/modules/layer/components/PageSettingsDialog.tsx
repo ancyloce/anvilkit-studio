@@ -31,8 +31,10 @@ import {
 } from "@/primitives/field";
 import { Input } from "@/primitives/input";
 import { useMsg } from "@/state/editor-i18n-context";
+import { useSidebarRegistry } from "@/state/sidebar-registry/use-sidebar-registry";
 import type {
 	StudioPage,
+	StudioPageSeo,
 	StudioPageSettingsInput,
 	StudioPagesSource,
 } from "@/types/pages";
@@ -49,10 +51,13 @@ interface FormState {
 	readonly path: string;
 	readonly route: boolean;
 	readonly description: string;
-	readonly metaTitle: string;
-	readonly metaDescription: string;
-	readonly ogImage: string;
-	readonly noindex: boolean;
+	/**
+	 * SEO sub-block, edited by the plugin-registered
+	 * {@link StudioPageSettingsSeoFields} slot (M4). Core owns this state
+	 * but never renders the fields; when no plugin is registered it stays
+	 * at the page's original value and the diff omits it.
+	 */
+	readonly seo: StudioPageSeo;
 }
 
 function initialForm(page: StudioPage): FormState {
@@ -61,17 +66,45 @@ function initialForm(page: StudioPage): FormState {
 		path: page.path ?? "",
 		route: page.route === true,
 		description: page.description ?? "",
-		metaTitle: page.seo?.metaTitle ?? "",
-		metaDescription: page.seo?.metaDescription ?? "",
-		ogImage: page.seo?.ogImage ?? "",
-		noindex: page.seo?.noindex === true,
+		seo: page.seo ?? {},
 	};
 }
 
 /**
+ * Trim every string field and drop the empties so an empty SEO block
+ * collapses to `{}` (lets hosts persist `seo: undefined`). `canonical`
+ * is carried through alongside the four legacy fields (M3 follow-up).
+ */
+function normalizeSeo(seo: StudioPageSeo): StudioPageSeo {
+	const out: { -readonly [K in keyof StudioPageSeo]?: StudioPageSeo[K] } = {};
+	const metaTitle = (seo.metaTitle ?? "").trim();
+	const metaDescription = (seo.metaDescription ?? "").trim();
+	const ogImage = (seo.ogImage ?? "").trim();
+	const canonical = (seo.canonical ?? "").trim();
+	if (metaTitle.length > 0) out.metaTitle = metaTitle;
+	if (metaDescription.length > 0) out.metaDescription = metaDescription;
+	if (ogImage.length > 0) out.ogImage = ogImage;
+	if (canonical.length > 0) out.canonical = canonical;
+	if (seo.noindex === true) out.noindex = true;
+	return out;
+}
+
+/** Structural equality over the normalized SEO shape. */
+function seoEqual(a: StudioPageSeo, b: StudioPageSeo): boolean {
+	return (
+		(a.metaTitle ?? "") === (b.metaTitle ?? "") &&
+		(a.metaDescription ?? "") === (b.metaDescription ?? "") &&
+		(a.ogImage ?? "") === (b.ogImage ?? "") &&
+		(a.canonical ?? "") === (b.canonical ?? "") &&
+		(a.noindex === true) === (b.noindex === true)
+	);
+}
+
+/**
  * Build the `onUpdateSettings` payload, omitting fields whose
- * trimmed value matches the original. Empty SEO fields collapse the
- * `seo` block entirely so hosts can persist `seo: undefined`.
+ * trimmed value matches the original. The `seo` block is included only
+ * when the user actually changed it; otherwise it (incl. any `canonical`
+ * the dialog never edits) passes through untouched.
  */
 function diffSettings(
 	page: StudioPage,
@@ -81,9 +114,6 @@ function diffSettings(
 		title: form.title.trim(),
 		path: form.path.trim(),
 		description: form.description.trim(),
-		metaTitle: form.metaTitle.trim(),
-		metaDescription: form.metaDescription.trim(),
-		ogImage: form.ogImage.trim(),
 	};
 	const out: { -readonly [K in keyof StudioPageSettingsInput]?: unknown } = {
 		id: page.id,
@@ -93,25 +123,9 @@ function diffSettings(
 	if (form.route !== (page.route === true)) out.route = form.route;
 	if (trimmed.description !== (page.description ?? ""))
 		out.description = trimmed.description;
-	const seo = {
-		metaTitle: trimmed.metaTitle,
-		metaDescription: trimmed.metaDescription,
-		ogImage: trimmed.ogImage,
-		noindex: form.noindex,
-	};
-	const seoChanged =
-		seo.metaTitle !== (page.seo?.metaTitle ?? "") ||
-		seo.metaDescription !== (page.seo?.metaDescription ?? "") ||
-		seo.ogImage !== (page.seo?.ogImage ?? "") ||
-		seo.noindex !== (page.seo?.noindex === true);
-	if (seoChanged) {
-		const seoOut: Record<string, unknown> = {};
-		if (seo.metaTitle.length > 0) seoOut.metaTitle = seo.metaTitle;
-		if (seo.metaDescription.length > 0)
-			seoOut.metaDescription = seo.metaDescription;
-		if (seo.ogImage.length > 0) seoOut.ogImage = seo.ogImage;
-		if (seo.noindex) seoOut.noindex = true;
-		out.seo = seoOut;
+	const nextSeo = normalizeSeo(form.seo);
+	if (!seoEqual(nextSeo, normalizeSeo(page.seo ?? {}))) {
+		out.seo = nextSeo;
 	}
 	return out as StudioPageSettingsInput;
 }
@@ -123,9 +137,14 @@ export function PageSettingsDialog({
 	onSubmit,
 }: PageSettingsDialogProps): ReactNode {
 	const msg = useMsg();
+	const seoFields = useSidebarRegistry((state) => state.pageSettingsSeoFields);
 	const [form, setForm] = useState<FormState>(() => initialForm(page));
 	const [error, setError] = useState<string | null>(null);
 	const [submitting, setSubmitting] = useState(false);
+
+	const handleSeoChange = useCallback((next: StudioPageSeo) => {
+		setForm((prev) => ({ ...prev, seo: next }));
+	}, []);
 
 	const reset = useCallback(() => {
 		setForm(initialForm(page));
@@ -174,10 +193,6 @@ export function PageSettingsDialog({
 	const pathId = `ak-layer-page-settings-${page.id}-path`;
 	const routeId = `ak-layer-page-settings-${page.id}-route`;
 	const descId = `ak-layer-page-settings-${page.id}-description`;
-	const metaTitleId = `ak-layer-page-settings-${page.id}-meta-title`;
-	const metaDescId = `ak-layer-page-settings-${page.id}-meta-description`;
-	const ogImageId = `ak-layer-page-settings-${page.id}-og-image`;
-	const noindexId = `ak-layer-page-settings-${page.id}-noindex`;
 
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
@@ -252,85 +267,17 @@ export function PageSettingsDialog({
 							/>
 						</Field>
 					</FieldGroup>
-					<div
-						className="mt-2 flex flex-col gap-3 border-t border-[var(--ak-pages-border,var(--ak-studio-border))] pt-3"
-						data-testid={`ak-layer-page-settings-${page.id}-seo`}
-					>
-						<h4 className="text-xs font-medium text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))]">
-							{msg("studio.module.layer.pages.settings.seo.heading")}
-						</h4>
-						<FieldGroup>
-							<Field>
-								<FieldLabel htmlFor={metaTitleId}>
-									{msg("studio.module.layer.pages.settings.seo.metaTitle")}
-								</FieldLabel>
-								<Input
-									id={metaTitleId}
-									value={form.metaTitle}
-									onChange={(event) =>
-										setForm((prev) => ({
-											...prev,
-											metaTitle: event.target.value,
-										}))
-									}
-									data-testid={`${metaTitleId}-input`}
-								/>
-							</Field>
-							<Field>
-								<FieldLabel htmlFor={metaDescId}>
-									{msg(
-										"studio.module.layer.pages.settings.seo.metaDescription",
-									)}
-								</FieldLabel>
-								<Input
-									id={metaDescId}
-									value={form.metaDescription}
-									onChange={(event) =>
-										setForm((prev) => ({
-											...prev,
-											metaDescription: event.target.value,
-										}))
-									}
-									data-testid={`${metaDescId}-input`}
-								/>
-							</Field>
-							<Field>
-								<FieldLabel htmlFor={ogImageId}>
-									{msg("studio.module.layer.pages.settings.seo.ogImage")}
-								</FieldLabel>
-								<Input
-									id={ogImageId}
-									type="url"
-									value={form.ogImage}
-									onChange={(event) =>
-										setForm((prev) => ({
-											...prev,
-											ogImage: event.target.value,
-										}))
-									}
-									data-testid={`${ogImageId}-input`}
-								/>
-							</Field>
-							<Field orientation="horizontal">
-								<Checkbox
-									id={noindexId}
-									checked={form.noindex}
-									onCheckedChange={(checked) =>
-										setForm((prev) => ({
-											...prev,
-											noindex: checked === true,
-										}))
-									}
-									data-testid={`${noindexId}-input`}
-								/>
-								<FieldContent>
-									<FieldLabel htmlFor={noindexId}>
-										{msg("studio.module.layer.pages.settings.seo.noindex")}
-									</FieldLabel>
-								</FieldContent>
-							</Field>
-						</FieldGroup>
-					</div>
+					{seoFields !== null ? (
+						<div
+							className="mt-2 flex flex-col gap-3 border-t border-[var(--ak-pages-border,var(--ak-studio-border))] pt-3"
+							data-testid={`ak-layer-page-settings-${page.id}-seo`}
+						>
+							<h4 className="text-xs font-medium text-[var(--ak-pages-muted-fg,var(--ak-studio-muted-fg))]">
+								{msg("studio.module.layer.pages.settings.seo.heading")}
+							</h4>
+							{seoFields.render({ value: form.seo, onChange: handleSeoChange })}
+						</div>
+					) : null}
 					{error !== null ? (
 						<FieldError data-testid={`ak-layer-page-settings-${page.id}-error`}>
 							{error}

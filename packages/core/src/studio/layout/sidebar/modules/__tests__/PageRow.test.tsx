@@ -8,16 +8,29 @@
  */
 
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import type { ReactElement, ReactNode } from "react";
+import { type ReactElement, type ReactNode, useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { PageRow } from "@/layout/sidebar/modules/layer/components/PageRow";
 import { EditorI18nProvider } from "@/state/index";
+import { SidebarRegistryProvider } from "@/state/sidebar-registry/SidebarRegistryProvider";
+import { createSidebarRegistryStore } from "@/state/sidebar-registry/sidebar-registry-store";
 import type { StudioPage } from "@/types/pages";
 
 afterEach(cleanup);
 
+// PageRow mounts PageSettingsDialog, which reads the sidebar registry (M4);
+// the dialog is always rendered inside <Studio>'s SidebarRegistryProvider, so
+// the test fixture supplies an (empty) registry. No SEO plugin is registered,
+// so these capability-gating tests see no SEO section.
 function Setup({ children }: { readonly children: ReactNode }): ReactElement {
-	return <EditorI18nProvider>{children}</EditorI18nProvider>;
+	const [store] = useState(() => createSidebarRegistryStore());
+	return (
+		<EditorI18nProvider>
+			<SidebarRegistryProvider value={store}>
+				{children}
+			</SidebarRegistryProvider>
+		</EditorI18nProvider>
+	);
 }
 
 const BASE_PAGE: StudioPage = {
