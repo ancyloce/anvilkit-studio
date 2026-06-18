@@ -5,7 +5,7 @@
  * The reference implementation at `ancyloce/anvilkit-puck-studio`
  * accepts an `aiHost` prop on its `<Studio>`-like component and runs
  * AI generation inline. The target architecture moves AI behind a
- * proper plugin (`@anvilkit/plugins/ai-generation` — Phase 3). This
+ * proper plugin (`@anvilkit/plugin-ai-copilot` — Phase 3). This
  * adapter is the bridge: existing host apps can pass `aiHost` and
  * keep working while the real plugin lands, with a one-time
  * deprecation `console.warn` nudging migration.
@@ -27,7 +27,7 @@
  * ### Deprecation timeline
  *
  * This adapter is **deprecated** in favor of
- * `createAiGenerationPlugin()` from `@anvilkit/plugins/ai-generation`.
+ * `createAiCopilotPlugin()` from `@anvilkit/plugin-ai-copilot`.
  * Per the LTS policy (`docs/policies/lts.md` §5), removal triggers a
  * **major** bump — never a minor — and lands no earlier than two
  * minors after the deprecation ships. Concretely:
@@ -62,7 +62,7 @@ import type { StudioPlugin, StudioPluginContext } from "@/types/plugin";
  * Mirrors the shape the legacy `<Studio aiHost="…">` consumed:
  * a single string base URL and an optional path override. Anything
  * richer (auth headers, retry, streaming) belongs to the real
- * `@anvilkit/plugins/ai-generation` package.
+ * `@anvilkit/plugin-ai-copilot` package.
  *
  * @deprecated Since `0.1.x`. Part of the legacy `aiHost` compat
  * surface; removal target `v2.0.0` (see {@link aiHostAdapter}).
@@ -107,7 +107,7 @@ const MIGRATION_DOCS_URL = "https://anvilkit.dev/docs/migrations/ai-host";
  * `console.warn` call site stays one line and the constant can be
  * referenced from tests if we ever want exact-text assertions.
  */
-const DEPRECATION_MESSAGE = `@anvilkit/core: the \`aiHost\` prop is deprecated. Migrate to createAiGenerationPlugin() from @anvilkit/plugins/ai-generation. The adapter dispatches the endpoint's JSON response directly into Puck — treat the \`aiHost\` URL as a fully-trusted first-party service. See: ${MIGRATION_DOCS_URL}`;
+const DEPRECATION_MESSAGE = `@anvilkit/core: the \`aiHost\` prop is deprecated. Migrate to createAiCopilotPlugin() from @anvilkit/plugin-ai-copilot. The adapter dispatches the endpoint's JSON response directly into Puck — treat the \`aiHost\` URL as a fully-trusted first-party service. See: ${MIGRATION_DOCS_URL}`;
 
 /**
  * Default per-request timeout. 30 seconds matches the upper end of
@@ -379,8 +379,8 @@ let warned = false;
  *
  * @param options - The legacy {@link AiHostAdapterOptions}.
  *
- * @deprecated Since `0.1.x`. Migrate to `createAiGenerationPlugin()`
- * from `@anvilkit/plugins/ai-generation`. Removal target: `v2.0.0`
+ * @deprecated Since `0.1.x`. Migrate to `createAiCopilotPlugin()`
+ * from `@anvilkit/plugin-ai-copilot`. Removal target: `v2.0.0`
  * (removal is a major bump per `docs/policies/lts.md` §5). Supported
  * through every `v1.x` minor.
  *
@@ -544,7 +544,7 @@ export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
 							} catch (error) {
 								// Per the spec: minimum-viable error handling.
 								// Log and let the user retry. Retry / backoff
-								// belongs to `@anvilkit/plugins/ai-generation`.
+								// belongs to `@anvilkit/plugin-ai-copilot`.
 								// `AbortError` is surfaced with an explicit
 								// hint so operators can distinguish a timeout
 								// from a generic network failure.

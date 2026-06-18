@@ -133,7 +133,7 @@ describe("aiHostAdapter — deprecation warning", () => {
 		const message = String(warnSpy.mock.calls[0]?.[0]);
 		expect(message).toContain("@anvilkit/core");
 		expect(message).toContain("aiHost");
-		expect(message).toContain("createAiGenerationPlugin");
+		expect(message).toContain("createAiCopilotPlugin");
 	});
 
 	it("re-arms after vi.resetModules() so each test sees a clean slate", async () => {
