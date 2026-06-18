@@ -19,6 +19,20 @@
  * any CI image — `ubuntu-latest` sometimes ships without `rg` and we
  * do not want this gate to depend on the runner's toolbox.
  *
+ * ### DOM-global scan (review finding M2)
+ *
+ * `src/runtime/` must also stay environment-agnostic. The package
+ * tsconfig's `lib` includes `DOM`, so a stray `window.` / `document.` /
+ * `localStorage` reference would typecheck **and** slip past the React
+ * import scan above. A second pass over the runtime tree (only) strips
+ * comments and string literals first — so English prose like "a sliding
+ * window" never false-positives — then flags any bare DOM-global
+ * identifier left in actual runtime code. It is a line-based heuristic:
+ * it does not resolve `@/…` aliases, so the *transitive* React-leak case
+ * (a runtime file importing a React-touching module) is covered
+ * separately by the `/runtime` React-free bundle assertion in
+ * `check-bundle-budget.mjs`.
+ *
  * @see {@link ../docs/tasks/core-015-public-api-gates.md | core-015}
  */
 
@@ -47,6 +61,19 @@ const SCHEMA_FILE = resolve(PACKAGE_ROOT, "src/config/schema.ts");
  */
 const REACT_IMPORT_PATTERN =
 	/\bfrom\s+['"](react|react-dom)(\/[^'"]*)?['"]|\bimport\s*\(\s*['"](react|react-dom)(\/[^'"]*)?['"]/;
+
+/**
+ * Browser-only globals the React-free runtime must never reference. A
+ * match is an environment dependency (`window.matchMedia`,
+ * `document.getElementById`, `localStorage.setItem`, …) that breaks
+ * Node-only consumers. Scanned only **after** comments + strings are
+ * stripped (see {@link stripCommentsAndStrings}), so the bare `\b`
+ * boundary is safe — prose occurrences of "window"/"document" are gone
+ * by the time this runs. The negative lookbehind keeps member access
+ * like `foo.document` from matching a host object's own property.
+ */
+const DOM_GLOBAL_PATTERN =
+	/(?<![.\w$])(window|document|localStorage|sessionStorage|navigator)\b/;
 
 /**
  * Recursively yield every `.ts` / `.tsx` file under `dir`, skipping
@@ -99,14 +126,95 @@ async function scanFile(filePath) {
 	return hits;
 }
 
+/**
+ * Blank out `//` and `/* *\/` comments and string / template literals,
+ * replacing their characters with spaces while preserving newlines so
+ * line numbers stay accurate. A tiny hand-rolled scanner — runtime
+ * source is small and this avoids pulling a parser into the gate. Good
+ * enough for the DOM-global heuristic: it strips the contexts (prose,
+ * log strings) where a DOM word could appear without being a real
+ * reference. `${…}` template interpolations are blanked too, which is an
+ * accepted blind spot (runtime has no DOM usage inside templates).
+ */
+function stripCommentsAndStrings(src) {
+	let out = "";
+	let i = 0;
+	const n = src.length;
+	const blank = (ch) => (ch === "\n" ? "\n" : " ");
+	while (i < n) {
+		const c = src[i];
+		const d = src[i + 1];
+		if (c === "/" && d === "/") {
+			while (i < n && src[i] !== "\n") {
+				out += " ";
+				i += 1;
+			}
+			continue;
+		}
+		if (c === "/" && d === "*") {
+			out += "  ";
+			i += 2;
+			while (i < n && !(src[i] === "*" && src[i + 1] === "/")) {
+				out += blank(src[i]);
+				i += 1;
+			}
+			out += "  ";
+			i += 2;
+			continue;
+		}
+		if (c === '"' || c === "'" || c === "`") {
+			const quote = c;
+			out += " ";
+			i += 1;
+			while (i < n && src[i] !== quote) {
+				if (src[i] === "\\") {
+					out += "  ";
+					i += 2;
+					continue;
+				}
+				out += blank(src[i]);
+				i += 1;
+			}
+			out += " ";
+			i += 1;
+			continue;
+		}
+		out += c;
+		i += 1;
+	}
+	return out;
+}
+
+/**
+ * Scan a single runtime file for DOM-global references, ignoring any
+ * inside comments or string literals. Returns `{ line, text }` offenders.
+ */
+async function scanFileForDomGlobals(filePath) {
+	const raw = await readFile(filePath, "utf8");
+	const lines = stripCommentsAndStrings(raw).split(/\r?\n/);
+	const hits = [];
+	for (let i = 0; i < lines.length; i += 1) {
+		if (DOM_GLOBAL_PATTERN.test(lines[i])) {
+			hits.push({ line: i + 1, text: lines[i].trim() });
+		}
+	}
+	return hits;
+}
+
 async function main() {
 	const offenders = [];
+	const domOffenders = [];
 
-	// Walk the runtime directory.
+	// Walk the runtime directory: every file is checked for both React
+	// imports and DOM-global references.
 	for await (const file of walkSourceFiles(RUNTIME_DIR)) {
 		const hits = await scanFile(file);
 		if (hits.length > 0) {
 			offenders.push({ file, hits });
+		}
+		const domHits = await scanFileForDomGlobals(file);
+		if (domHits.length > 0) {
+			domOffenders.push({ file, hits: domHits });
 		}
 	}
 
@@ -131,29 +239,51 @@ async function main() {
 		throw err;
 	}
 
-	if (offenders.length === 0) {
+	if (offenders.length === 0 && domOffenders.length === 0) {
 		console.log(
-			"check-react-free: OK — no React imports found in src/runtime/ or src/config/schema.ts",
+			"check-react-free: OK — no React imports in src/runtime/ or src/config/schema.ts, and no DOM globals in src/runtime/",
 		);
 		return;
 	}
 
 	console.error("check-react-free: FAIL");
-	console.error("");
-	console.error(
-		"The following files import `react` or `react-dom` but belong to the React-free layer:",
-	);
-	console.error("");
-	for (const { file, hits } of offenders) {
-		const rel = relative(PACKAGE_ROOT, file);
-		for (const hit of hits) {
-			console.error(`  ${rel}:${hit.line}  ${hit.text}`);
+
+	if (offenders.length > 0) {
+		console.error("");
+		console.error(
+			"The following files import `react` or `react-dom` but belong to the React-free layer:",
+		);
+		console.error("");
+		for (const { file, hits } of offenders) {
+			const rel = relative(PACKAGE_ROOT, file);
+			for (const hit of hits) {
+				console.error(`  ${rel}:${hit.line}  ${hit.text}`);
+			}
 		}
+		console.error("");
+		console.error(
+			"Move React-dependent code to src/react/ or refactor the import away. See architecture §7.",
+		);
 	}
-	console.error("");
-	console.error(
-		"Move React-dependent code to src/react/ or refactor the import away. See architecture §7.",
-	);
+
+	if (domOffenders.length > 0) {
+		console.error("");
+		console.error(
+			"The following src/runtime/ files reference a browser-only DOM global — the runtime must stay environment-agnostic (Node / SSR / CLI):",
+		);
+		console.error("");
+		for (const { file, hits } of domOffenders) {
+			const rel = relative(PACKAGE_ROOT, file);
+			for (const hit of hits) {
+				console.error(`  ${rel}:${hit.line}  ${hit.text}`);
+			}
+		}
+		console.error("");
+		console.error(
+			"Move DOM-dependent code to src/react/ or src/studio/, or guard it behind a host-injected seam. See architecture §7.",
+		);
+	}
+
 	process.exit(1);
 }
 

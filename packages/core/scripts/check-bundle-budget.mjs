@@ -28,6 +28,13 @@
  *    export, so this measurement intentionally points at the built
  *    `dist/` file — it is asserting an internal bundle property, not
  *    a consumer-facing one.
+ * 4. **The `/runtime` subpath stays React-free at the bundle level
+ *    (review finding M2).** `scripts/check-react-free.mjs` only catches
+ *    *direct* `react` imports under `src/runtime/`; a runtime file that
+ *    imports a React-touching `@/studio` / `@/react` module would slip
+ *    past that static scan. Here we bundle the `@anvilkit/core/runtime`
+ *    entry with React left **non-external** and fail if any
+ *    `node_modules/react…` input is pulled in — a transitive leak.
  *
  * ### How the check works
  *
@@ -95,6 +102,8 @@ const CHROME_MODULE = resolve(
 	PACKAGE_ROOT,
 	"dist/studio/layout/HeaderActionButton.js",
 );
+const RUNTIME_ENTRY_FILE = resolve(TMP_DIR, "runtime-entry.mjs");
+const RUNTIME_OUT_DIR = resolve(TMP_DIR, "out-runtime");
 
 /** Firm budget — raise only with a changeset justification. */
 const BUDGET_GZIPPED_BYTES = 25 * 1024;
@@ -225,9 +234,21 @@ async function writeEntries() {
 		`export { HeaderActionButton } from ${JSON.stringify(CHROME_MODULE)};\n`,
 		"utf8",
 	);
+	// Runtime: the React-free plugin-engine subpath, imported by package
+	// name so esbuild resolves it through the `./runtime` exports entry
+	// exactly as a Node / CLI consumer would.
+	await writeFile(
+		RUNTIME_ENTRY_FILE,
+		`export * from "@anvilkit/core/runtime";\n`,
+		"utf8",
+	);
 }
 
-async function bundle(entryFile, outDir) {
+async function bundle(
+	entryFile,
+	outDir,
+	external = [...EXTERNAL_PEERS, "*.css"],
+) {
 	// `splitting: true` turns dynamic `import()` calls in the source
 	// into separate chunks — exactly what real host bundlers (Next.js,
 	// Vite, Rspack) do by default. Without splitting, esbuild inlines
@@ -253,8 +274,11 @@ async function bundle(entryFile, outDir) {
 		// component token sheets) are a runtime concern for the host
 		// bundler — they are not JS bytes we ship through this budget.
 		// Mark `*.css` as external so esbuild leaves the import alone
-		// instead of failing to resolve it.
-		external: [...EXTERNAL_PEERS, "*.css"],
+		// instead of failing to resolve it. Defaults to peers + CSS
+		// external (entry/chrome budgets); the runtime React-free check
+		// passes `["*.css"]` only so react stays in the graph and a leak
+		// shows up in `metafile.inputs`.
+		external,
 		absWorkingDir: PACKAGE_ROOT,
 		logLevel: "error",
 		write: true,
@@ -322,6 +346,43 @@ async function measureEntry(label, entryFile, outDir, budget) {
 	};
 }
 
+/**
+ * Assert the `@anvilkit/core/runtime` subpath (the React-free plugin
+ * engine) pulls in zero React at the bundle level — the transitive-leak
+ * guard the static `check-react-free.mjs` scan cannot provide (it does
+ * not resolve `@/…` aliases, so a runtime file importing a React-touching
+ * `@/studio` module would pass the static gate).
+ *
+ * React is deliberately left **non-external** here: if the runtime import
+ * graph references it, esbuild resolves it and the file shows up in
+ * `metafile.inputs` under `node_modules/react…`. A clean runtime yields
+ * zero such inputs. Returns `true` on pass, `false` on leak.
+ */
+async function assertRuntimeReactFree() {
+	const metafile = await bundle(RUNTIME_ENTRY_FILE, RUNTIME_OUT_DIR, ["*.css"]);
+	const reactInputs = Object.keys(metafile.inputs).filter((p) =>
+		/node_modules[\\/](react|react-dom)[\\/]/.test(p),
+	);
+	console.log(
+		"check-bundle-budget: @anvilkit/core/runtime React-free assertion",
+	);
+	if (reactInputs.length === 0) {
+		console.log("  OK — runtime bundle pulls in no react / react-dom");
+		return true;
+	}
+	console.error("");
+	console.error(
+		"check-bundle-budget: FAIL — React leaked into the React-free `@anvilkit/core/runtime` subpath (transitive import):",
+	);
+	for (const p of reactInputs.slice(0, 10)) {
+		console.error(`  ${p}`);
+	}
+	console.error(
+		"A file under src/runtime/ (transitively) imports a React-touching module. Keep runtime imports limited to @/types (type-only) and other runtime modules.",
+	);
+	return false;
+}
+
 async function main() {
 	await ensureDistExists();
 	await writeEntries();
@@ -375,6 +436,13 @@ async function main() {
 		console.error(
 			'Likely a `import * as Icons from "lucide-react"` regression in HeaderActionButton.tsx — use explicit named icon imports (the ICON_REGISTRY).',
 		);
+		failed = true;
+	}
+
+	// 3. `@anvilkit/core/runtime` must pull in zero React (transitive-leak
+	//    guard — review finding M2). React is left non-external on purpose.
+	const runtimeReactFree = await assertRuntimeReactFree();
+	if (!runtimeReactFree) {
 		failed = true;
 	}
 
