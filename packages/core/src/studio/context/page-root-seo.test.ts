@@ -20,14 +20,14 @@ describe("pageRootSeoToStudioPageSeo", () => {
 			metaDescription: "Welcome",
 			ogImage: "https://example.com/og.png",
 			noindex: true,
+			canonical: "https://example.com/",
 		});
 	});
 
-	it("drops canonical (no StudioPageSeo equivalent)", () => {
-		const out = pageRootSeoToStudioPageSeo({
-			canonical: "https://example.com/",
-		});
-		expect(out).toBeUndefined();
+	it("carries canonical through to StudioPageSeo", () => {
+		expect(
+			pageRootSeoToStudioPageSeo({ canonical: "https://example.com/" }),
+		).toEqual({ canonical: "https://example.com/" });
 	});
 
 	it("returns undefined for an empty or absent seo block", () => {
@@ -50,21 +50,24 @@ describe("studioPageSeoToPageRootSeo (write-back inverse)", () => {
 				metaDescription: "D",
 				ogImage: "https://example.com/o.png",
 				noindex: true,
+				canonical: "https://example.com/",
 			}),
 		).toEqual({
 			title: "T",
 			description: "D",
 			ogImage: "https://example.com/o.png",
 			noIndex: true,
+			canonical: "https://example.com/",
 		});
 	});
 
-	it("round-trips through both directions losslessly (sans canonical)", () => {
+	it("round-trips through both directions losslessly (incl. canonical)", () => {
 		const original = {
 			title: "T",
 			description: "D",
 			ogImage: "https://example.com/o.png",
 			noIndex: false,
+			canonical: "https://example.com/",
 		};
 		const studio = pageRootSeoToStudioPageSeo(original);
 		expect(studioPageSeoToPageRootSeo(studio)).toEqual(original);

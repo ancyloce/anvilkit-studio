@@ -13,13 +13,19 @@
  *
  * Field-name reconciliation (PRD §5.1):
  *
- * | `root.props.seo` (schema) | `StudioPageSeo` (core) | Note          |
- * | :------------------------ | :--------------------- | :------------ |
- * | `title`                   | `metaTitle`            | rename        |
- * | `description`             | `metaDescription`      | rename        |
- * | `ogImage`                 | `ogImage`              | identical     |
- * | `noIndex`                 | `noindex`              | casing        |
- * | `canonical`               | —                      | no equivalent |
+ * | `root.props.seo` (schema) | `StudioPageSeo` (core) | Note      |
+ * | :------------------------ | :--------------------- | :-------- |
+ * | `title`                   | `metaTitle`            | rename    |
+ * | `description`             | `metaDescription`      | rename    |
+ * | `ogImage`                 | `ogImage`              | identical |
+ * | `noIndex`                 | `noindex`              | casing    |
+ * | `canonical`               | `canonical`            | identical |
+ *
+ * The `noIndex`/`noindex` casing difference is intentional — the schema
+ * uses camelCase, the core sidecar uses the lowercased HTML-attribute
+ * spelling — and this module is the single bridge that maps between them.
+ * `canonical` is carried through both ways so the projection round-trips
+ * losslessly (review finding M3).
  */
 
 import type { StudioPage, StudioPageSeo } from "../../types/pages.js";
@@ -41,9 +47,9 @@ export interface PageRootInput {
 
 /**
  * Project `root.props.seo` (schema field names) onto the core
- * {@link StudioPageSeo} shape. `canonical` has no `StudioPageSeo` equivalent
- * and is dropped. Returns `undefined` when no SEO field is set so callers can
- * omit the block entirely.
+ * {@link StudioPageSeo} shape. `canonical` is carried through unchanged so the
+ * projection round-trips losslessly (review finding M3). Returns `undefined`
+ * when no SEO field is set so callers can omit the block entirely.
  */
 export function pageRootSeoToStudioPageSeo(
 	seo: PageRootSeoInput | undefined,
@@ -54,20 +60,21 @@ export function pageRootSeoToStudioPageSeo(
 		metaDescription?: string;
 		ogImage?: string;
 		noindex?: boolean;
+		canonical?: string;
 	} = {};
 	if (seo.title !== undefined) out.metaTitle = seo.title;
 	if (seo.description !== undefined) out.metaDescription = seo.description;
 	if (seo.ogImage !== undefined) out.ogImage = seo.ogImage;
 	if (seo.noIndex !== undefined) out.noindex = seo.noIndex;
+	if (seo.canonical !== undefined) out.canonical = seo.canonical;
 	return Object.keys(out).length > 0 ? out : undefined;
 }
 
 /**
  * Inverse of {@link pageRootSeoToStudioPageSeo} for write-back: map an edited
  * {@link StudioPageSeo} (e.g. from the page-settings dialog) onto
- * `root.props.seo` field names. `canonical` is not represented in
- * `StudioPageSeo`; callers merge the result over the existing `seo` to
- * preserve it.
+ * `root.props.seo` field names. `canonical` round-trips through both
+ * directions, so write-back no longer drops it (review finding M3).
  */
 export function studioPageSeoToPageRootSeo(
 	seo: StudioPageSeo | undefined,
@@ -78,11 +85,13 @@ export function studioPageSeoToPageRootSeo(
 		description?: string;
 		ogImage?: string;
 		noIndex?: boolean;
+		canonical?: string;
 	} = {};
 	if (seo.metaTitle !== undefined) out.title = seo.metaTitle;
 	if (seo.metaDescription !== undefined) out.description = seo.metaDescription;
 	if (seo.ogImage !== undefined) out.ogImage = seo.ogImage;
 	if (seo.noindex !== undefined) out.noIndex = seo.noindex;
+	if (seo.canonical !== undefined) out.canonical = seo.canonical;
 	return out;
 }
 
