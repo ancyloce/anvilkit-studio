@@ -573,10 +573,97 @@
 					"kind": 4096,
 					"flags": {},
 					"comment": {
+						"summary": [],
+						"blockTags": [
+							{
+								"tag": "@deprecated",
+								"content": [
+									{
+										"kind": "text",
+										"text": "Renamed to "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "validatePageRootProps",
+										"target": 28
+									},
+									{
+										"kind": "text",
+										"text": ". The old name only ever\nvalidated "
+									},
+									{
+										"kind": "code",
+										"text": "`root.props`"
+									},
+									{
+										"kind": "text",
+										"text": " despite implying the full page payload; it is retained\nas a thin alias for backward compatibility. Prefer "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "validatePageRootProps",
+										"target": 28
+									},
+									{
+										"kind": "text",
+										"text": "\nfor metadata checks or "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "validatePuckPageData",
+										"target": 34
+									},
+									{
+										"kind": "text",
+										"text": " for full-document checks."
+									}
+								]
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 27,
+							"name": "rootProps",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 14,
+						"name": "ValidationResult",
+						"package": "@anvilkit/validator"
+					}
+				}
+			]
+		},
+		{
+			"id": 28,
+			"name": "validatePageRootProps",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 29,
+					"name": "validatePageRootProps",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Pure, isomorphic gateway that validates a page payload ("
+								"text": "Pure, isomorphic gateway that validates a page's "
 							},
 							{
 								"kind": "code",
@@ -584,11 +671,17 @@
 							},
 							{
 								"kind": "text",
-								"text": ")\nagainst the canonical "
+								"text": " against the\ncanonical "
 							},
 							{
-								"kind": "code",
-								"text": "`PageRootSchema`"
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "PageRootSchema",
+								"target": {
+									"packageName": "@anvilkit/schema",
+									"packagePath": "src/page-root-schema.ts",
+									"qualifiedName": "PageRootSchema"
+								}
 							},
 							{
 								"kind": "text",
@@ -600,66 +693,241 @@
 							},
 							{
 								"kind": "text",
-								"text": ".\n\nReuses the existing "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "ValidationResult",
-								"target": 14
-							},
-							{
-								"kind": "text",
-								"text": "/"
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "ValidationIssue",
-								"target": 8
-							},
-							{
-								"kind": "text",
-								"text": " shape —\nno new result type — mapping each Zod issue onto a "
-							},
-							{
-								"kind": "code",
-								"text": "`level: \"error\"`"
-							},
-							{
-								"kind": "text",
-								"text": " issue\nwith a symbol-safe "
-							},
-							{
-								"kind": "code",
-								"text": "`path`"
-							},
-							{
-								"kind": "text",
-								"text": " (mirrors the "
-							},
-							{
-								"kind": "code",
-								"text": "`validateAiSectionPatch`"
-							},
-							{
-								"kind": "text",
-								"text": " idiom in\n"
-							},
-							{
-								"kind": "code",
-								"text": "`section.ts`"
-							},
-							{
-								"kind": "text",
-								"text": "). Carries no React import; runs in Node / Edge / browser."
+								"text": ". This is the\nnarrow, metadata-only check used by draft saves and settings edits.\n\nCarries no React import; runs in Node / Edge / browser."
 							}
 						]
 					},
 					"parameters": [
 						{
-							"id": 27,
+							"id": 30,
 							"name": "rootProps",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 14,
+						"name": "ValidationResult",
+						"package": "@anvilkit/validator"
+					}
+				}
+			]
+		},
+		{
+			"id": 31,
+			"name": "validatePublishRequest",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 32,
+					"name": "validatePublishRequest",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Validate the body of a "
+							},
+							{
+								"kind": "code",
+								"text": "`POST /api/pages/publish`"
+							},
+							{
+								"kind": "text",
+								"text": " request\n("
+							},
+							{
+								"kind": "code",
+								"text": "`{ id?, slug?, data: PuckPageData }`"
+							},
+							{
+								"kind": "text",
+								"text": "). Publishing goes live, so the complete\npayload is validated via "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "validatePuckPageData",
+								"target": 34
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 33,
+							"name": "input",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 14,
+						"name": "ValidationResult",
+						"package": "@anvilkit/validator"
+					}
+				}
+			]
+		},
+		{
+			"id": 34,
+			"name": "validatePuckPageData",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 35,
+					"name": "validatePuckPageData",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Validate a *complete* Puck page document ("
+							},
+							{
+								"kind": "code",
+								"text": "`{ root, content, zones? }`"
+							},
+							{
+								"kind": "text",
+								"text": ") — the\ncheck a publish must pass before the payload is written to storage. Delegates\n"
+							},
+							{
+								"kind": "code",
+								"text": "`root.props`"
+							},
+							{
+								"kind": "text",
+								"text": " to the same "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "PageRootSchema",
+								"target": {
+									"packageName": "@anvilkit/schema",
+									"packagePath": "src/page-root-schema.ts",
+									"qualifiedName": "PageRootSchema"
+								}
+							},
+							{
+								"kind": "text",
+								"text": " as "
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "validatePageRootProps",
+								"target": 28
+							},
+							{
+								"kind": "text",
+								"text": "\nand additionally asserts the structural shape the renderer depends on."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 36,
+							"name": "data",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"type": {
+								"type": "intrinsic",
+								"name": "unknown"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 14,
+						"name": "ValidationResult",
+						"package": "@anvilkit/validator"
+					}
+				}
+			]
+		},
+		{
+			"id": 37,
+			"name": "validateSaveDraftRequest",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"signatures": [
+				{
+					"id": 38,
+					"name": "validateSaveDraftRequest",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Validate the body of a "
+							},
+							{
+								"kind": "code",
+								"text": "`POST /api/pages/draft`"
+							},
+							{
+								"kind": "text",
+								"text": " request\n("
+							},
+							{
+								"kind": "code",
+								"text": "`{ slug?, title?, data: { root: { props } } }`"
+							},
+							{
+								"kind": "text",
+								"text": "). A draft only commits page\nmetadata, so this validates "
+							},
+							{
+								"kind": "code",
+								"text": "`data.root.props`"
+							},
+							{
+								"kind": "text",
+								"text": " and tolerates arbitrary\n"
+							},
+							{
+								"kind": "code",
+								"text": "`content`"
+							},
+							{
+								"kind": "text",
+								"text": " (persisted verbatim)."
+							}
+						]
+					},
+					"parameters": [
+						{
+							"id": 39,
+							"name": "input",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
@@ -694,7 +962,11 @@
 			"children": [
 				17,
 				21,
-				25
+				25,
+				28,
+				31,
+				34,
+				37
 			]
 		}
 	],
@@ -839,6 +1111,66 @@
 			"packageName": "@anvilkit/validator",
 			"packagePath": "src/validate-page-payload.ts",
 			"qualifiedName": "rootProps"
+		},
+		"28": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validatePageRootProps"
+		},
+		"29": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validatePageRootProps"
+		},
+		"30": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "rootProps"
+		},
+		"31": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validatePublishRequest"
+		},
+		"32": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validatePublishRequest"
+		},
+		"33": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "input"
+		},
+		"34": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validatePuckPageData"
+		},
+		"35": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validatePuckPageData"
+		},
+		"36": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "data"
+		},
+		"37": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validateSaveDraftRequest"
+		},
+		"38": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "validateSaveDraftRequest"
+		},
+		"39": {
+			"packageName": "@anvilkit/validator",
+			"packagePath": "src/validate-page-payload.ts",
+			"qualifiedName": "input"
 		}
 	},
 	"files": {
