@@ -253,6 +253,9 @@ function wrapRegisterMethodsForTeardown(
 		registerHistoryPanel: track(pluginCtx.registerHistoryPanel),
 		registerDesignSystemPanel: track(pluginCtx.registerDesignSystemPanel),
 		registerSeoPanel: track(pluginCtx.registerSeoPanel),
+		registerPageSettingsSeoFields: track(
+			pluginCtx.registerPageSettingsSeoFields,
+		),
 	};
 }
 
@@ -459,6 +462,11 @@ export async function compilePlugins(
 			combineUnregister(
 				sidebar.registerSeoPanel(panel),
 				ctx.registerSeoPanel?.(panel),
+			),
+		registerPageSettingsSeoFields: (fields) =>
+			combineUnregister(
+				sidebar.registerPageSettingsSeoFields(fields),
+				ctx.registerPageSettingsSeoFields?.(fields),
 			),
 	};
 	// Slots are single-occupancy with a "first registration wins"

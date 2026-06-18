@@ -31,6 +31,7 @@ import type {
 	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
+	StudioPageSettingsSeoFields,
 	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "@/types/sidebar";
@@ -52,6 +53,7 @@ export interface StudioSidebarContributions {
 	readonly historyPanel: StudioHistoryPanel | null;
 	readonly designSystemPanel: StudioDesignSystemPanel | null;
 	readonly seoPanel: StudioSeoPanel | null;
+	readonly pageSettingsSeoFields: StudioPageSettingsSeoFields | null;
 }
 
 /**
@@ -72,6 +74,9 @@ export interface SidebarRegistry {
 		panel: StudioDesignSystemPanel,
 	): StudioSidebarUnregister;
 	registerSeoPanel(panel: StudioSeoPanel): StudioSidebarUnregister;
+	registerPageSettingsSeoFields(
+		fields: StudioPageSettingsSeoFields,
+	): StudioSidebarUnregister;
 	/** Freeze the current contributions into an immutable snapshot. */
 	snapshot(): StudioSidebarContributions;
 }
@@ -91,6 +96,7 @@ export function createSidebarRegistry(): SidebarRegistry {
 	let historyPanel: StudioHistoryPanel | null = null;
 	let designSystemPanel: StudioDesignSystemPanel | null = null;
 	let seoPanel: StudioSeoPanel | null = null;
+	let pageSettingsSeoFields: StudioPageSettingsSeoFields | null = null;
 
 	return {
 		registerInsertSection(section) {
@@ -166,6 +172,14 @@ export function createSidebarRegistry(): SidebarRegistry {
 				}
 			};
 		},
+		registerPageSettingsSeoFields(fields) {
+			pageSettingsSeoFields = fields;
+			return () => {
+				if (pageSettingsSeoFields === fields) {
+					pageSettingsSeoFields = null;
+				}
+			};
+		},
 		snapshot() {
 			return {
 				insertSections: new Map(insertSections),
@@ -177,6 +191,7 @@ export function createSidebarRegistry(): SidebarRegistry {
 				historyPanel,
 				designSystemPanel,
 				seoPanel,
+				pageSettingsSeoFields,
 			};
 		},
 	};
