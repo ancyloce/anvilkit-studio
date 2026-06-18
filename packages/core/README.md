@@ -19,8 +19,9 @@ pnpm add @anvilkit/core react react-dom @puckeditor/core
 ```
 
 `react`, `react-dom`, and `@puckeditor/core` are **peer** dependencies
-— `@anvilkit/core` will not ship its own copies. Any `react` >=18
-and `@puckeditor/core` >=0.21 work.
+— `@anvilkit/core` will not ship its own copies. It requires `react`
+and `react-dom` 19+ and `@puckeditor/core` 0.21+ (declared in
+`peerDependencies`).
 
 ## Quickstart
 
@@ -92,9 +93,11 @@ export default function EditorPage() {
 }
 ```
 
-`<Studio>` renders `null` while it resolves the plugin graph, then
-mounts `<Puck>` with the compiled runtime. No spinner by default —
-render your own loading UI above `<Studio>` if you want one.
+While `<Studio>` resolves the plugin graph it shows a loading state,
+then mounts `<Puck>` with the compiled runtime. The default `anvilkit`
+chrome renders a built-in `<StudioLoadingScreen />` skeleton;
+`chrome="puck"` renders `null`. Pass a `loading` node to `<Studio>` to
+render your own placeholder instead.
 
 ## Styling
 
@@ -165,7 +168,11 @@ export function createAutosavePlugin(endpoint: string): StudioPlugin {
         headerActions: [
           {
             id: "com.example.autosave.status",
-            label: "Saved",
+            // `labelKey` is an i18n message key the chrome resolves via
+            // `useMsg(labelKey)`. With no registered message it falls back
+            // to the literal string, so this renders "Saved"; register a
+            // bundle through `ctx.registerMessages` to localize it.
+            labelKey: "Saved",
             group: "secondary",
             onClick: () => {
               // no-op — purely informational
@@ -260,25 +267,28 @@ export function ExportStatusBadge() {
 }
 ```
 
-`useStudio()` projects the compiled plugin runtime (header actions,
-export formats, lifecycle manager) for chrome components that need
-to compose contributions across plugins:
+`useStudio()` projects the compiled plugin runtime — the loaded
+plugins, export formats, and header actions — for chrome components
+that build custom UI across plugins. It is a **read-only** diagnostic
+projection; the lifecycle bus and other write-side knobs are
+intentionally not exposed. Resolve each action's `labelKey` through
+`useMsg()` from `@anvilkit/core/i18n`:
 
 ```tsx
 "use client";
 
 import { useStudio } from "@anvilkit/core";
+import { useMsg } from "@anvilkit/core/i18n";
 
-export function HeaderActions() {
-  const { runtime } = useStudio();
+export function HeaderActionList() {
+  const { headerActions } = useStudio();
+  const msg = useMsg();
   return (
-    <div className="flex gap-2">
-      {runtime.headerActions.map((action) => (
-        <button key={action.id} onClick={action.onClick}>
-          {action.label}
-        </button>
+    <ul>
+      {headerActions.map((action) => (
+        <li key={action.id}>{msg(action.labelKey)}</li>
       ))}
-    </div>
+    </ul>
   );
 }
 ```
@@ -287,7 +297,8 @@ export function HeaderActions() {
 
 The legacy `aiHost` string prop is still supported through a compat
 shim for the 0.1 alpha line, but it prints a one-shot deprecation
-warning and is scheduled for removal in 0.2.
+warning and is scheduled for removal in **v2.0.0** (a major bump, per
+the LTS policy — it stays supported through every `v1.x` minor).
 
 ```tsx
 // Before — still works, prints a deprecation warning:
