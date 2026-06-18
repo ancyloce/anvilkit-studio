@@ -4,15 +4,17 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
 import { resolveDataSources } from "../../lib/data-source-adapter";
-import { getPage } from "../../lib/page-store";
+import { getPublishedPage } from "../../lib/page-store";
 import { demoConfig } from "../../lib/puck-demo";
 
 interface SlugPageProps {
 	readonly params: Promise<{ slug: string[] }>;
 }
 
-// The in-memory page store mutates (via /api/pages/*), so never statically
-// cache — read the live store on each request.
+// The page store mutates (via /api/pages/*), so never statically cache — read
+// the live store on each request. Only the `published` payload is served here;
+// drafts and archived pages are never rendered (see `getPublishedPage`). A
+// future preview mode would opt into `getPublishedPage(slug, { preview: true })`.
 export const dynamic = "force-dynamic";
 
 const slugOf = (segments: string[]): string => segments.join("/");
@@ -27,8 +29,8 @@ export async function generateMetadata({
 	params,
 }: SlugPageProps): Promise<Metadata> {
 	const { slug } = await params;
-	const page = getPage(slugOf(slug));
-	if (page === undefined) return {};
+	const page = await getPublishedPage(slugOf(slug));
+	if (page === null) return {};
 
 	const root = page.root.props as PageRootProps | undefined;
 	const seo: PageSeo | undefined = root?.seo;
@@ -67,8 +69,8 @@ export default async function SlugPage({
 	params,
 }: SlugPageProps): Promise<ReactElement> {
 	const { slug } = await params;
-	const page = getPage(slugOf(slug));
-	if (page === undefined) notFound();
+	const page = await getPublishedPage(slugOf(slug));
+	if (page === null) notFound();
 
 	const root = page.root.props as PageRootProps | undefined;
 	const seo: PageSeo | undefined = root?.seo;
