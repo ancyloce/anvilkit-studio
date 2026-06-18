@@ -30,6 +30,7 @@ import type {
 	StudioHistoryPanel,
 	StudioInsertSection,
 	StudioLayerQuickAdd,
+	StudioPageSettingsSeoFields,
 	StudioSeoPanel,
 	StudioSidebarUnregister,
 } from "./sidebar.js";
@@ -298,6 +299,18 @@ export interface StudioPluginContext<
 	 */
 	readonly registerSeoPanel?: (
 		panel: StudioSeoPanel,
+	) => StudioSidebarUnregister;
+	/**
+	 * Register the SEO field group rendered inside the `layer` module's
+	 * page-settings dialog. Unlike {@link registerSeoPanel} (which edits the
+	 * active Puck doc), this seam edits any page row's stored SEO via core's
+	 * controlled `value`/`onChange` props — keeping the SEO field UI in
+	 * `@anvilkit/plugin-page-seo` rather than core chrome. Single-occupancy,
+	 * last-write-wins; returns an `unregister()` handle that clears the fields
+	 * iff they still match the one captured in its closure.
+	 */
+	readonly registerPageSettingsSeoFields?: (
+		fields: StudioPageSettingsSeoFields,
 	) => StudioSidebarUnregister;
 }
 

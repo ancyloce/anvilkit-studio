@@ -86,6 +86,13 @@ export interface StudioPageSeo {
 	readonly metaDescription?: string;
 	readonly ogImage?: string;
 	readonly noindex?: boolean;
+	/**
+	 * Canonical URL for the page (`<link rel="canonical">`). Mirrors
+	 * `root.props.seo.canonical` so the root↔sidecar projection
+	 * ({@link pageRootSeoToStudioPageSeo}) round-trips losslessly; the
+	 * page-settings dialog does not edit it, so it passes through untouched.
+	 */
+	readonly canonical?: string;
 }
 
 /** Input shape for {@link StudioPagesSource.onRename}. */

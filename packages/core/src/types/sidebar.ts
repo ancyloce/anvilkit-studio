@@ -21,6 +21,9 @@ import type { ReactNode } from "react";
 // Leaf module (imports nothing), so referencing the shared union here does
 // not re-form the `plugin.ts` ↔ `sidebar.ts` madge cycle.
 import type { StudioLogLevel } from "./log.js";
+// `pages.js` is a pure type module with zero imports, so this edge is
+// one-way (sidebar → pages) and introduces no madge cycle.
+import type { StudioPageSeo } from "./pages.js";
 
 // -----------------------------------------------------------------------------
 // `insert` module — Component Library
@@ -481,6 +484,38 @@ export interface StudioDesignSystemPanel {
  */
 export interface StudioSeoPanel {
 	readonly render: () => ReactNode;
+}
+
+// -----------------------------------------------------------------------------
+// `layer` module — page-settings SEO fields
+// -----------------------------------------------------------------------------
+
+/**
+ * Props core's page-settings dialog passes to
+ * {@link StudioPageSettingsSeoFields.render}. The dialog owns the form
+ * state, the change diff, and the `onUpdateSettings` submission; the
+ * plugin owns only the field UI. `value` is the page row's current SEO
+ * sub-block (controlled); `onChange` replaces it wholesale with the next
+ * snapshot.
+ */
+export interface StudioPageSettingsSeoFieldsProps {
+	/** The page row's current SEO values (controlled). */
+	readonly value: StudioPageSeo;
+	/** Replace the SEO values with the next snapshot. */
+	readonly onChange: (next: StudioPageSeo) => void;
+}
+
+/**
+ * Host-registered SEO field group for the `layer` module's page-settings
+ * dialog. Unlike {@link StudioSeoPanel} — which edits the *active* Puck
+ * doc's `root.props.seo` via `usePuck()` — this seam edits *any* page
+ * row's stored SEO through core's controlled `value`/`onChange` props, so
+ * the SEO-specific field UI lives in `@anvilkit/plugin-page-seo` rather
+ * than core chrome. Single-occupancy, last-write-wins; when no plugin is
+ * registered the dialog renders no SEO section at all.
+ */
+export interface StudioPageSettingsSeoFields {
+	readonly render: (props: StudioPageSettingsSeoFieldsProps) => ReactNode;
 }
 
 // -----------------------------------------------------------------------------
