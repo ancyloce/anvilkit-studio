@@ -189,6 +189,22 @@ export function EditorI18nProvider({
 	// resolution triggers. A failed load is removed so a later switch retries.
 	const requestedRef = useRef<Set<string>>(new Set());
 
+	// Mount-lifetime flag (finding P2-2): the async `loadMessages()`
+	// resolutions below `setLoadedPacks`/mutate `requestedRef`, and a pack
+	// that settles after the provider unmounts (or is replaced) must not
+	// schedule state on a dead provider. Deliberately a mount-lifetime flag
+	// rather than a per-effect `cancelled` one — an in-flight load from a
+	// *prior locale* (while still mounted) is desirable to keep caching for
+	// a switch back; only post-unmount writes are skipped. Setup re-affirms
+	// `true` so a StrictMode mount→unmount→mount leaves it mounted.
+	const mountedRef = useRef(true);
+	useEffect(() => {
+		mountedRef.current = true;
+		return () => {
+			mountedRef.current = false;
+		};
+	}, []);
+
 	useEffect(() => {
 		// English ships inline per entry; everything else resolves through
 		// `loadMessages`. With `warmLocalePacks` every bundled pack locale is
@@ -208,10 +224,12 @@ export function EditorI18nProvider({
 				entry
 					.loadMessages(target)
 					.then((bundle) => {
-						// Keyed by locale, so a late write is correct data even if
-						// the user has since switched away — `mergeCatalog` only
-						// reads the *current* locale's keys, so stale writes are
-						// harmless and cached for a switch back.
+						// Skip writes once the provider has unmounted (P2-2). A
+						// late write from a *prior locale* while still mounted is
+						// kept: keyed by locale, `mergeCatalog` only reads the
+						// *current* locale's keys, so it is harmless and cached
+						// for a switch back.
+						if (!mountedRef.current) return;
 						setLoadedPacks((prev) => {
 							const next = new Map(prev);
 							next.set(key, bundle);
@@ -219,6 +237,9 @@ export function EditorI18nProvider({
 						});
 					})
 					.catch((error: unknown) => {
+						// Nothing to do once unmounted (P2-2): no warning, and no
+						// `requestedRef` mutation on a dead provider.
+						if (!mountedRef.current) return;
 						// The namespace stays at its English baseline; dropping the
 						// key allows a retry on a later switch. Surface the failure
 						// instead of swallowing it: a ChunkLoadError here (e.g. a
