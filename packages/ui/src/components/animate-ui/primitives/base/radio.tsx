@@ -95,15 +95,11 @@ function Radio({
   required,
   ...props
 }: RadioProps) {
-  const { value, setValue } = useRadioGroup();
+  const { value } = useRadioGroup();
   const isChecked = value === valueProps;
   const setIsChecked = React.useCallback(
-    (nextIsChecked: boolean) => {
-      if (nextIsChecked) {
-        setValue?.(valueProps);
-      }
-    },
-    [setValue, valueProps],
+    (_nextIsChecked: boolean) => undefined,
+    [],
   );
   const radioContext = React.useMemo(
     () => ({ isChecked, setIsChecked }),

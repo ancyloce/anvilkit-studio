@@ -138,24 +138,30 @@ function TooltipProvider({
     setCurrentTooltip(null);
     lastCloseTimeRef.current = Date.now();
   }, []);
+  const hideImmediateRef = React.useRef(hideImmediate);
+
+  React.useEffect(() => {
+    hideImmediateRef.current = hideImmediate;
+  });
 
   const setReferenceEl = React.useCallback((el: HTMLElement | null) => {
     referenceElRef.current = el;
   }, []);
 
   React.useEffect(() => {
+    const hide = () => hideImmediateRef.current();
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") hideImmediate();
+      if (e.key === "Escape") hide();
     };
     window.addEventListener("keydown", onKeyDown, true);
-    window.addEventListener("scroll", hideImmediate, true);
-    window.addEventListener("resize", hideImmediate, true);
+    window.addEventListener("scroll", hide, true);
+    window.addEventListener("resize", hide, true);
     return () => {
       window.removeEventListener("keydown", onKeyDown, true);
-      window.removeEventListener("scroll", hideImmediate, true);
-      window.removeEventListener("resize", hideImmediate, true);
+      window.removeEventListener("scroll", hide, true);
+      window.removeEventListener("resize", hide, true);
     };
-  }, [hideImmediate]);
+  }, []);
 
   return (
     <GlobalTooltipProvider
