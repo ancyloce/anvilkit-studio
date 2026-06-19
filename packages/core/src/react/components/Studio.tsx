@@ -29,6 +29,7 @@ import type {
 	UserGenerics,
 } from "@puckeditor/core";
 import { Puck } from "@puckeditor/core";
+import { MotionConfig } from "motion/react";
 import { type ReactElement, type ReactNode, useMemo } from "react";
 
 import type { ChromeProps } from "@/context/chrome-props";
@@ -322,24 +323,31 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		notifications: notificationOverlays,
 	} = splitOverlaysByPlacement(compiled.runtime.overlays);
 
+	// `reducedMotion="user"` makes every framer-motion animation in the
+	// AnvilKit chrome (cursor, highlight, auto-height, toggle, and the
+	// animate-ui effect primitives) honor the OS "reduce motion"
+	// preference — WCAG 2.3.3 (animation-from-interactions). Transform/
+	// opacity tweens are auto-reduced; essential layout motion is kept.
 	const studioBody = (
-		<TooltipProvider delay={200}>
-			<ThemeSyncBoundary />
-			<Toaster position="bottom-right" closeButton />
-			{viewportOverlays.map((overlay) => {
-				const OverlayComponent = overlay.component;
-				return <OverlayComponent key={overlay.id} />;
-			})}
-			{puckElement}
-			{canvasOverlays.map((overlay) => {
-				const OverlayComponent = overlay.component;
-				return <OverlayComponent key={overlay.id} />;
-			})}
-			{notificationOverlays.map((overlay) => {
-				const OverlayComponent = overlay.component;
-				return <OverlayComponent key={overlay.id} />;
-			})}
-		</TooltipProvider>
+		<MotionConfig reducedMotion="user">
+			<TooltipProvider delay={200}>
+				<ThemeSyncBoundary />
+				<Toaster position="bottom-right" closeButton />
+				{viewportOverlays.map((overlay) => {
+					const OverlayComponent = overlay.component;
+					return <OverlayComponent key={overlay.id} />;
+				})}
+				{puckElement}
+				{canvasOverlays.map((overlay) => {
+					const OverlayComponent = overlay.component;
+					return <OverlayComponent key={overlay.id} />;
+				})}
+				{notificationOverlays.map((overlay) => {
+					const OverlayComponent = overlay.component;
+					return <OverlayComponent key={overlay.id} />;
+				})}
+			</TooltipProvider>
+		</MotionConfig>
 	);
 
 	// Plugin-contributed providers compose **inside** the core provider
