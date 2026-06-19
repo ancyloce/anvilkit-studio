@@ -9,7 +9,6 @@ import {
   type Transition,
 } from "motion/react";
 
-import { useAutoHeight } from "@anvilkit/ui/hooks/use-auto-height";
 import {
   Slot,
   type WithAsChild,
@@ -26,7 +25,7 @@ type AutoHeightProps = WithAsChild<
 
 function AutoHeight({
   children,
-  deps = [],
+  deps,
   transition = {
     type: "spring",
     stiffness: 300,
@@ -39,18 +38,17 @@ function AutoHeight({
   asChild = false,
   ...props
 }: AutoHeightProps) {
-  const { ref, height } = useAutoHeight<HTMLDivElement>(deps);
-
   const Comp = asChild ? Slot : motion.div;
 
   return (
     <Comp
       style={{ overflow: "hidden", ...style }}
-      animate={{ height, ...animate }}
+      animate={animate}
+      layout
       transition={transition}
       {...props}
     >
-      <div ref={ref}>{children}</div>
+      <div>{children}</div>
     </Comp>
   );
 }

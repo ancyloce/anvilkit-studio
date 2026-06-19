@@ -43,15 +43,16 @@ export function AnimatedGridPattern({
 }: AnimatedGridPatternProps) {
   const id = useId();
   const containerRef = useRef<SVGSVGElement | null>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const dimensionsRef = useRef({ width: 0, height: 0 });
   const [squares, setSquares] = useState<Array<Square>>([]);
 
   const getPos = useCallback((): [number, number] => {
+    const dimensions = dimensionsRef.current;
     return [
       Math.floor((Math.random() * dimensions.width) / width),
       Math.floor((Math.random() * dimensions.height) / height),
     ];
-  }, [dimensions.height, dimensions.width, height, width]);
+  }, [height, width]);
 
   const generateSquares = useCallback(
     (count: number) => {
@@ -84,29 +85,30 @@ export function AnimatedGridPattern({
   );
 
   useEffect(() => {
-    if (dimensions.width && dimensions.height) {
-      setSquares(generateSquares(numSquares));
-    }
-  }, [dimensions.width, dimensions.height, generateSquares, numSquares]);
-
-  useEffect(() => {
     const element = containerRef.current;
     let resizeObserver: ResizeObserver | null = null;
 
     if (element) {
+      const updateDimensions = (nextWidth: number, nextHeight: number) => {
+        const currentDimensions = dimensionsRef.current;
+        if (
+          currentDimensions.width === nextWidth &&
+          currentDimensions.height === nextHeight
+        ) {
+          return;
+        }
+        dimensionsRef.current = { width: nextWidth, height: nextHeight };
+        if (nextWidth && nextHeight) {
+          setSquares(generateSquares(numSquares));
+        }
+      };
+
+      const rect = element.getBoundingClientRect();
+      updateDimensions(rect.width, rect.height);
+
       resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
-          setDimensions((currentDimensions) => {
-            const nextWidth = entry.contentRect.width;
-            const nextHeight = entry.contentRect.height;
-            if (
-              currentDimensions.width === nextWidth &&
-              currentDimensions.height === nextHeight
-            ) {
-              return currentDimensions;
-            }
-            return { width: nextWidth, height: nextHeight };
-          });
+          updateDimensions(entry.contentRect.width, entry.contentRect.height);
         }
       });
 
@@ -118,7 +120,7 @@ export function AnimatedGridPattern({
         resizeObserver.disconnect();
       }
     };
-  }, []);
+  }, [generateSquares, numSquares]);
 
   return (
     <svg

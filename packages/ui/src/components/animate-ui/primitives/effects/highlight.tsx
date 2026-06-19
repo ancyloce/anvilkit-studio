@@ -43,16 +43,27 @@ type HighlightContextType<T extends string> = {
 };
 
 const HighlightContext = React.createContext<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  HighlightContextType<any> | undefined
+  HighlightContextType<string> | undefined
 >(undefined);
 
 function useHighlight<T extends string>(): HighlightContextType<T> {
-  const context = React.useContext(HighlightContext);
+  const context = React.use(HighlightContext);
   if (!context) {
     throw new Error("useHighlight must be used within a HighlightProvider");
   }
   return context as unknown as HighlightContextType<T>;
+}
+
+function getChildKey(child: React.ReactNode) {
+  if (React.isValidElement(child) && child.key != null) {
+    return child.key;
+  }
+
+  if (typeof child === "string" || typeof child === "number") {
+    return String(child);
+  }
+
+  return undefined;
 }
 
 type BaseHighlightProps<T extends React.ElementType = "div"> = {
@@ -177,7 +188,7 @@ function Highlight<T extends React.ElementType = "div">({
   const [activeClassNameState, setActiveClassNameState] =
     React.useState<string>("");
 
-  const safeSetActiveValue = (id: string | null) => {
+  const safeSetActiveValue = React.useCallback((id: string | null) => {
     setActiveValue((prev) => {
       if (prev !== id) {
         onValueChange?.(id);
@@ -185,7 +196,7 @@ function Highlight<T extends React.ElementType = "div">({
       }
       return prev;
     });
-  };
+  }, [onValueChange]);
 
   const safeSetBoundsRef = React.useRef<
     ((bounds: DOMRect) => void) | undefined
@@ -219,9 +230,9 @@ function Highlight<T extends React.ElementType = "div">({
     };
   });
 
-  const safeSetBounds = (bounds: DOMRect) => {
+  const safeSetBounds = React.useCallback((bounds: DOMRect) => {
     safeSetBoundsRef.current?.(bounds);
-  };
+  }, []);
 
   const clearBounds = React.useCallback(() => {
     setBoundsState((prev) => (prev === null ? prev : null));
@@ -299,36 +310,60 @@ function Highlight<T extends React.ElementType = "div">({
 
     return children;
   };
+  const childrenArray = React.Children.toArray(children);
+  const forceUpdateBounds = (props as ParentModeHighlightProps)
+    ?.forceUpdateBounds;
+  const highlightContextValue = React.useMemo(
+    () => ({
+      mode,
+      activeValue,
+      setActiveValue: safeSetActiveValue,
+      id,
+      hover,
+      click,
+      className,
+      style,
+      transition,
+      disabled,
+      enabled,
+      exitDelay,
+      setBounds: safeSetBounds,
+      clearBounds,
+      activeClassName: activeClassNameState,
+      setActiveClassName: setActiveClassNameState,
+      forceUpdateBounds,
+    }),
+    [
+      activeClassNameState,
+      activeValue,
+      className,
+      clearBounds,
+      click,
+      disabled,
+      enabled,
+      exitDelay,
+      forceUpdateBounds,
+      hover,
+      id,
+      mode,
+      safeSetActiveValue,
+      safeSetBounds,
+      style,
+      transition,
+    ],
+  );
 
   return (
-    <HighlightContext.Provider
-      value={{
-        mode,
-        activeValue,
-        setActiveValue: safeSetActiveValue,
-        id,
-        hover,
-        click,
-        className,
-        style,
-        transition,
-        disabled,
-        enabled,
-        exitDelay,
-        setBounds: safeSetBounds,
-        clearBounds,
-        activeClassName: activeClassNameState,
-        setActiveClassName: setActiveClassNameState,
-        forceUpdateBounds: (props as ParentModeHighlightProps)
-          ?.forceUpdateBounds,
-      }}
-    >
+    <HighlightContext.Provider value={highlightContextValue}>
       {enabled
         ? controlledItems
           ? render(children)
           : render(
-              React.Children.map(children, (child, index) => (
-                <HighlightItem key={index} className={props?.itemsClassName}>
+              childrenArray.map((child) => (
+                <HighlightItem
+                  key={getChildKey(child)}
+                  className={props?.itemsClassName}
+                >
                   {child}
                 </HighlightItem>
               )),

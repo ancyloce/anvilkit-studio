@@ -32,9 +32,13 @@ function RadioGroup(props: RadioGroupProps) {
     defaultValue: props.defaultValue,
     onChange: props.onValueChange,
   });
+  const radioGroupContext = React.useMemo(
+    () => ({ value, setValue }),
+    [value, setValue],
+  );
 
   return (
-    <RadioGroupProvider value={{ value, setValue }}>
+    <RadioGroupProvider value={radioGroupContext}>
       <RadioGroupPrimitive
         data-slot="radio-group"
         {...props}
@@ -66,9 +70,9 @@ function RadioIndicator({
             <motion.div
               key="radio-group-indicator-circle"
               data-slot="radio-group-indicator-circle"
-              initial={{ opacity: 0, scale: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={transition}
               {...props}
             />
@@ -91,15 +95,23 @@ function Radio({
   required,
   ...props
 }: RadioProps) {
-  const { value } = useRadioGroup();
-  const [isChecked, setIsChecked] = React.useState(value === valueProps);
-
-  React.useEffect(() => {
-    setIsChecked(value === valueProps);
-  }, [value, valueProps]);
+  const { value, setValue } = useRadioGroup();
+  const isChecked = value === valueProps;
+  const setIsChecked = React.useCallback(
+    (nextIsChecked: boolean) => {
+      if (nextIsChecked) {
+        setValue?.(valueProps);
+      }
+    },
+    [setValue, valueProps],
+  );
+  const radioContext = React.useMemo(
+    () => ({ isChecked, setIsChecked }),
+    [isChecked, setIsChecked],
+  );
 
   return (
-    <RadioProvider value={{ isChecked, setIsChecked }}>
+    <RadioProvider value={radioContext}>
       <RadioPrimitive.Root
         value={valueProps}
         disabled={disabled}

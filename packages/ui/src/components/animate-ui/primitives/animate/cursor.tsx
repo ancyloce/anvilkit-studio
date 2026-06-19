@@ -27,14 +27,39 @@ type CursorContextType = {
 const [LocalCursorProvider, useCursor] =
   getStrictContext<CursorContextType>("CursorContext");
 
+type CursorState = {
+  cursorPos: { x: number; y: number };
+  active: boolean;
+};
+
+type CursorAction =
+  | { type: "move"; cursorPos: { x: number; y: number } }
+  | { type: "active"; active: boolean };
+
+function cursorReducer(state: CursorState, action: CursorAction): CursorState {
+  switch (action.type) {
+    case "move":
+      return {
+        cursorPos: action.cursorPos,
+        active: true,
+      };
+    case "active":
+      return state.active === action.active
+        ? state
+        : { ...state, active: action.active };
+  }
+}
+
 type CursorProviderProps = {
   children: React.ReactNode;
   global?: boolean;
 };
 
 function CursorProvider({ children, global = false }: CursorProviderProps) {
-  const [cursorPos, setCursorPos] = React.useState({ x: 0, y: 0 });
-  const [active, setActive] = React.useState(false);
+  const [cursorState, dispatchCursor] = React.useReducer(cursorReducer, {
+    cursorPos: { x: 0, y: 0 },
+    active: false,
+  });
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const cursorRef = React.useRef<HTMLDivElement>(null);
@@ -56,18 +81,22 @@ function CursorProvider({ children, global = false }: CursorProviderProps) {
 
     if (global) {
       const handlePointerMove = (e: PointerEvent) => {
-        setCursorPos({ x: e.clientX, y: e.clientY });
-        setActive(true);
+        dispatchCursor({
+          type: "move",
+          cursorPos: { x: e.clientX, y: e.clientY },
+        });
       };
 
       const handlePointerOut = (e: PointerEvent | MouseEvent) => {
         if (e instanceof PointerEvent && e.relatedTarget === null) {
-          setActive(false);
+          dispatchCursor({ type: "active", active: false });
         }
       };
 
       const handleVisibilityChange = () => {
-        if (document.visibilityState === "hidden") setActive(false);
+        if (document.visibilityState === "hidden") {
+          dispatchCursor({ type: "active", active: false });
+        }
       };
 
       window.addEventListener("pointermove", handlePointerMove, {
@@ -100,8 +129,10 @@ function CursorProvider({ children, global = false }: CursorProviderProps) {
 
       const handlePointerMove = (e: PointerEvent) => {
         const rect = parent.getBoundingClientRect();
-        setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-        setActive(true);
+        dispatchCursor({
+          type: "move",
+          cursorPos: { x: e.clientX - rect.left, y: e.clientY - rect.top },
+        });
       };
 
       const handlePointerOut = (e: PointerEvent | MouseEvent) => {
@@ -109,7 +140,7 @@ function CursorProvider({ children, global = false }: CursorProviderProps) {
           e.relatedTarget === null ||
           !(parent as Node).contains(e.relatedTarget as Node)
         ) {
-          setActive(false);
+          dispatchCursor({ type: "active", active: false });
         }
       };
 
@@ -131,10 +162,19 @@ function CursorProvider({ children, global = false }: CursorProviderProps) {
     return removeListeners;
   }, [global]);
 
+  const cursorContext = React.useMemo(
+    () => ({
+      cursorPos: cursorState.cursorPos,
+      active: cursorState.active,
+      global,
+      containerRef,
+      cursorRef,
+    }),
+    [cursorState.active, cursorState.cursorPos, global],
+  );
+
   return (
-    <LocalCursorProvider
-      value={{ cursorPos, active, global, containerRef, cursorRef }}
-    >
+    <LocalCursorProvider value={cursorContext}>
       {children}
     </LocalCursorProvider>
   );
@@ -218,9 +258,9 @@ function Cursor({ ref, asChild = false, style, ...props }: CursorProps) {
             left: x,
             ...style,
           }}
-          initial={{ scale: 0, opacity: 0 }}
+          initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
+          exit={{ scale: 0.95, opacity: 0 }}
           {...props}
         />
       )}
@@ -368,9 +408,9 @@ function CursorFollow({
             left: springX,
             ...style,
           }}
-          initial={{ scale: 0, opacity: 0 }}
+          initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
+          exit={{ scale: 0.95, opacity: 0 }}
           {...props}
         />
       )}

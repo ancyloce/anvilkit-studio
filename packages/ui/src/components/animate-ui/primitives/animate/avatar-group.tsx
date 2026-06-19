@@ -67,6 +67,18 @@ type AvatarGroupProps = Omit<React.ComponentProps<"div">, "translate"> & {
 } & Omit<TooltipProviderProps, "children"> &
   Omit<TooltipProps, "children">;
 
+function getChildKey(child: React.ReactNode) {
+  if (React.isValidElement(child) && child.key != null) {
+    return child.key;
+  }
+
+  if (typeof child === "string" || typeof child === "number") {
+    return String(child);
+  }
+
+  return undefined;
+}
+
 function AvatarGroup({
   ref,
   children,
@@ -84,6 +96,8 @@ function AvatarGroup({
   style,
   ...props
 }: AvatarGroupProps) {
+  const childArray = React.Children.toArray(children);
+
   return (
     <TooltipProvider
       id={id}
@@ -101,12 +115,11 @@ function AvatarGroup({
         }}
         {...props}
       >
-        {children?.map((child, index) => (
+        {childArray.map((child, index) => (
           <AvatarContainer
-            // biome-ignore lint/suspicious/noArrayIndexKey: animate-ui upstream uses index as the avatar stacking key; the ordered list is static
-            key={index}
+            key={getChildKey(child)}
             zIndex={
-              invertOverlap ? React.Children.count(children) - index : index
+              invertOverlap ? childArray.length - index : index
             }
             transition={transition}
             translate={translate}

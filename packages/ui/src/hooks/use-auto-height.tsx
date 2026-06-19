@@ -8,14 +8,13 @@ type AutoHeightOptions = {
 };
 
 export function useAutoHeight<T extends HTMLElement = HTMLDivElement>(
-	deps: React.DependencyList = [],
+	_deps: React.DependencyList = [],
 	options: AutoHeightOptions = {
 		includeParentBox: true,
 		includeSelfBox: false,
 	},
 ) {
 	const ref = React.useRef<T | null>(null);
-	const roRef = React.useRef<ResizeObserver | null>(null);
 	const [height, setHeight] = React.useState(0);
 
 	const measure = React.useCallback(() => {
@@ -65,16 +64,14 @@ export function useAutoHeight<T extends HTMLElement = HTMLDivElement>(
 		const el = ref.current;
 		if (!el) return;
 
-		setHeight(measure());
-
-		if (roRef.current) {
-			roRef.current.disconnect();
-			roRef.current = null;
-		}
+		const updateHeight = () => {
+			const next = measure();
+			setHeight((current) => (current === next ? current : next));
+		};
+		updateHeight();
 
 		const ro = new ResizeObserver(() => {
-			const next = measure();
-			requestAnimationFrame(() => setHeight(next));
+			requestAnimationFrame(updateHeight);
 		});
 
 		ro.observe(el);
@@ -82,21 +79,15 @@ export function useAutoHeight<T extends HTMLElement = HTMLDivElement>(
 			ro.observe(el.parentElement);
 		}
 
-		roRef.current = ro;
-
 		return () => {
 			ro.disconnect();
-			roRef.current = null;
 		};
-		// biome-ignore lint/correctness/useExhaustiveDependencies: deps is the caller-supplied dependency list — by design.
-	}, deps);
+	}, [measure, options.includeParentBox]);
 
 	React.useLayoutEffect(() => {
-		if (height === 0) {
-			const next = measure();
-			if (next !== 0) setHeight(next);
-		}
-	}, [height, measure]);
+		const next = measure();
+		setHeight((current) => (current === next ? current : next));
+	});
 
 	return { ref, height } as const;
 }

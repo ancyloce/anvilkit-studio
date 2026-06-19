@@ -317,7 +317,7 @@ function TooltipOverlay() {
                   layoutId={`tooltip-content-${globalId}`}
                   initial={{
                     opacity: 0,
-                    scale: 0,
+                    scale: 0.95,
                     ...initialFromSide(rendered.data.side),
                   }}
                   animate={
@@ -325,13 +325,13 @@ function TooltipOverlay() {
                       ? { opacity: 1, scale: 1, x: 0, y: 0 }
                       : {
                           opacity: 0,
-                          scale: 0,
+                          scale: 0.95,
                           ...initialFromSide(rendered.data.side),
                         }
                   }
                   exit={{
                     opacity: 0,
-                    scale: 0,
+                    scale: 0.95,
                     ...initialFromSide(rendered.data.side),
                   }}
                   onAnimationComplete={() => {

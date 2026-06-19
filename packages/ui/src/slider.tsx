@@ -1,4 +1,5 @@
 import { Slider as SliderPrimitive } from "@base-ui/react/slider";
+import * as React from "react";
 
 import { cn } from "@anvilkit/ui/lib/utils";
 
@@ -15,6 +16,14 @@ function Slider({
     : Array.isArray(defaultValue)
       ? defaultValue
       : [min, max];
+  const thumbIdBase = React.useId();
+  const thumbKeys = React.useMemo(
+    () =>
+      Array.from({ length: _values.length }, (_, position) => {
+        return `${thumbIdBase}-${position}`;
+      }),
+    [thumbIdBase, _values.length],
+  );
 
   return (
     <SliderPrimitive.Root
@@ -40,10 +49,7 @@ function Slider({
         {Array.from({ length: _values.length }, (_, index) => (
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
-            // Thumbs are positional and the array is derived from the value
-            // count — index is the stable identity here (shadcn pattern).
-            // biome-ignore lint/suspicious/noArrayIndexKey: positional thumb
-            key={index}
+            key={thumbKeys[index]}
             className="relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50"
           />
         ))}

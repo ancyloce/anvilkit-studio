@@ -7,6 +7,11 @@ import {
   type UseIsInViewOptions,
 } from "@anvilkit/ui/hooks/use-is-in-view";
 
+const DEFAULT_CODE_BLOCK_THEMES = {
+  light: "github-light",
+  dark: "github-dark",
+};
+
 type CodeBlockProps = React.ComponentProps<"div"> & {
   code: string;
   lang: string;
@@ -25,10 +30,7 @@ function CodeBlock({
   code,
   lang,
   theme = "light",
-  themes = {
-    light: "github-light",
-    dark: "github-dark",
-  },
+  themes = DEFAULT_CODE_BLOCK_THEMES,
   writing = false,
   duration = 5000,
   delay = 0,
@@ -49,14 +51,20 @@ function CodeBlock({
     },
   );
 
-  const [visibleCode, setVisibleCode] = React.useState("");
   const [highlightedCode, setHighlightedCode] = React.useState("");
   const [isDone, setIsDone] = React.useState(false);
+  const highlightRequestId = React.useRef(0);
 
-  React.useEffect(() => {
-    if (!visibleCode.length || !isInView) return;
+  const highlightCode = React.useCallback(
+    async (visibleCode: string) => {
+      const requestId = highlightRequestId.current + 1;
+      highlightRequestId.current = requestId;
 
-    const loadHighlightedCode = async () => {
+      if (!visibleCode.length || !isInView) {
+        setHighlightedCode("");
+        return;
+      }
+
       try {
         const { codeToHtml } = await import("shiki");
 
@@ -66,18 +74,19 @@ function CodeBlock({
           defaultColor: theme,
         });
 
-        setHighlightedCode(highlighted);
+        if (highlightRequestId.current === requestId) {
+          setHighlightedCode(highlighted);
+        }
       } catch (e) {
         console.error(`Language "${lang}" could not be loaded.`, e);
       }
-    };
-
-    loadHighlightedCode();
-  }, [lang, themes, writing, isInView, duration, delay, visibleCode, theme]);
+    },
+    [isInView, lang, theme, themes],
+  );
 
   React.useEffect(() => {
     if (!writing) {
-      setVisibleCode(code);
+      void highlightCode(code);
       onDone?.();
       onWrite?.({ index: code.length, length: code.length, done: true });
       return;
@@ -94,16 +103,14 @@ function CodeBlock({
     const timeout = setTimeout(() => {
       intervalId = setInterval(() => {
         if (index < characters.length) {
-          setVisibleCode(() => {
-            const nextChar = characters.slice(0, index + 1).join("");
-            onWrite?.({
-              index: index + 1,
-              length: characters.length,
-              done: false,
-            });
-            index += 1;
-            return nextChar;
+          const nextChar = characters.slice(0, index + 1).join("");
+          void highlightCode(nextChar);
+          onWrite?.({
+            index: index + 1,
+            length: characters.length,
+            done: false,
           });
+          index += 1;
           localRef.current?.scrollTo({
             top: localRef.current?.scrollHeight,
             behavior: "smooth",
@@ -127,7 +134,17 @@ function CodeBlock({
         clearInterval(intervalId);
       }
     };
-  }, [code, duration, delay, isInView, writing, onDone, onWrite, localRef]);
+  }, [
+    code,
+    duration,
+    delay,
+    highlightCode,
+    isInView,
+    writing,
+    onDone,
+    onWrite,
+    localRef,
+  ]);
 
   React.useEffect(() => {
     if (!writing || !isInView) return;

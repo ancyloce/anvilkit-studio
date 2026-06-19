@@ -101,7 +101,6 @@ export function Windowed<T>({
 			return (
 				<ul
 					aria-label={ariaLabel}
-					role="list"
 					style={{ margin: 0, padding: 0, listStyle: "none" }}
 				>
 					{items.map((item, i) => (
@@ -109,9 +108,8 @@ export function Windowed<T>({
 							aria-posinset={i + 1}
 							aria-setsize={items.length}
 							key={itemKey(item, i)}
-							role="listitem"
 						>
-							{renderItem(item, i)}
+							<WindowedItem item={item} index={i} render={renderItem} />
 						</li>
 					))}
 				</ul>
@@ -120,7 +118,9 @@ export function Windowed<T>({
 		return (
 			<>
 				{items.map((item, i) => (
-					<Fragment key={itemKey(item, i)}>{renderItem(item, i)}</Fragment>
+					<Fragment key={itemKey(item, i)}>
+						<WindowedItem item={item} index={i} render={renderItem} />
+					</Fragment>
 				))}
 			</>
 		);
@@ -143,6 +143,38 @@ export function Windowed<T>({
 			}}
 		/>
 	);
+}
+
+function WindowedItem<T>({
+	item,
+	index,
+	render,
+}: {
+	item: T;
+	index: number;
+	render: (item: T, index: number) => ReactNode;
+}) {
+	return <>{render(item, index)}</>;
+}
+
+function getVirtualGridRowStyle(
+	start: number,
+	effectiveLanes: number,
+): React.CSSProperties {
+	return {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		width: "100%",
+		transform: `translateY(${start}px)`,
+		display: effectiveLanes > 1 ? "grid" : "flex",
+		gridTemplateColumns:
+			effectiveLanes > 1
+				? `repeat(${effectiveLanes}, minmax(0, 1fr))`
+				: undefined,
+		flexDirection: effectiveLanes > 1 ? undefined : "column",
+		gap: 8,
+	};
 }
 
 function Virtualized<T>(props: {
@@ -230,7 +262,6 @@ function Virtualized<T>(props: {
 			>
 				<ul
 					aria-label={ariaLabel}
-					role="list"
 					style={{
 						height: virtualizer.getTotalSize(),
 						position: "relative",
@@ -250,7 +281,6 @@ function Virtualized<T>(props: {
 								aria-posinset={index + 1}
 								aria-setsize={items.length}
 								key={itemKey(item, index)}
-								role="listitem"
 								style={{
 									position: "absolute",
 									top: 0,
@@ -259,7 +289,7 @@ function Virtualized<T>(props: {
 									transform: `translateY(${row.start}px)`,
 								}}
 							>
-								{renderItem(item, index)}
+								<WindowedItem item={item} index={index} render={renderItem} />
 							</li>
 						);
 					})}
@@ -288,26 +318,17 @@ function Virtualized<T>(props: {
 					return (
 						<div
 							key={row.key}
-							style={{
-								position: "absolute",
-								top: 0,
-								left: 0,
-								width: "100%",
-								transform: `translateY(${row.start}px)`,
-								display: effectiveLanes > 1 ? "grid" : "flex",
-								gridTemplateColumns:
-									effectiveLanes > 1
-										? `repeat(${effectiveLanes}, minmax(0, 1fr))`
-										: undefined,
-								flexDirection: effectiveLanes > 1 ? undefined : "column",
-								gap: 8,
-							}}
+							style={getVirtualGridRowStyle(row.start, effectiveLanes)}
 						>
 							{slice.map((item, j) => {
 								const index = start + j;
 								return (
 									<div key={itemKey(item, index)}>
-										{renderItem(item, index)}
+										<WindowedItem
+											item={item}
+											index={index}
+											render={renderItem}
+										/>
 									</div>
 								);
 							})}

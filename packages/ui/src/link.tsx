@@ -24,6 +24,7 @@ const linkVariants = cva(
 );
 
 function Link({
+  children,
   className,
   variant = "default",
   underline = false,
@@ -34,7 +35,9 @@ function Link({
       data-slot="link"
       className={cn(linkVariants({ variant, underline, className }))}
       {...props}
-    />
+    >
+      {children}
+    </a>
   );
 }
 

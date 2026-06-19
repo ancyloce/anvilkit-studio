@@ -17,6 +17,28 @@ type TypingTextContextType = {
 const [TypingTextProvider, useTypingText] =
   getStrictContext<TypingTextContextType>("TypingTextContext");
 
+type TypingState = {
+  displayedText: string;
+  isTyping: boolean;
+};
+
+type TypingAction =
+  | { type: "typing"; isTyping: boolean }
+  | { type: "text"; displayedText: string };
+
+function typingReducer(state: TypingState, action: TypingAction): TypingState {
+  switch (action.type) {
+    case "typing":
+      return state.isTyping === action.isTyping
+        ? state
+        : { ...state, isTyping: action.isTyping };
+    case "text":
+      return state.displayedText === action.displayedText
+        ? state
+        : { ...state, displayedText: action.displayedText };
+  }
+}
+
 type TypingTextProps = React.ComponentProps<"span"> & {
   duration?: number;
   delay?: number;
@@ -47,36 +69,34 @@ function TypingText({
     },
   );
 
-  const [isTyping, setIsTyping] = React.useState(false);
-  const [started, setStarted] = React.useState(false);
-  const [displayedText, setDisplayedText] = React.useState<string>("");
+  const [typingState, dispatchTyping] = React.useReducer(typingReducer, {
+    displayedText: "",
+    isTyping: false,
+  });
+  const setIsTyping = React.useCallback((isTyping: boolean) => {
+    dispatchTyping({ type: "typing", isTyping });
+  }, []);
 
   React.useEffect(() => {
-    if (isInView) {
-      const timeoutId = setTimeout(() => {
-        setStarted(true);
-      }, delay);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isInView, delay]);
-
-  React.useEffect(() => {
-    if (!started) return;
+    if (!isInView) return;
 
     const timeoutIds: Array<ReturnType<typeof setTimeout>> = [];
     const texts: string[] = typeof text === "string" ? [text] : text;
 
     const typeText = (str: string, onComplete: () => void) => {
-      setIsTyping(true);
+      dispatchTyping({ type: "typing", isTyping: true });
       let currentIndex = 0;
       const type = () => {
         if (currentIndex <= str.length) {
-          setDisplayedText(str.substring(0, currentIndex));
+          dispatchTyping({
+            type: "text",
+            displayedText: str.substring(0, currentIndex),
+          });
           currentIndex++;
           const id = setTimeout(type, duration);
           timeoutIds.push(id);
         } else {
-          setIsTyping(false);
+          dispatchTyping({ type: "typing", isTyping: false });
           onComplete();
         }
       };
@@ -84,16 +104,19 @@ function TypingText({
     };
 
     const eraseText = (str: string, onComplete: () => void) => {
-      setIsTyping(true);
+      dispatchTyping({ type: "typing", isTyping: true });
       let currentIndex = str.length;
       const erase = () => {
         if (currentIndex >= 0) {
-          setDisplayedText(str.substring(0, currentIndex));
+          dispatchTyping({
+            type: "text",
+            displayedText: str.substring(0, currentIndex),
+          });
           currentIndex--;
           const id = setTimeout(erase, duration);
           timeoutIds.push(id);
         } else {
-          setIsTyping(false);
+          dispatchTyping({ type: "typing", isTyping: false });
           onComplete();
         }
       };
@@ -116,17 +139,25 @@ function TypingText({
       });
     };
 
-    animateTexts(0);
+    const startId = setTimeout(() => {
+      animateTexts(0);
+    }, delay);
+    timeoutIds.push(startId);
 
     return () => {
       timeoutIds.forEach(clearTimeout);
     };
-  }, [text, duration, started, loop, holdDelay]);
+  }, [text, duration, isInView, delay, loop, holdDelay]);
+
+  const typingTextContext = React.useMemo(
+    () => ({ isTyping: typingState.isTyping, setIsTyping }),
+    [typingState.isTyping, setIsTyping],
+  );
 
   return (
-    <TypingTextProvider value={{ isTyping, setIsTyping }}>
+    <TypingTextProvider value={typingTextContext}>
       <span ref={localRef} data-slot="typing-text" {...props}>
-        <motion.span>{displayedText}</motion.span>
+        <motion.span>{typingState.displayedText}</motion.span>
         {children}
       </span>
     </TypingTextProvider>

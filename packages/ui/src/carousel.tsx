@@ -92,41 +92,51 @@ function Carousel({
 		setApi(api);
 	}, [api, setApi]);
 
-	React.useEffect(() => {
-		if (!api) return;
-		onSelect(api);
-		api.on("reInit", onSelect);
+		React.useEffect(() => {
+			if (!api) return;
+			onSelect(api);
+			api.on("reInit", onSelect);
 		api.on("select", onSelect);
 
 		return () => {
 			api?.off("select", onSelect);
-		};
-	}, [api, onSelect]);
+			};
+		}, [api, onSelect]);
 
-	return (
-		<CarouselContext
-			value={{
+		const carouselContext = React.useMemo(
+			() => ({
 				carouselRef,
-				api: api,
+				api,
 				opts,
-				orientation:
-					orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+				orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
 				scrollPrev,
 				scrollNext,
 				canScrollPrev,
 				canScrollNext,
-			}}
-		>
-			<div
+			}),
+			[
+				api,
+				canScrollNext,
+				canScrollPrev,
+				carouselRef,
+				opts,
+				orientation,
+				scrollNext,
+				scrollPrev,
+			],
+		);
+
+		return (
+			<CarouselContext value={carouselContext}>
+			<section
 				onKeyDownCapture={handleKeyDown}
 				className={cn("relative", className)}
-				role="region"
 				aria-roledescription="carousel"
 				data-slot="carousel"
 				{...props}
 			>
 				{children}
-			</div>
+			</section>
 		</CarouselContext>
 	);
 }

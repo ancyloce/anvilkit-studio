@@ -8,12 +8,16 @@ import {
   type UseIsInViewOptions,
 } from "@anvilkit/ui/hooks/use-is-in-view";
 
+const graphemeSegmenter =
+  typeof Intl.Segmenter === "function"
+    ? new Intl.Segmenter(undefined, {
+        granularity: "grapheme",
+      })
+    : null;
+
 function segmentGraphemes(text: string): string[] {
-  if (typeof Intl.Segmenter === "function") {
-    const seg = new Intl.Segmenter(undefined, {
-      granularity: "grapheme",
-    });
-    return Array.from(seg.segment(text), (s) => s.segment);
+  if (graphemeSegmenter) {
+    return Array.from(graphemeSegmenter.segment(text), (s) => s.segment);
   }
   return Array.from(text);
 }
@@ -53,7 +57,6 @@ function MorphingText({
   const uniqueId = React.useId();
 
   const [currentIndex, setCurrentIndex] = React.useState(0);
-  const [started, setStarted] = React.useState(false);
 
   const currentText = React.useMemo(() => {
     if (Array.isArray(text)) {
@@ -77,34 +80,33 @@ function MorphingText({
   }, [currentText, uniqueId]);
 
   React.useEffect(() => {
-    if (isInView) {
-      const timeoutId = setTimeout(() => {
-        setStarted(true);
-      }, delay);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isInView, delay]);
-
-  React.useEffect(() => {
-    if (!started || !Array.isArray(text)) return;
+    if (!isInView || !Array.isArray(text)) return;
 
     let currentIndex = 0;
+    let interval: ReturnType<typeof setInterval> | undefined;
 
-    const interval = setInterval(() => {
-      currentIndex++;
-      if (currentIndex >= text.length) {
-        if (!loop) {
-          clearInterval(interval);
-          return;
-        } else {
-          currentIndex = 0;
+    const timeoutId = setTimeout(() => {
+      interval = setInterval(() => {
+        currentIndex++;
+        if (currentIndex >= text.length) {
+          if (!loop) {
+            clearInterval(interval);
+            return;
+          } else {
+            currentIndex = 0;
+          }
         }
-      }
-      setCurrentIndex(currentIndex);
-    }, holdDelay);
+        setCurrentIndex(currentIndex);
+      }, holdDelay);
+    }, delay);
 
-    return () => clearInterval(interval);
-  }, [started, loop, text, holdDelay]);
+    return () => {
+      clearTimeout(timeoutId);
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isInView, delay, loop, text, holdDelay]);
 
   return (
     <motion.span ref={localRef} aria-label={currentText} {...props}>

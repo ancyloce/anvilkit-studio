@@ -11,6 +11,16 @@ type ShimmeringTextProps = Omit<HTMLMotionProps<"span">, "children"> & {
   shimmeringColor?: string;
 };
 
+function getCharacterKeys(text: string) {
+  const counts = new Map<string, number>();
+
+  return Array.from(text, (char) => {
+    const occurrence = (counts.get(char) ?? 0) + 1;
+    counts.set(char, occurrence);
+    return `${char}-${occurrence}`;
+  });
+}
+
 function ShimmeringText({
   text,
   duration = 1,
@@ -20,6 +30,8 @@ function ShimmeringText({
   shimmeringColor = "var(--color-neutral-300)",
   ...props
 }: ShimmeringTextProps) {
+  const characterKeys = React.useMemo(() => getCharacterKeys(text), [text]);
+
   return (
     <motion.span
       style={
@@ -36,7 +48,7 @@ function ShimmeringText({
     >
       {text?.split("")?.map((char, i) => (
         <motion.span
-          key={i}
+          key={characterKeys[i]}
           style={{
             display: "inline-block",
             whiteSpace: "pre",
