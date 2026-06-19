@@ -256,6 +256,17 @@ function PuckApiBinder({
 	useEffect(() => {
 		apiRef.current = getPuck;
 		onBound?.();
+		return () => {
+			// Clear the shared ref when this Puck tree unmounts so a
+			// disposed/unmounted editor can't keep serving its API to a
+			// later compile's plugins via `getPuckApi()` (P1: stale API
+			// ref survives teardown). Guard on identity: a newer binder may
+			// have already rebound `apiRef` to its own `getPuck`, and this
+			// stale cleanup must not clobber the live one.
+			if (apiRef.current === getPuck) {
+				apiRef.current = null;
+			}
+		};
 	}, [apiRef, getPuck, onBound]);
 	return createElement(Fragment, null, children);
 }
@@ -764,6 +775,12 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			// Mark disposed *before* dispose()/store resets so an
 			// in-flight queued publish bails out of `onAfterPublish`.
 			disposedRef.current = true;
+			// Drop the bound Puck API before emitting `onDestroy`/disposing
+			// so a plugin's teardown hook (or a later compile's plugins)
+			// can't read the API of this now-unmounted runtime via
+			// `getPuckApi()` (P1: stale API ref survives teardown). The
+			// next compile's `PuckApiBinder` rebinds the ref on mount.
+			puckApiRef.current = null;
 			// `onDestroy` stays a shell-emitted event so it closes over
 			// the exact runtime/ctx pair that fired `onInit`; the phase
 			// marker keeps a late `onInit`-settle `.then` from firing a
