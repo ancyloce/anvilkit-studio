@@ -18,7 +18,10 @@
 
 import { useEffect } from "react";
 
-import { resolveQueryRoot, useStudioRootRef } from "@/context/StudioRootProvider";
+import {
+	resolveQueryRoot,
+	useStudioRootRef,
+} from "@/context/StudioRootProvider";
 import { useThemeStore } from "@/state/index";
 import { IFRAME_THEME_CSS, IFRAME_THEME_STYLE_ID } from "./iframe-theme";
 
@@ -34,6 +37,31 @@ function resolveSystemPreference(): "light" | "dark" {
 
 function applyClass(target: Element, dark: boolean): void {
 	target.classList.toggle("dark", dark);
+}
+
+// Module-scoped coordinator for the global `<html>.dark` class (finding
+// P2-1). Every `<Studio>` shares one host document, so the class is
+// ref-counted: the first instance to mount snapshots the host's prior
+// value, instances apply last-writer-wins while active, and the LAST to
+// unmount restores the snapshot — so a dark Studio that unmounts no
+// longer strands the host document dark, and a host that was already
+// dark before any Studio mounted is left dark afterwards.
+let htmlThemeOwners = 0;
+let htmlThemePrevDark = false;
+
+function acquireHtmlTheme(): void {
+	if (htmlThemeOwners === 0 && typeof document !== "undefined") {
+		htmlThemePrevDark = document.documentElement.classList.contains("dark");
+	}
+	htmlThemeOwners += 1;
+}
+
+function releaseHtmlTheme(): void {
+	if (htmlThemeOwners === 0) return;
+	htmlThemeOwners -= 1;
+	if (htmlThemeOwners === 0 && typeof document !== "undefined") {
+		applyClass(document.documentElement, htmlThemePrevDark);
+	}
 }
 
 function injectIframeStyle(doc: Document): void {
@@ -67,6 +95,15 @@ export function useThemeSync(): void {
 	const mode = useThemeStore((s) => s.mode);
 	const setResolved = useThemeStore((s) => s.setResolved);
 	const rootRef = useStudioRootRef();
+
+	// Ref-count ownership of the global `<html>.dark` class. Declared
+	// before the apply effect so the snapshot is taken *before* the first
+	// `apply()` mutates the class; the last instance to unmount restores
+	// the host's prior theme (finding P2-1).
+	useEffect(() => {
+		acquireHtmlTheme();
+		return releaseHtmlTheme;
+	}, []);
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;

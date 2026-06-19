@@ -96,4 +96,47 @@ describe("useThemeSync", () => {
 		expect(store.getState().resolved).toBe("dark");
 		expect(document.documentElement.classList.contains("dark")).toBe(true);
 	});
+
+	it("restores the host's prior .dark state when the last instance unmounts", () => {
+		// Host starts light (beforeEach removed `.dark`).
+		const hook = renderHook(() => useThemeSync(), { wrapper });
+		act(() => {
+			store.getState().setMode("dark");
+		});
+		hook.rerender();
+		expect(document.documentElement.classList.contains("dark")).toBe(true);
+
+		hook.unmount();
+		// Stranding the host dark on unmount is exactly the bug (P2-1) —
+		// the class must revert to the pre-mount (light) state.
+		expect(document.documentElement.classList.contains("dark")).toBe(false);
+	});
+
+	it("leaves a host that was already dark before mount dark after unmount", () => {
+		document.documentElement.classList.add("dark");
+		const hook = renderHook(() => useThemeSync(), { wrapper });
+		act(() => {
+			store.getState().setMode("light");
+		});
+		hook.rerender();
+		expect(document.documentElement.classList.contains("dark")).toBe(false);
+
+		hook.unmount();
+		// The snapshot taken at first mount was dark, so teardown restores it.
+		expect(document.documentElement.classList.contains("dark")).toBe(true);
+	});
+
+	it("ref-counts so one instance unmounting does not strand the others", () => {
+		store.getState().setMode("dark");
+		const a = renderHook(() => useThemeSync(), { wrapper });
+		const b = renderHook(() => useThemeSync(), { wrapper });
+		expect(document.documentElement.classList.contains("dark")).toBe(true);
+
+		a.unmount();
+		// `b` still owns the class — it must remain applied.
+		expect(document.documentElement.classList.contains("dark")).toBe(true);
+
+		b.unmount();
+		expect(document.documentElement.classList.contains("dark")).toBe(false);
+	});
 });
