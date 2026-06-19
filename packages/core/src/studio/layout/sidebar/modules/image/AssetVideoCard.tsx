@@ -44,6 +44,8 @@ function AssetVideoCardImpl({
 						src={asset.url}
 						preload="metadata"
 						muted
+						aria-hidden="true"
+						tabIndex={-1}
 						className="size-full object-cover"
 					/>
 				)}
