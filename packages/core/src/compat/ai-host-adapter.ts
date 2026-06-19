@@ -232,8 +232,15 @@ async function readBoundedResponseBody(
  * component `type` against the mounted Puck config so a hostile
  * endpoint cannot smuggle an unknown component entry past the gate —
  * Puck renders component props into the DOM, and some component
- * packages pass strings through verbatim, which is the load-bearing
- * XSS surface the adapter needs to close.
+ * packages pass strings through verbatim.
+ *
+ * **This is structural validation, NOT XSS sanitization.** It checks
+ * shape and the component-`type` allow-list only; it does not validate
+ * prop keys, value domains, or HTML-/markdown-bearing fields. A
+ * separate, narrow {@link containsDangerousUrl} scan refuses executable
+ * URL schemes as defense-in-depth, but component-aware sanitization of
+ * every sink prop is out of scope here — callers must treat the
+ * configured `aiHost` endpoint as trusted.
  *
  * Anything that fails this check is logged and refused — preferring
  * a noisy log over an XSS-shaped dispatch into the editor.
@@ -353,6 +360,67 @@ function isPuckZonesShape(
 		}
 	}
 	return true;
+}
+
+/**
+ * URL schemes that execute script when they reach a DOM sink
+ * (`<a href>`, `<iframe src>`, etc.). Components in this ecosystem pass
+ * some string props through verbatim, so a hostile endpoint that clears
+ * the shape + component-type gate could still smuggle one of these into
+ * a sink-like prop. This is a deny-list of *executable* schemes, **not**
+ * a general XSS sanitizer — see {@link isPuckDataShape}.
+ */
+const DANGEROUS_URL_SCHEMES: readonly string[] = [
+	"javascript:",
+	"vbscript:",
+	// `data:` document types that execute script when loaded by a
+	// *document* sink (`<iframe src>`, `<object data>`, `<embed src>`).
+	// Image data: URIs (`data:image/png`, …) are inert and allowed; SVG
+	// is NOT — it can carry `<script>`/`onload`.
+	"data:text/html",
+	"data:application/xhtml+xml",
+	"data:image/svg+xml",
+];
+
+/**
+ * True when a string, once normalized the way a browser parses a URL
+ * scheme, begins with a {@link DANGEROUS_URL_SCHEMES} entry.
+ *
+ * Browsers strip leading whitespace and ignore C0 control characters
+ * (incl. TAB/LF/CR) *inside* a scheme — `java\tscript:` is live — so
+ * those are removed before the prefix test. Internal spaces are kept:
+ * `java script:` is an inert relative URL to a browser, so stripping
+ * them would only manufacture false positives.
+ */
+function hasDangerousUrlScheme(value: string): boolean {
+	const normalized = value
+		.replace(/^\s+/, "")
+		// Strip the C0 control chars (incl. TAB/LF/CR) that browsers ignore
+		// *inside* a URL scheme — matching them is the whole point of this
+		// obfuscation-resistant normalization, hence the suppression below.
+		// biome-ignore lint/suspicious/noControlCharactersInRegex: intentional, see above
+		.replace(/[\u0000-\u001F\u007F]/g, "")
+		.toLowerCase();
+	return DANGEROUS_URL_SCHEMES.some((scheme) => normalized.startsWith(scheme));
+}
+
+/**
+ * Deep-walk any JSON-shaped value (the already-parsed, size-capped Puck
+ * `Data`) and report whether any string anywhere carries a dangerous
+ * URL scheme. JSON has no cycles and the body is byte-capped upstream,
+ * so the recursion is bounded.
+ */
+function containsDangerousUrl(value: unknown): boolean {
+	if (typeof value === "string") {
+		return hasDangerousUrlScheme(value);
+	}
+	if (Array.isArray(value)) {
+		return value.some(containsDangerousUrl);
+	}
+	if (isPlainRecord(value)) {
+		return Object.values(value).some(containsDangerousUrl);
+	}
+	return false;
 }
 
 /**
@@ -532,6 +600,23 @@ export function aiHostAdapter(options: AiHostAdapterOptions): StudioPlugin {
 									ctx.log(
 										"error",
 										"aiHost response did not match Puck Data shape or registered component types; dispatch refused",
+										{ endpoint },
+									);
+									return;
+								}
+
+								// Defense-in-depth (NOT full XSS sanitization): the
+								// shape/type gate above does not inspect prop *values*,
+								// so a hostile endpoint could still place an executable
+								// URL scheme (`javascript:`, `vbscript:`, or a scriptable
+								// `data:` document) into a sink-like prop that a component
+								// renders verbatim. Refuse those outright. Component-aware
+								// sanitization of every sink remains the host's
+								// responsibility — treat `aiHost` as a trusted endpoint.
+								if (containsDangerousUrl(parsed)) {
+									ctx.log(
+										"error",
+										"aiHost response contained a disallowed/executable URL scheme (javascript:, vbscript:, or a scriptable data: document) in a prop value; dispatch refused",
 										{ endpoint },
 									);
 									return;

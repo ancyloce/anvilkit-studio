@@ -265,6 +265,184 @@ describe("aiHostAdapter — onClick wiring", () => {
 		);
 	});
 
+	it("refuses responses carrying an executable URL scheme in a prop value", async () => {
+		const fetchMock = vi.fn<typeof fetch>(
+			async () =>
+				({
+					ok: true,
+					status: 200,
+					headers: new Headers(),
+					text: async () =>
+						JSON.stringify({
+							root: { props: {} },
+							content: [
+								{ type: "Hero", props: { href: "javascript:alert(1)" } },
+							],
+							zones: {},
+						}),
+				}) as unknown as Response,
+		);
+		vi.stubGlobal("fetch", fetchMock);
+
+		const dispatch = vi.fn();
+		const log = vi.fn();
+		const ctx = makeCtx({
+			getPuckApi: (() =>
+				makePuckApi(dispatch, ["Hero"])) as StudioPluginContext["getPuckApi"],
+			log,
+		});
+
+		const { aiHostAdapter } = await import("./ai-host-adapter.js");
+		const plugin = aiHostAdapter({ aiHost: "https://ai.example.com" });
+		const registration = await plugin.register(ctx);
+		await registration.headerActions?.[0]?.onClick(ctx);
+
+		expect(dispatch).not.toHaveBeenCalled();
+		expect(log).toHaveBeenCalledWith(
+			"error",
+			expect.stringContaining("URL scheme"),
+			expect.objectContaining({ endpoint: "https://ai.example.com/generate" }),
+		);
+	});
+
+	it("catches control-char-obfuscated dangerous schemes nested deep in zones", async () => {
+		const fetchMock = vi.fn<typeof fetch>(
+			async () =>
+				({
+					ok: true,
+					status: 200,
+					headers: new Headers(),
+					text: async () =>
+						JSON.stringify({
+							root: { props: {} },
+							content: [{ type: "Hero", props: {} }],
+							zones: {
+								// `java\tscript:` — the TAB is one of the C0 control
+								// chars a browser ignores inside a URL scheme, so the
+								// normalization must strip it before the prefix test.
+								sidebar: [
+									{
+										type: "Hero",
+										props: { nested: { src: "java\tscript:alert(1)" } },
+									},
+								],
+							},
+						}),
+				}) as unknown as Response,
+		);
+		vi.stubGlobal("fetch", fetchMock);
+
+		const dispatch = vi.fn();
+		const log = vi.fn();
+		const ctx = makeCtx({
+			getPuckApi: (() =>
+				makePuckApi(dispatch, ["Hero"])) as StudioPluginContext["getPuckApi"],
+			log,
+		});
+
+		const { aiHostAdapter } = await import("./ai-host-adapter.js");
+		const plugin = aiHostAdapter({ aiHost: "https://ai.example.com" });
+		const registration = await plugin.register(ctx);
+		await registration.headerActions?.[0]?.onClick(ctx);
+
+		expect(dispatch).not.toHaveBeenCalled();
+		expect(log).toHaveBeenCalledWith(
+			"error",
+			expect.stringContaining("URL scheme"),
+			expect.objectContaining({ endpoint: "https://ai.example.com/generate" }),
+		);
+	});
+
+	it("refuses scriptable data: documents (svg) reachable by a document sink", async () => {
+		const fetchMock = vi.fn<typeof fetch>(
+			async () =>
+				({
+					ok: true,
+					status: 200,
+					headers: new Headers(),
+					text: async () =>
+						JSON.stringify({
+							root: { props: {} },
+							content: [
+								{
+									type: "Hero",
+									props: {
+										// Inert in <img>, executable in <iframe src>/<object>.
+										src: "data:image/svg+xml,<svg onload=alert(1)>",
+									},
+								},
+							],
+							zones: {},
+						}),
+				}) as unknown as Response,
+		);
+		vi.stubGlobal("fetch", fetchMock);
+
+		const dispatch = vi.fn();
+		const log = vi.fn();
+		const ctx = makeCtx({
+			getPuckApi: (() =>
+				makePuckApi(dispatch, ["Hero"])) as StudioPluginContext["getPuckApi"],
+			log,
+		});
+
+		const { aiHostAdapter } = await import("./ai-host-adapter.js");
+		const plugin = aiHostAdapter({ aiHost: "https://ai.example.com" });
+		const registration = await plugin.register(ctx);
+		await registration.headerActions?.[0]?.onClick(ctx);
+
+		expect(dispatch).not.toHaveBeenCalled();
+		expect(log).toHaveBeenCalledWith(
+			"error",
+			expect.stringContaining("URL scheme"),
+			expect.objectContaining({ endpoint: "https://ai.example.com/generate" }),
+		);
+	});
+
+	it("dispatches responses whose prop URLs use safe schemes", async () => {
+		// `data:image/png` is a legitimate inline image, and an internal
+		// space (`Java script:`) is an inert relative URL to a browser —
+		// neither may be blocked by the scheme deny-scan.
+		const safeData = {
+			root: { props: {} },
+			content: [
+				{
+					type: "Hero",
+					props: {
+						href: "https://example.com/page",
+						img: "data:image/png;base64,iVBORw0KGgo=",
+						label: "Java script: a primer",
+					},
+				},
+			],
+			zones: {},
+		};
+		const fetchMock = vi.fn<typeof fetch>(
+			async () =>
+				({
+					ok: true,
+					status: 200,
+					headers: new Headers(),
+					text: async () => JSON.stringify(safeData),
+				}) as unknown as Response,
+		);
+		vi.stubGlobal("fetch", fetchMock);
+
+		const dispatch = vi.fn();
+		const ctx = makeCtx({
+			getPuckApi: (() =>
+				makePuckApi(dispatch, ["Hero"])) as StudioPluginContext["getPuckApi"],
+		});
+
+		const { aiHostAdapter } = await import("./ai-host-adapter.js");
+		const plugin = aiHostAdapter({ aiHost: "https://ai.example.com" });
+		const registration = await plugin.register(ctx);
+		await registration.headerActions?.[0]?.onClick(ctx);
+
+		expect(dispatch).toHaveBeenCalledTimes(1);
+		expect(dispatch).toHaveBeenCalledWith({ type: "setData", data: safeData });
+	});
+
 	it("respects a custom apiPath override", async () => {
 		const fetchMock = vi.fn<typeof fetch>(
 			async () =>
