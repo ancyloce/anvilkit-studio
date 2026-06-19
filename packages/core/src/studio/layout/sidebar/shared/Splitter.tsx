@@ -24,15 +24,44 @@ import {
 	useRef,
 	useState,
 } from "react";
-
+import {
+	resolveQueryRoot,
+	useStudioRootRef,
+} from "@/context/StudioRootProvider";
 import { useMsg } from "@/state/editor-i18n-context";
 import { useLayerSplitRatio } from "@/state/slices/editor-ui-selectors";
-import { resolveQueryRoot, useStudioRootRef } from "@/context/StudioRootProvider";
 
 const KEY_NUDGE = 0.02;
 const RATIO_MIN = 0.15;
 const RATIO_MAX = 0.85;
 const PUCK_IFRAME_SELECTOR = 'iframe[id^="preview-frame"]';
+
+// Module-scoped, ref-counted owner for the *global* body cursor (finding
+// P2-4). `document.body` is shared by every `<Studio>`, so per-instance
+// stash/restore can corrupt it when two splitters drag at once — the last
+// release would write back a stale value. Instead the FIRST active drag
+// across all splitters snapshots the host's prior cursor and sets
+// "row-resize"; the LAST to end restores the snapshot. (Mirrors the
+// ref-counted `<html>` theme owner in `use-theme-sync.ts`.)
+let bodyCursorDraggers = 0;
+let bodyCursorPrev = "";
+
+function acquireBodyDragCursor(): void {
+	if (bodyCursorDraggers === 0 && typeof document !== "undefined") {
+		bodyCursorPrev = document.body.style.cursor;
+		document.body.style.cursor = "row-resize";
+	}
+	bodyCursorDraggers += 1;
+}
+
+function releaseBodyDragCursor(): void {
+	if (bodyCursorDraggers === 0) return;
+	bodyCursorDraggers -= 1;
+	if (bodyCursorDraggers === 0 && typeof document !== "undefined") {
+		document.body.style.cursor = bodyCursorPrev;
+		bodyCursorPrev = "";
+	}
+}
 
 export interface SplitterProps {
 	/**
@@ -54,6 +83,10 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 	// even if React unmounts mid-drag.
 	const iframeRef = useRef<HTMLIFrameElement | null>(null);
 	const iframePointerEventsRef = useRef<string>("");
+	// Whether THIS splitter currently holds a body-cursor drag lease, so the
+	// shared owner is acquired/released exactly once per drag (and released
+	// on an unmount mid-drag) without double-counting.
+	const bodyDraggingRef = useRef(false);
 	// Scope the iframe lookup to THIS Studio's root subtree — Puck
 	// hardcodes `id^="preview-frame"`, so a global query would suppress
 	// the wrong editor's iframe when two are on one page (finding H3).
@@ -78,12 +111,24 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 		iframePointerEventsRef.current = "";
 	}, []);
 
+	const beginBodyDrag = useCallback(() => {
+		if (bodyDraggingRef.current) return;
+		bodyDraggingRef.current = true;
+		acquireBodyDragCursor();
+	}, []);
+
+	const endBodyDrag = useCallback(() => {
+		if (!bodyDraggingRef.current) return;
+		bodyDraggingRef.current = false;
+		releaseBodyDragCursor();
+	}, []);
+
 	useEffect(() => {
 		return () => {
 			restoreIframePointer();
-			document.body.style.cursor = "";
+			endBodyDrag();
 		};
-	}, [restoreIframePointer]);
+	}, [restoreIframePointer, endBodyDrag]);
 
 	const handlePointerDown = useCallback(
 		(event: PointerEvent<HTMLDivElement>) => {
@@ -97,10 +142,10 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 			}
 			draggingRef.current = true;
 			setDragging(true);
-			document.body.style.cursor = "row-resize";
+			beginBodyDrag();
 			suppressIframePointer();
 		},
-		[suppressIframePointer],
+		[suppressIframePointer, beginBodyDrag],
 	);
 
 	const handlePointerMove = useCallback(
@@ -131,10 +176,10 @@ export function Splitter({ ariaLabel }: SplitterProps): ReactNode {
 			} catch {
 				// See note in handlePointerDown.
 			}
-			document.body.style.cursor = "";
+			endBodyDrag();
 			restoreIframePointer();
 		},
-		[restoreIframePointer],
+		[restoreIframePointer, endBodyDrag],
 	);
 
 	const handleKeyDown = useCallback(

@@ -38,6 +38,12 @@ interface ExternalRow {
 	readonly raw: unknown;
 	readonly mapped: Record<string, unknown>;
 	readonly summary: string;
+	/**
+	 * Stable, collision-proof React key computed at result-mapping time
+	 * (finding P2-5): `${identity}::${index}`, where the index
+	 * disambiguates rows whose identity (id/key, else summary) repeats.
+	 */
+	readonly key: string;
 }
 
 function asString(input: unknown): string {
@@ -74,18 +80,22 @@ type FetchListWithSignal = (params: {
 	signal?: AbortSignal;
 }) => Promise<unknown[] | null>;
 
-function rowKey(row: ExternalRow): string {
+function stableRowKey(row: Omit<ExternalRow, "key">, index: number): string {
 	const raw =
 		row.raw !== null && typeof row.raw === "object"
 			? (row.raw as Record<string, unknown>)
 			: undefined;
-	return (
+	const identity =
 		asString(row.mapped.id) ||
 		asString(row.mapped.key) ||
 		asString(raw?.id) ||
 		asString(raw?.key) ||
-		row.summary
-	);
+		row.summary;
+	// Always suffix the source index: identities can repeat (a buggy
+	// source, or duplicate summaries when no id/key exists), and the
+	// result list is replaced wholesale per fetch (never reordered in
+	// place), so the index is a safe, collision-proof disambiguator.
+	return `${identity}::${index}`;
 }
 
 export function ExternalField({
@@ -145,7 +155,7 @@ export function ExternalField({
 				})) as unknown[] | null;
 				if (cancelled) return;
 				setLoadError(false);
-				const next = (result ?? []).map((raw) => {
+				const next = (result ?? []).map((raw, index) => {
 					const mapped =
 						field.mapProp !== undefined
 							? (field.mapProp(raw as Record<string, unknown>) as Record<
@@ -153,10 +163,10 @@ export function ExternalField({
 									unknown
 								>)
 							: (raw as Record<string, unknown>);
+					const base = { raw, mapped, summary: summarize(raw) };
 					return {
-						raw,
-						mapped,
-						summary: summarize(raw),
+						...base,
+						key: stableRowKey(base, index),
 					} satisfies ExternalRow;
 				});
 				setRows(next);
@@ -281,7 +291,7 @@ export function ExternalField({
 								) : (
 									<ul className="flex flex-col">
 										{rows.map((row) => (
-											<li key={rowKey(row)}>
+											<li key={row.key}>
 												<Button
 													variant="ghost"
 													size="sm"

@@ -133,6 +133,88 @@ describe("Splitter", () => {
 		}
 	});
 
+	it("stashes and restores the host body cursor across a drag (P2-4)", () => {
+		document.body.style.cursor = "progress"; // a pre-existing host cursor
+		try {
+			render(
+				<Setup>
+					<Splitter />
+				</Setup>,
+			);
+			const splitter = screen.getByTestId("ak-layer-splitter");
+			fireEvent.pointerDown(splitter, { pointerId: 1, clientY: 100 });
+			expect(document.body.style.cursor).toBe("row-resize");
+			fireEvent.pointerUp(splitter, { pointerId: 1, clientY: 120 });
+			// Restored to the host's prior cursor — NOT cleared to "".
+			expect(document.body.style.cursor).toBe("progress");
+		} finally {
+			document.body.style.cursor = "";
+		}
+	});
+
+	it("restores the host body cursor when unmounted mid-drag (P2-4)", () => {
+		document.body.style.cursor = "progress";
+		try {
+			const view = render(
+				<Setup>
+					<Splitter />
+				</Setup>,
+			);
+			const splitter = screen.getByTestId("ak-layer-splitter");
+			fireEvent.pointerDown(splitter, { pointerId: 1, clientY: 100 });
+			expect(document.body.style.cursor).toBe("row-resize");
+			view.unmount();
+			expect(document.body.style.cursor).toBe("progress");
+		} finally {
+			document.body.style.cursor = "";
+		}
+	});
+
+	it("leaves an untouched host body cursor alone on unmount without a drag (P2-4)", () => {
+		document.body.style.cursor = "progress";
+		try {
+			const view = render(
+				<Setup>
+					<Splitter />
+				</Setup>,
+			);
+			view.unmount();
+			// Never dragged: no body-cursor lease was acquired, so we don't
+			// clobber the host's cursor.
+			expect(document.body.style.cursor).toBe("progress");
+		} finally {
+			document.body.style.cursor = "";
+		}
+	});
+
+	it("ref-counts the shared body cursor across concurrent splitter drags (P2-4)", () => {
+		document.body.style.cursor = "progress";
+		try {
+			render(
+				<Setup>
+					<>
+						<Splitter ariaLabel="A" />
+						<Splitter ariaLabel="B" />
+					</>
+				</Setup>,
+			);
+			const [a, b] = screen.getAllByTestId("ak-layer-splitter");
+			fireEvent.pointerDown(a!, { pointerId: 1, clientY: 100 });
+			fireEvent.pointerDown(b!, { pointerId: 2, clientY: 100 });
+			expect(document.body.style.cursor).toBe("row-resize");
+			// A ends first while B still drags: the host cursor must NOT be
+			// restored yet. (The per-instance-stash bug restored "progress"
+			// here, stranding B with the wrong cursor.)
+			fireEvent.pointerUp(a!, { pointerId: 1, clientY: 120 });
+			expect(document.body.style.cursor).toBe("row-resize");
+			// The LAST drag to end restores the host's prior cursor.
+			fireEvent.pointerUp(b!, { pointerId: 2, clientY: 120 });
+			expect(document.body.style.cursor).toBe("progress");
+		} finally {
+			document.body.style.cursor = "";
+		}
+	});
+
 	it("clamps to 0.15 on Home and 0.85 on End", () => {
 		render(
 			<Setup>

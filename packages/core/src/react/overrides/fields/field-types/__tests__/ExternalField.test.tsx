@@ -127,4 +127,32 @@ describe("ExternalField", () => {
 		unmount();
 		expect(capturedSignal?.aborted).toBe(true);
 	});
+
+	it("renders rows with duplicate summaries without a duplicate-key warning (P2-5)", async () => {
+		const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {
+			/* swallow */
+		});
+		try {
+			// Two results with identical summaries and NO id/key — the old
+			// `summary` fallback produced colliding React keys.
+			const fetchList = vi
+				.fn()
+				.mockResolvedValue([{ name: "Same" }, { name: "Same" }]);
+			renderField({ type: "external", fetchList });
+			openPicker();
+
+			// Both rows render…
+			await waitFor(() => {
+				expect(screen.getAllByText("Same")).toHaveLength(2);
+			});
+
+			// …and React did not warn about duplicate keys.
+			const dupKeyWarning = errorSpy.mock.calls.some((call) =>
+				String(call[0] ?? "").includes("same key"),
+			);
+			expect(dupKeyWarning).toBe(false);
+		} finally {
+			errorSpy.mockRestore();
+		}
+	});
 });
