@@ -71,3 +71,73 @@ describe("AssetImageTile — drag", () => {
 		expect(onDragStartAsset).toHaveBeenCalledWith(UNSPLASH_ASSET);
 	});
 });
+
+describe("AssetImageTile — attribution link safety (P1)", () => {
+	function withAttribution(
+		photographerUrl: string,
+		sourceUrl: string,
+	): StudioAsset {
+		return {
+			...UNSPLASH_ASSET,
+			attribution: {
+				photographerName: "Ansel Adams",
+				photographerUrl,
+				sourceUrl,
+			},
+		};
+	}
+
+	it("renders safe http(s) attribution URLs as real links", () => {
+		render(
+			<AssetImageTile
+				asset={withAttribution(
+					"https://unsplash.com/@ansel",
+					"https://unsplash.com/",
+				)}
+				onClick={vi.fn()}
+				renderMenu={() => null}
+			/>,
+		);
+		const attribution = screen.getByTestId("ak-image-attribution");
+		const anchors = attribution.querySelectorAll("a");
+		expect(anchors).toHaveLength(2);
+		expect(anchors[0]?.getAttribute("href")).toBe(
+			"https://unsplash.com/@ansel",
+		);
+		expect(anchors[1]?.getAttribute("href")).toBe("https://unsplash.com/");
+	});
+
+	it("does NOT render unsafe-scheme attribution URLs as hrefs (degrades to text)", () => {
+		render(
+			<AssetImageTile
+				asset={withAttribution(
+					"javascript:alert(1)",
+					"data:text/html,<script>alert(1)</script>",
+				)}
+				onClick={vi.fn()}
+				renderMenu={() => null}
+			/>,
+		);
+		const attribution = screen.getByTestId("ak-image-attribution");
+		// No anchors at all — both schemes are rejected.
+		expect(attribution.querySelectorAll("a")).toHaveLength(0);
+		// The photographer name is still shown, just as inert text.
+		expect(attribution.textContent).toContain("Ansel Adams");
+	});
+
+	it("vets each link independently (unsafe photographer, safe source)", () => {
+		render(
+			<AssetImageTile
+				asset={withAttribution("javascript:alert(1)", "https://unsplash.com/")}
+				onClick={vi.fn()}
+				renderMenu={() => null}
+			/>,
+		);
+		const attribution = screen.getByTestId("ak-image-attribution");
+		const anchors = attribution.querySelectorAll("a");
+		// Only the safe source link survives.
+		expect(anchors).toHaveLength(1);
+		expect(anchors[0]?.getAttribute("href")).toBe("https://unsplash.com/");
+		expect(attribution.textContent).toContain("Ansel Adams");
+	});
+});

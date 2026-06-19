@@ -27,6 +27,51 @@ export interface AssetImageTileProps {
 	readonly renderMenu: (asset: StudioAsset) => ReactNode;
 }
 
+/**
+ * Allow only `http:`/`https:` attribution links. Asset sources are
+ * plugin/API-controlled (P1), so a `javascript:`/`data:`/other-scheme
+ * URL must never reach an `<a href>`. `new URL()` does browser-accurate
+ * scheme parsing (incl. stripping the control chars browsers ignore
+ * inside a scheme), so anything that does not parse to http(s) — or does
+ * not parse at all — is treated as unsafe.
+ */
+function safeHttpHref(url: string): string | undefined {
+	try {
+		const { protocol } = new URL(url);
+		return protocol === "http:" || protocol === "https:" ? url : undefined;
+	} catch {
+		return undefined;
+	}
+}
+
+/**
+ * Renders attribution as a real link only when `href` is a vetted
+ * http(s) URL; otherwise the text is shown plainly (no link), so an
+ * unsafe scheme degrades to inert text instead of a clickable sink.
+ */
+function AttributionLink({
+	href,
+	children,
+}: {
+	readonly href: string | undefined;
+	readonly children: ReactNode;
+}): ReactNode {
+	if (href === undefined) {
+		return <span>{children}</span>;
+	}
+	return (
+		<a
+			href={href}
+			target="_blank"
+			rel="noreferrer noopener"
+			className="underline"
+			onClick={(event) => event.stopPropagation()}
+		>
+			{children}
+		</a>
+	);
+}
+
 function AssetImageTileImpl({
 	asset,
 	onClick,
@@ -34,6 +79,12 @@ function AssetImageTileImpl({
 	renderMenu,
 }: AssetImageTileProps): ReactNode {
 	const src = asset.thumbnailUrl ?? asset.url;
+	const photographerHref = asset.attribution
+		? safeHttpHref(asset.attribution.photographerUrl)
+		: undefined;
+	const sourceHref = asset.attribution
+		? safeHttpHref(asset.attribution.sourceUrl)
+		: undefined;
 	return (
 		<div
 			className="group relative flex flex-col gap-1 text-xs"
@@ -84,25 +135,10 @@ function AssetImageTileImpl({
 					data-testid="ak-image-attribution"
 				>
 					Photo by{" "}
-					<a
-						href={asset.attribution.photographerUrl}
-						target="_blank"
-						rel="noreferrer noopener"
-						className="underline"
-						onClick={(event) => event.stopPropagation()}
-					>
+					<AttributionLink href={photographerHref}>
 						{asset.attribution.photographerName}
-					</a>{" "}
-					on{" "}
-					<a
-						href={asset.attribution.sourceUrl}
-						target="_blank"
-						rel="noreferrer noopener"
-						className="underline"
-						onClick={(event) => event.stopPropagation()}
-					>
-						Unsplash
-					</a>
+					</AttributionLink>{" "}
+					on <AttributionLink href={sourceHref}>Unsplash</AttributionLink>
 				</p>
 			) : null}
 		</div>
