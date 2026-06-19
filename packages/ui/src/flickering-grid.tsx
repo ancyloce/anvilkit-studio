@@ -167,7 +167,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     [flickerChance, maxOpacity],
   );
 
-  const drawGrid = useCallback(
+	  const drawGrid = useCallback(
     (
       ctx: CanvasRenderingContext2D,
       width: number,
@@ -196,8 +196,10 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 	    },
 	    [squareSize, gridGap],
 	  );
+	  const updateSquaresEvent = React.useEffectEvent(updateSquares);
+	  const drawGridEvent = React.useEffectEvent(drawGrid);
 
-  useEffect(() => {
+	  useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     const ctx = canvas?.getContext("2d") ?? null;
@@ -229,11 +231,11 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 	        const deltaTime = (time - lastTime) / 1000;
 	        lastTime = time;
 
-        updateSquares(gridParams.squares, deltaTime);
-        drawGrid(
-          ctx,
-          canvas.width,
-          canvas.height,
+	        updateSquaresEvent(gridParams.squares, deltaTime);
+	        drawGridEvent(
+	          ctx,
+	          canvas.width,
+	          canvas.height,
           gridParams.cols,
           gridParams.rows,
           gridParams.squares,
@@ -284,7 +286,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
         intersectionObserver.disconnect();
       }
     };
-	  }, [setupCanvas, updateSquares, drawGrid, width, height]);
+	  }, [setupCanvas, width, height]);
 
   return (
     <div

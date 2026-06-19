@@ -189,6 +189,9 @@ function SlidingNumber({
   const [effectiveNumber, setEffectiveNumber] = React.useState<number>(
     initiallyStable ? initialNumeric : 0,
   );
+  const onNumberChangeEvent = React.useEffectEvent((value: number) => {
+    onNumberChange?.(value);
+  });
 
   React.useEffect(() => {
     if (hasAnimated) {
@@ -212,7 +215,7 @@ function SlidingNumber({
 
         if (effectiveNumber !== newValue) {
           setEffectiveNumber(newValue);
-          onNumberChange?.(newValue);
+          onNumberChangeEvent(newValue);
         }
       });
       return () => unsubscribe();
@@ -227,7 +230,6 @@ function SlidingNumber({
     isInView,
     number,
     decimalPlaces,
-    onNumberChange,
     effectiveNumber,
     initiallyStable,
     initialNumeric,

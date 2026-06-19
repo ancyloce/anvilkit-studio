@@ -87,7 +87,7 @@ export function useAutoHeight<T extends HTMLElement = HTMLDivElement>(
 	React.useLayoutEffect(() => {
 		const next = measure();
 		setHeight((current) => (current === next ? current : next));
-	});
+	}, [measure]);
 
 	return { ref, height } as const;
 }

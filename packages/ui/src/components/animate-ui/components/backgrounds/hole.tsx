@@ -346,12 +346,24 @@ function HoleBackground({
     setLines();
     setParticles();
   }, [setSize, setDiscs, setLines, setParticles]);
+  const initEvent = React.useEffectEvent(init);
+  const moveDiscsEvent = React.useEffectEvent(moveDiscs);
+  const moveParticlesEvent = React.useEffectEvent(moveParticles);
+  const drawDiscsEvent = React.useEffectEvent(drawDiscs);
+  const drawLinesEvent = React.useEffectEvent(drawLines);
+  const drawParticlesEvent = React.useEffectEvent(drawParticles);
+  const resizeEvent = React.useEffectEvent(() => {
+    setSize();
+    setDiscs();
+    setLines();
+    setParticles();
+  });
 
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     let animationFrameId = 0;
-    init();
+    initEvent();
     const tick = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -360,38 +372,22 @@ function HoleBackground({
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.scale(stateRef.current.render.dpi, stateRef.current.render.dpi);
-      moveDiscs();
-      moveParticles();
-      drawDiscs(ctx);
-      drawLines(ctx);
-      drawParticles(ctx);
+      moveDiscsEvent();
+      moveParticlesEvent();
+      drawDiscsEvent(ctx);
+      drawLinesEvent(ctx);
+      drawParticlesEvent(ctx);
       ctx.restore();
       animationFrameId = requestAnimationFrame(tick);
     };
     tick();
-    const handleResize = () => {
-      setSize();
-      setDiscs();
-      setLines();
-      setParticles();
-    };
+    const handleResize = () => resizeEvent();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [
-    drawDiscs,
-    drawLines,
-    drawParticles,
-    init,
-    moveDiscs,
-    moveParticles,
-    setDiscs,
-    setLines,
-    setParticles,
-    setSize,
-  ]);
+  }, []);
 
   return (
     <div
