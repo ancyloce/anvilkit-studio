@@ -5,9 +5,11 @@
  * that item's configured `arrayFields` in an animated popover, so item
  * edits happen in a property panel instead of a second array list.
  *
- * The acceptance criterion calls out that add/remove/duplicate/
- * reorder must preserve item identity — we never `.map()` to new
- * objects; mutations are slice/splice on the existing array refs.
+ * The acceptance criterion calls out that add/remove/reorder must
+ * preserve item identity — we never `.map()` to new objects; mutations
+ * are slice/splice on the existing array refs. `duplicate` is the one
+ * exception: the new row is a deep clone of the source (finding P2-3),
+ * so the copy never aliases the original's nested objects.
  */
 
 import type {
@@ -24,6 +26,11 @@ import {
 	useCallback,
 	useState,
 } from "react";
+import { Button } from "@/primitives/button";
+import { Card, CardContent } from "@/primitives/card";
+import { FieldLegend, FieldSet } from "@/primitives/field";
+import { Item, ItemActions, ItemContent } from "@/primitives/item";
+import { ScrollArea } from "@/primitives/scroll-area";
 import {
 	Popover,
 	PopoverPopup,
@@ -32,13 +39,8 @@ import {
 	PopoverTitle,
 	PopoverTrigger,
 } from "@/primitives/vendor/animate-ui/primitives/base/popover";
-import { Button } from "@/primitives/button";
-import { Card, CardContent } from "@/primitives/card";
-import { FieldLegend, FieldSet } from "@/primitives/field";
-import { Item, ItemActions, ItemContent } from "@/primitives/item";
-import { ScrollArea } from "@/primitives/scroll-area";
-import { useMsg } from "@/state/editor-i18n-context";
 import { cn } from "@/shared/cn";
+import { useMsg } from "@/state/editor-i18n-context";
 
 import { FieldLabel } from "../../layout/FieldLabel";
 import { ExternalField } from "./ExternalField";
@@ -77,6 +79,21 @@ function toRecord(value: unknown): Record<string, unknown> {
 		return {};
 	}
 	return value as Record<string, unknown>;
+}
+
+/**
+ * Deep-clone a duplicated array item so the copy never aliases the
+ * source (finding P2-3): with `array`/`object` sub-fields an item can
+ * hold nested objects, and a shared reference lets a later edit (or a
+ * custom field) mutate both rows. Puck `array` values are JSON-shaped
+ * (no functions/refs), so `structuredClone` — with a JSON fallback for
+ * environments that lack it — is an exact, dependency-free clone.
+ */
+function cloneItem(item: Record<string, unknown>): Record<string, unknown> {
+	if (typeof structuredClone === "function") {
+		return structuredClone(item);
+	}
+	return JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
 }
 
 function defaultItemAt(
@@ -610,7 +627,11 @@ export function ArrayField({
 		(index: number): void => {
 			if (readOnly === true || items.length >= max) return;
 			const copy = items.slice();
-			copy.splice(index + 1, 0, copy[index] as Record<string, unknown>);
+			copy.splice(
+				index + 1,
+				0,
+				cloneItem(copy[index] as Record<string, unknown>),
+			);
 			setOpenIndex(index + 1);
 			update(copy);
 		},

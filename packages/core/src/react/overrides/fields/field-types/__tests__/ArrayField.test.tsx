@@ -247,9 +247,43 @@ describe("ArrayField", () => {
 		>[];
 		expect(next).toHaveLength(2);
 		expect(next[0]).toBe(items[0]);
-		// The duplicate is a shallow ref-equal copy by spec — our impl
-		// inserts the same reference, which is fine for v1.
-		expect(next[1]).toBe(items[0]);
+		// The duplicate is a DISTINCT deep clone (P2-3) — equal by value
+		// but never the same reference, so a later nested edit can't alias
+		// the source row.
+		expect(next[1]).not.toBe(items[0]);
+		expect(next[1]).toEqual(items[0]);
+	});
+
+	it("deep-clones a duplicated item so nested objects are not aliased (P2-3)", () => {
+		const onChange = vi.fn();
+		const items = [
+			{ id: "a", label: "First", meta: { tags: ["x"] as string[] } },
+		];
+		render(
+			<ArrayField
+				// biome-ignore lint/suspicious/noExplicitAny: test fixture
+				field={FIELD as any}
+				value={items}
+				onChange={onChange}
+				name="items"
+			>
+				<div />
+			</ArrayField>,
+		);
+		fireEvent.click(screen.getByLabelText("Duplicate"));
+		const next = onChange.mock.calls[0]?.[0] as readonly Record<
+			string,
+			unknown
+		>[];
+		expect(next).toHaveLength(2);
+		// Source row keeps its identity; the duplicate is a distinct clone.
+		const original = items[0]!;
+		expect(next[0]).toBe(original);
+		const dup = next[1] as (typeof items)[number];
+		expect(dup.meta).not.toBe(original.meta);
+		// Mutating the clone's nested object must not touch the original.
+		dup.meta.tags.push("y");
+		expect(original.meta.tags).toEqual(["x"]);
 	});
 
 	it("reorders items from the handle, preserving identity of every item", () => {
