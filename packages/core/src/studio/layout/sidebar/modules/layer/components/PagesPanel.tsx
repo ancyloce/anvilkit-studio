@@ -23,8 +23,8 @@ import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
-import { Windowed } from "@/primitives/windowed";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
+import { Windowed } from "@/primitives/windowed";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioPage } from "@/types/pages";
 import { AddPageDialog } from "./AddPageDialog";
@@ -42,7 +42,8 @@ export function PagesPanel(): ReactNode {
 	const source = useStudioPagesSourceOrDefault();
 	// `loading` intentionally ignored — behavior unchanged vs. the prior
 	// inline effect; the hook only adds out-of-order protection.
-	const { items: pages, hasError: loadError } = useSourceList<StudioPage>(source);
+	const { items: pages, hasError: loadError } =
+		useSourceList<StudioPage>(source);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 
@@ -190,7 +191,7 @@ export function PagesPanel(): ReactNode {
 							items={sortableIds}
 							strategy={verticalListSortingStrategy}
 						>
-							<ul role="list" className="flex flex-col px-2 gap-0">
+							<ul className="flex flex-col px-2 gap-0">
 								{/*
 								 * Below 50 pages `Windowed` emits bare keyed fragments
 								 * (DOM byte-identical to the old `.map`); at/above 50 it
