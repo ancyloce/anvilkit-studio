@@ -9,11 +9,11 @@ import { expect, type Page, test } from "@playwright/test";
  * (`canvas-ir-debug`) rather than reaching into the canvas.
  *
  * BLOCKED (test.fixme) — react-konva `<Stage>` does not render its canvas under
- * React 19.2.6 / Next 16. The editor mounts the host UI + container `<div>`, but
+ * React 19.2.7 / Next 16. The editor mounts the host UI + container `<div>`, but
  * react-konva's reconciler never builds the Konva content (no `.konvajs-content`,
  * no `<canvas>`), headed OR headless. Verified by isolation (2026-05-23):
  * imperative `new Konva.Stage()` builds a canvas fine in the same env, and React
- * resolves to a single 19.2.6 instance — so this is react-konva's reconciler, not
+ * resolves to a single 19.2.7 instance — so this is react-konva's reconciler, not
  * Konva core or a duplicate React. (A separate headless-GPU hang is mitigated by
  * `--disable-gpu` in playwright.config.ts; that lets the DOM-driven canvas specs
  * — pages/AI/export — run, but does not make the canvas render.) These three

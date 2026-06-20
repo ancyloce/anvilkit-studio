@@ -5,7 +5,7 @@ import { expect, type Page, test } from "@playwright/test";
  * on the standalone canvas route (`/studio/canvas/<id>`).
  *
  * #5 (AI panel, DOM-driven) runs. #7 is `test.fixme`: it pans the live canvas,
- * which react-konva does not render under React 19.2.6 / Next 16 (see the
+ * which react-konva does not render under React 19.2.7 / Next 16 (see the
  * editor-core.spec.ts header for the full root cause). `--disable-gpu` in
  * playwright.config.ts prevents the separate headless-GPU hang so #5 can run.
  *

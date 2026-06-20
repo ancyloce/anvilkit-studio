@@ -108,8 +108,8 @@
 		"@types/react-dom": "19.2.3",
 		"jsdom": "^29.1.1",
 		"publint": "^0.3.21",
-		"react": "^19.2.6",
-		"react-dom": "^19.2.6",
+		"react": "^19.2.7",
+		"react-dom": "^19.2.7",
 		"typescript": "6.0.3",
 		"vitest": "^4.1.7"
 	},

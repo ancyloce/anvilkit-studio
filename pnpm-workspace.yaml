@@ -43,12 +43,15 @@ minimumReleaseAgeExclude:
   - turbo@2.9.15
   - oxlint-plugin-react-doctor@0.2.14
   - react-doctor@0.2.14
+  - deslop-js@0.5.8
+  - oxlint-plugin-react-doctor@0.5.8
+  - react-doctor@0.5.8
 patchedDependencies:
   "@base-ui/react@1.5.0": packages/components/patches/@base-ui__react@1.5.0.patch
 
 overrides:
-  react: 19.2.6
-  react-dom: 19.2.6
+  react: 19.2.7
+  react-dom: 19.2.7
   # Pin a single typedoc + typescript pair so typedoc-plugin-markdown's
   # `instanceof Reflection` check works — otherwise pnpm installs a
   # separate `typedoc` copy per consuming `typescript` peer version and

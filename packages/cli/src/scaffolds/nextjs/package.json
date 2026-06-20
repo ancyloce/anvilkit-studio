@@ -14,8 +14,8 @@
 		"@anvilkit/ir": "0.1.0-alpha.0",
 		"@puckeditor/core": "^0.21.3",
 		"next": "^16.2.6",
-		"react": "^19.2.6",
-		"react-dom": "^19.2.6"
+		"react": "^19.2.7",
+		"react-dom": "^19.2.7"
 	},
 	"devDependencies": {
 		"@types/node": "^25.9.1",
