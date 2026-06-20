@@ -187,7 +187,10 @@ export function EditorI18nProvider({
 	// Keys already requested (in-flight or done) so a pack is fetched at most
 	// once per `(namespace, locale)`, even across the re-renders each
 	// resolution triggers. A failed load is removed so a later switch retries.
-	const requestedRef = useRef<Set<string>>(new Set());
+	const requestedRef = useRef<Set<string>>(null!);
+	if (!requestedRef.current) {
+		requestedRef.current = new Set();
+	}
 
 	// Mount-lifetime flag (finding P2-2): the async `loadMessages()`
 	// resolutions below `setLoadedPacks`/mutate `requestedRef`, and a pack
