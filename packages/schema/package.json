@@ -72,15 +72,15 @@
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
 		"@puckeditor/core": "^0.21.3",
-		"@rslib/core": "^0.22.0",
-		"@types/node": "^25.9.1",
+		"@rslib/core": "^0.23.0",
+		"@types/node": "^26.0.0",
 		"esbuild": "^0.28.0",
 		"madge": "^8.0.0",
 		"publint": "^0.3.21",
 		"typedoc": "^0.28.19",
 		"typedoc-plugin-markdown": "^4.11.0",
 		"typescript": "6.0.3",
-		"vitest": "^4.1.7",
+		"vitest": "^4.1.9",
 		"zod": "^4.4.3"
 	}
 }
