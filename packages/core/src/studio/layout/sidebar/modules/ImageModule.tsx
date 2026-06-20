@@ -27,17 +27,17 @@ import {
 	useState,
 } from "react";
 import { toast } from "sonner";
+import {
+	appendComponentToRoot,
+	generateNodeId,
+} from "@/layout/sidebar/commands/insert-component-node";
 import { useSetSidebarHeaderActions } from "@/layout/sidebar/SidebarHeaderActionsContext";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
 import { Input } from "@/primitives/input";
 import { useMsg } from "@/state/editor-i18n-context";
-import { useAssetCategoryFilter } from "@/state/slices/editor-ui-selectors";
-import {
-	appendComponentToRoot,
-	generateNodeId,
-} from "@/layout/sidebar/commands/insert-component-node";
 import { useSidebarRegistry } from "@/state/sidebar-registry/use-sidebar-registry";
+import { useAssetCategoryFilter } from "@/state/slices/editor-ui-selectors";
 import type {
 	StudioAsset,
 	StudioAssetFolder,
@@ -127,7 +127,10 @@ export function ImageModule(): ReactNode {
 	const requestSeqRef = useRef(0);
 	// In-flight upload AbortControllers, aborted on unmount / source change
 	// so a cancelled batch stops consuming the host endpoint.
-	const uploadAbortControllersRef = useRef<Set<AbortController>>(new Set());
+	const uploadAbortControllersRef = useRef<Set<AbortController>>(null!);
+	if (!uploadAbortControllersRef.current) {
+		uploadAbortControllersRef.current = new Set();
+	}
 
 	// Refresh the asset list whenever the source notifies. Mirrors
 	// `LayersPanel`'s pages-source effect.
