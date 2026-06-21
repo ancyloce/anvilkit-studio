@@ -39583,10 +39583,6 @@
                 "tag": "@example",
                 "content": [
                   {
-                    "kind": "text",
-                    "text": "\n\n"
-                  },
-                  {
                     "kind": "code",
                     "text": "```ts\n// Test-friendly: inject a synthetic env bag.\nconst config = createStudioConfig(undefined, {\n  env: { ANVILKIT_THEME__DEFAULT_MODE: \"dark\" },\n});\n```"
                   }
@@ -42519,10 +42515,6 @@
                 "tag": "@example",
                 "content": [
                   {
-                    "kind": "text",
-                    "text": "\n\n"
-                  },
-                  {
                     "kind": "code",
                     "text": "```ts\n// Explicit meta — reserves the header slot before the chunk loads:\nconst versionHistory = lazyPluginWith(\n  () => import(\"@anvilkit/plugin-version-history\").then((m) => m.plugin),\n  { id: \"@anvilkit/plugin-version-history\", name: \"Version History\",\n    version: \"0.1.0\", coreVersion: \"^0.1.0\", capabilities: { header: true } },\n  withoutHeaderActions,\n);\n```"
                   }
@@ -42899,10 +42891,6 @@
               {
                 "tag": "@example",
                 "content": [
-                  {
-                    "kind": "text",
-                    "text": "\n\n"
-                  },
                   {
                     "kind": "code",
                     "text": "```ts\n// Explicit meta — reserves the header slot before the chunk loads:\nconst versionHistory = lazyPluginWith(\n  () => import(\"@anvilkit/plugin-version-history\").then((m) => m.plugin),\n  { id: \"@anvilkit/plugin-version-history\", name: \"Version History\",\n    version: \"0.1.0\", coreVersion: \"^0.1.0\", capabilities: { header: true } },\n  withoutHeaderActions,\n);\n```"
@@ -45801,9 +45789,9 @@
       "sources": [
         {
           "fileName": "react/components/Studio.tsx",
-          "line": 139,
+          "line": 140,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L139"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L140"
         }
       ],
       "signatures": [
@@ -45857,9 +45845,9 @@
           "sources": [
             {
               "fileName": "react/components/Studio.tsx",
-              "line": 139,
+              "line": 140,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L139"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L140"
             }
           ],
           "typeParameters": [
@@ -46290,12 +46278,12 @@
             "type": "reference",
             "target": {
               "packageName": "@types/react",
-              "packagePath": "jsx-runtime.d.ts",
-              "qualifiedName": "JSX.Element"
+              "packagePath": "index.d.ts",
+              "qualifiedName": "React.JSX.Element"
             },
             "name": "Element",
             "package": "@types/react",
-            "qualifiedName": "JSX.Element"
+            "qualifiedName": "React.JSX.Element"
           }
         }
       ]
