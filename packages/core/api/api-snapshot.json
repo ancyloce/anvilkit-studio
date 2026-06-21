@@ -45789,9 +45789,9 @@
 			"sources": [
 				{
 					"fileName": "react/components/Studio.tsx",
-					"line": 139,
+					"line": 140,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L139"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L140"
 				}
 			],
 			"signatures": [
@@ -45845,9 +45845,9 @@
 					"sources": [
 						{
 							"fileName": "react/components/Studio.tsx",
-							"line": 139,
+							"line": 140,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L139"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L140"
 						}
 					],
 					"typeParameters": [
@@ -46278,12 +46278,12 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@types/react",
-							"packagePath": "jsx-runtime.d.ts",
-							"qualifiedName": "JSX.Element"
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.JSX.Element"
 						},
 						"name": "Element",
 						"package": "@types/react",
-						"qualifiedName": "JSX.Element"
+						"qualifiedName": "React.JSX.Element"
 					}
 				}
 			]

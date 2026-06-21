@@ -1991,9 +1991,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 283,
+					"line": 307,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L283"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L307"
 				}
 			],
 			"signatures": [
@@ -2022,9 +2022,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 283,
+							"line": 307,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L283"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L307"
 						}
 					],
 					"type": {
