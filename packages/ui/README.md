@@ -73,7 +73,7 @@ export function ContactCard() {
 | `@anvilkit/ui/card`     | `Card`, `CardHeader`, `CardContent`, `CardFooter`.                                           |
 | `@anvilkit/ui/dialog`   | Base-UI dialog wired with the Anvilkit token layer.                                          |
 | `@anvilkit/ui/presence` | Peer avatars, presence overlays, and cursor primitives used by `@anvilkit/plugin-collab-ui`. |
-| `@anvilkit/ui/hooks/*`  | Stable React hooks (`useMeasure`, etc.) re-exported for downstream packages.                 |
+| `@anvilkit/ui/hooks/*`  | Stable React hooks (`useControlledState`, `useIsInView`, etc.) re-exported for downstream packages. |
 | `@anvilkit/ui/lib/*`    | Internal helpers (`cn`, `cva` builders) — re-exported so component packages share one copy.  |
 
 The package is bundled with Rslib and ships CJS, ESM, and `.d.ts`

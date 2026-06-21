@@ -8,7 +8,8 @@ anvilkit-studio workspace. Private — not published to npm.
 | Import                              | Purpose                                                                                       |
 | ----------------------------------- | --------------------------------------------------------------------------------------------- |
 | `@anvilkit/tailwind-config`         | `theme.css` — the base token layer (light + dark CSS variables).                              |
-| `@anvilkit/tailwind-config/shadcn`  | `shadcn.css` — token layer plus shadcn-style design tokens used by `@anvilkit/ui` primitives. |
+| `@anvilkit/tailwind-config/shadcn`  | `shadcn.css` — app-level token layer plus shadcn-style design tokens; pulls Tailwind preflight and workspace-wide `@source` scans. Import once per app. |
+| `@anvilkit/tailwind-config/component` | `component.css` — preflight-free, source-scoped base for individual `@anvilkit/*` component packages. Import from a component's `src/styles.css` instead of `/shadcn`. |
 | `@anvilkit/tailwind-config/postcss` | PostCSS config bundling `@tailwindcss/postcss`. Drop-in for `apps/demo` and `apps/docs`.      |
 
 ## Usage

@@ -13,15 +13,16 @@ state/
   README.md   __tests__/
 
   ── composite + infra (what the <Studio> controller mounts) ──
-  editor-store-bundle.ts       createEditorStore — bundles the 4 slices below
-  EditorStoreProvider.tsx      single hydration gate supplying the 4 slice contexts
+  editor-store-bundle.ts       createEditorStore — bundles the 5 slices below
+  EditorStoreProvider.tsx      single hydration gate supplying the 5 slice contexts
   use-rehydrated-store.ts      zustand/persist rehydration helper (used by every provider)
   devtools.ts                  devtoolsEnabled — store devtools gate
 
-  slices/                      ── the 4 persisted Studio-instance Zustand slices ──
+  slices/                      ── the 5 persisted Studio-instance Zustand slices ──
     ai-store.ts          AiStoreProvider.tsx        (Core-owned, chrome-agnostic)
     export-store.ts      ExportStoreProvider.tsx    (Core-owned, chrome-agnostic)
     theme-store.ts       ThemeStoreProvider.tsx     (Core-owned, chrome-agnostic)
+    locale-store.ts      LocaleStoreProvider.tsx    (Core-owned, chrome-agnostic)
     editor-ui-store.ts   EditorUiStoreProvider.tsx  editor-ui-selectors.ts  (AnvilKit chrome)
 
   sidebar-registry/            ── plugin sidebar registry (store + hook + provider) ──

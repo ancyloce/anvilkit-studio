@@ -7,7 +7,7 @@ runtime packages (`ir`, `schema`, `validator`) and sits directly
 above `@anvilkit/utils` in the dependency graph — it imports zero
 React, no DOM, and no other `@anvilkit/*` runtime.
 
-> **Alpha status (0.1.x).** The four public exports are implemented
+> **Alpha status (0.1.x).** The public exports are implemented
 > and covered by round-trip, canonical-form, and snapshot tests.
 > The IR shape is **frozen at end of M1** — any change requires a
 > Core minor bump and an `ir_shape_changed` changeset.
@@ -73,19 +73,21 @@ for the full package catalog and trust-boundary discussion.
 | `irToPuckData`  | `(ir: PageIR) => Data`                               | Reverse of `puckDataToIR` — used for round-trip tests and the AI copilot's `setData` dispatch. |
 | `collectAssets` | `(node: PageIRNode) => readonly PageIRAsset[]`       | Walk a sub-tree and collect every referenced asset, deduplicated.                              |
 | `identifySlots` | `(config: Config) => Map<string, readonly string[]>` | Inspect a Puck `Config` and return the slot-field keys declared on each component.             |
+| `getDataSourceDirective` | `(props?: Readonly<Record<string, unknown>>) => DataSourceDirective \| undefined` | Read a `dataSource` directive off a node's props (or `undefined` when absent/malformed). |
+| `DATA_SOURCE_PROP` | `string` (`"_dataSource"`)                       | Reserved prop key under which a `DataSourceDirective` is carried on a node.                     |
 
 ## Peer dependencies
 
 | Package            | Version   |
 | ------------------ | --------- |
-| `@anvilkit/core`   | `0.1.3`   |
+| `@anvilkit/core`   | `^0.1.4`  |
 | `@puckeditor/core` | `^0.21.3` |
 
 ## Dependency contract
 
 | Allowed                                                          | Forbidden                                                           |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `@anvilkit/utils` (runtime), `@anvilkit/core` (peer, types-only) | `@anvilkit/schema`, `@anvilkit/validator`, `@anvilkit/core` runtime |
+| `@anvilkit/utils` (runtime), `zod` (runtime), `@anvilkit/core` (peer, types-only) | `@anvilkit/schema`, `@anvilkit/validator`, `@anvilkit/core` runtime |
 | `@puckeditor/core` (peer, types-only)                            | React, ReactDOM, any plugin package, any DOM API                    |
 
 CI enforces these with `madge --circular`, `check:react-free-runtime`,

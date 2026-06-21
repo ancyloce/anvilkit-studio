@@ -319,14 +319,20 @@ case on every build.
 
 ## Exports map
 
-| Import                   | Purpose                                                                 |
-| ------------------------ | ----------------------------------------------------------------------- |
-| `@anvilkit/core`         | Main barrel. Re-exports types, runtime, config, react (sans `compat`).  |
-| `@anvilkit/core/types`   | Plugin contract and domain types (AI, export, IR, config).              |
-| `@anvilkit/core/runtime` | React-free plugin engine (`compilePlugins`, errors, lifecycle manager). |
-| `@anvilkit/core/config`  | `createStudioConfig`, `StudioConfigSchema`, provider + hook.            |
-| `@anvilkit/core/react`   | `<Studio>`, `useStudio`, `mergeOverrides`, and the Zustand store hooks. |
-| `@anvilkit/core/compat`  | Legacy compat adapters (`aiHostAdapter`). Tree-shaken unless imported.  |
+| Import                            | Purpose                                                                 |
+| --------------------------------- | ----------------------------------------------------------------------- |
+| `@anvilkit/core`                  | Main barrel. Re-exports types, runtime, config, react (sans `compat`).  |
+| `@anvilkit/core/types`            | Plugin contract and domain types (AI, export, IR, config).              |
+| `@anvilkit/core/runtime`          | React-free plugin engine (`compilePlugins`, errors, lifecycle manager). |
+| `@anvilkit/core/config`           | `createStudioConfig`, `StudioConfigSchema`, provider + hook.            |
+| `@anvilkit/core/i18n`             | `useMsg`, `useT`, `EditorI18nProvider`, `LanguageSwitcher`, message types. |
+| `@anvilkit/core/react`            | `<Studio>`, `useStudio`, `mergeOverrides`, and the Zustand store hooks. |
+| `@anvilkit/core/react/overrides`  | Puck override preset (`studioOverrides`, `createStudioOverrides`, `mergeOverrides`). |
+| `@anvilkit/core/section`          | Type-only AI section context/patch/selection types.                     |
+| `@anvilkit/core/templates`        | Template manifest types + `isAnvilkitTemplate` guard.                   |
+| `@anvilkit/core/testing`          | Test helpers (`createFakePageIR`, `createFakeStudioContext`, `registerPlugin`). |
+| `@anvilkit/core/compat`           | Legacy compat adapters (`aiHostAdapter`). Tree-shaken unless imported.  |
+| `@anvilkit/core/styles.css`       | Self-contained chrome stylesheet (precompiled Tailwind utilities + tokens). |
 
 The `./runtime` subpath is guaranteed React-free — it can be imported
 from server-only code or a CLI without pulling React into your

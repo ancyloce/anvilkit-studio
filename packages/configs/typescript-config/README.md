@@ -11,8 +11,10 @@ Private — not published to npm.
 | `react-library.json` | React libraries that ship `.d.ts` for both CJS and ESM (`core`, `ui`, every plugin).    |
 | `nextjs.json`        | Next.js apps. Used by `apps/demo`.                                                      |
 
-All three enable `strict`, `verbatimModuleSyntax`, and
-`isolatedModules` — use `import type` for type-only imports.
+All three enable `strict` and `isolatedModules`. Packages that bundle
+their own `.d.ts` also turn on `verbatimModuleSyntax` (via the
+`react-library-bundler.json` preset or a per-package override) — use
+`import type` for type-only imports.
 
 ## Usage
 

@@ -2,7 +2,7 @@
 
 AnvilKit Studio is a monorepo of [Puck](https://puckeditor.com/)-native React component packages, a Studio runtime, and a plugin ecosystem. Components, plugins, and templates are each published as independent `@anvilkit/*` npm packages.
 
-> **AnvilKit Studio v1.0.0-beta is rolling out.** The runtime cone (`@anvilkit/core`, `ir`, `schema`, `validator`) and the first-party plugins are pinned to the `1.0.0-beta` line. Component packages stay on their independent `0.0.x` cadence and are not bumped to `1.0` with this release. See the [aggregate changelog](CHANGELOG.md), the [migration guide](docs/migration/0.x-to-1.0-beta.md), or [file beta feedback](docs/beta-feedback/README.md).
+> **AnvilKit Studio is in pre-1.0 beta.** Each package versions independently: the runtime cone (`@anvilkit/core`, `ir`, `schema`, `validator`, `ui`, `utils`) is on the `0.1.x` line, component packages are on their own `0.2.x` cadence, and the first-party plugins range from `0.1.x` to release-candidate lines (e.g. `@anvilkit/plugin-collab-yjs` and `@anvilkit/plugin-design-system`). See the [aggregate changelog](CHANGELOG.md), the [migration guide](docs/migration/0.x-to-1.0-beta.md), or [file beta feedback](docs/beta-feedback/README.md).
 >
 > **Looking ahead:** the [LTS policy](docs/policies/lts.md) and the [`beta → 1.0` migration notes](docs/migration/1.0-beta-to-1.0.md) take effect on the day `v1.0.0` ships.
 
@@ -49,32 +49,47 @@ Useful root commands:
 
 ### Plugins (`packages/plugins/`, git submodules)
 
-| Plugin                             | Latest                 | Purpose                                                                 |
-| ---------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
-| `@anvilkit/plugin-export-html`     | `1.0.0-beta.0`         | HTML exporter with the XSS / URL / CSS-injection hostile-input battery. |
-| `@anvilkit/plugin-export-react`    | `1.0.0-beta.0`         | React `.tsx` / `.jsx` exporter with AST-snapshot contract.              |
-| `@anvilkit/plugin-ai-copilot`      | `1.0.0-beta.0`         | Headless AI copilot; validator-gated dispatch; `./mock` for CI.         |
-| `@anvilkit/plugin-asset-manager`   | `1.0.0`                | Headless asset uploads with CSP advisor + S3 presigned adapter.         |
-| `@anvilkit/plugin-version-history` | `1.0.0-beta.0`         | Snapshot persistence via host `SnapshotAdapter`; diff/apply engine.     |
-| `@anvilkit/plugin-collab-yjs`      | `0.9.0-rc.0` (`@beta`) | Yjs CRDT collaboration; opt-in native Y.Map tree.                       |
-| `@anvilkit/collab-ui`              | `0.1.0-rc.0` (`@beta`) | Host UI primitives (room bar, presence layer) for the Yjs plugin.       |
+| Plugin                             | Latest         | Purpose                                                                       |
+| ---------------------------------- | -------------- | ---------------------------------------------------------------------------- |
+| `@anvilkit/plugin-export-html`     | `0.1.7`        | HTML exporter with the XSS / URL / CSS-injection hostile-input battery.       |
+| `@anvilkit/plugin-export-react`    | `0.1.6`        | React `.tsx` / `.jsx` exporter that emits source from the Page IR.            |
+| `@anvilkit/plugin-export-canvas`   | `0.1.0-rc.2`   | Canvas export formats (PNG / JSON / SVG / PDF) over the canvas serializers.   |
+| `@anvilkit/plugin-ai-copilot`      | `0.1.8`        | Headless AI copilot; validator-gated dispatch; `./mock` for CI.              |
+| `@anvilkit/plugin-ai-image`        | `0.1.4`        | AI image generation (text-to-image, variation, inpaint, background removal). |
+| `@anvilkit/plugin-asset-manager`   | `0.1.9`        | Headless asset uploads with optional React UI + presigned adapter.           |
+| `@anvilkit/plugin-version-history` | `0.1.7`        | Snapshot persistence via host `SnapshotAdapter`; diff/apply engine.          |
+| `@anvilkit/plugin-design-system`   | `0.1.1-rc.2`   | Token-bound fields, theme switching, and design validation.                  |
+| `@anvilkit/plugin-canvas-studio`   | `0.1.6`        | Canvas Studio integration — mode-switch, design-block + `design://` bridge.  |
+| `@anvilkit/plugin-page-seo`        | `0.1.0`        | Rail panel that edits a page's SEO metadata (`root.props.seo`).              |
+| `@anvilkit/plugin-collab-yjs`      | `0.10.0-rc.9`  | Yjs CRDT collaboration; native per-node Y.Map tree (now default).           |
+| `@anvilkit/collab-ui`              | `0.1.0-rc.9`   | Host UI primitives (room bar, presence layer) for the Yjs plugin.            |
+
+### Canvas & analytics (`packages/canvas/`, `packages/analytics/`, git submodules)
+
+| Package                    | Role                                                                        |
+| -------------------------- | -------------------------------------------------------------------------- |
+| `@anvilkit/canvas-core`    | Headless Canvas IR, Zod validators, walkers, mutations, serializers (no React/Konva). |
+| `@anvilkit/canvas-editor`  | React + Konva editor UI; loads inside `<Studio>` via `next/dynamic({ ssr: false })`.  |
+| `@anvilkit/analytics-core` | Framework-agnostic, React-free analytics adapters, event catalog, transport. |
+| `@anvilkit/analytics-react`| `AnalyticsProvider` / `useAnalytics` / `useTrack` React bindings.           |
 
 ### Apps (`apps/`)
 
-| App         | Purpose                                                                         |
-| ----------- | ------------------------------------------------------------------------------- |
-| `apps/demo` | Next.js validation surface for every published `@anvilkit/*` package.           |
-| `apps/docs` | Starlight docs site deployed to [docs.anvilkit.dev](https://docs.anvilkit.dev). |
+| App           | Purpose                                                                         |
+| ------------- | ------------------------------------------------------------------------------- |
+| `apps/demo`   | Next.js validation surface for every published `@anvilkit/*` package.           |
+| `apps/docs`   | Starlight docs site deployed to [docs.anvilkit.dev](https://docs.anvilkit.dev). |
+| `apps/collab` | Standalone Hocuspocus WebSocket relay for the docs playground (`?collab=1`); excluded from the pnpm workspace, deployed independently. |
 
 ### Component packages
 
-Eleven independently-published component packages live under the
+Twelve independently-published component packages live under the
 `packages/components/` submodule:
 
 `@anvilkit/button`, `@anvilkit/input`, `@anvilkit/navbar`, `@anvilkit/hero`,
 `@anvilkit/section`, `@anvilkit/bento-grid`, `@anvilkit/blog-list`,
-`@anvilkit/helps`, `@anvilkit/logo-clouds`, `@anvilkit/pricing-minimal`,
-`@anvilkit/statistics`.
+`@anvilkit/design-block`, `@anvilkit/helps`, `@anvilkit/logo-clouds`,
+`@anvilkit/pricing-minimal`, `@anvilkit/statistics`.
 
 Each exports a render component plus `componentConfig`, `defaultProps`, `fields`, and `metadata`. See `packages/components/AGENTS.md` for component-authoring conventions.
 
@@ -90,16 +105,18 @@ The shared Puck config lives in `apps/demo/lib/puck-demo.ts`. When adding a new 
 
 ## Git submodules
 
-After cloning, run `git submodule update --init --recursive`. Submodules:
+After cloning, run `git submodule update --init --recursive`. The canonical list
+is `.gitmodules` (`git config -f .gitmodules --get-regexp path`). There are 17
+submodules:
 
 - `packages/components`
-- `packages/plugins/plugin-ai-copilot`
-- `packages/plugins/plugin-asset-manager`
-- `packages/plugins/plugin-export-html`
-- `packages/plugins/plugin-export-react`
-- `packages/plugins/plugin-version-history`
-- `packages/plugins/plugin-collab-yjs`
-- `packages/plugins/plugin-collab-ui`
+- Plugins (`packages/plugins/`): `plugin-ai-copilot`, `plugin-ai-image`,
+  `plugin-asset-manager`, `plugin-canvas-studio`, `plugin-collab-ui`,
+  `plugin-collab-yjs`, `plugin-design-system`, `plugin-export-canvas`,
+  `plugin-export-html`, `plugin-export-react`, `plugin-page-seo`,
+  `plugin-version-history`
+- Canvas (`packages/canvas/`): `core`, `editor`
+- Analytics (`packages/analytics/`): `core`, `react`
 
 ## Continuous Integration
 

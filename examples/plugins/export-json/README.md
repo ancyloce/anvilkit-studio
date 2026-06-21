@@ -26,8 +26,9 @@ const studioConfig = createStudioConfig({
 });
 ```
 
-The registered format id is `"json"`. Host apps dispatch on the id
-via `useExportStore.exportAs("json", options)`.
+The registered format id is `"json"`. Host apps trigger a download
+by wiring `chromeProps.onExport(formatId)`, which normalizes the Puck
+data to `PageIR` and calls `jsonFormat.run(ir, options)`.
 
 ## Develop
 

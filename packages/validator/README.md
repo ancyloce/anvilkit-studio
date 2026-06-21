@@ -2,12 +2,12 @@
 
 Export-readiness validation for Puck component configs and AI-generated output.
 
-> **Alpha status (0.1.x).** Both `validateComponentConfig` and `validateAiOutput` are implemented and tested.
+> **Alpha status (0.1.x).** `validateComponentConfig`, `validateAiOutput`, and the page-payload validators (`validatePagePayload`, `validatePageRootProps`, `validatePublishRequest`, `validatePuckPageData`, `validateSaveDraftRequest`) are implemented and tested.
 
 ## Install
 
 ```bash
-pnpm add @anvilkit/validator @puckeditor/core
+pnpm add @anvilkit/validator @puckeditor/core zod
 ```
 
 ## Quickstart
@@ -115,7 +115,7 @@ Fields declared with `type: "object"` in `AiComponentSchema` are validated as `r
 | Allowed                               | Forbidden                      |
 | ------------------------------------- | ------------------------------ |
 | `@anvilkit/schema` (runtime)          | `@anvilkit/ir`, React, plugins |
-| `zod` (runtime)                       | `@anvilkit/utils`              |
+| `zod` (peer)                          | `@anvilkit/utils`              |
 | `@anvilkit/core` (types-only)         |                                |
 | `@puckeditor/core` (peer, types-only) |                                |
 
@@ -124,3 +124,4 @@ Fields declared with `type: "object"` in `AiComponentSchema` are validated as `r
 | Package            | Version   |
 | ------------------ | --------- |
 | `@puckeditor/core` | `^0.21.3` |
+| `zod`              | `^4.4.3`  |

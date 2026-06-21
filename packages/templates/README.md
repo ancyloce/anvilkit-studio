@@ -17,10 +17,11 @@ component packages.
 
 ```
 packages/templates/
-├── tsconfig.base.json                     # shared compiler options
+├── package.json                           # @anvilkit/templates-workspace (aggregator scripts)
+├── scripts/                               # scaffold / verify / preview tooling
 ├── landing-saas/
 │   ├── package.json                       # @anvilkit/template-landing-saas
-│   ├── tsconfig.json                      # extends ../tsconfig.base.json
+│   ├── tsconfig.json                      # extends @anvilkit/typescript-config/base.json
 │   ├── README.md                          # one-paragraph blurb
 │   └── src/
 │       ├── index.ts                       # default export (AnvilkitTemplate)

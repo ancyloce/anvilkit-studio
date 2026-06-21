@@ -1,6 +1,6 @@
-# @anvilkit/plugin-**NAME**
+# @anvilkit/plugin-__NAME__
 
-**DISPLAY_MARKDOWN** - Anvilkit StudioPlugin (category: **CATEGORY**).
+__DISPLAY_MARKDOWN__ - Anvilkit StudioPlugin (category: __CATEGORY__).
 
 ## Install
 

@@ -7,12 +7,13 @@ and [`AiFieldSchema`](../core/src/types/ai.ts) that the AI copilot plugin
 feeds into its system prompt.
 
 > **Alpha status (0.1.x).** `configToAiContext`, `identifySlotFields`,
-> `extractFieldSchema`, and `isJsonSerializable` are implemented and tested.
+> `extractFieldSchema`, `isJsonSerializable`, and the `PageRootSchema` /
+> `PageSeoSchema` Zod schemas are implemented and tested.
 
 ## Install
 
 ```bash
-pnpm add @anvilkit/schema @puckeditor/core
+pnpm add @anvilkit/schema @puckeditor/core zod
 ```
 
 ## Quickstart
@@ -78,6 +79,8 @@ for the full package catalog.
 | `identifySlotFields` | `(config: Config) => Map<string, readonly string[]>`   | Identify slot fields per component.               |
 | `extractFieldSchema` | `(name: string, field: Field, opts?) => AiFieldSchema` | Map a single Puck field to an AI-friendly schema. |
 | `isJsonSerializable` | `(value: unknown, opts?) => boolean`                   | Check if a value is safe for JSON serialization.  |
+| `PageRootSchema`     | `ZodType<PageRootProps>`                               | Zod schema for the canonical page `root.props` payload. |
+| `PageSeoSchema`      | `ZodType<PageSeo>`                                     | Zod schema for the `root.props.seo` SEO metadata block. |
 
 ### `ConfigToAiContextOptions`
 
@@ -104,3 +107,4 @@ optional. Callers that know better can override per call by passing
 | Package            | Version   |
 | ------------------ | --------- |
 | `@puckeditor/core` | `^0.21.3` |
+| `zod`              | `^4.4.3`  |
