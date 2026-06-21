@@ -629,10 +629,6 @@
                 "tag": "@example",
                 "content": [
                   {
-                    "kind": "text",
-                    "text": "\n\n"
-                  },
-                  {
                     "kind": "code",
                     "text": "```ts\ndeepMerge({ tags: [\"a\", \"b\"] }, { tags: [\"c\"] });\n// => { tags: [\"c\"] }   // arrays are replaced, not merged\n```"
                   }
