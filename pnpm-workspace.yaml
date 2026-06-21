@@ -19,7 +19,7 @@ allowBuilds:
   # by the prebuilt `@parcel/watcher-*` platform packages, so the node-gyp
   # install script isn't needed at runtime — skip it like the others below.
   '@parcel/watcher': false
-  core-js: set this to true or false
+  core-js: false
   esbuild: false
   leveldown: false
   msgpackr-extract: false
@@ -41,17 +41,37 @@ minimumReleaseAgeExclude:
   - '@turbo/windows-64@2.9.15'
   - '@turbo/windows-arm64@2.9.15'
   - turbo@2.9.15
-  - oxlint-plugin-react-doctor@0.2.14
-  - react-doctor@0.2.14
   - deslop-js@0.5.8
-  - oxlint-plugin-react-doctor@0.5.8
-  - react-doctor@0.5.8
+  # pnpm's minimumReleaseAgeExclude check returns at the FIRST entry whose
+  # package name matches, then asks "is this version in that one entry?". So a
+  # package needing several versions excluded must combine them into one `||`
+  # union — separate `pkg@A` / `pkg@B` lines leave the second line dead. This
+  # previously let react-doctor@0.5.8 / oxlint-plugin-react-doctor@0.5.8 slip
+  # through, shadowed by the older @0.2.14 lines above them.
+  - oxlint-plugin-react-doctor@0.2.14 || 0.5.8
+  - react-doctor@0.2.14 || 0.5.8
+  # Transitive deps newly resolved by the fresh lockfile (the @base-ui/react
+  # 1.6.0 bump re-resolved the tree), each published inside pnpm's 24h
+  # minimumReleaseAge embargo window. Mainstream packages; whitelist the exact
+  # pinned versions so install can proceed. nanoid pins two majors (3 + 5), so
+  # it must be a single union per the rule above.
+  - '@dotenvx/dotenvx@1.75.1'
+  - '@dotenvx/primitives@0.8.0'
+  - nanoid@3.3.14 || 5.1.15
+  - tabbable@6.5.0
 patchedDependencies:
-  "@base-ui/react@1.5.0": packages/components/patches/@base-ui__react@1.5.0.patch
+  "@base-ui/react@1.6.0": packages/components/patches/@base-ui__react@1.6.0.patch
 
 overrides:
   react: 19.2.7
   react-dom: 19.2.7
+  # Pin @base-ui/react to the version the patch is keyed to. The consumers
+  # (core, ui) depend on `^1.4.1`, and newer releases (1.6.0+) exist, so a
+  # fresh resolve without a lockfile floats past 1.5.0 and leaves
+  # patches/@base-ui__react@1.5.0.patch unused (ERR_PNPM_UNUSED_PATCH).
+  # The patch fixes the Puck/base-ui getModifierState crash, so keep it
+  # applied by pinning the single resolved version here.
+  "@base-ui/react": 1.6.0
   # Pin a single typedoc + typescript pair so typedoc-plugin-markdown's
   # `instanceof Reflection` check works — otherwise pnpm installs a
   # separate `typedoc` copy per consuming `typescript` peer version and
