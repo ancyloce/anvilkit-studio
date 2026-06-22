@@ -56,8 +56,10 @@ import type {
  *
  * - {@link log} routes to Core's logger.
  * - {@link emit} broadcasts to the plugin event bus so other plugins
- *   can observe this one (subscribers wire up their own listeners in
- *   `onInit` — Core does not prescribe a subscription API).
+ *   can observe this one; {@link on} subscribes to events from other
+ *   plugins. The bus is per `<Studio>` instance, synchronous, and
+ *   delivers in registration order (subscribers typically wire up their
+ *   listeners in `register`/`onInit`).
  *
  * @typeParam UserConfig - Optional Puck config generic so plugins can
  * receive fully-typed component data. Defaults to the Puck default.
@@ -109,25 +111,47 @@ export interface StudioPluginContext<
 	) => void;
 
 	/**
-	 * Broadcast an event to the Studio plugin event bus.
+	 * Broadcast an event to the Studio plugin event bus, delivering it
+	 * synchronously to every handler subscribed via {@link on} (including
+	 * other plugins' handlers), in registration order.
 	 *
 	 * Event names are free-form strings — Core does not enforce a
-	 * schema. Subscribers validate payloads themselves.
+	 * schema. Subscribers validate payloads themselves. Namespacing the
+	 * event with your plugin slug (e.g. `"asset-manager:uploaded"`) is
+	 * recommended to avoid collisions.
 	 *
-	 * @reserved **Not implemented yet (architecture §12).** The
-	 * plugin-to-plugin bus has no delivery: calling `emit` is inert,
-	 * never throws, and no subscriber receives the event. The
-	 * `<Studio>` shell logs a warning on the first call per plugin
-	 * context (every environment — rate-limited to once) so the inert
-	 * contract is discoverable without reading the implementation. Do
-	 * not rely on delivery until a concrete subscribe API and ordering
-	 * semantics are documented here. The signature is stable; only the
-	 * runtime behavior changes when the bus ships.
+	 * Delivery semantics (architecture §8.5):
+	 * - **Per-instance.** The bus is scoped to this `<Studio>` instance;
+	 *   two editors on a page never cross-deliver.
+	 * - **No replay.** Only handlers subscribed at emit time receive the
+	 *   event — a later subscriber never sees a past event.
+	 * - **Failure-isolated.** A throwing handler is caught, logged, and
+	 *   skipped; the remaining handlers still run. `emit` never throws.
 	 *
 	 * @param event - Event name (plugin-defined).
 	 * @param payload - Optional payload. Defaults to `undefined`.
 	 */
 	readonly emit: (event: string, payload?: unknown) => void;
+
+	/**
+	 * Subscribe `handler` to an event name on the Studio plugin event
+	 * bus. Returns an unsubscribe function; call it to stop receiving the
+	 * event (idempotent). Each `on` call is an independent subscription.
+	 *
+	 * The payload is `unknown` by contract — validate it in the handler.
+	 * Subscribe in `register` or an `onInit` hook so the handler is in
+	 * place before peer plugins start emitting; events emitted before you
+	 * subscribe are not replayed. See {@link emit} for delivery
+	 * semantics.
+	 *
+	 * @param event - Event name to listen for.
+	 * @param handler - Called with the emitted payload.
+	 * @returns An unsubscribe function.
+	 */
+	readonly on: (
+		event: string,
+		handler: (payload: unknown) => void,
+	) => () => void;
 
 	/**
 	 * Resolve an i18n message key to a string for the **config** locale

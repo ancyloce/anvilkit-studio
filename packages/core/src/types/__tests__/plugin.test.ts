@@ -133,6 +133,7 @@ describe("StudioPlugin type contract", () => {
 			emit: () => {
 				/* no-op */
 			},
+			on: () => () => undefined,
 			t: (key) => key,
 			registerMessages: () => {
 				/* no-op */
