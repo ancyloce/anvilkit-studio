@@ -4,10 +4,11 @@
  * (extracted from `use-studio-controller.ts`, review finding P2-1).
  *
  * This is the immutable shell context: `getData`/`getPuckApi` read live
- * refs, `log`/`emit` route through the host logger, `t` resolves the
- * React-free catalog for the **active** locale (live via the locale store
- * + the controller's `liveI18nRef`), and the `register*` methods proxy to
- * the per-instance sidebar registry. `compilePlugins()` re-wraps it per
+ * refs, `log` routes through the host logger, `emit`/`on` share one
+ * per-compile event bus (architecture §8.5), `t` resolves the React-free
+ * catalog for the **active** locale (live via the locale store + the
+ * controller's `liveI18nRef`), and the `register*` methods proxy to the
+ * per-instance sidebar registry. `compilePlugins()` re-wraps it per
  * plugin with runtime-backed `registerMessages`/`registerAssetResolver`
  * collectors; the base versions here stay inert no-ops so the shell
  * context is immutable.
@@ -17,6 +18,7 @@ import type { Data as PuckData } from "@puckeditor/core";
 import type { RefObject } from "react";
 
 import { braceFormatter } from "@/i18n/format";
+import { createEventBus, type EventBus } from "@/runtime/event-bus";
 import { DEFAULT_MESSAGES } from "@/state/editor-i18n-context";
 import type { LocaleStoreApi, SidebarRegistryStoreApi } from "@/state/index";
 import type { StudioConfig } from "@/types/config";
@@ -57,10 +59,25 @@ interface ShellPluginContextDeps {
 	readonly liveI18nRef: RefObject<StudioConfig["i18n"] | null>;
 }
 
+/** The base shell context plus the event bus handle backing it. */
+export interface ShellPluginContextResult {
+	readonly ctx: StudioPluginContext;
+	/**
+	 * The per-compile event bus `ctx.emit`/`ctx.on` delegate to. Returned
+	 * so the controller can `clear()` it on teardown/recompile — dropping
+	 * every subscription so a retained old `ctx` can't deliver to a
+	 * superseded plugin set.
+	 */
+	readonly eventBus: EventBus;
+}
+
 /**
  * Build the base {@link StudioPluginContext} for one compile pass. A
- * fresh context (and its once-per-ctx `emit` warning latch) is created
- * on every `setup()` run, matching the prior inline literal exactly.
+ * fresh context (and a fresh per-compile event bus) is created on every
+ * `setup()` run, so a recompile starts subscriptions from scratch and
+ * never delivers to handlers from a superseded plugin set. The bus is
+ * returned alongside the ctx so the controller can `clear()` it on
+ * teardown.
  */
 export function createShellPluginContext({
 	dataRef,
@@ -70,12 +87,19 @@ export function createShellPluginContext({
 	loggerRef,
 	localeStore,
 	liveI18nRef,
-}: ShellPluginContextDeps): StudioPluginContext {
-	// `ctx.emit` is reserved (architecture §12 / A4): warn once
-	// per ctx instead of a silent no-op.
-	let emitReservedWarned = false;
+}: ShellPluginContextDeps): ShellPluginContextResult {
+	// The plugin-to-plugin event bus (architecture §8.5). One bus per
+	// compile pass, shared by every plugin's context (compilePlugins
+	// spreads this base ctx, so `emit`/`on` are the same channel for all
+	// plugins → cross-plugin delivery + per-`<Studio>`-instance isolation).
+	// Handler failures route to the host logger via the live ref.
+	const eventBus = createEventBus({
+		log: (level, message, meta) => {
+			writeStudioLog(loggerRef.current, level, message, meta);
+		},
+	});
 
-	return {
+	const ctx: StudioPluginContext = {
 		getData: () => dataRef.current,
 		getPuckApi: () => {
 			const snapshot = puckApiRef.current;
@@ -88,21 +112,8 @@ export function createShellPluginContext({
 		log: (level, message, meta) => {
 			writeStudioLog(loggerRef.current, level, message, meta);
 		},
-		emit: (event) => {
-			// Reserved/inert until the event bus ships. Do not
-			// throw, but do not stay silent: warn exactly once
-			// per ctx (every environment — rate-limited, real
-			// misuse) so the inert contract is discoverable.
-			if (!emitReservedWarned) {
-				emitReservedWarned = true;
-				writeStudioLog(
-					loggerRef.current,
-					"warn",
-					`ctx.emit("${event}") is reserved and inert: the plugin-to-plugin event bus is not implemented yet (architecture §12). No subscriber will receive this event. This warning fires once per plugin context.`,
-					{ event },
-				);
-			}
-		},
+		emit: (event, payload) => eventBus.emit(event, payload),
+		on: (event, handler) => eventBus.on(event, handler),
 		t: (key, vars) => {
 			// React-free but LIVE (config-centric i18n §4.6): the active
 			// locale comes from the per-instance store (`getState()`, no
@@ -152,4 +163,6 @@ export function createShellPluginContext({
 		registerPageSettingsSeoFields: (fields) =>
 			sidebarRegistryStore.getState().registerPageSettingsSeoFields(fields),
 	};
+
+	return { ctx, eventBus };
 }

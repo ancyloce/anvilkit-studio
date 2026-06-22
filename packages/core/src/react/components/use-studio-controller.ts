@@ -538,9 +538,11 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 
 			// Base shell plugin context (review finding P2-1): live-ref
 			// getters, host-logger sink, config-locale `t`, and the
-			// per-instance sidebar registry proxies. A fresh ctx (and its
-			// once-per-ctx `emit` warning latch) per compile, as before.
-			const ctx = createShellPluginContext({
+			// per-instance sidebar registry proxies. A fresh ctx (and a
+			// fresh per-compile event bus) per compile; the bus is held so
+			// teardown can `clear()` it (P1 — no stale delivery after a
+			// superseded compile).
+			const { ctx, eventBus } = createShellPluginContext({
 				dataRef,
 				puckApiRef,
 				studioConfig,
@@ -567,16 +569,25 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 					runtime.lifecycle.advanceTo("destroyed", ctx);
 					void runtime.lifecycle.emit("onDestroy", ctx);
 					runtime.lifecycle.dispose();
+					eventBus.clear();
 					return;
 				}
 				setStored({
 					runtime,
 					studioConfig,
 					ctx,
+					eventBus,
 					compileKey,
 					chromeAssets: nextChromeAssets,
 				});
 			} catch (error) {
+				// Compilation failed: this ctx's plugin set is abandoned —
+				// `setStored` never runs, so neither the stale-success branch
+				// nor the active-teardown effect will ever own this bus. Drop
+				// any subscriptions an earlier plugin made before the throw so
+				// a retained ctx can't deliver to a half-built, discarded set
+				// (covers the stale-rejection path below too).
+				eventBus.clear();
 				if (isStale()) {
 					return;
 				}
@@ -770,13 +781,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	}, [activeCompiled]);
 
 	useEffect(() => {
-		if (activeCompiled === null) {
+		if (activeStored === null) {
 			return;
 		}
 		// Re-arm the post-dispose guard for this runtime (a remount via
-		// a new `activeCompiled` gets a fresh teardown window).
+		// a new `activeStored` gets a fresh teardown window).
 		disposedRef.current = false;
-		const { runtime, ctx } = activeCompiled;
+		const { runtime, ctx, eventBus } = activeStored;
 		return () => {
 			// Mark disposed *before* dispose()/store resets so an
 			// in-flight queued publish bails out of `onAfterPublish`.
@@ -794,11 +805,15 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			runtime.lifecycle.advanceTo("destroyed", ctx);
 			void runtime.lifecycle.emit("onDestroy", ctx);
 			runtime.lifecycle.dispose();
+			// Drop every event-bus subscription so a retained old `ctx`
+			// can't deliver to this superseded plugin set (P1: the bus is
+			// per-compile; teardown resets it like `lifecycle.dispose()`).
+			eventBus.clear();
 			exportStore.getState().reset();
 			aiStore.getState().reset();
 			// Theme persists across sessions — survives teardown.
 		};
-	}, [activeCompiled, exportStore, aiStore]);
+	}, [activeStored, exportStore, aiStore]);
 
 	const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
 		const base: Partial<PuckOverrides>[] = [];

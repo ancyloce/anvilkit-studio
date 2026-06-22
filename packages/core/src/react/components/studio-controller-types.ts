@@ -26,6 +26,7 @@ import type { ReactNode, RefObject } from "react";
 
 import type { StudioChromeMode } from "@/overrides/types";
 import type { StudioRuntime } from "@/runtime/compile-plugins";
+import type { EventBus } from "@/runtime/event-bus";
 import type { EditorStoreBundle } from "@/state/editor-store-bundle";
 import type {
 	AiStoreApi,
@@ -70,6 +71,12 @@ export interface ChromeAssets {
 export interface StoredRuntime extends CompiledStudioRuntime {
 	readonly compileKey: object;
 	readonly chromeAssets: ChromeAssets | null;
+	/**
+	 * The per-compile event bus backing `ctx.emit`/`ctx.on`. Held so the
+	 * controller can `clear()` it on teardown/recompile (internal only —
+	 * not part of the public {@link CompiledStudioRuntime}).
+	 */
+	readonly eventBus: EventBus;
 }
 
 /**

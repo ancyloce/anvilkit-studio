@@ -55,7 +55,11 @@ import {
 	useAiStoreApi,
 	useExportStoreApi,
 } from "@/state/index";
-import type { StudioPlugin, StudioPluginMeta } from "@/types/plugin";
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+	StudioPluginMeta,
+} from "@/types/plugin";
 
 // Post-H3 the export/AI stores are per-`<Studio>` instances created
 // internally. A probe rendered inside the (mocked) Puck — which sits
@@ -334,14 +338,22 @@ describe("<Studio> — mount and compile", () => {
 		});
 	});
 
-	it("warns once per ctx that ctx.emit is reserved/inert (A4)", async () => {
-		const logger = vi.fn();
-		const emittingPlugin: StudioPlugin = {
+	it("delivers ctx.emit to ctx.on subscribers across plugins (live bus, §8.5)", async () => {
+		const received = vi.fn();
+		// Subscriber registers first, so its `on` handler is live by the
+		// time the emitter plugin's `register` fires — proving the shared
+		// per-instance bus delivers across plugins.
+		const subscriberPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.subscriber"),
+			register(ctx) {
+				ctx.on("my-event", received);
+				return { meta: buildMeta("com.example.subscriber") };
+			},
+		};
+		const emitterPlugin: StudioPlugin = {
 			meta: buildMeta("com.example.emitter"),
 			register(ctx) {
-				// Reserved bus: must not throw, must not stay silent.
 				ctx.emit("my-event", { a: 1 });
-				ctx.emit("my-event-again");
 				return { meta: buildMeta("com.example.emitter") };
 			},
 		};
@@ -349,8 +361,7 @@ describe("<Studio> — mount and compile", () => {
 		const { container } = render(
 			<Studio
 				puckConfig={MINIMAL_PUCK_CONFIG}
-				plugins={[emittingPlugin]}
-				logger={logger}
+				plugins={[subscriberPlugin, emitterPlugin]}
 			/>,
 		);
 
@@ -358,23 +369,136 @@ describe("<Studio> — mount and compile", () => {
 			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
 		});
 
-		const emitWarnings = logger.mock.calls.filter(
-			(call) =>
-				call[0] === "warn" &&
-				typeof call[1] === "string" &&
-				call[1].includes("reserved and inert"),
+		expect(received).toHaveBeenCalledTimes(1);
+		expect(received).toHaveBeenCalledWith({ a: 1 });
+	});
+
+	it("isolates the event bus per <Studio> instance (§8.5)", async () => {
+		const handlerA = vi.fn();
+		const handlerB = vi.fn();
+		// Both instances subscribe AND emit on the SAME event name. Within
+		// each instance, the subscriber plugin registers before its emitter,
+		// so the handler is live when its own emit fires. If the two buses
+		// leaked into one, each handler would fire twice (both emits) — so
+		// "exactly once, with its own id" proves isolation deterministically,
+		// independent of the two compiles' relative timing.
+		const subscriber = (id: string, handler: (p: unknown) => void) =>
+			({
+				meta: buildMeta(`com.example.sub-${id}`),
+				register(ctx) {
+					ctx.on("ping", handler);
+					return { meta: buildMeta(`com.example.sub-${id}`) };
+				},
+			}) satisfies StudioPlugin;
+		const emitter = (id: string) =>
+			({
+				meta: buildMeta(`com.example.emit-${id}`),
+				register(ctx) {
+					ctx.emit("ping", id);
+					return { meta: buildMeta(`com.example.emit-${id}`) };
+				},
+			}) satisfies StudioPlugin;
+
+		const { container } = render(
+			<>
+				<Studio
+					puckConfig={MINIMAL_PUCK_CONFIG}
+					plugins={[subscriber("a", handlerA), emitter("a")]}
+					storeId="bus-iso-a"
+				/>
+				<Studio
+					puckConfig={MINIMAL_PUCK_CONFIG}
+					plugins={[subscriber("b", handlerB), emitter("b")]}
+					storeId="bus-iso-b"
+				/>
+			</>,
 		);
-		// Exactly one warn for the whole ctx, even though emit was
-		// called twice — and it names the first event.
-		expect(emitWarnings).toHaveLength(1);
-		const firstWarn = emitWarnings[0];
-		// Explicit guard so `noUncheckedIndexedAccess` narrows the
-		// tuple before we read [1]/[2] (codex-review P2).
-		if (firstWarn === undefined) {
-			throw new Error("expected exactly one ctx.emit reserved warning");
-		}
-		expect(firstWarn[1]).toContain('ctx.emit("my-event")');
-		expect(firstWarn[2]).toMatchObject({ event: "my-event" });
+
+		await waitFor(() => {
+			expect(
+				container.querySelectorAll("[data-testid=puck-mock]"),
+			).toHaveLength(2);
+		});
+
+		expect(handlerA).toHaveBeenCalledTimes(1);
+		expect(handlerA).toHaveBeenCalledWith("a");
+		expect(handlerB).toHaveBeenCalledTimes(1);
+		expect(handlerB).toHaveBeenCalledWith("b");
+	});
+
+	it("clears the event bus on teardown — a retained ctx delivers nothing (§8.5)", async () => {
+		const handler = vi.fn();
+		// Holder object (not a `let`) so the closure assignment isn't
+		// control-flow-narrowed to `never` at the read sites below.
+		const captured: { ctx: StudioPluginContext | null } = { ctx: null };
+		const plugin: StudioPlugin = {
+			meta: buildMeta("com.example.teardown-bus"),
+			register(ctx) {
+				captured.ctx = ctx;
+				ctx.on("ping", handler);
+				return { meta: buildMeta("com.example.teardown-bus") };
+			},
+		};
+
+		const { container, unmount } = render(
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[plugin]} />,
+		);
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+
+		// Live before teardown.
+		captured.ctx?.emit("ping", 1);
+		expect(handler).toHaveBeenCalledTimes(1);
+
+		unmount();
+
+		// After teardown the per-compile bus is cleared, so a plugin that
+		// retained its ctx and emits late delivers to nobody.
+		captured.ctx?.emit("ping", 2);
+		expect(handler).toHaveBeenCalledTimes(1);
+	});
+
+	it("clears the event bus when compilation fails (no delivery to an abandoned plugin set)", async () => {
+		const handler = vi.fn();
+		const captured: { ctx: StudioPluginContext | null } = { ctx: null };
+		// Subscriber registers first (capturing its ctx + subscribing), then
+		// a later plugin throws in `register`, so `compilePlugins` rejects and
+		// `setStored` never runs — the abandoned bus must still be cleared.
+		const subscriberPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.early-subscriber"),
+			register(ctx) {
+				captured.ctx = ctx;
+				ctx.on("ping", handler);
+				return { meta: buildMeta("com.example.early-subscriber") };
+			},
+		};
+		const throwingPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.thrower"),
+			register() {
+				throw new Error("register boom");
+			},
+		};
+		const logger = vi.fn();
+
+		render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[subscriberPlugin, throwingPlugin]}
+				logger={logger}
+			/>,
+		);
+
+		// Wait until the failure was logged — `eventBus.clear()` runs in the
+		// same catch, before this log, so by now the bus is cleared.
+		await waitFor(() => {
+			expect(
+				logger.mock.calls.some((c) => c[1] === "plugin compilation failed"),
+			).toBe(true);
+		});
+
+		captured.ctx?.emit("ping", 1);
+		expect(handler).not.toHaveBeenCalled();
 	});
 
 	it("delivers a serializable error when plugin compilation fails", async () => {
