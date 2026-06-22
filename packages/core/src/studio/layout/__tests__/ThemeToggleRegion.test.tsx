@@ -29,6 +29,7 @@ function createCtx(): StudioPluginContext {
 		studioConfig: StudioConfigSchema.parse({}),
 		log: vi.fn(),
 		emit: () => undefined,
+		on: () => () => undefined,
 		t: (key) => key,
 		registerMessages: () => undefined,
 		registerAssetResolver: () => undefined,

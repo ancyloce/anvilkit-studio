@@ -43,6 +43,7 @@ function createCtx(
 		studioConfig,
 		log,
 		emit: () => undefined,
+		on: () => () => undefined,
 		t: (key) => key,
 		registerMessages: () => undefined,
 		registerAssetResolver: () => undefined,
