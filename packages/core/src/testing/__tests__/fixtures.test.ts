@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
 	createFakePageIR,
@@ -25,6 +25,20 @@ describe("createFakeStudioContext", () => {
 		const ctx = createFakeStudioContext();
 		ctx.emit("x", { p: 1 });
 		expect(ctx._mocks.emitCalls).toEqual([["x", { p: 1 }]]);
+	});
+
+	it("exposes a working emit/on event bus", () => {
+		const ctx = createFakeStudioContext();
+		expect(typeof ctx.on).toBe("function");
+
+		const handler = vi.fn();
+		const off = ctx.on("x", handler);
+		ctx.emit("x", { p: 1 });
+		expect(handler).toHaveBeenCalledWith({ p: 1 });
+
+		off();
+		ctx.emit("x", { p: 2 });
+		expect(handler).toHaveBeenCalledTimes(1);
 	});
 
 	it("records registered asset resolvers on _mocks.assetResolvers", () => {

@@ -1,6 +1,7 @@
 import type { PuckApi, Config as PuckConfig } from "@puckeditor/core";
 
 import { StudioConfigSchema } from "@/config/schema";
+import { createEventBus } from "@/runtime/event-bus";
 import type { IRAssetResolver, StudioPluginContext } from "@/types/plugin";
 
 /**
@@ -37,6 +38,7 @@ export interface FakeStudioContextOverrides<
 	readonly studioConfig?: StudioPluginContext<UserConfig>["studioConfig"];
 	readonly log?: StudioPluginContext<UserConfig>["log"];
 	readonly emit?: StudioPluginContext<UserConfig>["emit"];
+	readonly on?: StudioPluginContext<UserConfig>["on"];
 	readonly t?: StudioPluginContext<UserConfig>["t"];
 	readonly registerMessages?: StudioPluginContext<UserConfig>["registerMessages"];
 	readonly registerAssetResolver?: StudioPluginContext<UserConfig>["registerAssetResolver"];
@@ -45,7 +47,9 @@ export interface FakeStudioContextOverrides<
 
 /**
  * Return a fully-typed `StudioPluginContext` with spy-backed
- * `log` / `emit` / `getPuckApi().dispatch`. Override any field via
+ * `log` / `emit` / `getPuckApi().dispatch` and a working `emit`/`on`
+ * event bus (events emitted reach handlers subscribed via `on`).
+ * Override any field via
  * the `overrides` argument; fields you don't override use sensible
  * test defaults (empty `Data`, default `StudioConfigSchema.parse({})`,
  * etc).
@@ -71,6 +75,11 @@ export function createFakeStudioContext<
 	const dispatchCalls: FakeStudioContext<UserConfig>["_mocks"]["dispatchCalls"] =
 		[];
 
+	// A real in-process bus so plugins that subscribe with `ctx.on` and
+	// emit with `ctx.emit` actually exchange events under test, while
+	// `emitCalls` still records every emit for assertions.
+	const eventBus = createEventBus();
+
 	const defaultPuckApi = {
 		dispatch: (...args: unknown[]) => {
 			dispatchCalls.push(args);
@@ -92,7 +101,9 @@ export function createFakeStudioContext<
 			overrides.emit ??
 			((event, payload) => {
 				emitCalls.push([event, payload]);
+				eventBus.emit(event, payload);
 			}),
+		on: overrides.on ?? ((event, handler) => eventBus.on(event, handler)),
 		// Default fake resolver: returns the key (or the supplied fallback
 		// is irrelevant here) so assertions that only need a string pass;
 		// override `t` for tests that pin specific resolutions.
