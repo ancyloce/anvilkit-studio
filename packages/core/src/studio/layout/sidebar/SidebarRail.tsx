@@ -41,6 +41,8 @@ import {
 	useRef,
 } from "react";
 import { useShallow } from "zustand/shallow";
+import { trackPluginToggled } from "@/components/analytics-events";
+import { useStudioAnalytics } from "@/context/studio-analytics";
 import { Tabs, TabsList, TabsTab } from "@/primitives/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
@@ -121,6 +123,7 @@ export const SidebarRail = memo(function SidebarRail({
 	ref?: Ref<SidebarRailHandle>;
 }): ReactNode {
 	const msg = useMsg();
+	const analytics = useStudioAnalytics();
 	const [activeTab, setActiveTab] = useActiveTab();
 	const drawerCollapsed = useEditorUiStore((s) => s.drawerCollapsed);
 	const setDrawerCollapsed = useEditorUiStore((s) => s.setDrawerCollapsed);
@@ -153,8 +156,10 @@ export const SidebarRail = memo(function SidebarRail({
 			if (next == null) return;
 			setActiveTab(next);
 			setDrawerCollapsed(false);
+			// F9: switching to / re-expanding a module opens its panel.
+			trackPluginToggled(analytics, next, "opened");
 		},
-		[setActiveTab, setDrawerCollapsed],
+		[analytics, setActiveTab, setDrawerCollapsed],
 	);
 
 	const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
@@ -189,9 +194,11 @@ export const SidebarRail = memo(function SidebarRail({
 		(tabKey: EditorTab): void => {
 			if (tabKey === activeTab && !drawerCollapsed) {
 				setDrawerCollapsed(true);
+				// F9: clicking the active, expanded tab collapses its panel.
+				trackPluginToggled(analytics, tabKey, "closed");
 			}
 		},
-		[activeTab, drawerCollapsed, setDrawerCollapsed],
+		[analytics, activeTab, drawerCollapsed, setDrawerCollapsed],
 	);
 
 	return (
