@@ -81,6 +81,7 @@ import {
 	trackComponentDropped,
 	trackDraftSaved,
 	trackPagePublished,
+	trackSeoUpdated,
 } from "./analytics-events.js";
 import {
 	createConfigFingerprinter,
@@ -871,6 +872,11 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 
 	const handleChange = useCallback(
 		(nextData: PuckData): void => {
+			// F9: emit `seo_updated` when a `root.props.seo` field changes
+			// (the PageSeoPlugin dispatches its edits through this seam).
+			// Diff against the previous document BEFORE overwriting the ref;
+			// the emitter forwards only the changed field names.
+			trackSeoUpdated(analyticsRef.current, dataRef.current, nextData);
 			dataRef.current = nextData;
 			if (activeCompiled !== null) {
 				void activeCompiled.runtime.lifecycle.emit(

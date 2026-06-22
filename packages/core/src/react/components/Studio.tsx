@@ -371,6 +371,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			editorStore={editorStore}
 			messages={messages}
 			chromePropsValue={chromePropsValue}
+			analytics={props.analytics}
 			rootRef={rootRef}
 		>
 			{wrappedBody}

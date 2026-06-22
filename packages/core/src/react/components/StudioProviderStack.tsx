@@ -20,6 +20,7 @@
  *   (`studioBody` / `wrappedBody` / `puckElement`) passed in as `children`.
  */
 
+import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import type { ReactElement, ReactNode, RefObject } from "react";
 import { StudioRuntimeProvider } from "@/components/use-studio";
 import { StudioConfigProvider } from "@/config/provider";
@@ -27,6 +28,7 @@ import { type ChromeProps, ChromePropsProvider } from "@/context/chrome-props";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { StudioPluginContextProvider } from "@/context/plugin-context";
 import { StudioRootProvider } from "@/context/StudioRootProvider";
+import { StudioAnalyticsProvider } from "@/context/studio-analytics";
 import type { StudioRuntime } from "@/runtime/compile-plugins";
 import { EditorStoreProvider } from "@/state/EditorStoreProvider";
 import type { EditorStoreBundle } from "@/state/editor-store-bundle";
@@ -80,6 +82,11 @@ interface AnvilkitProviderStackProps extends BaseStudioProviderStackProps {
 	readonly chromePropsValue: ChromeProps;
 	/** The coordinated editor-store bundle for the single `EditorStoreProvider`. */
 	readonly editorStore: EditorStoreBundle;
+	/**
+	 * Optional `<Studio analytics>` adapter (F9), exposed to chrome
+	 * interaction seams (the rail's `plugin_toggled`) via context.
+	 */
+	readonly analytics: AnalyticsAdapter | undefined;
 }
 
 export type StudioProviderStackProps =
@@ -137,6 +144,7 @@ export function StudioProviderStack(
 		messages,
 		chromePropsValue,
 		editorStore,
+		analytics,
 	} = props;
 
 	// AnvilKit chrome: config / runtime first so descendants can read them;
@@ -162,7 +170,9 @@ export function StudioProviderStack(
 									warmLocalePacks={studioConfig.i18n.showLocaleSwitch}
 								>
 									<ChromePropsProvider value={chromePropsValue}>
-										{rooted}
+										<StudioAnalyticsProvider adapter={analytics}>
+											{rooted}
+										</StudioAnalyticsProvider>
 									</ChromePropsProvider>
 								</EditorI18nProvider>
 							</EditorStoreProvider>
