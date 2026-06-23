@@ -18,7 +18,7 @@ import type { Data as PuckData } from "@puckeditor/core";
 import type { RefObject } from "react";
 
 import { braceFormatter } from "@/i18n/format";
-import { createEventBus, type EventBus } from "@/runtime/event-bus";
+import type { EventBus } from "@/runtime/event-bus";
 import { DEFAULT_MESSAGES } from "@/state/editor-i18n-context";
 import type { LocaleStoreApi, SidebarRegistryStoreApi } from "@/state/index";
 import type { StudioConfig } from "@/types/config";
@@ -57,27 +57,23 @@ interface ShellPluginContextDeps {
 	 * (register-time calls during the first compile).
 	 */
 	readonly liveI18nRef: RefObject<StudioConfig["i18n"] | null>;
-}
-
-/** The base shell context plus the event bus handle backing it. */
-export interface ShellPluginContextResult {
-	readonly ctx: StudioPluginContext;
 	/**
-	 * The per-compile event bus `ctx.emit`/`ctx.on` delegate to. Returned
-	 * so the controller can `clear()` it on teardown/recompile — dropping
-	 * every subscription so a retained old `ctx` can't deliver to a
-	 * superseded plugin set.
+	 * The per-compile plugin-to-plugin event bus (architecture §8.5) that
+	 * `ctx.emit`/`ctx.on` delegate to. Owned by the controller (created in
+	 * the compile effect) so its teardown can `close()` it even if this
+	 * compile never settles; shared by every plugin's context because
+	 * `compilePlugins` spreads this base ctx, giving cross-plugin delivery
+	 * within one `<Studio>` instance.
 	 */
 	readonly eventBus: EventBus;
 }
 
 /**
- * Build the base {@link StudioPluginContext} for one compile pass. A
- * fresh context (and a fresh per-compile event bus) is created on every
- * `setup()` run, so a recompile starts subscriptions from scratch and
- * never delivers to handlers from a superseded plugin set. The bus is
- * returned alongside the ctx so the controller can `clear()` it on
- * teardown.
+ * Build the base {@link StudioPluginContext} for one compile pass. The
+ * per-compile event bus is injected (created and owned by the controller)
+ * so `ctx.emit`/`ctx.on` share one channel across plugins and the
+ * controller can `close()` it on teardown — a recompile gets a fresh bus,
+ * so it never delivers to handlers from a superseded plugin set.
  */
 export function createShellPluginContext({
 	dataRef,
@@ -87,18 +83,8 @@ export function createShellPluginContext({
 	loggerRef,
 	localeStore,
 	liveI18nRef,
-}: ShellPluginContextDeps): ShellPluginContextResult {
-	// The plugin-to-plugin event bus (architecture §8.5). One bus per
-	// compile pass, shared by every plugin's context (compilePlugins
-	// spreads this base ctx, so `emit`/`on` are the same channel for all
-	// plugins → cross-plugin delivery + per-`<Studio>`-instance isolation).
-	// Handler failures route to the host logger via the live ref.
-	const eventBus = createEventBus({
-		log: (level, message, meta) => {
-			writeStudioLog(loggerRef.current, level, message, meta);
-		},
-	});
-
+	eventBus,
+}: ShellPluginContextDeps): StudioPluginContext {
 	const ctx: StudioPluginContext = {
 		getData: () => dataRef.current,
 		getPuckApi: () => {
@@ -164,5 +150,5 @@ export function createShellPluginContext({
 			sidebarRegistryStore.getState().registerPageSettingsSeoFields(fields),
 	};
 
-	return { ctx, eventBus };
+	return ctx;
 }

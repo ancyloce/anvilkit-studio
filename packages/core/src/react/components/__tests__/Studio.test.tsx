@@ -31,7 +31,13 @@
  */
 
 import type { Config as PuckConfig, Data as PuckData } from "@puckeditor/core";
-import { act, render, renderHook, waitFor } from "@testing-library/react";
+import {
+	act,
+	fireEvent,
+	render,
+	renderHook,
+	waitFor,
+} from "@testing-library/react";
 import {
 	Component,
 	createElement,
@@ -489,8 +495,8 @@ describe("<Studio> — mount and compile", () => {
 			/>,
 		);
 
-		// Wait until the failure was logged — `eventBus.clear()` runs in the
-		// same catch, before this log, so by now the bus is cleared.
+		// Wait until the failure was logged — `eventBus.close()` runs in the
+		// same catch, before this log, so by now the bus is closed.
 		await waitFor(() => {
 			expect(
 				logger.mock.calls.some((c) => c[1] === "plugin compilation failed"),
@@ -499,6 +505,42 @@ describe("<Studio> — mount and compile", () => {
 
 		captured.ctx?.emit("ping", 1);
 		expect(handler).not.toHaveBeenCalled();
+	});
+
+	it("clears the event bus on teardown even if a plugin's async register never settles", async () => {
+		const handler = vi.fn();
+		const captured: { ctx: StudioPluginContext | null } = { ctx: null };
+		const hangingPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.hanging"),
+			register(ctx) {
+				captured.ctx = ctx;
+				ctx.on("ping", handler);
+				// Never settles → `compilePlugins` stays pending, so the compile
+				// is abandoned on unmount before it ever reaches `setStored`.
+				return new Promise<never>(() => undefined);
+			},
+		};
+
+		const { unmount } = render(
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[hangingPlugin]} />,
+		);
+
+		// The hanging register runs synchronously up to its pending return,
+		// so the ctx is captured + subscribed even though the compile hangs.
+		await waitFor(() => {
+			expect(captured.ctx).not.toBeNull();
+		});
+
+		// Live before teardown.
+		captured.ctx?.emit("ping", 1);
+		expect(handler).toHaveBeenCalledTimes(1);
+
+		unmount();
+
+		// The compile never reached `setStored`, but the compile effect's
+		// cleanup still cleared the per-compile bus — no stale delivery.
+		captured.ctx?.emit("ping", 2);
+		expect(handler).toHaveBeenCalledTimes(1);
 	});
 
 	it("delivers a serializable error when plugin compilation fails", async () => {
@@ -554,6 +596,123 @@ describe("<Studio> — mount and compile", () => {
 		const serialized = JSON.stringify(failureCall?.[2]);
 		expect(serialized).toContain("failed to register");
 		expect(serialized).toContain("boom-compile-failure-detail");
+	});
+
+	it("calls onError once when plugin compilation fails", async () => {
+		const onError = vi.fn();
+		const failingPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.broken-onerror"),
+			register() {
+				throw new Error("boom-onerror");
+			},
+		};
+
+		render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[failingPlugin]}
+				onError={onError}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(onError).toHaveBeenCalledTimes(1);
+		});
+		// compilePlugins wraps the thrown error in a StudioPluginError.
+		const errorArg = onError.mock.calls[0]?.[0];
+		expect(errorArg).toBeInstanceOf(Error);
+		expect((errorArg as Error).name).toBe("StudioPluginError");
+	});
+
+	it("renders the built-in error screen on compile failure (not stuck loading) and recovers on Retry", async () => {
+		let attempts = 0;
+		const flakyPlugin: StudioPlugin = {
+			meta: buildMeta("com.example.flaky"),
+			register() {
+				attempts += 1;
+				if (attempts === 1) {
+					throw new Error("first-attempt-boom");
+				}
+				return { meta: buildMeta("com.example.flaky") };
+			},
+		};
+
+		const { container } = render(
+			<Studio puckConfig={MINIMAL_PUCK_CONFIG} plugins={[flakyPlugin]} />,
+		);
+
+		// First compile fails → the recoverable error screen, not the
+		// loading skeleton (the report-0002 P1 bug was hanging on loading).
+		const errorScreen = await waitFor(() => {
+			const el = container.querySelector("[data-testid=studio-error]");
+			expect(el).not.toBeNull();
+			return el as HTMLElement;
+		});
+		expect(container.querySelector("[data-testid=studio-loading]")).toBeNull();
+
+		// Retry → same-input recompile → second attempt succeeds → editor.
+		const retryButton = errorScreen.querySelector("button");
+		expect(retryButton).not.toBeNull();
+		act(() => {
+			fireEvent.click(retryButton as HTMLButtonElement);
+		});
+
+		await waitFor(() => {
+			expect(container.querySelector("[data-testid=puck-mock]")).not.toBeNull();
+		});
+		// Recovered: the error screen is gone (compileError cleared).
+		expect(container.querySelector("[data-testid=studio-error]")).toBeNull();
+	});
+
+	it("renders a custom errorFallback node instead of the built-in screen", async () => {
+		const failing: StudioPlugin = {
+			meta: buildMeta("com.example.fallback-node"),
+			register() {
+				throw new Error("boom");
+			},
+		};
+
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[failing]}
+				errorFallback={<div data-testid="my-fallback">custom</div>}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(
+				container.querySelector("[data-testid=my-fallback]"),
+			).not.toBeNull();
+		});
+		// The built-in screen is suppressed when a fallback is supplied.
+		expect(container.querySelector("[data-testid=studio-error]")).toBeNull();
+	});
+
+	it("passes the thrown error to a render-prop errorFallback", async () => {
+		const failing: StudioPlugin = {
+			meta: buildMeta("com.example.fallback-fn"),
+			register() {
+				throw new Error("render-prop-boom");
+			},
+		};
+
+		const { container } = render(
+			<Studio
+				puckConfig={MINIMAL_PUCK_CONFIG}
+				plugins={[failing]}
+				errorFallback={(err) => (
+					<div data-testid="fn-fallback">{(err as Error).name}</div>
+				)}
+			/>,
+		);
+
+		const el = await waitFor(() => {
+			const n = container.querySelector("[data-testid=fn-fallback]");
+			expect(n).not.toBeNull();
+			return n as HTMLElement;
+		});
+		expect(el.textContent).toBe("StudioPluginError");
 	});
 });
 

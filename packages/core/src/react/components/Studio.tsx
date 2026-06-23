@@ -33,6 +33,7 @@ import { MotionConfig } from "motion/react";
 import { type ReactElement, type ReactNode, useMemo } from "react";
 
 import type { ChromeProps } from "@/context/chrome-props";
+import { StudioErrorScreen } from "@/layout/StudioErrorScreen";
 import { StudioLoadingScreen } from "@/layout/StudioLoadingScreen";
 import { Toaster } from "@/primitives/sonner";
 import { TooltipProvider } from "@/primitives/tooltip";
@@ -155,6 +156,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		pages,
 		messages,
 		loading,
+		errorFallback,
 	} = props;
 
 	// Neutralize malformed synthetic keydown/keyup events (e.g. from password
@@ -166,6 +168,8 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 	const {
 		isAnvilkit,
 		compiled,
+		compileError,
+		retry,
 		liveStudioConfig,
 		chromeAssets,
 		mergedOverrides,
@@ -245,6 +249,23 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		) : isAnvilkit ? (
 			<StudioLoadingScreen />
 		) : null;
+	// Error state takes precedence over loading (`compiled` is `null` on a
+	// failed compile too, so without this branch the editor would hang on
+	// the loading fallback forever — report 0002, P1). A host `errorFallback`
+	// wins; otherwise the built-in recoverable `<StudioErrorScreen>` offers a
+	// Retry that forces a fresh compile via the controller's `retry()`.
+	if (compileError !== null) {
+		if (errorFallback !== undefined) {
+			return (
+				<>
+					{typeof errorFallback === "function"
+						? errorFallback(compileError)
+						: errorFallback}
+				</>
+			);
+		}
+		return <StudioErrorScreen error={compileError} onRetry={retry} />;
+	}
 	if (compiled === null) {
 		return loadingFallback;
 	}

@@ -26,7 +26,6 @@ import type { ReactNode, RefObject } from "react";
 
 import type { StudioChromeMode } from "@/overrides/types";
 import type { StudioRuntime } from "@/runtime/compile-plugins";
-import type { EventBus } from "@/runtime/event-bus";
 import type { EditorStoreBundle } from "@/state/editor-store-bundle";
 import type {
 	AiStoreApi,
@@ -71,12 +70,6 @@ export interface ChromeAssets {
 export interface StoredRuntime extends CompiledStudioRuntime {
 	readonly compileKey: object;
 	readonly chromeAssets: ChromeAssets | null;
-	/**
-	 * The per-compile event bus backing `ctx.emit`/`ctx.on`. Held so the
-	 * controller can `clear()` it on teardown/recompile (internal only —
-	 * not part of the public {@link CompiledStudioRuntime}).
-	 */
-	readonly eventBus: EventBus;
 }
 
 /**
@@ -302,12 +295,44 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 * Omitting it is a complete no-op — `<Studio>` behaves identically.
 	 */
 	readonly analytics?: AnalyticsAdapter;
+	/**
+	 * Called when the plugin runtime fails to compile (a plugin's
+	 * `register` throws or rejects). Receives the thrown value. Fires once
+	 * per failed compile; a later successful recompile does not re-notify.
+	 * Use it for host-side error reporting — it does not replace the
+	 * on-screen error UI (see {@link errorFallback}). Read through a ref, so
+	 * an inline handler never triggers a recompile.
+	 */
+	readonly onError?: (error: unknown) => void;
+	/**
+	 * Rendered in place of the editor when the plugin runtime fails to
+	 * compile, instead of the component hanging on the loading fallback
+	 * forever. Either a static node or a render function receiving the
+	 * thrown value. When omitted, `<Studio>` renders a built-in recoverable
+	 * error screen (with a Retry action). A successful retry/recompile
+	 * clears the error and mounts the editor.
+	 */
+	readonly errorFallback?: ReactNode | ((error: unknown) => ReactNode);
 }
 
 /** What the thin `<Studio>` view needs back from the controller. */
 export interface StudioControllerState {
 	readonly isAnvilkit: boolean;
 	readonly compiled: CompiledStudioRuntime | null;
+	/**
+	 * The thrown value from a failed plugin compile, or `null` while a
+	 * compile is in flight or succeeded. Drives the view's error branch
+	 * (`errorFallback` / the built-in error screen); reset on each new
+	 * compile attempt so a retry/recompile recovers.
+	 */
+	readonly compileError: unknown;
+	/**
+	 * Forces a fresh compile with the **same** inputs (bumps an internal
+	 * nonce folded into the compile identity). Wired to the built-in error
+	 * screen's Retry action and exposed so a custom `errorFallback` can
+	 * offer its own retry. A no-op-safe stable callback.
+	 */
+	readonly retry: () => void;
 	/**
 	 * The compiled `studioConfig` with the host's **latest raw `i18n`**
 	 * overlaid (`mergeLiveI18n`) — the config React readers see. The

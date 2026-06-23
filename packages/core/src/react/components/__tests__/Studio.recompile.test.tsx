@@ -139,7 +139,9 @@ describe("<Studio> — stale runtime is cleared when a recompile fails", () => {
 
 		// Replace with a plugin whose register throws → compilePlugins
 		// rejects. Pre-fix, the good runtime stayed mounted; post-fix the
-		// editor fails closed (renders the null loading state).
+		// editor fails closed (the `compileKey` mismatch masks the old
+		// runtime) AND the recoverable error screen renders in its place
+		// instead of hanging on a blank/loading frame (report 0002, P1).
 		const failingPlugin: StudioPlugin = {
 			meta: meta("com.test.bad"),
 			register: () => {
@@ -155,8 +157,12 @@ describe("<Studio> — stale runtime is cleared when a recompile fails", () => {
 		);
 
 		await waitFor(() => {
-			expect(container.querySelector("[data-testid=puck-mock]")).toBeNull();
+			expect(
+				container.querySelector("[data-testid=studio-error]"),
+			).not.toBeNull();
 		});
+		// The previously-mounted editor is gone (not left stale).
+		expect(container.querySelector("[data-testid=puck-mock]")).toBeNull();
 	});
 });
 

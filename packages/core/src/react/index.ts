@@ -43,6 +43,10 @@ export {
 	useThemeStoreApi,
 } from "../state/index";
 export {
+	StudioErrorScreen,
+	type StudioErrorScreenProps,
+} from "../studio/layout/StudioErrorScreen";
+export {
 	StudioLoadingScreen,
 	type StudioLoadingScreenProps,
 } from "../studio/layout/StudioLoadingScreen";

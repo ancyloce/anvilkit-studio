@@ -63,6 +63,7 @@ import { mergeOverrides } from "@/overrides/merge-overrides";
 import type { StudioChromeMode } from "@/overrides/types";
 import { jsonExportPlugin } from "@/runtime/built-in-formats/json-export-plugin";
 import { compilePlugins } from "@/runtime/compile-plugins";
+import { createEventBus } from "@/runtime/event-bus";
 import {
 	createEditorStore,
 	type EditorStoreBundle,
@@ -315,6 +316,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		logger,
 		messages,
 		onLocaleChange,
+		onError,
 	} = props;
 	const isAnvilkit = chrome === "anvilkit";
 
@@ -364,6 +366,11 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const onLocaleChangeRef = useRef<((locale: string) => void) | undefined>(
 		onLocaleChange,
 	);
+
+	// Latest `onError` behind a ref (same rationale as `loggerRef`): the
+	// compile-failure path reads it at call time, so an inline handler
+	// never triggers a recompile.
+	const onErrorRef = useRef<((error: unknown) => void) | undefined>(onError);
 
 	// Controlled-locale latch (config-centric i18n §4.2): an explicit host
 	// `config.i18n.locale` on the RAW prop — never the compiled config,
@@ -447,6 +454,19 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// absent, so the editor fails closed and the teardown effect disposes
 	// it — without an effect resetting state on a prop change.
 	const [stored, setStored] = useState<StoredRuntime | null>(null);
+	// Surfaces a plugin-compile failure to the view (P1). `null` while a
+	// compile is in flight or succeeded; set to the thrown value when
+	// `compilePlugins` rejects, and reset on the next compile attempt so a
+	// recompile/retry clears the prior error.
+	const [compileError, setCompileError] = useState<unknown>(null);
+	// Bumped by `retry()` to force a fresh compile with the SAME inputs
+	// (a failed compile leaves `compileKey` unchanged, so without this a
+	// Retry action would have nothing to re-trigger). Folded into
+	// `compileKey` below.
+	const [retryNonce, setRetryNonce] = useState(0);
+	const retry = useCallback(() => {
+		setRetryNonce((n) => n + 1);
+	}, []);
 
 	const pluginsFingerprint = useMemo(
 		// generic→default boundary: structural hash only; variance-safe.
@@ -478,8 +498,14 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// and is stored alongside the runtime, so the derived `activeCompiled`
 	// can mask a runtime built for a now-superseded key.
 	const compileKey = useMemo(
-		() => ({ pluginsFingerprint, aiHost, configFingerprint, isAnvilkit }),
-		[pluginsFingerprint, aiHost, configFingerprint, isAnvilkit],
+		() => ({
+			pluginsFingerprint,
+			aiHost,
+			configFingerprint,
+			isAnvilkit,
+			retryNonce,
+		}),
+		[pluginsFingerprint, aiHost, configFingerprint, isAnvilkit, retryNonce],
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: `compileKey` folds the plugin/config fingerprints + `aiHost` + chrome flag into one token; raw references stay out of the deps so inline arrays/objects do not thrash the runtime, and `logger` is read through `loggerRef` so an unstable inline logger does not trigger a full plugin recompile.
@@ -492,11 +518,28 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		identityRef.current.generation += 1;
 		const myGen = identityRef.current.generation;
 		const isStale = (): boolean => myGen !== identityRef.current.generation;
+		// A fresh compile attempt clears any prior failure (also how a retry
+		// recovers). No-op re-render when already `null` (React bails out).
+		setCompileError(null);
 		// generic→default boundary: the runtime is non-generic.
 		const basePlugins = (plugins ?? []) as readonly (
 			| StudioPlugin
 			| PuckPlugin
 		)[];
+
+		// The per-compile event bus backing `ctx.emit`/`ctx.on`. Created
+		// synchronously here — not inside the async `setup` (which awaits
+		// dynamic imports first) — so this effect's cleanup always holds the
+		// handle and is the SINGLE owner of its end-of-life: the cleanup
+		// `close()`s it unconditionally on unmount/recompile (covering even a
+		// hanging async `register` that never settles), and `close()` seals
+		// the bus so a `ctx` that resumes after teardown can neither emit nor
+		// subscribe. The catch below also `close()`s on a reject that leaves
+		// the component mounted (where this cleanup would not run).
+		const eventBus = createEventBus({
+			log: (level, message, meta) =>
+				writeStudioLog(loggerRef.current, level, message, meta),
+		});
 
 		async function setup(): Promise<void> {
 			const { createStudioConfig } = await import("@/config/create-config");
@@ -538,11 +581,11 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 
 			// Base shell plugin context (review finding P2-1): live-ref
 			// getters, host-logger sink, config-locale `t`, and the
-			// per-instance sidebar registry proxies. A fresh ctx (and a
-			// fresh per-compile event bus) per compile; the bus is held so
-			// teardown can `clear()` it (P1 — no stale delivery after a
-			// superseded compile).
-			const { ctx, eventBus } = createShellPluginContext({
+			// per-instance sidebar registry proxies. The per-compile
+			// `eventBus` (created in the effect body above) is injected so
+			// `ctx.emit`/`ctx.on` share one channel across plugins and the
+			// effect cleanup can clear it on teardown.
+			const ctx = createShellPluginContext({
 				dataRef,
 				puckApiRef,
 				studioConfig,
@@ -550,6 +593,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 				loggerRef,
 				localeStore,
 				liveI18nRef,
+				eventBus,
 			});
 
 			try {
@@ -569,25 +613,25 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 					runtime.lifecycle.advanceTo("destroyed", ctx);
 					void runtime.lifecycle.emit("onDestroy", ctx);
 					runtime.lifecycle.dispose();
-					eventBus.clear();
+					// The bus is closed by this run's effect cleanup (which
+					// already ran — that's why the compile is stale), so no
+					// explicit close is needed here.
 					return;
 				}
 				setStored({
 					runtime,
 					studioConfig,
 					ctx,
-					eventBus,
 					compileKey,
 					chromeAssets: nextChromeAssets,
 				});
 			} catch (error) {
-				// Compilation failed: this ctx's plugin set is abandoned —
-				// `setStored` never runs, so neither the stale-success branch
-				// nor the active-teardown effect will ever own this bus. Drop
-				// any subscriptions an earlier plugin made before the throw so
-				// a retained ctx can't deliver to a half-built, discarded set
-				// (covers the stale-rejection path below too).
-				eventBus.clear();
+				// Compilation failed. If the component stays mounted (same
+				// `compileKey`), this effect's cleanup will NOT run, so close
+				// the abandoned bus here — dropping any subscriptions an
+				// earlier plugin made before the throw and sealing it so a
+				// retained ctx can't deliver to a half-built, discarded set.
+				eventBus.close();
 				if (isStale()) {
 					return;
 				}
@@ -599,12 +643,28 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 						error,
 					},
 				);
+				// Surface the failure to the view (drives `errorFallback` /
+				// the built-in error screen) and notify the host. Read the
+				// handler through the ref so an inline `onError` never forces
+				// a recompile.
+				setCompileError(error);
+				onErrorRef.current?.(error);
 			}
 		}
 
 		void setup();
 		return () => {
 			identityRef.current.generation += 1;
+			// Single owner of the per-compile bus's end-of-life: close it
+			// unconditionally on every unmount/recompile. This covers a
+			// compile abandoned while still pending (a hanging async
+			// `register`), a stored runtime being torn down, and the
+			// commit-window where `setStored` was enqueued but never
+			// committed — all without depending on a separate effect. `close`
+			// also seals the bus, so a `ctx` that resumes later is inert.
+			// (Trade-off: an `onDestroy` hook that emits is not delivered —
+			// the bus is sealed with the runtime; no plugin relies on that.)
+			eventBus.close();
 		};
 	}, [compileKey]);
 
@@ -781,13 +841,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	}, [activeCompiled]);
 
 	useEffect(() => {
-		if (activeStored === null) {
+		if (activeCompiled === null) {
 			return;
 		}
 		// Re-arm the post-dispose guard for this runtime (a remount via
-		// a new `activeStored` gets a fresh teardown window).
+		// a new `activeCompiled` gets a fresh teardown window).
 		disposedRef.current = false;
-		const { runtime, ctx, eventBus } = activeStored;
+		const { runtime, ctx } = activeCompiled;
 		return () => {
 			// Mark disposed *before* dispose()/store resets so an
 			// in-flight queued publish bails out of `onAfterPublish`.
@@ -805,15 +865,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			runtime.lifecycle.advanceTo("destroyed", ctx);
 			void runtime.lifecycle.emit("onDestroy", ctx);
 			runtime.lifecycle.dispose();
-			// Drop every event-bus subscription so a retained old `ctx`
-			// can't deliver to this superseded plugin set (P1: the bus is
-			// per-compile; teardown resets it like `lifecycle.dispose()`).
-			eventBus.clear();
 			exportStore.getState().reset();
 			aiStore.getState().reset();
-			// Theme persists across sessions — survives teardown.
+			// Theme persists across sessions — survives teardown. The
+			// per-compile event bus is closed by the compile effect's
+			// cleanup (the single owner), not here.
 		};
-	}, [activeStored, exportStore, aiStore]);
+	}, [activeCompiled, exportStore, aiStore]);
 
 	const mergedOverrides = useMemo<Partial<PuckOverrides>>(() => {
 		const base: Partial<PuckOverrides>[] = [];
@@ -875,6 +933,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		onSaveDraftRef.current = onSaveDraft;
 		loggerRef.current = logger;
 		onLocaleChangeRef.current = onLocaleChange;
+		onErrorRef.current = onError;
 	}, [
 		onChange,
 		onPublish,
@@ -883,6 +942,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		onSaveDraft,
 		logger,
 		onLocaleChange,
+		onError,
 	]);
 
 	const handleChange = useCallback(
@@ -1009,6 +1069,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	return {
 		isAnvilkit,
 		compiled: activeCompiled,
+		compileError,
+		retry,
 		liveStudioConfig,
 		chromeAssets: activeChromeAssets,
 		mergedOverrides,
