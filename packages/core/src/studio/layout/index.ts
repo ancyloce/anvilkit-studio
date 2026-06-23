@@ -13,6 +13,10 @@ export {
 	type HeaderActionPlaceholderButtonProps,
 } from "./HeaderActionButton";
 export { HeaderActions, type HeaderActionsProps } from "./HeaderActions";
+export {
+	StudioErrorScreen,
+	type StudioErrorScreenProps,
+} from "./StudioErrorScreen";
 export { StudioHeader, type StudioHeaderProps } from "./StudioHeader";
 export { StudioLayout, type StudioLayoutProps } from "./StudioLayout";
 export {
