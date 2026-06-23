@@ -54,7 +54,12 @@ export interface RunExportOptions<
 	 * `Config`); core does not depend on `@anvilkit/ir`. May be async.
 	 */
 	readonly toIR: (data: PuckData) => PageIR | Promise<PageIR>;
-	/** Format-specific option bag forwarded to `format.run`. */
+	/**
+	 * Format-specific option bag forwarded to `format.run`. **Defaults to
+	 * `{}`** when omitted — so a format whose `Opts` has required fields
+	 * must pass them here explicitly (the empty default would otherwise
+	 * reach `run` missing those fields).
+	 */
 	readonly options?: ExportOptions<Opts>;
 	/**
 	 * Registration-ordered asset resolvers (e.g.
@@ -71,7 +76,9 @@ export interface RunExportOptions<
 	/**
 	 * Called once per warning emitted by the format (the warnings are
 	 * also returned on {@link ExportResult.warnings}). Route to a logger
-	 * or toast.
+	 * or toast. A throwing `onWarning` is a host-side reporting bug — it
+	 * propagates *after* the export is recorded successful, so it is never
+	 * misattributed as an export failure.
 	 */
 	readonly onWarning?: (warning: ExportWarning) => void;
 }
@@ -95,20 +102,15 @@ export async function runExport<
 		options;
 	const store = exportStore?.getState();
 	store?.setIsExporting(true);
+	let result: ExportResult;
 	try {
 		const ir = await toIR(data);
-		const result = await format.run(
+		result = await format.run(
 			ir,
 			(options.options ?? {}) as ExportOptions<Opts>,
 			assetResolvers !== undefined ? { assetResolvers } : undefined,
 		);
-		if (onWarning !== undefined && result.warnings !== undefined) {
-			for (const warning of result.warnings) {
-				onWarning(warning);
-			}
-		}
 		store?.recordExport(format.id, true);
-		return result;
 	} catch (error) {
 		store?.recordExport(format.id, false);
 		if (error instanceof StudioExportError) {
@@ -123,4 +125,13 @@ export async function runExport<
 	} finally {
 		store?.setIsExporting(false);
 	}
+	// Fan warnings out AFTER the run is recorded successful and outside the
+	// try/catch — so a throwing host `onWarning` surfaces as itself, never
+	// wrapped as (or recorded as) an export failure.
+	if (onWarning !== undefined && result.warnings !== undefined) {
+		for (const warning of result.warnings) {
+			onWarning(warning);
+		}
+	}
+	return result;
 }

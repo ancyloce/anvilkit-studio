@@ -148,6 +148,31 @@ describe("runExport — export store", () => {
 			runExport({ format: makeFormat(run), data: DATA, toIR: () => IR }),
 		).resolves.toBeDefined();
 	});
+
+	it("does not misattribute a throwing onWarning as an export failure", async () => {
+		const { store, recordExport } = makeStore();
+		const warnings = [{ level: "warn" as const, code: "x", message: "m" }];
+		const run = vi.fn(async () => ({ content: "x", filename: "p", warnings }));
+		const onWarning = vi.fn(() => {
+			throw new Error("reporter boom");
+		});
+
+		const error = await runExport({
+			format: makeFormat(run, "json"),
+			data: DATA,
+			toIR: () => IR,
+			exportStore: store,
+			onWarning,
+		}).catch((e: unknown) => e);
+
+		// The host reporter bug surfaces as itself, NOT wrapped as an export
+		// failure...
+		expect(error).toBeInstanceOf(Error);
+		expect(error).not.toBeInstanceOf(StudioExportError);
+		expect((error as Error).message).toContain("reporter boom");
+		// ...and the export was still recorded successful (the run succeeded).
+		expect(recordExport).toHaveBeenCalledWith("json", true);
+	});
 });
 
 describe("runExport — error wrapping", () => {

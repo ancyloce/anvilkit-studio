@@ -13,6 +13,7 @@ import type { PageIR } from "@/types/ir";
 
 let createObjectURL: ReturnType<typeof vi.fn>;
 let revokeObjectURL: ReturnType<typeof vi.fn>;
+let clickSpy: ReturnType<typeof vi.spyOn>;
 let createdAnchors: HTMLAnchorElement[];
 
 beforeEach(() => {
@@ -29,13 +30,15 @@ beforeEach(() => {
 	vi.spyOn(document, "createElement").mockImplementation((tag: string) => {
 		const el = realCreate(tag);
 		if (tag === "a") {
-			vi.spyOn(el as HTMLAnchorElement, "click").mockImplementation(
-				() => undefined,
-			);
 			createdAnchors.push(el as HTMLAnchorElement);
 		}
 		return el;
 	});
+	// jsdom navigation isn't implemented; stub the anchor click on the
+	// prototype (default no-op) so individual tests can override it.
+	clickSpy = vi
+		.spyOn(HTMLAnchorElement.prototype, "click")
+		.mockImplementation(() => undefined);
 });
 
 afterEach(() => {
@@ -51,7 +54,7 @@ describe("downloadExportResult", () => {
 		const anchor = createdAnchors[0] as HTMLAnchorElement;
 		expect(anchor.download).toBe("page.html");
 		expect(anchor.href).toContain("blob:mock-url");
-		expect(anchor.click).toHaveBeenCalledTimes(1);
+		expect(clickSpy).toHaveBeenCalledTimes(1);
 		// Anchor is detached after the click.
 		expect(anchor.isConnected).toBe(false);
 		// URL is always revoked.
@@ -70,22 +73,15 @@ describe("downloadExportResult", () => {
 	});
 
 	it("revokes the URL even if the click throws", () => {
-		const realCreate = document.createElement.bind(document);
-		(document.createElement as ReturnType<typeof vi.fn>).mockImplementation(
-			(tag: string) => {
-				const el = realCreate(tag);
-				if (tag === "a") {
-					vi.spyOn(el as HTMLAnchorElement, "click").mockImplementation(() => {
-						throw new Error("click boom");
-					});
-				}
-				return el;
-			},
-		);
+		clickSpy.mockImplementation(() => {
+			throw new Error("click boom");
+		});
 
 		expect(() => downloadExportResult("x", "p.txt", "text/plain")).toThrow(
 			"click boom",
 		);
+		// The anchor is detached and the URL revoked even on the throw path.
+		expect((createdAnchors[0] as HTMLAnchorElement).isConnected).toBe(false);
 		expect(revokeObjectURL).toHaveBeenCalledTimes(1);
 	});
 });

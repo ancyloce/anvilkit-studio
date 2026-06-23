@@ -35,14 +35,18 @@ export function downloadExportResult(
 		typeof content === "string" ? content : new Uint8Array(content);
 	const blob = new Blob([blobPart], { type: mimeType });
 	const url = URL.createObjectURL(blob);
+	// Enter the try immediately after creating the object URL so it is
+	// always revoked — even if `createElement` / `appendChild` / `click`
+	// throws. `anchor?.remove()` no-ops when the anchor was never created.
+	let anchor: HTMLAnchorElement | undefined;
 	try {
-		const anchor = document.createElement("a");
+		anchor = document.createElement("a");
 		anchor.href = url;
 		anchor.download = filename;
 		document.body.appendChild(anchor);
 		anchor.click();
-		anchor.remove();
 	} finally {
+		anchor?.remove();
 		URL.revokeObjectURL(url);
 	}
 }
