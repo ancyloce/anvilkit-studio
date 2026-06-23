@@ -14,13 +14,12 @@
 
 import { type Context, createContext, type ReactNode, use } from "react";
 import { useStore } from "zustand";
-
+import { useRehydratedStore } from "../use-rehydrated-store";
 import {
 	createThemeStore,
 	type ThemeState,
 	type ThemeStoreApi,
 } from "./theme-store";
-import { useRehydratedStore } from "../use-rehydrated-store";
 
 /**
  * Per-instance theme-store context. Exported so the consolidated
@@ -32,7 +31,12 @@ import { useRehydratedStore } from "../use-rehydrated-store";
 export const ThemeStoreContext: Context<ThemeStoreApi | null> =
 	createContext<ThemeStoreApi | null>(null);
 
+/** Props for {@link ThemeStoreProvider}. */
 export interface ThemeStoreProviderProps {
+	/**
+	 * Per-instance store id. Namespaces the theme store's persistence key
+	 * so two concurrent `<Studio>` editors keep independent theme state.
+	 */
 	readonly storeId: string;
 	/**
 	 * Optional externally-owned store. `<Studio>` creates the instance
@@ -40,6 +44,10 @@ export interface ThemeStoreProviderProps {
 	 * in; standalone callers omit it and the provider owns one.
 	 */
 	readonly store?: ThemeStoreApi;
+	/**
+	 * Subtree that reads the theme store via `useThemeStore` /
+	 * `useThemeStoreApi`.
+	 */
 	readonly children: ReactNode;
 }
 

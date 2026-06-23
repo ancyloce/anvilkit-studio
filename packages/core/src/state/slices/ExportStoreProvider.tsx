@@ -5,13 +5,12 @@
 
 import { type Context, createContext, type ReactNode, use } from "react";
 import { useStore } from "zustand";
-
+import { useRehydratedStore } from "../use-rehydrated-store";
 import {
 	createExportStore,
 	type ExportState,
 	type ExportStoreApi,
 } from "./export-store";
-import { useRehydratedStore } from "../use-rehydrated-store";
 
 /**
  * Per-instance export-store context. Exported so the consolidated
@@ -21,9 +20,24 @@ import { useRehydratedStore } from "../use-rehydrated-store";
 export const ExportStoreContext: Context<ExportStoreApi | null> =
 	createContext<ExportStoreApi | null>(null);
 
+/** Props for {@link ExportStoreProvider}. */
 export interface ExportStoreProviderProps {
+	/**
+	 * Per-instance store id. Namespaces the export store's persistence key
+	 * so two concurrent `<Studio>` editors never share in-flight export
+	 * state or available-format lists.
+	 */
 	readonly storeId: string;
+	/**
+	 * Optional externally-owned store. `<Studio>` creates the instance
+	 * itself (so it can drive it imperatively via `.getState()`) and passes
+	 * it in; standalone callers omit it and the provider owns one.
+	 */
 	readonly store?: ExportStoreApi;
+	/**
+	 * Subtree that reads the export store via `useExportStore` /
+	 * `useExportStoreApi`.
+	 */
 	readonly children: ReactNode;
 }
 

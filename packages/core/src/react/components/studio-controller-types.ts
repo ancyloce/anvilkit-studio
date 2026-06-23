@@ -73,6 +73,16 @@ export interface StoredRuntime extends CompiledStudioRuntime {
 }
 
 /**
+ * The Puck `Data` shape for a given `UserConfig`, derived from Puck's
+ * own `UserGenerics`. Collapses to the broad default `Data` (the prior
+ * non-generic `PuckData`) when `UserConfig` is the default
+ * `PuckConfig`, so every existing non-generic caller is byte-identical
+ * at the type level.
+ */
+type PuckDataFor<UserConfig extends PuckConfig> =
+	UserGenerics<UserConfig>["UserData"];
+
+/**
  * Props accepted by `<Studio>` and consumed by the controller. Lives
  * here (not in `Studio.tsx`) so there is **no import cycle** between
  * the view and its controller — `Studio.tsx` re-exports it to keep the
@@ -84,19 +94,6 @@ export interface StoredRuntime extends CompiledStudioRuntime {
  * `PropsWithChildren`) because `<Studio>` delegates its entire UI to
  * `<Puck>`.
  */
-/**
- * The Puck `Data` shape for a given `UserConfig`, derived from Puck's
- * own `UserGenerics`. Collapses to the broad default `Data` (the prior
- * non-generic `PuckData`) when `UserConfig` is the default
- * `PuckConfig`, so every existing non-generic caller is byte-identical
- * at the type level. Sits between the `StudioProps` doc and the
- * interface (as in the pre-extraction controller) so typedoc attaches
- * this comment to `PuckDataFor`, keeping `StudioProps` undocumented in
- * the api snapshot exactly as before.
- */
-type PuckDataFor<UserConfig extends PuckConfig> =
-	UserGenerics<UserConfig>["UserData"];
-
 export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	/**
 	 * The Puck component config the editor operates on. Typically

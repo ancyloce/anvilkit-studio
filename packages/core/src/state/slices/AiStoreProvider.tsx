@@ -5,9 +5,8 @@
 
 import { type Context, createContext, type ReactNode, use } from "react";
 import { useStore } from "zustand";
-
-import { type AiState, type AiStoreApi, createAiStore } from "./ai-store";
 import { useRehydratedStore } from "../use-rehydrated-store";
+import { type AiState, type AiStoreApi, createAiStore } from "./ai-store";
 
 /**
  * Per-instance AI-store context. Exported so the consolidated
@@ -17,9 +16,20 @@ import { useRehydratedStore } from "../use-rehydrated-store";
 export const AiStoreContext: Context<AiStoreApi | null> =
 	createContext<AiStoreApi | null>(null);
 
+/** Props for {@link AiStoreProvider}. */
 export interface AiStoreProviderProps {
+	/**
+	 * Per-instance store id. Namespaces the AI store's persistence key so
+	 * two concurrent `<Studio>` editors never share generation state.
+	 */
 	readonly storeId: string;
+	/**
+	 * Optional externally-owned store. `<Studio>` creates the instance
+	 * itself (so it can drive it imperatively via `.getState()`) and passes
+	 * it in; standalone callers omit it and the provider owns one.
+	 */
 	readonly store?: AiStoreApi;
+	/** Subtree that reads the AI store via `useAiStore` / `useAiStoreApi`. */
 	readonly children: ReactNode;
 }
 
