@@ -5694,12 +5694,84 @@
 			"flags": {
 				"isConst": true
 			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The built-in JSON snapshot exporter — the one export format\n"
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/core`"
+					},
+					{
+						"kind": "text",
+						"text": " ships itself (every other format comes from a plugin).\n\n"
+					},
+					{
+						"kind": "code",
+						"text": "`run(ir)`"
+					},
+					{
+						"kind": "text",
+						"text": " serializes the already-normalized "
+					},
+					{
+						"kind": "code",
+						"text": "`PageIR`"
+					},
+					{
+						"kind": "text",
+						"text": " verbatim with\n"
+					},
+					{
+						"kind": "code",
+						"text": "`JSON.stringify(ir, null, 2)`"
+					},
+					{
+						"kind": "text",
+						"text": " (2-space indent, human-readable/diffable)\nand returns it as a "
+					},
+					{
+						"kind": "code",
+						"text": "`string`"
+					},
+					{
+						"kind": "text",
+						"text": " under the fixed filename "
+					},
+					{
+						"kind": "code",
+						"text": "`page.json`"
+					},
+					{
+						"kind": "text",
+						"text": " with\nthe "
+					},
+					{
+						"kind": "code",
+						"text": "`application/json`"
+					},
+					{
+						"kind": "text",
+						"text": " MIME type. It performs no asset rewriting and\nemits no warnings — the IR is reproduced as-is, so it round-trips losslessly\nback through the IR pipeline.\n\nRegistered with the runtime by "
+					},
+					{
+						"kind": "code",
+						"text": "`jsonExportPlugin`"
+					},
+					{
+						"kind": "text",
+						"text": ", so it is always\navailable even when a host installs no exporter plugins."
+					}
+				]
+			},
 			"sources": [
 				{
 					"fileName": "runtime/built-in-formats/json-format.ts",
-					"line": 3,
+					"line": 17,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/built-in-formats/json-format.ts#L3"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/built-in-formats/json-format.ts#L17"
 				}
 			],
 			"type": {
