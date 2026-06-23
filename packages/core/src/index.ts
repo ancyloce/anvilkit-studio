@@ -58,11 +58,23 @@ export {
 	useStudioConfig,
 } from "./config/index.js";
 // ---------------------------------------------------------------------------
+// Export runner (P2 — first-party data→IR→run→download helper)
+// ---------------------------------------------------------------------------
+export {
+	downloadExportResult,
+	type ExportAndDownloadOptions,
+	exportAndDownload,
+	type RunExportOptions,
+	runExport,
+} from "./export/index.js";
+// ---------------------------------------------------------------------------
 // React (M5 — <Studio> shell, useStudio, mergeOverrides)
 // ---------------------------------------------------------------------------
 export {
 	mergeOverrides,
 	Studio,
+	StudioErrorScreen,
+	type StudioErrorScreenProps,
 	StudioLoadingScreen,
 	type StudioLoadingScreenProps,
 	type StudioLogger,
