@@ -46,6 +46,7 @@ import {
 import type { StudioConfig } from "@/types/config";
 import type { StudioPagesSource } from "@/types/pages";
 import type { StudioPluginContext } from "@/types/plugin";
+import type { StudioLogger } from "./studio-log";
 
 /** Controller outputs shared by both chrome modes. */
 interface BaseStudioProviderStackProps {
@@ -87,6 +88,12 @@ interface AnvilkitProviderStackProps extends BaseStudioProviderStackProps {
 	 * interaction seams (the rail's `plugin_toggled`) via context.
 	 */
 	readonly analytics: AnalyticsAdapter | undefined;
+	/**
+	 * Studio logger sink (bound to `<Studio logger>`) forwarded to
+	 * `EditorI18nProvider` so locale-pack load failures route through the
+	 * host logger instead of a raw `console.warn` (P3).
+	 */
+	readonly logger: StudioLogger | undefined;
 }
 
 export type StudioProviderStackProps =
@@ -145,6 +152,7 @@ export function StudioProviderStack(
 		chromePropsValue,
 		editorStore,
 		analytics,
+		logger,
 	} = props;
 
 	// AnvilKit chrome: config / runtime first so descendants can read them;
@@ -164,6 +172,7 @@ export function StudioProviderStack(
 									entries={runtime.i18n.entries}
 									configMessages={studioConfig.i18n.messages}
 									fallbackLocale={studioConfig.i18n.fallbackLocale}
+									logger={logger}
 									// A visible switcher means switching is expected — warm the
 									// packs at mount (at-switch chunk loads never settle under
 									// webpack; see EditorI18nProviderProps.warmLocalePacks).

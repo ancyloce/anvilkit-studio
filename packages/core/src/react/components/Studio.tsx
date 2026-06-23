@@ -44,6 +44,7 @@ import {
 import { useThemeSync } from "@/theme/use-theme-sync";
 import type { StudioPluginOverlay, StudioPluginProvider } from "@/types/plugin";
 import { StudioProviderStack } from "./StudioProviderStack";
+import { writeStudioLog } from "./studio-log";
 import { useKeyEventGuard } from "./use-key-event-guard";
 
 import {
@@ -224,6 +225,15 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		],
 	);
 
+	// Bind the host `logger` into a package-logger sink for the i18n
+	// provider (P3: locale-pack load failures route through it, normalized;
+	// `writeStudioLog` falls back to `console` when no host logger is set).
+	const i18nLogger = useMemo<StudioLogger>(
+		() => (level, message, meta) =>
+			writeStudioLog(props.logger, level, message, meta),
+		[props.logger],
+	);
+
 	// Loading state. A host-supplied `loading` node always wins. When
 	// omitted, the anvilkit chrome falls back to the built-in
 	// `<StudioLoadingScreen />` skeleton (skeleton rail/panel/header +
@@ -393,6 +403,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			messages={messages}
 			chromePropsValue={chromePropsValue}
 			analytics={props.analytics}
+			logger={i18nLogger}
 			rootRef={rootRef}
 		>
 			{wrappedBody}
