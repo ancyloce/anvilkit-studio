@@ -42,6 +42,7 @@ import {
 	mergeCatalog,
 	type RegistryEntry,
 } from "@/i18n/registry";
+import type { StudioLogLevel } from "@/types/log";
 // The English baseline lives at the package-root `i18n/messages/` (shipped via
 // the package `files`). Imported from outside `src/` so the bundleless rslib
 // build keeps the `.json` external — same pattern as every plugin's
@@ -157,6 +158,20 @@ export interface EditorI18nProviderProps {
 	 * locales outside the bundled pack set.
 	 */
 	readonly warmLocalePacks?: boolean;
+	/**
+	 * Optional diagnostics sink for locale-pack load failures. `<Studio>`
+	 * binds this to the package logger (so a failure routes through the
+	 * host's `<Studio logger>` and is normalized like every other Studio
+	 * log). Declared structurally — a `StudioLogger`-shaped function — so
+	 * `state/` need not import from `react/components` (avoids an import
+	 * cycle). When omitted (standalone use outside `<Studio>`), failures
+	 * fall back to `console.warn`.
+	 */
+	readonly logger?: (
+		level: StudioLogLevel,
+		message: string,
+		meta?: Readonly<Record<string, unknown>>,
+	) => void;
 }
 
 export function EditorI18nProvider({
@@ -166,6 +181,7 @@ export function EditorI18nProvider({
 	configMessages,
 	fallbackLocale,
 	warmLocalePacks = false,
+	logger,
 }: EditorI18nProviderProps): ReactNode {
 	// Active locale, null-tolerant: resolves to "en" when no locale store is
 	// mounted (RSC / tests / legacy path), mirroring `useMsg`'s fallback.
@@ -208,6 +224,15 @@ export function EditorI18nProvider({
 		};
 	}, []);
 
+	// Latest `logger` behind a ref so the load effect can use it without
+	// listing it as a dependency. Keeping `logger` out of the deps matters:
+	// the failure path `delete`s the requested key (to allow a retry on a
+	// later switch), so if `logger` were a dep, an unstable host logger
+	// re-running the effect would re-request that key and loop
+	// failed-load → log → delete → re-run. The ref always reads current.
+	const loggerRef = useRef(logger);
+	loggerRef.current = logger;
+
 	useEffect(() => {
 		// English ships inline per entry; everything else resolves through
 		// `loadMessages`. With `warmLocalePacks` every bundled pack locale is
@@ -248,10 +273,17 @@ export function EditorI18nProvider({
 						// instead of swallowing it: a ChunkLoadError here (e.g. a
 						// stale dev-server chunk graph) otherwise reads as "locale
 						// switch silently does nothing".
-						console.warn(
-							`[studio:i18n] failed to load locale pack "${key}" — keeping the English baseline for this namespace until the next switch`,
-							error,
-						);
+						const message = `[studio:i18n] failed to load locale pack "${key}" — keeping the English baseline for this namespace until the next switch`;
+						// Route through the Studio logger when available (P3:
+						// normalized + redacted, reaches the host's sink); console
+						// fallback only outside `<Studio>`. Read via the ref so a
+						// changing logger never re-triggers the load effect.
+						const log = loggerRef.current;
+						if (log !== undefined) {
+							log("warn", message, { error });
+						} else {
+							console.warn(message, error);
+						}
 						requestedRef.current.delete(key);
 					});
 			}

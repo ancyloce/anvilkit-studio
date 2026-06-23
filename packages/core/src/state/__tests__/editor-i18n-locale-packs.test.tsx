@@ -13,7 +13,8 @@
 
 import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { RegistryEntry } from "@/i18n/registry";
 import { EditorStoreProvider } from "@/state/EditorStoreProvider";
 import {
 	DEFAULT_MESSAGES,
@@ -73,6 +74,85 @@ describe("core studio.* locale packs", () => {
 		// keeps its English baseline rather than throwing or blanking.
 		await waitFor(() =>
 			expect(result.current("studio.publish")).toBe("Publish"),
+		);
+	});
+});
+
+describe("locale-pack load failure logging (P3)", () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
+
+	function makeFailingEntry(boom: Error): RegistryEntry {
+		return {
+			namespace: "test-fail",
+			en: { "test-fail.k": "v" },
+			loadMessages: async () => {
+				throw boom;
+			},
+		};
+	}
+
+	it("routes the failure through the provided logger (not console)", async () => {
+		const logger = vi.fn();
+		const warnSpy = vi
+			.spyOn(console, "warn")
+			.mockImplementation(() => undefined);
+		const boom = new Error("pack boom");
+		const storeId = "i18n-logger-route";
+		const bundle = createEditorStore({ storeId });
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<EditorStoreProvider storeId={storeId} store={bundle}>
+				<EditorI18nProvider entries={[makeFailingEntry(boom)]} logger={logger}>
+					{children}
+				</EditorI18nProvider>
+			</EditorStoreProvider>
+		);
+		const { result } = renderHook(() => useMsg(), { wrapper });
+		await waitFor(() => expect(typeof result.current).toBe("function"));
+
+		act(() => {
+			bundle.locale.getState().setLocale("zh");
+		});
+
+		await waitFor(() => expect(logger).toHaveBeenCalled());
+		const call = logger.mock.calls.find(
+			(c) => typeof c[1] === "string" && c[1].includes("test-fail:zh"),
+		);
+		expect(call).toBeDefined();
+		expect(call?.[0]).toBe("warn");
+		expect(call?.[2]).toMatchObject({ error: boom });
+		// The logger replaced the raw console.warn for this failure.
+		expect(warnSpy).not.toHaveBeenCalled();
+	});
+
+	it("falls back to console.warn when no logger is provided", async () => {
+		const warnSpy = vi
+			.spyOn(console, "warn")
+			.mockImplementation(() => undefined);
+		const boom = new Error("pack boom");
+		const storeId = "i18n-logger-fallback";
+		const bundle = createEditorStore({ storeId });
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<EditorStoreProvider storeId={storeId} store={bundle}>
+				<EditorI18nProvider entries={[makeFailingEntry(boom)]}>
+					{children}
+				</EditorI18nProvider>
+			</EditorStoreProvider>
+		);
+		const { result } = renderHook(() => useMsg(), { wrapper });
+		await waitFor(() => expect(typeof result.current).toBe("function"));
+
+		act(() => {
+			bundle.locale.getState().setLocale("zh");
+		});
+
+		await waitFor(() =>
+			expect(
+				warnSpy.mock.calls.some(
+					(c) => typeof c[0] === "string" && c[0].includes("test-fail:zh"),
+				),
+			).toBe(true),
 		);
 	});
 });
