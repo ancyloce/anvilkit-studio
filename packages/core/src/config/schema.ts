@@ -90,10 +90,15 @@ export const StudioConfigSchema = z
 				 */
 				enableAi: z.boolean().default(false),
 				/**
-				 * When `true`, the real-time collaboration plugin
-				 * (if installed) mounts its presence / cursor layer.
-				 * Placeholder for post-alpha work — no collaboration
-				 * plugin ships in `0.1.x`.
+				 * **Experimental / reserved.** `@anvilkit/core` does **not**
+				 * act on this flag — there is no collaboration implementation
+				 * in core. Real-time collaboration (presence / cursors) is
+				 * provided by the separate, experimental `@anvilkit/plugin-collab-*`
+				 * packages a host wires in; this is a reserved config seam those
+				 * packages (or host code) may consult to gate the presence layer.
+				 * Defaulted to `false` and kept stable so turning collaboration
+				 * on later is not a breaking config change. No core behavior
+				 * keys off it today.
 				 */
 				enableCollaboration: z.boolean().default(false),
 			})
