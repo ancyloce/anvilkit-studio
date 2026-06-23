@@ -82,6 +82,41 @@ export interface SidebarRegistry {
 }
 
 /**
+ * `NODE_ENV` via `globalThis` — mirrors the React `sidebar-registry-store`
+ * and `config/env-parser` (core's tsconfig has no `@types/node`, and the
+ * runtime layer must stay environment-agnostic). Absent ⇒ `undefined` ⇒
+ * treated as non-production (the warn is harmless).
+ */
+function nodeEnv(): string | undefined {
+	return (
+		globalThis as unknown as { process?: { env?: Record<string, string> } }
+	).process?.env?.NODE_ENV;
+}
+
+/**
+ * Dev-only warning when a second plugin overwrites a single-slot surface
+ * (`assetSource` / `copilotPanel` / `historyPanel` / `designSystemPanel` /
+ * `seoPanel` / `pageSettingsSeoFields`). Mirrors the React store's identical
+ * warning (`state/sidebar-registry/sidebar-registry-store.ts`) so the
+ * headless runtime registry is as diagnosable as the chrome's live view:
+ * the documented last-write-wins is otherwise silent here, making the
+ * loser's no-op `unregister()` look like a plugin that registered fine but
+ * never took effect. Skipped when the slot already holds the *same* object
+ * (idempotent re-registration). `console.warn` keeps the runtime layer
+ * React-free and DOM-free.
+ */
+function warnSlotOverwrite(slot: string): void {
+	if (nodeEnv() === "production") {
+		return;
+	}
+	console.warn(
+		`[studio] A "${slot}" surface is already registered; overwriting it ` +
+			"(last-write-wins). The previous registration's unregister() is now a " +
+			"no-op — only one plugin should contribute this surface.",
+	);
+}
+
+/**
  * Build a fresh runtime sidebar registry. `compilePlugins` creates one
  * per compile pass and threads its `register*` methods into the plugin
  * context.
@@ -117,6 +152,9 @@ export function createSidebarRegistry(): SidebarRegistry {
 		},
 		registerAssetSource(source) {
 			// Single-occupancy, last-write-wins (mirrors the React store).
+			if (assetSource !== null && assetSource !== source) {
+				warnSlotOverwrite("assetSource");
+			}
 			assetSource = source;
 			return () => {
 				if (assetSource === source) {
@@ -141,6 +179,9 @@ export function createSidebarRegistry(): SidebarRegistry {
 			};
 		},
 		registerCopilotPanel(panel) {
+			if (copilotPanel !== null && copilotPanel !== panel) {
+				warnSlotOverwrite("copilotPanel");
+			}
 			copilotPanel = panel;
 			return () => {
 				if (copilotPanel === panel) {
@@ -149,6 +190,9 @@ export function createSidebarRegistry(): SidebarRegistry {
 			};
 		},
 		registerHistoryPanel(panel) {
+			if (historyPanel !== null && historyPanel !== panel) {
+				warnSlotOverwrite("historyPanel");
+			}
 			historyPanel = panel;
 			return () => {
 				if (historyPanel === panel) {
@@ -157,6 +201,9 @@ export function createSidebarRegistry(): SidebarRegistry {
 			};
 		},
 		registerDesignSystemPanel(panel) {
+			if (designSystemPanel !== null && designSystemPanel !== panel) {
+				warnSlotOverwrite("designSystemPanel");
+			}
 			designSystemPanel = panel;
 			return () => {
 				if (designSystemPanel === panel) {
@@ -165,6 +212,9 @@ export function createSidebarRegistry(): SidebarRegistry {
 			};
 		},
 		registerSeoPanel(panel) {
+			if (seoPanel !== null && seoPanel !== panel) {
+				warnSlotOverwrite("seoPanel");
+			}
 			seoPanel = panel;
 			return () => {
 				if (seoPanel === panel) {
@@ -173,6 +223,9 @@ export function createSidebarRegistry(): SidebarRegistry {
 			};
 		},
 		registerPageSettingsSeoFields(fields) {
+			if (pageSettingsSeoFields !== null && pageSettingsSeoFields !== fields) {
+				warnSlotOverwrite("pageSettingsSeoFields");
+			}
 			pageSettingsSeoFields = fields;
 			return () => {
 				if (pageSettingsSeoFields === fields) {
