@@ -2205,15 +2205,15 @@
 						"types": [
 							{
 								"type": "literal",
+								"value": "secondary"
+							},
+							{
+								"type": "literal",
 								"value": "overflow"
 							},
 							{
 								"type": "literal",
 								"value": "primary"
-							},
-							{
-								"type": "literal",
-								"value": "secondary"
 							}
 						]
 					}
@@ -2615,15 +2615,15 @@
 						"types": [
 							{
 								"type": "literal",
+								"value": "secondary"
+							},
+							{
+								"type": "literal",
 								"value": "overflow"
 							},
 							{
 								"type": "literal",
 								"value": "primary"
-							},
-							{
-								"type": "literal",
-								"value": "secondary"
 							}
 						]
 					}
