@@ -13,7 +13,8 @@
  * - No replay: a handler subscribed after an `emit` never sees it.
  * - Mutating the subscriber set mid-dispatch does not change who
  *   receives the current event.
- * - `clear()` drops every subscription.
+ * - `close()` drops every subscription AND seals the bus (later `emit`
+ *   no-ops, later `on` is rejected).
  */
 
 import { describe, expect, it, vi } from "vitest";
@@ -238,7 +239,7 @@ describe("createEventBus — no replay & mid-dispatch mutation", () => {
 	});
 });
 
-describe("createEventBus — clear", () => {
+describe("createEventBus — close", () => {
 	it("drops every subscription", () => {
 		const bus = createEventBus();
 		const a = vi.fn();
@@ -246,11 +247,35 @@ describe("createEventBus — clear", () => {
 		bus.on("a", a);
 		bus.on("b", b);
 
-		bus.clear();
+		bus.close();
 		bus.emit("a");
 		bus.emit("b");
 
 		expect(a).not.toHaveBeenCalled();
 		expect(b).not.toHaveBeenCalled();
+	});
+
+	it("seals the bus: emit is a no-op and on is rejected after close", () => {
+		const bus = createEventBus();
+		bus.close();
+
+		const handler = vi.fn();
+		// A late subscriber (e.g. a hanging async register that resumes
+		// after teardown) must NOT be able to resurrect delivery.
+		const off = bus.on("evt", handler);
+		bus.emit("evt", 1);
+
+		expect(handler).not.toHaveBeenCalled();
+		// The rejected subscription still returns a callable no-op unsubscribe.
+		expect(() => off()).not.toThrow();
+	});
+
+	it("is idempotent", () => {
+		const bus = createEventBus();
+		bus.on("evt", vi.fn());
+		expect(() => {
+			bus.close();
+			bus.close();
+		}).not.toThrow();
 	});
 });

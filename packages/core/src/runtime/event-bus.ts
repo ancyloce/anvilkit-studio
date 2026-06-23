@@ -79,8 +79,15 @@ export interface EventBus {
 	 * handler twice delivers to it twice.
 	 */
 	on(event: string, handler: EventBusHandler): EventBusUnsubscribe;
-	/** Drop every subscription (used on `<Studio>` teardown / recompile). */
-	clear(): void;
+	/**
+	 * Permanently retire the bus (used on `<Studio>` teardown / recompile):
+	 * drop every subscription **and seal it** so any later `emit` is a no-op
+	 * and any later `on` is rejected (returns a no-op unsubscribe, adds
+	 * nothing). Sealing matters because an abandoned plugin's async
+	 * `register` can resume *after* teardown and try to subscribe — on a
+	 * closed bus that can no longer resurrect delivery. Idempotent.
+	 */
+	close(): void;
 }
 
 /** Options for {@link createEventBus}. */
@@ -112,6 +119,11 @@ export function createEventBus(options: CreateEventBusOptions = {}): EventBus {
 	// reference does not collapse into one shared, mutually-cancelling
 	// subscription.
 	const handlers = new Map<string, Subscription[]>();
+	// Once closed, the bus is permanently inert: `emit` no-ops and `on`
+	// rejects. Set by `close()` at `<Studio>` teardown so a retained ctx
+	// (e.g. a hanging async `register` that resumes later) can't resurrect
+	// delivery to an abandoned plugin set. Reassigned by `close()` below.
+	let closed = false;
 
 	// Report a handler failure without ever letting the reporting itself
 	// abort dispatch — a throwing log sink must not skip later handlers.
@@ -130,6 +142,9 @@ export function createEventBus(options: CreateEventBusOptions = {}): EventBus {
 
 	return {
 		emit(event, payload) {
+			if (closed) {
+				return;
+			}
 			const subs = handlers.get(event);
 			if (subs === undefined || subs.length === 0) {
 				return;
@@ -146,6 +161,11 @@ export function createEventBus(options: CreateEventBusOptions = {}): EventBus {
 		},
 
 		on(event, handler) {
+			if (closed) {
+				// Sealed bus: reject the subscription, hand back a no-op
+				// unsubscribe so callers don't special-case the closed state.
+				return () => undefined;
+			}
 			let subs = handlers.get(event);
 			if (subs === undefined) {
 				subs = [];
@@ -173,7 +193,8 @@ export function createEventBus(options: CreateEventBusOptions = {}): EventBus {
 			};
 		},
 
-		clear() {
+		close() {
+			closed = true;
 			handlers.clear();
 		},
 	};
