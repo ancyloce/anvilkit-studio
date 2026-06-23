@@ -69,9 +69,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 111,
+							"line": 112,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L111"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L112"
 						}
 					],
 					"type": {
@@ -134,9 +134,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 135,
+							"line": 136,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L135"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L136"
 						}
 					],
 					"type": {
@@ -244,9 +244,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 127,
+							"line": 128,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L127"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L128"
 						}
 					],
 					"type": {
@@ -297,14 +297,190 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 143,
+							"line": 144,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L143"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L144"
 						}
 					],
 					"type": {
 						"type": "intrinsic",
 						"name": "string"
+					}
+				},
+				{
+					"id": 54,
+					"name": "logger",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true,
+						"isReadonly": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional diagnostics sink for locale-pack load failures. "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": "\nbinds this to the package logger (so a failure routes through the\nhost's "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio logger>`"
+							},
+							{
+								"kind": "text",
+								"text": " and is normalized like every other Studio\nlog). Declared structurally — a "
+							},
+							{
+								"kind": "code",
+								"text": "`StudioLogger`"
+							},
+							{
+								"kind": "text",
+								"text": "-shaped function — so\n"
+							},
+							{
+								"kind": "code",
+								"text": "`state/`"
+							},
+							{
+								"kind": "text",
+								"text": " need not import from "
+							},
+							{
+								"kind": "code",
+								"text": "`react/components`"
+							},
+							{
+								"kind": "text",
+								"text": " (avoids an import\ncycle). When omitted (standalone use outside "
+							},
+							{
+								"kind": "code",
+								"text": "`<Studio>`"
+							},
+							{
+								"kind": "text",
+								"text": "), failures\nfall back to "
+							},
+							{
+								"kind": "code",
+								"text": "`console.warn`"
+							},
+							{
+								"kind": "text",
+								"text": "."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "state/editor-i18n-context.tsx",
+							"line": 170,
+							"character": 10,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L170"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 55,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"signatures": [
+								{
+									"id": 56,
+									"name": "__type",
+									"variant": "signature",
+									"kind": 4096,
+									"flags": {},
+									"parameters": [
+										{
+											"id": 57,
+											"name": "level",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "@anvilkit/core",
+													"packagePath": "src/types/log.ts",
+													"qualifiedName": "StudioLogLevel"
+												},
+												"name": "StudioLogLevel",
+												"package": "@anvilkit/core"
+											}
+										},
+										{
+											"id": 58,
+											"name": "message",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {},
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											}
+										},
+										{
+											"id": 59,
+											"name": "meta",
+											"variant": "param",
+											"kind": 32768,
+											"flags": {
+												"isOptional": true
+											},
+											"type": {
+												"type": "reference",
+												"target": {
+													"packageName": "typescript",
+													"packagePath": "lib/lib.es5.d.ts",
+													"qualifiedName": "Readonly"
+												},
+												"typeArguments": [
+													{
+														"type": "reference",
+														"target": {
+															"packageName": "typescript",
+															"packagePath": "lib/lib.es5.d.ts",
+															"qualifiedName": "Record"
+														},
+														"typeArguments": [
+															{
+																"type": "intrinsic",
+																"name": "string"
+															},
+															{
+																"type": "intrinsic",
+																"name": "unknown"
+															}
+														],
+														"name": "Record",
+														"package": "typescript"
+													}
+												],
+												"name": "Readonly",
+												"package": "typescript"
+											}
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "void"
+									}
+								}
+							]
+						}
 					}
 				},
 				{
@@ -390,9 +566,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 121,
+							"line": 122,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L121"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L122"
 						}
 					],
 					"type": {
@@ -480,9 +656,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 159,
+							"line": 160,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L159"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L160"
 						}
 					],
 					"type": {
@@ -499,6 +675,7 @@
 						51,
 						50,
 						52,
+						54,
 						49,
 						53
 					]
@@ -507,21 +684,21 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 110,
+					"line": 111,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L110"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L111"
 				}
 			]
 		},
 		{
-			"id": 65,
+			"id": 71,
 			"name": "LanguageSwitcherProps",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 67,
+					"id": 73,
 					"name": "className",
 					"variant": "declaration",
 					"kind": 1024,
@@ -551,7 +728,7 @@
 					}
 				},
 				{
-					"id": 66,
+					"id": 72,
 					"name": "locales",
 					"variant": "declaration",
 					"kind": 1024,
@@ -569,7 +746,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "SUPPORTED_LOCALES",
-								"target": 68
+								"target": 74
 							},
 							{
 								"kind": "text",
@@ -592,7 +769,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 69,
+								"target": 75,
 								"name": "SupportedLocale",
 								"package": "@anvilkit/core"
 							}
@@ -604,8 +781,8 @@
 				{
 					"title": "Properties",
 					"children": [
-						67,
-						66
+						73,
+						72
 					]
 				}
 			],
@@ -905,7 +1082,7 @@
 			]
 		},
 		{
-			"id": 69,
+			"id": 75,
 			"name": "SupportedLocale",
 			"variant": "declaration",
 			"kind": 256,
@@ -920,7 +1097,7 @@
 			},
 			"children": [
 				{
-					"id": 71,
+					"id": 77,
 					"name": "label",
 					"variant": "declaration",
 					"kind": 1024,
@@ -949,7 +1126,7 @@
 					}
 				},
 				{
-					"id": 70,
+					"id": 76,
 					"name": "locale",
 					"variant": "declaration",
 					"kind": 1024,
@@ -998,8 +1175,8 @@
 				{
 					"title": "Properties",
 					"children": [
-						71,
-						70
+						77,
+						76
 					]
 				}
 			],
@@ -1442,7 +1619,7 @@
 			"defaultValue": "..."
 		},
 		{
-			"id": 68,
+			"id": 74,
 			"name": "SUPPORTED_LOCALES",
 			"variant": "declaration",
 			"kind": 32,
@@ -1499,7 +1676,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "LanguageSwitcherProps.locales",
-						"target": 66
+						"target": 72
 					},
 					{
 						"kind": "text",
@@ -1522,7 +1699,7 @@
 					"type": "array",
 					"elementType": {
 						"type": "reference",
-						"target": 69,
+						"target": 75,
 						"name": "SupportedLocale",
 						"package": "@anvilkit/core"
 					}
@@ -1539,9 +1716,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 162,
+					"line": 177,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L162"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L177"
 				}
 			],
 			"signatures": [
@@ -1554,9 +1731,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 162,
+							"line": 177,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L162"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L177"
 						}
 					],
 					"parameters": [
@@ -1589,7 +1766,7 @@
 			]
 		},
 		{
-			"id": 62,
+			"id": 68,
 			"name": "LanguageSwitcher",
 			"variant": "declaration",
 			"kind": 64,
@@ -1604,7 +1781,7 @@
 			],
 			"signatures": [
 				{
-					"id": 63,
+					"id": 69,
 					"name": "LanguageSwitcher",
 					"variant": "signature",
 					"kind": 4096,
@@ -1643,14 +1820,14 @@
 					],
 					"parameters": [
 						{
-							"id": 64,
+							"id": 70,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 65,
+								"target": 71,
 								"name": "LanguageSwitcherProps",
 								"package": "@anvilkit/core"
 							}
@@ -1983,7 +2160,7 @@
 			]
 		},
 		{
-			"id": 54,
+			"id": 60,
 			"name": "useMsg",
 			"variant": "declaration",
 			"kind": 64,
@@ -1991,14 +2168,14 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 307,
+					"line": 328,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L307"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L328"
 				}
 			],
 			"signatures": [
 				{
-					"id": 55,
+					"id": 61,
 					"name": "useMsg",
 					"variant": "signature",
 					"kind": 4096,
@@ -2022,29 +2199,29 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 307,
+							"line": 328,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L307"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L328"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 56,
+							"id": 62,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 57,
+									"id": 63,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 58,
+											"id": 64,
 											"name": "key",
 											"variant": "param",
 											"kind": 32768,
@@ -2055,7 +2232,7 @@
 											}
 										},
 										{
-											"id": 59,
+											"id": 65,
 											"name": "fallback",
 											"variant": "param",
 											"kind": 32768,
@@ -2080,7 +2257,7 @@
 			]
 		},
 		{
-			"id": 60,
+			"id": 66,
 			"name": "useOptionalLocale",
 			"variant": "declaration",
 			"kind": 64,
@@ -2095,7 +2272,7 @@
 			],
 			"signatures": [
 				{
-					"id": 61,
+					"id": 67,
 					"name": "useOptionalLocale",
 					"variant": "signature",
 					"kind": 4096,
@@ -2380,10 +2557,10 @@
 			"children": [
 				10,
 				47,
-				65,
+				71,
 				17,
 				30,
-				69
+				75
 			]
 		},
 		{
@@ -2399,18 +2576,18 @@
 			"title": "Variables",
 			"children": [
 				1,
-				68
+				74
 			]
 		},
 		{
 			"title": "Functions",
 			"children": [
 				44,
-				62,
+				68,
 				13,
 				20,
-				54,
 				60,
+				66,
 				37
 			]
 		}
@@ -2685,12 +2862,12 @@
 		"54": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/editor-i18n-context.tsx",
-			"qualifiedName": "useMsg"
+			"qualifiedName": "EditorI18nProviderProps.logger"
 		},
 		"55": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/editor-i18n-context.tsx",
-			"qualifiedName": "useMsg"
+			"qualifiedName": "__type"
 		},
 		"56": {
 			"packageName": "@anvilkit/core",
@@ -2700,74 +2877,104 @@
 		"57": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/editor-i18n-context.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "level"
 		},
 		"58": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/editor-i18n-context.tsx",
-			"qualifiedName": "key"
+			"qualifiedName": "message"
 		},
 		"59": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/editor-i18n-context.tsx",
-			"qualifiedName": "fallback"
+			"qualifiedName": "meta"
 		},
 		"60": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/LocaleStoreProvider.tsx",
-			"qualifiedName": "useOptionalLocale"
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "useMsg"
 		},
 		"61": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/LocaleStoreProvider.tsx",
-			"qualifiedName": "useOptionalLocale"
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "useMsg"
 		},
 		"62": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "LanguageSwitcher"
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "__type"
 		},
 		"63": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "LanguageSwitcher"
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "__type"
 		},
 		"64": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "__0"
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "key"
 		},
 		"65": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "LanguageSwitcherProps"
+			"packagePath": "src/state/editor-i18n-context.tsx",
+			"qualifiedName": "fallback"
 		},
 		"66": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "LanguageSwitcherProps.locales"
+			"packagePath": "src/state/slices/LocaleStoreProvider.tsx",
+			"qualifiedName": "useOptionalLocale"
 		},
 		"67": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "LanguageSwitcherProps.className"
+			"packagePath": "src/state/slices/LocaleStoreProvider.tsx",
+			"qualifiedName": "useOptionalLocale"
 		},
 		"68": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "SUPPORTED_LOCALES"
+			"qualifiedName": "LanguageSwitcher"
 		},
 		"69": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "SupportedLocale"
+			"qualifiedName": "LanguageSwitcher"
 		},
 		"70": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
-			"qualifiedName": "SupportedLocale.locale"
+			"qualifiedName": "__0"
 		},
 		"71": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"qualifiedName": "LanguageSwitcherProps"
+		},
+		"72": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"qualifiedName": "LanguageSwitcherProps.locales"
+		},
+		"73": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"qualifiedName": "LanguageSwitcherProps.className"
+		},
+		"74": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"qualifiedName": "SUPPORTED_LOCALES"
+		},
+		"75": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"qualifiedName": "SupportedLocale"
+		},
+		"76": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"qualifiedName": "SupportedLocale.locale"
+		},
+		"77": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
 			"qualifiedName": "SupportedLocale.label"
