@@ -46,6 +46,7 @@ function makeCtx(data?: PuckData): StudioPluginContext {
 		studioConfig,
 		log: vi.fn(),
 		emit: vi.fn(),
+		on: vi.fn(() => () => undefined),
 		t: (key) => key,
 		registerMessages: () => undefined,
 		registerAssetResolver: vi.fn(),

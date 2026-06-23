@@ -86,7 +86,8 @@ hands the plugin — no other ambient state is allowed.
 | `getPuckApi()` | Returns the live `PuckApi`. Use `dispatch` to mutate; see §6.                            |
 | `studioConfig` | Frozen, merged `StudioConfig` (defaults + env + host overrides).                         |
 | `log(level, message, meta?)` | Routes to Core's logger (`debug` / `info` / `warn` / `error`).                |
-| `emit(event, payload?)` | Broadcasts to the in-process plugin event bus.                                      |
+| `emit(event, payload?)` | Broadcasts to the in-process plugin event bus (synchronous, registration-order delivery). |
+| `on(event, handler)` | Subscribes to bus events; returns an unsubscribe fn. Subscribe in `register`/`onInit`. |
 
 Two boundaries are intentional:
 
