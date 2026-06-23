@@ -174,9 +174,12 @@ export interface StudioPluginContext<
 	 * lazy per-locale packs) to this `<Studio>` instance's i18n catalog.
 	 *
 	 * `entry.namespace` must equal the plugin's slug and must not collide
-	 * with a reserved core namespace (`studio` / `assetManager` / `canvas`)
-	 * or another plugin's namespace — `compilePlugins()` throws otherwise.
-	 * Contributed packs join the catalog resolved by `useMsg` at render.
+	 * with a reserved core namespace (`studio` / `canvas`) or another
+	 * plugin's namespace — `compilePlugins()` throws otherwise. (`assetManager`
+	 * was reserved transitionally and has since been released —
+	 * `@anvilkit/plugin-asset-manager` now owns it as a normal plugin
+	 * namespace.) Contributed packs join the catalog resolved by `useMsg` at
+	 * render.
 	 */
 	readonly registerMessages: (entry: RegistryEntry) => void;
 
