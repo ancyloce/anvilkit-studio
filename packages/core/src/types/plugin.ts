@@ -176,6 +176,28 @@ export interface StudioPluginMeta {
 	 * compiles its plugin array.
 	 */
 	readonly prefetch?: StudioPluginPrefetch;
+
+	/**
+	 * Optional compile-ordering hint. Plugins compile — and their
+	 * first-registration-wins / single-occupancy contributions resolve — in
+	 * ascending `order`; ties keep declaration order. Lower = earlier. A plugin
+	 * that omits it sorts at the default (`100`), after any explicitly
+	 * lower-ordered plugin. {@link dependsOn} constraints always take
+	 * precedence over `order`.
+	 */
+	readonly order?: number;
+
+	/**
+	 * Optional ids of other plugins this one must compile **after**.
+	 *
+	 * `compilePlugins()` topologically orders the array so every declared
+	 * dependency registers first; independent plugins keep their
+	 * {@link order} / declaration order. A `dependsOn` id that is absent from
+	 * the plugin array, or a dependency cycle, throws a `StudioPluginError` at
+	 * compile time. Use it when a plugin's contribution must observe another's
+	 * (e.g. a plugin that decorates a surface a base plugin registers).
+	 */
+	readonly dependsOn?: readonly string[];
 }
 
 /**
@@ -524,8 +546,10 @@ export interface StudioPluginSlotContribution {
  *
  * ### Ordering
  *
- * Hooks fire in plugin registration order, which mirrors the order of
- * the host app's `createStudioConfig({ plugins: [...] })` array.
+ * Hooks fire in plugin **compile order** — the order of the host app's
+ * `createStudioConfig({ plugins: [...] })` array, unless a plugin sets
+ * `meta.order` / `meta.dependsOn` (which `compilePlugins()` resolves to a
+ * topological + `(order, index)` order).
  *
  * ### Error handling
  *

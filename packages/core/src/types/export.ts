@@ -123,8 +123,10 @@ export type ExportOptions<
  * `assetResolvers` is the runtime's registration-ordered resolver list
  * (sourced from `StudioRuntime.assetResolvers`): a format consults each
  * resolver in order and stops at the first that returns a non-null
- * rewrite. Absent or empty ⇒ treat it as "no asset rewriting
- * configured" and emit URLs verbatim.
+ * rewrite. Absent or empty ⇒ no rewriting is applied; how a format then
+ * treats a reference no resolver handles is its own policy — the bundled
+ * HTML / React exporters omit unresolved `asset://` / `design://` refs and
+ * emit an `ASSET_UNRESOLVED` warning rather than passing them through.
  */
 export interface ExportFormatRunContext {
 	readonly assetResolvers?: readonly IRAssetResolver[];
