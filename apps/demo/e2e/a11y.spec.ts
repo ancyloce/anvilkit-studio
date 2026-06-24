@@ -27,102 +27,102 @@ import { expect, test } from "@playwright/test";
 
 const require = createRequire(import.meta.url);
 const axeCoreSource = readFileSync(
-  require.resolve("axe-core/axe.min.js"),
-  "utf8",
+	require.resolve("axe-core/axe.min.js"),
+	"utf8",
 );
 
 interface AxeViolation {
-  id: string;
-  impact: string;
-  description: string;
-  help: string;
-  nodes: { target: string[]; html: string }[];
+	id: string;
+	impact: string;
+	description: string;
+	help: string;
+	nodes: { target: string[]; html: string }[];
 }
 
 interface AxeWindow extends Window {
-  axe: {
-    run: (
-      context: Document,
-      options: Record<string, unknown>,
-    ) => Promise<{ violations: AxeViolation[] }>;
-  };
+	axe: {
+		run: (
+			context: Document,
+			options: Record<string, unknown>,
+		) => Promise<{ violations: AxeViolation[] }>;
+	};
 }
 
 async function injectAndRunAxe(
-  page: import("@playwright/test").Page,
+	page: import("@playwright/test").Page,
 ): Promise<AxeViolation[]> {
-  // Inject axe-core source directly via evaluate (faster than addScriptTag,
-  // which waits for a network round-trip that can time out on heavy pages).
-  await page.evaluate(axeCoreSource);
+	// Inject axe-core source directly via evaluate (faster than addScriptTag,
+	// which waits for a network round-trip that can time out on heavy pages).
+	await page.evaluate(axeCoreSource);
 
-  return page.evaluate(async () => {
-    const results = await (window as unknown as AxeWindow).axe.run(document, {
-      runOnly: {
-        type: "tag",
-        values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"],
-      },
-      // color-contrast is the single most expensive axe rule (async
-      // canvas sampling per text node). It blows past the per-test
-      // timeout in WSL2 even on the tiny home page; contrast is
-      // validated manually in docs/a11y-baseline.md.
-      rules: { "color-contrast": { enabled: false } },
-      iframes: false,
-    });
-    return results.violations;
-  });
+	return page.evaluate(async () => {
+		const results = await (window as unknown as AxeWindow).axe.run(document, {
+			runOnly: {
+				type: "tag",
+				values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"],
+			},
+			// color-contrast is the single most expensive axe rule (async
+			// canvas sampling per text node). It blows past the per-test
+			// timeout in WSL2 even on the tiny home page; contrast is
+			// validated manually in docs/a11y-baseline.md.
+			rules: { "color-contrast": { enabled: false } },
+			iframes: false,
+		});
+		return results.violations;
+	});
 }
 
 function logViolations(violations: AxeViolation[]): void {
-  for (const v of violations) {
-    console.log(
-      `[axe ${v.impact}] ${v.id}: ${v.description} (${v.nodes.length} instance${v.nodes.length === 1 ? "" : "s"})`,
-    );
-    for (const node of v.nodes) {
-      console.log(`  → ${node.target.join(" > ")}`);
-    }
-  }
+	for (const v of violations) {
+		console.log(
+			`[axe ${v.impact}] ${v.id}: ${v.description} (${v.nodes.length} instance${v.nodes.length === 1 ? "" : "s"})`,
+		);
+		for (const node of v.nodes) {
+			console.log(`  → ${node.target.join(" > ")}`);
+		}
+	}
 }
 
 function formatViolations(violations: AxeViolation[]): string {
-  if (violations.length === 0) return "";
-  return (
-    `\n${violations.length} serious/critical axe violation(s):\n` +
-    violations
-      .map(
-        (v) =>
-          `  [${v.impact}] ${v.id}: ${v.description}\n` +
-          v.nodes.map((n) => `    → ${n.target.join(" > ")}`).join("\n"),
-      )
-      .join("\n")
-  );
+	if (violations.length === 0) return "";
+	return (
+		`\n${violations.length} serious/critical axe violation(s):\n` +
+		violations
+			.map(
+				(v) =>
+					`  [${v.impact}] ${v.id}: ${v.description}\n` +
+					v.nodes.map((n) => `    → ${n.target.join(" > ")}`).join("\n"),
+			)
+			.join("\n")
+	);
 }
 
 test.describe("Accessibility — WCAG 2.1 AA", () => {
-  test("demo home page has no serious or critical axe violations", async ({
-    page,
-  }) => {
-    test.setTimeout(60_000);
+	test("demo home page has no serious or critical axe violations", async ({
+		page,
+	}) => {
+		test.setTimeout(60_000);
 
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+		await page.goto("/", { waitUntil: "domcontentloaded" });
 
-    // Wait for known content to confirm the page rendered
-    await expect(
-      page.getByRole("heading", { name: /Validate the shared/i }),
-    ).toBeVisible({ timeout: 10_000 });
+		// Wait for known content to confirm the page rendered
+		await expect(
+			page.getByRole("heading", { name: /Puck-native component studio/i }),
+		).toBeVisible({ timeout: 10_000 });
 
-    const violations = await injectAndRunAxe(page);
+		const violations = await injectAndRunAxe(page);
 
-    const seriousViolations = violations.filter(
-      (v) => v.impact === "serious" || v.impact === "critical",
-    );
+		const seriousViolations = violations.filter(
+			(v) => v.impact === "serious" || v.impact === "critical",
+		);
 
-    if (violations.length > 0) {
-      logViolations(violations);
-    }
+		if (violations.length > 0) {
+			logViolations(violations);
+		}
 
-    // Only fail on serious + critical
-    expect(seriousViolations, formatViolations(seriousViolations)).toHaveLength(
-      0,
-    );
-  });
+		// Only fail on serious + critical
+		expect(seriousViolations, formatViolations(seriousViolations)).toHaveLength(
+			0,
+		);
+	});
 });

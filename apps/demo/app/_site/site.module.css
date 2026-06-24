@@ -1,0 +1,219 @@
+/* Global navigation + footer for the marketing surfaces. Pill-first chrome
+ * that sits transparent over the aurora hero and turns opaque with a backdrop
+ * blur once scrolled (DESIGN.md → "Top Navigation Bar"). Surfaces, text, and
+ * borders read from the workspace shadcn tokens so the chrome flips with the
+ * demo's light/dark toggle; the iris brand accent stays fixed. Interactive
+ * pills (Star, Open Studio, the menu + theme toggles) are `@anvilkit/ui`
+ * Buttons — what remains here is layout, the link treatment, and the
+ * responsive show/hide helpers. */
+
+.nav {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	width: 100%;
+	border-bottom: 1px solid transparent;
+	background: transparent;
+	transition:
+		background-color 200ms ease,
+		border-color 200ms ease,
+		backdrop-filter 200ms ease;
+}
+
+.navScrolled {
+	border-bottom-color: var(--border);
+	background: color-mix(in srgb, var(--background) 80%, transparent);
+	backdrop-filter: blur(12px);
+}
+
+.navInner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	width: 100%;
+	max-width: var(--huly-page-max-width);
+	margin: 0 auto;
+	padding: 14px 24px;
+}
+
+.brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--foreground);
+	font-weight: 600;
+	font-size: 16px;
+	letter-spacing: -0.02em;
+}
+
+.brandText {
+	white-space: nowrap;
+}
+
+/* Center nav links */
+.navLinks {
+	display: none;
+	align-items: center;
+	gap: 28px;
+}
+
+.navLink {
+	position: relative;
+	color: color-mix(in srgb, var(--foreground) 70%, transparent);
+	font-size: 14px;
+	font-weight: 400;
+	letter-spacing: -0.01em;
+	padding: 6px 2px;
+	transition: color 140ms ease;
+}
+
+.navLink:hover {
+	color: var(--foreground);
+}
+
+.navLinkActive {
+	color: var(--foreground);
+	font-weight: 500;
+}
+
+.navLinkActive::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -8px;
+	height: 2px;
+	border-radius: 9999px;
+	background: var(--huly-electric-iris);
+}
+
+.externalGlyph {
+	display: inline-block;
+	margin-left: 4px;
+	font-size: 10px;
+	opacity: 0.65;
+	vertical-align: middle;
+}
+
+.navRight {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+}
+
+/* Mobile menu (links collapse into a row below the bar) */
+.mobileSheet {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	max-width: var(--huly-page-max-width);
+	margin: 0 auto;
+	padding: 8px 16px 16px;
+}
+
+.mobileLink {
+	color: var(--foreground);
+	font-size: 16px;
+	padding: 12px 8px;
+	border-radius: var(--huly-radius-cards);
+	border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+.mobileLink:hover {
+	background: color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+
+/* Responsive show/hide helpers — links + Star + theme toggle appear on wide
+ * viewports; the hamburger appears on narrow ones. Kept as module classes so
+ * the 880px breakpoint stays in one place. */
+.showWide {
+	display: none;
+}
+.showNarrow {
+	display: inline-flex;
+}
+
+@media (min-width: 880px) {
+	.navLinks {
+		display: flex;
+	}
+	.showWide {
+		display: inline-flex;
+	}
+	.showNarrow {
+		display: none;
+	}
+}
+
+/* Footer */
+.footer {
+	background: var(--card);
+	border-top: 1px solid var(--border);
+	color: var(--muted-foreground);
+}
+
+.footerInner {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 40px;
+	max-width: var(--huly-page-max-width);
+	margin: 0 auto;
+	padding: 56px 24px 40px;
+}
+
+.footerBrandCol {
+	max-width: 26rem;
+}
+
+.footerTagline {
+	margin-top: 14px;
+	color: var(--muted-foreground);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.footerCols {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 32px;
+}
+
+.footerColTitle {
+	color: var(--foreground);
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	margin-bottom: 14px;
+}
+
+.footerLink {
+	display: block;
+	color: var(--muted-foreground);
+	font-size: 14px;
+	padding: 5px 0;
+	transition: color 140ms ease;
+}
+
+.footerLink:hover {
+	color: var(--foreground);
+}
+
+.footerBottom {
+	max-width: var(--huly-page-max-width);
+	margin: 0 auto;
+	padding: 20px 24px 40px;
+	border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+	color: var(--muted-foreground);
+	font-size: 12px;
+}
+
+@media (min-width: 720px) {
+	.footerInner {
+		grid-template-columns: 1.4fr 1fr;
+	}
+	.footerCols {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}

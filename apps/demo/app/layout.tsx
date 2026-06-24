@@ -7,8 +7,11 @@ import "@puckeditor/core/puck.css";
 // `app/puck/layout.tsx` (full demoConfig) and the standalone `/hero` +
 // `/navbar` pages import their one sheet directly.
 import "@anvilkit/core/styles.css";
-import { DemoThemeToggle } from "./demo-theme-toggle";
 import "./globals.css";
+// Huly design tokens (DESIGN.md) scoped to `.huly-root` — used only by the
+// marketing chrome and the Home / Editor / About pages.
+import "./_site/huly.css";
+import { SiteChrome } from "./_site/SiteChrome";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -54,17 +57,25 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
+				{/* Inter (functional text) + Sora (the DESIGN.md Esbuild substitute,
+				    display headlines), loaded at runtime so an offline build still
+				    succeeds; `.huly-root` falls back to the system stack if the fetch
+				    fails. React hoists these <link>s into <head>. */}
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link
+					rel="preconnect"
+					href="https://fonts.gstatic.com"
+					crossOrigin="anonymous"
+				/>
+				<link
+					rel="stylesheet"
+					href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600&display=swap"
+					precedence="default"
+				/>
 				<Script id="demo-theme-bootstrap" strategy="beforeInteractive">
 					{demoThemeBootstrapScript}
 				</Script>
-				<div className="mx-auto flex w-full max-w-7xl justify-end px-4 pt-4 sm:px-6 lg:px-8">
-					<div className="inline-flex items-center gap-3 rounded-full border border-border/60 bg-background/85 px-2 py-2 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/70">
-						<span className="pl-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-							Theme
-						</span>
-						<DemoThemeToggle />
-					</div>
-				</div>
+				<SiteChrome />
 				{children}
 			</body>
 		</html>

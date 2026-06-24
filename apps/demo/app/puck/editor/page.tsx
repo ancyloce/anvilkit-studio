@@ -33,7 +33,6 @@ import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
 import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 import type { PageRootProps } from "@anvilkit/schema";
 import type { Config, Data } from "@puckeditor/core";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
 	type ChangeEvent,
@@ -108,16 +107,18 @@ const designSystemPlugin = createDesignSystemPlugin();
 // F5: the Page SEO rail panel — edits root.props.seo (the canonical page model).
 const pageSeoPlugin = createPageSeoPlugin();
 
-// Studio config (Layer 3 host overrides). `showLocaleSwitch` mounts the
-// built-in header LanguageSwitcher (replacing the old
-// `headerEnd={<LanguageSwitcher/>}` wiring). No `i18n.locale` here, so the
-// mount stays UNCONTROLLED: the user's choice persists per `storeId` and
-// `onLocaleChange` below is a pure notification tap. Module scope keeps the
-// reference stable — `config` participates in the plugin-compile
-// fingerprint (its non-`i18n` part), so an inline literal would be wasteful
-// even though the i18n block itself is carve-out-exempt.
-const demoStudioConfig = {
-	i18n: { showLocaleSwitch: true },
+// Static (locale-agnostic) demo chrome-label overrides — formerly the
+// keys the deprecated flat `<Studio messages>` prop carried. The flat
+// prop applied to every locale; the per-locale `config.i18n.messages`
+// map reproduces that by placing these under the default
+// `fallbackLocale` ("en"), whose bundle back-fills missing keys into
+// every active locale. Covers the demo-only plugin keys not in the core
+// catalog. Merged with `?messageOverrides=` query overrides inside the
+// component (see `studioMessages`). The whole `i18n` block is
+// carve-out-exempt from the plugin-compile fingerprint, so populating
+// `messages` never recompiles.
+const demoChromeMessages: Readonly<Record<string, string>> = {
+	"demo.layer.quickadd.hero": "Add demo Hero",
 };
 
 // Uncontrolled-mode `onLocaleChange` sink: fires AFTER the store applied
@@ -375,6 +376,11 @@ export default function PuckEditorPage() {
 	const [isSavingDraft, setIsSavingDraft] = useState(false);
 	const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
 	const [assetManagerTestMode, setAssetManagerTestMode] = useState(false);
+	// `?e2e=demo-tools` surfaces the demo's auxiliary validation chrome — the
+	// HTML/React export buttons and the published-data snapshot — which the
+	// default full-screen editor deliberately omits. The export-html /
+	// export-react / pages-management specs opt into this mode.
+	const [demoToolsMode, setDemoToolsMode] = useState(false);
 	// Phase 4 Puck-drag E2E mirrors `publishedData` and intercepts
 	// exports onto `window.__puckData` / `window.__puckExports` so the
 	// spec can assert without parsing iframe contents or downloads.
@@ -444,27 +450,38 @@ export default function PuckEditorPage() {
 		handleLocaleChange(locale);
 		setStudioLocale(locale);
 	}, []);
-	// Phase G E2E hook: `?messageOverrides=<urlencoded JSON>` drives
-	// `<Studio messages>` so the sidebar-modules spec can exercise the
-	// PRD §10.2 alias map at runtime (legacy `studio.tab.*` keys
-	// resolve through the new `studio.module.*` namespace).
+	// Phase G E2E hook: `?messageOverrides=<urlencoded JSON>` layers onto
+	// the demo's chrome labels so the sidebar-modules spec can exercise the
+	// PRD §10.2 alias map at runtime (legacy `studio.tab.*` keys resolve
+	// through the new `studio.module.*` namespace). These flow through
+	// `config.i18n.messages` below — the deprecated flat `<Studio messages>`
+	// prop is gone.
 	const [messageOverrides, setMessageOverrides] = useState<
 		Readonly<Record<string, string>> | undefined
 	>(undefined);
-	// Default labels owned by the demo (not the core catalog) — covers
-	// the demo-only plugin keys. Merged with query-param overrides so
-	// the alias-map spec can layer on top.
-	const demoMessages = useMemo<Readonly<Record<string, string>>>(
-		() => ({
-			"demo.layer.quickadd.hero": "Add demo Hero",
-		}),
-		[],
-	);
+	// Demo-owned chrome labels (`demoChromeMessages`) merged with the
+	// query-param overrides so the alias-map spec can layer on top.
 	const studioMessages = useMemo<Readonly<Record<string, string>>>(
-		() => ({ ...demoMessages, ...(messageOverrides ?? {}) }),
-		[demoMessages, messageOverrides],
+		() => ({ ...demoChromeMessages, ...(messageOverrides ?? {}) }),
+		[messageOverrides],
 	);
-	const renderHref = createDemoModeHref("/puck/render", publishedData);
+	// Studio config (Layer 3 host overrides). `showLocaleSwitch` mounts the
+	// built-in header LanguageSwitcher (replacing the old
+	// `headerEnd={<LanguageSwitcher/>}` wiring); no `i18n.locale`, so the
+	// mount stays UNCONTROLLED (the user's choice persists per `storeId`,
+	// `onLocaleChange` is a pure notification tap). `i18n.messages` carries
+	// the demo's chrome overrides under "en" (the default `fallbackLocale`)
+	// so they back-fill into every active locale — the config-centric
+	// replacement for the removed flat `messages` prop. Memoized on
+	// `studioMessages` so identity only rotates when the E2E overrides change;
+	// the `i18n` block is carve-out-exempt from the compile fingerprint, so
+	// this never recompiles plugins.
+	const demoStudioConfig = useMemo(
+		() => ({
+			i18n: { showLocaleSwitch: true, messages: { en: studioMessages } },
+		}),
+		[studioMessages],
+	);
 
 	// F9: editor-side analytics. The console adapter logs the system events
 	// (draft_saved / page_published / component_dropped) emitted by <Studio>.
@@ -512,12 +529,11 @@ export default function PuckEditorPage() {
 		[],
 	);
 
-	// Locale switcher: config-centric — `studioConfig.i18n.showLocaleSwitch`
-	// (module-scope DEMO_STUDIO_CONFIG below the component) mounts the
-	// built-in header switcher; the old `headerEnd={<LanguageSwitcher/>}`
-	// seam is gone. Uncontrolled mode (no `i18n.locale` in the config), so
-	// the choice still persists per `storeId` and `onLocaleChange` is just a
-	// notification tap.
+	// Locale switcher: config-centric — `demoStudioConfig.i18n.showLocaleSwitch`
+	// (the memoized config above) mounts the built-in header switcher; the
+	// old `headerEnd={<LanguageSwitcher/>}` seam is gone. Uncontrolled mode
+	// (no `i18n.locale` in the config), so the choice still persists per
+	// `storeId` and `onLocaleChange` is just a notification tap.
 
 	// Per-page canvas content for the layer sidebar. The source owns which
 	// page is active; this map owns each page's Puck document. Clicking a
@@ -680,6 +696,7 @@ export default function PuckEditorPage() {
 		const params = new URLSearchParams(window.location.search);
 		const incomingData = params.get(demoDataSearchParam);
 		setAssetManagerTestMode(params.get("e2e") === "asset-manager");
+		setDemoToolsMode(params.get("e2e") === "demo-tools");
 		setPuckDragE2eMode(params.get("e2e") === "puck-drag");
 		const rogueUrlParam = params.get("rogueUrl");
 		if (rogueUrlParam !== null && rogueUrlParam.length > 0) {
@@ -1030,70 +1047,7 @@ export default function PuckEditorPage() {
 	}
 
 	return (
-		<main className={styles.shell}>
-			<section className={styles.masthead}>
-				<div>
-					<p className={styles.eyebrow}>Editor Validation</p>
-					<h1 className={styles.title}>
-						Puck editor mode for the shared navbar, hero, pricing, Bento Grid,
-						section, statistics, blog list, helps, and logo cloud demo.
-					</h1>
-					<p className={styles.lede}>
-						This route mounts {"`<Studio>`"} from `@anvilkit/core` with the same
-						consumer-owned Puck `Config` used by render mode. The demo
-						`smokeTestPlugin` logs every lifecycle event so you can verify the
-						plugin pipeline end-to-end from the browser console.
-					</p>
-				</div>
-				<div className={styles.actions}>
-					<Link href="/" className={styles.secondaryAction}>
-						Back to demo hub
-					</Link>
-					<Link href={renderHref} className={styles.primaryAction}>
-						Open render mode
-					</Link>
-				</div>
-			</section>
-
-			<section
-				className={styles.masthead}
-				aria-labelledby="demo-exports-heading"
-			>
-				<div>
-					<p className={styles.eyebrow}>Plugins</p>
-					<h2
-						id="demo-exports-heading"
-						className={styles.title}
-						style={{ fontSize: "1.4rem" }}
-					>
-						Exports
-					</h2>
-					<p className={styles.lede}>
-						The HTML and React export plugins each contribute a button below.
-						The AI copilot prompt panel now lives in the StudioSidebar — open
-						the &ldquo;AI Copilot&rdquo; tab in the left rail and type a prompt
-						(e.g. &ldquo;a hero for a SaaS landing page&rdquo;) to generate, or
-						use the in-panel toggle to flip to section-regeneration mode.
-					</p>
-				</div>
-				<div className={styles.actions}>
-					<button
-						type="button"
-						className={styles.secondaryAction}
-						onClick={handleExportHtml}
-					>
-						Download HTML
-					</button>
-					<button
-						type="button"
-						className={styles.secondaryAction}
-						onClick={handleExportReact}
-					>
-						Export React
-					</button>
-				</div>
-			</section>
-
+		<main className={styles.editorShell}>
 			{assetManagerTestMode ? (
 				<section className={styles.snapshot} data-testid="asset-manager-e2e">
 					<div className={styles.snapshotHeader}>
@@ -1192,40 +1146,11 @@ export default function PuckEditorPage() {
 			) : null}
 
 			<section
-				className={styles.panel}
-				style={{ position: "relative" }}
+				className={styles.editorPanel}
 				data-testid="studio-mount"
 				data-collab={collabEnabled ? "1" : "0"}
 				data-chrome={chromeMode}
 			>
-				<div
-					style={{
-						display: "flex",
-						gap: "0.5rem",
-						padding: "0.5rem 0.75rem",
-						borderBottom: "1px solid var(--demo-panel-border)",
-						alignItems: "center",
-						fontSize: "0.85rem",
-					}}
-				>
-					<span style={{ color: "var(--demo-muted-text)" }}>Chrome:</span>
-					<a
-						href="?chrome=anvilkit"
-						aria-current={chromeMode === "anvilkit" ? "page" : undefined}
-						className={styles.secondaryAction}
-						data-testid="chrome-toggle-anvilkit"
-					>
-						AnvilKit
-					</a>
-					<a
-						href="?chrome=puck"
-						aria-current={chromeMode === "puck" ? "page" : undefined}
-						className={styles.secondaryAction}
-						data-testid="chrome-toggle-puck"
-					>
-						Raw Puck
-					</a>
-				</div>
 				{/*
 				  The consolidated `createCollabPlugin()` from `@anvilkit/collab-ui`
 				  is now in the `plugins` array (when `collabEnabled`). It
@@ -1263,23 +1188,51 @@ export default function PuckEditorPage() {
 					chrome={chromeMode}
 					pages={pagesSource}
 					config={demoStudioConfig}
-					messages={studioMessages}
 					onLocaleChange={handleStudioLocaleChange}
 				/>
 			</section>
 
-			<section className={styles.snapshot}>
-				<div className={styles.snapshotHeader}>
-					<h2>Published data snapshot</h2>
-					<p>
-						The editor keeps its own draft state; this snapshot updates when you
-						publish or switch the active page.
-					</p>
-				</div>
-				<pre className={styles.codeBlock} data-testid="ak-demo-data-snapshot">
-					{JSON.stringify(publishedData, null, 2)}
-				</pre>
-			</section>
+			{/*
+			  Demo validation tools — the HTML/React export buttons and the
+			  published-data snapshot. The clean full-screen editor omits them by
+			  default; they render only under `?e2e=demo-tools`, which the
+			  export-html / export-react / pages-management specs request. The
+			  Studio's own chrome still exposes export via its publish panel.
+			*/}
+			{demoToolsMode ? (
+				<section
+					className={styles.snapshot}
+					aria-labelledby="demo-exports-heading"
+				>
+					<div className={styles.snapshotHeader}>
+						<h2 id="demo-exports-heading">Exports</h2>
+						<p>Demo validation tools (rendered under ?e2e=demo-tools).</p>
+					</div>
+					<div className={styles.actions}>
+						<button
+							type="button"
+							className={styles.secondaryAction}
+							onClick={handleExportHtml}
+						>
+							Download HTML
+						</button>
+						<button
+							type="button"
+							className={styles.secondaryAction}
+							onClick={handleExportReact}
+						>
+							Export React
+						</button>
+					</div>
+					<pre
+						className={styles.codeBlock}
+						data-testid="ak-demo-data-snapshot"
+						style={{ marginTop: "1rem" }}
+					>
+						{JSON.stringify(publishedData, null, 2)}
+					</pre>
+				</section>
+			) : null}
 		</main>
 	);
 }

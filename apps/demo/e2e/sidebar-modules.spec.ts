@@ -599,12 +599,17 @@ test.describe("StudioSidebar — visual regression", () => {
 			test(`${key} module — ${theme} theme`, async ({ page }) => {
 				await gotoEditor(page);
 
-				// Demo theme toggle: two `<Button aria-pressed>` controls
-				// labeled "light" / "dark" in the demo header.
-				await page
-					.getByRole("button", { name: theme, exact: true })
-					.first()
-					.click();
+				// Apply the demo theme directly. The floating theme toggle was
+				// removed from immersive surfaces (only the editor renders on
+				// `/puck/editor`), so drive the theme the way the toggle did —
+				// mirrors `app/demo-theme-toggle.tsx`'s applyTheme.
+				await page.evaluate((nextTheme) => {
+					const root = document.documentElement;
+					root.classList.toggle("dark", nextTheme === "dark");
+					root.dataset.theme = nextTheme;
+					root.style.colorScheme = nextTheme;
+					window.localStorage.setItem("anvilkit-demo-theme", nextTheme);
+				}, theme);
 
 				await activateModule(page, key);
 

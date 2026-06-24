@@ -13,7 +13,7 @@
  * does not matter.
  */
 
-import { type Page, expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 const LAYER_RAIL_TAB_ID = "ak-rail-tab-layer";
 const LAYER_MODULE_TESTID = "ak-module-layer";
@@ -52,7 +52,10 @@ async function gotoEditor(
 		);
 	});
 
-	await page.goto("/puck/editor");
+	// `?e2e=demo-tools` surfaces the published-data snapshot
+	// (`ak-demo-data-snapshot`) the page-switch assertions read; the default
+	// full-screen editor omits it.
+	await page.goto("/puck/editor?e2e=demo-tools");
 	await expect(
 		page.locator('[role="tablist"][aria-orientation="vertical"]'),
 	).toBeVisible({ timeout: 30_000 });

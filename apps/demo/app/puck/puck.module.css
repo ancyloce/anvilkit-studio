@@ -4,6 +4,32 @@
 	background: var(--demo-page-bg);
 }
 
+/* Full-screen editor surface: the `<Studio>` fills the viewport edge-to-edge,
+ * with no surrounding marketing/validation chrome. */
+.editorShell {
+	display: flex;
+	flex-direction: column;
+	min-height: 100svh;
+	background: var(--demo-page-bg);
+}
+
+.editorPanel {
+	position: relative;
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	width: 100%;
+	min-height: 0;
+}
+
+/* biome-ignore lint/correctness/noUnknownPseudoClass: CSS Modules :global() targets the Puck root */
+.editorPanel :global(.Puck) {
+	flex: 1 1 auto;
+	/* Subtract the immersive theme-toggle bar so the editor fills exactly one
+	 * viewport instead of overflowing it. */
+	min-height: calc(100svh - 4.5rem);
+}
+
 .masthead {
 	display: grid;
 	gap: 1rem;
