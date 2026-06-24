@@ -38512,9 +38512,9 @@
 			],
 			"type": {
 				"type": "literal",
-				"value": "0.1.16"
+				"value": "0.1.17"
 			},
-			"defaultValue": "\"0.1.16\""
+			"defaultValue": "\"0.1.17\""
 		},
 		{
 			"id": 386,
