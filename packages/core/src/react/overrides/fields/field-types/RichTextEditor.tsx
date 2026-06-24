@@ -9,6 +9,12 @@
  * entry or chrome bundle budgets (both measure entry chunks only). The field
  * value is a serializable **HTML string** — read as the editor's initial
  * content and emitted via `onChange` on every edit.
+ *
+ * Scope: ships TipTap's `StarterKit` only (paragraphs, headings, bold/italic,
+ * strike, code, blockquote, bullet/ordered lists, horizontal rule). HTML using
+ * marks/nodes outside that set — links, spans, inline styles, classes — is
+ * normalized away on the first edit, so a host migrating richer existing
+ * content should extend `extensions` to preserve it.
  */
 
 import "./rich-text-editor.css";

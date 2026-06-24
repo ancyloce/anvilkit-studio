@@ -15,6 +15,7 @@ import {
 const EXPECTED_KEYS = [
 	"text",
 	"textarea",
+	"richtext",
 	"number",
 	"select",
 	"radio",
@@ -47,6 +48,7 @@ describe("defineFieldTypeRegistry", () => {
 		const registry = defineFieldTypeRegistry({
 			text: noop,
 			textarea: noop,
+			richtext: noop,
 			number: noop,
 			select: noop,
 			radio: noop,

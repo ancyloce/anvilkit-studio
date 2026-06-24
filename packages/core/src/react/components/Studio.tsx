@@ -1,5 +1,18 @@
+"use client";
+
 /**
  * @file The public `<Studio>` shell component (task `core-014`).
+ *
+ * `<Studio>` is a **client component** (note the `"use client"`
+ * directive above). It runs hooks, effects, and dynamic chrome
+ * `import()`s, so it can never be a React Server Component — the
+ * directive makes that boundary explicit instead of failing at the
+ * first hook on a server. Under SSR (e.g. Next App Router) a client
+ * component still renders on the server, but effects do not run: the
+ * controller never resolves a compiled runtime, so `<Studio>` degrades
+ * to its loading skeleton on the server pass and then hydrates +
+ * compiles on the client. A server render therefore produces markup
+ * without throwing — locked in by `Studio.ssr.test.tsx`.
  *
  * `<Studio>` is the top-level Studio entry point host apps render. It
  * wraps `@puckeditor/core`'s `<Puck>` and the AnvilKit chrome. As of
@@ -30,7 +43,13 @@ import type {
 } from "@puckeditor/core";
 import { Puck } from "@puckeditor/core";
 import { MotionConfig } from "motion/react";
-import { type ReactElement, type ReactNode, useMemo } from "react";
+import {
+	type ErrorInfo,
+	type ReactElement,
+	type ReactNode,
+	useCallback,
+	useMemo,
+} from "react";
 
 import type { ChromeProps } from "@/context/chrome-props";
 import { StudioErrorScreen } from "@/layout/StudioErrorScreen";
@@ -43,6 +62,7 @@ import {
 } from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
 import type { StudioPluginOverlay, StudioPluginProvider } from "@/types/plugin";
+import { StudioErrorBoundary } from "./StudioErrorBoundary";
 import { StudioProviderStack } from "./StudioProviderStack";
 import { writeStudioLog } from "./studio-log";
 import { useKeyEventGuard } from "./use-key-event-guard";
@@ -234,6 +254,44 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		[props.logger],
 	);
 
+	// Runtime (render-time) error handling for the chrome — the complement
+	// to the `compileError` branch below. A plugin overlay/provider or a
+	// chrome component that throws *while rendering* is caught by
+	// `<StudioErrorBoundary>` (anvilkit path) and surfaced through the same
+	// `errorFallback` / `<StudioErrorScreen>` UI as a failed compile, then
+	// logged. These hooks stay unconditional (declared before the loading/
+	// error returns); their values are simply unused on the `null` paths.
+	const handleRuntimeError = useCallback(
+		(error: unknown, info: ErrorInfo): void => {
+			// Log BEFORE notifying the host. `onError` is host code and the
+			// boundary swallows a throwing handler (so it can't remount-loop),
+			// which means notifying first would let a throwing `onError` suppress
+			// our own runtime-crash record. Logging first guarantees the record
+			// survives — parity with the compile-error path.
+			writeStudioLog(
+				props.logger,
+				"error",
+				"Studio chrome crashed while rendering.",
+				{ error, componentStack: info.componentStack ?? undefined },
+			);
+			props.onError?.(error);
+		},
+		[props.onError, props.logger],
+	);
+	const renderRuntimeError = useCallback(
+		(error: unknown, reset: () => void): ReactNode =>
+			errorFallback !== undefined ? (
+				typeof errorFallback === "function" ? (
+					errorFallback(error)
+				) : (
+					errorFallback
+				)
+			) : (
+				<StudioErrorScreen error={error} onRetry={reset} />
+			),
+		[errorFallback],
+	);
+
 	// Loading state. A host-supplied `loading` node always wins. When
 	// omitted, the anvilkit chrome falls back to the built-in
 	// `<StudioLoadingScreen />` skeleton (skeleton rail/panel/header +
@@ -391,22 +449,27 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 	);
 
 	return (
-		<StudioProviderStack
-			isAnvilkit
-			studioConfig={resolvedStudioConfig}
-			runtime={compiled.runtime}
-			ctx={compiled.ctx}
-			sidebarRegistryStore={sidebarRegistryStore}
-			pages={pages}
-			storeId={resolvedStoreId}
-			editorStore={editorStore}
-			messages={messages}
-			chromePropsValue={chromePropsValue}
-			analytics={props.analytics}
-			logger={i18nLogger}
-			rootRef={rootRef}
+		<StudioErrorBoundary
+			onError={handleRuntimeError}
+			fallback={renderRuntimeError}
 		>
-			{wrappedBody}
-		</StudioProviderStack>
+			<StudioProviderStack
+				isAnvilkit
+				studioConfig={resolvedStudioConfig}
+				runtime={compiled.runtime}
+				ctx={compiled.ctx}
+				sidebarRegistryStore={sidebarRegistryStore}
+				pages={pages}
+				storeId={resolvedStoreId}
+				editorStore={editorStore}
+				messages={messages}
+				chromePropsValue={chromePropsValue}
+				analytics={props.analytics}
+				logger={i18nLogger}
+				rootRef={rootRef}
+			>
+				{wrappedBody}
+			</StudioProviderStack>
+		</StudioErrorBoundary>
 	);
 }

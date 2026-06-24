@@ -3,11 +3,10 @@
  * `Partial<FieldRenderFunctions>` so it slots straight into
  * `studioOverrides.fieldTypes`.
  *
- * v1 covers the 9 standard field types (PRD §11 decision 2). The
- * `richtext` and `custom` types are deliberately omitted — Puck's
- * default renderer for `custom` is the consumer's own `render` fn
- * (not an override target), and `richtext` is deferred until the
- * editor stack settles (PRD §12 follow-up).
+ * Covers the 9 standard field types plus `richtext` — a lazily-loaded
+ * TipTap editor (see {@link RichTextField}) that replaces Puck's built-in
+ * richtext editor. `custom` is the lone omission: Puck's renderer for
+ * `custom` is the consumer's own `render` fn, not an override target.
  */
 
 import type { FieldProps, Overrides as PuckOverrides } from "@puckeditor/core";
@@ -18,6 +17,7 @@ import { ExternalField } from "./ExternalField";
 import { NumberField } from "./NumberField";
 import { ObjectField } from "./ObjectField";
 import { RadioField } from "./RadioField";
+import { RichTextField } from "./RichTextField";
 import { SelectField } from "./SelectField";
 import { SlotField } from "./SlotField";
 import { TextareaField } from "./TextareaField";
@@ -29,6 +29,7 @@ export {
 	NumberField,
 	ObjectField,
 	RadioField,
+	RichTextField,
 	SelectField,
 	SlotField,
 	TextareaField,
@@ -42,14 +43,15 @@ export type FieldTypeRenderer = FunctionComponent<
 export type FieldTypeRegistry = NonNullable<PuckOverrides["fieldTypes"]>;
 
 /**
- * Puck `Field.type` literals this registry can supply. `richtext` and
- * `custom` are intentionally absent (see file header). Used both as
- * the compile-time key set (`Record<FieldTypeKey, …>`) and the
- * runtime guard in {@link defineFieldTypeRegistry}.
+ * Puck `Field.type` literals this registry can supply. `custom` is
+ * intentionally absent (see file header). Used both as the compile-time
+ * key set (`Record<FieldTypeKey, …>`) and the runtime guard in
+ * {@link defineFieldTypeRegistry}.
  */
 const FIELD_TYPE_KEYS = [
 	"text",
 	"textarea",
+	"richtext",
 	"number",
 	"select",
 	"radio",
@@ -99,11 +101,12 @@ export function defineFieldTypeRegistry(
 
 /**
  * Default field-type registry. Keys match Puck `Field.type` literals
- * exactly. `richtext` and `custom` are intentionally absent.
+ * exactly. `custom` is intentionally absent (it has no override target).
  */
 export const defaultFieldTypes = defineFieldTypeRegistry({
 	text: asFieldRenderer(TextField),
 	textarea: asFieldRenderer(TextareaField),
+	richtext: asFieldRenderer(RichTextField),
 	number: asFieldRenderer(NumberField),
 	select: asFieldRenderer(SelectField),
 	radio: asFieldRenderer(RadioField),

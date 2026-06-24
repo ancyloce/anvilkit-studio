@@ -17,6 +17,7 @@ import {
 	Lock,
 	type LucideIcon,
 	PanelsTopLeft,
+	Pilcrow,
 	TextInitial,
 	Type,
 } from "lucide-react";
@@ -35,6 +36,7 @@ export type FieldLabelDataType =
 	| "number"
 	| "object"
 	| "radio"
+	| "richtext"
 	| "select"
 	| "slot"
 	| "text"
@@ -56,6 +58,7 @@ const fieldTypeIcons = {
 	number: Hash,
 	object: Braces,
 	radio: Blend,
+	richtext: Pilcrow,
 	select: ListChevronsUpDown,
 	slot: PanelsTopLeft,
 	text: Type,

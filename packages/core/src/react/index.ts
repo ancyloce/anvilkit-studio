@@ -55,5 +55,9 @@ export {
 	type StudioLogger,
 	type StudioProps,
 } from "./components/Studio";
+export {
+	StudioErrorBoundary,
+	type StudioErrorBoundaryProps,
+} from "./components/StudioErrorBoundary";
 export { type UseStudioResult, useStudio } from "./components/use-studio";
 export { mergeOverrides } from "./overrides/merge-overrides";
