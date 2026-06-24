@@ -1,3 +1,11 @@
+/**
+ * @file `Input` — the Studio's shadcn-style text input primitive.
+ *
+ * A thin Base UI `Input` wrapper that applies the shared field styling
+ * (`--ak-studio-*` tokens, focus ring, disabled state). Forwards every native
+ * `<input>` prop, including `type`.
+ */
+
 import { Input as InputPrimitive } from "@base-ui/react/input";
 import * as React from "react";
 

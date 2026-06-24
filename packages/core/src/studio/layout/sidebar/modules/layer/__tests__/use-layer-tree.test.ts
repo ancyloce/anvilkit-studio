@@ -39,6 +39,7 @@ import {
 	collectSubtreeZones,
 	findNode,
 	flattenVisibleRows,
+	isCycleDrop,
 	type LayerNode,
 	ROOT_ZONE,
 	resolveDrop,
@@ -237,5 +238,19 @@ describe("flattenVisibleRows", () => {
 			"layout-1",
 			"text-1",
 		]);
+	});
+});
+
+describe("isCycleDrop", () => {
+	it("is true when the destination zone is inside the dragged subtree", () => {
+		expect(isCycleDrop("self:content", new Set(["self:content"]))).toBe(true);
+	});
+
+	it("is false when the destination zone is outside the dragged subtree", () => {
+		expect(isCycleDrop("other:content", new Set(["self:content"]))).toBe(false);
+	});
+
+	it("is false for a leaf node (empty subtree)", () => {
+		expect(isCycleDrop("any:zone", new Set())).toBe(false);
 	});
 });

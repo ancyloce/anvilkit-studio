@@ -342,6 +342,20 @@ export function collectSubtreeZones(node: LayerNode): Set<string> {
 }
 
 /**
+ * Whether dropping into `destZone` would land inside the dragged node's own
+ * subtree — the cycle that {@link resolveDrop} rejects. Factored out so the
+ * "rejected because cycle" branch in `LayerTree` (the toast + screen-reader
+ * announcement) and the resolver share one definition instead of each
+ * re-deriving it from a bare `null` return.
+ */
+export function isCycleDrop(
+	destZone: string,
+	draggedSubtreeZones: ReadonlySet<string>,
+): boolean {
+	return draggedSubtreeZones.has(destZone);
+}
+
+/**
  * Pure resolver: map a (source, destination) pair to the Puck action
  * that performs the drop, or `null` to abort.
  *
@@ -356,7 +370,7 @@ export function resolveDrop(args: {
 	readonly draggedSubtreeZones: ReadonlySet<string>;
 }): PuckAction | null {
 	const { source, dest, draggedSubtreeZones } = args;
-	if (draggedSubtreeZones.has(dest.zone)) return null;
+	if (isCycleDrop(dest.zone, draggedSubtreeZones)) return null;
 	if (source.zone === dest.zone) {
 		if (source.index === dest.index) return null;
 		return {

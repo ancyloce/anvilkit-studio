@@ -7,10 +7,13 @@ import { Play } from "lucide-react";
 import { memo, type ReactNode } from "react";
 import { Button } from "@/primitives/button";
 import type { StudioAsset } from "@/types/sidebar";
+import { modifiersFromEvent, type SelectModifiers } from "./asset-selection";
 
 export interface AssetVideoCardProps {
 	readonly asset: StudioAsset;
-	readonly onClick: (asset: StudioAsset) => void;
+	readonly onClick: (asset: StudioAsset, modifiers?: SelectModifiers) => void;
+	/** Whether this card is part of the library's current multi-selection. */
+	readonly selected?: boolean;
 	/** Builds the per-asset overflow menu (see {@link AssetImageTile}). */
 	readonly renderMenu: (asset: StudioAsset) => ReactNode;
 }
@@ -18,16 +21,18 @@ export interface AssetVideoCardProps {
 function AssetVideoCardImpl({
 	asset,
 	onClick,
+	selected,
 	renderMenu,
 }: AssetVideoCardProps): ReactNode {
 	return (
 		<div
-			className="group relative flex flex-col gap-1 text-xs"
+			className="group relative flex flex-col gap-1 rounded-md text-xs data-[selected=true]:ring-2 data-[selected=true]:ring-inset data-[selected=true]:ring-[var(--ak-studio-accent)]"
+			data-selected={selected === true ? "true" : undefined}
 			data-testid={`ak-image-video-${asset.id}`}
 		>
 			<Button
 				variant="ghost"
-				onClick={() => onClick(asset)}
+				onClick={(event) => onClick(asset, modifiersFromEvent(event))}
 				className="relative aspect-video h-auto w-full overflow-hidden rounded-md border border-[var(--ak-studio-border)] bg-black p-0 transition-colors hover:border-[var(--ak-studio-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ak-studio-ring)]"
 				aria-label={asset.name}
 			>

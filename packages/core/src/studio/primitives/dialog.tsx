@@ -1,3 +1,14 @@
+/**
+ * @file `Dialog` — the Studio's shadcn-style modal dialog primitives.
+ *
+ * A compound wrapper over Base UI's `Dialog`. Compose `Dialog` with
+ * `DialogTrigger` and `DialogContent`, and lay out the body with the
+ * `DialogHeader` / `DialogTitle` / `DialogDescription` / `DialogFooter`
+ * helpers. (`DialogPortal` / `DialogOverlay` / `DialogClose` are exported for
+ * advanced composition.) Used by the chrome's dialogs — rename asset, page
+ * settings, delete confirmation, etc.
+ */
+
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { XIcon } from "lucide-react";
 import * as React from "react";

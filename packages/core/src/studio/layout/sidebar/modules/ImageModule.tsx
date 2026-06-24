@@ -46,6 +46,11 @@ import type {
 	StudioAssetUploadEvent,
 } from "@/types/sidebar";
 import { AssetGrid, type UploadingTile } from "./image/AssetGrid";
+import {
+	assetsInDisplayOrder,
+	type SelectModifiers,
+} from "./image/asset-selection";
+import { BulkDeleteAssetsDialog } from "./image/BulkDeleteAssetsDialog";
 import { FolderNav } from "./image/FolderNav";
 import { ImageActionsMenu } from "./image/ImageActionsMenu";
 import { ImageFilterStrip } from "./image/ImageFilterStrip";
@@ -56,6 +61,7 @@ import {
 	kindToComponentName,
 	kindToPropsForInsert,
 } from "./image/infer-asset-kind";
+import { NewFolderDialog } from "./image/NewFolderDialog";
 import { RenameAssetDialog } from "./image/RenameAssetDialog";
 import { UploadDropZone } from "./image/UploadDropZone";
 
@@ -94,10 +100,17 @@ export function ImageModule(): ReactNode {
 	const [currentFolderId, setCurrentFolderId] = useState<
 		string | null | undefined
 	>(undefined);
-	// Opens the inline "new folder" name input inside `FolderNav`. The trigger
-	// lives in the header actions menu (`ImageActionsMenu`); the input renders in
-	// the folder-nav area so the name is entered in the location it's created.
+	// Whether the new-folder dialog ({@link NewFolderDialog}) is open. The
+	// trigger lives in the header actions menu (`ImageActionsMenu`); the folder
+	// is created at the current `currentFolderId` location (report 0003 P2-11).
 	const [creatingFolder, setCreatingFolder] = useState(false);
+	// Asset multi-selection (report 0003 P2-7b): `selectedAssetIds` are the
+	// highlighted tiles, `assetAnchorId` is the shift-range pivot.
+	const [selectedAssetIds, setSelectedAssetIds] = useState<ReadonlySet<string>>(
+		() => new Set(),
+	);
+	const [assetAnchorId, setAssetAnchorId] = useState<string | null>(null);
+	const [bulkDeleteAssetsOpen, setBulkDeleteAssetsOpen] = useState(false);
 	const [activeSource, setActiveSource] = useState<string | undefined>(
 		undefined,
 	);
@@ -298,6 +311,17 @@ export function ImageModule(): ReactNode {
 		});
 	}, [assets, query, usesPaginatedListing]);
 
+	// The media-kind filter is a local-library control, hidden on an external
+	// source (e.g. Unsplash) — forcing "all" there avoids a persisted
+	// `videos`/`audio` filter partitioning every image-only result out of the
+	// grid. `displayedAssets` is exactly what AssetGrid renders, in render order,
+	// so a shift-range over it matches the visible layout (report 0003 P2-7b).
+	const gridFilter = isLocalSource ? filter : "all";
+	const displayedAssets = useMemo(
+		() => assetsInDisplayOrder(filteredAssets, gridFilter),
+		[filteredAssets, gridFilter],
+	);
+
 	const handleUpload = useCallback(
 		async (files: readonly File[]): Promise<void> => {
 			if (source === null || files.length === 0) return;
@@ -357,8 +381,8 @@ export function ImageModule(): ReactNode {
 		fileInputRef.current?.click();
 	}, []);
 
-	// "New folder" is offered only where the folder nav can host the name input:
-	// a folder-aware LOCAL source (mirrors the FolderNav render gate below).
+	// "New folder" is offered only for a folder-aware LOCAL source (mirrors the
+	// FolderNav render gate below).
 	const canCreateFolder = isLocalSource && source?.createFolder !== undefined;
 	const headerActions = useMemo(
 		() => (
@@ -374,7 +398,7 @@ export function ImageModule(): ReactNode {
 	);
 	useSetSidebarHeaderActions(headerActions);
 
-	const handleAssetClick = useCallback(
+	const handleAssetInsert = useCallback(
 		async (asset: StudioAsset): Promise<void> => {
 			let insertable = asset;
 			// External browse results (Unsplash) must be picked first — this
@@ -408,6 +432,82 @@ export function ImageModule(): ReactNode {
 		},
 		[getPuck, msg, source],
 	);
+
+	// A plain tile click clears the selection and inserts; `meta`/`ctrl` toggles
+	// a tile and `shift` selects the range — both update the selection only.
+	const handleAssetClick = useCallback(
+		(asset: StudioAsset, modifiers?: SelectModifiers): void => {
+			// Multi-select + bulk delete is a local-library action only. External
+			// browse results (e.g. Unsplash) are read-only, and the composite
+			// source's `delete` targets the local library — deleting an external
+			// id would silently no-op. So on a non-local source every click just
+			// inserts (report 0003 P2-7b).
+			if (!isLocalSource) {
+				void handleAssetInsert(asset);
+				return;
+			}
+			if (modifiers?.metaKey === true || modifiers?.ctrlKey === true) {
+				setSelectedAssetIds((prev) => {
+					const next = new Set(prev);
+					if (next.has(asset.id)) next.delete(asset.id);
+					else next.add(asset.id);
+					return next;
+				});
+				setAssetAnchorId(asset.id);
+				return;
+			}
+			if (modifiers?.shiftKey === true) {
+				const ids = displayedAssets.map((item) => item.id);
+				const to = ids.indexOf(asset.id);
+				const from = assetAnchorId !== null ? ids.indexOf(assetAnchorId) : -1;
+				if (to !== -1) {
+					if (from !== -1) {
+						const [lo, hi] = from <= to ? [from, to] : [to, from];
+						setSelectedAssetIds(new Set(ids.slice(lo, hi + 1)));
+					} else {
+						setSelectedAssetIds(new Set([asset.id]));
+						setAssetAnchorId(asset.id);
+					}
+					return;
+				}
+			}
+			setSelectedAssetIds(new Set());
+			setAssetAnchorId(asset.id);
+			void handleAssetInsert(asset);
+		},
+		[assetAnchorId, displayedAssets, handleAssetInsert, isLocalSource],
+	);
+	const clearAssetSelection = useCallback((): void => {
+		setSelectedAssetIds(new Set());
+		setAssetAnchorId(null);
+	}, []);
+	// Every selected asset is deletable when the source supports deletion
+	// (assets carry no per-item lock, unlike pages).
+	const deletableSelectedAssets = useMemo(
+		() => displayedAssets.filter((asset) => selectedAssetIds.has(asset.id)),
+		[displayedAssets, selectedAssetIds],
+	);
+	const handleBulkDeleteAssets = useCallback(async (): Promise<void> => {
+		const del = source?.delete;
+		if (del === undefined) return;
+		// Sequential so a host that throws halts the rest + surfaces the error.
+		for (const asset of deletableSelectedAssets) {
+			await del.call(source, asset.id);
+		}
+		clearAssetSelection();
+	}, [clearAssetSelection, deletableSelectedAssets, source]);
+	// Keep the selection scoped to visible tiles as the list filters / reloads.
+	useEffect(() => {
+		const visible = new Set(displayedAssets.map((asset) => asset.id));
+		setSelectedAssetIds((prev) => {
+			if (prev.size === 0) return prev;
+			const next = new Set([...prev].filter((id) => visible.has(id)));
+			return next.size === prev.size ? prev : next;
+		});
+		setAssetAnchorId((prev) =>
+			prev !== null && !visible.has(prev) ? null : prev,
+		);
+	}, [displayedAssets]);
 
 	const handleRenameSubmit = useCallback(
 		async (asset: StudioAsset, nextName: string): Promise<void> => {
@@ -450,11 +550,6 @@ export function ImageModule(): ReactNode {
 	const isLibraryEmpty =
 		assets.length === 0 && uploadingTiles.length === 0 && !assetsLoading;
 	const isFilterEmpty = !isLibraryEmpty && filteredAssets.length === 0;
-	// The media-kind filter is a local-library control and is hidden on an
-	// external source (e.g. Unsplash). Don't apply it client-side there either:
-	// a persisted `videos`/`audio` selection would otherwise partition every
-	// (image-only) Unsplash result out of the grid with no visible way back.
-	const gridFilter = isLocalSource ? filter : "all";
 
 	return (
 		<div data-testid="ak-module-image" className="flex h-full flex-col">
@@ -479,17 +574,45 @@ export function ImageModule(): ReactNode {
 						folderPath={folderPath}
 						folders={folders}
 						onNavigate={setCurrentFolderId}
-						onCreateFolder={handleCreateFolder}
-						creating={creatingFolder}
-						onCreatingChange={setCreatingFolder}
 						rootLabel={msg("studio.module.image.folder.root")}
 						navLabel={msg("studio.module.image.folder.nav")}
-						newPromptLabel={msg("studio.module.image.folder.newPrompt")}
 					/>
 				) : null}
 				{isLocalSource ? <ImageFilterStrip /> : null}
 				<ImageSearchBar onChange={setQuery} />
 			</div>
+			{selectedAssetIds.size > 0 &&
+			isLocalSource &&
+			source?.delete !== undefined ? (
+				<div
+					className="flex h-9 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] px-2 text-xs"
+					data-testid="ak-image-selection-toolbar"
+				>
+					<span className="grow text-[var(--ak-studio-fg)]">
+						{msg("studio.module.image.bulk.selected").replace(
+							"{count}",
+							String(selectedAssetIds.size),
+						)}
+					</span>
+					<Button
+						size="sm"
+						variant="ghost"
+						onClick={clearAssetSelection}
+						data-testid="ak-image-bulk-clear"
+					>
+						{msg("studio.module.image.bulk.clear")}
+					</Button>
+					<Button
+						size="sm"
+						variant="destructive"
+						disabled={deletableSelectedAssets.length === 0}
+						onClick={() => setBulkDeleteAssetsOpen(true)}
+						data-testid="ak-image-bulk-delete"
+					>
+						{msg("studio.module.image.bulk.delete")}
+					</Button>
+				</div>
+			) : null}
 			<div className="min-h-0 flex-1 overflow-auto">
 				<UploadDropZone onDrop={handleUpload}>
 					{assetsLoadError && assets.length === 0 ? (
@@ -520,6 +643,7 @@ export function ImageModule(): ReactNode {
 							source={source}
 							pluginActions={pluginActions}
 							onAssetClick={handleAssetClick}
+							selectedIds={selectedAssetIds}
 							onRename={setRenaming}
 							onReplace={handleStartReplace}
 						/>
@@ -569,6 +693,17 @@ export function ImageModule(): ReactNode {
 					if (!open) setRenaming(null);
 				}}
 				onSubmit={handleRenameSubmit}
+			/>
+			<NewFolderDialog
+				open={creatingFolder}
+				onOpenChange={setCreatingFolder}
+				onSubmit={handleCreateFolder}
+			/>
+			<BulkDeleteAssetsDialog
+				open={bulkDeleteAssetsOpen}
+				onOpenChange={setBulkDeleteAssetsOpen}
+				count={deletableSelectedAssets.length}
+				onConfirm={handleBulkDeleteAssets}
 			/>
 		</div>
 	);

@@ -52,9 +52,22 @@ import type { StudioPage, StudioPagesSource } from "@/types/pages";
 import { PageDeleteConfirmDialog } from "./PageDeleteConfirmDialog";
 import { PageSettingsDialog } from "./PageSettingsDialog";
 
+/** Modifier keys from a row click, used by the panel for multi-select. */
+export interface SelectModifiers {
+	readonly shiftKey: boolean;
+	readonly metaKey: boolean;
+	readonly ctrlKey: boolean;
+}
+
 export interface PageRowProps {
 	readonly page: StudioPage;
-	readonly onSelect: (id: string) => void;
+	/**
+	 * Activate a row. A plain click navigates; a click with `metaKey` / `ctrlKey`
+	 * (toggle) or `shiftKey` (range) drives the panel's multi-selection instead.
+	 */
+	readonly onSelect: (id: string, modifiers?: SelectModifiers) => void;
+	/** Whether this row is part of the panel's current multi-selection. */
+	readonly selected?: boolean;
 	readonly routeBadgeLabel: string;
 	readonly onRename?: StudioPagesSource["onRename"];
 	readonly onDelete?: StudioPagesSource["onDelete"];
@@ -68,6 +81,7 @@ type RowMode = "view" | "renaming";
 export function PageRow({
 	page,
 	onSelect,
+	selected,
 	routeBadgeLabel,
 	onRename,
 	onDelete,
@@ -269,9 +283,20 @@ export function PageRow({
 					<Button
 						type="button"
 						variant="ghost"
-						onClick={() => onSelect(page.id)}
+						onClick={(event) =>
+							onSelect(page.id, {
+								shiftKey: event.shiftKey,
+								metaKey: event.metaKey,
+								ctrlKey: event.ctrlKey,
+							})
+						}
 						aria-current={page.active === true ? "page" : undefined}
+						// Visual-only selection state. `aria-selected` is omitted on
+						// purpose: it is meaningful only on listbox/option-style roles,
+						// not a plain button (report 0003 P2-7a — proper selectable-list
+						// semantics is a follow-up).
 						data-active={page.active === true ? "true" : undefined}
+						data-selected={selected === true ? "true" : undefined}
 						data-testid={`ak-layer-page-row-${page.id}`}
 					/>
 				}
@@ -281,6 +306,7 @@ export function PageRow({
 					"hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))]",
 					"focus-visible:ring-2 focus-visible:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
 					"data-[active=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[active=true]:text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
+					"data-[selected=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[selected=true]:ring-1 data-[selected=true]:ring-inset data-[selected=true]:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
 					hasAnyAction ? "pr-7" : "",
 					canReorder ? "pl-6" : "",
 				)}

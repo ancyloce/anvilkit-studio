@@ -7,10 +7,13 @@ import { type DragEvent, memo, type ReactNode } from "react";
 import { encodeDropPayload } from "@/canvas-drop";
 import { Button } from "@/primitives/button";
 import type { StudioAsset } from "@/types/sidebar";
+import { modifiersFromEvent, type SelectModifiers } from "./asset-selection";
 
 export interface AssetImageTileProps {
 	readonly asset: StudioAsset;
-	readonly onClick: (asset: StudioAsset) => void;
+	readonly onClick: (asset: StudioAsset, modifiers?: SelectModifiers) => void;
+	/** Whether this tile is part of the library's current multi-selection. */
+	readonly selected?: boolean;
 	/**
 	 * Fired when the tile starts being dragged, so the host can run the
 	 * source's pick side effects (e.g. Unsplash's MANDATORY download trigger)
@@ -75,6 +78,7 @@ function AttributionLink({
 function AssetImageTileImpl({
 	asset,
 	onClick,
+	selected,
 	onDragStartAsset,
 	renderMenu,
 }: AssetImageTileProps): ReactNode {
@@ -87,12 +91,13 @@ function AssetImageTileImpl({
 		: undefined;
 	return (
 		<div
-			className="group relative flex flex-col gap-1 text-xs"
+			className="group relative flex flex-col gap-1 rounded-md text-xs data-[selected=true]:ring-2 data-[selected=true]:ring-inset data-[selected=true]:ring-[var(--ak-studio-accent)]"
+			data-selected={selected === true ? "true" : undefined}
 			data-testid={`ak-image-tile-${asset.id}`}
 		>
 			<Button
 				variant="ghost"
-				onClick={() => onClick(asset)}
+				onClick={(event) => onClick(asset, modifiersFromEvent(event))}
 				draggable
 				onDragStart={(event: DragEvent<HTMLButtonElement>) => {
 					encodeDropPayload(event.dataTransfer, {

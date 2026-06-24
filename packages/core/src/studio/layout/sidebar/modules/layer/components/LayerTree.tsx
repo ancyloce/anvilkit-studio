@@ -34,22 +34,24 @@ import {
 } from "@dnd-kit/sortable";
 import { useGetPuck } from "@puckeditor/core";
 import { memo, type ReactNode, useCallback, useMemo, useState } from "react";
-import { cn } from "@/shared/cn";
+import { toast } from "sonner";
 import { Windowed } from "@/primitives/windowed";
+import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
-import type { EditorUiState } from "@/state/slices/editor-ui-store";
 import { useEditorUiStore } from "@/state/slices/editor-ui-selectors";
-import { LayerRow } from "./LayerRow";
+import type { EditorUiState } from "@/state/slices/editor-ui-store";
 import {
 	buildNodeIndex,
 	collectSubtreeZones,
-	type LayerFlatRow,
 	flattenVisibleRows,
+	isCycleDrop,
+	type LayerFlatRow,
 	type LayerNode,
 	ROOT_ZONE,
 	resolveDrop,
 	useLayerTree,
 } from "../hooks/use-layer-tree";
+import { LayerRow } from "./LayerRow";
 
 /** Droppable id namespace so zone keys never collide with component ids. */
 const ZONE_PREFIX = "zone:";
@@ -287,9 +289,16 @@ export function LayerTree(): ReactNode {
 				dest: { zone: overData.zone, index: destIndex },
 				draggedSubtreeZones,
 			});
-			if (action !== null) snapshot.dispatch(action);
+			if (action !== null) {
+				snapshot.dispatch(action);
+			} else if (isCycleDrop(overData.zone, draggedSubtreeZones)) {
+				// The cycle rejection used to be silent (the drop just no-op'd).
+				// Surface it — sonner toasts are announced via aria-live, so this
+				// reaches screen-reader users as well as sighted ones.
+				toast(msg("studio.module.layer.layers.tree.cycleRejected"));
+			}
 		},
-		[getPuck, nodeById],
+		[getPuck, nodeById, msg],
 	);
 
 	const handleDragCancel = useCallback((): void => {
@@ -327,10 +336,25 @@ export function LayerTree(): ReactNode {
 							nodeById.get(String(active.id))?.label ?? String(active.id)
 						}`,
 					onDragOver: () => "",
-					onDragEnd: ({ active }) =>
-						`${msg("studio.module.layer.layers.tree.announce.moved")} ${
-							nodeById.get(String(active.id))?.label ?? String(active.id)
-						}`,
+					onDragEnd: ({ active, over }) => {
+						const id = String(active.id);
+						const label = nodeById.get(id)?.label ?? id;
+						const overZone = (
+							over?.data.current as { zone?: string } | undefined
+						)?.zone;
+						const draggedNode = nodeById.get(id) ?? null;
+						if (
+							overZone !== undefined &&
+							draggedNode !== null &&
+							isCycleDrop(overZone, collectSubtreeZones(draggedNode))
+						) {
+							// Don't falsely announce "Dropped layer" for a rejected cycle.
+							return msg("studio.module.layer.layers.tree.cycleRejected");
+						}
+						return `${msg(
+							"studio.module.layer.layers.tree.announce.moved",
+						)} ${label}`;
+					},
 					onDragCancel: () =>
 						msg("studio.module.layer.layers.tree.announce.cancelled"),
 				},

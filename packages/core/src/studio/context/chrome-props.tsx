@@ -14,13 +14,30 @@ import { createContext, type ReactNode, use } from "react";
 import type { StudioViewport } from "@/studio/ui/viewports";
 
 export interface ChromeProps {
+	/**
+	 * Invoked by the header's back affordance. When omitted, the affordance
+	 * still renders and falls back to `window.history.back()`.
+	 */
 	readonly onBack?: () => void;
+	/**
+	 * Invoked by the header's Save-draft control. May be async; report progress
+	 * back to the control via the separately-supplied
+	 * {@link ChromeProps.isSavingDraft} — it is not inferred from the returned
+	 * promise.
+	 */
 	readonly onSaveDraft?: () => void | Promise<void>;
+	/** When `true`, the Save-draft control is disabled and shows its busy label. */
 	readonly isSavingDraft?: boolean;
+	/**
+	 * When the draft was last saved — surfaced as a "last saved" hint in the
+	 * header. `null` or omitted hides the hint.
+	 */
 	readonly lastSavedAt?: Date | null;
+	/** When `true`, the Publish control is disabled and shows its busy label. */
 	readonly isPublishing?: boolean;
 	/** Receives the live editor document (read from the Puck API at click time). */
 	readonly onPublishClick?: (data: Data) => void;
+	/** Responsive viewport presets for the toolbar's viewport selector. */
 	readonly viewports?: readonly StudioViewport[];
 	/**
 	 * Host-supplied download handler invoked from the publish panel's

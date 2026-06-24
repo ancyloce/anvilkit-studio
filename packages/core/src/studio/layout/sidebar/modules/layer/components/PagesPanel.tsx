@@ -18,7 +18,13 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
-import { type ReactNode, useCallback, useMemo, useState } from "react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import { useStudioPagesSourceOrDefault } from "@/context/pages-source";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import { Button } from "@/primitives/button";
@@ -28,7 +34,8 @@ import { Windowed } from "@/primitives/windowed";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { StudioPage } from "@/types/pages";
 import { AddPageDialog } from "./AddPageDialog";
-import { PageRow } from "./PageRow";
+import { BulkDeletePagesDialog } from "./BulkDeletePagesDialog";
+import { PageRow, type SelectModifiers } from "./PageRow";
 import "../pages-tokens.css";
 import { usePagesDnd } from "../hooks/use-pages-dnd";
 import { useSourceList } from "../hooks/use-source-list";
@@ -46,13 +53,14 @@ export function PagesPanel(): ReactNode {
 		useSourceList<StudioPage>(source);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
-
-	const handleSelect = useCallback(
-		(id: string) => {
-			source?.onSelect?.(id);
-		},
-		[source],
+	// Multi-selection (report 0003 P2-7a): `selectedIds` are the checked rows,
+	// `anchorId` is the range pivot for shift-click, `bulkDeleteOpen` gates the
+	// bulk-delete confirm dialog.
+	const [selectedIds, setSelectedIds] = useState<ReadonlySet<string>>(
+		() => new Set(),
 	);
+	const [anchorId, setAnchorId] = useState<string | null>(null);
+	const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
 
 	const trimmedQuery = searchQuery.trim().toLowerCase();
 	const filteredPages = useMemo(() => {
@@ -78,6 +86,82 @@ export function PagesPanel(): ReactNode {
 		}),
 		[source],
 	);
+
+	// A plain click clears the selection and navigates; `meta`/`ctrl` toggles a
+	// row, `shift` selects the range from the anchor — both purely update the
+	// selection (no navigation).
+	const handleSelect = useCallback(
+		(id: string, modifiers?: SelectModifiers): void => {
+			if (modifiers?.metaKey === true || modifiers?.ctrlKey === true) {
+				setSelectedIds((prev) => {
+					const next = new Set(prev);
+					if (next.has(id)) next.delete(id);
+					else next.add(id);
+					return next;
+				});
+				setAnchorId(id);
+				return;
+			}
+			if (modifiers?.shiftKey === true) {
+				const ids = filteredPages.map((page) => page.id);
+				const to = ids.indexOf(id);
+				const from = anchorId !== null ? ids.indexOf(anchorId) : -1;
+				if (to !== -1) {
+					if (from !== -1) {
+						const [lo, hi] = from <= to ? [from, to] : [to, from];
+						setSelectedIds(new Set(ids.slice(lo, hi + 1)));
+					} else {
+						// No valid anchor (first shift-click, or the anchor was filtered
+						// out) — select just this row and make it the new anchor. A
+						// shift-click never navigates.
+						setSelectedIds(new Set([id]));
+						setAnchorId(id);
+					}
+					return;
+				}
+			}
+			setSelectedIds(new Set());
+			setAnchorId(id);
+			source?.onSelect?.(id);
+		},
+		[anchorId, filteredPages, source],
+	);
+	const clearSelection = useCallback((): void => {
+		setSelectedIds(new Set());
+		setAnchorId(null);
+	}, []);
+	// Only non-locked selected pages with an `onDelete` handler are deletable.
+	const deletableSelected = useMemo(
+		() =>
+			filteredPages.filter(
+				(page) => selectedIds.has(page.id) && page.locked !== true,
+			),
+		[filteredPages, selectedIds],
+	);
+	const handleBulkDelete = useCallback(async (): Promise<void> => {
+		const onDelete = handlers.onDelete;
+		if (typeof onDelete !== "function") return;
+		// Sequential so a host that throws halts the rest and the error surfaces
+		// in the dialog (the partial deletes that succeeded stay deleted).
+		for (const page of deletableSelected) {
+			await onDelete(page.id);
+		}
+		clearSelection();
+	}, [clearSelection, deletableSelected, handlers.onDelete]);
+
+	// Keep the selection scoped to visible rows: when the list filters or the
+	// source changes, drop any selected id / anchor that is no longer present, so
+	// the toolbar count always matches what bulk-delete would actually remove.
+	useEffect(() => {
+		const visible = new Set(filteredPages.map((page) => page.id));
+		setSelectedIds((prev) => {
+			if (prev.size === 0) return prev;
+			const next = new Set([...prev].filter((id) => visible.has(id)));
+			return next.size === prev.size ? prev : next;
+		});
+		setAnchorId((prev) => (prev !== null && !visible.has(prev) ? null : prev));
+	}, [filteredPages]);
+
 	const dnd = usePagesDnd({
 		pages: filteredPages,
 		onReorder: handlers.onReorder,
@@ -94,6 +178,7 @@ export function PagesPanel(): ReactNode {
 			<PageRow
 				page={page}
 				onSelect={handleSelect}
+				selected={selectedIds.has(page.id)}
 				routeBadgeLabel={routeBadgeLabel}
 				onRename={handlers.onRename}
 				onDelete={handlers.onDelete}
@@ -102,7 +187,7 @@ export function PagesPanel(): ReactNode {
 				onReorder={handlers.onReorder}
 			/>
 		),
-		[handleSelect, routeBadgeLabel, handlers],
+		[handleSelect, selectedIds, routeBadgeLabel, handlers],
 	);
 	const pageKey = useCallback((page: StudioPage): string => page.id, []);
 
@@ -137,6 +222,36 @@ export function PagesPanel(): ReactNode {
 					</TooltipContent>
 				</Tooltip>
 			</div>
+			{selectedIds.size > 0 && typeof handlers.onDelete === "function" ? (
+				<div
+					className="flex h-9 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-muted)] px-2 text-xs"
+					data-testid="ak-layer-pages-selection-toolbar"
+				>
+					<span className="grow text-[var(--ak-studio-fg)]">
+						{msg("studio.module.layer.pages.bulk.selected").replace(
+							"{count}",
+							String(selectedIds.size),
+						)}
+					</span>
+					<Button
+						size="sm"
+						variant="ghost"
+						onClick={clearSelection}
+						data-testid="ak-layer-pages-bulk-clear"
+					>
+						{msg("studio.module.layer.pages.bulk.clear")}
+					</Button>
+					<Button
+						size="sm"
+						variant="destructive"
+						disabled={deletableSelected.length === 0}
+						onClick={() => setBulkDeleteOpen(true)}
+						data-testid="ak-layer-pages-bulk-delete"
+					>
+						{msg("studio.module.layer.pages.bulk.delete")}
+					</Button>
+				</div>
+			) : null}
 			{!loadError && pages.length > 0 ? (
 				<div className="px-2 pt-2">
 					<Input
@@ -225,6 +340,12 @@ export function PagesPanel(): ReactNode {
 				)}
 			</div>
 			<AddPageDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+			<BulkDeletePagesDialog
+				open={bulkDeleteOpen}
+				onOpenChange={setBulkDeleteOpen}
+				count={deletableSelected.length}
+				onConfirm={handleBulkDelete}
+			/>
 		</div>
 	);
 }

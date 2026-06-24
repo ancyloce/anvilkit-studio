@@ -28,7 +28,7 @@ import {
 	SidebarRegistryProvider,
 	type SidebarRegistryStoreApi,
 } from "@/state/index";
-import type { StudioAssetSource } from "@/types/sidebar";
+import type { StudioAsset, StudioAssetSource } from "@/types/sidebar";
 
 const dispatch = vi.fn();
 const mockPuckSnapshot = {
@@ -584,7 +584,7 @@ describe("ImageModule", () => {
 	it("merges upload + new folder behind a single header menu button", async () => {
 		// One icon button publishes to the header; the old standalone upload
 		// button no longer exists. The menu offers Upload + (folder-aware local
-		// source) New folder, and New folder opens the inline name input.
+		// source) New folder, and New folder opens the new-folder dialog.
 		const registry = createSidebarRegistryStore();
 		const createFolder = vi
 			.fn()
@@ -618,11 +618,11 @@ describe("ImageModule", () => {
 		expect(await screen.findByTestId("ak-image-action-upload")).toBeTruthy();
 		fireEvent.click(await screen.findByTestId("ak-image-action-new-folder"));
 
-		// New folder opens the inline name input; submitting creates the folder
-		// at the current (root) location.
+		// New folder opens a dialog; submitting it creates the folder at the
+		// current (root) location.
 		const input = await screen.findByTestId("ak-image-new-folder-input");
 		fireEvent.change(input, { target: { value: "Brand" } });
-		fireEvent.keyDown(input, { key: "Enter" });
+		fireEvent.click(screen.getByTestId("ak-image-new-folder-submit"));
 		await waitFor(() => {
 			expect(createFolder).toHaveBeenCalledWith(null, "Brand");
 		});
@@ -698,5 +698,196 @@ describe("ImageModule", () => {
 		// Switch to Unsplash → the image result still renders despite filter=videos.
 		fireEvent.click(screen.getByText("Unsplash"));
 		expect(await screen.findByLabelText("pic")).toBeTruthy();
+	});
+});
+
+describe("ImageModule — multi-select + bulk delete (P2-7b)", () => {
+	const ASSETS: readonly StudioAsset[] = [
+		{ id: "a1", kind: "image", name: "a1.png", url: "asset://a1" },
+		{ id: "a2", kind: "image", name: "a2.png", url: "asset://a2" },
+		{ id: "a3", kind: "image", name: "a3.png", url: "asset://a3" },
+	];
+
+	it("ctrl-click toggles an asset into the selection (no insert)", async () => {
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(makeSource({ list: () => ASSETS }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		const tile = await screen.findByLabelText("a2.png");
+		fireEvent.click(tile, { ctrlKey: true });
+		expect(
+			await screen.findByTestId("ak-image-selection-toolbar"),
+		).toHaveTextContent("1 selected");
+		expect(screen.getByTestId("ak-image-tile-a2")).toHaveAttribute(
+			"data-selected",
+			"true",
+		);
+		expect(dispatch).not.toHaveBeenCalled();
+		// Toggle back off → toolbar disappears.
+		fireEvent.click(tile, { ctrlKey: true });
+		await waitFor(() =>
+			expect(screen.queryByTestId("ak-image-selection-toolbar")).toBeNull(),
+		);
+	});
+
+	it("shift-click selects the range from the anchor", async () => {
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(makeSource({ list: () => ASSETS }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByLabelText("a1.png"), { ctrlKey: true });
+		fireEvent.click(screen.getByLabelText("a3.png"), { shiftKey: true });
+		expect(
+			await screen.findByTestId("ak-image-selection-toolbar"),
+		).toHaveTextContent("3 selected");
+	});
+
+	it("plain click inserts the asset and clears any selection", async () => {
+		mockPuckSnapshot.config.components = { Image: {} };
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(makeSource({ list: () => ASSETS }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByLabelText("a2.png"), { ctrlKey: true });
+		expect(
+			await screen.findByTestId("ak-image-selection-toolbar"),
+		).toBeTruthy();
+		fireEvent.click(screen.getByLabelText("a1.png"));
+		expect(dispatch).toHaveBeenCalledTimes(1);
+		await waitFor(() =>
+			expect(screen.queryByTestId("ak-image-selection-toolbar")).toBeNull(),
+		);
+	});
+
+	it("bulk-deletes the selected assets via source.delete after confirmation", async () => {
+		const del = vi.fn().mockResolvedValue(undefined);
+		const registry = createSidebarRegistryStore();
+		registry
+			.getState()
+			.registerAssetSource(makeSource({ list: () => ASSETS, delete: del }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByLabelText("a1.png"), { ctrlKey: true });
+		fireEvent.click(screen.getByLabelText("a3.png"), { ctrlKey: true });
+		fireEvent.click(screen.getByTestId("ak-image-bulk-delete"));
+		fireEvent.click(await screen.findByTestId("ak-image-bulk-delete-confirm"));
+		await waitFor(() => {
+			expect(del).toHaveBeenCalledWith("a1");
+			expect(del).toHaveBeenCalledWith("a3");
+		});
+		expect(del).toHaveBeenCalledTimes(2);
+	});
+
+	it("does not show the bulk toolbar when the source cannot delete", async () => {
+		const registry = createSidebarRegistryStore();
+		registry
+			.getState()
+			.registerAssetSource(
+				makeSource({ list: () => ASSETS, delete: undefined }),
+			);
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByLabelText("a2.png"), { ctrlKey: true });
+		// Selection still highlights the tile, but with no delete there is no bar.
+		expect(screen.getByTestId("ak-image-tile-a2")).toHaveAttribute(
+			"data-selected",
+			"true",
+		);
+		expect(screen.queryByTestId("ak-image-selection-toolbar")).toBeNull();
+	});
+
+	it("shift-range follows the visual (partitioned) order, not source order", async () => {
+		// Source order is [image, video, image]; the grid renders images then
+		// videos, so the display order is [img-a, img-c, vid-b]. A range from
+		// img-a to img-c must NOT pull in vid-b, which sits between them in source
+		// order but renders in a different section.
+		const MIXED: readonly StudioAsset[] = [
+			{ id: "img-a", kind: "image", name: "img-a.png", url: "asset://img-a" },
+			{ id: "vid-b", kind: "video", name: "vid-b.mp4", url: "asset://vid-b" },
+			{ id: "img-c", kind: "image", name: "img-c.png", url: "asset://img-c" },
+		];
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(makeSource({ list: () => MIXED }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByLabelText("img-a.png"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByLabelText("img-c.png"), { shiftKey: true });
+		expect(
+			await screen.findByTestId("ak-image-selection-toolbar"),
+		).toHaveTextContent("2 selected");
+		expect(screen.getByTestId("ak-image-tile-img-c")).toHaveAttribute(
+			"data-selected",
+			"true",
+		);
+		expect(screen.getByTestId("ak-image-video-vid-b")).not.toHaveAttribute(
+			"data-selected",
+			"true",
+		);
+	});
+
+	it("does not enable multi-select on a non-local (external) source tab", async () => {
+		const pickResult = vi.fn().mockResolvedValue({
+			id: "unsplash:p1",
+			kind: "image",
+			name: "pic",
+			url: "asset://unsplash:p1",
+			source: "unsplash",
+		});
+		const listPaginated = vi.fn().mockResolvedValue({
+			items: [
+				{
+					id: "unsplash:p1",
+					kind: "image",
+					name: "pic",
+					url: "asset://unsplash:p1",
+					source: "unsplash",
+					thumbnailUrl: "https://images.unsplash.com/p1",
+				},
+			],
+			total: 1,
+			nextCursor: undefined,
+		});
+		const registry = createSidebarRegistryStore();
+		registry.getState().registerAssetSource(
+			makeSource({
+				list: vi.fn().mockReturnValue([]),
+				listPaginated,
+				listThemes: () => [
+					{ id: "nature", label: "assetManager.unsplash.theme.nature" },
+				],
+				pickResult,
+			}),
+		);
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		expect(await screen.findByTestId("ak-image-source-tabs")).toBeTruthy();
+		fireEvent.click(screen.getByText("Unsplash"));
+		// ctrl-click an external tile: it inserts (read-only browse), never selects.
+		fireEvent.click(await screen.findByLabelText("pic"), { ctrlKey: true });
+		await waitFor(() => expect(pickResult).toHaveBeenCalled());
+		expect(screen.queryByTestId("ak-image-selection-toolbar")).toBeNull();
 	});
 });

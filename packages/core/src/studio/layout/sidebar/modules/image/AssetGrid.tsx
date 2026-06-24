@@ -24,6 +24,7 @@ import { AssetAudioRow } from "./AssetAudioRow";
 import { AssetImageTile } from "./AssetImageTile";
 import { AssetOverflowMenu } from "./AssetOverflowMenu";
 import { AssetVideoCard } from "./AssetVideoCard";
+import { partitionAssets, type SelectModifiers } from "./asset-selection";
 
 /** Stable `Windowed.itemKey` — hoisted so it never re-allocates per render. */
 const assetKey = (asset: StudioAsset): string => asset.id;
@@ -40,7 +41,12 @@ export interface AssetGridProps {
 	readonly filter: AssetCategoryFilter;
 	readonly source: StudioAssetSource;
 	readonly pluginActions: readonly StudioAssetAction[];
-	readonly onAssetClick: (asset: StudioAsset) => void;
+	readonly onAssetClick: (
+		asset: StudioAsset,
+		modifiers?: SelectModifiers,
+	) => void;
+	/** The library's current multi-selection — highlights the matching tiles. */
+	readonly selectedIds: ReadonlySet<string>;
 	readonly onRename: (asset: StudioAsset) => void;
 	readonly onReplace: (asset: StudioAsset) => void;
 }
@@ -52,6 +58,7 @@ export function AssetGrid({
 	source,
 	pluginActions,
 	onAssetClick,
+	selectedIds,
 	onRename,
 	onReplace,
 }: AssetGridProps): ReactNode {
@@ -60,27 +67,12 @@ export function AssetGrid({
 	const showVideos = filter === "all" || filter === "videos";
 	const showAudio = filter === "all" || filter === "audio";
 
-	// Single pass partitions assets by kind honoring the active filter,
-	// instead of three independent full-list scans every render.
-	const { images, videos, audio } = useMemo(() => {
-		const img: StudioAsset[] = [];
-		const vid: StudioAsset[] = [];
-		const aud: StudioAsset[] = [];
-		const wantImages = filter === "all" || filter === "images";
-		const wantVideos = filter === "all" || filter === "videos";
-		const wantAudio = filter === "all" || filter === "audio";
-		for (const asset of assets) {
-			if (asset.kind === "video") {
-				if (wantVideos) vid.push(asset);
-			} else if (asset.kind === "audio") {
-				if (wantAudio) aud.push(asset);
-			} else if (wantImages) {
-				// "image" and "other" both render in the image grid.
-				img.push(asset);
-			}
-		}
-		return { images: img, videos: vid, audio: aud };
-	}, [assets, filter]);
+	// Single pass partitions assets by kind honoring the active filter (shared
+	// with ImageModule's shift-range so selection order matches render order).
+	const { images, videos, audio } = useMemo(
+		() => partitionAssets(assets, filter),
+		[assets, filter],
+	);
 
 	// Stable across renders so the memoized tiles below can skip re-rendering
 	// when only sibling state (e.g. upload progress) changes.
@@ -124,11 +116,12 @@ export function AssetGrid({
 			<AssetImageTile
 				asset={asset}
 				onClick={onAssetClick}
+				selected={selectedIds.has(asset.id)}
 				onDragStartAsset={handleAssetDragStart}
 				renderMenu={renderMenu}
 			/>
 		),
-		[onAssetClick, handleAssetDragStart, renderMenu],
+		[onAssetClick, selectedIds, handleAssetDragStart, renderMenu],
 	);
 
 	const renderVideoItem = useCallback(
@@ -136,10 +129,11 @@ export function AssetGrid({
 			<AssetVideoCard
 				asset={asset}
 				onClick={onAssetClick}
+				selected={selectedIds.has(asset.id)}
 				renderMenu={renderMenu}
 			/>
 		),
-		[onAssetClick, renderMenu],
+		[onAssetClick, selectedIds, renderMenu],
 	);
 
 	const renderAudioItem = useCallback(
@@ -147,10 +141,11 @@ export function AssetGrid({
 			<AssetAudioRow
 				asset={asset}
 				onClick={onAssetClick}
+				selected={selectedIds.has(asset.id)}
 				renderMenu={renderMenu}
 			/>
 		),
-		[onAssetClick, renderMenu],
+		[onAssetClick, selectedIds, renderMenu],
 	);
 
 	const sections: ReactNode[] = [];

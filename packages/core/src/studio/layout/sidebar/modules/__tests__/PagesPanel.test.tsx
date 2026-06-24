@@ -7,9 +7,15 @@
  * the underlying list itself is empty.
  */
 
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+	cleanup,
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+} from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { StudioPagesSourceProvider } from "@/context/pages-source";
 import { PagesPanel } from "@/layout/sidebar/modules/layer/components/PagesPanel";
 import { EditorI18nProvider } from "@/state/index";
@@ -172,5 +178,228 @@ describe("PagesPanel — virtualization", () => {
 		expect(
 			document.querySelectorAll("[data-testid^='ak-layer-page-row-']").length,
 		).toBeLessThan(total);
+	});
+});
+
+describe("PagesPanel — multi-select + bulk delete (P2-7a)", () => {
+	it("ctrl-click toggles a row into the selection (and back out)", async () => {
+		const onDelete = vi.fn().mockResolvedValue(undefined);
+		const source: StudioPagesSource = { list: () => PAGES, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		const about = await screen.findByTestId("ak-layer-page-row-about");
+		fireEvent.click(about, { ctrlKey: true });
+		const toolbar = await screen.findByTestId(
+			"ak-layer-pages-selection-toolbar",
+		);
+		expect(toolbar).toHaveTextContent("1 selected");
+		expect(about).toHaveAttribute("data-selected", "true");
+		fireEvent.click(about, { ctrlKey: true });
+		expect(screen.queryByTestId("ak-layer-pages-selection-toolbar")).toBeNull();
+	});
+
+	it("shift-click selects the range from the anchor", async () => {
+		const onDelete = vi.fn().mockResolvedValue(undefined);
+		const source: StudioPagesSource = { list: () => PAGES, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		// Plain click sets the anchor; shift-click extends the range (about → blog
+		// spans about, contact, blog = 3).
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-about"));
+		fireEvent.click(screen.getByTestId("ak-layer-page-row-blog"), {
+			shiftKey: true,
+		});
+		expect(
+			await screen.findByTestId("ak-layer-pages-selection-toolbar"),
+		).toHaveTextContent("3 selected");
+	});
+
+	it("bulk-deletes the selected pages via onDelete after confirmation", async () => {
+		const onDelete = vi.fn().mockResolvedValue(undefined);
+		const source: StudioPagesSource = { list: () => PAGES, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-about"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-page-row-blog"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-pages-bulk-delete"));
+		fireEvent.click(
+			await screen.findByTestId("ak-layer-pages-bulk-delete-confirm"),
+		);
+		await waitFor(() => {
+			expect(onDelete).toHaveBeenCalledWith("about");
+			expect(onDelete).toHaveBeenCalledWith("blog");
+		});
+		expect(onDelete).toHaveBeenCalledTimes(2);
+		// Selection clears after delete.
+		await waitFor(() =>
+			expect(
+				screen.queryByTestId("ak-layer-pages-selection-toolbar"),
+			).toBeNull(),
+		);
+	});
+
+	it("skips locked pages in bulk delete", async () => {
+		const onDelete = vi.fn().mockResolvedValue(undefined);
+		const lockedPages: readonly StudioPage[] = [
+			{ id: "home", title: "Home", path: "/", locked: true },
+			{ id: "about", title: "About", path: "/about" },
+		];
+		const source: StudioPagesSource = { list: () => lockedPages, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-home"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-page-row-about"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-pages-bulk-delete"));
+		fireEvent.click(
+			await screen.findByTestId("ak-layer-pages-bulk-delete-confirm"),
+		);
+		await waitFor(() => expect(onDelete).toHaveBeenCalledWith("about"));
+		expect(onDelete).not.toHaveBeenCalledWith("home");
+		expect(onDelete).toHaveBeenCalledTimes(1);
+	});
+
+	it("does not show the bulk toolbar when the source has no onDelete", async () => {
+		const source: StudioPagesSource = { list: () => PAGES };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-about"), {
+			ctrlKey: true,
+		});
+		expect(screen.queryByTestId("ak-layer-pages-selection-toolbar")).toBeNull();
+	});
+
+	it("prunes the selection to visible rows as the search filters them out", async () => {
+		const onDelete = vi.fn().mockResolvedValue(undefined);
+		const source: StudioPagesSource = { list: () => PAGES, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-about"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-page-row-blog"), {
+			ctrlKey: true,
+		});
+		expect(
+			await screen.findByTestId("ak-layer-pages-selection-toolbar"),
+		).toHaveTextContent("2 selected");
+		// Filter so only "about" is visible — "blog" prunes out of the selection.
+		fireEvent.change(screen.getByTestId("ak-layer-pages-search"), {
+			target: { value: "about" },
+		});
+		await waitFor(() =>
+			expect(
+				screen.getByTestId("ak-layer-pages-selection-toolbar"),
+			).toHaveTextContent("1 selected"),
+		);
+		// Filtering everything out hides the toolbar entirely.
+		fireEvent.change(screen.getByTestId("ak-layer-pages-search"), {
+			target: { value: "zzz-no-match" },
+		});
+		await waitFor(() =>
+			expect(
+				screen.queryByTestId("ak-layer-pages-selection-toolbar"),
+			).toBeNull(),
+		);
+	});
+
+	it("plain click clears the selection and navigates", async () => {
+		const onSelect = vi.fn();
+		const onDelete = vi.fn().mockResolvedValue(undefined);
+		const source: StudioPagesSource = { list: () => PAGES, onSelect, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-about"), {
+			ctrlKey: true,
+		});
+		expect(
+			await screen.findByTestId("ak-layer-pages-selection-toolbar"),
+		).toBeTruthy();
+		fireEvent.click(screen.getByTestId("ak-layer-page-row-contact"));
+		expect(onSelect).toHaveBeenCalledWith("contact");
+		await waitFor(() =>
+			expect(
+				screen.queryByTestId("ak-layer-pages-selection-toolbar"),
+			).toBeNull(),
+		);
+	});
+
+	it("disables Delete when only locked pages are selected", async () => {
+		const onDelete = vi.fn().mockResolvedValue(undefined);
+		const lockedPages: readonly StudioPage[] = [
+			{ id: "home", title: "Home", path: "/", locked: true },
+			{ id: "about", title: "About", path: "/about" },
+		];
+		const source: StudioPagesSource = { list: () => lockedPages, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-home"), {
+			ctrlKey: true,
+		});
+		expect(
+			await screen.findByTestId("ak-layer-pages-selection-toolbar"),
+		).toHaveTextContent("1 selected");
+		expect(screen.getByTestId("ak-layer-pages-bulk-delete")).toBeDisabled();
+	});
+
+	it("halts and surfaces the error when a bulk delete throws partway", async () => {
+		const onDelete = vi
+			.fn()
+			.mockResolvedValueOnce(undefined)
+			.mockRejectedValueOnce(new Error("Cannot delete"));
+		const source: StudioPagesSource = { list: () => PAGES, onDelete };
+		render(
+			<Setup source={source}>
+				<PagesPanel />
+			</Setup>,
+		);
+		// Deleted in filtered order: about (ok), then contact (throws).
+		fireEvent.click(await screen.findByTestId("ak-layer-page-row-about"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-page-row-contact"), {
+			ctrlKey: true,
+		});
+		fireEvent.click(screen.getByTestId("ak-layer-pages-bulk-delete"));
+		fireEvent.click(
+			await screen.findByTestId("ak-layer-pages-bulk-delete-confirm"),
+		);
+		await waitFor(() =>
+			expect(
+				screen.getByTestId("ak-layer-pages-bulk-delete-dialog-error"),
+			).toHaveTextContent("Cannot delete"),
+		);
+		expect(onDelete).toHaveBeenCalledTimes(2);
 	});
 });
