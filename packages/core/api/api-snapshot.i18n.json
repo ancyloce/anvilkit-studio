@@ -2168,9 +2168,9 @@
 			"sources": [
 				{
 					"fileName": "state/editor-i18n-context.tsx",
-					"line": 339,
+					"line": 386,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L339"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L386"
 				}
 			],
 			"signatures": [
@@ -2199,9 +2199,9 @@
 					"sources": [
 						{
 							"fileName": "state/editor-i18n-context.tsx",
-							"line": 339,
+							"line": 386,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L339"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx#L386"
 						}
 					],
 					"type": {

@@ -1,0 +1,157 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "@anvilkit/core",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 3,
+			"name": "icuFormatter",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {
+				"isConst": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "A ready-made ICU-subset formatter (equivalent to "
+					},
+					{
+						"kind": "code",
+						"text": "`createIcuFormatter()`"
+					},
+					{
+						"kind": "text",
+						"text": ")."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 380,
+					"character": 13,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/i18n/icu/index.ts#L380"
+				}
+			],
+			"type": {
+				"type": "reference",
+				"target": {
+					"packageName": "@anvilkit/core",
+					"packagePath": "src/i18n/format.ts",
+					"qualifiedName": "MessageFormatter"
+				},
+				"name": "MessageFormatter",
+				"package": "@anvilkit/core"
+			},
+			"defaultValue": "..."
+		},
+		{
+			"id": 1,
+			"name": "createIcuFormatter",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 368,
+					"character": 16,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/i18n/icu/index.ts#L368"
+				}
+			],
+			"signatures": [
+				{
+					"id": 2,
+					"name": "createIcuFormatter",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Create an ICU-subset "
+							},
+							{
+								"kind": "code",
+								"text": "`MessageFormatter`"
+							},
+							{
+								"kind": "text",
+								"text": ". The returned formatter never\nthrows: a malformed message degrades to its closest literal rendering."
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "index.ts",
+							"line": 368,
+							"character": 16,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/i18n/icu/index.ts#L368"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@anvilkit/core",
+							"packagePath": "src/i18n/format.ts",
+							"qualifiedName": "MessageFormatter"
+						},
+						"name": "MessageFormatter",
+						"package": "@anvilkit/core"
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Variables",
+			"children": [
+				3
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				1
+			]
+		}
+	],
+	"packageName": "@anvilkit/core",
+	"symbolIdMap": {
+		"0": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/icu/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/icu/index.ts",
+			"qualifiedName": "createIcuFormatter"
+		},
+		"2": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/icu/index.ts",
+			"qualifiedName": "createIcuFormatter"
+		},
+		"3": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/i18n/icu/index.ts",
+			"qualifiedName": "icuFormatter"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/i18n/icu/index.ts"
+		},
+		"reflections": {
+			"1": 0
+		}
+	}
+}
