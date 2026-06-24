@@ -168,8 +168,17 @@ function parseCases(str: string): Map<string, string> {
 	return cases;
 }
 
-function toNumber(value: string | number | undefined): number {
+function toNumber(value: string | number): number {
 	return typeof value === "number" ? value : Number(value);
+}
+
+function toDate(value: string | number): Date {
+	// A purely-numeric string is treated as a millisecond timestamp; `new
+	// Date("1686830400000")` would otherwise be an Invalid Date.
+	if (typeof value === "string" && /^\d+$/.test(value)) {
+		return new Date(Number(value));
+	}
+	return new Date(value);
 }
 
 // ---------------------------------------------------------------------------
@@ -177,10 +186,15 @@ function toNumber(value: string | number | undefined): number {
 // ---------------------------------------------------------------------------
 
 function formatNumber(
-	value: string | number | undefined,
+	value: string | number,
 	style: string | undefined,
 	locale: Locale,
 ): string {
+	const num = toNumber(value);
+	if (Number.isNaN(num)) {
+		// Non-numeric value — degrade to the literal placeholder, not "NaN".
+		throw new Error("icu: non-numeric value");
+	}
 	const options: Intl.NumberFormatOptions = {};
 	if (style === "integer") {
 		options.maximumFractionDigits = 0;
@@ -189,48 +203,61 @@ function formatNumber(
 	} else if (style?.startsWith("::currency/")) {
 		options.style = "currency";
 		options.currency = style.slice("::currency/".length).trim();
+	} else if (style !== undefined && style !== "") {
+		// Unrecognized number style — leave the whole placeholder literal.
+		throw new Error("icu: unsupported number style");
 	}
-	return numberFormat(locale, options).format(toNumber(value));
+	return numberFormat(locale, options).format(num);
 }
 
 function formatDateTime(
-	value: string | number | undefined,
+	value: string | number,
 	style: string | undefined,
 	locale: Locale,
 	kind: "date" | "time",
 ): string {
 	const named = ["short", "medium", "long", "full"] as const;
 	type NamedStyle = (typeof named)[number];
-	const resolved: NamedStyle = (named as readonly string[]).includes(
-		style ?? "",
-	)
-		? (style as NamedStyle)
-		: "medium";
+	let resolved: NamedStyle;
+	if (style === undefined || style === "") {
+		resolved = "medium";
+	} else if ((named as readonly string[]).includes(style)) {
+		resolved = style as NamedStyle;
+	} else {
+		// Unrecognized date/time style — leave the whole placeholder literal.
+		throw new Error("icu: unsupported date style");
+	}
 	const options: Intl.DateTimeFormatOptions =
 		kind === "date" ? { dateStyle: resolved } : { timeStyle: resolved };
-	return dateTimeFormat(locale, options).format(new Date(value ?? Date.now()));
+	return dateTimeFormat(locale, options).format(toDate(value));
 }
 
 function formatPlural(
-	name: string,
-	value: string | number | undefined,
+	value: string | number,
 	casesStr: string,
 	vars: Vars,
 	locale: Locale,
 	ordinal: boolean,
 ): string {
 	const num = toNumber(value);
+	if (Number.isNaN(num)) {
+		// Non-numeric value — degrade to the literal placeholder, not "NaN …".
+		throw new Error("icu: non-numeric plural value");
+	}
 	const cases = parseCases(casesStr);
 	// Exact `=N` cases win over the keyword category (ICU semantics).
 	let chosen = cases.get(`=${num}`);
 	if (chosen === undefined) {
-		const category = Number.isNaN(num)
-			? "other"
-			: pluralRule(locale, ordinal ? "ordinal" : "cardinal").select(num);
+		const category = pluralRule(
+			locale,
+			ordinal ? "ordinal" : "cardinal",
+		).select(num);
 		chosen = cases.get(category) ?? cases.get("other");
 	}
 	if (chosen === undefined) {
-		return value === undefined ? `{${name}}` : String(value);
+		// No matching category and no `other` case — a malformed plural; degrade
+		// to the literal placeholder (via formatArg's catch), not the raw value.
+		throw new Error("icu: plural has no matching case");
 	}
 	// `#` inside the chosen sub-message renders the formatted number.
 	const pound = numberFormat(locale, {}).format(num);
@@ -238,26 +265,40 @@ function formatPlural(
 }
 
 function formatSelect(
-	name: string,
-	value: string | number | undefined,
+	value: string | number,
 	casesStr: string,
 	vars: Vars,
 	locale: Locale,
+	pound?: string,
 ): string {
 	const cases = parseCases(casesStr);
 	const chosen = cases.get(String(value)) ?? cases.get("other");
 	if (chosen === undefined) {
-		return value === undefined ? `{${name}}` : String(value);
+		// No matching value and no `other` case — a malformed select; degrade to
+		// the literal placeholder (via formatArg's catch), not the raw value.
+		throw new Error("icu: select has no matching case");
 	}
-	return format(chosen, vars, locale);
+	// Carry the active plural `#` so a `#` inside a select case that is nested
+	// in a plural still resolves to the outer plural number (ICU semantics).
+	return format(chosen, vars, locale, pound);
 }
 
-function formatArg(inner: string, vars: Vars, locale: Locale): string {
+function formatArg(
+	inner: string,
+	vars: Vars,
+	locale: Locale,
+	pound?: string,
+): string {
 	const { name, type, style } = splitArg(inner);
 	const value = vars[name];
 	if (type === undefined) {
 		// Simple `{name}` — leave literal when missing (brace-formatter parity).
 		return value === undefined ? `{${name}}` : String(value);
+	}
+	if (value === undefined) {
+		// A typed arg with no value cannot be formatted — degrade to the literal
+		// placeholder rather than emitting `NaN`, the current date, or `NaN items`.
+		return `{${inner}}`;
 	}
 	try {
 		switch (type) {
@@ -268,17 +309,19 @@ function formatArg(inner: string, vars: Vars, locale: Locale): string {
 			case "time":
 				return formatDateTime(value, style, locale, "time");
 			case "plural":
-				return formatPlural(name, value, style ?? "", vars, locale, false);
+				return formatPlural(value, style ?? "", vars, locale, false);
 			case "selectordinal":
-				return formatPlural(name, value, style ?? "", vars, locale, true);
+				return formatPlural(value, style ?? "", vars, locale, true);
 			case "select":
-				return formatSelect(name, value, style ?? "", vars, locale);
+				return formatSelect(value, style ?? "", vars, locale, pound);
 			default:
 				// Unknown argument type — leave the whole placeholder literal.
 				return `{${inner}}`;
 		}
 	} catch {
-		return value === undefined ? `{${name}}` : String(value);
+		// Any Intl / parsing failure (bad currency code, locale, date value, …)
+		// degrades to the full literal placeholder — never a half-formatted value.
+		return `{${inner}}`;
 	}
 }
 
@@ -312,7 +355,7 @@ function format(
 			out += message.slice(i);
 			break;
 		}
-		out += formatArg(message.slice(i + 1, close), vars, locale);
+		out += formatArg(message.slice(i + 1, close), vars, locale, pound);
 		i = close + 1;
 	}
 	return out;
