@@ -78,4 +78,20 @@ describe("createEditorUiStore", () => {
 		expect(after.drawerCollapsed).toBe(false);
 		expect(after.outlineExpanded).toEqual({});
 	});
+
+	it("caps the in-memory expansion map (most-recently-toggled kept)", () => {
+		const store = createEditorUiStore({ storeId: "cap-in-memory" });
+		const state = store.getState();
+		// Toggle well past the 1000-key limit.
+		for (let i = 0; i < 1100; i++) {
+			state.setOutlineExpanded(`node-${i}`, true);
+		}
+		const map = store.getState().outlineExpanded;
+		expect(Object.keys(map).length).toBe(1000);
+		// Oldest 100 evicted, most-recent 1000 retained.
+		expect(map["node-0"]).toBeUndefined();
+		expect(map["node-99"]).toBeUndefined();
+		expect(map["node-100"]).toBe(true);
+		expect(map["node-1099"]).toBe(true);
+	});
 });

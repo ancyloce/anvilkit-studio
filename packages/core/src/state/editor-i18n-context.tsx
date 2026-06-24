@@ -325,6 +325,53 @@ export function EditorI18nProvider({
 }
 
 /**
+ * `NODE_ENV` via `globalThis` — mirrors `config/env-parser`, `devtools`, and
+ * `sidebar-registry-store` (core's tsconfig has no `@types/node`, so the bare
+ * `process` identifier is untyped). Returns `undefined` when `process` is
+ * absent — e.g. a browser bundle that did not inline it.
+ */
+function nodeEnv(): string | undefined {
+	return (
+		globalThis as unknown as { process?: { env?: Record<string, string> } }
+	).process?.env?.NODE_ENV;
+}
+
+/**
+ * Keys already warned about. Module-scoped so a missing key logs at most once
+ * per session rather than on every render — the warning is a developer aid,
+ * not per-instance state.
+ */
+const warnedMissingKeys = new Set<string>();
+
+/**
+ * Dev-only warning when a key resolves to *itself*: absent from the catalog
+ * and overrides, with no caller `fallback`, so the raw key string renders in
+ * the UI. Surfaces the otherwise-silent visible-fallback so a typo'd or
+ * unregistered key is caught in development. Deduped per key.
+ *
+ * Fires only when `NODE_ENV` is an **explicit non-production** value. This is
+ * deliberately stricter than `devtoolsEnabled` (whose `undefined ⇒ on` default
+ * is harmless — the devtools middleware is inert without the extension): an
+ * absent `NODE_ENV` here means `process` is undefined, which is exactly the
+ * shape of a browser **production** bundle, and a stray `console.warn` there is
+ * not harmless. Dev/test set `NODE_ENV`, so the warning still fires there; in
+ * any build where we cannot confirm development, the visibly-rendered raw key
+ * remains the signal.
+ */
+function warnMissingMessageKey(key: string): void {
+	const env = nodeEnv();
+	if (env === undefined || env === "production" || warnedMissingKeys.has(key)) {
+		return;
+	}
+	warnedMissingKeys.add(key);
+	console.warn(
+		`[studio] i18n: no message for key "${key}" in the active catalog ` +
+			"(and no fallback was supplied); rendering the key itself. Add it to " +
+			"your messages / locale pack, or pass a fallback to t() / useMsg().",
+	);
+}
+
+/**
  * Resolve a message key to the active string.
  *
  * Resolution order (PRD §10.2):
@@ -346,7 +393,13 @@ export function useMsg(): (key: string, fallback?: string) => string {
 	return useCallback(
 		(key, fallback) => {
 			if (key in overrides) return overrides[key] as string;
-			return messages[key] ?? fallback ?? key;
+			const resolved = messages[key];
+			if (resolved !== undefined) return resolved;
+			if (fallback !== undefined) return fallback;
+			// Genuinely missing: no catalog entry, no override, no fallback — the
+			// raw key is about to render. Make that visible-fallback debuggable.
+			warnMissingMessageKey(key);
+			return key;
 		},
 		[messages, overrides],
 	);

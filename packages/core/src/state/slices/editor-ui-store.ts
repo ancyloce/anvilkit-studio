@@ -230,9 +230,11 @@ function migratePersistedState(persisted: unknown, _version: number): unknown {
 			typeof source.drawerCollapsed === "boolean"
 				? source.drawerCollapsed
 				: INITIAL_STATE.drawerCollapsed,
-		outlineExpanded: isStringBoolMap(source.outlineExpanded)
-			? source.outlineExpanded
-			: INITIAL_STATE.outlineExpanded,
+		outlineExpanded: capExpansionMap(
+			isStringBoolMap(source.outlineExpanded)
+				? source.outlineExpanded
+				: INITIAL_STATE.outlineExpanded,
+		),
 		canvasViewport:
 			typeof source.canvasViewport === "string"
 				? source.canvasViewport
@@ -243,14 +245,18 @@ function migratePersistedState(persisted: unknown, _version: number): unknown {
 				? source.canvasZoom
 				: INITIAL_STATE.canvasZoom,
 		componentViewMode,
-		insertSectionsExpanded: isStringBoolMap(source.insertSectionsExpanded)
-			? source.insertSectionsExpanded
-			: INITIAL_STATE.insertSectionsExpanded,
+		insertSectionsExpanded: capExpansionMap(
+			isStringBoolMap(source.insertSectionsExpanded)
+				? source.insertSectionsExpanded
+				: INITIAL_STATE.insertSectionsExpanded,
+		),
 		assetCategoryFilter,
 		copyCategoryFilter,
-		pagesExpanded: isStringBoolMap(source.pagesExpanded)
-			? source.pagesExpanded
-			: INITIAL_STATE.pagesExpanded,
+		pagesExpanded: capExpansionMap(
+			isStringBoolMap(source.pagesExpanded)
+				? source.pagesExpanded
+				: INITIAL_STATE.pagesExpanded,
+		),
 		layerSplitRatio,
 	} satisfies EditorUiPersistedSlice;
 }
@@ -270,22 +276,23 @@ function clampSplitRatio(ratio: number): number {
 }
 
 /**
- * Upper bound on a persisted expansion map (review finding Z-e).
- * Toggling expansion accumulates one key per node id ever touched and
- * never reclaims keys for deleted nodes, so the persisted blob grew
- * without bound across a long session. Capping to the most-recently-
- * inserted N keys (object key order is insertion order) bounds the blob
- * without needing the live tree at the persistence boundary.
+ * Upper bound on an expansion map (review finding Z-e; report 0003 P2-10).
+ * Toggling expansion accumulates one key per node id ever touched and never
+ * reclaims keys for deleted nodes, so a map grew without bound across a long
+ * session. The cap is applied both in the toggle reducers (bounding live
+ * memory) and in `partialize` (bounding the persisted blob and sanitizing an
+ * oversized hydrated blob), keeping the most-recently-inserted N keys (object
+ * key order is insertion order) without needing the live tree.
  */
-const EXPANSION_MAP_PERSIST_LIMIT = 1000;
+const EXPANSION_MAP_LIMIT = 1000;
 
 function capExpansionMap(
 	map: Readonly<Record<string, boolean>>,
 ): Readonly<Record<string, boolean>> {
 	const keys = Object.keys(map);
-	if (keys.length <= EXPANSION_MAP_PERSIST_LIMIT) return map;
+	if (keys.length <= EXPANSION_MAP_LIMIT) return map;
 	const out: Record<string, boolean> = {};
-	for (const key of keys.slice(-EXPANSION_MAP_PERSIST_LIMIT)) {
+	for (const key of keys.slice(-EXPANSION_MAP_LIMIT)) {
 		out[key] = map[key] as boolean;
 	}
 	return out;
@@ -321,7 +328,10 @@ export function createEditorUiStore(
 				},
 				setOutlineExpanded(id, expanded) {
 					set((state) => ({
-						outlineExpanded: { ...state.outlineExpanded, [id]: expanded },
+						outlineExpanded: capExpansionMap({
+							...state.outlineExpanded,
+							[id]: expanded,
+						}),
 					}));
 				},
 				setCanvasViewport(canvasViewport) {
@@ -338,10 +348,10 @@ export function createEditorUiStore(
 				},
 				setInsertSectionExpanded(id, expanded) {
 					set((state) => ({
-						insertSectionsExpanded: {
+						insertSectionsExpanded: capExpansionMap({
 							...state.insertSectionsExpanded,
 							[id]: expanded,
-						},
+						}),
 					}));
 				},
 				setAssetCategoryFilter(assetCategoryFilter) {
@@ -352,7 +362,10 @@ export function createEditorUiStore(
 				},
 				setPageExpanded(id, expanded) {
 					set((state) => ({
-						pagesExpanded: { ...state.pagesExpanded, [id]: expanded },
+						pagesExpanded: capExpansionMap({
+							...state.pagesExpanded,
+							[id]: expanded,
+						}),
 					}));
 				},
 				setLayerSplitRatio(layerSplitRatio) {
