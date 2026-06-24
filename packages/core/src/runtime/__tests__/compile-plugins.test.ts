@@ -64,6 +64,8 @@ function makePlugin(
 	id: string,
 	options: {
 		coreVersion?: string;
+		order?: number;
+		dependsOn?: readonly string[];
 		register?: (
 			meta: StudioPluginMeta,
 			ctx: StudioPluginContext,
@@ -75,6 +77,10 @@ function makePlugin(
 		name: id,
 		version: "1.0.0",
 		coreVersion: options.coreVersion ?? "^0.1.0",
+		...(options.order !== undefined ? { order: options.order } : {}),
+		...(options.dependsOn !== undefined
+			? { dependsOn: options.dependsOn }
+			: {}),
 	};
 	const register = options.register ?? ((m) => ({ meta: m }));
 	return {
@@ -671,5 +677,73 @@ describe("compilePlugins — i18n message registration (P4)", () => {
 		await expect(compilePlugins([plugin], makeCtx())).rejects.toThrow(
 			/already registered/,
 		);
+	});
+});
+
+describe("compilePlugins — order / dependsOn (P2-9)", () => {
+	const compiledIds = (runtime: { pluginMeta: readonly StudioPluginMeta[] }) =>
+		runtime.pluginMeta.map((m) => m.id);
+
+	it("preserves declaration order when no plugin sets order/dependsOn", async () => {
+		const runtime = await compilePlugins(
+			[makePlugin("a"), makePlugin("b"), makePlugin("c")],
+			makeCtx(),
+		);
+		expect(compiledIds(runtime)).toEqual(["a", "b", "c"]);
+	});
+
+	it("compiles in ascending order, declaration order breaking ties", async () => {
+		const runtime = await compilePlugins(
+			[
+				makePlugin("late", { order: 200 }),
+				makePlugin("early", { order: 10 }),
+				makePlugin("default-a"),
+				makePlugin("default-b"),
+			],
+			makeCtx(),
+		);
+		expect(compiledIds(runtime)).toEqual([
+			"early",
+			"default-a",
+			"default-b",
+			"late",
+		]);
+	});
+
+	it("topologically orders so a dependency compiles before its dependent", async () => {
+		const runtime = await compilePlugins(
+			[makePlugin("ui", { dependsOn: ["base"] }), makePlugin("base")],
+			makeCtx(),
+		);
+		expect(compiledIds(runtime)).toEqual(["base", "ui"]);
+	});
+
+	it("lets dependsOn override order", async () => {
+		const runtime = await compilePlugins(
+			[
+				makePlugin("ui", { order: 1, dependsOn: ["base"] }),
+				makePlugin("base", { order: 999 }),
+			],
+			makeCtx(),
+		);
+		expect(compiledIds(runtime)).toEqual(["base", "ui"]);
+	});
+
+	it("throws a StudioPluginError on a missing dependency", async () => {
+		await expect(
+			compilePlugins([makePlugin("ui", { dependsOn: ["nope"] })], makeCtx()),
+		).rejects.toBeInstanceOf(StudioPluginError);
+	});
+
+	it("throws on a dependency cycle", async () => {
+		await expect(
+			compilePlugins(
+				[
+					makePlugin("a", { dependsOn: ["b"] }),
+					makePlugin("b", { dependsOn: ["a"] }),
+				],
+				makeCtx(),
+			),
+		).rejects.toThrow(/cycle/i);
 	});
 });

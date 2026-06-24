@@ -86,13 +86,15 @@ const RESERVED_I18N_NAMESPACES: ReadonlySet<string> = new Set([
 export interface StudioRuntime {
 	/**
 	 * The `meta` block of every Studio plugin that successfully
-	 * registered, in declaration order. Diagnostic surface only —
-	 * the runtime does not re-read fields from here after compile.
+	 * registered, in compile order (declaration order unless a plugin sets
+	 * `order` / `dependsOn`). Diagnostic surface only — the runtime does not
+	 * re-read fields from here after compile.
 	 */
 	readonly pluginMeta: readonly StudioPluginMeta[];
 	/**
-	 * The raw plugin registrations in declaration order, as returned
-	 * by each plugin's `register()`. Primarily consumed by the
+	 * The raw plugin registrations in compile order (declaration order
+	 * unless a plugin sets `order` / `dependsOn`), as returned by each
+	 * plugin's `register()`. Primarily consumed by the
 	 * `@anvilkit/core/testing` harness so unit tests can drive a
 	 * single plugin's lifecycle hooks without re-implementing the
 	 * compile-time invariant checks (structural guard, coreVersion
@@ -191,11 +193,12 @@ export interface StudioRuntime {
  * Compile an ordered, mixed array of plugin objects into a ready-to-
  * mount {@link StudioRuntime}.
  *
- * See the file-level JSDoc for the error surface. Each plugin is
- * processed strictly in declaration order so error messages always
- * refer to the first offending plugin and the resulting registries
- * (export formats, header actions, override merge) honor the
- * caller's intent.
+ * See the file-level JSDoc for the error surface. Plugins are first
+ * ordered by `dependsOn` (topological) then `(order, declaration index)`
+ * — a constraint-free array keeps declaration order exactly — and then
+ * processed in that compile order, so error messages refer to the first
+ * offending plugin in compile order and the resulting registries (export
+ * formats, header actions, override merge) honor the caller's intent.
  *
  * @param plugins - The mixed array passed to
  * `createStudioConfig({ plugins })`.
@@ -339,11 +342,127 @@ function combineUnregister(
 	};
 }
 
+/**
+ * Topologically order the plugin array so each plugin compiles **after** every
+ * plugin it {@link StudioPluginMeta.dependsOn}, breaking ties (plugins with no
+ * dependency relation) by `(meta.order ?? DEFAULT_PLUGIN_ORDER, declaration
+ * index)`. Puck plugins carry no meta, so they sort at the default order by
+ * declaration index.
+ *
+ * When no plugin declares `order` or `dependsOn`, the input array is returned
+ * unchanged — the common case stays byte-for-byte identical. Throws a
+ * {@link StudioPluginError} when a `dependsOn` id is absent from the array or
+ * the dependency graph contains a cycle.
+ */
+function orderPlugins(
+	plugins: readonly (StudioPlugin | PuckPlugin)[],
+): readonly (StudioPlugin | PuckPlugin)[] {
+	interface PluginNode {
+		readonly plugin: StudioPlugin | PuckPlugin;
+		readonly index: number;
+		readonly id: string | null;
+		readonly order: number;
+		readonly dependsOn: readonly string[];
+		readonly explicitOrder: boolean;
+	}
+	const nodes: PluginNode[] = plugins.map((plugin, index) =>
+		isStudioPlugin(plugin)
+			? {
+					plugin,
+					index,
+					id: plugin.meta.id,
+					order: plugin.meta.order ?? DEFAULT_PLUGIN_ORDER,
+					dependsOn: plugin.meta.dependsOn ?? [],
+					explicitOrder: plugin.meta.order !== undefined,
+				}
+			: {
+					plugin,
+					index,
+					id: null,
+					order: DEFAULT_PLUGIN_ORDER,
+					dependsOn: [],
+					explicitOrder: false,
+				},
+	);
+
+	// Common case: nobody asked for a specific order → leave the array exactly
+	// as declared (zero behavior change for existing plugin sets).
+	const hasConstraints = nodes.some(
+		(node) => node.dependsOn.length > 0 || node.explicitOrder,
+	);
+	if (!hasConstraints) {
+		return plugins;
+	}
+
+	const byId = new Map<string, PluginNode>();
+	for (const node of nodes) {
+		if (node.id !== null) {
+			byId.set(node.id, node);
+		}
+	}
+
+	const indegree = new Map<PluginNode, number>(nodes.map((node) => [node, 0]));
+	const dependents = new Map<PluginNode, PluginNode[]>(
+		nodes.map((node) => [node, []]),
+	);
+	for (const node of nodes) {
+		for (const depId of node.dependsOn) {
+			const dependency = byId.get(depId);
+			if (dependency === undefined) {
+				throw new StudioPluginError(
+					node.id ?? `#${node.index}`,
+					`Plugin "${node.id}" declares dependsOn "${depId}", which is not present in the plugin array.`,
+				);
+			}
+			dependents.get(dependency)?.push(node);
+			indegree.set(node, (indegree.get(node) ?? 0) + 1);
+		}
+	}
+
+	// Kahn's algorithm; among ready (in-degree 0) nodes, emit the lowest
+	// `(order, index)` first so `order` and declaration order break ties.
+	const byOrderThenIndex = (a: PluginNode, b: PluginNode): number =>
+		a.order - b.order || a.index - b.index;
+	const ready = nodes.filter((node) => (indegree.get(node) ?? 0) === 0);
+	const ordered: PluginNode[] = [];
+	while (ready.length > 0) {
+		ready.sort(byOrderThenIndex);
+		const node = ready.shift();
+		if (node === undefined) {
+			break;
+		}
+		ordered.push(node);
+		for (const dependent of dependents.get(node) ?? []) {
+			const next = (indegree.get(dependent) ?? 0) - 1;
+			indegree.set(dependent, next);
+			if (next === 0) {
+				ready.push(dependent);
+			}
+		}
+	}
+
+	if (ordered.length !== nodes.length) {
+		const cyclic = nodes
+			.filter((node) => !ordered.includes(node))
+			.map((node) => node.id ?? `#${node.index}`);
+		throw new StudioPluginError(
+			cyclic[0] ?? "(unknown)",
+			`Plugin dependency cycle detected among: ${cyclic.join(", ")}.`,
+		);
+	}
+	return ordered.map((node) => node.plugin);
+}
+
 export async function compilePlugins(
 	plugins: readonly (StudioPlugin | PuckPlugin)[],
 	ctx: StudioPluginContext,
 	options: CompilePluginsOptions = {},
 ): Promise<StudioRuntime> {
+	// Order by `dependsOn` (topological) then `(order, declaration index)`
+	// before compiling, so first-registration-wins contributions resolve in
+	// the host's intended order. A constraint-free array passes through
+	// unchanged; a missing dependency / cycle throws here.
+	const orderedPlugins = orderPlugins(plugins);
 	const pluginMeta: StudioPluginMeta[] = [];
 	const registrations: StudioPluginRegistration[] = [];
 	const assetResolvers: IRAssetResolver[] = [];
@@ -489,7 +608,7 @@ export async function compilePlugins(
 			},
 		});
 
-	for (const [index, plugin] of plugins.entries()) {
+	for (const [index, plugin] of orderedPlugins.entries()) {
 		if (isStudioPlugin(plugin)) {
 			const meta = plugin.meta;
 
