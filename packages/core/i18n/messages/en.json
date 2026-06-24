@@ -156,6 +156,7 @@
 	"studio.module.image.source.all": "All",
 	"studio.module.image.source.library": "Library",
 	"studio.module.image.source.unsplash": "Unsplash",
+	"studio.module.image.source.degraded": "Some sources are unavailable.",
 	"studio.module.image.theme.label": "Themes",
 	"studio.module.text.name": "Copywriting",
 	"studio.module.text.filter.all": "All",
