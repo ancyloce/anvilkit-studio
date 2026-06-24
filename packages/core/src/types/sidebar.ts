@@ -259,6 +259,15 @@ export interface StudioAssetListPage {
 	readonly folderPath?: readonly StudioAssetFolder[];
 	/** Per-source page tokens for federated paging, keyed by source id. */
 	readonly sourceCursors?: Readonly<Record<string, string | undefined>>;
+	/**
+	 * Per-source errors for a federated page, keyed by source id. Present when a
+	 * source failed to return results for this page while others succeeded — the
+	 * sidebar surfaces a non-blocking "degraded" hint instead of dropping the
+	 * failure silently. Successful sources are absent from the map.
+	 */
+	readonly sourceErrors?: Readonly<
+		Record<string, { readonly message: string; readonly code?: string }>
+	>;
 }
 
 /**

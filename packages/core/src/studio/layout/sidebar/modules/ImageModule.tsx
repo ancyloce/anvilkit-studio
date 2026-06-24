@@ -87,6 +87,9 @@ export function ImageModule(): ReactNode {
 	const [assetsLoading, setAssetsLoading] = useState(false);
 	const [assetsLoadError, setAssetsLoadError] = useState(false);
 	const [nextCursor, setNextCursor] = useState<string | undefined>(undefined);
+	// Source ids that failed for the latest federated page (others succeeded) —
+	// drives a non-blocking "degraded" hint instead of dropping the error.
+	const [degradedSources, setDegradedSources] = useState<readonly string[]>([]);
 	const [query, setQuery] = useState("");
 	const [uploadingTiles, setUploadingTiles] = useState<
 		readonly UploadingTile[]
@@ -189,6 +192,9 @@ export function ImageModule(): ReactNode {
 						cursor === undefined ? page.items : [...current, ...page.items],
 					);
 					setNextCursor(page.nextCursor);
+					setDegradedSources(
+						page.sourceErrors ? Object.keys(page.sourceErrors) : [],
+					);
 					if (cursor === undefined) {
 						setFolders(page.folders ?? []);
 						setFolderPath(page.folderPath ?? []);
@@ -199,6 +205,7 @@ export function ImageModule(): ReactNode {
 				if (isStale()) return;
 				setAssets(next);
 				setNextCursor(undefined);
+				setDegradedSources([]);
 			} catch {
 				if (isStale()) return;
 				if (cursor === undefined) {
@@ -615,6 +622,15 @@ export function ImageModule(): ReactNode {
 			) : null}
 			<div className="min-h-0 flex-1 overflow-auto">
 				<UploadDropZone onDrop={handleUpload}>
+					{degradedSources.length > 0 ? (
+						<div
+							role="status"
+							className="px-3 py-2 text-xs text-muted-foreground"
+							data-testid="ak-image-sources-degraded"
+						>
+							{msg("studio.module.image.source.degraded")}
+						</div>
+					) : null}
 					{assetsLoadError && assets.length === 0 ? (
 						<EmptyState
 							message={msg("studio.module.image.loadError")}

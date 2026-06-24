@@ -130,6 +130,92 @@ describe("ImageModule", () => {
 		expect(await screen.findByTestId("ak-image-library-empty")).toBeTruthy();
 	});
 
+	it("shows a non-blocking degraded hint when listPaginated reports sourceErrors", async () => {
+		const registry = createSidebarRegistryStore();
+		const listPaginated = vi.fn().mockResolvedValue({
+			items: [
+				{ id: "png-1", kind: "image", name: "photo.png", url: "asset://png-1" },
+			],
+			total: 1,
+			nextCursor: undefined,
+			sourceErrors: {
+				unsplash: { message: "rate limited", code: "PROVIDER_RATE_LIMITED" },
+			},
+		});
+		registry.getState().registerAssetSource(makeSource({ listPaginated }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		// Results still render; the hint appears alongside them, not instead.
+		expect(await screen.findByLabelText("photo.png")).toBeTruthy();
+		expect(screen.getByTestId("ak-image-sources-degraded")).toBeTruthy();
+	});
+
+	it("shows no degraded hint when every source succeeds", async () => {
+		const registry = createSidebarRegistryStore();
+		const listPaginated = vi.fn().mockResolvedValue({
+			items: [
+				{ id: "png-1", kind: "image", name: "photo.png", url: "asset://png-1" },
+			],
+			total: 1,
+			nextCursor: undefined,
+		});
+		registry.getState().registerAssetSource(makeSource({ listPaginated }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		expect(await screen.findByLabelText("photo.png")).toBeTruthy();
+		expect(screen.queryByTestId("ak-image-sources-degraded")).toBeNull();
+	});
+
+	it("clears the degraded hint after a later page succeeds", async () => {
+		const registry = createSidebarRegistryStore();
+		const listPaginated = vi
+			.fn()
+			.mockResolvedValueOnce({
+				items: [
+					{
+						id: "png-1",
+						kind: "image",
+						name: "photo.png",
+						url: "asset://png-1",
+					},
+				],
+				total: 2,
+				nextCursor: "cursor-2",
+				sourceErrors: { unsplash: { message: "rate limited" } },
+			})
+			.mockResolvedValueOnce({
+				items: [
+					{
+						id: "png-2",
+						kind: "image",
+						name: "second.png",
+						url: "asset://png-2",
+					},
+				],
+				total: 2,
+				nextCursor: undefined,
+			});
+		registry.getState().registerAssetSource(makeSource({ listPaginated }));
+		render(
+			<Setup registry={registry}>
+				<ImageModule />
+			</Setup>,
+		);
+		expect(await screen.findByTestId("ak-image-sources-degraded")).toBeTruthy();
+
+		fireEvent.click(screen.getByRole("button", { name: "Load more" }));
+		expect(await screen.findByLabelText("second.png")).toBeTruthy();
+		await waitFor(() =>
+			expect(screen.queryByTestId("ak-image-sources-degraded")).toBeNull(),
+		);
+	});
+
 	it("prefers listPaginated and loads additional pages by cursor", async () => {
 		const registry = createSidebarRegistryStore();
 		const list = vi.fn().mockReturnValue([]);
