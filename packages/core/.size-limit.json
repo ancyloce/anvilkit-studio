@@ -12,5 +12,11 @@
 			"@puckeditor/core",
 			"*.css"
 		]
+	},
+	{
+		"name": "@anvilkit/core/i18n/icu (optional ICU formatter — dependency-free)",
+		"path": "dist/i18n/icu/index.js",
+		"limit": "3 KB",
+		"gzip": true
 	}
 ]

@@ -294,15 +294,20 @@ async function bundle(
 }
 
 /**
- * Identify which emitted file is the top-level entry chunk. With
- * `splitting: true`, esbuild names the entry `studio-entry.js` (the
- * basename of the entry input) and names split chunks `chunk-*.js`.
- * The metafile's `outputs` map lets us be certain which is which by
- * checking the `entryPoint` field.
+ * Identify the top-level entry chunk for `entryFile`. With
+ * `splitting: true`, esbuild sets `entryPoint` on EVERY output it derives
+ * from an entry input **or a dynamic `import()` target** — so several
+ * outputs (the real entry plus one per code-split chunk) carry an
+ * `entryPoint`. Returning the first such output is order-dependent and
+ * wrong: it can pick a dynamic chunk (e.g. the `ai-host-adapter` split)
+ * whose iteration position shifts whenever a new split chunk is added.
+ * Match on the entry file's basename so we always pick the real
+ * top-level chunk, regardless of `outputs` iteration order.
  */
-async function findEntryChunk(metafile) {
+async function findEntryChunk(metafile, entryFile) {
+	const wanted = basename(entryFile);
 	for (const [outPath, info] of Object.entries(metafile.outputs)) {
-		if (info.entryPoint) {
+		if (info.entryPoint !== undefined && basename(info.entryPoint) === wanted) {
 			return resolve(PACKAGE_ROOT, outPath);
 		}
 	}
@@ -318,7 +323,7 @@ async function findEntryChunk(metafile) {
  */
 async function measureEntry(label, entryFile, outDir, budget) {
 	const metafile = await bundle(entryFile, outDir);
-	const entryChunkPath = await findEntryChunk(metafile);
+	const entryChunkPath = await findEntryChunk(metafile, entryFile);
 
 	const raw = await readFile(entryChunkPath);
 	const gzippedBytes = gzipSync(raw, { level: 9 }).length;
