@@ -1,0 +1,56 @@
+---
+title: "Standalone pricing page"
+description: "Standalone pricing page — hero banner, pricing tiers, comparison FAQ."
+---
+
+![Standalone pricing page preview](/templates/pricing-comparison/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-pricing-comparison</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## Scaffold from the CLI
+
+```sh
+npx anvilkit init --template pricing-comparison my-site
+```
+
+## Composition
+
+The committed `PageIR` wires the following node types at the root:
+
+- `Navbar`
+- `Hero`
+- `PricingMinimal`
+- `Helps`
+
+## Package details
+
+A standalone pricing page.
+
+Navbar, hero banner, three-tier pricing grid, and a comparison FAQ — drop-in replacement for `/pricing`.
+
+## Install
+
+```sh
+npx anvilkit init --template pricing-comparison my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/pricing-minimal`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

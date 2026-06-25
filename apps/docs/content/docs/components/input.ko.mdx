@@ -1,0 +1,241 @@
+---
+title: Input
+description: "Anvilkit Puck 네이티브 Input 컴포넌트."
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/input</code> <span>·</span> <span>v0.2.1</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+</div>
+
+## 라이브 미리보기
+
+<ComponentPreview name="Input" />
+
+A Puck-native form input block with label, helper text, and validation support.
+
+## Install
+
+```sh
+pnpm add @anvilkit/input @anvilkit/ui @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/input/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render a labelled email input with placeholder text.
+
+```tsx
+import "@anvilkit/input/styles.css";
+import { Input } from "@anvilkit/input";
+
+export function Example() {
+  return (
+    <Input label="Email address" name="email" placeholder="Enter your email" />
+  );
+}
+```
+
+### Required field with helper text
+
+Switch the input `type`, mark it `required` (appends `*` to the label and sets
+the native `required` attribute), and surface guidance with `helperText`.
+
+```tsx
+import { Input } from "@anvilkit/input";
+
+export function PasswordField() {
+  return (
+    <Input
+      label="Password"
+      name="password"
+      type="password"
+      placeholder="At least 8 characters"
+      helperText="Use a mix of letters, numbers, and symbols."
+      required
+    />
+  );
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config` so authors can add the
+field to a form.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type InputProps } from "@anvilkit/input";
+
+const config: Config<{ Input: InputProps }> = {
+  components: {
+    Input: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `InputProps` type and the Puck `fields` schema.
+
+| Prop           | Type                                                                      | Default                                          | Description                            |
+| -------------- | ------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------- |
+| `label`        | `string`                                                                  | `"Email address"`                                | Field label.                           |
+| `name`         | `string`                                                                  | `"email"`                                        | Form field name.                       |
+| `type`         | `"text"` \| `"email"` \| `"password"` \| `"search"` \| `"tel"` \| `"url"` | `"email"`                                        | Input type.                            |
+| `placeholder`  | `string`                                                                  | `"Enter your email"`                             | Placeholder text.                      |
+| `helperText`   | `string`                                                                  | `"We will only use this for important updates."` | Helper text shown below the field.     |
+| `defaultValue` | `string`                                                                  | `""`                                             | Initial uncontrolled value.            |
+| `required`     | `boolean`                                                                 | `false`                                          | Mark the field required (appends `*`). |
+| `disabled`     | `boolean`                                                                 | `false`                                          | Disable the field.                     |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+
+## 속성 레퍼런스
+
+컴포넌트의 Puck `fields` 스키마에서 파생됩니다.
+
+| 필드 | 타입 | 기본값 |
+|-------|------|---------|
+| `label` | text | `"Email address"` |
+| `name` | text | `"email"` |
+| `type` | select ("text" \| "email" \| "password" \| "search" \| "tel" \| "url") | `"email"` |
+| `placeholder` | text | `"Enter your email"` |
+| `helperText` | textarea | `"We will only use this for important updates."` |
+| `defaultValue` | text | `""` |
+| `required` | radio (false \| true) | `false` |
+| `disabled` | radio (false \| true) | `false` |
+
+## 기본 속성
+
+```json
+{
+  "label": "Email address",
+  "name": "email",
+  "type": "email",
+  "placeholder": "Enter your email",
+  "helperText": "We will only use this for important updates.",
+  "defaultValue": "",
+  "required": false,
+  "disabled": false
+}
+```
+
+## Puck 설정
+
+```json
+{
+  "label": "Input",
+  "metadata": {
+    "componentName": "Input",
+    "componentSlug": "input",
+    "packageName": "@anvilkit/input",
+    "packageVersion": "0.2.1",
+    "scaffoldType": "form",
+    "schemaVersion": 1,
+    "suggestedCategory": "forms"
+  },
+  "defaultProps": {
+    "label": "Email address",
+    "name": "email",
+    "type": "email",
+    "placeholder": "Enter your email",
+    "helperText": "We will only use this for important updates.",
+    "defaultValue": "",
+    "required": false,
+    "disabled": false
+  },
+  "fields": {
+    "label": {
+      "type": "text",
+      "label": "Label"
+    },
+    "name": {
+      "type": "text",
+      "label": "Name"
+    },
+    "type": {
+      "type": "select",
+      "label": "Type",
+      "options": [
+        {
+          "label": "Text",
+          "value": "text"
+        },
+        {
+          "label": "Email",
+          "value": "email"
+        },
+        {
+          "label": "Password",
+          "value": "password"
+        },
+        {
+          "label": "Search",
+          "value": "search"
+        },
+        {
+          "label": "Telephone",
+          "value": "tel"
+        },
+        {
+          "label": "URL",
+          "value": "url"
+        }
+      ]
+    },
+    "placeholder": {
+      "type": "text",
+      "label": "Placeholder"
+    },
+    "helperText": {
+      "type": "textarea",
+      "label": "Helper text"
+    },
+    "defaultValue": {
+      "type": "text",
+      "label": "Default value"
+    },
+    "required": {
+      "type": "radio",
+      "label": "Required",
+      "options": [
+        {
+          "label": "No",
+          "value": false
+        },
+        {
+          "label": "Yes",
+          "value": true
+        }
+      ]
+    },
+    "disabled": {
+      "type": "radio",
+      "label": "Disabled",
+      "options": [
+        {
+          "label": "No",
+          "value": false
+        },
+        {
+          "label": "Yes",
+          "value": true
+        }
+      ]
+    }
+  }
+}
+```

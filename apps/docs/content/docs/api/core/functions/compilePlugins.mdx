@@ -1,0 +1,25 @@
+---
+title: "compilePlugins"
+description: "@anvilkit/core · compilePlugins"
+---
+
+```ts
+function compilePlugins(
+   plugins, 
+   ctx, 
+options?): Promise<StudioRuntime>;
+```
+
+Defined in: [runtime/compile-plugins.ts:456](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L456)
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `plugins` | readonly ( \| [`StudioPlugin`](../interfaces/StudioPlugin)\&lt;`Config`\&gt; \| [`Plugin`](https://puckeditor.com/docs/extending-puck/plugins))[] |
+| `ctx` | [`StudioPluginContext`](../interfaces/StudioPluginContext) |
+| `options` | `CompilePluginsOptions` |
+
+## Returns
+
+`Promise`\<[`StudioRuntime`](../interfaces/StudioRuntime)\>

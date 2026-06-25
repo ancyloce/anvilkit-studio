@@ -1,0 +1,17 @@
+---
+title: "MIGRATION_VERSIONS"
+description: "@anvilkit/ir · MIGRATION_VERSIONS"
+---
+
+```ts
+const MIGRATION_VERSIONS: readonly ["0.21", "0.22"];
+```
+
+Defined in: [migrations/index.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L35)
+
+The peer-range labels that [migratePageIR](../functions/migratePageIR) accepts.
+
+`"0.21"` is the `1.0` GA peer range (no `meta`); `"0.22"` is the
+`1.1` peer range (additive `meta`). The values map to
+`@puckeditor/core` peer-range labels rather than to the IR
+document's own `version` literal — the IR literal stays `"1"`.

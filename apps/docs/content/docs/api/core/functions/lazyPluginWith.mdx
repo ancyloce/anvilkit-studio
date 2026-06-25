@@ -1,0 +1,172 @@
+---
+title: "lazyPluginWith"
+description: "@anvilkit/core · lazyPluginWith"
+---
+
+## Call Signature
+
+```ts
+function lazyPluginWith<UserConfig>(load, transform): StudioPlugin<UserConfig>;
+```
+
+Defined in: [runtime/lazy-plugin.ts:232](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L232)
+
+Like [lazyPlugin](lazyPlugin.md), but applies `transform` to the loaded
+plugin's registration **inside the lazy boundary** — after the chunk
+is fetched at `register()` time, never before.
+
+This is the lazy-preserving replacement for host helpers that wrap an
+**already-instantiated** plugin to tweak its registration (e.g. a
+"strip header actions" wrapper). Such instance wrappers force the
+plugin's `import()` to resolve eagerly at module scope, defeating
+code-splitting. By re-wrapping with [lazyPlugin](lazyPlugin.md) and deferring
+`load()`, the chunk stays out of the host's initial bundle until
+`compilePlugins()` awaits `register()`.
+
+The inner loader returns the **loaded module's real `meta`** so
+[lazyPlugin](lazyPlugin.md)'s post-fetch id / `coreVersion` re-validation still
+runs against the genuine module — the transform wraps the
+`register()` delegation, it does not bypass the gates.
+
+### Two forms
+
+- **`lazyPluginWith(load, transform)`** — the ergonomic form: `meta`
+  is **synthesized automatically** (createAutoMeta) and the
+  loaded module's real `meta` becomes the source of truth post-fetch.
+  Use this when the host has nothing meaningful to declare up-front —
+  e.g. a plugin paired with [withoutHeaderActions](../variables/withoutHeaderActions), whose
+  `capabilities` / header slot do not need to be reserved before the
+  chunk loads. See AUTO\_META for the trade-offs (placeholder
+  `runtime.pluginMeta` id; no pre-fetch `capabilities` for this
+  plugin). The real module's `coreVersion` is still enforced.
+- **`lazyPluginWith(load, meta, transform)`** — the explicit form:
+  the declared `meta` is what the up-front id-uniqueness and
+  `coreVersion` checks (and the plugin-array fingerprint, and the
+  progressive-chrome `capabilities` / `staticHeaderActions` reads) use,
+  all without resolving the dynamic import. Declare `meta` when you
+  need any of those reserved before the chunk is fetched.
+
+### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `Config` | `Config` |
+
+### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `load` | [`StudioPluginLoader`](../type-aliases/StudioPluginLoader)\&lt;`UserConfig`\&gt; |
+| `transform` | [`RegistrationTransform`](../type-aliases/RegistrationTransform)\&lt;`UserConfig`\&gt; |
+
+### Returns
+
+[`StudioPlugin`](../interfaces/StudioPlugin)\<`UserConfig`\>
+
+### Examples
+
+```ts
+// Auto-meta — id/coreVersion/capabilities come from the chunk:
+const assetManager = lazyPluginWith(
+  () => import("@anvilkit/plugin-asset-manager").then((m) =>
+    m.createAssetManagerPlugin({ uploader: m.inMemoryUploader() }),
+  ),
+  withoutHeaderActions,
+);
+```
+
+```ts
+// Explicit meta — reserves the header slot before the chunk loads:
+const versionHistory = lazyPluginWith(
+  () => import("@anvilkit/plugin-version-history").then((m) => m.plugin),
+  { id: "@anvilkit/plugin-version-history", name: "Version History",
+    version: "0.1.0", coreVersion: "^0.1.0", capabilities: { header: true } },
+  withoutHeaderActions,
+);
+```
+
+## Call Signature
+
+```ts
+function lazyPluginWith<UserConfig>(
+   load, 
+   meta, 
+transform): StudioPlugin<UserConfig>;
+```
+
+Defined in: [runtime/lazy-plugin.ts:236](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L236)
+
+Like [lazyPlugin](lazyPlugin.md), but applies `transform` to the loaded
+plugin's registration **inside the lazy boundary** — after the chunk
+is fetched at `register()` time, never before.
+
+This is the lazy-preserving replacement for host helpers that wrap an
+**already-instantiated** plugin to tweak its registration (e.g. a
+"strip header actions" wrapper). Such instance wrappers force the
+plugin's `import()` to resolve eagerly at module scope, defeating
+code-splitting. By re-wrapping with [lazyPlugin](lazyPlugin.md) and deferring
+`load()`, the chunk stays out of the host's initial bundle until
+`compilePlugins()` awaits `register()`.
+
+The inner loader returns the **loaded module's real `meta`** so
+[lazyPlugin](lazyPlugin.md)'s post-fetch id / `coreVersion` re-validation still
+runs against the genuine module — the transform wraps the
+`register()` delegation, it does not bypass the gates.
+
+### Two forms
+
+- **`lazyPluginWith(load, transform)`** — the ergonomic form: `meta`
+  is **synthesized automatically** (createAutoMeta) and the
+  loaded module's real `meta` becomes the source of truth post-fetch.
+  Use this when the host has nothing meaningful to declare up-front —
+  e.g. a plugin paired with [withoutHeaderActions](../variables/withoutHeaderActions), whose
+  `capabilities` / header slot do not need to be reserved before the
+  chunk loads. See AUTO\_META for the trade-offs (placeholder
+  `runtime.pluginMeta` id; no pre-fetch `capabilities` for this
+  plugin). The real module's `coreVersion` is still enforced.
+- **`lazyPluginWith(load, meta, transform)`** — the explicit form:
+  the declared `meta` is what the up-front id-uniqueness and
+  `coreVersion` checks (and the plugin-array fingerprint, and the
+  progressive-chrome `capabilities` / `staticHeaderActions` reads) use,
+  all without resolving the dynamic import. Declare `meta` when you
+  need any of those reserved before the chunk is fetched.
+
+### Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `Config` | `Config` |
+
+### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `load` | [`StudioPluginLoader`](../type-aliases/StudioPluginLoader)\&lt;`UserConfig`\&gt; |
+| `meta` | [`StudioPluginMeta`](../interfaces/StudioPluginMeta) |
+| `transform` | [`RegistrationTransform`](../type-aliases/RegistrationTransform)\&lt;`UserConfig`\&gt; |
+
+### Returns
+
+[`StudioPlugin`](../interfaces/StudioPlugin)\<`UserConfig`\>
+
+### Examples
+
+```ts
+// Auto-meta — id/coreVersion/capabilities come from the chunk:
+const assetManager = lazyPluginWith(
+  () => import("@anvilkit/plugin-asset-manager").then((m) =>
+    m.createAssetManagerPlugin({ uploader: m.inMemoryUploader() }),
+  ),
+  withoutHeaderActions,
+);
+```
+
+```ts
+// Explicit meta — reserves the header slot before the chunk loads:
+const versionHistory = lazyPluginWith(
+  () => import("@anvilkit/plugin-version-history").then((m) => m.plugin),
+  { id: "@anvilkit/plugin-version-history", name: "Version History",
+    version: "0.1.0", coreVersion: "^0.1.0", capabilities: { header: true } },
+  withoutHeaderActions,
+);
+```

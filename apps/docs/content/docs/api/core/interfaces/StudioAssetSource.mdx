@@ -1,0 +1,420 @@
+---
+title: "StudioAssetSource"
+description: "@anvilkit/core · StudioAssetSource"
+---
+
+Defined in: [types/sidebar.ts:279](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L279)
+
+Asset listing + mutation contract registered by an asset-manager
+plugin via `ctx.registerAssetSource(source)`. The `image` sidebar
+module reads from this surface; when no source is registered it
+shows the `studio.module.image.pluginMissing` empty state.
+
+## Methods
+
+### createFolder()?
+
+```ts
+optional createFolder(parentId, name): Promise<StudioAssetFolder>;
+```
+
+Defined in: [types/sidebar.ts:324](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L324)
+
+Create a folder under `parentId` (`null` ⇒ root).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `parentId` | `string` \| `null` |
+| `name` | `string` |
+
+#### Returns
+
+`Promise`\<[`StudioAssetFolder`](StudioAssetFolder.md)\>
+
+***
+
+### delete()?
+
+```ts
+optional delete(assetId): Promise<void>;
+```
+
+Defined in: [types/sidebar.ts:306](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L306)
+
+Optional delete.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `assetId` | `string` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### getUrl()?
+
+```ts
+optional getUrl(assetId): string | Promise<string>;
+```
+
+Defined in: [types/sidebar.ts:308](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L308)
+
+Optional URL accessor for "Copy URL". Defaults to `asset.url`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `assetId` | `string` |
+
+#### Returns
+
+`string` \| `Promise`\&lt;`string`\&gt;
+
+***
+
+### list()
+
+```ts
+list(): 
+  | readonly StudioAsset[]
+| Promise<readonly StudioAsset[]>;
+```
+
+Defined in: [types/sidebar.ts:281](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L281)
+
+Return the current asset list (sync or async).
+
+#### Returns
+
+  \| readonly [`StudioAsset`](StudioAsset.md)[]
+  \| `Promise`\&lt;readonly [`StudioAsset`](StudioAsset.md)[]\&gt;
+
+***
+
+### listPaginated()?
+
+```ts
+optional listPaginated(query): Promise<StudioAssetListPage>;
+```
+
+Defined in: [types/sidebar.ts:287](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L287)
+
+Optional paginated / filtered listing. Remote sources override
+this to push search and pagination to the server; the sidebar
+falls back to [StudioAssetSource.list](#list) when omitted.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`StudioAssetListQuery`](StudioAssetListQuery.md) |
+
+#### Returns
+
+`Promise`\<[`StudioAssetListPage`](StudioAssetListPage.md)\>
+
+***
+
+### listThemes()?
+
+```ts
+optional listThemes(): 
+  | readonly StudioAssetTheme[]
+| Promise<readonly StudioAssetTheme[]>;
+```
+
+Defined in: [types/sidebar.ts:339](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L339)
+
+Browse themes for a themed source (e.g. Unsplash topics).
+
+#### Returns
+
+  \| readonly [`StudioAssetTheme`](StudioAssetTheme.md)[]
+  \| `Promise`\&lt;readonly [`StudioAssetTheme`](StudioAssetTheme.md)[]\&gt;
+
+***
+
+### moveAsset()?
+
+```ts
+optional moveAsset(assetId, folderId): Promise<void>;
+```
+
+Defined in: [types/sidebar.ts:335](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L335)
+
+Move an asset into a folder (`null` ⇒ root).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `assetId` | `string` |
+| `folderId` | `string` \| `null` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### moveFolder()?
+
+```ts
+optional moveFolder(id, parentId): Promise<StudioAssetFolder>;
+```
+
+Defined in: [types/sidebar.ts:333](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L333)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `parentId` | `string` \| `null` |
+
+#### Returns
+
+`Promise`\<[`StudioAssetFolder`](StudioAssetFolder.md)\>
+
+***
+
+### pickResult()?
+
+```ts
+optional pickResult(asset): Promise<StudioAsset>;
+```
+
+Defined in: [types/sidebar.ts:347](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L347)
+
+Materialize an external browse result into the catalog — registers it and
+fires any required download trigger (Unsplash) — returning the insertable
+asset whose `url` now resolves. Local assets need no pick.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `asset` | [`StudioAsset`](StudioAsset.md) |
+
+#### Returns
+
+`Promise`\<[`StudioAsset`](StudioAsset.md)\>
+
+***
+
+### removeFolder()?
+
+```ts
+optional removeFolder(id, opts?): Promise<void>;
+```
+
+Defined in: [types/sidebar.ts:329](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L329)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `opts?` | \{ `cascade?`: `boolean`; \} |
+| `opts.cascade?` | `boolean` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### rename()?
+
+```ts
+optional rename(assetId, nextName): Promise<void>;
+```
+
+Defined in: [types/sidebar.ts:300](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L300)
+
+Optional rename. Sidebar hides the menu item when omitted.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `assetId` | `string` |
+| `nextName` | `string` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### renameFolder()?
+
+```ts
+optional renameFolder(id, name): Promise<StudioAssetFolder>;
+```
+
+Defined in: [types/sidebar.ts:328](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L328)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `name` | `string` |
+
+#### Returns
+
+`Promise`\<[`StudioAssetFolder`](StudioAssetFolder.md)\>
+
+***
+
+### replace()?
+
+```ts
+optional replace(assetId, file): Promise<StudioAsset>;
+```
+
+Defined in: [types/sidebar.ts:302](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L302)
+
+Optional in-place replace.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `assetId` | `string` |
+| `file` | `File` |
+
+#### Returns
+
+`Promise`\<[`StudioAsset`](StudioAsset.md)\>
+
+***
+
+### setTags()?
+
+```ts
+optional setTags(assetId, tags): Promise<void>;
+```
+
+Defined in: [types/sidebar.ts:304](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L304)
+
+Optional tag editor. Replaces the asset's tag set in place.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `assetId` | `string` |
+| `tags` | readonly `string`[] |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### subscribe()?
+
+```ts
+optional subscribe(listener): () => void;
+```
+
+Defined in: [types/sidebar.ts:313](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L313)
+
+Optional subscription. The sidebar calls it on mount with a
+listener that re-runs `list()` when fired.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | () =&gt; `void` |
+
+#### Returns
+
+() => `void`
+
+***
+
+### subscribeStatus()?
+
+```ts
+optional subscribeStatus(listener): () => void;
+```
+
+Defined in: [types/sidebar.ts:349](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L349)
+
+Subscribe to loading/mutation status (sync sources emit only `idle`).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | (`status`) =&gt; `void` |
+
+#### Returns
+
+() => `void`
+
+***
+
+### subscribeUploads()?
+
+```ts
+optional subscribeUploads(listener): () => void;
+```
+
+Defined in: [types/sidebar.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L320)
+
+Optional streaming upload subscription. Fired with the same
+envelope shape `upload()` emits to its inline listener, but
+delivered to every subscriber. Hosts use this to render
+persistent progress UI outside the upload call site.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | [`StudioAssetUploadListener`](../type-aliases/StudioAssetUploadListener) |
+
+#### Returns
+
+() => `void`
+
+***
+
+### upload()
+
+```ts
+upload(
+   files, 
+   listener?, 
+signal?): Promise<readonly StudioAsset[]>;
+```
+
+Defined in: [types/sidebar.ts:294](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L294)
+
+Upload one or more files. The optional listener is fired with
+progress envelopes if the source supports streaming progress. Pass
+an `AbortSignal` to cancel an in-flight batch (e.g. on unmount);
+sources that support cancellation reject with an `AbortError`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `files` | readonly `File`[] |
+| `listener?` | [`StudioAssetUploadListener`](../type-aliases/StudioAssetUploadListener) |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<readonly [`StudioAsset`](StudioAsset.md)[]\>

@@ -1,0 +1,29 @@
+---
+title: "useAiStore"
+description: "@anvilkit/core · useAiStore"
+---
+
+```ts
+function useAiStore<TResult>(selector): TResult;
+```
+
+Defined in: [state/slices/AiStoreProvider.tsx:67](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L67)
+
+Reactive AI-store selector. Same call shape as the former
+module-singleton hook: `useAiStore((s) => s.isGenerating)`.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `TResult` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `selector` | (`state`) =&gt; `TResult` |
+
+## Returns
+
+`TResult`

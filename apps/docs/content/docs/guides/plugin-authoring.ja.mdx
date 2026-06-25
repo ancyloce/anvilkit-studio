@@ -1,0 +1,538 @@
+---
+title: "プラグインの作成"
+description: "StudioPlugin をゼロから作成する —— インターフェース、ライフサイクルフック、コンテキスト API、エクスポート形式、そして CI でコンパイルが通る実践的な例。"
+---
+
+`StudioPlugin` は `@anvilkit/core` の正規の拡張ポイントです。
+本ガイドでは、契約のすべての部分 —— meta、register
+関数、コンテキスト API、ライフサイクルフック、ヘッダーアクション、エクスポート
+形式、dispatch のセマンティクス、テスト —— を順に説明し、
+実際に npm へ公開可能なパッケージとして提供され CI で実行される実践的な例で締めくくります。
+
+<Callout type="info" title="コードは常にグリーン">
+	このページのすべてのコードブロックは
+	[`apps/docs/tests/guides/plugin-authoring.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/plugin-authoring.test.ts)
+	に抽出され、CI で Vitest テストとして実行されます。契約がずれると、
+	ドキュメントが公開される前にビルドが失敗します。
+</Callout>
+
+## 1. `StudioPlugin` とは
+
+`@anvilkit/core` は、その `createStudioConfig` 呼び出しで混在した
+`plugins: (StudioPlugin | PuckPlugin)[]` 配列を受け付けます。この 2 つの契約は共存します。
+
+| 機能                                           | `PuckPlugin` | `StudioPlugin` |
+| ---------------------------------------------- | ------------ | -------------- |
+| Puck の rail / drawer / header スロットをオーバーライド | ✅           | ✅             |
+| データ変更の購読 / 公開ライフサイクル          | ❌           | ✅             |
+| エクスポート形式を提供（`html`、`react`、…）   | ❌           | ✅             |
+| Studio ヘッダーアクションを提供                | ❌           | ✅             |
+| マージ済みの `StudioConfig` を読み取る         | ❌           | ✅             |
+
+`StudioPlugin` はスーパーセットです。Puck API を通じて Puck エディターと
+やり取りし、Puck 自体がモデル化していない横断的な関心事を追加します。
+Core は `compilePlugins()` の際に両方の種類を解決するため、ホストは
+それらを自由に混在させることができます。
+
+## 2. 最小限の実用プラグイン
+
+最小の正当なプラグインは、凍結された `meta` ブロックと、空の登録結果を返す
+`register()` 関数です。
+
+```ts
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export function createNoopPlugin(): StudioPlugin {
+	const meta = {
+		id: "com.example.noop",
+		name: "No-op",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	} as const;
+
+	return {
+		meta,
+		register(_ctx) {
+			return { meta };
+		},
+	};
+}
+```
+
+これだけで `compilePlugins()` を通過するのに十分です。追加の機能
+—— フック、オーバーライド、ヘッダーアクション、エクスポート形式 —— はすべてオプトインであり、
+登録オブジェクト上の個別のフィールドとして現れます。
+
+<Callout type="warn" title="`coreVersion` は契約である">
+	`compilePlugins()` は、`meta.coreVersion`
+	の範囲が実行中の `CORE_VERSION` を含まないプラグインを拒否します。今日サポートされている
+	プレフィックスは、完全一致（`"0.1.0-alpha.0"`）、キャレット（`"^…"`）、
+	そしてチルダ（`"~…"`）です。不一致はマウント時に `StudioPluginError`
+	をスローするため、ホストはずれたプラグインでレンダリングするのではなく、
+	大きく失敗できます。
+</Callout>
+
+## 3. `StudioPluginContext`
+
+すべてのライフサイクルフックと、すべてのヘッダーアクションの `onClick` は
+`StudioPluginContext` を受け取ります。これは Core がプラグインに渡す
+読み取り / 書き込み / 監視のハンドルであり、それ以外の暗黙的な状態は一切許可されません。
+
+| フィールド     | 目的                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| `getData()`    | 現在の Puck `Data` のスナップショット（購読は作成されない）。                             |
+| `getPuckApi()` | ライブの `PuckApi` を返す。変更には `dispatch` を使用する。§6 を参照。                    |
+| `studioConfig` | 凍結済みでマージ済みの `StudioConfig`（デフォルト + 環境変数 + ホストのオーバーライド）。 |
+| `log(level, message, meta?)` | Core のロガーへルーティングする（`debug` / `info` / `warn` / `error`）。    |
+| `emit(event, payload?)` | プロセス内のプラグインイベントバスへブロードキャストする（同期、登録順で配信）。 |
+| `on(event, handler)` | バスイベントを購読する。購読解除関数を返す。`register`/`onInit` で購読する。      |
+
+2 つの境界は意図的なものです。
+
+1. **store への直接アクセスはない。** プラグインは Zustand store を `import` しません。
+   すべての変更は `getPuckApi().dispatch()` を経由して流れるため、Puck の
+   履歴スタックが信頼できる唯一の情報源であり続けます。
+2. **`studioConfig` は深い読み取り専用である。** 実行時にそれを変更しても無操作であり、
+   strict モードではスローする場合があります。
+
+データの形状を観察するだけのプラグインは、次のように実装できます。
+
+```ts
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+} from "@anvilkit/core/types";
+
+export const observerPlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.observer",
+		name: "Observer",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(ctx: StudioPluginContext) {
+		ctx.log("info", "observer plugin registered", {
+			theme: ctx.studioConfig.theme.defaultMode,
+		});
+		return { meta: observerPlugin.meta };
+	},
+};
+```
+
+## 4. ライフサイクルフック
+
+フックは `registration.hooks` 上に存在します。すべてのフックはオプションであり、
+`void` または `Promise<void>` を返すことができます。
+
+| フック            | 発火タイミング                                                        | 並行性       |
+| ----------------- | -------------------------------------------------------------------- | ------------ |
+| `onInit`          | 一度だけ、`compilePlugins()` の後、`<Studio>` がエディターをマウントする前。 | 並列         |
+| `onDataChange`    | Puck `onChange` のたびに、新しい `data` 引数とともに。               | 並列         |
+| `onBeforePublish` | ホストが公開する前 —— 中止するために `StudioPluginError` をスローできる。 | **逐次**     |
+| `onAfterPublish`  | 公開が成功した後。                                                   | 並列         |
+| `onDestroy`       | `<Studio>` がアンマウントされたとき。                               | 並列         |
+
+2 つの順序ルールが重要です。
+
+1. **プラグインの順序。** フックはプラグインの登録順に発火します —— すなわち
+   `createStudioConfig` に渡された `plugins: [...]` 配列の順序です。
+2. **拒否権のセマンティクス。** `onBeforePublish` は **逐次** 実行されます。最初に
+   スローしたフックが残りを中止し、ライフサイクルディスパッチャーから再スローします。
+   それ以外のすべてのイベントは `Promise.allSettled` を通じて実行されるため、
+   バグのあるプラグインはログを記録するだけで、決してエディターをクラッシュさせません。
+
+```ts
+import type { StudioPlugin } from "@anvilkit/core/types";
+import { StudioPluginError } from "@anvilkit/core";
+
+export const requireHeroPlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.require-hero",
+		name: "Require Hero",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(_ctx) {
+		return {
+			meta: requireHeroPlugin.meta,
+			hooks: {
+				onBeforePublish(_ctx, data) {
+					const hasHero = data.content.some((item) => item.type === "Hero");
+					if (!hasHero) {
+						throw new StudioPluginError(
+							"com.example.require-hero",
+							"Pages must include a Hero block before publish",
+						);
+					}
+				},
+			},
+		};
+	},
+};
+```
+
+## 5. エクスポート形式の提供
+
+エクスポーターは `registration.exportFormats` 上に 1 つ以上の
+`ExportFormatDefinition` を提供します。形式の `id` はグローバルに一意でなければなりません。
+2 つのプラグインが同じ id を登録すると、コンパイル時に `StudioPluginError` をスローします。
+
+ランタイムは `run()` に正規化済みの `PageIR`（Puck `Data` ではなく）を渡すため、
+IR の正規化ステップはすべてのエクスポーターを通じてちょうど一度だけ発生します。
+
+```ts
+import type {
+	ExportFormatDefinition,
+	StudioPlugin,
+} from "@anvilkit/core/types";
+
+const jsonFormat: ExportFormatDefinition = {
+	id: "json-snapshot",
+	label: "JSON snapshot",
+	extension: "json",
+	mimeType: "application/json",
+	async run(ir, _options) {
+		return {
+			content: JSON.stringify(ir, null, 2),
+			filename: "page.json",
+			warnings: [],
+		};
+	},
+};
+
+export function createJsonSnapshotPlugin(): StudioPlugin {
+	const meta = {
+		id: "com.example.json-snapshot",
+		name: "JSON Snapshot Exporter",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	} as const;
+
+	return {
+		meta,
+		register(_ctx) {
+			return { meta, exportFormats: [jsonFormat] };
+		},
+	};
+}
+```
+
+本番環境のリファレンスについては、
+[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+を参照してください —— これはアセットをインライン化し、コンポーネントごとに CSS を出力し、
+`@anvilkit/ir` を通じてラウンドトリップします。
+
+## 6. エディターアクションのディスパッチ
+
+状態の変更は常に `getPuckApi().dispatch()` を経由して流れます。プラグインが最もよく
+手を伸ばす 2 つのパターンは次のとおりです。
+
+```ts
+import type { StudioPluginContext } from "@anvilkit/core/types";
+
+// Pattern A — full replacement (use sparingly; clobbers history).
+export function clearPage(ctx: StudioPluginContext): void {
+	ctx.getPuckApi().dispatch({
+		type: "setData",
+		data: { root: { props: {} }, content: [], zones: {} },
+	});
+}
+
+// Pattern B — surgical action (preserves history; preferred).
+export function insertHero(ctx: StudioPluginContext): void {
+	ctx.getPuckApi().dispatch({
+		type: "insert",
+		componentType: "Hero",
+		destinationZone: "default-zone",
+		destinationIndex: 0,
+	});
+}
+```
+
+パターン A はシンプルですが、ツリー全体を書き換えるため、元に戻す操作は
+単一のステップに折りたたまれます。パターン B は Puck の型付き `PuckAction` ユニオン
+（`insert`、`move`、`remove`、`replace`、`duplicate`、…）を使用し、履歴を
+細かく保ちます。新しいツリーが古いツリーと本当に無関係である場合（例：保存済みの
+下書きを開く場合）にのみ `setData` に手を伸ばしてください —— それ以外のすべての
+ケースには専用のアクションがあります。
+
+## 7. プラグインのテスト
+
+プラグインの契約は React を含まず、デフォルトで同期的であるため、
+プラグインは Node 環境で Vitest を使ってテストできます。正規の
+テストハーネスは次のとおりです。
+
+1. `log` と `emit` に `vi.fn()` を使い、`getPuckApi` をスタブにした偽の
+   `StudioPluginContext` を構築する。
+2. `compilePlugins([yourPlugin], ctx)` を呼び出して `StudioRuntime` を取得する。
+3. `runtime.lifecycle.emit("onInit" | "onDataChange" | …, ctx, data)` を駆動する。
+4. プラグインが記録したものを検証する —— カウント、ログ呼び出し、ディスパッチされた
+   アクション、`runtime.headerActions` 上に提供されたヘッダーアクション。
+
+```ts
+import { compilePlugins, StudioConfigSchema } from "@anvilkit/core";
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+} from "@anvilkit/core/types";
+import type { Data as PuckData } from "@puckeditor/core";
+import { describe, expect, it, vi } from "vitest";
+
+const studioConfig = StudioConfigSchema.parse({});
+
+function makeCtx(data: PuckData): StudioPluginContext {
+	return {
+		getData: () => data,
+		getPuckApi: (() => {
+			throw new Error("getPuckApi unused in this test");
+		}) as unknown as StudioPluginContext["getPuckApi"],
+		studioConfig,
+		log: vi.fn(),
+		emit: vi.fn(),
+	};
+}
+
+const samplePlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.sample",
+		name: "Sample",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(_ctx) {
+		return {
+			meta: samplePlugin.meta,
+			hooks: {
+				onInit(ctx) {
+					ctx.log("info", "sample plugin started");
+				},
+			},
+		};
+	},
+};
+
+describe("samplePlugin", () => {
+	it("logs an info line on onInit", async () => {
+		const ctx = makeCtx({ root: { props: {} }, content: [], zones: {} });
+		const runtime = await compilePlugins([samplePlugin], ctx);
+
+		await runtime.lifecycle.emit("onInit", ctx);
+
+		expect(ctx.log).toHaveBeenCalledWith("info", "sample plugin started");
+	});
+});
+```
+
+この単一のパターンだけで、React や DOM に触れることなく、
+フック、ヘッダーアクション、エクスポート形式、そしてイベントバスの発行を
+演習するのに十分です。
+
+### 手作りの偽物よりも `@anvilkit/core/testing` を優先する
+
+Phase 4（`phase4-012`）以降、同じ偽のコンテキストが
+再利用可能なフィクスチャとしてエクスポートされています。すべての
+テストファイルで `makeCtx` を書き直すよりも、これを優先してください。
+
+```ts
+import {
+	createFakeStudioContext,
+	createFakePageIR,
+	registerPlugin,
+} from "@anvilkit/core/testing";
+
+const harness = await registerPlugin(samplePlugin);
+await harness.runInit();
+expect(harness.ctx._mocks.logCalls[0]).toEqual([
+	"info",
+	"sample plugin started",
+	undefined,
+]);
+```
+
+`createFakeStudioContext()` は、`log` / `emit` /
+`getPuckApi().dispatch` がスパイで裏付けられた、完全に型付けされた
+`StudioPluginContext` を返します。`_mocks.logCalls` / `_mocks.emitCalls` /
+`_mocks.dispatchCalls` は、検証の準備が整った順序付き配列です。
+`createFakePageIR()` は、エクスポート /
+validator テスト用に最小限の有効な PageIR を構築します。`registerPlugin()` は register +
+ライフサイクルの定型コードをラップします。`@anvilkit/create-plugin` のスキャフォールドは、これらのフィクスチャを最初から使用します。
+
+## 8. 実践的な例 —— コンポーネント使用回数カウンター
+
+パッケージ
+[`@anvilkit/example-usage-counter`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/usage-counter)
+は、実際に npm へ公開可能なワークスペースパッケージとして提供されます。これは
+Puck `onChange` のたびに `componentType → instanceCount` を追跡し、合計を
+3 つの独立したサーフェスを通じて公開し、5 つのプラグイン貢献スロットのうち 4 つを
+100 行未満で実演します。
+
+### 構造
+
+プラグインファクトリー：
+
+```ts
+import type { Data as PuckData } from "@puckeditor/core";
+import type {
+	StudioHeaderAction,
+	StudioPluginContext,
+	StudioPluginMeta,
+} from "@anvilkit/core/types";
+
+const META: StudioPluginMeta = {
+	id: "anvilkit-example-usage-counter",
+	name: "Component Usage Counter",
+	version: "0.1.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+function computeCounts(data: PuckData): Readonly<Record<string, number>> {
+	const counts: Record<string, number> = {};
+	for (const item of data.content) {
+		counts[item.type] = (counts[item.type] ?? 0) + 1;
+	}
+	const zones = data.zones ?? {};
+	for (const zoneKey of Object.keys(zones)) {
+		for (const item of zones[zoneKey] ?? []) {
+			counts[item.type] = (counts[item.type] ?? 0) + 1;
+		}
+	}
+	return counts;
+}
+
+export function createUsageCounterPluginCore() {
+	let counts: Readonly<Record<string, number>> = {};
+
+	function update(next: typeof counts, ctx: StudioPluginContext): void {
+		counts = next;
+		ctx.emit("usage-counter:update", counts);
+	}
+
+	const action: StudioHeaderAction = {
+		id: "usage-counter-log",
+		label: "Log usage counts",
+		icon: "list",
+		group: "overflow",
+		onClick(ctx) {
+			ctx.log("info", "usage-counter:snapshot", { counts });
+		},
+	};
+
+	return {
+		meta: META,
+		getCounts: () => counts,
+		register(_ctx: StudioPluginContext) {
+			return {
+				meta: META,
+				hooks: {
+					onInit: (ctx: StudioPluginContext) =>
+						update(computeCounts(ctx.getData()), ctx),
+					onDataChange: (ctx: StudioPluginContext, data: PuckData) =>
+						update(computeCounts(data), ctx),
+				},
+				headerActions: [action],
+			};
+		},
+	};
+}
+```
+
+### ホストでの接続
+
+```ts
+import { createUsageCounterPlugin } from "@anvilkit/example-usage-counter";
+// In the host:
+//   const usageCounter = createUsageCounterPlugin({ verbose: true });
+//   const config = createStudioConfig({ plugins: [usageCounter] });
+//   usageCounter.subscribe((counts) => console.log(counts));
+```
+
+`createUsageCounterPlugin` は、標準の `StudioPlugin` 形状に加えて、
+2 つの追加メソッド（`getCounts()` と `subscribe(fn)`）を返します。これらは、イベントバスを
+購読することなくライブカウントを読み取りたいホストやテストのためのものです。
+
+### テスト
+
+完全なテストファイルは
+[`examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts)
+にあります。
+このハーネスは §7 と同じです —— プラグイン固有の点は何もありません。
+
+## 9. プラグイン設定と型安全性
+
+### プラグインの型は `<Studio>` に伝播しない
+
+これは **意図的なアーキテクチャ上の決定** であり、回避すべき
+ギャップではありません。`<Studio>` はそのプラグインセットに対して
+ジェネリックでは *ありません*。`plugins={[myPlugin]}` を渡しても、`myPlugin` の設定の型が
+`config` に流れ込むことはなく、`config.experimental` の型は `Record<string, unknown>` です。
+
+理由：core は、その型のバージョンをすべてのプラグインのバージョンから切り離します。プラグインは
+`@anvilkit/core` とは独立に新しいメジャーバージョンを出荷でき、いかなるプラグインの
+アップグレードも core の型のバージョンアップを強制することはありません。その代償として、ホストの
+`<Studio>` 境界は **プラグイン固有の設定に対するコンパイル時の検証や IDE の
+オートコンプリートをまったく提供しません** —— しかしプラグイン自身の
+`register()` 本体の内部では、`StudioPluginContext<UserConfig>` は完全に型付けされているため、
+プラグインの作成者はプラグインコードを書く場所で完全な安全性を保ちます。
+
+**プラグインの設定は、`<Studio>` の型境界ではなく、Zod を通じて実行時に検証されます**。
+`createStudioConfig()` は `StudioConfigSchema`（`config.experimental` は
+`z.record(z.string(), z.unknown())`）を実行するため、不正な設定は起動時に
+Zod エラーとともに即座に失敗します —— ただし `tsc` の時点ではありません。
+
+### プラグインの `experimental` 設定の型を自分で定義する
+
+Core はモジュール拡張スロット `StudioExperimentalConfig` を公開しています。
+宣言マージでキーを追加することで、core があなたの型に依存することなく、
+*あなたの* プラグインの設定に対してインテリセンス + チェックを得られます。
+
+```ts
+declare module "@anvilkit/core" {
+  interface StudioExperimentalConfig {
+    myPlugin?: { apiKey: string; debug?: boolean };
+  }
+}
+
+// Now this is type-checked and autocompleted:
+const config = createStudioConfig({
+  experimental: { myPlugin: { apiKey: "…" } },
+});
+```
+
+このスロットは開かれた `Record<string, unknown>` と交差するため、純粋に
+追加的です —— 拡張されていないキーは型なしのまま動作し続け、
+既存の設定が壊れることはありません。いずれにせよ、実行時には依然として Zod で検証されます。
+
+### 落とし穴：関数を含む `config` をメモ化する
+
+`<Studio>` は、プラグインをいつ再コンパイルするかを決定するために `config` の
+フィンガープリントを取得します。純粋な JSON の設定は安価な構造ハッシュを使用します。しかし `config` が
+**関数、symbol、または bigint** を含む場合（例：
+`config={{ experimental: { transform: fn } }}`）、構造ハッシュは
+それをひそかに削除してしまうため、core は安全に **参照
+同一性** にフォールバックします。その結果として、*インライン* の非 JSON の設定オブジェクトは
+レンダリングのたびに新しい同一性を取得し、親のレンダリングのたびに
+プラグインのコンパイル全体が再実行されます。
+
+修正：非 JSON の値を持つ設定はすべてメモ化（またはホイスト）してください。
+
+```tsx
+// ❌ recompiles every render
+<Studio config={{ experimental: { transform: (n) => n } }} />
+
+// ✅ stable identity → compiles once
+const config = useMemo(
+  () => ({ experimental: { transform: (n) => n } }),
+  [],
+);
+<Studio config={config} />
+```
+
+開発時には、このパターン（同じ構造の設定が連続したレンダリングで
+新しい同一性とともに到着すること）を core が検出すると、一度限りの
+`console.warn` を記録します。
+
+## リファレンス
+
+- プラグイン契約：[`packages/core/src/types/plugin.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts)
+- HTML エクスポーター（本番環境のリファレンス）：[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+- AI copilot（イベントバス + dispatch のリファレンス）：[`@anvilkit/plugin-ai-copilot`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-ai-copilot)

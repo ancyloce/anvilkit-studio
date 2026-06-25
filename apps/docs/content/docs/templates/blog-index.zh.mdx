@@ -1,0 +1,54 @@
+---
+title: "博客索引页面"
+description: "博客索引页面 —— 导航栏、区块标题、文章列表。"
+---
+
+![博客索引页面 preview](/templates/blog-index/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-blog-index</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template blog-index my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Section`
+- `BlogList`
+
+## 包详情
+
+A blog landing / index page.
+
+Navbar, section heading, and a paginated post list.
+
+## Install
+
+```sh
+npx anvilkit init --template blog-index my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/blog-list`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

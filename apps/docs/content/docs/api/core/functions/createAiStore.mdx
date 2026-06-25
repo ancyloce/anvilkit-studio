@@ -1,0 +1,26 @@
+---
+title: "createAiStore"
+description: "@anvilkit/core · createAiStore"
+---
+
+```ts
+function createAiStore(options): AiStoreApi;
+```
+
+Defined in: [state/slices/ai-store.ts:249](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L249)
+
+Build a fresh per-`<Studio>` AI store. The persistence key is
+namespaced by `storeId` so two concurrent editors never bleed
+in-flight generation state or prompt history into each other.
+Consume via [AiStoreProvider](AiStoreProvider.md) + the `useAiStore` selector
+hook.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateAiStoreOptions`](../interfaces/CreateAiStoreOptions) |
+
+## Returns
+
+[`AiStoreApi`](../type-aliases/AiStoreApi)

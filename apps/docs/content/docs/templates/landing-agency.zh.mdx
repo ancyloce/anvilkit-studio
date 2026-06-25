@@ -1,0 +1,60 @@
+---
+title: "代理公司落地页"
+description: "代理公司落地页 —— 主视觉、服务 bento、数据统计、客户评价区块。"
+---
+
+![代理公司落地页 preview](/templates/landing-agency/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-landing-agency</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template landing-agency my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `BentoGrid`
+- `Statistics`
+- `Button`
+
+## 包详情
+
+A services-led agency landing page.
+
+Navbar, hero, about section, services grid, social proof stats, and a CTA button.
+
+## Install
+
+```sh
+npx anvilkit init --template landing-agency my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/bento-grid`
+- `@anvilkit/button`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

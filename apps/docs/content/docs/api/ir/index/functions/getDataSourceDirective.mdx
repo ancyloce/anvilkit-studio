@@ -1,0 +1,23 @@
+---
+title: "getDataSourceDirective"
+description: "@anvilkit/ir · getDataSourceDirective"
+---
+
+```ts
+function getDataSourceDirective(props): RemoteCsvDirective | undefined;
+```
+
+Defined in: [data-source.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/data-source.ts#L27)
+
+Read a [DataSourceDirective](../type-aliases/DataSourceDirective) off a node's props, or `undefined` when
+absent / malformed. Pure + isomorphic.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; \| `undefined` |
+
+## Returns
+
+[`RemoteCsvDirective`](../interfaces/RemoteCsvDirective) \| `undefined`

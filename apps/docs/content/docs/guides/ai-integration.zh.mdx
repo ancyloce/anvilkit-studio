@@ -1,0 +1,395 @@
+---
+title: "AI 集成"
+description: "在 createAiCopilotPlugin 背后接入真实的 LLM——信任模型、generatePage 契约、验证器边界、成本控制，以及三个完整的宿主适配器（Anthropic、OpenAI、通用 fetch）。"
+---
+
+`@anvilkit/plugin-ai-copilot` 刻意保持无头设计：它不
+附带任何提供商，不打包任何 API 客户端，也不知道
+你运行的是哪个模型。相反，它只接受一个由宿主拥有的回调：
+
+```ts
+createAiCopilotPlugin({
+	generatePage: async (prompt, ctx) => {
+		// you choose the LLM, you hold the secrets
+		return somePageIR;
+	},
+	puckConfig,
+});
+```
+
+本指南讲解形态选择所强制实施的信任模型、
+确切的 `generatePage()` 契约、schema 上下文如何构建、每个响应在派发前都要跨越的
+验证器边界、如何
+呈现错误、成本控制旋钮，以及针对
+真实提供商的三个完整适配器。最后以一个明确的“不要这样做”章节结束。
+
+<Callout type="info" title="代码保持绿色">
+	本页的每个代码块都会被提取到
+	[`apps/docs/tests/guides/ai-integration.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/ai-integration.test.ts)，
+	并在 CI 中作为使用了 mock `fetch` 的 Vitest 测试运行。如果
+	契约发生漂移，构建会在文档发布之前失败。
+</Callout>
+
+## 1. 信任模型
+
+在用户的提示词和渲染出的页面之间存在三个主体：
+
+```
+┌─────────────────┐    ┌──────────────┐    ┌──────────────┐
+│   Studio UI     │───▶│   your host  │───▶│    LLM       │
+│ (this package)  │    │  (your app)  │    │ (Anthropic,  │
+│                 │    │              │    │  OpenAI, …)  │
+└─────────────────┘    └──────────────┘    └──────────────┘
+        ▲                      │
+        │     validated PageIR │
+        └──────────────────────┘
+```
+
+**Studio 自身没有任何网络访问能力。** 它调用你
+提供的回调。该回调是凭据唯一存在的地方，因此
+宿主的后端始终掌控着：
+
+- 调用哪个提供商。
+- 提供商接收哪个模型和哪些参数。
+- 哪些用户可以调用（认证、限流）。
+- 响应正文是否会未经过滤地到达客户端。
+
+由于该回调是一个**函数引用**，而非一个配置
+字符串，因此无法将 API 密钥嵌入插件选项中并
+意外地将其序列化。如果你从一个服务器
+操作返回某个值，密钥会留在服务器上。
+
+<Callout type="warn" title="密钥永不离开宿主后端">
+	完整的推理过程见
+	[`docs/security/plugin-trust-model.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/security/plugin-trust-model.md)
+	§3。本指南假设你已从那里读过正式的
+	能力边界。
+</Callout>
+
+## 2. `generatePage` 契约
+
+```ts
+import type {
+	AiGenerationContext,
+	PageIR,
+} from "@anvilkit/core/types";
+
+type GeneratePageFn = (
+	prompt: string,
+	ctx: AiGenerationContext,
+) => Promise<PageIR>;
+```
+
+输入：
+
+- `prompt`——原始的用户字符串。在传入时不会进行任何
+  净化处理。如果你的提供商按输入 token 收费，请自行限制其长度。
+- `ctx.availableComponents: AiComponentSchema[]`——宿主 Puck `Config` 的一个
+  AI 安全投影，由
+  `@anvilkit/schema/configToAiContext()` 构建。这是 LLM
+  可以从中挑选的允许列表。
+- `ctx.currentData?`——仅当你向插件传入
+  `forwardCurrentData: true` 时才会设置；它让 LLM 能够引用
+  页面上已有的块。
+
+输出：**一个原始的 `PageIR` 候选项**。它不必有效
+——插件会在派发前将其传入 `validateAiOutput()`
+（见下文 §4）。干净的失败优于被强行扭曲的成功。
+
+```ts
+// minimum-viable generatePage (for tests or offline demos)
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+export const noopGeneratePage: GeneratePageFn = async (prompt, _ctx) => ({
+	version: "1",
+	root: {
+		id: "root",
+		type: "__root__",
+		props: {},
+		children: [
+			{
+				id: "hero-1",
+				type: "Hero",
+				props: { headline: prompt.slice(0, 80) },
+			},
+		],
+	},
+	assets: [],
+	metadata: {},
+});
+```
+
+## 3. Schema 上下文
+
+`@anvilkit/schema` 的 `configToAiContext(puckConfig)` 会遍历你传给
+`<Studio>` 的同一个 Puck `Config` 对象，并生成一个
+确定性的、JSON 安全的摘要，让 LLM 可以在不
+触碰实时运行时的情况下进行推理：
+
+```ts
+import { configToAiContext } from "@anvilkit/schema";
+import type { AiComponentSchema } from "@anvilkit/core/types";
+
+const ctx = configToAiContext(puckConfig);
+// ctx.availableComponents: AiComponentSchema[]
+//   [
+//     {
+//       componentName: "Hero",
+//       description: "Marketing hero block with headline + body.",
+//       fields: [{ name: "title", description: "…", type: "text" }]
+//     },
+//     { componentName: "Pricing", description: "…", fields: [...] },
+//     ...
+//   ]
+```
+
+有两点保证很重要：
+
+1. **该列表是一个封闭集合。** LLM 无法凭空造出一个
+   不在 `availableComponents` 中的组件类型——验证器会
+   拒绝它（§4）。
+2. **字段种类是 AI 安全的。** 不可序列化的字段（slot、
+   渲染器）会被 `extractFieldSchema` 丢弃；LLM 只能看到
+   能够作为 JSON 往返传输的字段。
+
+你通常不会将 `availableComponents` 原样传入
+提示词——而是按你所选提供商的工具/函数调用
+约定来对其进行整形（`@anvilkit/plugin-ai-copilot` 给你提供数据；如何
+呈现它则取决于具体提供商）。
+
+## 4. 验证器边界
+
+每个 `generatePage` 响应在插件调用 `puckApi.dispatch`
+之前都要跨越一道关卡：
+
+```ts
+import { validateAiOutput } from "@anvilkit/validator";
+
+const validation = validateAiOutput(response, ctx.availableComponents);
+if (!validation.valid) {
+	// emit error, do NOT dispatch
+}
+```
+
+该验证器是一个 Zod schema。它强制实施：
+
+- `PageIR` 形态（`version === "1"`、根节点、assets 数组）。
+- 每个子节点的 `type` 都在 `availableComponents` 中。
+- `props` 是一个对象（可序列化约束在信任模型中有
+  说明；那里的 §4 列出了已知的缺口）。
+
+它**不**强制实施：
+
+- 字符串属性的内容（净化是导出器的职责）。
+- 大小限制（如果你在意，请在你的 `generatePage` 中强制实施——见 §6）。
+- 语义合理性（空的 `headline` 在语法上是有效的）。
+
+失败时会在事件总线上发出 `ai-copilot:error`，携带
+`{ code: "VALIDATION_FAILED", issues }`，并写入一条结构化日志
+行。该 IR 会被丢弃。绝不会提交任何部分状态。
+
+## 5. 错误呈现
+
+该插件会发出三个稳定的错误码：
+
+| 错误码              | 何时发生                                               |
+| ------------------- | ------------------------------------------------------ |
+| `VALIDATION_FAILED` | 响应未通过 Zod 验证。                                  |
+| `TIMEOUT`           | `generatePage` 未在 `timeoutMs` 内解决。               |
+| `GENERATE_FAILED`   | `generatePage` 抛出了异常（网络错误、配额等）。        |
+
+通过你持有的任何 `StudioPluginContext` 进行订阅：
+
+```ts
+import type { StudioPluginContext } from "@anvilkit/core/types";
+import type { AiCopilotErrorPayload } from "@anvilkit/plugin-ai-copilot";
+
+function wireErrorToast(ctx: StudioPluginContext, toast: (msg: string) => void) {
+	ctx.on("ai-copilot:error", (payload: AiCopilotErrorPayload) => {
+		if (payload.code === "TIMEOUT") {
+			toast("AI generation timed out. Try again.");
+		} else if (payload.code === "VALIDATION_FAILED") {
+			toast(`Response rejected: ${payload.issues?.[0]?.message ?? "bad IR"}`);
+		} else {
+			toast(`Generation failed: ${payload.message}`);
+		}
+	});
+}
+```
+
+不要为了逻辑处理而去解析 `payload.message` 字符串——它们的用途
+是供人类阅读显示的。`code` 字段才是稳定的契约。
+
+## 6. 成本控制
+
+四个杠杆，按插件提供的部分多于
+你必须自行完成的部分降序排列：
+
+1. **`timeoutMs`**（插件选项，默认 30 000 毫秒）。超过这个时间后，
+   待处理的生成会被放弃，并触发一个 `TIMEOUT` 错误。
+   这会限制提供商病态的延迟。
+2. **`maxPromptLength`**（宿主侧，在你的适配器中实现）。
+   插件不会限制提示词长度——失控的提示词会在 LLM
+   作出响应之前就消耗你的配额。在你的 `generatePage` 中加一句简单的
+   `if (prompt.length > 4_000) throw`
+   就足够了。
+3. **限流**（宿主侧）。由于 `generatePage` 是从一个
+   宿主拥有的函数中调用的，你可以按用户、按 IP、
+   按组织进行限流——取决于你的后端拥有怎样的认证上下文。Studio 中没有任何东西
+   能替你做这件事。
+4. **提供商侧配额。** 你交给提供商的 API 密钥是
+   最后一道防线。请使用一个带有花费上限的受限密钥。
+
+## 7. 三个完整的适配器
+
+每个适配器作为一个独立的包位于 `examples/ai-adapters/<provider>/`
+之下，带有各自的 README。本指南将
+其中有意思的部分——`generatePage` 主体——内联展示，以便 CI 测试套件能
+捕获漂移。
+
+### Anthropic（Claude）
+
+```ts
+import Anthropic from "@anthropic-ai/sdk";
+import { validateAiOutput } from "@anvilkit/validator";
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+const client = new Anthropic({ apiKey: process.env.AI_API_KEY });
+
+export const generatePage: GeneratePageFn = async (prompt, ctx) => {
+	if (prompt.length > 4_000) {
+		throw new Error("Prompt too long");
+	}
+	const response = await client.messages.create({
+		model: "claude-sonnet-4-6",
+		max_tokens: 4_096,
+		system:
+			"You are a page generator. Return ONLY a JSON PageIR. " +
+			"Allowed component types: " +
+			ctx.availableComponents.map((c) => c.componentName).join(", "),
+		messages: [{ role: "user", content: prompt }],
+	});
+	const block = response.content[0];
+	if (block?.type !== "text") {
+		throw new Error("No text block in Claude response");
+	}
+	return JSON.parse(block.text);
+};
+```
+
+密钥：`process.env.AI_API_KEY` 位于宿主后端。
+`generatePage` 函数从一个服务器模块导出，并且
+仅在服务器组件中被导入宿主的 Studio 配置。
+
+### OpenAI
+
+```ts
+import OpenAI from "openai";
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+const client = new OpenAI({ apiKey: process.env.AI_API_KEY });
+
+export const generatePage: GeneratePageFn = async (prompt, ctx) => {
+	if (prompt.length > 4_000) {
+		throw new Error("Prompt too long");
+	}
+	const response = await client.chat.completions.create({
+		model: "gpt-5",
+		response_format: { type: "json_object" },
+		messages: [
+			{
+				role: "system",
+				content:
+					"Return JSON PageIR only. Components: " +
+					ctx.availableComponents.map((c) => c.componentName).join(", "),
+			},
+			{ role: "user", content: prompt },
+		],
+	});
+	const text = response.choices[0]?.message?.content;
+	if (!text) throw new Error("Empty OpenAI response");
+	return JSON.parse(text);
+};
+```
+
+### 通用 `fetch`（与提供商无关）
+
+如果你通过自己的后端路由来代理你的提供商，请使用这种形态
+（对于源自浏览器的请求，这是推荐做法）：
+
+```ts
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+export function createFetchGeneratePage(endpoint: string): GeneratePageFn {
+	return async (prompt, ctx) => {
+		if (prompt.length > 4_000) {
+			throw new Error("Prompt too long");
+		}
+		const response = await fetch(endpoint, {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({
+				prompt,
+				availableComponents: ctx.availableComponents.map(
+					(c) => c.componentName,
+				),
+			}),
+		});
+		if (!response.ok) {
+			throw new Error(`AI endpoint returned ${response.status}`);
+		}
+		return (await response.json()) as Awaited<ReturnType<GeneratePageFn>>;
+	};
+}
+```
+
+随后，后端的 `POST /api/ai/generate-page` 路由会持有真正的
+API 密钥，并且可以在一个地方统一强制实施认证、限流和提示词
+大小限制。
+
+## 8. 不要这样做
+
+这些反模式会破坏信任模型——绝不要发布
+任何包含其中任意一项的构建：
+
+<Callout type="error" title="反模式">
+	**1. 在客户端硬编码 API 密钥。**
+
+	```ts
+	// ❌ NEVER
+	const client = new Anthropic({
+		apiKey: "sk-ant-xxxxxxxxxxxxxxxxxxxx",
+	});
+	```
+
+	任何查看页面源码的人都能看到该密钥。请立即轮换。
+
+	**2. 在浏览器中运行的代码里从 `import.meta.env.ANTHROPIC_API_KEY`
+	读取密钥。**
+
+	打包器会将 `VITE_*`、`NEXT_PUBLIC_*` 以及类似前缀
+	内联进客户端包中。如果环境变量被打包到浏览器，那它就是
+	一个客户端密钥——请将其视为已泄露。
+
+	**3. 在 `studioConfig` 中嵌入凭据。**
+
+	`studioConfig` 对每个已注册的插件都可见（信任
+	模型 §2）。你放在那里的任何东西都能被宿主日后安装的
+	第三方插件读取。请将密钥保存在你仅服务器端的
+	`generatePage` 模块的模块作用域中。
+
+	**4. 将 `prompt` 当作服务器到 LLM 的直通来信任。**
+
+	提示词是用户输入。一次提示词注入攻击可能试图
+	诱使 LLM 返回 JS 形态的数据或宿主未声明的组件
+	类型。验证器会拒绝形态漂移，
+	但适配器仍应限制提示词长度并拒绝
+	明显的滥用（见 `validateAiOutput` §4）。
+
+	**5. 静默地捕获并吞掉 `generatePage` 错误。**
+
+	让它们抛出。插件会将抛出的错误转化为一个
+	`GENERATE_FAILED` 事件，以便 UI 能将其呈现出来。吞掉
+	错误会让“我点了生成，什么都没发生”成为
+	失败模式，这比一条可见的红色消息糟糕得多。
+</Callout>

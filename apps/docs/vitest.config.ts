@@ -10,12 +10,12 @@ import { defineConfig } from "vitest/config";
  * stays excluded — those run under a separate `pnpm e2e` script.
  */
 export default defineConfig({
-  test: {
-    name: "@anvilkit/docs-site",
-    environment: "node",
-    globals: false,
-    include: ["tests/**/*.test.ts"],
-    clearMocks: true,
-    restoreMocks: true,
-  },
+	test: {
+		name: "@anvilkit/docs-site",
+		environment: "node",
+		globals: false,
+		include: ["tests/**/*.test.ts"],
+		clearMocks: true,
+		restoreMocks: true,
+	},
 });

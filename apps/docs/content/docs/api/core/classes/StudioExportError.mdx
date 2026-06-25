@@ -1,0 +1,58 @@
+---
+title: "StudioExportError"
+description: "@anvilkit/core · StudioExportError"
+---
+
+Defined in: [runtime/errors.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L143)
+
+Thrown when a registered export format's `run()` implementation
+fails.
+
+Raised by the export pipeline (`core-009`) when a format throws or
+returns a rejected promise. The `formatId` field identifies which
+format failed so host apps can surface a targeted message
+("HTML export failed: …") without introspecting the cause.
+
+Advisory diagnostics should flow through `ExportResult.warnings`
+instead — this error is reserved for hard failures where no
+content could be produced at all.
+
+## Extends
+
+- [`StudioError`](StudioError.md)
+
+## Constructors
+
+### Constructor
+
+```ts
+new StudioExportError(
+   formatId, 
+   message, 
+   options?): StudioExportError;
+```
+
+Defined in: [runtime/errors.ts:155](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L155)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `formatId` | `string` |
+| `message` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+`StudioExportError`
+
+#### Overrides
+
+[`StudioError`](StudioError.md).[`constructor`](StudioError.md#constructor)
+
+## Properties
+
+| Property | Modifier | Type | Default value | Description | Overrides | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `"StudioExportError"` | `"StudioExportError"` | Stable failure code for export errors. See [StudioError.code](StudioError.md#code). | [`StudioError`](StudioError.md).[`code`](StudioError.md#code) | [runtime/errors.ts:147](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L147) |
+| &lt;a id="formatid"&gt;&lt;/a&gt; `formatId` | `readonly` | `string` | `undefined` | The `id` of the [ExportFormatDefinition](../interfaces/ExportFormatDefinition) whose `run()` method threw. | - | [runtime/errors.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L153) |

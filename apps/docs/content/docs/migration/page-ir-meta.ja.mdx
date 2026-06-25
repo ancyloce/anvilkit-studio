@@ -1,0 +1,97 @@
+---
+title: "PageIRNode.meta（1.0 → 1.1）"
+description: "@anvilkit/ir/migrations を使用して、すべての PageIRNode の作成時メタデータ（locked、owner、version、notes）を移行します。1.0 コンシューマーとのラウンドトリップが安全で、meta を省略すればすべての Phase 5 不変条件が保持されます。"
+---
+
+`@anvilkit/ir@0.22`（Phase 6 / M10）は、すべての `PageIRNode` に
+オプションの `meta?: PageIRNodeMeta` フィールドを追加します。このフィールドは
+**作成時** のメタデータ（`locked`、`owner`、`version`、`notes`）を保持し、
+下流のツール（バージョン履歴サイドバー、ロックインジケーター、
+監査ログ）がそれを読み取ります。この変更は LTS 契約の下で **純粋な追加** です。
+
+```ts
+export interface PageIRNodeMeta {
+	readonly locked?: boolean;   // editor blocks edits when true
+	readonly owner?: string;     // host-owned identifier (≤ 256 chars)
+	readonly version?: string;   // semver-shaped string
+	readonly notes?: string;     // freeform notes (≤ 512 chars)
+}
+```
+
+<Callout type="info">
+IR ドキュメントの `version` リテラルは、この移行を通じて `"1"` のままです。
+スキーマバージョンの引き上げはなく、`meta` は追加的です。
+</Callout>
+
+## `migratePageIR` を呼び出すタイミング
+
+ホストが追加的な `meta` 契約に初めてオプトインする境界で使用します。
+どのノードも `meta` を保持していない場合、このヘルパーは参照上の
+**何もしない操作（no-op）** であり、1.0 ドキュメントに対して呼び出しても
+コストはかかりません。
+
+```ts
+import { migratePageIR } from "@anvilkit/ir/migrations";
+
+const upgraded = migratePageIR(ir, { from: "0.21", to: "0.22" });
+// `upgraded === ir` when meta is absent on every node.
+```
+
+少なくとも 1 つのノードが `meta` を設定している場合、`migratePageIR` は次を行います。
+
+1. 設定された各 `meta` をランタイム上限に対して検証します——
+   違反時には `PageIRNodeMetaError` をスローします。
+2. `meta` をバイト単位で保持した、構造的にクローンされ凍結された IR を
+   返します。既存のフィールド（`id`、`type`、`props`、`slot`、
+   `children`、`assets`）は変更されずにそのまま渡されます。
+
+## `downgradePageIR` を呼び出すタイミング
+
+`meta` 以前の契約にピン留めされた `1.0` コンシューマーに IR を公開する際に使用します。
+`downgradePageIR(ir)` は、すべてのノードから再帰的に `meta` を取り除いた
+新しい凍結済みのツリーを返します——たとえ入力に
+取り除くべき `meta` がなかったとしてもです。
+
+```ts
+import { downgradePageIR } from "@anvilkit/ir/migrations";
+
+const safeForOldConsumer = downgradePageIR(ir);
+```
+
+`downgradePageIR` はそれ自身の不動点です。2 回呼び出すことは
+1 回呼び出すことと同じです。
+
+## フィールド上限（ランタイムで強制）
+
+| フィールド | 型      | 上限                                                       |
+| --------- | ------- | ---------------------------------------------------------- |
+| `locked`  | boolean | —                                                          |
+| `owner`   | string  | ≤ 256 文字                                                |
+| `version` | string  | semver 形式（オプションのプレリリース付き `MAJOR.MINOR.PATCH`） |
+| `notes`   | string  | ≤ 512 文字                                                |
+
+上限は `@anvilkit/ir/migrations`（ここ）と
+`@anvilkit/validator` の section-AI パッチチェッカーによってランタイムで強制されます。これらは
+型レベルでは反映され **ません**——`@anvilkit/core/types` 表面は
+ランタイムフリーのままなので、`import type` のみを行うコンシューマーは
+バイトコストをまったく支払いません。
+
+## `puckDataToIR` が行わないこと
+
+`puckDataToIR()` は、どのノードにも `meta` を合成してはなりません。この関数は
+`1.0` から変更されていません。構造的な Puck `Data` のみを読み取り、
+ロスレスにラウンドトリップする `PageIR` を生成します。`meta` はあなたがその上に追加する
+ホスト所有のメタデータであり、派生値ではありません。
+
+このコントラクトがすべてのデモフィクスチャで成り立つことを保証するため、
+`@anvilkit/ir` のテストスイートには合成なし不変条件テストが同梱されています。
+
+## 互換性マトリクス
+
+| コンシューマーのピン | meta を持つドキュメント | meta を持たないドキュメント |
+| ---------------- | ------------------ | --------------------- |
+| `@anvilkit/ir@0.21` | 未認識のフィールド、ラウンドトリップ時に破棄される可能性あり | ロスレスにラウンドトリップ |
+| `@anvilkit/ir@0.22` | `migratePageIR` により保持され、バージョン履歴により表示 | 0.21 の挙動と同一 |
+
+交差するセル——`meta` を持つドキュメントを 0.21 コンシューマーに送ること——が
+唯一の失敗モードです。その境界を越える前に `downgradePageIR` を使用してください。

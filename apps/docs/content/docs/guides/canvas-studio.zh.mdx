@@ -1,0 +1,97 @@
+---
+title: "Canvas Studio 插件"
+description: "在 Puck <Studio> 外壳内挂载一个全屏的画布编辑界面，通过宿主适配器持久化 CanvasIR，并使用 @anvilkit/plugin-canvas-studio 解析 design:// 预览。"
+---
+
+`@anvilkit/plugin-canvas-studio` 在基于 Puck 的 `<Studio>` 外壳内挂载一个全屏的
+**Canvas Studio** 编辑界面。一个头部操作可在 Puck 页面模式与画布叠加层之间切换；
+关闭时，插件通过宿主提供的适配器持久化 `CanvasIR`，将每个画板栅格化为一张预览，
+并修补发起的 Puck `DesignBlock`，使页面渲染该缩略图。它还为设计块注册了一个图层
+快速添加项，以及一个 `design://` 资源解析器，使页面可以通过设计 id 引用画板预览。
+
+## 1. 安装
+
+```sh
+pnpm add @anvilkit/plugin-canvas-studio @anvilkit/canvas-core @anvilkit/canvas-editor react react-dom @puckeditor/core
+```
+
+对等依赖：`@anvilkit/canvas-core`、`@anvilkit/canvas-editor`、
+`@puckeditor/core ^0.21.3`、`react >=19.0.0`、
+`react-dom >=19.0.0`。
+
+<Callout type="warn" title="导入编辑器样式表">
+Tailwind 工具类和父文档 CSS **不会**到达画布——编辑器自带一个独立完整的样式表。
+宿主必须导入它一次，例如在应用入口处：
+
+```ts
+import "@anvilkit/canvas-editor/styles.css";
+```
+</Callout>
+
+## 2. 最小宿主
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createCanvasStudioPlugin,
+  localStorageCanvasAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+import "@anvilkit/canvas-editor/styles.css";
+
+const canvasStudio = createCanvasStudioPlugin({
+  adapter: localStorageCanvasAdapter({ namespace: "demo-canvas" }),
+  // The editor's image tool resolves to a host asset id; seed it so the
+  // returned id always maps to renderable bytes.
+  onPickAsset: async () => "host-image",
+  seedAssets: {
+    "host-image": { id: "host-image", uri: "data:image/png;base64,…" },
+  },
+});
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[canvasStudio]} />;
+}
+```
+
+## 3. 选项
+
+```ts
+interface CreateCanvasStudioPluginOptions {
+  readonly adapter: CanvasPersistenceAdapter;
+  readonly designBlockComponentType?: string;        // default "DesignBlock"
+  readonly canvasSnapshotAdapter?: CanvasSnapshotAdapter;
+  readonly onPickAsset?: () => Promise<string>;
+  readonly seedAssets?: Readonly<Record<string, CanvasAssetRef>>;
+}
+```
+
+`CanvasPersistenceAdapter` 是存储契约——`save(designId, ir)`、
+`load(designId)` 和 `list()`。`inMemoryCanvasAdapter` 和
+`localStorageCanvasAdapter({ namespace })` 开箱即用；想要持久化
+存储（Postgres、IndexedDB）的宿主需自行实现该接口。
+
+## 4. design:// 引用
+
+插件注册了一个 `design://` 资源解析器，使 Puck 页面可以通过设计 id 引用
+某个画板的预览。前缀和解析器工厂已导出，供搭建自有流水线的宿主使用：
+
+```ts
+import {
+  createDesignAssetResolver,
+  DESIGN_REFERENCE_PREFIX, // "design://"
+} from "@anvilkit/plugin-canvas-studio";
+```
+
+## 5. 模式切换与快照
+
+- 头部操作（`canvas-studio:toggle`，id 为 `MODE_SWITCH_ACTION_ID`）在
+  Puck 页面编辑与全屏画布叠加层之间切换；模式存储
+  （`createCanvasModeStore`）保存当前激活的模式。
+- `exportCanvasToAsset` / `exportAllArtboards` 将画板栅格化为预览。
+- 当提供了 `canvasSnapshotAdapter` 时，`createCanvasSnapshotBridge` 将画布
+  接入 Version History 插件（否则使用进程内适配器）。
+
+<Callout type="info" title="状态（alpha，v0.1.3）">
+API 在 `1.0` 之前可能会变更。`@anvilkit/core`、`@anvilkit/design-block` 和
+`@anvilkit/plugin-asset-manager` 作为此插件的直接依赖一同发布。
+</Callout>

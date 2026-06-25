@@ -1,0 +1,521 @@
+---
+title: Component authoring
+description: Write a Puck-native React component package that ships as its own @anvilkit/* npm release — contract, field types, editMode, theming, responsiveness, icons, scaffolding, and publishing.
+---
+
+AnvilKit components are **independently publishable Puck-native React
+packages**. Each lives under `packages/components/src/<slug>/`, ships
+its own `@anvilkit/<slug>` npm release, and plugs into `<Puck>` through
+a tightly constrained `ComponentConfig` contract.
+
+This guide is the canonical reference for writing one. It uses
+[`@anvilkit/button`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/src/button)
+as the recurring worked example, and it supersedes the
+submodule-local
+[`packages/components/AGENTS.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/AGENTS.md)
+as the public-facing doc.
+
+<Callout type="info" title="Code stays green">
+	Every code block on this page is extracted to
+	[`apps/docs/tests/guides/component-authoring.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/component-authoring.test.ts)
+	and runs as a Vitest test in CI. If the contract drifts, the
+	build fails before the docs ship.
+</Callout>
+
+## 1. The contract
+
+Every component package under `packages/components/src/<slug>/` must
+export a fixed set of symbols from `src/index.ts`. Core and the demo
+app both depend on the exact names below — renaming is a breaking
+change.
+
+| Export           | Shape                                   | Purpose                                                          |
+| ---------------- | --------------------------------------- | ---------------------------------------------------------------- |
+| `componentConfig`| `ComponentConfig<Props>`                | The Puck config: `label`, `defaultProps`, `fields`, `render`.    |
+| `defaultProps`   | `Props` (serializable)                  | What Puck inserts when the component is dropped on a canvas.     |
+| `fields`         | `Fields<Props>`                         | The editor schema — one entry per editable prop.                 |
+| `metadata`       | `ComponentMetadata`                     | Catalog metadata: name, slug, package name + version, category.  |
+| Camel aliases    | `<camel>Config`, `<camel>DefaultProps`, `<camel>Fields`, `<camel>Metadata` | Convenience re-exports for hosts that import by feature.         |
+| The component    | `Button`, `Input`, …                    | The React render symbol, exported alongside its `*Props` types.  |
+
+The canonical `button` package wires all of these together:
+
+```ts
+import "./styles.css";
+
+export type { ButtonProps, ButtonViewProps } from "./Button";
+export { Button } from "./Button";
+export {
+	buttonConfig,
+	componentConfig,
+	defaultProps,
+	defaultProps as buttonDefaultProps,
+	fields,
+	fields as buttonFields,
+	metadata,
+	metadata as buttonMetadata,
+} from "./config";
+```
+
+Three invariants follow from the table:
+
+1. **`metadata.packageName` must match `package.json` `name`.** The
+   catalog generator (`apps/docs/scripts/generate-component-pages.ts`)
+   verifies this at docs-build time and fails loud if they drift.
+2. **`metadata.componentSlug` must match the directory name.** Same
+   generator, same failure mode.
+3. **`render` must be a pure adapter.** It receives the resolved
+   props plus `editMode` and returns a React element — no effects,
+   no data fetching, no store access.
+
+```ts
+import type { ComponentConfig } from "@puckeditor/core";
+import { createElement } from "react";
+import type { ButtonProps } from "./Button";
+import { Button } from "./Button";
+
+const renderButton: ComponentConfig<ButtonProps>["render"] = ({
+	label,
+	variant,
+	disabled,
+	href,
+	openInNewTab,
+	editMode,
+}) =>
+	createElement(Button, {
+		label,
+		variant,
+		disabled,
+		href,
+		openInNewTab,
+		editMode,
+	});
+```
+
+## 2. Field types
+
+Fields describe the editor UI Puck generates for each prop. AnvilKit
+components use seven of Puck's built-in types. Prefer the simplest
+field that models the data — `radio` over `select` for small enums,
+`array` over stringly-typed CSV, `object` over flat prefixed props.
+
+| Puck `type` | When to use it                                                         | Real example                                 |
+| ----------- | ---------------------------------------------------------------------- | -------------------------------------------- |
+| `text`      | Single-line string, free-form (label, URL, alt).                       | `@anvilkit/button` `label`, `href`.          |
+| `textarea`  | Multi-line string (subtitle, description, body copy).                  | `@anvilkit/section` `description`.           |
+| `number`    | Numeric input (column count, spacing units, counts).                   | `@anvilkit/bento-grid` column count.         |
+| `email`     | Email address — Puck validates the format in the UI.                   | `@anvilkit/input` default `type`.            |
+| `radio`     | Small enum (≤ ~4 values) you want rendered inline as segmented choices.| `@anvilkit/button` `variant`, `disabled`.    |
+| `select`    | Enum with more than a handful of values, shown as a dropdown.          | `@anvilkit/bento-grid` `gap`, `radius`.      |
+| `array`     | Ordered list of repeatable items (links, cards, tiers, features).      | `@anvilkit/navbar` `items`, `actions`.       |
+| `object`    | Heterogeneous nested shape (logo text + image + href).                 | `@anvilkit/navbar` `logo`.                   |
+
+The worked example below is verbatim from
+[`button/src/config.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/src/button/src/config.ts)
+and demonstrates the two most common types side by side:
+
+```ts
+import type { Fields } from "@puckeditor/core";
+import type { ButtonProps } from "./Button";
+
+export const buttonFields = {
+	label: {
+		type: "text",
+		label: "Label",
+	},
+	variant: {
+		type: "radio",
+		label: "Variant",
+		options: [
+			{ label: "Primary", value: "primary" },
+			{ label: "Secondary", value: "secondary" },
+		],
+	},
+	href: {
+		type: "text",
+		label: "Link URL",
+	},
+	openInNewTab: {
+		type: "radio",
+		label: "Open in new tab",
+		options: [
+			{ label: "No", value: false },
+			{ label: "Yes", value: true },
+		],
+	},
+	disabled: {
+		type: "radio",
+		label: "Disabled",
+		options: [
+			{ label: "No", value: false },
+			{ label: "Yes", value: true },
+		],
+	},
+} satisfies Fields<ButtonProps>;
+```
+
+### Arrays and objects
+
+Repeatable lists use `type: "array"` with three ergonomics fields:
+
+```ts
+import type { Fields } from "@puckeditor/core";
+
+type NavLink = { label: string; href: string };
+type NavProps = { items: NavLink[] };
+
+const fields = {
+	items: {
+		type: "array",
+		label: "Navigation links",
+		defaultItemProps: { label: "New link", href: "/" },
+		getItemSummary: (item, index) =>
+			item.label || `Link ${(index ?? 0) + 1}`,
+		arrayFields: {
+			label: { type: "text", label: "Label" },
+			href: { type: "text", label: "Href" },
+		},
+	},
+} satisfies Fields<NavProps>;
+```
+
+`defaultItemProps` is the object Puck inserts when the editor clicks
+"Add item". `getItemSummary` powers the collapsed item label in the
+right rail — always return a non-empty string so editors don't see
+an unlabelled row. `arrayFields` is the per-item schema.
+
+Objects use the same shape with `objectFields` instead:
+
+```ts
+import type { Fields } from "@puckeditor/core";
+
+type Logo = { type: "text" | "image"; text: string; imageUrl: string };
+type LogoProps = { logo: Logo };
+
+const fields = {
+	logo: {
+		type: "object",
+		label: "Logo",
+		objectFields: {
+			type: {
+				type: "radio",
+				label: "Type",
+				options: [
+					{ label: "Text", value: "text" },
+					{ label: "Image", value: "image" },
+				],
+			},
+			text: { type: "text", label: "Text" },
+			imageUrl: { type: "text", label: "Image URL" },
+		},
+	},
+} satisfies Fields<LogoProps>;
+```
+
+## 3. Serializability
+
+**Every value reachable from `defaultProps` or `fields` must be JSON-
+serializable.** Puck persists the editor state as JSON and rehydrates
+it on the render route (`/puck/render`, RSC-compatible). A function,
+ref, `Date`, or class instance anywhere in the tree will either drop
+silently on reload or throw at boundary crossings.
+
+```ts
+import { defaultProps } from "@anvilkit/button";
+
+// `defaultProps` is JSON-safe. This round-trip must be lossless.
+const snapshot = JSON.parse(JSON.stringify(defaultProps));
+```
+
+Callback-shaped field helpers (`getItemSummary`, `resolveFields`,
+`resolveData`) are the exception — they live on the `fields` schema,
+not on the data, and Puck resolves them at runtime. The catalog
+generator deliberately serializes them as the string `"[[Function]]"`
+when it dumps the Puck config for the docs site; see
+[`generate-component-pages.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/scripts/generate-component-pages.ts).
+
+Common traps:
+
+- **Don't store React nodes in props.** Pass primitives (labels, URLs,
+  flags) and let the render adapter compose JSX.
+- **Don't smuggle event handlers through props.** The host wires
+  behavior via plugins and lifecycle hooks — see
+  [Plugin authoring](/guides/plugin-authoring/).
+- **Don't memoize with stable refs.** Anything a consumer needs from
+  inside the component belongs to the component module itself, not
+  to its props.
+
+`validateComponentConfig` from `@anvilkit/validator` walks
+`defaultProps` recursively and reports the **full structural path** to
+any non-JSON-serializable leaf, including the failure reason
+(`function`, `symbol`, `bigint`, `circular`, `exceeds-max-depth`). A
+function buried at `defaultProps.settings.layout.onPress` is reported
+as `["components", "<Name>", "defaultProps", "settings", "layout",
+"onPress"]` rather than truncating at the top-level prop.
+
+## 4. The `editMode` pattern
+
+Puck calls `render` with an extra `editMode: boolean` argument in the
+editor and omits it on the render route. Interactive controls must
+**neutralize themselves** when `editMode` is true: a live `<button>`
+steals focus from Puck's drag handles, a live `<a>` hijacks clicks,
+and a live `<input>` swallows keystrokes that the editor needs for
+component selection.
+
+The button package's view component is the canonical pattern:
+
+```tsx
+import { Button as BaseButton, buttonVariants } from "@anvilkit/ui/button";
+import { cn } from "@anvilkit/ui/lib/utils";
+
+export interface ButtonViewProps {
+	label: string;
+	variant?: "primary" | "secondary";
+	disabled?: boolean;
+	href?: string;
+	openInNewTab?: boolean;
+	editMode?: boolean;
+}
+
+export function Button({
+	label,
+	variant = "primary",
+	disabled = false,
+	href,
+	openInNewTab = false,
+	editMode = false,
+}: ButtonViewProps) {
+	const isInactive = disabled || editMode;
+	const resolvedHref = isInactive ? undefined : href;
+
+	if (href) {
+		return (
+			<a
+				href={resolvedHref}
+				target={resolvedHref && openInNewTab ? "_blank" : undefined}
+				rel={resolvedHref && openInNewTab ? "noreferrer noopener" : undefined}
+				aria-disabled={isInactive || undefined}
+				tabIndex={isInactive ? -1 : undefined}
+				className={cn(
+					buttonVariants({ size: "lg", variant: "default" }),
+					"h-11 rounded-full px-5 shadow-sm",
+					isInactive && "cursor-not-allowed opacity-50",
+				)}
+			>
+				{label}
+			</a>
+		);
+	}
+
+	return (
+		<BaseButton
+			size="lg"
+			disabled={isInactive}
+			aria-disabled={isInactive || undefined}
+			className="h-11 rounded-full px-5 shadow-sm"
+		>
+			{label}
+		</BaseButton>
+	);
+}
+```
+
+Two rules fall out of that snippet:
+
+1. **Coalesce with `disabled`.** `const isInactive = disabled || editMode`
+   is the single source of truth — every interactive prop (`href`,
+   `tabIndex`, `aria-disabled`) reads from `isInactive`, not from
+   `editMode` directly.
+2. **Keep the DOM semantic.** An inactive link stays an `<a>` with
+   `aria-disabled` and no `href`; an inactive button stays a `<button>`
+   with the real `disabled` attribute. Do not swap the element type
+   based on `editMode` — screen readers announce a different role,
+   and Puck's selection outlines move with it.
+
+`@anvilkit/input` follows the same pattern with `readOnly={editMode}`
+and a `bg-input/50` visual cue — pick whatever variant matches your
+component's native disabled state.
+
+## 5. Theme-aware styling
+
+Every component ships a colocated `styles.css` that imports the
+shared Tailwind layer:
+
+```css
+@import "@anvilkit/tailwind-config/shadcn";
+
+@source "./**/*.{ts,tsx}";
+@source "../../../../ui/src/button.tsx";
+```
+
+The first line imports the shadcn-compatible token palette from
+[`@anvilkit/tailwind-config`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/configs/tailwind-config);
+the `@source` directives tell Tailwind 4 which files to scan for
+class names. Add an extra `@source` for any `@anvilkit/ui` primitive
+whose classes you reuse directly.
+
+Color rules, in strict priority order:
+
+1. **Prefer shadcn semantic tokens.** `bg-background`, `text-foreground`,
+   `border-border`, `text-muted-foreground`, `bg-primary`,
+   `text-primary-foreground`, `bg-card`, `text-card-foreground`.
+2. **Fall back to Tailwind utilities** when no semantic token fits.
+3. **Only invent a CSS variable** when neither above suffices — and
+   make sure it has sensible values in both `:root` and `.dark`.
+
+Never hardcode `#...`, `rgb(...)`, or `hsl(...)` when a semantic
+token can express the same intent. The token palette is tuned to
+meet WCAG AA contrast in both themes; bypassing it silently
+regresses the
+[accessibility baseline](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md).
+
+## 6. Responsive requirements
+
+Every component must render correctly on three device classes —
+**mobile, tablet, desktop** — using a mobile-first Tailwind stance.
+Start with the small-screen layout as the default, then scale up
+with `md:` and `lg:` breakpoints.
+
+```tsx
+<section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+	{/* mobile: single column; tablet: two; desktop: three */}
+</section>
+```
+
+Concrete rules that recur across the catalog:
+
+- **Don't pin widths in pixels above `md`.** Use `max-w-*` clamps and
+  let the grid breathe.
+- **Don't hide content at mobile.** If a section truly doesn't fit,
+  reflow it — don't `hidden md:block`.
+- **Always verify all three widths.** The demo app runs each
+  component in `/puck/render`; open it at ~375 px, ~768 px, and
+  ~1280 px before filing a PR.
+
+Components that rely on animation (FlickeringGrid, Marquee, Ripple)
+must additionally respect `prefers-reduced-motion`; see the
+[a11y baseline](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)
+for the current gap list and remediation pattern.
+
+## 7. Icons
+
+Use [`lucide-react`](https://lucide.dev/guide/packages/lucide-react)
+for every standard UI icon. Do not mix other general-purpose icon
+libraries in the same component, and do not hand-roll inline SVGs
+for icons Lucide already ships.
+
+```tsx
+import { ArrowRight } from "lucide-react";
+
+export function LearnMoreLink({ href }: { href: string }) {
+	return (
+		<a
+			href={href}
+			className="inline-flex items-center gap-1 text-primary hover:underline"
+		>
+			Learn more
+			<ArrowRight aria-hidden="true" className="size-4" />
+		</a>
+	);
+}
+```
+
+Two accessibility nuances:
+
+- **Decorative icons** (paired with a visible text label) get
+  `aria-hidden="true"` so screen readers don't double-announce.
+- **Semantic icons** (icon-only buttons) need an accessible label —
+  either `aria-label="…"` on the interactive element or an adjacent
+  `<span className="sr-only">`.
+
+Icon color flows through Tailwind (`text-primary`, `text-muted-foreground`, …)
+so icons inherit theme-aware color automatically. Never hardcode
+`stroke` or `fill` colors.
+
+## 8. Package scaffolding
+
+Don't scaffold a new component by hand — the generator wires up
+`package.json`, `rslib.config.ts`, `tsconfig.json`, the render file,
+`config.ts`, `index.ts`, `styles.css`, and the README in one step.
+
+```bash
+# Interactive — prompts for slug, label, template, category:
+pnpm -C packages/components gen:component
+
+# Flag-driven, reproducible in scripts:
+pnpm -C packages/components gen:component -- \
+	--name my-component \
+	--label "My Component" \
+	--template content \
+	--category marketing
+```
+
+Templates:
+
+- **`content`** — static marketing surface (button, hero, section).
+  Default choice.
+- **`layout`** — structural container that slots children (bento-grid,
+  section with zones).
+- **`form`** — interactive input with editor-aware disabled state
+  (input, form field wrappers).
+
+After the generator runs:
+
+1. Fill in real markup and props in `src/<ComponentName>.tsx`.
+2. Finalize `defaultProps`, `fields`, and `metadata.suggestedCategory`
+   in `src/config.ts`.
+3. Wire any `@anvilkit/ui` peer dependencies and extra
+   `@source` entries in `styles.css`.
+4. Validate: `pnpm -C packages/components lint && pnpm typecheck && pnpm build`.
+5. Integrate into the demo — add an import + config entry in
+   `apps/demo/lib/puck-demo.ts` and the package name to
+   `transpilePackages` in `apps/demo/next.config.js`.
+
+The full generator walkthrough — including prerequisites and a
+reproducible worked example — lives in the
+[generator usage guide](/guides/generator-usage/).
+
+## 9. Publishing
+
+Versioning is Changesets-driven, and every `@anvilkit/<slug>`
+releases independently.
+
+```bash
+# From the components workspace — the changeset prompts for the
+# affected package(s) and bump level, then writes a file to
+# packages/components/.changeset/.
+pnpm -C packages/components changeset
+
+# In a release PR, version + build + publish in one shot:
+pnpm -C packages/components release
+```
+
+The typical flow:
+
+1. **Branch + implement** the component change.
+2. **`pnpm changeset`** and commit the resulting markdown file with
+   the same PR. Describe the change in user-facing terms — the file
+   becomes the npm changelog entry verbatim.
+3. **Merge to `main`.** CI runs `lint`, `typecheck`, `madge` (circular
+   deps), `test`, `build`, `publint` (package exports), and the
+   Playwright smoke suite — see the
+   [component catalog](/components/) for the current set of packages
+   wired through the pipeline.
+4. **Release PR** bumps versions + writes CHANGELOGs via Changesets'
+   GitHub action; merging it runs `pnpm release` and publishes to npm.
+
+<Callout type="warn" title="Never hand-edit versions">
+	Package versions live in `packages/components/src/<slug>/package.json`,
+	but hand-editing them bypasses Changesets' CHANGELOG generation and
+	desyncs the release PR. Always route bumps through `pnpm changeset`.
+</Callout>
+
+## Reference
+
+- Component contract in the architecture doc: [`anvilkit-architecture.md` §Component Packages](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/ai-context/anvilkit-architecture.md#component-packages-current)
+- Worked example source: [`packages/components/src/button`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/src/button)
+- Full component catalog: [Components](/components/)
+- Accessibility baseline (WCAG 2.1 AA): [`docs/a11y-baseline.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)
+- Generator walkthrough: [Generator usage](/guides/generator-usage/)
+- Plugin surface for editor-time behavior: [Plugin authoring](/guides/plugin-authoring/)
+

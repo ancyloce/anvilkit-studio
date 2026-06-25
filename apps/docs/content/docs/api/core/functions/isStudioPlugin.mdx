@@ -1,0 +1,38 @@
+---
+title: "isStudioPlugin"
+description: "@anvilkit/core · isStudioPlugin"
+---
+
+```ts
+function isStudioPlugin(value): value is StudioPlugin<Config>;
+```
+
+Defined in: [runtime/detect-plugin.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L65)
+
+Type guard that returns `true` if `value` conforms to the
+[StudioPlugin](../interfaces/StudioPlugin) shape.
+
+The check is intentionally minimal — it validates the three fields
+the runtime actually reads during compilation:
+
+1. `meta.id` is a non-empty string.
+2. `meta.coreVersion` is a non-empty string.
+3. `register` is a function.
+
+Everything else on [StudioPluginMeta](../interfaces/StudioPluginMeta) (name, version,
+description) is advisory and not required for the runtime to make
+forward progress. A plugin that passes this guard but omits those
+fields will still compile; the type system is the forcing function
+for completeness at authoring time.
+
+Pure, synchronous, no side effects.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+`value is StudioPlugin<Config>`

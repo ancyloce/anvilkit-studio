@@ -1,0 +1,25 @@
+---
+title: "StudioLogger"
+description: "@anvilkit/core · StudioLogger"
+---
+
+```ts
+type StudioLogger = (level, message, meta?) => void;
+```
+
+Defined in: [react/components/studio-log.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-log.ts#L18)
+
+Host-supplied structured logger. Re-exported from `Studio.tsx` so the
+public `@anvilkit/core/react` surface is unchanged.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `level` | [`StudioLogLevel`](StudioLogLevel.md) |
+| `message` | `string` |
+| `meta?` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; |
+
+## Returns
+
+`void`

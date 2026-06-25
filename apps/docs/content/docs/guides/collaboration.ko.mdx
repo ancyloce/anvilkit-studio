@@ -1,0 +1,175 @@
+---
+title: "실시간 협업"
+description: "단 한 번의 팩토리 호출로 실시간 협업을 Studio에 연결하세요——`@anvilkit/collab-ui`의 `createCollabPlugin()`은 Yjs CRDT 데이터 동기화, 프레즌스 커서, 충돌 토스트, 협업자 아바타 스택을 단일 `StudioPlugin`으로 묶어줍니다."
+---
+
+`@anvilkit/collab-ui`는 Studio 호스트에
+완전한 실시간 협업 경험을 제공하는 단일 팩토리를 제공합니다: 프레즌스 커서, 충돌
+진단, 헤더의 협업자 아바타 스택, 그리고 Yjs CRDT
+데이터 동기화——이 모든 것이 하나의 `plugins={[...]}`
+항목 뒤에 있으며 React 래퍼가 필요 없습니다.
+
+## 1. 설치
+
+```sh
+# the factory + its yjs peer, plus a WebSocket provider for managed mode
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs @hocuspocus/provider
+```
+
+`@anvilkit/plugin-collab-yjs`는 `@anvilkit/collab-ui`의 피어 의존성입니다(이
+팩토리가 두 패키지를 함께 구성합니다). provider
+(`@hocuspocus/provider` 또는 `y-websocket`)는 **선택적** 피어 의존성으로,
+관리형 모드(§ 2)에서만 필요합니다——자체 트랜스포트를 가져오거나
+단일 탭 인메모리로 실행한다면 생략하세요. React UI 없이 어댑터만 원하는 호스트는
+yjs 플러그인만 설치할 수 있습니다——아래 § 4를 참조하세요.
+
+## 2. 통합 레시피
+
+**하나**의 값만 설정하세요——WebSocket 릴레이 URL입니다. 이 플러그인은 전체
+트랜스포트를 소유합니다: `Y.Doc`, `Awareness` 채널, provider,
+연결 상태 브리지, 그리고 정리(teardown)입니다. `room`의 기본값은
+`"anvilkit-default-room"`, `provider`의 기본값은 `"hocuspocus"`, `self`의 기본값은
+자동 생성된 익명 신원이므로, 이것이 진정으로 레시피의 전부입니다.
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+<Studio
+	puckConfig={myConfig}
+	plugins={[
+		createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig: myConfig }),
+	]}
+/>;
+```
+
+<Callout type="info" title="provider 설치하기">
+	관리형 모드는 WebSocket provider를 **지연** 로드하므로(초기 번들에는
+	절대 도달하지 않습니다), 사용하는 것을 설치하세요——둘 다 선택적 피어 의존성입니다:
+	`@hocuspocus/provider`(기본 백엔드) 또는 `y-websocket`(
+	`provider: "y-websocket"`를 설정할 때). provider를 설치하지 않고 `websocketUrl`을
+	설정하면, 동기화 표시기가 명확한 `error` 상태를 보여주고
+	`onConnectionError`가 발생합니다——난해한 번들러 실패가 아닙니다.
+</Callout>
+
+### 자체 트랜스포트 가져오기
+
+이미 `Y.Doc` / `Awareness` / provider를 직접 관리하고 있나요(커스텀
+백엔드, 공유 문서, 또는 연결 상태를 자체 UI로 분기하는 호스트)?
+그것들을 직접 전달하면 팩토리는 트랜스포트를 전적으로 당신에게 맡깁니다——
+`websocketUrl` 이전 호출자와 완전히 하위 호환됩니다:
+
+```tsx
+import { Doc as YDoc } from "yjs";
+import { Awareness } from "y-protocols/awareness";
+
+const doc = new YDoc();
+const awareness = new Awareness(doc);
+
+createCollabPlugin({
+	doc,
+	awareness,
+	self: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+	puckConfig: myConfig,
+	onIdentityChange: (next) => {
+		// Mirror identity changes (e.g. from the settings popover)
+		// back into your auth/profile store.
+		updateProfile(next);
+	},
+});
+```
+
+`doc`와 `websocketUrl`이 모두 전달되면, `doc`(자체)가 우선하며 무시된
+필드를 알려주는 일회성 개발 경고가 출력됩니다.
+
+이 플러그인이 기여하는 것:
+
+| 기여 항목        | 보이는 것                                                  |
+| ------------------- | ------------------------------------------------------------- |
+| `hooks`             | Puck 데이터 ↔ Y.Doc CRDT 동기화(Puck이 신뢰할 수 있는 정보원으로 유지됨). |
+| Provider            | Studio를 감싸는 `<CollabUIProvider>`로 `useCollabContext`가 어디서나 작동합니다. |
+| 캔버스 오버레이      | `<PresenceLayer>`——원격 피어 커서와 선택 링.  |
+| 알림 오버레이 | `<ConflictNoticeCenter>`——겹칠 때의 토스트 알림. |
+| 협업자 슬롯  | 헤더의 `<PeerAvatarStack>`.                            |
+
+## 3. 자주 쓰는 노브
+
+```tsx
+createCollabPlugin({
+	// Managed-mode transport knobs (all optional; `websocketUrl` is the
+	// only field most hosts set)
+	websocketUrl: "wss://relay.example.com",
+	room: "doc-42", //              default "anvilkit-default-room"
+	provider: "y-websocket", //     default "hocuspocus"
+	token: authToken, //            forwarded to the relay (auth)
+	self: alice, //                 default: auto-generated anonymous identity
+	onConnectionError: (err) => toast.error(String(err)),
+
+	// Validate remote IR before dispatching (defense-in-depth)
+	validateRemoteIR: (ir) => (isWellFormed(ir) ? ir : null),
+	onValidationFailure: (failure) => toast(`Rejected: ${failure.kind}`),
+
+	// RBAC / lock policy applied symmetrically on inbound + outbound
+	policy: {
+		canEdit: (node, peer) => canUserEditNode(peer, node),
+	},
+	onPolicyViolation: (violation) => toast(violation.message),
+
+	// Surface outbound transport failures
+	onSaveError: (error) => toast(`Save failed: ${error}`),
+
+	// Cross-tab persistence
+	persistence: { indexedDb: true, broadcastChannel: true },
+
+	// Opt out of individual UI surfaces
+	presence: { enabled: false }, //      hide remote cursors
+	notifications: { enabled: false }, // hide conflict toaster
+});
+```
+
+호스트가 `<Studio>`에서 `collaboratorsSlot`을 전달하면, 그 속성이
+플러그인의 슬롯 기여보다 우선합니다——호스트가 항상 최종
+결정권을 갖습니다.
+
+## 4. 파워 유저 경로(헤드리스 / 대체 UI)
+
+React UI가 필요 없다면——예를 들어 Node 동기화 워커, 서버 사이드 IR
+프로세서, 또는 커스텀 비-React 협업자 크롬——
+`@anvilkit/plugin-collab-yjs`에서 저수준 프리미티브를 직접 임포트하세요:
+
+```ts
+import {
+	createCollabDataPlugin,
+	createYjsAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+
+const adapter = createYjsAdapter({ doc, awareness, peer });
+const plugin = createCollabDataPlugin({ adapter, puckConfig });
+```
+
+<Callout type="warn" title="이름 변경 안내">
+	`@anvilkit/plugin-collab-yjs`의 데이터 전용 팩토리는
+	`@anvilkit/collab-ui`의 통합 팩토리와 구분하기 위해
+	`createCollabPlugin` → `createCollabDataPlugin`으로 이름이 변경되었습니다. 레거시 별칭
+	`createCollabPlugin`은 한 마이너 릴리스 동안 계속 내보내지며,
+	최초 호출 시 일회성 `console.warn`을 출력합니다.
+</Callout>
+
+## 5. Puck의 플러그인 계약과의 조합
+
+Studio 플러그인은 Puck 형태 필드와 Studio 확장의 **임의의 조합**을 제공할 수 있습니다.
+통합된 협업 플러그인은 Studio
+확장을 사용합니다; 플러그인 레일에
+협업자 패널을 원한다면 그 옆에 Puck 형태 필드를 추가할 수 있습니다.
+
+| 플러그인 기여 | 계약  | 대상                                                    |
+| ------------------- | --------- | --------------------------------------------------------- |
+| `name` / `label` / `icon` | Puck   | 플러그인 레일 식별자                                  |
+| `render`            | Puck      | 플러그인 레일 패널                                         |
+| `overrides`         | Puck(Studio를 통한 패스스루) | `<Puck>` 내부 슬롯          |
+| `hooks`             | Studio    | 라이프사이클(onInit / onDataChange / onBeforePublish / …)   |
+| `providers`         | Studio    | 전체 Studio 트리를 감쌈                               |
+| `overlays`          | Studio    | 에디터의 형제 요소(캔버스 / 뷰포트 / 알림) |
+| `slots`             | Studio    | 명명된 크롬 앵커(`collaborators`)                    |
+
+전체 플러그인 계약 세부 사항은 [플러그인 작성 가이드](/ko/guides/plugin-authoring.mdx)를 참조하세요.

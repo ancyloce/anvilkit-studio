@@ -1,0 +1,23 @@
+---
+title: "jsonFormat"
+description: "@anvilkit/core · jsonFormat"
+---
+
+```ts
+const jsonFormat: ExportFormatDefinition;
+```
+
+Defined in: [runtime/built-in-formats/json-format.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/built-in-formats/json-format.ts#L17)
+
+The built-in JSON snapshot exporter — the one export format
+`@anvilkit/core` ships itself (every other format comes from a plugin).
+
+`run(ir)` serializes the already-normalized `PageIR` verbatim with
+`JSON.stringify(ir, null, 2)` (2-space indent, human-readable/diffable)
+and returns it as a `string` under the fixed filename `page.json` with
+the `application/json` MIME type. It performs no asset rewriting and
+emits no warnings — the IR is reproduced as-is, so it round-trips losslessly
+back through the IR pipeline.
+
+Registered with the runtime by `jsonExportPlugin`, so it is always
+available even when a host installs no exporter plugins.

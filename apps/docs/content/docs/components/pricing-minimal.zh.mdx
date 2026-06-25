@@ -1,0 +1,510 @@
+---
+title: PricingMinimal
+description: "Anvilkit Puck 原生 PricingMinimal 组件。"
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/pricing-minimal</code> <span>·</span> <span>v0.2.2</span> <span>·</span> <a href="/playground">在演练场中试用 →</a>
+</div>
+
+## 实时预览
+
+<ComponentPreview name="PricingMinimal" />
+
+A Puck-native pricing section with headline, description, and configurable plan cards.
+
+## Install
+
+```sh
+pnpm add @anvilkit/pricing-minimal @anvilkit/ui @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/pricing-minimal/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render the section with the bundled three-plan example via `defaultProps`.
+
+```tsx
+import "@anvilkit/pricing-minimal/styles.css";
+import { PricingMinimal, defaultProps } from "@anvilkit/pricing-minimal";
+
+export function Example() {
+  return <PricingMinimal {...defaultProps} />;
+}
+```
+
+### Custom plans with a featured card
+
+Each plan accepts a `features` list and an optional `extraFeatures` list shown
+below a divider. Set `featured` plus a `badgeLabel` to highlight a plan.
+
+```tsx
+import { PricingMinimal } from "@anvilkit/pricing-minimal";
+
+export function TwoTier() {
+  return (
+    <PricingMinimal
+      headline="Pricing"
+      description="Start free, upgrade when you grow."
+      plans={[
+        {
+          name: "Starter",
+          description: "For individuals",
+          price: "$0",
+          billingPeriodLabel: "forever",
+          ctaLabel: "Get started",
+          ctaHref: "/signup/starter",
+          features: [{ label: "1 project" }, { label: "Community support" }],
+        },
+        {
+          name: "Team",
+          description: "For growing teams",
+          price: "$29",
+          billingPeriodLabel: "per month",
+          ctaLabel: "Start trial",
+          ctaHref: "/signup/team",
+          featured: true,
+          badgeLabel: "Popular",
+          features: [
+            { label: "Unlimited projects" },
+            { label: "Priority support" },
+          ],
+          extraFeatures: [{ label: "SSO & SAML" }],
+        },
+      ]}
+    />
+  );
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config`.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import {
+  componentConfig,
+  type PricingMinimalProps,
+} from "@anvilkit/pricing-minimal";
+
+const config: Config<{ PricingMinimal: PricingMinimalProps }> = {
+  components: {
+    PricingMinimal: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `PricingMinimalProps` type and the Puck `fields` schema.
+
+| Prop                            | Type               | Default                              | Description                            |
+| ------------------------------- | ------------------ | ------------------------------------ | -------------------------------------- |
+| `headline`                      | `string`           | `"Simple, Transparent Pricing"`      | Section headline.                      |
+| `description`                   | `string`           | `"Choose a plan that works best..."` | Section description.                   |
+| `plans`                         | `PricingPlan[]`    | _(3 example plans)_                  | Pricing plan cards.                    |
+| `plans[].name`                  | `string`           | `"New plan"`                         | Plan name.                             |
+| `plans[].description`           | `string`           | —                                    | Plan description.                      |
+| `plans[].price`                 | `string`           | `"$0"`                               | Display price.                         |
+| `plans[].billingPeriodLabel`    | `string`           | `"per month"`                        | Billing period text.                   |
+| `plans[].ctaLabel`              | `string`           | `"Get Started"`                      | CTA button label.                      |
+| `plans[].ctaHref`               | `string`           | `""`                                 | CTA button link.                       |
+| `plans[].ctaOpenInNewTab`       | `boolean`          | `false`                              | Open the CTA in a new tab.             |
+| `plans[].featured`              | `boolean`          | `false`                              | Highlight as the featured plan.        |
+| `plans[].badgeLabel`            | `string`           | `""`                                 | Badge text shown on a featured plan.   |
+| `plans[].features`              | `PricingFeature[]` | —                                    | Feature list items.                    |
+| `plans[].features[].label`      | `string`           | `"Feature"`                          | Feature label.                         |
+| `plans[].extraFeatures`         | `PricingFeature[]` | `[]`                                 | Additional features below the divider. |
+| `plans[].extraFeatures[].label` | `string`           | `"Extra feature"`                    | Extra feature label.                   |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints. Plan cards stack vertically on mobile and display side-by-side on wider viewports.
+
+## 属性参考
+
+派生自该组件的 Puck `fields` 模式。
+
+| 字段 | 类型 | 默认值 |
+|-------|------|---------|
+| `headline` | text | `"Simple, Transparent Pricing"` |
+| `description` | textarea | `"Choose a plan that works best for you and your team. No …` |
+| `plans` | array | `[{"name":"Basic","description":"Perfect for side projects…` |
+
+## 默认属性
+
+```json
+{
+  "headline": "Simple, Transparent Pricing",
+  "description": "Choose a plan that works best for you and your team. No hidden fees.",
+  "plans": [
+    {
+      "name": "Basic",
+      "description": "Perfect for side projects and small teams",
+      "price": "$9",
+      "billingPeriodLabel": "per month",
+      "ctaLabel": "Get Started",
+      "ctaHref": "/signup/basic",
+      "ctaOpenInNewTab": false,
+      "featured": false,
+      "badgeLabel": "",
+      "features": [
+        {
+          "label": "5 Projects"
+        },
+        {
+          "label": "10GB Storage"
+        },
+        {
+          "label": "Basic Analytics"
+        },
+        {
+          "label": "Email Support"
+        },
+        {
+          "label": "API Access"
+        }
+      ],
+      "extraFeatures": []
+    },
+    {
+      "name": "Pro",
+      "description": "For growing teams that need more power",
+      "price": "$29",
+      "billingPeriodLabel": "per month",
+      "ctaLabel": "Get Started",
+      "ctaHref": "/signup/pro",
+      "ctaOpenInNewTab": false,
+      "featured": true,
+      "badgeLabel": "Popular",
+      "features": [
+        {
+          "label": "Unlimited Projects"
+        },
+        {
+          "label": "100GB Storage"
+        },
+        {
+          "label": "Advanced Analytics"
+        },
+        {
+          "label": "Priority Support"
+        },
+        {
+          "label": "API Access"
+        }
+      ],
+      "extraFeatures": [
+        {
+          "label": "Custom Integrations"
+        },
+        {
+          "label": "Team Collaboration"
+        },
+        {
+          "label": "Advanced Security"
+        }
+      ]
+    },
+    {
+      "name": "Business",
+      "description": "For organizations that need full control",
+      "price": "$99",
+      "billingPeriodLabel": "per month",
+      "ctaLabel": "Get Started",
+      "ctaHref": "/signup/business",
+      "ctaOpenInNewTab": false,
+      "featured": false,
+      "badgeLabel": "",
+      "features": [
+        {
+          "label": "Unlimited Projects"
+        },
+        {
+          "label": "Unlimited Storage"
+        },
+        {
+          "label": "Custom Analytics"
+        },
+        {
+          "label": "24/7 Phone Support"
+        },
+        {
+          "label": "Dedicated Account Manager"
+        }
+      ],
+      "extraFeatures": [
+        {
+          "label": "SSO & SAML"
+        },
+        {
+          "label": "Audit Logs"
+        },
+        {
+          "label": "SLA Guarantee"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Puck 配置
+
+```json
+{
+  "label": "PricingMinimal",
+  "metadata": {
+    "componentName": "PricingMinimal",
+    "componentSlug": "pricing-minimal",
+    "packageName": "@anvilkit/pricing-minimal",
+    "packageVersion": "0.2.2",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "marketing"
+  },
+  "defaultProps": {
+    "headline": "Simple, Transparent Pricing",
+    "description": "Choose a plan that works best for you and your team. No hidden fees.",
+    "plans": [
+      {
+        "name": "Basic",
+        "description": "Perfect for side projects and small teams",
+        "price": "$9",
+        "billingPeriodLabel": "per month",
+        "ctaLabel": "Get Started",
+        "ctaHref": "/signup/basic",
+        "ctaOpenInNewTab": false,
+        "featured": false,
+        "badgeLabel": "",
+        "features": [
+          {
+            "label": "5 Projects"
+          },
+          {
+            "label": "10GB Storage"
+          },
+          {
+            "label": "Basic Analytics"
+          },
+          {
+            "label": "Email Support"
+          },
+          {
+            "label": "API Access"
+          }
+        ],
+        "extraFeatures": []
+      },
+      {
+        "name": "Pro",
+        "description": "For growing teams that need more power",
+        "price": "$29",
+        "billingPeriodLabel": "per month",
+        "ctaLabel": "Get Started",
+        "ctaHref": "/signup/pro",
+        "ctaOpenInNewTab": false,
+        "featured": true,
+        "badgeLabel": "Popular",
+        "features": [
+          {
+            "label": "Unlimited Projects"
+          },
+          {
+            "label": "100GB Storage"
+          },
+          {
+            "label": "Advanced Analytics"
+          },
+          {
+            "label": "Priority Support"
+          },
+          {
+            "label": "API Access"
+          }
+        ],
+        "extraFeatures": [
+          {
+            "label": "Custom Integrations"
+          },
+          {
+            "label": "Team Collaboration"
+          },
+          {
+            "label": "Advanced Security"
+          }
+        ]
+      },
+      {
+        "name": "Business",
+        "description": "For organizations that need full control",
+        "price": "$99",
+        "billingPeriodLabel": "per month",
+        "ctaLabel": "Get Started",
+        "ctaHref": "/signup/business",
+        "ctaOpenInNewTab": false,
+        "featured": false,
+        "badgeLabel": "",
+        "features": [
+          {
+            "label": "Unlimited Projects"
+          },
+          {
+            "label": "Unlimited Storage"
+          },
+          {
+            "label": "Custom Analytics"
+          },
+          {
+            "label": "24/7 Phone Support"
+          },
+          {
+            "label": "Dedicated Account Manager"
+          }
+        ],
+        "extraFeatures": [
+          {
+            "label": "SSO & SAML"
+          },
+          {
+            "label": "Audit Logs"
+          },
+          {
+            "label": "SLA Guarantee"
+          }
+        ]
+      }
+    ]
+  },
+  "fields": {
+    "headline": {
+      "type": "text",
+      "label": "Headline"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "plans": {
+      "type": "array",
+      "label": "Plans",
+      "defaultItemProps": {
+        "name": "New plan",
+        "description": "Describe who this plan is for.",
+        "price": "$0",
+        "billingPeriodLabel": "per month",
+        "ctaLabel": "Get Started",
+        "ctaHref": "",
+        "ctaOpenInNewTab": false,
+        "featured": false,
+        "badgeLabel": "",
+        "features": [
+          {
+            "label": "Feature"
+          }
+        ],
+        "extraFeatures": []
+      },
+      "getItemSummary": "[[Function]]",
+      "arrayFields": {
+        "name": {
+          "type": "text",
+          "label": "Name"
+        },
+        "description": {
+          "type": "textarea",
+          "label": "Description"
+        },
+        "price": {
+          "type": "text",
+          "label": "Price"
+        },
+        "billingPeriodLabel": {
+          "type": "text",
+          "label": "Billing period label"
+        },
+        "ctaLabel": {
+          "type": "text",
+          "label": "CTA label"
+        },
+        "ctaHref": {
+          "type": "text",
+          "label": "CTA href"
+        },
+        "ctaOpenInNewTab": {
+          "type": "radio",
+          "label": "CTA opens in new tab",
+          "options": [
+            {
+              "label": "No",
+              "value": false
+            },
+            {
+              "label": "Yes",
+              "value": true
+            }
+          ]
+        },
+        "featured": {
+          "type": "radio",
+          "label": "Featured plan",
+          "options": [
+            {
+              "label": "No",
+              "value": false
+            },
+            {
+              "label": "Yes",
+              "value": true
+            }
+          ]
+        },
+        "badgeLabel": {
+          "type": "text",
+          "label": "Badge label"
+        },
+        "features": {
+          "type": "array",
+          "label": "Features",
+          "defaultItemProps": {
+            "label": "Feature"
+          },
+          "getItemSummary": "[[Function]]",
+          "arrayFields": {
+            "label": {
+              "type": "text",
+              "label": "Feature label"
+            }
+          }
+        },
+        "extraFeatures": {
+          "type": "array",
+          "label": "Extra features",
+          "defaultItemProps": {
+            "label": "Extra feature"
+          },
+          "getItemSummary": "[[Function]]",
+          "arrayFields": {
+            "label": {
+              "type": "text",
+              "label": "Feature label"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```

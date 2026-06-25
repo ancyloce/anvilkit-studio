@@ -1,0 +1,24 @@
+---
+title: "StudioPluginLoader"
+description: "@anvilkit/core · StudioPluginLoader"
+---
+
+```ts
+type StudioPluginLoader<UserConfig> = () => Promise<StudioPlugin<UserConfig>>;
+```
+
+Defined in: [runtime/lazy-plugin.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L37)
+
+Loader function returning either a plugin module's default export or
+a named export that is itself a `StudioPlugin`. Most ergonomic shape
+for callers writing `() => import("@anvilkit/plugin-x").then(m => m.plugin)`.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `PuckConfig` | `PuckConfig` |
+
+## Returns
+
+`Promise`\<[`StudioPlugin`](../interfaces/StudioPlugin)\<`UserConfig`\>\>

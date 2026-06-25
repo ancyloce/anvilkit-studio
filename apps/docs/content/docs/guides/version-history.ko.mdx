@@ -1,0 +1,108 @@
+---
+title: "버전 기록 플러그인"
+description: "어댑터 기반 스냅샷 저장소, 결정론적 diff/apply 엔진, 그리고 @anvilkit/plugin-version-history 를 설치하는 Studio 호스트를 위한 선택적 UI."
+---
+
+`@anvilkit/plugin-version-history` 는 퍼스트파티 헤드리스 `StudioPlugin` 입니다.
+스냅샷 영속화는 호스트가 제공하는 `SnapshotAdapter` 에 위임되므로,
+이 플러그인 자체는 어떠한 I/O 도 포함하지 않습니다 ——
+오직 diff/apply 엔진, 두 개의 헤더 액션, 선택적 UI 프리미티브,
+그리고 테스트와 데모용 참조 어댑터만 제공합니다.
+
+## 1. 설치
+
+```sh
+pnpm add @anvilkit/plugin-version-history
+```
+
+피어 의존성:
+
+- `@puckeditor/core ^0.21.3`
+- `react >=19.0.0`
+- `react-dom >=19.0.0`
+
+전송 또는 저장소 의존성 없음 —— 호스트가 영속화를 엔드투엔드로 소유합니다.
+
+서브패스 익스포트:
+
+- `@anvilkit/plugin-version-history` —— 팩토리, 참조 어댑터, diff/apply 엔진, 타입.
+- `@anvilkit/plugin-version-history/ui` —— `VersionHistoryUI`, `SaveSnapshotButton`, `SnapshotList`, `SnapshotHistoryModal`, `DiffView`.
+- `@anvilkit/plugin-version-history/testing` —— `runAdapterContract` 공유 테스트 스위트.
+
+## 2. 최소 호스트
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createVersionHistoryPlugin,
+  localStorageAdapter,
+} from "@anvilkit/plugin-version-history";
+
+const versionHistory = createVersionHistoryPlugin({
+  adapter: localStorageAdapter({ namespace: "my-app-history" }),
+  maxSnapshots: 50,
+});
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[versionHistory]} />;
+}
+```
+
+이 플러그인은 두 개의 헤더 액션(`version-history:save` 및
+`version-history:open`)을 제공하며, Studio 이벤트 버스에서 `version-history:save-requested` /
+`version-history:open-requested` 를 발생시킵니다. UI 표면을 마운트하여 open 이벤트를
+처리하세요 —— 예를 들어 `/ui` 서브패스의 `<SnapshotHistoryModal>` 입니다.
+
+## 3. 옵션
+
+```ts
+interface CreateVersionHistoryPluginOptions {
+  readonly adapter: SnapshotAdapter;
+  readonly maxSnapshots?: number; // FIFO eviction; requires adapter.delete
+}
+```
+
+`maxSnapshots` 가 설정되면 용량에 도달했을 때 가장 오래된 스냅샷이 자동으로
+삭제됩니다(이는 어댑터가 `delete` 를 구현하고 있어야 합니다).
+
+## 4. 어댑터
+
+`inMemoryAdapter()`(테스트)와 `localStorageAdapter({ namespace })`(데모)가
+기본 제공됩니다. 프로덕션 어댑터는 `save` / `list` / `load` 를 구현하고
+선택적으로 `delete` 를 구현합니다:
+
+```ts
+import type { SnapshotAdapter } from "@anvilkit/plugin-version-history";
+
+const firestoreAdapter: SnapshotAdapter = {
+  save: async (id, record) => { /* … */ },
+  list: async () => { /* … */ },
+  load: async (id) => { /* … */ },
+  delete: async (id) => { /* … */ },
+};
+```
+
+`/testing` 서브패스의 `runAdapterContract` 를 사용하여, 참조 어댑터가 사용하는 것과
+동일한 계약에 대해 모든 커스텀 어댑터를 검증하세요.
+
+## 5. Diff 엔진
+
+`diffIR(a, b)` 는 동결된 `IRDiff` 를 생성합니다; `applyDiff(a, diff)` 는
+`b` 로 왕복 복원합니다; `summarizeDiff(diff)` 는 표시용 `IRDiffSummary` 를 반환합니다:
+
+```ts
+import { applyDiff, diffIR, summarizeDiff } from "@anvilkit/plugin-version-history";
+
+const diff = diffIR(previous, current);
+const summary = summarizeDiff(diff);   // { added, removed, changed, … }
+const restored = applyDiff(previous, diff); // deep-equals `current`
+```
+
+잘못된 형식의 apply 는 `DiffApplyError` 를 던집니다; 그 외의 실패는
+`VersionHistoryErrorCode` 를 담은 `VersionHistoryError` 로 나타납니다.
+
+<Callout type="info" title="상태(alpha, v0.1.4)">
+헤더 액션과 diff/apply 엔진은 안정적입니다. 사이드바 패널 슬롯
+기여는 `StudioPluginContext` 가 사이드바 등록 API 를 노출할 때까지
+연기되었습니다. 번들 예산: 8 KB gzipped, CI 에서 강제됩니다.
+</Callout>

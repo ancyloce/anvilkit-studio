@@ -1,0 +1,27 @@
+---
+title: "StaticHeaderActionPlaceholder"
+description: "@anvilkit/core · StaticHeaderActionPlaceholder"
+---
+
+```ts
+type StaticHeaderActionPlaceholder = Omit<StudioHeaderAction, "onClick" | "disabled">;
+```
+
+Defined in: [types/plugin.ts:396](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L396)
+
+The **serializable** subset of [StudioHeaderAction](../interfaces/StudioHeaderAction) a plugin can
+declare on [StudioPluginMeta.staticHeaderActions](../interfaces/StudioPluginMeta#staticheaderactions) before its
+chunk loads — the descriptor **minus** its two live closures
+(`onClick`, `disabled`).
+
+What remains (`id`, `label`, the string-name `icon`, `group`, `order`)
+is plain data, so the chrome can reserve a deferred plugin's toolbar
+slot during the load window without instantiating React or resolving
+the dynamic import. The placeholder and the live action are matched by
+`id`; both sort by the same `(group, order, id)` key, so swapping a
+placeholder for its live action causes no layout shift.
+
+Do **not** confuse the placeholder `icon` (a string name resolved via
+the chrome's curated `ICON_REGISTRY`) with [StudioPluginMeta.icon](../interfaces/StudioPluginMeta#icon)
+(a `ReactNode`) — only the string-name form keeps this type
+serializable and the runtime React-free.

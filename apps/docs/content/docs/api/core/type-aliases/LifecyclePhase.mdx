@@ -1,0 +1,30 @@
+---
+title: "LifecyclePhase"
+description: "@anvilkit/core · LifecyclePhase"
+---
+
+```ts
+type LifecyclePhase = "compiled" | "init" | "ready" | "running" | "destroyed";
+```
+
+Defined in: [runtime/lifecycle-manager.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L130)
+
+Engine-owned lifecycle phase (architecture §6 A2). The shell drives
+transitions with [LifecycleManager.advanceTo](../interfaces/LifecycleManager#advanceto); the engine owns
+the ordering and dedupe that used to live as three cooperating refs
+in the React shell (`onInitPromise` / `readyFiredFor` / the
+`queueMicrotask` + `.then(fireReady, fireReady)` chain).
+
+- `compiled` — manager just constructed, no lifecycle event fired.
+- `init` — `advanceTo("init")` fired `onInit`; its settle promise is
+  recorded so `onReady` can chain strictly after it.
+- `ready` — `advanceTo("ready")` was called (Puck API bound); the
+  engine will fire `onReady` exactly once, after `onInit` settles.
+- `running` — steady state after `onReady`; `onDataChange` /
+  `onBeforePublish` / `onAfterPublish` flow through `emit`.
+- `destroyed` — terminal; `advanceTo` is a no-op afterwards.
+
+Transitions are **monotonic and lenient**: a repeat or stale call
+(React StrictMode double-invoke, a late binder effect) is a no-op,
+never a throw — a lifecycle bookkeeping signal must not crash the
+editor in any environment.

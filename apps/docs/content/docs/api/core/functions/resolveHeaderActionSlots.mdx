@@ -1,0 +1,40 @@
+---
+title: "resolveHeaderActionSlots"
+description: "@anvilkit/core · resolveHeaderActionSlots"
+---
+
+```ts
+function resolveHeaderActionSlots(placeholders, live): HeaderActionSlot[];
+```
+
+Defined in: [runtime/header-actions.ts:245](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L245)
+
+Coalesce declared placeholders and live header actions into one
+ordered slot list, keyed by `id`:
+
+- An `id` with a **live** action renders that action (the placeholder,
+  if any, is superseded — the chunk has landed).
+- An `id` with **only** a placeholder renders the placeholder, disabled
+  (its chunk is still loading, or never registered the action).
+
+The merged list is sorted by the shared `(group, order, id)` comparator
+so a placeholder and its eventual live action occupy the **same**
+position — swapping one for the other never shifts the toolbar.
+
+Pure + React-free: the chrome owns rendering; this only decides which
+descriptor wins each slot and in what order. Unlike
+[composeHeaderActions](composeHeaderActions.md), duplicate `id`s *within* either input are
+still rejected (a plugin must not declare the same button twice), but a
+placeholder and a live action sharing an `id` is the expected,
+non-duplicate case.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `placeholders` | readonly [`StaticHeaderActionPlaceholder`](../type-aliases/StaticHeaderActionPlaceholder)[] | Static declarations from [StudioPluginMeta.staticHeaderActions](../interfaces/StudioPluginMeta#staticheaderactions) across all plugins. |
+| `live` | readonly [`StudioHeaderAction`](../interfaces/StudioHeaderAction)[] | Live actions from `register()`, after the runtime concatenates every plugin's `headerActions`. |
+
+## Returns
+
+[`HeaderActionSlot`](../type-aliases/HeaderActionSlot)[]

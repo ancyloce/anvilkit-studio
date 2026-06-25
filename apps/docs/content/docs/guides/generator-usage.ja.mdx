@@ -1,0 +1,563 @@
+---
+title: "ジェネレーターの使い方"
+description: "5 分でゼロからスキャフォールドへ —— 前提条件、対話式およびフラグ駆動の実行、3 つのテンプレート、スキャフォールド後のチェックリスト、そして実践的な @anvilkit/callout の例。"
+---
+
+すべての `@anvilkit/<slug>` コンポーネントパッケージは同じ
+ジェネレーター `pnpm -C packages/components gen:component` から始まります。これは
+9 ファイルのスキャフォールド —— `package.json`、`rslib.config.ts`、`tsconfig.json`、
+`src/index.ts`、`src/<ComponentName>.tsx`、`src/config.ts`、
+`src/styles.css`、`src/styles.d.ts`、`README.md` —— を書き出し、
+ワークスペースの Rslib、Tailwind、Puck の規約に結線します。新しいコントリビューターは
+クローンから命名済みでビルド可能なパッケージまで 5 分以内で
+到達できるはずです。
+
+このガイドはステップバイステップのウォークスルーです。スキャフォールドされたコードが
+守るべき契約については、[コンポーネントの作成](/ja/guides/component-authoring/) を参照してください。
+
+<Callout type="info" title="飛ばし読みの順序">
+	すでにリポジトリをクローン済みなら、対話式の実行は §2 へ、
+	フラグ駆動の実行は §3 へ直接ジャンプしてください。§6 は真新しい `@anvilkit/callout`
+	パッケージのための完全に再現可能な実践例です。
+</Callout>
+
+## 1. 前提条件
+
+コンポーネントワークスペースは、それ自身の pnpm
+ワークスペースを持つ git サブモジュールです。サブモジュールの初期化ステップを逃すと、ジェネレーターは
+実行を拒否します。
+
+1. **サブモジュール付きでクローンする。**
+
+	```bash
+	git clone --recurse-submodules https://github.com/ancyloce/anvilkit-studio.git
+	cd anvilkit-studio
+	```
+
+	すでに `--recurse-submodules` なしでクローンしている場合は、リポジトリのルートから一度
+	`git submodule update --init --recursive` を実行してください。
+
+2. **ツールチェーンを固定する。** このリポジトリは
+	`packageManager` によって pnpm 10.33.0 を強制し、Node ≥ 18 を対象とします。
+
+	```bash
+	corepack enable
+	node -v        # ≥ 18
+	pnpm -v        # 10.33.0
+	```
+
+3. **依存関係をインストールする。** これはリポジトリのルートから実行します。Turbo と
+	pnpm ワークスペースが `packages/components/` を自動的に認識します。
+
+	```bash
+	pnpm install
+	```
+
+この時点で `packages/components/src/` には既存の
+コンポーネントパッケージ（`button`、`hero`、`navbar` など）が含まれ、ジェネレーターは
+もう 1 つ追加する準備が整っています。
+
+## 2. 対話式の実行
+
+デフォルトの呼び出しは 4 つの回答を尋ね、それぞれを検証し、
+その後スキャフォールドを書き出します。`-C` フラグがコマンドを
+コンポーネントワークスペースにスコープするよう、リポジトリのルートから実行してください。
+
+```bash
+pnpm -C packages/components gen:component
+```
+
+プロンプトは順に：
+
+| プロンプト              | 受け付ける値                                                | デフォルト                      |
+| ----------------------- | ----------------------------------------------------------- | ------------------------------- |
+| **コンポーネント slug** | 小文字 kebab-case、`src/` 配下で一意                         | _必須_                          |
+| **表示ラベル**          | Puck レールに表示される自由形式の文字列                      | `Title-Cased Slug`（slug から） |
+| **スキャフォールド種別**| `content` · `layout` · `form`                               | _必須_                          |
+| **推奨カテゴリ**        | 任意の小文字 slug（`marketing`、`forms` など）              | 空                              |
+
+検証ルール（`turbo/generators/config.ts` によって強制されます）：
+
+- slug は `^[a-z0-9]+(?:-[a-z0-9]+)*$` に一致しなければなりません —— つまり `button-group` は
+	問題なく、`ButtonGroup` や `my_button` はだめです。
+- slug は一意でなければなりません —— `src/<slug>/` がすでに存在する場合、ジェネレーターは
+	それを上書きすることを拒否します。
+- カテゴリは（指定された場合）同じ kebab-case の形に従う必要があります。
+
+実行が成功すると、ファイルごとに 1 行の `>>> Added "…"` が表示され、クリーンに終了します。
+
+## 3. フラグ駆動の実行
+
+スクリプト化可能な呼び出しはプロンプトをスキップします。pnpm がフラグを
+自分で消費するのではなくジェネレーターに転送するよう、`--` 区切り子が
+必須です。
+
+```bash
+pnpm -C packages/components gen:component -- \
+	--name button-group \
+	--label "Button Group" \
+	--template content \
+	--category actions
+```
+
+サポートされるフラグ：
+
+| フラグ        | 必須     | 備考                                                        |
+| ------------- | -------- | ----------------------------------------------------------- |
+| `--name`      | はい     | コンポーネント slug。対話式プロンプトと同じ検証。           |
+| `--label`     | いいえ   | デフォルトは Title Case の slug。                           |
+| `--template`  | いいえ   | デフォルトは `content`。`content`、`layout`、`form` のいずれか。 |
+| `--category`  | いいえ   | `src/config.ts` の `metadata.suggestedCategory` に書き込まれます。 |
+
+無効な入力は検証器からのメッセージとともに即座に失敗します —— スキャフォールドは
+書き出されず、部分的な状態も残りません。
+
+## 4. 3 つのテンプレート
+
+どのテンプレートも同じ 9 ファイルを生成しますが、
+`<ComponentName>.tsx`、`config.ts`、`package.json` の形が異なり、
+スキャフォールドがコンポーネントの意図に合うようになっています。あなたが
+作ろうとしているものに最も適したものを選んでください。
+
+<Tabs items={['content', 'layout', 'form']}>
+
+<Tab value="content">
+
+**いつ選ぶか。** 静的なマーケティング面 —— ボタン、ヒーロー、
+セクション、料金ブロックなど。これがデフォルトであり、ほとんどの `@anvilkit/*` パッケージに
+最も近い一致です。
+
+**何をスキャフォールドするか。**
+
+- **属性：** `title: string`、`body: RichText`、`alignment?: 'left' | 'center' | 'right'`。
+- **フィールド：** `text`（title）、`richtext`（body）、`radio`（alignment）。
+- **`package.json` peer deps：** `@puckeditor/core`、`react`、`react-dom`。
+- **`@anvilkit/ui` 依存なし。**
+
+**レンダリングの形**（`templates/component/content/src/component.tsx` から逐語）：
+
+```tsx
+import type { RichText } from "@puckeditor/core";
+
+export interface CalloutProps {
+	title: string;
+	body: RichText;
+	alignment?: "left" | "center" | "right";
+}
+
+export interface CalloutViewProps extends CalloutProps {
+	editMode?: boolean;
+}
+```
+
+</Tab>
+
+<Tab value="layout">
+
+**いつ選ぶか。** 子コンポーネントをスロットする構造的コンテナ ——
+ベントーグリッド、2 カラムのセクション、ページシェル。
+コンポーネントの仕事が、終端のコンテンツ自体をレンダリングするのではなく、
+他の Puck コンポーネントを配置することである場合に使います。
+
+**何をスキャフォールドするか。**
+
+- **属性：** `title: string`、`leftColumn: Slot`、`rightColumn: Slot`、`emphasis?: 'balanced' | 'accent'`。
+- **フィールド：** `text`（title）、`slot` × 2（左/右カラム）、`radio`（emphasis）。
+- **レンダリング：** 設定の `render` は各 `Slot` を
+	`createElement(LeftColumn)` / `createElement(RightColumn)` でラップし、Puck が
+	ネストされたドロップゾーンをマウントできるようにします。
+- **`package.json` peer deps：** `content` と同じ。
+
+レンダリングされるコンポーネントは `leftColumn`/`rightColumn` を
+`ReactNode` として受け取り、`editMode` を貫通させます —— スキャフォールドはすでに
+編集中のみ表示される「Layout」アフォーダンスラベルを結線しています。
+
+</Tab>
+
+<Tab value="form">
+
+**いつ選ぶか。** エディター対応の無効状態を必要とする
+対話的な入力 —— テキスト入力、セレクト、フォームフィールドのラッパー。これは
+`@anvilkit/ui` にランタイム依存を取る唯一のテンプレートです。
+
+**何をスキャフォールドするか。**
+
+- **属性：** `label`、`name`、`type?`（text/email/password/search/tel/url）、`placeholder?`、`helperText?`、`defaultValue?`、`required?`、`disabled?`。
+- **フィールド：** `text`、`text`、`select`、`text`、`textarea`、`text`、`radio`、`radio`。
+- **`package.json` peer deps：** 通常の Puck + React に加えて `@anvilkit/ui` を追加します。
+- **`styles.css`：** Tailwind が上流のプリミティブのクラスを拾えるよう、
+	追加の `@source '../../../../ui/src/input.tsx'` を含みます。
+- **`editMode` の扱い：** ビューコンポーネントは `@anvilkit/ui` の
+	`Input` を `readOnly={editMode}` と落ち着いた背景でラップし、
+	フィールドがエディター内で自身を中和するようにします。
+
+</Tab>
+
+</Tabs>
+
+### 共通のスキャフォールドファイル
+
+テンプレートにかかわらず、すべてのスキャフォールドには次が含まれます：
+
+- **`src/config.ts`** —— `metadata`、`defaultProps`、`fields`、
+	`render<ComponentName>` アダプター、`<slug>Config`、`componentConfig` をエクスポートします。
+	`metadata.packageName` は `package.json` を源とするためリネームに強く、
+	`metadata.componentSlug` はジェネレーターの回答から書き込まれます。
+- **`src/index.ts`** —— コンポーネント、その `Props` +
+	`ViewProps` 型、および 4 つの正規シンボル（`componentConfig`、
+	`defaultProps`、`fields`、`metadata`）を、元の名前と
+	lowerCamel エイリアスの両方で再エクスポートします。
+- **`src/styles.css`** —— `@import '@anvilkit/tailwind-config/shadcn'`
+	とローカルの `@source './**/*.{ts,tsx}'` ディレクティブで始まります。
+- **`package.json`** —— デュアル CJS/ESM の `exports`、`./styles.css`
+	サブパス、および Rslib 駆動の `build` / `dev` / `typecheck` スクリプト一式。
+
+## 5. スキャフォールド後のチェックリスト
+
+ジェネレーターは動作するスタブ —— lint、typecheck、ビルドが通る ——
+を書き出しますが、そのスタブは意図的に最小限です。パッケージを仕上げるには
+毎回同じ 5 ステップのループに従います。
+
+1. **レンダリングを実装する。** `src/<ComponentName>.tsx` を開き、
+	プレースホルダーのマークアップを本物のコンポーネントに置き換えます。
+	シリアライズ可能な属性と `editMode` の単一の真実の源として
+	`<ComponentName>ViewProps` の形を保ってください。
+
+2. **`defaultProps`、`fields`、`metadata` を確定する。**
+	`src/config.ts` で、デフォルト値をデモ上で意図的に見える
+	ものに調整し、フィールドのスキーマを洗練させます —— enum が増えたら
+	`radio`→`select` に切り替え、繰り返しのグループには `array`/`object` フィールドを
+	追加します。空だった場合は `metadata.suggestedCategory` を設定します。
+
+3. **peer deps + `@source` エントリを結線する。** `@anvilkit/ui` の
+	プリミティブを使い始めたら、それを `peerDependencies` +
+	`devDependencies` に追加し、そのソースパスを追加の `@source` ディレクティブとして
+	`styles.css` に付け足します。
+
+4. **検証する。** ワークスペースには単一のスモークコマンドがあります：
+
+	```bash
+	pnpm -C packages/components lint \
+		&& pnpm -C packages/components typecheck \
+		&& pnpm -C packages/components build
+	```
+
+	CI は同じ 3 つに加えて `madge`（循環依存）、`publint`
+	（パッケージのエクスポート）、Playwright スイートを実行します。
+
+5. **デモに統合する。** `apps/demo/` で触る 2 つのファイル：
+
+	- **`apps/demo/lib/puck-demo.ts`** —— import、
+		`DemoComponents` エントリ、カテゴリの結線、
+		`demoConfig.components` エントリ、`createDemoData` のエントリを追加します。
+	- **`apps/demo/next.config.js`** —— Next がソース
+		パッケージをトランスパイルできるよう、`@anvilkit/<slug>` を
+		`transpilePackages` 配列に追加します。
+
+	`pnpm -C apps/demo dev` を実行し、コンポーネントが
+	`/puck/editor` の Puck エディターにドロップできることを確認します。
+
+## 6. 公開ワークフロー
+
+バージョン管理は Changesets 駆動です。各 `@anvilkit/<slug>` は
+独立してリリースされます。
+
+1. **changeset を追加する。** コンポーネントワークスペースから：
+
+	```bash
+	pnpm -C packages/components changeset
+	```
+
+	新しいパッケージを選び、bump レベル（真新しいパッケージには通常
+	`minor`）を選択し、ユーザー向けの説明を書きます —— それがそのまま
+	変更履歴のエントリになります。
+
+2. **PR を開く。** changeset ファイルをコンポーネントの
+	実装とともにコミットします。CI はプッシュごとに `lint`、`typecheck`、`madge`、`test`、
+	`build`、`publint`、Playwright E2E スイートを実行します ——
+	[`.github/workflows/ci.yml`](https://github.com/ancyloce/anvilkit-studio/blob/main/.github/workflows/ci.yml) を参照してください。
+
+3. **`main` にマージする。** Changesets の GitHub action が、影響を受ける
+	`package.json` のバージョンを bump し、パッケージごとの `CHANGELOG.md` エントリを
+	書き込む release PR を開く（または更新する）。
+
+4. **release PR をマージする。** その action はその後次を実行します：
+
+	```bash
+	pnpm -C packages/components release
+	# = changeset version && pnpm build && changeset publish
+	```
+
+	保留中の changeset を持つ各パッケージは、新しいバージョンで
+	npm に公開されます。消費者は必要なものだけをインストールします ——
+	`pnpm add @anvilkit/<slug> @puckeditor/core`。
+
+<Callout type="warn" title="バージョンを手で編集しないこと">
+	パッケージのバージョンは `packages/components/src/<slug>/package.json` にありますが、
+	それらを直接編集すると Changesets の CHANGELOG 生成を迂回し、
+	release PR を非同期にしてしまいます。bump は常に
+	`pnpm changeset` 経由で行ってください。
+</Callout>
+
+## 7. 実践例 —— `@anvilkit/callout`
+
+これは、真新しい `callout` コンポーネントを空の
+`src/callout/` ディレクトリからデモ統合まで出荷する過程をたどります。新しい
+コントリビューターは 15 分以内でこれをエンドツーエンドで再現できます。
+
+### 7.1 スキャフォールド
+
+リポジトリのルートから、`pnpm install` のあとで：
+
+```bash
+pnpm -C packages/components gen:component -- \
+	--name callout \
+	--label "Callout" \
+	--template content \
+	--category marketing
+```
+
+実行後、`packages/components/src/callout/` には
+9 ファイルのスキャフォールドが含まれ、生成された `src/config.ts` には
+`metadata.suggestedCategory: 'marketing'` がすでに結線されています。
+
+### 7.2 レンダリングを実装する
+
+`packages/components/src/callout/src/Callout.tsx` をトーン対応の
+コンテナに置き換えます。`tone` 属性は shadcn のセマンティック token
+セットを選び、新しい色を考案することなくコンポーネントを
+テーマ対応にします：
+
+```tsx
+import type { RichText } from "@puckeditor/core";
+
+export interface CalloutProps {
+	title: string;
+	body: RichText;
+	tone?: "info" | "success" | "warning" | "danger";
+}
+
+export interface CalloutViewProps extends CalloutProps {
+	editMode?: boolean;
+}
+
+const toneClasses: Record<
+	NonNullable<CalloutProps["tone"]>,
+	{ border: string; bg: string; text: string }
+> = {
+	info: {
+		border: "border-border",
+		bg: "bg-muted/40",
+		text: "text-foreground",
+	},
+	success: {
+		border: "border-primary/30",
+		bg: "bg-primary/10",
+		text: "text-primary",
+	},
+	warning: {
+		border: "border-accent",
+		bg: "bg-accent/20",
+		text: "text-accent-foreground",
+	},
+	danger: {
+		border: "border-destructive/40",
+		bg: "bg-destructive/10",
+		text: "text-destructive",
+	},
+};
+
+export function Callout({
+	title,
+	body,
+	tone = "info",
+}: CalloutViewProps) {
+	const classes = toneClasses[tone];
+
+	return (
+		<aside
+			role="note"
+			className={`grid gap-3 rounded-2xl border p-5 shadow-sm ${classes.border} ${classes.bg}`}
+		>
+			<h3 className={`text-base font-semibold ${classes.text}`}>
+				{title}
+			</h3>
+			<div className="text-sm leading-6 text-muted-foreground [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4">
+				{body}
+			</div>
+		</aside>
+	);
+}
+```
+
+`tone` は単なる文字列なので、`Callout` には `editMode`
+分岐がありません —— 中和すべきライブリンクやフォーカス可能なコントロールが
+ないからです。装飾専用のコンポーネントは
+[editMode パターン](/ja/guides/component-authoring/#4-the-editmode-pattern) の最も単純な変種です。
+
+### 7.3 設定を確定する
+
+`packages/components/src/callout/src/config.ts` を更新し、
+`defaultProps` が実例を選び、`fields` が 4 つの
+トーンを `radio` として提供するようにします：
+
+```ts
+import type {
+	ComponentConfig,
+	ComponentMetadata,
+	Fields,
+} from "@puckeditor/core";
+import { createElement } from "react";
+import packageJson from "../package.json";
+import type { CalloutProps } from "./Callout";
+import { Callout } from "./Callout";
+
+export const metadata = {
+	componentName: "Callout",
+	componentSlug: "callout",
+	packageName: packageJson.name,
+	packageVersion: packageJson.version,
+	scaffoldType: "content",
+	schemaVersion: 1,
+	suggestedCategory: "marketing",
+} satisfies ComponentMetadata;
+
+export const defaultProps = {
+	title: "Heads up",
+	body: "<p>Use this space for a helpful reminder.</p>",
+	tone: "info",
+} satisfies CalloutProps;
+
+export const fields = {
+	title: { type: "text", label: "Title" },
+	body: { type: "richtext", label: "Body" },
+	tone: {
+		type: "radio",
+		label: "Tone",
+		options: [
+			{ label: "Info", value: "info" },
+			{ label: "Success", value: "success" },
+			{ label: "Warning", value: "warning" },
+			{ label: "Danger", value: "danger" },
+		],
+	},
+} satisfies Fields<CalloutProps>;
+
+const renderCallout: ComponentConfig<CalloutProps>["render"] = ({
+	title,
+	body,
+	tone,
+	editMode,
+}) =>
+	createElement(Callout, { title, body, tone, editMode });
+
+export const calloutConfig = {
+	label: "Callout",
+	defaultProps,
+	fields,
+	metadata,
+	render: renderCallout,
+} satisfies ComponentConfig<CalloutProps>;
+
+export const componentConfig = calloutConfig;
+```
+
+`src/index.ts` は生成されたままにしておきます —— すでに 4 つの
+正規シンボルと `callout*` キャメルエイリアスを再エクスポートしています。
+
+### 7.4 検証する
+
+コンポーネントワークスペースから 3 コマンドのスモークを実行します：
+
+```bash
+pnpm -C packages/components lint \
+	&& pnpm -C packages/components typecheck \
+	&& pnpm -C packages/components build
+```
+
+3 つすべてが通るはずです。`build` は
+`packages/components/src/callout/dist/` を生成し、`index.cjs`、`index.js`、
+`index.d.ts`、コンパイル済みの `styles.css` が含まれます。
+
+### 7.5 デモに統合する
+
+callout の import と結線を `apps/demo/lib/puck-demo.ts` に追加します：
+
+```ts
+import {
+	type CalloutProps,
+	componentConfig as calloutComponentConfig,
+	defaultProps as calloutDefaultProps,
+} from "@anvilkit/callout";
+
+export type DemoComponents = {
+	// …existing entries…
+	Callout: CalloutProps;
+};
+
+export const demoConfig: Config<DemoComponents> = {
+	categories: {
+		// …existing categories…
+		marketing: {
+			title: "Marketing",
+			components: [
+				// …existing marketing components…
+				"Callout",
+			],
+		},
+	},
+	components: {
+		// …existing components…
+		Callout: calloutComponentConfig,
+	},
+};
+```
+
+次に `createDemoData` にエントリを追加し、コンポーネントが
+シードされた `/puck/render` のペイロードに現れるようにします：
+
+```ts
+{
+	type: "Callout",
+	props: {
+		id: "callout-primary",
+		...calloutDefaultProps,
+},
+},
+```
+
+そして `apps/demo/next.config.js` でパッケージをホワイトリストに入れます：
+
+```js
+transpilePackages: [
+	// …existing packages…
+	"@anvilkit/callout",
+];
+```
+
+デモを起動し、Callout が Marketing レールに現れることを確認します：
+
+```bash
+pnpm -C apps/demo dev
+# Open http://localhost:3000/puck/editor
+```
+
+### 7.6 出荷する
+
+changeset を作成し、PR を開き、マージ後に release PR が
+`@anvilkit/callout@0.1.0` を公開できるようにします：
+
+```bash
+pnpm -C packages/components changeset
+# Select @anvilkit/callout → minor
+# Description: Add a new `callout` component package with four tones
+# and shared demo integration.
+```
+
+## 8. リファレンス
+
+- ジェネレーターのエントリーポイント：[`packages/components/turbo/generators/run-component-generator.mjs`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/turbo/generators/run-component-generator.mjs)
+- Turbo ジェネレーターの設定：[`packages/components/turbo/generators/config.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/turbo/generators/config.ts)
+- スキャフォールドのテンプレート：[`packages/components/turbo/generators/templates/component/`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/turbo/generators/templates/component)
+- コンポーネントの契約：[コンポーネントの作成](/ja/guides/component-authoring/)
+- 完全なコンポーネントカタログ：[コンポーネント](/ja/components/)

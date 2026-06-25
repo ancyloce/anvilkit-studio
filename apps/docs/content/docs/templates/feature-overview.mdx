@@ -1,0 +1,58 @@
+---
+title: "Product feature overview"
+description: "Product feature overview — hero, bento feature grid, statistics, FAQ."
+---
+
+![Product feature overview preview](/templates/feature-overview/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-feature-overview</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## Scaffold from the CLI
+
+```sh
+npx anvilkit init --template feature-overview my-site
+```
+
+## Composition
+
+The committed `PageIR` wires the following node types at the root:
+
+- `Navbar`
+- `Hero`
+- `BentoGrid`
+- `Statistics`
+- `Helps`
+
+## Package details
+
+Product feature overview page.
+
+Navbar, hero, bento feature grid, statistics, and FAQ — suited to the `/features` subpage of a product site.
+
+## Install
+
+```sh
+npx anvilkit init --template feature-overview my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/bento-grid`
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

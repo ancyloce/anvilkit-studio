@@ -1,0 +1,19 @@
+---
+title: "StudioConfigProviderProps"
+description: "@anvilkit/core · StudioConfigProviderProps"
+---
+
+Defined in: [config/provider.tsx:72](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L72)
+
+Props for [StudioConfigProvider](../functions/StudioConfigProvider).
+
+Both fields are required — the provider never fabricates a default
+config, and a childless provider is a bug the type system should
+catch at the call site.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | The React subtree that should have access to `config` via `useStudioConfig()`. | [config/provider.tsx:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L83) |
+| &lt;a id="config"&gt;&lt;/a&gt; `config` | `readonly` | [`StudioConfig`](../type-aliases/StudioConfig) | The validated config object returned by `createStudioConfig()`. Treated as deeply read-only; callers that mutate it are in undefined-behavior territory. | [config/provider.tsx:78](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L78) |

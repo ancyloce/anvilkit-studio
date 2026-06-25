@@ -1,0 +1,25 @@
+---
+title: "validatePuckPageData"
+description: "@anvilkit/validator · validatePuckPageData"
+---
+
+```ts
+function validatePuckPageData(data): ValidationResult;
+```
+
+Defined in: [validator/src/validate-page-payload.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L68)
+
+Validate a *complete* Puck page document (`{ root, content, zones? }`) — the
+check a publish must pass before the payload is written to storage. Delegates
+`root.props` to the same PageRootSchema as [validatePageRootProps](validatePageRootProps.md)
+and additionally asserts the structural shape the renderer depends on.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `data` | `unknown` |
+
+## Returns
+
+[`ValidationResult`](../interfaces/ValidationResult)

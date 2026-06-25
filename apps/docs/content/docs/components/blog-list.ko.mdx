@@ -1,0 +1,281 @@
+---
+title: BlogList
+description: "Anvilkit Puck 네이티브 BlogList 컴포넌트."
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/blog-list</code> <span>·</span> <span>v0.2.2</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+</div>
+
+## 라이브 미리보기
+
+<ComponentPreview name="BlogList" />
+
+A Puck-native blog post grid with image cards, dates, and links.
+
+## Install
+
+```sh
+pnpm add @anvilkit/blog-list @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/blog-list/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render the grid with the bundled example posts via `defaultProps`.
+
+```tsx
+import "@anvilkit/blog-list/styles.css";
+import { BlogList, defaultProps } from "@anvilkit/blog-list";
+
+export function Example() {
+  return <BlogList posts={defaultProps.posts} />;
+}
+```
+
+### Custom posts with external links
+
+Each post renders a cover image, a published date (with an optional relative
+label), a title, and a description. Set `href` to make the card a link;
+`openInNewTab` adds `target="_blank"` plus safe `rel` attributes.
+
+```tsx
+import { BlogList } from "@anvilkit/blog-list";
+
+export function LatestPosts() {
+  return (
+    <BlogList
+      posts={[
+        {
+          title: "Shipping faster with Anvilkit",
+          description: "How we cut release time in half.",
+          href: "https://blog.example.com/shipping-faster",
+          openInNewTab: true,
+          imageSrc: "https://images.example.com/cover.jpg",
+          imageAlt: "Shipping faster",
+          publishedAt: "2025-01-12",
+          publishedLabel: "January 12, 2025",
+          relativeLabel: "2mo ago",
+        },
+      ]}
+    />
+  );
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config`.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type BlogListProps } from "@anvilkit/blog-list";
+
+const config: Config<{ BlogList: BlogListProps }> = {
+  components: {
+    BlogList: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `BlogListProps` type and the Puck `fields` schema.
+
+| Prop                     | Type             | Default              | Description                                 |
+| ------------------------ | ---------------- | -------------------- | ------------------------------------------- |
+| `posts`                  | `BlogListPost[]` | _(3 example posts)_  | Blog post entries.                          |
+| `posts[].title`          | `string`         | `"New post"`         | Post title.                                 |
+| `posts[].description`    | `string`         | —                    | Post summary.                               |
+| `posts[].href`           | `string`         | `"/blog/new-post"`   | Link URL (card becomes a link when set).    |
+| `posts[].openInNewTab`   | `boolean`        | `false`              | Open the link in a new tab.                 |
+| `posts[].imageSrc`       | `string`         | _(Unsplash sample)_  | Cover image URL.                            |
+| `posts[].imageAlt`       | `string`         | `"New post"`         | Cover image alt text.                       |
+| `posts[].publishedAt`    | `string`         | `"2024-11-01"`       | ISO date string (used when no label given). |
+| `posts[].publishedLabel` | `string`         | `"November 1, 2024"` | Formatted date label.                       |
+| `posts[].relativeLabel`  | `string`         | `"8mo ago"`          | Relative time label shown in parentheses.   |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+
+## 속성 레퍼런스
+
+컴포넌트의 Puck `fields` 스키마에서 파생됩니다.
+
+| 필드 | 타입 | 기본값 |
+|-------|------|---------|
+| `posts` | array | `[{"title":"How Dev AI?","description":"Introducing Acme.a…` |
+
+## 기본 속성
+
+```json
+{
+  "posts": [
+    {
+      "title": "How Dev AI?",
+      "description": "Introducing Acme.ai, a cutting-edge AI solution for modern businesses.",
+      "href": "/blog/how-dev-ai",
+      "openInNewTab": false,
+      "imageSrc": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80",
+      "imageAlt": "How Dev AI?",
+      "publishedAt": "2024-11-01",
+      "publishedLabel": "November 1, 2024",
+      "relativeLabel": "8mo ago"
+    },
+    {
+      "title": "Why Dev AI?",
+      "description": "Introducing Acme.ai, a cutting-edge AI solution for modern businesses.",
+      "href": "/blog/why-dev-ai",
+      "openInNewTab": false,
+      "imageSrc": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80",
+      "imageAlt": "Why Dev AI?",
+      "publishedAt": "2024-11-01",
+      "publishedLabel": "November 1, 2024",
+      "relativeLabel": "8mo ago"
+    },
+    {
+      "title": "Introducing Acme.ai",
+      "description": "Introducing Acme.ai, a cutting-edge AI solution for modern businesses.",
+      "href": "/blog/introducing-dev-ai",
+      "openInNewTab": false,
+      "imageSrc": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80",
+      "imageAlt": "Introducing Acme.ai",
+      "publishedAt": "2024-08-29",
+      "publishedLabel": "August 29, 2024",
+      "relativeLabel": "10mo ago"
+    }
+  ]
+}
+```
+
+## Puck 설정
+
+```json
+{
+  "label": "BlogList",
+  "metadata": {
+    "componentName": "BlogList",
+    "componentSlug": "blog-list",
+    "packageName": "@anvilkit/blog-list",
+    "packageVersion": "0.2.2",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "marketing"
+  },
+  "defaultProps": {
+    "posts": [
+      {
+        "title": "How Dev AI?",
+        "description": "Introducing Acme.ai, a cutting-edge AI solution for modern businesses.",
+        "href": "/blog/how-dev-ai",
+        "openInNewTab": false,
+        "imageSrc": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80",
+        "imageAlt": "How Dev AI?",
+        "publishedAt": "2024-11-01",
+        "publishedLabel": "November 1, 2024",
+        "relativeLabel": "8mo ago"
+      },
+      {
+        "title": "Why Dev AI?",
+        "description": "Introducing Acme.ai, a cutting-edge AI solution for modern businesses.",
+        "href": "/blog/why-dev-ai",
+        "openInNewTab": false,
+        "imageSrc": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80",
+        "imageAlt": "Why Dev AI?",
+        "publishedAt": "2024-11-01",
+        "publishedLabel": "November 1, 2024",
+        "relativeLabel": "8mo ago"
+      },
+      {
+        "title": "Introducing Acme.ai",
+        "description": "Introducing Acme.ai, a cutting-edge AI solution for modern businesses.",
+        "href": "/blog/introducing-dev-ai",
+        "openInNewTab": false,
+        "imageSrc": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80",
+        "imageAlt": "Introducing Acme.ai",
+        "publishedAt": "2024-08-29",
+        "publishedLabel": "August 29, 2024",
+        "relativeLabel": "10mo ago"
+      }
+    ]
+  },
+  "fields": {
+    "posts": {
+      "type": "array",
+      "label": "Posts",
+      "defaultItemProps": {
+        "title": "New post",
+        "description": "Write a short summary for this article.",
+        "href": "/blog/new-post",
+        "openInNewTab": false,
+        "imageSrc": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=80",
+        "imageAlt": "New post",
+        "publishedAt": "2024-11-01",
+        "publishedLabel": "November 1, 2024",
+        "relativeLabel": "8mo ago"
+      },
+      "getItemSummary": "[[Function]]",
+      "arrayFields": {
+        "title": {
+          "type": "text",
+          "label": "Title"
+        },
+        "description": {
+          "type": "textarea",
+          "label": "Description"
+        },
+        "href": {
+          "type": "text",
+          "label": "Href"
+        },
+        "openInNewTab": {
+          "type": "radio",
+          "label": "Open in new tab",
+          "options": [
+            {
+              "label": "No",
+              "value": false
+            },
+            {
+              "label": "Yes",
+              "value": true
+            }
+          ]
+        },
+        "imageSrc": {
+          "type": "text",
+          "label": "Image URL"
+        },
+        "imageAlt": {
+          "type": "text",
+          "label": "Image alt text"
+        },
+        "publishedAt": {
+          "type": "text",
+          "label": "Published ISO date"
+        },
+        "publishedLabel": {
+          "type": "text",
+          "label": "Published date label"
+        },
+        "relativeLabel": {
+          "type": "text",
+          "label": "Relative label"
+        }
+      }
+    }
+  }
+}
+```

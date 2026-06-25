@@ -1,0 +1,128 @@
+---
+title: "Studio 侧边栏 — 四个可切换模块"
+description: "图标轨道 + 模块面板的侧边栏外壳，包含 insert / layer / image / text 四个工作区、五个插件扩展面、以及用于 v1 → v2 弃用键的 i18n 别名映射。"
+---
+
+`<Studio>` 的左侧侧边栏提供一条 44 px 的垂直图标轨道，外加一个
+280 px 的模块面板，该面板承载四个互斥工作区之一：
+`insert`、`layer`、`image`、`text`。宿主无需额外配置即可获得轨道 +
+面板；插件可通过五个注册面扩展任意模块；使用者可通过
+`<Studio messages>` 和每实例 store 覆盖文案、比例或持久化状态。
+
+## 模块
+
+| 模块 | 它的作用 | 持久化状态 |
+| :--- | :--- | :--- |
+| `insert` | 拖放式组件库 — 分区、可搜索、网格/列表视图。委托给 Puck 的 `<Puck.Components />`。 | `componentViewMode`、`insertSectionsExpanded`、`drawerSearch`（瞬态） |
+| `layer` | 在活动页面的元素树（`<Puck.Outline />`）之上展示页面列表（由宿主提供），二者由一个水平拖拽手柄分隔。 | `pagesExpanded`、`layerSplitRatio`、`outlineExpanded` |
+| `image` | 资源库 — 过滤条（All / Images / Videos / Audio）、搜索、拖放上传、点击插入、每个资源的溢出菜单。桥接到 `@anvilkit/plugin-asset-manager`。 | `assetCategoryFilter` |
+| `text` | 文案片段库 — 分类、搜索、点击插入到画布上选中的 Text 元素中。 | `copyCategoryFilter` |
+
+活动模块在每个 `<Studio>` 实例下以
+`anvilkit-ui-${storeId}` 持久化；在同一页面挂载两个 `<Studio>`
+实例时，请提供不同的 `storeId` 属性。
+
+## 模块切换契约
+
+- 点击某个**未激活**模块的轨道图标会切换到该模块。
+- 点击**已激活**模块的轨道图标会折叠面板（轨道仍保持可见）。
+- 点击面板标题栏的 `×` 会折叠面板，但不改变活动模块 —
+  再次点击任意轨道图标即可恢复。
+- 当焦点位于面板内任意位置时按 `Esc` 会折叠面板，并将
+  焦点返回到活动的轨道图标。
+
+## 插件扩展面
+
+插件在 `register()` 中会收到一个带类型的 `StudioPluginContext`。
+每个 `register*` 辅助方法都会返回一个 `unregister()` 函数，
+插件应在其 `onDestroy` 生命周期钩子中调用它。
+
+| 扩展面 | 模块 | 用途 |
+| :--- | :--- | :--- |
+| `ctx.registerInsertSection(section)` | `insert` | 添加一个新的可折叠分区，并对 Puck 组件使用自定义谓词 |
+| `ctx.registerLayerQuickAdd(item)` | `layer`（Layers） | 在“+”快速添加弹出框中添加一个条目 |
+| `ctx.registerAssetSource(source)` | `image` | 提供资源列表 + 上传 + 变更契约 |
+| `ctx.registerAssetAction(action)` | `image` | 在每个资源的 `…` 溢出菜单中添加一个条目 |
+| `ctx.registerCopySnippetPack(pack)` | `text` | 提供一组片段，可选按区域设置区分 |
+
+`apps/demo/lib/puck-demo.ts` 中的演示提供了两个值得在
+编写你自己的插件之前阅读的参考插件：
+
+- `demoCopySnippetPlugin` 通过 `ctx.registerCopySnippetPack`
+  注册一个英文片段包。十二个条目分布在 `basic`
+  / `brand` 分类中 — 可作为
+  `StudioCopySnippetPack` 的结构参考。
+- `demoLayerQuickAddPlugin` 通过 `ctx.registerLayerQuickAdd`
+  注册一个单独的图层快速添加项。它读取实时的 Puck 快照，然后
+  派发一个 `insert` 动作 — 这与任何贡献快速添加项的
+  插件应遵循的结构相同。
+
+资源源契约位于
+[`@anvilkit/plugin-asset-manager`](/zh/api/plugin-asset-manager/)；
+其 `studio-asset-source.ts` 适配器是实现
+`StudioAssetSource` 的权威参考。
+
+## i18n 目录
+
+所有轨道工具提示、面板标题、搜索占位符、空状态
+文案以及溢出菜单项都通过 i18n provider 解析。
+默认的英文目录随
+[`editor-i18n-context.tsx`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx)
+一同提供，位于 `studio.module.*` 命名空间下。
+
+通过 `<Studio messages>` 传入覆盖：
+
+```tsx title="app/editor/page.tsx"
+<Studio
+	puckConfig={config}
+	data={data}
+	messages={{
+		"studio.module.insert.name": "Components",
+		"studio.module.layer.name": "Pages",
+	}}
+/>
+```
+
+### 消息解析
+
+解析顺序（优先级从高到低）：所请求键的覆盖、
+所请求键的默认值、调用方提供的 `fallback`、
+键本身。详尽的解析顺序测试位于
+`packages/core/src/state/__tests__/editor-i18n-context.alias.test.tsx`。
+
+<Callout type="info" title="已移除：旧版标签别名">
+	v1 之前的侧边栏提供了 `studio.tab.insert` / `studio.tab.outline`
+	键（别名指向 v1 的 `studio.module.insert.name` /
+	`studio.module.layer.name`）。这些别名和旧版键都已
+	**移除**；请直接覆盖 `studio.module.*` 键。
+</Callout>
+
+## CSS 变量
+
+侧边栏复用了所有现有的 `--ak-studio-*` 令牌，外加两个新的
+布局令牌，由 chrome 通过 iframe 主题同步桥接：
+
+| 令牌 | 默认值 | 用途 |
+| :--- | :--- | :--- |
+| `--ak-studio-rail-width` | `44px` | 始终可见的图标轨道宽度 |
+| `--ak-studio-panel-width` | `280px` | 未折叠时模块面板的宽度 |
+
+在 `:root`（或 `<Studio>` 的任意祖先）上覆盖其中任意一个，
+即可重新设计轨道 / 面板的外观，而无需 fork chrome。
+
+## 从旧版 2 标签外壳迁移
+
+`EditorTab` 从 `"insert" | "outline"` 扩展为 `"insert" |
+"layer" | "image" | "text"`。`editor-ui-store` 的持久化版本
+升级到 `2`；hydrate 迁移会在首次加载时将旧版 `"outline"` →
+`"layer"` 重写一次。在 `EditorTab === "outline"` 上做窄化判断的
+使用者必须更新。
+
+那些接入了旧版 `studio.tab.*` 键的宿主会通过别名映射
+继续工作（一个发布版本的窗口期）。
+
+## API 参考
+
+- [`StudioProps.messages`](/zh/api/core/interfaces/studioprops/) — 转发给编辑器 i18n provider 的 i18n 覆盖
+- [`StudioPagesSource`](/zh/api/core/interfaces/studiopagessource/) — 宿主实现的契约，用于填充 `layer` 模块的页面列表
+- [`StudioPluginContext`](/zh/api/core/interfaces/studioplugincontext/) — 注册辅助方法（`registerInsertSection`、`registerLayerQuickAdd`、`registerAssetSource`、`registerAssetAction`、`registerCopySnippetPack`）

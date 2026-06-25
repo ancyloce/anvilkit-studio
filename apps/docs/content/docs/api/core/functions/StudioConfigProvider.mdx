@@ -1,0 +1,35 @@
+---
+title: "StudioConfigProvider"
+description: "@anvilkit/core · StudioConfigProvider"
+---
+
+```ts
+function StudioConfigProvider(__namedParameters): Element;
+```
+
+Defined in: [config/provider.tsx:99](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/provider.tsx#L99)
+
+Make a validated [StudioConfig](../type-aliases/StudioConfig) available to descendants via
+[useStudioConfig](useStudioConfig.md) (exported from `./hooks.ts`).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`StudioConfigProviderProps`](../interfaces/StudioConfigProviderProps) |
+
+## Returns
+
+`Element`
+
+## Example
+
+```ts
+const config = createStudioConfig({ features: { enableAi: true } });
+
+return (
+  <StudioConfigProvider config={config}>
+    <Studio />
+  </StudioConfigProvider>
+);
+```

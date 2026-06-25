@@ -1,0 +1,35 @@
+---
+title: "IRAssetResolver"
+description: "@anvilkit/core · IRAssetResolver"
+---
+
+```ts
+type IRAssetResolver = (url) => 
+  | Promise<AssetResolution | null>
+  | AssetResolution
+  | null;
+```
+
+Defined in: [types/asset-resolver.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/asset-resolver.ts#L33)
+
+Rewrites an asset reference to its resolved location, or returns `null` when
+this resolver does not handle the reference.
+
+Resolvers are registered via the plugin context's `registerAssetResolver`
+seam and collected into `StudioRuntime.assetResolvers` in registration
+order. A consuming export format consults each in order and stops at the
+first non-null result; how a format treats a reference that no resolver
+handles is the format's own policy. May run sync or async — the pipeline
+awaits the result.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `url` | `string` | The raw reference to resolve (e.g. an `asset://…` URL). |
+
+## Returns
+
+  \| `Promise`\&lt;[`AssetResolution`](../interfaces/AssetResolution) \| `null`\&gt;
+  \| [`AssetResolution`](../interfaces/AssetResolution)
+  \| `null`

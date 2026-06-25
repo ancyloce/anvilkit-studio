@@ -1,0 +1,27 @@
+---
+title: "downgradePageIR"
+description: "@anvilkit/ir · downgradePageIR"
+---
+
+```ts
+function downgradePageIR(ir): PageIR;
+```
+
+Defined in: [migrations/index.ts:163](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L163)
+
+Recursively strip `meta` from every node in a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts).
+
+Use when surfacing IR to a `1.0` consumer that pins against the
+pre-`meta` contract. Always returns a fresh, frozen tree — even
+when the input had no `meta` to strip — so callers can safely
+cache the result.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) |
+
+## Returns
+
+[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts)

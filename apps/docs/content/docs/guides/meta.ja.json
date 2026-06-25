@@ -1,0 +1,17 @@
+{
+	"title": "ガイド",
+	"pages": [
+		"component-authoring",
+		"generator-usage",
+		"plugin-authoring",
+		"export-pipeline",
+		"pages-management",
+		"ai-integration",
+		"design-system",
+		"ai-image",
+		"asset-manager",
+		"version-history",
+		"canvas-studio",
+		"collaboration"
+	]
+}

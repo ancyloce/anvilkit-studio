@@ -1,0 +1,26 @@
+---
+title: "StudioPluginPrefetch"
+description: "@anvilkit/core · StudioPluginPrefetch"
+---
+
+```ts
+type StudioPluginPrefetch = "mount" | "idle" | "interaction";
+```
+
+Defined in: [types/plugin.ts:220](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L220)
+
+When a deferred plugin's chunk should be fetched. Advisory hint on
+[StudioPluginMeta.prefetch](../interfaces/StudioPluginMeta#prefetch).
+
+- `"mount"` — **default / today's behavior.** The loader runs as part
+  of `compilePlugins()` when `<Studio>` mounts; the chunk is on the
+  compile critical path.
+- `"idle"` — the host should defer the loader to first idle
+  (`requestIdleCallback`) after first paint, so the chunk does not
+  compete with initial render. Useful for surfaces the user is
+  unlikely to open immediately.
+- `"interaction"` — **reserved / not yet honored.** True click-to-load
+  needs incremental plugin registration: `compilePlugins()` currently
+  awaits *all* `register()`s and returns a single runtime, so there is
+  no mid-session "add one plugin" seam. Declared for forward-compat;
+  hosts should treat it as `"idle"` until that seam ships.

@@ -1,0 +1,26 @@
+---
+title: "LifecycleSubscriber"
+description: "@anvilkit/core · LifecycleSubscriber"
+---
+
+```ts
+type LifecycleSubscriber = (ctx, payload) => void;
+```
+
+Defined in: [runtime/lifecycle-manager.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L143)
+
+Handler signature registered via [LifecycleManager.subscribe](../interfaces/LifecycleManager#subscribe).
+
+Receives the same `ctx` and `payload` the plugin hooks receive so
+observers can inspect the live state of the running session.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`StudioPluginContext`](../interfaces/StudioPluginContext) |
+| `payload` | `PuckData` \| `undefined` |
+
+## Returns
+
+`void`

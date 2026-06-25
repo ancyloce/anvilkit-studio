@@ -1,0 +1,231 @@
+---
+title: "Studio 覆盖"
+description: "AnvilKit 的一流 Puck 覆盖预设、chrome 模式，以及默认值、插件和使用方之间的组合顺序。"
+---
+
+`@anvilkit/core` 提供了一套完整的 Studio chrome —— 包括头部、侧边栏
+标签页、视口工具栏、字段面板 —— 作为一个 Puck 覆盖预设。
+想要它的宿主只需导入 `<Studio>` 即可获得。想要原生 Puck 的宿主
+只需翻转一个属性。插件和使用方可以扩展任何插槽，
+而合并管线保证了这三层之间的确定性排序。
+
+## Chrome 模式
+
+`<Studio chrome>` 接受两个值：
+
+| 值         | 行为                                                                 |
+| ------------- | ------------------------------------------------------------------------ |
+| `"anvilkit"`（默认） | 挂载 AnvilKit Studio 外壳，使用默认覆盖预设和每个实例的编辑器存储。 |
+| `"puck"`      | 跳过预设，挂载原生 `@puckeditor/core` `<Puck>`。与引入 Studio 覆盖之前的版本逐位完全一致。 |
+
+`"anvilkit"` chrome 和编辑器存储通过动态
+导入加载，因此 `chrome="puck"` 不会附带任何 chrome 字节 ——
+入口包保持在 25 KB gzip 预算之下。
+
+## CSS 导入
+
+chrome 从一个 CSS sidecar 中读取 `--ak-studio-*` 令牌契约，
+该 sidecar 桥接到你现有的 shadcn / Tailwind v4 变量
+（`--background`、`--foreground`、`--border` 等）。需要
+两个导入：
+
+```ts title="app/layout.tsx"
+import "@puckeditor/core/puck.css";
+import "@anvilkit/core/styles.css";
+```
+
+该 sidecar 是一个带副作用的导入 —— `@anvilkit/core`
+包将 `*.css` 文件标记为带副作用，以便打包器
+不会对其进行 tree-shake。
+
+## 默认 chrome
+
+```tsx title="app/editor/page.tsx"
+"use client";
+
+import { Studio } from "@anvilkit/core/react";
+import type { Config, Data } from "@puckeditor/core";
+
+export default function EditorPage() {
+	return (
+		<Studio
+			puckConfig={config as Config}
+			data={initialData as Data}
+			plugins={plugins}
+			onPublish={async (data) => {
+				await fetch("/api/publish", {
+					method: "POST",
+					body: JSON.stringify(data),
+				});
+			}}
+		/>
+	);
+}
+```
+
+`chrome` 默认为 `"anvilkit"`，因此无需更改属性。
+如果你想接入头部
+按钮，chrome 会读取 `onBack`、`onSaveDraft`、`isSavingDraft`、
+`lastSavedAt`、`isPublishing`：
+
+```tsx
+<Studio
+	puckConfig={config}
+	data={data}
+	onBack={() => router.push("/dashboard")}
+	onSaveDraft={async () => {
+		await fetch("/api/draft", { method: "POST" });
+	}}
+	isSavingDraft={isSavingDraft}
+	lastSavedAt={lastSavedAt}
+	isPublishing={isPublishing}
+/>
+```
+
+## 原生 Puck 逃生舱
+
+如果你已经发布了自定义 chrome 并且需要与引入
+Studio 覆盖之前的 `<Studio>` 逐位一致，请设置 `chrome="puck"`：
+
+```tsx title="app/editor/page.tsx"
+<Studio
+	puckConfig={config}
+	data={data}
+	plugins={plugins}
+	chrome="puck"
+/>
+```
+
+在这种模式下，**绝不**会加载默认预设，插件
+覆盖的应用方式与之前完全相同，而你现有的
+`overrides` 属性会原封不动地传递给 Puck。
+
+## 使用方覆盖扩展
+
+`<Studio>` 上的 `overrides` 属性是宿主的最外层。
+你贡献的任何内容都会围绕默认预设的
+输出进行组合。要替换某个字段类型的渲染器或包裹字段标签，
+只需提供该插槽：
+
+```tsx
+import type { Overrides } from "@puckeditor/core";
+
+const customOverrides: Partial<Overrides> = {
+	fieldTypes: {
+		text: ({ field, value, onChange, name }) => (
+			<input
+				name={name}
+				value={value ?? ""}
+				placeholder={field.placeholder}
+				onChange={(e) => onChange(e.target.value)}
+				className="my-app-input"
+			/>
+		),
+	},
+	fieldLabel: ({ children, label, readOnly }) => (
+		<label className="my-app-label">
+			<span>{label}{readOnly ? " (read-only)" : ""}</span>
+			{children}
+		</label>
+	),
+};
+
+<Studio
+	puckConfig={config}
+	data={data}
+	overrides={customOverrides}
+/>
+```
+
+默认预设的 `text` 渲染器会被你的渲染器包裹 ——
+而非替换 —— 因此诸如只读标记之类的 chrome 功能
+会向下继承。
+
+## 插件覆盖组合
+
+插件通过其 `register()` 返回
+值来贡献覆盖。合并管线按注册顺序组合各层，
+以宿主作为最外层包裹器：
+
+```
+default preset (innermost)
+  → plugin A
+    → plugin B
+      → consumer (outermost)
+```
+
+对于任何给定的插槽，每个提供了渲染函数的层
+都会运行 —— 没有一个会被丢弃。正是这个契约让插件
+能够添加标记而不抹除默认预设的 chrome：
+
+```ts title="my-plugin/src/plugin.ts"
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export function createBadgePlugin(): StudioPlugin {
+	return {
+		meta: {
+			id: "com.example.badge",
+			name: "Badge",
+			version: "1.0.0",
+			coreVersion: "^0.1.0-alpha",
+		},
+		register() {
+			return {
+				meta: this.meta,
+				overrides: {
+					fieldLabel: ({ children, label }) => (
+						<span data-marker="badge">
+							[badge:{label}] {children}
+						</span>
+					),
+				},
+			};
+		},
+	};
+}
+```
+
+与默认预设一起挂载时，`fieldLabel` 的渲染
+输出为：
+
+1. 外层：使用方的 `fieldLabel`（如果有）。
+2. 中层：每个插件的 `fieldLabel`，按注册顺序排列。
+3. 内层：默认预设的 `FieldLabel`，带只读
+   标记等。
+
+`fieldTypes` 注册表按内部类型逐一组合，遵循同样的
+规则 —— 来自插件的 `fieldTypes.text` 会包裹默认预设的
+`TextField`，而使用方提供的 `fieldTypes.text` 会包裹该
+插件。
+
+<Callout type="info" title="三层回归">
+	`Studio.test.tsx` 套件通过一个回归测试固定了
+	`default → plugin → consumer` 排序，该测试
+	针对实际预设挂载了一个插件和一个使用方覆盖。
+	如果合并契约发生漂移，CI 将失败。
+</Callout>
+
+## 迁移
+
+`chrome` 默认为 `"anvilkit"` —— 从早于该 chrome 的版本
+升级时，首次重新加载即会显示新外观。有两条
+前进路径：
+
+- **保留新 chrome。** 无需更改代码。添加
+  上面的 CSS 导入。如果你想要更丰富的头部行为，请接入
+  `onBack` / `onSaveDraft` / `isPublishing`。
+- **保持原生 Puck。** 在你的 `<Studio>`
+  调用中添加 `chrome="puck"`。其输出与先前版本完全一致。
+
+`chrome="puck"` 退出选项将无限期支持 —— 合并
+管线只是跳过默认预设的前置追加，因此所有现有的
+插件覆盖都会继续工作。
+
+## API 参考
+
+- [`StudioProps`](/zh/api/core/interfaces/studioprops/) —— 完整的
+  属性列表，包括 chrome 模式相关新增项。
+- [`createStudioOverrides`](/zh/api/core/functions/createstudiooverrides/)
+  —— 供需要直接使用预设的测试 / 工具使用的工厂函数。
+- [`mergeOverrides`](/zh/api/core/functions/mergeoverrides/) —— 支撑
+  三层合并的逐键组合原语。

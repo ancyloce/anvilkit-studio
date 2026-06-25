@@ -1,0 +1,158 @@
+---
+title: Section
+description: "Anvilkit Puck 네이티브 Section 컴포넌트."
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/section</code> <span>·</span> <span>v0.2.1</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+</div>
+
+## 라이브 미리보기
+
+<ComponentPreview name="Section" />
+
+A Puck-native section component with badge, headline, highlighted text, and description.
+
+## Install
+
+```sh
+pnpm add @anvilkit/section @anvilkit/ui @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/section/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render the section with custom copy. `highlightedHeadline` is rendered with an
+animated aurora gradient next to the plain `headline`.
+
+```tsx
+import "@anvilkit/section/styles.css";
+import { Section } from "@anvilkit/section";
+
+export function Example() {
+  return (
+    <Section
+      badgeLabel="Scale"
+      headline="Stop writing boilerplate."
+      highlightedHeadline="Start building features."
+      description="Your AI agent handles repetitive coding tasks."
+    />
+  );
+}
+```
+
+### Default copy
+
+Render the bundled marketing copy via `defaultProps`.
+
+```tsx
+import { Section, defaultProps } from "@anvilkit/section";
+
+export function DefaultSection() {
+  return <Section {...defaultProps} />;
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config`.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type SectionProps } from "@anvilkit/section";
+
+const config: Config<{ Section: SectionProps }> = {
+  components: {
+    Section: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `SectionProps` type and the Puck `fields` schema.
+
+| Prop                  | Type     | Default                                              | Description                      |
+| --------------------- | -------- | ---------------------------------------------------- | -------------------------------- |
+| `badgeLabel`          | `string` | `"Scale"`                                            | Shiny pill badge text.           |
+| `headline`            | `string` | `"Stop writing boilerplate."`                        | Plain headline text.             |
+| `highlightedHeadline` | `string` | `"Start building features."`                         | Aurora-gradient headline accent. |
+| `description`         | `string` | `"Your AI agent handles repetitive coding tasks..."` | Supporting description.          |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+
+## 속성 레퍼런스
+
+컴포넌트의 Puck `fields` 스키마에서 파생됩니다.
+
+| 필드 | 타입 | 기본값 |
+|-------|------|---------|
+| `badgeLabel` | text | `"Scale"` |
+| `headline` | text | `"Stop writing boilerplate."` |
+| `highlightedHeadline` | text | `"Start building features."` |
+| `description` | textarea | `"Your AI agent handles repetitive coding tasks, reviews e…` |
+
+## 기본 속성
+
+```json
+{
+  "badgeLabel": "Scale",
+  "headline": "Stop writing boilerplate.",
+  "highlightedHeadline": "Start building features.",
+  "description": "Your AI agent handles repetitive coding tasks, reviews every commit, and catches bugs before deployment. Spend time on architecture, not syntax."
+}
+```
+
+## Puck 설정
+
+```json
+{
+  "label": "Section",
+  "metadata": {
+    "componentName": "Section",
+    "componentSlug": "section",
+    "packageName": "@anvilkit/section",
+    "packageVersion": "0.2.1",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "marketing"
+  },
+  "defaultProps": {
+    "badgeLabel": "Scale",
+    "headline": "Stop writing boilerplate.",
+    "highlightedHeadline": "Start building features.",
+    "description": "Your AI agent handles repetitive coding tasks, reviews every commit, and catches bugs before deployment. Spend time on architecture, not syntax."
+  },
+  "fields": {
+    "badgeLabel": {
+      "type": "text",
+      "label": "Badge label"
+    },
+    "headline": {
+      "type": "text",
+      "label": "Headline"
+    },
+    "highlightedHeadline": {
+      "type": "text",
+      "label": "Highlighted headline"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    }
+  }
+}
+```

@@ -1,0 +1,85 @@
+---
+title: "StudioPlugin"
+description: "@anvilkit/core · StudioPlugin"
+---
+
+Defined in: [types/plugin.ts:782](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L782)
+
+The authored plugin object.
+
+Plugins are plain objects (not classes) with a frozen `meta` block
+and a `register()` method that returns a
+[StudioPluginRegistration](StudioPluginRegistration.md). `register()` may be synchronous or
+asynchronous — the runtime awaits it before moving on to the next
+plugin in the registration order.
+
+## Example
+
+```ts
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export const telemetryPlugin: StudioPlugin = {
+  meta: {
+    id: "com.example.telemetry",
+    name: "Telemetry",
+    version: "1.0.0",
+    coreVersion: "^0.1.0",
+  },
+  register(ctx) {
+    return {
+      meta: telemetryPlugin.meta,
+      hooks: {
+        onDataChange(_innerCtx, data) {
+          ctx.log("debug", "data changed", {
+            contentNodeCount: data.content.length,
+          });
+        },
+      },
+    };
+  },
+};
+```
+
+## Extended by
+
+- [`StudioPluginContributing`](StudioPluginContributing.md)
+
+## Type Parameters
+
+| Type Parameter | Default type | Description |
+| ------ | ------ | ------ |
+| `UserConfig` *extends* `PuckConfig` | `PuckConfig` | Optional Puck config generic. Defaults to the Puck default so simple plugins don't need to parameterize it. |
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta` | `readonly` | [`StudioPluginMeta`](StudioPluginMeta.md) | Frozen plugin metadata. See [StudioPluginMeta](StudioPluginMeta.md). | [types/plugin.ts:788](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L788) |
+
+## Methods
+
+### register()
+
+```ts
+register(ctx): 
+  | StudioPluginRegistration<UserConfig>
+| Promise<StudioPluginRegistration<UserConfig>>;
+```
+
+Defined in: [types/plugin.ts:798](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L798)
+
+Produce a registration block for the runtime to consume.
+
+Called exactly once per plugin, during `compilePlugins()`. May
+return synchronously or via a `Promise`.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `ctx` | [`StudioPluginContext`](StudioPluginContext.md)\&lt;`UserConfig`\&gt; | The [StudioPluginContext](StudioPluginContext.md) for this session. |
+
+#### Returns
+
+  \| [`StudioPluginRegistration`](StudioPluginRegistration.md)\&lt;`UserConfig`\&gt;
+  \| `Promise`\&lt;[`StudioPluginRegistration`](StudioPluginRegistration.md)\&lt;`UserConfig`\&gt;\&gt;

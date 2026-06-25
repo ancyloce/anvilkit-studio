@@ -1,0 +1,35 @@
+---
+title: "puckDataToIR"
+description: "@anvilkit/ir · puckDataToIR"
+---
+
+```ts
+function puckDataToIR(
+   data, 
+   config, 
+   opts?): PageIR;
+```
+
+Defined in: [puck-data-to-ir.ts:196](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/puck-data-to-ir.ts#L196)
+
+Transform a Puck `Data` document into a normalized [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts).
+
+This is the primary entry point every Anvilkit export format
+consumes. Given a Puck `Data` and its matching `Config`, the
+result is a pure, JSON-serializable, deeply-frozen `PageIR` with
+stable node ids, canonicalized (sorted) props, and a flat asset
+manifest.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `Data` | Puck editor document to normalize. |
+| `config` | `Config` | Puck `Config` matching `data`. **Required** — used by [identifySlots](identifySlots.md) to tell slot fields (descended into as `children`) apart from plain serializable props. |
+| `opts?` | [`PuckDataToIROptions`](../interfaces/PuckDataToIROptions) | See [PuckDataToIROptions](../interfaces/PuckDataToIROptions). |
+
+## Returns
+
+[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts)
+
+The normalized, frozen page IR document.

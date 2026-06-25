@@ -1,0 +1,25 @@
+---
+title: "pageRootToStudioPageFields"
+description: "@anvilkit/core · pageRootToStudioPageFields"
+---
+
+```ts
+function pageRootToStudioPageFields(root): Partial<Pick<StudioPage, "title" | "seo">>;
+```
+
+Defined in: [studio/context/page-root-seo.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/context/page-root-seo.ts#L104)
+
+Project a page's `root.props` (title + seo) onto the [StudioPage](../interfaces/StudioPage)
+fields the rail/breadcrumb read, so the sidecar no longer holds a parallel
+copy. Returns only the derived slice; callers merge it with the routing
+metadata they own (`id`/`path`/`route`/`locked`).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `root` | [`PageRootInput`](../interfaces/PageRootInput) \| `undefined` |
+
+## Returns
+
+`Partial`\&lt;`Pick`\&lt;[`StudioPage`](../interfaces/StudioPage), `"title"` \| `"seo"`\&gt;\&gt;

@@ -1,0 +1,27 @@
+---
+title: "StudioSidebarContributions"
+description: "@anvilkit/core · StudioSidebarContributions"
+---
+
+Defined in: [runtime/sidebar-registry.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L46)
+
+Immutable snapshot of every sidebar contribution collected during a
+single [compilePlugins](../functions/compilePlugins) pass, exposed on
+[StudioRuntime.sidebar](StudioRuntime.md#sidebar). Map-keyed surfaces are last-write-wins
+by id; the single-occupancy panels/source are last-write-wins by
+registration order.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assetactions"&gt;&lt;/a&gt; `assetActions` | `readonly` | `ReadonlyMap`\&lt;`string`, [`StudioAssetAction`](StudioAssetAction.md)\&gt; | [runtime/sidebar-registry.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L50) |
+| &lt;a id="assetsource"&gt;&lt;/a&gt; `assetSource` | `readonly` | [`StudioAssetSource`](StudioAssetSource.md) \| `null` | [runtime/sidebar-registry.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L49) |
+| &lt;a id="copilotpanel"&gt;&lt;/a&gt; `copilotPanel` | `readonly` | [`StudioCopilotPanel`](StudioCopilotPanel.md) \| `null` | [runtime/sidebar-registry.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L52) |
+| &lt;a id="copypacks"&gt;&lt;/a&gt; `copyPacks` | `readonly` | `ReadonlyMap`\&lt;`string`, [`StudioCopySnippetPack`](StudioCopySnippetPack.md)\&gt; | [runtime/sidebar-registry.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L51) |
+| &lt;a id="designsystempanel"&gt;&lt;/a&gt; `designSystemPanel` | `readonly` | [`StudioDesignSystemPanel`](StudioDesignSystemPanel.md) \| `null` | [runtime/sidebar-registry.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L54) |
+| &lt;a id="historypanel"&gt;&lt;/a&gt; `historyPanel` | `readonly` | [`StudioHistoryPanel`](StudioHistoryPanel.md) \| `null` | [runtime/sidebar-registry.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L53) |
+| &lt;a id="insertsections"&gt;&lt;/a&gt; `insertSections` | `readonly` | `ReadonlyMap`\&lt;`string`, [`StudioInsertSection`](StudioInsertSection.md)\&gt; | [runtime/sidebar-registry.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L47) |
+| &lt;a id="layerquickadds"&gt;&lt;/a&gt; `layerQuickAdds` | `readonly` | `ReadonlyMap`\&lt;`string`, [`StudioLayerQuickAdd`](StudioLayerQuickAdd.md)\&gt; | [runtime/sidebar-registry.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L48) |
+| &lt;a id="pagesettingsseofields"&gt;&lt;/a&gt; `pageSettingsSeoFields` | `readonly` | [`StudioPageSettingsSeoFields`](StudioPageSettingsSeoFields.md) \| `null` | [runtime/sidebar-registry.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L56) |
+| &lt;a id="seopanel"&gt;&lt;/a&gt; `seoPanel` | `readonly` | [`StudioSeoPanel`](StudioSeoPanel.md) \| `null` | [runtime/sidebar-registry.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L55) |

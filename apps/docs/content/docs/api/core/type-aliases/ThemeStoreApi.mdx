@@ -1,0 +1,17 @@
+---
+title: "ThemeStoreApi"
+description: "@anvilkit/core · ThemeStoreApi"
+---
+
+```ts
+type ThemeStoreApi = ReturnType<typeof createThemeStore>;
+```
+
+Defined in: [state/slices/theme-store.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L172)
+
+The vanilla theme store handle. Inferred from [createThemeStore](../functions/createThemeStore) so
+it carries the `persist` middleware surface (`hasHydrated`,
+`onFinishHydration`, `rehydrate`, …) with full fidelity — consumers reach
+`store.persist` directly instead of casting through `unknown`. zustand does
+not export `StorePersist`, so deriving the type is the only way to keep it
+statically guaranteed rather than asserted.

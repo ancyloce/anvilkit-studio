@@ -1,0 +1,52 @@
+---
+title: "mergeOverrides"
+description: "@anvilkit/core · mergeOverrides"
+---
+
+```ts
+function mergeOverrides(overridesList): Partial<PuckOverrides>;
+```
+
+Defined in: [react/overrides/merge-overrides.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/overrides/merge-overrides.ts#L132)
+
+Compose a list of plugin-contributed Puck override slices into a
+single [PuckOverrides](https://puckeditor.com/docs/api-reference/configuration/overrides) dictionary, with per-key currying so
+multiple plugins touching the same key all run.
+
+The input array is consumed in order: earlier entries become
+**innermost** wrappers (closer to the default render), later
+entries become **outermost**. This matches Puck 0.21's own
+internal composition so feeding the result back into
+`<Puck overrides={…}>` is semantically identical to letting Puck
+register each plugin individually — just done once, upfront, so
+`<Studio>` can also fold in consumer-supplied overrides in the
+same pass.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `overridesList` | readonly `Partial`\&lt;[`Overrides`](https://puckeditor.com/docs/api-reference/configuration/overrides)\&gt;[] | Plugin override slices in the order they should compose. Pass `[...runtime.overrides, consumerOverrides]` to get consumer-outermost semantics. |
+
+## Returns
+
+`Partial`\<[`PuckOverrides`](https://puckeditor.com/docs/api-reference/configuration/overrides)\>
+
+A single `Partial<PuckOverrides>` ready to hand to
+`<Puck overrides={…}>`. Returns `{}` for an empty input.
+
+## Throws
+
+If any non-`fieldTypes` override value is not
+a function, or if any entry inside a `fieldTypes` dictionary is
+not a function.
+
+## Example
+
+```ts
+const merged = mergeOverrides([
+  { fieldLabel: (props) => <span className="a">{props.children}</span> },
+  { fieldLabel: (props) => <span className="b">{props.children}</span> },
+]);
+// merged.fieldLabel renders: <span class="b"><span class="a">{default}</span></span>
+```

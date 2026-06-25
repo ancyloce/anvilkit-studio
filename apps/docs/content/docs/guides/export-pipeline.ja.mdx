@@ -1,0 +1,543 @@
+---
+title: "エクスポートパイプライン"
+description: "Puck Data がダウンロード可能なバイト列になるまで —— puckDataToIR、PageIR コントラクト、ExportFormatDefinition、アセットのインライン化、ラウンドトリップ不変条件、そしてすべてのエクスポーターが同梱するスナップショット駆動のテストパターン。"
+---
+
+AnvilKit はすべてのエクスポート —— 今日の HTML、明日の React ソースと PDF、来週のあなたのカスタム形式 —— を、同一の正規化された `PageIR` ドキュメントの関数として扱います。本ガイドはパイプラインをエンドツーエンドで解説し、実際にテストされた JSON エクスポーターを実例として同梱します。
+
+<Callout type="info" title="コードは常にグリーンを保つ">
+	以下のすべてのコードブロックは
+	[`apps/docs/tests/guides/export-pipeline.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/export-pipeline.test.ts)
+	に抽出され、CI で Vitest テストとして実行されます。`@anvilkit/core`、
+	`@anvilkit/ir`、`@anvilkit/plugin-export-html`、または実例での
+	ドリフトは、ドキュメントが公開される前にビルドを壊します。
+</Callout>
+
+## 1. パイプラインの概要
+
+パイプラインには 3 つの名前付きステージと、各ペアの間に 1 回の凍結された受け渡しがあります。
+
+```text
+Puck Data ──puckDataToIR()──▶ PageIR ──ExportFormatDefinition.run()──▶ { content, filename }
+          (from @anvilkit/ir)  (from @anvilkit/core/types)       (string | Uint8Array)
+```
+
+- **ステージ 1 — `Puck Data`**：Puck のエディターが渡してくるもの。オーサリング形態：コンポーネント id、UI 状態、ドラッグ＆ドロップのメタデータ。エクスポーターがこれを直接見ることはありません。
+- **ステージ 2 — `PageIR`**：すべてのエクスポーターが消費する、正規化され、深く凍結された、JSON セーフなツリー。エクスポートごとにちょうど 1 回、
+	[`puckDataToIR()`](/ja/api/ir/functions/puckdatatoir/) によって生成されます —— 関数
+	プロパティは警告として破棄され、オブジェクトのキーは正規にソートされ、
+	アセットはルートレベルのマニフェストに収集されます。
+- **ステージ 3 — `ExportFormatDefinition.run(ir, options)`**：あなたの
+	エクスポーター。凍結された IR と形式固有のオプションを受け取り、
+	`string`（テキスト形式）または
+	`Uint8Array`（バイナリ形式）に加えて推奨の `filename` を含む `Promise<ExportResult>` を返します。
+
+これを成り立たせる不変条件は、IR の正規化ステップが、登録された形式の数に関わらず、パイプライン全体で**ちょうど 1 回**実行されることです。同時に登録された 2 つのエクスポーターはバイト単位で同一の入力を見ます。これこそが、テストハーネスが 1 つの正規化されたフィクスチャから 2 つの異なる出力をスナップショットできる仕組みです。
+
+## 2. `PageIR` の形態
+
+このセクションのすべての型は、`@anvilkit/core/types` からの `type` エクスポートです —— ランタイムコードゼロ、React ゼロ、JS レイヤーでの `@puckeditor/core` 依存ゼロ。`import type` でインポートすれば、コンパイル時に消去されます。
+
+```ts
+import type {
+	ExportFormatDefinition,
+	PageIR,
+	PageIRAsset,
+	PageIRMetadata,
+	PageIRNode,
+} from "@anvilkit/core/types";
+```
+
+### 2.1 ルートドキュメント
+
+```ts
+import type { PageIR } from "@anvilkit/core/types";
+
+const ir: PageIR = {
+	version: "1",
+	root: {
+		id: "root",
+		type: "__root__",
+		props: {},
+		children: [
+			{
+				id: "hero-1",
+				type: "Hero",
+				props: {
+					headline: "Ship updates without friction.",
+					description: "Deterministic exports for internal release pages.",
+				},
+			},
+		],
+	},
+	assets: [],
+	metadata: { createdAt: "2026-04-11T00:00:00.000Z" },
+};
+```
+
+4 つのトップレベルキー、すべて必須：
+
+| キー       | 形態                                 | 目的                                                                 |
+| ---------- | ------------------------------------ | -------------------------------------------------------------------- |
+| `version`  | リテラル `"1"`                       | スキーマバージョン。将来の `"2"` は IR 形態への破壊的変更です。       |
+| `root`     | [`PageIRNode`](/ja/api/core/interfaces/pageirnode/) | 合成された `__root__` ノード；その `children` がページコンテンツを保持します。 |
+| `assets`   | `readonly PageIRAsset[]`             | ツリー内で参照されるすべてのアセットの、フラットで重複排除されたマニフェスト。 |
+| `metadata` | [`PageIRMetadata`](/ja/api/core/interfaces/pageirmetadata/) | オプションの `title`/`description`/`createdAt`/`updatedAt`。 |
+
+### 2.2 ノード
+
+```ts
+import type { PageIRNode } from "@anvilkit/core/types";
+
+const heroNode: PageIRNode = {
+	id: "hero-1",
+	type: "Hero",
+	props: {
+		headline: "Ship updates without friction.",
+		description: "Deterministic HTML exports.",
+	},
+	// `children` is omitted on leaf nodes (not set to []).
+};
+```
+
+- `id` —— ノードごとの安定した識別子。Puck のコンテンツ id から引き継がれるため、ラウンドトリップはロスレスです。
+- `type` —— そのノードが生成された元となるコンポーネント名（`"Hero"`、`"Button"`、`"Section"`）。エクスポーターはこれに基づいてディスパッチします。
+- `props` —— 不透明な `Readonly<Record<string, unknown>>`。IR はプロパティの形態について何の主張もしません。それはエクスポーターの仕事です。
+- `children` —— オプションの再帰的な配列。リーフでは省略されます（空配列にはなりません）。
+- `assets` —— オプションのノードスコープのアセットリスト。ツリー全体を辿らずに自分の担当部分だけを解決したいエクスポーター向け。
+
+### 2.3 アセット参照
+
+```ts
+import type { PageIRAsset } from "@anvilkit/core/types";
+
+const cover: PageIRAsset = {
+	id: "a1b2c3",
+	kind: "image",
+	url: "https://cdn.example.com/cover.jpg",
+	meta: { width: 1600, height: 900 },
+};
+```
+
+`kind` は**クローズドなユニオン**です：`"image" | "video" | "font" | "script" |
+"style" | "other"`。設計上、このユニオンを拡張することは破壊的変更です —— 型レベルですべてのケースを処理するエクスポーターは、新しい kind が登場したときに再チェックを強制されます。
+
+どのプロパティキーがアセットになるのか？
+[`collectAssets()`](/ja/api/ir/functions/collectassets/) は
+`src`、`imageUrl`、`imageSrc`、`url`、`videoUrl`、`videoSrc`、
+`fontUrl`、`scriptUrl`、`styleUrl` を認識します。`href` は意図的に
+除外されています —— それはアセットではなくナビゲーションリンクだからです。
+
+### 2.4 スロット
+
+Puck の `slot` 型フィールドは、親ノードの `props` バッグに存在する子ノードのネストした配列として IR に現れます。レイアウトコンポーネント（例えば `layout` テンプレートの `leftColumn`/`rightColumn`）はこれに依存しています —— 空のスロットは欠落したキーではなく `[]` です。
+
+エクスポート時に、どの `type` のどのプロパティキーがスロットなのかを知る必要があるときは、
+[`identifySlots(config)`](/ja/api/ir/functions/identifyslots/) を使用します。IR パッケージは、正規化中にスロット配列を通常のデータ配列と区別するためにこれを使います。
+
+## 3. 新しいエクスポーターを書く
+
+エクスポーターは 3 つのものから成ります：
+
+1. `ExportFormatDefinition` オブジェクト —— 形式ごとのディスクリプター。
+2. その `register()` の戻り値の `exportFormats` 配列を通じて定義を提供する `StudioPlugin`。
+3. （オプションで）Studio ツールバーからエクスポートを駆動する `StudioHeaderAction`。
+
+本ガイドの実例は
+[`@anvilkit/example-export-json`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json)
+—— 最小限の JSON エクスポーターです。その `run()` 全体は 1 画面に収まります：
+
+```ts
+import type {
+	ExportFormatDefinition,
+	PageIR,
+} from "@anvilkit/core/types";
+
+interface JsonExportOptions extends Record<string, unknown> {
+	readonly indent?: number;
+	readonly filename?: string;
+}
+
+export const jsonFormat: ExportFormatDefinition<JsonExportOptions> = {
+	id: "json",
+	label: "JSON",
+	extension: "json",
+	mimeType: "application/json",
+	async run(ir: PageIR, options) {
+		const indent = options.indent ?? 2;
+		const filename = options.filename ?? "page.json";
+		const content = JSON.stringify(ir, null, indent);
+		return { content, filename };
+	},
+};
+```
+
+これを `StudioPlugin` でラップします：
+
+```ts
+import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core/types";
+import { jsonFormat } from "./json-format.js";
+
+const meta: StudioPluginMeta = {
+	id: "anvilkit-example-export-json",
+	name: "JSON Export",
+	version: "0.1.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+export function createExportJsonPlugin(): StudioPlugin {
+	return {
+		meta,
+		register(_ctx) {
+			return {
+				meta,
+				exportFormats: [jsonFormat],
+			};
+		},
+	};
+}
+```
+
+そしてランタイムに登録します：
+
+```ts
+import { createStudioConfig } from "@anvilkit/core";
+import { createExportJsonPlugin } from "@anvilkit/example-export-json";
+
+const studioConfig = createStudioConfig({
+	plugins: [createExportJsonPlugin()],
+});
+```
+
+ホストアプリは、id を介して
+`useExportStore.exportAs("json", { indent: 0 })` でその形式をトリガーします。ランタイムは
+`runtime.exportFormats` でその id を探し、
+新しく正規化された IR で `run(ir, options)` を呼び出し、結果を
+ダウンロード用の `Blob` として返します。
+
+<Callout type="warn" title="`run` は Data ではなく IR を受け取る">
+	`ExportFormatDefinition.run` は
+	[`PageIR`](/ja/api/core/interfaces/pageir/) に対して型付けされています —— Puck の `Data` を
+	受け取る `run` を物理的に型チェックすることはできません。それこそが
+	IR レイヤーが存在する唯一の理由です：エクスポーターは誤って
+	正規化をスキップすることができません。
+</Callout>
+
+## 4. HTML エクスポーターのウォークスルー
+
+[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+はリファレンスエクスポーターです。自分のものを構築し始めるとき、その `format-definition.ts` が最初に読むべきファイルです：
+
+```ts
+// packages/plugins/plugin-export-html/src/format-definition.ts
+export const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+	id: "html",
+	label: "HTML",
+	extension: "html",
+	mimeType: "text/html",
+	run: async (ir, options) => {
+		const ctx = makeEmitContext();
+		const { html, usedClassnames, warnings: htmlWarnings, emittedAssetIds } = emitHtml(ir, options, ctx);
+		const { inlined, warnings: assetWarnings } = await inlineAssets(ir.assets, {
+			thresholdBytes: options.inlineAssetThresholdBytes ?? 32_768,
+			...(options.fetchAsset ? { fetchAsset: options.fetchAsset } : {}),
+			emittedAssetIds,
+		});
+		const css = emitCss(usedClassnames, options);
+		const bodyHtml = substituteAssets(html, inlined);
+		const content = wrapDocument({
+			title: options.title ?? ir.metadata.title ?? "Exported Page",
+			description: ir.metadata.description,
+			css,
+			bodyHtml,
+		});
+		return { content, filename: "page.html", warnings: [...htmlWarnings, ...assetWarnings] };
+	},
+};
+```
+
+5 つの責務、それぞれが独自のモジュールに：
+
+| モジュール               | 責務                                                               |
+| ------------------------ | ------------------------------------------------------------------ |
+| `emit-html.ts`           | IR を辿り、ノード `type` ごとにクラス装飾された HTML 文字列を発行する。 |
+| `emit-css.ts`            | `emit-html` が使ったクラス名のための CSS ルールを発行する。        |
+| `inline-assets.ts`       | 任意でアセットのバイトを取得し、しきい値以下の発行済み画像を base64 エンコードする。 |
+| `substitute-assets.ts`   | body 内の `asset-id://…` プレースホルダーを data URI で置換する。  |
+| `wrap-document.ts`       | body + CSS を独立した `<!doctype html>` ドキュメントにラップする。 |
+
+パイプライン全体は意図的に純粋です —— `run()` が `async` なのは、
+アセット解決やホスト提供のインライン化が外部
+コールバックを await する可能性があるためです。それ以外のすべては、深く凍結された IR に対する同期的な文字列操作です。
+
+プラグインのシェルは薄いラッパーです：
+
+```ts
+// create-html-export-plugin.ts — abbreviated
+const htmlExportPluginMeta: StudioPluginMeta = {
+	id: "anvilkit-plugin-export-html",
+	name: "HTML Export",
+	version: "0.1.0-alpha.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+export function createHtmlExportPlugin(opts: HtmlExportOptions = {}): StudioPlugin {
+	return {
+		meta: htmlExportPluginMeta,
+		register(_ctx) {
+			return {
+				meta: htmlExportPluginMeta,
+				exportFormats: [htmlFormat],
+				...(opts.buildIR ? { headerActions: [createExportHtmlHeaderAction(htmlFormat, opts)] } : {}),
+			};
+		},
+	};
+}
+```
+
+あなたが提供するすべて —— `exportFormats`、`headerActions`、そして
+（未表示の）`hooks` / `overrides` —— はプレーンなデータです。ランタイムが
+マウント時にそれを組み立てます。あなたのプラグインコードが
+React ツリーに手を伸ばすことは決してありません。
+
+## 5. アセットのインライン化戦略
+
+テキスト中心のエクスポート（HTML、MDX、React ソース）は通常、出力を単一の自己完結型ファイルにするために、ある程度のインライン化を望みます。バイナリ
+エクスポート（PDF、ZIP）は常にインライン化します。純粋なデータエクスポート（JSON）は決して
+インライン化しません。3 つの戦略は、バイトが最終的にどこに収まるかで異なります。
+
+### 5.1 Base64 インライン化（ホスト制御の HTML）
+
+`@anvilkit/plugin-export-html` は、デコード後のサイズが
+`inlineAssetThresholdBytes`（デフォルト `32_768`）未満の発行済み画像をどれでもインライン化できますが、
+ホストが `fetchAsset` を提供したときにのみバイトを取得します。`inlineAssets`
+ヘルパーは形態をシンプルに保ちます —— `Map<assetId, dataUrl>`
+—— そして HTML パイプラインは出力時に置換します：
+
+```ts
+// Simplified from inline-assets.ts.
+async function inlineSmallImages(assets, { thresholdBytes, fetchAsset, emittedAssetIds }) {
+	const inlined = new Map<string, string>();
+	if (!fetchAsset) return inlined;
+	for (const asset of assets) {
+		if (!emittedAssetIds.has(asset.id)) continue;
+		if (asset.kind !== "image") continue;
+		const { bytes, contentType } = await fetchAsset(asset.url, { maxBytes: thresholdBytes });
+		if (bytes.length > thresholdBytes) continue;
+		inlined.set(asset.id, `data:${contentType};base64,${toBase64(bytes)}`);
+	}
+	return inlined;
+}
+```
+
+以下の場合にこれを使用します：
+
+- ホストが単一のファイルをダウンロードし、アセットを再取得できない。
+- アセットが小さい（アイコン、favicon、32 KB 未満の画像）。
+- ファイルをオフラインで動作させたい。
+
+### 5.2 URL による参照
+
+アセットの URL をそのままにして、プレーンな `<img src="…">`（または
+同等のもの）を発行します。次の場合に最適：
+
+- アセットが大きい（hero 画像、動画）。
+- エクスポートが、元のホストに到達できる環境で消費される。
+- 移植性よりも出力サイズを重視する。
+
+デフォルトの HTML パイプラインは URL を参照します。ホストが
+フェッチャーを提供すると、パイプラインは両方を混在させます：しきい値以下はインライン化し、
+残りは参照します。`MISSING_INLINE` 警告（レベル `"warn"`）は、しきい値に
+届かなかったものを指摘し、ホストが
+予算を引き締めるか、アセットを再ホストするかを判断できるようにします。
+
+### 5.3 参照を完全に取り除く
+
+一部のエクスポート（下流のパイプラインに渡される JSON スナップショット、別のアセットパスによって再構築される MDX
+バンドル）は、IR の
+`assets` マニフェストをそのままコピーするだけを望みます。本
+ガイドの JSON エクスポーターが典型的な例です —— それは取得もインライン化もせず、
+`ir.assets` をノードツリーと並べてシリアライズするだけです。
+
+### 5.4 アセット警告の分類体系
+
+すべてのエクスポーターは、致命的でない発見について、例外をスローするのではなく
+`ExportWarning[]` を発行すべきです。HTML プラグインは次のような警告コードを使用します：
+
+- `MISSING_INLINE` —— アセットがしきい値を超え、URL として残された。
+- `ASSET_FETCH_FAILED` —— `fetchAsset()` がスローした。URL はそのまま残される。
+- `ASSET_FETCH_BLOCKED` —— デフォルトのフェッチャーが非 http(s) の URL を拒否した。
+- `UNINLINEABLE_ASSET_KIND` —— 画像でないアセットは data-URI インライン化の対象外だった。
+- `ASSET_UNRESOLVED` —— `asset://` URL を所有する登録済みリゾルバーがなかった。
+- `UNSUPPORTED_CHILDREN` —— レンダリングされたコンポーネントに、エクスポーターがまだ保持できないネストした IR 子ノードがあった。
+
+ハードな失敗（不正な IR、修正不能なエンコーディングエラー）は
+`StudioExportError` をスローすべきで、ランタイムがそれをキャッチしてホストに提示します。
+ユーザーが回復できないものについて、`level: "error"` の警告を決して返さないでください。
+
+## 6. ラウンドトリップ不変条件
+
+パイプラインで最も重要な単一の不変条件は次のとおりです：
+
+```text
+irToPuckData(puckDataToIR(d)) ≡ d   // up to root-prop canonicalization
+```
+
+[`irToPuckData`](/ja/api/ir/functions/irtopuckdata/) は
+`puckDataToIR` の逆です。両者を合わせて、IR がそれを生成した
+オーサリング `Data` に対してロスレスであることを証明します。3 つの具体的な利点：
+
+1. **AI 生成のページがラウンドトリップする。** AI-copilot プラグインは
+	その LLM 出力を `PageIR` として検証し、それから
+	`irToPuckData` を通じて `setData` ディスパッチへ送ります。この不変条件がなければ、
+	AI の編集は生成のたびに少しずつドリフトするでしょう。
+2. **スナップショットテストがバイト安定を保つ。** 同じ `Data` に対して `puckDataToIR` を 2 回実行すると
+	バイト単位で同一の JSON が生成されます（プロパティは
+	正規にソートされ、タイムスタンプは注入可能）。これこそが
+	HTML プラグインのゴールデンスナップショットを CI 実行間で `toMatchFileSnapshot()` に
+	合格させるものです。
+3. **2 つのエクスポーターが「ページに何があるか」で食い違うことはない。** 両者が
+	同じ IR を消費するため、Puck の癖や
+	オーサリング専用のフィールドで分岐することはできません。
+
+不変条件を明示的にテストしてください —— すべての新しいエクスポーターは、代表的なフィクスチャに対してそれを証明する
+`round-trip.test.ts` を同梱すべきです：
+
+```ts
+import { irToPuckData, puckDataToIR } from "@anvilkit/ir";
+import { expect, it } from "vitest";
+
+it("round-trips the demo data through IR without loss", () => {
+	const FIXED_CLOCK = () => new Date("2026-04-11T00:00:00.000Z");
+	const ir = puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK });
+	expect(irToPuckData(ir)).toEqual(demoData);
+});
+```
+
+`FIXED_CLOCK` が鍵です —— `metadata.createdAt` は ISO 文字列であり、
+浮動する `new Date()` はスナップショットの安定性を損なうでしょう。パイプラインを
+実行するすべての AnvilKit テストは、`puckDataToIR` の `opts.now` を通じて
+注入されたクロックを通します。
+
+## 7. エクスポーターをテストする
+
+`@anvilkit/plugin-export-html` は 3 つの重なり合うテストレイヤーを使用します。
+それらをコピーしてください —— それらは 3 つの異なる種類の回帰を捕捉します。
+
+### 7.1 ゴールデンスナップショット
+
+フィクスチャごとに 1 つのテスト。それぞれがエクスポーターの出力が、コミットされた
+`.snap.html` ファイルに一致することをアサートします：
+
+```ts
+// Adapted from plugin-export-html/src/__tests__/golden.test.ts
+import { fileURLToPath } from "node:url";
+import { expect, it } from "vitest";
+import { htmlFormat } from "../format-definition.js";
+import { heroFixture } from "./__fixtures__/hero.fixture.js";
+
+const fetchAsset = async () => ({
+	bytes: new Uint8Array([1, 2, 3, 4]),
+	contentType: "image/jpeg",
+});
+
+it("renders the hero fixture to a stable html document", async () => {
+	const result = await htmlFormat.run(heroFixture, {
+		inlineStyles: true,
+		inlineAssetThresholdBytes: 0,
+		title: "Hero",
+		fetchAsset,
+	});
+	expect(result.content).toMatchFileSnapshot(
+		fileURLToPath(new URL("./__snapshots__/hero.snap.html", import.meta.url)),
+	);
+});
+```
+
+`toMatchFileSnapshot` は初回実行時に書き込み、後続の
+実行時に比較します。エクスポーター、IR 形態、またはフィクスチャのデフォルトのドリフトは、すべて
+`pnpm test -u` で明示的に受け入れなければならない差分を生成します。
+
+### 7.2 ラウンドトリップ解析
+
+ゴールデンスナップショットは出力の*形態*を固定しますが、
+「HTML は技術的には有効だが headline を失った」を捕捉することはできません。出力を
+`happy-dom` で解析し、再クエリしてください：
+
+```ts
+import { Window } from "happy-dom";
+import { expect, it } from "vitest";
+
+it("preserves hero headline content", async () => {
+	const { content } = await htmlFormat.run(heroFixture, {
+		inlineStyles: true,
+		inlineAssetThresholdBytes: 0,
+		fetchAsset: async () => ({
+			bytes: new Uint8Array([1, 2, 3, 4]),
+			contentType: "image/jpeg",
+		}),
+	});
+	const window = new Window();
+	window.document.write(content as string);
+	window.document.close();
+	expect(
+		window.document.querySelector(".ak-hero__headline")?.textContent,
+	).toContain("Ship updates without friction.");
+});
+```
+
+### 7.3 登録テスト
+
+3 つ目のレイヤーは、プラグインがクリーンに接続されることをアサートします。
+`compilePlugins([yourPlugin()], ctx)` を呼び出し、あなたの形式 id が
+`runtime.exportFormats` に現れることを確認します：
+
+```ts
+import { StudioConfigSchema, compilePlugins } from "@anvilkit/core";
+import type { StudioPluginContext } from "@anvilkit/core/types";
+import { expect, it, vi } from "vitest";
+import { createExportJsonPlugin } from "@anvilkit/example-export-json";
+
+const studioConfig = StudioConfigSchema.parse({});
+
+function makeCtx(): StudioPluginContext {
+	return {
+		getData: () => ({ root: { props: {} }, content: [], zones: {} }),
+		getPuckApi: (() => {
+			throw new Error("getPuckApi unused in this test");
+		}) as unknown as StudioPluginContext["getPuckApi"],
+		studioConfig,
+		log: vi.fn(),
+		emit: vi.fn(),
+	};
+}
+
+it("registers the json export format via compilePlugins", async () => {
+	const runtime = await compilePlugins([createExportJsonPlugin()], makeCtx());
+	expect([...runtime.exportFormats.keys()]).toContain("json");
+});
+```
+
+JSON の実例は 3 つすべてを同梱しています —— 完全なスイートに加えて、
+`apps/demo/lib/puck-demo.ts` をミラーするデモページのスナップショットについては、
+[`examples/plugins/export-json/src/__tests__/`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json/src/__tests__)
+を参照してください。
+
+<Callout type="info" title="1 つのパイプライン、3 つのテスト、1 つのフィクスチャ">
+	3 つのテストレイヤーすべてを同じ IR フィクスチャから駆動させ続けてください。
+	フィクスチャが変わると、単一の信頼できる情報源から 3 つの異なる信号 —— 出力
+	形態（ゴールデン）、意味的保存（ラウンドトリップ解析）、そして
+	プラグイン配線（登録）—— が得られます。
+</Callout>
+
+## リファレンス
+
+- [`puckDataToIR`](/ja/api/ir/functions/puckdatatoir/) —— Puck `Data` → IR の変換。
+- [`irToPuckData`](/ja/api/ir/functions/irtopuckdata/) —— 逆変換。AI プラグインとラウンドトリップテスト用。
+- [`collectAssets`](/ja/api/ir/functions/collectassets/) —— 正規化中に使用されるアセットウォーカー。
+- [`identifySlots`](/ja/api/ir/functions/identifyslots/) —— レイアウトコンポーネント向けのスロット検出ヘルパー。
+- [`PageIR`](/ja/api/core/interfaces/pageir/) · [`PageIRNode`](/ja/api/core/interfaces/pageirnode/) · [`PageIRAsset`](/ja/api/core/interfaces/pageirasset/) · [`PageIRMetadata`](/ja/api/core/interfaces/pageirmetadata/) —— IR の型サーフェス。
+- [`ExportFormatDefinition`](/ja/api/core/interfaces/exportformatdefinition/) · [`ExportResult`](/ja/api/core/interfaces/exportresult/) · [`ExportWarning`](/ja/api/core/interfaces/exportwarning/) —— エクスポーターコントラクト。
+- 実例の JSON エクスポーター：[`examples/plugins/export-json`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json)。
+- リファレンス HTML エクスポーター：[`packages/plugins/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)。
+- エクスポーターを登録するためのプラグインサーフェス：[プラグインオーサリング](/ja/guides/plugin-authoring/)。

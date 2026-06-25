@@ -1,0 +1,49 @@
+---
+title: "debounce"
+description: "@anvilkit/utils · debounce"
+---
+
+```ts
+function debounce<T>(fn, wait): DebouncedFunction<T>;
+```
+
+Defined in: [debounce.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/debounce.ts#L38)
+
+Returns a debounced version of `fn` that delays invocation until
+`wait` milliseconds have elapsed since the last call. If the returned
+function is called again within the window, the timer resets. Calling
+`.cancel()` drops any pending invocation without firing `fn`.
+
+The returned function always resolves to `undefined` synchronously —
+the real return value of `fn` is dropped because it is deferred. The
+type-level `T &` intersection exists so callers retain the original
+parameter tuple; it does **not** imply the return value is preserved.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `AnyFunction` |
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `fn` | `T` | The function to debounce. |
+| `wait` | `number` | Idle period in milliseconds before `fn` fires. |
+
+## Returns
+
+[`DebouncedFunction`](../type-aliases/DebouncedFunction)\<`T`\>
+
+A debounced function with a `.cancel()` method.
+
+## Example
+
+```ts
+const save = debounce((data: FormData) => api.save(data), 300);
+save(formA); // pending
+save(formB); // resets timer, formA is dropped
+// 300ms later → api.save(formB) fires.
+save.cancel(); // drops formB if still pending.
+```

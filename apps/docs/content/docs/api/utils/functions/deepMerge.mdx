@@ -1,0 +1,62 @@
+---
+title: "deepMerge"
+description: "@anvilkit/utils · deepMerge"
+---
+
+```ts
+function deepMerge<T>(target, ...sources): T;
+```
+
+Defined in: [deep-merge.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L55)
+
+Deeply merges one or more `sources` onto `target`, returning a **new**
+object. The original `target` is never mutated — callers can treat the
+result as an immutable snapshot.
+
+Semantics:
+
+- Later sources override earlier sources (total order).
+- Plain objects are merged recursively.
+- **Arrays are replaced, not concatenated.** This is the correct
+  behavior for layered configuration (you want Layer 3 to fully
+  override Layer 1's array, not append to it). Other Puck-adjacent
+  codebases have regressed here; do not change it without updating
+  every caller.
+- Non-plain objects (class instances, `Date`, `Map`, `Set`, etc.) are
+  assigned by reference — they are leaf values.
+- Own-property keys `__proto__`, `constructor`, and `prototype` are
+  silently skipped to block prototype-pollution attacks.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `target` | `T` | The base value. If it is a plain object, it is shallow-cloned before merging. |
+| ...`sources` | readonly ([`DeepPartial`](../type-aliases/DeepPartial)\&lt;`T`\&gt; \| `undefined`)[] | Patches applied in order. `undefined` sources are ignored so callers can pass optional layers without guarding. |
+
+## Returns
+
+`T`
+
+A new `T` containing the merged result.
+
+## Examples
+
+```ts
+deepMerge(
+  { theme: { mode: "light", tokens: { primary: "#000" } } },
+  { theme: { mode: "dark" } },
+);
+// => { theme: { mode: "dark", tokens: { primary: "#000" } } }
+```
+
+```ts
+deepMerge({ tags: ["a", "b"] }, { tags: ["c"] });
+// => { tags: ["c"] }   // arrays are replaced, not merged
+```

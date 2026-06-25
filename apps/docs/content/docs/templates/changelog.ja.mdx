@@ -1,0 +1,54 @@
+---
+title: "変更履歴ページ"
+description: "変更履歴ページ — ナビバー、セクション見出し、エントリ用の blog-list。"
+---
+
+![変更履歴ページ preview](/templates/changelog/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-changelog</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI からスキャフォールド
+
+```sh
+npx anvilkit init --template changelog my-site
+```
+
+## 構成
+
+コミット済みの `PageIR` は、ルートに次のノードタイプを配線します：
+
+- `Navbar`
+- `Section`
+- `BlogList`
+
+## パッケージの詳細
+
+A product changelog page.
+
+Navbar, section heading, and a blog-list re-used as the changelog entry stream.
+
+## Install
+
+```sh
+npx anvilkit init --template changelog my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/blog-list`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

@@ -1,0 +1,541 @@
+---
+title: "导出管线"
+description: "Puck Data 如何变成可下载的字节 —— puckDataToIR、PageIR 契约、ExportFormatDefinition、资源内联、往返不变式，以及每个导出器都会附带的快照驱动测试模式。"
+---
+
+AnvilKit 将每一种导出 —— 今天的 HTML，明天的 React 源码和 PDF，下周你的自定义格式 —— 都视为同一份归一化 `PageIR` 文档的函数。本指南端到端地讲解整条管线，并以一个真实的、经过测试的 JSON 导出器作为示例。
+
+<Callout type="info" title="代码保持绿色">
+	下面每一个代码块都被抽取到
+	[`apps/docs/tests/guides/export-pipeline.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/export-pipeline.test.ts)
+	并在 CI 中作为 Vitest 测试运行。`@anvilkit/core`、
+	`@anvilkit/ir`、`@anvilkit/plugin-export-html` 或本示例中的任何漂移
+	都会在文档发布之前中断构建。
+</Callout>
+
+## 1. 管线概览
+
+整条管线有三个命名阶段，以及每对阶段之间的一次冻结交接：
+
+```text
+Puck Data ──puckDataToIR()──▶ PageIR ──ExportFormatDefinition.run()──▶ { content, filename }
+          (from @anvilkit/ir)  (from @anvilkit/core/types)       (string | Uint8Array)
+```
+
+- **阶段 1 — `Puck Data`**：Puck 编辑器交给你的内容。以创作为形态：组件 id、UI 状态、拖放元数据。导出器永远不会直接看到它。
+- **阶段 2 — `PageIR`**：每个导出器消费的那棵归一化、深度冻结、JSON 安全的树。每次导出由
+	[`puckDataToIR()`](/zh/api/ir/functions/puckdatatoir/) 恰好生成一次 —— 函数
+	属性会作为警告被丢弃，对象键被规范地排序，
+	资源被收集进一份根级清单。
+- **阶段 3 — `ExportFormatDefinition.run(ir, options)`**：你的
+	导出器。接收冻结的 IR 和特定于格式的选项，
+	返回 `Promise<ExportResult>`，其中包含一个 `string`（文本格式）或一个
+	`Uint8Array`（二进制格式），外加一个建议的 `filename`。
+
+让这一切得以运作的不变式是：IR 归一化步骤在整条管线中**恰好运行一次**，无论注册了多少种格式。同时注册的两个导出器看到的输入逐字节相同，这正是测试框架能够从同一份归一化夹具快照出两份不同输出的原因。
+
+## 2. `PageIR` 的形态
+
+本节中的每个类型都是来自 `@anvilkit/core/types` 的 `type` 导出 —— 零运行时代码、零 React、在 JS 层零 `@puckeditor/core` 依赖。用 `import type` 导入它们，它们会在编译期被擦除。
+
+```ts
+import type {
+	ExportFormatDefinition,
+	PageIR,
+	PageIRAsset,
+	PageIRMetadata,
+	PageIRNode,
+} from "@anvilkit/core/types";
+```
+
+### 2.1 根文档
+
+```ts
+import type { PageIR } from "@anvilkit/core/types";
+
+const ir: PageIR = {
+	version: "1",
+	root: {
+		id: "root",
+		type: "__root__",
+		props: {},
+		children: [
+			{
+				id: "hero-1",
+				type: "Hero",
+				props: {
+					headline: "Ship updates without friction.",
+					description: "Deterministic exports for internal release pages.",
+				},
+			},
+		],
+	},
+	assets: [],
+	metadata: { createdAt: "2026-04-11T00:00:00.000Z" },
+};
+```
+
+四个顶级键，全部必填：
+
+| 键         | 形态                                 | 用途                                                                 |
+| ---------- | ------------------------------------ | -------------------------------------------------------------------- |
+| `version`  | 字面量 `"1"`                         | Schema 版本。未来的 `"2"` 是对 IR 形态的破坏性变更。                  |
+| `root`     | [`PageIRNode`](/zh/api/core/interfaces/pageirnode/) | 合成的 `__root__` 节点；它的 `children` 持有页面内容。 |
+| `assets`   | `readonly PageIRAsset[]`             | 对树中引用的每个资源进行扁平化、去重后的清单。                       |
+| `metadata` | [`PageIRMetadata`](/zh/api/core/interfaces/pageirmetadata/) | 可选的 `title`/`description`/`createdAt`/`updatedAt`。 |
+
+### 2.2 节点
+
+```ts
+import type { PageIRNode } from "@anvilkit/core/types";
+
+const heroNode: PageIRNode = {
+	id: "hero-1",
+	type: "Hero",
+	props: {
+		headline: "Ship updates without friction.",
+		description: "Deterministic HTML exports.",
+	},
+	// `children` is omitted on leaf nodes (not set to []).
+};
+```
+
+- `id` —— 稳定的逐节点标识符，从 Puck 的内容 id 沿用而来，因此往返是无损的。
+- `type` —— 生成该节点所依据的组件名（`"Hero"`、`"Button"`、`"Section"`）。导出器据此分派。
+- `props` —— 不透明的 `Readonly<Record<string, unknown>>`。IR 对属性形态不作任何断言；那是导出器的职责。
+- `children` —— 可选的递归数组。在叶子节点上被省略（而非置空）。
+- `assets` —— 可选的节点作用域资源列表，供那些只想解析自己那一部分、而不必遍历整棵树的导出器使用。
+
+### 2.3 资源引用
+
+```ts
+import type { PageIRAsset } from "@anvilkit/core/types";
+
+const cover: PageIRAsset = {
+	id: "a1b2c3",
+	kind: "image",
+	url: "https://cdn.example.com/cover.jpg",
+	meta: { width: 1600, height: 900 },
+};
+```
+
+`kind` 是一个**封闭联合类型**：`"image" | "video" | "font" | "script" |
+"style" | "other"`。按设计，扩展这个联合类型是破坏性变更 —— 在类型层面处理每一种情况的导出器，会在新的 kind 落地时被强制重新检查。
+
+哪些属性键会变成资源？
+[`collectAssets()`](/zh/api/ir/functions/collectassets/) 识别
+`src`、`imageUrl`、`imageSrc`、`url`、`videoUrl`、`videoSrc`、
+`fontUrl`、`scriptUrl` 和 `styleUrl`。`href` 被刻意排除 —— 它是一个导航链接，而非资源。
+
+### 2.4 插槽
+
+一个 Puck `slot` 类型的字段在 IR 中表现为存放在父节点 `props` 包里的、由子节点构成的嵌套数组。布局组件（例如 `layout` 模板的 `leftColumn`/`rightColumn`）依赖于此 —— 一个空插槽是 `[]`，而不是缺失的键。
+
+当你需要在导出时知道哪些 `type` 上的哪些属性键是插槽时，使用
+[`identifySlots(config)`](/zh/api/ir/functions/identifyslots/)。IR 包用它在归一化期间把插槽数组与常规数据数组区分开来。
+
+## 3. 编写一个新的导出器
+
+一个导出器由三样东西组成：
+
+1. 一个 `ExportFormatDefinition` 对象 —— 逐格式的描述符。
+2. 一个 `StudioPlugin`，通过其 `register()` 返回值的 `exportFormats` 数组贡献该定义。
+3. （可选）一个 `StudioHeaderAction`，从 Studio 工具栏驱动导出。
+
+本指南的示例是
+[`@anvilkit/example-export-json`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json)
+—— 一个极简的 JSON 导出器。它的整个 `run()` 一屏即可放下：
+
+```ts
+import type {
+	ExportFormatDefinition,
+	PageIR,
+} from "@anvilkit/core/types";
+
+interface JsonExportOptions extends Record<string, unknown> {
+	readonly indent?: number;
+	readonly filename?: string;
+}
+
+export const jsonFormat: ExportFormatDefinition<JsonExportOptions> = {
+	id: "json",
+	label: "JSON",
+	extension: "json",
+	mimeType: "application/json",
+	async run(ir: PageIR, options) {
+		const indent = options.indent ?? 2;
+		const filename = options.filename ?? "page.json";
+		const content = JSON.stringify(ir, null, indent);
+		return { content, filename };
+	},
+};
+```
+
+把它包进一个 `StudioPlugin`：
+
+```ts
+import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core/types";
+import { jsonFormat } from "./json-format.js";
+
+const meta: StudioPluginMeta = {
+	id: "anvilkit-example-export-json",
+	name: "JSON Export",
+	version: "0.1.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+export function createExportJsonPlugin(): StudioPlugin {
+	return {
+		meta,
+		register(_ctx) {
+			return {
+				meta,
+				exportFormats: [jsonFormat],
+			};
+		},
+	};
+}
+```
+
+然后把它注册到运行时：
+
+```ts
+import { createStudioConfig } from "@anvilkit/core";
+import { createExportJsonPlugin } from "@anvilkit/example-export-json";
+
+const studioConfig = createStudioConfig({
+	plugins: [createExportJsonPlugin()],
+});
+```
+
+宿主应用通过 id 用
+`useExportStore.exportAs("json", { indent: 0 })` 触发该格式。运行时
+在 `runtime.exportFormats` 中查找该 id，用
+新鲜归一化的 IR 调用 `run(ir, options)`，并把结果作为一个 `Blob` 交回
+以供下载。
+
+<Callout type="warn" title="`run` 接收 IR，而非 Data">
+	`ExportFormatDefinition.run` 是针对
+	[`PageIR`](/zh/api/core/interfaces/pageir/) 进行类型标注的 —— 你在物理上无法
+	对一个接收 Puck `Data` 的 `run` 进行类型检查。这正是
+	IR 层存在的全部原因：导出器无法意外跳过
+	归一化。
+</Callout>
+
+## 4. HTML 导出器逐步讲解
+
+[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+是参考导出器。当你开始构建自己的导出器时，它的 `format-definition.ts` 是第一个要读的文件：
+
+```ts
+// packages/plugins/plugin-export-html/src/format-definition.ts
+export const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+	id: "html",
+	label: "HTML",
+	extension: "html",
+	mimeType: "text/html",
+	run: async (ir, options) => {
+		const ctx = makeEmitContext();
+		const { html, usedClassnames, warnings: htmlWarnings, emittedAssetIds } = emitHtml(ir, options, ctx);
+		const { inlined, warnings: assetWarnings } = await inlineAssets(ir.assets, {
+			thresholdBytes: options.inlineAssetThresholdBytes ?? 32_768,
+			...(options.fetchAsset ? { fetchAsset: options.fetchAsset } : {}),
+			emittedAssetIds,
+		});
+		const css = emitCss(usedClassnames, options);
+		const bodyHtml = substituteAssets(html, inlined);
+		const content = wrapDocument({
+			title: options.title ?? ir.metadata.title ?? "Exported Page",
+			description: ir.metadata.description,
+			css,
+			bodyHtml,
+		});
+		return { content, filename: "page.html", warnings: [...htmlWarnings, ...assetWarnings] };
+	},
+};
+```
+
+五项职责，每项都在各自的模块里：
+
+| 模块                     | 职责                                                               |
+| ------------------------ | ------------------------------------------------------------------ |
+| `emit-html.ts`           | 遍历 IR，按节点 `type` 发出带类名装饰的 HTML 字符串。              |
+| `emit-css.ts`            | 为 `emit-html` 用到的类名发出 CSS 规则。                           |
+| `inline-assets.ts`       | 可选地抓取资源字节，并对阈值以下的发出图片进行 base64 编码。       |
+| `substitute-assets.ts`   | 用 data URI 替换 body 中的 `asset-id://…` 占位符。                 |
+| `wrap-document.ts`       | 把 body + CSS 包进一个独立的 `<!doctype html>` 文档。              |
+
+整条管线被刻意设计为纯函数 —— `run()` 是 `async` 的，因为
+资源解析和宿主提供的内联可能会 await 外部
+回调。除此之外的一切都是对一棵深度冻结 IR 的同步字符串操作。
+
+插件外壳是一层薄薄的包装：
+
+```ts
+// create-html-export-plugin.ts — abbreviated
+const htmlExportPluginMeta: StudioPluginMeta = {
+	id: "anvilkit-plugin-export-html",
+	name: "HTML Export",
+	version: "0.1.0-alpha.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+export function createHtmlExportPlugin(opts: HtmlExportOptions = {}): StudioPlugin {
+	return {
+		meta: htmlExportPluginMeta,
+		register(_ctx) {
+			return {
+				meta: htmlExportPluginMeta,
+				exportFormats: [htmlFormat],
+				...(opts.buildIR ? { headerActions: [createExportHtmlHeaderAction(htmlFormat, opts)] } : {}),
+			};
+		},
+	};
+}
+```
+
+你贡献的一切 —— `exportFormats`、`headerActions`，以及
+（未展示的）`hooks` / `overrides` —— 都是纯数据。运行时
+在挂载时把它组合起来；你的插件代码永远不会伸进
+React 树里。
+
+## 5. 资源内联策略
+
+文本密集型导出（HTML、MDX、React 源码）通常希望进行一些
+内联，使输出成为单个自包含文件。二进制
+导出（PDF、ZIP）总是内联。纯数据导出（JSON）从不
+内联。这三种策略的区别在于字节最终落在哪里。
+
+### 5.1 Base64 内联（宿主控制的 HTML）
+
+`@anvilkit/plugin-export-html` 可以内联任何解码后大小
+低于 `inlineAssetThresholdBytes`（默认 `32_768`）的发出图片，
+但它只在宿主提供 `fetchAsset` 时才抓取字节。`inlineAssets`
+辅助函数让形态保持简单 —— `Map<assetId, dataUrl>`
+—— HTML 管线在输出时进行替换：
+
+```ts
+// Simplified from inline-assets.ts.
+async function inlineSmallImages(assets, { thresholdBytes, fetchAsset, emittedAssetIds }) {
+	const inlined = new Map<string, string>();
+	if (!fetchAsset) return inlined;
+	for (const asset of assets) {
+		if (!emittedAssetIds.has(asset.id)) continue;
+		if (asset.kind !== "image") continue;
+		const { bytes, contentType } = await fetchAsset(asset.url, { maxBytes: thresholdBytes });
+		if (bytes.length > thresholdBytes) continue;
+		inlined.set(asset.id, `data:${contentType};base64,${toBase64(bytes)}`);
+	}
+	return inlined;
+}
+```
+
+在以下情况下使用它：
+
+- 宿主下载单个文件且无法重新抓取资源。
+- 资源很小（图标、favicon、小于 32 KB 的图片）。
+- 你希望文件能离线工作。
+
+### 5.2 按 URL 引用
+
+保持资源 URL 原样，并发出一个普通的 `<img src="…">`（或
+等价物）。在以下情况下最佳：
+
+- 资源很大（hero 图片、视频）。
+- 导出在一个能够触达原始宿主的环境中被消费。
+- 相比可移植性，你更在意输出体积。
+
+默认的 HTML 管线引用 URL。当宿主提供
+抓取器时，管线会混合两者：阈值以下的内联，其余的引用。`MISSING_INLINE` 警告（级别 `"warn"`）会标出任何
+未达阈值的资源，以便宿主决定是收紧
+预算还是重新托管该资源。
+
+### 5.3 彻底剥离引用
+
+某些导出（交付给下游管线的 JSON 快照、由单独资源处理流程重建的 MDX
+包）只想把 IR 的
+`assets` 清单原封不动地复制出去。本
+指南中的 JSON 导出器就是典型例子 —— 它既不抓取也不内联，它
+只是把 `ir.assets` 与节点树一起序列化。
+
+### 5.4 资源警告分类
+
+每个导出器都应该为非致命的发现发出一个 `ExportWarning[]`，
+而不是抛出异常。HTML 插件使用诸如以下的警告码：
+
+- `MISSING_INLINE` —— 资源超过阈值，作为 URL 保留。
+- `ASSET_FETCH_FAILED` —— `fetchAsset()` 抛出异常；URL 保持原样。
+- `ASSET_FETCH_BLOCKED` —— 默认抓取器拒绝了一个非 http(s) 的 URL。
+- `UNINLINEABLE_ASSET_KIND` —— 非图片资源不符合 data-URI 内联的条件。
+- `ASSET_UNRESOLVED` —— 没有已注册的解析器拥有某个 `asset://` URL。
+- `UNSUPPORTED_CHILDREN` —— 某个被渲染的组件含有导出器尚无法保留的嵌套 IR 子节点。
+
+硬性失败（IR 格式错误、无法修复的编码错误）应该抛出
+`StudioExportError`，运行时会捕获它并向宿主呈现。
+对于用户无法恢复的情况，绝不要返回 `level: "error"` 的警告。
+
+## 6. 往返不变式
+
+管线中最重要的单一不变式是：
+
+```text
+irToPuckData(puckDataToIR(d)) ≡ d   // up to root-prop canonicalization
+```
+
+[`irToPuckData`](/zh/api/ir/functions/irtopuckdata/) 是
+`puckDataToIR` 的逆操作。两者一起证明了 IR 相对于产生它的
+创作 `Data` 是无损的。三个具体的收益：
+
+1. **AI 生成的页面能够往返。** AI-copilot 插件验证
+	它的 LLM 输出为一份 `PageIR`，然后通过
+	`irToPuckData` 把它送入一次 `setData` 分派。没有这个不变式，
+	AI 编辑会在每一次生成中漂移一点。
+2. **快照测试保持字节稳定。** 对同一份 `Data` 运行 `puckDataToIR` 两次
+	会产生逐字节相同的 JSON（属性被
+	规范地排序，时间戳可注入）。这正是让
+	HTML 插件的黄金快照在 CI 运行间通过 `toMatchFileSnapshot()`
+	的原因。
+3. **两个导出器不会对“页面上有什么”产生分歧。** 既然
+	它们都消费同一份 IR，就不会因为 Puck 的怪癖
+	或仅用于创作的字段而产生分叉。
+
+显式地测试该不变式 —— 每个新导出器都应附带一个
+`round-trip.test.ts`，对一个有代表性的夹具加以证明：
+
+```ts
+import { irToPuckData, puckDataToIR } from "@anvilkit/ir";
+import { expect, it } from "vitest";
+
+it("round-trips the demo data through IR without loss", () => {
+	const FIXED_CLOCK = () => new Date("2026-04-11T00:00:00.000Z");
+	const ir = puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK });
+	expect(irToPuckData(ir)).toEqual(demoData);
+});
+```
+
+`FIXED_CLOCK` 是关键 —— `metadata.createdAt` 是一个 ISO 字符串，而
+一个浮动的 `new Date()` 会破坏快照稳定性。每一个
+运行该管线的 AnvilKit 测试都会通过 `puckDataToIR` 的 `opts.now`
+传入一个注入的时钟。
+
+## 7. 测试导出器
+
+`@anvilkit/plugin-export-html` 使用三个相互重叠的测试层。
+照搬它们 —— 它们能捕获三种不同类别的回归。
+
+### 7.1 黄金快照
+
+每个夹具一个测试，每个都断言导出器输出与一个
+已提交的 `.snap.html` 文件相匹配：
+
+```ts
+// Adapted from plugin-export-html/src/__tests__/golden.test.ts
+import { fileURLToPath } from "node:url";
+import { expect, it } from "vitest";
+import { htmlFormat } from "../format-definition.js";
+import { heroFixture } from "./__fixtures__/hero.fixture.js";
+
+const fetchAsset = async () => ({
+	bytes: new Uint8Array([1, 2, 3, 4]),
+	contentType: "image/jpeg",
+});
+
+it("renders the hero fixture to a stable html document", async () => {
+	const result = await htmlFormat.run(heroFixture, {
+		inlineStyles: true,
+		inlineAssetThresholdBytes: 0,
+		title: "Hero",
+		fetchAsset,
+	});
+	expect(result.content).toMatchFileSnapshot(
+		fileURLToPath(new URL("./__snapshots__/hero.snap.html", import.meta.url)),
+	);
+});
+```
+
+`toMatchFileSnapshot` 在首次运行时写入，并在后续
+运行时进行比较。导出器、IR 形态或夹具默认值中的漂移都会
+产生一个你必须通过 `pnpm test -u` 显式接受的差异。
+
+### 7.2 往返解析
+
+黄金快照固定了输出的*形态*，但它们无法
+捕获“HTML 在技术上有效但丢失了一个 headline”。用
+`happy-dom` 解析输出并重新查询它：
+
+```ts
+import { Window } from "happy-dom";
+import { expect, it } from "vitest";
+
+it("preserves hero headline content", async () => {
+	const { content } = await htmlFormat.run(heroFixture, {
+		inlineStyles: true,
+		inlineAssetThresholdBytes: 0,
+		fetchAsset: async () => ({
+			bytes: new Uint8Array([1, 2, 3, 4]),
+			contentType: "image/jpeg",
+		}),
+	});
+	const window = new Window();
+	window.document.write(content as string);
+	window.document.close();
+	expect(
+		window.document.querySelector(".ak-hero__headline")?.textContent,
+	).toContain("Ship updates without friction.");
+});
+```
+
+### 7.3 注册测试
+
+第三层断言插件能够干净地接入。调用
+`compilePlugins([yourPlugin()], ctx)`，并检查你的格式 id
+出现在 `runtime.exportFormats` 中：
+
+```ts
+import { StudioConfigSchema, compilePlugins } from "@anvilkit/core";
+import type { StudioPluginContext } from "@anvilkit/core/types";
+import { expect, it, vi } from "vitest";
+import { createExportJsonPlugin } from "@anvilkit/example-export-json";
+
+const studioConfig = StudioConfigSchema.parse({});
+
+function makeCtx(): StudioPluginContext {
+	return {
+		getData: () => ({ root: { props: {} }, content: [], zones: {} }),
+		getPuckApi: (() => {
+			throw new Error("getPuckApi unused in this test");
+		}) as unknown as StudioPluginContext["getPuckApi"],
+		studioConfig,
+		log: vi.fn(),
+		emit: vi.fn(),
+	};
+}
+
+it("registers the json export format via compilePlugins", async () => {
+	const runtime = await compilePlugins([createExportJsonPlugin()], makeCtx());
+	expect([...runtime.exportFormats.keys()]).toContain("json");
+});
+```
+
+JSON 示例同时附带这三层 —— 完整套件以及一个镜像
+`apps/demo/lib/puck-demo.ts` 的演示页快照，参见
+[`examples/plugins/export-json/src/__tests__/`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json/src/__tests__)。
+
+<Callout type="info" title="一条管线，三个测试，一份夹具">
+	让这三个测试层都由同一份 IR 夹具驱动。当
+	夹具改变时，你会从单一真相来源得到三个不同的信号 —— 输出
+	形态（黄金）、语义保留（往返解析）和
+	插件接线（注册）。
+</Callout>
+
+## 参考
+
+- [`puckDataToIR`](/zh/api/ir/functions/puckdatatoir/) —— Puck `Data` → IR 的变换。
+- [`irToPuckData`](/zh/api/ir/functions/irtopuckdata/) —— 逆变换，供 AI 插件和往返测试使用。
+- [`collectAssets`](/zh/api/ir/functions/collectassets/) —— 归一化期间使用的资源遍历器。
+- [`identifySlots`](/zh/api/ir/functions/identifyslots/) —— 用于布局组件的插槽检测辅助函数。
+- [`PageIR`](/zh/api/core/interfaces/pageir/) · [`PageIRNode`](/zh/api/core/interfaces/pageirnode/) · [`PageIRAsset`](/zh/api/core/interfaces/pageirasset/) · [`PageIRMetadata`](/zh/api/core/interfaces/pageirmetadata/) —— IR 类型表面。
+- [`ExportFormatDefinition`](/zh/api/core/interfaces/exportformatdefinition/) · [`ExportResult`](/zh/api/core/interfaces/exportresult/) · [`ExportWarning`](/zh/api/core/interfaces/exportwarning/) —— 导出器契约。
+- 示例 JSON 导出器：[`examples/plugins/export-json`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/export-json)。
+- 参考 HTML 导出器：[`packages/plugins/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)。
+- 用于注册导出器的插件表面：[插件编写](/zh/guides/plugin-authoring/)。

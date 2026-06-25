@@ -1,0 +1,135 @@
+---
+title: "Studio 사이드바 — 전환 가능한 네 개의 모듈"
+description: "insert / layer / image / text 워크스페이스, 다섯 개의 플러그인 확장 표면, 그리고 v1 → v2에서 더 이상 사용되지 않는 키를 위한 i18n 별칭 맵을 갖춘 아이콘 레일 + 모듈 패널 사이드바 셸."
+---
+
+`<Studio>`의 왼쪽 사이드바는 44 px 세로 아이콘 레일과 함께,
+네 개의 상호 배타적인 워크스페이스(`insert`, `layer`, `image`,
+`text`) 중 하나를 호스팅하는 280 px 모듈 패널을 제공합니다.
+호스트는 레일 + 패널을 별도의 작업 없이 얻습니다. 플러그인은 다섯 개의
+등록 표면을 통해 모든 모듈을 확장할 수 있습니다. 사용자는
+`<Studio messages>` 및 인스턴스별 store를 통해 문구, 비율, 또는
+영속화된 상태를 오버라이드할 수 있습니다.
+
+## 모듈
+
+| 모듈 | 하는 일 | 영속화된 상태 |
+| :--- | :--- | :--- |
+| `insert` | 드래그 앤 드롭 컴포넌트 라이브러리 — 섹션 구분, 검색 가능, 그리드/리스트 보기. Puck의 `<Puck.Components />`에 위임합니다. | `componentViewMode`, `insertSectionsExpanded`, `drawerSearch`(임시) |
+| `layer` | 활성 페이지의 요소 트리(`<Puck.Outline />`) 위에 (호스트가 제공하는) 페이지 목록을 표시하며, 가로 드래그 핸들로 분할됩니다. | `pagesExpanded`, `layerSplitRatio`, `outlineExpanded` |
+| `image` | 에셋 라이브러리 — 필터 스트립(All / Images / Videos / Audio), 검색, 드래그 앤 드롭 업로드, 클릭하여 삽입, 에셋별 오버플로 메뉴. `@anvilkit/plugin-asset-manager`로 브리지합니다. | `assetCategoryFilter` |
+| `text` | 카피라이팅 스니펫 라이브러리 — 카테고리, 검색, 캔버스에서 선택된 Text 요소로 클릭하여 삽입. | `copyCategoryFilter` |
+
+활성 모듈은 `<Studio>` 인스턴스별로
+`anvilkit-ui-${storeId}` 아래에 영속화됩니다. 같은 페이지에 두 개의
+`<Studio>` 인스턴스를 마운트할 때는 서로 다른 `storeId` 속성을
+제공하세요.
+
+## 모듈 전환 계약
+
+- **비활성** 모듈의 레일 아이콘을 클릭하면 해당 모듈로 전환됩니다.
+- **이미 활성화된** 모듈의 레일 아이콘을 클릭하면
+  패널이 접힙니다(레일은 계속 표시됩니다).
+- 패널 헤더의 `×`를 클릭하면 활성 모듈을 변경하지 않고
+  접힙니다 — 임의의 레일 아이콘을 다시 클릭하면 복원됩니다.
+- 패널 내부 어딘가에 포커스가 있는 상태에서 `Esc`를 누르면 접히고
+  포커스가 활성 레일 아이콘으로 돌아갑니다.
+
+## 플러그인 확장 표면
+
+플러그인은 `register()`에서 타입이 지정된 `StudioPluginContext`를
+받습니다. 각 `register*` 헬퍼는 `unregister()` 함수를 반환하며,
+플러그인은 이를 자신의 `onDestroy` 라이프사이클 훅에서
+호출해야 합니다.
+
+| 표면 | 모듈 | 용도 |
+| :--- | :--- | :--- |
+| `ctx.registerInsertSection(section)` | `insert` | Puck 컴포넌트에 대한 커스텀 술어를 가진 새로운 접을 수 있는 섹션 추가 |
+| `ctx.registerLayerQuickAdd(item)` | `layer`(Layers) | "+" 빠른 추가 팝오버에 항목 추가 |
+| `ctx.registerAssetSource(source)` | `image` | 에셋 목록 + 업로드 + 변경 계약 제공 |
+| `ctx.registerAssetAction(action)` | `image` | 에셋별 `…` 오버플로 메뉴에 항목 추가 |
+| `ctx.registerCopySnippetPack(pack)` | `text` | 스니펫 세트를 제공하며, 선택적으로 로캘별로 제공 |
+
+`apps/demo/lib/puck-demo.ts`의 데모에는 직접 작성하기 전에 읽어볼
+가치가 있는 두 개의 참조 플러그인이 포함되어 있습니다:
+
+- `demoCopySnippetPlugin`은 `ctx.registerCopySnippetPack`을 통해
+  영어 스니펫 팩을 등록합니다. 열두 개의 항목이 `basic`
+  / `brand` 카테고리에 나뉘어 있으며,
+  `StudioCopySnippetPack`의 형태 참조로 유용합니다.
+- `demoLayerQuickAddPlugin`은 `ctx.registerLayerQuickAdd`를 통해
+  단일 레이어 빠른 추가를 등록합니다. 라이브 Puck 스냅샷을
+  읽은 다음 `insert` 액션을 디스패치합니다 — 이는 빠른 추가를
+  기여하는 모든 플러그인이 따라야 할 형태와
+  동일합니다.
+
+에셋 소스 계약은
+[`@anvilkit/plugin-asset-manager`](/ko/api/plugin-asset-manager/)에 있습니다.
+그 `studio-asset-source.ts` 어댑터는
+`StudioAssetSource`를 구현하기 위한 표준 참조입니다.
+
+## i18n 카탈로그
+
+모든 레일 툴팁, 패널 제목, 검색 플레이스홀더, 빈 상태
+문구, 오버플로 메뉴 항목은 i18n provider를 통해 해석됩니다.
+기본 영어 카탈로그는
+[`editor-i18n-context.tsx`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx)
+의 `studio.module.*` 네임스페이스 아래에 제공됩니다.
+
+오버라이드는 `<Studio messages>`를 통해 전달하세요:
+
+```tsx title="app/editor/page.tsx"
+<Studio
+	puckConfig={config}
+	data={data}
+	messages={{
+		"studio.module.insert.name": "Components",
+		"studio.module.layer.name": "Pages",
+	}}
+/>
+```
+
+### 메시지 해석
+
+해석 순서(우선순위 높음 → 낮음): 요청된 키의 오버라이드,
+요청된 키의 기본값, 호출자가 제공한 `fallback`,
+키 자체. 완전한 해석 순서 테스트는
+`packages/core/src/state/__tests__/editor-i18n-context.alias.test.tsx`에 있습니다.
+
+<Callout type="info" title="제거됨: 레거시 탭 별칭">
+	v1 이전 사이드바는 `studio.tab.insert` / `studio.tab.outline`
+	키(v1의 `studio.module.insert.name` /
+	`studio.module.layer.name`에 대한 별칭)를 제공했습니다. 별칭과 레거시 키 모두
+	**제거**되었습니다. `studio.module.*` 키를 직접 오버라이드하세요.
+</Callout>
+
+## CSS 변수
+
+사이드바는 기존의 모든 `--ak-studio-*` 토큰을 재사용하며, 추가로
+chrome이 iframe 테마 동기화를 통해 브리지하는 두 개의 새로운
+레이아웃 토큰을 사용합니다:
+
+| 토큰 | 기본값 | 목적 |
+| :--- | :--- | :--- |
+| `--ak-studio-rail-width` | `44px` | 항상 표시되는 아이콘 레일의 너비 |
+| `--ak-studio-panel-width` | `280px` | 접히지 않았을 때 모듈 패널의 너비 |
+
+`:root`(또는 `<Studio>`의 임의의 조상)에서 둘 중 하나를 오버라이드하면
+chrome을 포크하지 않고도 레일 / 패널의 스킨을 변경할 수 있습니다.
+
+## 레거시 2탭 셸에서의 마이그레이션
+
+`EditorTab`은 `"insert" | "outline"`에서 `"insert" |
+"layer" | "image" | "text"`로 확장됩니다. `editor-ui-store` persist 버전은
+`2`로 올라갑니다. hydrate 마이그레이션은 첫 로드 시 한 번 레거시
+`"outline"` → `"layer"`를 다시 씁니다. `EditorTab === "outline"`으로
+좁혀서 처리하는 사용자는 업데이트해야 합니다.
+
+레거시 `studio.tab.*` 키를 연결한 호스트는 별칭 맵을 통해
+계속 작동합니다(한 릴리스의 윈도우 기간).
+
+## API 참조
+
+- [`StudioProps.messages`](/ko/api/core/interfaces/studioprops/) — 에디터의 i18n provider로 전달되는 i18n 오버라이드
+- [`StudioPagesSource`](/ko/api/core/interfaces/studiopagessource/) — `layer` 모듈의 페이지 목록을 채우기 위해 호스트가 구현하는 계약
+- [`StudioPluginContext`](/ko/api/core/interfaces/studioplugincontext/) — 등록 헬퍼(`registerInsertSection`, `registerLayerQuickAdd`, `registerAssetSource`, `registerAssetAction`, `registerCopySnippetPack`)

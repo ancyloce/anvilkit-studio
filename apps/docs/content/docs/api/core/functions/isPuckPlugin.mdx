@@ -1,0 +1,45 @@
+---
+title: "isPuckPlugin"
+description: "@anvilkit/core · isPuckPlugin"
+---
+
+```ts
+function isPuckPlugin(value): value is Plugin;
+```
+
+Defined in: [runtime/detect-plugin.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L114)
+
+Type guard that returns `true` if `value` conforms to the
+`@puckeditor/core` [PuckPlugin](https://puckeditor.com/docs/extending-puck/plugins) shape.
+
+Puck's plugin type is a bag of optional fields (`overrides`,
+`fieldTransforms`, `render`, `icon`, `label`, `name`,
+`mobilePanelHeight`) — there is no single required field to pin
+the check on. This guard looks for **any** of the distinctive Puck
+contribution surfaces:
+
+- `overrides` — slot component overrides.
+- `fieldTransforms` — custom field renderers.
+- `render` — a plugin-provided side panel or toolbar.
+
+An object that contributes none of those is either a vacuous
+plugin (which callers should author as a `StudioPlugin` instead)
+or something that was handed to the runtime by mistake. Rejecting
+the empty object here means `compilePlugins([{}])` throws a clean
+[StudioPluginError](../classes/StudioPluginError) instead of silently registering a no-op.
+
+Crucially, this guard **also** rejects anything that looks like a
+[StudioPlugin](../interfaces/StudioPlugin) — the two guards are mutually exclusive so
+`compilePlugins` can dispatch on a single `if / else` branch.
+
+Pure, synchronous, no side effects.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+`value is Plugin`

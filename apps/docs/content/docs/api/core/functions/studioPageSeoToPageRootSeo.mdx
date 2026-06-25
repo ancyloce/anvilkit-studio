@@ -1,0 +1,25 @@
+---
+title: "studioPageSeoToPageRootSeo"
+description: "@anvilkit/core · studioPageSeoToPageRootSeo"
+---
+
+```ts
+function studioPageSeoToPageRootSeo(seo): PageRootSeoInput;
+```
+
+Defined in: [studio/context/page-root-seo.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/context/page-root-seo.ts#L79)
+
+Inverse of [pageRootSeoToStudioPageSeo](pageRootSeoToStudioPageSeo.md) for write-back: map an edited
+[StudioPageSeo](../interfaces/StudioPageSeo) (e.g. from the page-settings dialog) onto
+`root.props.seo` field names. `canonical` round-trips through both
+directions, so write-back no longer drops it (review finding M3).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `seo` | [`StudioPageSeo`](../interfaces/StudioPageSeo) \| `undefined` |
+
+## Returns
+
+[`PageRootSeoInput`](../interfaces/PageRootSeoInput)

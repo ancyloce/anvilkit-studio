@@ -1,0 +1,204 @@
+---
+title: "설정 중심 i18n (0.1.x)"
+description: "Studio 국제화를 흩어진 속성에서 config.i18n으로 마이그레이션합니다 —— 호스트가 제어하는 로케일, 로케일별 메시지 오버라이드, 내장 언어 전환기 —— 언어 전환 시 플러그인을 전혀 재컴파일하지 않습니다."
+---
+
+`@anvilkit/core@0.1.15`는 국제화를
+`config.i18n` 블록으로 집중시킵니다. 예전에 속성 전반에 흩어져 있던 것들 ——
+`<Studio messages>` 오버라이드 맵과 `headerEnd`에 직접 마운트한
+`<LanguageSwitcher>` —— 이 이제 하나의 선언적이고
+직렬화 가능한 위치에 모이며, 언어 상태를 직접 소유하는
+프레임워크(Next.js 라우트 세그먼트, `next-intl`, 쿠키)에 대해
+활성 로케일은 **호스트 제어 가능** 해집니다:
+
+```tsx
+<Studio
+  puckConfig={puckConfig}
+  config={{
+    i18n: {
+      locale: "zh",                    // controlled active language
+      messages: {                      // per-locale chrome overrides
+        zh: { "studio.publish": "发布" },
+        en: { "studio.publish": "Ship it" },
+      },
+      showLocaleSwitch: true,          // built-in header switcher
+    },
+  }}
+  onLocaleChange={(next) => router.replace(pathnameFor(next))}
+/>
+```
+
+전체 `i18n` 블록은 **재컴파일 면제** 대상입니다: 플러그인
+컴파일 핑거프린트에서 제외되므로, 런타임에 `locale`, `messages`,
+`showLocaleSwitch`를 변경하면 UI가 제자리에서 갱신됩니다 —— 플러그인
+해제도, 에디터 재마운트도 없으며, 실시간 협업 트랜스포트도 그대로 유지됩니다.
+
+## TL;DR —— 무엇이 어디로 이동하는가
+
+| 이전 (속성) | 이후 (설정) |
+| --- | --- |
+| `messages={{ "studio.publish": "Ship it" }}` | `config.i18n.messages` —— 로케일별: `{ en: { "studio.publish": "Ship it" } }` |
+| `headerEnd={<LanguageSwitcher />}` | `config.i18n.showLocaleSwitch: true` |
+| *(불가능)* 호스트 주도 실시간 로케일 | `config.i18n.locale` (제어 모드) |
+| *(불가능)* 에디터 내 전환 관찰 | `onLocaleChange` 속성 (유일한 신규 속성 —— 핸들러는 설정이 될 수 없음) |
+
+`headerEnd` 자체는 변경되지 않았습니다 —— 임의의 호스트
+헤더 콘텐츠를 위한 이음새로 남아 있습니다. 단지 전환기가 더 이상 그것을 필요로 하지 않을 뿐입니다.
+
+## 제어형 vs 비제어형 로케일
+
+모드는 한 가지로 결정됩니다: **원본 `config` 속성이
+`i18n.locale`을 명시적으로 설정하는지 여부.**
+
+|  | 비제어형 (키 없음) | 제어형 (키 있음) |
+| --- | --- | --- |
+| 단일 진실 공급원 | 인스턴스별 store, `localStorage`의 `anvilkit-core-locale-${storeId}` 아래에 영속화 | 당신의 `config.i18n.locale` 값 |
+| 최초 페인트 | `"en"` (또는 영속화된 선택) | 설정 로케일 —— 동기적으로, 깜빡임 없이, SSR과 일관되게 |
+| 영속화 | 켜짐 —— 사용자의 선택이 리로드 후에도 유지됨 | 우회됨 —— `localStorage`에서 읽거나 쓰는 것이 전혀 없음 (이후의 비제어형 마운트를 위해 오래된 블롭은 그대로 남겨둠) |
+| `ANVILKIT_I18N__LOCALE` 환경 변수 | 영속화된 선택이 없을 때, 기본값을 한 번만 시드함 | 제어에 대해서는 무시됨 —— 환경 변수가 마운트를 제어형으로 만드는 일은 결코 없음 |
+| 내장 전환기 선택 | 즉시 적용(및 영속화)한 뒤 `onLocaleChange`를 호출 | `onLocaleChange`만 **호출** —— 새 `config.i18n.locale`로 다시 렌더링하여 적용해야 함, 정확히 제어형 `<input>`처럼 |
+
+앱이 이미 언어 상태를 소유하는 경우(라우트
+세그먼트, 쿠키, 사용자 프로필) **제어형** 을 선택하세요. 에디터가
+에디터 내 선택을 스스로 기억해야 하는 경우 **비제어형** 을 선택하세요.
+
+<Callout type="warn" title="모드는 마운트 시점에 고정됨">
+제어 여부는 최초 렌더링에서 결정되어 고정됩니다 —— 이후에
+`i18n.locale`을 추가하거나 제거해도 무시됩니다(일회성 경고가 로그에 기록됨).
+모드를 전환하려면 새 React `key`로 재마운트하세요. 이는
+`storeId`에 이미 적용되는 것과 동일한 규칙입니다.
+</Callout>
+
+<Callout type="warn" title="의도적인 동작 변경 한 가지">
+이전에는 정적인 `config={{ i18n: { locale: "zh" } }}`가
+한 번만 시드하는 기본값이었습니다: 사용자가 한 번이라도 영속화한 로케일이
+이를 **이겼습니다**.
+이제 명시적인 설정 로케일이 권위를 가지며(제어 모드),
+오래된 영속화된 선택보다 우선합니다. 기존 의미론에 의존했다면,
+그 값을 `ANVILKIT_I18N__LOCALE` 환경 변수로 옮기세요.
+이 변수는 한 번만 시드하는 동작을 유지합니다.
+</Callout>
+
+## Next.js 레시피
+
+`[locale]` 세그먼트가 있는 App Router:
+
+```tsx
+// app/[locale]/editor/page.tsx (server component)
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return <Editor locale={locale} />;
+}
+```
+
+```tsx
+// editor.tsx
+"use client";
+import { Studio } from "@anvilkit/core/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useMemo } from "react";
+
+export function Editor({ locale }: { locale: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Memoize: `config` participates in the plugin-compile fingerprint
+  // (its non-i18n part). The i18n block itself is additionally
+  // JSON-keyed internally, so even this re-created object never
+  // recompiles — but a stable reference is still the cheapest path.
+  const config = useMemo(
+    () => ({ i18n: { locale, showLocaleSwitch: true } }),
+    [locale],
+  );
+
+  const handleLocaleChange = useCallback(
+    (next: string) => router.replace(pathname.replace(`/${locale}`, `/${next}`)),
+    [router, pathname, locale],
+  );
+
+  return (
+    <Studio
+      puckConfig={puckConfig}
+      config={config}
+      onLocaleChange={handleLocaleChange}
+    />
+  );
+}
+```
+
+왕복 흐름 —— 전환기 클릭 → `onLocaleChange` → `router.replace`
+→ 새 `config.i18n.locale`로 다시 렌더링 —— 은 모든 UI 문자열과
+플러그인 문자열을 제자리에서 전환합니다. 최초 클라이언트 렌더링이
+이미 제어 로케일을 해석하므로 `en → zh` 깜빡임이 없습니다.
+영어가 아닌 코어 팩(`zh`/`ja`/`ko`)은 지연 로드되며, 로드되는 동안에는
+키별로 영어 폴백을 사용합니다.
+
+쿠키 기반 설정(라우팅이 없는 `next-intl`)도 형태가 동일합니다:
+쿠키를 `config.i18n.locale`로 읽어들이고, `onLocaleChange`에서 기록합니다.
+
+## 메시지: 평면 속성 → 로케일별 맵
+
+`<Studio messages>` 속성은 **사용 중단** 되었습니다(`0.2.0`에서 제거).
+이것은 로케일 무관이었습니다 —— 하나의 평면 맵이 모든 언어에 적용되었습니다. 설정
+맵은 로케일로 키가 지정되며, `fallbackLocale`이 활성 로케일의
+번들에 없는 키를 채워 넣습니다:
+
+```tsx
+// Before (deprecated, still works through 0.1.x):
+<Studio messages={{ "studio.publish": "Ship it" }} />
+
+// After:
+<Studio
+  config={{
+    i18n: {
+      fallbackLocale: "en",
+      messages: {
+        en: { "studio.publish": "Ship it" },
+        zh: { "studio.publish": "立即发布" },
+      },
+    },
+  }}
+/>
+```
+
+해석 순서(낮음 → 높음): 내장 카탈로그 + 지연 팩 +
+플러그인 번들 → `messages[fallbackLocale]` → `messages[activeLocale]`
+→ 사용 중단된 평면 속성. 속성이 최상위에 있다는 것은 키 단위 마이그레이션이
+오버라이드를 결코 *잃지* 않음을 의미합니다 —— 다만 둘을 장기간 함께
+사용하지는 마세요. 이 속성이 설정되어 있는 동안 개발 콘솔은 마운트마다
+한 번씩 경고합니다.
+
+## 내장 언어 전환기
+
+`config.i18n.showLocaleSwitch: true`는 헤더 우측 클러스터에서,
+플러그인 헤더 액션과 당신의 `headerEnd` 노드 사이에 동일한
+`<LanguageSwitcher>` 컴포넌트를 렌더링합니다. 기본값은
+**꺼짐** 이므로 기존 마운트는 변경되지 않습니다. 현재 `headerEnd`를 통해
+전환기를 마운트하고 있다면, 플래그를 켤 때 그 배선을 삭제하세요 ——
+그렇지 않으면 두 개의 전환기가 나란히 보입니다(의도적으로 인접시켜,
+마이그레이션 중에 중복이 명백히 드러나도록 했습니다).
+
+이 플래그는 실시간입니다: 런타임에 켜고 끄면 재컴파일 없이
+전환기가 표시/숨김됩니다. `<LanguageSwitcher>`(`@anvilkit/core/i18n`에서
+내보냄)는 여전히 어디서든 직접 렌더링할 수 있습니다. 이제 그것은
+동일한 요청 이음새를 통해 라우팅되므로, 어느 방식이든 `onLocaleChange`가 발생합니다.
+
+## 플러그인 작성자
+
+- `ctx.t`는 이제 **활성** 로케일과 실시간 `config.i18n.messages`에
+  대해 해석합니다 —— 컴파일 시점의 설정 값에서 고정되는 대신
+  런타임 전환을 추적합니다. 그 외의 제한은 변하지 않았습니다:
+  영어가 아닌 코어 팩을 결코 지연 로드하지 않으며, 플러그인이
+  등록한 네임스페이스를 결코 해석하지 않습니다. 반응형 UI 문자열은
+  여전히 `useMsg`/`useT`에 속합니다.
+- `ctx.studioConfig.i18n`은 여전히 컴파일 시점의 스냅샷입니다 —— 그것을
+  "현재 로케일"이 아니라 "설정된 i18n"으로 읽으세요.
+- `ctx.registerMessages`와 레지스트리 계약은 변경되지 않았습니다.
+
+## 사용 중단 타임라인
+
+| 표면 | 상태 |
+| --- | --- |
+| `<Studio messages>` 속성 | 현재 사용 중단(`@deprecated` + 일회성 개발 경고); `0.1.x` 전반에 걸쳐 완전히 동작; **`0.2.0`에서 제거** |
+| `config.i18n.locale`의 미영속화 시 한 번만 시드하는 의미론 | 명시적 설정 값에 대해서는 제어 모드로 대체; `ANVILKIT_I18N__LOCALE`에 대해서는 유지 |
+| 그 외 모든 것 | 추가적 —— 다른 조치 불필요 |

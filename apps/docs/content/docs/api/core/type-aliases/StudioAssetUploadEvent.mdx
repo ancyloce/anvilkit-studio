@@ -1,0 +1,29 @@
+---
+title: "StudioAssetUploadEvent"
+description: "@anvilkit/core · StudioAssetUploadEvent"
+---
+
+```ts
+type StudioAssetUploadEvent = 
+  | {
+  bytesTotal: number;
+  bytesUploaded: number;
+  type: "progress";
+}
+  | {
+  asset: StudioAsset;
+  type: "done";
+}
+  | {
+  message: string;
+  type: "error";
+};
+```
+
+Defined in: [types/sidebar.ts:204](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L204)
+
+Progress envelope emitted while an upload is in flight.
+
+Asset sources call the listener passed to [StudioAssetSource.upload](../interfaces/StudioAssetSource#upload)
+(when present) with a sequence of `progress` events followed by
+exactly one terminal `done` or `error` event.

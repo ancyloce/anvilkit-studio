@@ -1,0 +1,243 @@
+---
+title: "StudioPagesSource"
+description: "@anvilkit/core · StudioPagesSource"
+---
+
+Defined in: [types/pages.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L153)
+
+Pages source contract. The host application supplies one of these
+via the `<Studio>` `pages` prop. When omitted, the `layer/pages`
+sub-panel renders the empty state keyed
+`studio.module.layer.pages.empty`.
+
+`subscribe` is optional: sources backed by reactive stores wire
+live updates by calling the listener; static fixtures can omit it
+and rely on the sidebar's pull-on-mount semantics.
+
+### Capability gating
+
+Every callback below is **optional**. The sidebar uses capability
+detection — "is the callback defined?" — to decide whether to render
+the matching affordance. A host that implements `onRename` gets the
+inline rename input; a host that doesn't gets a plain row. The
+existing `onCreate` / `subscribe?` gating is the precedent.
+
+### Data-flow rule (PRD §3.3)
+
+**No optimistic mutation in core.** Every callback resolves → host
+mutates its registry → host invokes the [subscribe](#subscribe) listener →
+the panel re-runs [list](#list). The single documented exception is
+[onDuplicate](#onduplicate): it may return the created page so the UI can
+pre-select it before the refresh round-trips.
+
+## Methods
+
+### list()
+
+```ts
+list(): 
+  | readonly StudioPage[]
+| Promise<readonly StudioPage[]>;
+```
+
+Defined in: [types/pages.ts:155](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L155)
+
+Return the current page list. May be sync or async.
+
+#### Returns
+
+  \| readonly [`StudioPage`](StudioPage.md)[]
+  \| `Promise`\&lt;readonly [`StudioPage`](StudioPage.md)[]\&gt;
+
+***
+
+### onCreate()?
+
+```ts
+optional onCreate(input): void | Promise<void>;
+```
+
+Defined in: [types/pages.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L169)
+
+Fired when the `+` add-page dialog is submitted. Host creates
+the page and (optionally) navigates to it. Async result is
+awaited by the dialog so it can show a pending state.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`StudioPageCreateInput`](StudioPageCreateInput.md) |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;
+
+***
+
+### onDelete()?
+
+```ts
+optional onDelete(pageId): void | Promise<void>;
+```
+
+Defined in: [types/pages.ts:181](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L181)
+
+Delete a page. The delete menu item + confirm dialog are hidden
+when this callback is undefined OR when [StudioPage.locked](StudioPage.md#locked)
+is `true` on the target row.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `pageId` | `string` |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;
+
+***
+
+### onDuplicate()?
+
+```ts
+optional onDuplicate(pageId): void | Promise<void | StudioPage>;
+```
+
+Defined in: [types/pages.ts:191](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L191)
+
+Duplicate a page. Hidden when undefined.
+
+**Optimistic-pre-select exception (PRD §3.3):** the host may
+resolve with the created [StudioPage](StudioPage.md) so the UI can pre-
+select it before the standard `subscribe → list()` refresh
+round-trips. Returning `void` is also valid — the row simply
+appears once the host's `subscribe` listener fires.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `pageId` | `string` |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void` \| [`StudioPage`](StudioPage.md)\&gt;
+
+***
+
+### onRename()?
+
+```ts
+optional onRename(input): void | Promise<void>;
+```
+
+Defined in: [types/pages.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L175)
+
+Rename / re-path a page. The inline rename affordance is hidden
+when this callback is undefined OR when [StudioPage.locked](StudioPage.md#locked)
+is `true` on the target row.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`StudioPageRenameInput`](StudioPageRenameInput.md) |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;
+
+***
+
+### onReorder()?
+
+```ts
+optional onReorder(input): void | Promise<void>;
+```
+
+Defined in: [types/pages.ts:196](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L196)
+
+Reorder a page to a new index. Drag handles are inert when this
+callback is undefined.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`StudioPageReorderInput`](StudioPageReorderInput.md) |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;
+
+***
+
+### onSelect()?
+
+```ts
+optional onSelect(pageId): void;
+```
+
+Defined in: [types/pages.ts:163](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L163)
+
+Fired when a page row is clicked. Host routes to that page.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `pageId` | `string` |
+
+#### Returns
+
+`void`
+
+***
+
+### onUpdateSettings()?
+
+```ts
+optional onUpdateSettings(input): void | Promise<void>;
+```
+
+Defined in: [types/pages.ts:202](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L202)
+
+Update page settings + SEO. The settings menu item is hidden
+when this callback is undefined; the SEO section inside the
+dialog follows the same gate.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`StudioPageSettingsInput`](StudioPageSettingsInput.md) |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;
+
+***
+
+### subscribe()?
+
+```ts
+optional subscribe(listener): () => void;
+```
+
+Defined in: [types/pages.ts:161](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L161)
+
+Optional subscription. When set, the sidebar calls it on mount
+with a listener and re-runs `list()` whenever the listener fires.
+Returns an `unsubscribe` cleanup.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | () =&gt; `void` |
+
+#### Returns
+
+() => `void`

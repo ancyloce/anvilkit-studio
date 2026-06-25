@@ -1,0 +1,62 @@
+---
+title: "StudioError"
+description: "@anvilkit/core · StudioError"
+---
+
+Defined in: [runtime/errors.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L49)
+
+Abstract base class for every `@anvilkit/core` runtime error.
+
+Never thrown directly — subclass instead. The abstract `code` field
+forces every concrete subclass to declare a stable, machine-readable
+identifier, which host apps use to branch on specific failure modes
+without string-matching on the message.
+
+The `Object.setPrototypeOf(this, new.target.prototype)` call in the
+constructor guarantees `instanceof` works correctly across the
+prototype chain even when the runtime is transpiled to older ES
+targets or consumed via CJS interop. With `target: ES2022` it is
+a harmless no-op — kept so the code remains portable.
+
+## Extends
+
+- `Error`
+
+## Extended by
+
+- [`StudioConfigError`](StudioConfigError.md)
+- [`StudioExportError`](StudioExportError.md)
+- [`StudioPluginError`](StudioPluginError.md)
+
+## Constructors
+
+### Constructor
+
+```ts
+new StudioError(message, options?): StudioError;
+```
+
+Defined in: [runtime/errors.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+`StudioError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `abstract` | `string` | Stable, machine-readable failure identifier. Subclasses must override this with a constant literal so host apps can branch on `err.code` without string-matching on the human-readable message. | [runtime/errors.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L57) |

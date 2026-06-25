@@ -1,0 +1,526 @@
+---
+title: "コンポーネントの作成"
+description: "独自の @anvilkit/* npm リリースとして配布される Puck ネイティブな React コンポーネントパッケージを作成する —— 契約、フィールドタイプ、editMode、テーマ化、レスポンシブ、アイコン、スキャフォールド、公開。"
+---
+
+AnvilKit のコンポーネントは**独立して公開可能な Puck ネイティブな React
+パッケージ**です。それぞれは `packages/components/src/<slug>/` の下に置かれ、
+独自の `@anvilkit/<slug>` npm リリースとして配布され、
+厳格に制約された `ComponentConfig` 契約を通じて `<Puck>` に接続します。
+
+本ガイドは、その作成方法の正式なリファレンスです。
+[`@anvilkit/button`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/src/button)
+を一貫した実例として使用し、
+サブモジュールローカルの
+[`packages/components/AGENTS.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/AGENTS.md)
+に取って代わる、公開向けのドキュメントです。
+
+<Callout type="info" title="コードは常にグリーン">
+	このページのすべてのコードブロックは
+	[`apps/docs/tests/guides/component-authoring.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/component-authoring.test.ts)
+	に抽出され、CI で Vitest テストとして実行されます。契約がドリフトすると、
+	ドキュメントが配布される前にビルドが失敗します。
+</Callout>
+
+## 1. 契約
+
+`packages/components/src/<slug>/` の下のすべてのコンポーネントパッケージは
+`src/index.ts` から固定されたシンボルの集合をエクスポートしなければなりません。Core とデモ
+アプリの両方が以下の正確な名前に依存しています —— 名前の変更は破壊的
+変更です。
+
+| エクスポート     | 形状                                    | 目的                                                            |
+| ---------------- | --------------------------------------- | ---------------------------------------------------------------- |
+| `componentConfig`| `ComponentConfig<Props>`                | Puck 設定：`label`、`defaultProps`、`fields`、`render`。         |
+| `defaultProps`   | `Props`（シリアライズ可能）             | コンポーネントがキャンバスにドロップされたときに Puck が挿入する内容。 |
+| `fields`         | `Fields<Props>`                         | エディタースキーマ —— 編集可能なプロパティごとに 1 エントリ。   |
+| `metadata`       | `ComponentMetadata`                     | カタログメタデータ：名前、slug、パッケージ名 + バージョン、カテゴリ。 |
+| キャメルエイリアス | `<camel>Config`、`<camel>DefaultProps`、`<camel>Fields`、`<camel>Metadata` | 機能別にインポートするホスト向けの便利な再エクスポート。        |
+| コンポーネント本体 | `Button`、`Input`、…                    | React のレンダリングシンボル。`*Props` 型とともにエクスポートされる。 |
+
+正式な `button` パッケージはこれらすべてを結びつけます：
+
+```ts
+import "./styles.css";
+
+export type { ButtonProps, ButtonViewProps } from "./Button";
+export { Button } from "./Button";
+export {
+	buttonConfig,
+	componentConfig,
+	defaultProps,
+	defaultProps as buttonDefaultProps,
+	fields,
+	fields as buttonFields,
+	metadata,
+	metadata as buttonMetadata,
+} from "./config";
+```
+
+この表から 3 つの不変条件が導かれます：
+
+1. **`metadata.packageName` は `package.json` の `name` と一致しなければなりません。**
+   カタログジェネレーター（`apps/docs/scripts/generate-component-pages.ts`）
+   はこれをドキュメントビルド時に検証し、ドリフトすると大声で失敗します。
+2. **`metadata.componentSlug` はディレクトリ名と一致しなければなりません。** 同じ
+   ジェネレーター、同じ失敗モードです。
+3. **`render` は純粋なアダプターでなければなりません。** 解決された
+   プロパティと `editMode` を受け取り、React 要素を返します —— 副作用なし、
+   データフェッチなし、ストアアクセスなしです。
+
+```ts
+import type { ComponentConfig } from "@puckeditor/core";
+import { createElement } from "react";
+import type { ButtonProps } from "./Button";
+import { Button } from "./Button";
+
+const renderButton: ComponentConfig<ButtonProps>["render"] = ({
+	label,
+	variant,
+	disabled,
+	href,
+	openInNewTab,
+	editMode,
+}) =>
+	createElement(Button, {
+		label,
+		variant,
+		disabled,
+		href,
+		openInNewTab,
+		editMode,
+	});
+```
+
+## 2. フィールドタイプ
+
+フィールドは、Puck が各プロパティに対して生成するエディター UI を記述します。AnvilKit
+コンポーネントは Puck の組み込みタイプのうち 7 つを使用します。データをモデル化する
+最もシンプルなフィールドを優先してください —— 小さな列挙には `select` より `radio`、
+文字列化された CSV より `array`、フラットなプレフィックス付きプロパティより `object` です。
+
+| Puck `type` | 使用するタイミング                                                     | 実例                                         |
+| ----------- | ---------------------------------------------------------------------- | -------------------------------------------- |
+| `text`      | 単一行の文字列、自由形式（ラベル、URL、alt）。                        | `@anvilkit/button` の `label`、`href`。       |
+| `textarea`  | 複数行の文字列（サブタイトル、説明、本文）。                          | `@anvilkit/section` の `description`。        |
+| `number`    | 数値入力（列数、間隔単位、カウント）。                                | `@anvilkit/bento-grid` の列数。              |
+| `email`     | メールアドレス —— Puck が UI でフォーマットを検証します。            | `@anvilkit/input` のデフォルト `type`。      |
+| `radio`     | 小さな列挙（≤ 約 4 値）で、セグメント化された選択肢としてインライン表示したいもの。 | `@anvilkit/button` の `variant`、`disabled`。|
+| `select`    | 少数より多くの値を持つ列挙で、ドロップダウンとして表示されるもの。    | `@anvilkit/bento-grid` の `gap`、`radius`。  |
+| `array`     | 繰り返し可能な項目の順序付きリスト（リンク、カード、ティア、機能）。  | `@anvilkit/navbar` の `items`、`actions`。   |
+| `object`    | 異種混在のネストされた形状（logo テキスト + 画像 + href）。          | `@anvilkit/navbar` の `logo`。               |
+
+下の実例は
+[`button/src/config.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/src/button/src/config.ts)
+からそのまま引用したもので、最も一般的な 2 つのタイプを並べて示しています：
+
+```ts
+import type { Fields } from "@puckeditor/core";
+import type { ButtonProps } from "./Button";
+
+export const buttonFields = {
+	label: {
+		type: "text",
+		label: "Label",
+	},
+	variant: {
+		type: "radio",
+		label: "Variant",
+		options: [
+			{ label: "Primary", value: "primary" },
+			{ label: "Secondary", value: "secondary" },
+		],
+	},
+	href: {
+		type: "text",
+		label: "Link URL",
+	},
+	openInNewTab: {
+		type: "radio",
+		label: "Open in new tab",
+		options: [
+			{ label: "No", value: false },
+			{ label: "Yes", value: true },
+		],
+	},
+	disabled: {
+		type: "radio",
+		label: "Disabled",
+		options: [
+			{ label: "No", value: false },
+			{ label: "Yes", value: true },
+		],
+	},
+} satisfies Fields<ButtonProps>;
+```
+
+### 配列とオブジェクト
+
+繰り返し可能なリストは、3 つのエルゴノミクス用フィールドとともに `type: "array"` を使用します：
+
+```ts
+import type { Fields } from "@puckeditor/core";
+
+type NavLink = { label: string; href: string };
+type NavProps = { items: NavLink[] };
+
+const fields = {
+	items: {
+		type: "array",
+		label: "Navigation links",
+		defaultItemProps: { label: "New link", href: "/" },
+		getItemSummary: (item, index) =>
+			item.label || `Link ${(index ?? 0) + 1}`,
+		arrayFields: {
+			label: { type: "text", label: "Label" },
+			href: { type: "text", label: "Href" },
+		},
+	},
+} satisfies Fields<NavProps>;
+```
+
+`defaultItemProps` は、編集者が「項目を追加」をクリックしたときに Puck が挿入する
+オブジェクトです。`getItemSummary` は右レール内の折りたたまれた項目ラベルを
+駆動します —— 編集者がラベルのない行を見ないように、常に空でない文字列を
+返してください。`arrayFields` は項目ごとのスキーマです。
+
+オブジェクトは同じ形状を使いますが、代わりに `objectFields` を使用します：
+
+```ts
+import type { Fields } from "@puckeditor/core";
+
+type Logo = { type: "text" | "image"; text: string; imageUrl: string };
+type LogoProps = { logo: Logo };
+
+const fields = {
+	logo: {
+		type: "object",
+		label: "Logo",
+		objectFields: {
+			type: {
+				type: "radio",
+				label: "Type",
+				options: [
+					{ label: "Text", value: "text" },
+					{ label: "Image", value: "image" },
+				],
+			},
+			text: { type: "text", label: "Text" },
+			imageUrl: { type: "text", label: "Image URL" },
+		},
+	},
+} satisfies Fields<LogoProps>;
+```
+
+## 3. シリアライズ可能性
+
+**`defaultProps` または `fields` から到達可能なすべての値は JSON
+シリアライズ可能でなければなりません。** Puck はエディターの状態を JSON として永続化し、
+レンダリングルート（`/puck/render`、RSC 互換）で再水和します。ツリー内のどこかにある
+関数、ref、`Date`、クラスインスタンスは、リロード時に静かにドロップするか、
+境界をまたぐときにスローします。
+
+```ts
+import { defaultProps } from "@anvilkit/button";
+
+// `defaultProps` is JSON-safe. This round-trip must be lossless.
+const snapshot = JSON.parse(JSON.stringify(defaultProps));
+```
+
+コールバック形状のフィールドヘルパー（`getItemSummary`、`resolveFields`、
+`resolveData`）は例外です —— これらはデータではなく `fields` スキーマ上に
+存在し、Puck が実行時に解決します。カタログ
+ジェネレーターは、ドキュメントサイト向けに Puck 設定をダンプするとき、
+意図的にそれらを文字列 `"[[Function]]"` としてシリアライズします。
+[`generate-component-pages.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/scripts/generate-component-pages.ts)
+を参照してください。
+
+よくある罠：
+
+- **プロパティに React ノードを格納しないでください。** プリミティブ（ラベル、URL、
+  フラグ）を渡し、レンダリングアダプターに JSX を組み立てさせてください。
+- **プロパティ経由でイベントハンドラーを密輸しないでください。** ホストは
+  プラグインとライフサイクルフックを通じて振る舞いを接続します —— 参照：
+  [プラグインの作成](/ja/guides/plugin-authoring/)。
+- **安定した ref でメモ化しないでください。** コンシューマーがコンポーネント
+  内部から必要とするものは、そのプロパティではなく、コンポーネント
+  モジュール自体に属します。
+
+`@anvilkit/validator` の `validateComponentConfig` は
+`defaultProps` を再帰的に走査し、JSON シリアライズ不可能な任意のリーフへの
+**完全な構造パス**を、失敗理由
+（`function`、`symbol`、`bigint`、`circular`、`exceeds-max-depth`）とともに報告します。
+`defaultProps.settings.layout.onPress` に埋もれた関数は、トップレベルの
+プロパティで切り詰められるのではなく、`["components", "<Name>", "defaultProps", "settings", "layout",
+"onPress"]` として報告されます。
+
+## 4. `editMode` パターン
+
+Puck はエディター内では `render` を追加の `editMode: boolean` 引数とともに呼び出し、
+レンダリングルートでは省略します。インタラクティブなコントロールは、`editMode` が true のとき
+**自身を無効化**しなければなりません：ライブな `<button>` は Puck のドラッグハンドルから
+フォーカスを奪い、ライブな `<a>` はクリックを乗っ取り、
+ライブな `<input>` はエディターがコンポーネント選択のために必要とする
+キーストロークを飲み込みます。
+
+button パッケージのビューコンポーネントが正式なパターンです：
+
+```tsx
+import { Button as BaseButton, buttonVariants } from "@anvilkit/ui/button";
+import { cn } from "@anvilkit/ui/lib/utils";
+
+export interface ButtonViewProps {
+	label: string;
+	variant?: "primary" | "secondary";
+	disabled?: boolean;
+	href?: string;
+	openInNewTab?: boolean;
+	editMode?: boolean;
+}
+
+export function Button({
+	label,
+	variant = "primary",
+	disabled = false,
+	href,
+	openInNewTab = false,
+	editMode = false,
+}: ButtonViewProps) {
+	const isInactive = disabled || editMode;
+	const resolvedHref = isInactive ? undefined : href;
+
+	if (href) {
+		return (
+			<a
+				href={resolvedHref}
+				target={resolvedHref && openInNewTab ? "_blank" : undefined}
+				rel={resolvedHref && openInNewTab ? "noreferrer noopener" : undefined}
+				aria-disabled={isInactive || undefined}
+				tabIndex={isInactive ? -1 : undefined}
+				className={cn(
+					buttonVariants({ size: "lg", variant: "default" }),
+					"h-11 rounded-full px-5 shadow-sm",
+					isInactive && "cursor-not-allowed opacity-50",
+				)}
+			>
+				{label}
+			</a>
+		);
+	}
+
+	return (
+		<BaseButton
+			size="lg"
+			disabled={isInactive}
+			aria-disabled={isInactive || undefined}
+			className="h-11 rounded-full px-5 shadow-sm"
+		>
+			{label}
+		</BaseButton>
+	);
+}
+```
+
+このスニペットから 2 つのルールが導かれます：
+
+1. **`disabled` と合体させる。** `const isInactive = disabled || editMode`
+   が唯一の信頼できる情報源です —— すべてのインタラクティブなプロパティ（`href`、
+   `tabIndex`、`aria-disabled`）は、`editMode` から直接ではなく、
+   `isInactive` から読み取ります。
+2. **DOM をセマンティックに保つ。** 非アクティブなリンクは
+   `aria-disabled` を持ち `href` を持たない `<a>` のままです。非アクティブなボタンは
+   本物の `disabled` 属性を持つ `<button>` のままです。`editMode` に基づいて
+   要素タイプを切り替えないでください —— スクリーンリーダーは異なるロールを
+   アナウンスし、Puck の選択アウトラインがそれとともに移動します。
+
+`@anvilkit/input` は `readOnly={editMode}` と
+`bg-input/50` の視覚的な手がかりで同じパターンに従います —— あなたの
+コンポーネントのネイティブな無効状態に合うバリアントを選んでください。
+
+## 5. テーマ対応のスタイリング
+
+すべてのコンポーネントは、共有の Tailwind レイヤーをインポートする
+コロケートされた `styles.css` を配布します：
+
+```css
+@import "@anvilkit/tailwind-config/shadcn";
+
+@source "./**/*.{ts,tsx}";
+@source "../../../../ui/src/button.tsx";
+```
+
+最初の行は
+[`@anvilkit/tailwind-config`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/configs/tailwind-config)
+から shadcn 互換の token パレットをインポートします。
+`@source` ディレクティブは、クラス名をスキャンするファイルを Tailwind 4 に
+伝えます。直接再利用する `@anvilkit/ui` プリミティブには、
+追加の `@source` を追加してください。
+
+カラールール、厳密な優先順位で：
+
+1. **shadcn のセマンティック token を優先する。** `bg-background`、`text-foreground`、
+   `border-border`、`text-muted-foreground`、`bg-primary`、
+   `text-primary-foreground`、`bg-card`、`text-card-foreground`。
+2. **セマンティック token が合わない場合は Tailwind ユーティリティにフォールバックする。**
+3. **上記のいずれも不十分な場合にのみ CSS 変数を発明する** —— そして
+   `:root` と `.dark` の両方で適切な値を持つことを確認してください。
+
+セマンティック token が同じ意図を表現できる場合は、`#...`、`rgb(...)`、`hsl(...)` を
+ハードコードしないでください。token パレットは両方のテーマで
+WCAG AA コントラストを満たすよう調整されています。それを回避すると、
+[アクセシビリティのベースライン](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)
+が静かに後退します。
+
+## 6. レスポンシブ要件
+
+すべてのコンポーネントは、モバイルファーストの Tailwind スタンスを使用して、
+3 つのデバイスクラス —— **モバイル、タブレット、デスクトップ** —— で
+正しくレンダリングされなければなりません。
+小画面のレイアウトをデフォルトとして開始し、その後
+`md:` および `lg:` ブレークポイントで拡大します。
+
+```tsx
+<section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+	{/* mobile: single column; tablet: two; desktop: three */}
+</section>
+```
+
+カタログ全体で繰り返し現れる具体的なルール：
+
+- **`md` を超えてピクセルで幅を固定しないでください。** `max-w-*` のクランプを使い、
+  グリッドに余裕を持たせてください。
+- **モバイルでコンテンツを隠さないでください。** セクションが本当に収まらない場合は、
+  リフローしてください —— `hidden md:block` にしないでください。
+- **常に 3 つの幅すべてを検証してください。** デモアプリは各
+  コンポーネントを `/puck/render` で実行します。PR を提出する前に、約 375 px、約 768 px、
+  約 1280 px でそれを開いてください。
+
+アニメーションに依存するコンポーネント（FlickeringGrid、Marquee、Ripple）は、
+さらに `prefers-reduced-motion` を尊重しなければなりません。現在のギャップリストと
+修復パターンについては
+[アクセシビリティのベースライン](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)
+を参照してください。
+
+## 7. アイコン
+
+すべての標準 UI アイコンには
+[`lucide-react`](https://lucide.dev/guide/packages/lucide-react)
+を使用してください。同じコンポーネント内で他の汎用アイコン
+ライブラリを混在させないでください。また、Lucide が既に提供している
+アイコンのためにインライン SVG を手作りしないでください。
+
+```tsx
+import { ArrowRight } from "lucide-react";
+
+export function LearnMoreLink({ href }: { href: string }) {
+	return (
+		<a
+			href={href}
+			className="inline-flex items-center gap-1 text-primary hover:underline"
+		>
+			Learn more
+			<ArrowRight aria-hidden="true" className="size-4" />
+		</a>
+	);
+}
+```
+
+2 つのアクセシビリティのニュアンス：
+
+- **装飾的なアイコン**（可視のテキストラベルと組み合わせたもの）には
+  `aria-hidden="true"` を付けて、スクリーンリーダーが二重にアナウンスしないようにします。
+- **セマンティックなアイコン**（アイコンのみのボタン）にはアクセシブルなラベルが必要です ——
+  インタラクティブな要素に `aria-label="…"` を付けるか、隣接する
+  `<span className="sr-only">` を付けます。
+
+アイコンの色は Tailwind を通じて流れる（`text-primary`、`text-muted-foreground`、…）ため、
+アイコンはテーマ対応の色を自動的に継承します。`stroke` や `fill` の色を
+ハードコードしないでください。
+
+## 8. パッケージのスキャフォールド
+
+新しいコンポーネントを手作業でスキャフォールドしないでください —— ジェネレーターは
+`package.json`、`rslib.config.ts`、`tsconfig.json`、レンダリングファイル、
+`config.ts`、`index.ts`、`styles.css`、README を 1 ステップで接続します。
+
+```bash
+# Interactive — prompts for slug, label, template, category:
+pnpm -C packages/components gen:component
+
+# Flag-driven, reproducible in scripts:
+pnpm -C packages/components gen:component -- \
+	--name my-component \
+	--label "My Component" \
+	--template content \
+	--category marketing
+```
+
+テンプレート：
+
+- **`content`** —— 静的なマーケティングサーフェス（button、hero、section）。
+  デフォルトの選択肢。
+- **`layout`** —— 子要素をスロットする構造的なコンテナ（bento-grid、
+  zone を持つ section）。
+- **`form`** —— エディター対応の無効状態を持つインタラクティブな入力
+  （input、フォームフィールドのラッパー）。
+
+ジェネレーターの実行後：
+
+1. `src/<ComponentName>.tsx` に実際のマークアップとプロパティを記入します。
+2. `src/config.ts` で `defaultProps`、`fields`、`metadata.suggestedCategory`
+   を確定します。
+3. `styles.css` で `@anvilkit/ui` のピア依存関係と追加の
+   `@source` エントリを接続します。
+4. 検証：`pnpm -C packages/components lint && pnpm typecheck && pnpm build`。
+5. デモに統合する —— `apps/demo/lib/puck-demo.ts` に
+   import + 設定エントリを追加し、`apps/demo/next.config.js` の
+   `transpilePackages` にパッケージ名を追加します。
+
+ジェネレーターの完全なウォークスルー —— 前提条件と
+再現可能な実例を含む —— は
+[ジェネレーター使用ガイド](/ja/guides/generator-usage/)
+にあります。
+
+## 9. 公開
+
+バージョン管理は Changesets 駆動で、すべての `@anvilkit/<slug>` は
+独立してリリースされます。
+
+```bash
+# From the components workspace — the changeset prompts for the
+# affected package(s) and bump level, then writes a file to
+# packages/components/.changeset/.
+pnpm -C packages/components changeset
+
+# In a release PR, version + build + publish in one shot:
+pnpm -C packages/components release
+```
+
+典型的なフロー：
+
+1. **ブランチを作成 + 実装**してコンポーネントの変更を行う。
+2. **`pnpm changeset`** を実行し、生成された markdown ファイルを同じ PR で
+   コミットします。ユーザー向けの言葉で変更を記述してください —— このファイルは
+   npm のチェンジログエントリにそのままなります。
+3. **`main` にマージする。** CI は `lint`、`typecheck`、`madge`（循環
+   依存）、`test`、`build`、`publint`（パッケージのエクスポート）、および
+   Playwright スモークスイートを実行します —— パイプラインを通じて接続されている
+   現在のパッケージ群については
+   [コンポーネントカタログ](/ja/components/) を参照してください。
+4. **リリース PR** は Changesets の GitHub action を通じてバージョンを上げ + CHANGELOG を
+   書き込みます。それをマージすると `pnpm release` が実行され、npm に公開されます。
+
+<Callout type="warn" title="バージョンを手作業で編集しないでください">
+	パッケージのバージョンは `packages/components/src/<slug>/package.json` に
+	存在しますが、それらを手作業で編集すると Changesets の CHANGELOG 生成をバイパスし、
+	リリース PR の同期がずれます。バージョンの引き上げは常に `pnpm changeset` を経由してください。
+</Callout>
+
+## リファレンス
+
+- アーキテクチャドキュメント内のコンポーネント契約：[`anvilkit-architecture.md` §Component Packages](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/ai-context/anvilkit-architecture.md#component-packages-current)
+- 実例のソース：[`packages/components/src/button`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/src/button)
+- 完全なコンポーネントカタログ：[コンポーネント](/ja/components/)
+- アクセシビリティのベースライン（WCAG 2.1 AA）：[`docs/a11y-baseline.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)
+- ジェネレーターのウォークスルー：[ジェネレーターの使用](/ja/guides/generator-usage/)
+- エディター時の振る舞いのためのプラグインサーフェス：[プラグインの作成](/ja/guides/plugin-authoring/)

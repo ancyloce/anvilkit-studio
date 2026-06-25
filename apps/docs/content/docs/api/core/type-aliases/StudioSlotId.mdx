@@ -1,0 +1,23 @@
+---
+title: "StudioSlotId"
+description: "@anvilkit/core · StudioSlotId"
+---
+
+```ts
+type StudioSlotId = 
+  | "collaborators"
+  | string & {
+};
+```
+
+Defined in: [types/plugin.ts:508](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L508)
+
+Identifier of a named chrome slot a plugin can fill.
+
+`"collaborators"` is the first enumerated slot: `<StudioHeader>`
+renders its single occupant in the header-actions row (collaborator
+avatar stacks live here — `@anvilkit/collab-ui` fills it with
+`<PeerAvatarStack>`). The open `string` arm keeps the contract
+additive, so plugin authors can target future slots without a Core
+type bump; the literal exists only to surface autocomplete and
+document the anchor.

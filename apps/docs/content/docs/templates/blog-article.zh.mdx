@@ -1,0 +1,54 @@
+---
+title: "博客文章页面"
+description: "博客文章页面 —— 导航栏、文章区块、相关文章 CTA。"
+---
+
+![博客文章页面 preview](/templates/blog-article/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-blog-article</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template blog-article my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Section`
+- `Button`
+
+## 包详情
+
+A single blog-article page.
+
+Navbar, article section with rich prose, and a related-posts CTA button at the foot.
+
+## Install
+
+```sh
+npx anvilkit init --template blog-article my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/button`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

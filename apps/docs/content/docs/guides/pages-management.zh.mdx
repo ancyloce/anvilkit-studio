@@ -1,0 +1,183 @@
+---
+title: "多页面管理"
+description: "Studio 页面面板的能力门控行操作、页面设置、SEO、搜索以及拖拽排序。"
+---
+
+`<Studio>` 中的页面面板由单一的宿主提供的
+`StudioPagesSource` 驱动。每一项变更能力 —— 重命名、删除、
+复制、拖拽排序、设置、SEO —— 都是该接口上的**可选**回调。
+当宿主实现了某个回调时，对应的
+UI 能力就会出现在 `PageRow` 中。当未实现时，该能力会被
+静默隐藏。不会强制任何宿主改动；在 v0.2 之前发布的同一个数据源
+依然可以原样编译和渲染。
+
+## 1. 你将获得什么
+
+| 特性 | 回调 | 能力 | 隐藏条件…… |
+| --- | --- | --- | --- |
+| 重命名 | `onRename` | 行上的内联 `Input` | 回调未定义 **或** `page.locked === true` |
+| 删除 | `onDelete` | 行菜单 → 确认对话框 | 回调未定义 **或** `page.locked === true` |
+| 复制 | `onDuplicate` | 行菜单项 | 回调未定义 |
+| 页面设置 | `onUpdateSettings` | 设置对话框 | 回调未定义 |
+| SEO 元数据 | `onUpdateSettings` | 设置对话框内的 SEO 区块 | 回调未定义 |
+| 拖拽排序 | `onReorder` | 行悬停时的拖拽手柄；Space + 方向键循环 | 回调未定义（手柄不可用） |
+| 搜索 / 过滤 | *（无 —— 仅 UI）* | 头部 `Input` + 过滤后的列表 | 永不 —— 始终可用 |
+
+如果某一行根本不会渲染任何操作，则其溢出触发器本身
+会被抑制。
+
+## 2. 契约接口
+
+```ts
+import type {
+  StudioPage,
+  StudioPagesSource,
+} from "@anvilkit/core/types";
+
+interface StudioPagesSource {
+  // existing — unchanged from earlier versions
+  list(): readonly StudioPage[] | Promise<readonly StudioPage[]>;
+  subscribe?(listener: () => void): () => void;
+  onSelect?(pageId: string): void;
+  onCreate?(input: StudioPageCreateInput): void | Promise<void>;
+
+  // new — all optional, capability-gated
+  onRename?(input: StudioPageRenameInput): void | Promise<void>;
+  onDelete?(pageId: string): void | Promise<void>;
+  onDuplicate?(pageId: string): void | Promise<StudioPage | void>;
+  onReorder?(input: StudioPageReorderInput): void | Promise<void>;
+  onUpdateSettings?(input: StudioPageSettingsInput): void | Promise<void>;
+}
+```
+
+完整接口（包含输入形状）生成于
+[`/api/core/interfaces/StudioPagesSource`](/zh/api/core/interfaces/StudioPagesSource/)。
+
+<Callout type="info" title="无乐观变更">
+每个回调 resolve → 宿主变更其注册表 → 宿主
+触发其 `subscribe()` 监听器 → `PagesPanel` 重新运行 `list()`。
+UI 永远不会先于宿主进行变更。有一个已记录的例外：
+`onDuplicate` 可以返回创建出的 `StudioPage`，以便 UI 能够
+在往返完成之前预先选中它。
+</Callout>
+
+## 3. 锁定的页面
+
+`StudioPage.locked` 是宿主用来将某个页面标记为
+不可重命名且不可删除的显式信号。设置后：
+
+- 该行上的 `Rename` 和 `Delete` 菜单项会被抑制，
+  无论 `onRename` / `onDelete` 是否已实现。
+- 该行会显示 Home 图标（过去这是 core 中的一个 `page.id === "home"`
+  字符串启发式判断 —— 现在改由宿主控制）。
+- `Duplicate` 和 `Settings` **不**会被 `locked` 抑制 ——
+  宿主仍可以允许复制被锁定的页面或编辑其
+  元数据。
+
+该演示数据源将主页标记为 `{ id: "home", title: "Home",
+locked: true }` —— 参见 `apps/demo/lib/demo-pages-source.ts` 获取一份
+参考实现。
+
+## 4. 品牌 token
+
+`PageRow` 和各对话框通过一组受作用域限定的
+`--ak-pages-*` token 表面进行主题化，分为基元层 + 语义层。语义
+token 链式向下传递到 `--ak-studio-*`，再到宿主的 shadcn
+变量：
+
+```css
+.ak-pages-panel {
+  --ak-pages-fg: var(--ak-studio-fg, var(--foreground));
+  --ak-pages-muted: var(--ak-studio-muted, var(--muted));
+  --ak-pages-accent: var(--ak-pages-accent-primitive);
+  --ak-pages-danger-bg: var(--ak-pages-danger-primitive);
+  /* … */
+}
+```
+
+完整的 token 表面位于
+`packages/core/src/studio/layout/sidebar/modules/layer/pages-tokens.css`。
+暗色模式仅覆盖基元；语义 token 会继承。已经
+提供了 `--ak-studio-*` 或 shadcn 主题变量的宿主，无需任何额外
+接线即可获得正确的外观。
+
+## 5. 端到端参考
+
+一个实现了每个回调的最小数据源，以演示为蓝本：
+
+```ts
+import type {
+  StudioPage,
+  StudioPagesSource,
+  StudioPageRenameInput,
+  StudioPageReorderInput,
+  StudioPageSettingsInput,
+} from "@anvilkit/core/types";
+
+export function createMyPagesSource(): StudioPagesSource {
+  const pages: StudioPage[] = [
+    { id: "home", title: "Home", locked: true },
+    { id: "about", title: "About", path: "/about", route: true },
+  ];
+  let activeId = pages[0]?.id ?? "";
+  const listeners = new Set<() => void>();
+  const notify = () => {
+    for (const fn of listeners) fn();
+  };
+
+  return {
+    list: () => pages.map((p) => ({ ...p, active: p.id === activeId })),
+    subscribe(fn) {
+      listeners.add(fn);
+      return () => listeners.delete(fn);
+    },
+    onSelect(id) {
+      activeId = id;
+      notify();
+    },
+    onRename({ id, title }: StudioPageRenameInput) {
+      const p = pages.find((x) => x.id === id);
+      if (p) {
+        p.title = title;
+        notify();
+      }
+    },
+    onDelete(id) {
+      const i = pages.findIndex((p) => p.id === id);
+      if (i >= 0) {
+        pages.splice(i, 1);
+        notify();
+      }
+    },
+    async onDuplicate(id): Promise<StudioPage | void> {
+      const src = pages.find((p) => p.id === id);
+      if (!src) return;
+      const copy: StudioPage = {
+        ...src,
+        id: `${id}-copy-${Date.now()}`,
+        title: `${src.title} (copy)`,
+        locked: undefined,
+      };
+      pages.push(copy);
+      notify();
+      return copy; // pre-select on the UI side
+    },
+    onReorder({ id, toIndex }: StudioPageReorderInput) {
+      const from = pages.findIndex((p) => p.id === id);
+      if (from < 0) return;
+      const [moved] = pages.splice(from, 1);
+      if (moved) pages.splice(toIndex, 0, moved);
+      notify();
+    },
+    onUpdateSettings(input: StudioPageSettingsInput) {
+      const p = pages.find((x) => x.id === input.id);
+      if (!p) return;
+      Object.assign(p, input);
+      notify();
+    },
+  };
+}
+```
+
+将该数据源放入 `<Studio pages={createMyPagesSource()} … />`，
+每一项能力都会被点亮。

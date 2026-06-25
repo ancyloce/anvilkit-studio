@@ -1,0 +1,17 @@
+---
+title: "AiThemeHint"
+description: "@anvilkit/core · AiThemeHint"
+---
+
+```ts
+type AiThemeHint = "light" | "dark";
+```
+
+Defined in: [types/ai.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts#L65)
+
+Theme hint forwarded into AI prompts so the model can pick
+appropriate colors, imagery, and tone (review finding TS-4). Named
+once here rather than inlining `"light" | "dark"` at each AI context
+site. (Kept local to the type-only `ai.ts` layer rather than reusing
+the react-layer `ThemeResolved`, which would cross the engine
+boundary.)

@@ -1,0 +1,49 @@
+---
+title: "StudioPluginLifecycleHooks"
+description: "@anvilkit/core · StudioPluginLifecycleHooks"
+---
+
+Defined in: [types/plugin.ts:570](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L570)
+
+Optional lifecycle method bag returned by a plugin's `register()`.
+
+Every hook is optional. The lifecycle manager (`core-008`) awaits
+async hooks before proceeding, so any hook may return either a
+synchronous `void` or a `Promise<void>`.
+
+### Ordering
+
+Hooks fire in plugin **compile order** — the order of the host app's
+`createStudioConfig({ plugins: [...] })` array, unless a plugin sets
+`meta.order` / `meta.dependsOn` (which `compilePlugins()` resolves to a
+topological + `(order, index)` order).
+
+### Error handling
+
+- [onBeforePublish](#onbeforepublish) may throw `StudioPluginError` to abort the
+  publish. The host receives the error and can surface it.
+- All other hooks' errors are logged and swallowed — a buggy plugin
+  must not crash the editor.
+
+### Statelessness
+
+Hooks receive a fresh [StudioPluginContext](StudioPluginContext.md) pointer at every
+call site, so plugins can stay stateless and read the current data
+/ config at the moment the hook fires.
+
+## Type Parameters
+
+| Type Parameter | Default type | Description |
+| ------ | ------ | ------ |
+| `UserConfig` *extends* `PuckConfig` | `PuckConfig` | Optional Puck config generic; mirrors the one on [StudioPluginContext](StudioPluginContext.md) and defaults to Puck's default. |
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="onafterpublish"&gt;&lt;/a&gt; `onAfterPublish?` | `readonly` | (`ctx`, `data`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | Fires after the host app successfully publishes. Use for post-publish side-effects like cache invalidation or telemetry. | [types/plugin.ts:620](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L620) |
+| &lt;a id="onbeforepublish"&gt;&lt;/a&gt; `onBeforePublish?` | `readonly` | (`ctx`, `data`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | Fires before the host app publishes. May throw `StudioPluginError` to abort the publish (e.g. validation failure, missing required fields). | [types/plugin.ts:611](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L611) |
+| &lt;a id="ondatachange"&gt;&lt;/a&gt; `onDataChange?` | `readonly` | (`ctx`, `data`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | Fires on every Puck `onChange` with the fresh data snapshot. The `data` argument is passed directly so the plugin does not need to re-read it from `ctx.getData()`. | [types/plugin.ts:601](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L601) |
+| &lt;a id="ondestroy"&gt;&lt;/a&gt; `onDestroy?` | `readonly` | (`ctx`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | Fires when `<Studio>` unmounts. Use for cleanup — subscriptions, timers, event listeners, intervals, etc. | [types/plugin.ts:629](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L629) |
+| &lt;a id="oninit"&gt;&lt;/a&gt; `onInit?` | `readonly` | (`ctx`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | Fires exactly once, after `compilePlugins()` succeeds and before `<Studio>` mounts the Puck editor. Use for one-time setup (subscribing to external data, priming caches, etc.). | [types/plugin.ts:578](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L578) |
+| &lt;a id="onready"&gt;&lt;/a&gt; `onReady?` | `readonly` | (`ctx`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | Fires exactly once, after `<Puck>` has mounted and its effect-time API binder has captured `getPuckApi()` — i.e. the first moment a plugin may safely call `ctx.getPuckApi()`. Fires after `onInit` has been dispatched. Use for one-time setup that must touch the live Puck API on first paint (e.g. collab hydration of a preloaded snapshot) — work that is too early in `onInit`, where the binder does not yet exist. | [types/plugin.ts:591](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L591) |

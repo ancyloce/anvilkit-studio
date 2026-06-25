@@ -1,0 +1,560 @@
+---
+title: "生成器用法"
+description: "5 分钟从零完成脚手架生成 —— 前置条件、交互式与基于标志的运行方式、三种模板、脚手架生成后的检查清单，以及一个完整的 @anvilkit/callout 实例。"
+---
+
+每个 `@anvilkit/<slug>` 组件包都从同一个生成器开始：`pnpm -C packages/components gen:component`。它会写入一个
+九文件脚手架 —— `package.json`、`rslib.config.ts`、`tsconfig.json`、
+`src/index.ts`、`src/<ComponentName>.tsx`、`src/config.ts`、
+`src/styles.css`、`src/styles.d.ts` 以及 `README.md` —— 与
+工作区的 Rslib、Tailwind 和 Puck 约定相连。一名新贡献者
+应当能够在五分钟内从克隆仓库走到一个已命名、可构建的包。
+
+本指南是分步演练。关于脚手架代码必须遵守的契约，
+请参阅 [组件编写](/zh/guides/component-authoring/)。
+
+<Callout type="info" title="快速浏览顺序">
+	如果你已经克隆了仓库，可直接跳到 §2 进行
+	交互式运行，或跳到 §3 进行基于标志的运行。§6 是一个针对全新 `@anvilkit/callout`
+	包的完整可复现实例。
+</Callout>
+
+## 1. 前置条件
+
+组件工作区是一个带有自己的 pnpm
+工作区的 git 子模块。漏掉子模块初始化步骤，生成器将拒绝
+运行。
+
+1. **带子模块克隆。**
+
+	```bash
+	git clone --recurse-submodules https://github.com/ancyloce/anvilkit-studio.git
+	cd anvilkit-studio
+	```
+
+	如果你已经在没有 `--recurse-submodules` 的情况下克隆，请在仓库根目录运行一次
+	`git submodule update --init --recursive`。
+
+2. **固定工具链。** 该仓库通过
+	`packageManager` 强制使用 pnpm 10.33.0，并以 Node ≥ 18 为目标。
+
+	```bash
+	corepack enable
+	node -v        # ≥ 18
+	pnpm -v        # 10.33.0
+	```
+
+3. **安装依赖。** 在仓库根目录运行此命令；Turbo 和
+	pnpm 工作区会自动识别 `packages/components/`。
+
+	```bash
+	pnpm install
+	```
+
+此时 `packages/components/src/` 包含已有的
+组件包（`button`、`hero`、`navbar` 等），生成器
+已就绪可再添加一个。
+
+## 2. 交互式运行
+
+默认调用会提示输入四个答案、逐一校验，
+然后写入脚手架。请从仓库根目录运行，以便 `-C` 标志
+将命令限定到组件工作区：
+
+```bash
+pnpm -C packages/components gen:component
+```
+
+提示项依次为：
+
+| 提示                    | 接受值                                                      | 默认值                          |
+| ----------------------- | ----------------------------------------------------------- | ------------------------------- |
+| **组件 slug**           | 小写 kebab-case，在 `src/` 下唯一                            | _必填_                          |
+| **显示标签**            | 在 Puck 侧栏轨道中显示的自由格式字符串                       | `Title-Cased Slug`（来自 slug） |
+| **脚手架类型**          | `content` · `layout` · `form`                               | _必填_                          |
+| **建议分类**            | 可选的小写 slug（`marketing`、`forms` 等）                   | 空                              |
+
+校验规则（由 `turbo/generators/config.ts` 强制执行）：
+
+- slug 必须匹配 `^[a-z0-9]+(?:-[a-z0-9]+)*$` —— 因此 `button-group` 是
+	合法的，而 `ButtonGroup` 和 `my_button` 不是。
+- slug 必须唯一 —— 如果 `src/<slug>/` 已存在，生成器会拒绝
+	覆盖它。
+- 分类（如果提供）必须满足相同的 kebab-case 形式。
+
+一次成功的运行会为每个文件打印一行 `>>> Added "…"` 并干净退出。
+
+## 3. 基于标志的运行
+
+可脚本化的调用会跳过提示。`--` 分隔符是
+必需的，这样 pnpm 才会把这些标志转发给生成器，而不是
+自己消费它们：
+
+```bash
+pnpm -C packages/components gen:component -- \
+	--name button-group \
+	--label "Button Group" \
+	--template content \
+	--category actions
+```
+
+支持的标志：
+
+| 标志          | 必填     | 说明                                                        |
+| ------------- | -------- | ----------------------------------------------------------- |
+| `--name`      | 是       | 组件 slug；与交互式提示相同的校验。                          |
+| `--label`     | 否       | 默认为 slug 的 Title Case 形式。                            |
+| `--template`  | 否       | 默认为 `content`。取 `content`、`layout`、`form` 之一。      |
+| `--category`  | 否       | 写入 `src/config.ts` 中的 `metadata.suggestedCategory`。   |
+
+无效输入会以校验器给出的消息快速失败 —— 不会写入
+脚手架，也不会留下任何部分状态。
+
+## 4. 三种模板
+
+每种模板都会生成相同的九个文件，但
+`<ComponentName>.tsx`、`config.ts` 和 `package.json` 的形态各异，使
+脚手架与组件的意图相匹配。请选择最契合
+你所构建内容的那一种。
+
+<Tabs items={['content', 'layout', 'form']}>
+
+<Tab value="content">
+
+**何时选它。** 静态营销界面 —— 按钮、英雄区、
+区块、定价模块。这是默认选项，也是大多数 `@anvilkit/*` 包
+最贴近的匹配。
+
+**它生成什么。**
+
+- **属性：** `title: string`、`body: RichText`、`alignment?: 'left' | 'center' | 'right'`。
+- **字段：** `text`（title）、`richtext`（body）、`radio`（alignment）。
+- **`package.json` peer deps：** `@puckeditor/core`、`react`、`react-dom`。
+- **无 `@anvilkit/ui` 依赖。**
+
+**渲染形态**（逐字摘自 `templates/component/content/src/component.tsx`）：
+
+```tsx
+import type { RichText } from "@puckeditor/core";
+
+export interface CalloutProps {
+	title: string;
+	body: RichText;
+	alignment?: "left" | "center" | "right";
+}
+
+export interface CalloutViewProps extends CalloutProps {
+	editMode?: boolean;
+}
+```
+
+</Tab>
+
+<Tab value="layout">
+
+**何时选它。** 用于嵌入子组件的结构性容器 ——
+便当式网格、双列区块、页面外壳。当
+组件的职责是排布其他 Puck 组件、而非自身渲染
+终端内容时，使用它。
+
+**它生成什么。**
+
+- **属性：** `title: string`、`leftColumn: Slot`、`rightColumn: Slot`、`emphasis?: 'balanced' | 'accent'`。
+- **字段：** `text`（title）、`slot` × 2（左/右列）、`radio`（emphasis）。
+- **渲染：** 配置的 `render` 用
+	`createElement(LeftColumn)` / `createElement(RightColumn)` 包裹每个 `Slot`，以便 Puck
+	挂载嵌套的拖放区。
+- **`package.json` peer deps：** 与 `content` 相同。
+
+被渲染的组件将 `leftColumn`/`rightColumn` 作为
+`ReactNode` 接收，并将 `editMode` 贯穿传递 —— 脚手架已经
+连接好仅在编辑期间显示的 “Layout” 可操作性标签。
+
+</Tab>
+
+<Tab value="form">
+
+**何时选它。** 需要编辑器感知的禁用状态的
+交互式输入 —— 文本输入框、选择框、表单字段包装器。这是
+唯一对 `@anvilkit/ui` 取运行时依赖的模板。
+
+**它生成什么。**
+
+- **属性：** `label`、`name`、`type?`（text/email/password/search/tel/url）、`placeholder?`、`helperText?`、`defaultValue?`、`required?`、`disabled?`。
+- **字段：** `text`、`text`、`select`、`text`、`textarea`、`text`、`radio`、`radio`。
+- **`package.json` peer deps：** 在常规的 Puck + React 之外加入 `@anvilkit/ui`。
+- **`styles.css`：** 包含一条额外的 `@source '../../../../ui/src/input.tsx'`
+	以便 Tailwind 拾取上游原语的类。
+- **`editMode` 处理：** 视图组件用
+	`readOnly={editMode}` 和一个柔和背景包裹 `@anvilkit/ui` 的
+	`Input`，从而让字段在编辑器中自我中和。
+
+</Tab>
+
+</Tabs>
+
+### 通用脚手架文件
+
+无论何种模板，每个脚手架都包含：
+
+- **`src/config.ts`** —— 导出 `metadata`、`defaultProps`、`fields`、
+	一个 `render<ComponentName>` 适配器、`<slug>Config` 和 `componentConfig`。
+	`metadata.packageName` 取自 `package.json`，因此对重命名安全；
+	`metadata.componentSlug` 则根据生成器答案写入。
+- **`src/index.ts`** —— 重新导出该组件、其 `Props` +
+	`ViewProps` 类型，以及四个规范符号（`componentConfig`、
+	`defaultProps`、`fields`、`metadata`），同时以原名和
+	lowerCamel 别名两种形式导出。
+- **`src/styles.css`** —— 以 `@import '@anvilkit/tailwind-config/shadcn'`
+	和本地的 `@source './**/*.{ts,tsx}'` 指令开头。
+- **`package.json`** —— 双 CJS/ESM `exports`、一个 `./styles.css`
+	子路径，以及一组由 Rslib 驱动的 `build` / `dev` / `typecheck` 脚本。
+
+## 5. 脚手架生成后的检查清单
+
+生成器写入的是一个可工作的桩 —— 它能通过 lint、typecheck 和
+构建 —— 但该桩有意保持最小化。完成这个包
+每次都遵循同样的五步循环。
+
+1. **实现渲染。** 打开 `src/<ComponentName>.tsx` 并
+	用真正的组件替换占位标记。保持
+	`<ComponentName>ViewProps` 形态作为可序列化属性
+	加 `editMode` 的唯一事实来源。
+
+2. **敲定 `defaultProps`、`fields` 和 `metadata`。** 在
+	`src/config.ts` 中，把默认值调到在演示中
+	看起来有意为之的程度，并优化字段 schema —— 如果枚举增多，把
+	`radio`→`select`；为可重复的分组添加 `array`/`object` 字段。
+	如果 `metadata.suggestedCategory` 之前为空，请设置它。
+
+3. **连接 peer deps + `@source` 条目。** 如果你开始消费某个
+	`@anvilkit/ui` 原语，请把它加入 `peerDependencies` +
+	`devDependencies`，并把其源路径作为额外的 `@source` 指令
+	追加到 `styles.css`。
+
+4. **校验。** 工作区有一个统一的冒烟命令：
+
+	```bash
+	pnpm -C packages/components lint \
+		&& pnpm -C packages/components typecheck \
+		&& pnpm -C packages/components build
+	```
+
+	CI 运行同样这三个，外加 `madge`（循环依赖）、`publint`
+	（包导出）和 Playwright 套件。
+
+5. **集成进演示。** `apps/demo/` 中要改动两个文件：
+
+	- **`apps/demo/lib/puck-demo.ts`** —— 添加 import、
+		`DemoComponents` 条目、分类连接、
+		`demoConfig.components` 条目，以及 `createDemoData` 中的一个条目。
+	- **`apps/demo/next.config.js`** —— 把 `@anvilkit/<slug>` 加入
+		`transpilePackages` 数组，以便 Next 能转译源
+		包。
+
+	运行 `pnpm -C apps/demo dev` 并验证该组件能拖入
+	位于 `/puck/editor` 的 Puck 编辑器。
+
+## 6. 发布工作流
+
+版本管理由 Changesets 驱动；每个 `@anvilkit/<slug>` 都
+独立发布。
+
+1. **添加一个 changeset。** 从组件工作区：
+
+	```bash
+	pnpm -C packages/components changeset
+	```
+
+	选中新包，选择 bump 级别（对全新包通常为
+	`minor`），并写一段面向用户的描述 —— 它会原样
+	成为变更日志条目。
+
+2. **开一个 PR。** 把 changeset 文件与组件
+	实现一起提交。CI 在每次推送时运行 `lint`、`typecheck`、`madge`、`test`、
+	`build`、`publint` 和 Playwright E2E 套件 ——
+	参见 [`.github/workflows/ci.yml`](https://github.com/ancyloce/anvilkit-studio/blob/main/.github/workflows/ci.yml)。
+
+3. **合并到 `main`。** Changesets 的 GitHub action 会打开（或更新）
+	一个 release PR，它会 bump 受影响的 `package.json` 版本并
+	写入每个包的 `CHANGELOG.md` 条目。
+
+4. **合并 release PR。** 该 action 随后运行：
+
+	```bash
+	pnpm -C packages/components release
+	# = changeset version && pnpm build && changeset publish
+	```
+
+	每个带有待处理 changeset 的包都会以其新版本
+	发布到 npm。消费者只安装他们需要的 ——
+	`pnpm add @anvilkit/<slug> @puckeditor/core`。
+
+<Callout type="warn" title="切勿手动编辑版本">
+	包版本存在于 `packages/components/src/<slug>/package.json`，
+	但直接编辑它们会绕过 Changesets 的 CHANGELOG 生成
+	并使 release PR 失同步。请始终通过
+	`pnpm changeset` 路由 bump。
+</Callout>
+
+## 7. 实例 —— `@anvilkit/callout`
+
+本节演练把一个全新的 `callout` 组件从
+空的 `src/callout/` 目录一直推进到演示集成的过程。一名新
+贡献者可以在 15 分钟内端到端复现它。
+
+### 7.1 脚手架生成
+
+从仓库根目录，在 `pnpm install` 之后：
+
+```bash
+pnpm -C packages/components gen:component -- \
+	--name callout \
+	--label "Callout" \
+	--template content \
+	--category marketing
+```
+
+运行后，`packages/components/src/callout/` 包含
+九文件脚手架，且生成的 `src/config.ts` 已
+连接好 `metadata.suggestedCategory: 'marketing'`。
+
+### 7.2 实现渲染
+
+把 `packages/components/src/callout/src/Callout.tsx` 替换为一个
+语气感知的容器。`tone` 属性会挑选一套 shadcn 语义化 token
+集合，使组件在不发明新颜色的情况下做到主题感知：
+
+```tsx
+import type { RichText } from "@puckeditor/core";
+
+export interface CalloutProps {
+	title: string;
+	body: RichText;
+	tone?: "info" | "success" | "warning" | "danger";
+}
+
+export interface CalloutViewProps extends CalloutProps {
+	editMode?: boolean;
+}
+
+const toneClasses: Record<
+	NonNullable<CalloutProps["tone"]>,
+	{ border: string; bg: string; text: string }
+> = {
+	info: {
+		border: "border-border",
+		bg: "bg-muted/40",
+		text: "text-foreground",
+	},
+	success: {
+		border: "border-primary/30",
+		bg: "bg-primary/10",
+		text: "text-primary",
+	},
+	warning: {
+		border: "border-accent",
+		bg: "bg-accent/20",
+		text: "text-accent-foreground",
+	},
+	danger: {
+		border: "border-destructive/40",
+		bg: "bg-destructive/10",
+		text: "text-destructive",
+	},
+};
+
+export function Callout({
+	title,
+	body,
+	tone = "info",
+}: CalloutViewProps) {
+	const classes = toneClasses[tone];
+
+	return (
+		<aside
+			role="note"
+			className={`grid gap-3 rounded-2xl border p-5 shadow-sm ${classes.border} ${classes.bg}`}
+		>
+			<h3 className={`text-base font-semibold ${classes.text}`}>
+				{title}
+			</h3>
+			<div className="text-sm leading-6 text-muted-foreground [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4">
+				{body}
+			</div>
+		</aside>
+	);
+}
+```
+
+因为 `tone` 是一个普通字符串，`Callout` 没有 `editMode`
+分支 —— 没有需要中和的活动链接或可聚焦控件。
+一个仅装饰的组件是
+[editMode 模式](/zh/guides/component-authoring/#4-the-editmode-pattern) 最简单的变体。
+
+### 7.3 敲定配置
+
+更新 `packages/components/src/callout/src/config.ts`，使
+`defaultProps` 选取一个真实示例，且 `fields` 以 `radio` 形式提供
+四种语气：
+
+```ts
+import type {
+	ComponentConfig,
+	ComponentMetadata,
+	Fields,
+} from "@puckeditor/core";
+import { createElement } from "react";
+import packageJson from "../package.json";
+import type { CalloutProps } from "./Callout";
+import { Callout } from "./Callout";
+
+export const metadata = {
+	componentName: "Callout",
+	componentSlug: "callout",
+	packageName: packageJson.name,
+	packageVersion: packageJson.version,
+	scaffoldType: "content",
+	schemaVersion: 1,
+	suggestedCategory: "marketing",
+} satisfies ComponentMetadata;
+
+export const defaultProps = {
+	title: "Heads up",
+	body: "<p>Use this space for a helpful reminder.</p>",
+	tone: "info",
+} satisfies CalloutProps;
+
+export const fields = {
+	title: { type: "text", label: "Title" },
+	body: { type: "richtext", label: "Body" },
+	tone: {
+		type: "radio",
+		label: "Tone",
+		options: [
+			{ label: "Info", value: "info" },
+			{ label: "Success", value: "success" },
+			{ label: "Warning", value: "warning" },
+			{ label: "Danger", value: "danger" },
+		],
+	},
+} satisfies Fields<CalloutProps>;
+
+const renderCallout: ComponentConfig<CalloutProps>["render"] = ({
+	title,
+	body,
+	tone,
+	editMode,
+}) =>
+	createElement(Callout, { title, body, tone, editMode });
+
+export const calloutConfig = {
+	label: "Callout",
+	defaultProps,
+	fields,
+	metadata,
+	render: renderCallout,
+} satisfies ComponentConfig<CalloutProps>;
+
+export const componentConfig = calloutConfig;
+```
+
+保持 `src/index.ts` 如生成时那样 —— 它已经重新导出四个
+规范符号以及 `callout*` 驼峰别名。
+
+### 7.4 校验
+
+从组件工作区运行三命令冒烟：
+
+```bash
+pnpm -C packages/components lint \
+	&& pnpm -C packages/components typecheck \
+	&& pnpm -C packages/components build
+```
+
+三个都应当通过。`build` 会产出
+`packages/components/src/callout/dist/`，其中含有 `index.cjs`、`index.js`、
+`index.d.ts` 和编译后的 `styles.css`。
+
+### 7.5 集成进演示
+
+把 callout 的 import 和连接添加到 `apps/demo/lib/puck-demo.ts`：
+
+```ts
+import {
+	type CalloutProps,
+	componentConfig as calloutComponentConfig,
+	defaultProps as calloutDefaultProps,
+} from "@anvilkit/callout";
+
+export type DemoComponents = {
+	// …existing entries…
+	Callout: CalloutProps;
+};
+
+export const demoConfig: Config<DemoComponents> = {
+	categories: {
+		// …existing categories…
+		marketing: {
+			title: "Marketing",
+			components: [
+				// …existing marketing components…
+				"Callout",
+			],
+		},
+	},
+	components: {
+		// …existing components…
+		Callout: calloutComponentConfig,
+	},
+};
+```
+
+然后向 `createDemoData` 添加一个条目，使该组件出现在
+被填充的 `/puck/render` 负载中：
+
+```ts
+{
+	type: "Callout",
+	props: {
+		id: "callout-primary",
+		...calloutDefaultProps,
+},
+},
+```
+
+并在 `apps/demo/next.config.js` 中将该包列入白名单：
+
+```js
+transpilePackages: [
+	// …existing packages…
+	"@anvilkit/callout",
+];
+```
+
+启动演示并确认 Callout 出现在 Marketing 侧栏轨道中：
+
+```bash
+pnpm -C apps/demo dev
+# Open http://localhost:3000/puck/editor
+```
+
+### 7.6 发布它
+
+创建 changeset、开 PR，并在合并后让 release PR 发布
+`@anvilkit/callout@0.1.0`：
+
+```bash
+pnpm -C packages/components changeset
+# Select @anvilkit/callout → minor
+# Description: Add a new `callout` component package with four tones
+# and shared demo integration.
+```
+
+## 8. 参考
+
+- 生成器入口：[`packages/components/turbo/generators/run-component-generator.mjs`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/turbo/generators/run-component-generator.mjs)
+- Turbo 生成器配置：[`packages/components/turbo/generators/config.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/turbo/generators/config.ts)
+- 脚手架模板：[`packages/components/turbo/generators/templates/component/`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/turbo/generators/templates/component)
+- 组件契约：[组件编写](/zh/guides/component-authoring/)
+- 完整组件目录：[组件](/zh/components/)

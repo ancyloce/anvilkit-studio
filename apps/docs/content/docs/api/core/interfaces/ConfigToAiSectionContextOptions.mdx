@@ -1,0 +1,20 @@
+---
+title: "ConfigToAiSectionContextOptions"
+description: "@anvilkit/core · ConfigToAiSectionContextOptions"
+---
+
+Defined in: [types/ai-section.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L125)
+
+Optional environment hints for `configToAiSectionContext()`.
+
+Mirrors the per-call hints on [AiGenerationContext](AiGenerationContext.md) (theme,
+locale) so a host that already builds a page-level context can reuse
+the same hint object for both flows.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="allowresize"&gt;&lt;/a&gt; `allowResize?` | `readonly` | `boolean` | When `true`, the resulting context's [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is set so the LLM (and the validator) accepts a [AiSectionPatch](AiSectionPatch.md) whose `replacement.length` ≠ [AiSectionSelection.nodeIds](AiSectionSelection.md#nodeids).length. Defaults to `false` — Phase 6 / M9 ships size-preserving patches only. Hosts wanting "split this hero into three sections" must opt in explicitly. | [types/ai-section.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L145) |
+| &lt;a id="locale"&gt;&lt;/a&gt; `locale?` | `readonly` | `string` | Optional BCP 47 language tag forwarded onto [AiSectionContext.locale](AiSectionContext.md#locale). | [types/ai-section.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L135) |
+| &lt;a id="theme"&gt;&lt;/a&gt; `theme?` | `readonly` | [`AiThemeHint`](../type-aliases/AiThemeHint) | Optional theme hint (`"light"` | `"dark"`) forwarded onto [AiSectionContext.theme](AiSectionContext.md#theme). | [types/ai-section.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L130) |

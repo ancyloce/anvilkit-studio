@@ -1,0 +1,56 @@
+---
+title: "문의 페이지"
+description: "문의 페이지 — 내비게이션 바, 문의 섹션, 제출 버튼이 있는 인라인 이메일 + 메시지 폼."
+---
+
+![문의 페이지 preview](/templates/contact/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-contact</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI로 스캐폴딩
+
+```sh
+npx anvilkit init --template contact my-site
+```
+
+## 구성
+
+커밋된 `PageIR`는 루트에 다음 노드 타입을 연결합니다:
+
+- `Navbar`
+- `Section`
+- `Input`
+- `Button`
+
+## 패키지 세부 정보
+
+A contact-us page.
+
+Navbar, section with copy, inline email + message inputs, and a submit button. No form handler wired — users hook up their own.
+
+## Install
+
+```sh
+npx anvilkit init --template contact my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/button`
+- `@anvilkit/input`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

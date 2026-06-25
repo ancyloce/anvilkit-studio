@@ -1,0 +1,18 @@
+---
+title: "StudioCopySnippetCategory"
+description: "@anvilkit/core · StudioCopySnippetCategory"
+---
+
+```ts
+type StudioCopySnippetCategory = 
+  | "basic"
+  | "brand"
+  | string & {
+};
+```
+
+Defined in: [types/sidebar.ts:386](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L386)
+
+Built-in snippet categories. Plugins may extend by passing arbitrary
+strings; the i18n catalog ships keys for `basic` / `brand` only —
+unknown categories render under the snippet's literal category name.

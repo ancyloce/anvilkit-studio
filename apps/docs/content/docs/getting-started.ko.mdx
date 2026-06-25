@@ -1,0 +1,108 @@
+---
+title: 빠른 시작
+description: AnvilKit를 설치하고 최소한의 Studio 호스트를 마운트하여 첫 Puck 페이지를 렌더링합니다.
+---
+
+AnvilKit는 Puck 네이티브 컴포넌트 생태계입니다. 독립적으로 배포 가능한
+컴포넌트(`@anvilkit/*`), 런타임 셸(`@anvilkit/core`), 그리고 플러그인으로
+구성됩니다. 이 가이드에서는 React 앱에 최소한의 Studio 호스트를 마운트합니다.
+
+## 사전 요구 사항
+
+- Node.js **≥ 22.13**(워크스페이스의 `engines` 제약과 일치)
+- pnpm, npm 또는 yarn
+- React 19 호스트 앱(Next.js 16 권장)
+
+## 설치
+
+필요한 컴포넌트만 선택하세요 — 통합 번들은 없습니다.
+
+<Tabs items={['pnpm', 'npm', 'yarn']}>
+	<Tab value="pnpm">
+
+```bash
+pnpm add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+	<Tab value="npm">
+
+```bash
+npm install @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+	<Tab value="yarn">
+
+```bash
+yarn add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+</Tabs>
+
+## 최소한의 `<Studio>` 호스트
+
+1. 컴포넌트를 가져와 Puck `Config`를 구성합니다.
+
+	```tsx
+	// app/studio/config.ts
+	import { componentConfig as hero } from "@anvilkit/hero";
+	import { componentConfig as button } from "@anvilkit/button";
+	import type { Config } from "@puckeditor/core";
+
+	export const config: Config = {
+		components: {
+			Hero: hero,
+			Button: button,
+		},
+	};
+	```
+
+2. 클라이언트 컴포넌트에서 `<Studio>`를 마운트합니다.
+
+	```tsx
+	// app/studio/page.tsx
+	"use client";
+
+	import { Studio } from "@anvilkit/core";
+	import { config } from "./config";
+
+	export default function StudioPage() {
+		return <Studio puckConfig={config} />;
+	}
+	```
+
+3. 전역 스타일시트에서 공유 테마 토큰을 가져옵니다.
+
+	```css
+	/* app/globals.css */
+	@import "@anvilkit/tailwind-config/shadcn";
+	```
+
+## 플러그인 스캐폴딩
+
+최소 호스트를 마친 후에는 배포된 제너레이터로 새 플러그인을 스캐폴딩하세요 —
+`package.json`, `rslib.config.ts`, 보일러플레이트 테스트를 직접 복사할 필요가
+없습니다:
+
+```bash
+# 비대화형
+pnpm create @anvilkit/plugin \
+  --name my-plugin \
+  --display "My Plugin" \
+  --category rail-panel
+
+# 대화형(TTY 전용)
+pnpm create @anvilkit/plugin
+```
+
+결과물은 `@anvilkit/core/testing` 픽스처가 통과하는 기준 테스트에 연결된, 바로
+빌드할 수 있는 패키지입니다. 전체 `StudioPlugin` 계약은 **플러그인 작성** 가이드를
+참고하세요.
+
+## 다음 단계
+
+- **컴포넌트** 카탈로그에서 전체 `@anvilkit/*` 패키지 목록을 살펴보세요.
+- **가이드**에서 플러그인 작성, 컴포넌트 작성, 내보내기 파이프라인을 읽어보세요.
+- **API 레퍼런스**에서 `<Studio>`, 플러그인 계약, 런타임 훅을 확인하세요.

@@ -1,0 +1,107 @@
+---
+title: "版本历史插件"
+description: "适配器驱动的快照存储、确定性的 diff/apply 引擎，以及面向安装 @anvilkit/plugin-version-history 的 Studio 宿主的可选 UI。"
+---
+
+`@anvilkit/plugin-version-history` 是一个第一方的无头 `StudioPlugin`。
+快照持久化被委托给宿主提供的 `SnapshotAdapter`，因此该插件自身不附带任何 I/O ——
+只包含 diff/apply 引擎、两个头部操作、可选的 UI 基础组件，
+以及用于测试和演示的参考适配器。
+
+## 1. 安装
+
+```sh
+pnpm add @anvilkit/plugin-version-history
+```
+
+对等依赖：
+
+- `@puckeditor/core ^0.21.3`
+- `react >=19.0.0`
+- `react-dom >=19.0.0`
+
+无传输或存储依赖 —— 宿主端到端地拥有持久化。
+
+子路径导出：
+
+- `@anvilkit/plugin-version-history` —— 工厂、参考适配器、diff/apply 引擎、类型。
+- `@anvilkit/plugin-version-history/ui` —— `VersionHistoryUI`、`SaveSnapshotButton`、`SnapshotList`、`SnapshotHistoryModal`、`DiffView`。
+- `@anvilkit/plugin-version-history/testing` —— `runAdapterContract` 共享测试套件。
+
+## 2. 最小宿主
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createVersionHistoryPlugin,
+  localStorageAdapter,
+} from "@anvilkit/plugin-version-history";
+
+const versionHistory = createVersionHistoryPlugin({
+  adapter: localStorageAdapter({ namespace: "my-app-history" }),
+  maxSnapshots: 50,
+});
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[versionHistory]} />;
+}
+```
+
+该插件贡献两个头部操作（`version-history:save` 和
+`version-history:open`），并在 Studio 事件总线上发出 `version-history:save-requested` /
+`version-history:open-requested`。通过挂载一个 UI 界面来处理 open 事件 ——
+例如来自 `/ui` 子路径的 `<SnapshotHistoryModal>`。
+
+## 3. 选项
+
+```ts
+interface CreateVersionHistoryPluginOptions {
+  readonly adapter: SnapshotAdapter;
+  readonly maxSnapshots?: number; // FIFO eviction; requires adapter.delete
+}
+```
+
+当设置了 `maxSnapshots` 时，一旦达到容量上限，最旧的快照会被自动删除
+（这要求适配器实现 `delete`）。
+
+## 4. 适配器
+
+`inMemoryAdapter()`（测试）和 `localStorageAdapter({ namespace })`（演示）
+开箱即用。生产环境的适配器需实现 `save` / `list` / `load`，
+并可选地实现 `delete`：
+
+```ts
+import type { SnapshotAdapter } from "@anvilkit/plugin-version-history";
+
+const firestoreAdapter: SnapshotAdapter = {
+  save: async (id, record) => { /* … */ },
+  list: async () => { /* … */ },
+  load: async (id) => { /* … */ },
+  delete: async (id) => { /* … */ },
+};
+```
+
+使用 `/testing` 子路径上的 `runAdapterContract`，针对参考适配器所使用的
+同一份契约来验证任何自定义适配器。
+
+## 5. Diff 引擎
+
+`diffIR(a, b)` 生成一个冻结的 `IRDiff`；`applyDiff(a, diff)` 往返还原为
+`b`；`summarizeDiff(diff)` 返回一个用于显示的 `IRDiffSummary`：
+
+```ts
+import { applyDiff, diffIR, summarizeDiff } from "@anvilkit/plugin-version-history";
+
+const diff = diffIR(previous, current);
+const summary = summarizeDiff(diff);   // { added, removed, changed, … }
+const restored = applyDiff(previous, diff); // deep-equals `current`
+```
+
+格式错误的 apply 会抛出 `DiffApplyError`；其他失败则以携带
+`VersionHistoryErrorCode` 的 `VersionHistoryError` 形式呈现。
+
+<Callout type="info" title="状态（alpha，v0.1.4）">
+头部操作以及 diff/apply 引擎已稳定。侧边栏面板槽位贡献
+被推迟，直到 `StudioPluginContext` 暴露侧边栏注册 API。
+打包预算：8 KB gzipped，在 CI 中强制执行。
+</Callout>

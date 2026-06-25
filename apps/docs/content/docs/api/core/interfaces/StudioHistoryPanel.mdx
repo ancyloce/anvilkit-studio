@@ -1,0 +1,23 @@
+---
+title: "StudioHistoryPanel"
+description: "@anvilkit/core · StudioHistoryPanel"
+---
+
+Defined in: [types/sidebar.ts:450](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L450)
+
+Host-supplied panel body for the sidebar's `history` module.
+`@anvilkit/core` stays agnostic about any specific snapshot store —
+the host (or an integration plugin paired with
+`@anvilkit/plugin-version-history`) registers a single panel via
+`ctx.registerHistoryPanel(panel)` and owns its own React state,
+adapter reference, and restore-dispatch wiring.
+
+Mirrors [StudioCopilotPanel](StudioCopilotPanel.md) and [StudioAssetSource](StudioAssetSource.md): v1
+supports a single panel, last-write-wins; the module shows
+`studio.module.history.empty` until a panel is registered.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="render"&gt;&lt;/a&gt; `render` | `readonly` | () =&gt; `ReactNode` | Render the panel body. Called from the `history` module on every render; the returned tree is rendered directly inside the sidebar panel's body slot. Implementations may close over an adapter reference and own their internal state via standard hooks. | [types/sidebar.ts:457](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L457) |

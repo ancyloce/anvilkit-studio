@@ -1,0 +1,13 @@
+{
+	"pages": [
+		"index",
+		"getting-started",
+		"components",
+		"templates",
+		"guides",
+		"core",
+		"migration",
+		"api",
+		"..."
+	]
+}

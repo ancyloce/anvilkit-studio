@@ -1,0 +1,232 @@
+---
+title: "Studio 오버라이드"
+description: "AnvilKit의 일급 Puck 오버라이드 프리셋, chrome 모드, 그리고 기본값·플러그인·소비자 간의 합성 순서."
+---
+
+`@anvilkit/core`는 완전한 Studio chrome —— 헤더, 사이드바
+탭, 뷰포트 툴바, 필드 패널 —— 을 Puck 오버라이드 프리셋으로
+제공합니다. 이를 원하는 호스트는 `<Studio>`만 임포트하면 얻을 수 있습니다. 원시
+Puck을 원하는 호스트는 단일 속성 하나만 전환하면 됩니다. 플러그인과 소비자는 어떤 슬롯이든
+확장할 수 있으며, 머지 파이프라인이 이 세 레이어 간의 결정론적
+순서를 보장합니다.
+
+## Chrome 모드
+
+`<Studio chrome>`는 두 가지 값을 받습니다.
+
+| 값         | 동작                                                                 |
+| ------------- | ------------------------------------------------------------------------ |
+| `"anvilkit"`(기본값) | 기본 오버라이드 프리셋과 인스턴스별 에디터 스토어를 갖춘 AnvilKit Studio 셸을 마운트합니다. |
+| `"puck"`      | 프리셋을 건너뛰고 원시 `@puckeditor/core` `<Puck>`를 마운트합니다. Studio 오버라이드 도입 이전 릴리스와 비트 단위로 동일합니다. |
+
+`"anvilkit"` chrome과 에디터 스토어는 동적
+임포트로 로드되므로, `chrome="puck"`는 chrome 바이트를 전혀 포함하지 않습니다 ——
+엔트리 번들이 25 KB gzip 예산 이하로 유지됩니다.
+
+## CSS 임포트
+
+chrome은 `--ak-studio-*` 토큰 계약을, 기존 shadcn / Tailwind v4 변수
+(`--background`, `--foreground`, `--border` 등)로 연결하는 CSS
+사이드카에서 읽습니다. 두 개의 임포트가
+필요합니다.
+
+```ts title="app/layout.tsx"
+import "@puckeditor/core/puck.css";
+import "@anvilkit/core/styles.css";
+```
+
+이 사이드카는 부수 효과가 있는 임포트입니다 —— `@anvilkit/core`
+패키지는 `*.css` 파일을 부수 효과가 있는 것으로 표시하여 번들러가
+이를 트리 셰이크하지 않도록 합니다.
+
+## 기본 chrome
+
+```tsx title="app/editor/page.tsx"
+"use client";
+
+import { Studio } from "@anvilkit/core/react";
+import type { Config, Data } from "@puckeditor/core";
+
+export default function EditorPage() {
+	return (
+		<Studio
+			puckConfig={config as Config}
+			data={initialData as Data}
+			plugins={plugins}
+			onPublish={async (data) => {
+				await fetch("/api/publish", {
+					method: "POST",
+					body: JSON.stringify(data),
+				});
+			}}
+		/>
+	);
+}
+```
+
+`chrome`은 기본값이 `"anvilkit"`이므로 속성 변경이 필요하지 않습니다.
+헤더
+버튼을 연결하려면 chrome이 `onBack`, `onSaveDraft`, `isSavingDraft`,
+`lastSavedAt`, `isPublishing`을 읽습니다.
+
+```tsx
+<Studio
+	puckConfig={config}
+	data={data}
+	onBack={() => router.push("/dashboard")}
+	onSaveDraft={async () => {
+		await fetch("/api/draft", { method: "POST" });
+	}}
+	isSavingDraft={isSavingDraft}
+	lastSavedAt={lastSavedAt}
+	isPublishing={isPublishing}
+/>
+```
+
+## 원시 Puck 탈출구
+
+이미 커스텀 chrome을 출시했고 Studio 오버라이드 도입 이전의
+`<Studio>`와 비트 단위로 동일해야 한다면, `chrome="puck"`를 설정하세요.
+
+```tsx title="app/editor/page.tsx"
+<Studio
+	puckConfig={config}
+	data={data}
+	plugins={plugins}
+	chrome="puck"
+/>
+```
+
+이 모드에서는 기본 프리셋이 **절대** 로드되지 않으며, 플러그인
+오버라이드는 이전과 동일하게 적용되고, 기존의
+`overrides` 속성은 변경 없이 Puck에 전달됩니다.
+
+## 소비자 오버라이드 확장
+
+`<Studio>`의 `overrides` 속성은 호스트의 가장 바깥쪽 레이어입니다.
+당신이 기여하는 모든 것은 기본 프리셋의
+출력 주위에 합성됩니다. 하나의 필드 타입 렌더러를 교체하거나 필드 레이블을 감싸려면,
+해당 슬롯만 제공하세요.
+
+```tsx
+import type { Overrides } from "@puckeditor/core";
+
+const customOverrides: Partial<Overrides> = {
+	fieldTypes: {
+		text: ({ field, value, onChange, name }) => (
+			<input
+				name={name}
+				value={value ?? ""}
+				placeholder={field.placeholder}
+				onChange={(e) => onChange(e.target.value)}
+				className="my-app-input"
+			/>
+		),
+	},
+	fieldLabel: ({ children, label, readOnly }) => (
+		<label className="my-app-label">
+			<span>{label}{readOnly ? " (read-only)" : ""}</span>
+			{children}
+		</label>
+	),
+};
+
+<Studio
+	puckConfig={config}
+	data={data}
+	overrides={customOverrides}
+/>
+```
+
+기본 프리셋의 `text` 렌더러는 당신의 렌더러로 감싸집니다 ——
+교체되는 것이 아닙니다 —— 따라서 읽기 전용 마커와 같은 chrome 기능이
+그대로 상속됩니다.
+
+## 플러그인 오버라이드 합성
+
+플러그인은 `register()` 반환
+값을 통해 오버라이드를 기여합니다. 머지 파이프라인은 등록 순서대로 레이어를 합성하며,
+호스트를 가장 바깥쪽 래퍼로 둡니다.
+
+```
+default preset (innermost)
+  → plugin A
+    → plugin B
+      → consumer (outermost)
+```
+
+주어진 어떤 슬롯에서든, 렌더 함수를 제공하는 모든 레이어가
+실행됩니다 —— 어느 것도 드롭되지 않습니다. 이것이 바로 플러그인이
+기본 프리셋의 chrome을 지우지 않고 마커를 추가할 수 있게 하는 계약입니다.
+
+```ts title="my-plugin/src/plugin.ts"
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export function createBadgePlugin(): StudioPlugin {
+	return {
+		meta: {
+			id: "com.example.badge",
+			name: "Badge",
+			version: "1.0.0",
+			coreVersion: "^0.1.0-alpha",
+		},
+		register() {
+			return {
+				meta: this.meta,
+				overrides: {
+					fieldLabel: ({ children, label }) => (
+						<span data-marker="badge">
+							[badge:{label}] {children}
+						</span>
+					),
+				},
+			};
+		},
+	};
+}
+```
+
+기본 프리셋과 함께 마운트되면, `fieldLabel`의 렌더링
+출력은 다음과 같습니다.
+
+1. 바깥쪽: 소비자의 `fieldLabel`(있는 경우).
+2. 중간: 등록 순서대로 모든 플러그인의 `fieldLabel`.
+3. 안쪽: 기본 프리셋의 `FieldLabel`, 읽기 전용
+   마커 등을 포함.
+
+`fieldTypes` 레지스트리는 동일한 규칙으로 내부 타입별로
+합성됩니다 —— 플러그인의 `fieldTypes.text`는 기본 프리셋의
+`TextField`를 감싸고, 소비자가 제공한 `fieldTypes.text`는 해당
+플러그인을 감쌉니다.
+
+<Callout type="info" title="3 레이어 회귀">
+	`Studio.test.tsx` 스위트는 실제 프리셋에 대해
+	플러그인과 소비자 오버라이드를 마운트하는 회귀 테스트로
+	`default → plugin → consumer` 순서를 고정합니다.
+	머지 계약이 드리프트되면 CI가 실패합니다.
+</Callout>
+
+## 마이그레이션
+
+`chrome`은 기본값이 `"anvilkit"`입니다 —— 이 chrome 이전의
+릴리스에서 업그레이드하면 첫 번째 다시 로드 시 새로운 모습이 표시됩니다. 앞으로 나아갈
+두 가지 경로가 있습니다.
+
+- **새 chrome을 유지합니다.** 코드 변경이 필요 없습니다.
+  위의 CSS 임포트를 추가하세요. 더 풍부한 헤더 동작을 원하면
+  `onBack` / `onSaveDraft` / `isPublishing`을 연결하세요.
+- **원시 Puck을 유지합니다.** `<Studio>`
+  호출에 `chrome="puck"`를 추가하세요. 출력이 이전 릴리스와 정확히 일치합니다.
+
+`chrome="puck"` 옵트아웃은 무기한 지원됩니다 —— 머지
+파이프라인이 단지 기본 프리셋 앞부분 추가를 건너뛸 뿐이므로, 기존의
+모든 플러그인 오버라이드는 계속 작동합니다.
+
+## API 레퍼런스
+
+- [`StudioProps`](/ko/api/core/interfaces/studioprops/) —— chrome 모드 추가 항목을 포함한
+  전체 속성 목록.
+- [`createStudioOverrides`](/ko/api/core/functions/createstudiooverrides/)
+  —— 프리셋을 직접 필요로 하는 테스트 / 도구를 위한 팩토리.
+- [`mergeOverrides`](/ko/api/core/functions/mergeoverrides/) —— 3 레이어 머지를
+  뒷받침하는 키별 합성 프리미티브.

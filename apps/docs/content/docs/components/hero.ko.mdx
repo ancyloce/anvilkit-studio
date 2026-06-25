@@ -1,0 +1,262 @@
+---
+title: Hero
+description: "Anvilkit Puck 네이티브 Hero 컴포넌트."
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/hero</code> <span>·</span> <span>v0.2.2</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+</div>
+
+## 라이브 미리보기
+
+<ComponentPreview name="Hero" />
+
+A Puck-native marketing hero component with a striped dark backdrop, announcement pill, and dual download CTAs.
+
+## Install
+
+```sh
+pnpm add @anvilkit/hero @anvilkit/ui @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/hero/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render the hero with custom copy. `headline` and `description` honor line breaks
+(`\n`).
+
+```tsx
+import "@anvilkit/hero/styles.css";
+import { Hero } from "@anvilkit/hero";
+
+export function Example() {
+  return (
+    <Hero
+      announcementLabel="Launching today"
+      headline={"Build faster.\nShip sooner."}
+      description="A modern toolkit for teams that move fast."
+      linuxLabel="Download for Linux"
+      linuxHref="/download/linux"
+      windowsLabel="Download for Windows"
+      windowsHref="/download/windows"
+    />
+  );
+}
+```
+
+### Linked announcement pill
+
+Set `announcementHref` to turn the pill into a link; `announcementOpenInNewTab`
+opens it in a new tab. Each download CTA has the same `href` / `openInNewTab`
+pairing.
+
+```tsx
+import { Hero } from "@anvilkit/hero";
+
+export function LaunchHero() {
+  return (
+    <Hero
+      announcementLabel="We raised $69M pre seed"
+      announcementHref="/blog/seed-round"
+      announcementOpenInNewTab
+      headline="Write fast with accurate precision."
+      description="Our state of the art tool writes copy instantly."
+      linuxLabel="Get the Linux build"
+      linuxHref="/download/linux"
+      windowsLabel="Get the Windows build"
+      windowsHref="/download/windows"
+      windowsOpenInNewTab
+    />
+  );
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config`.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type HeroProps } from "@anvilkit/hero";
+
+const config: Config<{ Hero: HeroProps }> = {
+  components: {
+    Hero: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `HeroProps` type and the Puck `fields` schema.
+
+| Prop                       | Type      | Default                                  | Description                              |
+| -------------------------- | --------- | ---------------------------------------- | ---------------------------------------- |
+| `announcementLabel`        | `string`  | `"We raised $69M pre seed"`              | Announcement pill text.                  |
+| `announcementHref`         | `string`  | `""`                                     | Announcement link URL.                   |
+| `announcementOpenInNewTab` | `boolean` | `false`                                  | Open the announcement link in a new tab. |
+| `headline`                 | `string`  | `"Write fast with\naccurate precision."` | Hero headline (supports line breaks).    |
+| `description`              | `string`  | `"Our state of the art tool..."`         | Hero description (supports line breaks). |
+| `linuxLabel`               | `string`  | `"Download for Linux"`                   | Linux CTA label.                         |
+| `linuxHref`                | `string`  | `"/download/linux"`                      | Linux CTA link.                          |
+| `linuxOpenInNewTab`        | `boolean` | `false`                                  | Open the Linux CTA in a new tab.         |
+| `windowsLabel`             | `string`  | `"Download for Windows"`                 | Windows CTA label.                       |
+| `windowsHref`              | `string`  | `"/download/windows"`                    | Windows CTA link.                        |
+| `windowsOpenInNewTab`      | `boolean` | `false`                                  | Open the Windows CTA in a new tab.       |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+
+## 속성 레퍼런스
+
+컴포넌트의 Puck `fields` 스키마에서 파생됩니다.
+
+| 필드 | 타입 | 기본값 |
+|-------|------|---------|
+| `announcementLabel` | text | `"We raised $69M pre seed"` |
+| `announcementHref` | text | `""` |
+| `announcementOpenInNewTab` | radio (false \| true) | `false` |
+| `headline` | textarea | `"Write fast with\naccurate precision."` |
+| `description` | textarea | `"Our state of the art tool is a tool that allows you to\n…` |
+| `linuxLabel` | text | `"Download for Linux"` |
+| `linuxHref` | text | `"/download/linux"` |
+| `linuxOpenInNewTab` | radio (false \| true) | `false` |
+| `windowsLabel` | text | `"Download for Windows"` |
+| `windowsHref` | text | `"/download/windows"` |
+| `windowsOpenInNewTab` | radio (false \| true) | `false` |
+
+## 기본 속성
+
+```json
+{
+  "announcementLabel": "We raised $69M pre seed",
+  "announcementHref": "",
+  "announcementOpenInNewTab": false,
+  "headline": "Write fast with\naccurate precision.",
+  "description": "Our state of the art tool is a tool that allows you to\nwrite copy instantly.",
+  "linuxLabel": "Download for Linux",
+  "linuxHref": "/download/linux",
+  "linuxOpenInNewTab": false,
+  "windowsLabel": "Download for Windows",
+  "windowsHref": "/download/windows",
+  "windowsOpenInNewTab": false
+}
+```
+
+## Puck 설정
+
+```json
+{
+  "label": "Hero",
+  "metadata": {
+    "componentName": "Hero",
+    "componentSlug": "hero",
+    "packageName": "@anvilkit/hero",
+    "packageVersion": "0.2.2",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "marketing"
+  },
+  "defaultProps": {
+    "announcementLabel": "We raised $69M pre seed",
+    "announcementHref": "",
+    "announcementOpenInNewTab": false,
+    "headline": "Write fast with\naccurate precision.",
+    "description": "Our state of the art tool is a tool that allows you to\nwrite copy instantly.",
+    "linuxLabel": "Download for Linux",
+    "linuxHref": "/download/linux",
+    "linuxOpenInNewTab": false,
+    "windowsLabel": "Download for Windows",
+    "windowsHref": "/download/windows",
+    "windowsOpenInNewTab": false
+  },
+  "fields": {
+    "announcementLabel": {
+      "type": "text",
+      "label": "Announcement label"
+    },
+    "announcementHref": {
+      "type": "text",
+      "label": "Announcement link"
+    },
+    "announcementOpenInNewTab": {
+      "type": "radio",
+      "label": "Announcement opens in new tab",
+      "options": [
+        {
+          "label": "No",
+          "value": false
+        },
+        {
+          "label": "Yes",
+          "value": true
+        }
+      ]
+    },
+    "headline": {
+      "type": "textarea",
+      "label": "Headline"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "linuxLabel": {
+      "type": "text",
+      "label": "Linux button label"
+    },
+    "linuxHref": {
+      "type": "text",
+      "label": "Linux button link"
+    },
+    "linuxOpenInNewTab": {
+      "type": "radio",
+      "label": "Linux opens in new tab",
+      "options": [
+        {
+          "label": "No",
+          "value": false
+        },
+        {
+          "label": "Yes",
+          "value": true
+        }
+      ]
+    },
+    "windowsLabel": {
+      "type": "text",
+      "label": "Windows button label"
+    },
+    "windowsHref": {
+      "type": "text",
+      "label": "Windows button link"
+    },
+    "windowsOpenInNewTab": {
+      "type": "radio",
+      "label": "Windows opens in new tab",
+      "options": [
+        {
+          "label": "No",
+          "value": false
+        },
+        {
+          "label": "Yes",
+          "value": true
+        }
+      ]
+    }
+  }
+}
+```

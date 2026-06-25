@@ -1,0 +1,19 @@
+---
+title: "StudioSidebarUnregister"
+description: "@anvilkit/core · StudioSidebarUnregister"
+---
+
+```ts
+type StudioSidebarUnregister = () => void;
+```
+
+Defined in: [types/sidebar.ts:540](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L540)
+
+Handle returned by every `register*` extension method. Calling it
+removes the contributed entry from the registry. Plugins should
+collect these in their `register()` body and call them in
+`onDestroy` so a remount does not duplicate registrations.
+
+## Returns
+
+`void`

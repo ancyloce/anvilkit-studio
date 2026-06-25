@@ -1,0 +1,175 @@
+---
+title: "リアルタイムコラボレーション"
+description: "たった一度のファクトリ呼び出しで、リアルタイムコラボレーションを Studio に組み込めます——`@anvilkit/collab-ui` の `createCollabPlugin()` は、Yjs CRDT データ同期、プレゼンスカーソル、競合トースト、コラボレーターのアバタースタックを単一の `StudioPlugin` にまとめます。"
+---
+
+`@anvilkit/collab-ui` は、Studio ホストに
+完全なリアルタイムコラボレーション体験を提供する単一のファクトリを同梱しています：プレゼンスカーソル、競合
+診断、ヘッダーのコラボレーターアバタースタック、そして Yjs CRDT
+データ同期——これらすべてが 1 つの `plugins={[...]}`
+エントリの背後にあり、React ラッパーは不要です。
+
+## 1. インストール
+
+```sh
+# the factory + its yjs peer, plus a WebSocket provider for managed mode
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs @hocuspocus/provider
+```
+
+`@anvilkit/plugin-collab-yjs` は `@anvilkit/collab-ui` のピア依存です（この
+ファクトリが 2 つのパッケージを組み合わせます）。provider
+（`@hocuspocus/provider` または `y-websocket`）は**任意**のピア依存で、
+マネージドモード（§ 2）でのみ必要です——独自のトランスポートを持ち込む場合や
+シングルタブのインメモリで実行する場合は省略してください。React UI なしでアダプターだけが欲しいホストは
+yjs プラグインのみをインストールできます——下記 § 4 を参照してください。
+
+## 2. 統合レシピ
+
+設定するのは**1 つ**の値だけ——WebSocket リレー URL です。このプラグインはトランスポート全体を所有します：
+`Y.Doc`、`Awareness` チャネル、provider、
+接続ステータスのブリッジ、そして後始末です。`room` のデフォルトは
+`"anvilkit-default-room"`、`provider` のデフォルトは `"hocuspocus"`、`self` のデフォルトは
+自動生成された匿名アイデンティティなので、これが本当にレシピのすべてです。
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+<Studio
+	puckConfig={myConfig}
+	plugins={[
+		createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig: myConfig }),
+	]}
+/>;
+```
+
+<Callout type="info" title="provider をインストールする">
+	マネージドモードは WebSocket provider を**遅延**ロードします（初期バンドルには
+	決して到達しません）ので、使用するものをインストールしてください——どちらも任意のピア依存です：
+	`@hocuspocus/provider`（デフォルトのバックエンド）または `y-websocket`（
+	`provider: "y-websocket"` を設定した場合）。provider をインストールせずに `websocketUrl` を
+	設定すると、同期インジケーターは明確な `error` ステータスを表示し、
+	`onConnectionError` が発火します——わかりにくいバンドラーの失敗になることはありません。
+</Callout>
+
+### 独自のトランスポートを持ち込む
+
+すでに `Y.Doc` / `Awareness` / provider を自分で管理していますか（カスタム
+バックエンド、共有ドキュメント、または接続ステータスを独自の UI へ分岐させるホスト）？
+それらを直接渡せば、ファクトリはトランスポートを完全にあなたに委ねます——
+`websocketUrl` 以前の呼び出し元と完全に後方互換です：
+
+```tsx
+import { Doc as YDoc } from "yjs";
+import { Awareness } from "y-protocols/awareness";
+
+const doc = new YDoc();
+const awareness = new Awareness(doc);
+
+createCollabPlugin({
+	doc,
+	awareness,
+	self: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+	puckConfig: myConfig,
+	onIdentityChange: (next) => {
+		// Mirror identity changes (e.g. from the settings popover)
+		// back into your auth/profile store.
+		updateProfile(next);
+	},
+});
+```
+
+`doc` と `websocketUrl` の両方が渡された場合、`doc`（独自）が優先され、無視された
+フィールドを示す一度限りの開発警告が出ます。
+
+このプラグインが提供するもの：
+
+| 提供項目        | 表示されるもの                                                  |
+| ------------------- | ------------------------------------------------------------- |
+| `hooks`             | Puck データ ↔ Y.Doc CRDT 同期（Puck が信頼できる情報源のまま）。 |
+| Provider            | Studio をラップする `<CollabUIProvider>`。これにより `useCollabContext` がどこでも動作します。 |
+| キャンバスオーバーレイ      | `<PresenceLayer>`——リモートピアのカーソルと選択リング。  |
+| 通知オーバーレイ | `<ConflictNoticeCenter>`——重複時のトースト通知。 |
+| コラボレータースロット  | ヘッダー内の `<PeerAvatarStack>`。                            |
+
+## 3. よく使うつまみ
+
+```tsx
+createCollabPlugin({
+	// Managed-mode transport knobs (all optional; `websocketUrl` is the
+	// only field most hosts set)
+	websocketUrl: "wss://relay.example.com",
+	room: "doc-42", //              default "anvilkit-default-room"
+	provider: "y-websocket", //     default "hocuspocus"
+	token: authToken, //            forwarded to the relay (auth)
+	self: alice, //                 default: auto-generated anonymous identity
+	onConnectionError: (err) => toast.error(String(err)),
+
+	// Validate remote IR before dispatching (defense-in-depth)
+	validateRemoteIR: (ir) => (isWellFormed(ir) ? ir : null),
+	onValidationFailure: (failure) => toast(`Rejected: ${failure.kind}`),
+
+	// RBAC / lock policy applied symmetrically on inbound + outbound
+	policy: {
+		canEdit: (node, peer) => canUserEditNode(peer, node),
+	},
+	onPolicyViolation: (violation) => toast(violation.message),
+
+	// Surface outbound transport failures
+	onSaveError: (error) => toast(`Save failed: ${error}`),
+
+	// Cross-tab persistence
+	persistence: { indexedDb: true, broadcastChannel: true },
+
+	// Opt out of individual UI surfaces
+	presence: { enabled: false }, //      hide remote cursors
+	notifications: { enabled: false }, // hide conflict toaster
+});
+```
+
+ホストが `<Studio>` で `collaboratorsSlot` を渡すと、そのプロパティが
+プラグインのスロット提供よりも優先されます——ホストが常に最終的な
+決定権を持ちます。
+
+## 4. パワーユーザー向けの道（ヘッドレス / 代替 UI）
+
+React UI が不要な場合——たとえば Node 同期ワーカー、サーバーサイドの IR
+プロセッサ、またはカスタムの非 React コラボレーターのクロームなど——は、
+`@anvilkit/plugin-collab-yjs` から低レベルのプリミティブを直接インポートしてください：
+
+```ts
+import {
+	createCollabDataPlugin,
+	createYjsAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+
+const adapter = createYjsAdapter({ doc, awareness, peer });
+const plugin = createCollabDataPlugin({ adapter, puckConfig });
+```
+
+<Callout type="warn" title="リネームに関する注記">
+	`@anvilkit/plugin-collab-yjs` のデータ専用ファクトリは、
+	`@anvilkit/collab-ui` の統合ファクトリと区別するために
+	`createCollabPlugin` → `createCollabDataPlugin` にリネームされました。レガシーエイリアス
+	`createCollabPlugin` は 1 つのマイナーリリースの間エクスポートされ続け、
+	初回呼び出し時に一度限りの `console.warn` を出します。
+</Callout>
+
+## 5. Puck のプラグイン契約との組み合わせ
+
+Studio プラグインは、Puck 形式のフィールドと Studio 拡張の**任意の組み合わせ**を同梱できます。
+統合されたコラボプラグインは Studio
+拡張を使用します；プラグインレールに
+コラボレーターパネルが欲しい場合は、それと並べて Puck 形式のフィールドを追加できます。
+
+| プラグインの提供 | 契約  | ターゲット                                                    |
+| ------------------- | --------- | --------------------------------------------------------- |
+| `name` / `label` / `icon` | Puck   | プラグインレールのアイデンティティ                                  |
+| `render`            | Puck      | プラグインレールパネル                                         |
+| `overrides`         | Puck（Studio を介したパススルー） | `<Puck>` 内部のスロット          |
+| `hooks`             | Studio    | ライフサイクル（onInit / onDataChange / onBeforePublish / …）   |
+| `providers`         | Studio    | Studio ツリー全体をラップ                               |
+| `overlays`          | Studio    | エディターの兄弟要素（キャンバス / ビューポート / 通知） |
+| `slots`             | Studio    | 名前付きクロームアンカー（`collaborators`）                    |
+
+完全なプラグイン契約の詳細については、[プラグイン作成ガイド](/ja/guides/plugin-authoring.mdx)を参照してください。

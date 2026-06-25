@@ -1,0 +1,17 @@
+---
+title: "StudioLogLevel"
+description: "@anvilkit/core · StudioLogLevel"
+---
+
+```ts
+type StudioLogLevel = "debug" | "info" | "warn" | "error";
+```
+
+Defined in: [types/log.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/log.ts#L19)
+
+Severity level for [StudioPluginContext.log](../interfaces/StudioPluginContext#log) and
+[StudioAssetAction.run](../interfaces/StudioAssetAction#run)'s `log`.
+
+Follows the conventional `debug` < `info` < `warn` < `error`
+ordering. The runtime may route different levels to different sinks
+(e.g. `error` to a host-provided error reporter).

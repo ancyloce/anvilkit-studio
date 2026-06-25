@@ -1,0 +1,140 @@
+---
+title: LogoClouds
+description: "Anvilkit Puck 네이티브 LogoClouds 컴포넌트."
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/logo-clouds</code> <span>·</span> <span>v0.2.1</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+</div>
+
+## 라이브 미리보기
+
+<ComponentPreview name="LogoClouds" />
+
+A Puck-native logo cloud component with a shimmering heading and a scrolling Devicon logo marquee.
+
+## Install
+
+```sh
+pnpm add @anvilkit/logo-clouds @anvilkit/ui @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/logo-clouds/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render the section with its default copy via `defaultProps`.
+
+```tsx
+import "@anvilkit/logo-clouds/styles.css";
+import { LogoClouds, defaultProps } from "@anvilkit/logo-clouds";
+
+export function Example() {
+  return <LogoClouds {...defaultProps} />;
+}
+```
+
+### Custom heading and subtitle
+
+The shimmering heading is driven by `title`; `subtitle` renders the supporting
+copy beneath it. The scrolling logo marquee is built in.
+
+```tsx
+import { LogoClouds } from "@anvilkit/logo-clouds";
+
+export function TrustedBy() {
+  return (
+    <LogoClouds
+      title="Trusted by builders"
+      subtitle="Teams of every size ship polished products with our stack."
+    />
+  );
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config`.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type LogoCloudsProps } from "@anvilkit/logo-clouds";
+
+const config: Config<{ LogoClouds: LogoCloudsProps }> = {
+  components: {
+    LogoClouds: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `LogoCloudsProps` type and the Puck `fields` schema.
+
+| Prop       | Type     | Default             | Description                        |
+| ---------- | -------- | ------------------- | ---------------------------------- |
+| `title`    | `string` | `"Brands love us"`  | Shimmering heading text.           |
+| `subtitle` | `string` | _(trusted-by copy)_ | Supporting copy below the heading. |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+
+## 속성 레퍼런스
+
+컴포넌트의 Puck `fields` 스키마에서 파생됩니다.
+
+| 필드 | 타입 | 기본값 |
+|-------|------|---------|
+| `title` | text | `"Brands love us"` |
+| `subtitle` | textarea | `"Trusted by the teams building polished, high-performance…` |
+
+## 기본 속성
+
+```json
+{
+  "title": "Brands love us",
+  "subtitle": "Trusted by the teams building polished, high-performance products for the modern web."
+}
+```
+
+## Puck 설정
+
+```json
+{
+  "label": "LogoClouds",
+  "metadata": {
+    "componentName": "LogoClouds",
+    "componentSlug": "logo-clouds",
+    "packageName": "@anvilkit/logo-clouds",
+    "packageVersion": "0.2.1",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "marketing"
+  },
+  "defaultProps": {
+    "title": "Brands love us",
+    "subtitle": "Trusted by the teams building polished, high-performance products for the modern web."
+  },
+  "fields": {
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "subtitle": {
+      "type": "textarea",
+      "label": "Subtitle"
+    }
+  }
+}
+```

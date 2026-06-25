@@ -1,0 +1,35 @@
+---
+title: "CreateExportStoreOptions"
+description: "@anvilkit/core · CreateExportStoreOptions"
+---
+
+Defined in: [state/slices/export-store.ts:228](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L228)
+
+Zustand store for the export pipeline's view-level state.
+
+Uses the v5 curried form — `create<ExportState>()(persist(...))`
+— which is required when a middleware is in play so TypeScript
+can infer the middleware's mutator chain. Do not drop the empty
+call; `create<ExportState>(persist(...))` will not compile.
+
+## Example
+
+```ts
+// Read the currently selected format inside a component:
+const currentFormat = useExportStore((s) => s.currentFormat);
+
+// Dispatch a lifecycle effect from <Studio>:
+useExportStore.getState().setIsExporting(true);
+try {
+  await runExport(formatId);
+  useExportStore.getState().recordExport(formatId, true);
+} finally {
+  useExportStore.getState().setIsExporting(false);
+}
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="storeid"&gt;&lt;/a&gt; `storeId` | `readonly` | `string` | [state/slices/export-store.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L229) |

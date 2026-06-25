@@ -1,0 +1,54 @@
+---
+title: "블로그 기사 페이지"
+description: "블로그 기사 페이지 — 내비게이션 바, 기사 섹션, 관련 글 CTA."
+---
+
+![블로그 기사 페이지 preview](/templates/blog-article/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-blog-article</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI로 스캐폴딩
+
+```sh
+npx anvilkit init --template blog-article my-site
+```
+
+## 구성
+
+커밋된 `PageIR`는 루트에 다음 노드 타입을 연결합니다:
+
+- `Navbar`
+- `Section`
+- `Button`
+
+## 패키지 세부 정보
+
+A single blog-article page.
+
+Navbar, article section with rich prose, and a related-posts CTA button at the foot.
+
+## Install
+
+```sh
+npx anvilkit init --template blog-article my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/button`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

@@ -1,0 +1,56 @@
+---
+title: "开发者工具文档站落地页"
+description: "开发者工具文档站落地页 —— 主视觉、功能网格、常见问题。"
+---
+
+![开发者工具文档站落地页 preview](/templates/landing-docs/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-landing-docs</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template landing-docs my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `Helps`
+
+## 包详情
+
+Landing page for a developer-tool docs site.
+
+Navbar, hero, feature section, and FAQ — tuned for a developer audience who want the punchline fast.
+
+## Install
+
+```sh
+npx anvilkit init --template landing-docs my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

@@ -1,0 +1,20 @@
+---
+title: "StudioAssetAction"
+description: "@anvilkit/core · StudioAssetAction"
+---
+
+Defined in: [types/sidebar.ts:359](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L359)
+
+Plugin-contributed entry in the per-asset overflow `…` menu.
+Built-ins (Rename, Replace, Copy URL, Delete) come from the source
+itself; this surface lets plugins add commands like "Open in CDN".
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="icon"&gt;&lt;/a&gt; `icon?` | `readonly` | `string` | Optional `lucide-react` icon name. | [types/sidebar.ts:364](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L364) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/sidebar.ts:360](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L360) |
+| &lt;a id="labelkey"&gt;&lt;/a&gt; `labelKey` | `readonly` | `string` | i18n key for the menu item label. | [types/sidebar.ts:362](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L362) |
+| &lt;a id="run"&gt;&lt;/a&gt; `run` | `readonly` | (`input`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | - | [types/sidebar.ts:367](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L367) |
+| &lt;a id="tone"&gt;&lt;/a&gt; `tone?` | `readonly` | `"default"` \| `"destructive"` | Optional `"destructive"` tone for danger items. | [types/sidebar.ts:366](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L366) |

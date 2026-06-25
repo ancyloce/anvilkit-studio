@@ -1,0 +1,51 @@
+---
+title: "StudioConfigError"
+description: "@anvilkit/core · StudioConfigError"
+---
+
+Defined in: [runtime/errors.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L118)
+
+Thrown when Studio configuration validation fails.
+
+Raised by `createStudioConfig()` (`core-011`) when the Zod schema
+rejects the merged configuration. The underlying `ZodError` is
+attached via the standard ES2022 `cause` field so host apps can
+drill into the per-field issues.
+
+Kept here (not in `src/config/`) so every runtime error ships as
+a single, tree-shakeable module under `@anvilkit/core/runtime`.
+
+## Extends
+
+- [`StudioError`](StudioError.md)
+
+## Constructors
+
+### Constructor
+
+```ts
+new StudioConfigError(message, options?): StudioConfigError;
+```
+
+Defined in: [runtime/errors.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L124)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Returns
+
+`StudioConfigError`
+
+#### Overrides
+
+[`StudioError`](StudioError.md).[`constructor`](StudioError.md#constructor)
+
+## Properties
+
+| Property | Modifier | Type | Default value | Description | Overrides | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `"StudioConfigError"` | `"StudioConfigError"` | Stable failure code for config errors. See [StudioError.code](StudioError.md#code). | [`StudioError`](StudioError.md).[`code`](StudioError.md#code) | [runtime/errors.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L122) |

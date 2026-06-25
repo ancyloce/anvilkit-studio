@@ -1,0 +1,62 @@
+---
+title: "SaaS 产品落地页"
+description: "SaaS 产品落地页 —— 主视觉、logo 墙、bento 功能、定价、常见问题。"
+---
+
+![SaaS 产品落地页 preview](/templates/landing-saas/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-landing-saas</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template landing-saas my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Hero`
+- `LogoClouds`
+- `BentoGrid`
+- `Statistics`
+- `PricingMinimal`
+- `Helps`
+
+## 包详情
+
+A conversion-focused SaaS landing page.
+
+Navbar, hero, logo cloud, bento feature grid, pricing, statistics, and FAQ — the full set for a typical SaaS home page.
+
+## Install
+
+```sh
+npx anvilkit init --template landing-saas my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/bento-grid`
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/logo-clouds`
+- `@anvilkit/navbar`
+- `@anvilkit/pricing-minimal`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

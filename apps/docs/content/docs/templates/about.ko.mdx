@@ -1,0 +1,58 @@
+---
+title: "소개 페이지"
+description: "소개 페이지 — 히어로, 미션 섹션, 통계, 고객 로고 클라우드."
+---
+
+![소개 페이지 preview](/templates/about/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-about</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI로 스캐폴딩
+
+```sh
+npx anvilkit init --template about my-site
+```
+
+## 구성
+
+커밋된 `PageIR`는 루트에 다음 노드 타입을 연결합니다:
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `Statistics`
+- `LogoClouds`
+
+## 패키지 세부 정보
+
+An about / mission page.
+
+Navbar, hero, mission section, statistics, and a customer logo cloud.
+
+## Install
+
+```sh
+npx anvilkit init --template about my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/hero`
+- `@anvilkit/logo-clouds`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

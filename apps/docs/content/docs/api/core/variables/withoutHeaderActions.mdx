@@ -1,0 +1,20 @@
+---
+title: "withoutHeaderActions"
+description: "@anvilkit/core · withoutHeaderActions"
+---
+
+```ts
+const withoutHeaderActions: RegistrationTransform;
+```
+
+Defined in: [runtime/lazy-plugin.ts:284](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L284)
+
+Ready-made [RegistrationTransform](../type-aliases/RegistrationTransform) that drops a plugin's
+`headerActions` from its registration while leaving every other
+contribution (overrides, sidebar registrations, export formats,
+providers, overlays, slots) intact.
+
+Pair with [lazyPluginWith](../functions/lazyPluginWith) when a host wants a plugin's sidebar
+/ export surfaces but not its toolbar buttons (e.g. when a custom
+chrome owns the header) — without forcing the plugin's chunk to load
+eagerly.

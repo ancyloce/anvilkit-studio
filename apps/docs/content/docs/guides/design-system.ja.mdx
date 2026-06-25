@@ -1,0 +1,251 @@
+---
+title: "デザインシステムプラグイン"
+description: "@anvilkit/plugin-design-system をインストールした Studio ホスト向けに、トークンバインドフィールド、テーマ切り替え、トークン外警告、WCAG-AA コントラスト公開ゲーティングを提供します。"
+---
+
+`@anvilkit/plugin-design-system` はファーストパーティの `StudioPlugin` で、
+作者に 16 進数のカラーコードやピクセル値を書かせることなく、
+Puck の上にデザインシステムの語彙をホストへ提供します。提供する機能：
+
+- 任意の Puck `Config` 向けのトークンバインド `color`、`spacing`、`typography`
+  フィールド。2 段構成の `--ak-ds-*` トークンツリーに支えられています。
+- バンドルされたデフォルトトークンセット（ブランド + ニュートラルのランプ、0–24 の間隔
+  スケール、タイプランプ、半径スケール）。ホストはこの上にディープマージできます。
+- トークン外のリテラル値をフラグ付けする `onDataChange` ウォーカー。
+- 不合格ペアで公開を中止する `onBeforePublish` WCAG-AA コントラストペア
+  バリデーター。
+- テーマ対応のトークンブロック——`light` / `dark` を切り替えると
+  プリミティブのみが入れ替わります。セマンティクスと永続化されたトークン参照は
+  テーマ安定です。
+
+このプラグインは `@anvilkit/core` の既存のシーム
+（`compilePlugins`、`mergeOverrides`、`sidebar-registry-store`、
+`lifecycle-manager`）を通じて組み込まれます。Puck のオーバーライド内部を
+直接インポートすることは決してありません。
+
+## 1. インストール
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+ピア依存関係（一般的な Studio ホストにはすでに存在します）：
+
+- `@puckeditor/core ^0.21.3`
+- `@anvilkit/core`（ワークスペースまたは一致するマイナーバージョン）
+- `react >=19.0.0`
+
+## 2. 最小限のホスト
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin();
+
+export function MyEditor() {
+  return (
+    <Studio
+      puckConfig={config}
+      data={data}
+      plugins={[designSystemPlugin]}
+    />
+  );
+}
+```
+
+このファクトリはデフォルトでパラメータなしです。バンドルされたトークンツリーが
+適用され、両方のバリデーターが有効になります。`<Studio>` のプラグインコンパイル
+パイプラインが毎レンダリングごとに走らないよう、ファクトリ呼び出しを
+モジュールスコープへ巻き上げてください。
+
+## 3. トークンモデル
+
+このプラグインは 2 段構成の CSS 変数を、ホスト
+ドキュメントと Puck キャンバス iframe の両方へ発行します。
+
+**第 1 段——プリミティブ**（ダークモードで入れ替わる）：
+
+| 名前空間 | 変数 |
+| --- | --- |
+| ブランドランプ | `--ak-ds-brand-50` … `--ak-ds-brand-900` |
+| ニュートラルランプ | `--ak-ds-neutral-50` … `--ak-ds-neutral-900` |
+| 間隔 | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}` |
+| タイポグラフィ | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}` |
+| 半径 | `--ak-ds-radius-{sm,md,lg}` |
+
+**第 2 段——セマンティクス**（テーマ安定。それぞれが
+対応する `--ak-studio-*` クロム変数へフォールバックするため、テーマ未設定のホストでも
+レンダリングできます）：
+
+`--ak-ds-bg`、`--ak-ds-surface`、`--ak-ds-fg`、`--ak-ds-fg-muted`、
+`--ak-ds-accent`、`--ak-ds-accent-fg`、`--ak-ds-border`、
+`--ak-ds-focus-ring`。
+
+ディープパーシャルでバンドルされたデフォルトをオーバーライドします：
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin({
+  tokens: {
+    primitives: {
+      brand: {
+        500: "oklch(62% 0.18 264)",
+        600: "oklch(54% 0.19 264)",
+      },
+    },
+    semantics: {
+      accent: "brand.500",
+    },
+  },
+});
+```
+
+設定したキーだけが適用されます。ツリーの残りの部分は
+`DEFAULT_TOKENS` と構造的に共有されます。
+
+## 4. トークンバインドフィールド
+
+フィールドファクトリは Puck `CustomField<string>` レンダラーを返します。フィールド
+値は**トークン参照文字列**として永続化されます——解決済みの
+値ではありません——そのため、トークンの再調整はデータ移行なしで、
+以前に作成されたすべての
+フィールドへ波及します。
+
+```ts
+import {
+  createTokenColorField,
+  createTokenSpacingField,
+  createTokenTypographyField,
+  DEFAULT_TOKENS,
+  resolveTokenRef,
+} from "@anvilkit/plugin-design-system";
+
+const Card = {
+  fields: {
+    background: createTokenColorField({ label: "Surface" }),
+    padding: createTokenSpacingField({ label: "Padding" }),
+    title: createTokenTypographyField({ label: "Title size" }),
+  },
+  defaultProps: {
+    background: "semantic.surface",
+    padding: "space.4",
+    title: "text.lg",
+  },
+  render: ({ background, padding, title }) => (
+    <div
+      style={{
+        background: resolveTokenRef(background, DEFAULT_TOKENS).cssVar,
+        padding: resolveTokenRef(padding, DEFAULT_TOKENS).cssVar,
+        fontSize: resolveTokenRef(title, DEFAULT_TOKENS).cssVar,
+      }}
+    >
+      …
+    </div>
+  ),
+};
+```
+
+参照文法：
+
+- `color.<ramp>.<step>` — プリミティブ（例：`color.brand.500`）。
+- `semantic.<role>` — セマンティックロール（例：`semantic.bg`）。
+- `space.<key>` — 間隔プリミティブ（例：`space.4`）。
+- `text.<key>` — タイポグラフィプリミティブ（例：`text.lg`）。
+- `radius.<key>` — 半径プリミティブ。
+
+純粋なデータ処理中に React の解決をスキップしたいビルド
+パイプライン向けに、React 非依存のトークン面（デフォルト、マージヘルパー、リゾルバー）も
+`./tokens` サブパスから利用できます：
+
+```ts
+import { DEFAULT_TOKENS, mergeTokens } from "@anvilkit/plugin-design-system/tokens";
+```
+
+## 5. バリデーション
+
+両方のバリデーターはデフォルトで有効で、ホストごとに切り替えられます：
+
+```ts
+createDesignSystemPlugin({
+  validation: {
+    offToken: true,   // onDataChange — non-blocking warnings
+    contrast: true,   // onBeforePublish — throws on AA failure
+  },
+});
+```
+
+**トークン外警告**（`onDataChange`）は Puck データツリーを
+`Promise.allSettled` 経由で並列的に走査し、色や長さのように
+見えるが解決済みトークンツリーに存在しないすべてのリテラル値に対して
+`ctx.log("warn", …)` を呼び出します。非ブロッキングで
+——警告がコンソール / ホストログシンクに表示される間も、作者は
+作業を続けられます。
+
+**コントラストゲート**（`onBeforePublish`）はデータツリー内の fg / bg ペアを走査し、
+WCAG-AA コントラスト比を計算して、4.5:1 を下回る任意のペアに対して
+記述的な `StudioPluginError` をスローします。`onBeforePublish`
+内部でスローすると、`@anvilkit/core` の lifecycle-manager 契約に従って
+Puck の公開が中止されます——ホストの
+`onPublish` は決して発火しません。
+
+<Callout type="info" title="なぜバリデーターは 1 つではなく 2 つなのか">
+トークン外警告は理想志向です（「ここはおそらくトークンの
+つもりでしたよね」）。コントラスト失敗は仕様違反です（「これは AA に
+不合格です」）。一方は助言的で、もう一方はハードゲートです。そのため
+両者は異なるライフサイクルフックで実行されます。
+</Callout>
+
+## 6. テーマ切り替え
+
+ライト / ダーク / システムモードは**プリミティブのみ**を入れ替えます。セマンティック
+ロールは内部で適切なランプステップへ再ポイントします。作者データに保存された
+トークン参照は、解決後の値ではなくセマンティック / プリミティブの*名前*を参照するため、
+テーマ安定です。
+
+このプラグインは `@anvilkit/core` の既存の `useThemeStore` +
+`use-theme-sync` の仕組みを再利用します——モードを選択すると、1 つの描画サイクル内で `<html>`
+（クロム）と Puck キャンバス iframe の両方が入れ替わります。
+
+## 7. ステータス（v0.1）
+
+出荷されるもの：
+
+- ファクトリ + バンドルされた `DEFAULT_TOKENS` + ディープマージオーバーライド。
+- `fieldTypes.custom` Puck スロットを使う 3 つのトークンバインドフィールドファクトリ
+  （`color`、`spacing`、
+  `typography`）。
+- プラグインの `overrides.fields` ラッパーによって自動的にマウントされる
+  `TokenProvider`。
+- `onDataChange` トークン外ウォーカー + `onBeforePublish` コントラスト
+  バリデーター。
+- ホストドキュメントと iframe キャンバスの両方の `--ak-ds-*` CSS。`.dark`
+  プリミティブオーバーライド付き。
+
+まだユーザー向けではないもの（`@anvilkit/core` で Phase B
+バックフィル待ち）：
+
+- デザインシステムサイドバータブ + モジュール。プラグインは
+  `ctx.registerDesignSystemPanel?({ render })` でパネルを登録し、
+  `sidebarRegistryStore.designSystemPanel` も設定されますが、
+  `@anvilkit/core` の `EditorTab` + `RAIL_MODULES` にはまだ
+  `"design-system"` エントリがありません——パネル状態は設定されるものの、それを
+  読み取る UI がありません。
+- フィールドファクトリ内のトークンタイポグラフィランプ UI（現在のスケールは
+  バンドルされていますが、ピッカー UI は生の参照を表示します。よりリッチなプレビューは
+  v0.2 へ延期）。
+- パネル内のコンポーネントタブ（v0.2——パネル React ツリーには現在 Tokens
+  + Theme タブのみが実装されています）。
+
+<Callout type="info" title="出典">
+仕様は `docs/archive/PRD/0005-design-system-integration-prd.md` に、
+開発計画は
+`docs/archive/plans/0005-design-system-integration-dev-plan-2026-05-20.md`
+にあります（リポジトリローカル。`docs/` は git で無視されます）。参照されているコアシーム：
+`compilePlugins`（`packages/core/src/runtime/compile-plugins.ts`）、
+`mergeOverrides`（`packages/core/src/react/overrides/merge-overrides.ts`）、
+`sidebar-registry-store`
+（`packages/core/src/state/sidebar-registry-store.ts`）、
+`lifecycle-manager`（`packages/core/src/runtime/lifecycle-manager.ts`）。
+</Callout>

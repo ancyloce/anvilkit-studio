@@ -1,0 +1,21 @@
+---
+title: "SortableHeaderAction"
+description: "@anvilkit/core · SortableHeaderAction"
+---
+
+Defined in: [runtime/header-actions.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L64)
+
+The minimal shape [composeHeaderActions](../functions/composeHeaderActions) needs to order an
+action: only the three sort keys. Both [StudioHeaderAction](StudioHeaderAction.md) (live)
+and [StaticHeaderActionPlaceholder](../type-aliases/StaticHeaderActionPlaceholder) (declared) satisfy it, so the
+exact same ordering applies whether or not the live `onClick` /
+`disabled` closures exist yet — that positional parity is what lets a
+placeholder swap to its live action with no layout shift.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="group"&gt;&lt;/a&gt; `group?` | `readonly` | `"secondary"` \| `"overflow"` \| `"primary"` | [runtime/header-actions.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L66) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | [runtime/header-actions.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L65) |
+| &lt;a id="order"&gt;&lt;/a&gt; `order?` | `readonly` | `number` | [runtime/header-actions.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L67) |

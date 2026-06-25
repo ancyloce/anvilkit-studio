@@ -1,0 +1,24 @@
+---
+title: "StudioOverlayPlacement"
+description: "@anvilkit/core · StudioOverlayPlacement"
+---
+
+```ts
+type StudioOverlayPlacement = "canvas" | "viewport" | "notifications";
+```
+
+Defined in: [types/plugin.ts:459](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L459)
+
+Placement targets for plugin-contributed overlays. Each placement
+corresponds to a distinct slot inside `<Studio>`:
+
+- `"viewport"` — rendered **before** the Puck editor, at the top of
+  the editor surface. Use for global banners, viewport-scoped
+  affordances.
+- `"canvas"` — rendered **after** the Puck editor (DOM-wise) so it
+  layers above canvas content via CSS. Use for cursors, selection
+  rings, presence rings — anything that needs to overlay the
+  editing canvas.
+- `"notifications"` — rendered last, after all other overlays. Use
+  for toast surfaces, conflict-resolution dialogs, and other
+  stack-ordered notification UI.

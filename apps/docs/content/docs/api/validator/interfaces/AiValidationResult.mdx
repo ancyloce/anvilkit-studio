@@ -1,0 +1,19 @@
+---
+title: "AiValidationResult"
+description: "@anvilkit/validator · AiValidationResult"
+---
+
+Defined in: core/dist/types/ai.d.ts:252
+
+The outcome of validating an LLM response.
+
+[valid](#valid) is `true` only when the response contains zero
+issues with `severity: "error"` — `"warn"`-level issues may be
+present even when the response is considered valid.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`AiValidationIssue`](AiValidationIssue.md)[] | The full list of issues found. Empty array when the response passed without complaint. | core/dist/types/ai.d.ts:263 |
+| &lt;a id="valid"&gt;&lt;/a&gt; `valid` | `readonly` | `boolean` | `true` iff the response contains no `severity: "error"` issues. A valid response may still carry `"warn"` entries in [issues](#issues). | core/dist/types/ai.d.ts:258 |

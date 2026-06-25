@@ -15,7 +15,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = join(__dirname, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
 const COMPONENTS_SRC = join(WORKSPACE_ROOT, "packages", "components", "src");
-const OUT_DIR = join(DOCS_ROOT, "src", "content", "docs", "components");
+const OUT_DIR = join(DOCS_ROOT, "content", "docs", "components");
 
 const SLUGS = [
 	"bento-grid",
@@ -509,10 +509,6 @@ function stripReadmeHeading(readme: string): string {
 	return lines.slice(i).join("\n").trimEnd();
 }
 
-function escapeYaml(value: string): string {
-	return value.replace(/"/g, '\\"');
-}
-
 function formatDefault(value: unknown): string {
 	if (value === undefined) return "—";
 	const json = JSON.stringify(value);
@@ -532,9 +528,165 @@ function fieldTypeLabel(field: PuckField): string {
 	return field.type;
 }
 
-function buildPropsTable(fields: Fields, defaultProps: DefaultProps): string {
+// "" is the default English locale (unsuffixed filename); the rest are prefixed
+// and use a `.{lang}.mdx` suffix (Fumadocs `parser: 'dot'`). Generator-controlled
+// boilerplate is translated; each component's README body + Puck schema stay as
+// emitted (sourced from the package). Translations live here so they survive
+// regeneration.
+const LOCALES = ["", "zh", "ja", "ko"] as const;
+type Locale = (typeof LOCALES)[number];
+
+const T: Record<
+	Locale,
+	{
+		sectionTitle: string;
+		sectionDesc: string;
+		indexLead: string;
+		indexPlayground: string;
+		indexAuthoring: string;
+		colComponent: string;
+		colPackage: string;
+		colSummary: string;
+		playgroundCta: string;
+		livePreview: string;
+		propReference: string;
+		propLead: string;
+		colField: string;
+		colType: string;
+		colDefault: string;
+		defaultProps: string;
+		puckConfig: string;
+	}
+> = {
+	"": {
+		sectionTitle: "Components",
+		sectionDesc:
+			"Auto-generated catalog of every @anvilkit/* Puck-native component package.",
+		indexLead:
+			"This catalog is regenerated from each component's `metadata` export and `README.md`\non every docs build — see `apps/docs/scripts/generate-component-pages.ts`.",
+		indexPlayground:
+			"Prefer to explore interactively? [Open the playground](/playground) to drop any of\nthese 11 components onto a live Puck canvas.",
+		indexAuthoring:
+			"Writing your own? Start with the [component authoring guide](/guides/component-authoring).",
+		colComponent: "Component",
+		colPackage: "Package",
+		colSummary: "Summary",
+		playgroundCta: "Try it in the playground →",
+		livePreview: "Live preview",
+		propReference: "Prop reference",
+		propLead: "Derived from the component's Puck `fields` schema.",
+		colField: "Field",
+		colType: "Type",
+		colDefault: "Default",
+		defaultProps: "Default props",
+		puckConfig: "Puck config",
+	},
+	zh: {
+		sectionTitle: "组件",
+		sectionDesc: "自动生成的所有 @anvilkit/* Puck 原生组件包目录。",
+		indexLead:
+			"此目录在每次构建文档时，都会根据每个组件的 `metadata` 导出和 `README.md`\n重新生成 —— 参见 `apps/docs/scripts/generate-component-pages.ts`。",
+		indexPlayground:
+			"想要交互式探索？[打开演练场](/playground) 即可将这 11 个组件中的任意一个\n拖放到实时的 Puck 画布上。",
+		indexAuthoring:
+			"想编写自己的组件？请从 [组件编写指南](/zh/guides/component-authoring) 开始。",
+		colComponent: "组件",
+		colPackage: "包",
+		colSummary: "摘要",
+		playgroundCta: "在演练场中试用 →",
+		livePreview: "实时预览",
+		propReference: "属性参考",
+		propLead: "派生自该组件的 Puck `fields` 模式。",
+		colField: "字段",
+		colType: "类型",
+		colDefault: "默认值",
+		defaultProps: "默认属性",
+		puckConfig: "Puck 配置",
+	},
+	ja: {
+		sectionTitle: "コンポーネント",
+		sectionDesc:
+			"すべての @anvilkit/* Puck ネイティブコンポーネントパッケージの自動生成カタログ。",
+		indexLead:
+			"このカタログは、ドキュメントをビルドするたびに各コンポーネントの `metadata` エクスポートと `README.md` から\n再生成されます — `apps/docs/scripts/generate-component-pages.ts` を参照してください。",
+		indexPlayground:
+			"インタラクティブに試したいですか？[プレイグラウンドを開く](/playground)と、これら 11 個の\nコンポーネントを実際の Puck キャンバスに配置できます。",
+		indexAuthoring:
+			"独自に作成しますか？[コンポーネント作成ガイド](/ja/guides/component-authoring)から始めてください。",
+		colComponent: "コンポーネント",
+		colPackage: "パッケージ",
+		colSummary: "概要",
+		playgroundCta: "プレイグラウンドで試す →",
+		livePreview: "ライブプレビュー",
+		propReference: "プロパティリファレンス",
+		propLead: "コンポーネントの Puck `fields` スキーマから導出されます。",
+		colField: "フィールド",
+		colType: "型",
+		colDefault: "デフォルト",
+		defaultProps: "デフォルトプロパティ",
+		puckConfig: "Puck 設定",
+	},
+	ko: {
+		sectionTitle: "컴포넌트",
+		sectionDesc:
+			"모든 @anvilkit/* Puck 네이티브 컴포넌트 패키지의 자동 생성 카탈로그.",
+		indexLead:
+			"이 카탈로그는 문서를 빌드할 때마다 각 컴포넌트의 `metadata` 익스포트와 `README.md`에서\n다시 생성됩니다 — `apps/docs/scripts/generate-component-pages.ts` 참조.",
+		indexPlayground:
+			"인터랙티브하게 살펴보고 싶으신가요? [플레이그라운드 열기](/playground)에서 이 11개\n컴포넌트를 실제 Puck 캔버스에 끌어다 놓아 보세요.",
+		indexAuthoring:
+			"직접 작성하시나요? [컴포넌트 작성 가이드](/ko/guides/component-authoring)부터 시작하세요.",
+		colComponent: "컴포넌트",
+		colPackage: "패키지",
+		colSummary: "요약",
+		playgroundCta: "플레이그라운드에서 사용해 보기 →",
+		livePreview: "라이브 미리보기",
+		propReference: "속성 레퍼런스",
+		propLead: "컴포넌트의 Puck `fields` 스키마에서 파생됩니다.",
+		colField: "필드",
+		colType: "타입",
+		colDefault: "기본값",
+		defaultProps: "기본 속성",
+		puckConfig: "Puck 설정",
+	},
+};
+
+// Localized page description. English keeps the package's own description; other
+// locales wrap the component's display name in a translated sentence.
+function localizedDescription(
+	lang: Locale,
+	componentName: string,
+	pkgDescription: string,
+): string {
+	switch (lang) {
+		case "zh":
+			return `Anvilkit Puck 原生 ${componentName} 组件。`;
+		case "ja":
+			return `Anvilkit Puck ネイティブの ${componentName} コンポーネント。`;
+		case "ko":
+			return `Anvilkit Puck 네이티브 ${componentName} 컴포넌트.`;
+		default:
+			return pkgDescription;
+	}
+}
+
+function fileName(slug: string, lang: Locale): string {
+	return lang ? `${slug}.${lang}.mdx` : `${slug}.mdx`;
+}
+
+// Locale-prefix an internal component href (default locale unchanged).
+function localizeComponentHref(slug: string, lang: Locale): string {
+	return lang ? `/${lang}/components/${slug}` : `/components/${slug}`;
+}
+
+function buildPropsTable(
+	fields: Fields,
+	defaultProps: DefaultProps,
+	lang: Locale,
+): string {
+	const t = T[lang];
 	const rows: string[] = [
-		"| Field | Type | Default |",
+		`| ${t.colField} | ${t.colType} | ${t.colDefault} |`,
 		"|-------|------|---------|",
 	];
 	for (const [name, field] of Object.entries(fields)) {
@@ -556,7 +708,7 @@ function buildPuckConfigJson(info: ComponentInfo): string {
 	return JSON.stringify(payload, null, 2);
 }
 
-function renderMdx(info: ComponentInfo): string {
+function renderMdx(info: ComponentInfo, lang: Locale): string {
 	const {
 		componentName,
 		pkgName,
@@ -567,46 +719,43 @@ function renderMdx(info: ComponentInfo): string {
 		readme,
 	} = info;
 
+	const t = T[lang];
 	const readmeBody = stripReadmeHeading(readme);
-	const propsTable = buildPropsTable(fields, defaultProps);
+	const propsTable = buildPropsTable(fields, defaultProps, lang);
 	const puckJson = buildPuckConfigJson(info);
 	const defaultPropsJson = JSON.stringify(defaultProps, null, 2);
+	const description = localizedDescription(lang, componentName, pkgDescription);
+	// The playground is not localized — keep the link unprefixed in every locale.
+	const playgroundHref = "/playground";
 
 	return `---
 title: ${componentName}
-description: "${escapeYaml(pkgDescription)}"
-sidebar:
-  label: ${componentName}
-editUrl: false
+description: ${JSON.stringify(description)}
 ---
-import { ${componentName}, defaultProps as __anvilkitDefaultProps } from "${pkgName}";
-import "${pkgName}/styles.css";
 
-<div class="anvilkit-component-meta">
-	<code>${pkgName}</code> <span>·</span> <span>v${pkgVersion}</span> <span>·</span> <a href="/playground/">Try it in the playground →</a>
+<div className="anvilkit-component-meta">
+	<code>${pkgName}</code> <span>·</span> <span>v${pkgVersion}</span> <span>·</span> <a href="${playgroundHref}">${t.playgroundCta}</a>
 </div>
 
-## Live preview
+## ${t.livePreview}
 
-<div class="not-content anvilkit-component-preview">
-	<${componentName} client:only="react" {...__anvilkitDefaultProps} />
-</div>
+<ComponentPreview name="${componentName}" />
 
 ${readmeBody}
 
-## Prop reference
+## ${t.propReference}
 
-Derived from the component's Puck \`fields\` schema.
+${t.propLead}
 
 ${propsTable}
 
-## Default props
+## ${t.defaultProps}
 
 \`\`\`json
 ${defaultPropsJson}
 \`\`\`
 
-## Puck config
+## ${t.puckConfig}
 
 \`\`\`json
 ${puckJson}
@@ -615,8 +764,13 @@ ${puckJson}
 }
 
 function writePage(info: ComponentInfo): void {
-	const outPath = join(OUT_DIR, `${info.slug}.mdx`);
-	writeFileSync(outPath, renderMdx(info), "utf8");
+	for (const lang of LOCALES) {
+		writeFileSync(
+			join(OUT_DIR, fileName(info.slug, lang)),
+			renderMdx(info, lang),
+			"utf8",
+		);
+	}
 }
 
 function clearOutDir(): void {
@@ -641,34 +795,49 @@ function main(): void {
 		console.log(`[generate-component-pages] wrote components/${slug}.mdx`);
 	}
 
-	const indexPath = join(OUT_DIR, "index.mdx");
-	const indexBody = renderIndex(results);
-	writeFileSync(indexPath, indexBody, "utf8");
-	console.log(`[generate-component-pages] wrote components/index.mdx`);
-	console.log(`[generate-component-pages] ${results.length} pages generated`);
+	for (const lang of LOCALES) {
+		writeFileSync(
+			join(OUT_DIR, lang ? `index.${lang}.mdx` : "index.mdx"),
+			renderIndex(results, lang),
+			"utf8",
+		);
+		// Fumadocs nav metadata (localized section title).
+		writeFileSync(
+			join(OUT_DIR, lang ? `meta.${lang}.json` : "meta.json"),
+			`${JSON.stringify({ title: T[lang].sectionTitle, pages: ["index", "..."] }, null, "\t")}\n`,
+			"utf8",
+		);
+	}
+	console.log(
+		`[generate-component-pages] ${results.length} pages × ${LOCALES.length} locales + index + meta.json`,
+	);
 }
 
-function renderIndex(all: ComponentInfo[]): string {
+function renderIndex(all: ComponentInfo[], lang: Locale): string {
+	const t = T[lang];
 	const rows = all
-		.map(
-			(info) =>
-				`| [${info.componentName}](/components/${info.slug}/) | \`${info.pkgName}\` | ${info.pkgDescription} |`,
-		)
+		.map((info) => {
+			const href = localizeComponentHref(info.slug, lang);
+			const summary = localizedDescription(
+				lang,
+				info.componentName,
+				info.pkgDescription,
+			);
+			return `| [${info.componentName}](${href}) | \`${info.pkgName}\` | ${summary} |`;
+		})
 		.join("\n");
 	return `---
-title: Components
-description: Auto-generated catalog of every @anvilkit/* Puck-native component package.
+title: ${JSON.stringify(t.sectionTitle)}
+description: ${JSON.stringify(t.sectionDesc)}
 ---
 
-This catalog is regenerated from each component's \`metadata\` export and \`README.md\`
-on every docs build — see \`apps/docs/scripts/generate-component-pages.ts\`.
+${t.indexLead}
 
-Prefer to explore interactively? [Open the playground](/playground/) to drop any of
-these 11 components onto a live Puck canvas.
+${t.indexPlayground}
 
-Writing your own? Start with the [component authoring guide](/guides/component-authoring/).
+${t.indexAuthoring}
 
-| Component | Package | Summary |
+| ${t.colComponent} | ${t.colPackage} | ${t.colSummary} |
 |-----------|---------|---------|
 ${rows}
 `;

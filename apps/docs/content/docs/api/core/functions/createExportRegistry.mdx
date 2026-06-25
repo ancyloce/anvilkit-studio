@@ -1,0 +1,37 @@
+---
+title: "createExportRegistry"
+description: "@anvilkit/core · createExportRegistry"
+---
+
+```ts
+function createExportRegistry(formats): ExportRegistry;
+```
+
+Defined in: [runtime/export-registry.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L98)
+
+Build an [ExportRegistry](../interfaces/ExportRegistry) from a flat array of
+[ExportFormatDefinition](../interfaces/ExportFormatDefinition) objects.
+
+The factory walks the array exactly once, validates that every
+`id` is unique, and folds the formats into an insertion-ordered
+`Map`. Subsequent calls to `list()` return the formats in the
+same order they appeared in the input — host apps can rely on
+this for stable export-menu ordering.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `formats` | readonly [`ExportFormatDefinition`](../interfaces/ExportFormatDefinition)\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt;[] | The flat array of export formats. Typically built by walking the `exportFormats` field of every [StudioPluginRegistration](../interfaces/StudioPluginRegistration) the host app is loading. |
+
+## Returns
+
+[`ExportRegistry`](../interfaces/ExportRegistry)
+
+## Throws
+
+[StudioPluginError](../classes/StudioPluginError) if two formats share the same
+`id`. The error's `pluginId` field is set to the conflicting
+format id (the registry layer does not know which plugin
+contributed the format — `compilePlugins()` provides that
+attribution at the layer above).

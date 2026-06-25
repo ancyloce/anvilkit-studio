@@ -1,0 +1,241 @@
+---
+title: Button
+description: "Anvilkit Puck 네이티브 Button 컴포넌트."
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/button</code> <span>·</span> <span>v0.2.2</span> <span>·</span> <a href="/playground">플레이그라운드에서 사용해 보기 →</a>
+</div>
+
+## 라이브 미리보기
+
+<ComponentPreview name="Button" />
+
+A Puck-native button block with variant and link support.
+
+## Install
+
+```sh
+pnpm add @anvilkit/button @anvilkit/ui @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/button/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render the button standalone with its default primary variant.
+
+```tsx
+import "@anvilkit/button/styles.css";
+import { Button } from "@anvilkit/button";
+
+export function Example() {
+  return <Button label="Save changes" variant="primary" />;
+}
+```
+
+### Link button opening a new tab
+
+Provide `href` to render an anchor; pair it with `openInNewTab` to add
+`target="_blank"` plus safe `rel` attributes. A `disabled` button is
+non-interactive and announces `aria-disabled`.
+
+```tsx
+import { Button } from "@anvilkit/button";
+
+export function Actions() {
+  return (
+    <div className="flex gap-3">
+      <Button
+        label="Read the docs"
+        variant="secondary"
+        href="https://anvilkit.dev"
+        openInNewTab
+      />
+      <Button label="Coming soon" variant="primary" disabled />
+    </div>
+  );
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config` so authors can drop the
+button onto a page.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type ButtonProps } from "@anvilkit/button";
+
+const config: Config<{ Button: ButtonProps }> = {
+  components: {
+    Button: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `ButtonProps` type and the Puck `fields` schema.
+
+| Prop           | Type                         | Default          | Description                                                  |
+| -------------- | ---------------------------- | ---------------- | ----------------------------------------------------------- |
+| `label`        | `string`                     | `"Save changes"` | Button label text.                                          |
+| `variant`      | `"primary"` \| `"secondary"` | `"primary"`      | Visual variant.                                             |
+| `href`         | `string`                     | `""`             | Link URL; renders an anchor when set.                       |
+| `openInNewTab` | `boolean`                    | `false`          | Open the link in a new tab.                                 |
+| `disabled`     | `boolean`                    | `false`          | Disable interaction.                                        |
+| `trackClick`   | `boolean`                    | `false`          | Fire an analytics event on click (requires an analytics provider). |
+| `eventName`    | `string`                     | —                | Event name; defaults to `button_click`.                     |
+| `eventProps`   | `{ category?: string; placement?: string }` | — | Extra properties merged into the click event.               |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+
+## 속성 레퍼런스
+
+컴포넌트의 Puck `fields` 스키마에서 파생됩니다.
+
+| 필드 | 타입 | 기본값 |
+|-------|------|---------|
+| `label` | text | `"Save changes"` |
+| `variant` | radio ("primary" \| "secondary") | `"primary"` |
+| `href` | text | `""` |
+| `openInNewTab` | radio (false \| true) | `false` |
+| `disabled` | radio (false \| true) | `false` |
+| `trackClick` | radio (false \| true) | `false` |
+| `eventName` | text | — |
+| `eventProps` | object | — |
+
+## 기본 속성
+
+```json
+{
+  "label": "Save changes",
+  "variant": "primary",
+  "disabled": false,
+  "href": "",
+  "openInNewTab": false,
+  "trackClick": false
+}
+```
+
+## Puck 설정
+
+```json
+{
+  "label": "Button",
+  "metadata": {
+    "componentName": "Button",
+    "componentSlug": "button",
+    "packageName": "@anvilkit/button",
+    "packageVersion": "0.2.2",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "actions"
+  },
+  "defaultProps": {
+    "label": "Save changes",
+    "variant": "primary",
+    "disabled": false,
+    "href": "",
+    "openInNewTab": false,
+    "trackClick": false
+  },
+  "fields": {
+    "label": {
+      "type": "text",
+      "label": "Label"
+    },
+    "variant": {
+      "type": "radio",
+      "label": "Variant",
+      "options": [
+        {
+          "label": "Primary",
+          "value": "primary"
+        },
+        {
+          "label": "Secondary",
+          "value": "secondary"
+        }
+      ]
+    },
+    "href": {
+      "type": "text",
+      "label": "Link URL"
+    },
+    "openInNewTab": {
+      "type": "radio",
+      "label": "Open in new tab",
+      "options": [
+        {
+          "label": "No",
+          "value": false
+        },
+        {
+          "label": "Yes",
+          "value": true
+        }
+      ]
+    },
+    "disabled": {
+      "type": "radio",
+      "label": "Disabled",
+      "options": [
+        {
+          "label": "No",
+          "value": false
+        },
+        {
+          "label": "Yes",
+          "value": true
+        }
+      ]
+    },
+    "trackClick": {
+      "type": "radio",
+      "label": "Track click",
+      "options": [
+        {
+          "label": "Off",
+          "value": false
+        },
+        {
+          "label": "On",
+          "value": true
+        }
+      ]
+    },
+    "eventName": {
+      "type": "text",
+      "label": "Event name"
+    },
+    "eventProps": {
+      "type": "object",
+      "label": "Event properties",
+      "objectFields": {
+        "category": {
+          "type": "text",
+          "label": "Category"
+        },
+        "placement": {
+          "type": "text",
+          "label": "Placement"
+        }
+      }
+    }
+  }
+}
+```

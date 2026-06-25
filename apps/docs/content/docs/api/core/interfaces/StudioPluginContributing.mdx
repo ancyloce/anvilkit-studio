@@ -1,0 +1,75 @@
+---
+title: "StudioPluginContributing"
+description: "@anvilkit/core · StudioPluginContributing"
+---
+
+Defined in: [types/plugin.ts:838](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L838)
+
+A `StudioPlugin` that advertises a `Contributes` capability surface.
+
+Plugin authors return one via [defineStudioPlugin](../functions/defineStudioPlugin) so the
+contributed types are recoverable through
+[InferPluginContributions](../type-aliases/InferPluginContributions):
+
+```ts
+export function createThingPlugin(): StudioPluginContributing<ThingApi> {
+  return defineStudioPlugin<ThingApi>({ meta, register });
+}
+```
+
+Implementation note: the brand property is required at the type level
+(so unbranded `StudioPlugin` cannot accidentally satisfy
+[InferPluginContributions](../type-aliases/InferPluginContributions) and contribute `unknown` to the
+inferred union) but is `unique symbol`-keyed, so it never collides
+with real properties and is erased at runtime — no value is ever
+produced or read. The required-but-erased shape is fulfilled by the
+type-only cast inside `defineStudioPlugin`.
+
+## Extends
+
+- [`StudioPlugin`](StudioPlugin.md)\<`PuckConfig`\>
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `Contributes` |
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="studioplugincontributesbrand"&gt;&lt;/a&gt; `[StudioPluginContributesBrand]` | `readonly` | `Contributes` | - | - | [types/plugin.ts:840](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L840) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta` | `readonly` | [`StudioPluginMeta`](StudioPluginMeta.md) | Frozen plugin metadata. See [StudioPluginMeta](StudioPluginMeta.md). | [`StudioPlugin`](StudioPlugin.md).[`meta`](StudioPlugin.md#meta) | [types/plugin.ts:788](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L788) |
+
+## Methods
+
+### register()
+
+```ts
+register(ctx): 
+  | StudioPluginRegistration<Config>
+| Promise<StudioPluginRegistration<Config>>;
+```
+
+Defined in: [types/plugin.ts:798](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L798)
+
+Produce a registration block for the runtime to consume.
+
+Called exactly once per plugin, during `compilePlugins()`. May
+return synchronously or via a `Promise`.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `ctx` | [`StudioPluginContext`](StudioPluginContext.md)\&lt;`Config`\&gt; | The [StudioPluginContext](StudioPluginContext.md) for this session. |
+
+#### Returns
+
+  \| [`StudioPluginRegistration`](StudioPluginRegistration.md)\&lt;`Config`\&gt;
+  \| `Promise`\&lt;[`StudioPluginRegistration`](StudioPluginRegistration.md)\&lt;`Config`\&gt;\&gt;
+
+#### Inherited from
+
+[`StudioPlugin`](StudioPlugin.md).[`register`](StudioPlugin.md#register)

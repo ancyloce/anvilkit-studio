@@ -1,0 +1,28 @@
+---
+title: "createLifecycleManager"
+description: "@anvilkit/core · createLifecycleManager"
+---
+
+```ts
+function createLifecycleManager(registrations, options?): LifecycleManager;
+```
+
+Defined in: [runtime/lifecycle-manager.ts:266](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L266)
+
+Create a lifecycle manager bound to a frozen array of plugin
+registrations.
+
+The registrations are snapshotted at construction time — adding
+or removing plugins at runtime would require rebuilding the
+manager, which mirrors Puck's mount-time plugin array semantics.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `registrations` | readonly [`StudioPluginRegistration`](../interfaces/StudioPluginRegistration)\&lt;`Config`\&gt;[] | The aggregated registrations returned by each plugin's `register()` method, in plugin declaration order. |
+| `options` | [`LifecycleManagerOptions`](#) | Optional [LifecycleManagerOptions](#); see the field docs for semantics. |
+
+## Returns
+
+[`LifecycleManager`](../interfaces/LifecycleManager)

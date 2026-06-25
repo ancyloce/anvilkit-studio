@@ -1,6 +1,6 @@
 /**
  * Code-block extraction harness for the plugin authoring guide
- * (`apps/docs/src/content/docs/guides/plugin-authoring.mdx`).
+ * (`apps/docs/content/docs/guides/plugin-authoring.mdx`).
  *
  * Each `describe(...)` block below corresponds to one numbered
  * section of the guide, and the snippets inside mirror — verbatim

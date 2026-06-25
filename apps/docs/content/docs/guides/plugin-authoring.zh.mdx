@@ -1,0 +1,535 @@
+---
+title: "插件编写"
+description: "从零开始编写一个 StudioPlugin —— 接口、生命周期钩子、上下文 API、导出格式，以及一个能在 CI 中编译通过的完整示例。"
+---
+
+`StudioPlugin` 是 `@anvilkit/core` 的规范扩展点。
+本指南将逐一讲解契约的每个部分 —— meta、register
+函数、上下文 API、生命周期钩子、头部操作、导出
+格式、dispatch 语义、测试 —— 并以一个完整示例结尾，
+该示例作为一个真正可发布到 npm 的包提供，并在 CI 中被执行验证。
+
+<Callout type="info" title="代码始终保持绿色">
+	本页面上的每个代码块都会被提取到
+	[`apps/docs/tests/guides/plugin-authoring.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/plugin-authoring.test.ts)
+	并作为 Vitest 测试在 CI 中运行。如果契约发生偏移，
+	构建会在文档发布前失败。
+</Callout>
+
+## 1. 什么是 `StudioPlugin`
+
+`@anvilkit/core` 在其 `createStudioConfig` 调用上接受一个混合的
+`plugins: (StudioPlugin | PuckPlugin)[]` 数组。这两种契约可以共存：
+
+| 能力                                           | `PuckPlugin` | `StudioPlugin` |
+| ---------------------------------------------- | ------------ | -------------- |
+| 覆盖 Puck 的 rail / drawer / header 插槽       | ✅           | ✅             |
+| 订阅数据变更 / 发布生命周期                     | ❌           | ✅             |
+| 贡献导出格式（`html`、`react`、…）             | ❌           | ✅             |
+| 贡献 Studio 头部操作                           | ❌           | ✅             |
+| 读取合并后的 `StudioConfig`                     | ❌           | ✅             |
+
+`StudioPlugin` 是一个超集：它通过 Puck API 与 Puck 编辑器
+对话，并添加了 Puck 本身未建模的横切关注点。
+Core 在 `compilePlugins()` 期间解析这两种类型，因此宿主可以
+自由地混用它们。
+
+## 2. 最小可用插件
+
+最小的合法插件是一个被冻结的 `meta` 块加上一个返回空注册结果的
+`register()` 函数：
+
+```ts
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export function createNoopPlugin(): StudioPlugin {
+	const meta = {
+		id: "com.example.noop",
+		name: "No-op",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	} as const;
+
+	return {
+		meta,
+		register(_ctx) {
+			return { meta };
+		},
+	};
+}
+```
+
+这就足以通过 `compilePlugins()`。每个额外的能力
+—— 钩子、覆盖、头部操作、导出格式 —— 都是可选的，
+并作为注册对象上的一个独立字段出现。
+
+<Callout type="warn" title="`coreVersion` 是一份契约">
+	`compilePlugins()` 会拒绝任何 `meta.coreVersion`
+	范围不包含运行中的 `CORE_VERSION` 的插件。目前支持的
+	前缀有精确匹配（`"0.1.0-alpha.0"`）、插入符（`"^…"`），
+	以及波浪号（`"~…"`）。不匹配会在挂载时抛出
+	`StudioPluginError`，从而让宿主能够大声失败，而不是带着
+	不对齐的插件进行渲染。
+</Callout>
+
+## 3. `StudioPluginContext`
+
+每个生命周期钩子以及每个头部操作的 `onClick` 都会接收一个
+`StudioPluginContext`。它是 Core 交给插件的读取 / 写入 / 观察
+句柄 —— 不允许有其他任何环境状态。
+
+| 字段           | 用途                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| `getData()`    | 当前 Puck `Data` 的快照（不创建订阅）。                                                   |
+| `getPuckApi()` | 返回实时的 `PuckApi`。使用 `dispatch` 进行变更；参见 §6。                                 |
+| `studioConfig` | 已冻结、已合并的 `StudioConfig`（默认值 + 环境变量 + 宿主覆盖）。                         |
+| `log(level, message, meta?)` | 路由到 Core 的日志器（`debug` / `info` / `warn` / `error`）。               |
+| `emit(event, payload?)` | 广播到进程内的插件事件总线（同步，按注册顺序投递）。                             |
+| `on(event, handler)` | 订阅总线事件；返回一个取消订阅的函数。在 `register`/`onInit` 中订阅。              |
+
+有两个边界是刻意设计的：
+
+1. **没有直接的 store 访问。** 插件从不 `import` Zustand store。
+   每次变更都通过 `getPuckApi().dispatch()` 流转，从而让 Puck 的
+   历史栈保持为唯一可信来源。
+2. **`studioConfig` 是深度只读的。** 在运行时变更它是一个无操作，
+   并且在严格模式下可能抛出异常。
+
+一个只观察数据形状的插件可以实现为：
+
+```ts
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+} from "@anvilkit/core/types";
+
+export const observerPlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.observer",
+		name: "Observer",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(ctx: StudioPluginContext) {
+		ctx.log("info", "observer plugin registered", {
+			theme: ctx.studioConfig.theme.defaultMode,
+		});
+		return { meta: observerPlugin.meta };
+	},
+};
+```
+
+## 4. 生命周期钩子
+
+钩子位于 `registration.hooks` 上。每个钩子都是可选的，并且可以
+返回 `void` 或 `Promise<void>`。
+
+| 钩子              | 触发时机                                                              | 并发性       |
+| ----------------- | -------------------------------------------------------------------- | ------------ |
+| `onInit`          | 一次性，在 `compilePlugins()` 之后、`<Studio>` 挂载编辑器之前。      | 并行         |
+| `onDataChange`    | 每次 Puck `onChange`，带上最新的 `data` 参数。                       | 并行         |
+| `onBeforePublish` | 在宿主发布之前 —— 可以抛出 `StudioPluginError` 以中止。              | **顺序执行** |
+| `onAfterPublish`  | 在成功发布之后。                                                     | 并行         |
+| `onDestroy`       | 当 `<Studio>` 卸载时。                                               | 并行         |
+
+有两条排序规则很重要：
+
+1. **插件顺序。** 钩子按插件注册顺序触发 —— 即传递给
+   `createStudioConfig` 的 `plugins: [...]` 数组的顺序。
+2. **否决语义。** `onBeforePublish` **顺序执行**；第一个抛出异常的
+   钩子会中止其余钩子，并从生命周期分发器重新抛出。其他每个
+   事件都通过 `Promise.allSettled` 运行，因此一个有 bug 的插件只会
+   记录日志，绝不会让编辑器崩溃。
+
+```ts
+import type { StudioPlugin } from "@anvilkit/core/types";
+import { StudioPluginError } from "@anvilkit/core";
+
+export const requireHeroPlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.require-hero",
+		name: "Require Hero",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(_ctx) {
+		return {
+			meta: requireHeroPlugin.meta,
+			hooks: {
+				onBeforePublish(_ctx, data) {
+					const hasHero = data.content.some((item) => item.type === "Hero");
+					if (!hasHero) {
+						throw new StudioPluginError(
+							"com.example.require-hero",
+							"Pages must include a Hero block before publish",
+						);
+					}
+				},
+			},
+		};
+	},
+};
+```
+
+## 5. 贡献导出格式
+
+一个导出器在 `registration.exportFormats` 上贡献一个或多个
+`ExportFormatDefinition`。格式 `id` 必须全局唯一；
+两个插件注册相同的 id 会在编译时抛出 `StudioPluginError`。
+
+运行时会向 `run()` 传递一个规范化的 `PageIR`（而不是 Puck `Data`），
+因此 IR 规范化步骤在所有导出器之间恰好只发生一次。
+
+```ts
+import type {
+	ExportFormatDefinition,
+	StudioPlugin,
+} from "@anvilkit/core/types";
+
+const jsonFormat: ExportFormatDefinition = {
+	id: "json-snapshot",
+	label: "JSON snapshot",
+	extension: "json",
+	mimeType: "application/json",
+	async run(ir, _options) {
+		return {
+			content: JSON.stringify(ir, null, 2),
+			filename: "page.json",
+			warnings: [],
+		};
+	},
+};
+
+export function createJsonSnapshotPlugin(): StudioPlugin {
+	const meta = {
+		id: "com.example.json-snapshot",
+		name: "JSON Snapshot Exporter",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	} as const;
+
+	return {
+		meta,
+		register(_ctx) {
+			return { meta, exportFormats: [jsonFormat] };
+		},
+	};
+}
+```
+
+对于生产环境的参考实现，请参见
+[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+—— 它会内联资源、为每个组件发出 CSS，并通过
+`@anvilkit/ir` 进行往返转换。
+
+## 6. 分发编辑器操作
+
+状态变更总是通过 `getPuckApi().dispatch()` 流转。插件最常采用的
+两种模式是：
+
+```ts
+import type { StudioPluginContext } from "@anvilkit/core/types";
+
+// Pattern A — full replacement (use sparingly; clobbers history).
+export function clearPage(ctx: StudioPluginContext): void {
+	ctx.getPuckApi().dispatch({
+		type: "setData",
+		data: { root: { props: {} }, content: [], zones: {} },
+	});
+}
+
+// Pattern B — surgical action (preserves history; preferred).
+export function insertHero(ctx: StudioPluginContext): void {
+	ctx.getPuckApi().dispatch({
+		type: "insert",
+		componentType: "Hero",
+		destinationZone: "default-zone",
+		destinationIndex: 0,
+	});
+}
+```
+
+模式 A 很简单，但它会重写整棵树，因此撤销会折叠为
+单一步骤。模式 B 使用 Puck 的类型化 `PuckAction` 联合类型
+（`insert`、`move`、`remove`、`replace`、`duplicate`、…），并保持
+历史粒度。仅当新树与旧树确实毫无关联时（例如打开一份已保存的
+草稿），才采用 `setData` —— 其他每种情况都有专门的操作。
+
+## 7. 测试插件
+
+插件契约是无 React 的，且默认同步，因此
+插件可以在 Node 环境中用 Vitest 测试。规范的
+测试框架是：
+
+1. 用 `vi.fn()` 为 `log` 和 `emit` 构建一个假的 `StudioPluginContext`，
+   以及一个桩 `getPuckApi`。
+2. 调用 `compilePlugins([yourPlugin], ctx)` 以获得一个 `StudioRuntime`。
+3. 驱动 `runtime.lifecycle.emit("onInit" | "onDataChange" | …, ctx, data)`。
+4. 断言你的插件记录了什么 —— 计数、日志调用、已分发的
+   操作、在 `runtime.headerActions` 上贡献的头部操作。
+
+```ts
+import { compilePlugins, StudioConfigSchema } from "@anvilkit/core";
+import type {
+	StudioPlugin,
+	StudioPluginContext,
+} from "@anvilkit/core/types";
+import type { Data as PuckData } from "@puckeditor/core";
+import { describe, expect, it, vi } from "vitest";
+
+const studioConfig = StudioConfigSchema.parse({});
+
+function makeCtx(data: PuckData): StudioPluginContext {
+	return {
+		getData: () => data,
+		getPuckApi: (() => {
+			throw new Error("getPuckApi unused in this test");
+		}) as unknown as StudioPluginContext["getPuckApi"],
+		studioConfig,
+		log: vi.fn(),
+		emit: vi.fn(),
+	};
+}
+
+const samplePlugin: StudioPlugin = {
+	meta: {
+		id: "com.example.sample",
+		name: "Sample",
+		version: "1.0.0",
+		coreVersion: "^0.1.0-alpha",
+	},
+	register(_ctx) {
+		return {
+			meta: samplePlugin.meta,
+			hooks: {
+				onInit(ctx) {
+					ctx.log("info", "sample plugin started");
+				},
+			},
+		};
+	},
+};
+
+describe("samplePlugin", () => {
+	it("logs an info line on onInit", async () => {
+		const ctx = makeCtx({ root: { props: {} }, content: [], zones: {} });
+		const runtime = await compilePlugins([samplePlugin], ctx);
+
+		await runtime.lifecycle.emit("onInit", ctx);
+
+		expect(ctx.log).toHaveBeenCalledWith("info", "sample plugin started");
+	});
+});
+```
+
+这一种模式足以在不触及 React 或 DOM 的情况下，
+演练钩子、头部操作、导出格式以及事件总线的发射。
+
+### 优先使用 `@anvilkit/core/testing` 而非手写的假对象
+
+自 Phase 4（`phase4-012`）起，同样的假上下文以
+可复用的固定装置导出。优先使用它，而不是在每个
+测试文件中重写 `makeCtx`：
+
+```ts
+import {
+	createFakeStudioContext,
+	createFakePageIR,
+	registerPlugin,
+} from "@anvilkit/core/testing";
+
+const harness = await registerPlugin(samplePlugin);
+await harness.runInit();
+expect(harness.ctx._mocks.logCalls[0]).toEqual([
+	"info",
+	"sample plugin started",
+	undefined,
+]);
+```
+
+`createFakeStudioContext()` 返回一个完全类型化的
+`StudioPluginContext`，其 `log` / `emit` /
+`getPuckApi().dispatch` 都由 spy 支撑；`_mocks.logCalls` / `_mocks.emitCalls` /
+`_mocks.dispatchCalls` 是已就绪可供断言的有序数组。
+`createFakePageIR()` 为导出 /
+validator 测试构建一个最小的有效 PageIR。`registerPlugin()` 封装了 register +
+生命周期的样板代码。`@anvilkit/create-plugin` 的脚手架生成开箱即用地使用这些固定装置。
+
+## 8. 完整示例 —— 组件使用计数器
+
+包
+[`@anvilkit/example-usage-counter`](https://github.com/ancyloce/anvilkit-studio/tree/main/examples/plugins/usage-counter)
+作为一个真正可发布到 npm 的工作区包提供。它在每次 Puck `onChange`
+时追踪 `componentType → instanceCount`，通过三个独立的界面暴露
+总数，并在不到 100 行的代码中演示了五个插件贡献插槽中的四个。
+
+### 剖析
+
+插件工厂：
+
+```ts
+import type { Data as PuckData } from "@puckeditor/core";
+import type {
+	StudioHeaderAction,
+	StudioPluginContext,
+	StudioPluginMeta,
+} from "@anvilkit/core/types";
+
+const META: StudioPluginMeta = {
+	id: "anvilkit-example-usage-counter",
+	name: "Component Usage Counter",
+	version: "0.1.0",
+	coreVersion: "^0.1.0-alpha",
+};
+
+function computeCounts(data: PuckData): Readonly<Record<string, number>> {
+	const counts: Record<string, number> = {};
+	for (const item of data.content) {
+		counts[item.type] = (counts[item.type] ?? 0) + 1;
+	}
+	const zones = data.zones ?? {};
+	for (const zoneKey of Object.keys(zones)) {
+		for (const item of zones[zoneKey] ?? []) {
+			counts[item.type] = (counts[item.type] ?? 0) + 1;
+		}
+	}
+	return counts;
+}
+
+export function createUsageCounterPluginCore() {
+	let counts: Readonly<Record<string, number>> = {};
+
+	function update(next: typeof counts, ctx: StudioPluginContext): void {
+		counts = next;
+		ctx.emit("usage-counter:update", counts);
+	}
+
+	const action: StudioHeaderAction = {
+		id: "usage-counter-log",
+		label: "Log usage counts",
+		icon: "list",
+		group: "overflow",
+		onClick(ctx) {
+			ctx.log("info", "usage-counter:snapshot", { counts });
+		},
+	};
+
+	return {
+		meta: META,
+		getCounts: () => counts,
+		register(_ctx: StudioPluginContext) {
+			return {
+				meta: META,
+				hooks: {
+					onInit: (ctx: StudioPluginContext) =>
+						update(computeCounts(ctx.getData()), ctx),
+					onDataChange: (ctx: StudioPluginContext, data: PuckData) =>
+						update(computeCounts(data), ctx),
+				},
+				headerActions: [action],
+			};
+		},
+	};
+}
+```
+
+### 在宿主中接入它
+
+```ts
+import { createUsageCounterPlugin } from "@anvilkit/example-usage-counter";
+// In the host:
+//   const usageCounter = createUsageCounterPlugin({ verbose: true });
+//   const config = createStudioConfig({ plugins: [usageCounter] });
+//   usageCounter.subscribe((counts) => console.log(counts));
+```
+
+`createUsageCounterPlugin` 返回标准的 `StudioPlugin` 形状，
+外加两个额外的方法（`getCounts()` 和 `subscribe(fn)`），供宿主
+和测试在不订阅事件总线的情况下读取实时计数。
+
+### 测试它
+
+完整的测试文件位于
+[`examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/examples/plugins/usage-counter/src/__tests__/create-usage-counter-plugin.test.ts)。
+该测试框架与 §7 如出一辙 —— 其中没有任何插件特有的内容。
+
+## 9. 插件配置与类型安全
+
+### 插件类型不会传播到 `<Studio>`
+
+这是一个**经过深思熟虑的架构决策**，而不是需要绕过的
+缺口。`<Studio>` *并非*在其插件集合上是泛型的：传入
+`plugins={[myPlugin]}` 不会将 `myPlugin` 的配置类型流入
+`config`，而 `config.experimental` 的类型是 `Record<string, unknown>`。
+
+原因：core 将其类型版本与每个插件的类型版本解耦。插件可以
+独立于 `@anvilkit/core` 发布一个新的主版本，并且任何插件
+升级都绝不会强制 core 进行类型版本提升。代价是宿主的
+`<Studio>` 边界**不会为插件特有的配置提供任何编译期校验或 IDE
+自动补全** —— 但在插件自身的
+`register()` 主体内部，`StudioPluginContext<UserConfig>` 是完全类型化的，因此
+插件作者在编写插件代码的地方仍保有完整的安全性。
+
+**插件配置在运行时通过 Zod 校验**，而不是在
+`<Studio>` 类型边界上校验。`createStudioConfig()` 运行
+`StudioConfigSchema`（`config.experimental` 是
+`z.record(z.string(), z.unknown())`），因此一个格式错误的配置会在启动时
+带着 Zod 错误快速失败 —— 只是不会在 `tsc` 阶段失败。
+
+### 自行为你的插件的 `experimental` 配置定义类型
+
+Core 暴露了一个模块增强插槽 `StudioExperimentalConfig`。
+通过声明合并添加你的键，从而为*你*插件的配置获得智能感知 + 校验，
+而无需 core 依赖你的类型：
+
+```ts
+declare module "@anvilkit/core" {
+  interface StudioExperimentalConfig {
+    myPlugin?: { apiKey: string; debug?: boolean };
+  }
+}
+
+// Now this is type-checked and autocompleted:
+const config = createStudioConfig({
+  experimental: { myPlugin: { apiKey: "…" } },
+});
+```
+
+该插槽与开放的 `Record<string, unknown>` 取交集，因此它
+是纯增量的 —— 未增强的键仍可继续以无类型方式工作，且没有
+任何现有配置会被破坏。无论如何，运行时仍会通过 Zod 进行校验。
+
+### 陷阱：对包含函数的 `config` 进行记忆化
+
+`<Studio>` 会对 `config` 进行指纹计算，以决定何时重新编译插件。
+一个纯 JSON 配置使用廉价的结构化哈希。但如果 `config`
+包含一个**函数、symbol 或 bigint**（例如
+`config={{ experimental: { transform: fn } }}`），结构化哈希
+会悄无声息地丢弃它，因此 core 会安全地回退为**引用
+标识**。后果是：一个*内联*的非 JSON 配置对象
+在每次渲染时都会获得全新的标识，从而在每次父级渲染时
+重新运行整个插件编译。
+
+修复方法：对任何携带非 JSON 值的配置进行记忆化（或提升）。
+
+```tsx
+// ❌ recompiles every render
+<Studio config={{ experimental: { transform: (n) => n } }} />
+
+// ✅ stable identity → compiles once
+const config = useMemo(
+  () => ({ experimental: { transform: (n) => n } }),
+  [],
+);
+<Studio config={config} />
+```
+
+在开发环境中，当 core 检测到这种模式时（即同一个结构化配置
+在连续渲染中带着新的标识到达），它会记录一次性的
+`console.warn`。
+
+## 参考
+
+- 插件契约：[`packages/core/src/types/plugin.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts)
+- HTML 导出器（生产环境参考）：[`@anvilkit/plugin-export-html`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-export-html)
+- AI copilot（事件总线 + dispatch 参考）：[`@anvilkit/plugin-ai-copilot`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/plugins/plugin-ai-copilot)

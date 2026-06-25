@@ -1,0 +1,23 @@
+---
+title: "StudioDesignSystemPanel"
+description: "@anvilkit/core · StudioDesignSystemPanel"
+---
+
+Defined in: [types/sidebar.ts:476](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L476)
+
+Host-supplied panel body for the sidebar's `design-system` module.
+`@anvilkit/core` stays agnostic about any specific token vocabulary —
+the host (or an integration plugin paired with
+`@anvilkit/plugin-design-system`) registers a single panel via
+`ctx.registerDesignSystemPanel(panel)` and owns its own React state,
+token tree, and theme-toggle wiring.
+
+Mirrors [StudioCopilotPanel](StudioCopilotPanel.md) and [StudioHistoryPanel](StudioHistoryPanel.md):
+v1 supports a single panel, last-write-wins; the module shows
+`studio.module.designSystem.empty` until a panel is registered.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="render"&gt;&lt;/a&gt; `render` | `readonly` | () =&gt; `ReactNode` | Render the panel body. Called from the `design-system` module on every render; the returned tree is rendered directly inside the sidebar panel's body slot. Implementations may close over a resolved token tree and own their internal state via standard hooks. | [types/sidebar.ts:484](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L484) |

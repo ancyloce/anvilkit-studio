@@ -1,0 +1,232 @@
+---
+title: "Studio オーバーライド"
+description: "AnvilKit のファーストクラスな Puck オーバーライドプリセット、chrome モード、そしてデフォルト・プラグイン・利用者の間の合成順序。"
+---
+
+`@anvilkit/core` は完全な Studio chrome —— ヘッダー、サイドバー
+タブ、ビューポートツールバー、フィールドパネル —— を Puck オーバーライドプリセットとして
+提供します。それを使いたいホストは `<Studio>` をインポートするだけで手に入ります。生の
+Puck を使いたいホストは単一のプロパティを切り替えるだけです。プラグインと利用者は任意のスロットを
+拡張でき、マージパイプラインがこれら 3 つのレイヤー間の決定論的な
+順序を保証します。
+
+## Chrome モード
+
+`<Studio chrome>` は 2 つの値を受け付けます。
+
+| 値         | 動作                                                                 |
+| ------------- | ------------------------------------------------------------------------ |
+| `"anvilkit"`（デフォルト） | デフォルトのオーバーライドプリセットとインスタンスごとのエディターストアを備えた AnvilKit Studio シェルをマウントします。 |
+| `"puck"`      | プリセットをスキップし、生の `@puckeditor/core` `<Puck>` をマウントします。Studio オーバーライド導入前のリリースとビット単位で同一です。 |
+
+`"anvilkit"` chrome とエディターストアは動的
+インポートで読み込まれるため、`chrome="puck"` は chrome のバイトを一切同梱しません ——
+エントリーバンドルは 25 KB gzip 予算内に収まります。
+
+## CSS インポート
+
+chrome は `--ak-studio-*` トークン契約を、既存の shadcn / Tailwind v4 変数
+（`--background`、`--foreground`、`--border` など）へ橋渡しする CSS
+サイドカーから読み取ります。2 つのインポートが
+必要です。
+
+```ts title="app/layout.tsx"
+import "@puckeditor/core/puck.css";
+import "@anvilkit/core/styles.css";
+```
+
+このサイドカーは副作用を伴うインポートです —— `@anvilkit/core`
+パッケージは `*.css` ファイルを副作用ありとマークしているため、バンドラーは
+それをツリーシェイクしません。
+
+## デフォルト chrome
+
+```tsx title="app/editor/page.tsx"
+"use client";
+
+import { Studio } from "@anvilkit/core/react";
+import type { Config, Data } from "@puckeditor/core";
+
+export default function EditorPage() {
+	return (
+		<Studio
+			puckConfig={config as Config}
+			data={initialData as Data}
+			plugins={plugins}
+			onPublish={async (data) => {
+				await fetch("/api/publish", {
+					method: "POST",
+					body: JSON.stringify(data),
+				});
+			}}
+		/>
+	);
+}
+```
+
+`chrome` はデフォルトで `"anvilkit"` なので、プロパティの変更は不要です。
+ヘッダー
+ボタンを接続したい場合、chrome は `onBack`、`onSaveDraft`、`isSavingDraft`、
+`lastSavedAt`、`isPublishing` を読み取ります。
+
+```tsx
+<Studio
+	puckConfig={config}
+	data={data}
+	onBack={() => router.push("/dashboard")}
+	onSaveDraft={async () => {
+		await fetch("/api/draft", { method: "POST" });
+	}}
+	isSavingDraft={isSavingDraft}
+	lastSavedAt={lastSavedAt}
+	isPublishing={isPublishing}
+/>
+```
+
+## 生の Puck への脱出ハッチ
+
+すでにカスタム chrome を出荷していて、Studio オーバーライド導入前の
+`<Studio>` とビット単位で同一にする必要がある場合は、`chrome="puck"` を設定します。
+
+```tsx title="app/editor/page.tsx"
+<Studio
+	puckConfig={config}
+	data={data}
+	plugins={plugins}
+	chrome="puck"
+/>
+```
+
+このモードではデフォルトプリセットは**決して**読み込まれず、プラグイン
+オーバーライドは以前とまったく同じように適用され、既存の
+`overrides` プロパティはそのまま Puck に届きます。
+
+## 利用者オーバーライド拡張
+
+`<Studio>` の `overrides` プロパティはホストの最も外側のレイヤーです。
+あなたが提供するものはすべて、デフォルトプリセットの
+出力の周りに合成されます。1 つのフィールドタイプのレンダラーを差し替えたり、フィールドラベルをラップしたりするには、
+そのスロットだけを提供します。
+
+```tsx
+import type { Overrides } from "@puckeditor/core";
+
+const customOverrides: Partial<Overrides> = {
+	fieldTypes: {
+		text: ({ field, value, onChange, name }) => (
+			<input
+				name={name}
+				value={value ?? ""}
+				placeholder={field.placeholder}
+				onChange={(e) => onChange(e.target.value)}
+				className="my-app-input"
+			/>
+		),
+	},
+	fieldLabel: ({ children, label, readOnly }) => (
+		<label className="my-app-label">
+			<span>{label}{readOnly ? " (read-only)" : ""}</span>
+			{children}
+		</label>
+	),
+};
+
+<Studio
+	puckConfig={config}
+	data={data}
+	overrides={customOverrides}
+/>
+```
+
+デフォルトプリセットの `text` レンダラーは、あなたのレンダラーによってラップされます ——
+置き換えられるのではありません —— そのため読み取り専用マーカーのような chrome 機能は
+そのまま継承されます。
+
+## プラグインオーバーライドの合成
+
+プラグインは `register()` の戻り
+値を通じてオーバーライドを提供します。マージパイプラインは登録順に各レイヤーを合成し、
+ホストを最も外側のラッパーとします。
+
+```
+default preset (innermost)
+  → plugin A
+    → plugin B
+      → consumer (outermost)
+```
+
+任意のスロットにおいて、レンダー関数を提供するすべてのレイヤーが
+実行されます —— 1 つも破棄されません。これこそが、プラグインが
+デフォルトプリセットの chrome を消去せずにマーカーを追加できるようにする契約です。
+
+```ts title="my-plugin/src/plugin.ts"
+import type { StudioPlugin } from "@anvilkit/core/types";
+
+export function createBadgePlugin(): StudioPlugin {
+	return {
+		meta: {
+			id: "com.example.badge",
+			name: "Badge",
+			version: "1.0.0",
+			coreVersion: "^0.1.0-alpha",
+		},
+		register() {
+			return {
+				meta: this.meta,
+				overrides: {
+					fieldLabel: ({ children, label }) => (
+						<span data-marker="badge">
+							[badge:{label}] {children}
+						</span>
+					),
+				},
+			};
+		},
+	};
+}
+```
+
+デフォルトプリセットと並べてマウントすると、`fieldLabel` の
+レンダリング出力は次のようになります。
+
+1. 外側: 利用者の `fieldLabel`（あれば）。
+2. 中間: すべてのプラグインの `fieldLabel`（登録順）。
+3. 内側: デフォルトプリセットの `FieldLabel`（読み取り専用
+   マーカーなど付き）。
+
+`fieldTypes` レジストリは内部タイプごとに同じ
+ルールで合成されます —— プラグイン由来の `fieldTypes.text` はデフォルトプリセットの
+`TextField` をラップし、利用者が提供した `fieldTypes.text` はその
+プラグインをラップします。
+
+<Callout type="info" title="3 レイヤーのリグレッション">
+	`Studio.test.tsx` スイートは、実際のプリセットに対して
+	プラグインと利用者オーバーライドをマウントするリグレッションテストで
+	`default → plugin → consumer` の順序を固定します。
+	マージ契約がドリフトすると、CI が失敗します。
+</Callout>
+
+## 移行
+
+`chrome` はデフォルトで `"anvilkit"` です —— この chrome より前の
+リリースからアップグレードすると、最初の再読み込みで新しい見た目が表示されます。前進の
+道は 2 つあります。
+
+- **新しい chrome を維持する。** コード変更は不要です。
+  上記の CSS インポートを追加します。より豊かなヘッダー動作が必要なら、
+  `onBack` / `onSaveDraft` / `isPublishing` を接続します。
+- **生の Puck のままにする。** `<Studio>`
+  呼び出しに `chrome="puck"` を追加します。出力は以前のリリースと完全に一致します。
+
+`chrome="puck"` のオプトアウトは無期限にサポートされます —— マージ
+パイプラインは単にデフォルトプリセットの前置追加をスキップするだけなので、既存の
+すべてのプラグインオーバーライドは動作し続けます。
+
+## API リファレンス
+
+- [`StudioProps`](/ja/api/core/interfaces/studioprops/) —— chrome モードの追加を含む、
+  完全なプロパティ一覧。
+- [`createStudioOverrides`](/ja/api/core/functions/createstudiooverrides/)
+  —— プリセットを直接必要とするテスト / ツール向けのファクトリ。
+- [`mergeOverrides`](/ja/api/core/functions/mergeoverrides/) —— 3 レイヤーマージを
+  支えるキーごとの合成プリミティブ。

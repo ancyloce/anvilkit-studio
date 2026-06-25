@@ -1,0 +1,96 @@
+---
+title: "PageIRNode.meta（1.0 → 1.1）"
+description: "使用 @anvilkit/ir/migrations 为每个 PageIRNode 迁移创作元数据（locked、owner、version、notes）。与 1.0 消费者往返安全——省略 meta 可保留每一项 Phase 5 不变量。"
+---
+
+`@anvilkit/ir@0.22`（Phase 6 / M10）为每个 `PageIRNode` 新增了一个可选的
+`meta?: PageIRNodeMeta` 字段。该字段承载
+**创作期** 元数据——`locked`、`owner`、`version`、`notes`——
+供下游工具（版本历史侧边栏、锁定指示器、
+审计日志）读取。此变更在 LTS 契约下是 **纯增量** 的。
+
+```ts
+export interface PageIRNodeMeta {
+	readonly locked?: boolean;   // editor blocks edits when true
+	readonly owner?: string;     // host-owned identifier (≤ 256 chars)
+	readonly version?: string;   // semver-shaped string
+	readonly notes?: string;     // freeform notes (≤ 512 chars)
+}
+```
+
+<Callout type="info">
+IR 文档的 `version` 字面量在此过渡期间保持为 `"1"`。
+没有 schema 版本提升；`meta` 是增量的。
+</Callout>
+
+## 何时调用 `migratePageIR`
+
+在宿主首次选择启用增量 `meta` 契约的边界处使用它。当没有节点
+携带 `meta` 时，该辅助函数是一个引用上的 **空操作**——在 1.0
+文档上调用它没有任何开销。
+
+```ts
+import { migratePageIR } from "@anvilkit/ir/migrations";
+
+const upgraded = migratePageIR(ir, { from: "0.21", to: "0.22" });
+// `upgraded === ir` when meta is absent on every node.
+```
+
+当至少有一个节点填充了 `meta` 时，`migratePageIR` 会：
+
+1. 根据运行时上限校验每个已填充的 `meta`——
+   违规时抛出 `PageIRNodeMetaError`。
+2. 返回一个结构化克隆、冻结的 IR，逐字节保留 `meta`。
+   现有字段（`id`、`type`、`props`、`slot`、
+   `children`、`assets`）原样透传。
+
+## 何时调用 `downgradePageIR`
+
+当向钉定在前 `meta` 契约上的 `1.0` 消费者暴露 IR 时使用它。
+`downgradePageIR(ir)` 返回一棵全新的、冻结的树，
+其中每个节点都递归剥离了 `meta`——即便
+输入本身没有 `meta` 可移除。
+
+```ts
+import { downgradePageIR } from "@anvilkit/ir/migrations";
+
+const safeForOldConsumer = downgradePageIR(ir);
+```
+
+`downgradePageIR` 是它自身的不动点：调用两次与调用一次
+效果相同。
+
+## 字段上限（运行时强制）
+
+| 字段      | 类型    | 上限                                                       |
+| --------- | ------- | ---------------------------------------------------------- |
+| `locked`  | boolean | —                                                          |
+| `owner`   | string  | ≤ 256 个字符                                              |
+| `version` | string  | semver 形状（`MAJOR.MINOR.PATCH`，可选预发布段）          |
+| `notes`   | string  | ≤ 512 个字符                                              |
+
+上限由 `@anvilkit/ir/migrations`（此处）和
+`@anvilkit/validator` 的 section-AI 补丁检查器在运行时强制执行。它们 **不会**
+在类型层面体现——`@anvilkit/core/types` 表面
+保持无运行时开销，因此只 `import type` 的消费者付出零
+字节。
+
+## `puckDataToIR` 不会做什么
+
+`puckDataToIR()` 绝不能在任何节点上合成 `meta`。该函数
+与 `1.0` 保持一致：它仅读取结构化的 Puck `Data`，并
+生成一个可无损往返的 `PageIR`。`meta` 是你在其之上添加的宿主拥有的
+元数据，而非派生值。
+
+`@anvilkit/ir` 的测试套件中附带了一个无合成不变量测试，
+以保证此契约在每个演示固件中都成立。
+
+## 兼容性矩阵
+
+| 消费者钉定        | 带 meta 的文档 | 不带 meta 的文档 |
+| ---------------- | ------------------ | --------------------- |
+| `@anvilkit/ir@0.21` | 未识别字段，往返时可能被丢弃 | 无损往返 |
+| `@anvilkit/ir@0.22` | 由 `migratePageIR` 保留，由版本历史呈现 | 与 0.21 行为相同 |
+
+交叉单元格——向 0.21 消费者发送一个带 `meta` 的文档——
+是唯一的失败模式。在跨越该边界之前请使用 `downgradePageIR`。

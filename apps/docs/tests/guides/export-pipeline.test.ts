@@ -1,6 +1,6 @@
 /**
  * Code-block extraction harness for the export pipeline guide
- * (`apps/docs/src/content/docs/guides/export-pipeline.mdx`).
+ * (`apps/docs/content/docs/guides/export-pipeline.mdx`).
  *
  * Each `describe(...)` below pins a numbered section of the guide.
  * Snippets mirror — verbatim where possible — the code blocks the

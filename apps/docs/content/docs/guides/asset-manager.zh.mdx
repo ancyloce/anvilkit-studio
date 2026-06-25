@@ -1,0 +1,250 @@
+---
+title: "资源管理器插件"
+description: "为安装了 @anvilkit/plugin-asset-manager 的 Studio 宿主提供零配置资源库，支持文件夹、Unsplash、搜索以及 IR 阶段解析。"
+---
+
+`@anvilkit/plugin-asset-manager` 是一个第一方的无头 `StudioPlugin`。它
+开箱即用地提供了一个可工作的内存资源库 —— **每个选项都是
+可选的**。你只需接入自己关心的 `fetch`/数据操作（列出 / 移除
+/ 替换 / 重命名 / 移动 / 创建文件夹），插件会封装其余的一切：
+校验、带搜索功能的内存注册表、文件夹、Unsplash、分类与
+过滤、IR 阶段的 `asset://` 解析、CSP 指引，以及可选的 React UI。
+每个适配器的响应在被注册之前都会越过一条严格的信任边界。
+
+## 1. 安装
+
+```sh
+pnpm add @anvilkit/plugin-asset-manager
+```
+
+对等依赖（在典型的 Studio 宿主中通常已存在）：
+
+- `@puckeditor/core ^0.21.3`
+- `react >=19.0.0`
+- `react-dom >=19.0.0`
+
+子路径导出：
+
+- `@anvilkit/plugin-asset-manager` —— 工厂、适配器、校验、CSP 顾问、错误。
+- `@anvilkit/plugin-asset-manager/ui` —— React UI 组件（浏览器 + 文件夹 + Unsplash 面板）。
+- `@anvilkit/plugin-asset-manager/adapters/s3` —— 生产环境用的 `s3PresignedAdapter`。
+- `@anvilkit/plugin-asset-manager/providers/unsplash` —— 惰性、无依赖的 Unsplash 提供器。
+- `@anvilkit/plugin-asset-manager/retry` —— `RetryableError` + `withRetry()`。
+- `@anvilkit/plugin-asset-manager/testing` —— 供下游插件测试使用的夹具。
+
+## 2. 零配置
+
+`createAssetManagerPlugin()` **无需任何参数** 即可工作 —— 你将获得一个启用了
+文件夹的内存资源库。上传的文件会变成页面生命周期内的 `blob:`/`data:`
+URL；服务端不会持久化任何内容。
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createAssetManagerPlugin } from "@anvilkit/plugin-asset-manager";
+
+const assetManager = createAssetManagerPlugin();
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[assetManager]} />;
+}
+```
+
+要实现真实上传，请传入 `uploader`。`dataUrlUploader` 仅供开发使用（文件会变成
+内存中的 `data:` URL）；生产环境请换用 `s3PresignedAdapter` 或自定义的 `UploadAdapter`。
+
+```ts
+import { createAssetManagerPlugin } from "@anvilkit/plugin-asset-manager";
+import { s3PresignedAdapter } from "@anvilkit/plugin-asset-manager/adapters/s3";
+
+const assetManager = createAssetManagerPlugin({
+  uploader: s3PresignedAdapter({
+    presignEndpoint: "/api/s3/presign",
+    region: "us-east-1",
+  }),
+});
+```
+
+请将工厂调用提升到模块作用域，以免 `<Studio>` 的插件编译流水线
+在每次渲染时重新运行。默认的 Studio 侧边栏的 **Images** 栏会
+渲染资源库、文件夹面包屑/树、源选项卡，以及（在配置后）
+Unsplash 选择器 —— 无需额外接线。
+
+## 3. 选项
+
+每个字段都是可选的。现有的 `createAssetManagerPlugin({ uploader })` 调用
+将保持不变并继续工作。
+
+```ts
+interface AssetManagerOptions {
+  readonly uploader?: UploadAdapter; // binary ingest; defaults to an in-memory uploader
+  readonly dataSource?: AssetDataSource; // host-backed catalog (list / CRUD / folders) — §4
+  readonly folders?: boolean | FolderOptions; // folder chrome (default: enabled, in-memory) — §5
+  readonly providers?: readonly AssetSourceProvider[]; // extra read-only sources (federated)
+  readonly unsplash?: UnsplashSourceOptions; // built-in Unsplash source (proxy-first) — §6
+  readonly categories?: readonly AssetCategory[]; // saved-view chips
+  readonly facets?: readonly AssetFacetDefinition[]; // custom faceted filters — §7
+  // existing optional fields, unchanged:
+  readonly maxFileSize?: number;
+  readonly acceptedMimeTypes?: readonly string[];
+  readonly dataUrlAllowlistOptIn?: boolean; // permit data: URLs (default false)
+  readonly allowMixedScriptHostnames?: boolean; // homoglyph guard (default false)
+  readonly getThumbnail?: (entry: UploadResult) => string | undefined;
+}
+```
+
+`uploader`（二进制摄取）与 `dataSource`（目录操作）是正交的：
+`dataSource.replace(id, file)` 会先让 `File` 经过 `uploader`，然后再
+将结果交给目录。首次上传始终经由 `uploader` 流转。
+
+## 4. 宿主支持的数据源
+
+要用你自己的 API 来支撑资源库，请提供一个 `dataSource`。**仅** 实现
+你需要的方法 —— 被省略的方法会回退到内存默认实现。
+读/写两个平面作为一个整体进行解析：如果你提供的资源（或文件夹）
+方法集是 _不完整的_，整个平面都会回退到内存实现，并且会
+记录一次性的警告。
+
+```ts
+const assetManager = createAssetManagerPlugin({
+  dataSource: {
+    async list(q, signal) {
+      return (
+        await fetch(`/api/assets?folder=${q.folderId ?? ""}`, { signal })
+      ).json();
+    },
+    async remove(id) {
+      await fetch(`/api/assets/${id}`, { method: "DELETE" });
+    },
+    async rename(id, name) {
+      return (
+        await fetch(`/api/assets/${id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ name }),
+        })
+      ).json();
+    },
+    async move(id, folderId) {
+      await fetch(`/api/assets/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ folderId }),
+      });
+    },
+    async listFolders() {
+      return (await fetch("/api/folders")).json();
+    },
+    async createFolder(p, name) {
+      return (
+        await fetch("/api/folders", {
+          method: "POST",
+          body: JSON.stringify({ parentId: p, name }),
+        })
+      ).json();
+    },
+  },
+});
+```
+
+`list(query)` 会同时返回资源页面 **以及** 当前的文件夹树 +
+面包屑（`folders` / `folderPath`），因此单个端点即可驱动整个栏。
+异步失败应抛出 `AssetSourceError`（携带 `code`、`retryable`、
+`status`、`retryAfterMs`）；侧边栏会显示一个重试横幅。
+
+## 5. 文件夹
+
+文件夹 **默认开启**（`folders: true`）。文件夹归属仅是资源库的
+元数据 —— 它永远不会进入 IR，因此移动资源绝不会改变
+已渲染的页面（`asset://<id>` 引用与文件夹无关）。传入
+`folders: false` 可获得扁平资源库，或传入 `folders: { maxDepth, allowMove }` 进行
+配置。
+
+```ts
+const assetManager = createAssetManagerPlugin({
+  folders: { maxDepth: 4, allowMove: true },
+});
+```
+
+移除文件夹默认会将其子项 **重新归到** 父级（绝不会
+级联删除被引用的字节）；向宿主的 `removeFolder` 传入 `{ cascade: true }`
+可选择启用删除。移动操作会以全有或全无的方式校验，并运行
+循环/`maxDepth` 守卫。
+
+## 6. Unsplash
+
+Unsplash 是内置的，并在 **配置后启用**（代理优先；该包本身
+不嵌入任何密钥）。将 `proxyEndpoint` 指向一个小型服务端路由，由它从仅服务端的
+环境变量注入你的 `Client-ID`，这样密钥就永远不会到达浏览器。
+
+```ts
+const assetManager = createAssetManagerPlugin({
+  uploader: s3PresignedAdapter({
+    presignEndpoint: "/api/s3/presign",
+    region: "us-east-1",
+  }),
+  unsplash: { proxyEndpoint: "/api/unsplash", appName: "my-app" },
+});
+```
+
+Unsplash 代码位于一个惰性子路径导入之后，因此它永远不会进入
+无头入口块。默认会提供多个主题（自然、建筑、
+商业、食物、科技、旅行、纹理、人物）；可通过
+`unsplash.themes` 覆盖。署名（`Photo by … on Unsplash`，附带强制的 UTM
+链接）以及强制的下载触发都由提供器强制执行。客户端的
+`accessKey`（没有 `proxyEndpoint`）**仅供开发使用** —— 它会将密钥
+发送到浏览器，并记录一次性警告。
+
+<Callout type="warn" title="不内置任何密钥">
+  该包不包含任何 Unsplash 密钥。生产环境请使用 `proxyEndpoint`；
+  通过仅服务端的环境变量（例如
+  `UNSPLASH_ACCESS_KEY`）将密钥提供给代理。
+</Callout>
+
+## 7. 分类与过滤
+
+四个正交的轴以 AND 方式组合：**kind**（派生）、**tags**（开放）、
+**folder**（单父级树）和 **source**（来源）。宿主追加
+保存视图的 `categories` 和自定义 `facets`（通过 `valueOf` 在本地处理，或远程处理）——
+它们永远不会重新配置内置项。当存在多个源时，
+插件会进行联合（受速率限制的 Unsplash 绝不会清空本地结果），并使用
+不透明的复合游标进行分页。
+
+## 8. 信任边界
+
+适配器返回的每个 `UploadResult` 在注册前都会经过 `validateUploadResult`
+处理：方案允许列表（始终允许 `http`、`https`、`blob`；`data:`
+仅在 `dataUrlAllowlistOptIn` 时允许）、路径遍历守卫，以及一个 IDN 同形字
+守卫。`javascript:` 和 `vbscript:` URL 会被硬性阻止。
+
+校验会抛出 `AssetValidationError`；异步/文件夹/提供器失败会抛出
+`AssetSourceError`；导出时 `asset://` 解析失败会抛出 `AssetResolutionError`。
+
+## 9. IR 阶段解析与 CSP
+
+`createIRAssetResolver` / `resolveAssets` 会在导出或渲染时将 Page IR 中的
+`asset://<id>` 引用转换为经过校验的 URL。`getRequiredCsp` 会计算
+所配置适配器所需的最小 `connect-src` / `img-src` / `media-src` 指令：
+
+```ts
+import { getRequiredCsp } from "@anvilkit/plugin-asset-manager";
+
+const csp = getRequiredCsp({ adapters: ["s3"] });
+```
+
+## 10. 可选的 React UI
+
+默认的 Studio 侧边栏已经渲染了丰富的资源外壳。对于挂载自己
+界面的宿主，`./ui` 子路径提供了由属性驱动的组件：
+`UploadButton`、`AssetBrowser`、`AssetCommandPalette`、`MetadataPanel`、
+`ReplaceAssetDialog`、`DeleteAssetDialog`、复合组件 `AssetManagerUI`，以及
+文件夹套件（`FolderTree`、`FolderBreadcrumb`、`CreateFolderDialog` /
+`RenameFolderDialog`、`DeleteFolderDialog`、`MoveTargetPicker`、
+`EmptyFolderState`）和 `UnsplashPanel`。拖到文件夹使用原生 HTML5
+DnD API（不使用 `@dnd-kit`）；每次移动也都可以通过可用键盘访问的
+`MoveTargetPicker` 完成。默认（`.`）导出不会引入它们中的任何一个，因此无头
+使用者无需承担任何 UI 渲染成本。
+
+<Callout type="info" title="状态（alpha，v0.1.6）">
+  公共接口在 `v1.0` 之前可能仍会变动。CI 中强制执行包体积预算：
+  无头入口 ≤ 8 KB gzip，`./ui` ≤ 12 KB gzip，Unsplash 子路径 ≤ 4 KB
+  gzip。Unsplash 泄露守卫会让 `api.unsplash.com` / `images.unsplash.com`
+  不进入无头块。
+</Callout>

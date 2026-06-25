@@ -1,0 +1,25 @@
+---
+title: "validateSaveDraftRequest"
+description: "@anvilkit/validator · validateSaveDraftRequest"
+---
+
+```ts
+function validateSaveDraftRequest(input): ValidationResult;
+```
+
+Defined in: [validator/src/validate-page-payload.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L82)
+
+Validate the body of a `POST /api/pages/draft` request
+(`{ slug?, title?, data: { root: { props } } }`). A draft only commits page
+metadata, so this validates `data.root.props` and tolerates arbitrary
+`content` (persisted verbatim).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | `unknown` |
+
+## Returns
+
+[`ValidationResult`](../interfaces/ValidationResult)

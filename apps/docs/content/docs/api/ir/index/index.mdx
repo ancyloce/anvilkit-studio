@@ -1,0 +1,33 @@
+---
+title: "index"
+description: "@anvilkit/ir · index"
+---
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [PuckDataToIROptions](interfaces/PuckDataToIROptions.md) | Options accepted by [puckDataToIR](functions/puckDataToIR.md). |
+| [RemoteCsvDirective](interfaces/RemoteCsvDirective.md) | Fetch a CSV and synthesize props from it (the only kind shipped — §8.4). |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [DataSourceDirective](type-aliases/DataSourceDirective.md) | - |
+
+## Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [DATA\_SOURCE\_PROP](variables/DATA_SOURCE_PROP.md) | Reserved prop key carrying a [DataSourceDirective](type-aliases/DataSourceDirective.md) on a node. |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [collectAssets](functions/collectAssets.md) | - |
+| [getDataSourceDirective](functions/getDataSourceDirective.md) | Read a [DataSourceDirective](type-aliases/DataSourceDirective.md) off a node's props, or `undefined` when absent / malformed. Pure + isomorphic. |
+| [identifySlots](functions/identifySlots.md) | Inspect a Puck `Config` and return the set of field keys that behave as `slot` (nested child-tree) fields, grouped by component name. |
+| [irToPuckData](functions/irToPuckData.md) | Reverse of [puckDataToIR](functions/puckDataToIR.md): rebuild a Puck `Data` document from a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts). |
+| [puckDataToIR](functions/puckDataToIR.md) | Transform a Puck `Data` document into a normalized [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts). |

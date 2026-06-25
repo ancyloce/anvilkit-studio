@@ -1,0 +1,58 @@
+---
+title: "产品功能概览"
+description: "产品功能概览 —— 主视觉、bento 功能网格、数据统计、常见问题。"
+---
+
+![产品功能概览 preview](/templates/feature-overview/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-feature-overview</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template feature-overview my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Hero`
+- `BentoGrid`
+- `Statistics`
+- `Helps`
+
+## 包详情
+
+Product feature overview page.
+
+Navbar, hero, bento feature grid, statistics, and FAQ — suited to the `/features` subpage of a product site.
+
+## Install
+
+```sh
+npx anvilkit init --template feature-overview my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/bento-grid`
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

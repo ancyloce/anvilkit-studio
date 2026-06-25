@@ -1,0 +1,27 @@
+---
+title: "validatePagePayload"
+description: "@anvilkit/validator · validatePagePayload"
+---
+
+```ts
+function validatePagePayload(rootProps): ValidationResult;
+```
+
+Defined in: [validator/src/validate-page-payload.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L109)
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `rootProps` | `unknown` |
+
+## Returns
+
+[`ValidationResult`](../interfaces/ValidationResult)
+
+## Deprecated
+
+Renamed to [validatePageRootProps](validatePageRootProps.md). The old name only ever
+validated `root.props` despite implying the full page payload; it is retained
+as a thin alias for backward compatibility. Prefer [validatePageRootProps](validatePageRootProps.md)
+for metadata checks or [validatePuckPageData](validatePuckPageData.md) for full-document checks.

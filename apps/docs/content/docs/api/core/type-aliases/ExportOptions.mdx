@@ -1,0 +1,45 @@
+---
+title: "ExportOptions"
+description: "@anvilkit/core · ExportOptions"
+---
+
+```ts
+type ExportOptions<T> = T;
+```
+
+Defined in: [types/export.ts:115](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/export.ts#L115)
+
+Generic bag of format-specific options passed to
+[ExportFormatDefinition.run](../interfaces/ExportFormatDefinition#run).
+
+Declared as a constrained identity type rather than a bare
+`Record<string, unknown>` so format authors can parameterize their
+own `run()` signature with a strongly-typed option shape while the
+runtime's dispatch layer treats every format's options uniformly.
+
+## Type Parameters
+
+| Type Parameter | Default type | Description |
+| ------ | ------ | ------ |
+| `T` *extends* `Record`\&lt;`string`, `unknown`\&gt; | `Record`\&lt;`string`, `unknown`\&gt; | Format-specific option shape. Defaults to an unconstrained `Record<string, unknown>` so formats that don't care about options can omit the type parameter entirely. |
+
+## Example
+
+```ts
+interface HtmlExportOptions extends Record<string, unknown> {
+  readonly inlineStyles: boolean;
+  readonly minify?: boolean;
+}
+
+const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+  id: "html",
+  label: "HTML",
+  extension: "html",
+  mimeType: "text/html",
+  async run(ir, options) {
+    //        ^? options: ExportOptions<HtmlExportOptions>
+    //        ^? options.inlineStyles is typed as boolean
+    return { content: "<!doctype html>…", filename: "page.html" };
+  },
+};
+```

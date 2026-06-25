@@ -1,0 +1,39 @@
+---
+title: "runExport"
+description: "@anvilkit/core · runExport"
+---
+
+```ts
+function runExport<Opts>(options): Promise<ExportResult>;
+```
+
+Defined in: [export/run-export.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/export/run-export.ts#L98)
+
+Normalize → run → record an export, returning the [ExportResult](../interfaces/ExportResult)
+(no download — see [exportAndDownload](exportAndDownload.md)).
+
+Drives the optional [RunExportOptions.exportStore](../interfaces/RunExportOptions#exportstore) around the run
+and wraps any failure in a [StudioExportError](../classes/StudioExportError) (preserving the
+original via `cause`) — an error the format already threw is rethrown
+unwrapped. The store's in-flight flag is always cleared, even on
+failure.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `Opts` *extends* `Record`\&lt;`string`, `unknown`\&gt; | `Record`\&lt;`string`, `unknown`\&gt; |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`RunExportOptions`](../interfaces/RunExportOptions)\&lt;`Opts`\&gt; |
+
+## Returns
+
+`Promise`\<[`ExportResult`](../interfaces/ExportResult)\>
+
+## Throws
+
+[StudioExportError](../classes/StudioExportError) when the format's `run` rejects.

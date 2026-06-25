@@ -1,0 +1,396 @@
+---
+title: "AI 통합"
+description: "createAiCopilotPlugin 뒤에 실제 LLM을 연결하기 — 신뢰 모델, generatePage 계약, 검증기 경계, 비용 제어, 그리고 실제 제공자에 대한 세 가지 완성된 호스트 어댑터(Anthropic, OpenAI, 일반 fetch)."
+---
+
+`@anvilkit/plugin-ai-copilot`은 의도적으로 헤드리스입니다. 제공자를
+탑재하지 않고, API 클라이언트를 번들하지 않으며, 당신이
+어떤 모델을 실행하는지도 모릅니다. 대신, 호스트가 소유하는 단일 콜백을 받습니다.
+
+```ts
+createAiCopilotPlugin({
+	generatePage: async (prompt, ctx) => {
+		// you choose the LLM, you hold the secrets
+		return somePageIR;
+	},
+	puckConfig,
+});
+```
+
+이 가이드는 형태 선택이 강제하는 신뢰 모델,
+정확한 `generatePage()` 계약, schema 컨텍스트가 어떻게 구성되는지, 모든 응답이 디스패치 전에 통과하는
+검증기 경계, 오류를
+드러내는 방법, 비용 제어 노브, 그리고
+실제 제공자에 대한 세 가지 완성된 어댑터를 설명합니다. 마지막은 명시적인 "이렇게 하지 마세요" 섹션으로 끝맺습니다.
+
+<Callout type="info" title="코드는 그린을 유지한다">
+	이 페이지의 모든 코드 블록은
+	[`apps/docs/tests/guides/ai-integration.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/ai-integration.test.ts)
+	로 추출되어 mock 처리된 `fetch`와 함께 CI에서 Vitest 테스트로 실행됩니다. 만약
+	계약이 어긋나면, 문서가 배포되기 전에 빌드가 실패합니다.
+</Callout>
+
+## 1. 신뢰 모델
+
+사용자의 프롬프트와 렌더링된 페이지 사이에는 세 주체가 자리합니다.
+
+```
+┌─────────────────┐    ┌──────────────┐    ┌──────────────┐
+│   Studio UI     │───▶│   your host  │───▶│    LLM       │
+│ (this package)  │    │  (your app)  │    │ (Anthropic,  │
+│                 │    │              │    │  OpenAI, …)  │
+└─────────────────┘    └──────────────┘    └──────────────┘
+        ▲                      │
+        │     validated PageIR │
+        └──────────────────────┘
+```
+
+**Studio는 자체적으로 네트워크 접근 능력이 없습니다.** 그것은 당신이
+제공하는 콜백을 호출합니다. 그 콜백은 자격 증명이 존재하는 유일한 장소이므로,
+호스트의 백엔드가 다음을 계속 통제합니다.
+
+- 어느 제공자가 호출되는지.
+- 제공자가 어떤 모델과 매개변수를 받는지.
+- 애초에 어떤 사용자가 호출해도 되는지(인증, 속도 제한).
+- 응답 본문이 필터링되지 않은 채로 클라이언트에 도달하는지 여부.
+
+콜백은 설정
+문자열이 아니라 **함수 참조**이므로, API 키를 플러그인 옵션에 끼워 넣어
+실수로 직렬화할 방법이 없습니다. 서버
+액션에서 값을 반환하면, 비밀은 서버에 남습니다.
+
+<Callout type="warn" title="비밀은 결코 호스트 백엔드를 떠나지 않는다">
+	전체 근거는
+	[`docs/security/plugin-trust-model.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/security/plugin-trust-model.md)
+	§3에 있습니다. 이 가이드는 당신이 그곳에서 정식 능력
+	경계를 읽었다고 가정합니다.
+</Callout>
+
+## 2. `generatePage` 계약
+
+```ts
+import type {
+	AiGenerationContext,
+	PageIR,
+} from "@anvilkit/core/types";
+
+type GeneratePageFn = (
+	prompt: string,
+	ctx: AiGenerationContext,
+) => Promise<PageIR>;
+```
+
+입력:
+
+- `prompt` — 가공되지 않은 사용자 문자열. 들어올 때
+  어떠한 정제(sanitisation)도 적용되지 않습니다. 제공자가 입력 토큰당 과금한다면 직접 길이를 제한하세요.
+- `ctx.availableComponents: AiComponentSchema[]` — 호스트의 Puck `Config`의
+  AI 안전 투영으로,
+  `@anvilkit/schema/configToAiContext()`에 의해 구성됩니다. 이것이 LLM이
+  고를 수 있는 허용 목록입니다.
+- `ctx.currentData?` — 플러그인에
+  `forwardCurrentData: true`를 전달했을 때만 설정됩니다. LLM이
+  페이지에 이미 있는 블록을 참조할 수 있게 합니다.
+
+출력: **가공되지 않은 `PageIR` 후보**. 유효할 필요는 없습니다
+— 플러그인은 디스패치 전에 그것을 `validateAiOutput()`에 통과시킵니다
+(아래 §4). 깔끔한 실패가 억지로 만든 성공보다 낫습니다.
+
+```ts
+// minimum-viable generatePage (for tests or offline demos)
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+export const noopGeneratePage: GeneratePageFn = async (prompt, _ctx) => ({
+	version: "1",
+	root: {
+		id: "root",
+		type: "__root__",
+		props: {},
+		children: [
+			{
+				id: "hero-1",
+				type: "Hero",
+				props: { headline: prompt.slice(0, 80) },
+			},
+		],
+	},
+	assets: [],
+	metadata: {},
+});
+```
+
+## 3. Schema 컨텍스트
+
+`@anvilkit/schema`의 `configToAiContext(puckConfig)`는 당신이 `<Studio>`에
+전달하는 것과 동일한 Puck `Config` 객체를 순회하며, 실시간 런타임을
+건드리지 않고도 LLM이 추론할 수 있는
+결정론적이고 JSON 안전한 요약을 생성합니다.
+
+```ts
+import { configToAiContext } from "@anvilkit/schema";
+import type { AiComponentSchema } from "@anvilkit/core/types";
+
+const ctx = configToAiContext(puckConfig);
+// ctx.availableComponents: AiComponentSchema[]
+//   [
+//     {
+//       componentName: "Hero",
+//       description: "Marketing hero block with headline + body.",
+//       fields: [{ name: "title", description: "…", type: "text" }]
+//     },
+//     { componentName: "Pricing", description: "…", fields: [...] },
+//     ...
+//   ]
+```
+
+두 가지 보장이 중요합니다.
+
+1. **이 목록은 닫힌 집합입니다.** LLM은
+   `availableComponents`에 없는 컴포넌트 타입을 만들어낼 수 없습니다 — 검증기가
+   그것을 거부합니다(§4).
+2. **필드 종류는 AI 안전합니다.** 직렬화 불가능한 필드(slot,
+   렌더러)는 `extractFieldSchema`에 의해 제거됩니다. LLM은
+   JSON으로 왕복 전송될 수 있는 필드만 봅니다.
+
+당신은 보통 `availableComponents`를 프롬프트에 그대로
+전달하지 않습니다 — 선택한 제공자의 도구/함수 호출
+관례에 맞게 그것을 가공하세요(`@anvilkit/plugin-ai-copilot`은 데이터를 제공합니다. 그것을
+어떻게 제시할지는 제공자별로 다릅니다).
+
+## 4. 검증기 경계
+
+모든 `generatePage` 응답은 플러그인이 `puckApi.dispatch`를
+호출하기 전에 하나의 관문을 통과합니다.
+
+```ts
+import { validateAiOutput } from "@anvilkit/validator";
+
+const validation = validateAiOutput(response, ctx.availableComponents);
+if (!validation.valid) {
+	// emit error, do NOT dispatch
+}
+```
+
+검증기는 Zod schema입니다. 다음을 강제합니다.
+
+- `PageIR` 형태(`version === "1"`, 루트 노드, assets 배열).
+- 모든 자식의 `type`이 `availableComponents` 안에 있을 것.
+- `props`가 객체일 것(직렬화 가능성 제약은 신뢰
+  모델에 문서화되어 있습니다. 알려진 빈틈은 그곳의 §4를 참조).
+
+다음은 강제하지 **않습니다**.
+
+- 문자열 속성의 내용(정제는 내보내기 도구의 일입니다).
+- 크기 제한(신경 쓴다면 당신의 `generatePage`에서 강제하세요 — §6 참조).
+- 의미적 타당성(빈 `headline`은 구문상 유효합니다).
+
+실패하면 이벤트 버스에 `ai-copilot:error`를
+`{ code: "VALIDATION_FAILED", issues }`와 함께 발행하고, 구조화된 로그
+줄을 기록합니다. 해당 IR은 폐기됩니다. 어떤 부분 상태도
+커밋되지 않습니다.
+
+## 5. 오류 드러내기
+
+플러그인은 세 가지 안정적인 오류 코드를 발행합니다.
+
+| 코드                | 언제                                                   |
+| ------------------- | ------------------------------------------------------ |
+| `VALIDATION_FAILED` | 응답이 Zod 검증에 실패했다.                            |
+| `TIMEOUT`           | `generatePage`가 `timeoutMs` 안에 해결되지 않았다.     |
+| `GENERATE_FAILED`   | `generatePage`가 throw했다(네트워크 오류, 쿼터 등).    |
+
+당신이 보유한 어떤 `StudioPluginContext`를 통해서든 구독하세요.
+
+```ts
+import type { StudioPluginContext } from "@anvilkit/core/types";
+import type { AiCopilotErrorPayload } from "@anvilkit/plugin-ai-copilot";
+
+function wireErrorToast(ctx: StudioPluginContext, toast: (msg: string) => void) {
+	ctx.on("ai-copilot:error", (payload: AiCopilotErrorPayload) => {
+		if (payload.code === "TIMEOUT") {
+			toast("AI generation timed out. Try again.");
+		} else if (payload.code === "VALIDATION_FAILED") {
+			toast(`Response rejected: ${payload.issues?.[0]?.message ?? "bad IR"}`);
+		} else {
+			toast(`Generation failed: ${payload.message}`);
+		}
+	});
+}
+```
+
+로직을 위해 `payload.message` 문자열을 파싱하지 마세요 — 그것들은
+사람이 표시하기 위한 것입니다. `code` 필드가 안정적인 계약입니다.
+
+## 6. 비용 제어
+
+네 개의 레버. 플러그인이 제공하는 것이 많은 순에서
+당신이 직접 해야 하는 것이 많은 순으로 내림차순 정렬했습니다.
+
+1. **`timeoutMs`**(플러그인 옵션, 기본 30 000 ms). 이 시간을 넘기면,
+   미해결 생성은 포기되고 `TIMEOUT` 오류가
+   발생합니다. 이는 제공자의 병적인 지연을 제한합니다.
+2. **`maxPromptLength`**(호스트 측, 당신의 어댑터에서 구현). 플러그인은
+   프롬프트 길이를 제한하지 않습니다 — 폭주하는 프롬프트는 LLM이
+   응답하기도 전에 당신의 쿼터에 청구됩니다. 당신의 `generatePage` 안의
+   간단한 `if (prompt.length > 4_000) throw`면
+   충분합니다.
+3. **속도 제한**(호스트 측). `generatePage`는
+   호스트가 소유하는 함수에서 호출되므로, 사용자별, IP별,
+   조직별로 속도 제한을 걸 수 있습니다 — 당신의 백엔드가 가진 어떤 인증 컨텍스트든 말이죠. Studio 안에는
+   이것을 대신 해줄 수 있는 것이 없습니다.
+4. **제공자 측 쿼터.** 제공자에게 건네는 API 키가
+   마지막 방어선입니다. 지출 상한이 설정된 범위 제한 키를 사용하세요.
+
+## 7. 세 가지 완성된 어댑터
+
+각 어댑터는 독립된 패키지로서 각자의 README와 함께
+`examples/ai-adapters/<provider>/` 아래에 있습니다. 이 가이드는
+흥미로운 부분 — `generatePage` 본문 — 을 인라인으로 보여주어, 어긋남을 CI
+하니스가 잡아내도록 합니다.
+
+### Anthropic(Claude)
+
+```ts
+import Anthropic from "@anthropic-ai/sdk";
+import { validateAiOutput } from "@anvilkit/validator";
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+const client = new Anthropic({ apiKey: process.env.AI_API_KEY });
+
+export const generatePage: GeneratePageFn = async (prompt, ctx) => {
+	if (prompt.length > 4_000) {
+		throw new Error("Prompt too long");
+	}
+	const response = await client.messages.create({
+		model: "claude-sonnet-4-6",
+		max_tokens: 4_096,
+		system:
+			"You are a page generator. Return ONLY a JSON PageIR. " +
+			"Allowed component types: " +
+			ctx.availableComponents.map((c) => c.componentName).join(", "),
+		messages: [{ role: "user", content: prompt }],
+	});
+	const block = response.content[0];
+	if (block?.type !== "text") {
+		throw new Error("No text block in Claude response");
+	}
+	return JSON.parse(block.text);
+};
+```
+
+비밀: `process.env.AI_API_KEY`는 호스트 백엔드에 존재합니다.
+`generatePage` 함수는 서버 모듈에서 내보내지며,
+서버 컴포넌트 안에서만 호스트의 Studio 설정으로 가져와집니다.
+
+### OpenAI
+
+```ts
+import OpenAI from "openai";
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+const client = new OpenAI({ apiKey: process.env.AI_API_KEY });
+
+export const generatePage: GeneratePageFn = async (prompt, ctx) => {
+	if (prompt.length > 4_000) {
+		throw new Error("Prompt too long");
+	}
+	const response = await client.chat.completions.create({
+		model: "gpt-5",
+		response_format: { type: "json_object" },
+		messages: [
+			{
+				role: "system",
+				content:
+					"Return JSON PageIR only. Components: " +
+					ctx.availableComponents.map((c) => c.componentName).join(", "),
+			},
+			{ role: "user", content: prompt },
+		],
+	});
+	const text = response.choices[0]?.message?.content;
+	if (!text) throw new Error("Empty OpenAI response");
+	return JSON.parse(text);
+};
+```
+
+### 일반 `fetch`(제공자 무관)
+
+제공자를 당신 자신의 백엔드 라우트를 통해 앞단에 두는 경우 이 형태를 사용하세요
+(브라우저에서 시작되는 요청에 권장).
+
+```ts
+import type { GeneratePageFn } from "@anvilkit/plugin-ai-copilot";
+
+export function createFetchGeneratePage(endpoint: string): GeneratePageFn {
+	return async (prompt, ctx) => {
+		if (prompt.length > 4_000) {
+			throw new Error("Prompt too long");
+		}
+		const response = await fetch(endpoint, {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({
+				prompt,
+				availableComponents: ctx.availableComponents.map(
+					(c) => c.componentName,
+				),
+			}),
+		});
+		if (!response.ok) {
+			throw new Error(`AI endpoint returned ${response.status}`);
+		}
+		return (await response.json()) as Awaited<ReturnType<GeneratePageFn>>;
+	};
+}
+```
+
+그러면 백엔드의 `POST /api/ai/generate-page` 라우트가 진짜
+API 키를 보유하고, 인증, 속도 제한, 프롬프트 크기를 한 곳에서
+강제할 수 있습니다.
+
+## 8. 이렇게 하지 마세요
+
+이 안티패턴들은 신뢰 모델을 무너뜨립니다 — 이 중 어떤 것이든
+포함된 빌드는 절대 출시하지 마세요.
+
+<Callout type="error" title="안티패턴">
+	**1. API 키를 클라이언트 측에 하드코딩하기.**
+
+	```ts
+	// ❌ NEVER
+	const client = new Anthropic({
+		apiKey: "sk-ant-xxxxxxxxxxxxxxxxxxxx",
+	});
+	```
+
+	페이지 소스를 보는 사람이라면 누구나 키를 봅니다. 즉시 교체하세요.
+
+	**2. 브라우저에서 실행되는 코드 안에서 `import.meta.env.ANTHROPIC_API_KEY`
+	로부터 비밀을 읽기.**
+
+	번들러는 `VITE_*`, `NEXT_PUBLIC_*` 및 유사 접두사를
+	클라이언트 번들에 인라인합니다. 환경 변수가 브라우저로 출하된다면, 그것은
+	클라이언트 비밀입니다 — 유출된 것으로 취급하세요.
+
+	**3. 자격 증명을 `studioConfig`에 끼워 넣기.**
+
+	`studioConfig`는 등록된 모든 플러그인에게 보입니다(신뢰
+	모델 §2). 그곳에 넣은 것은 호스트가 나중에 설치하는
+	서드파티 플러그인이 읽을 수 있습니다. 비밀은
+	서버 전용 `generatePage` 모듈의 모듈 스코프에 보관하세요.
+
+	**4. `prompt`를 서버에서 LLM으로의 통과(passthrough)로 신뢰하기.**
+
+	프롬프트는 사용자 입력입니다. 프롬프트 인젝션 공격은
+	LLM이 JS 형태의 데이터나 호스트가 선언하지 않은 컴포넌트
+	타입을 반환하도록 유도하려 할 수 있습니다. 검증기는 형태 어긋남을 거부하지만,
+	어댑터는 여전히 프롬프트 길이를 제한하고
+	명백한 남용을 거부해야 합니다(`validateAiOutput` §4 참조).
+
+	**5. `generatePage` 오류를 조용히 잡아서 삼키기.**
+
+	그것들이 throw하게 두세요. 플러그인은 throw된 오류를
+	`GENERATE_FAILED` 이벤트로 바꿔 UI가 그것을 드러낼 수 있게 합니다. 오류를
+	삼키면 "생성을 클릭했는데 아무 일도 일어나지 않았다"가
+	실패 모드가 되며, 이는 눈에 보이는 빨간 메시지보다 훨씬 나쁩니다.
+</Callout>

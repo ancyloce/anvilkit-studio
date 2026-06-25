@@ -1,0 +1,33 @@
+---
+title: "createThemeStore"
+description: "@anvilkit/core · createThemeStore"
+---
+
+```ts
+function createThemeStore(options): WithPersist<WithDevtools<StoreApi<ThemeState>>, ThemeStorePartial>;
+```
+
+Defined in: [state/slices/theme-store.ts:185](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L185)
+
+Build a fresh per-`<Studio>` theme store. The persistence key is
+namespaced by `storeId` so two editors on the same page never
+collide on `localStorage` or bleed preference state into each other.
+Consume via [ThemeStoreProvider](ThemeStoreProvider.md) + the `useThemeStore`
+selector hook (re-exported from the provider module).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateThemeStoreOptions`](../interfaces/CreateThemeStoreOptions) |
+
+## Returns
+
+`WithPersist`\<`WithDevtools`\<`StoreApi`\<[`ThemeState`](../interfaces/ThemeState)\>\>, `ThemeStorePartial`\>
+
+## Example
+
+```ts
+const store = createThemeStore({ storeId: "a" });
+store.getState().setMode("dark");
+```

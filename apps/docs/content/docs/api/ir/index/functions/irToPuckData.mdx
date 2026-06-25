@@ -1,0 +1,37 @@
+---
+title: "irToPuckData"
+description: "@anvilkit/ir · irToPuckData"
+---
+
+```ts
+function irToPuckData(ir): Data;
+```
+
+Defined in: [ir-to-puck-data.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L39)
+
+Reverse of [puckDataToIR](puckDataToIR.md): rebuild a Puck `Data` document
+from a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts).
+
+This function backs the round-trip guarantee: for serializable,
+already-canonical Puck `Data`, `irToPuckData(puckDataToIR(d))` is
+*structurally equivalent* to `d`. (The forward transform is
+intentionally normalizing — it sorts keys and drops
+functions/`undefined`/non-JSON values — so the equivalence is
+structural, not byte-for-byte, for non-canonical input.) That
+guarantee is what lets us snapshot-test IR shapes without drift.
+It is also the entry point the AI copilot plugin uses to turn a
+validated LLM `PageIR` response back into a `setData` payload.
+
+Returns a plain (un-frozen) Puck `Data` so Puck can mutate it.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) | The page IR document to rehydrate. |
+
+## Returns
+
+`Data`
+
+A Puck `Data` equivalent to the IR input.

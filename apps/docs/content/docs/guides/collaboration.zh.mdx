@@ -1,0 +1,175 @@
+---
+title: "实时协作"
+description: "只需一次工厂调用即可将实时协作接入你的 Studio——来自 `@anvilkit/collab-ui` 的 `createCollabPlugin()` 将 Yjs CRDT 数据同步、在线状态光标、冲突提示和协作者头像堆叠打包进单个 `StudioPlugin`。"
+---
+
+`@anvilkit/collab-ui` 提供了单个工厂，让 Studio 宿主获得
+完整的实时协作体验：在线状态光标、冲突
+诊断、头部的协作者头像堆叠，以及 Yjs CRDT
+数据同步——全部隐藏在一个 `plugins={[...]}`
+条目之后，无需 React 包装器。
+
+## 1. 安装
+
+```sh
+# the factory + its yjs peer, plus a WebSocket provider for managed mode
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs @hocuspocus/provider
+```
+
+`@anvilkit/plugin-collab-yjs` 是 `@anvilkit/collab-ui` 的对等依赖（该
+工厂将这两个包组合在一起）。该 provider
+（`@hocuspocus/provider` 或 `y-websocket`）是一个**可选**对等依赖，仅在
+托管模式（§ 2）下需要——如果你自带传输层或
+以单标签页内存方式运行，可以省略它。想要使用适配器而不需要 React UI 的宿主可以
+只安装 yjs 插件——见下方 § 4。
+
+## 2. 集成方案
+
+只需设置**一个**值——WebSocket 中继 URL。该插件拥有整个
+传输层：`Y.Doc`、`Awareness` 通道、provider、
+连接状态桥接以及拆卸。`room` 默认为
+`"anvilkit-default-room"`，`provider` 默认为 `"hocuspocus"`，`self` 默认为一个
+自动生成的匿名身份，所以这确实就是完整的方案。
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+<Studio
+	puckConfig={myConfig}
+	plugins={[
+		createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig: myConfig }),
+	]}
+/>;
+```
+
+<Callout type="info" title="安装 provider">
+	托管模式以**懒加载**方式加载 WebSocket provider（它绝不会进入你的
+	初始包），所以请安装你所使用的那个——两者都是可选对等依赖：
+	`@hocuspocus/provider`（默认后端）或 `y-websocket`（当你设置
+	`provider: "y-websocket"` 时）。如果你设置了 `websocketUrl` 却没有安装
+	provider，同步指示器会显示明确的 `error` 状态，并触发
+	`onConnectionError`——绝不会是晦涩的打包器失败。
+</Callout>
+
+### 自带传输层
+
+已经在自己管理 `Y.Doc` / `Awareness` / provider 了（自定义
+后端、共享文档，或将连接状态分流到自有 UI 的宿主）？
+直接将它们传入，工厂就会把传输层完全交给你——与
+`websocketUrl` 之前的调用者完全向后兼容：
+
+```tsx
+import { Doc as YDoc } from "yjs";
+import { Awareness } from "y-protocols/awareness";
+
+const doc = new YDoc();
+const awareness = new Awareness(doc);
+
+createCollabPlugin({
+	doc,
+	awareness,
+	self: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+	puckConfig: myConfig,
+	onIdentityChange: (next) => {
+		// Mirror identity changes (e.g. from the settings popover)
+		// back into your auth/profile store.
+		updateProfile(next);
+	},
+});
+```
+
+当同时传入 `doc` 和 `websocketUrl` 时，`doc`（自带）胜出，并会发出一条一次性
+开发警告，指明被忽略的字段。
+
+该插件贡献了：
+
+| 贡献项        | 你会看到什么                                                  |
+| ------------------- | ------------------------------------------------------------- |
+| `hooks`             | Puck 数据 ↔ Y.Doc CRDT 同步（Puck 仍是事实来源）。 |
+| Provider            | `<CollabUIProvider>` 包裹 Studio，使 `useCollabContext` 在各处可用。 |
+| 画布叠加层      | `<PresenceLayer>`——远端对等方的光标和选择框。  |
+| 通知叠加层 | `<ConflictNoticeCenter>`——重叠时的 toast 通知。 |
+| 协作者插槽  | 头部中的 `<PeerAvatarStack>`。                            |
+
+## 3. 常用旋钮
+
+```tsx
+createCollabPlugin({
+	// Managed-mode transport knobs (all optional; `websocketUrl` is the
+	// only field most hosts set)
+	websocketUrl: "wss://relay.example.com",
+	room: "doc-42", //              default "anvilkit-default-room"
+	provider: "y-websocket", //     default "hocuspocus"
+	token: authToken, //            forwarded to the relay (auth)
+	self: alice, //                 default: auto-generated anonymous identity
+	onConnectionError: (err) => toast.error(String(err)),
+
+	// Validate remote IR before dispatching (defense-in-depth)
+	validateRemoteIR: (ir) => (isWellFormed(ir) ? ir : null),
+	onValidationFailure: (failure) => toast(`Rejected: ${failure.kind}`),
+
+	// RBAC / lock policy applied symmetrically on inbound + outbound
+	policy: {
+		canEdit: (node, peer) => canUserEditNode(peer, node),
+	},
+	onPolicyViolation: (violation) => toast(violation.message),
+
+	// Surface outbound transport failures
+	onSaveError: (error) => toast(`Save failed: ${error}`),
+
+	// Cross-tab persistence
+	persistence: { indexedDb: true, broadcastChannel: true },
+
+	// Opt out of individual UI surfaces
+	presence: { enabled: false }, //      hide remote cursors
+	notifications: { enabled: false }, // hide conflict toaster
+});
+```
+
+当宿主在 `<Studio>` 上传入 `collaboratorsSlot` 时，该属性会胜过
+插件的插槽贡献——宿主始终拥有最终
+决定权。
+
+## 4. 高级用户路径（无头 / 替代 UI）
+
+如果你不需要 React UI——例如 Node 同步 worker、服务端 IR
+处理器，或自定义的非 React 协作者外壳——可直接从
+`@anvilkit/plugin-collab-yjs` 导入底层原语：
+
+```ts
+import {
+	createCollabDataPlugin,
+	createYjsAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+
+const adapter = createYjsAdapter({ doc, awareness, peer });
+const plugin = createCollabDataPlugin({ adapter, puckConfig });
+```
+
+<Callout type="warn" title="重命名说明">
+	`@anvilkit/plugin-collab-yjs` 中仅数据的工厂已从
+	`createCollabPlugin` 重命名为 `createCollabDataPlugin`，以便与
+	`@anvilkit/collab-ui` 中合并后的工厂区分。旧别名
+	`createCollabPlugin` 会在一个小版本内继续导出，并
+	在首次调用时发出一次性的 `console.warn`。
+</Callout>
+
+## 5. 与 Puck 插件契约的组合
+
+一个 Studio 插件可以提供 Puck 形态字段与 Studio 扩展的**任意组合**。
+合并后的协作插件使用 Studio
+扩展；如果你想在插件栏中拥有一个
+协作者面板，可以在旁边附加 Puck 形态字段。
+
+| 插件贡献 | 契约  | 目标                                                    |
+| ------------------- | --------- | --------------------------------------------------------- |
+| `name` / `label` / `icon` | Puck   | 插件栏标识                                  |
+| `render`            | Puck      | 插件栏面板                                         |
+| `overrides`         | Puck（通过 Studio 透传） | `<Puck>` 内部插槽          |
+| `hooks`             | Studio    | 生命周期（onInit / onDataChange / onBeforePublish / …）   |
+| `providers`         | Studio    | 包裹整个 Studio 树                               |
+| `overlays`          | Studio    | 编辑器的同级（画布 / 视口 / 通知） |
+| `slots`             | Studio    | 命名外壳锚点（`collaborators`）                    |
+
+完整的插件契约细节请参见[插件编写指南](/zh/guides/plugin-authoring.mdx)。

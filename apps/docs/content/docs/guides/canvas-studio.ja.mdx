@@ -1,0 +1,106 @@
+---
+title: "Canvas Studio プラグイン"
+description: "Puck の <Studio> シェル内にフルスクリーンのキャンバス編集サーフェスをマウントし、ホストアダプター経由で CanvasIR を永続化し、@anvilkit/plugin-canvas-studio で design:// プレビューを解決します。"
+---
+
+`@anvilkit/plugin-canvas-studio` は、Puck ベースの `<Studio>` シェル内に
+フルスクリーンの **Canvas Studio** 編集サーフェスをマウントします。ヘッダー
+アクションで Puck ページモードとキャンバスオーバーレイを切り替えます。
+クローズ時にプラグインはホスト提供のアダプター経由で `CanvasIR` を永続化し、
+各アートボードをプレビューにラスタライズし、発信元の Puck `DesignBlock` を
+パッチしてページがそのサムネイルをレンダリングするようにします。さらに、
+デザインブロック用のレイヤークイック追加と、ページがデザイン id で
+アートボードプレビューを参照できる `design://` アセットリゾルバーも登録します。
+
+## 1. インストール
+
+```sh
+pnpm add @anvilkit/plugin-canvas-studio @anvilkit/canvas-core @anvilkit/canvas-editor react react-dom @puckeditor/core
+```
+
+ピア依存関係：`@anvilkit/canvas-core`、`@anvilkit/canvas-editor`、
+`@puckeditor/core ^0.21.3`、`react >=19.0.0`、
+`react-dom >=19.0.0`。
+
+<Callout type="warn" title="エディターのスタイルシートをインポートする">
+Tailwind のユーティリティや親ドキュメントの CSS はキャンバスに**届きません**。
+エディターは独立して完結した独自のスタイルシートを同梱しています。ホストは
+それを一度だけインポートする必要があります。たとえばアプリのエントリーで：
+
+```ts
+import "@anvilkit/canvas-editor/styles.css";
+```
+</Callout>
+
+## 2. 最小限のホスト
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createCanvasStudioPlugin,
+  localStorageCanvasAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+import "@anvilkit/canvas-editor/styles.css";
+
+const canvasStudio = createCanvasStudioPlugin({
+  adapter: localStorageCanvasAdapter({ namespace: "demo-canvas" }),
+  // The editor's image tool resolves to a host asset id; seed it so the
+  // returned id always maps to renderable bytes.
+  onPickAsset: async () => "host-image",
+  seedAssets: {
+    "host-image": { id: "host-image", uri: "data:image/png;base64,…" },
+  },
+});
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[canvasStudio]} />;
+}
+```
+
+## 3. オプション
+
+```ts
+interface CreateCanvasStudioPluginOptions {
+  readonly adapter: CanvasPersistenceAdapter;
+  readonly designBlockComponentType?: string;        // default "DesignBlock"
+  readonly canvasSnapshotAdapter?: CanvasSnapshotAdapter;
+  readonly onPickAsset?: () => Promise<string>;
+  readonly seedAssets?: Readonly<Record<string, CanvasAssetRef>>;
+}
+```
+
+`CanvasPersistenceAdapter` はストレージ契約です——`save(designId, ir)`、
+`load(designId)`、`list()`。`inMemoryCanvasAdapter` と
+`localStorageCanvasAdapter({ namespace })` は標準で同梱されています。永続的な
+ストレージ（Postgres、IndexedDB）が必要なホストは、このインターフェースを
+自分で実装します。
+
+## 4. design:// 参照
+
+プラグインは `design://` アセットリゾルバーを登録し、Puck ページがデザイン id で
+アートボードプレビューを参照できるようにします。独自のパイプラインを組む
+ホストのために、プレフィックスとリゾルバーファクトリがエクスポートされています：
+
+```ts
+import {
+  createDesignAssetResolver,
+  DESIGN_REFERENCE_PREFIX, // "design://"
+} from "@anvilkit/plugin-canvas-studio";
+```
+
+## 5. モード切り替えとスナップショット
+
+- ヘッダーアクション（`canvas-studio:toggle`、id は `MODE_SWITCH_ACTION_ID`）は
+  Puck ページ編集とフルスクリーンキャンバスオーバーレイを切り替えます。モード
+  ストア（`createCanvasModeStore`）がアクティブなモードを保持します。
+- `exportCanvasToAsset` / `exportAllArtboards` はアートボードをプレビュー用に
+  ラスタライズします。
+- `canvasSnapshotAdapter` が指定されている場合、`createCanvasSnapshotBridge` は
+  キャンバスを Version History プラグインに接続します（指定されていない場合は
+  プロセス内アダプターが使用されます）。
+
+<Callout type="info" title="ステータス（alpha、v0.1.3）">
+API は `1.0` より前に変更される可能性があります。`@anvilkit/core`、
+`@anvilkit/design-block`、`@anvilkit/plugin-asset-manager` は、このプラグインの
+直接依存関係として同梱されています。
+</Callout>

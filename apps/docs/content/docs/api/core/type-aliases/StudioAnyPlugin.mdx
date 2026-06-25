@@ -1,0 +1,20 @@
+---
+title: "StudioAnyPlugin"
+description: "@anvilkit/core · StudioAnyPlugin"
+---
+
+```ts
+type StudioAnyPlugin<UserConfig> = 
+  | StudioPlugin<UserConfig>
+| PuckPlugin<UserConfig>;
+```
+
+Defined in: [types/plugin.ts:860](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L860)
+
+Either a Studio plugin or a raw `@puckeditor/core` plugin.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `PuckConfig` | `PuckConfig` |

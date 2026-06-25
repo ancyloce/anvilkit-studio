@@ -1,0 +1,58 @@
+---
+title: "概要ページ"
+description: "概要ページ — ヒーロー、ミッションセクション、統計、顧客ロゴクラウド。"
+---
+
+![概要ページ preview](/templates/about/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-about</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI からスキャフォールド
+
+```sh
+npx anvilkit init --template about my-site
+```
+
+## 構成
+
+コミット済みの `PageIR` は、ルートに次のノードタイプを配線します：
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `Statistics`
+- `LogoClouds`
+
+## パッケージの詳細
+
+An about / mission page.
+
+Navbar, hero, mission section, statistics, and a customer logo cloud.
+
+## Install
+
+```sh
+npx anvilkit init --template about my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/hero`
+- `@anvilkit/logo-clouds`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

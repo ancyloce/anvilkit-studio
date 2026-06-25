@@ -1,0 +1,37 @@
+---
+title: "migratePageIR"
+description: "@anvilkit/ir · migratePageIR"
+---
+
+```ts
+function migratePageIR(ir, options): PageIR;
+```
+
+Defined in: [migrations/index.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L63)
+
+Migrate a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) document between peer-range labels.
+
+- Pure no-op when `from === to` AND every node has `meta === undefined`.
+  Returns the original reference.
+- Validates every `node.meta` (when present) against the runtime
+  caps documented on `PageIRNodeMeta` (from `@anvilkit/core`).
+  Throws [PageIRNodeMetaError](../classes/PageIRNodeMetaError) on the first invalid node.
+- Returns a frozen IR with a freshly rebuilt node spine when
+  validation succeeds with at least one populated `meta`. The
+  rebuild is structural only: `props`, `assets`, and `meta` are
+  carried over by reference (not deep-cloned) and `meta` is
+  preserved byte-for-byte; no new fields are synthesized.
+
+Importantly, this helper NEVER bumps `ir.version`. The literal
+stays `"1"` across `0.21 ↔ 0.22`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) |
+| `options` | [`PageIRMigrationOptions`](../interfaces/PageIRMigrationOptions) |
+
+## Returns
+
+[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts)

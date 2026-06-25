@@ -1,0 +1,33 @@
+---
+title: "PageRootSchema"
+description: "@anvilkit/schema · PageRootSchema"
+---
+
+```ts
+const PageRootSchema: ZodObject<{
+  parentFolder: ZodDefault<ZodString>;
+  seo: ZodPrefault<ZodObject<{
+     canonical: ZodOptional<ZodURL>;
+     description: ZodOptional<ZodString>;
+     noIndex: ZodDefault<ZodBoolean>;
+     ogImage: ZodOptional<ZodURL>;
+     title: ZodOptional<ZodString>;
+  }, $strip>>;
+  slug: ZodString;
+  status: ZodEnum<{
+     archived: "archived";
+     draft: "draft";
+     published: "published";
+  }>;
+  title: ZodString;
+  version: ZodString;
+}, $strip>;
+```
+
+Defined in: [page-root-schema.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/schema/src/page-root-schema.ts#L41)
+
+The authoritative page payload, canonical in Puck `root.props`. Editor,
+validator, storage, and renderer all read this single shape.
+
+`z.object` (not `z.strictObject`) so Puck-internal keys (e.g. `id`) and
+forward-compat fields are stripped rather than rejected.

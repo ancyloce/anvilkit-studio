@@ -1,0 +1,16 @@
+---
+title: "ThemeStoreProviderProps"
+description: "@anvilkit/core · ThemeStoreProviderProps"
+---
+
+Defined in: [state/slices/ThemeStoreProvider.tsx:35](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L35)
+
+Props for [ThemeStoreProvider](../functions/ThemeStoreProvider).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | Subtree that reads the theme store via `useThemeStore` / `useThemeStoreApi`. | [state/slices/ThemeStoreProvider.tsx:51](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L51) |
+| &lt;a id="store"&gt;&lt;/a&gt; `store?` | `readonly` | `WithPersist`\&lt;`WithDevtools`\&lt;`StoreApi`\&lt;[`ThemeState`](ThemeState.md)\&gt;\&gt;, `ThemeStorePartial`\&gt; | Optional externally-owned store. `<Studio>` creates the instance itself (so it can call `.getState()` imperatively) and passes it in; standalone callers omit it and the provider owns one. | [state/slices/ThemeStoreProvider.tsx:46](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L46) |
+| &lt;a id="storeid"&gt;&lt;/a&gt; `storeId` | `readonly` | `string` | Per-instance store id. Namespaces the theme store's persistence key so two concurrent `<Studio>` editors keep independent theme state. | [state/slices/ThemeStoreProvider.tsx:40](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L40) |

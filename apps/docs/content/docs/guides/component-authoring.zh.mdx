@@ -1,0 +1,521 @@
+---
+title: "组件编写"
+description: "编写一个 Puck 原生 React 组件包，作为独立的 @anvilkit/* npm 版本发布 —— 契约、字段类型、editMode、主题化、响应式、图标、脚手架生成与发布。"
+---
+
+AnvilKit 组件是**可独立发布的 Puck 原生 React
+包**。每个组件位于 `packages/components/src/<slug>/` 下，作为
+独立的 `@anvilkit/<slug>` npm 版本发布，并通过
+一个严格约束的 `ComponentConfig` 契约接入 `<Puck>`。
+
+本指南是编写组件的权威参考。它以
+[`@anvilkit/button`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/src/button)
+作为贯穿全文的实例，并取代了
+子模块本地的
+[`packages/components/AGENTS.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/AGENTS.md)
+成为面向公众的文档。
+
+<Callout type="info" title="代码保持绿色">
+	本页面上的每个代码块都会被提取到
+	[`apps/docs/tests/guides/component-authoring.test.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/tests/guides/component-authoring.test.ts)
+	中，并在 CI 中作为 Vitest 测试运行。如果契约发生漂移，
+	构建会在文档发布之前失败。
+</Callout>
+
+## 1. 契约
+
+`packages/components/src/<slug>/` 下的每个组件包都必须
+从 `src/index.ts` 导出一组固定的符号。Core 和演示
+应用都依赖于下面这些确切的名称 —— 重命名是破坏性
+变更。
+
+| 导出             | 形状                                    | 用途                                                            |
+| ---------------- | --------------------------------------- | ---------------------------------------------------------------- |
+| `componentConfig`| `ComponentConfig<Props>`                | Puck 配置：`label`、`defaultProps`、`fields`、`render`。         |
+| `defaultProps`   | `Props`（可序列化）                     | 当组件被拖放到画布上时 Puck 插入的内容。                        |
+| `fields`         | `Fields<Props>`                         | 编辑器 schema —— 每个可编辑属性对应一个条目。                   |
+| `metadata`       | `ComponentMetadata`                     | 目录元数据：名称、slug、包名 + 版本、类别。                     |
+| 驼峰别名         | `<camel>Config`、`<camel>DefaultProps`、`<camel>Fields`、`<camel>Metadata` | 供按功能导入的宿主使用的便捷再导出。                            |
+| 组件本身         | `Button`、`Input`、…                    | React 渲染符号，与其 `*Props` 类型一同导出。                    |
+
+权威的 `button` 包将所有这些组合在一起：
+
+```ts
+import "./styles.css";
+
+export type { ButtonProps, ButtonViewProps } from "./Button";
+export { Button } from "./Button";
+export {
+	buttonConfig,
+	componentConfig,
+	defaultProps,
+	defaultProps as buttonDefaultProps,
+	fields,
+	fields as buttonFields,
+	metadata,
+	metadata as buttonMetadata,
+} from "./config";
+```
+
+从该表中可以推出三条不变量：
+
+1. **`metadata.packageName` 必须与 `package.json` 的 `name` 匹配。**
+   目录生成器（`apps/docs/scripts/generate-component-pages.ts`）
+   会在文档构建时验证这一点，并在二者漂移时大声失败。
+2. **`metadata.componentSlug` 必须与目录名匹配。** 相同的
+   生成器，相同的失败模式。
+3. **`render` 必须是一个纯适配器。** 它接收已解析的
+   属性以及 `editMode`，并返回一个 React 元素 —— 没有副作用、
+   没有数据获取、没有 store 访问。
+
+```ts
+import type { ComponentConfig } from "@puckeditor/core";
+import { createElement } from "react";
+import type { ButtonProps } from "./Button";
+import { Button } from "./Button";
+
+const renderButton: ComponentConfig<ButtonProps>["render"] = ({
+	label,
+	variant,
+	disabled,
+	href,
+	openInNewTab,
+	editMode,
+}) =>
+	createElement(Button, {
+		label,
+		variant,
+		disabled,
+		href,
+		openInNewTab,
+		editMode,
+	});
+```
+
+## 2. 字段类型
+
+字段描述了 Puck 为每个属性生成的编辑器 UI。AnvilKit
+组件使用 Puck 内置类型中的七种。优先选择能够建模数据的
+最简单字段 —— 对于小型枚举用 `radio` 而非 `select`，
+用 `array` 而非字符串化的 CSV，用 `object` 而非扁平的带前缀属性。
+
+| Puck `type` | 何时使用                                                               | 真实示例                                     |
+| ----------- | ---------------------------------------------------------------------- | -------------------------------------------- |
+| `text`      | 单行字符串、自由格式（标签、URL、alt）。                              | `@anvilkit/button` 的 `label`、`href`。      |
+| `textarea`  | 多行字符串（副标题、描述、正文）。                                    | `@anvilkit/section` 的 `description`。        |
+| `number`    | 数值输入（列数、间距单位、计数）。                                    | `@anvilkit/bento-grid` 的列数。              |
+| `email`     | 电子邮件地址 —— Puck 在 UI 中验证格式。                              | `@anvilkit/input` 默认的 `type`。            |
+| `radio`     | 小型枚举（≤ 约 4 个值），希望以内联分段选项形式渲染。               | `@anvilkit/button` 的 `variant`、`disabled`。|
+| `select`    | 值多于少数几个的枚举，以下拉菜单形式显示。                            | `@anvilkit/bento-grid` 的 `gap`、`radius`。  |
+| `array`     | 可重复项的有序列表（链接、卡片、套餐层级、特性）。                    | `@anvilkit/navbar` 的 `items`、`actions`。   |
+| `object`    | 异构的嵌套形状（logo 文本 + 图片 + href）。                          | `@anvilkit/navbar` 的 `logo`。               |
+
+下面的实例逐字摘自
+[`button/src/config.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/components/src/button/src/config.ts)
+并并排演示了两种最常见的类型：
+
+```ts
+import type { Fields } from "@puckeditor/core";
+import type { ButtonProps } from "./Button";
+
+export const buttonFields = {
+	label: {
+		type: "text",
+		label: "Label",
+	},
+	variant: {
+		type: "radio",
+		label: "Variant",
+		options: [
+			{ label: "Primary", value: "primary" },
+			{ label: "Secondary", value: "secondary" },
+		],
+	},
+	href: {
+		type: "text",
+		label: "Link URL",
+	},
+	openInNewTab: {
+		type: "radio",
+		label: "Open in new tab",
+		options: [
+			{ label: "No", value: false },
+			{ label: "Yes", value: true },
+		],
+	},
+	disabled: {
+		type: "radio",
+		label: "Disabled",
+		options: [
+			{ label: "No", value: false },
+			{ label: "Yes", value: true },
+		],
+	},
+} satisfies Fields<ButtonProps>;
+```
+
+### 数组与对象
+
+可重复列表使用 `type: "array"`，配合三个人体工程学字段：
+
+```ts
+import type { Fields } from "@puckeditor/core";
+
+type NavLink = { label: string; href: string };
+type NavProps = { items: NavLink[] };
+
+const fields = {
+	items: {
+		type: "array",
+		label: "Navigation links",
+		defaultItemProps: { label: "New link", href: "/" },
+		getItemSummary: (item, index) =>
+			item.label || `Link ${(index ?? 0) + 1}`,
+		arrayFields: {
+			label: { type: "text", label: "Label" },
+			href: { type: "text", label: "Href" },
+		},
+	},
+} satisfies Fields<NavProps>;
+```
+
+`defaultItemProps` 是编辑者点击"添加项"时 Puck 插入的
+对象。`getItemSummary` 驱动右侧栏中折叠项的标签 ——
+始终返回一个非空字符串，这样编辑者就不会看到
+没有标签的行。`arrayFields` 是每一项的 schema。
+
+对象使用相同的形状，但改用 `objectFields`：
+
+```ts
+import type { Fields } from "@puckeditor/core";
+
+type Logo = { type: "text" | "image"; text: string; imageUrl: string };
+type LogoProps = { logo: Logo };
+
+const fields = {
+	logo: {
+		type: "object",
+		label: "Logo",
+		objectFields: {
+			type: {
+				type: "radio",
+				label: "Type",
+				options: [
+					{ label: "Text", value: "text" },
+					{ label: "Image", value: "image" },
+				],
+			},
+			text: { type: "text", label: "Text" },
+			imageUrl: { type: "text", label: "Image URL" },
+		},
+	},
+} satisfies Fields<LogoProps>;
+```
+
+## 3. 可序列化性
+
+**从 `defaultProps` 或 `fields` 可达的每个值都必须是 JSON
+可序列化的。** Puck 将编辑器状态持久化为 JSON，并在
+渲染路由（`/puck/render`，兼容 RSC）上对其进行再水合。树中任何位置的
+函数、ref、`Date` 或类实例要么会在重新加载时静默丢失，
+要么会在边界跨越时抛出异常。
+
+```ts
+import { defaultProps } from "@anvilkit/button";
+
+// `defaultProps` is JSON-safe. This round-trip must be lossless.
+const snapshot = JSON.parse(JSON.stringify(defaultProps));
+```
+
+回调形状的字段辅助函数（`getItemSummary`、`resolveFields`、
+`resolveData`）是例外 —— 它们存在于 `fields` schema 上，
+而非数据上，且 Puck 在运行时解析它们。目录
+生成器在为文档站点导出 Puck 配置时，会刻意
+将它们序列化为字符串 `"[[Function]]"`；参见
+[`generate-component-pages.ts`](https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/scripts/generate-component-pages.ts)。
+
+常见陷阱：
+
+- **不要在属性中存储 React 节点。** 传递原始值（标签、URL、
+  标志），让渲染适配器去组合 JSX。
+- **不要通过属性夹带事件处理器。** 宿主通过插件和
+  生命周期钩子来连接行为 —— 参见
+  [插件编写](/zh/guides/plugin-authoring/)。
+- **不要用稳定的 ref 做记忆化。** 消费者从组件
+  内部需要的任何东西都属于组件模块本身，而非
+  属于其属性。
+
+来自 `@anvilkit/validator` 的 `validateComponentConfig` 会递归
+遍历 `defaultProps`，并报告到任何非 JSON 可序列化叶子节点的
+**完整结构路径**，包括失败原因
+（`function`、`symbol`、`bigint`、`circular`、`exceeds-max-depth`）。一个
+深埋在 `defaultProps.settings.layout.onPress` 处的函数会被报告
+为 `["components", "<Name>", "defaultProps", "settings", "layout",
+"onPress"]`，而不会在顶层属性处被截断。
+
+## 4. `editMode` 模式
+
+Puck 在编辑器中调用 `render` 时会传入一个额外的 `editMode: boolean` 参数，
+而在渲染路由上会省略它。交互式控件在 `editMode` 为 true 时必须
+**自我中和**：活动的 `<button>` 会从 Puck 的拖动手柄
+偷走焦点，活动的 `<a>` 会劫持点击，
+而活动的 `<input>` 会吞掉编辑器进行
+组件选择所需的击键。
+
+button 包的视图组件是这一权威模式：
+
+```tsx
+import { Button as BaseButton, buttonVariants } from "@anvilkit/ui/button";
+import { cn } from "@anvilkit/ui/lib/utils";
+
+export interface ButtonViewProps {
+	label: string;
+	variant?: "primary" | "secondary";
+	disabled?: boolean;
+	href?: string;
+	openInNewTab?: boolean;
+	editMode?: boolean;
+}
+
+export function Button({
+	label,
+	variant = "primary",
+	disabled = false,
+	href,
+	openInNewTab = false,
+	editMode = false,
+}: ButtonViewProps) {
+	const isInactive = disabled || editMode;
+	const resolvedHref = isInactive ? undefined : href;
+
+	if (href) {
+		return (
+			<a
+				href={resolvedHref}
+				target={resolvedHref && openInNewTab ? "_blank" : undefined}
+				rel={resolvedHref && openInNewTab ? "noreferrer noopener" : undefined}
+				aria-disabled={isInactive || undefined}
+				tabIndex={isInactive ? -1 : undefined}
+				className={cn(
+					buttonVariants({ size: "lg", variant: "default" }),
+					"h-11 rounded-full px-5 shadow-sm",
+					isInactive && "cursor-not-allowed opacity-50",
+				)}
+			>
+				{label}
+			</a>
+		);
+	}
+
+	return (
+		<BaseButton
+			size="lg"
+			disabled={isInactive}
+			aria-disabled={isInactive || undefined}
+			className="h-11 rounded-full px-5 shadow-sm"
+		>
+			{label}
+		</BaseButton>
+	);
+}
+```
+
+从该片段中可以得出两条规则：
+
+1. **与 `disabled` 合并。** `const isInactive = disabled || editMode`
+   是唯一的真相来源 —— 每个交互式属性（`href`、
+   `tabIndex`、`aria-disabled`）都从 `isInactive` 读取，而非
+   直接从 `editMode` 读取。
+2. **保持 DOM 语义化。** 非活动的链接仍是带有
+   `aria-disabled` 且无 `href` 的 `<a>`；非活动的按钮仍是带有
+   真实 `disabled` 属性的 `<button>`。不要基于
+   `editMode` 切换元素类型 —— 屏幕阅读器会朗读出不同的角色，
+   而且 Puck 的选择轮廓会随之移动。
+
+`@anvilkit/input` 遵循相同的模式，使用 `readOnly={editMode}`
+和 `bg-input/50` 的视觉提示 —— 选择任何与你
+组件原生禁用状态相匹配的变体。
+
+## 5. 主题感知样式
+
+每个组件都附带一个并置的 `styles.css`，它导入
+共享的 Tailwind 层：
+
+```css
+@import "@anvilkit/tailwind-config/shadcn";
+
+@source "./**/*.{ts,tsx}";
+@source "../../../../ui/src/button.tsx";
+```
+
+第一行从
+[`@anvilkit/tailwind-config`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/configs/tailwind-config)
+导入与 shadcn 兼容的 token 调色板；
+`@source` 指令告诉 Tailwind 4 应扫描哪些文件以查找
+类名。对于你直接复用其类的任何 `@anvilkit/ui` 原语，
+请添加额外的 `@source`。
+
+颜色规则，严格按优先级顺序：
+
+1. **优先使用 shadcn 语义化 token。** `bg-background`、`text-foreground`、
+   `border-border`、`text-muted-foreground`、`bg-primary`、
+   `text-primary-foreground`、`bg-card`、`text-card-foreground`。
+2. **退而使用 Tailwind 工具类**，当没有语义化 token 适用时。
+3. **仅在以上两者都不够用时才发明一个 CSS 变量** —— 并
+   确保它在 `:root` 和 `.dark` 中都有合理的值。
+
+当语义化 token 能够表达相同意图时，绝不要硬编码
+`#...`、`rgb(...)` 或 `hsl(...)`。该 token 调色板经过调整以
+在两种主题下都满足 WCAG AA 对比度；绕过它会静默地
+回退
+[无障碍基线](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)。
+
+## 6. 响应式要求
+
+每个组件都必须在三种设备类别上正确渲染 ——
+**移动端、平板端、桌面端** —— 采用移动优先的 Tailwind 立场。
+从小屏幕布局作为默认开始，然后用
+`md:` 和 `lg:` 断点向上扩展。
+
+```tsx
+<section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+	{/* mobile: single column; tablet: two; desktop: three */}
+</section>
+```
+
+在整个目录中反复出现的具体规则：
+
+- **不要在 `md` 以上用像素固定宽度。** 使用 `max-w-*` 钳制，
+  并让网格自由伸展。
+- **不要在移动端隐藏内容。** 如果某个区块确实放不下，
+  就重新排布它 —— 不要 `hidden md:block`。
+- **始终验证全部三种宽度。** 演示应用在 `/puck/render` 中运行每个
+  组件；在提交 PR 之前以约 375 px、约 768 px 和
+  约 1280 px 打开它。
+
+依赖动画的组件（FlickeringGrid、Marquee、Ripple）
+还必须额外尊重 `prefers-reduced-motion`；参见
+[无障碍基线](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)
+以了解当前的差距列表与修复模式。
+
+## 7. 图标
+
+为每个标准 UI 图标使用
+[`lucide-react`](https://lucide.dev/guide/packages/lucide-react)。
+不要在同一组件中混用其他通用图标
+库，也不要为 Lucide 已经提供的图标手写内联 SVG。
+
+```tsx
+import { ArrowRight } from "lucide-react";
+
+export function LearnMoreLink({ href }: { href: string }) {
+	return (
+		<a
+			href={href}
+			className="inline-flex items-center gap-1 text-primary hover:underline"
+		>
+			Learn more
+			<ArrowRight aria-hidden="true" className="size-4" />
+		</a>
+	);
+}
+```
+
+两个无障碍细节：
+
+- **装饰性图标**（与可见文本标签配对）需要加上
+  `aria-hidden="true"`，这样屏幕阅读器就不会重复朗读。
+- **语义性图标**（仅图标的按钮）需要一个可访问的标签 ——
+  要么在交互式元素上加 `aria-label="…"`，要么加一个相邻的
+  `<span className="sr-only">`。
+
+图标颜色通过 Tailwind 流转（`text-primary`、`text-muted-foreground`、…），
+因此图标会自动继承主题感知的颜色。绝不要硬编码
+`stroke` 或 `fill` 颜色。
+
+## 8. 包脚手架
+
+不要手动搭建新组件的脚手架 —— 生成器会一步连接好
+`package.json`、`rslib.config.ts`、`tsconfig.json`、渲染文件、
+`config.ts`、`index.ts`、`styles.css` 以及 README。
+
+```bash
+# Interactive — prompts for slug, label, template, category:
+pnpm -C packages/components gen:component
+
+# Flag-driven, reproducible in scripts:
+pnpm -C packages/components gen:component -- \
+	--name my-component \
+	--label "My Component" \
+	--template content \
+	--category marketing
+```
+
+模板：
+
+- **`content`** —— 静态营销界面（button、hero、section）。
+  默认选择。
+- **`layout`** —— 容纳子元素的结构性容器（bento-grid、
+  带 zone 的 section）。
+- **`form`** —— 具有编辑器感知禁用状态的交互式输入
+  （input、表单字段包装器）。
+
+生成器运行后：
+
+1. 在 `src/<ComponentName>.tsx` 中填入真实的标记和属性。
+2. 在 `src/config.ts` 中最终确定 `defaultProps`、`fields` 以及
+   `metadata.suggestedCategory`。
+3. 在 `styles.css` 中连接任何 `@anvilkit/ui` 对等依赖和额外的
+   `@source` 条目。
+4. 验证：`pnpm -C packages/components lint && pnpm typecheck && pnpm build`。
+5. 集成到演示中 —— 在 `apps/demo/lib/puck-demo.ts` 中添加一个
+   import + 配置条目，并在 `apps/demo/next.config.js` 的
+   `transpilePackages` 中添加包名。
+
+完整的生成器演练 —— 包括前提条件和一个
+可复现的实例 —— 见
+[生成器使用指南](/zh/guides/generator-usage/)。
+
+## 9. 发布
+
+版本管理由 Changesets 驱动，每个 `@anvilkit/<slug>`
+都独立发布。
+
+```bash
+# From the components workspace — the changeset prompts for the
+# affected package(s) and bump level, then writes a file to
+# packages/components/.changeset/.
+pnpm -C packages/components changeset
+
+# In a release PR, version + build + publish in one shot:
+pnpm -C packages/components release
+```
+
+典型流程：
+
+1. **建分支 + 实现**组件变更。
+2. **`pnpm changeset`** 并将生成的 markdown 文件与同一 PR
+   一起提交。用面向用户的措辞描述变更 —— 该文件
+   会逐字成为 npm 更新日志条目。
+3. **合并到 `main`。** CI 会运行 `lint`、`typecheck`、`madge`（循环
+   依赖）、`test`、`build`、`publint`（包导出），以及
+   Playwright 冒烟测试套件 —— 参见
+   [组件目录](/zh/components/) 以了解当前通过流水线
+   连接的包集合。
+4. **发布 PR** 通过 Changesets 的 GitHub action 提升版本 + 编写
+   CHANGELOG；合并它会运行 `pnpm release` 并发布到 npm。
+
+<Callout type="warn" title="切勿手动编辑版本">
+	包版本位于 `packages/components/src/<slug>/package.json`，
+	但手动编辑它们会绕过 Changesets 的 CHANGELOG 生成，并
+	使发布 PR 失去同步。始终通过 `pnpm changeset` 来执行版本提升。
+</Callout>
+
+## 参考
+
+- 架构文档中的组件契约：[`anvilkit-architecture.md` §Component Packages](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/ai-context/anvilkit-architecture.md#component-packages-current)
+- 实例源码：[`packages/components/src/button`](https://github.com/ancyloce/anvilkit-studio/tree/main/packages/components/src/button)
+- 完整组件目录：[组件](/zh/components/)
+- 无障碍基线（WCAG 2.1 AA）：[`docs/a11y-baseline.md`](https://github.com/ancyloce/anvilkit-studio/blob/main/docs/a11y-baseline.md)
+- 生成器演练：[生成器使用](/zh/guides/generator-usage/)
+- 用于编辑器时行为的插件接口：[插件编写](/zh/guides/plugin-authoring/)

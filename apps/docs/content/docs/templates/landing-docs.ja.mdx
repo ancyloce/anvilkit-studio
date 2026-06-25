@@ -1,0 +1,56 @@
+---
+title: "開発者ツールのドキュメントサイト向けランディングページ"
+description: "開発者ツールのドキュメントサイト向けランディングページ — ヒーロー、機能グリッド、FAQ。"
+---
+
+![開発者ツールのドキュメントサイト向けランディングページ preview](/templates/landing-docs/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-landing-docs</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI からスキャフォールド
+
+```sh
+npx anvilkit init --template landing-docs my-site
+```
+
+## 構成
+
+コミット済みの `PageIR` は、ルートに次のノードタイプを配線します：
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `Helps`
+
+## パッケージの詳細
+
+Landing page for a developer-tool docs site.
+
+Navbar, hero, feature section, and FAQ — tuned for a developer audience who want the punchline fast.
+
+## Install
+
+```sh
+npx anvilkit init --template landing-docs my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

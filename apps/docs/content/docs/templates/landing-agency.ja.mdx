@@ -1,0 +1,60 @@
+---
+title: "エージェンシー向けランディングページ"
+description: "エージェンシー向けランディングページ — ヒーロー、サービス bento、統計、お客様の声セクション。"
+---
+
+![エージェンシー向けランディングページ preview](/templates/landing-agency/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-landing-agency</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI からスキャフォールド
+
+```sh
+npx anvilkit init --template landing-agency my-site
+```
+
+## 構成
+
+コミット済みの `PageIR` は、ルートに次のノードタイプを配線します：
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `BentoGrid`
+- `Statistics`
+- `Button`
+
+## パッケージの詳細
+
+A services-led agency landing page.
+
+Navbar, hero, about section, services grid, social proof stats, and a CTA button.
+
+## Install
+
+```sh
+npx anvilkit init --template landing-agency my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/bento-grid`
+- `@anvilkit/button`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

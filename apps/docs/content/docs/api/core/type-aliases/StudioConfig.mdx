@@ -1,0 +1,24 @@
+---
+title: "StudioConfig"
+description: "@anvilkit/core · StudioConfig"
+---
+
+```ts
+type StudioConfig = Omit<InferredStudioConfig, "experimental"> & {
+  experimental: InferredStudioConfig["experimental"] & Partial<StudioExperimentalConfig>;
+};
+```
+
+Defined in: [types/config.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L81)
+
+Runtime configuration surface for `<Studio>`. Identical to the
+Zod-inferred shape except `experimental` also carries any keys a
+plugin/host declared on [StudioExperimentalConfig](../interfaces/StudioExperimentalConfig) — the
+runtime/type single-source-of-truth is unchanged (the schema still
+accepts any record); this only *adds* optional typed keys.
+
+## Type Declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `experimental` | `InferredStudioConfig`\[`"experimental"`\] & `Partial`\&lt;[`StudioExperimentalConfig`](../interfaces/StudioExperimentalConfig)\&gt; | [types/config.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L82) |

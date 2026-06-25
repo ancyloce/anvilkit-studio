@@ -1,0 +1,88 @@
+---
+title: "AI 图像插件"
+description: "通过 @anvilkit/plugin-ai-image 为 AnvilKit Canvas Studio 提供由服务商代理的文生图、变体、局部重绘和背景移除任务。"
+---
+
+`@anvilkit/plugin-ai-image` 封装了由宿主提供的 `AiImageProvider`，因此
+画布编辑器可以通过一份带类型的契约发起文生图、变体、局部重绘、背景移除
+和放大任务。该插件**绝不**直接与 AI
+服务通信——没有任何凭据、模型 id 或端点会越过插件
+边界。周边的构建模块（带中止/重试/轮询的任务客户端、模拟
+服务商、蒙版编辑器、后处理流水线、画布提交辅助函数，以及一个
+可选的 React 侧边栏面板）作为独立的子路径导出发布。
+
+## 1. 安装
+
+```sh
+pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
+```
+
+对等依赖：`react >=19.0.0`、`react-dom >=19.0.0`、
+`@puckeditor/core ^0.21.3`、`@anvilkit/ui`（用于 React 面板），以及
+`konva ^9 || ^10` + `react-konva ^19`（用于 `./mask` 和 `./react` Konva
+界面）。无头的 `.` 入口——工厂、任务客户端、后处理、提交——
+不需要 Konva。
+
+子路径导出：
+
+- `@anvilkit/plugin-ai-image` — `createAiImagePlugin`、`createAiJobClient`、`commitImageReplace`、蒙版导出工具，以及所有线格式类型。
+- `@anvilkit/plugin-ai-image/react` — `AiImagePanel`、`useAiImage`、`createAiImageSidebarPlugin`。
+- `@anvilkit/plugin-ai-image/mask` — `MaskEditorLayer`、`useMaskStrokes`、蒙版类型。
+- `@anvilkit/plugin-ai-image/post-process` — `createPostProcessPipeline` + 图像辅助函数。
+- `@anvilkit/plugin-ai-image/commit` — `commitImageReplace`。
+- `@anvilkit/plugin-ai-image/mock` — 用于测试和演示的 `createMockAiImageProvider`。
+
+## 2. 服务商契约
+
+`AiImagePluginOptions` 携带一个必需的 `provider`。服务商是一个
+异步函数，它接收一个带类型的请求、一个图层上下文和运行选项
+（包括一个 `AbortSignal`），并解析为一个 `AiImageJobResult`：
+
+```ts
+import { createAiImagePlugin } from "@anvilkit/plugin-ai-image";
+import type { AiImageProvider } from "@anvilkit/plugin-ai-image";
+
+const provider: AiImageProvider = async (request, context, options) => {
+  // Call your AI service of choice (Replicate, OpenAI, self-hosted SD, …).
+  // Honour `options?.signal` for cancellation and return an AiImageJobResult.
+  const res = await fetch("/api/ai/image", {
+    method: "POST",
+    body: JSON.stringify({ request, context }),
+    signal: options?.signal,
+  });
+  return (await res.json()) as Awaited<ReturnType<AiImageProvider>>;
+};
+
+const aiImage = createAiImagePlugin({ provider });
+```
+
+对于测试和演示，来自 `./mock` 子路径的 `createMockAiImageProvider()`
+无需网络调用即可返回确定性的结果。
+
+## 3. 挂载 UI
+
+<Callout type="warn" title="裸工厂是无头的">
+`createAiImagePlugin` 会校验服务商并暴露一个命令式的
+`submit()` 方法，但它注册的是一个**空**的 Studio 钩子块——单凭它自身
+不会贡献任何生命周期钩子或 UI。请通过
+`@anvilkit/plugin-ai-image/react`（`AiImagePanel` / `createAiImageSidebarPlugin`）
+挂载面板，或在 `useAiImage` 钩子之上构建你自己的 UI。
+</Callout>
+
+## 4. 任务客户端、蒙版与提交
+
+- **任务客户端** — `createAiJobClient` 在服务商外围添加中止/重试/轮询；
+  它会针对瞬时故障抛出 `RetryableError`。
+- **蒙版** — `drawMask`、`rasterizeMaskToDataUrl` 和 `createMaskToAssetExporter`
+  将编辑器中的笔触转换为用于局部重绘任务的蒙版资源；`dataUrlToFile` 则
+  桥接到上传适配器。
+- **提交** — `commitImageReplace` 将生成的图像写回到发起请求的
+  画布图层上。
+- **后处理** — `createPostProcessPipeline`（仅子路径，以保持主
+  包精简）会在上传前对结果进行压缩并生成缩略图。
+
+<Callout type="info" title="状态（alpha，v0.1.1）">
+迭代 1 的构建模块均已发布（任务客户端、模拟服务商、蒙版
+编辑器、后处理流水线、提交辅助函数、React 侧边栏界面）。API 在
+`1.0` 之前可能会有变更。
+</Callout>

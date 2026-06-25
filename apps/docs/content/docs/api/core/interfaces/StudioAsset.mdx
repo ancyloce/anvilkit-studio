@@ -1,0 +1,31 @@
+---
+title: "StudioAsset"
+description: "@anvilkit/core · StudioAsset"
+---
+
+Defined in: [types/sidebar.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L170)
+
+A single asset entry returned by a [StudioAssetSource](StudioAssetSource.md).
+
+The shape is intentionally loose — concrete asset managers can add
+fields via declaration merging. Required fields are enough for the
+sidebar to render.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="attribution"&gt;&lt;/a&gt; `attribution?` | `readonly` | \{ `photographerName`: `string`; `photographerUrl`: `string`; `sourceUrl`: `string`; \} | Visible attribution for credit-requiring sources (Unsplash). Shown on the tile. | [types/sidebar.ts:190](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L190) |
+| `attribution.photographerName` | `readonly` | `string` | - | [types/sidebar.ts:191](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L191) |
+| `attribution.photographerUrl` | `readonly` | `string` | - | [types/sidebar.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L192) |
+| `attribution.sourceUrl` | `readonly` | `string` | - | [types/sidebar.ts:193](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L193) |
+| &lt;a id="folderid"&gt;&lt;/a&gt; `folderId?` | `readonly` | `string` \| `null` | Optional owning folder (PRD 0002 §7). `null`/absent ⇒ root. | [types/sidebar.ts:186](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L186) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/sidebar.ts:171](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L171) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | [`StudioAssetKind`](../type-aliases/StudioAssetKind) | - | [types/sidebar.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L172) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType?` | `readonly` | `string` | Optional MIME type. Used for filter accuracy when `kind` is `"other"`. | [types/sidebar.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L180) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | Display name shown beneath the tile. | [types/sidebar.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L174) |
+| &lt;a id="size"&gt;&lt;/a&gt; `size?` | `readonly` | `number` | Optional size in bytes — surfaced in tooltips. | [types/sidebar.ts:184](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L184) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source?` | `readonly` | `string` | Optional provenance — which source produced it (e.g. `"local"` | `"unsplash"`). | [types/sidebar.ts:188](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L188) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | Optional tags surfaced by the search input. | [types/sidebar.ts:182](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L182) |
+| &lt;a id="thumbnailurl"&gt;&lt;/a&gt; `thumbnailUrl?` | `readonly` | `string` | Optional thumbnail URL. Falls back to `url` for images. | [types/sidebar.ts:178](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L178) |
+| &lt;a id="url"&gt;&lt;/a&gt; `url` | `readonly` | `string` | URL the canvas inserts when the user clicks the tile. | [types/sidebar.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L176) |

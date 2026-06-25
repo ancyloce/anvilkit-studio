@@ -1,0 +1,89 @@
+---
+title: "AI 画像プラグイン"
+description: "@anvilkit/plugin-ai-image を介して AnvilKit Canvas Studio 向けに、プロバイダーへ委譲したテキストから画像生成、バリエーション、インペイント、背景除去のジョブを提供します。"
+---
+
+`@anvilkit/plugin-ai-image` はホストが提供する `AiImageProvider` をラップし、
+キャンバスエディターが 1 つの型付き契約を通じて、テキストから画像生成、バリエーション、インペイント、
+背景除去、アップスケールのジョブを発行できるようにします。このプラグインは AI
+サービスと直接通信することは**決してありません**——認証情報、モデル id、エンドポイントのいずれもプラグイン
+境界を越えません。周辺の構成要素（中止/再試行/ポーリングを行うジョブクライアント、モック
+プロバイダー、マスクエディター、後処理パイプライン、キャンバスへのコミットヘルパー、そして
+オプションの React サイドバーパネル）は、独立したサブパスエクスポートとして提供されます。
+
+## 1. インストール
+
+```sh
+pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
+```
+
+ピア依存関係：`react >=19.0.0`、`react-dom >=19.0.0`、
+`@puckeditor/core ^0.21.3`、`@anvilkit/ui`（React パネル用）、そして
+`konva ^9 || ^10` + `react-konva ^19`（`./mask` および `./react` の Konva
+サーフェス用）。ヘッドレスな `.` エントリ——ファクトリ、ジョブクライアント、後処理、コミット——
+は Konva を必要としません。
+
+サブパスエクスポート：
+
+- `@anvilkit/plugin-ai-image` — `createAiImagePlugin`、`createAiJobClient`、`commitImageReplace`、マスクエクスポーターユーティリティ、およびすべてのワイヤー形状の型。
+- `@anvilkit/plugin-ai-image/react` — `AiImagePanel`、`useAiImage`、`createAiImageSidebarPlugin`。
+- `@anvilkit/plugin-ai-image/mask` — `MaskEditorLayer`、`useMaskStrokes`、マスクの型。
+- `@anvilkit/plugin-ai-image/post-process` — `createPostProcessPipeline` + 画像ヘルパー。
+- `@anvilkit/plugin-ai-image/commit` — `commitImageReplace`。
+- `@anvilkit/plugin-ai-image/mock` — テストおよびデモ用の `createMockAiImageProvider`。
+
+## 2. プロバイダー契約
+
+`AiImagePluginOptions` は必須の `provider` を 1 つ保持します。プロバイダーは、
+型付きのリクエスト、レイヤーコンテキスト、実行オプション
+（`AbortSignal` を含む）を受け取り、`AiImageJobResult` を解決する
+非同期関数です：
+
+```ts
+import { createAiImagePlugin } from "@anvilkit/plugin-ai-image";
+import type { AiImageProvider } from "@anvilkit/plugin-ai-image";
+
+const provider: AiImageProvider = async (request, context, options) => {
+  // Call your AI service of choice (Replicate, OpenAI, self-hosted SD, …).
+  // Honour `options?.signal` for cancellation and return an AiImageJobResult.
+  const res = await fetch("/api/ai/image", {
+    method: "POST",
+    body: JSON.stringify({ request, context }),
+    signal: options?.signal,
+  });
+  return (await res.json()) as Awaited<ReturnType<AiImageProvider>>;
+};
+
+const aiImage = createAiImagePlugin({ provider });
+```
+
+テストおよびデモ用に、`./mock` サブパスの `createMockAiImageProvider()`
+はネットワーク呼び出しなしで決定論的な結果を返します。
+
+## 3. UI のマウント
+
+<Callout type="warn" title="素のファクトリはヘッドレス">
+`createAiImagePlugin` はプロバイダーを検証し、命令的な
+`submit()` メソッドを公開しますが、登録するのは**空の** Studio フックブロックです——単体では
+ライフサイクルフックや UI を一切提供しません。`@anvilkit/plugin-ai-image/react`
+（`AiImagePanel` / `createAiImageSidebarPlugin`）を介してパネルをマウントするか、
+`useAiImage` フックの上に独自の UI を構築してください。
+</Callout>
+
+## 4. ジョブクライアント、マスク、コミット
+
+- **ジョブクライアント** — `createAiJobClient` はプロバイダーの周りに中止/再試行/ポーリングを追加し、
+  一時的な障害に対して `RetryableError` を表面化します。
+- **マスク** — `drawMask`、`rasterizeMaskToDataUrl`、`createMaskToAssetExporter`
+  は、エディターのストロークをインペイントジョブ用のマスクアセットに変換します。`dataUrlToFile` は
+  アップロードアダプターへの橋渡しを行います。
+- **コミット** — `commitImageReplace` は生成された画像を、それを要求した
+  キャンバスレイヤーへ書き戻します。
+- **後処理** — `createPostProcessPipeline`（メインバンドルを軽量に保つためサブパスのみ）
+  は、アップロード前に結果を圧縮しサムネイルを生成します。
+
+<Callout type="info" title="ステータス（alpha、v0.1.1）">
+イテレーション 1 の構成要素はすべて提供済みです（ジョブクライアント、モックプロバイダー、マスク
+エディター、後処理パイプライン、コミットヘルパー、React サイドバーサーフェス）。API は
+`1.0` より前に変更される可能性があります。
+</Callout>

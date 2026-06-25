@@ -1,0 +1,253 @@
+---
+title: "アセットマネージャープラグイン"
+description: "@anvilkit/plugin-asset-manager をインストールした Studio ホスト向けの、フォルダー・Unsplash・検索・IR 時解決を備えたゼロコンフィグのアセットライブラリ。"
+---
+
+`@anvilkit/plugin-asset-manager` はファーストパーティのヘッドレス `StudioPlugin` です。
+すぐに使えるインメモリのアセットライブラリを標準で提供します —— **すべてのオプションは
+任意です**。気にする `fetch`/データ操作（一覧 / 削除
+/ 置換 / 名前変更 / 移動 / フォルダー作成）だけを接続すれば、プラグインが残りをすべてカプセル化します：
+バリデーション、検索機能付きのインメモリレジストリ、フォルダー、Unsplash、カテゴリーと
+フィルタリング、IR 時の `asset://` 解決、CSP のガイダンス、そして任意の React UI。
+すべてのアダプターのレスポンスは、登録される前に厳格な信頼境界を越えます。
+
+## 1. インストール
+
+```sh
+pnpm add @anvilkit/plugin-asset-manager
+```
+
+ピア依存関係（一般的な Studio ホストには既に存在します）：
+
+- `@puckeditor/core ^0.21.3`
+- `react >=19.0.0`
+- `react-dom >=19.0.0`
+
+サブパスエクスポート：
+
+- `@anvilkit/plugin-asset-manager` —— ファクトリー、アダプター、バリデーション、CSP アドバイザー、エラー。
+- `@anvilkit/plugin-asset-manager/ui` —— React UI コンポーネント（ブラウザー + フォルダー + Unsplash パネル）。
+- `@anvilkit/plugin-asset-manager/adapters/s3` —— 本番用の `s3PresignedAdapter`。
+- `@anvilkit/plugin-asset-manager/providers/unsplash` —— 遅延読み込みで依存関係のない Unsplash プロバイダー。
+- `@anvilkit/plugin-asset-manager/retry` —— `RetryableError` + `withRetry()`。
+- `@anvilkit/plugin-asset-manager/testing` —— 下流のプラグインテスト用のフィクスチャ。
+
+## 2. ゼロコンフィグ
+
+`createAssetManagerPlugin()` は **引数なし** で動作します —— フォルダーが有効化された
+インメモリライブラリが得られます。アップロードされたファイルはページのライフタイムの `blob:`/`data:`
+URL になります。サーバー側には何も永続化されません。
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createAssetManagerPlugin } from "@anvilkit/plugin-asset-manager";
+
+const assetManager = createAssetManagerPlugin();
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[assetManager]} />;
+}
+```
+
+実際のアップロードには `uploader` を渡します。`dataUrlUploader` は開発専用です（ファイルは
+インメモリの `data:` URL になります）。本番では `s3PresignedAdapter` またはカスタムの `UploadAdapter`
+に差し替えてください。
+
+```ts
+import { createAssetManagerPlugin } from "@anvilkit/plugin-asset-manager";
+import { s3PresignedAdapter } from "@anvilkit/plugin-asset-manager/adapters/s3";
+
+const assetManager = createAssetManagerPlugin({
+  uploader: s3PresignedAdapter({
+    presignEndpoint: "/api/s3/presign",
+    region: "us-east-1",
+  }),
+});
+```
+
+`<Studio>` のプラグインコンパイルパイプラインがレンダリングごとに再実行されないよう、
+ファクトリー呼び出しをモジュールスコープに巻き上げてください。
+デフォルトの Studio サイドバーの **Images** レールは、ライブラリ、
+フォルダーのパンくず/ツリー、ソースタブ、そして（設定されている場合は）
+Unsplash ピッカーをレンダリングします —— 追加の配線は不要です。
+
+## 3. オプション
+
+すべてのフィールドは任意です。既存の `createAssetManagerPlugin({ uploader })` 呼び出しは
+変更なしで引き続き動作します。
+
+```ts
+interface AssetManagerOptions {
+  readonly uploader?: UploadAdapter; // binary ingest; defaults to an in-memory uploader
+  readonly dataSource?: AssetDataSource; // host-backed catalog (list / CRUD / folders) — §4
+  readonly folders?: boolean | FolderOptions; // folder chrome (default: enabled, in-memory) — §5
+  readonly providers?: readonly AssetSourceProvider[]; // extra read-only sources (federated)
+  readonly unsplash?: UnsplashSourceOptions; // built-in Unsplash source (proxy-first) — §6
+  readonly categories?: readonly AssetCategory[]; // saved-view chips
+  readonly facets?: readonly AssetFacetDefinition[]; // custom faceted filters — §7
+  // existing optional fields, unchanged:
+  readonly maxFileSize?: number;
+  readonly acceptedMimeTypes?: readonly string[];
+  readonly dataUrlAllowlistOptIn?: boolean; // permit data: URLs (default false)
+  readonly allowMixedScriptHostnames?: boolean; // homoglyph guard (default false)
+  readonly getThumbnail?: (entry: UploadResult) => string | undefined;
+}
+```
+
+`uploader`（バイナリの取り込み）と `dataSource`（カタログ操作）は直交しています：
+`dataSource.replace(id, file)` は `File` をまず `uploader` を通してルーティングし、その後
+結果をカタログに渡します。初回のアップロードは常に `uploader` を経由して流れます。
+
+## 4. ホストが裏で支えるデータソース
+
+自分の API でライブラリを支えるには、`dataSource` を提供します。必要なメソッド **だけ**
+を実装してください —— 省略したメソッドはインメモリのデフォルトにフォールバックします。
+読み取り/書き込みのプレーンは一体として解決されます：_部分的な_ アセット（またはフォルダー）
+メソッドのセットを提供した場合、プレーン全体がインメモリにフォールバックし、一度だけ警告が
+ログ出力されます。
+
+```ts
+const assetManager = createAssetManagerPlugin({
+  dataSource: {
+    async list(q, signal) {
+      return (
+        await fetch(`/api/assets?folder=${q.folderId ?? ""}`, { signal })
+      ).json();
+    },
+    async remove(id) {
+      await fetch(`/api/assets/${id}`, { method: "DELETE" });
+    },
+    async rename(id, name) {
+      return (
+        await fetch(`/api/assets/${id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ name }),
+        })
+      ).json();
+    },
+    async move(id, folderId) {
+      await fetch(`/api/assets/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ folderId }),
+      });
+    },
+    async listFolders() {
+      return (await fetch("/api/folders")).json();
+    },
+    async createFolder(p, name) {
+      return (
+        await fetch("/api/folders", {
+          method: "POST",
+          body: JSON.stringify({ parentId: p, name }),
+        })
+      ).json();
+    },
+  },
+});
+```
+
+`list(query)` はアセットページ **と** 現在のフォルダーツリー +
+パンくず（`folders` / `folderPath`）の両方を返すため、単一のエンドポイントでレール全体を駆動できます。
+非同期の失敗は `AssetSourceError`（`code`、`retryable`、
+`status`、`retryAfterMs` を保持）をスローすべきです。サイドバーは再試行バナーを表示します。
+
+## 5. フォルダー
+
+フォルダーは **デフォルトでオン** です（`folders: true`）。フォルダーの所属はライブラリの
+メタデータのみです —— それは決して IR に入らないため、アセットを移動しても
+レンダリングされるページは変わりません（`asset://<id>` 参照はフォルダーに依存しません）。
+フラットなライブラリには `folders: false` を、設定するには `folders: { maxDepth, allowMove }` を
+渡してください。
+
+```ts
+const assetManager = createAssetManagerPlugin({
+  folders: { maxDepth: 4, allowMove: true },
+});
+```
+
+フォルダーの削除はデフォルトで子要素を親へ **再ペアレント** します（参照されている
+バイトを決してカスケード削除しません）。ホストの `removeFolder` に `{ cascade: true }`
+を渡すと削除をオプトインできます。移動は全か無かで検証され、
+循環/`maxDepth` ガードを実行します。
+
+## 6. Unsplash
+
+Unsplash は組み込みで、**設定すると有効化** されます（プロキシ優先；パッケージは
+キーを埋め込みません）。`proxyEndpoint` を、サーバー専用の環境変数からあなたの
+`Client-ID` を注入する小さなサーバールートに向けてください。そうすればキーが
+ブラウザーに到達することはありません。
+
+```ts
+const assetManager = createAssetManagerPlugin({
+  uploader: s3PresignedAdapter({
+    presignEndpoint: "/api/s3/presign",
+    region: "us-east-1",
+  }),
+  unsplash: { proxyEndpoint: "/api/unsplash", appName: "my-app" },
+});
+```
+
+Unsplash のコードは遅延サブパスインポートの背後にあるため、ヘッドレスエントリー
+チャンクには決して入りません。複数のテーマがデフォルトで提供されます（自然、建築、
+ビジネス、食べ物、テクノロジー、旅行、テクスチャ、人物）。`unsplash.themes` で
+オーバーライドできます。アトリビューション（`Photo by … on Unsplash` と義務付けられた UTM
+リンク）および必須のダウンロードトリガーは、プロバイダーによって強制されます。クライアント側の
+`accessKey`（`proxyEndpoint` なし）は **開発専用** です —— キーを
+ブラウザーに送信し、一度だけ警告をログ出力します。
+
+<Callout type="warn" title="同梱されるシークレットはありません">
+  パッケージには Unsplash のキーは含まれていません。本番では `proxyEndpoint` を使用してください。
+  サーバー専用の環境変数（例：
+  `UNSPLASH_ACCESS_KEY`）を通じてキーをプロキシに提供します。
+</Callout>
+
+## 7. カテゴリーとフィルタリング
+
+直交する 4 つの軸が AND で組み合わさります：**kind**（派生）、**tags**（オープン）、
+**folder**（単一親ツリー）、**source**（来歴）。ホストは
+保存ビューの `categories` とカスタムの `facets`（`valueOf` によるローカル、またはリモート）を追加します ——
+それらは決して組み込みを再設定しません。複数のソースが存在する場合、
+プラグインはフェデレーションします（レート制限された Unsplash がローカルの結果を空にすることは決してありません）。そして
+不透明な複合カーソルでページングします。
+
+## 8. 信頼境界
+
+アダプターが返すすべての `UploadResult` は、登録前に `validateUploadResult`
+を通して実行されます：スキームの許可リスト（`http`、`https`、`blob` は常に；`data:`
+は `dataUrlAllowlistOptIn` のときのみ）、パストラバーサルガード、そして IDN 同形異義字
+ガード。`javascript:` および `vbscript:` URL は完全にブロックされます。
+
+バリデーションは `AssetValidationError` をスローします。非同期/フォルダー/プロバイダーの失敗は
+`AssetSourceError` をスローします。エクスポート時の `asset://` 解決の失敗は `AssetResolutionError` をスローします。
+
+## 9. IR 時の解決と CSP
+
+`createIRAssetResolver` / `resolveAssets` は、エクスポートまたはレンダリング時に Page IR 内の
+`asset://<id>` 参照を検証済みの URL へ変換します。`getRequiredCsp` は、
+設定されたアダプターが必要とする最小の `connect-src` / `img-src` / `media-src` ディレクティブを計算します：
+
+```ts
+import { getRequiredCsp } from "@anvilkit/plugin-asset-manager";
+
+const csp = getRequiredCsp({ adapters: ["s3"] });
+```
+
+## 10. 任意の React UI
+
+デフォルトの Studio サイドバーはすでにリッチなアセットクロムをレンダリングします。独自の
+サーフェスをマウントするホストのために、`./ui` サブパスはプロパティ駆動のコンポーネントを提供します：
+`UploadButton`、`AssetBrowser`、`AssetCommandPalette`、`MetadataPanel`、
+`ReplaceAssetDialog`、`DeleteAssetDialog`、複合の `AssetManagerUI`、
+フォルダーキット（`FolderTree`、`FolderBreadcrumb`、`CreateFolderDialog` /
+`RenameFolderDialog`、`DeleteFolderDialog`、`MoveTargetPicker`、
+`EmptyFolderState`）、そして `UnsplashPanel`。フォルダーへのドラッグはネイティブの HTML5
+DnD API を使用します（`@dnd-kit` は不使用）。すべての移動はキーボードでアクセスできる
+`MoveTargetPicker` 経由でも到達可能です。デフォルト（`.`）のエクスポートはそれらのいずれもインポートしないため、ヘッドレスな
+コンシューマーは UI レンダリングのコストを一切支払いません。
+
+<Callout type="info" title="ステータス（alpha、v0.1.6）">
+  公開サーフェスは `v1.0` の前にまだ変わる可能性があります。バンドル予算は
+  CI で強制されます：ヘッドレスエントリー ≤ 8 KB gzip、`./ui` ≤ 12 KB gzip、Unsplash サブパス ≤ 4 KB
+  gzip。Unsplash リークゲートは `api.unsplash.com` / `images.unsplash.com`
+  をヘッドレスチャンクから締め出します。
+</Callout>

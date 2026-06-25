@@ -1,0 +1,28 @@
+---
+title: "LifecycleEventName"
+description: "@anvilkit/core · LifecycleEventName"
+---
+
+```ts
+type LifecycleEventName = 
+  | "onInit"
+  | "onReady"
+  | "onDataChange"
+  | "onBeforePublish"
+  | "onAfterPublish"
+  | "onDestroy";
+```
+
+Defined in: [runtime/lifecycle-manager.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L101)
+
+The closed union of lifecycle event names the runtime fires.
+
+Must be kept in sync **by hand** with the optional keys on
+[StudioPluginLifecycleHooks](../interfaces/StudioPluginLifecycleHooks) — TypeScript does **not** force it
+(review finding A-8). `getHook` indexes the wider hooks interface by
+this narrower union, so a hook added to the interface but omitted from
+this union would simply never be dispatched (a silent no-op), not a
+compile error. The forcing function runs the *other* direction: a name
+in this union with no matching key in `StudioPluginLifecycleHooks`
+fails `getHook`'s return type. When adding a hook, update both this
+union and the `emit` dispatch table.

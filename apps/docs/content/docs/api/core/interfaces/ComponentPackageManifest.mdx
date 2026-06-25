@@ -1,0 +1,28 @@
+---
+title: "ComponentPackageManifest"
+description: "@anvilkit/core · ComponentPackageManifest"
+---
+
+Defined in: [types/config.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L97)
+
+Runtime-discoverable metadata for an `@anvilkit/<slug>` component
+package.
+
+Mirrors the metadata shape every component package exports from
+its own `config.ts` (`componentName`, `componentSlug`,
+`packageName`, `packageVersion`, `scaffoldType`, `schemaVersion`).
+The host app's plugin discovery layer projects the on-disk
+manifest into this shape so the Studio runtime can enumerate
+installed components without importing their full Puck configs.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="displayname"&gt;&lt;/a&gt; `displayName` | `readonly` | `string` | Human-readable display name surfaced in the editor's component palette (e.g. `"Button"`, `"Bento Grid"`). | [types/config.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L117) |
+| &lt;a id="entry"&gt;&lt;/a&gt; `entry` | `readonly` | `string` | Path or package specifier the host app uses to import the component's Puck config (e.g. `"@anvilkit/button"`, `"./components/hero"`). | [types/config.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L140) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | Fully-qualified package name on npm (e.g. `"@anvilkit/button"`). | [types/config.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L102) |
+| &lt;a id="scaffoldtype"&gt;&lt;/a&gt; `scaffoldType` | `readonly` | `"content"` \| `"layout"` \| `"form"` | The scaffold template this component was produced from. - `"content"` — author-facing text/media components. - `"layout"` — structural containers, grids, stacks. - `"form"` — inputs, buttons, form wrappers. Closed union — extending it requires updating the scaffold CLI in `packages/components/`. | [types/config.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L128) |
+| &lt;a id="schemaversion"&gt;&lt;/a&gt; `schemaVersion` | `readonly` | `string` | The version of the component package schema this manifest was produced against. Used by future migration shims when the manifest shape itself evolves. | [types/config.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L134) |
+| &lt;a id="slug"&gt;&lt;/a&gt; `slug` | `readonly` | `string` | Short, URL-safe slug for the component (e.g. `"button"`, `"bento-grid"`). Matches the directory name under `packages/components/src/`. | [types/config.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L112) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `readonly` | `string` | The package's own semver version (e.g. `"1.2.3"`). | [types/config.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L106) |

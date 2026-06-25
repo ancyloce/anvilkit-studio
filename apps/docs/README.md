@@ -1,75 +1,45 @@
 # @anvilkit/docs-site
 
-Public documentation for AnvilKit — built with [Starlight](https://starlight.astro.build) (Astro), hosted on Vercel.
+The anvilkit-studio documentation site. Built with **[Fumadocs](https://fumadocs.dev/)**
+on **[TanStack Start](https://tanstack.com/start)** (Vite + Nitro) — a server-rendered
+app deployed to Vercel via the Nitro Build Output API.
 
-- **Production:** <https://docs.anvilkit.dev>
-- **Framework:** Astro 6 + Starlight
-- **Decision record:** [ADR 001 — Docs framework: Starlight](../../docs/decisions/001-docs-framework-starlight.md)
+> Migrated from Astro/Starlight. The content, the interactive Puck `/playground`,
+> the marketplace catalog, and the registry/scorecard tooling all carried over;
+> the runtime is now SSR rather than a static `dist/`.
 
-## Local development
+## Commands
 
 ```bash
-pnpm --filter @anvilkit/docs-site dev     # astro dev on :4321
-pnpm --filter @anvilkit/docs-site build   # astro build → apps/docs/dist/
-pnpm --filter @anvilkit/docs-site preview # serve the built site
+pnpm dev            # Vite dev server on :4321 (also boots the embedded collab relay)
+pnpm build          # vite build → Nitro Build Output API at .vercel/output (preset: vercel)
+pnpm typecheck      # fumadocs-mdx && tsc --noEmit
+pnpm test           # vitest — registry-feed + scorecard + guide code-block tests
+pnpm e2e            # Playwright — playground + marketplace specs
+pnpm generate:all   # regenerate component/API/template pages + registry/feed.json
 ```
 
-The `prebuild` / `predev` hooks run `generate:all` (`scripts/generate-component-pages.ts`, `generate-api-pages.ts`, `generate-template-pages.mjs`, and `generate-registry-feed.ts`), so MDX under `src/content/docs/components/`, `src/content/docs/api/`, and `src/content/docs/templates/` — plus the registry feed under `src/registry/` — is regenerated automatically.
+## Content
 
-## Deploy pipeline (Vercel)
+MDX lives under `content/docs/**`. Hand-authored prose is internationalized in
+**en / zh / ja / ko** via locale-suffixed siblings (`foo.zh.mdx`, …); English is
+the default locale and is served without a path prefix (Starlight URL parity).
 
-Configured by `vercel.json` at the repository root.
+Three trees are **generated and committed** (no build-time generation hook):
 
-| Setting           | Value                                                                 |
-| ----------------- | --------------------------------------------------------------------- |
-| Build command     | `pnpm install --frozen-lockfile && pnpm -F @anvilkit/docs-site build` |
-| Output directory  | `apps/docs/dist`                                                      |
-| Node version      | `22` (matches `.github/workflows/ci.yml`)                             |
-| Production branch | `main`                                                                |
-| Production domain | `docs.anvilkit.dev`                                                   |
+| Tree                        | Generator                                   |
+| --------------------------- | ------------------------------------------- |
+| `content/docs/components/`  | `scripts/generate-component-pages.ts`       |
+| `content/docs/api/`         | `scripts/generate-api-pages.ts` (TypeDoc)   |
+| `content/docs/templates/`   | `scripts/generate-template-pages.mjs`       |
+| `src/registry/feed.json` + `public/registry/` | `scripts/generate-registry-feed.mjs` |
 
-### Preview behavior
+Run `pnpm generate:all` after changing a component, plugin, or template to refresh
+them. The auto-generated API reference (`content/docs/api/**`) is English-only and
+reached for other locales via Fumadocs `fallbackLanguage`.
 
-Every pull request gets a Vercel preview deployment and a GitHub check with the preview URL, provided the diff touches any of:
+## Deployment
 
-- `apps/docs/**`
-- `packages/components/**`
-- `packages/core/**`
-
-PRs whose diff avoids all three paths are skipped via `vercel.json`'s `ignoreCommand` so we don't burn build minutes on unrelated changes. Pushes to `main` always redeploy production, regardless of paths.
-
-### Merging to `main`
-
-A merge to `main` triggers a production redeploy. Propagation typically completes within 5 minutes.
-
-### One-time Vercel project setup
-
-These steps are performed once in the Vercel dashboard — they can't be expressed in `vercel.json`:
-
-1. **Create project** — import the `ancyloce/anvilkit-studio` GitHub repo.
-2. **Root Directory:** leave as repo root (`./`). `vercel.json` drives the build from there.
-3. **Node version:** `22.x` (Project Settings → General → Node.js Version).
-4. **Environment variables:** none required for the docs site today.
-5. **Git Submodules:** enable "Include Git Submodules" so `packages/components`, `packages/plugins/plugin-ai-copilot`, and `packages/plugins/plugin-export-html` check out during the build.
-6. **Custom domain:** add `docs.anvilkit.dev` (Project Settings → Domains) and point the DNS `CNAME` to `cname.vercel-dns.com`.
-7. **Production branch:** `main`.
-8. **GitHub check integration:** enabled by default — posts preview and production deploy checks on every PR.
-
-### CI vs. Vercel
-
-`.github/workflows/ci.yml` already runs `pnpm turbo run docs:build` on every PR as a correctness gate. Vercel is the deploy gate: a failing Vercel build surfaces in PR UI but does not block CI (informational only). The CI build and the Vercel build are intentionally independent — a regression in either surfaces before merge.
-
-## Content layout
-
-```
-src/content/docs/
-├── index.mdx              # Landing page
-├── getting-started.mdx    # Quickstart
-├── components/            # Generated by scripts/generate-component-pages.ts
-├── api/                   # Generated by scripts/generate-api-pages.ts (TypeDoc)
-└── templates/             # Generated by scripts/generate-template-pages.mjs
-```
-
-The interactive Puck playground is an Astro route at `src/pages/playground.astro` (`/playground/`), not a content collection.
-
-Generated directories are rebuilt via the `prebuild` hook; don't hand-edit files under `components/`, `api/`, or `templates/`.
+Vercel **Root Directory** must be `apps/docs`. Vercel reads `apps/docs/vercel.json`,
+runs the build from the repo root, and consumes the Build Output API that Nitro
+emits to `apps/docs/.vercel/output`. There is no root `vercel.json`.

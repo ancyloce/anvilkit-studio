@@ -1,0 +1,12 @@
+{
+	"title": "API Reference",
+	"pages": [
+		"index",
+		"core",
+		"ir",
+		"schema",
+		"validator",
+		"utils",
+		"..."
+	]
+}

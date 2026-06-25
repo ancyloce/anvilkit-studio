@@ -1,0 +1,37 @@
+---
+title: "StudioAssetSourceStatus"
+description: "@anvilkit/core · StudioAssetSourceStatus"
+---
+
+```ts
+type StudioAssetSourceStatus = 
+  | {
+  phase: "idle";
+}
+  | {
+  phase: "loading";
+}
+  | {
+  loaded: number;
+  phase: "paginating";
+}
+  | {
+  id: string;
+  op: string;
+  phase: "mutating";
+}
+  | {
+  error: {
+     code?: string;
+     message: string;
+     retryable?: boolean;
+  };
+  phase: "error";
+};
+```
+
+Defined in: [types/sidebar.ts:149](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L149)
+
+Loading / mutation status streamed by a source via
+[StudioAssetSource.subscribeStatus](../interfaces/StudioAssetSource#subscribestatus). The error variant carries a
+structural error (no class dependency on a plugin).

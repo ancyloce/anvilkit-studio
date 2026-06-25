@@ -1,0 +1,32 @@
+---
+title: "downloadExportResult"
+description: "@anvilkit/core · downloadExportResult"
+---
+
+```ts
+function downloadExportResult(
+   content, 
+   filename, 
+   mimeType): void;
+```
+
+Defined in: [export/download.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/export/download.ts#L29)
+
+Trigger a browser download of exported content via a transient
+object-URL + anchor click.
+
+A `string` is wrapped in a `Blob` with `mimeType`; a `Uint8Array` is
+downloaded as raw bytes. The object URL is always revoked afterwards.
+Browser-only — calling this without a DOM throws.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `content` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | The serialized output (`ExportResult.content`). |
+| `filename` | `string` | Suggested filename, including extension. |
+| `mimeType` | `string` | The format's MIME type (`ExportFormatDefinition.mimeType`). |
+
+## Returns
+
+`void`

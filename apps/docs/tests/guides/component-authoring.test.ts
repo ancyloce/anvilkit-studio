@@ -1,6 +1,6 @@
 /**
  * Code-block extraction harness for the component authoring guide
- * (`apps/docs/src/content/docs/guides/component-authoring.mdx`).
+ * (`apps/docs/content/docs/guides/component-authoring.mdx`).
  *
  * Each `describe(...)` below corresponds to one numbered section of
  * the guide, and the snippets inside mirror — verbatim where

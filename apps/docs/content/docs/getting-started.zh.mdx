@@ -1,0 +1,106 @@
+---
+title: 快速开始
+description: 安装 AnvilKit，挂载一个最小的 Studio 宿主，并渲染你的第一个 Puck 页面。
+---
+
+AnvilKit 是一个 Puck 原生的组件生态：可独立发布的组件
+（`@anvilkit/*`）、运行时外壳（`@anvilkit/core`）以及插件。本指南将在一个
+React 应用中挂载一个最小的 Studio 宿主。
+
+## 前置条件
+
+- Node.js **≥ 22.13**（与工作区的 `engines` 约束一致）
+- pnpm、npm 或 yarn
+- 一个 React 19 宿主应用（推荐 Next.js 16）
+
+## 安装
+
+按需选择所需的组件 —— 没有统一的捆绑包。
+
+<Tabs items={['pnpm', 'npm', 'yarn']}>
+	<Tab value="pnpm">
+
+```bash
+pnpm add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+	<Tab value="npm">
+
+```bash
+npm install @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+	<Tab value="yarn">
+
+```bash
+yarn add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+</Tabs>
+
+## 最小的 `<Studio>` 宿主
+
+1. 导入组件并组合一个 Puck `Config`。
+
+	```tsx
+	// app/studio/config.ts
+	import { componentConfig as hero } from "@anvilkit/hero";
+	import { componentConfig as button } from "@anvilkit/button";
+	import type { Config } from "@puckeditor/core";
+
+	export const config: Config = {
+		components: {
+			Hero: hero,
+			Button: button,
+		},
+	};
+	```
+
+2. 在一个客户端组件中挂载 `<Studio>`。
+
+	```tsx
+	// app/studio/page.tsx
+	"use client";
+
+	import { Studio } from "@anvilkit/core";
+	import { config } from "./config";
+
+	export default function StudioPage() {
+		return <Studio puckConfig={config} />;
+	}
+	```
+
+3. 在你的全局样式表中导入共享的主题 token。
+
+	```css
+	/* app/globals.css */
+	@import "@anvilkit/tailwind-config/shadcn";
+	```
+
+## 脚手架生成插件
+
+当你完成最小宿主后，可使用已发布的生成器脚手架创建新插件 —— 无需手动复制粘贴
+`package.json`、`rslib.config.ts` 或样板测试：
+
+```bash
+# 非交互式
+pnpm create @anvilkit/plugin \
+  --name my-plugin \
+  --display "My Plugin" \
+  --category rail-panel
+
+# 交互式（仅限 TTY）
+pnpm create @anvilkit/plugin
+```
+
+输出是一个可直接构建的包，其中已将 `@anvilkit/core/testing` 测试夹具接入一个通过的
+基线测试。完整的 `StudioPlugin` 契约请阅读 **插件编写** 指南。
+
+## 后续步骤
+
+- 浏览 **组件** 目录，查看完整的 `@anvilkit/*` 包列表。
+- 阅读 **指南**，了解插件编写、组件编写与导出流程。
+- 查阅 **API 参考**，了解 `<Studio>`、插件契约与运行时钩子。

@@ -1,0 +1,24 @@
+---
+title: "StudioAssetFolder"
+description: "@anvilkit/core · StudioAssetFolder"
+---
+
+Defined in: [types/sidebar.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L118)
+
+A folder returned by a folder-aware [StudioAssetSource](StudioAssetSource.md) (PRD 0002 §7).
+`parentId: null` is the root convention. Counts/timestamps are optional so a
+source can supply a lightweight folder for the tree without them.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="counts"&gt;&lt;/a&gt; `counts?` | `readonly` | \{ `assets`: `number`; `folders`: `number`; \} | [types/sidebar.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L124) |
+| `counts.assets` | `readonly` | `number` | [types/sidebar.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L125) |
+| `counts.folders` | `readonly` | `number` | [types/sidebar.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L126) |
+| &lt;a id="createdat"&gt;&lt;/a&gt; `createdAt?` | `readonly` | `number` | [types/sidebar.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L122) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | [types/sidebar.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L119) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string` \| `number` \| `boolean`\&gt;\&gt; | [types/sidebar.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L128) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | [types/sidebar.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L120) |
+| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId` | `readonly` | `string` \| `null` | [types/sidebar.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L121) |
+| &lt;a id="updatedat"&gt;&lt;/a&gt; `updatedAt?` | `readonly` | `number` | [types/sidebar.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L123) |

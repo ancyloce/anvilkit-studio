@@ -1,0 +1,43 @@
+---
+title: "composeHeaderActions"
+description: "@anvilkit/core · composeHeaderActions"
+---
+
+```ts
+function composeHeaderActions<T>(actions): T[];
+```
+
+Defined in: [runtime/header-actions.ts:193](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L193)
+
+Sort and validate the flat list of plugin-contributed header
+actions into the canonical render order.
+
+Pure: no logging, no React, no mutation of the input array. The
+returned array is a fresh copy so callers can mutate it freely
+(e.g. to attach React keys at render time) without affecting any
+other consumer.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* [`SortableHeaderAction`](../interfaces/SortableHeaderAction) |
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `actions` | readonly `T`[] | Flat array of action descriptors, typically built by concatenating the `headerActions` field of every [StudioPluginRegistration](../interfaces/StudioPluginRegistration) the host app loaded. |
+
+## Returns
+
+`T`[]
+
+A new array sorted by `(group, order, id)`.
+
+## Throws
+
+[StudioPluginError](../classes/StudioPluginError) when two actions share the same
+`id`. The error's `pluginId` field is set to the duplicated
+action id; `compilePlugins()` provides richer attribution at the
+layer above when it knows which plugin contributed each action.

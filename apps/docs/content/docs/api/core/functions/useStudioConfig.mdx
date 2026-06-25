@@ -1,0 +1,115 @@
+---
+title: "useStudioConfig"
+description: "@anvilkit/core · useStudioConfig"
+---
+
+## File
+
+Root barrel for `@anvilkit/core` — the package's public API
+surface (task `core-015`).
+
+Every name reachable through `import { X } from "@anvilkit/core"`
+passes through this file. The list is deliberately explicit rather
+than `export *` so a PR that inadvertently widens (or narrows) the
+public surface is impossible to miss in code review.
+
+### Layer map
+
+The named exports below are grouped by the four M2–M5 layers:
+
+- **Types** — the pure TypeScript types plugin authors and host apps
+  use to describe plugins, registrations, config, and domain records.
+  Re-exported via `export type *` so the barrel stays free of runtime
+  type imports.
+- **Runtime** — the React-free plugin engine: `compilePlugins`, the
+  error class family, the export registry + header-action composer,
+  and the lifecycle manager factory. React never appears in this
+  layer; the `scripts/check-react-free.mjs` quality gate enforces
+  that at CI time.
+- **Config** — the Zod schema, the layered-merge factory, the React
+  provider, and the `useStudioConfig()` hook.
+- **React** — the public `<Studio>` shell, `useStudio()` projection
+  hook, `mergeOverrides` helper, and the three Zustand store hooks
+  (`useExportStore` / `useAiStore` / `useThemeStore`).
+
+### What is NOT re-exported
+
+`src/compat/ai-host-adapter.ts` — the legacy `aiHost` compat adapter
+— is **intentionally absent** from this barrel. It is reachable only
+at the `@anvilkit/core/compat` subpath so ESM tree-shaking can drop
+it entirely from host bundles that never import it. The
+`check-bundle-budget.mjs` script asserts the adapter is absent from
+a build that imports only `{ Studio }`, resolving `core-010`
+acceptance criterion #6.
+
+Internal primitives that are not part of the public contract — e.g.
+`StudioRuntimeProvider`, `detectPlugin` internals, internal schema
+helpers — are deliberately not surfaced here. Consumers who need a
+deeper hook reach for the `@anvilkit/core/runtime`,
+`@anvilkit/core/config`, or `@anvilkit/core/react` subpath barrels.
+
+## See
+
+[core-015](https://github.com/anvilkit/studio/blob/main/docs/tasks/core-015-public-api-gates.md)
+
+## Call Signature
+
+```ts
+function useStudioConfig(): StudioConfig;
+```
+
+Defined in: [config/hooks.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/hooks.ts#L63)
+
+Read the full [StudioConfig](../type-aliases/StudioConfig) from the nearest
+[StudioConfigProvider](StudioConfigProvider.md). Throws if no provider is mounted
+above the caller — the error message is surfaced by
+`getStrictContext` and contains the string `"StudioConfig"`.
+
+### Returns
+
+[`StudioConfig`](../type-aliases/StudioConfig)
+
+### Example
+
+```ts
+function Header() {
+  const config = useStudioConfig();
+  return <h1>{config.branding.appName}</h1>;
+}
+```
+
+## Call Signature
+
+```ts
+function useStudioConfig<T>(selector): T;
+```
+
+Defined in: [config/hooks.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/hooks.ts#L78)
+
+Read a projection of [StudioConfig](../type-aliases/StudioConfig) through `selector`. The
+result is memoized by `[config, selector]` — see the file header
+for the trade-off behind that key.
+
+### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `selector` | (`config`) =&gt; `T` | Pure function that picks a slice of the config. Inline arrow functions are fine; the memo guards cheap primitives and object references stay stable as long as both the config and the selector reference are unchanged. |
+
+### Returns
+
+`T`
+
+The slice produced by `selector(config)`.
+
+### Example
+
+```ts
+const enableExport = useStudioConfig((c) => c.features.enableExport);
+```

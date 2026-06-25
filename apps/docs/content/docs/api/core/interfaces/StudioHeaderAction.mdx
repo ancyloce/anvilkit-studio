@@ -1,0 +1,41 @@
+---
+title: "StudioHeaderAction"
+description: "@anvilkit/core · StudioHeaderAction"
+---
+
+Defined in: [types/plugin.ts:277](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L277)
+
+Header action descriptor, contributed by plugins via
+[StudioPluginRegistration.headerActions](StudioPluginRegistration.md#headeractions).
+
+Plugins author header actions as **plain data** — no React, no
+components, no closures over render-time state. The Studio shell
+(`core-014`) is responsible for resolving the [icon](#icon) string
+to a `lucide-react` icon element, rendering the [labelKey](#labelkey), and
+wiring up `onClick` / `disabled` to the live React tree at runtime.
+
+Keeping the type free of `ReactNode` / `ComponentType` lets the
+`runtime/` layer stay React-free (architecture §17) and lets test
+code compare action arrays with structural equality.
+
+The full shape was finalized in `core-009` alongside
+`composeHeaderActions()`. The interface lives in `src/types/` so
+`StudioPluginRegistration` can reference it without crossing the
+types → runtime boundary; `composeHeaderActions()` re-exports it
+for callers that import from `@anvilkit/core/runtime`.
+
+## See
+
+[core-009](https://github.com/anvilkit/studio/blob/main/docs/tasks/core-009-runtime-export-header.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="disabled"&gt;&lt;/a&gt; `disabled?` | `readonly` | (`ctx`) =&gt; `boolean` | Optional predicate that disables the action based on live context. Called on every render of the header (cheap by convention — do not perform async work or expensive computation here). Receives the same [StudioPluginContext](StudioPluginContext.md) as `onClick`. Return `true` to disable the button, `false` (or omit) to enable it. | [types/plugin.ts:375](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L375) |
+| &lt;a id="group"&gt;&lt;/a&gt; `group?` | `readonly` | `"secondary"` \| `"overflow"` \| `"primary"` | Display group the action belongs to. Used by `composeHeaderActions()` as the primary sort key. - `"primary"` — high-emphasis call-to-action (e.g. "Publish"). - `"secondary"` — normal toolbar action (e.g. "Save Draft"). **Default** when omitted — most actions belong here. - `"overflow"` — collapsed into the "…" menu when space is tight (e.g. "Generate with AI", "Download HTML"). | [types/plugin.ts:335](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L335) |
+| &lt;a id="icon"&gt;&lt;/a&gt; `icon?` | `readonly` | `string` | Optional `lucide-react` icon **name** (e.g. `"download"`, `"sparkles"`). Resolved to a real icon component at render time by the Studio shell. **Why a string and not a `ComponentType`?** The `runtime/` layer cannot import React, and plugin-contributed action arrays must stay serializable enough that lifecycle tests can compare them with `toEqual`. The string-name indirection lets the renderer own React while the protocol stays headless. **Resolvable set.** The shell resolves against a *curated* registry (not all of `lucide-react`) so the chrome bundle tree-shakes to only the icons it ships — a namespace import would retain every Lucide icon. Name matching is case/separator insensitive (`"download"`, `"Download"`, `"down-load"` all resolve). A name outside the registry resolves to no icon (the label still renders). To add an icon, extend `ICON_REGISTRY` in `react/studio/layout/HeaderActionButton.tsx` (and the chrome-path bundle-budget gate covers the size impact). | [types/plugin.ts:323](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L323) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, globally-unique identifier for the action (e.g. `"export-html"`, `"publish"`). `composeHeaderActions()` rejects duplicate ids across all contributing plugins. Convention: lowercase, hyphen-separated, no namespace prefix — the runtime treats ids as opaque strings. | [types/plugin.ts:286](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L286) |
+| &lt;a id="labelkey"&gt;&lt;/a&gt; `labelKey` | `readonly` | `string` | i18n message key resolved to the visible label by the Studio shell via `useMsg(labelKey)` at render time — so the button localizes with the active locale and a lazy reserved slot (`StaticHeaderActionPlaceholder`) shows the localized string before the plugin chunk loads. Required. `composeHeaderActions()` rejects an action without it. The raw `label` fallback was removed after its one-release deprecation window — author the English copy in the plugin's i18n catalog under this key instead. | [types/plugin.ts:300](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L300) |
+| &lt;a id="onclick"&gt;&lt;/a&gt; `onClick` | `readonly` | (`ctx`) =&gt; `void` \| `Promise`\&lt;`void`\&gt; | Click handler invoked by the Studio shell when the user activates the action. Receives the same [StudioPluginContext](StudioPluginContext.md) the lifecycle hooks receive, so the action can read live page data, call `getPuckApi().dispatch()`, log diagnostics, or `emit` events to other plugins. The runtime awaits the returned promise (if any) before re-enabling the button — host apps are free to render a loading affordance during the wait. Errors thrown from `onClick` are caught by the shell and routed through `ctx.log("error", …)`; they do not crash the editor. | [types/plugin.ts:363](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L363) |
+| &lt;a id="order"&gt;&lt;/a&gt; `order?` | `readonly` | `number` | Per-group ordering hint. Lower values render first; the default is `100` so plugin authors can interleave their actions with built-ins (which conventionally use round numbers like `0`, `100`, `200`). Within a group, actions are sorted ascending by `order`. Ties break on [id](#id) for determinism. | [types/plugin.ts:346](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L346) |

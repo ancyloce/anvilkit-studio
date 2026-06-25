@@ -2,11 +2,13 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import type { z } from "zod";
 import {
-	type RegistryEntry,
 	RegistryEntrySchema,
 	RegistryFeedSchema,
-} from "../../src/registry/feed.schema.ts";
+} from "../../src/registry/feed.schema.mjs";
+
+type RegistryEntry = z.infer<typeof RegistryEntrySchema>;
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FEED_PATH = join(here, "..", "..", "src", "registry", "feed.json");

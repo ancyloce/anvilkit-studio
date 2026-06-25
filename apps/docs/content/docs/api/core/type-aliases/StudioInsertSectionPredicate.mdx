@@ -1,0 +1,26 @@
+---
+title: "StudioInsertSectionPredicate"
+description: "@anvilkit/core · StudioInsertSectionPredicate"
+---
+
+```ts
+type StudioInsertSectionPredicate = (componentName, metadata) => boolean;
+```
+
+Defined in: [types/sidebar.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L38)
+
+Predicate used by `registerInsertSection()` to decide which
+components belong in this section. Receives the component name (a
+Puck Config key) and may inspect the component's metadata category
+via the second argument.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `componentName` | `string` |
+| `metadata` | \| \{ `category?`: `string`; \} \| `undefined` |
+
+## Returns
+
+`boolean`

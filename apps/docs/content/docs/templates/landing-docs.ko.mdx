@@ -1,0 +1,56 @@
+---
+title: "개발자 도구 문서 사이트 랜딩 페이지"
+description: "개발자 도구 문서 사이트 랜딩 페이지 — 히어로, 기능 그리드, FAQ."
+---
+
+![개발자 도구 문서 사이트 랜딩 페이지 preview](/templates/landing-docs/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-landing-docs</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI로 스캐폴딩
+
+```sh
+npx anvilkit init --template landing-docs my-site
+```
+
+## 구성
+
+커밋된 `PageIR`는 루트에 다음 노드 타입을 연결합니다:
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `Helps`
+
+## 패키지 세부 정보
+
+Landing page for a developer-tool docs site.
+
+Navbar, hero, feature section, and FAQ — tuned for a developer audience who want the punchline fast.
+
+## Install
+
+```sh
+npx anvilkit init --template landing-docs my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

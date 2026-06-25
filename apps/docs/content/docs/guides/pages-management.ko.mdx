@@ -1,0 +1,187 @@
+---
+title: "다중 페이지 관리"
+description: "Studio 페이지 패널의 기능 게이트 행 액션, 페이지 설정, SEO, 검색, 드래그 재정렬."
+---
+
+`<Studio>`의 페이지 패널은 호스트가 제공하는 단일
+`StudioPagesSource`에 의해 구동됩니다. 모든 변경 어포던스
+—— 이름 변경, 삭제, 복제, 드래그 재정렬, 설정, SEO —— 는 해당
+인터페이스의 **선택적** 콜백입니다. 호스트가 콜백을 구현하면, 일치하는
+UI 어포던스가 `PageRow`에 나타납니다. 구현하지 않으면 그 어포던스는
+조용히 숨겨집니다. 호스트 변경은 전혀 강제되지 않습니다. v0.2 이전에
+출시된 동일한 소스는 계속해서 변경 없이 컴파일되고 렌더링됩니다.
+
+## 1. 얻게 되는 것
+
+| 기능 | 콜백 | 어포던스 | 숨겨지는 조건…… |
+| --- | --- | --- | --- |
+| 이름 변경 | `onRename` | 행의 인라인 `Input` | 콜백 미정의 **또는** `page.locked === true` |
+| 삭제 | `onDelete` | 행 메뉴 → 확인 대화 상자 | 콜백 미정의 **또는** `page.locked === true` |
+| 복제 | `onDuplicate` | 행 메뉴 항목 | 콜백 미정의 |
+| 페이지 설정 | `onUpdateSettings` | 설정 대화 상자 | 콜백 미정의 |
+| SEO 메타데이터 | `onUpdateSettings` | 설정 대화 상자 내 SEO 섹션 | 콜백 미정의 |
+| 드래그 재정렬 | `onReorder` | 행 호버 시 드래그 핸들; Space + 화살표 키 사이클 | 콜백 미정의(핸들 비활성) |
+| 검색 / 필터 | *(없음 —— UI 전용)* | 헤더 `Input` + 필터링된 목록 | 없음 —— 항상 사용 가능 |
+
+어떤 행이 액션을 전혀 렌더링하지 않는다면, 오버플로
+트리거 자체가 억제됩니다.
+
+## 2. 계약 표면
+
+```ts
+import type {
+  StudioPage,
+  StudioPagesSource,
+} from "@anvilkit/core/types";
+
+interface StudioPagesSource {
+  // existing — unchanged from earlier versions
+  list(): readonly StudioPage[] | Promise<readonly StudioPage[]>;
+  subscribe?(listener: () => void): () => void;
+  onSelect?(pageId: string): void;
+  onCreate?(input: StudioPageCreateInput): void | Promise<void>;
+
+  // new — all optional, capability-gated
+  onRename?(input: StudioPageRenameInput): void | Promise<void>;
+  onDelete?(pageId: string): void | Promise<void>;
+  onDuplicate?(pageId: string): void | Promise<StudioPage | void>;
+  onReorder?(input: StudioPageReorderInput): void | Promise<void>;
+  onUpdateSettings?(input: StudioPageSettingsInput): void | Promise<void>;
+}
+```
+
+전체 인터페이스(입력 형태 포함)는
+[`/api/core/interfaces/StudioPagesSource`](/ko/api/core/interfaces/StudioPagesSource/) 아래에 생성됩니다.
+
+<Callout type="info" title="낙관적 변경 없음">
+각 콜백이 resolve → 호스트가 자체 레지스트리를 변경 → 호스트가
+자체 `subscribe()` 리스너를 발동 → `PagesPanel`이 `list()`를 다시 실행
+합니다. UI는 결코 호스트보다 먼저 변경하지 않습니다. 문서화된 예외가
+하나 있습니다:
+`onDuplicate`는 생성된 `StudioPage`를 반환할 수 있으며, 이를 통해 UI는
+왕복이 완료되기 전에 그것을 미리 선택할 수 있습니다.
+</Callout>
+
+## 3. 잠긴 페이지
+
+`StudioPage.locked`는 호스트가 어떤 페이지를 이름 변경 불가 및 삭제 불가
+로 표시하기 위해 사용하는 명시적 신호입니다. 설정되면:
+
+- 해당 행의 `Rename` 및 `Delete` 메뉴 항목은 `onRename` / `onDelete`가
+  구현되어 있는지 여부와 관계없이 억제됩니다.
+- 해당 행에는 Home 아이콘이 표시됩니다(예전에는 core 내의
+  `page.id === "home"` 문자열 휴리스틱이었으나 이제는 호스트가
+  제어합니다).
+- `Duplicate`와 `Settings`는 `locked`에 의해 억제되지 **않습니다** ——
+  호스트는 잠긴 페이지를 복제하거나 해당 메타데이터를 편집하도록
+  여전히 허용할 수 있습니다.
+
+데모 소스는 홈 페이지를 `{ id: "home", title: "Home",
+locked: true }`로 표시합니다 —— 참조 구현은
+`apps/demo/lib/demo-pages-source.ts`를 참고하세요.
+
+## 4. 브랜드 token
+
+`PageRow`와 대화 상자는 스코프가 지정된
+`--ak-pages-*` token 표면을 통해 테마가 적용되며, 프리미티브 계층 +
+시맨틱 계층으로 구성됩니다. 시맨틱
+token은 `--ak-studio-*`로, 그다음 호스트의 shadcn
+변수로 체인됩니다:
+
+```css
+.ak-pages-panel {
+  --ak-pages-fg: var(--ak-studio-fg, var(--foreground));
+  --ak-pages-muted: var(--ak-studio-muted, var(--muted));
+  --ak-pages-accent: var(--ak-pages-accent-primitive);
+  --ak-pages-danger-bg: var(--ak-pages-danger-primitive);
+  /* … */
+}
+```
+
+전체 token 표면은
+`packages/core/src/studio/layout/sidebar/modules/layer/pages-tokens.css`에 있습니다.
+다크 모드는 프리미티브만 오버라이드하며, 시맨틱 token은 상속됩니다.
+이미 `--ak-studio-*` 또는 shadcn 테마 변수를 제공하는 호스트는 추가
+배선 없이도
+올바른 모습을 얻습니다.
+
+## 5. 엔드 투 엔드 참조
+
+모든 콜백을 구현한 최소 소스로, 데모를 모델로 했습니다:
+
+```ts
+import type {
+  StudioPage,
+  StudioPagesSource,
+  StudioPageRenameInput,
+  StudioPageReorderInput,
+  StudioPageSettingsInput,
+} from "@anvilkit/core/types";
+
+export function createMyPagesSource(): StudioPagesSource {
+  const pages: StudioPage[] = [
+    { id: "home", title: "Home", locked: true },
+    { id: "about", title: "About", path: "/about", route: true },
+  ];
+  let activeId = pages[0]?.id ?? "";
+  const listeners = new Set<() => void>();
+  const notify = () => {
+    for (const fn of listeners) fn();
+  };
+
+  return {
+    list: () => pages.map((p) => ({ ...p, active: p.id === activeId })),
+    subscribe(fn) {
+      listeners.add(fn);
+      return () => listeners.delete(fn);
+    },
+    onSelect(id) {
+      activeId = id;
+      notify();
+    },
+    onRename({ id, title }: StudioPageRenameInput) {
+      const p = pages.find((x) => x.id === id);
+      if (p) {
+        p.title = title;
+        notify();
+      }
+    },
+    onDelete(id) {
+      const i = pages.findIndex((p) => p.id === id);
+      if (i >= 0) {
+        pages.splice(i, 1);
+        notify();
+      }
+    },
+    async onDuplicate(id): Promise<StudioPage | void> {
+      const src = pages.find((p) => p.id === id);
+      if (!src) return;
+      const copy: StudioPage = {
+        ...src,
+        id: `${id}-copy-${Date.now()}`,
+        title: `${src.title} (copy)`,
+        locked: undefined,
+      };
+      pages.push(copy);
+      notify();
+      return copy; // pre-select on the UI side
+    },
+    onReorder({ id, toIndex }: StudioPageReorderInput) {
+      const from = pages.findIndex((p) => p.id === id);
+      if (from < 0) return;
+      const [moved] = pages.splice(from, 1);
+      if (moved) pages.splice(toIndex, 0, moved);
+      notify();
+    },
+    onUpdateSettings(input: StudioPageSettingsInput) {
+      const p = pages.find((x) => x.id === input.id);
+      if (!p) return;
+      Object.assign(p, input);
+      notify();
+    },
+  };
+}
+```
+
+이 소스를 `<Studio pages={createMyPagesSource()} … />`에 넣으면,
+모든 어포던스가 활성화됩니다.

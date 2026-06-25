@@ -1,0 +1,111 @@
+---
+title: クイックスタート
+description: AnvilKit をインストールし、最小の Studio ホストをマウントして、最初の Puck ページをレンダリングします。
+---
+
+AnvilKit は Puck ネイティブのコンポーネントエコシステムです。独立して公開できる
+コンポーネント（`@anvilkit/*`）、ランタイムシェル（`@anvilkit/core`）、そして
+プラグインで構成されます。このガイドでは、React アプリに最小の Studio ホストを
+マウントします。
+
+## 前提条件
+
+- Node.js **≥ 22.13**（ワークスペースの `engines` 制約に一致）
+- pnpm、npm、または yarn
+- React 19 のホストアプリ（Next.js 16 を推奨）
+
+## インストール
+
+必要なコンポーネントだけを選んでください — 一括バンドルはありません。
+
+<Tabs items={['pnpm', 'npm', 'yarn']}>
+	<Tab value="pnpm">
+
+```bash
+pnpm add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+	<Tab value="npm">
+
+```bash
+npm install @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+	<Tab value="yarn">
+
+```bash
+yarn add @anvilkit/core @anvilkit/hero @anvilkit/button
+```
+
+	</Tab>
+</Tabs>
+
+## 最小の `<Studio>` ホスト
+
+1. コンポーネントをインポートして Puck の `Config` を組み立てます。
+
+	```tsx
+	// app/studio/config.ts
+	import { componentConfig as hero } from "@anvilkit/hero";
+	import { componentConfig as button } from "@anvilkit/button";
+	import type { Config } from "@puckeditor/core";
+
+	export const config: Config = {
+		components: {
+			Hero: hero,
+			Button: button,
+		},
+	};
+	```
+
+2. クライアントコンポーネントで `<Studio>` をマウントします。
+
+	```tsx
+	// app/studio/page.tsx
+	"use client";
+
+	import { Studio } from "@anvilkit/core";
+	import { config } from "./config";
+
+	export default function StudioPage() {
+		return <Studio puckConfig={config} />;
+	}
+	```
+
+3. グローバルスタイルシートで共有テーマトークンをインポートします。
+
+	```css
+	/* app/globals.css */
+	@import "@anvilkit/tailwind-config/shadcn";
+	```
+
+## プラグインをスキャフォールド
+
+最小ホストを終えたら、公開済みのジェネレーターで新しいプラグインを
+スキャフォールドします — `package.json`、`rslib.config.ts`、ボイラープレートの
+テストを手作業でコピーする必要はありません：
+
+```bash
+# 非対話モード
+pnpm create @anvilkit/plugin \
+  --name my-plugin \
+  --display "My Plugin" \
+  --category rail-panel
+
+# 対話モード（TTY のみ）
+pnpm create @anvilkit/plugin
+```
+
+出力は、`@anvilkit/core/testing` のフィクスチャがグリーンのベースラインテストに
+組み込まれた、すぐにビルドできるパッケージです。`StudioPlugin` の完全な契約に
+ついては **プラグイン作成** ガイドを参照してください。
+
+## 次のステップ
+
+- **コンポーネント** カタログで `@anvilkit/*` パッケージの一覧を確認します。
+- **ガイド** でプラグイン作成、コンポーネント作成、エクスポートパイプラインを
+  学びます。
+- **API リファレンス** で `<Studio>`、プラグイン契約、ランタイムフックを
+  参照します。

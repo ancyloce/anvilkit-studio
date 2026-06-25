@@ -1,0 +1,14 @@
+---
+title: "ThemeResolved"
+description: "@anvilkit/core · ThemeResolved"
+---
+
+```ts
+type ThemeResolved = "light" | "dark";
+```
+
+Defined in: [state/slices/theme-store.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L63)
+
+The resolved on-screen theme. Only two values because `"system"`
+is a preference, not a concrete style — it always resolves to
+`"light"` or `"dark"` at render time.

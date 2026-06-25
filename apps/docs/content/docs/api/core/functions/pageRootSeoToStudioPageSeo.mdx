@@ -1,0 +1,25 @@
+---
+title: "pageRootSeoToStudioPageSeo"
+description: "@anvilkit/core · pageRootSeoToStudioPageSeo"
+---
+
+```ts
+function pageRootSeoToStudioPageSeo(seo): StudioPageSeo | undefined;
+```
+
+Defined in: [studio/context/page-root-seo.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/context/page-root-seo.ts#L54)
+
+Project `root.props.seo` (schema field names) onto the core
+[StudioPageSeo](../interfaces/StudioPageSeo) shape. `canonical` is carried through unchanged so the
+projection round-trips losslessly (review finding M3). Returns `undefined`
+when no SEO field is set so callers can omit the block entirely.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `seo` | [`PageRootSeoInput`](../interfaces/PageRootSeoInput) \| `undefined` |
+
+## Returns
+
+[`StudioPageSeo`](../interfaces/StudioPageSeo) \| `undefined`

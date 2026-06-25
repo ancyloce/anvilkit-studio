@@ -1,0 +1,33 @@
+---
+title: "collectAssets"
+description: "@anvilkit/ir · collectAssets"
+---
+
+```ts
+function collectAssets(node, opts?): readonly PageIRAsset[];
+```
+
+Defined in: [collect-assets.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/collect-assets.ts#L32)
+
+Walk a node's props and collect every asset reference into a
+deduplicated, deterministically-ordered list.
+
+Used by `puckDataToIR` to populate the root IR document's
+`assets` manifest, and by node-scoped exporters that want to
+resolve only their own slice of the asset graph.
+
+**Does not fetch or read files** — asset collection is purely
+static analysis of prop values.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `node` | \| [`PageIRNode`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) \| \{ `props`: `Record`\&lt;`string`, `unknown`\&gt;; \} | The node (or Puck content item) to walk. |
+| `opts?` | `CollectAssetsOptions` | Optional collection options (currently a `deriveId` callback override). |
+
+## Returns
+
+readonly `PageIRAsset`[]
+
+A deduplicated list of assets, ordered by first encounter.

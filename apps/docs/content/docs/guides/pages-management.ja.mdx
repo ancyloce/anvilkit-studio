@@ -1,0 +1,189 @@
+---
+title: "マルチページ管理"
+description: "Studio ページパネルの機能ゲート付き行アクション、ページ設定、SEO、検索、ドラッグ並べ替え。"
+---
+
+`<Studio>` のページパネルは、ホストが提供する単一の
+`StudioPagesSource` によって駆動されます。すべての変更アフォーダンス
+—— 名前変更、削除、複製、ドラッグ並べ替え、設定、SEO —— は、その
+インターフェース上の**オプション**のコールバックです。ホストがコール
+バックを実装すると、対応する
+UI アフォーダンスが `PageRow` に表示されます。実装しない場合、その
+アフォーダンスは静かに非表示になります。ホストへの変更は一切強制
+されません。v0.2 より前に出荷された同じソースは、引き続き変更なしで
+コンパイルおよびレンダリングされます。
+
+## 1. 得られるもの
+
+| 機能 | コールバック | アフォーダンス | 非表示になる条件…… |
+| --- | --- | --- | --- |
+| 名前変更 | `onRename` | 行上のインライン `Input` | コールバックが未定義 **または** `page.locked === true` |
+| 削除 | `onDelete` | 行メニュー → 確認ダイアログ | コールバックが未定義 **または** `page.locked === true` |
+| 複製 | `onDuplicate` | 行メニュー項目 | コールバックが未定義 |
+| ページ設定 | `onUpdateSettings` | 設定ダイアログ | コールバックが未定義 |
+| SEO メタデータ | `onUpdateSettings` | 設定ダイアログ内の SEO セクション | コールバックが未定義 |
+| ドラッグ並べ替え | `onReorder` | 行ホバー時のドラッグハンドル；Space + 矢印キーのサイクル | コールバックが未定義（ハンドルは不活性） |
+| 検索 / フィルター | *（なし —— UI のみ）* | ヘッダーの `Input` + フィルター済みリスト | なし —— 常に利用可能 |
+
+ある行がアクションをまったくレンダリングしない場合、オーバーフロー
+トリガー自体が抑制されます。
+
+## 2. コントラクト面
+
+```ts
+import type {
+  StudioPage,
+  StudioPagesSource,
+} from "@anvilkit/core/types";
+
+interface StudioPagesSource {
+  // existing — unchanged from earlier versions
+  list(): readonly StudioPage[] | Promise<readonly StudioPage[]>;
+  subscribe?(listener: () => void): () => void;
+  onSelect?(pageId: string): void;
+  onCreate?(input: StudioPageCreateInput): void | Promise<void>;
+
+  // new — all optional, capability-gated
+  onRename?(input: StudioPageRenameInput): void | Promise<void>;
+  onDelete?(pageId: string): void | Promise<void>;
+  onDuplicate?(pageId: string): void | Promise<StudioPage | void>;
+  onReorder?(input: StudioPageReorderInput): void | Promise<void>;
+  onUpdateSettings?(input: StudioPageSettingsInput): void | Promise<void>;
+}
+```
+
+完全なインターフェース（入力の形状を含む）は
+[`/api/core/interfaces/StudioPagesSource`](/ja/api/core/interfaces/StudioPagesSource/) の下に生成されます。
+
+<Callout type="info" title="楽観的な変更なし">
+各コールバックが resolve → ホストがレジストリを変更 → ホストが
+その `subscribe()` リスナーを発火 → `PagesPanel` が `list()` を再実行
+します。UI がホストより先に変更を行うことは決してありません。文書化
+された例外が 1 つあります：
+`onDuplicate` は作成された `StudioPage` を返すことができ、それによって
+UI はラウンドトリップが完了する前にそれを事前選択できます。
+</Callout>
+
+## 3. ロックされたページ
+
+`StudioPage.locked` は、ホストがあるページを名前変更不可かつ削除不可
+としてマークするために使用する明示的なシグナルです。設定すると：
+
+- そのページの `Rename` と `Delete` のメニュー項目は、`onRename` /
+  `onDelete` が実装されているかどうかに関係なく抑制されます。
+- その行には Home アイコンが表示されます（以前は core 内の
+  `page.id === "home"` という文字列ヒューリスティックでしたが、今は
+  ホスト制御になりました）。
+- `Duplicate` と `Settings` は `locked` によって抑制されません ——
+  ホストはロックされたページの複製や、そのメタデータの編集を引き続き
+  許可できます。
+
+このデモソースはホームページを `{ id: "home", title: "Home",
+locked: true }` としてマークしています —— リファレンス実装については
+`apps/demo/lib/demo-pages-source.ts` を参照してください。
+
+## 4. ブランド token
+
+`PageRow` とダイアログは、スコープ付きの
+`--ak-pages-*` token サーフェスを通じてテーマ化されます。プリミティブ層
++ セマンティック層です。セマンティック
+token は `--ak-studio-*` へ、さらにホストの shadcn
+変数へとチェーンします：
+
+```css
+.ak-pages-panel {
+  --ak-pages-fg: var(--ak-studio-fg, var(--foreground));
+  --ak-pages-muted: var(--ak-studio-muted, var(--muted));
+  --ak-pages-accent: var(--ak-pages-accent-primitive);
+  --ak-pages-danger-bg: var(--ak-pages-danger-primitive);
+  /* … */
+}
+```
+
+完全な token サーフェスは
+`packages/core/src/studio/layout/sidebar/modules/layer/pages-tokens.css` にあります。
+ダークモードはプリミティブのみをオーバーライドし、セマンティック
+token は継承します。すでに `--ak-studio-*` または shadcn テーマ変数を
+提供しているホストは、追加の配線なしで
+正しい見た目を得られます。
+
+## 5. エンドツーエンドのリファレンス
+
+すべてのコールバックを実装した最小のソースで、デモをモデルにしています：
+
+```ts
+import type {
+  StudioPage,
+  StudioPagesSource,
+  StudioPageRenameInput,
+  StudioPageReorderInput,
+  StudioPageSettingsInput,
+} from "@anvilkit/core/types";
+
+export function createMyPagesSource(): StudioPagesSource {
+  const pages: StudioPage[] = [
+    { id: "home", title: "Home", locked: true },
+    { id: "about", title: "About", path: "/about", route: true },
+  ];
+  let activeId = pages[0]?.id ?? "";
+  const listeners = new Set<() => void>();
+  const notify = () => {
+    for (const fn of listeners) fn();
+  };
+
+  return {
+    list: () => pages.map((p) => ({ ...p, active: p.id === activeId })),
+    subscribe(fn) {
+      listeners.add(fn);
+      return () => listeners.delete(fn);
+    },
+    onSelect(id) {
+      activeId = id;
+      notify();
+    },
+    onRename({ id, title }: StudioPageRenameInput) {
+      const p = pages.find((x) => x.id === id);
+      if (p) {
+        p.title = title;
+        notify();
+      }
+    },
+    onDelete(id) {
+      const i = pages.findIndex((p) => p.id === id);
+      if (i >= 0) {
+        pages.splice(i, 1);
+        notify();
+      }
+    },
+    async onDuplicate(id): Promise<StudioPage | void> {
+      const src = pages.find((p) => p.id === id);
+      if (!src) return;
+      const copy: StudioPage = {
+        ...src,
+        id: `${id}-copy-${Date.now()}`,
+        title: `${src.title} (copy)`,
+        locked: undefined,
+      };
+      pages.push(copy);
+      notify();
+      return copy; // pre-select on the UI side
+    },
+    onReorder({ id, toIndex }: StudioPageReorderInput) {
+      const from = pages.findIndex((p) => p.id === id);
+      if (from < 0) return;
+      const [moved] = pages.splice(from, 1);
+      if (moved) pages.splice(toIndex, 0, moved);
+      notify();
+    },
+    onUpdateSettings(input: StudioPageSettingsInput) {
+      const p = pages.find((x) => x.id === input.id);
+      if (!p) return;
+      Object.assign(p, input);
+      notify();
+    },
+  };
+}
+```
+
+このソースを `<Studio pages={createMyPagesSource()} … />` に投入すると、
+すべてのアフォーダンスが点灯します。

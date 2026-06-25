@@ -1,0 +1,58 @@
+---
+title: "제품 기능 개요"
+description: "제품 기능 개요 — 히어로, bento 기능 그리드, 통계, FAQ."
+---
+
+![제품 기능 개요 preview](/templates/feature-overview/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-feature-overview</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## CLI로 스캐폴딩
+
+```sh
+npx anvilkit init --template feature-overview my-site
+```
+
+## 구성
+
+커밋된 `PageIR`는 루트에 다음 노드 타입을 연결합니다:
+
+- `Navbar`
+- `Hero`
+- `BentoGrid`
+- `Statistics`
+- `Helps`
+
+## 패키지 세부 정보
+
+Product feature overview page.
+
+Navbar, hero, bento feature grid, statistics, and FAQ — suited to the `/features` subpage of a product site.
+
+## Install
+
+```sh
+npx anvilkit init --template feature-overview my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/bento-grid`
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

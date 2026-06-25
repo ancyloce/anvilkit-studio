@@ -1,0 +1,37 @@
+---
+title: "generateId"
+description: "@anvilkit/utils · generateId"
+---
+
+```ts
+function generateId(prefix?): string;
+```
+
+Defined in: [generate-id.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/generate-id.ts#L19)
+
+Generates a collision-resistant identifier.
+
+Prefers `crypto.randomUUID()` (RFC 4122 v4, cryptographically strong,
+available in all modern browsers and Node.js ≥ 16.7) and falls back
+to a `Math.random()`-based v4-shaped string for legacy environments
+such as JSDOM < 16 or locked-down sandboxes without Web Crypto.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `prefix?` | `string` | Optional namespace segment joined with a `-`. Use this to label IDs by origin (e.g. `"plugin"`, `"node"`) so they are easy to spot in logs and React DevTools. |
+
+## Returns
+
+`string`
+
+A unique string of the form `"<prefix>-<uuid>"` or just the
+  bare UUID when no prefix is given.
+
+## Example
+
+```ts
+generateId();           // "0192ac5e-a9b3-7ce0-b4a9-9f4f8a4f5d2b"
+generateId("plugin");   // "plugin-0192ac5e-a9b3-7ce0-b4a9-9f4f8a4f5d2b"
+```

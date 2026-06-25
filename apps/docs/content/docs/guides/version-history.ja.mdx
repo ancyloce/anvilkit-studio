@@ -1,0 +1,108 @@
+---
+title: "バージョン履歴プラグイン"
+description: "アダプター駆動のスナップショットストレージ、決定論的な diff/apply エンジン、そして @anvilkit/plugin-version-history をインストールする Studio ホスト向けのオプション UI。"
+---
+
+`@anvilkit/plugin-version-history` はファーストパーティのヘッドレス `StudioPlugin` です。
+スナップショットの永続化はホストが提供する `SnapshotAdapter` に委譲されるため、
+このプラグイン自体は I/O を一切持ちません ——
+diff/apply エンジン、2 つのヘッダーアクション、オプションの UI プリミティブ、
+そしてテストとデモ用の参照アダプターのみです。
+
+## 1. インストール
+
+```sh
+pnpm add @anvilkit/plugin-version-history
+```
+
+ピア依存関係：
+
+- `@puckeditor/core ^0.21.3`
+- `react >=19.0.0`
+- `react-dom >=19.0.0`
+
+トランスポートやストレージの依存関係はありません —— ホストが永続化をエンドツーエンドで所有します。
+
+サブパスエクスポート：
+
+- `@anvilkit/plugin-version-history` —— ファクトリー、参照アダプター、diff/apply エンジン、型。
+- `@anvilkit/plugin-version-history/ui` —— `VersionHistoryUI`、`SaveSnapshotButton`、`SnapshotList`、`SnapshotHistoryModal`、`DiffView`。
+- `@anvilkit/plugin-version-history/testing` —— `runAdapterContract` 共有テストスイート。
+
+## 2. 最小限のホスト
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createVersionHistoryPlugin,
+  localStorageAdapter,
+} from "@anvilkit/plugin-version-history";
+
+const versionHistory = createVersionHistoryPlugin({
+  adapter: localStorageAdapter({ namespace: "my-app-history" }),
+  maxSnapshots: 50,
+});
+
+export function MyEditor() {
+  return <Studio puckConfig={config} plugins={[versionHistory]} />;
+}
+```
+
+このプラグインは 2 つのヘッダーアクション（`version-history:save` と
+`version-history:open`）を提供し、Studio イベントバス上で `version-history:save-requested` /
+`version-history:open-requested` を発行します。UI サーフェスをマウントすることで
+open イベントを処理します —— 例えば `/ui` サブパスの `<SnapshotHistoryModal>` です。
+
+## 3. オプション
+
+```ts
+interface CreateVersionHistoryPluginOptions {
+  readonly adapter: SnapshotAdapter;
+  readonly maxSnapshots?: number; // FIFO eviction; requires adapter.delete
+}
+```
+
+`maxSnapshots` が設定されている場合、容量に達すると最も古いスナップショットが
+自動的に削除されます（これにはアダプターが `delete` を実装している必要があります）。
+
+## 4. アダプター
+
+`inMemoryAdapter()`（テスト）と `localStorageAdapter({ namespace })`（デモ）が
+すぐに使える形で同梱されています。本番用のアダプターは `save` / `list` / `load` を実装し、
+オプションで `delete` を実装します：
+
+```ts
+import type { SnapshotAdapter } from "@anvilkit/plugin-version-history";
+
+const firestoreAdapter: SnapshotAdapter = {
+  save: async (id, record) => { /* … */ },
+  list: async () => { /* … */ },
+  load: async (id) => { /* … */ },
+  delete: async (id) => { /* … */ },
+};
+```
+
+`/testing` サブパスの `runAdapterContract` を使って、参照アダプターが使用するのと
+同じ契約に対して任意のカスタムアダプターを検証してください。
+
+## 5. Diff エンジン
+
+`diffIR(a, b)` は凍結された `IRDiff` を生成します；`applyDiff(a, diff)` は
+`b` へと往復で復元します；`summarizeDiff(diff)` は表示用の `IRDiffSummary` を返します：
+
+```ts
+import { applyDiff, diffIR, summarizeDiff } from "@anvilkit/plugin-version-history";
+
+const diff = diffIR(previous, current);
+const summary = summarizeDiff(diff);   // { added, removed, changed, … }
+const restored = applyDiff(previous, diff); // deep-equals `current`
+```
+
+不正な apply は `DiffApplyError` をスローします；その他の失敗は
+`VersionHistoryErrorCode` を伴う `VersionHistoryError` として現れます。
+
+<Callout type="info" title="ステータス（alpha、v0.1.4）">
+ヘッダーアクションと diff/apply エンジンは安定しています。サイドバーパネルのスロット
+貢献は、`StudioPluginContext` がサイドバー登録 API を公開するまで
+延期されています。バンドル予算：8 KB gzipped、CI で強制されます。
+</Callout>

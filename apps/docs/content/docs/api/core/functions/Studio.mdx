@@ -1,0 +1,56 @@
+---
+title: "Studio"
+description: "@anvilkit/core · Studio"
+---
+
+```ts
+function Studio<UserConfig>(props): 
+  | ReactElement<unknown, string | JSXElementConstructor<any>>
+  | null;
+```
+
+Defined in: [react/components/Studio.tsx:162](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L162)
+
+The public Studio shell. Thin view over useStudioController:
+select the loading state, then render the provider stack around
+`<Puck>`.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `Config` | `Config` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`StudioProps`](../interfaces/StudioProps)\&lt;`UserConfig`\&gt; |
+
+## Returns
+
+  \| `ReactElement`\&lt;`unknown`, `string` \| `JSXElementConstructor`\&lt;`any`\&gt;\&gt;
+  \| `null`
+
+## Example
+
+```tsx
+import { Studio } from "@anvilkit/core/react";
+import { puckDemoConfig } from "./lib/puck-demo";
+import { exportHtmlPlugin } from "@anvilkit/plugin-export-html";
+
+export default function EditorPage() {
+  return (
+    <Studio
+      puckConfig={puckDemoConfig}
+      plugins={[exportHtmlPlugin()]}
+      onPublish={async (data) => {
+        await fetch("/api/publish", {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+      }}
+    />
+  );
+}
+```

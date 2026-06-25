@@ -1,0 +1,33 @@
+---
+title: "RegistrationTransform"
+description: "@anvilkit/core · RegistrationTransform"
+---
+
+```ts
+type RegistrationTransform<UserConfig> = (registration) => StudioPluginRegistration<UserConfig>;
+```
+
+Defined in: [runtime/lazy-plugin.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L173)
+
+Pure transform applied to a plugin's [StudioPluginRegistration](../interfaces/StudioPluginRegistration)
+— e.g. to drop a registration field before the runtime aggregates it.
+
+Kept React-free (operates on plain registration data, never on React
+nodes) so it composes inside the `runtime/` layer and survives the
+`check:react-free-runtime` gate.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `PuckConfig` | `PuckConfig` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `registration` | [`StudioPluginRegistration`](../interfaces/StudioPluginRegistration)\&lt;`UserConfig`\&gt; |
+
+## Returns
+
+[`StudioPluginRegistration`](../interfaces/StudioPluginRegistration)\<`UserConfig`\>

@@ -1,0 +1,56 @@
+---
+title: "独立定价页面"
+description: "独立定价页面 —— 主视觉横幅、定价档位、对比常见问题。"
+---
+
+![独立定价页面 preview](/templates/pricing-comparison/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-pricing-comparison</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template pricing-comparison my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Hero`
+- `PricingMinimal`
+- `Helps`
+
+## 包详情
+
+A standalone pricing page.
+
+Navbar, hero banner, three-tier pricing grid, and a comparison FAQ — drop-in replacement for `/pricing`.
+
+## Install
+
+```sh
+npx anvilkit init --template pricing-comparison my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/pricing-minimal`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

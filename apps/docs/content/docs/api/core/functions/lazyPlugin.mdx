@@ -1,0 +1,47 @@
+---
+title: "lazyPlugin"
+description: "@anvilkit/core · lazyPlugin"
+---
+
+```ts
+function lazyPlugin<UserConfig>(load, meta): StudioPlugin<UserConfig>;
+```
+
+Defined in: [runtime/lazy-plugin.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L126)
+
+Wrap an async plugin loader as a `StudioPlugin` with the supplied
+synchronous `meta`. The actual plugin module is fetched on first
+`register()` invocation — i.e. once `<Studio>` mounts and
+`compilePlugins()` reaches this entry of the `plugins` prop.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `Config` | `Config` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `load` | [`StudioPluginLoader`](../type-aliases/StudioPluginLoader)\&lt;`UserConfig`\&gt; |
+| `meta` | [`StudioPluginMeta`](../interfaces/StudioPluginMeta) |
+
+## Returns
+
+[`StudioPlugin`](../interfaces/StudioPlugin)\<`UserConfig`\>
+
+## Example
+
+```ts
+const aiCopilot = lazyPlugin(
+  () => import("@anvilkit/plugin-ai-copilot").then(m => m.aiCopilotPlugin),
+  {
+    id: "@anvilkit/plugin-ai-copilot",
+    name: "AI Copilot",
+    version: "0.1.0",
+    coreVersion: "^0.1.0",
+    capabilities: { sidebar: true },
+  },
+);
+```

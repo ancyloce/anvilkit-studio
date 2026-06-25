@@ -1,0 +1,32 @@
+---
+title: "useStudio"
+description: "@anvilkit/core · useStudio"
+---
+
+```ts
+function useStudio(): UseStudioResult;
+```
+
+Defined in: [react/components/use-studio.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L112)
+
+Read the compiled [StudioRuntime](../interfaces/StudioRuntime)'s diagnostic projection
+from inside a `<Studio>` subtree.
+
+Throws a descriptive error if called outside `<Studio>` — the
+error message contains the literal string `"Studio"` so host apps
+can pattern-match it in tests if needed.
+
+## Returns
+
+[`UseStudioResult`](../interfaces/UseStudioResult)
+
+The [UseStudioResult](../interfaces/UseStudioResult) projection of the runtime.
+
+## Example
+
+```tsx
+function PluginBadge() {
+  const { plugins } = useStudio();
+  return <span>{plugins.length} plugins loaded</span>;
+}
+```

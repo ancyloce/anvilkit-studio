@@ -1,0 +1,35 @@
+---
+title: "StudioPluginProvider"
+description: "@anvilkit/core · StudioPluginProvider"
+---
+
+Defined in: [types/plugin.ts:423](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L423)
+
+React provider contributed by a plugin via
+[StudioPluginRegistration.providers](StudioPluginRegistration.md#providers). The Studio shell composes
+every contributed provider around the editor tree (inside
+`StudioRuntimeProvider`, so each provider's component may call
+`useStudio()`).
+
+### Composition order
+
+Providers are sorted ascending by [order](#order) (ties break on
+registration order). The provider with the **lowest** order ends up
+**outermost**, mirroring the conventional "wrap from the outside in"
+intuition.
+
+### Why `ComponentType` and not `ReactNode`?
+
+A `ReactNode` would be captured at `register()` time and never
+re-render with new hook state inside the provider. Plugins authoring
+a provider commonly need their own hooks (e.g. `useEffect` for
+presence sync) — those only work when React instantiates the
+component fresh on each render pass.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="component"&gt;&lt;/a&gt; `component` | `readonly` | `ComponentType`\&lt;\{ `children`: `ReactNode`; \}\&gt; | The provider component. Must render its `children` somewhere in its tree (otherwise the entire Studio shell becomes empty). | [types/plugin.ts:435](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L435) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, globally-unique provider identifier (e.g. `"collab-ui"`, `"feature-flags"`). Used for diagnostics and for the "first registration wins" rule on duplicate ids. | [types/plugin.ts:429](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L429) |
+| &lt;a id="order"&gt;&lt;/a&gt; `order?` | `readonly` | `number` | Optional sort key. Lower values render **outermost**. Default `100`. Ties break on registration order for determinism. | [types/plugin.ts:441](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L441) |

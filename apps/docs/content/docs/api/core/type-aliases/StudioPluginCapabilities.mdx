@@ -1,0 +1,64 @@
+---
+title: "StudioPluginCapabilities"
+description: "@anvilkit/core · StudioPluginCapabilities"
+---
+
+```ts
+type StudioPluginCapabilities = 
+  | {
+  header?: never;
+  sidebar?: boolean;
+}
+  | {
+  header?: boolean;
+  sidebar?: never;
+};
+```
+
+Defined in: [types/plugin.ts:237](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L237)
+
+Declarative capability hint carried on [StudioPluginMeta](../interfaces/StudioPluginMeta).
+
+`sidebar` and `header` are **mutually exclusive** — a plugin
+self-declares the single primary surface it contributes, or neither.
+Advisory only: the runtime does not enforce these and continues to
+drive UI visibility from actual `register*()` calls, not from this
+flag. They exist so host code can list "all sidebar plugins" without
+mounting the plugin first.
+
+The `never` on the opposite key is what makes the two flags mutually
+exclusive (`{ sidebar: true, header: true }` is rejected). Optional
+`boolean` (rather than literal `true`) keeps the JSON-sourced
+`meta/config.json` spread assignable without a cast.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  header?: never;
+  sidebar?: boolean;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `header?` | `never` | - | [types/plugin.ts:245](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L245) |
+| `sidebar?` | `boolean` | `true` when the plugin contributes sidebar UI (asset source, copilot panel, history panel, design-system panel, copy snippet pack, etc.). | [types/plugin.ts:244](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L244) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  header?: boolean;
+  sidebar?: never;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `header?` | `boolean` | `true` when the plugin contributes a header action. | [types/plugin.ts:249](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L249) |
+| `sidebar?` | `never` | - | [types/plugin.ts:250](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L250) |

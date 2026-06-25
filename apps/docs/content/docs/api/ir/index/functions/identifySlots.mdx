@@ -1,0 +1,39 @@
+---
+title: "identifySlots"
+description: "@anvilkit/ir · identifySlots"
+---
+
+```ts
+function identifySlots(config): Map<string, readonly string[]>;
+```
+
+Defined in: [identify-slots.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/identify-slots.ts#L32)
+
+Inspect a Puck `Config` and return the set of field keys that
+behave as `slot` (nested child-tree) fields, grouped by
+component name.
+
+The IR transform uses this to decide which prop values should be
+descended into as `PageIRNode.children` versus copied verbatim
+into `PageIRNode.props` (`PageIRNode` is declared in
+`@anvilkit/core`).
+
+### Detection heuristic
+
+A field is considered a slot if its `type` is `"slot"` (Puck's
+explicit slot field type). This covers Puck 0.19+ where slot
+fields are first-class citizens in the field schema.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `config` | `Config` | The Puck `Config` to inspect. |
+
+## Returns
+
+`Map`\<`string`, readonly `string`[]\>
+
+A map from component name to the list of slot-field keys
+  declared on that component. Components with no slots are
+  included with an empty array.

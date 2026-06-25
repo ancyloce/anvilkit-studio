@@ -1,0 +1,141 @@
+---
+title: "ExportState"
+description: "@anvilkit/core · ExportState"
+---
+
+Defined in: [state/slices/export-store.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L87)
+
+Full shape of the export store. Split into read fields (the state
+snapshot) and setter actions (the write surface).
+
+Actions live alongside state on the same object rather than under
+a nested `actions:` sub-key because the surface is small and
+consumers read it via selectors. If the store grows past a dozen
+fields, consider splitting into context / actions like the
+Zustand v5 "split state and actions" pattern.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="availableformats"&gt;&lt;/a&gt; `availableFormats` | `readonly` | readonly `string`[] | Ids of every export format currently registered with the runtime, in plugin insertion order. Populated from `StudioRuntime.exportFormats` at `<Studio>` mount time (`core-014`); tests pass a synthetic list directly. | [state/slices/export-store.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L94) |
+| &lt;a id="currentformat"&gt;&lt;/a&gt; `currentFormat` | `readonly` | `string` \| `null` | Id of the format the user currently has selected, or `null` if nothing is selected yet. Persisted across reloads so the user's last choice survives a page refresh — this is the only field [ExportStorePartial](#) carries. | [state/slices/export-store.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L101) |
+| &lt;a id="isexporting"&gt;&lt;/a&gt; `isExporting` | `readonly` | `boolean` | `true` while an export run is in flight. **Never persisted** — a reload always lands on `false` so the UI can never be stuck in a spinner that outlives the request it belonged to. | [state/slices/export-store.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L107) |
+| &lt;a id="lastexport"&gt;&lt;/a&gt; `lastExport` | `readonly` | [`LastExportRecord`](LastExportRecord.md) \| `null` | Record of the most recent run, or `null` before any run has completed. Ephemeral — a reload clears it. | [state/slices/export-store.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L112) |
+
+## Methods
+
+### recordExport()
+
+```ts
+recordExport(formatId, ok): void;
+```
+
+Defined in: [state/slices/export-store.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L137)
+
+Record the outcome of a run and stamp it with `Date.now()`.
+Called from the `afterExport` lifecycle handler (successful
+runs) and the export pipeline's catch block (failed runs).
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `formatId` | `string` |
+| `ok` | `boolean` |
+
+#### Returns
+
+`void`
+
+***
+
+### reset()
+
+```ts
+reset(): void;
+```
+
+Defined in: [state/slices/export-store.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L145)
+
+Restore every field to its initial state by spreading the
+module-level INITIAL\_STATE constant (a shallow `set`, so
+the action functions survive). The single source of "initial"
+is that constant — there is no `getInitialState()` singleton
+(review finding Z-c/Z-3).
+
+#### Returns
+
+`void`
+
+***
+
+### setAvailableFormats()
+
+```ts
+setAvailableFormats(ids): void;
+```
+
+Defined in: [state/slices/export-store.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L120)
+
+Replace [availableFormats](#availableformats) with a new list. Called once
+at `<Studio>` mount with the ids from
+`StudioRuntime.exportFormats`. Tests pass fresh lists between
+cases.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ids` | readonly `string`[] |
+
+#### Returns
+
+`void`
+
+***
+
+### setCurrentFormat()
+
+```ts
+setCurrentFormat(id): void;
+```
+
+Defined in: [state/slices/export-store.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L125)
+
+Set the user's currently selected format. Pass `null` to
+clear the selection.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` \| `null` |
+
+#### Returns
+
+`void`
+
+***
+
+### setIsExporting()
+
+```ts
+setIsExporting(value): void;
+```
+
+Defined in: [state/slices/export-store.ts:131](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L131)
+
+Flip the in-flight flag. The export pipeline in `<Studio>`
+wraps this around `beforeExport` / `afterExport` lifecycle
+events.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `boolean` |
+
+#### Returns
+
+`void`

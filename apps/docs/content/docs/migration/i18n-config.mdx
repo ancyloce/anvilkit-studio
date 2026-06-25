@@ -1,0 +1,204 @@
+---
+title: Config-centric i18n (0.1.x)
+description: Migrate Studio internationalization from scattered props to config.i18n — host-controlled locale, per-locale message overrides, and the built-in language switcher — with zero plugin recompiles on language switch.
+---
+
+`@anvilkit/core@0.1.15` centralizes internationalization on the
+`config.i18n` block. What used to be scattered across props — the
+`<Studio messages>` override map and a hand-mounted
+`<LanguageSwitcher>` in `headerEnd` — now lives in one declarative,
+serializable place, and the active locale becomes **host-controllable**
+for frameworks (Next.js route segments, `next-intl`, cookies) that own
+language state:
+
+```tsx
+<Studio
+  puckConfig={puckConfig}
+  config={{
+    i18n: {
+      locale: "zh",                    // controlled active language
+      messages: {                      // per-locale chrome overrides
+        zh: { "studio.publish": "发布" },
+        en: { "studio.publish": "Ship it" },
+      },
+      showLocaleSwitch: true,          // built-in header switcher
+    },
+  }}
+  onLocaleChange={(next) => router.replace(pathnameFor(next))}
+/>
+```
+
+The entire `i18n` block is **recompile-exempt**: it is excluded from the
+plugin-compile fingerprint, so changing `locale`, `messages`, or
+`showLocaleSwitch` at runtime updates the chrome in place — no plugin
+teardown, no editor remount, live collaboration transports survive.
+
+## TL;DR — what moves where
+
+| Before (props) | After (config) |
+| --- | --- |
+| `messages={{ "studio.publish": "Ship it" }}` | `config.i18n.messages` — per-locale: `{ en: { "studio.publish": "Ship it" } }` |
+| `headerEnd={<LanguageSwitcher />}` | `config.i18n.showLocaleSwitch: true` |
+| *(not possible)* host-driven live locale | `config.i18n.locale` (controlled mode) |
+| *(not possible)* observing in-editor switches | `onLocaleChange` prop (the one new prop — handlers can't be config) |
+
+`headerEnd` itself is unchanged — it remains the seam for arbitrary host
+header content. Only the switcher no longer needs it.
+
+## Controlled vs uncontrolled locale
+
+The mode is decided by one thing: **whether your raw `config` prop sets
+`i18n.locale` explicitly.**
+
+|  | Uncontrolled (key absent) | Controlled (key present) |
+| --- | --- | --- |
+| Source of truth | Per-instance store, persisted to `localStorage` under `anvilkit-core-locale-${storeId}` | Your `config.i18n.locale` value |
+| First paint | `"en"` (or the persisted choice) | The config locale — synchronously, no flash, SSR-consistent |
+| Persistence | On — user choices survive reloads | Bypassed — nothing is read from or written to `localStorage` (an old blob is left intact for a later uncontrolled mount) |
+| `ANVILKIT_I18N__LOCALE` env | Seeds the default once, when no persisted choice exists | Ignored for control — env never makes a mount controlled |
+| Built-in switcher selection | Applies immediately (and persists), then calls `onLocaleChange` | Calls `onLocaleChange` **only** — you apply it by re-rendering with the new `config.i18n.locale`, exactly like a controlled `<input>` |
+
+Pick **controlled** when your app already owns language state (route
+segment, cookie, user profile). Pick **uncontrolled** when the editor
+should remember the user's in-editor choice on its own.
+
+<Callout type="warn" title="Mode is latched at mount">
+Controlled-ness is decided at first render and frozen — adding or
+removing `i18n.locale` later is ignored (a one-shot warning is logged).
+To switch modes, remount with a new React `key`, the same rule that
+already applies to `storeId`.
+</Callout>
+
+<Callout type="warn" title="One intentional behavior change">
+Previously, a static `config={{ i18n: { locale: "zh" } }}` was a
+seed-once default: a locale the user had ever persisted **beat** it.
+Now an explicit config locale is authoritative (controlled mode) and
+wins over stale persisted choices. If you relied on the old semantics,
+move the value to the `ANVILKIT_I18N__LOCALE` environment variable,
+which keeps the seed-once behavior.
+</Callout>
+
+## Next.js recipe
+
+App Router with a `[locale]` segment:
+
+```tsx
+// app/[locale]/editor/page.tsx (server component)
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return <Editor locale={locale} />;
+}
+```
+
+```tsx
+// editor.tsx
+"use client";
+import { Studio } from "@anvilkit/core/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useMemo } from "react";
+
+export function Editor({ locale }: { locale: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Memoize: `config` participates in the plugin-compile fingerprint
+  // (its non-i18n part). The i18n block itself is additionally
+  // JSON-keyed internally, so even this re-created object never
+  // recompiles — but a stable reference is still the cheapest path.
+  const config = useMemo(
+    () => ({ i18n: { locale, showLocaleSwitch: true } }),
+    [locale],
+  );
+
+  const handleLocaleChange = useCallback(
+    (next: string) => router.replace(pathname.replace(`/${locale}`, `/${next}`)),
+    [router, pathname, locale],
+  );
+
+  return (
+    <Studio
+      puckConfig={puckConfig}
+      config={config}
+      onLocaleChange={handleLocaleChange}
+    />
+  );
+}
+```
+
+The round trip — switcher click → `onLocaleChange` → `router.replace`
+→ re-render with the new `config.i18n.locale` — switches every chrome
+and plugin string in place. The first client render already resolves
+the controlled locale, so there is no `en → zh` flash; non-English core
+packs (`zh`/`ja`/`ko`) lazy-load with per-key English fallback while in
+flight.
+
+Cookie-based setups (`next-intl` without routing) are the same shape:
+read the cookie into `config.i18n.locale`, write it in
+`onLocaleChange`.
+
+## Messages: flat prop → per-locale map
+
+The `<Studio messages>` prop is **deprecated** (removal in `0.2.0`).
+It was locale-agnostic — one flat map applied to every language. The
+config map is keyed by locale, with `fallbackLocale` back-filling keys
+the active locale's bundle lacks:
+
+```tsx
+// Before (deprecated, still works through 0.1.x):
+<Studio messages={{ "studio.publish": "Ship it" }} />
+
+// After:
+<Studio
+  config={{
+    i18n: {
+      fallbackLocale: "en",
+      messages: {
+        en: { "studio.publish": "Ship it" },
+        zh: { "studio.publish": "立即发布" },
+      },
+    },
+  }}
+/>
+```
+
+Resolution order (lowest → highest): built-in catalog + lazy packs +
+plugin bundles → `messages[fallbackLocale]` → `messages[activeLocale]`
+→ the deprecated flat prop. The prop staying on top means migrating
+key-by-key can never *lose* an override — but don't run both
+long-term; the dev console warns once per mount while the prop is set.
+
+## Built-in language switcher
+
+`config.i18n.showLocaleSwitch: true` renders the same
+`<LanguageSwitcher>` component in the header's right cluster, between
+the plugin header actions and your `headerEnd` node. It defaults to
+**off**, so existing mounts are unchanged. If you currently mount the
+switcher via `headerEnd`, delete that wiring when you flip the flag —
+otherwise you'll see two switchers side by side (deliberately adjacent,
+so the duplication is obvious during migration).
+
+The flag is live: flipping it at runtime shows/hides the switcher with
+no recompile. You can still render `<LanguageSwitcher>` (exported from
+`@anvilkit/core/i18n`) anywhere yourself; it now routes through the
+same request seam, so `onLocaleChange` fires either way.
+
+## Plugin authors
+
+- `ctx.t` now resolves against the **active** locale and the live
+  `config.i18n.messages` — it tracks runtime switches instead of
+  freezing at the compile-time config value. Its other limits are
+  unchanged: it never lazy-loads non-English core packs and never
+  resolves plugin-registered namespaces; reactive UI strings still
+  belong to `useMsg`/`useT`.
+- `ctx.studioConfig.i18n` remains a compile-time snapshot — read it as
+  "the configured i18n", not "the current locale".
+- `ctx.registerMessages` and the registry contract are untouched.
+
+## Deprecation timeline
+
+| Surface | Status |
+| --- | --- |
+| `<Studio messages>` prop | Deprecated now (`@deprecated` + one-shot dev warning); fully functional through `0.1.x`; **removed in `0.2.0`** |
+| `config.i18n.locale` seed-once-if-unpersisted semantics | Replaced by controlled mode for explicit config values; preserved for `ANVILKIT_I18N__LOCALE` |
+| Everything else | Additive — no other action required |
+

@@ -1,0 +1,20 @@
+---
+title: "StudioPageSettingsSeoFieldsProps"
+description: "@anvilkit/core · StudioPageSettingsSeoFieldsProps"
+---
+
+Defined in: [types/sidebar.ts:510](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L510)
+
+Props core's page-settings dialog passes to
+[StudioPageSettingsSeoFields.render](StudioPageSettingsSeoFields.md#render). The dialog owns the form
+state, the change diff, and the `onUpdateSettings` submission; the
+plugin owns only the field UI. `value` is the page row's current SEO
+sub-block (controlled); `onChange` replaces it wholesale with the next
+snapshot.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="onchange"&gt;&lt;/a&gt; `onChange` | `readonly` | (`next`) =&gt; `void` | Replace the SEO values with the next snapshot. | [types/sidebar.ts:514](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L514) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `readonly` | [`StudioPageSeo`](StudioPageSeo.md) | The page row's current SEO values (controlled). | [types/sidebar.ts:512](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L512) |

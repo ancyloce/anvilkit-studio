@@ -1,0 +1,24 @@
+---
+title: "validatePublishRequest"
+description: "@anvilkit/validator · validatePublishRequest"
+---
+
+```ts
+function validatePublishRequest(input): ValidationResult;
+```
+
+Defined in: [validator/src/validate-page-payload.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L95)
+
+Validate the body of a `POST /api/pages/publish` request
+(`{ id?, slug?, data: PuckPageData }`). Publishing goes live, so the complete
+payload is validated via [validatePuckPageData](validatePuckPageData.md).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | `unknown` |
+
+## Returns
+
+[`ValidationResult`](../interfaces/ValidationResult)

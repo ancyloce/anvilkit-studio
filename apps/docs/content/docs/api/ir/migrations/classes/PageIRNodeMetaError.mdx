@@ -1,0 +1,42 @@
+---
+title: "PageIRNodeMetaError"
+description: "@anvilkit/ir · PageIRNodeMetaError"
+---
+
+Defined in: [migrations/error.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L14)
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new PageIRNodeMetaError(issues): PageIRNodeMetaError;
+```
+
+Defined in: [migrations/error.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L16)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `issues` | readonly [`NodeMetaValidationIssue`](../interfaces/NodeMetaValidationIssue)[] |
+
+#### Returns
+
+`PageIRNodeMetaError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`NodeMetaValidationIssue`](../interfaces/NodeMetaValidationIssue)[] | [migrations/error.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/error.ts#L15) |

@@ -1,0 +1,24 @@
+---
+title: "InferPluginContributions"
+description: "@anvilkit/core · InferPluginContributions"
+---
+
+```ts
+type InferPluginContributions<Plugins> = { [Index in keyof Plugins]: Plugins[Index] extends { [StudioPluginContributesBrand]: infer Contributes } ? Contributes : never }[number];
+```
+
+Defined in: [types/plugin.ts:873](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L873)
+
+Infer the union of contribution types from a plugins tuple.
+
+Distributes over the tuple, picks up the branded `Contributes` from
+any [StudioPluginContributing](../interfaces/StudioPluginContributing) element, and collapses everything
+else (raw `StudioPlugin`, `PuckPlugin`, …) to `never`. The brand key
+on the conditional is **required** (not `?`), so an unbranded
+`StudioPlugin` does not match and cannot contribute `unknown`.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `Plugins` *extends* readonly `unknown`[] |

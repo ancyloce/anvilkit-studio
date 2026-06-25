@@ -1,0 +1,27 @@
+---
+title: "StudioLayerQuickAddInserter"
+description: "@anvilkit/core · StudioLayerQuickAddInserter"
+---
+
+```ts
+type StudioLayerQuickAddInserter = (api) => void | Promise<void>;
+```
+
+Defined in: [types/sidebar.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L76)
+
+Inserter callback handed to a `registerLayerQuickAdd` item when the
+user clicks it in the `+` quick-add popover. Plugins use the
+`puckApi` to dispatch a `setData`/`insert` action that drops the
+primitive into the canvas.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `api` | \{ `currentSelection`: `PuckComponentData` \| `null`; `puckApi`: `PuckApi`; \} |
+| `api.currentSelection` | `PuckComponentData` \| `null` |
+| `api.puckApi` | `PuckApi` |
+
+## Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;

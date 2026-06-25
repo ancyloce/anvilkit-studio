@@ -1,0 +1,66 @@
+---
+title: "StudioConfigSchema"
+description: "@anvilkit/core · StudioConfigSchema"
+---
+
+```ts
+const StudioConfigSchema: ZodPrefault<ZodObject<{
+  ai: ZodPrefault<ZodObject<{
+     defaultModel: ZodOptional<ZodString>;
+     maxRetries: ZodDefault<ZodNumber>;
+  }, $strict>>;
+  branding: ZodPrefault<ZodObject<{
+     appName: ZodDefault<ZodString>;
+     logoUrl: ZodOptional<ZodURL>;
+     primaryColor: ZodOptional<ZodString>;
+  }, $strict>>;
+  brandKit: ZodPrefault<ZodObject<{
+     colors: ZodDefault<ZodArray<ZodObject<{
+        name: ZodString;
+        value: ZodString;
+     }, $strict>>>;
+     fonts: ZodDefault<ZodArray<ZodString>>;
+  }, $strict>>;
+  experimental: ZodPrefault<ZodRecord<ZodString, ZodUnknown>>;
+  export: ZodPrefault<ZodObject<{
+     defaultFormat: ZodOptional<ZodString>;
+     filenamePrefix: ZodDefault<ZodString>;
+  }, $strict>>;
+  features: ZodPrefault<ZodObject<{
+     enableAi: ZodDefault<ZodBoolean>;
+     enableCollaboration: ZodDefault<ZodBoolean>;
+     enableExport: ZodDefault<ZodBoolean>;
+  }, $strict>>;
+  i18n: ZodPrefault<ZodObject<{
+     fallbackLocale: ZodDefault<ZodString>;
+     locale: ZodDefault<ZodString>;
+     messages: ZodOptional<ZodRecord<ZodString, ZodRecord<ZodString, ZodString>>>;
+     showLocaleSwitch: ZodDefault<ZodBoolean>;
+  }, $strict>>;
+  theme: ZodPrefault<ZodObject<{
+     allowToggle: ZodDefault<ZodBoolean>;
+     defaultMode: ZodDefault<ZodEnum<{
+        dark: "dark";
+        light: "light";
+        system: "system";
+     }>>;
+  }, $strict>>;
+}, $strict>>;
+```
+
+Defined in: [config/schema.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L69)
+
+The root schema for `StudioConfig`.
+
+Every level is wrapped in `z.strictObject` so unknown keys are
+rejected — a mistyped section name (`"feature"` instead of
+`"features"`) or a typo'd flag (`"enableExprot"` inside
+`features`) fails the host app's config load rather than silently
+disappearing.
+
+Every nested section is wrapped in `.prefault({})` so callers can
+omit entire sections and still receive the fully-defaulted shape.
+Inner fields use plain `.default(...)` because they are not
+objects (leaf defaults do not need the pre-parse round-trip).
+
+Consumers: **use `createStudioConfig()`**, not `.parse()` directly.

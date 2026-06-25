@@ -1,0 +1,25 @@
+---
+title: "StudioPluginOverlay"
+description: "@anvilkit/core · StudioPluginOverlay"
+---
+
+Defined in: [types/plugin.ts:472](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L472)
+
+Top-level overlay contributed by a plugin via
+[StudioPluginRegistration.overlays](StudioPluginRegistration.md#overlays). Overlays render as
+siblings of the Puck editor at the placement specified by
+[placement](#placement) (see [StudioOverlayPlacement](../type-aliases/StudioOverlayPlacement)).
+
+Overlays cannot inject themselves into Puck slots (that's what
+[StudioPluginRegistration.overrides](StudioPluginRegistration.md#overrides) is for) — they live one
+level above the editor in the DOM. Common uses: presence cursors,
+conflict toasts, comment threads, AI hint bubbles.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="component"&gt;&lt;/a&gt; `component` | `readonly` | `ComponentType` | The overlay component. Receives no props. | [types/plugin.ts:488](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L488) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, globally-unique overlay identifier (e.g. `"collab-presence"`, `"collab-conflicts"`). | [types/plugin.ts:477](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L477) |
+| &lt;a id="order"&gt;&lt;/a&gt; `order?` | `readonly` | `number` | Optional sort key within the same placement bucket. Lower values render first. Default `100`. Ties break on registration order. | [types/plugin.ts:494](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L494) |
+| &lt;a id="placement"&gt;&lt;/a&gt; `placement` | `readonly` | [`StudioOverlayPlacement`](../type-aliases/StudioOverlayPlacement) | Where Studio should mount the overlay relative to the Puck editor. See [StudioOverlayPlacement](../type-aliases/StudioOverlayPlacement). | [types/plugin.ts:483](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L483) |

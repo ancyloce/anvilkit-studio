@@ -1,0 +1,58 @@
+---
+title: "关于页面"
+description: "关于页面 —— 主视觉、使命区块、数据统计、客户 logo 墙。"
+---
+
+![关于页面 preview](/templates/about/preview.png)
+
+<div className="anvilkit-template-meta">
+	<code>@anvilkit/template-about</code> <span>·</span> <span>v1.0.2</span>
+</div>
+
+## 通过 CLI 脚手架生成
+
+```sh
+npx anvilkit init --template about my-site
+```
+
+## 组成结构
+
+提交的 `PageIR` 在根节点连接了以下节点类型：
+
+- `Navbar`
+- `Hero`
+- `Section`
+- `Statistics`
+- `LogoClouds`
+
+## 包详情
+
+An about / mission page.
+
+Navbar, hero, mission section, statistics, and a customer logo cloud.
+
+## Install
+
+```sh
+npx anvilkit init --template about my-site
+```
+
+## Composition
+
+This template composes the following component packages:
+
+- `@anvilkit/hero`
+- `@anvilkit/logo-clouds`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+- `@anvilkit/statistics`
+
+## Editing
+
+The canonical `PageIR` tree is committed at `src/page-ir.json`. The
+package's default export bundles that IR with the manifest fields
+(slug, name, description, preview, package list) into an
+`AnvilkitTemplate`.
+
+See `docs/decisions/003-core-templates-subpath.md` for the
+`AnvilkitTemplate` contract.

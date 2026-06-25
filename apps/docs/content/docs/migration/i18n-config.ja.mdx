@@ -1,0 +1,204 @@
+---
+title: "設定中心の i18n（0.1.x）"
+description: "Studio の国際化を散在したプロパティから config.i18n へ移行します —— ホスト制御のロケール、ロケールごとのメッセージオーバーライド、組み込みの言語スイッチャー —— 言語切り替え時にプラグインを一切再コンパイルしません。"
+---
+
+`@anvilkit/core@0.1.15` は国際化を
+`config.i18n` ブロックに集約します。これまでプロパティ全体に散在していたもの ——
+`<Studio messages>` のオーバーライドマップと、`headerEnd` に手動でマウントした
+`<LanguageSwitcher>` —— が、いまや 1 つの宣言的で
+シリアライズ可能な場所にまとまり、言語状態を自前で管理する
+フレームワーク（Next.js のルートセグメント、`next-intl`、cookie）に対して、
+アクティブなロケールは **ホスト制御可能** になります:
+
+```tsx
+<Studio
+  puckConfig={puckConfig}
+  config={{
+    i18n: {
+      locale: "zh",                    // controlled active language
+      messages: {                      // per-locale chrome overrides
+        zh: { "studio.publish": "发布" },
+        en: { "studio.publish": "Ship it" },
+      },
+      showLocaleSwitch: true,          // built-in header switcher
+    },
+  }}
+  onLocaleChange={(next) => router.replace(pathnameFor(next))}
+/>
+```
+
+`i18n` ブロック全体は **再コンパイル免除** です: プラグインの
+コンパイルフィンガープリントから除外されるため、実行時に `locale`、`messages`、
+`showLocaleSwitch` を変更しても、その場で UI が更新されます —— プラグインの
+破棄もエディターの再マウントもなく、ライブのコラボレーション・トランスポートも維持されます。
+
+## TL;DR —— 何がどこへ移るか
+
+| 以前（プロパティ） | 以後（設定） |
+| --- | --- |
+| `messages={{ "studio.publish": "Ship it" }}` | `config.i18n.messages` —— ロケールごと: `{ en: { "studio.publish": "Ship it" } }` |
+| `headerEnd={<LanguageSwitcher />}` | `config.i18n.showLocaleSwitch: true` |
+| *(不可能)* ホスト駆動のライブロケール | `config.i18n.locale`（制御モード） |
+| *(不可能)* エディター内での切り替えの観測 | `onLocaleChange` プロパティ（唯一の新規プロパティ —— ハンドラーは設定にできません） |
+
+`headerEnd` 自体は変更されていません —— 任意のホスト
+ヘッダーコンテンツのための継ぎ目として残ります。スイッチャーがそれを必要としなくなっただけです。
+
+## 制御 vs 非制御ロケール
+
+モードは 1 つのことで決まります: **生の `config` プロパティが
+`i18n.locale` を明示的に設定しているかどうか。**
+
+|  | 非制御（キーなし） | 制御（キーあり） |
+| --- | --- | --- |
+| 信頼できる情報源 | インスタンスごとのストア、`localStorage` の `anvilkit-core-locale-${storeId}` 配下に永続化 | あなたの `config.i18n.locale` の値 |
+| 最初の描画 | `"en"`（または永続化された選択） | 設定のロケール —— 同期的に、フラッシュなしで、SSR と一貫 |
+| 永続化 | オン —— ユーザーの選択がリロード後も残る | バイパス —— `localStorage` から読み込みも書き込みも行われない（後の非制御マウント用に古いブロブはそのまま残る） |
+| `ANVILKIT_I18N__LOCALE` 環境変数 | 永続化された選択がない場合に、デフォルトを一度だけシードする | 制御に関しては無視される —— 環境変数がマウントを制御モードにすることは決してない |
+| 組み込みスイッチャーの選択 | 即座に適用（かつ永続化）し、その後 `onLocaleChange` を呼ぶ | `onLocaleChange` を **のみ** 呼ぶ —— 新しい `config.i18n.locale` で再レンダリングして適用する、まさに制御された `<input>` のように |
+
+アプリがすでに言語状態を保持している場合（ルート
+セグメント、cookie、ユーザープロフィール）は **制御** を選びます。エディターが
+エディター内での選択を自身で記憶すべき場合は **非制御** を選びます。
+
+<Callout type="warn" title="モードはマウント時にラッチされる">
+制御かどうかは最初のレンダリングで決まり、固定されます —— 後から
+`i18n.locale` を追加・削除しても無視されます（一度きりの警告がログ出力されます）。
+モードを切り替えるには、新しい React の `key` で再マウントします。これは
+`storeId` にすでに適用されているのと同じルールです。
+</Callout>
+
+<Callout type="warn" title="意図的な動作変更が 1 つ">
+以前は、静的な `config={{ i18n: { locale: "zh" } }}` は
+一度だけシードするデフォルトでした: ユーザーがかつて永続化したロケールが
+それに **勝って** いました。
+いまや明示的な設定ロケールが権威となり（制御モード）、
+古い永続化された選択に勝ちます。もし古いセマンティクスに依存していた場合は、
+その値を `ANVILKIT_I18N__LOCALE` 環境変数に移してください。
+そちらは一度だけシードする動作を維持します。
+</Callout>
+
+## Next.js のレシピ
+
+`[locale]` セグメントを持つ App Router:
+
+```tsx
+// app/[locale]/editor/page.tsx (server component)
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return <Editor locale={locale} />;
+}
+```
+
+```tsx
+// editor.tsx
+"use client";
+import { Studio } from "@anvilkit/core/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useMemo } from "react";
+
+export function Editor({ locale }: { locale: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Memoize: `config` participates in the plugin-compile fingerprint
+  // (its non-i18n part). The i18n block itself is additionally
+  // JSON-keyed internally, so even this re-created object never
+  // recompiles — but a stable reference is still the cheapest path.
+  const config = useMemo(
+    () => ({ i18n: { locale, showLocaleSwitch: true } }),
+    [locale],
+  );
+
+  const handleLocaleChange = useCallback(
+    (next: string) => router.replace(pathname.replace(`/${locale}`, `/${next}`)),
+    [router, pathname, locale],
+  );
+
+  return (
+    <Studio
+      puckConfig={puckConfig}
+      config={config}
+      onLocaleChange={handleLocaleChange}
+    />
+  );
+}
+```
+
+往復のフロー —— スイッチャーのクリック → `onLocaleChange` → `router.replace`
+→ 新しい `config.i18n.locale` での再レンダリング —— は、すべての UI 文字列と
+プラグイン文字列をその場で切り替えます。最初のクライアントレンダリングで
+すでに制御ロケールが解決されるため、`en → zh` のフラッシュは起きません。
+英語以外のコアパック（`zh`/`ja`/`ko`）は遅延読み込みされ、読み込み中は
+キーごとに英語へフォールバックします。
+
+cookie ベースの構成（ルーティングなしの `next-intl`）も同じ形です:
+cookie を `config.i18n.locale` に読み込み、`onLocaleChange` で書き込みます。
+
+## メッセージ: フラットなプロパティ → ロケールごとのマップ
+
+`<Studio messages>` プロパティは **非推奨** です（`0.2.0` で削除）。
+それはロケール非依存でした —— 1 つのフラットなマップがすべての言語に適用されます。
+設定マップはロケールでキー付けされ、`fallbackLocale` が
+アクティブなロケールのバンドルに欠けているキーを埋めます:
+
+```tsx
+// Before (deprecated, still works through 0.1.x):
+<Studio messages={{ "studio.publish": "Ship it" }} />
+
+// After:
+<Studio
+  config={{
+    i18n: {
+      fallbackLocale: "en",
+      messages: {
+        en: { "studio.publish": "Ship it" },
+        zh: { "studio.publish": "立即发布" },
+      },
+    },
+  }}
+/>
+```
+
+解決順序（低 → 高）: 組み込みカタログ + 遅延パック +
+プラグインバンドル → `messages[fallbackLocale]` → `messages[activeLocale]`
+→ 非推奨のフラットなプロパティ。プロパティが最上位にあるということは、
+キー単位での移行が決してオーバーライドを *失わない* ことを意味します —— ただし
+両方を長期間併用しないでください。プロパティが設定されている間、開発コンソールは
+マウントごとに一度警告します。
+
+## 組み込み言語スイッチャー
+
+`config.i18n.showLocaleSwitch: true` は、ヘッダー右側のクラスター内、
+プラグインのヘッダーアクションとあなたの `headerEnd` ノードの間に、
+同じ `<LanguageSwitcher>` コンポーネントをレンダリングします。デフォルトは
+**オフ** なので、既存のマウントは変わりません。現在 `headerEnd` 経由で
+スイッチャーをマウントしている場合は、フラグを切り替える際にその配線を削除してください ——
+そうしないと、2 つのスイッチャーが横並びで表示されます（意図的に隣接させてあり、
+移行中に重複が明白になるようになっています）。
+
+このフラグはライブです: 実行時に切り替えると、再コンパイルなしで
+スイッチャーが表示/非表示されます。`<LanguageSwitcher>`（`@anvilkit/core/i18n` から
+エクスポート）は依然として好きな場所に自分でレンダリングできます。それは現在
+同じリクエストの継ぎ目を経由してルーティングされるため、どちらの方法でも `onLocaleChange` が発火します。
+
+## プラグイン作者へ
+
+- `ctx.t` は現在、**アクティブな** ロケールとライブの
+  `config.i18n.messages` に対して解決します —— コンパイル時の設定値で
+  凍結されるのではなく、実行時の切り替えを追従します。その他の制限は
+  変わりません: 英語以外のコアパックを遅延読み込みすることは決してなく、
+  プラグインが登録した名前空間を解決することも決してありません。リアクティブな UI 文字列は
+  依然として `useMsg`/`useT` に属します。
+- `ctx.studioConfig.i18n` は依然としてコンパイル時のスナップショットです —— それを
+  「現在のロケール」ではなく「設定された i18n」として読んでください。
+- `ctx.registerMessages` とレジストリの契約は変更されていません。
+
+## 非推奨タイムライン
+
+| サーフェス | ステータス |
+| --- | --- |
+| `<Studio messages>` プロパティ | 現在非推奨（`@deprecated` + 一度きりの開発警告）；`0.1.x` 全体で完全に機能；**`0.2.0` で削除** |
+| `config.i18n.locale` の未永続化なら一度だけシードするセマンティクス | 明示的な設定値については制御モードに置き換え；`ANVILKIT_I18N__LOCALE` については維持 |
+| その他すべて | 追加的 —— 他の対応は不要 |

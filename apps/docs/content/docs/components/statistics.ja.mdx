@@ -1,0 +1,164 @@
+---
+title: Statistics
+description: "Anvilkit Puck ネイティブの Statistics コンポーネント。"
+---
+
+<div className="anvilkit-component-meta">
+	<code>@anvilkit/statistics</code> <span>·</span> <span>v0.2.2</span> <span>·</span> <a href="/playground">プレイグラウンドで試す →</a>
+</div>
+
+## ライブプレビュー
+
+<ComponentPreview name="Statistics" />
+
+A Puck-native statistics header component with a flickering grid background.
+
+## Install
+
+```sh
+pnpm add @anvilkit/statistics @anvilkit/ui @puckeditor/core
+```
+
+## Styles
+
+Import the package stylesheet once from your app entry before rendering the component.
+
+```tsx
+import "@anvilkit/statistics/styles.css";
+```
+
+In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+
+## Examples
+
+### Basic usage
+
+Render the header with a custom uppercase `title` over the animated grid.
+
+```tsx
+import "@anvilkit/statistics/styles.css";
+import { Statistics } from "@anvilkit/statistics";
+
+export function Example() {
+  return <Statistics title="Our Impact" />;
+}
+```
+
+### Default copy
+
+Render the bundled default title via `defaultProps`.
+
+```tsx
+import { Statistics, defaultProps } from "@anvilkit/statistics";
+
+export function DefaultStatistics() {
+  return <Statistics {...defaultProps} />;
+}
+```
+
+### Register in a Puck config
+
+Wire the exported `componentConfig` into a Puck `Config`.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type StatisticsProps } from "@anvilkit/statistics";
+
+const config: Config<{ Statistics: StatisticsProps }> = {
+  components: {
+    Statistics: componentConfig,
+  },
+};
+```
+
+## API
+
+Derived from the exported `StatisticsProps` type and the Puck `fields` schema.
+
+| Prop         | Type                            | Default        | Description                                                          |
+| ------------ | ------------------------------- | -------------- | ------------------------------------------------------------------- |
+| `title`      | `string`                        | `"Statistics"` | Uppercase header title text.                                        |
+| `dataSource` | `"static"` \| `"remote_csv"`    | `"static"`     | Where metrics come from: author-entered or host-resolved CSV.       |
+| `metrics`    | `StatisticsMetric[]`            | `[]`           | Resolved metric rows (each `{ label, value }`).                     |
+| `metrics[].label` | `string`                   | —              | Metric label.                                                       |
+| `metrics[].value` | `string`                   | —              | Metric value.                                                       |
+
+## Theme & Responsiveness
+
+Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+
+## プロパティリファレンス
+
+コンポーネントの Puck `fields` スキーマから導出されます。
+
+| フィールド | 型 | デフォルト |
+|-------|------|---------|
+| `title` | text | `"Statistics"` |
+| `dataSource` | radio ("static" \| "remote_csv") | `"static"` |
+| `metrics` | array | `[]` |
+
+## デフォルトプロパティ
+
+```json
+{
+  "title": "Statistics",
+  "dataSource": "static",
+  "metrics": []
+}
+```
+
+## Puck 設定
+
+```json
+{
+  "label": "Statistics",
+  "metadata": {
+    "componentName": "Statistics",
+    "componentSlug": "statistics",
+    "packageName": "@anvilkit/statistics",
+    "packageVersion": "0.2.2",
+    "scaffoldType": "content",
+    "schemaVersion": 1,
+    "suggestedCategory": "marketing"
+  },
+  "defaultProps": {
+    "title": "Statistics",
+    "dataSource": "static",
+    "metrics": []
+  },
+  "fields": {
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "dataSource": {
+      "type": "radio",
+      "label": "Data source",
+      "options": [
+        {
+          "label": "Static User Input",
+          "value": "static"
+        },
+        {
+          "label": "Remote Data Adapter",
+          "value": "remote_csv"
+        }
+      ]
+    },
+    "metrics": {
+      "type": "array",
+      "label": "Metrics",
+      "arrayFields": {
+        "label": {
+          "type": "text",
+          "label": "Label"
+        },
+        "value": {
+          "type": "text",
+          "label": "Value"
+        }
+      }
+    }
+  }
+}
+```

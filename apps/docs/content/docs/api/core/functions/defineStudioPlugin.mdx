@@ -1,0 +1,35 @@
+---
+title: "defineStudioPlugin"
+description: "@anvilkit/core · defineStudioPlugin"
+---
+
+```ts
+function defineStudioPlugin<Contributes>(plugin): StudioPluginContributing<Contributes>;
+```
+
+Defined in: [types/plugin.ts:853](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L853)
+
+Brand a plain `StudioPlugin` literal as
+[StudioPluginContributing](../interfaces/StudioPluginContributing)`<Contributes>`.
+
+Pure type-level cast — the runtime value is the same object the caller
+passed in. Exists because the brand property is required on the
+sub-interface (to prevent inference pollution) but has no runtime
+representation; this helper concentrates the unavoidable `as` cast in
+one place so plugin authors don't sprinkle it across factories.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `Contributes` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `plugin` | [`StudioPlugin`](../interfaces/StudioPlugin)\&lt;`Config`\&gt; |
+
+## Returns
+
+[`StudioPluginContributing`](../interfaces/StudioPluginContributing)\<`Contributes`\>

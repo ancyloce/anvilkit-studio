@@ -1,0 +1,26 @@
+---
+title: "HeaderActionSlot"
+description: "@anvilkit/core · HeaderActionSlot"
+---
+
+```ts
+type HeaderActionSlot = 
+  | {
+  action: StudioHeaderAction;
+  kind: "live";
+}
+  | {
+  action: StaticHeaderActionPlaceholder;
+  kind: "placeholder";
+};
+```
+
+Defined in: [runtime/header-actions.ts:213](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L213)
+
+One resolved toolbar slot: either a fully-loaded live action or a
+static placeholder still awaiting its plugin's chunk.
+
+The discriminant lets the chrome render the two cases differently — a
+placeholder paints disabled (no `onClick`), a live action is
+interactive — while [resolveHeaderActionSlots](../functions/resolveHeaderActionSlots) guarantees both
+occupy the same `(group, order, id)`-sorted position.

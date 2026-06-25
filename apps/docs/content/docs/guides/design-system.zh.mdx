@@ -1,0 +1,250 @@
+---
+title: "设计系统插件"
+description: "为安装了 @anvilkit/plugin-design-system 的 Studio 宿主提供令牌绑定字段、主题切换、脱离令牌警告，以及 WCAG-AA 对比度发布门控。"
+---
+
+`@anvilkit/plugin-design-system` 是一个第一方 `StudioPlugin`，
+它在 Puck 之上为宿主提供设计系统词汇，
+而无需让作者编写十六进制颜色码或像素值。它提供：
+
+- 面向任意 Puck `Config` 的令牌绑定 `color`、`spacing` 和 `typography` 字段，
+  由两级 `--ak-ds-*` 令牌树支撑。
+- 一套捆绑的默认令牌集（品牌色 + 中性色阶、0–24 间距
+  比例、字号比例、圆角比例），宿主可在其上进行深度合并。
+- 一个用于标记脱离令牌字面值的 `onDataChange` 遍历器。
+- 一个 `onBeforePublish` WCAG-AA 对比度配对校验器，会在配对
+  不通过时中止发布。
+- 一个主题感知的令牌块——切换 `light` / `dark` 仅交换
+  原语；语义令牌与持久化的令牌引用保持
+  主题稳定。
+
+该插件通过 `@anvilkit/core` 现有的接缝
+（`compilePlugins`、`mergeOverrides`、`sidebar-registry-store`、
+`lifecycle-manager`）接入；它绝不会直接导入 Puck 覆盖
+内部实现。
+
+## 1. 安装
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+对等依赖（通常的 Studio 宿主中已存在）：
+
+- `@puckeditor/core ^0.21.3`
+- `@anvilkit/core`（工作区或匹配的次版本）
+- `react >=19.0.0`
+
+## 2. 最小化宿主
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin();
+
+export function MyEditor() {
+  return (
+    <Studio
+      puckConfig={config}
+      data={data}
+      plugins={[designSystemPlugin]}
+    />
+  );
+}
+```
+
+该工厂默认无参数；捆绑的令牌树
+会生效，且两个校验器均启用。请将工厂调用提升到
+模块作用域，这样 `<Studio>` 的插件编译流水线就不会在
+每次渲染时运行。
+
+## 3. 令牌模型
+
+该插件会将两级 CSS 变量发送到宿主
+文档和 Puck 画布 iframe 中。
+
+**第 1 级——原语**（在暗黑模式下翻转）：
+
+| 命名空间 | 变量 |
+| --- | --- |
+| 品牌色阶 | `--ak-ds-brand-50` … `--ak-ds-brand-900` |
+| 中性色阶 | `--ak-ds-neutral-50` … `--ak-ds-neutral-900` |
+| 间距 | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}` |
+| 排版 | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}` |
+| 圆角 | `--ak-ds-radius-{sm,md,lg}` |
+
+**第 2 级——语义**（主题稳定；每个都会回退到
+匹配的 `--ak-studio-*` 框架变量，因此未配置主题的宿主仍可
+渲染）：
+
+`--ak-ds-bg`、`--ak-ds-surface`、`--ak-ds-fg`、`--ak-ds-fg-muted`、
+`--ak-ds-accent`、`--ak-ds-accent-fg`、`--ak-ds-border`、
+`--ak-ds-focus-ring`。
+
+使用深度局部对象覆盖捆绑的默认值：
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin({
+  tokens: {
+    primitives: {
+      brand: {
+        500: "oklch(62% 0.18 264)",
+        600: "oklch(54% 0.19 264)",
+      },
+    },
+    semantics: {
+      accent: "brand.500",
+    },
+  },
+});
+```
+
+只有你设置的键会生效；令牌树的其余部分与
+`DEFAULT_TOKENS` 在结构上共享。
+
+## 4. 令牌绑定字段
+
+字段工厂返回 Puck `CustomField<string>` 渲染器。字段
+值以**令牌引用字符串**的形式持久化——绝不会是解析后的
+值——因此令牌的重新调校会贯穿到每个先前编写的
+字段，无需数据迁移。
+
+```ts
+import {
+  createTokenColorField,
+  createTokenSpacingField,
+  createTokenTypographyField,
+  DEFAULT_TOKENS,
+  resolveTokenRef,
+} from "@anvilkit/plugin-design-system";
+
+const Card = {
+  fields: {
+    background: createTokenColorField({ label: "Surface" }),
+    padding: createTokenSpacingField({ label: "Padding" }),
+    title: createTokenTypographyField({ label: "Title size" }),
+  },
+  defaultProps: {
+    background: "semantic.surface",
+    padding: "space.4",
+    title: "text.lg",
+  },
+  render: ({ background, padding, title }) => (
+    <div
+      style={{
+        background: resolveTokenRef(background, DEFAULT_TOKENS).cssVar,
+        padding: resolveTokenRef(padding, DEFAULT_TOKENS).cssVar,
+        fontSize: resolveTokenRef(title, DEFAULT_TOKENS).cssVar,
+      }}
+    >
+      …
+    </div>
+  ),
+};
+```
+
+引用语法：
+
+- `color.<ramp>.<step>` — 原语（例如 `color.brand.500`）。
+- `semantic.<role>` — 语义角色（例如 `semantic.bg`）。
+- `space.<key>` — 间距原语（例如 `space.4`）。
+- `text.<key>` — 排版原语（例如 `text.lg`）。
+- `radius.<key>` — 圆角原语。
+
+如果某个构建流水线希望在纯数据处理期间跳过 React 解析，
+那么这套无 React 的令牌接口（默认值、合并辅助函数、解析器）
+也可以通过 `./tokens` 子路径获取：
+
+```ts
+import { DEFAULT_TOKENS, mergeTokens } from "@anvilkit/plugin-design-system/tokens";
+```
+
+## 5. 校验
+
+两个校验器默认均开启，且可按宿主分别切换：
+
+```ts
+createDesignSystemPlugin({
+  validation: {
+    offToken: true,   // onDataChange — non-blocking warnings
+    contrast: true,   // onBeforePublish — throws on AA failure
+  },
+});
+```
+
+**脱离令牌警告**（`onDataChange`）通过 `Promise.allSettled`
+以并行方式遍历 Puck 数据树，并对每个看起来像
+颜色或长度但不在已解析令牌树中的字面值调用
+`ctx.log("warn", …)`。非阻塞
+——作者可以继续工作，同时警告会显示在控制台 / 宿主
+日志接收端。
+
+**对比度门控**（`onBeforePublish`）遍历数据树中的前景 / 背景配对，
+计算 WCAG-AA 对比度比率，并对任何低于 4.5:1 的配对抛出一个
+描述性的 `StudioPluginError`。在 `onBeforePublish`
+内部抛出会按 `@anvilkit/core` 的 lifecycle-manager 契约
+中止 Puck 发布——宿主的
+`onPublish` 永远不会触发。
+
+<Callout type="info" title="为什么是两个校验器，而不是一个">
+脱离令牌警告是引导性的（“你这里大概想用一个令牌”）。
+对比度失败是规范违例（“这未通过 AA”）。一个
+是建议性的；另一个是硬性门控。正因如此，它们运行在不同的
+生命周期钩子上。
+</Callout>
+
+## 6. 主题切换
+
+明亮 / 暗黑 / 系统模式仅翻转**原语**；语义
+角色会在内部重新指向相应的色阶步级。作者数据中存储的令牌
+引用是主题稳定的，因为它们引用的是语义 / 原语的*名称*，
+而不是其解析后的值。
+
+该插件复用 `@anvilkit/core` 现有的 `useThemeStore` +
+`use-theme-sync` 机制——选择一个模式会在一个绘制周期内同时翻转 `<html>`
+（框架）和 Puck 画布 iframe。
+
+## 7. 状态（v0.1）
+
+当前发布的内容：
+
+- 工厂 + 捆绑的 `DEFAULT_TOKENS` + 深度合并覆盖。
+- 三个使用 `fieldTypes.custom` Puck 插槽的令牌绑定字段工厂
+  （`color`、`spacing`、
+  `typography`）。
+- 由插件的 `overrides.fields` 包装器
+  自动挂载的 `TokenProvider`。
+- `onDataChange` 脱离令牌遍历器 + `onBeforePublish` 对比度
+  校验器。
+- 宿主文档和 iframe 画布中均含 `--ak-ds-*` CSS，并带有 `.dark`
+  原语覆盖。
+
+尚未面向用户的内容（`@anvilkit/core` 中待完成的 Phase B
+回填）：
+
+- 设计系统侧边栏页签 + 模块。该插件通过
+  `ctx.registerDesignSystemPanel?({ render })` 注册了一个
+  面板，并且 `sidebarRegistryStore.designSystemPanel` 已被填充，但
+  `@anvilkit/core` 中的 `EditorTab` + `RAIL_MODULES` 尚无
+  `"design-system"` 条目——面板状态已设置，但没有 UI
+  读取它。
+- 字段工厂中的令牌排版比例 UI（当前比例已
+  捆绑，但选择器 UI 显示的是原始引用；更丰富的预览推迟
+  到 v0.2）。
+- 面板中的组件页签（v0.2——面板 React 树中目前只实现了
+  Tokens + Theme 两个页签）。
+
+<Callout type="info" title="引用出处">
+规范位于 `docs/archive/PRD/0005-design-system-integration-prd.md`，
+开发计划位于
+`docs/archive/plans/0005-design-system-integration-dev-plan-2026-05-20.md`
+（仓库本地；`docs/` 已被 git 忽略）。所引用的核心接缝：
+`compilePlugins`（`packages/core/src/runtime/compile-plugins.ts`）、
+`mergeOverrides`（`packages/core/src/react/overrides/merge-overrides.ts`）、
+`sidebar-registry-store`
+（`packages/core/src/state/sidebar-registry-store.ts`）、
+`lifecycle-manager`（`packages/core/src/runtime/lifecycle-manager.ts`）。
+</Callout>

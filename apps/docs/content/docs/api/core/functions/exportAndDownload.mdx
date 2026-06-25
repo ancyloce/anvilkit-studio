@@ -1,0 +1,36 @@
+---
+title: "exportAndDownload"
+description: "@anvilkit/core · exportAndDownload"
+---
+
+```ts
+function exportAndDownload<Opts>(options): Promise<ExportResult>;
+```
+
+Defined in: [export/download.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/export/download.ts#L73)
+
+Browser convenience: [runExport](runExport.md) then download the result. The
+one-liner a `<Studio onExport>` handler can delegate to.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `Opts` *extends* `Record`\&lt;`string`, `unknown`\&gt; | `Record`\&lt;`string`, `unknown`\&gt; |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`ExportAndDownloadOptions`](../interfaces/ExportAndDownloadOptions)\&lt;`Opts`\&gt; |
+
+## Returns
+
+`Promise`\<[`ExportResult`](../interfaces/ExportResult)\>
+
+The [ExportResult](../interfaces/ExportResult) (so callers can also inspect warnings).
+
+## Throws
+
+[StudioExportError](../classes/StudioExportError) when the format's `run` rejects (no
+download happens in that case).

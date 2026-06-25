@@ -1,0 +1,89 @@
+---
+title: "AI 이미지 플러그인"
+description: "@anvilkit/plugin-ai-image를 통해 AnvilKit Canvas Studio용으로 제공자에게 위임된 텍스트-이미지, 변형, 인페인트, 배경 제거 작업을 제공합니다."
+---
+
+`@anvilkit/plugin-ai-image`는 호스트가 제공하는 `AiImageProvider`를 래핑하여
+캔버스 에디터가 하나의 타입이 지정된 계약을 통해 텍스트-이미지, 변형, 인페인트,
+배경 제거, 업스케일 작업을 발행할 수 있게 합니다. 이 플러그인은 AI
+서비스와 직접 통신하지 **절대** 않습니다——자격 증명, 모델 id, 엔드포인트 중 어느 것도 플러그인
+경계를 넘지 않습니다. 주변 구성 요소(중단/재시도/폴링 작업 클라이언트, 모의
+제공자, 마스크 에디터, 후처리 파이프라인, 캔버스 커밋 헬퍼, 그리고
+선택적인 React 사이드바 패널)는 별도의 서브경로 익스포트로 제공됩니다.
+
+## 1. 설치
+
+```sh
+pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
+```
+
+피어 의존성: `react >=19.0.0`, `react-dom >=19.0.0`,
+`@puckeditor/core ^0.21.3`, `@anvilkit/ui`(React 패널용), 그리고
+`konva ^9 || ^10` + `react-konva ^19`(`./mask` 및 `./react` Konva
+서피스용). 헤드리스 `.` 엔트리——팩토리, 작업 클라이언트, 후처리, 커밋——
+는 Konva를 필요로 하지 않습니다.
+
+서브경로 익스포트:
+
+- `@anvilkit/plugin-ai-image` — `createAiImagePlugin`, `createAiJobClient`, `commitImageReplace`, 마스크 익스포터 유틸리티, 그리고 모든 와이어 형태 타입.
+- `@anvilkit/plugin-ai-image/react` — `AiImagePanel`, `useAiImage`, `createAiImageSidebarPlugin`.
+- `@anvilkit/plugin-ai-image/mask` — `MaskEditorLayer`, `useMaskStrokes`, 마스크 타입.
+- `@anvilkit/plugin-ai-image/post-process` — `createPostProcessPipeline` + 이미지 헬퍼.
+- `@anvilkit/plugin-ai-image/commit` — `commitImageReplace`.
+- `@anvilkit/plugin-ai-image/mock` — 테스트 및 데모용 `createMockAiImageProvider`.
+
+## 2. 제공자 계약
+
+`AiImagePluginOptions`는 필수인 `provider` 하나를 가집니다. 제공자는
+타입이 지정된 요청, 레이어 컨텍스트, 실행 옵션(`AbortSignal` 포함)을
+받아 `AiImageJobResult`로 resolve하는
+비동기 함수입니다:
+
+```ts
+import { createAiImagePlugin } from "@anvilkit/plugin-ai-image";
+import type { AiImageProvider } from "@anvilkit/plugin-ai-image";
+
+const provider: AiImageProvider = async (request, context, options) => {
+  // Call your AI service of choice (Replicate, OpenAI, self-hosted SD, …).
+  // Honour `options?.signal` for cancellation and return an AiImageJobResult.
+  const res = await fetch("/api/ai/image", {
+    method: "POST",
+    body: JSON.stringify({ request, context }),
+    signal: options?.signal,
+  });
+  return (await res.json()) as Awaited<ReturnType<AiImageProvider>>;
+};
+
+const aiImage = createAiImagePlugin({ provider });
+```
+
+테스트 및 데모용으로, `./mock` 서브경로의 `createMockAiImageProvider()`는
+네트워크 호출 없이 결정론적인 결과를 반환합니다.
+
+## 3. UI 마운트
+
+<Callout type="warn" title="순수 팩토리는 헤드리스입니다">
+`createAiImagePlugin`은 제공자를 검증하고 명령형
+`submit()` 메서드를 노출하지만, **빈** Studio 훅 블록을 등록합니다——그 자체만으로는
+어떤 라이프사이클 훅이나 UI도 제공하지 않습니다. `@anvilkit/plugin-ai-image/react`
+(`AiImagePanel` / `createAiImageSidebarPlugin`)를 통해 패널을 마운트하거나
+`useAiImage` 훅 위에 자신만의 UI를 구축하세요.
+</Callout>
+
+## 4. 작업 클라이언트, 마스크, 커밋
+
+- **작업 클라이언트** — `createAiJobClient`는 제공자 주위에 중단/재시도/폴링을 추가하며,
+  일시적인 실패에 대해 `RetryableError`를 표면화합니다.
+- **마스크** — `drawMask`, `rasterizeMaskToDataUrl`, `createMaskToAssetExporter`는
+  에디터 스트로크를 인페인트 작업용 마스크 에셋으로 변환합니다. `dataUrlToFile`은
+  업로드 어댑터로 연결해 줍니다.
+- **커밋** — `commitImageReplace`는 생성된 이미지를 요청한
+  캔버스 레이어에 다시 기록합니다.
+- **후처리** — `createPostProcessPipeline`(메인 번들을 가볍게 유지하기 위해 서브경로 전용)은
+  업로드 전에 결과를 압축하고 썸네일을 생성합니다.
+
+<Callout type="info" title="상태(alpha, v0.1.1)">
+이터레이션 1 구성 요소가 모두 제공됩니다(작업 클라이언트, 모의 제공자, 마스크
+에디터, 후처리 파이프라인, 커밋 헬퍼, React 사이드바 서피스). API는
+`1.0` 이전에 변경될 수 있습니다.
+</Callout>

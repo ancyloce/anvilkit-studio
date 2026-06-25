@@ -1,0 +1,202 @@
+---
+title: "以配置为中心的 i18n（0.1.x）"
+description: "将 Studio 国际化从分散的属性迁移到 config.i18n —— 由宿主控制语言、按语言的消息覆盖，以及内置的语言切换器 —— 并且切换语言时无需重新编译任何插件。"
+---
+
+`@anvilkit/core@0.1.15` 将国际化集中到了
+`config.i18n` 块上。过去分散在各个属性中的内容 ——
+`<Studio messages>` 覆盖映射以及手动挂载在 `headerEnd` 中的
+`<LanguageSwitcher>` —— 现在统一存放在一个声明式、
+可序列化的位置，并且对于那些自身掌管语言状态的框架
+（Next.js 路由段、`next-intl`、cookie），当前语言变得
+**可由宿主控制**：
+
+```tsx
+<Studio
+  puckConfig={puckConfig}
+  config={{
+    i18n: {
+      locale: "zh",                    // controlled active language
+      messages: {                      // per-locale chrome overrides
+        zh: { "studio.publish": "发布" },
+        en: { "studio.publish": "Ship it" },
+      },
+      showLocaleSwitch: true,          // built-in header switcher
+    },
+  }}
+  onLocaleChange={(next) => router.replace(pathnameFor(next))}
+/>
+```
+
+整个 `i18n` 块都是 **免重新编译的**：它被排除在
+插件编译指纹之外，因此在运行时更改 `locale`、`messages` 或
+`showLocaleSwitch` 会就地更新界面 —— 不会销毁插件、
+不会重新挂载编辑器，实时协作传输也不会中断。
+
+## TL;DR —— 各项内容的迁移去向
+
+| 之前（属性） | 之后（配置） |
+| --- | --- |
+| `messages={{ "studio.publish": "Ship it" }}` | `config.i18n.messages` —— 按语言：`{ en: { "studio.publish": "Ship it" } }` |
+| `headerEnd={<LanguageSwitcher />}` | `config.i18n.showLocaleSwitch: true` |
+| *（无法实现）* 由宿主驱动的实时语言 | `config.i18n.locale`（受控模式） |
+| *（无法实现）* 观察编辑器内的切换 | `onLocaleChange` 属性（唯一的新增属性 —— 处理函数不能放进配置中） |
+
+`headerEnd` 本身未发生变化 —— 它仍然是承载任意宿主
+头部内容的接缝。只是切换器不再需要它了。
+
+## 受控 vs 非受控语言
+
+模式由一件事决定：**你的原始 `config` 属性是否显式设置了
+`i18n.locale`。**
+
+|  | 非受控（键缺失） | 受控（键存在） |
+| --- | --- | --- |
+| 真实来源 | 每个实例的 store，持久化到 `localStorage` 中的 `anvilkit-core-locale-${storeId}` 下 | 你的 `config.i18n.locale` 值 |
+| 首次绘制 | `"en"`（或已持久化的选择） | 配置中的语言 —— 同步生效，无闪烁，与 SSR 一致 |
+| 持久化 | 开启 —— 用户选择在重新加载后依然保留 | 绕过 —— 不会从 `localStorage` 读取或写入任何内容（旧的数据块会原样保留，供之后的非受控挂载使用） |
+| `ANVILKIT_I18N__LOCALE` 环境变量 | 在不存在已持久化的选择时，仅作为默认值播种一次 | 在控制方面被忽略 —— 环境变量绝不会让挂载变为受控 |
+| 内置切换器选择 | 立即生效（并持久化），然后调用 `onLocaleChange` | **仅** 调用 `onLocaleChange` —— 你需要通过用新的 `config.i18n.locale` 重新渲染来应用它，就像受控的 `<input>` 一样 |
+
+当你的应用已经掌管语言状态（路由段、cookie、
+用户资料）时，选择 **受控**。当编辑器应该自行记住用户在
+编辑器内的选择时，选择 **非受控**。
+
+<Callout type="warn" title="模式在挂载时被锁定">
+受控与否在首次渲染时决定并被冻结 —— 之后添加或
+移除 `i18n.locale` 会被忽略（会记录一次性警告）。
+要切换模式，请用新的 React `key` 重新挂载，这与
+`storeId` 已经适用的规则相同。
+</Callout>
+
+<Callout type="warn" title="一处有意为之的行为变更">
+此前，静态的 `config={{ i18n: { locale: "zh" } }}` 是
+仅播种一次的默认值：用户曾经持久化过的语言会 **胜过** 它。
+现在显式的配置语言具有权威性（受控模式），会
+胜过陈旧的已持久化选择。如果你依赖旧的语义，请
+将该值移到 `ANVILKIT_I18N__LOCALE` 环境变量中，
+它保留了仅播种一次的行为。
+</Callout>
+
+## Next.js 配方
+
+带有 `[locale]` 段的 App Router：
+
+```tsx
+// app/[locale]/editor/page.tsx (server component)
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  return <Editor locale={locale} />;
+}
+```
+
+```tsx
+// editor.tsx
+"use client";
+import { Studio } from "@anvilkit/core/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useMemo } from "react";
+
+export function Editor({ locale }: { locale: string }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Memoize: `config` participates in the plugin-compile fingerprint
+  // (its non-i18n part). The i18n block itself is additionally
+  // JSON-keyed internally, so even this re-created object never
+  // recompiles — but a stable reference is still the cheapest path.
+  const config = useMemo(
+    () => ({ i18n: { locale, showLocaleSwitch: true } }),
+    [locale],
+  );
+
+  const handleLocaleChange = useCallback(
+    (next: string) => router.replace(pathname.replace(`/${locale}`, `/${next}`)),
+    [router, pathname, locale],
+  );
+
+  return (
+    <Studio
+      puckConfig={puckConfig}
+      config={config}
+      onLocaleChange={handleLocaleChange}
+    />
+  );
+}
+```
+
+整个往返过程 —— 切换器点击 → `onLocaleChange` → `router.replace`
+→ 用新的 `config.i18n.locale` 重新渲染 —— 会就地切换每一处界面
+和插件字符串。首次客户端渲染就已经解析出了受控的语言，
+因此不会出现 `en → zh` 的闪烁；非英语的核心包
+（`zh`/`ja`/`ko`）会惰性加载，并在加载过程中按键回退到英语。
+
+基于 cookie 的设置（不带路由的 `next-intl`）形态相同：
+将 cookie 读入 `config.i18n.locale`，并在
+`onLocaleChange` 中写回它。
+
+## 消息：扁平属性 → 按语言的映射
+
+`<Studio messages>` 属性已 **弃用**（将在 `0.2.0` 中移除）。
+它与语言无关 —— 同一个扁平映射应用于所有语言。配置
+映射是按语言键控的，由 `fallbackLocale` 回填当前语言
+包所缺少的键：
+
+```tsx
+// Before (deprecated, still works through 0.1.x):
+<Studio messages={{ "studio.publish": "Ship it" }} />
+
+// After:
+<Studio
+  config={{
+    i18n: {
+      fallbackLocale: "en",
+      messages: {
+        en: { "studio.publish": "Ship it" },
+        zh: { "studio.publish": "立即发布" },
+      },
+    },
+  }}
+/>
+```
+
+解析顺序（从低到高）：内置目录 + 惰性加载包 +
+插件包 → `messages[fallbackLocale]` → `messages[activeLocale]`
+→ 已弃用的扁平属性。该属性位于最高优先级意味着逐键迁移
+绝不会 *丢失* 覆盖 —— 但不要长期同时使用两者；
+当该属性被设置时，开发控制台每次挂载会警告一次。
+
+## 内置语言切换器
+
+`config.i18n.showLocaleSwitch: true` 会在头部右侧簇中渲染
+相同的 `<LanguageSwitcher>` 组件，位于插件头部操作
+与你的 `headerEnd` 节点之间。它默认 **关闭**，因此
+现有的挂载不会改变。如果你当前通过 `headerEnd` 挂载
+切换器，在翻转此标志时请删除那段接线 ——
+否则你会看到两个切换器并排出现（故意相邻，
+以便在迁移期间一眼就能看出重复）。
+
+该标志是实时的：在运行时翻转它会显示/隐藏切换器，
+不会重新编译。你仍然可以在任何地方自行渲染
+`<LanguageSwitcher>`（从 `@anvilkit/core/i18n` 导出）；它现在会经由
+同一个请求接缝路由，因此无论哪种方式 `onLocaleChange` 都会触发。
+
+## 插件作者
+
+- `ctx.t` 现在会针对 **当前** 语言以及实时的
+  `config.i18n.messages` 进行解析 —— 它会跟踪运行时切换，
+  而不再冻结在编译期的配置值上。它的其他限制
+  未变：它绝不会惰性加载非英语的核心包，也绝不会
+  解析插件注册的命名空间；响应式 UI 字符串仍然
+  属于 `useMsg`/`useT`。
+- `ctx.studioConfig.i18n` 仍然是编译期快照 —— 将它读作
+  “已配置的 i18n”，而非“当前语言”。
+- `ctx.registerMessages` 以及注册表契约保持不变。
+
+## 弃用时间线
+
+| 接口 | 状态 |
+| --- | --- |
+| `<Studio messages>` 属性 | 现已弃用（`@deprecated` + 一次性开发警告）；在 `0.1.x` 全程仍可完整使用；**将在 `0.2.0` 中移除** |
+| `config.i18n.locale` 未持久化时仅播种一次的语义 | 对于显式的配置值，由受控模式取代；对 `ANVILKIT_I18N__LOCALE` 保留 |
+| 其他所有内容 | 增量式 —— 无需其他操作 |

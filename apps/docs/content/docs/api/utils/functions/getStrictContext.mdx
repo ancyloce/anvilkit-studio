@@ -1,0 +1,55 @@
+---
+title: "getStrictContext"
+description: "@anvilkit/utils · getStrictContext"
+---
+
+```ts
+function getStrictContext<T>(name): readonly [Provider<T>, () => T];
+```
+
+Defined in: [get-strict-context.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/get-strict-context.ts#L48)
+
+Creates a React context paired with a hook that throws a descriptive
+error when used outside its provider. The returned tuple is designed
+to be destructured into a single module, producing the common
+`<FooProvider>` + `useFoo()` pattern with no repeated boilerplate.
+
+Why this exists instead of using `createContext` directly:
+
+- Missing-provider bugs are one of the most common React footguns
+  and the default behavior (silently return the context default) is
+  the worst possible outcome — consumers see `undefined` deep inside
+  a component tree with no stack trace pointing at the real cause.
+- Hand-rolling the throw-if-unset check on every context adds noise
+  and gets forgotten. Centralizing it here makes it automatic.
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `name` | `string` | Identifier used in the missing-provider error message and as the context's `displayName` (visible in React DevTools). Typically matches the exported provider, e.g. `"StudioConfig"` → `<StudioConfigProvider>` + `useStudioConfig()`. |
+
+## Returns
+
+readonly \[`Provider`\<`T`\>, () => `T`\]
+
+A tuple `[Provider, useContext]` ready to be destructured.
+
+## Example
+
+```ts
+const [StudioConfigProvider, useStudioConfig] =
+  getStrictContext<StudioConfig>("StudioConfig");
+
+// Inside a component:
+function SettingsPanel() {
+  const config = useStudioConfig(); // throws if no provider above
+  return <div>{config.apiKey}</div>;
+}
+```

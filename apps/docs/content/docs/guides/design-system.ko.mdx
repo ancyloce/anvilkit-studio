@@ -1,0 +1,251 @@
+---
+title: "디자인 시스템 플러그인"
+description: "@anvilkit/plugin-design-system 을 설치한 Studio 호스트를 위한 토큰 바인딩 필드, 테마 전환, 토큰 미준수 경고, WCAG-AA 대비 게시 게이팅을 제공합니다."
+---
+
+`@anvilkit/plugin-design-system` 은 퍼스트파티 `StudioPlugin` 으로,
+작성자가 16진수 색상 코드나 픽셀 값을 작성하지 않고도
+Puck 위에 디자인 시스템 어휘를 호스트에 제공합니다. 제공하는 기능：
+
+- 임의의 Puck `Config` 를 위한 토큰 바인딩 `color`, `spacing`, `typography`
+  필드. 2단계 `--ak-ds-*` 토큰 트리로 뒷받침됩니다.
+- 번들된 기본 토큰 세트(브랜드 + 뉴트럴 램프, 0–24 간격
+  스케일, 타입 램프, 반경 스케일). 호스트는 그 위에 딥 머지할 수 있습니다.
+- 토큰을 벗어난 리터럴 값을 표시하는 `onDataChange` 워커.
+- 실패한 쌍에서 게시를 중단하는 `onBeforePublish` WCAG-AA 대비 쌍
+  검증기.
+- 테마 인식 토큰 블록——`light` / `dark` 를 전환하면
+  프리미티브만 교체됩니다. 시맨틱과 영속화된 토큰 참조는
+  테마에 안정적입니다.
+
+이 플러그인은 `@anvilkit/core` 의 기존 심
+(`compilePlugins`, `mergeOverrides`, `sidebar-registry-store`,
+`lifecycle-manager`)을 통해 끼워집니다. Puck 오버라이드 내부를
+직접 임포트하는 일은 절대 없습니다.
+
+## 1. 설치
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+피어 의존성(일반적인 Studio 호스트에는 이미 존재함)：
+
+- `@puckeditor/core ^0.21.3`
+- `@anvilkit/core`(워크스페이스 또는 일치하는 마이너 버전)
+- `react >=19.0.0`
+
+## 2. 최소 호스트
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin();
+
+export function MyEditor() {
+  return (
+    <Studio
+      puckConfig={config}
+      data={data}
+      plugins={[designSystemPlugin]}
+    />
+  );
+}
+```
+
+이 팩토리는 기본적으로 매개변수가 없습니다. 번들된 토큰 트리가
+적용되고 두 검증기가 모두 활성화됩니다. `<Studio>` 의 플러그인 컴파일
+파이프라인이 렌더링마다 실행되지 않도록 팩토리 호출을
+모듈 스코프로 끌어올리세요.
+
+## 3. 토큰 모델
+
+이 플러그인은 2단계 CSS 변수를 호스트
+문서와 Puck 캔버스 iframe 양쪽 모두에 방출합니다.
+
+**1단계——프리미티브**(다크 모드에서 전환됨)：
+
+| 네임스페이스 | 변수 |
+| --- | --- |
+| 브랜드 램프 | `--ak-ds-brand-50` … `--ak-ds-brand-900` |
+| 뉴트럴 램프 | `--ak-ds-neutral-50` … `--ak-ds-neutral-900` |
+| 간격 | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}` |
+| 타이포그래피 | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}` |
+| 반경 | `--ak-ds-radius-{sm,md,lg}` |
+
+**2단계——시맨틱**(테마에 안정적이며, 각각은
+대응하는 `--ak-studio-*` 크롬 변수로 폴백하므로 테마가 설정되지 않은 호스트도
+렌더링할 수 있습니다)：
+
+`--ak-ds-bg`, `--ak-ds-surface`, `--ak-ds-fg`, `--ak-ds-fg-muted`,
+`--ak-ds-accent`, `--ak-ds-accent-fg`, `--ak-ds-border`,
+`--ak-ds-focus-ring`.
+
+딥 파셜로 번들된 기본값을 오버라이드하세요：
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystemPlugin = createDesignSystemPlugin({
+  tokens: {
+    primitives: {
+      brand: {
+        500: "oklch(62% 0.18 264)",
+        600: "oklch(54% 0.19 264)",
+      },
+    },
+    semantics: {
+      accent: "brand.500",
+    },
+  },
+});
+```
+
+설정한 키만 적용됩니다. 트리의 나머지 부분은
+`DEFAULT_TOKENS` 와 구조적으로 공유됩니다.
+
+## 4. 토큰 바인딩 필드
+
+필드 팩토리는 Puck `CustomField<string>` 렌더러를 반환합니다. 필드
+값은 **토큰 참조 문자열**로 영속화됩니다——해결된
+값이 아닙니다——그래서 토큰을 다시 조정해도 데이터 마이그레이션 없이
+이전에 작성된 모든
+필드로 전파됩니다.
+
+```ts
+import {
+  createTokenColorField,
+  createTokenSpacingField,
+  createTokenTypographyField,
+  DEFAULT_TOKENS,
+  resolveTokenRef,
+} from "@anvilkit/plugin-design-system";
+
+const Card = {
+  fields: {
+    background: createTokenColorField({ label: "Surface" }),
+    padding: createTokenSpacingField({ label: "Padding" }),
+    title: createTokenTypographyField({ label: "Title size" }),
+  },
+  defaultProps: {
+    background: "semantic.surface",
+    padding: "space.4",
+    title: "text.lg",
+  },
+  render: ({ background, padding, title }) => (
+    <div
+      style={{
+        background: resolveTokenRef(background, DEFAULT_TOKENS).cssVar,
+        padding: resolveTokenRef(padding, DEFAULT_TOKENS).cssVar,
+        fontSize: resolveTokenRef(title, DEFAULT_TOKENS).cssVar,
+      }}
+    >
+      …
+    </div>
+  ),
+};
+```
+
+참조 문법：
+
+- `color.<ramp>.<step>` — 프리미티브(예: `color.brand.500`).
+- `semantic.<role>` — 시맨틱 역할(예: `semantic.bg`).
+- `space.<key>` — 간격 프리미티브(예: `space.4`).
+- `text.<key>` — 타이포그래피 프리미티브(예: `text.lg`).
+- `radius.<key>` — 반경 프리미티브.
+
+순수 데이터 작업 중에 React 해석을 건너뛰고 싶은 빌드
+파이프라인을 위해, React 비의존 토큰 표면(기본값, 머지 헬퍼, 리졸버)도
+`./tokens` 서브경로에서 사용할 수 있습니다：
+
+```ts
+import { DEFAULT_TOKENS, mergeTokens } from "@anvilkit/plugin-design-system/tokens";
+```
+
+## 5. 검증
+
+두 검증기는 기본적으로 켜져 있으며 호스트별로 전환할 수 있습니다：
+
+```ts
+createDesignSystemPlugin({
+  validation: {
+    offToken: true,   // onDataChange — non-blocking warnings
+    contrast: true,   // onBeforePublish — throws on AA failure
+  },
+});
+```
+
+**토큰 미준수 경고**(`onDataChange`)는 Puck 데이터 트리를
+`Promise.allSettled` 을 통해 병렬 방식으로 순회하며, 색상이나 길이처럼
+보이지만 해결된 토큰 트리에 없는 모든 리터럴 값에 대해
+`ctx.log("warn", …)` 을 호출합니다. 논블로킹이며
+——경고가 콘솔 / 호스트 로그 싱크에 표시되는 동안에도 작성자는
+계속 작업할 수 있습니다.
+
+**대비 게이트**(`onBeforePublish`)는 데이터 트리의 fg / bg 쌍을 순회하여
+WCAG-AA 대비 비율을 계산하고, 4.5:1 미만인 모든 쌍에 대해
+서술적인 `StudioPluginError` 를 던집니다. `onBeforePublish`
+내부에서 던지면 `@anvilkit/core` 의 lifecycle-manager 계약에 따라
+Puck 게시가 중단됩니다——호스트의
+`onPublish` 는 절대 실행되지 않습니다.
+
+<Callout type="info" title="왜 검증기가 하나가 아니라 둘인가">
+토큰 미준수 경고는 권고적입니다("여기는 아마 토큰을
+의도하셨을 겁니다"). 대비 실패는 사양 위반입니다("이것은 AA에
+실패합니다"). 하나는 권고이고, 다른 하나는 강제 게이트입니다. 그런 이유로
+둘은 서로 다른 라이프사이클 훅에서 실행됩니다.
+</Callout>
+
+## 6. 테마 전환
+
+라이트 / 다크 / 시스템 모드는 **프리미티브만** 전환합니다. 시맨틱
+역할은 내부적으로 적절한 램프 스텝으로 다시 가리킵니다. 작성자 데이터에 저장된
+토큰 참조는 해결된 값이 아니라 시맨틱 / 프리미티브의 *이름*을 참조하므로
+테마에 안정적입니다.
+
+이 플러그인은 `@anvilkit/core` 의 기존 `useThemeStore` +
+`use-theme-sync` 배관을 재사용합니다——모드를 선택하면 하나의 페인트 사이클 안에서 `<html>`
+(크롬)과 Puck 캔버스 iframe 양쪽을 모두 전환합니다.
+
+## 7. 상태(v0.1)
+
+출시되는 것：
+
+- 팩토리 + 번들된 `DEFAULT_TOKENS` + 딥 머지 오버라이드.
+- `fieldTypes.custom` Puck 슬롯을 사용하는 3개의 토큰 바인딩 필드 팩토리
+  (`color`, `spacing`,
+  `typography`).
+- 플러그인의 `overrides.fields` 래퍼가 자동으로 마운트하는
+  `TokenProvider`.
+- `onDataChange` 토큰 미준수 워커 + `onBeforePublish` 대비
+  검증기.
+- 호스트 문서와 iframe 캔버스 양쪽의 `--ak-ds-*` CSS, `.dark`
+  프리미티브 오버라이드 포함.
+
+아직 사용자에게 노출되지 않은 것(`@anvilkit/core` 에서 Phase B
+백필 대기 중)：
+
+- 디자인 시스템 사이드바 탭 + 모듈. 플러그인은
+  `ctx.registerDesignSystemPanel?({ render })` 로 패널을 등록하고
+  `sidebarRegistryStore.designSystemPanel` 도 채워지지만,
+  `@anvilkit/core` 의 `EditorTab` + `RAIL_MODULES` 에는 아직
+  `"design-system"` 항목이 없습니다——패널 상태는 설정되지만 그것을
+  읽는 UI가 없습니다.
+- 필드 팩토리 내의 토큰 타이포그래피 램프 UI(현재 스케일은
+  번들되어 있지만 피커 UI는 원시 참조를 표시합니다. 더 풍부한 미리보기는
+  v0.2 로 연기됨).
+- 패널 내의 컴포넌트 탭(v0.2——패널 React 트리에는 현재 Tokens
+  + Theme 탭만 구현되어 있습니다).
+
+<Callout type="info" title="출처">
+사양은 `docs/archive/PRD/0005-design-system-integration-prd.md` 에,
+개발 계획은
+`docs/archive/plans/0005-design-system-integration-dev-plan-2026-05-20.md`
+에 있습니다(리포지토리 로컬. `docs/` 는 git에서 무시됨). 참조된 코어 심：
+`compilePlugins`(`packages/core/src/runtime/compile-plugins.ts`),
+`mergeOverrides`(`packages/core/src/react/overrides/merge-overrides.ts`),
+`sidebar-registry-store`
+(`packages/core/src/state/sidebar-registry-store.ts`),
+`lifecycle-manager`(`packages/core/src/runtime/lifecycle-manager.ts`).
+</Callout>
