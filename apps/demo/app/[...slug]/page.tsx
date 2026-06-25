@@ -1,10 +1,11 @@
-import type { PageRootProps, PageSeo } from "@anvilkit/schema";
 import { Render } from "@puckeditor/core/rsc";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
-import { resolveDataSources } from "../../lib/data-source-adapter";
-import { getPublishedPage } from "../../lib/page-store";
+import {
+	buildPublishedMetadata,
+	loadPublishedRender,
+} from "../../lib/published-render";
 import { demoConfig } from "../../lib/puck-demo";
 
 interface SlugPageProps {
@@ -17,47 +18,15 @@ interface SlugPageProps {
 // future preview mode would opt into `getPublishedPage(slug, { preview: true })`.
 export const dynamic = "force-dynamic";
 
-const slugOf = (segments: string[]): string => segments.join("/");
-
 /**
- * F6: derive Next `Metadata` from `root.props.seo` (PRD §5.5). `noIndex`
- * drives `robots.index/follow`; `canonical` → `alternates.canonical`; `ogImage`
- * → `openGraph.images`. A missing page yields empty metadata (the page body
- * calls `notFound()`).
+ * F6: derive Next `Metadata` from `root.props.seo` (PRD §5.5). Shared with the
+ * editor-scoped `/puck/render/[...slug]` route via {@link buildPublishedMetadata}.
  */
 export async function generateMetadata({
 	params,
 }: SlugPageProps): Promise<Metadata> {
 	const { slug } = await params;
-	const page = await getPublishedPage(slugOf(slug));
-	if (page === null) return {};
-
-	const root = page.root.props as PageRootProps | undefined;
-	const seo: PageSeo | undefined = root?.seo;
-	const title = seo?.title ?? root?.title;
-	const metadata: Metadata = {
-		robots: { index: !seo?.noIndex, follow: !seo?.noIndex },
-	};
-	const openGraph: NonNullable<Metadata["openGraph"]> = {};
-
-	if (title !== undefined) {
-		metadata.title = title;
-		openGraph.title = title;
-	}
-	if (seo?.description !== undefined) {
-		metadata.description = seo.description;
-		openGraph.description = seo.description;
-	}
-	if (seo?.canonical !== undefined) {
-		metadata.alternates = { canonical: seo.canonical };
-	}
-	if (seo?.ogImage !== undefined) {
-		openGraph.images = [seo.ogImage];
-	}
-	if (Object.keys(openGraph).length > 0) {
-		metadata.openGraph = openGraph;
-	}
-	return metadata;
+	return buildPublishedMetadata(slug);
 }
 
 /**
@@ -69,31 +38,17 @@ export default async function SlugPage({
 	params,
 }: SlugPageProps): Promise<ReactElement> {
 	const { slug } = await params;
-	const page = await getPublishedPage(slugOf(slug));
-	if (page === null) notFound();
-
-	const root = page.root.props as PageRootProps | undefined;
-	const seo: PageSeo | undefined = root?.seo;
-	const jsonLd: Record<string, string> = {
-		"@context": "https://schema.org",
-		"@type": "WebPage",
-		name: seo?.title ?? root?.title ?? slugOf(slug),
-	};
-	if (seo?.description !== undefined) jsonLd.description = seo.description;
-	if (seo?.canonical !== undefined) jsonLd.url = seo.canonical;
-
-	// F11: resolve `remote_csv` dataSource directives into plain props before
-	// rendering — the component never fetches.
-	const resolved = await resolveDataSources(page);
+	const model = await loadPublishedRender(slug);
+	if (model === null) notFound();
 
 	return (
 		<>
 			<script
 				type="application/ld+json"
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw injection.
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(model.jsonLd) }}
 			/>
-			<Render config={demoConfig} data={resolved} />
+			<Render config={demoConfig} data={model.resolved} />
 		</>
 	);
 }

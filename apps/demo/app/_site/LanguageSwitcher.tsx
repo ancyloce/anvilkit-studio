@@ -1,22 +1,35 @@
 "use client";
 
+import {
+	Tooltip,
+	TooltipPanel,
+	TooltipTrigger,
+} from "@anvilkit/ui/components/animate-ui/components/base/tooltip";
 import { cn } from "@anvilkit/ui/lib/utils";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@anvilkit/ui/select";
 import { Languages } from "lucide-react";
 import { useDemoLocale, useDemoT } from "../../lib/i18n/client";
 import { DEMO_LOCALES, type DemoLocale } from "../../lib/i18n/messages";
 
 /**
- * Site-wide language switcher for the marketing chrome. A native `<select>`
- * (keyboard- and screen-reader-friendly out of the box) styled to match the
- * nav's pill controls, with the active endonym shown next to a globe icon.
+ * Site-wide language switcher for the marketing chrome, built from the shared
+ * `@anvilkit/ui` primitives: a base-ui `Select` for the selector and the
+ * animate-ui `Tooltip` for the hover hint (no native `<select>` / `title=`).
+ * The active endonym shows next to a globe icon; the popup lists all locales.
  *
  * Selecting a locale drives `<DemoI18nProvider>`: client islands retranslate
  * immediately and Server Components re-render via `router.refresh()`. The
  * choice persists in the `anvilkit-demo-locale` cookie.
  *
- * This is independent of the Studio editor's own locale switch (core's
- * uncontrolled, per-`storeId` store), which lives on the immersive editor
- * routes that don't render this chrome.
+ * Independent of the Studio editor's own locale switch (core's uncontrolled,
+ * per-`storeId` store) on the immersive editor routes that don't render this
+ * chrome.
  */
 export function LanguageSwitcher({ className }: { className?: string }) {
 	const { locale, setLocale } = useDemoLocale();
@@ -24,30 +37,44 @@ export function LanguageSwitcher({ className }: { className?: string }) {
 	const label = t("nav.language");
 
 	return (
-		<label
-			className={cn(
-				"relative inline-flex items-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-within:text-foreground",
-				className,
-			)}
-			title={label}
+		<Select
+			items={DEMO_LOCALES.map((option) => ({
+				value: option.locale,
+				label: option.label,
+			}))}
+			value={locale}
+			onValueChange={(next) => {
+				if (next) {
+					setLocale(next as DemoLocale);
+				}
+			}}
 		>
-			<span className="sr-only">{label}</span>
-			<Languages
-				className="pointer-events-none absolute left-2.5 size-4"
-				aria-hidden="true"
-			/>
-			<select
-				aria-label={label}
-				value={locale}
-				onChange={(event) => setLocale(event.currentTarget.value as DemoLocale)}
-				className="cursor-pointer appearance-none rounded-full border border-border bg-transparent py-1.5 pr-3 pl-8 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
-			>
+			<Tooltip>
+				<TooltipTrigger
+					render={
+						<span className="inline-flex">
+							<SelectTrigger
+								aria-label={label}
+								className={cn(
+									"rounded-full text-muted-foreground hover:text-foreground",
+									className,
+								)}
+							>
+								<Languages className="size-4" aria-hidden="true" />
+								<SelectValue />
+							</SelectTrigger>
+						</span>
+					}
+				/>
+				<TooltipPanel>{label}</TooltipPanel>
+			</Tooltip>
+			<SelectContent align="end">
 				{DEMO_LOCALES.map((option) => (
-					<option key={option.locale} value={option.locale}>
+					<SelectItem key={option.locale} value={option.locale}>
 						{option.label}
-					</option>
+					</SelectItem>
 				))}
-			</select>
-		</label>
+			</SelectContent>
+		</Select>
 	);
 }

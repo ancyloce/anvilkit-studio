@@ -389,95 +389,95 @@ export function SiteNav() {
 	const headerClass = `huly-root ${styles.nav}${firm ? ` ${styles.navScrolled}` : ""}`;
 
 	return (
-		<header className={headerClass}>
-			<div className={styles.navShell}>
-				<div className={styles.navRow}>
-					<Link
-						href="/"
-						className={styles.brand}
-						aria-label={t("nav.brandHomeAria")}
-					>
-						<BrandMark />
-						<span className={styles.brandText}>AnvilKit</span>
-					</Link>
+    <header className={headerClass}>
+      <div className={styles.navShell}>
+        <div className={styles.navRow}>
+          <Link
+            href="/"
+            className={styles.brand}
+            aria-label={t("nav.brandHomeAria")}
+          >
+            <BrandMark />
+            <span className={styles.brandText}>AnvilKit</span>
+          </Link>
 
-					<NavLinksGlass
-						pathname={pathname}
-						plain={plain}
-						reducedMotion={reducedMotion}
-					/>
+          <NavLinksGlass
+            pathname={pathname}
+            plain={plain}
+            reducedMotion={reducedMotion}
+          />
 
-					<div className={styles.navRight}>
-						<a
-							className={cn(
-								buttonVariants({ variant: "ghost", size: "icon" }),
-								styles.showWide,
-								"rounded-full text-muted-foreground hover:text-foreground",
-							)}
-							href={GITHUB_URL}
-							target="_blank"
-							rel="noreferrer noopener"
-							aria-label={t("nav.starAria")}
-							title={t("nav.starAria")}
-						>
-							<Star aria-hidden="true" />
-						</a>
-						<span className={styles.showWide}>
-							<LanguageSwitcher />
-						</span>
-						<span className={styles.showWide}>
-							<DemoThemeToggle />
-						</span>
-						<Link
-							className={cn(buttonVariants(), "rounded-full")}
-							href="/puck/editor"
-						>
-							{t("nav.openStudio")}
-						</Link>
-						<Button
-							type="button"
-							variant="outline"
-							size="icon"
-							className={`${styles.showNarrow} rounded-full`}
-							aria-expanded={menuOpen}
-							aria-label={menuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
-							onClick={() => setMenuOpen((open) => !open)}
-						>
-							{menuOpen ? (
-								<X aria-hidden="true" />
-							) : (
-								<Menu aria-hidden="true" />
-							)}
-						</Button>
-					</div>
-				</div>
-			</div>
+          <div className={styles.navRight}>
+            <a
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "icon" }),
+                styles.showWide,
+                "rounded-full text-muted-foreground hover:text-foreground",
+              )}
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label={t("nav.starAria")}
+              title={t("nav.starAria")}
+            >
+              <Star aria-hidden="true" />
+            </a>
+            <span className={styles.showWide}>
+              <DemoThemeToggle />
+            </span>
+            <span className={styles.showWide}>
+              <LanguageSwitcher />
+            </span>
+            <Link
+              className={cn(buttonVariants(), "rounded-full")}
+              href="/puck/editor"
+            >
+              {t("nav.openStudio")}
+            </Link>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className={`${styles.showNarrow} rounded-full`}
+              aria-expanded={menuOpen}
+              aria-label={menuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              {menuOpen ? (
+                <X aria-hidden="true" />
+              ) : (
+                <Menu aria-hidden="true" />
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
 
-			{menuOpen ? (
-				<div className={styles.mobileSheet}>
-					{NAV_LINKS.map((link) => (
-						<NavItem
-							key={link.href}
-							link={link}
-							pathname={pathname}
-							className={styles.mobileLink}
-							onNavigate={() => setMenuOpen(false)}
-						/>
-					))}
-					<a
-						href={GITHUB_URL}
-						target="_blank"
-						rel="noreferrer noopener"
-						className={styles.mobileLink}
-					>
-						{t("nav.starMobile")}
-					</a>
-					<div className={styles.mobileActions}>
-						<LanguageSwitcher />
-						<DemoThemeToggle />
-					</div>
-				</div>
-			) : null}
-		</header>
-	);
+      {menuOpen ? (
+        <div className={styles.mobileSheet}>
+          {NAV_LINKS.map((link) => (
+            <NavItem
+              key={link.href}
+              link={link}
+              pathname={pathname}
+              className={styles.mobileLink}
+              onNavigate={() => setMenuOpen(false)}
+            />
+          ))}
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            className={styles.mobileLink}
+          >
+            {t("nav.starMobile")}
+          </a>
+          <div className={styles.mobileActions}>
+            <LanguageSwitcher />
+            <DemoThemeToggle />
+          </div>
+        </div>
+      ) : null}
+    </header>
+  );
 }
