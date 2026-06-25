@@ -146,7 +146,7 @@ Release leads: see [`docs/release/release-runbook.md`](docs/release/release-runb
 
 Plugins, templates, and components published under a community npm scope can be listed in the AnvilKit marketplace. To submit:
 
-1. Open a PR that adds a single entry to [`apps/docs/src/registry/feed.json`](apps/docs/src/registry/feed.json), matching the schema in [`apps/docs/src/registry/feed.schema.ts`](apps/docs/src/registry/feed.schema.ts).
+1. Open a PR that adds a single entry to [`apps/docs/src/registry/feed.json`](apps/docs/src/registry/feed.json), matching the schema in [`apps/docs/src/registry/feed.schema.mjs`](apps/docs/src/registry/feed.schema.mjs).
 2. Include in the PR description: the published npm version, a runnable `npx anvilkit add <slug>` snippet, and the resulting `puck-config.ts` diff.
 3. CI runs `.github/workflows/marketplace-scorecard.yml` automatically. Failing the scorecard blocks merge.
 4. A maintainer performs the manual review checklist in [`docs/policies/marketplace-governance.md`](docs/policies/marketplace-governance.md) §4 within 48 hours of the PR being opened.
