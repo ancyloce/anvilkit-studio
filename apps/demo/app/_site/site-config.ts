@@ -8,6 +8,8 @@
  * the route map and external links.
  */
 
+import type { DemoMessageKey } from "../../lib/i18n/messages";
+
 /**
  * The published docs site is a separate Astro app (`apps/docs`,
  * `site: https://anvilkit.dev`, dev server on :4321). It cannot be reached by
@@ -22,7 +24,8 @@ export const DOCS_URL =
 export const GITHUB_URL = "https://github.com/ancyloce/anvilkit-studio";
 
 export interface SiteNavLink {
-	readonly label: string;
+	/** i18n message key resolved against the active demo locale at render. */
+	readonly labelKey: DemoMessageKey;
 	/** Internal Next route, or an absolute URL when {@link external} is true. */
 	readonly href: string;
 	/** External links open in a new tab (e.g. the standalone docs site). */
@@ -31,10 +34,10 @@ export interface SiteNavLink {
 
 /** The four global nav items requested in the brief: Home | Editor | Docs | About. */
 export const NAV_LINKS: readonly SiteNavLink[] = [
-	{ label: "Home", href: "/" },
-	{ label: "Editor", href: "/editor" },
-	{ label: "Docs", href: DOCS_URL, external: true },
-	{ label: "About", href: "/about" },
+	{ labelKey: "nav.home", href: "/" },
+	{ labelKey: "nav.editor", href: "/editor" },
+	{ labelKey: "nav.docs", href: DOCS_URL, external: true },
+	{ labelKey: "nav.about", href: "/about" },
 ];
 
 /**

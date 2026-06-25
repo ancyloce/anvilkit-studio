@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { DemoMessageKey } from "../lib/i18n/messages";
+import { getServerT } from "../lib/i18n/server";
 import { EditorMockup } from "./_site/EditorMockup";
 import { MarketingMotion } from "./_site/MarketingMotion";
 import { MiniEditor } from "./_site/MiniEditor";
@@ -21,96 +23,99 @@ import marketing from "./_site/marketing.module.css";
 import { SiteFooter } from "./_site/SiteFooter";
 import { DOCS_URL } from "./_site/site-config";
 
-export const metadata: Metadata = {
-	title: "AnvilKit — Puck-native component studio",
-	description:
-		"Independently publishable, Puck-native React component packages, composed into a real visual editor, canvas studio, AI copilot, and export pipeline.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	const t = await getServerT();
+	return {
+		title: t("meta.home.title"),
+		description: t("meta.home.description"),
+	};
+}
 
 interface Feature {
 	readonly icon: LucideIcon;
-	readonly title: string;
-	readonly body: string;
+	readonly titleKey: DemoMessageKey;
+	readonly bodyKey: DemoMessageKey;
 	readonly ember?: boolean;
 }
 
 const FEATURES: readonly Feature[] = [
 	{
 		icon: Blocks,
-		title: "Puck-native",
-		body: "Every package exports a Puck componentConfig — fields, defaultProps, render, metadata — so it drops straight into the editor.",
+		titleKey: "home.feature.puckNative.title",
+		bodyKey: "home.feature.puckNative.body",
 	},
 	{
 		icon: Package,
-		title: "Independent packages",
-		body: "No umbrella bundle. Install only the @anvilkit/* blocks you need; each is versioned and published on its own.",
+		titleKey: "home.feature.independent.title",
+		bodyKey: "home.feature.independent.body",
 		ember: true,
 	},
 	{
 		icon: Sparkles,
-		title: "AI Copilot",
-		body: "Generate whole pages or regenerate a single section from a prompt, wired through the @anvilkit/plugin-ai-copilot pipeline.",
+		titleKey: "home.feature.ai.title",
+		bodyKey: "home.feature.ai.body",
 	},
 	{
 		icon: Users,
-		title: "Real-time collaboration",
-		body: "A one-line managed transport adds shared editing, live cursors, and presence over Yjs — no backend wiring required.",
+		titleKey: "home.feature.collab.title",
+		bodyKey: "home.feature.collab.body",
 		ember: true,
 	},
 	{
 		icon: PenTool,
-		title: "Canvas studio",
-		body: "A Konva-powered free-form canvas with geometry, snapping, alignment, brand kits, and accessible keyboard tools.",
+		titleKey: "home.feature.canvas.title",
+		bodyKey: "home.feature.canvas.body",
 	},
 	{
 		icon: FileCode2,
-		title: "Export pipeline",
-		body: "Publish to a Headless Page IR, then export clean HTML, React/TSX, or JSON with resolved assets.",
+		titleKey: "home.feature.export.title",
+		bodyKey: "home.feature.export.body",
 		ember: true,
 	},
 	{
 		icon: Palette,
-		title: "Design system tokens",
-		body: "Token-bound field renderers plus off-token and WCAG-AA contrast validators keep every page on-brand.",
+		titleKey: "home.feature.tokens.title",
+		bodyKey: "home.feature.tokens.body",
 	},
 	{
 		icon: Languages,
-		title: "Built-in i18n",
-		body: "Components and Studio ship en/zh/ja/ko catalogs with a config-centric locale switch baked into the shell.",
+		titleKey: "home.feature.i18n.title",
+		bodyKey: "home.feature.i18n.body",
 		ember: true,
 	},
 ];
 
 interface Step {
-	readonly title: string;
-	readonly body: string;
+	readonly titleKey: DemoMessageKey;
+	readonly bodyKey: DemoMessageKey;
 	readonly code: string;
 }
 
 const STEPS: readonly Step[] = [
 	{
-		title: "Install the packages",
-		body: "Add the core runtime and just the blocks you want. Each is an independent @anvilkit/* package.",
+		titleKey: "home.step.install.title",
+		bodyKey: "home.step.install.body",
 		code: "pnpm add @anvilkit/core \\\n  @anvilkit/hero @anvilkit/navbar",
 	},
 	{
-		title: "Compose a Puck config",
-		body: "Each package exports a componentConfig. Assemble them into one consumer-owned Puck Config.",
+		titleKey: "home.step.compose.title",
+		bodyKey: "home.step.compose.body",
 		code: 'import { createHeroConfig } from "@anvilkit/hero";\n\nconst config = {\n  components: { Hero: createHeroConfig() },\n};',
 	},
 	{
-		title: "Mount the Studio",
-		body: "Render <Studio> from @anvilkit/core with your config and data. Plugins extend it without forking.",
+		titleKey: "home.step.mount.title",
+		bodyKey: "home.step.mount.body",
 		code: 'import { Studio } from "@anvilkit/core";\n\n<Studio puckConfig={config} data={data} />;',
 	},
 	{
-		title: "Publish & export",
-		body: "Publish to the Headless Page IR, then export production HTML, React, or JSON with resolved assets.",
+		titleKey: "home.step.publish.title",
+		bodyKey: "home.step.publish.body",
 		code: "// Publish → IR → export\nawait exportHtml(ir);\nawait exportReact(ir, { syntax: 'tsx' });",
 	},
 ];
 
-export default function Home() {
+export default async function Home() {
+	const t = await getServerT();
 	return (
 		<main className={`huly-root ${marketing.page}`}>
 			{/* Progressive-enhancement GSAP motion (renders null) */}
@@ -125,22 +130,18 @@ export default function Home() {
 							<span
 								className={`${marketing.tag} ${marketing.tagIris} ${marketing.eyebrow}`}
 							>
-								Anvilkit × Puck
+								{t("home.hero.tag")}
 							</span>
 							<h1 className={marketing.heroTitle}>
-								The Puck-native{" "}
+								{t("home.hero.titleLead")}{" "}
 								<span className={marketing.heroTitleAccent}>
-									component studio
+									{t("home.hero.titleAccent")}
 								</span>
 							</h1>
-							<p className={marketing.heroLede}>
-								Independently publishable React components, composed into a real
-								visual editor, a free-form canvas, an AI copilot, live
-								collaboration, and a clean export pipeline.
-							</p>
+							<p className={marketing.heroLede}>{t("home.hero.lede")}</p>
 							<div className={marketing.heroActions}>
 								<Link className={buttonVariants({ size: "lg" })} href="/editor">
-									Open the editor
+									{t("home.hero.ctaPrimary")}
 								</Link>
 								<a
 									className={buttonVariants({
@@ -149,18 +150,19 @@ export default function Home() {
 									})}
 									href="#demo"
 								>
-									See it in action →
+									{t("home.hero.ctaSecondary")}
 								</a>
 							</div>
 							<div className={marketing.heroMeta}>
 								<span>
-									<strong>11+</strong> published blocks
+									<strong>11+</strong> {t("home.hero.metaBlocks")}
 								</span>
 								<span>
-									<strong>Puck</strong> headless builder
+									<strong>Puck</strong> {t("home.hero.metaBuilder")}
 								</span>
 								<span>
-									<strong>HTML · React · JSON</strong> export
+									<strong>HTML · React · JSON</strong>{" "}
+									{t("home.hero.metaExport")}
 								</span>
 							</div>
 						</div>
@@ -179,14 +181,10 @@ export default function Home() {
 						<span
 							className={`${marketing.tag} ${marketing.tagEmber} ${marketing.kicker}`}
 						>
-							Live preview
+							{t("home.demo.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>Edit props, render live</h2>
-						<p className={marketing.sectionLede}>
-							This is the editor's core loop in miniature: change a block's
-							serializable props on the left and watch the render update on the
-							right. The generated snippet is real, runnable usage.
-						</p>
+						<h2 className={marketing.sectionTitle}>{t("home.demo.title")}</h2>
+						<p className={marketing.sectionLede}>{t("home.demo.lede")}</p>
 					</div>
 					<MiniEditor />
 				</div>
@@ -199,22 +197,17 @@ export default function Home() {
 						<span
 							className={`${marketing.tag} ${marketing.tagIris} ${marketing.kicker}`}
 						>
-							How to use
+							{t("home.howto.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>
-							From install to published page
-						</h2>
-						<p className={marketing.sectionLede}>
-							Four steps take you from an empty project to a published,
-							exportable page built entirely from @anvilkit/* packages.
-						</p>
+						<h2 className={marketing.sectionTitle}>{t("home.howto.title")}</h2>
+						<p className={marketing.sectionLede}>{t("home.howto.lede")}</p>
 					</div>
 					<div className={marketing.steps}>
 						{STEPS.map((step, index) => (
-							<Card key={step.title} className="gap-3.5 p-6">
+							<Card key={step.titleKey} className="gap-3.5 p-6">
 								<span className={marketing.stepNum}>{index + 1}</span>
-								<h3 className={marketing.stepTitle}>{step.title}</h3>
-								<p className={marketing.stepBody}>{step.body}</p>
+								<h3 className={marketing.stepTitle}>{t(step.titleKey)}</h3>
+								<p className={marketing.stepBody}>{t(step.bodyKey)}</p>
 								<pre className={marketing.codeBlock}>
 									<code>{step.code}</code>
 								</pre>
@@ -233,22 +226,19 @@ export default function Home() {
 						<span
 							className={`${marketing.tag} ${marketing.tagEmber} ${marketing.kicker}`}
 						>
-							Core features
+							{t("home.features.tag")}
 						</span>
 						<h2 className={marketing.sectionTitle}>
-							Everything a page builder needs
+							{t("home.features.title")}
 						</h2>
-						<p className={marketing.sectionLede}>
-							The studio shell, plugins, and packages cover the full authoring
-							lifecycle — editing, AI, collaboration, canvas, and export.
-						</p>
+						<p className={marketing.sectionLede}>{t("home.features.lede")}</p>
 					</div>
 					<div className={marketing.featureGrid}>
 						{FEATURES.map((feature) => {
 							const Icon = feature.icon;
 							return (
 								<Card
-									key={feature.title}
+									key={feature.titleKey}
 									className={cn("relative gap-3 p-6", marketing.cardGlow)}
 								>
 									<span
@@ -256,8 +246,10 @@ export default function Home() {
 									>
 										<Icon size={20} strokeWidth={1.75} />
 									</span>
-									<h3 className={marketing.featureTitle}>{feature.title}</h3>
-									<p className={marketing.featureBody}>{feature.body}</p>
+									<h3 className={marketing.featureTitle}>
+										{t(feature.titleKey)}
+									</h3>
+									<p className={marketing.featureBody}>{t(feature.bodyKey)}</p>
 								</Card>
 							);
 						})}
@@ -271,18 +263,15 @@ export default function Home() {
 					<div
 						className={`${marketing.sectionHead} ${marketing.sectionHeadCenter}`}
 					>
-						<h2 className={marketing.sectionTitle}>Ready to build a page?</h2>
-						<p className={marketing.sectionLede}>
-							Jump into the editor hub for every interactive surface, or read
-							the docs for the full package reference.
-						</p>
+						<h2 className={marketing.sectionTitle}>{t("home.cta.title")}</h2>
+						<p className={marketing.sectionLede}>{t("home.cta.lede")}</p>
 					</div>
 					<div
 						className={marketing.heroActions}
 						style={{ justifyContent: "center" }}
 					>
 						<Link className={buttonVariants({ size: "lg" })} href="/editor">
-							Explore the editor
+							{t("home.cta.primary")}
 						</Link>
 						<a
 							className={buttonVariants({ variant: "outline", size: "lg" })}
@@ -290,7 +279,7 @@ export default function Home() {
 							target="_blank"
 							rel="noreferrer noopener"
 						>
-							Read the docs ↗
+							{t("home.cta.docs")}
 						</a>
 					</div>
 				</div>

@@ -2,57 +2,49 @@ import { buttonVariants } from "@anvilkit/ui/button";
 import { Card } from "@anvilkit/ui/card";
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { DemoMessageKey } from "../../lib/i18n/messages";
+import { getServerT } from "../../lib/i18n/server";
 import { MarketingMotion } from "../_site/MarketingMotion";
 import marketing from "../_site/marketing.module.css";
 import { SiteFooter } from "../_site/SiteFooter";
 import { DOCS_URL, GITHUB_URL } from "../_site/site-config";
 
-export const metadata: Metadata = {
-	title: "About — AnvilKit",
-	description:
-		"AnvilKit is a monorepo of independently publishable, Puck-native React component packages, plus the Studio shell, IR, and plugin ecosystem that compose them.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	const t = await getServerT();
+	return {
+		title: t("meta.about.title"),
+		description: t("meta.about.description"),
+	};
+}
 
-const PRINCIPLES: readonly string[] = [
-	"Each component is its own npm package under @anvilkit/* — no umbrella bundle, so consumers install only what they need.",
-	"Every package honours the Puck contract: componentConfig, defaultProps, fields, and metadata, ready for both direct rendering and the editor.",
-	"Render components accept only serializable props, so a page is just data that round-trips through Puck, the IR, and export.",
-	"Components are built with Rslib to ship CJS, ESM, and type definitions, and are versioned independently with Changesets.",
+const PRINCIPLES: readonly DemoMessageKey[] = [
+	"about.principle.1",
+	"about.principle.2",
+	"about.principle.3",
+	"about.principle.4",
 ];
 
 interface Pkg {
-	readonly name: string;
-	readonly body: string;
+	/** Literal package name (kept untranslated), or a localized name via key. */
+	readonly name?: string;
+	readonly nameKey?: DemoMessageKey;
+	readonly bodyKey: DemoMessageKey;
 }
 
 const STACK: readonly Pkg[] = [
+	{ name: "@anvilkit/core", bodyKey: "about.stack.core.body" },
+	{ name: "@anvilkit/ir", bodyKey: "about.stack.ir.body" },
+	{ name: "@anvilkit/schema", bodyKey: "about.stack.schema.body" },
+	{ name: "@anvilkit/validator", bodyKey: "about.stack.validator.body" },
 	{
-		name: "@anvilkit/core",
-		body: "The runtime, plugin engine, and the <Studio> editor shell that hosts Puck.",
+		nameKey: "about.stack.components.name",
+		bodyKey: "about.stack.components.body",
 	},
-	{
-		name: "@anvilkit/ir",
-		body: "The Headless Page IR and the transforms that turn Puck data into portable output.",
-	},
-	{
-		name: "@anvilkit/schema",
-		body: "AI-friendly schema derivation that powers the copilot and validation.",
-	},
-	{
-		name: "@anvilkit/validator",
-		body: "A Puck Config validator that guards the editor and publish path.",
-	},
-	{
-		name: "Component packages",
-		body: "Hero, Navbar, Pricing, Bento Grid, Statistics, Blog List, and more — each publishable on its own.",
-	},
-	{
-		name: "Plugin ecosystem",
-		body: "AI copilot, asset manager, canvas studio, collaboration, design system, version history, and export plugins.",
-	},
+	{ nameKey: "about.stack.plugins.name", bodyKey: "about.stack.plugins.body" },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+	const t = await getServerT();
 	return (
 		<main className={`huly-root ${marketing.page}`}>
 			{/* Progressive-enhancement GSAP motion (renders null) */}
@@ -70,16 +62,10 @@ export default function AboutPage() {
 							<span
 								className={`${marketing.tag} ${marketing.tagEmber} ${marketing.eyebrow}`}
 							>
-								About
+								{t("about.intro.tag")}
 							</span>
-							<h1 className={marketing.heroTitle}>
-								Pages built from packages you can publish
-							</h1>
-							<p className={marketing.heroLede}>
-								AnvilKit is a monorepo of independently publishable, Puck-native
-								React components — and the Studio shell, IR, and plugins that
-								compose them into a complete authoring experience.
-							</p>
+							<h1 className={marketing.heroTitle}>{t("about.intro.title")}</h1>
+							<p className={marketing.heroLede}>{t("about.intro.lede")}</p>
 							<div className={marketing.heroActions}>
 								<a
 									className={buttonVariants({ size: "lg" })}
@@ -87,7 +73,7 @@ export default function AboutPage() {
 									target="_blank"
 									rel="noreferrer noopener"
 								>
-									View on GitHub ↗
+									{t("about.intro.github")}
 								</a>
 								<a
 									className={buttonVariants({
@@ -98,7 +84,7 @@ export default function AboutPage() {
 									target="_blank"
 									rel="noreferrer noopener"
 								>
-									Read the docs ↗
+									{t("about.intro.docs")}
 								</a>
 							</div>
 						</div>
@@ -114,19 +100,18 @@ export default function AboutPage() {
 							<span
 								className={`${marketing.tag} ${marketing.tagIris} ${marketing.kicker}`}
 							>
-								The model
+								{t("about.principles.tag")}
 							</span>
 							<h2 className={marketing.sectionTitle}>
-								A publishing model, not a kitchen sink
+								{t("about.principles.title")}
 							</h2>
 							<p className={marketing.sectionLede}>
-								The whole project is organised around one idea: a component is a
-								package, and a page is serializable data.
+								{t("about.principles.lede")}
 							</p>
 						</div>
 						<ul className={marketing.proseList}>
-							{PRINCIPLES.map((principle) => (
-								<li key={principle}>{principle}</li>
+							{PRINCIPLES.map((principleKey) => (
+								<li key={principleKey}>{t(principleKey)}</li>
 							))}
 						</ul>
 					</div>
@@ -140,20 +125,18 @@ export default function AboutPage() {
 						<span
 							className={`${marketing.tag} ${marketing.tagEmber} ${marketing.kicker}`}
 						>
-							In the monorepo
+							{t("about.stack.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>What powers the studio</h2>
-						<p className={marketing.sectionLede}>
-							A small set of foundational packages, a growing catalog of
-							components, and a plugin layer that extends the editor without
-							forking it.
-						</p>
+						<h2 className={marketing.sectionTitle}>{t("about.stack.title")}</h2>
+						<p className={marketing.sectionLede}>{t("about.stack.lede")}</p>
 					</div>
 					<div className={marketing.linkGrid}>
 						{STACK.map((pkg) => (
-							<Card key={pkg.name} className="gap-2 p-6">
-								<h3 className={marketing.linkCardTitle}>{pkg.name}</h3>
-								<p className={marketing.featureBody}>{pkg.body}</p>
+							<Card key={pkg.bodyKey} className="gap-2 p-6">
+								<h3 className={marketing.linkCardTitle}>
+									{pkg.nameKey ? t(pkg.nameKey) : pkg.name}
+								</h3>
+								<p className={marketing.featureBody}>{t(pkg.bodyKey)}</p>
 							</Card>
 						))}
 					</div>
@@ -166,24 +149,21 @@ export default function AboutPage() {
 					<div
 						className={`${marketing.sectionHead} ${marketing.sectionHeadCenter}`}
 					>
-						<h2 className={marketing.sectionTitle}>See it for yourself</h2>
-						<p className={marketing.sectionLede}>
-							Open the editor hub to try every surface, or jump straight into
-							the visual builder.
-						</p>
+						<h2 className={marketing.sectionTitle}>{t("about.cta.title")}</h2>
+						<p className={marketing.sectionLede}>{t("about.cta.lede")}</p>
 					</div>
 					<div
 						className={marketing.heroActions}
 						style={{ justifyContent: "center" }}
 					>
 						<Link className={buttonVariants({ size: "lg" })} href="/editor">
-							Explore the editor
+							{t("about.cta.explore")}
 						</Link>
 						<Link
 							className={buttonVariants({ variant: "outline", size: "lg" })}
 							href="/"
 						>
-							Back to home
+							{t("about.cta.home")}
 						</Link>
 					</div>
 				</div>

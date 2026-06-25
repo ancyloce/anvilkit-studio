@@ -7,6 +7,7 @@ import { cn } from "@anvilkit/ui/lib/utils";
 import { Textarea } from "@anvilkit/ui/textarea";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useDemoT } from "../../lib/i18n/client";
 import styles from "./marketing.module.css";
 
 type Accent = "iris" | "ember";
@@ -25,12 +26,11 @@ const ACCENTS: Record<Accent, string> = {
  * the same contract `<Studio>` drives at `/puck/editor`.
  */
 export function MiniEditor() {
-	const [eyebrow, setEyebrow] = useState("Puck-native");
-	const [headline, setHeadline] = useState("Compose pages from real packages.");
-	const [body, setBody] = useState(
-		"Every block is an independently published @anvilkit/* package. Edit its props here — the preview re-renders live.",
-	);
-	const [ctaLabel, setCtaLabel] = useState("Get started");
+	const t = useDemoT();
+	const [eyebrow, setEyebrow] = useState(t("mini.default.eyebrow"));
+	const [headline, setHeadline] = useState(t("mini.default.headline"));
+	const [body, setBody] = useState(t("mini.default.body"));
+	const [ctaLabel, setCtaLabel] = useState(t("mini.default.cta"));
 	const [accent, setAccent] = useState<Accent>("iris");
 	const [align, setAlign] = useState<Align>("center");
 
@@ -60,7 +60,7 @@ export function MiniEditor() {
 			<Card className="gap-[1.125rem] p-6">
 				<div className={styles.field}>
 					<label className={styles.label} htmlFor="mini-eyebrow">
-						Eyebrow
+						{t("mini.field.eyebrow")}
 					</label>
 					<Input
 						id="mini-eyebrow"
@@ -71,7 +71,7 @@ export function MiniEditor() {
 
 				<div className={styles.field}>
 					<label className={styles.label} htmlFor="mini-headline">
-						Headline
+						{t("mini.field.headline")}
 					</label>
 					<Input
 						id="mini-headline"
@@ -82,7 +82,7 @@ export function MiniEditor() {
 
 				<div className={styles.field}>
 					<label className={styles.label} htmlFor="mini-body">
-						Description
+						{t("mini.field.description")}
 					</label>
 					<Textarea
 						id="mini-body"
@@ -93,7 +93,7 @@ export function MiniEditor() {
 
 				<div className={styles.field}>
 					<label className={styles.label} htmlFor="mini-cta">
-						CTA label
+						{t("mini.field.cta")}
 					</label>
 					<Input
 						id="mini-cta"
@@ -103,7 +103,7 @@ export function MiniEditor() {
 				</div>
 
 				<div className={styles.field}>
-					<span className={styles.label}>Accent</span>
+					<span className={styles.label}>{t("mini.field.accent")}</span>
 					<div className={styles.swatchRow}>
 						{(Object.keys(ACCENTS) as Accent[]).map((key) => (
 							<Button
@@ -111,7 +111,11 @@ export function MiniEditor() {
 								type="button"
 								variant="outline"
 								size="icon"
-								aria-label={`${key} accent`}
+								aria-label={t(
+									key === "iris"
+										? "mini.accent.irisAria"
+										: "mini.accent.emberAria",
+								)}
 								aria-pressed={accent === key}
 								className={cn(
 									"size-8 rounded-full border-2 p-0",
@@ -125,7 +129,7 @@ export function MiniEditor() {
 				</div>
 
 				<div className={styles.field}>
-					<span className={styles.label}>Alignment</span>
+					<span className={styles.label}>{t("mini.field.alignment")}</span>
 					<div className="inline-flex gap-1 rounded-full border border-border p-1">
 						{(["left", "center"] as Align[]).map((value) => (
 							<Button
@@ -137,7 +141,7 @@ export function MiniEditor() {
 								className="rounded-full px-4"
 								onClick={() => setAlign(value)}
 							>
-								{value === "left" ? "Left" : "Center"}
+								{t(value === "left" ? "mini.align.left" : "mini.align.center")}
 							</Button>
 						))}
 					</div>
@@ -172,7 +176,7 @@ export function MiniEditor() {
 							</p>
 						) : null}
 						<h3 className={styles.previewHeadline}>
-							{headline || "Your headline"}
+							{headline || t("mini.preview.headlineFallback")}
 						</h3>
 						{body ? <p className={styles.previewBody}>{body}</p> : null}
 						{ctaLabel ? (
@@ -192,13 +196,13 @@ export function MiniEditor() {
 
 				<div className={styles.heroActions}>
 					<Link className={buttonVariants()} href="/puck/editor">
-						Open the full editor →
+						{t("mini.openFull")}
 					</Link>
 					<Link
 						className={buttonVariants({ variant: "outline" })}
 						href="/editor"
 					>
-						Explore all capabilities
+						{t("mini.exploreAll")}
 					</Link>
 				</div>
 			</div>

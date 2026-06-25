@@ -3,6 +3,7 @@
 import { Button } from "@anvilkit/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useDemoT } from "../lib/i18n/client";
 
 type DemoTheme = "dark" | "light";
 
@@ -42,6 +43,7 @@ function applyTheme(theme: DemoTheme) {
  * and marketing pages alike — flips together.
  */
 export function DemoThemeToggle() {
+	const t = useDemoT();
 	const [theme, setTheme] = useState<DemoTheme>("light");
 
 	useEffect(() => {
@@ -52,6 +54,9 @@ export function DemoThemeToggle() {
 	}, []);
 
 	const nextTheme: DemoTheme = theme === "dark" ? "light" : "dark";
+	const switchLabel = t(
+		nextTheme === "dark" ? "theme.toDark" : "theme.toLight",
+	);
 
 	return (
 		<Button
@@ -59,8 +64,8 @@ export function DemoThemeToggle() {
 			variant="ghost"
 			size="icon"
 			className="rounded-full text-muted-foreground hover:text-foreground"
-			aria-label={`Switch to ${nextTheme} theme`}
-			title={`Switch to ${nextTheme} theme`}
+			aria-label={switchLabel}
+			title={switchLabel}
 			onClick={() => {
 				setTheme(nextTheme);
 				applyTheme(nextTheme);

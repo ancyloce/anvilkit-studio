@@ -11,6 +11,8 @@ import "./globals.css";
 // Huly design tokens (DESIGN.md) scoped to `.huly-root` — used only by the
 // marketing chrome and the Home / Editor / About pages.
 import "./_site/huly.css";
+import { DemoI18nProvider } from "../lib/i18n/client";
+import { getServerLocale, getServerT } from "../lib/i18n/server";
 import { SiteChrome } from "./_site/SiteChrome";
 
 const geistSans = localFont({
@@ -22,11 +24,13 @@ const geistMono = localFont({
 	variable: "--font-geist-mono",
 });
 
-export const metadata: Metadata = {
-	title: "Anvilkit Components Demo",
-	description:
-		"Puck-native validation surface for the Anvilkit components workspace.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	const t = await getServerT();
+	return {
+		title: t("meta.root.title"),
+		description: t("meta.root.description"),
+	};
+}
 
 const demoThemeBootstrapScript = `
 (() => {
@@ -47,13 +51,14 @@ const demoThemeBootstrapScript = `
 })();
 `;
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const locale = await getServerLocale();
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang={locale} suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
@@ -75,8 +80,10 @@ export default function RootLayout({
 				<Script id="demo-theme-bootstrap" strategy="beforeInteractive">
 					{demoThemeBootstrapScript}
 				</Script>
-				<SiteChrome />
-				{children}
+				<DemoI18nProvider initialLocale={locale}>
+					<SiteChrome />
+					{children}
+				</DemoI18nProvider>
 			</body>
 		</html>
 	);
