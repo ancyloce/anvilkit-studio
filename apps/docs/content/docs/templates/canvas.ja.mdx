@@ -23,17 +23,11 @@ npx anvilkit init --template canvas my-site
 
 ## パッケージの詳細
 
-Ten starter [`CanvasIR`](../../canvas/core/src/types.ts) designs shipped
-with AnvilKit Canvas Studio — posters, social formats, slides, and print
-pieces. Each one is a self-contained `CanvasIR` (text / rect / ellipse /
-line nodes only, no external assets) so it loads with zero network calls.
+AnvilKit Canvas Studio に同梱される 10 個のスターター [`CanvasIR`](../../canvas/core/src/types.ts) デザイン——ポスター、ソーシャルフォーマット、スライド、印刷物。それぞれが自己完結型の `CanvasIR`（text / rect / ellipse / line ノードのみ、外部アセットなし）であるため、ネットワークコールなしで読み込まれます。
 
-## Contract
+## 契約
 
-`src/index.ts` exports a typed `canvasTemplates` registry (slug →
-`{ slug, name, description, ir }`) plus `canvasTemplateList`. Every `ir`
-validates against `CanvasIRSchema` from `@anvilkit/canvas-core` — enforced
-by `src/__tests__/canvas-templates.test.ts`.
+`src/index.ts` は型付けされた `canvasTemplates` レジストリ（slug → `{ slug, name, description, ir }`）と `canvasTemplateList` をエクスポートします。すべての `ir` は `@anvilkit/canvas-core` の `CanvasIRSchema` に対して検証されます——`src/__tests__/canvas-templates.test.ts` によって強制されます。
 
 ```ts
 import { canvasTemplates, canvasTemplateList } from "@anvilkit/canvas-templates";
@@ -41,7 +35,7 @@ import { canvasTemplates, canvasTemplateList } from "@anvilkit/canvas-templates"
 const poster = canvasTemplates.poster.ir; // CanvasIR
 ```
 
-## Layout
+## レイアウト
 
 ```
 packages/templates/canvas/
@@ -55,15 +49,8 @@ packages/templates/canvas/
         └── canvas-templates.test.ts
 ```
 
-The `*.json` files are authored by
-[`../scripts/scaffold-canvas-irs.mjs`](../scripts/scaffold-canvas-irs.mjs)
-and committed so diffs are reviewable. Re-run
-`pnpm --filter @anvilkit/templates-workspace scaffold:canvas-irs` to
-regenerate them from the declarative table.
+これらの `*.json` ファイルは [`../scripts/scaffold-canvas-irs.mjs`](../scripts/scaffold-canvas-irs.mjs) によって作成され、diff をレビューできるようにコミットされています。宣言的なテーブルから再生成するには、`pnpm --filter @anvilkit/templates-workspace scaffold:canvas-irs` を再実行してください。
 
-## Build
+## ビルド
 
-`tsc` copies the imported `*.json` into `dist/` (via `resolveJsonModule`),
-matching the Puck `@anvilkit/template-*` packages alongside this folder.
-The dir is skipped by `scripts/verify-templates.mjs` (which validates the
-Puck `AnvilkitTemplate` packages) and validated by its own Vitest suite.
+`tsc` は（`resolveJsonModule` を介して）インポートされた `*.json` を `dist/` にコピーし、このフォルダと並んで配置される Puck `@anvilkit/template-*` パッケージと整合させます。このディレクトリは `scripts/verify-templates.mjs`（Puck `AnvilkitTemplate` パッケージを検証する）ではスキップされ、独自の Vitest スイートによって検証されます。

@@ -29,19 +29,19 @@ npx anvilkit init --template landing-saas my-site
 
 ## 包详情
 
-A conversion-focused SaaS landing page.
+以转化为导向的 SaaS 落地页。
 
-Navbar, hero, logo cloud, bento feature grid, pricing, statistics, and FAQ — the full set for a typical SaaS home page.
+导航栏、Hero、logo 云、便当式（bento）功能网格、定价、统计数据和 FAQ —— 一个典型 SaaS 首页所需的全套内容。
 
-## Install
+## 安装
 
 ```sh
 npx anvilkit init --template landing-saas my-site
 ```
 
-## Composition
+## 组成
 
-This template composes the following component packages:
+此模板由以下组件包组合而成：
 
 - `@anvilkit/bento-grid`
 - `@anvilkit/helps`
@@ -51,12 +51,8 @@ This template composes the following component packages:
 - `@anvilkit/pricing-minimal`
 - `@anvilkit/statistics`
 
-## Editing
+## 编辑
 
-The canonical `PageIR` tree is committed at `src/page-ir.json`. The
-package's default export bundles that IR with the manifest fields
-(slug, name, description, preview, package list) into an
-`AnvilkitTemplate`.
+规范的 `PageIR` 树提交于 `src/page-ir.json`。该包的默认导出将这份 IR 与清单字段（slug、name、description、preview、package list）一起打包成一个 `AnvilkitTemplate`。
 
-See `docs/decisions/003-core-templates-subpath.md` for the
-`AnvilkitTemplate` contract.
+有关 `AnvilkitTemplate` 契约，请参阅 `docs/decisions/003-core-templates-subpath.md`。

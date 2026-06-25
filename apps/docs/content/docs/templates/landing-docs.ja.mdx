@@ -26,31 +26,27 @@ npx anvilkit init --template landing-docs my-site
 
 ## パッケージの詳細
 
-Landing page for a developer-tool docs site.
+開発者ツールのドキュメントサイト向けランディングページ。
 
-Navbar, hero, feature section, and FAQ — tuned for a developer audience who want the punchline fast.
+ナビゲーションバー、Hero、機能セクション、FAQ —— 要点を素早く知りたい開発者向けの読者に合わせて調整されています。
 
-## Install
+## インストール
 
 ```sh
 npx anvilkit init --template landing-docs my-site
 ```
 
-## Composition
+## 構成
 
-This template composes the following component packages:
+このテンプレートは、次のコンポーネントパッケージで構成されています。
 
 - `@anvilkit/helps`
 - `@anvilkit/hero`
 - `@anvilkit/navbar`
 - `@anvilkit/section`
 
-## Editing
+## 編集
 
-The canonical `PageIR` tree is committed at `src/page-ir.json`. The
-package's default export bundles that IR with the manifest fields
-(slug, name, description, preview, package list) into an
-`AnvilkitTemplate`.
+正規の `PageIR` ツリーは `src/page-ir.json` にコミットされています。このパッケージのデフォルトエクスポートは、その IR をマニフェストフィールド（slug、name、description、preview、package list）とともに `AnvilkitTemplate` にバンドルします。
 
-See `docs/decisions/003-core-templates-subpath.md` for the
-`AnvilkitTemplate` contract.
+`AnvilkitTemplate` の契約については `docs/decisions/003-core-templates-subpath.md` を参照してください。

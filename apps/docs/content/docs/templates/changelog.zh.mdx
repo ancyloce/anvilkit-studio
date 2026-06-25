@@ -25,30 +25,26 @@ npx anvilkit init --template changelog my-site
 
 ## 包详情
 
-A product changelog page.
+一个产品更新日志页面。
 
-Navbar, section heading, and a blog-list re-used as the changelog entry stream.
+导航栏、板块标题，以及一个复用为更新日志条目流的 blog-list。
 
-## Install
+## 安装
 
 ```sh
 npx anvilkit init --template changelog my-site
 ```
 
-## Composition
+## 组合
 
-This template composes the following component packages:
+该模板组合了以下组件包：
 
 - `@anvilkit/blog-list`
 - `@anvilkit/navbar`
 - `@anvilkit/section`
 
-## Editing
+## 编辑
 
-The canonical `PageIR` tree is committed at `src/page-ir.json`. The
-package's default export bundles that IR with the manifest fields
-(slug, name, description, preview, package list) into an
-`AnvilkitTemplate`.
+规范的 `PageIR` 树提交在 `src/page-ir.json` 中。该包的默认导出会将该 IR 与清单字段（slug、name、description、preview、包列表）打包为一个 `AnvilkitTemplate`。
 
-See `docs/decisions/003-core-templates-subpath.md` for the
-`AnvilkitTemplate` contract.
+有关 `AnvilkitTemplate` 契约，请参阅 `docs/decisions/003-core-templates-subpath.md`。

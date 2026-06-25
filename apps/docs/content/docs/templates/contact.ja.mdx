@@ -26,31 +26,27 @@ npx anvilkit init --template contact my-site
 
 ## パッケージの詳細
 
-A contact-us page.
+お問い合わせページ。
 
-Navbar, section with copy, inline email + message inputs, and a submit button. No form handler wired — users hook up their own.
+ナビゲーションバー、コピーを備えたセクション、インラインのメール + メッセージ入力欄、そして送信ボタン。フォームハンドラーは接続されていません——ユーザーが自分で接続します。
 
-## Install
+## インストール
 
 ```sh
 npx anvilkit init --template contact my-site
 ```
 
-## Composition
+## 構成
 
-This template composes the following component packages:
+このテンプレートは以下のコンポーネントパッケージを組み合わせています:
 
 - `@anvilkit/button`
 - `@anvilkit/input`
 - `@anvilkit/navbar`
 - `@anvilkit/section`
 
-## Editing
+## 編集
 
-The canonical `PageIR` tree is committed at `src/page-ir.json`. The
-package's default export bundles that IR with the manifest fields
-(slug, name, description, preview, package list) into an
-`AnvilkitTemplate`.
+正規の `PageIR` ツリーは `src/page-ir.json` にコミットされています。このパッケージのデフォルトエクスポートは、その IR をマニフェストフィールド（slug、name、description、preview、パッケージリスト）とともに `AnvilkitTemplate` にまとめます。
 
-See `docs/decisions/003-core-templates-subpath.md` for the
-`AnvilkitTemplate` contract.
+`AnvilkitTemplate` の契約については `docs/decisions/003-core-templates-subpath.md` を参照してください。
