@@ -1,0 +1,313 @@
+/*
+ * Liquid Glass cards — a reusable, content-first glass card for "feature layer"
+ * grids (capabilities, plugin showcases). Everything is namespaced under
+ * `.aklg-*` so it never leaks into the Fumadocs chrome or the shared shadcn
+ * theme, mirroring the `.akh` home convention.
+ *
+ * THEMING: tokens default to the `.akh` home palette (iris/ember + semantic
+ * text/surface tokens) via `var(--akh-*, <literal>)`, so the card themes
+ * automatically when mounted inside `.akh` AND degrades to sensible literals
+ * when used standalone. Dark mode tracks Fumadocs' `.dark` class.
+ *
+ * CONTENT FIRST: the glass fill stays opaque enough that text always clears
+ * WCAG AA against the section background — the refraction/glow layers live
+ * BELOW the content (z-index 0/1) and never tint the text region. A `@supports`
+ * fallback swaps to a near-solid fill for engines without `backdrop-filter`.
+ *
+ * MOTION: pointer-driven specular + 3D tilt and scroll-driven hue are applied
+ * through CSS custom properties the component updates inside a single
+ * requestAnimationFrame tick. Nothing animates the layout box — only `transform`
+ * (compositor) and the isolated decorative layers repaint. All of it collapses
+ * to a static card under `prefers-reduced-motion`.
+ */
+
+.aklg-card {
+	/* ---- Configurable knobs (overridable via props → inline style) ---- */
+	--aklg-blur: 16px; /* backdrop blur radius */
+	--aklg-tint: var(--akh-iris, #5683da); /* dynamic-tint base color */
+	--aklg-tint-strength: 0.5; /* 0..1 glow intensity */
+
+	/* ---- Runtime vars (set by JS; neutral defaults for SSR / reduced motion) */
+	--aklg-mx: 50; /* pointer X, 0..100 */
+	--aklg-my: 50; /* pointer Y, 0..100 */
+	--aklg-hue: 0; /* scroll-driven hue rotation, deg */
+	--aklg-lift: 0px; /* hover/focus lift */
+
+	/* ---- Surface tokens — LIGHT defaults (kept opaque enough for AA text) ---- */
+	--aklg-fill-1: rgba(255, 255, 255, 0.7);
+	--aklg-fill-2: rgba(255, 255, 255, 0.52);
+	--aklg-stroke: rgba(255, 255, 255, 0.65);
+	--aklg-glint: rgba(255, 255, 255, 0.9);
+	--aklg-tile: rgba(255, 255, 255, 0.55);
+	--aklg-shadow: 20, 22, 28; /* shadow base RGB */
+
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	isolation: isolate;
+	overflow: hidden;
+	padding: 28px;
+	border-radius: 20px;
+	color: var(--akh-text, #050506);
+	border: 1px solid var(--aklg-stroke);
+	background: linear-gradient(135deg, var(--aklg-fill-1), var(--aklg-fill-2));
+	-webkit-backdrop-filter: blur(var(--aklg-blur)) saturate(1.6);
+	backdrop-filter: blur(var(--aklg-blur)) saturate(1.6);
+	box-shadow:
+		0 1px 2px rgba(var(--aklg-shadow), 0.05),
+		0 14px 30px -16px rgba(var(--aklg-shadow), 0.22),
+		inset 0 1px 0 var(--aklg-glint),
+		inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+	transform: perspective(1100px) rotateX(calc((var(--aklg-my) - 50) * -0.05deg))
+		rotateY(calc((var(--aklg-mx) - 50) * 0.07deg)) translateY(var(--aklg-lift))
+		translateZ(0);
+	transform-style: preserve-3d;
+	transition:
+		transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+		box-shadow 0.4s ease,
+		border-color 0.4s ease;
+}
+
+/* ---- Surface tokens — DARK overrides ---- */
+.dark .aklg-card {
+	--aklg-fill-1: rgba(40, 42, 49, 0.6);
+	--aklg-fill-2: rgba(20, 21, 25, 0.42);
+	--aklg-stroke: rgba(255, 255, 255, 0.12);
+	--aklg-glint: rgba(255, 255, 255, 0.28);
+	--aklg-tile: rgba(255, 255, 255, 0.08);
+	--aklg-shadow: 0, 0, 0;
+	color: var(--akh-text, #ffffff);
+}
+
+/* ---- Fallback: no backdrop-filter → near-solid fill so text stays legible --- */
+@supports not (
+		(backdrop-filter: blur(2px)) or
+		(-webkit-backdrop-filter: blur(2px))
+	) {
+	.aklg-card {
+		--aklg-fill-1: rgba(255, 255, 255, 0.97);
+		--aklg-fill-2: rgba(247, 247, 250, 0.97);
+	}
+	.dark .aklg-card {
+		--aklg-fill-1: rgba(28, 29, 33, 0.98);
+		--aklg-fill-2: rgba(20, 21, 24, 0.98);
+	}
+}
+
+.aklg-card:hover,
+.aklg-card:focus-within {
+	--aklg-lift: -6px;
+	will-change: transform;
+	border-color: color-mix(in oklab, var(--aklg-tint) 50%, var(--aklg-stroke));
+	box-shadow:
+		0 2px 4px rgba(var(--aklg-shadow), 0.06),
+		0 26px 50px -22px rgba(var(--aklg-shadow), 0.3),
+		0 18px 60px -30px color-mix(in oklab, var(--aklg-tint) 70%, transparent),
+		inset 0 1px 0 var(--aklg-glint);
+}
+
+/* ------------------------------------------------------- decorative layers */
+
+/* Pointer-tracked specular highlight (soft moving light spot). */
+.aklg-spec {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	background: radial-gradient(
+		260px circle at calc(var(--aklg-mx) * 1%) calc(var(--aklg-my) * 1%),
+		rgba(255, 255, 255, 0.45),
+		rgba(255, 255, 255, 0.1) 35%,
+		transparent 62%
+	);
+	transition: opacity 0.4s ease;
+}
+.aklg-card:hover .aklg-spec {
+	opacity: 1;
+}
+
+/* Diagonal sheen that sweeps once across the surface on hover. */
+.aklg-sheen {
+	position: absolute;
+	inset: -1px;
+	z-index: 1;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+	background: linear-gradient(
+		115deg,
+		transparent 35%,
+		rgba(255, 255, 255, 0.35) 48%,
+		rgba(255, 255, 255, 0.06) 56%,
+		transparent 70%
+	);
+	transform: translateX(-120%);
+	transition: opacity 0.3s ease;
+}
+.aklg-card:hover .aklg-sheen {
+	opacity: 1;
+	animation: aklg-sweep 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes aklg-sweep {
+	from {
+		transform: translateX(-120%);
+	}
+	to {
+		transform: translateX(120%);
+	}
+}
+
+/* Dynamic-tint glow — hue rotates with scroll position for the "living" feel. */
+.aklg-glow {
+	position: absolute;
+	z-index: 0;
+	right: -30%;
+	bottom: -45%;
+	width: 80%;
+	height: 90%;
+	pointer-events: none;
+	background: radial-gradient(
+		ellipse at center,
+		color-mix(in oklab, var(--aklg-tint) 65%, transparent),
+		transparent 70%
+	);
+	opacity: calc(var(--aklg-tint-strength) * 0.6);
+	filter: blur(30px) hue-rotate(calc(var(--aklg-hue) * 1deg));
+	transition: opacity 0.4s ease;
+}
+.aklg-card:hover .aklg-glow {
+	opacity: calc(var(--aklg-tint-strength) * 0.95);
+}
+
+/* ------------------------------------------------------- content (above all) */
+
+.aklg-content {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.aklg-title {
+	margin: 0;
+	font-family: var(--akh-display, var(--akh-font, inherit));
+	font-size: 22px;
+	font-weight: 600;
+	line-height: 1.3;
+	letter-spacing: -0.02em;
+	color: var(--akh-text, inherit);
+}
+.aklg-desc {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.65;
+	color: var(--akh-text-muted, #51555b);
+}
+
+.aklg-items {
+	list-style: none;
+	margin: 8px 0 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+.aklg-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+}
+.aklg-tile {
+	flex: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	border-radius: 11px;
+	color: var(--aklg-tint);
+	background: var(--aklg-tile);
+	border: 1px solid var(--aklg-stroke);
+	box-shadow: inset 0 1px 0 var(--aklg-glint);
+}
+.aklg-tile svg {
+	width: 18px;
+	height: 18px;
+}
+.aklg-item-label {
+	display: block;
+	font-size: 13.5px;
+	font-weight: 600;
+	line-height: 1.4;
+	letter-spacing: -0.01em;
+	color: var(--akh-text, inherit);
+}
+.aklg-item-desc {
+	margin: 5px 0 0;
+	font-size: 12.5px;
+	line-height: 1.6;
+	color: var(--akh-text-dim, #6b6f76);
+}
+
+.aklg-footer {
+	margin-top: auto;
+	padding-top: 4px;
+}
+.aklg-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--aklg-tint);
+	text-decoration: none;
+	transition: gap 0.2s ease;
+}
+.aklg-cta:hover {
+	gap: 9px;
+}
+
+/* ------------------------------------------------------------------ stage */
+
+/* Optional backdrop the cards refract: blurred brand orbs sit behind the grid
+ * so the glass has something colorful to bend (over a flat band it would read
+ * as plain frosted white). Cards stack above the orbs via .aklg-stage-grid. */
+.aklg-stage {
+	position: relative;
+	isolation: isolate;
+}
+.aklg-stage-grid {
+	position: relative;
+	z-index: 1;
+}
+.aklg-stage-orb {
+	position: absolute;
+	z-index: 0;
+	border-radius: 9999px;
+	pointer-events: none;
+	filter: blur(60px);
+	opacity: 0.3;
+}
+.dark .aklg-stage-orb {
+	opacity: 0.5;
+}
+
+/* --------------------------------------------------------- reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+	.aklg-card {
+		transform: none !important;
+		transition: none !important;
+		will-change: auto;
+	}
+	.aklg-spec,
+	.aklg-sheen {
+		display: none;
+	}
+	.aklg-glow {
+		filter: blur(30px); /* freeze hue rotation */
+	}
+}

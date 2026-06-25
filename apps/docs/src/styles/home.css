@@ -1,0 +1,689 @@
+/*
+ * AnvilKit marketing home — "Huly" design language (see DESIGN.md).
+ *
+ * Everything is scoped under `.akh` so these tokens and component styles never
+ * leak into the Fumadocs docs chrome or the shared shadcn theme. The palette is
+ * a deliberate two-color story: one Electric Iris (#5683da) + one Ember Pulse
+ * (#ff8964) doing all the brand work, with alternating base/alt bands for the
+ * page's structural rhythm.
+ *
+ * THEMING: Fumadocs toggles dark mode with a `.dark` class on <html> (light is
+ * the default). The semantic tokens below default to the LIGHT palette and are
+ * overridden under `.dark .akh`, so the home tracks the site theme toggle. The
+ * brand colors (iris/ember) and three "product" surfaces — the Studio frame,
+ * the install terminal, and the finale CTA panel — stay fixed-dark in BOTH
+ * themes, faithful to the system treating its own dark UI as the hero asset.
+ *
+ * ANIMATION: nothing is hidden via CSS. Content renders fully on the server
+ * (content-first / LCP-safe); GSAP hides-then-reveals `[data-anim]` nodes inside
+ * a layout effect on the client, and skips under `prefers-reduced-motion`.
+ */
+
+.akh {
+	/* ---- Brand colors (fixed in both themes) ---- */
+	--akh-iris: #5683da; /* Electric Iris — primary action */
+	--akh-ember: #ff8964; /* Ember Pulse — warm accent */
+
+	/* ---- Fixed-dark "product" surfaces (theme-independent) ---- */
+	--akh-fixed-card: #141417;
+	--akh-fixed-deep: #0e0e10;
+	--akh-fixed-edge: #2a2b2f;
+	--akh-fixed-iron: #6b6c6d;
+	--akh-fixed-smoke: #95979e;
+
+	/* ---- Semantic tokens — LIGHT defaults (overridden under .dark) ---- */
+	--akh-bg: #ffffff;
+	--akh-hero-bg: #ffffff;
+	--akh-surface-base: #ffffff;
+	--akh-surface-alt: #f6f6f6; /* warm linen */
+	--akh-text: #050506; /* ink */
+	--akh-text-muted: #51555b;
+	--akh-text-dim: #6b6f76;
+	--akh-border: #e7e7ea;
+	--akh-card-bg: #ffffff;
+	--akh-card-border: #e7e7ea;
+	--akh-card-shadow: rgba(0, 0, 0, 0.06) 0 4px 16px 0;
+	--akh-card-hover-shadow: rgba(0, 0, 0, 0.12) 0 10px 30px 0;
+	--akh-badge-bg: rgba(255, 255, 255, 0.7);
+	--akh-hero-highlight: rgba(86, 131, 218, 0.06);
+	--akh-aurora-strength: 0.18;
+	--akh-aurora-base-strength: 0.24;
+
+	/* ---- Type ---- */
+	--akh-font:
+		"Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+		"Segoe UI", Roboto, sans-serif;
+	--akh-display:
+		"Sora", "General Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+	/* ---- Shape ---- */
+	--akh-r-card: 12px;
+	--akh-r-panel: 30px;
+	--akh-r-pill: 9999px;
+
+	/* ---- Elevation ---- */
+	--akh-shadow-screenshot: rgba(0, 0, 0, 0.5) 0 6px 25px 0;
+	--akh-shadow-float: rgba(0, 0, 0, 0.35) 0 4px 16px 0;
+
+	/* ---- Layout ---- */
+	--akh-max: 1200px;
+
+	width: 100%;
+	font-family: var(--akh-font);
+	color: var(--akh-text);
+	background: var(--akh-bg);
+	letter-spacing: -0.011em;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+/* ---- Semantic tokens — DARK overrides ---- */
+.dark .akh {
+	--akh-bg: #303236; /* Obsidian Canvas */
+	--akh-hero-bg: #090a0c; /* Void */
+	--akh-surface-base: #303236;
+	--akh-surface-alt: #1c1d20; /* elevated/recessed dark band */
+	--akh-text: #ffffff;
+	--akh-text-muted: #a9a9aa; /* ash */
+	--akh-text-dim: #95979e; /* smoke */
+	--akh-border: #3a3b40;
+	--akh-card-bg: #141417;
+	--akh-card-border: #2c2d31;
+	--akh-card-shadow: none;
+	--akh-card-hover-shadow: none;
+	--akh-badge-bg: rgba(48, 50, 54, 0.7);
+	--akh-hero-highlight: rgba(255, 255, 255, 0.05);
+	--akh-aurora-strength: 0.55;
+	--akh-aurora-base-strength: 0.7;
+}
+
+.akh ::selection {
+	background: color-mix(in oklab, var(--akh-iris) 40%, transparent);
+	color: #fff;
+}
+
+/* ------------------------------------------------------------------ layout */
+
+.akh-band {
+	position: relative;
+	width: 100%;
+	overflow: clip;
+}
+.akh-band--base {
+	background: var(--akh-surface-base);
+	color: var(--akh-text);
+}
+.akh-band--alt {
+	background: var(--akh-surface-alt);
+	color: var(--akh-text);
+}
+
+.akh-inner {
+	max-width: var(--akh-max);
+	margin-inline: auto;
+	padding-inline: 24px;
+}
+
+.akh-section {
+	padding-block: 96px;
+}
+@media (max-width: 640px) {
+	.akh-section {
+		padding-block: 64px;
+	}
+}
+
+/* ------------------------------------------------------------------ type */
+
+.akh-display {
+	font-family: var(--akh-display);
+	font-weight: 600;
+	line-height: 0.95;
+	letter-spacing: -0.04em;
+	font-size: clamp(2.75rem, 7vw, 5rem); /* ~44 → 80px */
+	margin: 0;
+	color: var(--akh-text);
+}
+.akh-display--mid {
+	font-size: clamp(2rem, 5vw, 3.25rem);
+	line-height: 1;
+	letter-spacing: -0.035em;
+}
+.akh-eyebrow {
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--akh-text-dim);
+	margin: 0 0 14px;
+}
+.akh-lede {
+	font-size: clamp(1rem, 1.4vw, 1.18rem);
+	line-height: 1.55;
+	color: var(--akh-text-muted);
+	max-width: 44ch;
+	margin: 22px 0 0;
+	margin-bottom: 16px;
+}
+
+.akh-gradient-text {
+	background: linear-gradient(
+		100deg,
+		var(--akh-iris) 0%,
+		var(--akh-ember) 65%,
+		#ffb98c 100%
+	);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* ------------------------------------------------------------------ buttons */
+
+.akh-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	border-radius: var(--akh-r-pill);
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: -0.01em;
+	padding: 12px 24px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	text-decoration: none;
+	transition:
+		transform 0.18s ease,
+		box-shadow 0.25s ease,
+		background-color 0.2s ease,
+		border-color 0.2s ease,
+		color 0.2s ease;
+	will-change: transform;
+}
+.akh-btn:active {
+	transform: translateY(1px);
+}
+.akh-btn--primary {
+	background: var(--akh-iris);
+	color: #fff;
+}
+.akh-btn--primary:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 8px 30px -6px
+		color-mix(in oklab, var(--akh-iris) 75%, transparent);
+}
+/* Ghost adapts to the active theme via the semantic tokens. */
+.akh-btn--ghost {
+	background: transparent;
+	color: var(--akh-text);
+	border-color: var(--akh-border);
+}
+.akh-btn--ghost:hover {
+	background: var(--akh-text);
+	color: var(--akh-bg);
+	border-color: var(--akh-text);
+}
+/* White pill is only used on the fixed-dark finale panel. */
+.akh-btn--white {
+	background: #fff;
+	color: #090a0c;
+}
+.akh-btn--white:hover {
+	transform: translateY(-1px);
+	box-shadow: var(--akh-shadow-float);
+}
+
+.akh-cta-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: center;
+}
+
+/* ------------------------------------------------------------------ tags */
+
+.akh-tag-dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 9999px;
+	background: currentColor;
+}
+
+/* ------------------------------------------------------------------ hero */
+
+.akh-hero {
+	position: relative;
+	background: var(--akh-hero-bg);
+	color: var(--akh-text);
+	isolation: isolate;
+}
+/* Aurora beam — narrow vertical iris→ember→white streak, brand signature.
+ * Strength is theme-driven: bold on the dark void, a soft wash on light. */
+.akh-aurora {
+	position: absolute;
+	inset: -10% 0 auto;
+	left: 50%;
+	width: min(34vw, 460px);
+	height: 130%;
+	transform: translateX(-50%);
+	background: linear-gradient(
+		180deg,
+		color-mix(in oklab, var(--akh-iris) 60%, transparent) 0%,
+		color-mix(in oklab, var(--akh-iris) 45%, transparent) 28%,
+		color-mix(in oklab, var(--akh-ember) 55%, transparent) 62%,
+		rgba(255, 255, 255, 0.92) 100%
+	);
+	filter: blur(60px);
+	opacity: var(--akh-aurora-strength);
+	z-index: -2;
+	pointer-events: none;
+	will-change: transform;
+}
+/* Warm radial sunburst at the base of the beam. */
+.akh-aurora-base {
+	position: absolute;
+	left: 50%;
+	bottom: -180px;
+	width: 760px;
+	height: 520px;
+	transform: translateX(-50%);
+	background: radial-gradient(
+		ellipse at center,
+		color-mix(in oklab, var(--akh-ember) 38%, transparent) 0%,
+		color-mix(in oklab, #ffda9f 22%, transparent) 38%,
+		transparent 70%
+	);
+	filter: blur(40px);
+	opacity: var(--akh-aurora-base-strength);
+	z-index: -2;
+	pointer-events: none;
+}
+.akh-hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background-image: radial-gradient(
+		circle at 50% 0%,
+		var(--akh-hero-highlight),
+		transparent 55%
+	);
+	pointer-events: none;
+}
+
+.akh-hero-grid {
+	display: grid;
+	grid-template-columns: 1.05fr 0.95fr;
+	gap: 48px;
+	align-items: center;
+	padding-block: 120px 96px;
+}
+@media (max-width: 900px) {
+	.akh-hero-grid {
+		grid-template-columns: 1fr;
+		gap: 40px;
+		padding-block: 88px 64px;
+		text-align: left;
+	}
+}
+
+.akh-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	border-radius: var(--akh-r-pill);
+	border: 1px solid var(--akh-border);
+	background: var(--akh-badge-bg);
+	backdrop-filter: blur(8px);
+	padding: 6px 14px;
+	font-size: 12px;
+	color: var(--akh-text-muted);
+	margin-bottom: 26px;
+}
+.akh-badge strong {
+	color: var(--akh-text);
+	font-weight: 600;
+}
+
+.akh-stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 32px;
+	margin-top: 44px;
+}
+.akh-stat-num {
+	font-family: var(--akh-display);
+	font-size: 32px;
+	font-weight: 600;
+	letter-spacing: -0.03em;
+	line-height: 1;
+	color: var(--akh-text);
+}
+.akh-stat-label {
+	font-size: 12px;
+	color: var(--akh-text-dim);
+	margin-top: 6px;
+}
+
+/* Product screenshot frame — a stylized <Studio> editor mock. FIXED DARK in
+ * both themes: in light mode it reads as a dark product screenshot, in dark
+ * mode it blends into the void. */
+.akh-frame {
+	border-radius: var(--akh-r-card);
+	background: var(--akh-fixed-card);
+	border: 1px solid var(--akh-fixed-edge);
+	box-shadow: var(--akh-shadow-screenshot);
+	overflow: hidden;
+	will-change: transform;
+}
+.akh-frame-bar {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	padding: 12px 14px;
+	border-bottom: 1px solid var(--akh-fixed-edge);
+	background: var(--akh-fixed-deep);
+}
+.akh-frame-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 9999px;
+	background: var(--akh-fixed-iron);
+}
+.akh-frame-title {
+	margin-left: 8px;
+	font-size: 11px;
+	color: var(--akh-fixed-smoke);
+}
+.akh-frame-body {
+	display: grid;
+	grid-template-columns: 132px 1fr;
+	min-height: 268px;
+}
+.akh-frame-rail {
+	border-right: 1px solid var(--akh-fixed-edge);
+	padding: 14px 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+	background: color-mix(in oklab, var(--akh-fixed-deep) 80%, transparent);
+}
+.akh-rail-item {
+	height: 9px;
+	border-radius: 9999px;
+	background: var(--akh-fixed-iron);
+	opacity: 0.55;
+}
+.akh-rail-item--active {
+	background: var(--akh-iris);
+	opacity: 1;
+	width: 78%;
+}
+.akh-frame-canvas {
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.akh-canvas-block {
+	border-radius: 8px;
+	border: 1px solid var(--akh-fixed-edge);
+	background: color-mix(in oklab, var(--akh-fixed-deep) 60%, transparent);
+}
+.akh-canvas-block--hero {
+	height: 64px;
+	background: linear-gradient(
+		120deg,
+		color-mix(in oklab, var(--akh-iris) 30%, var(--akh-fixed-deep)),
+		color-mix(in oklab, var(--akh-ember) 22%, var(--akh-fixed-deep))
+	);
+	border-color: transparent;
+}
+.akh-canvas-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 10px;
+}
+.akh-canvas-block--cell {
+	height: 56px;
+}
+.akh-canvas-block--wide {
+	height: 40px;
+}
+
+/* ------------------------------------------------------------------ cards */
+
+.akh-section-head {
+	max-width: 640px;
+	margin-bottom: 44px;
+}
+.akh-section-head--center {
+	margin-inline: auto;
+	text-align: center;
+}
+
+.akh-grid {
+	display: grid;
+	gap: 16px;
+}
+.akh-grid--2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+.akh-grid--3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+.akh-grid--4 {
+	grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 980px) {
+	.akh-grid--4 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.akh-grid--3 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 600px) {
+	.akh-grid--2,
+	.akh-grid--3,
+	.akh-grid--4 {
+		grid-template-columns: 1fr;
+	}
+}
+
+.akh-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	border-radius: var(--akh-r-card);
+	padding: 24px;
+	background: var(--akh-card-bg);
+	border: 1px solid var(--akh-card-border);
+	box-shadow: var(--akh-card-shadow);
+	text-decoration: none;
+	color: inherit;
+	overflow: hidden;
+	transition:
+		transform 0.22s ease,
+		border-color 0.22s ease,
+		box-shadow 0.25s ease;
+	will-change: transform;
+}
+.akh-card:hover {
+	transform: translateY(-3px);
+	border-color: color-mix(
+		in oklab,
+		var(--akh-iris) 55%,
+		var(--akh-card-border)
+	);
+	box-shadow: var(--akh-card-hover-shadow);
+}
+/* Optional warm radial bleed in a card corner. */
+.akh-card--glow::after {
+	content: "";
+	position: absolute;
+	top: -40px;
+	right: -40px;
+	width: 200px;
+	height: 200px;
+	background: radial-gradient(
+		circle at center,
+		color-mix(in oklab, var(--akh-ember) 30%, transparent) 0%,
+		color-mix(in oklab, #ffda9f 15%, transparent) 45%,
+		transparent 70%
+	);
+	pointer-events: none;
+	opacity: 0.6;
+}
+.akh-card-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
+	background: color-mix(in oklab, var(--akh-iris) 14%, transparent);
+	color: var(--akh-iris);
+	margin-bottom: 6px;
+}
+.akh-card--glow .akh-card-icon {
+	background: color-mix(in oklab, var(--akh-ember) 16%, transparent);
+	color: var(--akh-ember);
+}
+.akh-card-title {
+	font-size: 15px;
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	color: var(--akh-text);
+	margin: 0;
+}
+.akh-card-pkg {
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+	font-size: 12px;
+	color: var(--akh-iris);
+}
+.akh-card-body {
+	font-size: 13.5px;
+	line-height: 1.5;
+	color: var(--akh-text-muted);
+	margin: 0;
+}
+.akh-card-meta {
+	margin-top: auto;
+	padding-top: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--akh-text-dim);
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.akh-card:hover .akh-card-meta {
+	color: var(--akh-iris);
+}
+
+/* Feature card — larger, with icon + title + body */
+.akh-feature {
+	padding: 28px;
+}
+.akh-feature .akh-card-title {
+	font-family: var(--akh-display);
+	font-size: 22px;
+	font-weight: 600;
+	letter-spacing: -0.02em;
+}
+
+/* ------------------------------------------------------------------ install */
+
+/* FIXED DARK terminal surface in both themes (reads as a real terminal). */
+.akh-install {
+	border-radius: var(--akh-r-card);
+	border: 1px solid var(--akh-fixed-edge);
+	background: var(--akh-fixed-deep);
+	overflow: hidden;
+}
+.akh-install-bar {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 16px;
+	border-bottom: 1px solid var(--akh-fixed-edge);
+	font-size: 12px;
+	color: var(--akh-fixed-smoke);
+}
+.akh-install pre {
+	margin: 0;
+	padding: 20px;
+	overflow-x: auto;
+	font-size: 13px;
+	line-height: 1.7;
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+	color: #e6e7ea;
+}
+.akh-install .tok-cmd {
+	color: var(--akh-ember);
+}
+.akh-install .tok-pkg {
+	color: var(--akh-iris);
+}
+
+/* ------------------------------------------------------------------ finale */
+
+/* FIXED DARK CTA panel in both themes — the page's dramatic dark moment,
+ * echoing the hero. Scopes dark text tokens so descendants read correctly. */
+.akh-finale {
+	--akh-text: #ffffff;
+	--akh-text-muted: #a9a9aa;
+	position: relative;
+	border-radius: var(--akh-r-panel);
+	padding: clamp(40px, 6vw, 72px);
+	text-align: center;
+	background: var(--akh-fixed-card);
+	border: 1px solid var(--akh-fixed-edge);
+	color: #fff;
+	overflow: hidden;
+	isolation: isolate;
+}
+.akh-finale::before {
+	content: "";
+	position: absolute;
+	inset: auto 0 -60% 0;
+	height: 120%;
+	margin-inline: auto;
+	width: 50%;
+	background: radial-gradient(
+		ellipse at center bottom,
+		color-mix(in oklab, var(--akh-iris) 40%, transparent),
+		color-mix(in oklab, var(--akh-ember) 26%, transparent) 45%,
+		transparent 72%
+	);
+	filter: blur(50px);
+	z-index: -1;
+	opacity: 0.7;
+}
+.akh-finale .akh-cta-row {
+	justify-content: center;
+	margin-top: 30px;
+}
+
+/* ------------------------------------------------------------------ misc */
+
+.akh-link {
+	color: var(--akh-iris);
+	text-decoration: none;
+	font-weight: 500;
+}
+.akh-link:hover {
+	text-decoration: underline;
+}
+
+/* Respect reduced motion: GSAP already skips, but neutralize CSS transitions
+ * too so hover/active stay instant rather than easing. */
+@media (prefers-reduced-motion: reduce) {
+	.akh * {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+	}
+}
