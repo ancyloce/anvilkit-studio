@@ -1,0 +1,33 @@
+# Build context for the apps/demo and apps/docs images is the REPO ROOT.
+# Keep the context lean, but DO NOT exclude submodule source — the `@anvilkit/*`
+# workspace packages live in git submodules that must be present to build.
+# (apps/collab builds from its own directory and uses apps/collab/.dockerignore;
+# this file does not affect it.)
+
+# Dependencies and build output — reinstalled / rebuilt inside the image.
+**/node_modules
+**/.next
+**/.turbo
+**/.output
+**/.nitro
+**/.vercel
+**/dist
+**/coverage
+**/test-results
+**/playwright-report
+**/.cache
+
+# VCS / CI / editor noise (git metadata is not needed to build the apps).
+.git
+**/.git
+.github
+**/*.log
+
+# Local env files — never bake secrets into an image.
+**/.env
+**/.env.*
+!**/.env.example
+
+# Standalone Hocuspocus relay image — built separately with its own context,
+# and excluded from the pnpm workspace.
+apps/collab

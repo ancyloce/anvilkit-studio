@@ -36,10 +36,13 @@ export default defineConfig({
 			},
 		}),
 		react(),
-		// Hosting via Nitro (Vercel preset). See:
+		// Hosting via Nitro. Defaults to the Vercel preset (the production
+		// deploy target). A Docker build sets NITRO_PRESET=node-server to emit
+		// a runnable Node server at `.output/server/index.mjs` instead; the
+		// Vercel/CI build is unchanged because the env var is unset there. See:
 		// https://tanstack.com/start/latest/docs/framework/react/guide/hosting
 		nitro({
-			preset: "vercel",
+			preset: process.env.NITRO_PRESET ?? "vercel",
 		}),
 	],
 	resolve: {
