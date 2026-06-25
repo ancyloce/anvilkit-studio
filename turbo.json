@@ -49,13 +49,15 @@
 		"docs:build": {
 			"dependsOn": ["^build"],
 			"inputs": [
-				"astro.config.mjs",
+				"vite.config.ts",
+				"source.config.ts",
 				"package.json",
 				"tsconfig.json",
 				"src/**",
+				"content/**",
 				"public/**"
 			],
-			"outputs": ["dist/**", ".astro/**"]
+			"outputs": ["dist/**", ".output/**", ".nitro/**", ".vercel/output/**"]
 		},
 		"docs:dev": {
 			"cache": false,
