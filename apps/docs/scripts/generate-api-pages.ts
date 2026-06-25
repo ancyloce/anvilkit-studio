@@ -41,14 +41,23 @@ const PACKAGES_ROOT = join(WORKSPACE_ROOT, "packages");
 const OUT_DIR = join(DOCS_ROOT, "content", "docs", "api");
 const SNAPSHOT_DIR = join(DOCS_ROOT, ".api-snapshots");
 
-type PackageSlug = "core" | "ir" | "schema" | "validator" | "utils";
-
 type PackageEntry = {
-	slug: PackageSlug;
+	slug: string;
 	pkgName: string;
 	displayName: string;
 	summary: string;
 };
+
+// Plugins live under packages/plugins/<slug> and are documented under
+// api/plugins/<slug>. They are not uniformly TypeDoc-configured (only some ship
+// a typedoc.json, and not all have a local typedoc binary), so we drive TypeDoc
+// from the workspace: the hoisted root binary + the shared typedoc.base.json,
+// supplying entryPoints/tsconfig on the CLI. A plugin's own typedoc.json (richer
+// externalSymbolLinkMappings) is preferred when present.
+const PLUGINS_ROOT = join(PACKAGES_ROOT, "plugins");
+const PLUGINS_OUT = join(OUT_DIR, "plugins");
+const TYPEDOC_BIN = join(WORKSPACE_ROOT, "node_modules", ".bin", "typedoc");
+const TYPEDOC_BASE = join(WORKSPACE_ROOT, "typedoc.base.json");
 
 const PACKAGES: readonly PackageEntry[] = [
 	{
@@ -193,6 +202,169 @@ function generatePackage(entry: PackageEntry): void {
 
 	console.log(
 		`[generate-api-pages] wrote ${countMdx(finalOut)} pages → api/${entry.slug}/`,
+	);
+}
+
+// Markdown summaries come from package metadata and may contain `<Studio>` or
+// `|`, which break MDX/tables in a cell. Escape angle brackets + pipes.
+function escapeCell(text: string): string {
+	return text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\|/g, "\\|");
+}
+
+function titleCase(slug: string): string {
+	return slug
+		.replace(/^plugin-/, "")
+		.split("-")
+		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+		.join(" ");
+}
+
+// Discover every plugin package (packages/plugins/<slug> with src/index.ts) so
+// new plugins are picked up automatically. Display name comes from meta/config.json.
+function listPlugins(): PackageEntry[] {
+	if (!existsSync(PLUGINS_ROOT)) return [];
+	return readdirSync(PLUGINS_ROOT, { withFileTypes: true })
+		.filter(
+			(d) =>
+				d.isDirectory() &&
+				!d.name.startsWith(".") &&
+				existsSync(join(PLUGINS_ROOT, d.name, "package.json")) &&
+				existsSync(join(PLUGINS_ROOT, d.name, "src", "index.ts")),
+		)
+		.map((d) => {
+			const slug = d.name;
+			const pkg = JSON.parse(
+				readFileSync(join(PLUGINS_ROOT, slug, "package.json"), "utf8"),
+			) as { name: string; description?: string };
+			let displayName = titleCase(slug);
+			// Prefer meta/config.json's name + description (matches the /plugins
+			// catalog and avoids package.json descriptions that embed `<Studio>`).
+			let summary = (pkg.description ?? "").trim();
+			const metaPath = join(PLUGINS_ROOT, slug, "meta", "config.json");
+			if (existsSync(metaPath)) {
+				try {
+					const m = JSON.parse(readFileSync(metaPath, "utf8")) as {
+						name?: string;
+						description?: string;
+					};
+					if (m.name) displayName = m.name;
+					if (m.description) summary = m.description.trim();
+				} catch {
+					// fall back to the slug-derived title / package description
+				}
+			}
+			return {
+				slug,
+				pkgName: pkg.name,
+				displayName,
+				summary: summary || `Anvilkit ${displayName} plugin.`,
+			};
+		})
+		.sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+// True when a plugin's typedoc.json extends the shared base (which loads the
+// markdown plugin + table formatting). Configs without it produce HTML output.
+function configExtendsBase(configPath: string): boolean {
+	try {
+		const cfg = JSON.parse(readFileSync(configPath, "utf8")) as {
+			extends?: unknown;
+		};
+		const ext = Array.isArray(cfg.extends)
+			? cfg.extends
+			: typeof cfg.extends === "string"
+				? [cfg.extends]
+				: [];
+		return ext.some((e) => typeof e === "string" && e.includes("typedoc.base"));
+	} catch {
+		return false;
+	}
+}
+
+function generatePlugin(entry: PackageEntry): void {
+	const pkgDir = join(PLUGINS_ROOT, entry.slug);
+	if (!existsSync(TYPEDOC_BIN)) {
+		fail(
+			entry.slug,
+			`missing typedoc at ${relative(WORKSPACE_ROOT, TYPEDOC_BIN)} — run \`pnpm install\``,
+		);
+	}
+	// Prefer the plugin's own typedoc.json (richer cross-link maps), but ONLY when
+	// it extends the shared base — otherwise it would skip the markdown plugin and
+	// TypeDoc emits HTML (e.g. plugin-export-html's config has no `extends`). Fall
+	// back to the base config in that case. entryPoints/tsconfig/name are always
+	// supplied on the CLI (some configs omit them).
+	const ownConfig = join(pkgDir, "typedoc.json");
+	const optionsArg =
+		existsSync(ownConfig) && configExtendsBase(ownConfig)
+			? "./typedoc.json"
+			: TYPEDOC_BASE;
+
+	const tempOut = mkdtempSync(
+		join(tmpdir(), `anvilkit-typedoc-${entry.slug}-`),
+	);
+	const finalOut = join(PLUGINS_OUT, entry.slug);
+
+	console.log(`[generate-api-pages] ${entry.slug}: running TypeDoc…`);
+	const result = spawnSync(
+		TYPEDOC_BIN,
+		[
+			"--options",
+			optionsArg,
+			"--entryPoints",
+			"./src/index.ts",
+			"--tsconfig",
+			"./tsconfig.json",
+			"--name",
+			entry.pkgName,
+			"--out",
+			tempOut,
+		],
+		{
+			cwd: pkgDir,
+			stdio: ["ignore", "inherit", "inherit"],
+			env: { ...process.env, FORCE_COLOR: "0" },
+		},
+	);
+	if (result.status !== 0) {
+		fail(entry.slug, `typedoc exited with status ${result.status}`);
+	}
+
+	ensureCleanDir(finalOut);
+	migrateMarkdownTree(tempOut, finalOut, entry);
+	rmSync(tempOut, { recursive: true, force: true });
+	console.log(
+		`[generate-api-pages] wrote ${countMdx(finalOut)} pages → api/plugins/${entry.slug}/`,
+	);
+}
+
+function writePluginsIndex(plugins: PackageEntry[]): void {
+	const rows = plugins
+		.map(
+			(p) =>
+				`| [${p.displayName}](/api/plugins/${p.slug}) | \`${p.pkgName}\` | ${escapeCell(p.summary)} |`,
+		)
+		.join("\n");
+	const body = `---
+title: Plugins — API Reference
+description: Auto-generated TypeDoc reference for every @anvilkit/* Studio plugin.
+---
+
+TypeDoc reference for the public API (the \`src/index.ts\` entry) of every plugin
+under \`packages/plugins/\`, regenerated on every docs build. Subpath exports
+(e.g. \`./react\`, \`./mock\`) are not separately documented here — see each
+plugin's [guide](/plugins) for those.
+
+| Plugin | npm | Summary |
+|--------|-----|---------|
+${rows}
+`;
+	ensureDir(PLUGINS_OUT);
+	writeFileSync(join(PLUGINS_OUT, "index.mdx"), body, "utf8");
+	writeFileSync(
+		join(PLUGINS_OUT, "meta.json"),
+		`${JSON.stringify({ title: "Plugins", pages: ["index", "..."] }, null, "\t")}\n`,
+		"utf8",
 	);
 }
 
@@ -417,24 +589,41 @@ function countMdx(dir: string): number {
 	return count;
 }
 
-function writeApiIndex(): void {
+function writeApiIndex(plugins: PackageEntry[]): void {
 	const indexPath = join(OUT_DIR, "index.mdx");
 	const rows = PACKAGES.map(
 		(p) =>
-			`| [${p.displayName}](/api/${p.slug}) | \`${p.pkgName}\` | ${p.summary} |`,
+			`| [${p.displayName}](/api/${p.slug}) | \`${p.pkgName}\` | ${escapeCell(p.summary)} |`,
 	).join("\n");
+	const pluginRows = plugins
+		.map(
+			(p) =>
+				`| [${p.displayName}](/api/plugins/${p.slug}) | \`${p.pkgName}\` | ${escapeCell(p.summary)} |`,
+		)
+		.join("\n");
 	const body = `---
 title: API Reference
-description: Auto-generated TypeDoc reference for every Anvilkit runtime package.
+description: Auto-generated TypeDoc reference for every Anvilkit runtime package and plugin.
 ---
 
 This catalog is regenerated from each package's TypeDoc output on every docs
 build — see \`apps/docs/scripts/generate-api-pages.ts\`. Internal symbols (under
 \`**/internal/**\` or prefixed with \`_\`) are excluded.
 
+## Runtime packages
+
 | Package | npm | Summary |
 |---------|-----|---------|
 ${rows}
+
+## Plugins
+
+Public API for every \`@anvilkit/*\` plugin under \`packages/plugins/\` — also
+browsable from the [Plugins API index](/api/plugins).
+
+| Plugin | npm | Summary |
+|--------|-----|---------|
+${pluginRows}
 `;
 	ensureDir(OUT_DIR);
 	writeFileSync(indexPath, body, "utf8");
@@ -445,21 +634,37 @@ function main(): void {
 	for (const entry of PACKAGES) {
 		generatePackage(entry);
 	}
-	writeApiIndex();
+	const plugins = listPlugins();
+	for (const entry of plugins) {
+		generatePlugin(entry);
+	}
+	writePluginsIndex(plugins);
+	writeApiIndex(plugins);
 	// Fumadocs nav metadata for the API section.
 	writeFileSync(
 		join(OUT_DIR, "meta.json"),
 		`${JSON.stringify(
 			{
 				title: "API Reference",
-				pages: ["index", "core", "ir", "schema", "validator", "utils", "..."],
+				pages: [
+					"index",
+					"core",
+					"ir",
+					"schema",
+					"validator",
+					"utils",
+					"plugins",
+					"...",
+				],
 			},
 			null,
 			"\t",
 		)}\n`,
 		"utf8",
 	);
-	console.log(`[generate-api-pages] ${PACKAGES.length} packages + meta.json`);
+	console.log(
+		`[generate-api-pages] ${PACKAGES.length} runtime packages + ${plugins.length} plugins + meta.json`,
+	);
 }
 
 main();
