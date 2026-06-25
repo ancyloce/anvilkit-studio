@@ -2,7 +2,7 @@
 
 Reference `generatePage()` adapter for `@anvilkit/plugin-ai-copilot`
 backed by Anthropic's Claude API. See the companion AI integration
-guide at `apps/docs/src/content/docs/guides/ai-integration.mdx`
+guide at `apps/docs/content/docs/guides/ai-integration.mdx`
 (phase4-010) for the full trust model and adapter context.
 
 ## Use it
