@@ -3,7 +3,7 @@ import { z } from "zod";
 /**
  * CLI-side runtime parser for the marketplace registry feed.
  *
- * The CANONICAL schema lives in `apps/docs/src/registry/feed.schema.ts`.
+ * The CANONICAL schema lives in `apps/docs/src/registry/feed.schema.mjs`.
  * This copy is intentionally lenient: it asserts only the fields the CLI
  * relies on for `anvilkit add` resolution and codemod dispatch, and uses
  * `passthrough()` so feed-side additive bumps don't break the CLI.
