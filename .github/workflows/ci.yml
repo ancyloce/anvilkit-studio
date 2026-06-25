@@ -69,9 +69,10 @@ jobs:
       - name: Build workspace
         run: pnpm build
 
-      # Phase 4 (`phase4-001`): build the Starlight docs site on every
-      # PR. A broken docs build fails CI so drifted component docs,
-      # sidebar entries, and ADR references can't land unnoticed.
+      # Phase 4 (`phase4-001`): build the Fumadocs docs site (Vite /
+      # TanStack Start) on every PR. A broken docs build fails CI so
+      # drifted component docs, sidebar entries, and ADR references
+      # can't land unnoticed.
       #
       # Phase 4 (`phase4-005`): this step is a **correctness** gate.
       # The **deploy** gate lives on Vercel (`vercel.json` at repo
@@ -182,13 +183,12 @@ jobs:
           path: apps/demo/playwright-report/
           retention-days: 7
 
-      # Phase 4 (`phase4-004`): docs site playground smoke test. The
-      # spec boots the Starlight preview server, asserts all 11
-      # component palette entries, drives the HTML export button,
-      # and verifies the localStorage round-trip. The demo step
-      # above already installed the Chromium browser binary — we
-      # just need the `@anvilkit/docs-site` Playwright config to
-      # pick it up.
+      # Phase 4 (`phase4-004`): docs site playground + marketplace
+      # smoke tests. The specs boot the Vite dev server (TanStack
+      # Start), mount the Puck `/playground`, and exercise the
+      # marketplace catalog. The demo step above already installed
+      # the Chromium browser binary — we just need the
+      # `@anvilkit/docs-site` Playwright config to pick it up.
       - name: Install Playwright browsers (docs)
         run: pnpm --filter @anvilkit/docs-site exec playwright install --with-deps chromium
 
