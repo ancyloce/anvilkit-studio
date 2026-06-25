@@ -22,6 +22,7 @@
 		"generate:plugins": "jiti scripts/generate-plugin-pages.ts",
 		"generate:all": "pnpm generate:components && pnpm generate:api && pnpm generate:plugins && pnpm generate:templates && pnpm generate:registry",
 		"generate:api": "jiti scripts/generate-api-pages.ts",
+		"check:i18n": "node scripts/check-i18n.mjs",
 		"docs:build": "vite build",
 		"docs:dev": "vite dev"
 	},
