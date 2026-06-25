@@ -2,7 +2,7 @@
  * @anvilkit/plugin-__NAME__ - __DISPLAY_COMMENT__ (category: __CATEGORY__).
  *
  * See the plugin authoring guide for the full StudioPlugin contract:
- *   https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/src/content/docs/guides/plugin-authoring.mdx
+ *   https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/content/docs/guides/plugin-authoring.mdx
  *
  * Subpath-export coupling: this plugin imports from
  * `@anvilkit/core/types` and (in tests) `@anvilkit/core/testing`.
@@ -47,7 +47,7 @@ export function __FACTORY__(
       // fields (e.g. `puckExtensions`, custom `hooks`) alongside
       // `meta`/`hooks` as needed. The plugin authoring guide
       // enumerates every supported extension point:
-      // https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/src/content/docs/guides/plugin-authoring.mdx
+      // https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/content/docs/guides/plugin-authoring.mdx
       return {
         meta: META,
         hooks: {
