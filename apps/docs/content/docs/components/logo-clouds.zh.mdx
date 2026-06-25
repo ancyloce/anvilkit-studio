@@ -11,29 +11,31 @@ description: "Anvilkit Puck 原生 LogoClouds 组件。"
 
 <ComponentPreview name="LogoClouds" />
 
-A Puck-native logo cloud component with a shimmering heading and a scrolling Devicon logo marquee.
+一个 Puck 原生的 logo 云组件，带有微光标题和滚动的 Devicon logo 走马灯。
 
-## Install
+## 安装
+
+将该包的样式表从应用入口处导入一次，然后再渲染该组件。
 
 ```sh
 pnpm add @anvilkit/logo-clouds @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## 样式
 
-Import the package stylesheet once from your app entry before rendering the component.
+将该包的样式表从应用入口处导入一次，然后再渲染该组件。
 
 ```tsx
 import "@anvilkit/logo-clouds/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+在 Next.js 中，将该导入添加到 `app/layout.tsx` 或 `pages/_app.tsx`。
 
-## Examples
+## 示例
 
-### Basic usage
+### 基本用法
 
-Render the section with its default copy via `defaultProps`.
+通过 `defaultProps` 使用默认文案渲染该区块。
 
 ```tsx
 import "@anvilkit/logo-clouds/styles.css";
@@ -44,10 +46,9 @@ export function Example() {
 }
 ```
 
-### Custom heading and subtitle
+### 自定义标题和副标题
 
-The shimmering heading is driven by `title`; `subtitle` renders the supporting
-copy beneath it. The scrolling logo marquee is built in.
+微光标题由 `title` 驱动；`subtitle` 渲染其下方的辅助文案。滚动的 logo 走马灯是内置的。
 
 ```tsx
 import { LogoClouds } from "@anvilkit/logo-clouds";
@@ -62,9 +63,9 @@ export function TrustedBy() {
 }
 ```
 
-### Register in a Puck config
+### 在 Puck 配置中注册
 
-Wire the exported `componentConfig` into a Puck `Config`.
+将导出的 `componentConfig` 接入 Puck `Config`。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -79,16 +80,16 @@ const config: Config<{ LogoClouds: LogoCloudsProps }> = {
 
 ## API
 
-Derived from the exported `LogoCloudsProps` type and the Puck `fields` schema.
+派生自导出的 `LogoCloudsProps` 类型和 Puck `fields` schema。
 
 | Prop       | Type     | Default             | Description                        |
 | ---------- | -------- | ------------------- | ---------------------------------- |
-| `title`    | `string` | `"Brands love us"`  | Shimmering heading text.           |
-| `subtitle` | `string` | _(trusted-by copy)_ | Supporting copy below the heading. |
+| `title`    | `string` | `"Brands love us"`  | 微光标题文本。                     |
+| `subtitle` | `string` | _(trusted-by copy)_ | 标题下方的辅助文案。               |
 
-## Theme & Responsiveness
+## 主题与响应式
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+通过 shadcn CSS 变量令牌支持浅色和深色主题。在移动端、平板和桌面端各断点下均可自适应。
 
 ## 属性参考
 

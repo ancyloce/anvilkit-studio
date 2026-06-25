@@ -11,30 +11,29 @@ description: "Anvilkit Puck ネイティブの Hero コンポーネント。"
 
 <ComponentPreview name="Hero" />
 
-A Puck-native marketing hero component with a striped dark backdrop, announcement pill, and dual download CTAs.
+ストライプのダークな背景、アナウンスメントピル、2 つのダウンロード CTA を備えた Puck ネイティブのマーケティング hero コンポーネント。
 
-## Install
+## インストール
 
 ```sh
 pnpm add @anvilkit/hero @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## スタイル
 
-Import the package stylesheet once from your app entry before rendering the component.
+コンポーネントをレンダリングする前に、アプリのエントリポイントからパッケージのスタイルシートを一度インポートしてください。
 
 ```tsx
 import "@anvilkit/hero/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js では、このインポートを `app/layout.tsx` または `pages/_app.tsx` に追加します。
 
-## Examples
+## 例
 
-### Basic usage
+### 基本的な使い方
 
-Render the hero with custom copy. `headline` and `description` honor line breaks
-(`\n`).
+カスタムコピーで hero をレンダリングします。`headline` と `description` は改行（`\n`）に対応します。
 
 ```tsx
 import "@anvilkit/hero/styles.css";
@@ -55,11 +54,9 @@ export function Example() {
 }
 ```
 
-### Linked announcement pill
+### リンク付きアナウンスメントピル
 
-Set `announcementHref` to turn the pill into a link; `announcementOpenInNewTab`
-opens it in a new tab. Each download CTA has the same `href` / `openInNewTab`
-pairing.
+`announcementHref` を設定するとピルがリンクになります。`announcementOpenInNewTab` を指定すると新しいタブで開きます。各ダウンロード CTA も同じ `href` / `openInNewTab` のペアを持ちます。
 
 ```tsx
 import { Hero } from "@anvilkit/hero";
@@ -82,9 +79,9 @@ export function LaunchHero() {
 }
 ```
 
-### Register in a Puck config
+### Puck 設定への登録
 
-Wire the exported `componentConfig` into a Puck `Config`.
+エクスポートされた `componentConfig` を Puck `Config` に組み込みます。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -99,25 +96,25 @@ const config: Config<{ Hero: HeroProps }> = {
 
 ## API
 
-Derived from the exported `HeroProps` type and the Puck `fields` schema.
+エクスポートされた `HeroProps` 型と Puck `fields` スキーマから導出されています。
 
 | Prop                       | Type      | Default                                  | Description                              |
 | -------------------------- | --------- | ---------------------------------------- | ---------------------------------------- |
-| `announcementLabel`        | `string`  | `"We raised $69M pre seed"`              | Announcement pill text.                  |
-| `announcementHref`         | `string`  | `""`                                     | Announcement link URL.                   |
-| `announcementOpenInNewTab` | `boolean` | `false`                                  | Open the announcement link in a new tab. |
-| `headline`                 | `string`  | `"Write fast with\naccurate precision."` | Hero headline (supports line breaks).    |
-| `description`              | `string`  | `"Our state of the art tool..."`         | Hero description (supports line breaks). |
-| `linuxLabel`               | `string`  | `"Download for Linux"`                   | Linux CTA label.                         |
-| `linuxHref`                | `string`  | `"/download/linux"`                      | Linux CTA link.                          |
-| `linuxOpenInNewTab`        | `boolean` | `false`                                  | Open the Linux CTA in a new tab.         |
-| `windowsLabel`             | `string`  | `"Download for Windows"`                 | Windows CTA label.                       |
-| `windowsHref`              | `string`  | `"/download/windows"`                    | Windows CTA link.                        |
-| `windowsOpenInNewTab`      | `boolean` | `false`                                  | Open the Windows CTA in a new tab.       |
+| `announcementLabel`        | `string`  | `"We raised $69M pre seed"`              | アナウンスメントピルのテキスト。         |
+| `announcementHref`         | `string`  | `""`                                     | アナウンスメントのリンク URL。           |
+| `announcementOpenInNewTab` | `boolean` | `false`                                  | アナウンスメントのリンクを新しいタブで開きます。 |
+| `headline`                 | `string`  | `"Write fast with\naccurate precision."` | Hero の見出し（改行に対応）。            |
+| `description`              | `string`  | `"Our state of the art tool..."`         | Hero の説明文（改行に対応）。            |
+| `linuxLabel`               | `string`  | `"Download for Linux"`                   | Linux CTA のラベル。                     |
+| `linuxHref`                | `string`  | `"/download/linux"`                      | Linux CTA のリンク。                     |
+| `linuxOpenInNewTab`        | `boolean` | `false`                                  | Linux CTA を新しいタブで開きます。       |
+| `windowsLabel`             | `string`  | `"Download for Windows"`                 | Windows CTA のラベル。                   |
+| `windowsHref`              | `string`  | `"/download/windows"`                    | Windows CTA のリンク。                   |
+| `windowsOpenInNewTab`      | `boolean` | `false`                                  | Windows CTA を新しいタブで開きます。     |
 
-## Theme & Responsiveness
+## テーマとレスポンシブ対応
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn CSS 変数トークンによりライトテーマとダークテーマに対応します。モバイル、タブレット、デスクトップのブレークポイント全体でレスポンシブに対応します。
 
 ## プロパティリファレンス
 

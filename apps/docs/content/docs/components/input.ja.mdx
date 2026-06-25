@@ -11,29 +11,29 @@ description: "Anvilkit Puck ネイティブの Input コンポーネント。"
 
 <ComponentPreview name="Input" />
 
-A Puck-native form input block with label, helper text, and validation support.
+ラベル、ヘルパーテキスト、検証サポートを備えた Puck ネイティブのフォーム入力ブロック。
 
-## Install
+## インストール
 
 ```sh
 pnpm add @anvilkit/input @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## スタイル
 
-Import the package stylesheet once from your app entry before rendering the component.
+コンポーネントをレンダリングする前に、アプリのエントリポイントからパッケージのスタイルシートを一度インポートしてください。
 
 ```tsx
 import "@anvilkit/input/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js では、このインポートを `app/layout.tsx` または `pages/_app.tsx` に追加します。
 
-## Examples
+## 例
 
-### Basic usage
+### 基本的な使い方
 
-Render a labelled email input with placeholder text.
+プレースホルダーテキスト付きのラベル付きメールアドレス入力をレンダリングします。
 
 ```tsx
 import "@anvilkit/input/styles.css";
@@ -46,10 +46,9 @@ export function Example() {
 }
 ```
 
-### Required field with helper text
+### ヘルパーテキスト付きの必須フィールド
 
-Switch the input `type`, mark it `required` (appends `*` to the label and sets
-the native `required` attribute), and surface guidance with `helperText`.
+入力の `type` を切り替え、`required` としてマークし（ラベルに `*` を追加し、ネイティブの `required` 属性を設定します）、`helperText` でガイダンスを表示します。
 
 ```tsx
 import { Input } from "@anvilkit/input";
@@ -68,10 +67,9 @@ export function PasswordField() {
 }
 ```
 
-### Register in a Puck config
+### Puck 設定への登録
 
-Wire the exported `componentConfig` into a Puck `Config` so authors can add the
-field to a form.
+エクスポートされた `componentConfig` を Puck `Config` に組み込むことで、作成者がフィールドをフォームに追加できるようにします。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -86,22 +84,22 @@ const config: Config<{ Input: InputProps }> = {
 
 ## API
 
-Derived from the exported `InputProps` type and the Puck `fields` schema.
+エクスポートされた `InputProps` 型と Puck `fields` スキーマから導出されています。
 
 | Prop           | Type                                                                      | Default                                          | Description                            |
 | -------------- | ------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| `label`        | `string`                                                                  | `"Email address"`                                | Field label.                           |
-| `name`         | `string`                                                                  | `"email"`                                        | Form field name.                       |
-| `type`         | `"text"` \| `"email"` \| `"password"` \| `"search"` \| `"tel"` \| `"url"` | `"email"`                                        | Input type.                            |
-| `placeholder`  | `string`                                                                  | `"Enter your email"`                             | Placeholder text.                      |
-| `helperText`   | `string`                                                                  | `"We will only use this for important updates."` | Helper text shown below the field.     |
-| `defaultValue` | `string`                                                                  | `""`                                             | Initial uncontrolled value.            |
-| `required`     | `boolean`                                                                 | `false`                                          | Mark the field required (appends `*`). |
-| `disabled`     | `boolean`                                                                 | `false`                                          | Disable the field.                     |
+| `label`        | `string`                                                                  | `"Email address"`                                | フィールドのラベル。                   |
+| `name`         | `string`                                                                  | `"email"`                                        | フォームフィールド名。                 |
+| `type`         | `"text"` \| `"email"` \| `"password"` \| `"search"` \| `"tel"` \| `"url"` | `"email"`                                        | 入力タイプ。                           |
+| `placeholder`  | `string`                                                                  | `"Enter your email"`                             | プレースホルダーテキスト。             |
+| `helperText`   | `string`                                                                  | `"We will only use this for important updates."` | フィールドの下に表示されるヘルパーテキスト。 |
+| `defaultValue` | `string`                                                                  | `""`                                             | 初期の非制御値。                       |
+| `required`     | `boolean`                                                                 | `false`                                          | フィールドを必須としてマークします（`*` を追加）。 |
+| `disabled`     | `boolean`                                                                 | `false`                                          | フィールドを無効にします。             |
 
-## Theme & Responsiveness
+## テーマとレスポンシブ対応
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn CSS 変数トークンによりライトテーマとダークテーマに対応します。モバイル、タブレット、デスクトップのブレークポイント全体でレスポンシブに対応します。
 
 ## プロパティリファレンス
 

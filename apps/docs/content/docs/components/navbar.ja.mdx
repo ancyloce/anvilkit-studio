@@ -11,30 +11,31 @@ description: "Anvilkit Puck ネイティブの Navbar コンポーネント。"
 
 <ComponentPreview name="Navbar" />
 
-A Puck-native navbar layout component with logo, navigation items, and action buttons.
+ロゴ、ナビゲーション項目、アクションボタンを備えた、Puck ネイティブのナビゲーションバーレイアウトコンポーネント。
 
-## Install
+## インストール
+
+コンポーネントをレンダリングする前に、パッケージのスタイルシートをアプリのエントリポイントから一度だけインポートしてください。
 
 ```sh
 pnpm add @anvilkit/navbar @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## スタイル
 
-Import the package stylesheet once from your app entry before rendering the component.
+コンポーネントをレンダリングする前に、パッケージのスタイルシートをアプリのエントリポイントから一度だけインポートしてください。
 
 ```tsx
 import "@anvilkit/navbar/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js では、このインポートを `app/layout.tsx` または `pages/_app.tsx` に追加してください。
 
-## Examples
+## 例
 
-### Basic usage
+### 基本的な使い方
 
-A text logo, a few links, and a single call-to-action. The `active` href
-highlights the matching menu item.
+テキストロゴ、いくつかのリンク、単一の行動喚起。`active` href が一致するメニュー項目をハイライトします。
 
 ```tsx
 import "@anvilkit/navbar/styles.css";
@@ -55,10 +56,9 @@ export function Example() {
 }
 ```
 
-### Image logo with multiple actions
+### 画像ロゴと複数のアクション
 
-Switch the logo to `image`, and render several actions with different variants
-and sizes.
+ロゴを `image` に切り替え、異なるバリアントとサイズを持つ複数のアクションをレンダリングします。
 
 ```tsx
 import { Navbar } from "@anvilkit/navbar";
@@ -86,9 +86,9 @@ export function MarketingNav() {
 }
 ```
 
-### Register in a Puck config
+### Puck 設定への登録
 
-Wire the exported `componentConfig` into a Puck `Config`.
+エクスポートされた `componentConfig` を Puck `Config` に組み込みます。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -103,31 +103,31 @@ const config: Config<{ Navbar: NavbarProps }> = {
 
 ## API
 
-Derived from the exported `NavbarProps` type and the Puck `fields` schema.
+エクスポートされた `NavbarProps` 型と Puck `fields` スキーマから導出されています。
 
 | Prop                     | Type                                                                                    | Default              | Description                          |
 | ------------------------ | --------------------------------------------------------------------------------------- | -------------------- | ------------------------------------ |
-| `logo`                   | `object`                                                                                | _(text logo)_        | Logo configuration.                  |
-| `logo.type`              | `"text"` \| `"image"`                                                                   | `"text"`             | Render the logo as text or an image. |
-| `logo.text`              | `string`                                                                                | `"Underline"`        | Display text (when type is `text`).  |
-| `logo.imageUrl`          | `string`                                                                                | `""`                 | Image URL (when type is `image`).    |
-| `logo.alt`               | `string`                                                                                | `"Underline"`        | Image alt text.                      |
-| `logo.href`              | `string`                                                                                | `"/"`                | Logo link URL.                       |
-| `items`                  | `NavbarMenuItem[]`                                                                      | _(5 example links)_  | Navigation menu items.               |
-| `items[].label`          | `string`                                                                                | `"New link"`         | Menu item label.                     |
-| `items[].href`           | `string`                                                                                | `"/"`                | Menu item link.                      |
-| `actions`                | `NavbarAction[]`                                                                        | _(1 example action)_ | Action buttons.                      |
-| `actions[].label`        | `string`                                                                                | `"Action"`           | Button label.                        |
-| `actions[].href`         | `string`                                                                                | `""`                 | Button link.                         |
-| `actions[].variant`      | `"default"` \| `"secondary"` \| `"outline"` \| `"ghost"` \| `"link"` \| `"destructive"` | `"secondary"`        | Button variant.                      |
-| `actions[].size`         | `"sm"` \| `"default"` \| `"lg"`                                                         | `"lg"`               | Button size.                         |
-| `actions[].openInNewTab` | `boolean`                                                                               | `false`              | Open the link in a new tab.          |
-| `actions[].disabled`     | `boolean`                                                                               | `false`              | Disable the action button.           |
-| `active`                 | `string`                                                                                | `"/features"`        | Href of the currently active item.   |
+| `logo`                   | `object`                                                                                | _(text logo)_        | ロゴの設定。                         |
+| `logo.type`              | `"text"` \| `"image"`                                                                   | `"text"`             | ロゴをテキストまたは画像としてレンダリングします。 |
+| `logo.text`              | `string`                                                                                | `"Underline"`        | 表示テキスト（type が `text` の場合）。 |
+| `logo.imageUrl`          | `string`                                                                                | `""`                 | 画像 URL（type が `image` の場合）。 |
+| `logo.alt`               | `string`                                                                                | `"Underline"`        | 画像の alt テキスト。                |
+| `logo.href`              | `string`                                                                                | `"/"`                | ロゴのリンク URL。                   |
+| `items`                  | `NavbarMenuItem[]`                                                                      | _(5 example links)_  | ナビゲーションメニュー項目。         |
+| `items[].label`          | `string`                                                                                | `"New link"`         | メニュー項目のラベル。               |
+| `items[].href`           | `string`                                                                                | `"/"`                | メニュー項目のリンク。               |
+| `actions`                | `NavbarAction[]`                                                                        | _(1 example action)_ | アクションボタン。                   |
+| `actions[].label`        | `string`                                                                                | `"Action"`           | ボタンのラベル。                     |
+| `actions[].href`         | `string`                                                                                | `""`                 | ボタンのリンク。                     |
+| `actions[].variant`      | `"default"` \| `"secondary"` \| `"outline"` \| `"ghost"` \| `"link"` \| `"destructive"` | `"secondary"`        | ボタンのバリアント。                 |
+| `actions[].size`         | `"sm"` \| `"default"` \| `"lg"`                                                         | `"lg"`               | ボタンのサイズ。                     |
+| `actions[].openInNewTab` | `boolean`                                                                               | `false`              | リンクを新しいタブで開きます。       |
+| `actions[].disabled`     | `boolean`                                                                               | `false`              | アクションボタンを無効化します。     |
+| `active`                 | `string`                                                                                | `"/features"`        | 現在アクティブな項目の href。        |
 
-## Theme & Responsiveness
+## テーマとレスポンシブ対応
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints. Collapses into a hamburger menu on mobile.
+shadcn の CSS 変数トークンを介してライトテーマとダークテーマをサポートします。モバイル、タブレット、デスクトップの各ブレークポイントにわたってレスポンシブです。モバイルではハンバーガーメニューに折りたたまれます。
 
 ## プロパティリファレンス
 

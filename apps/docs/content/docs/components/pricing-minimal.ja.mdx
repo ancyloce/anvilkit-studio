@@ -11,29 +11,31 @@ description: "Anvilkit Puck ネイティブの PricingMinimal コンポーネン
 
 <ComponentPreview name="PricingMinimal" />
 
-A Puck-native pricing section with headline, description, and configurable plan cards.
+見出し、説明、設定可能なプランカードを備えた、Puck ネイティブの料金セクション。
 
-## Install
+## インストール
+
+コンポーネントをレンダリングする前に、パッケージのスタイルシートをアプリのエントリポイントから一度だけインポートしてください。
 
 ```sh
 pnpm add @anvilkit/pricing-minimal @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## スタイル
 
-Import the package stylesheet once from your app entry before rendering the component.
+コンポーネントをレンダリングする前に、パッケージのスタイルシートをアプリのエントリポイントから一度だけインポートしてください。
 
 ```tsx
 import "@anvilkit/pricing-minimal/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js では、このインポートを `app/layout.tsx` または `pages/_app.tsx` に追加してください。
 
-## Examples
+## 例
 
-### Basic usage
+### 基本的な使い方
 
-Render the section with the bundled three-plan example via `defaultProps`.
+`defaultProps` を使い、同梱の 3 プランの例でセクションをレンダリングします。
 
 ```tsx
 import "@anvilkit/pricing-minimal/styles.css";
@@ -44,10 +46,9 @@ export function Example() {
 }
 ```
 
-### Custom plans with a featured card
+### おすすめカード付きのカスタムプラン
 
-Each plan accepts a `features` list and an optional `extraFeatures` list shown
-below a divider. Set `featured` plus a `badgeLabel` to highlight a plan.
+各プランは `features` リストと、区切り線の下に表示される省略可能な `extraFeatures` リストを受け取ります。`featured` と `badgeLabel` を設定すると、プランをハイライトできます。
 
 ```tsx
 import { PricingMinimal } from "@anvilkit/pricing-minimal";
@@ -88,9 +89,9 @@ export function TwoTier() {
 }
 ```
 
-### Register in a Puck config
+### Puck 設定への登録
 
-Wire the exported `componentConfig` into a Puck `Config`.
+エクスポートされた `componentConfig` を Puck `Config` に組み込みます。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -108,30 +109,30 @@ const config: Config<{ PricingMinimal: PricingMinimalProps }> = {
 
 ## API
 
-Derived from the exported `PricingMinimalProps` type and the Puck `fields` schema.
+エクスポートされた `PricingMinimalProps` 型と Puck `fields` スキーマから導出されています。
 
 | Prop                            | Type               | Default                              | Description                            |
 | ------------------------------- | ------------------ | ------------------------------------ | -------------------------------------- |
-| `headline`                      | `string`           | `"Simple, Transparent Pricing"`      | Section headline.                      |
-| `description`                   | `string`           | `"Choose a plan that works best..."` | Section description.                   |
-| `plans`                         | `PricingPlan[]`    | _(3 example plans)_                  | Pricing plan cards.                    |
-| `plans[].name`                  | `string`           | `"New plan"`                         | Plan name.                             |
-| `plans[].description`           | `string`           | —                                    | Plan description.                      |
-| `plans[].price`                 | `string`           | `"$0"`                               | Display price.                         |
-| `plans[].billingPeriodLabel`    | `string`           | `"per month"`                        | Billing period text.                   |
-| `plans[].ctaLabel`              | `string`           | `"Get Started"`                      | CTA button label.                      |
-| `plans[].ctaHref`               | `string`           | `""`                                 | CTA button link.                       |
-| `plans[].ctaOpenInNewTab`       | `boolean`          | `false`                              | Open the CTA in a new tab.             |
-| `plans[].featured`              | `boolean`          | `false`                              | Highlight as the featured plan.        |
-| `plans[].badgeLabel`            | `string`           | `""`                                 | Badge text shown on a featured plan.   |
-| `plans[].features`              | `PricingFeature[]` | —                                    | Feature list items.                    |
-| `plans[].features[].label`      | `string`           | `"Feature"`                          | Feature label.                         |
-| `plans[].extraFeatures`         | `PricingFeature[]` | `[]`                                 | Additional features below the divider. |
-| `plans[].extraFeatures[].label` | `string`           | `"Extra feature"`                    | Extra feature label.                   |
+| `headline`                      | `string`           | `"Simple, Transparent Pricing"`      | セクションの見出し。                   |
+| `description`                   | `string`           | `"Choose a plan that works best..."` | セクションの説明。                     |
+| `plans`                         | `PricingPlan[]`    | _(3 example plans)_                  | 料金プランのカード。                   |
+| `plans[].name`                  | `string`           | `"New plan"`                         | プラン名。                             |
+| `plans[].description`           | `string`           | —                                    | プランの説明。                         |
+| `plans[].price`                 | `string`           | `"$0"`                               | 表示価格。                             |
+| `plans[].billingPeriodLabel`    | `string`           | `"per month"`                        | 請求期間のテキスト。                   |
+| `plans[].ctaLabel`              | `string`           | `"Get Started"`                      | CTA ボタンのラベル。                   |
+| `plans[].ctaHref`               | `string`           | `""`                                 | CTA ボタンのリンク。                   |
+| `plans[].ctaOpenInNewTab`       | `boolean`          | `false`                              | CTA を新しいタブで開きます。           |
+| `plans[].featured`              | `boolean`          | `false`                              | おすすめプランとしてハイライトします。 |
+| `plans[].badgeLabel`            | `string`           | `""`                                 | おすすめプランに表示されるバッジのテキスト。 |
+| `plans[].features`              | `PricingFeature[]` | —                                    | 機能リストの項目。                     |
+| `plans[].features[].label`      | `string`           | `"Feature"`                          | 機能のラベル。                         |
+| `plans[].extraFeatures`         | `PricingFeature[]` | `[]`                                 | 区切り線の下に表示される追加機能。     |
+| `plans[].extraFeatures[].label` | `string`           | `"Extra feature"`                    | 追加機能のラベル。                     |
 
-## Theme & Responsiveness
+## テーマとレスポンシブ対応
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints. Plan cards stack vertically on mobile and display side-by-side on wider viewports.
+shadcn の CSS 変数トークンを介してライトテーマとダークテーマをサポートします。モバイル、タブレット、デスクトップの各ブレークポイントにわたってレスポンシブです。プランカードはモバイルでは縦に積み重なり、より広いビューポートでは横並びに表示されます。
 
 ## プロパティリファレンス
 

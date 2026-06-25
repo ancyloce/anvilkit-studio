@@ -11,29 +11,29 @@ description: "Anvilkit Puck ネイティブの Button コンポーネント。"
 
 <ComponentPreview name="Button" />
 
-A Puck-native button block with variant and link support.
+バリアントとリンクをサポートする Puck ネイティブのボタンブロック。
 
-## Install
+## インストール
 
 ```sh
 pnpm add @anvilkit/button @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## スタイル
 
-Import the package stylesheet once from your app entry before rendering the component.
+コンポーネントをレンダリングする前に、アプリのエントリポイントからパッケージのスタイルシートを一度インポートします。
 
 ```tsx
 import "@anvilkit/button/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js では、このインポートを `app/layout.tsx` または `pages/_app.tsx` に追加します。
 
-## Examples
+## 例
 
-### Basic usage
+### 基本的な使い方
 
-Render the button standalone with its default primary variant.
+デフォルトの primary バリアントで、ボタンを単独でレンダリングします。
 
 ```tsx
 import "@anvilkit/button/styles.css";
@@ -44,11 +44,9 @@ export function Example() {
 }
 ```
 
-### Link button opening a new tab
+### 新しいタブで開くリンクボタン
 
-Provide `href` to render an anchor; pair it with `openInNewTab` to add
-`target="_blank"` plus safe `rel` attributes. A `disabled` button is
-non-interactive and announces `aria-disabled`.
+`href` を指定するとアンカーがレンダリングされます。`openInNewTab` と組み合わせると、`target="_blank"` と安全な `rel` 属性が追加されます。`disabled` のボタンは操作不能になり、`aria-disabled` をアナウンスします。
 
 ```tsx
 import { Button } from "@anvilkit/button";
@@ -68,10 +66,9 @@ export function Actions() {
 }
 ```
 
-### Register in a Puck config
+### Puck 設定への登録
 
-Wire the exported `componentConfig` into a Puck `Config` so authors can drop the
-button onto a page.
+作成者がボタンをページにドロップできるように、エクスポートされた `componentConfig` を Puck の `Config` に組み込みます。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -86,22 +83,22 @@ const config: Config<{ Button: ButtonProps }> = {
 
 ## API
 
-Derived from the exported `ButtonProps` type and the Puck `fields` schema.
+エクスポートされた `ButtonProps` 型と Puck の `fields` スキーマから導出されています。
 
 | Prop           | Type                         | Default          | Description                                                  |
 | -------------- | ---------------------------- | ---------------- | ----------------------------------------------------------- |
-| `label`        | `string`                     | `"Save changes"` | Button label text.                                          |
-| `variant`      | `"primary"` \| `"secondary"` | `"primary"`      | Visual variant.                                             |
-| `href`         | `string`                     | `""`             | Link URL; renders an anchor when set.                       |
-| `openInNewTab` | `boolean`                    | `false`          | Open the link in a new tab.                                 |
-| `disabled`     | `boolean`                    | `false`          | Disable interaction.                                        |
-| `trackClick`   | `boolean`                    | `false`          | Fire an analytics event on click (requires an analytics provider). |
-| `eventName`    | `string`                     | —                | Event name; defaults to `button_click`.                     |
-| `eventProps`   | `{ category?: string; placement?: string }` | — | Extra properties merged into the click event.               |
+| `label`        | `string`                     | `"Save changes"` | ボタンのラベルテキスト。                                    |
+| `variant`      | `"primary"` \| `"secondary"` | `"primary"`      | ビジュアルバリアント。                                      |
+| `href`         | `string`                     | `""`             | リンク URL。設定するとアンカーがレンダリングされる。        |
+| `openInNewTab` | `boolean`                    | `false`          | リンクを新しいタブで開く。                                  |
+| `disabled`     | `boolean`                    | `false`          | 操作を無効化する。                                          |
+| `trackClick`   | `boolean`                    | `false`          | クリック時に分析イベントを発火する（分析プロバイダーが必要）。 |
+| `eventName`    | `string`                     | —                | イベント名。デフォルトは `button_click`。                   |
+| `eventProps`   | `{ category?: string; placement?: string }` | — | クリックイベントにマージされる追加プロパティ。              |
 
-## Theme & Responsiveness
+## テーマとレスポンシブ対応
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn の CSS 変数トークンを通じて、ライトテーマとダークテーマをサポートします。モバイル、タブレット、デスクトップのブレークポイント全体でレスポンシブに対応します。
 
 ## プロパティリファレンス
 

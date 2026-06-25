@@ -11,29 +11,29 @@ description: "Anvilkit Puck ネイティブの BlogList コンポーネント。
 
 <ComponentPreview name="BlogList" />
 
-A Puck-native blog post grid with image cards, dates, and links.
+画像カード、日付、リンクを備えた Puck ネイティブのブログ記事グリッド。
 
-## Install
+## インストール
 
 ```sh
 pnpm add @anvilkit/blog-list @puckeditor/core
 ```
 
-## Styles
+## スタイル
 
-Import the package stylesheet once from your app entry before rendering the component.
+コンポーネントをレンダリングする前に、アプリのエントリポイントからパッケージのスタイルシートを一度インポートします。
 
 ```tsx
 import "@anvilkit/blog-list/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js では、このインポートを `app/layout.tsx` または `pages/_app.tsx` に追加します。
 
-## Examples
+## 例
 
-### Basic usage
+### 基本的な使い方
 
-Render the grid with the bundled example posts via `defaultProps`.
+`defaultProps` を使って、同梱されたサンプル記事でグリッドをレンダリングします。
 
 ```tsx
 import "@anvilkit/blog-list/styles.css";
@@ -44,11 +44,9 @@ export function Example() {
 }
 ```
 
-### Custom posts with external links
+### 外部リンク付きのカスタム記事
 
-Each post renders a cover image, a published date (with an optional relative
-label), a title, and a description. Set `href` to make the card a link;
-`openInNewTab` adds `target="_blank"` plus safe `rel` attributes.
+各記事は、カバー画像、公開日（オプションで相対ラベル付き）、タイトル、説明をレンダリングします。`href` を設定するとカードがリンクになります。`openInNewTab` は `target="_blank"` と安全な `rel` 属性を追加します。
 
 ```tsx
 import { BlogList } from "@anvilkit/blog-list";
@@ -74,9 +72,9 @@ export function LatestPosts() {
 }
 ```
 
-### Register in a Puck config
+### Puck 設定への登録
 
-Wire the exported `componentConfig` into a Puck `Config`.
+エクスポートされた `componentConfig` を Puck の `Config` に組み込みます。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -91,24 +89,24 @@ const config: Config<{ BlogList: BlogListProps }> = {
 
 ## API
 
-Derived from the exported `BlogListProps` type and the Puck `fields` schema.
+エクスポートされた `BlogListProps` 型と Puck の `fields` スキーマから導出されています。
 
 | Prop                     | Type             | Default              | Description                                 |
 | ------------------------ | ---------------- | -------------------- | ------------------------------------------- |
-| `posts`                  | `BlogListPost[]` | _(3 example posts)_  | Blog post entries.                          |
-| `posts[].title`          | `string`         | `"New post"`         | Post title.                                 |
-| `posts[].description`    | `string`         | —                    | Post summary.                               |
-| `posts[].href`           | `string`         | `"/blog/new-post"`   | Link URL (card becomes a link when set).    |
-| `posts[].openInNewTab`   | `boolean`        | `false`              | Open the link in a new tab.                 |
-| `posts[].imageSrc`       | `string`         | _(Unsplash sample)_  | Cover image URL.                            |
-| `posts[].imageAlt`       | `string`         | `"New post"`         | Cover image alt text.                       |
-| `posts[].publishedAt`    | `string`         | `"2024-11-01"`       | ISO date string (used when no label given). |
-| `posts[].publishedLabel` | `string`         | `"November 1, 2024"` | Formatted date label.                       |
-| `posts[].relativeLabel`  | `string`         | `"8mo ago"`          | Relative time label shown in parentheses.   |
+| `posts`                  | `BlogListPost[]` | _(3 件のサンプル記事)_ | ブログ記事のエントリ。                      |
+| `posts[].title`          | `string`         | `"New post"`         | 記事のタイトル。                            |
+| `posts[].description`    | `string`         | —                    | 記事の概要。                                |
+| `posts[].href`           | `string`         | `"/blog/new-post"`   | リンク URL（設定するとカードがリンクになる）。 |
+| `posts[].openInNewTab`   | `boolean`        | `false`              | リンクを新しいタブで開く。                  |
+| `posts[].imageSrc`       | `string`         | _(Unsplash サンプル)_ | カバー画像の URL。                          |
+| `posts[].imageAlt`       | `string`         | `"New post"`         | カバー画像の代替テキスト。                  |
+| `posts[].publishedAt`    | `string`         | `"2024-11-01"`       | ISO 日付文字列（ラベルが未指定のときに使用）。 |
+| `posts[].publishedLabel` | `string`         | `"November 1, 2024"` | フォーマット済みの日付ラベル。              |
+| `posts[].relativeLabel`  | `string`         | `"8mo ago"`          | 括弧内に表示される相対時間ラベル。          |
 
-## Theme & Responsiveness
+## テーマとレスポンシブ対応
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn の CSS 変数トークンを通じて、ライトテーマとダークテーマをサポートします。モバイル、タブレット、デスクトップのブレークポイント全体でレスポンシブに対応します。
 
 ## プロパティリファレンス
 

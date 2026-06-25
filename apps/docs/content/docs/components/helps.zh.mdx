@@ -11,29 +11,29 @@ description: "Anvilkit Puck 原生 Helps 组件。"
 
 <ComponentPreview name="Helps" />
 
-A Puck-native contributor CTA block with avatar stack, message, and action button.
+一个 Puck 原生的贡献者 CTA 区块，包含头像堆叠、消息文案和操作按钮。
 
-## Install
+## 安装
 
 ```sh
 pnpm add @anvilkit/helps @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## 样式
 
-Import the package stylesheet once from your app entry before rendering the component.
+在渲染组件之前，从你的应用入口处导入一次该包的样式表。
 
 ```tsx
 import "@anvilkit/helps/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+在 Next.js 中，将该导入添加到 `app/layout.tsx` 或 `pages/_app.tsx`。
 
-## Examples
+## 示例
 
-### Basic usage
+### 基本用法
 
-Render the CTA with the bundled example avatars via `defaultProps`.
+通过 `defaultProps` 使用内置的示例头像来渲染该 CTA。
 
 ```tsx
 import "@anvilkit/helps/styles.css";
@@ -51,10 +51,9 @@ export function Example() {
 }
 ```
 
-### Initials-only avatars
+### 仅首字母缩写头像
 
-Each avatar falls back to `initials` (or initials derived from `name`) when no
-`imageUrl` is supplied.
+当未提供 `imageUrl` 时，每个头像都会回退到 `initials`（或由 `name` 派生的首字母缩写）。
 
 ```tsx
 import { Helps } from "@anvilkit/helps";
@@ -76,9 +75,9 @@ export function ContributorWall() {
 }
 ```
 
-### Register in a Puck config
+### 在 Puck 配置中注册
 
-Wire the exported `componentConfig` into a Puck `Config`.
+将导出的 `componentConfig` 接入到 Puck `Config` 中。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -93,22 +92,22 @@ const config: Config<{ Helps: HelpsProps }> = {
 
 ## API
 
-Derived from the exported `HelpsProps` type and the Puck `fields` schema.
+派生自导出的 `HelpsProps` 类型和 Puck `fields` schema。
 
 | Prop                 | Type            | Default                     | Description                              |
 | -------------------- | --------------- | --------------------------- | ---------------------------------------- |
-| `message`            | `string`        | _(grateful-community copy)_ | CTA message text (supports line breaks). |
-| `buttonLabel`        | `string`        | `"Become a contributor"`    | Action button label.                     |
-| `buttonHref`         | `string`        | `"/contribute"`             | Action button link.                      |
-| `buttonOpenInNewTab` | `boolean`       | `false`                     | Open the link in a new tab.              |
-| `avatars`            | `HelpsAvatar[]` | _(5 example avatars)_       | Contributor avatar stack.                |
-| `avatars[].name`     | `string`        | `"New contributor"`         | Contributor name (shown in tooltip).     |
-| `avatars[].imageUrl` | `string`        | `""`                        | Avatar image URL.                        |
-| `avatars[].initials` | `string`        | `"NC"`                      | Fallback initials when no image is set.  |
+| `message`            | `string`        | _(感谢社区的文案)_          | CTA 消息文本（支持换行）。               |
+| `buttonLabel`        | `string`        | `"Become a contributor"`    | 操作按钮标签。                           |
+| `buttonHref`         | `string`        | `"/contribute"`             | 操作按钮链接。                           |
+| `buttonOpenInNewTab` | `boolean`       | `false`                     | 在新标签页中打开链接。                   |
+| `avatars`            | `HelpsAvatar[]` | _(5 个示例头像)_            | 贡献者头像堆叠。                         |
+| `avatars[].name`     | `string`        | `"New contributor"`         | 贡献者姓名（显示在工具提示中）。         |
+| `avatars[].imageUrl` | `string`        | `""`                        | 头像图片 URL。                           |
+| `avatars[].initials` | `string`        | `"NC"`                      | 未设置图片时回退的首字母缩写。           |
 
-## Theme & Responsiveness
+## 主题与响应式
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+通过 shadcn CSS 变量令牌支持浅色与深色主题。在移动端、平板和桌面断点下均具有响应式表现。
 
 ## 属性参考
 

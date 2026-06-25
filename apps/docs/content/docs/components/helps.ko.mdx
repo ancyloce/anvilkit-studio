@@ -11,29 +11,29 @@ description: "Anvilkit Puck 네이티브 Helps 컴포넌트."
 
 <ComponentPreview name="Helps" />
 
-A Puck-native contributor CTA block with avatar stack, message, and action button.
+아바타 스택, 메시지, 액션 버튼을 갖춘 Puck 네이티브 기여자 CTA 블록.
 
-## Install
+## 설치
 
 ```sh
 pnpm add @anvilkit/helps @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## 스타일
 
-Import the package stylesheet once from your app entry before rendering the component.
+컴포넌트를 렌더링하기 전에 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
 
 ```tsx
 import "@anvilkit/helps/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js에서는 이 import를 `app/layout.tsx` 또는 `pages/_app.tsx`에 추가하세요.
 
-## Examples
+## 예
 
-### Basic usage
+### 기본 사용법
 
-Render the CTA with the bundled example avatars via `defaultProps`.
+`defaultProps`를 통해 번들된 예시 아바타로 CTA를 렌더링합니다.
 
 ```tsx
 import "@anvilkit/helps/styles.css";
@@ -51,10 +51,9 @@ export function Example() {
 }
 ```
 
-### Initials-only avatars
+### 이니셜 전용 아바타
 
-Each avatar falls back to `initials` (or initials derived from `name`) when no
-`imageUrl` is supplied.
+`imageUrl`이 제공되지 않으면 각 아바타는 `initials`(또는 `name`에서 파생된 이니셜)로 폴백됩니다.
 
 ```tsx
 import { Helps } from "@anvilkit/helps";
@@ -76,9 +75,9 @@ export function ContributorWall() {
 }
 ```
 
-### Register in a Puck config
+### Puck 설정에 등록
 
-Wire the exported `componentConfig` into a Puck `Config`.
+내보낸 `componentConfig`를 Puck `Config`에 연결합니다.
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -93,22 +92,22 @@ const config: Config<{ Helps: HelpsProps }> = {
 
 ## API
 
-Derived from the exported `HelpsProps` type and the Puck `fields` schema.
+내보낸 `HelpsProps` 타입과 Puck `fields` 스키마에서 파생되었습니다.
 
 | Prop                 | Type            | Default                     | Description                              |
 | -------------------- | --------------- | --------------------------- | ---------------------------------------- |
-| `message`            | `string`        | _(grateful-community copy)_ | CTA message text (supports line breaks). |
-| `buttonLabel`        | `string`        | `"Become a contributor"`    | Action button label.                     |
-| `buttonHref`         | `string`        | `"/contribute"`             | Action button link.                      |
-| `buttonOpenInNewTab` | `boolean`       | `false`                     | Open the link in a new tab.              |
-| `avatars`            | `HelpsAvatar[]` | _(5 example avatars)_       | Contributor avatar stack.                |
-| `avatars[].name`     | `string`        | `"New contributor"`         | Contributor name (shown in tooltip).     |
-| `avatars[].imageUrl` | `string`        | `""`                        | Avatar image URL.                        |
-| `avatars[].initials` | `string`        | `"NC"`                      | Fallback initials when no image is set.  |
+| `message`            | `string`        | _(커뮤니티 감사 문구)_      | CTA 메시지 텍스트(줄바꿈 지원).          |
+| `buttonLabel`        | `string`        | `"Become a contributor"`    | 액션 버튼 레이블.                        |
+| `buttonHref`         | `string`        | `"/contribute"`             | 액션 버튼 링크.                          |
+| `buttonOpenInNewTab` | `boolean`       | `false`                     | 링크를 새 탭에서 엽니다.                 |
+| `avatars`            | `HelpsAvatar[]` | _(5개의 예시 아바타)_       | 기여자 아바타 스택.                      |
+| `avatars[].name`     | `string`        | `"New contributor"`         | 기여자 이름(툴팁에 표시됨).              |
+| `avatars[].imageUrl` | `string`        | `""`                        | 아바타 이미지 URL.                       |
+| `avatars[].initials` | `string`        | `"NC"`                      | 이미지가 설정되지 않은 경우의 폴백 이니셜. |
 
-## Theme & Responsiveness
+## 테마 및 반응형
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니다. 모바일, 태블릿, 데스크톱 브레이크포인트 전반에 걸쳐 반응형으로 동작합니다.
 
 ## 속성 레퍼런스
 

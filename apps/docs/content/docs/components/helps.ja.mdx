@@ -11,29 +11,29 @@ description: "Anvilkit Puck ネイティブの Helps コンポーネント。"
 
 <ComponentPreview name="Helps" />
 
-A Puck-native contributor CTA block with avatar stack, message, and action button.
+アバタースタック、メッセージ、アクションボタンを備えた Puck ネイティブのコントリビューター CTA ブロック。
 
-## Install
+## インストール
 
 ```sh
 pnpm add @anvilkit/helps @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## スタイル
 
-Import the package stylesheet once from your app entry before rendering the component.
+コンポーネントをレンダリングする前に、アプリのエントリポイントからパッケージのスタイルシートを一度インポートしてください。
 
 ```tsx
 import "@anvilkit/helps/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js では、このインポートを `app/layout.tsx` または `pages/_app.tsx` に追加します。
 
-## Examples
+## 例
 
-### Basic usage
+### 基本的な使い方
 
-Render the CTA with the bundled example avatars via `defaultProps`.
+`defaultProps` を介してバンドルされたサンプルアバターで CTA をレンダリングします。
 
 ```tsx
 import "@anvilkit/helps/styles.css";
@@ -51,10 +51,9 @@ export function Example() {
 }
 ```
 
-### Initials-only avatars
+### イニシャルのみのアバター
 
-Each avatar falls back to `initials` (or initials derived from `name`) when no
-`imageUrl` is supplied.
+`imageUrl` が指定されていない場合、各アバターは `initials`（または `name` から導出されたイニシャル）にフォールバックします。
 
 ```tsx
 import { Helps } from "@anvilkit/helps";
@@ -76,9 +75,9 @@ export function ContributorWall() {
 }
 ```
 
-### Register in a Puck config
+### Puck 設定への登録
 
-Wire the exported `componentConfig` into a Puck `Config`.
+エクスポートされた `componentConfig` を Puck `Config` に組み込みます。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -93,22 +92,22 @@ const config: Config<{ Helps: HelpsProps }> = {
 
 ## API
 
-Derived from the exported `HelpsProps` type and the Puck `fields` schema.
+エクスポートされた `HelpsProps` 型と Puck `fields` スキーマから導出されています。
 
 | Prop                 | Type            | Default                     | Description                              |
 | -------------------- | --------------- | --------------------------- | ---------------------------------------- |
-| `message`            | `string`        | _(grateful-community copy)_ | CTA message text (supports line breaks). |
-| `buttonLabel`        | `string`        | `"Become a contributor"`    | Action button label.                     |
-| `buttonHref`         | `string`        | `"/contribute"`             | Action button link.                      |
-| `buttonOpenInNewTab` | `boolean`       | `false`                     | Open the link in a new tab.              |
-| `avatars`            | `HelpsAvatar[]` | _(5 example avatars)_       | Contributor avatar stack.                |
-| `avatars[].name`     | `string`        | `"New contributor"`         | Contributor name (shown in tooltip).     |
-| `avatars[].imageUrl` | `string`        | `""`                        | Avatar image URL.                        |
-| `avatars[].initials` | `string`        | `"NC"`                      | Fallback initials when no image is set.  |
+| `message`            | `string`        | _(コミュニティへの感謝文)_  | CTA メッセージテキスト（改行に対応）。   |
+| `buttonLabel`        | `string`        | `"Become a contributor"`    | アクションボタンのラベル。               |
+| `buttonHref`         | `string`        | `"/contribute"`             | アクションボタンのリンク。               |
+| `buttonOpenInNewTab` | `boolean`       | `false`                     | リンクを新しいタブで開きます。           |
+| `avatars`            | `HelpsAvatar[]` | _(5 つのサンプルアバター)_  | コントリビューターのアバタースタック。   |
+| `avatars[].name`     | `string`        | `"New contributor"`         | コントリビューター名（ツールチップに表示）。 |
+| `avatars[].imageUrl` | `string`        | `""`                        | アバター画像の URL。                     |
+| `avatars[].initials` | `string`        | `"NC"`                      | 画像が設定されていない場合のフォールバックイニシャル。 |
 
-## Theme & Responsiveness
+## テーマとレスポンシブ対応
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn CSS 変数トークンによりライトテーマとダークテーマに対応します。モバイル、タブレット、デスクトップのブレークポイント全体でレスポンシブに対応します。
 
 ## プロパティリファレンス
 

@@ -11,30 +11,29 @@ description: "Anvilkit Puck 原生 Section 组件。"
 
 <ComponentPreview name="Section" />
 
-A Puck-native section component with badge, headline, highlighted text, and description.
+一个 Puck 原生的区块组件，包含徽章、标题、高亮文本和描述。
 
-## Install
+## 安装
 
 ```sh
 pnpm add @anvilkit/section @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## 样式
 
-Import the package stylesheet once from your app entry before rendering the component.
+在渲染组件之前，从应用入口处导入一次该包的样式表。
 
 ```tsx
 import "@anvilkit/section/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+在 Next.js 中，将该导入添加到 `app/layout.tsx` 或 `pages/_app.tsx`。
 
-## Examples
+## 示例
 
-### Basic usage
+### 基本用法
 
-Render the section with custom copy. `highlightedHeadline` is rendered with an
-animated aurora gradient next to the plain `headline`.
+使用自定义文案渲染该区块。`highlightedHeadline` 会以带有动画极光渐变的样式渲染，紧邻纯文本的 `headline`。
 
 ```tsx
 import "@anvilkit/section/styles.css";
@@ -52,9 +51,9 @@ export function Example() {
 }
 ```
 
-### Default copy
+### 默认文案
 
-Render the bundled marketing copy via `defaultProps`.
+通过 `defaultProps` 渲染内置的营销文案。
 
 ```tsx
 import { Section, defaultProps } from "@anvilkit/section";
@@ -64,9 +63,9 @@ export function DefaultSection() {
 }
 ```
 
-### Register in a Puck config
+### 在 Puck 配置中注册
 
-Wire the exported `componentConfig` into a Puck `Config`.
+将导出的 `componentConfig` 接入 Puck 的 `Config`。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -81,18 +80,18 @@ const config: Config<{ Section: SectionProps }> = {
 
 ## API
 
-Derived from the exported `SectionProps` type and the Puck `fields` schema.
+派生自导出的 `SectionProps` 类型和 Puck 的 `fields` 模式。
 
 | Prop                  | Type     | Default                                              | Description                      |
 | --------------------- | -------- | ---------------------------------------------------- | -------------------------------- |
-| `badgeLabel`          | `string` | `"Scale"`                                            | Shiny pill badge text.           |
-| `headline`            | `string` | `"Stop writing boilerplate."`                        | Plain headline text.             |
-| `highlightedHeadline` | `string` | `"Start building features."`                         | Aurora-gradient headline accent. |
-| `description`         | `string` | `"Your AI agent handles repetitive coding tasks..."` | Supporting description.          |
+| `badgeLabel`          | `string` | `"Scale"`                                            | 闪亮药丸徽章的文本。             |
+| `headline`            | `string` | `"Stop writing boilerplate."`                        | 纯文本标题。                     |
+| `highlightedHeadline` | `string` | `"Start building features."`                         | 极光渐变标题点缀。               |
+| `description`         | `string` | `"Your AI agent handles repetitive coding tasks..."` | 辅助性描述。                     |
 
-## Theme & Responsiveness
+## 主题与响应式
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+通过 shadcn CSS 变量令牌支持浅色和深色主题。在移动端、平板和桌面端断点上均支持响应式。
 
 ## 属性参考
 

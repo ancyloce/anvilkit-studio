@@ -11,29 +11,29 @@ description: "Anvilkit Puck 原生 Input 组件。"
 
 <ComponentPreview name="Input" />
 
-A Puck-native form input block with label, helper text, and validation support.
+一个 Puck 原生的表单输入区块，支持标签、帮助文本和校验。
 
-## Install
+## 安装
 
 ```sh
 pnpm add @anvilkit/input @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## 样式
 
-Import the package stylesheet once from your app entry before rendering the component.
+在渲染组件之前，从你的应用入口处导入一次该包的样式表。
 
 ```tsx
 import "@anvilkit/input/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+在 Next.js 中，将该导入添加到 `app/layout.tsx` 或 `pages/_app.tsx`。
 
-## Examples
+## 示例
 
-### Basic usage
+### 基本用法
 
-Render a labelled email input with placeholder text.
+渲染一个带有占位符文本的带标签电子邮件输入框。
 
 ```tsx
 import "@anvilkit/input/styles.css";
@@ -46,10 +46,9 @@ export function Example() {
 }
 ```
 
-### Required field with helper text
+### 带帮助文本的必填字段
 
-Switch the input `type`, mark it `required` (appends `*` to the label and sets
-the native `required` attribute), and surface guidance with `helperText`.
+切换输入框的 `type`，将其标记为 `required`（在标签后追加 `*` 并设置原生的 `required` 属性），并通过 `helperText` 提供指引。
 
 ```tsx
 import { Input } from "@anvilkit/input";
@@ -68,10 +67,9 @@ export function PasswordField() {
 }
 ```
 
-### Register in a Puck config
+### 在 Puck 配置中注册
 
-Wire the exported `componentConfig` into a Puck `Config` so authors can add the
-field to a form.
+将导出的 `componentConfig` 接入到 Puck `Config` 中，让作者可以将该字段添加到表单。
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -86,22 +84,22 @@ const config: Config<{ Input: InputProps }> = {
 
 ## API
 
-Derived from the exported `InputProps` type and the Puck `fields` schema.
+派生自导出的 `InputProps` 类型和 Puck `fields` schema。
 
 | Prop           | Type                                                                      | Default                                          | Description                            |
 | -------------- | ------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| `label`        | `string`                                                                  | `"Email address"`                                | Field label.                           |
-| `name`         | `string`                                                                  | `"email"`                                        | Form field name.                       |
-| `type`         | `"text"` \| `"email"` \| `"password"` \| `"search"` \| `"tel"` \| `"url"` | `"email"`                                        | Input type.                            |
-| `placeholder`  | `string`                                                                  | `"Enter your email"`                             | Placeholder text.                      |
-| `helperText`   | `string`                                                                  | `"We will only use this for important updates."` | Helper text shown below the field.     |
-| `defaultValue` | `string`                                                                  | `""`                                             | Initial uncontrolled value.            |
-| `required`     | `boolean`                                                                 | `false`                                          | Mark the field required (appends `*`). |
-| `disabled`     | `boolean`                                                                 | `false`                                          | Disable the field.                     |
+| `label`        | `string`                                                                  | `"Email address"`                                | 字段标签。                             |
+| `name`         | `string`                                                                  | `"email"`                                        | 表单字段名称。                         |
+| `type`         | `"text"` \| `"email"` \| `"password"` \| `"search"` \| `"tel"` \| `"url"` | `"email"`                                        | 输入框类型。                           |
+| `placeholder`  | `string`                                                                  | `"Enter your email"`                             | 占位符文本。                           |
+| `helperText`   | `string`                                                                  | `"We will only use this for important updates."` | 显示在字段下方的帮助文本。             |
+| `defaultValue` | `string`                                                                  | `""`                                             | 初始的非受控值。                       |
+| `required`     | `boolean`                                                                 | `false`                                          | 将字段标记为必填（追加 `*`）。         |
+| `disabled`     | `boolean`                                                                 | `false`                                          | 禁用该字段。                           |
 
-## Theme & Responsiveness
+## 主题与响应式
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+通过 shadcn CSS 变量令牌支持浅色与深色主题。在移动端、平板和桌面断点下均具有响应式表现。
 
 ## 属性参考
 

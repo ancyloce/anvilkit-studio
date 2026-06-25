@@ -11,29 +11,29 @@ description: "Anvilkit Puck 네이티브 Input 컴포넌트."
 
 <ComponentPreview name="Input" />
 
-A Puck-native form input block with label, helper text, and validation support.
+레이블, 헬퍼 텍스트, 검증 지원을 갖춘 Puck 네이티브 폼 입력 블록.
 
-## Install
+## 설치
 
 ```sh
 pnpm add @anvilkit/input @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## 스타일
 
-Import the package stylesheet once from your app entry before rendering the component.
+컴포넌트를 렌더링하기 전에 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
 
 ```tsx
 import "@anvilkit/input/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js에서는 이 import를 `app/layout.tsx` 또는 `pages/_app.tsx`에 추가하세요.
 
-## Examples
+## 예
 
-### Basic usage
+### 기본 사용법
 
-Render a labelled email input with placeholder text.
+플레이스홀더 텍스트가 있는 레이블이 지정된 이메일 입력을 렌더링합니다.
 
 ```tsx
 import "@anvilkit/input/styles.css";
@@ -46,10 +46,9 @@ export function Example() {
 }
 ```
 
-### Required field with helper text
+### 헬퍼 텍스트가 있는 필수 필드
 
-Switch the input `type`, mark it `required` (appends `*` to the label and sets
-the native `required` attribute), and surface guidance with `helperText`.
+입력의 `type`을 전환하고 `required`로 표시하며(레이블에 `*`를 추가하고 네이티브 `required` 속성을 설정), `helperText`로 안내를 제공합니다.
 
 ```tsx
 import { Input } from "@anvilkit/input";
@@ -68,10 +67,9 @@ export function PasswordField() {
 }
 ```
 
-### Register in a Puck config
+### Puck 설정에 등록
 
-Wire the exported `componentConfig` into a Puck `Config` so authors can add the
-field to a form.
+내보낸 `componentConfig`를 Puck `Config`에 연결하여 작성자가 해당 필드를 폼에 추가할 수 있도록 합니다.
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -86,22 +84,22 @@ const config: Config<{ Input: InputProps }> = {
 
 ## API
 
-Derived from the exported `InputProps` type and the Puck `fields` schema.
+내보낸 `InputProps` 타입과 Puck `fields` 스키마에서 파생되었습니다.
 
 | Prop           | Type                                                                      | Default                                          | Description                            |
 | -------------- | ------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------- |
-| `label`        | `string`                                                                  | `"Email address"`                                | Field label.                           |
-| `name`         | `string`                                                                  | `"email"`                                        | Form field name.                       |
-| `type`         | `"text"` \| `"email"` \| `"password"` \| `"search"` \| `"tel"` \| `"url"` | `"email"`                                        | Input type.                            |
-| `placeholder`  | `string`                                                                  | `"Enter your email"`                             | Placeholder text.                      |
-| `helperText`   | `string`                                                                  | `"We will only use this for important updates."` | Helper text shown below the field.     |
-| `defaultValue` | `string`                                                                  | `""`                                             | Initial uncontrolled value.            |
-| `required`     | `boolean`                                                                 | `false`                                          | Mark the field required (appends `*`). |
-| `disabled`     | `boolean`                                                                 | `false`                                          | Disable the field.                     |
+| `label`        | `string`                                                                  | `"Email address"`                                | 필드 레이블.                           |
+| `name`         | `string`                                                                  | `"email"`                                        | 폼 필드 이름.                          |
+| `type`         | `"text"` \| `"email"` \| `"password"` \| `"search"` \| `"tel"` \| `"url"` | `"email"`                                        | 입력 타입.                             |
+| `placeholder`  | `string`                                                                  | `"Enter your email"`                             | 플레이스홀더 텍스트.                   |
+| `helperText`   | `string`                                                                  | `"We will only use this for important updates."` | 필드 아래에 표시되는 헬퍼 텍스트.      |
+| `defaultValue` | `string`                                                                  | `""`                                             | 초기 비제어 값.                        |
+| `required`     | `boolean`                                                                 | `false`                                          | 필드를 필수로 표시합니다(`*` 추가).    |
+| `disabled`     | `boolean`                                                                 | `false`                                          | 필드를 비활성화합니다.                 |
 
-## Theme & Responsiveness
+## 테마 및 반응형
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니다. 모바일, 태블릿, 데스크톱 브레이크포인트 전반에 걸쳐 반응형으로 동작합니다.
 
 ## 속성 레퍼런스
 

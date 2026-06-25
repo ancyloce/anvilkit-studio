@@ -11,30 +11,29 @@ description: "Anvilkit Puck 네이티브 Hero 컴포넌트."
 
 <ComponentPreview name="Hero" />
 
-A Puck-native marketing hero component with a striped dark backdrop, announcement pill, and dual download CTAs.
+줄무늬 다크 배경, 공지 필(pill), 두 개의 다운로드 CTA를 갖춘 Puck 네이티브 마케팅 hero 컴포넌트.
 
-## Install
+## 설치
 
 ```sh
 pnpm add @anvilkit/hero @anvilkit/ui @puckeditor/core
 ```
 
-## Styles
+## 스타일
 
-Import the package stylesheet once from your app entry before rendering the component.
+컴포넌트를 렌더링하기 전에 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
 
 ```tsx
 import "@anvilkit/hero/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js에서는 이 import를 `app/layout.tsx` 또는 `pages/_app.tsx`에 추가하세요.
 
-## Examples
+## 예
 
-### Basic usage
+### 기본 사용법
 
-Render the hero with custom copy. `headline` and `description` honor line breaks
-(`\n`).
+사용자 정의 문구로 hero를 렌더링합니다. `headline`과 `description`은 줄바꿈(`\n`)을 지원합니다.
 
 ```tsx
 import "@anvilkit/hero/styles.css";
@@ -55,11 +54,9 @@ export function Example() {
 }
 ```
 
-### Linked announcement pill
+### 링크가 있는 공지 필(pill)
 
-Set `announcementHref` to turn the pill into a link; `announcementOpenInNewTab`
-opens it in a new tab. Each download CTA has the same `href` / `openInNewTab`
-pairing.
+`announcementHref`를 설정하면 필이 링크로 바뀝니다. `announcementOpenInNewTab`은 새 탭에서 엽니다. 각 다운로드 CTA도 동일한 `href` / `openInNewTab` 쌍을 가집니다.
 
 ```tsx
 import { Hero } from "@anvilkit/hero";
@@ -82,9 +79,9 @@ export function LaunchHero() {
 }
 ```
 
-### Register in a Puck config
+### Puck 설정에 등록
 
-Wire the exported `componentConfig` into a Puck `Config`.
+내보낸 `componentConfig`를 Puck `Config`에 연결합니다.
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -99,25 +96,25 @@ const config: Config<{ Hero: HeroProps }> = {
 
 ## API
 
-Derived from the exported `HeroProps` type and the Puck `fields` schema.
+내보낸 `HeroProps` 타입과 Puck `fields` 스키마에서 파생되었습니다.
 
 | Prop                       | Type      | Default                                  | Description                              |
 | -------------------------- | --------- | ---------------------------------------- | ---------------------------------------- |
-| `announcementLabel`        | `string`  | `"We raised $69M pre seed"`              | Announcement pill text.                  |
-| `announcementHref`         | `string`  | `""`                                     | Announcement link URL.                   |
-| `announcementOpenInNewTab` | `boolean` | `false`                                  | Open the announcement link in a new tab. |
-| `headline`                 | `string`  | `"Write fast with\naccurate precision."` | Hero headline (supports line breaks).    |
-| `description`              | `string`  | `"Our state of the art tool..."`         | Hero description (supports line breaks). |
-| `linuxLabel`               | `string`  | `"Download for Linux"`                   | Linux CTA label.                         |
-| `linuxHref`                | `string`  | `"/download/linux"`                      | Linux CTA link.                          |
-| `linuxOpenInNewTab`        | `boolean` | `false`                                  | Open the Linux CTA in a new tab.         |
-| `windowsLabel`             | `string`  | `"Download for Windows"`                 | Windows CTA label.                       |
-| `windowsHref`              | `string`  | `"/download/windows"`                    | Windows CTA link.                        |
-| `windowsOpenInNewTab`      | `boolean` | `false`                                  | Open the Windows CTA in a new tab.       |
+| `announcementLabel`        | `string`  | `"We raised $69M pre seed"`              | 공지 필 텍스트.                          |
+| `announcementHref`         | `string`  | `""`                                     | 공지 링크 URL.                           |
+| `announcementOpenInNewTab` | `boolean` | `false`                                  | 공지 링크를 새 탭에서 엽니다.            |
+| `headline`                 | `string`  | `"Write fast with\naccurate precision."` | Hero 헤드라인(줄바꿈 지원).              |
+| `description`              | `string`  | `"Our state of the art tool..."`         | Hero 설명(줄바꿈 지원).                  |
+| `linuxLabel`               | `string`  | `"Download for Linux"`                   | Linux CTA 레이블.                        |
+| `linuxHref`                | `string`  | `"/download/linux"`                      | Linux CTA 링크.                          |
+| `linuxOpenInNewTab`        | `boolean` | `false`                                  | Linux CTA를 새 탭에서 엽니다.            |
+| `windowsLabel`             | `string`  | `"Download for Windows"`                 | Windows CTA 레이블.                      |
+| `windowsHref`              | `string`  | `"/download/windows"`                    | Windows CTA 링크.                        |
+| `windowsOpenInNewTab`      | `boolean` | `false`                                  | Windows CTA를 새 탭에서 엽니다.          |
 
-## Theme & Responsiveness
+## 테마 및 반응형
 
-Supports light and dark themes via shadcn CSS variable tokens. Responsive across mobile, tablet, and desktop breakpoints.
+shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니다. 모바일, 태블릿, 데스크톱 브레이크포인트 전반에 걸쳐 반응형으로 동작합니다.
 
 ## 속성 레퍼런스
 

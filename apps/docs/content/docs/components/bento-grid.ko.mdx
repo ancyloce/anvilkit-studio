@@ -11,29 +11,29 @@ description: "Anvilkit Puck 네이티브 BentoGrid 컴포넌트."
 
 <ComponentPreview name="BentoGrid" />
 
-A Puck-native Bento Grid component with adaptive mobile/tablet/desktop layouts, built-in light/dark theming, a serializable `items` API for Puck, and exported `BentoCard` primitives for direct composition.
+Puck 네이티브 Bento Grid 컴포넌트로, 모바일/태블릿/데스크톱에 적응하는 레이아웃, 내장된 라이트/다크 테마, Puck용 직렬화 가능한 `items` API, 그리고 직접 조합할 수 있도록 내보낸 `BentoCard` 프리미티브를 제공합니다.
 
-## Install
+## 설치
 
 ```sh
 pnpm add @anvilkit/bento-grid @puckeditor/core
 ```
 
-## Styles
+## 스타일
 
-Import the package stylesheet once from your app entry before rendering the component.
+컴포넌트를 렌더링하기 전에, 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
 
 ```tsx
 import "@anvilkit/bento-grid/styles.css";
 ```
 
-In Next.js, add the import to `app/layout.tsx` or `pages/_app.tsx`.
+Next.js에서는 이 import를 `app/layout.tsx` 또는 `pages/_app.tsx`에 추가하세요.
 
-## Examples
+## 예
 
-### Basic usage
+### 기본 사용법
 
-Render the grid with the bundled example cards via `defaultProps`.
+`defaultProps`를 통해 번들된 예시 카드로 그리드를 렌더링합니다.
 
 ```tsx
 import "@anvilkit/bento-grid/styles.css";
@@ -44,10 +44,9 @@ export function Example() {
 }
 ```
 
-### Theming and direct `BentoCard` composition
+### 테마 지정 및 `BentoCard` 직접 조합
 
-Set `theme` and `platform`, and pass `BentoCard` children for full control over
-each cell instead of the serializable `items` array.
+`theme`와 `platform`을 설정하고, 직렬화 가능한 `items` 배열 대신 `BentoCard` 자식을 전달하여 각 셀을 완전히 제어합니다.
 
 ```tsx
 import { BentoCard, BentoGrid } from "@anvilkit/bento-grid";
@@ -68,9 +67,9 @@ export function CustomCards() {
 }
 ```
 
-### Register in a Puck config
+### Puck 설정에 등록
 
-Wire the exported `componentConfig` into a Puck `Config`.
+내보낸 `componentConfig`를 Puck의 `Config`에 연결합니다.
 
 ```tsx
 import type { Config } from "@puckeditor/core";
@@ -85,29 +84,29 @@ const config: Config<{ BentoGrid: BentoGridProps }> = {
 
 ## API
 
-Derived from the exported `BentoGridProps` type and the Puck `fields` schema.
+내보낸 `BentoGridProps` 타입과 Puck `fields` 스키마에서 파생되었습니다.
 
 | Prop                      | Type                                                                   | Default             | Description                |
 | ------------------------- | ---------------------------------------------------------------------- | ------------------- | -------------------------- |
-| `theme`                   | `"system"` \| `"light"` \| `"dark"`                                    | `"dark"`            | Color theme.               |
-| `platform`                | `"adaptive"` \| `"mobile"` \| `"tablet"` \| `"desktop"`                | `"adaptive"`        | Platform layout.           |
-| `items`                   | `BentoGridItem[]`                                                      | _(6 example cards)_ | Grid cards.                |
-| `items[].icon`            | `"brain"` \| `"users"` \| `"plug"` \| `"globe"` \| `"code"` \| `"zap"` | `"brain"`           | Card icon.                 |
-| `items[].title`           | `string`                                                               | `"Card title"`      | Card title.                |
-| `items[].description`     | `string`                                                               | —                   | Card description.          |
-| `items[].size`            | `"default"` \| `"wide"` \| `"tall"`                                    | `"default"`         | Card span size.            |
-| `items[].rounded`         | `boolean`                                                              | `false`             | Rounded corners.           |
-| `items[].background`      | `boolean`                                                              | `true`              | Decorative background.     |
-| `items[].ctaLabel`        | `string`                                                               | `"Learn more >"`    | CTA label.                 |
-| `items[].ctaHref`         | `string`                                                               | `"#"`               | CTA href.                  |
-| `items[].ctaOpenInNewTab` | `boolean`                                                              | `false`             | Open the CTA in a new tab. |
+| `theme`                   | `"system"` \| `"light"` \| `"dark"`                                    | `"dark"`            | 색상 테마.                 |
+| `platform`                | `"adaptive"` \| `"mobile"` \| `"tablet"` \| `"desktop"`                | `"adaptive"`        | 플랫폼 레이아웃.           |
+| `items`                   | `BentoGridItem[]`                                                      | _(예시 카드 6개)_   | 그리드 카드.               |
+| `items[].icon`            | `"brain"` \| `"users"` \| `"plug"` \| `"globe"` \| `"code"` \| `"zap"` | `"brain"`           | 카드 아이콘.               |
+| `items[].title`           | `string`                                                               | `"Card title"`      | 카드 제목.                 |
+| `items[].description`     | `string`                                                               | —                   | 카드 설명.                 |
+| `items[].size`            | `"default"` \| `"wide"` \| `"tall"`                                    | `"default"`         | 카드 스팬 크기.            |
+| `items[].rounded`         | `boolean`                                                              | `false`             | 둥근 모서리.               |
+| `items[].background`      | `boolean`                                                              | `true`              | 장식용 배경.               |
+| `items[].ctaLabel`        | `string`                                                               | `"Learn more >"`    | CTA 라벨.                  |
+| `items[].ctaHref`         | `string`                                                               | `"#"`               | CTA 링크 주소.             |
+| `items[].ctaOpenInNewTab` | `boolean`                                                              | `false`             | 새 탭에서 CTA 열기.        |
 
-> `children` and `className` are also accepted on the component directly: pass
-> `BentoCard` children to bypass the serializable `items` array.
+> 컴포넌트 자체에 `children`과 `className`도 직접 전달할 수 있습니다.
+> `BentoCard` 자식을 전달하면 직렬화 가능한 `items` 배열을 우회할 수 있습니다.
 
-## Theme & Responsiveness
+## 테마 및 반응형
 
-Supports light and dark themes via the `theme` prop and shadcn CSS variable tokens. The `platform` prop controls layout: `adaptive` automatically switches between mobile, tablet, and desktop grid layouts based on viewport width.
+`theme` 프로퍼티와 shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니다. `platform` 프로퍼티는 레이아웃을 제어합니다. `adaptive`는 뷰포트 너비에 따라 모바일, 태블릿, 데스크톱 그리드 레이아웃 사이를 자동으로 전환합니다.
 
 ## 속성 레퍼런스
 
