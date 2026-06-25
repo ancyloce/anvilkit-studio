@@ -1,0 +1,14 @@
+---
+title: "DataUrlUploaderOptions"
+description: "@anvilkit/plugin-asset-manager · DataUrlUploaderOptions"
+---
+
+Defined in: [adapters/data-url.ts:6](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/data-url.ts#L6)
+
+Options for the development-only data URL uploader.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="maxbytes"&gt;&lt;/a&gt; `maxBytes?` | `readonly` | `number` | Maximum **raw file size** in bytes (default 1 MB). This bounds the input file, NOT the emitted `data:` URL: base64 encoding inflates the payload ~4/3, so a file at the cap becomes a ~1.33× larger string that is held in memory and embedded inline in the registry / IR / exported page (C3). Size the cap for the *encoded* footprint your target can carry. | [adapters/data-url.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/data-url.ts#L14) |

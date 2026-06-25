@@ -1,0 +1,16 @@
+---
+title: "exportReactHeaderAction"
+description: "@anvilkit/plugin-export-react · exportReactHeaderAction"
+---
+
+```ts
+const exportReactHeaderAction: StudioHeaderAction;
+```
+
+Defined in: [actions/header-action.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/header-action.ts#L80)
+
+Default header action used when the consumer imports
+`exportReactHeaderAction` directly without going through
+`createReactExportPlugin`. This shape is preserved for backward
+compatibility; in production it is superseded by the bound action
+returned from `createExportReactHeaderAction(format, options)`.

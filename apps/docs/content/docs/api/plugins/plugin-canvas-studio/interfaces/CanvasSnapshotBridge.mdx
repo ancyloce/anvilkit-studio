@@ -1,0 +1,16 @@
+---
+title: "CanvasSnapshotBridge"
+description: "@anvilkit/plugin-canvas-studio · CanvasSnapshotBridge"
+---
+
+Defined in: [state/canvas-snapshot-bridge.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L30)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="deletesnapshot"&gt;&lt;/a&gt; `deleteSnapshot` | `readonly` | (`designId`, `snapshotId`) =&gt; `Promise`\&lt;`void`\&gt; | - | [state/canvas-snapshot-bridge.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L58) |
+| &lt;a id="listsnapshots"&gt;&lt;/a&gt; `listSnapshots` | `readonly` | (`designId`) =&gt; `Promise`\&lt;readonly [`CanvasSnapshotMeta`](CanvasSnapshotMeta.md)[]\&gt; | - | [state/canvas-snapshot-bridge.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L51) |
+| &lt;a id="loadsnapshot"&gt;&lt;/a&gt; `loadSnapshot` | `readonly` | (`designId`, `snapshotId`) =&gt; `Promise`\&lt;`CanvasIR` \| `null`\&gt; | - | [state/canvas-snapshot-bridge.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L54) |
+| &lt;a id="requestopen"&gt;&lt;/a&gt; `requestOpen` | `readonly` | (`designId`) =&gt; `Promise`\&lt;readonly [`CanvasSnapshotMeta`](CanvasSnapshotMeta.md)[]\&gt; | Emit `version-history:open-requested` for the design. The snapshot picker UI is deferred to Iter 3 (per the plan); for now the event fires for forward compatibility and the bridge also returns the current snapshot list so callers can render a minimal picker themselves. | [state/canvas-snapshot-bridge.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L48) |
+| &lt;a id="savesnapshot"&gt;&lt;/a&gt; `saveSnapshot` | `readonly` | (`designId`, `ir`, `options?`) =&gt; `Promise`\&lt;`string`\&gt; | Persist a snapshot of the current canvas IR under `canvas:<designId>` and emit `version-history:save-requested` with the canvas keyspace payload. Returns the new snapshot id. | [state/canvas-snapshot-bridge.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L36) |

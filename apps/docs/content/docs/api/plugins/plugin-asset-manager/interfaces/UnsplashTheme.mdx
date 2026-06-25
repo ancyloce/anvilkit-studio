@@ -1,0 +1,25 @@
+---
+title: "UnsplashTheme"
+description: "@anvilkit/plugin-asset-manager · UnsplashTheme"
+---
+
+Defined in: [types/unsplash.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L9)
+
+## File
+
+Unsplash configuration types (PRD 0002 §8.2, §8.3).
+
+Types only — the runtime client, default themes, and `resolveThemes` land in
+Phase 1 under the lazy `./sources/unsplash` subpath. Defining the config shape
+here keeps the `AssetManagerOptions.unsplash` field fully typed now.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="contentfilter"&gt;&lt;/a&gt; `contentFilter?` | `readonly` | `"low"` \| `"high"` | Defaults to `"high"`. | [types/unsplash.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L19) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/unsplash.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L10) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | i18n message key (not inline copy). | [types/unsplash.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L12) |
+| &lt;a id="orientation"&gt;&lt;/a&gt; `orientation?` | `readonly` | `"landscape"` \| `"portrait"` \| `"squarish"` | - | [types/unsplash.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L17) |
+| &lt;a id="query"&gt;&lt;/a&gt; `query?` | `readonly` | `string` | Fallback / supplement via `GET /search/photos`. | [types/unsplash.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L16) |
+| &lt;a id="topicslugs"&gt;&lt;/a&gt; `topicSlugs?` | `readonly` | readonly `string`[] | Tried first via `GET /topics/:id/photos`. | [types/unsplash.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L14) |

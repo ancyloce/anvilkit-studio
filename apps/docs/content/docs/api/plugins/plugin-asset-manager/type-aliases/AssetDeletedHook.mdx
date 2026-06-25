@@ -1,0 +1,25 @@
+---
+title: "AssetDeletedHook"
+description: "@anvilkit/plugin-asset-manager · AssetDeletedHook"
+---
+
+```ts
+type AssetDeletedHook = (asset) => void | Promise<void>;
+```
+
+Defined in: [types/types.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L93)
+
+Lifecycle hook fired when an asset is deleted through the asset source, with
+the record as it existed at deletion time. Lets a host release backend
+objects tied to the upload (e.g. delete the stored S3 object, revoke a
+`blob:` URL). Awaited; throwing rejects the delete.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `asset` | [`UploadResult`](../interfaces/UploadResult) |
+
+## Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;

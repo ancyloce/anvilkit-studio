@@ -1,0 +1,25 @@
+---
+title: "resolveFolderId"
+description: "@anvilkit/plugin-asset-manager · resolveFolderId"
+---
+
+```ts
+function resolveFolderId(folderId?): string | null;
+```
+
+Defined in: [types/folders.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L51)
+
+Normalize a folder-id input to the canonical root convention: `undefined`
+and `null` both collapse to `null` (root); a real id is returned unchanged.
+This is the only folder-id normalization helper — there is no `__root__`
+sentinel to expand or collapse.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `folderId?` | `string` \| `null` |
+
+## Returns
+
+`string` \| `null`

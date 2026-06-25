@@ -1,0 +1,24 @@
+---
+title: Plugins — API Reference
+description: Auto-generated TypeDoc reference for every @anvilkit/* Studio plugin.
+---
+
+TypeDoc reference for the public API (the `src/index.ts` entry) of every plugin
+under `packages/plugins/`, regenerated on every docs build. Subpath exports
+(e.g. `./react`, `./mock`) are not separately documented here — see each
+plugin's [guide](/plugins) for those.
+
+| Plugin | npm | Summary |
+|--------|-----|---------|
+| [AI Copilot](/api/plugins/plugin-ai-copilot) | `@anvilkit/plugin-ai-copilot` | Headless AI copilot - generate pages from natural-language prompts via a host-supplied callback. |
+| [AI Image](/api/plugins/plugin-ai-image) | `@anvilkit/plugin-ai-image` | AI image generation for the Canvas Studio editor — text-to-image, variation, inpaint, background removal. |
+| [Asset Manager](/api/plugins/plugin-asset-manager) | `@anvilkit/plugin-asset-manager` | Headless asset upload plugin with host-provided persistence and a separate React UI subpath. |
+| [Canvas Studio](/api/plugins/plugin-canvas-studio) | `@anvilkit/plugin-canvas-studio` | Mounts the Canvas Studio overlay, registers the design-block quick-add, and exposes the design:// asset resolver. |
+| [Collaboration](/api/plugins/plugin-collab-ui) | `@anvilkit/collab-ui` | Realtime collaboration: presence cursors, conflict diagnostics, and Yjs CRDT sync. Bundles @anvilkit/plugin-collab-yjs data sync with @anvilkit/collab-ui presence chrome. |
+| [Collab (Yjs)](/api/plugins/plugin-collab-yjs) | `@anvilkit/plugin-collab-yjs` | GA-candidate realtime collaboration for Anvilkit Studio over a Yjs CRDT transport. Implements the SnapshotAdapter v2 contract with conflict diagnostics, validation, debouncing, an opt-in native Y.Map IR tree for per-node merge, a transport-agnostic connection-state contract, and force-resync. |
+| [Design System](/api/plugins/plugin-design-system) | `@anvilkit/plugin-design-system` | Token-bound fields, theme switching, and design validation through the `&lt;Studio&gt;` plugin contract. |
+| [Canvas Export](/api/plugins/plugin-export-canvas) | `@anvilkit/plugin-export-canvas` | Export AnvilKit canvas designs as PNG, JSON, SVG, or PDF. |
+| [HTML Export](/api/plugins/plugin-export-html) | `@anvilkit/plugin-export-html` | Export Puck pages as standalone HTML documents. |
+| [React Export](/api/plugins/plugin-export-react) | `@anvilkit/plugin-export-react` | Export Puck pages as React (.tsx / .jsx) source files. |
+| [Page SEO](/api/plugins/plugin-page-seo) | `@anvilkit/plugin-page-seo` | Edit a page's SEO metadata (title, description, OG image, canonical, noindex) on root.props.seo via the sidebar rail. |
+| [Version History](/api/plugins/plugin-version-history) | `@anvilkit/plugin-version-history` | Headless version history plugin with host-provided snapshot persistence. |

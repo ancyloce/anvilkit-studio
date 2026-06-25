@@ -1,0 +1,17 @@
+---
+title: "CreateIRAssetResolverOptions"
+description: "@anvilkit/plugin-asset-manager · CreateIRAssetResolverOptions"
+---
+
+Defined in: [utils/resolver.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/resolver.ts#L40)
+
+Options for creating an IR asset-reference resolver.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="allowmixedscripthostnames"&gt;&lt;/a&gt; `allowMixedScriptHostnames?` | `readonly` | `boolean` | - | [utils/resolver.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/resolver.ts#L43) |
+| &lt;a id="dataurlallowlistoptin"&gt;&lt;/a&gt; `dataUrlAllowlistOptIn?` | `readonly` | `boolean` | - | [utils/resolver.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/resolver.ts#L42) |
+| &lt;a id="registry"&gt;&lt;/a&gt; `registry` | `readonly` | [`AssetRegistry`](AssetRegistry.md) | - | [utils/resolver.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/resolver.ts#L41) |
+| &lt;a id="transformresolver"&gt;&lt;/a&gt; `transformResolver?` | `readonly` | [`TransformResolver`](../type-aliases/TransformResolver) | Maps an asset + transform (carried on the reference as `?w=…&fm=…`) to a derivative URL. When omitted, or when it returns `undefined`, the asset's original URL is used. The derivative URL is re-validated through the same trust boundary as any resolved asset URL. | [utils/resolver.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/resolver.ts#L50) |

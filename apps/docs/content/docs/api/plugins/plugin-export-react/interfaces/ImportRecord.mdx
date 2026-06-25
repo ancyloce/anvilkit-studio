@@ -1,0 +1,23 @@
+---
+title: "ImportRecord"
+description: "@anvilkit/plugin-export-react · ImportRecord"
+---
+
+Defined in: [types/types.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L166)
+
+A single import emitted at the top of the React source file.
+
+`binding` is the local identifier (e.g. `Hero`); `source` is the
+module specifier (e.g. `@anvilkit/hero`); `kind` drives how the
+statement is serialized:
+
+- `"named"` → `import { Hero } from "@anvilkit/hero";`
+- `"default"` → `import Hero from "@anvilkit/hero";`
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="binding"&gt;&lt;/a&gt; `binding` | `readonly` | `string` | [types/types.ts:167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L167) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"named"` \| `"default"` | [types/types.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L169) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | `readonly` | `string` | [types/types.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L168) |

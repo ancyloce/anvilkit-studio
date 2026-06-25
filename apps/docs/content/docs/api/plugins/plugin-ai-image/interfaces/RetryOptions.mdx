@@ -1,0 +1,17 @@
+---
+title: "RetryOptions"
+description: "@anvilkit/plugin-ai-image · RetryOptions"
+---
+
+Defined in: [plugins/plugin-ai-image/src/job/retry.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L43)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="basedelayms"&gt;&lt;/a&gt; `baseDelayMs?` | `readonly` | `number` | Base delay in milliseconds. The actual delay grows exponentially (`baseDelayMs * 2^attempt`) and is then jittered. **Default** `250` | [plugins/plugin-ai-image/src/job/retry.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L57) |
+| &lt;a id="jitter"&gt;&lt;/a&gt; `jitter?` | `readonly` | () =&gt; `number` | Defaults to `Math.random`. Override for deterministic tests. | [plugins/plugin-ai-image/src/job/retry.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L67) |
+| &lt;a id="maxdelayms"&gt;&lt;/a&gt; `maxDelayMs?` | `readonly` | `number` | Cap on the computed backoff delay (before jitter). **Default** `8000` | [plugins/plugin-ai-image/src/job/retry.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L63) |
+| &lt;a id="maxretries"&gt;&lt;/a&gt; `maxRetries?` | `readonly` | `number` | Maximum number of retry attempts after the initial call. `maxRetries: 3` means up to 4 total invocations. **Default** `3` | [plugins/plugin-ai-image/src/job/retry.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L50) |
+| &lt;a id="signal"&gt;&lt;/a&gt; `signal?` | `readonly` | `AbortSignal` | Aborts both the in-flight call and any pending retry sleep. | [plugins/plugin-ai-image/src/job/retry.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L65) |
+| &lt;a id="sleep"&gt;&lt;/a&gt; `sleep?` | `readonly` | (`ms`, `signal?`) =&gt; `Promise`\&lt;`void`\&gt; | Defaults to a `setTimeout`-based, abort-aware sleep. | [plugins/plugin-ai-image/src/job/retry.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L69) |

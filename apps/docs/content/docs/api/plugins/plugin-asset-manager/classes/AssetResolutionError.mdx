@@ -1,0 +1,55 @@
+---
+title: "AssetResolutionError"
+description: "@anvilkit/plugin-asset-manager · AssetResolutionError"
+---
+
+Defined in: [utils/errors.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L87)
+
+Error thrown when an `asset://` reference cannot be resolved safely.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new AssetResolutionError(
+   assetId, 
+   code?, 
+   message?, 
+   options?): AssetResolutionError;
+```
+
+Defined in: [utils/errors.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L92)
+
+Create a resolver error for a specific asset id and failure code.
+
+#### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `assetId` | `string` | `undefined` |
+| `code` | [`AssetResolutionErrorCode`](../type-aliases/AssetResolutionErrorCode) | `"ASSET_NOT_FOUND"` |
+| `message` | `string` | `...` |
+| `options?` | \{ `cause?`: `unknown`; \} | `undefined` |
+| `options.cause?` | `unknown` | `undefined` |
+
+#### Returns
+
+`AssetResolutionError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assetid"&gt;&lt;/a&gt; `assetId` | `readonly` | `string` | [utils/errors.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L88) |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`AssetResolutionErrorCode`](../type-aliases/AssetResolutionErrorCode) | [utils/errors.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L89) |

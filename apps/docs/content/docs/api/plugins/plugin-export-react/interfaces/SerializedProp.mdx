@@ -1,0 +1,18 @@
+---
+title: "SerializedProp"
+description: "@anvilkit/plugin-export-react · SerializedProp"
+---
+
+Defined in: [props/serialize-prop.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/props/serialize-prop.ts#L9)
+
+Result of serializing a single prop value. Mirrors the emitter's
+warning contract: every non-serializable input surfaces an
+`ExportWarning { code: "NON_SERIALIZABLE_PROP" }` and falls back to
+a commented-out placeholder so the emitted JSX still parses.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `readonly` | `string` | The JSX attribute value segment, e.g. `"hello"` for a string or `{42}` for a number. Includes the surrounding quotes or braces. | [props/serialize-prop.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/props/serialize-prop.ts#L14) |
+| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings` | `readonly` | readonly `ExportWarning`[] | Non-fatal warnings collected while serializing. Empty for plain JSON-compatible inputs. | [props/serialize-prop.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/props/serialize-prop.ts#L19) |

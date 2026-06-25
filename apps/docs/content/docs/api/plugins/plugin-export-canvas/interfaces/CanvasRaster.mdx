@@ -1,0 +1,19 @@
+---
+title: "CanvasRaster"
+description: "@anvilkit/plugin-export-canvas · CanvasRaster"
+---
+
+Defined in: [types.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L9)
+
+A pre-rendered raster of one canvas page. The canvas renderer is React/Konva
+and cannot run headlessly, so this plugin never rasterizes itself — the host
+(e.g. `plugin-canvas-studio`'s `CanvasExportBridge`) renders each page (via
+`stage.toDataURL()` / `rasterizePage`) and passes the bytes/data-URL in.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="image"&gt;&lt;/a&gt; `image` | `readonly` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | Raw PNG/JPEG bytes, or a `data:image/...;base64,…` URL. | [types.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L12) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType?` | `readonly` | `"image/png"` \| `"image/jpeg"` | - | [types.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L13) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `readonly` | `string` | - | [types.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L10) |

@@ -1,0 +1,37 @@
+---
+title: "emitReact"
+description: "@anvilkit/plugin-export-react · emitReact"
+---
+
+```ts
+function emitReact(ir, opts): EmitReactResult;
+```
+
+Defined in: [emitter.ts:318](https://github.com/ancyloce/anvilkit-studio/blob/main/src/emitter.ts#L318)
+
+Emit React source for the given `PageIR`. Mirrors the
+`plugin-export-html` emitter contract: returns a code string, the
+dependency manifest, and any warnings collected while walking the
+tree.
+
+The emitter is intentionally dependency-light — the only collabora-
+tors are:
+
+- `collectImports` for component import statements,
+- `serializeProp` for JSX attribute-value rendering,
+- `collectReactAssets` for the optional static-import asset pipeline.
+
+The caller supplies fully-resolved options (`ResolvedReactExportOptions`).
+Use `resolveReactExportOptions(raw)` from `./types.ts` to derive
+them before invoking `emitReact`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `PageIR` |
+| `opts` | [`ResolvedReactExportOptions`](../interfaces/ResolvedReactExportOptions) |
+
+## Returns
+
+[`EmitReactResult`](../interfaces/EmitReactResult)

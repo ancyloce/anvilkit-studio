@@ -1,0 +1,38 @@
+---
+title: "ColorRamp"
+description: "@anvilkit/plugin-design-system · ColorRamp"
+---
+
+Defined in: [tokens/types.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L18)
+
+## File
+
+Design token tree types.
+
+Two-tier model (PRD 0005 §5.2, generalising PRD 0004 §7):
+
+  - **Primitives** carry raw brand + neutral palettes and the
+    spacing/typography/radius scales. They flip between light and
+    dark themes.
+  - **Semantics** map roles (background, surface, foreground, accent,
+    border, focus-ring) to primitive references. They are
+    theme-stable so stored token refs (`"color.brand.500"`) survive
+    a `.dark` toggle without being rewritten.
+
+Stored values are CSS strings — the runtime resolves them to
+`--ak-ds-*` references at emit time (`emit-css.ts`, A5).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="100"&gt;&lt;/a&gt; `100` | `readonly` | `string` | [tokens/types.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L20) |
+| &lt;a id="200"&gt;&lt;/a&gt; `200` | `readonly` | `string` | [tokens/types.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L21) |
+| &lt;a id="300"&gt;&lt;/a&gt; `300` | `readonly` | `string` | [tokens/types.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L22) |
+| &lt;a id="400"&gt;&lt;/a&gt; `400` | `readonly` | `string` | [tokens/types.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L23) |
+| &lt;a id="50"&gt;&lt;/a&gt; `50` | `readonly` | `string` | [tokens/types.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L19) |
+| &lt;a id="500"&gt;&lt;/a&gt; `500` | `readonly` | `string` | [tokens/types.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L24) |
+| &lt;a id="600"&gt;&lt;/a&gt; `600` | `readonly` | `string` | [tokens/types.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L25) |
+| &lt;a id="700"&gt;&lt;/a&gt; `700` | `readonly` | `string` | [tokens/types.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L26) |
+| &lt;a id="800"&gt;&lt;/a&gt; `800` | `readonly` | `string` | [tokens/types.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L27) |
+| &lt;a id="900"&gt;&lt;/a&gt; `900` | `readonly` | `string` | [tokens/types.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L28) |

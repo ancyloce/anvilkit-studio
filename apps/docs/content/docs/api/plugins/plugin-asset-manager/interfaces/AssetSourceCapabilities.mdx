@@ -1,0 +1,18 @@
+---
+title: "AssetSourceCapabilities"
+description: "@anvilkit/plugin-asset-manager · AssetSourceCapabilities"
+---
+
+Defined in: [sources/provider.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L20)
+
+Capability flags advertised by an asset source provider.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="folders"&gt;&lt;/a&gt; `folders?` | `readonly` | `boolean` | Supports folder scoping. Only the local library provider sets this; a folder-scoped query (`AssetFilter.folderId`) drops providers without it from the federation. Defaults to `false` when omitted. | [sources/provider.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L32) |
+| &lt;a id="mutable"&gt;&lt;/a&gt; `mutable` | `readonly` | `boolean` | Unsplash = false (browse + insert only). | [sources/provider.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L24) |
+| &lt;a id="requiresattribution"&gt;&lt;/a&gt; `requiresAttribution` | `readonly` | `boolean` | Unsplash = true. | [sources/provider.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L26) |
+| &lt;a id="searchable"&gt;&lt;/a&gt; `searchable` | `readonly` | `boolean` | - | [sources/provider.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L21) |
+| &lt;a id="themed"&gt;&lt;/a&gt; `themed` | `readonly` | `boolean` | - | [sources/provider.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L22) |

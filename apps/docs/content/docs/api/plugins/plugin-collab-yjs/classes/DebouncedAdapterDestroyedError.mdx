@@ -1,0 +1,44 @@
+---
+title: "DebouncedAdapterDestroyedError"
+description: "@anvilkit/plugin-collab-yjs · DebouncedAdapterDestroyedError"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/debounced-adapter.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L64)
+
+Wrap a `SnapshotAdapter` so that bursts of `save()` calls within `ms`
+coalesce into a single underlying write. The latest IR wins; every
+caller that issued a save during the window receives the resolved id
+(or the rejection) of that single flush.
+
+Backpressure target: slider drags, rapid typing, and bulk operations.
+Underlying adapter behavior is preserved for `list`, `load`, `delete`,
+`subscribe`, and `presence`.
+
+`destroy()` cancels the pending flush timer, rejects any in-flight
+`save()` promises with `DebouncedAdapterDestroyedError`, and forwards
+teardown to the upstream adapter's optional `destroy`. Hosts MUST call
+it on unmount to avoid pending timers firing into a torn-down state.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new DebouncedAdapterDestroyedError(): DebouncedAdapterDestroyedError;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/debounced-adapter.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L65)
+
+#### Returns
+
+`DebouncedAdapterDestroyedError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```

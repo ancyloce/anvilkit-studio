@@ -1,0 +1,18 @@
+---
+title: "CreateStudioAssetSourceOptions"
+description: "@anvilkit/plugin-asset-manager · CreateStudioAssetSourceOptions"
+---
+
+Defined in: [utils/studio-asset-source.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/studio-asset-source.ts#L42)
+
+Inputs needed to bridge the registry into core's studio asset source API.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="getthumbnail"&gt;&lt;/a&gt; `getThumbnail?` | `readonly` | (`entry`) =&gt; `string` \| `undefined` | Optional thumbnail derivation. Returning a string sets `StudioAsset.thumbnailUrl`; returning `undefined` suppresses the thumbnail (overriding the default-for-images behavior). When omitted, image-kind assets get the original URL as their thumbnail and other kinds get no thumbnail. | [utils/studio-asset-source.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/studio-asset-source.ts#L60) |
+| &lt;a id="maxconcurrentuploads"&gt;&lt;/a&gt; `maxConcurrentUploads?` | `readonly` | `number` | Maximum number of uploads in flight. Defaults to `MAX_CONCURRENT_UPLOADS` (3). Set to 1 to restore the previous sequential behavior. | [utils/studio-asset-source.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/studio-asset-source.ts#L66) |
+| &lt;a id="ondelete"&gt;&lt;/a&gt; `onDelete?` | `readonly` | [`AssetDeletedHook`](../type-aliases/AssetDeletedHook) | Fired with the removed record after a successful delete. | [utils/studio-asset-source.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/studio-asset-source.ts#L68) |
+| &lt;a id="registry"&gt;&lt;/a&gt; `registry` | `readonly` | [`AssetRegistry`](AssetRegistry.md) | - | [utils/studio-asset-source.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/studio-asset-source.ts#L43) |
+| &lt;a id="upload"&gt;&lt;/a&gt; `upload` | `readonly` | (`file`, `options?`) =&gt; `Promise`\&lt;[`UploadResult`](UploadResult.md)\&gt; | Performs the upload. Provided by the plugin so the adapter does not need to depend on `StudioPluginContext` directly. | [utils/studio-asset-source.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/studio-asset-source.ts#L48) |

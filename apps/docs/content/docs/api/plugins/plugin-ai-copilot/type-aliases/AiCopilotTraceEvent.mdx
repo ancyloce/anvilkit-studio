@@ -1,0 +1,56 @@
+---
+title: "AiCopilotTraceEvent"
+description: "@anvilkit/plugin-ai-copilot · AiCopilotTraceEvent"
+---
+
+```ts
+type AiCopilotTraceEvent = 
+  | {
+  flow: "page" | "section";
+  generationId: number;
+  promptLength: number;
+  type: "generation-start";
+}
+  | {
+  flow: "page" | "section";
+  generationId: number;
+  type: "generation-validated";
+}
+  | {
+  flow: "page" | "section";
+  generationId: number;
+  stage: "after-generate" | "after-validate" | "after-apply";
+  type: "generation-stale-drop";
+}
+  | {
+  flow: "page" | "section";
+  generationId: number;
+  type: "generation-dispatched";
+}
+  | {
+  code: AiErrorCode;
+  flow: "page" | "section";
+  generationId: number;
+  type: "generation-failed";
+};
+```
+
+Defined in: [plugins/plugin-ai-copilot/src/types/types.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L57)
+
+Discriminated trace event emitted by [AiCopilotOptions.onTrace](../interfaces/AiCopilotOptions#ontrace)
+at every decision point inside `runGeneration` and `regenerateSelection`.
+
+Hosts wire this into Sentry, OpenTelemetry, or `console.debug` to make
+the otherwise-opaque concurrency/cancellation behaviour observable in
+production. The plugin remains transport-agnostic — the host decides
+whether `onTrace` ships to a metrics sink, a log line, or nowhere.
+
+Every event carries a `flow` ("page" or "section") and a numeric
+`generationId` matching the plugin's internal monotonic counter, so
+downstream sinks can correlate the lifecycle of a single run.
+
+## See
+
+docs/decisions/004-ai-copilot-data-egress.md for related egress
+     considerations — `onTrace` event payloads never include forwarded
+     Puck data, only structural metadata.

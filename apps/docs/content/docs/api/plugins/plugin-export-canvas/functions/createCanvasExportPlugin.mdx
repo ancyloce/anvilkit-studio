@@ -1,0 +1,29 @@
+---
+title: "createCanvasExportPlugin"
+description: "@anvilkit/plugin-export-canvas · createCanvasExportPlugin"
+---
+
+```ts
+function createCanvasExportPlugin(_opts?): StudioPlugin;
+```
+
+Defined in: [plugin.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L25)
+
+I2-3: a Studio plugin that registers the four canvas export formats
+(PNG / JSON / SVG / PDF) via `StudioPluginRegistration.exportFormats`.
+
+Headless — it wraps `@anvilkit/canvas-core` serializers only and never
+imports React/Konva. Because the Studio export contract passes `run()` a
+Puck `PageIR`, the canvas-mode host invokes these formats with the
+`CanvasIR` (and any pre-rendered page rasters for PNG/PDF) in the format
+options bag — see [CanvasExportOptions](../interfaces/CanvasExportOptions).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `_opts` | [`CanvasExportPluginOptions`](../type-aliases/CanvasExportPluginOptions) |
+
+## Returns
+
+`StudioPlugin`

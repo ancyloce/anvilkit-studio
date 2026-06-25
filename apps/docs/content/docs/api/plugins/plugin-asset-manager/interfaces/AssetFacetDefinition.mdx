@@ -1,0 +1,20 @@
+---
+title: "AssetFacetDefinition"
+description: "@anvilkit/plugin-asset-manager · AssetFacetDefinition"
+---
+
+Defined in: [types/categories.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L22)
+
+Describes a facet filter available in the asset browser.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="appliesto"&gt;&lt;/a&gt; `appliesTo?` | `readonly` | readonly [`AssetSourceId`](../type-aliases/AssetSourceId)[] | Which sources this facet applies to. `undefined` ⇒ all. | [types/categories.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L29) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable key; used in `AssetFilter.facets[id]`. | [types/categories.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L24) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | - | [types/categories.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L25) |
+| &lt;a id="options"&gt;&lt;/a&gt; `options?` | `readonly` | \| readonly [`AssetFacetOption`](AssetFacetOption.md)[] \| ((`ctx`) =&gt; `Promise`\&lt;readonly [`AssetFacetOption`](AssetFacetOption.md)[]\&gt;) | Static options, or an async loader for remote facets (e.g. Unsplash topics). | [types/categories.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L33) |
+| &lt;a id="remote"&gt;&lt;/a&gt; `remote?` | `readonly` | `boolean` | When true, the facet is delegated to the source instead of matched locally. | [types/categories.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L39) |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection` | `readonly` | `"single"` \| `"multi"` | `"single"` renders as chips/radio; `"multi"` as a multiselect. | [types/categories.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L27) |
+| &lt;a id="valueof"&gt;&lt;/a&gt; `valueOf?` | `readonly` | (`asset`) =&gt; readonly `string`[] \| `undefined` | Derive the asset's value(s) for this facet (local, sync). | [types/categories.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L31) |

@@ -1,0 +1,19 @@
+---
+title: "createPageSeoPlugin"
+description: "@anvilkit/plugin-page-seo · createPageSeoPlugin"
+---
+
+```ts
+function createPageSeoPlugin(): StudioPlugin;
+```
+
+Defined in: [plugin.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L22)
+
+Create the Page SEO plugin (PRD 0004 F5). Contributes a sidebar rail panel
+that edits `root.props.seo` via the core `registerSeoPanel` seam. Returns a
+`StudioPlugin`; its `register` wires the i18n catalog + panel and cleans both
+up on `onDestroy`.
+
+## Returns
+
+`StudioPlugin`

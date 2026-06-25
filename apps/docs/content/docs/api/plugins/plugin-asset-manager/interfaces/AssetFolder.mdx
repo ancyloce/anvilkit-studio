@@ -1,0 +1,22 @@
+---
+title: "AssetFolder"
+description: "@anvilkit/plugin-asset-manager · AssetFolder"
+---
+
+Defined in: [types/folders.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L15)
+
+Folder node returned by the asset library data source.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="counts"&gt;&lt;/a&gt; `counts` | `readonly` | \{ `assets`: `number`; `folders`: `number`; \} | Denormalized direct-child counts for cheap tree rendering. NEVER the source of truth for membership — the asset→folder side-index is. | [types/folders.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L29) |
+| `counts.assets` | `readonly` | `number` | - | [types/folders.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L30) |
+| `counts.folders` | `readonly` | `number` | - | [types/folders.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L31) |
+| &lt;a id="createdat"&gt;&lt;/a&gt; `createdAt` | `readonly` | `number` | Epoch-ms creation timestamp (stamped via an injected clock, test-friendly). | [types/folders.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L22) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/folders.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L16) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string` \| `number` \| `boolean`\&gt;\&gt; | Optional host-opaque metadata (e.g. color label, ACL). | [types/folders.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L34) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | Display name; trimmed, non-empty. Siblings are case-insensitively unique. | [types/folders.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L18) |
+| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId` | `readonly` | `string` \| `null` | Parent container. `null` ⇒ top level. | [types/folders.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L20) |
+| &lt;a id="updatedat"&gt;&lt;/a&gt; `updatedAt` | `readonly` | `number` | Epoch-ms last-mutation timestamp. | [types/folders.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/folders.ts#L24) |

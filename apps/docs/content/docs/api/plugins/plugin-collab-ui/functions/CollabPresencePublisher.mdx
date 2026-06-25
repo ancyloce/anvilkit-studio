@@ -1,0 +1,33 @@
+---
+title: "CollabPresencePublisher"
+description: "@anvilkit/collab-ui · CollabPresencePublisher"
+---
+
+```ts
+function CollabPresencePublisher(props): ReactNode;
+```
+
+Defined in: [components/collab-presence-publisher.tsx:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/collab-presence-publisher.tsx#L39)
+
+Opt-in local presence publisher (review §C4).
+
+`@anvilkit/collab-ui` renders *remote* cursors/selections
+(`PresenceLayer`) but does not publish the *local* ones — hosts
+that own pointer/selection plumbing can skip this. Mount this
+component (it renders `null`) to get a turnkey publisher: it reads
+the local peer from context, the current Puck selection via
+`usePuckSelection()`, captures pointer coordinates from `root`, and
+calls `adapter.presence.update(...)`. Outbound rate limiting is the
+Yjs adapter's responsibility (`awarenessRateLimit`); this component
+additionally coalesces pointer moves to one update per animation
+frame.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`CollabPresencePublisherProps`](../interfaces/CollabPresencePublisherProps) |
+
+## Returns
+
+`ReactNode`

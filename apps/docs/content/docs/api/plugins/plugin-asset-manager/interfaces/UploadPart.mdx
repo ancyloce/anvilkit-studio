@@ -1,0 +1,18 @@
+---
+title: "UploadPart"
+description: "@anvilkit/plugin-asset-manager · UploadPart"
+---
+
+Defined in: [types/resumable.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L30)
+
+One contiguous chunk of the source file handed to
+[ResumableUploadAdapter.uploadPart](ResumableUploadAdapter.md#uploadpart).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="blob"&gt;&lt;/a&gt; `blob` | `readonly` | `Blob` | The chunk body — a `File.slice(start, end)` of the source. | [types/resumable.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L41) |
+| &lt;a id="end"&gt;&lt;/a&gt; `end` | `readonly` | `number` | Exclusive end offset; `end - start === blob.size`. | [types/resumable.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L39) |
+| &lt;a id="partnumber"&gt;&lt;/a&gt; `partNumber` | `readonly` | `number` | 1-based part index — contiguous and ascending. S3 multipart numbers parts from 1, so the runner and adapters share that convention with no offset. | [types/resumable.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L35) |
+| &lt;a id="start"&gt;&lt;/a&gt; `start` | `readonly` | `number` | Byte offset of this part within the source file. | [types/resumable.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L37) |

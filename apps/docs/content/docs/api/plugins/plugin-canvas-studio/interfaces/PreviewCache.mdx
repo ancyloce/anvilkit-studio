@@ -1,0 +1,17 @@
+---
+title: "PreviewCache"
+description: "@anvilkit/plugin-canvas-studio · PreviewCache"
+---
+
+Defined in: [state/preview-cache.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/preview-cache.ts#L109)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="clear"&gt;&lt;/a&gt; `clear` | () =&gt; `void` | - | [state/preview-cache.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/preview-cache.ts#L130) |
+| &lt;a id="delete"&gt;&lt;/a&gt; `delete` | (`designId`, `artboardId?`) =&gt; `void` | - | [state/preview-cache.ts:127](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/preview-cache.ts#L127) |
+| &lt;a id="deletedesign"&gt;&lt;/a&gt; `deleteDesign` | (`designId`) =&gt; `void` | Removes every entry for `designId` (every artboard + default). | [state/preview-cache.ts:129](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/preview-cache.ts#L129) |
+| &lt;a id="get"&gt;&lt;/a&gt; `get` | (`designId`, `artboardId?`) =&gt; `string` \| `undefined` | Look up the **data URL** for a `(designId, artboardId)` pair (the self-contained form used by the `design://` export resolver). When `artboardId` is omitted, returns the default bucket entry. When the default is also missing, returns any *one* of the design's artboard-specific entries (insertion order) so a bare `design://<designId>` URL still renders something useful. | [state/preview-cache.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/preview-cache.ts#L118) |
+| &lt;a id="getobjecturl"&gt;&lt;/a&gt; `getObjectUrl` | (`designId`, `artboardId?`) =&gt; `string` \| `undefined` | Look up the **object (`blob:`) URL** for a `(designId, artboardId)` pair — the form the live DesignBlock renders. Same fallback semantics as [get](#get). Falls back to the data URL when the platform cannot mint object URLs. | [state/preview-cache.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/preview-cache.ts#L125) |
+| &lt;a id="set"&gt;&lt;/a&gt; `set` | (`designId`, `previewUrl`, `artboardId?`) =&gt; `void` | - | [state/preview-cache.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/preview-cache.ts#L126) |

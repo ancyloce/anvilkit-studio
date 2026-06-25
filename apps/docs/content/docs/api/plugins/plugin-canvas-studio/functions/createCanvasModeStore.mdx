@@ -1,0 +1,19 @@
+---
+title: "createCanvasModeStore"
+description: "@anvilkit/plugin-canvas-studio · createCanvasModeStore"
+---
+
+```ts
+function createCanvasModeStore(): CanvasModeStoreApi;
+```
+
+Defined in: [state/mode-store.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/mode-store.ts#L41)
+
+Minimal subscribable store for the canvas overlay's open/closed flag and
+the design id currently being edited. Avoids pulling in zustand at the
+plugin layer (canvas-editor already depends on it, but we keep this
+package lighter).
+
+## Returns
+
+[`CanvasModeStoreApi`](../interfaces/CanvasModeStoreApi)

@@ -1,0 +1,19 @@
+---
+title: "CanvasExportInput"
+description: "@anvilkit/plugin-canvas-studio · CanvasExportInput"
+---
+
+Defined in: [export/CanvasExportBridge.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L9)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="artboardid"&gt;&lt;/a&gt; `artboardId?` | `readonly` | `string` | Optional artboard (page) id to associate this preview with. When provided, the cache entry lives under the artboard key so the `design://<designId>/<artboardId>` URL form can resolve it. When omitted, the entry is written to the design's default bucket and used as the fallback for bare `design://<designId>` URLs. | [export/CanvasExportBridge.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L20) |
+| &lt;a id="designid"&gt;&lt;/a&gt; `designId` | `readonly` | `string` | - | [export/CanvasExportBridge.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L11) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType?` | `readonly` | `"image/png"` \| `"image/jpeg"` \| `"image/webp"` | Defaults to `"image/png"`. | [export/CanvasExportBridge.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L31) |
+| &lt;a id="pixelratio"&gt;&lt;/a&gt; `pixelRatio?` | `readonly` | `number` | Defaults to 2 (retina-quality preview). | [export/CanvasExportBridge.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L29) |
+| &lt;a id="previewcache"&gt;&lt;/a&gt; `previewCache` | `readonly` | [`PreviewCache`](PreviewCache.md) | - | [export/CanvasExportBridge.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L12) |
+| &lt;a id="quality"&gt;&lt;/a&gt; `quality?` | `readonly` | `number` | Only honored for image/jpeg + image/webp. Defaults to 0.92. | [export/CanvasExportBridge.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L33) |
+| &lt;a id="stage"&gt;&lt;/a&gt; `stage` | `readonly` | `Stage` | - | [export/CanvasExportBridge.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L10) |
+| &lt;a id="writedefault"&gt;&lt;/a&gt; `writeDefault?` | `readonly` | `boolean` | If true, also write the exported URL to the design's default bucket so bare `design://<designId>` URLs (e.g. legacy single-preview DesignBlock entries) still render. Defaults to `false` when `artboardId` is provided, `true` when it isn't. | [export/CanvasExportBridge.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L27) |

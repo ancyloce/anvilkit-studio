@@ -1,0 +1,44 @@
+---
+title: "createCollabDataPlugin"
+description: "@anvilkit/plugin-collab-yjs · createCollabDataPlugin"
+---
+
+```ts
+function createCollabDataPlugin(options): StudioPlugin;
+```
+
+Defined in: [plugin-collab-yjs/src/plugin.ts:157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L157)
+
+Create a Studio plugin that wires a SnapshotAdapter v2 (typically
+built with `createYjsAdapter`) into the editor lifecycle.
+
+Incoming side (remote → local): the plugin observes the adapter's
+`subscribe()` callback and dispatches `setData` with `irToPuckData`
+so Puck remains the single source of truth for the canvas.
+
+Outgoing side (local → remote): on every Puck `onChange`, the
+plugin reads the new data, converts it back to IR via
+`puckDataToIR`, and persists via the adapter's `save()`. Outgoing
+sync only runs when `puckConfig` is supplied — keeping it optional
+means a host can defer the wiring to the application layer if it
+needs custom IR canonicalization.
+
+### Naming
+
+This factory used to be exported as `createCollabPlugin`. The new
+`@anvilkit/plugin-collab-ui` package exposes a higher-level
+`createCollabPlugin` that bundles the data plugin together with the
+UI providers/overlays/slots. Inside this package the data-only
+factory is therefore renamed `createCollabDataPlugin` to
+disambiguate. The legacy export `createCollabPlugin` is still
+available as a deprecated alias for one minor release.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateCollabPluginOptions`](../interfaces/CreateCollabPluginOptions) |
+
+## Returns
+
+`StudioPlugin`

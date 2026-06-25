@@ -1,0 +1,37 @@
+---
+title: "CanvasExportOptions"
+description: "@anvilkit/plugin-export-canvas · CanvasExportOptions"
+---
+
+Defined in: [types.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L22)
+
+Option bag for the canvas export formats. The Studio export contract hands
+`run()` a Puck `PageIR`, which is meaningless for a canvas design — so the
+canvas document (and any pre-rendered rasters) arrive HERE instead, supplied
+by the canvas-mode host when it invokes the format.
+
+## Extends
+
+- `Record`\<`string`, `unknown`\>
+
+## Indexable
+
+```ts
+[key: string]: unknown
+```
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="canvasir"&gt;&lt;/a&gt; `canvasIR?` | `readonly` | `CanvasIR` | The canvas document to export. Required at runtime (`run()` throws without it), but typed optional so `ExportFormatDefinition<CanvasExportOptions>` stays assignable to the registry's generic `Record<string, unknown>` slot. | [types.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L28) |
+| &lt;a id="dpi"&gt;&lt;/a&gt; `dpi?` | `readonly` | `number` | Fallback DPI for unit→px/pt conversion (`svg` / `pdf`). | [types.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L37) |
+| &lt;a id="filename"&gt;&lt;/a&gt; `filename?` | `readonly` | `string` | Base filename (no extension). Defaults to the IR title, else `"design"`. | [types.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L49) |
+| &lt;a id="page"&gt;&lt;/a&gt; `page?` | `readonly` | `string` \| `number` | Page id or index for single-page formats (`svg` / `png`). Defaults to the first page. | [types.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L30) |
+| &lt;a id="pdf"&gt;&lt;/a&gt; `pdf?` | `readonly` | \{ `author?`: `string`; `pages?`: readonly (`string` \| `number`)[]; `title?`: `string`; \} | Extra PDF document metadata + explicit page selection/order. | [types.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L43) |
+| `pdf.author?` | `readonly` | `string` | - | [types.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L46) |
+| `pdf.pages?` | `readonly` | readonly (`string` \| `number`)[] | - | [types.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L44) |
+| `pdf.title?` | `readonly` | `string` | - | [types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L45) |
+| &lt;a id="pretty"&gt;&lt;/a&gt; `pretty?` | `readonly` | `boolean` | Pretty-print the JSON export. | [types.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L39) |
+| &lt;a id="rasters"&gt;&lt;/a&gt; `rasters?` | `readonly` | readonly [`CanvasRaster`](CanvasRaster.md)[] | Pre-rendered rasters keyed by page id. Required for `pdf` (one per page to embed) and for `png` (the selected page must be present). Ignored by `svg`/`json`. | [types.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L35) |
+| &lt;a id="svg"&gt;&lt;/a&gt; `svg?` | `readonly` | `SvgSerializeOptions` | SVG serializer options (image embedding mode, fonts, pretty…). | [types.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types.ts#L41) |

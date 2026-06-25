@@ -1,0 +1,39 @@
+---
+title: "serializeProp"
+description: "@anvilkit/plugin-export-react · serializeProp"
+---
+
+```ts
+function serializeProp(value, opts?): SerializedProp;
+```
+
+Defined in: [props/serialize-prop.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/props/serialize-prop.ts#L84)
+
+Serialize a single prop value into its JSX attribute-value form.
+
+Primitives:
+- `string`  → `"<escaped>"` (attribute-style string literal)
+- `number`  → `{42}`
+- `boolean` → `{true}` / `{false}`
+- `null`    → `{null}`
+
+Composites:
+- plain object / array → `{<JSON.stringify(...)>}`
+
+Any other value (function, Date, Map, Set, RegExp, Promise, symbol,
+bigint, undefined) emits the non-serializable placeholder and
+surfaces an `ExportWarning`. `nodeId` is echoed back on the warning
+so host apps can attribute the issue to the offending node.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `value` | `unknown` | Raw prop value from the IR. |
+| `opts?` | \{ `nodeId?`: `string`; `propName?`: `string`; \} | Optional context: the IR node id and prop name, used purely for diagnostic attribution. |
+| `opts.nodeId?` | `string` | - |
+| `opts.propName?` | `string` | - |
+
+## Returns
+
+[`SerializedProp`](../interfaces/SerializedProp)

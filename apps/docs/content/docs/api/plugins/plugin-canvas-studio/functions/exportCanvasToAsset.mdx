@@ -1,0 +1,30 @@
+---
+title: "exportCanvasToAsset"
+description: "@anvilkit/plugin-canvas-studio · exportCanvasToAsset"
+---
+
+```ts
+function exportCanvasToAsset(input): CanvasExportResult;
+```
+
+Defined in: [export/CanvasExportBridge.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L54)
+
+Snapshot the current Konva stage to a data URL, write it into the
+preview cache (so the `design://` resolver can hand it back later),
+and return the URL so the caller can patch it onto the Puck
+`DesignBlock` node it came from.
+
+When `artboardId` is provided the entry is keyed by
+`(designId, artboardId)`. Pass `writeDefault: true` to also seed the
+design's default bucket so bare `design://<designId>` references
+still resolve (this is the default when no `artboardId` is supplied).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`CanvasExportInput`](../interfaces/CanvasExportInput) |
+
+## Returns
+
+[`CanvasExportResult`](../interfaces/CanvasExportResult)

@@ -1,0 +1,18 @@
+---
+title: "UploadResult"
+description: "@anvilkit/plugin-asset-manager · UploadResult"
+---
+
+Defined in: [types/types.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L52)
+
+Normalized asset row returned by upload adapters and registry mutations.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/types.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L54) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | [`AssetMeta`](AssetMeta.md) | - | [types/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L62) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `readonly` | `string` | Optional human-readable name. The plugin's `uploadAsset()` seeds this from the source `File`'s `name` so the sidebar can render a filename under each tile; uploader adapters may also populate it directly when they know a friendlier label. | [types/types.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L61) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | Optional library tags. The plugin auto-derives a small set on register (kind + filename tokens); hosts may extend or replace via [AssetRegistry.setTags](AssetRegistry.md#settags) or by attaching `tags` on a host-supplied `UploadResult`. Surfaced to the sidebar through `StudioAsset.tags` and consulted by `AssetRegistry.search`. | [types/types.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L70) |
+| &lt;a id="url"&gt;&lt;/a&gt; `url` | `readonly` | `string` | - | [types/types.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L53) |

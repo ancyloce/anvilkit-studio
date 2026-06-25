@@ -1,0 +1,25 @@
+---
+title: "dataUrlUploader"
+description: "@anvilkit/plugin-asset-manager · dataUrlUploader"
+---
+
+```ts
+function dataUrlUploader(options?): UploadAdapter;
+```
+
+Defined in: [adapters/data-url.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/data-url.ts#L25)
+
+Dev/demo upload adapter that inlines the file as a `data:` URL. The result is
+self-contained (no host backend) but ~33% larger than the raw bytes once
+base64-encoded — see [DataUrlUploaderOptions.maxBytes](../interfaces/DataUrlUploaderOptions#maxbytes). Not for
+production; use `s3PresignedAdapter` or a custom `UploadAdapter` there.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`DataUrlUploaderOptions`](../interfaces/DataUrlUploaderOptions) |
+
+## Returns
+
+[`UploadAdapter`](../type-aliases/UploadAdapter)

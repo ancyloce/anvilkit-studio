@@ -1,0 +1,25 @@
+---
+title: "ResumableUploadAdapter"
+description: "@anvilkit/plugin-asset-manager · ResumableUploadAdapter"
+---
+
+Defined in: [types/resumable.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L162)
+
+Session-based upload backend. Contrast with [UploadAdapter](../type-aliases/UploadAdapter), which is a
+single `File → UploadResult` call. Implementations own the four lifecycle
+steps; the adapter-agnostic runner (M3) drives them and handles slicing,
+per-part retry, progress, resume, and abort.
+
+Transient failures (HTTP 5xx, network) should be thrown as `RetryableError`
+so the runner retries the individual part; non-retryable failures (4xx,
+shape errors) should throw `AssetValidationError`, matching the single-shot
+adapter convention.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="abort"&gt;&lt;/a&gt; `abort` | `readonly` | (`session`, `options?`) =&gt; `Promise`\&lt;`void`\&gt; | Best-effort teardown of an aborted or failed session (e.g. S3 `AbortMultipartUpload`). The runner calls this on abort; implementations should swallow their own errors so cleanup never masks the original failure. | [types/resumable.ts:203](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L203) |
+| &lt;a id="begin"&gt;&lt;/a&gt; `begin` | `readonly` | (`file`, `resume?`, `options?`) =&gt; `Promise`\&lt;[`UploadSession`](UploadSession.md)\&gt; | Open — or resume — a multipart session for `file`. When `resume` is supplied (a persisted handle from a prior, interrupted run), the adapter SHOULD reconcile against that backend session — e.g. S3 `ListParts` against `resume.uploadId` — and return a session that echoes the still-valid `uploadId` and accepted `parts` so the runner skips them. If `resume.uploadId` is reused, the returned session's effective `partSize` MUST equal `resume.partSize` — the byte ranges of already- uploaded parts depend on it. If the backend session is gone or expired the adapter MUST start fresh: return a new `uploadId` with empty `parts`. When `resume` is omitted this always starts a fresh session. | [types/resumable.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L176) |
+| &lt;a id="complete"&gt;&lt;/a&gt; `complete` | `readonly` | (`session`, `parts`, `options?`) =&gt; `Promise`\&lt;[`UploadResult`](UploadResult.md)\&gt; | Finalize the session once every part is stored. `parts` is the full, part-number-ordered tag set (resumed + freshly uploaded). Returns the asset row, which is then validated like any other upload result. | [types/resumable.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L192) |
+| &lt;a id="uploadpart"&gt;&lt;/a&gt; `uploadPart` | `readonly` | (`session`, `part`, `options?`) =&gt; `Promise`\&lt;[`PartTag`](PartTag.md)\&gt; | Upload one part and return its completion tag. | [types/resumable.ts:182](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L182) |

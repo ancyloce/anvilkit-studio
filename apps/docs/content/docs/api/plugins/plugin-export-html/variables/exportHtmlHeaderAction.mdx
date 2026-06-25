@@ -1,0 +1,16 @@
+---
+title: "exportHtmlHeaderAction"
+description: "@anvilkit/plugin-export-html · exportHtmlHeaderAction"
+---
+
+```ts
+const exportHtmlHeaderAction: StudioHeaderAction;
+```
+
+Defined in: [action/header-action.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/action/header-action.ts#L90)
+
+Default header action used when the consumer imports
+`exportHtmlHeaderAction` directly without going through
+`createHtmlExportPlugin`. This shape is preserved for backward
+compatibility; in production it is superseded by the bound action
+returned from `createExportHtmlHeaderAction(format, options)`.

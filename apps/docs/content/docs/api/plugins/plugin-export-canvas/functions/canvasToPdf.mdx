@@ -1,0 +1,35 @@
+---
+title: "canvasToPdf"
+description: "@anvilkit/plugin-export-canvas · canvasToPdf"
+---
+
+```ts
+function canvasToPdf(ir, options): Promise<{
+  pdf: Uint8Array;
+  warnings: ExportWarning[];
+}>;
+```
+
+Defined in: [serialize.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize.ts#L63)
+
+Serialize the canvas document to a multi-page PDF (wraps canvas-core). The
+caller supplies one pre-rendered raster per page — this stays headless.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `CanvasIR` |
+| `options` | \{ `author?`: `string`; `dpi?`: `number`; `pages?`: readonly (`string` \| `number`)[]; `rasters`: readonly [`CanvasRaster`](../interfaces/CanvasRaster)[]; `title?`: `string`; \} |
+| `options.author?` | `string` |
+| `options.dpi?` | `number` |
+| `options.pages?` | readonly (`string` \| `number`)[] |
+| `options.rasters` | readonly [`CanvasRaster`](../interfaces/CanvasRaster)[] |
+| `options.title?` | `string` |
+
+## Returns
+
+`Promise`\<\{
+  `pdf`: `Uint8Array`;
+  `warnings`: `ExportWarning`[];
+\}\>

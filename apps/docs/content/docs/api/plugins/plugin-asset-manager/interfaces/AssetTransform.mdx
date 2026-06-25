@@ -1,0 +1,21 @@
+---
+title: "AssetTransform"
+description: "@anvilkit/plugin-asset-manager · AssetTransform"
+---
+
+Defined in: [types/transform.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L22)
+
+A declarative, backend-neutral image transformation request. All fields are
+optional; a resolver maps the ones it supports onto its CDN's vocabulary and
+ignores the rest.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="dpr"&gt;&lt;/a&gt; `dpr?` | `readonly` | `number` | Device pixel ratio multiplier (e.g. `2` for retina). | [types/transform.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L38) |
+| &lt;a id="fit"&gt;&lt;/a&gt; `fit?` | `readonly` | `"cover"` \| `"contain"` \| `"fill"` \| `"inside"` \| `"outside"` | How the image fills the target box when both `width` and `height` are set. Names follow the common CDN/sharp vocabulary; a resolver maps them onto its own parameter values. | [types/transform.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L32) |
+| &lt;a id="format"&gt;&lt;/a&gt; `format?` | `readonly` | `"webp"` \| `"avif"` \| `"jpeg"` \| `"png"` \| `"auto"` | Output format. `"auto"` lets the CDN negotiate (e.g. WebP/AVIF by Accept). | [types/transform.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L34) |
+| &lt;a id="height"&gt;&lt;/a&gt; `height?` | `readonly` | `number` | Target height in pixels. | [types/transform.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L26) |
+| &lt;a id="quality"&gt;&lt;/a&gt; `quality?` | `readonly` | `number` | Output quality, 1–100. | [types/transform.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L36) |
+| &lt;a id="width"&gt;&lt;/a&gt; `width?` | `readonly` | `number` | Target width in pixels. | [types/transform.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L24) |

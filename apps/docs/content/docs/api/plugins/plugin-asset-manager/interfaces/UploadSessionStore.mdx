@@ -1,0 +1,89 @@
+---
+title: "UploadSessionStore"
+description: "@anvilkit/plugin-asset-manager · UploadSessionStore"
+---
+
+Defined in: [types/resumable.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L137)
+
+Persistence seam for resumable uploads. The runner loads a prior session
+before [ResumableUploadAdapter.begin](ResumableUploadAdapter.md#begin) (so an interrupted upload can
+resume), saves progress as parts complete, and clears it once the upload
+finishes or is abandoned. Keyed internally by a stable file fingerprint
+(name + size + lastModified), so the same picked file resumes while a
+different file does not.
+
+The built-in `createUploadSessionStore` persists to `localStorage` (with an
+in-memory fallback where unavailable); hosts may supply their own (e.g.
+IndexedDB or remote), hence the optionally-async return types.
+
+## Methods
+
+### clear()
+
+```ts
+clear(file): void | Promise<void>;
+```
+
+Defined in: [types/resumable.ts:148](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L148)
+
+Remove any persisted session for `file` — called on complete or abort.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `file` | `File` |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;
+
+***
+
+### load()
+
+```ts
+load(file): 
+  | PersistedUploadSession
+  | Promise<PersistedUploadSession | undefined>
+  | undefined;
+```
+
+Defined in: [types/resumable.ts:139](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L139)
+
+Look up a persisted session for `file`, or `undefined` if none.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `file` | `File` |
+
+#### Returns
+
+  \| [`PersistedUploadSession`](PersistedUploadSession.md)
+  \| `Promise`\&lt;[`PersistedUploadSession`](PersistedUploadSession.md) \| `undefined`\&gt;
+  \| `undefined`
+
+***
+
+### save()
+
+```ts
+save(file, session): void | Promise<void>;
+```
+
+Defined in: [types/resumable.ts:146](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L146)
+
+Persist (or overwrite) the in-progress session for `file`. Best-effort.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `file` | `File` |
+| `session` | [`PersistedUploadSession`](PersistedUploadSession.md) |
+
+#### Returns
+
+`void` \| `Promise`\&lt;`void`\&gt;

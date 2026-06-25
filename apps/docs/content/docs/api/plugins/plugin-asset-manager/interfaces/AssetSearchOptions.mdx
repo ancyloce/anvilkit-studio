@@ -1,0 +1,27 @@
+---
+title: "AssetSearchOptions"
+description: "@anvilkit/plugin-asset-manager · AssetSearchOptions"
+---
+
+Defined in: [types/types.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L117)
+
+Search and filter options accepted by [AssetRegistry.search](AssetRegistry.md#search).
+
+`query` matches case-insensitively against `id`, `name`, `tags`, and
+the MIME type (prefix match — e.g. `"image"` matches `"image/png"`).
+Filters compose with AND semantics: an entry must satisfy every
+supplied filter to land in the page.
+
+## Extended by
+
+- [`AssetFilter`](AssetFilter.md)
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `string` | [types/types.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L121) |
+| &lt;a id="kinds"&gt;&lt;/a&gt; `kinds?` | `readonly` | readonly [`AssetKind`](../type-aliases/AssetKind)[] | [types/types.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L119) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `readonly` | `number` | [types/types.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L122) |
+| &lt;a id="query"&gt;&lt;/a&gt; `query?` | `readonly` | `string` | [types/types.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L118) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | [types/types.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L120) |

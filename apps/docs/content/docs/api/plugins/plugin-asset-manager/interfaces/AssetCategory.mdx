@@ -1,0 +1,21 @@
+---
+title: "AssetCategory"
+description: "@anvilkit/plugin-asset-manager · AssetCategory"
+---
+
+Defined in: [types/categories.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L43)
+
+Top-level asset category exposed to the browser UI.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/categories.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L44) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | - | [types/categories.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L45) |
+| &lt;a id="match"&gt;&lt;/a&gt; `match?` | `readonly` | \{ `kinds?`: readonly [`AssetKind`](../type-aliases/AssetKind)[]; `tags?`: readonly `string`[]; \} | Local match composed with AND-semantic search. | [types/categories.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L47) |
+| `match.kinds?` | `readonly` | readonly [`AssetKind`](../type-aliases/AssetKind)[] | - | [types/categories.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L49) |
+| `match.tags?` | `readonly` | readonly `string`[] | - | [types/categories.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L48) |
+| &lt;a id="provider"&gt;&lt;/a&gt; `provider?` | `readonly` | \{ `source`: [`AssetSourceId`](../type-aliases/AssetSourceId); `theme?`: `string`; \} | Route the category to an external provider/theme instead of a local match. | [types/categories.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L52) |
+| `provider.source` | `readonly` | [`AssetSourceId`](../type-aliases/AssetSourceId) | - | [types/categories.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L53) |
+| `provider.theme?` | `readonly` | `string` | - | [types/categories.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/categories.ts#L54) |

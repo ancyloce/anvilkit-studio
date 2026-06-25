@@ -1,0 +1,24 @@
+---
+title: "inferAssetKind"
+description: "@anvilkit/plugin-asset-manager · inferAssetKind"
+---
+
+```ts
+function inferAssetKind(entry): AssetKind;
+```
+
+Defined in: [utils/infer-kind.ts:8](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/infer-kind.ts#L8)
+
+Library-management kind inference. Used by both
+`AssetRegistry.search` (kind filter) and `inferStudioAssetKind`
+(sidebar projection) so a single source of truth drives both.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `entry` | [`UploadResult`](../interfaces/UploadResult) |
+
+## Returns
+
+[`AssetKind`](../type-aliases/AssetKind)

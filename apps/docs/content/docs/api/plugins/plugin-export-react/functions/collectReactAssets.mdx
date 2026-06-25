@@ -1,0 +1,31 @@
+---
+title: "collectReactAssets"
+description: "@anvilkit/plugin-export-react · collectReactAssets"
+---
+
+```ts
+function collectReactAssets(ir, strategy): AssetPlan;
+```
+
+Defined in: [assets/assets.ts:350](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L350)
+
+Resolve the asset import + rewrite plan for the given IR and
+strategy.
+
+- `"url-prop"`: empty imports, no rewrites — the emitter keeps the
+  URL as a string literal.
+- `"static-import"`: every local relative-path URL becomes one
+  `import` binding (deduplicated by URL). External URLs fall back
+  to `"url-prop"` behavior with an `EXTERNAL_URL_STATIC_IMPORT`
+  warning, so the emitter never generates broken import paths.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `PageIR` |
+| `strategy` | `"static-import"` \| `"url-prop"` |
+
+## Returns
+
+[`AssetPlan`](../interfaces/AssetPlan)

@@ -1,0 +1,27 @@
+---
+title: "FetchAssetFn"
+description: "@anvilkit/plugin-export-html · FetchAssetFn"
+---
+
+```ts
+type FetchAssetFn = (url, opts?) => Promise<{
+  bytes: Uint8Array;
+  contentType: string;
+}>;
+```
+
+Defined in: [types/types.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L20)
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `url` | `string` |
+| `opts?` | [`FetchAssetOptions`](../interfaces/FetchAssetOptions) |
+
+## Returns
+
+`Promise`\<\{
+  `bytes`: `Uint8Array`;
+  `contentType`: `string`;
+\}\>

@@ -1,0 +1,78 @@
+---
+title: "AiCopilotPluginInstance"
+description: "@anvilkit/plugin-ai-copilot · AiCopilotPluginInstance"
+---
+
+Defined in: [plugins/plugin-ai-copilot/src/types/types.ts:205](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L205)
+
+Returned plugin instance, including the public `runGeneration()`
+entry point used by host UI code and tests.
+
+## Plugin shape — why imperative rather than declarative
+
+Sibling plugins like `@anvilkit/plugin-export-html` use a purely
+declarative shape: they return an `exportFormats` / `headerActions`
+map from `register()` and host UI pulls from it. This plugin
+intentionally extends that pattern with two imperative methods —
+`runGeneration` and `regenerateSelection` — because the AI copilot
+is prompt-driven: host UI code typically renders a textarea + submit
+button and must `await` the run to drive progress state, disable
+the input mid-generation, and surface errors inline. A declarative
+`aiActions` map would still require a host-side `await invoke()` at
+the call site, so we expose the imperative methods directly.
+
+The trade-off is that host UI cannot enumerate copilot capabilities
+without instantiating the plugin. This is acceptable because there
+is exactly one copilot per host integration today; if multiple
+copilots are needed in future, a registry surface will be added.
+
+## See
+
+docs/decisions/005-ai-copilot-imperative-api.md for the long-form
+     decision record.
+
+## Extends
+
+- `StudioPlugin`
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta` | `readonly` | [`StudioPluginMeta`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts) | Frozen plugin metadata. See [StudioPluginMeta](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts). | `StudioPlugin.meta` | core/dist/types/plugin.d.ts:701 |
+| &lt;a id="regenerateselection"&gt;&lt;/a&gt; `regenerateSelection` | `readonly` | (`prompt`, `selection`, `opts?`) =&gt; `Promise`\&lt;`void`\&gt; | Phase 6 / M9 section-level entry point. Reads the current Puck canvas, derives an [AiSectionContext](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts) from the host's Puck config plus the supplied [AiSectionSelection](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts), calls the host's [GenerateSectionFn](../type-aliases/GenerateSectionFn) (when configured), validates the response with `validateAiSectionPatch`, and on success atomically dispatches the patched canvas via `puckApi.dispatch({ type: "setData", … })`. Resolves whether the run succeeded or failed — failures surface on the `ai-copilot:error` event bus the same way as the page flow, so callers should subscribe to that bus rather than inspecting the return value. | - | [plugins/plugin-ai-copilot/src/types/types.ts:221](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L221) |
+| &lt;a id="rungeneration"&gt;&lt;/a&gt; `runGeneration` | `readonly` | (`prompt`) =&gt; `Promise`\&lt;`void`\&gt; | - | - | [plugins/plugin-ai-copilot/src/types/types.ts:206](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L206) |
+
+## Methods
+
+### register()
+
+```ts
+register(ctx): 
+  | StudioPluginRegistration<Config>
+| Promise<StudioPluginRegistration<Config>>;
+```
+
+Defined in: core/dist/types/plugin.d.ts:710
+
+Produce a registration block for the runtime to consume.
+
+Called exactly once per plugin, during `compilePlugins()`. May
+return synchronously or via a `Promise`.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `ctx` | [`StudioPluginContext`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts)\&lt;`Config`\&gt; | The [StudioPluginContext](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts) for this session. |
+
+#### Returns
+
+  \| `StudioPluginRegistration`\&lt;`Config`\&gt;
+  \| `Promise`\&lt;`StudioPluginRegistration`\&lt;`Config`\&gt;\&gt;
+
+#### Inherited from
+
+```ts
+StudioPlugin.register
+```

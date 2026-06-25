@@ -1,0 +1,22 @@
+---
+title: "AssetRegistry"
+description: "@anvilkit/plugin-asset-manager · AssetRegistry"
+---
+
+Defined in: [types/types.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L140)
+
+In-memory catalog API that stores and searches uploaded assets.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="delete"&gt;&lt;/a&gt; `delete` | `readonly` | (`id`) =&gt; `boolean` | Remove an asset. Returns `true` if an entry was removed. | [types/types.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L145) |
+| &lt;a id="get"&gt;&lt;/a&gt; `get` | `readonly` | (`id`) =&gt; [`UploadResult`](UploadResult.md) \| `undefined` | - | [types/types.ts:142](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L142) |
+| &lt;a id="list"&gt;&lt;/a&gt; `list` | `readonly` | () =&gt; readonly [`UploadResult`](UploadResult.md)[] | - | [types/types.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L143) |
+| &lt;a id="register"&gt;&lt;/a&gt; `register` | `readonly` | (`asset`) =&gt; [`UploadResult`](UploadResult.md) | - | [types/types.ts:141](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L141) |
+| &lt;a id="rename"&gt;&lt;/a&gt; `rename` | `readonly` | (`id`, `name`) =&gt; [`UploadResult`](UploadResult.md) \| `undefined` | Rename an asset in-place. Returns the updated entry, or `undefined` if no asset with that id exists. | [types/types.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L150) |
+| &lt;a id="replace"&gt;&lt;/a&gt; `replace` | `readonly` | (`id`, `next`) =&gt; [`UploadResult`](UploadResult.md) \| `undefined` | Replace an asset in-place. Preserves the entry's `id` even if the incoming `next` carries a different one. Returns the updated entry, or `undefined` if no asset with that id exists. | [types/types.ts:156](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L156) |
+| &lt;a id="search"&gt;&lt;/a&gt; `search` | `readonly` | (`options?`) =&gt; [`AssetSearchPage`](AssetSearchPage.md) | Search and paginate the registry. See [AssetSearchOptions](AssetSearchOptions.md) for filter semantics. | [types/types.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L174) |
+| &lt;a id="settags"&gt;&lt;/a&gt; `setTags` | `readonly` | (`id`, `tags`) =&gt; [`UploadResult`](UploadResult.md) \| `undefined` | Replace the tag set on an asset in-place. Empty arrays drop the `tags` field entirely. Tags are deduped, trimmed, lowercased, and frozen before storage. Returns the updated entry, or `undefined` if no asset with that id exists. | [types/types.ts:166](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L166) |
+| &lt;a id="subscribe"&gt;&lt;/a&gt; `subscribe` | `readonly` | (`listener`) =&gt; () =&gt; `void` | Subscribe to mutation notifications. The returned function unsubscribes the listener. | [types/types.ts:179](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L179) |

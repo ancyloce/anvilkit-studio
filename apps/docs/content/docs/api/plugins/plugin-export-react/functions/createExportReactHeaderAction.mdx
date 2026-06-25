@@ -1,0 +1,31 @@
+---
+title: "createExportReactHeaderAction"
+description: "@anvilkit/plugin-export-react · createExportReactHeaderAction"
+---
+
+```ts
+function createExportReactHeaderAction(format, options): StudioHeaderAction;
+```
+
+Defined in: [actions/header-action.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/header-action.ts#L30)
+
+Build a header action whose `onClick` actually runs the bound React
+export format and broadcasts the result.
+
+- When `options.buildIR` is provided, the action constructs a
+  `PageIR` via that builder, runs the export format, and emits
+  `anvilkit:export:ready` with the resulting payload (host listens
+  to trigger a download).
+- Otherwise, the action emits `anvilkit:export:request` so the host
+  can perform the export end-to-end with its own Puck `Config`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `format` | `ExportFormatDefinition`\&lt;[`ReactExportOptions`](../interfaces/ReactExportOptions)\&gt; |
+| `options` | [`ReactExportOptions`](../interfaces/ReactExportOptions) |
+
+## Returns
+
+`StudioHeaderAction`

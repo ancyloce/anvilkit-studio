@@ -1,0 +1,17 @@
+---
+title: "useCollabIdentity"
+description: "@anvilkit/collab-ui · useCollabIdentity"
+---
+
+```ts
+function useCollabIdentity(): IdentityContextValue;
+```
+
+Defined in: [context.tsx:355](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L355)
+
+Identity tuple `{ self, updateSelf }`. Reads only `IdentityContext`,
+so consumers do not re-render on cursor / status / conflict churn.
+
+## Returns
+
+`IdentityContextValue`

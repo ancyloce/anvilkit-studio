@@ -1,0 +1,30 @@
+---
+title: "SnapshotAdapterWithMetrics"
+description: "@anvilkit/plugin-collab-yjs · SnapshotAdapterWithMetrics"
+---
+
+```ts
+type SnapshotAdapterWithMetrics = SnapshotAdapter & {
+  destroy?: () => void;
+  metrics?: () => MetricsSnapshot;
+};
+```
+
+Defined in: [plugin-collab-yjs/src/utils/debounced-adapter.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L44)
+
+`SnapshotAdapter` extended with the optional metrics surface from
+`YjsSnapshotAdapter`. Used as both the upstream type accepted by
+`createDebouncedAdapter` and the return type — when the upstream
+adapter exposes `metrics()`, the debouncer overlays its own
+coalescing ratio on top of the upstream snapshot.
+
+When the upstream adapter exposes `destroy()`, the debouncer
+forwards teardown to it so hosts that wrap a `YjsSnapshotAdapter`
+get clean unobserve-on-unmount semantics through a single call.
+
+## Type Declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `destroy()?` | () =&gt; `void` | [plugin-collab-yjs/src/utils/debounced-adapter.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L46) |
+| `metrics()?` | () =&gt; [`MetricsSnapshot`](../interfaces/MetricsSnapshot) | [plugin-collab-yjs/src/utils/debounced-adapter.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L45) |

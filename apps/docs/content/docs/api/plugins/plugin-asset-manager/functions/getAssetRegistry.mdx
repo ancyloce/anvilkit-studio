@@ -1,0 +1,32 @@
+---
+title: "getAssetRegistry"
+description: "@anvilkit/plugin-asset-manager · getAssetRegistry"
+---
+
+```ts
+function getAssetRegistry<UserConfig>(ctx): AssetRegistry | undefined;
+```
+
+Defined in: [plugin.ts:217](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L217)
+
+Return the runtime registry associated with an initialized plugin context.
+
+The registry is available after the plugin `onInit` hook has run and is
+removed during `onDestroy`; callers should handle `undefined` in setup,
+teardown, and tests that inspect lifecycle boundaries.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `Config` | `Config` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | `StudioPluginContext`\&lt;`UserConfig`\&gt; |
+
+## Returns
+
+[`AssetRegistry`](../interfaces/AssetRegistry) \| `undefined`

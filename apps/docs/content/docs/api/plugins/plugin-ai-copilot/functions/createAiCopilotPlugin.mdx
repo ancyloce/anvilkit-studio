@@ -1,0 +1,26 @@
+---
+title: "createAiCopilotPlugin"
+description: "@anvilkit/plugin-ai-copilot · createAiCopilotPlugin"
+---
+
+```ts
+function createAiCopilotPlugin(opts): AiCopilotPluginInstance;
+```
+
+Defined in: [plugins/plugin-ai-copilot/src/plugin.ts:137](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L137)
+
+Create the headless AI copilot plugin.
+
+The host must pass the same `puckConfig` object it gives to
+`<Studio />` so `configToAiContext()` can derive the AI-safe schema
+once during `onInit`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `opts` | [`AiCopilotOptions`](../interfaces/AiCopilotOptions) |
+
+## Returns
+
+[`AiCopilotPluginInstance`](../interfaces/AiCopilotPluginInstance)

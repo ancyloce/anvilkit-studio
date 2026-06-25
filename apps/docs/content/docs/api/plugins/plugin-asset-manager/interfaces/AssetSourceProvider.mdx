@@ -1,0 +1,88 @@
+---
+title: "AssetSourceProvider"
+description: "@anvilkit/plugin-asset-manager · AssetSourceProvider"
+---
+
+Defined in: [sources/provider.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L44)
+
+Read-only external provider contract for searchable asset sources.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="capabilities"&gt;&lt;/a&gt; `capabilities` | `readonly` | [`AssetSourceCapabilities`](AssetSourceCapabilities.md) | - | [sources/provider.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L48) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | [`AssetSourceId`](../type-aliases/AssetSourceId) | `"unsplash"` | host id. The built-in `"local"` provider wraps the data source. | [sources/provider.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L46) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | - | [sources/provider.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L47) |
+| &lt;a id="requiredcsp"&gt;&lt;/a&gt; `requiredCsp?` | `readonly` | () =&gt; \{ `connectSrc?`: readonly `string`[]; `imgSrc?`: readonly `string`[]; \} | Content-Security-Policy hosts this provider needs (e.g. Unsplash img/connect src). | [sources/provider.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L50) |
+
+## Methods
+
+### listThemes()
+
+```ts
+listThemes(): 
+  | readonly AssetTheme[]
+| Promise<readonly AssetTheme[]>;
+```
+
+Defined in: [sources/provider.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L55)
+
+Return browse themes or categories this provider exposes.
+
+#### Returns
+
+  \| readonly [`AssetTheme`](AssetTheme.md)[]
+  \| `Promise`\&lt;readonly [`AssetTheme`](AssetTheme.md)[]\&gt;
+
+***
+
+### pickResult()
+
+```ts
+pickResult(asset, signal?): Promise<UploadResult>;
+```
+
+Defined in: [sources/provider.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L67)
+
+Convert a browsed result into a real asset (fires the source's
+download-trigger / attribution work) and feed it into the existing
+registry → IR → `asset://` pipeline.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `asset` | `StudioAsset` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`UploadResult`](UploadResult.md)\>
+
+***
+
+### search()
+
+```ts
+search(
+   query, 
+   page, 
+signal?): Promise<AssetListPage>;
+```
+
+Defined in: [sources/provider.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/sources/provider.ts#L57)
+
+Search or browse the provider and return one page of normalized assets.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`AssetFilter`](AssetFilter.md) |
+| `page` | `string` \| `undefined` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`AssetListPage`](AssetListPage.md)\>

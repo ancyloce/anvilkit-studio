@@ -1,0 +1,17 @@
+---
+title: "RequiredCspOptions"
+description: "@anvilkit/plugin-asset-manager · RequiredCspOptions"
+---
+
+Defined in: [utils/csp.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L53)
+
+Inputs describing which asset backends need CSP allowances.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="dataurl"&gt;&lt;/a&gt; `dataUrl?` | `readonly` | `boolean` | True if `dataUrlUploader` is mounted. Defaults to false. | [utils/csp.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L55) |
+| &lt;a id="inmemory"&gt;&lt;/a&gt; `inMemory?` | `readonly` | `boolean` | True if `inMemoryUploader` is mounted. Defaults to false. | [utils/csp.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L57) |
+| &lt;a id="s3"&gt;&lt;/a&gt; `s3?` | `readonly` | \| [`S3CspOptions`](S3CspOptions.md) \| readonly [`S3CspOptions`](S3CspOptions.md)[] | Description of any `s3PresignedAdapter` instance(s). | [utils/csp.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L59) |
+| &lt;a id="s3multipart"&gt;&lt;/a&gt; `s3Multipart?` | `readonly` | \| [`S3MultipartCspOptions`](S3MultipartCspOptions.md) \| readonly [`S3MultipartCspOptions`](S3MultipartCspOptions.md)[] | Description of any `s3MultipartAdapter` instance(s). | [utils/csp.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L61) |

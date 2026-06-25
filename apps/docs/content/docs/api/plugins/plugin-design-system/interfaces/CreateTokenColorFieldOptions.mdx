@@ -1,0 +1,27 @@
+---
+title: "CreateTokenColorFieldOptions"
+description: "@anvilkit/plugin-design-system · CreateTokenColorFieldOptions"
+---
+
+Defined in: [fields/createTokenColorField.tsx:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/fields/createTokenColorField.tsx#L30)
+
+## File
+
+Public surface for `@anvilkit/plugin-design-system`.
+
+Phase A scaffold:
+ - A4 (this revision): re-exports the React-free token surface
+   (`DEFAULT_TOKENS`, `mergeTokens`, type tree).
+ - A5: adds the `emitTokensCss` helper.
+ - A6: adds the `createDesignSystemPlugin()` factory.
+
+The dedicated `./tokens` subpath stays the authoritative React-free
+import — host build pipelines that want to avoid pulling React
+resolutions during a pure-data import should keep using it.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="defaultref"&gt;&lt;/a&gt; `defaultRef?` | `readonly` | `string` | Default ref string applied when Puck instantiates the field with no value. Stored verbatim — no validation at factory time. | [fields/createTokenColorField.tsx:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/fields/createTokenColorField.tsx#L37) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `readonly` | `string` | Label shown above the field in the Puck sidebar. | [fields/createTokenColorField.tsx:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/fields/createTokenColorField.tsx#L32) |

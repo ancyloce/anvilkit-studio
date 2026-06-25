@@ -1,0 +1,59 @@
+---
+title: "SnapshotPrunedError"
+description: "@anvilkit/plugin-collab-yjs · SnapshotPrunedError"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/snapshot-errors.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L38)
+
+The snapshot was evicted by the `maxSnapshots` retention cap. This
+is best-effort and **same-session**: it is raised when THIS adapter
+instance performed the eviction (it tracks its own pruned ids).
+Cross-peer or post-reload, an evicted id is indistinguishable from
+one that never existed (retention deletes meta+payload atomically)
+and surfaces as [SnapshotNotFoundError](SnapshotNotFoundError.md); a host history UI
+should pre-filter requests against the retained `list()`.
+Recoverable: hide / disable the revision rather than treat it as
+corruption.
+
+## Extends
+
+- `SnapshotError`
+
+## Constructors
+
+### Constructor
+
+```ts
+new SnapshotPrunedError(
+   id, 
+   message, 
+   options?): SnapshotPrunedError;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/snapshot-errors.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L16)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `message` | `string` |
+| `options?` | \{ `cause?`: `unknown`; \} |
+| `options.cause?` | `unknown` |
+
+#### Returns
+
+`SnapshotPrunedError`
+
+#### Inherited from
+
+```ts
+SnapshotError.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Default value | Description | Overrides | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | `undefined` | The snapshot id the failed `load()` targeted. | - | `SnapshotError.id` | [plugin-collab-yjs/src/utils/snapshot-errors.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L15) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `"SnapshotPrunedError"` | `"SnapshotPrunedError"` | - | `SnapshotError.name` | - | [plugin-collab-yjs/src/utils/snapshot-errors.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L39) |

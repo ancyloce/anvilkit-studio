@@ -1,0 +1,25 @@
+---
+title: "sanitizeDisplayName"
+description: "@anvilkit/plugin-collab-yjs · sanitizeDisplayName"
+---
+
+```ts
+function sanitizeDisplayName(value): string;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L77)
+
+Strip ASCII control characters (and the DEL byte) from a display name,
+then cap to `MAX_DISPLAY_NAME_LENGTH`. Does NOT escape HTML — hosts
+that render the name into `innerHTML` must still apply their own
+escaping; this helper only blunts the control-character injection sink.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `string` |
+
+## Returns
+
+`string`

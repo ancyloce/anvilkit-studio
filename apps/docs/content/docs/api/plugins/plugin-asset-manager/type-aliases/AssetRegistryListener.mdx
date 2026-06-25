@@ -1,0 +1,19 @@
+---
+title: "AssetRegistryListener"
+description: "@anvilkit/plugin-asset-manager · AssetRegistryListener"
+---
+
+```ts
+type AssetRegistryListener = () => void;
+```
+
+Defined in: [types/types.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L107)
+
+Listener invoked after every registry mutation
+(`register` / `delete` / `rename` / `replace` / `setTags`). The
+`studio-asset-source` adapter wires its own listener set onto the
+registry so the sidebar re-runs `list()` whenever an asset changes.
+
+## Returns
+
+`void`

@@ -1,0 +1,26 @@
+---
+title: "ConnectionSource"
+description: "@anvilkit/plugin-collab-yjs · ConnectionSource"
+---
+
+```ts
+type ConnectionSource = (emit) => () => void;
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:218](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L218)
+
+Callback wired by the adapter into the host transport. The host
+invokes `emit` with the latest `ConnectionStatus` when its provider
+changes state (connect, sync, disconnect, retry, fail).
+
+Returns an unsubscribe used by the adapter on `destroy`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `emit` | (`status`) =&gt; `void` |
+
+## Returns
+
+() => `void`

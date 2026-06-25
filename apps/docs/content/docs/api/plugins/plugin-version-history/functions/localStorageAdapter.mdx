@@ -1,0 +1,28 @@
+---
+title: "localStorageAdapter"
+description: "@anvilkit/plugin-version-history · localStorageAdapter"
+---
+
+```ts
+function localStorageAdapter(options): SnapshotAdapter;
+```
+
+Defined in: [adapters/local-storage.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/local-storage.ts#L32)
+
+Browser `localStorage`-backed snapshot store.
+
+Records use the shared delta-chain format (keyframe + diffs) so a long
+history fits the ~5–10 MB quota far better than one full `PageIR` per
+version. Records written by older versions are raw `PageIR` JSON and are
+read transparently as keyframes — no migration required. The snapshot
+**index** schema is unchanged.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`LocalStorageAdapterOptions`](../interfaces/LocalStorageAdapterOptions) |
+
+## Returns
+
+[`SnapshotAdapter`](../interfaces/SnapshotAdapter)

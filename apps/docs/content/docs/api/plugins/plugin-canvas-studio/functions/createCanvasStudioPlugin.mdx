@@ -1,0 +1,36 @@
+---
+title: "createCanvasStudioPlugin"
+description: "@anvilkit/plugin-canvas-studio · createCanvasStudioPlugin"
+---
+
+```ts
+function createCanvasStudioPlugin(options): StudioPlugin;
+```
+
+Defined in: [plugin.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L76)
+
+Wires the Canvas Studio integration into `<Studio>`:
+
+- Header action: toggle between Puck page mode and full-screen Canvas
+  overlay.
+- Overlay: mounts `<CanvasStudio>` when the toggle is on, persists the
+  IR through the host-provided `CanvasPersistenceAdapter` on close,
+  exports the stage into the preview store (object URL for display, data
+  URL for export), and patches the Puck DesignBlock it came from with a
+  tiny `design://` reference — never the image bytes, so Puck's undo
+  history does not retain a full preview per edit. The DesignBlock reads
+  the object URL back from the store via `setDesignPreviewSource`.
+- Layer quick-add: inserts a `DesignBlock` placeholder into the Puck
+  page and stages a fresh design id in the overlay store.
+- `design://` asset resolver: hands back cached preview URLs for any
+  `design://<designId>` reference encountered in the IR resolver chain.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateCanvasStudioPluginOptions`](../interfaces/CreateCanvasStudioPluginOptions) |
+
+## Returns
+
+`StudioPlugin`

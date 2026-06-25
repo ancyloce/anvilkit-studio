@@ -1,0 +1,24 @@
+---
+title: "UnsplashSourceOptions"
+description: "@anvilkit/plugin-asset-manager · UnsplashSourceOptions"
+---
+
+Defined in: [types/unsplash.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L36)
+
+Options for enabling and configuring the Unsplash source provider.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="accesskey"&gt;&lt;/a&gt; `accessKey?` | `readonly` | `string` | DEV ONLY — ships the key to the browser; ignored when `proxyEndpoint` is set. | [types/unsplash.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L40) |
+| &lt;a id="appname"&gt;&lt;/a&gt; `appName` | `readonly` | `string` | REQUIRED when enabled — `utm_source` for mandatory attribution. | [types/unsplash.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L44) |
+| &lt;a id="cachettlms"&gt;&lt;/a&gt; `cacheTtlMs?` | `readonly` | `number` | Result LRU TTL. Default 300_000. | [types/unsplash.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L51) |
+| &lt;a id="enabled"&gt;&lt;/a&gt; `enabled?` | `readonly` | `boolean` | Defaults to `!!(proxyEndpoint || accessKey)`; the package never bundles a key. | [types/unsplash.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L42) |
+| &lt;a id="fetch"&gt;&lt;/a&gt; `fetch?` | `readonly` | (`input`, `init?`) =&gt; `Promise`\&lt;`Response`\&gt; | Injectable fetch for tests / SSR. | [types/unsplash.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L61) |
+| &lt;a id="minrequestintervalms"&gt;&lt;/a&gt; `minRequestIntervalMs?` | `readonly` | `number` | Throttle floor between JSON requests. Default 1200. | [types/unsplash.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L49) |
+| &lt;a id="perpage"&gt;&lt;/a&gt; `perPage?` | `readonly` | `number` | Default 24 (clamped 1–30). | [types/unsplash.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L47) |
+| &lt;a id="proxyendpoint"&gt;&lt;/a&gt; `proxyEndpoint?` | `readonly` | `string` \| `URL` | RECOMMENDED — proxy injects the `Client-ID` server-side. | [types/unsplash.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L38) |
+| &lt;a id="rehostonpick"&gt;&lt;/a&gt; `rehostOnPick?` | `readonly` | `boolean` | Opt-in re-host instead of hotlinking. Default false. | [types/unsplash.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L63) |
+| &lt;a id="requesttimeoutms"&gt;&lt;/a&gt; `requestTimeoutMs?` | `readonly` | `number` | Per-request timeout for search / topic / photo lookups (ms). A request that exceeds it aborts and surfaces as a retryable `PROVIDER_NETWORK` error, so a blocked or flaky network path (e.g. a VPN/proxy black-holing `api.unsplash.com`) lets the sidebar fall back to "Unsplash unavailable" instead of spinning. Default 15_000. Ignored if not a positive number. | [types/unsplash.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L59) |
+| &lt;a id="themes"&gt;&lt;/a&gt; `themes?` | `readonly` | [`UnsplashThemeConfig`](UnsplashThemeConfig.md) | - | [types/unsplash.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/unsplash.ts#L45) |

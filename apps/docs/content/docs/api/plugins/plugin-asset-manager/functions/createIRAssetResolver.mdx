@@ -1,0 +1,27 @@
+---
+title: "createIRAssetResolver"
+description: "@anvilkit/plugin-asset-manager · createIRAssetResolver"
+---
+
+```ts
+function createIRAssetResolver(options): IRAssetResolver;
+```
+
+Defined in: [utils/resolver.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/resolver.ts#L61)
+
+Create an IR asset resolver for `asset://<id>` references.
+
+The resolver looks up references in the supplied registry, re-validates the
+stored URL at export/render time, and translates lookup or validation failures
+into `AssetResolutionError` codes for callers that need actionable export
+diagnostics.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateIRAssetResolverOptions`](../interfaces/CreateIRAssetResolverOptions) |
+
+## Returns
+
+`IRAssetResolver`

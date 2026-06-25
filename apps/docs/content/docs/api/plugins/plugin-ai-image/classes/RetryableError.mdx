@@ -1,0 +1,56 @@
+---
+title: "RetryableError"
+description: "@anvilkit/plugin-ai-image · RetryableError"
+---
+
+Defined in: [plugins/plugin-ai-image/src/job/retry.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L24)
+
+Marks an error as transient — withRetry reschedules the
+underlying call rather than rethrowing.
+
+Providers should throw `RetryableError` for recoverable conditions
+(HTTP 5xx, network blips); non-retryable failures should surface as
+a plain `Error` (which propagates) or as an `AiImageJobResult` with
+`status: "error"` (which does not).
+
+The optional `retryAfterMs` overrides the next computed delay, useful
+when a server returned a `Retry-After` header.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new RetryableError(message, options?): RetryableError;
+```
+
+Defined in: [plugins/plugin-ai-image/src/job/retry.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L27)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `message` | `string` |
+| `options?` | \{ `cause?`: `unknown`; `retryAfterMs?`: `number`; \} |
+| `options.cause?` | `unknown` |
+| `options.retryAfterMs?` | `number` |
+
+#### Returns
+
+`RetryableError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="retryafterms"&gt;&lt;/a&gt; `retryAfterMs?` | `readonly` | `number` | [plugins/plugin-ai-image/src/job/retry.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/retry.ts#L25) |

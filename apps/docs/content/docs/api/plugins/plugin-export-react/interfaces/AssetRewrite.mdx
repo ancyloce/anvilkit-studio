@@ -1,0 +1,17 @@
+---
+title: "AssetRewrite"
+description: "@anvilkit/plugin-export-react · AssetRewrite"
+---
+
+Defined in: [assets/assets.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L49)
+
+A rewrite entry: for an asset URL, which binding identifier the
+emitter should substitute when it sees that URL in a prop.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="binding"&gt;&lt;/a&gt; `binding` | `readonly` | `string` | The local binding name (e.g. `asset_hero_bg_<hash>`). | [assets/assets.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L53) |
+| &lt;a id="importpath"&gt;&lt;/a&gt; `importPath?` | `readonly` | `string` | The relative path the `import` statement references (e.g. `./assets/hero-bg.jpg`). Omitted for URLs that were rejected (external CDNs under `static-import`). | [assets/assets.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L59) |
+| &lt;a id="url"&gt;&lt;/a&gt; `url` | `readonly` | `string` | The original URL as it appeared in the IR (exact string match). | [assets/assets.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L51) |

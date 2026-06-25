@@ -1,0 +1,36 @@
+---
+title: "createReactExportPlugin"
+description: "@anvilkit/plugin-export-react · createReactExportPlugin"
+---
+
+```ts
+function createReactExportPlugin(opts?): StudioPlugin;
+```
+
+Defined in: [plugin.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L48)
+
+Build the `StudioPlugin` object for the React export format.
+
+The returned plugin contributes exactly one export format
+(`id: "react"`) and one header action (`id: "export-react"`). The
+header action is bound to the same options passed here, so a host
+supplying `buildIR` gets an action that runs the export end-to-end
+and broadcasts `anvilkit:export:ready`; without `buildIR` the action
+broadcasts `anvilkit:export:request` for the host to handle.
+
+Options passed here become the plugin-level defaults. Caller-supplied
+options at `exportAs("react", opts)` time shallow-merge on top, so
+call-site overrides win over plugin defaults. When no options are
+supplied here, the shared `reactFormat` singleton is returned
+unchanged — preserving referential equality for tests that compare
+`runtime.exportFormats.get("react") === reactFormat`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `opts` | [`ReactExportOptions`](../interfaces/ReactExportOptions) |
+
+## Returns
+
+`StudioPlugin`

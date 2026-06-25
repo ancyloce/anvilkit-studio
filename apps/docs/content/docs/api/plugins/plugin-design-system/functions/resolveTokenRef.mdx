@@ -1,0 +1,26 @@
+---
+title: "resolveTokenRef"
+description: "@anvilkit/plugin-design-system · resolveTokenRef"
+---
+
+```ts
+function resolveTokenRef(ref, tokens): ResolvedTokenRef;
+```
+
+Defined in: [runtime/resolve-ref.ts:219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/runtime/resolve-ref.ts#L219)
+
+Resolve a user-facing token ref against the live token tree.
+
+Returns `{ kind: "unknown" }` for any malformed or off-tree ref so
+the off-token walker can flag it without throwing.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | `string` |
+| `tokens` | [`DesignTokens`](../interfaces/DesignTokens) |
+
+## Returns
+
+[`ResolvedTokenRef`](../interfaces/ResolvedTokenRef)

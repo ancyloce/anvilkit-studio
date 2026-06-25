@@ -1,0 +1,17 @@
+---
+title: "SnapshotAdapter"
+description: "@anvilkit/plugin-version-history · SnapshotAdapter"
+---
+
+Defined in: [types/types.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L55)
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="delete"&gt;&lt;/a&gt; `delete?` | `readonly` | (`id`) =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;`void`\&gt; | [types/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L62) |
+| &lt;a id="list"&gt;&lt;/a&gt; `list` | `readonly` | () =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;readonly [`SnapshotMeta`](SnapshotMeta.md)[]\&gt; | [types/types.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L60) |
+| &lt;a id="load"&gt;&lt;/a&gt; `load` | `readonly` | (`id`) =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;`PageIR`\&gt; | [types/types.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L61) |
+| &lt;a id="presence"&gt;&lt;/a&gt; `presence?` | `readonly` | [`SnapshotAdapterPresence`](SnapshotAdapterPresence.md) | [types/types.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L66) |
+| &lt;a id="save"&gt;&lt;/a&gt; `save` | `readonly` | (`ir`, `meta`) =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;`string`\&gt; | [types/types.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L56) |
+| &lt;a id="subscribe"&gt;&lt;/a&gt; `subscribe?` | `readonly` | (`onUpdate`) =&gt; [`Unsubscribe`](../type-aliases/Unsubscribe) | [types/types.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L63) |

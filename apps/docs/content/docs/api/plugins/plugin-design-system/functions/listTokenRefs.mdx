@@ -1,0 +1,24 @@
+---
+title: "listTokenRefs"
+description: "@anvilkit/plugin-design-system · listTokenRefs"
+---
+
+```ts
+function listTokenRefs(tokens): readonly ResolvedTokenRef[];
+```
+
+Defined in: [runtime/resolve-ref.ts:247](https://github.com/ancyloce/anvilkit-studio/blob/main/src/runtime/resolve-ref.ts#L247)
+
+List every legal ref string for a given token tree. Used by the
+panel + the field dropdowns to populate options without each surface
+inventing its own enumeration.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `tokens` | [`DesignTokens`](../interfaces/DesignTokens) |
+
+## Returns
+
+readonly [`ResolvedTokenRef`](../interfaces/ResolvedTokenRef)[]

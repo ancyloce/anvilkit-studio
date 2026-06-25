@@ -1,0 +1,25 @@
+---
+title: "AssetSearchPage"
+description: "@anvilkit/plugin-asset-manager · AssetSearchPage"
+---
+
+Defined in: [types/types.ts:133](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L133)
+
+Pagination envelope returned by [AssetRegistry.search](AssetRegistry.md#search).
+
+- `items` — the slice for the requested page.
+- `total` — total number of matches across all pages (post-filter).
+- `nextCursor` — opaque cursor for the next page, or `undefined` when
+  the result set is exhausted.
+
+## Extended by
+
+- [`AssetListPage`](AssetListPage.md)
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="items"&gt;&lt;/a&gt; `items` | `readonly` | readonly [`UploadResult`](UploadResult.md)[] | [types/types.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L134) |
+| &lt;a id="nextcursor"&gt;&lt;/a&gt; `nextCursor` | `readonly` | `string` \| `undefined` | [types/types.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L136) |
+| &lt;a id="total"&gt;&lt;/a&gt; `total` | `readonly` | `number` | [types/types.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L135) |

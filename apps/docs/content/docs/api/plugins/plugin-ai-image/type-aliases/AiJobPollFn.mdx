@@ -1,0 +1,27 @@
+---
+title: "AiJobPollFn"
+description: "@anvilkit/plugin-ai-image · AiJobPollFn"
+---
+
+```ts
+type AiJobPollFn = (jobId, options?) => Promise<AiImageJobResult>;
+```
+
+Defined in: [plugins/plugin-ai-image/src/job/ai-job-client.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/ai-job-client.ts#L31)
+
+Polls a previously-submitted job for its latest status. Supplied by
+hosts that run AI work as an async background job; omitted for the
+synchronous (and mock) path, where the first provider result is
+already terminal.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `jobId` | `string` |
+| `options?` | \{ `signal?`: `AbortSignal`; \} |
+| `options.signal?` | `AbortSignal` |
+
+## Returns
+
+`Promise`\<[`AiImageJobResult`](../interfaces/AiImageJobResult)\>

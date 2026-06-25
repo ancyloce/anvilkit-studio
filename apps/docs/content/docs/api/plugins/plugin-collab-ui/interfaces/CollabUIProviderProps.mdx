@@ -1,0 +1,14 @@
+---
+title: "CollabUIProviderProps"
+description: "@anvilkit/collab-ui · CollabUIProviderProps"
+---
+
+Defined in: [context.tsx:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L105)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | `YjsSnapshotAdapter` | - | [context.tsx:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L106) |
+| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | - | [context.tsx:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L116) |
+| &lt;a id="self"&gt;&lt;/a&gt; `self` | `readonly` | `PeerInfo` | The local peer's identity. Host `self` is **authoritative**: the provider mirrors host changes into local state, and mirrors local `updateSelf` edits back out through `adapter.presence.update`. The factory's `onIdentityChange` is how the host's source of truth (auth profile, settings store, …) observes those local edits and keeps itself in sync (review §A3). | [context.tsx:115](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L115) |

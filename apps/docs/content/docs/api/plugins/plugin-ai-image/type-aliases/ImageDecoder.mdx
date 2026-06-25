@@ -1,0 +1,22 @@
+---
+title: "ImageDecoder"
+description: "@anvilkit/plugin-ai-image · ImageDecoder"
+---
+
+```ts
+type ImageDecoder = (file) => Promise<DecodedImage>;
+```
+
+Defined in: [plugins/plugin-ai-image/src/post-process/pipeline.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/post-process/pipeline.ts#L71)
+
+Decodes a `File` into something drawable. Default uses `createImageBitmap`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `file` | `File` |
+
+## Returns
+
+`Promise`\<[`DecodedImage`](../interfaces/DecodedImage)\>

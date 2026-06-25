@@ -1,0 +1,26 @@
+---
+title: "localStorageCanvasAdapter"
+description: "@anvilkit/plugin-canvas-studio · localStorageCanvasAdapter"
+---
+
+```ts
+function localStorageCanvasAdapter(options): CanvasPersistenceAdapter;
+```
+
+Defined in: [adapters/local-storage.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/local-storage.ts#L18)
+
+Browser `localStorage`-backed design store. Per-save snapshots — no
+delta compression. One design per key under
+`<namespace>:designs:<id>`, plus an index at `<namespace>:designs:index`.
+
+Throws if `globalThis.localStorage` is missing (SSR / Node).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`LocalStorageCanvasAdapterOptions`](../interfaces/LocalStorageCanvasAdapterOptions) |
+
+## Returns
+
+[`CanvasPersistenceAdapter`](../interfaces/CanvasPersistenceAdapter)

@@ -1,0 +1,30 @@
+---
+title: "PeerAvatarStack"
+description: "@anvilkit/collab-ui · PeerAvatarStack"
+---
+
+```ts
+function PeerAvatarStack(props): ReactNode;
+```
+
+Defined in: [components/peer-avatar-stack.tsx:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/peer-avatar-stack.tsx#L32)
+
+Stacked collaborator avatars. Reads only identity + peers context,
+so it does not re-render on status / conflict / cursor churn
+(review §C2).
+
+Remote peer colors are rendered into inline `background` styles
+below. Safe because `@anvilkit/plugin-collab-yjs` sanitizes inbound
+awareness via `validatePeerInfo` / `validatePresenceState` before
+peers reach context; the local `self` color is normalized in
+`CollabUIProvider.updateSelf` (review §B4).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`PeerAvatarStackProps`](../interfaces/PeerAvatarStackProps) |
+
+## Returns
+
+`ReactNode`

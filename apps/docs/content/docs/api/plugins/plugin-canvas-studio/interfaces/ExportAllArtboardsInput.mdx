@@ -1,0 +1,20 @@
+---
+title: "ExportAllArtboardsInput"
+description: "@anvilkit/plugin-canvas-studio · ExportAllArtboardsInput"
+---
+
+Defined in: [export/CanvasExportBridge.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L88)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="activepageid"&gt;&lt;/a&gt; `activePageId` | `readonly` | `string` | Id of the page that `stage` is rendering. | [export/CanvasExportBridge.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L92) |
+| &lt;a id="designid"&gt;&lt;/a&gt; `designId` | `readonly` | `string` | - | [export/CanvasExportBridge.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L95) |
+| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | `readonly` | `CanvasIR` | Walks `ir.pages` to enumerate every artboard that needs a preview. | [export/CanvasExportBridge.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L94) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType?` | `readonly` | `"image/png"` \| `"image/jpeg"` \| `"image/webp"` | Defaults to `"image/png"`. | [export/CanvasExportBridge.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L106) |
+| &lt;a id="pixelratio"&gt;&lt;/a&gt; `pixelRatio?` | `readonly` | `number` | Defaults to 2. | [export/CanvasExportBridge.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L104) |
+| &lt;a id="previewcache"&gt;&lt;/a&gt; `previewCache` | `readonly` | [`PreviewCache`](PreviewCache.md) | - | [export/CanvasExportBridge.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L96) |
+| &lt;a id="quality"&gt;&lt;/a&gt; `quality?` | `readonly` | `number` | Only honored for image/jpeg + image/webp. Defaults to 0.92. | [export/CanvasExportBridge.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L108) |
+| &lt;a id="stage"&gt;&lt;/a&gt; `stage` | `readonly` | `Stage` | Live `Konva.Stage` for the currently-active artboard. | [export/CanvasExportBridge.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L90) |
+| &lt;a id="writedefault"&gt;&lt;/a&gt; `writeDefault?` | `readonly` | `boolean` | If true (the default), the active artboard's preview is also written to the design's default bucket so bare `design://<designId>` URLs (the legacy single-preview form) still render. | [export/CanvasExportBridge.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/CanvasExportBridge.ts#L102) |

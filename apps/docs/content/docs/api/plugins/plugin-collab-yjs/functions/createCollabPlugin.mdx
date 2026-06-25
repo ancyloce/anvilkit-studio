@@ -1,0 +1,37 @@
+---
+title: "createCollabPlugin"
+description: "@anvilkit/plugin-collab-yjs · createCollabPlugin"
+---
+
+```ts
+function createCollabPlugin(options): StudioPlugin;
+```
+
+Defined in: [plugin-collab-yjs/src/plugin.ts:1044](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L1044)
+
+Deprecated alias for [createCollabDataPlugin](createCollabDataPlugin.md).
+
+The factory was renamed when `@anvilkit/plugin-collab-ui` introduced
+a higher-level `createCollabPlugin` that bundles the data plugin with
+UI contributions. Prefer [createCollabDataPlugin](createCollabDataPlugin.md) for headless
+/ power-user paths.
+
+Emits a single `console.warn` on first call per module instance.
+Will be removed in the next minor release of
+`@anvilkit/plugin-collab-yjs`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateCollabPluginOptions`](../interfaces/CreateCollabPluginOptions) |
+
+## Returns
+
+`StudioPlugin`
+
+## Deprecated
+
+Use [createCollabDataPlugin](createCollabDataPlugin.md) instead, or
+`createCollabPlugin` from `@anvilkit/plugin-collab-ui` for the
+full data + UI bundle.

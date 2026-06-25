@@ -1,0 +1,51 @@
+---
+title: "SnapshotNotFoundError"
+description: "@anvilkit/plugin-collab-yjs · SnapshotNotFoundError"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/snapshot-errors.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L23)
+
+No snapshot with this id exists in the shared Y.Doc.
+
+## Extends
+
+- `SnapshotError`
+
+## Constructors
+
+### Constructor
+
+```ts
+new SnapshotNotFoundError(
+   id, 
+   message, 
+   options?): SnapshotNotFoundError;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/snapshot-errors.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L16)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `message` | `string` |
+| `options?` | \{ `cause?`: `unknown`; \} |
+| `options.cause?` | `unknown` |
+
+#### Returns
+
+`SnapshotNotFoundError`
+
+#### Inherited from
+
+```ts
+SnapshotError.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Default value | Description | Overrides | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | `undefined` | The snapshot id the failed `load()` targeted. | - | `SnapshotError.id` | [plugin-collab-yjs/src/utils/snapshot-errors.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L15) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `"SnapshotNotFoundError"` | `"SnapshotNotFoundError"` | - | `SnapshotError.name` | - | [plugin-collab-yjs/src/utils/snapshot-errors.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L24) |

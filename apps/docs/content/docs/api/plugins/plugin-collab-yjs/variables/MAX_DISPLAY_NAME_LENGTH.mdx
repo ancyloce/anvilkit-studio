@@ -1,0 +1,32 @@
+---
+title: "MAX_DISPLAY_NAME_LENGTH"
+description: "@anvilkit/plugin-collab-yjs · MAX_DISPLAY_NAME_LENGTH"
+---
+
+```ts
+const MAX_DISPLAY_NAME_LENGTH: 64 = 64;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L32)
+
+Structured validation for `PresenceState` payloads. Replaces the
+scattered ad-hoc type guards previously inline in `yjs-adapter.ts`.
+
+`validate*` returns the strongly-typed value when the input matches the
+schema, or `null` when it does not. Hosts can use these helpers to
+sanitize awareness payloads received over an untrusted transport.
+
+Hardening (M4):
+
+- `displayName` is capped at `MAX_DISPLAY_NAME_LENGTH` chars and stripped
+  of ASCII control characters by `sanitizeDisplayName`. Bytes that don't
+  match are filtered out — the result is the validated payload with a
+  sanitized name, not a rejection of the whole record.
+- `color` is validated against an allowlist regex covering `#rgb`,
+  `#rrggbb`, `#rrggbbaa`, `rgb(...)`, `rgba(...)`, `hsl(...)`,
+  `hsla(...)`, and the
+  `NAMED_COLOR_SET`. Anything else (notably `javascript:`,
+  `expression(...)`, `<script>`, or arbitrary strings) is treated as
+  schema failure and rejects the peer record entirely. Hosts that
+  render `color` into a CSS attribute therefore get defense-in-depth
+  without doing their own validation.

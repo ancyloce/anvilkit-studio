@@ -1,0 +1,13 @@
+---
+title: "CreateCanvasSnapshotBridgeOptions"
+description: "@anvilkit/plugin-canvas-studio · CreateCanvasSnapshotBridgeOptions"
+---
+
+Defined in: [state/canvas-snapshot-bridge.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L64)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | [`CanvasSnapshotAdapter`](CanvasSnapshotAdapter.md) | - | [state/canvas-snapshot-bridge.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L65) |
+| &lt;a id="getctx"&gt;&lt;/a&gt; `getCtx` | `readonly` | () =&gt; `StudioPluginContext`\&lt;`Config`\&gt; \| `null` | Returns the live `StudioPluginContext` so the bridge can call `ctx.emit(...)` at fire time. Wrapped in a getter because the ctx isn't available until `onInit` runs, but the bridge is constructed earlier (inside `createCanvasStudioPlugin`). | [state/canvas-snapshot-bridge.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L72) |

@@ -1,0 +1,100 @@
+---
+title: "ConnectionStatus"
+description: "@anvilkit/plugin-collab-yjs · ConnectionStatus"
+---
+
+```ts
+type ConnectionStatus = 
+  | {
+  kind: "connecting";
+}
+  | {
+  kind: "synced";
+  since: string;
+}
+  | {
+  kind: "offline";
+  queuedEdits: number;
+  since: string;
+}
+  | {
+  attempt: number;
+  backoffMs: number;
+  kind: "reconnecting";
+}
+  | {
+  kind: "error";
+  message: string;
+  recoverable: boolean;
+};
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:184](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L184)
+
+Discriminated union describing the host transport's lifecycle as
+observed by the adapter. The five variants give hosts a transport-
+agnostic surface to render a unified sync indicator without reading
+provider-specific fields like `wsconnected`.
+
+## Union Members
+
+### Type Literal
+
+```ts
+{
+  kind: "connecting";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "synced";
+  since: string;
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "offline";
+  queuedEdits: number;
+  since: string;
+}
+```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `kind` | `"offline"` | - | [plugin-collab-yjs/src/types/types.ts:188](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L188) |
+| `queuedEdits` | `number` | Number of local save() calls observed by the adapter since the last "synced" status. Populated by `createYjsAdapter` whenever the host's `connectionSource` emits an `offline` status — the adapter substitutes its internal counter for whatever value the host passed. Resets to 0 on the next "synced" transition. | [plugin-collab-yjs/src/types/types.ts:198](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L198) |
+| `since` | `string` | - | [plugin-collab-yjs/src/types/types.ts:189](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L189) |
+
+***
+
+### Type Literal
+
+```ts
+{
+  attempt: number;
+  backoffMs: number;
+  kind: "reconnecting";
+}
+```
+
+***
+
+### Type Literal
+
+```ts
+{
+  kind: "error";
+  message: string;
+  recoverable: boolean;
+}
+```

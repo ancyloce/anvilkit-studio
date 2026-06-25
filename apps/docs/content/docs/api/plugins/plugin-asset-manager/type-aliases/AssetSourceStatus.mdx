@@ -1,0 +1,37 @@
+---
+title: "AssetSourceStatus"
+description: "@anvilkit/plugin-asset-manager · AssetSourceStatus"
+---
+
+```ts
+type AssetSourceStatus = 
+  | {
+  phase: "idle";
+}
+  | {
+  phase: "loading";
+}
+  | {
+  loaded: number;
+  phase: "paginating";
+}
+  | {
+  id: string;
+  op:   | "rename"
+     | "remove"
+     | "move"
+     | "replace"
+     | "createFolder"
+     | "removeFolder"
+     | "moveFolder";
+  phase: "mutating";
+}
+  | {
+  error: AssetSourceError;
+  phase: "error";
+};
+```
+
+Defined in: [types/data-source.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L27)
+
+Loading/mutation status surfaced through [AssetDataSource.subscribeStatus](../interfaces/AssetDataSource#subscribestatus).

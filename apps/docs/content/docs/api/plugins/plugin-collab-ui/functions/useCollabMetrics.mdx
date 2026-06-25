@@ -1,0 +1,26 @@
+---
+title: "useCollabMetrics"
+description: "@anvilkit/collab-ui · useCollabMetrics"
+---
+
+```ts
+function useCollabMetrics(pollMs?): MetricsSnapshot | null;
+```
+
+Defined in: [context.tsx:386](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L386)
+
+Poll `adapter.metrics()` on an interval (review §C5 / §4.5).
+
+Returns the latest MetricsSnapshot, or `null` when the
+adapter does not expose `metrics()`. The interval is cleared on
+unmount and re-established if `adapter` or `pollMs` change.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `pollMs` | `number` | `5000` |
+
+## Returns
+
+`MetricsSnapshot` \| `null`

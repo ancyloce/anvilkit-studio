@@ -1,0 +1,19 @@
+---
+title: "useCollabContext"
+description: "@anvilkit/collab-ui · useCollabContext"
+---
+
+```ts
+function useCollabContext(): CollabUIContextValue;
+```
+
+Defined in: [context.tsx:418](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L418)
+
+Back-compat composite hook. Returns the full
+[CollabUIContextValue](../interfaces/CollabUIContextValue). Prefer the narrow hooks
+(`useCollabStatus`, `useCollabPeers`, …) in components — this hook
+re-renders on **any** collab state change by design.
+
+## Returns
+
+[`CollabUIContextValue`](../interfaces/CollabUIContextValue)

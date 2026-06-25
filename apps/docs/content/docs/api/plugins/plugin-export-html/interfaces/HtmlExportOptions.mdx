@@ -1,0 +1,29 @@
+---
+title: "HtmlExportOptions"
+description: "@anvilkit/plugin-export-html · HtmlExportOptions"
+---
+
+Defined in: [types/types.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L35)
+
+## Extends
+
+- `Record`\<`string`, `unknown`\>
+
+## Indexable
+
+```ts
+[key: string]: unknown
+```
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="assetresolvers"&gt;&lt;/a&gt; `assetResolvers?` | `readonly` | readonly `IRAssetResolver`[] | Optional asset resolvers consulted before rendering. Used by the header action's `buildIR` path so `asset://` references resolve the same way they would when the host calls `format.run()` directly with `runtime.assetResolvers`. When the host's export pipeline already supplies resolvers via the third `runCtx` argument to `format.run()`, those are merged with this list. | [types/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L62) |
+| &lt;a id="buildir"&gt;&lt;/a&gt; `buildIR?` | `readonly` | [`IRBuilder`](../type-aliases/IRBuilder) | Optional builder used by the export header action to obtain a PageIR from the live Studio context. When provided, the action runs the format and broadcasts an `anvilkit:export:ready` event with the resulting payload. When omitted, the action falls back to broadcasting an `anvilkit:export:request` event so the host can perform the export itself. | [types/types.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L53) |
+| &lt;a id="fetchasset"&gt;&lt;/a&gt; `fetchAsset?` | `readonly` | [`FetchAssetFn`](../type-aliases/FetchAssetFn) | - | [types/types.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L39) |
+| &lt;a id="headeraction"&gt;&lt;/a&gt; `headerAction?` | `readonly` | `boolean` | Whether `createHtmlExportPlugin()` should contribute the Studio header action. Defaults to `true` when `buildIR` is supplied and `false` otherwise, so the stock Studio toolbar only shows a "Download HTML" action when the plugin can run the export end-to-end. Set this to `true` without `buildIR` only when the host has wired an `anvilkit:export:request` listener. | [types/types.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L71) |
+| &lt;a id="inlineassetthresholdbytes"&gt;&lt;/a&gt; `inlineAssetThresholdBytes?` | `readonly` | `number` | - | [types/types.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L37) |
+| &lt;a id="inlinestyles"&gt;&lt;/a&gt; `inlineStyles?` | `readonly` | `boolean` | - | [types/types.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L36) |
+| &lt;a id="lang"&gt;&lt;/a&gt; `lang?` | `readonly` | `string` | BCP 47 language tag emitted on the document `<html lang="…">` element. Defaults to `"en"` when omitted. | [types/types.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L44) |
+| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `readonly` | `string` | - | [types/types.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L38) |

@@ -1,0 +1,22 @@
+---
+title: "DrawMaskOptions"
+description: "@anvilkit/plugin-ai-image · DrawMaskOptions"
+---
+
+Defined in: [plugins/plugin-ai-image/src/mask/exporter.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L14)
+
+I1-8 `MaskToAssetExporter` (PRD FR-022). Rasterises mask strokes to an alpha
+PNG and uploads it via an injected uploader, returning a `maskAssetId`.
+
+Konva-free by design: drawing uses the plain Canvas 2D API so the exporter is
+unit-testable in a node env (via an injected canvas factory) and carries no
+react-konva dependency. The uploader is injected too — this package never
+depends on `@anvilkit/plugin-asset-manager`; the host wires
+`upload = (file) => uploadAsset(ctx, file)`.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="compositeoperation"&gt;&lt;/a&gt; `compositeOperation?` | `GlobalCompositeOperation` | Canvas composite mode. Default `"source-over"`. | [plugins/plugin-ai-image/src/mask/exporter.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L18) |
+| &lt;a id="strokecolor"&gt;&lt;/a&gt; `strokeColor?` | `string` | Stroke colour. Default `"#ffffff"` — opaque white on a transparent canvas. | [plugins/plugin-ai-image/src/mask/exporter.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L16) |

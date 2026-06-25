@@ -1,0 +1,20 @@
+---
+title: "inMemoryCanvasSnapshotAdapter"
+description: "@anvilkit/plugin-canvas-studio · inMemoryCanvasSnapshotAdapter"
+---
+
+```ts
+function inMemoryCanvasSnapshotAdapter(): CanvasSnapshotAdapter;
+```
+
+Defined in: [adapters/in-memory-snapshot.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/in-memory-snapshot.ts#L29)
+
+Default in-memory implementation of [CanvasSnapshotAdapter](../interfaces/CanvasSnapshotAdapter).
+Lives for the lifetime of one plugin instance — suitable for tests,
+demos, and "soft" undo across a session. Hosts that need durable
+history should pass their own adapter via
+`CreateCanvasStudioPluginOptions.canvasSnapshotAdapter`.
+
+## Returns
+
+[`CanvasSnapshotAdapter`](../interfaces/CanvasSnapshotAdapter)

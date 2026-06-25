@@ -1,0 +1,23 @@
+---
+title: "PostProcessUpload"
+description: "@anvilkit/plugin-ai-image · PostProcessUpload"
+---
+
+```ts
+type PostProcessUpload = (file) => Promise<PostProcessUploadResult>;
+```
+
+Defined in: [plugins/plugin-ai-image/src/post-process/pipeline.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/post-process/pipeline.ts#L35)
+
+Injected uploader. The host wraps `plugin-asset-manager`'s
+`uploadAsset(ctx, file)` (whose `UploadResult` satisfies this shape).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `file` | `File` |
+
+## Returns
+
+`Promise`\<[`PostProcessUploadResult`](../interfaces/PostProcessUploadResult)\>

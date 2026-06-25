@@ -1,0 +1,38 @@
+---
+title: "uploadAsset"
+description: "@anvilkit/plugin-asset-manager · uploadAsset"
+---
+
+```ts
+function uploadAsset<UserConfig>(
+   ctx, 
+   file, 
+signal?): Promise<UploadResult>;
+```
+
+Defined in: [plugin.ts:232](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L232)
+
+Validate and upload a single file through the configured plugin runtime.
+
+The pipeline enforces selected-file constraints, calls the resolved upload
+adapter, validates the adapter's `UploadResult`, derives lightweight tags,
+registers the asset, dispatches an `asset://` reference into page data, and
+emits typed asset-manager events.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `Config` | `Config` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | `StudioPluginContext`\&lt;`UserConfig`\&gt; |
+| `file` | `File` |
+| `signal?` | `AbortSignal` |
+
+## Returns
+
+`Promise`\<[`UploadResult`](../interfaces/UploadResult)\>

@@ -1,0 +1,30 @@
+---
+title: "CollabPolicy"
+description: "@anvilkit/plugin-collab-yjs · CollabPolicy"
+---
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:488](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L488)
+
+Phase 3 (D6) RBAC + lock policy bridge.
+
+`canEdit(node, peer)` is consulted symmetrically:
+
+- **Outbound** — before `adapter.save`, every node touched by the
+  local diff is checked against `policy.canEdit(node, localPeer)`.
+  If any check returns `false` (or throws), the save is rejected
+  and `onPolicyViolation` fires with `direction: "outbound"`.
+- **Inbound** — after `validateRemoteIR`, every node in the
+  incoming IR is checked against
+  `policy.canEdit(node, remotePeer ?? localPeer)`. Any rejection
+  drops the dispatch and fires `onPolicyViolation` with
+  `direction: "inbound"`.
+
+Synchronous throws from `canEdit` are treated as denial. The hook
+runs against the *whole* IR rather than a structured diff for
+simplicity at this phase; richer per-node diffs can come in Phase 4.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="canedit"&gt;&lt;/a&gt; `canEdit` | `readonly` | (`node`, `peer`) =&gt; `boolean` | [plugin-collab-yjs/src/types/types.ts:489](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L489) |

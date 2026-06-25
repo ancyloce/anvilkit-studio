@@ -1,0 +1,17 @@
+---
+title: "AssetSourceId"
+description: "@anvilkit/plugin-asset-manager · AssetSourceId"
+---
+
+```ts
+type AssetSourceId = 
+  | "local"
+  | "unsplash"
+  | string & {
+};
+```
+
+Defined in: [types/filter.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L19)
+
+Stable source identifiers. Branded so a typo is a type error while hosts can
+still introduce their own ids (e.g. `"brandfolder"`).

@@ -1,0 +1,15 @@
+---
+title: "ResolvedTokenRef"
+description: "@anvilkit/plugin-design-system · ResolvedTokenRef"
+---
+
+Defined in: [runtime/resolve-ref.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/runtime/resolve-ref.ts#L49)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="cssvar"&gt;&lt;/a&gt; `cssVar?` | `readonly` | `string` | CSS `var(--ak-ds-…)` reference for this token. Undefined when `kind === "unknown"`. | [runtime/resolve-ref.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/runtime/resolve-ref.ts#L58) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | [`TokenRefKind`](../type-aliases/TokenRefKind) | Category the ref resolved against. `"unknown"` for malformed or off-tree refs. | [runtime/resolve-ref.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/runtime/resolve-ref.ts#L53) |
+| &lt;a id="ref"&gt;&lt;/a&gt; `ref` | `readonly` | `string` | Original ref string the caller passed in. | [runtime/resolve-ref.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/runtime/resolve-ref.ts#L51) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value?` | `readonly` | `string` | Resolved raw value at call time (e.g. `"oklch(62% 0.197 254)"`, `"16px"`). Undefined when `kind === "unknown"`. For semantics, this is the primitive ramp value the role currently points at. | [runtime/resolve-ref.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/runtime/resolve-ref.ts#L64) |

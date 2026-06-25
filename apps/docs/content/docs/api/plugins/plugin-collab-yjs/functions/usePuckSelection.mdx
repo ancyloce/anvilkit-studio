@@ -1,0 +1,39 @@
+---
+title: "usePuckSelection"
+description: "@anvilkit/plugin-collab-yjs · usePuckSelection"
+---
+
+```ts
+function usePuckSelection(): PresenceSelection | null;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/selection-bridge.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/selection-bridge.ts#L66)
+
+Subscribe to the currently-selected canvas node id and return a
+`PresenceSelection` suitable for `presence.update`. Returns `null`
+when nothing is selected so hosts can short-circuit instead of
+broadcasting an empty selection.
+
+The shape is intentionally narrow — only the selected node ids,
+matching `PresenceSelection`'s `nodeIds` field. Multi-select
+support remains out of scope for Phase 3; the hook returns a
+single-element array when an item is selected.
+
+## Returns
+
+`PresenceSelection` \| `null`
+
+## Example
+
+```tsx
+function Cursor({ adapter }: { adapter: YjsSnapshotAdapter }) {
+  const selection = usePuckSelection();
+  useEffect(() => {
+    adapter.presence?.update({
+      peer: { id: "alice", color: "#f43f5e" },
+      selection: selection ?? undefined,
+    });
+  }, [adapter, selection]);
+  return null;
+}
+```

@@ -1,0 +1,32 @@
+---
+title: "AiImagePluginInstance"
+description: "@anvilkit/plugin-ai-image · AiImagePluginInstance"
+---
+
+Defined in: [plugins/plugin-ai-image/src/types/index.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/index.ts#L36)
+
+## Methods
+
+### submit()
+
+```ts
+submit(
+   request, 
+   context, 
+options?): Promise<AiImageJobResult>;
+```
+
+Defined in: [plugins/plugin-ai-image/src/types/index.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/index.ts#L37)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `request` | [`AiImageJobRequest`](../type-aliases/AiImageJobRequest) |
+| `context` | [`AiLayerContext`](AiLayerContext.md) |
+| `options?` | \{ `signal?`: `AbortSignal`; \} |
+| `options.signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`AiImageJobResult`](AiImageJobResult.md)\>

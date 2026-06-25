@@ -1,0 +1,27 @@
+---
+title: "JsonValue"
+description: "@anvilkit/plugin-asset-manager · JsonValue"
+---
+
+```ts
+type JsonValue = 
+  | string
+  | number
+  | boolean
+  | null
+  | readonly JsonValue[]
+  | {
+[key: string]: JsonValue;
+};
+```
+
+Defined in: [types/resumable.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L96)
+
+Any value that survives `JSON.stringify` → `JSON.parse` (and `structuredClone`)
+unchanged. Used to type persisted continuation data so the M2 session store
+can round-trip it through `localStorage` without silently dropping functions,
+symbols, `BigInt`, class instances, or cyclic references.
+
+NOTE: numbers must be **finite** — `NaN` and `±Infinity` serialize to `null`
+via `JSON.stringify`, so they do not round-trip. The session store treats
+non-finite numeric meta as a host bug.

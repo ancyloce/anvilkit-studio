@@ -1,0 +1,33 @@
+---
+title: "createAssetManagerPlugin"
+description: "@anvilkit/plugin-asset-manager · createAssetManagerPlugin"
+---
+
+```ts
+function createAssetManagerPlugin<UserConfig>(options?): StudioPlugin<UserConfig>;
+```
+
+Defined in: [plugin.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.ts#L106)
+
+Create the Anvilkit Studio asset-manager plugin.
+
+The returned plugin registers localization messages, a header upload action,
+an IR asset resolver, and a Studio asset source. With no options it provides
+an in-memory uploader/library; production hosts typically provide an
+`uploader` and optionally a folder-aware `dataSource` or external providers.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `UserConfig` *extends* `Config` | `Config` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`AssetManagerOptions`](../interfaces/AssetManagerOptions) |
+
+## Returns
+
+`StudioPlugin`\<`UserConfig`\>

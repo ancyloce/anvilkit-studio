@@ -1,0 +1,29 @@
+---
+title: "createAssetReference"
+description: "@anvilkit/plugin-asset-manager · createAssetReference"
+---
+
+```ts
+function createAssetReference(id, transform?): string;
+```
+
+Defined in: [utils/asset-reference.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/asset-reference.ts#L25)
+
+Build the opaque `asset://<id>` reference stored in page data for an asset.
+The IR resolver ([createIRAssetResolver](createIRAssetResolver.md)) turns it back into a validated
+URL at export / render time; it is never a directly-loadable URL itself.
+
+Pass a [AssetTransform](../interfaces/AssetTransform) to request a derivative rendition — it is
+encoded as a stable query (`?w=&h=&fit=&fm=&q=&dpr=`) and applied by the
+resolver's configured `TransformResolver`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `transform?` | [`AssetTransform`](../interfaces/AssetTransform) |
+
+## Returns
+
+`string`

@@ -1,0 +1,16 @@
+---
+title: "SnapshotMeta"
+description: "@anvilkit/plugin-version-history · SnapshotMeta"
+---
+
+Defined in: [types/types.ts:7](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L7)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="delta"&gt;&lt;/a&gt; `delta?` | `readonly` | [`IRDiff`](../type-aliases/IRDiff) | Structural diff from the immediately previous snapshot to this one (L2). Optional — only populated when the producing adapter opts in (e.g. `createYjsAdapter({ computeDelta: true })`). Useful for audit logs, undo-stack replay, and human-readable change summaries via `summarizeDiff` from `./diff.js`. Snapshots written by older adapter versions omit this field; the shape stays backward compatible. | [types/types.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L22) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/types.ts:8](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L8) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `readonly` | `string` | - | [types/types.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L9) |
+| &lt;a id="pageirhash"&gt;&lt;/a&gt; `pageIRHash` | `readonly` | `string` | - | [types/types.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L11) |
+| &lt;a id="savedat"&gt;&lt;/a&gt; `savedAt` | `readonly` | `string` | - | [types/types.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L10) |

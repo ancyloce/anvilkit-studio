@@ -1,0 +1,28 @@
+---
+title: "encodeIR"
+description: "@anvilkit/plugin-collab-yjs · encodeIR"
+---
+
+```ts
+function encodeIR(ir): string;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/encode.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/encode.ts#L12)
+
+Serialize a PageIR to a stable JSON string with sorted object keys.
+
+Two replicas that observe the same logical IR must produce
+byte-identical Yjs values; otherwise Y.Map last-writer-wins
+semantics would flap on key-order differences alone. Sorting
+non-array object keys here gives us that property without
+touching the IR canonicalization in `@anvilkit/ir`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `PageIR` |
+
+## Returns
+
+`string`

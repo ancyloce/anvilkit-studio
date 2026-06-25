@@ -1,0 +1,33 @@
+---
+title: "createDesignAssetResolver"
+description: "@anvilkit/plugin-canvas-studio · createDesignAssetResolver"
+---
+
+```ts
+function createDesignAssetResolver(previewCache): IRAssetResolver;
+```
+
+Defined in: [resolvers/design-asset-resolver.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/resolvers/design-asset-resolver.ts#L20)
+
+IR asset resolver for the `design://` URL scheme.
+
+Supported URL forms:
+
+- `design://<designId>` — design-level preview (default bucket; falls
+  back to any artboard-specific entry when no default is cached).
+- `design://<designId>/<artboardId>` — artboard-specific preview.
+- `design://<designId>?artboard=<id>` — legacy back-compat form; same
+  semantics as the path form above.
+
+Returns `null` for unknown design / artboard ids and for unrelated
+URLs (so the next resolver in the chain can try).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `previewCache` | [`PreviewCache`](../interfaces/PreviewCache) |
+
+## Returns
+
+`IRAssetResolver`

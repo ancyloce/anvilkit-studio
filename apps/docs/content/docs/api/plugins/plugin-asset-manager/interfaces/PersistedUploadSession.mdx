@@ -1,0 +1,21 @@
+---
+title: "PersistedUploadSession"
+description: "@anvilkit/plugin-asset-manager · PersistedUploadSession"
+---
+
+Defined in: [types/resumable.ts:111](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L111)
+
+The serializable subset of an [UploadSession](UploadSession.md) that the M2 session store
+persists so an interrupted upload can resume after a reload. The runner loads
+it (keyed by file fingerprint) and hands it to
+[ResumableUploadAdapter.begin](ResumableUploadAdapter.md#begin) as the `resume` argument. MUST be JSON /
+structured-clone safe end-to-end — it round-trips through `localStorage`.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`JsonValue`](../type-aliases/JsonValue)\&gt;\&gt; | Host-opaque continuation data. Typed as JSON-safe so the persisted handle is serializable by construction, not just by convention. | [types/resumable.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L122) |
+| &lt;a id="parts"&gt;&lt;/a&gt; `parts` | `readonly` | readonly [`PartTag`](PartTag.md)[] | Parts the backend had accepted at persist time. | [types/resumable.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L117) |
+| &lt;a id="partsize"&gt;&lt;/a&gt; `partSize` | `readonly` | `number` | The effective part size locked in when the session started (bytes). | [types/resumable.ts:115](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L115) |
+| &lt;a id="uploadid"&gt;&lt;/a&gt; `uploadId` | `readonly` | `string` | Backend session id (e.g. S3 `UploadId`) to reconcile against. | [types/resumable.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L113) |

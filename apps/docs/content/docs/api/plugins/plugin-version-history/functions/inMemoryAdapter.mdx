@@ -1,0 +1,18 @@
+---
+title: "inMemoryAdapter"
+description: "@anvilkit/plugin-version-history · inMemoryAdapter"
+---
+
+```ts
+function inMemoryAdapter(): SnapshotAdapter;
+```
+
+Defined in: [adapters/in-memory.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/in-memory.ts#L22)
+
+Ephemeral, in-process snapshot store. Uses the shared delta-chain so a
+long history costs roughly one keyframe + N small diffs instead of N
+full `PageIR` copies. Suitable for tests, demos, and transient sessions.
+
+## Returns
+
+[`SnapshotAdapter`](../interfaces/SnapshotAdapter)

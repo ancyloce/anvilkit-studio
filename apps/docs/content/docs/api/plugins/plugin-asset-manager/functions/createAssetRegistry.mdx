@@ -1,0 +1,21 @@
+---
+title: "createAssetRegistry"
+description: "@anvilkit/plugin-asset-manager · createAssetRegistry"
+---
+
+```ts
+function createAssetRegistry(): AssetRegistry;
+```
+
+Defined in: [utils/registry.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/registry.ts#L21)
+
+Create an in-memory asset registry.
+
+The registry stores immutable `UploadResult` records by id and exposes the
+local catalog operations used by the plugin runtime and Studio asset source:
+registration, lookup, listing, delete, rename, replace, tag mutation, search,
+pagination, and mutation subscriptions.
+
+## Returns
+
+[`AssetRegistry`](../interfaces/AssetRegistry)

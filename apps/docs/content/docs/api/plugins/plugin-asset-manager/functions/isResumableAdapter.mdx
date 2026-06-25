@@ -1,0 +1,25 @@
+---
+title: "isResumableAdapter"
+description: "@anvilkit/plugin-asset-manager · isResumableAdapter"
+---
+
+```ts
+function isResumableAdapter(value): value is ResumableUploadAdapter;
+```
+
+Defined in: [types/resumable.ts:241](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L241)
+
+Narrow an upload backend to a [ResumableUploadAdapter](../interfaces/ResumableUploadAdapter). The single-shot
+[UploadAdapter](../type-aliases/UploadAdapter) is a function; the resumable adapter is an object with
+the four lifecycle methods, so a `typeof === "object"` plus method check
+distinguishes them unambiguously.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | \| [`UploadAdapter`](../type-aliases/UploadAdapter) \| [`ResumableUploadAdapter`](../interfaces/ResumableUploadAdapter) \| `undefined` |
+
+## Returns
+
+`value is ResumableUploadAdapter`

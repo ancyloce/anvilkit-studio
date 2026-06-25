@@ -1,0 +1,43 @@
+---
+title: "createCollabPlugin"
+description: "@anvilkit/collab-ui · createCollabPlugin"
+---
+
+```ts
+function createCollabPlugin(options): StudioPlugin;
+```
+
+Defined in: [plugin.tsx:401](https://github.com/ancyloce/anvilkit-studio/blob/main/src/plugin.tsx#L401)
+
+Build a single StudioPlugin that delivers both yjs data sync
+*and* the collab UI (presence cursors, conflict toasts, collaborator
+avatar stack) in one factory call.
+
+This is the integration surface most hosts should reach for. Power
+users who want only the headless adapter can still import
+`createYjsAdapter` / `createCollabDataPlugin` from
+`@anvilkit/plugin-collab-yjs` directly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateCollabPluginOptions`](../interfaces/CreateCollabPluginOptions) |
+
+## Returns
+
+`StudioPlugin`
+
+## Example
+
+```tsx
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+// The one-liner: set only the relay URL. `room` → "anvilkit-default-room",
+// `provider` → "hocuspocus", `self` → an auto-generated anonymous identity,
+// and the whole transport lifecycle is owned by the plugin.
+<Studio
+  plugins={[createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig })]}
+  puckConfig={puckConfig}
+/>
+```

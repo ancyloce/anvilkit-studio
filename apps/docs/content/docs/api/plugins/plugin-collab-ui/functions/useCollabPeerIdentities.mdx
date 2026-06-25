@@ -1,0 +1,20 @@
+---
+title: "useCollabPeerIdentities"
+description: "@anvilkit/collab-ui · useCollabPeerIdentities"
+---
+
+```ts
+function useCollabPeerIdentities(): readonly PeerInfo[];
+```
+
+Defined in: [context.tsx:343](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L343)
+
+Roster-only peer identities (id/displayName/color). The returned
+array reference only changes when the *set* of identities changes —
+not on cursor / selection frames (F5) — so identity-only consumers
+like `<PeerAvatarStack>` skip cursor-churn re-renders. Excludes the
+local peer (mirrors `useCollabPeers()`).
+
+## Returns
+
+readonly `PeerInfo`[]

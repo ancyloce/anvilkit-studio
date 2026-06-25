@@ -1,0 +1,16 @@
+---
+title: "UploadAdapterOptions"
+description: "@anvilkit/plugin-asset-manager · UploadAdapterOptions"
+---
+
+Defined in: [types/types.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L78)
+
+Options passed to an [UploadAdapter](../type-aliases/UploadAdapter). Currently carries an
+optional `AbortSignal` so a cancelled upload batch can short-circuit
+the adapter (network request, image decode). Adapters may ignore it.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="signal"&gt;&lt;/a&gt; `signal?` | `readonly` | `AbortSignal` | [types/types.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L79) |

@@ -1,0 +1,36 @@
+---
+title: "S3CspOptions"
+description: "@anvilkit/plugin-asset-manager · S3CspOptions"
+---
+
+Defined in: [utils/csp.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L21)
+
+## File
+
+CSP advisor — computes the minimum `connect-src` / `img-src` /
+`media-src` directives a host page needs in order for the
+configured adapters and their served URLs to load. Pure static
+derivation; no network or DOM dependencies.
+
+The host calls this once at boot with a description of which
+adapters are wired in, then merges the result into its existing CSP
+builder.
+
+## Example
+
+```ts
+const csp = getRequiredCsp({
+    dataUrl: true,
+    s3: { presignEndpoint: "https://uploads.example.com/sign" },
+  });
+  // csp.connectSrc → ["https://uploads.example.com"]
+  // csp.imgSrc     → ["data:"]
+  // csp.mediaSrc   → ["data:"]
+```
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="presignendpoint"&gt;&lt;/a&gt; `presignEndpoint` | `readonly` | `string` \| `URL` | The presign endpoint configured on `s3PresignedAdapter`. | [utils/csp.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L23) |
+| &lt;a id="publichost"&gt;&lt;/a&gt; `publicHost?` | `readonly` | `string` | Optional public-bucket origin (e.g. `https://cdn.example.com`). If your `publicUrl` returned by the presign service points at a different host than the presign endpoint itself, list it here so the advisor can include it in `img-src` / `media-src`. | [utils/csp.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L30) |

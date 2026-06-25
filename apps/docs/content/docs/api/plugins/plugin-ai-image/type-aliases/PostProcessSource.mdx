@@ -1,0 +1,33 @@
+---
+title: "PostProcessSource"
+description: "@anvilkit/plugin-ai-image · PostProcessSource"
+---
+
+```ts
+type PostProcessSource = Blob | File | string;
+```
+
+Defined in: [plugins/plugin-ai-image/src/post-process/pipeline.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/post-process/pipeline.ts#L24)
+
+## File
+
+I1-9 `PostProcessPipeline` (PRD FR-024). Turns a raw AI-image output
+(a `Blob`, `File`, or data URL) into a registered, validated, compressed asset
+plus a registered thumbnail asset:
+
+  normalise → validate MIME → validate size → (optional) compress
+            → register main → thumbnail → register thumbnail.
+
+Konva-free and dependency-clean by design — exactly like
+[createMaskToAssetExporter](../functions/createMaskToAssetExporter). The two host-specific concerns are
+injected:
+ - `upload` wraps the host's asset manager (this package never depends on
+   `@anvilkit/plugin-asset-manager`).
+ - `createCanvas` + `decodeImage` are the raster primitives; their browser
+   defaults use `document.createElement("canvas")` + `createImageBitmap`, but
+   tests inject fakes so the pipeline is unit-testable in a node env.
+
+Compression is opt-in (`compress`): re-encoding PNG→PNG is pointless, so the
+main asset is the validated original unless a lossy `mimeType`/`quality` is
+requested (e.g. the demo route asks for `image/webp`). The thumbnail is always
+generated and registered as its own asset.

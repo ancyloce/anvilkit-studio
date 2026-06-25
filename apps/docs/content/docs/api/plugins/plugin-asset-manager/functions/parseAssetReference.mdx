@@ -1,0 +1,24 @@
+---
+title: "parseAssetReference"
+description: "@anvilkit/plugin-asset-manager · parseAssetReference"
+---
+
+```ts
+function parseAssetReference(url): ParsedAssetReference | null;
+```
+
+Defined in: [utils/asset-reference.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/asset-reference.ts#L47)
+
+Parse an `asset://<id>[?transform]` reference. Returns `null` for any non-
+asset URL or an empty id. Malformed transform params are ignored rather than
+failing the parse (references can be host- or tamper-supplied).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `url` | `string` |
+
+## Returns
+
+[`ParsedAssetReference`](../interfaces/ParsedAssetReference) \| `null`

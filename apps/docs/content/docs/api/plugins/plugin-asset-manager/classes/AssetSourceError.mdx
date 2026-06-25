@@ -1,0 +1,63 @@
+---
+title: "AssetSourceError"
+description: "@anvilkit/plugin-asset-manager · AssetSourceError"
+---
+
+Defined in: [utils/errors.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L51)
+
+Error for async catalog operations: host `dataSource` failures, folder
+mutations, and external `AssetSourceProvider` calls (e.g. Unsplash). Carries
+retry metadata so callers can drive backoff (`./retry`) without re-deriving
+it: `retryable` gates whether a retry is attempted at all, `status` mirrors
+an HTTP status (429, 401, …), and `retryAfterMs` is sourced from a
+`Retry-After` / `X-Ratelimit-Reset` header when present.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new AssetSourceError(
+   code, 
+   message, 
+   options?): AssetSourceError;
+```
+
+Defined in: [utils/errors.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L58)
+
+Create an asset-source error with optional retry and status metadata.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | [`AssetSourceErrorCode`](../type-aliases/AssetSourceErrorCode) |
+| `message` | `string` |
+| `options?` | \{ `cause?`: `unknown`; `retryable?`: `boolean`; `retryAfterMs?`: `number`; `status?`: `number`; \} |
+| `options.cause?` | `unknown` |
+| `options.retryable?` | `boolean` |
+| `options.retryAfterMs?` | `number` |
+| `options.status?` | `number` |
+
+#### Returns
+
+`AssetSourceError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`AssetSourceErrorCode`](../type-aliases/AssetSourceErrorCode) | [utils/errors.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L52) |
+| &lt;a id="retryable"&gt;&lt;/a&gt; `retryable` | `readonly` | `boolean` | [utils/errors.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L53) |
+| &lt;a id="retryafterms"&gt;&lt;/a&gt; `retryAfterMs?` | `readonly` | `number` | [utils/errors.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L55) |
+| &lt;a id="status"&gt;&lt;/a&gt; `status?` | `readonly` | `number` | [utils/errors.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L54) |

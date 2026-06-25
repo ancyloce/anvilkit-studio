@@ -1,0 +1,21 @@
+---
+title: "CanvasPersistenceAdapter"
+description: "@anvilkit/plugin-canvas-studio · CanvasPersistenceAdapter"
+---
+
+Defined in: [types/types.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L18)
+
+Host-provided persistence layer for canvas designs. Hosts implement
+`save`/`load`/`list`/`delete` against whatever store fits their
+deployment (Postgres, S3, IndexedDB, etc.). The plugin ships two
+default implementations: `inMemoryCanvasAdapter` (transient) and
+`localStorageCanvasAdapter` (browser-only, demo-grade).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="delete"&gt;&lt;/a&gt; `delete?` | `readonly` | (`designId`) =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;`void`\&gt; | [types/types.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L22) |
+| &lt;a id="list"&gt;&lt;/a&gt; `list` | `readonly` | () =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;readonly [`CanvasDesignMeta`](CanvasDesignMeta.md)[]\&gt; | [types/types.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L21) |
+| &lt;a id="load"&gt;&lt;/a&gt; `load` | `readonly` | (`designId`) =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;`CanvasIR` \| `null`\&gt; | [types/types.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L20) |
+| &lt;a id="save"&gt;&lt;/a&gt; `save` | `readonly` | (`designId`, `ir`) =&gt; [`MaybePromise`](../type-aliases/MaybePromise)\&lt;`void`\&gt; | [types/types.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L19) |

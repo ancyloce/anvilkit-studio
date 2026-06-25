@@ -1,0 +1,40 @@
+---
+title: "PresenceLayer"
+description: "@anvilkit/collab-ui · PresenceLayer"
+---
+
+```ts
+function PresenceLayer(props): ReactNode;
+```
+
+Defined in: [components/presence-layer.tsx:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/presence-layer.tsx#L82)
+
+Mounts spring-animated cursors and selection rings for every
+remote peer in the active collab room.
+
+Pulls peers from `<CollabUIProvider>` context. Remote cursor
+coordinates are interpolated with `motion/react` springs so a
+peer's pointer moves smoothly between awareness frames instead
+of jumping. Selection rings still delegate to the static
+`PresenceSelectionRing` from `@anvilkit/ui/presence`.
+
+Remote peer colors are rendered into inline styles below. This is
+safe because `@anvilkit/plugin-collab-yjs` sanitizes inbound
+awareness payloads via `validatePeerInfo` / `validatePresenceState`
+before they reach this layer (review §B5).
+
+Note: the remote-cursor node uses `z-50`. This overlay is a canvas
+overlay (not a Dialog/Popover), so the explicit z-index is
+intentional, but it must stay coordinated with `@anvilkit/core`'s
+canvas overlay stacking so cursors are not occluded by other
+overlays (review §B5).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`CollabPresenceLayerProps`](../interfaces/CollabPresenceLayerProps) |
+
+## Returns
+
+`ReactNode`

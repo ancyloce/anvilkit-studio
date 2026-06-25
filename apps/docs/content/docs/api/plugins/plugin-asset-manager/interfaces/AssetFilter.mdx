@@ -1,0 +1,29 @@
+---
+title: "AssetFilter"
+description: "@anvilkit/plugin-asset-manager · AssetFilter"
+---
+
+Defined in: [types/filter.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L35)
+
+The single, unified query passed to every filterable surface. All fields are
+optional and compose with AND semantics (an asset must satisfy every supplied
+axis), extending the existing `runSearch()` conjunction.
+
+## Extends
+
+- [`AssetSearchOptions`](AssetSearchOptions.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `string` | - | [`AssetSearchOptions`](AssetSearchOptions.md).[`cursor`](AssetSearchOptions.md#cursor) | [types/types.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L121) |
+| &lt;a id="facets"&gt;&lt;/a&gt; `facets?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, readonly `string`[]\&gt;\&gt; | Host-registered facet selections, keyed by facet id. | - | [types/filter.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L43) |
+| &lt;a id="folderid"&gt;&lt;/a&gt; `folderId?` | `readonly` | `string` \| `null` | Scope to a folder. `null` ⇒ root only; `undefined` ⇒ any folder. | - | [types/filter.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L37) |
+| &lt;a id="kinds"&gt;&lt;/a&gt; `kinds?` | `readonly` | readonly [`AssetKind`](../type-aliases/AssetKind)[] | - | [`AssetSearchOptions`](AssetSearchOptions.md).[`kinds`](AssetSearchOptions.md#kinds) | [types/types.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L119) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `readonly` | `number` | - | [`AssetSearchOptions`](AssetSearchOptions.md).[`limit`](AssetSearchOptions.md#limit) | [types/types.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L122) |
+| &lt;a id="query"&gt;&lt;/a&gt; `query?` | `readonly` | `string` | - | [`AssetSearchOptions`](AssetSearchOptions.md).[`query`](AssetSearchOptions.md#query) | [types/types.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L118) |
+| &lt;a id="recursive"&gt;&lt;/a&gt; `recursive?` | `readonly` | `boolean` | When true, include assets in descendant folders too. Default false. | - | [types/filter.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L39) |
+| &lt;a id="sort"&gt;&lt;/a&gt; `sort?` | `readonly` | [`AssetSort`](AssetSort.md) | Sort. Defaults to `{ field: "recent", direction: "desc" }`. | - | [types/filter.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L45) |
+| &lt;a id="sources"&gt;&lt;/a&gt; `sources?` | `readonly` | readonly [`AssetSourceId`](../type-aliases/AssetSourceId)[] | Restrict to one or more sources. `undefined` ⇒ federate across all. | - | [types/filter.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L41) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | - | [`AssetSearchOptions`](AssetSearchOptions.md).[`tags`](AssetSearchOptions.md#tags) | [types/types.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L120) |

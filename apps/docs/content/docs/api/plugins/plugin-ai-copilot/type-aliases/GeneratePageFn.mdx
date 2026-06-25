@@ -1,0 +1,26 @@
+---
+title: "GeneratePageFn"
+description: "@anvilkit/plugin-ai-copilot · GeneratePageFn"
+---
+
+```ts
+type GeneratePageFn = (prompt, ctx) => Promise<PageIR>;
+```
+
+Defined in: [plugins/plugin-ai-copilot/src/types/types.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L18)
+
+Host-supplied generation callback used by the AI copilot plugin.
+
+The plugin passes exactly two arguments: the user's prompt and an
+AI-safe generation context derived from the Puck config.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `prompt` | `string` |
+| `ctx` | `AiGenerationContext` |
+
+## Returns
+
+`Promise`\<`PageIR`\>

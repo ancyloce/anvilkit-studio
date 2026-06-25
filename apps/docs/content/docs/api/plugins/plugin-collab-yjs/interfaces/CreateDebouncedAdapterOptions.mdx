@@ -1,0 +1,14 @@
+---
+title: "CreateDebouncedAdapterOptions"
+description: "@anvilkit/plugin-collab-yjs · CreateDebouncedAdapterOptions"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/debounced-adapter.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L9)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="cleartimeout"&gt;&lt;/a&gt; `clearTimeout?` | `readonly` | (`handle`) =&gt; `void` | - | [plugin-collab-yjs/src/utils/debounced-adapter.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L23) |
+| &lt;a id="ms"&gt;&lt;/a&gt; `ms?` | `readonly` | `number` | Quiet window after which the latest pending `save()` is flushed to the underlying adapter. Default: 150 ms. | [plugin-collab-yjs/src/utils/debounced-adapter.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L14) |
+| &lt;a id="settimeout"&gt;&lt;/a&gt; `setTimeout?` | `readonly` | (`fn`, `ms`) =&gt; `Timeout` | Optional scheduler override. Defaults to `setTimeout` / `clearTimeout`. Tests use this to inject a fake scheduler. | [plugin-collab-yjs/src/utils/debounced-adapter.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L19) |

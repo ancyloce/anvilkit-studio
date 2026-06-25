@@ -1,0 +1,23 @@
+---
+title: "UploadSession"
+description: "@anvilkit/plugin-asset-manager · UploadSession"
+---
+
+Defined in: [types/resumable.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L63)
+
+Backend handle for an in-progress multipart upload, returned by
+[ResumableUploadAdapter.begin](ResumableUploadAdapter.md#begin).
+
+`uploadId` is the backend's session id (e.g. S3 `UploadId`). A non-empty
+`parts` marks a *resumed* session — the runner skips those part numbers
+rather than re-uploading them. `meta` is host-opaque continuation data that
+round-trips unchanged back to `uploadPart` / `complete` / `abort`.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, [`JsonValue`](../type-aliases/JsonValue)\&gt;\&gt; | Host-opaque continuation data echoed back to subsequent calls. Typed JSON-safe so the runner can persist it directly into [PersistedUploadSession.meta](PersistedUploadSession.md#meta) (which the M2 session store round-trips through `localStorage`) without a lossy conversion. | [types/resumable.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L83) |
+| &lt;a id="parts"&gt;&lt;/a&gt; `parts?` | `readonly` | readonly [`PartTag`](PartTag.md)[] | Parts already accepted by the backend (empty/omitted for a fresh session). | [types/resumable.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L66) |
+| &lt;a id="partsize"&gt;&lt;/a&gt; `partSize?` | `readonly` | `number` | Effective part size in bytes, **locked for the life of the session**. The runner slices every part at this size, so resuming MUST reuse the same value — otherwise a skipped `partNumber` would map to a different byte range and corrupt the object. A backend may dictate it here; otherwise the runner sets it from config and persists it (see [PersistedUploadSession.partSize](PersistedUploadSession.md#partsize)). Once parts have been uploaded it must not change. | [types/resumable.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L76) |
+| &lt;a id="uploadid"&gt;&lt;/a&gt; `uploadId` | `readonly` | `string` | - | [types/resumable.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L64) |

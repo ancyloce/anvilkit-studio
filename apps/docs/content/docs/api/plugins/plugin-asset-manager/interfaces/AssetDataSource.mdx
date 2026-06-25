@@ -1,0 +1,268 @@
+---
+title: "AssetDataSource"
+description: "@anvilkit/plugin-asset-manager · AssetDataSource"
+---
+
+Defined in: [types/data-source.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L46)
+
+Host-supplied read and mutation plane for the local asset library.
+
+## Methods
+
+### createFolder()?
+
+```ts
+optional createFolder(
+   parentId, 
+   name, 
+signal?): Promise<AssetFolder>;
+```
+
+Defined in: [types/data-source.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L79)
+
+Create a child folder under `parentId`, or under root when `null`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `parentId` | `string` \| `null` |
+| `name` | `string` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`AssetFolder`](AssetFolder.md)\>
+
+***
+
+### list()?
+
+```ts
+optional list(query, signal?): Promise<AssetListPage>;
+```
+
+Defined in: [types/data-source.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L53)
+
+THE single read. Scoped by `query.folderId` (null=root, undefined=all),
+returns the folder's assets (paginated `items`), its child `folders`, and
+its `folderPath` breadcrumb in one envelope. No separate `listFolders`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | [`AssetFilter`](AssetFilter.md) |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`AssetListPage`](AssetListPage.md)\>
+
+***
+
+### move()?
+
+```ts
+optional move(
+   id, 
+   folderId, 
+signal?): Promise<void>;
+```
+
+Defined in: [types/data-source.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L71)
+
+Move an asset into a folder. `null` ⇒ root.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `folderId` | `string` \| `null` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### moveFolder()?
+
+```ts
+optional moveFolder(
+   id, 
+   parentId, 
+signal?): Promise<AssetFolder>;
+```
+
+Defined in: [types/data-source.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L97)
+
+Move a folder under `parentId`, or to root when `null`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `parentId` | `string` \| `null` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`AssetFolder`](AssetFolder.md)\>
+
+***
+
+### remove()?
+
+```ts
+optional remove(id, signal?): Promise<void>;
+```
+
+Defined in: [types/data-source.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L57)
+
+Remove an asset by id from the backing library.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### removeFolder()?
+
+```ts
+optional removeFolder(
+   id, 
+   opts?, 
+signal?): Promise<void>;
+```
+
+Defined in: [types/data-source.ts:91](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L91)
+
+Remove a folder, optionally cascading through descendants and assets.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `opts?` | \{ `cascade?`: `boolean`; \} |
+| `opts.cascade?` | `boolean` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### rename()?
+
+```ts
+optional rename(
+   id, 
+   name, 
+signal?): Promise<UploadResult>;
+```
+
+Defined in: [types/data-source.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L65)
+
+Rename an asset and return the updated upload row.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `name` | `string` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`UploadResult`](UploadResult.md)\>
+
+***
+
+### renameFolder()?
+
+```ts
+optional renameFolder(
+   id, 
+   name, 
+signal?): Promise<AssetFolder>;
+```
+
+Defined in: [types/data-source.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L85)
+
+Rename a folder and return the updated folder record.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `name` | `string` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`AssetFolder`](AssetFolder.md)\>
+
+***
+
+### replace()?
+
+```ts
+optional replace(
+   id, 
+   payload, 
+signal?): Promise<UploadResult>;
+```
+
+Defined in: [types/data-source.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L59)
+
+Replace an asset's binary contents and return the updated upload row.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `payload` | `File` |
+| `signal?` | `AbortSignal` |
+
+#### Returns
+
+`Promise`\<[`UploadResult`](UploadResult.md)\>
+
+***
+
+### subscribeStatus()?
+
+```ts
+optional subscribeStatus(listener): () => void;
+```
+
+Defined in: [types/data-source.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/data-source.ts#L105)
+
+Subscribe to data-source loading and mutation status updates.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `listener` | (`status`) =&gt; `void` |
+
+#### Returns
+
+() => `void`

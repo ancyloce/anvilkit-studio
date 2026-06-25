@@ -1,0 +1,27 @@
+---
+title: "resolveAssets"
+description: "@anvilkit/plugin-asset-manager · resolveAssets"
+---
+
+```ts
+function resolveAssets(ir, resolver): Promise<PageIR>;
+```
+
+Defined in: [utils/resolver.ts:144](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/resolver.ts#L144)
+
+Resolve all asset references found in a Page IR tree.
+
+The function scans the IR asset table and asset-like node props, resolves each
+distinct URL concurrently with the supplied resolver, clones the IR with any
+resolved URLs/meta applied, and returns a deeply frozen result.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `PageIR` |
+| `resolver` | `IRAssetResolver` |
+
+## Returns
+
+`Promise`\<`PageIR`\>

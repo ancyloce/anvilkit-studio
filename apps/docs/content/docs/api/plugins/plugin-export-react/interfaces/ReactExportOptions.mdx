@@ -1,0 +1,32 @@
+---
+title: "ReactExportOptions"
+description: "@anvilkit/plugin-export-react · ReactExportOptions"
+---
+
+Defined in: [types/types.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L24)
+
+Public options bag for `@anvilkit/plugin-export-react`.
+
+Declared as an identity-shaped record so it satisfies the
+`ExportOptions` constraint from `@anvilkit/core` while remaining
+strongly typed for plugin consumers.
+
+## Extends
+
+- `Record`\<`string`, `unknown`\>
+
+## Indexable
+
+```ts
+[key: string]: unknown
+```
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="assetstrategy"&gt;&lt;/a&gt; `assetStrategy?` | `readonly` | `"static-import"` \| `"url-prop"` | How asset URL props are rendered. - `"url-prop"` (default): assets stay as string URLs exactly as they appear in the IR (matches `plugin-export-html` behavior). - `"static-import"`: every local relative-path asset URL is rewritten into a top-of-file `import` binding, and the prop value becomes `{binding}` — the Vite/Next-friendly path for hashed/fingerprinted bundler inputs. External CDN URLs keep `"url-prop"` behavior under this strategy (with a warning). | [types/types.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L52) |
+| &lt;a id="buildir"&gt;&lt;/a&gt; `buildIR?` | `readonly` | [`IRBuilder`](../type-aliases/IRBuilder) | Optional builder used by the export header action to obtain a PageIR from the live Studio context. When provided, the action runs the format and broadcasts an `anvilkit:export:ready` event with the resulting payload. When omitted, the action falls back to broadcasting an `anvilkit:export:request` event so the host can perform the export itself. | [types/types.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L61) |
+| &lt;a id="includeimports"&gt;&lt;/a&gt; `includeImports?` | `readonly` | `boolean` | When `false`, component `import` statements are omitted from the emitted source — useful for downstream bundlers that inject their own imports. Defaults to `true`. | [types/types.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L40) |
+| &lt;a id="moduleresolution"&gt;&lt;/a&gt; `moduleResolution?` | `readonly` | `"esm"` \| `"cjs"` | Module system the emitted file targets. `"esm"` (default) emits `import`/`export default`; `"cjs"` emits `require`/`module.exports`. | [types/types.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L34) |
+| &lt;a id="syntax"&gt;&lt;/a&gt; `syntax?` | `readonly` | `"tsx"` \| `"jsx"` | Output syntax. `"tsx"` (default) keeps TypeScript return-type annotations on the emitted page component. `"jsx"` strips them. | [types/types.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L29) |

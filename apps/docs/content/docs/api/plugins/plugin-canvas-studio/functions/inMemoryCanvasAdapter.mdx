@@ -1,0 +1,18 @@
+---
+title: "inMemoryCanvasAdapter"
+description: "@anvilkit/plugin-canvas-studio · inMemoryCanvasAdapter"
+---
+
+```ts
+function inMemoryCanvasAdapter(): CanvasPersistenceAdapter;
+```
+
+Defined in: [adapters/in-memory.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/in-memory.ts#L12)
+
+Transient in-process design store. The IR is cloned on save so callers
+cannot mutate the stored copy. Intended for tests and short-lived demo
+sessions — production hosts should provide their own adapter.
+
+## Returns
+
+[`CanvasPersistenceAdapter`](../interfaces/CanvasPersistenceAdapter)

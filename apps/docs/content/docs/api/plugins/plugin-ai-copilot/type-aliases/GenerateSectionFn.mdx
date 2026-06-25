@@ -1,0 +1,32 @@
+---
+title: "GenerateSectionFn"
+description: "@anvilkit/plugin-ai-copilot · GenerateSectionFn"
+---
+
+```ts
+type GenerateSectionFn = (prompt, ctx) => Promise<AiSectionPatch>;
+```
+
+Defined in: [plugins/plugin-ai-copilot/src/types/types.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L35)
+
+Host-supplied callback for the Phase 6 / M9 section-level flow.
+
+Receives the user's prompt and a section-scoped [AiSectionContext](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts)
+describing the selected nodes plus the components the LLM is allowed
+to emit inside the targeted zone. Returns an [AiSectionPatch](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts)
+the plugin then validates with `validateAiSectionPatch` and applies
+via `puckApi.dispatch({ type: "setData", … })`.
+
+Same `(prompt, ctx)` argument order as [GeneratePageFn](GeneratePageFn.md) for
+symmetry across the page and section flows.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `prompt` | `string` |
+| `ctx` | [`AiSectionContext`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts) |
+
+## Returns
+
+`Promise`\<[`AiSectionPatch`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts)\>

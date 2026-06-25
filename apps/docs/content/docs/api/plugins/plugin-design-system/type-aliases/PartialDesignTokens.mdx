@@ -1,0 +1,26 @@
+---
+title: "PartialDesignTokens"
+description: "@anvilkit/plugin-design-system · PartialDesignTokens"
+---
+
+```ts
+type PartialDesignTokens = {
+  dark?: { readonly [P in keyof DarkPrimitiveOverrides]?: Partial<DarkPrimitiveOverrides[P]> };
+  primitives?: { readonly [P in keyof PrimitiveTokens]?: Partial<PrimitiveTokens[P]> };
+  semantics?: Partial<SemanticTokens>;
+};
+```
+
+Defined in: [tokens/types.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L103)
+
+Deep-partial mirror of [DesignTokens](../interfaces/DesignTokens) for host overrides.
+Hosts may patch any subset of the bundled defaults — `mergeTokens`
+deep-merges and preserves structural sharing for untouched subtrees.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="dark"&gt;&lt;/a&gt; `dark?` | `readonly` | `{ readonly [P in keyof DarkPrimitiveOverrides]?: Partial<DarkPrimitiveOverrides[P]> }` | [tokens/types.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L108) |
+| &lt;a id="primitives"&gt;&lt;/a&gt; `primitives?` | `readonly` | `{ readonly [P in keyof PrimitiveTokens]?: Partial<PrimitiveTokens[P]> }` | [tokens/types.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L104) |
+| &lt;a id="semantics"&gt;&lt;/a&gt; `semantics?` | `readonly` | `Partial`\&lt;[`SemanticTokens`](../interfaces/SemanticTokens)\&gt; | [tokens/types.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L107) |

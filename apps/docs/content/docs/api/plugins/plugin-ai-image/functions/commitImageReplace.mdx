@@ -1,0 +1,30 @@
+---
+title: "commitImageReplace"
+description: "@anvilkit/plugin-ai-image · commitImageReplace"
+---
+
+```ts
+function commitImageReplace<T>(options): T;
+```
+
+Defined in: [plugins/plugin-ai-image/src/commit/commit-image-replace.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commit/commit-image-replace.ts#L49)
+
+Build a `CanvasImageReplaceCommand` and commit it through the injected
+`commit`, returning the commit's result. The canvas-core engine validates the
+node kind + `fromAssetId` and produces the inverse, so this swap is undoable.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `unknown` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CommitImageReplaceOptions`](../interfaces/CommitImageReplaceOptions)\&lt;`T`\&gt; |
+
+## Returns
+
+`T`

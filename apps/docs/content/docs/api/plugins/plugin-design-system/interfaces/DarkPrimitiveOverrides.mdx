@@ -1,0 +1,20 @@
+---
+title: "DarkPrimitiveOverrides"
+description: "@anvilkit/plugin-design-system · DarkPrimitiveOverrides"
+---
+
+Defined in: [tokens/types.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L88)
+
+Dark-mode primitive overrides. v1 only inverts the neutral ramp —
+brand stays the same across themes (brand color is brand color) and
+spacing / type / radius are intrinsically theme-independent.
+
+Semantics resolve through primitives, so an unset semantic block in
+dark mode is intentional: roles re-bind automatically when neutrals
+flip, keeping stored token refs theme-stable (PRD 0005 §5.2).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="neutral"&gt;&lt;/a&gt; `neutral` | `readonly` | [`ColorRamp`](ColorRamp.md) | [tokens/types.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tokens/types.ts#L89) |

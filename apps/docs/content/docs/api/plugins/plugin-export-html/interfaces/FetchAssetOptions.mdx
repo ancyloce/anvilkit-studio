@@ -1,0 +1,20 @@
+---
+title: "FetchAssetOptions"
+description: "@anvilkit/plugin-export-html · FetchAssetOptions"
+---
+
+Defined in: [types/types.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L16)
+
+Optional hints the format passes to a custom fetcher.
+
+The default fetcher uses these to enforce byte caps before fully
+downloading a payload (Content-Length pre-check + streaming body).
+Custom fetchers are free to ignore the bag entirely; the field
+exists so hosts that wrap `defaultFetchAsset` can honor the same
+limits the format would have applied.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="maxbytes"&gt;&lt;/a&gt; `maxBytes?` | `readonly` | `number` | [types/types.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L17) |

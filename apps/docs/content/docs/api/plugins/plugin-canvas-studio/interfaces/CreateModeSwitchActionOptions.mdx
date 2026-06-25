@@ -1,0 +1,13 @@
+---
+title: "CreateModeSwitchActionOptions"
+description: "@anvilkit/plugin-canvas-studio · CreateModeSwitchActionOptions"
+---
+
+Defined in: [actions/mode-switch-action.ts:4](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/mode-switch-action.ts#L4)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="modestore"&gt;&lt;/a&gt; `modeStore` | `readonly` | [`CanvasModeStoreApi`](CanvasModeStoreApi.md) | - | [actions/mode-switch-action.ts:5](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/mode-switch-action.ts#L5) |
+| &lt;a id="resolvetarget"&gt;&lt;/a&gt; `resolveTarget?` | `readonly` | (`selection`) =&gt; \{ `artboardId?`: `string` \| `null`; `designId`: `string`; `puckNodeId`: `string` \| `null`; \} | Optional resolver: given a Puck selection (or null when nothing is selected) return the design id + nodeId + (optional) artboardId the overlay should edit. The default treats any selected `DesignBlock` node as the target and otherwise allocates a new design id. | [actions/mode-switch-action.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/actions/mode-switch-action.ts#L12) |

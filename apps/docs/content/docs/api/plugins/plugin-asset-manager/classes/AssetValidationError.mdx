@@ -1,0 +1,52 @@
+---
+title: "AssetValidationError"
+description: "@anvilkit/plugin-asset-manager · AssetValidationError"
+---
+
+Defined in: [utils/errors.ts:2](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L2)
+
+Error thrown when an upload adapter returns an invalid result.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new AssetValidationError(
+   code, 
+   message, 
+   options?): AssetValidationError;
+```
+
+Defined in: [utils/errors.ts:6](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L6)
+
+Create a validation error with a stable machine-readable code.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | `string` |
+| `message` | `string` |
+| `options?` | \{ `cause?`: `unknown`; \} |
+| `options.cause?` | `unknown` |
+
+#### Returns
+
+`AssetValidationError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `string` | [utils/errors.ts:3](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L3) |

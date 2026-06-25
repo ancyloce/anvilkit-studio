@@ -1,0 +1,44 @@
+---
+title: "createYjsAdapter"
+description: "@anvilkit/plugin-collab-yjs · createYjsAdapter"
+---
+
+```ts
+function createYjsAdapter(options): YjsSnapshotAdapter;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/yjs-adapter.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/yjs-adapter.ts#L73)
+
+Build a SnapshotAdapter v2 backed by a shared Y.Doc.
+
+Encoding is intentionally simple for the alpha cycle: the latest
+live PageIR is JSON-encoded under one Y.Map key, while saved
+snapshots are stored under per-id metadata and payload keys. Yjs
+gives last-writer-wins semantics to the live key with deterministic
+conflict resolution, which is correct (eventually-consistent +
+convergent) but coarse-grained.
+
+Internal structure (post-2026-05-13 split): the public factory
+composes six focused modules:
+
+- `keys.ts` — magic-string Y.Map keys
+- `metrics.ts` — saveCount, latency window, churn sliding window,
+  degraded flag, snapshot id generator
+- `connection-status.ts` — status FSM + queuedEdits injection
+- `conflicts.ts` — overlap computation + unconfirmed-window tracking
+- `snapshots.ts` — save/load/list/delete/forceResync + subscribers
+- `awareness-bridge.ts` — presence + churn + presence-validation
+
+Each module owns its own state. The orchestrator wires them together
+via callback dependencies and owns the Y.Map observer + Y.Map deep
+tree observer registrations so `destroy()` can release both.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateYjsAdapterOptions`](../interfaces/CreateYjsAdapterOptions) |
+
+## Returns
+
+[`YjsSnapshotAdapter`](../interfaces/YjsSnapshotAdapter)

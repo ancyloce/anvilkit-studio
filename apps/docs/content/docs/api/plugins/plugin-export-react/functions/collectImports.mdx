@@ -1,0 +1,32 @@
+---
+title: "collectImports"
+description: "@anvilkit/plugin-export-react · collectImports"
+---
+
+```ts
+function collectImports(ir): ImportManifest;
+```
+
+Defined in: [imports/collect-imports.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/imports/collect-imports.ts#L48)
+
+Walk the IR tree and return the deduplicated import manifest for
+every component type encountered (excluding the `__root__`
+wrapper). The mapping is:
+
+- `binding` — the component's PascalCase type (used directly in JSX).
+- `source`  — `@anvilkit/<kebab-case>` package name.
+- `kind`    — always `"named"` for the default wiring; consumers may
+  override via the emitter's own logic (e.g. static-import assets).
+
+Sorted by `source` ascending so the emitted imports are byte-stable
+across runs.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `PageIR` |
+
+## Returns
+
+[`ImportManifest`](../interfaces/ImportManifest)

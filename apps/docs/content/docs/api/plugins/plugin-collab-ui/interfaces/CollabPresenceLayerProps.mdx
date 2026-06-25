@@ -1,0 +1,15 @@
+---
+title: "CollabPresenceLayerProps"
+description: "@anvilkit/collab-ui · CollabPresenceLayerProps"
+---
+
+Defined in: [components/presence-layer.tsx:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/presence-layer.tsx#L35)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="classname"&gt;&lt;/a&gt; `className?` | `readonly` | `string` | - | [components/presence-layer.tsx:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/presence-layer.tsx#L46) |
+| &lt;a id="maxcursors"&gt;&lt;/a&gt; `maxCursors?` | `readonly` | `number` | Maximum number of remote cursors animated at once (review U1). Defaults to DEFAULT\_MAX\_CURSORS. Rooms under the cap render every peer's cursor; past it, only the most-recently-moved cursors animate — each cursor mounts two `motion` springs, so an uncapped large room would otherwise spin up ~2N rAF loops. Selection rings are unaffected. Pass `0` to render no cursors. | [components/presence-layer.tsx:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/presence-layer.tsx#L55) |
+| &lt;a id="resolveselectionrect"&gt;&lt;/a&gt; `resolveSelectionRect?` | `readonly` | (`nodeId`) =&gt; `PresenceSelectionRingRect` \| `null` | - | [components/presence-layer.tsx:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/presence-layer.tsx#L43) |
+| &lt;a id="showcursors"&gt;&lt;/a&gt; `showCursors?` | `readonly` | `boolean` | Per-instance override for remote-cursor visibility. When omitted, the layer follows the shared `useCollabCursorVisibility()` state that the bundled `<CollabSettingsPopover>` toggle writes (review §C3 / §4.3). | [components/presence-layer.tsx:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/presence-layer.tsx#L42) |

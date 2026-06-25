@@ -1,0 +1,34 @@
+---
+title: "createTokenTypographyField"
+description: "@anvilkit/plugin-design-system · createTokenTypographyField"
+---
+
+```ts
+function createTokenTypographyField(opts?): CustomField<string>;
+```
+
+Defined in: [fields/createTokenTypographyField.tsx:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/fields/createTokenTypographyField.tsx#L16)
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `opts` | [`CreateTokenTypographyFieldOptions`](../interfaces/CreateTokenTypographyFieldOptions) |
+
+## Returns
+
+`CustomField`\<`string`\>
+
+## File
+
+Public surface for `@anvilkit/plugin-design-system`.
+
+Phase A scaffold:
+ - A4 (this revision): re-exports the React-free token surface
+   (`DEFAULT_TOKENS`, `mergeTokens`, type tree).
+ - A5: adds the `emitTokensCss` helper.
+ - A6: adds the `createDesignSystemPlugin()` factory.
+
+The dedicated `./tokens` subpath stays the authoritative React-free
+import — host build pipelines that want to avoid pulling React
+resolutions during a pure-data import should keep using it.

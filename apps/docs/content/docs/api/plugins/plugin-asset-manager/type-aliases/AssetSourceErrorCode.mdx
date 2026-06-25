@@ -1,0 +1,29 @@
+---
+title: "AssetSourceErrorCode"
+description: "@anvilkit/plugin-asset-manager · AssetSourceErrorCode"
+---
+
+```ts
+type AssetSourceErrorCode = 
+  | "DATA_SOURCE_UNAVAILABLE"
+  | "DATA_SOURCE_TIMEOUT"
+  | "ASSET_MUTATION_REJECTED"
+  | "FOLDER_NOT_FOUND"
+  | "FOLDER_CYCLE"
+  | "FOLDER_NAME_CONFLICT"
+  | "FOLDER_NOT_EMPTY"
+  | "MOVE_REJECTED"
+  | "PROVIDER_RATE_LIMITED"
+  | "PROVIDER_UNAUTHORIZED"
+  | "PROVIDER_NETWORK"
+  | "PROVIDER_BAD_RESPONSE"
+  | "READ_ONLY_SOURCE"
+  | "OPTIMISTIC_ROLLBACK";
+```
+
+Defined in: [utils/errors.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L27)
+
+Failure codes raised by the async data-source / folder / external-provider
+surfaces (PRD 0002 §3.6). Distinct from [AssetValidationError](../classes/AssetValidationError)
+(upload validation) and [AssetResolutionError](../classes/AssetResolutionError) (resolver domain) — in
+particular `ASSET_NOT_FOUND` belongs to the resolver, never here.

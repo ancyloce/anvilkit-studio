@@ -1,0 +1,33 @@
+---
+title: "canvasToSvg"
+description: "@anvilkit/plugin-export-canvas · canvasToSvg"
+---
+
+```ts
+function canvasToSvg(
+   ir, 
+   page?, 
+   options?): Promise<{
+  svg: string;
+  warnings: ExportWarning[];
+}>;
+```
+
+Defined in: [serialize.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize.ts#L50)
+
+Serialize one canvas page to an SVG string (wraps canvas-core).
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `ir` | `CanvasIR` | `undefined` |
+| `page` | `string` \| `number` | `0` |
+| `options?` | `SvgSerializeOptions` | `undefined` |
+
+## Returns
+
+`Promise`\<\{
+  `svg`: `string`;
+  `warnings`: `ExportWarning`[];
+\}\>

@@ -1,0 +1,54 @@
+---
+title: "SnapshotCorruptedError"
+description: "@anvilkit/plugin-collab-yjs · SnapshotCorruptedError"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/snapshot-errors.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L48)
+
+The record is internally inconsistent — the payload failed to decode
+(corrupt / schema-drifted), or metadata is present without its
+payload (which, because retention deletes both atomically in one
+synchronous transaction, indicates corruption, not eviction).
+
+## Extends
+
+- `SnapshotError`
+
+## Constructors
+
+### Constructor
+
+```ts
+new SnapshotCorruptedError(
+   id, 
+   message, 
+   options?): SnapshotCorruptedError;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/snapshot-errors.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L16)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `message` | `string` |
+| `options?` | \{ `cause?`: `unknown`; \} |
+| `options.cause?` | `unknown` |
+
+#### Returns
+
+`SnapshotCorruptedError`
+
+#### Inherited from
+
+```ts
+SnapshotError.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Default value | Description | Overrides | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | `undefined` | The snapshot id the failed `load()` targeted. | - | `SnapshotError.id` | [plugin-collab-yjs/src/utils/snapshot-errors.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L15) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `"SnapshotCorruptedError"` | `"SnapshotCorruptedError"` | - | `SnapshotError.name` | - | [plugin-collab-yjs/src/utils/snapshot-errors.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/snapshot-errors.ts#L49) |

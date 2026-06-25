@@ -1,0 +1,16 @@
+---
+title: "S3MultipartCspOptions"
+description: "@anvilkit/plugin-asset-manager · S3MultipartCspOptions"
+---
+
+Defined in: [utils/csp.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L34)
+
+CSP inputs for an `s3MultipartAdapter` instance.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="buckethost"&gt;&lt;/a&gt; `bucketHost?` | `readonly` | `string` | Origin that part PUTs and the completed object live on (e.g. `https://my-bucket.s3.amazonaws.com`). Presigned part URLs target it directly, so it must be in `connect-src`. When omitted, only the broker endpoint origin is added and you must allow the bucket origin yourself. | [utils/csp.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L43) |
+| &lt;a id="endpoint"&gt;&lt;/a&gt; `endpoint` | `readonly` | `string` \| `URL` | The broker `endpoint` configured on `s3MultipartAdapter`. | [utils/csp.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L36) |
+| &lt;a id="publichost"&gt;&lt;/a&gt; `publicHost?` | `readonly` | `string` | Separate public/CDN origin the completed object is served from, if it differs from `bucketHost`. Added to `connect-src` / `img-src` / `media-src`. | [utils/csp.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/csp.ts#L49) |

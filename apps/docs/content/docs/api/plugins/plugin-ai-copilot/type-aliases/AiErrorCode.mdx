@@ -1,0 +1,34 @@
+---
+title: "AiErrorCode"
+description: "@anvilkit/plugin-ai-copilot · AiErrorCode"
+---
+
+```ts
+type AiErrorCode = 
+  | "VALIDATION_FAILED"
+  | "TIMEOUT"
+  | "GENERATE_FAILED"
+  | "APPLY_FAILED"
+  | "CONFIG_INVALID";
+```
+
+Defined in: [plugins/plugin-ai-copilot/src/types/types.ts:248](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L248)
+
+Stable error codes emitted by the AI copilot plugin.
+
+- `VALIDATION_FAILED` — the host's `generatePage` / `generateSection`
+  callback returned a payload that failed `validateAiOutput` /
+  `validateAiSectionPatch`. Carries an `issues[]` array.
+- `TIMEOUT` — the host callback did not resolve within
+  [AiCopilotOptions.timeoutMs](../interfaces/AiCopilotOptions#timeoutms) (default 30 s).
+- `GENERATE_FAILED` — the host callback rejected, threw, or was
+  missing (e.g. `regenerateSelection` called without a
+  `generateSection` configured).
+- `APPLY_FAILED` — the post-validation apply step failed (e.g. a
+  section patch's `nodeIds` were not contiguous, or the targeted
+  zone could not be located in the live Puck data).
+- `CONFIG_INVALID` — `createAiCopilotPlugin` was called with options
+  that fail runtime structural validation (e.g. a non-function
+  `generatePage`, a non-positive `timeoutMs`). Surfaced through the
+  constructor's thrown `Error.message` rather than the event bus,
+  since no Studio context exists yet.

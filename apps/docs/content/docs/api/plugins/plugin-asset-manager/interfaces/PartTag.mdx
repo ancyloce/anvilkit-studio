@@ -1,0 +1,17 @@
+---
+title: "PartTag"
+description: "@anvilkit/plugin-asset-manager · PartTag"
+---
+
+Defined in: [types/resumable.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L49)
+
+Opaque acknowledgement of a successfully stored part. `etag` is the value the
+backend requires at completion (S3 returns one per `UploadPart`); the runner
+persists it so the part is skipped when a session resumes.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="etag"&gt;&lt;/a&gt; `etag` | `readonly` | `string` | [types/resumable.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L51) |
+| &lt;a id="partnumber"&gt;&lt;/a&gt; `partNumber` | `readonly` | `number` | [types/resumable.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L50) |

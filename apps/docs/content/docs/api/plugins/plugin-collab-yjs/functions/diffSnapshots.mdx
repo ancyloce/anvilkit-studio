@@ -1,0 +1,31 @@
+---
+title: "diffSnapshots"
+description: "@anvilkit/plugin-collab-yjs · diffSnapshots"
+---
+
+```ts
+function diffSnapshots(previous, next): IRDiff;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/diff.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/diff.ts#L15)
+
+L2 — snapshot-diff helper. Computes the structural `IRDiff` between
+two `PageIR` values; thin alias over diffIR from the
+version-history plugin to keep the call site domain-aligned ("I'm
+diffing snapshots, not arbitrary IRs"). Adapter `save()` calls this
+automatically when `createYjsAdapter({ computeDelta: true })` is set,
+and attaches the result as `SnapshotMeta.delta`.
+
+Hosts that want to diff arbitrary pairs (e.g. for audit logs or
+undo-stack replay) can call this directly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `previous` | `PageIR` |
+| `next` | `PageIR` |
+
+## Returns
+
+`IRDiff`

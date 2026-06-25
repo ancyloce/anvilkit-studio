@@ -1,0 +1,17 @@
+---
+title: "ResumableUploadConfig"
+description: "@anvilkit/plugin-asset-manager · ResumableUploadConfig"
+---
+
+Defined in: [types/resumable.ts:212](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L212)
+
+Resumable / multipart upload configuration on [AssetManagerOptions](AssetManagerOptions.md).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | [`ResumableUploadAdapter`](ResumableUploadAdapter.md) | The multipart backend driving begin / uploadPart / complete / abort. | [types/resumable.ts:214](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L214) |
+| &lt;a id="partsize"&gt;&lt;/a&gt; `partSize?` | `readonly` | `number` | Bytes per part. Defaults to 8 MiB in the runner. S3 requires every part except the last to be ≥ 5 MiB, so the S3 adapter clamps smaller values. | [types/resumable.ts:219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L219) |
+| &lt;a id="sessionstore"&gt;&lt;/a&gt; `sessionStore?` | `readonly` | [`UploadSessionStore`](UploadSessionStore.md) | Where in-progress sessions are persisted so an interrupted upload can resume. Omitted ⇒ the runner uses the built-in `createUploadSessionStore` (localStorage, with an in-memory fallback). Supply a custom store (IndexedDB, remote) to change the backing. | [types/resumable.ts:232](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L232) |
+| &lt;a id="threshold"&gt;&lt;/a&gt; `threshold?` | `readonly` | `number` | Minimum file size (bytes) routed through the resumable path; smaller files use the single-shot `uploader`. Defaults to `partSize` — a file that fits in one part gains nothing from multipart. | [types/resumable.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/resumable.ts#L225) |

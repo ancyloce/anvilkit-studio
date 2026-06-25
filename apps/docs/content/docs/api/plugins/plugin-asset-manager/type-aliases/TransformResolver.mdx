@@ -1,0 +1,26 @@
+---
+title: "TransformResolver"
+description: "@anvilkit/plugin-asset-manager · TransformResolver"
+---
+
+```ts
+type TransformResolver = (asset, transform) => string | undefined;
+```
+
+Defined in: [types/transform.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/transform.ts#L47)
+
+Host-pluggable mapping from an asset + transform spec to a derivative URL.
+Return `undefined` to fall back to the asset's original URL (e.g. the
+transform isn't supported, or the asset isn't an image). The returned URL is
+re-validated through the same trust boundary as any other resolved asset URL.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `asset` | [`UploadResult`](../interfaces/UploadResult) |
+| `transform` | [`AssetTransform`](../interfaces/AssetTransform) |
+
+## Returns
+
+`string` \| `undefined`

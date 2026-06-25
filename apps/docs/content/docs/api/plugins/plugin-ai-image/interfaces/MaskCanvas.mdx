@@ -1,0 +1,55 @@
+---
+title: "MaskCanvas"
+description: "@anvilkit/plugin-ai-image · MaskCanvas"
+---
+
+Defined in: [plugins/plugin-ai-image/src/mask/exporter.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L56)
+
+Minimal canvas surface the exporter needs — satisfied by `HTMLCanvasElement`.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="height"&gt;&lt;/a&gt; `height` | `number` | [plugins/plugin-ai-image/src/mask/exporter.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L58) |
+| &lt;a id="width"&gt;&lt;/a&gt; `width` | `number` | [plugins/plugin-ai-image/src/mask/exporter.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L57) |
+
+## Methods
+
+### getContext()
+
+```ts
+getContext(contextId): CanvasRenderingContext2D | null;
+```
+
+Defined in: [plugins/plugin-ai-image/src/mask/exporter.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L59)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `contextId` | `"2d"` |
+
+#### Returns
+
+`CanvasRenderingContext2D` \| `null`
+
+***
+
+### toDataURL()
+
+```ts
+toDataURL(type?): string;
+```
+
+Defined in: [plugins/plugin-ai-image/src/mask/exporter.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/mask/exporter.ts#L60)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type?` | `string` |
+
+#### Returns
+
+`string`

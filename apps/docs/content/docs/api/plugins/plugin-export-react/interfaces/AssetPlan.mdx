@@ -1,0 +1,16 @@
+---
+title: "AssetPlan"
+description: "@anvilkit/plugin-export-react · AssetPlan"
+---
+
+Defined in: [assets/assets.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L65)
+
+The asset plan returned by `collectReactAssets`.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="imports"&gt;&lt;/a&gt; `imports` | `readonly` | readonly [`ImportRecord`](ImportRecord.md)[] | Import records to be prepended to the emitted source (alongside the component imports). Empty for `"url-prop"`. | [assets/assets.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L70) |
+| &lt;a id="rewrites"&gt;&lt;/a&gt; `rewrites` | `readonly` | `ReadonlyMap`\&lt;`string`, [`AssetRewrite`](AssetRewrite.md)\&gt; | URL → binding lookup. The emitter consults this table when serializing each asset-shaped prop. | [assets/assets.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L75) |
+| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings` | `readonly` | readonly `ExportWarning`[] | Warnings emitted during asset resolution (e.g. when an external CDN URL is encountered under `"static-import"`). | [assets/assets.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/assets/assets.ts#L80) |

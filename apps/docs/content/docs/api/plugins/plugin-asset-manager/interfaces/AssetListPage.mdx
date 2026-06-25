@@ -1,0 +1,27 @@
+---
+title: "AssetListPage"
+description: "@anvilkit/plugin-asset-manager · AssetListPage"
+---
+
+Defined in: [types/filter.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L54)
+
+Page envelope: `AssetSearchPage` (assets, paginated) plus the unified folder
+view. `folders`/`folderPath` ride OUTSIDE the asset cursor/`limit` (folders
+are few and returned whole per scope); only `items` paginates. A flat source
+omits the folder fields.
+
+## Extends
+
+- [`AssetSearchPage`](AssetSearchPage.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="folderpath"&gt;&lt;/a&gt; `folderPath?` | `readonly` | readonly [`AssetFolder`](AssetFolder.md)[] | Root → … → current folder, for the breadcrumb. Omitted at root. | - | [types/filter.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L58) |
+| &lt;a id="folders"&gt;&lt;/a&gt; `folders?` | `readonly` | readonly [`AssetFolder`](AssetFolder.md)[] | Child folders of `query.folderId` (or the whole sub-tree when `recursive`). | - | [types/filter.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L56) |
+| &lt;a id="items"&gt;&lt;/a&gt; `items` | `readonly` | readonly [`UploadResult`](UploadResult.md)[] | - | [`AssetSearchPage`](AssetSearchPage.md).[`items`](AssetSearchPage.md#items) | [types/types.ts:134](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L134) |
+| &lt;a id="nextcursor"&gt;&lt;/a&gt; `nextCursor` | `readonly` | `string` \| `undefined` | - | [`AssetSearchPage`](AssetSearchPage.md).[`nextCursor`](AssetSearchPage.md#nextcursor) | [types/types.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L136) |
+| &lt;a id="sourcecursors"&gt;&lt;/a&gt; `sourceCursors?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string` \| `undefined`\&gt;\&gt; | Per-source page tokens for federated paging, keyed by source id. | - | [types/filter.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L60) |
+| &lt;a id="sourceerrors"&gt;&lt;/a&gt; `sourceErrors?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, \{ `code?`: `string`; `message`: `string`; \}\&gt;\&gt; | Per-source errors for a federated page, keyed by source id — set when a provider failed for this page while others succeeded (the failed provider's items are dropped but its cursor is carried forward). Mirrors core's `StudioAssetListPage.sourceErrors`. | - | [types/filter.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/filter.ts#L67) |
+| &lt;a id="total"&gt;&lt;/a&gt; `total` | `readonly` | `number` | - | [`AssetSearchPage`](AssetSearchPage.md).[`total`](AssetSearchPage.md#total) | [types/types.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L135) |

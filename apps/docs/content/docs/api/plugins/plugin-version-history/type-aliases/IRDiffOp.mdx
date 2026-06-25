@@ -1,0 +1,52 @@
+---
+title: "IRDiffOp"
+description: "@anvilkit/plugin-version-history · IRDiffOp"
+---
+
+```ts
+type IRDiffOp = 
+  | {
+  kind: "add-node";
+  node: PageIRNode;
+  path: string;
+}
+  | {
+  kind: "remove-node";
+  nodeId: string;
+  path: string;
+}
+  | {
+  from: string;
+  kind: "move-node";
+  nodeId: string;
+  to: string;
+}
+  | {
+  after: unknown;
+  before: unknown;
+  key: string;
+  kind: "change-prop";
+  path: string;
+}
+  | {
+  after: readonly string[];
+  before: readonly string[];
+  kind: "change-children";
+  path: string;
+}
+  | {
+  after: unknown;
+  before: unknown;
+  key: "locked" | "owner" | "version" | "notes";
+  kind: "meta-changed";
+  path: string;
+};
+```
+
+Defined in: [utils/diff.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/diff.ts#L10)
+
+Note: `move-node` is a hint, not a mutation. `applyDiff` validates it but
+does not perform any reparenting — the authoritative reparenting/reorder
+signal is `change-children` on the affected parent(s). Consumers that
+inspect an `IRDiff` for display or logging may use `move-node` for
+presentation, but should not rely on it for replay correctness.

@@ -1,0 +1,14 @@
+---
+title: "ValidateUploadResultOptions"
+description: "@anvilkit/plugin-asset-manager · ValidateUploadResultOptions"
+---
+
+```ts
+type ValidateUploadResultOptions = Pick<AssetManagerOptions, "dataUrlAllowlistOptIn" | "allowMixedScriptHostnames">;
+```
+
+Defined in: [utils/validate-upload-result.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/validate-upload-result.ts#L13)
+
+Subset of [AssetManagerOptions](../interfaces/AssetManagerOptions) consulted by the trust boundary.
+`urlAllowlist` is intentionally absent — Phase 4 replaced the raw
+allowlist with the two typed flags below.
