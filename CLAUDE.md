@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 anvilkit-studio/
 ├── apps/
 │   ├── demo/               # Next.js demo app for validating components
-│   └── docs/               # @anvilkit/docs-site — Starlight docs (Astro)
+│   └── docs/               # @anvilkit/docs-site — Fumadocs docs (TanStack Start + Vite, SSR)
 ├── bench/                  # tinybench perf harness (component/IR/export)
 ├── packages/
 │   ├── analytics/          # Git submodules → @anvilkit/analytics-{core,react}
@@ -63,8 +63,8 @@ pnpm publint      # Validate package.json exports across publishable packages
 pnpm size         # size-limit gzip budgets per publishable package
 pnpm bench        # Run tinybench perf harness against ./bench/baseline.json
 pnpm bench:update # Re-record bench baselines
-pnpm docs:dev     # Starlight docs site dev server (apps/docs, port 4321)
-pnpm docs:build   # Build the Starlight docs site
+pnpm docs:dev     # Fumadocs (Vite) docs site dev server (apps/docs, port 4321)
+pnpm docs:build   # Build the Fumadocs docs site
 ```
 
 ### Components workspace (`packages/components/`)
@@ -100,14 +100,24 @@ pnpm e2e:install  # One-time: install Chromium for Playwright
 ### Docs site (`apps/docs/` — `@anvilkit/docs-site`)
 
 ```bash
-pnpm docs:dev     # Astro dev server (port 4321) — runs generate:all first
-pnpm docs:build   # Astro build → apps/docs/dist (deployed to Vercel)
-pnpm typecheck    # astro check
+pnpm docs:dev     # Vite dev server (TanStack Start, port 4321) — also boots the collab relay
+pnpm docs:build   # vite build → Nitro Build Output API at apps/docs/.vercel/output (SSR, deployed to Vercel)
+pnpm typecheck    # fumadocs-mdx && tsc --noEmit
+pnpm test         # vitest (registry + guide code-block tests)
 pnpm e2e          # Docs playground Playwright spec
 ```
 
-Generators (`scripts/generate-*`) emit MDX for component pages, API
-references, and template pages before every build.
+The docs site is a **Fumadocs + TanStack Start (Vite/Nitro)** SSR app. Content
+lives under `content/docs/**` (MDX). Generators (`scripts/generate-*`) emit MDX
+for component pages, the API reference, and template pages plus the marketplace
+`registry/feed.json`; the generated trees (`content/docs/{components,api,templates}`)
+are committed, so run `pnpm generate:all` after changing a component/plugin to
+refresh them.
+
+> **Deploy model.** Unlike the prior static Astro build, this app is SSR: Vercel's
+> **Root Directory** must be set to `apps/docs` (it reads `apps/docs/vercel.json`
+> and consumes the Nitro Build Output API at `apps/docs/.vercel/output`). There is
+> no root `vercel.json`.
 
 ## Key Architecture Decisions
 
@@ -152,9 +162,9 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 
 ### Continuous Integration
 
-`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.5.1 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Starlight build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
+`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.5.1 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Fumadocs/Vite build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
 
-Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `vercel.json` and posts an independent GitHub check — it does not block CI, and CI does not block it.
+Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `apps/docs/vercel.json` (Vercel Root Directory = `apps/docs`) and posts an independent GitHub check — it does not block CI, and CI does not block it.
 
 **Typecheck script naming:** the workspace normalizes on `typecheck` (not `check-types`) across every package and the Turbo task graph. The components submodule (`packages/components/`) already used `typecheck` for each component package, so the root and direct-workspace packages (`ui`, `utils`, `vitest-config`, `apps/demo`) were renamed to match. Do not reintroduce `check-types`.
 
