@@ -19,7 +19,8 @@
 		"generate:templates": "node scripts/generate-template-pages.mjs",
 		"generate:registry": "node scripts/generate-registry-feed.mjs",
 		"generate:components": "jiti scripts/generate-component-pages.ts",
-		"generate:all": "pnpm generate:components && pnpm generate:api && pnpm generate:templates && pnpm generate:registry",
+		"generate:plugins": "jiti scripts/generate-plugin-pages.ts",
+		"generate:all": "pnpm generate:components && pnpm generate:api && pnpm generate:plugins && pnpm generate:templates && pnpm generate:registry",
 		"generate:api": "jiti scripts/generate-api-pages.ts",
 		"docs:build": "vite build",
 		"docs:dev": "vite dev"
