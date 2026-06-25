@@ -36,6 +36,16 @@ const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
 const TEMPLATES_ROOT = join(WORKSPACE_ROOT, "packages", "templates");
 const MDX_OUT = join(DOCS_ROOT, "content", "docs", "templates");
 const PREVIEW_OUT = join(DOCS_ROOT, "public", "templates");
+// Central translation store (committed in the main repo so it survives clones +
+// regeneration). A `<slug>.<lang>.md` here overrides the English package README
+// for that locale; otherwise the body falls back to English.
+const README_STORE = join(DOCS_ROOT, "i18n", "readmes", "templates");
+
+function localizedReadme(slug, lang, englishReadme) {
+	if (!lang) return englishReadme;
+	const p = join(README_STORE, `${slug}.${lang}.md`);
+	return existsSync(p) ? readFileSync(p, "utf8") : englishReadme;
+}
 
 // "" is the default English locale (unsuffixed filename); the rest are prefixed
 // and use a `.{lang}.mdx` suffix (Fumadocs `parser: 'dot'`).
@@ -291,7 +301,7 @@ function mdxForTemplate({ slug, pkg, readme, pageIR }, lang) {
 	const nodeTypes = (pageIR?.root?.children ?? [])
 		.map((n) => n.type)
 		.filter((t, i, a) => a.indexOf(t) === i);
-	const readmeBody = readme
+	const readmeBody = localizedReadme(slug, lang, readme)
 		.replace(/^#\s.*\n+/m, "")
 		.replace(/!\[[^\]]*\]\(\.\/preview\.png\)\n*/g, "")
 		.trim();

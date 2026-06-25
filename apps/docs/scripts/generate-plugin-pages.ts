@@ -213,7 +213,15 @@ function repoUrl(pkg: {
 	return url.replace(/^git\+/, "").replace(/\.git$/, "");
 }
 
-function readLocalizedReadme(pluginDir: string): Record<Locale, string> {
+// Central translation store (committed in the main repo so it survives clones +
+// regeneration without writing into the plugin submodules). Resolution order per
+// locale: central store → package-local README.<lang>.md → English README.
+const README_STORE = join(DOCS_ROOT, "i18n", "readmes", "plugins");
+
+function readLocalizedReadme(
+	pluginDir: string,
+	slug: string,
+): Record<Locale, string> {
 	const base = join(pluginDir, "README.md");
 	const fallback = existsSync(base) ? readFileSync(base, "utf8") : "";
 	const out = {} as Record<Locale, string>;
@@ -222,10 +230,13 @@ function readLocalizedReadme(pluginDir: string): Record<Locale, string> {
 			out[lang] = fallback;
 			continue;
 		}
-		const localized = join(pluginDir, `README.${lang}.md`);
-		out[lang] = existsSync(localized)
-			? readFileSync(localized, "utf8")
-			: fallback;
+		const central = join(README_STORE, `${slug}.${lang}.md`);
+		const local = join(pluginDir, `README.${lang}.md`);
+		out[lang] = existsSync(central)
+			? readFileSync(central, "utf8")
+			: existsSync(local)
+				? readFileSync(local, "utf8")
+				: fallback;
 	}
 	return out;
 }
@@ -308,7 +319,7 @@ function parsePlugin(slug: string): PluginInfo {
 		exports: exportEntries,
 		primaryFactory,
 		repository: repoUrl(pkg),
-		readme: readLocalizedReadme(pluginDir),
+		readme: readLocalizedReadme(pluginDir, slug),
 	};
 }
 

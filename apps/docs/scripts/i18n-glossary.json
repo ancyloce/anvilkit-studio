@@ -1,0 +1,240 @@
+{
+	"$schema-note": "Canonical translation glossary for apps/docs (en/zh/ja/ko). Descriptive of the renderings already used across content/docs/**.zh|ja|ko.mdx, and prescriptive for future translations. Consumed by scripts/check-i18n.mjs and the README.<lang>.md translation workflow.",
+	"keepEnglish": [
+		"AnvilKit",
+		"Studio",
+		"Puck",
+		"IR",
+		"PageIR",
+		"CRDT",
+		"Yjs",
+		"SEO",
+		"PNG",
+		"SVG",
+		"PDF",
+		"HTML",
+		"React",
+		"TypeScript",
+		"Next.js",
+		"Fumadocs",
+		"Tailwind",
+		"npm",
+		"pnpm",
+		"yarn",
+		"@anvilkit/*"
+	],
+	"keepEnglishNote": "Product/brand names, format acronyms, package names, and all API symbols (component/hook/type/function names, props, enum values) are NEVER translated — only surrounding prose.",
+	"terms": {
+		"plugin": {
+			"en": "plugin",
+			"zh": "插件",
+			"ja": "プラグイン",
+			"ko": "플러그인"
+		},
+		"component": {
+			"en": "component",
+			"zh": "组件",
+			"ja": "コンポーネント",
+			"ko": "컴포넌트"
+		},
+		"template": {
+			"en": "template",
+			"zh": "模板",
+			"ja": "テンプレート",
+			"ko": "템플릿"
+		},
+		"host / host app": {
+			"en": "host (app)",
+			"zh": "宿主（应用）",
+			"ja": "ホスト（アプリ）",
+			"ko": "호스트（앱）"
+		},
+		"runtime shell": {
+			"en": "runtime shell",
+			"zh": "运行时外壳",
+			"ja": "ランタイムシェル",
+			"ko": "런타임 셸"
+		},
+		"page builder": {
+			"en": "page builder",
+			"zh": "页面构建器",
+			"ja": "ページビルダー",
+			"ko": "페이지 빌더"
+		},
+		"field": { "en": "field", "zh": "字段", "ja": "フィールド", "ko": "필드" },
+		"render": {
+			"en": "render",
+			"zh": "渲染",
+			"ja": "レンダリング",
+			"ko": "렌더링"
+		},
+		"export": {
+			"en": "export",
+			"zh": "导出",
+			"ja": "エクスポート",
+			"ko": "내보내기"
+		},
+		"import": {
+			"en": "import",
+			"zh": "导入",
+			"ja": "インポート",
+			"ko": "가져오기"
+		},
+		"asset": { "en": "asset", "zh": "资源", "ja": "アセット", "ko": "에셋" },
+		"upload": {
+			"en": "upload",
+			"zh": "上传",
+			"ja": "アップロード",
+			"ko": "업로드"
+		},
+		"collaboration": {
+			"en": "collaboration",
+			"zh": "协作",
+			"ja": "コラボレーション",
+			"ko": "협업"
+		},
+		"presence": {
+			"en": "presence",
+			"zh": "在场",
+			"ja": "プレゼンス",
+			"ko": "프레즌스"
+		},
+		"presence cursor": {
+			"en": "presence cursor",
+			"zh": "在场光标",
+			"ja": "プレゼンスカーソル",
+			"ko": "프레즌스 커서"
+		},
+		"conflict": { "en": "conflict", "zh": "冲突", "ja": "競合", "ko": "충돌" },
+		"snapshot": {
+			"en": "snapshot",
+			"zh": "快照",
+			"ja": "スナップショット",
+			"ko": "스냅샷"
+		},
+		"version history": {
+			"en": "version history",
+			"zh": "版本历史",
+			"ja": "バージョン履歴",
+			"ko": "버전 기록"
+		},
+		"design token": {
+			"en": "design token",
+			"zh": "设计令牌",
+			"ja": "デザイントークン",
+			"ko": "디자인 토큰"
+		},
+		"theme": { "en": "theme", "zh": "主题", "ja": "テーマ", "ko": "테마" },
+		"sidebar panel": {
+			"en": "sidebar panel",
+			"zh": "侧边栏面板",
+			"ja": "サイドバーパネル",
+			"ko": "사이드바 패널"
+		},
+		"header action": {
+			"en": "header action",
+			"zh": "顶栏操作",
+			"ja": "ヘッダーアクション",
+			"ko": "헤더 액션"
+		},
+		"headless": {
+			"en": "headless",
+			"zh": "无界面",
+			"ja": "ヘッドレス",
+			"ko": "헤드리스"
+		},
+		"canvas": {
+			"en": "canvas",
+			"zh": "画布",
+			"ja": "キャンバス",
+			"ko": "캔버스"
+		},
+		"artboard": {
+			"en": "artboard",
+			"zh": "画板",
+			"ja": "アートボード",
+			"ko": "아트보드"
+		},
+		"factory": {
+			"en": "factory (function)",
+			"zh": "工厂函数",
+			"ja": "ファクトリ",
+			"ko": "팩토리"
+		},
+		"hook": { "en": "hook", "zh": "Hook", "ja": "フック", "ko": "훅" },
+		"adapter": {
+			"en": "adapter",
+			"zh": "适配器",
+			"ja": "アダプター",
+			"ko": "어댑터"
+		},
+		"transport": {
+			"en": "transport",
+			"zh": "传输层",
+			"ja": "トランスポート",
+			"ko": "트랜스포트"
+		},
+		"peer dependency": {
+			"en": "peer dependency",
+			"zh": "对等依赖",
+			"ja": "peer 依存関係",
+			"ko": "peer 의존성"
+		},
+		"entry point / subpath": {
+			"en": "entry point / subpath",
+			"zh": "入口点 / 子路径",
+			"ja": "エントリポイント / サブパス",
+			"ko": "진입점 / 서브경로"
+		},
+		"validation": {
+			"en": "validation",
+			"zh": "校验",
+			"ja": "検証",
+			"ko": "검증"
+		},
+		"serializable": {
+			"en": "serializable",
+			"zh": "可序列化",
+			"ja": "シリアライズ可能",
+			"ko": "직렬화 가능"
+		},
+		"override": {
+			"en": "override",
+			"zh": "覆盖",
+			"ja": "オーバーライド",
+			"ko": "오버라이드"
+		},
+		"slot": { "en": "slot", "zh": "插槽", "ja": "スロット", "ko": "슬롯" },
+		"prompt": {
+			"en": "prompt",
+			"zh": "提示词",
+			"ja": "プロンプト",
+			"ko": "프롬프트"
+		},
+		"copilot": {
+			"en": "copilot",
+			"zh": "Copilot",
+			"ja": "Copilot",
+			"ko": "Copilot"
+		},
+		"getting started": {
+			"en": "Getting started",
+			"zh": "快速开始",
+			"ja": "クイックスタート",
+			"ko": "빠른 시작"
+		},
+		"guide": { "en": "Guide", "zh": "指南", "ja": "ガイド", "ko": "가이드" },
+		"API reference": {
+			"en": "API reference",
+			"zh": "API 参考",
+			"ja": "API リファレンス",
+			"ko": "API 레퍼런스"
+		},
+		"installation": {
+			"en": "Installation",
+			"zh": "安装",
+			"ja": "インストール",
+			"ko": "설치"
+		}
+	}
+}

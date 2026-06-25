@@ -16,6 +16,20 @@ const DOCS_ROOT = join(__dirname, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
 const COMPONENTS_SRC = join(WORKSPACE_ROOT, "packages", "components", "src");
 const OUT_DIR = join(DOCS_ROOT, "content", "docs", "components");
+// Central translation store (committed in the main repo). A `<slug>.<lang>.md`
+// here overrides the English package README body for that locale; otherwise the
+// body falls back to English (Fumadocs renders the localized headings either way).
+const README_STORE = join(DOCS_ROOT, "i18n", "readmes", "components");
+
+function localizedReadme(
+	slug: string,
+	lang: string,
+	englishReadme: string,
+): string {
+	if (!lang) return englishReadme;
+	const p = join(README_STORE, `${slug}.${lang}.md`);
+	return existsSync(p) ? readFileSync(p, "utf8") : englishReadme;
+}
 
 const SLUGS = [
 	"bento-grid",
@@ -720,7 +734,9 @@ function renderMdx(info: ComponentInfo, lang: Locale): string {
 	} = info;
 
 	const t = T[lang];
-	const readmeBody = stripReadmeHeading(readme);
+	const readmeBody = stripReadmeHeading(
+		localizedReadme(info.slug, lang, readme),
+	);
 	const propsTable = buildPropsTable(fields, defaultProps, lang);
 	const puckJson = buildPuckConfigJson(info);
 	const defaultPropsJson = JSON.stringify(defaultProps, null, 2);
