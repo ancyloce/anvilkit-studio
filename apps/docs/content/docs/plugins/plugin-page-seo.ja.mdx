@@ -42,9 +42,9 @@ import { Studio } from "@anvilkit/core";
 
 ## ガイド
 
-A `<Studio>` plugin (sidebar capability) that adds a **Page SEO** rail panel for
-editing a page's SEO metadata — meta title, description, OG image, canonical URL,
-and `noindex` — directly on the canonical Puck `root.props.seo` (PRD 0004 F5).
+ページの SEO メタデータ——meta タイトル、説明、OG 画像、canonical URL、
+そして `noindex`——を、正準的な Puck `root.props.seo` 上で直接編集するための
+**Page SEO** レールパネルを追加する `<Studio>` プラグイン（サイドバー機能）です（PRD 0004 F5）。
 
 ```tsx
 import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
@@ -52,15 +52,15 @@ import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 <Studio puckConfig={config} plugins={[createPageSeoPlugin()]} />;
 ```
 
-- **Single source of truth.** Edits dispatch an immutable `root.props.seo` update
-  (Puck `setData`), reflected in `appState.data` — the same shape the validator,
-  storage gateway, and SEO render route read.
-- **Localized.** All strings come from i18n message keys (`pageSeo.*`); no inline
-  copy.
-- **Rail seam.** Registers via the core `registerSeoPanel` seam; the panel lights
-  up under the **SEO** rail tab.
+- **単一の信頼できる情報源。** 編集はイミュータブルな `root.props.seo` 更新
+  （Puck `setData`）をディスパッチし、`appState.data` に反映されます——これは検証器、
+  ストレージゲートウェイ、SEO レンダリングルートが読み取るのと同じ形です。
+- **ローカライズ済み。** すべての文字列は i18n メッセージキー（`pageSeo.*`）から来ます。インラインの
+  コピーはありません。
+- **レールのシーム。** コアの `registerSeoPanel` シームを介して登録されます。パネルは **SEO**
+  レールタブの下で点灯します。
 
-Requires `@anvilkit/core` ≥ the version exposing `registerSeoPanel`.
+`registerSeoPanel` を公開するバージョン以上の `@anvilkit/core` が必要です。
 
 ## API リファレンス
 

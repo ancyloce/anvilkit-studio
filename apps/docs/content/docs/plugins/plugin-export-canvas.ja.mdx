@@ -41,38 +41,25 @@ import { Studio } from "@anvilkit/core";
 
 ## ガイド
 
-> **Alpha (`0.1.0-rc.2`).** API may change before `1.0`.
+> **Alpha（`0.1.0-rc.2`）。** `1.0` より前に API が変更される可能性があります。
 
-Headless canvas export plugin for AnvilKit Studio. Registers four export formats
-— **PNG, JSON, SVG, and PDF** — for AnvilKit canvas designs by wrapping the
-`@anvilkit/canvas-core` serializers. It imports no React or Konva.
+AnvilKit Studio 向けのヘッドレスキャンバスエクスポートプラグインです。`@anvilkit/canvas-core` のシリアライザーをラップすることで、AnvilKit のキャンバスデザインに対して 4 つのエクスポート形式——**PNG、JSON、SVG、PDF**——を登録します。React や Konva をインポートしません。
 
-Unlike the Puck export plugins, the canvas formats read the document from the
-**options bag** (`options.canvasIR`), not the `PageIR` argument: the Studio export
-contract hands `run()` a Puck `PageIR`, which is meaningless for a canvas design,
-so the canvas-mode host passes the `CanvasIR` (and any pre-rendered page rasters)
-through the format options instead.
+Puck のエクスポートプラグインとは異なり、キャンバス形式はドキュメントを `PageIR` 引数からではなく**オプションバッグ**（`options.canvasIR`）から読み取ります。Studio のエクスポート契約は `run()` に Puck の `PageIR` を渡しますが、これはキャンバスデザインにとって無意味であるため、キャンバスモードのホストは代わりに `CanvasIR`（および事前レンダリングされたページラスター）を形式オプション経由で渡します。
 
-## Installation
+## インストール
 
 ```sh
 pnpm add @anvilkit/plugin-export-canvas @puckeditor/core
 ```
 
-Peer dependencies: `@puckeditor/core ^0.21.3` (required); `react` and `react-dom`
-(`>=19.0.0`) are **optional** peers — the plugin is headless and only
-needs them if your host shares a React tree. `@anvilkit/canvas-core` ships as a
-direct dependency and provides the underlying serializers.
+peer 依存関係：`@puckeditor/core ^0.21.3`（必須）。`react` と `react-dom`（`>=19.0.0`）は**任意の** peer です——このプラグインはヘッドレスであり、ホストが React ツリーを共有する場合にのみそれらを必要とします。`@anvilkit/canvas-core` は直接依存関係として同梱され、基盤となるシリアライザーを提供します。
 
-## Why rasters are passed in
+## なぜラスターが渡されるのか
 
-The canvas renderer is React/Konva and cannot run headlessly, so this plugin never
-rasterizes on its own. For PNG and PDF, the canvas-mode host (typically
-`@anvilkit/plugin-canvas-studio`'s export bridge) renders each page — e.g. via
-`stage.toDataURL()` — and passes the bytes/data-URL in through `options.rasters`.
-SVG and JSON need no rasters.
+キャンバスレンダラーは React/Konva であり、ヘッドレスでは実行できないため、このプラグインは自身でラスタライズすることは決してありません。PNG と PDF については、キャンバスモードのホスト（通常は `@anvilkit/plugin-canvas-studio` のエクスポートブリッジ）が各ページをレンダリングし——例えば `stage.toDataURL()` 経由で——バイト/データ URL を `options.rasters` を通じて渡します。SVG と JSON はラスターを必要としません。
 
-## Quickstart
+## クイックスタート
 
 ```ts
 import { Studio } from "@anvilkit/core";
@@ -84,25 +71,22 @@ const canvasExport = createCanvasExportPlugin();
 <Studio puckConfig={puckConfig} plugins={[canvasExport]} />;
 ```
 
-The reference end-to-end integration is the canvas editor's own
-`createCanvasExportPlugin` **header plugin** (`CanvasWorkspace headerPlugins`
-seam), where PNG/JSON are built in and SVG/PDF are host-injected. This package is
-the headless format registry those flows build on.
+参照となるエンドツーエンドの統合は、キャンバスエディター自身の `createCanvasExportPlugin` **ヘッダープラグイン**（`CanvasWorkspace headerPlugins` シーム）であり、そこでは PNG/JSON が組み込まれ、SVG/PDF はホストによって注入されます。このパッケージは、それらのフローが構築の土台とするヘッドレスな形式レジストリです。
 
-## Core features
+## コア機能
 
-- **Four formats** — `canvas-png`, `canvas-json`, `canvas-svg`, `canvas-pdf`,
-  registered via `StudioPluginRegistration.exportFormats`.
-- **Headless** — wraps `@anvilkit/canvas-core` serializers only; no React/Konva
-  import, safe in Node/CLI pipelines.
-- **Options-bag input** — reads `CanvasIR` (and rasters) from the format options,
-  leaving the Puck `PageIR` argument unused.
-- **Warning channel** — SVG and PDF serialization surface font/image/rasterization
-  warnings for the host to act on.
+- **4 つの形式** —— `canvas-png`、`canvas-json`、`canvas-svg`、`canvas-pdf`。
+  `StudioPluginRegistration.exportFormats` 経由で登録されます。
+- **ヘッドレス** —— `@anvilkit/canvas-core` のシリアライザーのみをラップします。React/Konva
+  のインポートはなく、Node/CLI パイプラインで安全です。
+- **オプションバッグ入力** —— `CanvasIR`（およびラスター）を形式オプションから読み取り、
+  Puck の `PageIR` 引数は未使用のままにします。
+- **警告チャネル** —— SVG と PDF のシリアライズは、ホストが対処するためのフォント/画像/ラスタライズ
+  警告を表面化します。
 
-## API reference
+## API リファレンス
 
-### Plugin factory
+### プラグインファクトリ
 
 ```ts
 function createCanvasExportPlugin(
@@ -112,34 +96,34 @@ function createCanvasExportPlugin(
 type CanvasExportPluginOptions = Record<string, never>; // reserved; no options yet
 ```
 
-Returns a `StudioPlugin` that registers the four canvas export formats.
+4 つのキャンバスエクスポート形式を登録する `StudioPlugin` を返します。
 
-### Export formats
+### エクスポート形式
 
-| Export        | `id`          | Label        | Extension | MIME              |
+| エクスポート  | `id`          | ラベル       | 拡張子    | MIME              |
 | ------------- | ------------- | ------------ | --------- | ----------------- |
 | `pngFormat`   | `canvas-png`  | Canvas PNG   | `png`     | `image/png`       |
 | `jsonFormat`  | `canvas-json` | Canvas JSON  | `json`    | `application/json`|
 | `svgFormat`   | `canvas-svg`  | Canvas SVG   | `svg`     | `image/svg+xml`   |
 | `pdfFormat`   | `canvas-pdf`  | Canvas PDF   | `pdf`     | `application/pdf` |
 
-`canvasExportFormats` is the readonly array of all four, ready to spread into a
-host's format registry.
+`canvasExportFormats` は 4 つすべてを含む読み取り専用の配列で、ホストの形式レジストリに
+そのままスプレッドできます。
 
 ### `CanvasExportOptions`
 
-Passed to each format's `run(pageIr, options)` (the `pageIr` argument is ignored):
+各形式の `run(pageIr, options)` に渡されます（`pageIr` 引数は無視されます）：
 
-| Field      | Type                                                        | Default                | Purpose                                                                 |
+| フィールド | 型                                                          | デフォルト             | 目的                                                                 |
 | ---------- | ----------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
-| `canvasIR` | `CanvasIR`                                                  | _required at runtime_  | The canvas document to export. `run()` throws without it (typed optional only to satisfy the registry's generic slot). |
-| `page`     | `string \| number`                                         | first page (`0`)       | Page id/index for single-page formats (`svg` / `png`).                  |
-| `rasters`  | `readonly CanvasRaster[]`                                  | none                   | Pre-rendered page images. **Required for `pdf`** (one per page) and **`png`** (the selected page). Ignored by `svg`/`json`. |
-| `dpi`      | `number`                                                   | none                   | Fallback DPI for unit→px/pt conversion (`svg` / `pdf`).                  |
-| `pretty`   | `boolean`                                                  | `false`                | Pretty-print the JSON export.                                           |
-| `svg`      | `SvgSerializeOptions`                                      | none                   | SVG serializer options (image embedding mode, fonts, pretty, …).        |
-| `pdf`      | `{ pages?; title?; author? }`                              | none                   | PDF page selection/order + document metadata.                           |
-| `filename` | `string`                                                   | IR title, else `"design"` | Base filename (no extension; the format appends it).                 |
+| `canvasIR` | `CanvasIR`                                                  | _ランタイムで必須_  | エクスポートするキャンバスドキュメント。これがないと `run()` がスローします（レジストリのジェネリックスロットを満たすためにのみ型上は任意）。 |
+| `page`     | `string \| number`                                         | 最初のページ（`0`）       | 単一ページ形式（`svg` / `png`）のページ id/インデックス。                  |
+| `rasters`  | `readonly CanvasRaster[]`                                  | なし                   | 事前レンダリングされたページ画像。**`pdf` には必須**（ページごとに 1 つ）かつ **`png`** には必須（選択されたページ）。`svg`/`json` では無視されます。 |
+| `dpi`      | `number`                                                   | なし                   | 単位→px/pt 変換のためのフォールバック DPI（`svg` / `pdf`）。                  |
+| `pretty`   | `boolean`                                                  | `false`                | JSON エクスポートを整形出力します。                                           |
+| `svg`      | `SvgSerializeOptions`                                      | なし                   | SVG シリアライザーオプション（画像埋め込みモード、フォント、整形 など）。        |
+| `pdf`      | `{ pages?; title?; author? }`                              | なし                   | PDF のページ選択/順序 + ドキュメントメタデータ。                           |
+| `filename` | `string`                                                   | IR タイトル、なければ `"design"` | ベースファイル名（拡張子なし。形式が拡張子を付加します）。                 |
 
 ```ts
 interface CanvasRaster {
@@ -149,10 +133,10 @@ interface CanvasRaster {
 }
 ```
 
-### Serializers (headless)
+### シリアライザー（ヘッドレス）
 
-For pipelines that don't run inside Studio, the underlying serializers are exported
-directly:
+Studio 内で実行されないパイプラインのために、基盤となるシリアライザーが
+直接エクスポートされています：
 
 ```ts
 function canvasToJson(ir: CanvasIR, opts?: { pretty?: boolean }): string;
@@ -175,9 +159,9 @@ function canvasToPng(raster: Uint8Array | string): Uint8Array;
 function rasterToBytes(image: Uint8Array | string): Uint8Array;
 ```
 
-## Usage examples
+## 使用例
 
-### Headless export from a CLI / server
+### CLI / サーバーからのヘッドレスエクスポート
 
 ```ts
 import {
@@ -200,7 +184,7 @@ const { pdf } = await canvasToPdf(canvasIR, { rasters });
 writeFileSync("design.pdf", pdf);
 ```
 
-### Invoking a registered format
+### 登録済みの形式を呼び出す
 
 ```ts
 import { canvasExportFormats } from "@anvilkit/plugin-export-canvas";
@@ -214,21 +198,21 @@ const result = await png.run(
 // result → { content, filename, warnings }
 ```
 
-## Notes & FAQ
+## 備考と FAQ
 
-### The `PageIR` argument is intentionally unused
+### `PageIR` 引数は意図的に未使用である
 
-Every format's `run(pageIr, options)` ignores `pageIr` and reads `options.canvasIR`.
-This keeps the plugin assignable to the standard `ExportFormatDefinition` registry
-slot while exporting canvas documents, which have a different shape from Puck pages.
+すべての形式の `run(pageIr, options)` は `pageIr` を無視し、`options.canvasIR` を読み取ります。
+これにより、Puck ページとは異なる形状を持つキャンバスドキュメントをエクスポートしつつ、
+プラグインを標準の `ExportFormatDefinition` レジストリスロットに割り当て可能なままにします。
 
-### PNG/PDF need host-rendered rasters
+### PNG/PDF にはホストがレンダリングしたラスターが必要
 
-Because Konva can't render headlessly, PNG and PDF require `options.rasters`. PNG
-needs the selected page's raster; PDF needs one raster per exported page. SVG and
-JSON serialize straight from the `CanvasIR`.
+Konva はヘッドレスでレンダリングできないため、PNG と PDF は `options.rasters` を必要とします。PNG
+は選択されたページのラスターを必要とし、PDF はエクスポートされる各ページにつき 1 つのラスターを必要とします。SVG と
+JSON は `CanvasIR` から直接シリアライズします。
 
-## License
+## ライセンス
 
 MIT
 

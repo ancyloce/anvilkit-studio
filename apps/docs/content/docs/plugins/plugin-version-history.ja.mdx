@@ -41,25 +41,25 @@ import { Studio } from "@anvilkit/core";
 
 ## ガイド
 
-> **Alpha (`0.1.7`).** Header actions and the diff/apply engine are stable. The sidebar-panel slot contribution is deferred until `StudioPluginContext` exposes the sidebar registration API.
+> **Alpha（`0.1.7`）。** ヘッダーアクションと diff/apply エンジンは安定しています。サイドバーパネルのスロット貢献は、`StudioPluginContext` がサイドバー登録 API を公開するまで延期されています。
 
-Headless version-history plugin for Anvilkit Studio. Snapshot persistence is delegated to a host-provided `SnapshotAdapter`, so the plugin itself ships no I/O — only the diff/apply engine, header actions, optional UI primitives, and reference adapters for tests and demos.
+Anvilkit Studio 向けのヘッドレスなバージョン履歴プラグイン。スナップショットの永続化はホストが提供する `SnapshotAdapter` に委譲されるため、プラグイン自体は I/O を一切同梱しません —— diff/apply エンジン、ヘッダーアクション、オプションの UI プリミティブ、テストとデモ用の参照アダプターのみです。
 
-## Installation
+## インストール
 
 ```bash
 pnpm add @anvilkit/plugin-version-history react react-dom @puckeditor/core
 ```
 
-Non-optional peers: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.21.3`. No transport or storage dependencies — the host owns persistence end-to-end.
+非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.21.3`。トランスポートやストレージの依存関係はありません —— ホストが永続化をエンドツーエンドで所有します。
 
-Subpath imports:
+サブパスインポート：
 
-- `@anvilkit/plugin-version-history` — main entry: plugin factory, reference adapters, diff/apply engine, types.
-- `@anvilkit/plugin-version-history/ui` — optional React components (`VersionHistoryUI`, `SaveSnapshotButton`, `SnapshotList`, `SnapshotHistoryModal`, `DiffView`).
-- `@anvilkit/plugin-version-history/testing` — `runAdapterContract` shared test suite.
+- `@anvilkit/plugin-version-history` —— メインエントリ：プラグインファクトリ、参照アダプター、diff/apply エンジン、型。
+- `@anvilkit/plugin-version-history/ui` —— オプションの React コンポーネント（`VersionHistoryUI`、`SaveSnapshotButton`、`SnapshotList`、`SnapshotHistoryModal`、`DiffView`）。
+- `@anvilkit/plugin-version-history/testing` —— `runAdapterContract` 共有テストスイート。
 
-## Quickstart
+## クイックスタート
 
 ```ts
 import {
@@ -75,21 +75,21 @@ const plugin = createVersionHistoryPlugin({
 // Pass `plugin` alongside other Studio plugins.
 ```
 
-The plugin contributes two header actions (`version-history:save` and `version-history:open`) and emits `version-history:save-requested` / `version-history:open-requested` on the Studio event bus. Hosts handle the open event by mounting a UI surface (e.g., `<SnapshotHistoryModal>` from the `/ui` subpath).
+このプラグインは 2 つのヘッダーアクション（`version-history:save` と `version-history:open`）を提供し、Studio イベントバス上で `version-history:save-requested` / `version-history:open-requested` を発行します。ホストは UI サーフェス（例：`/ui` サブパスの `<SnapshotHistoryModal>`）をマウントすることで open イベントを処理します。
 
-## Core features
+## コア機能
 
-- **Adapter-driven persistence** — the plugin defines the contract; the host implements `save` / `list` / `load` / `delete?` and gets full control over storage (in-memory, localStorage, Firestore, S3, …).
-- **Deterministic diff/apply engine** — `diffIR(a, b)` produces a frozen `IRDiff`; `applyDiff(a, diff)` round-trips.
-- **Optional UI** — five components on `/ui` for hosts that want batteries-included version history. The default export imports none of them, so headless consumers pay no UI rendering cost.
-- **FIFO eviction** — `maxSnapshots` automatically deletes the oldest snapshot when capacity is reached (requires `adapter.delete`).
-- **Reference adapters** — `inMemoryAdapter()` for tests, `localStorageAdapter({ namespace })` for demos.
-- **Adapter test suite** — `runAdapterContract` is the same contract the reference adapters use; consumers can validate their own implementation against it.
-- **Bundle budget** — 8 KB gzipped enforced in CI via `scripts/check-bundle-budget.mjs`.
+- **アダプター駆動の永続化** —— プラグインが契約を定義し、ホストが `save` / `list` / `load` / `delete?` を実装してストレージ（インメモリ、localStorage、Firestore、S3、……）を完全に制御します。
+- **決定論的な diff/apply エンジン** —— `diffIR(a, b)` は凍結された `IRDiff` を生成し、`applyDiff(a, diff)` はラウンドトリップします。
+- **オプションの UI** —— バッテリー同梱のバージョン履歴を望むホストのために `/ui` に 5 つのコンポーネントを用意。デフォルトエクスポートはそれらを一切インポートしないため、ヘッドレスな利用者は UI レンダリングのコストを負担しません。
+- **FIFO エビクション** —— 容量に達すると `maxSnapshots` が最も古いスナップショットを自動的に削除します（`adapter.delete` が必要）。
+- **参照アダプター** —— テスト用の `inMemoryAdapter()`、デモ用の `localStorageAdapter({ namespace })`。
+- **アダプターテストスイート** —— `runAdapterContract` は参照アダプターが使用するのと同じ契約です。利用者は自身の実装をこれに対して検証できます。
+- **バンドルバジェット** —— `scripts/check-bundle-budget.mjs` により CI で 8 KB gzipped を強制します。
 
-## API reference
+## API リファレンス
 
-### Factory
+### ファクトリ
 
 ```ts
 function createVersionHistoryPlugin(
@@ -102,9 +102,9 @@ interface CreateVersionHistoryPluginOptions {
 }
 ```
 
-Returns a typed `StudioPlugin` carrying the `VersionHistoryContribution` capability (so downstream consumers can recover `adapter` / `snapshots` via `InferPluginContributions`).
+`VersionHistoryContribution` 能力を持つ型付きの `StudioPlugin` を返します（これにより下流の利用者は `InferPluginContributions` 経由で `adapter` / `snapshots` を回収できます）。
 
-### `SnapshotAdapter` contract
+### `SnapshotAdapter` 契約
 
 ```ts
 interface SnapshotAdapter {
@@ -120,16 +120,16 @@ interface SnapshotAdapter {
 }
 ```
 
-| Method           | Required? | Purpose                                                                   |
+| メソッド         | 必須？    | 目的                                                                       |
 | ---------------- | --------- | ------------------------------------------------------------------------- |
-| `save(ir, meta)` | yes       | Persist a `PageIR`. Returns a unique snapshot id.                         |
-| `list()`         | yes       | Return all snapshots in order (newest-first by convention).               |
-| `load(id)`       | yes       | Hydrate by id. Throw `VersionHistoryError("SNAPSHOT_NOT_FOUND")` on miss. |
-| `delete(id)`     | optional  | Required when `maxSnapshots` is set.                                      |
-| `subscribe(cb)`  | optional  | Push updates from collaborative adapters (e.g., `createYjsAdapter`).      |
-| `presence`       | optional  | Multi-user cursor / selection channel. Implemented by the Yjs adapter.    |
+| `save(ir, meta)` | はい      | `PageIR` を永続化する。一意のスナップショット id を返す。                   |
+| `list()`         | はい      | すべてのスナップショットを順序付きで返す（慣例として新しい順）。            |
+| `load(id)`       | はい      | id で水和する。ミス時には `VersionHistoryError("SNAPSHOT_NOT_FOUND")` を投げる。 |
+| `delete(id)`     | オプション | `maxSnapshots` を設定する場合は必須。                                       |
+| `subscribe(cb)`  | オプション | コラボレーションアダプター（例：`createYjsAdapter`）からの更新をプッシュする。 |
+| `presence`       | オプション | マルチユーザーのカーソル / 選択チャネル。Yjs アダプターが実装する。         |
 
-All methods may be sync or async (`MaybePromise<T>`). Frozen, structurally-equal results are recommended.
+すべてのメソッドは同期でも非同期でもかまいません（`MaybePromise<T>`）。凍結された、構造的に等しい結果を返すことが推奨されます。
 
 ### `SnapshotMeta`
 
@@ -143,18 +143,18 @@ interface SnapshotMeta {
 }
 ```
 
-`delta` is optional. Adapters that opt in (`createYjsAdapter({ computeDelta: true })`) populate it with the structural diff from the previous snapshot; older or simpler adapters omit it.
+`delta` はオプションです。オプトインしたアダプター（`createYjsAdapter({ computeDelta: true })`）は、前のスナップショットからの構造的な diff でそれを埋めます。古いまたはよりシンプルなアダプターはそれを省略します。
 
-### Diff engine
+### Diff エンジン
 
-| Export           | Signature                             | Purpose                                                                  |
+| エクスポート     | シグネチャ                            | 目的                                                                     |
 | ---------------- | ------------------------------------- | ------------------------------------------------------------------------ |
-| `diffIR`         | `(a: PageIR, b: PageIR) => IRDiff`    | Compute a deterministic, frozen diff.                                    |
-| `applyDiff`      | `(a: PageIR, diff: IRDiff) => PageIR` | Apply a diff. `applyDiff(a, diffIR(a, b))` is structurally equal to `b`. |
-| `summarizeDiff`  | `(diff: IRDiff) => IRDiffSummary`     | `{ added, removed, moved, changed, metaChanged?, description }`.         |
-| `DiffApplyError` | `class extends Error`                 | Thrown when `applyDiff` cannot reconcile the diff against the input IR.  |
+| `diffIR`         | `(a: PageIR, b: PageIR) => IRDiff`    | 決定論的で凍結された diff を計算する。                                     |
+| `applyDiff`      | `(a: PageIR, diff: IRDiff) => PageIR` | diff を適用する。`applyDiff(a, diffIR(a, b))` は `b` と構造的に等しい。    |
+| `summarizeDiff`  | `(diff: IRDiff) => IRDiffSummary`     | `{ added, removed, moved, changed, metaChanged?, description }`。         |
+| `DiffApplyError` | `class extends Error`                 | `applyDiff` が diff を入力 IR と調整できないときに投げられる。             |
 
-### `IRDiffOp` (discriminated union)
+### `IRDiffOp`（判別可能なユニオン型）
 
 ```ts
 type IRDiffOp =
@@ -183,14 +183,14 @@ type IRDiffOp =
     };
 ```
 
-### Reference adapters
+### 参照アダプター
 
-| Adapter                              | Use case                | Notes                                                                                                                                                                                                                                                                          |
+| アダプター                           | ユースケース            | 備考                                                                                                                                                                                                                                                                          |
 | ------------------------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `inMemoryAdapter()`                  | Tests                   | Deep-freezes stored IRs; loses data on reload.                                                                                                                                                                                                                                 |
-| `localStorageAdapter({ namespace })` | Demos, single-user SPAs | Storage keys: `<namespace>:snapshots:<id>` (payload), `<namespace>:snapshots:index` (metadata array). Uses delta-chain encoding to fit within the ~5–10 MB quota. Throws `VersionHistoryError` with one of `STORAGE_UNAVAILABLE`, `STORAGE_CORRUPT`, `STORAGE_QUOTA_EXCEEDED`. |
+| `inMemoryAdapter()`                  | テスト                  | 保存される IR をディープフリーズする。リロードでデータを失う。                                                                                                                                                                                                                 |
+| `localStorageAdapter({ namespace })` | デモ、シングルユーザー SPA | ストレージキー：`<namespace>:snapshots:<id>`（ペイロード）、`<namespace>:snapshots:index`（メタデータ配列）。約 5～10 MB のクォータに収めるため delta チェーンエンコーディングを使用する。`STORAGE_UNAVAILABLE`、`STORAGE_CORRUPT`、`STORAGE_QUOTA_EXCEEDED` のいずれかで `VersionHistoryError` を投げる。 |
 
-### Errors
+### エラー
 
 ```ts
 class VersionHistoryError extends Error {
@@ -204,9 +204,9 @@ type VersionHistoryErrorCode =
   | "STORAGE_UNAVAILABLE";
 ```
 
-### Optional UI (`./ui`)
+### オプションの UI（`./ui`）
 
-| Component              | Key props                                               |
+| コンポーネント         | 主要な props                                            |
 | ---------------------- | ------------------------------------------------------- |
 | `VersionHistoryUI`     | `{ adapter, currentIR, onRestore }`                     |
 | `SaveSnapshotButton`   | `{ adapter, currentIR, getLabel? }`                     |
@@ -214,9 +214,9 @@ type VersionHistoryErrorCode =
 | `SnapshotHistoryModal` | `{ open, onOpenChange, adapter, currentIR, onRestore }` |
 | `DiffView`             | `{ diff, before?, after? }`                             |
 
-The `/ui` subpath is a separate entry point — importing from it does not trigger the rest of the package. The default plugin export does not reference these components.
+`/ui` サブパスは独立したエントリポイントです —— そこからインポートしてもパッケージの残りの部分はトリガーされません。デフォルトのプラグインエクスポートはこれらのコンポーネントを参照しません。
 
-### Testing (`./testing`)
+### テスト（`./testing`）
 
 ```ts
 runAdapterContract(
@@ -225,11 +225,11 @@ runAdapterContract(
 ): void;
 ```
 
-Pass your test runner's primitives to inject the suite without coupling the package to a specific framework.
+テストランナーのプリミティブを渡すことで、パッケージを特定のフレームワークに結合させることなくスイートを注入できます。
 
-## Usage examples
+## 使用例
 
-### LocalStorage adapter for a single-user SPA
+### シングルユーザー SPA 向けの LocalStorage アダプター
 
 ```ts
 import {
@@ -243,7 +243,7 @@ const versionHistory = createVersionHistoryPlugin({
 });
 ```
 
-### Custom Firestore adapter
+### カスタム Firestore アダプター
 
 ```ts
 import type {
@@ -293,7 +293,7 @@ export function firestoreAdapter(roomId: string): SnapshotAdapter {
 }
 ```
 
-### Validating a custom adapter
+### カスタムアダプターの検証
 
 ```ts
 import { runAdapterContract } from "@anvilkit/plugin-version-history/testing";
@@ -308,7 +308,7 @@ runAdapterContract(() => firestoreAdapter("test-room"), {
 });
 ```
 
-### Rendering a diff view
+### diff ビューのレンダリング
 
 ```tsx
 import { useEffect, useState } from "react";
@@ -349,35 +349,35 @@ function HistoryEntry({
 }
 ```
 
-## Notes & FAQ
+## 備考と FAQ
 
-### Storage is intentionally pluggable
+### ストレージは意図的にプラグイン可能
 
-The plugin never reads from `localStorage`, IndexedDB, or any backend directly. Adapters are the only persistence boundary — if you need session-shared, multi-tenant, or audit-compliant storage, write an adapter and stay inside the typed contract.
+プラグインは `localStorage`、IndexedDB、あるいはいかなるバックエンドからも直接読み取りません。アダプターが唯一の永続化境界です —— セッション共有、マルチテナント、または監査準拠のストレージが必要な場合は、アダプターを書き、型付きの契約の内側にとどまってください。
 
-### `move-node` is informational
+### `move-node` は情報提供用
 
-`applyDiff` validates `move-node` ops but does **not** perform reparenting on them alone. `change-children` on the affected parent is the authoritative reparenting/reorder signal. Consumers that inspect an `IRDiff` for display or logging may use `move-node` for presentation; do not rely on it for replay correctness.
+`applyDiff` は `move-node` オペレーションを検証しますが、それらだけでは親の再設定を**実行しません**。影響を受ける親の `change-children` が、権威ある再設定 / 並べ替えのシグナルです。表示やロギングのために `IRDiff` を検査する利用者は `move-node` をプレゼンテーションに使用してかまいませんが、リプレイの正確性をそれに依存しないでください。
 
-### `maxSnapshots` requires `delete`
+### `maxSnapshots` には `delete` が必要
 
-The FIFO eviction loop calls `adapter.delete(oldestId)` when the snapshot count would exceed the cap. Adapters that omit `delete` cannot satisfy `maxSnapshots`; either implement `delete` or omit `maxSnapshots`.
+スナップショット数が上限を超えそうになると、FIFO エビクションループが `adapter.delete(oldestId)` を呼び出します。`delete` を省略したアダプターは `maxSnapshots` を満たせません。`delete` を実装するか、`maxSnapshots` を省略してください。
 
-### Bundle budget
+### バンドルバジェット
 
-The published entry has an 8 KB gzipped budget enforced in CI by `scripts/check-bundle-budget.mjs` and `.size-limit.json`. Workspace deps (`@anvilkit/*`) and peers (`react`, `react-dom`, `@puckeditor/core`) are treated as external.
+公開されたエントリには 8 KB gzipped のバジェットがあり、`scripts/check-bundle-budget.mjs` と `.size-limit.json` により CI で強制されます。ワークスペース依存（`@anvilkit/*`）と peer（`react`、`react-dom`、`@puckeditor/core`）は外部として扱われます。
 
-### Optional UI is opt-in by design
+### オプションの UI は設計上オプトイン
 
-Importing from `@anvilkit/plugin-version-history` never pulls the `/ui` components — they live in a separate entry. This keeps the headless consumer (a CMS that only wants snapshots and audit history but ships its own UI) at the published bundle budget.
+`@anvilkit/plugin-version-history` からのインポートは `/ui` コンポーネントを決して引き込みません —— それらは別のエントリに存在します。これにより、ヘッドレスな利用者（スナップショットと監査履歴だけを望むが自前の UI を同梱する CMS）が公開されたバンドルバジェット内にとどまります。
 
-### Adapter freezing recommended
+### アダプターの凍結を推奨
 
-Reference adapters deep-freeze stored IRs to catch accidental mutation early. Custom adapters are not required to freeze, but doing so eliminates a class of "history snapshot mutated after save" bugs that are otherwise easy to miss.
+参照アダプターは保存される IR をディープフリーズして、意図しない変更を早期に捕捉します。カスタムアダプターは凍結を要求されませんが、そうすることで「保存後に履歴スナップショットが変更された」という、さもなければ見逃しやすい一連のバグを排除できます。
 
-### Cross-plugin types
+### プラグイン間の型
 
-`SnapshotAdapter`, `PeerInfo`, `PresenceState`, etc. are re-exported here as the source of truth — `@anvilkit/plugin-collab-yjs` extends `SnapshotAdapter` with `YjsSnapshotAdapter` to add conflict / status / metrics surfaces. Use this package's types when authoring shared abstractions across both plugins.
+`SnapshotAdapter`、`PeerInfo`、`PresenceState` などは、ここで唯一の信頼できる情報源として再エクスポートされています —— `@anvilkit/plugin-collab-yjs` は `SnapshotAdapter` を `YjsSnapshotAdapter` で拡張し、競合 / ステータス / メトリクスのサーフェスを追加します。両方のプラグインにまたがる共有抽象を作成する際には、このパッケージの型を使用してください。
 
 ## エントリポイント
 

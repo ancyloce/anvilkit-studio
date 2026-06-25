@@ -44,52 +44,52 @@ import { Studio } from "@anvilkit/core";
 
 ## ガイド
 
-> **Alpha (`0.1.4`).** API may change before `1.0`. The plugin never talks to an
-> AI service directly — every job is delegated to a host-supplied
-> `AiImageProvider`, so no credentials, model identifiers, or endpoints cross the
-> plugin boundary.
+> **Alpha（`0.1.4`）。** API は `1.0` 以前に変更される可能性があります。このプラグインは
+> AI サービスと直接通信することはありません——すべてのジョブはホストが提供する
+> `AiImageProvider` に委譲されるため、認証情報、モデル識別子、エンドポイントが
+> プラグインの境界を越えることはありません。
 
-AI image generation plugin for AnvilKit **Canvas Studio**. It wraps a
-host-supplied `AiImageProvider` so the editor can issue text-to-image, variation,
-inpaint, background-removal, and upscale jobs through one typed contract — and
-ships the surrounding building blocks (abort/retry/poll job client, mock
-provider, mask editor, post-processing pipeline, canvas commit helper, and an
-optional React sidebar panel) as separate subpath exports.
+AnvilKit **Canvas Studio** 向けの AI 画像生成プラグインです。ホストが提供する
+`AiImageProvider` をラップし、エディターが 1 つの型付き契約を通じて text-to-image、variation、
+inpaint、背景除去、アップスケールの各ジョブを発行できるようにします——さらに周辺のビルディングブロック
+（中止/リトライ/ポーリング対応のジョブクライアント、mock provider、マスクエディター、
+後処理パイプライン、キャンバスコミットヘルパー、そしてオプションの React サイドバーパネル）を、
+それぞれ別個のサブパスエクスポートとして提供します。
 
-> **Status.** The Iteration 1 building blocks all ship: the job client
-> (`./` — `createAiJobClient`), the mock provider (`./mock`), the mask editor
-> (`./mask`), the post-processing pipeline (`./post-process`), the commit helper
-> (`./commit`), and the React sidebar surface (`./react`). The bare
-> `createAiImagePlugin` factory validates the provider and exposes an imperative
-> `submit()` method, but registers an empty Studio hook block — it does not yet
-> contribute lifecycle hooks or UI on its own. Mount the panel via
-> `@anvilkit/plugin-ai-image/react` (or wire your own UI on top of `useAiImage`).
+> **ステータス。** イテレーション 1 のビルディングブロックはすべて出荷済みです：ジョブクライアント
+> （`./` — `createAiJobClient`）、mock provider（`./mock`）、マスクエディター
+> （`./mask`）、後処理パイプライン（`./post-process`）、コミットヘルパー（`./commit`）、
+> および React サイドバーサーフェス（`./react`）。素の
+> `createAiImagePlugin` ファクトリは provider を検証し、命令的な
+> `submit()` メソッドを公開しますが、登録するのは空の Studio フックブロックです——それ自体ではまだ
+> ライフサイクルフックや UI を提供しません。パネルは
+> `@anvilkit/plugin-ai-image/react` 経由でマウントしてください（または `useAiImage` の上に独自の UI を組み込んでください）。
 
-## Installation
+## インストール
 
 ```sh
 pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
 ```
 
-Peer dependencies: `react >=19.0.0`, `react-dom >=19.0.0`,
-`@puckeditor/core ^0.21.3`, `@anvilkit/ui` (for the React panel), and
-`konva ^10` + `react-konva ^19` (for the `./mask` and `./react` Konva
-surfaces). The headless `.` entry — factory, job client, post-process, commit —
-does not require Konva. `@anvilkit/canvas-core` ships as a direct dependency and
-is the source of truth for the wire-shape types.
+peer 依存関係：`react >=19.0.0`、`react-dom >=19.0.0`、
+`@puckeditor/core ^0.21.3`、`@anvilkit/ui`（React パネル用）、および
+`konva ^10` + `react-konva ^19`（`./mask` と `./react` の Konva
+サーフェス用）。ヘッドレスの `.` エントリ——ファクトリ、ジョブクライアント、後処理、コミット——は
+Konva を必要としません。`@anvilkit/canvas-core` は直接依存関係として出荷され、
+ワイヤーシェイプ型のソースオブトゥルースとなります。
 
-Subpath imports:
+サブパスインポート：
 
-| Subpath                                  | Exports                                                                                |
+| サブパス                                  | エクスポート                                                                           |
 | ---------------------------------------- | -------------------------------------------------------------------------------------- |
-| `@anvilkit/plugin-ai-image`              | `createAiImagePlugin`, `createAiJobClient`, `RetryableError`, `commitImageReplace`, mask exporter utilities, and all wire-shape types. |
-| `@anvilkit/plugin-ai-image/react`        | `AiImagePanel`, `useAiImage`, `createAiImageSidebarPlugin`.                             |
-| `@anvilkit/plugin-ai-image/mask`         | `MaskEditorLayer`, `useMaskStrokes`, mask types.                                       |
-| `@anvilkit/plugin-ai-image/post-process` | `createPostProcessPipeline` + image helpers (`dataUrlToFile`, `sourceToFile`, `thumbnailDimensions`, `PostProcessError`). |
-| `@anvilkit/plugin-ai-image/commit`       | `commitImageReplace`.                                                                  |
-| `@anvilkit/plugin-ai-image/mock`         | `createMockAiImageProvider` for tests and demos.                                       |
+| `@anvilkit/plugin-ai-image`              | `createAiImagePlugin`、`createAiJobClient`、`RetryableError`、`commitImageReplace`、マスクエクスポーターユーティリティ、およびすべてのワイヤーシェイプ型。 |
+| `@anvilkit/plugin-ai-image/react`        | `AiImagePanel`、`useAiImage`、`createAiImageSidebarPlugin`。                            |
+| `@anvilkit/plugin-ai-image/mask`         | `MaskEditorLayer`、`useMaskStrokes`、マスク型。                                        |
+| `@anvilkit/plugin-ai-image/post-process` | `createPostProcessPipeline` + 画像ヘルパー（`dataUrlToFile`、`sourceToFile`、`thumbnailDimensions`、`PostProcessError`）。 |
+| `@anvilkit/plugin-ai-image/commit`       | `commitImageReplace`。                                                                 |
+| `@anvilkit/plugin-ai-image/mock`         | テストとデモ用の `createMockAiImageProvider`。                                          |
 
-## Quickstart
+## クイックスタート
 
 ```ts
 import { createAiImagePlugin } from "@anvilkit/plugin-ai-image";
@@ -115,29 +115,29 @@ const result = await aiImage.submit(
 );
 ```
 
-## Core features
+## コア機能
 
-- **One typed provider contract** — five job kinds (`text-to-image`, `variation`,
-  `inpaint`, `bg-remove`, `upscale`) flow through a single `AiImageProvider`
-  callback. No credentials or model identifiers cross the plugin boundary.
-- **Abort / retry / poll job client** — `createAiJobClient` wraps a provider with
-  transient-failure retry (exponential backoff + jitter) and optional polling for
-  async jobs that return `status: "pending"`.
-- **Mask editor** — `MaskEditorLayer` + `useMaskStrokes` capture brush strokes on a
-  Konva layer; the exporter rasterizes them to a mask asset for inpaint jobs.
-- **Post-processing pipeline** — normalize → validate MIME → validate size →
-  optional compress → register main asset → generate + register thumbnail.
-- **Canvas commit helper** — `commitImageReplace` builds a typed
-  `image.replace` command for the host's canvas command bus.
-- **React sidebar panel** — `AiImagePanel` + the self-registering
-  `createAiImageSidebarPlugin` drop the generation UI into the Studio sidebar's
-  `copilot` module.
-- **Deterministic mock** — `createMockAiImageProvider` simulates latency and
-  per-kind results (and forced failures) for tests and demos.
+- **1 つの型付き provider 契約** — 5 つのジョブ種別（`text-to-image`、`variation`、
+  `inpaint`、`bg-remove`、`upscale`）が単一の `AiImageProvider`
+  コールバックを流れます。認証情報やモデル識別子がプラグインの境界を越えることはありません。
+- **中止/リトライ/ポーリング対応のジョブクライアント** — `createAiJobClient` は provider をラップし、
+  一時的な失敗に対するリトライ（指数バックオフ + ジッター）と、`status: "pending"` を返す
+  非同期ジョブ向けのオプションのポーリングを提供します。
+- **マスクエディター** — `MaskEditorLayer` + `useMaskStrokes` が Konva レイヤー上でブラシ
+  ストロークをキャプチャし、エクスポーターがそれらを inpaint ジョブ用のマスクアセットへラスタライズします。
+- **後処理パイプライン** — 正規化 → MIME 検証 → サイズ検証 →
+  オプションの圧縮 → メインアセットの登録 → サムネイルの生成と登録。
+- **キャンバスコミットヘルパー** — `commitImageReplace` がホストのキャンバスコマンドバス向けに型付きの
+  `image.replace` コマンドを構築します。
+- **React サイドバーパネル** — `AiImagePanel` と自己登録型の
+  `createAiImageSidebarPlugin` が、生成 UI を Studio サイドバーの
+  `copilot` モジュールに投入します。
+- **決定論的な mock** — `createMockAiImageProvider` は、テストとデモ向けにレイテンシと
+  種別ごとの結果（および強制失敗）をシミュレートします。
 
-## API reference
+## API リファレンス
 
-### Factory
+### ファクトリ
 
 ```ts
 function createAiImagePlugin(
@@ -157,10 +157,10 @@ interface AiImagePluginInstance {
 }
 ```
 
-`submit()` delegates directly to the configured `provider`. The returned object is
-also a `StudioPlugin`; its `register()` currently returns an empty `hooks` block.
+`submit()` は設定済みの `provider` に直接委譲します。返されるオブジェクトは
+同時に `StudioPlugin` でもあり、その `register()` は現在のところ空の `hooks` ブロックを返します。
 
-### Wire-shape types (re-exported from `@anvilkit/canvas-core`)
+### ワイヤーシェイプ型（`@anvilkit/canvas-core` から再エクスポート）
 
 ```ts
 type AiImageJobRequest =
@@ -195,10 +195,10 @@ type AiImageProvider = (
 ) => Promise<AiImageJobResult>;
 ```
 
-These live in `@anvilkit/canvas-core` so the headless IR and this plugin agree on
-the wire shape; the package re-exports them for ergonomics.
+これらは `@anvilkit/canvas-core` に存在するため、ヘッドレス IR とこのプラグインが
+ワイヤーシェイプについて一致します。利便性のため、このパッケージはそれらを再エクスポートしています。
 
-### Job client (`.`)
+### ジョブクライアント（`.`）
 
 ```ts
 function createAiJobClient(options: AiJobClientOptions): AiJobClient;
@@ -212,40 +212,40 @@ interface AiJobClient {
 }
 ```
 
-| `AiJobClientOptions` field | Type             | Default     | Purpose                                                                 |
+| `AiJobClientOptions` フィールド | 型               | デフォルト  | 目的                                                                    |
 | -------------------------- | ---------------- | ----------- | ----------------------------------------------------------------------- |
-| `provider`                 | `AiImageProvider`| _required_  | Host-supplied provider.                                                 |
-| `poll`                     | `AiJobPollFn`    | none        | Poller for async jobs. When the provider returns non-terminal `pending` and `poll` is set, the client polls until terminal/aborted/timed out. |
-| `pollIntervalMs`           | `number`         | `1000`      | Delay between poll attempts.                                            |
-| `pollTimeoutMs`            | `number`         | none        | Wall-clock budget for the poll loop; on overrun resolves to an `error` result with code `TIMEOUT`. |
-| `maxRetries`               | `number`         | `3`         | Retry attempts after the initial call (transient failures only).       |
-| `baseDelayMs`              | `number`         | `250`       | Base backoff delay.                                                     |
-| `maxDelayMs`               | `number`         | `8000`      | Cap on backoff before jitter.                                          |
-| `jitter` / `sleep` / `now` | functions        | platform    | Injection points for deterministic tests.                              |
+| `provider`                 | `AiImageProvider`| _必須_      | ホストが提供する provider。                                             |
+| `poll`                     | `AiJobPollFn`    | なし        | 非同期ジョブ用のポーラー。provider が非終端の `pending` を返し `poll` が設定されている場合、クライアントは終端/中止/タイムアウトまでポーリングします。 |
+| `pollIntervalMs`           | `number`         | `1000`      | ポーリング試行間の遅延。                                                |
+| `pollTimeoutMs`            | `number`         | なし        | ポーリングループの実時間予算。超過時はコード `TIMEOUT` の `error` 結果に解決します。 |
+| `maxRetries`               | `number`         | `3`         | 初回呼び出し後のリトライ回数（一時的な失敗のみ）。                       |
+| `baseDelayMs`              | `number`         | `250`       | 基本バックオフ遅延。                                                    |
+| `maxDelayMs`               | `number`         | `8000`      | ジッター前のバックオフ上限。                                            |
+| `jitter` / `sleep` / `now` | 関数             | プラットフォーム | 決定論的テスト用の注入ポイント。                                    |
 
-Aborting `options.signal` resolves to a `cancelled` result. Throw `RetryableError`
-from a provider to mark a failure as transient and eligible for the backoff loop.
+`options.signal` を中止すると `cancelled` 結果に解決します。provider から `RetryableError`
+をスローすると、その失敗を一時的なものとしてマークし、バックオフループの対象とすることができます。
 
-### Mask editing (`./mask`)
+### マスク編集（`./mask`）
 
-| Export            | Signature                                                   | Purpose                                              |
+| エクスポート       | シグネチャ                                                  | 目的                                                 |
 | ----------------- | ----------------------------------------------------------- | ---------------------------------------------------- |
-| `MaskEditorLayer` | React (`react-konva`) component                             | Brush-stroke capture layer for inpaint masks.        |
-| `useMaskStrokes`  | `(options?: UseMaskStrokesOptions) => UseMaskStrokesResult` | Stroke state + pointer handlers for the mask layer.  |
+| `MaskEditorLayer` | React（`react-konva`）コンポーネント                        | inpaint マスク用のブラシストロークキャプチャレイヤー。 |
+| `useMaskStrokes`  | `(options?: UseMaskStrokesOptions) => UseMaskStrokesResult` | マスクレイヤーのストローク状態 + ポインターハンドラー。 |
 
-### Mask export (root entry)
+### マスクエクスポート（ルートエントリ）
 
-The mask rasterization/upload helpers are exported from the root entry
-(`@anvilkit/plugin-ai-image`), not the `./mask` subpath:
+マスクのラスタライズ/アップロードヘルパーは、`./mask` サブパスではなくルートエントリ
+（`@anvilkit/plugin-ai-image`）からエクスポートされます：
 
-| Export                       | Signature                                                       | Purpose                                                            |
+| エクスポート                  | シグネチャ                                                      | 目的                                                              |
 | ---------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `createMaskToAssetExporter`  | `(options: MaskToAssetExporterOptions) => MaskToAssetExporter`  | `.export(strokes, dimensions)` rasterizes + uploads, resolving to the mask asset id. |
-| `drawMask`                   | `(ctx, strokes, options?) => void`                              | Low-level mask rasterization onto a 2D context.                    |
-| `rasterizeMaskToDataUrl`     | `(input: RasterizeMaskInput) => string`                         | Render strokes to a PNG data URL.                                  |
-| `dataUrlToFile`              | `(dataUrl: string, filename: string) => File`                   | Convert a data URL to a `File` for upload.                         |
+| `createMaskToAssetExporter`  | `(options: MaskToAssetExporterOptions) => MaskToAssetExporter`  | `.export(strokes, dimensions)` がラスタライズ + アップロードを行い、マスクアセット id に解決します。 |
+| `drawMask`                   | `(ctx, strokes, options?) => void`                              | 2D context へのマスクの低レベルラスタライズ。                     |
+| `rasterizeMaskToDataUrl`     | `(input: RasterizeMaskInput) => string`                         | ストロークを PNG data URL にレンダリングします。                  |
+| `dataUrlToFile`              | `(dataUrl: string, filename: string) => File`                   | data URL をアップロード用の `File` に変換します。                |
 
-### Post-processing (`./post-process`)
+### 後処理（`./post-process`）
 
 ```ts
 function createPostProcessPipeline(
@@ -253,21 +253,21 @@ function createPostProcessPipeline(
 ): PostProcessPipeline; // .process(source) => Promise<PostProcessResult>
 ```
 
-| `PostProcessOptions` field | Type                        | Default | Purpose                                                          |
+| `PostProcessOptions` フィールド | 型                        | デフォルト | 目的                                                            |
 | -------------------------- | --------------------------- | ------- | ---------------------------------------------------------------- |
-| `upload`                   | `PostProcessUpload`         | _required_ | Host upload fn; called for both the main image and the thumbnail. |
-| `acceptedMimeTypes`        | `readonly string[]`         | none    | MIME allowlist; non-matching sources throw `PostProcessError`.   |
-| `maxBytes`                 | `number`                    | none    | Size cap.                                                        |
-| `thumbnail`                | `{ maxEdge?; mimeType? }`   | `maxEdge: 256` | Thumbnail dimensions / format (always generated).        |
-| `compress`                 | `{ mimeType?; quality? }`   | none    | Opt-in re-encode (e.g. to `image/webp`).                         |
-| `createCanvas` / `decodeImage` | functions               | platform | Injection points for non-DOM / test environments.            |
-| `filename`                 | `string`                    | none    | Base filename for the uploaded asset.                            |
+| `upload`                   | `PostProcessUpload`         | _必須_  | ホストのアップロード関数。メイン画像とサムネイルの両方に対して呼び出されます。 |
+| `acceptedMimeTypes`        | `readonly string[]`         | なし    | MIME 許可リスト。一致しないソースは `PostProcessError` をスローします。 |
+| `maxBytes`                 | `number`                    | なし    | サイズ上限。                                                    |
+| `thumbnail`                | `{ maxEdge?; mimeType? }`   | `maxEdge: 256` | サムネイルの寸法/フォーマット（常に生成）。              |
+| `compress`                 | `{ mimeType?; quality? }`   | なし    | オプトインの再エンコード（例：`image/webp` へ）。               |
+| `createCanvas` / `decodeImage` | 関数                    | プラットフォーム | 非 DOM／テスト環境用の注入ポイント。                       |
+| `filename`                 | `string`                    | なし    | アップロードされるアセットの基本ファイル名。                    |
 
-`PostProcessResult` returns `{ assetId, thumbnailAssetId, mimeType, bytes, width, height }`.
-Helpers `dataUrlToFile`, `sourceToFile`, `thumbnailDimensions`, and the
-`PostProcessError` class are exported alongside.
+`PostProcessResult` は `{ assetId, thumbnailAssetId, mimeType, bytes, width, height }` を返します。
+ヘルパー `dataUrlToFile`、`sourceToFile`、`thumbnailDimensions`、および
+`PostProcessError` クラスが併せてエクスポートされます。
 
-### Commit (`./commit`)
+### コミット（`./commit`）
 
 ```ts
 function commitImageReplace<T = unknown>(
@@ -282,11 +282,11 @@ interface CommitImageReplaceOptions<T = unknown> {
 }
 ```
 
-Builds an `image.replace` canvas command and hands it to the host's `commit`
-function (e.g. `(cmd) => historyStore.getState().commit(currentIr, cmd)`),
-returning whatever that function returns.
+`image.replace` キャンバスコマンドを構築し、それをホストの `commit`
+関数（例：`(cmd) => historyStore.getState().commit(currentIr, cmd)`）に渡し、
+その関数が返すものをそのまま返します。
 
-### React (`./react`)
+### React（`./react`）
 
 ```ts
 function AiImagePanel(props: AiImagePanelProps): ReactElement;
@@ -296,29 +296,29 @@ function createAiImageSidebarPlugin(
 ): StudioPlugin;
 ```
 
-- **`AiImagePanel`** — the generation UI (op selector, prompt fields, run/cancel).
-  Driven by a `jobClient`, a `getLayerContext` accessor, an optional `defaultOp`,
-  and injectable i18n `labels`.
-- **`useAiImage`** — headless panel-state hook returning field values, change
-  handlers, and `onRun` / `onCancel`. Wire it to your own UI when `AiImagePanel`'s
-  chrome doesn't fit.
-- **`createAiImageSidebarPlugin`** — self-registering plugin that mounts
-  `AiImagePanel` into the Studio sidebar's `copilot` module. Options:
+- **`AiImagePanel`** — 生成 UI（操作セレクター、プロンプトフィールド、実行/キャンセル）。
+  `jobClient`、`getLayerContext` アクセサー、オプションの `defaultOp`、
+  および注入可能な i18n `labels` によって駆動されます。
+- **`useAiImage`** — フィールド値、変更
+  ハンドラー、`onRun` / `onCancel` を返すヘッドレスなパネル状態フックです。`AiImagePanel` の
+  クロムが合わない場合に、独自の UI に組み込んでください。
+- **`createAiImageSidebarPlugin`** — `AiImagePanel` を Studio サイドバーの
+  `copilot` モジュールにマウントする自己登録型プラグインです。オプション：
 
-  | Field            | Type                                  | Default          | Purpose                                                            |
+  | フィールド       | 型                                    | デフォルト       | 目的                                                              |
   | ---------------- | ------------------------------------- | ---------------- | ------------------------------------------------------------------ |
-  | `jobClient`      | `AiJobClient`                         | _required_       | Drives jobs (recommended: from `createAiJobClient`).               |
-  | `getLayerContext`| `() => AiLayerContext \| null`        | `() => null`     | Live active-artboard / selection accessor. `null` disables Run.    |
-  | `defaultOp`      | `AiImageJobKind`                      | `"text-to-image"`| Op selected on first render.                                       |
-  | `labels`         | i18n copy                             | none             | Forwarded to `AiImagePanel`.                                       |
+  | `jobClient`      | `AiJobClient`                         | _必須_           | ジョブを駆動します（推奨：`createAiJobClient` から）。            |
+  | `getLayerContext`| `() => AiLayerContext \| null`        | `() => null`     | ライブのアクティブアートボード/選択アクセサー。`null` は Run を無効化します。 |
+  | `defaultOp`      | `AiImageJobKind`                      | `"text-to-image"`| 初回レンダリング時に選択される操作。                              |
+  | `labels`         | i18n コピー                           | なし             | `AiImagePanel` に転送されます。                                   |
 
-  **Single-occupancy caveat.** Core's sidebar registry holds a single
-  `copilotPanel` (last-write-wins). This panel and `@anvilkit/plugin-ai-copilot`'s
-  panel both claim the `copilot` slot — register exactly one per `<Studio>` mount.
-  In practice they live in different Studio contexts (the canvas editor is a
-  sibling mode that mounts separately from the Puck page editor).
+  **単一占有に関する注意。** Core のサイドバーレジストリは単一の
+  `copilotPanel` を保持します（後勝ち）。このパネルと `@anvilkit/plugin-ai-copilot` の
+  パネルはどちらも `copilot` スロットを要求します——`<Studio>` マウントごとに 1 つだけ登録してください。
+  実際には、これらは異なる Studio context に存在します（canvas エディターは
+  Puck ページエディターとは別個にマウントされる兄弟モードです）。
 
-### Mock (`./mock`)
+### Mock（`./mock`）
 
 ```ts
 function createMockAiImageProvider(
@@ -326,34 +326,34 @@ function createMockAiImageProvider(
 ): AiImageProvider;
 ```
 
-| Field           | Type                                            | Default | Purpose                                          |
+| フィールド      | 型                                              | デフォルト | 目的                                             |
 | --------------- | ----------------------------------------------- | ------- | ------------------------------------------------ |
-| `latencyMs`     | `number`                                        | `0`     | Simulated (abort-aware) provider latency.        |
-| `resultAssetId` | `string \| ((request) => string)`               | none    | Deterministic result asset id, or a per-request function. |
-| failure options | —                                               | none    | Force transient/terminal failures for exercising error and retry paths. |
+| `latencyMs`     | `number`                                        | `0`     | シミュレートされた（中止対応の）provider レイテンシ。 |
+| `resultAssetId` | `string \| ((request) => string)`               | なし    | 決定論的な結果アセット id、またはリクエストごとの関数。 |
+| 失敗オプション  | —                                               | なし    | エラーとリトライのパスを演習するために、一時的/終端の失敗を強制します。 |
 
-## Notes & FAQ
+## 注意事項と FAQ
 
-### Security model
+### セキュリティモデル
 
-The plugin never sees credentials, endpoints, or model identifiers — those belong
-to the host's `AiImageProvider`. The provider receives exactly `(request, context,
-options)` and returns an `AiImageJobResult`.
+プラグインが認証情報、エンドポイント、モデル識別子を見ることはありません——それらは
+ホストの `AiImageProvider` に属します。provider はちょうど `(request, context,
+options)` を受け取り、`AiImageJobResult` を返します。
 
-### Honour the abort signal
+### 中止シグナルを尊重する
 
-`submit()` and `AiJobClient.run()` thread an `AbortSignal` through to the provider.
-Providers should pass `options.signal` to their `fetch` (or equivalent) so cancels,
-retry sleeps, and poll loops all stop promptly. Aborting resolves to a `cancelled`
-result rather than throwing.
+`submit()` と `AiJobClient.run()` は `AbortSignal` を provider まで通します。
+provider は `options.signal` を自身の `fetch`（または同等のもの）に渡すべきです。そうすればキャンセル、
+リトライのスリープ、ポーリングループがすべて速やかに停止します。中止は例外をスローするのではなく
+`cancelled` 結果に解決します。
 
-### Konva is only needed for the visual surfaces
+### Konva はビジュアルサーフェスにのみ必要
 
-The headless `.` entry (factory, job client, post-process, commit) has no Konva
-dependency. `konva` + `react-konva` become required only when you import the
-`./mask` editor layer or the `./react` panel.
+ヘッドレスの `.` エントリ（ファクトリ、ジョブクライアント、後処理、コミット）には Konva
+依存関係がありません。`konva` + `react-konva` が必須となるのは、`./mask`
+エディターレイヤーまたは `./react` パネルをインポートするときだけです。
 
-## License
+## ライセンス
 
 MIT
 

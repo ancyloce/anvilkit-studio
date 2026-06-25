@@ -41,19 +41,19 @@ import { Studio } from "@anvilkit/core";
 
 ## 指南
 
-> **Alpha (`0.1.6`).** The surface is implemented and tested; the emitted JSX contract may still evolve before `1.0.0`.
+> **Alpha（`0.1.6`）。** 该接口已实现并经过测试；在 `1.0.0` 之前，发出的 JSX 契约仍可能演进。
 
-React (`.tsx` / `.jsx`) export plugin for Anvilkit Studio. Turns a normalized `PageIR` into ready-to-drop React source: component imports from `@anvilkit/<slug>` packages, JSX with serialized props, and — optionally — `import` statements for any referenced local assets so Vite / Next can hash and fingerprint them. Pair with [`@anvilkit/plugin-export-html`](../plugin-export-html/README.md) when you also need standalone HTML output.
+Anvilkit Studio 的 React（`.tsx` / `.jsx`）导出插件。将规范化的 `PageIR` 转换为可直接拖入使用的 React 源码：从 `@anvilkit/<slug>` 包导入组件、带有序列化属性的 JSX，以及——可选地——为任何被引用的本地资源生成 `import` 语句，以便 Vite / Next 能够对其进行哈希与指纹处理。当你同时还需要独立的 HTML 输出时，请搭配 [`@anvilkit/plugin-export-html`](../plugin-export-html/README.md) 使用。
 
-## Installation
+## 安装
 
 ```bash
 pnpm add @anvilkit/plugin-export-react @anvilkit/core react @puckeditor/core
 ```
 
-Non-optional peers: `react >=19.0.0`, `@puckeditor/core ^0.21.3`, `@anvilkit/core ^0.1.4`. `react-dom` is not required — the plugin emits source, not rendered DOM.
+非可选对等依赖：`react >=19.0.0`、`@puckeditor/core ^0.21.3`、`@anvilkit/core ^0.1.4`。不需要 `react-dom`——该插件发出的是源码，而非渲染后的 DOM。
 
-## Quickstart
+## 快速开始
 
 ```ts
 import { Studio } from "@anvilkit/core";
@@ -72,27 +72,27 @@ const reactExport = createReactExportPlugin({
 <Studio puckConfig={puckConfig} plugins={[htmlExport, reactExport]} />;
 ```
 
-When `buildIR` is supplied, clicking "Export React" runs end-to-end and broadcasts `anvilkit:export:ready` with the `page.tsx` content; the host listens and triggers a download. Without `buildIR`, the action broadcasts `anvilkit:export:request` instead.
+当提供了 `buildIR` 时，点击 “Export React” 会端到端运行，并通过 `anvilkit:export:ready` 广播 `page.tsx` 的内容；宿主监听该事件并触发下载。如果没有提供 `buildIR`，该操作会改为广播 `anvilkit:export:request`。
 
-## Core features
+## 核心特性
 
-- **TSX or JSX output** — `syntax: "tsx"` keeps return-type annotations; `"jsx"` strips them.
-- **ESM or CJS module system** — `moduleResolution: "esm"` (default) emits `import`/`export default`; `"cjs"` emits `require`/`module.exports`.
-- **Two asset strategies** — `url-prop` keeps asset URLs as strings; `static-import` rewrites local relative paths into top-of-file ES imports so bundlers can hash and fingerprint them.
-- **Deterministic imports** — `collectImports` walks the IR, maps `PascalCase` component types to `@anvilkit/<slug>` packages, and sorts the manifest for byte-stable output.
-- **AST snapshot testing** — output is parsed through `@typescript-eslint/typescript-estree` so the test suite catches shape changes while ignoring whitespace churn.
-- **Strict prop serialization** — only JSON-serializable values pass through; functions, `Date`, `Map`, `Set`, `RegExp`, `Promise`, `symbol`, `bigint`, and `undefined` are rejected with `NON_SERIALIZABLE_PROP` warnings.
-- **8-code warning channel** — typed, host-fatal-able warnings for the eight things that can go wrong at emit time.
+- **TSX 或 JSX 输出**——`syntax: "tsx"` 保留返回类型注解；`"jsx"` 会将其去除。
+- **ESM 或 CJS 模块系统**——`moduleResolution: "esm"`（默认）发出 `import`/`export default`；`"cjs"` 发出 `require`/`module.exports`。
+- **两种资源策略**——`url-prop` 将资源 URL 保留为字符串；`static-import` 将本地相对路径重写为文件顶部的 ES 导入，以便打包器对其进行哈希与指纹处理。
+- **确定性导入**——`collectImports` 遍历 IR，将 `PascalCase` 组件类型映射到 `@anvilkit/<slug>` 包，并对清单进行排序以获得字节稳定的输出。
+- **AST 快照测试**——输出通过 `@typescript-eslint/typescript-estree` 解析，因此测试套件能够捕获形状变化，同时忽略空白字符的扰动。
+- **严格的属性序列化**——只有可 JSON 序列化的值才能通过；函数、`Date`、`Map`、`Set`、`RegExp`、`Promise`、`symbol`、`bigint` 以及 `undefined` 会被拒绝并伴随 `NON_SERIALIZABLE_PROP` 警告。
+- **8 码警告通道**——针对发出时可能出错的八种情况提供带类型、可由宿主设为致命的警告。
 
-## API reference
+## API 参考
 
-### Plugin factory
+### 插件工厂函数
 
 ```ts
 function createReactExportPlugin(opts?: ReactExportOptions): StudioPlugin;
 ```
 
-Returns a `StudioPlugin` that registers one export format (`id: "react"`) and one header action (`id: "export-react"`). Plugin meta:
+返回一个 `StudioPlugin`，它注册一种导出格式（`id: "react"`）和一个顶栏操作（`id: "export-react"`）。插件元信息：
 
 | Field         | Value                          |
 | ------------- | ------------------------------ |
@@ -104,15 +104,15 @@ Returns a `StudioPlugin` that registers one export format (`id: "react"`) and on
 
 | Field              | Type                            | Default      | Purpose                                                                 |
 | ------------------ | ------------------------------- | ------------ | ----------------------------------------------------------------------- |
-| `syntax`           | `"tsx" \| "jsx"`                | `"tsx"`      | `"tsx"` keeps TypeScript return-type annotations on the page component. |
-| `moduleResolution` | `"esm" \| "cjs"`                | `"esm"`      | Module system targeted by the emitted file.                             |
-| `includeImports`   | `boolean`                       | `true`       | Set `false` if a downstream bundler injects its own imports.            |
-| `assetStrategy`    | `"static-import" \| "url-prop"` | `"url-prop"` | Asset prop rendering strategy.                                          |
-| `buildIR`          | `IRBuilder`                     | none         | When supplied, the header action runs end-to-end.                       |
+| `syntax`           | `"tsx" \| "jsx"`                | `"tsx"`      | `"tsx"` 在页面组件上保留 TypeScript 返回类型注解。                       |
+| `moduleResolution` | `"esm" \| "cjs"`                | `"esm"`      | 发出文件所针对的模块系统。                                               |
+| `includeImports`   | `boolean`                       | `true`       | 如果下游打包器会注入自己的导入，则设为 `false`。                         |
+| `assetStrategy`    | `"static-import" \| "url-prop"` | `"url-prop"` | 资源属性的渲染策略。                                                     |
+| `buildIR`          | `IRBuilder`                     | none         | 提供后，顶栏操作将端到端运行。                                           |
 
-`REACT_EXPORT_DEFAULTS` exposes the default object for tests and snapshots. `resolveReactExportOptions(partial)` applies defaults with input validation (throws `TypeError` on bad enum values).
+`REACT_EXPORT_DEFAULTS` 为测试和快照暴露默认对象。`resolveReactExportOptions(partial)` 在应用默认值时进行输入校验（遇到无效枚举值会抛出 `TypeError`）。
 
-### Direct format access
+### 直接访问格式
 
 ```ts
 const reactFormat: ExportFormatDefinition<ReactExportOptions> = {
@@ -124,18 +124,18 @@ const reactFormat: ExportFormatDefinition<ReactExportOptions> = {
 };
 ```
 
-`filename` is `page.tsx` or `page.jsx` depending on `syntax`.
+`filename` 根据 `syntax` 为 `page.tsx` 或 `page.jsx`。
 
-### Header action
+### 顶栏操作
 
 | Export                                           | Purpose                                                                      |
 | ------------------------------------------------ | ---------------------------------------------------------------------------- |
-| `createExportReactHeaderAction(format, options)` | Build a header action bound to a configured format.                          |
-| `exportReactHeaderAction`                        | Default unbound action; emits `anvilkit:export:request` for hosts to handle. |
+| `createExportReactHeaderAction(format, options)` | 构建一个绑定到已配置格式的顶栏操作。                                          |
+| `exportReactHeaderAction`                        | 默认的未绑定操作；发出 `anvilkit:export:request` 供宿主处理。                 |
 
-Header action metadata: `id: "export-react"`, `label: "Export React"`, `icon: "code"`, `order: 110`.
+顶栏操作元数据：`id: "export-react"`、`label: "Export React"`、`icon: "code"`、`order: 110`。
 
-### Low-level emitter
+### 底层发射器
 
 ```ts
 function emitReact(ir: PageIR, options?: ReactExportOptions): EmitReactResult;
@@ -147,9 +147,9 @@ interface EmitReactResult {
 }
 ```
 
-Validates IR version (`"1"`) and root node type (`"__root__"`) before emitting. Tag and attribute names are guarded by regex — invalid identifiers fall back to comment placeholders with a warning rather than emitting broken JSX.
+在发出之前校验 IR 版本（`"1"`）与根节点类型（`"__root__"`）。标签名与属性名由正则保护——无效的标识符会回退为带警告的注释占位符，而不是发出损坏的 JSX。
 
-### Import collection
+### 导入收集
 
 ```ts
 function collectImports(ir: PageIR): ImportManifest;
@@ -166,9 +166,9 @@ interface ImportManifest {
 }
 ```
 
-`componentTypeToPackageSlug("Hero")` → `"@anvilkit/hero"`. The manifest is sorted by `(kind, source, binding)` for byte-stable output.
+`componentTypeToPackageSlug("Hero")` → `"@anvilkit/hero"`。该清单按 `(kind, source, binding)` 排序，以获得字节稳定的输出。
 
-### Asset planning
+### 资源规划
 
 ```ts
 function collectReactAssets(
@@ -189,9 +189,9 @@ interface AssetRewrite {
 }
 ```
 
-Asset prop keys detected: `src`, `imageUrl`, `imageSrc`, `url`, `videoUrl`, `videoSrc`, `fontUrl`, `scriptUrl`, `styleUrl`, `backgroundSrc`, `backgroundImage`, `poster`, `thumbnailSrc`.
+可检测到的资源属性键：`src`、`imageUrl`、`imageSrc`、`url`、`videoUrl`、`videoSrc`、`fontUrl`、`scriptUrl`、`styleUrl`、`backgroundSrc`、`backgroundImage`、`poster`、`thumbnailSrc`。
 
-### Prop serialization
+### 属性序列化
 
 ```ts
 function serializeProp(
@@ -205,24 +205,24 @@ interface SerializedProp {
 }
 ```
 
-Accepts primitives, plain objects, and arrays. Rejects functions, `Date`, `Map`, `Set`, `RegExp`, `Promise`, `symbol`, `bigint`, and `undefined`.
+接受基本类型、普通对象和数组。拒绝函数、`Date`、`Map`、`Set`、`RegExp`、`Promise`、`symbol`、`bigint` 以及 `undefined`。
 
-### Warning codes
+### 警告码
 
 | Code                         | Trigger                                                                                                        | Remediation                                                                               |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `NON_SERIALIZABLE_PROP`      | Prop is or contains a function, `Date`, `Map`, `Set`, `RegExp`, `Promise`, `symbol`, `bigint`, or `undefined`. | Convert to JSON-compatible values at the source.                                          |
-| `INVALID_PROP_NAME`          | Prop key is not a valid JSX attribute name.                                                                    | Sanitize the key in the IR. The emitter drops the offending attribute.                    |
-| `INVALID_NODE_TYPE`          | Component type is not a valid JSX tag (lowercase, spaces, etc.).                                               | Use a `PascalCase` identifier. The emitter inserts a comment placeholder.                 |
-| `CJS_REQUIRES_JSX`           | `syntax: "tsx"` + `moduleResolution: "cjs"` — Node cannot `require` a `.tsx`.                                  | Compile via a TypeScript toolchain first, or switch to ESM.                               |
-| `EXTERNAL_URL_STATIC_IMPORT` | External URL (`https://` / `//` / `data:` / `file:`) on an asset prop under `static-import`.                   | Move asset into the project tree, or accept the per-prop `url-prop` fallback.             |
-| `UNSAFE_ASSET_PATH`          | Asset URL under `static-import` contains `..` traversal or unknown scheme.                                     | Sanitize the asset URL. Per-prop falls back to `url-prop`.                                |
-| `ASSET_UNRESOLVED`           | `asset://` reference unresolved by any registered resolver.                                                    | Register the resolver, or remove the unresolved asset.                                    |
-| `INVALID_OPTION_COMBINATION` | `static-import` + `includeImports: false`.                                                                     | Set `includeImports: true` or use `url-prop`. The emitter runs with `url-prop` semantics. |
+| `NON_SERIALIZABLE_PROP`      | 属性本身是或包含函数、`Date`、`Map`、`Set`、`RegExp`、`Promise`、`symbol`、`bigint` 或 `undefined`。            | 在源头转换为与 JSON 兼容的值。                                                             |
+| `INVALID_PROP_NAME`          | 属性键不是有效的 JSX 属性名。                                                                                  | 在 IR 中净化该键。发射器会丢弃该违规属性。                                                 |
+| `INVALID_NODE_TYPE`          | 组件类型不是有效的 JSX 标签（小写、含空格等）。                                                                | 使用 `PascalCase` 标识符。发射器会插入一个注释占位符。                                     |
+| `CJS_REQUIRES_JSX`           | `syntax: "tsx"` + `moduleResolution: "cjs"`——Node 无法 `require` 一个 `.tsx`。                                  | 先通过 TypeScript 工具链编译，或切换到 ESM。                                               |
+| `EXTERNAL_URL_STATIC_IMPORT` | 在 `static-import` 下，资源属性上出现外部 URL（`https://` / `//` / `data:` / `file:`）。                        | 将资源移入项目目录树，或接受逐属性的 `url-prop` 回退。                                     |
+| `UNSAFE_ASSET_PATH`          | 在 `static-import` 下，资源 URL 含有 `..` 遍历或未知协议。                                                      | 净化资源 URL。逐属性回退为 `url-prop`。                                                    |
+| `ASSET_UNRESOLVED`           | `asset://` 引用未被任何已注册的解析器解析。                                                                    | 注册该解析器，或移除未解析的资源。                                                         |
+| `INVALID_OPTION_COMBINATION` | `static-import` + `includeImports: false`。                                                                    | 设置 `includeImports: true` 或使用 `url-prop`。发射器将以 `url-prop` 语义运行。            |
 
-## Usage examples
+## 用法示例
 
-### TSX + static-import for Next.js / Vite
+### 用于 Next.js / Vite 的 TSX + static-import
 
 ```ts
 createReactExportPlugin({
@@ -240,7 +240,7 @@ createReactExportPlugin({
 //   }
 ```
 
-### Plain JSX + url-prop for a static React app
+### 用于静态 React 应用的纯 JSX + url-prop
 
 ```ts
 createReactExportPlugin({
@@ -257,7 +257,7 @@ createReactExportPlugin({
 //   }
 ```
 
-### CJS output for a tooling pipeline
+### 用于工具流水线的 CJS 输出
 
 ```ts
 // `syntax: "tsx"` + `moduleResolution: "cjs"` emits a CJS_REQUIRES_JSX warning.
@@ -275,7 +275,7 @@ createReactExportPlugin({
 //   };
 ```
 
-### Host-driven export via event bus
+### 通过事件总线进行宿主驱动的导出
 
 ```ts
 const reactExport = createReactExportPlugin({
@@ -290,7 +290,7 @@ studio.eventBus.on("anvilkit:export:request", async ({ formatId, options }) => {
 });
 ```
 
-### Headless emit for tests / CLI
+### 用于测试 / CLI 的无界面发射
 
 ```ts
 import { emitReact } from "@anvilkit/plugin-export-react";
@@ -305,47 +305,47 @@ if (warnings.length > 0)
 console.log(code);
 ```
 
-## Notes & FAQ
+## 注意事项与 FAQ
 
-### `static-import` vs `url-prop`
+### `static-import` 对比 `url-prop`
 
-- **`url-prop`** (default) — assets stay as string URLs exactly as they appear in the IR. Best for quick one-off snapshots and for remote CDN URLs where no bundler rewrite is needed.
-- **`static-import`** — every asset whose URL is a relative path becomes an ES module `import` binding, and the JSX prop is rewritten to reference the binding. Vite and Next treat these imports as bundle inputs, so assets get hashed, preloaded, and fingerprinted for cache busting. External `https://…` URLs under `static-import` emit `EXTERNAL_URL_STATIC_IMPORT` and fall back to `url-prop` behavior for that single prop.
+- **`url-prop`**（默认）——资源完全按其在 IR 中出现的样子，保留为字符串 URL。最适合快速的一次性快照，以及无需打包器重写的远程 CDN URL。
+- **`static-import`**——每个 URL 为相对路径的资源都会变成一个 ES 模块 `import` 绑定，并且 JSX 属性会被重写为引用该绑定。Vite 和 Next 会把这些导入视为打包输入，因此资源会被哈希、预加载，并被指纹化以实现缓存失效。在 `static-import` 下，外部 `https://…` URL 会发出 `EXTERNAL_URL_STATIC_IMPORT`，并对该单个属性回退为 `url-prop` 行为。
 
-### Prop serialization is strict
+### 属性序列化是严格的
 
-Only JSON-compatible values reach the emitted JSX. If your component takes a `new Date(...)`, a `RegExp`, or a class instance, transform it into a plain object / string at the IR boundary — the emitter refuses to encode it. This is intentional: the emitted source must round-trip through a build pipeline that cannot resurrect class instances.
+只有与 JSON 兼容的值才能进入发出的 JSX。如果你的组件接收一个 `new Date(...)`、一个 `RegExp` 或一个类实例，请在 IR 边界处将其转换为普通对象 / 字符串——发射器拒绝对其进行编码。这是有意为之：发出的源码必须能往返穿过一个无法复活类实例的构建流水线。
 
-### Component naming contract
+### 组件命名契约
 
-The plugin assumes the Anvilkit component naming convention: `PascalCase` component type in IR → `kebab-case` `@anvilkit/<slug>` package. `Hero` → `@anvilkit/hero`; `PricingMinimal` → `@anvilkit/pricing-minimal`. Custom components outside the Anvilkit naming convention will still emit but the import path may not match a real npm package. Override by post-processing the emitted code or pre-rewriting component types in the IR.
+该插件假定遵循 Anvilkit 组件命名约定：IR 中的 `PascalCase` 组件类型 → `kebab-case` 的 `@anvilkit/<slug>` 包。`Hero` → `@anvilkit/hero`；`PricingMinimal` → `@anvilkit/pricing-minimal`。位于 Anvilkit 命名约定之外的自定义组件仍会被发出，但其导入路径可能不对应真实的 npm 包。可通过对发出的代码进行后处理，或在 IR 中预先重写组件类型来覆盖。
 
-### Updating AST snapshots
+### 更新 AST 快照
 
-The emitter's output is parsed through `@typescript-eslint/typescript-estree` and compared against an AST snapshot at `src/__tests__/__snapshots__/ast-contract.test.ts.snap`. Whitespace churn becomes invisible to the suite, but shape churn (a missing `ImportDeclaration`, a new `JSXAttribute`) fails loud. After a deliberate emitter change:
+发射器的输出通过 `@typescript-eslint/typescript-estree` 解析，并与位于 `src/__tests__/__snapshots__/ast-contract.test.ts.snap` 的 AST 快照进行比较。空白字符的扰动对套件不可见，但形状扰动（缺失一个 `ImportDeclaration`、新增一个 `JSXAttribute`）会显著失败。在一次有意的发射器变更之后：
 
 ```bash
 pnpm --filter @anvilkit/plugin-export-react test -- -u
 ```
 
-Review the snapshot diff in the PR — it should look JSX-like (`ImportDeclaration`, `ExportDefaultDeclaration`, `JSXElement` children).
+在 PR 中审查快照差异——它应当看起来像 JSX（`ImportDeclaration`、`ExportDefaultDeclaration`、`JSXElement` 子节点）。
 
-### Alpha JSX contract
+### Alpha JSX 契约
 
-The emitted JSX shape (attribute ordering, formatter quirks, comment placement) is not yet a stability contract. Consumers that diff exported source across releases should either re-format both sides or compare semantic shape via the AST.
+发出的 JSX 形状（属性顺序、格式化器的怪癖、注释位置）尚不是稳定性契约。需要跨版本对导出源码做差异比较的使用者，应当对两侧都重新格式化，或通过 AST 比较语义形状。
 
-### Bundle budget and `version.ts`
+### 打包预算与 `version.ts`
 
-The main bundle is held to an **8 KB gzip** budget (`.size-limit.json`, enforced in CI). To stay under it, the plugin's version string lives in a hand-maintained `src/version.ts` constant rather than importing `package.json` (which would inline the whole JSON object). A `plugin.metadata-drift.test.ts` guard fails if `version.ts` falls out of sync with `package.json`, so bump both together when releasing.
+主包受 **8 KB gzip** 预算约束（`.size-limit.json`，在 CI 中强制执行）。为了保持在预算之内，该插件的版本字符串存放在手动维护的 `src/version.ts` 常量中，而不是导入 `package.json`（那样会把整个 JSON 对象内联进来）。如果 `version.ts` 与 `package.json` 不同步，`plugin.metadata-drift.test.ts` 守卫会失败，所以发布时请同时更新两者。
 
-### Why `text/plain` MIME type?
+### 为什么用 `text/plain` MIME 类型？
 
-Browsers cannot meaningfully render `.tsx` source on download — the emitted file is for developer hand-off to a build pipeline, not direct rendering. `text/plain` ensures the download triggers in every browser without "preview as HTML" interception.
+浏览器在下载时无法有意义地渲染 `.tsx` 源码——发出的文件用于将代码交接给构建流水线的开发者，而非直接渲染。`text/plain` 确保在每个浏览器中都能触发下载，而不会被 “以 HTML 预览” 拦截。
 
-### See also
+### 另请参阅
 
-- [`@anvilkit/plugin-export-html`](../plugin-export-html/README.md) — standalone HTML output for the same `PageIR`.
-- The `export-pipeline` architecture doc on the Anvilkit docs site — shared export-plugin contract.
+- [`@anvilkit/plugin-export-html`](../plugin-export-html/README.md)——针对同一 `PageIR` 的独立 HTML 输出。
+- Anvilkit 文档站点上的 `export-pipeline` 架构文档——共享的导出插件契约。
 
 ## 入口点
 

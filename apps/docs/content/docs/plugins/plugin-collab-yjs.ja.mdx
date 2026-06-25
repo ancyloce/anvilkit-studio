@@ -43,19 +43,19 @@ import { Studio } from "@anvilkit/core";
 
 ## ガイド
 
-> **Release candidate (`0.10.x`).** Ships under the `@next` npm dist-tag. Per-node CRDT merge (`useNativeTree`) is now the default. See `docs/policies/lts.md` for the GA timeline.
+> **リリース候補（`0.10.x`）。** `@next` npm dist-tag で公開されています。ノード単位の CRDT マージ（`useNativeTree`）が現在のデフォルトになりました。GA のタイムラインについては `docs/policies/lts.md` を参照してください。
 
-A first-party Anvilkit Studio plugin that proves the `SnapshotAdapter` v2 contract can host live CRDT state alongside Puck without forking Core or Puck. Built on [Yjs](https://github.com/yjs/yjs) and [`y-protocols/awareness`](https://github.com/yjs/y-protocols), it ships the data layer only — pair it with `@anvilkit/collab-ui` for the React presentation layer or compose your own UI on top of the public hooks.
+`SnapshotAdapter` v2 契約が、Core や Puck をフォークすることなく Puck と並んでライブ CRDT 状態をホストできることを実証する、ファーストパーティの Anvilkit Studio プラグインです。[Yjs](https://github.com/yjs/yjs) と [`y-protocols/awareness`](https://github.com/yjs/y-protocols) の上に構築されており、データレイヤーのみを提供します。React の表示レイヤーには `@anvilkit/collab-ui` と組み合わせるか、公開フックの上に独自の UI を組み立ててください。
 
-## Installation
+## インストール
 
 ```bash
 pnpm add @anvilkit/plugin-collab-yjs yjs y-protocols react react-dom @puckeditor/core
 ```
 
-`yjs` and `y-protocols` are direct runtime dependencies. `react`, `react-dom`, and `@puckeditor/core` are **non-optional** peers even though this is the "data-only" layer: the package exports React hooks (e.g. `usePuckSelection`) and its plugin factory runs inside the React-based Studio shell, so React is genuinely required — it is not split into a React-free entry. For a transport, install `y-websocket` (demos) or wire your own provider (Hocuspocus, custom WebRTC, etc.).
+`yjs` と `y-protocols` は直接のランタイム依存関係です。`react`、`react-dom`、`@puckeditor/core` は、これが「データのみ」のレイヤーであっても**任意ではない** peer です。このパッケージは React フック（例：`usePuckSelection`）をエクスポートし、そのプラグインファクトリは React ベースの Studio シェル内で実行されるため、React は本当に必要です。React フリーのエントリポイントには分割されていません。トランスポートには、`y-websocket`（デモ用）をインストールするか、独自のプロバイダー（Hocuspocus、カスタム WebRTC など）を接続してください。
 
-## Quickstart
+## クイックスタート
 
 ```ts
 import {
@@ -90,76 +90,76 @@ registerPlugins([
 ]);
 ```
 
-For the full data + UI bundle in a single factory call, import `createCollabPlugin` from `@anvilkit/collab-ui` instead.
+単一のファクトリ呼び出しで完全なデータ + UI バンドルを得るには、代わりに `@anvilkit/collab-ui` から `createCollabPlugin` をインポートしてください。
 
-## Core features
+## コア機能
 
-- **Per-node CRDT merge by default** — `PageIR` is mirrored as a flat-addressed `Y.Map` tree, so concurrent edits to disjoint nodes both survive instead of overwriting each other under whole-document LWW.
-- **Snapshot history** — every `save()` writes both the live encoding and a `snapshotMeta:<id>` + `snapshotPayload:<id>` pair, satisfying the `SnapshotAdapter` history contract regardless of which encoding is live.
-- **Conflict diagnostics** — `onConflict(event)` fires when a remote update lands on top of a local in-flight edit within `staleAfterMs` (default 2000 ms).
-- **Connection-state contract** — five-variant `ConnectionStatus` (`connecting`/`synced`/`offline`/`reconnecting`/`error`) lets hosts render a unified sync indicator without reading provider-specific fields.
-- **Observability** — `metrics()` returns latency percentiles, awareness churn (5-minute sliding window), validation-failure counts, and main-thread hot-path timings for telemetry sinks.
-- **Cross-tab persistence** — opt-in IndexedDB queue + same-origin `BroadcastChannel` relay. Survives brief disconnects and syncs two tabs of the same app without round-tripping through the transport.
-- **Defense-in-depth presence security** — strict color allowlist, control-character stripping on display names, awareness rate-limiting, and a `validateRemoteIR` hook for hostile-peer rejection.
-- **Force resync** — `adapter.forceResync()` discards unsaved local edits and re-emits the latest authoritative snapshot for the host's "discard and reload" affordance.
+- **デフォルトでノード単位の CRDT マージ** —— `PageIR` はフラットアドレス指定の `Y.Map` ツリーとしてミラーリングされるため、互いに素なノードへの同時編集は、全文書 LWW のもとで互いを上書きすることなく、どちらも残ります。
+- **スナップショット履歴** —— `save()` のたびにライブエンコーディングと `snapshotMeta:<id>` + `snapshotPayload:<id>` のペアの両方が書き込まれ、どのエンコーディングがライブであるかにかかわらず `SnapshotAdapter` 履歴契約を満たします。
+- **競合診断** —— リモート更新が `staleAfterMs`（デフォルト 2000 ミリ秒）以内にローカルの進行中の編集の上に着地すると `onConflict(event)` が発火します。
+- **接続状態契約** —— 5 つのバリアントを持つ `ConnectionStatus`（`connecting`/`synced`/`offline`/`reconnecting`/`error`）により、ホストはプロバイダー固有のフィールドを読むことなく統一された同期インジケーターをレンダリングできます。
+- **可観測性** —— `metrics()` はレイテンシのパーセンタイル、awareness のチャーン（5 分間のスライディングウィンドウ）、検証失敗カウント、そしてテレメトリシンク向けのメインスレッドのホットパスタイミングを返します。
+- **タブ間の永続化** —— オプトインの IndexedDB キュー + 同一オリジンの `BroadcastChannel` リレー。短い切断を生き延び、トランスポートを往復することなく同じアプリの 2 つのタブを同期します。
+- **多層防御のプレゼンスセキュリティ** —— 厳格なカラー許可リスト、表示名に対する制御文字の除去、awareness のレート制限、そして敵対的なピアの拒否のための `validateRemoteIR` フック。
+- **強制再同期** —— `adapter.forceResync()` は未保存のローカル編集を破棄し、最新の権威あるスナップショットを再発行して、ホストの「破棄して再読み込み」アフォーダンスを実現します。
 
-## API reference
+## API リファレンス
 
-### Factory functions
+### ファクトリ関数
 
-| Function                 | Signature                                                                       | Purpose                                                                                                                                                                         |
+| 関数                     | シグネチャ                                                                      | 目的                                                                                                                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `createYjsAdapter`       | `(opts: CreateYjsAdapterOptions) => YjsSnapshotAdapter`                         | Builds the CRDT-backed `SnapshotAdapter` from a Yjs `Doc` and optional `Awareness`.                                                                                             |
-| `createCollabDataPlugin` | `(opts: CreateCollabPluginOptions) => StudioPlugin`                             | Wraps the adapter into a Studio plugin (data sync only — no UI).                                                                                                                |
-| `createDebouncedAdapter` | `(adapter, opts?: CreateDebouncedAdapterOptions) => SnapshotAdapterWithMetrics` | Coalesces rapid `save()` calls into a single transport write per debounce window (default 150 ms). Returns an adapter with a `destroy()` method that must be called on unmount. |
-| `createCollabPlugin`     | _deprecated alias of `createCollabDataPlugin`_                                  | Retained for one minor release. Logs a one-shot `console.warn` on first call. Import `createCollabPlugin` from `@anvilkit/collab-ui` for the bundled UI factory.                |
+| `createYjsAdapter`       | `(opts: CreateYjsAdapterOptions) => YjsSnapshotAdapter`                         | Yjs の `Doc` とオプションの `Awareness` から CRDT で支えられた `SnapshotAdapter` を構築します。                                                                  |
+| `createCollabDataPlugin` | `(opts: CreateCollabPluginOptions) => StudioPlugin`                             | アダプターを Studio プラグインにラップします（データ同期のみ——UI なし）。                                                                              |
+| `createDebouncedAdapter` | `(adapter, opts?: CreateDebouncedAdapterOptions) => SnapshotAdapterWithMetrics` | 高速な `save()` 呼び出しをデバウンスウィンドウ（デフォルト 150 ミリ秒）ごとに 1 回のトランスポート書き込みへとまとめます。アンマウント時に呼び出す必要がある `destroy()` メソッドを持つアダプターを返します。 |
+| `createCollabPlugin`     | _`createCollabDataPlugin` の非推奨エイリアス_                                  | マイナーリリース 1 回分のあいだ保持されます。最初の呼び出し時に 1 回限りの `console.warn` をログ出力します。バンドル済みの UI ファクトリには `@anvilkit/collab-ui` から `createCollabPlugin` をインポートしてください。                |
 
 ### `CreateYjsAdapterOptions`
 
-| Field                | Type                        | Default                | Purpose                                                                                                                                                                       |
+| フィールド           | 型                          | デフォルト             | 目的                                                                                                                                                                        |
 | -------------------- | --------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `doc`                | `YDoc`                      | _required_             | Yjs document. Host-owned; the adapter never constructs its own.                                                                                                               |
-| `awareness`          | `Awareness`                 | auto-created           | Presence channel. When omitted, the adapter creates one internally.                                                                                                           |
-| `peer`               | `PeerInfo`                  | ephemeral              | Local identity. Omitting it mints a `local-<uuid>` id with a warn log. Provide a stable id in production.                                                                     |
-| `mapName`            | `string`                    | `"default"`            | Root `Y.Map` key.                                                                                                                                                             |
-| `staleAfterMs`       | `number`                    | `2000`                 | Window during which a remote update touching locally-edited nodes counts as an overlap.                                                                                       |
-| `useNativeTree`      | `boolean`                   | `true`                 | Per-node CRDT merge. Set `false` only for legacy JSON-blob rooms — replicas with different modes cannot share a `Y.Doc`.                                                      |
-| `connectionSource`   | `ConnectionSource`          | none                   | Host transport-event source. The host calls `emit(status)` as the provider's connection state changes.                                                                        |
-| `computeDelta`       | `boolean`                   | `false`                | When `true`, every `save()` attaches a structural `IRDiff` to `SnapshotMeta.delta`.                                                                                           |
-| `maxSnapshots`       | `number`                    | `200`                  | Hard ceiling on retained snapshots in the shared `Y.Doc`. Older payload+meta pairs are evicted in the same transaction as the write. Set `<= 0` to disable (not recommended). |
-| `awarenessRateLimit` | `AwarenessRateLimitOptions` | `{ maxPerSecond: 30 }` | Token-bucket limiter on outbound `presence.update`. Set `maxPerSecond: Infinity` to disable.                                                                                  |
-| `persistence`        | `PersistenceOptions`        | none                   | Opt-in IndexedDB queue and `BroadcastChannel` relay. Each backend feature-detects and degrades silently on SSR or older browsers.                                             |
+| `doc`                | `YDoc`                      | _必須_             | Yjs ドキュメント。ホストが所有します。アダプターが自身のものを構築することはありません。                                                                       |
+| `awareness`          | `Awareness`                 | 自動作成           | プレゼンスチャネル。省略した場合、アダプターが内部で 1 つ作成します。                                                                                       |
+| `peer`               | `PeerInfo`                  | エフェメラル        | ローカルアイデンティティ。省略すると `local-<uuid>` の id を生成し、警告ログを出力します。本番環境では安定した id を指定してください。                                              |
+| `mapName`            | `string`                    | `"default"`            | ルート `Y.Map` のキー。                                                                                                                                                     |
+| `staleAfterMs`       | `number`                    | `2000`                 | ローカルで編集されたノードに触れるリモート更新がオーバーラップとしてカウントされるウィンドウ。                                                       |
+| `useNativeTree`      | `boolean`                   | `true`                 | ノード単位の CRDT マージ。レガシーな JSON-blob ルームに対してのみ `false` を設定してください——異なるモードのレプリカは `Y.Doc` を共有できません。                          |
+| `connectionSource`   | `ConnectionSource`          | なし                 | ホストのトランスポートイベントソース。プロバイダーの接続状態が変化すると、ホストが `emit(status)` を呼び出します。                                          |
+| `computeDelta`       | `boolean`                   | `false`                | `true` の場合、`save()` のたびに構造的な `IRDiff` が `SnapshotMeta.delta` に添付されます。                                                                           |
+| `maxSnapshots`       | `number`                    | `200`                  | 共有 `Y.Doc` 内で保持されるスナップショットの厳格な上限。古い payload+meta のペアは書き込みと同じトランザクションで退避されます。無効にするには `<= 0` を設定します（非推奨）。 |
+| `awarenessRateLimit` | `AwarenessRateLimitOptions` | `{ maxPerSecond: 30 }` | アウトバウンドの `presence.update` に対するトークンバケットリミッター。無効にするには `maxPerSecond: Infinity` を設定します。                                                                                  |
+| `persistence`        | `PersistenceOptions`        | なし                 | オプトインの IndexedDB キューと `BroadcastChannel` リレー。各バックエンドは機能検出を行い、SSR や古いブラウザでは静かにデグレードします。                             |
 
 ### `CreateCollabPluginOptions`
 
-| Field                   | Type                                   | Default    | Purpose                                                                                                                                        |
+| フィールド              | 型                                     | デフォルト | 目的                                                                                                                                           |
 | ----------------------- | -------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `adapter`               | `SnapshotAdapter`                      | _required_ | The CRDT adapter (usually from `createYjsAdapter`, optionally wrapped in `createDebouncedAdapter`).                                            |
-| `puckConfig`            | `Config`                               | none       | Required for outbound sync (Puck → IR). Omit for read-only viewers.                                                                            |
-| `localPeer`             | `PeerInfo`                             | ephemeral  | Identity used for conflict attribution, policy checks, and presence cursors. Omitting it logs a warning and mints a per-instance ephemeral id. |
-| `validateRemoteIR`      | `(ir: PageIR) => PageIR \| null`       | none       | Defense-in-depth validation hook. Returning `null` or throwing rejects the update.                                                             |
-| `onValidationFailure`   | `(failure: ValidationFailure) => void` | none       | Host-side observer for rejected remote IRs (toast, telemetry).                                                                                 |
-| `onSaveError`           | `(error: unknown) => void`             | none       | Outbound transport-failure observer. Without it, network 5xx errors surface as `unhandledRejection`.                                           |
-| `policy`                | `CollabPolicy`                         | none       | Symmetric RBAC bridge. `canEdit(node, peer)` is consulted inbound and outbound.                                                                |
-| `onPolicyViolation`     | `(violation: PolicyViolation) => void` | none       | Fired when `policy.canEdit` rejects.                                                                                                           |
-| `inboundScheduler`      | `InboundSchedulerHandleScheduler`      | `requestAnimationFrame` / `setTimeout` | (H1) Override the inbound coalescing scheduler. Defaults to `requestAnimationFrame` in the browser, `setTimeout` under SSR/Node. Intended for deterministic tests — do not set in production. |
-| `inboundBudgetMs`       | `number`                               | `16`       | (H1) Fallback inbound-flush cadence in ms, used when `requestAnimationFrame` is unavailable.                                                   |
-| `replaceBatchThreshold` | `number`                               | `50`       | Per-node `replace` dispatches below this threshold; above it the plugin falls back to a single `setData` call.                                 |
+| `adapter`               | `SnapshotAdapter`                      | _必須_ | CRDT アダプター（通常は `createYjsAdapter` から、必要に応じて `createDebouncedAdapter` でラップ）。                                            |
+| `puckConfig`            | `Config`                               | なし       | アウトバウンド同期（Puck → IR）に必須。読み取り専用ビューアーでは省略します。                                                                            |
+| `localPeer`             | `PeerInfo`                             | エフェメラル | 競合の帰属、ポリシーチェック、プレゼンスカーソルに使用されるアイデンティティ。省略すると警告をログ出力し、インスタンスごとのエフェメラル id を生成します。 |
+| `validateRemoteIR`      | `(ir: PageIR) => PageIR \| null`       | なし       | 多層防御の検証フック。`null` を返すか例外をスローすると更新が拒否されます。                                                                             |
+| `onValidationFailure`   | `(failure: ValidationFailure) => void` | なし       | 拒否されたリモート IR に対するホスト側オブザーバー（トースト、テレメトリ）。                                                                                 |
+| `onSaveError`           | `(error: unknown) => void`             | なし       | アウトバウンドのトランスポート失敗オブザーバー。これがないと、ネットワークの 5xx エラーは `unhandledRejection` として表面化します。                                           |
+| `policy`                | `CollabPolicy`                         | なし       | 対称的な RBAC ブリッジ。`canEdit(node, peer)` はインバウンドとアウトバウンドの両方で参照されます。                                                                       |
+| `onPolicyViolation`     | `(violation: PolicyViolation) => void` | なし       | `policy.canEdit` が拒否したときに発火します。                                                                                                           |
+| `inboundScheduler`      | `InboundSchedulerHandleScheduler`      | `requestAnimationFrame` / `setTimeout` | （H1）インバウンドの合体スケジューラーをオーバーライドします。ブラウザではデフォルトで `requestAnimationFrame`、SSR/Node では `setTimeout` になります。決定論的テスト向けです——本番環境では設定しないでください。 |
+| `inboundBudgetMs`       | `number`                               | `16`       | （H1）`requestAnimationFrame` が利用できない場合に使用される、フォールバックのインバウンドフラッシュ間隔（ミリ秒）。                                                   |
+| `replaceBatchThreshold` | `number`                               | `50`       | このしきい値を下回るとノード単位の `replace` をディスパッチします。上回るとプラグインは単一の `setData` 呼び出しにフォールバックします。                                 |
 
 ### `YjsSnapshotAdapter`
 
-Extends `SnapshotAdapter` (from `@anvilkit/plugin-version-history`) with:
+`SnapshotAdapter`（`@anvilkit/plugin-version-history` から）を以下で拡張します：
 
-| Member           | Signature                                                 | Purpose                                                                                                                                     |
+| メンバー         | シグネチャ                                                | 目的                                                                                                                                       |
 | ---------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onConflict`     | `(cb: (event: ConflictEvent) => void) => Unsubscribe`     | Overlap diagnostics.                                                                                                                        |
-| `onStatusChange` | `(cb: (status: ConnectionStatus) => void) => Unsubscribe` | Connection-state stream. Invoked synchronously with the current status on registration.                                                     |
-| `getStatus`      | `() => ConnectionStatus`                                  | Sync read of the latest status. Prefer `onStatusChange` inside `useSyncExternalStore` in React.                                             |
-| `forceResync`    | `() => Promise<PageIR \| null>`                           | Discard unsaved local edits and re-emit the latest authoritative snapshot. Resolves to `null` if no snapshot exists.                        |
-| `metrics`        | `() => MetricsSnapshot`                                   | Point-in-time observability snapshot. Cheap to call at second-cadence polling.                                                              |
-| `destroy`        | `() => void`                                              | Release internal subscriptions. Called automatically by the Studio plugin's `onDestroy` — only needed if you build a custom plugin wrapper. |
+| `onConflict`     | `(cb: (event: ConflictEvent) => void) => Unsubscribe`     | オーバーラップ診断。                                                                                                                        |
+| `onStatusChange` | `(cb: (status: ConnectionStatus) => void) => Unsubscribe` | 接続状態ストリーム。登録時に現在の状態で同期的に呼び出されます。                                                                     |
+| `getStatus`      | `() => ConnectionStatus`                                  | 最新状態の同期読み取り。React では `useSyncExternalStore` 内で `onStatusChange` を使うことを推奨します。                                             |
+| `forceResync`    | `() => Promise<PageIR \| null>`                           | 未保存のローカル編集を破棄し、最新の権威あるスナップショットを再発行します。スナップショットが存在しない場合は `null` に解決します。                        |
+| `metrics`        | `() => MetricsSnapshot`                                   | 時点ごとの可観測性スナップショット。秒単位のポーリングで呼び出すコストは安価です。                                                              |
+| `destroy`        | `() => void`                                              | 内部サブスクリプションを解放します。Studio プラグインの `onDestroy` によって自動的に呼び出されます——カスタムのプラグインラッパーを構築する場合にのみ必要です。 |
 
-### `ConnectionStatus` (discriminated union)
+### `ConnectionStatus`（判別共用体）
 
 ```ts
 type ConnectionStatus =
@@ -170,7 +170,7 @@ type ConnectionStatus =
   | { kind: "error"; message: string; recoverable: boolean };
 ```
 
-`queuedEdits` is populated by the adapter from its internal counter; the value the host passes is ignored.
+`queuedEdits` はアダプターが内部カウンターから設定します。ホストが渡す値は無視されます。
 
 ### `ConflictEvent`
 
@@ -184,47 +184,47 @@ interface ConflictEvent {
 }
 ```
 
-### `MetricsSnapshot` (selected fields)
+### `MetricsSnapshot`（抜粋フィールド）
 
-| Field                                                                                                            | Meaning                                                                                                                                |
+| フィールド                                                                                                      | 意味                                                                                                                                |
 | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `saveCount`, `transportWrites`, `saveCoalescingRatio`                                                            | Save traffic and debouncer efficacy.                                                                                                   |
-| `syncLatencyP50Ms`, `syncLatencyP95Ms`, `syncLatencySamples`                                                     | End-to-end latency percentiles over the last 200 samples.                                                                              |
-| `awarenessChurn`, `presenceValidationFailures`                                                                   | Presence health — high churn or non-zero failures point to a misbehaving peer.                                                         |
-| `inboundCoalesced`, `inboundQueueDelayP50Ms`                                                                     | Inbound coalescer activity. Non-zero `inboundCoalesced` means the adapter shielded the editor from a remote burst.                     |
-| `conversionTimeP50Ms`, `dispatchTimeP50Ms`, `saveEncodeTimeP50Ms`, `nativeApplyTimeP50Ms`, `nativeReadTimeP50Ms` | Main-thread hot-path timings (P1).                                                                                                     |
-| `degraded`, `degradedReasons`                                                                                    | Whether the adapter fell back from native-tree to legacy blob, and the trip reason (`cycle`/`max-depth`/`max-nodes`/`decode-failure`). |
-| `dispatchFailures`                                                                                               | Number of remote `subscribe` callback invocations that threw.                                                                          |
+| `saveCount`、`transportWrites`、`saveCoalescingRatio`                                                            | 保存トラフィックとデバウンサーの有効性。                                                                                   |
+| `syncLatencyP50Ms`、`syncLatencyP95Ms`、`syncLatencySamples`                                                     | 直近 200 サンプルにわたるエンドツーエンドのレイテンシパーセンタイル。                                                              |
+| `awarenessChurn`、`presenceValidationFailures`                                                                   | プレゼンスの健全性——高いチャーンや非ゼロの失敗は、行儀の悪いピアを指し示します。                                                         |
+| `inboundCoalesced`、`inboundQueueDelayP50Ms`                                                                     | インバウンド合体器のアクティビティ。非ゼロの `inboundCoalesced` は、アダプターがリモートのバーストからエディターを保護したことを意味します。                     |
+| `conversionTimeP50Ms`、`dispatchTimeP50Ms`、`saveEncodeTimeP50Ms`、`nativeApplyTimeP50Ms`、`nativeReadTimeP50Ms` | メインスレッドのホットパスタイミング（P1）。                                                                                                     |
+| `degraded`、`degradedReasons`                                                                                    | アダプターがネイティブツリーからレガシー blob へフォールバックしたかどうか、およびそのトリップ理由（`cycle`/`max-depth`/`max-nodes`/`decode-failure`）。 |
+| `dispatchFailures`                                                                                               | 例外をスローしたリモート `subscribe` コールバックの呼び出し回数。                                                                         |
 
-### Encoding utilities and snapshot diff
+### エンコーディングユーティリティとスナップショット差分
 
-| Export                            | Purpose                                               |
+| エクスポート                      | 目的                                                  |
 | --------------------------------- | ----------------------------------------------------- |
-| `encodeIR(ir)` / `decodeIR(json)` | Stable JSON encoding used for snapshot payloads.      |
-| `hashIR(encoded)`                 | Content hash used by `SnapshotMeta.pageIRHash`.       |
-| `diffSnapshots(prev, next)`       | Structural per-node diff between two `PageIR` values. |
+| `encodeIR(ir)` / `decodeIR(json)` | スナップショット payload に使用される安定した JSON エンコーディング。      |
+| `hashIR(encoded)`                 | `SnapshotMeta.pageIRHash` が使用するコンテンツハッシュ。       |
+| `diffSnapshots(prev, next)`       | 2 つの `PageIR` 値間の構造的なノード単位の差分。 |
 
-### Presence validation
+### プレゼンス検証
 
-| Export                                                                                  | Purpose                                                                                    |
+| エクスポート                                                                            | 目的                                                                                    |
 | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `sanitizeDisplayName(value)`                                                            | Strips `U+0000`–`U+001F` / `U+007F` and truncates to `MAX_DISPLAY_NAME_LENGTH` (64 chars). |
-| `validatePeerInfo(value)`                                                               | Strict validation. Color must match the allowlist; rejection drops the entire peer record. |
-| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | Inbound awareness validators used by the adapter; exported for host-side defense-in-depth. |
-| `MAX_DISPLAY_NAME_LENGTH`                                                               | `64`.                                                                                      |
+| `sanitizeDisplayName(value)`                                                            | `U+0000`–`U+001F` / `U+007F` を除去し、`MAX_DISPLAY_NAME_LENGTH`（64 文字）に切り詰めます。 |
+| `validatePeerInfo(value)`                                                               | 厳格な検証。カラーは許可リストに一致する必要があり、拒否はピアレコード全体を破棄します。 |
+| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | アダプターが使用するインバウンドの awareness バリデーター。ホスト側の多層防御のためにエクスポートされています。 |
+| `MAX_DISPLAY_NAME_LENGTH`                                                               | `64`。                                                                                      |
 
-### Errors
+### エラー
 
-- `SnapshotCorruptedError`, `SnapshotNotFoundError`, `SnapshotPrunedError` — typed errors thrown from `load(id)`.
-- `DebouncedAdapterDestroyedError` — thrown when methods are called on a `createDebouncedAdapter` instance after `destroy()`.
+- `SnapshotCorruptedError`、`SnapshotNotFoundError`、`SnapshotPrunedError` —— `load(id)` からスローされる型付きエラー。
+- `DebouncedAdapterDestroyedError` —— `destroy()` の後に `createDebouncedAdapter` インスタンスでメソッドが呼び出されたときにスローされます。
 
-### React bridge
+### React ブリッジ
 
-- `usePuckSelection()` — maps Puck's selected component into `PresenceSelection` for outbound awareness updates. Use inside a host component mounted within `<Puck>`.
+- `usePuckSelection()` —— Puck の選択されたコンポーネントをアウトバウンドの awareness 更新のための `PresenceSelection` にマッピングします。`<Puck>` 内にマウントされたホストコンポーネント内で使用してください。
 
-## Usage examples
+## 使用例
 
-### In-memory test harness
+### インメモリのテストハーネス
 
 ```ts
 import { Awareness } from "y-protocols/awareness";
@@ -247,7 +247,7 @@ adapter.subscribe((ir) => {
 });
 ```
 
-### Host-driven connection status
+### ホスト駆動の接続状態
 
 ```ts
 import type { ConnectionSource } from "@anvilkit/plugin-collab-yjs";
@@ -280,7 +280,7 @@ const connectionSource: ConnectionSource = (emit) => {
 createYjsAdapter({ doc, awareness, connectionSource });
 ```
 
-### Force resync flow
+### 強制再同期フロー
 
 ```ts
 const forceResync = async () => {
@@ -293,7 +293,7 @@ const forceResync = async () => {
 };
 ```
 
-### Policy + validation hooks
+### ポリシー + 検証フック
 
 ```ts
 import type {
@@ -325,32 +325,32 @@ createCollabDataPlugin({
 });
 ```
 
-## Notes & FAQ
+## 備考と FAQ
 
-### Native-tree vs legacy JSON-blob
+### ネイティブツリー vs レガシー JSON-blob
 
-Native-tree (`useNativeTree: true`, the default) mirrors the live `PageIR` as a flat-addressed `Y.Map` tree — one `Y.Map` per node, plus a `childIds` `Y.Array` per parent. Same-node edits still fall back to per-key LWW; different-node edits merge cleanly.
+ネイティブツリー（`useNativeTree: true`、デフォルト）は、ライブの `PageIR` をフラットアドレス指定の `Y.Map` ツリーとしてミラーリングします——ノードごとに 1 つの `Y.Map`、加えて親ごとに 1 つの `childIds` `Y.Array`。同一ノードへの編集は依然としてキー単位の LWW にフォールバックしますが、異なるノードへの編集はクリーンにマージされます。
 
-The legacy whole-document JSON-blob encoding under a single `pageIR` key is preserved as a fallback. `save()` writes both representations so a tree-aware adapter and a blob-aware adapter can read the same snapshot. **You cannot mix encodings in one `Y.Doc`** — pick one mode per room.
+単一の `pageIR` キーの下にある、レガシーな全文書 JSON-blob エンコーディングはフォールバックとして保持されます。`save()` は両方の表現を書き込むため、ツリー対応のアダプターと blob 対応のアダプターは同じスナップショットを読めます。**1 つの `Y.Doc` 内でエンコーディングを混在させることはできません**——ルームごとに 1 つのモードを選んでください。
 
-**Migration is automatic.** Adapters constructed on a `Y.Doc` that only has the legacy blob (no native-tree state) hydrate the tree from the blob at construction time. The migration is one-shot, transactional, and idempotent — subsequent adapters short-circuit. Hosts upgrading from a pre-`0.10` version can roll the new adapter without a separate migration step.
+**マイグレーションは自動です。** レガシー blob のみを持ち（ネイティブツリー状態を持たない）`Y.Doc` 上で構築されたアダプターは、構築時に blob からツリーをハイドレートします。このマイグレーションは 1 回限りで、トランザクショナルかつ冪等です——後続のアダプターはショートサーキットします。`0.10` より前のバージョンからアップグレードするホストは、別個のマイグレーション手順なしで新しいアダプターをロールアウトできます。
 
-### Presence is untrusted input
+### プレゼンスは信頼できない入力である
 
-The adapter validates every inbound `PresenceState` through `validatePresenceState`. Two specific hardenings:
+アダプターはすべてのインバウンドの `PresenceState` を `validatePresenceState` を通じて検証します。具体的な 2 つの強化があります：
 
-- **`color` allowlist.** Anything that doesn't match `#rgb` / `#rrggbb` / `#rrggbbaa`, `rgb(...)`, `rgba(...)`, or the named-color set is rejected — including `javascript:`, `expression(...)`, `<script>`, and arbitrary strings. Rejection drops the entire peer record so a malicious peer cannot smuggle a payload with only the safe parts.
-- **`displayName` sanitization.** `sanitizeDisplayName` strips ASCII control characters and truncates to 64 chars. It does **not** HTML-escape — if your UI injects the name via `innerHTML`, escape at the rendering boundary.
+- **`color` 許可リスト。** `#rgb` / `#rrggbb` / `#rrggbbaa`、`rgb(...)`、`rgba(...)`、または名前付きカラーのセットに一致しないものはすべて拒否されます——`javascript:`、`expression(...)`、`<script>`、任意の文字列を含みます。拒否はピアレコード全体を破棄するため、悪意あるピアは安全な部分だけを含む payload を密輸入することはできません。
+- **`displayName` のサニタイズ。** `sanitizeDisplayName` は ASCII 制御文字を除去し、64 文字に切り詰めます。HTML エスケープは**行いません**——UI が `innerHTML` 経由で名前を注入する場合は、レンダリング境界でエスケープしてください。
 
-`MetricsSnapshot.presenceValidationFailures` counts rejected peers so hosts can alert on a noisy or hostile room without inspecting individual payloads.
+`MetricsSnapshot.presenceValidationFailures` は拒否されたピアをカウントするため、ホストは個々の payload を検査することなく、ノイズの多いルームや敵対的なルームについてアラートを出せます。
 
-### `createDebouncedAdapter` requires `destroy()`
+### `createDebouncedAdapter` には `destroy()` が必要
 
-The wrapper holds a pending-timer reference. Call `destroy()` on unmount to cancel pending timers and forward teardown to the wrapped adapter. Methods called after `destroy()` throw `DebouncedAdapterDestroyedError`.
+このラッパーは保留中のタイマー参照を保持します。アンマウント時に `destroy()` を呼び出して、保留中のタイマーをキャンセルし、ラップされたアダプターへティアダウンを転送してください。`destroy()` の後に呼び出されたメソッドは `DebouncedAdapterDestroyedError` をスローします。
 
-### Reference transport and production deployment
+### 参照トランスポートと本番デプロイ
 
-A minimal relay lives under `examples/y-websocket-server.mjs` in this repository (source-only, not in the published npm package):
+最小限のリレーがこのリポジトリの `examples/y-websocket-server.mjs` の下にあります（ソースのみで、公開された npm パッケージには含まれません）：
 
 ```bash
 # Defaults to ws://127.0.0.1:21234
@@ -361,29 +361,29 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs
 node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 ```
 
-The relay listens on **port 21234 by default** (1234 and 11234 are avoided because Windows/WSL2 reserves them). Because `y-websocket@3` dropped its bundled server (`y-websocket/bin/utils`) and `@y/websocket-server` targets the incompatible `yjs-14` line, this relay **vendors the classic `y-protocols` sync/awareness server inline against the `yjs-13` stack** — wire-compatible with the demo's `y-websocket@3` client and independent of `y-websocket`'s server packaging. It is a reference for tests and demos, not a production server.
+このリレーは**デフォルトでポート 21234 をリッスンします**（Windows/WSL2 が予約しているため 1234 と 11234 は回避されています）。`y-websocket@3` がバンドルされたサーバー（`y-websocket/bin/utils`）を削除し、`@y/websocket-server` は互換性のない `yjs-14` 系列を対象としているため、このリレーは**`yjs-13` スタックに対してクラシックな `y-protocols` の同期/awareness サーバーをインラインでベンダリングしています**——デモの `y-websocket@3` クライアントとワイヤ互換であり、`y-websocket` のサーバーパッケージングからは独立しています。これはテストとデモのための参照であり、本番サーバーではありません。
 
-For production deployments — auth, durable Postgres persistence, and Redis-backed horizontal scale-out via [Hocuspocus](https://tiptap.dev/hocuspocus) — follow the recipe at [`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md).
+本番デプロイ——認証、永続的な Postgres による永続化、[Hocuspocus](https://tiptap.dev/hocuspocus) による Redis を裏付けとした水平スケールアウト——については、[`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md) のレシピに従ってください。
 
-### Performance characteristics
+### パフォーマンス特性
 
-- **Remote edits — incremental.** A remote prop edit re-reads only the touched nodes. A reorder/insert/delete emits a structured relink delta so the live-IR cache relinks only the affected parents + added nodes, reusing every untouched node's already-parsed props. A genuine whole-document change still falls back to a full guarded rebuild — the correctness backstop.
-- **Local `save()` — O(changed) apply, O(document) floor.** The Y.Doc apply writes only changed/added nodes and deletes removed ones. The residual O(document) cost is the `encodeIR(ir)` snapshot payload string written every save; `SnapshotMeta.pageIRHash` keeps its `hashIR(encodeIR(ir))` definition.
-- **Residual tail costs.** Snapshot meta re-scan O(`maxSnapshots`) per save, pending-index rebuild O(document) under interleaved remote bursts during active typing, conflict overlap O(document) per remote flush when an `onConflict` listener is attached, and wide-child-list reconciliation O(n²) for parents with thousands of children. All gated by `pnpm bench:collab-highload`.
+- **リモート編集——インクリメンタル。** リモートのプロップ編集は、触れられたノードのみを再読み込みします。並べ替え/挿入/削除は構造化されたリリンクデルタを発行するため、ライブ IR キャッシュは影響を受けた親 + 追加されたノードのみをリリンクし、触れられていないすべてのノードのすでに解析済みのプロップを再利用します。本物の全文書変更は依然として完全なガード付き再構築にフォールバックします——これは正確性のバックストップです。
+- **ローカル `save()`——O(変更分) の適用、O(文書) の下限。** Y.Doc の適用は変更/追加されたノードのみを書き込み、削除されたノードを削除します。残余の O(文書) コストは、保存のたびに書き込まれる `encodeIR(ir)` スナップショット payload 文字列です。`SnapshotMeta.pageIRHash` はその `hashIR(encodeIR(ir))` の定義を維持します。
+- **残余の末尾コスト。** 保存ごとのスナップショット meta の再スキャンは O(`maxSnapshots`)、アクティブなタイピング中にインターリーブされたリモートバーストのもとでの保留中インデックスの再構築は O(文書)、`onConflict` リスナーがアタッチされている場合のリモートフラッシュごとの競合オーバーラップは O(文書)、そして数千の子を持つ親に対する幅広い子リストの調整は O(n²) です。すべて `pnpm bench:collab-highload` によってゲートされています。
 
-Budget guidance: pages up to a few thousand nodes with the default `maxSnapshots` stay comfortably within frame budget.
+予算ガイダンス：デフォルトの `maxSnapshots` のもとで、最大で数千ノードのページは余裕をもってフレーム予算内に収まります。
 
-### Cross-tab persistence is opt-in
+### タブ間の永続化はオプトイン
 
-Both `persistence.indexedDb` and `persistence.broadcastChannel` default to `false`. When enabled, each backend feature-detects at construction time and degrades silently if its API is unavailable (SSR, older browsers, certain test runners). Use `persistence.onFault` to learn about quota or schema faults — the adapter never throws out of persistence into the `Y.Doc` observer chain.
+`persistence.indexedDb` と `persistence.broadcastChannel` はどちらもデフォルトで `false` です。有効にすると、各バックエンドは構築時に機能検出を行い、その API が利用できない場合（SSR、古いブラウザ、特定のテストランナー）は静かにデグレードします。クォータやスキーマの障害について知るには `persistence.onFault` を使用してください——アダプターが永続化から `Y.Doc` オブザーバーチェーンへ例外をスローすることは決してありません。
 
-Snapshot-level persistence (full state dump for fast tab bootstrap) and encryption at rest for the IDB queue are deferred. Cross-origin / iframe persistence is explicitly out of scope — `BroadcastChannel` is same-origin and that is the correct boundary for an editor.
+スナップショットレベルの永続化（高速なタブブートストラップのための完全な状態ダンプ）と、IDB キューの保存時暗号化は延期されています。クロスオリジン / iframe の永続化は明示的にスコープ外です——`BroadcastChannel` は同一オリジンであり、それがエディターにとって正しい境界です。
 
-### See also
+### 関連項目
 
-- The `realtime-collab` architecture doc on the Anvilkit docs site — full design and threat model.
-- [CHANGELOG.md](./CHANGELOG.md) — per-release notes.
-- [`@anvilkit/collab-ui`](../plugin-collab-ui/README.md) — React presentation layer + consolidated `createCollabPlugin` factory.
+- Anvilkit ドキュメントサイト上の `realtime-collab` アーキテクチャドキュメント——完全な設計と脅威モデル。
+- [CHANGELOG.md](./CHANGELOG.md) —— リリースごとのノート。
+- [`@anvilkit/collab-ui`](../plugin-collab-ui/README.md) —— React 表示レイヤー + 統合された `createCollabPlugin` ファクトリ。
 
 ## エントリポイント
 

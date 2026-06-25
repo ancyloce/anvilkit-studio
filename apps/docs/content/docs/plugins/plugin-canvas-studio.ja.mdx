@@ -43,38 +43,27 @@ import { Studio } from "@anvilkit/core";
 
 ## ガイド
 
-> **Alpha (`0.1.7`).** API may change before `1.0`.
+> **Alpha（`0.1.7`）。** API は `1.0` より前に変更される可能性があります。
 
-Mounts a full-screen **Canvas Studio** editing surface inside the Puck-based
-`<Studio>` shell. A header action toggles between Puck page mode and a canvas
-overlay; on close the plugin persists the `CanvasIR` through a host-provided
-adapter, rasterizes each artboard to a preview, and patches the originating Puck
-`DesignBlock` so the page renders the thumbnail. It also registers a layer
-quick-add for inserting design blocks and a `design://` asset resolver so pages
-can reference artboard previews by design id.
+Puck ベースの `<Studio>` シェルの内部に、フルスクリーンの **Canvas Studio** 編集サーフェスをマウントします。ヘッダーアクションが Puck ページモードとキャンバスオーバーレイの間を切り替えます。クローズ時、プラグインはホストが提供するアダプターを通じて `CanvasIR` を永続化し、各アートボードをプレビューにラスタライズし、発生元の Puck `DesignBlock` をパッチしてページがサムネイルをレンダリングするようにします。また、デザインブロックを挿入するためのレイヤークイック追加と、ページがデザイン id でアートボードのプレビューを参照できるようにする `design://` アセットリゾルバーも登録します。
 
-## Installation
+## インストール
 
 ```sh
 pnpm add @anvilkit/plugin-canvas-studio @anvilkit/canvas-core @anvilkit/canvas-editor react react-dom @puckeditor/core
 ```
 
-Peer dependencies: `@anvilkit/canvas-core`, `@anvilkit/canvas-editor`,
-`@puckeditor/core ^0.21.3`, `react >=19.0.0`,
-`react-dom >=19.0.0`. (`@anvilkit/core`, `@anvilkit/design-block`, and
-`@anvilkit/plugin-asset-manager` ship as direct dependencies.)
+peer 依存関係：`@anvilkit/canvas-core`、`@anvilkit/canvas-editor`、`@puckeditor/core ^0.21.3`、`react >=19.0.0`、`react-dom >=19.0.0`。（`@anvilkit/core`、`@anvilkit/design-block`、`@anvilkit/plugin-asset-manager` は直接依存関係として同梱されます。）
 
-The canvas overlay renders with the compiled editor stylesheet — the host must
-import it once, e.g. in the app entry:
+キャンバスオーバーレイはコンパイル済みのエディタースタイルシートでレンダリングされます —— ホストはそれを一度インポートする必要があります。例えばアプリのエントリで：
 
 ```ts
 import "@anvilkit/canvas-editor/styles.css";
 ```
 
-Tailwind utilities and parent-document CSS do **not** reach the canvas; the editor
-ships its own self-contained stylesheet.
+Tailwind ユーティリティと親ドキュメントの CSS はキャンバスに**到達しません**。エディターは自前の自己完結型スタイルシートを同梱しています。
 
-## Quickstart
+## クイックスタート
 
 ```ts
 import { Studio } from "@anvilkit/core";
@@ -97,26 +86,18 @@ const canvasStudio = createCanvasStudioPlugin({
 <Studio puckConfig={puckConfig} plugins={[canvasStudio]} />;
 ```
 
-## Core features
+## コア機能
 
-- **Mode switch** — a header action (`canvas-studio:toggle`) flips between Puck
-  page editing and the full-screen canvas overlay.
-- **Host-owned persistence** — designs are saved/loaded through a
-  `CanvasPersistenceAdapter` you implement (Postgres, S3, IndexedDB, …). Two
-  reference adapters ship: `inMemoryCanvasAdapter` (transient) and
-  `localStorageCanvasAdapter` (browser, demo-grade).
-- **Artboard preview round-trip** — on close, each artboard is rasterized and the
-  preview URL is patched back onto the originating Puck `DesignBlock` node.
-- **Design-block quick-add** — inserts a `DesignBlock` placeholder into the page
-  and stages a fresh design id in the overlay.
-- **`design://` resolver** — resolves `design://<designId>` references in the IR
-  resolver chain to cached artboard previews.
-- **Version-history bridge** — wires canvas snapshots into the `canvas:` keyspace
-  via a `CanvasSnapshotAdapter`, compatible with `@anvilkit/plugin-version-history`.
+- **モード切り替え** —— ヘッダーアクション（`canvas-studio:toggle`）が Puck ページ編集とフルスクリーンキャンバスオーバーレイの間を切り替えます。
+- **ホスト所有の永続化** —— デザインは、あなたが実装する `CanvasPersistenceAdapter`（Postgres、S3、IndexedDB、……）を通じて保存/読み込みされます。2 つの参照アダプターが同梱されています：`inMemoryCanvasAdapter`（一時的）と `localStorageCanvasAdapter`（ブラウザ、デモグレード）。
+- **アートボードプレビューのラウンドトリップ** —— クローズ時、各アートボードがラスタライズされ、プレビュー URL が発生元の Puck `DesignBlock` ノードにパッチバックされます。
+- **デザインブロッククイック追加** —— `DesignBlock` プレースホルダーをページに挿入し、オーバーレイ内で新鮮なデザイン id をステージします。
+- **`design://` リゾルバー** —— IR リゾルバーチェーン内の `design://<designId>` 参照をキャッシュされたアートボードプレビューに解決します。
+- **バージョン履歴ブリッジ** —— `CanvasSnapshotAdapter` を介してキャンバスのスナップショットを `canvas:` キースペースに配線します。`@anvilkit/plugin-version-history` と互換性があります。
 
-## API reference
+## API リファレンス
 
-### Factory
+### ファクトリ
 
 ```ts
 function createCanvasStudioPlugin(
@@ -124,15 +105,15 @@ function createCanvasStudioPlugin(
 ): StudioPlugin;
 ```
 
-| Field                      | Type                                       | Default                           | Purpose                                                                                                                                        |
+| フィールド                 | 型                                         | デフォルト                        | 目的                                                                                                                                          |
 | -------------------------- | ------------------------------------------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `adapter`                  | `CanvasPersistenceAdapter`                 | _required_                        | Host persistence for canvas designs (`save` / `load` / `list` / `delete?`).                                                                    |
-| `designBlockComponentType` | `string`                                   | `"DesignBlock"`                   | Puck component type id treated as a design block.                                                                                              |
-| `canvasSnapshotAdapter`    | `CanvasSnapshotAdapter`                    | `inMemoryCanvasSnapshotAdapter()` | Version-history snapshot store for canvas designs. Supply a durable one for persistent history.                                                |
-| `onPickAsset`              | `() => Promise<string>`                    | none                              | Host image picker for the editor's `image` tool. Resolve with a (seeded) asset id; reject or `""` cancels. Omit to leave the tool inert.       |
-| `seedAssets`               | `Readonly<Record<string, CanvasAssetRef>>` | none                              | Host asset-library entries merged into every opened design so `onPickAsset` ids resolve to bytes. The design's own assets win on id collision. |
+| `adapter`                  | `CanvasPersistenceAdapter`                 | _必須_                            | キャンバスデザイン向けのホスト永続化（`save` / `load` / `list` / `delete?`）。                                                                  |
+| `designBlockComponentType` | `string`                                   | `"DesignBlock"`                   | デザインブロックとして扱われる Puck コンポーネントタイプ id。                                                                                  |
+| `canvasSnapshotAdapter`    | `CanvasSnapshotAdapter`                    | `inMemoryCanvasSnapshotAdapter()` | キャンバスデザイン向けのバージョン履歴スナップショットストア。永続的な履歴のために耐久性のあるものを供給してください。                          |
+| `onPickAsset`              | `() => Promise<string>`                    | なし                              | エディターの `image` ツール向けのホスト画像ピッカー。（シードされた）アセット id で resolve する。reject または `""` はキャンセル。省略するとツールは不活性のままになる。 |
+| `seedAssets`               | `Readonly<Record<string, CanvasAssetRef>>` | なし                              | `onPickAsset` の id がバイトに解決されるように、開かれた各デザインにマージされるホストアセットライブラリのエントリ。id の衝突時はデザイン自身のアセットが勝つ。 |
 
-### Adapter contracts
+### アダプター契約
 
 ```ts
 interface CanvasPersistenceAdapter {
@@ -154,38 +135,35 @@ interface CanvasSnapshotAdapter {
 }
 ```
 
-`CanvasSnapshotAdapter` mirrors `@anvilkit/plugin-version-history`'s `SnapshotAdapter`
-shape (typed for `CanvasIR`) so one host can wire both Puck PageIR history and
-canvas design history into compatible stores.
+`CanvasSnapshotAdapter` は `@anvilkit/plugin-version-history` の `SnapshotAdapter` の形状をミラーします（`CanvasIR` 向けに型付けされています）。これにより、1 つのホストが Puck PageIR 履歴とキャンバスデザイン履歴の両方を互換性のあるストアに配線できます。
 
-### Reference adapters
+### 参照アダプター
 
-| Export                                     | Returns                    | Notes                                                                                                  |
+| エクスポート                               | 戻り値                     | 備考                                                                                                  |
 | ------------------------------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `inMemoryCanvasAdapter()`                  | `CanvasPersistenceAdapter` | Transient; loses data on reload.                                                                       |
-| `localStorageCanvasAdapter({ namespace })` | `CanvasPersistenceAdapter` | Per-save snapshots under `<namespace>:designs:<id>` + an index key. Throws on SSR (no `localStorage`). |
-| `inMemoryCanvasSnapshotAdapter()`          | `CanvasSnapshotAdapter`    | Default in-process snapshot store used when `canvasSnapshotAdapter` is omitted.                        |
+| `inMemoryCanvasAdapter()`                  | `CanvasPersistenceAdapter` | 一時的。リロードでデータを失う。                                                                        |
+| `localStorageCanvasAdapter({ namespace })` | `CanvasPersistenceAdapter` | `<namespace>:designs:<id>` の下に保存ごとのスナップショット＋インデックスキー。SSR 上（`localStorage` なし）では投げる。 |
+| `inMemoryCanvasSnapshotAdapter()`          | `CanvasSnapshotAdapter`    | `canvasSnapshotAdapter` が省略されたときに使用されるデフォルトのプロセス内スナップショットストア。       |
 
-### Composable building blocks
+### コンポーザブルなビルディングブロック
 
-The plugin wires these internally, but each is exported for hosts assembling a
-custom integration:
+プラグインはこれらを内部で配線しますが、カスタム統合を組み立てるホストのためにそれぞれがエクスポートされています：
 
-| Export                                       | Purpose                                                                                                                                                                                                                  |
+| エクスポート                                 | 目的                                                                                                                                                                                                                  |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `createModeSwitchAction`                     | Header action that toggles canvas mode. Id: `MODE_SWITCH_ACTION_ID` (`"canvas-studio:toggle"`).                                                                                                                          |
-| `createDesignBlockQuickAdd`                  | Layer quick-add for `DesignBlock`. Id: `DESIGN_BLOCK_QUICK_ADD_ID` (`"canvas-studio:add-design-block"`).                                                                                                                 |
-| `createCanvasModeOverlay`                    | Builds the overlay component (`<CanvasWorkspace>` host) mounted in canvas mode.                                                                                                                                          |
-| `createDesignAssetResolver`                  | `design://` IR asset resolver. Prefix: `DESIGN_REFERENCE_PREFIX` (`"design://"`).                                                                                                                                        |
-| `createCanvasSnapshotBridge`                 | Bridges canvas snapshots into version-history events under `CANVAS_KEYSPACE` (`"canvas"`). Reuses `version-history:save-requested` / `version-history:open-requested` (`SAVE_REQUESTED_EVENT` / `OPEN_REQUESTED_EVENT`). |
-| `createCanvasModeStore`                      | Standalone mode-state store (`CanvasModeState` / `CanvasModeStoreApi`).                                                                                                                                                  |
-| `createPreviewCache`                         | Artboard-preview URL cache (`PreviewCache`).                                                                                                                                                                             |
-| `exportCanvasToAsset` / `exportAllArtboards` | Rasterize a single artboard / every artboard to preview data URLs (`CanvasExportInput`, `CanvasExportResult`, `ExportAllArtboardsInput`, `ExportAllArtboardsResult`).                                                    |
-| `CANVAS_STUDIO_PLUGIN_META`                  | The plugin metadata constant.                                                                                                                                                                                            |
+| `createModeSwitchAction`                     | キャンバスモードを切り替えるヘッダーアクション。Id：`MODE_SWITCH_ACTION_ID`（`"canvas-studio:toggle"`）。                                                                                                                |
+| `createDesignBlockQuickAdd`                  | `DesignBlock` 向けのレイヤークイック追加。Id：`DESIGN_BLOCK_QUICK_ADD_ID`（`"canvas-studio:add-design-block"`）。                                                                                                        |
+| `createCanvasModeOverlay`                    | キャンバスモードでマウントされるオーバーレイコンポーネント（`<CanvasWorkspace>` ホスト）を構築する。                                                                                                                    |
+| `createDesignAssetResolver`                  | `design://` IR アセットリゾルバー。プレフィックス：`DESIGN_REFERENCE_PREFIX`（`"design://"`）。                                                                                                                          |
+| `createCanvasSnapshotBridge`                 | キャンバスのスナップショットを `CANVAS_KEYSPACE`（`"canvas"`）の下のバージョン履歴イベントにブリッジする。`version-history:save-requested` / `version-history:open-requested`（`SAVE_REQUESTED_EVENT` / `OPEN_REQUESTED_EVENT`）を再利用する。 |
+| `createCanvasModeStore`                      | スタンドアロンのモード状態ストア（`CanvasModeState` / `CanvasModeStoreApi`）。                                                                                                                                          |
+| `createPreviewCache`                         | アートボードプレビューの URL キャッシュ（`PreviewCache`）。                                                                                                                                                             |
+| `exportCanvasToAsset` / `exportAllArtboards` | 単一のアートボード / すべてのアートボードをプレビューデータ URL にラスタライズする（`CanvasExportInput`、`CanvasExportResult`、`ExportAllArtboardsInput`、`ExportAllArtboardsResult`）。                                  |
+| `CANVAS_STUDIO_PLUGIN_META`                  | プラグインメタデータ定数。                                                                                                                                                                                             |
 
-## Usage examples
+## 使用例
 
-### Transient in-memory designs (tests / ephemeral demos)
+### 一時的なインメモリデザイン（テスト / 使い捨てデモ）
 
 ```ts
 import { Studio } from "@anvilkit/core";
@@ -202,11 +180,9 @@ const canvasStudio = createCanvasStudioPlugin({
 <Studio puckConfig={puckConfig} plugins={[canvasStudio]} />;
 ```
 
-### Custom host-backed persistence adapter
+### カスタムのホストバック型永続化アダプター
 
-Implement the `CanvasPersistenceAdapter` contract against your own backend
-(Postgres, S3, IndexedDB, an HTTP API). `save` / `load` / `list` may be sync or
-async.
+あなた自身のバックエンド（Postgres、S3、IndexedDB、HTTP API）に対して `CanvasPersistenceAdapter` 契約を実装します。`save` / `load` / `list` は同期でも非同期でもかまいません。
 
 ```ts
 import {
@@ -230,28 +206,21 @@ const httpAdapter: CanvasPersistenceAdapter = {
 const canvasStudio = createCanvasStudioPlugin({ adapter: httpAdapter });
 ```
 
-## Notes & FAQ
+## 備考と FAQ
 
-### Persistence happens on close
+### 永続化はクローズ時に発生する
 
-The overlay holds the live `CanvasIR` while open; the host adapter's `save()` runs
-when the user exits canvas mode (alongside artboard export and the `DesignBlock`
-preview patch). There is no incremental autosave at the adapter layer.
+オーバーレイは開いている間ライブの `CanvasIR` を保持します。ホストアダプターの `save()` は、ユーザーがキャンバスモードを終了するときに（アートボードのエクスポートと `DesignBlock` プレビューパッチとともに）実行されます。アダプター層には増分のオートセーブはありません。
 
-### `onPickAsset` + `seedAssets` go together
+### `onPickAsset` と `seedAssets` はセットで使う
 
-Canvas commands cannot add assets to a live scene, so an id returned by
-`onPickAsset` must already exist in the design. Seed host-library entries via
-`seedAssets` so picked ids resolve to renderable bytes. The design's own assets win
-on id collision.
+キャンバスコマンドはライブシーンにアセットを追加できないため、`onPickAsset` が返す id はデザイン内に既に存在していなければなりません。`seedAssets` を介してホストライブラリのエントリをシードし、選択された id がレンダリング可能なバイトに解決されるようにします。id の衝突時はデザイン自身のアセットが勝ちます。
 
-### Version-history integration is opt-in for durability
+### バージョン履歴統合は耐久性のためにオプトイン
 
-Without `canvasSnapshotAdapter`, snapshots live in an in-process store and are lost
-on reload. Implement `CanvasSnapshotAdapter` against a durable backend (and pair it
-with `@anvilkit/plugin-version-history`) for persistent canvas history.
+`canvasSnapshotAdapter` がない場合、スナップショットはプロセス内ストアに存在し、リロードで失われます。永続的なキャンバス履歴のために、耐久性のあるバックエンドに対して `CanvasSnapshotAdapter` を実装し（`@anvilkit/plugin-version-history` とペアにして）ください。
 
-## License
+## ライセンス
 
 MIT
 
