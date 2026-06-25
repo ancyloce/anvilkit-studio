@@ -1,0 +1,83 @@
+# @anvilkit/section
+
+一个 Puck 原生的区块组件，包含徽章、标题、高亮文本和描述。
+
+## 安装
+
+```sh
+pnpm add @anvilkit/section @anvilkit/ui @puckeditor/core
+```
+
+## 样式
+
+在渲染组件之前，从应用入口处导入一次该包的样式表。
+
+```tsx
+import "@anvilkit/section/styles.css";
+```
+
+在 Next.js 中，将该导入添加到 `app/layout.tsx` 或 `pages/_app.tsx`。
+
+## 示例
+
+### 基本用法
+
+使用自定义文案渲染该区块。`highlightedHeadline` 会以带有动画极光渐变的样式渲染，紧邻纯文本的 `headline`。
+
+```tsx
+import "@anvilkit/section/styles.css";
+import { Section } from "@anvilkit/section";
+
+export function Example() {
+  return (
+    <Section
+      badgeLabel="Scale"
+      headline="Stop writing boilerplate."
+      highlightedHeadline="Start building features."
+      description="Your AI agent handles repetitive coding tasks."
+    />
+  );
+}
+```
+
+### 默认文案
+
+通过 `defaultProps` 渲染内置的营销文案。
+
+```tsx
+import { Section, defaultProps } from "@anvilkit/section";
+
+export function DefaultSection() {
+  return <Section {...defaultProps} />;
+}
+```
+
+### 在 Puck 配置中注册
+
+将导出的 `componentConfig` 接入 Puck 的 `Config`。
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type SectionProps } from "@anvilkit/section";
+
+const config: Config<{ Section: SectionProps }> = {
+  components: {
+    Section: componentConfig,
+  },
+};
+```
+
+## API
+
+派生自导出的 `SectionProps` 类型和 Puck 的 `fields` 模式。
+
+| Prop                  | Type     | Default                                              | Description                      |
+| --------------------- | -------- | ---------------------------------------------------- | -------------------------------- |
+| `badgeLabel`          | `string` | `"Scale"`                                            | 闪亮药丸徽章的文本。             |
+| `headline`            | `string` | `"Stop writing boilerplate."`                        | 纯文本标题。                     |
+| `highlightedHeadline` | `string` | `"Start building features."`                         | 极光渐变标题点缀。               |
+| `description`         | `string` | `"Your AI agent handles repetitive coding tasks..."` | 辅助性描述。                     |
+
+## 主题与响应式
+
+通过 shadcn CSS 变量令牌支持浅色和深色主题。在移动端、平板和桌面端断点上均支持响应式。

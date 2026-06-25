@@ -1,0 +1,77 @@
+# @anvilkit/statistics
+
+一个 Puck 原生的统计数据头部组件，带有闪烁网格背景。
+
+## 安装
+
+```sh
+pnpm add @anvilkit/statistics @anvilkit/ui @puckeditor/core
+```
+
+## 样式
+
+在渲染组件之前，从应用入口处导入一次该包的样式表。
+
+```tsx
+import "@anvilkit/statistics/styles.css";
+```
+
+在 Next.js 中，将该导入添加到 `app/layout.tsx` 或 `pages/_app.tsx`。
+
+## 示例
+
+### 基本用法
+
+在动画网格之上，使用自定义大写 `title` 渲染头部。
+
+```tsx
+import "@anvilkit/statistics/styles.css";
+import { Statistics } from "@anvilkit/statistics";
+
+export function Example() {
+  return <Statistics title="Our Impact" />;
+}
+```
+
+### 默认文案
+
+通过 `defaultProps` 渲染内置的默认标题。
+
+```tsx
+import { Statistics, defaultProps } from "@anvilkit/statistics";
+
+export function DefaultStatistics() {
+  return <Statistics {...defaultProps} />;
+}
+```
+
+### 在 Puck 配置中注册
+
+将导出的 `componentConfig` 接入 Puck 的 `Config`。
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type StatisticsProps } from "@anvilkit/statistics";
+
+const config: Config<{ Statistics: StatisticsProps }> = {
+  components: {
+    Statistics: componentConfig,
+  },
+};
+```
+
+## API
+
+派生自导出的 `StatisticsProps` 类型和 Puck 的 `fields` 模式。
+
+| Prop         | Type                            | Default        | Description                                                          |
+| ------------ | ------------------------------- | -------------- | ------------------------------------------------------------------- |
+| `title`      | `string`                        | `"Statistics"` | 大写头部标题文本。                                                  |
+| `dataSource` | `"static"` \| `"remote_csv"`    | `"static"`     | 指标的来源：作者手动输入，或由宿主解析的 CSV。                      |
+| `metrics`    | `StatisticsMetric[]`            | `[]`           | 已解析的指标行（每行为 `{ label, value }`）。                       |
+| `metrics[].label` | `string`                   | —              | 指标标签。                                                          |
+| `metrics[].value` | `string`                   | —              | 指标值。                                                            |
+
+## 主题与响应式
+
+通过 shadcn CSS 变量令牌支持浅色和深色主题。在移动端、平板和桌面端断点上均支持响应式。

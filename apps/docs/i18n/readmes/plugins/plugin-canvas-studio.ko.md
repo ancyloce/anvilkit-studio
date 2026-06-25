@@ -1,0 +1,182 @@
+# @anvilkit/plugin-canvas-studio
+
+> **Alpha（`0.1.7`）.** API는 `1.0` 이전에 변경될 수 있습니다.
+
+Puck 기반 `<Studio>` 셸 내부에 전체 화면 **Canvas Studio** 편집 표면을 마운트합니다. 헤더 액션이 Puck 페이지 모드와 캔버스 오버레이 사이를 토글합니다. 닫을 때 플러그인은 호스트가 제공하는 어댑터를 통해 `CanvasIR`을 영속화하고, 각 아트보드를 미리보기로 래스터화하며, 발생원인 Puck `DesignBlock`을 패치하여 페이지가 썸네일을 렌더링하도록 합니다. 또한 디자인 블록을 삽입하기 위한 레이어 빠른 추가와, 페이지가 디자인 id로 아트보드 미리보기를 참조할 수 있도록 하는 `design://` 에셋 리졸버도 등록합니다.
+
+## 설치
+
+```sh
+pnpm add @anvilkit/plugin-canvas-studio @anvilkit/canvas-core @anvilkit/canvas-editor react react-dom @puckeditor/core
+```
+
+peer 의존성: `@anvilkit/canvas-core`, `@anvilkit/canvas-editor`, `@puckeditor/core ^0.21.3`, `react >=19.0.0`, `react-dom >=19.0.0`. (`@anvilkit/core`, `@anvilkit/design-block`, `@anvilkit/plugin-asset-manager`는 직접 의존성으로 동봉됩니다.)
+
+캔버스 오버레이는 컴파일된 에디터 스타일시트로 렌더링됩니다 —— 호스트는 그것을 한 번 가져와야 합니다. 예를 들어 앱 진입점에서:
+
+```ts
+import "@anvilkit/canvas-editor/styles.css";
+```
+
+Tailwind 유틸리티와 부모 문서 CSS는 캔버스에 **도달하지 않습니다**. 에디터는 자체적인 독립형 스타일시트를 동봉합니다.
+
+## 빠른 시작
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createCanvasStudioPlugin,
+  localStorageCanvasAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+import "@anvilkit/canvas-editor/styles.css";
+
+const canvasStudio = createCanvasStudioPlugin({
+  adapter: localStorageCanvasAdapter({ namespace: "demo-canvas" }),
+  // The editor's image tool resolves to a host asset id; seed it so the
+  // returned id always maps to renderable bytes.
+  onPickAsset: async () => "host-image",
+  seedAssets: {
+    "host-image": { id: "host-image", uri: "data:image/png;base64,…" },
+  },
+});
+
+<Studio puckConfig={puckConfig} plugins={[canvasStudio]} />;
+```
+
+## 핵심 기능
+
+- **모드 전환** —— 헤더 액션(`canvas-studio:toggle`)이 Puck 페이지 편집과 전체 화면 캔버스 오버레이 사이를 전환합니다.
+- **호스트 소유 영속화** —— 디자인은 직접 구현하는 `CanvasPersistenceAdapter`(Postgres, S3, IndexedDB, ……)를 통해 저장/로드됩니다. 두 개의 참조 어댑터가 동봉됩니다: `inMemoryCanvasAdapter`(일시적)와 `localStorageCanvasAdapter`(브라우저, 데모 등급).
+- **아트보드 미리보기 왕복** —— 닫을 때 각 아트보드가 래스터화되고 미리보기 URL이 발생원인 Puck `DesignBlock` 노드에 다시 패치됩니다.
+- **디자인 블록 빠른 추가** —— `DesignBlock` 플레이스홀더를 페이지에 삽입하고 오버레이에 새로운 디자인 id를 스테이징합니다.
+- **`design://` 리졸버** —— IR 리졸버 체인의 `design://<designId>` 참조를 캐시된 아트보드 미리보기로 해석합니다.
+- **버전 기록 브리지** —— `CanvasSnapshotAdapter`를 통해 캔버스 스냅샷을 `canvas:` 키스페이스에 연결합니다. `@anvilkit/plugin-version-history`와 호환됩니다.
+
+## API 레퍼런스
+
+### 팩토리
+
+```ts
+function createCanvasStudioPlugin(
+  options: CreateCanvasStudioPluginOptions,
+): StudioPlugin;
+```
+
+| 필드                       | 타입                                       | 기본값                            | 목적                                                                                                                                          |
+| -------------------------- | ------------------------------------------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `adapter`                  | `CanvasPersistenceAdapter`                 | _필수_                            | 캔버스 디자인을 위한 호스트 영속화(`save` / `load` / `list` / `delete?`).                                                                       |
+| `designBlockComponentType` | `string`                                   | `"DesignBlock"`                   | 디자인 블록으로 취급되는 Puck 컴포넌트 타입 id.                                                                                                |
+| `canvasSnapshotAdapter`    | `CanvasSnapshotAdapter`                    | `inMemoryCanvasSnapshotAdapter()` | 캔버스 디자인을 위한 버전 기록 스냅샷 저장소. 영속적인 기록을 위해 내구성 있는 것을 제공하세요.                                                  |
+| `onPickAsset`              | `() => Promise<string>`                    | 없음                              | 에디터의 `image` 도구를 위한 호스트 이미지 선택기. (시드된) 에셋 id로 resolve한다. reject 또는 `""`는 취소. 생략하면 도구가 비활성 상태로 남는다. |
+| `seedAssets`               | `Readonly<Record<string, CanvasAssetRef>>` | 없음                              | `onPickAsset` id가 바이트로 해석되도록 열린 각 디자인에 병합되는 호스트 에셋 라이브러리 항목. id 충돌 시 디자인 자체의 에셋이 이긴다.            |
+
+### 어댑터 계약
+
+```ts
+interface CanvasPersistenceAdapter {
+  save(designId: string, ir: CanvasIR): MaybePromise<void>;
+  load(designId: string): MaybePromise<CanvasIR | null>;
+  list(): MaybePromise<readonly CanvasDesignMeta[]>;
+  delete?(designId: string): MaybePromise<void>;
+}
+
+interface CanvasSnapshotAdapter {
+  save(
+    designId: string,
+    ir: CanvasIR,
+    meta?: { label?: string },
+  ): MaybePromise<string>;
+  list(designId: string): MaybePromise<readonly CanvasSnapshotMeta[]>;
+  load(designId: string, snapshotId: string): MaybePromise<CanvasIR | null>;
+  delete?(designId: string, snapshotId: string): MaybePromise<void>;
+}
+```
+
+`CanvasSnapshotAdapter`는 `@anvilkit/plugin-version-history`의 `SnapshotAdapter` 형태를 미러링합니다(`CanvasIR`에 맞게 타입이 지정됨). 따라서 하나의 호스트가 Puck PageIR 기록과 캔버스 디자인 기록 모두를 호환되는 저장소에 연결할 수 있습니다.
+
+### 참조 어댑터
+
+| 익스포트                                   | 반환값                     | 비고                                                                                                  |
+| ------------------------------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `inMemoryCanvasAdapter()`                  | `CanvasPersistenceAdapter` | 일시적. 새로고침 시 데이터를 잃는다.                                                                    |
+| `localStorageCanvasAdapter({ namespace })` | `CanvasPersistenceAdapter` | `<namespace>:designs:<id>` 아래에 저장별 스냅샷 + 인덱스 키. SSR(`localStorage` 없음)에서는 던진다.     |
+| `inMemoryCanvasSnapshotAdapter()`          | `CanvasSnapshotAdapter`    | `canvasSnapshotAdapter`가 생략될 때 사용되는 기본 인프로세스 스냅샷 저장소.                             |
+
+### 조합 가능한 빌딩 블록
+
+플러그인은 이것들을 내부적으로 연결하지만, 커스텀 통합을 조립하는 호스트를 위해 각각이 익스포트됩니다:
+
+| 익스포트                                     | 목적                                                                                                                                                                                                                  |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createModeSwitchAction`                     | 캔버스 모드를 토글하는 헤더 액션. Id: `MODE_SWITCH_ACTION_ID`(`"canvas-studio:toggle"`).                                                                                                                                |
+| `createDesignBlockQuickAdd`                  | `DesignBlock`을 위한 레이어 빠른 추가. Id: `DESIGN_BLOCK_QUICK_ADD_ID`(`"canvas-studio:add-design-block"`).                                                                                                              |
+| `createCanvasModeOverlay`                    | 캔버스 모드에서 마운트되는 오버레이 컴포넌트(`<CanvasWorkspace>` 호스트)를 빌드한다.                                                                                                                                    |
+| `createDesignAssetResolver`                  | `design://` IR 에셋 리졸버. 접두사: `DESIGN_REFERENCE_PREFIX`(`"design://"`).                                                                                                                                           |
+| `createCanvasSnapshotBridge`                 | 캔버스 스냅샷을 `CANVAS_KEYSPACE`(`"canvas"`) 아래의 버전 기록 이벤트로 브리지한다. `version-history:save-requested` / `version-history:open-requested`(`SAVE_REQUESTED_EVENT` / `OPEN_REQUESTED_EVENT`)를 재사용한다.    |
+| `createCanvasModeStore`                      | 독립형 모드 상태 저장소(`CanvasModeState` / `CanvasModeStoreApi`).                                                                                                                                                      |
+| `createPreviewCache`                         | 아트보드 미리보기 URL 캐시(`PreviewCache`).                                                                                                                                                                             |
+| `exportCanvasToAsset` / `exportAllArtboards` | 단일 아트보드 / 모든 아트보드를 미리보기 데이터 URL로 래스터화한다(`CanvasExportInput`, `CanvasExportResult`, `ExportAllArtboardsInput`, `ExportAllArtboardsResult`).                                                    |
+| `CANVAS_STUDIO_PLUGIN_META`                  | 플러그인 메타데이터 상수.                                                                                                                                                                                              |
+
+## 사용 예시
+
+### 일시적인 인메모리 디자인(테스트 / 일회성 데모)
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createCanvasStudioPlugin,
+  inMemoryCanvasAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+
+// Designs live only for the session — handy for tests and throwaway demos.
+const canvasStudio = createCanvasStudioPlugin({
+  adapter: inMemoryCanvasAdapter(),
+});
+
+<Studio puckConfig={puckConfig} plugins={[canvasStudio]} />;
+```
+
+### 커스텀 호스트 백엔드 영속화 어댑터
+
+자신의 백엔드(Postgres, S3, IndexedDB, HTTP API)에 대해 `CanvasPersistenceAdapter` 계약을 구현하세요. `save` / `load` / `list`는 동기 또는 비동기일 수 있습니다.
+
+```ts
+import {
+  createCanvasStudioPlugin,
+  type CanvasPersistenceAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+
+const httpAdapter: CanvasPersistenceAdapter = {
+  save: (designId, ir) =>
+    fetch(`/api/designs/${designId}`, {
+      method: "PUT",
+      body: JSON.stringify(ir),
+    }).then(() => undefined),
+  load: (designId) =>
+    fetch(`/api/designs/${designId}`).then((res) =>
+      res.ok ? res.json() : null,
+    ),
+  list: () => fetch("/api/designs").then((res) => res.json()),
+};
+
+const canvasStudio = createCanvasStudioPlugin({ adapter: httpAdapter });
+```
+
+## 비고 및 FAQ
+
+### 영속화는 닫을 때 발생한다
+
+오버레이는 열려 있는 동안 라이브 `CanvasIR`을 보유합니다. 호스트 어댑터의 `save()`는 사용자가 캔버스 모드를 종료할 때(아트보드 내보내기 및 `DesignBlock` 미리보기 패치와 함께) 실행됩니다. 어댑터 계층에는 증분 자동 저장이 없습니다.
+
+### `onPickAsset`과 `seedAssets`는 함께 사용한다
+
+캔버스 명령은 라이브 장면에 에셋을 추가할 수 없으므로, `onPickAsset`이 반환하는 id는 디자인에 이미 존재해야 합니다. `seedAssets`를 통해 호스트 라이브러리 항목을 시드하여 선택된 id가 렌더링 가능한 바이트로 해석되도록 하세요. id 충돌 시 디자인 자체의 에셋이 이깁니다.
+
+### 버전 기록 통합은 내구성을 위해 옵트인
+
+`canvasSnapshotAdapter`가 없으면 스냅샷은 인프로세스 저장소에 존재하며 새로고침 시 손실됩니다. 영속적인 캔버스 기록을 위해 내구성 있는 백엔드에 대해 `CanvasSnapshotAdapter`를 구현하고(`@anvilkit/plugin-version-history`와 페어링하세요).
+
+## 라이선스
+
+MIT

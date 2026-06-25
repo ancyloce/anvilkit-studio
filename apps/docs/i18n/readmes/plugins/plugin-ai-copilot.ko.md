@@ -1,0 +1,327 @@
+# @anvilkit/plugin-ai-copilot
+
+> **Alpha（`0.1.8`）.** API는 `1.0` 이전에 변경될 수 있습니다. 이 플러그인은 호스트의 LLM 어댑터 뒤에 위치하며, 어떤 자격 증명이나 모델 식별자도 플러그인 경계를 넘지 않습니다.
+
+Anvilkit Studio를 위한 헤드리스 AI Copilot. 이 플러그인은 호스트의 Puck config에서 파생된 세션별 `AiGenerationContext`를 캐시하고, 호스트가 제공하는 `generatePage(prompt, ctx)`(그리고 선택적으로 `generateSection`)를 호출하며, `@anvilkit/validator`로 응답을 검증하고, `setData`를 통해 결과를 원자적으로 디스패치합니다. React UI 프리미티브는 `/react` 아래에서 배포됩니다. 테스트와 데모용 결정론적 mock 제너레이터는 `/mock` 아래에서 배포됩니다.
+
+## 설치
+
+```bash
+pnpm add @anvilkit/plugin-ai-copilot @anvilkit/core react react-dom @puckeditor/core
+```
+
+비선택 peer: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.21.3`. `@anvilkit/ui`는 선택적 peer입니다. React 컴포넌트를 사용한다면 설치하세요.
+
+서브경로 임포트:
+
+- `@anvilkit/plugin-ai-copilot` — 플러그인 팩토리, `applySectionPatch`, 타입.
+- `@anvilkit/plugin-ai-copilot/react` — React 컴포넌트와 `useAiCopilot` 훅.
+- `@anvilkit/plugin-ai-copilot/mock` — CI / 데모용 결정론적 fixture와 mock 제너레이터.
+
+## 빠른 시작
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
+import { puckConfig } from "./puck-config";
+
+const aiCopilot = createAiCopilotPlugin({
+  puckConfig,
+  generatePage: (prompt, ctx) =>
+    fetch("/api/ai/generate", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt,
+        availableComponents: ctx.availableComponents,
+      }),
+    }).then((response) => response.json()),
+  timeoutMs: 30_000,
+});
+
+<Studio puckConfig={puckConfig} plugins={[aiCopilot]} />;
+```
+
+호스트 UI는 제출 시 `aiCopilot.runGeneration(prompt)`(또는 `regenerateSelection(prompt, selection)`)를 호출합니다. 둘 다 프롬프트로 구동되기 때문에 명령형입니다. 타입이 지정된 실패를 받으려면 `ai-copilot:error` 이벤트 버스를 구독하세요.
+
+## 핵심 기능
+
+- **명령형 생성 API** — `runGeneration(prompt)`와 `regenerateSelection(prompt, selection)`를 통해 호스트 UI가 진행 상태를 구동하고, 실행 중 입력을 비활성화하며, 오류를 인라인으로 표시할 수 있습니다.
+- **엄격한 검증 경계** — 모든 LLM 응답은 디스패치 전에 `validateAiOutput`(페이지 플로우) 또는 `validateAiSectionPatch`(섹션 플로우)를 거칩니다.
+- **원자적 디스패치** — 성공한 생성마다 단일 `setData` 액션. 동시 실행은 단조 증가하는 `generationId`로 추적되며, 오래된 resolve는 폐기됩니다.
+- **이그레스 제어** — `forwardCurrentData`는 기본값이 `false`입니다. `sanitizeCurrentData`와 짝지어 LLM이 캔버스를 보기 전에 PII를 제거하세요.
+- **관측 가능** — 동기 `onTrace` 훅이 각 의사결정 지점에서 발화하며 구조적 메타데이터만 전달합니다(전달된 데이터가 채널을 넘지 않습니다).
+- **섹션 수준 패치** — Phase 6 / M9 플로우는 전체 페이지를 재구성하지 않고 연속된 선택 영역을 재생성합니다.
+- **결정론적 mock** — `createMockGeneratePage` / `createMockGenerateSection`은 테스트와 데모를 위한 fixture 기반 제너레이터를 제공합니다.
+- **React 프리미티브** — 헤드리스 `useAiCopilot` 훅과 더불어 `AiCopilotPanel` / `CopilotChatPanel` / `CopilotComposer` / `CopilotModelMenu` 컴포넌트.
+
+## API 레퍼런스
+
+### 팩토리
+
+```ts
+function createAiCopilotPlugin(
+  options: AiCopilotOptions,
+): AiCopilotPluginInstance;
+
+interface AiCopilotPluginInstance extends StudioPlugin {
+  runGeneration(prompt: string): Promise<void>;
+  regenerateSelection(
+    prompt: string,
+    selection: AiSectionSelection,
+    opts?: RegenerateSelectionOptions,
+  ): Promise<void>;
+}
+```
+
+### `AiCopilotOptions`
+
+| 필드                  | 타입                                   | 기본값     | 목적                                                                                                                                 |
+| --------------------- | -------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `generatePage`        | `GeneratePageFn`                       | _필수_     | 페이지 플로우 콜백. `(prompt, ctx) => Promise<PageIR>`.                                                                              |
+| `generateSection`     | `GenerateSectionFn`                    | 없음       | 섹션 플로우 콜백. `(prompt, ctx) => Promise<AiSectionPatch>`. 생략하면 `regenerateSelection`이 `GENERATE_FAILED`로 실패합니다. |
+| `puckConfig`          | `Config`                               | _필수_     | `<Studio>`에 전달하는 것과 동일한 Puck config. AI 안전 schema는 이로부터 한 번 파생됩니다.                                   |
+| `timeoutMs`           | `number`                               | `30_000`   | 각 호스트 콜백에 적용됩니다.                                                                                       |
+| `forwardCurrentData`  | `boolean`                              | `false`    | `true`이면 현재 캔버스가 컨텍스트에 포함됩니다(`sanitizeCurrentData`의 적용 대상).                                       |
+| `sanitizeCurrentData` | `(data: PuckData) => PuckData`         | 항등 함수  | 전달 전에 적용되는 동기 새니타이저. 가볍게 유지하세요.                                                             |
+| `onTrace`             | `(event: AiCopilotTraceEvent) => void` | no-op      | 관측성 훅. throw는 잡혀서 `ctx.log`를 통해 보고됩니다.                                                                    |
+
+생성자는 동기 구조 검증을 수행하며, 형태가 잘못되면 `[CONFIG_INVALID]` 태그가 붙은 `Error`를 throw합니다. 이 시점에는 아직 Studio 컨텍스트가 존재하지 않으므로 throw된 `Error.message`가 실패 코드를 전달합니다. 플러그인이 생성되고 나면 오류는 대신 `ai-copilot:error` 이벤트 버스에 나타납니다.
+
+### `AiErrorCode`
+
+| 코드                | 트리거                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `VALIDATION_FAILED` | 호스트 응답이 `validateAiOutput` / `validateAiSectionPatch`에 실패했습니다. `issues[]`를 동반합니다.                       |
+| `TIMEOUT`           | 호스트 콜백이 `timeoutMs` 이내에 resolve되지 않았습니다.                                                             |
+| `GENERATE_FAILED`   | 호스트 콜백이 reject되거나, throw하거나, 누락되었습니다(예: `generateSection` 없이 `regenerateSelection` 호출). |
+| `APPLY_FAILED`      | 검증 후 적용 단계가 실패했습니다(비연속 `nodeIds`, zone 누락 등).                                            |
+| `CONFIG_INVALID`    | 생성자 시점 옵션 검증이 입력을 거부했습니다.                                                        |
+
+### `AiCopilotTraceEvent`
+
+| `type`                  | 발생 시점                                   | 추가 필드                                                      |
+| ----------------------- | ------------------------------------------- | -------------------------------------------------------------- |
+| `generation-start`      | 실행 시작                                   | `promptLength`                                                 |
+| `generation-validated`  | 검증기가 응답을 수락함                      | —                                                              |
+| `generation-dispatched` | `setData`가 디스패치됨                      | —                                                              |
+| `generation-stale-drop` | 더 새로운 실행이 선점한 후에 실행이 resolve됨 | `stage: "after-generate" \| "after-validate" \| "after-apply"` |
+| `generation-failed`     | 실행이 오류로 종료됨                        | `code: AiErrorCode`                                            |
+
+모든 이벤트는 `flow: "page" \| "section"`과 단조 증가하는 `generationId`도 동반합니다.
+
+### `AiCopilotErrorPayload`
+
+```ts
+interface AiCopilotErrorPayload {
+  readonly code: AiErrorCode;
+  readonly message: string;
+  readonly issues?: readonly {
+    readonly path: string;
+    readonly message: string;
+    readonly severity: "error" | "warn";
+  }[];
+}
+```
+
+`ai-copilot:error` 이벤트 버스에서 방출됩니다.
+
+### 헬퍼
+
+```ts
+function applySectionPatch(
+  currentData: PuckData,
+  patch: AiSectionPatch,
+): PuckData;
+```
+
+`AiSectionPatch`를 Puck 호환 `setData` 페이로드로 변환하며, 연속성과 zone 위치를 검증합니다. 패치의 `zoneId`(예: `"root"`, `"root-zone"`, 또는 `"<parentId>:<slotName>"`)가 교체 노드가 놓일 위치를 결정합니다. 별도의 `selection` 인자는 필요하지 않습니다.
+
+### React API（`./react`）
+
+```ts
+function useAiCopilot(
+  plugin: AiCopilotPluginInstance,
+  options?: UseAiCopilotOptions,
+): UseAiCopilotResult;
+```
+
+`UseAiCopilotResult`(선택된 필드):
+
+| 필드              | 타입                                                          | 목적                                                              |
+| ----------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `prompt`          | `string`                                                      | 컴포저 텍스트영역의 값.                                           |
+| `onPromptChange`  | `(next: string) => void`                                      | 컴포저의 onChange.                                                 |
+| `status`          | `"idle" \| "pending"`                                         | 생성 라이프사이클.                                              |
+| `error`           | `string \| null`                                              | 마지막 오류 메시지.                                                |
+| `issues`          | `readonly AiPromptPanelIssue[]`                               | 마지막으로 실패한 실행의 검증기 issue.                         |
+| `onGenerate`      | `(prompt: string) => void`                                    | 제출 핸들러 — `plugin.runGeneration`을 호출합니다.                     |
+| `onRegenerate`    | `(prompt: string, selection: AiPromptPanelSelection) => void` | 제출 핸들러 — `plugin.regenerateSelection`을 호출합니다.               |
+| `messages`        | `readonly CopilotMessage[]`                                   | 로컬 채팅 기록.                                                |
+| `toolCalls`       | `readonly CopilotToolCall[]`                                  | 툴 콜로 렌더링된 생성 라이프사이클.                       |
+| `selectedModelId` | `string \| undefined`                                         | 현재 선택된 모델(UI 전용 — 플러그인은 모델에 독립적). |
+| `onModelChange`   | `(id: string) => void`                                        | 모델 선택기 핸들러.                                            |
+| `pushTrace`       | `(event: AiCopilotTraceEvent) => void`                        | 플러그인의 trace 이벤트를 위한 싱크. `onTrace`에 연결하세요.          |
+
+컴포넌트:
+
+| 컴포넌트               | 주요 props                                            |
+| ---------------------- | ----------------------------------------------------- |
+| `AiCopilotPanel`       | `{ plugin: AiCopilotPluginInstance }`                 |
+| `CopilotComposer`      | `{ prompt, onPromptChange, onSubmit, status, error }` |
+| `CopilotChatPanel`     | `{ messages, toolCalls }`                             |
+| `CopilotMessageBubble` | `{ message, role }`                                   |
+| `CopilotToolCallRow`   | `{ toolCall }`                                        |
+| `CopilotModelMenu`     | `{ selectedId, models?, onSelect }`                   |
+
+### Mock 제너레이터（`./mock`）
+
+```ts
+function createMockGeneratePage(
+  options?: CreateMockGeneratePageOptions,
+): GeneratePageFn;
+function createMockGenerateSection(
+  options?: CreateMockGenerateSectionOptions,
+): GenerateSectionFn;
+
+function matchPromptToFixture(prompt: string): Fixture | undefined;
+const allFixtures: readonly Fixture[];
+```
+
+Fixture는 데모 컴포넌트 카탈로그와 일치합니다. `matchPromptToFixture`는 프롬프트 부분 매칭을 수행합니다. 알려진 문구에 대해 결정론적 생성 결과가 필요한 E2E 테스트에 유용합니다.
+
+## 사용 예제
+
+### 호스트 백엔드를 대상으로 한 전체 페이지 생성
+
+```ts
+createAiCopilotPlugin({
+  puckConfig,
+  generatePage: async (prompt, ctx) => {
+    const response = await fetch("/api/ai/page", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, available: ctx.availableComponents }),
+    });
+    if (!response.ok) throw new Error(`AI backend ${response.status}`);
+    return response.json();
+  },
+});
+```
+
+### 현재 캔버스를 사용한 섹션 수준 재생성
+
+```ts
+createAiCopilotPlugin({
+  puckConfig,
+  generatePage,
+  generateSection: async (prompt, ctx) => {
+    return fetch("/api/ai/section", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt,
+        selection: ctx.selection,
+        availableComponents: ctx.availableComponents,
+        currentSnapshot: ctx.currentData,
+      }),
+    }).then((response) => response.json());
+  },
+  forwardCurrentData: true,
+  sanitizeCurrentData: stripInternalProps,
+});
+
+function stripInternalProps(data: PuckData): PuckData {
+  return {
+    ...data,
+    content: data.content.map((item) => ({
+      ...item,
+      props: Object.fromEntries(
+        Object.entries(item.props ?? {}).filter(([key]) => {
+          if (key.startsWith("_")) return false;
+          if (key === "email" || key === "phone") return false;
+          return true;
+        }),
+      ),
+    })),
+  };
+}
+```
+
+### `onTrace`로부터의 Sentry 브레드크럼
+
+```ts
+createAiCopilotPlugin({
+  puckConfig,
+  generatePage,
+  onTrace: (event) => {
+    Sentry.addBreadcrumb({
+      category: "ai-copilot",
+      level: event.type === "generation-failed" ? "error" : "info",
+      message: event.type,
+      data: event,
+    });
+  },
+});
+```
+
+### 테스트에서의 결정론적 mock 제너레이터
+
+```ts
+import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
+import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
+
+const aiCopilot = createAiCopilotPlugin({
+  puckConfig,
+  generatePage: createMockGeneratePage(),
+});
+
+await aiCopilot.runGeneration(
+  "a marketing landing page with a hero and pricing grid",
+);
+```
+
+### React UI 패널
+
+```tsx
+import { AiCopilotPanel } from "@anvilkit/plugin-ai-copilot/react";
+
+function Sidebar({ aiCopilot }: { aiCopilot: AiCopilotPluginInstance }) {
+  return <AiCopilotPanel plugin={aiCopilot} />;
+}
+```
+
+## 참고 사항 및 FAQ
+
+### 왜 선언형이 아니라 명령형인가?
+
+형제 플러그인(`@anvilkit/plugin-export-html` 등)은 호스트 UI가 가져가는 선언형 `exportFormats` / `headerActions` 맵을 등록합니다. AI Copilot이 대신 명령형 메서드를 반환하는 이유는 프롬프트로 구동되기 때문입니다. 호스트 UI는 일반적으로 텍스트영역 + 제출 버튼을 렌더링하며, 진행 상태를 구동하고, 생성 중 입력을 비활성화하고, 오류를 인라인으로 표시하기 위해 실행을 `await`해야 합니다. 선언형 `aiActions` 맵이라도 호출 지점에서 호스트 측 `await invoke()`가 여전히 필요하므로 메서드를 직접 노출합니다. 장문의 근거는 `docs/decisions/005-ai-copilot-imperative-api.md`를 참조하세요.
+
+### 보안 모델
+
+- 이 플러그인은 **자격 증명을 결코 보지 않습니다**. API 키, 인증 헤더, 엔드포인트는 호스트 백엔드에 속합니다.
+- `generatePage`와 `generateSection`은 정확히 `(prompt, ctx)`를 받습니다. 전역 상태도, 암묵적 데이터도 없습니다.
+- 모든 LLM 응답은 어떤 캔버스 변경 이전에도 검증을 거칩니다.
+- 디스패치는 원자적입니다. 성공한 생성마다 단일 `setData` 액션이므로 부분적 / 인터리브된 업데이트는 불가능합니다.
+
+### `forwardCurrentData`는 옵트인과 새니타이즈가 필요하다
+
+`forwardCurrentData: true`일 때, 전체 Puck 캔버스 — 컴포넌트 props, 에셋 URL, 임베디드 텍스트 — 가 프롬프트마다 호스트의 LLM 어댑터로 넘어갑니다. 이는 재생성 품질을 실질적으로 향상시키지만, 어떤 컴포넌트 props든 PII, 서명된 에셋 URL, 임베디드 시크릿, 내부 고객 식별자를 포함할 수 있다면, 애플리케이션을 떠나서는 안 되는 모든 것을 제거하기 위해 이 플래그와 `sanitizeCurrentData`를 짝지으세요. `docs/decisions/004-ai-copilot-data-egress.md`를 참조하세요.
+
+### stale-drop 시맨틱
+
+각 호출은 내부 `generationId`를 증가시킵니다. 먼저 시작된 더 느린 실행이 나중에 시작된 더 빠른 실행이 디스패치한 후에 resolve되면, 더 이른 결과는 폐기되고 폐기가 발생한 `stage`(`after-generate` / `after-validate` / `after-apply`)와 함께 `generation-stale-drop`이 발화합니다. 캔버스는 항상 가장 마지막으로 수락된 생성만 반영합니다.
+
+### `onTrace` 페이로드는 전달된 데이터를 결코 포함하지 않는다
+
+trace 채널을 통해 흐르는 것은 구조적 메타데이터뿐입니다: flow(`"page"` / `"section"`), `generationId`, `promptLength`, 오류 코드, stale-drop stage. 시크릿 유출을 걱정하지 않고 Sentry 브레드크럼, OpenTelemetry 스팬 이벤트, 또는 `console.debug`에 연결할 수 있습니다.
+
+### 생성 오류는 동기적으로 throw된다
+
+잘못된 옵션 형태는 `[CONFIG_INVALID]` 태그가 붙은 `Error`로 빠르게 실패합니다. `CONFIG_INVALID` 코드는 `AiErrorCode` 유니온의 일부지만, 이벤트 버스가 아니라 생성자가 throw하는 `Error.message`를 통해 나타납니다. 생성 시점에는 아직 Studio 컨텍스트가 존재하지 않기 때문입니다.
+
+### Mock vs 프로덕션 제너레이터
+
+Mock 제너레이터는 데모 컴포넌트 카탈로그에 맞춰 형성된 `PageIR` 문서를 방출합니다. 호스트 컴포넌트가 데모 세트에서 벗어난다면, 번들된 fixture를 그대로 의존하기보다 커스텀 mock을 작성하거나 `allFixtures`를 확장하세요.
+
+### 아키텍처 배경
+
+전체 패키지 카탈로그와 트러스트 경계 논의는 Anvilkit 문서 사이트의 `anvilkit-architecture` AI 컨텍스트 문서를 참조하세요. AI 생성 플로우는 전적으로 이 플러그인 경계를 통해 실행됩니다. `@anvilkit/core`는 `AiGenerationContext` 타입을 넘어서는 어떤 퍼스트파티 AI 프리미티브도 노출하지 않습니다.

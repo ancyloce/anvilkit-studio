@@ -1,0 +1,175 @@
+# @anvilkit/plugin-design-system
+
+为 `@anvilkit/core` 的 `<Studio>` 外壳提供令牌绑定字段、主题切换以及设计校验。
+
+> 📘 **完整指南：** 关于令牌模型、校验 Hook、主题切换和当前限制的长篇逐步讲解，请参阅文档站点上的 [Design System plugin](https://anvilkit-studio.vercel.app/guides/design-system/)。
+
+## 安装
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+对等依赖：`@puckeditor/core@^0.21.3`、`react@>=19.0.0` 以及 `react-dom@>=19.0.0`。`@anvilkit/core` 作为直接运行时依赖随包发布，因此使用者无需单独管理其版本。
+
+## 最小宿主
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import {
+  createDesignSystemPlugin,
+  createTokenColorField,
+  createTokenSpacingField,
+} from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  // Optional — deep-merged onto bundled `DEFAULT_TOKENS`.
+  tokens: {
+    primitives: { brand: { 500: "#1f6feb" } },
+  },
+});
+
+const config = {
+  components: {
+    Card: {
+      fields: {
+        bg: createTokenColorField({ label: "Background" }),
+        gap: createTokenSpacingField({ label: "Gap" }),
+      },
+      render: ({ bg, gap }) => (
+        <div
+          style={{
+            background: `var(--ak-ds-${bg.replace("color.", "").replace(".", "-")})`,
+            padding: `var(--ak-ds-space-${gap.replace("space.", "")})`,
+          }}
+        />
+      ),
+    },
+  },
+};
+
+export function App() {
+  return <Studio plugins={[designSystem]} config={config} />;
+}
+```
+
+## 该插件贡献了什么
+
+- **三个字段工厂。** `createToken{Color,Spacing,Typography}Field` 返回存储可序列化令牌引用（`color.brand.500`、`space.4`、`text.lg`、`semantic.bg`）的 Puck `CustomField<string>` 形状。字段 UI 显示一个色块预览 + 按令牌类别分组的下拉菜单。
+- **`overrides.fields` 包装器。** 在 Puck 的侧边栏字段树之上挂载一个 `<TokenProvider>`，以便字段工厂的渲染函数能够通过 `useTokens()` 读取解析后的令牌树。它通过 anvilkit 的柯里化 `mergeOverrides` 组合，因此绝不会覆盖同级插件的 `fields` 插槽。
+- **设计系统轨道面板。** 通过 `ctx.registerDesignSystemPanel` 注册两个标签页（Tokens · Theme）。Tokens 标签页列出每一个解析后的引用，并带有一行点击即可复制；Theme 标签页派发 `useThemeStore.setMode("light" | "dark" | "system")`，并让现有的 `use-theme-sync` 将其传播到 chrome + Puck iframe。
+- **越界令牌警告（`onDataChange`）。** 一个非阻塞的、基于形状的遍历器，会标记不在解析后令牌树中的 hex / rgb / hsl / oklch / px / rem 字面量。通过 `ctx.log("warn", …)` 记录。
+- **对比度门禁（`onBeforePublish`）。** WCAG-AA 配对遍历器（默认 `{ fg: "color", bg: "backgroundColor" }` 与 `{ fg: "color", bg:
+"background" }`）抛出 `StudioPluginError`，并将所有失败附加到 `error.cause.failures` 上以中止发布。
+
+## 选项
+
+`createDesignSystemPlugin(opts?: DesignSystemOptions)`——每个字段都是可选的，因此不带参数调用它会得到打包的默认值。
+
+```ts
+interface DesignSystemOptions {
+  tokens?: PartialDesignTokens;
+  validation?: {
+    offToken?: boolean;
+    contrast?: boolean;
+  };
+}
+```
+
+| Field                 | Type                  | Default | Purpose                                                             |
+| --------------------- | --------------------- | ------- | ------------------------------------------------------------------- |
+| `tokens`              | `PartialDesignTokens` | none    | 深度合并到打包的 `DEFAULT_TOKENS` 之上。                            |
+| `validation.offToken` | `boolean`             | `true`  | 设为 `false` 以禁用越界令牌的 `onDataChange` 警告遍历器。            |
+| `validation.contrast` | `boolean`             | `true`  | 设为 `false` 以禁用 WCAG-AA 对比度 `onBeforePublish` 门禁。          |
+
+## 用法示例
+
+### 零配置默认值
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+// No arguments — bundled DEFAULT_TOKENS, both validators on.
+const designSystem = createDesignSystemPlugin();
+```
+
+### 自定义品牌令牌并禁用校验器
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  tokens: { primitives: { brand: { 500: "#1f6feb" } } },
+  // Silence the off-token warning + skip the WCAG-AA publish gate.
+  validation: { offToken: false, contrast: false },
+});
+```
+
+### 在运行时读取解析后的令牌
+
+字段工厂和设计系统面板都消费这些运行时辅助函数；构建自有令牌绑定界面的宿主也可以使用它们。
+
+```tsx
+import { useTokens } from "@anvilkit/plugin-design-system/runtime";
+
+function PrimitiveGroupCount() {
+  const tokens = useTokens();
+  return <span>{Object.keys(tokens.primitives).length} primitive groups</span>;
+}
+```
+
+## 令牌命名空间
+
+发出到宿主文档和 Puck iframe 中的 CSS 变量：
+
+| Tier      | Variables                                                             |
+| --------- | --------------------------------------------------------------------- |
+| Primitive | `--ak-ds-brand-{50..900}`、`--ak-ds-neutral-{50..900}`                |
+|           | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}`                              |
+|           | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}`                             |
+|           | `--ak-ds-radius-{sm,md,lg}`                                           |
+| Semantic  | `--ak-ds-{bg,surface,fg,fg-muted,accent,accent-fg,border,focus-ring}` |
+
+语义层回退到 `var(--ak-studio-*, …)`，因此未应用主题的宿主渲染效果与今天完全相同。
+
+## 字段引用语法
+
+| Ref string         | Resolves to               |
+| ------------------ | ------------------------- |
+| `color.brand.500`  | `var(--ak-ds-brand-500)`  |
+| `color.neutral.50` | `var(--ak-ds-neutral-50)` |
+| `semantic.bg`      | `var(--ak-ds-bg)`         |
+| `semantic.accent`  | `var(--ak-ds-accent)`     |
+| `space.4`          | `var(--ak-ds-space-4)`    |
+| `text.lg`          | `var(--ak-ds-text-lg)`    |
+| `radius.md`        | `var(--ak-ds-radius-md)`  |
+
+## 子路径导出
+
+| Subpath                                  | Exports                                          |
+| ---------------------------------------- | ------------------------------------------------ |
+| `@anvilkit/plugin-design-system`         | 工厂函数、字段工厂、运行时、令牌、面板            |
+| `@anvilkit/plugin-design-system/tokens`  | 无 React 的令牌树 + 辅助函数                      |
+| `@anvilkit/plugin-design-system/runtime` | `TokenProvider`、`useTokens`、`resolveTokenRef`  |
+
+## 运行时 API（`./runtime`）
+
+令牌解析辅助函数 + React 上下文。字段工厂、设计系统面板以及校验 Hook 都消费这些；构建自有令牌绑定界面的宿主也可以导入它们。
+
+| Export                         | Signature                                                   | Purpose                                                                                                                                                                     |
+| ------------------------------ | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TokenProvider`                | `(props: TokenProviderProps) => JSX.Element`                | 将解析后的令牌树 + 校验选项发布到上下文。由插件的 `overrides.fields` 包装器自动挂载。                                                                                       |
+| `useTokens()`                  | `() => DesignTokens`                                        | 在字段/渲染函数内部读取解析后的令牌树。                                                                                                                                    |
+| `useTokenContext()`            | `() => TokenContextValue`                                   | 完整的上下文值（令牌 + 校验选项）。                                                                                                                                        |
+| `useTokenValidationOptions()`  | `() => Required<DesignSystemValidationOptions>`             | 应用默认值后解析出的 `{ offToken, contrast }` 标志。                                                                                                                       |
+| `resolveTokenRef(ref, tokens)` | `(ref: string, tokens: DesignTokens) => ResolvedTokenRef`   | 将一个引用字符串（`color.brand.500`、`semantic.bg`、`space.4`、…）解析为其 CSS 变量 + 元数据。未知引用解析为 `kind: "unknown"` 结果，而非抛出异常。                          |
+| `listTokenRefs(tokens)`        | `(tokens: DesignTokens) => ReadonlyArray<ResolvedTokenRef>` | 枚举一个令牌树的每一个合法引用——用于填充字段下拉菜单和面板，免去每个界面各自重新发明该列表。                                                                                |
+
+用于在 UI 中对引用进行分组的类别常量：`TOKEN_CATEGORIES`（`["color", "semantic", "space", "text", "radius"]`）、`COLOR_CATEGORIES`（`["color", "semantic"]`）、`SPACING_CATEGORIES`（`["space"]`）以及 `TYPOGRAPHY_CATEGORIES`（`["text"]`）。类型 `TokenCategory`、`TokenRefKind`、`ResolvedTokenRef`、`TokenContextValue` 和 `TokenProviderProps` 也一并导出。
+
+## v0.1 限制
+
+- 对比度校验仅解析 hex 与 `rgb()`/`rgba()`。`oklch()`、`hsl()`、`lab()` 等会被解析为“无法解析”而被跳过——不会产生误报，但打包的默认值（使用 oklch）在宿主将 primitives 覆盖为 hex 之前不会触发失败。更广泛的解析作为后续工作进行跟踪。
+- 越界令牌检测是基于形状的；无论字面量由哪个字段产生，遍历器都会标记每一个字面量形状。如果噪声成为问题，可通过 `opts.validation.offToken: false` 禁用。
+- DS 面板在 v0.1 中提供 Tokens + Theme 标签页。Components 标签页将延后，直到针对每行应显示哪些元数据有了具体规范。
+- **核心中的轨道标签页待定。** 该插件通过 `ctx.registerDesignSystemPanel?({ render })` 注册了一个面板，且核心的 `sidebarRegistryStore.designSystemPanel` 插槽已被填充，但 `@anvilkit/core` 中的 `EditorTab` 联合类型 + `RAIL_MODULES` 表尚未包含 `"design-system"` 条目——因此面板状态被设置了，但没有 UI 去消费它。令牌绑定字段、`--ak-ds-*` CSS 以及校验器如今都能工作；面板 UI 将随核心中后续的 Phase B 回填一起落地。

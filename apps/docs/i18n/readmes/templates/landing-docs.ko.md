@@ -1,0 +1,28 @@
+# @anvilkit/template-landing-docs
+
+개발자 도구 문서 사이트를 위한 랜딩 페이지.
+
+내비게이션 바, Hero, 기능 섹션, FAQ —— 핵심을 빠르게 파악하고 싶어 하는 개발자 독자에 맞춰 조정되었습니다.
+
+![Landing — Docs / Dev-tool preview](./preview.png)
+
+## 설치
+
+```sh
+npx anvilkit init --template landing-docs my-site
+```
+
+## 구성
+
+이 템플릿은 다음 컴포넌트 패키지로 구성됩니다.
+
+- `@anvilkit/helps`
+- `@anvilkit/hero`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## 편집
+
+표준 `PageIR` 트리는 `src/page-ir.json`에 커밋되어 있습니다. 이 패키지의 기본 내보내기는 해당 IR을 매니페스트 필드(slug, name, description, preview, package list)와 함께 `AnvilkitTemplate`으로 묶습니다.
+
+`AnvilkitTemplate` 계약에 대해서는 `docs/decisions/003-core-templates-subpath.md`를 참조하세요.

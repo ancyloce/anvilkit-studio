@@ -1,0 +1,343 @@
+# @anvilkit/plugin-collab-yjs
+
+> **候选发布版本（`0.10.x`）。** 以 `@next` npm dist-tag 发布。逐节点 CRDT 合并（`useNativeTree`）现已成为默认行为。GA 时间表见 `docs/policies/lts.md`。
+
+一个第一方 Anvilkit Studio 插件，它证明了 `SnapshotAdapter` v2 契约能够在不分叉 Core 或 Puck 的前提下，与 Puck 一同承载实时 CRDT 状态。它构建于 [Yjs](https://github.com/yjs/yjs) 和 [`y-protocols/awareness`](https://github.com/yjs/y-protocols) 之上，仅提供数据层——请将它与 `@anvilkit/collab-ui` 搭配使用以获得 React 展示层，或在公共 Hook 之上自行组合你自己的 UI。
+
+## 安装
+
+```bash
+pnpm add @anvilkit/plugin-collab-yjs yjs y-protocols react react-dom @puckeditor/core
+```
+
+`yjs` 和 `y-protocols` 是直接的运行时依赖。`react`、`react-dom` 和 `@puckeditor/core` 是**非可选的** peer，即使这是"仅数据"层也是如此：该包导出了 React Hook（例如 `usePuckSelection`），并且其插件工厂函数运行在基于 React 的 Studio 外壳中，所以 React 是真正必需的——它并未被拆分到一个无 React 的入口点。对于传输层，请安装 `y-websocket`（用于演示）或接入你自己的提供方（Hocuspocus、自定义 WebRTC 等）。
+
+## 快速开始
+
+```ts
+import {
+  createCollabDataPlugin,
+  createDebouncedAdapter,
+  createYjsAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+import { Doc as YDoc } from "yjs";
+import { WebsocketProvider } from "y-websocket";
+
+const doc = new YDoc();
+const provider = new WebsocketProvider(
+  "ws://localhost:21234",
+  "demo-room",
+  doc,
+);
+
+const adapter = createYjsAdapter({
+  doc,
+  awareness: provider.awareness,
+  peer: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+});
+
+const debounced = createDebouncedAdapter(adapter, { ms: 150 });
+
+registerPlugins([
+  createCollabDataPlugin({
+    adapter: debounced,
+    puckConfig: myPuckConfig,
+    localPeer: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+  }),
+]);
+```
+
+如需在单次工厂函数调用中获得完整的数据 + UI 套件，请改为从 `@anvilkit/collab-ui` 导入 `createCollabPlugin`。
+
+## 核心特性
+
+- **默认逐节点 CRDT 合并** —— `PageIR` 被镜像为一棵扁平寻址的 `Y.Map` 树，因此对不相交节点的并发编辑都能存活下来，而不会在整文档 LWW 下相互覆盖。
+- **快照历史** —— 每次 `save()` 都会同时写入实时编码以及一对 `snapshotMeta:<id>` + `snapshotPayload:<id>`，无论哪种编码处于实时状态，都能满足 `SnapshotAdapter` 历史契约。
+- **冲突诊断** —— 当一个远程更新在 `staleAfterMs`（默认 2000 毫秒）内落在一个本地正在进行的编辑之上时，`onConflict(event)` 会触发。
+- **连接状态契约** —— 五种变体的 `ConnectionStatus`（`connecting`/`synced`/`offline`/`reconnecting`/`error`）让宿主无需读取提供方特定的字段就能渲染一个统一的同步指示器。
+- **可观测性** —— `metrics()` 返回延迟百分位数、awareness 变动率（5 分钟滑动窗口）、校验失败计数，以及供遥测接收端使用的主线程热路径计时。
+- **跨标签页持久化** —— 可选启用的 IndexedDB 队列 + 同源 `BroadcastChannel` 中继。它能在短暂断连中存活，并且无需经传输层往返就能同步同一应用的两个标签页。
+- **纵深防御式在场安全** —— 严格的颜色允许列表、对显示名称的控制字符剥离、awareness 速率限制，以及一个用于拒绝恶意对等方的 `validateRemoteIR` Hook。
+- **强制重新同步** —— `adapter.forceResync()` 丢弃未保存的本地编辑，并重新发出最新的权威快照，以支持宿主的"丢弃并重新加载"功能。
+
+## API 参考
+
+### 工厂函数
+
+| 函数                     | 签名                                                                            | 用途                                                                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createYjsAdapter`       | `(opts: CreateYjsAdapterOptions) => YjsSnapshotAdapter`                         | 从一个 Yjs `Doc` 和可选的 `Awareness` 构建由 CRDT 支撑的 `SnapshotAdapter`。                                                                                             |
+| `createCollabDataPlugin` | `(opts: CreateCollabPluginOptions) => StudioPlugin`                             | 将适配器包装成一个 Studio 插件（仅数据同步——无 UI）。                                                                                                                |
+| `createDebouncedAdapter` | `(adapter, opts?: CreateDebouncedAdapterOptions) => SnapshotAdapterWithMetrics` | 将快速的 `save()` 调用合并为每个防抖窗口（默认 150 毫秒）一次传输层写入。返回一个带 `destroy()` 方法的适配器，该方法必须在卸载时调用。 |
+| `createCollabPlugin`     | _`createCollabDataPlugin` 的已弃用别名_                                  | 保留一个次要发布版本。首次调用时会记录一次性的 `console.warn`。请从 `@anvilkit/collab-ui` 导入 `createCollabPlugin` 以获得打包好的 UI 工厂函数。                |
+
+### `CreateYjsAdapterOptions`
+
+| 字段                 | 类型                        | 默认值                 | 用途                                                                                                                                                                        |
+| -------------------- | --------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `doc`                | `YDoc`                      | _必填_             | Yjs 文档。由宿主拥有；适配器从不构建自己的文档。                                                                                                               |
+| `awareness`          | `Awareness`                 | 自动创建           | 在场通道。省略时，适配器会在内部创建一个。                                                                                                           |
+| `peer`               | `PeerInfo`                  | 临时性              | 本地身份。省略它会铸造一个 `local-<uuid>` id 并附带一条警告日志。请在生产环境中提供一个稳定的 id。                                                                     |
+| `mapName`            | `string`                    | `"default"`            | 根 `Y.Map` 键。                                                                                                                                                             |
+| `staleAfterMs`       | `number`                    | `2000`                 | 在此窗口期内，一个触及本地已编辑节点的远程更新会被计为重叠。                                                                                       |
+| `useNativeTree`      | `boolean`                   | `true`                 | 逐节点 CRDT 合并。仅对旧式 JSON-blob 房间设置为 `false`——使用不同模式的副本无法共享一个 `Y.Doc`。                                                      |
+| `connectionSource`   | `ConnectionSource`          | 无                   | 宿主传输层事件源。当提供方的连接状态变化时，宿主会调用 `emit(status)`。                                                                        |
+| `computeDelta`       | `boolean`                   | `false`                | 当为 `true` 时，每次 `save()` 都会把一个结构性的 `IRDiff` 附加到 `SnapshotMeta.delta` 上。                                                                           |
+| `maxSnapshots`       | `number`                    | `200`                  | 共享 `Y.Doc` 中保留快照的硬性上限。较旧的 payload+meta 对会在与写入相同的事务中被驱逐。设置为 `<= 0` 可禁用（不推荐）。 |
+| `awarenessRateLimit` | `AwarenessRateLimitOptions` | `{ maxPerSecond: 30 }` | 对出站 `presence.update` 的令牌桶限制器。设置 `maxPerSecond: Infinity` 可禁用。                                                                                  |
+| `persistence`        | `PersistenceOptions`        | 无                   | 可选启用的 IndexedDB 队列与 `BroadcastChannel` 中继。每个后端都会进行特性检测，并在 SSR 或较旧浏览器上静默降级。                                             |
+
+### `CreateCollabPluginOptions`
+
+| 字段                    | 类型                                   | 默认值     | 用途                                                                                                                                           |
+| ----------------------- | -------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `adapter`               | `SnapshotAdapter`                      | _必填_ | CRDT 适配器（通常来自 `createYjsAdapter`，可选地包装在 `createDebouncedAdapter` 中）。                                            |
+| `puckConfig`            | `Config`                               | 无       | 出站同步（Puck → IR）所必需。只读查看者可省略。                                                                            |
+| `localPeer`             | `PeerInfo`                             | 临时性  | 用于冲突归因、策略检查和在场光标的身份。省略它会记录一条警告并铸造一个每实例的临时 id。 |
+| `validateRemoteIR`      | `(ir: PageIR) => PageIR \| null`       | 无       | 纵深防御校验 Hook。返回 `null` 或抛出异常会拒绝该更新。                                                                             |
+| `onValidationFailure`   | `(failure: ValidationFailure) => void` | 无       | 宿主侧的被拒绝远程 IR 观察者（toast、遥测）。                                                                                 |
+| `onSaveError`           | `(error: unknown) => void`             | 无       | 出站传输层失败观察者。若没有它，网络 5xx 错误会以 `unhandledRejection` 形式浮现。                                           |
+| `policy`                | `CollabPolicy`                         | 无       | 对称的 RBAC 桥接。`canEdit(node, peer)` 在入站和出站时都会被咨询。                                                                       |
+| `onPolicyViolation`     | `(violation: PolicyViolation) => void` | 无       | 当 `policy.canEdit` 拒绝时触发。                                                                                                           |
+| `inboundScheduler`      | `InboundSchedulerHandleScheduler`      | `requestAnimationFrame` / `setTimeout` | （H1）覆盖入站合并调度器。在浏览器中默认为 `requestAnimationFrame`，在 SSR/Node 下默认为 `setTimeout`。用于确定性测试——请勿在生产环境中设置。 |
+| `inboundBudgetMs`       | `number`                               | `16`       | （H1）回退的入站刷新节奏（以毫秒计），在 `requestAnimationFrame` 不可用时使用。                                                   |
+| `replaceBatchThreshold` | `number`                               | `50`       | 低于此阈值时进行逐节点 `replace` 派发；高于它时插件会回退为一次 `setData` 调用。                                 |
+
+### `YjsSnapshotAdapter`
+
+扩展自 `SnapshotAdapter`（来自 `@anvilkit/plugin-version-history`），新增：
+
+| 成员             | 签名                                                      | 用途                                                                                                                                       |
+| ---------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onConflict`     | `(cb: (event: ConflictEvent) => void) => Unsubscribe`     | 重叠诊断。                                                                                                                        |
+| `onStatusChange` | `(cb: (status: ConnectionStatus) => void) => Unsubscribe` | 连接状态流。注册时会以当前状态被同步调用。                                                                     |
+| `getStatus`      | `() => ConnectionStatus`                                  | 对最新状态的同步读取。在 React 中，优先在 `useSyncExternalStore` 内使用 `onStatusChange`。                                             |
+| `forceResync`    | `() => Promise<PageIR \| null>`                           | 丢弃未保存的本地编辑并重新发出最新的权威快照。若不存在快照，则解析为 `null`。                        |
+| `metrics`        | `() => MetricsSnapshot`                                   | 时间点可观测性快照。以秒级节奏轮询调用的开销很低。                                                              |
+| `destroy`        | `() => void`                                              | 释放内部订阅。由 Studio 插件的 `onDestroy` 自动调用——仅当你构建自定义插件包装器时才需要它。 |
+
+### `ConnectionStatus`（可辨识联合）
+
+```ts
+type ConnectionStatus =
+  | { kind: "connecting" }
+  | { kind: "synced"; since: string }
+  | { kind: "offline"; since: string; queuedEdits: number }
+  | { kind: "reconnecting"; attempt: number; backoffMs: number }
+  | { kind: "error"; message: string; recoverable: boolean };
+```
+
+`queuedEdits` 由适配器从其内部计数器填充；宿主传入的值会被忽略。
+
+### `ConflictEvent`
+
+```ts
+interface ConflictEvent {
+  kind: "overlap";
+  localPeer: PeerInfo;
+  remotePeer?: PeerInfo;
+  nodeIds: readonly string[];
+  at: string;
+}
+```
+
+### `MetricsSnapshot`（选定字段）
+
+| 字段                                                                                                            | 含义                                                                                                                                |
+| ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `saveCount`、`transportWrites`、`saveCoalescingRatio`                                                            | 保存流量与防抖器效能。                                                                                                   |
+| `syncLatencyP50Ms`、`syncLatencyP95Ms`、`syncLatencySamples`                                                     | 最近 200 个样本上的端到端延迟百分位数。                                                                              |
+| `awarenessChurn`、`presenceValidationFailures`                                                                   | 在场健康度——高变动率或非零失败数指向一个行为异常的对等方。                                                         |
+| `inboundCoalesced`、`inboundQueueDelayP50Ms`                                                                     | 入站合并器活动。非零的 `inboundCoalesced` 意味着适配器为编辑器屏蔽了一次远程突发。                     |
+| `conversionTimeP50Ms`、`dispatchTimeP50Ms`、`saveEncodeTimeP50Ms`、`nativeApplyTimeP50Ms`、`nativeReadTimeP50Ms` | 主线程热路径计时（P1）。                                                                                                     |
+| `degraded`、`degradedReasons`                                                                                    | 适配器是否从原生树回退到了旧式 blob，以及触发原因（`cycle`/`max-depth`/`max-nodes`/`decode-failure`）。 |
+| `dispatchFailures`                                                                                               | 抛出异常的远程 `subscribe` 回调调用次数。                                                                         |
+
+### 编码工具与快照差异
+
+| 导出项                            | 用途                                               |
+| --------------------------------- | ----------------------------------------------------- |
+| `encodeIR(ir)` / `decodeIR(json)` | 用于快照 payload 的稳定 JSON 编码。      |
+| `hashIR(encoded)`                 | 由 `SnapshotMeta.pageIRHash` 使用的内容哈希。       |
+| `diffSnapshots(prev, next)`       | 两个 `PageIR` 值之间的结构性逐节点差异。 |
+
+### 在场校验
+
+| 导出项                                                                                  | 用途                                                                                    |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `sanitizeDisplayName(value)`                                                            | 剥离 `U+0000`–`U+001F` / `U+007F` 并截断至 `MAX_DISPLAY_NAME_LENGTH`（64 个字符）。 |
+| `validatePeerInfo(value)`                                                               | 严格校验。颜色必须匹配允许列表；拒绝会丢弃整条对等方记录。 |
+| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | 适配器使用的入站 awareness 校验器；导出以供宿主侧纵深防御使用。 |
+| `MAX_DISPLAY_NAME_LENGTH`                                                               | `64`。                                                                                      |
+
+### 错误
+
+- `SnapshotCorruptedError`、`SnapshotNotFoundError`、`SnapshotPrunedError` —— 从 `load(id)` 抛出的有类型错误。
+- `DebouncedAdapterDestroyedError` —— 当在 `destroy()` 之后对一个 `createDebouncedAdapter` 实例调用方法时抛出。
+
+### React 桥接
+
+- `usePuckSelection()` —— 将 Puck 选中的组件映射为 `PresenceSelection`，用于出站 awareness 更新。请在挂载于 `<Puck>` 内的宿主组件中使用。
+
+## 用法示例
+
+### 内存中测试框架
+
+```ts
+import { Awareness } from "y-protocols/awareness";
+import { Doc as YDoc } from "yjs";
+import { createYjsAdapter } from "@anvilkit/plugin-collab-yjs";
+
+const doc = new YDoc();
+const awareness = new Awareness(doc);
+const adapter = createYjsAdapter({
+  doc,
+  awareness,
+  peer: { id: "test-user", displayName: "Test" },
+});
+
+// In tests, the adapter starts in `connecting` and flips to `synced`
+// on the first subscribe() registration, so no transport plumbing is
+// needed for unit tests.
+adapter.subscribe((ir) => {
+  console.log("emitted IR", ir);
+});
+```
+
+### 宿主驱动的连接状态
+
+```ts
+import type { ConnectionSource } from "@anvilkit/plugin-collab-yjs";
+import { WebsocketProvider } from "y-websocket";
+
+let queuedEdits = 0;
+
+const connectionSource: ConnectionSource = (emit) => {
+  const onStatus = (e: { status: string }) => {
+    if (e.status === "connected") emit({ kind: "connecting" });
+    if (e.status === "disconnected") {
+      emit({
+        kind: "offline",
+        since: new Date().toISOString(),
+        queuedEdits,
+      });
+    }
+  };
+  const onSync = (synced: boolean) => {
+    if (synced) emit({ kind: "synced", since: new Date().toISOString() });
+  };
+  provider.on("status", onStatus);
+  provider.on("sync", onSync);
+  return () => {
+    provider.off("status", onStatus);
+    provider.off("sync", onSync);
+  };
+};
+
+createYjsAdapter({ doc, awareness, connectionSource });
+```
+
+### 强制重新同步流程
+
+```ts
+const forceResync = async () => {
+  const restored = await adapter.forceResync();
+  if (restored === null) {
+    toast.warn("No snapshot to restore from.");
+    return;
+  }
+  toast.success("Reloaded the latest collaborative snapshot.");
+};
+```
+
+### 策略 + 校验 Hook
+
+```ts
+import type {
+  CollabPolicy,
+  ValidateRemoteIR,
+} from "@anvilkit/plugin-collab-yjs";
+
+const policy: CollabPolicy = {
+  canEdit: (node, peer) => {
+    if (node.props?.locked === true) return peer.id === node.props.lockedBy;
+    return true;
+  },
+};
+
+const validateRemoteIR: ValidateRemoteIR = (ir) => {
+  if (!ir.root || typeof ir.root !== "object") return null;
+  if (ir.version !== "1") return null;
+  return ir;
+};
+
+createCollabDataPlugin({
+  adapter,
+  puckConfig,
+  localPeer,
+  policy,
+  validateRemoteIR,
+  onPolicyViolation: (v) => telemetry.warn("policy-violation", v),
+  onValidationFailure: (f) => telemetry.warn("validation-failure", f),
+});
+```
+
+## 备注与常见问题
+
+### 原生树 vs 旧式 JSON-blob
+
+原生树（`useNativeTree: true`，即默认值）将实时的 `PageIR` 镜像为一棵扁平寻址的 `Y.Map` 树——每个节点一个 `Y.Map`，外加每个父节点一个 `childIds` `Y.Array`。同节点的编辑仍会回退到逐键 LWW；不同节点的编辑会干净地合并。
+
+旧式的、位于单一 `pageIR` 键下的整文档 JSON-blob 编码作为回退被保留。`save()` 会同时写入两种表示，以便一个树感知的适配器和一个 blob 感知的适配器能读取同一份快照。**你不能在一个 `Y.Doc` 中混用编码**——每个房间选一种模式。
+
+**迁移是自动的。** 在一个只有旧式 blob（无原生树状态）的 `Y.Doc` 上构建的适配器会在构建时从 blob 水合出树。该迁移是一次性的、事务性的且幂等的——后续的适配器会短路跳过。从 `0.10` 之前版本升级的宿主可以在不进行单独迁移步骤的情况下推出新适配器。
+
+### 在场是不可信输入
+
+适配器会通过 `validatePresenceState` 校验每一个入站的 `PresenceState`。有两处具体的强化：
+
+- **`color` 允许列表。** 任何不匹配 `#rgb` / `#rrggbb` / `#rrggbbaa`、`rgb(...)`、`rgba(...)` 或命名颜色集的内容都会被拒绝——包括 `javascript:`、`expression(...)`、`<script>` 以及任意字符串。拒绝会丢弃整条对等方记录，因此恶意对等方无法只夹带 payload 的安全部分。
+- **`displayName` 净化。** `sanitizeDisplayName` 会剥离 ASCII 控制字符并截断至 64 个字符。它**不会** HTML 转义——如果你的 UI 通过 `innerHTML` 注入名称，请在渲染边界处进行转义。
+
+`MetricsSnapshot.presenceValidationFailures` 会统计被拒绝的对等方，因此宿主无需检查单个 payload 就能针对一个嘈杂或恶意的房间发出告警。
+
+### `createDebouncedAdapter` 需要 `destroy()`
+
+该包装器持有一个待定计时器引用。请在卸载时调用 `destroy()` 以取消待定计时器并将拆卸转发给被包装的适配器。在 `destroy()` 之后调用的方法会抛出 `DebouncedAdapterDestroyedError`。
+
+### 参考传输层与生产部署
+
+本仓库的 `examples/y-websocket-server.mjs` 下有一个最小化的中继（仅源码，不在发布的 npm 包中）：
+
+```bash
+# Defaults to ws://127.0.0.1:21234
+node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs
+
+# Override the port (positional arg or COLLAB_RELAY_PORT), or bind a
+# non-loopback host with COLLAB_RELAY_HOST:
+node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
+```
+
+该中继**默认监听 21234 端口**（避开 1234 和 11234，因为 Windows/WSL2 保留了它们）。由于 `y-websocket@3` 移除了其捆绑的服务器（`y-websocket/bin/utils`），而 `@y/websocket-server` 面向不兼容的 `yjs-14` 系列，因此此中继**内联地针对 `yjs-13` 技术栈植入了经典的 `y-protocols` 同步/awareness 服务器**——它与演示所用的 `y-websocket@3` 客户端在线缆层面兼容，且独立于 `y-websocket` 的服务器打包方式。它是用于测试和演示的参考实现，而非生产服务器。
+
+对于生产部署——身份验证、持久的 Postgres 持久化，以及通过 [Hocuspocus](https://tiptap.dev/hocuspocus) 实现的 Redis 支撑的水平横向扩展——请遵循 [`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md) 中的方案。
+
+### 性能特征
+
+- **远程编辑——增量式。** 一次远程的属性编辑只会重新读取被触及的节点。一次重排序/插入/删除会发出一个结构化的重链接增量，因此实时 IR 缓存只重链接受影响的父节点 + 新增节点，复用每个未触及节点已解析好的属性。一次真正的整文档变更仍会回退到一次完整的受保护重建——这是正确性的后备保障。
+- **本地 `save()`——O(已变更) 的应用，O(文档) 的下限。** Y.Doc 的应用只写入已变更/新增的节点并删除被移除的节点。残余的 O(文档) 成本是每次保存都要写入的 `encodeIR(ir)` 快照 payload 字符串；`SnapshotMeta.pageIRHash` 保持其 `hashIR(encodeIR(ir))` 定义。
+- **残余尾部成本。** 每次保存的快照 meta 重扫描为 O(`maxSnapshots`)，在主动键入期间穿插的远程突发下，待定索引重建为 O(文档)，当附加了一个 `onConflict` 监听器时，每次远程刷新的冲突重叠为 O(文档)，以及对拥有数千个子节点的父节点的宽子节点列表协调为 O(n²)。全部由 `pnpm bench:collab-highload` 把关。
+
+预算指引：在默认 `maxSnapshots` 下，至多数千个节点的页面能舒适地保持在帧预算之内。
+
+### 跨标签页持久化是可选启用的
+
+`persistence.indexedDb` 和 `persistence.broadcastChannel` 均默认为 `false`。启用后，每个后端会在构建时进行特性检测，并在其 API 不可用时（SSR、较旧浏览器、某些测试运行器）静默降级。使用 `persistence.onFault` 来了解配额或模式故障——适配器从不会从持久化层向 `Y.Doc` 观察者链中抛出异常。
+
+快照级持久化（用于快速标签页引导的完整状态转储）以及 IDB 队列的静态加密都被推迟。跨源 / iframe 持久化被明确排除在范围之外——`BroadcastChannel` 是同源的，而这正是编辑器的正确边界。
+
+### 另请参阅
+
+- Anvilkit 文档站点上的 `realtime-collab` 架构文档——完整的设计与威胁模型。
+- [CHANGELOG.md](./CHANGELOG.md) —— 逐发布版本的说明。
+- [`@anvilkit/collab-ui`](../plugin-collab-ui/README.md) —— React 展示层 + 整合后的 `createCollabPlugin` 工厂函数。

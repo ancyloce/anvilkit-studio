@@ -1,0 +1,27 @@
+# @anvilkit/template-changelog
+
+一个产品更新日志页面。
+
+导航栏、板块标题，以及一个复用为更新日志条目流的 blog-list。
+
+![Changelog preview](./preview.png)
+
+## 安装
+
+```sh
+npx anvilkit init --template changelog my-site
+```
+
+## 组合
+
+该模板组合了以下组件包：
+
+- `@anvilkit/blog-list`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## 编辑
+
+规范的 `PageIR` 树提交在 `src/page-ir.json` 中。该包的默认导出会将该 IR 与清单字段（slug、name、description、preview、包列表）打包为一个 `AnvilkitTemplate`。
+
+有关 `AnvilkitTemplate` 契约，请参阅 `docs/decisions/003-core-templates-subpath.md`。

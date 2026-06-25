@@ -1,0 +1,98 @@
+# @anvilkit/blog-list
+
+一个 Puck 原生的博客文章网格，带有图片卡片、日期和链接。
+
+## 安装
+
+```sh
+pnpm add @anvilkit/blog-list @puckeditor/core
+```
+
+## 样式
+
+在渲染组件之前，从你的应用入口处导入一次该包的样式表。
+
+```tsx
+import "@anvilkit/blog-list/styles.css";
+```
+
+在 Next.js 中，将该导入添加到 `app/layout.tsx` 或 `pages/_app.tsx`。
+
+## 示例
+
+### 基本用法
+
+通过 `defaultProps` 用捆绑的示例文章渲染网格。
+
+```tsx
+import "@anvilkit/blog-list/styles.css";
+import { BlogList, defaultProps } from "@anvilkit/blog-list";
+
+export function Example() {
+  return <BlogList posts={defaultProps.posts} />;
+}
+```
+
+### 带外部链接的自定义文章
+
+每篇文章都会渲染一张封面图、一个发布日期（可选带相对时间标签）、一个标题和一段描述。设置 `href` 可使卡片成为链接；`openInNewTab` 会添加 `target="_blank"` 以及安全的 `rel` 属性。
+
+```tsx
+import { BlogList } from "@anvilkit/blog-list";
+
+export function LatestPosts() {
+  return (
+    <BlogList
+      posts={[
+        {
+          title: "Shipping faster with Anvilkit",
+          description: "How we cut release time in half.",
+          href: "https://blog.example.com/shipping-faster",
+          openInNewTab: true,
+          imageSrc: "https://images.example.com/cover.jpg",
+          imageAlt: "Shipping faster",
+          publishedAt: "2025-01-12",
+          publishedLabel: "January 12, 2025",
+          relativeLabel: "2mo ago",
+        },
+      ]}
+    />
+  );
+}
+```
+
+### 在 Puck 配置中注册
+
+将导出的 `componentConfig` 接入到 Puck 的 `Config` 中。
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type BlogListProps } from "@anvilkit/blog-list";
+
+const config: Config<{ BlogList: BlogListProps }> = {
+  components: {
+    BlogList: componentConfig,
+  },
+};
+```
+
+## API
+
+派生自导出的 `BlogListProps` 类型和 Puck 的 `fields` 模式。
+
+| Prop                     | Type             | Default              | Description                                 |
+| ------------------------ | ---------------- | -------------------- | ------------------------------------------- |
+| `posts`                  | `BlogListPost[]` | _(3 篇示例文章)_     | 博客文章条目。                              |
+| `posts[].title`          | `string`         | `"New post"`         | 文章标题。                                  |
+| `posts[].description`    | `string`         | —                    | 文章摘要。                                  |
+| `posts[].href`           | `string`         | `"/blog/new-post"`   | 链接 URL（设置后卡片即成为链接）。          |
+| `posts[].openInNewTab`   | `boolean`        | `false`              | 在新标签页中打开链接。                      |
+| `posts[].imageSrc`       | `string`         | _(Unsplash 示例)_    | 封面图 URL。                                |
+| `posts[].imageAlt`       | `string`         | `"New post"`         | 封面图替代文本。                            |
+| `posts[].publishedAt`    | `string`         | `"2024-11-01"`       | ISO 日期字符串（未提供标签时使用）。        |
+| `posts[].publishedLabel` | `string`         | `"November 1, 2024"` | 格式化的日期标签。                          |
+| `posts[].relativeLabel`  | `string`         | `"8mo ago"`          | 显示在括号中的相对时间标签。                |
+
+## 主题与响应式
+
+通过 shadcn 的 CSS 变量令牌支持浅色和深色主题。在移动端、平板和桌面端断点下均可响应式适配。

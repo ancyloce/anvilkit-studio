@@ -1,0 +1,267 @@
+# @anvilkit/collab-ui
+
+> **リリース候補（`0.1.0-rc.9`）。** `@next` npm タグ上で `@anvilkit/plugin-collab-yjs` に追従します。両パッケージは SnapshotAdapter v2 契約が凍結され次第、共同で GA を切ります。
+
+[`@anvilkit/plugin-collab-yjs`](../plugin-collab-yjs/README.md) のためのホスト UI プリミティブです。Yjs プラグインはヘッドレスで——CRDT レイヤー、SnapshotAdapter、プレゼンスの配線、競合診断を提供しますが、DOM は含みません。このパッケージが UI を補完します：ライブな協作状態を公開する context provider に加えて、ホストアプリが自身のエディタークロムに組み込める一連の shadcn スタイルのコンポーネントです。統合された `createCollabPlugin()` ファクトリは、一般的なケース向けに両パッケージを単一の `StudioPlugin` にまとめます。
+
+## インストール
+
+```bash
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs @anvilkit/core react react-dom
+```
+
+`react` と `react-dom` は必須の peer です。`@puckeditor/core` はオプションの peer で——アウトバウンド同期のために `puckConfig` を転送する場合にのみ必要です。`yjs` と `y-protocols` は `@anvilkit/plugin-collab-yjs` を通じて推移的に到達します。
+
+**マネージドモードには provider が必要です。** `websocketUrl` だけでライブコラボレーションを有効にするには（クイックスタートを参照）、対応する WebSocket provider をインストールしてください——どちらも**オプションの peer** であり、実際に接続するときにのみ動的 `import()` 経由でロードされるため、初期バンドルを重くすることはありません：
+
+```bash
+pnpm add @hocuspocus/provider   # default backend (provider: "hocuspocus")
+# or
+pnpm add y-websocket            # for provider: "y-websocket"
+```
+
+provider をインストールせずに `websocketUrl` を設定した場合、同期インジケーターは明確な `error` ステータスを表示し、`onConnectionError` が発火します——難解なバンドラーの失敗になることはありません。
+
+## クイックスタート
+
+設定するのは**1 つ**の値だけ——WebSocket URL です。`room` はデフォルトで `"anvilkit-default-room"`、`provider` は `"hocuspocus"`、`self` は自動生成された匿名アイデンティティになり、プラグインはトランスポートのライフサイクル全体（doc + awareness + provider + ステータスブリッジ + ティアダウン）を所有します：
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+export default function EditorPage() {
+  return (
+    <Studio
+      puckConfig={puckConfig}
+      plugins={[
+        createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig }),
+      ]}
+    />
+  );
+}
+```
+
+その他のすべてのフィールドはオプションのオーバーライドです：
+
+```tsx
+createCollabPlugin({
+  websocketUrl: "wss://relay.example.com",
+  room: "doc-42",
+  provider: "y-websocket",            // override the Hocuspocus default
+  token: authToken,
+  self: { id: user.id, displayName: user.name, color: user.color },
+  puckConfig,
+  onConnectionError: (err) => toast.error(String(err)),
+});
+```
+
+### 独自のトランスポートを持ち込む（BYO）
+
+すでに `Y.Doc`、`Awareness`、provider を自分で管理していますか？`doc`（およびオプションで `awareness` / `connectionSource`）を渡せば、ファクトリはトランスポートを完全にあなたに任せます——`websocketUrl` 以前の呼び出し元と完全に後方互換です：
+
+```tsx
+createCollabPlugin({ doc, awareness, connectionSource, self, puckConfig });
+```
+
+`doc` と `websocketUrl` の両方が設定されている場合、`doc`（BYO）が勝ち、一度限りの開発警告が無視されたフィールドを示します。
+
+バンドルされた `<PresenceLayer>` と `<ConflictNoticeCenter>` はプラグインによって自動的にマウントされます——`presence: { enabled: false }` または `notifications: { enabled: false }` を渡せば、どちらかをオプトアウトできます。コラボレーターのアバタースタックは、常にコアの `collaborators` ヘッダースロットに提供されます。そのスロットは単一占有で初回登録勝ちなので、異なるクロムに差し替えるには、このプラグインより先に `collaborators` スロットを提供する独自のプラグインを登録してください。
+
+## コア機能
+
+- **ワンコール統合** — `createCollabPlugin()` は、Yjs データ同期プラグイン、context provider、プレゼンスオーバーレイ、競合トースター、コラボレーターアバタースタックをまとめた単一の `StudioPlugin` を返します。
+- **分割された context** — アダプター／アイデンティティ／ステータス／ピア／ピアアイデンティティ／競合／カーソル可視性は独立した provider なので、変動の激しいリモートカーソル更新がステータスピルや競合トースターを再レンダリングすることは決してありません。
+- **セレクターが薄いフック** — すべてのプリミティブは、自身が読むスライスのみをサブスクライブします（`useCollabPeers`、`useCollabStatus`、`useCollabConflictQueue` など）。
+- **shadcn 互換コンポーネント** — 8 つのアンスタイルドフレームワークに優しいビルディングブロック。まるごと使うか、フックの上に独自の UI を組み込んでください。
+- **アイデンティティミラー** — `onIdentityChange` により、ホストの認証ストアは下流の表示名／カラーの編集をそのソースオブトゥルースにミラーバックできます。
+- **組み込みの保存デバウンス** — ファクトリはアダプターを `createDebouncedAdapter`（デフォルト 150 ms）でラップし、キーストロークが `Y.Doc` を氾濫させないようにします。`saveDebounceMs: 0` を設定するとオプトアウトできます。
+
+## API リファレンス
+
+### 統合ファクトリ
+
+```ts
+function createCollabPlugin(options: CreateCollabPluginOptions): StudioPlugin;
+```
+
+| フィールド                                                                                                          | 型                                                  | デフォルト   | 目的                                                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `websocketUrl`                                                                                                      | `string`                                            | なし         | **マネージドモード。** リレー URL——ほとんどのホストが設定する唯一のフィールド。（`doc` なしで）省略するとシングルタブのインメモリモード（一度限りの開発警告）。 |
+| `room`                                                                                                              | `string`                                            | `"anvilkit-default-room"` | マネージドモードの共有ルーム/ドキュメント名。                                                                            |
+| `provider`                                                                                                          | `"hocuspocus" \| "y-websocket"`                     | `"hocuspocus"` | マネージドモードのバックエンド（対応するオプション peer をインストール）。BYO モードでは無視されます。                            |
+| `token`                                                                                                             | `string`                                            | `""`         | リレーに転送される認証トークン（マネージドモード）。                                                                                  |
+| `onConnectionError`                                                                                                 | `(err: unknown) => void`                            | `console.error` 一度 | マネージドトランスポートが失敗したときに発火します（provider 欠落、不正な URL、認証失敗）。ファクトリから例外をスローすることはありません。 |
+| `self`                                                                                                              | `PeerInfo`                                          | 自動生成     | ローカルピアのアイデンティティ。省略すると、匿名アイデンティティ（`anon-<uuid>` + 安定したハッシュ済み 16 進カラー）が生成されます。 |
+| `onIdentityChange`                                                                                                  | `(next: PeerInfo) => void`                          | なし         | 下流 UI が `updateSelf` を呼び出したときに発火します。初回マウント時はスキップされ、`{ id, displayName, color }` の浅い等価性で重複排除されます。 |
+| `doc`                                                                                                               | `YDoc`                                              | なし         | **BYO モード。** 独自の Yjs ドキュメントを提供します。ファクトリはそれを作成も破棄もしません。`websocketUrl` より優先されます。 |
+| `awareness`                                                                                                         | `Awareness`                                         | 自動作成     | プレゼンスチャネル。BYO モードでは BYO、それ以外ではマネージドモードのオプションのオーバーライド。                                            |
+| `mapName`、`useNativeTree`、`staleAfterMs`、`connectionSource`、`computeDelta`、`awarenessRateLimit`、`persistence` | —                                                   | —            | `createYjsAdapter` にそのまま転送されます。[plugin-collab-yjs `CreateYjsAdapterOptions`](../plugin-collab-yjs/README.md#createyjsadapteroptions) を参照。 |
+| `puckConfig`                                                                                                        | `Config`                                            | なし         | アウトバウンド同期に必須。読み取り専用ビューアーでは省略します。                                                                              |
+| `saveDebounceMs`                                                                                                    | `number`                                            | `150`        | ローカル保存を合体させます。`0` を設定すると無効になります。                                                                           |
+| `validateRemoteIR`、`onValidationFailure`、`policy`、`onPolicyViolation`、`onSaveError`                             | —                                                   | —            | `createCollabDataPlugin` に転送されます。                                                                                               |
+| `presence`                                                                                                          | `CollabPresenceLayerProps & { enabled?: boolean }`  | マウント済み | 自動マウントされる `<PresenceLayer>` の props。`enabled: false` でスキップされます。                                                                             |
+| `notifications`                                                                                                     | `ConflictNoticeCenterProps & { enabled?: boolean }` | マウント済み | 自動マウントされる `<ConflictNoticeCenter>` の props。                                                                                                 |
+
+### プロバイダー
+
+```ts
+function CollabUIProvider(props: CollabUIProviderProps): JSX.Element;
+
+interface CollabUIProviderProps {
+  adapter: YjsSnapshotAdapter;
+  self: PeerInfo;
+  children: ReactNode;
+}
+```
+
+ヘッドレスアダプターとフックだけが欲しい場合は、エディターツリーを provider で直接ラップしてください——統合ファクトリは完全にスキップします。
+
+### フック
+
+| フック                        | 戻り値                                           | 備考                                                                                  |
+| ----------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `useCollabAdapter()`          | `YjsSnapshotAdapter`                             | 生のアダプターインスタンス。                                                          |
+| `useCollabStatus()`           | `ConnectionStatus`                               | 判別可能な共用体（`connecting` / `synced` / `offline` / `reconnecting` / `error`）。  |
+| `useCollabSelf()`             | `PeerInfo`                                       | ローカルピアのアイデンティティ。                                                      |
+| `useCollabIdentity()`         | `{ self, updateSelf }`                           | アイデンティティのみの消費者に使用します。ピア／ステータスの変動では再レンダリングしません。 |
+| `useCollabPeers()`            | `readonly PresenceState[]`                       | 変動の激しいスライス（ピアアイデンティティ + ライブカーソル/選択）——その消費者は小さく保ってください。 |
+| `useCollabConflicts()`        | `readonly ConflictEvent[]`                       | 読み取り専用の競合キュー。                                                            |
+| `useCollabConflictQueue()`    | `{ conflicts, dismissConflict, clearConflicts }` | ミューテーションを行う消費者。                                                        |
+| `useCollabCursorVisibility()` | `{ showRemoteCursors, setShowRemoteCursors }`    | 設定トグルと `PresenceLayer` の共有ソースオブトゥルース。                             |
+| `useCollabMetrics(pollMs?)`   | `MetricsSnapshot \| null`                        | ポーリングされた `adapter.metrics()` スナップショット。初回レンダリングでは `null`。  |
+| `useCollabContext()`          | `CollabUIContextValue`                           | 完全なコンポジット——あらゆる変化で再レンダリングします。狭いフックを優先してください。 |
+
+### コンポーネント
+
+すべてのコンポーネントは `@anvilkit/collab-ui/components/<name>` に存在します。これらは context を消費するため、`<CollabUIProvider>` の内側（または統合ファクトリを登録する `<Studio>` の下）でレンダリングする必要があります。
+
+| コンポーネント            | 主な props                                                                                                                    |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `CollabRoomBar`           | `title?: string`、`subtitle?: string`、`roomId?: string`、`roomLink?: string`、`trailing?: ReactNode`、`className?: string`   |
+| `PeerAvatarStack`         | `maxVisible?: number`（デフォルト `5`）、`className?: string`                                                                 |
+| `PresenceLayer`           | `showCursors?: boolean`、`resolveSelectionRect?: (nodeId: string) => PresenceSelectionRingRect \| null`、`className?: string` |
+| `SyncActivityIndicator`   | `latencyMs?: number`、`lastSyncAt?: string`、`lastPeerName?: string`、`className?: string`                                    |
+| `ConflictNoticeCenter`    | `formatMessage?: (event: ConflictEvent) => string`、`toasterPosition?: "top-right" \| "bottom-right" \| "top-center"`         |
+| `ForceResyncDialog`       | `open?: boolean`、`onOpenChange?: (open: boolean) => void`                                                                    |
+| `CollabSettingsPopover`   | `roomId?: string`、`roomLink?: string`                                                                                        |
+| `CollabPresencePublisher` | `root: HTMLElement`、`frameSelector?: string`                                                                                 |
+
+## 使用例
+
+### ヘッドレスアダプター + カスタム UI
+
+```tsx
+import {
+  createYjsAdapter,
+  createCollabDataPlugin,
+} from "@anvilkit/plugin-collab-yjs";
+import {
+  CollabUIProvider,
+  useCollabStatus,
+  useCollabPeers,
+} from "@anvilkit/collab-ui";
+
+const adapter = createYjsAdapter({ doc, awareness, peer: self });
+
+export function Editor() {
+  return (
+    <CollabUIProvider adapter={adapter} self={self}>
+      <Studio
+        puckConfig={puckConfig}
+        plugins={[
+          createCollabDataPlugin({ adapter, puckConfig, localPeer: self }),
+        ]}
+      />
+      <CustomSyncRibbon />
+    </CollabUIProvider>
+  );
+}
+
+function CustomSyncRibbon() {
+  const status = useCollabStatus();
+  const peers = useCollabPeers();
+  return (
+    <div>
+      {status.kind} · {peers.length} peer(s)
+    </div>
+  );
+}
+```
+
+### ローカルカーソル + Puck 選択のパブリッシュ
+
+```tsx
+import { CollabPresencePublisher } from "@anvilkit/collab-ui/components/collab-presence-publisher";
+
+<CollabPresencePublisher
+  root={canvasRef.current!}
+  frameSelector="#puck-canvas"
+/>;
+```
+
+パブリッシャーは `<Studio>` の内側にマウントしてください（そうすれば `createUsePuck()` 経由で Puck の選択を読めます）。これはオプトインです——データレイヤーはリモートカーソルのみをパブリッシュします。
+
+### アイデンティティ変更をホストにミラーバックする
+
+```tsx
+createCollabPlugin({
+  doc,
+  self: { id: profile.id, displayName: profile.name, color: profile.color },
+  onIdentityChange: (next) => {
+    profileStore.update({ name: next.displayName, color: next.color });
+  },
+  puckConfig,
+});
+```
+
+`onIdentityChange` は実際の変更時にのみ発火します——初回マウントと同値の更新はスキップされます。
+
+### テレメトリ向けのポーリングメトリクス
+
+```tsx
+import { useCollabMetrics } from "@anvilkit/collab-ui";
+
+function CollabHealthBadge() {
+  const metrics = useCollabMetrics(5000);
+  if (!metrics) return null;
+  return (
+    <span>
+      p95 {metrics.syncLatencyP95Ms}ms · churn {metrics.awarenessChurn}
+    </span>
+  );
+}
+```
+
+## 注意事項と FAQ
+
+### なぜ context を 5 つの provider に分割するのか？
+
+リモートカーソルのトラフィックは、システム内で最も変動の激しいシグナルです。すべての消費者が単一の context から読む場合、すべてのカーソル更新がステータスピル、アバタースタック、競合トースターを再レンダリングします。`peers` を独自の context に分割することで、変動の激しいシグナルを `<PresenceLayer>` にスコープし、UI の残りの部分は静止したままに保ちます。
+
+本当にすべてのスライスを 1 つのコンポーネントで必要とする場合は `useCollabContext()` を使ってください——ただし、あらゆる変化で再レンダリングすることに注意してください。
+
+### 保存デバウンスはデフォルトでオン
+
+`saveDebounceMs: 150` は、データプラグインに渡す前にアダプターを `createDebouncedAdapter` でラップします。デバウンスされるのは保存パスのみです——プレゼンス、ステータス、競合の読み取りは引き続きライブのアダプターを使用します。ホストがすでに上流でデバウンスしている場合（例：キーストロークをバッチ処理する制御フォームレイヤー）は `saveDebounceMs: 0` を設定してください。
+
+### ヘッドレス vs 統合ファクトリ
+
+| ユースケース                                                                  | 選択                                                                                                                          |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| デフォルトのクロムで 1 行の統合が欲しい。                                      | このパッケージの `createCollabPlugin()`。                                                                                    |
+| データレイヤーのみが欲しい（読み取り専用ビューアー、カスタム UI、サーバーサイド同期）。 | `@anvilkit/plugin-collab-yjs` の `createYjsAdapter` + `createCollabDataPlugin`。                                             |
+| フックは欲しいがコンポーネントはカスタム。                                    | ヘッドレスアダプター + 手動の `<CollabUIProvider>`。                                                                          |
+| バンドルされた UI の一部は欲しいが全部ではない。                              | `createCollabPlugin()` に `presence.enabled: false` / `notifications.enabled: false`（`collaborators` スロットは常に提供されます——自身の `collaborators` スロットを先に登録してオーバーライド）。 |
+
+### カーソル可視性トグル
+
+`useCollabCursorVisibility()` は「リモートカーソルを表示」トグルの共有ソースオブトゥルースです。`CollabSettingsPopover` がそこに書き込み、`PresenceLayer` がそれを読みます。この状態をホストコードで複製しないでください——フックから読むことで、トグルとオーバーレイの同期が保たれます。
+
+### バンドルされたコンポーネントはスロットへの提供物
+
+ファクトリは `<PeerAvatarStack>` をヘッダーの `collaborators` スロットに登録します。Studio プラグイン契約に従い、スロットは単一占有で初回登録が勝ちます——デフォルトをオーバーライドするには、このプラグインより先に `collaborators` スロットを提供する独自のプラグインを登録してください。
+
+### 依存関係の契約
+
+このパッケージは、その型とイベントストリームのために `@anvilkit/plugin-collab-yjs` に依存します。リアルタイムコラボレーションを出荷しないホストはこれをインストールすべきではありません。SnapshotAdapter v2 契約については、Anvilkit ドキュメントサイト上のリアルタイムコラボレーションアーキテクチャドキュメントを参照してください。

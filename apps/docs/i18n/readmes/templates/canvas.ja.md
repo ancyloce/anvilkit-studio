@@ -1,0 +1,33 @@
+# `@anvilkit/canvas-templates`
+
+AnvilKit Canvas Studio に同梱される 10 個のスターター [`CanvasIR`](../../canvas/core/src/types.ts) デザイン——ポスター、ソーシャルフォーマット、スライド、印刷物。それぞれが自己完結型の `CanvasIR`（text / rect / ellipse / line ノードのみ、外部アセットなし）であるため、ネットワークコールなしで読み込まれます。
+
+## 契約
+
+`src/index.ts` は型付けされた `canvasTemplates` レジストリ（slug → `{ slug, name, description, ir }`）と `canvasTemplateList` をエクスポートします。すべての `ir` は `@anvilkit/canvas-core` の `CanvasIRSchema` に対して検証されます——`src/__tests__/canvas-templates.test.ts` によって強制されます。
+
+```ts
+import { canvasTemplates, canvasTemplateList } from "@anvilkit/canvas-templates";
+
+const poster = canvasTemplates.poster.ir; // CanvasIR
+```
+
+## レイアウト
+
+```
+packages/templates/canvas/
+├── package.json
+├── tsconfig.json
+├── vitest.config.ts
+└── src/
+    ├── index.ts                 # typed registry (default export per slug)
+    ├── *.json                   # one committed CanvasIR per template
+    └── __tests__/
+        └── canvas-templates.test.ts
+```
+
+これらの `*.json` ファイルは [`../scripts/scaffold-canvas-irs.mjs`](../scripts/scaffold-canvas-irs.mjs) によって作成され、diff をレビューできるようにコミットされています。宣言的なテーブルから再生成するには、`pnpm --filter @anvilkit/templates-workspace scaffold:canvas-irs` を再実行してください。
+
+## ビルド
+
+`tsc` は（`resolveJsonModule` を介して）インポートされた `*.json` を `dist/` にコピーし、このフォルダと並んで配置される Puck `@anvilkit/template-*` パッケージと整合させます。このディレクトリは `scripts/verify-templates.mjs`（Puck `AnvilkitTemplate` パッケージを検証する）ではスキップされ、独自の Vitest スイートによって検証されます。

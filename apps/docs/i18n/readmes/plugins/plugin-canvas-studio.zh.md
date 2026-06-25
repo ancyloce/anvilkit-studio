@@ -1,0 +1,182 @@
+# @anvilkit/plugin-canvas-studio
+
+> **Alpha（`0.1.7`）。** API 在 `1.0` 之前可能会变化。
+
+在基于 Puck 的 `<Studio>` 外壳内部挂载一个全屏的 **Canvas Studio** 编辑界面。一个顶栏操作在 Puck 页面模式与画布覆盖层之间切换；关闭时，插件通过宿主提供的适配器持久化 `CanvasIR`，将每个画板栅格化为预览，并修补发起它的 Puck `DesignBlock`，使页面渲染缩略图。它还注册了一个图层快速添加（用于插入设计块）以及一个 `design://` 资源解析器，让页面可以按设计 id 引用画板预览。
+
+## 安装
+
+```sh
+pnpm add @anvilkit/plugin-canvas-studio @anvilkit/canvas-core @anvilkit/canvas-editor react react-dom @puckeditor/core
+```
+
+对等依赖：`@anvilkit/canvas-core`、`@anvilkit/canvas-editor`、`@puckeditor/core ^0.21.3`、`react >=19.0.0`、`react-dom >=19.0.0`。（`@anvilkit/core`、`@anvilkit/design-block` 和 `@anvilkit/plugin-asset-manager` 作为直接依赖随包发布。）
+
+画布覆盖层使用编译后的编辑器样式表进行渲染 —— 宿主必须导入它一次，例如在应用入口中：
+
+```ts
+import "@anvilkit/canvas-editor/styles.css";
+```
+
+Tailwind 工具类和父文档 CSS **无法**到达画布；编辑器自带其独立的、自包含的样式表。
+
+## 快速开始
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createCanvasStudioPlugin,
+  localStorageCanvasAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+import "@anvilkit/canvas-editor/styles.css";
+
+const canvasStudio = createCanvasStudioPlugin({
+  adapter: localStorageCanvasAdapter({ namespace: "demo-canvas" }),
+  // The editor's image tool resolves to a host asset id; seed it so the
+  // returned id always maps to renderable bytes.
+  onPickAsset: async () => "host-image",
+  seedAssets: {
+    "host-image": { id: "host-image", uri: "data:image/png;base64,…" },
+  },
+});
+
+<Studio puckConfig={puckConfig} plugins={[canvasStudio]} />;
+```
+
+## 核心特性
+
+- **模式切换** —— 一个顶栏操作（`canvas-studio:toggle`）在 Puck 页面编辑与全屏画布覆盖层之间切换。
+- **宿主拥有的持久化** —— 设计通过你实现的 `CanvasPersistenceAdapter` 进行保存/加载（Postgres、S3、IndexedDB，……）。随包提供两个参考适配器：`inMemoryCanvasAdapter`（瞬态）和 `localStorageCanvasAdapter`（浏览器，演示级别）。
+- **画板预览往返** —— 关闭时，每个画板都会被栅格化，并将预览 URL 修补回发起它的 Puck `DesignBlock` 节点。
+- **设计块快速添加** —— 向页面插入一个 `DesignBlock` 占位符，并在覆盖层中暂存一个全新的设计 id。
+- **`design://` 解析器** —— 在 IR 解析器链中将 `design://<designId>` 引用解析为缓存的画板预览。
+- **版本历史桥接** —— 通过 `CanvasSnapshotAdapter` 将画布快照接入 `canvas:` 键空间，与 `@anvilkit/plugin-version-history` 兼容。
+
+## API 参考
+
+### 工厂函数
+
+```ts
+function createCanvasStudioPlugin(
+  options: CreateCanvasStudioPluginOptions,
+): StudioPlugin;
+```
+
+| 字段                       | 类型                                       | 默认值                            | 用途                                                                                                                                          |
+| -------------------------- | ------------------------------------------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `adapter`                  | `CanvasPersistenceAdapter`                 | _必需_                            | 用于画布设计的宿主持久化（`save` / `load` / `list` / `delete?`）。                                                                              |
+| `designBlockComponentType` | `string`                                   | `"DesignBlock"`                   | 被视为设计块的 Puck 组件类型 id。                                                                                                              |
+| `canvasSnapshotAdapter`    | `CanvasSnapshotAdapter`                    | `inMemoryCanvasSnapshotAdapter()` | 用于画布设计的版本历史快照存储。提供一个持久化的实现以获得持久历史。                                                                            |
+| `onPickAsset`              | `() => Promise<string>`                    | 无                                | 用于编辑器 `image` 工具的宿主图片选择器。以一个（已预置的）资源 id 来 resolve；reject 或 `""` 表示取消。省略则使该工具处于惰性状态。            |
+| `seedAssets`               | `Readonly<Record<string, CanvasAssetRef>>` | 无                                | 合并到每个打开的设计中的宿主资源库条目，使 `onPickAsset` 返回的 id 可解析为字节。id 冲突时设计自身的资源胜出。                                  |
+
+### 适配器契约
+
+```ts
+interface CanvasPersistenceAdapter {
+  save(designId: string, ir: CanvasIR): MaybePromise<void>;
+  load(designId: string): MaybePromise<CanvasIR | null>;
+  list(): MaybePromise<readonly CanvasDesignMeta[]>;
+  delete?(designId: string): MaybePromise<void>;
+}
+
+interface CanvasSnapshotAdapter {
+  save(
+    designId: string,
+    ir: CanvasIR,
+    meta?: { label?: string },
+  ): MaybePromise<string>;
+  list(designId: string): MaybePromise<readonly CanvasSnapshotMeta[]>;
+  load(designId: string, snapshotId: string): MaybePromise<CanvasIR | null>;
+  delete?(designId: string, snapshotId: string): MaybePromise<void>;
+}
+```
+
+`CanvasSnapshotAdapter` 镜像了 `@anvilkit/plugin-version-history` 的 `SnapshotAdapter` 形态（为 `CanvasIR` 定型），这样一个宿主就能将 Puck PageIR 历史和画布设计历史都接入兼容的存储中。
+
+### 参考适配器
+
+| 导出                                       | 返回值                     | 备注                                                                                                  |
+| ------------------------------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `inMemoryCanvasAdapter()`                  | `CanvasPersistenceAdapter` | 瞬态；重新加载时丢失数据。                                                                              |
+| `localStorageCanvasAdapter({ namespace })` | `CanvasPersistenceAdapter` | 在 `<namespace>:designs:<id>` 下按保存存储快照，外加一个索引键。在 SSR 下（无 `localStorage`）抛出异常。 |
+| `inMemoryCanvasSnapshotAdapter()`          | `CanvasSnapshotAdapter`    | 当省略 `canvasSnapshotAdapter` 时使用的默认进程内快照存储。                                             |
+
+### 可组合的构建块
+
+插件在内部接线这些构建块，但每一个都被导出，供组装自定义集成的宿主使用：
+
+| 导出                                         | 用途                                                                                                                                                                                                                  |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createModeSwitchAction`                     | 切换画布模式的顶栏操作。Id：`MODE_SWITCH_ACTION_ID`（`"canvas-studio:toggle"`）。                                                                                                                                       |
+| `createDesignBlockQuickAdd`                  | 用于 `DesignBlock` 的图层快速添加。Id：`DESIGN_BLOCK_QUICK_ADD_ID`（`"canvas-studio:add-design-block"`）。                                                                                                              |
+| `createCanvasModeOverlay`                    | 构建在画布模式下挂载的覆盖层组件（`<CanvasWorkspace>` 宿主）。                                                                                                                                                          |
+| `createDesignAssetResolver`                  | `design://` IR 资源解析器。前缀：`DESIGN_REFERENCE_PREFIX`（`"design://"`）。                                                                                                                                           |
+| `createCanvasSnapshotBridge`                 | 将画布快照桥接到 `CANVAS_KEYSPACE`（`"canvas"`）下的版本历史事件。复用 `version-history:save-requested` / `version-history:open-requested`（`SAVE_REQUESTED_EVENT` / `OPEN_REQUESTED_EVENT`）。                          |
+| `createCanvasModeStore`                      | 独立的模式状态存储（`CanvasModeState` / `CanvasModeStoreApi`）。                                                                                                                                                        |
+| `createPreviewCache`                         | 画板预览 URL 缓存（`PreviewCache`）。                                                                                                                                                                                   |
+| `exportCanvasToAsset` / `exportAllArtboards` | 将单个画板 / 每个画板栅格化为预览数据 URL（`CanvasExportInput`、`CanvasExportResult`、`ExportAllArtboardsInput`、`ExportAllArtboardsResult`）。                                                                          |
+| `CANVAS_STUDIO_PLUGIN_META`                  | 插件元数据常量。                                                                                                                                                                                                       |
+
+## 使用示例
+
+### 瞬态的内存内设计（测试 / 临时演示）
+
+```ts
+import { Studio } from "@anvilkit/core";
+import {
+  createCanvasStudioPlugin,
+  inMemoryCanvasAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+
+// Designs live only for the session — handy for tests and throwaway demos.
+const canvasStudio = createCanvasStudioPlugin({
+  adapter: inMemoryCanvasAdapter(),
+});
+
+<Studio puckConfig={puckConfig} plugins={[canvasStudio]} />;
+```
+
+### 自定义的宿主后端持久化适配器
+
+针对你自己的后端（Postgres、S3、IndexedDB、一个 HTTP API）实现 `CanvasPersistenceAdapter` 契约。`save` / `load` / `list` 既可同步也可异步。
+
+```ts
+import {
+  createCanvasStudioPlugin,
+  type CanvasPersistenceAdapter,
+} from "@anvilkit/plugin-canvas-studio";
+
+const httpAdapter: CanvasPersistenceAdapter = {
+  save: (designId, ir) =>
+    fetch(`/api/designs/${designId}`, {
+      method: "PUT",
+      body: JSON.stringify(ir),
+    }).then(() => undefined),
+  load: (designId) =>
+    fetch(`/api/designs/${designId}`).then((res) =>
+      res.ok ? res.json() : null,
+    ),
+  list: () => fetch("/api/designs").then((res) => res.json()),
+};
+
+const canvasStudio = createCanvasStudioPlugin({ adapter: httpAdapter });
+```
+
+## 备注与 FAQ
+
+### 持久化发生在关闭时
+
+覆盖层在打开期间持有活动的 `CanvasIR`；宿主适配器的 `save()` 会在用户退出画布模式时运行（与画板导出和 `DesignBlock` 预览修补一起）。适配器层没有增量自动保存。
+
+### `onPickAsset` 与 `seedAssets` 配套使用
+
+画布命令无法向活动场景添加资源，因此 `onPickAsset` 返回的 id 必须已存在于设计中。通过 `seedAssets` 预置宿主库条目，使被选中的 id 可解析为可渲染的字节。id 冲突时设计自身的资源胜出。
+
+### 版本历史集成在需要持久化时主动启用
+
+没有 `canvasSnapshotAdapter` 时，快照存在于一个进程内存储中，重新加载时丢失。针对一个持久化的后端实现 `CanvasSnapshotAdapter`（并将其与 `@anvilkit/plugin-version-history` 配对），以获得持久的画布历史。
+
+## 许可证
+
+MIT

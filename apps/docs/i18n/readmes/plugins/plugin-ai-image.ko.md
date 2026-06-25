@@ -1,0 +1,313 @@
+# @anvilkit/plugin-ai-image
+
+> **Alpha（`0.1.4`）.** API는 `1.0` 이전에 변경될 수 있습니다. 이 플러그인은
+> AI 서비스와 직접 통신하지 않습니다——모든 작업은 호스트가 제공하는
+> `AiImageProvider`에 위임되므로, 자격 증명, 모델 식별자, 엔드포인트가
+> 플러그인 경계를 넘어가지 않습니다.
+
+AnvilKit **Canvas Studio**용 AI 이미지 생성 플러그인입니다. 호스트가 제공하는
+`AiImageProvider`를 래핑하여 에디터가 하나의 타입화된 계약을 통해 text-to-image, variation,
+inpaint, 배경 제거, 업스케일 작업을 발행할 수 있게 합니다——그리고 주변 빌딩 블록
+（중단/재시도/폴링 작업 클라이언트, mock provider, 마스크 에디터, 후처리 파이프라인,
+캔버스 커밋 헬퍼, 그리고 선택적인 React 사이드바 패널）을 별도의 서브경로 익스포트로 함께 제공합니다.
+
+> **상태.** 이터레이션 1의 빌딩 블록은 모두 출시되었습니다: 작업 클라이언트
+> （`./` — `createAiJobClient`）, mock provider（`./mock`）, 마스크 에디터
+> （`./mask`）, 후처리 파이프라인（`./post-process`）, 커밋 헬퍼（`./commit`）,
+> 그리고 React 사이드바 표면（`./react`）. 순수한
+> `createAiImagePlugin` 팩토리는 provider를 검증하고 명령형
+> `submit()` 메서드를 노출하지만, 등록하는 것은 빈 Studio 훅 블록입니다——이 자체로는 아직
+> 라이프사이클 훅이나 UI를 제공하지 않습니다. 패널은
+> `@anvilkit/plugin-ai-image/react`를 통해 마운트하세요（또는 `useAiImage` 위에 직접 UI를 연결하세요）.
+
+## 설치
+
+```sh
+pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
+```
+
+peer 의존성: `react >=19.0.0`, `react-dom >=19.0.0`,
+`@puckeditor/core ^0.21.3`, `@anvilkit/ui`（React 패널용）, 그리고
+`konva ^10` + `react-konva ^19`（`./mask` 및 `./react` Konva
+표면용）. 헤드리스 `.` 진입점——팩토리, 작업 클라이언트, 후처리, 커밋——은
+Konva가 필요하지 않습니다. `@anvilkit/canvas-core`는 직접 의존성으로 함께 제공되며
+와이어 형태（wire-shape） 타입의 단일 진실 공급원입니다.
+
+서브경로 임포트:
+
+| 서브경로                                  | 익스포트                                                                               |
+| ---------------------------------------- | -------------------------------------------------------------------------------------- |
+| `@anvilkit/plugin-ai-image`              | `createAiImagePlugin`, `createAiJobClient`, `RetryableError`, `commitImageReplace`, 마스크 익스포터 유틸리티, 그리고 모든 와이어 형태 타입. |
+| `@anvilkit/plugin-ai-image/react`        | `AiImagePanel`, `useAiImage`, `createAiImageSidebarPlugin`.                             |
+| `@anvilkit/plugin-ai-image/mask`         | `MaskEditorLayer`, `useMaskStrokes`, 마스크 타입.                                       |
+| `@anvilkit/plugin-ai-image/post-process` | `createPostProcessPipeline` + 이미지 헬퍼（`dataUrlToFile`, `sourceToFile`, `thumbnailDimensions`, `PostProcessError`）. |
+| `@anvilkit/plugin-ai-image/commit`       | `commitImageReplace`.                                                                  |
+| `@anvilkit/plugin-ai-image/mock`         | 테스트 및 데모용 `createMockAiImageProvider`.                                          |
+
+## 빠른 시작
+
+```ts
+import { createAiImagePlugin } from "@anvilkit/plugin-ai-image";
+import type { AiImageProvider } from "@anvilkit/plugin-ai-image";
+
+const provider: AiImageProvider = async (request, context, options) => {
+  // Call your AI service of choice (Replicate, OpenAI, self-hosted SD, ...).
+  // Honour `options?.signal` for cancellation and return an AiImageJobResult.
+  const res = await fetch("/api/ai/image", {
+    method: "POST",
+    body: JSON.stringify({ request, context }),
+    signal: options?.signal,
+  });
+  return res.json();
+};
+
+export const aiImage = createAiImagePlugin({ provider });
+
+// Imperative submit (delegates straight to your provider):
+const result = await aiImage.submit(
+  { kind: "text-to-image", prompt: "a calm mountain lake at dawn" },
+  { artboardId: "artboard-1" },
+);
+```
+
+## 핵심 기능
+
+- **하나의 타입화된 provider 계약** — 다섯 가지 작업 종류（`text-to-image`, `variation`,
+  `inpaint`, `bg-remove`, `upscale`）가 단일 `AiImageProvider`
+  콜백을 통해 흐릅니다. 자격 증명이나 모델 식별자가 플러그인 경계를 넘어가지 않습니다.
+- **중단/재시도/폴링 작업 클라이언트** — `createAiJobClient`는 provider를 래핑하여
+  일시적 실패에 대한 재시도（지수 백오프 + 지터）와 `status: "pending"`을 반환하는
+  비동기 작업에 대한 선택적 폴링을 제공합니다.
+- **마스크 에디터** — `MaskEditorLayer` + `useMaskStrokes`는 Konva 레이어에서 브러시
+  스트로크를 캡처하고, 익스포터는 이를 inpaint 작업용 마스크 에셋으로 래스터화합니다.
+- **후처리 파이프라인** — 정규화 → MIME 검증 → 크기 검증 →
+  선택적 압축 → 메인 에셋 등록 → 썸네일 생성 및 등록.
+- **캔버스 커밋 헬퍼** — `commitImageReplace`는 호스트의 캔버스 명령 버스를 위해 타입화된
+  `image.replace` 명령을 구성합니다.
+- **React 사이드바 패널** — `AiImagePanel`과 자체 등록형
+  `createAiImageSidebarPlugin`이 생성 UI를 Studio 사이드바의
+  `copilot` 모듈에 투입합니다.
+- **결정론적 mock** — `createMockAiImageProvider`는 테스트 및 데모를 위해 지연 시간과
+  종류별 결과（및 강제 실패）를 시뮬레이션합니다.
+
+## API 레퍼런스
+
+### 팩토리
+
+```ts
+function createAiImagePlugin(
+  opts: AiImagePluginOptions,
+): StudioPlugin & AiImagePluginInstance;
+
+interface AiImagePluginOptions {
+  provider: AiImageProvider; // required — throws TypeError if not a function
+}
+
+interface AiImagePluginInstance {
+  submit(
+    request: AiImageJobRequest,
+    context: AiLayerContext,
+    options?: { signal?: AbortSignal },
+  ): Promise<AiImageJobResult>;
+}
+```
+
+`submit()`은 구성된 `provider`에 직접 위임합니다. 반환된 객체는
+동시에 `StudioPlugin`이기도 하며, 그 `register()`는 현재 빈 `hooks` 블록을 반환합니다.
+
+### 와이어 형태 타입（`@anvilkit/canvas-core`에서 재익스포트）
+
+```ts
+type AiImageJobRequest =
+  | { kind: "text-to-image"; prompt: string; negativePrompt?: string; width?: number; height?: number; seed?: number }
+  | { kind: "variation"; sourceAssetId: string; strength?: number; seed?: number }
+  | { kind: "inpaint"; sourceAssetId: string; maskAssetId: string; prompt: string; seed?: number }
+  | { kind: "bg-remove"; sourceAssetId: string }
+  | { kind: "upscale"; sourceAssetId: string; scale?: number };
+
+type AiImageJobKind = AiImageJobRequest["kind"];
+type AiImageJobStatus = CanvasAiPlaceholderStatus | "cancelled";
+
+interface AiImageJobResult {
+  jobId: string;
+  status: AiImageJobStatus;
+  resultAssetId?: string;
+  error?: { code: string; message: string };
+  startedAt: number;
+  finishedAt?: number;
+}
+
+interface AiLayerContext {
+  artboardId: string;
+  selectedNodeId?: string;
+  bounds?: { x: number; y: number; width: number; height: number };
+}
+
+type AiImageProvider = (
+  request: AiImageJobRequest,
+  context: AiLayerContext,
+  options?: { signal?: AbortSignal },
+) => Promise<AiImageJobResult>;
+```
+
+이들은 `@anvilkit/canvas-core`에 존재하므로 헤드리스 IR과 이 플러그인이
+와이어 형태에 대해 일치합니다. 편의를 위해 이 패키지는 그것들을 재익스포트합니다.
+
+### 작업 클라이언트（`.`）
+
+```ts
+function createAiJobClient(options: AiJobClientOptions): AiJobClient;
+
+interface AiJobClient {
+  run(
+    request: AiImageJobRequest,
+    context: AiLayerContext,
+    options?: { signal?: AbortSignal },
+  ): Promise<AiImageJobResult>;
+}
+```
+
+| `AiJobClientOptions` 필드   | 타입             | 기본값      | 목적                                                                    |
+| -------------------------- | ---------------- | ----------- | ----------------------------------------------------------------------- |
+| `provider`                 | `AiImageProvider`| _필수_      | 호스트가 제공하는 provider.                                             |
+| `poll`                     | `AiJobPollFn`    | 없음        | 비동기 작업용 폴러. provider가 비종단 `pending`을 반환하고 `poll`이 설정되어 있으면, 클라이언트는 종단/중단/타임아웃까지 폴링합니다. |
+| `pollIntervalMs`           | `number`         | `1000`      | 폴링 시도 사이의 지연.                                                  |
+| `pollTimeoutMs`            | `number`         | 없음        | 폴링 루프의 실제 시간 예산. 초과 시 코드 `TIMEOUT`의 `error` 결과로 해결됩니다. |
+| `maxRetries`               | `number`         | `3`         | 초기 호출 이후의 재시도 횟수（일시적 실패에 한함）.                      |
+| `baseDelayMs`              | `number`         | `250`       | 기본 백오프 지연.                                                      |
+| `maxDelayMs`               | `number`         | `8000`      | 지터 이전의 백오프 상한.                                               |
+| `jitter` / `sleep` / `now` | 함수             | 플랫폼      | 결정론적 테스트를 위한 주입 지점.                                       |
+
+`options.signal`을 중단하면 `cancelled` 결과로 해결됩니다. provider에서 `RetryableError`
+를 던지면 해당 실패를 일시적인 것으로 표시하고 백오프 루프의 대상으로 만들 수 있습니다.
+
+### 마스크 편집（`./mask`）
+
+| 익스포트           | 시그니처                                                    | 목적                                                 |
+| ----------------- | ----------------------------------------------------------- | ---------------------------------------------------- |
+| `MaskEditorLayer` | React（`react-konva`） 컴포넌트                             | inpaint 마스크용 브러시 스트로크 캡처 레이어.        |
+| `useMaskStrokes`  | `(options?: UseMaskStrokesOptions) => UseMaskStrokesResult` | 마스크 레이어의 스트로크 상태 + 포인터 핸들러.       |
+
+### 마스크 익스포트（루트 진입점）
+
+마스크 래스터화/업로드 헬퍼는 `./mask` 서브경로가 아니라 루트 진입점
+（`@anvilkit/plugin-ai-image`）에서 익스포트됩니다:
+
+| 익스포트                      | 시그니처                                                        | 목적                                                              |
+| ---------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `createMaskToAssetExporter`  | `(options: MaskToAssetExporterOptions) => MaskToAssetExporter`  | `.export(strokes, dimensions)`이 래스터화 + 업로드를 수행하고 마스크 에셋 id로 해결됩니다. |
+| `drawMask`                   | `(ctx, strokes, options?) => void`                              | 2D context에 대한 저수준 마스크 래스터화.                         |
+| `rasterizeMaskToDataUrl`     | `(input: RasterizeMaskInput) => string`                         | 스트로크를 PNG data URL로 렌더링합니다.                           |
+| `dataUrlToFile`              | `(dataUrl: string, filename: string) => File`                   | data URL을 업로드용 `File`로 변환합니다.                         |
+
+### 후처리（`./post-process`）
+
+```ts
+function createPostProcessPipeline(
+  options: PostProcessOptions,
+): PostProcessPipeline; // .process(source) => Promise<PostProcessResult>
+```
+
+| `PostProcessOptions` 필드   | 타입                        | 기본값  | 목적                                                            |
+| -------------------------- | --------------------------- | ------- | ---------------------------------------------------------------- |
+| `upload`                   | `PostProcessUpload`         | _필수_  | 호스트 업로드 함수. 메인 이미지와 썸네일 모두에 대해 호출됩니다. |
+| `acceptedMimeTypes`        | `readonly string[]`         | 없음    | MIME 허용 목록. 일치하지 않는 소스는 `PostProcessError`를 던집니다. |
+| `maxBytes`                 | `number`                    | 없음    | 크기 상한.                                                      |
+| `thumbnail`                | `{ maxEdge?; mimeType? }`   | `maxEdge: 256` | 썸네일 치수/포맷（항상 생성됨）.                          |
+| `compress`                 | `{ mimeType?; quality? }`   | 없음    | 옵트인 재인코딩（예: `image/webp`로）.                          |
+| `createCanvas` / `decodeImage` | 함수                    | 플랫폼  | 비 DOM／테스트 환경용 주입 지점.                              |
+| `filename`                 | `string`                    | 없음    | 업로드되는 에셋의 기본 파일명.                                  |
+
+`PostProcessResult`는 `{ assetId, thumbnailAssetId, mimeType, bytes, width, height }`를 반환합니다.
+헬퍼 `dataUrlToFile`, `sourceToFile`, `thumbnailDimensions`, 그리고
+`PostProcessError` 클래스가 함께 익스포트됩니다.
+
+### 커밋（`./commit`）
+
+```ts
+function commitImageReplace<T = unknown>(
+  options: CommitImageReplaceOptions<T>,
+): T;
+
+interface CommitImageReplaceOptions<T = unknown> {
+  commit: (cmd: CanvasImageReplaceCommand) => T; // CommitCanvasCommandFn<T>
+  nodeId: string;
+  fromAssetId: string;
+  toAssetId: string;
+}
+```
+
+`image.replace` 캔버스 명령을 구성하여 호스트의 `commit`
+함수（예: `(cmd) => historyStore.getState().commit(currentIr, cmd)`）에 넘기고,
+그 함수가 반환하는 것을 그대로 반환합니다.
+
+### React（`./react`）
+
+```ts
+function AiImagePanel(props: AiImagePanelProps): ReactElement;
+function useAiImage(options: UseAiImageOptions): UseAiImageResult;
+function createAiImageSidebarPlugin(
+  options: CreateAiImageSidebarPluginOptions,
+): StudioPlugin;
+```
+
+- **`AiImagePanel`** — 생성 UI（작업 선택기, 프롬프트 필드, 실행/취소）.
+  `jobClient`, `getLayerContext` 접근자, 선택적 `defaultOp`,
+  그리고 주입 가능한 i18n `labels`에 의해 구동됩니다.
+- **`useAiImage`** — 필드 값, 변경
+  핸들러, 그리고 `onRun` / `onCancel`을 반환하는 헤드리스 패널 상태 훅입니다. `AiImagePanel`의
+  크롬이 맞지 않을 때 직접 UI에 연결하세요.
+- **`createAiImageSidebarPlugin`** — `AiImagePanel`을 Studio 사이드바의
+  `copilot` 모듈에 마운트하는 자체 등록형 플러그인입니다. 옵션:
+
+  | 필드             | 타입                                  | 기본값           | 목적                                                              |
+  | ---------------- | ------------------------------------- | ---------------- | ------------------------------------------------------------------ |
+  | `jobClient`      | `AiJobClient`                         | _필수_           | 작업을 구동합니다（권장: `createAiJobClient`로부터）.             |
+  | `getLayerContext`| `() => AiLayerContext \| null`        | `() => null`     | 실시간 활성 아트보드/선택 접근자. `null`은 Run을 비활성화합니다.  |
+  | `defaultOp`      | `AiImageJobKind`                      | `"text-to-image"`| 첫 렌더링 시 선택되는 작업.                                       |
+  | `labels`         | i18n 문구                             | 없음             | `AiImagePanel`로 전달됩니다.                                      |
+
+  **단일 점유 주의 사항.** Core의 사이드바 레지스트리는 단일
+  `copilotPanel`을 보유합니다（나중에 쓴 것이 우선）. 이 패널과 `@anvilkit/plugin-ai-copilot`의
+  패널은 둘 다 `copilot` 슬롯을 요구합니다——`<Studio>` 마운트당 정확히 하나만 등록하세요.
+  실제로는 서로 다른 Studio context에 존재합니다（canvas 에디터는
+  Puck 페이지 에디터와 별도로 마운트되는 형제 모드입니다）.
+
+### Mock（`./mock`）
+
+```ts
+function createMockAiImageProvider(
+  opts?: CreateMockAiImageProviderOptions,
+): AiImageProvider;
+```
+
+| 필드            | 타입                                            | 기본값  | 목적                                             |
+| --------------- | ----------------------------------------------- | ------- | ------------------------------------------------ |
+| `latencyMs`     | `number`                                        | `0`     | 시뮬레이션된（중단 인식） provider 지연 시간.    |
+| `resultAssetId` | `string \| ((request) => string)`               | 없음    | 결정론적 결과 에셋 id, 또는 요청별 함수.        |
+| 실패 옵션       | —                                               | 없음    | 오류 및 재시도 경로를 연습하기 위해 일시적/종단 실패를 강제합니다. |
+
+## 참고 사항 및 FAQ
+
+### 보안 모델
+
+플러그인은 자격 증명, 엔드포인트, 모델 식별자를 결코 보지 않습니다——이것들은
+호스트의 `AiImageProvider`에 속합니다. provider는 정확히 `(request, context,
+options)`를 받아 `AiImageJobResult`를 반환합니다.
+
+### 중단 신호를 존중하세요
+
+`submit()`과 `AiJobClient.run()`은 `AbortSignal`을 provider까지 전달합니다.
+provider는 `options.signal`을 자신의 `fetch`（또는 동등한 것）에 전달해야 하며, 그래야 취소,
+재시도 슬립, 폴링 루프가 모두 신속하게 멈춥니다. 중단은 예외를 던지는 대신
+`cancelled` 결과로 해결됩니다.
+
+### Konva는 비주얼 표면에만 필요합니다
+
+헤드리스 `.` 진입점（팩토리, 작업 클라이언트, 후처리, 커밋）은 Konva
+의존성이 없습니다. `konva` + `react-konva`는 `./mask`
+에디터 레이어 또는 `./react` 패널을 임포트할 때에만 필수가 됩니다.
+
+## 라이선스
+
+MIT

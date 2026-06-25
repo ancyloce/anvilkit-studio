@@ -1,0 +1,81 @@
+# @anvilkit/logo-clouds
+
+반짝이는 제목과 스크롤되는 Devicon 로고 마퀴를 갖춘 Puck 네이티브 로고 클라우드 컴포넌트.
+
+## 설치
+
+컴포넌트를 렌더링하기 전에 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
+
+```sh
+pnpm add @anvilkit/logo-clouds @anvilkit/ui @puckeditor/core
+```
+
+## 스타일
+
+컴포넌트를 렌더링하기 전에 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
+
+```tsx
+import "@anvilkit/logo-clouds/styles.css";
+```
+
+Next.js에서는 이 import를 `app/layout.tsx` 또는 `pages/_app.tsx`에 추가하세요.
+
+## 예
+
+### 기본 사용법
+
+`defaultProps`를 통해 기본 문구로 섹션을 렌더링합니다.
+
+```tsx
+import "@anvilkit/logo-clouds/styles.css";
+import { LogoClouds, defaultProps } from "@anvilkit/logo-clouds";
+
+export function Example() {
+  return <LogoClouds {...defaultProps} />;
+}
+```
+
+### 커스텀 제목과 부제목
+
+반짝이는 제목은 `title`로 제어됩니다. `subtitle`은 그 아래에 보조 문구를 렌더링합니다. 스크롤되는 로고 마퀴는 기본 내장되어 있습니다.
+
+```tsx
+import { LogoClouds } from "@anvilkit/logo-clouds";
+
+export function TrustedBy() {
+  return (
+    <LogoClouds
+      title="Trusted by builders"
+      subtitle="Teams of every size ship polished products with our stack."
+    />
+  );
+}
+```
+
+### Puck 설정에 등록
+
+내보낸 `componentConfig`를 Puck `Config`에 연결합니다.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type LogoCloudsProps } from "@anvilkit/logo-clouds";
+
+const config: Config<{ LogoClouds: LogoCloudsProps }> = {
+  components: {
+    LogoClouds: componentConfig,
+  },
+};
+```
+
+## API
+
+내보낸 `LogoCloudsProps` 타입과 Puck `fields` 스키마에서 파생되었습니다.
+
+| Prop       | Type     | Default             | Description                        |
+| ---------- | -------- | ------------------- | ---------------------------------- |
+| `title`    | `string` | `"Brands love us"`  | 반짝이는 제목 텍스트.              |
+| `subtitle` | `string` | _(trusted-by copy)_ | 제목 아래의 보조 문구.            |
+
+## 테마 및 반응형
+
+shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니다. 모바일, 태블릿, 데스크톱 브레이크포인트 전반에서 반응형입니다.

@@ -1,0 +1,119 @@
+# @anvilkit/navbar
+
+로고, 내비게이션 항목, 액션 버튼을 갖춘 Puck 네이티브 내비게이션 바 레이아웃 컴포넌트.
+
+## 설치
+
+컴포넌트를 렌더링하기 전에 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
+
+```sh
+pnpm add @anvilkit/navbar @anvilkit/ui @puckeditor/core
+```
+
+## 스타일
+
+컴포넌트를 렌더링하기 전에 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
+
+```tsx
+import "@anvilkit/navbar/styles.css";
+```
+
+Next.js에서는 이 import를 `app/layout.tsx` 또는 `pages/_app.tsx`에 추가하세요.
+
+## 예
+
+### 기본 사용법
+
+텍스트 로고, 몇 개의 링크, 단일 행동 유도. `active` href가 일치하는 메뉴 항목을 강조 표시합니다.
+
+```tsx
+import "@anvilkit/navbar/styles.css";
+import { Navbar } from "@anvilkit/navbar";
+
+export function Example() {
+  return (
+    <Navbar
+      logo={{ type: "text", text: "Acme", href: "/" }}
+      items={[
+        { label: "Overview", href: "/overview" },
+        { label: "Features", href: "/features" },
+      ]}
+      actions={[{ label: "Sign up", href: "/signup", variant: "secondary" }]}
+      active="/features"
+    />
+  );
+}
+```
+
+### 이미지 로고와 여러 액션
+
+로고를 `image`로 전환하고, 서로 다른 변형과 크기를 가진 여러 액션을 렌더링합니다.
+
+```tsx
+import { Navbar } from "@anvilkit/navbar";
+
+export function MarketingNav() {
+  return (
+    <Navbar
+      logo={{ type: "image", imageUrl: "/logo.svg", alt: "Acme", href: "/" }}
+      items={[
+        { label: "Product", href: "/product" },
+        { label: "Pricing", href: "/pricing" },
+      ]}
+      actions={[
+        { label: "Log in", href: "/login", variant: "ghost", size: "default" },
+        {
+          label: "Get started",
+          href: "/signup",
+          variant: "default",
+          size: "lg",
+        },
+      ]}
+      active="/pricing"
+    />
+  );
+}
+```
+
+### Puck 설정에 등록
+
+내보낸 `componentConfig`를 Puck `Config`에 연결합니다.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type NavbarProps } from "@anvilkit/navbar";
+
+const config: Config<{ Navbar: NavbarProps }> = {
+  components: {
+    Navbar: componentConfig,
+  },
+};
+```
+
+## API
+
+내보낸 `NavbarProps` 타입과 Puck `fields` 스키마에서 파생되었습니다.
+
+| Prop                     | Type                                                                                    | Default              | Description                          |
+| ------------------------ | --------------------------------------------------------------------------------------- | -------------------- | ------------------------------------ |
+| `logo`                   | `object`                                                                                | _(text logo)_        | 로고 설정.                           |
+| `logo.type`              | `"text"` \| `"image"`                                                                   | `"text"`             | 로고를 텍스트 또는 이미지로 렌더링합니다. |
+| `logo.text`              | `string`                                                                                | `"Underline"`        | 표시 텍스트(type이 `text`일 때).     |
+| `logo.imageUrl`          | `string`                                                                                | `""`                 | 이미지 URL(type이 `image`일 때).     |
+| `logo.alt`               | `string`                                                                                | `"Underline"`        | 이미지 대체 텍스트.                  |
+| `logo.href`              | `string`                                                                                | `"/"`                | 로고 링크 URL.                       |
+| `items`                  | `NavbarMenuItem[]`                                                                      | _(5 example links)_  | 내비게이션 메뉴 항목.                |
+| `items[].label`          | `string`                                                                                | `"New link"`         | 메뉴 항목 레이블.                    |
+| `items[].href`           | `string`                                                                                | `"/"`                | 메뉴 항목 링크.                      |
+| `actions`                | `NavbarAction[]`                                                                        | _(1 example action)_ | 액션 버튼.                           |
+| `actions[].label`        | `string`                                                                                | `"Action"`           | 버튼 레이블.                         |
+| `actions[].href`         | `string`                                                                                | `""`                 | 버튼 링크.                           |
+| `actions[].variant`      | `"default"` \| `"secondary"` \| `"outline"` \| `"ghost"` \| `"link"` \| `"destructive"` | `"secondary"`        | 버튼 변형.                           |
+| `actions[].size`         | `"sm"` \| `"default"` \| `"lg"`                                                         | `"lg"`               | 버튼 크기.                           |
+| `actions[].openInNewTab` | `boolean`                                                                               | `false`              | 링크를 새 탭에서 엽니다.             |
+| `actions[].disabled`     | `boolean`                                                                               | `false`              | 액션 버튼을 비활성화합니다.          |
+| `active`                 | `string`                                                                                | `"/features"`        | 현재 활성 항목의 href.               |
+
+## 테마 및 반응형
+
+shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니다. 모바일, 태블릿, 데스크톱 브레이크포인트 전반에서 반응형입니다. 모바일에서는 햄버거 메뉴로 접힙니다.

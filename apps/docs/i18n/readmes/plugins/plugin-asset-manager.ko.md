@@ -1,0 +1,518 @@
+# @anvilkit/plugin-asset-manager
+
+> **Alpha(`0.1.10`).** `v1.0` 이전에는 공개 표면이 아직 바뀔 수 있습니다. CI에서 강제되는 번들 예산: headless 진입점 ≤ 8 KB gzip, UI 서브경로 ≤ 12 KB gzip, Unsplash 서브경로 ≤ 4 KB gzip.
+
+Anvilkit Studio를 위한 헤드리스 에셋 관리자 플러그인입니다. 호스트가 업로드 백엔드를 제공하며, 플러그인은 검증, 등록, 검색, IR 시점 해석, CSP 가이던스, 그리고 (선택적으로) 업로드 + 탐색 경험을 위한 React UI를 담당합니다. 모든 어댑터 응답에 대해 엄격한 신뢰 경계를 강제하면서, 교체 가능한 프로덕션 백엔드(S3, GCS, 커스텀 HTTP)를 위해 설계되었습니다.
+
+## 설치
+
+```bash
+pnpm add @anvilkit/plugin-asset-manager @anvilkit/core react react-dom @puckeditor/core
+```
+
+선택적이지 않은 peer: `react >=19.2.0`, `react-dom >=19.2.0`, `@puckeditor/core ^0.21.3`.
+
+서브경로 가져오기:
+
+- `@anvilkit/plugin-asset-manager` — 플러그인 팩토리, 검증, 어댑터, CSP 어드바이저, 에러.
+- `@anvilkit/plugin-asset-manager/ui` — React UI 컴포넌트(브라우저 + 폴더 + Unsplash 패널).
+- `@anvilkit/plugin-asset-manager/retry` — 범용 `RetryableError` + `withRetry()`.
+- `@anvilkit/plugin-asset-manager/adapters/s3` — 프로덕션용 `s3PresignedAdapter`.
+- `@anvilkit/plugin-asset-manager/providers/unsplash` — 지연 로딩되며 의존성 없는 Unsplash provider.
+- `@anvilkit/plugin-asset-manager/testing` — 하위 플러그인 테스트를 위한 fixtures.
+
+## 빠른 시작
+
+```ts
+import { createAssetManagerPlugin } from "@anvilkit/plugin-asset-manager";
+import { Studio } from "@anvilkit/core";
+
+// Zero-config: an in-memory library with folders enabled. Every option is optional.
+const assetManager = createAssetManagerPlugin();
+
+<Studio puckConfig={puckConfig} plugins={[assetManager]} />;
+```
+
+실제 업로드를 위해서는 `uploader`를 전달하세요. `dataUrlUploader`는 개발 전용입니다 — 파일은 메모리 내 `data:` URL로 변환됩니다(기본 상한 1 MB). 프로덕션에서는 `s3PresignedAdapter` 또는 커스텀 `UploadAdapter`로 교체하세요. 기본 Studio 사이드바의 **Images** 레일은 라이브러리, 폴더 브레드크럼/트리, 소스 탭, 그리고 (구성된 경우) Unsplash 피커를 추가 배선 없이 렌더링합니다.
+
+## 핵심 기능
+
+- **교체 가능한 업로드 어댑터** — `dataUrlUploader`, `inMemoryUploader`, `s3PresignedAdapter`가 기본 제공됩니다. 커스텀 어댑터는 `UploadAdapter` 함수 시그니처를 구현합니다.
+- **엄격한 신뢰 모델** — 모든 어댑터 응답은 `validateUploadResult`를 통해 검증됩니다: scheme 허용 목록, 경로 순회 방어, IDN 동형이의 글자 방어. `javascript:` / `vbscript:`는 강력하게 차단됩니다. `data:`는 옵트인입니다.
+- **메모리 내 에셋 레지스트리** — 검색(`query` / `kinds` / `tags`), 불투명 커서 페이지네이션, 자동 파생 태그, 이름 변경 / 재태깅 / 교체 / 삭제.
+- **필수 구성 제로** — `createAssetManagerPlugin()`(인자 없음)은 폴더가 포함된 동작하는 메모리 내 라이브러리를 만들어 줍니다. 필요한 `dataSource` 연산만 배선하세요.
+- **폴더** — 트리 관리(생성 / 이름 변경 / 이동 / 제거, 부모 재지정 또는 캐스케이드 지원). 소속은 라이브러리 메타데이터이며 결코 IR이 아니므로, 이동이 렌더링된 페이지를 바꾸는 일은 없습니다.
+- **호스트 지원 데이터 소스** — 선택적인 비동기 `AssetDataSource`(list는 에셋 + 폴더 트리를 반환). 생략된 메서드에 대해서는 plane별로 메모리 내 기본값으로 폴백합니다.
+- **Unsplash** — 내장되어 지연 로딩되며 프록시 우선인 소스. 여러 테마, 어트리뷰션 + 필수 다운로드 트리거를 갖추고 있으며, 결코 headless 청크에 들어가지 않습니다.
+- **카테고리 및 패싯 필터링** — kind / tags / folder / source 축(AND로 합성)에 더해 호스트가 정의한 카테고리와 패싯. 복합 커서로 여러 소스에 걸쳐 페더레이션합니다.
+- **IR 시점 해석** — `createIRAssetResolver` + `resolveAssets`가 내보내기 / 렌더링 시점에 `asset://<id>` 참조를 검증된 URL로 변환합니다.
+- **CSP 어드바이저** — `getRequiredCsp`는 구성된 어댑터가 필요로 하는 최소 `connect-src` / `img-src` / `media-src` 지시문을 계산합니다.
+- **프로덕션 준비된 S3 어댑터** — `s3PresignedAdapter`는 POST 후 PUT 하며, 5xx + 네트워크 장애에 대해 지수 백오프로 재시도합니다(4xx는 빠르게 실패).
+- **재개 가능 / 멀티파트 업로드** — 옵트인 `resumable` 옵션이 대용량 미디어를 청크로 나누고, 파트별로 재시도하며, 재로드 후 중단된 업로드를 재개합니다. `s3MultipartAdapter`는 기본 제공됩니다(`./adapters/s3-multipart`). [재개 가능 / 멀티파트 업로드](#resumable--multipart-upload)를 참조하세요.
+- **에셋 변환** — 바이트를 처리하지 않는 변환 심(seam): 선언적인 `AssetTransform`이 `asset://<id>?w=…&fm=…` 참조에 실리고, 호스트의 `transformResolver`가 그것을 파생 URL(여러분의 이미지 CDN)로 매핑합니다. `createQueryParamTransformResolver`는 기본 제공됩니다(`./transform`). [에셋 변환 / 변형](#asset-transformations--variants)을 참조하세요.
+- **선택적 React UI** — `UploadButton`, `AssetBrowser`, `AssetCommandPalette`, `MetadataPanel`, `ReplaceAssetDialog`, `DeleteAssetDialog`, 그리고 복합 `AssetManagerUI`.
+- **배치 업로드 제어** — `StudioAssetSource.upload(files)`는 `maxConcurrentUploads`(기본 3)와 `AbortSignal`을 준수합니다.
+
+## API 레퍼런스
+
+### 플러그인 팩토리
+
+```ts
+function createAssetManagerPlugin(options: AssetManagerOptions): StudioPlugin;
+```
+
+| 필드                        | 타입                                           | 기본값    | 목적                                                                          |
+| --------------------------- | ---------------------------------------------- | --------- | ---------------------------------------------------------------------------- |
+| `uploader`                  | `UploadAdapter`                                | in-memory | 바이너리 수집 백엔드(선택. 기본은 메모리 내 업로더).                          |
+| `resumable`                 | `ResumableUploadConfig`                        | none      | 대용량 파일을 위한 옵트인 청크/재개 가능 업로드(`{ adapter, partSize?, threshold?, sessionStore? }`). |
+| `dataSource`                | `AssetDataSource`                              | in-memory | 호스트 지원 카탈로그(list / remove / replace / rename / move + 폴더).         |
+| `folders`                   | `boolean \| FolderOptions`                     | `true`    | 폴더 관리. 평면 라이브러리는 `false`, 또는 `{ maxDepth, allowMove }`.         |
+| `providers`                 | `readonly AssetSourceProvider[]`               | `[]`      | 로컬 라이브러리와 함께 페더레이션되는 추가 읽기 전용 소스.                    |
+| `unsplash`                  | `UnsplashSourceOptions`                        | none      | 내장 Unsplash 소스(프록시 우선. 키는 번들하지 않음).                          |
+| `categories`                | `readonly AssetCategory[]`                     | none      | kind 필터 옆의 저장된 뷰 칩.                                                  |
+| `facets`                    | `readonly AssetFacetDefinition[]`              | none      | 커스텀 패싯 필터(로컬 `valueOf` 또는 원격).                                   |
+| `maxFileSize`               | `number`                                       | none      | 바이트 수. 어댑터 실행 전에 강제됩니다.                                       |
+| `acceptedMimeTypes`         | `readonly string[]`                            | none      | 허용 목록. 어댑터 실행 전에 강제됩니다.                                       |
+| `acceptedFileExtensions`    | `readonly string[]`                            | none      | 확장자 허용 목록(`".png"` 또는 `"png"`). 어댑터 실행 전에 강제됩니다.         |
+| `dataUrlAllowlistOptIn`     | `boolean`                                      | `false`   | `true`일 때 `data:` URL이 유효한 출력입니다.                                  |
+| `allowMixedScriptHostnames` | `boolean`                                      | `false`   | `true`일 때 라틴 문자를 혼동되는 스크립트와 섞은 호스트명이 허용됩니다.       |
+| `getThumbnail`              | `(entry: UploadResult) => string \| undefined` | none      | 표시되는 썸네일에 대한 선택적 오버라이드.                                     |
+| `transformResolver`         | `TransformResolver`                            | none      | `AssetTransform`을 파생 URL(여러분의 이미지 CDN)로 매핑합니다. [에셋 변환](#asset-transformations--variants)을 참조하세요. |
+| `dedupe`                    | `boolean`                                      | `false`   | `true`일 때 업로드를 해시(SHA-256)하고, 재업로드 대신 같은 내용의 기존 에셋을 재사용합니다. |
+| `sniffContent`              | `boolean`                                      | `false`   | `true`일 때, 매직 바이트 내용이 선언된 `file.type`과 모순되는 파일을 거부합니다(MIME/확장자를 넘어선 심층 방어). |
+| `onAssetDeleted`            | `(asset: UploadResult) => void \| Promise<void>` | none    | 기본 소스를 통해 에셋이 삭제될 때 발화하는 라이프사이클 hook. 여기서 백엔드 객체를 해제하세요(`blob:` URL은 자동으로 취소됩니다). |
+
+### 플러그인 컨텍스트의 명령형 API
+
+| 함수                   | 시그니처                                        | 목적                                                       |
+| ---------------------- | ----------------------------------------------- | ---------------------------------------------------------- |
+| `uploadAsset`          | `(ctx, file, signal?) => Promise<UploadResult>` | 파일 검증 → 업로더 실행 → 결과 검증 → 등록.                 |
+| `getAssetRegistry`     | `(ctx) => AssetRegistry \| undefined`           | `onInit` 이후 런타임 레지스트리를 읽습니다.                |
+| `createAssetReference` | `(id) => string`                                | IR을 위한 안정적인 `asset://<id>` 참조를 생성합니다.       |
+
+런타임 이벤트:
+
+| 이벤트 상수 | 이벤트 이름 | 페이로드 |
+| -------------- | ---------- | ------- |
+| `ASSET_MANAGER_UPLOADED_EVENT` | `asset-manager:uploaded` | `AssetManagerUploadedEvent` — 검증 및 레지스트리 삽입 후의 `{ asset, reference }`. |
+| `ASSET_MANAGER_ERROR_EVENT` | `asset-manager:error` | `AssetManagerErrorEvent` — 업로드 검증 또는 어댑터 장애에 대한 `{ code, message }`. |
+
+### `UploadAdapter`
+
+```ts
+type UploadAdapter = (
+  file: File,
+  options?: UploadAdapterOptions, // { signal?: AbortSignal }
+) => Promise<UploadResult>;
+
+interface UploadResult {
+  readonly url: string;
+  readonly id: string;
+  readonly name?: string;
+  readonly meta?: AssetMeta; // { size?, mimeType?, width?, height? }
+  readonly tags?: readonly string[];
+}
+```
+
+### 참조 어댑터
+
+| 어댑터                     | 사용 사례  | 비고                                                                                                 |
+| -------------------------- | ---------- | ---------------------------------------------------------------------------------------------------- |
+| `dataUrlUploader(opts?)`   | 개발, 데모 | `maxBytes` 기본 1 MB — 제한되는 것은 **원본** 파일입니다. 산출되는 base64 `data:` URL은 약 ~33% 더 크며, 메모리에 보관되고 IR/내보내기에 인라인으로 임베드됩니다. 이미지 치수를 추출합니다. |
+| `inMemoryUploader()`       | 테스트     | 파일을 `blob:` URL로 메모리에 저장합니다. 이 객체 URL은 **결코 취소되지 않으므로**(삭제 hook 없음), 장시간의 업로드/삭제 변동은 누수됩니다 — 개발/테스트 전용. |
+| `s3PresignedAdapter(opts)` | 프로덕션   | `presignEndpoint`에 `{ name, type, size }`를 POST하고, 반환된 `url`에 파일을 PUT합니다. 5xx + 네트워크를 재시도합니다. |
+
+`s3PresignedAdapter` 옵션:
+
+| 필드              | 기본값                | 목적                                                           |
+| ----------------- | --------------------- | -------------------------------------------------------------- |
+| `presignEndpoint` | _필수_                | `{ url, publicUrl?, headers?, id? }`를 반환하는 URL.           |
+| `fetch`           | `globalThis.fetch`    | 주입 가능한 fetch 구현(테스트 / 계측용).                       |
+| `region`          | none                  | 로그에만 기록되며 검증되지 않습니다.                           |
+| `retry`           | `{ maxRetries: 3 }`   | 두 단계 모두에 대해 `withRetry()`로 전달됩니다.                |
+| `signal`          | none                  | 진행 중인 presign + PUT + 모든 재시도 슬립을 중단합니다.       |
+| `headers`         | none                  | presign POST의 추가 헤더(예: 인증).                            |
+| `idGenerator`     | `crypto.randomUUID()` | 에셋 id 오버라이드.                                            |
+
+### 재개 가능 / 멀티파트 업로드
+
+대용량 미디어는 파트 단위로 업로드되고, 파트별로 재시도되며, 중단(새로고침, 네트워크 끊김) 후 재개될 수 있습니다. `resumable` 옵션으로 옵트인합니다. 임계값 이상의 파일은 재개 가능 경로를 타고, 나머지는 단발성으로 유지됩니다.
+
+```ts
+import { createAssetManagerPlugin } from "@anvilkit/plugin-asset-manager";
+import { s3PresignedAdapter } from "@anvilkit/plugin-asset-manager/adapters/s3";
+import { s3MultipartAdapter } from "@anvilkit/plugin-asset-manager/adapters/s3-multipart";
+
+createAssetManagerPlugin({
+	uploader: s3PresignedAdapter({ presignEndpoint: "/api/sign" }), // small files
+	resumable: {
+		adapter: s3MultipartAdapter({ endpoint: "/api/s3-multipart" }),
+		partSize: 8 * 1024 * 1024, // bytes/part (clamped up to S3's 5 MiB min)
+		threshold: 16 * 1024 * 1024, // route files ≥ this through multipart
+		// sessionStore defaults to localStorage (in-memory fallback)
+	},
+});
+```
+
+`ResumableUploadConfig`:
+
+| 필드           | 기본값             | 목적                                                                                      |
+| -------------- | ------------------ | ---------------------------------------------------------------------------------------- |
+| `adapter`      | _필수_             | `ResumableUploadAdapter`(`begin` / `uploadPart` / `complete` / `abort`).                 |
+| `partSize`     | 8 MiB              | 파트당 바이트 수.                                                                        |
+| `threshold`    | `partSize`         | 재개 가능 경로를 타는 최소 파일 크기. 더 작은 파일은 `uploader`를 사용합니다.             |
+| `sessionStore` | localStorage 스토어 | 진행 중인 세션이 영속화되는 곳(`createUploadSessionStore`, 또는 커스텀).                  |
+
+영속적인 세션 스토어가 사용 가능할 때 **재개는 자동입니다**. 진행 상황은 세션 스토어를 통해 영속화되며(name + size + last-modified로 구성된 안정적인 파일 핑거프린트를 키로 함), 같은 중단된 파일을 다시 선택하면 백엔드와 대조하여 이미 수락된 파트를 건너뜁니다 — 명시적인 "재개" 동작은 필요하지 않습니다. 기본 스토어는 `localStorage`를 사용하며, 그것이 불가능한 곳(SSR, 프라이빗 모드)에서는 메모리 내 스토어로 폴백하므로, 재개는 같은 페이지 세션 내에서만 유지됩니다.
+
+**`s3MultipartAdapter`(`./adapters/s3-multipart`)** 는 의존성이 없습니다 — `s3PresignedAdapter`와 마찬가지로 AWS SDK를 결코 번들하지 않습니다. 그것은 `action`으로 판별되는 JSON을 POST하는 단일 호스트 `endpoint`를 통해 모든 S3 연산을 중개합니다.
+
+| `action`     | 호스트가 실행                | 반환                             |
+| ------------ | -------------------------- | -------------------------------- |
+| `create`     | `CreateMultipartUpload`    | `{ uploadId, key?, partSize? }`  |
+| `sign-part`  | 하나의 `UploadPart`를 presign | `{ url, headers? }`           |
+| `complete`   | `CompleteMultipartUpload`  | `{ url, publicUrl?, id? }`       |
+| `abort`      | `AbortMultipartUpload`     | —                                |
+| `list-parts` | `ListParts`(재개)          | `{ parts, key? }`(404 ⇒ 사라짐) |
+
+파트 PUT은 그 `ETag`를 브라우저에 노출해야 합니다 — S3 CORS `ExposeHeaders: ["ETag"]`를 설정하세요. CSP를 위해서는 `s3Multipart: { endpoint, bucketHost, publicHost? }`를 `getRequiredCsp`에 전달하세요.
+
+### `AssetRegistry`
+
+```ts
+interface AssetRegistry {
+  register(asset: UploadResult): UploadResult;
+  get(id: string): UploadResult | undefined;
+  list(): readonly UploadResult[];
+  delete(id: string): boolean;
+  rename(id: string, name: string): UploadResult | undefined;
+  replace(id: string, next: UploadResult): UploadResult | undefined;
+  setTags(id: string, tags: readonly string[]): UploadResult | undefined;
+  search(options?: AssetSearchOptions): AssetSearchPage;
+  subscribe(listener: AssetRegistryListener): () => void;
+}
+
+interface AssetSearchOptions {
+  readonly query?: string; // matches id, name, MIME prefix, tags (case-insensitive)
+  readonly kinds?: readonly AssetKind[];
+  readonly tags?: readonly string[]; // AND semantics
+  readonly cursor?: string;
+  readonly limit?: number;
+}
+
+interface AssetSearchPage {
+  readonly items: readonly UploadResult[];
+  readonly total: number;
+  readonly nextCursor: string | undefined;
+}
+```
+
+`AssetKind`는 `"image" | "video" | "audio" | "font" | "document" | "other"` 중 하나입니다 — `inferAssetKind(mimeType)`를 통해 MIME로부터 추론됩니다.
+
+### 사이드바 소스 브리지
+
+```ts
+function createStudioAssetSource(
+  options: CreateStudioAssetSourceOptions,
+): StudioAssetSource;
+
+interface CreateStudioAssetSourceOptions {
+  readonly registry: AssetRegistry;
+  readonly upload: (
+    file: File,
+    options?: UploadAdapterOptions,
+  ) => Promise<UploadResult>;
+  readonly getThumbnail?: (entry: UploadResult) => string | undefined;
+  readonly maxConcurrentUploads?: number; // default 3
+}
+```
+
+사이드바 소비자는 `inferStudioAssetKind(entry)`를 직접 호출할 수도 있습니다.
+
+### IR 해석
+
+| 내보내기                | 시그니처                                                  | 목적                                                     |
+| ----------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
+| `createIRAssetResolver` | `(opts: CreateIRAssetResolverOptions) => IRAssetResolver` | `asset://<id>` 참조를 레지스트리에 대해 해석합니다.      |
+| `resolveAssets`         | `(ir: PageIR, resolver) => PageIR`                        | IR 트리를 순회하여 에셋 참조를 다시 씁니다.              |
+
+```ts
+interface CreateIRAssetResolverOptions {
+  readonly registry: AssetRegistry;
+  readonly dataUrlAllowlistOptIn?: boolean;
+  readonly allowMixedScriptHostnames?: boolean;
+  readonly transformResolver?: TransformResolver; // see Asset transformations
+}
+```
+
+### 에셋 변환 / 변형
+
+플러그인이 어떤 바이트도 처리하지 않으면서 파생 렌디션(리사이즈 / 크롭 / 포맷 / 품질)을 요청합니다 — 변환은 참조에 실린 선언적인 `AssetTransform`(`asset://<id>?w=800&fm=webp`)이며, 호스트의 `transformResolver`가 그것을 여러분의 이미지 CDN / 서비스가 생성하는 파생 URL로 매핑합니다. IR 리졸버는 그것을 내보내기 / 렌더링 시점에 적용하며, 파생 URL을 임의의 에셋 URL과 동일한 신뢰 경계를 통해 **재검증**합니다(악의적인 파생은 거부됩니다). 변환이 요청되지 않거나 리졸버가 `undefined`를 반환하면, 원본 URL이 사용됩니다.
+
+```ts
+import { createAssetManagerPlugin, createAssetReference } from "@anvilkit/plugin-asset-manager";
+import { createQueryParamTransformResolver } from "@anvilkit/plugin-asset-manager/transform";
+
+createAssetManagerPlugin({
+  // Built-in query-param mapping (imgix-style w/h/fit/fm/q/dpr by default;
+  // param names + fit/format vocab are configurable for other CDNs).
+  transformResolver: createQueryParamTransformResolver(),
+});
+
+// A component stores a transform-bearing reference:
+createAssetReference("asset-1", { width: 800, format: "webp" });
+// → "asset://asset-1?w=800&fm=webp"  → resolves to e.g. "https://cdn/asset-1.png?w=800&fm=webp"
+```
+
+`AssetTransform` 필드: `width` / `height`(양의 정수), `fit`(`cover` \| `contain` \| `fill` \| `inside` \| `outside`), `format`(`webp` \| `avif` \| `jpeg` \| `png` \| `auto`), `quality`(1–100), `dpr`.
+
+| 내보내기(`./transform`)               | 목적                                                                    |
+| ------------------------------------- | ----------------------------------------------------------------------- |
+| `createQueryParamTransformResolver`   | 에셋 URL에 쿼리 파라미터를 덧붙이는 `TransformResolver`를 구축합니다.    |
+| `deriveVariantUrl(asset, t, resolver)`| 파생 URL을 라이브로(IR이 아닌) 해석하며, 원본으로 폴백합니다.           |
+
+파생의 치수 메타데이터는 호스트 소유이므로, 리졸버는 해석 결과에서 오래된 `width`/`height`/`size`를 버리는 한편 `attribution`은 보존합니다(필수 크레딧은 리사이즈에도 살아남습니다).
+
+### 검증 및 보안
+
+```ts
+function validateUploadResult(
+  result: UploadResult,
+  options?: ValidateUploadResultOptions,
+): UploadResult;
+```
+
+잘못된 입력에 대해 `AssetValidationError`를 던집니다. 항상 강제합니다:
+
+- 기본 scheme 집합: `http`, `https`, `blob`.
+- 강력 차단: `javascript:`, `vbscript:`.
+- 경로 순회: `http`/`https`/`blob` URL에서 `../`와 그 퍼센트 인코딩 변종(`%2e%2e/`, `%2e%2e%2f`)을 거부합니다.
+- IDN 동형이의 글자: `allowMixedScriptHostnames: true`가 아닌 한, 라틴 문자를 키릴 문자 또는 그리스 문자와 섞은 호스트명을 거부합니다. 단일 스크립트 IDN 호스트(`münchen.de`, `日本.jp`, `россия.рф`)는 항상 허용됩니다.
+
+선택된 파일은 어댑터 실행 전에 `maxFileSize`, `acceptedMimeTypes`, `acceptedFileExtensions`에 대해 검사됩니다. 브라우저 `file.type`은 호스트가 설정하며 흔히 비어 있거나 위조 가능하므로, **`sniffContent: true`** 가 매직 바이트 검사를 추가합니다: 감지된 타입이 선언된 구체적인 `file.type`과 모순되는 파일은 거부됩니다(`CONTENT_TYPE_MISMATCH`). 이는 심층 방어입니다 — 서명할 수 없는 타입과 일반적인 선언은 통과하며, 백엔드는 여전히 독립적으로 검증해야 합니다.
+
+### CSP 어드바이저
+
+```ts
+function getRequiredCsp(options: RequiredCspOptions): RequiredCsp;
+```
+
+| 어댑터               | `connect-src`                 | `img-src`               | `media-src`             |
+| -------------------- | ----------------------------- | ----------------------- | ----------------------- |
+| `dataUrlUploader`    | _(없음)_                      | `data:`                 | `data:`                 |
+| `inMemoryUploader`   | _(없음)_                      | `blob:`                 | `blob:`                 |
+| `s3PresignedAdapter` | presign 오리진 + `publicHost` | `publicHost` ?? presign | `publicHost` ?? presign |
+| `s3MultipartAdapter` | `endpoint` + `bucketHost` + `publicHost` | `publicHost` ?? `bucketHost` | `publicHost` ?? `bucketHost` |
+
+`s3Multipart: { endpoint, bucketHost?, publicHost? }`(단일 또는 배열)를 `dataUrl` / `inMemory` / `s3`와 함께 전달하세요.
+
+### React UI(`./ui`)
+
+| 컴포넌트              | 주요 props                                    |
+| --------------------- | --------------------------------------------- |
+| `UploadButton`        | `{ onUpload, onProgress?, disabled? }`        |
+| `AssetBrowser`        | `{ registry, onSelect, maxWidth? }`           |
+| `AssetCommandPalette` | `{ registry, onSelect }`                      |
+| `MetadataPanel`       | `{ asset, registry, onClose }`                |
+| `ReplaceAssetDialog`  | `{ asset, onReplace, onCancel }`              |
+| `DeleteAssetDialog`   | `{ asset, onDelete, onCancel }`               |
+| `AssetManagerUI`      | `{ registry, plugin, maxWidth? }`(복합)       |
+
+`UploadProgressSnapshot`은 `{ inFlight: number; completed: number }`입니다.
+
+### 재시도 헬퍼(`./retry`)
+
+```ts
+class RetryableError extends Error {
+  readonly retryAfterMs?: number;
+}
+
+interface RetryOptions {
+  readonly maxRetries?: number; // default 3
+  readonly baseDelayMs?: number; // default 250
+  readonly maxDelayMs?: number; // default 8000
+  readonly signal?: AbortSignal;
+  readonly jitter?: () => number; // default Math.random
+  readonly sleep?: (ms: number, signal?: AbortSignal) => Promise<void>;
+}
+
+function withRetry<T>(
+  fn: (attempt: number) => Promise<T>,
+  options?: RetryOptions,
+): Promise<T>;
+```
+
+풀 지터 지수 백오프. `RetryableError`의 선택적 `retryAfterMs`는 계산된 지연을 오버라이드합니다(서버가 `Retry-After` 헤더를 반환했을 때 사용하세요).
+
+### 에러
+
+`AssetValidationError.code`:
+
+| 코드                           | 출처                        |
+| ------------------------------ | --------------------------- |
+| `FILE_TOO_LARGE`               | 업로드 전 파일 검증         |
+| `UNSUPPORTED_MIME_TYPE`        | 업로드 전 파일 검증         |
+| `UNSUPPORTED_FILE_EXTENSION`   | 업로드 전 파일 검증         |
+| `INVALID_UPLOAD_ID`            | `validateUploadResult`      |
+| `EMPTY_UPLOAD_URL`             | `validateUploadResult`      |
+| `UNSCHEMED_UPLOAD_URL`         | `validateUploadResult`      |
+| `DISALLOWED_UPLOAD_URL_SCHEME` | `validateUploadResult`      |
+| `PATH_TRAVERSAL_URL`           | `validateUploadResult`      |
+| `MIXED_SCRIPT_HOSTNAME`        | `validateUploadResult`      |
+| `DATA_URL_FILE_TOO_LARGE`      | `dataUrlUploader`           |
+| `DATA_URL_READ_FAILED`         | `dataUrlUploader`           |
+| `UPLOAD_FAILED`                | `uploadAsset` 폴백 래핑     |
+
+`AssetResolutionError.code`:
+
+| 코드                      | 의미                                               |
+| ------------------------- | -------------------------------------------------- |
+| `ASSET_NOT_FOUND`         | 레지스트리에 해당 에셋 id의 항목이 없습니다.       |
+| `ASSET_URL_REJECTED`      | 저장된 URL이 허용 목록 또는 신뢰 게이트에서 실패했습니다. |
+| `ASSET_VALIDATION_FAILED` | 예상치 못한 리졸버 실패에 대한 포괄 케이스.        |
+
+## 사용 예시
+
+### 로컬 개발을 위한 Data-URL 어댑터
+
+```ts
+createAssetManagerPlugin({
+  uploader: dataUrlUploader({ maxBytes: 2_000_000 }),
+  dataUrlAllowlistOptIn: true,
+});
+```
+
+### 프로덕션 S3 배선
+
+```ts
+import {
+  createAssetManagerPlugin,
+  getRequiredCsp,
+} from "@anvilkit/plugin-asset-manager";
+import { s3PresignedAdapter } from "@anvilkit/plugin-asset-manager/adapters/s3";
+
+const uploader = s3PresignedAdapter({
+  presignEndpoint: "/api/assets/sign",
+  headers: { Authorization: `Bearer ${apiKey}` },
+  retry: { maxRetries: 3 },
+});
+
+const plugin = createAssetManagerPlugin({ uploader });
+
+const csp = getRequiredCsp({
+  s3: {
+    presignEndpoint: "/api/assets/sign",
+    publicHost: "https://cdn.example.com",
+  },
+});
+
+response.setHeader(
+  "Content-Security-Policy",
+  [
+    `default-src 'self'`,
+    `connect-src 'self' ${csp.connectSrc.join(" ")}`,
+    `img-src 'self' ${csp.imgSrc.join(" ")}`,
+    `media-src 'self' ${csp.mediaSrc.join(" ")}`,
+  ].join("; "),
+);
+```
+
+### 커스텀 업로드 어댑터
+
+```ts
+import type { UploadAdapter } from "@anvilkit/plugin-asset-manager";
+import {
+  RetryableError,
+  withRetry,
+} from "@anvilkit/plugin-asset-manager/retry";
+
+const myCdnUploader: UploadAdapter = async (file, { signal } = {}) =>
+  withRetry(
+    async () => {
+      const response = await fetch("/api/cdn", {
+        method: "POST",
+        body: file,
+        headers: { "Content-Type": file.type, "X-Filename": file.name },
+        signal,
+      });
+      if (response.status >= 500) {
+        throw new RetryableError(`CDN ${response.status}`);
+      }
+      if (!response.ok) {
+        throw new Error(`CDN ${response.status}: ${await response.text()}`);
+      }
+      const { url, id } = await response.json();
+      return {
+        id,
+        url,
+        name: file.name,
+        meta: { size: file.size, mimeType: file.type },
+      };
+    },
+    { signal, maxRetries: 2 },
+  );
+```
+
+### 내보내기 시점의 에셋 해석
+
+```ts
+import {
+  createAssetRegistry,
+  createIRAssetResolver,
+  resolveAssets,
+} from "@anvilkit/plugin-asset-manager";
+
+const registry = createAssetRegistry();
+registry.register({
+  id: "logo",
+  url: "https://cdn.example.com/logo.svg",
+  name: "logo.svg",
+});
+
+const resolver = createIRAssetResolver({ registry });
+const resolved = resolveAssets(ir, resolver);
+// `asset://logo` references inside `ir` are now full URLs.
+```
+
+## 참고 사항 및 FAQ
+
+### 신뢰 모델은 기본적으로 엄격
+
+`UploadAdapter.url`은 신뢰할 수 없는 입력으로 취급됩니다. 기본 scheme 집합은 `http`, `https`, `blob`입니다. `data:`는 **기본적으로 꺼져 있습니다** — `dataUrlAllowlistOptIn: true`로 활성화하세요. 혼합 스크립트 호스트명은 `allowMixedScriptHostnames: true`가 아닌 한 거부됩니다. 어떤 구성에서도 플러그인은 어댑터가 `javascript:` URL을 레지스트리로 밀반입하도록 허용하지 않습니다.
+
+### alpha 시절의 `urlAllowlist` 필드에서 마이그레이션
+
+alpha 시절의 `urlAllowlist?: readonly string[]` 필드는 제거되었습니다.
+
+| Alpha                                             | 대체                                                                                |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `urlAllowlist: ["http", "https", "blob"]`         | _(기본값 — 필드를 제거)_                                                             |
+| `urlAllowlist: ["http", "https", "blob", "data"]` | `dataUrlAllowlistOptIn: true`                                                       |
+| `urlAllowlist: ["http", "https", "blob", "ftp"]`  | _지원되지 않음 — `validateUploadResult`를 래핑하고 `registry.register`를 직접 호출_ |
+
+근거: 경계에서 허용되는 각 scheme은 그 자체의 CSP / 소독 방안이 필요합니다. 타입이 있는 플래그는 그 결정을 명시적으로 만들도록 강제합니다.
+
+### 배치 업로드 동작
+
+`StudioAssetSource.upload(files)`는 최대 `maxConcurrentUploads`(기본 3)개의 업로드를 병렬로 실행합니다. 파일별 실패는 리스너를 통해 `error` 엔벨로프로 드러납니다. 반환된 promise는 성공한 부분집합으로 resolve되며 **던지지 않습니다**. 빠른 실패 시맨틱이 필요한 호스트는 `maxConcurrentUploads: 1`을 전달할 수 있습니다. 어댑터에서 온 `AbortError`는 배치 전체를 중단합니다 — 대기 중인 파일은 스케줄되지 않습니다.
+
+### 영속화는 호스트 소유
+
+플러그인은 Studio 마운트마다 레지스트리 상태를 메모리 내에 보관합니다. 세션 간 에셋 재사용이 필요하면, 호스트가 `publicUrl`을 서버 측에 저장하고 부팅 시 `registry.register(...)`를 통해 레지스트리를 다시 시드합니다.
+
+### S3 어댑터는 파일 내용을 결코 로깅하지 않음
+
+`name`, `size`, `mimeType`만 로깅에 안전하다고 간주됩니다. 여러분의 호스트 엔드포인트가 S3 호환이 아니라면(덮어쓰기 시맨틱 없음), `retry: { maxRetries: 0 }`을 전달하여 재시도를 비활성화하고 중복 업로드의 작은 가능성을 회피하세요.
+
+### 프로덕션 체크리스트
+
+1. **올바른 어댑터를 선택하세요.** `dataUrlUploader`는 개발 전용입니다. `s3PresignedAdapter`가 프로덕션 기본값입니다. 여러분의 presign 엔드포인트에 배선하고 `retry: { maxRetries: 3 }`을 설정하세요.
+2. **신뢰 플래그를 명시적으로 설정하세요.** 여러분의 호스트가 `dataUrlAllowlistOptIn: true`를 필요로 하는지(흐름이 `data:` URL을 엔드투엔드로 임베드하는 경우에만) 결정하세요. 문서화된 비즈니스 필요성이 없는 한 `allowMixedScriptHostnames`는 꺼진 채로 두세요.
+3. **CSP를 배선하세요.** `getRequiredCsp(...)`를 호출하고 그 결과를 여러분의 `connect-src` / `img-src` / `media-src` 빌더에 병합하세요. 어댑터를 추가하거나 제거하면 다시 실행하세요.
+4. **영속화 방안을 선택하세요.** 플러그인 상태는 메모리 내에 있습니다. 호스트가 `publicUrl`을 서버 측에 저장하고 부팅 시 다시 시드합니다.
+5. **모니터링하세요.** 업로드 실패를 위해 `asset-manager:error` 이벤트 버스 엔벨로프를 구독하고, 여러분의 내보내기 파이프라인에서 `AssetResolutionError.code`를 로깅하여 `ASSET_NOT_FOUND` / `ASSET_URL_REJECTED` / `ASSET_VALIDATION_FAILED`가 각각 별도의 알림을 받도록 하세요.
+6. **번들을 잠그세요.** `.size-limit.json`은 headless 진입점을 8 KB gzip 미만, UI 서브경로를 12 KB 미만으로 유지합니다. CI가 둘 다에 게이트를 겁니다.
+
+### 선택적 UI는 별도 진입점
+
+`@anvilkit/plugin-asset-manager`에서 가져오는 것은 결코 `/ui` 컴포넌트를 끌어오지 않습니다. 자체 브라우저/업로드 UI를 출하하는 호스트는 어떤 UI 렌더링 비용도 지불하지 않습니다.

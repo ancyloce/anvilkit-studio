@@ -1,0 +1,175 @@
+# @anvilkit/plugin-design-system
+
+`@anvilkit/core`의 `<Studio>` 셸을 위한 토큰 바인딩 필드, 테마 전환, 디자인 검증.
+
+> 📘 **전체 가이드:** 토큰 모델, 검증 훅, 테마 전환, 현재 제한에 대한 긴 형식의 단계별 설명은 문서 사이트의 [Design System plugin](https://anvilkit-studio.vercel.app/guides/design-system/)을 참조하세요.
+
+## 설치
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+peer 의존성: `@puckeditor/core@^0.21.3`, `react@>=19.0.0`, `react-dom@>=19.0.0`. `@anvilkit/core`는 직접 런타임 의존성으로 함께 제공되므로, 사용자가 그 버전을 별도로 관리할 필요가 없습니다.
+
+## 최소 호스트
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import {
+  createDesignSystemPlugin,
+  createTokenColorField,
+  createTokenSpacingField,
+} from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  // Optional — deep-merged onto bundled `DEFAULT_TOKENS`.
+  tokens: {
+    primitives: { brand: { 500: "#1f6feb" } },
+  },
+});
+
+const config = {
+  components: {
+    Card: {
+      fields: {
+        bg: createTokenColorField({ label: "Background" }),
+        gap: createTokenSpacingField({ label: "Gap" }),
+      },
+      render: ({ bg, gap }) => (
+        <div
+          style={{
+            background: `var(--ak-ds-${bg.replace("color.", "").replace(".", "-")})`,
+            padding: `var(--ak-ds-space-${gap.replace("space.", "")})`,
+          }}
+        />
+      ),
+    },
+  },
+};
+
+export function App() {
+  return <Studio plugins={[designSystem]} config={config} />;
+}
+```
+
+## 이 플러그인이 기여하는 것
+
+- **세 가지 필드 팩토리.** `createToken{Color,Spacing,Typography}Field`는 직렬화 가능한 토큰 참조(`color.brand.500`, `space.4`, `text.lg`, `semantic.bg`)를 저장하는 Puck `CustomField<string>` 형태를 반환합니다. 필드 UI는 색상 견본 미리보기 + 토큰 카테고리별로 그룹화된 드롭다운을 표시합니다.
+- **`overrides.fields` 래퍼.** Puck의 사이드바 필드 트리 위에 `<TokenProvider>`를 마운트하여, 필드 팩토리의 렌더링 함수가 `useTokens()`를 통해 해결된 토큰 트리를 읽을 수 있도록 합니다. anvilkit의 커링된 `mergeOverrides`를 통해 합성되므로, 형제 플러그인의 `fields` 슬롯을 절대 덮어쓰지 않습니다.
+- **디자인 시스템 레일 패널.** `ctx.registerDesignSystemPanel`을 통해 두 개의 탭(Tokens · Theme)을 등록합니다. Tokens 탭은 해결된 각 참조를 클릭하여 복사할 수 있는 행과 함께 나열하고, Theme 탭은 `useThemeStore.setMode("light" | "dark" | "system")`을 디스패치하며 기존 `use-theme-sync`가 chrome + Puck iframe으로 전파하도록 합니다.
+- **오프 토큰 경고(`onDataChange`).** 비차단(non-blocking)이며 형태 기반인 워커가, 해결된 토큰 트리에 없는 hex / rgb / hsl / oklch / px / rem 리터럴에 플래그를 지정합니다. `ctx.log("warn", …)`을 통해 로그됩니다.
+- **대비 게이팅(`onBeforePublish`).** WCAG-AA 쌍 워커(기본값 `{ fg: "color", bg: "backgroundColor" }` 및 `{ fg: "color", bg:
+"background" }`)가 모든 실패를 `error.cause.failures`에 첨부한 `StudioPluginError`를 던져 게시를 중단합니다.
+
+## 옵션
+
+`createDesignSystemPlugin(opts?: DesignSystemOptions)`——모든 필드는 선택 사항이므로, 인자 없이 호출하면 번들된 기본값을 얻습니다.
+
+```ts
+interface DesignSystemOptions {
+  tokens?: PartialDesignTokens;
+  validation?: {
+    offToken?: boolean;
+    contrast?: boolean;
+  };
+}
+```
+
+| Field                 | Type                  | Default | Purpose                                                             |
+| --------------------- | --------------------- | ------- | ------------------------------------------------------------------- |
+| `tokens`              | `PartialDesignTokens` | none    | 번들된 `DEFAULT_TOKENS` 위에 딥 머지됩니다.                         |
+| `validation.offToken` | `boolean`             | `true`  | 오프 토큰 `onDataChange` 경고 워커를 비활성화하려면 `false`로 설정합니다. |
+| `validation.contrast` | `boolean`             | `true`  | WCAG-AA 대비 `onBeforePublish` 게이트를 비활성화하려면 `false`로 설정합니다. |
+
+## 사용 예시
+
+### 무설정 기본값
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+// No arguments — bundled DEFAULT_TOKENS, both validators on.
+const designSystem = createDesignSystemPlugin();
+```
+
+### 검증기를 비활성화한 커스텀 브랜드 토큰
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  tokens: { primitives: { brand: { 500: "#1f6feb" } } },
+  // Silence the off-token warning + skip the WCAG-AA publish gate.
+  validation: { offToken: false, contrast: false },
+});
+```
+
+### 런타임에 해결된 토큰 읽기
+
+필드 팩토리와 디자인 시스템 패널은 런타임 헬퍼를 사용합니다. 자체 토큰 바인딩 표면을 구축하는 호스트도 사용할 수 있습니다.
+
+```tsx
+import { useTokens } from "@anvilkit/plugin-design-system/runtime";
+
+function PrimitiveGroupCount() {
+  const tokens = useTokens();
+  return <span>{Object.keys(tokens.primitives).length} primitive groups</span>;
+}
+```
+
+## 토큰 네임스페이스
+
+호스트 문서와 Puck iframe에 출력되는 CSS 변수:
+
+| Tier      | Variables                                                             |
+| --------- | --------------------------------------------------------------------- |
+| Primitive | `--ak-ds-brand-{50..900}`, `--ak-ds-neutral-{50..900}`                |
+|           | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}`                              |
+|           | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}`                             |
+|           | `--ak-ds-radius-{sm,md,lg}`                                           |
+| Semantic  | `--ak-ds-{bg,surface,fg,fg-muted,accent,accent-fg,border,focus-ring}` |
+
+시맨틱은 `var(--ak-studio-*, …)`로 폴백하므로, 테마가 적용되지 않은 호스트는 현재와 동일하게 렌더링됩니다.
+
+## 필드 참조 문법
+
+| Ref string         | Resolves to               |
+| ------------------ | ------------------------- |
+| `color.brand.500`  | `var(--ak-ds-brand-500)`  |
+| `color.neutral.50` | `var(--ak-ds-neutral-50)` |
+| `semantic.bg`      | `var(--ak-ds-bg)`         |
+| `semantic.accent`  | `var(--ak-ds-accent)`     |
+| `space.4`          | `var(--ak-ds-space-4)`    |
+| `text.lg`          | `var(--ak-ds-text-lg)`    |
+| `radius.md`        | `var(--ak-ds-radius-md)`  |
+
+## 서브경로 익스포트
+
+| Subpath                                  | Exports                                          |
+| ---------------------------------------- | ------------------------------------------------ |
+| `@anvilkit/plugin-design-system`         | 팩토리, 필드 팩토리, 런타임, 토큰, 패널          |
+| `@anvilkit/plugin-design-system/tokens`  | React 비의존 토큰 트리 + 헬퍼                    |
+| `@anvilkit/plugin-design-system/runtime` | `TokenProvider`, `useTokens`, `resolveTokenRef`  |
+
+## 런타임 API(`./runtime`)
+
+토큰 해결 헬퍼 + React 컨텍스트. 필드 팩토리, 디자인 시스템 패널, 검증 훅이 모두 이를 사용합니다. 자체 토큰 바인딩 표면을 구축하는 호스트도 import할 수 있습니다.
+
+| Export                         | Signature                                                   | Purpose                                                                                                                                                                     |
+| ------------------------------ | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TokenProvider`                | `(props: TokenProviderProps) => JSX.Element`                | 해결된 토큰 트리 + 검증 옵션을 컨텍스트에 게시합니다. 플러그인의 `overrides.fields` 래퍼에 의해 자동으로 마운트됩니다.                                                      |
+| `useTokens()`                  | `() => DesignTokens`                                        | 필드/렌더링 함수 내부에서 해결된 토큰 트리를 읽습니다.                                                                                                                     |
+| `useTokenContext()`            | `() => TokenContextValue`                                   | 전체 컨텍스트 값(토큰 + 검증 옵션).                                                                                                                                        |
+| `useTokenValidationOptions()`  | `() => Required<DesignSystemValidationOptions>`             | 기본값이 적용된 후 해결된 `{ offToken, contrast }` 플래그.                                                                                                                 |
+| `resolveTokenRef(ref, tokens)` | `(ref: string, tokens: DesignTokens) => ResolvedTokenRef`   | 참조 문자열(`color.brand.500`, `semantic.bg`, `space.4`, …)을 해당 CSS 변수 + 메타데이터로 해결합니다. 알 수 없는 참조는 던지는 대신 `kind: "unknown"` 결과로 해결됩니다. |
+| `listTokenRefs(tokens)`        | `(tokens: DesignTokens) => ReadonlyArray<ResolvedTokenRef>` | 토큰 트리의 모든 합법적인 참조를 열거합니다——각 표면이 이 목록을 다시 발명하지 않고도 필드 드롭다운과 패널을 채우는 데 사용됩니다.                                          |
+
+UI에서 참조를 그룹화하기 위한 카테고리 상수: `TOKEN_CATEGORIES`(`["color", "semantic", "space", "text", "radius"]`), `COLOR_CATEGORIES`(`["color", "semantic"]`), `SPACING_CATEGORIES`(`["space"]`), `TYPOGRAPHY_CATEGORIES`(`["text"]`). 타입 `TokenCategory`, `TokenRefKind`, `ResolvedTokenRef`, `TokenContextValue`, `TokenProviderProps`도 함께 익스포트됩니다.
+
+## v0.1 제한
+
+- 대비 검증은 hex와 `rgb()`/`rgba()`만 파싱합니다. `oklch()`, `hsl()`, `lab()` 등은 "파싱 불가"로 해결되어 건너뜁니다——거짓 양성은 없지만, 번들된 기본값(oklch 사용)은 호스트가 primitives를 hex로 오버라이드할 때까지 실패를 트리거하지 않습니다. 더 폭넓은 파싱은 후속 작업으로 추적됩니다.
+- 오프 토큰 감지는 형태 기반입니다. 어떤 필드가 생성했는지에 관계없이 워커는 모든 리터럴 형태에 플래그를 지정합니다. 노이즈가 문제라면 `opts.validation.offToken: false`로 비활성화하세요.
+- DS 패널은 v0.1에서 Tokens + Theme 탭을 제공합니다. Components 탭은 각 행이 어떤 메타데이터를 표시할지에 대한 구체적인 사양이 정해질 때까지 연기됩니다.
+- **코어의 레일 탭 보류 중.** 플러그인은 `ctx.registerDesignSystemPanel?({ render })`을 통해 패널을 등록하고 코어의 `sidebarRegistryStore.designSystemPanel` 슬롯도 채워지지만, `@anvilkit/core`의 `EditorTab` 유니온 + `RAIL_MODULES` 테이블에는 아직 `"design-system"` 항목이 포함되어 있지 않습니다——그래서 패널 상태는 설정되지만 이를 소비하는 UI가 없습니다. 토큰 바인딩 필드, `--ak-ds-*` CSS, 검증기는 모두 현재 동작합니다. 패널 UI는 코어의 후속 Phase B 백필과 함께 등장합니다.

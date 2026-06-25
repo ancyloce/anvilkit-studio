@@ -1,0 +1,175 @@
+# @anvilkit/plugin-design-system
+
+`@anvilkit/core` の `<Studio>` シェル向けの、トークンにバインドされたフィールド、テーマ切り替え、デザイン検証。
+
+> 📘 **完全ガイド：** トークンモデル、検証フック、テーマ切り替え、現在の制限についての長文の手順解説は、ドキュメントサイトの [Design System plugin](https://anvilkit-studio.vercel.app/guides/design-system/) を参照してください。
+
+## インストール
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+peer 依存関係：`@puckeditor/core@^0.21.3`、`react@>=19.0.0`、`react-dom@>=19.0.0`。`@anvilkit/core` は直接のランタイム依存関係として同梱されるため、利用者がそのバージョンを個別に管理する必要はありません。
+
+## 最小構成のホスト
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import {
+  createDesignSystemPlugin,
+  createTokenColorField,
+  createTokenSpacingField,
+} from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  // Optional — deep-merged onto bundled `DEFAULT_TOKENS`.
+  tokens: {
+    primitives: { brand: { 500: "#1f6feb" } },
+  },
+});
+
+const config = {
+  components: {
+    Card: {
+      fields: {
+        bg: createTokenColorField({ label: "Background" }),
+        gap: createTokenSpacingField({ label: "Gap" }),
+      },
+      render: ({ bg, gap }) => (
+        <div
+          style={{
+            background: `var(--ak-ds-${bg.replace("color.", "").replace(".", "-")})`,
+            padding: `var(--ak-ds-space-${gap.replace("space.", "")})`,
+          }}
+        />
+      ),
+    },
+  },
+};
+
+export function App() {
+  return <Studio plugins={[designSystem]} config={config} />;
+}
+```
+
+## このプラグインが提供するもの
+
+- **3 つのフィールドファクトリ。** `createToken{Color,Spacing,Typography}Field` は、シリアライズ可能なトークン参照（`color.brand.500`、`space.4`、`text.lg`、`semantic.bg`）を格納する Puck の `CustomField<string>` 形状を返します。フィールド UI は、スウォッチプレビューと、トークンカテゴリごとにグループ化されたドロップダウンを表示します。
+- **`overrides.fields` ラッパー。** Puck のサイドバーフィールドツリーの上に `<TokenProvider>` をマウントし、フィールドファクトリのレンダリング関数が `useTokens()` を介して解決済みのトークンツリーを読み取れるようにします。anvilkit のカリー化された `mergeOverrides` を通じて合成されるため、兄弟プラグインの `fields` スロットを決して上書きしません。
+- **デザインシステムのレールパネル。** `ctx.registerDesignSystemPanel` を介して 2 つのタブ（Tokens · Theme）を登録します。Tokens タブは解決済みの各参照を、クリックでコピーできる行とともに一覧表示します。Theme タブは `useThemeStore.setMode("light" | "dark" | "system")` をディスパッチし、既存の `use-theme-sync` が chrome と Puck iframe に伝播できるようにします。
+- **オフトークン警告（`onDataChange`）。** 非ブロッキングで形状ベースのウォーカーが、解決済みのトークンツリーに存在しない hex / rgb / hsl / oklch / px / rem リテラルをフラグ付けします。`ctx.log("warn", …)` を介してログ出力されます。
+- **コントラストゲーティング（`onBeforePublish`）。** WCAG-AA のペアウォーカー（デフォルトは `{ fg: "color", bg: "backgroundColor" }` と `{ fg: "color", bg:
+"background" }`）が `StudioPluginError` をスローし、すべての失敗を `error.cause.failures` に添付して公開を中断します。
+
+## オプション
+
+`createDesignSystemPlugin(opts?: DesignSystemOptions)`——すべてのフィールドは任意なので、引数なしで呼び出すと同梱のデフォルトが得られます。
+
+```ts
+interface DesignSystemOptions {
+  tokens?: PartialDesignTokens;
+  validation?: {
+    offToken?: boolean;
+    contrast?: boolean;
+  };
+}
+```
+
+| Field                 | Type                  | Default | Purpose                                                             |
+| --------------------- | --------------------- | ------- | ------------------------------------------------------------------- |
+| `tokens`              | `PartialDesignTokens` | none    | 同梱の `DEFAULT_TOKENS` にディープマージされます。                  |
+| `validation.offToken` | `boolean`             | `true`  | オフトークンの `onDataChange` 警告ウォーカーを無効化するには `false` に設定します。 |
+| `validation.contrast` | `boolean`             | `true`  | WCAG-AA コントラストの `onBeforePublish` ゲートを無効化するには `false` に設定します。 |
+
+## 使用例
+
+### ゼロコンフィグのデフォルト
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+// No arguments — bundled DEFAULT_TOKENS, both validators on.
+const designSystem = createDesignSystemPlugin();
+```
+
+### 検証を無効化したカスタムブランドトークン
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  tokens: { primitives: { brand: { 500: "#1f6feb" } } },
+  // Silence the off-token warning + skip the WCAG-AA publish gate.
+  validation: { offToken: false, contrast: false },
+});
+```
+
+### ランタイムで解決済みのトークンを読み取る
+
+フィールドファクトリとデザインシステムパネルはこれらのランタイムヘルパーを利用します。独自のトークンバインド面を構築するホストも利用できます。
+
+```tsx
+import { useTokens } from "@anvilkit/plugin-design-system/runtime";
+
+function PrimitiveGroupCount() {
+  const tokens = useTokens();
+  return <span>{Object.keys(tokens.primitives).length} primitive groups</span>;
+}
+```
+
+## トークンの名前空間
+
+ホストドキュメントと Puck iframe に出力される CSS 変数：
+
+| Tier      | Variables                                                             |
+| --------- | --------------------------------------------------------------------- |
+| Primitive | `--ak-ds-brand-{50..900}`、`--ak-ds-neutral-{50..900}`                |
+|           | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}`                              |
+|           | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}`                             |
+|           | `--ak-ds-radius-{sm,md,lg}`                                           |
+| Semantic  | `--ak-ds-{bg,surface,fg,fg-muted,accent,accent-fg,border,focus-ring}` |
+
+セマンティクスは `var(--ak-studio-*, …)` にフォールバックするため、テーマ未適用のホストは現状とまったく同じようにレンダリングされます。
+
+## フィールド参照の文法
+
+| Ref string         | Resolves to               |
+| ------------------ | ------------------------- |
+| `color.brand.500`  | `var(--ak-ds-brand-500)`  |
+| `color.neutral.50` | `var(--ak-ds-neutral-50)` |
+| `semantic.bg`      | `var(--ak-ds-bg)`         |
+| `semantic.accent`  | `var(--ak-ds-accent)`     |
+| `space.4`          | `var(--ak-ds-space-4)`    |
+| `text.lg`          | `var(--ak-ds-text-lg)`    |
+| `radius.md`        | `var(--ak-ds-radius-md)`  |
+
+## サブパスのエクスポート
+
+| Subpath                                  | Exports                                          |
+| ---------------------------------------- | ------------------------------------------------ |
+| `@anvilkit/plugin-design-system`         | ファクトリ、フィールドファクトリ、ランタイム、トークン、パネル |
+| `@anvilkit/plugin-design-system/tokens`  | React 非依存のトークンツリー + ヘルパー          |
+| `@anvilkit/plugin-design-system/runtime` | `TokenProvider`、`useTokens`、`resolveTokenRef`  |
+
+## ランタイム API（`./runtime`）
+
+トークン解決ヘルパー + React コンテキスト。フィールドファクトリ、デザインシステムパネル、検証フックはすべてこれらを利用します。独自のトークンバインド面を構築するホストもインポートできます。
+
+| Export                         | Signature                                                   | Purpose                                                                                                                                                                     |
+| ------------------------------ | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TokenProvider`                | `(props: TokenProviderProps) => JSX.Element`                | 解決済みのトークンツリーと検証オプションをコンテキストに公開します。プラグインの `overrides.fields` ラッパーによって自動的にマウントされます。                              |
+| `useTokens()`                  | `() => DesignTokens`                                        | フィールド/レンダリング関数内で解決済みのトークンツリーを読み取ります。                                                                                                    |
+| `useTokenContext()`            | `() => TokenContextValue`                                   | コンテキスト値の全体（トークン + 検証オプション）。                                                                                                                        |
+| `useTokenValidationOptions()`  | `() => Required<DesignSystemValidationOptions>`             | デフォルト適用後に解決された `{ offToken, contrast }` フラグ。                                                                                                             |
+| `resolveTokenRef(ref, tokens)` | `(ref: string, tokens: DesignTokens) => ResolvedTokenRef`   | 参照文字列（`color.brand.500`、`semantic.bg`、`space.4`、…）を、その CSS 変数 + メタデータに解決します。未知の参照は、スローする代わりに `kind: "unknown"` の結果に解決されます。 |
+| `listTokenRefs(tokens)`        | `(tokens: DesignTokens) => ReadonlyArray<ResolvedTokenRef>` | トークンツリーの正当な参照をすべて列挙します——各面がこのリストを再発明せずに、フィールドのドロップダウンとパネルを埋めるために使用します。                                  |
+
+UI で参照をグループ化するためのカテゴリ定数：`TOKEN_CATEGORIES`（`["color", "semantic", "space", "text", "radius"]`）、`COLOR_CATEGORIES`（`["color", "semantic"]`）、`SPACING_CATEGORIES`（`["space"]`）、`TYPOGRAPHY_CATEGORIES`（`["text"]`）。型 `TokenCategory`、`TokenRefKind`、`ResolvedTokenRef`、`TokenContextValue`、`TokenProviderProps` も併せてエクスポートされます。
+
+## v0.1 の制限
+
+- コントラスト検証は hex と `rgb()`/`rgba()` のみを解析します。`oklch()`、`hsl()`、`lab()` などは「解析不可」として解決され、スキップされます——誤検出はありませんが、同梱のデフォルト（oklch を使用）は、ホストが primitives を hex にオーバーライドするまで失敗をトリガーしません。より広範な解析はフォローアップとして追跡されています。
+- オフトークン検出は形状ベースです。どのフィールドが生成したかに関わらず、ウォーカーはすべてのリテラル形状をフラグ付けします。ノイズが問題になる場合は `opts.validation.offToken: false` で無効化してください。
+- DS パネルは v0.1 で Tokens + Theme タブを同梱します。Components タブは、各行がどのメタデータを表示するかの具体的な仕様が固まるまで延期されています。
+- **コアでのレールタブは保留中。** プラグインは `ctx.registerDesignSystemPanel?({ render })` を介してパネルを登録し、コアの `sidebarRegistryStore.designSystemPanel` スロットも設定されますが、`@anvilkit/core` の `EditorTab` ユニオンと `RAIL_MODULES` テーブルにはまだ `"design-system"` のエントリが含まれていません——そのためパネルの状態は設定されますが、それを利用する UI はありません。トークンバインドフィールド、`--ak-ds-*` CSS、検証はすべて現状で動作します。パネル UI は、コアでのフォローアップ Phase B のバックフィルとともに登場します。

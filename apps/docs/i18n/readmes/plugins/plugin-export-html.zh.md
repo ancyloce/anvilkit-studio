@@ -1,0 +1,223 @@
+# @anvilkit/plugin-export-html
+
+> **Alpha（`0.1.7`）。** 该包的接口面已实现并经过测试，但所发出的 HTML/CSS 契约在 `1.0.0` 之前可能演进。
+
+面向 Anvilkit Studio 的 HTML 导出插件。它将 `PageIR` 文档转换为带有所发出 CSS 的独立 HTML，支持可选的资源内联，并在宿主提供 `buildIR` 回调时为交互式导出流程提供一个可选启用的 Studio 顶栏操作。它是 Anvilkit 导出插件契约的参考实现——通过 CI 中的 24 项测试组合，针对恶意输入进行了安全加固。
+
+## 安装
+
+```bash
+pnpm add @anvilkit/plugin-export-html @anvilkit/core react react-dom @puckeditor/core
+```
+
+非可选 peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.21.3`。只有 `@anvilkit/core` 是运行时依赖。
+
+## 快速开始
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { puckDataToIR } from "@anvilkit/ir";
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckConfig } from "./puck-config";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Marketing page",
+  lang: "en",
+  inlineAssetThresholdBytes: 32_768,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+
+<Studio puckConfig={puckConfig} plugins={[htmlExport]} />;
+```
+
+提供 `buildIR` 会点亮 “Download HTML” 顶栏操作：点击它会端到端地运行导出，并以最终载荷发出 `anvilkit:export:ready`。如果宿主想要自行处理导出，请省略 `buildIR`——此时该操作改为发出 `anvilkit:export:request`。
+
+## 核心特性
+
+- **独立的 HTML5 输出** — 带有所发出 `<style>`、BCP 47 `lang` 和文档标题的封装文档。
+- **内置组件发射器** — 为 `hero`、`navbar`、`pricing-minimal`、`bento-grid`、`section`、`statistics`、`blog-list`、`helps` 和 `logo-clouds` 提供第一方 HTML 输出。
+- **选择性资源内联** — 小于 `inlineAssetThresholdBytes` 的资源会被 base64 内联；更大的或仅远程的资源保留为 URL。宿主通过 `fetchAsset` 控制网络。
+- **两种顶栏操作模式** — 使用 `buildIR` 的端到端模式，或通过 `anvilkit:export:request` 事件的宿主驱动模式。
+- **安全加固的转义** — `escapeHtml` 和 `escapeAttr` 由 24 项恶意输入测试组合强制保证，并由 Anvilkit 插件信任模型加以编码固化。
+- **直接的格式访问** — 导出了 `htmlFormat`，供不在 Studio 内运行的无界面导出管线使用。
+
+## API 参考
+
+### 插件工厂函数
+
+```ts
+function createHtmlExportPlugin(opts?: HtmlExportOptions): StudioPlugin;
+```
+
+返回一个 `StudioPlugin`，它注册一种导出格式（`id: "html"`），并在配置后注册一个顶栏操作（`id: "export-html"`）。插件元信息：
+
+| 字段          | 值                            |
+| ------------- | ----------------------------- |
+| `id`          | `anvilkit-plugin-export-html` |
+| `name`        | `HTML Export`                 |
+| `coreVersion` | `^0.1.0-alpha`                |
+
+### `HtmlExportOptions`
+
+| 字段                        | 类型                         | 默认值                                          | 用途                                                                           |
+| --------------------------- | ---------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| `title`                     | `string`                     | 来自 IR 元数据                                  | 文档 `<title>`。                                                            |
+| `lang`                      | `string`                     | `"en"`                                          | 发出于 `<html lang="…">` 上的 BCP 47 标签。                                       |
+| `inlineStyles`              | `boolean`                    | `true`                                          | 为 `false` 时，省略 CSS（由宿主拥有样式表）。                       |
+| `inlineAssetThresholdBytes` | `number`                     | `32_768`                                        | ≤ 阈值的资源会被 base64 内联；更大的保留为 URL。                    |
+| `fetchAsset`                | `FetchAssetFn`               | 无                                              | 宿主提供的异步资源加载器。没有它时，远程资源保留为 URL。  |
+| `buildIR`                   | `IRBuilder`                  | 无                                              | 提供时，顶栏操作会端到端地运行导出。                   |
+| `assetResolvers`            | `readonly IRAssetResolver[]` | 无                                              | 资源解析管线。会与传给 `format.run()` 的任意解析器合并。 |
+| `headerAction`              | `boolean`                    | 提供 `buildIR` 时为 `true`，否则为 `false`      | 贡献 “Download HTML” 顶栏操作。|
+
+### `FetchAssetFn`
+
+```ts
+type FetchAssetFn = (
+  url: string,
+  opts?: FetchAssetOptions,
+) => Promise<{ bytes: Uint8Array; contentType: string }>;
+
+interface FetchAssetOptions {
+  readonly maxBytes?: number;
+}
+```
+
+默认的获取器（`defaultFetchAsset`）会执行一次 Content-Length 预检查，并对响应体进行流式处理以强制执行 `maxBytes`。自定义获取器可以忽略该提示，但这样做会放弃字节上限。
+
+### `IRBuilder`
+
+```ts
+type IRBuilder = (ctx: StudioPluginContext) => PageIR | Promise<PageIR>;
+```
+
+宿主通常使用来自 `@anvilkit/ir` 的 `puckDataToIR(ctx.getData(), puckConfig)` 来实现它。
+
+### 直接的格式访问
+
+```ts
+const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+  id: "html",
+  label: "HTML",
+  extension: "html",
+  mimeType: "text/html",
+  run: async (ir, options, runCtx) => ({ content, filename, warnings }),
+};
+```
+
+当在 Studio 之外运行（例如 CLI 工具、服务端渲染的导出端点）时使用它。
+
+### 顶栏操作
+
+| 导出                                            | 用途                                                                         |
+| ----------------------------------------------- | ---------------------------------------------------------------------------- |
+| `createExportHtmlHeaderAction(format, options)` | 构建一个绑定到已配置格式的顶栏操作。                          |
+| `exportHtmlHeaderAction`                        | 默认的未绑定操作；发出 `anvilkit:export:request` 供宿主处理。 |
+
+顶栏操作元数据：`id: "export-html"`、`label: "Download HTML"`、`icon: "download"`、`order: 100`。
+
+### 事件流
+
+- `anvilkit:export:ready` — 在配置了 `buildIR` 时由顶栏操作触发。载荷：`{ formatId: "html", content: string, filename: string, mimeType: "text/html", warnings: ExportWarning[] }`。
+- `anvilkit:export:request` — 在未配置 `buildIR` 时触发。载荷：`{ formatId: "html", options }`。宿主通过使用自己的 IR 运行导出 + 分发 `anvilkit:export:ready`（或直接保存结果）来处理它。
+
+## 用法示例
+
+### 使用默认设置的独立导出
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckDataToIR } from "@anvilkit/ir";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Untitled page",
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### 从私有 S3 桶内联资源
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+
+const fetchAsset = async (url: string, opts) => {
+  const signed = await mySigner.sign(url);
+  const response = await fetch(signed.url, {
+    headers: signed.headers,
+  });
+  if (!response.ok) throw new Error(`fetch ${url} → ${response.status}`);
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (opts?.maxBytes && bytes.byteLength > opts.maxBytes) {
+    throw new Error(`asset exceeded ${opts.maxBytes} bytes`);
+  }
+  return {
+    bytes,
+    contentType:
+      response.headers.get("Content-Type") ?? "application/octet-stream",
+  };
+};
+
+createHtmlExportPlugin({
+  inlineAssetThresholdBytes: 65_536,
+  fetchAsset,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### 通过事件总线的宿主驱动导出
+
+```ts
+const htmlExport = createHtmlExportPlugin({ headerAction: true });
+
+studio.eventBus.on("anvilkit:export:request", async ({ formatId, options }) => {
+  if (formatId !== "html") return;
+  const ir = puckDataToIR(latestPuckData, puckConfig);
+  const result = await htmlFormat.run(ir, options, { assetResolvers });
+  saveAs(new Blob([result.content], { type: "text/html" }), result.filename);
+});
+```
+
+### 来自 CLI 的无界面导出
+
+```ts
+import { htmlFormat } from "@anvilkit/plugin-export-html";
+import { writeFileSync } from "node:fs";
+
+const result = await htmlFormat.run(
+  ir,
+  { title: "Generated", lang: "en", inlineAssetThresholdBytes: 0 },
+  { assetResolvers: [resolver] },
+);
+
+writeFileSync("dist/page.html", result.content);
+```
+
+## 注意事项与 FAQ
+
+### 资源内联由宿主控制
+
+该插件从不自行访问网络——只有当宿主提供 `fetchAsset` 时资源才会内联。这使导出管线对于沙箱化和离线环境保持安全。管线顺序为 `resolve`（通过 `assetResolvers`）→ `inline`（如果 `fetchAsset` + 大小阈值允许）→ `substitute`（用 data URL 替换资源 ID）。
+
+### 内置发射器覆盖范围
+
+该包为九种组件类型提供第一方 HTML 发射器：`hero`、`navbar`、`pricing-minimal`、`bento-grid`、`section`、`statistics`、`blog-list`、`helps`、`logo-clouds`。该集合之外的组件会发出一个警告和一个占位的 `<!-- unsupported component -->` 注释。如果你需要完整的自定义组件保真度，请将该插件与 `@anvilkit/plugin-export-react` 搭配使用。
+
+### 何时选择不启用 `headerAction`
+
+`headerAction` 在提供 `buildIR` 时（端到端模式）默认为 `true`，否则为 `false`。仅当宿主已接入 `anvilkit:export:request` 监听器时，才在不提供 `buildIR` 的情况下将其设为 `true`——否则用户点击 “Download HTML” 后什么也不会发生。
+
+### 转义契约
+
+转义契约由 `security.test.ts`（24 项恶意输入测试组合）强制保证。绕过 `escapeHtml` / `escapeAttr` 的自定义发射器会被 CI 阻止。
+
+### Alpha 契约注意事项
+
+所发出的 HTML/CSS 字符串尚不是稳定性契约。类名、属性顺序以及内嵌的 `<style>` 块可能在各 alpha 版本之间变化。在各发布版本之间对导出输出进行 diff 的使用者，应当只对渲染后的页面做快照，而不是对原始 HTML。
+
+### 包体积预算
+
+`.size-limit.json` 强制执行按包计的 gzip 上限（见 `scripts/check-bundle-budget.mjs`）。导出管线为 `O(node count)`——大型 IR 的运行时间随节点数量线性增长。
+
+### 另请参阅
+
+- [`@anvilkit/plugin-export-react`](../plugin-export-react/README.md) — 将相同的 `PageIR` 导出为 `.tsx`/`.jsx` 源文件以供开发者交接。

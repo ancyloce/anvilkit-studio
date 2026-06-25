@@ -1,0 +1,267 @@
+# @anvilkit/collab-ui
+
+> **릴리스 후보（`0.1.0-rc.9`）.** `@next` npm 태그에서 `@anvilkit/plugin-collab-yjs`를 추적합니다. 두 패키지는 SnapshotAdapter v2 계약이 동결되면 공동으로 GA를 출시합니다.
+
+[`@anvilkit/plugin-collab-yjs`](../plugin-collab-yjs/README.md)를 위한 호스트 UI 프리미티브입니다. Yjs 플러그인은 헤드리스이며——CRDT 레이어, SnapshotAdapter, 프레즌스 배선, 충돌 진단을 제공하지만 DOM은 없습니다. 이 패키지가 UI를 채웁니다: 라이브 협업 상태를 노출하는 context provider와, 호스트 앱이 자신의 에디터 크롬에 끼워 넣는 일련의 shadcn 스타일 컴포넌트입니다. 통합된 `createCollabPlugin()` 팩토리는 일반적인 경우를 위해 두 패키지를 단일 `StudioPlugin`으로 묶습니다.
+
+## 설치
+
+```bash
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs @anvilkit/core react react-dom
+```
+
+`react`와 `react-dom`은 선택적이지 않은 peer입니다. `@puckeditor/core`는 선택적 peer로——아웃바운드 동기화를 위해 `puckConfig`를 전달하는 경우에만 필요합니다. `yjs`와 `y-protocols`는 `@anvilkit/plugin-collab-yjs`를 통해 전이적으로 도달합니다.
+
+**매니지드 모드에는 provider가 필요합니다.** `websocketUrl`만으로 라이브 협업을 활성화하려면（빠른 시작 참조）, 대응하는 WebSocket provider를 설치하세요——둘 다 **선택적 peer**이며, 실제로 연결할 때에만 동적 `import()`를 통해 로드되므로, 초기 번들을 무겁게 하지 않습니다:
+
+```bash
+pnpm add @hocuspocus/provider   # default backend (provider: "hocuspocus")
+# or
+pnpm add y-websocket            # for provider: "y-websocket"
+```
+
+provider를 설치하지 않고 `websocketUrl`을 설정하면, 동기화 표시기가 명확한 `error` 상태를 보여주고 `onConnectionError`가 발생합니다——난해한 번들러 실패가 되는 일은 없습니다.
+
+## 빠른 시작
+
+설정할 값은 **하나**뿐입니다——WebSocket URL. `room`은 기본값이 `"anvilkit-default-room"`, `provider`는 `"hocuspocus"`, `self`는 자동 생성된 익명 신원이 되며, 플러그인이 트랜스포트 라이프사이클 전체（doc + awareness + provider + 상태 브리지 + 해체）를 소유합니다:
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+export default function EditorPage() {
+  return (
+    <Studio
+      puckConfig={puckConfig}
+      plugins={[
+        createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig }),
+      ]}
+    />
+  );
+}
+```
+
+그 외의 모든 필드는 선택적 오버라이드입니다:
+
+```tsx
+createCollabPlugin({
+  websocketUrl: "wss://relay.example.com",
+  room: "doc-42",
+  provider: "y-websocket",            // override the Hocuspocus default
+  token: authToken,
+  self: { id: user.id, displayName: user.name, color: user.color },
+  puckConfig,
+  onConnectionError: (err) => toast.error(String(err)),
+});
+```
+
+### 자신의 트랜스포트를 직접 가져오기（BYO）
+
+이미 `Y.Doc`, `Awareness`, provider를 직접 관리하고 있나요? `doc`（그리고 선택적으로 `awareness` / `connectionSource`）를 전달하면 팩토리는 트랜스포트를 전적으로 당신에게 맡깁니다——`websocketUrl` 이전 호출자와 완전히 하위 호환됩니다:
+
+```tsx
+createCollabPlugin({ doc, awareness, connectionSource, self, puckConfig });
+```
+
+`doc`와 `websocketUrl`이 둘 다 설정되면 `doc`（BYO）가 우선하며, 일회성 개발 경고가 무시된 필드를 명시합니다.
+
+번들된 `<PresenceLayer>`와 `<ConflictNoticeCenter>`는 플러그인에 의해 자동으로 마운트됩니다——`presence: { enabled: false }` 또는 `notifications: { enabled: false }`를 전달하면 둘 중 하나를 옵트아웃할 수 있습니다. 협업자 아바타 스택은 항상 코어의 `collaborators` 헤더 슬롯에 제공됩니다. 그 슬롯은 단일 점유이며 최초 등록이 우선하므로, 다른 크롬으로 교체하려면 이 플러그인보다 먼저 `collaborators` 슬롯을 제공하는 자신의 플러그인을 등록하세요.
+
+## 핵심 기능
+
+- **원콜 통합** — `createCollabPlugin()`은 Yjs 데이터 동기화 플러그인, context provider, 프레즌스 오버레이, 충돌 토스터, 협업자 아바타 스택을 묶은 단일 `StudioPlugin`을 반환합니다.
+- **분할된 context** — 어댑터／신원／상태／피어／피어 신원／충돌／커서 가시성은 독립적인 provider이므로, 변동이 잦은 원격 커서 업데이트가 상태 필이나 충돌 토스터를 다시 렌더링하는 일은 결코 없습니다.
+- **셀렉터가 얇은 훅** — 모든 프리미티브는 자신이 읽는 슬라이스만 구독합니다（`useCollabPeers`, `useCollabStatus`, `useCollabConflictQueue` 등）.
+- **shadcn 호환 컴포넌트** — 8개의 무스타일 프레임워크 친화적 빌딩 블록. 통째로 사용하거나 훅 위에 직접 UI를 연결하세요.
+- **신원 미러** — `onIdentityChange`를 통해 호스트의 인증 스토어가 하류의 표시 이름／색상 편집을 자신의 진실 공급원으로 미러백할 수 있습니다.
+- **내장 저장 디바운스** — 팩토리는 어댑터를 `createDebouncedAdapter`（기본값 150 ms）로 래핑하여 키 입력이 `Y.Doc`을 범람시키지 않게 합니다. `saveDebounceMs: 0`을 설정하면 옵트아웃됩니다.
+
+## API 레퍼런스
+
+### 통합 팩토리
+
+```ts
+function createCollabPlugin(options: CreateCollabPluginOptions): StudioPlugin;
+```
+
+| 필드                                                                                                                | 타입                                                | 기본값       | 목적                                                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `websocketUrl`                                                                                                      | `string`                                            | 없음         | **매니지드 모드.** 릴레이 URL——대부분의 호스트가 설정하는 유일한 필드. （`doc` 없이）생략하면 단일 탭 인메모리 모드（일회성 개발 경고）.        |
+| `room`                                                                                                              | `string`                                            | `"anvilkit-default-room"` | 매니지드 모드의 공유 룸/문서 이름.                                                                                            |
+| `provider`                                                                                                          | `"hocuspocus" \| "y-websocket"`                     | `"hocuspocus"` | 매니지드 모드 백엔드（대응하는 선택적 peer를 설치）. BYO 모드에서는 무시됩니다.                                                                   |
+| `token`                                                                                                             | `string`                                            | `""`         | 릴레이로 전달되는 인증 토큰（매니지드 모드）.                                                                                          |
+| `onConnectionError`                                                                                                 | `(err: unknown) => void`                            | `console.error` 한 번 | 매니지드 트랜스포트가 실패할 때 발생합니다（provider 누락, 잘못된 URL, 인증 실패）. 팩토리에서 예외를 던지지 않습니다.                  |
+| `self`                                                                                                              | `PeerInfo`                                          | 자동 생성    | 로컬 피어 신원. 생략하면 익명 신원（`anon-<uuid>` + 안정적인 해시된 16진수 색상）이 생성됩니다.                                  |
+| `onIdentityChange`                                                                                                  | `(next: PeerInfo) => void`                          | 없음         | 하류 UI가 `updateSelf`를 호출할 때 발생합니다. 초기 마운트 시 건너뛰고, `{ id, displayName, color }`의 얕은 동등성으로 중복 제거됩니다. |
+| `doc`                                                                                                               | `YDoc`                                              | 없음         | **BYO 모드.** 자신의 Yjs 문서를 제공합니다. 팩토리는 그것을 생성하지도 파괴하지도 않습니다. `websocketUrl`보다 우선합니다.       |
+| `awareness`                                                                                                         | `Awareness`                                         | 자동 생성    | 프레즌스 채널. BYO 모드에서는 BYO, 그 외에는 매니지드 모드의 선택적 오버라이드.                                                                      |
+| `mapName`, `useNativeTree`, `staleAfterMs`, `connectionSource`, `computeDelta`, `awarenessRateLimit`, `persistence` | —                                                   | —            | `createYjsAdapter`에 그대로 전달됩니다. [plugin-collab-yjs `CreateYjsAdapterOptions`](../plugin-collab-yjs/README.md#createyjsadapteroptions) 참조. |
+| `puckConfig`                                                                                                        | `Config`                                            | 없음         | 아웃바운드 동기화에 필수. 읽기 전용 뷰어에서는 생략합니다.                                                                              |
+| `saveDebounceMs`                                                                                                    | `number`                                            | `150`        | 로컬 저장을 합칩니다. `0`을 설정하면 비활성화됩니다.                                                                           |
+| `validateRemoteIR`, `onValidationFailure`, `policy`, `onPolicyViolation`, `onSaveError`                             | —                                                   | —            | `createCollabDataPlugin`로 전달됩니다.                                                                                               |
+| `presence`                                                                                                          | `CollabPresenceLayerProps & { enabled?: boolean }`  | 마운트됨     | 자동 마운트되는 `<PresenceLayer>`의 props. `enabled: false`는 이를 건너뜁니다.                                                                             |
+| `notifications`                                                                                                     | `ConflictNoticeCenterProps & { enabled?: boolean }` | 마운트됨     | 자동 마운트되는 `<ConflictNoticeCenter>`의 props.                                                                                                 |
+
+### 프로바이더
+
+```ts
+function CollabUIProvider(props: CollabUIProviderProps): JSX.Element;
+
+interface CollabUIProviderProps {
+  adapter: YjsSnapshotAdapter;
+  self: PeerInfo;
+  children: ReactNode;
+}
+```
+
+헤드리스 어댑터와 훅만 원할 때는 에디터 트리를 provider로 직접 감싸세요——통합 팩토리는 완전히 건너뜁니다.
+
+### 훅
+
+| 훅                            | 반환값                                           | 비고                                                                                  |
+| ----------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `useCollabAdapter()`          | `YjsSnapshotAdapter`                             | 원시 어댑터 인스턴스.                                                                 |
+| `useCollabStatus()`           | `ConnectionStatus`                               | 판별 가능한 유니온（`connecting` / `synced` / `offline` / `reconnecting` / `error`）. |
+| `useCollabSelf()`             | `PeerInfo`                                       | 로컬 피어 신원.                                                                       |
+| `useCollabIdentity()`         | `{ self, updateSelf }`                           | 신원 전용 소비자에 사용. 피어／상태 변동 시 다시 렌더링하지 않습니다.                  |
+| `useCollabPeers()`            | `readonly PresenceState[]`                       | 변동이 잦은 슬라이스（피어 신원 + 라이브 커서/선택）——그 소비자는 작게 유지하세요.     |
+| `useCollabConflicts()`        | `readonly ConflictEvent[]`                       | 읽기 전용 충돌 큐.                                                                    |
+| `useCollabConflictQueue()`    | `{ conflicts, dismissConflict, clearConflicts }` | 변경을 수행하는 소비자.                                                               |
+| `useCollabCursorVisibility()` | `{ showRemoteCursors, setShowRemoteCursors }`    | 설정 토글과 `PresenceLayer`의 공유 진실 공급원.                                       |
+| `useCollabMetrics(pollMs?)`   | `MetricsSnapshot \| null`                        | 폴링된 `adapter.metrics()` 스냅샷. 첫 렌더링 시 `null`.                               |
+| `useCollabContext()`          | `CollabUIContextValue`                           | 완전한 복합체——어떤 변화에도 다시 렌더링합니다. 좁은 훅을 선호하세요.                  |
+
+### 컴포넌트
+
+모든 컴포넌트는 `@anvilkit/collab-ui/components/<name>`에 존재합니다. 이들은 context를 소비하므로 `<CollabUIProvider>` 내부（또는 통합 팩토리를 등록하는 `<Studio>` 아래）에서 렌더링해야 합니다.
+
+| 컴포넌트                  | 주요 props                                                                                                                    |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `CollabRoomBar`           | `title?: string`, `subtitle?: string`, `roomId?: string`, `roomLink?: string`, `trailing?: ReactNode`, `className?: string`   |
+| `PeerAvatarStack`         | `maxVisible?: number`（기본값 `5`）, `className?: string`                                                                     |
+| `PresenceLayer`           | `showCursors?: boolean`, `resolveSelectionRect?: (nodeId: string) => PresenceSelectionRingRect \| null`, `className?: string` |
+| `SyncActivityIndicator`   | `latencyMs?: number`, `lastSyncAt?: string`, `lastPeerName?: string`, `className?: string`                                    |
+| `ConflictNoticeCenter`    | `formatMessage?: (event: ConflictEvent) => string`, `toasterPosition?: "top-right" \| "bottom-right" \| "top-center"`         |
+| `ForceResyncDialog`       | `open?: boolean`, `onOpenChange?: (open: boolean) => void`                                                                    |
+| `CollabSettingsPopover`   | `roomId?: string`, `roomLink?: string`                                                                                        |
+| `CollabPresencePublisher` | `root: HTMLElement`, `frameSelector?: string`                                                                                 |
+
+## 사용 예시
+
+### 헤드리스 어댑터 + 커스텀 UI
+
+```tsx
+import {
+  createYjsAdapter,
+  createCollabDataPlugin,
+} from "@anvilkit/plugin-collab-yjs";
+import {
+  CollabUIProvider,
+  useCollabStatus,
+  useCollabPeers,
+} from "@anvilkit/collab-ui";
+
+const adapter = createYjsAdapter({ doc, awareness, peer: self });
+
+export function Editor() {
+  return (
+    <CollabUIProvider adapter={adapter} self={self}>
+      <Studio
+        puckConfig={puckConfig}
+        plugins={[
+          createCollabDataPlugin({ adapter, puckConfig, localPeer: self }),
+        ]}
+      />
+      <CustomSyncRibbon />
+    </CollabUIProvider>
+  );
+}
+
+function CustomSyncRibbon() {
+  const status = useCollabStatus();
+  const peers = useCollabPeers();
+  return (
+    <div>
+      {status.kind} · {peers.length} peer(s)
+    </div>
+  );
+}
+```
+
+### 로컬 커서 + Puck 선택 게시
+
+```tsx
+import { CollabPresencePublisher } from "@anvilkit/collab-ui/components/collab-presence-publisher";
+
+<CollabPresencePublisher
+  root={canvasRef.current!}
+  frameSelector="#puck-canvas"
+/>;
+```
+
+게시자는 `<Studio>` 내부에 마운트하세요（그래야 `createUsePuck()`을 통해 Puck 선택을 읽을 수 있습니다）. 이것은 옵트인입니다——데이터 레이어는 원격 커서만 게시합니다.
+
+### 신원 변경을 호스트로 미러백하기
+
+```tsx
+createCollabPlugin({
+  doc,
+  self: { id: profile.id, displayName: profile.name, color: profile.color },
+  onIdentityChange: (next) => {
+    profileStore.update({ name: next.displayName, color: next.color });
+  },
+  puckConfig,
+});
+```
+
+`onIdentityChange`는 실제 변경 시에만 발생합니다——초기 마운트와 동일 값 업데이트는 건너뜁니다.
+
+### 텔레메트리를 위한 폴링 메트릭
+
+```tsx
+import { useCollabMetrics } from "@anvilkit/collab-ui";
+
+function CollabHealthBadge() {
+  const metrics = useCollabMetrics(5000);
+  if (!metrics) return null;
+  return (
+    <span>
+      p95 {metrics.syncLatencyP95Ms}ms · churn {metrics.awarenessChurn}
+    </span>
+  );
+}
+```
+
+## 참고 사항 및 FAQ
+
+### 왜 context를 다섯 개의 provider로 분할하는가?
+
+원격 커서 트래픽은 시스템에서 변동이 가장 잦은 신호입니다. 모든 소비자가 단일 context에서 읽으면, 모든 커서 업데이트가 상태 필, 아바타 스택, 충돌 토스터를 다시 렌더링합니다. `peers`를 자체 context로 분할하면, 변동이 잦은 신호를 `<PresenceLayer>`로 범위 지정하면서 UI의 나머지는 정지 상태로 유지합니다.
+
+진정으로 한 컴포넌트에서 모든 슬라이스가 필요하다면 `useCollabContext()`를 사용하세요——단, 어떤 변화에도 다시 렌더링한다는 점에 유의하세요.
+
+### 저장 디바운스는 기본적으로 켜져 있습니다
+
+`saveDebounceMs: 150`은 데이터 플러그인에 넘기기 전에 어댑터를 `createDebouncedAdapter`로 래핑합니다. 디바운스되는 것은 저장 경로뿐입니다——프레즌스, 상태, 충돌 읽기는 여전히 라이브 어댑터를 사용합니다. 호스트가 이미 상류에서 디바운스하는 경우（예: 키 입력을 배치하는 제어 폼 레이어）에는 `saveDebounceMs: 0`을 설정하세요.
+
+### 헤드리스 vs 통합 팩토리
+
+| 사용 사례                                                                     | 선택                                                                                                                          |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 기본 크롬으로 한 줄 통합을 원합니다.                                          | 이 패키지의 `createCollabPlugin()`.                                                                                          |
+| 데이터 레이어만 원합니다（읽기 전용 뷰어, 커스텀 UI, 서버 사이드 동기화）.    | `@anvilkit/plugin-collab-yjs`의 `createYjsAdapter` + `createCollabDataPlugin`.                                               |
+| 훅은 원하지만 컴포넌트는 커스텀.                                              | 헤드리스 어댑터 + 수동 `<CollabUIProvider>`.                                                                                  |
+| 번들된 UI의 일부는 원하지만 전부는 아닙니다.                                  | `createCollabPlugin()`에 `presence.enabled: false` / `notifications.enabled: false`（`collaborators` 슬롯은 항상 제공됩니다——자신의 `collaborators` 슬롯을 먼저 등록하여 오버라이드）. |
+
+### 커서 가시성 토글
+
+`useCollabCursorVisibility()`는 "원격 커서 표시" 토글의 공유 진실 공급원입니다. `CollabSettingsPopover`가 거기에 쓰고, `PresenceLayer`가 그것을 읽습니다. 이 상태를 호스트 코드에서 복제하지 마세요——훅에서 읽어야 토글과 오버레이의 동기화가 유지됩니다.
+
+### 번들된 컴포넌트는 슬롯 제공물입니다
+
+팩토리는 `<PeerAvatarStack>`을 헤더의 `collaborators` 슬롯에 등록합니다. Studio 플러그인 계약에 따라 슬롯은 단일 점유이며 최초 등록이 우선합니다——기본값을 오버라이드하려면 이 플러그인보다 먼저 `collaborators` 슬롯을 제공하는 자신의 플러그인을 등록하세요.
+
+### 의존성 계약
+
+이 패키지는 그 타입과 이벤트 스트림을 위해 `@anvilkit/plugin-collab-yjs`에 의존합니다. 실시간 협업을 출시하지 않는 호스트는 이를 설치해서는 안 됩니다. SnapshotAdapter v2 계약은 Anvilkit 문서 사이트의 실시간 협업 아키텍처 문서를 참조하세요.

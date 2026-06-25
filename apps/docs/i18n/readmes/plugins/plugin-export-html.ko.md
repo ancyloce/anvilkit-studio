@@ -1,0 +1,223 @@
+# @anvilkit/plugin-export-html
+
+> **Alpha（`0.1.7`）.** 패키지 인터페이스는 구현되고 테스트되었지만, 방출되는 HTML/CSS 계약은 `1.0.0` 이전에 진화할 수 있습니다.
+
+Anvilkit Studio를 위한 HTML 내보내기 플러그인. `PageIR` 문서를 방출된 CSS를 동반한 독립형 HTML로 변환하며, 선택적 에셋 인라이닝과, 호스트가 `buildIR` 콜백을 제공할 때 인터랙티브 내보내기 플로우를 위한 옵트인 Studio 헤더 액션을 제공합니다. Anvilkit 내보내기 플러그인 계약의 레퍼런스 구현이며, CI의 24개 테스트 배터리에 의해 적대적 입력에 대해 보안 강화되었습니다.
+
+## 설치
+
+```bash
+pnpm add @anvilkit/plugin-export-html @anvilkit/core react react-dom @puckeditor/core
+```
+
+비선택 peer: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.21.3`. 런타임 의존성은 `@anvilkit/core`뿐입니다.
+
+## 빠른 시작
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { puckDataToIR } from "@anvilkit/ir";
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckConfig } from "./puck-config";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Marketing page",
+  lang: "en",
+  inlineAssetThresholdBytes: 32_768,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+
+<Studio puckConfig={puckConfig} plugins={[htmlExport]} />;
+```
+
+`buildIR`을 제공하면 "Download HTML" 헤더 액션이 켜집니다. 클릭하면 내보내기를 엔드투엔드로 실행하고 결과 페이로드와 함께 `anvilkit:export:ready`를 방출합니다. 호스트가 내보내기를 직접 처리하려면 `buildIR`을 생략하세요. 그러면 액션이 대신 `anvilkit:export:request`를 방출합니다.
+
+## 핵심 기능
+
+- **독립형 HTML5 출력** — 방출된 `<style>`, BCP 47 `lang`, 문서 제목을 동반한 래핑된 문서.
+- **내장 컴포넌트 이미터** — `hero`, `navbar`, `pricing-minimal`, `bento-grid`, `section`, `statistics`, `blog-list`, `helps`, `logo-clouds`를 위한 퍼스트파티 HTML 출력.
+- **선택적 에셋 인라이닝** — `inlineAssetThresholdBytes` 미만의 에셋은 base64로 인라인됩니다. 더 크거나 원격 전용인 에셋은 URL로 남습니다. 호스트는 `fetchAsset`을 통해 네트워크를 제어합니다.
+- **두 가지 헤더 액션 모드** — `buildIR`을 사용한 엔드투엔드, 또는 `anvilkit:export:request` 이벤트를 통한 호스트 구동.
+- **보안 강화된 이스케이핑** — `escapeHtml`과 `escapeAttr`은 24개 적대적 입력 테스트 배터리에 의해 강제되며, Anvilkit 플러그인 트러스트 모델에 의해 코드화되어 있습니다.
+- **직접 포맷 접근** — Studio 내부에서 실행되지 않는 헤드리스 내보내기 파이프라인을 위해 `htmlFormat`이 내보내져 있습니다.
+
+## API 레퍼런스
+
+### 플러그인 팩토리
+
+```ts
+function createHtmlExportPlugin(opts?: HtmlExportOptions): StudioPlugin;
+```
+
+하나의 내보내기 포맷(`id: "html"`)을 등록하고, 구성된 경우 하나의 헤더 액션(`id: "export-html"`)을 등록하는 `StudioPlugin`을 반환합니다. 플러그인 메타:
+
+| 필드          | 값                            |
+| ------------- | ----------------------------- |
+| `id`          | `anvilkit-plugin-export-html` |
+| `name`        | `HTML Export`                 |
+| `coreVersion` | `^0.1.0-alpha`                |
+
+### `HtmlExportOptions`
+
+| 필드                        | 타입                         | 기본값                                          | 목적                                                                           |
+| --------------------------- | ---------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| `title`                     | `string`                     | IR 메타데이터로부터                             | 문서 `<title>`.                                                            |
+| `lang`                      | `string`                     | `"en"`                                          | `<html lang="…">`에 방출되는 BCP 47 태그.                                       |
+| `inlineStyles`              | `boolean`                    | `true`                                          | `false`이면 CSS가 생략됩니다(호스트가 스타일시트를 소유).                       |
+| `inlineAssetThresholdBytes` | `number`                     | `32_768`                                        | 임계값 ≤ 인 에셋은 base64로 인라인되고, 더 큰 것은 URL로 남습니다.                    |
+| `fetchAsset`                | `FetchAssetFn`               | 없음                                            | 호스트가 제공하는 비동기 에셋 로더. 없으면 원격 에셋은 URL로 남습니다.  |
+| `buildIR`                   | `IRBuilder`                  | 없음                                            | 제공되면 헤더 액션이 내보내기를 엔드투엔드로 실행합니다.                   |
+| `assetResolvers`            | `readonly IRAssetResolver[]` | 없음                                            | 에셋 해석 파이프라인. `format.run()`에 전달된 어떤 리졸버와도 병합됩니다. |
+| `headerAction`              | `boolean`                    | `buildIR`이 제공되면 `true`, 아니면 `false`     | "Download HTML" 헤더 액션을 기여합니다.|
+
+### `FetchAssetFn`
+
+```ts
+type FetchAssetFn = (
+  url: string,
+  opts?: FetchAssetOptions,
+) => Promise<{ bytes: Uint8Array; contentType: string }>;
+
+interface FetchAssetOptions {
+  readonly maxBytes?: number;
+}
+```
+
+기본 페처(`defaultFetchAsset`)는 Content-Length 사전 검사를 수행하고 `maxBytes`를 강제하기 위해 바디를 스트리밍합니다. 커스텀 페처는 이 힌트를 무시할 수 있지만, 그렇게 하면 바이트 상한을 포기하게 됩니다.
+
+### `IRBuilder`
+
+```ts
+type IRBuilder = (ctx: StudioPluginContext) => PageIR | Promise<PageIR>;
+```
+
+호스트는 일반적으로 `@anvilkit/ir`의 `puckDataToIR(ctx.getData(), puckConfig)`로 이를 구현합니다.
+
+### 직접 포맷 접근
+
+```ts
+const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+  id: "html",
+  label: "HTML",
+  extension: "html",
+  mimeType: "text/html",
+  run: async (ir, options, runCtx) => ({ content, filename, warnings }),
+};
+```
+
+Studio 밖에서 실행할 때(예: CLI 툴링, 서버 렌더링 내보내기 엔드포인트) 이것을 사용하세요.
+
+### 헤더 액션
+
+| 내보내기                                        | 목적                                                                         |
+| ----------------------------------------------- | ---------------------------------------------------------------------------- |
+| `createExportHtmlHeaderAction(format, options)` | 구성된 포맷에 바인딩된 헤더 액션을 구축합니다.                          |
+| `exportHtmlHeaderAction`                        | 기본 미바인딩 액션. 호스트가 처리하도록 `anvilkit:export:request`를 방출합니다. |
+
+헤더 액션 메타데이터: `id: "export-html"`, `label: "Download HTML"`, `icon: "download"`, `order: 100`.
+
+### 이벤트 플로우
+
+- `anvilkit:export:ready` — `buildIR`이 구성되어 있을 때 헤더 액션에 의해 발화됩니다. 페이로드: `{ formatId: "html", content: string, filename: string, mimeType: "text/html", warnings: ExportWarning[] }`.
+- `anvilkit:export:request` — `buildIR`이 구성되지 않았을 때 발화됩니다. 페이로드: `{ formatId: "html", options }`. 호스트는 자체 IR로 내보내기를 실행하고 `anvilkit:export:ready`를 디스패치하여(또는 결과를 직접 저장하여) 이를 처리합니다.
+
+## 사용 예제
+
+### 기본 설정으로 독립형 내보내기
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckDataToIR } from "@anvilkit/ir";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Untitled page",
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### 프라이빗 S3 버킷에서 에셋 인라이닝
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+
+const fetchAsset = async (url: string, opts) => {
+  const signed = await mySigner.sign(url);
+  const response = await fetch(signed.url, {
+    headers: signed.headers,
+  });
+  if (!response.ok) throw new Error(`fetch ${url} → ${response.status}`);
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (opts?.maxBytes && bytes.byteLength > opts.maxBytes) {
+    throw new Error(`asset exceeded ${opts.maxBytes} bytes`);
+  }
+  return {
+    bytes,
+    contentType:
+      response.headers.get("Content-Type") ?? "application/octet-stream",
+  };
+};
+
+createHtmlExportPlugin({
+  inlineAssetThresholdBytes: 65_536,
+  fetchAsset,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### 이벤트 버스를 통한 호스트 구동 내보내기
+
+```ts
+const htmlExport = createHtmlExportPlugin({ headerAction: true });
+
+studio.eventBus.on("anvilkit:export:request", async ({ formatId, options }) => {
+  if (formatId !== "html") return;
+  const ir = puckDataToIR(latestPuckData, puckConfig);
+  const result = await htmlFormat.run(ir, options, { assetResolvers });
+  saveAs(new Blob([result.content], { type: "text/html" }), result.filename);
+});
+```
+
+### CLI로부터의 헤드리스 내보내기
+
+```ts
+import { htmlFormat } from "@anvilkit/plugin-export-html";
+import { writeFileSync } from "node:fs";
+
+const result = await htmlFormat.run(
+  ir,
+  { title: "Generated", lang: "en", inlineAssetThresholdBytes: 0 },
+  { assetResolvers: [resolver] },
+);
+
+writeFileSync("dist/page.html", result.content);
+```
+
+## 참고 사항 및 FAQ
+
+### 에셋 인라이닝은 호스트 제어
+
+이 플러그인은 스스로 네트워크에 접근하는 일이 결코 없습니다. 에셋은 호스트가 `fetchAsset`을 제공할 때만 인라인됩니다. 이로써 내보내기 파이프라인은 샌드박스 및 오프라인 환경에서 안전하게 유지됩니다. 파이프라인 순서는 `resolve`(`assetResolvers`를 통해) → `inline`(`fetchAsset` + 크기 임계값이 허용하는 경우) → `substitute`(에셋 ID를 data URL로 교체)입니다.
+
+### 내장 이미터 커버리지
+
+이 패키지는 아홉 가지 컴포넌트 타입을 위한 퍼스트파티 HTML 이미터를 제공합니다: `hero`, `navbar`, `pricing-minimal`, `bento-grid`, `section`, `statistics`, `blog-list`, `helps`, `logo-clouds`. 이 세트 밖의 컴포넌트는 경고와 스텁 `<!-- unsupported component -->` 주석을 방출합니다. 완전한 커스텀 컴포넌트 충실도가 필요하다면, 이 플러그인을 `@anvilkit/plugin-export-react`와 짝지으세요.
+
+### `headerAction`을 옵트아웃할 때
+
+`headerAction`은 `buildIR`이 제공될 때(엔드투엔드 모드) 기본값이 `true`이고, 그렇지 않으면 `false`입니다. `buildIR` 없이 `true`로 설정하는 것은 호스트가 `anvilkit:export:request` 리스너를 배선해 둔 경우에만 하세요. 그렇지 않으면 사용자가 "Download HTML"을 클릭해도 아무 일도 일어나지 않습니다.
+
+### 이스케이핑 계약
+
+이스케이핑 계약은 `security.test.ts`(24개 적대적 입력 테스트 배터리)에 의해 강제됩니다. `escapeHtml` / `escapeAttr`을 우회하는 커스텀 이미터는 CI에서 차단됩니다.
+
+### Alpha 계약 주의 사항
+
+방출되는 HTML/CSS 문자열은 아직 안정성 계약이 아닙니다. 클래스 이름, 속성 순서, 임베디드 `<style>` 블록은 alpha 버전 간에 변경될 수 있습니다. 릴리스 간에 내보내기 출력을 diff하는 사용자는 원시 HTML이 아니라 렌더링된 페이지만 스냅샷해야 합니다.
+
+### 번들 예산
+
+`.size-limit.json`은 패키지별 gzip 상한을 강제합니다(`scripts/check-bundle-budget.mjs` 참조). 내보내기 파이프라인은 `O(node count)`입니다. 큰 IR은 노드 수에 대해 선형으로 실행됩니다.
+
+### 함께 보기
+
+- [`@anvilkit/plugin-export-react`](../plugin-export-react/README.md) — 동일한 `PageIR`을 개발자 인수인계용 `.tsx`/`.jsx` 소스 파일로 내보냅니다.

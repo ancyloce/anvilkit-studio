@@ -1,0 +1,27 @@
+# @anvilkit/template-blog-article
+
+単一のブログ記事ページ。
+
+ナビゲーションバー、リッチな本文を備えた記事セクション、そしてフッターの関連記事 CTA ボタン。
+
+![Blog Article preview](./preview.png)
+
+## インストール
+
+```sh
+npx anvilkit init --template blog-article my-site
+```
+
+## 構成
+
+このテンプレートは以下のコンポーネントパッケージを組み合わせています:
+
+- `@anvilkit/button`
+- `@anvilkit/navbar`
+- `@anvilkit/section`
+
+## 編集
+
+正規の `PageIR` ツリーは `src/page-ir.json` にコミットされています。このパッケージのデフォルトエクスポートは、その IR をマニフェストフィールド（slug、name、description、preview、パッケージリスト）とともに `AnvilkitTemplate` にまとめます。
+
+`AnvilkitTemplate` の契約については `docs/decisions/003-core-templates-subpath.md` を参照してください。

@@ -1,0 +1,339 @@
+# @anvilkit/plugin-version-history
+
+> **Alpha（`0.1.7`）。** ヘッダーアクションと diff/apply エンジンは安定しています。サイドバーパネルのスロット貢献は、`StudioPluginContext` がサイドバー登録 API を公開するまで延期されています。
+
+Anvilkit Studio 向けのヘッドレスなバージョン履歴プラグイン。スナップショットの永続化はホストが提供する `SnapshotAdapter` に委譲されるため、プラグイン自体は I/O を一切同梱しません —— diff/apply エンジン、ヘッダーアクション、オプションの UI プリミティブ、テストとデモ用の参照アダプターのみです。
+
+## インストール
+
+```bash
+pnpm add @anvilkit/plugin-version-history react react-dom @puckeditor/core
+```
+
+非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.21.3`。トランスポートやストレージの依存関係はありません —— ホストが永続化をエンドツーエンドで所有します。
+
+サブパスインポート：
+
+- `@anvilkit/plugin-version-history` —— メインエントリ：プラグインファクトリ、参照アダプター、diff/apply エンジン、型。
+- `@anvilkit/plugin-version-history/ui` —— オプションの React コンポーネント（`VersionHistoryUI`、`SaveSnapshotButton`、`SnapshotList`、`SnapshotHistoryModal`、`DiffView`）。
+- `@anvilkit/plugin-version-history/testing` —— `runAdapterContract` 共有テストスイート。
+
+## クイックスタート
+
+```ts
+import {
+  createVersionHistoryPlugin,
+  localStorageAdapter,
+} from "@anvilkit/plugin-version-history";
+
+const plugin = createVersionHistoryPlugin({
+  adapter: localStorageAdapter({ namespace: "my-app-history" }),
+  maxSnapshots: 50,
+});
+
+// Pass `plugin` alongside other Studio plugins.
+```
+
+このプラグインは 2 つのヘッダーアクション（`version-history:save` と `version-history:open`）を提供し、Studio イベントバス上で `version-history:save-requested` / `version-history:open-requested` を発行します。ホストは UI サーフェス（例：`/ui` サブパスの `<SnapshotHistoryModal>`）をマウントすることで open イベントを処理します。
+
+## コア機能
+
+- **アダプター駆動の永続化** —— プラグインが契約を定義し、ホストが `save` / `list` / `load` / `delete?` を実装してストレージ（インメモリ、localStorage、Firestore、S3、……）を完全に制御します。
+- **決定論的な diff/apply エンジン** —— `diffIR(a, b)` は凍結された `IRDiff` を生成し、`applyDiff(a, diff)` はラウンドトリップします。
+- **オプションの UI** —— バッテリー同梱のバージョン履歴を望むホストのために `/ui` に 5 つのコンポーネントを用意。デフォルトエクスポートはそれらを一切インポートしないため、ヘッドレスな利用者は UI レンダリングのコストを負担しません。
+- **FIFO エビクション** —— 容量に達すると `maxSnapshots` が最も古いスナップショットを自動的に削除します（`adapter.delete` が必要）。
+- **参照アダプター** —— テスト用の `inMemoryAdapter()`、デモ用の `localStorageAdapter({ namespace })`。
+- **アダプターテストスイート** —— `runAdapterContract` は参照アダプターが使用するのと同じ契約です。利用者は自身の実装をこれに対して検証できます。
+- **バンドルバジェット** —— `scripts/check-bundle-budget.mjs` により CI で 8 KB gzipped を強制します。
+
+## API リファレンス
+
+### ファクトリ
+
+```ts
+function createVersionHistoryPlugin(
+  options: CreateVersionHistoryPluginOptions,
+): StudioPlugin;
+
+interface CreateVersionHistoryPluginOptions {
+  readonly adapter: SnapshotAdapter;
+  readonly maxSnapshots?: number;
+}
+```
+
+`VersionHistoryContribution` 能力を持つ型付きの `StudioPlugin` を返します（これにより下流の利用者は `InferPluginContributions` 経由で `adapter` / `snapshots` を回収できます）。
+
+### `SnapshotAdapter` 契約
+
+```ts
+interface SnapshotAdapter {
+  save(
+    ir: PageIR,
+    meta: Partial<Omit<SnapshotMeta, "id" | "savedAt">>,
+  ): MaybePromise<string>;
+  list(): MaybePromise<readonly SnapshotMeta[]>;
+  load(id: string): MaybePromise<PageIR>;
+  delete?(id: string): MaybePromise<void>;
+  subscribe?(onUpdate: (ir: PageIR, peer?: PeerInfo) => void): Unsubscribe;
+  presence?: SnapshotAdapterPresence;
+}
+```
+
+| メソッド         | 必須？    | 目的                                                                       |
+| ---------------- | --------- | ------------------------------------------------------------------------- |
+| `save(ir, meta)` | はい      | `PageIR` を永続化する。一意のスナップショット id を返す。                   |
+| `list()`         | はい      | すべてのスナップショットを順序付きで返す（慣例として新しい順）。            |
+| `load(id)`       | はい      | id で水和する。ミス時には `VersionHistoryError("SNAPSHOT_NOT_FOUND")` を投げる。 |
+| `delete(id)`     | オプション | `maxSnapshots` を設定する場合は必須。                                       |
+| `subscribe(cb)`  | オプション | コラボレーションアダプター（例：`createYjsAdapter`）からの更新をプッシュする。 |
+| `presence`       | オプション | マルチユーザーのカーソル / 選択チャネル。Yjs アダプターが実装する。         |
+
+すべてのメソッドは同期でも非同期でもかまいません（`MaybePromise<T>`）。凍結された、構造的に等しい結果を返すことが推奨されます。
+
+### `SnapshotMeta`
+
+```ts
+interface SnapshotMeta {
+  readonly id: string;
+  readonly label?: string;
+  readonly savedAt: string;
+  readonly pageIRHash: string;
+  readonly delta?: IRDiff;
+}
+```
+
+`delta` はオプションです。オプトインしたアダプター（`createYjsAdapter({ computeDelta: true })`）は、前のスナップショットからの構造的な diff でそれを埋めます。古いまたはよりシンプルなアダプターはそれを省略します。
+
+### Diff エンジン
+
+| エクスポート     | シグネチャ                            | 目的                                                                     |
+| ---------------- | ------------------------------------- | ------------------------------------------------------------------------ |
+| `diffIR`         | `(a: PageIR, b: PageIR) => IRDiff`    | 決定論的で凍結された diff を計算する。                                     |
+| `applyDiff`      | `(a: PageIR, diff: IRDiff) => PageIR` | diff を適用する。`applyDiff(a, diffIR(a, b))` は `b` と構造的に等しい。    |
+| `summarizeDiff`  | `(diff: IRDiff) => IRDiffSummary`     | `{ added, removed, moved, changed, metaChanged?, description }`。         |
+| `DiffApplyError` | `class extends Error`                 | `applyDiff` が diff を入力 IR と調整できないときに投げられる。             |
+
+### `IRDiffOp`（判別可能なユニオン型）
+
+```ts
+type IRDiffOp =
+  | { kind: "add-node"; path: string; node: PageIRNode }
+  | { kind: "remove-node"; path: string; nodeId: string }
+  | { kind: "move-node"; from: string; to: string; nodeId: string }
+  | {
+      kind: "change-prop";
+      path: string;
+      key: string;
+      before: unknown;
+      after: unknown;
+    }
+  | {
+      kind: "change-children";
+      path: string;
+      before: readonly string[];
+      after: readonly string[];
+    }
+  | {
+      kind: "meta-changed";
+      path: string;
+      key: "locked" | "owner" | "version" | "notes";
+      before: unknown;
+      after: unknown;
+    };
+```
+
+### 参照アダプター
+
+| アダプター                           | ユースケース            | 備考                                                                                                                                                                                                                                                                          |
+| ------------------------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `inMemoryAdapter()`                  | テスト                  | 保存される IR をディープフリーズする。リロードでデータを失う。                                                                                                                                                                                                                 |
+| `localStorageAdapter({ namespace })` | デモ、シングルユーザー SPA | ストレージキー：`<namespace>:snapshots:<id>`（ペイロード）、`<namespace>:snapshots:index`（メタデータ配列）。約 5～10 MB のクォータに収めるため delta チェーンエンコーディングを使用する。`STORAGE_UNAVAILABLE`、`STORAGE_CORRUPT`、`STORAGE_QUOTA_EXCEEDED` のいずれかで `VersionHistoryError` を投げる。 |
+
+### エラー
+
+```ts
+class VersionHistoryError extends Error {
+  readonly code: VersionHistoryErrorCode;
+}
+
+type VersionHistoryErrorCode =
+  | "SNAPSHOT_NOT_FOUND"
+  | "STORAGE_CORRUPT"
+  | "STORAGE_QUOTA_EXCEEDED"
+  | "STORAGE_UNAVAILABLE";
+```
+
+### オプションの UI（`./ui`）
+
+| コンポーネント         | 主要な props                                            |
+| ---------------------- | ------------------------------------------------------- |
+| `VersionHistoryUI`     | `{ adapter, currentIR, onRestore }`                     |
+| `SaveSnapshotButton`   | `{ adapter, currentIR, getLabel? }`                     |
+| `SnapshotList`         | `{ snapshots, onSelect, currentId? }`                   |
+| `SnapshotHistoryModal` | `{ open, onOpenChange, adapter, currentIR, onRestore }` |
+| `DiffView`             | `{ diff, before?, after? }`                             |
+
+`/ui` サブパスは独立したエントリポイントです —— そこからインポートしてもパッケージの残りの部分はトリガーされません。デフォルトのプラグインエクスポートはこれらのコンポーネントを参照しません。
+
+### テスト（`./testing`）
+
+```ts
+runAdapterContract(
+  adapterFactory: () => SnapshotAdapter,
+  hooks: { describe; expect; it },
+): void;
+```
+
+テストランナーのプリミティブを渡すことで、パッケージを特定のフレームワークに結合させることなくスイートを注入できます。
+
+## 使用例
+
+### シングルユーザー SPA 向けの LocalStorage アダプター
+
+```ts
+import {
+  createVersionHistoryPlugin,
+  localStorageAdapter,
+} from "@anvilkit/plugin-version-history";
+
+const versionHistory = createVersionHistoryPlugin({
+  adapter: localStorageAdapter({ namespace: "marketing-cms" }),
+  maxSnapshots: 100,
+});
+```
+
+### カスタム Firestore アダプター
+
+```ts
+import type {
+  PageIR,
+  SnapshotAdapter,
+  SnapshotMeta,
+} from "@anvilkit/plugin-version-history";
+import { VersionHistoryError } from "@anvilkit/plugin-version-history";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  getDocs,
+  collection,
+  query,
+  orderBy,
+} from "firebase/firestore";
+
+export function firestoreAdapter(roomId: string): SnapshotAdapter {
+  const col = collection(db, "rooms", roomId, "snapshots");
+  return {
+    async save(ir, meta) {
+      const id = crypto.randomUUID();
+      const savedAt = new Date().toISOString();
+      await setDoc(doc(col, id), { ir, meta: { ...meta, id, savedAt } });
+      return id;
+    },
+    async list() {
+      const snaps = await getDocs(query(col, orderBy("meta.savedAt", "desc")));
+      return snaps.docs.map((d) => d.data().meta as SnapshotMeta);
+    },
+    async load(id) {
+      const snap = await getDoc(doc(col, id));
+      if (!snap.exists()) {
+        throw new VersionHistoryError(
+          "SNAPSHOT_NOT_FOUND",
+          `snapshot ${id} not found`,
+        );
+      }
+      return snap.data().ir as PageIR;
+    },
+    async delete(id) {
+      await deleteDoc(doc(col, id));
+    },
+  };
+}
+```
+
+### カスタムアダプターの検証
+
+```ts
+import { runAdapterContract } from "@anvilkit/plugin-version-history/testing";
+import { describe, expect, it } from "vitest";
+
+import { firestoreAdapter } from "./firestore-adapter.js";
+
+runAdapterContract(() => firestoreAdapter("test-room"), {
+  describe,
+  expect,
+  it,
+});
+```
+
+### diff ビューのレンダリング
+
+```tsx
+import { useEffect, useState } from "react";
+import {
+  diffIR,
+  summarizeDiff,
+  type IRDiff,
+  type PageIR,
+  type SnapshotAdapter,
+} from "@anvilkit/plugin-version-history";
+import { DiffView } from "@anvilkit/plugin-version-history/ui";
+
+function HistoryEntry({
+  adapter,
+  fromId,
+  toId,
+}: {
+  adapter: SnapshotAdapter;
+  fromId: string;
+  toId: string;
+}) {
+  const [diff, setDiff] = useState<IRDiff | null>(null);
+
+  useEffect(() => {
+    Promise.all([adapter.load(fromId), adapter.load(toId)]).then(([a, b]) => {
+      setDiff(diffIR(a, b));
+    });
+  }, [adapter, fromId, toId]);
+
+  if (!diff) return null;
+  const summary = summarizeDiff(diff);
+  return (
+    <div>
+      <p>{summary.description}</p>
+      <DiffView diff={diff} />
+    </div>
+  );
+}
+```
+
+## 備考と FAQ
+
+### ストレージは意図的にプラグイン可能
+
+プラグインは `localStorage`、IndexedDB、あるいはいかなるバックエンドからも直接読み取りません。アダプターが唯一の永続化境界です —— セッション共有、マルチテナント、または監査準拠のストレージが必要な場合は、アダプターを書き、型付きの契約の内側にとどまってください。
+
+### `move-node` は情報提供用
+
+`applyDiff` は `move-node` オペレーションを検証しますが、それらだけでは親の再設定を**実行しません**。影響を受ける親の `change-children` が、権威ある再設定 / 並べ替えのシグナルです。表示やロギングのために `IRDiff` を検査する利用者は `move-node` をプレゼンテーションに使用してかまいませんが、リプレイの正確性をそれに依存しないでください。
+
+### `maxSnapshots` には `delete` が必要
+
+スナップショット数が上限を超えそうになると、FIFO エビクションループが `adapter.delete(oldestId)` を呼び出します。`delete` を省略したアダプターは `maxSnapshots` を満たせません。`delete` を実装するか、`maxSnapshots` を省略してください。
+
+### バンドルバジェット
+
+公開されたエントリには 8 KB gzipped のバジェットがあり、`scripts/check-bundle-budget.mjs` と `.size-limit.json` により CI で強制されます。ワークスペース依存（`@anvilkit/*`）と peer（`react`、`react-dom`、`@puckeditor/core`）は外部として扱われます。
+
+### オプションの UI は設計上オプトイン
+
+`@anvilkit/plugin-version-history` からのインポートは `/ui` コンポーネントを決して引き込みません —— それらは別のエントリに存在します。これにより、ヘッドレスな利用者（スナップショットと監査履歴だけを望むが自前の UI を同梱する CMS）が公開されたバンドルバジェット内にとどまります。
+
+### アダプターの凍結を推奨
+
+参照アダプターは保存される IR をディープフリーズして、意図しない変更を早期に捕捉します。カスタムアダプターは凍結を要求されませんが、そうすることで「保存後に履歴スナップショットが変更された」という、さもなければ見逃しやすい一連のバグを排除できます。
+
+### プラグイン間の型
+
+`SnapshotAdapter`、`PeerInfo`、`PresenceState` などは、ここで唯一の信頼できる情報源として再エクスポートされています —— `@anvilkit/plugin-collab-yjs` は `SnapshotAdapter` を `YjsSnapshotAdapter` で拡張し、競合 / ステータス / メトリクスのサーフェスを追加します。両方のプラグインにまたがる共有抽象を作成する際には、このパッケージの型を使用してください。

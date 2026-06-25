@@ -1,0 +1,327 @@
+# @anvilkit/plugin-ai-copilot
+
+> **Alpha（`0.1.8`）。** API は `1.0` までに変更される可能性があります。このプラグインはホストの LLM アダプターの背後に位置し、認証情報やモデル識別子がプラグイン境界を越えることはありません。
+
+Anvilkit Studio 向けのヘッドレス AI Copilot。このプラグインは、ホストの Puck config から派生したセッションごとの `AiGenerationContext` をキャッシュし、ホストが提供する `generatePage(prompt, ctx)`（および任意で `generateSection`）を呼び出し、`@anvilkit/validator` でレスポンスを検証し、`setData` を介して結果をアトミックにディスパッチします。React UI プリミティブは `/react` 配下で配布されます。テストおよびデモ用の決定論的なモックジェネレーターは `/mock` 配下で配布されます。
+
+## インストール
+
+```bash
+pnpm add @anvilkit/plugin-ai-copilot @anvilkit/core react react-dom @puckeditor/core
+```
+
+非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.21.3`。`@anvilkit/ui` はオプションの peer です。React コンポーネントを使う場合はインストールしてください。
+
+サブパスインポート：
+
+- `@anvilkit/plugin-ai-copilot` — プラグインファクトリ、`applySectionPatch`、型。
+- `@anvilkit/plugin-ai-copilot/react` — React コンポーネントと `useAiCopilot` フック。
+- `@anvilkit/plugin-ai-copilot/mock` — CI / デモ用の決定論的なフィクスチャとモックジェネレーター。
+
+## クイックスタート
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
+import { puckConfig } from "./puck-config";
+
+const aiCopilot = createAiCopilotPlugin({
+  puckConfig,
+  generatePage: (prompt, ctx) =>
+    fetch("/api/ai/generate", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt,
+        availableComponents: ctx.availableComponents,
+      }),
+    }).then((response) => response.json()),
+  timeoutMs: 30_000,
+});
+
+<Studio puckConfig={puckConfig} plugins={[aiCopilot]} />;
+```
+
+ホスト UI は送信時に `aiCopilot.runGeneration(prompt)`（または `regenerateSelection(prompt, selection)`）を呼び出します。どちらもプロンプト駆動であるため命令的です。型付きの失敗を受け取るには `ai-copilot:error` イベントバスを購読してください。
+
+## 主な機能
+
+- **命令的な生成 API** — `runGeneration(prompt)` と `regenerateSelection(prompt, selection)` により、ホスト UI は進捗状態を駆動し、実行中に入力を無効化し、エラーをインラインで表示できます。
+- **厳格な検証境界** — すべての LLM レスポンスは、ディスパッチの前に `validateAiOutput`（ページフロー）または `validateAiSectionPatch`（セクションフロー）を通過します。
+- **アトミックなディスパッチ** — 成功した生成ごとに単一の `setData` アクション。並行する実行は単調増加する `generationId` で追跡され、古い resolve は破棄されます。
+- **送信制御** — `forwardCurrentData` はデフォルトで `false` です。`sanitizeCurrentData` と組み合わせて、LLM がキャンバスを見る前に PII を除去します。
+- **観測可能** — 同期的な `onTrace` フックが各意思決定ポイントで発火し、構造的メタデータのみを伝えます（転送されたデータがチャネルを越えることはありません）。
+- **セクションレベルのパッチ** — Phase 6 / M9 フローは、ページ全体を再構築せずに連続した選択範囲を再生成します。
+- **決定論的なモック** — `createMockGeneratePage` / `createMockGenerateSection` は、テストおよびデモ向けにフィクスチャに裏打ちされたジェネレーターを提供します。
+- **React プリミティブ** — ヘッドレスな `useAiCopilot` フックに加え、`AiCopilotPanel` / `CopilotChatPanel` / `CopilotComposer` / `CopilotModelMenu` コンポーネント。
+
+## API リファレンス
+
+### ファクトリ
+
+```ts
+function createAiCopilotPlugin(
+  options: AiCopilotOptions,
+): AiCopilotPluginInstance;
+
+interface AiCopilotPluginInstance extends StudioPlugin {
+  runGeneration(prompt: string): Promise<void>;
+  regenerateSelection(
+    prompt: string,
+    selection: AiSectionSelection,
+    opts?: RegenerateSelectionOptions,
+  ): Promise<void>;
+}
+```
+
+### `AiCopilotOptions`
+
+| フィールド            | 型                                     | デフォルト | 目的                                                                                                                                 |
+| --------------------- | -------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `generatePage`        | `GeneratePageFn`                       | _必須_     | ページフローのコールバック。`(prompt, ctx) => Promise<PageIR>`。                                                                     |
+| `generateSection`     | `GenerateSectionFn`                    | なし       | セクションフローのコールバック。`(prompt, ctx) => Promise<AiSectionPatch>`。省略した場合、`regenerateSelection` は `GENERATE_FAILED` で失敗します。 |
+| `puckConfig`          | `Config`                               | _必須_     | `<Studio>` に渡すものと同じ Puck config。AI セーフな schema はこれから一度だけ派生されます。                                       |
+| `timeoutMs`           | `number`                               | `30_000`   | 各ホストコールバックに適用されます。                                                                                       |
+| `forwardCurrentData`  | `boolean`                              | `false`    | `true` の場合、現在のキャンバスがコンテキストに含まれます（`sanitizeCurrentData` の対象）。                                       |
+| `sanitizeCurrentData` | `(data: PuckData) => PuckData`         | 恒等関数   | 転送前に適用される同期的なサニタイザー。軽量に保ってください。                                                             |
+| `onTrace`             | `(event: AiCopilotTraceEvent) => void` | no-op      | 観測用フック。スローはキャッチされ、`ctx.log` を介して報告されます。                                                                    |
+
+コンストラクターは同期的な構造検証を実行し、形状が不正な場合は `[CONFIG_INVALID]` タグ付きの `Error` をスローします。この時点ではまだ Studio コンテキストが存在しないため、スローされた `Error.message` が失敗コードを伝えます。プラグインが構築されると、エラーは代わりに `ai-copilot:error` イベントバス上に現れます。
+
+### `AiErrorCode`
+
+| コード              | トリガー                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `VALIDATION_FAILED` | ホストのレスポンスが `validateAiOutput` / `validateAiSectionPatch` に失敗しました。`issues[]` を伴います。                       |
+| `TIMEOUT`           | ホストコールバックが `timeoutMs` 以内に resolve しませんでした。                                                             |
+| `GENERATE_FAILED`   | ホストコールバックが reject、スロー、または欠落していました（例：`generateSection` なしで `regenerateSelection` を呼び出した）。 |
+| `APPLY_FAILED`      | 検証後の適用ステップが失敗しました（非連続な `nodeIds`、zone の欠落など）。                                            |
+| `CONFIG_INVALID`    | コンストラクター時のオプション検証が入力を拒否しました。                                                        |
+
+### `AiCopilotTraceEvent`
+
+| `type`                  | タイミング                                  | 追加フィールド                                                 |
+| ----------------------- | ------------------------------------------- | -------------------------------------------------------------- |
+| `generation-start`      | 実行開始                                    | `promptLength`                                                 |
+| `generation-validated`  | バリデーターがレスポンスを受理              | —                                                              |
+| `generation-dispatched` | `setData` がディスパッチされた              | —                                                              |
+| `generation-stale-drop` | より新しい実行が先取りした後に実行が resolve した | `stage: "after-generate" \| "after-validate" \| "after-apply"` |
+| `generation-failed`     | 実行がエラーで終了した                      | `code: AiErrorCode`                                            |
+
+各イベントは `flow: "page" \| "section"` と単調増加する `generationId` も伴います。
+
+### `AiCopilotErrorPayload`
+
+```ts
+interface AiCopilotErrorPayload {
+  readonly code: AiErrorCode;
+  readonly message: string;
+  readonly issues?: readonly {
+    readonly path: string;
+    readonly message: string;
+    readonly severity: "error" | "warn";
+  }[];
+}
+```
+
+`ai-copilot:error` イベントバス上で発行されます。
+
+### ヘルパー
+
+```ts
+function applySectionPatch(
+  currentData: PuckData,
+  patch: AiSectionPatch,
+): PuckData;
+```
+
+`AiSectionPatch` を Puck 互換の `setData` ペイロードに変換し、連続性と zone の位置を検証します。パッチの `zoneId`（例：`"root"`、`"root-zone"`、または `"<parentId>:<slotName>"`）が、置き換えるノードの配置先を決定します。別途 `selection` 引数は不要です。
+
+### React API（`./react`）
+
+```ts
+function useAiCopilot(
+  plugin: AiCopilotPluginInstance,
+  options?: UseAiCopilotOptions,
+): UseAiCopilotResult;
+```
+
+`UseAiCopilotResult`（一部のフィールド）：
+
+| フィールド        | 型                                                            | 目的                                                              |
+| ----------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `prompt`          | `string`                                                      | コンポーザーのテキストエリアの値。                                           |
+| `onPromptChange`  | `(next: string) => void`                                      | コンポーザーの onChange。                                                 |
+| `status`          | `"idle" \| "pending"`                                         | 生成のライフサイクル。                                              |
+| `error`           | `string \| null`                                              | 直近のエラーメッセージ。                                                |
+| `issues`          | `readonly AiPromptPanelIssue[]`                               | 直近の失敗した実行のバリデーター issue。                         |
+| `onGenerate`      | `(prompt: string) => void`                                    | 送信ハンドラー — `plugin.runGeneration` を呼び出します。                     |
+| `onRegenerate`    | `(prompt: string, selection: AiPromptPanelSelection) => void` | 送信ハンドラー — `plugin.regenerateSelection` を呼び出します。               |
+| `messages`        | `readonly CopilotMessage[]`                                   | ローカルのチャット履歴。                                                |
+| `toolCalls`       | `readonly CopilotToolCall[]`                                  | ツールコールとしてレンダリングされる生成のライフサイクル。                       |
+| `selectedModelId` | `string \| undefined`                                         | 現在選択されているモデル（UI 専用 — プラグインはモデルに依存しません）。 |
+| `onModelChange`   | `(id: string) => void`                                        | モデルセレクターのハンドラー。                                            |
+| `pushTrace`       | `(event: AiCopilotTraceEvent) => void`                        | プラグインの trace イベントのシンク。`onTrace` に接続します。          |
+
+コンポーネント：
+
+| コンポーネント         | 主な props                                            |
+| ---------------------- | ----------------------------------------------------- |
+| `AiCopilotPanel`       | `{ plugin: AiCopilotPluginInstance }`                 |
+| `CopilotComposer`      | `{ prompt, onPromptChange, onSubmit, status, error }` |
+| `CopilotChatPanel`     | `{ messages, toolCalls }`                             |
+| `CopilotMessageBubble` | `{ message, role }`                                   |
+| `CopilotToolCallRow`   | `{ toolCall }`                                        |
+| `CopilotModelMenu`     | `{ selectedId, models?, onSelect }`                   |
+
+### モックジェネレーター（`./mock`）
+
+```ts
+function createMockGeneratePage(
+  options?: CreateMockGeneratePageOptions,
+): GeneratePageFn;
+function createMockGenerateSection(
+  options?: CreateMockGenerateSectionOptions,
+): GenerateSectionFn;
+
+function matchPromptToFixture(prompt: string): Fixture | undefined;
+const allFixtures: readonly Fixture[];
+```
+
+フィクスチャはデモコンポーネントカタログに対応しています。`matchPromptToFixture` はプロンプトの部分一致を行います。既知のフレーズに対して決定論的な生成結果が必要な E2E テストに役立ちます。
+
+## 使用例
+
+### ホストバックエンドに対するページ全体の生成
+
+```ts
+createAiCopilotPlugin({
+  puckConfig,
+  generatePage: async (prompt, ctx) => {
+    const response = await fetch("/api/ai/page", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, available: ctx.availableComponents }),
+    });
+    if (!response.ok) throw new Error(`AI backend ${response.status}`);
+    return response.json();
+  },
+});
+```
+
+### 現在のキャンバスを用いたセクションレベルの再生成
+
+```ts
+createAiCopilotPlugin({
+  puckConfig,
+  generatePage,
+  generateSection: async (prompt, ctx) => {
+    return fetch("/api/ai/section", {
+      method: "POST",
+      body: JSON.stringify({
+        prompt,
+        selection: ctx.selection,
+        availableComponents: ctx.availableComponents,
+        currentSnapshot: ctx.currentData,
+      }),
+    }).then((response) => response.json());
+  },
+  forwardCurrentData: true,
+  sanitizeCurrentData: stripInternalProps,
+});
+
+function stripInternalProps(data: PuckData): PuckData {
+  return {
+    ...data,
+    content: data.content.map((item) => ({
+      ...item,
+      props: Object.fromEntries(
+        Object.entries(item.props ?? {}).filter(([key]) => {
+          if (key.startsWith("_")) return false;
+          if (key === "email" || key === "phone") return false;
+          return true;
+        }),
+      ),
+    })),
+  };
+}
+```
+
+### `onTrace` からの Sentry ブレッドクラム
+
+```ts
+createAiCopilotPlugin({
+  puckConfig,
+  generatePage,
+  onTrace: (event) => {
+    Sentry.addBreadcrumb({
+      category: "ai-copilot",
+      level: event.type === "generation-failed" ? "error" : "info",
+      message: event.type,
+      data: event,
+    });
+  },
+});
+```
+
+### テストにおける決定論的なモックジェネレーター
+
+```ts
+import { createMockGeneratePage } from "@anvilkit/plugin-ai-copilot/mock";
+import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
+
+const aiCopilot = createAiCopilotPlugin({
+  puckConfig,
+  generatePage: createMockGeneratePage(),
+});
+
+await aiCopilot.runGeneration(
+  "a marketing landing page with a hero and pricing grid",
+);
+```
+
+### React UI パネル
+
+```tsx
+import { AiCopilotPanel } from "@anvilkit/plugin-ai-copilot/react";
+
+function Sidebar({ aiCopilot }: { aiCopilot: AiCopilotPluginInstance }) {
+  return <AiCopilotPanel plugin={aiCopilot} />;
+}
+```
+
+## 注意事項と FAQ
+
+### なぜ宣言的ではなく命令的なのか？
+
+兄弟プラグイン（`@anvilkit/plugin-export-html` など）は、ホスト UI が参照する宣言的な `exportFormats` / `headerActions` マップを登録します。AI Copilot が代わりに命令的なメソッドを返すのは、プロンプト駆動だからです。ホスト UI は通常、テキストエリア + 送信ボタンをレンダリングし、進捗状態を駆動し、生成中に入力を無効化し、エラーをインラインで表示するために実行を `await` しなければなりません。宣言的な `aiActions` マップでも呼び出し箇所でホスト側の `await invoke()` が依然として必要になるため、メソッドを直接公開しています。長文の根拠については `docs/decisions/005-ai-copilot-imperative-api.md` を参照してください。
+
+### セキュリティモデル
+
+- プラグインは**認証情報を決して見ません**。API キー、認証ヘッダー、エンドポイントはホストバックエンドに属します。
+- `generatePage` と `generateSection` はちょうど `(prompt, ctx)` を受け取ります。グローバル状態も暗黙のデータもありません。
+- すべての LLM レスポンスは、いかなるキャンバスのミューテーションの前にも検証を通過します。
+- ディスパッチはアトミックです。成功した生成ごとに単一の `setData` アクションなので、部分的 / インターリーブされた更新は不可能です。
+
+### `forwardCurrentData` はオプトインとサニタイズを必要とする
+
+`forwardCurrentData: true` の場合、Puck キャンバス全体 — コンポーネントの props、アセット URL、埋め込みテキスト — がプロンプトのたびにホストの LLM アダプターへ渡されます。これは再生成の品質を実質的に向上させますが、いずれかのコンポーネントの props が PII、署名付きアセット URL、埋め込みシークレット、内部の顧客識別子を含み得る場合は、アプリケーションから離れてはならないものを除去するために、このフラグと `sanitizeCurrentData` を組み合わせてください。`docs/decisions/004-ai-copilot-data-egress.md` を参照してください。
+
+### 古い破棄（stale-drop）のセマンティクス
+
+各呼び出しは内部の `generationId` をインクリメントします。先に始まった遅い実行が、後に始まった速い実行がディスパッチした後に resolve した場合、先の結果は破棄され、破棄が発生した `stage`（`after-generate` / `after-validate` / `after-apply`）を伴って `generation-stale-drop` が発火します。キャンバスは常に、最後に受理された生成のみを反映します。
+
+### `onTrace` のペイロードに転送されたデータが含まれることはない
+
+trace チャネルを流れるのは構造的メタデータのみです：flow（`"page"` / `"section"`）、`generationId`、`promptLength`、エラーコード、stale-drop の stage。シークレット漏洩を心配することなく、Sentry ブレッドクラム、OpenTelemetry のスパンイベント、または `console.debug` に接続できます。
+
+### 構築エラーは同期的にスローされる
+
+不正なオプション形状は `[CONFIG_INVALID]` タグ付きの `Error` で即座に失敗します。`CONFIG_INVALID` コードは `AiErrorCode` ユニオンの一部ですが、イベントバスではなくコンストラクターがスローする `Error.message` を通じて現れます。構築時にはまだ Studio コンテキストが存在しないためです。
+
+### モック vs 本番ジェネレーター
+
+モックジェネレーターは、デモコンポーネントカタログに合わせて形作られた `PageIR` ドキュメントを発行します。ホストコンポーネントがデモのセットから逸脱している場合は、バンドルされたフィクスチャをそのまま頼るのではなく、カスタムモックを書くか `allFixtures` を拡張してください。
+
+### アーキテクチャの背景
+
+完全なパッケージカタログとトラスト境界に関する議論については、Anvilkit ドキュメントサイトの `anvilkit-architecture` AI コンテキストドキュメントを参照してください。AI 生成フローは完全にこのプラグイン境界を通って実行されます。`@anvilkit/core` は、`AiGenerationContext` 型を超えるファーストパーティの AI プリミティブを公開しません。

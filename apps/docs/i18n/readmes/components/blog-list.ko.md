@@ -1,0 +1,98 @@
+# @anvilkit/blog-list
+
+이미지 카드, 날짜, 링크를 갖춘 Puck 네이티브 블로그 게시물 그리드.
+
+## 설치
+
+```sh
+pnpm add @anvilkit/blog-list @puckeditor/core
+```
+
+## 스타일
+
+컴포넌트를 렌더링하기 전에, 앱 진입점에서 패키지 스타일시트를 한 번 가져오세요.
+
+```tsx
+import "@anvilkit/blog-list/styles.css";
+```
+
+Next.js에서는 이 import를 `app/layout.tsx` 또는 `pages/_app.tsx`에 추가하세요.
+
+## 예
+
+### 기본 사용법
+
+`defaultProps`를 통해 번들된 예시 게시물로 그리드를 렌더링합니다.
+
+```tsx
+import "@anvilkit/blog-list/styles.css";
+import { BlogList, defaultProps } from "@anvilkit/blog-list";
+
+export function Example() {
+  return <BlogList posts={defaultProps.posts} />;
+}
+```
+
+### 외부 링크가 있는 사용자 지정 게시물
+
+각 게시물은 커버 이미지, 게시일(선택적으로 상대 라벨 포함), 제목, 설명을 렌더링합니다. `href`를 설정하면 카드가 링크가 됩니다. `openInNewTab`은 `target="_blank"`와 안전한 `rel` 속성을 추가합니다.
+
+```tsx
+import { BlogList } from "@anvilkit/blog-list";
+
+export function LatestPosts() {
+  return (
+    <BlogList
+      posts={[
+        {
+          title: "Shipping faster with Anvilkit",
+          description: "How we cut release time in half.",
+          href: "https://blog.example.com/shipping-faster",
+          openInNewTab: true,
+          imageSrc: "https://images.example.com/cover.jpg",
+          imageAlt: "Shipping faster",
+          publishedAt: "2025-01-12",
+          publishedLabel: "January 12, 2025",
+          relativeLabel: "2mo ago",
+        },
+      ]}
+    />
+  );
+}
+```
+
+### Puck 설정에 등록
+
+내보낸 `componentConfig`를 Puck의 `Config`에 연결합니다.
+
+```tsx
+import type { Config } from "@puckeditor/core";
+import { componentConfig, type BlogListProps } from "@anvilkit/blog-list";
+
+const config: Config<{ BlogList: BlogListProps }> = {
+  components: {
+    BlogList: componentConfig,
+  },
+};
+```
+
+## API
+
+내보낸 `BlogListProps` 타입과 Puck `fields` 스키마에서 파생되었습니다.
+
+| Prop                     | Type             | Default              | Description                                 |
+| ------------------------ | ---------------- | -------------------- | ------------------------------------------- |
+| `posts`                  | `BlogListPost[]` | _(예시 게시물 3개)_  | 블로그 게시물 항목.                         |
+| `posts[].title`          | `string`         | `"New post"`         | 게시물 제목.                                |
+| `posts[].description`    | `string`         | —                    | 게시물 요약.                                |
+| `posts[].href`           | `string`         | `"/blog/new-post"`   | 링크 URL(설정하면 카드가 링크가 됨).        |
+| `posts[].openInNewTab`   | `boolean`        | `false`              | 새 탭에서 링크 열기.                        |
+| `posts[].imageSrc`       | `string`         | _(Unsplash 샘플)_    | 커버 이미지 URL.                            |
+| `posts[].imageAlt`       | `string`         | `"New post"`         | 커버 이미지 대체 텍스트.                    |
+| `posts[].publishedAt`    | `string`         | `"2024-11-01"`       | ISO 날짜 문자열(라벨이 없을 때 사용).       |
+| `posts[].publishedLabel` | `string`         | `"November 1, 2024"` | 포맷된 날짜 라벨.                           |
+| `posts[].relativeLabel`  | `string`         | `"8mo ago"`          | 괄호 안에 표시되는 상대 시간 라벨.          |
+
+## 테마 및 반응형
+
+shadcn CSS 변수 토큰을 통해 라이트 및 다크 테마를 지원합니다. 모바일, 태블릿, 데스크톱 브레이크포인트 전반에서 반응형으로 동작합니다.

@@ -1,0 +1,343 @@
+# @anvilkit/plugin-collab-yjs
+
+> **릴리스 후보(`0.10.x`).** `@next` npm dist-tag로 배포됩니다. 노드별 CRDT 병합(`useNativeTree`)이 이제 기본값입니다. GA 일정은 `docs/policies/lts.md`를 참조하세요.
+
+`SnapshotAdapter` v2 계약이 Core나 Puck을 포크하지 않고도 Puck과 나란히 실시간 CRDT 상태를 호스팅할 수 있음을 증명하는 퍼스트파티 Anvilkit Studio 플러그인입니다. [Yjs](https://github.com/yjs/yjs)와 [`y-protocols/awareness`](https://github.com/yjs/y-protocols) 위에 구축되었으며 데이터 레이어만 제공합니다. React 프레젠테이션 레이어를 위해서는 `@anvilkit/collab-ui`와 짝지어 사용하거나, 공개 훅 위에 직접 UI를 구성하세요.
+
+## 설치
+
+```bash
+pnpm add @anvilkit/plugin-collab-yjs yjs y-protocols react react-dom @puckeditor/core
+```
+
+`yjs`와 `y-protocols`는 직접적인 런타임 의존성입니다. `react`, `react-dom`, `@puckeditor/core`는 이것이 "데이터 전용" 레이어임에도 **비선택적** peer입니다. 이 패키지는 React 훅(예: `usePuckSelection`)을 내보내며, 그 플러그인 팩토리는 React 기반 Studio 셸 내부에서 실행되므로 React는 정말로 필요합니다. React 없는 진입점으로 분리되어 있지 않습니다. 트랜스포트의 경우 `y-websocket`(데모용)을 설치하거나 직접 프로바이더(Hocuspocus, 커스텀 WebRTC 등)를 연결하세요.
+
+## 빠른 시작
+
+```ts
+import {
+  createCollabDataPlugin,
+  createDebouncedAdapter,
+  createYjsAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+import { Doc as YDoc } from "yjs";
+import { WebsocketProvider } from "y-websocket";
+
+const doc = new YDoc();
+const provider = new WebsocketProvider(
+  "ws://localhost:21234",
+  "demo-room",
+  doc,
+);
+
+const adapter = createYjsAdapter({
+  doc,
+  awareness: provider.awareness,
+  peer: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+});
+
+const debounced = createDebouncedAdapter(adapter, { ms: 150 });
+
+registerPlugins([
+  createCollabDataPlugin({
+    adapter: debounced,
+    puckConfig: myPuckConfig,
+    localPeer: { id: "alice", displayName: "Alice", color: "#f43f5e" },
+  }),
+]);
+```
+
+단일 팩토리 호출로 전체 데이터 + UI 번들을 얻으려면, 대신 `@anvilkit/collab-ui`에서 `createCollabPlugin`을 가져오세요.
+
+## 핵심 기능
+
+- **기본적으로 노드별 CRDT 병합** —— `PageIR`은 평면 주소 지정된 `Y.Map` 트리로 미러링되므로, 서로소인 노드에 대한 동시 편집은 전체 문서 LWW 하에서 서로를 덮어쓰는 대신 둘 다 살아남습니다.
+- **스냅샷 기록** —— 모든 `save()`는 라이브 인코딩과 `snapshotMeta:<id>` + `snapshotPayload:<id>` 쌍을 모두 기록하여, 어느 인코딩이 라이브이든 관계없이 `SnapshotAdapter` 기록 계약을 충족합니다.
+- **충돌 진단** —— 원격 업데이트가 `staleAfterMs`(기본값 2000ms) 이내에 로컬에서 진행 중인 편집 위에 도달하면 `onConflict(event)`가 발생합니다.
+- **연결 상태 계약** —— 다섯 가지 변형의 `ConnectionStatus`(`connecting`/`synced`/`offline`/`reconnecting`/`error`)는 호스트가 프로바이더별 필드를 읽지 않고도 통일된 동기화 표시기를 렌더링할 수 있게 합니다.
+- **관측 가능성** —— `metrics()`는 지연 백분위수, awareness 변동률(5분 슬라이딩 윈도), 검증 실패 횟수, 그리고 텔레메트리 싱크를 위한 메인 스레드 핫패스 타이밍을 반환합니다.
+- **탭 간 영속성** —— 옵트인 방식의 IndexedDB 큐 + 동일 출처 `BroadcastChannel` 릴레이. 짧은 연결 끊김을 견디며 트랜스포트를 왕복하지 않고도 같은 앱의 두 탭을 동기화합니다.
+- **심층 방어식 프레즌스 보안** —— 엄격한 색상 허용 목록, 표시 이름에 대한 제어 문자 제거, awareness 속도 제한, 그리고 적대적 피어 거부를 위한 `validateRemoteIR` 훅.
+- **강제 재동기화** —— `adapter.forceResync()`는 저장되지 않은 로컬 편집을 폐기하고 최신의 권위 있는 스냅샷을 다시 방출하여 호스트의 "폐기 후 다시 로드" 기능을 지원합니다.
+
+## API 레퍼런스
+
+### 팩토리 함수
+
+| 함수                     | 시그니처                                                                        | 목적                                                                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createYjsAdapter`       | `(opts: CreateYjsAdapterOptions) => YjsSnapshotAdapter`                         | Yjs `Doc`와 선택적 `Awareness`로부터 CRDT가 뒷받침하는 `SnapshotAdapter`를 빌드합니다.                                                                            |
+| `createCollabDataPlugin` | `(opts: CreateCollabPluginOptions) => StudioPlugin`                             | 어댑터를 Studio 플러그인으로 래핑합니다(데이터 동기화만——UI 없음).                                                                                              |
+| `createDebouncedAdapter` | `(adapter, opts?: CreateDebouncedAdapterOptions) => SnapshotAdapterWithMetrics` | 빠른 `save()` 호출을 디바운스 윈도(기본값 150ms)당 단일 트랜스포트 쓰기로 합칩니다. 언마운트 시 호출해야 하는 `destroy()` 메서드를 가진 어댑터를 반환합니다. |
+| `createCollabPlugin`     | _`createCollabDataPlugin`의 지원 중단된 별칭_                                  | 마이너 릴리스 하나 동안 유지됩니다. 첫 호출 시 일회성 `console.warn`을 로깅합니다. 번들된 UI 팩토리는 `@anvilkit/collab-ui`에서 `createCollabPlugin`을 가져오세요.                |
+
+### `CreateYjsAdapterOptions`
+
+| 필드                 | 타입                        | 기본값                 | 목적                                                                                                                                                                        |
+| -------------------- | --------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `doc`                | `YDoc`                      | _필수_             | Yjs 문서. 호스트 소유이며, 어댑터는 결코 자신의 문서를 생성하지 않습니다.                                                                       |
+| `awareness`          | `Awareness`                 | 자동 생성           | 프레즌스 채널. 생략하면 어댑터가 내부적으로 하나를 생성합니다.                                                                                       |
+| `peer`               | `PeerInfo`                  | 임시적              | 로컬 신원. 생략하면 경고 로그와 함께 `local-<uuid>` id를 발급합니다. 프로덕션에서는 안정적인 id를 제공하세요.                                              |
+| `mapName`            | `string`                    | `"default"`            | 루트 `Y.Map` 키.                                                                                                                                                     |
+| `staleAfterMs`       | `number`                    | `2000`                 | 로컬에서 편집된 노드를 건드리는 원격 업데이트가 겹침으로 집계되는 윈도.                                                       |
+| `useNativeTree`      | `boolean`                   | `true`                 | 노드별 CRDT 병합. 레거시 JSON-blob 룸에 대해서만 `false`로 설정하세요——모드가 다른 복제본은 하나의 `Y.Doc`을 공유할 수 없습니다.                          |
+| `connectionSource`   | `ConnectionSource`          | 없음                 | 호스트 트랜스포트 이벤트 소스. 프로바이더의 연결 상태가 변하면 호스트가 `emit(status)`를 호출합니다.                                          |
+| `computeDelta`       | `boolean`                   | `false`                | `true`이면 모든 `save()`가 구조적 `IRDiff`를 `SnapshotMeta.delta`에 첨부합니다.                                                                           |
+| `maxSnapshots`       | `number`                    | `200`                  | 공유 `Y.Doc`에 보관되는 스냅샷의 엄격한 상한. 오래된 payload+meta 쌍은 쓰기와 동일한 트랜잭션에서 축출됩니다. 비활성화하려면 `<= 0`으로 설정하세요(권장하지 않음). |
+| `awarenessRateLimit` | `AwarenessRateLimitOptions` | `{ maxPerSecond: 30 }` | 아웃바운드 `presence.update`에 대한 토큰 버킷 제한기. 비활성화하려면 `maxPerSecond: Infinity`로 설정하세요.                                                                                  |
+| `persistence`        | `PersistenceOptions`        | 없음                 | 옵트인 방식의 IndexedDB 큐와 `BroadcastChannel` 릴레이. 각 백엔드는 기능 감지를 수행하며 SSR이나 오래된 브라우저에서는 조용히 다운그레이드합니다.                             |
+
+### `CreateCollabPluginOptions`
+
+| 필드                    | 타입                                   | 기본값     | 목적                                                                                                                                           |
+| ----------------------- | -------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `adapter`               | `SnapshotAdapter`                      | _필수_ | CRDT 어댑터(보통 `createYjsAdapter`에서 가져오며, 선택적으로 `createDebouncedAdapter`로 래핑).                                            |
+| `puckConfig`            | `Config`                               | 없음       | 아웃바운드 동기화(Puck → IR)에 필수. 읽기 전용 뷰어의 경우 생략합니다.                                                                            |
+| `localPeer`             | `PeerInfo`                             | 임시적  | 충돌 귀속, 정책 검사, 프레즌스 커서에 사용되는 신원. 생략하면 경고를 로깅하고 인스턴스별 임시 id를 발급합니다. |
+| `validateRemoteIR`      | `(ir: PageIR) => PageIR \| null`       | 없음       | 심층 방어 검증 훅. `null`을 반환하거나 예외를 던지면 업데이트가 거부됩니다.                                                                             |
+| `onValidationFailure`   | `(failure: ValidationFailure) => void` | 없음       | 거부된 원격 IR에 대한 호스트 측 옵저버(토스트, 텔레메트리).                                                                                 |
+| `onSaveError`           | `(error: unknown) => void`             | 없음       | 아웃바운드 트랜스포트 실패 옵저버. 이것이 없으면 네트워크 5xx 오류가 `unhandledRejection`으로 표면화됩니다.                                           |
+| `policy`                | `CollabPolicy`                         | 없음       | 대칭 RBAC 브리지. `canEdit(node, peer)`는 인바운드와 아웃바운드 모두에서 참조됩니다.                                                                       |
+| `onPolicyViolation`     | `(violation: PolicyViolation) => void` | 없음       | `policy.canEdit`가 거부할 때 발생합니다.                                                                                                           |
+| `inboundScheduler`      | `InboundSchedulerHandleScheduler`      | `requestAnimationFrame` / `setTimeout` | (H1) 인바운드 합치기 스케줄러를 오버라이드합니다. 브라우저에서는 기본값이 `requestAnimationFrame`, SSR/Node에서는 `setTimeout`입니다. 결정론적 테스트를 위한 것입니다——프로덕션에서는 설정하지 마세요. |
+| `inboundBudgetMs`       | `number`                               | `16`       | (H1) `requestAnimationFrame`을 사용할 수 없을 때 사용되는 폴백 인바운드 플러시 주기(ms).                                                   |
+| `replaceBatchThreshold` | `number`                               | `50`       | 이 임계값 아래에서는 노드별 `replace`를 디스패치합니다. 그 위에서는 플러그인이 단일 `setData` 호출로 폴백합니다.                                 |
+
+### `YjsSnapshotAdapter`
+
+`SnapshotAdapter`(`@anvilkit/plugin-version-history` 출처)를 다음으로 확장합니다:
+
+| 멤버             | 시그니처                                                  | 목적                                                                                                                                       |
+| ---------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onConflict`     | `(cb: (event: ConflictEvent) => void) => Unsubscribe`     | 겹침 진단.                                                                                                                        |
+| `onStatusChange` | `(cb: (status: ConnectionStatus) => void) => Unsubscribe` | 연결 상태 스트림. 등록 시 현재 상태로 동기적으로 호출됩니다.                                                                     |
+| `getStatus`      | `() => ConnectionStatus`                                  | 최신 상태의 동기 읽기. React에서는 `useSyncExternalStore` 내부에서 `onStatusChange`를 사용하는 것을 권장합니다.                                             |
+| `forceResync`    | `() => Promise<PageIR \| null>`                           | 저장되지 않은 로컬 편집을 폐기하고 최신의 권위 있는 스냅샷을 다시 방출합니다. 스냅샷이 존재하지 않으면 `null`로 해결됩니다.                        |
+| `metrics`        | `() => MetricsSnapshot`                                   | 시점별 관측 가능성 스냅샷. 초 단위 폴링으로 호출해도 비용이 저렴합니다.                                                              |
+| `destroy`        | `() => void`                                              | 내부 구독을 해제합니다. Studio 플러그인의 `onDestroy`에 의해 자동으로 호출됩니다——커스텀 플러그인 래퍼를 빌드하는 경우에만 필요합니다. |
+
+### `ConnectionStatus`(판별 유니온)
+
+```ts
+type ConnectionStatus =
+  | { kind: "connecting" }
+  | { kind: "synced"; since: string }
+  | { kind: "offline"; since: string; queuedEdits: number }
+  | { kind: "reconnecting"; attempt: number; backoffMs: number }
+  | { kind: "error"; message: string; recoverable: boolean };
+```
+
+`queuedEdits`는 어댑터가 내부 카운터로부터 채웁니다. 호스트가 전달하는 값은 무시됩니다.
+
+### `ConflictEvent`
+
+```ts
+interface ConflictEvent {
+  kind: "overlap";
+  localPeer: PeerInfo;
+  remotePeer?: PeerInfo;
+  nodeIds: readonly string[];
+  at: string;
+}
+```
+
+### `MetricsSnapshot`(선택된 필드)
+
+| 필드                                                                                                            | 의미                                                                                                                                |
+| ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `saveCount`, `transportWrites`, `saveCoalescingRatio`                                                            | 저장 트래픽과 디바운서 효율.                                                                                                   |
+| `syncLatencyP50Ms`, `syncLatencyP95Ms`, `syncLatencySamples`                                                     | 최근 200개 샘플에 걸친 종단 간 지연 백분위수.                                                              |
+| `awarenessChurn`, `presenceValidationFailures`                                                                   | 프레즌스 건전성——높은 변동률이나 0이 아닌 실패 수는 오작동하는 피어를 가리킵니다.                                                         |
+| `inboundCoalesced`, `inboundQueueDelayP50Ms`                                                                     | 인바운드 합치기 활동. 0이 아닌 `inboundCoalesced`는 어댑터가 원격 버스트로부터 에디터를 보호했음을 의미합니다.                     |
+| `conversionTimeP50Ms`, `dispatchTimeP50Ms`, `saveEncodeTimeP50Ms`, `nativeApplyTimeP50Ms`, `nativeReadTimeP50Ms` | 메인 스레드 핫패스 타이밍(P1).                                                                                                     |
+| `degraded`, `degradedReasons`                                                                                    | 어댑터가 네이티브 트리에서 레거시 blob으로 폴백했는지 여부, 그리고 그 트립 사유(`cycle`/`max-depth`/`max-nodes`/`decode-failure`). |
+| `dispatchFailures`                                                                                               | 예외를 던진 원격 `subscribe` 콜백 호출 횟수.                                                                         |
+
+### 인코딩 유틸리티 및 스냅샷 diff
+
+| 내보내기                          | 목적                                                  |
+| --------------------------------- | ----------------------------------------------------- |
+| `encodeIR(ir)` / `decodeIR(json)` | 스냅샷 payload에 사용되는 안정적인 JSON 인코딩.      |
+| `hashIR(encoded)`                 | `SnapshotMeta.pageIRHash`가 사용하는 콘텐츠 해시.       |
+| `diffSnapshots(prev, next)`       | 두 `PageIR` 값 사이의 구조적 노드별 diff. |
+
+### 프레즌스 검증
+
+| 내보내기                                                                                | 목적                                                                                    |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `sanitizeDisplayName(value)`                                                            | `U+0000`–`U+001F` / `U+007F`를 제거하고 `MAX_DISPLAY_NAME_LENGTH`(64자)로 잘라냅니다. |
+| `validatePeerInfo(value)`                                                               | 엄격한 검증. 색상은 허용 목록과 일치해야 하며, 거부 시 피어 레코드 전체가 폐기됩니다. |
+| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | 어댑터가 사용하는 인바운드 awareness 검증기. 호스트 측 심층 방어를 위해 내보내집니다. |
+| `MAX_DISPLAY_NAME_LENGTH`                                                               | `64`.                                                                                      |
+
+### 오류
+
+- `SnapshotCorruptedError`, `SnapshotNotFoundError`, `SnapshotPrunedError` —— `load(id)`에서 던져지는 타입 지정 오류.
+- `DebouncedAdapterDestroyedError` —— `destroy()` 이후 `createDebouncedAdapter` 인스턴스에서 메서드가 호출될 때 던져집니다.
+
+### React 브리지
+
+- `usePuckSelection()` —— Puck의 선택된 컴포넌트를 아웃바운드 awareness 업데이트를 위한 `PresenceSelection`으로 매핑합니다. `<Puck>` 내부에 마운트된 호스트 컴포넌트 안에서 사용하세요.
+
+## 사용 예제
+
+### 인메모리 테스트 하니스
+
+```ts
+import { Awareness } from "y-protocols/awareness";
+import { Doc as YDoc } from "yjs";
+import { createYjsAdapter } from "@anvilkit/plugin-collab-yjs";
+
+const doc = new YDoc();
+const awareness = new Awareness(doc);
+const adapter = createYjsAdapter({
+  doc,
+  awareness,
+  peer: { id: "test-user", displayName: "Test" },
+});
+
+// In tests, the adapter starts in `connecting` and flips to `synced`
+// on the first subscribe() registration, so no transport plumbing is
+// needed for unit tests.
+adapter.subscribe((ir) => {
+  console.log("emitted IR", ir);
+});
+```
+
+### 호스트 주도 연결 상태
+
+```ts
+import type { ConnectionSource } from "@anvilkit/plugin-collab-yjs";
+import { WebsocketProvider } from "y-websocket";
+
+let queuedEdits = 0;
+
+const connectionSource: ConnectionSource = (emit) => {
+  const onStatus = (e: { status: string }) => {
+    if (e.status === "connected") emit({ kind: "connecting" });
+    if (e.status === "disconnected") {
+      emit({
+        kind: "offline",
+        since: new Date().toISOString(),
+        queuedEdits,
+      });
+    }
+  };
+  const onSync = (synced: boolean) => {
+    if (synced) emit({ kind: "synced", since: new Date().toISOString() });
+  };
+  provider.on("status", onStatus);
+  provider.on("sync", onSync);
+  return () => {
+    provider.off("status", onStatus);
+    provider.off("sync", onSync);
+  };
+};
+
+createYjsAdapter({ doc, awareness, connectionSource });
+```
+
+### 강제 재동기화 플로우
+
+```ts
+const forceResync = async () => {
+  const restored = await adapter.forceResync();
+  if (restored === null) {
+    toast.warn("No snapshot to restore from.");
+    return;
+  }
+  toast.success("Reloaded the latest collaborative snapshot.");
+};
+```
+
+### 정책 + 검증 훅
+
+```ts
+import type {
+  CollabPolicy,
+  ValidateRemoteIR,
+} from "@anvilkit/plugin-collab-yjs";
+
+const policy: CollabPolicy = {
+  canEdit: (node, peer) => {
+    if (node.props?.locked === true) return peer.id === node.props.lockedBy;
+    return true;
+  },
+};
+
+const validateRemoteIR: ValidateRemoteIR = (ir) => {
+  if (!ir.root || typeof ir.root !== "object") return null;
+  if (ir.version !== "1") return null;
+  return ir;
+};
+
+createCollabDataPlugin({
+  adapter,
+  puckConfig,
+  localPeer,
+  policy,
+  validateRemoteIR,
+  onPolicyViolation: (v) => telemetry.warn("policy-violation", v),
+  onValidationFailure: (f) => telemetry.warn("validation-failure", f),
+});
+```
+
+## 참고 및 FAQ
+
+### 네이티브 트리 vs 레거시 JSON-blob
+
+네이티브 트리(`useNativeTree: true`, 기본값)는 라이브 `PageIR`을 평면 주소 지정된 `Y.Map` 트리로 미러링합니다——노드당 하나의 `Y.Map`, 그리고 부모당 하나의 `childIds` `Y.Array`. 동일 노드 편집은 여전히 키별 LWW로 폴백하지만, 다른 노드 편집은 깔끔하게 병합됩니다.
+
+단일 `pageIR` 키 아래의 레거시 전체 문서 JSON-blob 인코딩은 폴백으로 보존됩니다. `save()`는 두 표현을 모두 기록하므로 트리 인식 어댑터와 blob 인식 어댑터가 같은 스냅샷을 읽을 수 있습니다. **하나의 `Y.Doc`에서 인코딩을 혼용할 수 없습니다**——룸당 하나의 모드를 선택하세요.
+
+**마이그레이션은 자동입니다.** 레거시 blob만 있고(네이티브 트리 상태 없음) `Y.Doc` 위에서 구성된 어댑터는 구성 시점에 blob으로부터 트리를 하이드레이트합니다. 이 마이그레이션은 일회성이며 트랜잭션적이고 멱등적입니다——후속 어댑터는 단락 처리됩니다. `0.10` 이전 버전에서 업그레이드하는 호스트는 별도의 마이그레이션 단계 없이 새 어댑터를 롤아웃할 수 있습니다.
+
+### 프레즌스는 신뢰할 수 없는 입력이다
+
+어댑터는 모든 인바운드 `PresenceState`를 `validatePresenceState`를 통해 검증합니다. 두 가지 구체적인 강화가 있습니다:
+
+- **`color` 허용 목록.** `#rgb` / `#rrggbb` / `#rrggbbaa`, `rgb(...)`, `rgba(...)`, 또는 명명된 색상 집합과 일치하지 않는 것은 모두 거부됩니다——`javascript:`, `expression(...)`, `<script>`, 임의의 문자열을 포함합니다. 거부는 피어 레코드 전체를 폐기하므로 악의적인 피어가 안전한 부분만 담은 payload를 밀반입할 수 없습니다.
+- **`displayName` 살균.** `sanitizeDisplayName`은 ASCII 제어 문자를 제거하고 64자로 잘라냅니다. HTML 이스케이프는 **하지 않습니다**——UI가 `innerHTML`을 통해 이름을 주입한다면 렌더링 경계에서 이스케이프하세요.
+
+`MetricsSnapshot.presenceValidationFailures`는 거부된 피어를 집계하므로, 호스트는 개별 payload를 검사하지 않고도 시끄럽거나 적대적인 룸에 대해 경고를 발생시킬 수 있습니다.
+
+### `createDebouncedAdapter`는 `destroy()`가 필요하다
+
+이 래퍼는 대기 중인 타이머 참조를 보유합니다. 언마운트 시 `destroy()`를 호출하여 대기 중인 타이머를 취소하고 래핑된 어댑터로 해체를 전달하세요. `destroy()` 이후 호출된 메서드는 `DebouncedAdapterDestroyedError`를 던집니다.
+
+### 참조 트랜스포트와 프로덕션 배포
+
+최소한의 릴레이가 이 저장소의 `examples/y-websocket-server.mjs` 아래에 있습니다(소스 전용이며 배포된 npm 패키지에는 포함되지 않음):
+
+```bash
+# Defaults to ws://127.0.0.1:21234
+node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs
+
+# Override the port (positional arg or COLLAB_RELAY_PORT), or bind a
+# non-loopback host with COLLAB_RELAY_HOST:
+node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
+```
+
+이 릴레이는 **기본적으로 포트 21234를 수신합니다**(Windows/WSL2가 예약하므로 1234와 11234는 회피됩니다). `y-websocket@3`이 번들된 서버(`y-websocket/bin/utils`)를 제거했고 `@y/websocket-server`는 호환되지 않는 `yjs-14` 계열을 대상으로 하므로, 이 릴레이는 **`yjs-13` 스택에 대해 클래식 `y-protocols` 동기화/awareness 서버를 인라인으로 벤더링합니다**——데모의 `y-websocket@3` 클라이언트와 와이어 호환되며 `y-websocket`의 서버 패키징과는 독립적입니다. 이것은 테스트와 데모를 위한 참조이지 프로덕션 서버가 아닙니다.
+
+프로덕션 배포——인증, 내구성 있는 Postgres 영속화, 그리고 [Hocuspocus](https://tiptap.dev/hocuspocus)를 통한 Redis 기반 수평 스케일아웃——는 [`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md)의 레시피를 따르세요.
+
+### 성능 특성
+
+- **원격 편집——증분식.** 원격 prop 편집은 건드린 노드만 다시 읽습니다. 재정렬/삽입/삭제는 구조화된 재연결 델타를 방출하므로 라이브 IR 캐시는 영향받은 부모 + 추가된 노드만 재연결하며, 건드리지 않은 모든 노드의 이미 파싱된 prop을 재사용합니다. 진짜 전체 문서 변경은 여전히 완전한 가드 처리된 재구축으로 폴백합니다——이것이 정확성의 백스톱입니다.
+- **로컬 `save()`——O(변경분) 적용, O(문서) 하한.** Y.Doc 적용은 변경/추가된 노드만 기록하고 제거된 노드를 삭제합니다. 잔여 O(문서) 비용은 저장할 때마다 기록되는 `encodeIR(ir)` 스냅샷 payload 문자열입니다. `SnapshotMeta.pageIRHash`는 그 `hashIR(encodeIR(ir))` 정의를 유지합니다.
+- **잔여 꼬리 비용.** 저장당 스냅샷 meta 재스캔은 O(`maxSnapshots`), 활성 타이핑 중 인터리브된 원격 버스트 하에서 대기 중 인덱스 재구축은 O(문서), `onConflict` 리스너가 부착된 경우 원격 플러시당 충돌 겹침은 O(문서), 그리고 수천 개의 자식을 가진 부모에 대한 넓은 자식 목록 조정은 O(n²)입니다. 모두 `pnpm bench:collab-highload`로 게이트됩니다.
+
+예산 지침: 기본 `maxSnapshots` 하에서 최대 수천 개 노드의 페이지는 프레임 예산 내에 여유 있게 머무릅니다.
+
+### 탭 간 영속성은 옵트인이다
+
+`persistence.indexedDb`와 `persistence.broadcastChannel`은 모두 기본값이 `false`입니다. 활성화하면 각 백엔드는 구성 시점에 기능 감지를 수행하며, 그 API를 사용할 수 없는 경우(SSR, 오래된 브라우저, 특정 테스트 러너) 조용히 다운그레이드합니다. 쿼터나 스키마 결함에 대해 알려면 `persistence.onFault`를 사용하세요——어댑터는 결코 영속성에서 `Y.Doc` 옵저버 체인으로 예외를 던지지 않습니다.
+
+스냅샷 수준 영속성(빠른 탭 부트스트랩을 위한 전체 상태 덤프)과 IDB 큐의 저장 시 암호화는 연기되었습니다. 교차 출처 / iframe 영속성은 명시적으로 범위 밖입니다——`BroadcastChannel`은 동일 출처이며, 그것이 에디터에 올바른 경계입니다.
+
+### 함께 보기
+
+- Anvilkit 문서 사이트의 `realtime-collab` 아키텍처 문서——전체 설계 및 위협 모델.
+- [CHANGELOG.md](./CHANGELOG.md) —— 릴리스별 노트.
+- [`@anvilkit/collab-ui`](../plugin-collab-ui/README.md) —— React 프레젠테이션 레이어 + 통합된 `createCollabPlugin` 팩토리.

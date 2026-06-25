@@ -1,0 +1,223 @@
+# @anvilkit/plugin-export-html
+
+> **Alpha（`0.1.7`）。** パッケージのインターフェイスは実装済みでテスト済みですが、発行される HTML/CSS の契約は `1.0.0` までに変化する可能性があります。
+
+Anvilkit Studio 向けの HTML エクスポートプラグイン。`PageIR` ドキュメントを、発行された CSS を伴う独立した HTML へ変換し、任意のアセットインライン化と、ホストが `buildIR` コールバックを提供したときのインタラクティブなエクスポートフロー向けのオプトインな Studio ヘッダーアクションを備えます。Anvilkit エクスポートプラグイン契約のリファレンス実装であり、CI における 24 件のテストバッテリーによって敵対的入力に対してセキュリティ強化されています。
+
+## インストール
+
+```bash
+pnpm add @anvilkit/plugin-export-html @anvilkit/core react react-dom @puckeditor/core
+```
+
+非オプションの peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.21.3`。ランタイム依存は `@anvilkit/core` のみです。
+
+## クイックスタート
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { puckDataToIR } from "@anvilkit/ir";
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckConfig } from "./puck-config";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Marketing page",
+  lang: "en",
+  inlineAssetThresholdBytes: 32_768,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+
+<Studio puckConfig={puckConfig} plugins={[htmlExport]} />;
+```
+
+`buildIR` を供給すると「Download HTML」ヘッダーアクションが有効になります。クリックするとエクスポートをエンドツーエンドで実行し、結果のペイロードとともに `anvilkit:export:ready` を発行します。ホストが自前でエクスポートを処理したい場合は `buildIR` を省略してください。その場合、アクションは代わりに `anvilkit:export:request` を発行します。
+
+## 主な機能
+
+- **独立した HTML5 出力** — 発行された `<style>`、BCP 47 の `lang`、ドキュメントタイトルを伴うラップされたドキュメント。
+- **組み込みコンポーネントエミッター** — `hero`、`navbar`、`pricing-minimal`、`bento-grid`、`section`、`statistics`、`blog-list`、`helps`、`logo-clouds` のためのファーストパーティ HTML 出力。
+- **選択的なアセットインライン化** — `inlineAssetThresholdBytes` 未満のアセットは base64 でインライン化されます。それより大きい、またはリモート専用のアセットは URL のまま残ります。ホストは `fetchAsset` を介してネットワークを制御します。
+- **2 つのヘッダーアクションモード** — `buildIR` を用いたエンドツーエンド、または `anvilkit:export:request` イベントを介したホスト駆動。
+- **セキュリティ強化されたエスケープ** — `escapeHtml` と `escapeAttr` は 24 件の敵対的入力テストバッテリーによって強制され、Anvilkit プラグインのトラストモデルによってコード化されています。
+- **直接的なフォーマットアクセス** — Studio 内で実行しないヘッドレスなエクスポートパイプライン向けに `htmlFormat` がエクスポートされています。
+
+## API リファレンス
+
+### プラグインファクトリ
+
+```ts
+function createHtmlExportPlugin(opts?: HtmlExportOptions): StudioPlugin;
+```
+
+1 つのエクスポートフォーマット（`id: "html"`）を登録し、構成されている場合は 1 つのヘッダーアクション（`id: "export-html"`）を登録する `StudioPlugin` を返します。プラグインメタ：
+
+| フィールド    | 値                            |
+| ------------- | ----------------------------- |
+| `id`          | `anvilkit-plugin-export-html` |
+| `name`        | `HTML Export`                 |
+| `coreVersion` | `^0.1.0-alpha`                |
+
+### `HtmlExportOptions`
+
+| フィールド                  | 型                           | デフォルト                                          | 目的                                                                           |
+| --------------------------- | ---------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `title`                     | `string`                     | IR メタデータから                                   | ドキュメントの `<title>`。                                                            |
+| `lang`                      | `string`                     | `"en"`                                              | `<html lang="…">` 上に発行される BCP 47 タグ。                                       |
+| `inlineStyles`              | `boolean`                    | `true`                                              | `false` のとき、CSS は省略されます（ホストがスタイルシートを所有）。                       |
+| `inlineAssetThresholdBytes` | `number`                     | `32_768`                                            | しきい値 ≤ のアセットは base64 でインライン化され、それより大きいものは URL のまま。                    |
+| `fetchAsset`                | `FetchAssetFn`               | なし                                                | ホスト供給の非同期アセットローダー。これがないと、リモートアセットは URL のまま残ります。  |
+| `buildIR`                   | `IRBuilder`                  | なし                                                | 供給されると、ヘッダーアクションがエクスポートをエンドツーエンドで実行します。                   |
+| `assetResolvers`            | `readonly IRAssetResolver[]` | なし                                                | アセット解決パイプライン。`format.run()` に渡された任意のリゾルバーとマージされます。 |
+| `headerAction`              | `boolean`                    | `buildIR` が供給されたとき `true`、それ以外は `false` | 「Download HTML」ヘッダーアクションを提供します。|
+
+### `FetchAssetFn`
+
+```ts
+type FetchAssetFn = (
+  url: string,
+  opts?: FetchAssetOptions,
+) => Promise<{ bytes: Uint8Array; contentType: string }>;
+
+interface FetchAssetOptions {
+  readonly maxBytes?: number;
+}
+```
+
+デフォルトのフェッチャー（`defaultFetchAsset`）は Content-Length の事前チェックを行い、`maxBytes` を強制するためにボディをストリーミングします。カスタムフェッチャーはこのヒントを無視してもよいですが、その場合はバイト上限を放棄することになります。
+
+### `IRBuilder`
+
+```ts
+type IRBuilder = (ctx: StudioPluginContext) => PageIR | Promise<PageIR>;
+```
+
+ホストは通常、`@anvilkit/ir` の `puckDataToIR(ctx.getData(), puckConfig)` でこれを実装します。
+
+### 直接的なフォーマットアクセス
+
+```ts
+const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+  id: "html",
+  label: "HTML",
+  extension: "html",
+  mimeType: "text/html",
+  run: async (ir, options, runCtx) => ({ content, filename, warnings }),
+};
+```
+
+Studio の外で実行する場合（例：CLI ツール、サーバーレンダリングのエクスポートエンドポイント）にこれを使用します。
+
+### ヘッダーアクション
+
+| エクスポート                                    | 目的                                                                         |
+| ----------------------------------------------- | ---------------------------------------------------------------------------- |
+| `createExportHtmlHeaderAction(format, options)` | 構成済みのフォーマットにバインドされたヘッダーアクションを構築します。                          |
+| `exportHtmlHeaderAction`                        | デフォルトの未バインドアクション。ホストが処理するために `anvilkit:export:request` を発行します。 |
+
+ヘッダーアクションのメタデータ：`id: "export-html"`、`label: "Download HTML"`、`icon: "download"`、`order: 100`。
+
+### イベントフロー
+
+- `anvilkit:export:ready` — `buildIR` が構成されているときにヘッダーアクションが発火します。ペイロード：`{ formatId: "html", content: string, filename: string, mimeType: "text/html", warnings: ExportWarning[] }`。
+- `anvilkit:export:request` — `buildIR` が構成されていないときに発火します。ペイロード：`{ formatId: "html", options }`。ホストは、自前の IR でエクスポートを実行して `anvilkit:export:ready` をディスパッチする（または結果を直接保存する）ことでこれを処理します。
+
+## 使用例
+
+### デフォルト設定での独立したエクスポート
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckDataToIR } from "@anvilkit/ir";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Untitled page",
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### プライベート S3 バケットからのアセットインライン化
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+
+const fetchAsset = async (url: string, opts) => {
+  const signed = await mySigner.sign(url);
+  const response = await fetch(signed.url, {
+    headers: signed.headers,
+  });
+  if (!response.ok) throw new Error(`fetch ${url} → ${response.status}`);
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (opts?.maxBytes && bytes.byteLength > opts.maxBytes) {
+    throw new Error(`asset exceeded ${opts.maxBytes} bytes`);
+  }
+  return {
+    bytes,
+    contentType:
+      response.headers.get("Content-Type") ?? "application/octet-stream",
+  };
+};
+
+createHtmlExportPlugin({
+  inlineAssetThresholdBytes: 65_536,
+  fetchAsset,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### イベントバスを介したホスト駆動のエクスポート
+
+```ts
+const htmlExport = createHtmlExportPlugin({ headerAction: true });
+
+studio.eventBus.on("anvilkit:export:request", async ({ formatId, options }) => {
+  if (formatId !== "html") return;
+  const ir = puckDataToIR(latestPuckData, puckConfig);
+  const result = await htmlFormat.run(ir, options, { assetResolvers });
+  saveAs(new Blob([result.content], { type: "text/html" }), result.filename);
+});
+```
+
+### CLI からのヘッドレスエクスポート
+
+```ts
+import { htmlFormat } from "@anvilkit/plugin-export-html";
+import { writeFileSync } from "node:fs";
+
+const result = await htmlFormat.run(
+  ir,
+  { title: "Generated", lang: "en", inlineAssetThresholdBytes: 0 },
+  { assetResolvers: [resolver] },
+);
+
+writeFileSync("dist/page.html", result.content);
+```
+
+## 注意事項と FAQ
+
+### アセットインライン化はホスト制御
+
+このプラグインは自分からネットワークにアクセスすることは決してありません。アセットがインライン化されるのは、ホストが `fetchAsset` を供給したときだけです。これにより、エクスポートパイプラインはサンドボックス環境やオフライン環境でも安全に保たれます。パイプラインの順序は `resolve`（`assetResolvers` を介して）→ `inline`（`fetchAsset` + サイズしきい値が許可する場合）→ `substitute`（アセット ID を data URL で置換）です。
+
+### 組み込みエミッターのカバレッジ
+
+このパッケージは 9 種類のコンポーネントタイプ向けにファーストパーティ HTML エミッターを同梱しています：`hero`、`navbar`、`pricing-minimal`、`bento-grid`、`section`、`statistics`、`blog-list`、`helps`、`logo-clouds`。このセット外のコンポーネントは警告と、スタブの `<!-- unsupported component -->` コメントを発行します。完全なカスタムコンポーネントの忠実度が必要な場合は、このプラグインを `@anvilkit/plugin-export-react` と組み合わせてください。
+
+### `headerAction` をオプトアウトするタイミング
+
+`headerAction` は、`buildIR` が供給されたとき（エンドツーエンドモード）はデフォルトで `true`、それ以外は `false` です。`buildIR` なしで `true` に設定するのは、ホストが `anvilkit:export:request` リスナーを配線済みのときだけにしてください。さもないと、ユーザーが「Download HTML」をクリックしても何も起こりません。
+
+### エスケープ契約
+
+エスケープ契約は `security.test.ts`（24 件の敵対的入力テストバッテリー）によって強制されます。`escapeHtml` / `escapeAttr` をバイパスするカスタムエミッターは CI でブロックされます。
+
+### Alpha 契約に関する注意点
+
+発行される HTML/CSS 文字列はまだ安定性契約ではありません。クラス名、属性の順序、埋め込みの `<style>` ブロックは alpha バージョン間で変化する可能性があります。リリース間でエクスポート出力を diff する利用者は、生の HTML ではなく、レンダリングされたページのみをスナップショットすべきです。
+
+### バンドル予算
+
+`.size-limit.json` はパッケージごとの gzip 上限を強制します（`scripts/check-bundle-budget.mjs` を参照）。エクスポートパイプラインは `O(node count)` です。大きな IR はノード数に対して線形に実行されます。
+
+### 関連項目
+
+- [`@anvilkit/plugin-export-react`](../plugin-export-react/README.md) — 同じ `PageIR` を、開発者への引き継ぎ用に `.tsx`/`.jsx` ソースファイルとしてエクスポートします。

@@ -1,0 +1,175 @@
+# @anvilkit/plugin-export-canvas
+
+> **Alpha（`0.1.0-rc.2`）。** 在 `1.0` 之前 API 可能会变化。
+
+面向 AnvilKit Studio 的无界面画布导出插件。它通过包装 `@anvilkit/canvas-core` 序列化器，为 AnvilKit 画布设计注册四种导出格式——**PNG、JSON、SVG 和 PDF**。它不导入任何 React 或 Konva。
+
+与 Puck 导出插件不同，画布格式从**选项包**（`options.canvasIR`）而非 `PageIR` 参数读取文档：Studio 导出契约会向 `run()` 传入一个 Puck `PageIR`，而这对画布设计而言毫无意义，因此画布模式宿主会改为通过格式选项传入 `CanvasIR`（以及任何预渲染的页面栅格图）。
+
+## 安装
+
+```sh
+pnpm add @anvilkit/plugin-export-canvas @puckeditor/core
+```
+
+对等依赖：`@puckeditor/core ^0.21.3`（必需）；`react` 和 `react-dom`（`>=19.0.0`）是**可选的** peer——该插件是无界面的，仅当你的宿主共享一棵 React 树时才需要它们。`@anvilkit/canvas-core` 作为直接依赖随附，并提供底层的序列化器。
+
+## 为什么栅格图要被传入
+
+画布渲染器基于 React/Konva，无法以无界面方式运行，因此该插件从不自行栅格化。对于 PNG 和 PDF，画布模式宿主（通常是 `@anvilkit/plugin-canvas-studio` 的导出桥接）会渲染每一页——例如通过 `stage.toDataURL()`——并通过 `options.rasters` 把字节/数据 URL 传入。SVG 和 JSON 不需要栅格图。
+
+## 快速开始
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
+
+// Registers the four canvas export formats. No options today.
+const canvasExport = createCanvasExportPlugin();
+
+<Studio puckConfig={puckConfig} plugins={[canvasExport]} />;
+```
+
+参考的端到端集成是画布编辑器自己的 `createCanvasExportPlugin` **顶栏插件**（`CanvasWorkspace headerPlugins` 接缝），其中 PNG/JSON 是内建的，而 SVG/PDF 是由宿主注入的。本包就是那些流程所构建于其上的无界面格式注册表。
+
+## 核心特性
+
+- **四种格式** —— `canvas-png`、`canvas-json`、`canvas-svg`、`canvas-pdf`，
+  通过 `StudioPluginRegistration.exportFormats` 注册。
+- **无界面** —— 仅包装 `@anvilkit/canvas-core` 序列化器；不导入 React/Konva，
+  在 Node/CLI 流水线中是安全的。
+- **选项包输入** —— 从格式选项读取 `CanvasIR`（以及栅格图），
+  使 Puck `PageIR` 参数保持未使用状态。
+- **警告通道** —— SVG 和 PDF 序列化会浮现字体/图像/栅格化
+  警告，供宿主据此采取行动。
+
+## API 参考
+
+### 插件工厂函数
+
+```ts
+function createCanvasExportPlugin(
+  opts?: CanvasExportPluginOptions,
+): StudioPlugin;
+
+type CanvasExportPluginOptions = Record<string, never>; // reserved; no options yet
+```
+
+返回一个注册了四种画布导出格式的 `StudioPlugin`。
+
+### 导出格式
+
+| 导出项        | `id`          | 标签         | 扩展名    | MIME              |
+| ------------- | ------------- | ------------ | --------- | ----------------- |
+| `pngFormat`   | `canvas-png`  | Canvas PNG   | `png`     | `image/png`       |
+| `jsonFormat`  | `canvas-json` | Canvas JSON  | `json`    | `application/json`|
+| `svgFormat`   | `canvas-svg`  | Canvas SVG   | `svg`     | `image/svg+xml`   |
+| `pdfFormat`   | `canvas-pdf`  | Canvas PDF   | `pdf`     | `application/pdf` |
+
+`canvasExportFormats` 是包含全部四种格式的只读数组，可直接展开到
+宿主的格式注册表中。
+
+### `CanvasExportOptions`
+
+传给每种格式的 `run(pageIr, options)`（`pageIr` 参数会被忽略）：
+
+| 字段       | 类型                                                        | 默认值                 | 用途                                                                 |
+| ---------- | ----------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
+| `canvasIR` | `CanvasIR`                                                  | _运行时必填_  | 要导出的画布文档。没有它 `run()` 会抛出异常（仅为满足注册表的泛型槽位而被类型标注为可选）。 |
+| `page`     | `string \| number`                                         | 第一页（`0`）       | 用于单页格式（`svg` / `png`）的页面 id/索引。                  |
+| `rasters`  | `readonly CanvasRaster[]`                                  | 无                   | 预渲染的页面图像。**`pdf` 必需**（每页一张）且 **`png` 必需**（选定的页面）。`svg`/`json` 会忽略它。 |
+| `dpi`      | `number`                                                   | 无                   | 用于单位→px/pt 转换的回退 DPI（`svg` / `pdf`）。                  |
+| `pretty`   | `boolean`                                                  | `false`                | 美化打印 JSON 导出。                                           |
+| `svg`      | `SvgSerializeOptions`                                      | 无                   | SVG 序列化器选项（图像嵌入模式、字体、美化等）。        |
+| `pdf`      | `{ pages?; title?; author? }`                              | 无                   | PDF 页面选择/排序 + 文档元数据。                           |
+| `filename` | `string`                                                   | IR 标题，否则为 `"design"` | 基础文件名（无扩展名；格式会追加扩展名）。                 |
+
+```ts
+interface CanvasRaster {
+  pageId: string;
+  image: Uint8Array | string; // raw PNG/JPEG bytes, or a data:image/...;base64,… URL
+  mimeType?: "image/png" | "image/jpeg";
+}
+```
+
+### 序列化器（无界面）
+
+对于不在 Studio 内部运行的流水线，底层序列化器会被直接导出：
+
+```ts
+function canvasToJson(ir: CanvasIR, opts?: { pretty?: boolean }): string;
+function canvasToSvg(
+  ir: CanvasIR,
+  page?: string | number,
+  options?: SvgSerializeOptions,
+): Promise<{ svg: string; warnings: ExportWarning[] }>;
+function canvasToPdf(
+  ir: CanvasIR,
+  options: {
+    rasters: readonly CanvasRaster[];
+    pages?: ReadonlyArray<string | number>;
+    dpi?: number;
+    title?: string;
+    author?: string;
+  },
+): Promise<{ pdf: Uint8Array; warnings: ExportWarning[] }>;
+function canvasToPng(raster: Uint8Array | string): Uint8Array;
+function rasterToBytes(image: Uint8Array | string): Uint8Array;
+```
+
+## 用法示例
+
+### 从 CLI / 服务器进行无界面导出
+
+```ts
+import {
+  canvasToJson,
+  canvasToSvg,
+  canvasToPdf,
+} from "@anvilkit/plugin-export-canvas";
+import { writeFileSync } from "node:fs";
+
+// JSON — no rasters needed.
+writeFileSync("design.json", canvasToJson(canvasIR, { pretty: true }));
+
+// SVG — first page.
+const { svg } = await canvasToSvg(canvasIR, 0);
+writeFileSync("design.svg", svg);
+
+// PDF — host renders one raster per page first (Konva is React-only),
+// then this stays headless.
+const { pdf } = await canvasToPdf(canvasIR, { rasters });
+writeFileSync("design.pdf", pdf);
+```
+
+### 调用一个已注册的格式
+
+```ts
+import { canvasExportFormats } from "@anvilkit/plugin-export-canvas";
+
+const png = canvasExportFormats.find((f) => f.id === "canvas-png")!;
+const result = await png.run(
+  ignoredPageIr,
+  { canvasIR, page: "page-1", rasters },
+  runCtx,
+);
+// result → { content, filename, warnings }
+```
+
+## 备注与常见问题
+
+### `PageIR` 参数是有意未使用的
+
+每种格式的 `run(pageIr, options)` 都会忽略 `pageIr` 并读取 `options.canvasIR`。
+这使得该插件在导出画布文档（其形状与 Puck 页面不同）的同时，
+仍可赋值给标准的 `ExportFormatDefinition` 注册表槽位。
+
+### PNG/PDF 需要由宿主渲染的栅格图
+
+因为 Konva 无法以无界面方式渲染，PNG 和 PDF 需要 `options.rasters`。PNG
+需要选定页面的栅格图；PDF 需要每个导出页面一张栅格图。SVG 和
+JSON 直接从 `CanvasIR` 序列化。
+
+## 许可证
+
+MIT

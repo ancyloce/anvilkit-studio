@@ -1,0 +1,313 @@
+# @anvilkit/plugin-ai-image
+
+> **Alpha（`0.1.4`）。** API 在 `1.0` 之前可能发生变化。该插件从不直接与
+> AI 服务通信——每个任务都委托给宿主提供的
+> `AiImageProvider`，因此没有任何凭据、模型标识符或端点会越过
+> 插件边界。
+
+面向 AnvilKit **Canvas Studio** 的 AI 图像生成插件。它封装了宿主提供的
+`AiImageProvider`，使编辑器能够通过一个类型化契约发起文生图、变体、
+修补（inpaint）、背景移除和放大任务——并将周边构建块（带中止/重试/轮询的任务
+客户端、mock provider、蒙版编辑器、后处理流水线、画布提交辅助函数，以及一个
+可选的 React 侧边栏面板）作为独立的子路径导出一并提供。
+
+> **状态。** 第 1 次迭代的构建块均已发布：任务客户端
+> （`./` — `createAiJobClient`）、mock provider（`./mock`）、蒙版编辑器
+> （`./mask`）、后处理流水线（`./post-process`）、提交辅助函数（`./commit`）
+> 以及 React 侧边栏界面（`./react`）。裸的
+> `createAiImagePlugin` 工厂函数会校验 provider 并暴露一个命令式的
+> `submit()` 方法，但它注册的是一个空的 Studio hook 块——它本身尚未
+> 贡献任何生命周期 hook 或 UI。请通过
+> `@anvilkit/plugin-ai-image/react` 挂载该面板（或在 `useAiImage` 之上接入你自己的 UI）。
+
+## 安装
+
+```sh
+pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
+```
+
+对等依赖：`react >=19.0.0`、`react-dom >=19.0.0`、
+`@puckeditor/core ^0.21.3`、`@anvilkit/ui`（用于 React 面板），以及
+`konva ^10` + `react-konva ^19`（用于 `./mask` 和 `./react` 的 Konva
+界面）。无界面的 `.` 入口——工厂函数、任务客户端、后处理、提交——
+不需要 Konva。`@anvilkit/canvas-core` 作为直接依赖一并提供，并且
+是线缆形态（wire-shape）类型的唯一可信来源。
+
+子路径导入：
+
+| 子路径                                    | 导出                                                                                   |
+| ---------------------------------------- | -------------------------------------------------------------------------------------- |
+| `@anvilkit/plugin-ai-image`              | `createAiImagePlugin`、`createAiJobClient`、`RetryableError`、`commitImageReplace`、蒙版导出器工具函数，以及所有线缆形态类型。 |
+| `@anvilkit/plugin-ai-image/react`        | `AiImagePanel`、`useAiImage`、`createAiImageSidebarPlugin`。                            |
+| `@anvilkit/plugin-ai-image/mask`         | `MaskEditorLayer`、`useMaskStrokes`、蒙版类型。                                        |
+| `@anvilkit/plugin-ai-image/post-process` | `createPostProcessPipeline` + 图像辅助函数（`dataUrlToFile`、`sourceToFile`、`thumbnailDimensions`、`PostProcessError`）。 |
+| `@anvilkit/plugin-ai-image/commit`       | `commitImageReplace`。                                                                 |
+| `@anvilkit/plugin-ai-image/mock`         | 用于测试和演示的 `createMockAiImageProvider`。                                          |
+
+## 快速开始
+
+```ts
+import { createAiImagePlugin } from "@anvilkit/plugin-ai-image";
+import type { AiImageProvider } from "@anvilkit/plugin-ai-image";
+
+const provider: AiImageProvider = async (request, context, options) => {
+  // Call your AI service of choice (Replicate, OpenAI, self-hosted SD, ...).
+  // Honour `options?.signal` for cancellation and return an AiImageJobResult.
+  const res = await fetch("/api/ai/image", {
+    method: "POST",
+    body: JSON.stringify({ request, context }),
+    signal: options?.signal,
+  });
+  return res.json();
+};
+
+export const aiImage = createAiImagePlugin({ provider });
+
+// Imperative submit (delegates straight to your provider):
+const result = await aiImage.submit(
+  { kind: "text-to-image", prompt: "a calm mountain lake at dawn" },
+  { artboardId: "artboard-1" },
+);
+```
+
+## 核心特性
+
+- **单一类型化 provider 契约** — 五种任务类型（`text-to-image`、`variation`、
+  `inpaint`、`bg-remove`、`upscale`）通过单个 `AiImageProvider`
+  回调流转。没有任何凭据或模型标识符会越过插件边界。
+- **带中止/重试/轮询的任务客户端** — `createAiJobClient` 封装一个 provider，
+  提供瞬时失败重试（指数退避 + 抖动），并为返回 `status: "pending"` 的
+  异步任务提供可选的轮询。
+- **蒙版编辑器** — `MaskEditorLayer` + `useMaskStrokes` 在 Konva 图层上捕获
+  笔刷描边；导出器会将它们栅格化为用于 inpaint 任务的蒙版资源。
+- **后处理流水线** — 规范化 → 校验 MIME → 校验大小 →
+  可选压缩 → 注册主资源 → 生成并注册缩略图。
+- **画布提交辅助函数** — `commitImageReplace` 为宿主的画布命令总线构建一个类型化的
+  `image.replace` 命令。
+- **React 侧边栏面板** — `AiImagePanel` 与可自注册的
+  `createAiImageSidebarPlugin` 将生成 UI 投放到 Studio 侧边栏的
+  `copilot` 模块中。
+- **确定性 mock** — `createMockAiImageProvider` 为测试和演示模拟延迟和
+  按类型区分的结果（以及强制失败）。
+
+## API 参考
+
+### 工厂函数
+
+```ts
+function createAiImagePlugin(
+  opts: AiImagePluginOptions,
+): StudioPlugin & AiImagePluginInstance;
+
+interface AiImagePluginOptions {
+  provider: AiImageProvider; // required — throws TypeError if not a function
+}
+
+interface AiImagePluginInstance {
+  submit(
+    request: AiImageJobRequest,
+    context: AiLayerContext,
+    options?: { signal?: AbortSignal },
+  ): Promise<AiImageJobResult>;
+}
+```
+
+`submit()` 直接委托给已配置的 `provider`。返回的对象同时也是一个
+`StudioPlugin`；其 `register()` 目前返回一个空的 `hooks` 块。
+
+### 线缆形态类型（从 `@anvilkit/canvas-core` 重新导出）
+
+```ts
+type AiImageJobRequest =
+  | { kind: "text-to-image"; prompt: string; negativePrompt?: string; width?: number; height?: number; seed?: number }
+  | { kind: "variation"; sourceAssetId: string; strength?: number; seed?: number }
+  | { kind: "inpaint"; sourceAssetId: string; maskAssetId: string; prompt: string; seed?: number }
+  | { kind: "bg-remove"; sourceAssetId: string }
+  | { kind: "upscale"; sourceAssetId: string; scale?: number };
+
+type AiImageJobKind = AiImageJobRequest["kind"];
+type AiImageJobStatus = CanvasAiPlaceholderStatus | "cancelled";
+
+interface AiImageJobResult {
+  jobId: string;
+  status: AiImageJobStatus;
+  resultAssetId?: string;
+  error?: { code: string; message: string };
+  startedAt: number;
+  finishedAt?: number;
+}
+
+interface AiLayerContext {
+  artboardId: string;
+  selectedNodeId?: string;
+  bounds?: { x: number; y: number; width: number; height: number };
+}
+
+type AiImageProvider = (
+  request: AiImageJobRequest,
+  context: AiLayerContext,
+  options?: { signal?: AbortSignal },
+) => Promise<AiImageJobResult>;
+```
+
+它们位于 `@anvilkit/canvas-core` 中，从而让无界面 IR 与本插件在
+线缆形态上保持一致；为方便使用，本包将它们重新导出。
+
+### 任务客户端（`.`）
+
+```ts
+function createAiJobClient(options: AiJobClientOptions): AiJobClient;
+
+interface AiJobClient {
+  run(
+    request: AiImageJobRequest,
+    context: AiLayerContext,
+    options?: { signal?: AbortSignal },
+  ): Promise<AiImageJobResult>;
+}
+```
+
+| `AiJobClientOptions` 字段   | 类型             | 默认值      | 用途                                                                    |
+| -------------------------- | ---------------- | ----------- | ----------------------------------------------------------------------- |
+| `provider`                 | `AiImageProvider`| _必填_      | 宿主提供的 provider。                                                    |
+| `poll`                     | `AiJobPollFn`    | 无          | 用于异步任务的轮询器。当 provider 返回非终止的 `pending` 且设置了 `poll` 时，客户端会持续轮询，直到达到终止/中止/超时。 |
+| `pollIntervalMs`           | `number`         | `1000`      | 轮询尝试之间的延迟。                                                    |
+| `pollTimeoutMs`            | `number`         | 无          | 轮询循环的实际耗时预算；超出时解析为代码为 `TIMEOUT` 的 `error` 结果。   |
+| `maxRetries`               | `number`         | `3`         | 首次调用之后的重试次数（仅限瞬时失败）。                                 |
+| `baseDelayMs`              | `number`         | `250`       | 基础退避延迟。                                                          |
+| `maxDelayMs`               | `number`         | `8000`      | 抖动前的退避上限。                                                      |
+| `jitter` / `sleep` / `now` | 函数             | 平台默认    | 用于确定性测试的注入点。                                                |
+
+中止 `options.signal` 会解析为 `cancelled` 结果。从 provider 抛出 `RetryableError`
+可将某次失败标记为瞬时失败，并使其符合退避循环的重试条件。
+
+### 蒙版编辑（`./mask`）
+
+| 导出               | 签名                                                        | 用途                                                 |
+| ----------------- | ----------------------------------------------------------- | ---------------------------------------------------- |
+| `MaskEditorLayer` | React（`react-konva`）组件                                  | 用于 inpaint 蒙版的笔刷描边捕获图层。                |
+| `useMaskStrokes`  | `(options?: UseMaskStrokesOptions) => UseMaskStrokesResult` | 蒙版图层的描边状态 + 指针处理器。                    |
+
+### 蒙版导出（根入口）
+
+蒙版栅格化/上传辅助函数从根入口
+（`@anvilkit/plugin-ai-image`）导出，而非 `./mask` 子路径：
+
+| 导出                          | 签名                                                            | 用途                                                              |
+| ---------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `createMaskToAssetExporter`  | `(options: MaskToAssetExporterOptions) => MaskToAssetExporter`  | `.export(strokes, dimensions)` 进行栅格化 + 上传，解析为蒙版资源 id。 |
+| `drawMask`                   | `(ctx, strokes, options?) => void`                              | 将蒙版底层栅格化到 2D context 上。                                |
+| `rasterizeMaskToDataUrl`     | `(input: RasterizeMaskInput) => string`                         | 将描边渲染为 PNG data URL。                                       |
+| `dataUrlToFile`              | `(dataUrl: string, filename: string) => File`                   | 将 data URL 转换为可上传的 `File`。                              |
+
+### 后处理（`./post-process`）
+
+```ts
+function createPostProcessPipeline(
+  options: PostProcessOptions,
+): PostProcessPipeline; // .process(source) => Promise<PostProcessResult>
+```
+
+| `PostProcessOptions` 字段   | 类型                        | 默认值  | 用途                                                            |
+| -------------------------- | --------------------------- | ------- | ---------------------------------------------------------------- |
+| `upload`                   | `PostProcessUpload`         | _必填_  | 宿主上传函数；对主图像和缩略图都会调用。                         |
+| `acceptedMimeTypes`        | `readonly string[]`         | 无      | MIME 白名单；不匹配的来源会抛出 `PostProcessError`。            |
+| `maxBytes`                 | `number`                    | 无      | 大小上限。                                                      |
+| `thumbnail`                | `{ maxEdge?; mimeType? }`   | `maxEdge: 256` | 缩略图尺寸/格式（始终生成）。                            |
+| `compress`                 | `{ mimeType?; quality? }`   | 无      | 可选启用的重新编码（例如转为 `image/webp`）。                  |
+| `createCanvas` / `decodeImage` | 函数                    | 平台默认 | 用于非 DOM／测试环境的注入点。                               |
+| `filename`                 | `string`                    | 无      | 上传资源的基础文件名。                                          |
+
+`PostProcessResult` 返回 `{ assetId, thumbnailAssetId, mimeType, bytes, width, height }`。
+辅助函数 `dataUrlToFile`、`sourceToFile`、`thumbnailDimensions` 以及
+`PostProcessError` 类一并导出。
+
+### 提交（`./commit`）
+
+```ts
+function commitImageReplace<T = unknown>(
+  options: CommitImageReplaceOptions<T>,
+): T;
+
+interface CommitImageReplaceOptions<T = unknown> {
+  commit: (cmd: CanvasImageReplaceCommand) => T; // CommitCanvasCommandFn<T>
+  nodeId: string;
+  fromAssetId: string;
+  toAssetId: string;
+}
+```
+
+构建一个 `image.replace` 画布命令并将其交给宿主的 `commit`
+函数（例如 `(cmd) => historyStore.getState().commit(currentIr, cmd)`），
+并返回该函数所返回的内容。
+
+### React（`./react`）
+
+```ts
+function AiImagePanel(props: AiImagePanelProps): ReactElement;
+function useAiImage(options: UseAiImageOptions): UseAiImageResult;
+function createAiImageSidebarPlugin(
+  options: CreateAiImageSidebarPluginOptions,
+): StudioPlugin;
+```
+
+- **`AiImagePanel`** — 生成 UI（操作选择器、提示词字段、运行/取消）。
+  由一个 `jobClient`、一个 `getLayerContext` 访问器、一个可选的 `defaultOp`，
+  以及可注入的 i18n `labels` 驱动。
+- **`useAiImage`** — 无界面的面板状态 Hook，返回字段值、变更
+  处理器，以及 `onRun` / `onCancel`。当 `AiImagePanel` 的
+  外观不合适时，将它接入你自己的 UI。
+- **`createAiImageSidebarPlugin`** — 可自注册的插件，将
+  `AiImagePanel` 挂载到 Studio 侧边栏的 `copilot` 模块中。选项：
+
+  | 字段             | 类型                                  | 默认值           | 用途                                                              |
+  | ---------------- | ------------------------------------- | ---------------- | ------------------------------------------------------------------ |
+  | `jobClient`      | `AiJobClient`                         | _必填_           | 驱动任务（推荐：来自 `createAiJobClient`）。                       |
+  | `getLayerContext`| `() => AiLayerContext \| null`        | `() => null`     | 实时的活动画板/选择访问器。`null` 会禁用 Run。                     |
+  | `defaultOp`      | `AiImageJobKind`                      | `"text-to-image"`| 首次渲染时选中的操作。                                            |
+  | `labels`         | i18n 文案                             | 无               | 转发给 `AiImagePanel`。                                           |
+
+  **单一占用注意事项。** Core 的侧边栏注册表只持有单个
+  `copilotPanel`（后写覆盖先写）。本面板与 `@anvilkit/plugin-ai-copilot` 的
+  面板都会占用 `copilot` 插槽——每个 `<Studio>` 挂载点只注册其中一个。
+  在实践中，它们位于不同的 Studio context 中（canvas 编辑器是一个
+  与 Puck 页面编辑器分开挂载的同级模式）。
+
+### Mock（`./mock`）
+
+```ts
+function createMockAiImageProvider(
+  opts?: CreateMockAiImageProviderOptions,
+): AiImageProvider;
+```
+
+| 字段            | 类型                                            | 默认值  | 用途                                             |
+| --------------- | ----------------------------------------------- | ------- | ------------------------------------------------ |
+| `latencyMs`     | `number`                                        | `0`     | 模拟的（支持中止的）provider 延迟。              |
+| `resultAssetId` | `string \| ((request) => string)`               | 无      | 确定性的结果资源 id，或一个按请求区分的函数。   |
+| 失败选项        | —                                               | 无      | 强制瞬时/终止失败，以便演练错误和重试路径。     |
+
+## 注意事项与常见问题
+
+### 安全模型
+
+插件从不看到凭据、端点或模型标识符——这些都属于
+宿主的 `AiImageProvider`。provider 恰好接收 `(request, context,
+options)` 并返回一个 `AiImageJobResult`。
+
+### 尊重中止信号
+
+`submit()` 和 `AiJobClient.run()` 会将一个 `AbortSignal` 一路传递给 provider。
+provider 应将 `options.signal` 传给其 `fetch`（或等效操作），以便取消、
+重试休眠和轮询循环都能及时停止。中止会解析为 `cancelled`
+结果，而不会抛出异常。
+
+### 仅可视化界面才需要 Konva
+
+无界面的 `.` 入口（工厂函数、任务客户端、后处理、提交）没有 Konva
+依赖。只有当你导入 `./mask` 编辑器图层或 `./react` 面板时，`konva`
++ `react-konva` 才成为必需。
+
+## 许可证
+
+MIT

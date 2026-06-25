@@ -1,0 +1,176 @@
+# @anvilkit/plugin-export-canvas
+
+> **Alpha(`0.1.0-rc.2`).** `1.0` 이전에 API가 변경될 수 있습니다.
+
+AnvilKit Studio를 위한 헤드리스 캔버스 내보내기 플러그인입니다. `@anvilkit/canvas-core` 직렬화기를 래핑하여 AnvilKit 캔버스 디자인에 대해 네 가지 내보내기 형식——**PNG, JSON, SVG, PDF**——을 등록합니다. React나 Konva를 가져오지 않습니다.
+
+Puck 내보내기 플러그인과 달리, 캔버스 형식은 문서를 `PageIR` 인수가 아니라 **옵션 백**(`options.canvasIR`)에서 읽습니다. Studio 내보내기 계약은 `run()`에 Puck `PageIR`을 전달하는데, 이는 캔버스 디자인에 무의미하므로 캔버스 모드 호스트는 대신 `CanvasIR`(및 사전 렌더링된 페이지 래스터)을 형식 옵션을 통해 전달합니다.
+
+## 설치
+
+```sh
+pnpm add @anvilkit/plugin-export-canvas @puckeditor/core
+```
+
+peer 의존성: `@puckeditor/core ^0.21.3`(필수); `react`와 `react-dom`(`>=19.0.0`)은 **선택적** peer입니다——이 플러그인은 헤드리스이며 호스트가 React 트리를 공유하는 경우에만 필요합니다. `@anvilkit/canvas-core`는 직접 의존성으로 동봉되며 기반이 되는 직렬화기를 제공합니다.
+
+## 래스터가 전달되는 이유
+
+캔버스 렌더러는 React/Konva이며 헤드리스로 실행될 수 없으므로, 이 플러그인은 결코 자체적으로 래스터화하지 않습니다. PNG와 PDF의 경우, 캔버스 모드 호스트(일반적으로 `@anvilkit/plugin-canvas-studio`의 내보내기 브리지)가 각 페이지를 렌더링하고——예를 들어 `stage.toDataURL()`을 통해——바이트/데이터 URL을 `options.rasters`를 통해 전달합니다. SVG와 JSON은 래스터가 필요 없습니다.
+
+## 빠른 시작
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
+
+// Registers the four canvas export formats. No options today.
+const canvasExport = createCanvasExportPlugin();
+
+<Studio puckConfig={puckConfig} plugins={[canvasExport]} />;
+```
+
+참조용 종단 간 통합은 캔버스 에디터 자체의 `createCanvasExportPlugin` **헤더 플러그인**(`CanvasWorkspace headerPlugins` 심)이며, 거기서 PNG/JSON은 내장되어 있고 SVG/PDF는 호스트가 주입합니다. 이 패키지는 그러한 플로우들이 구축의 토대로 삼는 헤드리스 형식 레지스트리입니다.
+
+## 핵심 기능
+
+- **네 가지 형식** —— `canvas-png`, `canvas-json`, `canvas-svg`, `canvas-pdf`.
+  `StudioPluginRegistration.exportFormats`를 통해 등록됩니다.
+- **헤드리스** —— `@anvilkit/canvas-core` 직렬화기만 래핑합니다. React/Konva
+  가져오기가 없으며 Node/CLI 파이프라인에서 안전합니다.
+- **옵션 백 입력** —— `CanvasIR`(및 래스터)을 형식 옵션에서 읽으며,
+  Puck `PageIR` 인수는 사용하지 않은 상태로 둡니다.
+- **경고 채널** —— SVG와 PDF 직렬화는 호스트가 대응할 수 있도록 폰트/이미지/래스터화
+  경고를 표면화합니다.
+
+## API 레퍼런스
+
+### 플러그인 팩토리
+
+```ts
+function createCanvasExportPlugin(
+  opts?: CanvasExportPluginOptions,
+): StudioPlugin;
+
+type CanvasExportPluginOptions = Record<string, never>; // reserved; no options yet
+```
+
+네 가지 캔버스 내보내기 형식을 등록하는 `StudioPlugin`을 반환합니다.
+
+### 내보내기 형식
+
+| 내보내기      | `id`          | 레이블       | 확장자    | MIME              |
+| ------------- | ------------- | ------------ | --------- | ----------------- |
+| `pngFormat`   | `canvas-png`  | Canvas PNG   | `png`     | `image/png`       |
+| `jsonFormat`  | `canvas-json` | Canvas JSON  | `json`    | `application/json`|
+| `svgFormat`   | `canvas-svg`  | Canvas SVG   | `svg`     | `image/svg+xml`   |
+| `pdfFormat`   | `canvas-pdf`  | Canvas PDF   | `pdf`     | `application/pdf` |
+
+`canvasExportFormats`는 네 가지 모두를 담은 읽기 전용 배열로, 호스트의 형식 레지스트리에
+그대로 스프레드할 수 있습니다.
+
+### `CanvasExportOptions`
+
+각 형식의 `run(pageIr, options)`에 전달됩니다(`pageIr` 인수는 무시됩니다):
+
+| 필드       | 타입                                                        | 기본값                 | 목적                                                                 |
+| ---------- | ----------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
+| `canvasIR` | `CanvasIR`                                                  | _런타임에 필수_  | 내보낼 캔버스 문서. 이것이 없으면 `run()`이 던집니다(레지스트리의 제네릭 슬롯을 충족하기 위해 타입상으로만 선택적). |
+| `page`     | `string \| number`                                         | 첫 페이지(`0`)       | 단일 페이지 형식(`svg` / `png`)의 페이지 id/인덱스.                  |
+| `rasters`  | `readonly CanvasRaster[]`                                  | 없음                   | 사전 렌더링된 페이지 이미지. **`pdf`에는 필수**(페이지당 하나)이며 **`png`**에도 필수(선택된 페이지). `svg`/`json`에서는 무시됩니다. |
+| `dpi`      | `number`                                                   | 없음                   | 단위→px/pt 변환을 위한 폴백 DPI(`svg` / `pdf`).                  |
+| `pretty`   | `boolean`                                                  | `false`                | JSON 내보내기를 정렬 출력합니다.                                           |
+| `svg`      | `SvgSerializeOptions`                                      | 없음                   | SVG 직렬화기 옵션(이미지 임베딩 모드, 폰트, 정렬 출력 등).        |
+| `pdf`      | `{ pages?; title?; author? }`                              | 없음                   | PDF 페이지 선택/순서 + 문서 메타데이터.                           |
+| `filename` | `string`                                                   | IR 제목, 없으면 `"design"` | 기본 파일명(확장자 없음; 형식이 확장자를 추가함).                 |
+
+```ts
+interface CanvasRaster {
+  pageId: string;
+  image: Uint8Array | string; // raw PNG/JPEG bytes, or a data:image/...;base64,… URL
+  mimeType?: "image/png" | "image/jpeg";
+}
+```
+
+### 직렬화기(헤드리스)
+
+Studio 내부에서 실행되지 않는 파이프라인을 위해, 기반이 되는 직렬화기가
+직접 내보내집니다:
+
+```ts
+function canvasToJson(ir: CanvasIR, opts?: { pretty?: boolean }): string;
+function canvasToSvg(
+  ir: CanvasIR,
+  page?: string | number,
+  options?: SvgSerializeOptions,
+): Promise<{ svg: string; warnings: ExportWarning[] }>;
+function canvasToPdf(
+  ir: CanvasIR,
+  options: {
+    rasters: readonly CanvasRaster[];
+    pages?: ReadonlyArray<string | number>;
+    dpi?: number;
+    title?: string;
+    author?: string;
+  },
+): Promise<{ pdf: Uint8Array; warnings: ExportWarning[] }>;
+function canvasToPng(raster: Uint8Array | string): Uint8Array;
+function rasterToBytes(image: Uint8Array | string): Uint8Array;
+```
+
+## 사용 예제
+
+### CLI / 서버에서의 헤드리스 내보내기
+
+```ts
+import {
+  canvasToJson,
+  canvasToSvg,
+  canvasToPdf,
+} from "@anvilkit/plugin-export-canvas";
+import { writeFileSync } from "node:fs";
+
+// JSON — no rasters needed.
+writeFileSync("design.json", canvasToJson(canvasIR, { pretty: true }));
+
+// SVG — first page.
+const { svg } = await canvasToSvg(canvasIR, 0);
+writeFileSync("design.svg", svg);
+
+// PDF — host renders one raster per page first (Konva is React-only),
+// then this stays headless.
+const { pdf } = await canvasToPdf(canvasIR, { rasters });
+writeFileSync("design.pdf", pdf);
+```
+
+### 등록된 형식 호출하기
+
+```ts
+import { canvasExportFormats } from "@anvilkit/plugin-export-canvas";
+
+const png = canvasExportFormats.find((f) => f.id === "canvas-png")!;
+const result = await png.run(
+  ignoredPageIr,
+  { canvasIR, page: "page-1", rasters },
+  runCtx,
+);
+// result → { content, filename, warnings }
+```
+
+## 참고 및 FAQ
+
+### `PageIR` 인수는 의도적으로 사용되지 않는다
+
+모든 형식의 `run(pageIr, options)`는 `pageIr`을 무시하고 `options.canvasIR`을 읽습니다.
+이는 Puck 페이지와 다른 형태를 가진 캔버스 문서를 내보내면서도, 플러그인을
+표준 `ExportFormatDefinition` 레지스트리 슬롯에 할당 가능한 상태로 유지합니다.
+
+### PNG/PDF에는 호스트가 렌더링한 래스터가 필요하다
+
+Konva는 헤드리스로 렌더링할 수 없으므로, PNG와 PDF는 `options.rasters`를 필요로 합니다. PNG
+는 선택된 페이지의 래스터가 필요하고, PDF는 내보내는 각 페이지마다 하나의 래스터가 필요합니다. SVG와
+JSON은 `CanvasIR`에서 직접 직렬화합니다.
+
+## 라이선스
+
+MIT
