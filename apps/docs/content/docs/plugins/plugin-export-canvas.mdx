@@ -1,0 +1,267 @@
+---
+title: "Canvas Export"
+description: "Export AnvilKit canvas designs as PNG, JSON, SVG, or PDF."
+---
+
+<div className="anvilkit-plugin-meta">
+	<code>@anvilkit/plugin-export-canvas</code> <span>·</span> <span>v0.1.0-rc.2</span> <span>·</span> <span>Export</span> <span>·</span> <span>Headless</span>
+</div>
+
+## Installation
+
+Install the package and its peer dependencies:
+
+```sh
+pnpm add @anvilkit/plugin-export-canvas @puckeditor/core
+```
+
+### Peer dependencies
+
+The host app must provide these versions:
+
+| Package | Range | Optional |
+|---------|-------|----------|
+| `@puckeditor/core` | `^0.21.3` | no |
+| `react` | `>=19.0.0` | yes |
+| `react-dom` | `>=19.0.0` | yes |
+
+## Quick start
+
+Register the plugin on the `<Studio>` shell:
+
+```tsx
+import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
+import { Studio } from "@anvilkit/core";
+
+<Studio
+	puckConfig={config}
+	plugins={[createCanvasExportPlugin({ /* options — see the guide below */ })]}
+/>;
+```
+
+## Guide
+
+> **Alpha (`0.1.0-rc.2`).** API may change before `1.0`.
+
+Headless canvas export plugin for AnvilKit Studio. Registers four export formats
+— **PNG, JSON, SVG, and PDF** — for AnvilKit canvas designs by wrapping the
+`@anvilkit/canvas-core` serializers. It imports no React or Konva.
+
+Unlike the Puck export plugins, the canvas formats read the document from the
+**options bag** (`options.canvasIR`), not the `PageIR` argument: the Studio export
+contract hands `run()` a Puck `PageIR`, which is meaningless for a canvas design,
+so the canvas-mode host passes the `CanvasIR` (and any pre-rendered page rasters)
+through the format options instead.
+
+## Installation
+
+```sh
+pnpm add @anvilkit/plugin-export-canvas @puckeditor/core
+```
+
+Peer dependencies: `@puckeditor/core ^0.21.3` (required); `react` and `react-dom`
+(`>=19.0.0`) are **optional** peers — the plugin is headless and only
+needs them if your host shares a React tree. `@anvilkit/canvas-core` ships as a
+direct dependency and provides the underlying serializers.
+
+## Why rasters are passed in
+
+The canvas renderer is React/Konva and cannot run headlessly, so this plugin never
+rasterizes on its own. For PNG and PDF, the canvas-mode host (typically
+`@anvilkit/plugin-canvas-studio`'s export bridge) renders each page — e.g. via
+`stage.toDataURL()` — and passes the bytes/data-URL in through `options.rasters`.
+SVG and JSON need no rasters.
+
+## Quickstart
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
+
+// Registers the four canvas export formats. No options today.
+const canvasExport = createCanvasExportPlugin();
+
+<Studio puckConfig={puckConfig} plugins={[canvasExport]} />;
+```
+
+The reference end-to-end integration is the canvas editor's own
+`createCanvasExportPlugin` **header plugin** (`CanvasWorkspace headerPlugins`
+seam), where PNG/JSON are built in and SVG/PDF are host-injected. This package is
+the headless format registry those flows build on.
+
+## Core features
+
+- **Four formats** — `canvas-png`, `canvas-json`, `canvas-svg`, `canvas-pdf`,
+  registered via `StudioPluginRegistration.exportFormats`.
+- **Headless** — wraps `@anvilkit/canvas-core` serializers only; no React/Konva
+  import, safe in Node/CLI pipelines.
+- **Options-bag input** — reads `CanvasIR` (and rasters) from the format options,
+  leaving the Puck `PageIR` argument unused.
+- **Warning channel** — SVG and PDF serialization surface font/image/rasterization
+  warnings for the host to act on.
+
+## API reference
+
+### Plugin factory
+
+```ts
+function createCanvasExportPlugin(
+  opts?: CanvasExportPluginOptions,
+): StudioPlugin;
+
+type CanvasExportPluginOptions = Record<string, never>; // reserved; no options yet
+```
+
+Returns a `StudioPlugin` that registers the four canvas export formats.
+
+### Export formats
+
+| Export        | `id`          | Label        | Extension | MIME              |
+| ------------- | ------------- | ------------ | --------- | ----------------- |
+| `pngFormat`   | `canvas-png`  | Canvas PNG   | `png`     | `image/png`       |
+| `jsonFormat`  | `canvas-json` | Canvas JSON  | `json`    | `application/json`|
+| `svgFormat`   | `canvas-svg`  | Canvas SVG   | `svg`     | `image/svg+xml`   |
+| `pdfFormat`   | `canvas-pdf`  | Canvas PDF   | `pdf`     | `application/pdf` |
+
+`canvasExportFormats` is the readonly array of all four, ready to spread into a
+host's format registry.
+
+### `CanvasExportOptions`
+
+Passed to each format's `run(pageIr, options)` (the `pageIr` argument is ignored):
+
+| Field      | Type                                                        | Default                | Purpose                                                                 |
+| ---------- | ----------------------------------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
+| `canvasIR` | `CanvasIR`                                                  | _required at runtime_  | The canvas document to export. `run()` throws without it (typed optional only to satisfy the registry's generic slot). |
+| `page`     | `string \| number`                                         | first page (`0`)       | Page id/index for single-page formats (`svg` / `png`).                  |
+| `rasters`  | `readonly CanvasRaster[]`                                  | none                   | Pre-rendered page images. **Required for `pdf`** (one per page) and **`png`** (the selected page). Ignored by `svg`/`json`. |
+| `dpi`      | `number`                                                   | none                   | Fallback DPI for unit→px/pt conversion (`svg` / `pdf`).                  |
+| `pretty`   | `boolean`                                                  | `false`                | Pretty-print the JSON export.                                           |
+| `svg`      | `SvgSerializeOptions`                                      | none                   | SVG serializer options (image embedding mode, fonts, pretty, …).        |
+| `pdf`      | `{ pages?; title?; author? }`                              | none                   | PDF page selection/order + document metadata.                           |
+| `filename` | `string`                                                   | IR title, else `"design"` | Base filename (no extension; the format appends it).                 |
+
+```ts
+interface CanvasRaster {
+  pageId: string;
+  image: Uint8Array | string; // raw PNG/JPEG bytes, or a data:image/...;base64,… URL
+  mimeType?: "image/png" | "image/jpeg";
+}
+```
+
+### Serializers (headless)
+
+For pipelines that don't run inside Studio, the underlying serializers are exported
+directly:
+
+```ts
+function canvasToJson(ir: CanvasIR, opts?: { pretty?: boolean }): string;
+function canvasToSvg(
+  ir: CanvasIR,
+  page?: string | number,
+  options?: SvgSerializeOptions,
+): Promise<{ svg: string; warnings: ExportWarning[] }>;
+function canvasToPdf(
+  ir: CanvasIR,
+  options: {
+    rasters: readonly CanvasRaster[];
+    pages?: ReadonlyArray<string | number>;
+    dpi?: number;
+    title?: string;
+    author?: string;
+  },
+): Promise<{ pdf: Uint8Array; warnings: ExportWarning[] }>;
+function canvasToPng(raster: Uint8Array | string): Uint8Array;
+function rasterToBytes(image: Uint8Array | string): Uint8Array;
+```
+
+## Usage examples
+
+### Headless export from a CLI / server
+
+```ts
+import {
+  canvasToJson,
+  canvasToSvg,
+  canvasToPdf,
+} from "@anvilkit/plugin-export-canvas";
+import { writeFileSync } from "node:fs";
+
+// JSON — no rasters needed.
+writeFileSync("design.json", canvasToJson(canvasIR, { pretty: true }));
+
+// SVG — first page.
+const { svg } = await canvasToSvg(canvasIR, 0);
+writeFileSync("design.svg", svg);
+
+// PDF — host renders one raster per page first (Konva is React-only),
+// then this stays headless.
+const { pdf } = await canvasToPdf(canvasIR, { rasters });
+writeFileSync("design.pdf", pdf);
+```
+
+### Invoking a registered format
+
+```ts
+import { canvasExportFormats } from "@anvilkit/plugin-export-canvas";
+
+const png = canvasExportFormats.find((f) => f.id === "canvas-png")!;
+const result = await png.run(
+  ignoredPageIr,
+  { canvasIR, page: "page-1", rasters },
+  runCtx,
+);
+// result → { content, filename, warnings }
+```
+
+## Notes & FAQ
+
+### The `PageIR` argument is intentionally unused
+
+Every format's `run(pageIr, options)` ignores `pageIr` and reads `options.canvasIR`.
+This keeps the plugin assignable to the standard `ExportFormatDefinition` registry
+slot while exporting canvas documents, which have a different shape from Puck pages.
+
+### PNG/PDF need host-rendered rasters
+
+Because Konva can't render headlessly, PNG and PDF require `options.rasters`. PNG
+needs the selected page's raster; PDF needs one raster per exported page. SVG and
+JSON serialize straight from the `CanvasIR`.
+
+## License
+
+MIT
+
+## Entry points
+
+In addition to the main entry, this package exposes these subpaths:
+
+| Subpath |
+|---------|
+| `@anvilkit/plugin-export-canvas` |
+| `@anvilkit/plugin-export-canvas/*` |
+
+## API reference
+
+Public exports from the package entry, classified by kind.
+
+| Export | Kind |
+|--------|------|
+| `createCanvasExportPlugin` | Factory |
+| `canvasExportFormats` | Function |
+| `canvasToJson` | Function |
+| `canvasToPdf` | Function |
+| `canvasToPng` | Function |
+| `canvasToSvg` | Function |
+| `jsonFormat` | Function |
+| `pdfFormat` | Function |
+| `pngFormat` | Function |
+| `rasterToBytes` | Function |
+| `svgFormat` | Function |
+| `CanvasExportOptions` | Type |
+| `CanvasExportPluginOptions` | Type |
+| `CanvasRaster` | Type |
+
+## Resources
+
+- [Full API reference](/api)

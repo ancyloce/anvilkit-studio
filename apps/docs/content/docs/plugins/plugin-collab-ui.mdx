@@ -1,0 +1,368 @@
+---
+title: "Collaboration"
+description: "Realtime collaboration: presence cursors, conflict diagnostics, and Yjs CRDT sync. Bundles @anvilkit/plugin-collab-yjs data sync with @anvilkit/collab-ui presence chrome."
+---
+
+<div className="anvilkit-plugin-meta">
+	<code>@anvilkit/collab-ui</code> <span>·</span> <span>v0.1.0-rc.9</span> <span>·</span> <span>Studio</span> <span>·</span> <span>Headless</span>
+</div>
+
+## Installation
+
+Install the package and its peer dependencies:
+
+```sh
+pnpm add @anvilkit/collab-ui react react-dom
+```
+
+### Peer dependencies
+
+The host app must provide these versions:
+
+| Package | Range | Optional |
+|---------|-------|----------|
+| `@hocuspocus/provider` | `^4.1.0` | yes |
+| `@puckeditor/core` | `^0.21.3` | yes |
+| `react` | `>=19.0.0` | no |
+| `react-dom` | `>=19.0.0` | no |
+| `y-websocket` | `^3.0.0` | yes |
+
+## Quick start
+
+Register the plugin on the `<Studio>` shell:
+
+```tsx
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+import { Studio } from "@anvilkit/core";
+
+<Studio
+	puckConfig={config}
+	plugins={[createCollabPlugin({ /* options — see the guide below */ })]}
+/>;
+```
+
+## Guide
+
+> **Release candidate (`0.1.0-rc.9`).** Tracks `@anvilkit/plugin-collab-yjs` on the `@next` npm tag. Both packages cut a joint GA once the SnapshotAdapter v2 contract is frozen.
+
+Host UI primitives for [`@anvilkit/plugin-collab-yjs`](../plugin-collab-yjs/README.md). The Yjs plugin is headless — it ships the CRDT layer, the SnapshotAdapter, presence wiring, and conflict diagnostics, but no DOM. This package fills in the UI: a context provider that surfaces live collab state plus a set of shadcn-style components host apps drop into their editor chrome. The consolidated `createCollabPlugin()` factory bundles both packages into a single `StudioPlugin` for the common case.
+
+## Installation
+
+```bash
+pnpm add @anvilkit/collab-ui @anvilkit/plugin-collab-yjs @anvilkit/core react react-dom
+```
+
+`react` and `react-dom` are non-optional peers. `@puckeditor/core` is an optional peer — only needed if you forward a `puckConfig` for outbound sync. `yjs` and `y-protocols` arrive transitively through `@anvilkit/plugin-collab-yjs`.
+
+**Managed mode needs a provider.** To enable live collaboration with just a `websocketUrl` (see Quickstart), install the matching WebSocket provider — both are **optional peers**, loaded only via dynamic `import()` when you actually connect, so they never weigh down your initial bundle:
+
+```bash
+pnpm add @hocuspocus/provider   # default backend (provider: "hocuspocus")
+# or
+pnpm add y-websocket            # for provider: "y-websocket"
+```
+
+If you set `websocketUrl` without installing the provider, the sync indicator shows a clear `error` status and `onConnectionError` fires — never a cryptic bundler failure.
+
+## Quickstart
+
+Set **one** value — the WebSocket URL. `room` defaults to `"anvilkit-default-room"`, `provider` to `"hocuspocus"`, `self` to an auto-generated anonymous identity, and the plugin owns the whole transport lifecycle (doc + awareness + provider + status bridge + teardown):
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import { createCollabPlugin } from "@anvilkit/collab-ui";
+
+export default function EditorPage() {
+  return (
+    <Studio
+      puckConfig={puckConfig}
+      plugins={[
+        createCollabPlugin({ websocketUrl: "ws://localhost:1234", puckConfig }),
+      ]}
+    />
+  );
+}
+```
+
+Every other field is an optional override:
+
+```tsx
+createCollabPlugin({
+  websocketUrl: "wss://relay.example.com",
+  room: "doc-42",
+  provider: "y-websocket",            // override the Hocuspocus default
+  token: authToken,
+  self: { id: user.id, displayName: user.name, color: user.color },
+  puckConfig,
+  onConnectionError: (err) => toast.error(String(err)),
+});
+```
+
+### Bring your own transport (BYO)
+
+Already managing the `Y.Doc`, `Awareness`, and provider yourself? Pass `doc` (and optionally `awareness` / `connectionSource`) and the factory leaves transport entirely to you — fully backward compatible with pre-`websocketUrl` callers:
+
+```tsx
+createCollabPlugin({ doc, awareness, connectionSource, self, puckConfig });
+```
+
+When both `doc` and `websocketUrl` are set, `doc` (BYO) wins and a one-time dev warning names the ignored field.
+
+The bundled `<PresenceLayer>` and `<ConflictNoticeCenter>` are mounted by the plugin automatically — pass `presence: { enabled: false }` or `notifications: { enabled: false }` to opt out of either. The collaborator avatar stack is always contributed to the core `collaborators` header slot. That slot is single-occupancy with first-registration-wins, so to swap in different chrome register your own plugin that contributes a `collaborators` slot ahead of this one.
+
+## Core features
+
+- **One-call integration** — `createCollabPlugin()` returns a single `StudioPlugin` that bundles the Yjs data-sync plugin, the context provider, the presence overlay, the conflict toaster, and the collaborator avatar stack.
+- **Split contexts** — adapter / identity / status / peers / peer-identities / conflicts / cursor-visibility are independent providers, so high-churn remote cursor updates never re-render the status pill or conflict toaster.
+- **Selector-thin hooks** — every primitive subscribes only to the slice it reads (`useCollabPeers`, `useCollabStatus`, `useCollabConflictQueue`, etc.).
+- **shadcn-compatible components** — 8 unstyled-framework-friendly building blocks. Use them whole or wire your own UI on top of the hooks.
+- **Identity mirror** — `onIdentityChange` lets the host's auth store mirror downstream display-name / color edits back to its source of truth.
+- **Built-in save debouncing** — the factory wraps the adapter in `createDebouncedAdapter` (150 ms by default) so keystrokes don't flood the `Y.Doc`. Set `saveDebounceMs: 0` to opt out.
+
+## API reference
+
+### Consolidated factory
+
+```ts
+function createCollabPlugin(options: CreateCollabPluginOptions): StudioPlugin;
+```
+
+| Field                                                                                                               | Type                                                | Default      | Purpose                                                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `websocketUrl`                                                                                                      | `string`                                            | none         | **Managed mode.** Relay URL — the only field most hosts set. Omit (with no `doc`) for single-tab in-memory mode (one-time dev warning).              |
+| `room`                                                                                                              | `string`                                            | `"anvilkit-default-room"` | Shared room/document name for managed mode.                                                                                            |
+| `provider`                                                                                                          | `"hocuspocus" \| "y-websocket"`                     | `"hocuspocus"` | Managed-mode backend (install the matching optional peer). Ignored in BYO mode.                                                                   |
+| `token`                                                                                                             | `string`                                            | `""`         | Auth token forwarded to the relay (managed mode).                                                                                                    |
+| `onConnectionError`                                                                                                 | `(err: unknown) => void`                            | `console.error` once | Fires when the managed transport fails (provider missing, bad URL, auth). Never throws from the factory.                                     |
+| `self`                                                                                                              | `PeerInfo`                                          | auto-generated | Local peer identity. When omitted, an anonymous identity (`anon-<uuid>` + stable hashed hex color) is generated.                                  |
+| `onIdentityChange`                                                                                                  | `(next: PeerInfo) => void`                          | none         | Fires when downstream UI calls `updateSelf`. Skipped on initial mount and deduped by shallow equality on `{ id, displayName, color }`.               |
+| `doc`                                                                                                               | `YDoc`                                              | none         | **BYO mode.** Provide your own Yjs document; the factory neither creates nor destroys it. Takes precedence over `websocketUrl`.                       |
+| `awareness`                                                                                                         | `Awareness`                                         | auto-created | Presence channel. BYO in BYO mode; an optional managed-mode override otherwise.                                                                      |
+| `mapName`, `useNativeTree`, `staleAfterMs`, `connectionSource`, `computeDelta`, `awarenessRateLimit`, `persistence` | —                                                   | —            | Forwarded verbatim to `createYjsAdapter`. See [plugin-collab-yjs `CreateYjsAdapterOptions`](../plugin-collab-yjs/README.md#createyjsadapteroptions). |
+| `puckConfig`                                                                                                        | `Config`                                            | none         | Required for outbound sync. Omit for read-only viewers.                                                                                              |
+| `saveDebounceMs`                                                                                                    | `number`                                            | `150`        | Coalesces local saves. Set `0` to disable.                                                                                                           |
+| `validateRemoteIR`, `onValidationFailure`, `policy`, `onPolicyViolation`, `onSaveError`                             | —                                                   | —            | Forwarded to `createCollabDataPlugin`.                                                                                                               |
+| `presence`                                                                                                          | `CollabPresenceLayerProps & { enabled?: boolean }`  | mounted      | Props for the auto-mounted `<PresenceLayer>`. `enabled: false` skips it.                                                                             |
+| `notifications`                                                                                                     | `ConflictNoticeCenterProps & { enabled?: boolean }` | mounted      | Props for the auto-mounted `<ConflictNoticeCenter>`.                                                                                                 |
+
+### Provider
+
+```ts
+function CollabUIProvider(props: CollabUIProviderProps): JSX.Element;
+
+interface CollabUIProviderProps {
+  adapter: YjsSnapshotAdapter;
+  self: PeerInfo;
+  children: ReactNode;
+}
+```
+
+Wrap the editor tree in the provider directly when you want only the headless adapter plus the hooks — skip the consolidated factory entirely.
+
+### Hooks
+
+| Hook                          | Returns                                          | Notes                                                                                 |
+| ----------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `useCollabAdapter()`          | `YjsSnapshotAdapter`                             | The raw adapter instance.                                                             |
+| `useCollabStatus()`           | `ConnectionStatus`                               | Discriminated union (`connecting` / `synced` / `offline` / `reconnecting` / `error`). |
+| `useCollabSelf()`             | `PeerInfo`                                       | Local peer identity.                                                                  |
+| `useCollabIdentity()`         | `{ self, updateSelf }`                           | Use for identity-only consumers; doesn't re-render on peer / status churn.            |
+| `useCollabPeers()`            | `readonly PresenceState[]`                       | High-churn slice (peer identity + live cursor/selection) — keep its consumers small.  |
+| `useCollabConflicts()`        | `readonly ConflictEvent[]`                       | Read-only conflict queue.                                                             |
+| `useCollabConflictQueue()`    | `{ conflicts, dismissConflict, clearConflicts }` | Mutating consumer.                                                                    |
+| `useCollabCursorVisibility()` | `{ showRemoteCursors, setShowRemoteCursors }`    | Shared source of truth for the settings toggle and `PresenceLayer`.                   |
+| `useCollabMetrics(pollMs?)`   | `MetricsSnapshot \| null`                        | Polled `adapter.metrics()` snapshot. `null` on first render.                          |
+| `useCollabContext()`          | `CollabUIContextValue`                           | Full composite — re-renders on any change. Prefer the narrow hooks.                   |
+
+### Components
+
+All components live at `@anvilkit/collab-ui/components/<name>`. They consume context, so they must be rendered inside `<CollabUIProvider>` (or under a `<Studio>` that registers the consolidated factory).
+
+| Component                 | Key props                                                                                                                     |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `CollabRoomBar`           | `title?: string`, `subtitle?: string`, `roomId?: string`, `roomLink?: string`, `trailing?: ReactNode`, `className?: string`   |
+| `PeerAvatarStack`         | `maxVisible?: number` (default `5`), `className?: string`                                                                     |
+| `PresenceLayer`           | `showCursors?: boolean`, `resolveSelectionRect?: (nodeId: string) => PresenceSelectionRingRect \| null`, `className?: string` |
+| `SyncActivityIndicator`   | `latencyMs?: number`, `lastSyncAt?: string`, `lastPeerName?: string`, `className?: string`                                    |
+| `ConflictNoticeCenter`    | `formatMessage?: (event: ConflictEvent) => string`, `toasterPosition?: "top-right" \| "bottom-right" \| "top-center"`         |
+| `ForceResyncDialog`       | `open?: boolean`, `onOpenChange?: (open: boolean) => void`                                                                    |
+| `CollabSettingsPopover`   | `roomId?: string`, `roomLink?: string`                                                                                        |
+| `CollabPresencePublisher` | `root: HTMLElement`, `frameSelector?: string`                                                                                 |
+
+## Usage examples
+
+### Headless adapter + custom UI
+
+```tsx
+import {
+  createYjsAdapter,
+  createCollabDataPlugin,
+} from "@anvilkit/plugin-collab-yjs";
+import {
+  CollabUIProvider,
+  useCollabStatus,
+  useCollabPeers,
+} from "@anvilkit/collab-ui";
+
+const adapter = createYjsAdapter({ doc, awareness, peer: self });
+
+export function Editor() {
+  return (
+    <CollabUIProvider adapter={adapter} self={self}>
+      <Studio
+        puckConfig={puckConfig}
+        plugins={[
+          createCollabDataPlugin({ adapter, puckConfig, localPeer: self }),
+        ]}
+      />
+      <CustomSyncRibbon />
+    </CollabUIProvider>
+  );
+}
+
+function CustomSyncRibbon() {
+  const status = useCollabStatus();
+  const peers = useCollabPeers();
+  return (
+    <div>
+      {status.kind} · {peers.length} peer(s)
+    </div>
+  );
+}
+```
+
+### Publishing local cursor + Puck selection
+
+```tsx
+import { CollabPresencePublisher } from "@anvilkit/collab-ui/components/collab-presence-publisher";
+
+<CollabPresencePublisher
+  root={canvasRef.current!}
+  frameSelector="#puck-canvas"
+/>;
+```
+
+Mount the publisher inside `<Studio>` (so it can read Puck selection via `createUsePuck()`). It is opt-in — the data layer only publishes remote cursors.
+
+### Mirroring identity changes back to the host
+
+```tsx
+createCollabPlugin({
+  doc,
+  self: { id: profile.id, displayName: profile.name, color: profile.color },
+  onIdentityChange: (next) => {
+    profileStore.update({ name: next.displayName, color: next.color });
+  },
+  puckConfig,
+});
+```
+
+`onIdentityChange` only fires on actual change — initial mount and same-value updates are skipped.
+
+### Polled metrics for telemetry
+
+```tsx
+import { useCollabMetrics } from "@anvilkit/collab-ui";
+
+function CollabHealthBadge() {
+  const metrics = useCollabMetrics(5000);
+  if (!metrics) return null;
+  return (
+    <span>
+      p95 {metrics.syncLatencyP95Ms}ms · churn {metrics.awarenessChurn}
+    </span>
+  );
+}
+```
+
+## Notes & FAQ
+
+### Why split context into five providers?
+
+Remote cursor traffic is the highest-churn signal in the system. If all consumers read from a single context, every cursor update re-renders the status pill, the avatar stack, and the conflict toaster. Splitting `peers` into its own context keeps the high-churn signal scoped to the `<PresenceLayer>` while the rest of the UI stays still.
+
+If you genuinely need every slice in one component, use `useCollabContext()` — but be aware it re-renders on any change.
+
+### Save debouncing is on by default
+
+`saveDebounceMs: 150` wraps the adapter in `createDebouncedAdapter` before passing it to the data plugin. Only the save path is debounced — presence, status, and conflict reads still use the live adapter. Set `saveDebounceMs: 0` if the host already debounces upstream (e.g., a controlled form layer that batches keystrokes).
+
+### Headless vs consolidated factory
+
+| Use case                                                                      | Pick                                                                                                                          |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| You want a one-line integration with the default chrome.                      | `createCollabPlugin()` from this package.                                                                                     |
+| You want only the data layer (read-only viewer, custom UI, server-side sync). | `createYjsAdapter` + `createCollabDataPlugin` from `@anvilkit/plugin-collab-yjs`.                                             |
+| You want the hooks but custom components.                                     | Headless adapter + manual `<CollabUIProvider>`.                                                                               |
+| You want some of the bundled UI but not all.                                  | `createCollabPlugin()` with `presence.enabled: false` / `notifications.enabled: false` (the `collaborators` slot is always contributed — override by registering your own `collaborators` slot first). |
+
+### Cursor visibility toggle
+
+`useCollabCursorVisibility()` is the shared source of truth for the "show remote cursors" toggle. `CollabSettingsPopover` writes to it, `PresenceLayer` reads it. Don't duplicate the state in host code — read from the hook so the toggle and the overlay stay in sync.
+
+### Bundled components are slot contributions
+
+The factory registers `<PeerAvatarStack>` to the header `collaborators` slot. Slots are single-occupancy and the first registration wins per the Studio plugin contract — register your own plugin contributing the `collaborators` slot ahead of this one to override the default.
+
+### Dependency contract
+
+This package depends on `@anvilkit/plugin-collab-yjs` for its types and event streams. Hosts that don't ship realtime collab should not install it. See the realtime-collab architecture doc on the Anvilkit docs site for the SnapshotAdapter v2 contract.
+
+## Entry points
+
+In addition to the main entry, this package exposes these subpaths:
+
+| Subpath |
+|---------|
+| `@anvilkit/collab-ui` |
+| `@anvilkit/collab-ui/*` |
+| `@anvilkit/collab-ui/components/*` |
+
+## API reference
+
+Public exports from the package entry, classified by kind.
+
+| Export | Kind |
+|--------|------|
+| `createCollabPlugin` | Factory |
+| `useCollabAdapter` | Hook |
+| `useCollabConflictQueue` | Hook |
+| `useCollabConflicts` | Hook |
+| `useCollabContext` | Hook |
+| `useCollabCursorVisibility` | Hook |
+| `useCollabIdentity` | Hook |
+| `useCollabMetrics` | Hook |
+| `useCollabPeerIdentities` | Hook |
+| `useCollabPeers` | Hook |
+| `useCollabSelf` | Hook |
+| `useCollabStatus` | Hook |
+| `CollabPresencePublisher` | Component / class |
+| `CollabRoomBar` | Component / class |
+| `CollabSettingsPopover` | Component / class |
+| `CollabUII18nProvider` | Component / class |
+| `CollabUIProvider` | Component / class |
+| `ConflictNoticeCenter` | Component / class |
+| `ForceResyncDialog` | Component / class |
+| `PeerAvatarStack` | Component / class |
+| `PresenceLayer` | Component / class |
+| `SyncActivityIndicator` | Component / class |
+| `conflictKey` | Function |
+| `CollabPresenceLayerProps` | Type |
+| `CollabPresencePublisherProps` | Type |
+| `CollabRoomBarProps` | Type |
+| `CollabSelf` | Type |
+| `CollabSettingsPopoverProps` | Type |
+| `CollabUIContextValue` | Type |
+| `CollabUIProviderProps` | Type |
+| `ConflictNoticeCenterProps` | Type |
+| `CreateCollabPluginOptions` | Type |
+| `ForceResyncDialogLabels` | Type |
+| `ForceResyncDialogProps` | Type |
+| `PeerAvatarStackProps` | Type |
+| `SyncActivityIndicatorProps` | Type |
+| `SyncActivityLabels` | Type |
+
+## Resources
+
+- [Full API reference](/api)

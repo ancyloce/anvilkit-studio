@@ -1,0 +1,315 @@
+---
+title: "Design System"
+description: "Token-bound fields, theme switching, and design validation through the `<Studio>` plugin contract."
+---
+
+<div className="anvilkit-plugin-meta">
+	<code>@anvilkit/plugin-design-system</code> <span>·</span> <span>v0.1.1-rc.2</span> <span>·</span> <span>Studio</span> <span>·</span> <span>Sidebar panel</span>
+</div>
+
+## Installation
+
+Install the package and its peer dependencies:
+
+```sh
+pnpm add @anvilkit/plugin-design-system @puckeditor/core react react-dom
+```
+
+### Peer dependencies
+
+The host app must provide these versions:
+
+| Package | Range | Optional |
+|---------|-------|----------|
+| `@puckeditor/core` | `^0.21.3` | no |
+| `react` | `>=19.0.0` | no |
+| `react-dom` | `>=19.0.0` | no |
+
+## Quick start
+
+Register the plugin on the `<Studio>` shell:
+
+```tsx
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+import { Studio } from "@anvilkit/core";
+
+<Studio
+	puckConfig={config}
+	plugins={[createDesignSystemPlugin({ /* options — see the guide below */ })]}
+/>;
+```
+
+## Guide
+
+Token-bound fields, theme switching, and design validation for
+`@anvilkit/core`'s `<Studio>` shell.
+
+> 📘 **Full guide:** see [Design System plugin](https://anvilkit-studio.vercel.app/guides/design-system/)
+> on the docs site for the long-form walkthrough — token model,
+> validation hooks, theme switching, current limits.
+
+## Install
+
+```sh
+pnpm add @anvilkit/plugin-design-system
+```
+
+Peer dependencies: `@puckeditor/core@^0.21.3`, `react@>=19.0.0`,
+and `react-dom@>=19.0.0`. `@anvilkit/core` ships as a direct
+runtime dependency, so consumers don't manage its version separately.
+
+## Minimal host
+
+```tsx
+import { Studio } from "@anvilkit/core";
+import {
+  createDesignSystemPlugin,
+  createTokenColorField,
+  createTokenSpacingField,
+} from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  // Optional — deep-merged onto bundled `DEFAULT_TOKENS`.
+  tokens: {
+    primitives: { brand: { 500: "#1f6feb" } },
+  },
+});
+
+const config = {
+  components: {
+    Card: {
+      fields: {
+        bg: createTokenColorField({ label: "Background" }),
+        gap: createTokenSpacingField({ label: "Gap" }),
+      },
+      render: ({ bg, gap }) => (
+        <div
+          style={{
+            background: `var(--ak-ds-${bg.replace("color.", "").replace(".", "-")})`,
+            padding: `var(--ak-ds-space-${gap.replace("space.", "")})`,
+          }}
+        />
+      ),
+    },
+  },
+};
+
+export function App() {
+  return <Studio plugins={[designSystem]} config={config} />;
+}
+```
+
+## What the plugin contributes
+
+- **Three field factories.** `createToken{Color,Spacing,Typography}Field`
+  return Puck `CustomField<string>` shapes that store serializable token
+  refs (`color.brand.500`, `space.4`, `text.lg`, `semantic.bg`). The
+  field UI shows a swatch preview + dropdown grouped by token category.
+- **`overrides.fields` wrapper.** Mounts a `<TokenProvider>` above
+  Puck's sidebar field tree so the field factories' render fns can read
+  the resolved token tree via `useTokens()`. Composed through anvilkit's
+  curried `mergeOverrides` so it never clobbers a sibling plugin's
+  `fields` slot.
+- **Design-system rail panel.** Two tabs (Tokens · Theme) registered
+  via `ctx.registerDesignSystemPanel`. The Tokens tab lists every
+  resolved ref with a click-to-copy row; the Theme tab dispatches
+  `useThemeStore.setMode("light" | "dark" | "system")` and lets the
+  existing `use-theme-sync` propagate to chrome + Puck iframe.
+- **Off-token warnings (`onDataChange`).** Non-blocking shape-based
+  walker flags hex / rgb / hsl / oklch / px / rem literals that aren't
+  in the resolved token tree. Logged via `ctx.log("warn", …)`.
+- **Contrast gating (`onBeforePublish`).** WCAG-AA pair walker (default
+  `{ fg: "color", bg: "backgroundColor" }` and `{ fg: "color", bg:
+"background" }`) throws `StudioPluginError` with all failures attached
+  to `error.cause.failures` to abort publish.
+
+## Options
+
+`createDesignSystemPlugin(opts?: DesignSystemOptions)` — every field is
+optional, so calling it with no arguments yields the bundled defaults.
+
+```ts
+interface DesignSystemOptions {
+  tokens?: PartialDesignTokens;
+  validation?: {
+    offToken?: boolean;
+    contrast?: boolean;
+  };
+}
+```
+
+| Field                 | Type                  | Default | Purpose                                                             |
+| --------------------- | --------------------- | ------- | ------------------------------------------------------------------- |
+| `tokens`              | `PartialDesignTokens` | none    | Deep-merged onto the bundled `DEFAULT_TOKENS`.                      |
+| `validation.offToken` | `boolean`             | `true`  | Set `false` to disable the off-token `onDataChange` warning walker. |
+| `validation.contrast` | `boolean`             | `true`  | Set `false` to disable the WCAG-AA contrast `onBeforePublish` gate. |
+
+## Usage examples
+
+### Zero-config defaults
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+// No arguments — bundled DEFAULT_TOKENS, both validators on.
+const designSystem = createDesignSystemPlugin();
+```
+
+### Custom brand tokens with validators disabled
+
+```ts
+import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+
+const designSystem = createDesignSystemPlugin({
+  tokens: { primitives: { brand: { 500: "#1f6feb" } } },
+  // Silence the off-token warning + skip the WCAG-AA publish gate.
+  validation: { offToken: false, contrast: false },
+});
+```
+
+### Reading resolved tokens at runtime
+
+The field factories and the design-system panel consume the runtime helpers; a
+host building its own token-bound surface can too.
+
+```tsx
+import { useTokens } from "@anvilkit/plugin-design-system/runtime";
+
+function PrimitiveGroupCount() {
+  const tokens = useTokens();
+  return <span>{Object.keys(tokens.primitives).length} primitive groups</span>;
+}
+```
+
+## Token namespace
+
+CSS variables emitted into the host doc and the Puck iframe:
+
+| Tier      | Variables                                                             |
+| --------- | --------------------------------------------------------------------- |
+| Primitive | `--ak-ds-brand-{50..900}`, `--ak-ds-neutral-{50..900}`                |
+|           | `--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}`                              |
+|           | `--ak-ds-text-{xs,sm,base,lg,xl,2xl,3xl}`                             |
+|           | `--ak-ds-radius-{sm,md,lg}`                                           |
+| Semantic  | `--ak-ds-{bg,surface,fg,fg-muted,accent,accent-fg,border,focus-ring}` |
+
+Semantics fall back to `var(--ak-studio-*, …)` so an unthemed host
+renders identically to today.
+
+## Field ref grammar
+
+| Ref string         | Resolves to               |
+| ------------------ | ------------------------- |
+| `color.brand.500`  | `var(--ak-ds-brand-500)`  |
+| `color.neutral.50` | `var(--ak-ds-neutral-50)` |
+| `semantic.bg`      | `var(--ak-ds-bg)`         |
+| `semantic.accent`  | `var(--ak-ds-accent)`     |
+| `space.4`          | `var(--ak-ds-space-4)`    |
+| `text.lg`          | `var(--ak-ds-text-lg)`    |
+| `radius.md`        | `var(--ak-ds-radius-md)`  |
+
+## Subpath exports
+
+| Subpath                                  | Exports                                          |
+| ---------------------------------------- | ------------------------------------------------ |
+| `@anvilkit/plugin-design-system`         | Factory, field factories, runtime, tokens, panel |
+| `@anvilkit/plugin-design-system/tokens`  | React-free token tree + helpers                  |
+| `@anvilkit/plugin-design-system/runtime` | `TokenProvider`, `useTokens`, `resolveTokenRef`  |
+
+## Runtime API (`./runtime`)
+
+Token resolution helpers + React context. The field factories, the
+design-system panel, and the validation hooks all consume these; hosts
+building their own token-bound surfaces can import them too.
+
+| Export                         | Signature                                                   | Purpose                                                                                                                                                                     |
+| ------------------------------ | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TokenProvider`                | `(props: TokenProviderProps) => JSX.Element`                | Publishes the resolved token tree + validation options to context. Mounted automatically by the plugin's `overrides.fields` wrapper.                                        |
+| `useTokens()`                  | `() => DesignTokens`                                        | Read the resolved token tree inside a field/render fn.                                                                                                                      |
+| `useTokenContext()`            | `() => TokenContextValue`                                   | Full context value (tokens + validation options).                                                                                                                           |
+| `useTokenValidationOptions()`  | `() => Required<DesignSystemValidationOptions>`             | Resolved `{ offToken, contrast }` flags after defaults are applied.                                                                                                         |
+| `resolveTokenRef(ref, tokens)` | `(ref: string, tokens: DesignTokens) => ResolvedTokenRef`   | Resolve a ref string (`color.brand.500`, `semantic.bg`, `space.4`, …) into its CSS var + metadata. Unknown refs resolve to a `kind: "unknown"` result rather than throwing. |
+| `listTokenRefs(tokens)`        | `(tokens: DesignTokens) => ReadonlyArray<ResolvedTokenRef>` | Enumerate every legal ref for a token tree — used to populate the field dropdowns and the panel without each surface re-inventing the list.                                 |
+
+Category constants for grouping refs in UI: `TOKEN_CATEGORIES`
+(`["color", "semantic", "space", "text", "radius"]`), `COLOR_CATEGORIES`
+(`["color", "semantic"]`), `SPACING_CATEGORIES` (`["space"]`), and
+`TYPOGRAPHY_CATEGORIES` (`["text"]`). Types `TokenCategory`,
+`TokenRefKind`, `ResolvedTokenRef`, `TokenContextValue`, and
+`TokenProviderProps` are exported alongside.
+
+## v0.1 limits
+
+- Contrast validation parses hex + `rgb()`/`rgba()` only. `oklch()`,
+  `hsl()`, `lab()` etc. resolve as "unparseable" and are skipped — no
+  false positives, but bundled defaults (which use oklch) won't trigger
+  failures until a host overrides primitives to hex. Broader parsing is
+  tracked as a follow-up.
+- Off-token detection is shape-based; the walker flags every literal
+  shape regardless of which field produced it. Disable via
+  `opts.validation.offToken: false` if noise is a problem.
+- The DS panel ships Tokens + Theme tabs in v0.1. A Components tab is
+  deferred until a concrete spec lands for which metadata each row
+  shows.
+- **Rail tab pending in core.** The plugin registers a panel via
+  `ctx.registerDesignSystemPanel?({ render })` and the core
+  `sidebarRegistryStore.designSystemPanel` slot is populated, but the
+  `EditorTab` union + `RAIL_MODULES` table in `@anvilkit/core` don't
+  yet include a `"design-system"` entry — so the panel state is set
+  but no UI consumes it. The token-bound fields, `--ak-ds-*` CSS, and
+  validators all work today; the panel UI lands with a follow-up Phase
+  B back-fill in core.
+
+## Entry points
+
+In addition to the main entry, this package exposes these subpaths:
+
+| Subpath |
+|---------|
+| `@anvilkit/plugin-design-system` |
+| `@anvilkit/plugin-design-system/runtime` |
+| `@anvilkit/plugin-design-system/tokens` |
+
+## API reference
+
+Public exports from the package entry, classified by kind.
+
+| Export | Kind |
+|--------|------|
+| `createDesignSystemPlugin` | Factory |
+| `createTokenColorField` | Factory |
+| `createTokenSpacingField` | Factory |
+| `createTokenTypographyField` | Factory |
+| `useTokenContext` | Hook |
+| `useTokens` | Hook |
+| `useTokenValidationOptions` | Hook |
+| `TokenProvider` | Component / class |
+| `emitTokensCss` | Function |
+| `listTokenRefs` | Function |
+| `mergeTokens` | Function |
+| `resolveTokenRef` | Function |
+| `DEFAULT_TOKENS` | Constant |
+| `ColorRamp` | Type |
+| `CreateTokenColorFieldOptions` | Type |
+| `CreateTokenSpacingFieldOptions` | Type |
+| `CreateTokenTypographyFieldOptions` | Type |
+| `DarkPrimitiveOverrides` | Type |
+| `DesignSystemOptions` | Type |
+| `DesignSystemValidationOptions` | Type |
+| `DesignTokens` | Type |
+| `EmitTokensCssOptions` | Type |
+| `PartialDesignTokens` | Type |
+| `PrimitiveTokens` | Type |
+| `RadiusScale` | Type |
+| `ResolvedTokenRef` | Type |
+| `SemanticTokens` | Type |
+| `SpacingScale` | Type |
+| `TokenCategory` | Type |
+| `TokenContextValue` | Type |
+| `TokenProviderProps` | Type |
+| `TokenRefKind` | Type |
+| `TypographyScale` | Type |
+
+## Resources
+
+- [Full API reference](/api)

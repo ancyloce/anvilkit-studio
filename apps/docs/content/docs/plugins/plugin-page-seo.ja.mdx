@@ -1,0 +1,75 @@
+---
+title: "Page SEO"
+description: "Anvilkit Page SEO プラグイン。"
+---
+
+<div className="anvilkit-plugin-meta">
+	<code>@anvilkit/plugin-page-seo</code> <span>·</span> <span>v0.1.0</span> <span>·</span> <span>Studio</span> <span>·</span> <span>サイドバーパネル</span>
+</div>
+
+## インストール
+
+パッケージとその peer 依存関係をインストールします：
+
+```sh
+pnpm add @anvilkit/plugin-page-seo @anvilkit/ui @puckeditor/core react react-dom
+```
+
+### Peer 依存関係
+
+ホストアプリは以下のバージョンを提供する必要があります：
+
+| パッケージ | バージョン範囲 | 任意 |
+|---------|-------|----------|
+| `@anvilkit/ui` | `latest` | いいえ |
+| `@puckeditor/core` | `^0.21.3` | いいえ |
+| `react` | `>=19.0.0` | いいえ |
+| `react-dom` | `>=19.0.0` | いいえ |
+
+## クイックスタート
+
+`<Studio>` シェルにプラグインを登録します：
+
+```tsx
+import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
+import { Studio } from "@anvilkit/core";
+
+<Studio
+	puckConfig={config}
+	plugins={[createPageSeoPlugin({ /* オプション — 下記のガイドを参照 */ })]}
+/>;
+```
+
+## ガイド
+
+A `<Studio>` plugin (sidebar capability) that adds a **Page SEO** rail panel for
+editing a page's SEO metadata — meta title, description, OG image, canonical URL,
+and `noindex` — directly on the canonical Puck `root.props.seo` (PRD 0004 F5).
+
+```tsx
+import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
+
+<Studio puckConfig={config} plugins={[createPageSeoPlugin()]} />;
+```
+
+- **Single source of truth.** Edits dispatch an immutable `root.props.seo` update
+  (Puck `setData`), reflected in `appState.data` — the same shape the validator,
+  storage gateway, and SEO render route read.
+- **Localized.** All strings come from i18n message keys (`pageSeo.*`); no inline
+  copy.
+- **Rail seam.** Registers via the core `registerSeoPanel` seam; the panel lights
+  up under the **SEO** rail tab.
+
+Requires `@anvilkit/core` ≥ the version exposing `registerSeoPanel`.
+
+## API リファレンス
+
+パッケージエントリからの公開エクスポート（種類別に分類）。
+
+| エクスポート | 種類 |
+|--------|------|
+| `createPageSeoPlugin` | ファクトリ |
+
+## リソース
+
+- [完全な API リファレンス](/ja/api)

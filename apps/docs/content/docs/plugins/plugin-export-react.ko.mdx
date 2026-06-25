@@ -1,0 +1,388 @@
+---
+title: "React Export"
+description: "Anvilkit React Export 플러그인."
+---
+
+<div className="anvilkit-plugin-meta">
+	<code>@anvilkit/plugin-export-react</code> <span>·</span> <span>v0.1.6</span> <span>·</span> <span>내보내기</span> <span>·</span> <span>헤더 액션</span>
+</div>
+
+## 설치
+
+패키지와 해당 peer 의존성을 설치합니다:
+
+```sh
+pnpm add @anvilkit/plugin-export-react @anvilkit/core @puckeditor/core react
+```
+
+### Peer 의존성
+
+호스트 앱은 다음 버전을 제공해야 합니다:
+
+| 패키지 | 버전 범위 | 선택 |
+|---------|-------|----------|
+| `@anvilkit/core` | `^0.1.4` | 아니오 |
+| `@puckeditor/core` | `^0.21.3` | 아니오 |
+| `react` | `>=19.0.0` | 아니오 |
+
+## 빠른 시작
+
+`<Studio>` 셸에 플러그인을 등록합니다:
+
+```tsx
+import { createReactExportPlugin } from "@anvilkit/plugin-export-react";
+import { Studio } from "@anvilkit/core";
+
+<Studio
+	puckConfig={config}
+	plugins={[createReactExportPlugin({ /* 옵션 — 아래 가이드 참조 */ })]}
+/>;
+```
+
+## 가이드
+
+> **Alpha (`0.1.6`).** The surface is implemented and tested; the emitted JSX contract may still evolve before `1.0.0`.
+
+React (`.tsx` / `.jsx`) export plugin for Anvilkit Studio. Turns a normalized `PageIR` into ready-to-drop React source: component imports from `@anvilkit/<slug>` packages, JSX with serialized props, and — optionally — `import` statements for any referenced local assets so Vite / Next can hash and fingerprint them. Pair with [`@anvilkit/plugin-export-html`](../plugin-export-html/README.md) when you also need standalone HTML output.
+
+## Installation
+
+```bash
+pnpm add @anvilkit/plugin-export-react @anvilkit/core react @puckeditor/core
+```
+
+Non-optional peers: `react >=19.0.0`, `@puckeditor/core ^0.21.3`, `@anvilkit/core ^0.1.4`. `react-dom` is not required — the plugin emits source, not rendered DOM.
+
+## Quickstart
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { createReactExportPlugin } from "@anvilkit/plugin-export-react";
+import { puckDataToIR } from "@anvilkit/ir";
+import { puckConfig } from "./puck-config";
+
+const htmlExport = createHtmlExportPlugin({ inlineStyles: true });
+const reactExport = createReactExportPlugin({
+  syntax: "tsx",
+  assetStrategy: "static-import",
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+
+<Studio puckConfig={puckConfig} plugins={[htmlExport, reactExport]} />;
+```
+
+When `buildIR` is supplied, clicking "Export React" runs end-to-end and broadcasts `anvilkit:export:ready` with the `page.tsx` content; the host listens and triggers a download. Without `buildIR`, the action broadcasts `anvilkit:export:request` instead.
+
+## Core features
+
+- **TSX or JSX output** — `syntax: "tsx"` keeps return-type annotations; `"jsx"` strips them.
+- **ESM or CJS module system** — `moduleResolution: "esm"` (default) emits `import`/`export default`; `"cjs"` emits `require`/`module.exports`.
+- **Two asset strategies** — `url-prop` keeps asset URLs as strings; `static-import` rewrites local relative paths into top-of-file ES imports so bundlers can hash and fingerprint them.
+- **Deterministic imports** — `collectImports` walks the IR, maps `PascalCase` component types to `@anvilkit/<slug>` packages, and sorts the manifest for byte-stable output.
+- **AST snapshot testing** — output is parsed through `@typescript-eslint/typescript-estree` so the test suite catches shape changes while ignoring whitespace churn.
+- **Strict prop serialization** — only JSON-serializable values pass through; functions, `Date`, `Map`, `Set`, `RegExp`, `Promise`, `symbol`, `bigint`, and `undefined` are rejected with `NON_SERIALIZABLE_PROP` warnings.
+- **8-code warning channel** — typed, host-fatal-able warnings for the eight things that can go wrong at emit time.
+
+## API reference
+
+### Plugin factory
+
+```ts
+function createReactExportPlugin(opts?: ReactExportOptions): StudioPlugin;
+```
+
+Returns a `StudioPlugin` that registers one export format (`id: "react"`) and one header action (`id: "export-react"`). Plugin meta:
+
+| Field         | Value                          |
+| ------------- | ------------------------------ |
+| `id`          | `anvilkit-plugin-export-react` |
+| `name`        | `React Export`                 |
+| `coreVersion` | `^0.1.3`                       |
+
+### `ReactExportOptions`
+
+| Field              | Type                            | Default      | Purpose                                                                 |
+| ------------------ | ------------------------------- | ------------ | ----------------------------------------------------------------------- |
+| `syntax`           | `"tsx" \| "jsx"`                | `"tsx"`      | `"tsx"` keeps TypeScript return-type annotations on the page component. |
+| `moduleResolution` | `"esm" \| "cjs"`                | `"esm"`      | Module system targeted by the emitted file.                             |
+| `includeImports`   | `boolean`                       | `true`       | Set `false` if a downstream bundler injects its own imports.            |
+| `assetStrategy`    | `"static-import" \| "url-prop"` | `"url-prop"` | Asset prop rendering strategy.                                          |
+| `buildIR`          | `IRBuilder`                     | none         | When supplied, the header action runs end-to-end.                       |
+
+`REACT_EXPORT_DEFAULTS` exposes the default object for tests and snapshots. `resolveReactExportOptions(partial)` applies defaults with input validation (throws `TypeError` on bad enum values).
+
+### Direct format access
+
+```ts
+const reactFormat: ExportFormatDefinition<ReactExportOptions> = {
+  id: "react",
+  label: "React (.tsx)",
+  extension: "tsx",
+  mimeType: "text/plain",
+  run: async (ir, options, runCtx) => ({ content, filename, warnings }),
+};
+```
+
+`filename` is `page.tsx` or `page.jsx` depending on `syntax`.
+
+### Header action
+
+| Export                                           | Purpose                                                                      |
+| ------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `createExportReactHeaderAction(format, options)` | Build a header action bound to a configured format.                          |
+| `exportReactHeaderAction`                        | Default unbound action; emits `anvilkit:export:request` for hosts to handle. |
+
+Header action metadata: `id: "export-react"`, `label: "Export React"`, `icon: "code"`, `order: 110`.
+
+### Low-level emitter
+
+```ts
+function emitReact(ir: PageIR, options?: ReactExportOptions): EmitReactResult;
+
+interface EmitReactResult {
+  readonly code: string;
+  readonly imports: ImportManifest;
+  readonly warnings: readonly ExportWarning[];
+}
+```
+
+Validates IR version (`"1"`) and root node type (`"__root__"`) before emitting. Tag and attribute names are guarded by regex — invalid identifiers fall back to comment placeholders with a warning rather than emitting broken JSX.
+
+### Import collection
+
+```ts
+function collectImports(ir: PageIR): ImportManifest;
+function componentTypeToPackageSlug(type: string): string;
+
+interface ImportRecord {
+  readonly binding: string;
+  readonly source: string;
+  readonly kind: "named" | "default";
+}
+
+interface ImportManifest {
+  readonly imports: readonly ImportRecord[];
+}
+```
+
+`componentTypeToPackageSlug("Hero")` → `"@anvilkit/hero"`. The manifest is sorted by `(kind, source, binding)` for byte-stable output.
+
+### Asset planning
+
+```ts
+function collectReactAssets(
+  ir: PageIR,
+  strategy: "static-import" | "url-prop",
+  resolvers?: readonly IRAssetResolver[],
+): AssetPlan;
+
+interface AssetPlan {
+  readonly imports: readonly ImportRecord[];
+  readonly rewrites: readonly AssetRewrite[];
+}
+
+interface AssetRewrite {
+  readonly url: string;
+  readonly binding: string;
+  readonly importPath?: string;
+}
+```
+
+Asset prop keys detected: `src`, `imageUrl`, `imageSrc`, `url`, `videoUrl`, `videoSrc`, `fontUrl`, `scriptUrl`, `styleUrl`, `backgroundSrc`, `backgroundImage`, `poster`, `thumbnailSrc`.
+
+### Prop serialization
+
+```ts
+function serializeProp(
+  value: unknown,
+  context: SerializeContext,
+): SerializedProp;
+
+interface SerializedProp {
+  readonly value: string;
+  readonly warnings: readonly ExportWarning[];
+}
+```
+
+Accepts primitives, plain objects, and arrays. Rejects functions, `Date`, `Map`, `Set`, `RegExp`, `Promise`, `symbol`, `bigint`, and `undefined`.
+
+### Warning codes
+
+| Code                         | Trigger                                                                                                        | Remediation                                                                               |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `NON_SERIALIZABLE_PROP`      | Prop is or contains a function, `Date`, `Map`, `Set`, `RegExp`, `Promise`, `symbol`, `bigint`, or `undefined`. | Convert to JSON-compatible values at the source.                                          |
+| `INVALID_PROP_NAME`          | Prop key is not a valid JSX attribute name.                                                                    | Sanitize the key in the IR. The emitter drops the offending attribute.                    |
+| `INVALID_NODE_TYPE`          | Component type is not a valid JSX tag (lowercase, spaces, etc.).                                               | Use a `PascalCase` identifier. The emitter inserts a comment placeholder.                 |
+| `CJS_REQUIRES_JSX`           | `syntax: "tsx"` + `moduleResolution: "cjs"` — Node cannot `require` a `.tsx`.                                  | Compile via a TypeScript toolchain first, or switch to ESM.                               |
+| `EXTERNAL_URL_STATIC_IMPORT` | External URL (`https://` / `//` / `data:` / `file:`) on an asset prop under `static-import`.                   | Move asset into the project tree, or accept the per-prop `url-prop` fallback.             |
+| `UNSAFE_ASSET_PATH`          | Asset URL under `static-import` contains `..` traversal or unknown scheme.                                     | Sanitize the asset URL. Per-prop falls back to `url-prop`.                                |
+| `ASSET_UNRESOLVED`           | `asset://` reference unresolved by any registered resolver.                                                    | Register the resolver, or remove the unresolved asset.                                    |
+| `INVALID_OPTION_COMBINATION` | `static-import` + `includeImports: false`.                                                                     | Set `includeImports: true` or use `url-prop`. The emitter runs with `url-prop` semantics. |
+
+## Usage examples
+
+### TSX + static-import for Next.js / Vite
+
+```ts
+createReactExportPlugin({
+  syntax: "tsx",
+  moduleResolution: "esm",
+  assetStrategy: "static-import",
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+
+// Emits:
+//   import Hero from "@anvilkit/hero";
+//   import asset_42 from "./hero.jpg";
+//   export default function Page() {
+//     return <Hero src={asset_42} ... />;
+//   }
+```
+
+### Plain JSX + url-prop for a static React app
+
+```ts
+createReactExportPlugin({
+  syntax: "jsx",
+  moduleResolution: "esm",
+  assetStrategy: "url-prop",
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+
+// Emits:
+//   import Hero from "@anvilkit/hero";
+//   export default function Page() {
+//     return <Hero src="./hero.jpg" ... />;
+//   }
+```
+
+### CJS output for a tooling pipeline
+
+```ts
+// `syntax: "tsx"` + `moduleResolution: "cjs"` emits a CJS_REQUIRES_JSX warning.
+// Use jsx + cjs together if your downstream toolchain cannot read TSX.
+createReactExportPlugin({
+  syntax: "jsx",
+  moduleResolution: "cjs",
+  buildIR,
+});
+
+// Emits:
+//   const Hero = require("@anvilkit/hero").default;
+//   module.exports = function Page() {
+//     return <Hero ... />;
+//   };
+```
+
+### Host-driven export via event bus
+
+```ts
+const reactExport = createReactExportPlugin({
+  /* no buildIR */
+});
+
+studio.eventBus.on("anvilkit:export:request", async ({ formatId, options }) => {
+  if (formatId !== "react") return;
+  const ir = puckDataToIR(latestPuckData, puckConfig);
+  const result = await reactFormat.run(ir, options, { assetResolvers });
+  saveAs(new Blob([result.content], { type: "text/plain" }), result.filename);
+});
+```
+
+### Headless emit for tests / CLI
+
+```ts
+import { emitReact } from "@anvilkit/plugin-export-react";
+
+const { code, imports, warnings } = emitReact(ir, {
+  syntax: "tsx",
+  assetStrategy: "url-prop",
+});
+
+if (warnings.length > 0)
+  throw new Error(`emit warnings: ${JSON.stringify(warnings)}`);
+console.log(code);
+```
+
+## Notes & FAQ
+
+### `static-import` vs `url-prop`
+
+- **`url-prop`** (default) — assets stay as string URLs exactly as they appear in the IR. Best for quick one-off snapshots and for remote CDN URLs where no bundler rewrite is needed.
+- **`static-import`** — every asset whose URL is a relative path becomes an ES module `import` binding, and the JSX prop is rewritten to reference the binding. Vite and Next treat these imports as bundle inputs, so assets get hashed, preloaded, and fingerprinted for cache busting. External `https://…` URLs under `static-import` emit `EXTERNAL_URL_STATIC_IMPORT` and fall back to `url-prop` behavior for that single prop.
+
+### Prop serialization is strict
+
+Only JSON-compatible values reach the emitted JSX. If your component takes a `new Date(...)`, a `RegExp`, or a class instance, transform it into a plain object / string at the IR boundary — the emitter refuses to encode it. This is intentional: the emitted source must round-trip through a build pipeline that cannot resurrect class instances.
+
+### Component naming contract
+
+The plugin assumes the Anvilkit component naming convention: `PascalCase` component type in IR → `kebab-case` `@anvilkit/<slug>` package. `Hero` → `@anvilkit/hero`; `PricingMinimal` → `@anvilkit/pricing-minimal`. Custom components outside the Anvilkit naming convention will still emit but the import path may not match a real npm package. Override by post-processing the emitted code or pre-rewriting component types in the IR.
+
+### Updating AST snapshots
+
+The emitter's output is parsed through `@typescript-eslint/typescript-estree` and compared against an AST snapshot at `src/__tests__/__snapshots__/ast-contract.test.ts.snap`. Whitespace churn becomes invisible to the suite, but shape churn (a missing `ImportDeclaration`, a new `JSXAttribute`) fails loud. After a deliberate emitter change:
+
+```bash
+pnpm --filter @anvilkit/plugin-export-react test -- -u
+```
+
+Review the snapshot diff in the PR — it should look JSX-like (`ImportDeclaration`, `ExportDefaultDeclaration`, `JSXElement` children).
+
+### Alpha JSX contract
+
+The emitted JSX shape (attribute ordering, formatter quirks, comment placement) is not yet a stability contract. Consumers that diff exported source across releases should either re-format both sides or compare semantic shape via the AST.
+
+### Bundle budget and `version.ts`
+
+The main bundle is held to an **8 KB gzip** budget (`.size-limit.json`, enforced in CI). To stay under it, the plugin's version string lives in a hand-maintained `src/version.ts` constant rather than importing `package.json` (which would inline the whole JSON object). A `plugin.metadata-drift.test.ts` guard fails if `version.ts` falls out of sync with `package.json`, so bump both together when releasing.
+
+### Why `text/plain` MIME type?
+
+Browsers cannot meaningfully render `.tsx` source on download — the emitted file is for developer hand-off to a build pipeline, not direct rendering. `text/plain` ensures the download triggers in every browser without "preview as HTML" interception.
+
+### See also
+
+- [`@anvilkit/plugin-export-html`](../plugin-export-html/README.md) — standalone HTML output for the same `PageIR`.
+- The `export-pipeline` architecture doc on the Anvilkit docs site — shared export-plugin contract.
+
+## 진입점
+
+메인 진입점 외에 이 패키지는 다음 서브경로를 노출합니다:
+
+| 서브경로 |
+|---------|
+| `@anvilkit/plugin-export-react` |
+| `@anvilkit/plugin-export-react/*` |
+
+## API 레퍼런스
+
+패키지 진입점의 공개 익스포트(종류별 분류).
+
+| 익스포트 | 종류 |
+|--------|------|
+| `createExportReactHeaderAction` | 팩토리 |
+| `createReactExportPlugin` | 팩토리 |
+| `collectImports` | 함수 |
+| `collectReactAssets` | 함수 |
+| `componentTypeToPackageSlug` | 함수 |
+| `emitReact` | 함수 |
+| `exportReactHeaderAction` | 함수 |
+| `reactFormat` | 함수 |
+| `resolveReactExportOptions` | 함수 |
+| `serializeProp` | 함수 |
+| `REACT_EXPORT_DEFAULTS` | 상수 |
+| `AssetPlan` | 타입 |
+| `AssetRewrite` | 타입 |
+| `EmitReactResult` | 타입 |
+| `ImportManifest` | 타입 |
+| `ImportRecord` | 타입 |
+| `IRBuilder` | 타입 |
+| `ReactExportOptions` | 타입 |
+| `ResolvedReactExportOptions` | 타입 |
+| `SerializedProp` | 타입 |
+
+## 리소스
+
+- [전체 API 레퍼런스](/ko/api)

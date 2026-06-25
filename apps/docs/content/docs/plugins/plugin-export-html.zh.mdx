@@ -1,0 +1,292 @@
+---
+title: "HTML Export"
+description: "Anvilkit HTML Export 插件。"
+---
+
+<div className="anvilkit-plugin-meta">
+	<code>@anvilkit/plugin-export-html</code> <span>·</span> <span>v0.1.7</span> <span>·</span> <span>导出</span> <span>·</span> <span>顶栏操作</span>
+</div>
+
+## 安装
+
+安装该包及其对等依赖：
+
+```sh
+pnpm add @anvilkit/plugin-export-html @puckeditor/core react react-dom
+```
+
+### 对等依赖
+
+宿主应用必须提供以下版本：
+
+| 包 | 版本范围 | 可选 |
+|---------|-------|----------|
+| `@puckeditor/core` | `^0.21.3` | 否 |
+| `react` | `>=19.0.0` | 否 |
+| `react-dom` | `>=19.0.0` | 否 |
+
+## 快速开始
+
+在 `<Studio>` 外壳上注册该插件：
+
+```tsx
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { Studio } from "@anvilkit/core";
+
+<Studio
+	puckConfig={config}
+	plugins={[createHtmlExportPlugin({ /* 选项 —— 参见下方指南 */ })]}
+/>;
+```
+
+## 指南
+
+> **Alpha (`0.1.7`).** The package surface is implemented and tested, but the emitted HTML/CSS contract may evolve before `1.0.0`.
+
+HTML export plugin for Anvilkit Studio. Turns `PageIR` documents into standalone HTML with emitted CSS, optional asset inlining, and an opt-in Studio header action for interactive export flows when the host supplies a `buildIR` callback. The reference implementation of the Anvilkit export-plugin contract — security-hardened against hostile input by a 24-test battery in CI.
+
+## Installation
+
+```bash
+pnpm add @anvilkit/plugin-export-html @anvilkit/core react react-dom @puckeditor/core
+```
+
+Non-optional peers: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.21.3`. Only `@anvilkit/core` is a runtime dependency.
+
+## Quickstart
+
+```ts
+import { Studio } from "@anvilkit/core";
+import { puckDataToIR } from "@anvilkit/ir";
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckConfig } from "./puck-config";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Marketing page",
+  lang: "en",
+  inlineAssetThresholdBytes: 32_768,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+
+<Studio puckConfig={puckConfig} plugins={[htmlExport]} />;
+```
+
+Supplying `buildIR` lights up the "Download HTML" header action: clicking it runs the export end-to-end and emits `anvilkit:export:ready` with the resulting payload. Omit `buildIR` if the host wants to handle export itself — the action emits `anvilkit:export:request` instead.
+
+## Core features
+
+- **Standalone HTML5 output** — wrapped document with emitted `<style>`, BCP 47 `lang`, and document title.
+- **Built-in component emitters** — first-party HTML output for `hero`, `navbar`, `pricing-minimal`, `bento-grid`, `section`, `statistics`, `blog-list`, `helps`, and `logo-clouds`.
+- **Selective asset inlining** — assets below `inlineAssetThresholdBytes` are base64-inlined; larger or remote-only assets stay as URLs. Host controls the network via `fetchAsset`.
+- **Two header-action modes** — end-to-end with `buildIR` or host-driven via the `anvilkit:export:request` event.
+- **Security-hardened escaping** — `escapeHtml` and `escapeAttr` enforced by a 24-test hostile-input battery, codified by the Anvilkit plugin trust model.
+- **Direct-format access** — `htmlFormat` is exported for headless export pipelines that don't run inside Studio.
+
+## API reference
+
+### Plugin factory
+
+```ts
+function createHtmlExportPlugin(opts?: HtmlExportOptions): StudioPlugin;
+```
+
+Returns a `StudioPlugin` that registers one export format (`id: "html"`) and, when configured, one header action (`id: "export-html"`). Plugin meta:
+
+| Field         | Value                         |
+| ------------- | ----------------------------- |
+| `id`          | `anvilkit-plugin-export-html` |
+| `name`        | `HTML Export`                 |
+| `coreVersion` | `^0.1.0-alpha`                |
+
+### `HtmlExportOptions`
+
+| Field                       | Type                         | Default                                         | Purpose                                                                        |
+| --------------------------- | ---------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| `title`                     | `string`                     | from IR metadata                                | Document `<title>`.                                                            |
+| `lang`                      | `string`                     | `"en"`                                          | BCP 47 tag emitted on `<html lang="…">`.                                       |
+| `inlineStyles`              | `boolean`                    | `true`                                          | When `false`, CSS is omitted (host owns the stylesheet).                       |
+| `inlineAssetThresholdBytes` | `number`                     | `32_768`                                        | Assets ≤ threshold are base64-inlined; larger stay as URLs.                    |
+| `fetchAsset`                | `FetchAssetFn`               | none                                            | Host-supplied async asset loader. Without it, remote assets are left as URLs.  |
+| `buildIR`                   | `IRBuilder`                  | none                                            | When supplied, the header action runs the export end-to-end.                   |
+| `assetResolvers`            | `readonly IRAssetResolver[]` | none                                            | Asset resolution pipeline. Merged with any resolvers passed to `format.run()`. |
+| `headerAction`              | `boolean`                    | `true` when `buildIR` is supplied, else `false` | Contribute the "Download HTML" header action.                                  |
+
+### `FetchAssetFn`
+
+```ts
+type FetchAssetFn = (
+  url: string,
+  opts?: FetchAssetOptions,
+) => Promise<{ bytes: Uint8Array; contentType: string }>;
+
+interface FetchAssetOptions {
+  readonly maxBytes?: number;
+}
+```
+
+The default fetcher (`defaultFetchAsset`) does a Content-Length pre-check and streams the body to enforce `maxBytes`. Custom fetchers may ignore the hint, but doing so foregoes the byte cap.
+
+### `IRBuilder`
+
+```ts
+type IRBuilder = (ctx: StudioPluginContext) => PageIR | Promise<PageIR>;
+```
+
+Hosts typically implement this with `puckDataToIR(ctx.getData(), puckConfig)` from `@anvilkit/ir`.
+
+### Direct format access
+
+```ts
+const htmlFormat: ExportFormatDefinition<HtmlExportOptions> = {
+  id: "html",
+  label: "HTML",
+  extension: "html",
+  mimeType: "text/html",
+  run: async (ir, options, runCtx) => ({ content, filename, warnings }),
+};
+```
+
+Use this when running outside Studio (e.g., CLI tooling, server-rendered export endpoints).
+
+### Header action
+
+| Export                                          | Purpose                                                                      |
+| ----------------------------------------------- | ---------------------------------------------------------------------------- |
+| `createExportHtmlHeaderAction(format, options)` | Build a header action bound to a configured format.                          |
+| `exportHtmlHeaderAction`                        | Default unbound action; emits `anvilkit:export:request` for hosts to handle. |
+
+Header action metadata: `id: "export-html"`, `label: "Download HTML"`, `icon: "download"`, `order: 100`.
+
+### Event flow
+
+- `anvilkit:export:ready` — fired by the header action when `buildIR` is configured. Payload: `{ formatId: "html", content: string, filename: string, mimeType: "text/html", warnings: ExportWarning[] }`.
+- `anvilkit:export:request` — fired when `buildIR` is not configured. Payload: `{ formatId: "html", options }`. Hosts handle this by running the export with their own IR + dispatching `anvilkit:export:ready` (or by saving the result directly).
+
+## Usage examples
+
+### Standalone export with default settings
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+import { puckDataToIR } from "@anvilkit/ir";
+
+const htmlExport = createHtmlExportPlugin({
+  title: "Untitled page",
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### Inlining assets from a private S3 bucket
+
+```ts
+import { createHtmlExportPlugin } from "@anvilkit/plugin-export-html";
+
+const fetchAsset = async (url: string, opts) => {
+  const signed = await mySigner.sign(url);
+  const response = await fetch(signed.url, {
+    headers: signed.headers,
+  });
+  if (!response.ok) throw new Error(`fetch ${url} → ${response.status}`);
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (opts?.maxBytes && bytes.byteLength > opts.maxBytes) {
+    throw new Error(`asset exceeded ${opts.maxBytes} bytes`);
+  }
+  return {
+    bytes,
+    contentType:
+      response.headers.get("Content-Type") ?? "application/octet-stream",
+  };
+};
+
+createHtmlExportPlugin({
+  inlineAssetThresholdBytes: 65_536,
+  fetchAsset,
+  buildIR: (ctx) => puckDataToIR(ctx.getData(), puckConfig),
+});
+```
+
+### Host-driven export via event bus
+
+```ts
+const htmlExport = createHtmlExportPlugin({ headerAction: true });
+
+studio.eventBus.on("anvilkit:export:request", async ({ formatId, options }) => {
+  if (formatId !== "html") return;
+  const ir = puckDataToIR(latestPuckData, puckConfig);
+  const result = await htmlFormat.run(ir, options, { assetResolvers });
+  saveAs(new Blob([result.content], { type: "text/html" }), result.filename);
+});
+```
+
+### Headless export from a CLI
+
+```ts
+import { htmlFormat } from "@anvilkit/plugin-export-html";
+import { writeFileSync } from "node:fs";
+
+const result = await htmlFormat.run(
+  ir,
+  { title: "Generated", lang: "en", inlineAssetThresholdBytes: 0 },
+  { assetResolvers: [resolver] },
+);
+
+writeFileSync("dist/page.html", result.content);
+```
+
+## Notes & FAQ
+
+### Asset inlining is host-controlled
+
+The plugin never fetches the network on its own — assets only inline when the host supplies a `fetchAsset`. This keeps the export pipeline safe for sandboxed and offline environments. The pipeline order is `resolve` (via `assetResolvers`) → `inline` (if `fetchAsset` + size threshold allow) → `substitute` (replace asset IDs with data URLs).
+
+### Built-in emitter coverage
+
+The package ships first-party HTML emitters for nine component types: `hero`, `navbar`, `pricing-minimal`, `bento-grid`, `section`, `statistics`, `blog-list`, `helps`, `logo-clouds`. Components outside this set emit a warning and a stub `` comment. Pair the plugin with `@anvilkit/plugin-export-react` if you need full custom-component fidelity.
+
+### When to opt out of `headerAction`
+
+`headerAction` defaults to `true` when `buildIR` is supplied (end-to-end mode) and `false` otherwise. Set it to `true` without `buildIR` only when the host has wired an `anvilkit:export:request` listener — otherwise the user clicks "Download HTML" and nothing happens.
+
+### Escaping contract
+
+The escape contract is enforced by `security.test.ts` (24-test hostile-input battery). Custom emitters that bypass `escapeHtml` / `escapeAttr` are CI-blocked.
+
+### Alpha contract caveats
+
+The emitted HTML/CSS string is not yet a stability contract. Class names, attribute ordering, and the embedded `<style>` block may change between alpha versions. Consumers that diff exported output across releases should snapshot only the rendered page, not the raw HTML.
+
+### Bundle budget
+
+`.size-limit.json` enforces a per-package gzip cap (see `scripts/check-bundle-budget.mjs`). The export pipeline is `O(node count)` — large IRs run linearly in the number of nodes.
+
+### See also
+
+- [`@anvilkit/plugin-export-react`](../plugin-export-react/README.md) — exports the same `PageIR` as `.tsx`/`.jsx` source files for developer hand-off.
+
+## 入口点
+
+除主入口外，此包还暴露以下子路径：
+
+| 子路径 |
+|---------|
+| `@anvilkit/plugin-export-html` |
+| `@anvilkit/plugin-export-html/*` |
+
+## API 参考
+
+来自包入口的公共导出，按类型分类。
+
+| 导出 | 类型 |
+|--------|------|
+| `createExportHtmlHeaderAction` | 工厂函数 |
+| `createHtmlExportPlugin` | 工厂函数 |
+| `exportHtmlHeaderAction` | 函数 |
+| `htmlFormat` | 函数 |
+| `FetchAssetFn` | 类型 |
+| `FetchAssetOptions` | 类型 |
+| `HtmlExportOptions` | 类型 |
+| `IRBuilder` | 类型 |
+
+## 资源
+
+- [完整 API 参考](/zh/api)
