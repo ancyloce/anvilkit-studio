@@ -45,7 +45,7 @@ output
 
 
 # Docs — only the top-level engineering-plans dir. An unanchored
-# `docs/` would also swallow `apps/docs/src/content/docs/`, the
+# `docs/` would also swallow `apps/docs/content/docs/`, the
 # Starlight content collection, which has to stay tracked.
 /docs/
 
