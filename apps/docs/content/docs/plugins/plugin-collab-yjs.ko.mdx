@@ -392,7 +392,6 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 | 서브경로 |
 |---------|
 | `@anvilkit/plugin-collab-yjs` |
-| `@anvilkit/plugin-collab-yjs/*` |
 | `@anvilkit/plugin-collab-yjs/transport` |
 
 ## API 레퍼런스
@@ -405,25 +404,42 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 | `createCollabPlugin` | 팩토리 |
 | `createDebouncedAdapter` | 팩토리 |
 | `createYjsAdapter` | 팩토리 |
+| `usePuckMultiSelection` | 훅 |
 | `usePuckSelection` | 훅 |
 | `DebouncedAdapterDestroyedError` | 컴포넌트 / 클래스 |
+| `InvalidAdapterOptionsError` | 컴포넌트 / 클래스 |
 | `SnapshotCorruptedError` | 컴포넌트 / 클래스 |
 | `SnapshotNotFoundError` | 컴포넌트 / 클래스 |
 | `SnapshotPrunedError` | 컴포넌트 / 클래스 |
 | `decodeIR` | 함수 |
 | `diffSnapshots` | 함수 |
 | `encodeIR` | 함수 |
+| `getHostSharedRoot` | 함수 |
 | `hashIR` | 함수 |
+| `isManagedSharedType` | 함수 |
 | `sanitizeDisplayName` | 함수 |
+| `sanitizePresenceSelection` | 함수 |
 | `validatePeerInfo` | 함수 |
+| `validatePresenceActivity` | 함수 |
 | `validatePresenceCursor` | 함수 |
 | `validatePresenceSelection` | 함수 |
 | `validatePresenceState` | 함수 |
+| `validatePresenceViewport` | 함수 |
 | `MAX_DISPLAY_NAME_LENGTH` | 상수 |
+| `MAX_NODE_ID_LENGTH` | 상수 |
+| `MAX_SELECTION_IDS` | 상수 |
+| `MAX_VIEWPORT_ZOOM` | 상수 |
+| `MIN_VIEWPORT_ZOOM` | 상수 |
+| `PRESENCE_SCHEMA_VERSION` | 상수 |
+| `SHARED_TYPE_SUPPORT` | 상수 |
 | `AwarenessRateLimitOptions` | 타입 |
+| `CollabLogger` | 타입 |
 | `CollabPluginRuntime` | 타입 |
 | `CollabPolicy` | 타입 |
 | `ConflictEvent` | 타입 |
+| `ConflictFieldDetail` | 타입 |
+| `ConflictResolution` | 타입 |
+| `ConnectionErrorReason` | 타입 |
 | `ConnectionSource` | 타입 |
 | `ConnectionStatus` | 타입 |
 | `CreateCollabPluginOptions` | 타입 |
@@ -432,10 +448,22 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 | `MetricsSnapshot` | 타입 |
 | `PersistenceOptions` | 타입 |
 | `PolicyViolation` | 타입 |
+| `PresenceActivity` | 타입 |
+| `PresenceViewport` | 타입 |
+| `PropGuardOptions` | 타입 |
+| `ResolveConflict` | 타입 |
+| `RichPresenceState` | 타입 |
+| `RichSnapshotAdapterPresence` | 타입 |
+| `SharedTypeSupport` | 타입 |
 | `SnapshotAdapterWithMetrics` | 타입 |
+| `SnapshotPersistenceAdapter` | 타입 |
+| `SnapshotPersistenceOptions` | 타입 |
+| `UndoController` | 타입 |
+| `UndoOptions` | 타입 |
 | `ValidateRemoteIR` | 타입 |
 | `ValidationFailure` | 타입 |
 | `YjsSnapshotAdapter` | 타입 |
+| `YSharedTypeName` | 타입 |
 
 ## 리소스
 

@@ -392,7 +392,6 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 | サブパス |
 |---------|
 | `@anvilkit/plugin-collab-yjs` |
-| `@anvilkit/plugin-collab-yjs/*` |
 | `@anvilkit/plugin-collab-yjs/transport` |
 
 ## API リファレンス
@@ -405,25 +404,42 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 | `createCollabPlugin` | ファクトリ |
 | `createDebouncedAdapter` | ファクトリ |
 | `createYjsAdapter` | ファクトリ |
+| `usePuckMultiSelection` | フック |
 | `usePuckSelection` | フック |
 | `DebouncedAdapterDestroyedError` | コンポーネント / クラス |
+| `InvalidAdapterOptionsError` | コンポーネント / クラス |
 | `SnapshotCorruptedError` | コンポーネント / クラス |
 | `SnapshotNotFoundError` | コンポーネント / クラス |
 | `SnapshotPrunedError` | コンポーネント / クラス |
 | `decodeIR` | 関数 |
 | `diffSnapshots` | 関数 |
 | `encodeIR` | 関数 |
+| `getHostSharedRoot` | 関数 |
 | `hashIR` | 関数 |
+| `isManagedSharedType` | 関数 |
 | `sanitizeDisplayName` | 関数 |
+| `sanitizePresenceSelection` | 関数 |
 | `validatePeerInfo` | 関数 |
+| `validatePresenceActivity` | 関数 |
 | `validatePresenceCursor` | 関数 |
 | `validatePresenceSelection` | 関数 |
 | `validatePresenceState` | 関数 |
+| `validatePresenceViewport` | 関数 |
 | `MAX_DISPLAY_NAME_LENGTH` | 定数 |
+| `MAX_NODE_ID_LENGTH` | 定数 |
+| `MAX_SELECTION_IDS` | 定数 |
+| `MAX_VIEWPORT_ZOOM` | 定数 |
+| `MIN_VIEWPORT_ZOOM` | 定数 |
+| `PRESENCE_SCHEMA_VERSION` | 定数 |
+| `SHARED_TYPE_SUPPORT` | 定数 |
 | `AwarenessRateLimitOptions` | 型 |
+| `CollabLogger` | 型 |
 | `CollabPluginRuntime` | 型 |
 | `CollabPolicy` | 型 |
 | `ConflictEvent` | 型 |
+| `ConflictFieldDetail` | 型 |
+| `ConflictResolution` | 型 |
+| `ConnectionErrorReason` | 型 |
 | `ConnectionSource` | 型 |
 | `ConnectionStatus` | 型 |
 | `CreateCollabPluginOptions` | 型 |
@@ -432,10 +448,22 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 | `MetricsSnapshot` | 型 |
 | `PersistenceOptions` | 型 |
 | `PolicyViolation` | 型 |
+| `PresenceActivity` | 型 |
+| `PresenceViewport` | 型 |
+| `PropGuardOptions` | 型 |
+| `ResolveConflict` | 型 |
+| `RichPresenceState` | 型 |
+| `RichSnapshotAdapterPresence` | 型 |
+| `SharedTypeSupport` | 型 |
 | `SnapshotAdapterWithMetrics` | 型 |
+| `SnapshotPersistenceAdapter` | 型 |
+| `SnapshotPersistenceOptions` | 型 |
+| `UndoController` | 型 |
+| `UndoOptions` | 型 |
 | `ValidateRemoteIR` | 型 |
 | `ValidationFailure` | 型 |
 | `YjsSnapshotAdapter` | 型 |
+| `YSharedTypeName` | 型 |
 
 ## リソース
 
