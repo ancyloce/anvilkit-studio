@@ -52,3 +52,6 @@ output
 .idea/
 .gstack/
 patches/
+
+# inline-style→tailwind codemod backups
+.codemod-backups/
