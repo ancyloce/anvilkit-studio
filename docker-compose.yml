@@ -12,7 +12,7 @@ services:
     # The demo image is a Next.js standalone server that listens on PORT=3000
     # (HOSTNAME=0.0.0.0 is baked into the Dockerfile).
     ports:
-      - "3000:3000"
+      - "3002:3000"
     restart: unless-stopped
     networks:
       - anvilkit
