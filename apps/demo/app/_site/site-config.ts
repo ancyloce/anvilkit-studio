@@ -8,7 +8,7 @@
  * the route map and external links.
  */
 
-import type { DemoMessageKey } from "../../lib/i18n/messages";
+import type { DemoMessageKey } from "@/lib/i18n/messages";
 
 /**
  * The published docs site is a separate Astro app (`apps/docs`,

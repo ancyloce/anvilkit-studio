@@ -1,5 +1,5 @@
-import { updateSettings } from "../../../../../lib/page-storage/page-api";
-import { getPageStorage } from "../../../../../lib/page-store";
+import { updateSettings } from "@/lib/page-storage/page-api";
+import { getPageStorage } from "@/lib/page-store";
 
 export const runtime = "nodejs";
 

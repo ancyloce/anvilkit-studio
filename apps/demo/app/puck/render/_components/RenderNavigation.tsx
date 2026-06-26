@@ -17,7 +17,7 @@
  */
 import { useRouter } from "next/navigation";
 import { type ReactElement, type ReactNode, useEffect, useRef } from "react";
-import { isInternalPath, toRenderHref } from "../../../../lib/page-link";
+import { isInternalPath, toRenderHref } from "@/lib/page-link";
 
 export function RenderNavigation({
 	children,

@@ -13,7 +13,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { useDemoT } from "../../lib/i18n/client";
+import { useDemoT } from "@/lib/i18n/client";
 import { DemoThemeToggle } from "../demo-theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import styles from "./site.module.css";

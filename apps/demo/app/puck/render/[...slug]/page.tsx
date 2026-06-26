@@ -13,8 +13,8 @@ import type { ReactElement } from "react";
 import {
 	buildPublishedMetadata,
 	loadPublishedRender,
-} from "../../../../lib/published-render";
-import { demoConfig } from "../../../../lib/puck-demo";
+} from "@/lib/published-render";
+import { demoConfig } from "@/lib/puck-demo";
 import { RenderNavigation } from "../_components/RenderNavigation";
 
 interface PuckSlugRenderPageProps {

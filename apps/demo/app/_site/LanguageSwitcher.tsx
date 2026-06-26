@@ -14,8 +14,8 @@ import {
 	SelectValue,
 } from "@anvilkit/ui/select";
 import { Languages } from "lucide-react";
-import { useDemoLocale, useDemoT } from "../../lib/i18n/client";
-import { DEMO_LOCALES, type DemoLocale } from "../../lib/i18n/messages";
+import { useDemoLocale, useDemoT } from "@/lib/i18n/client";
+import { DEMO_LOCALES, type DemoLocale } from "@/lib/i18n/messages";
 
 /**
  * Site-wide language switcher for the marketing chrome, built from the shared

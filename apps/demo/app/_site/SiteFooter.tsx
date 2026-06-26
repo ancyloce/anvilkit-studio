@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { DemoMessageKey } from "../../lib/i18n/messages";
-import { getServerT } from "../../lib/i18n/server";
+import type { DemoMessageKey } from "@/lib/i18n/messages";
+import { getServerT } from "@/lib/i18n/server";
 import styles from "./site.module.css";
 import { DOCS_URL, GITHUB_URL } from "./site-config";
 

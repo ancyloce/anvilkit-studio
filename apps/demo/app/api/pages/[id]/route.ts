@@ -1,5 +1,5 @@
-import { deletePage, getPage } from "../../../../lib/page-storage/page-api";
-import { getPageStorage } from "../../../../lib/page-store";
+import { deletePage, getPage } from "@/lib/page-storage/page-api";
+import { getPageStorage } from "@/lib/page-store";
 
 export const runtime = "nodejs";
 

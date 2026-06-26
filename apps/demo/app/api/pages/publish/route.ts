@@ -1,5 +1,5 @@
-import { publish } from "../../../../lib/page-storage/page-api";
-import { getPageStorage } from "../../../../lib/page-store";
+import { publish } from "@/lib/page-storage/page-api";
+import { getPageStorage } from "@/lib/page-store";
 
 export const runtime = "nodejs";
 

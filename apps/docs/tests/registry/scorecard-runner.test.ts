@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
 	runScorecardForEntry,
 	type Scorecard,
-} from "../../scripts/scorecard-runner.ts";
+} from "@scripts/scorecard-runner.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const FEED_PATH = join(here, "..", "..", "src", "registry", "feed.json");

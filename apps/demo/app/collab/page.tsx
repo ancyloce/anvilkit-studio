@@ -10,8 +10,8 @@ import {
 	createDemoConfig,
 	createDemoData,
 	demoConfig,
-} from "../../lib/puck-demo";
-import { readPersistedStudioLocale } from "../../lib/studio-locale";
+} from "@/lib/puck-demo";
+import { readPersistedStudioLocale } from "@/lib/studio-locale";
 
 // The one value this demo sets: the WebSocket relay URL. Defaults to the local
 // Hocuspocus dev relay (`pnpm --filter demo relay:hocuspocus`, port 31234).

@@ -42,9 +42,9 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { useDemoIdentity } from "../../../lib/collab-identity";
-import { createCopilotSidebarPlugin } from "../../../lib/copilot-sidebar-plugin";
-import { createDemoPagesSource } from "../../../lib/demo-pages-source";
+import { useDemoIdentity } from "@/lib/collab-identity";
+import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
+import { createDemoPagesSource } from "@/lib/demo-pages-source";
 import {
 	createLazyDemoVersionHistoryPlugins,
 	getDemoAssetRegistry,
@@ -55,9 +55,9 @@ import {
 	loadAssetManager,
 	loadExportHtml,
 	loadExportReact,
-} from "../../../lib/lazy-plugins";
-import { persistPage } from "../../../lib/page-persistence";
-import { pageValidationPlugin } from "../../../lib/page-validation-plugin";
+} from "@/lib/lazy-plugins";
+import { persistPage } from "@/lib/page-persistence";
+import { pageValidationPlugin } from "@/lib/page-validation-plugin";
 import {
 	createDemoConfig,
 	createDemoData,
@@ -68,10 +68,10 @@ import {
 	demoDataSearchParam,
 	demoLayerQuickAddPlugin,
 	getDemoDataFromSearchParam,
-} from "../../../lib/puck-demo";
-import { smokeTestPlugin } from "../../../lib/smoke-test-plugin";
-import { readPersistedStudioLocale } from "../../../lib/studio-locale";
-import { tokenSwatchComponentConfig } from "../../../lib/token-swatch-component";
+} from "@/lib/puck-demo";
+import { smokeTestPlugin } from "@/lib/smoke-test-plugin";
+import { readPersistedStudioLocale } from "@/lib/studio-locale";
+import { tokenSwatchComponentConfig } from "@/lib/token-swatch-component";
 import styles from "../puck.module.css";
 
 // Plugin set (step 3.2 — pluggable lazy loading).

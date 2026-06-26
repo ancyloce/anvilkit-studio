@@ -7,7 +7,7 @@ import { cn } from "@anvilkit/ui/lib/utils";
 import { Textarea } from "@anvilkit/ui/textarea";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useDemoT } from "../../lib/i18n/client";
+import { useDemoT } from "@/lib/i18n/client";
 import styles from "./marketing.module.css";
 
 type Accent = "iris" | "ember";

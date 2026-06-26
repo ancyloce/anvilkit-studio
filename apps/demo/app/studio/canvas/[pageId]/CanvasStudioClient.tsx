@@ -26,7 +26,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@anvilkit/canvas-editor/styles.css";
-import { selectAiImageProvider } from "../../../../lib/ai-image/provider-selection";
+import { selectAiImageProvider } from "@/lib/ai-image/provider-selection";
 
 // The whole editor surface (CanvasStudio + Konva + the host toolbar/panels)
 // loads behind an ssr:false dynamic boundary so Konva and the canvas-editor

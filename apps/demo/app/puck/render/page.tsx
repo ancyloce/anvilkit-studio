@@ -20,7 +20,7 @@ import {
 	demoConfig,
 	demoDataSearchParam,
 	getDemoDataFromSearchParam,
-} from "../../../lib/puck-demo";
+} from "@/lib/puck-demo";
 import styles from "../puck.module.css";
 import { RenderNavigation } from "./_components/RenderNavigation";
 

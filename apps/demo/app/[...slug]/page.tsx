@@ -5,8 +5,8 @@ import type { ReactElement } from "react";
 import {
 	buildPublishedMetadata,
 	loadPublishedRender,
-} from "../../lib/published-render";
-import { demoConfig } from "../../lib/puck-demo";
+} from "@/lib/published-render";
+import { demoConfig } from "@/lib/puck-demo";
 
 interface SlugPageProps {
 	readonly params: Promise<{ slug: string[] }>;

@@ -6,7 +6,7 @@ import type { z } from "zod";
 import {
 	RegistryEntrySchema,
 	RegistryFeedSchema,
-} from "../../src/registry/feed.schema.mjs";
+} from "@/registry/feed.schema.mjs";
 
 type RegistryEntry = z.infer<typeof RegistryEntrySchema>;
 
