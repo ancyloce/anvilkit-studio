@@ -28,7 +28,9 @@
  * losslessly (review finding M3).
  */
 
-import type { StudioPage, StudioPageSeo } from "@/types/pages.js";
+// Relative (not @/): these types surface in the emitted .d.ts and rslib
+// rewrites alias paths only in .js, not declarations.
+import type { StudioPage, StudioPageSeo } from "../../types/pages.js";
 
 /** SEO sub-shape of a page's `root.props.seo` (mirrors `@anvilkit/schema` `PageSeo`). */
 export interface PageRootSeoInput {
