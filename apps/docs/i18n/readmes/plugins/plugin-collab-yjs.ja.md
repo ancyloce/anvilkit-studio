@@ -4,6 +4,46 @@
 
 `SnapshotAdapter` v2 契約が、Core や Puck をフォークすることなく Puck と並んでライブ CRDT 状態をホストできることを実証する、ファーストパーティの Anvilkit Studio プラグインです。[Yjs](https://github.com/yjs/yjs) と [`y-protocols/awareness`](https://github.com/yjs/y-protocols) の上に構築されており、データレイヤーのみを提供します。React の表示レイヤーには `@anvilkit/collab-ui` と組み合わせるか、公開フックの上に独自の UI を組み立ててください。
 
+## スコープ / 共有型のサポート
+
+**これは PageIR 専用の Yjs アダプターであり、汎用的な Yjs バインディングではありません。** 単一のドメインモデル——Puck の `PageIR`——をフラットアドレス指定の `Y.Map` ツリーへとミラーリングします：
+
+- ノードごとに 1 つの `Y.Map`（キーは `node:<id>`）で、そのノードのスカラーフィールドを保持します。
+- 順序付き構造のための、親ごとの `Y.Array<string>` の `childIds` リスト。
+- **JSON エンコードされたプロップ値**——各プロップはノードごとの `Y.Map` 内に `JSON.stringify` された文字列として格納されるため、プロップは CRDT にとって不透明であり、文字単位ではなくキー単位（LWW）でマージされます。
+
+したがって、バインドする Yjs 共有型は `Y.Map` と `Y.Array` の **2 つだけ** です。ネイティブの `Y.Text`、`Y.XmlElement`、`Y.XmlFragment`、および**サブドキュメント**は**スコープ外**です——これらの型の内部での共同編集を Puck エディターへ投影する公開バインディングは存在しません。（特に、リッチテキストのプロップは文字レベルの CRDT マージを得られません。プロップ値は保存のたびに丸ごと置き換えられます。）
+
+この契約はエクスポートされており、機械的にチェック可能です。そのため、ホストは散文を読む代わりにそれを使って分岐できます：
+
+```ts
+import {
+  SHARED_TYPE_SUPPORT,
+  isManagedSharedType,
+  getHostSharedRoot,
+} from "@anvilkit/plugin-collab-yjs";
+
+SHARED_TYPE_SUPPORT.model; // "page-ir"
+SHARED_TYPE_SUPPORT.managed; // ["Y.Map", "Y.Array"]
+SHARED_TYPE_SUPPORT.unsupported; // ["Y.Text", "Y.XmlElement", "Y.XmlFragment", "Y.Doc"]
+SHARED_TYPE_SUPPORT.propEncoding; // "json-string"
+
+isManagedSharedType("Y.Array"); // true
+isManagedSharedType("Y.Text"); // false
+```
+
+**エスケープハッチ。** ページと並んでネイティブの共有型が本当に必要な場合（`Y.Text` のコメントスレッド、`Y.XmlFragment` のフィールド、サブドキュメントなど）、`getHostSharedRoot(doc, namespace)` は **同一の** `Y.Doc` 上のトップレベルの `Y.Map` を返します。これは `` `${mapName}:host:${namespace}` `` の下に名前空間化されているため、アダプターが管理する 2 つのルート（レガシー blob ルートの `mapName` とネイティブツリールートの `` `${mapName}:tree` ``）と衝突することは決してありません。アダプターはそのマップを読みも書きもしません——その内容は投影された `PageIR`、スナップショット、アンドゥ、競合検出には現れません——しかし共有ドキュメント上に存在するため、Yjs は依然としてそれをレプリケートします（そしてオプトインの永続化/トランスポートも依然としてそれを運びます）。それを解釈してレンダリングするのは、完全にホストの責任です。
+
+```ts
+import { getHostSharedRoot } from "@anvilkit/plugin-collab-yjs";
+import * as Y from "yjs";
+
+// Host-owned, adapter-ignored — safe to attach any native shared type.
+const comments = getHostSharedRoot(doc, "comments");
+const thread = new Y.Text();
+comments.set("hero-1", thread);
+```
+
 ## インストール
 
 ```bash
@@ -322,6 +362,30 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 
 本番デプロイ——認証、永続的な Postgres による永続化、[Hocuspocus](https://tiptap.dev/hocuspocus) による Redis を裏付けとした水平スケールアウト——については、[`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md) のレシピに従ってください。
 
+### 本番デプロイと認可
+
+認可は**2 層**であり、プラグインは両方を信頼できる情報源として扱います——どちらも他方を置き換えるものではありません：
+
+1. **リレーレベルの認証（誰が接続してよいか）。** websocket のアップグレード自体はリレーによってゲートされます。[Hocuspocus](https://tiptap.dev/hocuspocus) では、これは `onAuthenticate({ token })` フックです——接続を拒否するには例外をスローします（ソケットをクローズします）。トークンはプロバイダーの `token` オプション（または `createManagedTransport({ token })`）を介してクライアントから転送されます。認証付きの `server.mjs` と、それに対応するクライアントの配線については [`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md) を参照してください。
+
+2. **アプリケーションレベルの認可（誰が何を編集してよいか）。** ノード単位の編集権限は、[`policy.canEdit(node, peer)`](#policy--validation-hooks) フックを通じて**クライアント側で対称的に**強制されます——すべての `save()` の前にアウトバウンドで、`validateRemoteIR` の後にインバウンドで。拒否は変更を破棄し、`onPolicyViolation` を発火します。クライアントをバイパスするピアが認可されていない更新をポリシーをすり抜けて密輸入できないよう、リレーの `onChange` フック（サーバー側の多層防御）でも同じチェックをミラーリングしてください。
+
+**リレーの認証失敗は、第一級の、区別可能な接続エラーです。** マネージドトランスポートの Hocuspocus プロバイダーが `authenticationFailed` を発行すると、それは型付きの `ConnectionStatus` として表面化します：
+
+```ts
+import type { ConnectionStatus } from "@anvilkit/plugin-collab-yjs";
+
+function onStatus(status: ConnectionStatus) {
+  if (status.kind === "error" && status.reason === "auth") {
+    // Non-recoverable without new credentials (status.recoverable === false).
+    // Prompt re-authentication rather than a blind retry.
+    promptReauth();
+  }
+}
+```
+
+`error` バリアントは、オプションの `reason: "auth" | "transport"` 判別子を持ちます（存在しない場合 ⇒ `"transport"`）。認証失敗（`reason: "auth"`）は `recoverable: false` で発行されるため、ホストは一時的な再接続インジケーターを表示する代わりに、新しい認証情報を求めるプロンプトを表示できます。それ以外のすべての接続レベルの障害は `reason: "transport"` のままです。生の `HocuspocusProvider` に対して独自の `connectionSource` を構築するホストは、その `authenticationFailed` イベントを `{ kind: "error", reason: "auth", recoverable: false }` にマッピングすることで同じ UX を得られます——[`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md) のクライアント配線の例を参照してください。
+
 ### パフォーマンス特性
 
 - **リモート編集——インクリメンタル。** リモートのプロップ編集は、触れられたノードのみを再読み込みします。並べ替え/挿入/削除は構造化されたリリンクデルタを発行するため、ライブ IR キャッシュは影響を受けた親 + 追加されたノードのみをリリンクし、触れられていないすべてのノードのすでに解析済みのプロップを再利用します。本物の全文書変更は依然として完全なガード付き再構築にフォールバックします——これは正確性のバックストップです。
@@ -334,7 +398,41 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 
 `persistence.indexedDb` と `persistence.broadcastChannel` はどちらもデフォルトで `false` です。有効にすると、各バックエンドは構築時に機能検出を行い、その API が利用できない場合（SSR、古いブラウザ、特定のテストランナー）は静かにデグレードします。クォータやスキーマの障害について知るには `persistence.onFault` を使用してください——アダプターが永続化から `Y.Doc` オブザーバーチェーンへ例外をスローすることは決してありません。
 
-スナップショットレベルの永続化（高速なタブブートストラップのための完全な状態ダンプ）と、IDB キューの保存時暗号化は延期されています。クロスオリジン / iframe の永続化は明示的にスコープ外です——`BroadcastChannel` は同一オリジンであり、それがエディターにとって正しい境界です。
+### サーバーグレードのスナップショット永続化はプラグイン可能
+
+スナップショットレベルの永続化（`Y.Doc` 内の境界のある `maxSnapshots` ウィンドウよりも長く存続する、永続的な完全状態ダンプ——高速なタブブートストラップやサーバー側の履歴ストアのため）は、組み込みのバックエンドではなく、**オプションのインジェクションポイント** です。`createYjsAdapter` に `snapshotPersistence: { adapter }` を渡します。ここで `adapter` は `SnapshotPersistenceAdapter` インターフェースを実装します：
+
+```ts
+import {
+  createYjsAdapter,
+  type SnapshotPersistenceAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+
+const backend: SnapshotPersistenceAdapter = {
+  saveSnapshot: (meta, payload) => db.put(meta.id, { meta, payload }),
+  loadSnapshot: (id) => db.get(id).then((r) => r?.payload),
+  listSnapshots: () => db.all(),
+  deleteSnapshot: (id) => db.delete(id),
+};
+
+const adapter = createYjsAdapter({
+  doc,
+  snapshotPersistence: {
+    adapter: backend,
+    // Encryption-at-rest seam — supply a real cipher pair. `decode(encode(x)) === x`.
+    encode: (payload) => cipher.encrypt(payload),
+    decode: (payload) => cipher.decrypt(payload),
+    onFault: (op, err) => telemetry.warn("snapshot-persistence", { op, err }),
+  },
+});
+
+// Hydrate the durable, full-state snapshot independently of the bounded in-Y.Doc window:
+const ir = await adapter.loadPersistedSnapshot(id);
+```
+
+`Y.Doc` 内のスナップショットストアは依然として**信頼できる情報源かつデフォルト**です——`snapshotPersistence` を指定すると、各 `save()`（自己完結型の payload + `SnapshotMeta`）と各明示的な `delete()` をバックエンドに*ミラーリングする*だけです。ミラーリングはベストエフォートです：バックエンドのスロー/リジェクトは `onFault` を通じて表面化し、`Y.Doc` 内の書き込みをブロックしたり拒否したりすることは決してありません。保持の退避（`maxSnapshots`）は意図的に**ミラーリングされません**。そのため、永続ストアは CRDT が刈り取った履歴を保持できます。`encode`/`decode` のペアは、文書化された**保存時暗号化**のシーム（アダプター自身は暗号機能を一切搭載していません）です。
+
+クロスオリジン / iframe の永続化は明示的にスコープ外です——`BroadcastChannel` は同一オリジンであり、それがエディターにとって正しい境界です。
 
 ### 関連項目
 

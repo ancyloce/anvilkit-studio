@@ -4,6 +4,46 @@
 
 一个第一方 Anvilkit Studio 插件，它证明了 `SnapshotAdapter` v2 契约能够在不分叉 Core 或 Puck 的前提下，与 Puck 一同承载实时 CRDT 状态。它构建于 [Yjs](https://github.com/yjs/yjs) 和 [`y-protocols/awareness`](https://github.com/yjs/y-protocols) 之上，仅提供数据层——请将它与 `@anvilkit/collab-ui` 搭配使用以获得 React 展示层，或在公共 Hook 之上自行组合你自己的 UI。
 
+## 范围 / 共享类型支持
+
+**这是一个仅针对 PageIR 的 Yjs 适配器，而非通用的 Yjs 绑定。** 它将单一的领域模型——Puck 的 `PageIR`——镜像为一棵扁平寻址的 `Y.Map` 树：
+
+- 每个节点一个 `Y.Map`（以 `node:<id>` 为键），保存该节点的标量字段；
+- 每个父节点一个 `Y.Array<string>` 的 `childIds` 列表，用于表示有序结构；
+- **JSON 编码的属性值**——每个属性都以 `JSON.stringify` 后的字符串形式存储在每节点的 `Y.Map` 内，因此属性对 CRDT 而言是不透明的，并以逐键方式（LWW）合并，而非逐字符合并。
+
+因此，它绑定的**唯一** Yjs 共享类型是 `Y.Map` 和 `Y.Array`。原生的 `Y.Text`、`Y.XmlElement`、`Y.XmlFragment` 以及**子文档**都**不在范围之内**——没有任何公共绑定能将这些类型内部的协作编辑投射到 Puck 编辑器中。（特别是，富文本属性不会获得字符级的 CRDT 合并；属性值会在每次保存时被整体替换。）
+
+该契约是导出的且可被机器检查的，因此宿主可以基于它进行分支判断，而无需去解读文字说明：
+
+```ts
+import {
+  SHARED_TYPE_SUPPORT,
+  isManagedSharedType,
+  getHostSharedRoot,
+} from "@anvilkit/plugin-collab-yjs";
+
+SHARED_TYPE_SUPPORT.model; // "page-ir"
+SHARED_TYPE_SUPPORT.managed; // ["Y.Map", "Y.Array"]
+SHARED_TYPE_SUPPORT.unsupported; // ["Y.Text", "Y.XmlElement", "Y.XmlFragment", "Y.Doc"]
+SHARED_TYPE_SUPPORT.propEncoding; // "json-string"
+
+isManagedSharedType("Y.Array"); // true
+isManagedSharedType("Y.Text"); // false
+```
+
+**逃生舱口。** 如果你确实需要在页面旁边使用一个原生共享类型（一个 `Y.Text` 评论线程、一个 `Y.XmlFragment` 字段、一个子文档），`getHostSharedRoot(doc, namespace)` 会在**同一个** `Y.Doc` 上返回一个顶层 `Y.Map`，其命名空间位于 `` `${mapName}:host:${namespace}` `` 之下，因此它绝不会与适配器管理的两个根冲突（旧式 blob 根 `mapName` 和原生树根 `` `${mapName}:tree` ``）。适配器从不读取或写入那个 map——它的内容不会出现在投射出的 `PageIR`、快照、撤销或冲突检测中——但由于它存在于共享文档上，Yjs 仍会复制它（并且可选启用的持久化/传输层仍会承载它）。解释并渲染它完全是宿主的责任。
+
+```ts
+import { getHostSharedRoot } from "@anvilkit/plugin-collab-yjs";
+import * as Y from "yjs";
+
+// Host-owned, adapter-ignored — safe to attach any native shared type.
+const comments = getHostSharedRoot(doc, "comments");
+const thread = new Y.Text();
+comments.set("hero-1", thread);
+```
+
 ## 安装
 
 ```bash
@@ -322,6 +362,30 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 
 对于生产部署——身份验证、持久的 Postgres 持久化，以及通过 [Hocuspocus](https://tiptap.dev/hocuspocus) 实现的 Redis 支撑的水平横向扩展——请遵循 [`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md) 中的方案。
 
+### 生产部署与授权
+
+授权分为**两层**，插件将两者都视为权威来源——两者互不替代：
+
+1. **中继层身份验证（谁可以连接）。** websocket 升级本身由中继把关。使用 [Hocuspocus](https://tiptap.dev/hocuspocus) 时，这就是 `onAuthenticate({ token })` Hook——抛出异常即可拒绝连接（它会关闭套接字）。令牌由客户端通过提供方的 `token` 选项（或 `createManagedTransport({ token })`）转发。关于经过身份验证的 `server.mjs` 以及配套的客户端接线，请参见 [`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md)。
+
+2. **应用层授权（谁可以编辑什么）。** 逐节点的编辑权限通过 [`policy.canEdit(node, peer)`](#policy--validation-hooks) Hook **在客户端且对称地**强制执行——在每次 `save()` 之前出站，在 `validateRemoteIR` 之后入站。一次拒绝会丢弃该变更并触发 `onPolicyViolation`。请在中继的 `onChange` Hook 中镜像同样的检查（服务端纵深防御），这样一个绕过客户端的对等方就无法把一个未经授权的更新偷渡过策略。
+
+**中继身份验证失败是一类一等的、可区分的连接错误。** 当托管传输层的 Hocuspocus 提供方发出 `authenticationFailed` 时，它会以一个有类型的 `ConnectionStatus` 浮现：
+
+```ts
+import type { ConnectionStatus } from "@anvilkit/plugin-collab-yjs";
+
+function onStatus(status: ConnectionStatus) {
+  if (status.kind === "error" && status.reason === "auth") {
+    // Non-recoverable without new credentials (status.recoverable === false).
+    // Prompt re-authentication rather than a blind retry.
+    promptReauth();
+  }
+}
+```
+
+`error` 变体携带一个可选的 `reason: "auth" | "transport"` 判别符（缺省 ⇒ `"transport"`）。身份验证失败（`reason: "auth"`）会以 `recoverable: false` 发出，因此宿主可以提示获取新凭据，而不是显示一个短暂的重连指示器；其他所有连接层故障都保持 `reason: "transport"`。针对一个原始 `HocuspocusProvider` 构建自定义 `connectionSource` 的宿主，应将其 `authenticationFailed` 事件映射为 `{ kind: "error", reason: "auth", recoverable: false }` 以获得相同的用户体验——参见 [`docs/hocuspocus-deployment.md`](./docs/hocuspocus-deployment.md) 中的客户端接线示例。
+
 ### 性能特征
 
 - **远程编辑——增量式。** 一次远程的属性编辑只会重新读取被触及的节点。一次重排序/插入/删除会发出一个结构化的重链接增量，因此实时 IR 缓存只重链接受影响的父节点 + 新增节点，复用每个未触及节点已解析好的属性。一次真正的整文档变更仍会回退到一次完整的受保护重建——这是正确性的后备保障。
@@ -334,7 +398,41 @@ node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 
 `persistence.indexedDb` 和 `persistence.broadcastChannel` 均默认为 `false`。启用后，每个后端会在构建时进行特性检测，并在其 API 不可用时（SSR、较旧浏览器、某些测试运行器）静默降级。使用 `persistence.onFault` 来了解配额或模式故障——适配器从不会从持久化层向 `Y.Doc` 观察者链中抛出异常。
 
-快照级持久化（用于快速标签页引导的完整状态转储）以及 IDB 队列的静态加密都被推迟。跨源 / iframe 持久化被明确排除在范围之外——`BroadcastChannel` 是同源的，而这正是编辑器的正确边界。
+### 服务端级快照持久化是可插拔的
+
+快照级持久化（一种持久的、完整状态的转储，其寿命超过 `Y.Doc` 内有界的 `maxSnapshots` 窗口——用于快速的标签页引导或服务端的历史存储）是一个**可选的注入点**，而非内置后端。向 `createYjsAdapter` 传入 `snapshotPersistence: { adapter }`，其中 `adapter` 实现 `SnapshotPersistenceAdapter` 接口：
+
+```ts
+import {
+  createYjsAdapter,
+  type SnapshotPersistenceAdapter,
+} from "@anvilkit/plugin-collab-yjs";
+
+const backend: SnapshotPersistenceAdapter = {
+  saveSnapshot: (meta, payload) => db.put(meta.id, { meta, payload }),
+  loadSnapshot: (id) => db.get(id).then((r) => r?.payload),
+  listSnapshots: () => db.all(),
+  deleteSnapshot: (id) => db.delete(id),
+};
+
+const adapter = createYjsAdapter({
+  doc,
+  snapshotPersistence: {
+    adapter: backend,
+    // Encryption-at-rest seam — supply a real cipher pair. `decode(encode(x)) === x`.
+    encode: (payload) => cipher.encrypt(payload),
+    decode: (payload) => cipher.decrypt(payload),
+    onFault: (op, err) => telemetry.warn("snapshot-persistence", { op, err }),
+  },
+});
+
+// Hydrate the durable, full-state snapshot independently of the bounded in-Y.Doc window:
+const ir = await adapter.loadPersistedSnapshot(id);
+```
+
+`Y.Doc` 内的快照存储仍然是**权威来源和默认选项**——提供 `snapshotPersistence` 只会将每次 `save()`（一份自包含的 payload + `SnapshotMeta`）和每次显式的 `delete()` *镜像*到后端。镜像是尽力而为的：后端的抛出/拒绝会通过 `onFault` 浮现，且绝不会阻塞或拒绝 `Y.Doc` 内的写入。保留驱逐（`maxSnapshots`）被刻意地**不**镜像，因此持久存储可以保留 CRDT 已经修剪掉的历史。`encode`/`decode` 对是有文档记载的**静态加密**接缝（适配器自身不附带任何加密）。
+
+跨源 / iframe 持久化被明确排除在范围之外——`BroadcastChannel` 是同源的，而这正是编辑器的正确边界。
 
 ### 另请参阅
 
