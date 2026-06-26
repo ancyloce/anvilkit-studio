@@ -34,6 +34,15 @@
 						"command": "f=$(jq -r '.tool_response.filePath // .tool_input.file_path'); case \"$f\" in *packages/plugins/*.tsx|*packages/canvas/*.tsx) ;; *) exit 0;; esac; case \"$f\" in *__tests__*|*.test.tsx|*.spec.tsx) exit 0;; esac; grep -qE '</[A-Za-z]|/>|<>' \"$f\" 2>/dev/null && ! grep -qE '^import[[:space:]]+(\\*[[:space:]]+as[[:space:]]+)?React([[:space:]]|,)' \"$f\" && { echo 'WARN: JSX but no React binding in' \"$f\" '— this package builds CLASSIC JSX (React.createElement); dist throws \"React is not defined\" at runtime and typecheck will not catch it. Add: import * as React from \"react\";' >&2; exit 2; } || true"
 					}
 				]
+			},
+			{
+				"matcher": "Edit|Write",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "biome format --write $CLAUDE_FILE_PATHS"
+					}
+				]
 			}
 		]
 	}
