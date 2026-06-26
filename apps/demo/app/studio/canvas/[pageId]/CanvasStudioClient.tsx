@@ -183,25 +183,14 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 
 	if (!initialIR) {
 		return (
-			<main
-				data-testid="canvas-studio-mount-loading"
-				style={{ padding: "1.5rem" }}
-			>
+			<main data-testid="canvas-studio-mount-loading" className="p-6">
 				Loading design…
 			</main>
 		);
 	}
 
 	return (
-		<main
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				gap: "1rem",
-				padding: "1.5rem",
-			}}
-			data-testid="canvas-studio-mount"
-		>
+		<main data-testid="canvas-studio-mount" className="flex flex-col gap-4 p-6">
 			<header>
 				<h1 style={{ fontSize: "1.25rem", margin: 0 }}>
 					Canvas Studio · page <code>{pageId}</code>

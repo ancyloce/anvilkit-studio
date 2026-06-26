@@ -1,6 +1,6 @@
 export default function Loading() {
 	return (
-		<main style={{ padding: "1.5rem" }} data-testid="canvas-page-loading">
+		<main data-testid="canvas-page-loading" className="p-6">
 			Loading canvas page…
 		</main>
 	);

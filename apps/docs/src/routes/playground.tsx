@@ -26,11 +26,7 @@ export const Route = createFileRoute("/playground")({
 });
 
 function Loading() {
-	return (
-		<div style={{ padding: "2rem", textAlign: "center" }}>
-			Loading playground…
-		</div>
-	);
+	return <div className="p-8 text-center">Loading playground…</div>;
 }
 
 function PlaygroundRoute() {

@@ -60,7 +60,7 @@ export function RenderNavigation({
 	// `display: contents` keeps the wrapper out of the layout box model so the
 	// rendered page lays out exactly as it would unwrapped.
 	return (
-		<div ref={containerRef} style={{ display: "contents" }}>
+		<div ref={containerRef} className="contents">
 			{children}
 		</div>
 	);

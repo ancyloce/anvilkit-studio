@@ -297,7 +297,7 @@ export function HomeContent({ locale }: { locale: string }) {
 					<div className="akh-inner akh-hero-grid">
 						<div>
 							<span className="akh-badge" data-hero-item>
-								<span className="akh-tag-dot" style={{ color: "#5683da" }} />
+								<span className="akh-tag-dot text-[#5683da]" />
 								{t.badgeBefore} <strong>{VERSION}</strong> {t.badgeAfter}
 							</span>
 							<p className="akh-eyebrow" data-hero-item>
@@ -359,7 +359,7 @@ export function HomeContent({ locale }: { locale: string }) {
 									<span className="akh-rail-item" />
 									<span className="akh-rail-item" />
 									<span className="akh-rail-item" />
-									<span className="akh-rail-item" style={{ width: "60%" }} />
+									<span className="akh-rail-item w-[60%]" />
 								</div>
 								<div className="akh-frame-canvas">
 									<div className="akh-canvas-block akh-canvas-block--hero" />
@@ -524,7 +524,7 @@ export function HomeContent({ locale }: { locale: string }) {
 							className="akh-grid akh-grid--2"
 							style={{ alignItems: "start" }}
 						>
-							<div className="akh-section-head" style={{ marginBottom: 0 }}>
+							<div className="akh-section-head mb-0">
 								<p className="akh-eyebrow" data-reveal-item>
 									{t.installEyebrow}
 								</p>
@@ -534,11 +534,7 @@ export function HomeContent({ locale }: { locale: string }) {
 								<p className="akh-lede" data-reveal-item>
 									{t.installBody}
 								</p>
-								<p
-									className="akh-card-body"
-									data-reveal-item
-									style={{ marginTop: 20 }}
-								>
+								<p className="akh-card-body mt-5" data-reveal-item>
 									{t.collabBefore}{" "}
 									<Link
 										to="/$"
@@ -557,7 +553,7 @@ export function HomeContent({ locale }: { locale: string }) {
 									<span className="akh-frame-dot" />
 									<span className="akh-frame-dot" />
 									<span className="akh-frame-dot" />
-									<span style={{ marginLeft: 6 }}>Terminal</span>
+									<span className="ml-[6px]">Terminal</span>
 								</div>
 								<pre>
 									<code>

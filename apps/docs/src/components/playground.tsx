@@ -704,10 +704,10 @@ export default function Playground() {
 							backgroundColor: connectionTone(collabStatus),
 						}}
 					/>
-					<span style={{ fontWeight: 500 }}>
+					<span className="font-medium">
 						{describeConnection(collabStatus)}
 					</span>
-					<span style={{ color: "#6b7280" }}>
+					<span className="text-[#6b7280]">
 						·{" "}
 						{collabMode === "relay" ? "Hocuspocus relay" : "in-memory fallback"}
 					</span>

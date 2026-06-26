@@ -1056,14 +1056,8 @@ export default function PuckEditorPage() {
 							Test-only route wiring for resolver/export end-to-end coverage.
 						</p>
 					</div>
-					<div
-						style={{
-							display: "grid",
-							gap: "0.75rem",
-							marginBottom: "1rem",
-						}}
-					>
-						<div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+					<div className="grid gap-3 mb-4">
+						<div className="flex gap-3 flex-wrap">
 							<button
 								type="button"
 								className={styles.secondaryAction}
@@ -1081,7 +1075,7 @@ export default function PuckEditorPage() {
 								Simulate rogue uploader
 							</button>
 						</div>
-						<label style={{ display: "grid", gap: "0.5rem" }}>
+						<label className="grid gap-2">
 							<span>Upload fixture image</span>
 							<input
 								data-testid="asset-manager-file-input"
@@ -1093,7 +1087,7 @@ export default function PuckEditorPage() {
 							/>
 						</label>
 						<p data-testid="asset-manager-status">{assetManagerStatus}</p>
-						<div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+						<div className="flex gap-3 flex-wrap">
 							<button
 								type="button"
 								className={styles.secondaryAction}
