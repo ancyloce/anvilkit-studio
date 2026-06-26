@@ -99,6 +99,7 @@ registerPlugins([
 - **탭 간 영속성** —— 옵트인 방식의 IndexedDB 큐 + 동일 출처 `BroadcastChannel` 릴레이. 짧은 연결 끊김을 견디며 트랜스포트를 왕복하지 않고도 같은 앱의 두 탭을 동기화합니다.
 - **심층 방어식 프레즌스 보안** —— 엄격한 색상 허용 목록, 표시 이름에 대한 제어 문자 제거, awareness 속도 제한, 그리고 적대적 피어 거부를 위한 `validateRemoteIR` 훅.
 - **강제 재동기화** —— `adapter.forceResync()`는 저장되지 않은 로컬 편집을 폐기하고 최신의 권위 있는 스냅샷을 다시 방출하여 호스트의 "폐기 후 다시 로드" 기능을 지원합니다.
+- **옵트인 로컬 실행 취소/다시 실행** —— `undo` 옵션을 제공하여 라이브 `PageIR` 트리 위에 `Y.UndoManager`를 래핑합니다. 로컬 피어의 편집만 추적되므로, `undo()`는 결코 협업자의 작업을 되돌리지 않습니다.
 
 ## API 레퍼런스
 
@@ -126,6 +127,10 @@ registerPlugins([
 | `maxSnapshots`       | `number`                    | `200`                  | 공유 `Y.Doc`에 보관되는 스냅샷의 엄격한 상한. 오래된 payload+meta 쌍은 쓰기와 동일한 트랜잭션에서 축출됩니다. 비활성화하려면 `<= 0`으로 설정하세요(권장하지 않음). |
 | `awarenessRateLimit` | `AwarenessRateLimitOptions` | `{ maxPerSecond: 30 }` | 아웃바운드 `presence.update`에 대한 토큰 버킷 제한기. 비활성화하려면 `maxPerSecond: Infinity`로 설정하세요.                                                                                  |
 | `persistence`        | `PersistenceOptions`        | 없음                 | 옵트인 방식의 IndexedDB 큐와 `BroadcastChannel` 릴레이. 각 백엔드는 기능 감지를 수행하며 SSR이나 오래된 브라우저에서는 조용히 다운그레이드합니다.                             |
+| `undo`               | `UndoOptions`               | 없음                 | 옵트인 로컬 실행 취소/다시 실행. 라이브 `PageIR` 트리 위에 `Y.UndoManager`를 래핑하고 어댑터에 `undo`/`redo`/`canUndo`/`canRedo`/`clearUndo`/`onUndoStackChange`를 노출합니다. 로컬 피어의 편집만 추적되며——원격 변경은 결코 로컬 스택에 올라가지 않습니다. |
+| `propGuards`         | `PropGuardOptions`          | 허용적               | prop 디코드 신뢰 경계에서의 한계(`maxBytes` / `maxDepth` / `maxArrayLength` / `maxNodes`). 어떤 한계라도 초과하는 prop 값은 디코드된 노드에서 폐기되며 `degraded` 메트릭으로 기록됩니다. 개방형 / 멀티테넌트 룸에서는 낮춰서 조정하세요. |
+| `resolveConflict`    | `ResolveConflict`           | 없음                 | 동일 노드, 동일 필드 prop 충돌에 대한 의미적 병합 훅. `"local"`, `"remote"`, 또는 `{ fields }`를 반환하며, `"remote"`가 아닌 결과는 공유 `Y.Doc`에 다시 기록됩니다. 마지막 쓰기 우선(last-write-wins)을 원하면 생략하세요. |
+| `snapshotPersistence`| `SnapshotPersistenceOptions`| 없음                 | 옵트인 방식의 서버급 스냅샷 미러. 각 `save()` / `delete()`를 `encode` / `decode`(저장 시 암호화) 훅과 최선 노력 방식의 `onFault`를 갖춘 `SnapshotPersistenceAdapter`로 미러링합니다. `Y.Doc` 내 저장소가 진실의 원천으로 유지됩니다. |
 
 ### `CreateCollabPluginOptions`
 
@@ -142,6 +147,7 @@ registerPlugins([
 | `inboundScheduler`      | `InboundSchedulerHandleScheduler`      | `requestAnimationFrame` / `setTimeout` | (H1) 인바운드 합치기 스케줄러를 오버라이드합니다. 브라우저에서는 기본값이 `requestAnimationFrame`, SSR/Node에서는 `setTimeout`입니다. 결정론적 테스트를 위한 것입니다——프로덕션에서는 설정하지 마세요. |
 | `inboundBudgetMs`       | `number`                               | `16`       | (H1) `requestAnimationFrame`을 사용할 수 없을 때 사용되는 폴백 인바운드 플러시 주기(ms).                                                   |
 | `replaceBatchThreshold` | `number`                               | `50`       | 이 임계값 아래에서는 노드별 `replace`를 디스패치합니다. 그 위에서는 플러그인이 단일 `setData` 호출로 폴백합니다.                                 |
+| `logger`                | `CollabLogger`                         | 없음       | 지원 중단된 별칭 경고와 트랜스포트 오류를 위한 `(level, message, meta?) => void` 훅. 생략하면 `console`로 폴백합니다. 커스텀 `onSaveError` / 트랜스포트 `onConnectionError`가 여전히 우선합니다. |
 
 ### `YjsSnapshotAdapter`
 
@@ -154,6 +160,9 @@ registerPlugins([
 | `getStatus`      | `() => ConnectionStatus`                                  | 최신 상태의 동기 읽기. React에서는 `useSyncExternalStore` 내부에서 `onStatusChange`를 사용하는 것을 권장합니다.                                             |
 | `forceResync`    | `() => Promise<PageIR \| null>`                           | 저장되지 않은 로컬 편집을 폐기하고 최신의 권위 있는 스냅샷을 다시 방출합니다. 스냅샷이 존재하지 않으면 `null`로 해결됩니다.                        |
 | `metrics`        | `() => MetricsSnapshot`                                   | 시점별 관측 가능성 스냅샷. 초 단위 폴링으로 호출해도 비용이 저렴합니다.                                                              |
+| `loadPersistedSnapshot` | `(id: string) => Promise<PageIR \| undefined>`     | 선택적 `snapshotPersistence` 백엔드로부터 스냅샷의 `PageIR`을 하이드레이트합니다(구성된 `decode`를 적용). 백엔드가 제공되지 않았거나 `id`에 대한 레코드가 없으면 `undefined`로 해결됩니다. |
+| `undo` / `redo` / `canUndo` / `canRedo` / `clearUndo` / `onUndoStackChange` | `UndoController` | 로컬 실행 취소/다시 실행 표면(`undo` 옵션이 제공된 경우에만 활성화되며, 그 외에는 비활성입니다). `clearUndo()`는 문서 전환 시 스택을 초기화하고, `onUndoStackChange(cb)`는 스택 변경 시 알림을 보내 호스트가 `canUndo()`/`canRedo()`를 다시 읽을 수 있게 합니다. |
+| `presence`       | `RichSnapshotAdapterPresence \| undefined`               | `SnapshotAdapter.presence`에서 좁혀져 `update`/`onPeerChange`가 버전 관리된 다중 선택 / 뷰포트 / 포커스된 블록 / 타이핑 필드를 완전한 타입 검사와 함께 전달합니다. |
 | `destroy`        | `() => void`                                              | 내부 구독을 해제합니다. Studio 플러그인의 `onDestroy`에 의해 자동으로 호출됩니다——커스텀 플러그인 래퍼를 빌드하는 경우에만 필요합니다. |
 
 ### `ConnectionStatus`(판별 유니온)
@@ -164,10 +173,14 @@ type ConnectionStatus =
   | { kind: "synced"; since: string }
   | { kind: "offline"; since: string; queuedEdits: number }
   | { kind: "reconnecting"; attempt: number; backoffMs: number }
-  | { kind: "error"; message: string; recoverable: boolean };
+  | { kind: "error"; message: string; recoverable: boolean; reason?: ConnectionErrorReason };
+
+type ConnectionErrorReason = "auth" | "transport" | "timeout";
 ```
 
 `queuedEdits`는 어댑터가 내부 카운터로부터 채웁니다. 호스트가 전달하는 값은 무시됩니다.
+
+`error` 변형에서 `reason`은 인증/권한 부여 실패(`"auth"`——새 자격 증명 없이는 복구할 수 없으므로 `recoverable`는 `false`)를 일반적인 트랜스포트 결함(`"transport"`)이나 연결 수립 타임아웃(`"timeout"`)과 구별합니다. 관리형 트랜스포트는 재연결 주기에 걸쳐 `reconnecting.attempt`를 증가시키고 `backoffMs`를 지터와 함께 늘리며, `synced` 시 초기화합니다.
 
 ### `ConflictEvent`
 
@@ -177,9 +190,19 @@ interface ConflictEvent {
   localPeer: PeerInfo;
   remotePeer?: PeerInfo;
   nodeIds: readonly string[];
+  fields?: readonly ConflictFieldDetail[];
   at: string;
 }
+
+interface ConflictFieldDetail {
+  nodeId: string;
+  field: string;
+  localValue: unknown;
+  remoteValue: unknown;
+}
 ```
+
+`fields`는 동일 필드 겹침에 대한 노드별, 필드별 prop 충돌을 열거하므로, 호스트는 의미적 병합을 제시하거나 `resolveConflict` 어댑터 옵션을 통해 그것들을 해결할 수 있습니다.
 
 ### `MetricsSnapshot`(선택된 필드)
 
@@ -207,17 +230,22 @@ interface ConflictEvent {
 | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `sanitizeDisplayName(value)`                                                            | `U+0000`–`U+001F` / `U+007F`를 제거하고 `MAX_DISPLAY_NAME_LENGTH`(64자)로 잘라냅니다. |
 | `validatePeerInfo(value)`                                                               | 엄격한 검증. 색상은 허용 목록과 일치해야 하며, 거부 시 피어 레코드 전체가 폐기됩니다. |
-| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | 어댑터가 사용하는 인바운드 awareness 검증기. 호스트 측 심층 방어를 위해 내보내집니다. |
+| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | 어댑터가 사용하는 인바운드 awareness 검증기. 호스트 측 심층 방어를 위해 내보내집니다. `validatePresenceState`는 더 풍부한 `RichPresenceState`(다중 선택 + 뷰포트 + 포커스된 블록 + 타이핑)를 반환합니다. |
+| `sanitizePresenceSelection(value)`                                                      | 살균하는 다중 선택 검증기——문자열이 아니거나 비어 있거나 너무 긴 id를 폐기하고 선택 전체를 거부하는 대신 `MAX_SELECTION_IDS`로 잘라냅니다. |
+| `validatePresenceViewport` / `validatePresenceActivity`                                 | 더 풍부한 프레즌스 필드를 검증합니다——뷰포트(스크롤 + 클램프된 줌)와 타이핑/활동 메타데이터. |
 | `MAX_DISPLAY_NAME_LENGTH`                                                               | `64`.                                                                                      |
+| `MAX_SELECTION_IDS` / `MAX_NODE_ID_LENGTH` / `MIN_VIEWPORT_ZOOM` / `MAX_VIEWPORT_ZOOM` / `PRESENCE_SCHEMA_VERSION` | 살균 한계와 프레즌스 payload 스키마 버전(`2`). |
 
 ### 오류
 
-- `SnapshotCorruptedError`, `SnapshotNotFoundError`, `SnapshotPrunedError` —— `load(id)`에서 던져지는 타입 지정 오류.
+- `SnapshotCorruptedError`, `SnapshotNotFoundError`, `SnapshotPrunedError` —— `load(id)`에서 던져지는 타입 지정 오류. `SnapshotCorruptedError`는 디코드된 스냅샷 payload/meta가 엄격한 검증에 실패할 때(잘못된 payload 버전, 형식이 잘못된 델타 op, 유한하지 않은 타임스탬프, 빈 id)에도 던져집니다.
 - `DebouncedAdapterDestroyedError` —— `destroy()` 이후 `createDebouncedAdapter` 인스턴스에서 메서드가 호출될 때 던져집니다.
+- `InvalidAdapterOptionsError` —— 비어 있거나 공백이거나 문자열이 아닌 `mapName`, 또는 누락된 로컬 `peer.id`에 대해 `createYjsAdapter`가 구성 시점에 던집니다.
 
 ### React 브리지
 
 - `usePuckSelection()` —— Puck의 선택된 컴포넌트를 아웃바운드 awareness 업데이트를 위한 `PresenceSelection`으로 매핑합니다. `<Puck>` 내부에 마운트된 호스트 컴포넌트 안에서 사용하세요.
+- `usePuckMultiSelection(extraNodeIds?)` —— 단일 Puck 선택(주 선택, 첫 번째)을 호스트가 추적하는 추가 id와 병합하여 다중 id `PresenceSelection`으로 만들며, 중복이 제거되고 살균되며 `MAX_SELECTION_IDS`로 제한됩니다. 병합된 선택이 비어 있으면 `null`을 반환합니다.
 
 ## 사용 예제
 

@@ -99,6 +99,7 @@ registerPlugins([
 - **跨标签页持久化** —— 可选启用的 IndexedDB 队列 + 同源 `BroadcastChannel` 中继。它能在短暂断连中存活，并且无需经传输层往返就能同步同一应用的两个标签页。
 - **纵深防御式在场安全** —— 严格的颜色允许列表、对显示名称的控制字符剥离、awareness 速率限制，以及一个用于拒绝恶意对等方的 `validateRemoteIR` Hook。
 - **强制重新同步** —— `adapter.forceResync()` 丢弃未保存的本地编辑，并重新发出最新的权威快照，以支持宿主的"丢弃并重新加载"功能。
+- **可选启用的本地撤销/重做** —— 提供 `undo` 选项以在实时的 `PageIR` 树上包装一个 `Y.UndoManager`。只有本地对等方的编辑会被跟踪，因此 `undo()` 绝不会回滚协作者的工作。
 
 ## API 参考
 
@@ -126,6 +127,10 @@ registerPlugins([
 | `maxSnapshots`       | `number`                    | `200`                  | 共享 `Y.Doc` 中保留快照的硬性上限。较旧的 payload+meta 对会在与写入相同的事务中被驱逐。设置为 `<= 0` 可禁用（不推荐）。 |
 | `awarenessRateLimit` | `AwarenessRateLimitOptions` | `{ maxPerSecond: 30 }` | 对出站 `presence.update` 的令牌桶限制器。设置 `maxPerSecond: Infinity` 可禁用。                                                                                  |
 | `persistence`        | `PersistenceOptions`        | 无                   | 可选启用的 IndexedDB 队列与 `BroadcastChannel` 中继。每个后端都会进行特性检测，并在 SSR 或较旧浏览器上静默降级。                                             |
+| `undo`               | `UndoOptions`               | 无                   | 可选启用的本地撤销/重做。在实时的 `PageIR` 树上包装一个 `Y.UndoManager`，并在适配器上暴露 `undo`/`redo`/`canUndo`/`canRedo`/`clearUndo`/`onUndoStackChange`。只有本地对等方的编辑会被跟踪——远程变更绝不会进入本地栈。 |
+| `propGuards`         | `PropGuardOptions`          | 宽松                 | 属性解码信任边界处的界限（`maxBytes` / `maxDepth` / `maxArrayLength` / `maxNodes`）。任何超出某个界限的属性值都会从解码后的节点中被丢弃，并记录为一个 `degraded` 指标。对于开放 / 多租户房间请调低。 |
+| `resolveConflict`    | `ResolveConflict`           | 无                   | 针对同节点、同字段属性冲突的语义合并 Hook。返回 `"local"`、`"remote"` 或 `{ fields }`；非 `"remote"` 的结果会被写回共享的 `Y.Doc`。省略则采用最后写入胜出。 |
+| `snapshotPersistence`| `SnapshotPersistenceOptions`| 无                   | 可选启用的服务端级快照镜像。将每次 `save()` / `delete()` 镜像到一个带 `encode` / `decode`（静态加密）Hook 和尽力而为的 `onFault` 的 `SnapshotPersistenceAdapter`。`Y.Doc` 内的存储仍是权威来源。 |
 
 ### `CreateCollabPluginOptions`
 
@@ -142,6 +147,7 @@ registerPlugins([
 | `inboundScheduler`      | `InboundSchedulerHandleScheduler`      | `requestAnimationFrame` / `setTimeout` | （H1）覆盖入站合并调度器。在浏览器中默认为 `requestAnimationFrame`，在 SSR/Node 下默认为 `setTimeout`。用于确定性测试——请勿在生产环境中设置。 |
 | `inboundBudgetMs`       | `number`                               | `16`       | （H1）回退的入站刷新节奏（以毫秒计），在 `requestAnimationFrame` 不可用时使用。                                                   |
 | `replaceBatchThreshold` | `number`                               | `50`       | 低于此阈值时进行逐节点 `replace` 派发；高于它时插件会回退为一次 `setData` 调用。                                 |
+| `logger`                | `CollabLogger`                         | 无       | 用于已弃用别名警告和传输层错误的 `(level, message, meta?) => void` Hook。省略时回退到 `console`。自定义的 `onSaveError` / 传输层的 `onConnectionError` 仍然优先。 |
 
 ### `YjsSnapshotAdapter`
 
@@ -154,6 +160,9 @@ registerPlugins([
 | `getStatus`      | `() => ConnectionStatus`                                  | 对最新状态的同步读取。在 React 中，优先在 `useSyncExternalStore` 内使用 `onStatusChange`。                                             |
 | `forceResync`    | `() => Promise<PageIR \| null>`                           | 丢弃未保存的本地编辑并重新发出最新的权威快照。若不存在快照，则解析为 `null`。                        |
 | `metrics`        | `() => MetricsSnapshot`                                   | 时间点可观测性快照。以秒级节奏轮询调用的开销很低。                                                              |
+| `loadPersistedSnapshot` | `(id: string) => Promise<PageIR \| undefined>`     | 从可选的 `snapshotPersistence` 后端水合出一个快照的 `PageIR`（应用所配置的 `decode`）。当未提供后端或后端没有 `id` 的记录时，解析为 `undefined`。 |
+| `undo` / `redo` / `canUndo` / `canRedo` / `clearUndo` / `onUndoStackChange` | `UndoController` | 本地撤销/重做接口（仅当提供了 `undo` 选项时才生效；否则为惰性）。`clearUndo()` 在文档切换时重置栈；`onUndoStackChange(cb)` 在栈发生变化时通知，以便宿主重新读取 `canUndo()`/`canRedo()`。 |
+| `presence`       | `RichSnapshotAdapterPresence \| undefined`               | 从 `SnapshotAdapter.presence` 收窄而来，因此 `update`/`onPeerChange` 携带带版本的多选 / 视口 / 聚焦块 / 键入字段，并具备完整的类型检查。 |
 | `destroy`        | `() => void`                                              | 释放内部订阅。由 Studio 插件的 `onDestroy` 自动调用——仅当你构建自定义插件包装器时才需要它。 |
 
 ### `ConnectionStatus`（可辨识联合）
@@ -164,10 +173,14 @@ type ConnectionStatus =
   | { kind: "synced"; since: string }
   | { kind: "offline"; since: string; queuedEdits: number }
   | { kind: "reconnecting"; attempt: number; backoffMs: number }
-  | { kind: "error"; message: string; recoverable: boolean };
+  | { kind: "error"; message: string; recoverable: boolean; reason?: ConnectionErrorReason };
+
+type ConnectionErrorReason = "auth" | "transport" | "timeout";
 ```
 
 `queuedEdits` 由适配器从其内部计数器填充；宿主传入的值会被忽略。
+
+在 `error` 变体上，`reason` 用于区分身份验证/授权失败（`"auth"`——在没有新凭据的情况下不可恢复，因此 `recoverable` 为 `false`）、一般性的传输层故障（`"transport"`）以及连接建立超时（`"timeout"`）。托管传输层会在多个重连周期内递增 `reconnecting.attempt` 并带抖动地增长 `backoffMs`，并在 `synced` 时重置。
 
 ### `ConflictEvent`
 
@@ -177,9 +190,19 @@ interface ConflictEvent {
   localPeer: PeerInfo;
   remotePeer?: PeerInfo;
   nodeIds: readonly string[];
+  fields?: readonly ConflictFieldDetail[];
   at: string;
 }
+
+interface ConflictFieldDetail {
+  nodeId: string;
+  field: string;
+  localValue: unknown;
+  remoteValue: unknown;
+}
 ```
+
+`fields` 枚举了同字段重叠下逐节点、逐字段的属性冲突，因此宿主可以呈现一个语义合并，或通过 `resolveConflict` 适配器选项来解决它们。
 
 ### `MetricsSnapshot`（选定字段）
 
@@ -207,17 +230,22 @@ interface ConflictEvent {
 | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `sanitizeDisplayName(value)`                                                            | 剥离 `U+0000`–`U+001F` / `U+007F` 并截断至 `MAX_DISPLAY_NAME_LENGTH`（64 个字符）。 |
 | `validatePeerInfo(value)`                                                               | 严格校验。颜色必须匹配允许列表；拒绝会丢弃整条对等方记录。 |
-| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | 适配器使用的入站 awareness 校验器；导出以供宿主侧纵深防御使用。 |
+| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | 适配器使用的入站 awareness 校验器；导出以供宿主侧纵深防御使用。`validatePresenceState` 返回更丰富的 `RichPresenceState`（多选 + 视口 + 聚焦块 + 键入）。 |
+| `sanitizePresenceSelection(value)`                                                      | 净化式的多选校验器——丢弃非字符串 / 空 / 过长的 id 并截断至 `MAX_SELECTION_IDS`，而非拒绝整个选择。 |
+| `validatePresenceViewport` / `validatePresenceActivity`                                 | 校验更丰富的在场字段——视口（滚动 + 钳制后的缩放）以及键入/活动元数据。 |
 | `MAX_DISPLAY_NAME_LENGTH`                                                               | `64`。                                                                                      |
+| `MAX_SELECTION_IDS` / `MAX_NODE_ID_LENGTH` / `MIN_VIEWPORT_ZOOM` / `MAX_VIEWPORT_ZOOM` / `PRESENCE_SCHEMA_VERSION` | 净化界限以及在场 payload 模式版本（`2`）。 |
 
 ### 错误
 
-- `SnapshotCorruptedError`、`SnapshotNotFoundError`、`SnapshotPrunedError` —— 从 `load(id)` 抛出的有类型错误。
+- `SnapshotCorruptedError`、`SnapshotNotFoundError`、`SnapshotPrunedError` —— 从 `load(id)` 抛出的有类型错误。当解码后的快照 payload/meta 未通过严格校验（payload 版本错误、增量操作格式不正确、非有限时间戳、空 id）时，也会抛出 `SnapshotCorruptedError`。
 - `DebouncedAdapterDestroyedError` —— 当在 `destroy()` 之后对一个 `createDebouncedAdapter` 实例调用方法时抛出。
+- `InvalidAdapterOptionsError` —— 在构建时由 `createYjsAdapter` 针对一个空/空白/非字符串的 `mapName` 或缺失的本地 `peer.id` 抛出。
 
 ### React 桥接
 
 - `usePuckSelection()` —— 将 Puck 选中的组件映射为 `PresenceSelection`，用于出站 awareness 更新。请在挂载于 `<Puck>` 内的宿主组件中使用。
+- `usePuckMultiSelection(extraNodeIds?)` —— 将单一的 Puck 选择（主选，置于首位）与宿主跟踪的额外 id 合并为一个多 id 的 `PresenceSelection`，去重、净化并限制到 `MAX_SELECTION_IDS`。当合并后的选择为空时返回 `null`。
 
 ## 用法示例
 

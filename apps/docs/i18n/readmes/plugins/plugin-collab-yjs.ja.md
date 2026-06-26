@@ -99,6 +99,7 @@ registerPlugins([
 - **タブ間の永続化** —— オプトインの IndexedDB キュー + 同一オリジンの `BroadcastChannel` リレー。短い切断を生き延び、トランスポートを往復することなく同じアプリの 2 つのタブを同期します。
 - **多層防御のプレゼンスセキュリティ** —— 厳格なカラー許可リスト、表示名に対する制御文字の除去、awareness のレート制限、そして敵対的なピアの拒否のための `validateRemoteIR` フック。
 - **強制再同期** —— `adapter.forceResync()` は未保存のローカル編集を破棄し、最新の権威あるスナップショットを再発行して、ホストの「破棄して再読み込み」アフォーダンスを実現します。
+- **オプトインのローカルアンドゥ/リドゥ** —— `undo` オプションを指定すると、ライブの `PageIR` ツリーの上に `Y.UndoManager` をラップします。ローカルピアの編集のみが追跡されるため、`undo()` がコラボレーターの作業をロールバックすることは決してありません。
 
 ## API リファレンス
 
@@ -126,6 +127,10 @@ registerPlugins([
 | `maxSnapshots`       | `number`                    | `200`                  | 共有 `Y.Doc` 内で保持されるスナップショットの厳格な上限。古い payload+meta のペアは書き込みと同じトランザクションで退避されます。無効にするには `<= 0` を設定します（非推奨）。 |
 | `awarenessRateLimit` | `AwarenessRateLimitOptions` | `{ maxPerSecond: 30 }` | アウトバウンドの `presence.update` に対するトークンバケットリミッター。無効にするには `maxPerSecond: Infinity` を設定します。                                                                                  |
 | `persistence`        | `PersistenceOptions`        | なし                 | オプトインの IndexedDB キューと `BroadcastChannel` リレー。各バックエンドは機能検出を行い、SSR や古いブラウザでは静かにデグレードします。                             |
+| `undo`               | `UndoOptions`               | なし                 | オプトインのローカルアンドゥ/リドゥ。ライブの `PageIR` ツリーの上に `Y.UndoManager` をラップし、アダプター上に `undo`/`redo`/`canUndo`/`canRedo`/`clearUndo`/`onUndoStackChange` を公開します。ローカルピアの編集のみが追跡されます——リモートの変更がローカルスタックに乗ることは決してありません。 |
+| `propGuards`         | `PropGuardOptions`          | 寛容                 | プロップデコードの信頼境界におけるバウンド（`maxBytes` / `maxDepth` / `maxArrayLength` / `maxNodes`）。いずれかのバウンドを超えるプロップ値は、デコードされたノードから除外され、`degraded` メトリックとして記録されます。オープンな / マルチテナントのルームでは値を絞ってください。 |
+| `resolveConflict`    | `ResolveConflict`           | なし                 | 同一ノード・同一フィールドのプロップ競合に対するセマンティックなマージフック。`"local"`、`"remote"`、または `{ fields }` を返します。`"remote"` 以外の結果は共有 `Y.Doc` に書き戻されます。ラストライトウィンズには省略します。 |
+| `snapshotPersistence`| `SnapshotPersistenceOptions`| なし                 | オプトインのサーバーグレードなスナップショットミラー。各 `save()` / `delete()` を、`encode` / `decode`（保存時暗号化）フックとベストエフォートの `onFault` を持つ `SnapshotPersistenceAdapter` にミラーリングします。`Y.Doc` 内のストアが信頼できる情報源のままです。 |
 
 ### `CreateCollabPluginOptions`
 
@@ -142,6 +147,7 @@ registerPlugins([
 | `inboundScheduler`      | `InboundSchedulerHandleScheduler`      | `requestAnimationFrame` / `setTimeout` | （H1）インバウンドの合体スケジューラーをオーバーライドします。ブラウザではデフォルトで `requestAnimationFrame`、SSR/Node では `setTimeout` になります。決定論的テスト向けです——本番環境では設定しないでください。 |
 | `inboundBudgetMs`       | `number`                               | `16`       | （H1）`requestAnimationFrame` が利用できない場合に使用される、フォールバックのインバウンドフラッシュ間隔（ミリ秒）。                                                   |
 | `replaceBatchThreshold` | `number`                               | `50`       | このしきい値を下回るとノード単位の `replace` をディスパッチします。上回るとプラグインは単一の `setData` 呼び出しにフォールバックします。                                 |
+| `logger`                | `CollabLogger`                         | なし       | 非推奨エイリアスの警告とトランスポートエラーのための `(level, message, meta?) => void` フック。省略すると `console` にフォールバックします。カスタムの `onSaveError` / トランスポートの `onConnectionError` は依然として優先されます。 |
 
 ### `YjsSnapshotAdapter`
 
@@ -154,6 +160,9 @@ registerPlugins([
 | `getStatus`      | `() => ConnectionStatus`                                  | 最新状態の同期読み取り。React では `useSyncExternalStore` 内で `onStatusChange` を使うことを推奨します。                                             |
 | `forceResync`    | `() => Promise<PageIR \| null>`                           | 未保存のローカル編集を破棄し、最新の権威あるスナップショットを再発行します。スナップショットが存在しない場合は `null` に解決します。                        |
 | `metrics`        | `() => MetricsSnapshot`                                   | 時点ごとの可観測性スナップショット。秒単位のポーリングで呼び出すコストは安価です。                                                              |
+| `loadPersistedSnapshot` | `(id: string) => Promise<PageIR \| undefined>`     | オプションの `snapshotPersistence` バックエンドからスナップショットの `PageIR` をハイドレートします（設定された `decode` を適用します）。バックエンドが指定されていない場合、または `id` のレコードがない場合は `undefined` に解決します。 |
+| `undo` / `redo` / `canUndo` / `canRedo` / `clearUndo` / `onUndoStackChange` | `UndoController` | ローカルのアンドゥ/リドゥ面（`undo` オプションが指定されたときのみアクティブで、それ以外では不活性です）。`clearUndo()` はドキュメント切り替え時にスタックをリセットします。`onUndoStackChange(cb)` はスタックの変更を通知するため、ホストは `canUndo()`/`canRedo()` を再読み取りできます。 |
+| `presence`       | `RichSnapshotAdapterPresence \| undefined`               | `SnapshotAdapter.presence` から絞り込まれており、`update`/`onPeerChange` がバージョン管理されたマルチセレクト / ビューポート / フォーカスブロック / タイピングのフィールドを完全な型チェック付きで運びます。 |
 | `destroy`        | `() => void`                                              | 内部サブスクリプションを解放します。Studio プラグインの `onDestroy` によって自動的に呼び出されます——カスタムのプラグインラッパーを構築する場合にのみ必要です。 |
 
 ### `ConnectionStatus`（判別共用体）
@@ -164,10 +173,14 @@ type ConnectionStatus =
   | { kind: "synced"; since: string }
   | { kind: "offline"; since: string; queuedEdits: number }
   | { kind: "reconnecting"; attempt: number; backoffMs: number }
-  | { kind: "error"; message: string; recoverable: boolean };
+  | { kind: "error"; message: string; recoverable: boolean; reason?: ConnectionErrorReason };
+
+type ConnectionErrorReason = "auth" | "transport" | "timeout";
 ```
 
 `queuedEdits` はアダプターが内部カウンターから設定します。ホストが渡す値は無視されます。
+
+`error` バリアントでは、`reason` が認証/認可の失敗（`"auth"` —— 新しい認証情報なしには回復不可能なため、`recoverable` は `false` です）を、一般的なトランスポート障害（`"transport"`）や接続確立のタイムアウト（`"timeout"`）と区別します。マネージドトランスポートは、再接続サイクルにわたって `reconnecting.attempt` をインクリメントし、ジッターを伴って `backoffMs` を増加させ、`synced` でリセットします。
 
 ### `ConflictEvent`
 
@@ -177,9 +190,19 @@ interface ConflictEvent {
   localPeer: PeerInfo;
   remotePeer?: PeerInfo;
   nodeIds: readonly string[];
+  fields?: readonly ConflictFieldDetail[];
   at: string;
 }
+
+interface ConflictFieldDetail {
+  nodeId: string;
+  field: string;
+  localValue: unknown;
+  remoteValue: unknown;
+}
 ```
+
+`fields` は、同一フィールドのオーバーラップについてノード単位・フィールド単位のプロップ競合を列挙するため、ホストはセマンティックなマージを提示したり、`resolveConflict` アダプターオプションを通じてそれらを解決したりできます。
 
 ### `MetricsSnapshot`（抜粋フィールド）
 
@@ -207,17 +230,22 @@ interface ConflictEvent {
 | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `sanitizeDisplayName(value)`                                                            | `U+0000`–`U+001F` / `U+007F` を除去し、`MAX_DISPLAY_NAME_LENGTH`（64 文字）に切り詰めます。 |
 | `validatePeerInfo(value)`                                                               | 厳格な検証。カラーは許可リストに一致する必要があり、拒否はピアレコード全体を破棄します。 |
-| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | アダプターが使用するインバウンドの awareness バリデーター。ホスト側の多層防御のためにエクスポートされています。 |
+| `validatePresenceState(value)` / `validatePresenceCursor` / `validatePresenceSelection` | アダプターが使用するインバウンドの awareness バリデーター。ホスト側の多層防御のためにエクスポートされています。`validatePresenceState` は、より豊富な `RichPresenceState`（マルチセレクト + ビューポート + フォーカスブロック + タイピング）を返します。 |
+| `sanitizePresenceSelection(value)`                                                      | サニタイズを行うマルチセレクトバリデーター——文字列でない / 空 / 長すぎる id を除去し、選択全体を拒否する代わりに `MAX_SELECTION_IDS` に切り詰めます。 |
+| `validatePresenceViewport` / `validatePresenceActivity`                                 | より豊富なプレゼンスフィールド——ビューポート（スクロール + クランプされたズーム）とタイピング/アクティビティのメタデータ——を検証します。 |
 | `MAX_DISPLAY_NAME_LENGTH`                                                               | `64`。                                                                                      |
+| `MAX_SELECTION_IDS` / `MAX_NODE_ID_LENGTH` / `MIN_VIEWPORT_ZOOM` / `MAX_VIEWPORT_ZOOM` / `PRESENCE_SCHEMA_VERSION` | サニタイズのバウンドと、プレゼンス payload のスキーマバージョン（`2`）。 |
 
 ### エラー
 
-- `SnapshotCorruptedError`、`SnapshotNotFoundError`、`SnapshotPrunedError` —— `load(id)` からスローされる型付きエラー。
+- `SnapshotCorruptedError`、`SnapshotNotFoundError`、`SnapshotPrunedError` —— `load(id)` からスローされる型付きエラー。`SnapshotCorruptedError` は、デコードされたスナップショットの payload/meta が厳格な検証に失敗した場合（不正な payload バージョン、不正な形式のデルタ op、非有限のタイムスタンプ、空の id）にもスローされます。
 - `DebouncedAdapterDestroyedError` —— `destroy()` の後に `createDebouncedAdapter` インスタンスでメソッドが呼び出されたときにスローされます。
+- `InvalidAdapterOptionsError` —— 空 / 空白 / 文字列でない `mapName` や、ローカルの `peer.id` の欠落に対して、`createYjsAdapter` が構築時にスローします。
 
 ### React ブリッジ
 
 - `usePuckSelection()` —— Puck の選択されたコンポーネントをアウトバウンドの awareness 更新のための `PresenceSelection` にマッピングします。`<Puck>` 内にマウントされたホストコンポーネント内で使用してください。
+- `usePuckMultiSelection(extraNodeIds?)` —— 単一の Puck 選択（プライマリ、最初）とホストが追跡する追加の id を、重複排除・サニタイズされ、`MAX_SELECTION_IDS` に制限されたマルチ id の `PresenceSelection` へとマージします。マージされた選択が空の場合は `null` を返します。
 
 ## 使用例
 
