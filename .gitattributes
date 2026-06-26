@@ -1,4 +1,29 @@
-# Git hook scripts must stay LF-terminated. This repo runs with
-# core.autocrlf=true on Windows/WSL, which would otherwise rewrite the
+# Enforce LF line endings repo-wide. Contributors run with
+# core.autocrlf=true on Windows/WSL, which would otherwise rewrite text
+# files to CRLF on checkout — producing the "LF will be replaced by CRLF"
+# warning, polluting api-snapshots, and breaking Biome's tab/LF convention.
+# `text=auto` lets Git detect text vs binary; `eol=lf` forces LF on checkout
+# regardless of autocrlf. The index is already 100% LF, so this is no-churn.
+* text=auto eol=lf
+
+# Git hook scripts must stay LF-terminated (subsumed by the rule above, kept
+# explicit): core.autocrlf=true would otherwise rewrite the
 # `#!/usr/bin/env sh` shebang to CRLF on checkout and break the hook.
 .githooks/** text eol=lf
+
+# Binary assets: never apply EOL normalization.
+*.png  -text
+*.ico  -text
+*.woff  -text
+*.woff2 -text
+*.ttf  -text
+*.otf  -text
+*.jpg  -text
+*.jpeg -text
+*.gif  -text
+*.webp -text
+*.avif -text
+*.pdf  -text
+*.mp4  -text
+*.webm -text
+*.wasm -text
