@@ -630,7 +630,7 @@ export default function PuckEditorPage() {
 			const [{ createCollabPlugin }, { createCollabStudioPlugin }] =
 				await Promise.all([
 					import("@anvilkit/collab-ui"),
-					import("../../../lib/collab-studio-plugin"),
+					import("@/lib/collab-studio-plugin"),
 				]);
 			if (cancelled) return;
 			const collabPlugin = createCollabPlugin({
