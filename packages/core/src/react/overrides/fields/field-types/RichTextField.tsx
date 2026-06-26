@@ -15,7 +15,7 @@
 import type { RichtextField as PuckRichtextField } from "@puckeditor/core";
 import { lazy, type ReactNode, Suspense, useCallback } from "react";
 
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 const RichTextEditor = lazy(() => import("./RichTextEditor"));

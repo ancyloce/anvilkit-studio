@@ -7,7 +7,7 @@
 import type { FieldProps, SlotField as PuckSlotField } from "@puckeditor/core";
 import { type ReactNode } from "react";
 
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 interface SlotFieldRendererProps extends FieldProps<PuckSlotField, unknown> {

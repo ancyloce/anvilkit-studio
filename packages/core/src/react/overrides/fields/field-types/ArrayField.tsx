@@ -42,7 +42,7 @@ import {
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
 
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import { ExternalField } from "./ExternalField";
 import { NumberField } from "./NumberField";
 import { RadioField } from "./RadioField";

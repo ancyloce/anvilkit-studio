@@ -22,7 +22,7 @@ import { ScrollArea } from "@/primitives/scroll-area";
 import { Spinner } from "@/primitives/spinner";
 import { useMsg } from "@/state/editor-i18n-context";
 
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 interface ExternalFieldRendererProps

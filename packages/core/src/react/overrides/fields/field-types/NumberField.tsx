@@ -15,7 +15,7 @@ import { type ReactNode, useCallback } from "react";
 
 import { Input } from "@/primitives/input";
 
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 import { type ParseResult, useLocalFieldValue } from "./use-local-field-value";
 

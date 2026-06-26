@@ -24,7 +24,7 @@ import {
 } from "@/primitives/select";
 
 import { useMsg } from "@/state/editor-i18n-context";
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import {
 	findOptionIndex,
 	type OptionValue,

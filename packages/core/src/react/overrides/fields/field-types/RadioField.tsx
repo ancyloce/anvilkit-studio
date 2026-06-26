@@ -19,7 +19,7 @@ import {
 	ToggleGroup,
 } from "@/primitives/vendor/animate-ui/components/base/toggle-group";
 
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import {
 	findOptionIndex,
 	type OptionValue,

@@ -19,7 +19,7 @@ import { cloneElement, isValidElement, type ReactNode } from "react";
 
 import { Card, CardContent } from "@/primitives/card";
 import { cn } from "@/shared/cn";
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 
 interface ObjectFieldRendererProps
 	extends FieldProps<

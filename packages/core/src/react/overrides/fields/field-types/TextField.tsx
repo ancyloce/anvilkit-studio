@@ -6,7 +6,7 @@ import type { FieldProps, TextField as PuckTextField } from "@puckeditor/core";
 import { type ReactNode, useCallback } from "react";
 
 import { Input } from "@/primitives/input";
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import { useLocalFieldValue } from "./use-local-field-value";
 
 export interface FieldRendererProps<F, V> extends FieldProps<F, V> {

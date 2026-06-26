@@ -10,7 +10,7 @@ import { type ReactNode, useCallback } from "react";
 
 import { Textarea } from "@/primitives/textarea";
 
-import { FieldLabel } from "../../layout/FieldLabel";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 import { useLocalFieldValue } from "./use-local-field-value";
 
