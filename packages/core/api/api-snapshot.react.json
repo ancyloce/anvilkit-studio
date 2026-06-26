@@ -5286,7 +5286,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
 							"qualifiedName": "Data"
 						},
 						"typeArguments": [
@@ -5300,7 +5300,7 @@
 									"type": "reference",
 									"target": {
 										"packageName": "@puckeditor/core",
-										"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+										"packagePath": "dist/actions-Csn3gOP8.d.ts",
 										"qualifiedName": "ExtractConfigParams"
 									},
 									"typeArguments": [
@@ -5327,7 +5327,7 @@
 									"type": "reference",
 									"target": {
 										"packageName": "@puckeditor/core",
-										"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+										"packagePath": "dist/actions-Csn3gOP8.d.ts",
 										"qualifiedName": "ExtractConfigParams"
 									},
 									"typeArguments": [
@@ -5895,7 +5895,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
 							"qualifiedName": "OnAction"
 						},
 						"typeArguments": [
@@ -5903,7 +5903,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
 									"qualifiedName": "Data"
 								},
 								"typeArguments": [
@@ -5917,7 +5917,7 @@
 											"type": "reference",
 											"target": {
 												"packageName": "@puckeditor/core",
-												"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+												"packagePath": "dist/actions-Csn3gOP8.d.ts",
 												"qualifiedName": "ExtractConfigParams"
 											},
 											"typeArguments": [
@@ -5944,7 +5944,7 @@
 											"type": "reference",
 											"target": {
 												"packageName": "@puckeditor/core",
-												"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+												"packagePath": "dist/actions-Csn3gOP8.d.ts",
 												"qualifiedName": "ExtractConfigParams"
 											},
 											"typeArguments": [
@@ -6086,7 +6086,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"packagePath": "dist/actions-Csn3gOP8.d.ts",
 													"qualifiedName": "Data"
 												},
 												"typeArguments": [
@@ -6100,7 +6100,7 @@
 															"type": "reference",
 															"target": {
 																"packageName": "@puckeditor/core",
-																"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+																"packagePath": "dist/actions-Csn3gOP8.d.ts",
 																"qualifiedName": "ExtractConfigParams"
 															},
 															"typeArguments": [
@@ -6480,7 +6480,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"packagePath": "dist/actions-Csn3gOP8.d.ts",
 													"qualifiedName": "Data"
 												},
 												"typeArguments": [
@@ -6494,7 +6494,7 @@
 															"type": "reference",
 															"target": {
 																"packageName": "@puckeditor/core",
-																"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+																"packagePath": "dist/actions-Csn3gOP8.d.ts",
 																"qualifiedName": "ExtractConfigParams"
 															},
 															"typeArguments": [
@@ -6614,7 +6614,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"packagePath": "dist/actions-Csn3gOP8.d.ts",
 													"qualifiedName": "Data"
 												},
 												"name": "Data",
@@ -6738,7 +6738,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
 									"qualifiedName": "Overrides"
 								},
 								"typeArguments": [
@@ -6914,7 +6914,7 @@
 										"type": "reference",
 										"target": {
 											"packageName": "@puckeditor/core",
-											"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+											"packagePath": "dist/actions-Csn3gOP8.d.ts",
 											"qualifiedName": "Plugin"
 										},
 										"typeArguments": [
@@ -7242,7 +7242,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
 									"qualifiedName": "UiState"
 								},
 								"name": "UiState",
@@ -7290,7 +7290,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
 							"qualifiedName": "Viewports"
 						},
 						"name": "Viewports",
@@ -7353,7 +7353,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -7364,7 +7364,7 @@
 						"type": "reference",
 						"target": {
 							"packageName": "@puckeditor/core",
-							"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+							"packagePath": "dist/actions-Csn3gOP8.d.ts",
 							"qualifiedName": "Config"
 						},
 						"name": "PuckConfig",
@@ -9247,7 +9247,7 @@
 												"type": "reference",
 												"target": {
 													"packageName": "@puckeditor/core",
-													"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+													"packagePath": "dist/actions-Csn3gOP8.d.ts",
 													"qualifiedName": "Overrides"
 												},
 												"name": "Overrides",
@@ -9274,7 +9274,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
 									"qualifiedName": "Overrides"
 								},
 								"name": "PuckOverrides",
@@ -9370,7 +9370,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
@@ -9380,7 +9380,7 @@
 								"type": "reference",
 								"target": {
 									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-C3e2nJ9v.d.ts",
+									"packagePath": "dist/actions-Csn3gOP8.d.ts",
 									"qualifiedName": "Config"
 								},
 								"name": "Config",
