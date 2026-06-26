@@ -41,7 +41,7 @@ import { Studio } from "@anvilkit/core";
 
 ## 指南
 
-> **Alpha（`0.1.7`）。** 顶栏操作以及 diff/apply 引擎已稳定。侧边栏面板插槽贡献被推迟，直到 `StudioPluginContext` 暴露侧边栏注册 API。
+> **Alpha（`0.1.7`）。** 顶栏操作以及 diff/apply 引擎已稳定。该插件还可以通过受支持的 `ctx.registerHistoryPanel` 插槽贡献 StudioSidebar 的 `history` 面板 —— 传入 `renderPanel` 选项（参见[侧边栏历史面板](#sidebar-history-panel)）。
 
 Anvilkit Studio 的无界面版本历史插件。快照持久化被委托给宿主提供的 `SnapshotAdapter`，因此插件本身不附带任何 I/O —— 只有 diff/apply 引擎、顶栏操作、可选的 UI 基元，以及用于测试和演示的参考适配器。
 
@@ -79,13 +79,13 @@ const plugin = createVersionHistoryPlugin({
 
 ## 核心特性
 
-- **适配器驱动的持久化** —— 插件定义契约；宿主实现 `save` / `list` / `load` / `delete?`，并完全掌控存储（内存、localStorage、Firestore、S3，……）。
+- **适配器驱动的持久化** —— 插件定义契约；宿主实现 `save` / `list` / `load` / `delete?`（外加可选的 `deleteMany?` / `exportAll?` / `importAll?`，用于批量清理与可移植性），并完全掌控存储（内存、localStorage、Firestore、S3，……）。
 - **确定性 diff/apply 引擎** —— `diffIR(a, b)` 产生一个冻结的 `IRDiff`；`applyDiff(a, diff)` 可以往返还原。
 - **可选 UI** —— `/ui` 上提供五个组件，供希望获得开箱即用版本历史的宿主使用。默认导出不会导入它们中的任何一个，因此无界面消费者无需为 UI 渲染付出任何成本。
 - **FIFO 淘汰** —— 当达到容量上限时，`maxSnapshots` 会自动删除最旧的快照（需要 `adapter.delete`）。
 - **参考适配器** —— `inMemoryAdapter()` 用于测试，`localStorageAdapter({ namespace })` 用于演示。
 - **适配器测试套件** —— `runAdapterContract` 与参考适配器使用的契约相同；消费者可以据此校验自己的实现。
-- **打包预算** —— 通过 `scripts/check-bundle-budget.mjs` 在 CI 中强制执行 8 KB gzipped。
+- **打包预算** —— 通过 `scripts/check-bundle-budget.mjs` 在 CI 中强制执行约 10 KB gzipped 的入口块预算。
 
 ## API 参考
 
@@ -99,10 +99,36 @@ function createVersionHistoryPlugin(
 interface CreateVersionHistoryPluginOptions {
   readonly adapter: SnapshotAdapter;
   readonly maxSnapshots?: number;
+  /** Puck `Data` → `PageIR` bridge so "Save snapshot" works in a real `<Studio>` session. */
+  readonly buildIR?: (data: unknown) => PageIR | null | Promise<PageIR | null>;
+  /** Render the StudioSidebar `history` panel body — see below. */
+  readonly renderPanel?: () => ReactNode;
 }
 ```
 
 返回一个带类型的 `StudioPlugin`，携带 `VersionHistoryContribution` 能力（这样下游消费者就能通过 `InferPluginContributions` 恢复 `adapter` / `snapshots`）。
+
+### 侧边栏历史面板
+
+传入 `renderPanel` 即可贡献 StudioSidebar 的 `history` 模块主体。该插件会在 `register()` 期间，通过 core 受支持的、可渲染的 `ctx.registerHistoryPanel` 插槽注册一个 `StudioHistoryPanel`；这会让 `history` 侧轨标签出现（`SidebarRail` 以 `historyPanel !== null` 作为门控条件），并通过 core 的 `HistoryModule` 在面板内渲染你的 thunk。运行时会在 `<Studio>` 卸载时自动拆除该注册。省略 `renderPanel` 则保持此前仅有顶栏操作的行为 —— 没有侧边栏面板，也没有侧轨标签。
+
+```tsx
+import { createVersionHistoryPlugin } from "@anvilkit/plugin-version-history";
+import { VersionHistoryUI } from "@anvilkit/plugin-version-history/ui";
+
+const plugin = createVersionHistoryPlugin({
+  adapter,
+  renderPanel: () => (
+    <VersionHistoryUI
+      adapter={adapter}
+      currentIR={currentIR}
+      onRestore={(ir) => puckApi.dispatch({ type: "setData", data: irToPuckData(ir) })}
+    />
+  ),
+});
+```
+
+宿主拥有 `currentIR` 的读取与 `onRestore` 的派发：插件子模块可能在运行时解析出它自己的 `@puckeditor/core` 副本（双 Puck 隐患），因此读取响应式 Puck 状态必须发生在宿主的 React/Puck 上下文中。`currentIR` 通常来自针对宿主响应式 Puck 数据调用的 `puckDataToIR(data, puckConfig)`（`@anvilkit/ir`）。
 
 ### `SnapshotAdapter` 契约
 
@@ -115,35 +141,106 @@ interface SnapshotAdapter {
   list(): MaybePromise<readonly SnapshotMeta[]>;
   load(id: string): MaybePromise<PageIR>;
   delete?(id: string): MaybePromise<void>;
+  deleteMany?(ids: readonly string[]): MaybePromise<void>;
+  exportAll?(): MaybePromise<VersionHistoryExport>;
+  importAll?(
+    data: VersionHistoryExport,
+    options?: { mode?: "replace" | "merge" },
+  ): MaybePromise<void>;
+  updateMeta?(id: string, patch: SnapshotMetaPatch): MaybePromise<void>;
   subscribe?(onUpdate: (ir: PageIR, peer?: PeerInfo) => void): Unsubscribe;
   presence?: SnapshotAdapterPresence;
 }
 ```
 
-| 方法             | 必需？    | 用途                                                                       |
-| ---------------- | --------- | ------------------------------------------------------------------------- |
-| `save(ir, meta)` | 是        | 持久化一个 `PageIR`。返回唯一的快照 id。                                    |
-| `list()`         | 是        | 按顺序返回所有快照（按约定最新优先）。                                       |
-| `load(id)`       | 是        | 按 id 水合。未命中时抛出 `VersionHistoryError("SNAPSHOT_NOT_FOUND")`。      |
-| `delete(id)`     | 可选      | 设置了 `maxSnapshots` 时必需。                                              |
-| `subscribe(cb)`  | 可选      | 从协作适配器（例如 `createYjsAdapter`）推送更新。                            |
-| `presence`       | 可选      | 多用户光标 / 选择通道。由 Yjs 适配器实现。                                   |
+| 方法              | 必需？    | 用途                                                                       |
+| ----------------- | --------- | ------------------------------------------------------------------------- |
+| `save(ir, meta)`  | 是        | 持久化一个 `PageIR`。返回唯一的快照 id。                                    |
+| `list()`          | 是        | 按顺序返回所有快照（按约定最新优先）。                                       |
+| `load(id)`        | 是        | 按 id 水合。未命中时抛出 `VersionHistoryError("SNAPSHOT_NOT_FOUND")`。      |
+| `delete(id)`      | 可选      | 设置了 `maxSnapshots` 时必需。                                              |
+| `deleteMany(ids)` | 可选      | 供管理端清理的批量删除；保持其余快照仍可加载。                               |
+| `exportAll()`     | 可选      | 将所有快照物化为可移植的 `VersionHistoryExport` 归档。                       |
+| `importAll(data)` | 可选      | 从 `VersionHistoryExport` 恢复（默认 `"merge"`，或 `"replace"`）。          |
+| `updateMeta(id, patch)` | 可选 | 就地修补快照的可变元数据（`SnapshotMetaPatch`）；未命中时抛出 `SNAPSHOT_NOT_FOUND`。 |
+| `subscribe(cb)`   | 可选      | 从协作适配器（例如 `createYjsAdapter`）推送更新。                            |
+| `presence`        | 可选      | 多用户光标 / 选择通道。由 Yjs 适配器实现。                                   |
 
 所有方法既可同步也可异步（`MaybePromise<T>`）。建议返回冻结的、结构相等的结果。
+
+#### 批量删除与可移植性
+
+`deleteMany`、`exportAll` 和 `importAll` 是增量式的、可选的，并且向后兼容 ——
+省略它们的适配器不受影响，调用方必须对其进行特性检测。内存与
+`localStorage` 参考适配器实现了这三者；顶栏的 `maxSnapshots`
+保留路径在 `deleteMany` 存在时会自动优先使用它。
+
+```ts
+const archive = await adapter.exportAll?.(); // { version: 1; snapshots: [{ meta, ir }] }
+
+// Round-trips into a fresh adapter: imported snapshots keep their original
+// ids/metadata and are stored as standalone keyframes, so each is loadable.
+await fresh.importAll?.(archive, { mode: "replace" }); // or "merge" (default)
+```
+
+`exportAll` 会从内部 delta 链重建每个快照的**完整** `PageIR`，因此该归档是
+自包含且可 JSON 序列化的（它*不是* delta 链的线缆格式）。
+`normalizeVersionHistoryExport(value)` 是适配器所使用的、已导出且无副作用的
+校验器，它会在任何变更之前以 `STORAGE_CORRUPT` 的 `VersionHistoryError`
+拒绝格式错误的归档 —— 可直接调用它来校验手工构建或第三方的归档。
+
+#### 协作：`subscribe` 与 `presence`（宿主拥有）
+
+`subscribe` 和 `presence` 是**可选的，并且由宿主 / 协作适配器拥有 ——
+它们不由捆绑的参考适配器提供。**内存与 `localStorage` 参考适配器是
+单用户的，并且有意不实现两者中的任何一个（`types.contract.test.ts`
+套件断言它们在这两个适配器上均为 `undefined`），因此调用方在使用之前必须对其进行特性检测。
+
+真正的实现存在于协作传输层中 —— 例如 Yjs 适配器
+`@anvilkit/plugin-collab-yjs`（`YjsSnapshotAdapter`），它在此契约之上叠加了
+`subscribe`（远程变更推送）与 `presence`（实时光标 / 选择）。当存在时：
+
+- `subscribe(onUpdate)` 在某个远程对等方变更共享文档时触发
+  `onUpdate(ir, peer?)`，并返回一个 `Unsubscribe`，调用它即可停止
+  接收更新（幂等）。
+- `presence` 暴露 `update(state)` 以发布本地对等方，并暴露
+  `onPeerChange(cb)` 以观察远程名册（参见 `SnapshotAdapterPresence`）。
+
+如果你正在编写自己的协作适配器，请实现这两个成员；
+如果你只需要单用户持久化，则省略它们，插件会降级为
+无实时同步的顶栏操作快照。
 
 ### `SnapshotMeta`
 
 ```ts
 interface SnapshotMeta {
+  // Identity / provenance — immutable:
   readonly id: string;
-  readonly label?: string;
   readonly savedAt: string;
   readonly pageIRHash: string;
   readonly delta?: IRDiff;
+  // Host-curated, patchable metadata — all optional, backward compatible:
+  readonly label?: string;
+  readonly tags?: readonly string[];
+  readonly milestone?: boolean;
+  readonly protected?: boolean;
+  readonly author?: string;
+  readonly notes?: string;
 }
 ```
 
 `delta` 是可选的。选择启用的适配器（`createYjsAdapter({ computeDelta: true })`）会用相对于上一快照的结构性 diff 来填充它；较旧或较简单的适配器则会省略它。
+
+身份 / 来源字段（`id`、`savedAt`、`pageIRHash`、`delta`）是不可变的 —— 它们描述了*捕获了什么*以及*何时*捕获，并且在快照写入后永不改变。其余的是宿主精选的元数据，每个字段都是可选的且向后兼容（在某个字段存在之前写入的记录只会省略它）：
+
+- `label` —— 在历史列表中显示的简短、人类可读的名称。
+- `tags` —— 用于分组、过滤和搜索的标签（例如 `["release", "qa"]`）。
+- `milestone` —— 标记一个具名检查点，使其在历史 UI 中醒目地呈现，以区别于普通的自动保存。
+- `protected` —— 使该快照免于自动保留清理：无论存在时长或数量压力如何，`planRetention` 都永远不会把一个受保护的快照放入其删除计划。
+- `author` —— 用于审计跟踪的不透明操作者归属（用户 id、邮箱或显示名）；本包永不解析它。
+- `notes` —— 自由格式的、比简短的 `label` 更长的上下文。
+
+在保存时通过 `save(ir, meta)` 设置这些字段，或之后用 `adapter.updateMeta?.(id, patch)` 修订它们。patch 类型是 `SnapshotMetaPatch` —— 恰好是这个可变子集（`label` / `tags` / `milestone` / `protected` / `author` / `notes`）；省略的字段保持不变，且身份字段无法被修补。
 
 ### Diff 引擎
 
@@ -198,10 +295,25 @@ class VersionHistoryError extends Error {
 }
 
 type VersionHistoryErrorCode =
+  | "CONFLICT" // optimistic-concurrency: doc changed under a planned restore
+  | "PERMISSION_DENIED" // host/adapter rejected the op on authorization grounds
   | "SNAPSHOT_NOT_FOUND"
   | "STORAGE_CORRUPT"
   | "STORAGE_QUOTA_EXCEEDED"
   | "STORAGE_UNAVAILABLE";
+```
+
+远程和协作适配器会通过抛出 `PERMISSION_DENIED` 错误来拒绝未授权的 `save`/`load`/`list`/`delete`/`restore` 调用。使用便捷构造器 `createPermissionDeniedError(operation, detail?)`，或直接抛出 `new VersionHistoryError("PERMISSION_DENIED", message)`：
+
+```ts
+import { createPermissionDeniedError } from "@anvilkit/plugin-version-history";
+
+async function load(id: string) {
+  if (!viewer.canRead(roomId)) {
+    throw createPermissionDeniedError("load", `viewer ${viewer.id} lacks read access`);
+  }
+  // …
+}
 ```
 
 ### 可选 UI（`./ui`）
@@ -361,11 +473,11 @@ function HistoryEntry({
 
 ### `maxSnapshots` 需要 `delete`
 
-当快照数量将超过上限时，FIFO 淘汰循环会调用 `adapter.delete(oldestId)`。省略 `delete` 的适配器无法满足 `maxSnapshots`；要么实现 `delete`，要么省略 `maxSnapshots`。
+当快照数量将超过上限时，FIFO 淘汰路径会移除最旧的快照 —— 优先使用 `adapter.deleteMany(ids)`（单次存储变更），并回退到逐 id 的 `adapter.delete(oldestId)`。同时省略 `deleteMany` 和 `delete` 的适配器无法满足 `maxSnapshots`；要么实现其中之一，要么省略 `maxSnapshots`。
 
 ### 打包预算
 
-已发布的入口有一个 8 KB gzipped 预算，由 `scripts/check-bundle-budget.mjs` 和 `.size-limit.json` 在 CI 中强制执行。工作区依赖（`@anvilkit/*`）和对等依赖（`react`、`react-dom`、`@puckeditor/core`）被视为外部依赖。
+已发布的入口块有一个约 10 KB gzipped 预算，由 `scripts/check-bundle-budget.mjs` 在 CI 中强制执行，并辅以针对 `dist/index.js` 的 `.size-limit.json` 预算。工作区依赖（`@anvilkit/*`）和对等依赖（`react`、`react-dom`、`@puckeditor/core`）被视为外部依赖。
 
 ### 可选 UI 在设计上需要主动启用
 
@@ -386,7 +498,6 @@ function HistoryEntry({
 | 子路径 |
 |---------|
 | `@anvilkit/plugin-version-history` |
-| `@anvilkit/plugin-version-history/*` |
 | `@anvilkit/plugin-version-history/testing` |
 | `@anvilkit/plugin-version-history/ui` |
 
@@ -396,14 +507,23 @@ function HistoryEntry({
 
 | 导出 | 类型 |
 |--------|------|
+| `createPermissionDeniedError` | 工厂函数 |
 | `createVersionHistoryPlugin` | 工厂函数 |
 | `DiffApplyError` | 组件 / 类 |
 | `VersionHistoryError` | 组件 / 类 |
 | `applyDiff` | 函数 |
+| `checkRestoreConflict` | 函数 |
 | `diffIR` | 函数 |
 | `inMemoryAdapter` | 函数 |
+| `isIRDiff` | 函数 |
 | `localStorageAdapter` | 函数 |
+| `normalizeVersionHistoryExport` | 函数 |
+| `planRetention` | 函数 |
+| `prepareRestore` | 函数 |
+| `querySnapshots` | 函数 |
+| `runRetention` | 函数 |
 | `summarizeDiff` | 函数 |
+| `BuildPageIR` | 类型 |
 | `CreateVersionHistoryPluginOptions` | 类型 |
 | `IRDiff` | 类型 |
 | `IRDiffOp` | 类型 |
@@ -411,14 +531,30 @@ function HistoryEntry({
 | `LocalStorageAdapterOptions` | 类型 |
 | `MaybePromise` | 类型 |
 | `PeerInfo` | 类型 |
+| `PrepareRestoreInput` | 类型 |
 | `PresenceCursor` | 类型 |
 | `PresenceSelection` | 类型 |
 | `PresenceState` | 类型 |
+| `RestoreConflict` | 类型 |
+| `RestoreConflictInput` | 类型 |
+| `RetentionAdapter` | 类型 |
+| `RetentionPlan` | 类型 |
+| `RetentionPlanOptions` | 类型 |
+| `RetentionPolicy` | 类型 |
+| `RetentionResult` | 类型 |
+| `RunRetentionOptions` | 类型 |
 | `SnapshotAdapter` | 类型 |
 | `SnapshotAdapterPresence` | 类型 |
 | `SnapshotMeta` | 类型 |
+| `SnapshotMetaPatch` | 类型 |
+| `SnapshotPage` | 类型 |
+| `SnapshotQuery` | 类型 |
 | `Unsubscribe` | 类型 |
 | `VersionHistoryErrorCode` | 类型 |
+| `VersionHistoryExport` | 类型 |
+| `VersionHistoryExportEntry` | 类型 |
+| `VersionHistoryImportOptions` | 类型 |
+| `VersionHistoryOperation` | 类型 |
 
 ## 资源
 
