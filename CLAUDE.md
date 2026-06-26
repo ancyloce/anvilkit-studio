@@ -13,6 +13,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Prefer a root-cause fix plus a regression test over a band-aid. When a first attempt fails verification, iterate rather than stopping to ask how to proceed.
 - Track multi-finding work as numbered items (P0/P1/P2 or R1…/F1…) and drive each to closure.
 
+## Formatting & Conventions
+
+- This repo uses **Biome with TAB indentation** — never run Prettier, and never let formatter hooks convert tabs to spaces or introduce CRLF line endings.
+
+## Verification / Definition of Done
+
+- Always run the full gate suite (**typecheck, lint, build, and tests**) before declaring any task complete, and regenerate api-snapshots when hash drift is benign.
+
+## UI Conventions
+
+- For UI work, always use the shared **`@anvilkit/ui` primitives** — do not hand-roll native `<select>`, bespoke CSS, or custom components when a primitive exists.
+
+## Safety / File Handling
+
+- When editing code, verify each Edit actually applied, and never overwrite existing plan/report files — check for and back up plan files before writing.
+
+## Output Style
+
+- Keep responses concise and chunk large outputs — do not exceed the 500 output token limit in a single message; split long reports into saved files.
+
 ## Monorepo Structure
 
 ```
