@@ -27,7 +27,7 @@ pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
 ```
 
 对等依赖：`react >=19.0.0`、`react-dom >=19.0.0`、
-`@puckeditor/core ^0.21.3`、`@anvilkit/ui`（用于 React 面板），以及
+`@puckeditor/core ^0.22.0`、`@anvilkit/ui`（用于 React 面板），以及
 `konva ^10` + `react-konva ^19`（用于 `./mask` 和 `./react` 的 Konva
 界面）。无界面的 `.` 入口——工厂函数、任务客户端、后处理、提交——
 不需要 Konva。`@anvilkit/canvas-core` 作为直接依赖一并提供，并且

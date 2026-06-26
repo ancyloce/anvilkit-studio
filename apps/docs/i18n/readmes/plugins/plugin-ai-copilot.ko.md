@@ -10,7 +10,7 @@ Anvilkit Studio를 위한 헤드리스 AI Copilot. 이 플러그인은 호스트
 pnpm add @anvilkit/plugin-ai-copilot @anvilkit/core react react-dom @puckeditor/core
 ```
 
-비선택 peer: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.21.3`. `@anvilkit/ui`는 선택적 peer입니다. React 컴포넌트를 사용한다면 설치하세요.
+비선택 peer: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.22.0`. `@anvilkit/ui`는 선택적 peer입니다. React 컴포넌트를 사용한다면 설치하세요.
 
 서브경로 임포트:
 

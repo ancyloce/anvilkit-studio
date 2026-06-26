@@ -28,7 +28,7 @@ pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
 ```
 
 peer 依存関係：`react >=19.0.0`、`react-dom >=19.0.0`、
-`@puckeditor/core ^0.21.3`、`@anvilkit/ui`（React パネル用）、および
+`@puckeditor/core ^0.22.0`、`@anvilkit/ui`（React パネル用）、および
 `konva ^10` + `react-konva ^19`（`./mask` と `./react` の Konva
 サーフェス用）。ヘッドレスの `.` エントリ——ファクトリ、ジョブクライアント、後処理、コミット——は
 Konva を必要としません。`@anvilkit/canvas-core` は直接依存関係として出荷され、

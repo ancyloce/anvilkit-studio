@@ -36,6 +36,6 @@
 	"peerDependencies": {
 		"@testing-library/jest-dom": "^6.9.0",
 		"jsdom": "^29.0.0",
-		"vitest": "^4.1.0"
+		"vitest": "^4.3.0"
 	}
 }

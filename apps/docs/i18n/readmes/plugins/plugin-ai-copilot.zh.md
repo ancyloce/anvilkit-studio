@@ -10,7 +10,7 @@
 pnpm add @anvilkit/plugin-ai-copilot @anvilkit/core react react-dom @puckeditor/core
 ```
 
-非可选 peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.21.3`。`@anvilkit/ui` 是可选 peer——如果你使用 React 组件，请安装它。
+非可选 peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.22.0`。`@anvilkit/ui` 是可选 peer——如果你使用 React 组件，请安装它。
 
 子路径导入：
 

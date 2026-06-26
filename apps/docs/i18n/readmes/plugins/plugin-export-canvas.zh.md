@@ -12,7 +12,7 @@
 pnpm add @anvilkit/plugin-export-canvas @puckeditor/core
 ```
 
-对等依赖：`@puckeditor/core ^0.21.3`（必需）；`react` 和 `react-dom`（`>=19.0.0`）是**可选的** peer——该插件是无界面的，仅当你的宿主共享一棵 React 树时才需要它们。`@anvilkit/canvas-core` 作为直接依赖随附，并提供底层的序列化器。
+对等依赖：`@puckeditor/core ^0.22.0`（必需）；`react` 和 `react-dom`（`>=19.0.0`）是**可选的** peer——该插件是无界面的，仅当你的宿主共享一棵 React 树时才需要它们。`@anvilkit/canvas-core` 作为直接依赖随附，并提供底层的序列化器。
 
 ## 为什么栅格图要被传入
 

@@ -10,7 +10,7 @@
 pnpm add @anvilkit/plugin-export-html @anvilkit/core react react-dom @puckeditor/core
 ```
 
-非可选 peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.21.3`。只有 `@anvilkit/core` 是运行时依赖。
+非可选 peer：`react >=19.0.0`、`react-dom >=19.0.0`、`@puckeditor/core ^0.22.0`。只有 `@anvilkit/core` 是运行时依赖。
 
 ## 快速开始
 

@@ -120,7 +120,7 @@ submodules:
 
 ## Continuous Integration
 
-`.github/workflows/ci.yml` runs on every pull request (pnpm 11.5.1 / Node 22, submodules pulled recursively):
+`.github/workflows/ci.yml` runs on every pull request (pnpm 11.9.0 / Node 22, submodules pulled recursively):
 
 1. `pnpm lint` — Biome lint
 2. `pnpm typecheck` — TypeScript validation

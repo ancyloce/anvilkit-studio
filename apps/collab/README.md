@@ -15,8 +15,8 @@ is deliberately _excluded_ from the pnpm workspace (see the `!apps/collab`
 entry in `pnpm-workspace.yaml`), so it builds and deploys independently of
 the monorepo with its own npm lockfile (no Turbo/CI gates). It reuses the
 same
-`@hocuspocus/server@4.1.0` protocol the playground client
-(`@hocuspocus/provider@4.1.0`) speaks, so there's no client rewrite.
+`@hocuspocus/server@4.3.0` protocol the playground client
+(`@hocuspocus/provider@4.3.0`) speaks, so there's no client rewrite.
 
 > For the local dev/preview experience, `apps/docs` auto-starts an
 > _ephemeral_ in-process relay (`apps/docs/integrations/collab-relay.mjs`,

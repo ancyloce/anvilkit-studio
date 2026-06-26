@@ -12,7 +12,7 @@ Puck のエクスポートプラグインとは異なり、キャンバス形式
 pnpm add @anvilkit/plugin-export-canvas @puckeditor/core
 ```
 
-peer 依存関係：`@puckeditor/core ^0.21.3`（必須）。`react` と `react-dom`（`>=19.0.0`）は**任意の** peer です——このプラグインはヘッドレスであり、ホストが React ツリーを共有する場合にのみそれらを必要とします。`@anvilkit/canvas-core` は直接依存関係として同梱され、基盤となるシリアライザーを提供します。
+peer 依存関係：`@puckeditor/core ^0.22.0`（必須）。`react` と `react-dom`（`>=19.0.0`）は**任意の** peer です——このプラグインはヘッドレスであり、ホストが React ツリーを共有する場合にのみそれらを必要とします。`@anvilkit/canvas-core` は直接依存関係として同梱され、基盤となるシリアライザーを提供します。
 
 ## なぜラスターが渡されるのか
 

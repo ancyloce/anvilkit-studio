@@ -40,9 +40,9 @@
 	},
 	"devDependencies": {
 		"@anvilkit/core": "__CORE_VERSION_RANGE__",
-		"@biomejs/biome": "2.4.16",
+		"@biomejs/biome": "2.5.1",
 		"@rslib/core": "^0.23.0",
-		"@types/node": "^26.0.0",
+		"@types/node": "^26.0.1",
 		"publint": "^0.3.21",
 		"typescript": "^6.0.3",
 		"vitest": "^4.1.9"

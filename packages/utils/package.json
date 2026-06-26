@@ -68,7 +68,7 @@
 		"react": "^19.2.7",
 		"react-dom": "^19.2.7",
 		"typedoc": "^0.28.19",
-		"typedoc-plugin-markdown": "^4.11.0",
+		"typedoc-plugin-markdown": "^4.11.2",
 		"typescript": "6.0.3",
 		"vitest": "^4.1.9"
 	}

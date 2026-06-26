@@ -297,7 +297,7 @@ export function HeaderActionList() {
 
 The legacy `aiHost` string prop is still supported through a compat
 shim for the 0.1 alpha line, but it prints a one-shot deprecation
-warning and is scheduled for removal in **v2.0.0** (a major bump, per
+warning and is scheduled for removal in **v2.1.0** (a major bump, per
 the LTS policy — it stays supported through every `v1.x` minor).
 
 ```tsx

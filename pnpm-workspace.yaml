@@ -59,6 +59,10 @@ minimumReleaseAgeExclude:
   - '@dotenvx/primitives@0.8.0'
   - nanoid@3.3.14 || 5.1.15
   - tabbable@6.5.0
+  - '@puckeditor/core@0.22.0'
+  - framer-motion@12.42.0
+  - motion-dom@12.42.0
+  - motion@12.42.0
 patchedDependencies:
   "@base-ui/react@1.6.0": packages/components/patches/@base-ui__react@1.6.0.patch
 

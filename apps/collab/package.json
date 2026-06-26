@@ -13,10 +13,10 @@
 		"node": ">=20"
 	},
 	"dependencies": {
-		"@hocuspocus/extension-database": "4.1.0",
-		"@hocuspocus/extension-logger": "4.1.0",
-		"@hocuspocus/extension-redis": "4.1.0",
-		"@hocuspocus/server": "4.1.0",
+		"@hocuspocus/extension-database": "4.3.0",
+		"@hocuspocus/extension-logger": "4.3.0",
+		"@hocuspocus/extension-redis": "4.3.0",
+		"@hocuspocus/server": "4.3.0",
 		"ioredis": "^5.4.1",
 		"y-protocols": "^1.0.7",
 		"yjs": "^13.6.31"

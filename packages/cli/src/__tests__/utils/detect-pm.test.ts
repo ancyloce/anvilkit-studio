@@ -36,7 +36,7 @@ afterEach(() => {
 
 describe("detectPm", () => {
 	it("prefers npm_config_user_agent when present", () => {
-		process.env.npm_config_user_agent = "pnpm/10.33.0 node/v22.0.0";
+		process.env.npm_config_user_agent = "pnpm/10.33.0 node/v22.1.0";
 
 		expect(detectPm(process.cwd())).toBe("pnpm");
 	});

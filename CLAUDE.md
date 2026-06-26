@@ -43,7 +43,7 @@ anvilkit-studio/
 │   └── plugins/            # Git submodules (see Git Submodules below)
 ```
 
-**Package manager**: pnpm 11.5.1 (strictly pinned). **Orchestration**: Turbo.
+**Package manager**: pnpm 11.9.0 (strictly pinned). **Orchestration**: Turbo.
 
 `packages/components` is a git submodule with its own pnpm workspace. Each component under `packages/components/src/<slug>/` is an independently versioned and publishable package.
 
@@ -149,7 +149,7 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 
 ### Styling
 
-- **Tailwind CSS 4** (`tailwindcss` 4.2.2 via `@tailwindcss/postcss`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"` (CSS-first config, no `tailwind.config.js`)
+- **Tailwind CSS 4** (`tailwindcss` 4.3.1 via `@tailwindcss/postcss`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"` (CSS-first config, no `tailwind.config.js`)
 - shadcn-style CSS variable tokens (light/dark mode)
 - All components must be responsive (mobile/tablet/desktop) and theme-aware
 
@@ -162,7 +162,7 @@ Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from e
 
 ### Continuous Integration
 
-`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.5.1 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Fumadocs/Vite build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
+`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.9.0 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Fumadocs/Vite build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
 
 Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `apps/docs/vercel.json` (Vercel Root Directory = `apps/docs`) and posts an independent GitHub check — it does not block CI, and CI does not block it.
 
