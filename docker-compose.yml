@@ -1,0 +1,35 @@
+# docker-compose.yml — run the prebuilt anvilkit demo + docs images from GHCR.
+#
+# Images are produced by .github/workflows/docker-images.yml and tagged by the
+# triggering commit SHA (sha-<short>). Pull + run with:
+#
+#   docker compose pull && docker compose up -d
+#
+# Then open:  demo → http://localhost:3000   docs → http://localhost:5173
+services:
+  demo:
+    image: ghcr.io/ancyloce/demo:sha-f963041
+    # The demo image is a Next.js standalone server that listens on PORT=3000
+    # (HOSTNAME=0.0.0.0 is baked into the Dockerfile).
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - anvilkit
+
+  docs:
+    image: ghcr.io/ancyloce/docs:sha-f963041
+    # The docs image is a Nitro (TanStack Start) node-server. It binds to
+    # HOST=0.0.0.0 and reads PORT from the environment (the image defaults to
+    # 4321). We override it to 5173 so the requested 5173:5173 mapping works.
+    environment:
+      PORT: "5173"
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    networks:
+      - anvilkit
+
+networks:
+  anvilkit:
+    driver: bridge
