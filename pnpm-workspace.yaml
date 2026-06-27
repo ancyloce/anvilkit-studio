@@ -15,6 +15,11 @@ packages:
   - "examples/plugins/*"
   - "examples/ai-adapters/*"
 allowBuilds:
+  # better-sqlite3 ships a prebuilt binary via prebuild-install; its install
+  # script must run so the demo's SQLite page-storage adapter can `require`
+  # the native addon at runtime (server-only). Glibc base keeps the prebuilt
+  # binary compatible (see apps/demo/Dockerfile).
+  better-sqlite3: true
   # Pulled in by @tailwindcss/cli (CSS build). Native binding is supplied
   # by the prebuilt `@parcel/watcher-*` platform packages, so the node-gyp
   # install script isn't needed at runtime — skip it like the others below.
