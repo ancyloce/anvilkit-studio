@@ -5,8 +5,9 @@ export const runtime = "nodejs";
 
 /**
  * `POST /api/pages/draft` — validate `data.root.props` and persist the payload as
- * the page's `draft` (the published document is untouched). Active when the
- * client uses `NEXT_PUBLIC_USE_REMOTE_STORAGE === "true"`.
+ * the page's `draft` (the published document is untouched). The editor's
+ * `persistPage("draft", …)` gateway always routes here (→ {@link getPageStorage},
+ * SQLite by default).
  */
 export async function POST(req: Request): Promise<Response> {
 	const body = await req.json().catch(() => ({}));
