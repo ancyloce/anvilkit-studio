@@ -20,20 +20,39 @@
 // shutdown, processes we own. Inherited env survives reparenting, so this
 // also catches the next-server worker Next moves out of our process group.
 import { spawn } from "node:child_process";
-import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
 import { readdirSync, readFileSync, readlinkSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const demoDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const relayScript = resolve(
-	demoDir,
-	"../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs",
-);
-// Default 21234 (not 11234/1234): WSL2 + Windows-host port reservations
+// COLLAB_RELAY_KIND selects which protocol-relay this supervisor runs:
+//   - "hocuspocus" (the `dev` script) → the demo's Hocuspocus dev relay (:31234)
+//   - default / "y-websocket" (the `dev:collab` script) → the y-websocket
+//     reference relay (:21234 — the E2E and editor `?relay=ws` path)
+// The two are wire-incompatible, so the editor's `?relay=` query must match.
+const RELAY_KIND =
+	process.env.COLLAB_RELAY_KIND === "hocuspocus" ? "hocuspocus" : "y-websocket";
+const relayScript =
+	RELAY_KIND === "hocuspocus"
+		? resolve(demoDir, "scripts/hocuspocus-dev-relay.mjs")
+		: resolve(
+				demoDir,
+				"../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs",
+			);
+// Basename used to identify a stale relay still holding the port, so we only
+// ever SIGKILL OUR kind of relay (never an unrelated holder).
+const relayScriptName =
+	RELAY_KIND === "hocuspocus"
+		? "hocuspocus-dev-relay.mjs"
+		: "y-websocket-server.mjs";
+// Default ports avoid 11234/1234: WSL2 + Windows-host port reservations
 // (Hyper-V dynamic exclusion ranges) commonly block both lower ports,
 // surfacing as a misleading EADDRINUSE even when `/proc/net/tcp*` is empty.
 // Keep in sync with `apps/demo/playwright.config.ts`.
-const relayPort = process.env.COLLAB_RELAY_PORT || "21234";
+const relayPort =
+	RELAY_KIND === "hocuspocus"
+		? process.env.COLLAB_HOCUSPOCUS_PORT || "31234"
+		: process.env.COLLAB_RELAY_PORT || "21234";
 const nextArgs = ["dev", "--webpack", ...process.argv.slice(2)];
 
 const OWNER = String(process.pid);
@@ -167,8 +186,8 @@ function reapStaleRelayOnPort(port) {
 		} catch {
 			continue;
 		}
-		// Match only the y-websocket relay; never kill arbitrary holders.
-		if (!cmd.includes("y-websocket-server.mjs")) continue;
+		// Match only our relay kind; never kill arbitrary holders.
+		if (!cmd.includes(relayScriptName)) continue;
 		try {
 			process.kill(Number(pid), "SIGKILL");
 			console.log(
