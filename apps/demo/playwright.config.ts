@@ -60,6 +60,11 @@ export default defineConfig({
 			url: "http://localhost:3000",
 			reuseExistingServer: !process.env.CI,
 			timeout: 180_000,
+			// Pin the page store to the ephemeral in-memory backend for E2E: the
+			// runtime default is now `sqlite` (durable), but tests assert on the
+			// client-seeded rail + per-run state, so memory keeps runs hermetic
+			// and fast and avoids the native better-sqlite3 addon in CI.
+			env: { ANVILKIT_PAGE_STORAGE: "memory" },
 		},
 		{
 			// y-websocket reference relay for the cross-tab `collab.spec.ts`

@@ -17,14 +17,14 @@ export type { DemoPageData } from "./page-storage/types";
  * {@link PageStorageAdapter}, selected at runtime so the same API routes and
  * render path work against either backend.
  *
- * - `ANVILKIT_PAGE_STORAGE=memory` (default) — ephemeral
- *   {@link MemoryPageStorageAdapter}; preserves the demo's prior behavior.
+ * - `ANVILKIT_PAGE_STORAGE=sqlite` (default) — durable
+ *   {@link SqlitePageStorageAdapter} (Drizzle + better-sqlite3) at
+ *   `ANVILKIT_PAGE_STORAGE_SQLITE_PATH` (default `.anvilkit/pages.sqlite`).
  * - `ANVILKIT_PAGE_STORAGE=filesystem` — durable
  *   {@link FileSystemPageStorageAdapter} under `ANVILKIT_PAGE_STORAGE_DIR`
  *   (default `.anvilkit/pages`); survives server restarts.
- * - `ANVILKIT_PAGE_STORAGE=sqlite` — durable
- *   {@link SqlitePageStorageAdapter} (Drizzle + better-sqlite3) at
- *   `ANVILKIT_PAGE_STORAGE_SQLITE_PATH` (default `.anvilkit/pages.sqlite`).
+ * - `ANVILKIT_PAGE_STORAGE=memory` — ephemeral
+ *   {@link MemoryPageStorageAdapter}; resets every process (used by tests).
  *
  * The adapter is created and seeded once per process; `getPageStorage()` returns
  * the memoized promise so every route and the public route share one instance.
@@ -39,9 +39,9 @@ export function getPageStorage(): Promise<PageStorageAdapter> {
 }
 
 function createAdapter(): PageStorageAdapter {
-	const backend = process.env.ANVILKIT_PAGE_STORAGE ?? "memory";
-	if (backend === "sqlite") {
-		return new SqlitePageStorageAdapter();
+	const backend = process.env.ANVILKIT_PAGE_STORAGE ?? "sqlite";
+	if (backend === "memory") {
+		return new MemoryPageStorageAdapter();
 	}
 	if (backend === "filesystem") {
 		const dir = resolve(
@@ -50,7 +50,7 @@ function createAdapter(): PageStorageAdapter {
 		);
 		return new FileSystemPageStorageAdapter({ dir });
 	}
-	return new MemoryPageStorageAdapter();
+	return new SqlitePageStorageAdapter();
 }
 
 async function createAndSeed(): Promise<PageStorageAdapter> {
@@ -61,17 +61,22 @@ async function createAndSeed(): Promise<PageStorageAdapter> {
 
 /**
  * Seed the demo's example pages (as published records) only when the store is
- * empty. Memory starts empty every process; the filesystem backend seeds just
- * once, then persists. Keeps the existing `/home`, `/about`, … demo routes
- * working under both backends.
+ * empty. Memory starts empty every process; the sqlite/filesystem backends seed
+ * just once, then persist. Keeps the existing `/home`, `/about`, … demo routes
+ * working under every backend.
+ *
+ * Records are seeded with their `createDemoPagesData()` key as the record `id`
+ * (`home`, `list`, `team`, …) so the editor's page rail — keyed by those same
+ * stable ids — round-trips create/rename/delete/settings straight to storage
+ * (the `ak-layer-page-row-<id>` contract the E2E suite asserts on).
  */
 async function seedIfEmpty(storage: PageStorageAdapter): Promise<void> {
 	const existing = await storage.list();
 	if (existing.length > 0) return;
-	for (const data of Object.values(createDemoPagesData())) {
+	for (const [id, data] of Object.entries(createDemoPagesData())) {
 		const slug = data.root.props?.slug;
 		if (slug === undefined || slug.length === 0) continue;
-		await storage.publish({ slug, data });
+		await storage.publish({ id, slug, data });
 	}
 }
 
