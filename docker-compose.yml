@@ -8,17 +8,31 @@
 # Then open:  demo → http://localhost:3000   docs → http://localhost:5173
 services:
   demo:
-    image: ghcr.io/ancyloce/demo:sha-f963041
+    # Rebuild on `main` publishes `:latest` (.github/workflows/docker-images.yml);
+    # the image now bundles the SQLite adapter + better-sqlite3 native binary.
+    image: ghcr.io/ancyloce/demo:latest
     # The demo image is a Next.js standalone server that listens on PORT=3000
     # (HOSTNAME=0.0.0.0 is baked into the Dockerfile).
+    environment:
+      # Durable page store on the mounted volume (the Dockerfile also defaults
+      # these; repeated here for visibility / per-deploy override).
+      ANVILKIT_PAGE_STORAGE: sqlite
+      ANVILKIT_PAGE_STORAGE_SQLITE_PATH: /data/pages.sqlite
+      # Browser-reachable relay URL (NOT the compose-internal `collab:1234`) —
+      # served to the client by `GET /api/collab/config`.
+      COLLAB_HOCUSPOCUS_URL: ws://localhost:31234
     ports:
       - "3002:3000"
+    volumes:
+      - demo-pages:/data
+    depends_on:
+      - collab
     restart: unless-stopped
     networks:
       - anvilkit
 
   docs:
-    image: ghcr.io/ancyloce/docs:sha-f963041
+    image: ghcr.io/ancyloce/docs:latest
     # The docs image is a Nitro (TanStack Start) node-server. It binds to
     # HOST=0.0.0.0 and reads PORT from the environment (the image defaults to
     # 4321). We override it to 5173 so the requested 5173:5173 mapping works.
@@ -29,6 +43,27 @@ services:
     restart: unless-stopped
     networks:
       - anvilkit
+
+  collab:
+    # Production Hocuspocus relay (apps/collab) — built from its own context
+    # (own lockfile + .dockerignore; not a pnpm workspace member).
+    build:
+      context: apps/collab
+      dockerfile: Dockerfile
+    environment:
+      PORT: "1234"
+      # Restrict WS upgrades to the demo's published origin (else logs "ANY").
+      COLLAB_ALLOWED_ORIGINS: "http://localhost:3002"
+      # REDIS_URL: redis://redis:6379   # optional: durable + multi-instance
+    ports:
+      # Host 31234 → matches COLLAB_HOCUSPOCUS_URL (browser-reachable).
+      - "31234:1234"
+    restart: unless-stopped
+    networks:
+      - anvilkit
+
+volumes:
+  demo-pages:
 
 networks:
   anvilkit:
