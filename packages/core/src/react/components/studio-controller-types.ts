@@ -212,6 +212,14 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 */
 	readonly onPublishClick?: (data: PuckData) => void;
 	/**
+	 * Optional click handler for the chrome header's Preview action (the
+	 * ▶ button). Disabled when omitted. Receives the **live** editor document
+	 * (read from the Puck API at click time), so the host previews current
+	 * edits rather than a stale snapshot — e.g. opening a render route in a new
+	 * tab. A `() => void` handler stays assignable (the data arg is ignored).
+	 */
+	readonly onPreview?: (data: PuckData) => void;
+	/**
 	 * Optional handler invoked from the publish panel's Export submenu
 	 * with the format id. The host normalizes Puck data to `PageIR`,
 	 * calls `runtime.exportFormats.get(formatId).run(ir, options)`, and

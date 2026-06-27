@@ -7,10 +7,12 @@
  * a prop so it can be tested in isolation.
  */
 
+import { useGetPuck } from "@puckeditor/core";
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
 import { type ComponentType, memo, type ReactNode, useCallback } from "react";
 import { useStudioRuntime } from "@/components/use-studio";
 import { useStudioConfig } from "@/config/hooks";
+import { useChromeProps } from "@/context/chrome-props";
 import { useActivePage } from "@/context/pages-source";
 import { useStudioPluginContextOrNull } from "@/context/plugin-context";
 import { Button } from "@/primitives/button";
@@ -63,6 +65,16 @@ function StudioHeaderImpl({
 		activePage !== null && activePage.title.length > 0
 			? activePage.title
 			: msg("studio.breadcrumb.file");
+
+	// Preview action: hand the host the LIVE editor document at click time so it
+	// can open a preview of the current edits. Disabled until a host wires
+	// `onPreview` (`chrome.onPreview` → ChromeProps). Mirrors the PublishPanel's
+	// `getPuck().appState.data` read.
+	const { onPreview } = useChromeProps();
+	const getPuck = useGetPuck();
+	const handlePreview = useCallback(() => {
+		onPreview?.(getPuck().appState.data);
+	}, [onPreview, getPuck]);
 
 	return (
 		<header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
@@ -132,6 +144,8 @@ function StudioHeaderImpl({
 							<Button
 								variant="ghost"
 								size="icon"
+								onClick={handlePreview}
+								disabled={onPreview === undefined}
 								aria-label={msg("studio.preview")}
 							>
 								<Play />

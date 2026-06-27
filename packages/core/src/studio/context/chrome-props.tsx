@@ -37,6 +37,13 @@ export interface ChromeProps {
 	readonly isPublishing?: boolean;
 	/** Receives the live editor document (read from the Puck API at click time). */
 	readonly onPublishClick?: (data: Data) => void;
+	/**
+	 * Invoked by the header's Preview control (the ▶ button). Receives the live
+	 * editor document (read from the Puck API at click time) so the host can open
+	 * a preview of the current edits (e.g. a render route in a new tab). When
+	 * omitted, the Preview button renders disabled.
+	 */
+	readonly onPreview?: (data: Data) => void;
 	/** Responsive viewport presets for the toolbar's viewport selector. */
 	readonly viewports?: readonly StudioViewport[];
 	/**
