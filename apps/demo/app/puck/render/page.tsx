@@ -12,16 +12,19 @@
 //      have no meaning on the read path — there is no editing session
 //      to observe.
 //
-// See `docs/tasks/core-016-demo-migration.md` — implementation notes.
+// This route renders *only* the published page content: with `?slug=<slug>` it
+// serves the published document straight from the durable store (the editor's
+// publish flow navigates here); otherwise it falls back to the shared showcase
+// payload (`?data=` or the default demo data) that backs the static "server
+// render" links. No masthead, notes, links, or JSON panel — just the page.
 import { Render } from "@puckeditor/core/rsc";
-import Link from "next/link";
+import type { ReactElement } from "react";
+import { loadPublishedRender } from "@/lib/published-render";
 import {
-	createDemoModeHref,
 	demoConfig,
 	demoDataSearchParam,
 	getDemoDataFromSearchParam,
 } from "@/lib/puck-demo";
-import styles from "../puck.module.css";
 import { RenderNavigation } from "./_components/RenderNavigation";
 
 interface PuckRenderPageProps {
@@ -30,55 +33,41 @@ interface PuckRenderPageProps {
 		| Record<string, string | string[] | undefined>;
 }
 
+// The page store mutates (via /api/pages/*), so the `?slug=` branch must read
+// the live store on each request — never statically cache.
+export const dynamic = "force-dynamic";
+
+const firstParam = (
+	value: string | string[] | undefined,
+): string | undefined => (Array.isArray(value) ? value[0] : value);
+
 export default async function PuckRenderPage({
 	searchParams,
-}: PuckRenderPageProps) {
+}: PuckRenderPageProps): Promise<ReactElement> {
 	const resolvedSearchParams = searchParams ? await searchParams : undefined;
+	const slug = firstParam(resolvedSearchParams?.slug);
+
+	// Published document from the durable store (editor publish flow).
+	if (slug !== undefined && slug.length > 0) {
+		const model = await loadPublishedRender([slug]);
+		if (model !== null) {
+			return (
+				<RenderNavigation>
+					<Render config={demoConfig} data={model.resolved} />
+				</RenderNavigation>
+			);
+		}
+	}
+
+	// Fallback: the shared eleven-block showcase, sourced from the `?data=` param
+	// (or the default demo data). Backs the static "server render" links across
+	// the demo and the `button-input-smoke` E2E.
 	const renderData = getDemoDataFromSearchParam(
 		resolvedSearchParams?.[demoDataSearchParam],
 	);
-	const editorHref = createDemoModeHref("/puck/editor", renderData);
-
 	return (
-		<main className={styles.shell}>
-			<section className={styles.masthead}>
-				<div>
-					<p className={styles.eyebrow}>Render Validation</p>
-					<h1 className={styles.title}>
-						Render mode for the shared eleven-block demo payload.
-					</h1>
-					<p className={styles.lede}>
-						This route renders the shared demo data with `Render` from
-						`@puckeditor/core/rsc`, using the same package-level component
-						configs as the editor view for `@anvilkit/navbar`, `@anvilkit/hero`,
-						`@anvilkit/pricing-minimal`, `@anvilkit/bento-grid`,
-						`@anvilkit/section`, `@anvilkit/statistics`, `@anvilkit/blog-list`,
-						`@anvilkit/helps`, `@anvilkit/logo-clouds`, `@anvilkit/input`, and
-						`@anvilkit/button`.
-					</p>
-				</div>
-				<div className={styles.actions}>
-					<Link href="/" className={styles.secondaryAction}>
-						Back to demo hub
-					</Link>
-					<Link href={editorHref} className={styles.primaryAction}>
-						Open editor mode
-					</Link>
-				</div>
-			</section>
-
-			<section className={styles.renderFrame}>
-				<div className={styles.renderNote}>
-					<span>Shared config</span>
-					<span>RSC-friendly components</span>
-					<span>Eleven publishable package blocks</span>
-				</div>
-				<div className={styles.renderCanvas}>
-					<RenderNavigation>
-						<Render config={demoConfig} data={renderData} />
-					</RenderNavigation>
-				</div>
-			</section>
-		</main>
+		<RenderNavigation>
+			<Render config={demoConfig} data={renderData} />
+		</RenderNavigation>
 	);
 }

@@ -45,7 +45,6 @@ import {
 } from "react";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
-import { createDemoPagesSource } from "@/lib/demo-pages-source";
 import {
 	createLazyDemoVersionHistoryPlugins,
 	getDemoAssetRegistry,
@@ -60,6 +59,7 @@ import {
 } from "@/lib/lazy-plugins";
 import { persistPage } from "@/lib/page-persistence";
 import { pageValidationPlugin } from "@/lib/page-validation-plugin";
+import { createPersistedPagesSource } from "@/lib/persisted-pages-source";
 import {
 	createDemoConfig,
 	createDemoData,
@@ -507,13 +507,16 @@ export default function PuckEditorPage() {
 		[],
 	);
 
-	// Per-mount in-memory pages source for the layer sidebar module.
+	// Durable pages source for the layer sidebar module: keeps the rail's
+	// deterministic seed ids + locked/reorder/optimistic-duplicate behavior, and
+	// writes every create/rename/delete/duplicate/settings mutation through to the
+	// SQLite-backed Page API so editor edits resolve at `/puck/render/<slug>`.
 	// Stable identity (`useMemo` with no deps) so the source's internal
 	// active-page state survives re-renders. The source itself owns
 	// active-page tracking and re-emits via `subscribe()` on `onSelect`.
 	const pagesSource = useMemo(
 		() =>
-			createDemoPagesSource({
+			createPersistedPagesSource({
 				// `title`/`seo` are canonical in each page's Puck `root.props`.
 				// `getRootProps` reads the per-page document map (kept current for
 				// the active page by the sync effect below); `updateRootProps`
@@ -969,9 +972,18 @@ export default function PuckEditorPage() {
 		setPublishedData(typedData);
 		// The Puck-drag E2E stays on the editor so the export hooks
 		// (`window.__puckExportTrigger`) survive for its export assertions;
-		// real publishing navigates to the render preview.
+		// real publishing navigates to the render preview. The document was
+		// just persisted to the durable store (handlePublishClick → persistPage),
+		// so navigate by `?slug=` — the render route reads the stitched published
+		// document back from SQLite. Pages with no slug fall back to the inline
+		// `?data=` payload so the preview still renders.
 		if (!puckDragE2eMode) {
-			router.push(createDemoModeHref("/puck/render", typedData));
+			const slug = typedData.root.props?.slug ?? "";
+			router.push(
+				slug.length > 0
+					? `/puck/render?slug=${encodeURIComponent(slug)}`
+					: createDemoModeHref("/puck/render", typedData),
+			);
 		}
 		console.log("[demo] publish", typedData);
 	}
