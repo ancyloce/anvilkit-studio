@@ -988,6 +988,18 @@ export default function PuckEditorPage() {
 		console.log("[demo] publish", typedData);
 	}
 
+	function handlePreview(liveData: Data) {
+		// Preview the LIVE (possibly unsaved) editor document: open the render
+		// route carrying the current data inline (`?data=`), in a new tab so the
+		// editing session is preserved. The render route renders it content-only.
+		const typed = liveData as unknown as Data<DemoComponents, PageRootProps>;
+		window.open(
+			createDemoModeHref("/puck/render", typed),
+			"_blank",
+			"noopener,noreferrer",
+		);
+	}
+
 	// Build export IR and resolve any `asset://<id>` references against the
 	// demo's upload registry, so an inserted asset exports as a real URL
 	// instead of an unresolved `asset://` ref. The plugin keeps its registry
@@ -1243,6 +1255,7 @@ export default function PuckEditorPage() {
 					loading={<StudioLoadingScreen />}
 					onPublish={handlePublish}
 					onPublishClick={handlePublishClick}
+					onPreview={handlePreview}
 					onSaveDraft={handleSaveDraft}
 					isSavingDraft={isSavingDraft}
 					lastSavedAt={lastSavedAt}
