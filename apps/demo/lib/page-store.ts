@@ -1,6 +1,7 @@
 import { resolve } from "node:path";
 import { FileSystemPageStorageAdapter } from "./page-storage/filesystem-page-storage-adapter";
 import { MemoryPageStorageAdapter } from "./page-storage/memory-page-storage-adapter";
+import { SqlitePageStorageAdapter } from "./page-storage/sqlite-page-storage-adapter";
 import {
 	type DemoPageData,
 	type PageStorageAdapter,
@@ -21,6 +22,9 @@ export type { DemoPageData } from "./page-storage/types";
  * - `ANVILKIT_PAGE_STORAGE=filesystem` — durable
  *   {@link FileSystemPageStorageAdapter} under `ANVILKIT_PAGE_STORAGE_DIR`
  *   (default `.anvilkit/pages`); survives server restarts.
+ * - `ANVILKIT_PAGE_STORAGE=sqlite` — durable
+ *   {@link SqlitePageStorageAdapter} (Drizzle + better-sqlite3) at
+ *   `ANVILKIT_PAGE_STORAGE_SQLITE_PATH` (default `.anvilkit/pages.sqlite`).
  *
  * The adapter is created and seeded once per process; `getPageStorage()` returns
  * the memoized promise so every route and the public route share one instance.
@@ -36,6 +40,9 @@ export function getPageStorage(): Promise<PageStorageAdapter> {
 
 function createAdapter(): PageStorageAdapter {
 	const backend = process.env.ANVILKIT_PAGE_STORAGE ?? "memory";
+	if (backend === "sqlite") {
+		return new SqlitePageStorageAdapter();
+	}
 	if (backend === "filesystem") {
 		const dir = resolve(
 			process.cwd(),

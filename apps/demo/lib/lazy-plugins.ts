@@ -287,3 +287,39 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 		icon: createElement(Frame),
 	},
 );
+
+/**
+ * Lazy AI Image sidebar plugin. Surfaces `@anvilkit/plugin-ai-image`'s
+ * generation panel in the StudioSidebar `copilot` module (mirrors
+ * {@link createCopilotSidebarPlugin}). The mask UI transitively pulls Konva, so
+ * the whole package is deferred behind one `import()` until `<Studio>` compiles
+ * its plugins. A deterministic mock provider (no API key / no network) drives
+ * jobs — consistent with AI Copilot's `createMockGenerate*`. `getLayerContext`
+ * returns `null` (the panel shows its "no active artboard" state) until a
+ * canvas-studio selection bridge is wired (a follow-up).
+ */
+export const lazyAiImageSidebarPlugin: StudioPlugin = lazyPlugin(
+	async () => {
+		const [
+			{ createAiImageSidebarPlugin },
+			{ createAiJobClient },
+			{ createMockAiImageProvider },
+		] = await Promise.all([
+			import("@anvilkit/plugin-ai-image/react"),
+			import("@anvilkit/plugin-ai-image"),
+			import("@anvilkit/plugin-ai-image/mock"),
+		]);
+		return createAiImageSidebarPlugin({
+			jobClient: createAiJobClient({ provider: createMockAiImageProvider() }),
+			getLayerContext: () => null,
+		});
+	},
+	{
+		id: "@anvilkit/plugin-ai-image-sidebar",
+		name: "AI Image",
+		version: "0.1.0",
+		coreVersion: "^0.1.0-alpha",
+		description:
+			"AI image generation panel in the StudioSidebar `copilot` module (mock provider).",
+	},
+);
