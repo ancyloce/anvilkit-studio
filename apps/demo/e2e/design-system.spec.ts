@@ -37,7 +37,7 @@
  *     remainder inherit warm chunks.
  */
 
-import { type Page, expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
 
 async function gotoEditor(
 	page: Page,
@@ -58,7 +58,9 @@ async function gotoEditor(
 		);
 	});
 
-	await page.goto("/puck/editor");
+	// Collaboration is on by default; this suite isn't testing collab, so opt
+	// out (`?collab=0`) to keep the zero-error assertions relay-independent.
+	await page.goto("/puck/editor?collab=0");
 	await expect(
 		page.locator('[role="tablist"][aria-orientation="vertical"]'),
 	).toBeVisible({ timeout: 30_000 });
