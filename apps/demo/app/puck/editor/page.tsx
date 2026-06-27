@@ -30,6 +30,7 @@ import {
 // erased by `verbatimModuleSyntax`, so it pulls no chunk.
 import type { UploadResult } from "@anvilkit/plugin-asset-manager";
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
+import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
 import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 import type { PageRootProps } from "@anvilkit/schema";
 import type { Config, Data } from "@puckeditor/core";
@@ -48,6 +49,7 @@ import { createDemoPagesSource } from "@/lib/demo-pages-source";
 import {
 	createLazyDemoVersionHistoryPlugins,
 	getDemoAssetRegistry,
+	lazyAiImageSidebarPlugin,
 	lazyAssetManagerNoHeaderPlugin,
 	lazyCanvasStudioPlugin,
 	lazyHtmlExportPlugin,
@@ -106,6 +108,10 @@ const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 const designSystemPlugin = createDesignSystemPlugin();
 // F5: the Page SEO rail panel — edits root.props.seo (the canonical page model).
 const pageSeoPlugin = createPageSeoPlugin();
+// Canvas export formats (PNG / JSON / SVG / PDF). Headless — registers
+// `exportFormats` only (no React/Konva), so it stays eager. Its formats consume
+// a CanvasIR and are surfaced when the Canvas Studio overlay is active.
+const canvasExportPlugin = createCanvasExportPlugin();
 
 // Static (locale-agnostic) demo chrome-label overrides — formerly the
 // keys the deprecated flat `<Studio messages>` prop carried. The flat
@@ -402,12 +408,23 @@ export default function PuckEditorPage() {
 	const [assetManagerReactOutput, setAssetManagerReactOutput] = useState("");
 	const [assetManagerReactWarnings, setAssetManagerReactWarnings] =
 		useState("none");
-	const [collabEnabled, setCollabEnabled] = useState(false);
+	// Collaboration is ON by default in the showcase editor (`?collab=0` opts
+	// out); the editor auto-connects to the Hocuspocus relay the `dev`
+	// supervisor starts, so opening `/puck/editor` in two tabs shows peers
+	// without any extra step.
+	const [collabEnabled, setCollabEnabled] = useState(true);
 	const [collabQueryReady, setCollabQueryReady] = useState(false);
 	const [collabPeerOverride, setCollabPeerOverride] = useState<string | null>(
 		null,
 	);
 	const [collabRelayUrl, setCollabRelayUrl] = useState<string | null>(null);
+	// Selected managed transport. `ws` → y-websocket relay (:21234, the E2E
+	// path); `hocuspocus` → the auto-started Hocuspocus relay whose URL is
+	// resolved at runtime from `/api/collab/config` (:31234 by default); `null`
+	// → single-tab in-memory.
+	const [collabRelayKind, setCollabRelayKind] = useState<
+		"ws" | "hocuspocus" | null
+	>("hocuspocus");
 	const [collabRoom, setCollabRoom] = useState("demo-room");
 	const [showRemoteCursors] = useState(true);
 	const {
@@ -627,6 +644,23 @@ export default function PuckEditorPage() {
 		}
 		let cancelled = false;
 		void (async () => {
+			// Resolve the managed transport. `?relay=hocuspocus` fetches the
+			// browser-reachable relay URL at runtime (Docker-friendly: NEXT_PUBLIC
+			// is build-time-frozen); `?relay=ws` keeps the y-websocket relay; no
+			// relay → in-memory.
+			let websocketUrl = collabRelayUrl ?? undefined;
+			let provider: "y-websocket" | "hocuspocus" = "y-websocket";
+			if (collabRelayKind === "hocuspocus") {
+				provider = "hocuspocus";
+				try {
+					const res = await fetch("/api/collab/config");
+					const cfg = (await res.json()) as { wsUrl?: string };
+					websocketUrl = cfg.wsUrl ?? "ws://localhost:31234";
+				} catch {
+					websocketUrl = "ws://localhost:31234";
+				}
+				if (cancelled) return;
+			}
 			const [{ createCollabPlugin }, { createCollabStudioPlugin }] =
 				await Promise.all([
 					import("@anvilkit/collab-ui"),
@@ -634,10 +668,11 @@ export default function PuckEditorPage() {
 				]);
 			if (cancelled) return;
 			const collabPlugin = createCollabPlugin({
-				// `?relay=ws` → managed y-websocket relay; no relay → omit
-				// `websocketUrl` so the plugin runs single-tab in-memory.
-				websocketUrl: collabRelayUrl ?? undefined,
-				provider: "y-websocket",
+				// `?relay=ws` → y-websocket relay; `?relay=hocuspocus` → the
+				// auto-started Hocuspocus relay (URL from `/api/collab/config`);
+				// no relay → omit `websocketUrl` so the plugin runs in-memory.
+				websocketUrl,
+				provider,
 				room: collabRoom,
 				self: demoIdentityRef.current,
 				puckConfig: editorDemoConfig as unknown as Config,
@@ -665,7 +700,13 @@ export default function PuckEditorPage() {
 		return () => {
 			cancelled = true;
 		};
-	}, [collabEnabled, demoIdentityReady, collabRelayUrl, collabRoom]);
+	}, [
+		collabEnabled,
+		demoIdentityReady,
+		collabRelayUrl,
+		collabRoom,
+		collabRelayKind,
+	]);
 
 	// Memoized so the plugins array reference stays stable across
 	// renders. Without this, each render passes a fresh array literal
@@ -686,6 +727,8 @@ export default function PuckEditorPage() {
 			designSystemPlugin,
 			pageSeoPlugin,
 			lazyCanvasStudioPlugin,
+			canvasExportPlugin,
+			lazyAiImageSidebarPlugin,
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
 		];
@@ -705,7 +748,7 @@ export default function PuckEditorPage() {
 		if (incomingData !== null) {
 			setPublishedData(getDemoDataFromSearchParam(incomingData));
 		}
-		setCollabEnabled(params.get("collab") === "1");
+		setCollabEnabled(params.get("collab") !== "0");
 		const peerOverride = params.get("peer");
 		if (peerOverride && peerOverride.length > 0) {
 			setCollabPeerOverride(peerOverride);
@@ -716,20 +759,34 @@ export default function PuckEditorPage() {
 		if (roomOverride && roomOverride.length > 0) {
 			setCollabRoom(roomOverride);
 		}
-		// `?relay=ws` switches the demo onto the y-websocket reference
-		// relay (port comes from `?relayPort=` or NEXT_PUBLIC_COLLAB_RELAY_PORT,
-		// defaulting to 21234 — keep in sync with `scripts/dev-collab.mjs`
-		// and `playwright.config.ts`). Without it the demo runs in
-		// single-tab in-memory mode and only proves the SnapshotAdapter
-		// wiring.
-		if (params.get("relay") === "ws") {
+		// Relay selection:
+		//   - bare `/puck/editor` (default showcase) → auto-connect to the
+		//     Hocuspocus relay the `dev` supervisor starts (URL from
+		//     `/api/collab/config`, :31234);
+		//   - `?relay=ws` → y-websocket reference relay (port from `?relayPort=`/
+		//     NEXT_PUBLIC_COLLAB_RELAY_PORT, default 21234 — keep in sync with
+		//     `scripts/dev-collab.mjs` and `playwright.config.ts`);
+		//   - explicit `?collab=1` without a relay → single-tab in-memory.
+		const relayParam = params.get("relay");
+		if (relayParam === "ws") {
 			const port =
 				params.get("relayPort") ??
 				process.env.NEXT_PUBLIC_COLLAB_RELAY_PORT ??
 				"21234";
 			setCollabRelayUrl(`ws://localhost:${port}`);
-		} else {
+			setCollabRelayKind("ws");
+		} else if (relayParam === "hocuspocus") {
+			// URL resolved at plugin-build time from `/api/collab/config`.
 			setCollabRelayUrl(null);
+			setCollabRelayKind("hocuspocus");
+		} else if (params.get("collab") === "1") {
+			// Explicit opt-in without a relay → single-tab in-memory.
+			setCollabRelayUrl(null);
+			setCollabRelayKind(null);
+		} else {
+			// Default showcase → auto-connect to the Hocuspocus relay.
+			setCollabRelayUrl(null);
+			setCollabRelayKind("hocuspocus");
 		}
 		setChromeMode(params.get("chrome") === "puck" ? "puck" : "anvilkit");
 		setCollabQueryReady(true);
