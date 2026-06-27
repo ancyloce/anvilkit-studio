@@ -16,6 +16,12 @@
 # production
 /build
 
+# local page storage (sqlite + filesystem adapters)
+/.anvilkit
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
 # misc
 .DS_Store
 *.pem

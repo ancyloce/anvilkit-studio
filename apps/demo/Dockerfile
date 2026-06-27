@@ -42,6 +42,10 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
 # Build the demo and ONLY its workspace dependencies via Turbo (`^build`).
 # DOCKER_BUILD flips next.config.js to standalone output (see that file).
 ENV DOCKER_BUILD=1
+# Route the editor's Save/Publish through /api/pages (the server SQLite adapter)
+# instead of localStorage. NEXT_PUBLIC_* is inlined at build time, so it must be
+# set BEFORE the build, not as a runtime env.
+ENV NEXT_PUBLIC_USE_REMOTE_STORAGE=true
 RUN pnpm exec turbo run build --filter=demo --ui=stream
 
 # ---- runner ----------------------------------------------------------------
@@ -60,6 +64,17 @@ WORKDIR /app
 COPY --from=builder /repo/apps/demo/.next/standalone ./
 COPY --from=builder /repo/apps/demo/.next/static ./apps/demo/.next/static
 COPY --from=builder /repo/apps/demo/public ./apps/demo/public
+
+# Writable, persistent location for the SQLite page store. A mounted volume is
+# root-owned by default, so chown it before dropping to the non-root `node` user.
+# (Schema is created on boot by ensureSchema(); no migration files to copy.)
+RUN mkdir -p /data && chown node:node /data
+VOLUME /data
+
+# Server-side page-store selection (read at request time by the API routes). The
+# SQLite file lands on /data so published pages survive container restarts.
+ENV ANVILKIT_PAGE_STORAGE=sqlite \
+	ANVILKIT_PAGE_STORAGE_SQLITE_PATH=/data/pages.sqlite
 
 USER node
 EXPOSE 3000

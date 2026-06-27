@@ -4,7 +4,8 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"dev": "next dev --webpack",
+		"dev": "COLLAB_RELAY_KIND=hocuspocus node scripts/dev-collab.mjs",
+		"dev:next-only": "next dev --webpack",
 		"dev:turbopack": "next dev",
 		"dev:collab": "node scripts/dev-collab.mjs",
 		"relay": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-21234}",
@@ -15,6 +16,7 @@
 		"typecheck": "next typegen && tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest",
+		"drizzle:generate": "drizzle-kit generate",
 		"e2e": "playwright test",
 		"e2e:install": "playwright install --with-deps chromium"
 	},
@@ -54,6 +56,8 @@
 		"@gsap/react": "^2.1.2",
 		"@hocuspocus/provider": "^4.3.0",
 		"@puckeditor/core": "^0.22.0",
+		"better-sqlite3": "^12.11.1",
+		"drizzle-orm": "^0.45.2",
 		"gsap": "^3.15.0",
 		"konva": "^10.3.0",
 		"liquid-glass-web-react": "^0.1.1",
@@ -77,9 +81,11 @@
 		"@hocuspocus/server": "^4.3.0",
 		"@next/bundle-analyzer": "^16.2.9",
 		"@playwright/test": "^1.59.1",
+		"@types/better-sqlite3": "^7.6.13",
 		"@types/node": "^26.0.1",
 		"@types/react": "^19.2.17",
 		"@types/react-dom": "19.2.3",
+		"drizzle-kit": "^0.31.10",
 		"typescript": "6.0.3",
 		"vitest": "^4.1.9"
 	}

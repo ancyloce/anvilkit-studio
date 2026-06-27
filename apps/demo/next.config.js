@@ -17,6 +17,12 @@ const nextConfig = {
 				outputFileTracingRoot: join(import.meta.dirname, "..", ".."),
 			}
 		: {}),
+	// better-sqlite3 is a native addon (used only by the server-side SQLite
+	// page-storage adapter). Keep it external so the standalone trace copies the
+	// package — including its prebuilt `.node` binary — into
+	// `.next/standalone/node_modules` rather than trying to bundle it (which
+	// drops the binary and crashes at boot).
+	serverExternalPackages: ["better-sqlite3"],
 	experimental: {
 		externalDir: true,
 		// Tree-shake the icon/animation barrels out of route bundles
