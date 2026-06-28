@@ -47,23 +47,45 @@ services:
   collab:
     # Production Hocuspocus relay (apps/collab) — built from its own context
     # (own lockfile + .dockerignore; not a pnpm workspace member).
-    build:
-      context: ghcr.io/ancyloce/collab:latest
-      dockerfile: Dockerfile
+    image: ghcr.io/ancyloce/collab:latest
     environment:
       PORT: "1234"
       # Restrict WS upgrades to the demo's published origin (else logs "ANY").
       COLLAB_ALLOWED_ORIGINS: "http://localhost:3002"
-      # REDIS_URL: redis://redis:6379   # optional: durable + multi-instance
+      # Durable mode: persist docs to the `redis` service below and fan
+      # updates out across instances. Without this the relay boots
+      # EPHEMERAL/in-memory and rooms reset on restart.
+      REDIS_URL: redis://redis:6379
     ports:
       # Host 31234 → matches COLLAB_HOCUSPOCUS_URL (browser-reachable).
       - "31234:1234"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - anvilkit
+
+  redis:
+    # Backing store for the collab relay's durable mode (doc persistence +
+    # cross-instance pub/sub fan-out). appendonly=yes makes rooms survive
+    # restarts on the named volume.
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - collab-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
     restart: unless-stopped
     networks:
       - anvilkit
 
 volumes:
   demo-pages:
+  collab-redis:
 
 networks:
   anvilkit:
