@@ -1,6 +1,6 @@
 {
 	"name": "@anvilkit/ui",
-	"version": "0.1.16",
+	"version": "0.1.18",
 	"description": "Anvilkit shared UI primitives.",
 	"type": "module",
 	"main": "./dist/index.cjs",
