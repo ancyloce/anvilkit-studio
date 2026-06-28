@@ -6,9 +6,13 @@ FROM node:22-alpine
 ENV NODE_ENV=production
 WORKDIR /app
 
+# Enable the repo-pinned pnpm (from package.json "packageManager") via the
+# Node-bundled corepack shim.
+RUN corepack enable
+
 # Install deps first for layer caching. All deps are runtime (no dev).
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev || npm install --omit=dev
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile
 
 COPY server.mjs ./
 
