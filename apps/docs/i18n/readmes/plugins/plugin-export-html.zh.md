@@ -1,6 +1,6 @@
 # @anvilkit/plugin-export-html
 
-> **Alpha（`0.1.7`）。** 该包的接口面已实现并经过测试，但所发出的 HTML/CSS 契约在 `1.0.0` 之前可能演进。
+> **Alpha（`0.1.8`）。** 该包的接口面已实现并经过测试，但所发出的 HTML/CSS 契约在 `1.0.0` 之前可能演进。
 
 面向 Anvilkit Studio 的 HTML 导出插件。它将 `PageIR` 文档转换为带有所发出 CSS 的独立 HTML，支持可选的资源内联，并在宿主提供 `buildIR` 回调时为交互式导出流程提供一个可选启用的 Studio 顶栏操作。它是 Anvilkit 导出插件契约的参考实现——通过 CI 中的 24 项测试组合，针对恶意输入进行了安全加固。
 

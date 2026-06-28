@@ -1,6 +1,6 @@
 # @anvilkit/plugin-version-history
 
-> **Alpha（`0.1.7`）.** 헤더 액션과 diff/apply 엔진은 안정적입니다. 이 플러그인은 지원되는 `ctx.registerHistoryPanel` 슬롯을 통해 StudioSidebar `history` 패널도 기여할 수 있습니다 —— `renderPanel` 옵션을 전달하세요([사이드바 기록 패널](#sidebar-history-panel) 참조).
+> **Alpha（`0.1.8`）.** 헤더 액션과 diff/apply 엔진은 안정적입니다. 이 플러그인은 지원되는 `ctx.registerHistoryPanel` 슬롯을 통해 StudioSidebar `history` 패널도 기여할 수 있습니다 —— `renderPanel` 옵션을 전달하세요([사이드바 기록 패널](#sidebar-history-panel) 참조).
 
 Anvilkit Studio를 위한 헤드리스 버전 기록 플러그인. 스냅샷 영속화는 호스트가 제공하는 `SnapshotAdapter`에 위임되므로, 플러그인 자체는 I/O를 전혀 포함하지 않습니다 —— diff/apply 엔진, 헤더 액션, 선택적 UI 프리미티브, 그리고 테스트와 데모용 참조 어댑터만 있습니다.
 

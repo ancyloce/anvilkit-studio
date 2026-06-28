@@ -1,6 +1,6 @@
 # @anvilkit/plugin-version-history
 
-> **Alpha（`0.1.7`）。** ヘッダーアクションと diff/apply エンジンは安定しています。このプラグインは、サポートされている `ctx.registerHistoryPanel` スロットを通じて StudioSidebar の `history` パネルを貢献することもできます —— `renderPanel` オプションを渡してください（[サイドバー履歴パネル](#sidebar-history-panel)を参照）。
+> **Alpha（`0.1.8`）。** ヘッダーアクションと diff/apply エンジンは安定しています。このプラグインは、サポートされている `ctx.registerHistoryPanel` スロットを通じて StudioSidebar の `history` パネルを貢献することもできます —— `renderPanel` オプションを渡してください（[サイドバー履歴パネル](#sidebar-history-panel)を参照）。
 
 Anvilkit Studio 向けのヘッドレスなバージョン履歴プラグイン。スナップショットの永続化はホストが提供する `SnapshotAdapter` に委譲されるため、プラグイン自体は I/O を一切同梱しません —— diff/apply エンジン、ヘッダーアクション、オプションの UI プリミティブ、テストとデモ用の参照アダプターのみです。
 

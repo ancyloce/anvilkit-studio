@@ -1,6 +1,6 @@
 # @anvilkit/plugin-version-history
 
-> **Alpha（`0.1.7`）。** 顶栏操作以及 diff/apply 引擎已稳定。该插件还可以通过受支持的 `ctx.registerHistoryPanel` 插槽贡献 StudioSidebar 的 `history` 面板 —— 传入 `renderPanel` 选项（参见[侧边栏历史面板](#sidebar-history-panel)）。
+> **Alpha（`0.1.8`）。** 顶栏操作以及 diff/apply 引擎已稳定。该插件还可以通过受支持的 `ctx.registerHistoryPanel` 插槽贡献 StudioSidebar 的 `history` 面板 —— 传入 `renderPanel` 选项（参见[侧边栏历史面板](#sidebar-history-panel)）。
 
 Anvilkit Studio 的无界面版本历史插件。快照持久化被委托给宿主提供的 `SnapshotAdapter`，因此插件本身不附带任何 I/O —— 只有 diff/apply 引擎、顶栏操作、可选的 UI 基元，以及用于测试和演示的参考适配器。
 
