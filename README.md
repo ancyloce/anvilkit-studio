@@ -51,13 +51,13 @@ Useful root commands:
 
 | Plugin                             | Latest         | Purpose                                                                       |
 | ---------------------------------- | -------------- | ---------------------------------------------------------------------------- |
-| `@anvilkit/plugin-export-html`     | `0.1.7`        | HTML exporter with the XSS / URL / CSS-injection hostile-input battery.       |
+| `@anvilkit/plugin-export-html`     | `0.1.8`        | HTML exporter with the XSS / URL / CSS-injection hostile-input battery.       |
 | `@anvilkit/plugin-export-react`    | `0.1.6`        | React `.tsx` / `.jsx` exporter that emits source from the Page IR.            |
 | `@anvilkit/plugin-export-canvas`   | `0.1.0-rc.2`   | Canvas export formats (PNG / JSON / SVG / PDF) over the canvas serializers.   |
 | `@anvilkit/plugin-ai-copilot`      | `0.1.8`        | Headless AI copilot; validator-gated dispatch; `./mock` for CI.              |
 | `@anvilkit/plugin-ai-image`        | `0.1.4`        | AI image generation (text-to-image, variation, inpaint, background removal). |
 | `@anvilkit/plugin-asset-manager`   | `0.1.11`        | Headless asset uploads with optional React UI + presigned adapter.           |
-| `@anvilkit/plugin-version-history` | `0.1.7`        | Snapshot persistence via host `SnapshotAdapter`; diff/apply engine.          |
+| `@anvilkit/plugin-version-history` | `0.1.8`        | Snapshot persistence via host `SnapshotAdapter`; diff/apply engine.          |
 | `@anvilkit/plugin-design-system`   | `0.1.1-rc.2`   | Token-bound fields, theme switching, and design validation.                  |
 | `@anvilkit/plugin-canvas-studio`   | `0.1.6`        | Canvas Studio integration — mode-switch, design-block + `design://` bridge.  |
 | `@anvilkit/plugin-page-seo`        | `0.1.0`        | Rail panel that edits a page's SEO metadata (`root.props.seo`).              |
