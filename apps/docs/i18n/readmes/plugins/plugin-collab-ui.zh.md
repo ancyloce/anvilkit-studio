@@ -1,6 +1,6 @@
 # @anvilkit/collab-ui
 
-> **候选发布版（`0.1.0-rc.9`）。** 在 `@next` npm 标签上与 `@anvilkit/plugin-collab-yjs` 保持同步。两个包将在 SnapshotAdapter v2 契约冻结后联合发布 GA。
+> **候选发布版（`0.1.0-rc.10`）。** 在 `@next` npm 标签上与 `@anvilkit/plugin-collab-yjs` 保持同步。两个包将在 SnapshotAdapter v2 契约冻结后联合发布 GA。
 
 [`@anvilkit/plugin-collab-yjs`](../plugin-collab-yjs/README.md) 的宿主 UI 原语。Yjs 插件是无界面的——它提供 CRDT 层、SnapshotAdapter、在场接线和冲突诊断，但不含 DOM。本包补全了 UI 部分：一个对外暴露实时协作状态的 context provider，以及一组宿主应用可直接放入其编辑器外观（chrome）的 shadcn 风格组件。整合后的 `createCollabPlugin()` 工厂函数将这两个包打包为单个 `StudioPlugin`，以应对常见场景。
 

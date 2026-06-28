@@ -1,6 +1,6 @@
 # @anvilkit/collab-ui
 
-> **リリース候補（`0.1.0-rc.9`）。** `@next` npm タグ上で `@anvilkit/plugin-collab-yjs` に追従します。両パッケージは SnapshotAdapter v2 契約が凍結され次第、共同で GA を切ります。
+> **リリース候補（`0.1.0-rc.10`）。** `@next` npm タグ上で `@anvilkit/plugin-collab-yjs` に追従します。両パッケージは SnapshotAdapter v2 契約が凍結され次第、共同で GA を切ります。
 
 [`@anvilkit/plugin-collab-yjs`](../plugin-collab-yjs/README.md) のためのホスト UI プリミティブです。Yjs プラグインはヘッドレスで——CRDT レイヤー、SnapshotAdapter、プレゼンスの配線、競合診断を提供しますが、DOM は含みません。このパッケージが UI を補完します：ライブな協作状態を公開する context provider に加えて、ホストアプリが自身のエディタークロムに組み込める一連の shadcn スタイルのコンポーネントです。統合された `createCollabPlugin()` ファクトリは、一般的なケース向けに両パッケージを単一の `StudioPlugin` にまとめます。
 

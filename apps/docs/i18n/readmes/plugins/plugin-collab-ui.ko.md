@@ -1,6 +1,6 @@
 # @anvilkit/collab-ui
 
-> **릴리스 후보（`0.1.0-rc.9`）.** `@next` npm 태그에서 `@anvilkit/plugin-collab-yjs`를 추적합니다. 두 패키지는 SnapshotAdapter v2 계약이 동결되면 공동으로 GA를 출시합니다.
+> **릴리스 후보（`0.1.0-rc.10`）.** `@next` npm 태그에서 `@anvilkit/plugin-collab-yjs`를 추적합니다. 두 패키지는 SnapshotAdapter v2 계약이 동결되면 공동으로 GA를 출시합니다.
 
 [`@anvilkit/plugin-collab-yjs`](../plugin-collab-yjs/README.md)를 위한 호스트 UI 프리미티브입니다. Yjs 플러그인은 헤드리스이며——CRDT 레이어, SnapshotAdapter, 프레즌스 배선, 충돌 진단을 제공하지만 DOM은 없습니다. 이 패키지가 UI를 채웁니다: 라이브 협업 상태를 노출하는 context provider와, 호스트 앱이 자신의 에디터 크롬에 끼워 넣는 일련의 shadcn 스타일 컴포넌트입니다. 통합된 `createCollabPlugin()` 팩토리는 일반적인 경우를 위해 두 패키지를 단일 `StudioPlugin`으로 묶습니다.
 
