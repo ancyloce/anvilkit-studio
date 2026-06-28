@@ -61,7 +61,7 @@ Useful root commands:
 | `@anvilkit/plugin-design-system`   | `0.1.1-rc.2`   | Token-bound fields, theme switching, and design validation.                  |
 | `@anvilkit/plugin-canvas-studio`   | `0.1.6`        | Canvas Studio integration — mode-switch, design-block + `design://` bridge.  |
 | `@anvilkit/plugin-page-seo`        | `0.1.0`        | Rail panel that edits a page's SEO metadata (`root.props.seo`).              |
-| `@anvilkit/plugin-collab-yjs`      | `0.10.0-rc.9`  | Yjs CRDT collaboration; native per-node Y.Map tree (now default).           |
+| `@anvilkit/plugin-collab-yjs`      | `0.10.0-rc.10`  | Yjs CRDT collaboration; native per-node Y.Map tree (now default).           |
 | `@anvilkit/collab-ui`              | `0.1.0-rc.10`   | Host UI primitives (room bar, presence layer) for the Yjs plugin.            |
 
 ### Canvas & analytics (`packages/canvas/`, `packages/analytics/`, git submodules)
