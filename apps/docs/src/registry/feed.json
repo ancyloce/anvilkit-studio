@@ -29,7 +29,7 @@
 			"name": "@anvilkit/plugin-asset-manager",
 			"description": "Headless asset manager plugin for Anvilkit Studio with host-provided uploads and optional React UI.",
 			"packageName": "@anvilkit/plugin-asset-manager",
-			"version": "0.1.10",
+			"version": "0.1.11",
 			"category": "assets",
 			"tags": [],
 			"publisher": "first-party",
