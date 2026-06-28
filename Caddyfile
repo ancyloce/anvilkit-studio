@@ -1,0 +1,31 @@
+# Single public edge for the AnvilKit demo stack (docker-compose.yml `proxy`).
+#
+# This is the ONLY service published to the host/internet. `demo` and `collab`
+# stay on the internal `anvilkit` Docker network and are never exposed directly,
+# so the collab relay is reachable only through here, over the internal network.
+#
+# Site address:
+#   - PUBLIC_DOMAIN set (e.g. demo.example.com) → automatic HTTPS / WSS via
+#     Let's Encrypt (needs ports 80+443 reachable and DNS pointing here).
+#   - PUBLIC_DOMAIN unset/empty → `:80` plain HTTP (no cert attempts), so
+#     http://localhost (and ws://) work out of the box for local/IP testing.
+{$PUBLIC_DOMAIN} {
+	# Collaboration WebSocket → internal Hocuspocus relay (`collab:1234`).
+	# Caddy upgrades the connection transparently. The Hocuspocus client opens
+	# the socket at exactly `/collab-ws` and sends the room name in-band, so we
+	# match the exact path AND sub-paths and forward as-is (no prefix strip). A
+	# distinct path (NOT `/collab`, which is a demo *page* route) avoids
+	# clobbering the app. The relay has no published port of its own — it is
+	# reachable only here, over the internal network.
+	@collab path /collab-ws /collab-ws/*
+	handle @collab {
+		reverse_proxy collab:1234
+	}
+
+	# Everything else → the Next.js demo app (`demo:3000`). Same origin as the
+	# WebSocket above, so the browser's Origin always matches the relay's
+	# allowlist and a single TLS cert covers both.
+	handle {
+		reverse_proxy demo:3000
+	}
+}
