@@ -48,7 +48,7 @@ services:
     # Production Hocuspocus relay (apps/collab) — built from its own context
     # (own lockfile + .dockerignore; not a pnpm workspace member).
     build:
-      context: apps/collab
+      context: ghcr.io/ancyloce/collab:latest
       dockerfile: Dockerfile
     environment:
       PORT: "1234"
