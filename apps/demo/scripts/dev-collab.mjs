@@ -58,6 +58,16 @@ const nextArgs = ["dev", "--webpack", ...process.argv.slice(2)];
 const OWNER = String(process.pid);
 const childEnv = { ...process.env, ANVILKIT_DEVCOLLAB_OWNER: OWNER };
 
+// Point the Next dev server at the DIRECT dev relay. Without this the collab
+// client would derive the proxied same-origin `/collab-ws` path, which only
+// exists behind the docker-compose Caddy edge — not in local dev, where the
+// relay is a bare process on :31234. Setting it explicitly makes
+// `/api/collab/config` serve the direct URL so derivation is bypassed. Respects
+// an existing override.
+if (RELAY_KIND === "hocuspocus" && !childEnv.COLLAB_HOCUSPOCUS_URL) {
+	childEnv.COLLAB_HOCUSPOCUS_URL = `ws://localhost:${relayPort}`;
+}
+
 function isAlive(pid) {
 	try {
 		process.kill(Number(pid), 0);

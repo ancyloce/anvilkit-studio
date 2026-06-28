@@ -44,6 +44,7 @@ import {
 	useState,
 } from "react";
 import { useDemoIdentity } from "@/lib/collab-identity";
+import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
 import {
 	createLazyDemoVersionHistoryPlugins,
@@ -657,10 +658,12 @@ export default function PuckEditorPage() {
 				provider = "hocuspocus";
 				try {
 					const res = await fetch("/api/collab/config");
-					const cfg = (await res.json()) as { wsUrl?: string };
-					websocketUrl = cfg.wsUrl ?? "ws://localhost:31234";
+					const cfg = (await res.json()) as { wsUrl?: string | null };
+					// Pinned URL wins; otherwise derive `ws(s)://<current-host>:31234`
+					// so a prebuilt image works on a real server (not just localhost).
+					websocketUrl = resolveCollabRelayUrl(cfg.wsUrl);
 				} catch {
-					websocketUrl = "ws://localhost:31234";
+					websocketUrl = resolveCollabRelayUrl(null);
 				}
 				if (cancelled) return;
 			}

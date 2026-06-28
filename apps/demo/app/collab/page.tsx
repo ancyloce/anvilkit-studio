@@ -6,19 +6,9 @@ import { Studio } from "@anvilkit/core";
 import type { Config, Data } from "@puckeditor/core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import {
-	createDemoConfig,
-	createDemoData,
-	demoConfig,
-} from "@/lib/puck-demo";
+import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
+import { createDemoConfig, createDemoData, demoConfig } from "@/lib/puck-demo";
 import { readPersistedStudioLocale } from "@/lib/studio-locale";
-
-// The one value this demo sets: the WebSocket relay URL. Defaults to the local
-// Hocuspocus dev relay (`pnpm --filter demo relay:hocuspocus`, port 31234).
-// `createCollabPlugin`'s default `provider` is `"hocuspocus"`, so pointing it
-// at the Hocuspocus relay needs nothing else.
-const RELAY_URL =
-	process.env.NEXT_PUBLIC_COLLAB_HOCUSPOCUS_URL ?? "ws://localhost:31234";
 
 // Studio config: mounts the built-in header LanguageSwitcher via
 // `i18n.showLocaleSwitch` (replacing the old `headerEnd` wiring). No
@@ -52,19 +42,44 @@ export default function CollabDemoPage() {
 	// only seeds a brand-new room (the first tab to join an empty room).
 	const [seedData] = useState<Data>(() => createDemoData() as Data);
 
-	// Built once so `<Studio>`'s compile effect doesn't re-fire (and tear down
-	// the WebSocket) on every incidental re-render. The plugin keeps the
-	// stable English `demoConfig` (its internals don't render field labels);
-	// only the `puckConfig` handed to <Studio> below is locale-aware.
-	const plugins = useMemo(
-		() => [
-			createCollabPlugin({
-				websocketUrl: RELAY_URL,
-				puckConfig: demoConfig as unknown as Config,
-			}),
-		],
-		[],
-	);
+	// Resolve the browser-reachable relay URL at RUNTIME, then build the collab
+	// plugin once. `/api/collab/config` serves `COLLAB_HOCUSPOCUS_URL` when an
+	// operator pins it; otherwise the client derives `ws(s)://<current-host>:31234`
+	// from the page it loaded (see `resolveCollabRelayUrl`). This replaces the old
+	// build-time `NEXT_PUBLIC_COLLAB_HOCUSPOCUS_URL` constant, which froze the URL
+	// to `localhost` in the prebuilt image and broke collab on any real server.
+	//
+	// Built once (null → array) so `<Studio>`'s compile effect doesn't re-fire
+	// (and tear down the WebSocket) on every incidental re-render. The plugin
+	// keeps the stable English `demoConfig` (its internals don't render field
+	// labels); only the `puckConfig` handed to <Studio> below is locale-aware.
+	const [plugins, setPlugins] = useState<
+		ReturnType<typeof createCollabPlugin>[] | null
+	>(null);
+
+	useEffect(() => {
+		let cancelled = false;
+		void (async () => {
+			let configured: string | null = null;
+			try {
+				const res = await fetch("/api/collab/config");
+				const cfg = (await res.json()) as { wsUrl?: string | null };
+				configured = cfg.wsUrl ?? null;
+			} catch {
+				// Network/route failure → fall back to the window-derived default.
+			}
+			if (cancelled) return;
+			setPlugins([
+				createCollabPlugin({
+					websocketUrl: resolveCollabRelayUrl(configured),
+					puckConfig: demoConfig as unknown as Config,
+				}),
+			]);
+		})();
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
 	// Host-side mirror of the UNCONTROLLED locale store (see /puck/editor for
 	// the long-form rationale): seed from the persisted value on mount, track
@@ -121,7 +136,7 @@ export default function CollabDemoPage() {
 					storeId="demo-collab"
 					puckConfig={localizedConfig as unknown as Config}
 					data={seedData}
-					plugins={plugins}
+					plugins={plugins ?? undefined}
 					chrome="anvilkit"
 					config={collabStudioConfig}
 					onLocaleChange={handleLocaleChange}
