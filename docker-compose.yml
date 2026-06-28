@@ -5,8 +5,37 @@
 #
 #   docker compose pull && docker compose up -d
 #
-# Then open:  demo → http://localhost:3000   docs → http://localhost:5173
+# Topology: the `proxy` (Caddy) service is the ONLY public entry point. It
+# fronts the demo and tunnels the collab WebSocket to the relay over the
+# internal Docker network, so `demo` and `collab` are NOT published directly.
+#
+# Then open:  demo → http://localhost   docs → http://localhost:5173
 services:
+  proxy:
+    # Single public edge: terminates TLS (when PUBLIC_DOMAIN is set) and is the
+    # only service with published ports. Routes `/collab-ws/*` → the internal
+    # Hocuspocus relay and everything else → the demo. See ./Caddyfile.
+    image: caddy:2-alpine
+    environment:
+      # Unset → `:80` plain HTTP (good for localhost/IP). Set to your domain for
+      # automatic HTTPS + WSS. The `:80` default is supplied here (Caddy's own
+      # env-default only fires when a var is fully unset, but compose always
+      # sets it). See .env.example.
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN:-:80}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - demo
+      - collab
+    restart: unless-stopped
+    networks:
+      - anvilkit
+
   demo:
     # Rebuild on `main` publishes `:latest` (.github/workflows/docker-images.yml);
     # the image now bundles the SQLite adapter + better-sqlite3 native binary.
@@ -18,11 +47,17 @@ services:
       # these; repeated here for visibility / per-deploy override).
       ANVILKIT_PAGE_STORAGE: sqlite
       ANVILKIT_PAGE_STORAGE_SQLITE_PATH: /data/pages.sqlite
-      # Browser-reachable relay URL (NOT the compose-internal `collab:1234`) —
-      # served to the client by `GET /api/collab/config`.
-      COLLAB_HOCUSPOCUS_URL: ws://localhost:31234
-    ports:
-      - "3002:3000"
+      # Relay URL served to the client by `GET /api/collab/config`. LEAVE EMPTY:
+      # the client then derives the same-origin proxied path
+      # `ws(s)://<page-host>/collab-ws` from window.location, which the `proxy`
+      # forwards to the internal relay (works on localhost AND a server, and
+      # picks wss:// behind TLS, with no rebuild). Pin COLLAB_PUBLIC_WS_URL only
+      # when the relay is reached directly, off the proxy. See .env.example.
+      COLLAB_HOCUSPOCUS_URL: ${COLLAB_PUBLIC_WS_URL:-}
+    # Internal-only: reached through the `proxy` edge, never published directly,
+    # so collab stays same-origin with the app.
+    expose:
+      - "3000"
     volumes:
       - demo-pages:/data
     depends_on:
@@ -50,15 +85,22 @@ services:
     image: ghcr.io/ancyloce/collab:latest
     environment:
       PORT: "1234"
-      # Restrict WS upgrades to the demo's published origin (else logs "ANY").
-      COLLAB_ALLOWED_ORIGINS: "http://localhost:3002"
+      # Origin allowlist for WS upgrades. Since the relay is internal-only and
+      # reached through the proxy, the browser is same-origin with the app, so
+      # an empty allowlist (accept any; relay logs "ANY") is safe here. Pin it
+      # to your public origin(s) via DEMO_ALLOWED_ORIGINS (e.g.
+      # https://demo.example.com) for defense-in-depth. See .env.example.
+      COLLAB_ALLOWED_ORIGINS: ${DEMO_ALLOWED_ORIGINS:-}
       # Durable mode: persist docs to the `redis` service below and fan
       # updates out across instances. Without this the relay boots
       # EPHEMERAL/in-memory and rooms reset on restart.
       REDIS_URL: redis://redis:6379
-    ports:
-      # Host 31234 → matches COLLAB_HOCUSPOCUS_URL (browser-reachable).
-      - "31234:1234"
+    # Internal-only: NO published port. The `proxy` forwards `/collab-ws/*` to
+    # this service (`collab:1234`) over the internal network — that is what
+    # lets WSS terminate once at the edge instead of needing a cert on a
+    # separately-exposed relay port.
+    expose:
+      - "1234"
     depends_on:
       redis:
         condition: service_healthy
@@ -86,6 +128,8 @@ services:
 volumes:
   demo-pages:
   collab-redis:
+  caddy-data:
+  caddy-config:
 
 networks:
   anvilkit:
