@@ -48,7 +48,6 @@ import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
 import {
 	createLazyDemoVersionHistoryPlugins,
 	getDemoAssetRegistry,
-	lazyAiImageSidebarPlugin,
 	lazyAssetManagerNoHeaderPlugin,
 	lazyCanvasStudioPlugin,
 	lazyHtmlExportPlugin,
@@ -732,7 +731,6 @@ export default function PuckEditorPage() {
 			pageSeoPlugin,
 			lazyCanvasStudioPlugin,
 			canvasExportPlugin,
-			lazyAiImageSidebarPlugin,
 			demoCopySnippetPlugin,
 			demoLayerQuickAddPlugin,
 		];

@@ -56,4 +56,16 @@ test("AI copilot generates a Hero from a matching fixture prompt", async ({
       { timeout: 10_000 },
     )
     .toBe(true);
+
+  // Regression guard: the AI Copilot panel must own the StudioSidebar
+  // `copilot` slot for the whole session. `copilotPanel` is a
+  // single-occupancy surface (core's sidebar registry is last-write-wins),
+  // so a second registrant co-mounted in this <Studio> — e.g. the AI Image
+  // sidebar plugin, whose home is the canvas-studio route — would clobber it
+  // and emit the overwrite warning. Assert that warning never fired.
+  expect(
+    consoleMessages.filter((line) =>
+      line.includes('"copilotPanel" surface is already registered'),
+    ),
+  ).toEqual([]);
 });
