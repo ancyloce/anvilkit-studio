@@ -1,9 +1,11 @@
 name: Docker Images (GHCR)
 
-# Build the apps/demo (Next.js) and apps/docs (Vite/TanStack Start) images and
-# push them to GitHub Container Registry so other servers can pull them:
+# Build the apps/demo (Next.js), apps/docs (Vite/TanStack Start) and
+# apps/collab (Hocuspocus relay) images and push them to GitHub Container
+# Registry so other servers can pull them:
 #   docker pull ghcr.io/<owner>/demo:latest
 #   docker pull ghcr.io/<owner>/docs:latest
+#   docker pull ghcr.io/<owner>/collab:latest
 # Images are NOT published to Docker Hub.
 
 on:
@@ -143,6 +145,120 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: docker-build-diagnostics-${{ matrix.app }}
+          path: build-diagnostics/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # apps/collab is the standalone Hocuspocus relay. It is NOT a pnpm workspace
+  # member and pulls in no submodule packages, and its Dockerfile COPYs files
+  # (package.json / package-lock.json / server.mjs) from the *context root* —
+  # so it needs a plain checkout and a build context of apps/collab (NOT the
+  # monorepo root). That makes it a separate job rather than a matrix entry of
+  # build-and-push above.
+  build-and-push-collab:
+    name: Build & push collab
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # checkout
+      packages: write # push to ghcr.io
+    steps:
+      # 1. Checkout — no submodules: apps/collab is self-contained and tracked
+      #    directly in the superproject.
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      # Resolve a fully lowercased image ref (GHCR rejects uppercase paths).
+      - name: Compute image reference
+        id: img
+        env:
+          REGISTRY: ${{ env.REGISTRY }}
+          OWNER: ${{ github.repository_owner }}
+          IMAGE: collab
+        run: |
+          ref="${REGISTRY,,}/${OWNER,,}/${IMAGE,,}"
+          echo "ref=${ref}" >> "$GITHUB_OUTPUT"
+          echo "Image: ${ref}"
+
+      # 2. Buildx (BuildKit) for cache + efficient layer builds.
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Log in to GHCR with the workflow token (no extra secret needed).
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Derive tags + OCI labels: `latest` on the default branch plus an
+      # immutable short-SHA tag for traceability/rollback.
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.img.outputs.ref }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short
+          labels: |
+            org.opencontainers.image.title=anvilkit-collab
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+
+      # 4. Build and push. Context is apps/collab (the collab Dockerfile COPYs
+      #    from the context root), NOT the monorepo root.
+      - name: Build and push image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/collab # the standalone collab service dir
+          file: apps/collab/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: false # keep the GHCR package listing clean (no unknown/unknown)
+          cache-from: type=gha,scope=collab
+          cache-to: type=gha,mode=max,scope=collab
+
+      # Optional offline-distribution path (workflow_dispatch only): re-resolve
+      # the just-built image from the buildx cache with --load, then
+      # `docker save | gzip` to a tarball and upload it as a run artifact.
+      # A server with no GHCR access can `docker load < collab-image.tar.gz`.
+      - name: Save image to tarball
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.save_tar }}
+        run: |
+          docker buildx build \
+            --load \
+            --file "apps/collab/Dockerfile" \
+            --tag "${{ steps.img.outputs.ref }}:latest" \
+            --cache-from type=gha,scope=collab \
+            apps/collab
+          docker save "${{ steps.img.outputs.ref }}:latest" | gzip > "collab-image.tar.gz"
+          ls -lh "collab-image.tar.gz"
+
+      - name: Upload image tarball
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.save_tar }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: collab-image
+          path: collab-image.tar.gz
+          retention-days: 7
+
+      # Preserve tangible diagnostics when a build fails (the full BuildKit
+      # log is already inline in the run via BUILDKIT_PROGRESS=plain).
+      - name: Collect build diagnostics on failure
+        if: failure()
+        run: |
+          mkdir -p build-diagnostics
+          docker buildx ls    > build-diagnostics/buildx-ls.txt   2>&1 || true
+          docker info         > build-diagnostics/docker-info.txt 2>&1 || true
+          df -h               > build-diagnostics/disk.txt        2>&1 || true
+
+      - name: Upload build diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: docker-build-diagnostics-collab
           path: build-diagnostics/
           retention-days: 7
           if-no-files-found: ignore
