@@ -1,6 +1,6 @@
 # @anvilkit/plugin-asset-manager
 
-> **Alpha(`0.1.10`).** `v1.0` 이전에는 공개 표면이 아직 바뀔 수 있습니다. CI에서 강제되는 번들 예산: headless 진입점 ≤ 8 KB gzip, UI 서브경로 ≤ 12 KB gzip, Unsplash 서브경로 ≤ 4 KB gzip.
+> **Alpha(`0.1.11`).** `v1.0` 이전에는 공개 표면이 아직 바뀔 수 있습니다. CI에서 강제되는 번들 예산: headless 진입점 ≤ 8 KB gzip, UI 서브경로 ≤ 12 KB gzip, Unsplash 서브경로 ≤ 4 KB gzip.
 
 Anvilkit Studio를 위한 헤드리스 에셋 관리자 플러그인입니다. 호스트가 업로드 백엔드를 제공하며, 플러그인은 검증, 등록, 검색, IR 시점 해석, CSP 가이던스, 그리고 (선택적으로) 업로드 + 탐색 경험을 위한 React UI를 담당합니다. 모든 어댑터 응답에 대해 엄격한 신뢰 경계를 강제하면서, 교체 가능한 프로덕션 백엔드(S3, GCS, 커스텀 HTTP)를 위해 설계되었습니다.
 
