@@ -12,11 +12,16 @@
 //      have no meaning on the read path — there is no editing session
 //      to observe.
 //
-// This route renders *only* the published page content: with `?slug=<slug>` it
-// serves the published document straight from the durable store (the editor's
-// publish flow navigates here); otherwise it falls back to the shared showcase
-// payload (`?data=` or the default demo data) that backs the static "server
-// render" links. No masthead, notes, links, or JSON panel — just the page.
+// This route renders *only* the page content:
+//   - `?slug=<slug>` serves the published document from the durable store
+//     (the editor's publish flow navigates here);
+//   - `?slug=<slug>&preview=1` serves the page's in-progress *draft* — the
+//     editor's header Preview action stores the live document to SQLite as the
+//     draft, then opens this URL, so the document travels through the durable
+//     store rather than being concatenated into the URL;
+//   - otherwise it falls back to the shared showcase payload (`?data=` or the
+//     default demo data) that backs the static "server render" links.
+// No masthead, notes, links, or JSON panel — just the page.
 import { Render } from "@puckeditor/core/rsc";
 import type { ReactElement } from "react";
 import { loadPublishedRender } from "@/lib/published-render";
@@ -46,10 +51,13 @@ export default async function PuckRenderPage({
 }: PuckRenderPageProps): Promise<ReactElement> {
 	const resolvedSearchParams = searchParams ? await searchParams : undefined;
 	const slug = firstParam(resolvedSearchParams?.slug);
+	const preview = firstParam(resolvedSearchParams?.preview) === "1";
 
-	// Published document from the durable store (editor publish flow).
+	// Document from the durable store, keyed by slug: the published payload, or
+	// the in-progress draft under `&preview=1` (the editor's header Preview
+	// action). Either way the document comes from SQLite, not the URL.
 	if (slug !== undefined && slug.length > 0) {
-		const model = await loadPublishedRender([slug]);
+		const model = await loadPublishedRender([slug], { preview });
 		if (model !== null) {
 			return (
 				<RenderNavigation>

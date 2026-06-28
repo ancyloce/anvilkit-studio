@@ -57,6 +57,7 @@ import {
 	loadExportHtml,
 	loadExportReact,
 } from "@/lib/lazy-plugins";
+import { PREVIEW_SLOT_SLUG } from "@/lib/page-link";
 import { persistPage } from "@/lib/page-persistence";
 import { pageValidationPlugin } from "@/lib/page-validation-plugin";
 import { createPersistedPagesSource } from "@/lib/persisted-pages-source";
@@ -988,16 +989,59 @@ export default function PuckEditorPage() {
 		console.log("[demo] publish", typedData);
 	}
 
-	function handlePreview(liveData: Data) {
-		// Preview the LIVE (possibly unsaved) editor document: open the render
-		// route carrying the current data inline (`?data=`), in a new tab so the
-		// editing session is preserved. The render route renders it content-only.
+	async function handlePreview(liveData: Data) {
+		// Preview the LIVE (possibly unsaved) editor document. Instead of
+		// serializing the whole document into the URL (`?data=`), persist it to
+		// SQLite and open the render route in preview mode so it reads it back —
+		// the document travels through the durable store, never the URL.
 		const typed = liveData as unknown as Data<DemoComponents, PageRootProps>;
-		window.open(
-			createDemoModeHref("/puck/render", typed),
-			"_blank",
-			"noopener,noreferrer",
-		);
+		const slug = typed.root.props?.slug ?? "";
+		// Open the preview tab synchronously (inside the click gesture) so it
+		// isn't popup-blocked; fill it once the document is stored.
+		const previewWindow = window.open("", "_blank");
+		if (previewWindow !== null) {
+			previewWindow.document.write("Generating preview…");
+		}
+
+		// A real, slugged page stores as that page's draft (keyed by slug); a
+		// slugless / in-progress page falls back to the shared `__preview__`
+		// scratch slot, which bypasses the strict slug validation.
+		const previewSlug = slug.length > 0 ? slug : PREVIEW_SLOT_SLUG;
+		const stored =
+			slug.length > 0
+				? (await persistPage("draft", typed)).ok
+				: await storePreviewScratch(typed);
+		if (!stored) {
+			console.error("[demo] preview blocked — could not store the document");
+			previewWindow?.close();
+			return;
+		}
+
+		const previewUrl = `/puck/render?slug=${encodeURIComponent(
+			previewSlug,
+		)}&preview=1`;
+		if (previewWindow !== null) {
+			previewWindow.location.href = previewUrl;
+		} else {
+			window.open(previewUrl, "_blank", "noopener,noreferrer");
+		}
+	}
+
+	// Stash a slugless / in-progress document in the durable `__preview__`
+	// scratch slot. Returns `false` (and the caller aborts) on a transport error.
+	async function storePreviewScratch(
+		data: Data<DemoComponents, PageRootProps>,
+	): Promise<boolean> {
+		try {
+			const res = await fetch("/api/pages/preview", {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ data }),
+			});
+			return res.ok;
+		} catch {
+			return false;
+		}
 	}
 
 	// Build export IR and resolve any `asset://<id>` references against the
