@@ -64,15 +64,21 @@ export async function buildPublishedMetadata(
 }
 
 /**
- * Resolve the published document for `segments`, or `null` when nothing should
+ * Resolve the document to render for `segments`, or `null` when nothing should
  * render (no record, never published, or archived) — the caller turns `null`
- * into `notFound()`. Only the `published` payload is served; drafts/archived
- * never render.
+ * into `notFound()`. By default only the `published` payload is served.
+ *
+ * `opts.preview` opts into preview mode: the in-progress `draft` is served
+ * instead (falling back to `published`). The editor's header Preview action uses
+ * this to render the live, possibly-unsaved document it just stored as the
+ * page's draft in SQLite — so the preview transports the document through the
+ * durable store, not the URL. The public render routes never set it.
  */
 export async function loadPublishedRender(
 	segments: string[],
+	opts?: { readonly preview?: boolean },
 ): Promise<PublishedRenderModel | null> {
-	const page = await getPublishedPage(slugOf(segments));
+	const page = await getPublishedPage(slugOf(segments), opts);
 	if (page === null) return null;
 
 	const root = page.root.props as PageRootProps | undefined;

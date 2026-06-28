@@ -13,6 +13,16 @@
 export const RENDER_BASE = "/puck/render";
 
 /**
+ * Reserved key for the editor's preview *scratch slot* — a single throwaway
+ * draft record the header Preview action writes a slugless / in-progress page
+ * into (via `POST /api/pages/preview`), then renders back through
+ * `/puck/render?slug=__preview__&preview=1`. Underscored on purpose so it can
+ * never collide with a real page slug (the slug regex forbids underscores) and
+ * so the scratch record never resolves on the public `/<slug>` route.
+ */
+export const PREVIEW_SLOT_SLUG = "__preview__";
+
+/**
  * `true` for a same-origin app path (`/about`, `/team/members`). Returns `false`
  * for external URLs (`https://…`, `mailto:…`), protocol-relative URLs (`//host`),
  * and in-page fragments (`#section`) — those keep their native behavior.
