@@ -2,9 +2,12 @@
  * @file F7 — the formal `onBeforePublish` abort path (PRD 0004).
  *
  * Validates the page payload (`root.props`) before publish; throwing aborts
- * the publish (core's lifecycle catches the throw and skips `onPublish`). This
- * covers Puck's own publish button. The demo's `handlePublishClick` validates
- * the chrome panel's "Publish to live" path inline (it bypasses the queue).
+ * the publish (core's `runPublishPipeline` catches the throw, skips the consumer
+ * publish, and never emits `page_published`). As of the unified publish path
+ * this `onBeforePublish` runs for BOTH Puck's native publish AND the AnvilKit
+ * chrome's "Publish to live" — the chrome path no longer bypasses the queue. The
+ * demo's `handlePublishClick` still validates inline (defense in depth) before
+ * the actual persist.
  *
  * Demo-only — lives in `apps/demo/lib/`, not a published package.
  */

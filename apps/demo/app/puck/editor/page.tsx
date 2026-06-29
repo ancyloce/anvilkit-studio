@@ -4,7 +4,7 @@
 // `@anvilkit/canvas-editor`; its compiled (preflight-free) chrome stylesheet
 // must be loaded by the host or the editor shell renders unstyled/blank.
 import "@anvilkit/canvas-editor/styles.css";
-import { createConsoleAdapter } from "@anvilkit/analytics-core";
+import { createHttpAdapter } from "@anvilkit/analytics-core";
 import type { StudioPlugin } from "@anvilkit/core";
 import {
 	compilePlugins,
@@ -501,10 +501,51 @@ export default function PuckEditorPage() {
 		[studioMessages],
 	);
 
-	// F9: editor-side analytics. The console adapter logs the system events
-	// (draft_saved / page_published / component_dropped) emitted by <Studio>.
+	// F9: editor-side analytics. The demo now sends REAL HTTP analytics by
+	// default — the system events (draft_saved / page_published /
+	// component_dropped / seo_updated) emitted by <Studio> POST to
+	// `/api/analytics/events`. (A console adapter — `createConsoleAdapter({
+	// source: "studio" })` — is the dev fallback if you want to eyeball events
+	// instead.)
+	//
+	// `createHttpAdapter` has no static user/workspace/page context slot, so a
+	// tiny processor enriches each envelope with PRIMITIVE context read from a
+	// ref at emit time: the live active page id, the demo workspace, and the
+	// collab identity (or "demo-user"). The processor reads `analyticsContextRef`
+	// so the adapter identity stays STABLE (created once) — re-creating it per
+	// render would re-arm its visibilitychange listener and risk duplicate
+	// events. The full page document is NEVER added here.
+	const analyticsContextRef = useRef<{
+		pageId: string;
+		workspaceId: string;
+		userId: string;
+	}>({ pageId: "", workspaceId: "demo-workspace", userId: "demo-user" });
+	// The per-render refresh of `analyticsContextRef.current` lives below, once
+	// `activePageId` is declared (it is initialized from `pagesSource`).
 	const analyticsAdapter = useMemo(
-		() => createConsoleAdapter({ source: "studio" }),
+		() =>
+			createHttpAdapter({
+				endpoint: "/api/analytics/events",
+				source: "studio",
+				privacy: {
+					consentGranted: true,
+					truncateIpAddress: true,
+					retentionDays: 90,
+				},
+				processors: [
+					{
+						process(event) {
+							const ctx = analyticsContextRef.current;
+							return {
+								...event,
+								workspace_id: ctx.workspaceId,
+								user_id: ctx.userId,
+								...(ctx.pageId.length > 0 ? { page_id: ctx.pageId } : {}),
+							};
+						},
+					},
+				],
+			}),
 		[],
 	);
 
@@ -576,6 +617,15 @@ export default function PuckEditorPage() {
 	const [activePageId, setActivePageId] = useState<string>(
 		activePageIdRef.current,
 	);
+
+	// Refresh the analytics context the editor adapter's processor reads at emit
+	// time (declared above). Primitive context only — active page id, demo
+	// workspace, and the collab identity id (or "demo-user").
+	analyticsContextRef.current = {
+		pageId: activePageId,
+		workspaceId: "demo-workspace",
+		userId: demoIdentity?.id ?? "demo-user",
+	};
 
 	useEffect(() => {
 		const syncActivePage = (): void => {
@@ -948,15 +998,20 @@ export default function PuckEditorPage() {
 	}
 
 	async function handlePublishClick(liveData: Data) {
-		// Demo: the chrome panel's "Publish to live" hands us the LIVE editor
-		// document. This path bypasses Puck's publish queue (and thus the
-		// `onBeforePublish` plugin), so F7 validates + persists inline here;
-		// an invalid payload aborts the publish.
+		// The chrome panel's "Publish to live" hands us the LIVE editor document.
+		// <Studio> now routes this through the SAME publish pipeline as Puck's
+		// native publish (onBeforePublish → this consumer → `page_published` on
+		// success → onAfterPublish), so the `page_published` system event is owned
+		// by core — we do NOT track it here. F7 still validates + persists inline;
+		// THROW on an invalid payload so the pipeline treats it as a failed publish
+		// and skips `page_published` (a swallowed `return` would falsely count as a
+		// successful publish). `handlePublish` below only does the demo's
+		// navigation + state update, not analytics.
 		const typed = liveData as unknown as Data<DemoComponents, PageRootProps>;
 		const result = await persistPage("publish", typed);
 		if (!result.ok) {
 			console.error("[demo] publish blocked —", result.issue);
-			return;
+			throw new Error(`Publish blocked: ${result.issue ?? "invalid page"}`);
 		}
 		handlePublish(liveData);
 	}

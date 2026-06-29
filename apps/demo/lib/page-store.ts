@@ -90,10 +90,25 @@ export async function getPublishedPage(
 	slug: string,
 	opts?: { preview?: boolean },
 ): Promise<DemoPageData | null> {
+	return (await getPublishedPageWithId(slug, opts))?.data ?? null;
+}
+
+/**
+ * Like {@link getPublishedPage}, but also surfaces the stored record `id` so
+ * callers (e.g. the published render path) can attribute analytics by `pageId`
+ * in addition to slug. Returns `null` on the same conditions as
+ * {@link getPublishedPage} (no record, never published, or archived).
+ */
+export async function getPublishedPageWithId(
+	slug: string,
+	opts?: { preview?: boolean },
+): Promise<{ id: string; data: DemoPageData } | null> {
 	const storage = await getPageStorage();
 	const record = await storage.getBySlug(slug);
-	if (opts?.preview === true) {
-		return record?.draft ?? selectPublishedPayload(record);
-	}
-	return selectPublishedPayload(record);
+	const data =
+		opts?.preview === true
+			? (record?.draft ?? selectPublishedPayload(record))
+			: selectPublishedPayload(record);
+	if (record === null || data === null || data === undefined) return null;
+	return { id: record.id, data };
 }

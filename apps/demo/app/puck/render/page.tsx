@@ -24,6 +24,7 @@
 // No masthead, notes, links, or JSON panel — just the page.
 import { Render } from "@puckeditor/core/rsc";
 import type { ReactElement } from "react";
+import { PublishedPageAnalytics } from "@/components/PublishedPageAnalytics";
 import { loadPublishedRender } from "@/lib/published-render";
 import {
 	demoConfig,
@@ -61,6 +62,12 @@ export default async function PuckRenderPage({
 		if (model !== null) {
 			return (
 				<RenderNavigation>
+					{/* F15: one published-site `page_view` per visit (primitive props). */}
+					<PublishedPageAnalytics
+						pageId={model.pageId}
+						slug={slug}
+						preview={preview}
+					/>
 					<Render config={demoConfig} data={model.resolved} />
 				</RenderNavigation>
 			);
@@ -75,6 +82,7 @@ export default async function PuckRenderPage({
 	);
 	return (
 		<RenderNavigation>
+			<PublishedPageAnalytics slug={slug ?? ""} preview={preview} />
 			<Render config={demoConfig} data={renderData} />
 		</RenderNavigation>
 	);

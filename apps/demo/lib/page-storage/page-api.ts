@@ -5,6 +5,7 @@ import {
 	validatePublishRequest,
 	validateSaveDraftRequest,
 } from "@anvilkit/validator";
+import { recordServerPagePublished } from "../analytics/server-events";
 import {
 	API_ERROR,
 	type ApiResponse,
@@ -111,6 +112,17 @@ export async function publish(
 		id: input.id,
 		slug: input.slug,
 		data: input.data,
+	});
+	// Server-side fallback analytics/audit event (PRD 0004). Recorded ONLY
+	// after a validated payload is durably written (200) — never on a
+	// validation or storage failure (those return/throw before this line).
+	// It is the factual counterpart to the client-side behavioral
+	// `page_published`; `properties.server_side = true` distinguishes them. The
+	// full document is never forwarded — only the primitive slug + record id.
+	recordServerPagePublished({
+		slug: record.slug,
+		pageId: record.id,
+		at: Date.now(),
 	});
 	return { status: 200, body: apiSuccess(record) };
 }

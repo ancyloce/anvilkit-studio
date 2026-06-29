@@ -12,11 +12,13 @@ import type { PageRootProps, PageSeo } from "@anvilkit/schema";
 import type { Metadata } from "next";
 import { resolveDataSources } from "./data-source-adapter";
 import type { DemoPageData } from "./page-storage/types";
-import { getPublishedPage } from "./page-store";
+import { getPublishedPage, getPublishedPageWithId } from "./page-store";
 
 const slugOf = (segments: string[]): string => segments.join("/");
 
 export interface PublishedRenderModel {
+	/** Stored page record id — for `pageId` analytics attribution. */
+	readonly pageId: string;
 	/** Document with `dataSource` directives resolved into plain props. */
 	readonly resolved: DemoPageData;
 	/** Schema.org `WebPage` block injected as JSON-LD. */
@@ -78,8 +80,9 @@ export async function loadPublishedRender(
 	segments: string[],
 	opts?: { readonly preview?: boolean },
 ): Promise<PublishedRenderModel | null> {
-	const page = await getPublishedPage(slugOf(segments), opts);
-	if (page === null) return null;
+	const found = await getPublishedPageWithId(slugOf(segments), opts);
+	if (found === null) return null;
+	const { id: pageId, data: page } = found;
 
 	const root = page.root.props as PageRootProps | undefined;
 	const seo: PageSeo | undefined = root?.seo;
@@ -94,5 +97,5 @@ export async function loadPublishedRender(
 	// Resolve `remote_csv` dataSource directives into plain props before
 	// rendering — the component never fetches.
 	const resolved = await resolveDataSources(page);
-	return { resolved, jsonLd };
+	return { pageId, resolved, jsonLd };
 }

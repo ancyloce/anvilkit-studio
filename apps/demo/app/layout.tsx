@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
-import "@puckeditor/core/puck.css";
 // `<Studio>` is used beyond the Puck routes (`/test`, `/studio/canvas`),
-// so core + Puck CSS stay global. The per-component sheets are scoped to
-// `app/puck/layout.tsx` (full demoConfig) and the standalone `/hero` +
-// `/navbar` pages import their one sheet directly.
+// so core CSS stays global. Puck's own styles are injected at runtime by
+// `<Puck>` (Puck 0.22+), so we no longer import `@puckeditor/core/puck.css`
+// here — doing so would only trigger Puck's "styles already loaded" warning.
+// The per-component sheets are scoped to `app/puck/layout.tsx` (full
+// demoConfig) and the standalone `/hero` + `/navbar` pages import their one
+// sheet directly.
 import "@anvilkit/core/styles.css";
 import "./globals.css";
 // Huly design tokens (DESIGN.md) scoped to `.huly-root` — used only by the
