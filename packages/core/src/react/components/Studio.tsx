@@ -171,7 +171,6 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		isSavingDraft,
 		lastSavedAt,
 		isPublishing,
-		onPublishClick,
 		onPreview,
 		onExport,
 		headerEnd,
@@ -197,6 +196,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 		mergedOverrides,
 		handleChange,
 		handlePublish,
+		handlePublishClick,
 		handleAction,
 		handleSaveDraft,
 		themeStore,
@@ -228,7 +228,11 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			isSavingDraft,
 			lastSavedAt,
 			isPublishing,
-			onPublishClick,
+			// The controller wraps the host's `onPublishClick` through the shared
+			// publish pipeline so the chrome's "Publish to live" emits
+			// `page_published` on success (and stays `undefined`/disabled when the
+			// host wired no handler). Do NOT pass the raw prop here.
+			onPublishClick: handlePublishClick,
 			onPreview,
 			onExport,
 			headerEnd,
@@ -240,7 +244,7 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			isSavingDraft,
 			lastSavedAt,
 			isPublishing,
-			onPublishClick,
+			handlePublishClick,
 			onPreview,
 			onExport,
 			headerEnd,

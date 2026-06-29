@@ -81,7 +81,6 @@ import type { StudioPlugin } from "@/types/plugin";
 import {
 	trackComponentDropped,
 	trackDraftSaved,
-	trackPagePublished,
 	trackSeoUpdated,
 } from "./analytics-events.js";
 import {
@@ -90,6 +89,7 @@ import {
 	mergeLiveI18n,
 	stripReactiveConfig,
 } from "./plugin-fingerprint.js";
+import { runPublishPipeline } from "./publish-pipeline.js";
 import { createShellPluginContext } from "./shell-plugin-context.js";
 import type {
 	ChromeAssets,
@@ -306,6 +306,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		overrides: consumerOverrides,
 		onChange,
 		onPublish,
+		onPublishClick,
 		onAction,
 		onSaveDraft,
 		analytics,
@@ -916,6 +917,13 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	const onPublishRef = useRef<DefaultOnPublish | undefined>(
 		onPublish as DefaultOnPublish | undefined,
 	);
+	// The AnvilKit chrome's `PublishPanel` calls `onPublishClick` (not Puck's
+	// native `onPublish`), so the controller wraps it through the SAME
+	// `runPublishPipeline` below — otherwise a chrome publish would skip
+	// `page_published`. Held behind a ref so the wrapped handler stays stable.
+	const onPublishClickRef = useRef<((data: PuckData) => void) | undefined>(
+		onPublishClick as ((data: PuckData) => void) | undefined,
+	);
 	// F9 analytics: latest adapter + host onAction/onSaveDraft behind refs so
 	// the wrapped handlers stay stable while always reading the newest values.
 	const analyticsRef = useRef<AnalyticsAdapter | undefined>(analytics);
@@ -928,6 +936,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	useLayoutEffect(() => {
 		onChangeRef.current = onChange as DefaultOnChange | undefined;
 		onPublishRef.current = onPublish as DefaultOnPublish | undefined;
+		onPublishClickRef.current = onPublishClick as
+			| ((data: PuckData) => void)
+			| undefined;
 		analyticsRef.current = analytics;
 		onActionRef.current = onAction as PuckOnAction | undefined;
 		onSaveDraftRef.current = onSaveDraft;
@@ -937,6 +948,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	}, [
 		onChange,
 		onPublish,
+		onPublishClick,
 		analytics,
 		onAction,
 		onSaveDraft,
@@ -965,79 +977,87 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		[activeCompiled],
 	);
 
-	const handlePublish = useCallback(
-		(nextData: PuckData): void => {
-			const consumerOnPublish = onPublishRef.current;
-			// Capture the runtime + compile generation synchronously, at
-			// call time, before any await.
+	// Shared single-flight publish runner. Both the native Puck `onPublish`
+	// path and the AnvilKit chrome's `PublishPanel` (`onPublishClick`) call
+	// this with their own consumer fn, so `page_published` is owned in ONE
+	// place and emitted exactly once per publish, on success only. The queue
+	// tail serializes overlapping publishes so the onBefore → consumer →
+	// onAfter chains never interleave; the per-publish sequence itself lives
+	// in the pure `runPublishPipeline` (unit-tested without a `<Studio>` mount).
+	const runPublishTask = useCallback(
+		(
+			nextData: PuckData,
+			consumerPublish: ((data: PuckData) => void | Promise<void>) | undefined,
+		): void => {
+			// Capture the runtime + compile generation synchronously, at call
+			// time, before any await — the plugin lifecycle emits are
+			// runtime-bound and must skip a runtime disposed/superseded while
+			// this publish sat in the queue.
 			const runtimeAtCall = activeCompiled;
 			const myGen = identityRef.current.generation;
-			// The plugin lifecycle emits are runtime-bound: skip them if
-			// the runtime was disposed or superseded by a recompile while
-			// this publish sat in the queue. The consumer callback is
-			// NOT gated — dropping a host's save would be data loss.
-			const runtimeLive = (): boolean =>
+			const isRuntimeLive = (): boolean =>
 				!disposedRef.current &&
 				identityRef.current.generation === myGen &&
 				runtimeAtCall !== null;
 
-			// Single-flight: chain onto the queue tail so overlapping
-			// publishes serialize (onBeforePublish → onPublish →
-			// onAfterPublish never interleave). `.catch` keeps the chain
-			// alive — one failed publish must not poison the next.
-			const task = publishQueueRef.current.then(async () => {
-				if (runtimeAtCall !== null && runtimeLive()) {
-					try {
-						await runtimeAtCall.runtime.lifecycle.emit(
-							"onBeforePublish",
-							runtimeAtCall.ctx,
-							nextData,
-						);
-					} catch (error) {
-						writeStudioLog(
-							loggerRef.current,
-							"error",
-							"publish aborted by plugin",
-							{
-								error,
-							},
-						);
-						return;
-					}
-				}
-
-				try {
-					await consumerOnPublish?.(nextData);
-				} catch (error) {
-					writeStudioLog(
-						loggerRef.current,
-						"error",
-						"consumer onPublish threw",
-						{
-							error,
-						},
-					);
-					return;
-				}
-
-				// F9: publish succeeded (no early return above) — emit the
-				// lightweight system event before plugin `onAfterPublish` runs.
-				trackPagePublished(analyticsRef.current, "published");
-
-				if (runtimeAtCall !== null && runtimeLive()) {
-					await runtimeAtCall.runtime.lifecycle.emit(
-						"onAfterPublish",
-						runtimeAtCall.ctx,
-						nextData,
-					);
-				}
-			});
+			// `.catch` keeps the chain alive — one failed publish must not poison
+			// the next. The args object is built INSIDE the `.then` so the latest
+			// `analyticsRef`/`loggerRef` are read at execution time, not enqueue.
+			const task = publishQueueRef.current.then(() =>
+				runPublishPipeline(nextData, {
+					isRuntimeLive,
+					consumerPublish,
+					analytics: analyticsRef.current,
+					log: (level, message, meta) =>
+						writeStudioLog(loggerRef.current, level, message, meta),
+					emitBeforePublish:
+						runtimeAtCall === null
+							? undefined
+							: () =>
+									runtimeAtCall.runtime.lifecycle.emit(
+										"onBeforePublish",
+										runtimeAtCall.ctx,
+										nextData,
+									),
+					emitAfterPublish:
+						runtimeAtCall === null
+							? undefined
+							: () =>
+									runtimeAtCall.runtime.lifecycle.emit(
+										"onAfterPublish",
+										runtimeAtCall.ctx,
+										nextData,
+									),
+				}),
+			);
 			publishQueueRef.current = task.catch(() => {
 				// Swallowed: a failed publish must not poison the queue.
 			});
 		},
 		[activeCompiled],
 	);
+
+	// Native Puck `onPublish` → shared runner with the host's `onPublish`.
+	const handlePublish = useCallback(
+		(nextData: PuckData): void => {
+			runPublishTask(nextData, onPublishRef.current);
+		},
+		[runPublishTask],
+	);
+
+	// Chrome `PublishPanel` "Publish to live" → shared runner with the host's
+	// `onPublishClick`. Exposed as `undefined` when the host wired no
+	// `onPublishClick`, so the panel's button stays disabled exactly as before
+	// (it gates on `onPublishClick === undefined`).
+	const hasPublishClick = onPublishClick !== undefined;
+	const handlePublishClick = useMemo<
+		((data: PuckData) => void) | undefined
+	>(() => {
+		if (!hasPublishClick) return undefined;
+		return (nextData: PuckData): void => {
+			runPublishTask(nextData, onPublishClickRef.current);
+		};
+	}, [hasPublishClick, runPublishTask]);
 
 	// F9: wrap Puck `onAction` to emit `component_dropped` on insert, then
 	// forward to the host's handler. Stable identity (reads refs).
@@ -1076,6 +1096,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		mergedOverrides,
 		handleChange,
 		handlePublish,
+		handlePublishClick,
 		handleAction,
 		handleSaveDraft,
 		themeStore,

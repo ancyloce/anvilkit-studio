@@ -352,6 +352,14 @@ export interface StudioControllerState {
 	readonly mergedOverrides: Partial<PuckOverrides>;
 	readonly handleChange: (next: PuckData) => void;
 	readonly handlePublish: (next: PuckData) => void;
+	/**
+	 * The AnvilKit chrome `PublishPanel`'s "Publish to live" handler — the
+	 * host's `onPublishClick` wrapped through the SAME `runPublishPipeline`
+	 * as {@link handlePublish}, so a chrome publish emits `page_published`
+	 * on success exactly like Puck's native publish. `undefined` when the
+	 * host wired no `onPublishClick` (the panel button then stays disabled).
+	 */
+	readonly handlePublishClick?: (next: PuckData) => void;
 	/** Puck `onAction` wrapped to emit `component_dropped` on insert. */
 	readonly handleAction: PuckOnAction;
 	/**
