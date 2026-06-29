@@ -22,8 +22,12 @@
  * library stylesheet must not ship it or it would clobber the host app.
  *
  * Puck's own editor chrome CSS is NOT bundled here — it is the host's peer
- * dependency and must be imported separately, BEFORE this file:
- *   import "@puckeditor/core/puck.css";
+ * dependency. As of Puck 0.22 `<Puck>` injects that chrome CSS at runtime
+ * (prepended to <head>, so AnvilKit's overrides still cascade on top), so the
+ * static import is now OPTIONAL — importing it only triggers Puck's "styles
+ * already loaded" info log. This file stays a separate, required import either
+ * way:
+ *   import "@puckeditor/core/puck.css"; // optional on Puck 0.22+
  *   import "@anvilkit/core/styles.css";
  */
 
