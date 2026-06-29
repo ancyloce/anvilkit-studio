@@ -27,12 +27,16 @@ Puck を使いたいホストは単一のプロパティを切り替えるだけ
 
 chrome は `--ak-studio-*` トークン契約を、既存の shadcn / Tailwind v4 変数
 （`--background`、`--foreground`、`--border` など）へ橋渡しする CSS
-サイドカーから読み取ります。2 つのインポートが
-必要です。
+サイドカーから読み取ります。必要なインポートは
+`@anvilkit/core/styles.css` の 1 つだけです。Puck 0.22 以降、
+`<Puck>` は自身のエディター chrome CSS を実行時に注入するため、
+`@puckeditor/core/puck.css` のインポートは任意です（インポートしても
+Puck の「styles already loaded」メッセージがログに出るだけです）。
 
 ```ts title="app/layout.tsx"
-import "@puckeditor/core/puck.css";
 import "@anvilkit/core/styles.css";
+// Puck 0.22+ では任意 —— <Puck> がエディター chrome を実行時に注入します:
+// import "@puckeditor/core/puck.css";
 ```
 
 このサイドカーは副作用を伴うインポートです —— `@anvilkit/core`

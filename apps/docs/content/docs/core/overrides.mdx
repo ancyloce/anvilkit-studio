@@ -27,12 +27,16 @@ entry bundle stays under the 25 KB gzip budget.
 
 The chrome reads the `--ak-studio-*` token contract from a CSS
 sidecar that bridges to your existing shadcn / Tailwind v4 vars
-(`--background`, `--foreground`, `--border`, etc.). Two imports are
-required:
+(`--background`, `--foreground`, `--border`, etc.). Only one import is
+required — `@anvilkit/core/styles.css`. As of Puck 0.22, `<Puck>`
+injects its own editor chrome CSS at runtime, so the
+`@puckeditor/core/puck.css` import is optional (importing it merely
+logs Puck's "styles already loaded" message):
 
 ```ts title="app/layout.tsx"
-import "@puckeditor/core/puck.css";
 import "@anvilkit/core/styles.css";
+// Optional on Puck 0.22+ — <Puck> injects the editor chrome at runtime:
+// import "@puckeditor/core/puck.css";
 ```
 
 The sidecar is a side-effecting import — the `@anvilkit/core`
