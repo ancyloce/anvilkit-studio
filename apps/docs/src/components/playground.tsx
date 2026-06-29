@@ -1,4 +1,6 @@
-import "@puckeditor/core/puck.css";
+// Puck's own styles are injected at runtime by `<Puck>` (Puck 0.22+), so we
+// no longer import `@puckeditor/core/puck.css` here — importing it would only
+// trigger Puck's "styles already loaded" warning.
 // Canvas Studio's overlay mounts `<CanvasWorkspace>` from
 // `@anvilkit/canvas-editor`; its compiled (preflight-free) chrome
 // stylesheet must be loaded by the host or the overlay renders blank.
