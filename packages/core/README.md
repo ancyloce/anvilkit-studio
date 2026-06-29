@@ -37,8 +37,9 @@ you'll see `Attempted import error: 'Puck' is not exported from
 "use client";
 
 import { Studio } from "@anvilkit/core";
-import "@puckeditor/core/puck.css"; // Puck's editor chrome (your peer dep)
 import "@anvilkit/core/styles.css"; // AnvilKit tokens + chrome utilities (self-contained)
+// Puck's editor chrome is injected at runtime by <Puck> (Puck 0.22+); the
+// `import "@puckeditor/core/puck.css"` static import is now optional.
 import type { Config as PuckConfig } from "@puckeditor/core";
 
 const puckConfig: PuckConfig = {
@@ -75,8 +76,7 @@ client surface into its own file and import it from the server:
 "use client";
 
 import { Studio } from "@anvilkit/core";
-import "@puckeditor/core/puck.css";
-import "@anvilkit/core/styles.css";
+import "@anvilkit/core/styles.css"; // Puck's chrome is injected at runtime (0.22+)
 import { editorPuckConfig } from "./puck-config";
 
 export function EditorShell() {
@@ -101,19 +101,21 @@ render your own placeholder instead.
 
 ## Styling
 
-The Studio chrome needs exactly **two stylesheets**, imported once (the
-root layout is the natural place) and in this order:
+The Studio chrome needs **`@anvilkit/core/styles.css`**, imported once (the
+root layout is the natural place):
 
 ```tsx
-import "@puckeditor/core/puck.css"; // 1. Puck's editor chrome
-import "@anvilkit/core/styles.css"; // 2. AnvilKit tokens + chrome utilities
+import "@anvilkit/core/styles.css"; // AnvilKit tokens + chrome utilities
+// Optional on Puck 0.22+ — <Puck> injects its own editor chrome at runtime:
+// import "@puckeditor/core/puck.css";
 ```
 
 1. **`@puckeditor/core/puck.css`** styles Puck's own editor structure —
-   panels, the fields sidebar, the canvas frame, drag handles. It ships
-   with `@puckeditor/core` (your peer dependency), so AnvilKit cannot bundle
-   it. Without this import the editor renders unstyled. Import it **first**
-   so AnvilKit's overrides cascade on top.
+   panels, the fields sidebar, the canvas frame, drag handles. As of **Puck
+   0.22** `<Puck>` injects this chrome CSS at runtime (prepended to `<head>`),
+   so the static import is **optional** — importing it merely logs Puck's
+   "styles already loaded" info message. If you do import it, AnvilKit's
+   overrides still cascade on top either way.
 2. **`@anvilkit/core/styles.css`** is **self-contained** — it ships the
    precompiled Tailwind utilities used by the chrome plus shadcn design-token
    defaults (`--background`, `--card`, `--border`, …). **No Tailwind or
