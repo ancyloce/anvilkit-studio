@@ -1,16 +1,13 @@
-// The `/collab` demo renders the full `demoConfig` inside `<Studio>`, so
-// it needs the same per-component stylesheets the Puck routes load (see
-// `app/puck/layout.tsx`). Scoping them here keeps them off routes that
-// don't use them. Core + Puck CSS are already global (`app/layout.tsx`).
-import "@anvilkit/bento-grid/styles.css";
-import "@anvilkit/blog-list/styles.css";
-import "@anvilkit/hero/styles.css";
-import "@anvilkit/helps/styles.css";
-import "@anvilkit/logo-clouds/styles.css";
-import "@anvilkit/navbar/styles.css";
-import "@anvilkit/pricing-minimal/styles.css";
-import "@anvilkit/section/styles.css";
-import "@anvilkit/statistics/styles.css";
+// The `/collab` demo renders the full `demoConfig` inside `<Studio>`, so it
+// needs the same combined component stylesheet the Puck routes load (see
+// `app/puck/layout.tsx`). One combined sheet (rather than the nine per-package
+// sheets) keeps the responsive `md:*` utilities correctly ordered; importing
+// the per-package sheets concatenates them and lets a later sheet's bare
+// `.flex` / `.hidden` override an earlier one's `.md:hidden` / `.md:flex`,
+// collapsing the Navbar to its mobile menu on desktop. Scoping it here keeps it
+// off routes that don't use it. Core + Puck CSS are already global
+// (`app/layout.tsx`).
+import "@/lib/component-styles.css";
 
 export default function CollabLayout({
 	children,

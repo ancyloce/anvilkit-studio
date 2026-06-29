@@ -1,0 +1,22 @@
+/*
+ * Single combined stylesheet for the demo routes that render the full
+ * `demoConfig` — the Puck editor/render routes and the public published-page
+ * route (`app/[...slug]`).
+ *
+ * Why one sheet instead of importing the nine per-package `styles.css` files:
+ * each package sheet is its own Tailwind build, so importing them all
+ * concatenates nine separate utility blocks. Tailwind orders base utilities
+ * (`.flex`, `.hidden`) before responsive ones (`.md:flex`, `.md:hidden`) WITHIN
+ * a single build, but across concatenated builds a LATER package's bare
+ * `.flex` / `.hidden` wins over an EARLIER package's `.md:hidden` / `.md:flex`
+ * (same layer, same specificity, later source order). That collapsed the Navbar
+ * to its mobile menu on desktop on the render routes.
+ *
+ * One Tailwind pass over every component source emits each utility once, in the
+ * correct order, so the responsive variants win. Imported at the PAGE level so
+ * it loads after the root layout's globals and is the last utility sheet.
+ */
+@import "@anvilkit/tailwind-config/component";
+
+@source "../../../packages/components/src/**/*.{ts,tsx}";
+@source "../../../packages/ui/src/**/*.{ts,tsx}";

@@ -1,17 +1,11 @@
-// Component stylesheets are scoped to the Puck routes (`/puck/editor` +
-// `/puck/render`), which render the full `demoConfig`. Keeping them off
-// the root layout means non-Puck pages (`/`, etc.) no longer parse ~9
-// component sheets they don't use. Standalone component demo pages
-// (`/hero`, `/navbar`) import the single sheet they need directly.
-import "@anvilkit/bento-grid/styles.css";
-import "@anvilkit/blog-list/styles.css";
-import "@anvilkit/hero/styles.css";
-import "@anvilkit/helps/styles.css";
-import "@anvilkit/logo-clouds/styles.css";
-import "@anvilkit/navbar/styles.css";
-import "@anvilkit/pricing-minimal/styles.css";
-import "@anvilkit/section/styles.css";
-import "@anvilkit/statistics/styles.css";
+// The combined component stylesheet (one Tailwind pass over every component
+// source) is scoped to the routes that render the full `demoConfig` — the Puck
+// routes (`/puck/editor` + `/puck/render`) here and the public published-page
+// route (`app/[...slug]`) — so non-config pages (`/`, etc.) don't parse it.
+// Using one combined sheet (rather than the nine per-package sheets) keeps the
+// responsive `md:*` utilities correctly ordered; see `@/lib/component-styles.css`.
+// Standalone component demo pages (`/hero`, `/navbar`) import their single sheet.
+import "@/lib/component-styles.css";
 
 export default function PuckLayout({
 	children,

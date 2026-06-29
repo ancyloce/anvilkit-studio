@@ -1,3 +1,10 @@
+// Imported at the PAGE level (not the layout) on purpose: Next emits page CSS
+// after layout CSS, so this combined component sheet — where the responsive
+// `md:*` utilities are correctly ordered after their base utilities — loads
+// last and wins the cascade. In a layout it can be overridden by a later page
+// chunk's bare `.hidden` / `.flex`, collapsing the Navbar to its mobile menu on
+// desktop.
+import "@/lib/component-styles.css";
 import { Render } from "@puckeditor/core/rsc";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
