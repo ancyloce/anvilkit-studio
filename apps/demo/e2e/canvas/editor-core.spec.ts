@@ -21,6 +21,22 @@ import { expect, type Page, test } from "@playwright/test";
  * the canvas-editor moves off react-konva's reconciler (plan MVP-1 imperative-
  * Konva mitigation). Flip `test.fixme` → `test` once the Stage renders.
  *
+ * Re-investigated 2026-07-09 (canvas-m0-006):
+ * - Upgrade path is exhausted — react-konva 19.2.5 is the LATEST published
+ *   release and is what this workspace already resolves; no upstream fix
+ *   exists yet for the React 19.2.x reconciler break.
+ * - Porting these scenarios to the docs playground (Vite/TanStack — no Next)
+ *   was attempted as equivalent coverage and is blocked by a separate issue:
+ *   the playground's "Open Canvas" header action never becomes stable/clickable
+ *   under Playwright (looping chrome animation), so the overlay cannot be
+ *   driven open there. That instability is its own bug, untriaged.
+ * - Coverage that does NOT need on-canvas pointers is green elsewhere:
+ *   pages + PNG export (`pages-export.spec.ts`), AI panel (`ai-perf.spec.ts`
+ *   #5), DesignBlock bridge + preview (`puck-bridge.spec.ts` #8,
+ *   `preview-object-url.verify.spec.ts`), and the Templates panel
+ *   (`templates-panel.spec.ts`) — insert/select/move/resize/text-edit remain
+ *   the uncovered stage-bound gestures.
+ *
  * The first canvas mount dynamically imports Konva (its own chunk), so the
  * suite is serial with generous timeouts to absorb a cold dev-server compile
  * (CLAUDE.md test-infra note).
