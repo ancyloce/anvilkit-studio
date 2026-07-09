@@ -1290,11 +1290,56 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
+  packages/contracts:
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../configs/biome-config
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../configs/typescript-config
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../configs/vitest-config
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.2
+        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
   packages/core:
     dependencies:
       '@anvilkit/analytics-core':
         specifier: workspace:*
         version: link:../analytics/core
+      '@anvilkit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@anvilkit/ui':
         specifier: workspace:*
         version: link:../ui
@@ -1446,6 +1491,9 @@ importers:
 
   packages/ir:
     dependencies:
+      '@anvilkit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@anvilkit/utils':
         specifier: workspace:*
         version: link:../utils
@@ -1456,9 +1504,6 @@ importers:
       '@anvilkit/biome-config':
         specifier: workspace:*
         version: link:../configs/biome-config
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../core
       '@anvilkit/typescript-config':
         specifier: workspace:*
         version: link:../configs/typescript-config
@@ -2343,13 +2388,14 @@ importers:
         version: 0.1.0(vitest@4.1.9)
 
   packages/schema:
+    dependencies:
+      '@anvilkit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
         version: link:../configs/biome-config
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../core
       '@anvilkit/typescript-config':
         specifier: workspace:*
         version: link:../configs/typescript-config
@@ -2683,6 +2729,9 @@ importers:
 
   packages/validator:
     dependencies:
+      '@anvilkit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@anvilkit/schema':
         specifier: workspace:*
         version: link:../schema
@@ -2690,9 +2739,6 @@ importers:
       '@anvilkit/biome-config':
         specifier: workspace:*
         version: link:../configs/biome-config
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../core
       '@anvilkit/typescript-config':
         specifier: workspace:*
         version: link:../configs/typescript-config
