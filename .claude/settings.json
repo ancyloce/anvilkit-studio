@@ -40,10 +40,10 @@
 				"hooks": [
 					{
 						"type": "command",
-						"command": "biome format --write $CLAUDE_FILE_PATHS"
+						"command": "npx @biomejs/biome format --write $CLAUDE_FILE_PATHS"
 					}
 				]
 			}
 		]
-	}
+	}	
 }
