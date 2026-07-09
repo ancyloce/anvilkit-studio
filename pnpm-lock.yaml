@@ -198,6 +198,9 @@ importers:
       '@anvilkit/canvas-editor':
         specifier: workspace:*
         version: link:../../packages/canvas/editor
+      '@anvilkit/canvas-templates':
+        specifier: workspace:*
+        version: link:../../packages/templates/canvas
       '@anvilkit/collab-ui':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-collab-ui
@@ -388,6 +391,9 @@ importers:
       '@anvilkit/canvas-editor':
         specifier: workspace:*
         version: link:../../packages/canvas/editor
+      '@anvilkit/canvas-templates':
+        specifier: workspace:*
+        version: link:../../packages/templates/canvas
       '@anvilkit/collab-ui':
         specifier: workspace:*
         version: link:../../packages/plugins/plugin-collab-ui
@@ -787,6 +793,9 @@ importers:
       esbuild:
         specifier: ^0.28.0
         version: 0.28.1
+      fast-check:
+        specifier: ^4.3.0
+        version: 4.8.0
       madge:
         specifier: ^8.0.0
         version: 8.0.0(typescript@6.0.3)
@@ -857,6 +866,9 @@ importers:
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.17)
+      axe-core:
+        specifier: 4.11.3
+        version: 4.11.3
       esbuild:
         specifier: ^0.28.0
         version: 0.28.1
@@ -899,6 +911,9 @@ importers:
       vitest:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      vitest-axe:
+        specifier: ^0.1.0
+        version: 0.1.0(vitest@4.1.9)
       y-protocols:
         specifier: ^1.0.7
         version: 1.0.7(yjs@13.6.31)
@@ -1425,9 +1440,6 @@ importers:
         specifier: ^5.0.14
         version: 5.0.14(@types/react@19.2.17)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
     devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../configs/biome-config
       '@anvilkit/typescript-config':
         specifier: workspace:*
         version: link:../configs/typescript-config
@@ -1488,9 +1500,6 @@ importers:
       typedoc:
         specifier: 0.28.19
         version: 0.28.19(typescript@6.0.3)
-      typedoc-plugin-markdown:
-        specifier: ^4.11.2
-        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
       typescript:
         specifier: 6.0.3
         version: 6.0.3
