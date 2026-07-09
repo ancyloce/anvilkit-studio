@@ -1,0 +1,23 @@
+---
+title: "StudioPageSettingsInput"
+description: "@anvilkit/contracts · StudioPageSettingsInput"
+---
+
+Defined in: page.ts:118
+
+Input shape for [StudioPagesSource.onUpdateSettings](StudioPagesSource.md#onupdatesettings).
+
+Every editable field is optional — hosts that only persist a subset
+(e.g. title and SEO but not `description`) simply ignore the absent
+keys. The dialog sends only fields the user changed.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="description"&gt;&lt;/a&gt; `description?` | `readonly` | `string` | page.ts:123 |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | page.ts:119 |
+| &lt;a id="path"&gt;&lt;/a&gt; `path?` | `readonly` | `string` | page.ts:121 |
+| &lt;a id="route"&gt;&lt;/a&gt; `route?` | `readonly` | `boolean` | page.ts:122 |
+| &lt;a id="seo"&gt;&lt;/a&gt; `seo?` | `readonly` | [`StudioPageSeo`](StudioPageSeo.md) | page.ts:124 |
+| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `readonly` | `string` | page.ts:120 |

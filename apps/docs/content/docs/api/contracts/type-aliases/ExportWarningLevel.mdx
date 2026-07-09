@@ -1,0 +1,20 @@
+---
+title: "ExportWarningLevel"
+description: "@anvilkit/contracts · ExportWarningLevel"
+---
+
+```ts
+type ExportWarningLevel = "info" | "warn" | "error";
+```
+
+Defined in: export.ts:46
+
+Severity of a warning produced during an export run.
+
+- `"info"` — advisory; nothing wrong, just worth noting.
+- `"warn"` — non-fatal concern (e.g. missing alt text, unused
+  prop).
+- `"error"` — the export succeeded but emitted output the user
+  should almost certainly fix (e.g. unresolved asset url). An
+  exporter that cannot produce output at all should `throw` with
+  a `StudioExportError`, not return an `"error"` warning.

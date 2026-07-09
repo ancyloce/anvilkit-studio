@@ -8,40 +8,65 @@ description: "@anvilkit/plugin-version-history public API reference, generated b
 | Class | Description |
 | ------ | ------ |
 | [DiffApplyError](classes/DiffApplyError.md) | - |
-| [VersionHistoryError](classes/VersionHistoryError.md) | - |
+| [VersionHistoryError](classes/VersionHistoryError.md) | Typed error thrown across the version-history surface (adapters, the restore guard, host integrations). The [VersionHistoryError.code](classes/VersionHistoryError.md#code) discriminant lets callers branch on the failure category instead of parsing `message`. |
 
 ## Interfaces
 
 | Interface | Description |
 | ------ | ------ |
-| [CreateVersionHistoryPluginOptions](interfaces/CreateVersionHistoryPluginOptions.md) | - |
+| [CreateVersionHistoryPluginOptions](interfaces/CreateVersionHistoryPluginOptions.md) | Options for [createVersionHistoryPlugin](functions/createVersionHistoryPlugin.md). |
 | [IRDiffSummary](interfaces/IRDiffSummary.md) | - |
 | [LocalStorageAdapterOptions](interfaces/LocalStorageAdapterOptions.md) | - |
-| [PeerInfo](interfaces/PeerInfo.md) | - |
-| [PresenceCursor](interfaces/PresenceCursor.md) | - |
-| [PresenceSelection](interfaces/PresenceSelection.md) | - |
-| [PresenceState](interfaces/PresenceState.md) | - |
-| [SnapshotAdapter](interfaces/SnapshotAdapter.md) | - |
-| [SnapshotAdapterPresence](interfaces/SnapshotAdapterPresence.md) | - |
-| [SnapshotMeta](interfaces/SnapshotMeta.md) | - |
+| [PeerInfo](interfaces/PeerInfo.md) | Identity of a collaborator in a multiplayer session. |
+| [PrepareRestoreInput](interfaces/PrepareRestoreInput.md) | Inputs to [prepareRestore](functions/prepareRestore.md): a [RestoreConflictInput](interfaces/RestoreConflictInput.md) plus the `snapshotIR` to restore and a `force` escape hatch. |
+| [PresenceCursor](interfaces/PresenceCursor.md) | A peer's pointer position, in canvas/document coordinates. |
+| [PresenceSelection](interfaces/PresenceSelection.md) | A peer's current selection, as the ids of the selected IR nodes. |
+| [PresenceState](interfaces/PresenceState.md) | A single peer's full presence snapshot (identity + cursor + selection). |
+| [RestoreConflict](interfaces/RestoreConflict.md) | Result of comparing the live document hash against an expected base. |
+| [RestoreConflictInput](interfaces/RestoreConflictInput.md) | Inputs to [checkRestoreConflict](functions/checkRestoreConflict.md). |
+| [RetentionPlan](interfaces/RetentionPlan.md) | Deterministic deletion plan returned by [planRetention](functions/planRetention.md). `deleteIds` and `keepIds` partition the input ids and are both ordered oldest-first (ascending `savedAt`, ascending `id` tie-break — matching `evictOldest`), so the plan is reproducible for the same inputs. |
+| [RetentionPlanOptions](interfaces/RetentionPlanOptions.md) | Options for [planRetention](functions/planRetention.md) / [runRetention](functions/runRetention.md). |
+| [RetentionPolicy](interfaces/RetentionPolicy.md) | Declarative retention policy composed by [planRetention](functions/planRetention.md). Every field is optional and additive — supply either, both, or neither: |
+| [RetentionResult](interfaces/RetentionResult.md) | Outcome of [runRetention](functions/runRetention.md): the computed [RetentionPlan](interfaces/RetentionPlan.md), the ids actually deleted (`[]` for a dry run or when nothing matched), and whether this was a dry run. |
+| [RunRetentionOptions](interfaces/RunRetentionOptions.md) | Options for [runRetention](functions/runRetention.md): [RetentionPlanOptions](interfaces/RetentionPlanOptions.md) plus `dryRun`. |
+| [SnapshotAdapter](interfaces/SnapshotAdapter.md) | Host-provided storage backend for snapshots — the single integration seam between this plugin and a persistence layer (in-memory, localStorage, Yjs, a REST API, …). `save`/`list`/`load` are the required core; everything else is optional and must be feature-detected by callers, so older adapters keep working unchanged. Methods may be sync or async. |
+| [SnapshotAdapterPresence](interfaces/SnapshotAdapterPresence.md) | Presence channel a collaborative adapter exposes for live cursors / selections. |
+| [SnapshotMeta](interfaces/SnapshotMeta.md) | Lightweight, listable descriptor of a stored snapshot — everything the UI needs without materializing the full `PageIR`. Identity/provenance fields (`id`, `savedAt`, `pageIRHash`, `delta`) are immutable; the rest is the host-curated, patchable [SnapshotMetaPatch](interfaces/SnapshotMetaPatch.md) subset. |
+| [SnapshotMetaPatch](interfaces/SnapshotMetaPatch.md) | The mutable, host-curated subset of [SnapshotMeta](interfaces/SnapshotMeta.md) that [SnapshotAdapter.updateMeta](interfaces/SnapshotAdapter.md#updatemeta) may patch in place. The identity / provenance fields (`id`, `savedAt`, `pageIRHash`, `delta`) are intentionally excluded — they describe *what* was captured and *when*, and never change after a snapshot is written. |
+| [SnapshotPage](interfaces/SnapshotPage.md) | A single page of snapshot metadata returned by [SnapshotAdapter.query](interfaces/SnapshotAdapter.md#query). |
+| [SnapshotQuery](interfaces/SnapshotQuery.md) | Optional query for paginating, filtering, and sorting snapshot metadata via [SnapshotAdapter.query](interfaces/SnapshotAdapter.md#query). Every field is optional; an empty query (`{}`) is equivalent to `list()` (all metadata, input order). |
+| [VersionHistoryExport](interfaces/VersionHistoryExport.md) | Self-contained, JSON-serializable archive of every snapshot in an adapter — produced by [SnapshotAdapter.exportAll](interfaces/SnapshotAdapter.md#exportall) and consumed by [SnapshotAdapter.importAll](interfaces/SnapshotAdapter.md#importall). Each entry carries a full `PageIR`, so a round-trip `importAll(exportAll())` into a fresh adapter reproduces loadable snapshots. |
+| [VersionHistoryExportEntry](interfaces/VersionHistoryExportEntry.md) | A single entry in a [VersionHistoryExport](interfaces/VersionHistoryExport.md): a snapshot's metadata paired with its fully-materialized PageIR. |
+| [VersionHistoryImportOptions](interfaces/VersionHistoryImportOptions.md) | Options for [SnapshotAdapter.importAll](interfaces/SnapshotAdapter.md#importall). |
 
 ## Type Aliases
 
 | Type Alias | Description |
 | ------ | ------ |
+| [BuildPageIR](type-aliases/BuildPageIR.md) | Host-provided bridge that converts the live editor document returned by `ctx.getData()` (in a real `<Studio>` session this is Puck `Data`, not `PageIR`) into the `PageIR` the snapshot adapter persists. |
 | [IRDiff](type-aliases/IRDiff.md) | - |
 | [IRDiffOp](type-aliases/IRDiffOp.md) | Note: `move-node` is a hint, not a mutation. `applyDiff` validates it but does not perform any reparenting — the authoritative reparenting/reorder signal is `change-children` on the affected parent(s). Consumers that inspect an `IRDiff` for display or logging may use `move-node` for presentation, but should not rely on it for replay correctness. |
-| [MaybePromise](type-aliases/MaybePromise.md) | - |
-| [Unsubscribe](type-aliases/Unsubscribe.md) | - |
-| [VersionHistoryErrorCode](type-aliases/VersionHistoryErrorCode.md) | - |
+| [MaybePromise](type-aliases/MaybePromise.md) | A value that may be returned directly or as a promise. |
+| [RetentionAdapter](type-aliases/RetentionAdapter.md) | The slice of [SnapshotAdapter](interfaces/SnapshotAdapter.md) [runRetention](functions/runRetention.md) needs: `list` to read current metadata, plus the optional `deleteMany` / `delete` it uses to apply the plan. Any full `SnapshotAdapter` satisfies it. |
+| [Unsubscribe](type-aliases/Unsubscribe.md) | Teardown handle returned by a subscription; call it to stop receiving updates. |
+| [VersionHistoryErrorCode](type-aliases/VersionHistoryErrorCode.md) | Discriminant carried by every [VersionHistoryError](classes/VersionHistoryError.md). Callers switch on [VersionHistoryError.code](classes/VersionHistoryError.md#code) to recover by category instead of string-matching `message`. |
+| [VersionHistoryOperation](type-aliases/VersionHistoryOperation.md) | Version-history operations an adapter or host can gate on authorization. Used to describe which action was denied in a `"PERMISSION_DENIED"` [VersionHistoryError](classes/VersionHistoryError.md) (see [createPermissionDeniedError](functions/createPermissionDeniedError.md)). |
 
 ## Functions
 
 | Function | Description |
 | ------ | ------ |
 | [applyDiff](functions/applyDiff.md) | - |
+| [checkRestoreConflict](functions/checkRestoreConflict.md) | Pure optimistic-concurrency check for a rollback. Hashes `currentIR` and compares it to `expectedBaseHash`: a mismatch means the document changed underneath the planned restore (a remote collaborator or a local edit), so blindly applying the snapshot would clobber that work. |
+| [createPermissionDeniedError](functions/createPermissionDeniedError.md) | Convenience constructor for an authorization failure. Host and remote adapters call this when the current actor is not permitted to perform a version-history `operation` (`"save"`, `"load"`, `"list"`, `"delete"`, or `"restore"`), yielding a [VersionHistoryError](classes/VersionHistoryError.md) whose [VersionHistoryError.code](classes/VersionHistoryError.md#code) is `"PERMISSION_DENIED"` so callers can discriminate it without string-matching the message. |
 | [createVersionHistoryPlugin](functions/createVersionHistoryPlugin.md) | - |
 | [diffIR](functions/diffIR.md) | - |
 | [inMemoryAdapter](functions/inMemoryAdapter.md) | Ephemeral, in-process snapshot store. Uses the shared delta-chain so a long history costs roughly one keyframe + N small diffs instead of N full `PageIR` copies. Suitable for tests, demos, and transient sessions. |
+| [isIRDiff](functions/isIRDiff.md) | Structural guard for a persisted [IRDiff](type-aliases/IRDiff.md) — a (possibly empty) array of well-formed [IRDiffOp](type-aliases/IRDiffOp.md)s. Apply it at the storage trust boundary before casting an untrusted/parsed payload to `IRDiff` and feeding it to [applyDiff](functions/applyDiff.md): a malformed op is rejected here instead of throwing an opaque `DiffApplyError` (or silently misapplying) deep inside replay. An empty array (no changes) is valid. |
 | [localStorageAdapter](functions/localStorageAdapter.md) | Browser `localStorage`-backed snapshot store. |
+| [normalizeVersionHistoryExport](functions/normalizeVersionHistoryExport.md) | Pure validator/normalizer for the [VersionHistoryExport](interfaces/VersionHistoryExport.md) archive shape. |
+| [planRetention](functions/planRetention.md) | Pure, deterministic retention planner. Composes the count cap, age expiry, and protection rules of a [RetentionPolicy](interfaces/RetentionPolicy.md) into a single [RetentionPlan](interfaces/RetentionPlan.md) without mutating `snapshots` or touching any store. |
+| [prepareRestore](functions/prepareRestore.md) | Conflict-guarded rollback resolver. Runs [checkRestoreConflict](functions/checkRestoreConflict.md) and: |
+| [querySnapshots](functions/querySnapshots.md) | Pure, deterministic reference implementation of the optional [SnapshotAdapter.query](interfaces/SnapshotAdapter.md#query) capability over an in-memory array. |
+| [runRetention](functions/runRetention.md) | Manual cleanup API: plan retention over an adapter's current snapshots and (unless `dryRun`) apply it. The plan is computed by [planRetention](functions/planRetention.md) from `adapter.list()`. Deletions prefer the batch `adapter.deleteMany` and fall back to per-id `adapter.delete`; if the adapter exposes neither, nothing is deleted (`deletedIds` is `[]`). |
 | [summarizeDiff](functions/summarizeDiff.md) | - |

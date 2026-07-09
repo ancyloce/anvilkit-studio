@@ -3,7 +3,7 @@ title: "StudioPageSeo"
 description: "@anvilkit/core · StudioPageSeo"
 ---
 
-Defined in: [types/pages.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L84)
+Defined in: contracts/dist/page.d.ts:81
 
 Structured SEO metadata for a page. Every field is optional so the
 host can surface only what it persists; the settings dialog shows the
@@ -13,8 +13,8 @@ full set when the source implements [StudioPagesSource.onUpdateSettings](StudioP
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="canonical"&gt;&lt;/a&gt; `canonical?` | `readonly` | `string` | Canonical URL for the page (`<link rel="canonical">`). Mirrors `root.props.seo.canonical` so the root↔sidecar projection ([pageRootSeoToStudioPageSeo](../functions/pageRootSeoToStudioPageSeo)) round-trips losslessly; the page-settings dialog does not edit it, so it passes through untouched. | [types/pages.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L95) |
-| &lt;a id="metadescription"&gt;&lt;/a&gt; `metaDescription?` | `readonly` | `string` | - | [types/pages.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L86) |
-| &lt;a id="metatitle"&gt;&lt;/a&gt; `metaTitle?` | `readonly` | `string` | - | [types/pages.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L85) |
-| &lt;a id="noindex"&gt;&lt;/a&gt; `noindex?` | `readonly` | `boolean` | - | [types/pages.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L88) |
-| &lt;a id="ogimage"&gt;&lt;/a&gt; `ogImage?` | `readonly` | `string` | - | [types/pages.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/pages.ts#L87) |
+| &lt;a id="canonical"&gt;&lt;/a&gt; `canonical?` | `readonly` | `string` | Canonical URL for the page (`<link rel="canonical">`). Mirrors `root.props.seo.canonical` so the root↔sidecar projection (`pageRootSeoToStudioPageSeo` in `@anvilkit/core`) round-trips losslessly; the page-settings dialog does not edit it, so it passes through untouched. | contracts/dist/page.d.ts:92 |
+| &lt;a id="metadescription"&gt;&lt;/a&gt; `metaDescription?` | `readonly` | `string` | - | contracts/dist/page.d.ts:83 |
+| &lt;a id="metatitle"&gt;&lt;/a&gt; `metaTitle?` | `readonly` | `string` | - | contracts/dist/page.d.ts:82 |
+| &lt;a id="noindex"&gt;&lt;/a&gt; `noindex?` | `readonly` | `boolean` | - | contracts/dist/page.d.ts:85 |
+| &lt;a id="ogimage"&gt;&lt;/a&gt; `ogImage?` | `readonly` | `string` | - | contracts/dist/page.d.ts:84 |

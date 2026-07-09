@@ -1,0 +1,18 @@
+---
+title: "VersionHistoryImportOptions"
+description: "@anvilkit/plugin-version-history · VersionHistoryImportOptions"
+---
+
+Defined in: [types/types.ts:184](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L184)
+
+Options for [SnapshotAdapter.importAll](SnapshotAdapter.md#importall).
+
+- `"merge"` (default) — add the archive's snapshots to the existing store,
+  overwriting any whose `id` already exists and appending the rest.
+- `"replace"` — clear the existing store first, then import the archive.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="mode"&gt;&lt;/a&gt; `mode?` | `readonly` | `"replace"` \| `"merge"` | [types/types.ts:185](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L185) |

@@ -1,0 +1,31 @@
+---
+title: "prepareRestore"
+description: "@anvilkit/plugin-version-history · prepareRestore"
+---
+
+```ts
+function prepareRestore(input): PageIR;
+```
+
+Defined in: [utils/restore.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L77)
+
+Conflict-guarded rollback resolver. Runs [checkRestoreConflict](checkRestoreConflict.md) and:
+
+- returns `snapshotIR` unchanged when there is no conflict (including when
+  no `expectedBaseHash` was supplied — fully backward compatible), or when
+  `force` is `true`;
+- otherwise throws a typed [VersionHistoryError](../classes/VersionHistoryError) with code
+  `"CONFLICT"` so the host can prompt the user and retry with `force`.
+
+Pure: it resolves *what* to restore but never dispatches — the host owns
+applying the returned IR to the editor.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`PrepareRestoreInput`](../interfaces/PrepareRestoreInput) |
+
+## Returns
+
+`PageIR`

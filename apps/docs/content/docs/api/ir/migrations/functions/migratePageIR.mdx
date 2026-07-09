@@ -9,12 +9,12 @@ function migratePageIR(ir, options): PageIR;
 
 Defined in: [migrations/index.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L63)
 
-Migrate a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) document between peer-range labels.
+Migrate a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts) document between peer-range labels.
 
 - Pure no-op when `from === to` AND every node has `meta === undefined`.
   Returns the original reference.
 - Validates every `node.meta` (when present) against the runtime
-  caps documented on `PageIRNodeMeta` (from `@anvilkit/core`).
+  caps documented on `PageIRNodeMeta` (from `@anvilkit/contracts`).
   Throws [PageIRNodeMetaError](../classes/PageIRNodeMetaError) on the first invalid node.
 - Returns a frozen IR with a freshly rebuilt node spine when
   validation succeeds with at least one populated `meta`. The
@@ -29,9 +29,9 @@ stays `"1"` across `0.21 ↔ 0.22`.
 
 | Parameter | Type |
 | ------ | ------ |
-| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) |
+| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts) |
 | `options` | [`PageIRMigrationOptions`](../interfaces/PageIRMigrationOptions) |
 
 ## Returns
 
-[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts)
+[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts)

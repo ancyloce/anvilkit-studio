@@ -3,7 +3,7 @@ title: "ThemeState"
 description: "@anvilkit/core · ThemeState"
 ---
 
-Defined in: [state/slices/theme-store.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L71)
+Defined in: [core/src/state/slices/theme-store.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L71)
 
 Full shape of the theme store — two read fields, two setters.
 No `reset()` is required by the spec, but we add one for
@@ -14,8 +14,8 @@ isolation hook.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="mode"&gt;&lt;/a&gt; `mode` | `readonly` | [`ThemeMode`](../type-aliases/ThemeMode) | The user's declared preference. Persisted. | [state/slices/theme-store.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L75) |
-| &lt;a id="resolved"&gt;&lt;/a&gt; `resolved` | `readonly` | [`ThemeResolved`](../type-aliases/ThemeResolved) | The theme currently rendered on screen. **Never persisted** — recomputed at mount from `matchMedia` and updated on every OS-level preference change. See file header for rationale. | [state/slices/theme-store.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L81) |
+| &lt;a id="mode"&gt;&lt;/a&gt; `mode` | `readonly` | [`ThemeMode`](../type-aliases/ThemeMode) | The user's declared preference. Persisted. | [core/src/state/slices/theme-store.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L75) |
+| &lt;a id="resolved"&gt;&lt;/a&gt; `resolved` | `readonly` | [`ThemeResolved`](../type-aliases/ThemeResolved) | The theme currently rendered on screen. **Never persisted** — recomputed at mount from `matchMedia` and updated on every OS-level preference change. See file header for rationale. | [core/src/state/slices/theme-store.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L81) |
 
 ## Methods
 
@@ -25,7 +25,7 @@ isolation hook.
 reset(): void;
 ```
 
-Defined in: [state/slices/theme-store.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L98)
+Defined in: [core/src/state/slices/theme-store.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L98)
 
 Restore every field to its initial state. Present for
 symmetry with the other stores in this directory — see
@@ -43,7 +43,7 @@ symmetry with the other stores in this directory — see
 setMode(mode): void;
 ```
 
-Defined in: [state/slices/theme-store.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L86)
+Defined in: [core/src/state/slices/theme-store.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L86)
 
 Update the user's preference. Typically called from the
 header's theme-toggle button.
@@ -66,7 +66,7 @@ header's theme-toggle button.
 setResolved(resolved): void;
 ```
 
-Defined in: [state/slices/theme-store.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L92)
+Defined in: [core/src/state/slices/theme-store.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L92)
 
 Update the resolved on-screen value. Called once at mount
 with `matchMedia("(prefers-color-scheme: dark)").matches`

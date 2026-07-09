@@ -1,0 +1,23 @@
+---
+title: "AiComponentSchema"
+description: "@anvilkit/contracts · AiComponentSchema"
+---
+
+Defined in: ai.ts:172
+
+Description of a single component in a shape an LLM can reason
+about — name, purpose, props, and an optional concrete example.
+
+An array of these is passed to the LLM so it knows what components
+are available and how to use them. Produced by
+`@anvilkit/schema`'s `configToAiContext()` (Phase 3) from a Puck
+`Config`; this package only owns the destination shape.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="componentname"&gt;&lt;/a&gt; `componentName` | `readonly` | `string` | The component name as registered in the Puck config (e.g. `"Hero"`, `"Button"`, `"Card"`). Matches the `type` used in Puck's component data. | ai.ts:178 |
+| &lt;a id="description"&gt;&lt;/a&gt; `description` | `readonly` | `string` | Human-readable description of what the component does and when to use it. Forwarded verbatim into the LLM prompt — write it as guidance to a collaborator. | ai.ts:184 |
+| &lt;a id="example"&gt;&lt;/a&gt; `example?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; | Optional concrete example of a valid prop bag. The LLM uses this as a one-shot example of how the fields should look when populated; leaving it off falls back to zero-shot from the field descriptions alone. | ai.ts:195 |
+| &lt;a id="fields"&gt;&lt;/a&gt; `fields` | `readonly` | readonly [`AiFieldSchema`](AiFieldSchema.md)[] | The component's props, described field-by-field. | ai.ts:188 |

@@ -1,0 +1,14 @@
+---
+title: "MAX_NODE_ID_LENGTH"
+description: "@anvilkit/plugin-collab-yjs · MAX_NODE_ID_LENGTH"
+---
+
+```ts
+const MAX_NODE_ID_LENGTH: 256 = 256;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L176)
+
+Upper bound on the length of a single node-id / focused-block-id
+string. Mirrors [MAX\_DISPLAY\_NAME\_LENGTH](MAX_DISPLAY_NAME_LENGTH.md) in spirit — keeps a
+peer from smuggling a megabyte string through an id field.

@@ -1,0 +1,28 @@
+---
+title: "checkRestoreConflict"
+description: "@anvilkit/plugin-version-history · checkRestoreConflict"
+---
+
+```ts
+function checkRestoreConflict(input): RestoreConflict;
+```
+
+Defined in: [utils/restore.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L42)
+
+Pure optimistic-concurrency check for a rollback. Hashes `currentIR` and
+compares it to `expectedBaseHash`: a mismatch means the document changed
+underneath the planned restore (a remote collaborator or a local edit),
+so blindly applying the snapshot would clobber that work.
+
+Has no side effects and never throws — it only reports. Use
+[prepareRestore](prepareRestore.md) when you want a throwing guard instead.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`RestoreConflictInput`](../interfaces/RestoreConflictInput) |
+
+## Returns
+
+[`RestoreConflict`](../interfaces/RestoreConflict)

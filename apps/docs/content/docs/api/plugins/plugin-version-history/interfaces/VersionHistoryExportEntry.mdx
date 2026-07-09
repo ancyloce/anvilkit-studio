@@ -1,0 +1,20 @@
+---
+title: "VersionHistoryExportEntry"
+description: "@anvilkit/plugin-version-history · VersionHistoryExportEntry"
+---
+
+Defined in: [types/types.ts:156](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L156)
+
+A single entry in a [VersionHistoryExport](VersionHistoryExport.md): a snapshot's metadata
+paired with its fully-materialized PageIR.
+
+Unlike an adapter's internal delta-chain record, the `ir` here is a
+complete, standalone page (the chain is reconstructed during export), so
+importing the entry reproduces a directly loadable snapshot.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | `readonly` | `PageIR` | [types/types.ts:158](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L158) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta` | `readonly` | [`SnapshotMeta`](SnapshotMeta.md) | [types/types.ts:157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L157) |

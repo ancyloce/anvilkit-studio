@@ -1,0 +1,20 @@
+---
+title: "SnapshotPersistenceOptions"
+description: "@anvilkit/plugin-collab-yjs · SnapshotPersistenceOptions"
+---
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:390](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L390)
+
+§4.2.2 — configuration bag for [CreateYjsAdapterOptions.snapshotPersistence](CreateYjsAdapterOptions.md#snapshotpersistence).
+Bundles the [SnapshotPersistenceAdapter](SnapshotPersistenceAdapter.md) with an optional
+reversible payload transform (the encryption-at-rest seam) and a fault
+sink.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | [`SnapshotPersistenceAdapter`](SnapshotPersistenceAdapter.md) | The backend storage implementation. | [plugin-collab-yjs/src/types/types.ts:392](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L392) |
+| &lt;a id="decode"&gt;&lt;/a&gt; `decode?` | `readonly` | (`payload`) =&gt; `string` | Inverse of [encode](#encode), applied to the payload read back from [SnapshotPersistenceAdapter.loadSnapshot](SnapshotPersistenceAdapter.md#loadsnapshot) before it is decoded into a `PageIR`. Omit when [encode](#encode) is omitted. | [plugin-collab-yjs/src/types/types.ts:408](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L408) |
+| &lt;a id="encode"&gt;&lt;/a&gt; `encode?` | `readonly` | (`payload`) =&gt; `string` | Optional transform applied to the encoded payload string BEFORE it is handed to [SnapshotPersistenceAdapter.saveSnapshot](SnapshotPersistenceAdapter.md#savesnapshot). This is the documented encryption-at-rest seam — supply a real cipher here (the adapter ships no crypto). It is NOT applied to the in-`Y.Doc` copy. If provided, a matching [decode](#decode) MUST be supplied such that `decode(encode(x)) === x`, or hydration via [YjsSnapshotAdapter.loadPersistedSnapshot](YjsSnapshotAdapter.md#loadpersistedsnapshot) will fail. | [plugin-collab-yjs/src/types/types.ts:402](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L402) |
+| &lt;a id="onfault"&gt;&lt;/a&gt; `onFault?` | `readonly` | (`operation`, `error`) =&gt; `void` | Notified when a mirror operation (`saveSnapshot` / `deleteSnapshot`) throws or rejects. Mirroring is best-effort and never blocks the in-`Y.Doc` store, so this is the only signal of a backend fault. The first argument names the failed operation. | [plugin-collab-yjs/src/types/types.ts:415](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L415) |

@@ -3,12 +3,18 @@ title: "CollabUIProviderProps"
 description: "@anvilkit/collab-ui · CollabUIProviderProps"
 ---
 
-Defined in: [context.tsx:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L105)
+Defined in: [context.tsx:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L119)
+
+Props for [CollabUIProvider](../functions/CollabUIProvider): the live yjs adapter, the host's
+authoritative local `self` identity, and optional seeds/callbacks for
+remote-cursor visibility.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | `YjsSnapshotAdapter` | - | [context.tsx:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L106) |
-| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | - | [context.tsx:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L116) |
-| &lt;a id="self"&gt;&lt;/a&gt; `self` | `readonly` | `PeerInfo` | The local peer's identity. Host `self` is **authoritative**: the provider mirrors host changes into local state, and mirrors local `updateSelf` edits back out through `adapter.presence.update`. The factory's `onIdentityChange` is how the host's source of truth (auth profile, settings store, …) observes those local edits and keeps itself in sync (review §A3). | [context.tsx:115](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L115) |
+| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | `YjsSnapshotAdapter` | - | [context.tsx:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L120) |
+| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | - | [context.tsx:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L130) |
+| &lt;a id="initialshowremotecursors"&gt;&lt;/a&gt; `initialShowRemoteCursors?` | `readonly` | `boolean` | Seed the initial remote-cursor visibility (review §4.2.1). The provider keeps the toggle in React state; this only sets its first value so a host can restore a persisted preference (localStorage, a settings store, …) on mount. Defaults to `true`. Read at mount only — later changes flow through `setShowRemoteCursors`. Kept host-driven (no localStorage baked into this package) so the provider stays SSR-safe and storage-agnostic. | [context.tsx:141](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L141) |
+| &lt;a id="onshowremotecursorschange"&gt;&lt;/a&gt; `onShowRemoteCursorsChange?` | `readonly` | (`next`) =&gt; `void` | Fired whenever remote-cursor visibility changes — whether through the bundled `<CollabSettingsPopover>` toggle or a programmatic `setShowRemoteCursors(...)` on the context. Lets a host persist the preference (review §4.2.1). Does **not** fire on initial mount (the host already knows the seed it passed), and same-value writes are suppressed. | [context.tsx:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L150) |
+| &lt;a id="self"&gt;&lt;/a&gt; `self` | `readonly` | `PeerInfo` | The local peer's identity. Host `self` is **authoritative**: the provider mirrors host changes into local state, and mirrors local `updateSelf` edits back out through `adapter.presence.update`. The factory's `onIdentityChange` is how the host's source of truth (auth profile, settings store, …) observes those local edits and keeps itself in sync (review §A3). | [context.tsx:129](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L129) |

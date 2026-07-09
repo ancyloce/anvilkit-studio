@@ -1,0 +1,16 @@
+---
+title: "MAX_SELECTION_IDS"
+description: "@anvilkit/plugin-collab-yjs · MAX_SELECTION_IDS"
+---
+
+```ts
+const MAX_SELECTION_IDS: 256 = 256;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L169)
+
+Upper bound on the number of node ids carried in a multi-select
+presence payload. A hostile/buggy peer that "select-all"s a huge
+document must not be able to flood every other client's awareness
+cache with an unbounded id array — excess ids beyond this cap are
+dropped (the selection is truncated, not the whole state rejected).

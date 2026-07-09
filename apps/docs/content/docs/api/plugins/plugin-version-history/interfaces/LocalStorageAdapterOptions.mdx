@@ -3,10 +3,10 @@ title: "LocalStorageAdapterOptions"
 description: "@anvilkit/plugin-version-history · LocalStorageAdapterOptions"
 ---
 
-Defined in: [adapters/local-storage.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/local-storage.ts#L19)
+Defined in: [adapters/local-storage.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/local-storage.ts#L28)
 
 ## Properties
 
-| Property | Modifier | Type | Defined in |
-| ------ | ------ | ------ | ------ |
-| &lt;a id="namespace"&gt;&lt;/a&gt; `namespace` | `readonly` | `string` | [adapters/local-storage.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/local-storage.ts#L20) |
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="namespace"&gt;&lt;/a&gt; `namespace` | `readonly` | `string` | Key prefix isolating this adapter's data within a single `localStorage` origin. Every key is derived from it verbatim — `` `${namespace}:snapshots:index` `` for the index and `` `${namespace}:snapshots:${id}` `` for each record — so the namespace is what keeps one host's (or document's) history from colliding with another's that shares the same origin. Must be a non-empty string once surrounding whitespace is trimmed. An empty or whitespace-only value would yield malformed, prefix-less keys (e.g. `":snapshots:index"`) that silently collide across hosts, so [localStorageAdapter](../functions/localStorageAdapter) throws a `TypeError` at construction rather than corrupt data later. The value is validated but **not** trimmed for key derivation: a namespace with surrounding whitespace is accepted and used exactly as given, so callers should pass a stable, whitespace-free prefix per host. | [adapters/local-storage.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/adapters/local-storage.ts#L45) |

@@ -1,0 +1,23 @@
+---
+title: "VersionHistoryExport"
+description: "@anvilkit/plugin-version-history · VersionHistoryExport"
+---
+
+Defined in: [types/types.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L172)
+
+Self-contained, JSON-serializable archive of every snapshot in an adapter —
+produced by [SnapshotAdapter.exportAll](SnapshotAdapter.md#exportall) and consumed by
+[SnapshotAdapter.importAll](SnapshotAdapter.md#importall). Each entry carries a full `PageIR`, so a
+round-trip `importAll(exportAll())` into a fresh adapter reproduces loadable
+snapshots.
+
+`version` is the archive schema version (currently `1`) — bump it if the
+envelope shape ever changes so importers can refuse or migrate older files.
+This is intentionally NOT the adapter's internal delta-chain format.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="snapshots"&gt;&lt;/a&gt; `snapshots` | `readonly` | readonly [`VersionHistoryExportEntry`](VersionHistoryExportEntry.md)[] | [types/types.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L174) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `readonly` | `1` | [types/types.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L173) |

@@ -3,7 +3,7 @@ title: "PageIRNodeMeta"
 description: "@anvilkit/core · PageIRNodeMeta"
 ---
 
-Defined in: [types/ir.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L98)
+Defined in: contracts/dist/ir.d.ts:99
 
 Authoring-time metadata attached to a [PageIRNode](PageIRNode.md).
 
@@ -24,7 +24,7 @@ checker. Keeping caps off the type surface preserves the
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `readonly` | `boolean` | When `true`, the editor SHOULD treat this node and its subtree as locked: surface a lock indicator and refuse mutating dispatches scoped to the subtree. Authoring concept only — exporters ignore the field. | [types/ir.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L105) |
-| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `readonly` | `string` | Freeform author notes scoped to this node. Capped at 512 characters at runtime. | [types/ir.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L121) |
-| &lt;a id="owner"&gt;&lt;/a&gt; `owner?` | `readonly` | `string` | Opaque host-owned identifier for the author/team that owns this node. Capped at 256 characters at runtime. | [types/ir.ts:110](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L110) |
-| &lt;a id="version"&gt;&lt;/a&gt; `version?` | `readonly` | `string` | Host-versioning string for this node. Runtime contract: must match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional pre-release / build suffix). | [types/ir.ts:116](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L116) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `readonly` | `boolean` | When `true`, the editor SHOULD treat this node and its subtree as locked: surface a lock indicator and refuse mutating dispatches scoped to the subtree. Authoring concept only — exporters ignore the field. | contracts/dist/ir.d.ts:106 |
+| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `readonly` | `string` | Freeform author notes scoped to this node. Capped at 512 characters at runtime. | contracts/dist/ir.d.ts:122 |
+| &lt;a id="owner"&gt;&lt;/a&gt; `owner?` | `readonly` | `string` | Opaque host-owned identifier for the author/team that owns this node. Capped at 256 characters at runtime. | contracts/dist/ir.d.ts:111 |
+| &lt;a id="version"&gt;&lt;/a&gt; `version?` | `readonly` | `string` | Host-versioning string for this node. Runtime contract: must match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional pre-release / build suffix). | contracts/dist/ir.d.ts:117 |

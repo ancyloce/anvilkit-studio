@@ -7,15 +7,30 @@ description: "@anvilkit/plugin-collab-yjs · createDebouncedAdapter"
 function createDebouncedAdapter(adapter, options?): SnapshotAdapterWithMetrics;
 ```
 
-Defined in: [plugin-collab-yjs/src/utils/debounced-adapter.ts:71](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L71)
+Defined in: [plugin-collab-yjs/src/utils/debounced-adapter.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/debounced-adapter.ts#L89)
+
+Wrap a `SnapshotAdapter` so that bursts of `save()` calls within the
+configured quiet window (`options.ms`, default 150 ms) coalesce into a
+single underlying write. The latest IR wins, and every caller that
+issued a save during the window resolves (or rejects) with the result
+of that single flush. `list`, `load`, `delete`, `subscribe`, and
+`presence` pass through to the wrapped adapter unchanged.
+
+The returned adapter overlays a coalescing ratio onto the upstream
+`metrics()` snapshot (when present) and exposes a `destroy()` that
+cancels the pending flush timer, rejects any in-flight `save()` with
+[DebouncedAdapterDestroyedError](../classes/DebouncedAdapterDestroyedError), and forwards teardown to the
+upstream adapter. Hosts MUST call `destroy()` on unmount.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `adapter` | [`SnapshotAdapterWithMetrics`](../type-aliases/SnapshotAdapterWithMetrics) |
-| `options` | [`CreateDebouncedAdapterOptions`](../interfaces/CreateDebouncedAdapterOptions) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `adapter` | [`SnapshotAdapterWithMetrics`](../type-aliases/SnapshotAdapterWithMetrics) | Upstream snapshot adapter whose writes are debounced. |
+| `options` | [`CreateDebouncedAdapterOptions`](../interfaces/CreateDebouncedAdapterOptions) | Quiet-window (`ms`) and scheduler-injection overrides. |
 
 ## Returns
 
 [`SnapshotAdapterWithMetrics`](../type-aliases/SnapshotAdapterWithMetrics)
+
+A `SnapshotAdapterWithMetrics` that debounces `save()`.

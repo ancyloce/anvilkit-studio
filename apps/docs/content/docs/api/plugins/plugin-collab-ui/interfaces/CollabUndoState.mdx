@@ -1,0 +1,20 @@
+---
+title: "CollabUndoState"
+description: "@anvilkit/collab-ui · CollabUndoState"
+---
+
+Defined in: [context.tsx:500](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L500)
+
+Local undo/redo state snapshot (§4.1.2). Returned by
+[useCollabUndoState](../functions/useCollabUndoState). `undo`/`redo` are stable callbacks bound
+to the active adapter; `canUndo`/`canRedo` drive toolbar
+enabled-state.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="canredo"&gt;&lt;/a&gt; `canRedo` | `readonly` | `boolean` | [context.tsx:502](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L502) |
+| &lt;a id="canundo"&gt;&lt;/a&gt; `canUndo` | `readonly` | `boolean` | [context.tsx:501](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L501) |
+| &lt;a id="redo"&gt;&lt;/a&gt; `redo` | `readonly` | () =&gt; `void` | [context.tsx:504](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L504) |
+| &lt;a id="undo"&gt;&lt;/a&gt; `undo` | `readonly` | () =&gt; `void` | [context.tsx:503](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L503) |

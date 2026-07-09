@@ -7,7 +7,10 @@ description: "@anvilkit/collab-ui · useCollabStatus"
 function useCollabStatus(): ConnectionStatus;
 ```
 
-Defined in: [context.tsx:328](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L328)
+Defined in: [context.tsx:399](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L399)
+
+Current adapter ConnectionStatus. Reads only `StatusContext`, so
+consumers don't re-render on peer / cursor / conflict churn.
 
 ## Returns
 

@@ -7,14 +7,21 @@ description: "@anvilkit/plugin-collab-yjs · validatePresenceCursor"
 function validatePresenceCursor(value): PresenceCursor | null;
 ```
 
-Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L102)
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L124)
+
+Validate an untrusted value into a PresenceCursor.
+
+Requires finite numeric `x` and `y` coordinates; any other shape (or a
+`NaN`/`Infinity` coordinate) returns `null`.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `value` | `unknown` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `value` | `unknown` | Untrusted cursor payload. |
 
 ## Returns
 
 `PresenceCursor` \| `null`
+
+The `PresenceCursor`, or `null` if invalid.

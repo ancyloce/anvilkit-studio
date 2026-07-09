@@ -3,19 +3,23 @@ title: "CollabUIContextValue"
 description: "@anvilkit/collab-ui · CollabUIContextValue"
 ---
 
-Defined in: [context.tsx:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L39)
+Defined in: [context.tsx:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L48)
+
+The full collab UI state bag returned by the composite
+[useCollabContext](../functions/useCollabContext) hook — adapter, identity, status, peers, the
+conflict queue + its mutators, and the remote-cursor visibility toggle.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | `YjsSnapshotAdapter` | - | [context.tsx:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L40) |
-| &lt;a id="clearconflicts"&gt;&lt;/a&gt; `clearConflicts` | `readonly` | () =&gt; `void` | - | [context.tsx:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L51) |
-| &lt;a id="conflicts"&gt;&lt;/a&gt; `conflicts` | `readonly` | readonly `ConflictEvent`[] | - | [context.tsx:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L44) |
-| &lt;a id="dismissconflict"&gt;&lt;/a&gt; `dismissConflict` | `readonly` | (`key`) =&gt; `void` | Dismiss a single conflict by its composite [conflictKey](../functions/conflictKey). Keying by the bare ISO `at` would drop every co-timestamped conflict emitted in the same tick (M1). | [context.tsx:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L50) |
-| &lt;a id="peers"&gt;&lt;/a&gt; `peers` | `readonly` | readonly `PresenceState`[] | - | [context.tsx:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L43) |
-| &lt;a id="self"&gt;&lt;/a&gt; `self` | `readonly` | `PeerInfo` | - | [context.tsx:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L41) |
-| &lt;a id="setshowremotecursors"&gt;&lt;/a&gt; `setShowRemoteCursors` | `readonly` | (`show`) =&gt; `void` | - | [context.tsx:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L61) |
-| &lt;a id="showremotecursors"&gt;&lt;/a&gt; `showRemoteCursors` | `readonly` | `boolean` | Whether remote peer cursors should render. Single source of truth for the bundled `<CollabSettingsPopover>` toggle and the bundled `<PresenceLayer>` overlay (review §C3 / §4.3). A host that mounts `<PresenceLayer>` directly can still override per-instance via its `showCursors` prop. | [context.tsx:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L60) |
-| &lt;a id="status"&gt;&lt;/a&gt; `status` | `readonly` | `ConnectionStatus` | - | [context.tsx:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L42) |
-| &lt;a id="updateself"&gt;&lt;/a&gt; `updateSelf` | `readonly` | (`patch`) =&gt; `void` | - | [context.tsx:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L52) |
+| &lt;a id="adapter"&gt;&lt;/a&gt; `adapter` | `readonly` | `YjsSnapshotAdapter` | - | [context.tsx:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L49) |
+| &lt;a id="clearconflicts"&gt;&lt;/a&gt; `clearConflicts` | `readonly` | () =&gt; `void` | - | [context.tsx:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L60) |
+| &lt;a id="conflicts"&gt;&lt;/a&gt; `conflicts` | `readonly` | readonly `ConflictEvent`[] | - | [context.tsx:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L53) |
+| &lt;a id="dismissconflict"&gt;&lt;/a&gt; `dismissConflict` | `readonly` | (`key`) =&gt; `void` | Dismiss a single conflict by its composite [conflictKey](../functions/conflictKey). Keying by the bare ISO `at` would drop every co-timestamped conflict emitted in the same tick (M1). | [context.tsx:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L59) |
+| &lt;a id="peers"&gt;&lt;/a&gt; `peers` | `readonly` | readonly `PresenceState`[] | - | [context.tsx:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L52) |
+| &lt;a id="self"&gt;&lt;/a&gt; `self` | `readonly` | `PeerInfo` | - | [context.tsx:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L50) |
+| &lt;a id="setshowremotecursors"&gt;&lt;/a&gt; `setShowRemoteCursors` | `readonly` | (`show`) =&gt; `void` | - | [context.tsx:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L70) |
+| &lt;a id="showremotecursors"&gt;&lt;/a&gt; `showRemoteCursors` | `readonly` | `boolean` | Whether remote peer cursors should render. Single source of truth for the bundled `<CollabSettingsPopover>` toggle and the bundled `<PresenceLayer>` overlay (review §C3 / §4.3). A host that mounts `<PresenceLayer>` directly can still override per-instance via its `showCursors` prop. | [context.tsx:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L69) |
+| &lt;a id="status"&gt;&lt;/a&gt; `status` | `readonly` | `ConnectionStatus` | - | [context.tsx:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L51) |
+| &lt;a id="updateself"&gt;&lt;/a&gt; `updateSelf` | `readonly` | (`patch`) =&gt; `void` | - | [context.tsx:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L61) |

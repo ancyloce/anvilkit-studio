@@ -25,11 +25,12 @@ type ConnectionStatus =
   | {
   kind: "error";
   message: string;
+  reason?: ConnectionErrorReason;
   recoverable: boolean;
 };
 ```
 
-Defined in: [plugin-collab-yjs/src/types/types.ts:184](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L184)
+Defined in: [plugin-collab-yjs/src/types/types.ts:451](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L451)
 
 Discriminated union describing the host transport's lifecycle as
 observed by the adapter. The five variants give hosts a transport-
@@ -71,9 +72,9 @@ provider-specific fields like `wsconnected`.
 
 | Name | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| `kind` | `"offline"` | - | [plugin-collab-yjs/src/types/types.ts:188](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L188) |
-| `queuedEdits` | `number` | Number of local save() calls observed by the adapter since the last "synced" status. Populated by `createYjsAdapter` whenever the host's `connectionSource` emits an `offline` status — the adapter substitutes its internal counter for whatever value the host passed. Resets to 0 on the next "synced" transition. | [plugin-collab-yjs/src/types/types.ts:198](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L198) |
-| `since` | `string` | - | [plugin-collab-yjs/src/types/types.ts:189](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L189) |
+| `kind` | `"offline"` | - | [plugin-collab-yjs/src/types/types.ts:455](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L455) |
+| `queuedEdits` | `number` | Number of local save() calls observed by the adapter since the last "synced" status. Populated by `createYjsAdapter` whenever the host's `connectionSource` emits an `offline` status — the adapter substitutes its internal counter for whatever value the host passed. Resets to 0 on the next "synced" transition. | [plugin-collab-yjs/src/types/types.ts:465](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L465) |
+| `since` | `string` | - | [plugin-collab-yjs/src/types/types.ts:456](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L456) |
 
 ***
 
@@ -95,6 +96,14 @@ provider-specific fields like `wsconnected`.
 {
   kind: "error";
   message: string;
+  reason?: ConnectionErrorReason;
   recoverable: boolean;
 }
 ```
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `kind` | `"error"` | - | [plugin-collab-yjs/src/types/types.ts:473](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L473) |
+| `message` | `string` | - | [plugin-collab-yjs/src/types/types.ts:474](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L474) |
+| `reason?` | [`ConnectionErrorReason`](ConnectionErrorReason.md) | Why the connection errored. Lets a host distinguish an authentication / authorization failure (`"auth"`, typically non-recoverable without new credentials) from a generic transport fault (`"transport"`). Absent is treated as `"transport"` for backwards compatibility. See [ConnectionErrorReason](ConnectionErrorReason.md). | [plugin-collab-yjs/src/types/types.ts:484](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L484) |
+| `recoverable` | `boolean` | - | [plugin-collab-yjs/src/types/types.ts:475](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L475) |

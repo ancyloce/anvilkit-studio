@@ -1,0 +1,20 @@
+---
+title: "StudioPageSeo"
+description: "@anvilkit/contracts · StudioPageSeo"
+---
+
+Defined in: page.ts:84
+
+Structured SEO metadata for a page. Every field is optional so the
+host can surface only what it persists; the settings dialog shows the
+full set when the source implements [StudioPagesSource.onUpdateSettings](StudioPagesSource.md#onupdatesettings).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="canonical"&gt;&lt;/a&gt; `canonical?` | `readonly` | `string` | Canonical URL for the page (`<link rel="canonical">`). Mirrors `root.props.seo.canonical` so the root↔sidecar projection (`pageRootSeoToStudioPageSeo` in `@anvilkit/core`) round-trips losslessly; the page-settings dialog does not edit it, so it passes through untouched. | page.ts:95 |
+| &lt;a id="metadescription"&gt;&lt;/a&gt; `metaDescription?` | `readonly` | `string` | - | page.ts:86 |
+| &lt;a id="metatitle"&gt;&lt;/a&gt; `metaTitle?` | `readonly` | `string` | - | page.ts:85 |
+| &lt;a id="noindex"&gt;&lt;/a&gt; `noindex?` | `readonly` | `boolean` | - | page.ts:88 |
+| &lt;a id="ogimage"&gt;&lt;/a&gt; `ogImage?` | `readonly` | `string` | - | page.ts:87 |

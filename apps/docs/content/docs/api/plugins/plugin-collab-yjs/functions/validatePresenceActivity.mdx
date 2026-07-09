@@ -1,0 +1,25 @@
+---
+title: "validatePresenceActivity"
+description: "@anvilkit/plugin-collab-yjs · validatePresenceActivity"
+---
+
+```ts
+function validatePresenceActivity(value): PresenceActivity | null;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:339](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L339)
+
+Validate [PresenceActivity](../interfaces/PresenceActivity). `typing` must be a boolean when
+present; `updatedAt` must be a finite number (clamped ≥ 0). Returns a
+fresh object with only the known fields, or `null` when a present
+field is malformed.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+[`PresenceActivity`](../interfaces/PresenceActivity) \| `null`

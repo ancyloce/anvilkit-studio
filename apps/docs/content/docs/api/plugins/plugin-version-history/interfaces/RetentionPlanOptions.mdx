@@ -1,0 +1,24 @@
+---
+title: "RetentionPlanOptions"
+description: "@anvilkit/plugin-version-history · RetentionPlanOptions"
+---
+
+Defined in: [utils/retention.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L30)
+
+Options for [planRetention](../functions/planRetention) / [runRetention](../functions/runRetention).
+
+- **`now`** — injectable wall-clock used for age comparisons (defaults to
+  `Date.now()`); pass a fixed value for deterministic age-based planning.
+- **`protectedIds`** — snapshot ids that must never be evicted, regardless of
+  age or count pressure.
+
+## Extended by
+
+- [`RunRetentionOptions`](RunRetentionOptions.md)
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | `readonly` | `number` | [utils/retention.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L31) |
+| &lt;a id="protectedids"&gt;&lt;/a&gt; `protectedIds?` | `readonly` | readonly `string`[] | [utils/retention.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L32) |

@@ -1,0 +1,30 @@
+---
+title: "BuildPageIR"
+description: "@anvilkit/plugin-version-history · BuildPageIR"
+---
+
+```ts
+type BuildPageIR = (data) => MaybePromise<PageIR | null>;
+```
+
+Defined in: [types/types.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L19)
+
+Host-provided bridge that converts the live editor document returned by
+`ctx.getData()` (in a real `<Studio>` session this is Puck `Data`, not
+`PageIR`) into the `PageIR` the snapshot adapter persists.
+
+Threaded through [CreateVersionHistoryPluginOptions.buildIR](../interfaces/CreateVersionHistoryPluginOptions#buildir). The
+header save action calls it only when the raw data is not already a
+`PageIR` (the fast-path), so passing it is what makes "Save snapshot"
+persist in production sessions. Return `null` to signal the current data
+cannot be converted and the save should be skipped. May be sync or async.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `data` | `unknown` |
+
+## Returns
+
+[`MaybePromise`](MaybePromise.md)\&lt;`PageIR` \| `null`\&gt;

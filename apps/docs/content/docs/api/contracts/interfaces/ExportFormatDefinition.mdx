@@ -1,0 +1,43 @@
+---
+title: "ExportFormatDefinition"
+description: "@anvilkit/contracts · ExportFormatDefinition"
+---
+
+Defined in: export.ts:198
+
+The descriptor every exporter plugin contributes to Studio.
+
+Registered via `StudioPluginRegistration.exportFormats` (part of
+the plugin surface that stays in `@anvilkit/core`).
+The runtime collects every registered definition into the export
+registry (`core-009`) and dispatches to the matching `id` when the
+host calls `exportAs(formatId, options)`.
+
+### `run(ir, options, ctx?)` contract
+
+The `run` callback receives a fully-normalized [PageIR](PageIR.md), not
+a Puck `Data`. The IR normalization step (Puck `Data` → `PageIR`)
+is performed exactly once by the export pipeline before any format
+runs, ensuring every exporter sees the same input regardless of
+how the page was authored.
+
+Format authors should treat the `ir` argument as deeply read-only.
+Mutating it has no effect on the runtime and may break other
+exporters in the same pipeline.
+
+## Type Parameters
+
+| Type Parameter | Default type | Description |
+| ------ | ------ | ------ |
+| `Opts` *extends* `Record`\&lt;`string`, `unknown`\&gt; | `Record`\&lt;`string`, `unknown`\&gt; | Optional format-specific option shape. See [ExportOptions](../type-aliases/ExportOptions) for an example of how to parameterize a concrete format. Defaults to an unconstrained `Record<string, unknown>`. |
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="extension"&gt;&lt;/a&gt; `extension` | `readonly` | `string` | File extension (without the leading dot) for downloads in this format (e.g. `"html"`, `"jsx"`, `"json"`, `"pdf"`). | export.ts:227 |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, globally-unique format identifier (e.g. `"html"`, `"react"`, `"json"`). The runtime rejects duplicate ids at `createExportRegistry()` time. Convention: lowercase, hyphen-separated, no namespace prefix — host apps refer to formats by id in their UI. | export.ts:209 |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | Human-readable label surfaced in export menus and dialogs (e.g. `"HTML"`, `"React source"`, `"JSON snapshot"`). | export.ts:214 |
+| &lt;a id="labelkey"&gt;&lt;/a&gt; `labelKey?` | `readonly` | `string` | Optional i18n message key for the label, resolved by the chrome via `useMsg(labelKey, label)` at render — so the export menu localizes with the active locale. When present it wins; `label` is the missing-key fallback. Plugins contribute the key via `ctx.registerMessages` under their own namespace. | export.ts:222 |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType` | `readonly` | `string` | MIME type for the exported content (e.g. `"text/html"`, `"application/json"`, `"application/pdf"`). Used by host apps to set the correct `Blob` type at download time and to populate the `Content-Type` header when sending exports over the network. | export.ts:236 |
+| &lt;a id="run"&gt;&lt;/a&gt; `run` | `readonly` | (`ir`, `options`, `ctx?`) =&gt; `Promise`\&lt;[`ExportResult`](ExportResult.md)\&gt; | Produce the serialized output for a page. Receives a normalized [PageIR](PageIR.md) and a format-specific [ExportOptions](../type-aliases/ExportOptions) bag. Returns a `Promise<ExportResult>` — always async so the contract is uniform regardless of whether a given format happens to run synchronously. | export.ts:249 |

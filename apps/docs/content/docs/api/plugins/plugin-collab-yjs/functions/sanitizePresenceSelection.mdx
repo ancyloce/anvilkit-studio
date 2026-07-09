@@ -1,0 +1,27 @@
+---
+title: "sanitizePresenceSelection"
+description: "@anvilkit/plugin-collab-yjs · sanitizePresenceSelection"
+---
+
+```ts
+function sanitizePresenceSelection(value): PresenceSelection | null;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:285](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L285)
+
+Sanitizing variant of [validatePresenceSelection](validatePresenceSelection.md) used by the
+rich presence path (§4.2.5). Unlike the strict validator — which
+rejects the whole selection on any non-string entry — this DROPS
+individual bad ids (non-string, empty, or over-long) and truncates the
+array to [MAX\_SELECTION\_IDS](../variables/MAX_SELECTION_IDS). Returns `null` only when `nodeIds`
+is absent or not an array.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+`PresenceSelection` \| `null`

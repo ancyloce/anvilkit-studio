@@ -3,14 +3,24 @@ title: "SnapshotMeta"
 description: "@anvilkit/plugin-version-history · SnapshotMeta"
 ---
 
-Defined in: [types/types.ts:7](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L7)
+Defined in: [types/types.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L27)
+
+Lightweight, listable descriptor of a stored snapshot — everything the UI
+needs without materializing the full `PageIR`. Identity/provenance fields
+(`id`, `savedAt`, `pageIRHash`, `delta`) are immutable; the rest is the
+host-curated, patchable [SnapshotMetaPatch](SnapshotMetaPatch.md) subset.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="delta"&gt;&lt;/a&gt; `delta?` | `readonly` | [`IRDiff`](../type-aliases/IRDiff) | Structural diff from the immediately previous snapshot to this one (L2). Optional — only populated when the producing adapter opts in (e.g. `createYjsAdapter({ computeDelta: true })`). Useful for audit logs, undo-stack replay, and human-readable change summaries via `summarizeDiff` from `./diff.js`. Snapshots written by older adapter versions omit this field; the shape stays backward compatible. | [types/types.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L22) |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/types.ts:8](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L8) |
-| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `readonly` | `string` | - | [types/types.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L9) |
-| &lt;a id="pageirhash"&gt;&lt;/a&gt; `pageIRHash` | `readonly` | `string` | - | [types/types.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L11) |
-| &lt;a id="savedat"&gt;&lt;/a&gt; `savedAt` | `readonly` | `string` | - | [types/types.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L10) |
+| &lt;a id="author"&gt;&lt;/a&gt; `author?` | `readonly` | `string` | Free-form author / actor attribution for audit trails (e.g. a user id, email, or display name). The package treats it as an opaque string and never parses it. Optional and backward compatible — older records omit it. | [types/types.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L81) |
+| &lt;a id="delta"&gt;&lt;/a&gt; `delta?` | `readonly` | [`IRDiff`](../type-aliases/IRDiff) | Structural diff from the immediately previous snapshot to this one (L2). Optional — only populated when the producing adapter opts in (e.g. `createYjsAdapter({ computeDelta: true })`). Useful for audit logs, undo-stack replay, and human-readable change summaries via `summarizeDiff` from `./diff.js`. Snapshots written by older adapter versions omit this field; the shape stays backward compatible. | [types/types.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L46) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Adapter-assigned unique id; the key for `load`/`delete`/`updateMeta`. | [types/types.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L29) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `readonly` | `string` | Optional short, human-readable name shown in the history list. | [types/types.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L31) |
+| &lt;a id="milestone"&gt;&lt;/a&gt; `milestone?` | `readonly` | `boolean` | Marks this snapshot as a named milestone / checkpoint a host wants to surface prominently in version-history UIs (vs. an ordinary autosave). Optional and backward compatible — older records omit it, which is equivalent to `false` (not a milestone). | [types/types.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L64) |
+| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `readonly` | `string` | Free-form, human-readable notes describing the snapshot — longer-form context than the short [SnapshotMeta.label](#label). Optional and backward compatible — older records omit it. | [types/types.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L88) |
+| &lt;a id="pageirhash"&gt;&lt;/a&gt; `pageIRHash` | `readonly` | `string` | Content hash of the captured `PageIR`; powers the optimistic-restore guard. | [types/types.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L35) |
+| &lt;a id="protected"&gt;&lt;/a&gt; `protected?` | `readonly` | `boolean` | When `true`, the snapshot is exempt from automatic retention eviction: `planRetention` reads this flag and never places a protected snapshot in its delete plan, regardless of age or count pressure. Optional and backward compatible — older records omit it, which is equivalent to "not protected". | [types/types.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L73) |
+| &lt;a id="savedat"&gt;&lt;/a&gt; `savedAt` | `readonly` | `string` | ISO-8601 timestamp of when the snapshot was captured. | [types/types.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L33) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | Host-assigned labels for grouping, filtering, and searching snapshots (e.g. `["release", "qa"]`). Set at save time via [SnapshotAdapter.save](SnapshotAdapter.md#save) or amended later with [SnapshotAdapter.updateMeta](SnapshotAdapter.md#updatemeta). Optional and backward compatible — records written before tagging existed omit it (treated as "no tags"); it is never required. | [types/types.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L56) |

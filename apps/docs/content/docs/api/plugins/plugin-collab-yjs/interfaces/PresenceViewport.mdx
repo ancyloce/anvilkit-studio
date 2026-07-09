@@ -1,0 +1,21 @@
+---
+title: "PresenceViewport"
+description: "@anvilkit/plugin-collab-yjs · PresenceViewport"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L192)
+
+Peer viewport — scroll offset, zoom factor, and an optional visible
+rect. Lets remote clients render "where is this peer looking"
+follow-along UI. All numbers are finite; `zoom`/`width`/`height` are
+clamped to sane bounds by [validatePresenceViewport](../functions/validatePresenceViewport).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="height"&gt;&lt;/a&gt; `height?` | `readonly` | `number` | Optional visible-rect height (document px, clamped ≥ 0). | [plugin-collab-yjs/src/utils/presence-schema.ts:202](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L202) |
+| &lt;a id="width"&gt;&lt;/a&gt; `width?` | `readonly` | `number` | Optional visible-rect width (document px, clamped ≥ 0). | [plugin-collab-yjs/src/utils/presence-schema.ts:200](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L200) |
+| &lt;a id="x"&gt;&lt;/a&gt; `x` | `readonly` | `number` | Horizontal scroll offset (document px). | [plugin-collab-yjs/src/utils/presence-schema.ts:194](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L194) |
+| &lt;a id="y"&gt;&lt;/a&gt; `y` | `readonly` | `number` | Vertical scroll offset (document px). | [plugin-collab-yjs/src/utils/presence-schema.ts:196](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L196) |
+| &lt;a id="zoom"&gt;&lt;/a&gt; `zoom` | `readonly` | `number` | Zoom factor, clamped to [[MIN\_VIEWPORT\_ZOOM](../variables/MIN_VIEWPORT_ZOOM), [MAX\_VIEWPORT\_ZOOM](../variables/MAX_VIEWPORT_ZOOM)]. | [plugin-collab-yjs/src/utils/presence-schema.ts:198](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L198) |

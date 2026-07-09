@@ -1,0 +1,30 @@
+---
+title: "PageIRNodeMeta"
+description: "@anvilkit/contracts · PageIRNodeMeta"
+---
+
+Defined in: ir.ts:101
+
+Authoring-time metadata attached to a [PageIRNode](PageIRNode.md).
+
+Added in `@anvilkit/ir@0.22` (Phase 6 / M10) as an additive,
+round-trip-safe extension. Hosts populate these fields opt-in via
+`migratePageIR` (`@anvilkit/ir/migrations`) or by carrying them
+forward from a previous edit; `puckDataToIR()` itself MUST NOT
+synthesize `meta`, so omitting it round-trips losslessly with
+pre-1.1 documents.
+
+Field caps are runtime-enforced contracts (not type-level
+constraints) — the matching Zod schema lives in
+`@anvilkit/ir/migrations` and `@anvilkit/validator`'s section
+checker. Keeping caps off the type surface preserves the
+"zero runtime code" rule of this file.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `readonly` | `boolean` | When `true`, the editor SHOULD treat this node and its subtree as locked: surface a lock indicator and refuse mutating dispatches scoped to the subtree. Authoring concept only — exporters ignore the field. | ir.ts:108 |
+| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `readonly` | `string` | Freeform author notes scoped to this node. Capped at 512 characters at runtime. | ir.ts:124 |
+| &lt;a id="owner"&gt;&lt;/a&gt; `owner?` | `readonly` | `string` | Opaque host-owned identifier for the author/team that owns this node. Capped at 256 characters at runtime. | ir.ts:113 |
+| &lt;a id="version"&gt;&lt;/a&gt; `version?` | `readonly` | `string` | Host-versioning string for this node. Runtime contract: must match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional pre-release / build suffix). | ir.ts:119 |

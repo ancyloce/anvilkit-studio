@@ -1,0 +1,27 @@
+---
+title: "ResolveConflict"
+description: "@anvilkit/plugin-collab-yjs · ResolveConflict"
+---
+
+```ts
+type ResolveConflict = (conflict) => ConflictResolution | undefined;
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:550](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L550)
+
+§4.2.3 — optional merge-strategy hook. Invoked AFTER `onConflict` fires,
+with the same [ConflictEvent](../interfaces/ConflictEvent). Return a [ConflictResolution](ConflictResolution.md)
+to override pure last-write-wins with a field-level merge that is written
+back into the shared doc and replicated to every peer; return `"remote"`
+/ `undefined` to keep the default converged value. Throwing is treated as
+`"remote"` so a faulty hook can never corrupt the doc.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `conflict` | [`ConflictEvent`](../interfaces/ConflictEvent) |
+
+## Returns
+
+[`ConflictResolution`](ConflictResolution.md) \| `undefined`

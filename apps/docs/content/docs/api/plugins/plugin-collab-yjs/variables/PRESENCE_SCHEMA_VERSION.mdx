@@ -1,0 +1,17 @@
+---
+title: "PRESENCE_SCHEMA_VERSION"
+description: "@anvilkit/plugin-collab-yjs · PRESENCE_SCHEMA_VERSION"
+---
+
+```ts
+const PRESENCE_SCHEMA_VERSION: 2 = 2;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L160)
+
+Current presence payload schema version (§4.2.5).
+
+Payloads with no `version` field (or `version <= 1`) are legacy
+cursor/single-or-array-selection-only states and remain valid — the
+richer fields are simply absent. New hosts stamp this value so peers
+can feature-detect the extended fields without breaking older clients.

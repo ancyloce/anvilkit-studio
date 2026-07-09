@@ -1,0 +1,14 @@
+---
+title: "RetentionAdapter"
+description: "@anvilkit/plugin-version-history · RetentionAdapter"
+---
+
+```ts
+type RetentionAdapter = Pick<SnapshotAdapter, "list" | "delete" | "deleteMany">;
+```
+
+Defined in: [utils/retention.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L51)
+
+The slice of [SnapshotAdapter](../interfaces/SnapshotAdapter) [runRetention](../functions/runRetention) needs: `list` to
+read current metadata, plus the optional `deleteMany` / `delete` it uses to
+apply the plan. Any full `SnapshotAdapter` satisfies it.

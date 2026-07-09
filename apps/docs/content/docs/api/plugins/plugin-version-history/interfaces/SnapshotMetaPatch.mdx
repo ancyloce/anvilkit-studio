@@ -1,0 +1,25 @@
+---
+title: "SnapshotMetaPatch"
+description: "@anvilkit/plugin-version-history · SnapshotMetaPatch"
+---
+
+Defined in: [types/types.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L100)
+
+The mutable, host-curated subset of [SnapshotMeta](SnapshotMeta.md) that
+[SnapshotAdapter.updateMeta](SnapshotAdapter.md#updatemeta) may patch in place. The identity /
+provenance fields (`id`, `savedAt`, `pageIRHash`, `delta`) are intentionally
+excluded — they describe *what* was captured and *when*, and never change
+after a snapshot is written.
+
+Every field is optional; an omitted field is left unchanged by the update.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="author"&gt;&lt;/a&gt; `author?` | `readonly` | `string` | [types/types.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L105) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `readonly` | `string` | [types/types.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L101) |
+| &lt;a id="milestone"&gt;&lt;/a&gt; `milestone?` | `readonly` | `boolean` | [types/types.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L103) |
+| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `readonly` | `string` | [types/types.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L106) |
+| &lt;a id="protected"&gt;&lt;/a&gt; `protected?` | `readonly` | `boolean` | [types/types.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L104) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | [types/types.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L102) |

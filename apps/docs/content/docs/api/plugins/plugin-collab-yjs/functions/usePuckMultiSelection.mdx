@@ -1,0 +1,41 @@
+---
+title: "usePuckMultiSelection"
+description: "@anvilkit/plugin-collab-yjs · usePuckMultiSelection"
+---
+
+```ts
+function usePuckMultiSelection(extraNodeIds?): PresenceSelection | null;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/selection-bridge.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/selection-bridge.ts#L98)
+
+Multi-select sibling of [usePuckSelection](usePuckSelection.md) (Report 0006 §4.2.5).
+
+Merges the single Puck `selectedItem` (the PRIMARY selection, placed
+first) with `extraNodeIds` the host tracks itself — Puck's editor
+store only models one selected node, so a host that wants to broadcast
+a multi-node marquee/shift-click selection supplies the additional ids
+here. The merged list is sanitized exactly like an inbound presence
+selection: non-string / empty / over-long ids are dropped, duplicates
+are removed (primary wins its position), and the result is truncated to
+[MAX\_SELECTION\_IDS](../variables/MAX_SELECTION_IDS). Returns `null` when the merged selection is
+empty so hosts can short-circuit instead of broadcasting `{ nodeIds: [] }`.
+
+The single-id [usePuckSelection](usePuckSelection.md) contract is untouched.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `extraNodeIds?` | readonly `string`[] |
+
+## Returns
+
+`PresenceSelection` \| `null`
+
+## Example
+
+```tsx
+const selection = usePuckMultiSelection(marqueeIds);
+adapter.presence?.update({ peer, selection: selection ?? undefined });
+```

@@ -1,0 +1,35 @@
+---
+title: "runRetention"
+description: "@anvilkit/plugin-version-history · runRetention"
+---
+
+```ts
+function runRetention(
+   adapter, 
+   policy, 
+options?): Promise<RetentionResult>;
+```
+
+Defined in: [utils/retention.ts:183](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L183)
+
+Manual cleanup API: plan retention over an adapter's current snapshots and
+(unless `dryRun`) apply it. The plan is computed by [planRetention](planRetention.md)
+from `adapter.list()`. Deletions prefer the batch `adapter.deleteMany` and
+fall back to per-id `adapter.delete`; if the adapter exposes neither, nothing
+is deleted (`deletedIds` is `[]`).
+
+Pass `{ dryRun: true }` to preview the plan without mutating the store — the
+returned [RetentionResult.plan](../interfaces/RetentionResult#plan) is identical to a real run, but
+`deletedIds` is `[]` and no adapter mutation occurs.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `adapter` | [`RetentionAdapter`](../type-aliases/RetentionAdapter) |
+| `policy` | [`RetentionPolicy`](../interfaces/RetentionPolicy) |
+| `options` | [`RunRetentionOptions`](../interfaces/RunRetentionOptions) |
+
+## Returns
+
+`Promise`\<[`RetentionResult`](../interfaces/RetentionResult)\>

@@ -7,7 +7,11 @@ description: "@anvilkit/collab-ui · useCollabPeers"
 function useCollabPeers(): readonly PresenceState[];
 ```
 
-Defined in: [context.tsx:332](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L332)
+Defined in: [context.tsx:408](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L408)
+
+The remote peers' full presence frames (identity + cursor + selection),
+excluding the local peer. Re-renders on cursor/selection churn — prefer
+[useCollabPeerIdentities](useCollabPeerIdentities.md) for identity-only consumers.
 
 ## Returns
 

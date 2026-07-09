@@ -1,0 +1,22 @@
+---
+title: "PrepareRestoreInput"
+description: "@anvilkit/plugin-version-history · PrepareRestoreInput"
+---
+
+Defined in: [utils/restore.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L59)
+
+Inputs to [prepareRestore](../functions/prepareRestore): a [RestoreConflictInput](RestoreConflictInput.md) plus the
+`snapshotIR` to restore and a `force` escape hatch.
+
+## Extends
+
+- [`RestoreConflictInput`](RestoreConflictInput.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="currentir"&gt;&lt;/a&gt; `currentIR` | `readonly` | `PageIR` | - | [`RestoreConflictInput`](RestoreConflictInput.md).[`currentIR`](RestoreConflictInput.md#currentir) | [utils/restore.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L16) |
+| &lt;a id="expectedbasehash"&gt;&lt;/a&gt; `expectedBaseHash?` | `readonly` | `string` | - | [`RestoreConflictInput`](RestoreConflictInput.md).[`expectedBaseHash`](RestoreConflictInput.md#expectedbasehash) | [utils/restore.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L17) |
+| &lt;a id="force"&gt;&lt;/a&gt; `force?` | `readonly` | `boolean` | Bypass the conflict check and restore anyway. | - | [utils/restore.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L62) |
+| &lt;a id="snapshotir"&gt;&lt;/a&gt; `snapshotIR` | `readonly` | `PageIR` | - | - | [utils/restore.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L60) |

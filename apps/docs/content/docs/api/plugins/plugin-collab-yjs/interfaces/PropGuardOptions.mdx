@@ -1,0 +1,21 @@
+---
+title: "PropGuardOptions"
+description: "@anvilkit/plugin-collab-yjs · PropGuardOptions"
+---
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:203](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L203)
+
+Y3/§4.1.3 — per-prop decode bounds. All four are independent ceilings
+checked while decoding a single prop value; the first one exceeded
+drops that prop and records its reason. Defaults are deliberately
+generous so legitimate PageIR (rich-text, nested layout props, item
+lists) is never clamped.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="maxarraylength"&gt;&lt;/a&gt; `maxArrayLength?` | `readonly` | `number` | Maximum length of any single array inside one decoded prop value. Default: `100000`. | [plugin-collab-yjs/src/types/types.ts:219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L219) |
+| &lt;a id="maxbytes"&gt;&lt;/a&gt; `maxBytes?` | `readonly` | `number` | Maximum encoded length (string length of the JSON-encoded value) of a single prop, checked BEFORE `JSON.parse` so a multi-megabyte payload never reaches the parser. Default: `262144` (256 KiB). | [plugin-collab-yjs/src/types/types.ts:209](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L209) |
+| &lt;a id="maxdepth"&gt;&lt;/a&gt; `maxDepth?` | `readonly` | `number` | Maximum nested object/array depth inside one decoded prop value. Default: `64`. | [plugin-collab-yjs/src/types/types.ts:214](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L214) |
+| &lt;a id="maxnodes"&gt;&lt;/a&gt; `maxNodes?` | `readonly` | `number` | Maximum total decoded values (every object, array, and scalar) in one prop value — a ceiling on overall payload size independent of shape. Default: `1000000`. | [plugin-collab-yjs/src/types/types.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L225) |

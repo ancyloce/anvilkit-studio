@@ -3,7 +3,7 @@ title: "PageIRNode"
 description: "@anvilkit/core · PageIRNode"
 ---
 
-Defined in: [types/ir.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L150)
+Defined in: contracts/dist/ir.d.ts:150
 
 A single node in the page IR tree.
 
@@ -34,11 +34,11 @@ explosion.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="assets"&gt;&lt;/a&gt; `assets?` | `readonly` | readonly [`PageIRAsset`](PageIRAsset.md)[] | Optional assets scoped to this node. Duplicates from [PageIR.assets](PageIR.md#assets) are allowed and expected — exporters deduplicate by [PageIRAsset.id](PageIRAsset.md#id). | [types/ir.ts:193](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L193) |
-| &lt;a id="children"&gt;&lt;/a&gt; `children?` | `readonly` | readonly `PageIRNode`[] | Optional child nodes. Absent on leaf nodes. | [types/ir.ts:186](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L186) |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable per-node identifier, unique within its owning [PageIR](PageIR.md). Typically carried over from Puck's component data id so round-tripping is straightforward. | [types/ir.ts:156](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L156) |
-| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | [`PageIRNodeMeta`](PageIRNodeMeta.md) | Optional authoring-time metadata. See [PageIRNodeMeta](PageIRNodeMeta.md). Additive in `@anvilkit/ir@0.22` (Phase 6 / M10). Round-trip safe: when absent, every Phase 3/5 invariant (e.g. byte-equal `puckDataToIR` output across runs) is preserved. Exporters MUST NOT consume `meta`; it is an authoring contract only. | [types/ir.ts:202](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L202) |
-| &lt;a id="props"&gt;&lt;/a&gt; `props` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; | Serialized prop bag for this node. Opaque to the IR — exporters are responsible for interpreting the keys they care about and ignoring the rest. | [types/ir.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L169) |
-| &lt;a id="slot"&gt;&lt;/a&gt; `slot?` | `readonly` | `string` | Optional parent slot/zone name this node belongs to. Top-level nodes in the root content omit this field. Nested nodes produced from a Puck slot field carry the slot field key here so `irToPuckData()` can rebuild the correct parent prop. | [types/ir.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L177) |
-| &lt;a id="slotkind"&gt;&lt;/a&gt; `slotKind?` | `readonly` | `"slot"` \| `"zone"` | Distinguishes modern Puck slot fields from legacy `data.zones` entries when [slot](#slot) is present. Omitted means `"slot"`. | [types/ir.ts:182](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L182) |
-| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `string` | The component name this node was produced from (e.g. `"Hero"`, `"Button"`). Exporters dispatch on this value to select a renderer. | [types/ir.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts#L162) |
+| &lt;a id="assets"&gt;&lt;/a&gt; `assets?` | `readonly` | readonly [`PageIRAsset`](PageIRAsset.md)[] | Optional assets scoped to this node. Duplicates from [PageIR.assets](PageIR.md#assets) are allowed and expected — exporters deduplicate by [PageIRAsset.id](PageIRAsset.md#id). | contracts/dist/ir.d.ts:193 |
+| &lt;a id="children"&gt;&lt;/a&gt; `children?` | `readonly` | readonly `PageIRNode`[] | Optional child nodes. Absent on leaf nodes. | contracts/dist/ir.d.ts:186 |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable per-node identifier, unique within its owning [PageIR](PageIR.md). Typically carried over from Puck's component data id so round-tripping is straightforward. | contracts/dist/ir.d.ts:156 |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | [`PageIRNodeMeta`](PageIRNodeMeta.md) | Optional authoring-time metadata. See [PageIRNodeMeta](PageIRNodeMeta.md). Additive in `@anvilkit/ir@0.22` (Phase 6 / M10). Round-trip safe: when absent, every Phase 3/5 invariant (e.g. byte-equal `puckDataToIR` output across runs) is preserved. Exporters MUST NOT consume `meta`; it is an authoring contract only. | contracts/dist/ir.d.ts:202 |
+| &lt;a id="props"&gt;&lt;/a&gt; `props` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; | Serialized prop bag for this node. Opaque to the IR — exporters are responsible for interpreting the keys they care about and ignoring the rest. | contracts/dist/ir.d.ts:169 |
+| &lt;a id="slot"&gt;&lt;/a&gt; `slot?` | `readonly` | `string` | Optional parent slot/zone name this node belongs to. Top-level nodes in the root content omit this field. Nested nodes produced from a Puck slot field carry the slot field key here so `irToPuckData()` can rebuild the correct parent prop. | contracts/dist/ir.d.ts:177 |
+| &lt;a id="slotkind"&gt;&lt;/a&gt; `slotKind?` | `readonly` | `"slot"` \| `"zone"` | Distinguishes modern Puck slot fields from legacy `data.zones` entries when [slot](#slot) is present. Omitted means `"slot"`. | contracts/dist/ir.d.ts:182 |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `string` | The component name this node was produced from (e.g. `"Hero"`, `"Button"`). Exporters dispatch on this value to select a renderer. | contracts/dist/ir.d.ts:162 |

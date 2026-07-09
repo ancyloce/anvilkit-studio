@@ -1,0 +1,18 @@
+---
+title: "RetentionPlan"
+description: "@anvilkit/plugin-version-history · RetentionPlan"
+---
+
+Defined in: [utils/retention.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L41)
+
+Deterministic deletion plan returned by [planRetention](../functions/planRetention). `deleteIds`
+and `keepIds` partition the input ids and are both ordered oldest-first
+(ascending `savedAt`, ascending `id` tie-break — matching `evictOldest`), so
+the plan is reproducible for the same inputs.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="deleteids"&gt;&lt;/a&gt; `deleteIds` | `readonly` | readonly `string`[] | [utils/retention.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L42) |
+| &lt;a id="keepids"&gt;&lt;/a&gt; `keepIds` | `readonly` | readonly `string`[] | [utils/retention.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L43) |

@@ -1,0 +1,21 @@
+---
+title: "PresencePublishingMode"
+description: "@anvilkit/collab-ui · PresencePublishingMode"
+---
+
+```ts
+type PresencePublishingMode = "cursor" | "cursor+selection";
+```
+
+Defined in: [lib/select-presence-writer.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/lib/select-presence-writer.ts#L21)
+
+Local-presence publishing mode for `createCollabPlugin`.
+
+- `"cursor"` (default) — mount the Puck-free
+  PresenceCursorBroadcaster, which publishes only pointer
+  coordinates. Safe to mount in the provider that wraps the *whole*
+  Studio tree because it never touches Puck context.
+- `"cursor+selection"` — mount the Puck-aware
+  [CollabPresencePublisher](../functions/CollabPresencePublisher) INSTEAD, which publishes pointer
+  coordinates AND the current Puck selection ring via
+  `usePuckSelection()`.

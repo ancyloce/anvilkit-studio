@@ -1,0 +1,14 @@
+---
+title: "VersionHistoryOperation"
+description: "@anvilkit/plugin-version-history · VersionHistoryOperation"
+---
+
+```ts
+type VersionHistoryOperation = "save" | "load" | "list" | "delete" | "restore";
+```
+
+Defined in: [utils/errors.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L35)
+
+Version-history operations an adapter or host can gate on authorization.
+Used to describe which action was denied in a `"PERMISSION_DENIED"`
+[VersionHistoryError](../classes/VersionHistoryError) (see [createPermissionDeniedError](../functions/createPermissionDeniedError)).

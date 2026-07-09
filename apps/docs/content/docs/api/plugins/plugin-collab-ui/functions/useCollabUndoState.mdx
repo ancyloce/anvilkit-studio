@@ -1,0 +1,28 @@
+---
+title: "useCollabUndoState"
+description: "@anvilkit/collab-ui · useCollabUndoState"
+---
+
+```ts
+function useCollabUndoState(): CollabUndoState;
+```
+
+Defined in: [context.tsx:536](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L536)
+
+Subscribe to the adapter's local undo/redo stack (§4.1.2). Mirrors the
+`UndoController` surface exposed by YjsSnapshotAdapter: it backs
+`canUndo`/`canRedo` with `useSyncExternalStore` over
+`adapter.onUndoStackChange`, so a toolbar re-reads enabled-state the
+instant a tracked edit (or an `undo()`/`redo()`) mutates the stack —
+without a stale-paint window.
+
+Undo is opt-in on the adapter; when it was not enabled (or the adapter
+predates the controller entirely) every member is absent at runtime, so
+the hook returns a frozen disabled snapshot
+(`{ canUndo:false, canRedo:false, undo:noop, redo:noop }`) and never
+throws. The `undo`/`redo` callbacks are likewise guarded so calling them
+on an undo-less adapter is a no-op.
+
+## Returns
+
+[`CollabUndoState`](../interfaces/CollabUndoState)

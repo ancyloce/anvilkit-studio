@@ -1,0 +1,33 @@
+---
+title: "ConnectionRecoveryBanner"
+description: "@anvilkit/collab-ui · ConnectionRecoveryBanner"
+---
+
+```ts
+function ConnectionRecoveryBanner(props): ReactNode;
+```
+
+Defined in: [components/connection-recovery-banner.tsx:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/connection-recovery-banner.tsx#L126)
+
+Proactive disconnect-recovery banner (H4 / §4.1.4). Reads connection
+status via [useCollabStatus](useCollabStatus.md) and renders ONLY while the session is
+degraded (`offline`/`reconnecting`/`error`) — otherwise returns `null`,
+so a host can mount it unconditionally above the editor chrome.
+
+It surfaces localized recovery copy plus whichever host actions were
+wired (`onRetry` / `onExport` / `onForceResync`), each rendered with a
+shared `@anvilkit/ui` Button. With no actions provided it degrades to an
+informational banner (status + reason). The region is an accessible
+`role="status"` (`aria-live="polite"`) for non-terminal states and
+`role="alert"` for the error state, using semantic theme tokens so it
+stays light/dark-aware.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`ConnectionRecoveryBannerProps`](../interfaces/ConnectionRecoveryBannerProps) |
+
+## Returns
+
+`ReactNode`

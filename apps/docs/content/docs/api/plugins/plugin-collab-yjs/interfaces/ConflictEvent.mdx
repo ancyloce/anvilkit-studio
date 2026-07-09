@@ -3,7 +3,7 @@ title: "ConflictEvent"
 description: "@anvilkit/plugin-collab-yjs · ConflictEvent"
 ---
 
-Defined in: [plugin-collab-yjs/src/types/types.ts:226](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L226)
+Defined in: [plugin-collab-yjs/src/types/types.ts:558](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L558)
 
 Event payload emitted by `YjsSnapshotAdapter.onConflict` when a
 remote update lands on top of a local in-flight edit.
@@ -12,8 +12,9 @@ remote update lands on top of a local in-flight edit.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="at"&gt;&lt;/a&gt; `at` | `readonly` | `string` | ISO-8601 timestamp the conflict was detected. | [plugin-collab-yjs/src/types/types.ts:233](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L233) |
-| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"overlap"` | - | [plugin-collab-yjs/src/types/types.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L227) |
-| &lt;a id="localpeer"&gt;&lt;/a&gt; `localPeer` | `readonly` | `PeerInfo` | - | [plugin-collab-yjs/src/types/types.ts:228](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L228) |
-| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | `readonly` | readonly `string`[] | Node IDs touched by both sides within `staleAfterMs`. | [plugin-collab-yjs/src/types/types.ts:231](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L231) |
-| &lt;a id="remotepeer"&gt;&lt;/a&gt; `remotePeer?` | `readonly` | `PeerInfo` | - | [plugin-collab-yjs/src/types/types.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L229) |
+| &lt;a id="at"&gt;&lt;/a&gt; `at` | `readonly` | `string` | ISO-8601 timestamp the conflict was detected. | [plugin-collab-yjs/src/types/types.ts:565](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L565) |
+| &lt;a id="fields"&gt;&lt;/a&gt; `fields?` | `readonly` | readonly [`ConflictFieldDetail`](ConflictFieldDetail.md)[] | §4.2.3 — per-field detail for SAME-prop conflicts: every prop key BOTH peers changed to a different value, each with its local and converged-remote value. Empty (or absent) when the only overlap is a child-reorder (no prop fields conflict). Additive — pre-§4.2.3 consumers that read only `nodeIds` are unaffected; the adapter always populates this for prop conflicts. | [plugin-collab-yjs/src/types/types.ts:574](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L574) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"overlap"` | - | [plugin-collab-yjs/src/types/types.ts:559](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L559) |
+| &lt;a id="localpeer"&gt;&lt;/a&gt; `localPeer` | `readonly` | `PeerInfo` | - | [plugin-collab-yjs/src/types/types.ts:560](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L560) |
+| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | `readonly` | readonly `string`[] | Node IDs touched by both sides within `staleAfterMs`. | [plugin-collab-yjs/src/types/types.ts:563](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L563) |
+| &lt;a id="remotepeer"&gt;&lt;/a&gt; `remotePeer?` | `readonly` | `PeerInfo` | - | [plugin-collab-yjs/src/types/types.ts:561](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L561) |

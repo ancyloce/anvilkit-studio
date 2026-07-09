@@ -1,0 +1,26 @@
+---
+title: "PageIRAsset"
+description: "@anvilkit/contracts · PageIRAsset"
+---
+
+Defined in: ir.ts:50
+
+An out-of-band resource referenced by the page — images, videos,
+fonts, stylesheets, inline scripts, etc.
+
+Assets are listed both at the root of [PageIR](PageIR.md) (so exporters
+can emit a manifest or preload block in one pass) and, optionally,
+on individual [PageIRNode](PageIRNode.md)s (so a node-scoped exporter can
+resolve its own dependencies without walking the whole tree).
+
+The same asset may appear in both places — exporters are expected
+to deduplicate by [PageIRAsset.id](#id).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, unique identifier for this asset within the IR. Typically a hash of the URL or a caller-provided slug. Exporters use this for deduplication when the same asset is referenced by multiple nodes. | ir.ts:58 |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"image"` \| `"video"` \| `"font"` \| `"script"` \| `"style"` \| `"other"` | The asset's category. Closed union — extending this list is a breaking change to the IR contract. Use `"other"` for anything that doesn't fit the named categories rather than introducing an ad-hoc string. | ir.ts:66 |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; | Free-form metadata the producer wants to pass through to consumers (e.g. `{ width: 1600, height: 900 }` for an image). Exporters should treat unknown keys as forward-compatible — a missing key must not cause a hard failure. | ir.ts:82 |
+| &lt;a id="url"&gt;&lt;/a&gt; `url` | `readonly` | `string` | Absolute or root-relative URL pointing at the asset. Exporters may rewrite this (e.g. to a CDN or a hashed filename) during serialization — the IR shape does not constrain the scheme. | ir.ts:74 |

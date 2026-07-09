@@ -1,0 +1,43 @@
+---
+title: "getHostSharedRoot"
+description: "@anvilkit/plugin-collab-yjs · getHostSharedRoot"
+---
+
+```ts
+function getHostSharedRoot(
+   doc, 
+   namespace, 
+mapName?): YMap<unknown>;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/shared-types.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/shared-types.ts#L108)
+
+Escape hatch for hosts that genuinely need a native shared type the
+adapter does not bind (a `Y.Text` comment thread, a `Y.XmlFragment`
+rich-text field, a subdoc, etc.).
+
+Returns a top-level `Y.Map` on the same `Y.Doc`, keyed under
+`` `${mapName}:host:${namespace}` ``. The key is guaranteed disjoint
+from the two roots the adapter manages — the legacy blob root
+(`mapName`) and the native tree root (`` `${mapName}:tree` ``) — so
+attaching arbitrary shared types here can never collide with or
+corrupt the PageIR encoding.
+
+The adapter never reads or writes this map: its content does NOT
+appear in the projected `PageIR`, is not part of snapshots, undo, or
+conflict detection. It IS still replicated by Yjs (it lives on the
+shared `Y.Doc`) and carried by the opt-in persistence/transport, so
+peers converge on it — but interpreting and rendering it is entirely
+the host's responsibility.
+
+## Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `doc` | `Doc` | `undefined` | The shared `Y.Doc` (the same one passed to `createYjsAdapter`). |
+| `namespace` | `string` | `undefined` | A host-chosen, non-empty sub-key for this shared type. |
+| `mapName` | `string` | `DEFAULT_MAP_NAME` | The adapter's `mapName` (defaults to the adapter default). |
+
+## Returns
+
+`YMap`\<`unknown`\>

@@ -1,0 +1,30 @@
+---
+title: "CollabUndoRedoControls"
+description: "@anvilkit/collab-ui · CollabUndoRedoControls"
+---
+
+```ts
+function CollabUndoRedoControls(props): ReactNode;
+```
+
+Defined in: [components/collab-undo-redo-controls.tsx:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/collab-undo-redo-controls.tsx#L27)
+
+Toolbar pair of undo / redo buttons wired to the adapter's local
+undo/redo stack via [useCollabUndoState](useCollabUndoState.md) (§4.1.2). Each button's
+disabled state is driven straight from the adapter's `canUndo()` /
+`canRedo()` getters — when undo is disabled (or the adapter predates the
+controller) both buttons render disabled and stay inert.
+
+Mount inside `<CollabUIProvider>`; outside `<Studio>` also nest within
+`<CollabUII18nProvider>` so the labels resolve from the shared
+`collabUi.*` catalog.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`CollabUndoRedoControlsProps`](../interfaces/CollabUndoRedoControlsProps) |
+
+## Returns
+
+`ReactNode`

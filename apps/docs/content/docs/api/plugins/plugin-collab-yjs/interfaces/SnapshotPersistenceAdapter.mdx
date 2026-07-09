@@ -1,0 +1,110 @@
+---
+title: "SnapshotPersistenceAdapter"
+description: "@anvilkit/plugin-collab-yjs · SnapshotPersistenceAdapter"
+---
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:364](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L364)
+
+§4.2.2 — pluggable backend storage for saved snapshots ("server-grade
+snapshot persistence"). The in-`Y.Doc` snapshot store is bounded by
+[CreateYjsAdapterOptions.maxSnapshots](CreateYjsAdapterOptions.md#maxsnapshots) and is the source of
+truth; this is an OPTIONAL durable sink an embedder wires to a real
+backend (Postgres, S3, a `fetch` endpoint, IndexedDB object store …)
+so full-state snapshots survive eviction and reloads.
+
+Every method may be synchronous or return a `Promise`. The adapter
+mirrors writes best-effort: a thrown/rejected call is reported through
+[SnapshotPersistenceOptions.onFault](SnapshotPersistenceOptions.md#onfault) and never propagates into
+the in-`Y.Doc` `save()`/`delete()` path.
+
+`payload` is an opaque string — the encoded snapshot payload after the
+optional [SnapshotPersistenceOptions.encode](SnapshotPersistenceOptions.md#encode) transform. Treat it
+as a blob; do not parse it.
+
+## Methods
+
+### deleteSnapshot()
+
+```ts
+deleteSnapshot(id): MaybePromise<void>;
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:381](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L381)
+
+Remove the snapshot identified by `id`. Idempotent.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+#### Returns
+
+`MaybePromise`\<`void`\>
+
+***
+
+### listSnapshots()
+
+```ts
+listSnapshots(): MaybePromise<readonly SnapshotMeta[]>;
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:379](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L379)
+
+Enumerate the metadata of every snapshot this backend retains.
+
+#### Returns
+
+`MaybePromise`\<readonly `SnapshotMeta`[]\>
+
+***
+
+### loadSnapshot()
+
+```ts
+loadSnapshot(id): MaybePromise<string | undefined>;
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:377](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L377)
+
+Return the previously stored payload blob for `id`, or `undefined`
+when this backend has no record of it. The adapter applies
+[SnapshotPersistenceOptions.decode](SnapshotPersistenceOptions.md#decode) before decoding it back to
+a `PageIR`.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+
+#### Returns
+
+`MaybePromise`\&lt;`string` \| `undefined`\&gt;
+
+***
+
+### saveSnapshot()
+
+```ts
+saveSnapshot(meta, payload): MaybePromise<void>;
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:370](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L370)
+
+Persist (or overwrite) the snapshot identified by `meta.id`. Called
+once per `save()` with the snapshot metadata and the transformed,
+self-contained payload blob.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `meta` | `SnapshotMeta` |
+| `payload` | `string` |
+
+#### Returns
+
+`MaybePromise`\<`void`\>

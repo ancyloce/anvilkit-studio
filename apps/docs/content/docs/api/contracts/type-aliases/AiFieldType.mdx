@@ -1,0 +1,30 @@
+---
+title: "AiFieldType"
+description: "@anvilkit/contracts · AiFieldType"
+---
+
+```ts
+type AiFieldType = 
+  | "text"
+  | "richtext"
+  | "number"
+  | "boolean"
+  | "image"
+  | "url"
+  | "color"
+  | "select"
+  | "array"
+  | "object";
+```
+
+Defined in: ai.ts:45
+
+The finite set of field types an AI schema can describe.
+
+Mirrors Puck's own field type union closely but is intentionally a
+separate, stable enum — the AI contract must not break every time
+Puck adds or renames a field type. `@anvilkit/schema` maps Puck
+field types to these values during derivation.
+
+Closed union by design: extending this list is a breaking change
+to the AI contract.

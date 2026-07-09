@@ -7,14 +7,24 @@ description: "@anvilkit/plugin-collab-yjs · validatePresenceSelection"
 function validatePresenceSelection(value): PresenceSelection | null;
 ```
 
-Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L108)
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:142](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L142)
+
+Strictly validate an untrusted value into a PresenceSelection.
+
+Requires `nodeIds` to be an array in which EVERY entry is a string; the
+whole selection is rejected (returns `null`) if `nodeIds` is absent,
+not an array, or contains any non-string entry. Contrast with
+[sanitizePresenceSelection](sanitizePresenceSelection.md), which drops bad ids and truncates
+instead of rejecting the entire payload.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `value` | `unknown` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `value` | `unknown` | Untrusted selection payload. |
 
 ## Returns
 
 `PresenceSelection` \| `null`
+
+The `PresenceSelection`, or `null` if invalid.

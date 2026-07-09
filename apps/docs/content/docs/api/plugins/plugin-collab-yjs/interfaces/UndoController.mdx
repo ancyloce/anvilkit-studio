@@ -1,0 +1,27 @@
+---
+title: "UndoController"
+description: "@anvilkit/plugin-collab-yjs · UndoController"
+---
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:263](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L263)
+
+Local undo/redo surface exposed by [YjsSnapshotAdapter](YjsSnapshotAdapter.md) when
+[CreateYjsAdapterOptions.undo](CreateYjsAdapterOptions.md#undo) is provided. All methods are
+always present; when undo was not enabled they are inert
+(`canUndo`/`canRedo` return `false`, `undo`/`redo`/`clearUndo` are
+no-ops, `onUndoStackChange` never fires).
+
+## Extended by
+
+- [`YjsSnapshotAdapter`](YjsSnapshotAdapter.md)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="canredo"&gt;&lt;/a&gt; `canRedo` | `readonly` | () =&gt; `boolean` | `true` when there is at least one undone change to redo. | [plugin-collab-yjs/src/types/types.ts:271](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L271) |
+| &lt;a id="canundo"&gt;&lt;/a&gt; `canUndo` | `readonly` | () =&gt; `boolean` | `true` when there is at least one local change to undo. | [plugin-collab-yjs/src/types/types.ts:269](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L269) |
+| &lt;a id="clearundo"&gt;&lt;/a&gt; `clearUndo` | `readonly` | () =&gt; `void` | Drop every tracked undo/redo step. Hosts call this when switching the live document (e.g. loading a different page) so a later `undo()` cannot bleed the previous document's edits into the new one. | [plugin-collab-yjs/src/types/types.ts:278](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L278) |
+| &lt;a id="onundostackchange"&gt;&lt;/a&gt; `onUndoStackChange` | `readonly` | (`callback`) =&gt; `Unsubscribe` | Subscribe to undo/redo stack mutations (item added on a tracked local edit, item popped on undo/redo, stack cleared). The callback takes no arguments — hosts re-read `canUndo()`/`canRedo()` to drive toolbar enabled-state, typically via `useSyncExternalStore`. Returns an unsubscribe. | [plugin-collab-yjs/src/types/types.ts:286](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L286) |
+| &lt;a id="redo"&gt;&lt;/a&gt; `redo` | `readonly` | () =&gt; `void` | Redo the most recently undone change. No-op when the redo stack is empty. | [plugin-collab-yjs/src/types/types.ts:267](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L267) |
+| &lt;a id="undo"&gt;&lt;/a&gt; `undo` | `readonly` | () =&gt; `void` | Undo the most recent locally-tracked change. No-op when nothing is tracked. | [plugin-collab-yjs/src/types/types.ts:265](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L265) |

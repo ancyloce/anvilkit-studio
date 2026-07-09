@@ -1,0 +1,15 @@
+---
+title: "SnapshotPage"
+description: "@anvilkit/plugin-version-history · SnapshotPage"
+---
+
+Defined in: [types/types.ts:139](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L139)
+
+A single page of snapshot metadata returned by [SnapshotAdapter.query](SnapshotAdapter.md#query).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="items"&gt;&lt;/a&gt; `items` | `readonly` | readonly [`SnapshotMeta`](SnapshotMeta.md)[] | - | [types/types.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L140) |
+| &lt;a id="nextcursor"&gt;&lt;/a&gt; `nextCursor?` | `readonly` | `string` | Resume token for the next page (the last item's `id`). Absent on the final page — i.e. when no further items remain. | [types/types.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L145) |

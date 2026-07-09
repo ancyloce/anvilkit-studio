@@ -9,7 +9,7 @@ function applySectionPatch(currentData, patch): Data;
 
 Defined in: [plugins/plugin-ai-copilot/src/patchs/apply-section-patch.ts:273](https://github.com/ancyloce/anvilkit-studio/blob/main/src/patchs/apply-section-patch.ts#L273)
 
-Apply an [AiSectionPatch](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts) to the current Puck `Data`, returning
+Apply an AiSectionPatch to the current Puck `Data`, returning
 a new snapshot. Throws on any structural mismatch (missing zone,
 non-contiguous nodeIds, invalid zoneId format, cyclic tree, etc.).
 
@@ -18,7 +18,7 @@ non-contiguous nodeIds, invalid zoneId format, cyclic tree, etc.).
 | Parameter | Type |
 | ------ | ------ |
 | `currentData` | `Data` |
-| `patch` | [`AiSectionPatch`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts) |
+| `patch` | `AiSectionPatch` |
 
 ## Returns
 

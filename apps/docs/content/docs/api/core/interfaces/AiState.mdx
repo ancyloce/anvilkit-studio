@@ -3,7 +3,7 @@ title: "AiState"
 description: "@anvilkit/core · AiState"
 ---
 
-Defined in: [state/slices/ai-store.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L77)
+Defined in: [core/src/state/slices/ai-store.ts:77](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L77)
 
 Full shape of the AI store — read fields plus the three write
 actions plus [AiState.reset](#reset).
@@ -12,10 +12,10 @@ actions plus [AiState.reset](#reset).
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="history"&gt;&lt;/a&gt; `history` | `readonly` | readonly [`AiHistoryEntry`](AiHistoryEntry.md)[] | The user's prompt history, oldest first. New prompts are appended by [startGeneration](#startgeneration); the Zustand-persist `partialize` callback (see `useAiStore` below) trims to the last 10 entries when persisting, and [clearHistory](#clearhistory) empties the in-memory array. | [state/slices/ai-store.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L103) |
-| &lt;a id="isgenerating"&gt;&lt;/a&gt; `isGenerating` | `readonly` | `boolean` | `true` while a generation is in flight. **Never persisted** — a reload always lands on `false` so the UI can never be stuck in a spinner. | [state/slices/ai-store.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L83) |
-| &lt;a id="lasterror"&gt;&lt;/a&gt; `lastError` | `readonly` | `string` \| `null` | Error message from the most recent failed call, or `null` when the most recent call succeeded. **Never persisted** — showing a stale error after a reload is worse than showing nothing. | [state/slices/ai-store.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L95) |
-| &lt;a id="lastprompt"&gt;&lt;/a&gt; `lastPrompt` | `readonly` | `string` \| `null` | The prompt currently (or most recently) being generated against, or `null` before any call has been made. Ephemeral. | [state/slices/ai-store.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L88) |
+| &lt;a id="history"&gt;&lt;/a&gt; `history` | `readonly` | readonly [`AiHistoryEntry`](AiHistoryEntry.md)[] | The user's prompt history, oldest first. New prompts are appended by [startGeneration](#startgeneration); the Zustand-persist `partialize` callback (see `useAiStore` below) trims to the last 10 entries when persisting, and [clearHistory](#clearhistory) empties the in-memory array. | [core/src/state/slices/ai-store.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L103) |
+| &lt;a id="isgenerating"&gt;&lt;/a&gt; `isGenerating` | `readonly` | `boolean` | `true` while a generation is in flight. **Never persisted** — a reload always lands on `false` so the UI can never be stuck in a spinner. | [core/src/state/slices/ai-store.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L83) |
+| &lt;a id="lasterror"&gt;&lt;/a&gt; `lastError` | `readonly` | `string` \| `null` | Error message from the most recent failed call, or `null` when the most recent call succeeded. **Never persisted** — showing a stale error after a reload is worse than showing nothing. | [core/src/state/slices/ai-store.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L95) |
+| &lt;a id="lastprompt"&gt;&lt;/a&gt; `lastPrompt` | `readonly` | `string` \| `null` | The prompt currently (or most recently) being generated against, or `null` before any call has been made. Ephemeral. | [core/src/state/slices/ai-store.ts:88](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L88) |
 
 ## Methods
 
@@ -25,7 +25,7 @@ actions plus [AiState.reset](#reset).
 clearHistory(): void;
 ```
 
-Defined in: [state/slices/ai-store.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L130)
+Defined in: [core/src/state/slices/ai-store.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L130)
 
 Empty the in-memory history array. Persisted storage is
 overwritten on the next `set` — there is no explicit
@@ -44,7 +44,7 @@ write an empty array.
 finishGeneration(ok, error?): void;
 ```
 
-Defined in: [state/slices/ai-store.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L123)
+Defined in: [core/src/state/slices/ai-store.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L123)
 
 Clear the in-flight flag. Pass `false` with an `error` string
 to record a failure; pass `true` to record success.
@@ -71,7 +71,7 @@ export store and keeps the two callsites parallel.
 reset(): void;
 ```
 
-Defined in: [state/slices/ai-store.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L135)
+Defined in: [core/src/state/slices/ai-store.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L135)
 
 Restore every field to its initial state. See the matching
 note on [ExportState.reset](ExportState.md#reset).
@@ -88,7 +88,7 @@ note on [ExportState.reset](ExportState.md#reset).
 startGeneration(prompt): void;
 ```
 
-Defined in: [state/slices/ai-store.ts:115](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L115)
+Defined in: [core/src/state/slices/ai-store.ts:115](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L115)
 
 Mark a new generation as in flight. Flips `isGenerating` to
 `true`, stashes the prompt in `lastPrompt`, clears any prior

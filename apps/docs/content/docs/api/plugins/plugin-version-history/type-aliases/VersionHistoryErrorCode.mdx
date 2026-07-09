@@ -5,10 +5,32 @@ description: "@anvilkit/plugin-version-history · VersionHistoryErrorCode"
 
 ```ts
 type VersionHistoryErrorCode = 
+  | "CONFLICT"
+  | "PERMISSION_DENIED"
   | "SNAPSHOT_NOT_FOUND"
   | "STORAGE_CORRUPT"
   | "STORAGE_QUOTA_EXCEEDED"
   | "STORAGE_UNAVAILABLE";
 ```
 
-Defined in: [utils/errors.ts:1](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L1)
+Defined in: [utils/errors.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L22)
+
+Discriminant carried by every [VersionHistoryError](../classes/VersionHistoryError). Callers switch on
+[VersionHistoryError.code](../classes/VersionHistoryError#code) to recover by category instead of
+string-matching `message`.
+
+- `"CONFLICT"` — an optimistic-concurrency check failed: the live document
+  changed since a restore was planned (see `prepareRestore`). Retry with
+  `force` to override.
+- `"PERMISSION_DENIED"` — the host/adapter rejected a `save`/`load`/`list`/
+  `delete`/`restore` on authorization grounds (the actor is not allowed to
+  perform it). Surfaces with remote or collaborative adapters; the request
+  is well-formed but forbidden, so retrying without new credentials will not
+  help.
+- `"SNAPSHOT_NOT_FOUND"` — `load`/`delete` referenced an id that does not
+  exist in the adapter.
+- `"STORAGE_CORRUPT"` — a persisted payload could not be parsed or decoded.
+- `"STORAGE_QUOTA_EXCEEDED"` — the backing store rejected a write because it
+  is full (e.g. the `localStorage` quota).
+- `"STORAGE_UNAVAILABLE"` — the backing store is missing or inaccessible
+  (e.g. `localStorage` blocked in a sandboxed or private context).

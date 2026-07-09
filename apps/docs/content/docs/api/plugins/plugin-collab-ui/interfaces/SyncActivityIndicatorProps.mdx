@@ -3,15 +3,18 @@ title: "SyncActivityIndicatorProps"
 description: "@anvilkit/collab-ui · SyncActivityIndicatorProps"
 ---
 
-Defined in: [components/sync-activity-indicator.tsx:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L86)
+Defined in: [components/sync-activity-indicator.tsx:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L104)
+
+Props for [SyncActivityIndicator](../functions/SyncActivityIndicator) — the connection-status dot plus its metrics/diagnostics popover.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="classname"&gt;&lt;/a&gt; `className?` | `readonly` | `string` | - | [components/sync-activity-indicator.tsx:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L87) |
-| &lt;a id="formatstatus"&gt;&lt;/a&gt; `formatStatus?` | `readonly` | (`status`) =&gt; `string` | Override the status-line copy (incl. interpolated offline/reconnecting forms). | [components/sync-activity-indicator.tsx:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L92) |
-| &lt;a id="labels"&gt;&lt;/a&gt; `labels?` | `readonly` | [`SyncActivityLabels`](SyncActivityLabels.md) | - | [components/sync-activity-indicator.tsx:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L93) |
-| &lt;a id="lastpeername"&gt;&lt;/a&gt; `lastPeerName?` | `readonly` | `string` | - | [components/sync-activity-indicator.tsx:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L90) |
-| &lt;a id="lastsyncat"&gt;&lt;/a&gt; `lastSyncAt?` | `readonly` | `string` | - | [components/sync-activity-indicator.tsx:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L89) |
-| &lt;a id="latencyms"&gt;&lt;/a&gt; `latencyMs?` | `readonly` | `number` | - | [components/sync-activity-indicator.tsx:88](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L88) |
+| &lt;a id="classname"&gt;&lt;/a&gt; `className?` | `readonly` | `string` | - | [components/sync-activity-indicator.tsx:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L105) |
+| &lt;a id="formatstatus"&gt;&lt;/a&gt; `formatStatus?` | `readonly` | (`status`) =&gt; `string` | Override the status-line copy (incl. interpolated offline/reconnecting forms). | [components/sync-activity-indicator.tsx:110](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L110) |
+| &lt;a id="labels"&gt;&lt;/a&gt; `labels?` | `readonly` | [`SyncActivityLabels`](SyncActivityLabels.md) | - | [components/sync-activity-indicator.tsx:111](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L111) |
+| &lt;a id="lastpeername"&gt;&lt;/a&gt; `lastPeerName?` | `readonly` | `string` | - | [components/sync-activity-indicator.tsx:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L108) |
+| &lt;a id="lastsyncat"&gt;&lt;/a&gt; `lastSyncAt?` | `readonly` | `string` | - | [components/sync-activity-indicator.tsx:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L107) |
+| &lt;a id="latencyms"&gt;&lt;/a&gt; `latencyMs?` | `readonly` | `number` | - | [components/sync-activity-indicator.tsx:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L106) |
+| &lt;a id="showadvanceddiagnostics"&gt;&lt;/a&gt; `showAdvancedDiagnostics?` | `readonly` | `boolean` | Render extra adapter-metric rows (coalescing + conversion/dispatch latency) in the popover for production incident triage. Defaults to `false`, leaving the panel output byte-identical to the prior version; each advanced row is itself omitted when its metric field is absent (e.g. a `null` latency with no samples). | [components/sync-activity-indicator.tsx:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/sync-activity-indicator.tsx#L119) |

@@ -1,0 +1,20 @@
+---
+title: "RestoreConflict"
+description: "@anvilkit/plugin-version-history · RestoreConflict"
+---
+
+Defined in: [utils/restore.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L27)
+
+Result of comparing the live document hash against an expected base.
+
+`currentHash` is the freshly computed `hashPageIR` of `currentIR`;
+callers can persist it as the next `expectedBaseHash`. `expectedBaseHash`
+is echoed back only when one was supplied.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="currenthash"&gt;&lt;/a&gt; `currentHash` | `readonly` | `string` | [utils/restore.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L29) |
+| &lt;a id="expectedbasehash"&gt;&lt;/a&gt; `expectedBaseHash?` | `readonly` | `string` | [utils/restore.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L30) |
+| &lt;a id="hasconflict"&gt;&lt;/a&gt; `hasConflict` | `readonly` | `boolean` | [utils/restore.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L28) |

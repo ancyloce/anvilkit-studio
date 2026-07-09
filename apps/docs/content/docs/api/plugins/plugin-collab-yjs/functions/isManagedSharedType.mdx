@@ -1,0 +1,25 @@
+---
+title: "isManagedSharedType"
+description: "@anvilkit/plugin-collab-yjs · isManagedSharedType"
+---
+
+```ts
+function isManagedSharedType(name): boolean;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/shared-types.ts:78](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/shared-types.ts#L78)
+
+Whether the given Yjs shared type participates in this adapter's
+PageIR encoding. Returns `true` only for the structural containers
+the native tree manages (`Y.Map`, `Y.Array`); every other type
+(`Y.Text`, `Y.XmlElement`, `Y.XmlFragment`, subdocs) is out of scope.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `name` | [`YSharedTypeName`](../type-aliases/YSharedTypeName) |
+
+## Returns
+
+`boolean`

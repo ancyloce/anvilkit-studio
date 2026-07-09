@@ -3,7 +3,7 @@ title: "ExportStoreProviderProps"
 description: "@anvilkit/core · ExportStoreProviderProps"
 ---
 
-Defined in: [state/slices/ExportStoreProvider.tsx:24](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L24)
+Defined in: [core/src/state/slices/ExportStoreProvider.tsx:24](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L24)
 
 Props for [ExportStoreProvider](../functions/ExportStoreProvider).
 
@@ -11,6 +11,6 @@ Props for [ExportStoreProvider](../functions/ExportStoreProvider).
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | Subtree that reads the export store via `useExportStore` / `useExportStoreApi`. | [state/slices/ExportStoreProvider.tsx:41](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L41) |
-| &lt;a id="store"&gt;&lt;/a&gt; `store?` | `readonly` | [`ExportStoreApi`](../type-aliases/ExportStoreApi) | Optional externally-owned store. `<Studio>` creates the instance itself (so it can drive it imperatively via `.getState()`) and passes it in; standalone callers omit it and the provider owns one. | [state/slices/ExportStoreProvider.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L36) |
-| &lt;a id="storeid"&gt;&lt;/a&gt; `storeId` | `readonly` | `string` | Per-instance store id. Namespaces the export store's persistence key so two concurrent `<Studio>` editors never share in-flight export state or available-format lists. | [state/slices/ExportStoreProvider.tsx:30](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L30) |
+| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | Subtree that reads the export store via `useExportStore` / `useExportStoreApi`. | [core/src/state/slices/ExportStoreProvider.tsx:41](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L41) |
+| &lt;a id="store"&gt;&lt;/a&gt; `store?` | `readonly` | [`ExportStoreApi`](../type-aliases/ExportStoreApi) | Optional externally-owned store. `<Studio>` creates the instance itself (so it can drive it imperatively via `.getState()`) and passes it in; standalone callers omit it and the provider owns one. | [core/src/state/slices/ExportStoreProvider.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L36) |
+| &lt;a id="storeid"&gt;&lt;/a&gt; `storeId` | `readonly` | `string` | Per-instance store id. Namespaces the export store's persistence key so two concurrent `<Studio>` editors never share in-flight export state or available-format lists. | [core/src/state/slices/ExportStoreProvider.tsx:30](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L30) |

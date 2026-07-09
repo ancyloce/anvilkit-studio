@@ -1,0 +1,25 @@
+---
+title: "RestoreConflictInput"
+description: "@anvilkit/plugin-version-history · RestoreConflictInput"
+---
+
+Defined in: [utils/restore.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L15)
+
+Inputs to [checkRestoreConflict](../functions/checkRestoreConflict).
+
+`expectedBaseHash` is the optimistic-concurrency token: the `PageIR`
+fingerprint the restore was planned against — typically the live
+`currentIR` hash captured when the snapshot/diff view was opened, or a
+persisted `SnapshotMeta.pageIRHash`. Omitting it disables the check
+(always reports no conflict), which keeps pre-token callers working.
+
+## Extended by
+
+- [`PrepareRestoreInput`](PrepareRestoreInput.md)
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="currentir"&gt;&lt;/a&gt; `currentIR` | `readonly` | `PageIR` | [utils/restore.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L16) |
+| &lt;a id="expectedbasehash"&gt;&lt;/a&gt; `expectedBaseHash?` | `readonly` | `string` | [utils/restore.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/restore.ts#L17) |

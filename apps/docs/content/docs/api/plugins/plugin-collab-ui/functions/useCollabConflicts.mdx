@@ -7,7 +7,11 @@ description: "@anvilkit/collab-ui · useCollabConflicts"
 function useCollabConflicts(): readonly ConflictEvent[];
 ```
 
-Defined in: [context.tsx:359](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L359)
+Defined in: [context.tsx:441](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context.tsx#L441)
+
+The retained window of recent ConflictEvents. Reads only
+`ConflictsContext`; use [useCollabConflictQueue](useCollabConflictQueue.md) when you also need
+the dismiss / clear mutators.
 
 ## Returns
 

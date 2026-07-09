@@ -4,10 +4,25 @@ description: "@anvilkit/plugin-collab-yjs · validatePresenceState"
 ---
 
 ```ts
-function validatePresenceState(value): PresenceState | null;
+function validatePresenceState(value): RichPresenceState | null;
 ```
 
-Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L118)
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:376](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L376)
+
+Validate a full presence payload (§4.2.5).
+
+Reconstructs a sanitized [RichPresenceState](../interfaces/RichPresenceState) carrying only the
+KNOWN fields (an allowlist) — a hostile peer therefore cannot smuggle
+arbitrary top-level keys into the local view. Backward compatible:
+
+- The `selection` field is sanitized via [sanitizePresenceSelection](sanitizePresenceSelection.md)
+  so a multi-select array is bounded and bad ids are dropped rather
+  than rejecting the whole peer.
+- The richer fields (`version`, `viewport`, `focusedId`, `activity`)
+  are optional — a legacy single-selection peer with none of them
+  still validates. A field that is PRESENT but malformed rejects the
+  whole state (defense-in-depth, consistent with the existing
+  cursor/selection handling).
 
 ## Parameters
 
@@ -17,4 +32,4 @@ Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:118](https://github.
 
 ## Returns
 
-`PresenceState` \| `null`
+[`RichPresenceState`](../interfaces/RichPresenceState) \| `null`

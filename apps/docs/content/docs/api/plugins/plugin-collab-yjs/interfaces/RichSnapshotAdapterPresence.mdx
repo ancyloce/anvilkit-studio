@@ -1,0 +1,74 @@
+---
+title: "RichSnapshotAdapterPresence"
+description: "@anvilkit/plugin-collab-yjs · RichSnapshotAdapterPresence"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:244](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L244)
+
+Richer-typed view of SnapshotAdapterPresence (§4.2.5). Same
+runtime object — `update` accepts and `onPeerChange` emits
+[RichPresenceState](RichPresenceState.md), so hosts can set and read the versioned
+multi-select / viewport / focused-block / typing fields while the base
+cursor + selection contract keeps working. Structurally assignable to
+`SnapshotAdapterPresence` (the extra fields are optional).
+
+## Extends
+
+- `SnapshotAdapterPresence`
+
+## Methods
+
+### onPeerChange()
+
+```ts
+onPeerChange(callback): Unsubscribe;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:246](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L246)
+
+Subscribe to the roster of remote peers' presence; `callback` fires with
+the full set whenever it changes. Returns an Unsubscribe.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `callback` | (`peers`) =&gt; `void` |
+
+#### Returns
+
+`Unsubscribe`
+
+#### Overrides
+
+```ts
+SnapshotAdapterPresence.onPeerChange
+```
+
+***
+
+### update()
+
+```ts
+update(state): void;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:245](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L245)
+
+Publish the local peer's presence to other collaborators.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `state` | [`RichPresenceState`](RichPresenceState.md) |
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+```ts
+SnapshotAdapterPresence.update
+```

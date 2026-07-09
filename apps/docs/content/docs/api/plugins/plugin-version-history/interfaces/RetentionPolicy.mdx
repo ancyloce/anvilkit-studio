@@ -1,0 +1,25 @@
+---
+title: "RetentionPolicy"
+description: "@anvilkit/plugin-version-history · RetentionPolicy"
+---
+
+Defined in: [utils/retention.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L17)
+
+Declarative retention policy composed by [planRetention](../functions/planRetention). Every field
+is optional and additive — supply either, both, or neither:
+
+- **`maxSnapshots`** — keep at most this many snapshots, evicting the oldest
+  overflow (the historical count-only behavior of `evictOldest`). A
+  non-finite or `< 1` value disables the count cap.
+- **`maxAgeMs`** — evict any snapshot older than this many milliseconds
+  relative to "now". A non-finite or `<= 0` value disables age expiry.
+
+Protected snapshots (see [RetentionPlanOptions.protectedIds](RetentionPlanOptions.md#protectedids) and the
+`meta.protected` flag) are never evicted by either rule.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="maxagems"&gt;&lt;/a&gt; `maxAgeMs?` | `readonly` | `number` | [utils/retention.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L19) |
+| &lt;a id="maxsnapshots"&gt;&lt;/a&gt; `maxSnapshots?` | `readonly` | `number` | [utils/retention.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L18) |

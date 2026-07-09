@@ -1,0 +1,35 @@
+---
+title: "CollabPresenceAnnouncer"
+description: "@anvilkit/collab-ui · CollabPresenceAnnouncer"
+---
+
+```ts
+function CollabPresenceAnnouncer(props): ReactNode;
+```
+
+Defined in: [components/collab-presence-announcer.tsx:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/components/collab-presence-announcer.tsx#L47)
+
+Polite a11y live region that announces collaborator join/leave changes to
+screen readers (M3 / review §4.2.3). The aggregate `aria-label` on
+`<PeerAvatarStack>` exposes the *current* count, but it does not narrate
+the *transition* when a collaborator arrives or departs — this region does.
+
+Roster source is [useCollabPeerIdentities](useCollabPeerIdentities.md) (NOT `useCollabPeers`): its
+value reference changes only when the id/displayName/color *set* changes,
+never on a cursor/selection-only frame (F5), so a remote cursor move can
+never re-announce a join/leave. The previous roster is snapshotted in a ref
+and diffed against the current one each time that reference changes, so only
+deltas *after* mount are announced — the pre-existing roster present at
+mount seeds silently (no join-spam).
+
+Renders nothing visible. Excludes the local peer (mirrors the hook).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`CollabPresenceAnnouncerProps`](../interfaces/CollabPresenceAnnouncerProps) |
+
+## Returns
+
+`ReactNode`

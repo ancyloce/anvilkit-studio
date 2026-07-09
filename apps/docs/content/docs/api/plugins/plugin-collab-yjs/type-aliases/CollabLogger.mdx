@@ -1,0 +1,30 @@
+---
+title: "CollabLogger"
+description: "@anvilkit/plugin-collab-yjs · CollabLogger"
+---
+
+```ts
+type CollabLogger = (level, message, meta?) => void;
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:885](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L885)
+
+Optional logging hook for library-level diagnostics that would otherwise
+write straight to the console (the deprecated `createCollabPlugin` alias
+warning and the default managed-transport error reporter). When provided,
+those sites route through this hook instead of `console.warn` /
+`console.error`; when omitted, the console fallback is preserved so
+existing behavior is unchanged. The `meta` arg carries the underlying
+error (or other context) when available.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `level` | `"warn"` \| `"error"` |
+| `message` | `string` |
+| `meta?` | `unknown` |
+
+## Returns
+
+`void`

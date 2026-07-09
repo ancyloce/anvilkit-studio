@@ -1,0 +1,17 @@
+---
+title: "PresenceActivity"
+description: "@anvilkit/plugin-collab-yjs · PresenceActivity"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:210](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L210)
+
+Activity / typing metadata for a peer. Lets hosts render "Alice is
+typing…" affordances. Both fields are optional and individually
+validated.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="typing"&gt;&lt;/a&gt; `typing?` | `readonly` | `boolean` | Whether the peer is actively typing / editing. | [plugin-collab-yjs/src/utils/presence-schema.ts:212](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L212) |
+| &lt;a id="updatedat"&gt;&lt;/a&gt; `updatedAt?` | `readonly` | `number` | Epoch-ms timestamp of the last activity tick (finite, clamped ≥ 0). | [plugin-collab-yjs/src/utils/presence-schema.ts:214](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L214) |

@@ -3,7 +3,7 @@ title: "PersistenceOptions"
 description: "@anvilkit/plugin-collab-yjs · PersistenceOptions"
 ---
 
-Defined in: [plugin-collab-yjs/src/types/types.ts:142](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L142)
+Defined in: [plugin-collab-yjs/src/types/types.ts:311](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L311)
 
 Opt-in cross-tab persistence (L5). The default `createYjsAdapter`
 call uses no persistence — outbound Y.js updates flow through the
@@ -21,9 +21,9 @@ certain test runners).
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="broadcastchannel"&gt;&lt;/a&gt; `broadcastChannel?` | `readonly` | `boolean` | Enable same-origin cross-tab sync via `BroadcastChannel`. Default: `false`. | [plugin-collab-yjs/src/types/types.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L151) |
-| &lt;a id="channelname"&gt;&lt;/a&gt; `channelName?` | `readonly` | `string` | BroadcastChannel name. Defaults to `"<dbName>:<mapName>"` so multiple rooms in the same origin do not collide. | [plugin-collab-yjs/src/types/types.ts:162](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L162) |
-| &lt;a id="dbname"&gt;&lt;/a&gt; `dbName?` | `readonly` | `string` | IndexedDB database name. The adapter combines this with the `mapName` so multiple rooms in the same origin do not collide. Default: `"anvilkit-collab-yjs"`. | [plugin-collab-yjs/src/types/types.ts:157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L157) |
-| &lt;a id="indexeddb"&gt;&lt;/a&gt; `indexedDb?` | `readonly` | `boolean` | Enable the IndexedDB-backed offline queue. Default: `false`. | [plugin-collab-yjs/src/types/types.ts:146](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L146) |
-| &lt;a id="onfault"&gt;&lt;/a&gt; `onFault?` | `readonly` | (`reason`) =&gt; `void` | Notified once when either backend fails to open / falls back to a no-op. Useful for telemetry — the adapter never throws out of persistence into the Y.Doc observer chain, so this is the only way to learn about quota or schema faults. | [plugin-collab-yjs/src/types/types.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L175) |
-| &lt;a id="schemaversion"&gt;&lt;/a&gt; `schemaVersion?` | `readonly` | `number` | IndexedDB schema version. Bumped only when the queue's stored shape changes; rolling forward never downgrades the on-disk data. Default: `1`. | [plugin-collab-yjs/src/types/types.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L168) |
+| &lt;a id="broadcastchannel"&gt;&lt;/a&gt; `broadcastChannel?` | `readonly` | `boolean` | Enable same-origin cross-tab sync via `BroadcastChannel`. Default: `false`. | [plugin-collab-yjs/src/types/types.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L320) |
+| &lt;a id="channelname"&gt;&lt;/a&gt; `channelName?` | `readonly` | `string` | BroadcastChannel name. Defaults to `"<dbName>:<mapName>"` so multiple rooms in the same origin do not collide. | [plugin-collab-yjs/src/types/types.ts:331](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L331) |
+| &lt;a id="dbname"&gt;&lt;/a&gt; `dbName?` | `readonly` | `string` | IndexedDB database name. The adapter combines this with the `mapName` so multiple rooms in the same origin do not collide. Default: `"anvilkit-collab-yjs"`. | [plugin-collab-yjs/src/types/types.ts:326](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L326) |
+| &lt;a id="indexeddb"&gt;&lt;/a&gt; `indexedDb?` | `readonly` | `boolean` | Enable the IndexedDB-backed offline queue. Default: `false`. | [plugin-collab-yjs/src/types/types.ts:315](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L315) |
+| &lt;a id="onfault"&gt;&lt;/a&gt; `onFault?` | `readonly` | (`reason`) =&gt; `void` | Notified once when either backend fails to open / falls back to a no-op. Useful for telemetry — the adapter never throws out of persistence into the Y.Doc observer chain, so this is the only way to learn about quota or schema faults. | [plugin-collab-yjs/src/types/types.ts:344](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L344) |
+| &lt;a id="schemaversion"&gt;&lt;/a&gt; `schemaVersion?` | `readonly` | `number` | IndexedDB schema version. Bumped only when the queue's stored shape changes; rolling forward never downgrades the on-disk data. Default: `1`. | [plugin-collab-yjs/src/types/types.ts:337](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L337) |

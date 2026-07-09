@@ -1,0 +1,29 @@
+---
+title: "RichPresenceState"
+description: "@anvilkit/plugin-collab-yjs · RichPresenceState"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L225)
+
+Versioned, backward-compatible superset of PresenceState
+(§4.2.5). Every richer field is optional, so a plain `PresenceState`
+is a valid `RichPresenceState` and vice versa. Multi-select reuses the
+existing `selection.nodeIds` array (which already permits many ids);
+the additions are viewport, focused-block, activity, and the schema
+`version`.
+
+## Extends
+
+- `PresenceState`
+
+## Properties
+
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="activity"&gt;&lt;/a&gt; `activity?` | `readonly` | [`PresenceActivity`](PresenceActivity.md) | Activity / typing metadata. | - | [plugin-collab-yjs/src/utils/presence-schema.ts:233](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L233) |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `PresenceCursor` | The peer's pointer position, if broadcasting one. | `PresenceState.cursor` | plugin-version-history/dist/types/types.d.ts:205 |
+| &lt;a id="focusedid"&gt;&lt;/a&gt; `focusedId?` | `readonly` | `string` | Currently focused block id (e.g. the field/block under edit). | - | [plugin-collab-yjs/src/utils/presence-schema.ts:231](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L231) |
+| &lt;a id="peer"&gt;&lt;/a&gt; `peer` | `readonly` | `PeerInfo` | Who this presence belongs to. | `PresenceState.peer` | plugin-version-history/dist/types/types.d.ts:203 |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection?` | `readonly` | `PresenceSelection` | The peer's current selection, if broadcasting one. | `PresenceState.selection` | plugin-version-history/dist/types/types.d.ts:207 |
+| &lt;a id="version"&gt;&lt;/a&gt; `version?` | `readonly` | `number` | Schema version of this payload. Absent ⇒ legacy (≤ 1). | - | [plugin-collab-yjs/src/utils/presence-schema.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L227) |
+| &lt;a id="viewport"&gt;&lt;/a&gt; `viewport?` | `readonly` | [`PresenceViewport`](PresenceViewport.md) | Peer viewport (scroll + zoom, optional visible rect). | - | [plugin-collab-yjs/src/utils/presence-schema.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L229) |

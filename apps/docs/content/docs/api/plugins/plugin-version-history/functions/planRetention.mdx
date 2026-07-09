@@ -1,0 +1,44 @@
+---
+title: "planRetention"
+description: "@anvilkit/plugin-version-history · planRetention"
+---
+
+```ts
+function planRetention(
+   snapshots, 
+   policy, 
+   options?): RetentionPlan;
+```
+
+Defined in: [utils/retention.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/retention.ts#L114)
+
+Pure, deterministic retention planner. Composes the count cap, age expiry,
+and protection rules of a [RetentionPolicy](../interfaces/RetentionPolicy) into a single
+[RetentionPlan](../interfaces/RetentionPlan) without mutating `snapshots` or touching any store.
+
+Semantics:
+- **protection** — a snapshot is protected when its `id` is in
+  `options.protectedIds` OR it carries a truthy `meta.protected` flag (read
+  forward-compatibly, so no schema change is required). Protected snapshots
+  are never in `deleteIds`, even if they are the oldest or age-expired.
+- **age** — when `policy.maxAgeMs` is enabled, an unprotected snapshot is
+  evicted when `now - Date.parse(savedAt) > maxAgeMs`. Unparseable `savedAt`
+  values never expire (the `NaN` comparison is `false`).
+- **count** — when `policy.maxSnapshots` is enabled, the oldest unprotected
+  survivors (after age expiry) are evicted until at most `maxSnapshots`
+  remain. Protected snapshots are always kept and still count toward the
+  total, so the kept count can exceed the cap if enough are protected.
+
+`deleteIds` / `keepIds` are ordered oldest-first for reproducibility.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `snapshots` | readonly [`SnapshotMeta`](../interfaces/SnapshotMeta)[] |
+| `policy` | [`RetentionPolicy`](../interfaces/RetentionPolicy) |
+| `options` | [`RetentionPlanOptions`](../interfaces/RetentionPlanOptions) |
+
+## Returns
+
+[`RetentionPlan`](../interfaces/RetentionPlan)

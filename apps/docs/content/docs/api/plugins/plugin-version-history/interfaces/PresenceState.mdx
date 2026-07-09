@@ -3,12 +3,14 @@ title: "PresenceState"
 description: "@anvilkit/plugin-version-history · PresenceState"
 ---
 
-Defined in: [types/types.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L42)
+Defined in: [types/types.ts:216](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L216)
+
+A single peer's full presence snapshot (identity + cursor + selection).
 
 ## Properties
 
-| Property | Modifier | Type | Defined in |
-| ------ | ------ | ------ | ------ |
-| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | [`PresenceCursor`](PresenceCursor.md) | [types/types.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L44) |
-| &lt;a id="peer"&gt;&lt;/a&gt; `peer` | `readonly` | [`PeerInfo`](PeerInfo.md) | [types/types.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L43) |
-| &lt;a id="selection"&gt;&lt;/a&gt; `selection?` | `readonly` | [`PresenceSelection`](PresenceSelection.md) | [types/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L45) |
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | [`PresenceCursor`](PresenceCursor.md) | The peer's pointer position, if broadcasting one. | [types/types.ts:220](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L220) |
+| &lt;a id="peer"&gt;&lt;/a&gt; `peer` | `readonly` | [`PeerInfo`](PeerInfo.md) | Who this presence belongs to. | [types/types.ts:218](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L218) |
+| &lt;a id="selection"&gt;&lt;/a&gt; `selection?` | `readonly` | [`PresenceSelection`](PresenceSelection.md) | The peer's current selection, if broadcasting one. | [types/types.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L222) |

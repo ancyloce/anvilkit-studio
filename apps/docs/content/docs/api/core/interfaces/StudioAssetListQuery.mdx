@@ -3,7 +3,7 @@ title: "StudioAssetListQuery"
 description: "@anvilkit/core · StudioAssetListQuery"
 ---
 
-Defined in: [types/sidebar.ts:221](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L221)
+Defined in: [core/src/types/sidebar.ts:221](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L221)
 
 Search / filter / pagination query passed to
 [StudioAssetSource.listPaginated](StudioAssetSource.md#listpaginated). Filters compose with AND
@@ -14,13 +14,13 @@ the page.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `string` | Opaque pagination cursor returned by the previous page. | [types/sidebar.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L229) |
-| &lt;a id="facets"&gt;&lt;/a&gt; `facets?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, readonly `string`[]\&gt;\&gt; | Host facet selections, keyed by facet id. | [types/sidebar.ts:239](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L239) |
-| &lt;a id="folderid"&gt;&lt;/a&gt; `folderId?` | `readonly` | `string` \| `null` | Scope to a folder. `null` = root only; `undefined` = any folder. | [types/sidebar.ts:233](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L233) |
-| &lt;a id="kinds"&gt;&lt;/a&gt; `kinds?` | `readonly` | readonly [`StudioAssetKind`](../type-aliases/StudioAssetKind)[] | Restrict to one or more asset kinds. | [types/sidebar.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L225) |
-| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `readonly` | `number` | Maximum items per page. Sources may apply their own ceiling. | [types/sidebar.ts:231](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L231) |
-| &lt;a id="query"&gt;&lt;/a&gt; `query?` | `readonly` | `string` | Free-text query, matched against id, name, MIME prefix, tags. | [types/sidebar.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L223) |
-| &lt;a id="recursive"&gt;&lt;/a&gt; `recursive?` | `readonly` | `boolean` | Include assets in descendant folders. | [types/sidebar.ts:235](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L235) |
-| &lt;a id="sort"&gt;&lt;/a&gt; `sort?` | `readonly` | [`StudioAssetSort`](StudioAssetSort.md) | Sort axis. | [types/sidebar.ts:241](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L241) |
-| &lt;a id="sources"&gt;&lt;/a&gt; `sources?` | `readonly` | readonly `string`[] | Restrict to one or more source ids. `undefined` = federate all. | [types/sidebar.ts:237](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L237) |
-| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | Require all listed tags (AND semantics). | [types/sidebar.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L227) |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `string` | Opaque pagination cursor returned by the previous page. | [core/src/types/sidebar.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L229) |
+| &lt;a id="facets"&gt;&lt;/a&gt; `facets?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, readonly `string`[]\&gt;\&gt; | Host facet selections, keyed by facet id. | [core/src/types/sidebar.ts:239](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L239) |
+| &lt;a id="folderid"&gt;&lt;/a&gt; `folderId?` | `readonly` | `string` \| `null` | Scope to a folder. `null` = root only; `undefined` = any folder. | [core/src/types/sidebar.ts:233](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L233) |
+| &lt;a id="kinds"&gt;&lt;/a&gt; `kinds?` | `readonly` | readonly [`StudioAssetKind`](../type-aliases/StudioAssetKind)[] | Restrict to one or more asset kinds. | [core/src/types/sidebar.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L225) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `readonly` | `number` | Maximum items per page. Sources may apply their own ceiling. | [core/src/types/sidebar.ts:231](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L231) |
+| &lt;a id="query"&gt;&lt;/a&gt; `query?` | `readonly` | `string` | Free-text query, matched against id, name, MIME prefix, tags. | [core/src/types/sidebar.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L223) |
+| &lt;a id="recursive"&gt;&lt;/a&gt; `recursive?` | `readonly` | `boolean` | Include assets in descendant folders. | [core/src/types/sidebar.ts:235](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L235) |
+| &lt;a id="sort"&gt;&lt;/a&gt; `sort?` | `readonly` | [`StudioAssetSort`](StudioAssetSort.md) | Sort axis. | [core/src/types/sidebar.ts:241](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L241) |
+| &lt;a id="sources"&gt;&lt;/a&gt; `sources?` | `readonly` | readonly `string`[] | Restrict to one or more source ids. `undefined` = federate all. | [core/src/types/sidebar.ts:237](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L237) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags?` | `readonly` | readonly `string`[] | Require all listed tags (AND semantics). | [core/src/types/sidebar.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L227) |

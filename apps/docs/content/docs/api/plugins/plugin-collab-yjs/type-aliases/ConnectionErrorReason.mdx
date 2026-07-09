@@ -1,0 +1,34 @@
+---
+title: "ConnectionErrorReason"
+description: "@anvilkit/plugin-collab-yjs · ConnectionErrorReason"
+---
+
+```ts
+type ConnectionErrorReason = "auth" | "transport" | "timeout";
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:443](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L443)
+
+Why a transport connection entered the `error` state. Discriminates an
+authentication / authorization failure from every other connection-level
+fault so a host can react appropriately instead of treating an expired
+token the same as a dropped socket:
+
+- `"auth"` — the relay rejected the connection on authentication or
+  authorization grounds (e.g. Hocuspocus `onAuthenticate` threw, or a
+  policy hook refused the document). These are typically **not**
+  recoverable by retrying the same credentials — the host should prompt
+  for re-authentication / fresh credentials, so the accompanying
+  `recoverable` flag is `false`.
+- `"transport"` — any other connection-level failure (unreachable or
+  malformed URL, missing provider library, socket close/error). May or
+  may not be recoverable depending on the cause.
+- `"timeout"` — the transport stayed in `connecting`/`reconnecting`
+  past the managed transport's `connectTimeoutMs` without ever reaching
+  `synced` (§4.2.1). Recoverable: the provider may still connect later,
+  so a host should surface a "still connecting…" / "taking longer than
+  usual" affordance rather than a hard failure.
+
+Optional and treated as `"transport"` when absent, so a host that builds
+its own [ConnectionSource](ConnectionSource.md) and emits the legacy
+`{ kind: "error", message, recoverable }` shape stays valid.

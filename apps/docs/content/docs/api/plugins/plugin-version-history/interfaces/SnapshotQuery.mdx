@@ -1,0 +1,22 @@
+---
+title: "SnapshotQuery"
+description: "@anvilkit/plugin-version-history · SnapshotQuery"
+---
+
+Defined in: [types/types.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L114)
+
+Optional query for paginating, filtering, and sorting snapshot metadata
+via [SnapshotAdapter.query](SnapshotAdapter.md#query). Every field is optional; an empty query
+(`{}`) is equivalent to `list()` (all metadata, input order).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="cursor"&gt;&lt;/a&gt; `cursor?` | `readonly` | `string` | Opaque resume token — the `id` of the last item from a previous page. Results continue immediately after it in the resolved order. An unknown cursor (e.g. the referenced snapshot was deleted) restarts from the head. | [types/types.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L120) |
+| &lt;a id="filter"&gt;&lt;/a&gt; `filter?` | `readonly` | \{ `label?`: `string`; \} | - | [types/types.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L130) |
+| `filter.label?` | `readonly` | `string` | Case-insensitive substring match against [SnapshotMeta.label](SnapshotMeta.md#label). | [types/types.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L132) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `readonly` | `number` | Maximum number of items to return. An omitted, non-finite, or non-positive value returns all remaining items. | [types/types.ts:125](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L125) |
+| &lt;a id="sort"&gt;&lt;/a&gt; `sort?` | `readonly` | \{ `direction`: `"asc"` \| `"desc"`; `field`: `"savedAt"` \| `"label"`; \} | - | [types/types.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L126) |
+| `sort.direction` | `readonly` | `"asc"` \| `"desc"` | - | [types/types.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L128) |
+| `sort.field` | `readonly` | `"savedAt"` \| `"label"` | - | [types/types.ts:127](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L127) |

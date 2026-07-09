@@ -1,0 +1,17 @@
+---
+title: "SharedTypeSupport"
+description: "@anvilkit/plugin-collab-yjs · SharedTypeSupport"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/shared-types.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/shared-types.ts#L34)
+
+Shape of [SHARED\_TYPE\_SUPPORT](../variables/SHARED_TYPE_SUPPORT).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="managed"&gt;&lt;/a&gt; `managed` | `readonly` | readonly [`YSharedTypeName`](../type-aliases/YSharedTypeName)[] | Shared types the adapter reads/writes as part of the PageIR encoding: the per-node / props `Y.Map`s and the `childIds` `Y.Array`. These are the ONLY Yjs types the native tree touches. | [plugin-collab-yjs/src/utils/shared-types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/shared-types.ts#L45) |
+| &lt;a id="model"&gt;&lt;/a&gt; `model` | `readonly` | `"page-ir"` | The adapter mirrors a single domain model — Puck's `PageIR` — and is not a generic Yjs↔CRDT binding. Pinned to `"page-ir"`. | [plugin-collab-yjs/src/utils/shared-types.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/shared-types.ts#L39) |
+| &lt;a id="propencoding"&gt;&lt;/a&gt; `propEncoding` | `readonly` | `"json-string"` | How a node's `props` are stored. Each prop value is a JSON-encoded string inside the per-node `Y.Map`, so a prop is opaque to the IR contract and is never a live nested collaborative type. | [plugin-collab-yjs/src/utils/shared-types.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/shared-types.ts#L58) |
+| &lt;a id="unsupported"&gt;&lt;/a&gt; `unsupported` | `readonly` | readonly [`YSharedTypeName`](../type-aliases/YSharedTypeName)[] | Native collaborative types that have **no** public binding into PageIR. Concurrent edits inside these are not projected into the editor — use [getHostSharedRoot](../functions/getHostSharedRoot) to attach them to the same `Y.Doc` under a host-owned, adapter-ignored namespace. | [plugin-collab-yjs/src/utils/shared-types.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/shared-types.ts#L52) |

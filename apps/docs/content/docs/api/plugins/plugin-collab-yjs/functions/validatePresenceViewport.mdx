@@ -1,0 +1,27 @@
+---
+title: "validatePresenceViewport"
+description: "@anvilkit/plugin-collab-yjs · validatePresenceViewport"
+---
+
+```ts
+function validatePresenceViewport(value): PresenceViewport | null;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:307](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L307)
+
+Validate a [PresenceViewport](../interfaces/PresenceViewport). Requires finite `x`/`y`; clamps
+`zoom` to the [MIN\_VIEWPORT\_ZOOM](../variables/MIN_VIEWPORT_ZOOM)..[MAX\_VIEWPORT\_ZOOM](../variables/MAX_VIEWPORT_ZOOM)
+range and any provided `width`/`height` to ≥ 0. Returns `null` (field
+rejected) when a required number is missing/non-finite. Returns a
+fresh object carrying only the known fields (forward-compatible: a
+future peer's extra sub-fields are dropped, not preserved).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+[`PresenceViewport`](../interfaces/PresenceViewport) \| `null`

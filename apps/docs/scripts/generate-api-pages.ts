@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * @file phase4-003 — emit TypeDoc API reference for the five runtime
- * packages (`@anvilkit/core`, `@anvilkit/ir`, `@anvilkit/schema`,
- * `@anvilkit/validator`, `@anvilkit/utils`) into the Starlight docs
+ * @file phase4-003 — emit TypeDoc API reference for the six runtime
+ * packages (`@anvilkit/core`, `@anvilkit/contracts`, `@anvilkit/ir`,
+ * `@anvilkit/schema`, `@anvilkit/validator`, `@anvilkit/utils`) into the docs
  * site.
  *
  * For each package we:
@@ -66,6 +66,13 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Core",
 		summary:
 			"Runtime types, plugin engine, React shell, and config system for the Studio.",
+	},
+	{
+		slug: "contracts",
+		pkgName: "@anvilkit/contracts",
+		displayName: "Contracts",
+		summary:
+			"Shared type-only contracts — Page IR, AI DTOs, export formats, pages source, and asset resolution.",
 	},
 	{
 		slug: "ir",

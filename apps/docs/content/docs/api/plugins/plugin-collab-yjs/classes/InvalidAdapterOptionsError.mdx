@@ -1,0 +1,59 @@
+---
+title: "InvalidAdapterOptionsError"
+description: "@anvilkit/plugin-collab-yjs · InvalidAdapterOptionsError"
+---
+
+Defined in: [plugin-collab-yjs/src/utils/adapter-errors.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/adapter-errors.ts#L12)
+
+§4.2.4 — typed construction-time failure for [createYjsAdapter](../functions/createYjsAdapter).
+
+Adapter options are validated eagerly so a misconfigured host fails
+fast with an actionable message instead of silently binding to the
+wrong (or a blank) shared `Y.Map` name, or attributing every local
+write to an id-less peer. Extends `Error` (keeping the message text +
+`cause`) so existing `instanceof Error` callers keep working; the
+discriminating signal is the subclass (`name` + `instanceof`) plus the
+`option` field naming the field that failed validation.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new InvalidAdapterOptionsError(
+   option, 
+   message, 
+   options?): InvalidAdapterOptionsError;
+```
+
+Defined in: [plugin-collab-yjs/src/utils/adapter-errors.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/adapter-errors.ts#L16)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `option` | `string` |
+| `message` | `string` |
+| `options?` | \{ `cause?`: `unknown`; \} |
+| `options.cause?` | `unknown` |
+
+#### Returns
+
+`InvalidAdapterOptionsError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Default value | Description | Overrides | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `"InvalidAdapterOptionsError"` | `"InvalidAdapterOptionsError"` | - | `Error.name` | [plugin-collab-yjs/src/utils/adapter-errors.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/adapter-errors.ts#L13) |
+| &lt;a id="option"&gt;&lt;/a&gt; `option` | `readonly` | `string` | `undefined` | The option that failed validation (e.g. `"mapName"`, `"peer.id"`). | - | [plugin-collab-yjs/src/utils/adapter-errors.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/adapter-errors.ts#L15) |

@@ -1,0 +1,41 @@
+---
+title: "querySnapshots"
+description: "@anvilkit/plugin-version-history · querySnapshots"
+---
+
+```ts
+function querySnapshots(all, options?): SnapshotPage;
+```
+
+Defined in: [utils/query.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/query.ts#L30)
+
+Pure, deterministic reference implementation of the optional
+[SnapshotAdapter.query](../interfaces/SnapshotAdapter#query) capability over an in-memory array.
+
+Reference adapters (in-memory, localStorage) implement `query` by
+delegating here so the filter/sort/pagination semantics live in exactly
+one place. `all` is never mutated.
+
+Semantics:
+- **filter.label** — case-insensitive substring match. Snapshots without a
+  `label` are excluded whenever a label filter is supplied.
+- **sort** — when omitted, the input order is preserved (mirroring
+  `list()`). When supplied, snapshots are ordered by `field`/`direction`
+  with a stable ascending `id` tie-break (matching `evictOldest`), giving a
+  strict total order so cursor pagination is reproducible.
+- **cursor / limit** — `cursor` is the opaque `id` of the last item from a
+  previous page; results resume immediately after it (an unknown cursor
+  restarts from the head). An omitted, non-finite, or non-positive `limit`
+  returns all remaining items. `nextCursor` is the last returned item's
+  `id` when more items remain and is absent on the final page.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `all` | readonly [`SnapshotMeta`](../interfaces/SnapshotMeta)[] |
+| `options` | [`SnapshotQuery`](../interfaces/SnapshotQuery) |
+
+## Returns
+
+[`SnapshotPage`](../interfaces/SnapshotPage)

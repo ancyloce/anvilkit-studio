@@ -3,7 +3,7 @@ title: "AiSectionPatch"
 description: "@anvilkit/core · AiSectionPatch"
 ---
 
-Defined in: [types/ai-section.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L227)
+Defined in: contracts/dist/ai-section.d.ts:223
 
 The LLM's response to a section-level regeneration request.
 
@@ -12,12 +12,12 @@ via `puckApi.dispatch({ type: "setData", data: applyPatch(...) })`,
 preserving surrounding canvas (selection, sidebar, scroll).
 
 Validation lives in `@anvilkit/validator/section`'s
-`validateAiSectionPatch()`; Core only owns the type.
+`validateAiSectionPatch()`; this package only owns the type.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | `readonly` | readonly `string`[] | The node IDs being replaced. Must equal [AiSectionContext.nodeIds](AiSectionContext.md#nodeids) (same order, same length unless [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is `true`). | [types/ai-section.ts:239](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L239) |
-| &lt;a id="replacement"&gt;&lt;/a&gt; `replacement` | `readonly` | readonly [`PageIRNode`](PageIRNode.md)[] | The new subtrees, in the order they should appear in the zone after the replacement is applied. Each node is fully formed `PageIRNode` shape — the validator runs the same per-node rules as `validateAiOutput`, scoped to this subtree only. | [types/ai-section.ts:246](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L246) |
-| &lt;a id="zoneid"&gt;&lt;/a&gt; `zoneId` | `readonly` | `string` | The zone the patch applies to. Must match [AiSectionContext.zoneId](AiSectionContext.md#zoneid) — patches that target a different zone are rejected with code `PATCH_SHAPE`. | [types/ai-section.ts:233](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai-section.ts#L233) |
+| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | `readonly` | readonly `string`[] | The node IDs being replaced. Must equal [AiSectionContext.nodeIds](AiSectionContext.md#nodeids) (same order, same length unless [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is `true`). | contracts/dist/ai-section.d.ts:235 |
+| &lt;a id="replacement"&gt;&lt;/a&gt; `replacement` | `readonly` | readonly [`PageIRNode`](PageIRNode.md)[] | The new subtrees, in the order they should appear in the zone after the replacement is applied. Each node is fully formed `PageIRNode` shape — the validator runs the same per-node rules as `validateAiOutput`, scoped to this subtree only. | contracts/dist/ai-section.d.ts:242 |
+| &lt;a id="zoneid"&gt;&lt;/a&gt; `zoneId` | `readonly` | `string` | The zone the patch applies to. Must match [AiSectionContext.zoneId](AiSectionContext.md#zoneid) — patches that target a different zone are rejected with code `PATCH_SHAPE`. | contracts/dist/ai-section.d.ts:229 |

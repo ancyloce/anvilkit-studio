@@ -1,0 +1,19 @@
+---
+title: "UndoOptions"
+description: "@anvilkit/plugin-collab-yjs · UndoOptions"
+---
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:235](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L235)
+
+Local undo/redo configuration (§4.1.1). Maps the report's
+`{ scopes, trackedOrigins, captureTimeout }` shape onto this adapter:
+the *scope* is fixed (the adapter owns it — the native `:tree` map or
+the legacy whole-document map), so only the origin filter and the
+capture window are tunable here.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="capturetimeout"&gt;&lt;/a&gt; `captureTimeout?` | `readonly` | `number` | Merge window (ms) within which successive tracked changes collapse into a single undo step — forwarded verbatim to `Y.UndoManager`'s `captureTimeout`. Defaults to Yjs's own `500`. Set `0` to make every `save()` its own undo boundary. | [plugin-collab-yjs/src/types/types.ts:253](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L253) |
+| &lt;a id="trackedorigins"&gt;&lt;/a&gt; `trackedOrigins?` | `readonly` | `Iterable`\&lt;`unknown`, `any`, `any`\&gt; | Extra transaction origins to track in addition to the adapter's local peer. The adapter writes every local `save()` with the local `PeerInfo` object as the Yjs transaction origin and always tracks that origin, so local edits are undoable out of the box and remote-origin changes (a different peer, transport `applyUpdate`) are deliberately excluded. Add entries here only if the host runs its own `doc.transact(fn, origin)` writes it wants on the local undo stack. | [plugin-collab-yjs/src/types/types.ts:246](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L246) |

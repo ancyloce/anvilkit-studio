@@ -3,7 +3,7 @@ title: "AiValidationResult"
 description: "@anvilkit/core · AiValidationResult"
 ---
 
-Defined in: [types/ai.ts:270](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts#L270)
+Defined in: contracts/dist/ai.d.ts:252
 
 The outcome of validating an LLM response.
 
@@ -15,5 +15,5 @@ present even when the response is considered valid.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`AiValidationIssue`](AiValidationIssue.md)[] | The full list of issues found. Empty array when the response passed without complaint. | [types/ai.ts:281](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts#L281) |
-| &lt;a id="valid"&gt;&lt;/a&gt; `valid` | `readonly` | `boolean` | `true` iff the response contains no `severity: "error"` issues. A valid response may still carry `"warn"` entries in [issues](#issues). | [types/ai.ts:276](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ai.ts#L276) |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues` | `readonly` | readonly [`AiValidationIssue`](AiValidationIssue.md)[] | The full list of issues found. Empty array when the response passed without complaint. | contracts/dist/ai.d.ts:263 |
+| &lt;a id="valid"&gt;&lt;/a&gt; `valid` | `readonly` | `boolean` | `true` iff the response contains no `severity: "error"` issues. A valid response may still carry `"warn"` entries in [issues](#issues). | contracts/dist/ai.d.ts:258 |

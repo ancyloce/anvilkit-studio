@@ -1,0 +1,22 @@
+---
+title: "ConflictFieldDetail"
+description: "@anvilkit/plugin-collab-yjs · ConflictFieldDetail"
+---
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:506](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L506)
+
+§4.2.3 — one prop field that BOTH peers changed to DIFFERENT values
+within the conflict window (a true same-field, same-node race). Carried
+on [ConflictEvent.fields](ConflictEvent.md#fields) so a host can present a SEMANTIC,
+field-level merge ("they set headline to X, you set it to Y") instead of
+the coarse "your unsaved change overlapped" notice. Values are the raw,
+deserialized prop values (not JSON strings).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="field"&gt;&lt;/a&gt; `field` | `readonly` | `string` | The conflicting prop key. | [plugin-collab-yjs/src/types/types.ts:510](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L510) |
+| &lt;a id="localvalue"&gt;&lt;/a&gt; `localValue` | `readonly` | `unknown` | The value the LOCAL peer wrote for this field. | [plugin-collab-yjs/src/types/types.ts:512](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L512) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `readonly` | `string` | Id of the node whose prop conflicts. | [plugin-collab-yjs/src/types/types.ts:508](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L508) |
+| &lt;a id="remotevalue"&gt;&lt;/a&gt; `remoteValue` | `readonly` | `unknown` | The value the converged REMOTE state holds for this field. | [plugin-collab-yjs/src/types/types.ts:514](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L514) |

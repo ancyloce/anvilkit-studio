@@ -7,14 +7,23 @@ description: "@anvilkit/plugin-collab-yjs · validatePeerInfo"
 function validatePeerInfo(value): PeerInfo | null;
 ```
 
-Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:84](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L84)
+Defined in: [plugin-collab-yjs/src/utils/presence-schema.ts:97](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/presence-schema.ts#L97)
+
+Validate and sanitize an untrusted value into a PeerInfo.
+
+Requires a non-empty string `id`. `displayName`, when present, must be
+a string and is sanitized via [sanitizeDisplayName](sanitizeDisplayName.md); `color`,
+when present, must be a valid color string. Any other shape returns
+`null` so the caller can reject the peer.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `value` | `unknown` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `value` | `unknown` | Untrusted peer payload (e.g. from awareness state). |
 
 ## Returns
 
 `PeerInfo` \| `null`
+
+A sanitized `PeerInfo`, or `null` if the value is invalid.

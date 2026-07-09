@@ -1,0 +1,33 @@
+---
+title: "normalizeVersionHistoryExport"
+description: "@anvilkit/plugin-version-history · normalizeVersionHistoryExport"
+---
+
+```ts
+function normalizeVersionHistoryExport(value): VersionHistoryExport;
+```
+
+Defined in: [utils/archive.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/archive.ts#L75)
+
+Pure validator/normalizer for the [VersionHistoryExport](../interfaces/VersionHistoryExport) archive shape.
+
+The reference adapters call this from `importAll` so a malformed archive is
+rejected with a typed `STORAGE_CORRUPT` [VersionHistoryError](../classes/VersionHistoryError) before
+any mutation, rather than silently storing junk. Exported because it is the
+canonical, side-effect-free gate for hand-built or third-party archives too.
+
+Validates that the envelope is `{ version: 1; snapshots: Entry[] }` and that
+every entry carries a well-formed `meta` and a `PageIR`-shaped `ir`. The
+returned archive is frozen and key-canonicalized (extraneous `meta` fields
+are dropped); entry order is preserved exactly. The `ir` payloads are passed
+through by reference — callers that persist them clone as needed.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `unknown` |
+
+## Returns
+
+[`VersionHistoryExport`](../interfaces/VersionHistoryExport)

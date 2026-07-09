@@ -10,7 +10,7 @@ function irToPuckData(ir): Data;
 Defined in: [ir-to-puck-data.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/ir-to-puck-data.ts#L39)
 
 Reverse of [puckDataToIR](puckDataToIR.md): rebuild a Puck `Data` document
-from a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts).
+from a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts).
 
 This function backs the round-trip guarantee: for serializable,
 already-canonical Puck `Data`, `irToPuckData(puckDataToIR(d))` is
@@ -28,7 +28,7 @@ Returns a plain (un-frozen) Puck `Data` so Puck can mutate it.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts) | The page IR document to rehydrate. |
+| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts) | The page IR document to rehydrate. |
 
 ## Returns
 

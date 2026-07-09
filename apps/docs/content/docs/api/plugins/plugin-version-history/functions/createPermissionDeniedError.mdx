@@ -1,0 +1,32 @@
+---
+title: "createPermissionDeniedError"
+description: "@anvilkit/plugin-version-history · createPermissionDeniedError"
+---
+
+```ts
+function createPermissionDeniedError(operation, detail?): VersionHistoryError;
+```
+
+Defined in: [utils/errors.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/utils/errors.ts#L69)
+
+Convenience constructor for an authorization failure. Host and remote
+adapters call this when the current actor is not permitted to perform a
+version-history `operation` (`"save"`, `"load"`, `"list"`, `"delete"`, or
+`"restore"`), yielding a [VersionHistoryError](../classes/VersionHistoryError) whose
+[VersionHistoryError.code](../classes/VersionHistoryError#code) is `"PERMISSION_DENIED"` so callers can
+discriminate it without string-matching the message.
+
+Equivalent to `new VersionHistoryError("PERMISSION_DENIED", message)`; the
+direct constructor remains available for fully custom messages. An optional
+`detail` is appended to the default message to explain the denial.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `operation` | [`VersionHistoryOperation`](../type-aliases/VersionHistoryOperation) |
+| `detail?` | `string` |
+
+## Returns
+
+[`VersionHistoryError`](../classes/VersionHistoryError)

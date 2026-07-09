@@ -1,0 +1,30 @@
+---
+title: "ConflictResolution"
+description: "@anvilkit/plugin-collab-yjs · ConflictResolution"
+---
+
+```ts
+type ConflictResolution = 
+  | "local"
+  | "remote"
+  | {
+  fields: Readonly<Record<string, Readonly<Record<string, unknown>>>>;
+};
+```
+
+Defined in: [plugin-collab-yjs/src/types/types.ts:533](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L533)
+
+§4.2.3 — the host's chosen resolution for a same-node prop conflict,
+returned from [CreateYjsAdapterOptions.resolveConflict](../interfaces/CreateYjsAdapterOptions#resolveconflict):
+
+- `"remote"` — keep the converged remote-wins value (the default
+  last-write-wins outcome). Nothing is written back.
+- `"local"` — re-assert the LOCAL peer's value for EVERY conflicting
+  field reported on the event ([ConflictEvent.fields](../interfaces/ConflictEvent#fields)).
+- `{ fields }` — a precise field-level merge. `fields` is keyed by node
+  id; each entry maps a conflicting prop key to the value to write.
+  Listed fields are written back; unlisted conflicting fields keep the
+  converged remote-wins value.
+
+The chosen non-`"remote"` resolution is written into the shared `Y.Doc`
+(replicated to every peer) and surfaced to the local editor.
