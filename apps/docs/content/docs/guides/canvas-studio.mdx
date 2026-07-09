@@ -96,8 +96,144 @@ import {
   when a `canvasSnapshotAdapter` is supplied (otherwise an in-process adapter is
   used).
 
-<Callout type="info" title="Status (alpha, v0.1.3)">
-API may change before `1.0`. `@anvilkit/core`, `@anvilkit/design-block`, and
-`@anvilkit/plugin-asset-manager` ship as direct dependencies of this plugin.
+## 6. Headless documents (`@anvilkit/canvas-core`)
+
+The data layer works without React or Konva — build, edit, and inspect
+documents anywhere (server, worker, tests):
+
+```ts
+import {
+  applyCommand,
+  applyCommands,
+  createCanvasIR,
+  createPage,
+  createRect,
+  insertNode,
+} from "@anvilkit/canvas-core";
+
+// Build a one-page document.
+const page = createPage({ id: "p1" });
+let ir = createCanvasIR({ id: "doc-1", title: "Launch poster", pages: [page] });
+ir = insertNode(ir, {
+  parentId: page.root.id,
+  node: createRect({ id: "hero", bounds: { width: 640, height: 360 } }),
+});
+
+// Every mutation is a reversible command: `applyCommand` returns the next
+// document plus a compact inverse for your undo stack.
+const moved = applyCommand(ir, {
+  type: "node.move",
+  nodeId: "hero",
+  from: { x: 0, y: 0 },
+  to: { x: 120, y: 80 },
+});
+ir = moved.ir;
+const undo = moved.inverse;
+
+// Batches apply all-or-nothing, invert as ONE step, and derive granular
+// change records for autosave/collab subscribers.
+const batch = applyCommands(
+  ir,
+  [{ type: "node.move", nodeId: "hero", from: { x: 120, y: 80 }, to: { x: 0, y: 0 } }],
+  { label: "reset layout" },
+);
+ir = batch.ir; // batch.inverse undoes the whole batch; batch.changes lists deltas
+```
+
+## 7. Export to SVG and PDF
+
+```ts
+import {
+  serializeDocumentToPdf,
+  serializePageToSvg,
+} from "@anvilkit/canvas-core";
+
+// SVG: per page (by id or index), async, with a structured warnings
+// contract — fidelity gaps become `warnings`, not throws.
+const { svg, warnings } = await serializePageToSvg(ir, "p1", {
+  images: "embed", // inline image assets as data: URIs
+  pretty: true,
+});
+if (warnings.length) console.warn(warnings);
+
+// PDF: raster-embed — supply pre-rendered page bitmaps (e.g. from the
+// editor's `rasterizePage`) and get one PDF page per canvas page.
+const { pdf } = await serializeDocumentToPdf(ir, {
+  rasters: [{ pageId: "p1", image: pngBytesOrDataUrl }],
+  title: "Launch poster",
+});
+```
+
+For host export menus, `@anvilkit/plugin-export-canvas` packages these
+serializers as ready-made `canvas-json` / `canvas-svg` / `canvas-pdf` /
+`canvas-png` export formats.
+
+## 8. Standalone editor mount (`@anvilkit/canvas-editor`)
+
+The full workspace shell also mounts outside `<Studio>` — Konva renders
+client-side only, so load it with `ssr: false` in Next.js hosts:
+
+```tsx
+"use client";
+
+import { CanvasWorkspace } from "@anvilkit/canvas-editor";
+import "@anvilkit/canvas-editor/styles.css";
+
+export function DesignSurface({ initial }: { initial: CanvasIR }) {
+  return (
+    <CanvasWorkspace
+      storeId="design-1" // stable per document — keeps rail/dock UI state
+      title="Launch poster"
+      initialIR={initial}
+      onChange={(ir) => save(ir)} // coarse; `onChanges` delivers granular deltas
+      onBack={() => close()}
+    />
+  );
+}
+```
+
+`CanvasWorkspace` accepts every `CanvasStudio` prop (`brandKit`, `messages`,
+`extensions`, `onStageReady`, …) plus shell seams (`headerPlugins`, `dockItems`,
+`panels`, `inspector`). Full surface: the
+[canvas-editor API reference](/api/canvas-editor).
+
+## 9. Architecture & boundaries
+
+The canvas subsystem is a strict stack — each layer only uses the ones below:
+
+```
+host app (demo, docs, your product)
+  └─ @anvilkit/core <Studio> ── @anvilkit/plugin-canvas-studio (overlay, DesignBlock
+       │                        round-trip, design:// resolver, persistence adapters)
+       └─ @anvilkit/plugin-export-canvas (host export formats)
+            └─ @anvilkit/canvas-editor (React 19 + Konva UI: workspace, tools,
+                 panels, history, a11y, optional ./collab subpath)
+                 └─ @anvilkit/canvas-core (headless IR: schema, commands,
+                      geometry, serializers — deps: zod + pdf-lib ONLY)
+```
+
+Rules the packages enforce (and CI gates):
+
+- `canvas-core` never imports React, Konva, or the DOM — its release gate scans
+  for it. All state changes are reversible `CanvasCommand`s.
+- IR validation preserves unknown keys (forward compatibility for collab and
+  newer peers); schema migrations go through the migration registry.
+- Built-in node kinds and command types cannot be shadowed by extensions.
+- yjs is optional and confined to the `./collab` subpath.
+- Bundle budgets: `canvas-core` ≤ 80 KB gzipped, `canvas-editor` ≤ 400 KB
+  gzipped (`.size-limit.json` in each package).
+
+**Existing editor surface is the baseline.** The workspace shell (header, tool
+rail, dock, page strip), the panels (layers, inspector, brand, elements), the
+ten tools, keyboard accessibility, and undo/redo already ship — build on these
+surfaces instead of recreating them. API reference:
+[canvas-core](/api/canvas-core) · [canvas-editor](/api/canvas-editor) ·
+[plugin-canvas-studio](/api/plugins/plugin-canvas-studio) ·
+[plugin-export-canvas](/api/plugins/plugin-export-canvas).
+
+<Callout type="info" title="Status (alpha)">
+API may change before `1.0` — versions track each package's `package.json`.
+`@anvilkit/core`, `@anvilkit/design-block`, and `@anvilkit/plugin-asset-manager`
+ship as direct dependencies of this plugin.
 </Callout>
 

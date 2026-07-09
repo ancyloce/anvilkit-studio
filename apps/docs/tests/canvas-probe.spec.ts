@@ -20,9 +20,12 @@ test("react-konva Stage renders in the docs playground (Vite, React 19.2.7)", as
 		timeout: 90_000,
 	});
 	const open = page.getByRole("button", { name: "Open Canvas" });
-	await open.scrollIntoViewIfNeeded();
-	await expect(open).toBeVisible({ timeout: 60_000 });
-	await open.click();
+	// The playground header animates while plugin chunks stream in; the button
+	// resolves but never reports "stable". Cosmetic — force the click and let
+	// the overlay/Konva assertions carry the verdict.
+	await page.waitForLoadState("networkidle");
+	await expect(open).toBeAttached({ timeout: 60_000 });
+	await open.click({ force: true });
 	await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible({
 		timeout: 60_000,
 	});

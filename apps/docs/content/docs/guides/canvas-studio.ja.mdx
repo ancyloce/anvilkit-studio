@@ -99,8 +99,147 @@ import {
   キャンバスを Version History プラグインに接続します（指定されていない場合は
   プロセス内アダプターが使用されます）。
 
-<Callout type="info" title="ステータス（alpha、v0.1.3）">
-API は `1.0` より前に変更される可能性があります。`@anvilkit/core`、
-`@anvilkit/design-block`、`@anvilkit/plugin-asset-manager` は、このプラグインの
-直接依存関係として同梱されています。
+## 6. ヘッドレスドキュメント（`@anvilkit/canvas-core`）
+
+データ層は React にも Konva にも依存しません — サーバー、Worker、テストなど
+どこでもドキュメントを構築・編集・検査できます:
+
+```ts
+import {
+  applyCommand,
+  applyCommands,
+  createCanvasIR,
+  createPage,
+  createRect,
+  insertNode,
+} from "@anvilkit/canvas-core";
+
+// 1 ページのドキュメントを構築する。
+const page = createPage({ id: "p1" });
+let ir = createCanvasIR({ id: "doc-1", title: "Launch poster", pages: [page] });
+ir = insertNode(ir, {
+  parentId: page.root.id,
+  node: createRect({ id: "hero", bounds: { width: 640, height: 360 } }),
+});
+
+// すべての変更は可逆コマンド: `applyCommand` は次のドキュメントと、
+// アンドゥスタック用のコンパクトな逆コマンドを返します。
+const moved = applyCommand(ir, {
+  type: "node.move",
+  nodeId: "hero",
+  from: { x: 0, y: 0 },
+  to: { x: 120, y: 80 },
+});
+ir = moved.ir;
+const undo = moved.inverse;
+
+// バッチは all-or-nothing で適用され、1 つのアンドゥ単位として反転し、
+// 自動保存/コラボ購読者向けの細粒度な変更レコードを生成します。
+const batch = applyCommands(
+  ir,
+  [{ type: "node.move", nodeId: "hero", from: { x: 120, y: 80 }, to: { x: 0, y: 0 } }],
+  { label: "reset layout" },
+);
+ir = batch.ir; // batch.inverse でバッチ全体を取り消し。batch.changes が差分一覧
+```
+
+## 7. SVG / PDF へのエクスポート
+
+```ts
+import {
+  serializeDocumentToPdf,
+  serializePageToSvg,
+} from "@anvilkit/canvas-core";
+
+// SVG: ページ単位（id またはインデックス）、非同期、構造化された warnings
+// 契約付き — 忠実度のギャップは throw ではなく `warnings` で報告されます。
+const { svg, warnings } = await serializePageToSvg(ir, "p1", {
+  images: "embed", // 画像アセットを data: URI としてインライン化
+  pretty: true,
+});
+if (warnings.length) console.warn(warnings);
+
+// PDF: ラスター埋め込み — 事前レンダリングしたページ画像（例: エディターの
+// `rasterizePage`）を渡すと、キャンバスページごとに 1 ページの PDF になります。
+const { pdf } = await serializeDocumentToPdf(ir, {
+  rasters: [{ pageId: "p1", image: pngBytesOrDataUrl }],
+  title: "Launch poster",
+});
+```
+
+ホストのエクスポートメニュー向けには、`@anvilkit/plugin-export-canvas` が
+これらのシリアライザーを `canvas-json` / `canvas-svg` / `canvas-pdf` /
+`canvas-png` のエクスポート形式として提供します。
+
+## 8. エディターの単独マウント（`@anvilkit/canvas-editor`）
+
+ワークスペースシェルは `<Studio>` の外側にもマウントできます — Konva は
+クライアントサイドでのみレンダリングされるため、Next.js ホストでは
+`ssr: false` で読み込んでください:
+
+```tsx
+"use client";
+
+import { CanvasWorkspace } from "@anvilkit/canvas-editor";
+import "@anvilkit/canvas-editor/styles.css";
+
+export function DesignSurface({ initial }: { initial: CanvasIR }) {
+  return (
+    <CanvasWorkspace
+      storeId="design-1" // ドキュメントごとに安定させる — レール/ドックの UI 状態を保持
+      title="Launch poster"
+      initialIR={initial}
+      onChange={(ir) => save(ir)} // 粗粒度。細粒度の差分は `onChanges`
+      onBack={() => close()}
+    />
+  );
+}
+```
+
+`CanvasWorkspace` はすべての `CanvasStudio` プロパティ（`brandKit`、
+`messages`、`extensions`、`onStageReady` など）に加え、シェルのシーム
+（`headerPlugins`、`dockItems`、`panels`、`inspector`）を受け付けます。
+全 API は [canvas-editor API リファレンス](/api/canvas-editor) を参照してください。
+
+## 9. アーキテクチャと境界
+
+キャンバスサブシステムは厳密なレイヤースタックです — 各レイヤーは下位の
+レイヤーのみを利用します:
+
+```
+host app (demo, docs, your product)
+  └─ @anvilkit/core <Studio> ── @anvilkit/plugin-canvas-studio (overlay, DesignBlock
+       │                        round-trip, design:// resolver, persistence adapters)
+       └─ @anvilkit/plugin-export-canvas (host export formats)
+            └─ @anvilkit/canvas-editor (React 19 + Konva UI: workspace, tools,
+                 panels, history, a11y, optional ./collab subpath)
+                 └─ @anvilkit/canvas-core (headless IR: schema, commands,
+                      geometry, serializers — deps: zod + pdf-lib ONLY)
+```
+
+各パッケージが強制する（CI ゲートが保証する）ルール:
+
+- `canvas-core` は React・Konva・DOM を決してインポートしません — リリース
+  ゲートがこれをスキャンします。すべての状態変更は可逆な `CanvasCommand` です。
+- IR バリデーションは未知フィールドを保持します（コラボや新しいピアへの
+  前方互換性）。スキーマ移行はマイグレーションレジストリを経由します。
+- 組み込みのノード種別とコマンド種別は拡張で上書きできません。
+- yjs はオプションで、`./collab` サブパスに限定されます。
+- バンドル予算: `canvas-core` ≤ 80 KB gzip、`canvas-editor` ≤ 400 KB gzip
+  （各パッケージの `.size-limit.json`）。
+
+**既存のエディター UI がベースラインです。** ワークスペースシェル（ヘッダー、
+ツールレール、ドック、ページストリップ）、各パネル（レイヤー、インスペクター、
+ブランド、エレメント）、10 種のツール、キーボードアクセシビリティ、
+アンドゥ/リドゥはすでに同梱されています — 再実装せず、これらの上に構築して
+ください。API リファレンス:
+[canvas-core](/api/canvas-core) · [canvas-editor](/api/canvas-editor) ·
+[plugin-canvas-studio](/api/plugins/plugin-canvas-studio) ·
+[plugin-export-canvas](/api/plugins/plugin-export-canvas)。
+
+<Callout type="info" title="ステータス（alpha）">
+API は `1.0` より前に変更される可能性があります — バージョンは各パッケージの
+`package.json` に従います。`@anvilkit/core`、`@anvilkit/design-block`、
+`@anvilkit/plugin-asset-manager` は、このプラグインの直接依存関係として
+同梱されています。
 </Callout>

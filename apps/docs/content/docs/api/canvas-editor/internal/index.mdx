@@ -98,7 +98,7 @@ description: "@anvilkit/canvas-editor · index"
 | [selectTool](variables/selectTool.md) | - |
 | [SMART\_GUIDE\_COLOR](variables/SMART_GUIDE_COLOR.md) | - |
 | [SMART\_GUIDE\_DASH](variables/SMART_GUIDE_DASH.md) | - |
-| [textTool](variables/textTool.md) | MVP-7: single click commits exactly one node.create on pointerdown (no drag, no pointermove side effects). Editor overlay opens on the same event — see &lt;TextEditorOverlay&gt;. pointermove/pointerup are no-ops so the MVP-7 single-command assertion holds for the full down→move*→up sequence. |
+| [textTool](variables/textTool.md) | MVP-7: single click commits exactly one node.create on pointerdown (no drag, no pointermove side effects). Editor overlay opens on the same event — see `<TextEditorOverlay>`. pointermove/pointerup are no-ops so the MVP-7 single-command assertion holds for the full down→move*→up sequence. |
 | [TOOL\_LABELS](variables/TOOL_LABELS.md) | Human-readable names for the PRD FR-009 tools, used for screen-reader announcements (and reusable by hosts that build a tool palette — the editor itself ships no toolbar; tool selection is host-driven). Keep in sync with [ToolId](../index/type-aliases/ToolId). |
 | [TOOL\_RAIL\_ITEMS](variables/TOOL_RAIL_ITEMS.md) | Default tool-rail order. Drawing tools first, then the AI tools. Hosts can pass a narrower list to `<ToolRail tools=…>` (e.g. to hide pen/AI). |
 
@@ -158,6 +158,6 @@ description: "@anvilkit/canvas-editor · index"
 | [SmartGuideOverlay](functions/SmartGuideOverlay.md) | - |
 | [snapPoint](functions/snapPoint.md) | Snap a single point (used by draw tools — width/height = 0 collapses every candidate edge to the same coord). Honors viewportStore's grid + object-snap toggles. Pass `excludeIds` to ignore specific nodes (e.g. the node being dragged in select mode). |
 | [TextEditorOverlay](functions/TextEditorOverlay.md) | - |
-| [ToolInteractionLayer](functions/ToolInteractionLayer.md) | Bridges Konva.Stage pointer events to the active tool from `toolStore`. Renders no DOM — pure side-effect component. Mounts as a sibling of &lt;CanvasStage&gt; inside the CanvasStudioContext so unmount order detaches listeners before &lt;CanvasStage&gt; calls `stage.destroy()`. |
+| [ToolInteractionLayer](functions/ToolInteractionLayer.md) | Bridges Konva.Stage pointer events to the active tool from `toolStore`. Renders no DOM — pure side-effect component. Mounts as a sibling of `<CanvasStage>` inside the CanvasStudioContext so unmount order detaches listeners before `<CanvasStage>` calls `stage.destroy()`. |
 | [ungroupSelection](functions/ungroupSelection.md) | Dissolve every selected (non-root) group, lifting its children into the parent, then select the lifted children. Returns the lifted child ids. Multiple groups dissolve as ONE undo entry (a single `commitBatch`); a lone group stays a plain commit. Commands are collected from the pre-gesture IR — the selected groups are distinct, so each `node.ungroup` resolves its group by id regardless of how earlier ungroups in the batch reshaped the tree. |
 | [useCanvasAsset](functions/useCanvasAsset.md) | - |

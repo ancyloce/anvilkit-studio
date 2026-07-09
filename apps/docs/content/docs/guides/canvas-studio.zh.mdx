@@ -91,7 +91,141 @@ import {
 - 当提供了 `canvasSnapshotAdapter` 时，`createCanvasSnapshotBridge` 将画布
   接入 Version History 插件（否则使用进程内适配器）。
 
-<Callout type="info" title="状态（alpha，v0.1.3）">
-API 在 `1.0` 之前可能会变更。`@anvilkit/core`、`@anvilkit/design-block` 和
+## 6. 无头文档（`@anvilkit/canvas-core`）
+
+数据层不依赖 React 或 Konva——可在任意环境（服务端、Worker、测试）中构建、
+编辑和检查文档：
+
+```ts
+import {
+  applyCommand,
+  applyCommands,
+  createCanvasIR,
+  createPage,
+  createRect,
+  insertNode,
+} from "@anvilkit/canvas-core";
+
+// 构建单页文档。
+const page = createPage({ id: "p1" });
+let ir = createCanvasIR({ id: "doc-1", title: "Launch poster", pages: [page] });
+ir = insertNode(ir, {
+  parentId: page.root.id,
+  node: createRect({ id: "hero", bounds: { width: 640, height: 360 } }),
+});
+
+// 每次变更都是可逆命令：`applyCommand` 返回新文档以及一个紧凑的
+// 逆命令，供你的撤销栈使用。
+const moved = applyCommand(ir, {
+  type: "node.move",
+  nodeId: "hero",
+  from: { x: 0, y: 0 },
+  to: { x: 120, y: 80 },
+});
+ir = moved.ir;
+const undo = moved.inverse;
+
+// 批量命令以"全有或全无"方式应用，作为单个撤销步骤反转，
+// 并派生细粒度变更记录供自动保存 / 协作订阅方使用。
+const batch = applyCommands(
+  ir,
+  [{ type: "node.move", nodeId: "hero", from: { x: 120, y: 80 }, to: { x: 0, y: 0 } }],
+  { label: "reset layout" },
+);
+ir = batch.ir; // batch.inverse 可整体撤销；batch.changes 列出增量
+```
+
+## 7. 导出 SVG 与 PDF
+
+```ts
+import {
+  serializeDocumentToPdf,
+  serializePageToSvg,
+} from "@anvilkit/canvas-core";
+
+// SVG：按页导出（页 id 或索引），异步，带结构化 warnings 契约——
+// 保真度缺口以 `warnings` 报告而非抛错。
+const { svg, warnings } = await serializePageToSvg(ir, "p1", {
+  images: "embed", // 将图像资产内联为 data: URI
+  pretty: true,
+});
+if (warnings.length) console.warn(warnings);
+
+// PDF：栅格嵌入——提供预渲染的页面位图（例如来自编辑器的
+// `rasterizePage`），每个画布页生成一页 PDF。
+const { pdf } = await serializeDocumentToPdf(ir, {
+  rasters: [{ pageId: "p1", image: pngBytesOrDataUrl }],
+  title: "Launch poster",
+});
+```
+
+面向宿主导出菜单，`@anvilkit/plugin-export-canvas` 将这些序列化器封装为
+现成的 `canvas-json` / `canvas-svg` / `canvas-pdf` / `canvas-png` 导出格式。
+
+## 8. 独立挂载编辑器（`@anvilkit/canvas-editor`）
+
+完整的工作区外壳也可以在 `<Studio>` 之外挂载——Konva 仅在客户端渲染，
+因此在 Next.js 宿主中请使用 `ssr: false` 加载：
+
+```tsx
+"use client";
+
+import { CanvasWorkspace } from "@anvilkit/canvas-editor";
+import "@anvilkit/canvas-editor/styles.css";
+
+export function DesignSurface({ initial }: { initial: CanvasIR }) {
+  return (
+    <CanvasWorkspace
+      storeId="design-1" // 每个文档保持稳定——保存侧栏/面板 UI 状态
+      title="Launch poster"
+      initialIR={initial}
+      onChange={(ir) => save(ir)} // 粗粒度；`onChanges` 提供细粒度增量
+      onBack={() => close()}
+    />
+  );
+}
+```
+
+`CanvasWorkspace` 接受全部 `CanvasStudio` 属性（`brandKit`、`messages`、
+`extensions`、`onStageReady` 等）以及外壳插槽（`headerPlugins`、`dockItems`、
+`panels`、`inspector`）。完整 API 见
+[canvas-editor API 参考](/api/canvas-editor)。
+
+## 9. 架构与边界
+
+画布子系统是严格分层的栈——每一层只依赖其下层：
+
+```
+host app (demo, docs, your product)
+  └─ @anvilkit/core <Studio> ── @anvilkit/plugin-canvas-studio (overlay, DesignBlock
+       │                        round-trip, design:// resolver, persistence adapters)
+       └─ @anvilkit/plugin-export-canvas (host export formats)
+            └─ @anvilkit/canvas-editor (React 19 + Konva UI: workspace, tools,
+                 panels, history, a11y, optional ./collab subpath)
+                 └─ @anvilkit/canvas-core (headless IR: schema, commands,
+                      geometry, serializers — deps: zod + pdf-lib ONLY)
+```
+
+各包强制执行（且由 CI 门禁保障）的规则：
+
+- `canvas-core` 绝不导入 React、Konva 或 DOM——其发布门禁会扫描此项。
+  所有状态变更都是可逆的 `CanvasCommand`。
+- IR 校验保留未知字段（为协作与更新版本的对端保持前向兼容）；
+  Schema 迁移必须通过迁移注册表。
+- 内置节点类型与命令类型不可被扩展覆盖。
+- yjs 是可选依赖，仅限 `./collab` 子路径。
+- 体积预算：`canvas-core` ≤ 80 KB gzip，`canvas-editor` ≤ 400 KB gzip
+  （各包内的 `.size-limit.json`）。
+
+**既有编辑器界面即是基线。** 工作区外壳（头部、工具栏、侧栏、页面条）、
+各面板（图层、检查器、品牌、元素）、十个工具、键盘无障碍支持以及撤销/重做
+均已内置——请在这些界面之上构建，而不是重造它们。API 参考：
+[canvas-core](/api/canvas-core) · [canvas-editor](/api/canvas-editor) ·
+[plugin-canvas-studio](/api/plugins/plugin-canvas-studio) ·
+[plugin-export-canvas](/api/plugins/plugin-export-canvas)。
+
+<Callout type="info" title="状态（alpha）">
+API 在 `1.0` 之前可能会变更——版本以各包的 `package.json` 为准。
+`@anvilkit/core`、`@anvilkit/design-block` 和
 `@anvilkit/plugin-asset-manager` 作为此插件的直接依赖一同发布。
 </Callout>
