@@ -44,7 +44,7 @@
     "@anvilkit/pricing-minimal": "workspace:*",
     "@anvilkit/section": "workspace:*",
     "@anvilkit/statistics": "workspace:*",
-    "@biomejs/biome": "2.5.1",
+    "@biomejs/biome": "2.5.3",
     "@changesets/cli": "^2.31.0",
     "@puckeditor/core": "^0.22.0",
     "@rsbuild/plugin-react": "^2.1.0",
