@@ -22,6 +22,9 @@ import {
 	withoutHeaderActions,
 } from "@anvilkit/core";
 import type { AssetRegistry } from "@anvilkit/plugin-asset-manager";
+// Version-only JSON import: keeps the advisory meta in sync with the installed
+// plugin without pulling its code into the eager bundle (canvas-m0-005).
+import canvasStudioPackageJson from "@anvilkit/plugin-canvas-studio/package.json";
 import type { Config } from "@puckeditor/core";
 import { FileCode, FileCode2, Frame, History } from "lucide-react";
 import { createElement } from "react";
@@ -279,7 +282,7 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 	{
 		id: "@anvilkit/plugin-canvas-studio",
 		name: "Canvas Studio",
-		version: "0.1.1",
+		version: canvasStudioPackageJson.version,
 		coreVersion: "^0.1.0-alpha",
 		description:
 			"Mounts the Canvas Studio overlay, registers the design-block quick-add, and exposes the design:// asset resolver.",
