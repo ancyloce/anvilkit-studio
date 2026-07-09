@@ -111,6 +111,18 @@ jobs:
             pnpm --filter "$pkg" check:all
           done
 
+      # Milestone 0 (`canvas-m0-003`): the canvas package release gates — the
+      # same chain as the Phase 3 packages plus the React/Konva-free source
+      # scan on canvas-core. Two discrete steps (not loop entries) so a budget
+      # or API-snapshot failure pinpoints its package, per FR-000. Runs after
+      # `build` (bundle-budget inspects dist/; the editor's full build also
+      # regenerates dist/styles.css, which a bare `rslib build` wipes).
+      - name: Run @anvilkit/canvas-core release gates
+        run: pnpm --filter @anvilkit/canvas-core check:all
+
+      - name: Run @anvilkit/canvas-editor release gates
+        run: pnpm --filter @anvilkit/canvas-editor check:all
+
       # Phase 4 (`phase4-016`): per-package gzip budgets via size-limit.
       # Covers the publishable runtime + plugin + component packages.
       # I2-6 added the canvas packages (canvas-core, canvas-editor,
