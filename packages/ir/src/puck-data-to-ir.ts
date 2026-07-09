@@ -4,7 +4,7 @@ import type {
 	PageIRAsset,
 	PageIRMetadata,
 	PageIRNode,
-} from "@anvilkit/core/types";
+} from "@anvilkit/contracts";
 import type { Config, Data } from "@puckeditor/core";
 import { identifySlots } from "./identify-slots.js";
 import { collectNodeOwnAssets } from "./internal/asset-walker.js";

@@ -11,7 +11,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/phase-6-tasks.md | phase-6-tasks.md} for the M10 atomic task list.
  */
 
-import type { PageIR, PageIRNode } from "@anvilkit/core/types";
+import type { PageIR, PageIRNode } from "@anvilkit/contracts";
 
 import type { Mutable } from "../internal/types.js";
 import { type NodeMetaValidationIssue, PageIRNodeMetaError } from "./error.js";
@@ -49,7 +49,7 @@ export interface PageIRMigrationOptions {
  * - Pure no-op when `from === to` AND every node has `meta === undefined`.
  *   Returns the original reference.
  * - Validates every `node.meta` (when present) against the runtime
- *   caps documented on `PageIRNodeMeta` (from `@anvilkit/core`).
+ *   caps documented on `PageIRNodeMeta` (from `@anvilkit/contracts`).
  *   Throws {@link PageIRNodeMetaError} on the first invalid node.
  * - Returns a frozen IR with a freshly rebuilt node spine when
  *   validation succeeds with at least one populated `meta`. The

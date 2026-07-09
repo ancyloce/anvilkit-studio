@@ -1,0 +1,9 @@
+[
+	{
+		"name": "@anvilkit/contracts",
+		"path": "dist/index.js",
+		"limit": "1 KB",
+		"gzip": true,
+		"ignore": ["@puckeditor/core"]
+	}
+]

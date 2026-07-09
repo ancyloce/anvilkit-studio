@@ -2,7 +2,7 @@ import type {
 	AiComponentSchema,
 	AiSectionContext,
 	AiSectionPatch,
-} from "@anvilkit/core/types";
+} from "@anvilkit/contracts";
 import { describe, expect, it } from "vitest";
 import { validateAiSectionPatch } from "../section.js";
 

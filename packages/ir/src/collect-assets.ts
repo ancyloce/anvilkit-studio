@@ -1,4 +1,4 @@
-import type { PageIRAsset, PageIRNode } from "@anvilkit/core/types";
+import type { PageIRAsset, PageIRNode } from "@anvilkit/contracts";
 import { walkNodeIntoMap } from "./internal/asset-walker.js";
 import { deriveAssetId } from "./internal/derive-asset-id.js";
 

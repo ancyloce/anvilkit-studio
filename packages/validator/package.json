@@ -49,6 +49,7 @@
 		}
 	},
 	"dependencies": {
+		"@anvilkit/contracts": "workspace:*",
 		"@anvilkit/schema": "workspace:*"
 	},
 	"scripts": {
@@ -71,7 +72,6 @@
 	},
 	"devDependencies": {
 		"@anvilkit/biome-config": "workspace:*",
-		"@anvilkit/core": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
 		"@puckeditor/core": "^0.22.0",

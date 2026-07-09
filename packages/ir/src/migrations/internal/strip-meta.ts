@@ -8,7 +8,7 @@
  * always returns a frozen result.
  */
 
-import type { PageIR, PageIRNode } from "@anvilkit/core/types";
+import type { PageIR, PageIRNode } from "@anvilkit/contracts";
 
 import type { Mutable } from "../../internal/types.js";
 

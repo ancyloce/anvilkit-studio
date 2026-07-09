@@ -1,4 +1,4 @@
-import type { PageIRNode } from "@anvilkit/core/types";
+import type { PageIRNode } from "@anvilkit/contracts";
 import type { Config } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { configToAiSectionContext } from "../section.js";

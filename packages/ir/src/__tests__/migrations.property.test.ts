@@ -14,7 +14,7 @@
  * with a documented changeset.
  */
 
-import type { PageIR, PageIRNode, PageIRNodeMeta } from "@anvilkit/core/types";
+import type { PageIR, PageIRNode, PageIRNodeMeta } from "@anvilkit/contracts";
 import * as fc from "fast-check";
 import { describe, expect, it } from "vitest";
 

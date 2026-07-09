@@ -48,6 +48,9 @@
 			"optional": false
 		}
 	},
+	"dependencies": {
+		"@anvilkit/contracts": "workspace:*"
+	},
 	"scripts": {
 		"build": "rslib build",
 		"dev": "rslib build --watch",
@@ -68,7 +71,6 @@
 	},
 	"devDependencies": {
 		"@anvilkit/biome-config": "workspace:*",
-		"@anvilkit/core": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
 		"@puckeditor/core": "^0.22.0",

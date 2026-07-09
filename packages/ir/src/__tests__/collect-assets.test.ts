@@ -1,4 +1,4 @@
-import type { PageIRNode } from "@anvilkit/core/types";
+import type { PageIRNode } from "@anvilkit/contracts";
 import { describe, expect, it } from "vitest";
 import { collectAssets } from "../collect-assets.js";
 

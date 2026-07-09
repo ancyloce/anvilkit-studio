@@ -7,14 +7,14 @@
  * {@link import("../index.js").downgradePageIR | downgradePageIR},
  * both of which call into this module to enforce the runtime
  * contract documented on
- * {@link import("@anvilkit/core/types").PageIRNodeMeta | PageIRNodeMeta}.
+ * {@link import("@anvilkit/contracts").PageIRNodeMeta | PageIRNodeMeta}.
  *
  * Caps live here (not on the type surface) so that
- * `@anvilkit/core/types/ir.ts` stays runtime-free and consumers who
+ * `@anvilkit/contracts`'s `ir.ts` stays runtime-free and consumers who
  * only `import type { PageIRNodeMeta }` pay zero bytes.
  */
 
-import type { PageIRNodeMeta } from "@anvilkit/core/types";
+import type { PageIRNodeMeta } from "@anvilkit/contracts";
 import { z } from "zod";
 
 import { type NodeMetaValidationIssue, PageIRNodeMetaError } from "../error.js";

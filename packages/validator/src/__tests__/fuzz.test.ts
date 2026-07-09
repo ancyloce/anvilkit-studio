@@ -1,4 +1,4 @@
-import type { AiComponentSchema } from "@anvilkit/core/types";
+import type { AiComponentSchema } from "@anvilkit/contracts";
 import { describe, expect, it } from "vitest";
 import { validateAiOutput } from "../validate-ai-output.js";
 

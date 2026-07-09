@@ -1,4 +1,4 @@
-import type { AiFieldSchema } from "@anvilkit/core/types";
+import type { AiFieldSchema } from "@anvilkit/contracts";
 import {
 	array,
 	boolean,

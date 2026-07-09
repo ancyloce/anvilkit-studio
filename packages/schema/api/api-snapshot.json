@@ -663,7 +663,7 @@
 					},
 					{
 						"kind": "text",
-						"text": ".\n\nField-name reconciliation with core's "
+						"text": ".\n\nField-name reconciliation with the shared "
 					},
 					{
 						"kind": "code",
@@ -671,11 +671,11 @@
 					},
 					{
 						"kind": "text",
-						"text": "\n("
+						"text": " contract\n("
 					},
 					{
 						"kind": "code",
-						"text": "`@anvilkit/core`"
+						"text": "`@anvilkit/contracts`"
 					},
 					{
 						"kind": "text",
@@ -683,7 +683,7 @@
 					},
 					{
 						"kind": "code",
-						"text": "`packages/core/src/types/pages.ts`"
+						"text": "`packages/contracts/src/page.ts`"
 					},
 					{
 						"kind": "text",
@@ -695,7 +695,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " into the rail/breadcrumb sidecar losslessly:\n\n| This schema   | core "
+						"text": " into the rail/breadcrumb sidecar losslessly:\n\n| This schema   | "
 					},
 					{
 						"kind": "code",
@@ -703,7 +703,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " | Note                          |\n| :------------ | :------------------- | :---------------------------- |\n| "
+						"text": "      | Note                          |\n| :------------ | :------------------- | :---------------------------- |\n| "
 					},
 					{
 						"kind": "code",
@@ -775,7 +775,7 @@
 					},
 					{
 						"kind": "text",
-						"text": "   | —                    | new; no core equivalent yet   |\n\nZod v4 idioms (mirrors "
+						"text": "   | —                    | new; no contract field yet    |\n\nZod v4 idioms (mirrors "
 					},
 					{
 						"kind": "code",
@@ -1135,12 +1135,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/types/ai.ts",
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/ai.ts",
 							"qualifiedName": "AiGenerationContext"
 						},
 						"name": "AiGenerationContext",
-						"package": "@anvilkit/core"
+						"package": "@anvilkit/contracts"
 					}
 				}
 			]
@@ -1206,12 +1206,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/types/ai.ts",
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/ai.ts",
 							"qualifiedName": "AiFieldSchema"
 						},
 						"name": "AiFieldSchema",
-						"package": "@anvilkit/core"
+						"package": "@anvilkit/contracts"
 					}
 				}
 			]

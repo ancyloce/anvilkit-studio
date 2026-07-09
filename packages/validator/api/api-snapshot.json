@@ -24,7 +24,7 @@
 					},
 					{
 						"kind": "text",
-						"text": " (Phase 3) owns the runtime check that emits\nthese; Core just owns the shape so validator output flows through\na stable contract."
+						"text": " owns the runtime check that emits these;\nthis package just owns the shape so validator output flows through\na stable contract."
 					}
 				]
 			},
@@ -211,7 +211,7 @@
 								"type": "reference",
 								"target": 1,
 								"name": "AiValidationIssue",
-								"package": "@anvilkit/core"
+								"package": "@anvilkit/contracts"
 							}
 						}
 					}
@@ -482,12 +482,12 @@
 									"elementType": {
 										"type": "reference",
 										"target": {
-											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/ai.ts",
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/ai.ts",
 											"qualifiedName": "AiComponentSchema"
 										},
 										"name": "AiComponentSchema",
-										"package": "@anvilkit/core"
+										"package": "@anvilkit/contracts"
 									}
 								}
 							}
@@ -497,7 +497,7 @@
 						"type": "reference",
 						"target": 5,
 						"name": "AiValidationResult",
-						"package": "@anvilkit/core"
+						"package": "@anvilkit/contracts"
 					}
 				}
 			]
@@ -978,38 +978,38 @@
 			"qualifiedName": ""
 		},
 		"1": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/ai.ts",
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/ai.ts",
 			"qualifiedName": "AiValidationIssue"
 		},
 		"2": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/ai.ts",
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/ai.ts",
 			"qualifiedName": "AiValidationIssue.path"
 		},
 		"3": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/ai.ts",
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/ai.ts",
 			"qualifiedName": "AiValidationIssue.message"
 		},
 		"4": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/ai.ts",
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/ai.ts",
 			"qualifiedName": "AiValidationIssue.severity"
 		},
 		"5": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/ai.ts",
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/ai.ts",
 			"qualifiedName": "AiValidationResult"
 		},
 		"6": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/ai.ts",
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/ai.ts",
 			"qualifiedName": "AiValidationResult.valid"
 		},
 		"7": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/ai.ts",
+			"packageName": "@anvilkit/contracts",
+			"packagePath": "src/ai.ts",
 			"qualifiedName": "AiValidationResult.issues"
 		},
 		"8": {

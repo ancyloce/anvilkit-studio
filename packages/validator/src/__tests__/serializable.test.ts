@@ -11,7 +11,7 @@
  * See `docs/tasks/phase5-019-phase4-carryovers.md` § F-3.
  */
 
-import type { AiComponentSchema } from "@anvilkit/core/types";
+import type { AiComponentSchema } from "@anvilkit/contracts";
 import { describe, expect, it } from "vitest";
 import { validateAiOutput } from "../validate-ai-output.js";
 

@@ -1,4 +1,4 @@
-import type { AiComponentSchema } from "@anvilkit/core/types";
+import type { AiComponentSchema } from "@anvilkit/contracts";
 
 export const logoClouds: AiComponentSchema = {
 	componentName: "LogoClouds",

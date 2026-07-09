@@ -1,0 +1,4 @@
+{
+	"budgetGzippedBytes": 1024,
+	"forbiddenStrings": ["react/jsx-runtime", "react-dom"]
+}

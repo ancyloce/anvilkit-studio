@@ -1118,8 +1118,8 @@
 											{
 												"type": "reference",
 												"target": {
-													"packageName": "@anvilkit/core",
-													"packagePath": "src/types/export.ts",
+													"packageName": "@anvilkit/contracts",
+													"packagePath": "src/export.ts",
 													"qualifiedName": "ExportFormatDefinition"
 												},
 												"typeArguments": [
@@ -1145,7 +1145,7 @@
 													}
 												],
 												"name": "ExportFormatDefinition",
-												"package": "@anvilkit/core"
+												"package": "@anvilkit/contracts"
 											},
 											{
 												"type": "intrinsic",
@@ -1289,8 +1289,8 @@
 										"elementType": {
 											"type": "reference",
 											"target": {
-												"packageName": "@anvilkit/core",
-												"packagePath": "src/types/export.ts",
+												"packageName": "@anvilkit/contracts",
+												"packagePath": "src/export.ts",
 												"qualifiedName": "ExportFormatDefinition"
 											},
 											"typeArguments": [
@@ -1316,7 +1316,7 @@
 												}
 											],
 											"name": "ExportFormatDefinition",
-											"package": "@anvilkit/core"
+											"package": "@anvilkit/contracts"
 										}
 									}
 								}
@@ -3171,12 +3171,12 @@
 							"elementType": {
 								"type": "reference",
 								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/asset-resolver.ts",
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/assets.ts",
 									"qualifiedName": "IRAssetResolver"
 								},
 								"name": "IRAssetResolver",
-								"package": "@anvilkit/core"
+								"package": "@anvilkit/contracts"
 							}
 						}
 					}
@@ -3200,8 +3200,8 @@
 								"tag": "@link",
 								"text": "ExportFormatDefinition.id",
 								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/export.ts",
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/export.ts",
 									"qualifiedName": "ExportFormatDefinition.id"
 								}
 							},
@@ -3234,8 +3234,8 @@
 							{
 								"type": "reference",
 								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/export.ts",
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/export.ts",
 									"qualifiedName": "ExportFormatDefinition"
 								},
 								"typeArguments": [
@@ -3261,7 +3261,7 @@
 									}
 								],
 								"name": "ExportFormatDefinition",
-								"package": "@anvilkit/core"
+								"package": "@anvilkit/contracts"
 							}
 						],
 						"name": "ReadonlyMap",
@@ -5809,12 +5809,12 @@
 			"type": {
 				"type": "reference",
 				"target": {
-					"packageName": "@anvilkit/core",
-					"packagePath": "src/types/export.ts",
+					"packageName": "@anvilkit/contracts",
+					"packagePath": "src/export.ts",
 					"qualifiedName": "ExportFormatDefinition"
 				},
 				"name": "ExportFormatDefinition",
-				"package": "@anvilkit/core"
+				"package": "@anvilkit/contracts"
 			},
 			"defaultValue": "..."
 		},
@@ -6230,8 +6230,8 @@
 								"tag": "@link",
 								"text": "ExportFormatDefinition",
 								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/export.ts",
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/export.ts",
 									"qualifiedName": "ExportFormatDefinition"
 								}
 							},
@@ -6354,8 +6354,8 @@
 									"elementType": {
 										"type": "reference",
 										"target": {
-											"packageName": "@anvilkit/core",
-											"packagePath": "src/types/export.ts",
+											"packageName": "@anvilkit/contracts",
+											"packagePath": "src/export.ts",
 											"qualifiedName": "ExportFormatDefinition"
 										},
 										"typeArguments": [
@@ -6381,7 +6381,7 @@
 											}
 										],
 										"name": "ExportFormatDefinition",
-										"package": "@anvilkit/core"
+										"package": "@anvilkit/contracts"
 									}
 								}
 							}

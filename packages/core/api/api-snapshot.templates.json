@@ -32,7 +32,11 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "PageIR",
-						"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/ir.ts",
+							"qualifiedName": "PageIR"
+						}
 					},
 					{
 						"kind": "text",
@@ -242,13 +246,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/types/ir.ts",
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/ir.ts",
 							"qualifiedName": "PageIR"
 						},
 						"name": "PageIR",
-						"package": "@anvilkit/core",
-						"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
+						"package": "@anvilkit/contracts"
 					}
 				},
 				{
@@ -396,7 +399,11 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "PageIR",
-						"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/ir.ts",
+							"qualifiedName": "PageIR"
+						}
 					},
 					{
 						"kind": "text",
@@ -674,7 +681,11 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "PageIR",
-						"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
+						"target": {
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/ir.ts",
+							"qualifiedName": "PageIR"
+						}
 					},
 					{
 						"kind": "text",

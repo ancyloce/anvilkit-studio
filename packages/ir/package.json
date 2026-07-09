@@ -77,18 +77,15 @@
 		"access": "public"
 	},
 	"peerDependencies": {
-		"@anvilkit/core": "^0.1.4",
 		"@puckeditor/core": "^0.22.0"
 	},
 	"peerDependenciesMeta": {
-		"@anvilkit/core": {
-			"optional": false
-		},
 		"@puckeditor/core": {
 			"optional": false
 		}
 	},
 	"dependencies": {
+		"@anvilkit/contracts": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
 		"zod": "^4.4.3"
 	},
@@ -113,7 +110,6 @@
 	},
 	"devDependencies": {
 		"@anvilkit/biome-config": "workspace:*",
-		"@anvilkit/core": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
 		"@puckeditor/core": "^0.22.0",

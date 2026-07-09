@@ -9,7 +9,7 @@
  * this test pins the new invariant: each call sees its own fields.
  */
 
-import type { AiComponentSchema } from "@anvilkit/core/types";
+import type { AiComponentSchema } from "@anvilkit/contracts";
 import { describe, expect, it } from "vitest";
 import { validateAiOutput } from "../validate-ai-output.js";
 

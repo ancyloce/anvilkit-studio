@@ -1,4 +1,4 @@
-import type { PageIR } from "@anvilkit/core/types";
+import type { PageIR } from "@anvilkit/contracts";
 
 export const bentoGrid: PageIR = {
 	version: "1",

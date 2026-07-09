@@ -1,4 +1,4 @@
-import type { ExportWarning } from "@anvilkit/core/types";
+import type { ExportWarning } from "@anvilkit/contracts";
 import type { Config, Data } from "@puckeditor/core";
 import { describe, expect, it } from "vitest";
 import { puckDataToIR } from "../puck-data-to-ir.js";

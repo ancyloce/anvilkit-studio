@@ -14,7 +14,7 @@
  * `valid` flips to `false`.
  */
 
-import type { AiComponentSchema, AiSectionContext } from "@anvilkit/core/types";
+import type { AiComponentSchema, AiSectionContext } from "@anvilkit/contracts";
 import { describe, expect, it } from "vitest";
 
 import { validateAiSectionPatch } from "../section.js";

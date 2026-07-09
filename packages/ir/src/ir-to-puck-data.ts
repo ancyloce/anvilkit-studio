@@ -1,4 +1,4 @@
-import type { PageIR, PageIRNode } from "@anvilkit/core/types";
+import type { PageIR, PageIRNode } from "@anvilkit/contracts";
 import type { Data } from "@puckeditor/core";
 
 type PuckContentItem = Data["content"][number];

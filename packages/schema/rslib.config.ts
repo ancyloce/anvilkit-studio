@@ -28,6 +28,6 @@ export default defineConfig({
 	],
 	output: {
 		target: "node",
-		externals: ["@anvilkit/core", "@puckeditor/core", "zod"],
+		externals: ["@anvilkit/contracts", "@puckeditor/core", "zod"],
 	},
 });

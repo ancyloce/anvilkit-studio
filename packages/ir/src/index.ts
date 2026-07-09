@@ -3,7 +3,7 @@
  *
  * The IR package is the single source of truth for turning Puck
  * `Data` into a normalized `PageIR` document (declared in
- * `@anvilkit/core`), and for round-tripping it back. Every
+ * `@anvilkit/contracts`), and for round-tripping it back. Every
  * Anvilkit export format (HTML today, React/JSON/MDX later)
  * consumes IR — never raw Puck `Data` — so this barrel is the
  * entry point every downstream package pins against.

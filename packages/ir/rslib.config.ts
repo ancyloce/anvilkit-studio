@@ -5,11 +5,11 @@ import { defineConfig } from "@rslib/core";
  *
  * Each `.ts` under `src/` becomes an individual ESM + CJS output in
  * `dist/`, matching `@anvilkit/utils`'s layout. `@anvilkit/utils`,
- * `@puckeditor/core`, and `@anvilkit/core` are all left external —
+ * `@puckeditor/core`, and `@anvilkit/contracts` are all left external —
  * bundling any of them here would violate the package's dep contract
  * (architecture §8: `@anvilkit/ir` depends on `@anvilkit/utils` at
- * runtime and takes `@puckeditor/core` + `@anvilkit/core` as
- * types-only peers).
+ * runtime, takes `@puckeditor/core` as a types-only peer, and
+ * `@anvilkit/contracts` as a types-only dependency).
  */
 export default defineConfig({
 	source: {
@@ -39,6 +39,6 @@ export default defineConfig({
 	],
 	output: {
 		target: "node",
-		externals: ["@anvilkit/utils", "@anvilkit/core", "@puckeditor/core"],
+		externals: ["@anvilkit/utils", "@anvilkit/contracts", "@puckeditor/core"],
 	},
 });

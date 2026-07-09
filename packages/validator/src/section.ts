@@ -20,7 +20,7 @@ import type {
 	AiComponentSchema,
 	AiSectionContext,
 	AiSectionPatch,
-} from "@anvilkit/core/types";
+} from "@anvilkit/contracts";
 
 import { closestMatch } from "./internal/closest-match.js";
 import { MAX_NODE_DEPTH } from "./internal/constants.js";

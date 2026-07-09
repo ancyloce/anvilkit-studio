@@ -36,7 +36,7 @@ export default defineConfig({
 		// bundling failure rather than silent inclusion.
 		target: "web",
 		externals: [
-			"@anvilkit/core",
+			"@anvilkit/contracts",
 			"@anvilkit/ir",
 			"@anvilkit/schema",
 			"@puckeditor/core",

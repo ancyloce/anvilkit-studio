@@ -13,7 +13,7 @@
  * consumer that pins against the pre-`meta` shape.
  */
 
-import type { PageIR, PageIRNode } from "@anvilkit/core/types";
+import type { PageIR, PageIRNode } from "@anvilkit/contracts";
 import { describe, expect, it } from "vitest";
 
 import { puckDataToIR } from "../puck-data-to-ir.js";

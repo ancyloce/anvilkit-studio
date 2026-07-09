@@ -10,7 +10,7 @@
  * @internal
  */
 
-import type { PageIRAsset, PageIRNode } from "@anvilkit/core/types";
+import type { PageIRAsset, PageIRNode } from "@anvilkit/contracts";
 import { MAX_TREE_DEPTH } from "./types.js";
 
 // ---------------------------------------------------------------------------

@@ -6,10 +6,10 @@
 	"name": "@anvilkit/ir",
 	"intentionallyNotExported": ["CollectAssetsOptions"],
 	"externalSymbolLinkMappings": {
-		"@anvilkit/core": {
-			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts",
-			"PageIRNode": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts",
-			"PageIRNodeMeta": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts"
+		"@anvilkit/contracts": {
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts",
+			"PageIRNode": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts",
+			"PageIRNodeMeta": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
 		}
 	}
 }

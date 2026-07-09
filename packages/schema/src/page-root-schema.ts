@@ -3,17 +3,17 @@ import { z } from "zod";
 /**
  * Canonical SEO metadata block stored on a page's `root.props.seo`.
  *
- * Field-name reconciliation with core's `StudioPageSeo`
- * (`@anvilkit/core` → `packages/core/src/types/pages.ts`) so F4 can project
+ * Field-name reconciliation with the shared `StudioPageSeo` contract
+ * (`@anvilkit/contracts` → `packages/contracts/src/page.ts`) so F4 can project
  * `root.props.seo` into the rail/breadcrumb sidecar losslessly:
  *
- * | This schema   | core `StudioPageSeo` | Note                          |
+ * | This schema   | `StudioPageSeo`      | Note                          |
  * | :------------ | :------------------- | :---------------------------- |
  * | `title`       | `metaTitle`          | rename                        |
  * | `description` | `metaDescription`    | rename                        |
  * | `ogImage`     | `ogImage`            | identical                     |
  * | `noIndex`     | `noindex`            | casing differs                |
- * | `canonical`   | —                    | new; no core equivalent yet   |
+ * | `canonical`   | —                    | new; no contract field yet    |
  *
  * Zod v4 idioms (mirrors `@anvilkit/core/src/config/schema.ts`):
  * - `z.url()` not `z.string().url()` — top-level format validators.

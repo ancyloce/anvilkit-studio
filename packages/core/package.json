@@ -147,6 +147,7 @@
 	},
 	"dependencies": {
 		"@anvilkit/analytics-core": "workspace:*",
+		"@anvilkit/contracts": "workspace:*",
 		"@anvilkit/ui": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
 		"@base-ui/react": "^1.6.0",

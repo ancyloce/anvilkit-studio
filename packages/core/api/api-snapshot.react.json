@@ -6880,12 +6880,12 @@
 					"type": {
 						"type": "reference",
 						"target": {
-							"packageName": "@anvilkit/core",
-							"packagePath": "src/types/pages.ts",
+							"packageName": "@anvilkit/contracts",
+							"packagePath": "src/page.ts",
 							"qualifiedName": "StudioPagesSource"
 						},
 						"name": "StudioPagesSource",
-						"package": "@anvilkit/core"
+						"package": "@anvilkit/contracts"
 					}
 				},
 				{
@@ -8098,8 +8098,8 @@
 							{
 								"type": "reference",
 								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/types/export.ts",
+									"packageName": "@anvilkit/contracts",
+									"packagePath": "src/export.ts",
 									"qualifiedName": "ExportFormatDefinition"
 								},
 								"typeArguments": [
@@ -8125,7 +8125,7 @@
 									}
 								],
 								"name": "ExportFormatDefinition",
-								"package": "@anvilkit/core"
+								"package": "@anvilkit/contracts"
 							}
 						],
 						"name": "ReadonlyMap",

@@ -1,4 +1,4 @@
-import type { PageIR } from "@anvilkit/core/types";
+import type { PageIR } from "@anvilkit/contracts";
 
 export const hero: PageIR = {
 	version: "1",

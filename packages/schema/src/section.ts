@@ -17,7 +17,7 @@ import type {
 	AiSectionContext,
 	AiSectionSelection,
 	ConfigToAiSectionContextOptions,
-} from "@anvilkit/core/types";
+} from "@anvilkit/contracts";
 import type { Config } from "@puckeditor/core";
 
 import { configToAiContext } from "./config-to-ai-context.js";
@@ -38,7 +38,7 @@ import { configToAiContext } from "./config-to-ai-context.js";
  * The result is a plain object suitable for `JSON.stringify` — every
  * field on {@link AiSectionContext} is either a primitive, an array of
  * primitives, or another already-serializable
- * {@link import("@anvilkit/core/types").AiComponentSchema}.
+ * {@link import("@anvilkit/contracts").AiComponentSchema}.
  *
  * @param config - The Puck config defining the registered components.
  * @param selection - The author's current selection. Must reference at

@@ -2,7 +2,7 @@ import type {
 	AiComponentSchema,
 	AiValidationIssue,
 	AiValidationResult,
-} from "@anvilkit/core/types";
+} from "@anvilkit/contracts";
 import {
 	enum as enumSchema,
 	looseObject,

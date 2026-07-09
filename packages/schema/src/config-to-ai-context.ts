@@ -2,7 +2,7 @@ import type {
 	AiComponentSchema,
 	AiFieldSchema,
 	AiGenerationContext,
-} from "@anvilkit/core/types";
+} from "@anvilkit/contracts";
 import type { Config } from "@puckeditor/core";
 
 import { extractFieldSchema } from "./extract-field-schema.js";

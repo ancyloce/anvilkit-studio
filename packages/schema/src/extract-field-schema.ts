@@ -1,4 +1,4 @@
-import type { AiFieldSchema } from "@anvilkit/core/types";
+import type { AiFieldSchema } from "@anvilkit/contracts";
 import type { Field } from "@puckeditor/core";
 
 // Per-tree depth budget. Mirrors @anvilkit/validator's MAX_DEPTH so a
