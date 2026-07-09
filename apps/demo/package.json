@@ -28,6 +28,7 @@
 		"@anvilkit/button": "workspace:*",
 		"@anvilkit/canvas-core": "workspace:*",
 		"@anvilkit/canvas-editor": "workspace:*",
+		"@anvilkit/canvas-templates": "workspace:*",
 		"@anvilkit/collab-ui": "workspace:*",
 		"@anvilkit/core": "workspace:*",
 		"@anvilkit/helps": "workspace:*",

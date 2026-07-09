@@ -7,7 +7,12 @@ import {
 	CanvasWorkspace,
 	useCanvasStudio,
 } from "@anvilkit/canvas-editor";
+// Private workspace catalog consumed as plain data (canvas-m0-009). This file
+// is a client-only dynamic chunk, so the JSON stays out of the eager bundle.
+import { canvasTemplates } from "@anvilkit/canvas-templates";
 import { useSyncExternalStore } from "react";
+
+const DEMO_TEMPLATES = Object.values(canvasTemplates);
 
 export interface CanvasEditorSurfaceProps {
 	initialIR: CanvasIR;
@@ -135,6 +140,7 @@ export default function CanvasEditorSurface({
 			initialActivePageId={initialActivePageId}
 			storeId={initialActivePageId}
 			brandKit={brandKit}
+			templates={DEMO_TEMPLATES}
 			onPickAsset={onPickAsset}
 			onChange={(ir) => onChange(ir)}
 			onActivePageChange={onActivePageChange}

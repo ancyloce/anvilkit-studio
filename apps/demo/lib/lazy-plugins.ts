@@ -253,7 +253,13 @@ export function createLazyDemoVersionHistoryPlugins(puckConfig: Config): {
  */
 export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 	async () => {
-		const mod = await import("@anvilkit/plugin-canvas-studio");
+		// Template catalog rides the same lazy chunk boundary as the plugin —
+		// `@anvilkit/canvas-templates` is a private workspace package consumed
+		// as data here (canvas-m0-009).
+		const [mod, templatesMod] = await Promise.all([
+			import("@anvilkit/plugin-canvas-studio"),
+			import("@anvilkit/canvas-templates"),
+		]);
 		const adapter =
 			typeof globalThis.localStorage === "undefined"
 				? {
@@ -265,6 +271,7 @@ export const lazyCanvasStudioPlugin: StudioPlugin = lazyPlugin(
 				: mod.localStorageCanvasAdapter({ namespace: "demo-canvas" });
 		return mod.createCanvasStudioPlugin({
 			adapter,
+			templates: Object.values(templatesMod.canvasTemplates),
 			// Demo image picker: the editor's `image` tool resolves this to an
 			// asset id and places a node referencing it. We return a fixed host
 			// image and seed it into every opened design (mirrors the standalone
