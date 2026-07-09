@@ -1,37 +1,20 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code (claude.ai/code) when working in this repository.
+
+## Hard Rules
+
+- **Git is read-only for Claude. Automatic commits are disabled** — in the superproject and in every submodule. Never stage, commit, amend, rebase, merge, reset, clean, tag, push, switch branches, or open PRs on your own initiative. Details in Git & Submodules.
+- **Formatting is Biome with TAB indentation.** Never run Prettier (the root `pnpm format` script invokes Prettier — don't use it), and never let formatter hooks convert tabs to spaces or introduce CRLF line endings.
+- **UI work always uses the shared `@anvilkit/ui` primitives** — never hand-roll native `<select>`, bespoke CSS, or custom components when a primitive exists.
+- **Every new module — plugins AND standalone packages — is a git submodule**, never an in-tree package (see Git & Submodules).
+- Never reintroduce `check-types`: the workspace normalizes on `typecheck` across every package and the Turbo task graph.
+- Never overwrite existing plan/report files — check for them and back up before writing.
+- Never weaken tests or gates to get green; report pre-existing failures instead of skipping verification.
 
 ## Project Overview
 
-**anvilkit-studio** is a monorepo for independently publishable Puck-native React component packages. Components are built for [Puck](https://puckeditor.com/) (a headless page builder), each published separately under the `@anvilkit/*` namespace.
-
-## Workflow & Interaction
-
-- When asked for a **code review, analysis, audit, or roadmap**, start producing the deliverable immediately. Do NOT open plan-approval (`ExitPlanMode`) or ask scoping questions first — make reasonable scoping assumptions, state them inline, and only pause if the request is genuinely ambiguous or blocked.
-- Default to autonomous, multi-file execution: chain related fixes in one pass, self-verify through the gates below, and report once when the work survives verification — not after each micro-step.
-- Prefer a root-cause fix plus a regression test over a band-aid. When a first attempt fails verification, iterate rather than stopping to ask how to proceed.
-- Track multi-finding work as numbered items (P0/P1/P2 or R1…/F1…) and drive each to closure.
-
-## Formatting & Conventions
-
-- This repo uses **Biome with TAB indentation** — never run Prettier, and never let formatter hooks convert tabs to spaces or introduce CRLF line endings.
-
-## Verification / Definition of Done
-
-- Always run the full gate suite (**typecheck, lint, build, and tests**) before declaring any task complete, and regenerate api-snapshots when hash drift is benign.
-
-## UI Conventions
-
-- For UI work, always use the shared **`@anvilkit/ui` primitives** — do not hand-roll native `<select>`, bespoke CSS, or custom components when a primitive exists.
-
-## Safety / File Handling
-
-- When editing code, verify each Edit actually applied, and never overwrite existing plan/report files — check for and back up plan files before writing.
-
-## Output Style
-
-- Keep responses concise and chunk large outputs — do not exceed the 500 output token limit in a single message; split long reports into saved files.
+**anvilkit-studio** is a monorepo for independently publishable Puck-native React component packages, built for [Puck](https://puckeditor.com/) (a headless page builder) and published separately under the `@anvilkit/*` namespace.
 
 ## Monorepo Structure
 
@@ -42,11 +25,10 @@ anvilkit-studio/
 │   └── docs/               # @anvilkit/docs-site — Fumadocs docs (TanStack Start + Vite, SSR)
 ├── bench/                  # tinybench perf harness (component/IR/export)
 ├── packages/
-│   ├── analytics/          # Git submodules → @anvilkit/analytics-{core,react}
-│   │   ├── core/           # @anvilkit/analytics-core — React-free adapters/catalog/transport
-│   │   └── react/          # @anvilkit/analytics-react — AnalyticsProvider/useTrack
+│   ├── analytics/          # submodules → @anvilkit/analytics-{core,react}
+│   ├── canvas/             # submodules → canvas core + editor
 │   ├── cli/                # @anvilkit/cli — `anvilkit` CLI scaffold
-│   ├── components/         # Git submodule → @anvilkit/* component packages
+│   ├── components/         # submodule → @anvilkit/* component packages (own pnpm workspace)
 │   ├── core/               # @anvilkit/core — runtime, plugin engine, <Studio> shell
 │   ├── ir/                 # @anvilkit/ir — Headless Page IR transforms
 │   ├── schema/             # @anvilkit/schema — AI-friendly schema derivation
@@ -54,18 +36,12 @@ anvilkit-studio/
 │   ├── ui/                 # @anvilkit/ui — shared UI primitives
 │   ├── utils/              # @anvilkit/utils — shared helpers
 │   ├── templates/          # @anvilkit/template-* — page template packages
-│   ├── create-plugin/      # `@anvilkit/create-plugin` scaffolder
-│   ├── configs/
-│   │   ├── biome-config/
-│   │   ├── tailwind-config/
-│   │   ├── typescript-config/
-│   │   └── vitest-config/
-│   └── plugins/            # Git submodules (see Git Submodules below)
+│   ├── create-plugin/      # @anvilkit/create-plugin scaffolder
+│   ├── configs/            # biome-config · tailwind-config · typescript-config · vitest-config
+│   └── plugins/            # submodules (see Git & Submodules)
 ```
 
-**Package manager**: pnpm 11.9.0 (strictly pinned). **Orchestration**: Turbo.
-
-`packages/components` is a git submodule with its own pnpm workspace. Each component under `packages/components/src/<slug>/` is an independently versioned and publishable package.
+**Package manager**: pnpm 11.10.0 (strictly pinned). **Orchestration**: Turbo. Each component under `packages/components/src/<slug>/` is an independently versioned, publishable package.
 
 ## Commands
 
@@ -75,250 +51,127 @@ anvilkit-studio/
 pnpm dev          # Turbo watch mode for all packages
 pnpm build        # Build all packages
 pnpm lint         # Biome lint
-pnpm format       # Prettier format (TS/TSX/MD)
 pnpm typecheck    # TypeScript type checking across workspace
-pnpm test         # Run Vitest across every workspace package (via Turbo cache)
+pnpm test         # Vitest across every workspace package (Turbo cache)
 pnpm madge        # Circular dependency scan (packages/, ts+tsx)
 pnpm publint      # Validate package.json exports across publishable packages
 pnpm size         # size-limit gzip budgets per publishable package
-pnpm bench        # Run tinybench perf harness against ./bench/baseline.json
-pnpm bench:update # Re-record bench baselines
-pnpm docs:dev     # Fumadocs (Vite) docs site dev server (apps/docs, port 4321)
-pnpm docs:build   # Build the Fumadocs docs site
+pnpm bench        # tinybench perf harness vs ./bench/baseline.json (bench:update re-records)
+pnpm docs:dev     # Docs site dev server (apps/docs, port 4321)
+pnpm docs:build   # Build the docs site
 ```
 
 ### Components workspace (`packages/components/`)
 
 ```bash
-pnpm dev          # Watch mode (Rslib)
-pnpm build        # Build all component packages
-pnpm lint         # Biome lint
-pnpm format       # Biome format
-pnpm typecheck    # TypeScript validation
-
-# Scaffold a new component (interactive)
-pnpm gen:component
-# Or with flags:
-pnpm gen:component -- --name <slug> --label "Display Name" --template <content|layout|form> [--category <slug>]
-
-# Publishing
-pnpm changeset    # Create a changeset for versioning
-pnpm release      # Version + build + publish to npm
+pnpm dev|build|lint|typecheck    # Rslib watch / build / Biome / tsc
+pnpm gen:component               # Scaffold a new component (interactive; supports --name/--label/--template/--category)
+pnpm changeset && pnpm release   # Version + build + publish to npm
 ```
 
 ### Demo app (`apps/demo/`)
 
 ```bash
 pnpm dev          # Next.js dev server (port 3000)
-pnpm build        # Production build
-pnpm lint         # Biome lint
+pnpm build|lint   # Production build / Biome lint
 pnpm typecheck    # next typegen + tsc
-pnpm e2e          # Playwright E2E (smoke + export + AI copilot specs)
-pnpm e2e:install  # One-time: install Chromium for Playwright
+pnpm e2e          # Playwright E2E (smoke + export + AI copilot); e2e:install once for Chromium
 ```
 
 ### Docs site (`apps/docs/` — `@anvilkit/docs-site`)
 
 ```bash
 pnpm docs:dev     # Vite dev server (TanStack Start, port 4321) — also boots the collab relay
-pnpm docs:build   # vite build → Nitro Build Output API at apps/docs/.vercel/output (SSR, deployed to Vercel)
+pnpm docs:build   # vite build → Nitro Build Output API at apps/docs/.vercel/output (SSR → Vercel)
 pnpm typecheck    # fumadocs-mdx && tsc --noEmit
 pnpm test         # vitest (registry + guide code-block tests)
 pnpm e2e          # Docs playground Playwright spec
 ```
 
-The docs site is a **Fumadocs + TanStack Start (Vite/Nitro)** SSR app. Content
-lives under `content/docs/**` (MDX). Generators (`scripts/generate-*`) emit MDX
-for component pages, the API reference, and template pages plus the marketplace
-`registry/feed.json`; the generated trees (`content/docs/{components,api,templates}`)
-are committed, so run `pnpm generate:all` after changing a component/plugin to
-refresh them.
+Docs content lives under `content/docs/**` (MDX). Generators (`scripts/generate-*`) emit MDX for component pages, the API reference, template pages, and the marketplace `registry/feed.json`; the generated trees (`content/docs/{components,api,templates}`) are **committed** — run `pnpm generate:all` after changing a component/plugin.
 
-> **Deploy model.** Unlike the prior static Astro build, this app is SSR: Vercel's
-> **Root Directory** must be set to `apps/docs` (it reads `apps/docs/vercel.json`
-> and consumes the Nitro Build Output API at `apps/docs/.vercel/output`). There is
-> no root `vercel.json`.
+> **Deploy model**: the docs app is SSR — Vercel's Root Directory must be `apps/docs` (reads `apps/docs/vercel.json`, consumes the Nitro output). There is no root `vercel.json`.
 
-## Key Architecture Decisions
+## Architecture
 
-### Component Publishing Model
+- **Publishing model**: each component is its own npm package (`@anvilkit/<slug>`), versioned independently via Changesets — no umbrella package. Built with **Rslib** → CJS + ESM + `.d.ts`.
+- **Puck component contract**: every component package exports `componentConfig` (Puck config), `defaultProps` (serializable), `fields`, and `metadata` (label, description, category, icon). The render component accepts **only serializable props** — no functions or refs at the top level.
+- **Demo integration**: the demo validates components via `/puck/editor` (interactive builder) and `/puck/render` (server-side, RSC-compatible), both composed from `apps/demo/lib/puck-demo.ts` (all 11 published component packages are wired there). A new component must be added to that file AND to `transpilePackages` in `apps/demo/next.config.js`.
+- **Styling**: Tailwind CSS 4 (CSS-first config, no `tailwind.config.js`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"`; shadcn-style CSS variable tokens with light/dark mode. All components must be responsive and theme-aware.
+- **TypeScript**: 6.0.2 at the workspace level; demo pins TS 5.9.2 for Next.js compatibility.
+- **CI** (`.github/workflows/ci.yml`, every PR): recursive submodule checkout, pnpm 11.10.0 / Node 22, then `lint`, `typecheck`, `madge`, `test`, `build`, `turbo run docs:build`, `publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), Phase 3 release gates (`ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`), per-package `size-limit` budgets, and two Playwright suites (demo E2E + docs playground E2E). Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel docs deploy posts an independent check — it neither blocks nor is blocked by CI.
 
-- Each component is its own npm package (`@anvilkit/<slug>`), versioned independently via Changesets.
-- No umbrella package — consumers install only what they need.
-- Built with **Rslib** (Rust bundler) → outputs CJS + ESM + `.d.ts` types.
+## TypeScript & React Standards
 
-### Puck Component Contract
+- Use `import type` for type-only imports — `verbatimModuleSyntax` is enforced.
+- No circular dependencies (`pnpm madge` is a CI gate); when a cycle forms, prefer inlining small type references over cross-module imports.
+- **RSC boundaries**: `/puck/render` executes server-side — component code with hooks/interactivity needs a `'use client'` directive. A missing directive has caused a real production 500; check this whenever a component renders in both Puck modes.
+- **Size budgets**: publishable packages have `size-limit` gzip budgets — run `pnpm size` when touching runtime code and don't regress a budget for a micro-optimization.
+- **Iframe/canvas styling**: Tailwind utilities and parent-document CSS do NOT reach the canvas iframe — use inline styles or explicit CopyHostStyles injection. Before debugging styling, suspect stale webpack/dev-server cache and try a clean rebuild.
+- **i18n**: never duplicate bilingual strings inline — always use i18n message keys. Don't add language-specific (e.g. Chinese) translation overrides to demo apps unless explicitly requested.
 
-Each component package must export:
+## Verification / Definition of Done
 
-- `componentConfig: ComponentConfig` — the Puck config object (fields, defaultProps, render)
-- `defaultProps` — serializable default values
-- `fields` — Puck field definitions
-- `metadata` — display label, description, category, icon
+- Run the full gate suite — **typecheck, lint, test, build** (plus `madge` and `publint` for package-level work) — and confirm green before declaring any task complete. Regenerate api-snapshots when hash drift is benign.
+- Always rebuild the affected package's dist (`pnpm build`) before declaring a fix complete — unit tests passing is NOT sufficient when a running demo/browser executes built code. Build dependent packages before assuming module-resolution errors are code issues.
+- When tests fail due to pre-existing infrastructure issues (path aliases, missing dist folders), report this clearly rather than skipping verification. The repo has known path-alias issues in some suites — flag them, don't silently skip.
+- E2E: use unique room IDs per test and avoid port 1234 collisions (dynamic ports, or kill stale processes first).
+- knip and shellcheck are intentionally skipped (not installed; the only `.sh` files live under `node_modules/`) — reintroduce if that changes.
 
-The render component must accept only serializable props (no functions, no refs at the top level).
+## CI Gates
 
-### Demo App Integration
+- When fixing api-snapshot or version-drift gate failures, check for CRLF pollution and formatter-hook reformatting **before** staging — regenerate snapshots only once line endings are clean, and distinguish benign hash drift from a real API change.
 
-The demo validates components via two Puck modes:
+## Git & Submodules
 
-- `/puck/editor` — interactive builder
-- `/puck/render` — server-side render (RSC-compatible)
+**Automatic commits are disabled.** Claude never creates commits on its own initiative — not to "finish" a task, not after checks pass, not in a submodule, not because a skill or workflow normally would. All commits and gitlink bumps are made by the user after manual review.
 
-Both share `apps/demo/lib/puck-demo.ts`, which composes the Puck `Config` from each imported component package. All 11 published component packages are currently wired here. When adding a new component to the demo, update this file and `apps/demo/next.config.js` (`transpilePackages`).
+- Never run state-changing git/gh commands: `git add`/staging, `git commit` (including `--amend`), `git rebase`, `git merge`, `git cherry-pick`, `git reset`, `git clean`, `git checkout`/`switch` (branch changes), `git tag`, `git push`, `gh pr create`. The only exception is an explicit user request in the current conversation naming the action — and even then, never force-push and never push to main.
+- Read-only inspection is always fine: `git status`, `git diff`, `git log`, `git show`, `git branch`, `git submodule status`.
+- After making changes: leave everything unstaged, summarize the modified files (noting which live inside submodules) and the checks you ran — then stop.
 
-### Styling
+Submodule layout (16 total — the canonical source is `.gitmodules`; verify with `git config -f .gitmodules --get-regexp path` rather than trusting any list): `packages/components`, eleven plugins under `packages/plugins/` (ai-copilot, ai-image, asset-manager, canvas-studio, collab-ui, collab-yjs, design-system, export-canvas, export-html, export-react, version-history), plus direct submodules `packages/canvas/{core,editor}` and `packages/analytics/{core,react}` — the parent directories (`plugins/`, `canvas/`, `analytics/`) are plain directories, not submodules.
 
-- **Tailwind CSS 4** (`tailwindcss` 4.3.1 via `@tailwindcss/postcss`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"` (CSS-first config, no `tailwind.config.js`)
-- shadcn-style CSS variable tokens (light/dark mode)
-- All components must be responsive (mobile/tablet/desktop) and theme-aware
+- `git submodule update --init --recursive` after cloning.
+- **Convention (REQUIRED)**: every new module is added as a git submodule grouped under a plain parent directory, registered in `.gitmodules` + the matching `pnpm-workspace.yaml` glob (`packages/<group>/*`). Promotion of a scaffolded package (the maintainer's step — needs a remote repo):
 
-### Linting & Formatting
+```bash
+git submodule add https://github.com/ancyloce/anvilkit-<name>.git packages/<group>/<name>
+# add "packages/<group>/*" to pnpm-workspace.yaml if the group is new, then verify:
+git config -f .gitmodules --get-regexp path
+```
 
-- **Biome** handles both lint and format across all packages
-- **Prettier** is used at root level for `.ts/.tsx/.md` files
-- Use Biome with tab indentation (not Prettier, which converts tabs to spaces) for all formatting in this repo
-- TypeScript 6.0.2 at the workspace level; demo uses TS 5.9.2 for Next.js compatibility
-
-### Continuous Integration
-
-`.github/workflows/ci.yml` runs on every pull request: it checks out submodules recursively, sets up pnpm 11.9.0 / Node 22, then runs `pnpm lint`, `pnpm typecheck`, `pnpm madge` (circular dep gate), `pnpm test`, `pnpm build`, `pnpm turbo run docs:build` (Fumadocs/Vite build gate), `pnpm publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), the Phase 3 release gates for `ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`, per-package gzip budgets via `size-limit`, and two Playwright suites — the demo E2E (`apps/demo`) and the docs playground E2E (`apps/docs`).
-
-Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel deploy of the docs site runs from `apps/docs/vercel.json` (Vercel Root Directory = `apps/docs`) and posts an independent GitHub check — it does not block CI, and CI does not block it.
-
-**Typecheck script naming:** the workspace normalizes on `typecheck` (not `check-types`) across every package and the Turbo task graph. The components submodule (`packages/components/`) already used `typecheck` for each component package, so the root and direct-workspace packages (`ui`, `utils`, `vitest-config`, `apps/demo`) were renamed to match. Do not reintroduce `check-types`.
+- Submodule edits do **not** show in the superproject's `git status` — work inside the submodule's working tree; the commit there and the superproject gitlink bump are the user's actions.
 
 ## Adding a New Component
 
-1. Run `pnpm gen:component` in `packages/components/` — prompts for slug, label, template, category
+1. `pnpm gen:component` in `packages/components/` (prompts for slug, label, template, category)
 2. Implement `src/<Slug>.tsx` (render), `src/config.ts` (Puck config), `src/index.ts` (exports)
 3. Validate: `pnpm lint && pnpm typecheck && pnpm build`
-4. Integrate into demo: add import + config entry in `apps/demo/lib/puck-demo.ts` and the package name to `transpilePackages` in `apps/demo/next.config.js`
-5. Create changeset: `pnpm changeset` then `pnpm release`
+4. Wire into the demo: `apps/demo/lib/puck-demo.ts` + `transpilePackages` in `apps/demo/next.config.js`
+5. Changeset + release are the user's steps (`pnpm changeset`, `pnpm release`)
 
-Full component rules and conventions are documented in `packages/components/AGENTS.md`.
+Full component rules: `packages/components/AGENTS.md`.
 
-## Git Submodules
+## Working Rules
 
-```bash
-git submodule update --init --recursive  # Initialize after cloning
-```
-
-Submodules (16 total — the canonical source is `.gitmodules`; run
-`git config -f .gitmodules --get-regexp path` rather than trusting this list):
-
-- `packages/components`
-- Plugins under `packages/plugins/`:
-  - `plugin-ai-copilot`
-  - `plugin-ai-image`
-  - `plugin-asset-manager`
-  - `plugin-canvas-studio`
-  - `plugin-collab-ui`
-  - `plugin-collab-yjs`
-  - `plugin-design-system`
-  - `plugin-export-canvas`
-  - `plugin-export-html`
-  - `plugin-export-react`
-  - `plugin-version-history`
-- Canvas (direct submodules — `packages/canvas` is a plain directory, not itself a submodule):
-  - `packages/canvas/core`
-  - `packages/canvas/editor`
-- Analytics (direct submodules — `packages/analytics` is a plain directory, not itself a submodule):
-  - `packages/analytics/core` (`@anvilkit/analytics-core`)
-  - `packages/analytics/react` (`@anvilkit/analytics-react`)
-
-### Submodule convention (REQUIRED for all new modules)
-
-**Every new module — plugins AND standalone packages — is added as a git
-submodule, not an in-tree package.** Group related submodules under a plain
-parent directory (`packages/plugins/`, `packages/canvas/`, `packages/analytics/`)
-that is itself a normal directory, and register each child in `.gitmodules` +
-the matching `pnpm-workspace.yaml` glob (`packages/<group>/*`).
-
-To promote a scaffolded package to a submodule (the maintainer's step — needs a
-remote repo):
-
-```bash
-# 1. Create the GitHub repo (e.g. github.com/ancyloce/anvilkit-<name>), push the
-#    package content to it, then in the superproject:
-git submodule add https://github.com/ancyloce/anvilkit-<name>.git packages/<group>/<name>
-# 2. Add "packages/<group>/*" to pnpm-workspace.yaml if the group is new.
-git config -f .gitmodules --get-regexp path   # verify
-```
-
-Editing submodule content does **not** show in the superproject's `git status` —
-work inside the submodule's own working tree, commit there, then bump the
-gitlink in the superproject (see the canvas/collab submodule memory notes).
-
-## Health Stack
-
-- typecheck: pnpm typecheck
-- lint: pnpm lint
-- test: pnpm test
-- madge: pnpm madge (circular dependency detection)
-- publint: pnpm publint (package.json exports validation)
-
-knip and shellcheck are intentionally skipped: neither is installed in this repo,
-and the only `.sh` files live under `node_modules/`. Reintroduce them here if that
-ever changes.
-
-## Verification Gates
-
-- Always run typecheck, lint, and tests after multi-file changes
-- When tests fail due to pre-existing infrastructure issues (path aliases, missing dist folders), report this clearly rather than skipping verification
-- Build dependent packages (`pnpm build`) before assuming module resolution errors are code issues
-- Always rebuild the affected package's dist (e.g. `pnpm build`) before declaring a fix complete; unit tests passing is NOT sufficient verification when a running demo/browser executes built code
-
-## Code Review
-
-- When asked for a detailed analysis or code review, deliver it directly rather than pausing to ask scope-clarifying questions; only ask if a hard blocker prevents progress
-- After every code review, run the actual gates (typecheck, lint, tests, build, E2E) and adversarially verify findings against source before reporting them as confirmed
-
-## Demo & Mount Consistency
-
-- When wiring new props or plugins to Studio components, search for ALL <Studio> mounts in the demo (e.g., default and collab paths) and wire each one
-- After UI/prop changes, grep for component usage across demo/ before declaring done
-
-## Sub-agent usage
-
-- Before refactoring a component or threading new props/plugins, spawn an Explore sub-agent to enumerate every call site (file:line) and report wiring status — do not start editing until the enumeration is complete
-- Use sub-agents for parallel exploration when investigating across plugin packages or submodules (e.g., "find every adapter that implements X" across packages/plugins/\*); keep the main context focused on synthesis and edits
-- Do not delegate the actual edits — sub-agents enumerate and report, the main agent decides and writes
-
-## Safe Deletion
-
-- Before deleting any file, grep the repo for inbound references (imports, paths in JSON/MD, test fixtures). Present a deletion list with reference counts; wait for my approval before any rm.
-
-## Iframe & Canvas Styling
-
-- Tailwind utilities and parent-document CSS do NOT reach the canvas iframe — use inline styles or explicit CopyHostStyles injection
-- Before debugging styling issues, suspect stale webpack/dev-server cache and check with a clean rebuild
-
-## TypeScript Conventions
-
-- Use `import type` for type-only imports (verbatimModuleSyntax is enforced)
-- Watch for circular dependencies; prefer inlining small type references over cross-module imports when cycles form
-
-## i18n Convention
-
-- Never duplicate bilingual strings inline; always use i18n message keys
-- Do not add language-specific (e.g., Chinese) translation overrides to demo apps unless explicitly requested
-
-## Test Infrastructure Notes
-
-- E2E tests must use unique room IDs per test and avoid port 1234 collisions (use dynamic ports or kill stale processes first)
-- The repo has known path-alias resolution issues in some test suites — flag this rather than silently skipping tests
+- For a **code review, analysis, audit, or roadmap**, start producing the deliverable immediately — no plan-approval or scoping questions; make reasonable assumptions, state them inline, and pause only on a genuine blocker.
+- Default to autonomous multi-file execution: chain related fixes in one pass, self-verify through the gates, and report once the work survives verification. Prefer a root-cause fix plus a regression test over a band-aid; iterate when verification fails. Track multi-finding work as numbered items (P0/P1/P2 or R1…/F1…) and drive each to closure.
+- **Code review**: after every review, run the actual gates (typecheck, lint, tests, build, E2E) and adversarially verify findings against source before reporting them confirmed. For whole-package/directory reviews, use `/codex:adversarial-review` on the working-tree diff rather than `/codex:review` (which can't target directories); if a run produces no output for several minutes, suspect a stdin-blocking hang — diagnose and relaunch instead of waiting.
+- **Sub-agents**: before refactoring a component or threading new props/plugins, spawn an Explore sub-agent to enumerate every call site (file:line) — no edits until enumeration is complete. Use parallel sub-agents for exploration across plugin packages/submodules; sub-agents enumerate and report, the main agent decides and writes.
+- **Demo & mount consistency**: when wiring new props or plugins to Studio components, find and wire ALL `<Studio>` mounts in the demo (default and collab paths); grep component usage across `demo/` before declaring done.
+- **Safe deletion**: before deleting any file, grep for inbound references (imports, paths in JSON/MD, test fixtures); present a deletion list with reference counts and wait for approval before any `rm`.
+- **File handling**: verify each Edit actually applied.
+- **Output**: keep responses concise and chunk large outputs — never exceed the 500-output-token limit in a single message; write long reports to files.
+- **Shell**: portable only (interactive shell is zsh — no bash-only constructs); scope `find`/`grep` to the project directory and exclude `node_modules`.
 
 ## Skill routing
 
-When the user's request matches an available skill, ALWAYS invoke it using the Skill
-tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
-The skill has specialized workflows that produce better results than ad-hoc answers.
-
-Key routing rules:
+When the user's request matches an available skill, ALWAYS invoke it using the Skill tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
 
 - Product ideas, "is this worth building", brainstorming → invoke office-hours
 - Bugs, errors, "why is this broken", 500 errors → invoke investigate
+- Failing CI gates, red checks, drift (api-snapshot/version), "make checks pass" → invoke fixgates
 - Ship, deploy, push, create PR → invoke ship
 - QA, test the site, find bugs → invoke qa
 - Code review, check my diff → invoke review
