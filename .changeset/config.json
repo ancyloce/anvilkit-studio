@@ -4,6 +4,7 @@
 	"commit": false,
 	"fixed": [
 		[
+			"@anvilkit/contracts",
 			"@anvilkit/core",
 			"@anvilkit/ir",
 			"@anvilkit/schema",
