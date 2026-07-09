@@ -171,6 +171,7 @@ When an available Claude Code skill matches the task, use it before free-form wo
 - Ship, deploy, push, create PR: `ship`
 - QA or test the site: `qa`
 - Code review or diff review: `review` or `/code-review`
+- Fix all findings from an existing review report: `review-fixes`
 - Docs after shipping: `document-release`
 - Weekly retro: `retro`
 - Design system or brand: `design-consultation`
