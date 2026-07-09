@@ -19,7 +19,7 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 # pnpm is pinned via package.json#packageManager; corepack activates that exact
-# version (11.9.0) deterministically.
+# version (11.10.0) deterministically.
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
 	TURBO_TELEMETRY_DISABLED=1 \
 	NEXT_TELEMETRY_DISABLED=1
