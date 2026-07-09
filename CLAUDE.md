@@ -29,6 +29,7 @@ anvilkit-studio/
 │   ├── canvas/             # submodules → canvas core + editor
 │   ├── cli/                # @anvilkit/cli — `anvilkit` CLI scaffold
 │   ├── components/         # submodule → @anvilkit/* component packages (own pnpm workspace)
+│   ├── contracts/          # @anvilkit/contracts — shared type-only contracts (Page IR, AI, export, pages)
 │   ├── core/               # @anvilkit/core — runtime, plugin engine, <Studio> shell
 │   ├── ir/                 # @anvilkit/ir — Headless Page IR transforms
 │   ├── schema/             # @anvilkit/schema — AI-friendly schema derivation
@@ -99,7 +100,7 @@ Docs content lives under `content/docs/**` (MDX). Generators (`scripts/generate-
 - **Demo integration**: the demo validates components via `/puck/editor` (interactive builder) and `/puck/render` (server-side, RSC-compatible), both composed from `apps/demo/lib/puck-demo.ts` (all 11 published component packages are wired there). A new component must be added to that file AND to `transpilePackages` in `apps/demo/next.config.js`.
 - **Styling**: Tailwind CSS 4 (CSS-first config, no `tailwind.config.js`) — consumers import shared tokens with `@import "@anvilkit/tailwind-config/shadcn"`; shadcn-style CSS variable tokens with light/dark mode. All components must be responsive and theme-aware.
 - **TypeScript**: 6.0.2 at the workspace level; demo pins TS 5.9.2 for Next.js compatibility.
-- **CI** (`.github/workflows/ci.yml`, every PR): recursive submodule checkout, pnpm 11.10.0 / Node 22, then `lint`, `typecheck`, `madge`, `test`, `build`, `turbo run docs:build`, `publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), Phase 3 release gates (`ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`), per-package `size-limit` budgets, and two Playwright suites (demo E2E + docs playground E2E). Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel docs deploy posts an independent check — it neither blocks nor is blocked by CI.
+- **CI** (`.github/workflows/ci.yml`, every PR): recursive submodule checkout, pnpm 11.10.0 / Node 22, then `lint`, `typecheck`, `madge`, `test`, `build`, `turbo run docs:build`, `publint`, the `@anvilkit/core` release gates (`pnpm --filter @anvilkit/core check:all`), Phase 3 release gates (`contracts`/`ir`/`schema`/`validator`/`plugin-export-html`/`plugin-export-react`/`plugin-ai-copilot`), per-package `size-limit` budgets, and two Playwright suites (demo E2E + docs playground E2E). Other workflows: `publish.yml`, `bench.yml`, `size.yml`, `generator-smoke.yml`, `templates-smoke.yml`. The Vercel docs deploy posts an independent check — it neither blocks nor is blocked by CI.
 
 ## TypeScript & React Standards
 
