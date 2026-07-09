@@ -78,7 +78,7 @@ function filterToKinds(filter: string): readonly StudioAssetKind[] | undefined {
 	return undefined;
 }
 
-export function ImageModule(): ReactNode {
+function useImageModuleElement(): ReactNode {
 	const msg = useMsg();
 	const source = useSidebarRegistry((state) => state.assetSource);
 	const pluginActionMap = useSidebarRegistry((state) => state.assetActions);
@@ -723,4 +723,8 @@ export function ImageModule(): ReactNode {
 			/>
 		</div>
 	);
+}
+
+export function ImageModule(): ReactNode {
+	return useImageModuleElement();
 }

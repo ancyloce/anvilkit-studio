@@ -78,7 +78,7 @@ export interface PageRowProps {
 
 type RowMode = "view" | "renaming";
 
-export function PageRow({
+function usePageRowElement({
 	page,
 	onSelect,
 	selected,
@@ -436,4 +436,8 @@ export function PageRow({
 			) : null}
 		</li>
 	);
+}
+
+export function PageRow(props: PageRowProps): ReactNode {
+	return usePageRowElement(props);
 }

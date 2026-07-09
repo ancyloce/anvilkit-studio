@@ -17,7 +17,7 @@ import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
-import { SIDEBAR_PANEL_ID } from "./SidebarRail";
+import { SIDEBAR_PANEL_ID } from "./SidebarRail.ids";
 
 export interface SidebarPanelProps {
 	/** Pre-resolved module title (caller invokes `useMsg`). */

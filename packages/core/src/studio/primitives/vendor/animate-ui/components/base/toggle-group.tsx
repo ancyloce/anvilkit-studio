@@ -1,6 +1,6 @@
 import { type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { toggleVariants } from "@/primitives/vendor/animate-ui/components/base/toggle";
+import { toggleVariants } from "@/primitives/vendor/animate-ui/components/base/toggle.variants";
 import {
 	ToggleGroupHighlight as ToggleGroupHighlightPrimitive,
 	ToggleGroup as ToggleGroupPrimitive,

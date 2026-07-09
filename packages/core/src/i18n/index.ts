@@ -42,6 +42,8 @@ export { useOptionalLocale } from "@/state/slices/LocaleStoreProvider";
 export {
 	LanguageSwitcher,
 	type LanguageSwitcherProps,
+} from "@/studio/layout/LanguageSwitcher";
+export {
 	SUPPORTED_LOCALES,
 	type SupportedLocale,
-} from "@/studio/layout/LanguageSwitcher";
+} from "@/studio/layout/LanguageSwitcher.locales";

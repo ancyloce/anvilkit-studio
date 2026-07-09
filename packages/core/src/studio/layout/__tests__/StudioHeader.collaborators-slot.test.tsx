@@ -16,7 +16,7 @@ import { describe, expect, it } from "vitest";
 import {
 	COLLABORATORS_SLOT_ID,
 	selectCollaboratorsSlot,
-} from "@/layout/StudioHeader";
+} from "@/layout/StudioHeader.logic";
 import type { StudioPluginSlotContribution } from "@/types/plugin";
 
 const Noop: ComponentType = () => null;

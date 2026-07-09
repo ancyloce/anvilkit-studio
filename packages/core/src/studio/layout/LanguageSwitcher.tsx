@@ -28,27 +28,10 @@ import {
 } from "@/primitives/dropdown-menu";
 import { useMsg } from "@/state/editor-i18n-context";
 import { useLocaleStore } from "@/state/slices/LocaleStoreProvider";
-
-/** One selectable locale: its tag plus the label shown in its own script. */
-export interface SupportedLocale {
-	/** BCP-47-ish locale tag passed to `setLocale` (e.g. `"zh"`). */
-	readonly locale: string;
-	/** Display name in the language's own script (endonym). */
-	readonly label: string;
-}
-
-/**
- * Locales with a bundled core `studio.*` catalog. English is the inline
- * baseline; `zh` / `ja` / `ko` lazy-load from `i18n/messages/`. Pass a custom
- * list via {@link LanguageSwitcherProps.locales} to offer a different set (any
- * locale whose packs resolve works — this only seeds the default UI).
- */
-export const SUPPORTED_LOCALES: readonly SupportedLocale[] = [
-	{ locale: "en", label: "English" },
-	{ locale: "zh", label: "中文" },
-	{ locale: "ja", label: "日本語" },
-	{ locale: "ko", label: "한국어" },
-];
+import {
+	SUPPORTED_LOCALES,
+	type SupportedLocale,
+} from "./LanguageSwitcher.locales";
 
 export interface LanguageSwitcherProps {
 	/**

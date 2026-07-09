@@ -61,7 +61,10 @@ import {
 	resolveStudioViewports,
 } from "@/studio/ui/merge-studio-ui";
 import { useThemeSync } from "@/theme/use-theme-sync";
-import type { StudioPluginOverlay, StudioPluginProvider } from "@/types/plugin";
+import {
+	composePluginProviders,
+	splitOverlaysByPlacement,
+} from "./Studio.composition";
 import { StudioErrorBoundary } from "./StudioErrorBoundary";
 import { StudioProviderStack } from "./StudioProviderStack";
 import { writeStudioLog } from "./studio-log";
@@ -91,48 +94,6 @@ function ThemeSyncBoundary(): null {
 }
 
 /**
- * Reduce a sorted array of plugin-contributed providers into a single
- * wrapped subtree. The provider at index 0 becomes the **outermost**
- * wrapper; the rightmost provider sits closest to the children.
- *
- * The caller passes providers already sorted (`compilePlugins()` sorts
- * by `(order ?? 100, registrationIndex)`). Exported so the contract is
- * unit-testable without mounting the whole shell.
- */
-export function composePluginProviders(
-	providers: readonly StudioPluginProvider[],
-	children: ReactNode,
-): ReactNode {
-	return providers.reduceRight<ReactNode>((wrapped, provider) => {
-		const ProviderComponent = provider.component;
-		return <ProviderComponent key={provider.id}>{wrapped}</ProviderComponent>;
-	}, children);
-}
-
-/**
- * Partition a flat overlay array into the three placement buckets the
- * AnvilKit chrome renders, preserving input order (already sorted by
- * `compilePlugins()`).
- */
-export function splitOverlaysByPlacement(
-	overlays: readonly StudioPluginOverlay[],
-): {
-	readonly viewport: readonly StudioPluginOverlay[];
-	readonly canvas: readonly StudioPluginOverlay[];
-	readonly notifications: readonly StudioPluginOverlay[];
-} {
-	const viewport: StudioPluginOverlay[] = [];
-	const canvas: StudioPluginOverlay[] = [];
-	const notifications: StudioPluginOverlay[] = [];
-	for (const overlay of overlays) {
-		if (overlay.placement === "viewport") viewport.push(overlay);
-		else if (overlay.placement === "canvas") canvas.push(overlay);
-		else if (overlay.placement === "notifications") notifications.push(overlay);
-	}
-	return { viewport, canvas, notifications };
-}
-
-/**
  * The public Studio shell. Thin view over {@link useStudioController}:
  * select the loading state, then render the provider stack around
  * `<Puck>`.
@@ -159,7 +120,7 @@ export function splitOverlaysByPlacement(
  * }
  * ```
  */
-export function Studio<UserConfig extends PuckConfig = PuckConfig>(
+function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	props: StudioProps<UserConfig>,
 ): ReactElement | null {
 	const {
@@ -479,4 +440,10 @@ export function Studio<UserConfig extends PuckConfig = PuckConfig>(
 			</StudioProviderStack>
 		</StudioErrorBoundary>
 	);
+}
+
+export function Studio<UserConfig extends PuckConfig = PuckConfig>(
+	props: StudioProps<UserConfig>,
+): ReactElement | null {
+	return useStudioElement(props);
 }

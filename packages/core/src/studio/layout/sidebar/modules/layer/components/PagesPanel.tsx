@@ -40,7 +40,7 @@ import "../pages-tokens.css";
 import { usePagesDnd } from "../hooks/use-pages-dnd";
 import { useSourceList } from "../hooks/use-source-list";
 
-export function PagesPanel(): ReactNode {
+function usePagesPanelElement(): ReactNode {
 	const msg = useMsg();
 	// Falls back to a synthetic "Home" page when the host passes no
 	// `pages` prop, so the panel shows a default row rather than the
@@ -348,4 +348,8 @@ export function PagesPanel(): ReactNode {
 			/>
 		</div>
 	);
+}
+
+export function PagesPanel(): ReactNode {
+	return usePagesPanelElement();
 }

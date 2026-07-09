@@ -12,7 +12,7 @@
 
 import { describe, expect, it } from "vitest";
 import type { StudioPluginMeta } from "@/types/plugin";
-import { hasHeaderActionCapability } from "@/layout/StudioHeader";
+import { hasHeaderActionCapability } from "@/layout/StudioHeader.logic";
 
 function meta(
 	id: string,

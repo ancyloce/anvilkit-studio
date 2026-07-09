@@ -33,11 +33,8 @@ import {
 	useSidebarHeaderActions,
 } from "./sidebar/SidebarHeaderActionsContext";
 import { SidebarPanel } from "./sidebar/SidebarPanel";
-import {
-	railTabId,
-	SidebarRail,
-	type SidebarRailHandle,
-} from "./sidebar/SidebarRail";
+import { SidebarRail, type SidebarRailHandle } from "./sidebar/SidebarRail";
+import { railTabId } from "./sidebar/SidebarRail.ids";
 
 const MODULE_TITLE_KEYS: Readonly<Record<EditorTab, string>> = {
 	insert: "studio.module.insert.name",

@@ -9,7 +9,7 @@
 
 import { useGetPuck } from "@puckeditor/core";
 import { ChevronLeft, ChevronRight, Play, Users } from "lucide-react";
-import { type ComponentType, memo, type ReactNode, useCallback } from "react";
+import { memo, type ReactNode, useCallback } from "react";
 import { useStudioRuntime } from "@/components/use-studio";
 import { useStudioConfig } from "@/config/hooks";
 import { useChromeProps } from "@/context/chrome-props";
@@ -19,14 +19,14 @@ import { Button } from "@/primitives/button";
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
-import type {
-	StudioPluginMeta,
-	StudioPluginSlotContribution,
-} from "@/types/plugin";
 import { formatRelativeTimestamp } from "@/utils/format-timestamp";
 import { HeaderActions } from "./HeaderActions";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { PublishPanel } from "./PublishPanel";
+import {
+	hasHeaderActionCapability,
+	selectCollaboratorsSlot,
+} from "./StudioHeader.logic";
 import { ThemeToggle } from "./ThemeToggle";
 
 export interface StudioHeaderProps {
@@ -167,20 +167,6 @@ function StudioHeaderImpl({
 export const StudioHeader = memo(StudioHeaderImpl);
 
 /**
- * `true` when any registered plugin self-declares the `header`
- * capability (`meta.capabilities.header === true`).
- *
- * Exported so the detection logic can be unit-tested without mounting
- * the full `<StudioHeader>` tree (which would require i18n / Puck /
- * runtime providers).
- */
-export function hasHeaderActionCapability(
-	plugins: readonly StudioPluginMeta[],
-): boolean {
-	return plugins.some((meta) => meta.capabilities?.header === true);
-}
-
-/**
  * Renders the plugin header-action surface (vertical separator +
  * `<HeaderActions>`) only when a `header`-capable plugin is configured.
  *
@@ -288,32 +274,10 @@ function LocaleSwitchRegionInner(): ReactNode {
 }
 
 /**
- * Canonical slot id for the header collaborator-avatar anchor.
+ * `@anvilkit/collab-ui`'s `createCollabPlugin()` fills this slot with its
+ * `<PeerAvatarStack>`. Core never imports collab-ui: the avatar UI is
+ * delegated through the single-occupancy slot registry.
  *
- * `@anvilkit/collab-ui`'s `createCollabPlugin()` — which wraps the
- * headless `@anvilkit/plugin-collab-yjs` data plugin — fills this slot
- * with its `<PeerAvatarStack>`. Core never imports collab-ui: the
- * avatar UI is delegated entirely through the single-occupancy slot
- * registry, so the header shows nothing when no collaboration plugin is
- * configured. Mirrors the {@link StudioSlotId} `"collaborators"` literal.
- */
-export const COLLABORATORS_SLOT_ID = "collaborators";
-
-/**
- * Resolve the component a plugin contributed to the collaborators slot,
- * or `null` when the slot is unfilled.
- *
- * Exported so the slot-id contract can be unit-tested without mounting
- * the full `<StudioHeader>` tree (which would require i18n / runtime /
- * plugin-context providers).
- */
-export function selectCollaboratorsSlot(
-	slots: ReadonlyMap<string, StudioPluginSlotContribution>,
-): ComponentType | null {
-	return slots.get(COLLABORATORS_SLOT_ID)?.component ?? null;
-}
-
-/**
  * Renders the collaborator-avatar slot between the `lastSavedAt` chip
  * and the Share button.
  *
