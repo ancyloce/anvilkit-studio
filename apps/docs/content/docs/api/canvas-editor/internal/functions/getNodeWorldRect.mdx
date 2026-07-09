@@ -1,0 +1,25 @@
+---
+title: "getNodeWorldRect"
+description: "@anvilkit/canvas-editor · getNodeWorldRect"
+---
+
+```ts
+function getNodeWorldRect(node): SnapRect;
+```
+
+Defined in: [packages/canvas/editor/src/snap/get-node-rect.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap/get-node-rect.ts#L14)
+
+World-space rect for a node — the rotation/scale-aware axis-aligned bounding
+box from `@anvilkit/canvas-core` (`nodeWorldAabb`). For an unrotated, unscaled
+node this equals `{x, y, width, height}`; rotated/scaled nodes now report
+their true visual bounds (the earlier approximation ignored rotation/scale).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | `CanvasNode` |
+
+## Returns
+
+[`SnapRect`](../interfaces/SnapRect)

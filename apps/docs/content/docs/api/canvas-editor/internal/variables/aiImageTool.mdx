@@ -1,0 +1,18 @@
+---
+title: "aiImageTool"
+description: "@anvilkit/canvas-editor · aiImageTool"
+---
+
+```ts
+const aiImageTool: Tool;
+```
+
+Defined in: [packages/canvas/editor/src/tools/ai-image-tool.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/ai-image-tool.ts#L15)
+
+I1-7 `ai-image` tool (PRD FR-009: "Drag → marquee + prompt input →
+text-to-image"). Drags a marquee region and, on pointerup, hands the bounds
+to the host as an `ai-image-marquee` intent — the host's AI panel supplies
+the prompt input and runs the generation. The tool itself commits nothing to
+the IR/history (intent is not a command), mirroring how the selection marquee
+never touches `historyStore`. Reuses the `"marquee"` draft kind so
+`<DraftRenderer>` shows the region preview for free.

@@ -1,0 +1,37 @@
+---
+title: "createCanvasExportPlugin"
+description: "@anvilkit/canvas-editor · createCanvasExportPlugin"
+---
+
+```ts
+function createCanvasExportPlugin(options?): CanvasHeaderPlugin;
+```
+
+Defined in: [packages/canvas/editor/src/header/export-plugin.tsx:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/export-plugin.tsx#L21)
+
+Builds the export [CanvasHeaderPlugin](../interfaces/CanvasHeaderPlugin) for the workspace header.
+Pass it to `<CanvasWorkspace headerPlugins={[…]}>`. PNG/JSON work with no
+config; inject `exporters.svg` / `exporters.pdf` to enable those cards.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CanvasExportPluginOptions`](../interfaces/CanvasExportPluginOptions) |
+
+## Returns
+
+[`CanvasHeaderPlugin`](../interfaces/CanvasHeaderPlugin)
+
+## Example
+
+```ts
+createCanvasExportPlugin({
+  exporters: {
+    svg: async ({ ir, activePageId }) => {
+      const { svg } = await canvasToSvg(ir, activePageId);
+      return { filename: `${ir.title}.svg`, data: svg, mimeType: "image/svg+xml" };
+    },
+  },
+});
+```

@@ -3,7 +3,7 @@ title: "ConfigToAiSectionContextOptions"
 description: "@anvilkit/contracts · ConfigToAiSectionContextOptions"
 ---
 
-Defined in: ai-section.ts:126
+Defined in: [ai-section.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai-section.ts#L126)
 
 Optional environment hints for `configToAiSectionContext()`.
 
@@ -15,6 +15,6 @@ the same hint object for both flows.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="allowresize"&gt;&lt;/a&gt; `allowResize?` | `readonly` | `boolean` | When `true`, the resulting context's [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is set so the LLM (and the validator) accepts a [AiSectionPatch](AiSectionPatch.md) whose `replacement.length` ≠ [AiSectionSelection.nodeIds](AiSectionSelection.md#nodeids).length. Defaults to `false` — Phase 6 / M9 ships size-preserving patches only. Hosts wanting "split this hero into three sections" must opt in explicitly. | ai-section.ts:146 |
-| &lt;a id="locale"&gt;&lt;/a&gt; `locale?` | `readonly` | `string` | Optional BCP 47 language tag forwarded onto [AiSectionContext.locale](AiSectionContext.md#locale). | ai-section.ts:136 |
-| &lt;a id="theme"&gt;&lt;/a&gt; `theme?` | `readonly` | [`AiThemeHint`](../type-aliases/AiThemeHint) | Optional theme hint (`"light"` | `"dark"`) forwarded onto [AiSectionContext.theme](AiSectionContext.md#theme). | ai-section.ts:131 |
+| &lt;a id="allowresize"&gt;&lt;/a&gt; `allowResize?` | `readonly` | `boolean` | When `true`, the resulting context's [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is set so the LLM (and the validator) accepts a [AiSectionPatch](AiSectionPatch.md) whose `replacement.length` ≠ [AiSectionSelection.nodeIds](AiSectionSelection.md#nodeids).length. Defaults to `false` — Phase 6 / M9 ships size-preserving patches only. Hosts wanting "split this hero into three sections" must opt in explicitly. | [ai-section.ts:146](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai-section.ts#L146) |
+| &lt;a id="locale"&gt;&lt;/a&gt; `locale?` | `readonly` | `string` | Optional BCP 47 language tag forwarded onto [AiSectionContext.locale](AiSectionContext.md#locale). | [ai-section.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai-section.ts#L136) |
+| &lt;a id="theme"&gt;&lt;/a&gt; `theme?` | `readonly` | [`AiThemeHint`](../type-aliases/AiThemeHint) | Optional theme hint (`"light"` | `"dark"`) forwarded onto [AiSectionContext.theme](AiSectionContext.md#theme). | [ai-section.ts:131](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai-section.ts#L131) |

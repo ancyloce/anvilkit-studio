@@ -1,0 +1,24 @@
+---
+title: "MAX_DISPLAY_NAME_LENGTH"
+description: "@anvilkit/canvas-editor · MAX_DISPLAY_NAME_LENGTH"
+---
+
+```ts
+const MAX_DISPLAY_NAME_LENGTH: 64 = 64;
+```
+
+Defined in: [packages/canvas/editor/src/collab/presence-schema.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-schema.ts#L24)
+
+Structured validation for [CanvasPresenceState](../interfaces/CanvasPresenceState) payloads received over
+an untrusted transport. Ported from `plugin-collab-yjs`'s `presence-schema`.
+
+`validate*` returns the strongly-typed value when the input matches the
+schema, or `null` when it does not — a malformed payload from one peer never
+poisons the local view.
+
+- `displayName` is capped at MAX\_DISPLAY\_NAME\_LENGTH chars and
+  stripped of ASCII control characters by [sanitizeDisplayName](../functions/sanitizeDisplayName).
+- `color` is checked against an allowlist (hex / rgb(a) / hsl(a) / named).
+  Anything else (`javascript:`, `expression(...)`, `<script>`, arbitrary
+  strings) rejects the peer record — defense-in-depth for hosts that render
+  `color` into a CSS attribute.

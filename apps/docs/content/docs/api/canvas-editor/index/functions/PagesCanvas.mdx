@@ -1,0 +1,27 @@
+---
+title: "PagesCanvas"
+description: "@anvilkit/canvas-editor · PagesCanvas"
+---
+
+```ts
+function PagesCanvas(__namedParameters): Element;
+```
+
+Defined in: [packages/canvas/editor/src/workspace/layout/PagesCanvas.tsx:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/layout/PagesCanvas.tsx#L52)
+
+Canva-style vertical multi-page view. Owns the scrollable canvas viewport on
+the neutral-gray surface: the active page is the live editable Konva stage; the rest
+are cached rasterized thumbnails (`usePageThumbnails`). Clicking a thumbnail
+activates that page. On entry the active page is zoomed to fit the visible
+area; all pages share the viewport `zoom`, so the footer slider scales the
+whole canvas uniformly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`PagesCanvasProps`](../interfaces/PagesCanvasProps) |
+
+## Returns
+
+`Element`

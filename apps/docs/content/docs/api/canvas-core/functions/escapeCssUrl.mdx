@@ -1,0 +1,26 @@
+---
+title: "escapeCssUrl"
+description: "@anvilkit/canvas-core · escapeCssUrl"
+---
+
+```ts
+function escapeCssUrl(input): string;
+```
+
+Defined in: [serialize/svg.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L102)
+
+Sanitize a CSS `src` value for a `@font-face` rule: strip `<`/`>`/newlines (so
+it cannot break out of the `<style>` element) and the structural CSS breakout
+characters `{`, `}`, `;` (so it cannot terminate the declaration/rule and
+inject arbitrary CSS — e.g. `url(x); } * { background: url(//evil) }`), while
+preserving the `url(...)`/`format(...)` quotes a font `src` legitimately needs.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | `string` |
+
+## Returns
+
+`string`

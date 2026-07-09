@@ -1,0 +1,28 @@
+---
+title: "CanvasExporter"
+description: "@anvilkit/canvas-editor · CanvasExporter"
+---
+
+```ts
+type CanvasExporter = (ctx, request) => 
+  | CanvasExportArtifact
+| Promise<CanvasExportArtifact>;
+```
+
+Defined in: [packages/canvas/editor/src/header/types.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L51)
+
+Turns the live editor state + the requested options into a downloadable
+artifact. May be async (SVG/PDF serialization is). Throwing surfaces through
+[CanvasExportPluginOptions.onError](../interfaces/CanvasExportPluginOptions#onerror).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasExportContext`](../interfaces/CanvasExportContext) |
+| `request` | [`CanvasExportRequest`](../interfaces/CanvasExportRequest) |
+
+## Returns
+
+  \| [`CanvasExportArtifact`](../interfaces/CanvasExportArtifact)
+  \| `Promise`\&lt;[`CanvasExportArtifact`](../interfaces/CanvasExportArtifact)\&gt;

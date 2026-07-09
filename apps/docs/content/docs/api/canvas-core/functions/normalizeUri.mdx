@@ -1,0 +1,26 @@
+---
+title: "normalizeUri"
+description: "@anvilkit/canvas-core · normalizeUri"
+---
+
+```ts
+function normalizeUri(input, options?): string | undefined;
+```
+
+Defined in: [serialize/svg.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L118)
+
+Returns a safe URI, or `undefined` when the scheme is not allowlisted.
+Scheme-less (relative or protocol-relative `//…`) refs and `http(s)` are
+allowed; `data:` URIs are allowed only when `allowSafeDataImage` is set and
+the payload is a known raster image type; everything else is dropped.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | `string` |
+| `options` | [`NormalizeUriOptions`](../interfaces/NormalizeUriOptions) |
+
+## Returns
+
+`string` \| `undefined`

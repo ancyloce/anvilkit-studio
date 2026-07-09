@@ -1,0 +1,20 @@
+---
+title: "CropEditorOverlay"
+description: "@anvilkit/canvas-editor · CropEditorOverlay"
+---
+
+```ts
+function CropEditorOverlay(): Element | null;
+```
+
+Defined in: [packages/canvas/editor/src/selection/CropEditorOverlay.tsx:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/CropEditorOverlay.tsx#L46)
+
+Interactive crop editor (I3-2). Renders an HTML overlay (like
+[TextEditorOverlay](TextEditorOverlay.md)) over the cropping image with draggable corner
+handles + a movable body; Enter / ✓ commits one `node.update`, Escape / ✕
+cancels. Crop math runs through the pure [computeCropDrag](computeCropDrag.md); only the
+commit touches `historyStore` (MVP-7).
+
+## Returns
+
+`Element` \| `null`

@@ -1,0 +1,26 @@
+---
+title: "decomposeMatrix"
+description: "@anvilkit/canvas-core · decomposeMatrix"
+---
+
+```ts
+function decomposeMatrix(m): DecomposedTransform;
+```
+
+Defined in: [geometry.ts:184](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L184)
+
+Decompose an affine matrix back into translate/rotate/skew/scale components,
+the exact inverse of [toAffineMatrix](toAffineMatrix.md) (and of Konva's
+`Transform.decompose`). For a transform with no `skewY`,
+`decomposeMatrix(toAffineMatrix(t))` round-trips `t`; for the general case the
+recomposed matrix `toAffineMatrix(decomposeMatrix(m))` equals `m`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `m` | [`AffineMatrix`](../type-aliases/AffineMatrix) |
+
+## Returns
+
+[`DecomposedTransform`](../interfaces/DecomposedTransform)

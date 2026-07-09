@@ -1,0 +1,180 @@
+---
+title: "CanvasErrorBoundary"
+description: "@anvilkit/canvas-editor · CanvasErrorBoundary"
+---
+
+Defined in: [packages/canvas/editor/src/CanvasErrorBoundary.tsx:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L38)
+
+Error boundary for the canvas editor (W10). Without it, any render-time throw
+— a malformed IR, a missing asset, or a bug in a host-supplied panel — unwinds
+the whole React tree and the user loses the entire editor. Wrapping the panel
+registry and the stage subtree contains a failure to that region: the rest of
+the editor keeps working and the user gets a recover affordance instead of a
+blank screen. Exported so hosts can wrap their own custom panels too.
+
+## Extends
+
+- `Component`\<[`CanvasErrorBoundaryProps`](../interfaces/CanvasErrorBoundaryProps), `CanvasErrorBoundaryState`\>
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasErrorBoundary(props): CanvasErrorBoundary;
+```
+
+Defined in: node\_modules/.pnpm/@types+react@19.2.17/node\_modules/@types/react/index.d.ts:958
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `props` | [`CanvasErrorBoundaryProps`](../interfaces/CanvasErrorBoundaryProps) |
+
+#### Returns
+
+`CanvasErrorBoundary`
+
+#### Inherited from
+
+```ts
+Component<
+	CanvasErrorBoundaryProps,
+	CanvasErrorBoundaryState
+>.constructor
+```
+
+### Constructor
+
+```ts
+new CanvasErrorBoundary(props, context): CanvasErrorBoundary;
+```
+
+Defined in: node\_modules/.pnpm/@types+react@19.2.17/node\_modules/@types/react/index.d.ts:966
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `props` | [`CanvasErrorBoundaryProps`](../interfaces/CanvasErrorBoundaryProps) | - |
+| `context` | `any` | value of the parent [Context](https://react.dev/reference/react/Component#context) specified in `contextType`. |
+
+#### Returns
+
+`CanvasErrorBoundary`
+
+#### Inherited from
+
+```ts
+Component<
+	CanvasErrorBoundaryProps,
+	CanvasErrorBoundaryState
+>.constructor
+```
+
+## Properties
+
+| Property | Type | Overrides | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="state"&gt;&lt;/a&gt; `state` | `CanvasErrorBoundaryState` | `Component.state` | [packages/canvas/editor/src/CanvasErrorBoundary.tsx:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L42) |
+
+## Methods
+
+### componentDidCatch()
+
+```ts
+componentDidCatch(error, info): void;
+```
+
+Defined in: [packages/canvas/editor/src/CanvasErrorBoundary.tsx:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L55)
+
+Catches exceptions generated in descendant components. Unhandled exceptions will cause
+the entire component tree to unmount.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `error` | `Error` |
+| `info` | `ErrorInfo` |
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+```ts
+Component.componentDidCatch
+```
+
+***
+
+### componentDidUpdate()
+
+```ts
+componentDidUpdate(prev): void;
+```
+
+Defined in: [packages/canvas/editor/src/CanvasErrorBoundary.tsx:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L48)
+
+Called immediately after updating occurs. Not called for the initial render.
+
+The snapshot is only present if [getSnapshotBeforeUpdate](https://react.dev/reference/react/Component#getsnapshotbeforeupdate) is present and returns non-null.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `prev` | [`CanvasErrorBoundaryProps`](../interfaces/CanvasErrorBoundaryProps) |
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+```ts
+Component.componentDidUpdate
+```
+
+***
+
+### render()
+
+```ts
+render(): ReactNode;
+```
+
+Defined in: [packages/canvas/editor/src/CanvasErrorBoundary.tsx:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L68)
+
+#### Returns
+
+`ReactNode`
+
+#### Overrides
+
+```ts
+Component.render
+```
+
+***
+
+### getDerivedStateFromError()
+
+```ts
+static getDerivedStateFromError(error): CanvasErrorBoundaryState;
+```
+
+Defined in: [packages/canvas/editor/src/CanvasErrorBoundary.tsx:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L44)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `error` | `Error` |
+
+#### Returns
+
+`CanvasErrorBoundaryState`

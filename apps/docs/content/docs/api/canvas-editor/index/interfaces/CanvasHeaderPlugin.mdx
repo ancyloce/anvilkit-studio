@@ -1,0 +1,18 @@
+---
+title: "CanvasHeaderPlugin"
+description: "@anvilkit/canvas-editor · CanvasHeaderPlugin"
+---
+
+Defined in: [packages/canvas/editor/src/header/types.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L11)
+
+A pluggable action mounted in the [WorkspaceHeader](../functions/WorkspaceHeader)'s right cluster
+(between the collaborator avatars and the host `shareSlot`). `render` runs
+*inside* the `<CanvasStudio>` provider, so the returned node may call
+[useCanvasStudio](../functions/useCanvasStudio). `id` keys the node and dedupes registrations.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | [packages/canvas/editor/src/header/types.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L12) |
+| &lt;a id="render"&gt;&lt;/a&gt; `render` | `readonly` | () =&gt; `ReactNode` | [packages/canvas/editor/src/header/types.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L13) |

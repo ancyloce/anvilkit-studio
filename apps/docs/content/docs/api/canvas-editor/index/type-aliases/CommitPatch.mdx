@@ -1,0 +1,23 @@
+---
+title: "CommitPatch"
+description: "@anvilkit/canvas-editor · CommitPatch"
+---
+
+```ts
+type CommitPatch = (node, patch) => void;
+```
+
+Defined in: [packages/canvas/editor/src/panels/fields.tsx:199](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/fields.tsx#L199)
+
+Applies a partial node patch through the editor's `node.update` pipeline.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | `CanvasNode` |
+| `patch` | `Record`\&lt;`string`, `unknown`\&gt; |
+
+## Returns
+
+`void`

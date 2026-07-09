@@ -1,0 +1,28 @@
+---
+title: "pointInNode"
+description: "@anvilkit/canvas-core · pointInNode"
+---
+
+```ts
+function pointInNode(
+   node, 
+   world, 
+   parentMatrix?): boolean;
+```
+
+Defined in: [hit-test.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/src/hit-test.ts#L67)
+
+True when `world` falls inside a node's box, accounting for rotation/scale/
+skew. A degenerate (zero-area / non-invertible) node contains nothing.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `node` | [`CanvasNode`](../type-aliases/CanvasNode) | `undefined` |
+| `world` | `Point` | `undefined` |
+| `parentMatrix` | [`AffineMatrix`](../type-aliases/AffineMatrix) | `IDENTITY` |
+
+## Returns
+
+`boolean`

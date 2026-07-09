@@ -1,0 +1,24 @@
+---
+title: "createNodeKindRegistry"
+description: "@anvilkit/canvas-core · createNodeKindRegistry"
+---
+
+```ts
+function createNodeKindRegistry(builtins?): CanvasNodeKindRegistry;
+```
+
+Defined in: [extensions/node-kind-registry.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L83)
+
+Create a node-kind registry, optionally seeded with built-in definitions.
+Seeding is exempt from the shadow guard; later `register()` calls are not —
+mirroring the built-in command-type protection in `createCanvasRuntime`.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `builtins` | readonly [`CanvasNodeKindDefinition`](../interfaces/CanvasNodeKindDefinition)\&lt;[`CanvasUnknownNode`](../type-aliases/CanvasUnknownNode)\&gt;[] | `[]` |
+
+## Returns
+
+[`CanvasNodeKindRegistry`](../interfaces/CanvasNodeKindRegistry)

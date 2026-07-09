@@ -1,0 +1,16 @@
+---
+title: "CanvasErrorBoundaryProps"
+description: "@anvilkit/canvas-editor · CanvasErrorBoundaryProps"
+---
+
+Defined in: [packages/canvas/editor/src/CanvasErrorBoundary.tsx:5](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L5)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="children"&gt;&lt;/a&gt; `children` | `ReactNode` | - | [packages/canvas/editor/src/CanvasErrorBoundary.tsx:6](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L6) |
+| &lt;a id="fallback"&gt;&lt;/a&gt; `fallback?` | (`error`, `reset`) =&gt; `ReactNode` | Custom fallback. Receives the thrown error and a `reset` callback that re-mounts the children. When omitted, a minimal inline message renders. | [packages/canvas/editor/src/CanvasErrorBoundary.tsx:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L11) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `string` | Heading for the default fallback (already localized by the caller). Also tags the console output. | [packages/canvas/editor/src/CanvasErrorBoundary.tsx:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L18) |
+| &lt;a id="onerror"&gt;&lt;/a&gt; `onError?` | (`error`, `info`) =&gt; `void` | Reported when a child throws — wire to host telemetry/logging. | [packages/canvas/editor/src/CanvasErrorBoundary.tsx:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L13) |
+| &lt;a id="resetkey"&gt;&lt;/a&gt; `resetKey?` | `unknown` | Clears the error and re-mounts children whenever this value changes — e.g. pass the active page / panel id so navigating away recovers automatically. | [packages/canvas/editor/src/CanvasErrorBoundary.tsx:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/CanvasErrorBoundary.tsx#L23) |

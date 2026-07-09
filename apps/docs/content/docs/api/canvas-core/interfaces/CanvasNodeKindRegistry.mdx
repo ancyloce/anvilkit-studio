@@ -1,0 +1,98 @@
+---
+title: "CanvasNodeKindRegistry"
+description: "@anvilkit/canvas-core · CanvasNodeKindRegistry"
+---
+
+Defined in: [extensions/node-kind-registry.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L63)
+
+## Methods
+
+### get()
+
+```ts
+get(kind): 
+  | CanvasNodeKindDefinition<CanvasUnknownNode>
+  | undefined;
+```
+
+Defined in: [extensions/node-kind-registry.ts:73](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L73)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `kind` | `string` |
+
+#### Returns
+
+  \| [`CanvasNodeKindDefinition`](CanvasNodeKindDefinition.md)\&lt;[`CanvasUnknownNode`](../type-aliases/CanvasUnknownNode)\&gt;
+  \| `undefined`
+
+***
+
+### has()
+
+```ts
+has(kind): boolean;
+```
+
+Defined in: [extensions/node-kind-registry.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L74)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `kind` | `string` |
+
+#### Returns
+
+`boolean`
+
+***
+
+### list()
+
+```ts
+list(): readonly CanvasNodeKindDefinition<CanvasUnknownNode>[];
+```
+
+Defined in: [extensions/node-kind-registry.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L75)
+
+#### Returns
+
+readonly [`CanvasNodeKindDefinition`](CanvasNodeKindDefinition.md)\<[`CanvasUnknownNode`](../type-aliases/CanvasUnknownNode)\>[]
+
+***
+
+### register()
+
+```ts
+register<N>(def): void;
+```
+
+Defined in: [extensions/node-kind-registry.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L72)
+
+Register an extension kind. Seeded built-in kinds are unshadowable and a
+kind may only be registered once.
+
+#### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `N` *extends* [`CanvasUnknownNode`](../type-aliases/CanvasUnknownNode) |
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `def` | [`CanvasNodeKindDefinition`](CanvasNodeKindDefinition.md)\&lt;`N`\&gt; |
+
+#### Returns
+
+`void`
+
+#### Throws
+
+CanvasExtensionError with code `"builtin-kind-shadowed"` when the
+kind is a seeded built-in, or `"duplicate-kind"` when another extension
+already registered it.

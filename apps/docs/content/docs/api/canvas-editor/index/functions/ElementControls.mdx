@@ -1,0 +1,29 @@
+---
+title: "ElementControls"
+description: "@anvilkit/canvas-editor · ElementControls"
+---
+
+```ts
+function ElementControls(__namedParameters): Element | null;
+```
+
+Defined in: [packages/canvas/editor/src/workspace/layout/ElementControls.tsx:129](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/layout/ElementControls.tsx#L129)
+
+Floating per-selection controls pinned **above the selected element** (lock,
+duplicate, delete, "⋯ more"). The toolbar is a DOM element so it doesn't
+scale with the Konva canvas — but its position is computed from the rendered
+canvas-pixel bounding box (via `Konva.Node#getClientRect`), so it tracks the
+element on screen through any nested group transforms, rotation, zoom, or
+hand-tool pan. Lock + delete run through the existing command pipeline;
+duplicate / copy-paste-style / align / layer-order are host callbacks
+(disabled when unwired).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`ElementControlsProps`](../interfaces/ElementControlsProps) |
+
+## Returns
+
+`Element` \| `null`

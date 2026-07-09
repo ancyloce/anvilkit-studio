@@ -1,0 +1,14 @@
+---
+title: "SvgImageMode"
+description: "@anvilkit/canvas-core · SvgImageMode"
+---
+
+```ts
+type SvgImageMode = "auto" | "embed" | "reference";
+```
+
+Defined in: [serialize/svg.ts:618](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L618)
+
+- `auto` (default): inline `data:` URIs, reference everything else.
+- `embed`: fetch + base64-embed remote URIs (requires `fetchAsset`).
+- `reference`: always emit `href` referencing the original URI.

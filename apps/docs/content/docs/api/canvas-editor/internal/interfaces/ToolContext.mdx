@@ -1,0 +1,30 @@
+---
+title: "ToolContext"
+description: "@anvilkit/canvas-editor · ToolContext"
+---
+
+Defined in: [packages/canvas/editor/src/tools/tool-types.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L18)
+
+Per-event context handed to every tool handler. Stable across an interaction —
+the same ctx that arrives in `onPointerDown` is reused for `onPointerMove` and
+`onPointerUp` so tools can stash interaction state on it via a closure ref.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="activepageid"&gt;&lt;/a&gt; `activePageId` | `string` | - | [packages/canvas/editor/src/tools/tool-types.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L43) |
+| &lt;a id="commit"&gt;&lt;/a&gt; `commit` | (`cmd`) =&gt; [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) | - | [packages/canvas/editor/src/tools/tool-types.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L21) |
+| &lt;a id="commitbatch"&gt;&lt;/a&gt; `commitBatch?` | (`commands`, `label?`) =&gt; [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) | Apply many commands as one undoable transaction (a single undo step). Supplied by `<CanvasStudio>` via `ToolInteractionLayer`; optional so lightweight tool-test contexts may omit it — callers must fall back to per-command [commit](#commit) when it is absent. | [packages/canvas/editor/src/tools/tool-types.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L28) |
+| &lt;a id="draftstore"&gt;&lt;/a&gt; `draftStore` | [`DraftStoreApi`](../type-aliases/DraftStoreApi) | - | [packages/canvas/editor/src/tools/tool-types.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L38) |
+| &lt;a id="editingstore"&gt;&lt;/a&gt; `editingStore` | [`EditingStoreApi`](../type-aliases/EditingStoreApi) | - | [packages/canvas/editor/src/tools/tool-types.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L39) |
+| &lt;a id="focusstore"&gt;&lt;/a&gt; `focusStore?` | `CanvasFocusStoreApi` | Roving keyboard focus (a11y). Optional — lightweight tool tests may omit it. | [packages/canvas/editor/src/tools/tool-types.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L34) |
+| &lt;a id="getir"&gt;&lt;/a&gt; `getIR` | () =&gt; [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) | - | [packages/canvas/editor/src/tools/tool-types.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L20) |
+| &lt;a id="guidesstore"&gt;&lt;/a&gt; `guidesStore` | [`GuidesStoreApi`](../type-aliases/GuidesStoreApi) | - | [packages/canvas/editor/src/tools/tool-types.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L37) |
+| &lt;a id="penstore"&gt;&lt;/a&gt; `penStore` | [`PenStoreApi`](../type-aliases/PenStoreApi) | Multi-click pen-path state (I3-2). Always supplied by `<CanvasStudio>`. | [packages/canvas/editor/src/tools/tool-types.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L41) |
+| &lt;a id="pickasset"&gt;&lt;/a&gt; `pickAsset` | () =&gt; `Promise`\&lt;`string`\&gt; | - | [packages/canvas/editor/src/tools/tool-types.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L42) |
+| &lt;a id="requestaiintent"&gt;&lt;/a&gt; `requestAiIntent?` | (`intent`) =&gt; `void` | Hand an AI gesture (marquee region / image selection) to the host. Optional because the AI host is opt-in — `<CanvasStudio>` always supplies a function (a no-op when no `onAiIntent` prop is wired), but tool tests may omit it. | [packages/canvas/editor/src/tools/tool-types.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L49) |
+| &lt;a id="selectionstore"&gt;&lt;/a&gt; `selectionStore` | [`SelectionStoreApi`](../type-aliases/SelectionStoreApi) | - | [packages/canvas/editor/src/tools/tool-types.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L32) |
+| &lt;a id="stage"&gt;&lt;/a&gt; `stage` | `Stage` | - | [packages/canvas/editor/src/tools/tool-types.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L19) |
+| &lt;a id="toolstore"&gt;&lt;/a&gt; `toolStore` | [`ToolStoreApi`](../type-aliases/ToolStoreApi) | - | [packages/canvas/editor/src/tools/tool-types.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L36) |
+| &lt;a id="viewportstore"&gt;&lt;/a&gt; `viewportStore` | [`ViewportStoreApi`](../type-aliases/ViewportStoreApi) | - | [packages/canvas/editor/src/tools/tool-types.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L35) |

@@ -1,0 +1,17 @@
+---
+title: "aiBrushTool"
+description: "@anvilkit/canvas-editor · aiBrushTool"
+---
+
+```ts
+const aiBrushTool: Tool;
+```
+
+Defined in: [packages/canvas/editor/src/tools/ai-brush-tool.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/ai-brush-tool.ts#L41)
+
+I1-7 `ai-brush` tool (PRD FR-009: "Hover-select → contextual AI action
+menu"). Click-selects the image node under the pointer and hands it to the
+host as an `ai-brush-select` intent so the host can surface contextual AI
+actions (variation / inpaint / bg-remove) for it. Only image nodes are valid
+AI-action targets; clicks on other nodes or empty stage are no-ops. Commits
+nothing to the IR/history — intent is not a command.

@@ -1,0 +1,24 @@
+---
+title: "WorkspaceHeader"
+description: "@anvilkit/canvas-editor · WorkspaceHeader"
+---
+
+```ts
+function WorkspaceHeader(__namedParameters): Element;
+```
+
+Defined in: [packages/canvas/editor/src/workspace/layout/WorkspaceHeader.tsx:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/layout/WorkspaceHeader.tsx#L52)
+
+Full-width top header: Back · undo/redo · editable name · avatars · Share.
+Undo/redo run the standard `historyStore` → `sceneStore` wiring. The name is
+click-to-edit only when `onTitleChange` is wired (the host owns persistence).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`WorkspaceHeaderProps`](../interfaces/WorkspaceHeaderProps) |
+
+## Returns
+
+`Element`

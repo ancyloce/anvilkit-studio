@@ -1,0 +1,26 @@
+---
+title: "CanvasWorkspace"
+description: "@anvilkit/canvas-editor · CanvasWorkspace"
+---
+
+```ts
+function CanvasWorkspace(__namedParameters): Element;
+```
+
+Defined in: [packages/canvas/editor/src/workspace/layout/CanvasWorkspace.tsx:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/layout/CanvasWorkspace.tsx#L66)
+
+The Canva-style editor shell: full-width Header · Aside (Panel Dock + Tab
+Panel) · Canvas (dynamic Toolbar + Page with floating Element Controls) ·
+full-width Footer. Composed over the headless `<CanvasStudio>` via its
+`renderShell` seam; UI state lives in a per-instance Zustand store provided
+here. This is the editor's single top-level shell.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`CanvasWorkspaceProps`](../interfaces/CanvasWorkspaceProps) |
+
+## Returns
+
+`Element`

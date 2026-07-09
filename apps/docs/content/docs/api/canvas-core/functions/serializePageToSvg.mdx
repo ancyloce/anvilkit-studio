@@ -1,0 +1,31 @@
+---
+title: "serializePageToSvg"
+description: "@anvilkit/canvas-core · serializePageToSvg"
+---
+
+```ts
+function serializePageToSvg(
+   ir, 
+   pageSelector, 
+options?): Promise<SvgSerializeResult>;
+```
+
+Defined in: [serialize/svg.ts:946](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L946)
+
+Serialize a single page of a [CanvasIR](../interfaces/CanvasIR) document to an SVG string.
+
+`pageSelector` is either the page id (string) or its index (number); an
+unknown selector throws. Content-level degradations (unsupported background,
+unresolved asset, skipped placeholder, …) are reported in `warnings`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `pageSelector` | `string` \| `number` |
+| `options` | [`SvgSerializeOptions`](../interfaces/SvgSerializeOptions) |
+
+## Returns
+
+`Promise`\<[`SvgSerializeResult`](../interfaces/SvgSerializeResult)\>

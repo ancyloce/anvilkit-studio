@@ -1,0 +1,33 @@
+---
+title: "CanvasTextNodeSchema"
+description: "@anvilkit/canvas-core · CanvasTextNodeSchema"
+---
+
+```ts
+const CanvasTextNodeSchema: ZodObject<{
+  align: ZodOptional<ZodEnum<{
+     center: "center";
+     left: "left";
+     right: "right";
+  }>>;
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  fill: ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>;
+  fontFamily: ZodString;
+  fontSize: ZodNumber;
+  fontWeight: ZodOptional<ZodString>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  shadow: ZodOptional<ZodType<CanvasShadow, unknown, $ZodTypeInternals<CanvasShadow, unknown>>>;
+  text: ZodString;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"text">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir-validators.ts:182](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-validators.ts#L182)

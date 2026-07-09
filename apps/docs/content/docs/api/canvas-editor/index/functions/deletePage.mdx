@@ -1,0 +1,26 @@
+---
+title: "deletePage"
+description: "@anvilkit/canvas-editor · deletePage"
+---
+
+```ts
+function deletePage(ctx, pageId): void;
+```
+
+Defined in: [packages/canvas/editor/src/pages/page-actions.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/page-actions.ts#L68)
+
+Delete a page. No-op when only one page remains (last-page guard — empty
+IR would render the "no active page" fallback in `<CanvasStudio>`).
+If the deleted page was active, moves active to the page at the same index
+(or the previous one if the deleted was last).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
+| `pageId` | `string` |
+
+## Returns
+
+`void`

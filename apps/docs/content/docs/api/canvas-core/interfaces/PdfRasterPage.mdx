@@ -1,0 +1,14 @@
+---
+title: "PdfRasterPage"
+description: "@anvilkit/canvas-core · PdfRasterPage"
+---
+
+Defined in: [serialize/pdf.ts:185](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L185)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="image"&gt;&lt;/a&gt; `image` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | The rendered page screenshot: raw PNG/JPEG bytes, or a `data:image/(png|jpeg);base64,…` URL. | [serialize/pdf.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L192) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType?` | [`PdfRasterMimeType`](../type-aliases/PdfRasterMimeType) | MIME of `image` when it is raw bytes. Defaults to `image/png`. Ignored when `image` is a data URL (the URL's declared type wins). | [serialize/pdf.ts:197](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L197) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | Matches a [CanvasPage.id](CanvasPage.md#id) in the IR. | [serialize/pdf.ts:187](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L187) |

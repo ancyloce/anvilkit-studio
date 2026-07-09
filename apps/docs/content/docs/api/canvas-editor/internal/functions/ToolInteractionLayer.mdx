@@ -1,0 +1,25 @@
+---
+title: "ToolInteractionLayer"
+description: "@anvilkit/canvas-editor · ToolInteractionLayer"
+---
+
+```ts
+function ToolInteractionLayer(__namedParameters): null;
+```
+
+Defined in: [packages/canvas/editor/src/tools/ToolInteractionLayer.tsx:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/ToolInteractionLayer.tsx#L21)
+
+Bridges Konva.Stage pointer events to the active tool from `toolStore`.
+Renders no DOM — pure side-effect component. Mounts as a sibling of
+<CanvasStage> inside the CanvasStudioContext so unmount order detaches
+listeners before <CanvasStage> calls `stage.destroy()`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`ToolInteractionLayerProps`](../interfaces/ToolInteractionLayerProps) |
+
+## Returns
+
+`null`

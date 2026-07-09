@@ -1,0 +1,20 @@
+---
+title: "useCanvasPresence"
+description: "@anvilkit/canvas-editor · useCanvasPresence"
+---
+
+```ts
+function useCanvasPresence(): readonly CanvasPresenceState[];
+```
+
+Defined in: [packages/canvas/editor/src/collab/useCanvasPresence.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/useCanvasPresence.ts#L34)
+
+Subscribe to validated remote peer presence (cursors / selections) from the
+nearest [CanvasPresenceContext](../variables/CanvasPresenceContext). Returns `[]` when no provider is
+mounted. This is the data seam for the deferred collab UI (I3-1): the
+presence layer (`<RemoteCursors>` / `<RemoteSelections>`) can read it once
+cursor/selection rendering ships, without changing the binding.
+
+## Returns
+
+readonly [`CanvasPresenceState`](../interfaces/CanvasPresenceState)[]

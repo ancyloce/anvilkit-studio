@@ -1,0 +1,22 @@
+---
+title: "CanvasCommandHandler"
+description: "@anvilkit/canvas-core · CanvasCommandHandler"
+---
+
+Defined in: [extensions/command-registry.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L11)
+
+A command extension. `apply` must be reversible like the built-in
+`applyCommand` — returning `{ ir, inverse }` so history undo/redo works.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `C` *extends* \{ `type`: `string`; \} | \{ `type`: `string`; \} |
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="apply"&gt;&lt;/a&gt; `apply` | `readonly` | (`ir`, `cmd`, `options`) =&gt; [`CommandApplyResult`](CommandApplyResult.md) | [extensions/command-registry.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L15) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `readonly` | `C`\[`"type"`\] | [extensions/command-registry.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L14) |

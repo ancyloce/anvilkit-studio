@@ -1,0 +1,26 @@
+---
+title: "CanvasImageNodeSchema"
+description: "@anvilkit/canvas-core · CanvasImageNodeSchema"
+---
+
+```ts
+const CanvasImageNodeSchema: ZodObject<{
+  assetId: ZodString;
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  crop: ZodOptional<ZodType<CanvasImageCrop, unknown, $ZodTypeInternals<CanvasImageCrop, unknown>>>;
+  filters: ZodOptional<ZodArray<ZodType<ImageFilter, unknown, $ZodTypeInternals<ImageFilter, unknown>>>>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  maskAssetId: ZodOptional<ZodString>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"image">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir-validators.ts:194](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-validators.ts#L194)

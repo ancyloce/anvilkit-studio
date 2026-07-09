@@ -1,0 +1,27 @@
+---
+title: "PathControlRef"
+description: "@anvilkit/canvas-editor · PathControlRef"
+---
+
+```ts
+type PathControlRef = 
+  | {
+  type: "start";
+}
+  | {
+  seg: number;
+  type: "to";
+}
+  | {
+  seg: number;
+  type: "c1";
+}
+  | {
+  seg: number;
+  type: "c2";
+};
+```
+
+Defined in: [packages/canvas/editor/src/tools/path-edit-geometry.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/path-edit-geometry.ts#L17)
+
+Locates one editable point within a [ParsedPath](../interfaces/ParsedPath).

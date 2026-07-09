@@ -1,0 +1,14 @@
+---
+title: "handTool"
+description: "@anvilkit/canvas-editor · handTool"
+---
+
+```ts
+const handTool: Tool;
+```
+
+Defined in: [packages/canvas/editor/src/tools/hand-tool.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/hand-tool.ts#L16)
+
+MVP-7: hand tool NEVER commits — pan is view state, lives in viewportStore.
+The MVP-7 single-command assertion test's negative case (active tool = hand)
+expects history.past.length === 0 after a full down→move*→up sequence.

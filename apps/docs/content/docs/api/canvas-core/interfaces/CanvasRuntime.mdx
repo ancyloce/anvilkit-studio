@@ -1,0 +1,22 @@
+---
+title: "CanvasRuntime"
+description: "@anvilkit/canvas-core · CanvasRuntime"
+---
+
+Defined in: [extensions/canvas-runtime.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L59)
+
+The resolved runtime = built-ins + extensions. With NO extension node kinds,
+`nodeSchema`/`irSchema` are the exact static module schemas (identity-equal),
+so the zero-extension runtime is behaviourally identical to today.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="apply"&gt;&lt;/a&gt; `apply` | `readonly` | (`ir`, `cmd`, `options?`) =&gt; [`CommandApplyResult`](CommandApplyResult.md) | Apply a command: built-in types go to the core `applyCommand` (and cannot be shadowed by an extension); custom types dispatch to their registered handler. Throws for an unknown type with no handler. | [extensions/canvas-runtime.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L70) |
+| &lt;a id="commands"&gt;&lt;/a&gt; `commands` | `readonly` | [`CanvasCommandRegistry`](CanvasCommandRegistry.md) | - | [extensions/canvas-runtime.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L61) |
+| &lt;a id="irschema"&gt;&lt;/a&gt; `irSchema` | `readonly` | `ZodType`\&lt;[`CanvasIR`](CanvasIR.md)\&gt; | - | [extensions/canvas-runtime.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L64) |
+| &lt;a id="migrate"&gt;&lt;/a&gt; `migrate` | `readonly` | (`raw`) =&gt; [`CanvasIR`](CanvasIR.md) | Forward-migrate a persisted/peer IR to the current version via the migration registry, then validate with this runtime's `irSchema`. The default runtime (no migrations) accepts already-current documents and rejects others. | [extensions/canvas-runtime.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L80) |
+| &lt;a id="migrations"&gt;&lt;/a&gt; `migrations` | `readonly` | [`CanvasMigrationRegistry`](CanvasMigrationRegistry.md) | - | [extensions/canvas-runtime.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L62) |
+| &lt;a id="nodekinds"&gt;&lt;/a&gt; `nodeKinds` | `readonly` | [`CanvasNodeKindRegistry`](CanvasNodeKindRegistry.md) | - | [extensions/canvas-runtime.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L60) |
+| &lt;a id="nodeschema"&gt;&lt;/a&gt; `nodeSchema` | `readonly` | `ZodType`\&lt;[`CanvasNode`](../type-aliases/CanvasNode)\&gt; | - | [extensions/canvas-runtime.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/canvas-runtime.ts#L63) |

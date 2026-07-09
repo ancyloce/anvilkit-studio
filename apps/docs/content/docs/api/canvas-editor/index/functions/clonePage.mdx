@@ -1,0 +1,30 @@
+---
+title: "clonePage"
+description: "@anvilkit/canvas-editor · clonePage"
+---
+
+```ts
+function clonePage(page, opts?): CanvasPage;
+```
+
+Defined in: [packages/canvas/editor/src/pages/clone-page.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/clone-page.ts#L49)
+
+Deep-clone a CanvasPage with a brand-new page id and fresh ids on every
+descendant node. Uses structured JSON cloning — safe because the IR is
+pure data (per `CanvasNode` types in `@anvilkit/canvas-core`).
+
+The original `page` is not mutated. The returned page has:
+  - new `id`
+  - `name` set per `opts.name` (or `"<original.name ?? 'Page'> copy"`)
+  - `root.children[*]` cloned with fresh ids (preserving transforms, bounds)
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `page` | `CanvasPage` |
+| `opts` | [`ClonePageOptions`](../interfaces/ClonePageOptions) |
+
+## Returns
+
+`CanvasPage`

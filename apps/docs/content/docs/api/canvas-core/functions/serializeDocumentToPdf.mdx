@@ -1,0 +1,30 @@
+---
+title: "serializeDocumentToPdf"
+description: "@anvilkit/canvas-core · serializeDocumentToPdf"
+---
+
+```ts
+function serializeDocumentToPdf(ir, options): Promise<PdfSerializeResult>;
+```
+
+Defined in: [serialize/pdf.ts:249](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L249)
+
+Serialize a [CanvasIR](../interfaces/CanvasIR) document to a multi-page PDF, one PDF page per
+selected [CanvasPage](../interfaces/CanvasPage), with each page's pre-rendered raster drawn to fill
+it. Page count always equals the number of selected pages; pages whose raster
+is missing/undecodable/unsupported are emitted blank with a corresponding entry
+in `warnings`.
+
+Throws a `RangeError` when there are no pages to render (empty document, or a
+`pages` list that resolves to nothing) since a PDF requires at least one page.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`PdfSerializeOptions`](../interfaces/PdfSerializeOptions) |
+
+## Returns
+
+`Promise`\<[`PdfSerializeResult`](../interfaces/PdfSerializeResult)\>

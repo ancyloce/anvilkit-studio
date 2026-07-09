@@ -1,0 +1,29 @@
+---
+title: "marqueeHits"
+description: "@anvilkit/canvas-core · marqueeHits"
+---
+
+```ts
+function marqueeHits(
+   nodes, 
+   marquee, 
+   opts?): CanvasNode[];
+```
+
+Defined in: [hit-test.ts:138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/hit-test.ts#L138)
+
+Nodes selected by a marquee rectangle (in world coordinates). Uses each
+node's rotation-aware world AABB; `contained` switches from any-overlap to
+fully-enclosed. Returns matches in input order.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `nodes` | readonly [`CanvasNode`](../type-aliases/CanvasNode)[] |
+| `marquee` | [`BoundsExtent`](../interfaces/BoundsExtent) |
+| `opts` | [`MarqueeHitsOptions`](../interfaces/MarqueeHitsOptions) |
+
+## Returns
+
+[`CanvasNode`](../type-aliases/CanvasNode)[]

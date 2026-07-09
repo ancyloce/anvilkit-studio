@@ -1,0 +1,27 @@
+---
+title: "commitPathD"
+description: "@anvilkit/canvas-editor · commitPathD"
+---
+
+```ts
+function commitPathD(
+   ctx, 
+   nodeId, 
+   d): void;
+```
+
+Defined in: [packages/canvas/editor/src/selection/path-edit-actions.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/path-edit-actions.ts#L20)
+
+Commit a new `d` for a path node (one `node.update`). No-op for empty `d`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../../index/interfaces/CanvasStudioContextValue) |
+| `nodeId` | `string` |
+| `d` | `string` |
+
+## Returns
+
+`void`

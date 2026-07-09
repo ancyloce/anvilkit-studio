@@ -1,0 +1,33 @@
+---
+title: "createCanvasPresence"
+description: "@anvilkit/canvas-editor · createCanvasPresence"
+---
+
+```ts
+function createCanvasPresence(awareness, options?): CanvasPresence;
+```
+
+Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L49)
+
+Bridge between a `y-protocols/awareness` instance and the canvas presence
+contract. Ported from `plugin-collab-yjs`'s `createAwarenessBridge`, minus
+the metrics coupling:
+
+- outbound `update()` is token-bucket rate-limited (L3, default 30/sec) so a
+  cursor-on-every-mousemove host can't flood awareness traffic;
+- inbound peer states are filtered through [validateCanvasPresenceState](validateCanvasPresenceState.md)
+  so a malformed payload never poisons the local view;
+- `onPeerChange` keeps a validated cache keyed by client id and revalidates
+  only the clients in each change delta — O(changed), not O(peers);
+- `destroy()` removes every awareness listener this bridge registered.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `awareness` | `Awareness` |
+| `options?` | [`CreateCanvasPresenceOptions`](../interfaces/CreateCanvasPresenceOptions) |
+
+## Returns
+
+[`CanvasPresence`](../interfaces/CanvasPresence)

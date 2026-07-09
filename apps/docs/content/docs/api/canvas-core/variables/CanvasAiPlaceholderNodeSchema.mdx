@@ -1,0 +1,29 @@
+---
+title: "CanvasAiPlaceholderNodeSchema"
+description: "@anvilkit/canvas-core · CanvasAiPlaceholderNodeSchema"
+---
+
+```ts
+const CanvasAiPlaceholderNodeSchema: ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  id: ZodString;
+  jobId: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  sourcePrompt: ZodOptional<ZodString>;
+  status: ZodEnum<{
+     complete: "complete";
+     error: "error";
+     pending: "pending";
+  }>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"ai-placeholder">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir-validators.ts:203](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-validators.ts#L203)

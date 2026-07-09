@@ -1,0 +1,19 @@
+---
+title: "CanvasSvgHookContext"
+description: "@anvilkit/canvas-core · CanvasSvgHookContext"
+---
+
+Defined in: [extensions/node-kind-registry.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L31)
+
+Minimal, React/Konva-free SVG emit surface handed to a kind's `toSvg` hook so
+a custom kind can render to the same `<svg>` the built-in serializer produces.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="commonattrs"&gt;&lt;/a&gt; `commonAttrs` | (`node`) =&gt; `string` | Common per-node attributes: transform / opacity / blend mode. | [extensions/node-kind-registry.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L33) |
+| &lt;a id="escapeattr"&gt;&lt;/a&gt; `escapeAttr` | (`s`) =&gt; `string` | - | [extensions/node-kind-registry.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L36) |
+| &lt;a id="escapexml"&gt;&lt;/a&gt; `escapeXml` | (`s`) =&gt; `string` | - | [extensions/node-kind-registry.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L37) |
+| &lt;a id="fmt"&gt;&lt;/a&gt; `fmt` | (`n`) =&gt; `string` | Format a number for SVG output (matches the built-in serializer). | [extensions/node-kind-registry.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L35) |
+| &lt;a id="warn"&gt;&lt;/a&gt; `warn` | (`code`, `message`, `nodeId?`) =&gt; `void` | Record a non-fatal serialization warning. | [extensions/node-kind-registry.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L39) |

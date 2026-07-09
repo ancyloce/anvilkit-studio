@@ -1,0 +1,18 @@
+---
+title: "SvgSerializeOptions"
+description: "@anvilkit/canvas-core · SvgSerializeOptions"
+---
+
+Defined in: [serialize/svg.ts:620](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L620)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="fetchasset"&gt;&lt;/a&gt; `fetchAsset?` | [`SvgFetchAsset`](../type-aliases/SvgFetchAsset) | - | [serialize/svg.ts:622](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L622) |
+| &lt;a id="fonts"&gt;&lt;/a&gt; `fonts?` | [`SvgFontFaceDef`](SvgFontFaceDef.md)[] | - | [serialize/svg.ts:623](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L623) |
+| &lt;a id="images"&gt;&lt;/a&gt; `images?` | [`SvgImageMode`](../type-aliases/SvgImageMode) | - | [serialize/svg.ts:621](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L621) |
+| &lt;a id="nodekinds"&gt;&lt;/a&gt; `nodeKinds?` | [`CanvasNodeKindRegistry`](CanvasNodeKindRegistry.md) | Node-kind registry (typically `runtime.nodeKinds`). A node whose `type` is not a built-in kind is emitted via its registered `toSvg` hook; without one it is skipped with an `UNKNOWN_KIND_SKIPPED` warning. | [serialize/svg.ts:641](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L641) |
+| &lt;a id="pretty"&gt;&lt;/a&gt; `pretty?` | `boolean` | Newline-indent the output for readable/golden snapshots (default `false`). | [serialize/svg.ts:627](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L627) |
+| &lt;a id="skipinvisible"&gt;&lt;/a&gt; `skipInvisible?` | `boolean` | Skip nodes with `visible === false` (default `true`). | [serialize/svg.ts:625](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L625) |
+| &lt;a id="validate"&gt;&lt;/a&gt; `validate?` | `boolean` | Run [CanvasIRSchema](../variables/CanvasIRSchema) over `ir` before emitting and throw on failure (default `false`). The serializer trusts its input and `fmt` coerces any non-finite number to `"0"` to keep the output well-formed; enable this to fail fast on a malformed/un-validated IR (NaN/Infinity, wrong types) instead of silently emitting zeros. | [serialize/svg.ts:635](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L635) |

@@ -1,0 +1,23 @@
+---
+title: "CanvasNodeGroupCommand"
+description: "@anvilkit/canvas-core · CanvasNodeGroupCommand"
+---
+
+Defined in: [commands/types.ts:91](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L91)
+
+Wrap one or more sibling nodes in a new group node. All `childIds` must share
+the same immediate parent group on `pageId`; they are wrapped in their current
+sibling z-order and the new group takes the slot of the topmost selected node.
+No child transforms are altered (the group is created with an identity
+transform), so grouping is visually a no-op and exactly reversible.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="childids"&gt;&lt;/a&gt; `childIds` | `string`[] | - | [commands/types.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L94) |
+| &lt;a id="groupid"&gt;&lt;/a&gt; `groupId` | `string` | - | [commands/types.ts:95](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L95) |
+| &lt;a id="groupname"&gt;&lt;/a&gt; `groupName?` | `string` | - | [commands/types.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L96) |
+| &lt;a id="grouptemplate"&gt;&lt;/a&gt; `groupTemplate?` | `Omit`\&lt;[`CanvasGroupNode`](CanvasGroupNode.md), `"children"`\&gt; | When present (e.g. as the inverse of `node.ungroup`), the created group is reconstructed verbatim from these fields rather than as a canonical identity group. `children` are always supplied from `childIds`. | [commands/types.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L102) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | - | [commands/types.ts:93](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L93) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.group"` | - | [commands/types.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L92) |

@@ -1,0 +1,27 @@
+---
+title: "ungroupSelection"
+description: "@anvilkit/canvas-editor · ungroupSelection"
+---
+
+```ts
+function ungroupSelection(ctx): string[];
+```
+
+Defined in: [packages/canvas/editor/src/selection/group-actions.ts:83](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/group-actions.ts#L83)
+
+Dissolve every selected (non-root) group, lifting its children into the
+parent, then select the lifted children. Returns the lifted child ids.
+Multiple groups dissolve as ONE undo entry (a single `commitBatch`); a lone
+group stays a plain commit. Commands are collected from the pre-gesture IR —
+the selected groups are distinct, so each `node.ungroup` resolves its group by
+id regardless of how earlier ungroups in the batch reshaped the tree.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../../index/interfaces/CanvasStudioContextValue) |
+
+## Returns
+
+`string`[]

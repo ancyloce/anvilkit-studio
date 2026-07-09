@@ -14,8 +14,14 @@ test("react-konva Stage renders in the docs playground (Vite, React 19.2.7)", as
 	page,
 }) => {
 	await page.goto("/playground");
+	// The Studio shell mounts below the marketing banner and hydrates lazily —
+	// wait for the editor canvas before touching plugin chrome.
+	await expect(page.locator(".anvilkit-playground__canvas")).toBeVisible({
+		timeout: 90_000,
+	});
 	const open = page.getByRole("button", { name: "Open Canvas" });
-	await expect(open).toBeVisible({ timeout: 90_000 });
+	await open.scrollIntoViewIfNeeded();
+	await expect(open).toBeVisible({ timeout: 60_000 });
 	await open.click();
 	await expect(page.getByTestId("canvas-mode-overlay")).toBeVisible({
 		timeout: 60_000,

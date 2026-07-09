@@ -1,0 +1,25 @@
+---
+title: "encodeCanvasIR"
+description: "@anvilkit/canvas-editor · encodeCanvasIR"
+---
+
+```ts
+function encodeCanvasIR(ir): string;
+```
+
+Defined in: [packages/canvas/editor/src/collab/encode.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/encode.ts#L9)
+
+Serialize a [CanvasIR](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) to a stable JSON string with sorted object
+keys. Two replicas observing the same logical IR must produce
+byte-identical Y.Map values; otherwise last-writer-wins would flap on
+key-order differences alone. Mirrors `plugin-collab-yjs`'s `encodeIR`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) |
+
+## Returns
+
+`string`

@@ -1,0 +1,24 @@
+---
+title: "canUngroupSelection"
+description: "@anvilkit/canvas-editor · canUngroupSelection"
+---
+
+```ts
+function canUngroupSelection(ir, selectedIds): boolean;
+```
+
+Defined in: [packages/canvas/editor/src/selection/group-actions.ts:44](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/group-actions.ts#L44)
+
+True when at least one selected node is a non-root group that can be
+dissolved.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) |
+| `selectedIds` | readonly `string`[] |
+
+## Returns
+
+`boolean`

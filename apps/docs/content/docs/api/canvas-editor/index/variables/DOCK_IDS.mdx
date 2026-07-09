@@ -1,0 +1,19 @@
+---
+title: "DOCK_IDS"
+description: "@anvilkit/canvas-editor · DOCK_IDS"
+---
+
+```ts
+const DOCK_IDS: readonly ["ai", "templates", "elements", "text", "brand", "uploads", "layers"];
+```
+
+Defined in: [packages/canvas/editor/src/workspace/dock-ids.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/dock-ids.ts#L10)
+
+## File
+
+Single source of truth for the Canva-shell dock ids.
+
+Kept dependency-free (no lucide/React) so both the Zustand UI store
+(`state/workspace-ui-store.ts`) and the icon/label config
+(`workspace-config.ts`) can import it without a cycle. `DockId` is derived
+from the tuple so the union and the runtime list never drift.

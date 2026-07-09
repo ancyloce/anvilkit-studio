@@ -1,0 +1,29 @@
+---
+title: "renamePage"
+description: "@anvilkit/canvas-editor · renamePage"
+---
+
+```ts
+function renamePage(
+   ctx, 
+   pageId, 
+   name): void;
+```
+
+Defined in: [packages/canvas/editor/src/pages/page-actions.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/page-actions.ts#L120)
+
+Rename a page. No-op when the page id is unknown or the new name matches
+the existing name. Pass `undefined` (or use `clearPageName`) to remove
+the explicit name and fall back to the default tab label.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
+| `pageId` | `string` |
+| `name` | `string` \| `undefined` |
+
+## Returns
+
+`void`

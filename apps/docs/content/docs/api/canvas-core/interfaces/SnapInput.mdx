@@ -1,0 +1,15 @@
+---
+title: "SnapInput"
+description: "@anvilkit/canvas-core · SnapInput"
+---
+
+Defined in: [snap.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap.ts#L28)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="candidate"&gt;&lt;/a&gt; `candidate` | [`SnapRect`](SnapRect.md) | Rect of the thing being snapped (e.g. a dragging node) in world coords. | [snap.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap.ts#L30) |
+| &lt;a id="gridsize"&gt;&lt;/a&gt; `gridSize?` | `number` | When &gt; 0 and no edge snap matches, snap the top-left to this grid size. | [snap.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap.ts#L34) |
+| &lt;a id="others"&gt;&lt;/a&gt; `others` | readonly [`SnapRect`](SnapRect.md)[] | Other (unselected) node bounding rects to snap against. | [snap.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap.ts#L32) |
+| &lt;a id="threshold"&gt;&lt;/a&gt; `threshold?` | `number` | Maximum world-space distance for an edge snap. Default 6. | [snap.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap.ts#L36) |

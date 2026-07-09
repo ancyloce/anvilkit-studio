@@ -1,0 +1,18 @@
+---
+title: "ReplaceChildrenInParentOptions"
+description: "@anvilkit/canvas-core · ReplaceChildrenInParentOptions"
+---
+
+Defined in: [ir-mutations.ts:529](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-mutations.ts#L529)
+
+## Extends
+
+- `NowOption`
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | - | `NowOption.now` | [ir-mutations.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-mutations.ts#L38) |
+| &lt;a id="parentid"&gt;&lt;/a&gt; `parentId` | `string` | - | - | [ir-mutations.ts:530](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-mutations.ts#L530) |
+| &lt;a id="replace"&gt;&lt;/a&gt; `replace` | (`children`) =&gt; [`CanvasNode`](../type-aliases/CanvasNode)[] | Receives the parent group's current children and returns the replacement array. Runs inside a single tree rewrite, so a batch edit (e.g. grouping or ungrouping N siblings) costs one O(n) pass instead of N insert/remove passes. The caller owns IR invariants (unique ids, no cycles) within the returned array. | - | [ir-mutations.ts:538](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-mutations.ts#L538) |

@@ -1,0 +1,29 @@
+---
+title: "hitTest"
+description: "@anvilkit/canvas-core · hitTest"
+---
+
+```ts
+function hitTest(
+   nodes, 
+   world, 
+   opts?): CanvasNode | null;
+```
+
+Defined in: [hit-test.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/src/hit-test.ts#L94)
+
+The top-most node whose box contains `world`. Nodes are taken in paint order
+(later siblings paint on top, matching `page.root.children`), so the last
+match wins. Returns null when nothing is hit.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `nodes` | readonly [`CanvasNode`](../type-aliases/CanvasNode)[] |
+| `world` | `Point` |
+| `opts` | [`HitTestOptions`](../interfaces/HitTestOptions) |
+
+## Returns
+
+[`CanvasNode`](../type-aliases/CanvasNode) \| `null`

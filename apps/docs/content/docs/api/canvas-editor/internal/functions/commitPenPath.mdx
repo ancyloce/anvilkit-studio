@@ -1,0 +1,26 @@
+---
+title: "commitPenPath"
+description: "@anvilkit/canvas-editor · commitPenPath"
+---
+
+```ts
+function commitPenPath(ctx, closed): string | null;
+```
+
+Defined in: [packages/canvas/editor/src/tools/pen-actions.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/pen-actions.ts#L31)
+
+Finalize the in-progress pen path: builds a `CanvasPathNode` (bounds-local
+`d`, identity-stroke defaults), commits one `node.create`, resets the pen
+store, and selects the new node. No-op (returns null) for fewer than two
+anchors. `closed` appends a `Z` and the closing segment.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`PenCommitContext`](../interfaces/PenCommitContext) |
+| `closed` | `boolean` |
+
+## Returns
+
+`string` \| `null`

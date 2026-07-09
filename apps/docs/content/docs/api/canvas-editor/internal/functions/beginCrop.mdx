@@ -1,0 +1,24 @@
+---
+title: "beginCrop"
+description: "@anvilkit/canvas-editor · beginCrop"
+---
+
+```ts
+function beginCrop(ctx, nodeId): boolean;
+```
+
+Defined in: [packages/canvas/editor/src/selection/crop-actions.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/crop-actions.ts#L76)
+
+Open the interactive crop editor for an image node. Returns false (no-op)
+when the crop store is unavailable or the target is not an image node.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../../index/interfaces/CanvasStudioContextValue) |
+| `nodeId` | `string` |
+
+## Returns
+
+`boolean`

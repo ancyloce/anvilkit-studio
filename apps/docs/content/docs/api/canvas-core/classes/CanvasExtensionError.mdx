@@ -1,0 +1,45 @@
+---
+title: "CanvasExtensionError"
+description: "@anvilkit/canvas-core · CanvasExtensionError"
+---
+
+Defined in: [extensions/node-kind-registry.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L17)
+
+Structured error thrown when an extension registration is rejected.
+
+## Extends
+
+- `Error`
+
+## Constructors
+
+### Constructor
+
+```ts
+new CanvasExtensionError(code, message): CanvasExtensionError;
+```
+
+Defined in: [extensions/node-kind-registry.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L20)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `code` | [`CanvasExtensionErrorCode`](../type-aliases/CanvasExtensionErrorCode) |
+| `message` | `string` |
+
+#### Returns
+
+`CanvasExtensionError`
+
+#### Overrides
+
+```ts
+Error.constructor
+```
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | [`CanvasExtensionErrorCode`](../type-aliases/CanvasExtensionErrorCode) | [extensions/node-kind-registry.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L18) |

@@ -1,0 +1,31 @@
+---
+title: "CanvasPresenceSource"
+description: "@anvilkit/canvas-editor · CanvasPresenceSource"
+---
+
+Defined in: [packages/canvas/editor/src/collab/useCanvasPresence.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/useCanvasPresence.ts#L15)
+
+The minimal shape `useCanvasPresence` consumes — satisfied by a
+[CanvasYjsBinding](CanvasYjsBinding.md)'s `presence` bridge, or any fake in tests. Declared
+structurally so this module imports NO yjs: the `/collab` React seam stays
+free of the CRDT runtime.
+
+## Methods
+
+### onPeerChange()
+
+```ts
+onPeerChange(callback): CanvasBindingUnsubscribe;
+```
+
+Defined in: [packages/canvas/editor/src/collab/useCanvasPresence.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/useCanvasPresence.ts#L16)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `callback` | (`peers`) =&gt; `void` |
+
+#### Returns
+
+[`CanvasBindingUnsubscribe`](../type-aliases/CanvasBindingUnsubscribe)

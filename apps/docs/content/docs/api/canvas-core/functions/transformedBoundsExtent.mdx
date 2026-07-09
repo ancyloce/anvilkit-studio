@@ -1,0 +1,29 @@
+---
+title: "transformedBoundsExtent"
+description: "@anvilkit/canvas-core · transformedBoundsExtent"
+---
+
+```ts
+function transformedBoundsExtent(
+   transform, 
+   width, 
+   height): BoundsExtent;
+```
+
+Defined in: [geometry.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L92)
+
+Axis-aligned bounding box, in the parent coordinate space, of a
+`width`×`height` box anchored at the local origin after applying `transform`.
+Accounts for rotation/scale/skew, unlike a naive `x + width` extent.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `transform` | [`CanvasTransform`](../interfaces/CanvasTransform) |
+| `width` | `number` |
+| `height` | `number` |
+
+## Returns
+
+[`BoundsExtent`](../interfaces/BoundsExtent)

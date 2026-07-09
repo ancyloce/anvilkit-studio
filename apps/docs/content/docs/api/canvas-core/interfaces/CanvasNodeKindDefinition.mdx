@@ -1,0 +1,25 @@
+---
+title: "CanvasNodeKindDefinition"
+description: "@anvilkit/canvas-core · CanvasNodeKindDefinition"
+---
+
+Defined in: [extensions/node-kind-registry.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L43)
+
+A node kind contributed at runtime. `N` is the concrete node type.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `N` *extends* [`CanvasUnknownNode`](../type-aliases/CanvasUnknownNode) | [`CanvasUnknownNode`](../type-aliases/CanvasUnknownNode) |
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="contentextent"&gt;&lt;/a&gt; `contentExtent?` | `readonly` | (`node`) =&gt; \{ `height`: `number`; `width`: `number`; \} | Local-space content extent for group-bounds + hit-testing. | [extensions/node-kind-registry.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L56) |
+| &lt;a id="create"&gt;&lt;/a&gt; `create?` | `readonly` | (`opts`) =&gt; `N` | Pure factory; mirrors the `createRect`-style builders in ir-builders.ts. Optional: built-in kinds are created via the typed builders, and a parse/render-only kind (e.g. one received from a peer) may omit it. | [extensions/node-kind-registry.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L54) |
+| &lt;a id="iscontainer"&gt;&lt;/a&gt; `isContainer?` | `readonly` | `boolean` | True if this kind contains `children` (walked recursively). Default false. | [extensions/node-kind-registry.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L60) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `N`\[`"type"`\] | - | [extensions/node-kind-registry.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L46) |
+| &lt;a id="schema"&gt;&lt;/a&gt; `schema` | `readonly` | `ZodType`\&lt;`N`\&gt; | Object schema for THIS kind only (a `z.looseObject({..., type: z.literal(kind)})`). | [extensions/node-kind-registry.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L48) |
+| &lt;a id="tosvg"&gt;&lt;/a&gt; `toSvg?` | `readonly` | (`node`, `ctx`) =&gt; `string` | SVG hook. Returns a fragment string, or `""` to skip. | [extensions/node-kind-registry.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/node-kind-registry.ts#L58) |

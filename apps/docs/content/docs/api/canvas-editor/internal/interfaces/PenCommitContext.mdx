@@ -1,0 +1,19 @@
+---
+title: "PenCommitContext"
+description: "@anvilkit/canvas-editor · PenCommitContext"
+---
+
+Defined in: [packages/canvas/editor/src/tools/pen-actions.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/pen-actions.ts#L16)
+
+Minimal context shape shared by `ToolContext` (pen tool) and
+`CanvasStudioContextValue` (keyboard overlay). `penStore` is optional so the
+structurally-wider studio context (where it is optional) also fits.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="activepageid"&gt;&lt;/a&gt; `activePageId` | `string` | [packages/canvas/editor/src/tools/pen-actions.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/pen-actions.ts#L20) |
+| &lt;a id="commit"&gt;&lt;/a&gt; `commit` | (`cmd`) =&gt; [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) | [packages/canvas/editor/src/tools/pen-actions.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/pen-actions.ts#L18) |
+| &lt;a id="penstore"&gt;&lt;/a&gt; `penStore?` | [`PenStoreApi`](../type-aliases/PenStoreApi) | [packages/canvas/editor/src/tools/pen-actions.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/pen-actions.ts#L17) |
+| &lt;a id="selectionstore"&gt;&lt;/a&gt; `selectionStore` | [`SelectionStoreApi`](../type-aliases/SelectionStoreApi) | [packages/canvas/editor/src/tools/pen-actions.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/pen-actions.ts#L19) |

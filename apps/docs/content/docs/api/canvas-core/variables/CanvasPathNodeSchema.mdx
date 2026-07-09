@@ -1,0 +1,27 @@
+---
+title: "CanvasPathNodeSchema"
+description: "@anvilkit/canvas-core · CanvasPathNodeSchema"
+---
+
+```ts
+const CanvasPathNodeSchema: ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  d: ZodString;
+  fill: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  shadow: ZodOptional<ZodType<CanvasShadow, unknown, $ZodTypeInternals<CanvasShadow, unknown>>>;
+  stroke: ZodOptional<ZodString>;
+  strokeWidth: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"path">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir-validators.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-validators.ts#L172)

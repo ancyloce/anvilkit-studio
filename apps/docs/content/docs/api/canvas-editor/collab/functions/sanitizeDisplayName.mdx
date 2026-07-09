@@ -1,0 +1,26 @@
+---
+title: "sanitizeDisplayName"
+description: "@anvilkit/canvas-editor · sanitizeDisplayName"
+---
+
+```ts
+function sanitizeDisplayName(value): string;
+```
+
+Defined in: [packages/canvas/editor/src/collab/presence-schema.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-schema.ts#L70)
+
+Strip ASCII control characters (0x00–0x1f) and DEL (0x7f) from a display
+name, then cap to [MAX\_DISPLAY\_NAME\_LENGTH](../variables/MAX_DISPLAY_NAME_LENGTH). Filters by code point to
+avoid a control-character regex literal. Does NOT escape HTML — hosts
+rendering the name into `innerHTML` must still escape; this only blunts
+control-character injection.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `string` |
+
+## Returns
+
+`string`

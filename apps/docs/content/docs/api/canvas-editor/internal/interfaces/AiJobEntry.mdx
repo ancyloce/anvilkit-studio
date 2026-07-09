@@ -1,0 +1,25 @@
+---
+title: "AiJobEntry"
+description: "@anvilkit/canvas-editor · AiJobEntry"
+---
+
+Defined in: [packages/canvas/editor/src/stores/ai-job-store.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L15)
+
+I1-10 transient registry for in-flight AI jobs that back an `ai-placeholder`
+node on the canvas. The editor never runs jobs (the host does, via
+`requestAiIntent`); it only needs a place to (a) reflect a job's status and
+(b) reach the host's abort handle so a placeholder's on-canvas Cancel button
+can stop it. The `AbortController` lives with whoever runs the job (the host);
+here we hold only an `abort()` closure registered when the job starts.
+
+Purely ephemeral — never serialized into the IR (the placeholder node carries
+the serializable `jobId`/`status`; this store carries the live cancel handle).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="abort"&gt;&lt;/a&gt; `abort` | () =&gt; `void` | Host-supplied abort handle (e.g. `() => controller.abort()`). | [packages/canvas/editor/src/stores/ai-job-store.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L22) |
+| &lt;a id="jobid"&gt;&lt;/a&gt; `jobId` | `string` | Correlation id shared with the placeholder node's `jobId`. | [packages/canvas/editor/src/stores/ai-job-store.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L17) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId` | `string` | Id of the `ai-placeholder` node this job backs. | [packages/canvas/editor/src/stores/ai-job-store.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L19) |
+| &lt;a id="status"&gt;&lt;/a&gt; `status` | `CanvasAiPlaceholderStatus` \| `"cancelled"` | - | [packages/canvas/editor/src/stores/ai-job-store.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L20) |

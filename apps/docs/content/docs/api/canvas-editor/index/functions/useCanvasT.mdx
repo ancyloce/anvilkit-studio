@@ -1,0 +1,18 @@
+---
+title: "useCanvasT"
+description: "@anvilkit/canvas-editor · useCanvasT"
+---
+
+```ts
+function useCanvasT(): CanvasT;
+```
+
+Defined in: [packages/canvas/editor/src/context/canvas-studio-context.tsx:187](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L187)
+
+Resolve `canvas.*` chrome strings. Null-tolerant: when there is no
+`<CanvasStudio>` ancestor (or it provides no `t`), returns
+[DEFAULT\_CANVAS\_T](#) so the inline English fallback always renders.
+
+## Returns
+
+[`CanvasT`](../type-aliases/CanvasT)

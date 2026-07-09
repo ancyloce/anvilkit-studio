@@ -1,0 +1,25 @@
+---
+title: "BrandPanel"
+description: "@anvilkit/canvas-editor · BrandPanel"
+---
+
+```ts
+function BrandPanel(__namedParameters): Element | null;
+```
+
+Defined in: [packages/canvas/editor/src/panels/BrandPanel.tsx:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/BrandPanel.tsx#L17)
+
+Brand-kit panel: the host's shared palette + fonts (I3-4), sourced from
+`useBrandColors` / `useBrandFonts`. Mounted by the `CanvasWorkspace` Tab
+Panel (brand dock). Renders `null` when no brand kit is configured. Testids
+(`brand-section` / `brand-palette` / `brand-fonts`) are unchanged.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`BrandPanelProps`](../interfaces/BrandPanelProps) |
+
+## Returns
+
+`Element` \| `null`

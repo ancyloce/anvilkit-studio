@@ -1,0 +1,163 @@
+---
+title: "index"
+description: "@anvilkit/canvas-editor · index"
+---
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [AiBrushSelectIntent](interfaces/AiBrushSelectIntent.md) | `ai-brush`: an image node the host should offer contextual AI actions for. |
+| [AiImageMarqueeIntent](interfaces/AiImageMarqueeIntent.md) | `ai-image`: a drag-marquee region the host should fill with a generation. |
+| [AiJobEntry](interfaces/AiJobEntry.md) | I1-10 transient registry for in-flight AI jobs that back an `ai-placeholder` node on the canvas. The editor never runs jobs (the host does, via `requestAiIntent`); it only needs a place to (a) reflect a job's status and (b) reach the host's abort handle so a placeholder's on-canvas Cancel button can stop it. The `AbortController` lives with whoever runs the job (the host); here we hold only an `abort()` closure registered when the job starts. |
+| [AiJobRegistration](interfaces/AiJobRegistration.md) | - |
+| [AiJobState](interfaces/AiJobState.md) | - |
+| [CanvasNodeRendererProps](interfaces/CanvasNodeRendererProps.md) | - |
+| [CanvasStageProps](interfaces/CanvasStageProps.md) | - |
+| [CreateHistoryStoreOptions](interfaces/CreateHistoryStoreOptions.md) | - |
+| [CreatePagesStoreOptions](interfaces/CreatePagesStoreOptions.md) | - |
+| [CreateToolStoreOptions](interfaces/CreateToolStoreOptions.md) | - |
+| [CreateViewportStoreOptions](interfaces/CreateViewportStoreOptions.md) | - |
+| [CropRect](interfaces/CropRect.md) | Crop rectangle in the source image's natural-pixel space. |
+| [CropState](interfaces/CropState.md) | Drives the interactive image-crop editor (I3-2). `cropNodeId` is the image node being cropped (null when the editor is closed). `draft` is the live, in-progress crop rect updated on every handle drag — transient UI state, like `DraftStore`; the single committed `node.update` happens on confirm (MVP-7: refs/transient state during interaction, one command on commit). |
+| [DraftState](interfaces/DraftState.md) | - |
+| [EditingState](interfaces/EditingState.md) | Tracks which IR node is currently being edited in-place (text overlay for MVP-6 Task 7; could extend for future inline editors). Null when no editor is open. |
+| [GuidesState](interfaces/GuidesState.md) | - |
+| [HistoryState](interfaces/HistoryState.md) | - |
+| [PagesState](interfaces/PagesState.md) | Tracks which page in the IR is currently active in the editor. The IR's `pages` array is the source of truth for the page list itself — this store only owns the UI selection. Mutations to the IR's page list flow through `historyStore.commit(...)` with page commands (`page.create`, `page.delete`, `page.reorder`); helpers in `src/pages/page-actions.ts` coordinate the two. |
+| [ParsedPath](interfaces/ParsedPath.md) | - |
+| [PathControl](interfaces/PathControl.md) | - |
+| [PathEditState](interfaces/PathEditState.md) | Tracks which path node is in on-stage point-editing mode (I3-2). Null when no path editor is open. The [PathEditOverlay](functions/PathEditOverlay.md) reads this to render the anchor/control handles for that node. |
+| [PenAnchor](interfaces/PenAnchor.md) | One pen-tool anchor in world coordinates. `(hx, hy)` is the *outgoing* bezier control handle (absolute world point); the incoming handle is its mirror about `(x, y)`. When the handle equals the anchor the adjoining segments are straight lines. |
+| [PenBounds](interfaces/PenBounds.md) | - |
+| [PenCommitContext](interfaces/PenCommitContext.md) | Minimal context shape shared by `ToolContext` (pen tool) and `CanvasStudioContextValue` (keyboard overlay). `penStore` is optional so the structurally-wider studio context (where it is optional) also fits. |
+| [PenState](interfaces/PenState.md) | Multi-click state for the in-progress pen path (I3-2). Unlike `DraftStore` this persists across pointerup (anchors accumulate click-by-click); it is reset on commit, cancel, and tool change. The single `node.create` fires only when the path is closed/finalized (MVP-7). |
+| [Pt](interfaces/Pt.md) | - |
+| [RenderLayerProps](interfaces/RenderLayerProps.md) | - |
+| [SelectionState](interfaces/SelectionState.md) | - |
+| [SmartGuide](interfaces/SmartGuide.md) | - |
+| [SnapInput](interfaces/SnapInput.md) | - |
+| [SnapRect](interfaces/SnapRect.md) | Snap, smart-guide, and align/distribute geometry for `@anvilkit/canvas-core`. |
+| [SnapResult](interfaces/SnapResult.md) | - |
+| [StagePointer](interfaces/StagePointer.md) | - |
+| [Tool](interfaces/Tool.md) | - |
+| [ToolContext](interfaces/ToolContext.md) | Per-event context handed to every tool handler. Stable across an interaction — the same ctx that arrives in `onPointerDown` is reused for `onPointerMove` and `onPointerUp` so tools can stash interaction state on it via a closure ref. |
+| [ToolDescriptor](interfaces/ToolDescriptor.md) | - |
+| [ToolInteractionLayerProps](interfaces/ToolInteractionLayerProps.md) | - |
+| [ToolPointerEvent](interfaces/ToolPointerEvent.md) | - |
+| [ToolState](interfaces/ToolState.md) | - |
+| [ViewportState](interfaces/ViewportState.md) | - |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [AiJobStoreApi](type-aliases/AiJobStoreApi.md) | - |
+| [AiToolIntent](type-aliases/AiToolIntent.md) | - |
+| [ChromeIcon](type-aliases/ChromeIcon.md) | A lucide icon component (props-compatible with `<svg>`). |
+| [CropDragMode](type-aliases/CropDragMode.md) | Which crop handle is being dragged. `move` translates the whole rect. |
+| [CropStoreApi](type-aliases/CropStoreApi.md) | - |
+| [DraftStoreApi](type-aliases/DraftStoreApi.md) | - |
+| [DrawDraft](type-aliases/DrawDraft.md) | - |
+| [EditingStoreApi](type-aliases/EditingStoreApi.md) | - |
+| [GuidesStoreApi](type-aliases/GuidesStoreApi.md) | - |
+| [HistoryStoreApi](type-aliases/HistoryStoreApi.md) | - |
+| [PagesStoreApi](type-aliases/PagesStoreApi.md) | - |
+| [PathControlRef](type-aliases/PathControlRef.md) | Locates one editable point within a [ParsedPath](interfaces/ParsedPath.md). |
+| [PathEditStoreApi](type-aliases/PathEditStoreApi.md) | - |
+| [PathSeg](type-aliases/PathSeg.md) | - |
+| [PenStoreApi](type-aliases/PenStoreApi.md) | - |
+| [RenderLayerName](type-aliases/RenderLayerName.md) | - |
+| [SelectionStoreApi](type-aliases/SelectionStoreApi.md) | - |
+| [SnapAxis](type-aliases/SnapAxis.md) | - |
+| [ToolRegistry](type-aliases/ToolRegistry.md) | - |
+| [ToolStoreApi](type-aliases/ToolStoreApi.md) | - |
+| [ViewportStoreApi](type-aliases/ViewportStoreApi.md) | - |
+
+## Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [aiBrushTool](variables/aiBrushTool.md) | I1-7 `ai-brush` tool (PRD FR-009: "Hover-select → contextual AI action menu"). Click-selects the image node under the pointer and hands it to the host as an `ai-brush-select` intent so the host can surface contextual AI actions (variation / inpaint / bg-remove) for it. Only image nodes are valid AI-action targets; clicks on other nodes or empty stage are no-ops. Commits nothing to the IR/history — intent is not a command. |
+| [aiImageTool](variables/aiImageTool.md) | I1-7 `ai-image` tool (PRD FR-009: "Drag → marquee + prompt input → text-to-image"). Drags a marquee region and, on pointerup, hands the bounds to the host as an `ai-image-marquee` intent — the host's AI panel supplies the prompt input and runs the generation. The tool itself commits nothing to the IR/history (intent is not a command), mirroring how the selection marquee never touches `historyStore`. Reuses the `"marquee"` draft kind so `<DraftRenderer>` shows the region preview for free. |
+| [CanvasAssetsContext](variables/CanvasAssetsContext.md) | - |
+| [ChromeIcons](variables/ChromeIcons.md) | Action icons shared by the stage bar, floating toolbar, and zoom control. |
+| [DEFAULT\_GRID\_SIZE](variables/DEFAULT_GRID_SIZE.md) | - |
+| [DEFAULT\_HISTORY\_LIMIT](variables/DEFAULT_HISTORY_LIMIT.md) | - |
+| [DEFAULT\_SNAP\_THRESHOLD](variables/DEFAULT_SNAP_THRESHOLD.md) | - |
+| [DEFAULT\_TOOL](variables/DEFAULT_TOOL.md) | - |
+| [defaultToolRegistry](variables/defaultToolRegistry.md) | Default tool registry — the PRD FR-009 tools wired. The AI tools (`ai-image`, `ai-brush`) emit intents to the host rather than committing IR. |
+| [DRAFT\_DASH](variables/DRAFT_DASH.md) | - |
+| [DRAFT\_STROKE\_COLOR](variables/DRAFT_STROKE_COLOR.md) | - |
+| [ellipseTool](variables/ellipseTool.md) | - |
+| [handTool](variables/handTool.md) | MVP-7: hand tool NEVER commits — pan is view state, lives in viewportStore. The MVP-7 single-command assertion test's negative case (active tool = hand) expects history.past.length === 0 after a full down→move*→up sequence. |
+| [imageTool](variables/imageTool.md) | MVP-7: single click → host's pickAsset() resolves → exactly one node.create commits. pointermove/pointerup are not implemented (no drag interaction), so the MVP-7 down→move*→up sequence yields ≤ 1 command. |
+| [lineTool](variables/lineTool.md) | - |
+| [penTool](variables/penTool.md) | Pen tool (I3-2). Click to place anchors; drag after a click to pull out a symmetric bezier handle. Clicking within [CLOSE\_THRESHOLD](#) of the first anchor (with ≥2 anchors) closes the path and commits. Enter/Escape (handled by the `PenToolOverlay`) finalize/cancel. Per MVP-7 the only history commit is the final `node.create` — clicks/drags mutate the transient pen store. |
+| [rectTool](variables/rectTool.md) | MVP-7 rule: commit fires only on pointerup. pointerdown/pointermove update the transient draftStore — never historyStore. |
+| [selectTool](variables/selectTool.md) | - |
+| [SMART\_GUIDE\_COLOR](variables/SMART_GUIDE_COLOR.md) | - |
+| [SMART\_GUIDE\_DASH](variables/SMART_GUIDE_DASH.md) | - |
+| [textTool](variables/textTool.md) | MVP-7: single click commits exactly one node.create on pointerdown (no drag, no pointermove side effects). Editor overlay opens on the same event — see &lt;TextEditorOverlay&gt;. pointermove/pointerup are no-ops so the MVP-7 single-command assertion holds for the full down→move*→up sequence. |
+| [TOOL\_LABELS](variables/TOOL_LABELS.md) | Human-readable names for the PRD FR-009 tools, used for screen-reader announcements (and reusable by hosts that build a tool palette — the editor itself ships no toolbar; tool selection is host-driven). Keep in sync with [ToolId](../index/type-aliases/ToolId). |
+| [TOOL\_RAIL\_ITEMS](variables/TOOL_RAIL_ITEMS.md) | Default tool-rail order. Drawing tools first, then the AI tools. Hosts can pass a narrower list to `<ToolRail tools=…>` (e.g. to hide pen/AI). |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [beginCrop](functions/beginCrop.md) | Open the interactive crop editor for an image node. Returns false (no-op) when the crop store is unavailable or the target is not an image node. |
+| [beginPathEdit](functions/beginPathEdit.md) | Enter on-stage point editing for a path node. No-op (returns false) when the path-edit store is unavailable or the target is not a path node. |
+| [buildPathD](functions/buildPathD.md) | Build SVG path data from pen anchors, translated by `(-ox, -oy)` so the path is local to its bounds. A segment whose adjoining handles sit on their anchors is emitted as a straight `L`; otherwise as a cubic `C` (prev outgoing handle, next mirrored incoming handle). When `closed`, a final segment returns to the first anchor followed by `Z`. |
+| [buildToolRegistry](functions/buildToolRegistry.md) | - |
+| [cancelCrop](functions/cancelCrop.md) | Close the crop editor without committing. |
+| [cancelPenPath](functions/cancelPenPath.md) | Abandon the in-progress pen path without committing. |
+| [canGroupSelection](functions/canGroupSelection.md) | True when the current selection can be grouped: at least two nodes, all present on the active page and sharing the same immediate parent group. Cross-parent grouping is intentionally unsupported (see `node.group`). |
+| [canUngroupSelection](functions/canUngroupSelection.md) | True when at least one selected node is a non-root group that can be dissolved. |
+| [CanvasNodeRenderer](functions/CanvasNodeRenderer.md) | - |
+| [CanvasStage](functions/CanvasStage.md) | - |
+| [CanvasTransformer](functions/CanvasTransformer.md) | - |
+| [commitCrop](functions/commitCrop.md) | Commit the in-progress crop draft as a single `node.update` and close the editor. A zero-area draft is discarded (treated as a cancel) so an empty drag never writes a degenerate crop. |
+| [commitPathD](functions/commitPathD.md) | Commit a new `d` for a path node (one `node.update`). No-op for empty `d`. |
+| [commitPenPath](functions/commitPenPath.md) | Finalize the in-progress pen path: builds a `CanvasPathNode` (bounds-local `d`, identity-stroke defaults), commits one `node.create`, resets the pen store, and selects the new node. No-op (returns null) for fewer than two anchors. `closed` appends a `Z` and the closing segment. |
+| [computeCropDrag](functions/computeCropDrag.md) | Pure geometry for an interactive crop drag. Given the rect at drag start, a delta in natural-image pixels, and the source dimensions, returns the new crop rect clamped to `[0, naturalW] × [0, naturalH]` with a `MIN_CROP` floor. Side-effect-free so the handle math is unit-testable without a DOM. |
+| [computeSnap](functions/computeSnap.md) | Compute snap deltas + smart-guide overlays for a candidate rect. |
+| [createAiJobStore](functions/createAiJobStore.md) | - |
+| [createCropStore](functions/createCropStore.md) | - |
+| [createDraftStore](functions/createDraftStore.md) | - |
+| [createEditingStore](functions/createEditingStore.md) | - |
+| [createGuidesStore](functions/createGuidesStore.md) | - |
+| [createHistoryStore](functions/createHistoryStore.md) | - |
+| [createPagesStore](functions/createPagesStore.md) | - |
+| [createPathEditStore](functions/createPathEditStore.md) | - |
+| [createPenStore](functions/createPenStore.md) | - |
+| [createSelectionStore](functions/createSelectionStore.md) | - |
+| [createToolStore](functions/createToolStore.md) | - |
+| [createViewportStore](functions/createViewportStore.md) | - |
+| [CropEditorOverlay](functions/CropEditorOverlay.md) | Interactive crop editor (I3-2). Renders an HTML overlay (like [TextEditorOverlay](functions/TextEditorOverlay.md)) over the cropping image with draggable corner handles + a movable body; Enter / ✓ commits one `node.update`, Escape / ✕ cancels. Crop math runs through the pure [computeCropDrag](functions/computeCropDrag.md); only the commit touches `historyStore` (MVP-7). |
+| [DesignBackground](functions/DesignBackground.md) | - |
+| [DraftRenderer](functions/DraftRenderer.md) | - |
+| [endPathEdit](functions/endPathEdit.md) | Leave path point-editing mode. |
+| [getNodeWorldRect](functions/getNodeWorldRect.md) | World-space rect for a node — the rotation/scale-aware axis-aligned bounding box from `@anvilkit/canvas-core` (`nodeWorldAabb`). For an unrotated, unscaled node this equals `{x, y, width, height}`; rotated/scaled nodes now report their true visual bounds (the earlier approximation ignored rotation/scale). |
+| [getOtherNodeRects](functions/getOtherNodeRects.md) | Bounding rects of every direct child of the active page's root, excluding any ids in `excludeIds`. Used as `others` for the snap engine. |
+| [getStagePointer](functions/getStagePointer.md) | Resolve the current pointer position into both screen and world coordinates. Returns null when Konva has no pointer position (e.g. before the first pointer event), so callers must guard. |
+| [Grid](functions/Grid.md) | - |
+| [groupSelection](functions/groupSelection.md) | Wrap the current multi-selection in a new group on the active page and select the new group. No-op (returns `null`) unless [canGroupSelection](functions/canGroupSelection.md) holds. Returns the new group's id. |
+| [movePathControl](functions/movePathControl.md) | Return a new path with the point at `ref` moved to `(x, y)`. |
+| [parsePathD](functions/parsePathD.md) | Parse the absolute `M`/`L`/`C`/`Z` subset emitted by the pen tool (and most simple hand-authored paths) into an editable structure. Returns null for any unsupported command (relative ops, H/V/S/Q/A, …) so callers can fall back to raw-text editing rather than corrupt the path. |
+| [pathControlPoints](functions/pathControlPoints.md) | Flat list of every draggable point (anchors + bezier controls). |
+| [PathEditOverlay](functions/PathEditOverlay.md) | On-stage path point editor (I3-2). When a path node is in edit mode it parses the node's `d`, renders draggable anchor squares + bezier-control dots (with connector lines) plus a live preview, and commits one `node.update` per drag (MVP-7: the draft mutates during drag, the commit fires on `dragend`). Escape exits. Paths whose `d` uses unsupported commands simply render no handles. |
+| [penBounds](functions/penBounds.md) | Axis-aligned bounds of a pen path, including each anchor's point plus its outgoing and (mirrored) incoming control handles so bezier overshoot is enclosed. Returns a zero box for an empty anchor list. |
+| [PenPreview](functions/PenPreview.md) | Live on-stage preview of the in-progress pen path (I3-2): the open-path curve plus a dot at each placed anchor. Rendered in the selection layer; purely visual (`listening={false}`), so it never intercepts pointer events. |
+| [PenToolOverlay](functions/PenToolOverlay.md) | Keyboard finalizer for the pen tool (I3-2). Renders nothing; while the `path` tool is active it listens globally for Enter (finalize an open path) and Escape (cancel). Commit/cancel run through [commitPenPath](functions/commitPenPath.md)/[cancelPenPath](functions/cancelPenPath.md) — the same path the close-on-first-anchor click uses. |
+| [regenerateIds](functions/regenerateIds.md) | Walk a structurally-cloned (JSON-roundtripped) node tree and rewrite every `id` field with a fresh uuid. Recurses into `group.children`. Exported separately so tests can verify id regeneration in isolation. |
+| [RemoteCursors](functions/RemoteCursors.md) | - |
+| [RemoteSelections](functions/RemoteSelections.md) | - |
+| [RenderLayer](functions/RenderLayer.md) | - |
+| [serializeParsedPath](functions/serializeParsedPath.md) | - |
+| [SmartGuideOverlay](functions/SmartGuideOverlay.md) | - |
+| [snapPoint](functions/snapPoint.md) | Snap a single point (used by draw tools — width/height = 0 collapses every candidate edge to the same coord). Honors viewportStore's grid + object-snap toggles. Pass `excludeIds` to ignore specific nodes (e.g. the node being dragged in select mode). |
+| [TextEditorOverlay](functions/TextEditorOverlay.md) | - |
+| [ToolInteractionLayer](functions/ToolInteractionLayer.md) | Bridges Konva.Stage pointer events to the active tool from `toolStore`. Renders no DOM — pure side-effect component. Mounts as a sibling of &lt;CanvasStage&gt; inside the CanvasStudioContext so unmount order detaches listeners before &lt;CanvasStage&gt; calls `stage.destroy()`. |
+| [ungroupSelection](functions/ungroupSelection.md) | Dissolve every selected (non-root) group, lifting its children into the parent, then select the lifted children. Returns the lifted child ids. Multiple groups dissolve as ONE undo entry (a single `commitBatch`); a lone group stays a plain commit. Commands are collected from the pre-gesture IR — the selected groups are distinct, so each `node.ungroup` resolves its group by id regardless of how earlier ungroups in the batch reshaped the tree. |
+| [useCanvasAsset](functions/useCanvasAsset.md) | - |

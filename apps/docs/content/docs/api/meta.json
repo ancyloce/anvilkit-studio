@@ -7,6 +7,8 @@
 		"schema",
 		"validator",
 		"utils",
+		"canvas-core",
+		"canvas-editor",
 		"plugins",
 		"..."
 	]

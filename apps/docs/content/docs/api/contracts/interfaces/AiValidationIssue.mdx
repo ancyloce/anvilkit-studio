@@ -3,7 +3,7 @@ title: "AiValidationIssue"
 description: "@anvilkit/contracts · AiValidationIssue"
 ---
 
-Defined in: ai.ts:240
+Defined in: [ai.ts:240](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai.ts#L240)
 
 A single issue produced by validating an LLM's response against
 the expected component/field shape.
@@ -16,6 +16,6 @@ a stable contract.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | Human-readable message describing what went wrong. Suitable for display in a dev console or a toast. | ai.ts:251 |
-| &lt;a id="path"&gt;&lt;/a&gt; `path` | `readonly` | `string` | JSON-pointer-style path to the offending value inside the LLM response (e.g. `"content.0.props.title"`). Empty string means the issue applies to the response as a whole. | ai.ts:246 |
-| &lt;a id="severity"&gt;&lt;/a&gt; `severity` | `readonly` | `"error"` \| `"warn"` | Severity of the issue. - `"warn"` — the response is usable but suspect (e.g. an unexpected extra field). - `"error"` — the response is unusable (e.g. required field missing, wrong type). | ai.ts:260 |
+| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | Human-readable message describing what went wrong. Suitable for display in a dev console or a toast. | [ai.ts:251](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai.ts#L251) |
+| &lt;a id="path"&gt;&lt;/a&gt; `path` | `readonly` | `string` | JSON-pointer-style path to the offending value inside the LLM response (e.g. `"content.0.props.title"`). Empty string means the issue applies to the response as a whole. | [ai.ts:246](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai.ts#L246) |
+| &lt;a id="severity"&gt;&lt;/a&gt; `severity` | `readonly` | `"error"` \| `"warn"` | Severity of the issue. - `"warn"` — the response is usable but suspect (e.g. an unexpected extra field). - `"error"` — the response is unusable (e.g. required field missing, wrong type). | [ai.ts:260](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ai.ts#L260) |

@@ -1,0 +1,16 @@
+---
+title: "RasterizePageInput"
+description: "@anvilkit/canvas-editor · RasterizePageInput"
+---
+
+Defined in: [packages/canvas/editor/src/render/rasterize-page.tsx:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/rasterize-page.tsx#L17)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="assets"&gt;&lt;/a&gt; `assets?` | `readonly` | `Record`\&lt;`string`, `CanvasAssetRef`\&gt; | Asset map keyed by `assetId`. Image nodes look up their asset here. Defaults to an empty map; image nodes without an asset entry render nothing (matches the editor's behavior). | [packages/canvas/editor/src/render/rasterize-page.tsx:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/rasterize-page.tsx#L24) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType?` | `readonly` | `"image/png"` \| `"image/jpeg"` \| `"image/webp"` | Defaults to `"image/png"`. | [packages/canvas/editor/src/render/rasterize-page.tsx:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/rasterize-page.tsx#L28) |
+| &lt;a id="page"&gt;&lt;/a&gt; `page` | `readonly` | `CanvasPage` | - | [packages/canvas/editor/src/render/rasterize-page.tsx:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/rasterize-page.tsx#L18) |
+| &lt;a id="pixelratio"&gt;&lt;/a&gt; `pixelRatio?` | `readonly` | `number` | Defaults to 2 (retina-quality preview). | [packages/canvas/editor/src/render/rasterize-page.tsx:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/rasterize-page.tsx#L26) |
+| &lt;a id="quality"&gt;&lt;/a&gt; `quality?` | `readonly` | `number` | Only honored for image/jpeg + image/webp. Defaults to 0.92. | [packages/canvas/editor/src/render/rasterize-page.tsx:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/rasterize-page.tsx#L30) |

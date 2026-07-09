@@ -1,0 +1,70 @@
+---
+title: "CanvasMigrationRegistry"
+description: "@anvilkit/canvas-core · CanvasMigrationRegistry"
+---
+
+Defined in: [extensions/migration-registry.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L9)
+
+## Methods
+
+### has()
+
+```ts
+has(from): boolean;
+```
+
+Defined in: [extensions/migration-registry.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L11)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `from` | `string` |
+
+#### Returns
+
+`boolean`
+
+***
+
+### migrate()
+
+```ts
+migrate(raw, target): unknown;
+```
+
+Defined in: [extensions/migration-registry.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L16)
+
+Apply the chain from `raw.version` up to `target`. Returns `raw` unchanged
+when already at `target`. Throws on a missing step or a version cycle.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `raw` | `unknown` |
+| `target` | `string` |
+
+#### Returns
+
+`unknown`
+
+***
+
+### register()
+
+```ts
+register(m): void;
+```
+
+Defined in: [extensions/migration-registry.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L10)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `m` | [`CanvasMigration`](CanvasMigration.md) |
+
+#### Returns
+
+`void`

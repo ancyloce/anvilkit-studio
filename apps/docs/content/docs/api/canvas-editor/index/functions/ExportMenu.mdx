@@ -1,0 +1,26 @@
+---
+title: "ExportMenu"
+description: "@anvilkit/canvas-editor · ExportMenu"
+---
+
+```ts
+function ExportMenu(__namedParameters): Element | null;
+```
+
+Defined in: [packages/canvas/editor/src/header/ExportMenu.tsx:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/ExportMenu.tsx#L92)
+
+The header export control: an `@anvilkit/ui` popover laid out after the
+reference "Export image" panel (format cards · quality · resolution ·
+metadata toggle · Export). Reads the live stage/IR from
+[useCanvasStudio](useCanvasStudio.md) and runs the matching exporter, then downloads.
+PNG/JSON are built in; SVG/PDF (and overrides) arrive via `exporters`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `__namedParameters` | [`CanvasExportPluginOptions`](../interfaces/CanvasExportPluginOptions) |
+
+## Returns
+
+`Element` \| `null`

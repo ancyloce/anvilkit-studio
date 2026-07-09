@@ -1,0 +1,44 @@
+---
+title: "CanvasChange"
+description: "@anvilkit/canvas-core · CanvasChange"
+---
+
+```ts
+type CanvasChange = 
+  | {
+  kind: "added";
+  nodeId: string;
+  pageId?: string;
+}
+  | {
+  kind: "removed";
+  nodeId: string;
+  pageId?: string;
+}
+  | {
+  keys: readonly string[];
+  kind: "updated";
+  nodeId: string;
+}
+  | {
+  drot: number;
+  dx: number;
+  dy: number;
+  kind: "transform";
+  nodeId: string;
+}
+  | {
+  kind: "page";
+  op: "create" | "delete" | "rename" | "reorder";
+  pageId: string;
+};
+```
+
+Defined in: [commands/change-events.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L11)
+
+Granular document-change records for `@anvilkit/canvas-core`.
+
+Framework-free (no React): a `CanvasChange` describes the effect of a command
+so consumers (autosave, dirty-tracking, collaborative sync) can react without
+diffing whole IRs. Records are best-effort and derived from the command shape;
+`pageId` is omitted where the command does not carry it (node delete/ungroup).

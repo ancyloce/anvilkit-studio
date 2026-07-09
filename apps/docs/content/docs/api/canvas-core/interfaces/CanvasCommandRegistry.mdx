@@ -1,0 +1,79 @@
+---
+title: "CanvasCommandRegistry"
+description: "@anvilkit/canvas-core · CanvasCommandRegistry"
+---
+
+Defined in: [extensions/command-registry.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L22)
+
+## Methods
+
+### get()
+
+```ts
+get(type): 
+  | CanvasCommandHandler<{
+  type: string;
+}>
+  | undefined;
+```
+
+Defined in: [extensions/command-registry.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L24)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `string` |
+
+#### Returns
+
+  \| [`CanvasCommandHandler`](CanvasCommandHandler.md)\&lt;\{
+  `type`: `string`;
+\}\>
+  \| `undefined`
+
+***
+
+### has()
+
+```ts
+has(type): boolean;
+```
+
+Defined in: [extensions/command-registry.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L25)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `type` | `string` |
+
+#### Returns
+
+`boolean`
+
+***
+
+### register()
+
+```ts
+register<C>(handler): void;
+```
+
+Defined in: [extensions/command-registry.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/command-registry.ts#L23)
+
+#### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `C` *extends* \{ `type`: `string`; \} |
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `handler` | [`CanvasCommandHandler`](CanvasCommandHandler.md)\&lt;`C`\&gt; |
+
+#### Returns
+
+`void`

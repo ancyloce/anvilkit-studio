@@ -1,0 +1,19 @@
+---
+title: "CanvasBatchCommand"
+description: "@anvilkit/canvas-core · CanvasBatchCommand"
+---
+
+Defined in: [commands/types.ts:149](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L149)
+
+A composite, reversible command: applies its `commands` in order as a single
+undoable unit. Its inverse (produced by `applyCommand`) is another `batch`
+whose sub-commands are the reversed inverses, so history replays it like any
+other command with no special-casing. Nestable.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="commands"&gt;&lt;/a&gt; `commands` | [`CanvasCommand`](../type-aliases/CanvasCommand)[] | [commands/types.ts:152](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L152) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `string` | [commands/types.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L151) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"batch"` | [commands/types.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L150) |

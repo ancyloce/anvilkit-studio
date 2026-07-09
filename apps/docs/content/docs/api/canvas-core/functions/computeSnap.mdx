@@ -1,0 +1,26 @@
+---
+title: "computeSnap"
+description: "@anvilkit/canvas-core · computeSnap"
+---
+
+```ts
+function computeSnap(input): SnapResult;
+```
+
+Defined in: [snap.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/src/snap.ts#L109)
+
+Compute snap deltas + smart-guide overlays for a candidate rect.
+
+Edge-snap-to-other-nodes beats grid snap when both match within threshold;
+grid only applies when no edge snap is available on that axis. Guides are
+only emitted for edge snaps, never for grid snaps.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`SnapInput`](../interfaces/SnapInput) |
+
+## Returns
+
+[`SnapResult`](../interfaces/SnapResult)

@@ -1,0 +1,70 @@
+---
+title: "CanvasYjsBinding"
+description: "@anvilkit/canvas-editor · CanvasYjsBinding"
+---
+
+Defined in: [packages/canvas/editor/src/collab/binding.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L38)
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="presence"&gt;&lt;/a&gt; `presence` | `readonly` | [`CanvasPresence`](CanvasPresence.md) | Presence / awareness bridge. | [packages/canvas/editor/src/collab/binding.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L47) |
+
+## Methods
+
+### current()
+
+```ts
+current(): 
+  | CanvasIR
+  | undefined;
+```
+
+Defined in: [packages/canvas/editor/src/collab/binding.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L45)
+
+Decode the current IR from the doc, or `undefined` if empty/unparseable.
+
+#### Returns
+
+  \| [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts)
+  \| `undefined`
+
+***
+
+### destroy()
+
+```ts
+destroy(): void;
+```
+
+Defined in: [packages/canvas/editor/src/collab/binding.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L49)
+
+Detach all observers + awareness listeners. Idempotent.
+
+#### Returns
+
+`void`
+
+***
+
+### subscribe()
+
+```ts
+subscribe(onRemote): CanvasBindingUnsubscribe;
+```
+
+Defined in: [packages/canvas/editor/src/collab/binding.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L41)
+
+Fires on REMOTE writes only (origin != localPeer) with the decoded IR
+ and the authoring peer. Local pushes never fire this.
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `onRemote` | (`ir`, `peer?`) =&gt; `void` |
+
+#### Returns
+
+[`CanvasBindingUnsubscribe`](../type-aliases/CanvasBindingUnsubscribe)

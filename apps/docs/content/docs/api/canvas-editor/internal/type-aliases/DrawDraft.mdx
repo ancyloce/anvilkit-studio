@@ -1,0 +1,53 @@
+---
+title: "DrawDraft"
+description: "@anvilkit/canvas-editor · DrawDraft"
+---
+
+```ts
+type DrawDraft = 
+  | {
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "rect";
+}
+  | {
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "ellipse";
+}
+  | {
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "line";
+}
+  | {
+  currentX: number;
+  currentY: number;
+  nodeStarts: NodeStart[];
+  startX: number;
+  startY: number;
+  type: "move";
+}
+  | {
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "marquee";
+}
+  | {
+  startPanX: number;
+  startPanY: number;
+  startScreenX: number;
+  startScreenY: number;
+  type: "pan";
+};
+```
+
+Defined in: [packages/canvas/editor/src/stores/draft-store.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/draft-store.ts#L14)

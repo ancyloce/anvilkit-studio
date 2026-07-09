@@ -1,0 +1,25 @@
+---
+title: "parsePathD"
+description: "@anvilkit/canvas-editor · parsePathD"
+---
+
+```ts
+function parsePathD(d): ParsedPath | null;
+```
+
+Defined in: [packages/canvas/editor/src/tools/path-edit-geometry.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/path-edit-geometry.ts#L42)
+
+Parse the absolute `M`/`L`/`C`/`Z` subset emitted by the pen tool (and most
+simple hand-authored paths) into an editable structure. Returns null for any
+unsupported command (relative ops, H/V/S/Q/A, …) so callers can fall back to
+raw-text editing rather than corrupt the path.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `d` | `string` |
+
+## Returns
+
+[`ParsedPath`](../interfaces/ParsedPath) \| `null`

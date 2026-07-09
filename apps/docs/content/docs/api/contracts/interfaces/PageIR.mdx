@@ -3,7 +3,7 @@ title: "PageIR"
 description: "@anvilkit/contracts · PageIR"
 ---
 
-Defined in: ir.ts:245
+Defined in: [ir.ts:245](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L245)
 
 The root IR document — the single argument passed to every
 [ExportFormatDefinition.run](ExportFormatDefinition.md#run) call.
@@ -15,7 +15,7 @@ declares the shape; it does not implement the transformation.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="assets"&gt;&lt;/a&gt; `assets` | `readonly` | readonly [`PageIRAsset`](PageIRAsset.md)[] | Top-level asset manifest. Every asset referenced anywhere in the tree should appear here exactly once; node-scoped [PageIRNode.assets](PageIRNode.md#assets) entries are an optimization for exporters that process nodes independently. | ir.ts:268 |
-| &lt;a id="metadata"&gt;&lt;/a&gt; `metadata` | `readonly` | [`PageIRMetadata`](PageIRMetadata.md) | Page-level metadata block. See [PageIRMetadata](PageIRMetadata.md). | ir.ts:272 |
-| &lt;a id="root"&gt;&lt;/a&gt; `root` | `readonly` | [`PageIRNode`](PageIRNode.md) | The root node of the page tree. Exporters walk this recursively to produce output. | ir.ts:261 |
-| &lt;a id="version"&gt;&lt;/a&gt; `version` | `readonly` | `"1"` | Schema version of this IR document. Literal `"1"` for the initial contract. A future `"2"` would be a breaking change to IR shape and requires a migration shim in `@anvilkit/ir`. String (not number) to avoid JSON floating-point surprises and to match the convention used by most serialized IR schemas. | ir.ts:255 |
+| &lt;a id="assets"&gt;&lt;/a&gt; `assets` | `readonly` | readonly [`PageIRAsset`](PageIRAsset.md)[] | Top-level asset manifest. Every asset referenced anywhere in the tree should appear here exactly once; node-scoped [PageIRNode.assets](PageIRNode.md#assets) entries are an optimization for exporters that process nodes independently. | [ir.ts:268](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L268) |
+| &lt;a id="metadata"&gt;&lt;/a&gt; `metadata` | `readonly` | [`PageIRMetadata`](PageIRMetadata.md) | Page-level metadata block. See [PageIRMetadata](PageIRMetadata.md). | [ir.ts:272](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L272) |
+| &lt;a id="root"&gt;&lt;/a&gt; `root` | `readonly` | [`PageIRNode`](PageIRNode.md) | The root node of the page tree. Exporters walk this recursively to produce output. | [ir.ts:261](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L261) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `readonly` | `"1"` | Schema version of this IR document. Literal `"1"` for the initial contract. A future `"2"` would be a breaking change to IR shape and requires a migration shim in `@anvilkit/ir`. String (not number) to avoid JSON floating-point surprises and to match the convention used by most serialized IR schemas. | [ir.ts:255](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L255) |

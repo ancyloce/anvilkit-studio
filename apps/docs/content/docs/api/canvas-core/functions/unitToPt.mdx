@@ -1,0 +1,29 @@
+---
+title: "unitToPt"
+description: "@anvilkit/canvas-core · unitToPt"
+---
+
+```ts
+function unitToPt(
+   value, 
+   unit, 
+   dpi): number;
+```
+
+Defined in: [serialize/pdf.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L35)
+
+Convert a page dimension to PDF points. `in`/`mm` are physical; `px` is scaled
+through `dpi` so a screen-pixel page maps to a sensible physical size. Mirrors
+the unit semantics of `unitToPx` in `./svg.ts` (which shares [DEFAULT\_DPI](../variables/DEFAULT_DPI)).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `number` |
+| `unit` | [`CanvasUnit`](../type-aliases/CanvasUnit) |
+| `dpi` | `number` |
+
+## Returns
+
+`number`

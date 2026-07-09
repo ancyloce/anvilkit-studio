@@ -1,0 +1,21 @@
+---
+title: "ToolPointerEvent"
+description: "@anvilkit/canvas-editor · ToolPointerEvent"
+---
+
+Defined in: [packages/canvas/editor/src/tools/tool-types.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L52)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="evt"&gt;&lt;/a&gt; `evt` | `PointerEvent` \| `MouseEvent` \| `TouchEvent` | The underlying DOM PointerEvent / MouseEvent / TouchEvent. | [packages/canvas/editor/src/tools/tool-types.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L54) |
+| &lt;a id="point"&gt;&lt;/a&gt; `point` | \{ `x`: `number`; `y`: `number`; \} | Pointer position in world (canvas IR) coordinates. | [packages/canvas/editor/src/tools/tool-types.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L56) |
+| `point.x` | `number` | - | [packages/canvas/editor/src/tools/tool-types.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L56) |
+| `point.y` | `number` | - | [packages/canvas/editor/src/tools/tool-types.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L56) |
+| &lt;a id="screenpoint"&gt;&lt;/a&gt; `screenPoint` | \{ `x`: `number`; `y`: `number`; \} | Pointer position in stage screen coordinates (pre-transform). | [packages/canvas/editor/src/tools/tool-types.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L58) |
+| `screenPoint.x` | `number` | - | [packages/canvas/editor/src/tools/tool-types.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L58) |
+| `screenPoint.y` | `number` | - | [packages/canvas/editor/src/tools/tool-types.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L58) |
+| &lt;a id="shiftkey"&gt;&lt;/a&gt; `shiftKey` | `boolean` | - | [packages/canvas/editor/src/tools/tool-types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L62) |
+| &lt;a id="stage"&gt;&lt;/a&gt; `stage` | `Stage` | - | [packages/canvas/editor/src/tools/tool-types.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L59) |
+| &lt;a id="target"&gt;&lt;/a&gt; `target` | `Node` | Konva.Node directly under the pointer (i.e. e.target). | [packages/canvas/editor/src/tools/tool-types.ts:61](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/tool-types.ts#L61) |

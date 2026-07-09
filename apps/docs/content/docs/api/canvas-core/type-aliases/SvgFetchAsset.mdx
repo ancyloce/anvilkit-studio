@@ -1,0 +1,28 @@
+---
+title: "SvgFetchAsset"
+description: "@anvilkit/canvas-core · SvgFetchAsset"
+---
+
+```ts
+type SvgFetchAsset = (uri) => Promise<{
+  bytes: Uint8Array;
+  contentType: string;
+}>;
+```
+
+Defined in: [serialize/svg.ts:609](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L609)
+
+Fetch raw bytes for a remote/relative asset URI (only needed to embed).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `uri` | `string` |
+
+## Returns
+
+`Promise`\<\{
+  `bytes`: `Uint8Array`;
+  `contentType`: `string`;
+\}\>

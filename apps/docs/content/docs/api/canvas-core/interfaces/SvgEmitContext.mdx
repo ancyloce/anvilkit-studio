@@ -1,0 +1,20 @@
+---
+title: "SvgEmitContext"
+description: "@anvilkit/canvas-core · SvgEmitContext"
+---
+
+Defined in: [serialize/svg.ts:287](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L287)
+
+Mutable state threaded through emission: accumulates content-level warnings
+and the set of font families actually used (so `@font-face` emission can be
+limited to fonts that appear in the document), plus the resolved options and
+the document's asset map for image resolution.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assets"&gt;&lt;/a&gt; `assets` | `readonly` | `Record`\&lt;`string`, [`CanvasAssetRef`](CanvasAssetRef.md)\&gt; | [serialize/svg.ts:291](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L291) |
+| &lt;a id="options"&gt;&lt;/a&gt; `options` | `readonly` | [`ResolvedSvgOptions`](ResolvedSvgOptions.md) | [serialize/svg.ts:290](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L290) |
+| &lt;a id="usedfonts"&gt;&lt;/a&gt; `usedFonts` | `readonly` | `Set`\&lt;`string`\&gt; | [serialize/svg.ts:289](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L289) |
+| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings` | `readonly` | [`SvgSerializeWarning`](SvgSerializeWarning.md)[] | [serialize/svg.ts:288](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L288) |

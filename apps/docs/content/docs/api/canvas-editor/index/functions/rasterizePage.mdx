@@ -1,0 +1,32 @@
+---
+title: "rasterizePage"
+description: "@anvilkit/canvas-editor · rasterizePage"
+---
+
+```ts
+function rasterizePage(input): Promise<RasterizePageResult>;
+```
+
+Defined in: [packages/canvas/editor/src/render/rasterize-page.tsx:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/rasterize-page.tsx#L51)
+
+Render a single `CanvasIR` page into a detached `Konva.Stage` and
+return a data URL of its contents. The stage is built off-screen
+(the container element is appended to the body but positioned far
+outside the viewport) and torn down before the function resolves,
+so callers do not need to manage lifecycle.
+
+The render path reuses `<CanvasStage>` + `<CanvasNodeRenderer>` so
+non-active artboard previews match the live editor's output for
+every node kind already wired into the renderer. Image nodes are
+pre-decoded against `input.assets` so the async `useImage` path
+settles before `stage.toDataURL` is called.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `input` | [`RasterizePageInput`](../interfaces/RasterizePageInput) |
+
+## Returns
+
+`Promise`\<[`RasterizePageResult`](../interfaces/RasterizePageResult)\>

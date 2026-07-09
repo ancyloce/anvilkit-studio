@@ -1,0 +1,36 @@
+---
+title: "computeCropDrag"
+description: "@anvilkit/canvas-editor · computeCropDrag"
+---
+
+```ts
+function computeCropDrag(
+   mode, 
+   start, 
+   dxNat, 
+   dyNat, 
+   naturalW, 
+   naturalH): CropRect;
+```
+
+Defined in: [packages/canvas/editor/src/selection/crop-actions.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/crop-actions.ts#L20)
+
+Pure geometry for an interactive crop drag. Given the rect at drag start, a
+delta in natural-image pixels, and the source dimensions, returns the new
+crop rect clamped to `[0, naturalW] × [0, naturalH]` with a `MIN_CROP` floor.
+Side-effect-free so the handle math is unit-testable without a DOM.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `mode` | [`CropDragMode`](../type-aliases/CropDragMode) |
+| `start` | [`CropRect`](../interfaces/CropRect) |
+| `dxNat` | `number` |
+| `dyNat` | `number` |
+| `naturalW` | `number` |
+| `naturalH` | `number` |
+
+## Returns
+
+[`CropRect`](../interfaces/CropRect)

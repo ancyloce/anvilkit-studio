@@ -1,0 +1,24 @@
+---
+title: "screenToWorld"
+description: "@anvilkit/canvas-core · screenToWorld"
+---
+
+```ts
+function screenToWorld(v, p): Point;
+```
+
+Defined in: [viewport.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/viewport.ts#L43)
+
+Map a screen (stage-pixel) point back to world (canvas) coordinates. Throws
+if `zoom` is 0 (a degenerate, non-invertible viewport).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `v` | [`ViewportDescriptor`](../interfaces/ViewportDescriptor) |
+| `p` | `Point` |
+
+## Returns
+
+`Point`

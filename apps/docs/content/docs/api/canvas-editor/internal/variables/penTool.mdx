@@ -1,0 +1,16 @@
+---
+title: "penTool"
+description: "@anvilkit/canvas-editor · penTool"
+---
+
+```ts
+const penTool: Tool;
+```
+
+Defined in: [packages/canvas/editor/src/tools/pen-tool.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/pen-tool.ts#L17)
+
+Pen tool (I3-2). Click to place anchors; drag after a click to pull out a
+symmetric bezier handle. Clicking within [CLOSE\_THRESHOLD](#) of the first
+anchor (with ≥2 anchors) closes the path and commits. Enter/Escape (handled by
+the `PenToolOverlay`) finalize/cancel. Per MVP-7 the only history commit is the
+final `node.create` — clicks/drags mutate the transient pen store.

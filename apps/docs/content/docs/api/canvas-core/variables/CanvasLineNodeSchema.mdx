@@ -1,0 +1,25 @@
+---
+title: "CanvasLineNodeSchema"
+description: "@anvilkit/canvas-core · CanvasLineNodeSchema"
+---
+
+```ts
+const CanvasLineNodeSchema: ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  points: ZodTuple<[ZodNumber, ZodNumber, ZodNumber, ZodNumber], null>;
+  stroke: ZodString;
+  strokeWidth: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"line">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir-validators.ts:164](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-validators.ts#L164)

@@ -1,0 +1,25 @@
+---
+title: "nodeWorldAabb"
+description: "@anvilkit/canvas-core · nodeWorldAabb"
+---
+
+```ts
+function nodeWorldAabb(node, parentMatrix?): BoundsExtent;
+```
+
+Defined in: [hit-test.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/hit-test.ts#L55)
+
+World-space axis-aligned bounding box of a node, accounting for its
+rotation/scale/skew. Pass `parentMatrix` to place a node nested under a
+transformed ancestor; omit it for top-level (world-space) nodes.
+
+## Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `node` | [`CanvasNode`](../type-aliases/CanvasNode) | `undefined` |
+| `parentMatrix` | [`AffineMatrix`](../type-aliases/AffineMatrix) | `IDENTITY` |
+
+## Returns
+
+[`BoundsExtent`](../interfaces/BoundsExtent)

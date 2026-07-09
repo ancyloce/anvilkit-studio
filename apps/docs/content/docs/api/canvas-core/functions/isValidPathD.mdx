@@ -1,0 +1,24 @@
+---
+title: "isValidPathD"
+description: "@anvilkit/canvas-core · isValidPathD"
+---
+
+```ts
+function isValidPathD(d): boolean;
+```
+
+Defined in: [serialize/svg.ts:193](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L193)
+
+Allowlist check for an SVG path `d` string — the one free-text field that
+flows into an attribute. Rejects anything outside path commands, numbers,
+separators, and scientific-notation exponents.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `d` | `string` |
+
+## Returns
+
+`boolean`

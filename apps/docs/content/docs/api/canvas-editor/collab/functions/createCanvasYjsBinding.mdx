@@ -1,0 +1,37 @@
+---
+title: "createCanvasYjsBinding"
+description: "@anvilkit/canvas-editor · createCanvasYjsBinding"
+---
+
+```ts
+function createCanvasYjsBinding(options): CanvasYjsBinding;
+```
+
+Defined in: [packages/canvas/editor/src/collab/binding.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L70)
+
+Bind a canvas [SceneStoreApi](#) to a `Y.Doc` (I3-1 prototype). Mirrors
+`plugin-collab-yjs`'s `createYjsAdapter`, adapted for `CanvasIR` and a
+zustand store rather than the PageIR snapshot contract.
+
+Encoding is whole-document JSON-blob last-writer-wins under
+[CANVAS\_IR\_KEY](../variables/CANVAS_IR_KEY) (the documented alpha posture; native per-node merge is
+the GA follow-up). Echo loops are prevented two ways:
+
+- the Yjs observer ignores transactions whose origin is the local peer
+  ([isLocalOrigin](#)), so our own writes never re-apply;
+- an `applyingRemote` flag suppresses the store subscription while a remote
+  update is being written via `setIR`, so remote → `setIR` → subscription
+  does not re-push to the doc.
+
+Architectural only: no UI is wired here. Verified by a two-doc convergence
+test (`__tests__/binding.test.ts`).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateCanvasYjsBindingOptions`](../interfaces/CreateCanvasYjsBindingOptions) |
+
+## Returns
+
+[`CanvasYjsBinding`](../interfaces/CanvasYjsBinding)

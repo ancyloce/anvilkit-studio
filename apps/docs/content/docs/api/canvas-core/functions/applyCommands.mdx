@@ -1,0 +1,31 @@
+---
+title: "applyCommands"
+description: "@anvilkit/canvas-core · applyCommands"
+---
+
+```ts
+function applyCommands(
+   ir, 
+   commands, 
+   options?): TransactionApplyResult;
+```
+
+Defined in: [commands/transaction.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L29)
+
+Apply many commands as one reversible transaction. Wraps them in a `batch`
+command (so application is all-or-nothing and the inverse is a single
+composite) and additionally derives the granular change records. The caller's
+`ir` is never mutated; a throw from any sub-command propagates without partial
+application.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `commands` | readonly [`CanvasCommand`](../type-aliases/CanvasCommand)[] |
+| `options` | [`ApplyCommandsOptions`](../interfaces/ApplyCommandsOptions) |
+
+## Returns
+
+[`TransactionApplyResult`](../interfaces/TransactionApplyResult)

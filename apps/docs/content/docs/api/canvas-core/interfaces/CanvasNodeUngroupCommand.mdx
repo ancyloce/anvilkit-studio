@@ -1,0 +1,20 @@
+---
+title: "CanvasNodeUngroupCommand"
+description: "@anvilkit/canvas-core · CanvasNodeUngroupCommand"
+---
+
+Defined in: [commands/types.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L112)
+
+Dissolve a group, lifting its children into the group's parent. By default the
+children spill out contiguously at the group's former slot. When `restore` is
+present (as produced by the inverse of `node.group`), each child is instead
+placed back at its recorded original index so the prior tree is reconstructed
+exactly even for non-contiguous selections.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="groupid"&gt;&lt;/a&gt; `groupId` | `string` | [commands/types.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L114) |
+| &lt;a id="restore"&gt;&lt;/a&gt; `restore?` | \{ `id`: `string`; `index`: `number`; \}[] | [commands/types.ts:115](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L115) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"node.ungroup"` | [commands/types.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L113) |

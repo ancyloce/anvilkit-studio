@@ -1,0 +1,23 @@
+---
+title: "viewportMatrix"
+description: "@anvilkit/canvas-core · viewportMatrix"
+---
+
+```ts
+function viewportMatrix(v): AffineMatrix;
+```
+
+Defined in: [viewport.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/viewport.ts#L29)
+
+Affine matrix mapping world (canvas) coordinates to screen (stage-pixel)
+coordinates: `screen = world * zoom + pan`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `v` | [`ViewportDescriptor`](../interfaces/ViewportDescriptor) |
+
+## Returns
+
+[`AffineMatrix`](../type-aliases/AffineMatrix)

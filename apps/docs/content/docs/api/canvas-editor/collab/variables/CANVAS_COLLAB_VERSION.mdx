@@ -1,0 +1,20 @@
+---
+title: "CANVAS_COLLAB_VERSION"
+description: "@anvilkit/canvas-editor · CANVAS_COLLAB_VERSION"
+---
+
+```ts
+const CANVAS_COLLAB_VERSION: "0.1.0" = "0.1.0";
+```
+
+Defined in: [packages/canvas/editor/src/collab/index.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/index.ts#L12)
+
+`@anvilkit/canvas-editor/collab` — the Yjs collaboration prototype (I3-1).
+
+Isolated from the main editor entry on purpose: nothing in `src/index.ts`
+imports this subtree, so yjs / y-protocols never enter the measured
+`dist/index.js` bundle (size-limit, 400 KB gz). yjs + y-protocols are
+OPTIONAL peer dependencies — install them only when wiring collab.
+
+Architectural only (M6 / I3-1): binds the canvas `sceneStore` to a `Y.Doc`
+and scaffolds presence/awareness. No collaborative UI ships from here.

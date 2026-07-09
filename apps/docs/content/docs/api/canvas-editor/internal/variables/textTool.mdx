@@ -1,0 +1,15 @@
+---
+title: "textTool"
+description: "@anvilkit/canvas-editor · textTool"
+---
+
+```ts
+const textTool: Tool;
+```
+
+Defined in: [packages/canvas/editor/src/tools/text-tool.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/text-tool.ts#L20)
+
+MVP-7: single click commits exactly one node.create on pointerdown
+(no drag, no pointermove side effects). Editor overlay opens on the same
+event — see <TextEditorOverlay>. pointermove/pointerup are no-ops so the
+MVP-7 single-command assertion holds for the full down→move*→up sequence.

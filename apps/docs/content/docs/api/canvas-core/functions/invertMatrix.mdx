@@ -1,0 +1,23 @@
+---
+title: "invertMatrix"
+description: "@anvilkit/canvas-core · invertMatrix"
+---
+
+```ts
+function invertMatrix(m): AffineMatrix;
+```
+
+Defined in: [geometry.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L143)
+
+Invert an affine matrix. Throws if the matrix is singular (its determinant is
+zero or non-finite), e.g. a zero-scale transform that collapses a dimension.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `m` | [`AffineMatrix`](../type-aliases/AffineMatrix) |
+
+## Returns
+
+[`AffineMatrix`](../type-aliases/AffineMatrix)

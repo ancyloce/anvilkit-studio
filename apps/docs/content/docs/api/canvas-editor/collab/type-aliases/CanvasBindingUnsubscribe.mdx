@@ -1,0 +1,21 @@
+---
+title: "CanvasBindingUnsubscribe"
+description: "@anvilkit/canvas-editor · CanvasBindingUnsubscribe"
+---
+
+```ts
+type CanvasBindingUnsubscribe = () => void;
+```
+
+Defined in: [packages/canvas/editor/src/collab/presence-types.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-types.ts#L10)
+
+Presence / awareness types for the canvas collab prototype (I3-1).
+
+Canvas-local mirrors of `@anvilkit/plugin-version-history`'s presence shapes
+— defined here so `@anvilkit/canvas-editor` does not depend on the Puck /
+PageIR collab stack. `selection.nodeIds` references canvas node ids
+(the same ids the editor's `selectionStore` holds).
+
+## Returns
+
+`void`

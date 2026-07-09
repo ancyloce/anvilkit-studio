@@ -1,0 +1,22 @@
+---
+title: "DecomposedTransform"
+description: "@anvilkit/canvas-core · DecomposedTransform"
+---
+
+Defined in: [geometry.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L168)
+
+Components recovered from an affine matrix, compatible with `CanvasTransform`.
+The shear is reported entirely as `skewX` (the canonical 2D affine
+decomposition folds any `skewY` into rotation/scale/`skewX`), so `skewY` is
+always 0 and omitted. `rotation` is in degrees, in the range (-180, 180].
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="rotation"&gt;&lt;/a&gt; `rotation` | `number` | [geometry.ts:171](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L171) |
+| &lt;a id="scalex"&gt;&lt;/a&gt; `scaleX` | `number` | [geometry.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L172) |
+| &lt;a id="scaley"&gt;&lt;/a&gt; `scaleY` | `number` | [geometry.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L173) |
+| &lt;a id="skewx"&gt;&lt;/a&gt; `skewX` | `number` | [geometry.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L174) |
+| &lt;a id="x"&gt;&lt;/a&gt; `x` | `number` | [geometry.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L169) |
+| &lt;a id="y"&gt;&lt;/a&gt; `y` | `number` | [geometry.ts:170](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L170) |

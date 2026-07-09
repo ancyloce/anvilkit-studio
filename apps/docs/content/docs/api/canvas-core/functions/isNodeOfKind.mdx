@@ -1,0 +1,27 @@
+---
+title: "isNodeOfKind"
+description: "@anvilkit/canvas-core · isNodeOfKind"
+---
+
+```ts
+function isNodeOfKind<K>(node, kind): node is CanvasNodeByKind<K>;
+```
+
+Defined in: [ir-walkers.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir-walkers.ts#L33)
+
+## Type Parameters
+
+| Type Parameter |
+| ------ |
+| `K` *extends* [`CanvasNodeKind`](../type-aliases/CanvasNodeKind) |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | [`CanvasNode`](../type-aliases/CanvasNode) |
+| `kind` | `K` |
+
+## Returns
+
+`node is CanvasNodeByKind<K>`

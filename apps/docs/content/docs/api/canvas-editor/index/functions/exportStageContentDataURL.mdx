@@ -1,0 +1,32 @@
+---
+title: "exportStageContentDataURL"
+description: "@anvilkit/canvas-editor · exportStageContentDataURL"
+---
+
+```ts
+function exportStageContentDataURL(stage, options?): string;
+```
+
+Defined in: [packages/canvas/editor/src/render/export-stage.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/render/export-stage.ts#L31)
+
+Serialize a live editor stage to a data URL with the editor-only chrome
+layers hidden, so the exported preview shows only design content — not the
+selection transformer, smart guides, or remote-presence overlays the user
+happened to have on screen at export time.
+
+Konva's `toDataURL` composes only visible layers, so we flip the chrome
+layers invisible for the duration of the serialize and restore them in a
+`finally` (the stage is normally about to unmount, but we never leave it in
+a mutated visual state). Stages that don't expose `getLayers` (e.g. unit-test
+fakes) fall through to a plain `toDataURL` — there are no layers to hide.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `stage` | `Stage` |
+| `options` | [`ExportStageContentOptions`](../interfaces/ExportStageContentOptions) |
+
+## Returns
+
+`string`

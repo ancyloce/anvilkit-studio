@@ -1,0 +1,26 @@
+---
+title: "switchToPage"
+description: "@anvilkit/canvas-editor · switchToPage"
+---
+
+```ts
+function switchToPage(ctx, pageId): void;
+```
+
+Defined in: [packages/canvas/editor/src/pages/page-actions.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/page-actions.ts#L145)
+
+Switch active page AND clear transient UI state — selection, draft (any
+in-progress drag), text editor, and smart guides. Without the clears, a
+stale `selectionStore.selectedIds` would point at node ids that don't
+exist on the newly active page.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
+| `pageId` | `string` |
+
+## Returns
+
+`void`

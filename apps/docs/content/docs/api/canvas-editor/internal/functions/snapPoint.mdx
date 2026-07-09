@@ -1,0 +1,32 @@
+---
+title: "snapPoint"
+description: "@anvilkit/canvas-editor · snapPoint"
+---
+
+```ts
+function snapPoint(
+   ctx, 
+   point, 
+   excludeIds?): PointSnapResult;
+```
+
+Defined in: [packages/canvas/editor/src/tools/draw-snap.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/tools/draw-snap.ts#L18)
+
+Snap a single point (used by draw tools — width/height = 0 collapses every
+candidate edge to the same coord). Honors viewportStore's grid + object-snap
+toggles. Pass `excludeIds` to ignore specific nodes (e.g. the node being
+dragged in select mode).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`ToolContext`](../interfaces/ToolContext) |
+| `point` | \{ `x`: `number`; `y`: `number`; \} |
+| `point.x` | `number` |
+| `point.y` | `number` |
+| `excludeIds` | `ReadonlySet`\&lt;`string`\&gt; |
+
+## Returns
+
+`PointSnapResult`

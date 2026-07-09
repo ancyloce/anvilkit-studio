@@ -1,0 +1,15 @@
+---
+title: "SnapInput"
+description: "@anvilkit/canvas-editor · SnapInput"
+---
+
+Defined in: packages/canvas/core/dist/snap.d.ts:30
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="candidate"&gt;&lt;/a&gt; `candidate` | [`SnapRect`](SnapRect.md) | Rect of the thing being snapped (e.g. a dragging node) in world coords. | packages/canvas/core/dist/snap.d.ts:32 |
+| &lt;a id="gridsize"&gt;&lt;/a&gt; `gridSize?` | `number` | When &gt; 0 and no edge snap matches, snap the top-left to this grid size. | packages/canvas/core/dist/snap.d.ts:36 |
+| &lt;a id="others"&gt;&lt;/a&gt; `others` | readonly [`SnapRect`](SnapRect.md)[] | Other (unselected) node bounding rects to snap against. | packages/canvas/core/dist/snap.d.ts:34 |
+| &lt;a id="threshold"&gt;&lt;/a&gt; `threshold?` | `number` | Maximum world-space distance for an edge snap. Default 6. | packages/canvas/core/dist/snap.d.ts:38 |

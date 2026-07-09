@@ -1,0 +1,27 @@
+---
+title: "CanvasT"
+description: "@anvilkit/canvas-editor · CanvasT"
+---
+
+```ts
+type CanvasT = (key, fallback?) => string;
+```
+
+Defined in: [packages/canvas/editor/src/context/canvas-studio-context.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L36)
+
+i18n resolver (P7). `key` is a `canvas.*` message id; `fallback` is the
+inline English default. Returns the host-injected translation when present,
+else the fallback, else the key. canvas-editor stays standalone (no
+`@anvilkit/core` dep) — the host (e.g. plugin-canvas-studio) injects a
+locale-selected catalog via `<CanvasWorkspace messages>`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `key` | `string` |
+| `fallback?` | `string` |
+
+## Returns
+
+`string`

@@ -1,0 +1,25 @@
+---
+title: "useCanvasStores"
+description: "@anvilkit/canvas-editor · useCanvasStores"
+---
+
+```ts
+function useCanvasStores(): CanvasStudioStableValue;
+```
+
+Defined in: [packages/canvas/editor/src/context/canvas-studio-context.tsx:169](https://github.com/ancyloce/anvilkit-studio/blob/main/src/context/canvas-studio-context.tsx#L169)
+
+Read the stable store handles + callbacks WITHOUT subscribing to the live
+per-commit state (W16). Use this in components that only touch stores/commit
+and have no need for `ir`/`activePageId`/`stage`, so they don't re-render on
+every edit.
+
+Falls back to the full [CanvasStudioContext](../variables/CanvasStudioContext) when the stable context is
+absent — e.g. a partial test context that mounts only the merged provider.
+The fallback `use(...)` is intentionally conditional (legal for `use`, unlike
+other hooks): when the stable context IS present the merged context is never
+read, so no per-commit subscription is created and the optimization holds.
+
+## Returns
+
+[`CanvasStudioStableValue`](../type-aliases/CanvasStudioStableValue)

@@ -46,6 +46,8 @@ type PackageEntry = {
 	pkgName: string;
 	displayName: string;
 	summary: string;
+	/** Path under packages/ when it differs from the slug (e.g. canvas/core). */
+	dir?: string;
 };
 
 // Plugins live under packages/plugins/<slug> and are documented under
@@ -101,6 +103,22 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Utils",
 		summary: "Zero-dependency helpers shared across Anvilkit runtime packages.",
 	},
+	{
+		slug: "canvas-core",
+		pkgName: "@anvilkit/canvas-core",
+		displayName: "Canvas Core",
+		summary:
+			"Headless Canvas IR — Zod validators, immutable mutations, undoable commands, geometry/snap math, extension runtime, and SVG/PDF serializers.",
+		dir: join("canvas", "core"),
+	},
+	{
+		slug: "canvas-editor",
+		pkgName: "@anvilkit/canvas-editor",
+		displayName: "Canvas Editor",
+		summary:
+			"React + Konva editor for the Canvas IR — workspace shell, tools, panels, history, accessibility layer, and the optional collab subpath.",
+		dir: join("canvas", "editor"),
+	},
 ];
 
 function fail(slug: string, msg: string): never {
@@ -140,7 +158,7 @@ function runTypedoc(args: string[], cwd: string, slug: string): void {
 }
 
 function generatePackage(entry: PackageEntry): void {
-	const pkgDir = join(PACKAGES_ROOT, entry.slug);
+	const pkgDir = join(PACKAGES_ROOT, entry.dir ?? entry.slug);
 	const typedocConfig = join(pkgDir, "typedoc.json");
 	if (!existsSync(typedocConfig)) {
 		fail(entry.slug, `missing ${relative(WORKSPACE_ROOT, typedocConfig)}`);
@@ -660,6 +678,8 @@ function main(): void {
 					"schema",
 					"validator",
 					"utils",
+					"canvas-core",
+					"canvas-editor",
 					"plugins",
 					"...",
 				],

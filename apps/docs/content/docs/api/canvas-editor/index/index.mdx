@@ -1,0 +1,144 @@
+---
+title: "index"
+description: "@anvilkit/canvas-editor · index"
+---
+
+## Classes
+
+| Class | Description |
+| ------ | ------ |
+| [CanvasErrorBoundary](classes/CanvasErrorBoundary.md) | Error boundary for the canvas editor (W10). Without it, any render-time throw — a malformed IR, a missing asset, or a bug in a host-supplied panel — unwinds the whole React tree and the user loses the entire editor. Wrapping the panel registry and the stage subtree contains a failure to that region: the rest of the editor keeps working and the user gets a recover affordance instead of a blank screen. Exported so hosts can wrap their own custom panels too. |
+
+## Interfaces
+
+| Interface | Description |
+| ------ | ------ |
+| [AddPageOptions](interfaces/AddPageOptions.md) | - |
+| [BrandColor](interfaces/BrandColor.md) | A single named brand color — a swatch the canvas surfaces (color pickers, the property inspector) so designs stay on-brand. |
+| [BrandKit](interfaces/BrandKit.md) | Shared brand colors + font families surfaced to the canvas editor (I3-4). Sourced from the host's Studio config — `plugin-canvas-studio`'s `CanvasModeOverlay` maps `StudioConfig.brandKit`/`branding` → `BrandKit` and passes it via the `<CanvasStudio brandKit>` prop. Read it through [useBrandKit](functions/useBrandKit.md), which normalizes the absent case to [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md). |
+| [BrandPanelProps](interfaces/BrandPanelProps.md) | - |
+| [BuiltinPanelDescriptor](interfaces/BuiltinPanelDescriptor.md) | - |
+| [CanvasEditorExtension](interfaces/CanvasEditorExtension.md) | - |
+| [CanvasErrorBoundaryProps](interfaces/CanvasErrorBoundaryProps.md) | - |
+| [CanvasExportArtifact](interfaces/CanvasExportArtifact.md) | A downloadable artifact. `data` accepts a data URL, raw string, bytes, or a Blob. |
+| [CanvasExportContext](interfaces/CanvasExportContext.md) | The live editor state an exporter reads from (sourced from the studio context). |
+| [CanvasExportPluginOptions](interfaces/CanvasExportPluginOptions.md) | Options for [createCanvasExportPlugin](functions/createCanvasExportPlugin.md) / `<ExportMenu>`. |
+| [CanvasExportRequest](interfaces/CanvasExportRequest.md) | The user-tunable knobs from the export popover (mirrors the reference panel). |
+| [CanvasHeaderPlugin](interfaces/CanvasHeaderPlugin.md) | A pluggable action mounted in the [WorkspaceHeader](functions/WorkspaceHeader.md)'s right cluster (between the collaborator avatars and the host `shareSlot`). `render` runs *inside* the `<CanvasStudio>` provider, so the returned node may call [useCanvasStudio](functions/useCanvasStudio.md). `id` keys the node and dedupes registrations. |
+| [CanvasKindInspector](interfaces/CanvasKindInspector.md) | Renders the inspector fields for a custom node kind. |
+| [CanvasKindRenderer](interfaces/CanvasKindRenderer.md) | Draws a custom node kind to react-konva. |
+| [CanvasPanelContext](interfaces/CanvasPanelContext.md) | - |
+| [CanvasStudioContextValue](interfaces/CanvasStudioContextValue.md) | - |
+| [CanvasStudioProps](interfaces/CanvasStudioProps.md) | - |
+| [CanvasToolbarProps](interfaces/CanvasToolbarProps.md) | - |
+| [CanvasWorkspaceProps](interfaces/CanvasWorkspaceProps.md) | - |
+| [ClonePageOptions](interfaces/ClonePageOptions.md) | - |
+| [ColorFieldProps](interfaces/ColorFieldProps.md) | - |
+| [CreateWorkspaceUiStoreOptions](interfaces/CreateWorkspaceUiStoreOptions.md) | - |
+| [DockItem](interfaces/DockItem.md) | - |
+| [ElementActions](interfaces/ElementActions.md) | Optional host-supplied actions for operations with **no backing IR command** today (PRD §2). Each menu item is disabled until the host wires a handler — the layout-only refactor adds the affordance without inventing commands. |
+| [ElementControlsProps](interfaces/ElementControlsProps.md) | - |
+| [ElementsPanelProps](interfaces/ElementsPanelProps.md) | - |
+| [ExportStageContentOptions](interfaces/ExportStageContentOptions.md) | - |
+| [LayerPanelProps](interfaces/LayerPanelProps.md) | - |
+| [NumberFieldProps](interfaces/NumberFieldProps.md) | - |
+| [PageNavigatorProps](interfaces/PageNavigatorProps.md) | - |
+| [PagesCanvasProps](interfaces/PagesCanvasProps.md) | - |
+| [PanelDockProps](interfaces/PanelDockProps.md) | - |
+| [PluginPanelDescriptor](interfaces/PluginPanelDescriptor.md) | - |
+| [PropertyInspectorProps](interfaces/PropertyInspectorProps.md) | - |
+| [RasterizePageInput](interfaces/RasterizePageInput.md) | - |
+| [RasterizePageResult](interfaces/RasterizePageResult.md) | - |
+| [RemotePanelDescriptor](interfaces/RemotePanelDescriptor.md) | - |
+| [SearchPanelDescriptor](interfaces/SearchPanelDescriptor.md) | - |
+| [TabPanelProps](interfaces/TabPanelProps.md) | - |
+| [TextFieldProps](interfaces/TextFieldProps.md) | - |
+| [WorkspaceFooterProps](interfaces/WorkspaceFooterProps.md) | - |
+| [WorkspaceHeaderProps](interfaces/WorkspaceHeaderProps.md) | - |
+| [WorkspaceUiState](interfaces/WorkspaceUiState.md) | - |
+| [WorkspaceUiStoreProviderProps](interfaces/WorkspaceUiStoreProviderProps.md) | - |
+
+## Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [AlignDirection](type-aliases/AlignDirection.md) | - |
+| [CanvasExporter](type-aliases/CanvasExporter.md) | Turns the live editor state + the requested options into a downloadable artifact. May be async (SVG/PDF serialization is). Throwing surfaces through [CanvasExportPluginOptions.onError](interfaces/CanvasExportPluginOptions.md#onerror). |
+| [CanvasExportFormat](type-aliases/CanvasExportFormat.md) | Built-in export formats. PNG/JSON ship with the editor; SVG/PDF are host-injected. |
+| [CanvasIRGetter](type-aliases/CanvasIRGetter.md) | - |
+| [CanvasPanelDescriptor](type-aliases/CanvasPanelDescriptor.md) | - |
+| [CanvasPanelRegistry](type-aliases/CanvasPanelRegistry.md) | - |
+| [CanvasStudioStableValue](type-aliases/CanvasStudioStableValue.md) | The stable half of [CanvasStudioContextValue](interfaces/CanvasStudioContextValue.md) (W16): the store handles and host callbacks, with NO per-commit live state (`ir`/`activePageId`/ `stage`). `<CanvasStudio>` memoizes this so its identity never changes after mount, letting components that only need stores subscribe via [useCanvasStores](functions/useCanvasStores.md) and skip the re-render that fires on every edit for consumers of the full [CanvasStudioContext](variables/CanvasStudioContext.md). |
+| [CanvasT](type-aliases/CanvasT.md) | i18n resolver (P7). `key` is a `canvas.*` message id; `fallback` is the inline English default. Returns the host-injected translation when present, else the fallback, else the key. canvas-editor stays standalone (no `@anvilkit/core` dep) — the host (e.g. plugin-canvas-studio) injects a locale-selected catalog via `<CanvasWorkspace messages>`. |
+| [CommitPatch](type-aliases/CommitPatch.md) | Applies a partial node patch through the editor's `node.update` pipeline. |
+| [DockId](type-aliases/DockId.md) | - |
+| [ReorderDirection](type-aliases/ReorderDirection.md) | - |
+| [ToolId](type-aliases/ToolId.md) | A tool id. Built-in ids keep literal autocomplete; `(string & {})` admits custom tool ids contributed by an editor extension (Area 1). |
+| [WorkspaceUiStoreApi](type-aliases/WorkspaceUiStoreApi.md) | - |
+
+## Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [CanvasStudioContext](variables/CanvasStudioContext.md) | - |
+| [CanvasStudioStableContext](variables/CanvasStudioStableContext.md) | Stable-only context (W16). Provided alongside [CanvasStudioContext](variables/CanvasStudioContext.md). |
+| [DEFAULT\_CANVAS\_EXPORTERS](variables/DEFAULT_CANVAS_EXPORTERS.md) | Formats the editor can export with zero host wiring. |
+| [defaultCanvasPanelRegistry](variables/defaultCanvasPanelRegistry.md) | Built-in panels wired to existing components (layers / brand / elements); the rest are registration stubs awaiting their own content (PRD §1.3.4). |
+| [DOCK\_IDS](variables/DOCK_IDS.md) | - |
+| [DOCK\_ITEMS](variables/DOCK_ITEMS.md) | - |
+| [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md) | Stable empty kit returned by [useBrandKit](functions/useBrandKit.md) when the host has not configured one. Module-level constant so the reference is stable across renders (no per-render allocation). |
+| [jsonExporter](variables/jsonExporter.md) | Built-in JSON exporter. Serializes the IR; round-trips back into the editor. |
+| [pngExporter](variables/pngExporter.md) | Built-in PNG exporter. Reads the live Konva stage directly — no extra deps. `resolution` scales the (retina) pixel ratio; `quality` is a no-op for PNG. |
+| [WORKSPACE\_UI\_STORE\_PERSIST\_VERSION](variables/WORKSPACE_UI_STORE_PERSIST_VERSION.md) | - |
+
+## Functions
+
+| Function | Description |
+| ------ | ------ |
+| [addPage](functions/addPage.md) | Append a fresh blank page to the IR, commit `page.create`, and activate it. Returns the new page id. |
+| [BrandPanel](functions/BrandPanel.md) | Brand-kit panel: the host's shared palette + fonts (I3-4), sourced from `useBrandColors` / `useBrandFonts`. Mounted by the `CanvasWorkspace` Tab Panel (brand dock). Renders `null` when no brand kit is configured. Testids (`brand-section` / `brand-palette` / `brand-fonts`) are unchanged. |
+| [CanvasStudio](functions/CanvasStudio.md) | - |
+| [CanvasToolbar](functions/CanvasToolbar.md) | Dynamic property toolbar — a floating, centered pill above the page (Canva style). Surfaces the most-used quick props for the selected node (fill · border · width · opacity), committing through the shared `node.update` pipeline. Renders nothing when the selection is empty. |
+| [CanvasWorkspace](functions/CanvasWorkspace.md) | The Canva-style editor shell: full-width Header · Aside (Panel Dock + Tab Panel) · Canvas (dynamic Toolbar + Page with floating Element Controls) · full-width Footer. Composed over the headless `<CanvasStudio>` via its `renderShell` seam; UI state lives in a per-instance Zustand store provided here. This is the editor's single top-level shell. |
+| [clonePage](functions/clonePage.md) | Deep-clone a CanvasPage with a brand-new page id and fresh ids on every descendant node. Uses structured JSON cloning — safe because the IR is pure data (per `CanvasNode` types in `@anvilkit/canvas-core`). |
+| [ColorField](functions/ColorField.md) | - |
+| [createCanvasExportPlugin](functions/createCanvasExportPlugin.md) | Builds the export [CanvasHeaderPlugin](interfaces/CanvasHeaderPlugin.md) for the workspace header. Pass it to `<CanvasWorkspace headerPlugins={[…]}>`. PNG/JSON work with no config; inject `exporters.svg` / `exporters.pdf` to enable those cards. |
+| [createCanvasPanelRegistry](functions/createCanvasPanelRegistry.md) | Merge host overrides over the defaults (override wins per dock id). |
+| [createWorkspaceUiStore](functions/createWorkspaceUiStore.md) | Build a fresh per-instance store. The persistence key is namespaced by `storeId` so concurrent stores never collide in `localStorage`. |
+| [deletePage](functions/deletePage.md) | Delete a page. No-op when only one page remains (last-page guard — empty IR would render the "no active page" fallback in `<CanvasStudio>`). If the deleted page was active, moves active to the page at the same index (or the previous one if the deleted was last). |
+| [downloadCanvasArtifact](functions/downloadCanvasArtifact.md) | Trigger a browser download for an export artifact (client-only). |
+| [duplicateCurrentPage](functions/duplicateCurrentPage.md) | Deep-clone the currently active page (including all nodes with fresh ids), insert it directly after the original, and activate the clone. Returns the clone's id, or null if there is no active page in the current IR. |
+| [ElementControls](functions/ElementControls.md) | Floating per-selection controls pinned **above the selected element** (lock, duplicate, delete, "⋯ more"). The toolbar is a DOM element so it doesn't scale with the Konva canvas — but its position is computed from the rendered canvas-pixel bounding box (via `Konva.Node#getClientRect`), so it tracks the element on screen through any nested group transforms, rotation, zoom, or hand-tool pan. Lock + delete run through the existing command pipeline; duplicate / copy-paste-style / align / layer-order are host callbacks (disabled when unwired). |
+| [ElementsPanel](functions/ElementsPanel.md) | The Canva-shell "Elements" panel — the new home for the drawing tools. Renders each [TOOL\_RAIL\_ITEMS](../internal/variables/TOOL_RAIL_ITEMS) entry as a button bound to `toolStore`; the active tool is highlighted. It is the drawing-tool surface for the `CanvasWorkspace` shell (decision §1.3.2). |
+| [ExportMenu](functions/ExportMenu.md) | The header export control: an `@anvilkit/ui` popover laid out after the reference "Export image" panel (format cards · quality · resolution · metadata toggle · Export). Reads the live stage/IR from [useCanvasStudio](functions/useCanvasStudio.md) and runs the matching exporter, then downloads. PNG/JSON are built in; SVG/PDF (and overrides) arrive via `exporters`. |
+| [exportStageContentDataURL](functions/exportStageContentDataURL.md) | Serialize a live editor stage to a data URL with the editor-only chrome layers hidden, so the exported preview shows only design content — not the selection transformer, smart guides, or remote-presence overlays the user happened to have on screen at export time. |
+| [FieldRow](functions/FieldRow.md) | - |
+| [LayerPanel](functions/LayerPanel.md) | - |
+| [NumberField](functions/NumberField.md) | - |
+| [PageNavigator](functions/PageNavigator.md) | - |
+| [PagesCanvas](functions/PagesCanvas.md) | Canva-style vertical multi-page view. Owns the scrollable canvas viewport on the neutral-gray surface: the active page is the live editable Konva stage; the rest are cached rasterized thumbnails (`usePageThumbnails`). Clicking a thumbnail activates that page. On entry the active page is zoomed to fit the visible area; all pages share the viewport `zoom`, so the footer slider scales the whole canvas uniformly. |
+| [PanelDock](functions/PanelDock.md) | Vertical icon rail (Aside, col 1). Each entry switches the active Tab Panel via `workspaceUi.activeDockId`; the active entry is highlighted and each inactive icon can carry a configurable accent `color`. |
+| [PropertyInspector](functions/PropertyInspector.md) | - |
+| [rasterizePage](functions/rasterizePage.md) | Render a single `CanvasIR` page into a detached `Konva.Stage` and return a data URL of its contents. The stage is built off-screen (the container element is appended to the body but positioned far outside the viewport) and torn down before the function resolves, so callers do not need to manage lifecycle. |
+| [renamePage](functions/renamePage.md) | Rename a page. No-op when the page id is unknown or the new name matches the existing name. Pass `undefined` (or use `clearPageName`) to remove the explicit name and fall back to the default tab label. |
+| [reorderPage](functions/reorderPage.md) | Reorder a page in the IR. No-op when the page is already at `toIndex`, the page id is unknown, or `toIndex` is out of range. Active page is preserved (reordering does not change which page is editable). |
+| [Section](functions/Section.md) | - |
+| [switchToPage](functions/switchToPage.md) | Switch active page AND clear transient UI state — selection, draft (any in-progress drag), text editor, and smart guides. Without the clears, a stale `selectionStore.selectedIds` would point at node ids that don't exist on the newly active page. |
+| [TabPanel](functions/TabPanel.md) | Tab Panel (Aside, col 2). Renders the registry descriptor for the active dock id, with an optional search box, and dispatches by descriptor kind (built-in / plugin / remote / search). Search resets when the dock changes so each panel opens fresh. |
+| [TextField](functions/TextField.md) | - |
+| [ToolAnnouncer](functions/ToolAnnouncer.md) | `@anvilkit/canvas-editor` — public, host-facing API (W1). |
+| [useActiveDock](functions/useActiveDock.md) | - |
+| [useBrandColors](functions/useBrandColors.md) | Just the brand color swatches (empty array when none configured). |
+| [useBrandFonts](functions/useBrandFonts.md) | Just the brand font families (empty array when none configured). The first entry, when present, is the brand default font. |
+| [useBrandKit](functions/useBrandKit.md) | The host [BrandKit](interfaces/BrandKit.md) (colors + fonts) from the Studio config, or [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md) when none is configured. Always returns a well-formed kit so callers never branch on `undefined`. |
+| [useCanvasStores](functions/useCanvasStores.md) | Read the stable store handles + callbacks WITHOUT subscribing to the live per-commit state (W16). Use this in components that only touch stores/commit and have no need for `ir`/`activePageId`/`stage`, so they don't re-render on every edit. |
+| [useCanvasStudio](functions/useCanvasStudio.md) | - |
+| [useCanvasT](functions/useCanvasT.md) | Resolve `canvas.*` chrome strings. Null-tolerant: when there is no `<CanvasStudio>` ancestor (or it provides no `t`), returns [DEFAULT\_CANVAS\_T](#) so the inline English fallback always renders. |
+| [useCommitPatch](functions/useCommitPatch.md) | Returns a stable [CommitPatch](type-aliases/CommitPatch.md) bound to the current studio context. Identical to the inspector's former local `commitPatch` — every field mutation flows through `ctx.commit({ type: "node.update", … })`. |
+| [useInspectorCollapsed](functions/useInspectorCollapsed.md) | - |
+| [usePanelSearch](functions/usePanelSearch.md) | - |
+| [useWorkspaceUiStore](functions/useWorkspaceUiStore.md) | - |
+| [useWorkspaceUiStoreApi](functions/useWorkspaceUiStoreApi.md) | Internal accessor for the active store. Throws if used outside a `WorkspaceUiStoreProvider` so missing wiring fails loudly in development. |
+| [WorkspaceFooter](functions/WorkspaceFooter.md) | Full-width bottom footer (Canva style): a zoom slider with ± steppers and a percentage readout, then the page indicator. Bound to `viewportStore.zoom` and `pagesStore`. |
+| [WorkspaceHeader](functions/WorkspaceHeader.md) | Full-width top header: Back · undo/redo · editable name · avatars · Share. Undo/redo run the standard `historyStore` → `sceneStore` wiring. The name is click-to-edit only when `onTitleChange` is wired (the host owns persistence). |
+| [WorkspaceUiStoreProvider](functions/WorkspaceUiStoreProvider.md) | - |
