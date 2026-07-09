@@ -37,6 +37,7 @@ Useful root commands:
 
 | Package                   | Role                                                                  |
 | ------------------------- | --------------------------------------------------------------------- |
+| `@anvilkit/contracts`     | Shared type-only contracts (Page IR, AI DTOs, export, pages).         |
 | `@anvilkit/core`          | `<Studio>` shell, plugin engine, lifecycle bus, Zustand stores.       |
 | `@anvilkit/ir`            | Headless Page IR transforms (`puckDataToIR`, `irToPuckData`, …).      |
 | `@anvilkit/schema`        | AI-friendly schema derivation from a Puck `Config`.                   |
