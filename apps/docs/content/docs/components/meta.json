@@ -1,7 +1,4 @@
 {
 	"title": "Components",
-	"pages": [
-		"index",
-		"..."
-	]
+	"pages": ["index", "..."]
 }

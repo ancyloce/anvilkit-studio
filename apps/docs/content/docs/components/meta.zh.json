@@ -1,7 +1,4 @@
 {
 	"title": "组件",
-	"pages": [
-		"index",
-		"..."
-	]
+	"pages": ["index", "..."]
 }
