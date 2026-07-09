@@ -8,133 +8,133 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as PlaygroundRouteImport } from "./routes/playground";
-import { Route as MarketplaceRouteImport } from "./routes/marketplace";
-import { Route as SplatRouteImport } from "./routes/$";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as ApiSearchRouteImport } from "./routes/api/search";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlaygroundRouteImport } from './routes/playground'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSearchRouteImport } from './routes/api/search'
 
 const PlaygroundRoute = PlaygroundRouteImport.update({
-	id: "/playground",
-	path: "/playground",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
-	id: "/marketplace",
-	path: "/marketplace",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SplatRoute = SplatRouteImport.update({
-	id: "/$",
-	path: "/$",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
-	id: "/",
-	path: "/",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSearchRoute = ApiSearchRouteImport.update({
-	id: "/api/search",
-	path: "/api/search",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/api/search',
+  path: '/api/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
-	"/": typeof IndexRoute;
-	"/$": typeof SplatRoute;
-	"/marketplace": typeof MarketplaceRoute;
-	"/playground": typeof PlaygroundRoute;
-	"/api/search": typeof ApiSearchRoute;
+  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/playground': typeof PlaygroundRoute
+  '/api/search': typeof ApiSearchRoute
 }
 export interface FileRoutesByTo {
-	"/": typeof IndexRoute;
-	"/$": typeof SplatRoute;
-	"/marketplace": typeof MarketplaceRoute;
-	"/playground": typeof PlaygroundRoute;
-	"/api/search": typeof ApiSearchRoute;
+  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/playground': typeof PlaygroundRoute
+  '/api/search': typeof ApiSearchRoute
 }
 export interface FileRoutesById {
-	__root__: typeof rootRouteImport;
-	"/": typeof IndexRoute;
-	"/$": typeof SplatRoute;
-	"/marketplace": typeof MarketplaceRoute;
-	"/playground": typeof PlaygroundRoute;
-	"/api/search": typeof ApiSearchRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/playground': typeof PlaygroundRoute
+  '/api/search': typeof ApiSearchRoute
 }
 export interface FileRouteTypes {
-	fileRoutesByFullPath: FileRoutesByFullPath;
-	fullPaths: "/" | "/$" | "/marketplace" | "/playground" | "/api/search";
-	fileRoutesByTo: FileRoutesByTo;
-	to: "/" | "/$" | "/marketplace" | "/playground" | "/api/search";
-	id: "__root__" | "/" | "/$" | "/marketplace" | "/playground" | "/api/search";
-	fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/$' | '/marketplace' | '/playground' | '/api/search'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/$' | '/marketplace' | '/playground' | '/api/search'
+  id: '__root__' | '/' | '/$' | '/marketplace' | '/playground' | '/api/search'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-	IndexRoute: typeof IndexRoute;
-	SplatRoute: typeof SplatRoute;
-	MarketplaceRoute: typeof MarketplaceRoute;
-	PlaygroundRoute: typeof PlaygroundRoute;
-	ApiSearchRoute: typeof ApiSearchRoute;
+  IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
+  MarketplaceRoute: typeof MarketplaceRoute
+  PlaygroundRoute: typeof PlaygroundRoute
+  ApiSearchRoute: typeof ApiSearchRoute
 }
 
-declare module "@tanstack/react-router" {
-	interface FileRoutesByPath {
-		"/playground": {
-			id: "/playground";
-			path: "/playground";
-			fullPath: "/playground";
-			preLoaderRoute: typeof PlaygroundRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-		"/marketplace": {
-			id: "/marketplace";
-			path: "/marketplace";
-			fullPath: "/marketplace";
-			preLoaderRoute: typeof MarketplaceRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-		"/$": {
-			id: "/$";
-			path: "/$";
-			fullPath: "/$";
-			preLoaderRoute: typeof SplatRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-		"/": {
-			id: "/";
-			path: "/";
-			fullPath: "/";
-			preLoaderRoute: typeof IndexRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-		"/api/search": {
-			id: "/api/search";
-			path: "/api/search";
-			fullPath: "/api/search";
-			preLoaderRoute: typeof ApiSearchRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-	}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/search': {
+      id: '/api/search'
+      path: '/api/search'
+      fullPath: '/api/search'
+      preLoaderRoute: typeof ApiSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+  }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-	IndexRoute: IndexRoute,
-	SplatRoute: SplatRoute,
-	MarketplaceRoute: MarketplaceRoute,
-	PlaygroundRoute: PlaygroundRoute,
-	ApiSearchRoute: ApiSearchRoute,
-};
+  IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
+  MarketplaceRoute: MarketplaceRoute,
+  PlaygroundRoute: PlaygroundRoute,
+  ApiSearchRoute: ApiSearchRoute,
+}
 export const routeTree = rootRouteImport
-	._addFileChildren(rootRouteChildren)
-	._addFileTypes<FileRouteTypes>();
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx";
-import type { createStart } from "@tanstack/react-start";
-declare module "@tanstack/react-start" {
-	interface Register {
-		ssr: true;
-		router: Awaited<ReturnType<typeof getRouter>>;
-	}
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
 }
