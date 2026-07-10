@@ -1,0 +1,25 @@
+{
+	"extends": "@anvilkit/typescript-config/nextjs.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"ignoreDeprecations": "6.0",
+		"paths": {
+			"@/*": ["./*"]
+		},
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"strictNullChecks": true
+	},
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
+		"next-env.d.ts",
+		"next.config.js",
+		".next/types/routes.d.ts",
+		".next/types/validator.ts"
+	],
+	"exclude": ["node_modules"]
+}
