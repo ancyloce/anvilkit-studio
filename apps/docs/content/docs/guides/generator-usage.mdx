@@ -248,16 +248,16 @@ follows the same five-step loop every time.
 	CI runs the same three, plus `madge` (circular deps), `publint`
 	(package exports), and the Playwright suite.
 
-5. **Integrate into the demo.** Two files to touch in `apps/demo/`:
+5. **Integrate into the demo.** Two files to touch in `apps/studio/`:
 
-	- **`apps/demo/lib/puck-demo.ts`** — add the import, the
+	- **`apps/studio/lib/puck-demo.ts`** — add the import, the
 		`DemoComponents` entry, the category wiring, the
 		`demoConfig.components` entry, and an entry in `createDemoData`.
-	- **`apps/demo/next.config.js`** — add `@anvilkit/<slug>` to the
+	- **`apps/studio/next.config.js`** — add `@anvilkit/<slug>` to the
 		`transpilePackages` array so Next can transpile the source
 		package.
 
-	Run `pnpm -C apps/demo dev` and verify the component drops into
+	Run `pnpm -C apps/studio dev` and verify the component drops into
 	the Puck editor at `/puck/editor`.
 
 ## 6. Publishing workflow
@@ -483,7 +483,7 @@ All three should pass. `build` produces
 
 ### 7.5 Integrate into the demo
 
-Add the callout imports and wiring to `apps/demo/lib/puck-demo.ts`:
+Add the callout imports and wiring to `apps/studio/lib/puck-demo.ts`:
 
 ```ts
 import {
@@ -528,7 +528,7 @@ seeded `/puck/render` payload:
 },
 ```
 
-And whitelist the package in `apps/demo/next.config.js`:
+And whitelist the package in `apps/studio/next.config.js`:
 
 ```js
 transpilePackages: [
@@ -540,7 +540,7 @@ transpilePackages: [
 Start the demo and confirm Callout appears in the Marketing rail:
 
 ```bash
-pnpm -C apps/demo dev
+pnpm -C apps/studio dev
 # Open http://localhost:3000/puck/editor
 ```
 

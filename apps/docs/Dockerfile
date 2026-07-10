@@ -3,7 +3,7 @@
 # Build & run the AnvilKit Fumadocs site (apps/docs) as a standalone image.
 #
 # IMPORTANT: the build context MUST be the repo root (same monorepo/submodule
-# reason as apps/demo/Dockerfile). The CI workflow builds with `context: .`
+# reason as apps/studio/Dockerfile). The CI workflow builds with `context: .`
 # and `file: apps/docs/Dockerfile`. To build locally:
 #   docker build -f apps/docs/Dockerfile -t anvilkit-docs .
 

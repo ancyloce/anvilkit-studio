@@ -472,8 +472,8 @@ pnpm -C packages/components gen:component -- \
 3. `styles.css` で `@anvilkit/ui` のピア依存関係と追加の
    `@source` エントリを接続します。
 4. 検証：`pnpm -C packages/components lint && pnpm typecheck && pnpm build`。
-5. デモに統合する —— `apps/demo/lib/puck-demo.ts` に
-   import + 設定エントリを追加し、`apps/demo/next.config.js` の
+5. デモに統合する —— `apps/studio/lib/puck-demo.ts` に
+   import + 設定エントリを追加し、`apps/studio/next.config.js` の
    `transpilePackages` にパッケージ名を追加します。
 
 ジェネレーターの完全なウォークスルー —— 前提条件と

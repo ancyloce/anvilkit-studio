@@ -472,8 +472,8 @@ pnpm -C packages/components gen:component -- \
 3. `styles.css`에 모든 `@anvilkit/ui` 피어 의존성과 추가
    `@source` 항목을 연결합니다.
 4. 검증: `pnpm -C packages/components lint && pnpm typecheck && pnpm build`.
-5. 데모에 통합 —— `apps/demo/lib/puck-demo.ts`에 import + 설정 항목을
-   추가하고 `apps/demo/next.config.js`의
+5. 데모에 통합 —— `apps/studio/lib/puck-demo.ts`에 import + 설정 항목을
+   추가하고 `apps/studio/next.config.js`의
    `transpilePackages`에 패키지 이름을 추가합니다.
 
 전제 조건과 재현 가능한 작업 예제를 포함한

@@ -243,16 +243,16 @@ export interface CalloutViewProps extends CalloutProps {
 	CI 运行同样这三个，外加 `madge`（循环依赖）、`publint`
 	（包导出）和 Playwright 套件。
 
-5. **集成进演示。** `apps/demo/` 中要改动两个文件：
+5. **集成进演示。** `apps/studio/` 中要改动两个文件：
 
-	- **`apps/demo/lib/puck-demo.ts`** —— 添加 import、
+	- **`apps/studio/lib/puck-demo.ts`** —— 添加 import、
 		`DemoComponents` 条目、分类连接、
 		`demoConfig.components` 条目，以及 `createDemoData` 中的一个条目。
-	- **`apps/demo/next.config.js`** —— 把 `@anvilkit/<slug>` 加入
+	- **`apps/studio/next.config.js`** —— 把 `@anvilkit/<slug>` 加入
 		`transpilePackages` 数组，以便 Next 能转译源
 		包。
 
-	运行 `pnpm -C apps/demo dev` 并验证该组件能拖入
+	运行 `pnpm -C apps/studio dev` 并验证该组件能拖入
 	位于 `/puck/editor` 的 Puck 编辑器。
 
 ## 6. 发布工作流
@@ -478,7 +478,7 @@ pnpm -C packages/components lint \
 
 ### 7.5 集成进演示
 
-把 callout 的 import 和连接添加到 `apps/demo/lib/puck-demo.ts`：
+把 callout 的 import 和连接添加到 `apps/studio/lib/puck-demo.ts`：
 
 ```ts
 import {
@@ -523,7 +523,7 @@ export const demoConfig: Config<DemoComponents> = {
 },
 ```
 
-并在 `apps/demo/next.config.js` 中将该包列入白名单：
+并在 `apps/studio/next.config.js` 中将该包列入白名单：
 
 ```js
 transpilePackages: [
@@ -535,7 +535,7 @@ transpilePackages: [
 启动演示并确认 Callout 出现在 Marketing 侧栏轨道中：
 
 ```bash
-pnpm -C apps/demo dev
+pnpm -C apps/studio dev
 # Open http://localhost:3000/puck/editor
 ```
 

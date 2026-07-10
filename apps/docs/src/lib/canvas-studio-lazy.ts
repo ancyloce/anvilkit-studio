@@ -1,7 +1,7 @@
 /**
  * Lazy-loaded Canvas Studio plugin for the docs playground.
  *
- * Ported from `apps/demo/lib/lazy-plugins.ts`. Canvas Studio is the
+ * Ported from `apps/studio/lib/lazy-plugins.ts`. Canvas Studio is the
  * heaviest plugin — its `register()` pulls `@anvilkit/canvas-editor`,
  * which pulls Konva + react-konva — so we wrap it in `lazyPlugin()` to
  * keep that graph out of the playground island's entry chunk until

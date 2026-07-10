@@ -1,7 +1,7 @@
 /**
  * Collab transports for the docs playground.
  *
- * Ported from `apps/demo/lib/collab-transport.ts`:
+ * Ported from `apps/studio/lib/collab-transport.ts`:
  *   - {@link createInMemoryCollabTransport}: single-tab `Y.Doc`, no relay.
  *     Used as the fallback when no WebSocket backend answers (e.g. the
  *     deployed static docs site, which can't host one).

@@ -152,7 +152,7 @@ const STORAGE_KEY = "anvilkit-playground-data-v1";
 // Module-scope singletons so React re-renders don't re-instantiate
 // plugins (which would bust the copilot's WeakMap cache and re-run
 // compilePlugins inside <Studio>). This mirrors the demo's
-// `apps/demo/app/puck/editor/page.tsx` plugin set so the docs
+// `apps/studio/app/puck/editor/page.tsx` plugin set so the docs
 // playground demonstrates the full @anvilkit plugin surface live.
 //
 // Step 3.2 — pluggable lazy loading: export-html, export-react,

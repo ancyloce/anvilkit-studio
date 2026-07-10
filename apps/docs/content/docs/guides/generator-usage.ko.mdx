@@ -245,16 +245,16 @@ export interface CalloutViewProps extends CalloutProps {
 	CI 는 동일한 세 가지에 더해 `madge`(순환 의존성), `publint`
 	(패키지 내보내기), Playwright 스위트를 실행합니다.
 
-5. **데모에 통합하기.** `apps/demo/` 에서 손볼 두 파일:
+5. **데모에 통합하기.** `apps/studio/` 에서 손볼 두 파일:
 
-	- **`apps/demo/lib/puck-demo.ts`** — import,
+	- **`apps/studio/lib/puck-demo.ts`** — import,
 		`DemoComponents` 항목, 카테고리 연결,
 		`demoConfig.components` 항목, 그리고 `createDemoData` 의 항목을 추가하세요.
-	- **`apps/demo/next.config.js`** — Next 가 소스
+	- **`apps/studio/next.config.js`** — Next 가 소스
 		패키지를 트랜스파일할 수 있도록 `@anvilkit/<slug>` 를
 		`transpilePackages` 배열에 추가하세요.
 
-	`pnpm -C apps/demo dev` 를 실행하고 컴포넌트가
+	`pnpm -C apps/studio dev` 를 실행하고 컴포넌트가
 	`/puck/editor` 의 Puck 에디터에 드롭되는지 확인하세요.
 
 ## 6. 게시 워크플로
@@ -481,7 +481,7 @@ pnpm -C packages/components lint \
 
 ### 7.5 데모에 통합하기
 
-callout 의 import 와 연결을 `apps/demo/lib/puck-demo.ts` 에 추가하세요:
+callout 의 import 와 연결을 `apps/studio/lib/puck-demo.ts` 에 추가하세요:
 
 ```ts
 import {
@@ -526,7 +526,7 @@ export const demoConfig: Config<DemoComponents> = {
 },
 ```
 
-그리고 `apps/demo/next.config.js` 에서 패키지를 화이트리스트에 추가하세요:
+그리고 `apps/studio/next.config.js` 에서 패키지를 화이트리스트에 추가하세요:
 
 ```js
 transpilePackages: [
@@ -538,7 +538,7 @@ transpilePackages: [
 데모를 시작하고 Callout 이 Marketing 레일에 나타나는지 확인하세요:
 
 ```bash
-pnpm -C apps/demo dev
+pnpm -C apps/studio dev
 # Open http://localhost:3000/puck/editor
 ```
 

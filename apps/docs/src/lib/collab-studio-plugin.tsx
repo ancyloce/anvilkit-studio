@@ -3,7 +3,7 @@
 /**
  * Presence broadcaster for the docs playground's collab demo.
  *
- * Ported from `apps/demo/lib/collab-studio-plugin.tsx`. Owns ALL
+ * Ported from `apps/studio/lib/collab-studio-plugin.tsx`. Owns ALL
  * outbound presence writes (cursor + Puck selection) through the
  * adapter's awareness channel, mounted via Puck's `puck` override slot
  * so `createUsePuck()` resolves inside `<Puck>`, and reading the

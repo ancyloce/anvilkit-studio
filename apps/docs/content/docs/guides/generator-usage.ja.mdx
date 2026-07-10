@@ -245,16 +245,16 @@ export interface CalloutViewProps extends CalloutProps {
 	CI は同じ 3 つに加えて `madge`（循環依存）、`publint`
 	（パッケージのエクスポート）、Playwright スイートを実行します。
 
-5. **デモに統合する。** `apps/demo/` で触る 2 つのファイル：
+5. **デモに統合する。** `apps/studio/` で触る 2 つのファイル：
 
-	- **`apps/demo/lib/puck-demo.ts`** —— import、
+	- **`apps/studio/lib/puck-demo.ts`** —— import、
 		`DemoComponents` エントリ、カテゴリの結線、
 		`demoConfig.components` エントリ、`createDemoData` のエントリを追加します。
-	- **`apps/demo/next.config.js`** —— Next がソース
+	- **`apps/studio/next.config.js`** —— Next がソース
 		パッケージをトランスパイルできるよう、`@anvilkit/<slug>` を
 		`transpilePackages` 配列に追加します。
 
-	`pnpm -C apps/demo dev` を実行し、コンポーネントが
+	`pnpm -C apps/studio dev` を実行し、コンポーネントが
 	`/puck/editor` の Puck エディターにドロップできることを確認します。
 
 ## 6. 公開ワークフロー
@@ -481,7 +481,7 @@ pnpm -C packages/components lint \
 
 ### 7.5 デモに統合する
 
-callout の import と結線を `apps/demo/lib/puck-demo.ts` に追加します：
+callout の import と結線を `apps/studio/lib/puck-demo.ts` に追加します：
 
 ```ts
 import {
@@ -526,7 +526,7 @@ export const demoConfig: Config<DemoComponents> = {
 },
 ```
 
-そして `apps/demo/next.config.js` でパッケージをホワイトリストに入れます：
+そして `apps/studio/next.config.js` でパッケージをホワイトリストに入れます：
 
 ```js
 transpilePackages: [
@@ -538,7 +538,7 @@ transpilePackages: [
 デモを起動し、Callout が Marketing レールに現れることを確認します：
 
 ```bash
-pnpm -C apps/demo dev
+pnpm -C apps/studio dev
 # Open http://localhost:3000/puck/editor
 ```
 

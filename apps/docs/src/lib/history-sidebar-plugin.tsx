@@ -1,7 +1,7 @@
 /**
  * Version-history sidebar plugin pair for the docs playground.
  *
- * Ported from `apps/demo/lib/history-sidebar-plugin.tsx`. The single
+ * Ported from `apps/studio/lib/history-sidebar-plugin.tsx`. The single
  * factory `createDemoVersionHistoryPlugins` returns:
  *   - `versionHistoryPlugin` — the headless `@anvilkit/plugin-version-history`
  *     plugin (header actions + save/open events).

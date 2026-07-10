@@ -468,8 +468,8 @@ pnpm -C packages/components gen:component -- \
 3. 在 `styles.css` 中连接任何 `@anvilkit/ui` 对等依赖和额外的
    `@source` 条目。
 4. 验证：`pnpm -C packages/components lint && pnpm typecheck && pnpm build`。
-5. 集成到演示中 —— 在 `apps/demo/lib/puck-demo.ts` 中添加一个
-   import + 配置条目，并在 `apps/demo/next.config.js` 的
+5. 集成到演示中 —— 在 `apps/studio/lib/puck-demo.ts` 中添加一个
+   import + 配置条目，并在 `apps/studio/next.config.js` 的
    `transpilePackages` 中添加包名。
 
 完整的生成器演练 —— 包括前提条件和一个
