@@ -1,15 +1,15 @@
 {
 	"$schema": "https://typedoc.org/schema.json",
-	"extends": ["../../typedoc.base.json"],
+	"extends": ["../../../typedoc.base.json"],
 	"entryPoints": ["./src/index.ts", "./src/migrations/index.ts"],
 	"tsconfig": "./tsconfig.json",
 	"name": "@anvilkit/ir",
 	"intentionallyNotExported": ["CollectAssetsOptions"],
 	"externalSymbolLinkMappings": {
 		"@anvilkit/contracts": {
-			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts",
-			"PageIRNode": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts",
-			"PageIRNodeMeta": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts",
+			"PageIRNode": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts",
+			"PageIRNodeMeta": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 		}
 	}
 }

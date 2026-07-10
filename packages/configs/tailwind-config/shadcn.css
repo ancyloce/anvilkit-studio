@@ -25,8 +25,8 @@
  * UI primitives, and plugin surfaces would render without any of the
  * Tailwind classes baked into their compiled JSX.
  */
-@source "../../core/dist/**/*.js";
-@source "../../ui/dist/**/*.js";
+@source "../../runtime/core/dist/**/*.js";
+@source "../../runtime/ui/dist/**/*.js";
 @source "../../plugins/*/dist/**/*.js";
 @source "../../components/dist/**/*.js";
 

@@ -21,7 +21,7 @@
  *    intentional boundary change from the original "no React anywhere"
  *    rule. The `runtime/` layer continues to treat these as opaque
  *    (the runtime never reads or instantiates them); the React boundary
- *    is `<Studio>` (`packages/core/src/react/components/Studio.tsx`).
+ *    is `<Studio>` (`packages/runtime/core/src/react/components/Studio.tsx`).
  *    See architecture §17 for the updated boundary.
  *
  * 2. **No direct store access.** Plugins read state through

@@ -6,7 +6,7 @@
  * vitest is a no-op without `vitest typecheck` mode.
  *
  * Instead, every assertion in this file is enforced by `tsc --noEmit`
- * against `tsconfig.test.json` (see `packages/core/package.json`'s
+ * against `tsconfig.test.json` (see `packages/runtime/core/package.json`'s
  * `typecheck` script). Valid plugin shapes compile; invalid shapes
  * trigger `@ts-expect-error` comments, which themselves become errors
  * if the underlying line starts compiling — giving us bidirectional

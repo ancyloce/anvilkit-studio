@@ -35,7 +35,7 @@
 					"fileName": "index.ts",
 					"line": 380,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/i18n/icu/index.ts#L380"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/i18n/icu/index.ts#L380"
 				}
 			],
 			"type": {
@@ -61,7 +61,7 @@
 					"fileName": "index.ts",
 					"line": 368,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/i18n/icu/index.ts#L368"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/i18n/icu/index.ts#L368"
 				}
 			],
 			"signatures": [
@@ -92,7 +92,7 @@
 							"fileName": "index.ts",
 							"line": 368,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/i18n/icu/index.ts#L368"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/i18n/icu/index.ts#L368"
 						}
 					],
 					"type": {

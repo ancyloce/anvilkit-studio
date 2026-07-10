@@ -2,7 +2,7 @@
  * @file The running version of `@anvilkit/core`.
  *
  * Hand-maintained to match the `version` field of
- * `packages/core/package.json`. A colocated test asserts the two stay
+ * `packages/runtime/core/package.json`. A colocated test asserts the two stay
  * in sync, so any drift is caught at `pnpm test` time rather than at
  * plugin-load time in a downstream host.
  *

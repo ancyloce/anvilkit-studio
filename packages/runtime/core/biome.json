@@ -14,7 +14,7 @@
 		]
 	},
 	"extends": [
-		"../configs/biome-config/base.json",
-		"../configs/biome-config/react-internal.json"
+		"../../configs/biome-config/base.json",
+		"../../configs/biome-config/react-internal.json"
 	]
 }

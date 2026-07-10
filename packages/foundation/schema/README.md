@@ -2,8 +2,8 @@
 
 Derive AI-friendly component schemas from a Puck `Config`. The primary
 exports — `configToAiContext` and `extractFieldSchema` — map Puck config
-and field definitions to [`AiGenerationContext`](../core/src/types/ai.ts)
-and [`AiFieldSchema`](../core/src/types/ai.ts) that the AI copilot plugin
+and field definitions to [`AiGenerationContext`](../../core/src/types/ai.ts)
+and [`AiFieldSchema`](../../core/src/types/ai.ts) that the AI copilot plugin
 feeds into its system prompt.
 
 > **Alpha status (0.1.x).** `configToAiContext`, `identifySlotFields`,

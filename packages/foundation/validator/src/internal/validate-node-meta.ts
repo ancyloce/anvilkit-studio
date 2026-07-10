@@ -1,7 +1,7 @@
 /**
  * @file Vendored Zod schema for `PageIRNodeMeta` field caps inside
  * `@anvilkit/validator`. Mirrors
- * `packages/ir/src/migrations/internal/validate-meta.ts` deliberately
+ * `packages/foundation/ir/src/migrations/internal/validate-meta.ts` deliberately
  * — the validator package must not import from `@anvilkit/ir` to
  * keep its dep contract minimal (architecture §8).
  *

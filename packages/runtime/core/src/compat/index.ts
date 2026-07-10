@@ -7,7 +7,7 @@
 // `createAiCopilotPlugin()` from `@anvilkit/plugin-ai-copilot`.
 //
 // Reachable **only** at `@anvilkit/core/compat`. The root barrel
-// (`packages/core/src/index.ts`) does not re-export from this file
+// (`packages/runtime/core/src/index.ts`) does not re-export from this file
 // (acceptance criterion #6 of core-010), so a host app that never
 // imports `@anvilkit/core/compat` ships zero adapter bytes.
 //

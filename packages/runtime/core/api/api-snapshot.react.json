@@ -195,10 +195,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+							"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 							"line": 61,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L61"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L61"
 						}
 					],
 					"type": {
@@ -227,10 +227,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+							"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 							"line": 67,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L67"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L67"
 						}
 					],
 					"signatures": [
@@ -250,10 +250,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+									"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 									"line": 67,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L67"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L67"
 								}
 							],
 							"parameters": [
@@ -314,10 +314,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+							"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 							"line": 81,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L81"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L81"
 						}
 					],
 					"signatures": [
@@ -329,10 +329,10 @@
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+									"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 									"line": 81,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L81"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L81"
 								}
 							],
 							"type": {
@@ -371,10 +371,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+							"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 							"line": 63,
 							"character": 8,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L63"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L63"
 						}
 					],
 					"signatures": [
@@ -386,10 +386,10 @@
 							"flags": {},
 							"sources": [
 								{
-									"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+									"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 									"line": 63,
 									"character": 8,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L63"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L63"
 								}
 							],
 							"parameters": [
@@ -443,10 +443,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+					"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 					"line": 57,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L57"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L57"
 				}
 			],
 			"extendedTypes": [
@@ -538,10 +538,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 70,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L70"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L70"
 						}
 					],
 					"type": {
@@ -567,10 +567,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 65,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L65"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L65"
 						}
 					],
 					"type": {
@@ -590,10 +590,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ai-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 					"line": 61,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L61"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L61"
 				}
 			]
 		},
@@ -676,10 +676,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 103,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L103"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L103"
 						}
 					],
 					"type": {
@@ -726,10 +726,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 83,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L83"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L83"
 						}
 					],
 					"type": {
@@ -763,10 +763,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 95,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L95"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L95"
 						}
 					],
 					"type": {
@@ -809,10 +809,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 88,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L88"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L88"
 						}
 					],
 					"type": {
@@ -837,10 +837,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 130,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L130"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L130"
 						}
 					],
 					"signatures": [
@@ -876,10 +876,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/ai-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 									"line": 130,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L130"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L130"
 								}
 							],
 							"type": {
@@ -897,10 +897,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 123,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L123"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L123"
 						}
 					],
 					"signatures": [
@@ -952,10 +952,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/ai-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 									"line": 123,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L123"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L123"
 								}
 							],
 							"parameters": [
@@ -999,10 +999,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 135,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L135"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L135"
 						}
 					],
 					"signatures": [
@@ -1032,10 +1032,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/ai-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 									"line": 135,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L135"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L135"
 								}
 							],
 							"type": {
@@ -1053,10 +1053,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 115,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L115"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L115"
 						}
 					],
 					"signatures": [
@@ -1144,10 +1144,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/ai-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 									"line": 115,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L115"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L115"
 								}
 							],
 							"parameters": [
@@ -1193,10 +1193,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ai-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 					"line": 77,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L77"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L77"
 				}
 			]
 		},
@@ -1259,10 +1259,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 							"line": 33,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L33"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L33"
 						}
 					],
 					"type": {
@@ -1312,10 +1312,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 							"line": 31,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L31"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L31"
 						}
 					],
 					"type": {
@@ -1351,10 +1351,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 							"line": 25,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L25"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L25"
 						}
 					],
 					"type": {
@@ -1375,10 +1375,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 					"line": 20,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L20"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L20"
 				}
 			]
 		},
@@ -1418,10 +1418,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 237,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L237"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L237"
 						}
 					],
 					"type": {
@@ -1440,10 +1440,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ai-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 					"line": 236,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L236"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L236"
 				}
 			]
 		},
@@ -1499,10 +1499,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 229,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L229"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L229"
 						}
 					],
 					"type": {
@@ -1521,10 +1521,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/export-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 					"line": 228,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L228"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L228"
 				}
 			]
 		},
@@ -1545,10 +1545,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/theme-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 							"line": 161,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L161"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L161"
 						}
 					],
 					"type": {
@@ -1567,10 +1567,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/theme-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 					"line": 160,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L160"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L160"
 				}
 			]
 		},
@@ -1639,10 +1639,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 94,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L94"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L94"
 						}
 					],
 					"type": {
@@ -1693,10 +1693,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 101,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L101"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L101"
 						}
 					],
 					"type": {
@@ -1743,10 +1743,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 107,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L107"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L107"
 						}
 					],
 					"type": {
@@ -1780,10 +1780,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 112,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L112"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L112"
 						}
 					],
 					"type": {
@@ -1810,10 +1810,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 137,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L137"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L137"
 						}
 					],
 					"signatures": [
@@ -1849,10 +1849,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/export-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 									"line": 137,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L137"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L137"
 								}
 							],
 							"parameters": [
@@ -1894,10 +1894,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 145,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L145"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L145"
 						}
 					],
 					"signatures": [
@@ -1947,10 +1947,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/export-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 									"line": 145,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L145"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L145"
 								}
 							],
 							"type": {
@@ -1968,10 +1968,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 120,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L120"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L120"
 						}
 					],
 					"signatures": [
@@ -2017,10 +2017,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/export-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 									"line": 120,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L120"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L120"
 								}
 							],
 							"parameters": [
@@ -2058,10 +2058,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 125,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L125"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L125"
 						}
 					],
 					"signatures": [
@@ -2089,10 +2089,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/export-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 									"line": 125,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L125"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L125"
 								}
 							],
 							"parameters": [
@@ -2132,10 +2132,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 131,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L131"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L131"
 						}
 					],
 					"signatures": [
@@ -2179,10 +2179,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/export-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 									"line": 131,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L131"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L131"
 								}
 							],
 							"parameters": [
@@ -2229,10 +2229,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/export-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 					"line": 87,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L87"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L87"
 				}
 			]
 		},
@@ -2295,10 +2295,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 							"line": 41,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L41"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L41"
 						}
 					],
 					"type": {
@@ -2348,10 +2348,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 							"line": 36,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L36"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L36"
 						}
 					],
 					"type": {
@@ -2387,10 +2387,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 							"line": 30,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L30"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L30"
 						}
 					],
 					"type": {
@@ -2411,10 +2411,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 					"line": 24,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L24"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L24"
 				}
 			]
 		},
@@ -2465,10 +2465,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 68,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L68"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L68"
 						}
 					],
 					"type": {
@@ -2503,10 +2503,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 63,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L63"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L63"
 						}
 					],
 					"type": {
@@ -2568,10 +2568,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 74,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L74"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L74"
 						}
 					],
 					"type": {
@@ -2592,10 +2592,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/export-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 					"line": 59,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L59"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L59"
 				}
 			]
 		},
@@ -2616,10 +2616,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+							"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 							"line": 26,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L26"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L26"
 						}
 					],
 					"type": {
@@ -2660,10 +2660,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+							"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 							"line": 32,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L32"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L32"
 						}
 					],
 					"type": {
@@ -2767,10 +2767,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+							"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 							"line": 38,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L38"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L38"
 						}
 					],
 					"type": {
@@ -2841,10 +2841,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/components/StudioErrorBoundary.tsx",
+					"fileName": "packages/runtime/core/src/react/components/StudioErrorBoundary.tsx",
 					"line": 25,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/StudioErrorBoundary.tsx#L25"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/StudioErrorBoundary.tsx#L25"
 				}
 			]
 		},
@@ -2874,10 +2874,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 							"line": 66,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L66"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L66"
 						}
 					],
 					"type": {
@@ -2904,10 +2904,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 							"line": 62,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L62"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L62"
 						}
 					],
 					"type": {
@@ -2933,10 +2933,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 							"line": 52,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L52"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L52"
 						}
 					],
 					"type": {
@@ -2971,10 +2971,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 							"line": 58,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L58"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L58"
 						}
 					],
 					"type": {
@@ -3020,10 +3020,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 							"line": 64,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L64"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L64"
 						}
 					],
 					"type": {
@@ -3050,10 +3050,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 							"line": 60,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L60"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L60"
 						}
 					],
 					"type": {
@@ -3077,10 +3077,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+					"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 					"line": 50,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L50"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L50"
 				}
 			]
 		},
@@ -3110,10 +3110,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioLoadingScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx",
 							"line": 43,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L43"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx#L43"
 						}
 					],
 					"type": {
@@ -3148,10 +3148,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioLoadingScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx",
 							"line": 41,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L41"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx#L41"
 						}
 					],
 					"type": {
@@ -3171,10 +3171,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/studio/layout/StudioLoadingScreen.tsx",
+					"fileName": "packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx",
 					"line": 34,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L34"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx#L34"
 				}
 			]
 		},
@@ -3354,10 +3354,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 162,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L162"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L162"
 						}
 					],
 					"type": {
@@ -3432,10 +3432,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 302,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L302"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L302"
 						}
 					],
 					"type": {
@@ -3492,10 +3492,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 168,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L168"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L168"
 						}
 					],
 					"type": {
@@ -3552,10 +3552,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 138,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L138"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L138"
 						}
 					],
 					"type": {
@@ -3593,10 +3593,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/config/schema.ts",
+											"fileName": "packages/runtime/core/src/config/schema.ts",
 											"line": 285,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L285"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L285"
 										}
 									],
 									"type": {
@@ -3634,10 +3634,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 293,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L293"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L293"
 														}
 													],
 													"type": {
@@ -3680,10 +3680,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 300,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L300"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L300"
 														}
 													],
 													"type": {
@@ -3724,10 +3724,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/config/schema.ts",
+											"fileName": "packages/runtime/core/src/config/schema.ts",
 											"line": 110,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L110"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L110"
 										}
 									],
 									"type": {
@@ -3765,10 +3765,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 117,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L117"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L117"
 														}
 													],
 													"type": {
@@ -3803,10 +3803,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 124,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L124"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L124"
 														}
 													],
 													"type": {
@@ -3841,10 +3841,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 131,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L131"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L131"
 														}
 													],
 													"type": {
@@ -3926,10 +3926,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/config/schema.ts",
+											"fileName": "packages/runtime/core/src/config/schema.ts",
 											"line": 229,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L229"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L229"
 										}
 									],
 									"type": {
@@ -3983,10 +3983,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 235,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L235"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L235"
 														}
 													],
 													"type": {
@@ -4016,10 +4016,10 @@
 																		},
 																		"sources": [
 																			{
-																				"fileName": "packages/core/src/config/schema.ts",
+																				"fileName": "packages/runtime/core/src/config/schema.ts",
 																				"line": 239,
 																				"character": 7,
-																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L239"
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L239"
 																			}
 																		],
 																		"type": {
@@ -4044,10 +4044,10 @@
 																		},
 																		"sources": [
 																			{
-																				"fileName": "packages/core/src/config/schema.ts",
+																				"fileName": "packages/runtime/core/src/config/schema.ts",
 																				"line": 241,
 																				"character": 7,
-																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L241"
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L241"
 																			}
 																		],
 																		"type": {
@@ -4097,10 +4097,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 250,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L250"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L250"
 														}
 													],
 													"type": {
@@ -4137,10 +4137,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/types/config.ts",
+											"fileName": "packages/runtime/core/src/types/config.ts",
 											"line": 82,
 											"character": 10,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L82"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/config.ts#L82"
 										}
 									],
 									"type": {
@@ -4198,10 +4198,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/config/schema.ts",
+											"fileName": "packages/runtime/core/src/config/schema.ts",
 											"line": 257,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L257"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L257"
 										}
 									],
 									"type": {
@@ -4247,10 +4247,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 266,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L266"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L266"
 														}
 													],
 													"type": {
@@ -4293,10 +4293,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 274,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L274"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L274"
 														}
 													],
 													"type": {
@@ -4345,10 +4345,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/config/schema.ts",
+											"fileName": "packages/runtime/core/src/config/schema.ts",
 											"line": 76,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L76"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L76"
 										}
 									],
 									"type": {
@@ -4394,10 +4394,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 91,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L91"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L91"
 														}
 													],
 													"type": {
@@ -4448,10 +4448,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 103,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L103"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L103"
 														}
 													],
 													"type": {
@@ -4518,10 +4518,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 84,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L84"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L84"
 														}
 													],
 													"type": {
@@ -4627,10 +4627,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/config/schema.ts",
+											"fileName": "packages/runtime/core/src/config/schema.ts",
 											"line": 171,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L171"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L171"
 										}
 									],
 									"type": {
@@ -4678,10 +4678,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 197,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L197"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L197"
 														}
 													],
 													"type": {
@@ -4796,10 +4796,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 192,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L192"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L192"
 														}
 													],
 													"type": {
@@ -4860,10 +4860,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 208,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L208"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L208"
 														}
 													],
 													"type": {
@@ -5020,10 +5020,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 218,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L218"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L218"
 														}
 													],
 													"type": {
@@ -5066,10 +5066,10 @@
 									},
 									"sources": [
 										{
-											"fileName": "packages/core/src/config/schema.ts",
+											"fileName": "packages/runtime/core/src/config/schema.ts",
 											"line": 138,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L138"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L138"
 										}
 									],
 									"type": {
@@ -5115,10 +5115,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 153,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L153"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L153"
 														}
 													],
 													"type": {
@@ -5177,10 +5177,10 @@
 													},
 													"sources": [
 														{
-															"fileName": "packages/core/src/config/schema.ts",
+															"fileName": "packages/runtime/core/src/config/schema.ts",
 															"line": 146,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/config/schema.ts#L146"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L146"
 														}
 													],
 													"type": {
@@ -5276,10 +5276,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 116,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L116"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L116"
 						}
 					],
 					"type": {
@@ -5376,10 +5376,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 320,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L320"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L320"
 						}
 					],
 					"type": {
@@ -5493,10 +5493,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 237,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L237"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L237"
 						}
 					],
 					"type": {
@@ -5530,10 +5530,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 201,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L201"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L201"
 						}
 					],
 					"type": {
@@ -5560,10 +5560,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 197,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L197"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L197"
 						}
 					],
 					"type": {
@@ -5590,10 +5590,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 199,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L199"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L199"
 						}
 					],
 					"type": {
@@ -5691,10 +5691,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 295,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L295"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L295"
 						}
 					],
 					"type": {
@@ -5728,10 +5728,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 242,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L242"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L242"
 						}
 					],
 					"type": {
@@ -5819,10 +5819,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 260,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L260"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L260"
 						}
 					],
 					"type": {
@@ -5885,10 +5885,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 176,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L176"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L176"
 						}
 					],
 					"type": {
@@ -5989,10 +5989,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 193,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L193"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L193"
 						}
 					],
 					"type": {
@@ -6054,10 +6054,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 149,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L149"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L149"
 						}
 					],
 					"type": {
@@ -6169,10 +6169,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 311,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L311"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L311"
 						}
 					],
 					"type": {
@@ -6247,10 +6247,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 228,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L228"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L228"
 						}
 					],
 					"type": {
@@ -6370,10 +6370,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 273,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L273"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L273"
 						}
 					],
 					"type": {
@@ -6440,10 +6440,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 221,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L221"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L221"
 						}
 					],
 					"type": {
@@ -6524,10 +6524,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 154,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L154"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L154"
 						}
 					],
 					"type": {
@@ -6658,10 +6658,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 213,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L213"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L213"
 						}
 					],
 					"type": {
@@ -6726,10 +6726,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 195,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L195"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L195"
 						}
 					],
 					"type": {
@@ -6796,10 +6796,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 144,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L144"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L144"
 						}
 					],
 					"type": {
@@ -6871,10 +6871,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 247,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L247"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L247"
 						}
 					],
 					"type": {
@@ -6952,10 +6952,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 129,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L129"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L129"
 						}
 					],
 					"type": {
@@ -7148,10 +7148,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 110,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L110"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L110"
 						}
 					],
 					"type": {
@@ -7246,10 +7246,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 191,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L191"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L191"
 						}
 					],
 					"type": {
@@ -7300,10 +7300,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 174,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L174"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L174"
 						}
 					],
 					"type": {
@@ -7356,10 +7356,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 							"line": 178,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L178"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L178"
 						}
 					],
 					"type": {
@@ -7413,10 +7413,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/components/studio-controller-types.ts",
+					"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
 					"line": 97,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-controller-types.ts#L97"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L97"
 				}
 			],
 			"typeParameters": [
@@ -7492,10 +7492,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/theme-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 							"line": 75,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L75"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L75"
 						}
 					],
 					"type": {
@@ -7531,10 +7531,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/theme-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 							"line": 81,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L81"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L81"
 						}
 					],
 					"type": {
@@ -7552,10 +7552,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/theme-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 							"line": 98,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L98"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L98"
 						}
 					],
 					"signatures": [
@@ -7585,10 +7585,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/theme-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 									"line": 98,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L98"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L98"
 								}
 							],
 							"type": {
@@ -7606,10 +7606,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/theme-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 							"line": 86,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L86"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L86"
 						}
 					],
 					"signatures": [
@@ -7629,10 +7629,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/theme-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 									"line": 86,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L86"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L86"
 								}
 							],
 							"parameters": [
@@ -7665,10 +7665,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/theme-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 							"line": 92,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L92"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L92"
 						}
 					],
 					"signatures": [
@@ -7712,10 +7712,10 @@
 							},
 							"sources": [
 								{
-									"fileName": "packages/core/src/state/slices/theme-store.ts",
+									"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 									"line": 92,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L92"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L92"
 								}
 							],
 							"parameters": [
@@ -7760,10 +7760,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/theme-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 					"line": 71,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L71"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L71"
 				}
 			]
 		},
@@ -7826,10 +7826,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 							"line": 51,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L51"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L51"
 						}
 					],
 					"type": {
@@ -7879,10 +7879,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 							"line": 46,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L46"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L46"
 						}
 					],
 					"type": {
@@ -7964,10 +7964,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 							"line": 40,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L40"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L40"
 						}
 					],
 					"type": {
@@ -7988,10 +7988,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 					"line": 35,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L35"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L35"
 				}
 			]
 		},
@@ -8077,10 +8077,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/use-studio.ts",
+							"fileName": "packages/runtime/core/src/react/components/use-studio.ts",
 							"line": 84,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L84"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/use-studio.ts#L84"
 						}
 					],
 					"type": {
@@ -8166,10 +8166,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/use-studio.ts",
+							"fileName": "packages/runtime/core/src/react/components/use-studio.ts",
 							"line": 91,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L91"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/use-studio.ts#L91"
 						}
 					],
 					"type": {
@@ -8225,10 +8225,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/use-studio.ts",
+							"fileName": "packages/runtime/core/src/react/components/use-studio.ts",
 							"line": 76,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L76"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/use-studio.ts#L76"
 						}
 					],
 					"type": {
@@ -8262,10 +8262,10 @@
 			],
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/components/use-studio.ts",
+					"fileName": "packages/runtime/core/src/react/components/use-studio.ts",
 					"line": 69,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L69"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/use-studio.ts#L69"
 				}
 			]
 		},
@@ -8277,10 +8277,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ai-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 					"line": 240,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L240"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L240"
 				}
 			],
 			"type": {
@@ -8310,10 +8310,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/export-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 					"line": 232,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L232"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L232"
 				}
 			],
 			"type": {
@@ -8367,10 +8367,10 @@
 			},
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/components/studio-log.ts",
+					"fileName": "packages/runtime/core/src/react/components/studio-log.ts",
 					"line": 18,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/studio-log.ts#L18"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-log.ts#L18"
 				}
 			],
 			"type": {
@@ -8492,10 +8492,10 @@
 			},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/theme-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 					"line": 56,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L56"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L56"
 				}
 			],
 			"type": {
@@ -8556,10 +8556,10 @@
 			},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/theme-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 					"line": 63,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L63"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L63"
 				}
 			],
 			"type": {
@@ -8658,10 +8658,10 @@
 			},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/theme-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 					"line": 172,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L172"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L172"
 				}
 			],
 			"type": {
@@ -8694,10 +8694,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 					"line": 36,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L36"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L36"
 				}
 			],
 			"signatures": [
@@ -8709,10 +8709,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 							"line": 36,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L36"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L36"
 						}
 					],
 					"parameters": [
@@ -8752,10 +8752,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ai-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 					"line": 249,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L249"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L249"
 				}
 			],
 			"signatures": [
@@ -8809,10 +8809,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ai-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/ai-store.ts",
 							"line": 249,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ai-store.ts#L249"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ai-store.ts#L249"
 						}
 					],
 					"parameters": [
@@ -8847,10 +8847,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/export-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 					"line": 240,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L240"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L240"
 				}
 			],
 			"signatures": [
@@ -8904,10 +8904,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/export-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/export-store.ts",
 							"line": 240,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L240"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L240"
 						}
 					],
 					"parameters": [
@@ -8942,10 +8942,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/theme-store.ts",
+					"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 					"line": 185,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L185"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L185"
 				}
 			],
 			"signatures": [
@@ -9018,10 +9018,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/theme-store.ts",
+							"fileName": "packages/runtime/core/src/state/slices/theme-store.ts",
 							"line": 185,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/theme-store.ts#L185"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/theme-store.ts#L185"
 						}
 					],
 					"parameters": [
@@ -9102,10 +9102,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 					"line": 44,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L44"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L44"
 				}
 			],
 			"signatures": [
@@ -9117,10 +9117,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 							"line": 44,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L44"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L44"
 						}
 					],
 					"parameters": [
@@ -9160,10 +9160,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/overrides/merge-overrides.ts",
+					"fileName": "packages/runtime/core/src/react/overrides/merge-overrides.ts",
 					"line": 132,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/overrides/merge-overrides.ts#L132"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/overrides/merge-overrides.ts#L132"
 				}
 			],
 			"signatures": [
@@ -9278,10 +9278,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/overrides/merge-overrides.ts",
+							"fileName": "packages/runtime/core/src/react/overrides/merge-overrides.ts",
 							"line": 132,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/overrides/merge-overrides.ts#L132"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/overrides/merge-overrides.ts#L132"
 						}
 					],
 					"parameters": [
@@ -9374,10 +9374,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/components/Studio.tsx",
+					"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
 					"line": 162,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L162"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L162"
 				}
 			],
 			"signatures": [
@@ -9430,10 +9430,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/Studio.tsx",
+							"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
 							"line": 162,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L162"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L162"
 						}
 					],
 					"typeParameters": [
@@ -9552,10 +9552,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+					"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 					"line": 74,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L74"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L74"
 				}
 			],
 			"signatures": [
@@ -9599,10 +9599,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioErrorScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx",
 							"line": 74,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioErrorScreen.tsx#L74"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioErrorScreen.tsx#L74"
 						}
 					],
 					"parameters": [
@@ -9642,10 +9642,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/studio/layout/StudioLoadingScreen.tsx",
+					"fileName": "packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx",
 					"line": 73,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L73"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx#L73"
 				}
 			],
 			"signatures": [
@@ -9689,10 +9689,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/studio/layout/StudioLoadingScreen.tsx",
+							"fileName": "packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx",
 							"line": 73,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/studio/layout/StudioLoadingScreen.tsx#L73"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/StudioLoadingScreen.tsx#L73"
 						}
 					],
 					"parameters": [
@@ -9733,10 +9733,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 					"line": 54,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L54"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L54"
 				}
 			],
 			"signatures": [
@@ -9748,10 +9748,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 							"line": 54,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L54"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L54"
 						}
 					],
 					"parameters": [
@@ -9791,10 +9791,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 					"line": 67,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L67"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L67"
 				}
 			],
 			"signatures": [
@@ -9822,10 +9822,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 							"line": 67,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L67"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L67"
 						}
 					],
 					"typeParameters": [
@@ -9905,10 +9905,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 					"line": 52,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L52"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L52"
 				}
 			],
 			"signatures": [
@@ -9920,10 +9920,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/AiStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/AiStoreProvider.tsx",
 							"line": 52,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L52"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L52"
 						}
 					],
 					"type": {
@@ -9943,10 +9943,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 					"line": 77,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L77"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L77"
 				}
 			],
 			"signatures": [
@@ -9974,10 +9974,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 							"line": 77,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L77"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L77"
 						}
 					],
 					"typeParameters": [
@@ -10057,10 +10057,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 					"line": 62,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L62"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L62"
 				}
 			],
 			"signatures": [
@@ -10072,10 +10072,10 @@
 					"flags": {},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ExportStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ExportStoreProvider.tsx",
 							"line": 62,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ExportStoreProvider.tsx#L62"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ExportStoreProvider.tsx#L62"
 						}
 					],
 					"type": {
@@ -10095,10 +10095,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/react/components/use-studio.ts",
+					"fileName": "packages/runtime/core/src/react/components/use-studio.ts",
 					"line": 112,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L112"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/use-studio.ts#L112"
 				}
 			],
 			"signatures": [
@@ -10186,10 +10186,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/react/components/use-studio.ts",
+							"fileName": "packages/runtime/core/src/react/components/use-studio.ts",
 							"line": 112,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/use-studio.ts#L112"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/use-studio.ts#L112"
 						}
 					],
 					"type": {
@@ -10209,10 +10209,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 					"line": 93,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L93"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L93"
 				}
 			],
 			"signatures": [
@@ -10240,10 +10240,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 							"line": 93,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L93"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L93"
 						}
 					],
 					"typeParameters": [
@@ -10323,10 +10323,10 @@
 			"flags": {},
 			"sources": [
 				{
-					"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+					"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 					"line": 78,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L78"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L78"
 				}
 			],
 			"signatures": [
@@ -10354,10 +10354,10 @@
 					},
 					"sources": [
 						{
-							"fileName": "packages/core/src/state/slices/ThemeStoreProvider.tsx",
+							"fileName": "packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx",
 							"line": 78,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/ThemeStoreProvider.tsx#L78"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/ThemeStoreProvider.tsx#L78"
 						}
 					],
 					"type": {

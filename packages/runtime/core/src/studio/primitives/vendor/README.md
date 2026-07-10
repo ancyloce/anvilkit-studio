@@ -9,7 +9,7 @@ visually distinct from the package's own primitives one level up in
 
 Vendored from the [animate-ui](https://animate-ui.com) component set via the
 shadcn-style installer, then normalized by
-`packages/core/scripts/migrate-shadcn-paths.mjs` (eslint→biome translation,
+`packages/runtime/core/scripts/migrate-shadcn-paths.mjs` (eslint→biome translation,
 `verbatimModuleSyntax` fixups, relocation into this tree).
 
 **Do not hand-edit for style.** Its internal layout (`components/`,

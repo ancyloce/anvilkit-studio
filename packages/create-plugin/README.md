@@ -49,4 +49,4 @@ out of the box.
 ## Reference
 
 - Plugin authoring guide: https://github.com/ancyloce/anvilkit-studio/blob/main/apps/docs/content/docs/guides/plugin-authoring.mdx
-- StudioPlugin contract: [`@anvilkit/core` README](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/README.md)
+- StudioPlugin contract: [`@anvilkit/core` README](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/README.md)

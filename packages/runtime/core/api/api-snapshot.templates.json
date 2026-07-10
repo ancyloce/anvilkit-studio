@@ -93,7 +93,7 @@
 							"fileName": "index.ts",
 							"line": 94,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L94"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L94"
 						}
 					],
 					"type": {
@@ -136,7 +136,7 @@
 							"fileName": "index.ts",
 							"line": 89,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L89"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L89"
 						}
 					],
 					"type": {
@@ -171,7 +171,7 @@
 							"fileName": "index.ts",
 							"line": 103,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L103"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L103"
 						}
 					],
 					"type": {
@@ -240,7 +240,7 @@
 							"fileName": "index.ts",
 							"line": 124,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L124"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L124"
 						}
 					],
 					"type": {
@@ -286,7 +286,7 @@
 							"fileName": "index.ts",
 							"line": 96,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L96"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L96"
 						}
 					],
 					"type": {
@@ -339,7 +339,7 @@
 							"fileName": "index.ts",
 							"line": 87,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L87"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L87"
 						}
 					],
 					"type": {
@@ -371,7 +371,7 @@
 					"fileName": "index.ts",
 					"line": 116,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L116"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L116"
 				}
 			],
 			"extendedTypes": [
@@ -459,7 +459,7 @@
 							"fileName": "index.ts",
 							"line": 94,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L94"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L94"
 						}
 					],
 					"type": {
@@ -496,7 +496,7 @@
 							"fileName": "index.ts",
 							"line": 89,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L89"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L89"
 						}
 					],
 					"type": {
@@ -525,7 +525,7 @@
 							"fileName": "index.ts",
 							"line": 103,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L103"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L103"
 						}
 					],
 					"type": {
@@ -573,7 +573,7 @@
 							"fileName": "index.ts",
 							"line": 96,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L96"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L96"
 						}
 					],
 					"type": {
@@ -620,7 +620,7 @@
 							"fileName": "index.ts",
 							"line": 87,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L87"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L87"
 						}
 					],
 					"type": {
@@ -646,7 +646,7 @@
 					"fileName": "index.ts",
 					"line": 81,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L81"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L81"
 				}
 			],
 			"extendedBy": [
@@ -731,7 +731,7 @@
 							"fileName": "index.ts",
 							"line": 67,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L67"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L67"
 						}
 					],
 					"type": {
@@ -768,7 +768,7 @@
 							"fileName": "index.ts",
 							"line": 69,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L69"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L69"
 						}
 					],
 					"type": {
@@ -791,7 +791,7 @@
 					"fileName": "index.ts",
 					"line": 65,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L65"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L65"
 				}
 			]
 		},
@@ -847,7 +847,7 @@
 							"fileName": "index.ts",
 							"line": 52,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L52"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L52"
 						}
 					],
 					"type": {
@@ -876,7 +876,7 @@
 							"fileName": "index.ts",
 							"line": 47,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L47"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L47"
 						}
 					],
 					"type": {
@@ -937,7 +937,7 @@
 							"fileName": "index.ts",
 							"line": 43,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L43"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L43"
 						}
 					],
 					"type": {
@@ -966,7 +966,7 @@
 							"fileName": "index.ts",
 							"line": 45,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L45"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L45"
 						}
 					],
 					"type": {
@@ -991,7 +991,7 @@
 					"fileName": "index.ts",
 					"line": 36,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L36"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L36"
 				}
 			]
 		},
@@ -1006,7 +1006,7 @@
 					"fileName": "index.ts",
 					"line": 142,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L142"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L142"
 				}
 			],
 			"signatures": [
@@ -1080,7 +1080,7 @@
 							"fileName": "index.ts",
 							"line": 142,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/templates/index.ts#L142"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/templates/index.ts#L142"
 						}
 					],
 					"parameters": [

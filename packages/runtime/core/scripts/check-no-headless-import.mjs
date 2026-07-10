@@ -18,7 +18,7 @@
  * Implemented in plain Node (no `ripgrep` dependency) so it runs on
  * any CI image, mirroring `check-react-free.mjs`.
  *
- * @see {@link ../../../docs/ai-context/core-functional-architecture.md | §4 / §6 A5}
+ * @see {@link ../../../../docs/ai-context/core-functional-architecture.md | §4 / §6 A5}
  */
 
 import { readdir, readFile } from "node:fs/promises";

@@ -65,7 +65,7 @@ async function main() {
 			`  Missing from peerDependencies: ${missingFromPeers.join(", ")}`,
 		);
 		console.error(
-			`  Add each under \"peerDependencies\" in packages/core/package.json.`,
+			`  Add each under \"peerDependencies\" in packages/runtime/core/package.json.`,
 		);
 	}
 	if (leakedToDeps.length > 0) {

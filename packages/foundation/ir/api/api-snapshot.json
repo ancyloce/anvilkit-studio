@@ -404,7 +404,7 @@
 												},
 												"name": "PageIRNode",
 												"package": "@anvilkit/contracts",
-												"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+												"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 											},
 											{
 												"type": "reflection",
@@ -821,7 +821,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -928,7 +928,7 @@
 										},
 										"name": "PageIR",
 										"package": "@anvilkit/contracts",
-										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 									}
 								}
 							],
@@ -976,7 +976,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -1147,7 +1147,7 @@
 								},
 								"name": "PageIR",
 								"package": "@anvilkit/contracts",
-								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 							}
 						}
 					]
@@ -1674,7 +1674,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -1722,7 +1722,7 @@
 										},
 										"name": "PageIR",
 										"package": "@anvilkit/contracts",
-										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 									}
 								}
 							],
@@ -1735,7 +1735,7 @@
 								},
 								"name": "PageIR",
 								"package": "@anvilkit/contracts",
-								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 							}
 						}
 					]
@@ -1763,7 +1763,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "PageIR",
-										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+										"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 									},
 									{
 										"kind": "text",
@@ -1901,7 +1901,7 @@
 										},
 										"name": "PageIR",
 										"package": "@anvilkit/contracts",
-										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+										"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 									}
 								},
 								{
@@ -1927,7 +1927,7 @@
 								},
 								"name": "PageIR",
 								"package": "@anvilkit/contracts",
-								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts"
+								"externalUrl": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 							}
 						}
 					]

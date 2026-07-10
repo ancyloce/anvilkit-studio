@@ -1,7 +1,7 @@
 # @anvilkit/ir
 
 Headless transforms that turn Puck `Data` into the normalized
-[`PageIR`](../core/src/types/ir.ts) shape every Anvilkit export
+[`PageIR`](../../core/src/types/ir.ts) shape every Anvilkit export
 format consumes. `@anvilkit/ir` is the first of three headless
 runtime packages (`ir`, `schema`, `validator`) and sits directly
 above `@anvilkit/utils` in the dependency graph — it imports zero

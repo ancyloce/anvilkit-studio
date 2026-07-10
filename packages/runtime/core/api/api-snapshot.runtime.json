@@ -80,7 +80,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 124,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L124"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L124"
 						}
 					],
 					"signatures": [
@@ -95,7 +95,7 @@
 									"fileName": "runtime/errors.ts",
 									"line": 124,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L124"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L124"
 								}
 							],
 							"parameters": [
@@ -180,7 +180,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 122,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L122"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L122"
 						}
 					],
 					"type": {
@@ -214,7 +214,7 @@
 					"fileName": "runtime/errors.ts",
 					"line": 118,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L118"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L118"
 				}
 			],
 			"extendedTypes": [
@@ -294,7 +294,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 59,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L59"
 						}
 					],
 					"signatures": [
@@ -309,7 +309,7 @@
 									"fileName": "runtime/errors.ts",
 									"line": 59,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L59"
 								}
 							],
 							"parameters": [
@@ -395,7 +395,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 57,
 							"character": 19,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L57"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L57"
 						}
 					],
 					"type": {
@@ -423,7 +423,7 @@
 					"fileName": "runtime/errors.ts",
 					"line": 49,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L49"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L49"
 				}
 			],
 			"extendedTypes": [
@@ -514,7 +514,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 155,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L155"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L155"
 						}
 					],
 					"signatures": [
@@ -529,7 +529,7 @@
 									"fileName": "runtime/errors.ts",
 									"line": 155,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L155"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L155"
 								}
 							],
 							"parameters": [
@@ -625,7 +625,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 147,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L147"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L147"
 						}
 					],
 					"type": {
@@ -685,7 +685,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 153,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L153"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L153"
 						}
 					],
 					"type": {
@@ -714,7 +714,7 @@
 					"fileName": "runtime/errors.ts",
 					"line": 143,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L143"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L143"
 				}
 			],
 			"extendedTypes": [
@@ -816,7 +816,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 100,
 							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L100"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L100"
 						}
 					],
 					"signatures": [
@@ -831,7 +831,7 @@
 									"fileName": "runtime/errors.ts",
 									"line": 100,
 									"character": 1,
-									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L100"
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L100"
 								}
 							],
 							"parameters": [
@@ -927,7 +927,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 89,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L89"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L89"
 						}
 					],
 					"type": {
@@ -970,7 +970,7 @@
 							"fileName": "runtime/errors.ts",
 							"line": 98,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L98"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L98"
 						}
 					],
 					"type": {
@@ -999,7 +999,7 @@
 					"fileName": "runtime/errors.ts",
 					"line": 85,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L85"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L85"
 				}
 			],
 			"extendedTypes": [
@@ -1081,7 +1081,7 @@
 							"fileName": "runtime/export-registry.ts",
 							"line": 65,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L65"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L65"
 						}
 					],
 					"type": {
@@ -1195,7 +1195,7 @@
 							"fileName": "runtime/export-registry.ts",
 							"line": 70,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L70"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L70"
 						}
 					],
 					"type": {
@@ -1266,7 +1266,7 @@
 							"fileName": "runtime/export-registry.ts",
 							"line": 59,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L59"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L59"
 						}
 					],
 					"type": {
@@ -1345,7 +1345,7 @@
 							"fileName": "runtime/export-registry.ts",
 							"line": 75,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L75"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L75"
 						}
 					],
 					"type": {
@@ -1389,7 +1389,7 @@
 					"fileName": "runtime/export-registry.ts",
 					"line": 51,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L51"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L51"
 				}
 			]
 		},
@@ -1647,7 +1647,7 @@
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 209,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L209"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L209"
 						}
 					],
 					"type": {
@@ -1759,7 +1759,7 @@
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 223,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L223"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L223"
 						}
 					],
 					"type": {
@@ -1841,7 +1841,7 @@
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 162,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L162"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L162"
 						}
 					],
 					"type": {
@@ -1962,7 +1962,7 @@
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 180,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L180"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L180"
 						}
 					],
 					"type": {
@@ -2012,7 +2012,7 @@
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 174,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L174"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L174"
 						}
 					],
 					"type": {
@@ -2118,7 +2118,7 @@
 					"fileName": "runtime/lifecycle-manager.ts",
 					"line": 151,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L151"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L151"
 				}
 			]
 		},
@@ -2197,7 +2197,7 @@
 							"fileName": "runtime/header-actions.ts",
 							"line": 66,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L66"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L66"
 						}
 					],
 					"type": {
@@ -2231,7 +2231,7 @@
 							"fileName": "runtime/header-actions.ts",
 							"line": 65,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L65"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L65"
 						}
 					],
 					"type": {
@@ -2253,7 +2253,7 @@
 							"fileName": "runtime/header-actions.ts",
 							"line": 67,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L67"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L67"
 						}
 					],
 					"type": {
@@ -2277,7 +2277,7 @@
 					"fileName": "runtime/header-actions.ts",
 					"line": 64,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L64"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L64"
 				}
 			]
 		},
@@ -2507,7 +2507,7 @@
 							"fileName": "types/plugin.ts",
 							"line": 375,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L375"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L375"
 						}
 					],
 					"type": {
@@ -2607,7 +2607,7 @@
 							"fileName": "types/plugin.ts",
 							"line": 335,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L335"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L335"
 						}
 					],
 					"type": {
@@ -2746,7 +2746,7 @@
 							"fileName": "types/plugin.ts",
 							"line": 323,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L323"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L323"
 						}
 					],
 					"type": {
@@ -2799,7 +2799,7 @@
 							"fileName": "types/plugin.ts",
 							"line": 286,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L286"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L286"
 						}
 					],
 					"type": {
@@ -2860,7 +2860,7 @@
 							"fileName": "types/plugin.ts",
 							"line": 300,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L300"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L300"
 						}
 					],
 					"type": {
@@ -2935,7 +2935,7 @@
 							"fileName": "types/plugin.ts",
 							"line": 363,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L363"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L363"
 						}
 					],
 					"type": {
@@ -3074,7 +3074,7 @@
 							"fileName": "types/plugin.ts",
 							"line": 346,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L346"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L346"
 						}
 					],
 					"type": {
@@ -3102,7 +3102,7 @@
 					"fileName": "types/plugin.ts",
 					"line": 277,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L277"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L277"
 				}
 			]
 		},
@@ -3160,7 +3160,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 120,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L120"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L120"
 						}
 					],
 					"type": {
@@ -3216,7 +3216,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 113,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L113"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L113"
 						}
 					],
 					"type": {
@@ -3305,7 +3305,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 126,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L126"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L126"
 						}
 					],
 					"type": {
@@ -3375,7 +3375,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 187,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L187"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L187"
 						}
 					],
 					"type": {
@@ -3400,7 +3400,7 @@
 											"fileName": "runtime/compile-plugins.ts",
 											"line": 188,
 											"character": 11,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L188"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L188"
 										}
 									],
 									"type": {
@@ -3464,7 +3464,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 108,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L108"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L108"
 						}
 					],
 					"type": {
@@ -3519,7 +3519,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 158,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L158"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L158"
 						}
 					],
 					"type": {
@@ -3610,7 +3610,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 142,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L142"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L142"
 						}
 					],
 					"type": {
@@ -3689,7 +3689,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 93,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L93"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L93"
 						}
 					],
 					"type": {
@@ -3763,7 +3763,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 151,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L151"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L151"
 						}
 					],
 					"type": {
@@ -3813,7 +3813,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 169,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L169"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L169"
 						}
 					],
 					"type": {
@@ -3888,7 +3888,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 103,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L103"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L103"
 						}
 					],
 					"type": {
@@ -3968,7 +3968,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 180,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L180"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L180"
 						}
 					],
 					"type": {
@@ -4007,7 +4007,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 164,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L164"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L164"
 						}
 					],
 					"type": {
@@ -4063,7 +4063,7 @@
 					"fileName": "runtime/compile-plugins.ts",
 					"line": 86,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L86"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L86"
 				}
 			]
 		},
@@ -4115,7 +4115,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 50,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L50"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L50"
 						}
 					],
 					"type": {
@@ -4158,7 +4158,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 49,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L49"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L49"
 						}
 					],
 					"type": {
@@ -4194,7 +4194,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 52,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L52"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L52"
 						}
 					],
 					"type": {
@@ -4230,7 +4230,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 51,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L51"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L51"
 						}
 					],
 					"type": {
@@ -4273,7 +4273,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 54,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L54"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L54"
 						}
 					],
 					"type": {
@@ -4309,7 +4309,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 53,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L53"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L53"
 						}
 					],
 					"type": {
@@ -4345,7 +4345,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 47,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L47"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L47"
 						}
 					],
 					"type": {
@@ -4388,7 +4388,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 48,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L48"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L48"
 						}
 					],
 					"type": {
@@ -4431,7 +4431,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 56,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L56"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L56"
 						}
 					],
 					"type": {
@@ -4467,7 +4467,7 @@
 							"fileName": "runtime/sidebar-registry.ts",
 							"line": 55,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L55"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L55"
 						}
 					],
 					"type": {
@@ -4513,7 +4513,7 @@
 					"fileName": "runtime/sidebar-registry.ts",
 					"line": 46,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/sidebar-registry.ts#L46"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/sidebar-registry.ts#L46"
 				}
 			]
 		},
@@ -4562,7 +4562,7 @@
 					"fileName": "runtime/header-actions.ts",
 					"line": 213,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L213"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L213"
 				}
 			],
 			"type": {
@@ -4590,7 +4590,7 @@
 											"fileName": "runtime/header-actions.ts",
 											"line": 214,
 											"character": 37,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L214"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L214"
 										}
 									],
 									"type": {
@@ -4613,7 +4613,7 @@
 											"fileName": "runtime/header-actions.ts",
 											"line": 214,
 											"character": 14,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L214"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L214"
 										}
 									],
 									"type": {
@@ -4655,7 +4655,7 @@
 											"fileName": "runtime/header-actions.ts",
 											"line": 217,
 											"character": 12,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L217"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L217"
 										}
 									],
 									"type": {
@@ -4678,7 +4678,7 @@
 											"fileName": "runtime/header-actions.ts",
 											"line": 216,
 											"character": 12,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L216"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L216"
 										}
 									],
 									"type": {
@@ -4766,7 +4766,7 @@
 					"fileName": "runtime/lifecycle-manager.ts",
 					"line": 101,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L101"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L101"
 				}
 			],
 			"type": {
@@ -4996,7 +4996,7 @@
 					"fileName": "runtime/lifecycle-manager.ts",
 					"line": 130,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L130"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L130"
 				}
 			],
 			"type": {
@@ -5070,7 +5070,7 @@
 					"fileName": "runtime/lifecycle-manager.ts",
 					"line": 143,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L143"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L143"
 				}
 			],
 			"type": {
@@ -5192,7 +5192,7 @@
 					"fileName": "runtime/lazy-plugin.ts",
 					"line": 173,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L173"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L173"
 				}
 			],
 			"typeParameters": [
@@ -5446,7 +5446,7 @@
 					"fileName": "types/plugin.ts",
 					"line": 396,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L396"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L396"
 				}
 			],
 			"type": {
@@ -5516,7 +5516,7 @@
 					"fileName": "runtime/lazy-plugin.ts",
 					"line": 37,
 					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L37"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L37"
 				}
 			],
 			"typeParameters": [
@@ -5637,7 +5637,7 @@
 							},
 							{
 								"kind": "code",
-								"text": "`packages/core/package.json`"
+								"text": "`packages/runtime/core/package.json`"
 							},
 							{
 								"kind": "text",
@@ -5709,7 +5709,7 @@
 					"fileName": "runtime/version.ts",
 					"line": 21,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/version.ts#L21"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/version.ts#L21"
 				}
 			],
 			"type": {
@@ -5803,7 +5803,7 @@
 					"fileName": "runtime/built-in-formats/json-format.ts",
 					"line": 17,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/built-in-formats/json-format.ts#L17"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/built-in-formats/json-format.ts#L17"
 				}
 			],
 			"type": {
@@ -5867,7 +5867,7 @@
 					"fileName": "runtime/lazy-plugin.ts",
 					"line": 284,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L284"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L284"
 				}
 			],
 			"type": {
@@ -5889,7 +5889,7 @@
 					"fileName": "runtime/compile-plugins.ts",
 					"line": 456,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L456"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L456"
 				}
 			],
 			"signatures": [
@@ -5904,7 +5904,7 @@
 							"fileName": "runtime/compile-plugins.ts",
 							"line": 456,
 							"character": 22,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/compile-plugins.ts#L456"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L456"
 						}
 					],
 					"parameters": [
@@ -6028,7 +6028,7 @@
 					"fileName": "runtime/header-actions.ts",
 					"line": 193,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L193"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L193"
 				}
 			],
 			"signatures": [
@@ -6109,7 +6109,7 @@
 							"fileName": "runtime/header-actions.ts",
 							"line": 193,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L193"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L193"
 						}
 					],
 					"typeParameters": [
@@ -6199,7 +6199,7 @@
 					"fileName": "runtime/export-registry.ts",
 					"line": 98,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L98"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L98"
 				}
 			],
 			"signatures": [
@@ -6311,7 +6311,7 @@
 							"fileName": "runtime/export-registry.ts",
 							"line": 98,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L98"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L98"
 						}
 					],
 					"parameters": [
@@ -6407,7 +6407,7 @@
 					"fileName": "runtime/lifecycle-manager.ts",
 					"line": 266,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L266"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L266"
 				}
 			],
 			"signatures": [
@@ -6430,7 +6430,7 @@
 							"fileName": "runtime/lifecycle-manager.ts",
 							"line": 266,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lifecycle-manager.ts#L266"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lifecycle-manager.ts#L266"
 						}
 					],
 					"parameters": [
@@ -6544,7 +6544,7 @@
 					"fileName": "runtime/detect-plugin.ts",
 					"line": 114,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L114"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/detect-plugin.ts#L114"
 				}
 			],
 			"signatures": [
@@ -6737,7 +6737,7 @@
 							"fileName": "runtime/detect-plugin.ts",
 							"line": 114,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L114"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/detect-plugin.ts#L114"
 						}
 					],
 					"parameters": [
@@ -6783,7 +6783,7 @@
 					"fileName": "runtime/detect-plugin.ts",
 					"line": 65,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L65"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/detect-plugin.ts#L65"
 				}
 			],
 			"signatures": [
@@ -6869,7 +6869,7 @@
 							"fileName": "runtime/detect-plugin.ts",
 							"line": 65,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/detect-plugin.ts#L65"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/detect-plugin.ts#L65"
 						}
 					],
 					"parameters": [
@@ -6926,7 +6926,7 @@
 					"fileName": "runtime/lazy-plugin.ts",
 					"line": 126,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L126"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L126"
 				}
 			],
 			"signatures": [
@@ -7008,7 +7008,7 @@
 							"fileName": "runtime/lazy-plugin.ts",
 							"line": 126,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L126"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L126"
 						}
 					],
 					"typeParameters": [
@@ -7114,19 +7114,19 @@
 					"fileName": "runtime/lazy-plugin.ts",
 					"line": 232,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L232"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L232"
 				},
 				{
 					"fileName": "runtime/lazy-plugin.ts",
 					"line": 236,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L236"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L236"
 				},
 				{
 					"fileName": "runtime/lazy-plugin.ts",
 					"line": 241,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L241"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L241"
 				}
 			],
 			"signatures": [
@@ -7413,7 +7413,7 @@
 							"fileName": "runtime/lazy-plugin.ts",
 							"line": 232,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L232"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L232"
 						}
 					],
 					"typeParameters": [
@@ -7794,7 +7794,7 @@
 							"fileName": "runtime/lazy-plugin.ts",
 							"line": 236,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/lazy-plugin.ts#L236"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/lazy-plugin.ts#L236"
 						}
 					],
 					"typeParameters": [
@@ -7922,7 +7922,7 @@
 					"fileName": "runtime/header-actions.ts",
 					"line": 245,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L245"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L245"
 				}
 			],
 			"signatures": [
@@ -8003,7 +8003,7 @@
 							"fileName": "runtime/header-actions.ts",
 							"line": 245,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/header-actions.ts#L245"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/header-actions.ts#L245"
 						}
 					],
 					"parameters": [

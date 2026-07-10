@@ -3,7 +3,7 @@
  * contract.
  *
  * Canonical ownership moved to `@anvilkit/contracts`
- * (`packages/contracts/src/ai-section.ts`); see the shim rationale in
+ * (`packages/foundation/contracts/src/ai-section.ts`); see the shim rationale in
  * `./ir.ts`. New code should import from `@anvilkit/contracts`
  * directly.
  */

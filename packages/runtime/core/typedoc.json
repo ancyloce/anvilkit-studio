@@ -1,6 +1,6 @@
 {
 	"$schema": "https://typedoc.org/schema.json",
-	"extends": ["../../typedoc.base.json"],
+	"extends": ["../../../typedoc.base.json"],
 	"entryPoints": ["./src/index.ts"],
 	"tsconfig": "./tsconfig.json",
 	"name": "@anvilkit/core",
@@ -20,8 +20,8 @@
 			"Plugin": "https://puckeditor.com/docs/extending-puck/plugins"
 		},
 		"@anvilkit/core": {
-			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/ir.ts",
-			"EditorI18nProvider": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/editor-i18n-context.tsx",
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/ir.ts",
+			"EditorI18nProvider": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx",
 			"ExportStorePartial": "#",
 			"LifecycleManagerOptions": "#"
 		}
