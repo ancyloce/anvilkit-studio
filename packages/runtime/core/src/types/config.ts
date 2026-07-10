@@ -107,7 +107,7 @@ export interface ComponentPackageManifest {
 	/**
 	 * Short, URL-safe slug for the component (e.g. `"button"`,
 	 * `"bento-grid"`). Matches the directory name under
-	 * `packages/components/src/`.
+	 * `packages/extensions/components/src/`.
 	 */
 	readonly slug: string;
 	/**
@@ -123,7 +123,7 @@ export interface ComponentPackageManifest {
 	 * - `"form"` — inputs, buttons, form wrappers.
 	 *
 	 * Closed union — extending it requires updating the scaffold
-	 * CLI in `packages/components/`.
+	 * CLI in `packages/extensions/components/`.
 	 */
 	readonly scaffoldType: "content" | "layout" | "form";
 	/**

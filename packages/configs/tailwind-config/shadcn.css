@@ -27,8 +27,8 @@
  */
 @source "../../runtime/core/dist/**/*.js";
 @source "../../runtime/ui/dist/**/*.js";
-@source "../../plugins/*/dist/**/*.js";
-@source "../../components/dist/**/*.js";
+@source "../../extensions/plugins/*/dist/**/*.js";
+@source "../../extensions/components/dist/**/*.js";
 
 @theme inline {
 	--font-heading: var(--font-sans);

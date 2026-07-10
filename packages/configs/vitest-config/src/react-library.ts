@@ -9,7 +9,7 @@ import type { ViteUserConfig } from "vitest/config";
  * - `clearMocks: true` so vi.fn() state does not leak between tests.
  * - `resolve.dedupe` collapses `react` / `react-dom` / `react/jsx-runtime`
  *   to a single copy. The workspace ships two React installs (root
- *   `react@^19.2.7` vs `packages/components` `react@^19.2.4`); without
+ *   `react@^19.2.7` vs `packages/extensions/components` `react@^19.2.4`); without
  *   dedupe a react-library test process can load both, producing
  *   "invalid hook call" / `Cannot read properties of null (reading
  *   'useState')` failures depending on install state.
