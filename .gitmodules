@@ -23,10 +23,10 @@
 	path = packages/plugins/plugin-collab-ui
 	url = https://github.com/ancyloce/anvilkit-plugin-collab-ui.git
 [submodule "packages/canvas/core"]
-	path = packages/canvas/core
+	path = packages/capabilities/canvas/core
 	url = https://github.com/ancyloce/anvilkit-canvas-core.git
 [submodule "packages/canvas/editor"]
-	path = packages/canvas/editor
+	path = packages/capabilities/canvas/editor
 	url = https://github.com/ancyloce/anvilkit-canvas-editor.git
 [submodule "packages/plugins/plugin-canvas-studio"]
 	path = packages/plugins/plugin-canvas-studio
@@ -44,8 +44,8 @@
 	path = packages/plugins/plugin-page-seo
 	url = https://github.com/ancyloce/anvilkit-plugin-page-seo.git
 [submodule "packages/analytics/core"]
-	path = packages/analytics/core
+	path = packages/capabilities/analytics/core
 	url = https://github.com/ancyloce/anvilkit-analytics-core.git
 [submodule "packages/analytics/react"]
-	path = packages/analytics/react
+	path = packages/capabilities/analytics/react
 	url = https://github.com/ancyloce/anvilkit-analytics-react.git
