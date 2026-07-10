@@ -7,7 +7,7 @@
  *      is mounted in the demo's `<Studio plugins>` array.
  *   2. The plugin's `--ak-ds-*` CSS variables resolve to non-empty
  *      values in the host document, proving the Phase A CSS plumbing
- *      (`packages/core/src/react/overrides/styles.css`) landed.
+ *      (`packages/runtime/core/src/react/overrides/styles.css`) landed.
  *   3. The demo-only `TokenSwatch` component (added by
  *      `apps/studio/lib/token-swatch-component.ts`) renders with the
  *      seeded token refs resolving to `var(--ak-ds-*)` at paint time —
@@ -92,7 +92,7 @@ test.describe("Design System plugin — demo integration", () => {
 		// primitive (`brand-500`), semantic (`bg`, `fg`, `accent`,
 		// `border`), and a spacing primitive. All must resolve to a
 		// non-empty computed style; an empty string would mean the
-		// `packages/core/src/react/overrides/styles.css` block didn't
+		// `packages/runtime/core/src/react/overrides/styles.css` block didn't
 		// land. The fallback chain (`var(--ak-ds-bg, var(--ak-studio-bg))`)
 		// guarantees a value even when no host overrides apply.
 		const resolved = await page.evaluate(() => {
@@ -124,7 +124,7 @@ test.describe("Design System plugin — demo integration", () => {
 		await gotoEditor(page);
 
 		// The iframe injection is mirrored from
-		// `packages/core/src/react/studio/theme/iframe-theme.ts`'s
+		// `packages/runtime/core/src/react/studio/theme/iframe-theme.ts`'s
 		// `TOKEN_BLOCK` and must land in lockstep with the host doc.
 		// We wait for the iframe to be present, then probe the same
 		// vars. The iframe's `<style id="anvilkit-studio-iframe-theme">`

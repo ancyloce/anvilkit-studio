@@ -10,7 +10,7 @@
  *
  * Why a console assertion?
  *   `smokeTestPlugin.onInit` fires inside a `useEffect` in
- *   `<Studio>` (see `packages/core/src/react/components/Studio.tsx`
+ *   `<Studio>` (see `packages/runtime/core/src/react/components/Studio.tsx`
  *   L413-L418). That means the log only appears after:
  *     1. Server render lands.
  *     2. Next hydrates the client bundle.

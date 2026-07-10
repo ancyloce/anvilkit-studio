@@ -5,8 +5,8 @@
 		"ignoreDeprecations": "6.0",
 		"paths": {
 			"@/*": ["./*"],
-			"@anvilkit/ui": ["../../packages/ui/src/index.ts"],
-			"@anvilkit/ui/*": ["../../packages/ui/src/*"],
+			"@anvilkit/ui": ["../../packages/runtime/ui/src/index.ts"],
+			"@anvilkit/ui/*": ["../../packages/runtime/ui/src/*"],
 			"@anvilkit/*": ["../../packages/components/src/*/src/index.ts"]
 		},
 		"plugins": [

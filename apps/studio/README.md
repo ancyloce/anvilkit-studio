@@ -111,7 +111,7 @@ IP address** (only a salted hash is stored). Properties are `string | number |
 boolean` only; both the client adapter and the server endpoint enforce the
 forbidden-field deny-list (`data`, `html`, `dom`, `root`, `rootProps`,
 `puckData`, `serializedHtml`). Consent gates emission. See
-`packages/analytics/core/README.md` for the adapter contract.
+`packages/capabilities/analytics/core/README.md` for the adapter contract.
 
 ## Notes
 

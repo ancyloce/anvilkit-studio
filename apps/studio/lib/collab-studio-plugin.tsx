@@ -29,7 +29,7 @@ const META = {
  * chrome.
  *
  * Why one writer: Yjs awareness replaces local state per call (see
- * `packages/ui/src/presence/use-presence.ts:75-76`). If two callers
+ * `packages/runtime/ui/src/presence/use-presence.ts:75-76`). If two callers
  * each pass a partial frame (one with `cursor`, one with `selection`),
  * they erase each other's fields. Routing cursor and selection through
  * the same {@link PresenceWriter} keeps both fields in lock-step every

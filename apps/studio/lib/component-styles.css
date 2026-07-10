@@ -19,4 +19,4 @@
 @import "@anvilkit/tailwind-config/component";
 
 @source "../../../packages/components/src/**/*.{ts,tsx}";
-@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../packages/runtime/ui/src/**/*.{ts,tsx}";
