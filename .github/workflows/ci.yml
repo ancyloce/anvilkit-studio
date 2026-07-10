@@ -173,7 +173,7 @@ jobs:
             --filter @anvilkit/statistics \
             size
 
-      # Phase 3 M0 (`phase3-001`): Playwright + demo E2E harness. The
+      # Phase 3 M0 (`phase3-001`): Playwright + studio E2E harness. The
       # smoke spec loads `/puck/editor`, waits for `<Studio>` to
       # hydrate, and asserts `smokeTestPlugin.onInit` logs to the
       # browser console. Future Phase 3 tasks (`phase3-014`) add
@@ -181,25 +181,25 @@ jobs:
       #
       # `install --with-deps chromium` downloads Chromium + the OS
       # libraries Playwright needs on Ubuntu runners. Locally,
-      # developers run `pnpm --filter demo e2e:install` once.
+      # developers run `pnpm --filter studio e2e:install` once.
       - name: Install Playwright browsers
-        run: pnpm --filter demo exec playwright install --with-deps chromium
+        run: pnpm --filter studio exec playwright install --with-deps chromium
 
-      - name: Run demo E2E tests
-        run: pnpm --filter demo e2e
+      - name: Run studio E2E tests
+        run: pnpm --filter studio e2e
 
-      - name: Upload demo Playwright report
+      - name: Upload studio Playwright report
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-demo
-          path: apps/demo/playwright-report/
+          name: playwright-report-studio
+          path: apps/studio/playwright-report/
           retention-days: 7
 
       # Phase 4 (`phase4-004`): docs site playground + marketplace
       # smoke tests. The specs boot the Vite dev server (TanStack
       # Start), mount the Puck `/playground`, and exercise the
-      # marketplace catalog. The demo step above already installed
+      # marketplace catalog. The studio step above already installed
       # the Chromium browser binary — we just need the
       # `@anvilkit/docs-site` Playwright config to pick it up.
       - name: Install Playwright browsers (docs)

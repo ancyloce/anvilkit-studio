@@ -77,30 +77,30 @@ jobs:
 
       # phase5-019 phase4-015 — the Playwright editor-load bench
       # measures `/puck/editor` TTI against a real `next start`. Build
-      # the demo + launch it in the background, wait for readiness,
+      # the studio + launch it in the background, wait for readiness,
       # then hand off to the bench. `editor-load.bench.ts` also
       # self-skips if the URL is not reachable (local-dev fallback),
       # so this step is the one that turns the bench from "skipped"
       # to "measured" in CI.
-      - name: Build demo for editor-load bench
-        run: pnpm --filter demo build
+      - name: Build studio for editor-load bench
+        run: pnpm --filter studio build
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Start demo in background
+      - name: Start studio in background
         run: |
-          pnpm --filter demo exec next start -p 3000 &
-          echo "demo_pid=$!" >> "$GITHUB_ENV"
+          pnpm --filter studio exec next start -p 3000 &
+          echo "studio_pid=$!" >> "$GITHUB_ENV"
           # Wait up to 60s for the server to become reachable.
           for i in $(seq 1 60); do
             if curl -sf -o /dev/null http://localhost:3000/puck/editor; then
-              echo "demo reachable after ${i}s"
+              echo "studio reachable after ${i}s"
               exit 0
             fi
             sleep 1
           done
-          echo "::warning::demo not reachable after 60s — editor-load bench will skip"
+          echo "::warning::studio not reachable after 60s — editor-load bench will skip"
 
       - name: Run benches
         id: bench
@@ -109,9 +109,9 @@ jobs:
           ANVILKIT_EDITOR_URL: http://localhost:3000/puck/editor
         run: pnpm bench
 
-      - name: Stop demo
-        if: always() && env.demo_pid
-        run: kill "${demo_pid}" 2>/dev/null || true
+      - name: Stop studio
+        if: always() && env.studio_pid
+        run: kill "${studio_pid}" 2>/dev/null || true
 
       - name: Upload bench summary
         if: always()

@@ -1,9 +1,9 @@
 name: Docker Images (GHCR)
 
-# Build the apps/demo (Next.js), apps/docs (Vite/TanStack Start) and
+# Build the apps/studio (Next.js), apps/docs (Vite/TanStack Start) and
 # apps/collab (Hocuspocus relay) images and push them to GitHub Container
 # Registry so other servers can pull them:
-#   docker pull ghcr.io/<owner>/demo:latest
+#   docker pull ghcr.io/<owner>/studio:latest
 #   docker pull ghcr.io/<owner>/docs:latest
 #   docker pull ghcr.io/<owner>/collab:latest
 # Images are NOT published to Docker Hub.
@@ -39,9 +39,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - app: demo
-            image: demo
-            dockerfile: apps/demo/Dockerfile
+          - app: studio
+            image: studio
+            dockerfile: apps/studio/Dockerfile
           - app: docs
             image: docs
             dockerfile: apps/docs/Dockerfile
