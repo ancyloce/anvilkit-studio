@@ -8,7 +8,7 @@
 		"dev:next-only": "next dev --webpack",
 		"dev:turbopack": "next dev",
 		"dev:collab": "node scripts/dev-collab.mjs",
-		"relay": "node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-21234}",
+		"relay": "node ../../packages/extensions/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs ${COLLAB_RELAY_PORT:-21234}",
 		"relay:hocuspocus": "node scripts/hocuspocus-dev-relay.mjs ${COLLAB_HOCUSPOCUS_PORT:-31234}",
 		"build": "pnpm --filter @anvilkit/canvas-editor build:css && next build --webpack",
 		"start": "next start",

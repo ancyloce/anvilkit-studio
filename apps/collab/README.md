@@ -118,5 +118,5 @@ single-tab session (and locally, to the auto-started dev relay).
   concern. There is no built-in rate limiting.
 - **Alternatives**: the same client works against any Hocuspocus host
   (Railway/Render/your own Docker host) — only `PUBLIC_COLLAB_WS_URL`
-  changes. See `packages/plugins/plugin-collab-yjs/docs/hocuspocus-deployment.md`
+  changes. See `packages/extensions/plugins/plugin-collab-yjs/docs/hocuspocus-deployment.md`
   for the Postgres-backed variant.

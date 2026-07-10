@@ -3,8 +3,8 @@
  * Generate the first-party registry feed at `src/registry/feed.json` (and the
  * public copies `public/registry/feed.json` + `feed.schema.json`).
  *
- * Reads package.json for every plugin (`packages/plugins/plugin-<slug>`) and
- * component (`packages/components/src/<slug>`). Templates are workspace-only
+ * Reads package.json for every plugin (`packages/extensions/plugins/plugin-<slug>`) and
+ * component (`packages/extensions/components/src/<slug>`). Templates are workspace-only
  * (not published) so they are intentionally absent. Preserves `addedAt` for
  * existing entries; only stamps a fresh timestamp for new ones.
  *
@@ -26,8 +26,8 @@ import { RegistryFeedSchema } from "../src/registry/feed.schema.mjs";
 const here = dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = join(here, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
-const PLUGINS_ROOT = join(WORKSPACE_ROOT, "packages", "plugins");
-const COMPONENTS_ROOT = join(WORKSPACE_ROOT, "packages", "components", "src");
+const PLUGINS_ROOT = join(WORKSPACE_ROOT, "packages", "extensions", "plugins");
+const COMPONENTS_ROOT = join(WORKSPACE_ROOT, "packages", "extensions", "components", "src");
 
 const FEED_OUT_DIR = join(DOCS_ROOT, "src", "registry");
 const FEED_OUT_PATH = join(FEED_OUT_DIR, "feed.json");

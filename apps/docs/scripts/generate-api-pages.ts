@@ -50,13 +50,13 @@ type PackageEntry = {
 	dir?: string;
 };
 
-// Plugins live under packages/plugins/<slug> and are documented under
+// Plugins live under packages/extensions/plugins/<slug> and are documented under
 // api/plugins/<slug>. They are not uniformly TypeDoc-configured (only some ship
 // a typedoc.json, and not all have a local typedoc binary), so we drive TypeDoc
 // from the workspace: the hoisted root binary + the shared typedoc.base.json,
 // supplying entryPoints/tsconfig on the CLI. A plugin's own typedoc.json (richer
 // externalSymbolLinkMappings) is preferred when present.
-const PLUGINS_ROOT = join(PACKAGES_ROOT, "plugins");
+const PLUGINS_ROOT = join(PACKAGES_ROOT, "extensions", "plugins");
 const PLUGINS_OUT = join(OUT_DIR, "plugins");
 const TYPEDOC_BIN = join(WORKSPACE_ROOT, "node_modules", ".bin", "typedoc");
 const TYPEDOC_BASE = join(WORKSPACE_ROOT, "typedoc.base.json");
@@ -249,7 +249,7 @@ function titleCase(slug: string): string {
 		.join(" ");
 }
 
-// Discover every plugin package (packages/plugins/<slug> with src/index.ts) so
+// Discover every plugin package (packages/extensions/plugins/<slug> with src/index.ts) so
 // new plugins are picked up automatically. Display name comes from meta/config.json.
 function listPlugins(): PackageEntry[] {
 	if (!existsSync(PLUGINS_ROOT)) return [];
@@ -381,7 +381,7 @@ description: Auto-generated TypeDoc reference for every @anvilkit/* Studio plugi
 ---
 
 TypeDoc reference for the public API (the \`src/index.ts\` entry) of every plugin
-under \`packages/plugins/\`, regenerated on every docs build. Subpath exports
+under \`packages/extensions/plugins/\`, regenerated on every docs build. Subpath exports
 (e.g. \`./react\`, \`./mock\`) are not separately documented here — see each
 plugin's [guide](/plugins) for those.
 
@@ -648,7 +648,7 @@ ${rows}
 
 ## Plugins
 
-Public API for every \`@anvilkit/*\` plugin under \`packages/plugins/\` — also
+Public API for every \`@anvilkit/*\` plugin under \`packages/extensions/plugins/\` — also
 browsable from the [Plugins API index](/api/plugins).
 
 | Plugin | npm | Summary |

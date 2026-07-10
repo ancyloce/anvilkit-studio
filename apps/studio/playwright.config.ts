@@ -80,7 +80,7 @@ export default defineConfig({
 			// `/proc/net/tcp*` is empty). Keep in sync with the
 			// `COLLAB_RELAY_PORT` default in `apps/studio/scripts/dev-collab.mjs`.
 			command:
-				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21234",
+				"node ../../packages/extensions/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21234",
 			url: "http://localhost:21234",
 			reuseExistingServer: !process.env.CI,
 			timeout: 30_000,

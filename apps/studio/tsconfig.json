@@ -7,7 +7,7 @@
 			"@/*": ["./*"],
 			"@anvilkit/ui": ["../../packages/runtime/ui/src/index.ts"],
 			"@anvilkit/ui/*": ["../../packages/runtime/ui/src/*"],
-			"@anvilkit/*": ["../../packages/components/src/*/src/index.ts"]
+			"@anvilkit/*": ["../../packages/extensions/components/src/*/src/index.ts"]
 		},
 		"plugins": [
 			{

@@ -37,7 +37,7 @@ const relayScript =
 		? resolve(demoDir, "scripts/hocuspocus-dev-relay.mjs")
 		: resolve(
 				demoDir,
-				"../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs",
+				"../../packages/extensions/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs",
 			);
 // Basename used to identify a stale relay still holding the port, so we only
 // ever SIGKILL OUR kind of relay (never an unrelated holder).

@@ -379,11 +379,11 @@ createCollabDataPlugin({
 
 ```bash
 # Defaults to ws://127.0.0.1:21234
-node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs
+node packages/extensions/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs
 
 # Override the port (positional arg or COLLAB_RELAY_PORT), or bind a
 # non-loopback host with COLLAB_RELAY_HOST:
-node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
+node packages/extensions/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 ```
 
 该中继**默认监听 21234 端口**（避开 1234 和 11234，因为 Windows/WSL2 保留了它们）。由于 `y-websocket@3` 移除了其捆绑的服务器（`y-websocket/bin/utils`），而 `@y/websocket-server` 面向不兼容的 `yjs-14` 系列，因此此中继**内联地针对 `yjs-13` 技术栈植入了经典的 `y-protocols` 同步/awareness 服务器**——它与演示所用的 `y-websocket@3` 客户端在线缆层面兼容，且独立于 `y-websocket` 的服务器打包方式。它是用于测试和演示的参考实现，而非生产服务器。

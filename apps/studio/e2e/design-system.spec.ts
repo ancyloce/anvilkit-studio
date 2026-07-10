@@ -24,7 +24,7 @@
  *   - Theme toggle UI (`design-system-tab-theme` / `theme-mode-*`
  *     buttons) — blocked on the same rail-tab gap.
  *   - Contrast-validator publish gate end-to-end — the validator unit
- *     tests in `packages/plugins/plugin-design-system/src/validation/`
+ *     tests in `packages/extensions/plugins/plugin-design-system/src/validation/`
  *     cover the throw path; the UI surface for the resulting error is
  *     intertwined with the unwired rail panel.
  *

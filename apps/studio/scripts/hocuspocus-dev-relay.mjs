@@ -11,7 +11,7 @@
 //
 // Alpha-grade: in-memory only (no persistence), no auth (accepts any
 // token). Production deployments own auth/persistence — see
-// packages/plugins/plugin-collab-yjs/docs/hocuspocus-deployment.md.
+// packages/extensions/plugins/plugin-collab-yjs/docs/hocuspocus-deployment.md.
 import { Server } from "@hocuspocus/server";
 
 // 31234 (not 1234/11234/21234): 1234/11234 hit WSL2 + Hyper-V dynamic

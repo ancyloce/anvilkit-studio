@@ -10,7 +10,7 @@
  * `wss://` via the `PUBLIC_COLLAB_WS_URL` build env.
  *
  * Mirrors the repo's reference recipe
- * (packages/plugins/plugin-collab-yjs/docs/hocuspocus-deployment.md) but
+ * (packages/extensions/plugins/plugin-collab-yjs/docs/hocuspocus-deployment.md) but
  * backs persistence with Redis (Upstash) instead of Postgres, per the
  * chosen "durable + multi-instance" mode.
  *

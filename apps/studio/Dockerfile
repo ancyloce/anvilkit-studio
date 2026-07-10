@@ -32,12 +32,12 @@ WORKDIR /repo
 # context stays lean.
 COPY . .
 
-# Install with the committed lockfile. The nested `packages/components`
+# Install with the committed lockfile. The nested `packages/extensions/components`
 # workspace has its own lockfile and is installed separately (mirrors CI),
 # otherwise Turbo's component-leaf builds trigger a slow mid-build auto-install.
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
 	pnpm install --frozen-lockfile \
-	&& pnpm --dir packages/components install --frozen-lockfile --config.strictDepBuilds=false
+	&& pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
 
 # Build the app and ONLY its workspace dependencies via Turbo (`^build`).
 # DOCKER_BUILD flips next.config.js to standalone output (see that file).

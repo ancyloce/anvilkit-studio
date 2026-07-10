@@ -23,7 +23,7 @@ COPY . .
 
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
 	pnpm install --frozen-lockfile \
-	&& pnpm --dir packages/components install --frozen-lockfile --config.strictDepBuilds=false
+	&& pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
 
 # NITRO_PRESET=node-server makes the Nitro/TanStack-Start build emit a runnable
 # Node server (.output/server/index.mjs) instead of the default Vercel build

@@ -32,7 +32,7 @@ test("AI copilot generates a Hero from a matching fixture prompt", async ({
   await page.getByRole("button", { name: /^generate/i }).click({ force: true });
 
   // Hero fixture title: "Ship updates without friction." — see
-  // packages/plugins/plugin-ai-copilot/src/mock/fixtures/hero.fixture.ts.
+  // packages/extensions/plugins/plugin-ai-copilot/src/mock/fixtures/hero.fixture.ts.
   // Poll both the main frame and any child frames; Puck may render
   // the preview inside its own iframe depending on its layout mode.
   await expect

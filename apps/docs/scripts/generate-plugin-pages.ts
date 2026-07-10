@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Generate the `/plugins` documentation section from the source-of-truth in each
- * plugin package (`packages/plugins/plugin-<slug>`).
+ * plugin package (`packages/extensions/plugins/plugin-<slug>`).
  *
  * For every plugin this emits one MDX page per locale plus a section index and
  * Fumadocs `meta.json` nav files — mirroring `generate-component-pages.ts` and
@@ -40,7 +40,7 @@ import ts from "typescript";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = join(__dirname, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
-const PLUGINS_ROOT = join(WORKSPACE_ROOT, "packages", "plugins");
+const PLUGINS_ROOT = join(WORKSPACE_ROOT, "packages", "extensions", "plugins");
 const OUT_DIR = join(DOCS_ROOT, "content", "docs", "plugins");
 
 function fail(slug: string, msg: string): never {
