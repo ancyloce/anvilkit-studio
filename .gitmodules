@@ -1,26 +1,26 @@
 [submodule "packages/components"]
-	path = packages/components
+	path = packages/extensions/components
 	url = https://github.com/ancyloce/anvilkit-components.git
 [submodule "packages/plugins/plugin-ai-copilot"]
-	path = packages/plugins/plugin-ai-copilot
+	path = packages/extensions/plugins/plugin-ai-copilot
 	url = https://github.com/ancyloce/anvilkit-plugin-ai-copilot.git
 [submodule "packages/plugins/plugin-export-html"]
-	path = packages/plugins/plugin-export-html
+	path = packages/extensions/plugins/plugin-export-html
 	url = https://github.com/ancyloce/anvilkit-plugin-export-html.git
 [submodule "packages/plugins/plugin-export-react"]
-	path = packages/plugins/plugin-export-react
+	path = packages/extensions/plugins/plugin-export-react
 	url = https://github.com/ancyloce/anvilkit-plugin-export-react.git
 [submodule "packages/plugins/plugin-asset-manager"]
-	path = packages/plugins/plugin-asset-manager
+	path = packages/extensions/plugins/plugin-asset-manager
 	url = https://github.com/ancyloce/anvilkit-plugin-asset-manager.git
 [submodule "packages/plugins/plugin-version-history"]
-	path = packages/plugins/plugin-version-history
+	path = packages/extensions/plugins/plugin-version-history
 	url = https://github.com/ancyloce/anvilkit-plugin-version-history.git
 [submodule "packages/plugins/plugin-collab-yjs"]
-	path = packages/plugins/plugin-collab-yjs
+	path = packages/extensions/plugins/plugin-collab-yjs
 	url = https://github.com/ancyloce/anvilkit-plugin-collab-yjs.git
 [submodule "packages/plugins/plugin-collab-ui"]
-	path = packages/plugins/plugin-collab-ui
+	path = packages/extensions/plugins/plugin-collab-ui
 	url = https://github.com/ancyloce/anvilkit-plugin-collab-ui.git
 [submodule "packages/canvas/core"]
 	path = packages/capabilities/canvas/core
@@ -29,19 +29,19 @@
 	path = packages/capabilities/canvas/editor
 	url = https://github.com/ancyloce/anvilkit-canvas-editor.git
 [submodule "packages/plugins/plugin-canvas-studio"]
-	path = packages/plugins/plugin-canvas-studio
+	path = packages/extensions/plugins/plugin-canvas-studio
 	url = https://github.com/ancyloce/anvilkit-plugin-canvas-studio.git
 [submodule "packages/plugins/plugin-export-canvas"]
-	path = packages/plugins/plugin-export-canvas
+	path = packages/extensions/plugins/plugin-export-canvas
 	url = https://github.com/ancyloce/anvilkit-plugin-export-canvas.git
 [submodule "packages/plugins/plugin-ai-image"]
-	path = packages/plugins/plugin-ai-image
+	path = packages/extensions/plugins/plugin-ai-image
 	url = https://github.com/ancyloce/anvilkit-plugin-ai-image.git
 [submodule "packages/plugins/plugin-design-system"]
-	path = packages/plugins/plugin-design-system
+	path = packages/extensions/plugins/plugin-design-system
 	url = https://github.com/ancyloce/anvilkit-plugin-design-system.git
 [submodule "packages/plugins/plugin-page-seo"]
-	path = packages/plugins/plugin-page-seo
+	path = packages/extensions/plugins/plugin-page-seo
 	url = https://github.com/ancyloce/anvilkit-plugin-page-seo.git
 [submodule "packages/analytics/core"]
 	path = packages/capabilities/analytics/core
