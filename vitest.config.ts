@@ -15,7 +15,11 @@ import { defineConfig } from "vitest/config";
  * Add new packages to the list below as they adopt Vitest.
  */
 export default defineConfig({
-  test: {
-    projects: ["packages/ui", "packages/utils", "packages/core"],
-  },
+	test: {
+		projects: [
+			"packages/runtime/ui",
+			"packages/foundation/utils",
+			"packages/runtime/core",
+		],
+	},
 });
