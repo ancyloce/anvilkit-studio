@@ -1,1388 +1,1417 @@
 {
-	"schemaVersion": "2.0",
-	"id": 0,
-	"name": "@anvilkit/validator",
-	"variant": "project",
-	"kind": 1,
-	"flags": {},
-	"children": [
-		{
-			"id": 1,
-			"name": "AiValidationIssue",
-			"variant": "declaration",
-			"kind": 256,
-			"flags": {},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "A single issue produced by validating an LLM's response against\nthe expected component/field shape.\n\n"
-					},
-					{
-						"kind": "code",
-						"text": "`@anvilkit/validator`"
-					},
-					{
-						"kind": "text",
-						"text": " owns the runtime check that emits these;\nthis package just owns the shape so validator output flows through\na stable contract."
-					}
-				]
-			},
-			"children": [
-				{
-					"id": 3,
-					"name": "message",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Human-readable message describing what went wrong. Suitable\nfor display in a dev console or a toast."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "contracts/dist/ai.d.ts",
-							"line": 234,
-							"character": 13
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 2,
-					"name": "path",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "JSON-pointer-style path to the offending value inside the LLM\nresponse (e.g. "
-							},
-							{
-								"kind": "code",
-								"text": "`\"content.0.props.title\"`"
-							},
-							{
-								"kind": "text",
-								"text": "). Empty string means\nthe issue applies to the response as a whole."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "contracts/dist/ai.d.ts",
-							"line": 229,
-							"character": 13
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 4,
-					"name": "severity",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Severity of the issue.\n\n- "
-							},
-							{
-								"kind": "code",
-								"text": "`\"warn\"`"
-							},
-							{
-								"kind": "text",
-								"text": " — the response is usable but suspect (e.g. an\n  unexpected extra field).\n- "
-							},
-							{
-								"kind": "code",
-								"text": "`\"error\"`"
-							},
-							{
-								"kind": "text",
-								"text": " — the response is unusable (e.g. required field\n  missing, wrong type)."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "contracts/dist/ai.d.ts",
-							"line": 243,
-							"character": 13
-						}
-					],
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": "error"
-							},
-							{
-								"type": "literal",
-								"value": "warn"
-							}
-						]
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [3, 2, 4]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "contracts/dist/ai.d.ts",
-					"line": 223,
-					"character": 17
-				}
-			]
-		},
-		{
-			"id": 5,
-			"name": "AiValidationResult",
-			"variant": "declaration",
-			"kind": 256,
-			"flags": {},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "The outcome of validating an LLM response.\n\n"
-					},
-					{
-						"kind": "inline-tag",
-						"tag": "@link",
-						"text": "valid",
-						"target": 6
-					},
-					{
-						"kind": "text",
-						"text": " is "
-					},
-					{
-						"kind": "code",
-						"text": "`true`"
-					},
-					{
-						"kind": "text",
-						"text": " only when the response contains zero\nissues with "
-					},
-					{
-						"kind": "code",
-						"text": "`severity: \"error\"`"
-					},
-					{
-						"kind": "text",
-						"text": " — "
-					},
-					{
-						"kind": "code",
-						"text": "`\"warn\"`"
-					},
-					{
-						"kind": "text",
-						"text": "-level issues may be\npresent even when the response is considered valid."
-					}
-				]
-			},
-			"children": [
-				{
-					"id": 7,
-					"name": "issues",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "The full list of issues found. Empty array when the response\npassed without complaint."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "contracts/dist/ai.d.ts",
-							"line": 263,
-							"character": 13
-						}
-					],
-					"type": {
-						"type": "typeOperator",
-						"operator": "readonly",
-						"target": {
-							"type": "array",
-							"elementType": {
-								"type": "reference",
-								"target": 1,
-								"name": "AiValidationIssue",
-								"package": "@anvilkit/contracts"
-							}
-						}
-					}
-				},
-				{
-					"id": 6,
-					"name": "valid",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "code",
-								"text": "`true`"
-							},
-							{
-								"kind": "text",
-								"text": " iff the response contains no "
-							},
-							{
-								"kind": "code",
-								"text": "`severity: \"error\"`"
-							},
-							{
-								"kind": "text",
-								"text": "\nissues. A valid response may still carry "
-							},
-							{
-								"kind": "code",
-								"text": "`\"warn\"`"
-							},
-							{
-								"kind": "text",
-								"text": " entries in\n"
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "issues",
-								"target": 7
-							},
-							{
-								"kind": "text",
-								"text": "."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "contracts/dist/ai.d.ts",
-							"line": 258,
-							"character": 13
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [7, 6]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "contracts/dist/ai.d.ts",
-					"line": 252,
-					"character": 17
-				}
-			]
-		},
-		{
-			"id": 8,
-			"name": "ValidationIssue",
-			"variant": "declaration",
-			"kind": 256,
-			"flags": {},
-			"children": [
-				{
-					"id": 10,
-					"name": "code",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/types.ts",
-							"line": 3,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L3"
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 13,
-					"name": "componentName",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true,
-						"isReadonly": true
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/types.ts",
-							"line": 6,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L6"
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 9,
-					"name": "level",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/types.ts",
-							"line": 2,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L2"
-						}
-					],
-					"type": {
-						"type": "union",
-						"types": [
-							{
-								"type": "literal",
-								"value": "error"
-							},
-							{
-								"type": "literal",
-								"value": "warning"
-							}
-						]
-					}
-				},
-				{
-					"id": 11,
-					"name": "message",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/types.ts",
-							"line": 4,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L4"
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 12,
-					"name": "path",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/types.ts",
-							"line": 5,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L5"
-						}
-					],
-					"type": {
-						"type": "typeOperator",
-						"operator": "readonly",
-						"target": {
-							"type": "array",
-							"elementType": {
-								"type": "union",
-								"types": [
-									{
-										"type": "intrinsic",
-										"name": "string"
-									},
-									{
-										"type": "intrinsic",
-										"name": "number"
-									}
-								]
-							}
-						}
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [10, 13, 9, 11, 12]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "validator/src/types.ts",
-					"line": 1,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L1"
-				}
-			]
-		},
-		{
-			"id": 14,
-			"name": "ValidationResult",
-			"variant": "declaration",
-			"kind": 256,
-			"flags": {},
-			"children": [
-				{
-					"id": 16,
-					"name": "issues",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/types.ts",
-							"line": 11,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L11"
-						}
-					],
-					"type": {
-						"type": "typeOperator",
-						"operator": "readonly",
-						"target": {
-							"type": "array",
-							"elementType": {
-								"type": "reference",
-								"target": 8,
-								"name": "ValidationIssue",
-								"package": "@anvilkit/validator"
-							}
-						}
-					}
-				},
-				{
-					"id": 15,
-					"name": "valid",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isReadonly": true
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/types.ts",
-							"line": 10,
-							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L10"
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [16, 15]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "validator/src/types.ts",
-					"line": 9,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L9"
-				}
-			]
-		},
-		{
-			"id": 17,
-			"name": "validateAiOutput",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "validator/src/validate-ai-output.ts",
-					"line": 71,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-ai-output.ts#L71"
-				}
-			],
-			"signatures": [
-				{
-					"id": 18,
-					"name": "validateAiOutput",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "validator/src/validate-ai-output.ts",
-							"line": 71,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-ai-output.ts#L71"
-						}
-					],
-					"parameters": [
-						{
-							"id": 19,
-							"name": "response",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "unknown"
-							}
-						},
-						{
-							"id": 20,
-							"name": "availableComponents",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "typeOperator",
-								"operator": "readonly",
-								"target": {
-									"type": "array",
-									"elementType": {
-										"type": "reference",
-										"target": {
-											"packageName": "@anvilkit/contracts",
-											"packagePath": "src/ai.ts",
-											"qualifiedName": "AiComponentSchema"
-										},
-										"name": "AiComponentSchema",
-										"package": "@anvilkit/contracts"
-									}
-								}
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 5,
-						"name": "AiValidationResult",
-						"package": "@anvilkit/contracts"
-					}
-				}
-			]
-		},
-		{
-			"id": 21,
-			"name": "validateComponentConfig",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "validator/src/validate-component-config.ts",
-					"line": 15,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-component-config.ts#L15"
-				}
-			],
-			"signatures": [
-				{
-					"id": 22,
-					"name": "validateComponentConfig",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "validator/src/validate-component-config.ts",
-							"line": 15,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-component-config.ts#L15"
-						}
-					],
-					"typeParameters": [
-						{
-							"id": 23,
-							"name": "C",
-							"variant": "typeParam",
-							"kind": 131072,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
-									"qualifiedName": "Config"
-								},
-								"name": "Config",
-								"package": "@puckeditor/core"
-							}
-						}
-					],
-					"parameters": [
-						{
-							"id": 24,
-							"name": "config",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 23,
-								"name": "C",
-								"package": "@anvilkit/validator",
-								"refersToTypeParameter": true
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 14,
-						"name": "ValidationResult",
-						"package": "@anvilkit/validator"
-					}
-				}
-			]
-		},
-		{
-			"id": 25,
-			"name": "validatePagePayload",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "validator/src/validate-page-payload.ts",
-					"line": 109,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L109"
-				}
-			],
-			"signatures": [
-				{
-					"id": 26,
-					"name": "validatePagePayload",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"comment": {
-						"summary": [],
-						"blockTags": [
-							{
-								"tag": "@deprecated",
-								"content": [
-									{
-										"kind": "text",
-										"text": "Renamed to "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "validatePageRootProps",
-										"target": 28
-									},
-									{
-										"kind": "text",
-										"text": ". The old name only ever\nvalidated "
-									},
-									{
-										"kind": "code",
-										"text": "`root.props`"
-									},
-									{
-										"kind": "text",
-										"text": " despite implying the full page payload; it is retained\nas a thin alias for backward compatibility. Prefer "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "validatePageRootProps",
-										"target": 28
-									},
-									{
-										"kind": "text",
-										"text": "\nfor metadata checks or "
-									},
-									{
-										"kind": "inline-tag",
-										"tag": "@link",
-										"text": "validatePuckPageData",
-										"target": 34
-									},
-									{
-										"kind": "text",
-										"text": " for full-document checks."
-									}
-								]
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/validate-page-payload.ts",
-							"line": 109,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L109"
-						}
-					],
-					"parameters": [
-						{
-							"id": 27,
-							"name": "rootProps",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "unknown"
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 14,
-						"name": "ValidationResult",
-						"package": "@anvilkit/validator"
-					}
-				}
-			]
-		},
-		{
-			"id": 28,
-			"name": "validatePageRootProps",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "validator/src/validate-page-payload.ts",
-					"line": 54,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L54"
-				}
-			],
-			"signatures": [
-				{
-					"id": 29,
-					"name": "validatePageRootProps",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Pure, isomorphic gateway that validates a page's "
-							},
-							{
-								"kind": "code",
-								"text": "`root.props`"
-							},
-							{
-								"kind": "text",
-								"text": " against the\ncanonical "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "PageRootSchema",
-								"target": {
-									"packageName": "@anvilkit/schema",
-									"packagePath": "src/page-root-schema.ts",
-									"qualifiedName": "PageRootSchema"
-								}
-							},
-							{
-								"kind": "text",
-								"text": " from "
-							},
-							{
-								"kind": "code",
-								"text": "`@anvilkit/schema`"
-							},
-							{
-								"kind": "text",
-								"text": ". This is the\nnarrow, metadata-only check used by draft saves and settings edits.\n\nCarries no React import; runs in Node / Edge / browser."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/validate-page-payload.ts",
-							"line": 54,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L54"
-						}
-					],
-					"parameters": [
-						{
-							"id": 30,
-							"name": "rootProps",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "unknown"
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 14,
-						"name": "ValidationResult",
-						"package": "@anvilkit/validator"
-					}
-				}
-			]
-		},
-		{
-			"id": 31,
-			"name": "validatePublishRequest",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "validator/src/validate-page-payload.ts",
-					"line": 95,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L95"
-				}
-			],
-			"signatures": [
-				{
-					"id": 32,
-					"name": "validatePublishRequest",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Validate the body of a "
-							},
-							{
-								"kind": "code",
-								"text": "`POST /api/pages/publish`"
-							},
-							{
-								"kind": "text",
-								"text": " request\n("
-							},
-							{
-								"kind": "code",
-								"text": "`{ id?, slug?, data: PuckPageData }`"
-							},
-							{
-								"kind": "text",
-								"text": "). Publishing goes live, so the complete\npayload is validated via "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "validatePuckPageData",
-								"target": 34
-							},
-							{
-								"kind": "text",
-								"text": "."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/validate-page-payload.ts",
-							"line": 95,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L95"
-						}
-					],
-					"parameters": [
-						{
-							"id": 33,
-							"name": "input",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "unknown"
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 14,
-						"name": "ValidationResult",
-						"package": "@anvilkit/validator"
-					}
-				}
-			]
-		},
-		{
-			"id": 34,
-			"name": "validatePuckPageData",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "validator/src/validate-page-payload.ts",
-					"line": 68,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L68"
-				}
-			],
-			"signatures": [
-				{
-					"id": 35,
-					"name": "validatePuckPageData",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Validate a *complete* Puck page document ("
-							},
-							{
-								"kind": "code",
-								"text": "`{ root, content, zones? }`"
-							},
-							{
-								"kind": "text",
-								"text": ") — the\ncheck a publish must pass before the payload is written to storage. Delegates\n"
-							},
-							{
-								"kind": "code",
-								"text": "`root.props`"
-							},
-							{
-								"kind": "text",
-								"text": " to the same "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "PageRootSchema",
-								"target": {
-									"packageName": "@anvilkit/schema",
-									"packagePath": "src/page-root-schema.ts",
-									"qualifiedName": "PageRootSchema"
-								}
-							},
-							{
-								"kind": "text",
-								"text": " as "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "validatePageRootProps",
-								"target": 28
-							},
-							{
-								"kind": "text",
-								"text": "\nand additionally asserts the structural shape the renderer depends on."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/validate-page-payload.ts",
-							"line": 68,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L68"
-						}
-					],
-					"parameters": [
-						{
-							"id": 36,
-							"name": "data",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "unknown"
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 14,
-						"name": "ValidationResult",
-						"package": "@anvilkit/validator"
-					}
-				}
-			]
-		},
-		{
-			"id": 37,
-			"name": "validateSaveDraftRequest",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "validator/src/validate-page-payload.ts",
-					"line": 82,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L82"
-				}
-			],
-			"signatures": [
-				{
-					"id": 38,
-					"name": "validateSaveDraftRequest",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Validate the body of a "
-							},
-							{
-								"kind": "code",
-								"text": "`POST /api/pages/draft`"
-							},
-							{
-								"kind": "text",
-								"text": " request\n("
-							},
-							{
-								"kind": "code",
-								"text": "`{ slug?, title?, data: { root: { props } } }`"
-							},
-							{
-								"kind": "text",
-								"text": "). A draft only commits page\nmetadata, so this validates "
-							},
-							{
-								"kind": "code",
-								"text": "`data.root.props`"
-							},
-							{
-								"kind": "text",
-								"text": " and tolerates arbitrary\n"
-							},
-							{
-								"kind": "code",
-								"text": "`content`"
-							},
-							{
-								"kind": "text",
-								"text": " (persisted verbatim)."
-							}
-						]
-					},
-					"sources": [
-						{
-							"fileName": "validator/src/validate-page-payload.ts",
-							"line": 82,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L82"
-						}
-					],
-					"parameters": [
-						{
-							"id": 39,
-							"name": "input",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "unknown"
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": 14,
-						"name": "ValidationResult",
-						"package": "@anvilkit/validator"
-					}
-				}
-			]
-		}
-	],
-	"groups": [
-		{
-			"title": "Interfaces",
-			"children": [1, 5, 8, 14]
-		},
-		{
-			"title": "Functions",
-			"children": [17, 21, 25, 28, 31, 34, 37]
-		}
-	],
-	"packageName": "@anvilkit/validator",
-	"symbolIdMap": {
-		"0": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/index.ts",
-			"qualifiedName": ""
-		},
-		"1": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/ai.ts",
-			"qualifiedName": "AiValidationIssue"
-		},
-		"2": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/ai.ts",
-			"qualifiedName": "AiValidationIssue.path"
-		},
-		"3": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/ai.ts",
-			"qualifiedName": "AiValidationIssue.message"
-		},
-		"4": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/ai.ts",
-			"qualifiedName": "AiValidationIssue.severity"
-		},
-		"5": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/ai.ts",
-			"qualifiedName": "AiValidationResult"
-		},
-		"6": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/ai.ts",
-			"qualifiedName": "AiValidationResult.valid"
-		},
-		"7": {
-			"packageName": "@anvilkit/contracts",
-			"packagePath": "src/ai.ts",
-			"qualifiedName": "AiValidationResult.issues"
-		},
-		"8": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue"
-		},
-		"9": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.level"
-		},
-		"10": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.code"
-		},
-		"11": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.message"
-		},
-		"12": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.path"
-		},
-		"13": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationIssue.componentName"
-		},
-		"14": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationResult"
-		},
-		"15": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationResult.valid"
-		},
-		"16": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/types.ts",
-			"qualifiedName": "ValidationResult.issues"
-		},
-		"17": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-ai-output.ts",
-			"qualifiedName": "validateAiOutput"
-		},
-		"18": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-ai-output.ts",
-			"qualifiedName": "validateAiOutput"
-		},
-		"19": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-ai-output.ts",
-			"qualifiedName": "response"
-		},
-		"20": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-ai-output.ts",
-			"qualifiedName": "availableComponents"
-		},
-		"21": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-component-config.ts",
-			"qualifiedName": "validateComponentConfig"
-		},
-		"22": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-component-config.ts",
-			"qualifiedName": "validateComponentConfig"
-		},
-		"23": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-component-config.ts",
-			"qualifiedName": "C"
-		},
-		"24": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-component-config.ts",
-			"qualifiedName": "config"
-		},
-		"25": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePagePayload"
-		},
-		"26": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePagePayload"
-		},
-		"27": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "rootProps"
-		},
-		"28": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePageRootProps"
-		},
-		"29": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePageRootProps"
-		},
-		"30": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "rootProps"
-		},
-		"31": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePublishRequest"
-		},
-		"32": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePublishRequest"
-		},
-		"33": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "input"
-		},
-		"34": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePuckPageData"
-		},
-		"35": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validatePuckPageData"
-		},
-		"36": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "data"
-		},
-		"37": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validateSaveDraftRequest"
-		},
-		"38": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "validateSaveDraftRequest"
-		},
-		"39": {
-			"packageName": "@anvilkit/validator",
-			"packagePath": "src/validate-page-payload.ts",
-			"qualifiedName": "input"
-		}
-	},
-	"files": {
-		"entries": {
-			"1": "src/index.ts"
-		},
-		"reflections": {
-			"1": 0
-		}
-	}
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@anvilkit/validator",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 1,
+      "name": "AiValidationIssue",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "A single issue produced by validating an LLM's response against\nthe expected component/field shape.\n\n"
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/validator`"
+          },
+          {
+            "kind": "text",
+            "text": " owns the runtime check that emits these;\nthis package just owns the shape so validator output flows through\na stable contract."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 3,
+          "name": "message",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Human-readable message describing what went wrong. Suitable\nfor display in a dev console or a toast."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "contracts/dist/ai.d.ts",
+              "line": 234,
+              "character": 13
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 2,
+          "name": "path",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "JSON-pointer-style path to the offending value inside the LLM\nresponse (e.g. "
+              },
+              {
+                "kind": "code",
+                "text": "`\"content.0.props.title\"`"
+              },
+              {
+                "kind": "text",
+                "text": "). Empty string means\nthe issue applies to the response as a whole."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "contracts/dist/ai.d.ts",
+              "line": 229,
+              "character": 13
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 4,
+          "name": "severity",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Severity of the issue.\n\n- "
+              },
+              {
+                "kind": "code",
+                "text": "`\"warn\"`"
+              },
+              {
+                "kind": "text",
+                "text": " — the response is usable but suspect (e.g. an\n  unexpected extra field).\n- "
+              },
+              {
+                "kind": "code",
+                "text": "`\"error\"`"
+              },
+              {
+                "kind": "text",
+                "text": " — the response is unusable (e.g. required field\n  missing, wrong type)."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "contracts/dist/ai.d.ts",
+              "line": 243,
+              "character": 13
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "error"
+              },
+              {
+                "type": "literal",
+                "value": "warn"
+              }
+            ]
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            3,
+            2,
+            4
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "contracts/dist/ai.d.ts",
+          "line": 223,
+          "character": 17
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "AiValidationResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "The outcome of validating an LLM response.\n\n"
+          },
+          {
+            "kind": "inline-tag",
+            "tag": "@link",
+            "text": "valid",
+            "target": 6
+          },
+          {
+            "kind": "text",
+            "text": " is "
+          },
+          {
+            "kind": "code",
+            "text": "`true`"
+          },
+          {
+            "kind": "text",
+            "text": " only when the response contains zero\nissues with "
+          },
+          {
+            "kind": "code",
+            "text": "`severity: \"error\"`"
+          },
+          {
+            "kind": "text",
+            "text": " — "
+          },
+          {
+            "kind": "code",
+            "text": "`\"warn\"`"
+          },
+          {
+            "kind": "text",
+            "text": "-level issues may be\npresent even when the response is considered valid."
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 7,
+          "name": "issues",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The full list of issues found. Empty array when the response\npassed without complaint."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "contracts/dist/ai.d.ts",
+              "line": 263,
+              "character": 13
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 1,
+                "name": "AiValidationIssue",
+                "package": "@anvilkit/contracts"
+              }
+            }
+          }
+        },
+        {
+          "id": 6,
+          "name": "valid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "code",
+                "text": "`true`"
+              },
+              {
+                "kind": "text",
+                "text": " iff the response contains no "
+              },
+              {
+                "kind": "code",
+                "text": "`severity: \"error\"`"
+              },
+              {
+                "kind": "text",
+                "text": "\nissues. A valid response may still carry "
+              },
+              {
+                "kind": "code",
+                "text": "`\"warn\"`"
+              },
+              {
+                "kind": "text",
+                "text": " entries in\n"
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "issues",
+                "target": 7
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "contracts/dist/ai.d.ts",
+              "line": 258,
+              "character": 13
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            7,
+            6
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "contracts/dist/ai.d.ts",
+          "line": 252,
+          "character": 17
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "ValidationIssue",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 10,
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/types.ts",
+              "line": 3,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L3"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 13,
+          "name": "componentName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/types.ts",
+              "line": 6,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L6"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 9,
+          "name": "level",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/types.ts",
+              "line": 2,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L2"
+            }
+          ],
+          "type": {
+            "type": "union",
+            "types": [
+              {
+                "type": "literal",
+                "value": "error"
+              },
+              {
+                "type": "literal",
+                "value": "warning"
+              }
+            ]
+          }
+        },
+        {
+          "id": 11,
+          "name": "message",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/types.ts",
+              "line": 4,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L4"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 12,
+          "name": "path",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/types.ts",
+              "line": 5,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L5"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            10,
+            13,
+            9,
+            11,
+            12
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "validator/src/types.ts",
+          "line": 1,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L1"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "ValidationResult",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 16,
+          "name": "issues",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/types.ts",
+              "line": 11,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L11"
+            }
+          ],
+          "type": {
+            "type": "typeOperator",
+            "operator": "readonly",
+            "target": {
+              "type": "array",
+              "elementType": {
+                "type": "reference",
+                "target": 8,
+                "name": "ValidationIssue",
+                "package": "@anvilkit/validator"
+              }
+            }
+          }
+        },
+        {
+          "id": 15,
+          "name": "valid",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/types.ts",
+              "line": 10,
+              "character": 10,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L10"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            16,
+            15
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "validator/src/types.ts",
+          "line": 9,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L9"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "validateAiOutput",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-ai-output.ts",
+          "line": 71,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-ai-output.ts#L71"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 18,
+          "name": "validateAiOutput",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "validator/src/validate-ai-output.ts",
+              "line": 71,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-ai-output.ts#L71"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 19,
+              "name": "response",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            },
+            {
+              "id": 20,
+              "name": "availableComponents",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "@anvilkit/contracts",
+                      "packagePath": "src/ai.ts",
+                      "qualifiedName": "AiComponentSchema"
+                    },
+                    "name": "AiComponentSchema",
+                    "package": "@anvilkit/contracts"
+                  }
+                }
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 5,
+            "name": "AiValidationResult",
+            "package": "@anvilkit/contracts"
+          }
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "validateComponentConfig",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-component-config.ts",
+          "line": 15,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-component-config.ts#L15"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 22,
+          "name": "validateComponentConfig",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "validator/src/validate-component-config.ts",
+              "line": 15,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-component-config.ts#L15"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 23,
+              "name": "C",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-Csn3gOP8.d.ts",
+                  "qualifiedName": "Config"
+                },
+                "name": "Config",
+                "package": "@puckeditor/core"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 24,
+              "name": "config",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 23,
+                "name": "C",
+                "package": "@anvilkit/validator",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 14,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "validatePagePayload",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-page-payload.ts",
+          "line": 109,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L109"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 26,
+          "name": "validatePagePayload",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [],
+            "blockTags": [
+              {
+                "tag": "@deprecated",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Renamed to "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "validatePageRootProps",
+                    "target": 28
+                  },
+                  {
+                    "kind": "text",
+                    "text": ". The old name only ever\nvalidated "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`root.props`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " despite implying the full page payload; it is retained\nas a thin alias for backward compatibility. Prefer "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "validatePageRootProps",
+                    "target": 28
+                  },
+                  {
+                    "kind": "text",
+                    "text": "\nfor metadata checks or "
+                  },
+                  {
+                    "kind": "inline-tag",
+                    "tag": "@link",
+                    "text": "validatePuckPageData",
+                    "target": 34
+                  },
+                  {
+                    "kind": "text",
+                    "text": " for full-document checks."
+                  }
+                ]
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/validate-page-payload.ts",
+              "line": 109,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L109"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 27,
+              "name": "rootProps",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 14,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "validatePageRootProps",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-page-payload.ts",
+          "line": 54,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L54"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 29,
+          "name": "validatePageRootProps",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Pure, isomorphic gateway that validates a page's "
+              },
+              {
+                "kind": "code",
+                "text": "`root.props`"
+              },
+              {
+                "kind": "text",
+                "text": " against the\ncanonical "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "PageRootSchema",
+                "target": {
+                  "packageName": "@anvilkit/schema",
+                  "packagePath": "src/page-root-schema.ts",
+                  "qualifiedName": "PageRootSchema"
+                }
+              },
+              {
+                "kind": "text",
+                "text": " from "
+              },
+              {
+                "kind": "code",
+                "text": "`@anvilkit/schema`"
+              },
+              {
+                "kind": "text",
+                "text": ". This is the\nnarrow, metadata-only check used by draft saves and settings edits.\n\nCarries no React import; runs in Node / Edge / browser."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/validate-page-payload.ts",
+              "line": 54,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L54"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 30,
+              "name": "rootProps",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 14,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "validatePublishRequest",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-page-payload.ts",
+          "line": 95,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L95"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 32,
+          "name": "validatePublishRequest",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Validate the body of a "
+              },
+              {
+                "kind": "code",
+                "text": "`POST /api/pages/publish`"
+              },
+              {
+                "kind": "text",
+                "text": " request\n("
+              },
+              {
+                "kind": "code",
+                "text": "`{ id?, slug?, data: PuckPageData }`"
+              },
+              {
+                "kind": "text",
+                "text": "). Publishing goes live, so the complete\npayload is validated via "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "validatePuckPageData",
+                "target": 34
+              },
+              {
+                "kind": "text",
+                "text": "."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/validate-page-payload.ts",
+              "line": 95,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L95"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 33,
+              "name": "input",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 14,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "validatePuckPageData",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-page-payload.ts",
+          "line": 68,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L68"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 35,
+          "name": "validatePuckPageData",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Validate a *complete* Puck page document ("
+              },
+              {
+                "kind": "code",
+                "text": "`{ root, content, zones? }`"
+              },
+              {
+                "kind": "text",
+                "text": ") — the\ncheck a publish must pass before the payload is written to storage. Delegates\n"
+              },
+              {
+                "kind": "code",
+                "text": "`root.props`"
+              },
+              {
+                "kind": "text",
+                "text": " to the same "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "PageRootSchema",
+                "target": {
+                  "packageName": "@anvilkit/schema",
+                  "packagePath": "src/page-root-schema.ts",
+                  "qualifiedName": "PageRootSchema"
+                }
+              },
+              {
+                "kind": "text",
+                "text": " as "
+              },
+              {
+                "kind": "inline-tag",
+                "tag": "@link",
+                "text": "validatePageRootProps",
+                "target": 28
+              },
+              {
+                "kind": "text",
+                "text": "\nand additionally asserts the structural shape the renderer depends on."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/validate-page-payload.ts",
+              "line": 68,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L68"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 36,
+              "name": "data",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 14,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "name": "validateSaveDraftRequest",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "validator/src/validate-page-payload.ts",
+          "line": 82,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L82"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 38,
+          "name": "validateSaveDraftRequest",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Validate the body of a "
+              },
+              {
+                "kind": "code",
+                "text": "`POST /api/pages/draft`"
+              },
+              {
+                "kind": "text",
+                "text": " request\n("
+              },
+              {
+                "kind": "code",
+                "text": "`{ slug?, title?, data: { root: { props } } }`"
+              },
+              {
+                "kind": "text",
+                "text": "). A draft only commits page\nmetadata, so this validates "
+              },
+              {
+                "kind": "code",
+                "text": "`data.root.props`"
+              },
+              {
+                "kind": "text",
+                "text": " and tolerates arbitrary\n"
+              },
+              {
+                "kind": "code",
+                "text": "`content`"
+              },
+              {
+                "kind": "text",
+                "text": " (persisted verbatim)."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "validator/src/validate-page-payload.ts",
+              "line": 82,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L82"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 39,
+              "name": "input",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 14,
+            "name": "ValidationResult",
+            "package": "@anvilkit/validator"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Interfaces",
+      "children": [
+        1,
+        5,
+        8,
+        14
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        17,
+        21,
+        25,
+        28,
+        31,
+        34,
+        37
+      ]
+    }
+  ],
+  "packageName": "@anvilkit/validator",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@anvilkit/contracts",
+      "packagePath": "src/ai.ts",
+      "qualifiedName": "AiValidationIssue"
+    },
+    "2": {
+      "packageName": "@anvilkit/contracts",
+      "packagePath": "src/ai.ts",
+      "qualifiedName": "AiValidationIssue.path"
+    },
+    "3": {
+      "packageName": "@anvilkit/contracts",
+      "packagePath": "src/ai.ts",
+      "qualifiedName": "AiValidationIssue.message"
+    },
+    "4": {
+      "packageName": "@anvilkit/contracts",
+      "packagePath": "src/ai.ts",
+      "qualifiedName": "AiValidationIssue.severity"
+    },
+    "5": {
+      "packageName": "@anvilkit/contracts",
+      "packagePath": "src/ai.ts",
+      "qualifiedName": "AiValidationResult"
+    },
+    "6": {
+      "packageName": "@anvilkit/contracts",
+      "packagePath": "src/ai.ts",
+      "qualifiedName": "AiValidationResult.valid"
+    },
+    "7": {
+      "packageName": "@anvilkit/contracts",
+      "packagePath": "src/ai.ts",
+      "qualifiedName": "AiValidationResult.issues"
+    },
+    "8": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue"
+    },
+    "9": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.level"
+    },
+    "10": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.code"
+    },
+    "11": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.message"
+    },
+    "12": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.path"
+    },
+    "13": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationIssue.componentName"
+    },
+    "14": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationResult"
+    },
+    "15": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationResult.valid"
+    },
+    "16": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/types.ts",
+      "qualifiedName": "ValidationResult.issues"
+    },
+    "17": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "validateAiOutput"
+    },
+    "18": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "validateAiOutput"
+    },
+    "19": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "response"
+    },
+    "20": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-ai-output.ts",
+      "qualifiedName": "availableComponents"
+    },
+    "21": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "validateComponentConfig"
+    },
+    "22": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "validateComponentConfig"
+    },
+    "23": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "C"
+    },
+    "24": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-component-config.ts",
+      "qualifiedName": "config"
+    },
+    "25": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePagePayload"
+    },
+    "26": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePagePayload"
+    },
+    "27": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "rootProps"
+    },
+    "28": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePageRootProps"
+    },
+    "29": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePageRootProps"
+    },
+    "30": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "rootProps"
+    },
+    "31": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePublishRequest"
+    },
+    "32": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePublishRequest"
+    },
+    "33": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "input"
+    },
+    "34": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePuckPageData"
+    },
+    "35": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validatePuckPageData"
+    },
+    "36": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "data"
+    },
+    "37": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validateSaveDraftRequest"
+    },
+    "38": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "validateSaveDraftRequest"
+    },
+    "39": {
+      "packageName": "@anvilkit/validator",
+      "packagePath": "src/validate-page-payload.ts",
+      "qualifiedName": "input"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
 }

@@ -30,6 +30,7 @@ description: "@anvilkit/canvas-editor · index"
 | [CanvasPanelContext](interfaces/CanvasPanelContext.md) | - |
 | [CanvasStudioContextValue](interfaces/CanvasStudioContextValue.md) | - |
 | [CanvasStudioProps](interfaces/CanvasStudioProps.md) | - |
+| [CanvasTemplateEntry](interfaces/CanvasTemplateEntry.md) | A starter template supplied by the HOST as plain data (canvas-m0-009). |
 | [CanvasToolbarProps](interfaces/CanvasToolbarProps.md) | - |
 | [CanvasWorkspaceProps](interfaces/CanvasWorkspaceProps.md) | - |
 | [ClonePageOptions](interfaces/ClonePageOptions.md) | - |
@@ -114,6 +115,7 @@ description: "@anvilkit/canvas-editor · index"
 | [exportStageContentDataURL](functions/exportStageContentDataURL.md) | Serialize a live editor stage to a data URL with the editor-only chrome layers hidden, so the exported preview shows only design content — not the selection transformer, smart guides, or remote-presence overlays the user happened to have on screen at export time. |
 | [FieldRow](functions/FieldRow.md) | - |
 | [LayerPanel](functions/LayerPanel.md) | - |
+| [loadTemplate](functions/loadTemplate.md) | Replace the current document's pages with a template's pages, as ONE undo entry (canvas-m0-009 / FR-005). |
 | [NumberField](functions/NumberField.md) | - |
 | [PageNavigator](functions/PageNavigator.md) | - |
 | [PagesCanvas](functions/PagesCanvas.md) | Canva-style vertical multi-page view. Owns the scrollable canvas viewport on the neutral-gray surface: the active page is the live editable Konva stage; the rest are cached rasterized thumbnails (`usePageThumbnails`). Clicking a thumbnail activates that page. On entry the active page is zoomed to fit the visible area; all pages share the viewport `zoom`, so the footer slider scales the whole canvas uniformly. |
@@ -125,6 +127,7 @@ description: "@anvilkit/canvas-editor · index"
 | [Section](functions/Section.md) | - |
 | [switchToPage](functions/switchToPage.md) | Switch active page AND clear transient UI state — selection, draft (any in-progress drag), text editor, and smart guides. Without the clears, a stale `selectionStore.selectedIds` would point at node ids that don't exist on the newly active page. |
 | [TabPanel](functions/TabPanel.md) | Tab Panel (Aside, col 2). Renders the registry descriptor for the active dock id, with an optional search box, and dispatches by descriptor kind (built-in / plugin / remote / search). Search resets when the dock changes so each panel opens fresh. |
+| [TemplatesPanel](functions/TemplatesPanel.md) | - |
 | [TextField](functions/TextField.md) | - |
 | [ToolAnnouncer](functions/ToolAnnouncer.md) | `@anvilkit/canvas-editor` — public, host-facing API (W1). |
 | [useActiveDock](functions/useActiveDock.md) | - |

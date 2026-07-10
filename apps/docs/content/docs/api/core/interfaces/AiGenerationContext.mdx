@@ -3,7 +3,7 @@ title: "AiGenerationContext"
 description: "@anvilkit/core · AiGenerationContext"
 ---
 
-Defined in: contracts/dist/ai.d.ts:190
+Defined in: foundation/contracts/dist/ai.d.ts:190
 
 The full input to a single LLM generation call.
 
@@ -16,7 +16,7 @@ are per-call hints.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="availablecomponents"&gt;&lt;/a&gt; `availableComponents` | `readonly` | readonly [`AiComponentSchema`](AiComponentSchema.md)[] | Every component the LLM is allowed to emit, described as an [AiComponentSchema](AiComponentSchema.md). The LLM cannot use a component that is not present in this list. | contracts/dist/ai.d.ts:196 |
-| &lt;a id="currentdata"&gt;&lt;/a&gt; `currentData?` | `readonly` | `Data` | Optional snapshot of the current Puck page data. Lets the LLM generate contextual edits (e.g. "add a CTA to the existing hero") instead of always producing a full page from scratch. | contracts/dist/ai.d.ts:202 |
-| &lt;a id="locale"&gt;&lt;/a&gt; `locale?` | `readonly` | `string` | Optional BCP 47 language tag (e.g. `"en-US"`, `"fr-FR"`) so the LLM generates copy in the right language. | contracts/dist/ai.d.ts:213 |
-| &lt;a id="theme"&gt;&lt;/a&gt; `theme?` | `readonly` | [`AiThemeHint`](../type-aliases/AiThemeHint) | Optional theme hint (`"light"` or `"dark"`) so the LLM can pick appropriate colors, imagery, and tone. Host apps typically forward the current editor theme. | contracts/dist/ai.d.ts:208 |
+| &lt;a id="availablecomponents"&gt;&lt;/a&gt; `availableComponents` | `readonly` | readonly [`AiComponentSchema`](AiComponentSchema.md)[] | Every component the LLM is allowed to emit, described as an [AiComponentSchema](AiComponentSchema.md). The LLM cannot use a component that is not present in this list. | foundation/contracts/dist/ai.d.ts:196 |
+| &lt;a id="currentdata"&gt;&lt;/a&gt; `currentData?` | `readonly` | `Data` | Optional snapshot of the current Puck page data. Lets the LLM generate contextual edits (e.g. "add a CTA to the existing hero") instead of always producing a full page from scratch. | foundation/contracts/dist/ai.d.ts:202 |
+| &lt;a id="locale"&gt;&lt;/a&gt; `locale?` | `readonly` | `string` | Optional BCP 47 language tag (e.g. `"en-US"`, `"fr-FR"`) so the LLM generates copy in the right language. | foundation/contracts/dist/ai.d.ts:213 |
+| &lt;a id="theme"&gt;&lt;/a&gt; `theme?` | `readonly` | [`AiThemeHint`](../type-aliases/AiThemeHint) | Optional theme hint (`"light"` or `"dark"`) so the LLM can pick appropriate colors, imagery, and tone. Host apps typically forward the current editor theme. | foundation/contracts/dist/ai.d.ts:208 |

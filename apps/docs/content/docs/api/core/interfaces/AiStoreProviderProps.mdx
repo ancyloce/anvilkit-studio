@@ -3,7 +3,7 @@ title: "AiStoreProviderProps"
 description: "@anvilkit/core · AiStoreProviderProps"
 ---
 
-Defined in: [core/src/state/slices/AiStoreProvider.tsx:20](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L20)
+Defined in: [runtime/core/src/state/slices/AiStoreProvider.tsx:20](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L20)
 
 Props for [AiStoreProvider](../functions/AiStoreProvider).
 
@@ -11,6 +11,6 @@ Props for [AiStoreProvider](../functions/AiStoreProvider).
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | Subtree that reads the AI store via `useAiStore` / `useAiStoreApi`. | [core/src/state/slices/AiStoreProvider.tsx:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L33) |
-| &lt;a id="store"&gt;&lt;/a&gt; `store?` | `readonly` | [`AiStoreApi`](../type-aliases/AiStoreApi) | Optional externally-owned store. `<Studio>` creates the instance itself (so it can drive it imperatively via `.getState()`) and passes it in; standalone callers omit it and the provider owns one. | [core/src/state/slices/AiStoreProvider.tsx:31](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L31) |
-| &lt;a id="storeid"&gt;&lt;/a&gt; `storeId` | `readonly` | `string` | Per-instance store id. Namespaces the AI store's persistence key so two concurrent `<Studio>` editors never share generation state. | [core/src/state/slices/AiStoreProvider.tsx:25](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/AiStoreProvider.tsx#L25) |
+| &lt;a id="children"&gt;&lt;/a&gt; `children` | `readonly` | `ReactNode` | Subtree that reads the AI store via `useAiStore` / `useAiStoreApi`. | [runtime/core/src/state/slices/AiStoreProvider.tsx:33](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L33) |
+| &lt;a id="store"&gt;&lt;/a&gt; `store?` | `readonly` | [`AiStoreApi`](../type-aliases/AiStoreApi) | Optional externally-owned store. `<Studio>` creates the instance itself (so it can drive it imperatively via `.getState()`) and passes it in; standalone callers omit it and the provider owns one. | [runtime/core/src/state/slices/AiStoreProvider.tsx:31](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L31) |
+| &lt;a id="storeid"&gt;&lt;/a&gt; `storeId` | `readonly` | `string` | Per-instance store id. Namespaces the AI store's persistence key so two concurrent `<Studio>` editors never share generation state. | [runtime/core/src/state/slices/AiStoreProvider.tsx:25](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/AiStoreProvider.tsx#L25) |

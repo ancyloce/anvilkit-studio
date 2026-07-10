@@ -3,7 +3,7 @@ title: "PageIRAsset"
 description: "@anvilkit/contracts · PageIRAsset"
 ---
 
-Defined in: [ir.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L50)
+Defined in: [ir.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L50)
 
 An out-of-band resource referenced by the page — images, videos,
 fonts, stylesheets, inline scripts, etc.
@@ -20,7 +20,7 @@ to deduplicate by [PageIRAsset.id](#id).
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, unique identifier for this asset within the IR. Typically a hash of the URL or a caller-provided slug. Exporters use this for deduplication when the same asset is referenced by multiple nodes. | [ir.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L58) |
-| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"image"` \| `"video"` \| `"font"` \| `"script"` \| `"style"` \| `"other"` | The asset's category. Closed union — extending this list is a breaking change to the IR contract. Use `"other"` for anything that doesn't fit the named categories rather than introducing an ad-hoc string. | [ir.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L66) |
-| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; | Free-form metadata the producer wants to pass through to consumers (e.g. `{ width: 1600, height: 900 }` for an image). Exporters should treat unknown keys as forward-compatible — a missing key must not cause a hard failure. | [ir.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L82) |
-| &lt;a id="url"&gt;&lt;/a&gt; `url` | `readonly` | `string` | Absolute or root-relative URL pointing at the asset. Exporters may rewrite this (e.g. to a CDN or a hashed filename) during serialization — the IR shape does not constrain the scheme. | [ir.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L74) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, unique identifier for this asset within the IR. Typically a hash of the URL or a caller-provided slug. Exporters use this for deduplication when the same asset is referenced by multiple nodes. | [ir.ts:58](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L58) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"image"` \| `"video"` \| `"font"` \| `"script"` \| `"style"` \| `"other"` | The asset's category. Closed union — extending this list is a breaking change to the IR contract. Use `"other"` for anything that doesn't fit the named categories rather than introducing an ad-hoc string. | [ir.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L66) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; | Free-form metadata the producer wants to pass through to consumers (e.g. `{ width: 1600, height: 900 }` for an image). Exporters should treat unknown keys as forward-compatible — a missing key must not cause a hard failure. | [ir.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L82) |
+| &lt;a id="url"&gt;&lt;/a&gt; `url` | `readonly` | `string` | Absolute or root-relative URL pointing at the asset. Exporters may rewrite this (e.g. to a CDN or a hashed filename) during serialization — the IR shape does not constrain the scheme. | [ir.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L74) |

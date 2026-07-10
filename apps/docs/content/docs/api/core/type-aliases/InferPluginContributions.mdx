@@ -7,7 +7,7 @@ description: "@anvilkit/core · InferPluginContributions"
 type InferPluginContributions<Plugins> = { [Index in keyof Plugins]: Plugins[Index] extends { [StudioPluginContributesBrand]: infer Contributes } ? Contributes : never }[number];
 ```
 
-Defined in: [core/src/types/plugin.ts:873](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L873)
+Defined in: [runtime/core/src/types/plugin.ts:873](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L873)
 
 Infer the union of contribution types from a plugins tuple.
 

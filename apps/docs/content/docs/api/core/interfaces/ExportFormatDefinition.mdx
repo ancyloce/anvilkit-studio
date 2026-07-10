@@ -3,7 +3,7 @@ title: "ExportFormatDefinition"
 description: "@anvilkit/core · ExportFormatDefinition"
 ---
 
-Defined in: contracts/dist/export.d.ts:189
+Defined in: foundation/contracts/dist/export.d.ts:189
 
 The descriptor every exporter plugin contributes to Studio.
 
@@ -35,9 +35,9 @@ exporters in the same pipeline.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="extension"&gt;&lt;/a&gt; `extension` | `readonly` | `string` | File extension (without the leading dot) for downloads in this format (e.g. `"html"`, `"jsx"`, `"json"`, `"pdf"`). | contracts/dist/export.d.ts:216 |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, globally-unique format identifier (e.g. `"html"`, `"react"`, `"json"`). The runtime rejects duplicate ids at `createExportRegistry()` time. Convention: lowercase, hyphen-separated, no namespace prefix — host apps refer to formats by id in their UI. | contracts/dist/export.d.ts:198 |
-| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | Human-readable label surfaced in export menus and dialogs (e.g. `"HTML"`, `"React source"`, `"JSON snapshot"`). | contracts/dist/export.d.ts:203 |
-| &lt;a id="labelkey"&gt;&lt;/a&gt; `labelKey?` | `readonly` | `string` | Optional i18n message key for the label, resolved by the chrome via `useMsg(labelKey, label)` at render — so the export menu localizes with the active locale. When present it wins; `label` is the missing-key fallback. Plugins contribute the key via `ctx.registerMessages` under their own namespace. | contracts/dist/export.d.ts:211 |
-| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType` | `readonly` | `string` | MIME type for the exported content (e.g. `"text/html"`, `"application/json"`, `"application/pdf"`). Used by host apps to set the correct `Blob` type at download time and to populate the `Content-Type` header when sending exports over the network. | contracts/dist/export.d.ts:225 |
-| &lt;a id="run"&gt;&lt;/a&gt; `run` | `readonly` | (`ir`, `options`, `ctx?`) =&gt; `Promise`\&lt;[`ExportResult`](ExportResult.md)\&gt; | Produce the serialized output for a page. Receives a normalized [PageIR](PageIR.md) and a format-specific [ExportOptions](../type-aliases/ExportOptions) bag. Returns a `Promise<ExportResult>` — always async so the contract is uniform regardless of whether a given format happens to run synchronously. | contracts/dist/export.d.ts:238 |
+| &lt;a id="extension"&gt;&lt;/a&gt; `extension` | `readonly` | `string` | File extension (without the leading dot) for downloads in this format (e.g. `"html"`, `"jsx"`, `"json"`, `"pdf"`). | foundation/contracts/dist/export.d.ts:216 |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | Stable, globally-unique format identifier (e.g. `"html"`, `"react"`, `"json"`). The runtime rejects duplicate ids at `createExportRegistry()` time. Convention: lowercase, hyphen-separated, no namespace prefix — host apps refer to formats by id in their UI. | foundation/contracts/dist/export.d.ts:198 |
+| &lt;a id="label"&gt;&lt;/a&gt; `label` | `readonly` | `string` | Human-readable label surfaced in export menus and dialogs (e.g. `"HTML"`, `"React source"`, `"JSON snapshot"`). | foundation/contracts/dist/export.d.ts:203 |
+| &lt;a id="labelkey"&gt;&lt;/a&gt; `labelKey?` | `readonly` | `string` | Optional i18n message key for the label, resolved by the chrome via `useMsg(labelKey, label)` at render — so the export menu localizes with the active locale. When present it wins; `label` is the missing-key fallback. Plugins contribute the key via `ctx.registerMessages` under their own namespace. | foundation/contracts/dist/export.d.ts:211 |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType` | `readonly` | `string` | MIME type for the exported content (e.g. `"text/html"`, `"application/json"`, `"application/pdf"`). Used by host apps to set the correct `Blob` type at download time and to populate the `Content-Type` header when sending exports over the network. | foundation/contracts/dist/export.d.ts:225 |
+| &lt;a id="run"&gt;&lt;/a&gt; `run` | `readonly` | (`ir`, `options`, `ctx?`) =&gt; `Promise`\&lt;[`ExportResult`](ExportResult.md)\&gt; | Produce the serialized output for a page. Receives a normalized [PageIR](PageIR.md) and a format-specific [ExportOptions](../type-aliases/ExportOptions) bag. Returns a `Promise<ExportResult>` — always async so the contract is uniform regardless of whether a given format happens to run synchronously. | foundation/contracts/dist/export.d.ts:238 |

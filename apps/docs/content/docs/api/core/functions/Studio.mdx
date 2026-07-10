@@ -9,11 +9,7 @@ function Studio<UserConfig>(props):
   | null;
 ```
 
-Defined in: [core/src/react/components/Studio.tsx:162](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/react/components/Studio.tsx#L162)
-
-The public Studio shell. Thin view over useStudioController:
-select the loading state, then render the provider stack around
-`<Puck>`.
+Defined in: [runtime/core/src/react/components/Studio.tsx:445](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L445)
 
 ## Type Parameters
 
@@ -31,26 +27,3 @@ select the loading state, then render the provider stack around
 
   \| `ReactElement`\&lt;`unknown`, `string` \| `JSXElementConstructor`\&lt;`any`\&gt;\&gt;
   \| `null`
-
-## Example
-
-```tsx
-import { Studio } from "@anvilkit/core/react";
-import { puckDemoConfig } from "./lib/puck-demo";
-import { exportHtmlPlugin } from "@anvilkit/plugin-export-html";
-
-export default function EditorPage() {
-  return (
-    <Studio
-      puckConfig={puckDemoConfig}
-      plugins={[exportHtmlPlugin()]}
-      onPublish={async (data) => {
-        await fetch("/api/publish", {
-          method: "POST",
-          body: JSON.stringify(data),
-        });
-      }}
-    />
-  );
-}
-```

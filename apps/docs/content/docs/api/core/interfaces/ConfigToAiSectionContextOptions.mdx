@@ -3,7 +3,7 @@ title: "ConfigToAiSectionContextOptions"
 description: "@anvilkit/core · ConfigToAiSectionContextOptions"
 ---
 
-Defined in: contracts/dist/ai-section.d.ts:123
+Defined in: foundation/contracts/dist/ai-section.d.ts:123
 
 Optional environment hints for `configToAiSectionContext()`.
 
@@ -15,6 +15,6 @@ the same hint object for both flows.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="allowresize"&gt;&lt;/a&gt; `allowResize?` | `readonly` | `boolean` | When `true`, the resulting context's [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is set so the LLM (and the validator) accepts a [AiSectionPatch](AiSectionPatch.md) whose `replacement.length` ≠ [AiSectionSelection.nodeIds](AiSectionSelection.md#nodeids).length. Defaults to `false` — Phase 6 / M9 ships size-preserving patches only. Hosts wanting "split this hero into three sections" must opt in explicitly. | contracts/dist/ai-section.d.ts:143 |
-| &lt;a id="locale"&gt;&lt;/a&gt; `locale?` | `readonly` | `string` | Optional BCP 47 language tag forwarded onto [AiSectionContext.locale](AiSectionContext.md#locale). | contracts/dist/ai-section.d.ts:133 |
-| &lt;a id="theme"&gt;&lt;/a&gt; `theme?` | `readonly` | [`AiThemeHint`](../type-aliases/AiThemeHint) | Optional theme hint (`"light"` | `"dark"`) forwarded onto [AiSectionContext.theme](AiSectionContext.md#theme). | contracts/dist/ai-section.d.ts:128 |
+| &lt;a id="allowresize"&gt;&lt;/a&gt; `allowResize?` | `readonly` | `boolean` | When `true`, the resulting context's [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is set so the LLM (and the validator) accepts a [AiSectionPatch](AiSectionPatch.md) whose `replacement.length` ≠ [AiSectionSelection.nodeIds](AiSectionSelection.md#nodeids).length. Defaults to `false` — Phase 6 / M9 ships size-preserving patches only. Hosts wanting "split this hero into three sections" must opt in explicitly. | foundation/contracts/dist/ai-section.d.ts:143 |
+| &lt;a id="locale"&gt;&lt;/a&gt; `locale?` | `readonly` | `string` | Optional BCP 47 language tag forwarded onto [AiSectionContext.locale](AiSectionContext.md#locale). | foundation/contracts/dist/ai-section.d.ts:133 |
+| &lt;a id="theme"&gt;&lt;/a&gt; `theme?` | `readonly` | [`AiThemeHint`](../type-aliases/AiThemeHint) | Optional theme hint (`"light"` | `"dark"`) forwarded onto [AiSectionContext.theme](AiSectionContext.md#theme). | foundation/contracts/dist/ai-section.d.ts:128 |

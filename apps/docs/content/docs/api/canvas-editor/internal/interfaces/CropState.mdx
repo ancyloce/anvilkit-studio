@@ -3,7 +3,7 @@ title: "CropState"
 description: "@anvilkit/canvas-editor · CropState"
 ---
 
-Defined in: [packages/canvas/editor/src/stores/crop-store.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L18)
+Defined in: [packages/capabilities/canvas/editor/src/stores/crop-store.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L18)
 
 Drives the interactive image-crop editor (I3-2). `cropNodeId` is the image
 node being cropped (null when the editor is closed). `draft` is the live,
@@ -15,8 +15,8 @@ in-progress crop rect updated on every handle drag — transient UI state, like
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="begin"&gt;&lt;/a&gt; `begin` | (`nodeId`) =&gt; `void` | Open the editor for `nodeId`; the overlay seeds `draft` once it mounts. | [packages/canvas/editor/src/stores/crop-store.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L22) |
-| &lt;a id="clear"&gt;&lt;/a&gt; `clear` | () =&gt; `void` | - | [packages/canvas/editor/src/stores/crop-store.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L24) |
-| &lt;a id="cropnodeid"&gt;&lt;/a&gt; `cropNodeId` | `string` \| `null` | - | [packages/canvas/editor/src/stores/crop-store.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L19) |
-| &lt;a id="draft"&gt;&lt;/a&gt; `draft` | [`CropRect`](CropRect.md) \| `null` | - | [packages/canvas/editor/src/stores/crop-store.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L20) |
-| &lt;a id="setdraft"&gt;&lt;/a&gt; `setDraft` | (`rect`) =&gt; `void` | - | [packages/canvas/editor/src/stores/crop-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L23) |
+| &lt;a id="begin"&gt;&lt;/a&gt; `begin` | (`nodeId`) =&gt; `void` | Open the editor for `nodeId`; the overlay seeds `draft` once it mounts. | [packages/capabilities/canvas/editor/src/stores/crop-store.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L22) |
+| &lt;a id="clear"&gt;&lt;/a&gt; `clear` | () =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/crop-store.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L24) |
+| &lt;a id="cropnodeid"&gt;&lt;/a&gt; `cropNodeId` | `string` \| `null` | - | [packages/capabilities/canvas/editor/src/stores/crop-store.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L19) |
+| &lt;a id="draft"&gt;&lt;/a&gt; `draft` | [`CropRect`](CropRect.md) \| `null` | - | [packages/capabilities/canvas/editor/src/stores/crop-store.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L20) |
+| &lt;a id="setdraft"&gt;&lt;/a&gt; `setDraft` | (`rect`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/crop-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/crop-store.ts#L23) |

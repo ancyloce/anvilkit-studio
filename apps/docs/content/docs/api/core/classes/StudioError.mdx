@@ -3,7 +3,7 @@ title: "StudioError"
 description: "@anvilkit/core · StudioError"
 ---
 
-Defined in: [core/src/runtime/errors.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L49)
+Defined in: [runtime/core/src/runtime/errors.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L49)
 
 Abstract base class for every `@anvilkit/core` runtime error.
 
@@ -36,7 +36,7 @@ a harmless no-op — kept so the code remains portable.
 new StudioError(message, options?): StudioError;
 ```
 
-Defined in: [core/src/runtime/errors.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L59)
+Defined in: [runtime/core/src/runtime/errors.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L59)
 
 #### Parameters
 
@@ -59,4 +59,4 @@ Error.constructor
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="code"&gt;&lt;/a&gt; `code` | `abstract` | `string` | Stable, machine-readable failure identifier. Subclasses must override this with a constant literal so host apps can branch on `err.code` without string-matching on the human-readable message. | [core/src/runtime/errors.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L57) |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `abstract` | `string` | Stable, machine-readable failure identifier. Subclasses must override this with a constant literal so host apps can branch on `err.code` without string-matching on the human-readable message. | [runtime/core/src/runtime/errors.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L57) |

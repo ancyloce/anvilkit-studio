@@ -7,9 +7,9 @@ description: "@anvilkit/ir · migratePageIR"
 function migratePageIR(ir, options): PageIR;
 ```
 
-Defined in: [migrations/index.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/ir/src/migrations/index.ts#L63)
+Defined in: [migrations/index.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/ir/src/migrations/index.ts#L63)
 
-Migrate a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts) document between peer-range labels.
+Migrate a [PageIR](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts) document between peer-range labels.
 
 - Pure no-op when `from === to` AND every node has `meta === undefined`.
   Returns the original reference.
@@ -29,9 +29,9 @@ stays `"1"` across `0.21 ↔ 0.22`.
 
 | Parameter | Type |
 | ------ | ------ |
-| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts) |
+| `ir` | [`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts) |
 | `options` | [`PageIRMigrationOptions`](../interfaces/PageIRMigrationOptions) |
 
 ## Returns
 
-[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts)
+[`PageIR`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts)

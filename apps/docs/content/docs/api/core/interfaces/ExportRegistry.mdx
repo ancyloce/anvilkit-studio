@@ -3,7 +3,7 @@ title: "ExportRegistry"
 description: "@anvilkit/core · ExportRegistry"
 ---
 
-Defined in: [core/src/runtime/export-registry.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L51)
+Defined in: [runtime/core/src/runtime/export-registry.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L51)
 
 Read-only lookup interface returned by [createExportRegistry](../functions/createExportRegistry).
 
@@ -14,7 +14,7 @@ Methods are documented on the factory's return statement — see
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="get"&gt;&lt;/a&gt; `get` | `readonly` | (`id`) =&gt; \| [`ExportFormatDefinition`](ExportFormatDefinition.md)\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; \| `undefined` | Return the format registered under `id`, or `undefined` if no such format exists. | [core/src/runtime/export-registry.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L65) |
-| &lt;a id="has"&gt;&lt;/a&gt; `has` | `readonly` | (`id`) =&gt; `boolean` | Return `true` if a format with the given `id` is registered. | [core/src/runtime/export-registry.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L70) |
-| &lt;a id="list"&gt;&lt;/a&gt; `list` | `readonly` | () =&gt; [`ExportFormatDefinition`](ExportFormatDefinition.md)\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt;[] | Return every registered format, in the order they were passed to [createExportRegistry](../functions/createExportRegistry). The returned array is a fresh snapshot — mutating it does not affect the registry. | [core/src/runtime/export-registry.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L59) |
-| &lt;a id="size"&gt;&lt;/a&gt; `size` | `readonly` | () =&gt; `number` | Return the number of registered formats. | [core/src/runtime/export-registry.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/export-registry.ts#L75) |
+| &lt;a id="get"&gt;&lt;/a&gt; `get` | `readonly` | (`id`) =&gt; \| [`ExportFormatDefinition`](ExportFormatDefinition.md)\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt; \| `undefined` | Return the format registered under `id`, or `undefined` if no such format exists. | [runtime/core/src/runtime/export-registry.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L65) |
+| &lt;a id="has"&gt;&lt;/a&gt; `has` | `readonly` | (`id`) =&gt; `boolean` | Return `true` if a format with the given `id` is registered. | [runtime/core/src/runtime/export-registry.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L70) |
+| &lt;a id="list"&gt;&lt;/a&gt; `list` | `readonly` | () =&gt; [`ExportFormatDefinition`](ExportFormatDefinition.md)\&lt;`Record`\&lt;`string`, `unknown`\&gt;\&gt;[] | Return every registered format, in the order they were passed to [createExportRegistry](../functions/createExportRegistry). The returned array is a fresh snapshot — mutating it does not affect the registry. | [runtime/core/src/runtime/export-registry.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L59) |
+| &lt;a id="size"&gt;&lt;/a&gt; `size` | `readonly` | () =&gt; `number` | Return the number of registered formats. | [runtime/core/src/runtime/export-registry.ts:75](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/export-registry.ts#L75) |

@@ -3,13 +3,13 @@ title: "CreateHistoryStoreOptions"
 description: "@anvilkit/canvas-editor · CreateHistoryStoreOptions"
 ---
 
-Defined in: [packages/canvas/editor/src/stores/history-store.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L13)
+Defined in: [packages/capabilities/canvas/editor/src/stores/history-store.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L13)
 
 ## Properties
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `number` | Maximum number of inverse commands kept in `past`. When exceeded, the oldest entry is dropped. `future` is bounded by `past` (it can never be longer than the most recent run of undos), so a single `limit` suffices. | [packages/canvas/editor/src/stores/history-store.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L19) |
-| &lt;a id="mergewindowms"&gt;&lt;/a&gt; `mergeWindowMs?` | `number` | Time window (ms) within which a `commitCoalesced` call sharing the previous call's merge key folds into the same undo entry. Default 400. | [packages/canvas/editor/src/stores/history-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L26) |
-| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | Optional deterministic clock plumbed into every applyCommand call. | [packages/canvas/editor/src/stores/history-store.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L21) |
-| &lt;a id="nowms"&gt;&lt;/a&gt; `nowMs?` | () =&gt; `number` | Injectable millisecond clock for coalescing (default `Date.now`). | [packages/canvas/editor/src/stores/history-store.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L28) |
+| &lt;a id="limit"&gt;&lt;/a&gt; `limit?` | `number` | Maximum number of inverse commands kept in `past`. When exceeded, the oldest entry is dropped. `future` is bounded by `past` (it can never be longer than the most recent run of undos), so a single `limit` suffices. | [packages/capabilities/canvas/editor/src/stores/history-store.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L19) |
+| &lt;a id="mergewindowms"&gt;&lt;/a&gt; `mergeWindowMs?` | `number` | Time window (ms) within which a `commitCoalesced` call sharing the previous call's merge key folds into the same undo entry. Default 400. | [packages/capabilities/canvas/editor/src/stores/history-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L26) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | Optional deterministic clock plumbed into every applyCommand call. | [packages/capabilities/canvas/editor/src/stores/history-store.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L21) |
+| &lt;a id="nowms"&gt;&lt;/a&gt; `nowMs?` | () =&gt; `number` | Injectable millisecond clock for coalescing (default `Date.now`). | [packages/capabilities/canvas/editor/src/stores/history-store.ts:28](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/history-store.ts#L28) |

@@ -3,7 +3,7 @@ title: "AiSectionPatch"
 description: "@anvilkit/core · AiSectionPatch"
 ---
 
-Defined in: contracts/dist/ai-section.d.ts:223
+Defined in: foundation/contracts/dist/ai-section.d.ts:223
 
 The LLM's response to a section-level regeneration request.
 
@@ -18,6 +18,6 @@ Validation lives in `@anvilkit/validator/section`'s
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | `readonly` | readonly `string`[] | The node IDs being replaced. Must equal [AiSectionContext.nodeIds](AiSectionContext.md#nodeids) (same order, same length unless [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is `true`). | contracts/dist/ai-section.d.ts:235 |
-| &lt;a id="replacement"&gt;&lt;/a&gt; `replacement` | `readonly` | readonly [`PageIRNode`](PageIRNode.md)[] | The new subtrees, in the order they should appear in the zone after the replacement is applied. Each node is fully formed `PageIRNode` shape — the validator runs the same per-node rules as `validateAiOutput`, scoped to this subtree only. | contracts/dist/ai-section.d.ts:242 |
-| &lt;a id="zoneid"&gt;&lt;/a&gt; `zoneId` | `readonly` | `string` | The zone the patch applies to. Must match [AiSectionContext.zoneId](AiSectionContext.md#zoneid) — patches that target a different zone are rejected with code `PATCH_SHAPE`. | contracts/dist/ai-section.d.ts:229 |
+| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | `readonly` | readonly `string`[] | The node IDs being replaced. Must equal [AiSectionContext.nodeIds](AiSectionContext.md#nodeids) (same order, same length unless [AiSectionContext.allowResize](AiSectionContext.md#allowresize) is `true`). | foundation/contracts/dist/ai-section.d.ts:235 |
+| &lt;a id="replacement"&gt;&lt;/a&gt; `replacement` | `readonly` | readonly [`PageIRNode`](PageIRNode.md)[] | The new subtrees, in the order they should appear in the zone after the replacement is applied. Each node is fully formed `PageIRNode` shape — the validator runs the same per-node rules as `validateAiOutput`, scoped to this subtree only. | foundation/contracts/dist/ai-section.d.ts:242 |
+| &lt;a id="zoneid"&gt;&lt;/a&gt; `zoneId` | `readonly` | `string` | The zone the patch applies to. Must match [AiSectionContext.zoneId](AiSectionContext.md#zoneid) — patches that target a different zone are rejected with code `PATCH_SHAPE`. | foundation/contracts/dist/ai-section.d.ts:229 |

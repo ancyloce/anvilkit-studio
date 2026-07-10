@@ -7,14 +7,14 @@ description: "@anvilkit/core · CORE_VERSION"
 const CORE_VERSION: "0.1.18" = "0.1.18";
 ```
 
-Defined in: [core/src/runtime/version.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/version.ts#L21)
+Defined in: [runtime/core/src/runtime/version.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/version.ts#L21)
 
 ## File
 
 The running version of `@anvilkit/core`.
 
 Hand-maintained to match the `version` field of
-`packages/core/package.json`. A colocated test asserts the two stay
+`packages/runtime/core/package.json`. A colocated test asserts the two stay
 in sync, so any drift is caught at `pnpm test` time rather than at
 plugin-load time in a downstream host.
 

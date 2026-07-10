@@ -1,0 +1,17 @@
+---
+title: "CANVAS_IR_MIGRATIONS"
+description: "@anvilkit/canvas-core · CANVAS_IR_MIGRATIONS"
+---
+
+```ts
+const CANVAS_IR_MIGRATIONS: readonly CanvasMigration[];
+```
+
+Defined in: [ir/migrations.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/migrations.ts#L35)
+
+Production migrations for the core CanvasIR version chain, seeded into
+every registry so a zero-extension runtime still reads old documents.
+
+v1 → v2 is a pure structural version bump — every valid v1 document is a
+valid v2 document — so `up` only rewrites the version tag; all other
+fields (including unknown ones) ride along via the spread.

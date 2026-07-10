@@ -422,11 +422,11 @@ createCollabDataPlugin({
 
 ```bash
 # Defaults to ws://127.0.0.1:21234
-node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs
+node packages/extensions/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs
 
 # Override the port (positional arg or COLLAB_RELAY_PORT), or bind a
 # non-loopback host with COLLAB_RELAY_HOST:
-node packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
+node packages/extensions/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21300
 ```
 
 このリレーは**デフォルトでポート 21234 をリッスンします**（Windows/WSL2 が予約しているため 1234 と 11234 は回避されています）。`y-websocket@3` がバンドルされたサーバー（`y-websocket/bin/utils`）を削除し、`@y/websocket-server` は互換性のない `yjs-14` 系列を対象としているため、このリレーは**`yjs-13` スタックに対してクラシックな `y-protocols` の同期/awareness サーバーをインラインでベンダリングしています**——デモの `y-websocket@3` クライアントとワイヤ互換であり、`y-websocket` のサーバーパッケージングからは独立しています。これはテストとデモのための参照であり、本番サーバーではありません。

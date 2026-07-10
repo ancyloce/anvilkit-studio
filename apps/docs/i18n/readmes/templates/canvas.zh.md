@@ -1,6 +1,6 @@
 # `@anvilkit/canvas-templates`
 
-随 AnvilKit Canvas Studio 一同提供的十个起始 [`CanvasIR`](../../capabilities/canvas/core/src/types.ts) 设计——海报、社交媒体格式、幻灯片以及印刷物料。每一个都是自包含的 `CanvasIR`（仅含 text / rect / ellipse / line 节点，无外部资源），因此加载时无需任何网络请求。
+随 AnvilKit Canvas Studio 一同提供的十个起始 [`CanvasIR`](../../../capabilities/canvas/core/src/types.ts) 设计——海报、社交媒体格式、幻灯片以及印刷物料。每一个都是自包含的 `CanvasIR`（仅含 text / rect / ellipse / line 节点，无外部资源），因此加载时无需任何网络请求。
 
 ## 契约
 
@@ -15,7 +15,7 @@ const poster = canvasTemplates.poster.ir; // CanvasIR
 ## 布局
 
 ```
-packages/templates/canvas/
+packages/extensions/templates/canvas/
 ├── package.json
 ├── tsconfig.json
 ├── vitest.config.ts

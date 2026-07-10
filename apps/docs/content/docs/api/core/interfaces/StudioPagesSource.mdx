@@ -3,7 +3,7 @@ title: "StudioPagesSource"
 description: "@anvilkit/core · StudioPagesSource"
 ---
 
-Defined in: contracts/dist/page.d.ts:146
+Defined in: foundation/contracts/dist/page.d.ts:146
 
 Pages source contract. The host application supplies one of these
 via the `<Studio>` `pages` prop. When omitted, the `layer/pages`
@@ -40,7 +40,7 @@ list():
 | Promise<readonly StudioPage[]>;
 ```
 
-Defined in: contracts/dist/page.d.ts:148
+Defined in: foundation/contracts/dist/page.d.ts:148
 
 Return the current page list. May be sync or async.
 
@@ -57,7 +57,7 @@ Return the current page list. May be sync or async.
 optional onCreate(input): void | Promise<void>;
 ```
 
-Defined in: contracts/dist/page.d.ts:162
+Defined in: foundation/contracts/dist/page.d.ts:162
 
 Fired when the `+` add-page dialog is submitted. Host creates
 the page and (optionally) navigates to it. Async result is
@@ -81,7 +81,7 @@ awaited by the dialog so it can show a pending state.
 optional onDelete(pageId): void | Promise<void>;
 ```
 
-Defined in: contracts/dist/page.d.ts:174
+Defined in: foundation/contracts/dist/page.d.ts:174
 
 Delete a page. The delete menu item + confirm dialog are hidden
 when this callback is undefined OR when [StudioPage.locked](StudioPage.md#locked)
@@ -105,7 +105,7 @@ is `true` on the target row.
 optional onDuplicate(pageId): void | Promise<void | StudioPage>;
 ```
 
-Defined in: contracts/dist/page.d.ts:184
+Defined in: foundation/contracts/dist/page.d.ts:184
 
 Duplicate a page. Hidden when undefined.
 
@@ -133,7 +133,7 @@ appears once the host's `subscribe` listener fires.
 optional onRename(input): void | Promise<void>;
 ```
 
-Defined in: contracts/dist/page.d.ts:168
+Defined in: foundation/contracts/dist/page.d.ts:168
 
 Rename / re-path a page. The inline rename affordance is hidden
 when this callback is undefined OR when [StudioPage.locked](StudioPage.md#locked)
@@ -157,7 +157,7 @@ is `true` on the target row.
 optional onReorder(input): void | Promise<void>;
 ```
 
-Defined in: contracts/dist/page.d.ts:189
+Defined in: foundation/contracts/dist/page.d.ts:189
 
 Reorder a page to a new index. Drag handles are inert when this
 callback is undefined.
@@ -180,7 +180,7 @@ callback is undefined.
 optional onSelect(pageId): void;
 ```
 
-Defined in: contracts/dist/page.d.ts:156
+Defined in: foundation/contracts/dist/page.d.ts:156
 
 Fired when a page row is clicked. Host routes to that page.
 
@@ -202,7 +202,7 @@ Fired when a page row is clicked. Host routes to that page.
 optional onUpdateSettings(input): void | Promise<void>;
 ```
 
-Defined in: contracts/dist/page.d.ts:195
+Defined in: foundation/contracts/dist/page.d.ts:195
 
 Update page settings + SEO. The settings menu item is hidden
 when this callback is undefined; the SEO section inside the
@@ -226,7 +226,7 @@ dialog follows the same gate.
 optional subscribe(listener): () => void;
 ```
 
-Defined in: contracts/dist/page.d.ts:154
+Defined in: foundation/contracts/dist/page.d.ts:154
 
 Optional subscription. When set, the sidebar calls it on mount
 with a listener and re-runs `list()` whenever the listener fires.

@@ -3,7 +3,7 @@ title: "StudioAssetListPage"
 description: "@anvilkit/core · StudioAssetListPage"
 ---
 
-Defined in: [core/src/types/sidebar.ts:252](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L252)
+Defined in: [runtime/core/src/types/sidebar.ts:252](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L252)
 
 Pagination envelope returned by [StudioAssetSource.listPaginated](StudioAssetSource.md#listpaginated).
 
@@ -16,10 +16,10 @@ Pagination envelope returned by [StudioAssetSource.listPaginated](StudioAssetSou
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="folderpath"&gt;&lt;/a&gt; `folderPath?` | `readonly` | readonly [`StudioAssetFolder`](StudioAssetFolder.md)[] | Root → … → current folder, for the breadcrumb. | [core/src/types/sidebar.ts:259](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L259) |
-| &lt;a id="folders"&gt;&lt;/a&gt; `folders?` | `readonly` | readonly [`StudioAssetFolder`](StudioAssetFolder.md)[] | Child folders of `query.folderId` (folder-aware sources). | [core/src/types/sidebar.ts:257](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L257) |
-| &lt;a id="items"&gt;&lt;/a&gt; `items` | `readonly` | readonly [`StudioAsset`](StudioAsset.md)[] | - | [core/src/types/sidebar.ts:253](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L253) |
-| &lt;a id="nextcursor"&gt;&lt;/a&gt; `nextCursor` | `readonly` | `string` \| `undefined` | - | [core/src/types/sidebar.ts:255](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L255) |
-| &lt;a id="sourcecursors"&gt;&lt;/a&gt; `sourceCursors?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string` \| `undefined`\&gt;\&gt; | Per-source page tokens for federated paging, keyed by source id. | [core/src/types/sidebar.ts:261](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L261) |
-| &lt;a id="sourceerrors"&gt;&lt;/a&gt; `sourceErrors?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, \{ `code?`: `string`; `message`: `string`; \}\&gt;\&gt; | Per-source errors for a federated page, keyed by source id. Present when a source failed to return results for this page while others succeeded — the sidebar surfaces a non-blocking "degraded" hint instead of dropping the failure silently. Successful sources are absent from the map. | [core/src/types/sidebar.ts:268](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L268) |
-| &lt;a id="total"&gt;&lt;/a&gt; `total` | `readonly` | `number` | - | [core/src/types/sidebar.ts:254](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L254) |
+| &lt;a id="folderpath"&gt;&lt;/a&gt; `folderPath?` | `readonly` | readonly [`StudioAssetFolder`](StudioAssetFolder.md)[] | Root → … → current folder, for the breadcrumb. | [runtime/core/src/types/sidebar.ts:259](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L259) |
+| &lt;a id="folders"&gt;&lt;/a&gt; `folders?` | `readonly` | readonly [`StudioAssetFolder`](StudioAssetFolder.md)[] | Child folders of `query.folderId` (folder-aware sources). | [runtime/core/src/types/sidebar.ts:257](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L257) |
+| &lt;a id="items"&gt;&lt;/a&gt; `items` | `readonly` | readonly [`StudioAsset`](StudioAsset.md)[] | - | [runtime/core/src/types/sidebar.ts:253](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L253) |
+| &lt;a id="nextcursor"&gt;&lt;/a&gt; `nextCursor` | `readonly` | `string` \| `undefined` | - | [runtime/core/src/types/sidebar.ts:255](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L255) |
+| &lt;a id="sourcecursors"&gt;&lt;/a&gt; `sourceCursors?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, `string` \| `undefined`\&gt;\&gt; | Per-source page tokens for federated paging, keyed by source id. | [runtime/core/src/types/sidebar.ts:261](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L261) |
+| &lt;a id="sourceerrors"&gt;&lt;/a&gt; `sourceErrors?` | `readonly` | `Readonly`\&lt;`Record`\&lt;`string`, \{ `code?`: `string`; `message`: `string`; \}\&gt;\&gt; | Per-source errors for a federated page, keyed by source id. Present when a source failed to return results for this page while others succeeded — the sidebar surfaces a non-blocking "degraded" hint instead of dropping the failure silently. Successful sources are absent from the map. | [runtime/core/src/types/sidebar.ts:268](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L268) |
+| &lt;a id="total"&gt;&lt;/a&gt; `total` | `readonly` | `number` | - | [runtime/core/src/types/sidebar.ts:254](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L254) |

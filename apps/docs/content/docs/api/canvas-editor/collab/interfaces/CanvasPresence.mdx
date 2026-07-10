@@ -3,7 +3,7 @@ title: "CanvasPresence"
 description: "@anvilkit/canvas-editor · CanvasPresence"
 ---
 
-Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:8](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L8)
+Defined in: [packages/capabilities/canvas/editor/src/collab/presence-bridge.ts:8](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L8)
 
 ## Methods
 
@@ -13,7 +13,7 @@ Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:8](https://git
 destroy(): void;
 ```
 
-Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L19)
+Defined in: [packages/capabilities/canvas/editor/src/collab/presence-bridge.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L19)
 
 #### Returns
 
@@ -27,7 +27,7 @@ Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:19](https://gi
 droppedUpdateCount(): number;
 ```
 
-Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L18)
+Defined in: [packages/capabilities/canvas/editor/src/collab/presence-bridge.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L18)
 
 Test/telemetry hook — count of `update()` calls dropped by the limiter.
 
@@ -43,7 +43,7 @@ Test/telemetry hook — count of `update()` calls dropped by the limiter.
 onPeerChange(callback): CanvasBindingUnsubscribe;
 ```
 
-Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L14)
+Defined in: [packages/capabilities/canvas/editor/src/collab/presence-bridge.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L14)
 
 Subscribe to validated remote+local peer states. Fires immediately with
  the current set, then on every awareness change.
@@ -66,7 +66,7 @@ Subscribe to validated remote+local peer states. Fires immediately with
 update(state): void;
 ```
 
-Defined in: [packages/canvas/editor/src/collab/presence-bridge.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L11)
+Defined in: [packages/capabilities/canvas/editor/src/collab/presence-bridge.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/presence-bridge.ts#L11)
 
 Set local presence (cursor / selection / display name). Token-bucket
  rate-limited; calls beyond the budget are dropped.

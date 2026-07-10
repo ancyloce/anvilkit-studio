@@ -33,7 +33,7 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = join(here, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
-const TEMPLATES_ROOT = join(WORKSPACE_ROOT, "packages", "templates");
+const TEMPLATES_ROOT = join(WORKSPACE_ROOT, "packages", "extensions", "templates");
 const MDX_OUT = join(DOCS_ROOT, "content", "docs", "templates");
 const PREVIEW_OUT = join(DOCS_ROOT, "public", "templates");
 // Central translation store (committed in the main repo so it survives clones +

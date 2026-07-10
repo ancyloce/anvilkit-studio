@@ -1,7 +1,7 @@
 {
 	"$schema": "/registry/feed.schema.json",
 	"feedVersion": "1",
-	"generatedAt": "2026-06-25T11:06:41.113Z",
+	"generatedAt": "2026-07-10T19:21:40.968Z",
 	"entries": [
 		{
 			"slug": "plugin-ai-copilot",
@@ -16,7 +16,9 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -34,7 +36,9 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -52,7 +56,9 @@
 			"verified": true,
 			"addedAt": "2026-05-23T13:22:14.431Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -70,7 +76,9 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -88,7 +96,9 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -106,7 +116,9 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -124,7 +136,9 @@
 			"verified": true,
 			"addedAt": "2026-05-21T18:52:54.497Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -142,7 +156,9 @@
 			"verified": true,
 			"addedAt": "2026-05-21T18:52:54.497Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -160,7 +176,9 @@
 			"verified": true,
 			"addedAt": "2026-05-11T18:46:13.707Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -178,7 +196,9 @@
 			"verified": true,
 			"addedAt": "2026-05-04T18:42:58.623Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -196,7 +216,9 @@
 			"verified": true,
 			"addedAt": "2026-05-21T18:52:54.497Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -214,7 +236,9 @@
 			"verified": true,
 			"addedAt": "2026-06-16T16:29:14.279Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts"],
+				"mutates": [
+					"lib/puck-config.ts"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -232,7 +256,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -250,7 +277,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -268,7 +298,10 @@
 			"verified": true,
 			"addedAt": "2026-05-21T18:52:54.497Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -286,7 +319,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -304,7 +340,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -322,7 +361,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -340,7 +382,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -358,7 +403,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -376,7 +424,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -394,7 +445,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -412,7 +466,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}
@@ -430,7 +487,10 @@
 			"verified": true,
 			"addedAt": "2026-04-28T00:00:00.000Z",
 			"installSpec": {
-				"mutates": ["lib/puck-config.ts", "next.config.js"],
+				"mutates": [
+					"lib/puck-config.ts",
+					"next.config.js"
+				],
 				"scaffoldOnly": false,
 				"peerInstalls": []
 			}

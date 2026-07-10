@@ -7,7 +7,7 @@ description: "@anvilkit/canvas-core · multiplyMatrix"
 function multiplyMatrix(m1, m2): AffineMatrix;
 ```
 
-Defined in: [geometry.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry.ts#L123)
+Defined in: [geometry/affine.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/affine.ts#L123)
 
 Multiply two affine matrices. The result applies `m2` first, then `m1` — i.e.
 `applyMatrix(multiplyMatrix(m1, m2), p) === applyMatrix(m1, applyMatrix(m2, p))`.

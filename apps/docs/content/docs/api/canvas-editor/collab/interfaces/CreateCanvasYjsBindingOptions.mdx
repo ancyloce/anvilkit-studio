@@ -3,16 +3,16 @@ title: "CreateCanvasYjsBindingOptions"
 description: "@anvilkit/canvas-editor · CreateCanvasYjsBindingOptions"
 ---
 
-Defined in: [packages/canvas/editor/src/collab/binding.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L21)
+Defined in: [packages/capabilities/canvas/editor/src/collab/binding.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L21)
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="awareness"&gt;&lt;/a&gt; `awareness?` | `readonly` | `Awareness` | Awareness instance for presence. Defaults to `new Awareness(doc)`. | [packages/canvas/editor/src/collab/binding.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L31) |
-| &lt;a id="doc"&gt;&lt;/a&gt; `doc` | `readonly` | `Doc` | Shared document. The caller owns the transport (provider, or the two-doc `applyUpdate` wiring used in tests). | [packages/canvas/editor/src/collab/binding.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L24) |
-| &lt;a id="mapname"&gt;&lt;/a&gt; `mapName?` | `readonly` | `string` | Y.Map name scoping the binding keys. Default [DEFAULT\_CANVAS\_MAP\_NAME](../variables/DEFAULT_CANVAS_MAP_NAME). | [packages/canvas/editor/src/collab/binding.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L33) |
-| &lt;a id="peer"&gt;&lt;/a&gt; `peer` | `readonly` | [`CanvasPeerInfo`](CanvasPeerInfo.md) | Local peer identity. Used as the Yjs transaction origin tag. | [packages/canvas/editor/src/collab/binding.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L29) |
-| &lt;a id="presenceratelimit"&gt;&lt;/a&gt; `presenceRateLimit?` | `readonly` | \{ `maxPerSecond`: `number`; \} | Presence outbound rate limit (default 30/sec). | [packages/canvas/editor/src/collab/binding.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L35) |
-| `presenceRateLimit.maxPerSecond` | `readonly` | `number` | - | [packages/canvas/editor/src/collab/binding.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L35) |
-| &lt;a id="scenestore"&gt;&lt;/a&gt; `sceneStore` | `readonly` | [`SceneStoreApi`](#) | The scene store to bind. Local changes push to the doc; remote changes are applied back via `setIR` (bypassing the undo stack). | [packages/canvas/editor/src/collab/binding.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L27) |
+| &lt;a id="awareness"&gt;&lt;/a&gt; `awareness?` | `readonly` | `Awareness` | Awareness instance for presence. Defaults to `new Awareness(doc)`. | [packages/capabilities/canvas/editor/src/collab/binding.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L31) |
+| &lt;a id="doc"&gt;&lt;/a&gt; `doc` | `readonly` | `Doc` | Shared document. The caller owns the transport (provider, or the two-doc `applyUpdate` wiring used in tests). | [packages/capabilities/canvas/editor/src/collab/binding.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L24) |
+| &lt;a id="mapname"&gt;&lt;/a&gt; `mapName?` | `readonly` | `string` | Y.Map name scoping the binding keys. Default [DEFAULT\_CANVAS\_MAP\_NAME](../variables/DEFAULT_CANVAS_MAP_NAME). | [packages/capabilities/canvas/editor/src/collab/binding.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L33) |
+| &lt;a id="peer"&gt;&lt;/a&gt; `peer` | `readonly` | [`CanvasPeerInfo`](CanvasPeerInfo.md) | Local peer identity. Used as the Yjs transaction origin tag. | [packages/capabilities/canvas/editor/src/collab/binding.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L29) |
+| &lt;a id="presenceratelimit"&gt;&lt;/a&gt; `presenceRateLimit?` | `readonly` | \{ `maxPerSecond`: `number`; \} | Presence outbound rate limit (default 30/sec). | [packages/capabilities/canvas/editor/src/collab/binding.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L35) |
+| `presenceRateLimit.maxPerSecond` | `readonly` | `number` | - | [packages/capabilities/canvas/editor/src/collab/binding.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L35) |
+| &lt;a id="scenestore"&gt;&lt;/a&gt; `sceneStore` | `readonly` | [`SceneStoreApi`](#) | The scene store to bind. Local changes push to the doc; remote changes are applied back via `setIR` (bypassing the undo stack). | [packages/capabilities/canvas/editor/src/collab/binding.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/binding.ts#L27) |

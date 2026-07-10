@@ -3,7 +3,7 @@ title: "ExportResult"
 description: "@anvilkit/core · ExportResult"
 ---
 
-Defined in: contracts/dist/export.d.ts:137
+Defined in: foundation/contracts/dist/export.d.ts:137
 
 The return value of a successful [ExportFormatDefinition.run](ExportFormatDefinition.md#run)
 call.
@@ -18,6 +18,6 @@ download time — a `string` becomes a `Blob` with the format's
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="content"&gt;&lt;/a&gt; `content` | `readonly` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | The serialized output. Use `string` for text formats and `Uint8Array` for binary formats. Do not base64-encode binary content into a string; host apps handle the two cases differently. | contracts/dist/export.d.ts:145 |
-| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | The suggested filename for the download, including the extension (e.g. `"page.html"`, `"page.pdf"`). Host apps may override this at the download step, but the exporter is expected to provide a sensible default. | contracts/dist/export.d.ts:153 |
-| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings?` | `readonly` | readonly [`ExportWarning`](ExportWarning.md)[] | Optional non-fatal diagnostics emitted during the export run. See [ExportWarning](ExportWarning.md). Host apps may surface these in a dev console or toast; the export itself is still considered successful. | contracts/dist/export.d.ts:161 |
+| &lt;a id="content"&gt;&lt;/a&gt; `content` | `readonly` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | The serialized output. Use `string` for text formats and `Uint8Array` for binary formats. Do not base64-encode binary content into a string; host apps handle the two cases differently. | foundation/contracts/dist/export.d.ts:145 |
+| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | The suggested filename for the download, including the extension (e.g. `"page.html"`, `"page.pdf"`). Host apps may override this at the download step, but the exporter is expected to provide a sensible default. | foundation/contracts/dist/export.d.ts:153 |
+| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings?` | `readonly` | readonly [`ExportWarning`](ExportWarning.md)[] | Optional non-fatal diagnostics emitted during the export run. See [ExportWarning](ExportWarning.md). Host apps may surface these in a dev console or toast; the export itself is still considered successful. | foundation/contracts/dist/export.d.ts:161 |

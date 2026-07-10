@@ -3,7 +3,7 @@ title: "PenState"
 description: "@anvilkit/canvas-editor · PenState"
 ---
 
-Defined in: [packages/canvas/editor/src/stores/pen-store.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L22)
+Defined in: [packages/capabilities/canvas/editor/src/stores/pen-store.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L22)
 
 Multi-click state for the in-progress pen path (I3-2). Unlike `DraftStore`
 this persists across pointerup (anchors accumulate click-by-click); it is
@@ -14,7 +14,7 @@ when the path is closed/finalized (MVP-7).
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="addanchor"&gt;&lt;/a&gt; `addAnchor` | (`anchor`) =&gt; `void` | - | [packages/canvas/editor/src/stores/pen-store.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L24) |
-| &lt;a id="anchors"&gt;&lt;/a&gt; `anchors` | [`PenAnchor`](PenAnchor.md)[] | - | [packages/canvas/editor/src/stores/pen-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L23) |
-| &lt;a id="reset"&gt;&lt;/a&gt; `reset` | () =&gt; `void` | - | [packages/canvas/editor/src/stores/pen-store.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L27) |
-| &lt;a id="updatelasthandle"&gt;&lt;/a&gt; `updateLastHandle` | (`hx`, `hy`) =&gt; `void` | Set the outgoing handle of the most-recently-added anchor (drag-out). | [packages/canvas/editor/src/stores/pen-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L26) |
+| &lt;a id="addanchor"&gt;&lt;/a&gt; `addAnchor` | (`anchor`) =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/pen-store.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L24) |
+| &lt;a id="anchors"&gt;&lt;/a&gt; `anchors` | [`PenAnchor`](PenAnchor.md)[] | - | [packages/capabilities/canvas/editor/src/stores/pen-store.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L23) |
+| &lt;a id="reset"&gt;&lt;/a&gt; `reset` | () =&gt; `void` | - | [packages/capabilities/canvas/editor/src/stores/pen-store.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L27) |
+| &lt;a id="updatelasthandle"&gt;&lt;/a&gt; `updateLastHandle` | (`hx`, `hy`) =&gt; `void` | Set the outgoing handle of the most-recently-added anchor (drag-out). | [packages/capabilities/canvas/editor/src/stores/pen-store.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/pen-store.ts#L26) |

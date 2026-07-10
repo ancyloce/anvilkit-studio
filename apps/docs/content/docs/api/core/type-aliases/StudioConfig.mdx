@@ -9,7 +9,7 @@ type StudioConfig = Omit<InferredStudioConfig, "experimental"> & {
 };
 ```
 
-Defined in: [core/src/types/config.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L81)
+Defined in: [runtime/core/src/types/config.ts:81](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/config.ts#L81)
 
 Runtime configuration surface for `<Studio>`. Identical to the
 Zod-inferred shape except `experimental` also carries any keys a
@@ -21,4 +21,4 @@ accepts any record); this only *adds* optional typed keys.
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `experimental` | `InferredStudioConfig`\[`"experimental"`\] & `Partial`\&lt;[`StudioExperimentalConfig`](../interfaces/StudioExperimentalConfig)\&gt; | [core/src/types/config.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/config.ts#L82) |
+| `experimental` | `InferredStudioConfig`\[`"experimental"`\] & `Partial`\&lt;[`StudioExperimentalConfig`](../interfaces/StudioExperimentalConfig)\&gt; | [runtime/core/src/types/config.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/config.ts#L82) |

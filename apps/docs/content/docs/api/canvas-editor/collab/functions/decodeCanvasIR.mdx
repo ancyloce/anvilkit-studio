@@ -7,11 +7,11 @@ description: "@anvilkit/canvas-editor · decodeCanvasIR"
 function decodeCanvasIR(raw): CanvasIR;
 ```
 
-Defined in: [packages/canvas/editor/src/collab/encode.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/encode.ts#L21)
+Defined in: [packages/capabilities/canvas/editor/src/collab/encode.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/collab/encode.ts#L21)
 
 Parse + validate a remote payload. Unlike the plugin's `decodeIR` (which
 only checks `version === "1"`), this runs canvas-core's full
-[CanvasIRSchema](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir-validators.ts) — a hostile or corrupt peer cannot inject a
+[CanvasIRSchema](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/validators.ts) — a hostile or corrupt peer cannot inject a
 structurally-invalid IR into the local scene. Throws on invalid input;
 callers in observers must wrap this in try/catch (never throw out of a
 Yjs observer).
@@ -24,4 +24,4 @@ Yjs observer).
 
 ## Returns
 
-[`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts)
+[`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts)

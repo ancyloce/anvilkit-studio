@@ -3,7 +3,7 @@ title: "StudioPluginContributing"
 description: "@anvilkit/core · StudioPluginContributing"
 ---
 
-Defined in: [core/src/types/plugin.ts:838](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L838)
+Defined in: [runtime/core/src/types/plugin.ts:838](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L838)
 
 A `StudioPlugin` that advertises a `Contributes` capability surface.
 
@@ -39,8 +39,8 @@ type-only cast inside `defineStudioPlugin`.
 
 | Property | Modifier | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="studioplugincontributesbrand"&gt;&lt;/a&gt; `[StudioPluginContributesBrand]` | `readonly` | `Contributes` | - | - | [core/src/types/plugin.ts:840](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L840) |
-| &lt;a id="meta"&gt;&lt;/a&gt; `meta` | `readonly` | [`StudioPluginMeta`](StudioPluginMeta.md) | Frozen plugin metadata. See [StudioPluginMeta](StudioPluginMeta.md). | [`StudioPlugin`](StudioPlugin.md).[`meta`](StudioPlugin.md#meta) | [core/src/types/plugin.ts:788](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L788) |
+| &lt;a id="studioplugincontributesbrand"&gt;&lt;/a&gt; `[StudioPluginContributesBrand]` | `readonly` | `Contributes` | - | - | [runtime/core/src/types/plugin.ts:840](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L840) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta` | `readonly` | [`StudioPluginMeta`](StudioPluginMeta.md) | Frozen plugin metadata. See [StudioPluginMeta](StudioPluginMeta.md). | [`StudioPlugin`](StudioPlugin.md).[`meta`](StudioPlugin.md#meta) | [runtime/core/src/types/plugin.ts:788](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L788) |
 
 ## Methods
 
@@ -52,7 +52,7 @@ register(ctx):
 | Promise<StudioPluginRegistration<Config>>;
 ```
 
-Defined in: [core/src/types/plugin.ts:798](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/plugin.ts#L798)
+Defined in: [runtime/core/src/types/plugin.ts:798](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/plugin.ts#L798)
 
 Produce a registration block for the runtime to consume.
 

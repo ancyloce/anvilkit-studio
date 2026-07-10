@@ -3,7 +3,7 @@ title: "PageIRNodeMeta"
 description: "@anvilkit/contracts · PageIRNodeMeta"
 ---
 
-Defined in: [ir.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L101)
+Defined in: [ir.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L101)
 
 Authoring-time metadata attached to a [PageIRNode](PageIRNode.md).
 
@@ -24,7 +24,7 @@ checker. Keeping caps off the type surface preserves the
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `readonly` | `boolean` | When `true`, the editor SHOULD treat this node and its subtree as locked: surface a lock indicator and refuse mutating dispatches scoped to the subtree. Authoring concept only — exporters ignore the field. | [ir.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L108) |
-| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `readonly` | `string` | Freeform author notes scoped to this node. Capped at 512 characters at runtime. | [ir.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L124) |
-| &lt;a id="owner"&gt;&lt;/a&gt; `owner?` | `readonly` | `string` | Opaque host-owned identifier for the author/team that owns this node. Capped at 256 characters at runtime. | [ir.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L113) |
-| &lt;a id="version"&gt;&lt;/a&gt; `version?` | `readonly` | `string` | Host-versioning string for this node. Runtime contract: must match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional pre-release / build suffix). | [ir.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/ir.ts#L119) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `readonly` | `boolean` | When `true`, the editor SHOULD treat this node and its subtree as locked: surface a lock indicator and refuse mutating dispatches scoped to the subtree. Authoring concept only — exporters ignore the field. | [ir.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L108) |
+| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `readonly` | `string` | Freeform author notes scoped to this node. Capped at 512 characters at runtime. | [ir.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L124) |
+| &lt;a id="owner"&gt;&lt;/a&gt; `owner?` | `readonly` | `string` | Opaque host-owned identifier for the author/team that owns this node. Capped at 256 characters at runtime. | [ir.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L113) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version?` | `readonly` | `string` | Host-versioning string for this node. Runtime contract: must match a semver-shaped regex (`MAJOR.MINOR.PATCH` with optional pre-release / build suffix). | [ir.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts#L119) |

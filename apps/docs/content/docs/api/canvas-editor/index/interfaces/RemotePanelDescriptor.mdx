@@ -3,7 +3,7 @@ title: "RemotePanelDescriptor"
 description: "@anvilkit/canvas-editor · RemotePanelDescriptor"
 ---
 
-Defined in: [packages/canvas/editor/src/workspace/panel-registry.tsx:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L49)
+Defined in: [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L50)
 
 ## Extends
 
@@ -19,11 +19,11 @@ Defined in: [packages/canvas/editor/src/workspace/panel-registry.tsx:49](https:/
 
 | Property | Modifier | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `"text"` \| `"ai"` \| `"templates"` \| `"elements"` \| `"brand"` \| `"uploads"` \| `"layers"` | - | `PanelDescriptorBase.id` | [packages/canvas/editor/src/workspace/panel-registry.tsx:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L29) |
-| &lt;a id="isempty"&gt;&lt;/a&gt; `isEmpty?` | `readonly` | (`data`) =&gt; `boolean` | Treat the result as the empty state (e.g. an empty array). | - | [packages/canvas/editor/src/workspace/panel-registry.tsx:56](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L56) |
-| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"remote"` | - | - | [packages/canvas/editor/src/workspace/panel-registry.tsx:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L51) |
-| &lt;a id="load"&gt;&lt;/a&gt; `load` | `readonly` | (`ctx`) =&gt; `Promise`\&lt;`T`\&gt; | Fetch the data; the `TabPanel` handles loading/error/empty states. | - | [packages/canvas/editor/src/workspace/panel-registry.tsx:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L53) |
-| &lt;a id="render"&gt;&lt;/a&gt; `render` | `readonly` | (`data`, `ctx`) =&gt; `ReactNode` | - | - | [packages/canvas/editor/src/workspace/panel-registry.tsx:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L54) |
-| &lt;a id="searchable"&gt;&lt;/a&gt; `searchable?` | `readonly` | `boolean` | Show the Tab Panel search box for this panel. | `PanelDescriptorBase.searchable` | [packages/canvas/editor/src/workspace/panel-registry.tsx:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L35) |
-| &lt;a id="title"&gt;&lt;/a&gt; `title` | `readonly` | `string` | - | `PanelDescriptorBase.title` | [packages/canvas/editor/src/workspace/panel-registry.tsx:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L33) |
-| &lt;a id="titlekey"&gt;&lt;/a&gt; `titleKey?` | `readonly` | `string` | i18n key resolved by the `TabPanel` (`t(titleKey, title)`). Optional so host-supplied descriptors can still pass a plain `title`. | `PanelDescriptorBase.titleKey` | [packages/canvas/editor/src/workspace/panel-registry.tsx:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L32) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `"text"` \| `"templates"` \| `"ai"` \| `"elements"` \| `"brand"` \| `"uploads"` \| `"layers"` | - | `PanelDescriptorBase.id` | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L30) |
+| &lt;a id="isempty"&gt;&lt;/a&gt; `isEmpty?` | `readonly` | (`data`) =&gt; `boolean` | Treat the result as the empty state (e.g. an empty array). | - | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L57) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `readonly` | `"remote"` | - | - | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L52) |
+| &lt;a id="load"&gt;&lt;/a&gt; `load` | `readonly` | (`ctx`) =&gt; `Promise`\&lt;`T`\&gt; | Fetch the data; the `TabPanel` handles loading/error/empty states. | - | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L54) |
+| &lt;a id="render"&gt;&lt;/a&gt; `render` | `readonly` | (`data`, `ctx`) =&gt; `ReactNode` | - | - | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L55) |
+| &lt;a id="searchable"&gt;&lt;/a&gt; `searchable?` | `readonly` | `boolean` | Show the Tab Panel search box for this panel. | `PanelDescriptorBase.searchable` | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L36) |
+| &lt;a id="title"&gt;&lt;/a&gt; `title` | `readonly` | `string` | - | `PanelDescriptorBase.title` | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L34) |
+| &lt;a id="titlekey"&gt;&lt;/a&gt; `titleKey?` | `readonly` | `string` | i18n key resolved by the `TabPanel` (`t(titleKey, title)`). Optional so host-supplied descriptors can still pass a plain `title`. | `PanelDescriptorBase.titleKey` | [packages/capabilities/canvas/editor/src/workspace/panel-registry.tsx:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/workspace/panel-registry.tsx#L33) |

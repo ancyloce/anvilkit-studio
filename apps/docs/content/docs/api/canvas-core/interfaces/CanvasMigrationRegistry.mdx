@@ -3,7 +3,7 @@ title: "CanvasMigrationRegistry"
 description: "@anvilkit/canvas-core · CanvasMigrationRegistry"
 ---
 
-Defined in: [extensions/migration-registry.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L9)
+Defined in: [ir/migrations.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/migrations.ts#L9)
 
 ## Methods
 
@@ -13,7 +13,7 @@ Defined in: [extensions/migration-registry.ts:9](https://github.com/ancyloce/anv
 has(from): boolean;
 ```
 
-Defined in: [extensions/migration-registry.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L11)
+Defined in: [ir/migrations.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/migrations.ts#L11)
 
 #### Parameters
 
@@ -33,7 +33,7 @@ Defined in: [extensions/migration-registry.ts:11](https://github.com/ancyloce/an
 migrate(raw, target): unknown;
 ```
 
-Defined in: [extensions/migration-registry.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L16)
+Defined in: [ir/migrations.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/migrations.ts#L16)
 
 Apply the chain from `raw.version` up to `target`. Returns `raw` unchanged
 when already at `target`. Throws on a missing step or a version cycle.
@@ -57,7 +57,7 @@ when already at `target`. Throws on a missing step or a version cycle.
 register(m): void;
 ```
 
-Defined in: [extensions/migration-registry.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L10)
+Defined in: [ir/migrations.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/migrations.ts#L10)
 
 #### Parameters
 

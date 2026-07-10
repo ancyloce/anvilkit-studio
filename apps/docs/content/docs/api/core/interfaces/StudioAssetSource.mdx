@@ -3,7 +3,7 @@ title: "StudioAssetSource"
 description: "@anvilkit/core · StudioAssetSource"
 ---
 
-Defined in: [core/src/types/sidebar.ts:279](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L279)
+Defined in: [runtime/core/src/types/sidebar.ts:279](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L279)
 
 Asset listing + mutation contract registered by an asset-manager
 plugin via `ctx.registerAssetSource(source)`. The `image` sidebar
@@ -18,7 +18,7 @@ shows the `studio.module.image.pluginMissing` empty state.
 optional createFolder(parentId, name): Promise<StudioAssetFolder>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:324](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L324)
+Defined in: [runtime/core/src/types/sidebar.ts:324](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L324)
 
 Create a folder under `parentId` (`null` ⇒ root).
 
@@ -41,7 +41,7 @@ Create a folder under `parentId` (`null` ⇒ root).
 optional delete(assetId): Promise<void>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:306](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L306)
+Defined in: [runtime/core/src/types/sidebar.ts:306](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L306)
 
 Optional delete.
 
@@ -63,7 +63,7 @@ Optional delete.
 optional getUrl(assetId): string | Promise<string>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:308](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L308)
+Defined in: [runtime/core/src/types/sidebar.ts:308](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L308)
 
 Optional URL accessor for "Copy URL". Defaults to `asset.url`.
 
@@ -87,7 +87,7 @@ list():
 | Promise<readonly StudioAsset[]>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:281](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L281)
+Defined in: [runtime/core/src/types/sidebar.ts:281](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L281)
 
 Return the current asset list (sync or async).
 
@@ -104,7 +104,7 @@ Return the current asset list (sync or async).
 optional listPaginated(query): Promise<StudioAssetListPage>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:287](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L287)
+Defined in: [runtime/core/src/types/sidebar.ts:287](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L287)
 
 Optional paginated / filtered listing. Remote sources override
 this to push search and pagination to the server; the sidebar
@@ -130,7 +130,7 @@ optional listThemes():
 | Promise<readonly StudioAssetTheme[]>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:339](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L339)
+Defined in: [runtime/core/src/types/sidebar.ts:339](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L339)
 
 Browse themes for a themed source (e.g. Unsplash topics).
 
@@ -147,7 +147,7 @@ Browse themes for a themed source (e.g. Unsplash topics).
 optional moveAsset(assetId, folderId): Promise<void>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:335](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L335)
+Defined in: [runtime/core/src/types/sidebar.ts:335](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L335)
 
 Move an asset into a folder (`null` ⇒ root).
 
@@ -170,7 +170,7 @@ Move an asset into a folder (`null` ⇒ root).
 optional moveFolder(id, parentId): Promise<StudioAssetFolder>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:333](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L333)
+Defined in: [runtime/core/src/types/sidebar.ts:333](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L333)
 
 #### Parameters
 
@@ -191,7 +191,7 @@ Defined in: [core/src/types/sidebar.ts:333](https://github.com/ancyloce/anvilkit
 optional pickResult(asset): Promise<StudioAsset>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:347](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L347)
+Defined in: [runtime/core/src/types/sidebar.ts:347](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L347)
 
 Materialize an external browse result into the catalog — registers it and
 fires any required download trigger (Unsplash) — returning the insertable
@@ -215,7 +215,7 @@ asset whose `url` now resolves. Local assets need no pick.
 optional removeFolder(id, opts?): Promise<void>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:329](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L329)
+Defined in: [runtime/core/src/types/sidebar.ts:329](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L329)
 
 #### Parameters
 
@@ -237,7 +237,7 @@ Defined in: [core/src/types/sidebar.ts:329](https://github.com/ancyloce/anvilkit
 optional rename(assetId, nextName): Promise<void>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:300](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L300)
+Defined in: [runtime/core/src/types/sidebar.ts:300](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L300)
 
 Optional rename. Sidebar hides the menu item when omitted.
 
@@ -260,7 +260,7 @@ Optional rename. Sidebar hides the menu item when omitted.
 optional renameFolder(id, name): Promise<StudioAssetFolder>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:328](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L328)
+Defined in: [runtime/core/src/types/sidebar.ts:328](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L328)
 
 #### Parameters
 
@@ -281,7 +281,7 @@ Defined in: [core/src/types/sidebar.ts:328](https://github.com/ancyloce/anvilkit
 optional replace(assetId, file): Promise<StudioAsset>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:302](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L302)
+Defined in: [runtime/core/src/types/sidebar.ts:302](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L302)
 
 Optional in-place replace.
 
@@ -304,7 +304,7 @@ Optional in-place replace.
 optional setTags(assetId, tags): Promise<void>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:304](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L304)
+Defined in: [runtime/core/src/types/sidebar.ts:304](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L304)
 
 Optional tag editor. Replaces the asset's tag set in place.
 
@@ -327,7 +327,7 @@ Optional tag editor. Replaces the asset's tag set in place.
 optional subscribe(listener): () => void;
 ```
 
-Defined in: [core/src/types/sidebar.ts:313](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L313)
+Defined in: [runtime/core/src/types/sidebar.ts:313](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L313)
 
 Optional subscription. The sidebar calls it on mount with a
 listener that re-runs `list()` when fired.
@@ -350,7 +350,7 @@ listener that re-runs `list()` when fired.
 optional subscribeStatus(listener): () => void;
 ```
 
-Defined in: [core/src/types/sidebar.ts:349](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L349)
+Defined in: [runtime/core/src/types/sidebar.ts:349](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L349)
 
 Subscribe to loading/mutation status (sync sources emit only `idle`).
 
@@ -372,7 +372,7 @@ Subscribe to loading/mutation status (sync sources emit only `idle`).
 optional subscribeUploads(listener): () => void;
 ```
 
-Defined in: [core/src/types/sidebar.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L320)
+Defined in: [runtime/core/src/types/sidebar.ts:320](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L320)
 
 Optional streaming upload subscription. Fired with the same
 envelope shape `upload()` emits to its inline listener, but
@@ -400,7 +400,7 @@ upload(
 signal?): Promise<readonly StudioAsset[]>;
 ```
 
-Defined in: [core/src/types/sidebar.ts:294](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/types/sidebar.ts#L294)
+Defined in: [runtime/core/src/types/sidebar.ts:294](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/sidebar.ts#L294)
 
 Upload one or more files. The optional listener is fired with
 progress envelopes if the source supports streaming progress. Pass

@@ -7,7 +7,10 @@ description: "@anvilkit/canvas-core · createMigrationRegistry"
 function createMigrationRegistry(): CanvasMigrationRegistry;
 ```
 
-Defined in: [extensions/migration-registry.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/extensions/migration-registry.ts#L27)
+Defined in: [ir/migrations.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/migrations.ts#L47)
+
+Create a registry pre-seeded with [CANVAS\_IR\_MIGRATIONS](../variables/CANVAS_IR_MIGRATIONS); `register`
+adds extension steps (re-registering a `from` overrides the earlier step).
 
 ## Returns
 

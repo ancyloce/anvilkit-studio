@@ -3,7 +3,7 @@ title: "CanvasExportContext"
 description: "@anvilkit/canvas-editor · CanvasExportContext"
 ---
 
-Defined in: [packages/canvas/editor/src/header/types.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L20)
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L20)
 
 The live editor state an exporter reads from (sourced from the studio context).
 
@@ -11,6 +11,6 @@ The live editor state an exporter reads from (sourced from the studio context).
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="activepageid"&gt;&lt;/a&gt; `activePageId` | `readonly` | `string` | Active artboard id — exporters that emit a single page use this. | [packages/canvas/editor/src/header/types.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L24) |
-| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | `readonly` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) | Current IR snapshot (`useCanvasStudio().getIR()`). | [packages/canvas/editor/src/header/types.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L22) |
-| &lt;a id="stage"&gt;&lt;/a&gt; `stage` | `readonly` | `Stage` \| `null` | The live Konva stage; `null` until the canvas mounts. Raster formats need it. | [packages/canvas/editor/src/header/types.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L26) |
+| &lt;a id="activepageid"&gt;&lt;/a&gt; `activePageId` | `readonly` | `string` | Active artboard id — exporters that emit a single page use this. | [packages/capabilities/canvas/editor/src/header/types.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L24) |
+| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | `readonly` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | Current IR snapshot (`useCanvasStudio().getIR()`). | [packages/capabilities/canvas/editor/src/header/types.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L22) |
+| &lt;a id="stage"&gt;&lt;/a&gt; `stage` | `readonly` | `Stage` \| `null` | The live Konva stage; `null` until the canvas mounts. Raster formats need it. | [packages/capabilities/canvas/editor/src/header/types.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L26) |

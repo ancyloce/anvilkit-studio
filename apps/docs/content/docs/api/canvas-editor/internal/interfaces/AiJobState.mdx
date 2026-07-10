@@ -3,14 +3,14 @@ title: "AiJobState"
 description: "@anvilkit/canvas-editor · AiJobState"
 ---
 
-Defined in: [packages/canvas/editor/src/stores/ai-job-store.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L30)
+Defined in: [packages/capabilities/canvas/editor/src/stores/ai-job-store.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L30)
 
 ## Properties
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="cancel"&gt;&lt;/a&gt; `cancel` | (`jobId`) =&gt; `void` | Cancel a pending job: fire its `abort` once and flip status to cancelled. | [packages/canvas/editor/src/stores/ai-job-store.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L35) |
-| &lt;a id="complete"&gt;&lt;/a&gt; `complete` | (`jobId`) =&gt; `void` | Drop a settled job from the registry (host calls on completion/error). | [packages/canvas/editor/src/stores/ai-job-store.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L37) |
-| &lt;a id="get"&gt;&lt;/a&gt; `get` | (`jobId`) =&gt; [`AiJobEntry`](AiJobEntry.md) \| `undefined` | - | [packages/canvas/editor/src/stores/ai-job-store.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L38) |
-| &lt;a id="jobs"&gt;&lt;/a&gt; `jobs` | `Record`\&lt;`string`, [`AiJobEntry`](AiJobEntry.md)\&gt; | - | [packages/canvas/editor/src/stores/ai-job-store.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L31) |
-| &lt;a id="register"&gt;&lt;/a&gt; `register` | (`jobId`, `registration`) =&gt; `void` | Register a job the host just started (status begins `"pending"`). | [packages/canvas/editor/src/stores/ai-job-store.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L33) |
+| &lt;a id="cancel"&gt;&lt;/a&gt; `cancel` | (`jobId`) =&gt; `void` | Cancel a pending job: fire its `abort` once and flip status to cancelled. | [packages/capabilities/canvas/editor/src/stores/ai-job-store.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L35) |
+| &lt;a id="complete"&gt;&lt;/a&gt; `complete` | (`jobId`) =&gt; `void` | Drop a settled job from the registry (host calls on completion/error). | [packages/capabilities/canvas/editor/src/stores/ai-job-store.ts:37](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L37) |
+| &lt;a id="get"&gt;&lt;/a&gt; `get` | (`jobId`) =&gt; [`AiJobEntry`](AiJobEntry.md) \| `undefined` | - | [packages/capabilities/canvas/editor/src/stores/ai-job-store.ts:38](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L38) |
+| &lt;a id="jobs"&gt;&lt;/a&gt; `jobs` | `Record`\&lt;`string`, [`AiJobEntry`](AiJobEntry.md)\&gt; | - | [packages/capabilities/canvas/editor/src/stores/ai-job-store.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L31) |
+| &lt;a id="register"&gt;&lt;/a&gt; `register` | (`jobId`, `registration`) =&gt; `void` | Register a job the host just started (status begins `"pending"`). | [packages/capabilities/canvas/editor/src/stores/ai-job-store.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/stores/ai-job-store.ts#L33) |

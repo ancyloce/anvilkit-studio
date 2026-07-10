@@ -25,7 +25,11 @@
 					},
 					"kind": {
 						"type": "string",
-						"enum": ["plugin", "template", "component"]
+						"enum": [
+							"plugin",
+							"template",
+							"component"
+						]
 					},
 					"name": {
 						"type": "string",
@@ -63,7 +67,11 @@
 					},
 					"publisher": {
 						"type": "string",
-						"enum": ["first-party", "verified", "community"]
+						"enum": [
+							"first-party",
+							"verified",
+							"community"
+						]
 					},
 					"verified": {
 						"type": "boolean"
@@ -97,7 +105,9 @@
 								"maxLength": 512
 							}
 						},
-						"required": ["passed"],
+						"required": [
+							"passed"
+						],
 						"additionalProperties": false
 					},
 					"repository": {
@@ -149,7 +159,11 @@
 								}
 							}
 						},
-						"required": ["mutates", "scaffoldOnly", "peerInstalls"],
+						"required": [
+							"mutates",
+							"scaffoldOnly",
+							"peerInstalls"
+						],
 						"additionalProperties": false
 					}
 				},
@@ -171,6 +185,10 @@
 			}
 		}
 	},
-	"required": ["feedVersion", "generatedAt", "entries"],
+	"required": [
+		"feedVersion",
+		"generatedAt",
+		"entries"
+	],
 	"additionalProperties": false
 }

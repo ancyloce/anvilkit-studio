@@ -1,4 +1,7 @@
 {
 	"title": "テンプレート",
-	"pages": ["index", "..."]
+	"pages": [
+		"index",
+		"..."
+	]
 }

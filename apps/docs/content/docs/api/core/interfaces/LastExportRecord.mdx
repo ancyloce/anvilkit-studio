@@ -3,7 +3,7 @@ title: "LastExportRecord"
 description: "@anvilkit/core · LastExportRecord"
 ---
 
-Defined in: [core/src/state/slices/export-store.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L59)
+Defined in: [runtime/core/src/state/slices/export-store.ts:59](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L59)
 
 A single entry in [ExportState.lastExport](ExportState.md#lastexport) — the record of
 the most recently completed export attempt.
@@ -16,6 +16,6 @@ detail should subscribe to lifecycle events directly.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="at"&gt;&lt;/a&gt; `at` | `readonly` | `number` | `Date.now()` at the moment the run completed, successfully or otherwise. | [core/src/state/slices/export-store.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L68) |
-| &lt;a id="formatid"&gt;&lt;/a&gt; `formatId` | `readonly` | `string` | The [ExportFormatDefinition.id](ExportFormatDefinition.md#id) of the format that ran. | [core/src/state/slices/export-store.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L63) |
-| &lt;a id="ok"&gt;&lt;/a&gt; `ok` | `readonly` | `boolean` | `true` when the exporter's `run()` resolved without throwing; `false` when it threw. An exporter that returns a result with `warnings` but does not throw is still considered `ok: true`. | [core/src/state/slices/export-store.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/state/slices/export-store.ts#L74) |
+| &lt;a id="at"&gt;&lt;/a&gt; `at` | `readonly` | `number` | `Date.now()` at the moment the run completed, successfully or otherwise. | [runtime/core/src/state/slices/export-store.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L68) |
+| &lt;a id="formatid"&gt;&lt;/a&gt; `formatId` | `readonly` | `string` | The [ExportFormatDefinition.id](ExportFormatDefinition.md#id) of the format that ran. | [runtime/core/src/state/slices/export-store.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L63) |
+| &lt;a id="ok"&gt;&lt;/a&gt; `ok` | `readonly` | `boolean` | `true` when the exporter's `run()` resolved without throwing; `false` when it threw. An exporter that returns a result with `warnings` but does not throw is still considered `ok: true`. | [runtime/core/src/state/slices/export-store.ts:74](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/slices/export-store.ts#L74) |

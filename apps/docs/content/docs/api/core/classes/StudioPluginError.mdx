@@ -3,7 +3,7 @@ title: "StudioPluginError"
 description: "@anvilkit/core · StudioPluginError"
 ---
 
-Defined in: [core/src/runtime/errors.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L85)
+Defined in: [runtime/core/src/runtime/errors.ts:85](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L85)
 
 Thrown when plugin compilation or lifecycle invocation fails.
 
@@ -39,7 +39,7 @@ new StudioPluginError(
    options?): StudioPluginError;
 ```
 
-Defined in: [core/src/runtime/errors.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L100)
+Defined in: [runtime/core/src/runtime/errors.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L100)
 
 #### Parameters
 
@@ -61,5 +61,5 @@ Defined in: [core/src/runtime/errors.ts:100](https://github.com/ancyloce/anvilki
 
 | Property | Modifier | Type | Default value | Description | Overrides | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `"StudioPluginError"` | `"StudioPluginError"` | Stable failure code for plugin errors. See [StudioError.code](StudioError.md#code). | [`StudioError`](StudioError.md).[`code`](StudioError.md#code) | [core/src/runtime/errors.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L89) |
-| &lt;a id="pluginid"&gt;&lt;/a&gt; `pluginId` | `readonly` | `string` | `undefined` | The `meta.id` of the plugin that caused the failure. For errors that involve two plugins (e.g. a duplicate export format id) this field holds the second plugin's id, and both ids appear in the error message. | - | [core/src/runtime/errors.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/core/src/runtime/errors.ts#L98) |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `"StudioPluginError"` | `"StudioPluginError"` | Stable failure code for plugin errors. See [StudioError.code](StudioError.md#code). | [`StudioError`](StudioError.md).[`code`](StudioError.md#code) | [runtime/core/src/runtime/errors.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L89) |
+| &lt;a id="pluginid"&gt;&lt;/a&gt; `pluginId` | `readonly` | `string` | `undefined` | The `meta.id` of the plugin that caused the failure. For errors that involve two plugins (e.g. a duplicate export format id) this field holds the second plugin's id, and both ids appear in the error message. | - | [runtime/core/src/runtime/errors.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/errors.ts#L98) |

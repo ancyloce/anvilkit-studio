@@ -7,7 +7,7 @@ description: "@anvilkit/canvas-editor · canGroupSelection"
 function canGroupSelection(ir, selectedIds): boolean;
 ```
 
-Defined in: [packages/canvas/editor/src/selection/group-actions.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/group-actions.ts#L22)
+Defined in: [packages/capabilities/canvas/editor/src/selection/group-actions.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/selection/group-actions.ts#L22)
 
 True when the current selection can be grouped: at least two nodes, all
 present on the active page and sharing the same immediate parent group.
@@ -17,7 +17,7 @@ Cross-parent grouping is intentionally unsupported (see `node.group`).
 
 | Parameter | Type |
 | ------ | ------ |
-| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/types.ts) |
+| `ir` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) |
 | `selectedIds` | readonly `string`[] |
 
 ## Returns

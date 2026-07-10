@@ -1,6 +1,6 @@
 # `@anvilkit/canvas-templates`
 
-AnvilKit Canvas Studio に同梱される 10 個のスターター [`CanvasIR`](../../capabilities/canvas/core/src/types.ts) デザイン——ポスター、ソーシャルフォーマット、スライド、印刷物。それぞれが自己完結型の `CanvasIR`（text / rect / ellipse / line ノードのみ、外部アセットなし）であるため、ネットワークコールなしで読み込まれます。
+AnvilKit Canvas Studio に同梱される 10 個のスターター [`CanvasIR`](../../../capabilities/canvas/core/src/types.ts) デザイン——ポスター、ソーシャルフォーマット、スライド、印刷物。それぞれが自己完結型の `CanvasIR`（text / rect / ellipse / line ノードのみ、外部アセットなし）であるため、ネットワークコールなしで読み込まれます。
 
 ## 契約
 
@@ -15,7 +15,7 @@ const poster = canvasTemplates.poster.ir; // CanvasIR
 ## レイアウト
 
 ```
-packages/templates/canvas/
+packages/extensions/templates/canvas/
 ├── package.json
 ├── tsconfig.json
 ├── vitest.config.ts

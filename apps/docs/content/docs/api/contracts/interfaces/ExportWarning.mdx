@@ -3,7 +3,7 @@ title: "ExportWarning"
 description: "@anvilkit/contracts · ExportWarning"
 ---
 
-Defined in: [export.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L56)
+Defined in: [export.ts:56](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L56)
 
 A single diagnostic emitted by an exporter.
 
@@ -16,7 +16,7 @@ warning with `level: "error"`.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `string` | Machine-readable warning code (e.g. `"missing-alt-text"`). Stable across releases so host apps can filter or localize. Codes are plugin-defined; Core does not maintain a registry. | [export.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L67) |
-| &lt;a id="level"&gt;&lt;/a&gt; `level` | `readonly` | [`ExportWarningLevel`](../type-aliases/ExportWarningLevel) | Severity of this warning. See [ExportWarningLevel](../type-aliases/ExportWarningLevel). | [export.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L60) |
-| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | Human-readable warning message suitable for developer-facing surfaces (dev console, toast, logs). | [export.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L72) |
-| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId?` | `readonly` | `string` | Optional [PageIRNode.id](PageIRNode.md#id) the warning is attached to. When present, host UIs may highlight the offending node in the editor. | [export.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L79) |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `string` | Machine-readable warning code (e.g. `"missing-alt-text"`). Stable across releases so host apps can filter or localize. Codes are plugin-defined; Core does not maintain a registry. | [export.ts:67](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L67) |
+| &lt;a id="level"&gt;&lt;/a&gt; `level` | `readonly` | [`ExportWarningLevel`](../type-aliases/ExportWarningLevel) | Severity of this warning. See [ExportWarningLevel](../type-aliases/ExportWarningLevel). | [export.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L60) |
+| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | Human-readable warning message suitable for developer-facing surfaces (dev console, toast, logs). | [export.ts:72](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L72) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId?` | `readonly` | `string` | Optional [PageIRNode.id](PageIRNode.md#id) the warning is attached to. When present, host UIs may highlight the offending node in the editor. | [export.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L79) |

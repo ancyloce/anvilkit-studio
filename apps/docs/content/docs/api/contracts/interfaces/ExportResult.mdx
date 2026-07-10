@@ -3,7 +3,7 @@ title: "ExportResult"
 description: "@anvilkit/contracts · ExportResult"
 ---
 
-Defined in: [export.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L145)
+Defined in: [export.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L145)
 
 The return value of a successful [ExportFormatDefinition.run](ExportFormatDefinition.md#run)
 call.
@@ -18,6 +18,6 @@ download time — a `string` becomes a `Blob` with the format's
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="content"&gt;&lt;/a&gt; `content` | `readonly` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | The serialized output. Use `string` for text formats and `Uint8Array` for binary formats. Do not base64-encode binary content into a string; host apps handle the two cases differently. | [export.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L153) |
-| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | The suggested filename for the download, including the extension (e.g. `"page.html"`, `"page.pdf"`). Host apps may override this at the download step, but the exporter is expected to provide a sensible default. | [export.ts:161](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L161) |
-| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings?` | `readonly` | readonly [`ExportWarning`](ExportWarning.md)[] | Optional non-fatal diagnostics emitted during the export run. See [ExportWarning](ExportWarning.md). Host apps may surface these in a dev console or toast; the export itself is still considered successful. | [export.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/contracts/src/export.ts#L169) |
+| &lt;a id="content"&gt;&lt;/a&gt; `content` | `readonly` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | The serialized output. Use `string` for text formats and `Uint8Array` for binary formats. Do not base64-encode binary content into a string; host apps handle the two cases differently. | [export.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L153) |
+| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | The suggested filename for the download, including the extension (e.g. `"page.html"`, `"page.pdf"`). Host apps may override this at the download step, but the exporter is expected to provide a sensible default. | [export.ts:161](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L161) |
+| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings?` | `readonly` | readonly [`ExportWarning`](ExportWarning.md)[] | Optional non-fatal diagnostics emitted during the export run. See [ExportWarning](ExportWarning.md). Host apps may surface these in a dev console or toast; the export itself is still considered successful. | [export.ts:169](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/export.ts#L169) |
