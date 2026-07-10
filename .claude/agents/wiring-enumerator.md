@@ -72,7 +72,7 @@ here. Be the thing that makes a miss impossible.
 - Use Glob/Grep first to cast a wide net, then Read the specific lines to confirm.
 - Search the **submodules too** — collab packages (`plugin-collab-ui`,
   `plugin-collab-yjs`), canvas (`packages/capabilities/canvas/{core,editor}` — a nested
-  submodule, edits invisible to main-repo git status), and `packages/components`.
+  submodule, edits invisible to main-repo git status), and `packages/extensions/components`.
   Their files won't always show in main `git status`; search the working tree.
 - For each hit, capture `path:line` and a one-line note on what is passed/wired.
 - Distinguish **wired ✓**, **partially wired ⚠** (e.g. in puck-demo.ts but missing

@@ -33,14 +33,14 @@ There are two independent surfaces; confirm which one (or both) is being release
   plugin-export-html, plugin-export-react, plugin-version-history`.
   Release path: `pnpm release` (= `changeset version && build && changeset publish`).
   `demo` is in `ignore`.
-- **Components submodule** (`packages/components/`) — separate workspace + changeset config.
+- **Components submodule** (`packages/extensions/components/`) — separate workspace + changeset config.
   Each `@anvilkit/<slug>` versions independently. **Changesets are often orphaned here** —
   if `changeset version` no-ops, bump the component `package.json` `version` directly to
   republish.
 
 ```bash
 pnpm changeset:status                              # main workspace pending bumps
-cd packages/components && pnpm exec changeset status   # components workspace
+cd packages/extensions/components && pnpm exec changeset status   # components workspace
 ```
 
 ## Step 2 — Run the release gates
@@ -94,7 +94,7 @@ Output:
 - **Verdict**: GO / NO-GO
 - **Next command for the user to run** (do not run it yourself), e.g.:
   - main: `pnpm release`
-  - components: `cd packages/components && pnpm release`  *(or the direct `package.json`
+  - components: `cd packages/extensions/components && pnpm release`  *(or the direct `package.json`
     version bump if changesets are orphaned)*
 
 Stop here. The user executes the publish and all commits.

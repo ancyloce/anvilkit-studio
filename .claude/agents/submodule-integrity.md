@@ -22,8 +22,8 @@ never commit, push, or run a write/`update` command.**
 
 There are 14 submodules — **always enumerate from `.gitmodules`, never from memory.**
 As of this writing `git config -f .gitmodules --get-regexp path` yields:
-- `packages/components`
-- eleven plugins under `packages/plugins/`: `plugin-ai-copilot`, `plugin-ai-image`,
+- `packages/extensions/components`
+- eleven plugins under `packages/extensions/plugins/`: `plugin-ai-copilot`, `plugin-ai-image`,
   `plugin-asset-manager`, `plugin-canvas-studio`, `plugin-collab-ui`, `plugin-collab-yjs`,
   `plugin-design-system`, `plugin-export-canvas`, `plugin-export-html`, `plugin-export-react`,
   `plugin-version-history`

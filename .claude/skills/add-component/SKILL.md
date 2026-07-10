@@ -44,10 +44,10 @@ Agent(subagent_type: "wiring-enumerator",
                transpilePackages; demo package.json deps; root package.json devDeps.")
 ```
 
-## Step 1 — Scaffold (in `packages/components/` submodule)
+## Step 1 — Scaffold (in `packages/extensions/components/` submodule)
 
 ```bash
-cd packages/components
+cd packages/extensions/components
 pnpm gen:component -- --name <slug> --label "<Label>" --template <template> [--category <category>]
 ```
 
@@ -107,11 +107,11 @@ treating them as code issues.
 
 ## Step 4 — Changeset (stage, don't commit)
 
-Components live in the `packages/components/` submodule with its **own** workspace and
+Components live in the `packages/extensions/components/` submodule with its **own** workspace and
 changeset config — they are NOT in the main repo's `fixed` group.
 
 ```bash
-cd packages/components && pnpm changeset    # choose @anvilkit/<slug>, pick semver bump
+cd packages/extensions/components && pnpm changeset    # choose @anvilkit/<slug>, pick semver bump
 ```
 
 > If changesets are orphaned for components (known issue), the bump may need to be made by
