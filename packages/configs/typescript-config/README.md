@@ -9,7 +9,7 @@ Private — not published to npm.
 | -------------------- | --------------------------------------------------------------------------------------- |
 | `base.json`          | Plain TypeScript packages with no React surface (`ir`, `schema`, `validator`, `utils`). |
 | `react-library.json` | React libraries that ship `.d.ts` for both CJS and ESM (`core`, `ui`, every plugin).    |
-| `nextjs.json`        | Next.js apps. Used by `apps/demo`.                                                      |
+| `nextjs.json`        | Next.js apps. Used by `apps/studio`.                                                      |
 
 All three enable `strict` and `isolatedModules`. Packages that bundle
 their own `.d.ts` also turn on `verbatimModuleSyntax` (via the

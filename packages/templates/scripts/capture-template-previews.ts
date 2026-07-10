@@ -7,7 +7,7 @@
  *
  * Run locally when a template's IR changes:
  *
- *   pnpm -C apps/demo dev &          # start the render route
+ *   pnpm -C apps/studio dev &          # start the render route
  *   pnpm tsx packages/templates/scripts/capture-template-previews.ts
  *
  * Intentionally NOT a CI step — one-off per template change, not
@@ -20,7 +20,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Lazy imports so the file typechecks in CI (playwright + sharp are
-// dev-only deps added to `apps/demo`, not `packages/templates/`).
+// dev-only deps added to `apps/studio`, not `packages/templates/`).
 // The script is run from the repo root via `pnpm tsx`, so it picks
 // them up through workspace hoisting.
 

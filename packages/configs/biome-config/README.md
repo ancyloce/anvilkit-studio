@@ -10,7 +10,7 @@ npm.
 | --------------------------------------- | --------------------------------------------------------------------------------------- |
 | `@anvilkit/biome-config/base`           | Workspace-wide rules. Suitable for plain-TS packages (`ir`, `schema`, `validator`, …).  |
 | `@anvilkit/biome-config/react-internal` | Adds React-aware rules. Used by `@anvilkit/core`, `@anvilkit/ui`, plugins shipping JSX. |
-| `@anvilkit/biome-config/next-js`        | Adds Next.js-specific allowances. Used only by `apps/demo`.                             |
+| `@anvilkit/biome-config/next-js`        | Adds Next.js-specific allowances. Used only by `apps/studio`.                             |
 
 ## Usage
 
