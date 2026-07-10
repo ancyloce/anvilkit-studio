@@ -215,3 +215,21 @@ jobs:
           name: playwright-report-docs
           path: apps/docs/playwright-report/
           retention-days: 7
+
+      # Phase 1 restructure: playground compatibility smoke. Minimal app
+      # (apps/playground) that consumes @anvilkit/* strictly through built
+      # public exports — mounts <Studio>, SSR-renders via @puckeditor/core/rsc.
+      # Boots its own Next dev server on :3100 (studio owns :3000).
+      - name: Install Playwright browsers (playground)
+        run: pnpm --filter playground exec playwright install --with-deps chromium
+
+      - name: Run playground E2E tests
+        run: pnpm --filter playground e2e
+
+      - name: Upload playground Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-playground
+          path: apps/playground/playwright-report/
+          retention-days: 7
