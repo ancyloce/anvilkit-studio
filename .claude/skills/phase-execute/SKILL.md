@@ -75,7 +75,7 @@ Per CLAUDE.md `## Sub-agent usage` and `## Demo & Mount Consistency`:
 - If the task involves refactoring a component, threading new props, or
   wiring a new plugin, spawn an Explore sub-agent to enumerate every call
   site (file:line) **before editing**.
-- For `<Studio>` mount changes specifically: search `apps/demo/` for every
+- For `<Studio>` mount changes specifically: search `apps/studio/` for every
   mount and list wiring status for each. Both the default and collab paths
   must be wired.
 
