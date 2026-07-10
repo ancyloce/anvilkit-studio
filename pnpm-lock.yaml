@@ -20,61 +20,61 @@ importers:
     devDependencies:
       '@anvilkit/bento-grid':
         specifier: workspace:*
-        version: link:packages/components/src/bento-grid
+        version: link:packages/extensions/components/src/bento-grid
       '@anvilkit/blog-list':
         specifier: workspace:*
-        version: link:packages/components/src/blog-list
+        version: link:packages/extensions/components/src/blog-list
       '@anvilkit/button':
         specifier: workspace:*
-        version: link:packages/components/src/button
+        version: link:packages/extensions/components/src/button
       '@anvilkit/canvas-core':
         specifier: workspace:*
-        version: link:packages/canvas/core
+        version: link:packages/capabilities/canvas/core
       '@anvilkit/canvas-editor':
         specifier: workspace:*
-        version: link:packages/canvas/editor
+        version: link:packages/capabilities/canvas/editor
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:packages/core
+        version: link:packages/runtime/core
       '@anvilkit/helps':
         specifier: workspace:*
-        version: link:packages/components/src/helps
+        version: link:packages/extensions/components/src/helps
       '@anvilkit/hero':
         specifier: workspace:*
-        version: link:packages/components/src/hero
+        version: link:packages/extensions/components/src/hero
       '@anvilkit/input':
         specifier: workspace:*
-        version: link:packages/components/src/input
+        version: link:packages/extensions/components/src/input
       '@anvilkit/ir':
         specifier: workspace:*
-        version: link:packages/ir
+        version: link:packages/foundation/ir
       '@anvilkit/logo-clouds':
         specifier: workspace:*
-        version: link:packages/components/src/logo-clouds
+        version: link:packages/extensions/components/src/logo-clouds
       '@anvilkit/navbar':
         specifier: workspace:*
-        version: link:packages/components/src/navbar
+        version: link:packages/extensions/components/src/navbar
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
-        version: link:packages/plugins/plugin-ai-copilot
+        version: link:packages/extensions/plugins/plugin-ai-copilot
       '@anvilkit/plugin-collab-yjs':
         specifier: workspace:*
-        version: link:packages/plugins/plugin-collab-yjs
+        version: link:packages/extensions/plugins/plugin-collab-yjs
       '@anvilkit/plugin-export-html':
         specifier: workspace:*
-        version: link:packages/plugins/plugin-export-html
+        version: link:packages/extensions/plugins/plugin-export-html
       '@anvilkit/plugin-version-history':
         specifier: workspace:*
-        version: link:packages/plugins/plugin-version-history
+        version: link:packages/extensions/plugins/plugin-version-history
       '@anvilkit/pricing-minimal':
         specifier: workspace:*
-        version: link:packages/components/src/pricing-minimal
+        version: link:packages/extensions/components/src/pricing-minimal
       '@anvilkit/section':
         specifier: workspace:*
-        version: link:packages/components/src/section
+        version: link:packages/extensions/components/src/section
       '@anvilkit/statistics':
         specifier: workspace:*
-        version: link:packages/components/src/statistics
+        version: link:packages/extensions/components/src/statistics
       '@biomejs/biome':
         specifier: 2.5.3
         version: 2.5.3
@@ -179,79 +179,79 @@ importers:
     dependencies:
       '@anvilkit/bento-grid':
         specifier: workspace:*
-        version: link:../../packages/components/src/bento-grid
+        version: link:../../packages/extensions/components/src/bento-grid
       '@anvilkit/blog-list':
         specifier: workspace:*
-        version: link:../../packages/components/src/blog-list
+        version: link:../../packages/extensions/components/src/blog-list
       '@anvilkit/button':
         specifier: workspace:*
-        version: link:../../packages/components/src/button
+        version: link:../../packages/extensions/components/src/button
       '@anvilkit/canvas-editor':
         specifier: workspace:*
-        version: link:../../packages/canvas/editor
+        version: link:../../packages/capabilities/canvas/editor
       '@anvilkit/canvas-templates':
         specifier: workspace:*
-        version: link:../../packages/templates/canvas
+        version: link:../../packages/extensions/templates/canvas
       '@anvilkit/collab-ui':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-collab-ui
+        version: link:../../packages/extensions/plugins/plugin-collab-ui
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:../../packages/core
+        version: link:../../packages/runtime/core
       '@anvilkit/helps':
         specifier: workspace:*
-        version: link:../../packages/components/src/helps
+        version: link:../../packages/extensions/components/src/helps
       '@anvilkit/hero':
         specifier: workspace:*
-        version: link:../../packages/components/src/hero
+        version: link:../../packages/extensions/components/src/hero
       '@anvilkit/input':
         specifier: workspace:*
-        version: link:../../packages/components/src/input
+        version: link:../../packages/extensions/components/src/input
       '@anvilkit/ir':
         specifier: workspace:*
-        version: link:../../packages/ir
+        version: link:../../packages/foundation/ir
       '@anvilkit/logo-clouds':
         specifier: workspace:*
-        version: link:../../packages/components/src/logo-clouds
+        version: link:../../packages/extensions/components/src/logo-clouds
       '@anvilkit/navbar':
         specifier: workspace:*
-        version: link:../../packages/components/src/navbar
+        version: link:../../packages/extensions/components/src/navbar
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-ai-copilot
+        version: link:../../packages/extensions/plugins/plugin-ai-copilot
       '@anvilkit/plugin-asset-manager':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-asset-manager
+        version: link:../../packages/extensions/plugins/plugin-asset-manager
       '@anvilkit/plugin-canvas-studio':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-canvas-studio
+        version: link:../../packages/extensions/plugins/plugin-canvas-studio
       '@anvilkit/plugin-collab-yjs':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-collab-yjs
+        version: link:../../packages/extensions/plugins/plugin-collab-yjs
       '@anvilkit/plugin-design-system':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-design-system
+        version: link:../../packages/extensions/plugins/plugin-design-system
       '@anvilkit/plugin-export-html':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-html
+        version: link:../../packages/extensions/plugins/plugin-export-html
       '@anvilkit/plugin-export-react':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-react
+        version: link:../../packages/extensions/plugins/plugin-export-react
       '@anvilkit/plugin-version-history':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-version-history
+        version: link:../../packages/extensions/plugins/plugin-version-history
       '@anvilkit/pricing-minimal':
         specifier: workspace:*
-        version: link:../../packages/components/src/pricing-minimal
+        version: link:../../packages/extensions/components/src/pricing-minimal
       '@anvilkit/section':
         specifier: workspace:*
-        version: link:../../packages/components/src/section
+        version: link:../../packages/extensions/components/src/section
       '@anvilkit/statistics':
         specifier: workspace:*
-        version: link:../../packages/components/src/statistics
+        version: link:../../packages/extensions/components/src/statistics
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../packages/configs/tailwind-config
+        version: link:../../packages/tooling/configs/tailwind
       '@gsap/react':
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.7)
@@ -312,7 +312,7 @@ importers:
         version: link:../../examples/plugins/usage-counter
       '@anvilkit/validator':
         specifier: workspace:*
-        version: link:../../packages/validator
+        version: link:../../packages/foundation/validator
       '@hocuspocus/server':
         specifier: ^4.3.0
         version: 4.3.0(srvx@0.11.17)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
@@ -359,107 +359,153 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
+  apps/playground:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../packages/runtime/core
+      '@anvilkit/hero':
+        specifier: workspace:*
+        version: link:../../packages/extensions/components/src/hero
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../packages/runtime/ui
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      next:
+        specifier: ^16.2.9
+        version: 16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/tooling/configs/typescript
+      '@playwright/test':
+        specifier: ^1.59.1
+        version: 1.61.0
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
   apps/studio:
     dependencies:
       '@anvilkit/analytics-core':
         specifier: workspace:*
-        version: link:../../packages/analytics/core
+        version: link:../../packages/capabilities/analytics/core
       '@anvilkit/analytics-react':
         specifier: workspace:*
-        version: link:../../packages/analytics/react
+        version: link:../../packages/capabilities/analytics/react
       '@anvilkit/bento-grid':
         specifier: workspace:*
-        version: link:../../packages/components/src/bento-grid
+        version: link:../../packages/extensions/components/src/bento-grid
       '@anvilkit/blog-list':
         specifier: workspace:*
-        version: link:../../packages/components/src/blog-list
+        version: link:../../packages/extensions/components/src/blog-list
       '@anvilkit/button':
         specifier: workspace:*
-        version: link:../../packages/components/src/button
+        version: link:../../packages/extensions/components/src/button
       '@anvilkit/canvas-core':
         specifier: workspace:*
-        version: link:../../packages/canvas/core
+        version: link:../../packages/capabilities/canvas/core
       '@anvilkit/canvas-editor':
         specifier: workspace:*
-        version: link:../../packages/canvas/editor
+        version: link:../../packages/capabilities/canvas/editor
       '@anvilkit/canvas-templates':
         specifier: workspace:*
-        version: link:../../packages/templates/canvas
+        version: link:../../packages/extensions/templates/canvas
       '@anvilkit/collab-ui':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-collab-ui
+        version: link:../../packages/extensions/plugins/plugin-collab-ui
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:../../packages/core
+        version: link:../../packages/runtime/core
       '@anvilkit/helps':
         specifier: workspace:*
-        version: link:../../packages/components/src/helps
+        version: link:../../packages/extensions/components/src/helps
       '@anvilkit/hero':
         specifier: workspace:*
-        version: link:../../packages/components/src/hero
+        version: link:../../packages/extensions/components/src/hero
       '@anvilkit/input':
         specifier: workspace:*
-        version: link:../../packages/components/src/input
+        version: link:../../packages/extensions/components/src/input
       '@anvilkit/ir':
         specifier: workspace:*
-        version: link:../../packages/ir
+        version: link:../../packages/foundation/ir
       '@anvilkit/logo-clouds':
         specifier: workspace:*
-        version: link:../../packages/components/src/logo-clouds
+        version: link:../../packages/extensions/components/src/logo-clouds
       '@anvilkit/navbar':
         specifier: workspace:*
-        version: link:../../packages/components/src/navbar
+        version: link:../../packages/extensions/components/src/navbar
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-ai-copilot
+        version: link:../../packages/extensions/plugins/plugin-ai-copilot
       '@anvilkit/plugin-ai-image':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-ai-image
+        version: link:../../packages/extensions/plugins/plugin-ai-image
       '@anvilkit/plugin-asset-manager':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-asset-manager
+        version: link:../../packages/extensions/plugins/plugin-asset-manager
       '@anvilkit/plugin-canvas-studio':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-canvas-studio
+        version: link:../../packages/extensions/plugins/plugin-canvas-studio
       '@anvilkit/plugin-collab-yjs':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-collab-yjs
+        version: link:../../packages/extensions/plugins/plugin-collab-yjs
       '@anvilkit/plugin-design-system':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-design-system
+        version: link:../../packages/extensions/plugins/plugin-design-system
       '@anvilkit/plugin-export-canvas':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-canvas
+        version: link:../../packages/extensions/plugins/plugin-export-canvas
       '@anvilkit/plugin-export-html':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-html
+        version: link:../../packages/extensions/plugins/plugin-export-html
       '@anvilkit/plugin-export-react':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-react
+        version: link:../../packages/extensions/plugins/plugin-export-react
       '@anvilkit/plugin-page-seo':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-page-seo
+        version: link:../../packages/extensions/plugins/plugin-page-seo
       '@anvilkit/plugin-version-history':
         specifier: workspace:*
-        version: link:../../packages/plugins/plugin-version-history
+        version: link:../../packages/extensions/plugins/plugin-version-history
       '@anvilkit/pricing-minimal':
         specifier: workspace:*
-        version: link:../../packages/components/src/pricing-minimal
+        version: link:../../packages/extensions/components/src/pricing-minimal
       '@anvilkit/schema':
         specifier: workspace:*
-        version: link:../../packages/schema
+        version: link:../../packages/foundation/schema
       '@anvilkit/section':
         specifier: workspace:*
-        version: link:../../packages/components/src/section
+        version: link:../../packages/extensions/components/src/section
       '@anvilkit/statistics':
         specifier: workspace:*
-        version: link:../../packages/components/src/statistics
+        version: link:../../packages/extensions/components/src/statistics
       '@anvilkit/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../packages/runtime/ui
       '@anvilkit/validator':
         specifier: workspace:*
-        version: link:../../packages/validator
+        version: link:../../packages/foundation/validator
       '@gsap/react':
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.7)
@@ -517,16 +563,16 @@ importers:
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../../packages/configs/biome-config
+        version: link:../../packages/tooling/configs/biome
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../packages/configs/tailwind-config
+        version: link:../../packages/tooling/configs/tailwind
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../../packages/configs/typescript-config
+        version: link:../../packages/tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../../packages/configs/vitest-config
+        version: link:../../packages/tooling/configs/vitest
       '@axe-core/playwright':
         specifier: ^4.11.3
         version: 4.11.3(playwright-core@1.61.1)
@@ -568,10 +614,10 @@ importers:
         version: 0.32.1
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:../../../packages/core
+        version: link:../../../packages/runtime/core
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
-        version: link:../../../packages/plugins/plugin-ai-copilot
+        version: link:../../../packages/extensions/plugins/plugin-ai-copilot
     devDependencies:
       '@types/node':
         specifier: ^26.0.1
@@ -584,10 +630,10 @@ importers:
     dependencies:
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:../../../packages/core
+        version: link:../../../packages/runtime/core
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
-        version: link:../../../packages/plugins/plugin-ai-copilot
+        version: link:../../../packages/extensions/plugins/plugin-ai-copilot
     devDependencies:
       typescript:
         specifier: 6.0.3
@@ -597,10 +643,10 @@ importers:
     dependencies:
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:../../../packages/core
+        version: link:../../../packages/runtime/core
       '@anvilkit/plugin-ai-copilot':
         specifier: workspace:*
-        version: link:../../../packages/plugins/plugin-ai-copilot
+        version: link:../../../packages/extensions/plugins/plugin-ai-copilot
       openai:
         specifier: ^4.76.0
         version: 4.104.0(ws@8.21.0)(zod@3.25.76)
@@ -616,13 +662,13 @@ importers:
     devDependencies:
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:../../../packages/core
+        version: link:../../../packages/runtime/core
       '@anvilkit/ir':
         specifier: workspace:*
-        version: link:../../../packages/ir
+        version: link:../../../packages/foundation/ir
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../../../packages/configs/typescript-config
+        version: link:../../../packages/tooling/configs/typescript
       '@puckeditor/core':
         specifier: ^0.22.0
         version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
@@ -643,10 +689,10 @@ importers:
     devDependencies:
       '@anvilkit/core':
         specifier: workspace:*
-        version: link:../../../packages/core
+        version: link:../../../packages/runtime/core
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../../../packages/configs/typescript-config
+        version: link:../../../packages/tooling/configs/typescript
       '@puckeditor/core':
         specifier: ^0.22.0
         version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
@@ -663,17 +709,17 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/analytics/core:
+  packages/capabilities/analytics/core:
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../../configs/biome-config
+        version: link:../../../tooling/configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../../configs/typescript-config
+        version: link:../../../tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../../configs/vitest-config
+        version: link:../../../tooling/configs/vitest
       '@rslib/core':
         specifier: ^0.23.0
         version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
@@ -702,7 +748,7 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/analytics/react:
+  packages/capabilities/analytics/react:
     dependencies:
       '@anvilkit/analytics-core':
         specifier: workspace:*
@@ -710,13 +756,13 @@ importers:
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../../configs/biome-config
+        version: link:../../../tooling/configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../../configs/typescript-config
+        version: link:../../../tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../../configs/vitest-config
+        version: link:../../../tooling/configs/vitest
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
@@ -766,7 +812,7 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/canvas/core:
+  packages/capabilities/canvas/core:
     dependencies:
       pdf-lib:
         specifier: ^1.17.1
@@ -777,13 +823,13 @@ importers:
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../../configs/biome-config
+        version: link:../../../tooling/configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../../configs/typescript-config
+        version: link:../../../tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../../configs/vitest-config
+        version: link:../../../tooling/configs/vitest
       '@rslib/core':
         specifier: ^0.23.0
         version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
@@ -815,14 +861,14 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/canvas/editor:
+  packages/capabilities/canvas/editor:
     dependencies:
       '@anvilkit/canvas-core':
         specifier: workspace:*
         version: link:../core
       '@anvilkit/ui':
         specifier: workspace:*
-        version: link:../../ui
+        version: link:../../../runtime/ui
       lucide-react:
         specifier: ^1.17.0
         version: 1.21.0(react@19.2.7)
@@ -835,13 +881,13 @@ importers:
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../../configs/biome-config
+        version: link:../../../tooling/configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../../configs/typescript-config
+        version: link:../../../tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../../configs/vitest-config
+        version: link:../../../tooling/configs/vitest
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
@@ -921,96 +967,20 @@ importers:
         specifier: ^13.6.31
         version: 13.6.31
 
-  packages/cli:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../core
-      '@anvilkit/ir':
-        specifier: workspace:*
-        version: link:../ir
-      '@anvilkit/plugin-ai-copilot':
-        specifier: workspace:*
-        version: link:../plugins/plugin-ai-copilot
-      '@anvilkit/plugin-export-html':
-        specifier: workspace:*
-        version: link:../plugins/plugin-export-html
-      '@anvilkit/plugin-export-react':
-        specifier: workspace:*
-        version: link:../plugins/plugin-export-react
-      '@anvilkit/schema':
-        specifier: workspace:*
-        version: link:../schema
-      '@anvilkit/validator':
-        specifier: workspace:*
-        version: link:../validator
-      '@babel/parser':
-        specifier: ^7.29.2
-        version: 7.29.7
-      '@babel/types':
-        specifier: ^7.29.0
-        version: 7.29.7
-      '@clack/prompts':
-        specifier: ^0.8.2
-        version: 0.8.2
-      cac:
-        specifier: ^6.7.14
-        version: 6.7.14
-      jiti:
-        specifier: ^2.4.2
-        version: 2.7.0
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
-      recast:
-        specifier: ^0.23.11
-        version: 0.23.11
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
+  packages/extensions/components:
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../configs/vitest-config
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/components:
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../configs/biome-config
+        version: link:../../tooling/configs/biome
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../configs/tailwind-config
+        version: link:../../tooling/configs/tailwind
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../configs/typescript-config
+        version: link:../../tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../configs/vitest-config
+        version: link:../../tooling/configs/vitest
       '@biomejs/biome':
         specifier: 2.5.3
         version: 2.5.3
@@ -1028,7 +998,7 @@ importers:
         version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
       '@turbo/gen':
         specifier: ^2.9.14
-        version: 2.9.18(@types/node@26.0.1)
+        version: 2.10.4(@types/node@26.0.1)
       '@types/react':
         specifier: ^19.2.17
         version: 19.2.17
@@ -1043,7 +1013,7 @@ importers:
         version: 19.2.7(react@19.2.7)
       turbo:
         specifier: ^2.9.14
-        version: 2.9.18
+        version: 2.10.4
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -1051,7 +1021,7 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/components/src/bento-grid:
+  packages/extensions/components/src/bento-grid:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1068,9 +1038,9 @@ importers:
     devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
 
-  packages/components/src/blog-list:
+  packages/extensions/components/src/blog-list:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1084,9 +1054,9 @@ importers:
     devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
 
-  packages/components/src/button:
+  packages/extensions/components/src/button:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1100,15 +1070,15 @@ importers:
     devDependencies:
       '@anvilkit/analytics-react':
         specifier: workspace:*
-        version: link:../../../analytics/react
+        version: link:../../../../capabilities/analytics/react
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
       '@anvilkit/ui':
         specifier: workspace:*
-        version: link:../../../ui
+        version: link:../../../../runtime/ui
 
-  packages/components/src/design-block:
+  packages/extensions/components/src/design-block:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1122,88 +1092,9 @@ importers:
     devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
 
-  packages/components/src/helps:
-    dependencies:
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      lucide-react:
-        specifier: ^1.17.0
-        version: 1.21.0(react@19.2.7)
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-    devDependencies:
-      '@anvilkit/tailwind-config':
-        specifier: workspace:*
-        version: link:../../../configs/tailwind-config
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../../ui
-
-  packages/components/src/hero:
-    dependencies:
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-    devDependencies:
-      '@anvilkit/tailwind-config':
-        specifier: workspace:*
-        version: link:../../../configs/tailwind-config
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../../ui
-
-  packages/components/src/input:
-    dependencies:
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-    devDependencies:
-      '@anvilkit/tailwind-config':
-        specifier: workspace:*
-        version: link:../../../configs/tailwind-config
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../../ui
-
-  packages/components/src/logo-clouds:
-    dependencies:
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-    devDependencies:
-      '@anvilkit/tailwind-config':
-        specifier: workspace:*
-        version: link:../../../configs/tailwind-config
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../../ui
-
-  packages/components/src/navbar:
+  packages/extensions/components/src/helps:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1220,12 +1111,69 @@ importers:
     devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
       '@anvilkit/ui':
         specifier: workspace:*
-        version: link:../../../ui
+        version: link:../../../../runtime/ui
 
-  packages/components/src/pricing-minimal:
+  packages/extensions/components/src/hero:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/input:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/logo-clouds:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/navbar:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1242,12 +1190,34 @@ importers:
     devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
       '@anvilkit/ui':
         specifier: workspace:*
-        version: link:../../../ui
+        version: link:../../../../runtime/ui
 
-  packages/components/src/section:
+  packages/extensions/components/src/pricing-minimal:
+    dependencies:
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      lucide-react:
+        specifier: ^1.17.0
+        version: 1.21.0(react@19.2.7)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../../tooling/configs/tailwind
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../../runtime/ui
+
+  packages/extensions/components/src/section:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1261,12 +1231,12 @@ importers:
     devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
       '@anvilkit/ui':
         specifier: workspace:*
-        version: link:../../../ui
+        version: link:../../../../runtime/ui
 
-  packages/components/src/statistics:
+  packages/extensions/components/src/statistics:
     dependencies:
       '@puckeditor/core':
         specifier: ^0.22.0
@@ -1280,48 +1250,74 @@ importers:
     devDependencies:
       '@anvilkit/tailwind-config':
         specifier: workspace:*
-        version: link:../../../configs/tailwind-config
+        version: link:../../../../tooling/configs/tailwind
       '@anvilkit/ui':
         specifier: workspace:*
-        version: link:../../../ui
+        version: link:../../../../runtime/ui
 
-  packages/configs/biome-config: {}
-
-  packages/configs/tailwind-config:
+  packages/extensions/plugins/plugin-ai-copilot:
     dependencies:
-      '@tailwindcss/postcss':
-        specifier: 4.3.1
-        version: 4.3.1
-      postcss:
-        specifier: 8.5.8
-        version: 8.5.8
-      shadcn:
-        specifier: ^4.1.1
-        version: 4.11.0(typescript@6.0.3)
-      tailwindcss:
-        specifier: 4.3.1
-        version: 4.3.1
-      tw-animate-css:
-        specifier: ^1.4.0
-        version: 1.4.0
-
-  packages/configs/typescript-config: {}
-
-  packages/configs/vitest-config:
-    dependencies:
-      jsdom:
-        specifier: ^29.0.0
-        version: 29.1.1
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/schema':
+        specifier: workspace:*
+        version: link:../../../foundation/schema
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../../foundation/utils
+      '@anvilkit/validator':
+        specifier: workspace:*
+        version: link:../../../foundation/validator
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../biome-config
+        version: link:../../../tooling/configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../typescript-config
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../runtime/ui
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rsbuild/plugin-react':
+        specifier: ^2.1.0
+        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      motion:
+        specifier: ^12.42.0
+        version: 12.42.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -1329,17 +1325,930 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/contracts:
+  packages/extensions/plugins/plugin-ai-image:
+    dependencies:
+      '@anvilkit/canvas-core':
+        specifier: workspace:*
+        version: link:../../../capabilities/canvas/core
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../../foundation/utils
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../configs/biome-config
+        version: link:../../../tooling/configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../configs/typescript-config
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../runtime/ui
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../configs/vitest-config
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rsbuild/plugin-react':
+        specifier: ^2.1.0
+        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1
+      konva:
+        specifier: ^10.3.0
+        version: 10.3.0
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      react-konva:
+        specifier: ^19.2.4
+        version: 19.2.5(@types/react@19.2.17)(konva@10.3.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-asset-manager:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../../../foundation/ir
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../runtime/ui
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../../foundation/utils
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      axe-core:
+        specifier: 4.11.3
+        version: 4.11.3
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      happy-dom:
+        specifier: ^20.8.9
+        version: 20.10.6
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      vitest-axe:
+        specifier: ^0.1.0
+        version: 0.1.0(vitest@4.1.9)
+
+  packages/extensions/plugins/plugin-canvas-studio:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/design-block':
+        specifier: workspace:*
+        version: link:../../components/src/design-block
+      '@anvilkit/plugin-asset-manager':
+        specifier: workspace:*
+        version: link:../plugin-asset-manager
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/canvas-core':
+        specifier: workspace:*
+        version: link:../../../capabilities/canvas/core
+      '@anvilkit/canvas-editor':
+        specifier: workspace:*
+        version: link:../../../capabilities/canvas/editor
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      konva:
+        specifier: ^10.3.0
+        version: 10.3.0
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-collab-ui:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/plugin-collab-yjs':
+        specifier: workspace:*
+        version: link:../plugin-collab-yjs
+      '@anvilkit/plugin-version-history':
+        specifier: workspace:*
+        version: link:../plugin-version-history
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../runtime/ui
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../../foundation/utils
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      lucide-react:
+        specifier: ^1.17.0
+        version: 1.21.0(react@19.2.7)
+      motion:
+        specifier: ^12.42.0
+        version: 12.42.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      tailwind-merge:
+        specifier: ^3.6.0
+        version: 3.6.0
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@hocuspocus/provider':
+        specifier: ^4.3.0
+        version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rsbuild/plugin-react':
+        specifier: ^2.1.0
+        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      y-websocket:
+        specifier: ^3.0.0
+        version: 3.0.0(yjs@13.6.31)
+
+  packages/extensions/plugins/plugin-collab-yjs:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../../../foundation/ir
+      '@anvilkit/plugin-version-history':
+        specifier: workspace:*
+        version: link:../plugin-version-history
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../../foundation/utils
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+      y-protocols:
+        specifier: ^1.0.7
+        version: 1.0.7(yjs@13.6.31)
+      yjs:
+        specifier: ^13.6.31
+        version: 13.6.31
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@hocuspocus/provider':
+        specifier: ^4.3.0
+        version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      fake-indexeddb:
+        specifier: ^6.2.5
+        version: 6.2.5
+      lib0:
+        specifier: ^0.2.117
+        version: 0.2.117
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      ws:
+        specifier: ^8.20.0
+        version: 8.21.0
+      y-websocket:
+        specifier: ^3.0.0
+        version: 3.0.0(yjs@13.6.31)
+
+  packages/extensions/plugins/plugin-design-system:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@biomejs/biome':
+        specifier: 2.5.3
+        version: 2.5.3
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rsbuild/plugin-react':
+        specifier: ^2.1.0
+        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-export-canvas:
+    dependencies:
+      '@anvilkit/canvas-core':
+        specifier: workspace:*
+        version: link:../../../capabilities/canvas/core
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-export-html:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      happy-dom:
+        specifier: ^20.8.9
+        version: 20.10.6
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-export-react:
+    dependencies:
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@typescript-eslint/typescript-estree':
+        specifier: ^8.0.0
+        version: 8.61.1(typescript@6.0.3)
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-page-seo:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../runtime/ui
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rsbuild/plugin-react':
+        specifier: ^2.1.0
+        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.2
+        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/plugins/plugin-version-history:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../../../foundation/ir
+      '@anvilkit/ui':
+        specifier: workspace:*
+        version: link:../../../runtime/ui
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../../../foundation/utils
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      axe-core:
+        specifier: 4.11.3
+        version: 4.11.3
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      fast-check:
+        specifier: ^4.3.0
+        version: 4.8.0
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      vitest-axe:
+        specifier: ^0.1.0
+        version: 0.1.0(vitest@4.1.9)
+
+  packages/extensions/templates: {}
+
+  packages/extensions/templates/about:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/blog-article:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/blog-index:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/canvas:
+    devDependencies:
+      '@anvilkit/canvas-core':
+        specifier: workspace:*
+        version: link:../../../capabilities/canvas/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/vitest
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/extensions/templates/changelog:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/contact:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/feature-overview:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/landing-agency:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/landing-docs:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/landing-saas:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/extensions/templates/pricing-comparison:
+    devDependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../../runtime/core
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../../tooling/configs/typescript
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+
+  packages/foundation/contracts:
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.22.0
         version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
@@ -1371,20 +2280,224 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/core:
+  packages/foundation/ir:
     dependencies:
-      '@anvilkit/analytics-core':
-        specifier: workspace:*
-        version: link:../analytics/core
       '@anvilkit/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@anvilkit/utils':
+        specifier: workspace:*
+        version: link:../utils
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      fast-check:
+        specifier: ^4.3.0
+        version: 4.8.0
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.2
+        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/foundation/schema:
+    dependencies:
+      '@anvilkit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.2
+        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+
+  packages/foundation/utils:
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/vitest
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.2
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      '@vitest/coverage-v8':
+        specifier: ^4.1.9
+        version: 4.1.9(vitest@4.1.9)
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.2
+        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  packages/foundation/validator:
+    dependencies:
+      '@anvilkit/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@anvilkit/schema':
+        specifier: workspace:*
+        version: link:../schema
+    devDependencies:
+      '@anvilkit/biome-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/biome
+      '@anvilkit/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/typescript
+      '@anvilkit/vitest-config':
+        specifier: workspace:*
+        version: link:../../tooling/configs/vitest
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@rslib/core':
+        specifier: ^0.23.0
+        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      esbuild:
+        specifier: ^0.28.0
+        version: 0.28.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
+      typedoc:
+        specifier: 0.28.19
+        version: 0.28.19(typescript@6.0.3)
+      typedoc-plugin-markdown:
+        specifier: ^4.11.2
+        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+
+  packages/runtime/core:
+    dependencies:
+      '@anvilkit/contracts':
+        specifier: workspace:*
+        version: link:../../foundation/contracts
       '@anvilkit/ui':
         specifier: workspace:*
         version: link:../ui
       '@anvilkit/utils':
         specifier: workspace:*
-        version: link:../utils
+        version: link:../../foundation/utils
       '@base-ui/react':
         specifier: 1.6.0
         version: 1.6.0(patch_hash=137dc5c443082af2ad6222389cbc434b3946a982230a110cfe3dd67feccf23cd)(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -1440,12 +2553,15 @@ importers:
         specifier: ^5.0.14
         version: 5.0.14(@types/react@19.2.17)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
     devDependencies:
+      '@anvilkit/analytics-core':
+        specifier: workspace:*
+        version: link:../../capabilities/analytics/core
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../configs/typescript-config
+        version: link:../../tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../configs/vitest-config
+        version: link:../../tooling/configs/vitest
       '@puckeditor/core':
         specifier: ^0.22.0
         version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
@@ -1510,1106 +2626,7 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/create-plugin:
-    devDependencies:
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/ir:
-    dependencies:
-      '@anvilkit/contracts':
-        specifier: workspace:*
-        version: link:../contracts
-      '@anvilkit/utils':
-        specifier: workspace:*
-        version: link:../utils
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      fast-check:
-        specifier: ^4.3.0
-        version: 4.8.0
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typedoc-plugin-markdown:
-        specifier: ^4.11.2
-        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-ai-copilot:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/schema':
-        specifier: workspace:*
-        version: link:../../schema
-      '@anvilkit/utils':
-        specifier: workspace:*
-        version: link:../../utils
-      '@anvilkit/validator':
-        specifier: workspace:*
-        version: link:../../validator
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../ui
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rsbuild/plugin-react':
-        specifier: ^2.1.0
-        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      motion:
-        specifier: ^12.42.0
-        version: 12.42.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-ai-image:
-    dependencies:
-      '@anvilkit/canvas-core':
-        specifier: workspace:*
-        version: link:../../canvas/core
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/utils':
-        specifier: workspace:*
-        version: link:../../utils
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../ui
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rsbuild/plugin-react':
-        specifier: ^2.1.0
-        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
-      '@testing-library/react':
-        specifier: ^16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      jsdom:
-        specifier: ^29.1.1
-        version: 29.1.1
-      konva:
-        specifier: ^10.3.0
-        version: 10.3.0
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      react-konva:
-        specifier: ^19.2.4
-        version: 19.2.5(@types/react@19.2.17)(konva@10.3.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-asset-manager:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/ir':
-        specifier: workspace:*
-        version: link:../../ir
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../ui
-      '@anvilkit/utils':
-        specifier: workspace:*
-        version: link:../../utils
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      axe-core:
-        specifier: 4.11.3
-        version: 4.11.3
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      happy-dom:
-        specifier: ^20.8.9
-        version: 20.10.6
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      vitest-axe:
-        specifier: ^0.1.0
-        version: 0.1.0(vitest@4.1.9)
-
-  packages/plugins/plugin-canvas-studio:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/design-block':
-        specifier: workspace:*
-        version: link:../../components/src/design-block
-      '@anvilkit/plugin-asset-manager':
-        specifier: workspace:*
-        version: link:../plugin-asset-manager
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/canvas-core':
-        specifier: workspace:*
-        version: link:../../canvas/core
-      '@anvilkit/canvas-editor':
-        specifier: workspace:*
-        version: link:../../canvas/editor
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@testing-library/react':
-        specifier: ^16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      konva:
-        specifier: ^10.3.0
-        version: 10.3.0
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-collab-ui:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/plugin-collab-yjs':
-        specifier: workspace:*
-        version: link:../plugin-collab-yjs
-      '@anvilkit/plugin-version-history':
-        specifier: workspace:*
-        version: link:../plugin-version-history
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../ui
-      '@anvilkit/utils':
-        specifier: workspace:*
-        version: link:../../utils
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
-      lucide-react:
-        specifier: ^1.17.0
-        version: 1.21.0(react@19.2.7)
-      motion:
-        specifier: ^12.42.0
-        version: 12.42.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      tailwind-merge:
-        specifier: ^3.6.0
-        version: 3.6.0
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@hocuspocus/provider':
-        specifier: ^4.3.0
-        version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rsbuild/plugin-react':
-        specifier: ^2.1.0
-        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
-      '@testing-library/react':
-        specifier: ^16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      jsdom:
-        specifier: ^29.1.1
-        version: 29.1.1
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      y-websocket:
-        specifier: ^3.0.0
-        version: 3.0.0(yjs@13.6.31)
-
-  packages/plugins/plugin-collab-yjs:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/ir':
-        specifier: workspace:*
-        version: link:../../ir
-      '@anvilkit/plugin-version-history':
-        specifier: workspace:*
-        version: link:../plugin-version-history
-      '@anvilkit/utils':
-        specifier: workspace:*
-        version: link:../../utils
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-      y-protocols:
-        specifier: ^1.0.7
-        version: 1.0.7(yjs@13.6.31)
-      yjs:
-        specifier: ^13.6.31
-        version: 13.6.31
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@hocuspocus/provider':
-        specifier: ^4.3.0
-        version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      fake-indexeddb:
-        specifier: ^6.2.5
-        version: 6.2.5
-      lib0:
-        specifier: ^0.2.117
-        version: 0.2.117
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      ws:
-        specifier: ^8.20.0
-        version: 8.21.0
-      y-websocket:
-        specifier: ^3.0.0
-        version: 3.0.0(yjs@13.6.31)
-
-  packages/plugins/plugin-design-system:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@biomejs/biome':
-        specifier: 2.5.3
-        version: 2.5.3
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rsbuild/plugin-react':
-        specifier: ^2.1.0
-        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
-      '@testing-library/react':
-        specifier: ^16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      jsdom:
-        specifier: ^29.1.1
-        version: 29.1.1
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-export-canvas:
-    dependencies:
-      '@anvilkit/canvas-core':
-        specifier: workspace:*
-        version: link:../../canvas/core
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-export-html:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      happy-dom:
-        specifier: ^20.8.9
-        version: 20.10.6
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-export-react:
-    dependencies:
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@typescript-eslint/typescript-estree':
-        specifier: ^8.0.0
-        version: 8.61.1(typescript@6.0.3)
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-page-seo:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../ui
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rsbuild/plugin-react':
-        specifier: ^2.1.0
-        version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
-      '@testing-library/react':
-        specifier: ^16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      jsdom:
-        specifier: ^29.1.1
-        version: 29.1.1
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typedoc-plugin-markdown:
-        specifier: ^4.11.2
-        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/plugins/plugin-version-history:
-    dependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/ir':
-        specifier: workspace:*
-        version: link:../../ir
-      '@anvilkit/ui':
-        specifier: workspace:*
-        version: link:../../ui
-      '@anvilkit/utils':
-        specifier: workspace:*
-        version: link:../../utils
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      axe-core:
-        specifier: 4.11.3
-        version: 4.11.3
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      fast-check:
-        specifier: ^4.3.0
-        version: 4.8.0
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      vitest-axe:
-        specifier: ^0.1.0
-        version: 0.1.0(vitest@4.1.9)
-
-  packages/schema:
-    dependencies:
-      '@anvilkit/contracts':
-        specifier: workspace:*
-        version: link:../contracts
-    devDependencies:
-      '@anvilkit/biome-config':
-        specifier: workspace:*
-        version: link:../configs/biome-config
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typedoc-plugin-markdown:
-        specifier: ^4.11.2
-        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-
-  packages/templates: {}
-
-  packages/templates/about:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/blog-article:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/blog-index:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/canvas:
-    devDependencies:
-      '@anvilkit/canvas-core':
-        specifier: workspace:*
-        version: link:../../canvas/core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../../configs/vitest-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  packages/templates/changelog:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/contact:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/feature-overview:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/landing-agency:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/landing-docs:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/landing-saas:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/templates/pricing-comparison:
-    devDependencies:
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@anvilkit/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/typescript-config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
-  packages/ui:
+  packages/runtime/ui:
     dependencies:
       '@base-ui/react':
         specifier: 1.6.0
@@ -2662,13 +2679,13 @@ importers:
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../configs/biome-config
+        version: link:../../tooling/configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../configs/typescript-config
+        version: link:../../tooling/configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../configs/vitest-config
+        version: link:../../tooling/configs/vitest
       '@rsbuild/plugin-react':
         specifier: ^2.1.0
         version: 2.1.0(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))
@@ -2709,50 +2726,75 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/utils:
+  packages/tooling/cli:
+    dependencies:
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../runtime/core
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../../foundation/ir
+      '@anvilkit/plugin-ai-copilot':
+        specifier: workspace:*
+        version: link:../../extensions/plugins/plugin-ai-copilot
+      '@anvilkit/plugin-export-html':
+        specifier: workspace:*
+        version: link:../../extensions/plugins/plugin-export-html
+      '@anvilkit/plugin-export-react':
+        specifier: workspace:*
+        version: link:../../extensions/plugins/plugin-export-react
+      '@anvilkit/schema':
+        specifier: workspace:*
+        version: link:../../foundation/schema
+      '@anvilkit/validator':
+        specifier: workspace:*
+        version: link:../../foundation/validator
+      '@babel/parser':
+        specifier: ^7.29.2
+        version: 7.29.7
+      '@babel/types':
+        specifier: ^7.29.0
+        version: 7.29.7
+      '@clack/prompts':
+        specifier: ^0.8.2
+        version: 0.8.2
+      cac:
+        specifier: ^6.7.14
+        version: 6.7.14
+      jiti:
+        specifier: ^2.4.2
+        version: 2.7.0
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
+      recast:
+        specifier: ^0.23.11
+        version: 0.23.11
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../configs/biome-config
+        version: link:../configs/biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../configs/typescript-config
+        version: link:../configs/typescript
       '@anvilkit/vitest-config':
         specifier: workspace:*
-        version: link:../configs/vitest-config
+        version: link:../configs/vitest
       '@rslib/core':
         specifier: ^0.23.0
         version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
-      '@testing-library/react':
-        specifier: ^16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      '@vitest/coverage-v8':
-        specifier: ^4.1.9
-        version: 4.1.9(vitest@4.1.9)
-      jsdom:
-        specifier: ^29.1.1
-        version: 29.1.1
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typedoc-plugin-markdown:
-        specifier: ^4.11.2
-        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      madge:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@6.0.3)
+      publint:
+        specifier: ^0.3.21
+        version: 0.3.21
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -2760,57 +2802,61 @@ importers:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
-  packages/validator:
+  packages/tooling/configs/biome: {}
+
+  packages/tooling/configs/tailwind:
     dependencies:
-      '@anvilkit/contracts':
-        specifier: workspace:*
-        version: link:../contracts
-      '@anvilkit/schema':
-        specifier: workspace:*
-        version: link:../schema
+      '@tailwindcss/postcss':
+        specifier: 4.3.1
+        version: 4.3.1
+      postcss:
+        specifier: 8.5.8
+        version: 8.5.8
+      shadcn:
+        specifier: ^4.1.1
+        version: 4.11.0(typescript@6.0.3)
+      tailwindcss:
+        specifier: 4.3.1
+        version: 4.3.1
+      tw-animate-css:
+        specifier: ^1.4.0
+        version: 1.4.0
+
+  packages/tooling/configs/typescript: {}
+
+  packages/tooling/configs/vitest:
+    dependencies:
+      jsdom:
+        specifier: ^29.0.0
+        version: 29.1.1
     devDependencies:
       '@anvilkit/biome-config':
         specifier: workspace:*
-        version: link:../configs/biome-config
+        version: link:../biome
       '@anvilkit/typescript-config':
         specifier: workspace:*
-        version: link:../configs/typescript-config
-      '@anvilkit/vitest-config':
-        specifier: workspace:*
-        version: link:../configs/vitest-config
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@rslib/core':
-        specifier: ^0.23.0
-        version: 0.23.0(core-js@3.49.0)(typescript@6.0.3)
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      esbuild:
-        specifier: ^0.28.0
-        version: 0.28.1
-      madge:
-        specifier: ^8.0.0
-        version: 8.0.0(typescript@6.0.3)
-      publint:
-        specifier: ^0.3.21
-        version: 0.3.21
-      typedoc:
-        specifier: 0.28.19
-        version: 0.28.19(typescript@6.0.3)
-      typedoc-plugin-markdown:
-        specifier: ^4.11.2
-        version: 4.12.0(typedoc@0.28.19(typescript@6.0.3))
+        version: link:../typescript
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
       typescript:
         specifier: 6.0.3
         version: 6.0.3
       vitest:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
+
+  packages/tooling/create-plugin:
+    devDependencies:
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
 
 packages:
 
@@ -6298,32 +6344,17 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@turbo/darwin-64@2.9.18':
-    resolution: {integrity: sha512-9f27peFu16ur8c0v9nUFUEyBnbKuuFsUTjHFWfmwGfzySBXbHwzU44QhZon6Mznz0cHsIr3984NQj/bVrnGSRw==}
-    cpu: [x64]
-    os: [darwin]
-
   '@turbo/darwin-arm64@2.10.4':
     resolution: {integrity: sha512-VQ1Yxs5zkPT+2z7t1P4mvn6JmcKLkOCAsPuK9XbOvuVj0DlTlETfIXNisX0771v/vTWHOQqiwoGi+TtAUq8efw==}
     cpu: [arm64]
     os: [darwin]
 
-  '@turbo/darwin-arm64@2.9.18':
-    resolution: {integrity: sha512-9A6TMRq/Ib+QnbhLlgkhOm+624wO4pzSQ/yQviQfWHOlFvaYxdnIAYmu2H6TS6y7kSVL0DvzNe04NbESTOzFVQ==}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@turbo/gen@2.9.18':
-    resolution: {integrity: sha512-9Ry3V2eqFANYI7A5dyjehq2EOuLTY30XQSg4aDR7F3cJOuiP/Ad2KXwrxD3AnwNDkuSDVbJjlbES7yfJ0y7dhw==}
+  '@turbo/gen@2.10.4':
+    resolution: {integrity: sha512-FP3XAL344PohE7yN8cR+SDLyhWIMk7kn+jCNlovzhXDQJBHjfn9Iv7GgMf1dnSTO7etYeOfe4v41Ix26bzYm+A==}
     hasBin: true
 
   '@turbo/linux-64@2.10.4':
     resolution: {integrity: sha512-IzV1QovmwX7mfGnVinmE++2IB8tbeo38weltiuH5zNqwCTBjLs/DytyRKx+bmnhHdXIq9SheR8p0Nip/LBUPHg==}
-    cpu: [x64]
-    os: [linux]
-
-  '@turbo/linux-64@2.9.18':
-    resolution: {integrity: sha512-zCdIDtz69AnbYh913elJRRoF3QY5aa2HNnf+4rAkc7bQ+tWujiDkCNV7stazOUPggaDvhKIf2Z87qHftTeXSkw==}
     cpu: [x64]
     os: [linux]
 
@@ -6332,28 +6363,13 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@turbo/linux-arm64@2.9.18':
-    resolution: {integrity: sha512-Va1kXI04naMgYwqv/5Dfa36dTDx8015U7oaQAjrXa45ua9OoFjSV4OmvkML4EmXvUclQHCiBRbY8bvd0jV7eAg==}
-    cpu: [arm64]
-    os: [linux]
-
   '@turbo/windows-64@2.10.4':
     resolution: {integrity: sha512-NnspP7Wd5fa3Wwnqv9bKfhegqZzuHBgbPxdZU/idTLQcazx/vgKu95JlCx2YHY0hdvKCnPcARrDwM+KEUmaO7A==}
     cpu: [x64]
     os: [win32]
 
-  '@turbo/windows-64@2.9.18':
-    resolution: {integrity: sha512-m0kDhZANxSNz9ck1ybogFscHabriAsp4eDFNrN/1H5WrgTF7b3VlcPZnhuO3v2+E2KnCbeAc+UUT10BZZHdDKw==}
-    cpu: [x64]
-    os: [win32]
-
   '@turbo/windows-arm64@2.10.4':
     resolution: {integrity: sha512-Iv02YgOpaEShc2OkG7mgCJ2pEw1RUKiKbs0h8W5wAf4jZ5vpmraTEjuGTgHRuOORQnC1GN3KHo5WB+hu1abRMA==}
-    cpu: [arm64]
-    os: [win32]
-
-  '@turbo/windows-arm64@2.9.18':
-    resolution: {integrity: sha512-nUdR8WqoomUys9iIQmG45TMiizJ+5BV8egSeLLZba/AWblyp3fVBcIH1kSE58OtK4g2YzbMJEth6Ttv9w5rqMA==}
     cpu: [arm64]
     os: [win32]
 
@@ -10088,10 +10104,6 @@ packages:
     resolution: {integrity: sha512-GQpduILaKjoaGljw097ScsSyKTtZSY7cZ3bJktzfTkPMyCf3ShKLuXK2IaOEN2Plziml+ArR7WJ1m+V4VbnaKQ==}
     hasBin: true
 
-  turbo@2.9.18:
-    resolution: {integrity: sha512-bwabv6PupzeavybzEoArBAkwq5fnzwf8OFnRtpHwnviFWuwJPFxtyH+aVp36TmIqK3aYYgtTJ3J0m2ysxxSzQg==}
-    hasBin: true
-
   tw-animate-css@1.4.0:
     resolution: {integrity: sha512-7bziOlRqH0hJx80h/3mbicLW7o8qLsH5+RaLR2t+OHM3D0JlWGODQKQ4cxbK7WlvmUxpcj6Kgu6EKqjrGFe3QQ==}
 
@@ -13789,44 +13801,26 @@ snapshots:
   '@turbo/darwin-64@2.10.4':
     optional: true
 
-  '@turbo/darwin-64@2.9.18':
-    optional: true
-
   '@turbo/darwin-arm64@2.10.4':
     optional: true
 
-  '@turbo/darwin-arm64@2.9.18':
-    optional: true
-
-  '@turbo/gen@2.9.18(@types/node@26.0.1)':
+  '@turbo/gen@2.10.4(@types/node@26.0.1)':
     dependencies:
       '@inquirer/prompts': 7.10.1(@types/node@26.0.1)
-      esbuild: 0.25.12
+      esbuild: 0.28.1
     transitivePeerDependencies:
       - '@types/node'
 
   '@turbo/linux-64@2.10.4':
     optional: true
 
-  '@turbo/linux-64@2.9.18':
-    optional: true
-
   '@turbo/linux-arm64@2.10.4':
-    optional: true
-
-  '@turbo/linux-arm64@2.9.18':
     optional: true
 
   '@turbo/windows-64@2.10.4':
     optional: true
 
-  '@turbo/windows-64@2.9.18':
-    optional: true
-
   '@turbo/windows-arm64@2.10.4':
-    optional: true
-
-  '@turbo/windows-arm64@2.9.18':
     optional: true
 
   '@tybys/wasm-util@0.10.2':
@@ -18065,15 +18059,6 @@ snapshots:
       '@turbo/linux-arm64': 2.10.4
       '@turbo/windows-64': 2.10.4
       '@turbo/windows-arm64': 2.10.4
-
-  turbo@2.9.18:
-    optionalDependencies:
-      '@turbo/darwin-64': 2.9.18
-      '@turbo/darwin-arm64': 2.9.18
-      '@turbo/linux-64': 2.9.18
-      '@turbo/linux-arm64': 2.9.18
-      '@turbo/windows-64': 2.9.18
-      '@turbo/windows-arm64': 2.9.18
 
   tw-animate-css@1.4.0: {}
 

@@ -6,12 +6,17 @@ packages:
   # it is deliberately excluded from the pnpm workspace.
   - "!apps/collab"
   - "packages/*"
-  - "packages/analytics/*"
-  - "packages/canvas/*"
-  - "packages/plugins/*"
-  - "packages/configs/*"
-  - "packages/components/src/*"
-  - "packages/templates/*"
+  - "packages/foundation/*"
+  - "packages/runtime/*"
+  - "packages/capabilities/analytics/*"
+  - "packages/capabilities/canvas/*"
+  - "packages/extensions/plugins/*"
+  - "packages/extensions/components"
+  - "packages/extensions/components/src/*"
+  - "packages/extensions/templates"
+  - "packages/extensions/templates/*"
+  - "packages/tooling/*"
+  - "packages/tooling/configs/*"
   - "examples/plugins/*"
   - "examples/ai-adapters/*"
 allowBuilds:
@@ -69,7 +74,7 @@ minimumReleaseAgeExclude:
   - motion-dom@12.42.0
   - motion@12.42.0
 patchedDependencies:
-  "@base-ui/react@1.6.0": packages/components/patches/@base-ui__react@1.6.0.patch
+  "@base-ui/react@1.6.0": packages/extensions/components/patches/@base-ui__react@1.6.0.patch
 
 overrides:
   react: 19.2.7
