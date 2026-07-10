@@ -26,8 +26,8 @@ on:
       - "apps/docs/src/registry/feed.json"
       - "apps/docs/src/registry/scorecards/**"
       - "apps/docs/scripts/scorecard-runner.ts"
-      - "packages/plugins/**"
-      - "packages/components/src/**"
+      - "packages/extensions/plugins/**"
+      - "packages/extensions/components/src/**"
   schedule:
     # Wednesdays 07:37 UTC — staggered off generator-smoke.
     - cron: "37 7 * * 3"
@@ -94,10 +94,10 @@ jobs:
       - name: Install workspace
         run: pnpm install --frozen-lockfile
 
-      # See `ci.yml` — the nested `packages/components` workspace
+      # See `ci.yml` — the nested `packages/extensions/components` workspace
       # needs its own install before component leaves get built.
       - name: Install components workspace
-        run: pnpm --dir packages/components install --frozen-lockfile --config.strictDepBuilds=false
+        run: pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
 
       - name: Build dependencies for first-party entries
         if: matrix.publisher == 'first-party'

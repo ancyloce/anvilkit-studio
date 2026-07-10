@@ -52,7 +52,7 @@ jobs:
         # workspace has no build approvals of its own, so the install
         # would otherwise abort even though the ignored scripts are
         # safe to skip.
-        run: pnpm --dir packages/components install --frozen-lockfile --config.strictDepBuilds=false
+        run: pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
 
       - name: Lint workspace
         run: pnpm lint

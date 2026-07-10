@@ -38,10 +38,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # See `ci.yml` — the nested `packages/components` workspace
+      # See `ci.yml` — the nested `packages/extensions/components` workspace
       # needs its own install before component leaves get built.
       - name: Install components workspace
-        run: pnpm --dir packages/components install --frozen-lockfile --config.strictDepBuilds=false
+        run: pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
 
       # Bench harness imports from @anvilkit/plugin-export-html/dist,
       # @anvilkit/ir/dist, @anvilkit/plugin-version-history/dist, and
