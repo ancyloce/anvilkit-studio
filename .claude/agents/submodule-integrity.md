@@ -5,7 +5,7 @@ description: >-
   (superproject SHA vs submodule HEAD), UNPUSHED gitlink targets (the SHA a gitlink
   points at not existing on any remote → breaks clone/CI for everyone), detached-HEAD
   orphan-commit risk, dirty working trees, and uninitialized submodules. Recurses into
-  the nested packages/canvas submodules. Use BEFORE any main-repo commit/push or release,
+  the packages/capabilities/canvas submodules. Use BEFORE any main-repo commit/push or release,
   or when submodule state looks surprising. Reports a status table + danger list; makes
   no commits and runs no write commands.
 tools: Read, Grep, Glob, Bash
@@ -27,9 +27,9 @@ As of this writing `git config -f .gitmodules --get-regexp path` yields:
   `plugin-asset-manager`, `plugin-canvas-studio`, `plugin-collab-ui`, `plugin-collab-yjs`,
   `plugin-design-system`, `plugin-export-canvas`, `plugin-export-html`, `plugin-export-react`,
   `plugin-version-history`
-- **`packages/canvas/core`** and **`packages/canvas/editor`** — these are **direct**
-  superproject submodules at those paths (NOT nested inside a `packages/canvas`
-  submodule; `packages/canvas` is a plain directory). Their edits still don't appear in
+- **`packages/capabilities/canvas/core`** and **`packages/capabilities/canvas/editor`** — these are **direct**
+  superproject submodules at those paths (NOT nested inside a `packages/capabilities/canvas`
+  submodule; `packages/capabilities/canvas` is a plain directory). Their edits still don't appear in
   the main-repo working `git status` because of the submodule boundary — but
   `git submodule status --recursive` from the repo root already lists them.
 
@@ -63,7 +63,7 @@ As of this writing `git config -f .gitmodules --get-regexp path` yields:
    (`git -C <path> branch -r --contains <sha>`). A staged gitlink bump to an unpushed
    SHA is the highest-severity finding.
 5. **Recurse** — apply every check to all paths from step 1, including
-   `packages/canvas/core` and `packages/canvas/editor`, and any sub-superproject children.
+   `packages/capabilities/canvas/core` and `packages/capabilities/canvas/editor`, and any sub-superproject children.
 
 ## Severity ranking (highest first)
 
