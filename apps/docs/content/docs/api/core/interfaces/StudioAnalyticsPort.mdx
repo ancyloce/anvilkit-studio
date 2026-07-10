@@ -1,0 +1,31 @@
+---
+title: "StudioAnalyticsPort"
+description: "@anvilkit/core · StudioAnalyticsPort"
+---
+
+Defined in: [runtime/core/src/shared/analytics-port.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/shared/analytics-port.ts#L29)
+
+The minimal analytics surface consumed by `<Studio analytics>`. Any
+`@anvilkit/analytics-core` adapter (Noop/Console/LocalStorage/Http/GA4/
+PostHog) is assignable to it.
+
+## Methods
+
+### track()
+
+```ts
+track(eventName, properties): void;
+```
+
+Defined in: [runtime/core/src/shared/analytics-port.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/shared/analytics-port.ts#L30)
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `eventName` | `string` |
+| `properties` | `Record`\&lt;`string`, `unknown`\&gt; |
+
+#### Returns
+
+`void`

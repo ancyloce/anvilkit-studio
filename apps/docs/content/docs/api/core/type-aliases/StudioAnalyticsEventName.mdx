@@ -1,0 +1,19 @@
+---
+title: "StudioAnalyticsEventName"
+description: "@anvilkit/core · StudioAnalyticsEventName"
+---
+
+```ts
+type StudioAnalyticsEventName = 
+  | "draft_saved"
+  | "page_published"
+  | "component_dropped"
+  | "seo_updated"
+  | "plugin_toggled";
+```
+
+Defined in: [runtime/core/src/shared/analytics-port.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/shared/analytics-port.ts#L17)
+
+The Studio-owned system events `<Studio>` emits through the port. Each
+name must remain a member of the analytics capability's event catalog
+(`AnalyticsEventName`); the compat test enforces membership.

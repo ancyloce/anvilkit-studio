@@ -16,7 +16,7 @@ defaults, env vars, and explicit host overrides — in that order.
 
 1. **Layer 1 — defaults.** `StudioConfigSchema.parse({})` produces
    the fully-populated default shape. This is the base target for
-   [deepMerge](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts), so missing keys in higher layers fall back
+   [deepMerge](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/deep-merge.ts), so missing keys in higher layers fall back
    to real values rather than `undefined`.
 2. **Layer 2 — env.** [parseStudioEnv](parseStudioEnv.md) walks the env bag
    for `ANVILKIT_*` entries and produces a `DeepPartial` patch.

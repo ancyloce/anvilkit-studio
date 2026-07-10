@@ -7,7 +7,7 @@
   "flags": {},
   "children": [
     {
-      "id": 6,
+      "id": 1,
       "name": "DebouncedFunction",
       "variant": "declaration",
       "kind": 2097152,
@@ -33,12 +33,12 @@
           "fileName": "debounce.ts",
           "line": 8,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/debounce.ts#L8"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/debounce.ts#L8"
         }
       ],
       "typeParameters": [
         {
-          "id": 11,
+          "id": 6,
           "name": "T",
           "variant": "typeParam",
           "kind": 131072,
@@ -60,7 +60,7 @@
         "types": [
           {
             "type": "reference",
-            "target": 11,
+            "target": 6,
             "name": "T",
             "package": "@anvilkit/utils",
             "refersToTypeParameter": true
@@ -68,14 +68,14 @@
           {
             "type": "reflection",
             "declaration": {
-              "id": 7,
+              "id": 2,
               "name": "__type",
               "variant": "declaration",
               "kind": 65536,
               "flags": {},
               "children": [
                 {
-                  "id": 8,
+                  "id": 3,
                   "name": "cancel",
                   "variant": "declaration",
                   "kind": 1024,
@@ -101,20 +101,20 @@
                       "fileName": "debounce.ts",
                       "line": 13,
                       "character": 2,
-                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/debounce.ts#L13"
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/debounce.ts#L13"
                     }
                   ],
                   "type": {
                     "type": "reflection",
                     "declaration": {
-                      "id": 9,
+                      "id": 4,
                       "name": "__type",
                       "variant": "declaration",
                       "kind": 65536,
                       "flags": {},
                       "signatures": [
                         {
-                          "id": 10,
+                          "id": 5,
                           "name": "__type",
                           "variant": "signature",
                           "kind": 4096,
@@ -133,7 +133,7 @@
                 {
                   "title": "Properties",
                   "children": [
-                    8
+                    3
                   ]
                 }
               ]
@@ -143,7 +143,7 @@
       }
     },
     {
-      "id": 17,
+      "id": 12,
       "name": "DeepPartial",
       "variant": "declaration",
       "kind": 2097152,
@@ -177,12 +177,12 @@
           "fileName": "deep-merge.ts",
           "line": 6,
           "character": 12,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L6"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/deep-merge.ts#L6"
         }
       ],
       "typeParameters": [
         {
-          "id": 18,
+          "id": 13,
           "name": "T",
           "variant": "typeParam",
           "kind": 131072,
@@ -193,7 +193,7 @@
         "type": "conditional",
         "checkType": {
           "type": "reference",
-          "target": 18,
+          "target": 13,
           "name": "T",
           "package": "@anvilkit/utils",
           "refersToTypeParameter": true
@@ -216,7 +216,7 @@
         },
         "trueType": {
           "type": "reference",
-          "target": 18,
+          "target": 13,
           "name": "T",
           "package": "@anvilkit/utils",
           "refersToTypeParameter": true
@@ -225,7 +225,7 @@
           "type": "conditional",
           "checkType": {
             "type": "reference",
-            "target": 18,
+            "target": 13,
             "name": "T",
             "package": "@anvilkit/utils",
             "refersToTypeParameter": true
@@ -242,7 +242,7 @@
               "operator": "keyof",
               "target": {
                 "type": "reference",
-                "target": 18,
+                "target": 13,
                 "name": "T",
                 "package": "@anvilkit/utils",
                 "refersToTypeParameter": true
@@ -250,7 +250,7 @@
             },
             "templateType": {
               "type": "reference",
-              "target": 17,
+              "target": 12,
               "typeArguments": [
                 {
                   "type": "indexedAccess",
@@ -267,7 +267,7 @@
                   },
                   "objectType": {
                     "type": "reference",
-                    "target": 18,
+                    "target": 13,
                     "name": "T",
                     "package": "@anvilkit/utils",
                     "refersToTypeParameter": true
@@ -281,7 +281,7 @@
           },
           "falseType": {
             "type": "reference",
-            "target": 18,
+            "target": 13,
             "name": "T",
             "package": "@anvilkit/utils",
             "refersToTypeParameter": true
@@ -290,7 +290,7 @@
       }
     },
     {
-      "id": 1,
+      "id": 7,
       "name": "debounce",
       "variant": "declaration",
       "kind": 64,
@@ -300,12 +300,12 @@
           "fileName": "debounce.ts",
           "line": 38,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/debounce.ts#L38"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/debounce.ts#L38"
         }
       ],
       "signatures": [
         {
-          "id": 2,
+          "id": 8,
           "name": "debounce",
           "variant": "signature",
           "kind": 4096,
@@ -407,12 +407,12 @@
               "fileName": "debounce.ts",
               "line": 38,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/debounce.ts#L38"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/debounce.ts#L38"
             }
           ],
           "typeParameters": [
             {
-              "id": 3,
+              "id": 9,
               "name": "T",
               "variant": "typeParam",
               "kind": 131072,
@@ -431,7 +431,7 @@
           ],
           "parameters": [
             {
-              "id": 4,
+              "id": 10,
               "name": "fn",
               "variant": "param",
               "kind": 32768,
@@ -446,14 +446,14 @@
               },
               "type": {
                 "type": "reference",
-                "target": 3,
+                "target": 9,
                 "name": "T",
                 "package": "@anvilkit/utils",
                 "refersToTypeParameter": true
               }
             },
             {
-              "id": 5,
+              "id": 11,
               "name": "wait",
               "variant": "param",
               "kind": 32768,
@@ -482,11 +482,11 @@
           ],
           "type": {
             "type": "reference",
-            "target": 6,
+            "target": 1,
             "typeArguments": [
               {
                 "type": "reference",
-                "target": 3,
+                "target": 9,
                 "name": "T",
                 "package": "@anvilkit/utils",
                 "refersToTypeParameter": true
@@ -499,7 +499,7 @@
       ]
     },
     {
-      "id": 12,
+      "id": 14,
       "name": "deepMerge",
       "variant": "declaration",
       "kind": 64,
@@ -509,12 +509,12 @@
           "fileName": "deep-merge.ts",
           "line": 55,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L55"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/deep-merge.ts#L55"
         }
       ],
       "signatures": [
         {
-          "id": 13,
+          "id": 15,
           "name": "deepMerge",
           "variant": "signature",
           "kind": 4096,
@@ -641,12 +641,12 @@
               "fileName": "deep-merge.ts",
               "line": 55,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts#L55"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/deep-merge.ts#L55"
             }
           ],
           "typeParameters": [
             {
-              "id": 14,
+              "id": 16,
               "name": "T",
               "variant": "typeParam",
               "kind": 131072,
@@ -655,7 +655,7 @@
           ],
           "parameters": [
             {
-              "id": 15,
+              "id": 17,
               "name": "target",
               "variant": "param",
               "kind": 32768,
@@ -670,14 +670,14 @@
               },
               "type": {
                 "type": "reference",
-                "target": 14,
+                "target": 16,
                 "name": "T",
                 "package": "@anvilkit/utils",
                 "refersToTypeParameter": true
               }
             },
             {
-              "id": 16,
+              "id": 18,
               "name": "sources",
               "variant": "param",
               "kind": 32768,
@@ -710,11 +710,11 @@
                     "types": [
                       {
                         "type": "reference",
-                        "target": 17,
+                        "target": 12,
                         "typeArguments": [
                           {
                             "type": "reference",
-                            "target": 14,
+                            "target": 16,
                             "name": "T",
                             "package": "@anvilkit/utils",
                             "refersToTypeParameter": true
@@ -735,7 +735,7 @@
           ],
           "type": {
             "type": "reference",
-            "target": 14,
+            "target": 16,
             "name": "T",
             "package": "@anvilkit/utils",
             "refersToTypeParameter": true
@@ -754,7 +754,7 @@
           "fileName": "generate-id.ts",
           "line": 19,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/generate-id.ts#L19"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/generate-id.ts#L19"
         }
       ],
       "signatures": [
@@ -821,7 +821,7 @@
               "fileName": "generate-id.ts",
               "line": 19,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/generate-id.ts#L19"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/generate-id.ts#L19"
             }
           ],
           "parameters": [
@@ -880,223 +880,6 @@
     },
     {
       "id": 22,
-      "name": "getStrictContext",
-      "variant": "declaration",
-      "kind": 64,
-      "flags": {},
-      "sources": [
-        {
-          "fileName": "get-strict-context.ts",
-          "line": 48,
-          "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/get-strict-context.ts#L48"
-        }
-      ],
-      "signatures": [
-        {
-          "id": 23,
-          "name": "getStrictContext",
-          "variant": "signature",
-          "kind": 4096,
-          "flags": {},
-          "comment": {
-            "summary": [
-              {
-                "kind": "text",
-                "text": "Creates a React context paired with a hook that throws a descriptive\nerror when used outside its provider. The returned tuple is designed\nto be destructured into a single module, producing the common\n"
-              },
-              {
-                "kind": "code",
-                "text": "`<FooProvider>`"
-              },
-              {
-                "kind": "text",
-                "text": " + "
-              },
-              {
-                "kind": "code",
-                "text": "`useFoo()`"
-              },
-              {
-                "kind": "text",
-                "text": " pattern with no repeated boilerplate.\n\nWhy this exists instead of using "
-              },
-              {
-                "kind": "code",
-                "text": "`createContext`"
-              },
-              {
-                "kind": "text",
-                "text": " directly:\n\n- Missing-provider bugs are one of the most common React footguns\n  and the default behavior (silently return the context default) is\n  the worst possible outcome — consumers see "
-              },
-              {
-                "kind": "code",
-                "text": "`undefined`"
-              },
-              {
-                "kind": "text",
-                "text": " deep inside\n  a component tree with no stack trace pointing at the real cause.\n- Hand-rolling the throw-if-unset check on every context adds noise\n  and gets forgotten. Centralizing it here makes it automatic."
-              }
-            ],
-            "blockTags": [
-              {
-                "tag": "@returns",
-                "content": [
-                  {
-                    "kind": "text",
-                    "text": "A tuple "
-                  },
-                  {
-                    "kind": "code",
-                    "text": "`[Provider, useContext]`"
-                  },
-                  {
-                    "kind": "text",
-                    "text": " ready to be destructured."
-                  }
-                ]
-              },
-              {
-                "tag": "@example",
-                "content": [
-                  {
-                    "kind": "code",
-                    "text": "```ts\nconst [StudioConfigProvider, useStudioConfig] =\n  getStrictContext<StudioConfig>(\"StudioConfig\");\n\n// Inside a component:\nfunction SettingsPanel() {\n  const config = useStudioConfig(); // throws if no provider above\n  return <div>{config.apiKey}</div>;\n}\n```"
-                  }
-                ]
-              }
-            ]
-          },
-          "sources": [
-            {
-              "fileName": "get-strict-context.ts",
-              "line": 48,
-              "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/get-strict-context.ts#L48"
-            }
-          ],
-          "typeParameters": [
-            {
-              "id": 24,
-              "name": "T",
-              "variant": "typeParam",
-              "kind": 131072,
-              "flags": {}
-            }
-          ],
-          "parameters": [
-            {
-              "id": 25,
-              "name": "name",
-              "variant": "param",
-              "kind": 32768,
-              "flags": {},
-              "comment": {
-                "summary": [
-                  {
-                    "kind": "text",
-                    "text": "Identifier used in the missing-provider error message\n  and as the context's "
-                  },
-                  {
-                    "kind": "code",
-                    "text": "`displayName`"
-                  },
-                  {
-                    "kind": "text",
-                    "text": " (visible in React DevTools).\n  Typically matches the exported provider, e.g. "
-                  },
-                  {
-                    "kind": "code",
-                    "text": "`\"StudioConfig\"`"
-                  },
-                  {
-                    "kind": "text",
-                    "text": " →\n  "
-                  },
-                  {
-                    "kind": "code",
-                    "text": "`<StudioConfigProvider>`"
-                  },
-                  {
-                    "kind": "text",
-                    "text": " + "
-                  },
-                  {
-                    "kind": "code",
-                    "text": "`useStudioConfig()`"
-                  },
-                  {
-                    "kind": "text",
-                    "text": "."
-                  }
-                ]
-              },
-              "type": {
-                "type": "intrinsic",
-                "name": "string"
-              }
-            }
-          ],
-          "type": {
-            "type": "typeOperator",
-            "operator": "readonly",
-            "target": {
-              "type": "tuple",
-              "elements": [
-                {
-                  "type": "reference",
-                  "target": {
-                    "packageName": "@types/react",
-                    "packagePath": "index.d.ts",
-                    "qualifiedName": "React.Provider"
-                  },
-                  "typeArguments": [
-                    {
-                      "type": "reference",
-                      "target": 24,
-                      "name": "T",
-                      "package": "@anvilkit/utils",
-                      "refersToTypeParameter": true
-                    }
-                  ],
-                  "name": "Provider",
-                  "package": "@types/react",
-                  "qualifiedName": "React.Provider"
-                },
-                {
-                  "type": "reflection",
-                  "declaration": {
-                    "id": 26,
-                    "name": "__type",
-                    "variant": "declaration",
-                    "kind": 65536,
-                    "flags": {},
-                    "signatures": [
-                      {
-                        "id": 27,
-                        "name": "__type",
-                        "variant": "signature",
-                        "kind": 4096,
-                        "flags": {},
-                        "type": {
-                          "type": "reference",
-                          "target": 24,
-                          "name": "T",
-                          "package": "@anvilkit/utils",
-                          "refersToTypeParameter": true
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": 28,
       "name": "invariant",
       "variant": "declaration",
       "kind": 64,
@@ -1106,12 +889,12 @@
           "fileName": "invariant.ts",
           "line": 24,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/invariant.ts#L24"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/invariant.ts#L24"
         }
       ],
       "signatures": [
         {
-          "id": 29,
+          "id": 23,
           "name": "invariant",
           "variant": "signature",
           "kind": 4096,
@@ -1212,12 +995,12 @@
               "fileName": "invariant.ts",
               "line": 24,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/invariant.ts#L24"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/invariant.ts#L24"
             }
           ],
           "parameters": [
             {
-              "id": 30,
+              "id": 24,
               "name": "condition",
               "variant": "param",
               "kind": 32768,
@@ -1236,7 +1019,7 @@
               }
             },
             {
-              "id": 31,
+              "id": 25,
               "name": "message",
               "variant": "param",
               "kind": 32768,
@@ -1268,18 +1051,17 @@
     {
       "title": "Type Aliases",
       "children": [
-        6,
-        17
+        1,
+        12
       ]
     },
     {
       "title": "Functions",
       "children": [
-        1,
-        12,
+        7,
+        14,
         19,
-        22,
-        28
+        22
       ]
     }
   ],
@@ -1293,92 +1075,92 @@
     "1": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "debounce"
+      "qualifiedName": "DebouncedFunction"
     },
     "2": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "debounce"
+      "qualifiedName": "__type"
     },
     "3": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "T"
+      "qualifiedName": "__type.cancel"
     },
     "4": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "fn"
+      "qualifiedName": "__type"
     },
     "5": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "wait"
+      "qualifiedName": "__type"
     },
     "6": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "DebouncedFunction"
+      "qualifiedName": "T"
     },
     "7": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "debounce"
     },
     "8": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "__type.cancel"
+      "qualifiedName": "debounce"
     },
     "9": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "T"
     },
     "10": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "__type"
+      "qualifiedName": "fn"
     },
     "11": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/debounce.ts",
-      "qualifiedName": "T"
+      "qualifiedName": "wait"
     },
     "12": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/deep-merge.ts",
-      "qualifiedName": "deepMerge"
+      "qualifiedName": "DeepPartial"
     },
     "13": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/deep-merge.ts",
-      "qualifiedName": "deepMerge"
+      "qualifiedName": "T"
     },
     "14": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/deep-merge.ts",
-      "qualifiedName": "T"
+      "qualifiedName": "deepMerge"
     },
     "15": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/deep-merge.ts",
-      "qualifiedName": "target"
+      "qualifiedName": "deepMerge"
     },
     "16": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/deep-merge.ts",
-      "qualifiedName": "sources"
+      "qualifiedName": "T"
     },
     "17": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/deep-merge.ts",
-      "qualifiedName": "DeepPartial"
+      "qualifiedName": "target"
     },
     "18": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/deep-merge.ts",
-      "qualifiedName": "T"
+      "qualifiedName": "sources"
     },
     "19": {
       "packageName": "@anvilkit/utils",
@@ -1397,50 +1179,20 @@
     },
     "22": {
       "packageName": "@anvilkit/utils",
-      "packagePath": "src/get-strict-context.ts",
-      "qualifiedName": "getStrictContext"
+      "packagePath": "src/invariant.ts",
+      "qualifiedName": "invariant"
     },
     "23": {
       "packageName": "@anvilkit/utils",
-      "packagePath": "src/get-strict-context.ts",
-      "qualifiedName": "getStrictContext"
+      "packagePath": "src/invariant.ts",
+      "qualifiedName": "invariant"
     },
     "24": {
-      "packageName": "@anvilkit/utils",
-      "packagePath": "src/get-strict-context.ts",
-      "qualifiedName": "T"
-    },
-    "25": {
-      "packageName": "@anvilkit/utils",
-      "packagePath": "src/get-strict-context.ts",
-      "qualifiedName": "name"
-    },
-    "26": {
-      "packageName": "@anvilkit/utils",
-      "packagePath": "src/get-strict-context.ts",
-      "qualifiedName": "__type"
-    },
-    "27": {
-      "packageName": "@anvilkit/utils",
-      "packagePath": "src/get-strict-context.ts",
-      "qualifiedName": "__type"
-    },
-    "28": {
-      "packageName": "@anvilkit/utils",
-      "packagePath": "src/invariant.ts",
-      "qualifiedName": "invariant"
-    },
-    "29": {
-      "packageName": "@anvilkit/utils",
-      "packagePath": "src/invariant.ts",
-      "qualifiedName": "invariant"
-    },
-    "30": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/invariant.ts",
       "qualifiedName": "condition"
     },
-    "31": {
+    "25": {
       "packageName": "@anvilkit/utils",
       "packagePath": "src/invariant.ts",
       "qualifiedName": "message"

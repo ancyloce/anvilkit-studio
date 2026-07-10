@@ -107,6 +107,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		pkgName: "@anvilkit/utils",
 		displayName: "Utils",
 		summary: "Zero-dependency helpers shared across Anvilkit runtime packages.",
+		dir: join("foundation", "utils"),
 	},
 	{
 		slug: "canvas-core",
