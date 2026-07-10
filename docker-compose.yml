@@ -1,4 +1,4 @@
-# docker-compose.yml — run the prebuilt anvilkit demo + docs images from GHCR.
+# docker-compose.yml — run the prebuilt anvilkit studio + docs images from GHCR.
 #
 # Images are produced by .github/workflows/docker-images.yml and tagged by the
 # triggering commit SHA (sha-<short>). Pull + run with:
@@ -6,15 +6,15 @@
 #   docker compose pull && docker compose up -d
 #
 # Topology: the `proxy` (Caddy) service is the ONLY public entry point. It
-# fronts the demo and tunnels the collab WebSocket to the relay over the
-# internal Docker network, so `demo` and `collab` are NOT published directly.
+# fronts the studio app and tunnels the collab WebSocket to the relay over the
+# internal Docker network, so `studio` and `collab` are NOT published directly.
 #
-# Then open:  demo → http://localhost   docs → http://localhost:5173
+# Then open:  studio → http://localhost   docs → http://localhost:5173
 services:
   proxy:
     # Single public edge: terminates TLS (when PUBLIC_DOMAIN is set) and is the
     # only service with published ports. Routes `/collab-ws/*` → the internal
-    # Hocuspocus relay and everything else → the demo. See ./Caddyfile.
+    # Hocuspocus relay and everything else → the studio app. See ./Caddyfile.
     image: caddy:2-alpine
     environment:
       # Unset → `:80` plain HTTP (good for localhost/IP). Set to your domain for
@@ -30,17 +30,17 @@ services:
       - caddy-data:/data
       - caddy-config:/config
     depends_on:
-      - demo
+      - studio
       - collab
     restart: unless-stopped
     networks:
       - anvilkit
 
-  demo:
+  studio:
     # Rebuild on `main` publishes `:latest` (.github/workflows/docker-images.yml);
     # the image now bundles the SQLite adapter + better-sqlite3 native binary.
-    image: ghcr.io/ancyloce/demo:latest
-    # The demo image is a Next.js standalone server that listens on PORT=3000
+    image: ghcr.io/ancyloce/studio:latest
+    # The studio image is a Next.js standalone server that listens on PORT=3000
     # (HOSTNAME=0.0.0.0 is baked into the Dockerfile).
     environment:
       # Durable page store on the mounted volume (the Dockerfile also defaults
@@ -59,6 +59,8 @@ services:
     expose:
       - "3000"
     volumes:
+      # Volume keeps its pre-rename `demo-pages` name so existing deployments
+      # retain their page data across the demo → studio service rename.
       - demo-pages:/data
     depends_on:
       - collab
@@ -89,7 +91,7 @@ services:
       # reached through the proxy, the browser is same-origin with the app, so
       # an empty allowlist (accept any; relay logs "ANY") is safe here. Pin it
       # to your public origin(s) via DEMO_ALLOWED_ORIGINS (e.g.
-      # https://demo.example.com) for defense-in-depth. See .env.example.
+      # https://studio.example.com) for defense-in-depth. See .env.example.
       COLLAB_ALLOWED_ORIGINS: ${DEMO_ALLOWED_ORIGINS:-}
       # Durable mode: persist docs to the `redis` service below and fan
       # updates out across instances. Without this the relay boots

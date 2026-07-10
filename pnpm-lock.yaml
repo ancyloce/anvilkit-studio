@@ -175,7 +175,191 @@ importers:
         specifier: ^5.0.14
         version: 5.0.14(@types/react@19.2.17)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
 
-  apps/demo:
+  apps/docs:
+    dependencies:
+      '@anvilkit/bento-grid':
+        specifier: workspace:*
+        version: link:../../packages/components/src/bento-grid
+      '@anvilkit/blog-list':
+        specifier: workspace:*
+        version: link:../../packages/components/src/blog-list
+      '@anvilkit/button':
+        specifier: workspace:*
+        version: link:../../packages/components/src/button
+      '@anvilkit/canvas-editor':
+        specifier: workspace:*
+        version: link:../../packages/canvas/editor
+      '@anvilkit/canvas-templates':
+        specifier: workspace:*
+        version: link:../../packages/templates/canvas
+      '@anvilkit/collab-ui':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-collab-ui
+      '@anvilkit/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@anvilkit/helps':
+        specifier: workspace:*
+        version: link:../../packages/components/src/helps
+      '@anvilkit/hero':
+        specifier: workspace:*
+        version: link:../../packages/components/src/hero
+      '@anvilkit/input':
+        specifier: workspace:*
+        version: link:../../packages/components/src/input
+      '@anvilkit/ir':
+        specifier: workspace:*
+        version: link:../../packages/ir
+      '@anvilkit/logo-clouds':
+        specifier: workspace:*
+        version: link:../../packages/components/src/logo-clouds
+      '@anvilkit/navbar':
+        specifier: workspace:*
+        version: link:../../packages/components/src/navbar
+      '@anvilkit/plugin-ai-copilot':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-ai-copilot
+      '@anvilkit/plugin-asset-manager':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-asset-manager
+      '@anvilkit/plugin-canvas-studio':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-canvas-studio
+      '@anvilkit/plugin-collab-yjs':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-collab-yjs
+      '@anvilkit/plugin-design-system':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-design-system
+      '@anvilkit/plugin-export-html':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-export-html
+      '@anvilkit/plugin-export-react':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-export-react
+      '@anvilkit/plugin-version-history':
+        specifier: workspace:*
+        version: link:../../packages/plugins/plugin-version-history
+      '@anvilkit/pricing-minimal':
+        specifier: workspace:*
+        version: link:../../packages/components/src/pricing-minimal
+      '@anvilkit/section':
+        specifier: workspace:*
+        version: link:../../packages/components/src/section
+      '@anvilkit/statistics':
+        specifier: workspace:*
+        version: link:../../packages/components/src/statistics
+      '@anvilkit/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/configs/tailwind-config
+      '@gsap/react':
+        specifier: ^2.1.2
+        version: 2.1.2(gsap@3.15.0)(react@19.2.7)
+      '@hocuspocus/provider':
+        specifier: ^4.3.0
+        version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
+      '@orama/tokenizers':
+        specifier: 3.1.18
+        version: 3.1.18
+      '@puckeditor/core':
+        specifier: ^0.22.0
+        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
+      '@tanstack/react-router':
+        specifier: ^1.170.0
+        version: 1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@tanstack/react-start':
+        specifier: ^1.168.26
+        version: 1.168.26(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(crossws@0.4.6(srvx@0.11.17))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      fumadocs-core:
+        specifier: ^16.10.5
+        version: 16.10.5(@mdx-js/mdx@3.1.1)(@tanstack/react-router@1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.21.0(react@19.2.7))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(zod@4.4.3)
+      fumadocs-mdx:
+        specifier: ^15.0.12
+        version: 15.0.12(@types/mdast@4.0.4)(@types/mdx@2.0.14)(@types/react@19.2.17)(fumadocs-core@16.10.5(@mdx-js/mdx@3.1.1)(@tanstack/react-router@1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.21.0(react@19.2.7))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(zod@4.4.3))(mdast-util-directive@3.1.0)(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(rolldown@1.1.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      fumadocs-ui:
+        specifier: ^16.10.5
+        version: 16.10.5(@tailwindcss/oxide@4.3.1)(@types/mdx@2.0.14)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(fumadocs-core@16.10.5(@mdx-js/mdx@3.1.1)(@tanstack/react-router@1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.21.0(react@19.2.7))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(zod@4.4.3))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(tailwindcss@4.3.1)
+      gsap:
+        specifier: ^3.15.0
+        version: 3.15.0
+      lucide-react:
+        specifier: ^1.21.0
+        version: 1.21.0(react@19.2.7)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tailwind-merge:
+        specifier: ^3.6.0
+        version: 3.6.0
+      y-protocols:
+        specifier: ^1.0.7
+        version: 1.0.7(yjs@13.6.31)
+      yjs:
+        specifier: ^13.6.31
+        version: 13.6.31
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@anvilkit/example-export-json':
+        specifier: workspace:*
+        version: link:../../examples/plugins/export-json
+      '@anvilkit/example-usage-counter':
+        specifier: workspace:*
+        version: link:../../examples/plugins/usage-counter
+      '@anvilkit/validator':
+        specifier: workspace:*
+        version: link:../../packages/validator
+      '@hocuspocus/server':
+        specifier: ^4.3.0
+        version: 4.3.0(srvx@0.11.17)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
+      '@playwright/test':
+        specifier: ^1.59.1
+        version: 1.61.0
+      '@tailwindcss/vite':
+        specifier: ^4.3.1
+        version: 4.3.1(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      '@types/mdx':
+        specifier: ^2.0.14
+        version: 2.0.14
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
+      '@types/react':
+        specifier: ^19.2.17
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.17)
+      '@vitejs/plugin-react':
+        specifier: ^6.0.2
+        version: 6.0.3(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      happy-dom:
+        specifier: ^20.8.9
+        version: 20.10.6
+      jiti:
+        specifier: ^2.6.1
+        version: 2.7.0
+      nitro:
+        specifier: 3.0.260610-beta
+        version: 3.0.260610-beta(better-sqlite3@12.11.1)(chokidar@5.0.0)(dotenv@17.4.2)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1))(jiti@2.7.0)(lru-cache@11.5.1)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+      tailwindcss:
+        specifier: ^4.3.1
+        version: 4.3.1
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vite:
+        specifier: ^8.0.16
+        version: 8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0)
+      vitest:
+        specifier: ^4.1.9
+        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
+
+  apps/studio:
     dependencies:
       '@anvilkit/analytics-core':
         specifier: workspace:*
@@ -373,190 +557,6 @@ importers:
       typescript:
         specifier: 6.0.3
         version: 6.0.3
-      vitest:
-        specifier: ^4.1.9
-        version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-
-  apps/docs:
-    dependencies:
-      '@anvilkit/bento-grid':
-        specifier: workspace:*
-        version: link:../../packages/components/src/bento-grid
-      '@anvilkit/blog-list':
-        specifier: workspace:*
-        version: link:../../packages/components/src/blog-list
-      '@anvilkit/button':
-        specifier: workspace:*
-        version: link:../../packages/components/src/button
-      '@anvilkit/canvas-editor':
-        specifier: workspace:*
-        version: link:../../packages/canvas/editor
-      '@anvilkit/canvas-templates':
-        specifier: workspace:*
-        version: link:../../packages/templates/canvas
-      '@anvilkit/collab-ui':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-collab-ui
-      '@anvilkit/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@anvilkit/helps':
-        specifier: workspace:*
-        version: link:../../packages/components/src/helps
-      '@anvilkit/hero':
-        specifier: workspace:*
-        version: link:../../packages/components/src/hero
-      '@anvilkit/input':
-        specifier: workspace:*
-        version: link:../../packages/components/src/input
-      '@anvilkit/ir':
-        specifier: workspace:*
-        version: link:../../packages/ir
-      '@anvilkit/logo-clouds':
-        specifier: workspace:*
-        version: link:../../packages/components/src/logo-clouds
-      '@anvilkit/navbar':
-        specifier: workspace:*
-        version: link:../../packages/components/src/navbar
-      '@anvilkit/plugin-ai-copilot':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-ai-copilot
-      '@anvilkit/plugin-asset-manager':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-asset-manager
-      '@anvilkit/plugin-canvas-studio':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-canvas-studio
-      '@anvilkit/plugin-collab-yjs':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-collab-yjs
-      '@anvilkit/plugin-design-system':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-design-system
-      '@anvilkit/plugin-export-html':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-html
-      '@anvilkit/plugin-export-react':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-export-react
-      '@anvilkit/plugin-version-history':
-        specifier: workspace:*
-        version: link:../../packages/plugins/plugin-version-history
-      '@anvilkit/pricing-minimal':
-        specifier: workspace:*
-        version: link:../../packages/components/src/pricing-minimal
-      '@anvilkit/section':
-        specifier: workspace:*
-        version: link:../../packages/components/src/section
-      '@anvilkit/statistics':
-        specifier: workspace:*
-        version: link:../../packages/components/src/statistics
-      '@anvilkit/tailwind-config':
-        specifier: workspace:*
-        version: link:../../packages/configs/tailwind-config
-      '@gsap/react':
-        specifier: ^2.1.2
-        version: 2.1.2(gsap@3.15.0)(react@19.2.7)
-      '@hocuspocus/provider':
-        specifier: ^4.3.0
-        version: 4.3.0(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
-      '@orama/tokenizers':
-        specifier: 3.1.18
-        version: 3.1.18
-      '@puckeditor/core':
-        specifier: ^0.22.0
-        version: 0.22.0(@floating-ui/dom@1.7.6)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
-      '@tanstack/react-router':
-        specifier: ^1.170.0
-        version: 1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@tanstack/react-start':
-        specifier: ^1.168.26
-        version: 1.168.26(@rsbuild/core@2.0.15(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(crossws@0.4.6(srvx@0.11.17))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      fumadocs-core:
-        specifier: ^16.10.5
-        version: 16.10.5(@mdx-js/mdx@3.1.1)(@tanstack/react-router@1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.21.0(react@19.2.7))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(zod@4.4.3)
-      fumadocs-mdx:
-        specifier: ^15.0.12
-        version: 15.0.12(@types/mdast@4.0.4)(@types/mdx@2.0.14)(@types/react@19.2.17)(fumadocs-core@16.10.5(@mdx-js/mdx@3.1.1)(@tanstack/react-router@1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.21.0(react@19.2.7))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(zod@4.4.3))(mdast-util-directive@3.1.0)(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(rolldown@1.1.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      fumadocs-ui:
-        specifier: ^16.10.5
-        version: 16.10.5(@tailwindcss/oxide@4.3.1)(@types/mdx@2.0.14)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(fumadocs-core@16.10.5(@mdx-js/mdx@3.1.1)(@tanstack/react-router@1.170.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.17)(lucide-react@1.21.0(react@19.2.7))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(zod@4.4.3))(next@16.2.9(@opentelemetry/api@1.9.1)(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(tailwindcss@4.3.1)
-      gsap:
-        specifier: ^3.15.0
-        version: 3.15.0
-      lucide-react:
-        specifier: ^1.21.0
-        version: 1.21.0(react@19.2.7)
-      react:
-        specifier: 19.2.7
-        version: 19.2.7
-      react-dom:
-        specifier: 19.2.7
-        version: 19.2.7(react@19.2.7)
-      tailwind-merge:
-        specifier: ^3.6.0
-        version: 3.6.0
-      y-protocols:
-        specifier: ^1.0.7
-        version: 1.0.7(yjs@13.6.31)
-      yjs:
-        specifier: ^13.6.31
-        version: 13.6.31
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@anvilkit/example-export-json':
-        specifier: workspace:*
-        version: link:../../examples/plugins/export-json
-      '@anvilkit/example-usage-counter':
-        specifier: workspace:*
-        version: link:../../examples/plugins/usage-counter
-      '@anvilkit/validator':
-        specifier: workspace:*
-        version: link:../../packages/validator
-      '@hocuspocus/server':
-        specifier: ^4.3.0
-        version: 4.3.0(srvx@0.11.17)(y-protocols@1.0.7(yjs@13.6.31))(yjs@13.6.31)
-      '@playwright/test':
-        specifier: ^1.59.1
-        version: 1.61.0
-      '@tailwindcss/vite':
-        specifier: ^4.3.1
-        version: 4.3.1(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      '@types/mdx':
-        specifier: ^2.0.14
-        version: 2.0.14
-      '@types/node':
-        specifier: ^26.0.1
-        version: 26.0.1
-      '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
-      '@types/react-dom':
-        specifier: ^19.2.3
-        version: 19.2.3(@types/react@19.2.17)
-      '@vitejs/plugin-react':
-        specifier: ^6.0.2
-        version: 6.0.3(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      happy-dom:
-        specifier: ^20.8.9
-        version: 20.10.6
-      jiti:
-        specifier: ^2.6.1
-        version: 2.7.0
-      nitro:
-        specifier: 3.0.260610-beta
-        version: 3.0.260610-beta(better-sqlite3@12.11.1)(chokidar@5.0.0)(dotenv@17.4.2)(drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1))(jiti@2.7.0)(lru-cache@11.5.1)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
-      tailwindcss:
-        specifier: ^4.3.1
-        version: 4.3.1
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      vite:
-        specifier: ^8.0.16
-        version: 8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0)
       vitest:
         specifier: ^4.1.9
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@26.0.1)(@vitest/coverage-v8@4.1.9)(happy-dom@20.10.6)(jsdom@29.1.1)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.0)(yaml@2.9.0))
@@ -10076,11 +10076,6 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  tsx@4.22.4:
-    resolution: {integrity: sha512-X8EX+XV4QR5xCsrgxaED954zTDfY8KqlDtskKEL0cHhyS/P8b4IFOvGDQpsC9Q1XnLq915wEfwwY/zzskCtmhg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-
   tsx@4.23.0:
     resolution: {integrity: sha512-eUdUIaCr963q2h5u3+QwvYp0+eqPvn+egeqZUm0hwERCqqx1E3kK5ehbGCvqSE5MQAULr67ww0cA3jKc3YkM1w==}
     engines: {node: '>=18.0.0'}
@@ -14639,7 +14634,7 @@ snapshots:
       '@drizzle-team/brocli': 0.10.2
       '@esbuild-kit/esm-loader': 2.6.5
       esbuild: 0.25.12
-      tsx: 4.22.4
+      tsx: 4.23.0
 
   drizzle-orm@0.45.2(@opentelemetry/api@1.9.1)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1):
     optionalDependencies:
@@ -18051,12 +18046,6 @@ snapshots:
   tslib@1.14.1: {}
 
   tslib@2.8.1: {}
-
-  tsx@4.22.4:
-    dependencies:
-      esbuild: 0.28.1
-    optionalDependencies:
-      fsevents: 2.3.3
 
   tsx@4.23.0:
     dependencies:
