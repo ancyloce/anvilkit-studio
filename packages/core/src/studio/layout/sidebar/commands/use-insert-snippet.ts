@@ -26,8 +26,8 @@ import {
 } from "@puckeditor/core";
 import { useCallback } from "react";
 import { toast } from "sonner";
-import type { StudioCopySnippet } from "@/types/sidebar";
 import { useMsg } from "@/state/editor-i18n-context";
+import type { StudioCopySnippet } from "@/types/sidebar";
 
 export type InsertSnippetCommand = (snippet: StudioCopySnippet) => void;
 

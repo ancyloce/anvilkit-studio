@@ -11,8 +11,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-import type { StudioPluginMeta } from "@/types/plugin";
 import { hasHeaderActionCapability } from "@/layout/StudioHeader.logic";
+import type { StudioPluginMeta } from "@/types/plugin";
 
 function meta(
 	id: string,

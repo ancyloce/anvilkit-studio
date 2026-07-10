@@ -16,10 +16,9 @@ import type {
 	ObjectField as PuckObjectField,
 } from "@puckeditor/core";
 import { cloneElement, isValidElement, type ReactNode } from "react";
-
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import { Card, CardContent } from "@/primitives/card";
 import { cn } from "@/shared/cn";
-import { FieldLabel } from "@/overrides/layout/FieldLabel";
 
 interface ObjectFieldRendererProps
 	extends FieldProps<

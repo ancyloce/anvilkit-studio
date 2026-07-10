@@ -12,10 +12,8 @@ import type {
 	NumberField as PuckNumberField,
 } from "@puckeditor/core";
 import { type ReactNode, useCallback } from "react";
-
-import { Input } from "@/primitives/input";
-
 import { FieldLabel } from "@/overrides/layout/FieldLabel";
+import { Input } from "@/primitives/input";
 import type { FieldRendererProps } from "./TextField";
 import { type ParseResult, useLocalFieldValue } from "./use-local-field-value";
 

@@ -11,12 +11,11 @@
 import { cleanup, render, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-
-import { useEditorUiStoreApi } from "@/state/slices/EditorUiStoreProvider";
-import { useAiStoreApi } from "@/state/slices/AiStoreProvider";
 import { EditorStoreProvider } from "@/state/EditorStoreProvider";
-import { useExportStoreApi } from "@/state/slices/ExportStoreProvider";
 import { createEditorStore } from "@/state/editor-store-bundle";
+import { useAiStoreApi } from "@/state/slices/AiStoreProvider";
+import { useEditorUiStoreApi } from "@/state/slices/EditorUiStoreProvider";
+import { useExportStoreApi } from "@/state/slices/ExportStoreProvider";
 import { useThemeStoreApi } from "@/state/slices/ThemeStoreProvider";
 
 interface Captured {

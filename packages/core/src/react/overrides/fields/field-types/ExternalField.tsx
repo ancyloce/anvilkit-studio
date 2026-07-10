@@ -13,7 +13,7 @@ import type {
 } from "@puckeditor/core";
 import { ChevronDown, X } from "lucide-react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
-
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import { Button } from "@/primitives/button";
 import { Card, CardContent } from "@/primitives/card";
 import { Empty, EmptyDescription, EmptyTitle } from "@/primitives/empty";
@@ -21,8 +21,6 @@ import { Input } from "@/primitives/input";
 import { ScrollArea } from "@/primitives/scroll-area";
 import { Spinner } from "@/primitives/spinner";
 import { useMsg } from "@/state/editor-i18n-context";
-
-import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import type { FieldRendererProps } from "./TextField";
 
 interface ExternalFieldRendererProps

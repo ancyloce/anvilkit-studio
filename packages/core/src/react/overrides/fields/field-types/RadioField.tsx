@@ -13,13 +13,11 @@ import type {
 	RadioField as PuckRadioField,
 } from "@puckeditor/core";
 import { type ReactNode } from "react";
-
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import {
 	Toggle,
 	ToggleGroup,
 } from "@/primitives/vendor/animate-ui/components/base/toggle-group";
-
-import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import {
 	findOptionIndex,
 	type OptionValue,

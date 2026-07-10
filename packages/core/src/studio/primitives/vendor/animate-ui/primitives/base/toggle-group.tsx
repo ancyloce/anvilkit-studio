@@ -4,14 +4,13 @@ import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
 import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
 import * as React from "react";
-
+import { useControlledState } from "@/primitives/hooks/use-controlled-state";
 import {
 	Highlight,
 	HighlightItem,
 	type HighlightItemProps,
 	type HighlightProps,
 } from "@/primitives/vendor/animate-ui/primitives/effects/highlight";
-import { useControlledState } from "@/primitives/hooks/use-controlled-state";
 import { getStrictContext } from "@/primitives/vendor/lib/get-strict-context";
 
 type ToggleGroupProps = React.ComponentProps<typeof ToggleGroupPrimitive>;

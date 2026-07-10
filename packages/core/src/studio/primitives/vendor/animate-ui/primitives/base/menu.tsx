@@ -3,15 +3,14 @@
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
 import * as React from "react";
-
+import { useControlledState } from "@/primitives/hooks/use-controlled-state";
+import { useDataState } from "@/primitives/hooks/use-data-state";
 import {
 	Highlight,
 	HighlightItem,
 	type HighlightItemProps,
 	type HighlightProps,
 } from "@/primitives/vendor/animate-ui/primitives/effects/highlight";
-import { useControlledState } from "@/primitives/hooks/use-controlled-state";
-import { useDataState } from "@/primitives/hooks/use-data-state";
 import { getStrictContext } from "@/primitives/vendor/lib/get-strict-context";
 
 type MenuActiveValueContextType = {

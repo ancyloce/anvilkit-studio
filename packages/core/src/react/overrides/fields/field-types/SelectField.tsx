@@ -14,7 +14,7 @@ import type {
 	SelectField as PuckSelectField,
 } from "@puckeditor/core";
 import { type ReactNode, useMemo } from "react";
-
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import {
 	Select,
 	SelectContent,
@@ -22,9 +22,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/primitives/select";
-
 import { useMsg } from "@/state/editor-i18n-context";
-import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import {
 	findOptionIndex,
 	type OptionValue,

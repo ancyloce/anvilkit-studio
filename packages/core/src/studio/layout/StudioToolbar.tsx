@@ -28,7 +28,10 @@ import {
 import { Separator } from "@/primitives/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/primitives/tooltip";
 import { useMsg } from "@/state/editor-i18n-context";
-import { useCanvasViewport, useCanvasZoom } from "@/state/slices/editor-ui-selectors";
+import {
+	useCanvasViewport,
+	useCanvasZoom,
+} from "@/state/slices/editor-ui-selectors";
 import { FULL_WIDTH_VIEWPORTS, type StudioViewport } from "@/studio/ui/index";
 
 const ZOOM_STEP = 0.1;

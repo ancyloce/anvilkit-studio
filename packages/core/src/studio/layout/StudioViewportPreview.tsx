@@ -6,9 +6,12 @@
 import { Puck } from "@puckeditor/core";
 import { memo, type ReactNode, useMemo } from "react";
 import { useChromeProps } from "@/context/chrome-props";
-import { useCanvasViewport, useCanvasZoom } from "@/state/slices/editor-ui-selectors";
-import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
 import { cn } from "@/shared/cn";
+import {
+	useCanvasViewport,
+	useCanvasZoom,
+} from "@/state/slices/editor-ui-selectors";
+import { FULL_WIDTH_VIEWPORTS } from "@/studio/ui/index";
 
 export interface StudioViewportPreviewProps {
 	readonly className?: string;

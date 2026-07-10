@@ -23,7 +23,10 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { createExportStore, type ExportStoreApi } from "@/state/slices/export-store";
+import {
+	createExportStore,
+	type ExportStoreApi,
+} from "@/state/slices/export-store";
 
 type PersistableStore = { persist: { rehydrate(): Promise<void> } };
 function persistOf(store: ExportStoreApi): PersistableStore {

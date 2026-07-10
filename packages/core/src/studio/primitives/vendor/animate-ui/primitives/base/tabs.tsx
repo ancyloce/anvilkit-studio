@@ -8,6 +8,7 @@ import {
 	type Transition,
 } from "motion/react";
 import * as React from "react";
+import { useControlledState } from "@/primitives/hooks/use-controlled-state";
 import {
 	AutoHeight,
 	type AutoHeightProps,
@@ -18,7 +19,6 @@ import {
 	type HighlightItemProps,
 	type HighlightProps,
 } from "@/primitives/vendor/animate-ui/primitives/effects/highlight";
-import { useControlledState } from "@/primitives/hooks/use-controlled-state";
 import { getStrictContext } from "@/primitives/vendor/lib/get-strict-context";
 
 type TabsContextType = {

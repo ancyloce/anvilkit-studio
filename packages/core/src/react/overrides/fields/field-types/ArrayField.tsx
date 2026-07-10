@@ -26,6 +26,7 @@ import {
 	useCallback,
 	useState,
 } from "react";
+import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import { Button } from "@/primitives/button";
 import { Card, CardContent } from "@/primitives/card";
 import { FieldLegend, FieldSet } from "@/primitives/field";
@@ -41,8 +42,6 @@ import {
 } from "@/primitives/vendor/animate-ui/primitives/base/popover";
 import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
-
-import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import { ExternalField } from "./ExternalField";
 import { NumberField } from "./NumberField";
 import { RadioField } from "./RadioField";

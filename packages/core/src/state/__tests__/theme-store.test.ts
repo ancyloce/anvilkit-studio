@@ -16,7 +16,10 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { createThemeStore, type ThemeStoreApi } from "@/state/slices/theme-store";
+import {
+	createThemeStore,
+	type ThemeStoreApi,
+} from "@/state/slices/theme-store";
 
 type PersistableStore = { persist: { rehydrate(): Promise<void> } };
 function persistOf(store: ThemeStoreApi): PersistableStore {

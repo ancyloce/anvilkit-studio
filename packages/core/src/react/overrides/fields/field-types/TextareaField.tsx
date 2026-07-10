@@ -7,10 +7,8 @@ import type {
 	TextareaField as PuckTextareaField,
 } from "@puckeditor/core";
 import { type ReactNode, useCallback } from "react";
-
-import { Textarea } from "@/primitives/textarea";
-
 import { FieldLabel } from "@/overrides/layout/FieldLabel";
+import { Textarea } from "@/primitives/textarea";
 import type { FieldRendererProps } from "./TextField";
 import { useLocalFieldValue } from "./use-local-field-value";
 

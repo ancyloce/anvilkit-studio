@@ -8,11 +8,11 @@ import {
 	type Transition,
 } from "motion/react";
 import * as React from "react";
+import { useAutoHeight } from "@/primitives/hooks/use-auto-height";
 import {
 	Slot,
 	type WithAsChild,
 } from "@/primitives/vendor/animate-ui/primitives/animate/slot";
-import { useAutoHeight } from "@/primitives/hooks/use-auto-height";
 
 type AutoHeightProps = WithAsChild<
 	{

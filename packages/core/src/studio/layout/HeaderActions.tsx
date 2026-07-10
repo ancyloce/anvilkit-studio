@@ -13,8 +13,8 @@
 
 import { MoreHorizontal } from "lucide-react";
 import { type ReactNode, useMemo } from "react";
-import { useStudioPluginContextOrNull } from "@/context/plugin-context";
 import { useStudioRuntime } from "@/components/use-studio";
+import { useStudioPluginContextOrNull } from "@/context/plugin-context";
 import { Button } from "@/primitives/button";
 import {
 	DropdownMenu,
