@@ -15,7 +15,7 @@
  * - **CI:** `.github/workflows/bench.yml` builds the demo, starts
  *   `next start` on port 3000 in the background, waits for it, and
  *   then calls `pnpm bench`.
- * - **Local:** run `pnpm --filter demo build && pnpm --filter demo
+ * - **Local:** run `pnpm --filter studio build && pnpm --filter studio
  *   start` in a second shell, then `pnpm bench`.
  *
  * If the demo is not reachable, the bench emits a single
@@ -74,7 +74,7 @@ export async function runEditorLoadBench(): Promise<BenchResult[]> {
   if (!reachable) {
     console.warn(
       `bench: editor-load — ${EDITOR_URL} not reachable, skipping. ` +
-        `Start the demo (\`pnpm --filter demo start\`) or set ANVILKIT_EDITOR_URL to measure.`,
+        `Start the demo (\`pnpm --filter studio start\`) or set ANVILKIT_EDITOR_URL to measure.`,
     );
     return [
       {

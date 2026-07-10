@@ -82,7 +82,7 @@ export async function runSidebarSwitchBench(): Promise<BenchResult[]> {
 	if (!reachable) {
 		console.warn(
 			`bench: sidebar-switch — ${EDITOR_URL} not reachable, skipping. ` +
-				`Start the demo (\`pnpm --filter demo start\`) or set ANVILKIT_EDITOR_URL to measure.`,
+				`Start the demo (\`pnpm --filter studio start\`) or set ANVILKIT_EDITOR_URL to measure.`,
 		);
 		return [
 			{

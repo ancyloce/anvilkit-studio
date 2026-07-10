@@ -4,7 +4,7 @@
  * NOT part of the gated `pnpm bench` suite — a 100-peer scenario is
  * far too noisy to regress CI on. Run it by hand:
  *
- *   pnpm --filter demo dev        # (or build && next start -p 3000)
+ *   pnpm --filter studio dev        # (or build && next start -p 3000)
  *   pnpm bench:collab-highload    # or: pnpm tsx bench/scenarios/collab-yjs-highload.ts
  *
  * What it does
@@ -330,8 +330,8 @@ async function main(): Promise<void> {
   if (!(await probeDemo(editorUrl))) {
     console.error(
       `\n  Demo not reachable at ${editorUrl}.\n` +
-        `  Start it first:  pnpm --filter demo dev\n` +
-        `  (or: pnpm --filter demo build && pnpm --filter demo start)\n`,
+        `  Start it first:  pnpm --filter studio dev\n` +
+        `  (or: pnpm --filter studio build && pnpm --filter studio start)\n`,
     );
     process.exitCode = 1;
     return;
