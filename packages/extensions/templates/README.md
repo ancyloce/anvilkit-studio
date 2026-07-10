@@ -16,7 +16,7 @@ component packages.
 ## Layout
 
 ```
-packages/templates/
+packages/extensions/templates/
 ├── package.json                           # @anvilkit/templates-workspace (aggregator scripts)
 ├── scripts/                               # scaffold / verify / preview tooling
 ├── landing-saas/

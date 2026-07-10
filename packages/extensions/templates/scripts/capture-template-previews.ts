@@ -3,12 +3,12 @@
  * template's `PageIR` into the demo's `/puck/render` route via the
  * `data` search param, takes a 1200×675 screenshot, runs it through
  * `sharp` to compress ≤200 KB, and writes it to
- * `packages/templates/<slug>/preview.png`.
+ * `packages/extensions/templates/<slug>/preview.png`.
  *
  * Run locally when a template's IR changes:
  *
  *   pnpm -C apps/studio dev &          # start the render route
- *   pnpm tsx packages/templates/scripts/capture-template-previews.ts
+ *   pnpm tsx packages/extensions/templates/scripts/capture-template-previews.ts
  *
  * Intentionally NOT a CI step — one-off per template change, not
  * per PR. The `templates-smoke.yml` cron catches rot without needing
@@ -20,7 +20,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Lazy imports so the file typechecks in CI (playwright + sharp are
-// dev-only deps added to `apps/studio`, not `packages/templates/`).
+// dev-only deps added to `apps/studio`, not `packages/extensions/templates/`).
 // The script is run from the repo root via `pnpm tsx`, so it picks
 // them up through workspace hoisting.
 

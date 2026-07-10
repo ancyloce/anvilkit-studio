@@ -39,7 +39,7 @@ The `check:react-free-runtime` gate guarantees `src/` (excluding `scaffolds/`) h
 ## Layout
 
 ```
-packages/cli/
+packages/tooling/cli/
 ├── src/
 │   ├── bin/anvilkit.ts        # entry point, command registration
 │   ├── commands/              # init.ts, add.ts, validate.ts, export.ts, generate.ts

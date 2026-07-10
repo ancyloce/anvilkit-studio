@@ -14,7 +14,7 @@ import { runAdd } from "../../commands/add.js";
 import { CliError } from "../../utils/errors.js";
 
 const REPO_ROOT = resolve(
-	fileURLToPath(new URL("../../../../../", import.meta.url)),
+	fileURLToPath(new URL("../../../../../../", import.meta.url)),
 );
 const FEED_PATH = join(
 	REPO_ROOT,

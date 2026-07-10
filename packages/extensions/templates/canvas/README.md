@@ -1,6 +1,6 @@
 # `@anvilkit/canvas-templates`
 
-Ten starter [`CanvasIR`](../../capabilities/canvas/core/src/types.ts) designs shipped
+Ten starter [`CanvasIR`](../../../capabilities/canvas/core/src/types.ts) designs shipped
 with AnvilKit Canvas Studio — posters, social formats, slides, and print
 pieces. Each one is a self-contained `CanvasIR` (text / rect / ellipse /
 line nodes only, no external assets) so it loads with zero network calls.
@@ -21,7 +21,7 @@ const poster = canvasTemplates.poster.ir; // CanvasIR
 ## Layout
 
 ```
-packages/templates/canvas/
+packages/extensions/templates/canvas/
 ├── package.json
 ├── tsconfig.json
 ├── vitest.config.ts

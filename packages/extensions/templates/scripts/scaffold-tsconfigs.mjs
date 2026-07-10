@@ -3,7 +3,7 @@
  * Writes a fresh `tsconfig.json` into every template package.
  *
  * Each file is self-contained (no shared base) because
- * `packages/templates/` is not itself a pnpm workspace member — so
+ * `packages/extensions/templates/` is not itself a pnpm workspace member — so
  * `@anvilkit/typescript-config` resolves only from each template's
  * own `node_modules`.
  */
@@ -38,5 +38,5 @@ for (const slug of slugs) {
 		join(root, slug, "tsconfig.json"),
 		`${JSON.stringify(content, null, "\t")}\n`,
 	);
-	console.log(`wrote packages/templates/${slug}/tsconfig.json`);
+	console.log(`wrote packages/extensions/templates/${slug}/tsconfig.json`);
 }

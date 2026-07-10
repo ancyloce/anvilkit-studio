@@ -179,5 +179,5 @@ for (const def of defs) {
 		join(root, def.slug, "src", "page-ir.json"),
 		`${JSON.stringify(pageIR, null, "\t")}\n`,
 	);
-	console.log(`wrote packages/templates/${def.slug}/src/page-ir.json`);
+	console.log(`wrote packages/extensions/templates/${def.slug}/src/page-ir.json`);
 }

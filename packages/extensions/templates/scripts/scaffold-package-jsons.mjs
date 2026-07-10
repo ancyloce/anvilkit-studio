@@ -6,7 +6,7 @@
  * single source of truth for their metadata.
  *
  * Run with: `node scripts/scaffold-package-jsons.mjs` from this
- * directory (`packages/templates/`).
+ * directory (`packages/extensions/templates/`).
  */
 
 import { writeFileSync } from "node:fs";
@@ -106,5 +106,5 @@ for (const { slug, description } of templates) {
 		join(root, slug, "package.json"),
 		`${JSON.stringify(pkg, null, "\t")}\n`,
 	);
-	console.log(`wrote packages/templates/${slug}/package.json`);
+	console.log(`wrote packages/extensions/templates/${slug}/package.json`);
 }

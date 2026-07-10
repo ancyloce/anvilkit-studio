@@ -211,5 +211,5 @@ for (const t of templates) {
 	const dir = join(root, t.slug);
 	writeFileSync(join(dir, "src", "index.ts"), indexSource(t));
 	writeFileSync(join(dir, "README.md"), readmeSource(t));
-	console.log(`wrote packages/templates/${t.slug}/{src/index.ts, README.md}`);
+	console.log(`wrote packages/extensions/templates/${t.slug}/{src/index.ts, README.md}`);
 }

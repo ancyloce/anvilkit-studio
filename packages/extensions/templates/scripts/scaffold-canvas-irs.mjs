@@ -379,7 +379,7 @@ for (const def of defs) {
 		join(canvasSrc, `${def.slug}.json`),
 		`${JSON.stringify(ir, null, "\t")}\n`,
 	);
-	console.log(`wrote packages/templates/canvas/src/${def.slug}.json`);
+	console.log(`wrote packages/extensions/templates/canvas/src/${def.slug}.json`);
 }
 
 console.log(`\nwrote ${defs.length} canvas templates.`);
