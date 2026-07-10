@@ -12350,7 +12350,8 @@
 						{
 							"fileName": "runtime/core/src/shared/analytics-port.ts",
 							"line": 30,
-							"character": 1
+							"character": 1,
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/shared/analytics-port.ts#L30"
 						}
 					],
 					"signatures": [
@@ -12364,7 +12365,8 @@
 								{
 									"fileName": "runtime/core/src/shared/analytics-port.ts",
 									"line": 30,
-									"character": 1
+									"character": 1,
+									"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/shared/analytics-port.ts#L30"
 								}
 							],
 							"parameters": [
@@ -12427,7 +12429,8 @@
 				{
 					"fileName": "runtime/core/src/shared/analytics-port.ts",
 					"line": 29,
-					"character": 17
+					"character": 17,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/shared/analytics-port.ts#L29"
 				}
 			]
 		},
@@ -35841,7 +35844,8 @@
 				{
 					"fileName": "runtime/core/src/shared/analytics-port.ts",
 					"line": 17,
-					"character": 12
+					"character": 12,
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/shared/analytics-port.ts#L17"
 				}
 			],
 			"type": {
@@ -42352,7 +42356,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "deepMerge",
-								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts"
+								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/deep-merge.ts"
 							},
 							{
 								"kind": "text",
@@ -47041,7 +47045,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "DeepPartial",
-								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/types.ts"
+								"target": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/types.ts"
 							},
 							{
 								"kind": "text",

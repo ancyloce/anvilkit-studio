@@ -28,7 +28,7 @@
  *
  * `getStrictContext<StudioRuntime>("Studio")` gives us the usual
  * "called outside provider" error with a useful stack trace, via the
- * helper documented at `packages/utils/src/get-strict-context.ts`. The
+ * helper documented at `packages/foundation/utils/src/get-strict-context.ts`. The
  * context `displayName` is `"Studio"` — the missing-provider error
  * reads `` `useStudio` must be used within <StudioProvider>. ``, which
  * matches the `core-014` acceptance criterion.

@@ -6,11 +6,11 @@ type AnyFunction = (...args: any[]) => any;
  * method that discards any pending invocation.
  */
 export type DebouncedFunction<T extends AnyFunction> = T & {
-  /**
-   * Cancels any pending invocation. Calling `cancel()` on an idle
-   * debounced function is a no-op.
-   */
-  cancel: () => void;
+	/**
+	 * Cancels any pending invocation. Calling `cancel()` on an idle
+	 * debounced function is a no-op.
+	 */
+	cancel: () => void;
 };
 
 /**
@@ -36,27 +36,27 @@ export type DebouncedFunction<T extends AnyFunction> = T & {
  * save.cancel(); // drops formB if still pending.
  */
 export function debounce<T extends AnyFunction>(
-  fn: T,
-  wait: number,
+	fn: T,
+	wait: number,
 ): DebouncedFunction<T> {
-  let timer: ReturnType<typeof setTimeout> | undefined;
+	let timer: ReturnType<typeof setTimeout> | undefined;
 
-  const debounced = ((...args: Parameters<T>): void => {
-    if (timer !== undefined) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(() => {
-      timer = undefined;
-      fn(...args);
-    }, wait);
-  }) as DebouncedFunction<T>;
+	const debounced = ((...args: Parameters<T>): void => {
+		if (timer !== undefined) {
+			clearTimeout(timer);
+		}
+		timer = setTimeout(() => {
+			timer = undefined;
+			fn(...args);
+		}, wait);
+	}) as DebouncedFunction<T>;
 
-  debounced.cancel = (): void => {
-    if (timer !== undefined) {
-      clearTimeout(timer);
-      timer = undefined;
-    }
-  };
+	debounced.cancel = (): void => {
+		if (timer !== undefined) {
+			clearTimeout(timer);
+			timer = undefined;
+		}
+	};
 
-  return debounced;
+	return debounced;
 }

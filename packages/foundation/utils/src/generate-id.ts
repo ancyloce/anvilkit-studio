@@ -17,12 +17,12 @@
  * generateId("plugin");   // "plugin-0192ac5e-a9b3-7ce0-b4a9-9f4f8a4f5d2b"
  */
 export function generateId(prefix?: string): string {
-  const uuid =
-    typeof globalThis.crypto !== "undefined" &&
-    typeof globalThis.crypto.randomUUID === "function"
-      ? globalThis.crypto.randomUUID()
-      : fallbackUuid();
-  return prefix ? `${prefix}-${uuid}` : uuid;
+	const uuid =
+		typeof globalThis.crypto !== "undefined" &&
+		typeof globalThis.crypto.randomUUID === "function"
+			? globalThis.crypto.randomUUID()
+			: fallbackUuid();
+	return prefix ? `${prefix}-${uuid}` : uuid;
 }
 
 /**
@@ -31,9 +31,9 @@ export function generateId(prefix?: string): string {
  * auth tokens or similar.
  */
 function fallbackUuid(): string {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
-    const rand = Math.floor(Math.random() * 16);
-    const value = char === "x" ? rand : (rand & 0x3) | 0x8;
-    return value.toString(16);
-  });
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+		const rand = Math.floor(Math.random() * 16);
+		const value = char === "x" ? rand : (rand & 0x3) | 0x8;
+		return value.toString(16);
+	});
 }

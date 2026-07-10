@@ -12,27 +12,27 @@ import { defineConfig, mergeConfig } from "vitest/config";
  * at this boundary.
  */
 export default mergeConfig(
-  reactLibraryPreset,
-  defineConfig({
-    test: {
-      name: "@anvilkit/utils",
-      coverage: {
-        provider: "v8",
-        reporter: ["text", "html", "lcov"],
-        include: ["src/**/*.ts"],
-        exclude: [
-          "src/**/*.test.ts",
-          "src/**/*.test.tsx",
-          "src/**/__tests__/**",
-          "src/index.ts",
-        ],
-        thresholds: {
-          lines: 100,
-          functions: 100,
-          statements: 100,
-          branches: 100,
-        },
-      },
-    },
-  }),
+	reactLibraryPreset,
+	defineConfig({
+		test: {
+			name: "@anvilkit/utils",
+			coverage: {
+				provider: "v8",
+				reporter: ["text", "html", "lcov"],
+				include: ["src/**/*.ts"],
+				exclude: [
+					"src/**/*.test.ts",
+					"src/**/*.test.tsx",
+					"src/**/__tests__/**",
+					"src/index.ts",
+				],
+				thresholds: {
+					lines: 100,
+					functions: 100,
+					statements: 100,
+					branches: 100,
+				},
+			},
+		},
+	}),
 );

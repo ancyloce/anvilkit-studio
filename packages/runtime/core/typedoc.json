@@ -12,8 +12,8 @@
 	],
 	"externalSymbolLinkMappings": {
 		"@anvilkit/utils": {
-			"deepMerge": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/deep-merge.ts",
-			"DeepPartial": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/utils/src/types.ts"
+			"deepMerge": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/deep-merge.ts",
+			"DeepPartial": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/utils/src/types.ts"
 		},
 		"@puckeditor/core": {
 			"Overrides": "https://puckeditor.com/docs/api-reference/configuration/overrides",

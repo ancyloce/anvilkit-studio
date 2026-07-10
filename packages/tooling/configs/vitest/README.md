@@ -32,7 +32,7 @@ export default mergeConfig(
 For a Node-only package:
 
 ```ts
-// packages/utils/vitest.config.ts
+// packages/foundation/utils/vitest.config.ts
 import { defineConfig, mergeConfig } from "vitest/config";
 import { nodePreset } from "@anvilkit/vitest-config/node";
 
