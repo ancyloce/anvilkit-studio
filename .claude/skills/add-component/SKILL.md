@@ -78,9 +78,9 @@ pnpm --filter @anvilkit/<slug> build
 
 Edit each site for `@anvilkit/<slug>` (component `<Name>`, lowerCamel `<name>`):
 
-1. **`apps/demo/package.json`** → add `"@anvilkit/<slug>": "workspace:*"` to `dependencies` (alphabetical).
-2. **`apps/demo/next.config.js`** → add `"@anvilkit/<slug>"` to `transpilePackages` (alphabetical).
-3. **`apps/demo/lib/puck-demo.ts`** — four edits:
+1. **`apps/studio/package.json`** → add `"@anvilkit/<slug>": "workspace:*"` to `dependencies` (alphabetical).
+2. **`apps/studio/next.config.js`** → add `"@anvilkit/<slug>"` to `transpilePackages` (alphabetical).
+3. **`apps/studio/lib/puck-demo.ts`** — four edits:
    - **import**: `import { type <Name>Props, componentConfig as <name>ComponentConfig, defaultProps as <name>DefaultProps } from "@anvilkit/<slug>";` (drop `defaultProps` if the component doesn't export one — see `DesignBlock`).
    - **`DemoComponents` type**: add `<Name>: <Name>Props;`
    - **`categories.<category>.components`**: add `"<Name>"` to the array.
@@ -97,9 +97,9 @@ bench harness), wire those too.
 
 ```bash
 pnpm install                          # link the new workspace dep
-pnpm --filter demo typecheck
-pnpm --filter demo lint
-pnpm --filter demo build              # confirms transpilePackages + Puck config compose
+pnpm --filter studio typecheck
+pnpm --filter studio lint
+pnpm --filter studio build              # confirms transpilePackages + Puck config compose
 ```
 
 Run `pnpm build` first if module-resolution errors appear (dist may be missing) before

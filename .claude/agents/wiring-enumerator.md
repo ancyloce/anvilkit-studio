@@ -28,19 +28,19 @@ here. Be the thing that makes a miss impossible.
 1. **`<Studio>` mounts** — every real mount of `<Studio>` from `@anvilkit/core`.
    As of last enumeration there are four, and "default + collab paths" means
    these — NOT a separate per-route collab mount:
-   - `apps/demo/app/test/page.tsx` (minimal: puckConfig, plugins=[], onPublish)
-   - `apps/demo/app/puck/editor/page.tsx` (the rich mount; **one** `<Studio>`
+   - `apps/studio/app/test/page.tsx` (minimal: puckConfig, plugins=[], onPublish)
+   - `apps/studio/app/puck/editor/page.tsx` (the rich mount; **one** `<Studio>`
      serves collab-on AND collab-off — `key={activePageId}` + `storeId="demo-editor"`)
-   - `apps/demo/app/collab/page.tsx` (`storeId="demo-collab"`, no key)
+   - `apps/studio/app/collab/page.tsx` (`storeId="demo-collab"`, no key)
    - `apps/docs/src/components/Playground.tsx` (docs parity mount)
    Re-glob every time (`grep -rn "<Studio" --include=*.tsx`) — the list drifts.
    For each: note props passed, and whether `key`/`storeId` are set (page-swap
-   remount uses `key` + a stable `storeId`). **Do NOT treat `apps/demo/app/
+   remount uses `key` + a stable `storeId`). **Do NOT treat `apps/studio/app/
    puck/render/page.tsx` as a mount** — the render path deliberately does not
    import `<Studio>` (see its header comment); flag it only as an intentional
    non-mount so the main agent doesn't add the prop there by mistake.
 2. **`<CanvasWorkspace>` / `<CanvasStudio>` mounts** — canvas editor mounts and
-   overlays (e.g. `CanvasModeOverlay`, `apps/demo/app/studio/canvas/[pageId]/
+   overlays (e.g. `CanvasModeOverlay`, `apps/studio/app/studio/canvas/[pageId]/
    CanvasEditorSurface.tsx`). These are a SEPARATE component family from
    `<Studio>` and do **not** consume `StudioProps` — a new Studio prop will not
    auto-thread here; classify them distinctly rather than lumping them in with
@@ -54,9 +54,9 @@ here. Be the thing that makes a miss impossible.
    Point the main agent at the declaration file for the type, and verify the
    re-export chain still resolves. (Re-grep `interface StudioProps` to confirm —
    the file may move.)
-4. **Puck demo config composition** — `apps/demo/lib/puck-demo.ts`: every imported
+4. **Puck demo config composition** — `apps/studio/lib/puck-demo.ts`: every imported
    component package and its config entry. Cross-check against the
-   `transpilePackages` array in `apps/demo/next.config.js` — every wired package
+   `transpilePackages` array in `apps/studio/next.config.js` — every wired package
    MUST appear in both.
 5. **Docs Playground parity** — `apps/docs/src/lib/` glue and the Playground
    component (`Playground.tsx`); it mirrors the demo's plugin set (collab gated on
