@@ -16,11 +16,17 @@ cost for these primitives.
 | `deepMerge`        | `<T>(target: T, ...sources: DeepPartial<T>[]) => T`          | Recursive plain-object merge. **Arrays are replaced**, not concatenated.                  |
 | `invariant`        | `(condition: unknown, message: string) => asserts condition` | Throws `Error(message)` when `condition` is falsy; narrows the type for the caller.       |
 | `debounce`         | `<T>(fn: T, wait: number) => T & { cancel(): void }`         | Leading-edge-off debounce with a `.cancel()` method to drop a pending call.               |
-| `getStrictContext` | `<T>(name: string) => [Provider<T>, () => T]`                | React context + hook pair that throws a descriptive error when used outside its provider. |
 
-`getStrictContext` is the only helper that touches React, and `react`
-is declared as an **optional peer dependency**. Consumers that do not
-import `get-strict-context` never need React installed.
+The React-coupled `getStrictContext` helper —
+`<T>(name: string) => [Provider<T>, () => T]`, a context + hook pair that
+throws a descriptive error when used outside its provider — is **not**
+exported from the main entry. It lives on its own subpath so the main
+entry stays React-free (`react` is an **optional peer dependency**;
+consumers that never import the subpath never need React installed):
+
+```ts
+import { getStrictContext } from "@anvilkit/utils/get-strict-context";
+```
 
 ## Usage
 
@@ -40,7 +46,7 @@ invariant(merged.theme.mode === "dark", "theme.mode must be 'dark'");
 ```
 
 ```tsx
-import { getStrictContext } from "@anvilkit/utils";
+import { getStrictContext } from "@anvilkit/utils/get-strict-context";
 
 interface StudioConfig {
   apiKey: string;

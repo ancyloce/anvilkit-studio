@@ -1,5 +1,14 @@
-import { createContext, useContext } from "react";
+/**
+ * @file The only React-coupled helper in `@anvilkit/utils`. Not re-exported
+ * from the main entry (which must stay React-free for the package's
+ * foundation-layer role); import it via the subpath:
+ * `import { getStrictContext } from "@anvilkit/utils/get-strict-context"`.
+ * `@anvilkit/ui` ships its own `getStrictContext` variant (optional `name`,
+ * wrapper-component provider) for UI-layer work — the two are not identical.
+ */
+
 import type { Provider } from "react";
+import { createContext, useContext } from "react";
 
 /**
  * Sentinel value used as the context's default. Any real consumer is
@@ -46,21 +55,21 @@ type Unset = typeof UNSET;
  * }
  */
 export function getStrictContext<T>(
-  name: string,
+	name: string,
 ): readonly [Provider<T>, () => T] {
-  const context = createContext<T | Unset>(UNSET);
-  context.displayName = name;
+	const context = createContext<T | Unset>(UNSET);
+	context.displayName = name;
 
-  function useStrictContext(): T {
-    const value = useContext(context);
-    if (value === UNSET) {
-      throw new Error(`\`use${name}\` must be used within <${name}Provider>.`);
-    }
-    return value;
-  }
+	function useStrictContext(): T {
+		const value = useContext(context);
+		if (value === UNSET) {
+			throw new Error(`\`use${name}\` must be used within <${name}Provider>.`);
+		}
+		return value;
+	}
 
-  return [
-    context.Provider as unknown as Provider<T>,
-    useStrictContext,
-  ] as const;
+	return [
+		context.Provider as unknown as Provider<T>,
+		useStrictContext,
+	] as const;
 }
