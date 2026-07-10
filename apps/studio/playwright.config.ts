@@ -1,5 +1,5 @@
 /**
- * Playwright configuration for `apps/demo`.
+ * Playwright configuration for `apps/studio`.
  *
  * This file is the only E2E harness in the workspace. It boots the
  * demo's Next.js dev server (`pnpm dev`) automatically via Playwright's
@@ -78,7 +78,7 @@ export default defineConfig({
 			// ranges can include both 1234 and 11234 depending on the
 			// machine, surfacing as a misleading EADDRINUSE even when
 			// `/proc/net/tcp*` is empty). Keep in sync with the
-			// `COLLAB_RELAY_PORT` default in `apps/demo/scripts/dev-collab.mjs`.
+			// `COLLAB_RELAY_PORT` default in `apps/studio/scripts/dev-collab.mjs`.
 			command:
 				"node ../../packages/plugins/plugin-collab-yjs/examples/y-websocket-server.mjs 21234",
 			url: "http://localhost:21234",

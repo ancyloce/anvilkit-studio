@@ -5,7 +5,7 @@
  * `AiImageJobRequest` member (plus wire-only resolved image URLs) to a
  * Replicate model call. The real provider is gated on `REPLICATE_API_TOKEN`;
  * the demo falls back to the mock provider when it is unset (see
- * `apps/demo/lib/ai-image/provider-selection.ts`). The token is read here,
+ * `apps/studio/lib/ai-image/provider-selection.ts`). The token is read here,
  * server-side only — it never reaches the client bundle.
  */
 import Replicate from "replicate";

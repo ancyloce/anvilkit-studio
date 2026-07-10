@@ -11,7 +11,7 @@
  *     `StudioHistoryPanel` rendering `<VersionHistoryUI>`.
  *   - `adapter` — the shared `SnapshotAdapter` instance.
  *
- * Mirrors `apps/demo/lib/copilot-sidebar-plugin.tsx` for shape, and
+ * Mirrors `apps/studio/lib/copilot-sidebar-plugin.tsx` for shape, and
  * follows the "consolidate integration surface, not packages" pattern
  * (one factory in the demo, rather than splitting into multiple
  * exports).

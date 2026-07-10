@@ -15,7 +15,7 @@ Both routes share the Puck `Config` composed in [`lib/puck-demo.ts`](./lib/puck-
 ```bash
 git submodule update --init --recursive   # one-time, from the repo root
 pnpm install                               # one-time, from the repo root
-pnpm --filter demo dev                     # Next.js dev server on :3000
+pnpm --filter studio dev                     # Next.js dev server on :3000
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -115,6 +115,6 @@ forbidden-field deny-list (`data`, `html`, `dom`, `root`, `rootProps`,
 
 ## Notes
 
-- The demo depends on every workspace component package via `workspace:*`. After adding a new component package, list it in both `apps/demo/lib/puck-demo.ts` and `transpilePackages` in `apps/demo/next.config.js`.
+- The demo depends on every workspace component package via `workspace:*`. After adding a new component package, list it in both `apps/studio/lib/puck-demo.ts` and `transpilePackages` in `apps/studio/next.config.js`.
 - E2E tests must use unique room IDs and avoid port 1234 collisions — see the repo-level [`CLAUDE.md`](../../CLAUDE.md#test-infrastructure-notes).
 - The canvas iframe does **not** inherit Tailwind utilities or parent-document CSS. Use inline styles or explicit `CopyHostStyles` injection when debugging styling that only renders inside the iframe.

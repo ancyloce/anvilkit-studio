@@ -9,7 +9,7 @@
  * demo's `handlePublishClick` still validates inline (defense in depth) before
  * the actual persist.
  *
- * Demo-only — lives in `apps/demo/lib/`, not a published package.
+ * Demo-only — lives in `apps/studio/lib/`, not a published package.
  */
 
 import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core";

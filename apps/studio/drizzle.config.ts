@@ -5,7 +5,7 @@ import { defineConfig } from "drizzle-kit";
  * guaranteed by `ensureSchema()` in `lib/db/client.ts`, so this config is only
  * needed by teams that adopt formal migrations:
  *
- *   pnpm --filter demo drizzle:generate   # emit SQL under ./drizzle
+ *   pnpm --filter studio drizzle:generate   # emit SQL under ./drizzle
  *
  * (Then switch `getDb()` to `migrate()` against `./drizzle`.)
  */

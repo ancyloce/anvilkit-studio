@@ -11,7 +11,7 @@ export default mergeConfig(
 	nodePreset,
 	defineConfig({
 		test: {
-			name: "demo",
+			name: "studio",
 			include: ["lib/**/__tests__/**/*.{test,spec}.ts"],
 			passWithNoTests: true,
 		},

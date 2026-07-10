@@ -48,7 +48,7 @@ const relayScriptName =
 // Default ports avoid 11234/1234: WSL2 + Windows-host port reservations
 // (Hyper-V dynamic exclusion ranges) commonly block both lower ports,
 // surfacing as a misleading EADDRINUSE even when `/proc/net/tcp*` is empty.
-// Keep in sync with `apps/demo/playwright.config.ts`.
+// Keep in sync with `apps/studio/playwright.config.ts`.
 const relayPort =
 	RELAY_KIND === "hocuspocus"
 		? process.env.COLLAB_HOCUSPOCUS_PORT || "31234"

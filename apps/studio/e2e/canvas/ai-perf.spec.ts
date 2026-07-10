@@ -11,7 +11,7 @@ import { expect, type Page, test } from "@playwright/test";
  *
  * Coverage notes:
  *  • #5: the AI route guard (503 PROVIDER_DISABLED) + mock-provider result are
- *    also covered by `apps/demo/e2e/canvas-ai.spec.ts`. The "new image node
+ *    also covered by `apps/studio/e2e/canvas-ai.spec.ts`. The "new image node
  *    appears on canvas" half additionally needs an `onSelectionChange` seam to
  *    commit `image.replace` (documented in CanvasStudioClient.tsx); this asserts
  *    the panel surfaces a result.

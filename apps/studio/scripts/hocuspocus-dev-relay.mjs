@@ -6,7 +6,7 @@
 // that server leaves the client perpetually reconnecting. This gives the
 // demo a protocol-compatible server to talk to.
 //
-// Run:  pnpm --filter demo relay:hocuspocus            (port 31234)
+// Run:  pnpm --filter studio relay:hocuspocus            (port 31234)
 //       node scripts/hocuspocus-dev-relay.mjs 41234     (custom port)
 //
 // Alpha-grade: in-memory only (no persistence), no auth (accepts any
@@ -17,7 +17,7 @@ import { Server } from "@hocuspocus/server";
 // 31234 (not 1234/11234/21234): 1234/11234 hit WSL2 + Hyper-V dynamic
 // port reservations, and 21234 is the y-websocket reference relay. Keep
 // in sync with NEXT_PUBLIC_COLLAB_HOCUSPOCUS_URL's default in
-// apps/demo/app/collab/page.tsx.
+// apps/studio/app/collab/page.tsx.
 const port = Number.parseInt(
 	process.argv[2] ?? process.env.COLLAB_HOCUSPOCUS_PORT ?? "31234",
 	10,

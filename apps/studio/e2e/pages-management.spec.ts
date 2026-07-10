@@ -4,7 +4,7 @@
  * Each `test()` exercises one capability surface added across plan
  * phases P2–P5 (rename / duplicate / delete / search / locked / drag-
  * reorder) plus the new P6 demo wiring in
- * `apps/demo/lib/demo-pages-source.ts`. Conventions match
+ * `apps/studio/lib/demo-pages-source.ts`. Conventions match
  * `sidebar-modules.spec.ts`: console/pageerror/requestfailed listeners
  * attach before navigation; the rail tablist is the hydration signal.
  *

@@ -6,7 +6,7 @@
  * the title so failures map directly back to PRD acceptance rows
  * (AC-INS-*, AC-LYR-*, AC-IMG-*, AC-TXT-*, AC-SHL-*).
  *
- * Conventions match `apps/demo/e2e/smoke.spec.ts`:
+ * Conventions match `apps/studio/e2e/smoke.spec.ts`:
  *   - `page.on("console" | "pageerror" | "requestfailed")` is attached
  *     before navigation so hydration crashes surface as diagnostics
  *     rather than opaque selector timeouts.
@@ -15,7 +15,7 @@
  * Visual regression baselines live in `sidebar-modules.spec.ts-snapshots/`
  * and are seeded once per branch via:
  *
- *   pnpm --filter demo e2e -- sidebar-modules.spec.ts --update-snapshots
+ *   pnpm --filter studio e2e -- sidebar-modules.spec.ts --update-snapshots
  *
  * Subsequent CI runs compare against the committed baselines with
  * `maxDiffPixels: 50` to absorb font/AA noise across runners (build
@@ -582,7 +582,7 @@ test.describe("StudioSidebar — four-module switcher", () => {
  * Baselines are seeded once per branch (run on the same chromium +
  * `Desktop Chrome` device profile that CI uses):
  *
- *   pnpm --filter demo e2e -- sidebar-modules.spec.ts --update-snapshots
+ *   pnpm --filter studio e2e -- sidebar-modules.spec.ts --update-snapshots
  *
  * The `mask` array occludes:
  *   - The Puck canvas iframe — its hash-fingerprinted dev-mode chunk

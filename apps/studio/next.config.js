@@ -9,7 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
 	// Docker: emit a self-contained server bundle (`.next/standalone`) with
 	// monorepo deps traced from the repo root, so the image can run with a
-	// bare `node apps/demo/server.js` and no `node_modules` install. Gated on
+	// bare `node apps/studio/server.js` and no `node_modules` install. Gated on
 	// DOCKER_BUILD so the Vercel/CI build and local `next start` are unchanged.
 	...(process.env.DOCKER_BUILD === "1"
 		? {

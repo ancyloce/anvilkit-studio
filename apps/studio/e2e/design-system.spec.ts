@@ -9,7 +9,7 @@
  *      values in the host document, proving the Phase A CSS plumbing
  *      (`packages/core/src/react/overrides/styles.css`) landed.
  *   3. The demo-only `TokenSwatch` component (added by
- *      `apps/demo/lib/token-swatch-component.ts`) renders with the
+ *      `apps/studio/lib/token-swatch-component.ts`) renders with the
  *      seeded token refs resolving to `var(--ak-ds-*)` at paint time —
  *      this verifies the field factory + `resolveTokenRef` round-trip
  *      under real browser rendering.

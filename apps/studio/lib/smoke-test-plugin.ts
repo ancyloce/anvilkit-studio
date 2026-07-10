@@ -3,12 +3,12 @@
  *
  * The `smokeTestPlugin` is intentionally trivial: it exists to prove
  * the `@anvilkit/core` plugin contract is invokable end-to-end from
- * the `apps/demo` host and that the compile → lifecycle → render
+ * the `apps/studio` host and that the compile → lifecycle → render
  * pipeline is hot. Every lifecycle hook logs to the browser console
  * so a human running the manual verification checklist can watch the
  * events fire as they drag blocks, edit fields, and click publish.
  *
- * This file lives in `apps/demo/lib/` — not in a published package —
+ * This file lives in `apps/studio/lib/` — not in a published package —
  * because it has zero runtime value outside the demo. If you find
  * yourself wanting to reuse this logic in another app, author a real
  * plugin package instead.

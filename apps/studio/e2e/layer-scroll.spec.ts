@@ -13,7 +13,7 @@
  * top-level page. Puck hardcodes the iframe id `preview-frame` and tags
  * every rendered component with `data-puck-component="<id>"` — the same
  * attribute the hook queries. Conventions match
- * `apps/demo/e2e/sidebar-modules.spec.ts`.
+ * `apps/studio/e2e/sidebar-modules.spec.ts`.
  */
 
 import { expect, type Frame, type Page, test } from "@playwright/test";

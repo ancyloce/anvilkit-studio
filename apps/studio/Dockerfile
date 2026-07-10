@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1.7
 
-# Build & run the AnvilKit Next.js demo (apps/demo) as a standalone image.
+# Build & run the AnvilKit Next.js Studio app (apps/studio) as a standalone image.
 #
 # IMPORTANT: the build context MUST be the repo root. This is a pnpm + Turbo
 # monorepo whose `@anvilkit/*` workspace packages live in git submodules, so
-# the demo cannot be built in isolation from its own directory. The CI
-# workflow builds with `context: .` and `file: apps/demo/Dockerfile`. To build
-# locally:  docker build -f apps/demo/Dockerfile -t anvilkit-demo .
+# the app cannot be built in isolation from its own directory. The CI
+# workflow builds with `context: .` and `file: apps/studio/Dockerfile`. To build
+# locally:  docker build -f apps/studio/Dockerfile -t anvilkit-studio .
 
 # ---- builder ---------------------------------------------------------------
 FROM node:22-bookworm-slim AS builder
@@ -39,14 +39,14 @@ RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
 	pnpm install --frozen-lockfile \
 	&& pnpm --dir packages/components install --frozen-lockfile --config.strictDepBuilds=false
 
-# Build the demo and ONLY its workspace dependencies via Turbo (`^build`).
+# Build the app and ONLY its workspace dependencies via Turbo (`^build`).
 # DOCKER_BUILD flips next.config.js to standalone output (see that file).
 ENV DOCKER_BUILD=1
 # Route the editor's Save/Publish through /api/pages (the server SQLite adapter)
 # instead of localStorage. NEXT_PUBLIC_* is inlined at build time, so it must be
 # set BEFORE the build, not as a runtime env.
 ENV NEXT_PUBLIC_USE_REMOTE_STORAGE=true
-RUN pnpm exec turbo run build --filter=demo --ui=stream
+RUN pnpm exec turbo run build --filter=studio --ui=stream
 
 # ---- runner ----------------------------------------------------------------
 FROM node:22-bookworm-slim AS runner
@@ -59,11 +59,11 @@ ENV NODE_ENV=production \
 WORKDIR /app
 
 # Next traces the standalone bundle from the repo root, so the server and its
-# pruned node_modules land under apps/demo/. Static assets and public/ are not
+# pruned node_modules land under apps/studio/. Static assets and public/ are not
 # part of the trace and must be copied alongside.
-COPY --from=builder /repo/apps/demo/.next/standalone ./
-COPY --from=builder /repo/apps/demo/.next/static ./apps/demo/.next/static
-COPY --from=builder /repo/apps/demo/public ./apps/demo/public
+COPY --from=builder /repo/apps/studio/.next/standalone ./
+COPY --from=builder /repo/apps/studio/.next/static ./apps/studio/.next/static
+COPY --from=builder /repo/apps/studio/public ./apps/studio/public
 
 # Writable, persistent location for the SQLite page store. A mounted volume is
 # root-owned by default, so chown it before dropping to the non-root `node` user.
@@ -79,4 +79,4 @@ ENV ANVILKIT_PAGE_STORAGE=sqlite \
 USER node
 EXPOSE 3000
 
-CMD ["node", "apps/demo/server.js"]
+CMD ["node", "apps/studio/server.js"]

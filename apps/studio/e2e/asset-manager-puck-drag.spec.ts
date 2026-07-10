@@ -11,7 +11,7 @@
  *      and the `asset://` reference is gone.
  *
  * Uses the `?e2e=puck-drag` debug hook in
- * `apps/demo/app/puck/editor/page.tsx`, which mirrors `publishedData`
+ * `apps/studio/app/puck/editor/page.tsx`, which mirrors `publishedData`
  * to `window.__puckData` and writes export results to
  * `window.__puckExports` instead of triggering a download. We avoid
  * Playwright's `dragTo` because it does not produce a reliable
