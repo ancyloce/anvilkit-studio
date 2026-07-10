@@ -68,6 +68,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Core",
 		summary:
 			"Runtime types, plugin engine, React shell, and config system for the Studio.",
+		dir: join("runtime", "core"),
 	},
 	{
 		slug: "contracts",
@@ -75,6 +76,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Contracts",
 		summary:
 			"Shared type-only contracts — Page IR, AI DTOs, export formats, pages source, and asset resolution.",
+		dir: join("foundation", "contracts"),
 	},
 	{
 		slug: "ir",
@@ -82,6 +84,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "IR",
 		summary:
 			"Headless Page Intermediate Representation transforms shared by every export format.",
+		dir: join("foundation", "ir"),
 	},
 	{
 		slug: "schema",
@@ -89,6 +92,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Schema",
 		summary:
 			"Derive AI-friendly component schemas from a Puck Config — extraction, serializability, generation context.",
+		dir: join("foundation", "schema"),
 	},
 	{
 		slug: "validator",
@@ -96,6 +100,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Validator",
 		summary:
 			"Export-readiness validation for Puck configs and AI-generated output.",
+		dir: join("foundation", "validator"),
 	},
 	{
 		slug: "utils",
@@ -109,7 +114,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Canvas Core",
 		summary:
 			"Headless Canvas IR — Zod validators, immutable mutations, undoable commands, geometry/snap math, extension runtime, and SVG/PDF serializers.",
-		dir: join("canvas", "core"),
+		dir: join("capabilities", "canvas", "core"),
 	},
 	{
 		slug: "canvas-editor",
@@ -117,7 +122,7 @@ const PACKAGES: readonly PackageEntry[] = [
 		displayName: "Canvas Editor",
 		summary:
 			"React + Konva editor for the Canvas IR — workspace shell, tools, panels, history, accessibility layer, and the optional collab subpath.",
-		dir: join("canvas", "editor"),
+		dir: join("capabilities", "canvas", "editor"),
 	},
 ];
 

@@ -1,6 +1,6 @@
 # `@anvilkit/canvas-templates`
 
-AnvilKit Canvas Studio와 함께 제공되는 10개의 스타터 [`CanvasIR`](../../canvas/core/src/types.ts) 디자인 — 포스터, 소셜 포맷, 슬라이드, 인쇄물. 각각은 자체 완결형 `CanvasIR`(text / rect / ellipse / line 노드만 포함, 외부 에셋 없음)이므로 네트워크 호출 없이 로드됩니다.
+AnvilKit Canvas Studio와 함께 제공되는 10개의 스타터 [`CanvasIR`](../../capabilities/canvas/core/src/types.ts) 디자인 — 포스터, 소셜 포맷, 슬라이드, 인쇄물. 각각은 자체 완결형 `CanvasIR`(text / rect / ellipse / line 노드만 포함, 외부 에셋 없음)이므로 네트워크 호출 없이 로드됩니다.
 
 ## 계약
 

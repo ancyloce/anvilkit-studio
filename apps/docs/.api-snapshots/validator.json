@@ -340,7 +340,7 @@
 							"fileName": "validator/src/types.ts",
 							"line": 3,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L3"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L3"
 						}
 					],
 					"type": {
@@ -362,7 +362,7 @@
 							"fileName": "validator/src/types.ts",
 							"line": 6,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L6"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L6"
 						}
 					],
 					"type": {
@@ -383,7 +383,7 @@
 							"fileName": "validator/src/types.ts",
 							"line": 2,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L2"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L2"
 						}
 					],
 					"type": {
@@ -413,7 +413,7 @@
 							"fileName": "validator/src/types.ts",
 							"line": 4,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L4"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L4"
 						}
 					],
 					"type": {
@@ -434,7 +434,7 @@
 							"fileName": "validator/src/types.ts",
 							"line": 5,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L5"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L5"
 						}
 					],
 					"type": {
@@ -470,7 +470,7 @@
 					"fileName": "validator/src/types.ts",
 					"line": 1,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L1"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L1"
 				}
 			]
 		},
@@ -494,7 +494,7 @@
 							"fileName": "validator/src/types.ts",
 							"line": 11,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L11"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L11"
 						}
 					],
 					"type": {
@@ -524,7 +524,7 @@
 							"fileName": "validator/src/types.ts",
 							"line": 10,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L10"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L10"
 						}
 					],
 					"type": {
@@ -544,7 +544,7 @@
 					"fileName": "validator/src/types.ts",
 					"line": 9,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/types.ts#L9"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/types.ts#L9"
 				}
 			]
 		},
@@ -559,7 +559,7 @@
 					"fileName": "validator/src/validate-ai-output.ts",
 					"line": 71,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-ai-output.ts#L71"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-ai-output.ts#L71"
 				}
 			],
 			"signatures": [
@@ -574,7 +574,7 @@
 							"fileName": "validator/src/validate-ai-output.ts",
 							"line": 71,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-ai-output.ts#L71"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-ai-output.ts#L71"
 						}
 					],
 					"parameters": [
@@ -634,7 +634,7 @@
 					"fileName": "validator/src/validate-component-config.ts",
 					"line": 15,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-component-config.ts#L15"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-component-config.ts#L15"
 				}
 			],
 			"signatures": [
@@ -649,7 +649,7 @@
 							"fileName": "validator/src/validate-component-config.ts",
 							"line": 15,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-component-config.ts#L15"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-component-config.ts#L15"
 						}
 					],
 					"typeParameters": [
@@ -707,7 +707,7 @@
 					"fileName": "validator/src/validate-page-payload.ts",
 					"line": 109,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L109"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L109"
 				}
 			],
 			"signatures": [
@@ -774,7 +774,7 @@
 							"fileName": "validator/src/validate-page-payload.ts",
 							"line": 109,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L109"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L109"
 						}
 					],
 					"parameters": [
@@ -810,7 +810,7 @@
 					"fileName": "validator/src/validate-page-payload.ts",
 					"line": 54,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L54"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L54"
 				}
 			],
 			"signatures": [
@@ -863,7 +863,7 @@
 							"fileName": "validator/src/validate-page-payload.ts",
 							"line": 54,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L54"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L54"
 						}
 					],
 					"parameters": [
@@ -899,7 +899,7 @@
 					"fileName": "validator/src/validate-page-payload.ts",
 					"line": 95,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L95"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L95"
 				}
 			],
 			"signatures": [
@@ -948,7 +948,7 @@
 							"fileName": "validator/src/validate-page-payload.ts",
 							"line": 95,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L95"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L95"
 						}
 					],
 					"parameters": [
@@ -984,7 +984,7 @@
 					"fileName": "validator/src/validate-page-payload.ts",
 					"line": 68,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L68"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L68"
 				}
 			],
 			"signatures": [
@@ -1047,7 +1047,7 @@
 							"fileName": "validator/src/validate-page-payload.ts",
 							"line": 68,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L68"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L68"
 						}
 					],
 					"parameters": [
@@ -1083,7 +1083,7 @@
 					"fileName": "validator/src/validate-page-payload.ts",
 					"line": 82,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L82"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L82"
 				}
 			],
 			"signatures": [
@@ -1138,7 +1138,7 @@
 							"fileName": "validator/src/validate-page-payload.ts",
 							"line": 82,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/validator/src/validate-page-payload.ts#L82"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/validator/src/validate-page-payload.ts#L82"
 						}
 					],
 					"parameters": [
