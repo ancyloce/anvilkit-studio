@@ -13,6 +13,10 @@ top-level domain (`config/`, `studio/`, `react/`, `state/`). Reached via the
   widely-imported symbol in the package (~50 importers); it was previously
   filed under `react/overrides/utils/`, which mislabeled a package-wide
   primitive as an overrides concern.
+- `analytics-port.ts` — the runtime-owned analytics port (`track` only) that
+  keeps `@anvilkit/core` free of the `@anvilkit/analytics-core` capability
+  dependency (restructure plan 0001, Phase 4). Consumed by `react/` and
+  `studio/context/`.
 
 ## What does NOT live here
 

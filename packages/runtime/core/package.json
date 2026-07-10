@@ -146,7 +146,6 @@
 		"react-dom": ">=19.0.0"
 	},
 	"dependencies": {
-		"@anvilkit/analytics-core": "workspace:*",
 		"@anvilkit/contracts": "workspace:*",
 		"@anvilkit/ui": "workspace:*",
 		"@anvilkit/utils": "workspace:*",
@@ -170,6 +169,7 @@
 		"zustand": "^5.0.14"
 	},
 	"devDependencies": {
+		"@anvilkit/analytics-core": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@anvilkit/vitest-config": "workspace:*",
 		"@puckeditor/core": "^0.22.0",

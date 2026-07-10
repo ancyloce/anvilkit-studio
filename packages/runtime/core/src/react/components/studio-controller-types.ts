@@ -9,7 +9,6 @@
  * view↔controller import graph are byte-identical.
  */
 
-import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import type { DeepPartial } from "@anvilkit/utils";
 import type {
 	Config as PuckConfig,
@@ -26,6 +25,7 @@ import type { ReactNode, RefObject } from "react";
 
 import type { StudioChromeMode } from "@/overrides/types";
 import type { StudioRuntime } from "@/runtime/compile-plugins";
+import type { StudioAnalyticsPort } from "@/shared/analytics-port";
 import type { EditorStoreBundle } from "@/state/editor-store-bundle";
 import type {
 	AiStoreApi,
@@ -294,12 +294,14 @@ export interface StudioProps<UserConfig extends PuckConfig = PuckConfig> {
 	 */
 	readonly loading?: ReactNode;
 	/**
-	 * Optional analytics adapter (from `@anvilkit/analytics-core`, types-only
-	 * dependency). When set, `<Studio>` emits the system events `draft_saved`
-	 * / `page_published` / `component_dropped` with lightweight props only.
-	 * Omitting it is a complete no-op — `<Studio>` behaves identically.
+	 * Optional analytics sink. Typed as the runtime-owned
+	 * {@link StudioAnalyticsPort} — every `@anvilkit/analytics-core` adapter
+	 * satisfies it structurally. When set, `<Studio>` emits the system events
+	 * `draft_saved` / `page_published` / `component_dropped` with lightweight
+	 * props only. Omitting it is a complete no-op — `<Studio>` behaves
+	 * identically.
 	 */
-	readonly analytics?: AnalyticsAdapter;
+	readonly analytics?: StudioAnalyticsPort;
 	/**
 	 * Called when the plugin runtime fails to compile (a plugin's
 	 * `register` throws or rejects). Receives the thrown value. Fires once

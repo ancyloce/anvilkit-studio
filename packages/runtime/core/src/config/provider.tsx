@@ -38,7 +38,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-012-config-provider-hooks.md | core-012}
  */
 
-import { getStrictContext } from "@anvilkit/utils";
+import { getStrictContext } from "@anvilkit/utils/get-strict-context";
 import type { ReactNode } from "react";
 
 import type { StudioConfig } from "@/types/config";

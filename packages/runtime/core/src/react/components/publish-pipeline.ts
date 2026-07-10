@@ -24,8 +24,8 @@
  * `analytics.track("page_published")` itself.
  */
 
-import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import type { Data as PuckData } from "@puckeditor/core";
+import type { StudioAnalyticsPort } from "@/shared/analytics-port";
 import type { StudioLogLevel } from "@/types/plugin";
 import { trackPagePublished } from "./analytics-events.js";
 
@@ -54,8 +54,8 @@ export interface PublishPipelineHooks {
 		| undefined;
 	/** Emit `onAfterPublish` after a successful publish. */
 	readonly emitAfterPublish?: () => Promise<unknown>;
-	/** Latest analytics adapter (or `undefined` ⇒ the success event is a no-op). */
-	readonly analytics: AnalyticsAdapter | undefined;
+	/** Latest analytics sink (or `undefined` ⇒ the success event is a no-op). */
+	readonly analytics: StudioAnalyticsPort | undefined;
 	/** Structured-log sink (bound to the host logger by the controller). */
 	readonly log: (
 		level: StudioLogLevel,

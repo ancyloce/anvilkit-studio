@@ -670,15 +670,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						48,
-						51,
-						50,
-						52,
-						54,
-						49,
-						53
-					]
+					"children": [48, 51, 50, 52, 54, 49, 53]
 				}
 			],
 			"sources": [
@@ -717,9 +709,9 @@
 					"sources": [
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
-							"line": 60,
+							"line": 43,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L60"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L43"
 						}
 					],
 					"type": {
@@ -757,9 +749,9 @@
 					"sources": [
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
-							"line": 58,
+							"line": 41,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L58"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L41"
 						}
 					],
 					"type": {
@@ -780,18 +772,15 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						73,
-						72
-					]
+					"children": [73, 72]
 				}
 			],
 			"sources": [
 				{
 					"fileName": "studio/layout/LanguageSwitcher.tsx",
-					"line": 53,
+					"line": 36,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L53"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L36"
 				}
 			]
 		},
@@ -1065,11 +1054,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						32,
-						33,
-						31
-					]
+					"children": [32, 33, 31]
 				}
 			],
 			"sources": [
@@ -1087,14 +1072,6 @@
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "One selectable locale: its tag plus the label shown in its own script."
-					}
-				]
-			},
 			"children": [
 				{
 					"id": 77,
@@ -1104,20 +1081,12 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "Display name in the language's own script (endonym)."
-							}
-						]
-					},
 					"sources": [
 						{
-							"fileName": "studio/layout/LanguageSwitcher.tsx",
-							"line": 37,
+							"fileName": "studio/layout/LanguageSwitcher.locales.ts",
+							"line": 3,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L37"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.locales.ts#L3"
 						}
 					],
 					"type": {
@@ -1133,36 +1102,12 @@
 					"flags": {
 						"isReadonly": true
 					},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "BCP-47-ish locale tag passed to "
-							},
-							{
-								"kind": "code",
-								"text": "`setLocale`"
-							},
-							{
-								"kind": "text",
-								"text": " (e.g. "
-							},
-							{
-								"kind": "code",
-								"text": "`\"zh\"`"
-							},
-							{
-								"kind": "text",
-								"text": ")."
-							}
-						]
-					},
 					"sources": [
 						{
-							"fileName": "studio/layout/LanguageSwitcher.tsx",
-							"line": 35,
+							"fileName": "studio/layout/LanguageSwitcher.locales.ts",
+							"line": 2,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L35"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.locales.ts#L2"
 						}
 					],
 					"type": {
@@ -1174,18 +1119,15 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						77,
-						76
-					]
+					"children": [77, 76]
 				}
 			],
 			"sources": [
 				{
-					"fileName": "studio/layout/LanguageSwitcher.tsx",
-					"line": 33,
+					"fileName": "studio/layout/LanguageSwitcher.locales.ts",
+					"line": 1,
 					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L33"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.locales.ts#L1"
 				}
 			]
 		},
@@ -1626,70 +1568,12 @@
 			"flags": {
 				"isConst": true
 			},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "Locales with a bundled core "
-					},
-					{
-						"kind": "code",
-						"text": "`studio.*`"
-					},
-					{
-						"kind": "text",
-						"text": " catalog. English is the inline\nbaseline; "
-					},
-					{
-						"kind": "code",
-						"text": "`zh`"
-					},
-					{
-						"kind": "text",
-						"text": " / "
-					},
-					{
-						"kind": "code",
-						"text": "`ja`"
-					},
-					{
-						"kind": "text",
-						"text": " / "
-					},
-					{
-						"kind": "code",
-						"text": "`ko`"
-					},
-					{
-						"kind": "text",
-						"text": " lazy-load from "
-					},
-					{
-						"kind": "code",
-						"text": "`i18n/messages/`"
-					},
-					{
-						"kind": "text",
-						"text": ". Pass a custom\nlist via "
-					},
-					{
-						"kind": "inline-tag",
-						"tag": "@link",
-						"text": "LanguageSwitcherProps.locales",
-						"target": 72
-					},
-					{
-						"kind": "text",
-						"text": " to offer a different set (any\nlocale whose packs resolve works — this only seeds the default UI)."
-					}
-				]
-			},
 			"sources": [
 				{
-					"fileName": "studio/layout/LanguageSwitcher.tsx",
-					"line": 46,
+					"fileName": "studio/layout/LanguageSwitcher.locales.ts",
+					"line": 6,
 					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L46"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.locales.ts#L6"
 				}
 			],
 			"type": {
@@ -1774,9 +1658,9 @@
 			"sources": [
 				{
 					"fileName": "studio/layout/LanguageSwitcher.tsx",
-					"line": 67,
+					"line": 50,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L67"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L50"
 				}
 			],
 			"signatures": [
@@ -1813,9 +1697,9 @@
 					"sources": [
 						{
 							"fileName": "studio/layout/LanguageSwitcher.tsx",
-							"line": 67,
+							"line": 50,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L67"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/studio/layout/LanguageSwitcher.tsx#L50"
 						}
 					],
 					"parameters": [
@@ -2554,42 +2438,19 @@
 	"groups": [
 		{
 			"title": "Interfaces",
-			"children": [
-				10,
-				47,
-				71,
-				17,
-				30,
-				75
-			]
+			"children": [10, 47, 71, 17, 30, 75]
 		},
 		{
 			"title": "Type Aliases",
-			"children": [
-				8,
-				12,
-				2,
-				11
-			]
+			"children": [8, 12, 2, 11]
 		},
 		{
 			"title": "Variables",
-			"children": [
-				1,
-				74
-			]
+			"children": [1, 74]
 		},
 		{
 			"title": "Functions",
-			"children": [
-				44,
-				68,
-				13,
-				20,
-				60,
-				66,
-				37
-			]
+			"children": [44, 68, 13, 20, 60, 66, 37]
 		}
 	],
 	"packageName": "@anvilkit/core",
@@ -2961,22 +2822,22 @@
 		},
 		"74": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"packagePath": "src/studio/layout/LanguageSwitcher.locales.ts",
 			"qualifiedName": "SUPPORTED_LOCALES"
 		},
 		"75": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"packagePath": "src/studio/layout/LanguageSwitcher.locales.ts",
 			"qualifiedName": "SupportedLocale"
 		},
 		"76": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"packagePath": "src/studio/layout/LanguageSwitcher.locales.ts",
 			"qualifiedName": "SupportedLocale.locale"
 		},
 		"77": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/LanguageSwitcher.tsx",
+			"packagePath": "src/studio/layout/LanguageSwitcher.locales.ts",
 			"qualifiedName": "SupportedLocale.label"
 		}
 	},

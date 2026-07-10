@@ -98,9 +98,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						2
-					]
+					"children": [2]
 				}
 			],
 			"sources": [
@@ -236,10 +234,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						115,
-						114
-					]
+					"children": [115, 114]
 				}
 			],
 			"sources": [
@@ -555,10 +550,7 @@
 																	"groups": [
 																		{
 																			"title": "Properties",
-																			"children": [
-																				155,
-																				156
-																			]
+																			"children": [155, 156]
 																		}
 																	]
 																}
@@ -796,11 +788,7 @@
 																	"groups": [
 																		{
 																			"title": "Properties",
-																			"children": [
-																				125,
-																				126,
-																				127
-																			]
+																			"children": [125, 126, 127]
 																		}
 																	]
 																}
@@ -1063,10 +1051,7 @@
 																											"groups": [
 																												{
 																													"title": "Properties",
-																													"children": [
-																														146,
-																														147
-																													]
+																													"children": [146, 147]
 																												}
 																											]
 																										}
@@ -1165,10 +1150,7 @@
 																	"groups": [
 																		{
 																			"title": "Properties",
-																			"children": [
-																				144,
-																				148
-																			]
+																			"children": [144, 148]
 																		}
 																	]
 																}
@@ -1444,10 +1426,7 @@
 																	"groups": [
 																		{
 																			"title": "Properties",
-																			"children": [
-																				151,
-																				152
-																			]
+																			"children": [151, 152]
 																		}
 																	]
 																}
@@ -1749,11 +1728,7 @@
 																	"groups": [
 																		{
 																			"title": "Properties",
-																			"children": [
-																				121,
-																				122,
-																				120
-																			]
+																			"children": [121, 122, 120]
 																		}
 																	]
 																}
@@ -2309,12 +2284,7 @@
 																	"groups": [
 																		{
 																			"title": "Properties",
-																			"children": [
-																				139,
-																				138,
-																				140,
-																				141
-																			]
+																			"children": [139, 138, 140, 141]
 																		}
 																	]
 																}
@@ -2565,9 +2535,7 @@
 																										{
 																											"title": "Properties",
 																											"children": [
-																												133,
-																												132,
-																												134
+																												133, 132, 134
 																											]
 																										}
 																									]
@@ -2587,10 +2555,7 @@
 																	"groups": [
 																		{
 																			"title": "Properties",
-																			"children": [
-																				135,
-																				130
-																			]
+																			"children": [135, 130]
 																		}
 																	]
 																}
@@ -2619,16 +2584,7 @@
 									"groups": [
 										{
 											"title": "Properties",
-											"children": [
-												153,
-												123,
-												142,
-												157,
-												149,
-												118,
-												136,
-												128
-											]
+											"children": [153, 123, 142, 157, 149, 118, 136, 128]
 										}
 									]
 								}
@@ -3024,10 +2980,7 @@
 													"groups": [
 														{
 															"title": "Properties",
-															"children": [
-																47,
-																46
-															]
+															"children": [47, 46]
 														}
 													]
 												}
@@ -3185,11 +3138,7 @@
 													"groups": [
 														{
 															"title": "Properties",
-															"children": [
-																14,
-																15,
-																16
-															]
+															"children": [14, 15, 16]
 														}
 													]
 												}
@@ -3388,10 +3337,7 @@
 																		"groups": [
 																			{
 																				"title": "Properties",
-																				"children": [
-																					37,
-																					38
-																				]
+																				"children": [37, 38]
 																			}
 																		]
 																	}
@@ -3444,10 +3390,7 @@
 													"groups": [
 														{
 															"title": "Properties",
-															"children": [
-																35,
-																39
-															]
+															"children": [35, 39]
 														}
 													]
 												}
@@ -3637,10 +3580,7 @@
 													"groups": [
 														{
 															"title": "Properties",
-															"children": [
-																43,
-																42
-															]
+															"children": [43, 42]
 														}
 													]
 												}
@@ -3862,11 +3802,7 @@
 													"groups": [
 														{
 															"title": "Properties",
-															"children": [
-																10,
-																11,
-																9
-															]
+															"children": [10, 11, 9]
 														}
 													]
 												}
@@ -4364,12 +4300,7 @@
 													"groups": [
 														{
 															"title": "Properties",
-															"children": [
-																24,
-																23,
-																26,
-																25
-															]
+															"children": [24, 23, 26, 25]
 														}
 													]
 												}
@@ -4534,10 +4465,7 @@
 													"groups": [
 														{
 															"title": "Properties",
-															"children": [
-																20,
-																19
-															]
+															"children": [20, 19]
 														}
 													]
 												}
@@ -4548,16 +4476,7 @@
 									"groups": [
 										{
 											"title": "Properties",
-											"children": [
-												44,
-												12,
-												33,
-												48,
-												40,
-												7,
-												21,
-												17
-											]
+											"children": [44, 12, 33, 48, 40, 7, 21, 17]
 										}
 									]
 								}
@@ -4948,10 +4867,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														97,
-														96
-													]
+													"children": [97, 96]
 												}
 											]
 										}
@@ -5109,11 +5025,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														64,
-														65,
-														66
-													]
+													"children": [64, 65, 66]
 												}
 											]
 										}
@@ -5312,10 +5224,7 @@
 																"groups": [
 																	{
 																		"title": "Properties",
-																		"children": [
-																			87,
-																			88
-																		]
+																		"children": [87, 88]
 																	}
 																]
 															}
@@ -5368,10 +5277,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														85,
-														89
-													]
+													"children": [85, 89]
 												}
 											]
 										}
@@ -5561,10 +5467,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														93,
-														92
-													]
+													"children": [93, 92]
 												}
 											]
 										}
@@ -5786,11 +5689,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														60,
-														61,
-														59
-													]
+													"children": [60, 61, 59]
 												}
 											]
 										}
@@ -6288,12 +6187,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														74,
-														73,
-														76,
-														75
-													]
+													"children": [74, 73, 76, 75]
 												}
 											]
 										}
@@ -6458,10 +6352,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														70,
-														69
-													]
+													"children": [70, 69]
 												}
 											]
 										}
@@ -6472,16 +6363,7 @@
 							"groups": [
 								{
 									"title": "Properties",
-									"children": [
-										94,
-										62,
-										83,
-										98,
-										90,
-										57,
-										71,
-										67
-									]
+									"children": [94, 62, 83, 98, 90, 57, 71, 67]
 								}
 							]
 						}
@@ -6874,25 +6756,15 @@
 	"groups": [
 		{
 			"title": "Interfaces",
-			"children": [
-				1,
-				113
-			]
+			"children": [1, 113]
 		},
 		{
 			"title": "Variables",
-			"children": [
-				116
-			]
+			"children": [116]
 		},
 		{
 			"title": "Functions",
-			"children": [
-				3,
-				53,
-				110,
-				102
-			]
+			"children": [3, 53, 110, 102]
 		}
 	],
 	"packageName": "@anvilkit/core",

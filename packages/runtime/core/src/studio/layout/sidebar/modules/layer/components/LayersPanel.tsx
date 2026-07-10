@@ -99,7 +99,8 @@ export function LayersPanel(): ReactNode {
 	const source = useStudioPagesSourceOrDefault();
 	// `loading` intentionally ignored — behavior unchanged vs. the prior
 	// inline effect; the hook only adds out-of-order protection.
-	const { items: pages, hasError: loadError } = useSourceList<StudioPage>(source);
+	const { items: pages, hasError: loadError } =
+		useSourceList<StudioPage>(source);
 	const getPuck = useGetPuck();
 
 	const hasActivePage = pages.some((page) => page.active === true);

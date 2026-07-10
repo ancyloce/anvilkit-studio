@@ -6,9 +6,9 @@
  */
 
 import type {
-	AnalyticsAdapter,
-	AnalyticsEventName,
-} from "@anvilkit/analytics-core";
+	StudioAnalyticsEventName,
+	StudioAnalyticsPort,
+} from "@/shared/analytics-port";
 
 /** The minimal shape of a Puck "insert" action this module reads. */
 export interface InsertActionLike {
@@ -45,11 +45,11 @@ function readSeo(
 
 /** `draft_saved` — fired when the host's save-draft handler resolves. */
 export function trackDraftSaved(
-	analytics: AnalyticsAdapter | undefined,
+	analytics: StudioAnalyticsPort | undefined,
 	componentCount: number,
 	durationMs: number,
 ): void {
-	analytics?.track("draft_saved" satisfies AnalyticsEventName, {
+	analytics?.track("draft_saved" satisfies StudioAnalyticsEventName, {
 		component_count: componentCount,
 		duration_ms: durationMs,
 	});
@@ -57,10 +57,10 @@ export function trackDraftSaved(
 
 /** `page_published` — fired after a publish completes. */
 export function trackPagePublished(
-	analytics: AnalyticsAdapter | undefined,
+	analytics: StudioAnalyticsPort | undefined,
 	statusChange: string,
 ): void {
-	analytics?.track("page_published" satisfies AnalyticsEventName, {
+	analytics?.track("page_published" satisfies StudioAnalyticsEventName, {
 		status_change: statusChange,
 	});
 }
@@ -70,11 +70,11 @@ export function trackPagePublished(
  * (move/remove/reorder/…) are ignored.
  */
 export function trackComponentDropped(
-	analytics: AnalyticsAdapter | undefined,
+	analytics: StudioAnalyticsPort | undefined,
 	action: InsertActionLike,
 ): void {
 	if (action.type !== "insert") return;
-	analytics?.track("component_dropped" satisfies AnalyticsEventName, {
+	analytics?.track("component_dropped" satisfies StudioAnalyticsEventName, {
 		component_type: action.componentType ?? "unknown",
 		zone: action.destinationZone ?? "default",
 	});
@@ -91,7 +91,7 @@ export function trackComponentDropped(
  * `string | number | boolean`, so an array value would be silently dropped.
  */
 export function trackSeoUpdated(
-	analytics: AnalyticsAdapter | undefined,
+	analytics: StudioAnalyticsPort | undefined,
 	prev: PageDataLike | undefined,
 	next: PageDataLike | undefined,
 ): void {
@@ -102,7 +102,7 @@ export function trackSeoUpdated(
 		(field) => prevSeo[field] !== nextSeo[field],
 	);
 	if (modifiedFields.length === 0) return;
-	analytics.track("seo_updated" satisfies AnalyticsEventName, {
+	analytics.track("seo_updated" satisfies StudioAnalyticsEventName, {
 		modified_fields: modifiedFields.join(","),
 	});
 }
@@ -113,11 +113,11 @@ export function trackSeoUpdated(
  * is the rail module key; `state` is the resulting open/closed state.
  */
 export function trackPluginToggled(
-	analytics: AnalyticsAdapter | undefined,
+	analytics: StudioAnalyticsPort | undefined,
 	pluginName: string,
 	state: "opened" | "closed",
 ): void {
-	analytics?.track("plugin_toggled" satisfies AnalyticsEventName, {
+	analytics?.track("plugin_toggled" satisfies StudioAnalyticsEventName, {
 		plugin_name: pluginName,
 		state,
 	});

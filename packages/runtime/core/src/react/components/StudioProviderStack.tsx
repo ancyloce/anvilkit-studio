@@ -20,7 +20,6 @@
  *   (`studioBody` / `wrappedBody` / `puckElement`) passed in as `children`.
  */
 
-import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import type { ReactElement, ReactNode, RefObject } from "react";
 import { StudioRuntimeProvider } from "@/components/use-studio";
 import { StudioConfigProvider } from "@/config/provider";
@@ -30,6 +29,7 @@ import { StudioPluginContextProvider } from "@/context/plugin-context";
 import { StudioRootProvider } from "@/context/StudioRootProvider";
 import { StudioAnalyticsProvider } from "@/context/studio-analytics";
 import type { StudioRuntime } from "@/runtime/compile-plugins";
+import type { StudioAnalyticsPort } from "@/shared/analytics-port";
 import { EditorStoreProvider } from "@/state/EditorStoreProvider";
 import type { EditorStoreBundle } from "@/state/editor-store-bundle";
 import {
@@ -87,7 +87,7 @@ interface AnvilkitProviderStackProps extends BaseStudioProviderStackProps {
 	 * Optional `<Studio analytics>` adapter (F9), exposed to chrome
 	 * interaction seams (the rail's `plugin_toggled`) via context.
 	 */
-	readonly analytics: AnalyticsAdapter | undefined;
+	readonly analytics: StudioAnalyticsPort | undefined;
 	/**
 	 * Studio logger sink (bound to `<Studio logger>`) forwarded to
 	 * `EditorI18nProvider` so locale-pack load failures route through the

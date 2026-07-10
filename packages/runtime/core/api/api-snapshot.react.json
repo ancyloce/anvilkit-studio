@@ -7,7 +7,7 @@
 	"flags": {},
 	"children": [
 		{
-			"id": 257,
+			"id": 263,
 			"name": "StudioErrorBoundary",
 			"variant": "declaration",
 			"kind": 128,
@@ -30,7 +30,7 @@
 			},
 			"children": [
 				{
-					"id": 261,
+					"id": 267,
 					"name": "constructor",
 					"variant": "declaration",
 					"kind": 512,
@@ -51,7 +51,7 @@
 					],
 					"signatures": [
 						{
-							"id": 262,
+							"id": 268,
 							"name": "StudioErrorBoundary",
 							"variant": "signature",
 							"kind": 16384,
@@ -67,7 +67,7 @@
 							],
 							"parameters": [
 								{
-									"id": 263,
+									"id": 269,
 									"name": "props",
 									"variant": "param",
 									"kind": 32768,
@@ -76,7 +76,7 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 276,
+										"target": 282,
 										"name": "StudioErrorBoundaryProps",
 										"package": "@anvilkit/core"
 									}
@@ -84,7 +84,7 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 257,
+								"target": 263,
 								"name": "StudioErrorBoundary",
 								"package": "@anvilkit/core"
 							},
@@ -96,7 +96,7 @@
 							}
 						},
 						{
-							"id": 264,
+							"id": 270,
 							"name": "StudioErrorBoundary",
 							"variant": "signature",
 							"kind": 16384,
@@ -112,7 +112,7 @@
 							],
 							"parameters": [
 								{
-									"id": 265,
+									"id": 271,
 									"name": "props",
 									"variant": "param",
 									"kind": 32768,
@@ -121,13 +121,13 @@
 									},
 									"type": {
 										"type": "reference",
-										"target": 276,
+										"target": 282,
 										"name": "StudioErrorBoundaryProps",
 										"package": "@anvilkit/core"
 									}
 								},
 								{
-									"id": 266,
+									"id": 272,
 									"name": "context",
 									"variant": "param",
 									"kind": 32768,
@@ -168,7 +168,7 @@
 							],
 							"type": {
 								"type": "reference",
-								"target": 257,
+								"target": 263,
 								"name": "StudioErrorBoundary",
 								"package": "@anvilkit/core"
 							},
@@ -188,7 +188,7 @@
 					}
 				},
 				{
-					"id": 267,
+					"id": 273,
 					"name": "state",
 					"variant": "declaration",
 					"kind": 1024,
@@ -220,7 +220,7 @@
 					}
 				},
 				{
-					"id": 268,
+					"id": 274,
 					"name": "componentDidCatch",
 					"variant": "declaration",
 					"kind": 2048,
@@ -235,7 +235,7 @@
 					],
 					"signatures": [
 						{
-							"id": 269,
+							"id": 275,
 							"name": "componentDidCatch",
 							"variant": "signature",
 							"kind": 4096,
@@ -258,7 +258,7 @@
 							],
 							"parameters": [
 								{
-									"id": 270,
+									"id": 276,
 									"name": "error",
 									"variant": "param",
 									"kind": 32768,
@@ -269,7 +269,7 @@
 									}
 								},
 								{
-									"id": 271,
+									"id": 277,
 									"name": "info",
 									"variant": "param",
 									"kind": 32768,
@@ -307,7 +307,7 @@
 					}
 				},
 				{
-					"id": 274,
+					"id": 280,
 					"name": "render",
 					"variant": "declaration",
 					"kind": 2048,
@@ -322,7 +322,7 @@
 					],
 					"signatures": [
 						{
-							"id": 275,
+							"id": 281,
 							"name": "render",
 							"variant": "signature",
 							"kind": 4096,
@@ -362,7 +362,7 @@
 					}
 				},
 				{
-					"id": 258,
+					"id": 264,
 					"name": "getDerivedStateFromError",
 					"variant": "declaration",
 					"kind": 2048,
@@ -379,7 +379,7 @@
 					],
 					"signatures": [
 						{
-							"id": 259,
+							"id": 265,
 							"name": "getDerivedStateFromError",
 							"variant": "signature",
 							"kind": 4096,
@@ -394,7 +394,7 @@
 							],
 							"parameters": [
 								{
-									"id": 260,
+									"id": 266,
 									"name": "error",
 									"variant": "param",
 									"kind": 32768,
@@ -422,23 +422,15 @@
 			"groups": [
 				{
 					"title": "Constructors",
-					"children": [
-						261
-					]
+					"children": [267]
 				},
 				{
 					"title": "Properties",
-					"children": [
-						267
-					]
+					"children": [273]
 				},
 				{
 					"title": "Methods",
-					"children": [
-						268,
-						274,
-						258
-					]
+					"children": [274, 280, 264]
 				}
 			],
 			"sources": [
@@ -460,7 +452,7 @@
 					"typeArguments": [
 						{
 							"type": "reference",
-							"target": 276,
+							"target": 282,
 							"name": "StudioErrorBoundaryProps",
 							"package": "@anvilkit/core"
 						},
@@ -482,7 +474,7 @@
 			]
 		},
 		{
-			"id": 1,
+			"id": 7,
 			"name": "AiHistoryEntry",
 			"variant": "declaration",
 			"kind": 256,
@@ -497,7 +489,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "AiState.history",
-						"target": 8
+						"target": 14
 					},
 					{
 						"kind": "text",
@@ -507,7 +499,7 @@
 			},
 			"children": [
 				{
-					"id": 3,
+					"id": 9,
 					"name": "at",
 					"variant": "declaration",
 					"kind": 1024,
@@ -528,7 +520,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "AiState.startGeneration",
-								"target": 9
+								"target": 15
 							},
 							{
 								"kind": "text",
@@ -550,7 +542,7 @@
 					}
 				},
 				{
-					"id": 2,
+					"id": 8,
 					"name": "prompt",
 					"variant": "declaration",
 					"kind": 1024,
@@ -582,10 +574,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						3,
-						2
-					]
+					"children": [9, 8]
 				}
 			],
 			"sources": [
@@ -598,7 +587,7 @@
 			]
 		},
 		{
-			"id": 4,
+			"id": 10,
 			"name": "AiState",
 			"variant": "declaration",
 			"kind": 256,
@@ -613,7 +602,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "AiState.reset",
-						"target": 18
+						"target": 24
 					},
 					{
 						"kind": "text",
@@ -623,7 +612,7 @@
 			},
 			"children": [
 				{
-					"id": 8,
+					"id": 14,
 					"name": "history",
 					"variant": "declaration",
 					"kind": 1024,
@@ -640,7 +629,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "startGeneration",
-								"target": 9
+								"target": 15
 							},
 							{
 								"kind": "text",
@@ -666,7 +655,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "clearHistory",
-								"target": 16
+								"target": 22
 							},
 							{
 								"kind": "text",
@@ -689,7 +678,7 @@
 							"type": "array",
 							"elementType": {
 								"type": "reference",
-								"target": 1,
+								"target": 7,
 								"name": "AiHistoryEntry",
 								"package": "@anvilkit/core"
 							}
@@ -697,7 +686,7 @@
 					}
 				},
 				{
-					"id": 5,
+					"id": 11,
 					"name": "isGenerating",
 					"variant": "declaration",
 					"kind": 1024,
@@ -738,7 +727,7 @@
 					}
 				},
 				{
-					"id": 7,
+					"id": 13,
 					"name": "lastError",
 					"variant": "declaration",
 					"kind": 1024,
@@ -784,7 +773,7 @@
 					}
 				},
 				{
-					"id": 6,
+					"id": 12,
 					"name": "lastPrompt",
 					"variant": "declaration",
 					"kind": 1024,
@@ -830,7 +819,7 @@
 					}
 				},
 				{
-					"id": 16,
+					"id": 22,
 					"name": "clearHistory",
 					"variant": "declaration",
 					"kind": 2048,
@@ -845,7 +834,7 @@
 					],
 					"signatures": [
 						{
-							"id": 17,
+							"id": 23,
 							"name": "clearHistory",
 							"variant": "signature",
 							"kind": 4096,
@@ -890,7 +879,7 @@
 					]
 				},
 				{
-					"id": 12,
+					"id": 18,
 					"name": "finishGeneration",
 					"variant": "declaration",
 					"kind": 2048,
@@ -905,7 +894,7 @@
 					],
 					"signatures": [
 						{
-							"id": 13,
+							"id": 19,
 							"name": "finishGeneration",
 							"variant": "signature",
 							"kind": 4096,
@@ -960,7 +949,7 @@
 							],
 							"parameters": [
 								{
-									"id": 14,
+									"id": 20,
 									"name": "ok",
 									"variant": "param",
 									"kind": 32768,
@@ -971,7 +960,7 @@
 									}
 								},
 								{
-									"id": 15,
+									"id": 21,
 									"name": "error",
 									"variant": "param",
 									"kind": 32768,
@@ -992,7 +981,7 @@
 					]
 				},
 				{
-					"id": 18,
+					"id": 24,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1007,7 +996,7 @@
 					],
 					"signatures": [
 						{
-							"id": 19,
+							"id": 25,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -1022,7 +1011,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "ExportState.reset",
-										"target": 61
+										"target": 67
 									},
 									{
 										"kind": "text",
@@ -1046,7 +1035,7 @@
 					]
 				},
 				{
-					"id": 9,
+					"id": 15,
 					"name": "startGeneration",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1061,7 +1050,7 @@
 					],
 					"signatures": [
 						{
-							"id": 10,
+							"id": 16,
 							"name": "startGeneration",
 							"variant": "signature",
 							"kind": 4096,
@@ -1108,7 +1097,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "AiHistoryEntry",
-										"target": 1
+										"target": 7
 									},
 									{
 										"kind": "text",
@@ -1126,7 +1115,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "finishGeneration",
-										"target": 12
+										"target": 18
 									},
 									{
 										"kind": "text",
@@ -1152,7 +1141,7 @@
 							],
 							"parameters": [
 								{
-									"id": 11,
+									"id": 17,
 									"name": "prompt",
 									"variant": "param",
 									"kind": 32768,
@@ -1174,21 +1163,11 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						8,
-						5,
-						7,
-						6
-					]
+					"children": [14, 11, 13, 12]
 				},
 				{
 					"title": "Methods",
-					"children": [
-						16,
-						12,
-						18,
-						9
-					]
+					"children": [22, 18, 24, 15]
 				}
 			],
 			"sources": [
@@ -1201,7 +1180,7 @@
 			]
 		},
 		{
-			"id": 24,
+			"id": 30,
 			"name": "AiStoreProviderProps",
 			"variant": "declaration",
 			"kind": 256,
@@ -1216,7 +1195,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "AiStoreProvider",
-						"target": 21
+						"target": 27
 					},
 					{
 						"kind": "text",
@@ -1226,7 +1205,7 @@
 			},
 			"children": [
 				{
-					"id": 27,
+					"id": 33,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1278,7 +1257,7 @@
 					}
 				},
 				{
-					"id": 26,
+					"id": 32,
 					"name": "store",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1320,13 +1299,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 20,
+						"target": 26,
 						"name": "AiStoreApi",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 25,
+					"id": 31,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1366,11 +1345,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						27,
-						26,
-						25
-					]
+					"children": [33, 32, 31]
 				}
 			],
 			"sources": [
@@ -1383,7 +1358,7 @@
 			]
 		},
 		{
-			"id": 28,
+			"id": 34,
 			"name": "CreateAiStoreOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -1409,7 +1384,7 @@
 			},
 			"children": [
 				{
-					"id": 29,
+					"id": 35,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1433,9 +1408,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						29
-					]
+					"children": [35]
 				}
 			],
 			"sources": [
@@ -1448,7 +1421,7 @@
 			]
 		},
 		{
-			"id": 30,
+			"id": 36,
 			"name": "CreateExportStoreOptions",
 			"variant": "declaration",
 			"kind": 256,
@@ -1490,7 +1463,7 @@
 			},
 			"children": [
 				{
-					"id": 31,
+					"id": 37,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1514,9 +1487,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						31
-					]
+					"children": [37]
 				}
 			],
 			"sources": [
@@ -1529,14 +1500,14 @@
 			]
 		},
 		{
-			"id": 32,
+			"id": 38,
 			"name": "CreateThemeStoreOptions",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 33,
+					"id": 39,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1560,9 +1531,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						33
-					]
+					"children": [39]
 				}
 			],
 			"sources": [
@@ -1575,7 +1544,7 @@
 			]
 		},
 		{
-			"id": 43,
+			"id": 49,
 			"name": "ExportState",
 			"variant": "declaration",
 			"kind": 256,
@@ -1598,7 +1567,7 @@
 			},
 			"children": [
 				{
-					"id": 44,
+					"id": 50,
 					"name": "availableFormats",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1658,7 +1627,7 @@
 					}
 				},
 				{
-					"id": 45,
+					"id": 51,
 					"name": "currentFormat",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1714,7 +1683,7 @@
 					}
 				},
 				{
-					"id": 46,
+					"id": 52,
 					"name": "isExporting",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1755,7 +1724,7 @@
 					}
 				},
 				{
-					"id": 47,
+					"id": 53,
 					"name": "lastExport",
 					"variant": "declaration",
 					"kind": 1024,
@@ -1791,7 +1760,7 @@
 						"types": [
 							{
 								"type": "reference",
-								"target": 71,
+								"target": 77,
 								"name": "LastExportRecord",
 								"package": "@anvilkit/core"
 							},
@@ -1803,7 +1772,7 @@
 					}
 				},
 				{
-					"id": 57,
+					"id": 63,
 					"name": "recordExport",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1818,7 +1787,7 @@
 					],
 					"signatures": [
 						{
-							"id": 58,
+							"id": 64,
 							"name": "recordExport",
 							"variant": "signature",
 							"kind": 4096,
@@ -1857,7 +1826,7 @@
 							],
 							"parameters": [
 								{
-									"id": 59,
+									"id": 65,
 									"name": "formatId",
 									"variant": "param",
 									"kind": 32768,
@@ -1868,7 +1837,7 @@
 									}
 								},
 								{
-									"id": 60,
+									"id": 66,
 									"name": "ok",
 									"variant": "param",
 									"kind": 32768,
@@ -1887,7 +1856,7 @@
 					]
 				},
 				{
-					"id": 61,
+					"id": 67,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1902,7 +1871,7 @@
 					],
 					"signatures": [
 						{
-							"id": 62,
+							"id": 68,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -1961,7 +1930,7 @@
 					]
 				},
 				{
-					"id": 48,
+					"id": 54,
 					"name": "setAvailableFormats",
 					"variant": "declaration",
 					"kind": 2048,
@@ -1976,7 +1945,7 @@
 					],
 					"signatures": [
 						{
-							"id": 49,
+							"id": 55,
 							"name": "setAvailableFormats",
 							"variant": "signature",
 							"kind": 4096,
@@ -1991,7 +1960,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "availableFormats",
-										"target": 44
+										"target": 50
 									},
 									{
 										"kind": "text",
@@ -2025,7 +1994,7 @@
 							],
 							"parameters": [
 								{
-									"id": 50,
+									"id": 56,
 									"name": "ids",
 									"variant": "param",
 									"kind": 32768,
@@ -2051,7 +2020,7 @@
 					]
 				},
 				{
-					"id": 51,
+					"id": 57,
 					"name": "setCurrentFormat",
 					"variant": "declaration",
 					"kind": 2048,
@@ -2066,7 +2035,7 @@
 					],
 					"signatures": [
 						{
-							"id": 52,
+							"id": 58,
 							"name": "setCurrentFormat",
 							"variant": "signature",
 							"kind": 4096,
@@ -2097,7 +2066,7 @@
 							],
 							"parameters": [
 								{
-									"id": 53,
+									"id": 59,
 									"name": "id",
 									"variant": "param",
 									"kind": 32768,
@@ -2125,7 +2094,7 @@
 					]
 				},
 				{
-					"id": 54,
+					"id": 60,
 					"name": "setIsExporting",
 					"variant": "declaration",
 					"kind": 2048,
@@ -2140,7 +2109,7 @@
 					],
 					"signatures": [
 						{
-							"id": 55,
+							"id": 61,
 							"name": "setIsExporting",
 							"variant": "signature",
 							"kind": 4096,
@@ -2187,7 +2156,7 @@
 							],
 							"parameters": [
 								{
-									"id": 56,
+									"id": 62,
 									"name": "value",
 									"variant": "param",
 									"kind": 32768,
@@ -2209,22 +2178,11 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						44,
-						45,
-						46,
-						47
-					]
+					"children": [50, 51, 52, 53]
 				},
 				{
 					"title": "Methods",
-					"children": [
-						57,
-						61,
-						48,
-						51,
-						54
-					]
+					"children": [63, 67, 54, 57, 60]
 				}
 			],
 			"sources": [
@@ -2237,7 +2195,7 @@
 			]
 		},
 		{
-			"id": 67,
+			"id": 73,
 			"name": "ExportStoreProviderProps",
 			"variant": "declaration",
 			"kind": 256,
@@ -2252,7 +2210,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "ExportStoreProvider",
-						"target": 64
+						"target": 70
 					},
 					{
 						"kind": "text",
@@ -2262,7 +2220,7 @@
 			},
 			"children": [
 				{
-					"id": 70,
+					"id": 76,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2314,7 +2272,7 @@
 					}
 				},
 				{
-					"id": 69,
+					"id": 75,
 					"name": "store",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2356,13 +2314,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 63,
+						"target": 69,
 						"name": "ExportStoreApi",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 68,
+					"id": 74,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2402,11 +2360,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						70,
-						69,
-						68
-					]
+					"children": [76, 75, 74]
 				}
 			],
 			"sources": [
@@ -2419,7 +2373,7 @@
 			]
 		},
 		{
-			"id": 71,
+			"id": 77,
 			"name": "LastExportRecord",
 			"variant": "declaration",
 			"kind": 256,
@@ -2434,7 +2388,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "ExportState.lastExport",
-						"target": 47
+						"target": 53
 					},
 					{
 						"kind": "text",
@@ -2444,7 +2398,7 @@
 			},
 			"children": [
 				{
-					"id": 73,
+					"id": 79,
 					"name": "at",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2477,7 +2431,7 @@
 					}
 				},
 				{
-					"id": 72,
+					"id": 78,
 					"name": "formatId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2515,7 +2469,7 @@
 					}
 				},
 				{
-					"id": 74,
+					"id": 80,
 					"name": "ok",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2583,11 +2537,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						73,
-						72,
-						74
-					]
+					"children": [79, 78, 80]
 				}
 			],
 			"sources": [
@@ -2600,14 +2550,134 @@
 			]
 		},
 		{
-			"id": 276,
+			"id": 2,
+			"name": "StudioAnalyticsPort",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The minimal analytics surface consumed by "
+					},
+					{
+						"kind": "code",
+						"text": "`<Studio analytics>`"
+					},
+					{
+						"kind": "text",
+						"text": ". Any\n"
+					},
+					{
+						"kind": "code",
+						"text": "`@anvilkit/analytics-core`"
+					},
+					{
+						"kind": "text",
+						"text": " adapter (Noop/Console/LocalStorage/Http/GA4/\nPostHog) is assignable to it."
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 3,
+					"name": "track",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "packages/runtime/core/src/shared/analytics-port.ts",
+							"line": 30,
+							"character": 1
+						}
+					],
+					"signatures": [
+						{
+							"id": 4,
+							"name": "track",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "packages/runtime/core/src/shared/analytics-port.ts",
+									"line": 30,
+									"character": 1
+								}
+							],
+							"parameters": [
+								{
+									"id": 5,
+									"name": "eventName",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 6,
+									"name": "properties",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"packageName": "typescript",
+											"packagePath": "lib/lib.es5.d.ts",
+											"qualifiedName": "Record"
+										},
+										"typeArguments": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "unknown"
+											}
+										],
+										"name": "Record",
+										"package": "typescript"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Methods",
+					"children": [3]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "packages/runtime/core/src/shared/analytics-port.ts",
+					"line": 29,
+					"character": 17
+				}
+			]
+		},
+		{
+			"id": 282,
 			"name": "StudioErrorBoundaryProps",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 277,
+					"id": 283,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2635,7 +2705,7 @@
 					}
 				},
 				{
-					"id": 278,
+					"id": 284,
 					"name": "fallback",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2669,21 +2739,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 279,
+							"id": 285,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 280,
+									"id": 286,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 281,
+											"id": 287,
 											"name": "error",
 											"variant": "param",
 											"kind": 32768,
@@ -2694,7 +2764,7 @@
 											}
 										},
 										{
-											"id": 282,
+											"id": 288,
 											"name": "reset",
 											"variant": "param",
 											"kind": 32768,
@@ -2702,14 +2772,14 @@
 											"type": {
 												"type": "reflection",
 												"declaration": {
-													"id": 283,
+													"id": 289,
 													"name": "__type",
 													"variant": "declaration",
 													"kind": 65536,
 													"flags": {},
 													"signatures": [
 														{
-															"id": 284,
+															"id": 290,
 															"name": "__type",
 															"variant": "signature",
 															"kind": 4096,
@@ -2741,7 +2811,7 @@
 					}
 				},
 				{
-					"id": 285,
+					"id": 291,
 					"name": "onError",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2776,21 +2846,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 286,
+							"id": 292,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 287,
+									"id": 293,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 288,
+											"id": 294,
 											"name": "error",
 											"variant": "param",
 											"kind": 32768,
@@ -2801,7 +2871,7 @@
 											}
 										},
 										{
-											"id": 289,
+											"id": 295,
 											"name": "info",
 											"variant": "param",
 											"kind": 32768,
@@ -2832,11 +2902,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						277,
-						278,
-						285
-					]
+					"children": [283, 284, 291]
 				}
 			],
 			"sources": [
@@ -2849,14 +2915,14 @@
 			]
 		},
 		{
-			"id": 126,
+			"id": 132,
 			"name": "StudioErrorScreenProps",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 134,
+					"id": 140,
 					"name": "className",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2886,7 +2952,7 @@
 					}
 				},
 				{
-					"id": 132,
+					"id": 138,
 					"name": "description",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2916,7 +2982,7 @@
 					}
 				},
 				{
-					"id": 127,
+					"id": 133,
 					"name": "error",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2945,7 +3011,7 @@
 					}
 				},
 				{
-					"id": 128,
+					"id": 134,
 					"name": "onRetry",
 					"variant": "declaration",
 					"kind": 1024,
@@ -2980,14 +3046,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 129,
+							"id": 135,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 130,
+									"id": 136,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -3002,7 +3068,7 @@
 					}
 				},
 				{
-					"id": 133,
+					"id": 139,
 					"name": "retryLabel",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3032,7 +3098,7 @@
 					}
 				},
 				{
-					"id": 131,
+					"id": 137,
 					"name": "title",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3065,14 +3131,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						134,
-						132,
-						127,
-						128,
-						133,
-						131
-					]
+					"children": [140, 138, 133, 134, 139, 137]
 				}
 			],
 			"sources": [
@@ -3085,14 +3144,14 @@
 			]
 		},
 		{
-			"id": 138,
+			"id": 144,
 			"name": "StudioLoadingScreenProps",
 			"variant": "declaration",
 			"kind": 256,
 			"flags": {},
 			"children": [
 				{
-					"id": 140,
+					"id": 146,
 					"name": "className",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3122,7 +3181,7 @@
 					}
 				},
 				{
-					"id": 139,
+					"id": 145,
 					"name": "label",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3163,10 +3222,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						140,
-						139
-					]
+					"children": [146, 145]
 				}
 			],
 			"sources": [
@@ -3179,7 +3235,7 @@
 			]
 		},
 		{
-			"id": 151,
+			"id": 157,
 			"name": "StudioProps",
 			"variant": "declaration",
 			"kind": 256,
@@ -3290,7 +3346,7 @@
 			},
 			"children": [
 				{
-					"id": 212,
+					"id": 218,
 					"name": "aiHost",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3366,7 +3422,7 @@
 					}
 				},
 				{
-					"id": 248,
+					"id": 254,
 					"name": "analytics",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3378,7 +3434,17 @@
 						"summary": [
 							{
 								"kind": "text",
-								"text": "Optional analytics adapter (from "
+								"text": "Optional analytics sink. Typed as the runtime-owned\n"
+							},
+							{
+								"kind": "inline-tag",
+								"tag": "@link",
+								"text": "StudioAnalyticsPort",
+								"target": 2
+							},
+							{
+								"kind": "text",
+								"text": " — every "
 							},
 							{
 								"kind": "code",
@@ -3386,7 +3452,7 @@
 							},
 							{
 								"kind": "text",
-								"text": ", types-only\ndependency). When set, "
+								"text": " adapter\nsatisfies it structurally. When set, "
 							},
 							{
 								"kind": "code",
@@ -3394,7 +3460,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " emits the system events "
+								"text": " emits the system events\n"
 							},
 							{
 								"kind": "code",
@@ -3402,7 +3468,7 @@
 							},
 							{
 								"kind": "text",
-								"text": "\n/ "
+								"text": " / "
 							},
 							{
 								"kind": "code",
@@ -3418,7 +3484,7 @@
 							},
 							{
 								"kind": "text",
-								"text": " with lightweight props only.\nOmitting it is a complete no-op — "
+								"text": " with lightweight\nprops only. Omitting it is a complete no-op — "
 							},
 							{
 								"kind": "code",
@@ -3426,31 +3492,27 @@
 							},
 							{
 								"kind": "text",
-								"text": " behaves identically."
+								"text": " behaves\nidentically."
 							}
 						]
 					},
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 302,
+							"line": 304,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L302"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L304"
 						}
 					],
 					"type": {
 						"type": "reference",
-						"target": {
-							"packageName": "@anvilkit/analytics-core",
-							"packagePath": "src/types.ts",
-							"qualifiedName": "AnalyticsAdapter"
-						},
-						"name": "AnalyticsAdapter",
-						"package": "@anvilkit/analytics-core"
+						"target": 2,
+						"name": "StudioAnalyticsPort",
+						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 213,
+					"id": 219,
 					"name": "chrome",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3510,7 +3572,7 @@
 					}
 				},
 				{
-					"id": 156,
+					"id": 162,
 					"name": "config",
 					"variant": "declaration",
 					"kind": 1024,
@@ -3561,14 +3623,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 157,
+							"id": 163,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"children": [
 								{
-									"id": 195,
+									"id": 201,
 									"name": "ai",
 									"variant": "declaration",
 									"kind": 1024,
@@ -3602,14 +3664,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 196,
+											"id": 202,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 198,
+													"id": 204,
 													"name": "defaultModel",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3647,7 +3709,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 197,
+													"id": 203,
 													"name": "maxRetries",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3696,10 +3758,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														198,
-														197
-													]
+													"children": [204, 203]
 												}
 											]
 										}
@@ -3707,7 +3766,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 163,
+									"id": 169,
 									"name": "branding",
 									"variant": "declaration",
 									"kind": 1024,
@@ -3733,14 +3792,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 164,
+											"id": 170,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 165,
+													"id": 171,
 													"name": "appName",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3778,7 +3837,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 166,
+													"id": 172,
 													"name": "logoUrl",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3816,7 +3875,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 167,
+													"id": 173,
 													"name": "primaryColor",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3857,11 +3916,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														165,
-														166,
-														167
-													]
+													"children": [171, 172, 173]
 												}
 											]
 										}
@@ -3869,7 +3924,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 184,
+									"id": 190,
 									"name": "brandKit",
 									"variant": "declaration",
 									"kind": 1024,
@@ -3935,14 +3990,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 185,
+											"id": 191,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 186,
+													"id": 192,
 													"name": "colors",
 													"variant": "declaration",
 													"kind": 1024,
@@ -3994,14 +4049,14 @@
 														"elementType": {
 															"type": "reflection",
 															"declaration": {
-																"id": 187,
+																"id": 193,
 																"name": "__type",
 																"variant": "declaration",
 																"kind": 65536,
 																"flags": {},
 																"children": [
 																	{
-																		"id": 188,
+																		"id": 194,
 																		"name": "name",
 																		"variant": "declaration",
 																		"kind": 1024,
@@ -4029,7 +4084,7 @@
 																		"defaultValue": "..."
 																	},
 																	{
-																		"id": 189,
+																		"id": 195,
 																		"name": "value",
 																		"variant": "declaration",
 																		"kind": 1024,
@@ -4060,10 +4115,7 @@
 																"groups": [
 																	{
 																		"title": "Properties",
-																		"children": [
-																			188,
-																			189
-																		]
+																		"children": [194, 195]
 																	}
 																]
 															}
@@ -4072,7 +4124,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 190,
+													"id": 196,
 													"name": "fonts",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4116,10 +4168,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														186,
-														190
-													]
+													"children": [192, 196]
 												}
 											]
 										}
@@ -4127,7 +4176,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 199,
+									"id": 205,
 									"name": "experimental",
 									"variant": "declaration",
 									"kind": 1024,
@@ -4146,21 +4195,21 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 200,
+											"id": 206,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"indexSignatures": [
 												{
-													"id": 201,
+													"id": 207,
 													"name": "__index",
 													"variant": "signature",
 													"kind": 8192,
 													"flags": {},
 													"parameters": [
 														{
-															"id": 202,
+															"id": 208,
 															"name": "key",
 															"variant": "param",
 															"kind": 32768,
@@ -4181,7 +4230,7 @@
 									}
 								},
 								{
-									"id": 191,
+									"id": 197,
 									"name": "export",
 									"variant": "declaration",
 									"kind": 1024,
@@ -4207,14 +4256,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 192,
+											"id": 198,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 194,
+													"id": 200,
 													"name": "defaultFormat",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4260,7 +4309,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 193,
+													"id": 199,
 													"name": "filenamePrefix",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4309,10 +4358,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														194,
-														193
-													]
+													"children": [200, 199]
 												}
 											]
 										}
@@ -4320,7 +4366,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 158,
+									"id": 164,
 									"name": "features",
 									"variant": "declaration",
 									"kind": 1024,
@@ -4354,14 +4400,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 159,
+											"id": 165,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 161,
+													"id": 167,
 													"name": "enableAi",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4407,7 +4453,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 162,
+													"id": 168,
 													"name": "enableCollaboration",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4461,7 +4507,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 160,
+													"id": 166,
 													"name": "enableExport",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4534,11 +4580,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														161,
-														162,
-														160
-													]
+													"children": [167, 168, 166]
 												}
 											]
 										}
@@ -4546,7 +4588,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 172,
+									"id": 178,
 									"name": "i18n",
 									"variant": "declaration",
 									"kind": 1024,
@@ -4636,14 +4678,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 173,
+											"id": 179,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 175,
+													"id": 181,
 													"name": "fallbackLocale",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4660,7 +4702,7 @@
 																"kind": "inline-tag",
 																"tag": "@link",
 																"text": "messages",
-																"target": 177
+																"target": 183
 															},
 															{
 																"kind": "text",
@@ -4691,7 +4733,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 174,
+													"id": 180,
 													"name": "locale",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4809,7 +4851,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 177,
+													"id": 183,
 													"name": "messages",
 													"variant": "declaration",
 													"kind": 1024,
@@ -4834,7 +4876,7 @@
 																"kind": "inline-tag",
 																"tag": "@link",
 																"text": "fallbackLocale",
-																"target": 175
+																"target": 181
 															},
 															{
 																"kind": "text",
@@ -4869,21 +4911,21 @@
 													"type": {
 														"type": "reflection",
 														"declaration": {
-															"id": 178,
+															"id": 184,
 															"name": "__type",
 															"variant": "declaration",
 															"kind": 65536,
 															"flags": {},
 															"indexSignatures": [
 																{
-																	"id": 179,
+																	"id": 185,
 																	"name": "__index",
 																	"variant": "signature",
 																	"kind": 8192,
 																	"flags": {},
 																	"parameters": [
 																		{
-																			"id": 180,
+																			"id": 186,
 																			"name": "key",
 																			"variant": "param",
 																			"kind": 32768,
@@ -4900,21 +4942,21 @@
 																			{
 																				"type": "reflection",
 																				"declaration": {
-																					"id": 181,
+																					"id": 187,
 																					"name": "__type",
 																					"variant": "declaration",
 																					"kind": 65536,
 																					"flags": {},
 																					"indexSignatures": [
 																						{
-																							"id": 182,
+																							"id": 188,
 																							"name": "__index",
 																							"variant": "signature",
 																							"kind": 8192,
 																							"flags": {},
 																							"parameters": [
 																								{
-																									"id": 183,
+																									"id": 189,
 																									"name": "key",
 																									"variant": "param",
 																									"kind": 32768,
@@ -4955,7 +4997,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 176,
+													"id": 182,
 													"name": "showLocaleSwitch",
 													"variant": "declaration",
 													"kind": 1024,
@@ -5036,12 +5078,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														175,
-														174,
-														177,
-														176
-													]
+													"children": [181, 180, 183, 182]
 												}
 											]
 										}
@@ -5049,7 +5086,7 @@
 									"defaultValue": "..."
 								},
 								{
-									"id": 168,
+									"id": 174,
 									"name": "theme",
 									"variant": "declaration",
 									"kind": 1024,
@@ -5075,14 +5112,14 @@
 									"type": {
 										"type": "reflection",
 										"declaration": {
-											"id": 169,
+											"id": 175,
 											"name": "__type",
 											"variant": "declaration",
 											"kind": 65536,
 											"flags": {},
 											"children": [
 												{
-													"id": 171,
+													"id": 177,
 													"name": "allowToggle",
 													"variant": "declaration",
 													"kind": 1024,
@@ -5128,7 +5165,7 @@
 													"defaultValue": "..."
 												},
 												{
-													"id": 170,
+													"id": 176,
 													"name": "defaultMode",
 													"variant": "declaration",
 													"kind": 1024,
@@ -5206,10 +5243,7 @@
 											"groups": [
 												{
 													"title": "Properties",
-													"children": [
-														171,
-														170
-													]
+													"children": [177, 176]
 												}
 											]
 										}
@@ -5220,23 +5254,14 @@
 							"groups": [
 								{
 									"title": "Properties",
-									"children": [
-										195,
-										163,
-										184,
-										199,
-										191,
-										158,
-										172,
-										168
-									]
+									"children": [201, 169, 190, 205, 197, 164, 178, 174]
 								}
 							]
 						}
 					}
 				},
 				{
-					"id": 154,
+					"id": 160,
 					"name": "data",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5306,7 +5331,7 @@
 									"typeArguments": [
 										{
 											"type": "reference",
-											"target": 152,
+											"target": 158,
 											"name": "UserConfig",
 											"package": "@anvilkit/core",
 											"qualifiedName": "StudioProps.UserConfig",
@@ -5333,7 +5358,7 @@
 									"typeArguments": [
 										{
 											"type": "reference",
-											"target": 152,
+											"target": 158,
 											"name": "UserConfig",
 											"package": "@anvilkit/core",
 											"qualifiedName": "StudioProps.UserConfig",
@@ -5350,7 +5375,7 @@
 					}
 				},
 				{
-					"id": 253,
+					"id": 259,
 					"name": "errorFallback",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5377,9 +5402,9 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 320,
+							"line": 322,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L320"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L322"
 						}
 					],
 					"type": {
@@ -5399,21 +5424,21 @@
 							{
 								"type": "reflection",
 								"declaration": {
-									"id": 254,
+									"id": 260,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 255,
+											"id": 261,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 256,
+													"id": 262,
 													"name": "error",
 													"variant": "param",
 													"kind": 32768,
@@ -5443,7 +5468,7 @@
 					}
 				},
 				{
-					"id": 239,
+					"id": 245,
 					"name": "headerEnd",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5512,7 +5537,7 @@
 					}
 				},
 				{
-					"id": 226,
+					"id": 232,
 					"name": "isPublishing",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5542,7 +5567,7 @@
 					}
 				},
 				{
-					"id": 224,
+					"id": 230,
 					"name": "isSavingDraft",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5572,7 +5597,7 @@
 					}
 				},
 				{
-					"id": 225,
+					"id": 231,
 					"name": "lastSavedAt",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5617,7 +5642,7 @@
 					}
 				},
 				{
-					"id": 247,
+					"id": 253,
 					"name": "loading",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5710,7 +5735,7 @@
 					}
 				},
 				{
-					"id": 240,
+					"id": 246,
 					"name": "logger",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5736,13 +5761,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 145,
+						"target": 151,
 						"name": "StudioLogger",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 242,
+					"id": 248,
 					"name": "messages",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5859,7 +5884,7 @@
 					}
 				},
 				{
-					"id": 215,
+					"id": 221,
 					"name": "onAction",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5923,7 +5948,7 @@
 											"typeArguments": [
 												{
 													"type": "reference",
-													"target": 152,
+													"target": 158,
 													"name": "UserConfig",
 													"package": "@anvilkit/core",
 													"qualifiedName": "StudioProps.UserConfig",
@@ -5950,7 +5975,7 @@
 											"typeArguments": [
 												{
 													"type": "reference",
-													"target": 152,
+													"target": 158,
 													"name": "UserConfig",
 													"package": "@anvilkit/core",
 													"qualifiedName": "StudioProps.UserConfig",
@@ -5971,7 +5996,7 @@
 					}
 				},
 				{
-					"id": 218,
+					"id": 224,
 					"name": "onBack",
 					"variant": "declaration",
 					"kind": 1024,
@@ -5998,14 +6023,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 219,
+							"id": 225,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 220,
+									"id": 226,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -6020,7 +6045,7 @@
 					}
 				},
 				{
-					"id": 204,
+					"id": 210,
 					"name": "onChange",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6063,21 +6088,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 205,
+							"id": 211,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 206,
+									"id": 212,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 207,
+											"id": 213,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -6106,7 +6131,7 @@
 															"typeArguments": [
 																{
 																	"type": "reference",
-																	"target": 152,
+																	"target": 158,
 																	"name": "UserConfig",
 																	"package": "@anvilkit/core",
 																	"qualifiedName": "StudioProps.UserConfig",
@@ -6133,7 +6158,7 @@
 					}
 				},
 				{
-					"id": 249,
+					"id": 255,
 					"name": "onError",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6159,7 +6184,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "errorFallback",
-								"target": 253
+								"target": 259
 							},
 							{
 								"kind": "text",
@@ -6170,29 +6195,29 @@
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/studio-controller-types.ts",
-							"line": 311,
+							"line": 313,
 							"character": 10,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L311"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/studio-controller-types.ts#L313"
 						}
 					],
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 250,
+							"id": 256,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 251,
+									"id": 257,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 252,
+											"id": 258,
 											"name": "error",
 											"variant": "param",
 											"kind": 32768,
@@ -6213,7 +6238,7 @@
 					}
 				},
 				{
-					"id": 235,
+					"id": 241,
 					"name": "onExport",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6256,21 +6281,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 236,
+							"id": 242,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 237,
+									"id": 243,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 238,
+											"id": 244,
 											"name": "formatId",
 											"variant": "param",
 											"kind": 32768,
@@ -6312,7 +6337,7 @@
 					}
 				},
 				{
-					"id": 243,
+					"id": 249,
 					"name": "onLocaleChange",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6379,21 +6404,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 244,
+							"id": 250,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 245,
+									"id": 251,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 246,
+											"id": 252,
 											"name": "locale",
 											"variant": "param",
 											"kind": 32768,
@@ -6414,7 +6439,7 @@
 					}
 				},
 				{
-					"id": 231,
+					"id": 237,
 					"name": "onPreview",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6449,21 +6474,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 232,
+							"id": 238,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 233,
+									"id": 239,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 234,
+											"id": 240,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -6490,7 +6515,7 @@
 					}
 				},
 				{
-					"id": 208,
+					"id": 214,
 					"name": "onPublish",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6533,21 +6558,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 209,
+							"id": 215,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 210,
+									"id": 216,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 211,
+											"id": 217,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -6576,7 +6601,7 @@
 															"typeArguments": [
 																{
 																	"type": "reference",
-																	"target": 152,
+																	"target": 158,
 																	"name": "UserConfig",
 																	"package": "@anvilkit/core",
 																	"qualifiedName": "StudioProps.UserConfig",
@@ -6624,7 +6649,7 @@
 					}
 				},
 				{
-					"id": 227,
+					"id": 233,
 					"name": "onPublishClick",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6667,21 +6692,21 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 228,
+							"id": 234,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 229,
+									"id": 235,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
 									"flags": {},
 									"parameters": [
 										{
-											"id": 230,
+											"id": 236,
 											"name": "data",
 											"variant": "param",
 											"kind": 32768,
@@ -6708,7 +6733,7 @@
 					}
 				},
 				{
-					"id": 221,
+					"id": 227,
 					"name": "onSaveDraft",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6735,14 +6760,14 @@
 					"type": {
 						"type": "reflection",
 						"declaration": {
-							"id": 222,
+							"id": 228,
 							"name": "__type",
 							"variant": "declaration",
 							"kind": 65536,
 							"flags": {},
 							"signatures": [
 								{
-									"id": 223,
+									"id": 229,
 									"name": "__type",
 									"variant": "signature",
 									"kind": 4096,
@@ -6778,7 +6803,7 @@
 					}
 				},
 				{
-					"id": 203,
+					"id": 209,
 					"name": "overrides",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6820,7 +6845,7 @@
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 152,
+										"target": 158,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"qualifiedName": "StudioProps.UserConfig",
@@ -6837,7 +6862,7 @@
 					}
 				},
 				{
-					"id": 241,
+					"id": 247,
 					"name": "pages",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6889,7 +6914,7 @@
 					}
 				},
 				{
-					"id": 155,
+					"id": 161,
 					"name": "plugins",
 					"variant": "declaration",
 					"kind": 1024,
@@ -6976,7 +7001,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 152,
+												"target": 158,
 												"name": "UserConfig",
 												"package": "@anvilkit/core",
 												"qualifiedName": "StudioProps.UserConfig",
@@ -6996,7 +7021,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 152,
+												"target": 158,
 												"name": "UserConfig",
 												"package": "@anvilkit/core",
 												"qualifiedName": "StudioProps.UserConfig",
@@ -7013,7 +7038,7 @@
 					}
 				},
 				{
-					"id": 153,
+					"id": 159,
 					"name": "puckConfig",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7156,7 +7181,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 152,
+						"target": 158,
 						"name": "UserConfig",
 						"package": "@anvilkit/core",
 						"qualifiedName": "StudioProps.UserConfig",
@@ -7164,7 +7189,7 @@
 					}
 				},
 				{
-					"id": 217,
+					"id": 223,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7258,7 +7283,7 @@
 					}
 				},
 				{
-					"id": 214,
+					"id": 220,
 					"name": "ui",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7330,7 +7355,7 @@
 					}
 				},
 				{
-					"id": 216,
+					"id": 222,
 					"name": "viewports",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7378,36 +7403,9 @@
 				{
 					"title": "Properties",
 					"children": [
-						212,
-						248,
-						213,
-						156,
-						154,
-						253,
-						239,
-						226,
-						224,
-						225,
-						247,
-						240,
-						242,
-						215,
-						218,
-						204,
-						249,
-						235,
-						243,
-						231,
-						208,
-						227,
-						221,
-						203,
-						241,
-						155,
-						153,
-						217,
-						214,
-						216
+						218, 254, 219, 162, 160, 259, 245, 232, 230, 231, 253, 246, 248,
+						221, 224, 210, 255, 241, 249, 237, 214, 233, 227, 209, 247, 161,
+						159, 223, 220, 222
 					]
 				}
 			],
@@ -7421,7 +7419,7 @@
 			],
 			"typeParameters": [
 				{
-					"id": 152,
+					"id": 158,
 					"name": "UserConfig",
 					"variant": "typeParam",
 					"kind": 131072,
@@ -7452,7 +7450,7 @@
 			]
 		},
 		{
-			"id": 77,
+			"id": 83,
 			"name": "ThemeState",
 			"variant": "declaration",
 			"kind": 256,
@@ -7475,7 +7473,7 @@
 			},
 			"children": [
 				{
-					"id": 78,
+					"id": 84,
 					"name": "mode",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7500,13 +7498,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 75,
+						"target": 81,
 						"name": "ThemeMode",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 79,
+					"id": 85,
 					"name": "resolved",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7539,13 +7537,13 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 76,
+						"target": 82,
 						"name": "ThemeResolved",
 						"package": "@anvilkit/core"
 					}
 				},
 				{
-					"id": 86,
+					"id": 92,
 					"name": "reset",
 					"variant": "declaration",
 					"kind": 2048,
@@ -7560,7 +7558,7 @@
 					],
 					"signatures": [
 						{
-							"id": 87,
+							"id": 93,
 							"name": "reset",
 							"variant": "signature",
 							"kind": 4096,
@@ -7575,7 +7573,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "ExportState.reset",
-										"target": 61
+										"target": 67
 									},
 									{
 										"kind": "text",
@@ -7599,7 +7597,7 @@
 					]
 				},
 				{
-					"id": 80,
+					"id": 86,
 					"name": "setMode",
 					"variant": "declaration",
 					"kind": 2048,
@@ -7614,7 +7612,7 @@
 					],
 					"signatures": [
 						{
-							"id": 81,
+							"id": 87,
 							"name": "setMode",
 							"variant": "signature",
 							"kind": 4096,
@@ -7637,14 +7635,14 @@
 							],
 							"parameters": [
 								{
-									"id": 82,
+									"id": 88,
 									"name": "mode",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 75,
+										"target": 81,
 										"name": "ThemeMode",
 										"package": "@anvilkit/core"
 									}
@@ -7658,7 +7656,7 @@
 					]
 				},
 				{
-					"id": 83,
+					"id": 89,
 					"name": "setResolved",
 					"variant": "declaration",
 					"kind": 2048,
@@ -7673,7 +7671,7 @@
 					],
 					"signatures": [
 						{
-							"id": 84,
+							"id": 90,
 							"name": "setResolved",
 							"variant": "signature",
 							"kind": 4096,
@@ -7720,14 +7718,14 @@
 							],
 							"parameters": [
 								{
-									"id": 85,
+									"id": 91,
 									"name": "resolved",
 									"variant": "param",
 									"kind": 32768,
 									"flags": {},
 									"type": {
 										"type": "reference",
-										"target": 76,
+										"target": 82,
 										"name": "ThemeResolved",
 										"package": "@anvilkit/core"
 									}
@@ -7744,18 +7742,11 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						78,
-						79
-					]
+					"children": [84, 85]
 				},
 				{
 					"title": "Methods",
-					"children": [
-						86,
-						80,
-						83
-					]
+					"children": [92, 86, 89]
 				}
 			],
 			"sources": [
@@ -7768,7 +7759,7 @@
 			]
 		},
 		{
-			"id": 92,
+			"id": 98,
 			"name": "ThemeStoreProviderProps",
 			"variant": "declaration",
 			"kind": 256,
@@ -7783,7 +7774,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "ThemeStoreProvider",
-						"target": 89
+						"target": 95
 					},
 					{
 						"kind": "text",
@@ -7793,7 +7784,7 @@
 			},
 			"children": [
 				{
-					"id": 95,
+					"id": 101,
 					"name": "children",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7845,7 +7836,7 @@
 					}
 				},
 				{
-					"id": 94,
+					"id": 100,
 					"name": "store",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7911,7 +7902,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 77,
+												"target": 83,
 												"name": "ThemeState",
 												"package": "@anvilkit/core"
 											}
@@ -7939,7 +7930,7 @@
 					}
 				},
 				{
-					"id": 93,
+					"id": 99,
 					"name": "storeId",
 					"variant": "declaration",
 					"kind": 1024,
@@ -7979,11 +7970,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						95,
-						94,
-						93
-					]
+					"children": [101, 100, 99]
 				}
 			],
 			"sources": [
@@ -7996,7 +7983,7 @@
 			]
 		},
 		{
-			"id": 290,
+			"id": 296,
 			"name": "UseStudioResult",
 			"variant": "declaration",
 			"kind": 256,
@@ -8043,7 +8030,7 @@
 			},
 			"children": [
 				{
-					"id": 292,
+					"id": 298,
 					"name": "exportFormats",
 					"variant": "declaration",
 					"kind": 1024,
@@ -8133,7 +8120,7 @@
 					}
 				},
 				{
-					"id": 293,
+					"id": 299,
 					"name": "headerActions",
 					"variant": "declaration",
 					"kind": 1024,
@@ -8191,7 +8178,7 @@
 					}
 				},
 				{
-					"id": 291,
+					"id": 297,
 					"name": "plugins",
 					"variant": "declaration",
 					"kind": 1024,
@@ -8253,11 +8240,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						292,
-						293,
-						291
-					]
+					"children": [298, 299, 297]
 				}
 			],
 			"sources": [
@@ -8270,7 +8253,7 @@
 			]
 		},
 		{
-			"id": 20,
+			"id": 26,
 			"name": "AiStoreApi",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -8293,7 +8276,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 4,
+						"target": 10,
 						"name": "AiState",
 						"package": "@anvilkit/core"
 					}
@@ -8303,7 +8286,7 @@
 			}
 		},
 		{
-			"id": 63,
+			"id": 69,
 			"name": "ExportStoreApi",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -8326,7 +8309,7 @@
 				"typeArguments": [
 					{
 						"type": "reference",
-						"target": 43,
+						"target": 49,
 						"name": "ExportState",
 						"package": "@anvilkit/core"
 					}
@@ -8336,7 +8319,70 @@
 			}
 		},
 		{
-			"id": 145,
+			"id": 1,
+			"name": "StudioAnalyticsEventName",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The Studio-owned system events "
+					},
+					{
+						"kind": "code",
+						"text": "`<Studio>`"
+					},
+					{
+						"kind": "text",
+						"text": " emits through the port. Each\nname must remain a member of the analytics capability's event catalog\n("
+					},
+					{
+						"kind": "code",
+						"text": "`AnalyticsEventName`"
+					},
+					{
+						"kind": "text",
+						"text": "); the compat test enforces membership."
+					}
+				]
+			},
+			"sources": [
+				{
+					"fileName": "packages/runtime/core/src/shared/analytics-port.ts",
+					"line": 17,
+					"character": 12
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "literal",
+						"value": "draft_saved"
+					},
+					{
+						"type": "literal",
+						"value": "page_published"
+					},
+					{
+						"type": "literal",
+						"value": "component_dropped"
+					},
+					{
+						"type": "literal",
+						"value": "seo_updated"
+					},
+					{
+						"type": "literal",
+						"value": "plugin_toggled"
+					}
+				]
+			}
+		},
+		{
+			"id": 151,
 			"name": "StudioLogger",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -8376,21 +8422,21 @@
 			"type": {
 				"type": "reflection",
 				"declaration": {
-					"id": 146,
+					"id": 152,
 					"name": "__type",
 					"variant": "declaration",
 					"kind": 65536,
 					"flags": {},
 					"signatures": [
 						{
-							"id": 147,
+							"id": 153,
 							"name": "__type",
 							"variant": "signature",
 							"kind": 4096,
 							"flags": {},
 							"parameters": [
 								{
-									"id": 148,
+									"id": 154,
 									"name": "level",
 									"variant": "param",
 									"kind": 32768,
@@ -8407,7 +8453,7 @@
 									}
 								},
 								{
-									"id": 149,
+									"id": 155,
 									"name": "message",
 									"variant": "param",
 									"kind": 32768,
@@ -8418,7 +8464,7 @@
 									}
 								},
 								{
-									"id": 150,
+									"id": 156,
 									"name": "meta",
 									"variant": "param",
 									"kind": 32768,
@@ -8469,7 +8515,7 @@
 			}
 		},
 		{
-			"id": 75,
+			"id": 81,
 			"name": "ThemeMode",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -8517,7 +8563,7 @@
 			}
 		},
 		{
-			"id": 76,
+			"id": 82,
 			"name": "ThemeResolved",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -8577,7 +8623,7 @@
 			}
 		},
 		{
-			"id": 88,
+			"id": 94,
 			"name": "ThemeStoreApi",
 			"variant": "declaration",
 			"kind": 2097152,
@@ -8592,7 +8638,7 @@
 						"kind": "inline-tag",
 						"tag": "@link",
 						"text": "createThemeStore",
-						"target": 40
+						"target": 46
 					},
 					{
 						"kind": "text",
@@ -8676,7 +8722,7 @@
 						"type": "query",
 						"queryType": {
 							"type": "reference",
-							"target": 40,
+							"target": 46,
 							"name": "createThemeStore",
 							"package": "@anvilkit/core"
 						}
@@ -8687,7 +8733,7 @@
 			}
 		},
 		{
-			"id": 21,
+			"id": 27,
 			"name": "AiStoreProvider",
 			"variant": "declaration",
 			"kind": 64,
@@ -8702,7 +8748,7 @@
 			],
 			"signatures": [
 				{
-					"id": 22,
+					"id": 28,
 					"name": "AiStoreProvider",
 					"variant": "signature",
 					"kind": 4096,
@@ -8717,14 +8763,14 @@
 					],
 					"parameters": [
 						{
-							"id": 23,
+							"id": 29,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 24,
+								"target": 30,
 								"name": "AiStoreProviderProps",
 								"package": "@anvilkit/core"
 							}
@@ -8745,7 +8791,7 @@
 			]
 		},
 		{
-			"id": 34,
+			"id": 40,
 			"name": "createAiStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -8760,7 +8806,7 @@
 			],
 			"signatures": [
 				{
-					"id": 35,
+					"id": 41,
 					"name": "createAiStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -8791,7 +8837,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "AiStoreProvider",
-								"target": 21
+								"target": 27
 							},
 							{
 								"kind": "text",
@@ -8817,14 +8863,14 @@
 					],
 					"parameters": [
 						{
-							"id": 36,
+							"id": 42,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 28,
+								"target": 34,
 								"name": "CreateAiStoreOptions",
 								"package": "@anvilkit/core"
 							}
@@ -8832,7 +8878,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 20,
+						"target": 26,
 						"name": "AiStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -8840,7 +8886,7 @@
 			]
 		},
 		{
-			"id": 37,
+			"id": 43,
 			"name": "createExportStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -8855,7 +8901,7 @@
 			],
 			"signatures": [
 				{
-					"id": 38,
+					"id": 44,
 					"name": "createExportStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -8886,7 +8932,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "ExportStoreProvider",
-								"target": 64
+								"target": 70
 							},
 							{
 								"kind": "text",
@@ -8912,14 +8958,14 @@
 					],
 					"parameters": [
 						{
-							"id": 39,
+							"id": 45,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 30,
+								"target": 36,
 								"name": "CreateExportStoreOptions",
 								"package": "@anvilkit/core"
 							}
@@ -8927,7 +8973,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 63,
+						"target": 69,
 						"name": "ExportStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -8935,7 +8981,7 @@
 			]
 		},
 		{
-			"id": 40,
+			"id": 46,
 			"name": "createThemeStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -8950,7 +8996,7 @@
 			],
 			"signatures": [
 				{
-					"id": 41,
+					"id": 47,
 					"name": "createThemeStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -8989,7 +9035,7 @@
 								"kind": "inline-tag",
 								"tag": "@link",
 								"text": "ThemeStoreProvider",
-								"target": 89
+								"target": 95
 							},
 							{
 								"kind": "text",
@@ -9026,14 +9072,14 @@
 					],
 					"parameters": [
 						{
-							"id": 42,
+							"id": 48,
 							"name": "options",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 32,
+								"target": 38,
 								"name": "CreateThemeStoreOptions",
 								"package": "@anvilkit/core"
 							}
@@ -9065,7 +9111,7 @@
 										"typeArguments": [
 											{
 												"type": "reference",
-												"target": 77,
+												"target": 83,
 												"name": "ThemeState",
 												"package": "@anvilkit/core"
 											}
@@ -9095,7 +9141,7 @@
 			]
 		},
 		{
-			"id": 64,
+			"id": 70,
 			"name": "ExportStoreProvider",
 			"variant": "declaration",
 			"kind": 64,
@@ -9110,7 +9156,7 @@
 			],
 			"signatures": [
 				{
-					"id": 65,
+					"id": 71,
 					"name": "ExportStoreProvider",
 					"variant": "signature",
 					"kind": 4096,
@@ -9125,14 +9171,14 @@
 					],
 					"parameters": [
 						{
-							"id": 66,
+							"id": 72,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 67,
+								"target": 73,
 								"name": "ExportStoreProviderProps",
 								"package": "@anvilkit/core"
 							}
@@ -9153,7 +9199,7 @@
 			]
 		},
 		{
-			"id": 296,
+			"id": 302,
 			"name": "mergeOverrides",
 			"variant": "declaration",
 			"kind": 64,
@@ -9168,7 +9214,7 @@
 			],
 			"signatures": [
 				{
-					"id": 297,
+					"id": 303,
 					"name": "mergeOverrides",
 					"variant": "signature",
 					"kind": 4096,
@@ -9286,7 +9332,7 @@
 					],
 					"parameters": [
 						{
-							"id": 298,
+							"id": 304,
 							"name": "overridesList",
 							"variant": "param",
 							"kind": 32768,
@@ -9367,7 +9413,7 @@
 			]
 		},
 		{
-			"id": 141,
+			"id": 147,
 			"name": "Studio",
 			"variant": "declaration",
 			"kind": 64,
@@ -9375,70 +9421,29 @@
 			"sources": [
 				{
 					"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
-					"line": 162,
+					"line": 445,
 					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L162"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L445"
 				}
 			],
 			"signatures": [
 				{
-					"id": 142,
+					"id": 148,
 					"name": "Studio",
 					"variant": "signature",
 					"kind": 4096,
 					"flags": {},
-					"comment": {
-						"summary": [
-							{
-								"kind": "text",
-								"text": "The public Studio shell. Thin view over "
-							},
-							{
-								"kind": "inline-tag",
-								"tag": "@link",
-								"text": "useStudioController",
-								"target": {
-									"packageName": "@anvilkit/core",
-									"packagePath": "src/react/components/use-studio-controller.ts",
-									"qualifiedName": "useStudioController"
-								}
-							},
-							{
-								"kind": "text",
-								"text": ":\nselect the loading state, then render the provider stack around\n"
-							},
-							{
-								"kind": "code",
-								"text": "`<Puck>`"
-							},
-							{
-								"kind": "text",
-								"text": "."
-							}
-						],
-						"blockTags": [
-							{
-								"tag": "@example",
-								"content": [
-									{
-										"kind": "code",
-										"text": "```tsx\nimport { Studio } from \"@anvilkit/core/react\";\nimport { puckDemoConfig } from \"./lib/puck-demo\";\nimport { exportHtmlPlugin } from \"@anvilkit/plugin-export-html\";\n\nexport default function EditorPage() {\n  return (\n    <Studio\n      puckConfig={puckDemoConfig}\n      plugins={[exportHtmlPlugin()]}\n      onPublish={async (data) => {\n        await fetch(\"/api/publish\", {\n          method: \"POST\",\n          body: JSON.stringify(data),\n        });\n      }}\n    />\n  );\n}\n```"
-									}
-								]
-							}
-						]
-					},
 					"sources": [
 						{
 							"fileName": "packages/runtime/core/src/react/components/Studio.tsx",
-							"line": 162,
+							"line": 445,
 							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L162"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L445"
 						}
 					],
 					"typeParameters": [
 						{
-							"id": 143,
+							"id": 149,
 							"name": "UserConfig",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -9467,18 +9472,18 @@
 					],
 					"parameters": [
 						{
-							"id": 144,
+							"id": 150,
 							"name": "props",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 151,
+								"target": 157,
 								"typeArguments": [
 									{
 										"type": "reference",
-										"target": 143,
+										"target": 149,
 										"name": "UserConfig",
 										"package": "@anvilkit/core",
 										"refersToTypeParameter": true
@@ -9545,7 +9550,7 @@
 			]
 		},
 		{
-			"id": 123,
+			"id": 129,
 			"name": "StudioErrorScreen",
 			"variant": "declaration",
 			"kind": 64,
@@ -9560,7 +9565,7 @@
 			],
 			"signatures": [
 				{
-					"id": 124,
+					"id": 130,
 					"name": "StudioErrorScreen",
 					"variant": "signature",
 					"kind": 4096,
@@ -9607,14 +9612,14 @@
 					],
 					"parameters": [
 						{
-							"id": 125,
+							"id": 131,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 126,
+								"target": 132,
 								"name": "StudioErrorScreenProps",
 								"package": "@anvilkit/core"
 							}
@@ -9635,7 +9640,7 @@
 			]
 		},
 		{
-			"id": 135,
+			"id": 141,
 			"name": "StudioLoadingScreen",
 			"variant": "declaration",
 			"kind": 64,
@@ -9650,7 +9655,7 @@
 			],
 			"signatures": [
 				{
-					"id": 136,
+					"id": 142,
 					"name": "StudioLoadingScreen",
 					"variant": "signature",
 					"kind": 4096,
@@ -9697,14 +9702,14 @@
 					],
 					"parameters": [
 						{
-							"id": 137,
+							"id": 143,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 138,
+								"target": 144,
 								"name": "StudioLoadingScreenProps",
 								"package": "@anvilkit/core"
 							},
@@ -9726,7 +9731,7 @@
 			]
 		},
 		{
-			"id": 89,
+			"id": 95,
 			"name": "ThemeStoreProvider",
 			"variant": "declaration",
 			"kind": 64,
@@ -9741,7 +9746,7 @@
 			],
 			"signatures": [
 				{
-					"id": 90,
+					"id": 96,
 					"name": "ThemeStoreProvider",
 					"variant": "signature",
 					"kind": 4096,
@@ -9756,14 +9761,14 @@
 					],
 					"parameters": [
 						{
-							"id": 91,
+							"id": 97,
 							"name": "__namedParameters",
 							"variant": "param",
 							"kind": 32768,
 							"flags": {},
 							"type": {
 								"type": "reference",
-								"target": 92,
+								"target": 98,
 								"name": "ThemeStoreProviderProps",
 								"package": "@anvilkit/core"
 							}
@@ -9784,7 +9789,7 @@
 			]
 		},
 		{
-			"id": 96,
+			"id": 102,
 			"name": "useAiStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -9799,7 +9804,7 @@
 			],
 			"signatures": [
 				{
-					"id": 97,
+					"id": 103,
 					"name": "useAiStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -9830,7 +9835,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 98,
+							"id": 104,
 							"name": "TResult",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -9839,7 +9844,7 @@
 					],
 					"parameters": [
 						{
-							"id": 99,
+							"id": 105,
 							"name": "selector",
 							"variant": "param",
 							"kind": 32768,
@@ -9847,28 +9852,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 100,
+									"id": 106,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 101,
+											"id": 107,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 102,
+													"id": 108,
 													"name": "state",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 4,
+														"target": 10,
 														"name": "AiState",
 														"package": "@anvilkit/core"
 													}
@@ -9876,7 +9881,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 98,
+												"target": 104,
 												"name": "TResult",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -9889,7 +9894,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 98,
+						"target": 104,
 						"name": "TResult",
 						"package": "@anvilkit/core",
 						"refersToTypeParameter": true
@@ -9898,7 +9903,7 @@
 			]
 		},
 		{
-			"id": 103,
+			"id": 109,
 			"name": "useAiStoreApi",
 			"variant": "declaration",
 			"kind": 64,
@@ -9913,7 +9918,7 @@
 			],
 			"signatures": [
 				{
-					"id": 104,
+					"id": 110,
 					"name": "useAiStoreApi",
 					"variant": "signature",
 					"kind": 4096,
@@ -9928,7 +9933,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 20,
+						"target": 26,
 						"name": "AiStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -9936,7 +9941,7 @@
 			]
 		},
 		{
-			"id": 105,
+			"id": 111,
 			"name": "useExportStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -9951,7 +9956,7 @@
 			],
 			"signatures": [
 				{
-					"id": 106,
+					"id": 112,
 					"name": "useExportStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -9982,7 +9987,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 107,
+							"id": 113,
 							"name": "TResult",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -9991,7 +9996,7 @@
 					],
 					"parameters": [
 						{
-							"id": 108,
+							"id": 114,
 							"name": "selector",
 							"variant": "param",
 							"kind": 32768,
@@ -9999,28 +10004,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 109,
+									"id": 115,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 110,
+											"id": 116,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 111,
+													"id": 117,
 													"name": "state",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 43,
+														"target": 49,
 														"name": "ExportState",
 														"package": "@anvilkit/core"
 													}
@@ -10028,7 +10033,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 107,
+												"target": 113,
 												"name": "TResult",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -10041,7 +10046,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 107,
+						"target": 113,
 						"name": "TResult",
 						"package": "@anvilkit/core",
 						"refersToTypeParameter": true
@@ -10050,7 +10055,7 @@
 			]
 		},
 		{
-			"id": 112,
+			"id": 118,
 			"name": "useExportStoreApi",
 			"variant": "declaration",
 			"kind": 64,
@@ -10065,7 +10070,7 @@
 			],
 			"signatures": [
 				{
-					"id": 113,
+					"id": 119,
 					"name": "useExportStoreApi",
 					"variant": "signature",
 					"kind": 4096,
@@ -10080,7 +10085,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 63,
+						"target": 69,
 						"name": "ExportStoreApi",
 						"package": "@anvilkit/core"
 					}
@@ -10088,7 +10093,7 @@
 			]
 		},
 		{
-			"id": 294,
+			"id": 300,
 			"name": "useStudio",
 			"variant": "declaration",
 			"kind": 64,
@@ -10103,7 +10108,7 @@
 			],
 			"signatures": [
 				{
-					"id": 295,
+					"id": 301,
 					"name": "useStudio",
 					"variant": "signature",
 					"kind": 4096,
@@ -10165,7 +10170,7 @@
 										"kind": "inline-tag",
 										"tag": "@link",
 										"text": "UseStudioResult",
-										"target": 290
+										"target": 296
 									},
 									{
 										"kind": "text",
@@ -10194,7 +10199,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 290,
+						"target": 296,
 						"name": "UseStudioResult",
 						"package": "@anvilkit/core"
 					}
@@ -10202,7 +10207,7 @@
 			]
 		},
 		{
-			"id": 114,
+			"id": 120,
 			"name": "useThemeStore",
 			"variant": "declaration",
 			"kind": 64,
@@ -10217,7 +10222,7 @@
 			],
 			"signatures": [
 				{
-					"id": 115,
+					"id": 121,
 					"name": "useThemeStore",
 					"variant": "signature",
 					"kind": 4096,
@@ -10248,7 +10253,7 @@
 					],
 					"typeParameters": [
 						{
-							"id": 116,
+							"id": 122,
 							"name": "TResult",
 							"variant": "typeParam",
 							"kind": 131072,
@@ -10257,7 +10262,7 @@
 					],
 					"parameters": [
 						{
-							"id": 117,
+							"id": 123,
 							"name": "selector",
 							"variant": "param",
 							"kind": 32768,
@@ -10265,28 +10270,28 @@
 							"type": {
 								"type": "reflection",
 								"declaration": {
-									"id": 118,
+									"id": 124,
 									"name": "__type",
 									"variant": "declaration",
 									"kind": 65536,
 									"flags": {},
 									"signatures": [
 										{
-											"id": 119,
+											"id": 125,
 											"name": "__type",
 											"variant": "signature",
 											"kind": 4096,
 											"flags": {},
 											"parameters": [
 												{
-													"id": 120,
+													"id": 126,
 													"name": "state",
 													"variant": "param",
 													"kind": 32768,
 													"flags": {},
 													"type": {
 														"type": "reference",
-														"target": 77,
+														"target": 83,
 														"name": "ThemeState",
 														"package": "@anvilkit/core"
 													}
@@ -10294,7 +10299,7 @@
 											],
 											"type": {
 												"type": "reference",
-												"target": 116,
+												"target": 122,
 												"name": "TResult",
 												"package": "@anvilkit/core",
 												"refersToTypeParameter": true
@@ -10307,7 +10312,7 @@
 					],
 					"type": {
 						"type": "reference",
-						"target": 116,
+						"target": 122,
 						"name": "TResult",
 						"package": "@anvilkit/core",
 						"refersToTypeParameter": true
@@ -10316,7 +10321,7 @@
 			]
 		},
 		{
-			"id": 121,
+			"id": 127,
 			"name": "useThemeStoreApi",
 			"variant": "declaration",
 			"kind": 64,
@@ -10331,7 +10336,7 @@
 			],
 			"signatures": [
 				{
-					"id": 122,
+					"id": 128,
 					"name": "useThemeStoreApi",
 					"variant": "signature",
 					"kind": 4096,
@@ -10377,62 +10382,23 @@
 	"groups": [
 		{
 			"title": "Classes",
-			"children": [
-				257
-			]
+			"children": [263]
 		},
 		{
 			"title": "Interfaces",
 			"children": [
-				1,
-				4,
-				24,
-				28,
-				30,
-				32,
-				43,
-				67,
-				71,
-				276,
-				126,
-				138,
-				151,
-				77,
-				92,
-				290
+				7, 10, 30, 34, 36, 38, 49, 73, 77, 2, 282, 132, 144, 157, 83, 98, 296
 			]
 		},
 		{
 			"title": "Type Aliases",
-			"children": [
-				20,
-				63,
-				145,
-				75,
-				76,
-				88
-			]
+			"children": [26, 69, 1, 151, 81, 82, 94]
 		},
 		{
 			"title": "Functions",
 			"children": [
-				21,
-				34,
-				37,
-				40,
-				64,
-				296,
-				141,
-				123,
-				135,
-				89,
-				96,
-				103,
-				105,
-				112,
-				294,
-				114,
-				121
+				27, 40, 43, 46, 70, 302, 147, 129, 141, 95, 102, 109, 111, 118, 300,
+				120, 127
 			]
 		}
 	],
@@ -10445,1108 +10411,1108 @@
 		},
 		"1": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiHistoryEntry"
+			"packagePath": "src/shared/analytics-port.ts",
+			"qualifiedName": "StudioAnalyticsEventName"
 		},
 		"2": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiHistoryEntry.prompt"
+			"packagePath": "src/shared/analytics-port.ts",
+			"qualifiedName": "StudioAnalyticsPort"
 		},
 		"3": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiHistoryEntry.at"
+			"packagePath": "src/shared/analytics-port.ts",
+			"qualifiedName": "StudioAnalyticsPort.track"
 		},
 		"4": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState"
+			"packagePath": "src/shared/analytics-port.ts",
+			"qualifiedName": "StudioAnalyticsPort.track"
 		},
 		"5": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.isGenerating"
+			"packagePath": "src/shared/analytics-port.ts",
+			"qualifiedName": "eventName"
 		},
 		"6": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.lastPrompt"
+			"packagePath": "src/shared/analytics-port.ts",
+			"qualifiedName": "properties"
 		},
 		"7": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.lastError"
+			"qualifiedName": "AiHistoryEntry"
 		},
 		"8": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.history"
+			"qualifiedName": "AiHistoryEntry.prompt"
 		},
 		"9": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.startGeneration"
+			"qualifiedName": "AiHistoryEntry.at"
 		},
 		"10": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.startGeneration"
+			"qualifiedName": "AiState"
 		},
 		"11": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "prompt"
+			"qualifiedName": "AiState.isGenerating"
 		},
 		"12": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.finishGeneration"
+			"qualifiedName": "AiState.lastPrompt"
 		},
 		"13": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.finishGeneration"
+			"qualifiedName": "AiState.lastError"
 		},
 		"14": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "ok"
+			"qualifiedName": "AiState.history"
 		},
 		"15": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "error"
+			"qualifiedName": "AiState.startGeneration"
 		},
 		"16": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.clearHistory"
+			"qualifiedName": "AiState.startGeneration"
 		},
 		"17": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.clearHistory"
+			"qualifiedName": "prompt"
 		},
 		"18": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.reset"
+			"qualifiedName": "AiState.finishGeneration"
 		},
 		"19": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiState.reset"
+			"qualifiedName": "AiState.finishGeneration"
 		},
 		"20": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "AiStoreApi"
+			"qualifiedName": "ok"
 		},
 		"21": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProvider"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "error"
 		},
 		"22": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProvider"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "AiState.clearHistory"
 		},
 		"23": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "__0"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "AiState.clearHistory"
 		},
 		"24": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "AiState.reset"
 		},
 		"25": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps.storeId"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "AiState.reset"
 		},
 		"26": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps.store"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "AiStoreApi"
 		},
 		"27": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "AiStoreProviderProps.children"
+			"qualifiedName": "AiStoreProvider"
 		},
 		"28": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "CreateAiStoreOptions"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "AiStoreProvider"
 		},
 		"29": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "CreateAiStoreOptions.storeId"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "__0"
 		},
 		"30": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "CreateExportStoreOptions"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "AiStoreProviderProps"
 		},
 		"31": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "CreateExportStoreOptions.storeId"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "AiStoreProviderProps.storeId"
 		},
 		"32": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "CreateThemeStoreOptions"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "AiStoreProviderProps.store"
 		},
 		"33": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "CreateThemeStoreOptions.storeId"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "AiStoreProviderProps.children"
 		},
 		"34": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "createAiStore"
+			"qualifiedName": "CreateAiStoreOptions"
 		},
 		"35": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "createAiStore"
+			"qualifiedName": "CreateAiStoreOptions.storeId"
 		},
 		"36": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ai-store.ts",
-			"qualifiedName": "options"
+			"packagePath": "src/state/slices/export-store.ts",
+			"qualifiedName": "CreateExportStoreOptions"
 		},
 		"37": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "createExportStore"
+			"qualifiedName": "CreateExportStoreOptions.storeId"
 		},
 		"38": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "createExportStore"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "CreateThemeStoreOptions"
 		},
 		"39": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "options"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "CreateThemeStoreOptions.storeId"
 		},
 		"40": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "createThemeStore"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "createAiStore"
 		},
 		"41": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "createThemeStore"
+			"packagePath": "src/state/slices/ai-store.ts",
+			"qualifiedName": "createAiStore"
 		},
 		"42": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
+			"packagePath": "src/state/slices/ai-store.ts",
 			"qualifiedName": "options"
 		},
 		"43": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState"
+			"qualifiedName": "createExportStore"
 		},
 		"44": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.availableFormats"
+			"qualifiedName": "createExportStore"
 		},
 		"45": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.currentFormat"
+			"qualifiedName": "options"
 		},
 		"46": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.isExporting"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "createThemeStore"
 		},
 		"47": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.lastExport"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "createThemeStore"
 		},
 		"48": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.setAvailableFormats"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "options"
 		},
 		"49": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.setAvailableFormats"
+			"qualifiedName": "ExportState"
 		},
 		"50": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ids"
+			"qualifiedName": "ExportState.availableFormats"
 		},
 		"51": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.setCurrentFormat"
+			"qualifiedName": "ExportState.currentFormat"
 		},
 		"52": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.setCurrentFormat"
+			"qualifiedName": "ExportState.isExporting"
 		},
 		"53": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "id"
+			"qualifiedName": "ExportState.lastExport"
 		},
 		"54": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.setIsExporting"
+			"qualifiedName": "ExportState.setAvailableFormats"
 		},
 		"55": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.setIsExporting"
+			"qualifiedName": "ExportState.setAvailableFormats"
 		},
 		"56": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "value"
+			"qualifiedName": "ids"
 		},
 		"57": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.recordExport"
+			"qualifiedName": "ExportState.setCurrentFormat"
 		},
 		"58": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.recordExport"
+			"qualifiedName": "ExportState.setCurrentFormat"
 		},
 		"59": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "formatId"
+			"qualifiedName": "id"
 		},
 		"60": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ok"
+			"qualifiedName": "ExportState.setIsExporting"
 		},
 		"61": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.reset"
+			"qualifiedName": "ExportState.setIsExporting"
 		},
 		"62": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportState.reset"
+			"qualifiedName": "value"
 		},
 		"63": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
-			"qualifiedName": "ExportStoreApi"
+			"qualifiedName": "ExportState.recordExport"
 		},
 		"64": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProvider"
+			"packagePath": "src/state/slices/export-store.ts",
+			"qualifiedName": "ExportState.recordExport"
 		},
 		"65": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProvider"
+			"packagePath": "src/state/slices/export-store.ts",
+			"qualifiedName": "formatId"
 		},
 		"66": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "__0"
+			"packagePath": "src/state/slices/export-store.ts",
+			"qualifiedName": "ok"
 		},
 		"67": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps"
+			"packagePath": "src/state/slices/export-store.ts",
+			"qualifiedName": "ExportState.reset"
 		},
 		"68": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps.storeId"
+			"packagePath": "src/state/slices/export-store.ts",
+			"qualifiedName": "ExportState.reset"
 		},
 		"69": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps.store"
+			"packagePath": "src/state/slices/export-store.ts",
+			"qualifiedName": "ExportStoreApi"
 		},
 		"70": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "ExportStoreProviderProps.children"
+			"qualifiedName": "ExportStoreProvider"
 		},
 		"71": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "ExportStoreProvider"
+		},
+		"72": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "__0"
+		},
+		"73": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "ExportStoreProviderProps"
+		},
+		"74": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "ExportStoreProviderProps.storeId"
+		},
+		"75": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "ExportStoreProviderProps.store"
+		},
+		"76": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "ExportStoreProviderProps.children"
+		},
+		"77": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
 			"qualifiedName": "LastExportRecord"
 		},
-		"72": {
+		"78": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
 			"qualifiedName": "LastExportRecord.formatId"
 		},
-		"73": {
+		"79": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
 			"qualifiedName": "LastExportRecord.at"
 		},
-		"74": {
+		"80": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/export-store.ts",
 			"qualifiedName": "LastExportRecord.ok"
 		},
-		"75": {
+		"81": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
 			"qualifiedName": "ThemeMode"
 		},
-		"76": {
+		"82": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
 			"qualifiedName": "ThemeResolved"
 		},
-		"77": {
+		"83": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
 			"qualifiedName": "ThemeState"
 		},
-		"78": {
+		"84": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
 			"qualifiedName": "ThemeState.mode"
 		},
-		"79": {
+		"85": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
 			"qualifiedName": "ThemeState.resolved"
 		},
-		"80": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "ThemeState.setMode"
-		},
-		"81": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "ThemeState.setMode"
-		},
-		"82": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "mode"
-		},
-		"83": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "ThemeState.setResolved"
-		},
-		"84": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "ThemeState.setResolved"
-		},
-		"85": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "resolved"
-		},
 		"86": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "ThemeState.reset"
+			"qualifiedName": "ThemeState.setMode"
 		},
 		"87": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "ThemeState.reset"
+			"qualifiedName": "ThemeState.setMode"
 		},
 		"88": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/theme-store.ts",
-			"qualifiedName": "ThemeStoreApi"
+			"qualifiedName": "mode"
 		},
 		"89": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProvider"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "ThemeState.setResolved"
 		},
 		"90": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProvider"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "ThemeState.setResolved"
 		},
 		"91": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "__0"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "resolved"
 		},
 		"92": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "ThemeState.reset"
 		},
 		"93": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps.storeId"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "ThemeState.reset"
 		},
 		"94": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps.store"
+			"packagePath": "src/state/slices/theme-store.ts",
+			"qualifiedName": "ThemeStoreApi"
 		},
 		"95": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "ThemeStoreProviderProps.children"
+			"qualifiedName": "ThemeStoreProvider"
 		},
 		"96": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "useAiStore"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "ThemeStoreProvider"
 		},
 		"97": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "useAiStore"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "__0"
 		},
 		"98": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "TResult"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "ThemeStoreProviderProps"
 		},
 		"99": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "selector"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "ThemeStoreProviderProps.storeId"
 		},
 		"100": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "ThemeStoreProviderProps.store"
 		},
 		"101": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "ThemeStoreProviderProps.children"
 		},
 		"102": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "state"
+			"qualifiedName": "useAiStore"
 		},
 		"103": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "useAiStoreApi"
+			"qualifiedName": "useAiStore"
 		},
 		"104": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/AiStoreProvider.tsx",
-			"qualifiedName": "useAiStoreApi"
+			"qualifiedName": "TResult"
 		},
 		"105": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "useExportStore"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "selector"
 		},
 		"106": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "useExportStore"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "__type"
 		},
 		"107": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "TResult"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "__type"
 		},
 		"108": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "selector"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "state"
 		},
 		"109": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "useAiStoreApi"
 		},
 		"110": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"packagePath": "src/state/slices/AiStoreProvider.tsx",
+			"qualifiedName": "useAiStoreApi"
 		},
 		"111": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "state"
+			"qualifiedName": "useExportStore"
 		},
 		"112": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "useExportStoreApi"
+			"qualifiedName": "useExportStore"
 		},
 		"113": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
-			"qualifiedName": "useExportStoreApi"
+			"qualifiedName": "TResult"
 		},
 		"114": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "useThemeStore"
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "selector"
 		},
 		"115": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "useThemeStore"
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "__type"
 		},
 		"116": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "TResult"
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "__type"
 		},
 		"117": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "selector"
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "state"
 		},
 		"118": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "useExportStoreApi"
 		},
 		"119": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "__type"
+			"packagePath": "src/state/slices/ExportStoreProvider.tsx",
+			"qualifiedName": "useExportStoreApi"
 		},
 		"120": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "state"
+			"qualifiedName": "useThemeStore"
 		},
 		"121": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "useThemeStoreApi"
+			"qualifiedName": "useThemeStore"
 		},
 		"122": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
-			"qualifiedName": "useThemeStoreApi"
+			"qualifiedName": "TResult"
 		},
 		"123": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreen"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "selector"
 		},
 		"124": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreen"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "__type"
 		},
 		"125": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "__0"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "__type"
 		},
 		"126": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreenProps"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "state"
 		},
 		"127": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreenProps.error"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "useThemeStoreApi"
 		},
 		"128": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreenProps.onRetry"
+			"packagePath": "src/state/slices/ThemeStoreProvider.tsx",
+			"qualifiedName": "useThemeStoreApi"
 		},
 		"129": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioErrorScreen"
 		},
 		"130": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioErrorScreen"
 		},
 		"131": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreenProps.title"
+			"qualifiedName": "__0"
 		},
 		"132": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreenProps.description"
+			"qualifiedName": "StudioErrorScreenProps"
 		},
 		"133": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreenProps.retryLabel"
+			"qualifiedName": "StudioErrorScreenProps.error"
 		},
 		"134": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
-			"qualifiedName": "StudioErrorScreenProps.className"
+			"qualifiedName": "StudioErrorScreenProps.onRetry"
 		},
 		"135": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/studio/layout/StudioLoadingScreen.tsx",
-			"qualifiedName": "StudioLoadingScreen"
+			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
+			"qualifiedName": "__type"
 		},
 		"136": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
+			"qualifiedName": "__type"
+		},
+		"137": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
+			"qualifiedName": "StudioErrorScreenProps.title"
+		},
+		"138": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
+			"qualifiedName": "StudioErrorScreenProps.description"
+		},
+		"139": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
+			"qualifiedName": "StudioErrorScreenProps.retryLabel"
+		},
+		"140": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/StudioErrorScreen.tsx",
+			"qualifiedName": "StudioErrorScreenProps.className"
+		},
+		"141": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioLoadingScreen.tsx",
 			"qualifiedName": "StudioLoadingScreen"
 		},
-		"137": {
+		"142": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/studio/layout/StudioLoadingScreen.tsx",
+			"qualifiedName": "StudioLoadingScreen"
+		},
+		"143": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioLoadingScreen.tsx",
 			"qualifiedName": "__0"
 		},
-		"138": {
+		"144": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioLoadingScreen.tsx",
 			"qualifiedName": "StudioLoadingScreenProps"
 		},
-		"139": {
+		"145": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioLoadingScreen.tsx",
 			"qualifiedName": "StudioLoadingScreenProps.label"
 		},
-		"140": {
+		"146": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/studio/layout/StudioLoadingScreen.tsx",
 			"qualifiedName": "StudioLoadingScreenProps.className"
 		},
-		"141": {
+		"147": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/Studio.tsx",
 			"qualifiedName": "Studio"
 		},
-		"142": {
+		"148": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/Studio.tsx",
 			"qualifiedName": "Studio"
 		},
-		"143": {
+		"149": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/Studio.tsx",
 			"qualifiedName": "UserConfig"
 		},
-		"144": {
+		"150": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/Studio.tsx",
 			"qualifiedName": "props"
 		},
-		"145": {
+		"151": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-log.ts",
 			"qualifiedName": "StudioLogger"
 		},
-		"146": {
+		"152": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-log.ts",
 			"qualifiedName": "__type"
 		},
-		"147": {
+		"153": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-log.ts",
 			"qualifiedName": "__type"
 		},
-		"148": {
+		"154": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-log.ts",
 			"qualifiedName": "level"
 		},
-		"149": {
+		"155": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-log.ts",
 			"qualifiedName": "message"
 		},
-		"150": {
+		"156": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-log.ts",
 			"qualifiedName": "meta"
 		},
-		"151": {
+		"157": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
 			"qualifiedName": "StudioProps"
 		},
-		"152": {
+		"158": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
 			"qualifiedName": "StudioProps.UserConfig"
 		},
-		"153": {
+		"159": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
 			"qualifiedName": "StudioProps.puckConfig"
 		},
-		"154": {
+		"160": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
 			"qualifiedName": "StudioProps.data"
 		},
-		"155": {
+		"161": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
 			"qualifiedName": "StudioProps.plugins"
 		},
-		"156": {
+		"162": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
 			"qualifiedName": "StudioProps.config"
 		},
-		"157": {
+		"163": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
-		"158": {
+		"164": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
 			"qualifiedName": "features"
 		},
-		"159": {
-			"packageName": "@anvilkit/utils",
-			"packagePath": "src/deep-merge.ts",
-			"qualifiedName": "__type"
-		},
-		"160": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "enableExport"
-		},
-		"161": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "enableAi"
-		},
-		"162": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "enableCollaboration"
-		},
-		"163": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "branding"
-		},
-		"164": {
-			"packageName": "@anvilkit/utils",
-			"packagePath": "src/deep-merge.ts",
-			"qualifiedName": "__type"
-		},
 		"165": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "appName"
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
 		},
 		"166": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "logoUrl"
+			"qualifiedName": "enableExport"
 		},
 		"167": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "primaryColor"
+			"qualifiedName": "enableAi"
 		},
 		"168": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "theme"
+			"qualifiedName": "enableCollaboration"
 		},
 		"169": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "branding"
+		},
+		"170": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
-		},
-		"170": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "defaultMode"
 		},
 		"171": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "allowToggle"
+			"qualifiedName": "appName"
 		},
 		"172": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "i18n"
+			"qualifiedName": "logoUrl"
 		},
 		"173": {
-			"packageName": "@anvilkit/utils",
-			"packagePath": "src/deep-merge.ts",
-			"qualifiedName": "__type"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "primaryColor"
 		},
 		"174": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "locale"
+			"qualifiedName": "theme"
 		},
 		"175": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "fallbackLocale"
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
 		},
 		"176": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "showLocaleSwitch"
+			"qualifiedName": "defaultMode"
 		},
 		"177": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "messages"
+			"qualifiedName": "allowToggle"
 		},
 		"178": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "i18n"
+		},
+		"179": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
+		},
+		"180": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "locale"
 		},
 		"181": {
-			"packageName": "@anvilkit/utils",
-			"packagePath": "src/deep-merge.ts",
-			"qualifiedName": "__type"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "fallbackLocale"
+		},
+		"182": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "showLocaleSwitch"
+		},
+		"183": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "messages"
 		},
 		"184": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "brandKit"
-		},
-		"185": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
-		"186": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "colors"
-		},
 		"187": {
-			"packageName": "zod",
-			"packagePath": "v4/core/util.d.cts",
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
-		},
-		"188": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "name"
-		},
-		"189": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "value"
 		},
 		"190": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "fonts"
+			"qualifiedName": "brandKit"
 		},
 		"191": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "export"
-		},
-		"192": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
-		"193": {
+		"192": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "filenamePrefix"
+			"qualifiedName": "colors"
+		},
+		"193": {
+			"packageName": "zod",
+			"packagePath": "v4/core/util.d.cts",
+			"qualifiedName": "__type"
 		},
 		"194": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "defaultFormat"
+			"qualifiedName": "name"
 		},
 		"195": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "ai"
+			"qualifiedName": "value"
 		},
 		"196": {
-			"packageName": "@anvilkit/utils",
-			"packagePath": "src/deep-merge.ts",
-			"qualifiedName": "__type"
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "fonts"
 		},
 		"197": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "maxRetries"
+			"qualifiedName": "export"
 		},
 		"198": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/config/schema.ts",
-			"qualifiedName": "defaultModel"
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
+			"qualifiedName": "__type"
 		},
 		"199": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/types/config.ts",
-			"qualifiedName": "experimental"
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "filenamePrefix"
 		},
 		"200": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultFormat"
+		},
+		"201": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "ai"
+		},
+		"202": {
 			"packageName": "@anvilkit/utils",
 			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
 		},
 		"203": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.overrides"
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "maxRetries"
 		},
 		"204": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onChange"
+			"packagePath": "src/config/schema.ts",
+			"qualifiedName": "defaultModel"
 		},
 		"205": {
 			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"packagePath": "src/types/config.ts",
+			"qualifiedName": "experimental"
 		},
 		"206": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/studio-controller-types.ts",
+			"packageName": "@anvilkit/utils",
+			"packagePath": "src/deep-merge.ts",
 			"qualifiedName": "__type"
-		},
-		"207": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "data"
-		},
-		"208": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onPublish"
 		},
 		"209": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.overrides"
 		},
 		"210": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onChange"
 		},
 		"211": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"212": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.aiHost"
+			"qualifiedName": "__type"
 		},
 		"213": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.chrome"
+			"qualifiedName": "data"
 		},
 		"214": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.ui"
+			"qualifiedName": "StudioProps.onPublish"
 		},
 		"215": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onAction"
+			"qualifiedName": "__type"
 		},
 		"216": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.viewports"
+			"qualifiedName": "__type"
 		},
 		"217": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.storeId"
+			"qualifiedName": "data"
 		},
 		"218": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onBack"
+			"qualifiedName": "StudioProps.aiHost"
 		},
 		"219": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.chrome"
 		},
 		"220": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.ui"
 		},
 		"221": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onSaveDraft"
+			"qualifiedName": "StudioProps.onAction"
 		},
 		"222": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.viewports"
 		},
 		"223": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.storeId"
 		},
 		"224": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.isSavingDraft"
+			"qualifiedName": "StudioProps.onBack"
 		},
 		"225": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.lastSavedAt"
+			"qualifiedName": "__type"
 		},
 		"226": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.isPublishing"
+			"qualifiedName": "__type"
 		},
 		"227": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onPublishClick"
+			"qualifiedName": "StudioProps.onSaveDraft"
 		},
 		"228": {
 			"packageName": "@anvilkit/core",
@@ -11561,102 +11527,102 @@
 		"230": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "StudioProps.isSavingDraft"
 		},
 		"231": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onPreview"
+			"qualifiedName": "StudioProps.lastSavedAt"
 		},
 		"232": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.isPublishing"
 		},
 		"233": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onPublishClick"
 		},
 		"234": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "data"
+			"qualifiedName": "__type"
 		},
 		"235": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onExport"
+			"qualifiedName": "__type"
 		},
 		"236": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "data"
 		},
 		"237": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onPreview"
 		},
 		"238": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "formatId"
+			"qualifiedName": "__type"
 		},
 		"239": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.headerEnd"
+			"qualifiedName": "__type"
 		},
 		"240": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.logger"
+			"qualifiedName": "data"
 		},
 		"241": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.pages"
+			"qualifiedName": "StudioProps.onExport"
 		},
 		"242": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.messages"
+			"qualifiedName": "__type"
 		},
 		"243": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onLocaleChange"
+			"qualifiedName": "__type"
 		},
 		"244": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "formatId"
 		},
 		"245": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.headerEnd"
 		},
 		"246": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "locale"
+			"qualifiedName": "StudioProps.logger"
 		},
 		"247": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.loading"
+			"qualifiedName": "StudioProps.pages"
 		},
 		"248": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.analytics"
+			"qualifiedName": "StudioProps.messages"
 		},
 		"249": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.onError"
+			"qualifiedName": "StudioProps.onLocaleChange"
 		},
 		"250": {
 			"packageName": "@anvilkit/core",
@@ -11671,162 +11637,162 @@
 		"252": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "error"
+			"qualifiedName": "locale"
 		},
 		"253": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "StudioProps.errorFallback"
+			"qualifiedName": "StudioProps.loading"
 		},
 		"254": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.analytics"
 		},
 		"255": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioProps.onError"
 		},
 		"256": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/studio-controller-types.ts",
-			"qualifiedName": "error"
+			"qualifiedName": "__type"
 		},
 		"257": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "__type"
+		},
+		"258": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "error"
+		},
+		"259": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "StudioProps.errorFallback"
+		},
+		"260": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "__type"
+		},
+		"261": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "__type"
+		},
+		"262": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/studio-controller-types.ts",
+			"qualifiedName": "error"
+		},
+		"263": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
 			"qualifiedName": "StudioErrorBoundary"
 		},
-		"258": {
+		"264": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
 			"qualifiedName": "StudioErrorBoundary.getDerivedStateFromError"
 		},
-		"259": {
+		"265": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
 			"qualifiedName": "StudioErrorBoundary.getDerivedStateFromError"
 		},
-		"260": {
+		"266": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
 			"qualifiedName": "error"
 		},
-		"261": {
+		"267": {
 			"packageName": "@types/react",
 			"packagePath": "index.d.ts",
 			"qualifiedName": "React.Component.__constructor"
 		},
-		"262": {
+		"268": {
 			"packageName": "@types/react",
 			"packagePath": "index.d.ts",
 			"qualifiedName": "StudioErrorBoundary"
 		},
-		"263": {
+		"269": {
 			"packageName": "@types/react",
 			"packagePath": "index.d.ts",
 			"qualifiedName": "props"
 		},
-		"264": {
+		"270": {
 			"packageName": "@types/react",
 			"packagePath": "index.d.ts",
 			"qualifiedName": "StudioErrorBoundary"
 		},
-		"265": {
+		"271": {
 			"packageName": "@types/react",
 			"packagePath": "index.d.ts",
 			"qualifiedName": "props"
 		},
-		"266": {
+		"272": {
 			"packageName": "@types/react",
 			"packagePath": "index.d.ts",
 			"qualifiedName": "context"
 		},
-		"267": {
+		"273": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
 			"qualifiedName": "StudioErrorBoundary.state"
 		},
-		"268": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundary.componentDidCatch"
-		},
-		"269": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundary.componentDidCatch"
-		},
-		"270": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "error"
-		},
-		"271": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "info"
-		},
 		"274": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundary.render"
+			"qualifiedName": "StudioErrorBoundary.componentDidCatch"
 		},
 		"275": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundary.render"
+			"qualifiedName": "StudioErrorBoundary.componentDidCatch"
 		},
 		"276": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundaryProps"
+			"qualifiedName": "error"
 		},
 		"277": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundaryProps.children"
-		},
-		"278": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundaryProps.fallback"
-		},
-		"279": {
-			"packageName": "@anvilkit/core",
-			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "info"
 		},
 		"280": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioErrorBoundary.render"
 		},
 		"281": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "error"
+			"qualifiedName": "StudioErrorBoundary.render"
 		},
 		"282": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "reset"
+			"qualifiedName": "StudioErrorBoundaryProps"
 		},
 		"283": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioErrorBoundaryProps.children"
 		},
 		"284": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "StudioErrorBoundaryProps.fallback"
 		},
 		"285": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "StudioErrorBoundaryProps.onError"
+			"qualifiedName": "__type"
 		},
 		"286": {
 			"packageName": "@anvilkit/core",
@@ -11836,59 +11802,89 @@
 		"287": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "__type"
+			"qualifiedName": "error"
 		},
 		"288": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "error"
+			"qualifiedName": "reset"
 		},
 		"289": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
-			"qualifiedName": "info"
+			"qualifiedName": "__type"
 		},
 		"290": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
+			"qualifiedName": "__type"
+		},
+		"291": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
+			"qualifiedName": "StudioErrorBoundaryProps.onError"
+		},
+		"292": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
+			"qualifiedName": "__type"
+		},
+		"293": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
+			"qualifiedName": "__type"
+		},
+		"294": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
+			"qualifiedName": "error"
+		},
+		"295": {
+			"packageName": "@anvilkit/core",
+			"packagePath": "src/react/components/StudioErrorBoundary.tsx",
+			"qualifiedName": "info"
+		},
+		"296": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
 			"qualifiedName": "UseStudioResult"
 		},
-		"291": {
+		"297": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
 			"qualifiedName": "UseStudioResult.plugins"
 		},
-		"292": {
+		"298": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
 			"qualifiedName": "UseStudioResult.exportFormats"
 		},
-		"293": {
+		"299": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
 			"qualifiedName": "UseStudioResult.headerActions"
 		},
-		"294": {
+		"300": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
 			"qualifiedName": "useStudio"
 		},
-		"295": {
+		"301": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/components/use-studio.ts",
 			"qualifiedName": "useStudio"
 		},
-		"296": {
+		"302": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/overrides/merge-overrides.ts",
 			"qualifiedName": "mergeOverrides"
 		},
-		"297": {
+		"303": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/overrides/merge-overrides.ts",
 			"qualifiedName": "mergeOverrides"
 		},
-		"298": {
+		"304": {
 			"packageName": "@anvilkit/core",
 			"packagePath": "src/react/overrides/merge-overrides.ts",
 			"qualifiedName": "overridesList"

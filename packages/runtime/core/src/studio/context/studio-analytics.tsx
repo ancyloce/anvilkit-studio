@@ -17,15 +17,15 @@
  * which makes every consumer a no-op.
  */
 
-import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import { createContext, type ReactNode, use } from "react";
+import type { StudioAnalyticsPort } from "@/shared/analytics-port";
 
-const StudioAnalyticsContext = createContext<AnalyticsAdapter | undefined>(
+const StudioAnalyticsContext = createContext<StudioAnalyticsPort | undefined>(
 	undefined,
 );
 
 export interface StudioAnalyticsProviderProps {
-	readonly adapter: AnalyticsAdapter | undefined;
+	readonly adapter: StudioAnalyticsPort | undefined;
 	readonly children: ReactNode;
 }
 
@@ -39,6 +39,6 @@ export function StudioAnalyticsProvider({
 }
 
 /** The active `<Studio analytics>` adapter, or `undefined` when unset. */
-export function useStudioAnalytics(): AnalyticsAdapter | undefined {
+export function useStudioAnalytics(): StudioAnalyticsPort | undefined {
 	return use(StudioAnalyticsContext);
 }

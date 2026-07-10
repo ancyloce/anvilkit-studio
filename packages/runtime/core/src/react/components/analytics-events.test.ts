@@ -3,15 +3,23 @@ import type {
 	AnalyticsEventName,
 } from "@anvilkit/analytics-core";
 import { describe, expect, it, vi } from "vitest";
+import type {
+	StudioAnalyticsEventName,
+	StudioAnalyticsPort,
+} from "@/shared/analytics-port";
 
-// M1: the three Studio-owned event names this module emits must stay members of
-// the analytics catalog. The `satisfies` makes a typo or a catalog rename a
-// compile error here, mirroring the per-call-site `satisfies` in the emitters.
+// Phase 4 boundary-compat contract: `@anvilkit/analytics-core` is a
+// devDependency reachable from tests ONLY. Every Studio-owned event name in
+// the runtime port must stay a member of the capability's catalog, and the
+// full port union must stay pinned here — either `satisfies` failing is a
+// compile error, mirroring the per-call-site `satisfies` in the emitters.
 const STUDIO_EVENT_NAMES = [
 	"draft_saved",
 	"page_published",
 	"component_dropped",
-] as const satisfies readonly AnalyticsEventName[];
+	"seo_updated",
+	"plugin_toggled",
+] as const satisfies readonly AnalyticsEventName[] satisfies readonly StudioAnalyticsEventName[];
 
 import {
 	trackComponentDropped,
@@ -100,12 +108,26 @@ describe("no adapter", () => {
 
 describe("event-name catalog contract", () => {
 	it("emits only names declared in the analytics catalog", () => {
-		// Compile-time enforcement is the `satisfies` on STUDIO_EVENT_NAMES above;
-		// this runtime check documents the contract and pins the exact set.
+		// Compile-time enforcement is the double `satisfies` on
+		// STUDIO_EVENT_NAMES above; this runtime check documents the contract
+		// and pins the exact set.
 		expect(STUDIO_EVENT_NAMES).toEqual([
 			"draft_saved",
 			"page_published",
 			"component_dropped",
+			"seo_updated",
+			"plugin_toggled",
 		]);
+	});
+});
+
+describe("adapter ↔ port compatibility", () => {
+	it("every analytics-core adapter satisfies the runtime port", () => {
+		// The assignment is the compile-time contract: if the capability's
+		// `AnalyticsAdapter` ever stops satisfying core's `StudioAnalyticsPort`
+		// (e.g. a `track` signature change), this line is a type error.
+		const port: StudioAnalyticsPort = spyAdapter();
+		port.track("draft_saved", {});
+		expect(port.track).toHaveBeenCalledWith("draft_saved", {});
 	});
 });

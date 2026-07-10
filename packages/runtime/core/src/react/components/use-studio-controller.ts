@@ -32,7 +32,6 @@
  * bridge, which must live inside Puck's subtree.
  */
 
-import type { AnalyticsAdapter } from "@anvilkit/analytics-core";
 import type { DeepPartial } from "@anvilkit/utils";
 import {
 	type Config as PuckConfig,
@@ -64,6 +63,7 @@ import type { StudioChromeMode } from "@/overrides/types";
 import { jsonExportPlugin } from "@/runtime/built-in-formats/json-export-plugin";
 import { compilePlugins } from "@/runtime/compile-plugins";
 import { createEventBus } from "@/runtime/event-bus";
+import type { StudioAnalyticsPort } from "@/shared/analytics-port";
 import {
 	createEditorStore,
 	type EditorStoreBundle,
@@ -926,7 +926,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	);
 	// F9 analytics: latest adapter + host onAction/onSaveDraft behind refs so
 	// the wrapped handlers stay stable while always reading the newest values.
-	const analyticsRef = useRef<AnalyticsAdapter | undefined>(analytics);
+	const analyticsRef = useRef<StudioAnalyticsPort | undefined>(analytics);
 	const onActionRef = useRef<PuckOnAction | undefined>(
 		onAction as PuckOnAction | undefined,
 	);

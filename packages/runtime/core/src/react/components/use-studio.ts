@@ -36,7 +36,7 @@
  * @see {@link https://github.com/anvilkit/studio/blob/main/docs/tasks/core-014-studio-component.md | core-014}
  */
 
-import { getStrictContext } from "@anvilkit/utils";
+import { getStrictContext } from "@anvilkit/utils/get-strict-context";
 import { useMemo } from "react";
 
 import type { StudioRuntime } from "@/runtime/compile-plugins";

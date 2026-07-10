@@ -12,6 +12,10 @@
 // the host config read path, react/ owns the Studio shell and its
 // slice stores.
 
+export type {
+	StudioAnalyticsEventName,
+	StudioAnalyticsPort,
+} from "../shared/analytics-port";
 export {
 	type AiHistoryEntry,
 	type AiState,

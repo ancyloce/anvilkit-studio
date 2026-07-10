@@ -34,7 +34,10 @@ export function RenameAssetDialog({
 }: RenameAssetDialogProps): ReactNode {
 	return (
 		<Dialog open={asset !== null} onOpenChange={onOpenChange}>
-			<DialogContent data-testid="ak-image-rename-dialog" showCloseButton={false}>
+			<DialogContent
+				data-testid="ak-image-rename-dialog"
+				showCloseButton={false}
+			>
 				{asset !== null ? (
 					<RenameAssetForm
 						// Remount per asset (`key`) so draft/error/submitting reset

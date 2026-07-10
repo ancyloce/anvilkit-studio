@@ -18,7 +18,10 @@
  */
 
 import { useCallback } from "react";
-import { resolveQueryRoot, useStudioRootRef } from "@/context/StudioRootProvider";
+import {
+	resolveQueryRoot,
+	useStudioRootRef,
+} from "@/context/StudioRootProvider";
 
 const PUCK_COMPONENT_ATTR = "data-puck-component";
 

@@ -73,6 +73,8 @@ export {
 export {
 	mergeOverrides,
 	Studio,
+	type StudioAnalyticsEventName,
+	type StudioAnalyticsPort,
 	StudioErrorScreen,
 	type StudioErrorScreenProps,
 	StudioLoadingScreen,

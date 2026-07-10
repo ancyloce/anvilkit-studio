@@ -1,19 +1,30 @@
 #!/usr/bin/env node
 /**
- * @file `check-no-headless-import` — quality gate for architecture §4
- * (A5: declare & guard the core ↔ ir/schema/validator contract).
+ * @file `check-no-headless-import` — the runtime-layer import gate.
  *
- * Enforces the dependency direction: **`@anvilkit/core` is a
- * *consumer* of the headless packages' contracts, never the reverse.**
- * `@anvilkit/ir` imports `PageIR` from `@anvilkit/core/types` and
- * declares `@anvilkit/core` a peer dependency. If `src/` ever imports
- * `@anvilkit/ir`, `@anvilkit/schema`, or `@anvilkit/validator`, the
- * acyclic layering inverts and `PageIR` can drift between core's
- * `src/types/ir.ts` (the source of truth) and the IR package.
+ * Enforces the layer rule `runtime -> foundation (+ runtime)` from
+ * `docs/architecture/repository-structure.md` (restructure plan 0001,
+ * Phase 4): shipped `src/` may import **only** the allowlisted
+ * `@anvilkit/*` packages (`contracts`, `ui`, `utils`). Every other
+ * `@anvilkit/*` specifier is forbidden, which covers both historic
+ * failure modes with one rule:
+ *
+ * - **Headless inversion** (architecture §4 A5): `@anvilkit/ir` imports
+ *   `PageIR` from `@anvilkit/core/types` and declares core a peer. If
+ *   `src/` ever imports `@anvilkit/ir`/`schema`/`validator`, the acyclic
+ *   layering inverts and `PageIR` can drift from `src/types/ir.ts`.
+ * - **Capability/extension leakage**: concrete analytics, Canvas, SEO,
+ *   export, or collaboration packages (`@anvilkit/analytics-*`,
+ *   `@anvilkit/canvas-*`, `@anvilkit/plugin-*`, component packages)
+ *   must stay behind runtime-owned ports (e.g.
+ *   `src/shared/analytics-port.ts`) — never direct dependencies.
+ *
+ * Tests are exempt (see {@link walkSourceFiles}): boundary-compat tests
+ * deliberately import `@anvilkit/analytics-core` as a devDependency.
  *
  * `madge --circular` only catches *cycles*; it does not catch a
- * one-directional inverse import (core → ir) that has no cycle yet.
- * This gate is the precise guard for that.
+ * one-directional inverse or downward-layer import that has no cycle
+ * yet. This gate is the precise guard for that.
  *
  * Implemented in plain Node (no `ripgrep` dependency) so it runs on
  * any CI image, mirroring `check-react-free.mjs`.
@@ -31,20 +42,29 @@ const PACKAGE_ROOT = resolve(__dirname, "..");
 const SRC_DIR = resolve(PACKAGE_ROOT, "src");
 
 /**
- * Forbidden headless packages. `@anvilkit/core` must not import any of
- * these (including subpaths). Type-only imports count too — a
+ * The only `@anvilkit/*` packages runtime `src/` may import: its
+ * foundation dependencies plus the runtime sibling `@anvilkit/ui`.
+ * Any other `@anvilkit/*` specifier — headless (`ir`/`schema`/
+ * `validator`), capabilities (`analytics-*`, `canvas-*`), extensions
+ * (`plugin-*`, components, templates) — is forbidden, including
+ * subpaths. Type-only imports count too — a
  * `import type { ... } from "@anvilkit/ir"` still couples the contract
  * direction even though it erases at build time.
  */
-const FORBIDDEN = ["@anvilkit/ir", "@anvilkit/schema", "@anvilkit/validator"];
+const ALLOWED = ["@anvilkit/contracts", "@anvilkit/ui", "@anvilkit/utils"];
 
 /**
- * True iff `spec` is a forbidden package or one of its subpaths
- * (`@anvilkit/ir`, `@anvilkit/ir/foo`) — but **not** a different
- * package that merely shares the prefix (`@anvilkit/ir-utils`).
+ * True iff `spec` is an `@anvilkit/*` package outside the allowlist.
+ * Allowlist entries match exactly or by subpath (`@anvilkit/utils`,
+ * `@anvilkit/utils/get-strict-context`) — but **not** a different
+ * package that merely shares the prefix (`@anvilkit/ui-extras` is NOT
+ * allowlisted by `@anvilkit/ui`).
  */
 function isForbiddenSpecifier(spec) {
-	return FORBIDDEN.some((pkg) => spec === pkg || spec.startsWith(`${pkg}/`));
+	if (!spec.startsWith("@anvilkit/")) {
+		return false;
+	}
+	return !ALLOWED.some((pkg) => spec === pkg || spec.startsWith(`${pkg}/`));
 }
 
 /**
@@ -290,7 +310,7 @@ async function main() {
 
 	if (offenders.length === 0) {
 		console.log(
-			"check-no-headless-import: OK — src/ does not import @anvilkit/ir, @anvilkit/schema, or @anvilkit/validator",
+			`check-no-headless-import: OK — src/ imports no @anvilkit/* package outside the runtime allowlist (${ALLOWED.join(", ")})`,
 		);
 		return;
 	}
@@ -298,10 +318,10 @@ async function main() {
 	console.error("check-no-headless-import: FAIL");
 	console.error("");
 	console.error(
-		"`@anvilkit/core` must not import the headless packages — it is their *consumer*,",
+		`\`@anvilkit/core\` (runtime layer) may import only ${ALLOWED.join(", ")} —`,
 	);
 	console.error(
-		"not the reverse. The following src/ files invert the contract direction:",
+		"never headless, capability, or extension packages. Offending src/ files:",
 	);
 	console.error("");
 	for (const { file, hits } of offenders) {
@@ -312,10 +332,16 @@ async function main() {
 	}
 	console.error("");
 	console.error(
-		"`PageIR` lives in src/types/ir.ts (source of truth); @anvilkit/ir consumes it,",
+		"Headless: `PageIR` lives in src/types/ir.ts (source of truth); @anvilkit/ir",
 	);
 	console.error(
-		"declaring @anvilkit/core a peer dep. See core-functional-architecture.md §4 / §6 A5.",
+		"consumes it, declaring @anvilkit/core a peer dep (core-functional-architecture.md §4 / §6 A5).",
+	);
+	console.error(
+		"Capabilities/extensions: keep them behind runtime-owned ports (e.g. src/shared/analytics-port.ts);",
+	);
+	console.error(
+		"see docs/architecture/repository-structure.md and restructure plan 0001, Phase 4.",
 	);
 	process.exit(1);
 }
