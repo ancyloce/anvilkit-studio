@@ -1,6 +1,8 @@
 # Production Hocuspocus relay for the AnvilKit docs playground.
-# Standalone image — built from services/collab-relay only (this dir is
-# NOT a pnpm workspace member). See README.md for the Fly.io runbook.
+# Standalone image — built from this apps/collab directory only (NOT a pnpm
+# workspace member). Production ownership is slated to move to
+# anvilkit-platform/services/collab-relay (ADR 0003); see README.md for the
+# Fly.io runbook.
 FROM node:22-alpine
 
 ENV NODE_ENV=production
