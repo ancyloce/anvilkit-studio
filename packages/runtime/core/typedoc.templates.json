@@ -5,8 +5,8 @@
 	"tsconfig": "./tsconfig.json",
 	"name": "@anvilkit/core/templates",
 	"externalSymbolLinkMappings": {
-		"@anvilkit/core": {
-			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/ir.ts"
+		"@anvilkit/contracts": {
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
 		}
 	}
 }

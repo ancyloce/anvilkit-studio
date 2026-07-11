@@ -19,8 +19,10 @@
 			"Overrides": "https://puckeditor.com/docs/api-reference/configuration/overrides",
 			"Plugin": "https://puckeditor.com/docs/extending-puck/plugins"
 		},
+		"@anvilkit/contracts": {
+			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ir.ts"
+		},
 		"@anvilkit/core": {
-			"PageIR": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/types/ir.ts",
 			"EditorI18nProvider": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/state/editor-i18n-context.tsx",
 			"ExportStorePartial": "#",
 			"LifecycleManagerOptions": "#"
