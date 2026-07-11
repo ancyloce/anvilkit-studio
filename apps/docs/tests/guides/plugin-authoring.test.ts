@@ -18,12 +18,9 @@ import {
 } from "@anvilkit/core";
 import type {
 	ExportFormatDefinition,
-	StudioHeaderAction,
 	StudioPlugin,
 	StudioPluginContext,
-	StudioPluginMeta,
 } from "@anvilkit/core/types";
-import { createUsageCounterPlugin } from "@anvilkit/example-usage-counter";
 import type { PuckApi, Data as PuckData } from "@puckeditor/core";
 import { describe, expect, it, vi } from "vitest";
 
@@ -345,79 +342,5 @@ describe("§7 — Testing harness pattern", () => {
 		await runtime.lifecycle.emit("onInit", ctx);
 
 		expect(ctx.log).toHaveBeenCalledWith("info", "sample plugin started");
-	});
-});
-
-// ---------------------------------------------------------------------------
-// §8 — Worked example
-// ---------------------------------------------------------------------------
-
-describe("§8 — Worked example: usage-counter", () => {
-	it("exposes the documented plugin meta", () => {
-		const plugin = createUsageCounterPlugin();
-		expect(plugin.meta).toEqual(
-			expect.objectContaining({
-				id: "anvilkit-example-usage-counter",
-				name: "Component Usage Counter",
-				coreVersion: "^0.1.0-alpha",
-			} satisfies Partial<StudioPluginMeta>),
-		);
-	});
-
-	it("compiles, contributes a header action, and tracks counts", async () => {
-		const plugin = createUsageCounterPlugin();
-		const data: PuckData = {
-			root: { props: {} },
-			content: [
-				{ type: "Hero", props: { id: "hero-1" } },
-				{ type: "Button", props: { id: "btn-1" } },
-				{ type: "Button", props: { id: "btn-2" } },
-			],
-			zones: {
-				"footer:children": [{ type: "Button", props: { id: "btn-3" } }],
-			},
-		};
-		const ctx = makeCtx(data);
-		const runtime = await compilePlugins([plugin], ctx);
-
-		await runtime.lifecycle.emit("onInit", ctx);
-		await runtime.lifecycle.emit("onDataChange", ctx, data);
-
-		expect(plugin.getCounts()).toEqual({ Hero: 1, Button: 3 });
-		expect(runtime.headerActions).toHaveLength(1);
-		const action = runtime.headerActions[0] as StudioHeaderAction;
-		expect(action.id).toBe("usage-counter-log");
-	});
-
-	it("emits 'usage-counter:update' through the event bus", async () => {
-		const plugin = createUsageCounterPlugin();
-		const ctx = makeCtx();
-		const runtime = await compilePlugins([plugin], ctx);
-
-		await runtime.lifecycle.emit("onInit", ctx);
-
-		expect(ctx.emit).toHaveBeenCalledWith("usage-counter:update", {});
-	});
-
-	it("supports synchronous subscribe / unsubscribe", async () => {
-		const plugin = createUsageCounterPlugin();
-		const observed: Array<Record<string, number>> = [];
-		const unsubscribe = plugin.subscribe((counts) => {
-			observed.push({ ...counts });
-		});
-
-		const data: PuckData = {
-			root: { props: {} },
-			content: [{ type: "Hero", props: { id: "hero-1" } }],
-			zones: {},
-		};
-		const ctx = makeCtx(data);
-		const runtime = await compilePlugins([plugin], ctx);
-		await runtime.lifecycle.emit("onInit", ctx);
-
-		unsubscribe();
-		await runtime.lifecycle.emit("onDataChange", ctx, data);
-
-		expect(observed).toEqual([{ Hero: 1 }]);
 	});
 });

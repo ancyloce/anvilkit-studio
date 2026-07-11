@@ -71,8 +71,6 @@
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"@anvilkit/example-export-json": "workspace:*",
-		"@anvilkit/example-usage-counter": "workspace:*",
 		"@anvilkit/validator": "workspace:*",
 		"@hocuspocus/server": "^4.3.0",
 		"@playwright/test": "^1.59.1",

@@ -5,27 +5,21 @@
  * Each `describe(...)` below pins a numbered section of the guide.
  * Snippets mirror — verbatim where possible — the code blocks the
  * guide renders to readers, so drift in `@anvilkit/core`,
- * `@anvilkit/ir`, `@anvilkit/plugin-export-html`, or the worked
- * JSON-exporter example breaks the docs build before it ships.
+ * `@anvilkit/ir`, or `@anvilkit/plugin-export-html` breaks the
+ * docs build before it ships.
  *
  * Phase 4 task: `phase4-009`.
  */
 
 import { compilePlugins, StudioConfigSchema } from "@anvilkit/core";
 import type {
-	ExportFormatDefinition,
 	PageIR,
 	PageIRAsset,
 	PageIRMetadata,
 	PageIRNode,
-	StudioPlugin,
 	StudioPluginContext,
 	StudioPluginMeta,
 } from "@anvilkit/core/types";
-import {
-	createExportJsonPlugin,
-	jsonFormat,
-} from "@anvilkit/example-export-json";
 import { irToPuckData, puckDataToIR } from "@anvilkit/ir";
 import {
 	createHtmlExportPlugin,
@@ -95,15 +89,6 @@ describe("§1 — Pipeline overview", () => {
 		expect(ir.version).toBe("1");
 		expect(ir.root.type).toBe("__root__");
 		expect(ir.root.children?.[0]?.type).toBe("Hero");
-	});
-
-	it("PageIR → ExportFormatDefinition.run() returns string | Uint8Array", async () => {
-		const ir = puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK });
-		const { content, filename } = await jsonFormat.run(ir, {});
-		expect(typeof content === "string" || content instanceof Uint8Array).toBe(
-			true,
-		);
-		expect(filename).toBe("page.json");
 	});
 
 	it("running the IR transform twice produces byte-identical output", () => {
@@ -194,14 +179,6 @@ describe("§2 — PageIR shape", () => {
 // ---------------------------------------------------------------------------
 
 describe("§3 — Writing a new exporter", () => {
-	it("the worked JSON exporter is a real ExportFormatDefinition", () => {
-		expect(jsonFormat.id).toBe("json");
-		expect(jsonFormat.label).toBe("JSON");
-		expect(jsonFormat.extension).toBe("json");
-		expect(jsonFormat.mimeType).toBe("application/json");
-		expect(typeof jsonFormat.run).toBe("function");
-	});
-
 	it("StudioPluginMeta has the four required fields", () => {
 		const meta: StudioPluginMeta = {
 			id: "anvilkit-example-export-json",
@@ -212,20 +189,6 @@ describe("§3 — Writing a new exporter", () => {
 
 		expect(meta.id).toBe("anvilkit-example-export-json");
 		expect(meta.coreVersion).toBe("^0.1.0-alpha");
-	});
-
-	it("createExportJsonPlugin returns a valid StudioPlugin", () => {
-		const plugin: StudioPlugin = createExportJsonPlugin();
-		expect(plugin.meta.id).toBe("anvilkit-example-export-json");
-		expect(typeof plugin.register).toBe("function");
-	});
-
-	it("compilePlugins wires the format into runtime.exportFormats", async () => {
-		const runtime = await compilePlugins([createExportJsonPlugin()], makeCtx());
-		expect([...runtime.exportFormats.keys()]).toContain("json");
-		expect(runtime.exportFormats.get("json")?.mimeType).toBe(
-			"application/json",
-		);
 	});
 });
 
@@ -261,20 +224,6 @@ describe("§4 — HTML exporter walkthrough", () => {
 // ---------------------------------------------------------------------------
 
 describe("§5 — Asset inlining", () => {
-	it("the JSON exporter copies ir.assets through verbatim (no inlining)", async () => {
-		const ir: PageIR = {
-			version: "1",
-			root: { id: "root", type: "__root__", props: {} },
-			assets: [
-				{ id: "a1", kind: "image", url: "https://cdn.example.com/hero.jpg" },
-			],
-			metadata: { createdAt: "2026-04-11T00:00:00.000Z" },
-		};
-		const { content } = await jsonFormat.run(ir, {});
-		const parsed = JSON.parse(content as string) as PageIR;
-		expect(parsed.assets).toEqual(ir.assets);
-	});
-
 	it("the HTML exporter inlines small fetched images as data URIs", async () => {
 		const ir: PageIR = {
 			version: "1",
@@ -335,12 +284,6 @@ describe("§6 — Round-trip invariants", () => {
 		expect(irToPuckData(ir)).toEqual(demoData);
 	});
 
-	it("the JSON exporter losslessly JSON-round-trips the IR", async () => {
-		const ir = puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK });
-		const { content } = await jsonFormat.run(ir, {});
-		expect(JSON.parse(content as string)).toEqual(ir);
-	});
-
 	it("a floating clock would break snapshot stability — FIXED_CLOCK is required", () => {
 		const a = puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK });
 		const b = puckDataToIR(demoData, demoConfig, { now: FIXED_CLOCK });
@@ -396,23 +339,5 @@ describe("§7 — Testing exporters", () => {
 		expect(window.document.body.textContent ?? "").toContain(
 			"Ship updates without friction.",
 		);
-	});
-
-	it("registration: the JSON exporter meets compilePlugins' contract", async () => {
-		const runtime = await compilePlugins([createExportJsonPlugin()], makeCtx());
-		expect([...runtime.exportFormats.keys()]).toContain("json");
-	});
-});
-
-// ---------------------------------------------------------------------------
-// Type-level: ExportFormatDefinition cannot be typed against Data
-// ---------------------------------------------------------------------------
-
-describe("Type surface (compile-time only)", () => {
-	it("ExportFormatDefinition<Opts>.run accepts a PageIR and returns ExportResult", () => {
-		// Purely a type test: assigning `jsonFormat` into the generic type
-		// would fail at compile time if `run`'s signature had drifted.
-		const typed: ExportFormatDefinition = jsonFormat;
-		expect(typed.id).toBe("json");
 	});
 });

@@ -17,8 +17,6 @@ packages:
   - "packages/extensions/templates/*"
   - "packages/tooling/*"
   - "packages/tooling/configs/*"
-  - "examples/plugins/*"
-  - "examples/ai-adapters/*"
 allowBuilds:
   # better-sqlite3 ships a prebuilt binary via prebuild-install; its install
   # script must run so the demo's SQLite page-storage adapter can `require`
