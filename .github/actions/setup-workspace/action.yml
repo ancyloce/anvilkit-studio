@@ -1,9 +1,9 @@
 name: Setup pnpm workspace
 description: >-
-  Set up pnpm + Node.js, install the root workspace, and install the nested
-  packages/extensions/components workspace. Assumes the repository is already
-  checked out with submodules — a local composite action can only run after
-  checkout, so the checkout step stays in each job.
+  Set up pnpm + Node.js, install the nested packages/extensions/components
+  workspace, then install the root workspace — in that order. Assumes the
+  repository is already checked out with submodules — a local composite
+  action can only run after checkout, so the checkout step stays in each job.
 
 runs:
   using: composite
@@ -21,16 +21,24 @@ runs:
         cache: pnpm
         cache-dependency-path: pnpm-lock.yaml
 
-    - name: Install dependencies
-      shell: bash
-      run: pnpm install --frozen-lockfile
-
     # `packages/extensions/components` is a nested pnpm workspace (its own
     # pnpm-workspace.yaml), so the root install doesn't populate its
     # `node_modules`. Without this step, turbo's `pnpm run build` inside a
     # component leaf triggers pnpm 11's verify-deps-before-run auto-install,
     # which is both slow and subject to strict-dep-builds errors on first
     # run.
+    #
+    # ORDER MATTERS — this install must run BEFORE the root install. Several
+    # packages (packages/runtime/ui, packages/capabilities/analytics/*,
+    # packages/tooling/configs/*, and the component leaves) are members of
+    # BOTH workspaces, so whichever install runs last owns their
+    # node_modules symlinks. The components store carries its own physical
+    # react copy and an UNPATCHED @base-ui/react (the root workspace's
+    # patchedDependencies don't apply to the nested workspace), so running
+    # the components install last makes every root-workspace test that
+    # renders @anvilkit/ui crash with "Cannot read properties of null
+    # (reading 'useRef')" — the classic duplicate-React failure. Root
+    # install last keeps the shared members linked to the root store.
     #
     # `--config.strictDepBuilds=false` overrides the pnpm 11 default that
     # turns ignored install scripts (esbuild, msw) into an
@@ -40,3 +48,29 @@ runs:
     - name: Install components workspace
       shell: bash
       run: pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    # Fail fast if the duplicate-React landmine ever returns (e.g. a step
+    # reorder puts a components-workspace install after the root install):
+    # shared workspace members must resolve react from the ROOT store, never
+    # from the components workspace store.
+    - name: Verify single React instance
+      shell: bash
+      run: |
+        for pkg in packages/runtime/ui packages/capabilities/analytics/react; do
+          link="$pkg/node_modules/react"
+          target="$(readlink -f "$link")"
+          case "$target" in
+            */packages/extensions/components/node_modules/*)
+              echo "::error::$link resolves into the components workspace store ($target)." \
+                "This creates a second physical React copy and an unpatched @base-ui/react," \
+                "crashing every root-workspace test that renders @anvilkit/ui." \
+                "The root 'pnpm install' must run AFTER the components-workspace install."
+              exit 1
+              ;;
+          esac
+        done
+        echo "OK: shared workspace members resolve react from the root store."

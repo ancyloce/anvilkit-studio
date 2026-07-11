@@ -136,13 +136,20 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
           registry-url: "https://registry.npmjs.org"
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # See `ci.yml` — the nested `packages/extensions/components` workspace
-      # needs its own install before component leaves get built.
+      # See .github/actions/setup-workspace/action.yml - the nested
+      # packages/extensions/components workspace needs its own install, and
+      # it must run BEFORE the root install: several packages (runtime/ui,
+      # capabilities/analytics/*, tooling/configs/*, component leaves) are
+      # members of BOTH workspaces, so the last install wins their
+      # node_modules symlinks. Root-install-last keeps them on the root
+      # store (single physical React, patched @base-ui/react); the reverse
+      # order breaks every root-workspace test that renders @anvilkit/ui
+      # with a duplicate-React useRef crash.
       - name: Install components workspace
         run: pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build all packages
         run: pnpm build
