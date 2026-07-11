@@ -1,58 +1,94 @@
 name: CI
 
+# Phase 5 (restructure plan §16/§19): the former single monolithic job is
+# split so npm release gates and app/deploy gates are separate, path-aware
+# checks:
+#
+#   changes        — classifies the PR diff (dorny/paths-filter).
+#   validate       — lint + typecheck + madge + test + build for the whole
+#                    workspace. Always runs: this is the full blocking gate
+#                    the migration plan keeps in place during the
+#                    restructure.
+#   package-gates  — publint + per-package `check:all` release gates + size
+#                    budgets. npm release concerns; skipped only when every
+#                    changed file lives under `apps/`. Apps are
+#                    dependency-graph leaves — no package depends on an app,
+#                    so an app-only diff cannot affect a package gate.
+#   studio-e2e /   — per-app Playwright suites (+ the docs build). Each runs
+#   playground-e2e   when the app itself changed or when anything outside
+#   / docs           `apps/` changed — a package change can affect every
+#                    app, so the conservative full cone applies.
+#
+# Skipping is deliberately coarse: finer per-package cones stay off until
+# dependency boundaries are machine-enforced (plan §15/§19 —
+# dependency-cruiser is still deferred). Jobs are skipped via job-level
+# `if:` rather than `on.paths` so branch-protection required checks report
+# "skipped" (which satisfies protection) instead of hanging as "expected".
+
 on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  changes:
+    name: Classify changed paths
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      non_app: ${{ steps.filter.outputs.non_app }}
+      studio: ${{ steps.filter.outputs.studio }}
+      playground: ${{ steps.filter.outputs.playground }}
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      # pull_request events are classified via the GitHub API — no checkout
+      # needed. On workflow_dispatch this step is skipped and every output
+      # is empty, which the job conditions below treat as "run everything".
+      - name: Detect changed paths
+        id: filter
+        if: github.event_name == 'pull_request'
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            # Any changed file OUTSIDE apps/ ⇒ run the full dependent cone.
+            # Belt-and-braces patterns: `!(apps)/**` catches every current
+            # and future top-level directory except apps/, and the
+            # root-file/dotfile patterns catch lockfile, workspace, and
+            # config changes. A future new top-level directory therefore
+            # fails safe (runs everything) instead of skipping gates.
+            non_app:
+              - "!(apps)/**"
+              - "*"
+              - ".*"
+              - ".*/**"
+            studio:
+              - "apps/studio/**"
+            playground:
+              - "apps/playground/**"
+            docs:
+              - "apps/docs/**"
+
   validate:
     name: Lint, Typecheck, and Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    concurrency:
-      group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: true
     defaults:
       run:
         shell: bash
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
         with:
           submodules: recursive
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: 11.10.0
-          run_install: false
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # `packages/components` is a nested pnpm workspace (its own
-      # pnpm-workspace.yaml), so the root install doesn't populate
-      # its `node_modules`. Without this step, turbo's `pnpm run
-      # build` inside a component leaf triggers pnpm 11's
-      # verify-deps-before-run auto-install, which is both slow and
-      # subject to strict-dep-builds errors on first run.
-      - name: Install components workspace
-        # `--config.strictDepBuilds=false` overrides the pnpm 11
-        # default that turns ignored install scripts (esbuild, msw)
-        # into an `[ERR_PNPM_IGNORED_BUILDS]` failure. The components
-        # workspace has no build approvals of its own, so the install
-        # would otherwise abort even though the ignored scripts are
-        # safe to skip.
-        run: pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
 
       - name: Lint workspace
         run: pnpm lint
@@ -69,73 +105,64 @@ jobs:
       - name: Build workspace
         run: pnpm build
 
-      # Phase 4 (`phase4-001`): build the Fumadocs docs site (Vite /
-      # TanStack Start) on every PR. A broken docs build fails CI so
-      # drifted component docs, sidebar entries, and ADR references
-      # can't land unnoticed.
-      #
-      # Phase 4 (`phase4-005`): this step is a **correctness** gate.
-      # The **deploy** gate lives on Vercel (`vercel.json` at repo
-      # root) and posts its own GitHub check with the preview URL.
-      # The Vercel check is informational from CI's perspective — a
-      # failing Vercel build surfaces in the PR UI but does not fail
-      # this workflow, and conversely a failing CI build does not
-      # suppress the Vercel preview. The two builds are intentionally
-      # independent so a regression in either surfaces before merge.
-      - name: Build docs site
-        run: pnpm turbo run docs:build
+  package-gates:
+    name: Package release gates
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.non_app == 'true'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      # Retained-submodule contract (plan §16 Phase 5, §19): gitlink
+      # pointer bumps land as `packages/**` changes, so they route into
+      # this job — validate the pinned submodule state against
+      # scripts/submodule-contract.json before running its gates.
+      - name: Validate retained-submodule contracts
+        run: node scripts/check-submodule-contracts.mjs
+
+      # `check:all` and the size budgets inspect `dist/`, so build first.
+      - name: Build workspace
+        run: pnpm build
 
       - name: Publint — validate package.json exports
         run: pnpm publint
 
-      # `check:all` aggregates the `@anvilkit/core` release gates from
-      # `core-015`: publint, circular-dep scan (madge), the
-      # React-free-runtime assertion, the peer-dep contract, the
-      # `<Studio>` entry bundle budget (25 KB gzipped + adapter
-      # tree-shake check), and the TypeDoc API snapshot. Runs after
-      # `build` because the bundle-budget script inspects `dist/` and
-      # the API-snapshot generator emits into `packages/runtime/core/api/`.
-      - name: Run @anvilkit/core release gates
-        run: pnpm --filter @anvilkit/core check:all
-
-      # Phase 3 (`phase3-015`): run the same quality gates against each
-      # new package — `publint`, `madge --circular`,
-      # `check:react-free-runtime` (ir / schema / validator only;
-      # plugin `check:all` already omits that step),
-      # `check:peer-deps`, `check:bundle-budget`, and the TypeDoc API
-      # snapshot. Loop form matches the task brief and avoids
-      # duplicating five near-identical step entries.
-      - name: Run Phase 3 package release gates
-        run: |
-          for pkg in @anvilkit/contracts @anvilkit/ir @anvilkit/schema @anvilkit/validator @anvilkit/plugin-export-html @anvilkit/plugin-export-react @anvilkit/plugin-ai-copilot @anvilkit/plugin-asset-manager @anvilkit/plugin-design-system @anvilkit/plugin-page-seo @anvilkit/analytics-core @anvilkit/analytics-react; do
-            pnpm --filter "$pkg" check:all
-          done
-
-      # Milestone 0 (`canvas-m0-003`): the canvas package release gates — the
-      # same chain as the Phase 3 packages plus the React/Konva-free source
-      # scan on canvas-core. Two discrete steps (not loop entries) so a budget
-      # or API-snapshot failure pinpoints its package, per FR-000. Runs after
-      # `build` (bundle-budget inspects dist/; the editor's full build also
-      # regenerates dist/styles.css, which a bare `rslib build` wipes).
-      - name: Run @anvilkit/canvas-core release gates
-        run: pnpm --filter @anvilkit/canvas-core check:all
-
-      - name: Run @anvilkit/canvas-editor release gates
-        run: pnpm --filter @anvilkit/canvas-editor check:all
+      # Phase 5: release gates are discovered from workspace manifests, not
+      # a hardcoded package list (plan §20). The root `check:all` script
+      # fans out via `turbo run check:all --concurrency=4` to every
+      # workspace package that defines a `check:all` script (20 packages at
+      # time of writing) — publint, circular-dep scan, React-free-runtime
+      # assertions, peer-dep contracts, bundle budgets, and TypeDoc API
+      # snapshots, per package. A newly added publishable package is gated
+      # automatically the moment it ships a `check:all` script. Concurrency
+      # stays at 4 — higher fan-out is a known source of phantom
+      # bundle-budget failures.
+      - name: Run package release gates (check:all)
+        run: pnpm check:all
 
       # Phase 4 (`phase4-016`): per-package gzip budgets via size-limit.
       # Covers the publishable runtime + plugin + component packages.
       # I2-6 added the canvas packages (canvas-core, canvas-editor,
       # plugin-ai-image, plugin-canvas-studio); I2-3 added plugin-export-canvas.
       # Each package ships its own `.size-limit.json` with a tuned budget.
-      # Every component `.size-limit.json` now carries TWO entries — the JS
+      # Every component `.size-limit.json` carries TWO entries — the JS
       # `dist/index.js` budget and a `dist/styles.css` gzip budget (12 KB) —
       # so this one step gates both. The CSS budget guards against a component
       # re-importing `@anvilkit/tailwind-config/shadcn` (the app-level sheet),
       # which would re-emit preflight + the workspace utility superset (~24 KB)
       # into the package; `/component` is the per-component, preflight-free entry.
-      # design-block was previously absent from this list (and shipped no
-      # `.size-limit.json`); it now has a config and is enforced here too.
+      # The filter list stays explicit (rather than `turbo run size`
+      # discovery) so budget coverage changes remain deliberate, reviewed
+      # decisions.
       - name: Bundle-size budgets (size-limit)
         run: |
           pnpm \
@@ -173,20 +200,37 @@ jobs:
             --filter @anvilkit/statistics \
             size
 
-      # Phase 3 M0 (`phase3-001`): Playwright + studio E2E harness. The
-      # smoke spec loads `/puck/editor`, waits for `<Studio>` to
-      # hydrate, and asserts `smokeTestPlugin.onInit` logs to the
-      # browser console. Future Phase 3 tasks (`phase3-014`) add
-      # real export + AI copilot E2Es under the same harness.
-      #
+  # Phase 3 M0 (`phase3-001`): Playwright + studio E2E harness. The smoke
+  # spec loads `/puck/editor`, waits for `<Studio>` to hydrate, and asserts
+  # `smokeTestPlugin.onInit` logs to the browser console. The studio
+  # Playwright config boots its own `pnpm dev` server; `turbo run e2e`
+  # builds the studio's workspace dependencies first (`e2e` dependsOn
+  # `^build`).
+  studio-e2e:
+    name: Studio E2E
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.non_app == 'true' || needs.changes.outputs.studio == 'true'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
       # `install --with-deps chromium` downloads Chromium + the OS
-      # libraries Playwright needs on Ubuntu runners. Locally,
-      # developers run `pnpm --filter studio e2e:install` once.
+      # libraries Playwright needs on Ubuntu runners. Locally, developers
+      # run `pnpm --filter studio e2e:install` once.
       - name: Install Playwright browsers
-        run: pnpm --filter studio exec playwright install --with-deps chromium
+        run: pnpm --filter studio e2e:install
 
       - name: Run studio E2E tests
-        run: pnpm --filter studio e2e
+        run: pnpm exec turbo run e2e --filter=studio
 
       - name: Upload studio Playwright report
         if: failure()
@@ -196,35 +240,32 @@ jobs:
           path: apps/studio/playwright-report/
           retention-days: 7
 
-      # Phase 4 (`phase4-004`): docs site playground + marketplace
-      # smoke tests. The specs boot the Vite dev server (TanStack
-      # Start), mount the Puck `/playground`, and exercise the
-      # marketplace catalog. The studio step above already installed
-      # the Chromium browser binary — we just need the
-      # `@anvilkit/docs-site` Playwright config to pick it up.
-      - name: Install Playwright browsers (docs)
-        run: pnpm --filter @anvilkit/docs-site exec playwright install --with-deps chromium
-
-      - name: Run docs E2E tests
-        run: pnpm --filter @anvilkit/docs-site e2e
-
-      - name: Upload docs Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v7
+  # Phase 1 restructure: playground compatibility smoke. Minimal app
+  # (apps/playground) that consumes @anvilkit/* strictly through built
+  # public exports — mounts <Studio>, SSR-renders via @puckeditor/core/rsc.
+  # Boots its own Next dev server on :3100 (studio owns :3000).
+  playground-e2e:
+    name: Playground E2E
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.non_app == 'true' || needs.changes.outputs.playground == 'true'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
         with:
-          name: playwright-report-docs
-          path: apps/docs/playwright-report/
-          retention-days: 7
+          submodules: recursive
 
-      # Phase 1 restructure: playground compatibility smoke. Minimal app
-      # (apps/playground) that consumes @anvilkit/* strictly through built
-      # public exports — mounts <Studio>, SSR-renders via @puckeditor/core/rsc.
-      # Boots its own Next dev server on :3100 (studio owns :3000).
-      - name: Install Playwright browsers (playground)
-        run: pnpm --filter playground exec playwright install --with-deps chromium
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Install Playwright browsers
+        run: pnpm --filter playground e2e:install
 
       - name: Run playground E2E tests
-        run: pnpm --filter playground e2e
+        run: pnpm exec turbo run e2e --filter=playground
 
       - name: Upload playground Playwright report
         if: failure()
@@ -232,4 +273,55 @@ jobs:
         with:
           name: playwright-report-playground
           path: apps/playground/playwright-report/
+          retention-days: 7
+
+  # Phase 4 (`phase4-001`): build the Fumadocs docs site (Vite / TanStack
+  # Start) on every packages or docs PR. A broken docs build fails CI so
+  # drifted component docs, sidebar entries, and ADR references can't land
+  # unnoticed.
+  #
+  # Phase 4 (`phase4-005`): the build step is a **correctness** gate. The
+  # **deploy** gate lives on Vercel (`vercel.json` at repo root) and posts
+  # its own GitHub check with the preview URL. The Vercel check is
+  # informational from CI's perspective — a failing Vercel build surfaces
+  # in the PR UI but does not fail this workflow, and conversely a failing
+  # CI build does not suppress the Vercel preview. The two builds are
+  # intentionally independent so a regression in either surfaces before
+  # merge.
+  #
+  # Phase 4 (`phase4-004`): docs site playground + marketplace smoke tests.
+  # The specs boot the Vite dev server (TanStack Start), mount the Puck
+  # `/playground`, and exercise the marketplace catalog.
+  docs:
+    name: Docs build + E2E
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.non_app == 'true' || needs.changes.outputs.docs == 'true'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Build docs site
+        run: pnpm turbo run docs:build
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @anvilkit/docs-site e2e:install
+
+      - name: Run docs E2E tests
+        run: pnpm exec turbo run e2e --filter=@anvilkit/docs-site
+
+      - name: Upload docs Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-docs
+          path: apps/docs/playwright-report/
           retention-days: 7

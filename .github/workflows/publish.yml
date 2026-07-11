@@ -158,16 +158,18 @@ jobs:
           echo "Pending changesets:"
           ls -la .changeset/*.md 2>/dev/null | grep -v README.md || echo "  (none)"
 
-      # Changesets sanity. Runs the repo's full check:all for the
-      # publishable runtime cone before version/publish, so a broken
-      # tree never hits npm.
+      # Phase 5: release gates are discovered from workspace manifests,
+      # not a hardcoded package list (plan §20). The root `check:all`
+      # script fans out via `turbo run check:all --concurrency=4` to
+      # every workspace package that defines a `check:all` script
+      # (20 packages at time of writing), so a newly added publishable
+      # package is gated automatically the moment it ships a
+      # `check:all` script. `check:all` is `cache: false` in turbo.json
+      # and depends on each package's build, which `pnpm build` above
+      # already produced. Concurrency stays at 4 — higher fan-out is a
+      # known source of phantom bundle-budget failures.
       - name: Run release gates
-        run: |
-          pnpm --filter @anvilkit/core check:all
-          for pkg in @anvilkit/ir @anvilkit/schema @anvilkit/validator \
-                     @anvilkit/plugin-export-html @anvilkit/plugin-ai-copilot; do
-            pnpm --filter "$pkg" check:all
-          done
+        run: pnpm check:all
 
       # `setup-node` creates npm auth config for normal cases. Write
       # and export one explicit userconfig so both npm probes and

@@ -36,12 +36,12 @@ jobs:
         with:
           node-version: 22
 
-      # Pre-flight: confirm `@latest` resolves on npm. The first publish
-      # is auto-created by `publish.yml`'s `Auto-create missing npm
-      # packages` step, so an E404 here means publish.yml has not yet
-      # landed the first version. Soft-skip the smoke in that case
-      # (the maintainer doesn't need a weekly false alarm); fail loud
-      # only on unexpected probe errors.
+      # Pre-flight: confirm `@latest` resolves on npm. First publishes
+      # are intentional, maintainer-owned steps — `publish.yml` never
+      # auto-creates missing package names — so an E404 here means the
+      # first version simply has not been published yet. Soft-skip the
+      # smoke in that case (the maintainer doesn't need a weekly false
+      # alarm); fail loud only on unexpected probe errors.
       - name: Verify @anvilkit/create-plugin@latest exists on npm
         id: check-dist-tag
         run: |

@@ -7,9 +7,23 @@ name: Size
 # `andresz1/size-limit-action`, which compares the PR branch against
 # the base branch and posts a table to the PR.
 
+# Phase 5: path-scoped — package bundle sizes can only move when package
+# source, dependency resolution, or build config changes, so app/docs/bench
+# PRs skip this workflow entirely. Because this uses `on.paths`, the job
+# must NOT be a branch-protection required check (a non-triggering
+# path-filtered workflow reports no check run and a required check would
+# hang as "expected"); the hard size gate is the Bundle-size budgets step
+# in ci.yml — this workflow only posts the PR diff comment.
 on:
   pull_request:
     branches: [main]
+    paths:
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/size.yml"
 
 jobs:
   size:

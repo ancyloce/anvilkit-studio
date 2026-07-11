@@ -1,0 +1,136 @@
+name: Clean clone
+
+# Phase 5 (restructure plan §18/§19): validate that a pristine recursive
+# clone of this repository actually works — the exact flow a new
+# contributor or a fresh CI environment executes.
+#
+# Unlike ci.yml (which asks actions/checkout for `submodules: recursive`),
+# this workflow starts from a PLAIN checkout and runs the submodule
+# init/sync flow manually. That is deliberate: `git submodule update
+# --init --recursive` fetches each submodule remote and checks out the
+# pinned gitlink SHA, so a gitlink that points at an UNPUSHED commit —
+# the highest-severity submodule hazard in the migration plan (it breaks
+# `git clone --recurse-submodules` for everyone) — fails this job loudly.
+#
+# Triggers:
+#   - pull_request on the files that define clone/install topology
+#     (.gitmodules, lockfiles, workspace manifest). Because this uses
+#     `on.paths`, it MUST NOT be added to branch-protection required
+#     checks — a path-filtered workflow that doesn't trigger reports no
+#     check run and a required check would hang as "expected" forever.
+#   - weekly schedule, so gitlink drift on main can't sit unnoticed.
+#   - workflow_dispatch for on-demand validation (e.g. before a release).
+
+on:
+  pull_request:
+    paths:
+      - ".gitmodules"
+      - "pnpm-workspace.yaml"
+      - "pnpm-lock.yaml"
+      - "packages/extensions/components/pnpm-lock.yaml"
+      - "packages/extensions/components/pnpm-workspace.yaml"
+      - ".github/workflows/clean-clone.yml"
+      - ".github/actions/setup-workspace/**"
+  schedule:
+    # Mondays 05:17 UTC — off-peak, before the 06:47 generator smoke.
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clean-clone-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  clean-clone:
+    name: Recursive clone, install, build from pristine state
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write # failure notification on scheduled runs
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # PLAIN checkout — no submodules on purpose; see header comment.
+      - name: Check out repository (no submodules)
+        uses: actions/checkout@v6
+
+      # actions/checkout's auth extraheader applies to the superproject
+      # only. Route submodule fetches through the workflow token so this
+      # job keeps working even if a submodule repository becomes private.
+      - name: Configure git auth for submodule remotes
+        run: git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+
+      # `sync` first: if a .gitmodules URL was edited without updating
+      # .git/config, the stale URL is what a validation clone would use.
+      # `update --init --recursive` then fetches every submodule and checks
+      # out the pinned SHA — an unpushed/unreachable gitlink fails here.
+      - name: Initialize submodules from pristine state
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive
+
+      # Belt-and-braces: assert no submodule is left uninitialized ("-"
+      # prefix) or checked out at the wrong commit ("+" prefix).
+      - name: Verify submodule status
+        run: |
+          git submodule status --recursive
+          if git submodule status --recursive | grep -E '^[-+]'; then
+            echo "::error::Submodule(s) uninitialized or not at the pinned gitlink after a clean init (see '-'/'+' rows above)."
+            exit 1
+          fi
+
+      # Retained-submodule contract (plan §16 Phase 5): every .gitmodules
+      # entry must satisfy scripts/submodule-contract.json — required
+      # scripts, peer ranges, versioning policy vs the Changesets fixed
+      # group, npm access, and engine metadata. Gaps recorded in the
+      # contract's knownGaps baseline are warnings; new violations fail.
+      - name: Validate retained-submodule contracts
+        run: node scripts/check-submodule-contracts.mjs
+
+      # Root install + nested components-workspace install, frozen —
+      # exactly what a fresh clone must survive.
+      - name: Set up workspace
+        uses: ./.github/actions/setup-workspace
+
+      - name: Build workspace
+        run: pnpm build
+
+      # Scheduled runs fail silently unless someone is pinged — reuse the
+      # generator-smoke issue-notification pattern for cron failures.
+      - name: Notify on scheduled failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "clean-clone: pristine recursive clone/install/build is broken";
+            const body = `Clean-clone validation failed on ${new Date().toISOString()}. ` +
+              `A fresh \`git clone --recurse-submodules\` + install + build no longer works — ` +
+              `likely an unpushed gitlink, stale .gitmodules URL, or lockfile drift. ` +
+              `See run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "clean-clone",
+            });
+            if (existing.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing[0].number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["clean-clone", "bug"],
+              });
+            }

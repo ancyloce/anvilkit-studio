@@ -7,9 +7,24 @@ name: Bench
 # millisecond benches are tracked but not gated (noise floor);
 # see `bench/index.ts`.
 
+# Phase 5: path-scoped — the benches exercise package dist output plus the
+# studio's `/puck/editor` TTI, so only package, bench-harness, studio, or
+# dependency-resolution changes can move the numbers; docs/playground PRs
+# skip the run. Because this uses `on.paths`, the job must NOT be a
+# branch-protection required check (a non-triggering path-filtered workflow
+# reports no check run and a required check would hang as "expected").
 on:
   pull_request:
     branches: [main]
+    paths:
+      - "packages/**"
+      - "bench/**"
+      - "apps/studio/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "turbo.json"
+      - ".github/workflows/bench.yml"
   workflow_dispatch:
 
 jobs:
