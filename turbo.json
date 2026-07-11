@@ -22,6 +22,19 @@
 		"anvilkit-components#build": {
 			"dependsOn": ["^build", "@anvilkit/ui#build", "@anvilkit/utils#build"]
 		},
+		"@anvilkit/docs-site#build": {
+			"dependsOn": ["^build"],
+			"inputs": [
+				"vite.config.ts",
+				"source.config.ts",
+				"package.json",
+				"tsconfig.json",
+				"src/**",
+				"content/**",
+				"public/**"
+			],
+			"outputs": ["dist/**", ".output/**", ".nitro/**", ".vercel/output/**"]
+		},
 		"test": {
 			"dependsOn": ["^build"],
 			"outputs": ["coverage/**"]
