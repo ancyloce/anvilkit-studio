@@ -193,11 +193,14 @@ function Highlight<T extends React.ElementType = "div">({
 	const [activeClassNameState, setActiveClassNameState] =
 		React.useState<string>("");
 
-	const safeSetActiveValue = (id: string | null) => {
-		if (id === activeValue) return;
-		setInternalValue(id);
-		onValueChange?.(id);
-	};
+	const safeSetActiveValue = React.useCallback(
+		(id: string | null) => {
+			if (id === activeValue) return;
+			setInternalValue(id);
+			onValueChange?.(id);
+		},
+		[activeValue, onValueChange],
+	);
 
 	const safeSetBoundsRef = React.useRef<
 		((bounds: DOMRect) => void) | undefined
@@ -231,9 +234,9 @@ function Highlight<T extends React.ElementType = "div">({
 		};
 	});
 
-	const safeSetBounds = (bounds: DOMRect) => {
+	const safeSetBounds = React.useCallback((bounds: DOMRect) => {
 		safeSetBoundsRef.current?.(bounds);
-	};
+	}, []);
 
 	const clearBounds = React.useCallback(() => {
 		setBoundsState((prev) => (prev === null ? prev : null));
@@ -307,29 +310,50 @@ function Highlight<T extends React.ElementType = "div">({
 		return children;
 	};
 
+	// Memoized so a Highlight re-render (e.g. bounds churn in parent mode)
+	// does not hand every consumer a fresh context identity per render.
+	const contextValue = React.useMemo<HighlightContextType<string>>(
+		() => ({
+			mode,
+			activeValue,
+			setActiveValue: safeSetActiveValue,
+			id,
+			hover,
+			click,
+			className,
+			style,
+			transition,
+			disabled,
+			enabled,
+			exitDelay,
+			setBounds: safeSetBounds,
+			clearBounds,
+			activeClassName: activeClassNameState,
+			setActiveClassName: setActiveClassNameState,
+			forceUpdateBounds: propsForceUpdateBounds,
+		}),
+		[
+			mode,
+			activeValue,
+			safeSetActiveValue,
+			id,
+			hover,
+			click,
+			className,
+			style,
+			transition,
+			disabled,
+			enabled,
+			exitDelay,
+			safeSetBounds,
+			clearBounds,
+			activeClassNameState,
+			propsForceUpdateBounds,
+		],
+	);
+
 	return (
-		<HighlightContext.Provider
-			value={{
-				mode,
-				activeValue,
-				setActiveValue: safeSetActiveValue,
-				id,
-				hover,
-				click,
-				className,
-				style,
-				transition,
-				disabled,
-				enabled,
-				exitDelay,
-				setBounds: safeSetBounds,
-				clearBounds,
-				activeClassName: activeClassNameState,
-				setActiveClassName: setActiveClassNameState,
-				forceUpdateBounds: (props as ParentModeHighlightProps)
-					?.forceUpdateBounds,
-			}}
-		>
+		<HighlightContext.Provider value={contextValue}>
 			{enabled
 				? controlledItems
 					? render(children)
