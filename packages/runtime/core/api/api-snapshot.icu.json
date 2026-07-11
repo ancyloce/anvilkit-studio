@@ -112,15 +112,11 @@
 	"groups": [
 		{
 			"title": "Variables",
-			"children": [
-				3
-			]
+			"children": [3]
 		},
 		{
 			"title": "Functions",
-			"children": [
-				1
-			]
+			"children": [1]
 		}
 	],
 	"packageName": "@anvilkit/core",
