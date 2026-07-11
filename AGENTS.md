@@ -59,7 +59,6 @@ All three are read-only: they report and never edit or run write commands.
 - `ci.yml` — the pull-request gate, split into path-aware jobs: `changes` classifies changed paths (`dorny/paths-filter`) so leaf-app-only changes skip unrelated jobs; `validate` runs `pnpm lint`, `typecheck`, `madge`, `test`, `build`; `package-gates` runs `pnpm build`, `publint`, `check:all`; `studio-e2e` and `playground-e2e` run Playwright suites with uploaded reports; `docs` runs `docs:build` plus the docs Playwright suite. Setup uses pnpm 11.10.0 / Node 22 with recursive submodule checkout.
 - `size.yml` — per-package gzip budgets via `size-limit` on pull requests.
 - `react-doctor.yml` — react-doctor diagnostics on pull requests.
-- `bench.yml` — performance regression gate (builds studio, drives an editor-load bench via Playwright). Its `bench/` harness directory was recently removed, so this workflow and the root `bench` scripts are currently stale.
 - `clean-clone.yml` — validates clone/install topology when files defining it change; also dispatchable on demand before a release.
 - `generator-smoke.yml` — weekly cron smoke test of the generators.
 - `marketplace-scorecard.yml` — marketplace entry validation on pull requests plus a weekly cron re-check of previously passing entries.

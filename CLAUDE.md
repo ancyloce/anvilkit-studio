@@ -73,7 +73,6 @@ The authoritative current map, target map, classifications, dependency direction
 ## Commands
 
 - Root: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm madge`, `pnpm publint`, `pnpm size`, `pnpm check:all`, `pnpm check:push`, `pnpm check:submodules`, `pnpm docs:dev`, `pnpm docs:build`.
-- The root `bench`/`bench:update` scripts and `bench.yml` reference a removed `bench/` directory; treat the bench harness as stale until restored.
 - `packages/extensions/components/`: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm gen:component`.
 - `apps/studio/`: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm e2e`.
 - `apps/playground/`: `pnpm dev` (port 3100), `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm e2e`.
