@@ -23,7 +23,7 @@ load the plugin see no behavioural change.
 
 **Token CSS plumbing — new `--ak-ds-*` two-tier block:**
 
-- `packages/core/src/react/overrides/styles.css` declares
+- `packages/runtime/core/src/react/overrides/styles.css` declares
   primitive ramps (`--ak-ds-brand-{50…900}`,
   `--ak-ds-neutral-{50…900}`), spacing scale
   (`--ak-ds-space-{0,1,2,3,4,6,8,12,16,24}`), type ramp
@@ -33,7 +33,7 @@ load the plugin see no behavioural change.
   `--ak-ds-border`, `--ak-ds-focus-ring`). Each semantic falls back
   to its `--ak-studio-*` chrome equivalent so unthemed hosts render
   unchanged.
-- `packages/core/src/react/studio/theme/iframe-theme.ts` mirrors the
+- `packages/runtime/core/src/react/studio/theme/iframe-theme.ts` mirrors the
   same declarations into `TOKEN_BLOCK` so host doc + Puck canvas
   iframe stay in lockstep on theme changes.
 - `.dark` overrides primitives only — semantics and persisted token

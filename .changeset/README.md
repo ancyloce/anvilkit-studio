@@ -2,7 +2,7 @@
 
 This directory is the **root-workspace** Changesets store for `anvilkit-studio`. It versions packages that live directly in the top-level `pnpm-workspace.yaml` — currently `@anvilkit/ui`, `@anvilkit/utils`, and (once scaffolded) `@anvilkit/core`.
 
-The component packages in `packages/components/src/*` are versioned by the **components submodule's** own `.changeset/` store (`packages/components/.changeset/`). Do not add changesets for `@anvilkit/button`, `@anvilkit/hero`, etc. here — they belong in the submodule.
+The component packages in `packages/extensions/components/src/*` are versioned by the **components submodule's** own `.changeset/` store (`packages/extensions/components/.changeset/`). Do not add changesets for `@anvilkit/button`, `@anvilkit/hero`, etc. here — they belong in the submodule.
 
 ## How to add a changeset
 
