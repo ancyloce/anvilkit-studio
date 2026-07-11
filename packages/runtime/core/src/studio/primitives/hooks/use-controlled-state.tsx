@@ -13,13 +13,14 @@ export function useControlledState<T, Rest extends any[] = []>(
 ): readonly [T, (next: T, ...args: Rest) => void] {
 	const { value, defaultValue, onChange } = props;
 
-	const [state, setInternalState] = React.useState<T>(
-		value !== undefined ? value : (defaultValue as T),
+	const [internalState, setInternalState] = React.useState<T>(
+		defaultValue as T,
 	);
-
-	React.useEffect(() => {
-		if (value !== undefined) setInternalState(value);
-	}, [value]);
+	// Controlled wins by derivation: rendering `value` directly (instead of
+	// mirroring it into state from a useEffect) keeps a controlled update
+	// to a single render with no stale frame. The internal state only backs
+	// uncontrolled usage; switching modes mid-life is unsupported.
+	const state = value !== undefined ? value : internalState;
 
 	const setState = React.useCallback(
 		(next: T, ...args: Rest) => {

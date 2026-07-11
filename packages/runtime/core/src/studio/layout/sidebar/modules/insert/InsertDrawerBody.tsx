@@ -155,9 +155,9 @@ export function InsertDrawerBody({
 		return <FlatTiles>{flatMatches}</FlatTiles>;
 	}
 
-	const expandedIds = sortedSections
-		.filter((section) => expanded[section.id] !== false)
-		.map((section) => section.id);
+	const expandedIds = sortedSections.flatMap((section) =>
+		expanded[section.id] !== false ? [section.id] : [],
+	);
 
 	const handleAccordionChange = (next: readonly string[]): void => {
 		const nextSet = new Set(next);

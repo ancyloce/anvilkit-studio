@@ -442,9 +442,10 @@ function orderPlugins(
 	}
 
 	if (ordered.length !== nodes.length) {
-		const cyclic = nodes
-			.filter((node) => !ordered.includes(node))
-			.map((node) => node.id ?? `#${node.index}`);
+		const orderedSet = new Set(ordered);
+		const cyclic = nodes.flatMap((node) =>
+			orderedSet.has(node) ? [] : [node.id ?? `#${node.index}`],
+		);
 		throw new StudioPluginError(
 			cyclic[0] ?? "(unknown)",
 			`Plugin dependency cycle detected among: ${cyclic.join(", ")}.`,

@@ -13,7 +13,6 @@ type AccordionContextType = {
 
 type AccordionItemContextType = {
 	isOpen: boolean;
-	setIsOpen: (open: boolean) => void;
 };
 
 const [AccordionProvider, useAccordion] =
@@ -70,16 +69,14 @@ type AccordionItemProps = React.ComponentProps<typeof AccordionPrimitive.Item>;
 
 function AccordionItem(props: AccordionItemProps) {
 	const { value } = useAccordion();
-	const [isOpen, setIsOpen] = React.useState(
-		value?.includes(props?.value) ?? false,
-	);
-
-	React.useEffect(() => {
-		setIsOpen(value?.includes(props?.value) ?? false);
-	}, [value, props?.value]);
+	// Open-ness is pure derivation from the accordion's value — deriving
+	// during render (instead of mirroring it into state from a useEffect)
+	// drops the extra commit and can never fall out of sync.
+	const isOpen = value?.includes(props?.value) ?? false;
+	const itemContext = React.useMemo(() => ({ isOpen }), [isOpen]);
 
 	return (
-		<AccordionItemProvider value={{ isOpen, setIsOpen }}>
+		<AccordionItemProvider value={itemContext}>
 			<AccordionPrimitive.Item data-slot="accordion-item" {...props} />
 		</AccordionItemProvider>
 	);

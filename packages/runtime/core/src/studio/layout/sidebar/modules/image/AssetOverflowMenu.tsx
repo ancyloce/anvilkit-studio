@@ -13,7 +13,7 @@
  */
 
 import { Link, MoreHorizontal, Pencil, Trash2, Upload } from "lucide-react";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useRef } from "react";
 import { toast } from "sonner";
 import { Button } from "@/primitives/button";
 import {
@@ -47,11 +47,13 @@ export function AssetOverflowMenu({
 	onReplace,
 }: AssetOverflowMenuProps): ReactNode {
 	const msg = useMsg();
-	const [copying, setCopying] = useState(false);
+	// Reentrancy guard, not UI state — nothing in the JSX reads it, so a
+	// ref avoids a pointless re-render per copy start/finish.
+	const copyingRef = useRef(false);
 
 	const handleCopy = async (): Promise<void> => {
-		if (copying) return;
-		setCopying(true);
+		if (copyingRef.current) return;
+		copyingRef.current = true;
 		try {
 			const url = (await source.getUrl?.(asset.id)) ?? asset.url ?? "";
 			await navigator.clipboard.writeText(url);
@@ -59,7 +61,7 @@ export function AssetOverflowMenu({
 		} catch (error) {
 			toast.error(error instanceof Error ? error.message : String(error));
 		} finally {
-			setCopying(false);
+			copyingRef.current = false;
 		}
 	};
 

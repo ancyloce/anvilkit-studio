@@ -199,8 +199,14 @@ export function useLayerTree(): LayerTreeModel {
 	// finding P-a) and NOT on non-structural prop edits. `selected` is resolved
 	// per-row downstream (`selectedId === node.id`), so `selectedId` does not
 	// belong in the projection memo.
-	// biome-ignore lint/correctness/useExhaustiveDependencies: `topology` is the structural fingerprint folded in as the reactive trigger — it intentionally is not referenced in the body (data is read non-reactively through `getPuck`), so prop-only edits that leave `topology` unchanged do not re-walk the tree. Removing it (Biome's suggestion) would make `roots` stale because `getPuck` is referentially stable.
 	const roots = useMemo<readonly LayerNode[]>(() => {
+		// `topology` is this memo's real reactive input: the body reads
+		// `data` non-reactively through the stable `getPuck`, and the
+		// structural fingerprint is what keys the projection — so prop-only
+		// edits that leave `topology` unchanged do not re-walk the tree.
+		// Referenced explicitly so the dependency is visible in the body,
+		// not only in the deps array.
+		void topology;
 		const data = getPuck().appState.data as Data;
 		const zones = (data.zones ?? {}) as Readonly<Record<string, ComponentList>>;
 		const childZonesByParent = indexZonesByParent(zones);

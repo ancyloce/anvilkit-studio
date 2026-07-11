@@ -21,6 +21,14 @@ const DEFAULT_BOUNDS_OFFSET: Bounds = {
 	height: 0,
 };
 
+// Module scope so the default keeps one identity across renders — it
+// feeds the memoized context value below.
+const DEFAULT_TRANSITION: Transition = {
+	type: "spring",
+	stiffness: 350,
+	damping: 35,
+};
+
 type HighlightContextType<T extends string> = {
 	as?: keyof HTMLElementTagNameMap;
 	mode: HighlightMode;
@@ -130,7 +138,7 @@ function Highlight<T extends React.ElementType = "div">({
 		onValueChange,
 		className,
 		style,
-		transition = { type: "spring", stiffness: 350, damping: 35 },
+		transition = DEFAULT_TRANSITION,
 		hover = false,
 		click = true,
 		enabled = true,
@@ -144,6 +152,8 @@ function Highlight<T extends React.ElementType = "div">({
 	React.useImperativeHandle(ref, () => localRef.current as HTMLDivElement);
 
 	const propsBoundsOffset = (props as ParentModeHighlightProps)?.boundsOffset;
+	const propsForceUpdateBounds = (props as ParentModeHighlightProps)
+		?.forceUpdateBounds;
 	const boundsOffset = propsBoundsOffset ?? DEFAULT_BOUNDS_OFFSET;
 	const boundsOffsetTop = boundsOffset.top ?? 0;
 	const boundsOffsetLeft = boundsOffset.left ?? 0;
@@ -171,21 +181,22 @@ function Highlight<T extends React.ElementType = "div">({
 		boundsOffsetHeight,
 	]);
 
-	const [activeValue, setActiveValue] = React.useState<string | null>(
-		value ?? defaultValue ?? null,
+	const [internalValue, setInternalValue] = React.useState<string | null>(
+		defaultValue ?? null,
 	);
+	// Controlled wins by derivation (no prop→state sync effect): `value`
+	// renders directly and the internal state only backs uncontrolled
+	// usage. Calling `onValueChange` here — not inside a state updater,
+	// which React may double-invoke — keeps the notification exactly-once.
+	const activeValue = value !== undefined ? value : internalValue;
 	const [boundsState, setBoundsState] = React.useState<Bounds | null>(null);
 	const [activeClassNameState, setActiveClassNameState] =
 		React.useState<string>("");
 
 	const safeSetActiveValue = (id: string | null) => {
-		setActiveValue((prev) => {
-			if (prev !== id) {
-				onValueChange?.(id);
-				return id;
-			}
-			return prev;
-		});
+		if (id === activeValue) return;
+		setInternalValue(id);
+		onValueChange?.(id);
 	};
 
 	const safeSetBoundsRef = React.useRef<
@@ -227,11 +238,6 @@ function Highlight<T extends React.ElementType = "div">({
 	const clearBounds = React.useCallback(() => {
 		setBoundsState((prev) => (prev === null ? prev : null));
 	}, []);
-
-	React.useEffect(() => {
-		if (value !== undefined) setActiveValue(value);
-		else if (defaultValue !== undefined) setActiveValue(defaultValue);
-	}, [value, defaultValue]);
 
 	const id = React.useId();
 

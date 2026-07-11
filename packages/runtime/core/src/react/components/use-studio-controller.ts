@@ -140,6 +140,13 @@ export const EMPTY_DATA: PuckData = {
  */
 const DATA_CHANGE_DEBOUNCE_MS = 250;
 
+/**
+ * Shared already-resolved promise seeding each mount's publish queue.
+ * Module scope so `useRef` does not allocate (and discard) a fresh
+ * promise on every render.
+ */
+const RESOLVED_PUBLISH_TAIL: Promise<void> = Promise.resolve();
+
 function useHydrateRuntimeStores(
 	compiled: CompiledStudioRuntime | null,
 	exportStore: ExportStoreApi,
@@ -241,23 +248,33 @@ function useRuntimeInit(compiled: CompiledStudioRuntime | null): void {
 
 /**
  * Runs inside Puck's subtree, captures the live `PuckApi` via
- * {@link useGetPuck}, stores the snapshot on the shared ref, and
- * renders `children` verbatim. JSX-free (`createElement`) so this
- * module stays a `.ts` orchestration file.
+ * {@link useGetPuck}, stores the snapshot on the shared ref, and — when
+ * a compiled runtime is mounted — drives the engine to `ready`. JSX-free
+ * (`createElement`) so this module stays a `.ts` orchestration file.
  */
 function PuckApiBinder({
 	apiRef,
-	onBound,
+	compiled,
 	children,
 }: {
 	readonly apiRef: RefObject<GetPuckSnapshot | null>;
-	readonly onBound?: () => void;
-	readonly children: ReactNode;
+	readonly compiled: CompiledStudioRuntime | null;
+	readonly children?: ReactNode;
 }): ReactElement {
 	const getPuck = useGetPuck();
 	useEffect(() => {
 		apiRef.current = getPuck;
-		onBound?.();
+		// Drive `ready` for this exact (runtime, getPuck) pair, strictly
+		// after the binding above so `getPuckApi()` is safe for `onReady`
+		// hooks. The deps array IS the once-per-pair dedupe the shell used
+		// to hand-track with a `readyDrivenRef`: the effect re-runs only
+		// when Puck re-initializes (new `getPuck`) or a new compile lands
+		// (new `compiled`), and the engine's `advanceTo` is idempotent per
+		// runtime — a repeat call (StrictMode remount) or a `ready` racing
+		// ahead of `init` is absorbed there (see lifecycle-manager.ts).
+		if (compiled !== null) {
+			compiled.runtime.lifecycle.advanceTo("ready", compiled.ctx);
+		}
 		return () => {
 			// Clear the shared ref when this Puck tree unmounts so a
 			// disposed/unmounted editor can't keep serving its API to a
@@ -269,7 +286,7 @@ function PuckApiBinder({
 				apiRef.current = null;
 			}
 		};
-	}, [apiRef, getPuck, onBound]);
+	}, [apiRef, getPuck, compiled]);
 	return createElement(Fragment, null, children);
 }
 
@@ -332,6 +349,19 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		}
 	}, [data]);
 
+	// Latest `plugins`/`config` behind refs (same rationale as `loggerRef`
+	// below): the compile effect re-runs only when `compileKey` changes —
+	// the structural fingerprints inside the key stand in for these raw
+	// references — and reads the live values at run time, so an inline
+	// `plugins={[…]}` or `config={{…}}` (new identity, same content every
+	// render) neither recompiles the plugin set nor goes stale.
+	const pluginsRef = useRef(plugins);
+	const configRef = useRef(config);
+	useLayoutEffect(() => {
+		pluginsRef.current = plugins;
+		configRef.current = config;
+	}, [plugins, config]);
+
 	const puckApiRef = useRef<GetPuckSnapshot | null>(null);
 
 	// Compile-generation guard (A1 unified the refs; A2 moved the
@@ -388,23 +418,12 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// the onBeforePublish → onPublish → onAfterPublish chains never
 	// interleave. The tail promise is replaced on every call; each
 	// queued task awaits the previous tail.
-	const publishQueueRef = useRef<Promise<void>>(Promise.resolve());
+	const publishQueueRef = useRef<Promise<void>>(RESOLVED_PUBLISH_TAIL);
 	// Flipped by the teardown effect's cleanup. A slow consumer
 	// onPublish can resolve after dispose(); this lets the queued
 	// continuation skip a post-dispose onAfterPublish emit against a
 	// disposed runtime / reset stores.
 	const disposedRef = useRef(false);
-
-	// `onReady` dedupe per `(runtime, getPuck)` pair. The engine phase
-	// machine is already idempotent for a given runtime, but Puck can
-	// re-initialize mid-session (new `getPuck`) while `compiled` is
-	// unchanged; this skips the redundant `advanceTo("ready")` churn so
-	// the intent ("ready is driven exactly once per runtime") is
-	// legible at the call site and not solely an engine invariant.
-	const readyDrivenRef = useRef<{
-		runtime: CompiledStudioRuntime;
-		getPuck: GetPuckSnapshot;
-	} | null>(null);
 
 	const rootRef = useRef<HTMLDivElement>(null);
 
@@ -509,8 +528,14 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		[pluginsFingerprint, aiHost, configFingerprint, isAnvilkit, retryNonce],
 	);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: `compileKey` folds the plugin/config fingerprints + `aiHost` + chrome flag into one token; raw references stay out of the deps so inline arrays/objects do not thrash the runtime, and `logger` is read through `loggerRef` so an unstable inline logger does not trigger a full plugin recompile.
 	useEffect(() => {
+		// `compileKey` is the single compile trigger; `aiHost` and the
+		// chrome flag are read back off the key (shadowing the render-scope
+		// bindings) so they cannot drift from what the key encodes, and the
+		// raw `plugins`/`config` come through the refs above. `logger` is
+		// read through `loggerRef` so an unstable inline logger does not
+		// trigger a full plugin recompile.
+		const { aiHost, isAnvilkit } = compileKey;
 		// New compile generation. The prior runtime is *not* reset to
 		// `null` here: once `compileKey` changes, the derived
 		// `activeCompiled` masks it (fail-closed render) and the
@@ -523,7 +548,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		// recovers). No-op re-render when already `null` (React bails out).
 		setCompileError(null);
 		// generic→default boundary: the runtime is non-generic.
-		const basePlugins = (plugins ?? []) as readonly (
+		const basePlugins = (pluginsRef.current ?? []) as readonly (
 			| StudioPlugin
 			| PuckPlugin
 		)[];
@@ -547,7 +572,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			if (isStale()) {
 				return;
 			}
-			const studioConfig = createStudioConfig(config);
+			const studioConfig = createStudioConfig(configRef.current);
 
 			let nextChromeAssets: ChromeAssets | null = null;
 			if (isAnvilkit) {
@@ -667,7 +692,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			// the bus is sealed with the runtime; no plugin relies on that.)
 			eventBus.close();
 		};
-	}, [compileKey]);
+	}, [compileKey, localeStore, sidebarRegistryStore]);
 
 	// A stored runtime whose `compileKey` no longer matches the current
 	// render is a superseded compile still settling. Masking it here gives
@@ -811,36 +836,6 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 
 	useRuntimeInit(activeCompiled);
 
-	// Fired by the Puck-API binder's effect once `getPuckApi()` is
-	// safe. The engine phase machine (A2) now owns the
-	// once-per-runtime dedupe and the "after onInit settles" ordering
-	// the shell used to hand-orchestrate with `readyFiredFor` +
-	// `queueMicrotask` + `onInitPromise`. A `ready` that races ahead
-	// of `init` is a lenient no-op; the binder effect re-runs and
-	// retries, so no microtask defer is needed here.
-	const handlePuckBound = useCallback((): void => {
-		if (activeCompiled === null) {
-			return;
-		}
-		// Skip a repeat `advanceTo("ready")` for the same runtime + the
-		// same bound `getPuck`. `puckApiRef.current` is the live binder
-		// identity (set by `PuckApiBinder` immediately before `onBound`).
-		const driven = readyDrivenRef.current;
-		const getPuck = puckApiRef.current;
-		if (
-			driven !== null &&
-			driven.runtime === activeCompiled &&
-			getPuck !== null &&
-			driven.getPuck === getPuck
-		) {
-			return;
-		}
-		if (getPuck !== null) {
-			readyDrivenRef.current = { runtime: activeCompiled, getPuck };
-		}
-		activeCompiled.runtime.lifecycle.advanceTo("ready", activeCompiled.ctx);
-	}, [activeCompiled]);
-
 	useEffect(() => {
 		if (activeCompiled === null) {
 			return;
@@ -888,23 +883,21 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		}
 		// Puck-API binder is outermost-of-all so it always runs
 		// `useGetPuck()` inside the Puck subtree; composed (not
-		// clobbering) any consumer `puck` override.
+		// clobbering) any consumer `puck` override. The binder itself
+		// drives the engine to `ready` once `getPuckApi()` is safe (A2:
+		// the phase machine owns the "after onInit settles" ordering the
+		// shell used to hand-orchestrate with `readyFiredFor` +
+		// `queueMicrotask` + `onInitPromise`).
 		base.push({
 			puck: ({ children }) =>
-				createElement(PuckApiBinder, {
-					apiRef: puckApiRef,
-					onBound: handlePuckBound,
+				createElement(
+					PuckApiBinder,
+					{ apiRef: puckApiRef, compiled: activeCompiled },
 					children,
-				}),
+				),
 		});
 		return mergeOverrides(base);
-	}, [
-		activeCompiled,
-		consumerOverrides,
-		isAnvilkit,
-		activeChromeAssets,
-		handlePuckBound,
-	]);
+	}, [activeCompiled, consumerOverrides, isAnvilkit, activeChromeAssets]);
 
 	// generic→default boundary: the public callbacks are typed against
 	// `PuckDataFor<UserConfig>`; internally Puck hands us the broad

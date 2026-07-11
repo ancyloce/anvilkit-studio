@@ -13,19 +13,15 @@
 
 import type { Overrides as PuckOverrides } from "@puckeditor/core";
 import { StudioLayout } from "@/layout/StudioLayout";
-import {
-	ActionBar,
-	CanvasIframe,
-	CanvasPreview,
-	ComponentOverlay,
-} from "./canvas/index";
+import { ActionBar } from "./canvas/ActionBar";
+import { CanvasIframe } from "./canvas/CanvasIframe";
+import { CanvasPreview } from "./canvas/CanvasPreview";
+import { ComponentOverlay } from "./canvas/ComponentOverlay";
 import { defaultFieldTypes } from "./fields/field-types/index";
-import {
-	DrawerItem,
-	EditorDrawer,
-	FieldLabel,
-	FieldsPanel,
-} from "./layout/index";
+import { DrawerItem } from "./layout/DrawerItem";
+import { EditorDrawer } from "./layout/EditorDrawer";
+import { FieldLabel } from "./layout/FieldLabel";
+import { FieldsPanel } from "./layout/FieldsPanel";
 import type { CreateStudioOverridesOptions } from "./types";
 
 /**

@@ -139,6 +139,8 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 		messages,
 		loading,
 		errorFallback,
+		logger,
+		onError,
 	} = props;
 
 	// Neutralize malformed synthetic keydown/keyup events (e.g. from password
@@ -218,8 +220,8 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 	// `writeStudioLog` falls back to `console` when no host logger is set).
 	const i18nLogger = useMemo<StudioLogger>(
 		() => (level, message, meta) =>
-			writeStudioLog(props.logger, level, message, meta),
-		[props.logger],
+			writeStudioLog(logger, level, message, meta),
+		[logger],
 	);
 
 	// Runtime (render-time) error handling for the chrome — the complement
@@ -237,14 +239,17 @@ function useStudioElement<UserConfig extends PuckConfig = PuckConfig>(
 			// our own runtime-crash record. Logging first guarantees the record
 			// survives — parity with the compile-error path.
 			writeStudioLog(
-				props.logger,
+				logger,
 				"error",
 				"Studio chrome crashed while rendering.",
-				{ error, componentStack: info.componentStack ?? undefined },
+				{
+					error,
+					componentStack: info.componentStack ?? undefined,
+				},
 			);
-			props.onError?.(error);
+			onError?.(error);
 		},
-		[props.onError, props.logger],
+		[onError, logger],
 	);
 	const renderRuntimeError = useCallback(
 		(error: unknown, reset: () => void): ReactNode =>

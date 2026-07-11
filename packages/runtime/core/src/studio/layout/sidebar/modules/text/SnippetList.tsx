@@ -17,13 +17,7 @@
  * the message is generic enough to read sensibly in both cases.
  */
 
-import {
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from "react";
+import { type ReactNode, useCallback, useMemo, useState } from "react";
 import { EmptyState } from "@/layout/sidebar/shared/EmptyState";
 import {
 	Accordion,
@@ -90,16 +84,38 @@ export function SnippetList({
 
 	const grouped = useMemo(() => groupByCategory(filtered), [filtered]);
 	const groupIds = useMemo(() => grouped.map(([cat]) => cat), [grouped]);
-	const [openGroupIds, setOpenGroupIds] =
-		useState<StudioCopySnippetCategory[]>(groupIds);
+	// Track explicitly-collapsed groups instead of mirroring `groupIds`
+	// into open-state via an effect (the default-expanded convention the
+	// layer tree also uses): groups are open unless the user closed them,
+	// so a search/filter change needs no state reset — new groups arrive
+	// open and the user's collapse choices survive.
+	const [closedGroupIds, setClosedGroupIds] = useState<
+		ReadonlySet<StudioCopySnippetCategory>
+	>(() => new Set());
+	const openGroupIds = useMemo(
+		() => groupIds.filter((id) => !closedGroupIds.has(id)),
+		[groupIds, closedGroupIds],
+	);
 
-	useEffect(() => {
-		setOpenGroupIds(groupIds);
-	}, [groupIds]);
-
-	const handleAccordionChange = useCallback((next: readonly string[]): void => {
-		setOpenGroupIds([...next] as StudioCopySnippetCategory[]);
-	}, []);
+	const handleAccordionChange = useCallback(
+		(next: readonly string[]): void => {
+			const nextOpen = new Set(next);
+			setClosedGroupIds((prev) => {
+				// Only visible groups can be toggled; off-screen collapse
+				// choices are preserved untouched.
+				const nextClosed = new Set(prev);
+				for (const id of groupIds) {
+					if (nextOpen.has(id)) {
+						nextClosed.delete(id);
+					} else {
+						nextClosed.add(id);
+					}
+				}
+				return nextClosed;
+			});
+		},
+		[groupIds],
+	);
 
 	if (filtered.length === 0) {
 		return (

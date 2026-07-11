@@ -252,9 +252,9 @@ export function resolveHeaderActionSlots(
 	const liveIds = new Set(live.map((action) => action.id));
 	const slots: HeaderActionSlot[] = [
 		...live.map((action): HeaderActionSlot => ({ kind: "live", action })),
-		...placeholders
-			.filter((placeholder) => !liveIds.has(placeholder.id))
-			.map((action): HeaderActionSlot => ({ kind: "placeholder", action })),
+		...placeholders.flatMap((action): HeaderActionSlot[] =>
+			liveIds.has(action.id) ? [] : [{ kind: "placeholder", action }],
+		),
 	];
 
 	return slots.sort((a, b) => compareActions(a.action, b.action));
