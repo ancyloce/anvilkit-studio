@@ -55,51 +55,13 @@ in [`docs/policies/lts.md`](docs/policies/lts.md).
 
 ## Workspace Layout
 
-```
-anvilkit-studio/
-├── apps/demo/                 # Next.js demo app (validation surface)
-├── packages/
-│   ├── core/                  # @anvilkit/core — runtime, plugin engine, React shell
-│   ├── ir/                    # @anvilkit/ir — intermediate representation transforms
-│   ├── schema/                # @anvilkit/schema — AI-friendly component schemas
-│   ├── validator/             # @anvilkit/validator — export-readiness validation
-│   ├── ui/                    # @anvilkit/ui — shared UI primitives
-│   ├── utils/                 # @anvilkit/utils — zero-dependency helpers
-│   ├── components/            # Git submodule — 11 @anvilkit/* component packages
-│   ├── plugins/               # Git submodules (plugin-ai-copilot, plugin-export-html)
-│   └── configs/               # Private config packages (biome, tailwind, typescript)
-└── docs/                      # Architecture docs, plans, task specs
-```
+The current physical tree and the phased target are intentionally documented separately. Before adding or moving a workspace, read the [canonical repository architecture](docs/architecture/repository-structure.md). It defines the `apps -> extensions -> capabilities -> runtime -> foundation` dependency direction, app responsibilities, package placement, and submodule policy. Physical path changes must preserve public npm names and exports.
 
-Each component under `packages/components/src/<slug>/` is an independently versioned and publishable npm package under the `@anvilkit/*` namespace.
-
-For the full architecture, see [docs/ai-context/anvilkit-architecture.md](docs/ai-context/anvilkit-architecture.md).
+The current `apps/studio` is a full product-grade reference implementation and will become `apps/studio`. A future `apps/playground` will own minimal package compatibility tests. `apps/docs` remains the Fumadocs/TanStack Start documentation and marketplace application.
 
 ## Dependency Rules
 
-The workspace enforces a strict dependency DAG. Violations are caught by `pnpm madge` in CI.
-
-**Forbidden edges:**
-
-| Rule                                                                         | Rationale                                                      |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `@anvilkit/utils` has **zero** runtime dependencies                          | Leaf node of the DAG; any import is a bug                      |
-| `@anvilkit/ir`, `@anvilkit/schema`, `@anvilkit/validator` never import React | These are isomorphic — they must run in Node and edge runtimes |
-| `@anvilkit/ui` never imports `@anvilkit/core` or plugins                     | UI primitives are Studio-agnostic                              |
-| `@anvilkit/core` never imports plugins                                       | The shell doesn't know the plugin set                          |
-| No package imports an app                                                    | Data flows upward only                                         |
-
-**Dependency direction** (each arrow means "depends on"):
-
-```
-apps/demo → plugins, components, core, ui
-plugins   → core, ui, utils, schema, validator, ir
-core      → ui, utils
-schema    → utils
-validator → utils, schema
-ir        → utils
-utils     → (nothing)
-```
+`pnpm madge` detects circular imports but does not enforce every architectural edge. Contributors must follow the [canonical dependency rules](docs/architecture/repository-structure.md#architecture-layers): lower layers never import higher layers, runtime never imports capabilities/extensions, packages never import apps, and extensions integrate through public exports rather than private source paths. Workspace-wide boundary automation is planned separately.
 
 ## Running Tests
 
@@ -110,23 +72,23 @@ pnpm test
 # Watch mode
 pnpm test:watch
 
-# Run Playwright E2E tests against the demo
-pnpm --filter demo exec playwright install --with-deps chromium  # first time only
-pnpm --filter demo e2e
+# Run Playwright E2E tests against the studio app
+pnpm --filter studio exec playwright install --with-deps chromium  # first time only
+pnpm --filter studio e2e
 ```
 
-## Running the Demo
+## Running the Reference App
 
 ```bash
-pnpm --filter demo dev
+pnpm --filter studio dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The demo has two Puck modes:
+Open [http://localhost:3000](http://localhost:3000). The current reference app has two Puck modes:
 
 - `/puck/editor` — interactive page builder
 - `/puck/render` — server-side render (RSC-compatible)
 
-The shared Puck config lives in `apps/demo/lib/puck-demo.ts`.
+The shared Puck config lives in `apps/studio/lib/puck-demo.ts`.
 
 ## Changesets Workflow
 
@@ -203,18 +165,20 @@ After scaffolding:
 1. Implement the render component in `src/<Slug>.tsx` and finalize `defaultProps`, `fields`, and metadata in `src/config.ts`
 2. Wire `@anvilkit/ui` peer/dev deps and any needed CSS `@source` entries
 3. Validate: `pnpm lint && pnpm typecheck && pnpm build`
-4. Integrate into the demo: add import + config entry in `apps/demo/lib/puck-demo.ts` and the package name to `transpilePackages` in `apps/demo/next.config.js`
+4. Integrate into the current reference app: add import + config entry in `apps/studio/lib/puck-demo.ts` and the package name to `transpilePackages` in `apps/studio/next.config.js`
 5. Create a changeset: `pnpm changeset`
 
-Full component conventions are documented in `packages/components/AGENTS.md`.
+Full component conventions are documented in `packages/extensions/components/AGENTS.md`.
 
 ## Submodule Workflow
 
-Three directories are Git submodules:
+`.gitmodules` is the canonical inventory. List current paths instead of relying on a copied count:
 
-- `packages/components`
-- `packages/plugins/plugin-ai-copilot`
-- `packages/plugins/plugin-export-html`
+```bash
+git config -f .gitmodules --get-regexp path
+```
+
+Do not create a submodule by default. Use the [lifecycle and ownership policy](docs/architecture/repository-structure.md#submodule-policy) before separating a package.
 
 **Initialize after cloning:**
 
@@ -231,7 +195,7 @@ git submodule update --remote
 After updating submodule pointers, commit the updated reference in the parent repo:
 
 ```bash
-git add packages/components  # or whichever submodule changed
+git add packages/extensions/components  # or whichever submodule changed
 git commit -m "chore: update components submodule"
 ```
 
