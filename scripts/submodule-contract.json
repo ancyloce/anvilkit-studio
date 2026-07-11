@@ -1,0 +1,218 @@
+{
+	"description": "Retained-submodule contract (restructure plan Phase 5; docs/architecture/repository-structure.md §Retained Submodule Contract). Records, per .gitmodules entry, what every retained submodule must provide: owners, engine metadata, peer ranges, required commands, and versioning policy. Validated by scripts/check-submodule-contracts.mjs in CI (clean-clone + package gates). Owners stay explicitly 'unknown' until CODEOWNERS or equivalent evidence exists (plan §4/§27).",
+	"gitlinkProcess": "Gitlink bumps land as dedicated superproject commits after the submodule commit is pushed to its remote; path moves use a dedicated PR that updates .gitmodules and gitlinks atomically and passes the clean-clone workflow (plan §18).",
+	"defaults": {
+		"owners": { "repository": "unknown", "release": "unknown" },
+		"engines": { "node": ">=18" },
+		"packageManager": "pnpm@11.10.0",
+		"typescript": "6.0.3",
+		"requiredScripts": [
+			"build",
+			"lint",
+			"typecheck",
+			"test",
+			"publint",
+			"check:all"
+		]
+	},
+	"submodules": {
+		"packages/extensions/components": {
+			"name": "anvilkit-components",
+			"url": "https://github.com/ancyloce/anvilkit-components.git",
+			"npmAccess": "private",
+			"versioning": "independent",
+			"requiredScripts": ["build", "lint", "typecheck", "test"],
+			"peers": {}
+		},
+		"packages/extensions/plugins/plugin-ai-copilot": {
+			"name": "@anvilkit/plugin-ai-copilot",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-ai-copilot.git",
+			"npmAccess": "public",
+			"versioning": "fixed",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-export-html": {
+			"name": "@anvilkit/plugin-export-html",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-export-html.git",
+			"npmAccess": "public",
+			"versioning": "fixed",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-export-react": {
+			"name": "@anvilkit/plugin-export-react",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-export-react.git",
+			"npmAccess": "public",
+			"versioning": "fixed",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-asset-manager": {
+			"name": "@anvilkit/plugin-asset-manager",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-asset-manager.git",
+			"npmAccess": "public",
+			"versioning": "fixed",
+			"peers": { "react": ">=19.2.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-version-history": {
+			"name": "@anvilkit/plugin-version-history",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-version-history.git",
+			"npmAccess": "public",
+			"versioning": "fixed",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-collab-yjs": {
+			"name": "@anvilkit/plugin-collab-yjs",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-collab-yjs.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-collab-ui": {
+			"name": "@anvilkit/collab-ui",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-collab-ui.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-canvas-studio": {
+			"name": "@anvilkit/plugin-canvas-studio",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-canvas-studio.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-export-canvas": {
+			"name": "@anvilkit/plugin-export-canvas",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-export-canvas.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-ai-image": {
+			"name": "@anvilkit/plugin-ai-image",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-ai-image.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-design-system": {
+			"name": "@anvilkit/plugin-design-system",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-design-system.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/extensions/plugins/plugin-page-seo": {
+			"name": "@anvilkit/plugin-page-seo",
+			"url": "https://github.com/ancyloce/anvilkit-plugin-page-seo.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0", "@puckeditor/core": "^0.22.0" }
+		},
+		"packages/capabilities/canvas/core": {
+			"name": "@anvilkit/canvas-core",
+			"url": "https://github.com/ancyloce/anvilkit-canvas-core.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": {}
+		},
+		"packages/capabilities/canvas/editor": {
+			"name": "@anvilkit/canvas-editor",
+			"url": "https://github.com/ancyloce/anvilkit-canvas-editor.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0" }
+		},
+		"packages/capabilities/analytics/core": {
+			"name": "@anvilkit/analytics-core",
+			"url": "https://github.com/ancyloce/anvilkit-analytics-core.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": {}
+		},
+		"packages/capabilities/analytics/react": {
+			"name": "@anvilkit/analytics-react",
+			"url": "https://github.com/ancyloce/anvilkit-analytics-react.git",
+			"npmAccess": "public",
+			"versioning": "independent",
+			"peers": { "react": ">=19.0.0" }
+		}
+	},
+	"knownGaps": [
+		{
+			"path": "packages/extensions/plugins/plugin-ai-copilot",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-export-html",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-export-react",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-asset-manager",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-version-history",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-collab-yjs",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-collab-ui",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-canvas-studio",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-export-canvas",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-ai-image",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-design-system",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-page-seo",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/capabilities/canvas/core",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/capabilities/canvas/editor",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/capabilities/analytics/core",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/capabilities/analytics/react",
+			"issue": "missing-engine-metadata"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-canvas-studio",
+			"issue": "missing-script:check:all"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-export-canvas",
+			"issue": "missing-script:check:all"
+		},
+		{
+			"path": "packages/extensions/plugins/plugin-ai-image",
+			"issue": "missing-script:check:all"
+		}
+	]
+}
