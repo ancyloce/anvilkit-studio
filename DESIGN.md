@@ -1,449 +1,1227 @@
-# Huly — Style Reference
-> Aurora through a midnight observatory — the hero is a vertical beam of violet melting into coral, and every quiet section below it borrows that same two-color story told at lower volume.
+# AnvilKit Studio — Neutral Aurora Design System
 
-**Theme:** mixed
+> A precise neutral editor shell with a restrained iris-blue signal. The interface stays quiet so the canvas, selected component, and publishing actions remain unmistakably dominant.
 
-Huly projects a cosmic-workspace atmosphere: near-black canvas with a single violet-to-amber aurora slicing through the hero, then a quieter productivity grid below. The system lives in a narrow chromatic band — one electric iris blue and one ember coral do all the brand work against layered graphite surfaces, so the dark mode never feels neutral. Typography is Inter for everything functional, with a custom display face (Esbuild) reserved for hero moments at 80–84px with aggressive negative tracking. Components lean pill-shaped: 9999px radii on controls, 12px on cards, minimal shadow, and glowing gradient strokes as the primary decoration. The page alternates between full-bleed dark spectacle and calm light sections, so any new screen must decide which mode it's in before picking colors.
+**Theme:** dark-first application UI with complete light-mode support  
+**Foundation:** shadcn/ui semantic tokens + Tailwind CSS v4 + Neutral base palette  
+**Brand layer:** Electric Iris for high-emphasis interaction; Ember Pulse for rare warm emphasis  
+**Primary product context:** visual page editor, canvas workspace, component tree, property inspector, publishing workflow
 
-## Tokens — Colors
+---
+
+## 1. Overview
+
+AnvilKit Studio combines the structural discipline of shadcn/ui's Neutral theme with the restrained atmospheric character of the original Huly-inspired system.
+
+The Neutral palette owns the application shell:
+
+- backgrounds and elevated surfaces;
+- sidebars, toolbars, inspectors, and overlays;
+- borders, separators, inputs, and hover states;
+- default text, muted text, and disabled states.
+
+The brand palette is intentionally narrow:
+
+- **Electric Iris** identifies the primary action, selected layer, canvas selection outline, focus ring, and active navigation state;
+- **Ember Pulse** is reserved for warm highlights, warnings that are not errors, notification dots, and limited marketing gradients;
+- destructive actions use the semantic shadcn destructive token rather than Ember Pulse.
+
+The editor must feel dense, calm, and dependable. Brand effects should never compete with the page being edited.
+
+---
+
+## 2. Design Direction
+
+### 2.1 Product character
+
+The interface should communicate:
+
+- **Precision:** compact controls, consistent alignment, explicit selection states;
+- **Neutrality:** the editor chrome does not visually contaminate the user's page design;
+- **Depth without decoration:** elevation comes primarily from neutral surface steps and borders;
+- **Controlled energy:** blue appears only when an element is active, selected, focused, or primary;
+- **Professional density:** optimized for prolonged desktop editing rather than marketing-page comfort.
+
+### 2.2 Integration rule
+
+Use the following priority when design rules conflict:
+
+```text
+Editor usability
+  > shadcn semantic behavior
+    > Neutral visual foundation
+      > AnvilKit brand expression
+        > decorative effects
+```
+
+### 2.3 What changed from the previous design
+
+The previous system was spectacle-first, mixed-theme, and pill-heavy. This updated system is application-first:
+
+- Neutral replaces bespoke graphite colors as the default UI foundation;
+- semantic shadcn tokens replace direct color references in components;
+- 8–10px radii replace universal pills in dense editor controls;
+- pill geometry remains only for badges, segmented controls, avatars, and marketing CTAs;
+- Aurora gradients are removed from the persistent editor shell;
+- Esbuild is removed from functional UI and retained only for optional marketing display text;
+- Pages and Layers are treated as alternate navigation modes, not permanently stacked panels;
+- the canvas and inspector receive explicit editor-specific tokens and interaction rules.
+
+---
+
+## 3. Core Principles
+
+### 3.1 Semantic tokens first
+
+Components must consume semantic tokens such as:
+
+```text
+background / foreground
+card / card-foreground
+popover / popover-foreground
+primary / primary-foreground
+secondary / secondary-foreground
+muted / muted-foreground
+accent / accent-foreground
+destructive
+border / input / ring
+sidebar-* tokens
+```
+
+Do not place Neutral scale values directly inside reusable component classes unless creating a documented editor-specific alias.
+
+### 3.2 One primary signal per view
+
+Electric Iris should identify the most important current action or state. Examples:
+
+- Publish button;
+- selected layer;
+- selected canvas component;
+- active sidebar tool;
+- focused form field.
+
+Do not simultaneously fill many controls with the brand color.
+
+### 3.3 Canvas autonomy
+
+The editor theme and the rendered page theme are separate systems.
+
+- The editor may be dark while the page is light.
+- The canvas viewport must preserve its configured width even when side panels open.
+- Opening the inspector may reduce visible workspace, but must not silently change the page breakpoint.
+- Canvas zoom and canvas width are different controls and must never share an ambiguous label.
+
+### 3.4 Density with breathing room
+
+The editor is compact, not cramped.
+
+- 28px: icon-only compact controls;
+- 32px: tree rows, toolbar buttons, compact inputs;
+- 36px: default inputs and buttons;
+- 40px: primary actions when additional emphasis is required.
+
+Use 4px increments and avoid arbitrary spacing values.
+
+### 3.5 Borders before shadows
+
+Dark application surfaces should rely on:
+
+1. surface contrast;
+2. 1px neutral borders;
+3. subtle inset highlights;
+4. shadows only for detached overlays and floating toolbars.
+
+---
+
+## 4. Theme Modes
+
+### 4.1 Dark mode — default editor mode
+
+Use dark mode for the Studio workspace by default.
+
+- Application background: Neutral 950 family;
+- panels and bars: Neutral 900 family;
+- elevated controls and overlays: Neutral 800 family;
+- hover and selected neutral surfaces: Neutral 800/700 family;
+- borders: translucent white or Neutral 800;
+- primary text: Neutral 50;
+- secondary text: Neutral 400;
+- brand selection: Electric Iris.
+
+### 4.2 Light mode
+
+Light mode is a fully supported editor theme, not an inverted afterthought.
+
+- Application background: white or Neutral 50;
+- panels: white;
+- workspace: Neutral 100;
+- borders: Neutral 200;
+- primary text: Neutral 900;
+- secondary text: Neutral 500;
+- brand selection: Electric Iris.
+
+### 4.3 Marketing mode
+
+Marketing surfaces may use the original Aurora visual language, but they must be isolated from functional editor chrome.
+
+Allowed locations:
+
+- sign-in and onboarding hero;
+- empty project onboarding;
+- release announcement artwork;
+- public landing pages.
+
+Forbidden locations:
+
+- persistent sidebars;
+- property inspector backgrounds;
+- input fills;
+- tree rows;
+- canvas selection overlays;
+- menus and dialogs.
+
+---
+
+## 5. Color System
+
+## 5.1 Neutral reference scale
+
+| Token | Hex | Primary use |
+|---|---:|---|
+| `neutral-50` | `#fafafa` | dark-mode foreground, light elevated tint |
+| `neutral-100` | `#f5f5f5` | light workspace, light muted surface |
+| `neutral-200` | `#e5e5e5` | light borders and input outlines |
+| `neutral-300` | `#d4d4d4` | stronger light dividers |
+| `neutral-400` | `#a3a3a3` | dark secondary text and icons |
+| `neutral-500` | `#737373` | light secondary text, disabled content |
+| `neutral-600` | `#525252` | strong muted text, dark control outlines |
+| `neutral-700` | `#404040` | dark hover/pressed states |
+| `neutral-800` | `#262626` | dark elevated controls and secondary fills |
+| `neutral-900` | `#171717` | dark panels, cards, popovers |
+| `neutral-950` | `#0a0a0a` | dark application shell and canvas backing |
+
+The scale is a reference only. Components should use semantic tokens.
+
+## 5.2 Brand colors
 
 | Name | Value | Token | Role |
-|------|-------|-------|------|
-| Obsidian Canvas | `#303236` | `--color-obsidian-canvas` | Page background, dominant surface — near-black with a whisper of warmth, the default stage for all content |
-| Void | `#090a0c` | `--color-void` | Deepest surface layer for hero gradients, modal backdrops, and borders that need to disappear into the canvas |
-| Charcoal Card | `#111111` | `--color-charcoal-card` | Elevated card and panel surfaces sitting one step above the canvas |
-| Slate Edge | `#4a4b50` | `--color-slate-edge` | Hairline borders and dividers on dark surfaces |
-| Iron Veil | `#6b6c6d` | `--color-iron-veil` | Muted backgrounds for tags, list-item fills, and disabled state washes |
-| Smoke | `#95979e` | `--color-smoke` | Icon strokes, secondary text, and inactive controls — the workhorse mid-gray |
-| Ash | `#a9a9aa` | `--color-ash` | Tertiary text and subtle body borders in content-heavy lists |
-| Frost | `#d1d1d1` | `--color-frost` | Light-mode borders, input fields, and secondary CTA borders |
-| Linen | `#e5e5e7` | `--color-linen` | Light-mode surface tint and subtle section dividers in white backgrounds |
-| Snow | `#ffffff` | `--color-snow` | Hairline borders, dividers, input outlines, and card edges on light surfaces. Do not promote it to the primary CTA color |
-| Electric Iris | `#5683da` | `--color-electric-iris` | Primary action background, active nav indicator, hero aurora cool stop — vivid violet-blue against charcoal reads as switched-on, not corporate |
-| Ember Pulse | `#ff8964` | `--color-ember-pulse` | Secondary accent, hero aurora warm stop, notification dot, illustration highlight — the amber that breaks the blue's composure and gives the beam its heat |
-| Molasses | `#5a250a` | `--color-molasses` | Deep ember tone for dark-context borders, icon strokes, and tag fills when coral would be too bright |
+|---|---:|---|---|
+| Electric Iris | `#5683da` | `--brand` | primary action, selection, active state, focus |
+| Electric Iris Hover | `#6f95e2` | `--brand-hover` | primary hover on dark surfaces |
+| Electric Iris Pressed | `#4a73c5` | `--brand-pressed` | primary pressed state |
+| Electric Iris Soft | `rgb(86 131 218 / 14%)` | `--brand-soft` | selected rows and subtle emphasis |
+| Ember Pulse | `#ff8964` | `--warm` | rare warm emphasis and marketing accent |
+| Ember Pulse Soft | `rgb(255 137 100 / 14%)` | `--warm-soft` | warm badges and notice surfaces |
 
-## Tokens — Typography
+### Brand usage constraints
 
-### Inter — All functional UI text — body, nav, buttons, list items, captions, small headings. Used at weight 500–600 for emphasis, 400 for body, 300 sparingly for quiet metadata. · `--font-inter`
-- **Substitute:** DM Sans, IBM Plex Sans
-- **Weights:** 300, 400, 500, 600, 700
-- **Sizes:** 10, 11, 12, 14, 15, 16, 18, 22, 24
-- **Line height:** 1.00, 1.13, 1.25, 1.38, 1.50
-- **Letter spacing:** Tight: -0.04em at large sizes, -0.02em at subhead, -0.01em at body, normal at caption
-- **Role:** All functional UI text — body, nav, buttons, list items, captions, small headings. Used at weight 500–600 for emphasis, 400 for body, 300 sparingly for quiet metadata.
+- Electric Iris may be used as `primary`, `ring`, `selection`, and `sidebar-primary`.
+- Ember Pulse must not become a second primary action color.
+- A normal editor view should contain no more than one filled Electric Iris action.
+- Use opacity-based soft backgrounds rather than pale blue hardcoded surfaces.
 
-### Esbuild — Display-only: hero headlines, section openers, MetaBrain feature titles. The condensed geometry and tight tracking make 84px feel editorial rather than SaaS. Never used below 28px. · `--font-esbuild`
-- **Substitute:** Sora, General Sans
-- **Weights:** 400, 500, 600
-- **Sizes:** 28, 32, 80, 84
-- **Line height:** 0.80, 0.90, 1.00
-- **Letter spacing:** -0.05em to -0.02em, tightest at 80–84px
-- **Role:** Display-only: hero headlines, section openers, MetaBrain feature titles. The condensed geometry and tight tracking make 84px feel editorial rather than SaaS. Never used below 28px.
+## 5.3 Semantic token mapping
 
-### Type Scale
+### Light
 
-| Role | Size | Line Height | Letter Spacing | Token |
-|------|------|-------------|----------------|-------|
-| caption | 11px | 1.38 | -0.1px | `--text-caption` |
-| body | 14px | 1.5 | -0.14px | `--text-body` |
-| body-lg | 16px | 1.5 | -0.16px | `--text-body-lg` |
-| subheading | 18px | 1.5 | -0.36px | `--text-subheading` |
-| heading-sm | 22px | 1.25 | — | `--text-heading-sm` |
-| heading | 24px | 1.25 | -0.48px | `--text-heading` |
-| display-sm | 32px | 1 | -1.6px | `--text-display-sm` |
-| display | 80px | 0.9 | -4px | `--text-display` |
+| Semantic token | Value | Purpose |
+|---|---|---|
+| `background` | `oklch(1 0 0)` | app shell and panels |
+| `foreground` | `oklch(0.145 0 0)` | default text and icons |
+| `card` | `oklch(1 0 0)` | inspector groups and dialogs |
+| `popover` | `oklch(1 0 0)` | dropdowns and floating surfaces |
+| `primary` | `oklch(0.619 0.141 262.4)` | brand action and active states |
+| `primary-foreground` | `oklch(0.985 0 0)` | text on primary |
+| `secondary` | `oklch(0.97 0 0)` | secondary controls |
+| `muted` | `oklch(0.97 0 0)` | subtle surfaces |
+| `muted-foreground` | `oklch(0.556 0 0)` | descriptions and placeholders |
+| `accent` | `oklch(0.97 0 0)` | hover and active neutral surfaces |
+| `border` | `oklch(0.922 0 0)` | dividers and containers |
+| `input` | `oklch(0.922 0 0)` | form control outlines |
+| `ring` | `oklch(0.619 0.141 262.4)` | keyboard focus ring |
 
-## Tokens — Spacing & Shapes
+### Dark
 
-**Base unit:** 4px
+| Semantic token | Value | Purpose |
+|---|---|---|
+| `background` | `oklch(0.145 0 0)` | app shell and deepest workspace |
+| `foreground` | `oklch(0.985 0 0)` | default text and icons |
+| `card` | `oklch(0.205 0 0)` | side panels and inspector groups |
+| `popover` | `oklch(0.205 0 0)` | dropdowns and detached overlays |
+| `primary` | `oklch(0.619 0.141 262.4)` | brand action and active states |
+| `primary-foreground` | `oklch(0.985 0 0)` | text on primary |
+| `secondary` | `oklch(0.269 0 0)` | secondary controls |
+| `muted` | `oklch(0.269 0 0)` | subtle surfaces |
+| `muted-foreground` | `oklch(0.708 0 0)` | descriptions and placeholders |
+| `accent` | `oklch(0.269 0 0)` | hover and active neutral surfaces |
+| `border` | `oklch(1 0 0 / 10%)` | dividers and containers |
+| `input` | `oklch(1 0 0 / 15%)` | form control outlines |
+| `ring` | `oklch(0.619 0.141 262.4)` | keyboard focus ring |
 
-**Density:** comfortable
+## 5.4 Editor-specific aliases
 
-### Spacing Scale
+These aliases clarify roles that are too specific for generic shadcn tokens.
 
-| Name | Value | Token |
-|------|-------|-------|
-| 4 | 4px | `--spacing-4` |
-| 8 | 8px | `--spacing-8` |
-| 12 | 12px | `--spacing-12` |
-| 16 | 16px | `--spacing-16` |
-| 20 | 20px | `--spacing-20` |
-| 24 | 24px | `--spacing-24` |
-| 28 | 28px | `--spacing-28` |
-| 32 | 32px | `--spacing-32` |
-| 36 | 36px | `--spacing-36` |
-| 40 | 40px | `--spacing-40` |
-| 64 | 64px | `--spacing-64` |
-| 160 | 160px | `--spacing-160` |
-| 180 | 180px | `--spacing-180` |
-| 240 | 240px | `--spacing-240` |
+| Token | Light | Dark | Role |
+|---|---|---|---|
+| `--editor-topbar` | `oklch(1 0 0)` | `oklch(0.145 0 0)` | global header |
+| `--editor-panel` | `oklch(1 0 0)` | `oklch(0.178 0 0)` | navigation and inspector panels |
+| `--editor-panel-raised` | `oklch(0.985 0 0)` | `oklch(0.205 0 0)` | nested panel groups |
+| `--editor-workspace` | `oklch(0.97 0 0)` | `oklch(0.205 0 0)` | canvas outside area |
+| `--editor-canvas-frame` | `oklch(1 0 0)` | `oklch(0.145 0 0)` | page frame boundary |
+| `--editor-selection` | `oklch(0.619 0.141 262.4)` | same | selected component outline |
+| `--editor-selection-soft` | `rgb(86 131 218 / 12%)` | `rgb(86 131 218 / 16%)` | selected tree row |
+| `--editor-drop-target` | `rgb(86 131 218 / 18%)` | `rgb(86 131 218 / 22%)` | drag destination |
+| `--editor-grid` | `rgb(0 0 0 / 5%)` | `rgb(255 255 255 / 5%)` | optional workspace grid |
+| `--editor-overlay` | `rgb(0 0 0 / 38%)` | `rgb(0 0 0 / 56%)` | modal and interaction scrim |
 
-### Border Radius
+---
 
-| Element | Value |
-|---------|-------|
-| tags | 9999px |
-| cards | 12px |
-| inputs | 4px |
-| panels | 30px |
-| buttons | 9999px |
+## 6. Typography
 
-### Shadows
+## 6.1 Functional UI font
 
-| Name | Value | Token |
-|------|-------|-------|
-| md | `rgba(0, 0, 0, 0.35) 0px 4px 16px 0px` | `--shadow-md` |
-| subtle | `rgba(255, 255, 255, 0.4) 0px 0px 0px 6px` | `--shadow-subtle` |
-| sm | `rgba(0, 0, 0, 0.15) 0px 4px 6px 0px` | `--shadow-sm` |
-| xl | `rgba(0, 0, 0, 0.5) 0px 6px 25px 0px` | `--shadow-xl` |
+### Inter
 
-### Layout
+Use Inter for all product interface text.
 
-- **Page max-width:** 1200px
-- **Section gap:** 96px
-- **Card padding:** 24px
-- **Element gap:** 12px
+```css
+--font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+  BlinkMacSystemFont, "Segoe UI", sans-serif;
+```
 
-## Components
+Recommended weights:
 
-### Primary Pill Button
-**Role:** Hero CTA, top-level conversion
+- 400: descriptions, placeholders, secondary text;
+- 500: inputs, tree rows, buttons, tabs;
+- 600: panel titles, selected items, primary actions;
+- 700: rare application-level emphasis only.
 
-Filled #5683da, white text, Inter 14px weight 500, 9999px radius, 12px 24px padding. Inherits Electric Iris glow on hover. Uppercase or sentence-case tracking at -0.01em.
+## 6.2 Display font
 
-### Ghost Pill Button
-**Role:** Secondary CTA, nav actions
+### Esbuild — optional marketing-only font
 
-Transparent background, 1px #303236 border on dark surfaces, white text, Inter 14px weight 500, 9999px radius, 10px 20px padding. Becomes solid white-on-charcoal on hover.
+Esbuild may be used for:
 
-### White Pill Button
-**Role:** Light-section CTA, 'See in action' hero button
+- public landing page hero headings;
+- onboarding campaign artwork;
+- release announcement graphics.
 
-Solid #ffffff fill with dark text (#090a0c), 9999px radius, 12px 24px padding. This is the hero — 'SEE IN ACTION →' — and the one place white earns its weight as a foreground, not background.
+It must not be used in:
 
-### Feature Card
-**Role:** Product capability cards in grids
+- toolbars;
+- tree rows;
+- inspectors;
+- dialogs;
+- form labels;
+- canvas control overlays.
 
-Dark card on #111111 or gradient-tinted surface, 12px radius, 24px padding, optional 1px #4a4b50 border. Some variants carry a radial coral-to-amber glow behind the card edge.
+## 6.3 Editor type scale
 
-### MetaBrain Card
-**Role:** Feature highlight in the MetaBrain section
+| Role | Size | Line height | Weight | Usage |
+|---|---:|---:|---:|---|
+| micro | 10px | 14px | 500 | canvas measurement labels only |
+| caption | 11px | 16px | 500 | shortcuts, metadata, badges |
+| compact | 12px | 16px | 400–500 | helper text, secondary tree metadata |
+| body | 13px | 20px | 400–500 | default editor body and controls |
+| body-lg | 14px | 20px | 500 | important controls and form values |
+| panel-title | 14px | 20px | 600 | Pages, Layers, Hero |
+| heading-sm | 16px | 24px | 600 | dialogs and inspector section titles |
+| heading | 20px | 28px | 600 | full-page settings headings |
 
-Deep card (#0e0e10 base) with 12px radius, 16–20px padding, containing an Esbuild 32px heading in white. Many carry a soft radial gradient bleed in the corner — warm amber or cool iris — as the visual hook.
+### Typography rules
 
-### Product Screenshot Frame
-**Role:** In-app UI previews in the hero and feature sections
+- Default editor text is 13px, not 14–16px everywhere.
+- Use sentence case for labels and buttons.
+- Avoid uppercase except for compact status codes and technical metadata.
+- Use tabular numerals for zoom percentages, dimensions, and measurements.
+- Do not use negative tracking below 16px.
 
-Dark UI surface (matching the real product) wrapped in a 12px radius frame with a soft black shadow (rgba(0,0,0,0.5) 0 6px 25px). Floats above the aurora background as the hero's evidence.
+---
 
-### Top Navigation Bar
-**Role:** Site-wide header
+## 7. Spacing and Density
 
-Transparent over the hero, sticks with a slight backdrop blur on scroll. Huly logo mark on the left, Inter 14px nav items in the center, 'Star Us' link + outlined 'Sign In' + filled 'Sign Up' pill on the right.
+**Base unit:** 4px  
+**Density:** compact-comfortable
 
-### Aurora Hero Background
-**Role:** Full-bleed hero treatment
+| Token | Value | Typical use |
+|---|---:|---|
+| `--space-1` | 4px | icon-to-label micro gap |
+| `--space-2` | 8px | compact control gap |
+| `--space-3` | 12px | standard row padding and field gap |
+| `--space-4` | 16px | panel padding and group spacing |
+| `--space-5` | 20px | large panel padding |
+| `--space-6` | 24px | dialog and card padding |
+| `--space-8` | 32px | major layout spacing |
 
-Vertical light beam on #090a0c: linear gradient from Electric Iris (#5683da at ~60% opacity) through Ember Pulse (#ff8964) to white, painted as a narrow vertical streak. Radial sunburst glow at the base in warm amber.
+### Control heights
 
-### Tag/Chip
-**Role:** Category labels on issue cards, filter pills
+| Control | Height |
+|---|---:|
+| icon button compact | 28px |
+| tree row | 32px |
+| toolbar control | 32px |
+| input compact | 32px |
+| input default | 36px |
+| button default | 36px |
+| primary publish button | 36px |
+| top bar | 64px |
+| canvas toolbar | 48px |
 
-Small pill (9999px radius), 4px 10px padding, 11px Inter weight 500, text colored to match category — Medium (iris), Marketing (ember), Done (ash), Medium with custom hex variants. Background is the category color at 12% opacity.
+---
 
-### Stat Counter
-**Role:** MetaBrain date/time display
+## 8. Shape System
 
-Large Esbuild numeral (80px) in white inside a 30px-radius circle, with a + button below. The oversized number in a circle is the section's visual signature.
+shadcn's moderate radius becomes the default. The editor should not be universally pill-shaped.
 
-### Light Section Band
-**Role:** Alternating content sections below the dark hero
+```css
+--radius: 0.625rem; /* 10px */
+```
 
-White (#ffffff) or warm linen (#f6f6f6) background, Esbuild display heading in #050506, Inter body in #303236. The contrast flip from dark hero to light band is the page's structural rhythm.
+| Element | Radius | Rule |
+|---|---:|---|
+| tree row | 6px | compact and stable |
+| input / textarea | 8px | slightly tighter than cards |
+| button | 8px | default editor control |
+| icon button | 8px | consistent with buttons |
+| card / inspector group | 10px | uses base radius |
+| popover / menu | 10px | detached surface |
+| dialog | 12px | larger elevated container |
+| selected canvas label | 4px | technical overlay, not decorative |
+| badge / status / avatar | 9999px | pill allowed |
+| segmented control | 9999px outer shell | compact grouped choice |
+| marketing CTA | 9999px | brand expression outside editor shell |
 
-### Kanban Board Preview
-**Role:** Feature illustration cards
+### Shape rule
 
-Mini dark-mode kanban with columns (BACKLOG, TO DO, IN PROGRESS) rendered in-product, wrapped in a 12px card with subtle shadow. Shows tags and avatars at real product scale.
+Use pills only when the shape communicates one of the following:
 
-### Inbox/Chat Panel
-**Role:** Right-side feature preview
+- status;
+- identity;
+- binary or segmented choice;
+- compact metadata;
+- marketing conversion.
 
-Dark panel with avatar circles, 12px radius, user names in Inter 14px weight 500 white, message previews in #a9a9aa. Includes 'Unread' pills and status dots in iris blue.
+---
 
-## Do's and Don'ts
+## 9. Borders, Shadows, and Elevation
+
+## 9.1 Borders
+
+- Default divider: `1px solid var(--border)`;
+- focused input: border remains stable; apply ring rather than changing layout;
+- selected tree row: soft brand fill + 1px brand outline;
+- selected canvas component: 1px Electric Iris outline at all zoom levels;
+- destructive target: semantic destructive outline only during confirmation or active drag.
+
+## 9.2 Shadows
+
+| Token | Value | Usage |
+|---|---|---|
+| `--shadow-overlay` | `0 12px 32px rgb(0 0 0 / 28%)` | dialogs and command palettes |
+| `--shadow-popover` | `0 8px 24px rgb(0 0 0 / 22%)` | menus and popovers |
+| `--shadow-floating` | `0 4px 16px rgb(0 0 0 / 24%)` | selection action toolbar |
+| `--shadow-canvas` | `0 8px 28px rgb(0 0 0 / 20%)` | page frame against workspace |
+
+Do not apply heavy shadows to persistent sidebars or inspectors.
+
+---
+
+## 10. Editor Layout
+
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│ Global Top Bar                                                       │
+├──────┬──────────────────┬─────────────────────────────┬──────────────┤
+│      │                  │ Canvas Toolbar              │ Inspector    │
+│ Tool │ Active Panel     ├─────────────────────────────┤              │
+│ Rail │ Pages / Layers   │                             │ Properties   │
+│      │ / Assets         │      Canvas Workspace       │              │
+│      │                  │                             │              │
+└──────┴──────────────────┴─────────────────────────────┴──────────────┘
+```
+
+### 10.1 Global dimensions
+
+| Region | Recommended size |
+|---|---:|
+| top bar | 64px |
+| activity rail | 52px |
+| left panel | 280–320px, resizable |
+| inspector | 320–360px, resizable |
+| canvas toolbar | 48px |
+| workspace padding | 24–32px |
+| minimum usable canvas viewport | 720px |
+
+### 10.2 Panel behavior
+
+- Left panel and Inspector are independently collapsible.
+- Pages, Layers, Assets, and Components occupy one shared panel; only one primary mode is visible at a time.
+- Inspector title must always match the selected component.
+- Opening the Inspector must not change the configured responsive breakpoint.
+- A focus mode hides both panels while retaining the canvas toolbar.
+- Resizing a panel must preserve the user's last width.
+
+---
+
+## 11. Component Specifications
+
+## 11.1 Global Top Bar
+
+**Role:** project context, collaboration, preview, and publishing.
+
+Recommended structure:
+
+```text
+Back | Project / Home                   Collaborators Share | Preview | Publish ▾
+```
+
+Rules:
+
+- background: `var(--editor-topbar)`;
+- border-bottom: `var(--border)`;
+- height: 64px;
+- breadcrumb uses muted text for ancestors and foreground for the current page;
+- theme and language controls belong in the account/settings menu;
+- only Publish uses a filled primary treatment;
+- Share uses outline or secondary treatment;
+- Preview is a ghost button with icon and text;
+- avoid ambiguous labels such as “Open Canvas” while already inside the editor.
+
+## 11.2 Activity Rail
+
+**Role:** switch the active left-panel mode.
+
+Items:
+
+- Pages;
+- Layers;
+- Assets;
+- Components;
+- Text styles;
+- AI tools;
+- History;
+- Search.
+
+Rules:
+
+- width: 52px;
+- icon button: 36×36px inside the rail;
+- active state: `bg-sidebar-accent`, brand icon, and a 2px left indicator;
+- every icon requires a tooltip with name and keyboard shortcut;
+- do not rely on icon meaning alone.
+
+## 11.3 Navigation Panel
+
+**Role:** display the active Pages, Layers, Assets, or Components mode.
+
+Header:
+
+```text
+Layers                                      +
+[ Search layers…                              ]
+```
+
+Rules:
+
+- panel uses `--editor-panel`;
+- header remains sticky;
+- search is compact, 32px high;
+- avoid nested independent scroll areas inside the same panel;
+- one panel body owns vertical scrolling;
+- panel mode should persist between sessions.
+
+## 11.4 Page Tree
+
+Tree rows include:
+
+- disclosure icon when children exist;
+- page icon;
+- page name;
+- optional route or status metadata;
+- context menu on hover.
+
+States:
+
+| State | Treatment |
+|---|---|
+| default | transparent, foreground text |
+| hover | `bg-sidebar-accent` |
+| selected | stronger neutral fill; current page icon may use brand |
+| focused | visible brand focus ring |
+| drag target | `--editor-drop-target` + insertion line |
+| hidden / draft | reduced opacity with explicit status icon |
+
+Hierarchy must use consistent 16px indentation and disclosure controls. Never imply nesting through irregular spacing alone.
+
+## 11.5 Layer Tree
+
+Each row contains:
+
+```text
+Drag handle | Component icon | Name                 Visibility | Menu
+```
+
+Rules:
+
+- row height: 32px;
+- selected row: `--editor-selection-soft` plus 1px brand outline;
+- selection must synchronize with the canvas and inspector;
+- selecting a canvas component expands ancestor nodes and scrolls the layer into view;
+- row actions appear on hover but remain keyboard accessible;
+- lock, hidden, and error states must use distinct icons rather than color alone.
+
+## 11.6 Canvas Toolbar
+
+Recommended structure:
+
+```text
+Desktop ▾ | 1440 px                           Undo Redo | Fit | − 100% +
+```
+
+Rules:
+
+- device preset and viewport width are grouped;
+- zoom controls form a separate group;
+- do not show two unlabeled `100%` values;
+- viewport width uses pixels; zoom uses percentage;
+- Undo/Redo buttons expose disabled states and shortcuts;
+- toolbar groups use separators, not large empty gaps.
+
+## 11.7 Canvas Workspace
+
+**Role:** neutral environment surrounding the rendered page.
+
+Rules:
+
+- background: `var(--editor-workspace)`;
+- page frame: `var(--editor-canvas-frame)`;
+- workspace padding: at least 24px;
+- show a subtle frame border and optional canvas shadow;
+- page frame size is determined by breakpoint width, not remaining center-column width;
+- overflow occurs in the workspace rather than compressing the page;
+- scrollbars remain low contrast until hover.
+
+Optional grid:
+
+```css
+background-image:
+  linear-gradient(var(--editor-grid) 1px, transparent 1px),
+  linear-gradient(90deg, var(--editor-grid) 1px, transparent 1px);
+background-size: 16px 16px;
+```
+
+The grid should be disabled by default for page editing.
+
+## 11.8 Canvas Selection
+
+Selected component treatment:
+
+- 1px Electric Iris outline;
+- no layout shift;
+- component name label placed outside the top-left edge when space allows;
+- resize or spacing handles use brand only when interactive;
+- the label uses 10–11px medium text and a 4px radius;
+- avoid covering the rendered content.
+
+Selection toolbar:
+
+```text
+Move | Duplicate | More | Delete
+```
+
+- placed outside the selection boundary where possible;
+- automatically flips when close to a viewport edge;
+- uses a raised neutral surface;
+- delete is neutral by default and turns destructive on hover;
+- every action includes a tooltip and shortcut;
+- deletion must support Undo.
+
+## 11.9 Inspector Panel
+
+Header:
+
+```text
+◇ Hero                                      ⋯  Close
+Component properties
+```
+
+Rules:
+
+- never display `Root` when a specific component such as Hero is selected;
+- width: 320–360px;
+- header is sticky;
+- property groups use collapsible sections;
+- only the panel body scrolls;
+- groups use spacing rather than separators between every field.
+
+Recommended hierarchy:
+
+```text
+Hero
+├── Content
+│   ├── Announcement
+│   ├── Headline
+│   └── Description
+├── Actions
+│   ├── Linux CTA
+│   ├── macOS CTA
+│   └── Windows CTA
+├── Appearance
+├── Layout
+└── Advanced
+```
+
+## 11.10 Form Fields
+
+### Label
+
+- 12px medium;
+- foreground or high-contrast muted foreground;
+- optional field description appears below in 11–12px muted text;
+- required status uses text or icon, not color alone.
+
+### Input
+
+- height: 36px default, 32px compact;
+- background: transparent or slightly elevated neutral surface;
+- border: `var(--input)`;
+- focus: 2px `ring` at 40–50% opacity;
+- placeholder: `muted-foreground`;
+- invalid: semantic destructive border and message.
+
+### Textarea
+
+- minimum height based on content role;
+- auto-grow for short content fields such as headline;
+- fixed resize handle only for long-form fields;
+- avoid oversized empty textareas.
+
+### URL field
+
+Support:
+
+- relative paths such as `/pricing`;
+- absolute URLs;
+- page selection through a combobox;
+- validation status;
+- an optional external-link indicator.
+
+Placeholder:
+
+```text
+https://example.com or /about
+```
+
+### Boolean field
+
+Use a Switch with a direct label:
+
+```text
+Open in new tab                                      [ switch ]
+```
+
+Do not use a `No / Yes` segmented control for a simple boolean unless the distinction needs explicit comparison.
+
+## 11.11 Action Collections
+
+Do not model platform actions as an indefinitely growing flat field list.
+
+Preferred structure:
+
+```text
+Actions
+┌────────────────────────────────────────┐
+│ Linux CTA                          ⋮   │
+│ Label   Download for Linux             │
+│ Link    /download/linux                │
+└────────────────────────────────────────┘
+
+[ + Add action ]
+```
+
+Suggested data model:
+
+```ts
+interface HeroAction {
+  id: string
+  platform?: "linux" | "macos" | "windows" | "other"
+  label: string
+  href: string
+  target?: "_self" | "_blank"
+  icon?: string
+}
+```
+
+## 11.12 Buttons
+
+### Primary
+
+- background: `primary`;
+- foreground: `primary-foreground`;
+- radius: 8px inside editor;
+- used for Publish, Save, Confirm, or the single primary action;
+- hover: `--brand-hover`;
+- pressed: `--brand-pressed`.
+
+### Secondary
+
+- neutral filled surface;
+- used for Share, auxiliary confirmation, and lower-emphasis actions.
+
+### Outline
+
+- transparent background;
+- `border-input`;
+- hover uses `accent`.
+
+### Ghost
+
+- transparent by default;
+- hover uses `accent`;
+- preferred for toolbar and icon actions.
+
+### Destructive
+
+- semantic destructive token;
+- use a filled variant only inside confirmation flows;
+- normal delete icons should remain neutral until hover.
+
+## 11.13 Tabs and Segmented Controls
+
+Use Tabs for Pages/Layers/Assets when displayed within the same panel. Use the activity rail when each mode has a distinct icon and tool context.
+
+Segmented controls are appropriate for:
+
+- responsive device modes;
+- alignment choices;
+- binary visual options where both states must remain visible.
+
+They are not the default choice for normal booleans.
+
+## 11.14 Dialogs, Popovers, and Menus
+
+- use shadcn semantic `popover` and `card` tokens;
+- 10–12px radius;
+- border + restrained shadow;
+- menu item height: 32px;
+- destructive menu item uses destructive text and hover surface;
+- dialogs must trap focus and close on Escape unless a destructive operation is in progress;
+- command palette uses a stronger overlay shadow but no gradient.
+
+## 11.15 Tooltips
+
+Every unlabeled icon control requires a tooltip.
+
+Format:
+
+```text
+Duplicate                                  ⌘D
+```
+
+- delay: 400–600ms for normal tools;
+- shorter delay after the first tooltip in a sequence;
+- tooltip text uses 12px medium;
+- shortcut uses `Kbd` styling.
+
+---
+
+## 12. Interaction States
+
+| State | Visual treatment |
+|---|---|
+| hover | neutral accent surface; no brand unless already active |
+| active / pressed | darker neutral or brand pressed token |
+| selected | soft brand surface + brand outline or indicator |
+| focus-visible | 2px brand ring with offset |
+| disabled | 50% opacity; preserve readable labels |
+| loading | spinner plus stable button width |
+| error | destructive text, icon, and field association |
+| drag source | 70% opacity + lifted shadow |
+| drag target | brand soft fill + insertion indicator |
+
+### Focus rule
+
+Only show strong focus rings for keyboard focus using `:focus-visible`. Mouse selection may use a selected state without an additional ring.
+
+---
+
+## 13. Motion
+
+Motion should clarify state changes, not create atmosphere.
+
+| Interaction | Duration | Easing |
+|---|---:|---|
+| hover color | 100ms | ease-out |
+| button press | 80ms | ease-out |
+| panel collapse | 180ms | cubic-bezier(0.2, 0.8, 0.2, 1) |
+| popover enter | 120ms | ease-out |
+| dialog enter | 160ms | ease-out |
+| tree expand | 140ms | ease-out |
+| selection toolbar reposition | 100ms | linear/ease-out |
+
+Respect `prefers-reduced-motion` by removing transforms and reducing duration to near-zero.
+
+Do not animate:
+
+- canvas selection borders continuously;
+- persistent gradients;
+- sidebar backgrounds;
+- input focus with large glows.
+
+---
+
+## 14. Accessibility
+
+- Text and essential icons must meet WCAG AA contrast.
+- Focus must remain visible in both dark and light modes.
+- Color must not be the only indicator for selected, hidden, locked, warning, or error states.
+- All icon-only controls require accessible names.
+- Tree views require correct keyboard navigation and ARIA tree semantics.
+- Drag-and-drop must have keyboard alternatives.
+- Panel resizing must be keyboard accessible where feasible.
+- Minimum pointer target is 28×28px in dense desktop contexts; primary controls should reach 36px.
+- Canvas zoom must not affect the scale of editor chrome or tooltips.
+
+---
+
+## 15. Do and Don't
 
 ### Do
-- Use 9999px radius for all buttons, tags, and pill controls — pill geometry is the system's signature shape
-- Reserve Esbuild for display moments (28px and up); never use it for body, nav, or anything below 22px
-- Pick a background mode first: dark (#303236 canvas) for product-heavy screens, white (#ffffff) for editorial sections — never blend them in one component
-- Use Electric Iris (#5683da) for the single most important action per screen; let Ember Pulse (#ff8964) appear as warm punctuation in tags, dots, and gradient stops
-- Apply the aurora gradient (iris → ember → white) as a narrow vertical or radial beam, never as a full background fill
-- Set body text to 14px / line-height 1.5 / -0.14px tracking, and increase tracking compression proportionally with size (to -4px at 80px display)
-- Stack dark and light sections as alternating bands with 96px vertical gaps to create the page's signature rhythm
+
+- Use shadcn semantic tokens as the component API.
+- Use Neutral for surfaces, borders, muted content, and hover states.
+- Use Electric Iris for the selected object and the single primary action.
+- Keep the canvas visually dominant.
+- Make Pages, Layers, Assets, and Components alternate modes of one panel.
+- Keep inspector titles synchronized with the actual selection.
+- Separate viewport width from zoom percentage.
+- Use Switch for simple booleans.
+- Use collapsible property groups for long inspectors.
+- Use Lucide-style monochrome line icons.
 
 ### Don't
-- Don't use sharp corners (0–8px) on buttons or tags — the system is pill-first
-- Don't pair Inter display weights with the custom Esbuild; they fight each other at large sizes
-- Don't apply the aurora gradient as a full-surface background — it loses its impact when it covers everything
-- Don't introduce a third accent color; the iris/ember pair is the entire chromatic vocabulary
-- Don't use shadows for elevation on dark cards — the system prefers borders (#4a4b50) and color contrast over drop shadows
-- Don't use Esbuild below 28px or in body copy — it was designed for headlines, and its tight tracking crushes readability at small sizes
-- Don't put white text on a white section, or #303236 text on the dark canvas without checking contrast — the dark palette has narrow readable bands
 
-## Surfaces
+- Do not hardcode `#111111`, `#303236`, or other surface colors inside components.
+- Do not use brand blue for every hover state.
+- Do not use Ember Pulse as a destructive color.
+- Do not place Aurora gradients behind persistent editor panels.
+- Do not make every control pill-shaped.
+- Do not display duplicate page names or duplicate unlabeled zoom values.
+- Do not allow side panels to silently alter responsive breakpoints.
+- Do not create multiple competing scroll areas within one sidebar.
+- Do not use shadows as the primary method of separating persistent panels.
+- Do not use Esbuild in functional product UI.
 
-| Level | Name | Value | Purpose |
-|-------|------|-------|---------|
-| 0 | Obsidian Canvas | `#303236` | Page background, dominant surface for dark sections |
-| 1 | Void | `#090a0c` | Deepest dark surface, hero gradient base, modal backdrops |
-| 2 | Charcoal Card | `#111111` | Elevated card panels one step above canvas |
-| 3 | Light Canvas | `#ffffff` | Alternating light sections, editorial content bands |
-| 4 | Linen | `#f6f6f6` | Soft warm tint for secondary light sections |
+---
 
-## Elevation
+## 16. Quick Color Reference
 
-- **Product screenshot card:** `rgba(0, 0, 0, 0.5) 0px 6px 25px 0px`
-- **Floating panel:** `rgba(0, 0, 0, 0.35) 0px 4px 16px 0px`
-- **Subtle elevation:** `rgba(0, 0, 0, 0.15) 0px 4px 6px 0px`
-- **Focus ring:** `rgba(255, 255, 255, 0.4) 0px 0px 0px 6px`
+### Dark editor
 
-## Imagery
+- app background: Neutral 950 / `background`;
+- panels: Neutral 900-derived / `--editor-panel`;
+- raised controls: Neutral 800 / `secondary`, `accent`;
+- primary text: Neutral 50 / `foreground`;
+- muted text: Neutral 400 / `muted-foreground`;
+- borders: white at 10–15% / `border`, `input`;
+- selection and primary action: Electric Iris / `primary`;
+- warnings and warm notices: Ember Pulse / `--warm`;
+- destructive: semantic destructive red.
 
-Hero is pure aurora gradient — no photography. All feature illustrations are real product UI screenshots (dark-mode kanban, inbox, calendar) wrapped in card frames, functioning as both evidence and decoration. No lifestyle photography, no stock imagery, no 3D renders. The only non-UI visual element is the warm radial sunburst glow at the base of the aurora, painted as a CSS gradient. Icons are monochrome line icons in #95979 or white, never multicolor. The system treats its own dark UI as the hero asset — the product is the photography.
+### Light editor
 
-## Layout
+- app background: white / `background`;
+- workspace: Neutral 100 / `--editor-workspace`;
+- panels: white / `--editor-panel`;
+- primary text: Neutral 900 / `foreground`;
+- muted text: Neutral 500 / `muted-foreground`;
+- borders: Neutral 200 / `border`, `input`;
+- selection and primary action: Electric Iris / `primary`.
 
-Full-bleed hero with a vertical aurora beam and headline left-aligned, product screenshot floating bottom-right. Below the hero, a max-width 1200px content area alternates dark and light bands. Each section is a single vertical block: heading + 3-column or 4-column card grid, separated by 96px gaps. The 'MetaBrain' section breaks the grid with a centered display heading and a mixed-size card mosaic (large featured card + smaller supporting cards). The page is content-dense by SaaS standards but uses the dark/light band alternation to give each section room to breathe. Navigation is a single transparent top bar that becomes opaque on scroll.
+---
 
-## Agent Prompt Guide
+## 17. Implementation
 
-primary action: #5683da (filled action)
-Create a Primary Action Button: #5683da background, #ffffff text, 9999px radius, compact pill padding. Use this filled treatment for the main CTA.
-## Quick Color Reference
-- Canvas (dark): #303236
-- Canvas (light): #ffffff
-- Primary text on dark: #ffffff
-- Primary text on light: #050506
-- Border dark: #4a4b50
-- Border light: #d1d1d1
-- Accent: #5683da (Electric Iris) for primary actions
-- Warm accent: #ff8964 (Ember Pulse) for highlights, tags, gradient stops
+## 17.1 `components.json`
 
-## Example Component Prompts
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-nova",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  }
+}
+```
 
+## 17.2 Tailwind CSS v4 theme
 
-2. **Feature card grid**: 4-column grid on white (#ffffff) section. Each card: #111111 background, 12px radius, 24px padding, 1px #4a4b50 border. Card heading: Esbuild 28px weight 500, #ffffff. Card body: Inter 14px weight 400, #a9a9aa. Optional radial gradient bleed in corner (rgba(255,137,100,0.15) fading to transparent).
+```css
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-3. **Product screenshot frame**: In-app dark UI screenshot wrapped in a 12px-radius container with shadow rgba(0,0,0,0.5) 0 6px 25px. Floats over the aurora background at the bottom of the hero.
+@custom-variant dark (&:is(.dark *));
 
-4. **Tag chip**: 9999px radius, 4px 10px padding, Inter 11px weight 500. Background: category color at 12% opacity. Text: category color at full saturation (e.g., #5683da text on rgba(86,131,218,0.12) background).
+@theme inline {
+  --font-sans: var(--font-inter);
 
-5. **Top navigation**: Transparent over hero. Huly logo left (interlocking shapes mark). Center: Inter 14px weight 400, #ffffff, 24px gaps. Right: 'Star Us' text link + outlined 'Sign In' ghost pill (1px #303236 border, 9999px radius) + filled 'Sign Up' pill (#5683da, white text, 9999px radius, 10px 20px padding).
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-## Gradient System
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
-Two gradient families serve distinct purposes:
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-pressed: var(--brand-pressed);
+  --color-brand-soft: var(--brand-soft);
+  --color-warm: var(--warm);
+  --color-warm-soft: var(--warm-soft);
 
-**Aurora beam** (hero only): linear-gradient(180deg, Electric Iris → Ember Pulse → white) painted as a narrow vertical streak, 15–25% page width. This is the brand's signature visual — it should appear once per page, not repeated.
+  --color-editor-topbar: var(--editor-topbar);
+  --color-editor-panel: var(--editor-panel);
+  --color-editor-panel-raised: var(--editor-panel-raised);
+  --color-editor-workspace: var(--editor-workspace);
+  --color-editor-canvas-frame: var(--editor-canvas-frame);
+  --color-editor-selection: var(--editor-selection);
+  --color-editor-selection-soft: var(--editor-selection-soft);
+  --color-editor-drop-target: var(--editor-drop-target);
+  --color-editor-grid: var(--editor-grid);
+  --color-editor-overlay: var(--editor-overlay);
 
-**Radial sunburst** (feature card glows): radial-gradient from warm amber (#ffaa81) through soft yellow (#ffda9f) to transparent. Painted as a 200–400px circle bleeding from a card corner, at 30–50% opacity. Provides warmth without competing with the hero aurora.
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.2);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-3xl: calc(var(--radius) * 2);
+}
+```
 
-**Section transitions** (rare): linear-gradient from white to soft violet-tint (#d5d8f6) for the MetaBrain section's light-to-product bridge.
-
-Never stack two full-opacity gradients in the same viewport.
-
-## Similar Brands
-
-- **Linear** — Same dark-canvas productivity app aesthetic with a single vivid accent (Linear uses purple, Huly uses iris-blue), pill-shaped controls, and product-UI-as-hero photography
-- **Vercel** — Same dramatic gradient hero treatment (vertical beam on near-black) and display-headline-at-80px approach with tight letter-spacing
-- **Arc Browser** — Same dark-mode-first product UI with warm-to-cool gradient washes and pill geometry on controls
-- **Resend** — Same alternating dark/light section rhythm, minimal shadow approach, and 9999px button radii as a brand signature
-- **Stripe** — Same use of gradient hero beams and product screenshots floating over atmospheric backgrounds, with Inter as the workhorse UI face
-
-## Quick Start
-
-### CSS Custom Properties
+## 17.3 Theme variables
 
 ```css
 :root {
-  /* Colors */
-  --color-obsidian-canvas: #303236;
-  --color-void: #090a0c;
-  --color-charcoal-card: #111111;
-  --color-slate-edge: #4a4b50;
-  --color-iron-veil: #6b6c6d;
-  --color-smoke: #95979e;
-  --color-ash: #a9a9aa;
-  --color-frost: #d1d1d1;
-  --color-linen: #e5e5e7;
-  --color-snow: #ffffff;
-  --color-electric-iris: #5683da;
-  --color-ember-pulse: #ff8964;
-  --color-molasses: #5a250a;
+  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-esbuild: "Esbuild", "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Typography — Font Families */
-  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-esbuild: 'Esbuild', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --radius: 0.625rem;
 
-  /* Typography — Scale */
-  --text-caption: 11px;
-  --leading-caption: 1.38;
-  --tracking-caption: -0.1px;
-  --text-body: 14px;
-  --leading-body: 1.5;
-  --tracking-body: -0.14px;
-  --text-body-lg: 16px;
-  --leading-body-lg: 1.5;
-  --tracking-body-lg: -0.16px;
-  --text-subheading: 18px;
-  --leading-subheading: 1.5;
-  --tracking-subheading: -0.36px;
-  --text-heading-sm: 22px;
-  --leading-heading-sm: 1.25;
-  --text-heading: 24px;
-  --leading-heading: 1.25;
-  --tracking-heading: -0.48px;
-  --text-display-sm: 32px;
-  --leading-display-sm: 1;
-  --tracking-display-sm: -1.6px;
-  --text-display: 80px;
-  --leading-display: 0.9;
-  --tracking-display: -4px;
+  /* Brand */
+  --brand: oklch(0.619 0.141 262.4);
+  --brand-hover: oklch(0.675 0.122 263.5);
+  --brand-pressed: oklch(0.566 0.135 262.8);
+  --brand-soft: rgb(86 131 218 / 12%);
+  --warm: oklch(0.753 0.152 38.1);
+  --warm-soft: rgb(255 137 100 / 14%);
 
-  /* Typography — Weights */
-  --font-weight-light: 300;
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  /* shadcn Neutral semantic foundation */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: var(--brand);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: var(--brand);
 
-  /* Spacing */
-  --spacing-unit: 4px;
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-28: 28px;
-  --spacing-32: 32px;
-  --spacing-36: 36px;
-  --spacing-40: 40px;
-  --spacing-64: 64px;
-  --spacing-160: 160px;
-  --spacing-180: 180px;
-  --spacing-240: 240px;
+  /* Charts */
+  --chart-1: var(--brand);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: var(--warm);
+  --chart-4: oklch(0.646 0.222 41.116);
+  --chart-5: oklch(0.556 0 0);
 
-  /* Layout */
-  --page-max-width: 1200px;
-  --section-gap: 96px;
-  --card-padding: 24px;
-  --element-gap: 12px;
+  /* Sidebar */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: var(--brand);
 
-  /* Border Radius */
-  --radius-md: 4px;
-  --radius-xl: 12px;
-  --radius-3xl: 30px;
-  --radius-full: 9999px;
+  /* Editor aliases */
+  --editor-topbar: oklch(1 0 0);
+  --editor-panel: oklch(1 0 0);
+  --editor-panel-raised: oklch(0.985 0 0);
+  --editor-workspace: oklch(0.97 0 0);
+  --editor-canvas-frame: oklch(1 0 0);
+  --editor-selection: var(--brand);
+  --editor-selection-soft: rgb(86 131 218 / 12%);
+  --editor-drop-target: rgb(86 131 218 / 18%);
+  --editor-grid: rgb(0 0 0 / 5%);
+  --editor-overlay: rgb(0 0 0 / 38%);
 
-  /* Named Radii */
-  --radius-tags: 9999px;
-  --radius-cards: 12px;
-  --radius-inputs: 4px;
-  --radius-panels: 30px;
-  --radius-buttons: 9999px;
+  /* Elevation */
+  --shadow-overlay: 0 12px 32px rgb(0 0 0 / 28%);
+  --shadow-popover: 0 8px 24px rgb(0 0 0 / 22%);
+  --shadow-floating: 0 4px 16px rgb(0 0 0 / 24%);
+  --shadow-canvas: 0 8px 28px rgb(0 0 0 / 20%);
+}
 
-  /* Shadows */
-  --shadow-md: rgba(0, 0, 0, 0.35) 0px 4px 16px 0px;
-  --shadow-subtle: rgba(255, 255, 255, 0.4) 0px 0px 0px 6px;
-  --shadow-sm: rgba(0, 0, 0, 0.15) 0px 4px 6px 0px;
-  --shadow-xl: rgba(0, 0, 0, 0.5) 0px 6px 25px 0px;
+.dark {
+  --brand-soft: rgb(86 131 218 / 16%);
 
-  /* Surfaces */
-  --surface-obsidian-canvas: #303236;
-  --surface-void: #090a0c;
-  --surface-charcoal-card: #111111;
-  --surface-light-canvas: #ffffff;
-  --surface-linen: #f6f6f6;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: var(--brand);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--brand);
+
+  --sidebar: oklch(0.178 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--brand);
+
+  --editor-topbar: oklch(0.145 0 0);
+  --editor-panel: oklch(0.178 0 0);
+  --editor-panel-raised: oklch(0.205 0 0);
+  --editor-workspace: oklch(0.205 0 0);
+  --editor-canvas-frame: oklch(0.145 0 0);
+  --editor-selection: var(--brand);
+  --editor-selection-soft: rgb(86 131 218 / 16%);
+  --editor-drop-target: rgb(86 131 218 / 22%);
+  --editor-grid: rgb(255 255 255 / 5%);
+  --editor-overlay: rgb(0 0 0 / 56%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-family: var(--font-sans);
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
 }
 ```
 
-### Tailwind v4
+## 17.4 Editor utility examples
 
-```css
-@theme {
-  /* Colors */
-  --color-obsidian-canvas: #303236;
-  --color-void: #090a0c;
-  --color-charcoal-card: #111111;
-  --color-slate-edge: #4a4b50;
-  --color-iron-veil: #6b6c6d;
-  --color-smoke: #95979e;
-  --color-ash: #a9a9aa;
-  --color-frost: #d1d1d1;
-  --color-linen: #e5e5e7;
-  --color-snow: #ffffff;
-  --color-electric-iris: #5683da;
-  --color-ember-pulse: #ff8964;
-  --color-molasses: #5a250a;
+```tsx
+// Selected layer row
+<div className="h-8 rounded-md border border-editor-selection bg-editor-selection-soft px-2 text-sm font-medium">
+  Hero
+</div>
 
-  /* Typography */
-  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-esbuild: 'Esbuild', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+// Canvas workspace
+<main className="bg-editor-workspace p-6">
+  <div className="bg-editor-canvas-frame shadow-[var(--shadow-canvas)]">
+    {/* Rendered page */}
+  </div>
+</main>
 
-  /* Typography — Scale */
-  --text-caption: 11px;
-  --leading-caption: 1.38;
-  --tracking-caption: -0.1px;
-  --text-body: 14px;
-  --leading-body: 1.5;
-  --tracking-body: -0.14px;
-  --text-body-lg: 16px;
-  --leading-body-lg: 1.5;
-  --tracking-body-lg: -0.16px;
-  --text-subheading: 18px;
-  --leading-subheading: 1.5;
-  --tracking-subheading: -0.36px;
-  --text-heading-sm: 22px;
-  --leading-heading-sm: 1.25;
-  --text-heading: 24px;
-  --leading-heading: 1.25;
-  --tracking-heading: -0.48px;
-  --text-display-sm: 32px;
-  --leading-display-sm: 1;
-  --tracking-display-sm: -1.6px;
-  --text-display: 80px;
-  --leading-display: 0.9;
-  --tracking-display: -4px;
+// Inspector field
+<div className="grid gap-2">
+  <Label htmlFor="headline">Headline</Label>
+  <Textarea id="headline" className="min-h-20 resize-none" />
+</div>
 
-  /* Spacing */
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-28: 28px;
-  --spacing-32: 32px;
-  --spacing-36: 36px;
-  --spacing-40: 40px;
-  --spacing-64: 64px;
-  --spacing-160: 160px;
-  --spacing-180: 180px;
-  --spacing-240: 240px;
-
-  /* Border Radius */
-  --radius-md: 4px;
-  --radius-xl: 12px;
-  --radius-3xl: 30px;
-  --radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-md: rgba(0, 0, 0, 0.35) 0px 4px 16px 0px;
-  --shadow-subtle: rgba(255, 255, 255, 0.4) 0px 0px 0px 6px;
-  --shadow-sm: rgba(0, 0, 0, 0.15) 0px 4px 6px 0px;
-  --shadow-xl: rgba(0, 0, 0, 0.5) 0px 6px 25px 0px;
-}
+// Primary publish action
+<Button className="bg-brand text-primary-foreground hover:bg-brand-hover active:bg-brand-pressed">
+  Publish
+</Button>
 ```
+
+---
+
+## 18. Agent Prompt Guide
+
+Use this condensed instruction when asking an implementation agent to build or revise editor UI:
+
+> Build a dark-first visual editor using shadcn/ui with `baseColor: neutral`, semantic CSS variables, Tailwind CSS v4, and Lucide icons. Neutral tokens must control all application surfaces, borders, inputs, muted text, menus, and hover states. Use Electric Iris `#5683da` only for the single primary action, active navigation, selected layers, canvas outlines, and focus rings. Use Ember Pulse `#ff8964` only for rare warm highlights, never as destructive. Default editor controls use 8–10px radii; reserve full pills for badges, avatars, segmented controls, and marketing CTAs. Keep the canvas dominant, make side panels collapsible and resizable, separate viewport width from zoom, synchronize Layers/Canvas/Inspector selection, and group inspector fields into collapsible Content, Actions, Appearance, Layout, and Advanced sections. Do not use gradients, display fonts, or heavy shadows in persistent editor chrome.
+
+---
+
+## 19. Final Visual Standard
+
+The finished interface should look like a neutral professional tool before it looks like a branded website.
+
+At rest:
+
+- the workspace is quiet;
+- inactive UI recedes into Neutral surfaces;
+- the page frame is clearly separated from the editor;
+- only the selected component and Publish action carry strong blue emphasis.
+
+During interaction:
+
+- hover uses neutral contrast;
+- focus uses a precise iris ring;
+- selection synchronizes across the layer tree, canvas, and inspector;
+- destructive intent appears only when the user approaches a destructive action;
+- panels support the task without becoming the visual subject.
+
+The result should feel closer to a disciplined design tool than a dark marketing page: neutral, compact, predictable, and unmistakably responsive to user intent.
