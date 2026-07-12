@@ -15,8 +15,12 @@ import twitterHeader from "./twitter-header.json" with { type: "json" };
 /**
  * A starter canvas design: its slug, a display name, a one-line blurb,
  * and the {@link CanvasIR} itself. The `ir` is authored as committed
- * JSON (see `../../scripts/scaffold-canvas-irs.mjs`) and validates
- * against `CanvasIRSchema` — enforced by the package's Vitest suite.
+ * JSON (see `../../scripts/scaffold-canvas-irs.mjs`). Templates are
+ * persisted documents, so a consumer should decode them through
+ * `migrateCanvasIR` ("migrate-on-read, write current") rather than a bare
+ * `CanvasIRSchema.parse`, which pins the current version literal and would
+ * reject a template stored at an older schema version. The package's Vitest
+ * suite enforces that every template migrates and validates.
  */
 export interface CanvasTemplate {
 	readonly slug: string;

@@ -1,4 +1,4 @@
-import { CanvasIRSchema } from "@anvilkit/canvas-core";
+import { CANVAS_IR_VERSION, migrateCanvasIR } from "@anvilkit/canvas-core";
 import { describe, expect, it } from "vitest";
 import {
 	type CanvasTemplate,
@@ -23,20 +23,28 @@ describe("@anvilkit/canvas-templates", () => {
 		expect(new Set(slugs).size).toBe(slugs.length);
 	});
 
+	// Committed template JSON is *persisted* IR, so it is decoded the way every
+	// other persisted document is: through the migration seam. canvas-core's
+	// policy is "migrate-on-read, write current" — a bare `CanvasIRSchema.parse`
+	// pins the CURRENT version literal and would reject a stored older template
+	// that is perfectly loadable. The assertion is therefore: every template
+	// forward-migrates to the current version and validates there.
 	it.each(
 		canvasTemplateList.map((t) => [t.slug, t] as const),
-	)("%s is a valid CanvasIR", (_slug, template: CanvasTemplate) => {
-		const result = CanvasIRSchema.safeParse(template.ir);
-		if (!result.success) {
+	)("%s migrates and validates as CanvasIR", (_slug, template: CanvasTemplate) => {
+		let migrated: ReturnType<typeof migrateCanvasIR>;
+		try {
+			migrated = migrateCanvasIR(template.ir);
+		} catch (error) {
 			throw new Error(
-				`${template.slug} failed CanvasIRSchema: ${JSON.stringify(
-					result.error.issues,
-					null,
-					2,
-				)}`,
+				`${template.slug} failed to migrate/validate: ${
+					error instanceof Error ? error.message : String(error)
+				}`,
 			);
 		}
-		expect(result.success).toBe(true);
+		expect(migrated.version).toBe(CANVAS_IR_VERSION);
+		// Migration must not drop the document's content.
+		expect(migrated.pages.length).toBe(template.ir.pages.length);
 	});
 
 	it("gives every template a non-empty name and description", () => {
