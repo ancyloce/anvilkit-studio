@@ -26,11 +26,11 @@ import type { StudioPlugin, StudioPluginMeta } from "@anvilkit/core";
  * `compilePlugins`' duplicate-id guard deterministic.
  */
 const smokeTestPluginMeta: StudioPluginMeta = {
-  id: "anvilkit-demo-smoke-test",
-  name: "Smoke Test Plugin",
-  version: "0.0.1",
-  coreVersion: "^0.1.0-alpha",
-  description: "Logs every lifecycle event — demo only, not for production.",
+	id: "anvilkit-demo-smoke-test",
+	name: "Smoke Test Plugin",
+	version: "0.0.1",
+	coreVersion: "^0.1.0-alpha",
+	description: "Logs every lifecycle event — demo only, not for production.",
 };
 
 /**
@@ -39,29 +39,29 @@ const smokeTestPluginMeta: StudioPluginMeta = {
  * editor page to verify the plugin system is wired correctly.
  */
 export const smokeTestPlugin: StudioPlugin = {
-  meta: smokeTestPluginMeta,
-  register() {
-    return {
-      meta: smokeTestPluginMeta,
-      hooks: {
-        onInit: () => {
-          console.log("[smoke] onInit");
-        },
-        onDataChange: (_ctx, data) => {
-          console.log("[smoke] onDataChange", {
-            nodeCount: data?.content?.length ?? 0,
-          });
-        },
-        onBeforePublish: () => {
-          console.log("[smoke] onBeforePublish");
-        },
-        onAfterPublish: () => {
-          console.log("[smoke] onAfterPublish");
-        },
-        onDestroy: () => {
-          console.log("[smoke] onDestroy");
-        },
-      },
-    };
-  },
+	meta: smokeTestPluginMeta,
+	register() {
+		return {
+			meta: smokeTestPluginMeta,
+			hooks: {
+				onInit: () => {
+					console.log("[smoke] onInit");
+				},
+				onDataChange: (_ctx, data) => {
+					console.log("[smoke] onDataChange", {
+						nodeCount: data?.content?.length ?? 0,
+					});
+				},
+				onBeforePublish: () => {
+					console.log("[smoke] onBeforePublish");
+				},
+				onAfterPublish: () => {
+					console.log("[smoke] onAfterPublish");
+				},
+				onDestroy: () => {
+					console.log("[smoke] onDestroy");
+				},
+			},
+		};
+	},
 };

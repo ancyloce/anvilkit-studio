@@ -125,9 +125,9 @@ export default function CollabDemoPage() {
 					<code>@anvilkit/collab-ui</code>. The plugin owns the whole transport
 					(<code>Y.Doc</code>, <code>Awareness</code>, provider, status bridge,
 					and teardown). Start the local Hocuspocus relay with{" "}
-					<code>pnpm --filter studio relay:hocuspocus</code>, then open this page
-					in a second tab to watch edits sync live, collaborators appear in the
-					Studio header, and each peer&rsquo;s cursor moves in real time.
+					<code>pnpm --filter studio relay:hocuspocus</code>, then open this
+					page in a second tab to watch edits sync live, collaborators appear in
+					the Studio header, and each peer&rsquo;s cursor moves in real time.
 				</p>
 			</header>
 
