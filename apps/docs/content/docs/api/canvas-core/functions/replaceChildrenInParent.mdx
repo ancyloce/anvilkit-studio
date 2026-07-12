@@ -7,9 +7,9 @@ description: "@anvilkit/canvas-core · replaceChildrenInParent"
 function replaceChildrenInParent(ir, options): CanvasIR;
 ```
 
-Defined in: [ir/mutations.ts:546](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L546)
+Defined in: [ir/mutations.ts:562](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/mutations.ts#L562)
 
-Rewrite a single parent group's `children` in one immutable pass. The
+Rewrite a single parent container's `children` in one immutable pass. The
 building block the command layer uses for batch sibling edits (group /
 ungroup) so they don't pay one full tree clone per affected child.
 

@@ -41264,9 +41264,9 @@
       "sources": [
         {
           "fileName": "runtime/core/src/runtime/compile-plugins.ts",
-          "line": 456,
+          "line": 457,
           "character": 22,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L456"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L457"
         }
       ],
       "signatures": [
@@ -41279,9 +41279,9 @@
           "sources": [
             {
               "fileName": "runtime/core/src/runtime/compile-plugins.ts",
-              "line": 456,
+              "line": 457,
               "character": 22,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L456"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L457"
             }
           ],
           "parameters": [
@@ -49293,9 +49293,9 @@
       "sources": [
         {
           "fileName": "runtime/core/src/react/components/Studio.tsx",
-          "line": 445,
+          "line": 450,
           "character": 16,
-          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L445"
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L450"
         }
       ],
       "signatures": [
@@ -49308,9 +49308,9 @@
           "sources": [
             {
               "fileName": "runtime/core/src/react/components/Studio.tsx",
-              "line": 445,
+              "line": 450,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L445"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/react/components/Studio.tsx#L450"
             }
           ],
           "typeParameters": [

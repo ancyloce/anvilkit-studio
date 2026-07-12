@@ -1,0 +1,17 @@
+---
+title: "CanvasContainerNode"
+description: "@anvilkit/canvas-core · CanvasContainerNode"
+---
+
+```ts
+type CanvasContainerNode = 
+  | CanvasGroupNode
+  | CanvasFrameNode;
+```
+
+Defined in: [ir/types.ts:168](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L168)
+
+A node that holds `children` and is therefore recursed into by every walker,
+mutation, and serializer. Group was the only container until frame landed;
+anything gated on "does this node have children" must test against this union
+rather than `type === "group"`.

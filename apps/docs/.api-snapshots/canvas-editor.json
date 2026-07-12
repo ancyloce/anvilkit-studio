@@ -11395,9 +11395,9 @@
               "sources": [
                 {
                   "fileName": "packages/capabilities/canvas/editor/src/panels/LayerPanel.tsx",
-                  "line": 100,
+                  "line": 102,
                   "character": 1,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L100"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L102"
                 }
               ],
               "type": {
@@ -11417,9 +11417,9 @@
           "sources": [
             {
               "fileName": "packages/capabilities/canvas/editor/src/panels/LayerPanel.tsx",
-              "line": 98,
+              "line": 100,
               "character": 17,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L98"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L100"
             }
           ]
         },
@@ -17339,9 +17339,9 @@
           "sources": [
             {
               "fileName": "packages/capabilities/canvas/editor/src/panels/LayerPanel.tsx",
-              "line": 103,
+              "line": 105,
               "character": 16,
-              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L103"
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L105"
             }
           ],
           "signatures": [
@@ -17354,9 +17354,9 @@
               "sources": [
                 {
                   "fileName": "packages/capabilities/canvas/editor/src/panels/LayerPanel.tsx",
-                  "line": 103,
+                  "line": 105,
                   "character": 16,
-                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L103"
+                  "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/LayerPanel.tsx#L105"
                 }
               ],
               "parameters": [

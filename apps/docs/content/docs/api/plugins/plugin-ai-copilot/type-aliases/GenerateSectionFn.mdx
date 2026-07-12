@@ -11,9 +11,9 @@ Defined in: [extensions/plugins/plugin-ai-copilot/src/types/types.ts:35](https:/
 
 Host-supplied callback for the Phase 6 / M9 section-level flow.
 
-Receives the user's prompt and a section-scoped AiSectionContext
+Receives the user's prompt and a section-scoped [AiSectionContext](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ai-section.ts)
 describing the selected nodes plus the components the LLM is allowed
-to emit inside the targeted zone. Returns an AiSectionPatch
+to emit inside the targeted zone. Returns an [AiSectionPatch](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ai-section.ts)
 the plugin then validates with `validateAiSectionPatch` and applies
 via `puckApi.dispatch({ type: "setData", … })`.
 
@@ -25,8 +25,8 @@ symmetry across the page and section flows.
 | Parameter | Type |
 | ------ | ------ |
 | `prompt` | `string` |
-| `ctx` | `AiSectionContext` |
+| `ctx` | [`AiSectionContext`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ai-section.ts) |
 
 ## Returns
 
-`Promise`\<`AiSectionPatch`\>
+`Promise`\<[`AiSectionPatch`](https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/contracts/src/ai-section.ts)\>

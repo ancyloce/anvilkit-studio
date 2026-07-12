@@ -1,0 +1,27 @@
+---
+title: "CanvasFrameNodeSchema"
+description: "@anvilkit/canvas-core · CanvasFrameNodeSchema"
+---
+
+```ts
+const CanvasFrameNodeSchema: ZodObject<{
+  background: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  children: ZodArray<ZodLazy<ZodType<CanvasNode, unknown, $ZodTypeInternals<CanvasNode, unknown>>>>;
+  clip: ZodOptional<ZodBoolean>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  placeholder: ZodOptional<ZodType<FramePlaceholder, unknown, $ZodTypeInternals<FramePlaceholder, unknown>>>;
+  radius: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"frame">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:246](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L246)
