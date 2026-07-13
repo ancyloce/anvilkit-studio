@@ -1,0 +1,30 @@
+---
+title: "commandToChangeRecord"
+description: "@anvilkit/canvas-core · commandToChangeRecord"
+---
+
+```ts
+function commandToChangeRecord(
+   cmd, 
+   ir, 
+   options?): CanvasChangeRecord | null;
+```
+
+Defined in: [commands/change-events.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L160)
+
+Enrich a single command into a full [CanvasChangeRecord](../interfaces/CanvasChangeRecord), or `null`
+for a `batch` (mirrors `commandToChange`; `applyCommands` maps sub-commands
+individually). `ir` must be the pre-mutation IR so page/node lookups for
+commands that omit `pageId` can resolve correctly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `cmd` | [`CanvasCommand`](../type-aliases/CanvasCommand) |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `options` | [`ChangeRecordOptions`](../interfaces/ChangeRecordOptions) |
+
+## Returns
+
+[`CanvasChangeRecord`](../interfaces/CanvasChangeRecord) \| `null`

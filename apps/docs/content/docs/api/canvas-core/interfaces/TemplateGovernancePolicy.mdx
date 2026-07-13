@@ -1,0 +1,22 @@
+---
+title: "TemplateGovernancePolicy"
+description: "@anvilkit/canvas-core · TemplateGovernancePolicy"
+---
+
+Defined in: [templates/types.ts:160](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L160)
+
+Enterprise governance metadata for a template — approval workflows and
+org-level restrictions (FR-082, canvas-m6-003). Deliberately NOT a field on
+[CanvasTemplateDefinition](CanvasTemplateDefinition.md): a marketplace/enterprise platform stores
+this keyed by `templateId` in its OWN store, so a non-enterprise consumer
+never has to deal with it, and it can never leak into Canvas IR or a
+template's core validated shape.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="allowedorgids"&gt;&lt;/a&gt; `allowedOrgIds?` | `string`[] | Org/team ids permitted to use this template. Omitted means unrestricted. | [templates/types.ts:165](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L165) |
+| &lt;a id="approvalrequired"&gt;&lt;/a&gt; `approvalRequired?` | `boolean` | Whether this template requires organization approval before use. | [templates/types.ts:163](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L163) |
+| &lt;a id="notes"&gt;&lt;/a&gt; `notes?` | `string` | Free-form policy notes for audit/compliance. | [templates/types.ts:167](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L167) |
+| &lt;a id="templateid"&gt;&lt;/a&gt; `templateId` | `string` | - | [templates/types.ts:161](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L161) |

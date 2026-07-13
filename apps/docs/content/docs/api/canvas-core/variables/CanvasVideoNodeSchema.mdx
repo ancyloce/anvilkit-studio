@@ -1,0 +1,27 @@
+---
+title: "CanvasVideoNodeSchema"
+description: "@anvilkit/canvas-core · CanvasVideoNodeSchema"
+---
+
+```ts
+const CanvasVideoNodeSchema: ZodObject<{
+  assetId: ZodString;
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  muted: ZodOptional<ZodBoolean>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  poster: ZodOptional<ZodString>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  trim: ZodOptional<ZodType<CanvasMediaTrim, unknown, $ZodTypeInternals<CanvasMediaTrim, unknown>>>;
+  type: ZodLiteral<"video">;
+  visible: ZodOptional<ZodBoolean>;
+  volume: ZodOptional<ZodNumber>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:412](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L412)

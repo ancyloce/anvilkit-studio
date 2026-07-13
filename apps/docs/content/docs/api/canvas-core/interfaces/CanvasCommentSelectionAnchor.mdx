@@ -1,0 +1,20 @@
+---
+title: "CanvasCommentSelectionAnchor"
+description: "@anvilkit/canvas-core · CanvasCommentSelectionAnchor"
+---
+
+Defined in: comment-contracts.ts:42
+
+Anchors a comment to a set of nodes rather than a fixed rectangle, so the
+anchor survives every node in the set moving — the region is always
+whatever the current bounds of `nodeIds` are, recomputed by the consumer,
+never a stale snapshot core would need to keep in sync.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `"selection"` | comment-contracts.ts:43 |
+| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | readonly `string`[] | comment-contracts.ts:46 |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | comment-contracts.ts:45 |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `string` | comment-contracts.ts:44 |

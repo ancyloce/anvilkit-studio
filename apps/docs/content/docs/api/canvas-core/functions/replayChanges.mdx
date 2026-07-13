@@ -1,0 +1,29 @@
+---
+title: "replayChanges"
+description: "@anvilkit/canvas-core · replayChanges"
+---
+
+```ts
+function replayChanges(
+   initialIr, 
+   records, 
+   options?): CanvasIR;
+```
+
+Defined in: [commands/change-events.ts:187](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L187)
+
+Deterministically replay a sequence of change records onto an initial IR by
+re-applying each record's original `command` in order via `applyCommand`.
+Ignores each command's own inverse; only the resulting `ir` is threaded.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `initialIr` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `records` | readonly [`CanvasChangeRecord`](../interfaces/CanvasChangeRecord)[] |
+| `options` | [`CommandApplyOptions`](../interfaces/CommandApplyOptions) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

@@ -3,21 +3,18 @@ title: "CanvasVersionHistoryEventPayload"
 description: "@anvilkit/plugin-canvas-studio · CanvasVersionHistoryEventPayload"
 ---
 
-Defined in: [state/canvas-snapshot-bridge.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L23)
+Defined in: [state/canvas-snapshot-bridge.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L20)
 
 Payload shape emitted on the Studio event bus when a canvas-mode
 save or open is requested. The `keyspace` field is the canonical
-namespace tag — `plugin-version-history` (or any future bridge UI)
-can read it to distinguish canvas history from Puck PageIR history.
-
-The bus itself is currently inert in `@anvilkit/core` — see
-`packages/core/src/types/plugin.ts:208-217`. The events are still
-emitted so the contract is in place when delivery ships.
+namespace tag — `plugin-version-history` reads it (FR-073) to
+distinguish canvas history from Puck PageIR history and track a
+lightweight reference list alongside its own snapshots.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="designid"&gt;&lt;/a&gt; `designId` | `readonly` | `string` | - | [state/canvas-snapshot-bridge.ts:25](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L25) |
-| &lt;a id="keyspace"&gt;&lt;/a&gt; `keyspace` | `readonly` | `"canvas"` | - | [state/canvas-snapshot-bridge.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L24) |
-| &lt;a id="snapshotid"&gt;&lt;/a&gt; `snapshotId?` | `readonly` | `string` | Snapshot id — only present on `save-requested` after persistence succeeds. | [state/canvas-snapshot-bridge.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L27) |
+| &lt;a id="designid"&gt;&lt;/a&gt; `designId` | `readonly` | `string` | - | [state/canvas-snapshot-bridge.ts:22](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L22) |
+| &lt;a id="keyspace"&gt;&lt;/a&gt; `keyspace` | `readonly` | `"canvas"` | - | [state/canvas-snapshot-bridge.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L21) |
+| &lt;a id="snapshotid"&gt;&lt;/a&gt; `snapshotId?` | `readonly` | `string` | Snapshot id — only present on `save-requested` after persistence succeeds. | [state/canvas-snapshot-bridge.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/state/canvas-snapshot-bridge.ts#L24) |

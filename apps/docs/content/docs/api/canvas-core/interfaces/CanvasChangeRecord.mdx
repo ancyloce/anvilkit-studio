@@ -1,0 +1,25 @@
+---
+title: "CanvasChangeRecord"
+description: "@anvilkit/canvas-core · CanvasChangeRecord"
+---
+
+Defined in: [commands/change-events.ts:96](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L96)
+
+An enriched, persistable, replayable record of one applied command (FR-070).
+Additive alongside [CanvasChange](../type-aliases/CanvasChange): `change` carries the existing
+best-effort content diff, `command` carries the original command so a
+sequence of records can be replayed deterministically via [replayChanges](../functions/replayChanges).
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="actorid"&gt;&lt;/a&gt; `actorId` | `string` | Who applied the command. Defaults to `"local"` when not supplied. | [commands/change-events.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L100) |
+| &lt;a id="change"&gt;&lt;/a&gt; `change` | [`CanvasChange`](../type-aliases/CanvasChange) | The derived content diff (identical to what `commandToChange` would return). | [commands/change-events.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L114) |
+| &lt;a id="command"&gt;&lt;/a&gt; `command` | [`CanvasCommand`](../type-aliases/CanvasCommand) | The original command, enabling deterministic replay. | [commands/change-events.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L112) |
+| &lt;a id="commandid"&gt;&lt;/a&gt; `commandId` | `string` | Unique id for this record, stable across persistence/transmission. | [commands/change-events.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L98) |
+| &lt;a id="nodeids"&gt;&lt;/a&gt; `nodeIds` | readonly `string`[] | Node ids the command affected. Empty for page-kind changes. | [commands/change-events.ts:106](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L106) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | The page the command targeted — always resolved, even for commands whose type omits it. | [commands/change-events.ts:104](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L104) |
+| &lt;a id="sequence"&gt;&lt;/a&gt; `sequence` | `number` | Ordering/version metadata for conflict resolution. Defaults to `0`. | [commands/change-events.ts:110](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L110) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source` | [`CanvasChangeSource`](../type-aliases/CanvasChangeSource) | `"remote"` records may bypass a host's local undo stack. | [commands/change-events.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L108) |
+| &lt;a id="timestamp"&gt;&lt;/a&gt; `timestamp` | `string` | ISO-8601 timestamp, from the same clock seam as command apply options. | [commands/change-events.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/change-events.ts#L102) |

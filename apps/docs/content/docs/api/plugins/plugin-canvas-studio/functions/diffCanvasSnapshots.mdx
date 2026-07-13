@@ -1,0 +1,28 @@
+---
+title: "diffCanvasSnapshots"
+description: "@anvilkit/plugin-canvas-studio · diffCanvasSnapshots"
+---
+
+```ts
+function diffCanvasSnapshots(before, after): CanvasSnapshotDiff;
+```
+
+Defined in: state/canvas-snapshot-diff.ts:68
+
+Diff two canvas snapshots (typically `before`/`after` loaded via
+`CanvasSnapshotBridge.loadSnapshot`). Nodes are matched by their stable
+id; a node present in both with a different serialized shape counts as
+modified. A page counts as modified if its own top-level fields changed
+(name/size/background/variantSource) or if any node it contains was
+added, removed, or modified.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `before` | `CanvasIR` |
+| `after` | `CanvasIR` |
+
+## Returns
+
+[`CanvasSnapshotDiff`](../interfaces/CanvasSnapshotDiff)

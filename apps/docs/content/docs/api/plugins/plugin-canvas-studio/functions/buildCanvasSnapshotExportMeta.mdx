@@ -1,0 +1,24 @@
+---
+title: "buildCanvasSnapshotExportMeta"
+description: "@anvilkit/plugin-canvas-studio · buildCanvasSnapshotExportMeta"
+---
+
+```ts
+function buildCanvasSnapshotExportMeta(ir): CanvasSnapshotExportMeta;
+```
+
+Defined in: state/snapshot-meta.ts:12
+
+Derive an export-relevant structural summary from a saved IR (FR-073):
+page count, plus provenance for any page that is a campaign-resize
+variant of another page (`CanvasPage.variantSource`, FR-061).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ir` | `CanvasIR` |
+
+## Returns
+
+[`CanvasSnapshotExportMeta`](../interfaces/CanvasSnapshotExportMeta)

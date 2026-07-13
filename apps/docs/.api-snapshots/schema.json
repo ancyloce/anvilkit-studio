@@ -1,1890 +1,1935 @@
 {
-	"schemaVersion": "2.0",
-	"id": 0,
-	"name": "@anvilkit/schema",
-	"variant": "project",
-	"kind": 1,
-	"flags": {},
-	"children": [
-		{
-			"id": 1,
-			"name": "ConfigToAiContextOptions",
-			"variant": "declaration",
-			"kind": 256,
-			"flags": {},
-			"children": [
-				{
-					"id": 2,
-					"name": "include",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"sources": [
-						{
-							"fileName": "config-to-ai-context.ts",
-							"line": 20,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L20"
-						}
-					],
-					"type": {
-						"type": "array",
-						"elementType": {
-							"type": "intrinsic",
-							"name": "string"
-						}
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [2]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "config-to-ai-context.ts",
-					"line": 19,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L19"
-				}
-			]
-		},
-		{
-			"id": 8,
-			"name": "ExtractFieldSchemaOptions",
-			"variant": "declaration",
-			"kind": 256,
-			"flags": {},
-			"children": [
-				{
-					"id": 10,
-					"name": "description",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"sources": [
-						{
-							"fileName": "extract-field-schema.ts",
-							"line": 11,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L11"
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "string"
-					}
-				},
-				{
-					"id": 9,
-					"name": "required",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"sources": [
-						{
-							"fileName": "extract-field-schema.ts",
-							"line": 10,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L10"
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [10, 9]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "extract-field-schema.ts",
-					"line": 9,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L9"
-				}
-			]
-		},
-		{
-			"id": 20,
-			"name": "IsJsonSerializableOptions",
-			"variant": "declaration",
-			"kind": 256,
-			"flags": {},
-			"children": [
-				{
-					"id": 21,
-					"name": "dateAsIso",
-					"variant": "declaration",
-					"kind": 1024,
-					"flags": {
-						"isOptional": true
-					},
-					"sources": [
-						{
-							"fileName": "is-json-serializable.ts",
-							"line": 2,
-							"character": 1,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L2"
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					}
-				}
-			],
-			"groups": [
-				{
-					"title": "Properties",
-					"children": [21]
-				}
-			],
-			"sources": [
-				{
-					"fileName": "is-json-serializable.ts",
-					"line": 1,
-					"character": 17,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L1"
-				}
-			]
-		},
-		{
-			"id": 26,
-			"name": "PageRootProps",
-			"variant": "declaration",
-			"kind": 2097152,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "page-root-schema.ts",
-					"line": 50,
-					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L50"
-				}
-			],
-			"type": {
-				"type": "reference",
-				"target": {
-					"packageName": "zod",
-					"packagePath": "v4/core/core.d.cts",
-					"qualifiedName": "output"
-				},
-				"typeArguments": [
-					{
-						"type": "query",
-						"queryType": {
-							"type": "reference",
-							"target": 28,
-							"name": "PageRootSchema",
-							"package": "@anvilkit/schema"
-						}
-					}
-				],
-				"name": "z.infer",
-				"package": "zod",
-				"qualifiedName": "output"
-			}
-		},
-		{
-			"id": 27,
-			"name": "PageSeo",
-			"variant": "declaration",
-			"kind": 2097152,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "page-root-schema.ts",
-					"line": 51,
-					"character": 12,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L51"
-				}
-			],
-			"type": {
-				"type": "reference",
-				"target": {
-					"packageName": "zod",
-					"packagePath": "v4/core/core.d.cts",
-					"qualifiedName": "output"
-				},
-				"typeArguments": [
-					{
-						"type": "query",
-						"queryType": {
-							"type": "reference",
-							"target": 46,
-							"name": "PageSeoSchema",
-							"package": "@anvilkit/schema"
-						}
-					}
-				],
-				"name": "z.infer",
-				"package": "zod",
-				"qualifiedName": "output"
-			}
-		},
-		{
-			"id": 28,
-			"name": "PageRootSchema",
-			"variant": "declaration",
-			"kind": 32,
-			"flags": {
-				"isConst": true
-			},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "The authoritative page payload, canonical in Puck "
-					},
-					{
-						"kind": "code",
-						"text": "`root.props`"
-					},
-					{
-						"kind": "text",
-						"text": ". Editor,\nvalidator, storage, and renderer all read this single shape.\n\n"
-					},
-					{
-						"kind": "code",
-						"text": "`z.object`"
-					},
-					{
-						"kind": "text",
-						"text": " (not "
-					},
-					{
-						"kind": "code",
-						"text": "`z.strictObject`"
-					},
-					{
-						"kind": "text",
-						"text": ") so Puck-internal keys (e.g. "
-					},
-					{
-						"kind": "code",
-						"text": "`id`"
-					},
-					{
-						"kind": "text",
-						"text": ") and\nforward-compat fields are stripped rather than rejected."
-					}
-				]
-			},
-			"sources": [
-				{
-					"fileName": "page-root-schema.ts",
-					"line": 41,
-					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L41"
-				}
-			],
-			"type": {
-				"type": "reference",
-				"target": {
-					"packageName": "zod",
-					"packagePath": "v4/classic/schemas.d.cts",
-					"qualifiedName": "ZodObject"
-				},
-				"typeArguments": [
-					{
-						"type": "reflection",
-						"declaration": {
-							"id": 29,
-							"name": "__type",
-							"variant": "declaration",
-							"kind": 65536,
-							"flags": {},
-							"children": [
-								{
-									"id": 38,
-									"name": "parentFolder",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "page-root-schema.ts",
-											"line": 46,
-											"character": 1,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L46"
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "zod",
-											"packagePath": "v4/classic/schemas.d.cts",
-											"qualifiedName": "ZodDefault"
-										},
-										"typeArguments": [
-											{
-												"type": "reference",
-												"target": {
-													"packageName": "zod",
-													"packagePath": "v4/classic/schemas.d.cts",
-													"qualifiedName": "ZodString"
-												},
-												"name": "ZodString",
-												"package": "zod"
-											}
-										],
-										"name": "ZodDefault",
-										"package": "zod"
-									},
-									"defaultValue": "..."
-								},
-								{
-									"id": 39,
-									"name": "seo",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "page-root-schema.ts",
-											"line": 47,
-											"character": 1,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L47"
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "zod",
-											"packagePath": "v4/classic/schemas.d.cts",
-											"qualifiedName": "ZodPrefault"
-										},
-										"typeArguments": [
-											{
-												"type": "reference",
-												"target": {
-													"packageName": "zod",
-													"packagePath": "v4/classic/schemas.d.cts",
-													"qualifiedName": "ZodObject"
-												},
-												"typeArguments": [
-													{
-														"type": "reflection",
-														"declaration": {
-															"id": 40,
-															"name": "__type",
-															"variant": "declaration",
-															"kind": 65536,
-															"flags": {},
-															"children": [
-																{
-																	"id": 45,
-																	"name": "canonical",
-																	"variant": "declaration",
-																	"kind": 1024,
-																	"flags": {},
-																	"sources": [
-																		{
-																			"fileName": "page-root-schema.ts",
-																			"line": 30,
-																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L30"
-																		}
-																	],
-																	"type": {
-																		"type": "reference",
-																		"target": {
-																			"packageName": "zod",
-																			"packagePath": "v4/classic/schemas.d.cts",
-																			"qualifiedName": "ZodOptional"
-																		},
-																		"typeArguments": [
-																			{
-																				"type": "reference",
-																				"target": {
-																					"packageName": "zod",
-																					"packagePath": "v4/classic/schemas.d.cts",
-																					"qualifiedName": "ZodURL"
-																				},
-																				"name": "ZodURL",
-																				"package": "zod"
-																			}
-																		],
-																		"name": "ZodOptional",
-																		"package": "zod"
-																	},
-																	"defaultValue": "..."
-																},
-																{
-																	"id": 42,
-																	"name": "description",
-																	"variant": "declaration",
-																	"kind": 1024,
-																	"flags": {},
-																	"sources": [
-																		{
-																			"fileName": "page-root-schema.ts",
-																			"line": 27,
-																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L27"
-																		}
-																	],
-																	"type": {
-																		"type": "reference",
-																		"target": {
-																			"packageName": "zod",
-																			"packagePath": "v4/classic/schemas.d.cts",
-																			"qualifiedName": "ZodOptional"
-																		},
-																		"typeArguments": [
-																			{
-																				"type": "reference",
-																				"target": {
-																					"packageName": "zod",
-																					"packagePath": "v4/classic/schemas.d.cts",
-																					"qualifiedName": "ZodString"
-																				},
-																				"name": "ZodString",
-																				"package": "zod"
-																			}
-																		],
-																		"name": "ZodOptional",
-																		"package": "zod"
-																	},
-																	"defaultValue": "..."
-																},
-																{
-																	"id": 44,
-																	"name": "noIndex",
-																	"variant": "declaration",
-																	"kind": 1024,
-																	"flags": {},
-																	"sources": [
-																		{
-																			"fileName": "page-root-schema.ts",
-																			"line": 29,
-																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L29"
-																		}
-																	],
-																	"type": {
-																		"type": "reference",
-																		"target": {
-																			"packageName": "zod",
-																			"packagePath": "v4/classic/schemas.d.cts",
-																			"qualifiedName": "ZodDefault"
-																		},
-																		"typeArguments": [
-																			{
-																				"type": "reference",
-																				"target": {
-																					"packageName": "zod",
-																					"packagePath": "v4/classic/schemas.d.cts",
-																					"qualifiedName": "ZodBoolean"
-																				},
-																				"name": "ZodBoolean",
-																				"package": "zod"
-																			}
-																		],
-																		"name": "ZodDefault",
-																		"package": "zod"
-																	},
-																	"defaultValue": "..."
-																},
-																{
-																	"id": 43,
-																	"name": "ogImage",
-																	"variant": "declaration",
-																	"kind": 1024,
-																	"flags": {},
-																	"sources": [
-																		{
-																			"fileName": "page-root-schema.ts",
-																			"line": 28,
-																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L28"
-																		}
-																	],
-																	"type": {
-																		"type": "reference",
-																		"target": {
-																			"packageName": "zod",
-																			"packagePath": "v4/classic/schemas.d.cts",
-																			"qualifiedName": "ZodOptional"
-																		},
-																		"typeArguments": [
-																			{
-																				"type": "reference",
-																				"target": {
-																					"packageName": "zod",
-																					"packagePath": "v4/classic/schemas.d.cts",
-																					"qualifiedName": "ZodURL"
-																				},
-																				"name": "ZodURL",
-																				"package": "zod"
-																			}
-																		],
-																		"name": "ZodOptional",
-																		"package": "zod"
-																	},
-																	"defaultValue": "..."
-																},
-																{
-																	"id": 41,
-																	"name": "title",
-																	"variant": "declaration",
-																	"kind": 1024,
-																	"flags": {},
-																	"sources": [
-																		{
-																			"fileName": "page-root-schema.ts",
-																			"line": 26,
-																			"character": 2,
-																			"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L26"
-																		}
-																	],
-																	"type": {
-																		"type": "reference",
-																		"target": {
-																			"packageName": "zod",
-																			"packagePath": "v4/classic/schemas.d.cts",
-																			"qualifiedName": "ZodOptional"
-																		},
-																		"typeArguments": [
-																			{
-																				"type": "reference",
-																				"target": {
-																					"packageName": "zod",
-																					"packagePath": "v4/classic/schemas.d.cts",
-																					"qualifiedName": "ZodString"
-																				},
-																				"name": "ZodString",
-																				"package": "zod"
-																			}
-																		],
-																		"name": "ZodOptional",
-																		"package": "zod"
-																	},
-																	"defaultValue": "..."
-																}
-															],
-															"groups": [
-																{
-																	"title": "Properties",
-																	"children": [45, 42, 44, 43, 41]
-																}
-															]
-														}
-													},
-													{
-														"type": "reference",
-														"target": {
-															"packageName": "zod",
-															"packagePath": "v4/core/schemas.d.cts",
-															"qualifiedName": "$strip"
-														},
-														"name": "$strip",
-														"package": "zod"
-													}
-												],
-												"name": "ZodObject",
-												"package": "zod"
-											}
-										],
-										"name": "ZodPrefault",
-										"package": "zod"
-									},
-									"defaultValue": "PageSeoSchema"
-								},
-								{
-									"id": 31,
-									"name": "slug",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "page-root-schema.ts",
-											"line": 43,
-											"character": 1,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L43"
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "zod",
-											"packagePath": "v4/classic/schemas.d.cts",
-											"qualifiedName": "ZodString"
-										},
-										"name": "ZodString",
-										"package": "zod"
-									},
-									"defaultValue": "..."
-								},
-								{
-									"id": 32,
-									"name": "status",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "page-root-schema.ts",
-											"line": 44,
-											"character": 1,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L44"
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "zod",
-											"packagePath": "v4/classic/schemas.d.cts",
-											"qualifiedName": "ZodEnum"
-										},
-										"typeArguments": [
-											{
-												"type": "reflection",
-												"declaration": {
-													"id": 33,
-													"name": "__type",
-													"variant": "declaration",
-													"kind": 65536,
-													"flags": {},
-													"children": [
-														{
-															"id": 36,
-															"name": "archived",
-															"variant": "declaration",
-															"kind": 1024,
-															"flags": {},
-															"type": {
-																"type": "literal",
-																"value": "archived"
-															}
-														},
-														{
-															"id": 34,
-															"name": "draft",
-															"variant": "declaration",
-															"kind": 1024,
-															"flags": {},
-															"type": {
-																"type": "literal",
-																"value": "draft"
-															}
-														},
-														{
-															"id": 35,
-															"name": "published",
-															"variant": "declaration",
-															"kind": 1024,
-															"flags": {},
-															"type": {
-																"type": "literal",
-																"value": "published"
-															}
-														}
-													],
-													"groups": [
-														{
-															"title": "Properties",
-															"children": [36, 34, 35]
-														}
-													]
-												}
-											}
-										],
-										"name": "ZodEnum",
-										"package": "zod"
-									},
-									"defaultValue": "..."
-								},
-								{
-									"id": 30,
-									"name": "title",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "page-root-schema.ts",
-											"line": 42,
-											"character": 1,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L42"
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "zod",
-											"packagePath": "v4/classic/schemas.d.cts",
-											"qualifiedName": "ZodString"
-										},
-										"name": "ZodString",
-										"package": "zod"
-									},
-									"defaultValue": "..."
-								},
-								{
-									"id": 37,
-									"name": "version",
-									"variant": "declaration",
-									"kind": 1024,
-									"flags": {},
-									"sources": [
-										{
-											"fileName": "page-root-schema.ts",
-											"line": 45,
-											"character": 1,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L45"
-										}
-									],
-									"type": {
-										"type": "reference",
-										"target": {
-											"packageName": "zod",
-											"packagePath": "v4/classic/schemas.d.cts",
-											"qualifiedName": "ZodString"
-										},
-										"name": "ZodString",
-										"package": "zod"
-									},
-									"defaultValue": "..."
-								}
-							],
-							"groups": [
-								{
-									"title": "Properties",
-									"children": [38, 39, 31, 32, 30, 37]
-								}
-							]
-						}
-					},
-					{
-						"type": "reference",
-						"target": {
-							"packageName": "zod",
-							"packagePath": "v4/core/schemas.d.cts",
-							"qualifiedName": "$strip"
-						},
-						"name": "$strip",
-						"package": "zod"
-					}
-				],
-				"name": "ZodObject",
-				"package": "zod"
-			},
-			"defaultValue": "..."
-		},
-		{
-			"id": 46,
-			"name": "PageSeoSchema",
-			"variant": "declaration",
-			"kind": 32,
-			"flags": {
-				"isConst": true
-			},
-			"comment": {
-				"summary": [
-					{
-						"kind": "text",
-						"text": "Canonical SEO metadata block stored on a page's "
-					},
-					{
-						"kind": "code",
-						"text": "`root.props.seo`"
-					},
-					{
-						"kind": "text",
-						"text": ".\n\nField-name reconciliation with the shared "
-					},
-					{
-						"kind": "code",
-						"text": "`StudioPageSeo`"
-					},
-					{
-						"kind": "text",
-						"text": " contract\n("
-					},
-					{
-						"kind": "code",
-						"text": "`@anvilkit/contracts`"
-					},
-					{
-						"kind": "text",
-						"text": " → "
-					},
-					{
-						"kind": "code",
-						"text": "`packages/foundation/contracts/src/page.ts`"
-					},
-					{
-						"kind": "text",
-						"text": ") so F4 can project\n"
-					},
-					{
-						"kind": "code",
-						"text": "`root.props.seo`"
-					},
-					{
-						"kind": "text",
-						"text": " into the rail/breadcrumb sidecar losslessly:\n\n| This schema   | "
-					},
-					{
-						"kind": "code",
-						"text": "`StudioPageSeo`"
-					},
-					{
-						"kind": "text",
-						"text": "      | Note                          |\n| :------------ | :------------------- | :---------------------------- |\n| "
-					},
-					{
-						"kind": "code",
-						"text": "`title`"
-					},
-					{
-						"kind": "text",
-						"text": "       | "
-					},
-					{
-						"kind": "code",
-						"text": "`metaTitle`"
-					},
-					{
-						"kind": "text",
-						"text": "          | rename                        |\n| "
-					},
-					{
-						"kind": "code",
-						"text": "`description`"
-					},
-					{
-						"kind": "text",
-						"text": " | "
-					},
-					{
-						"kind": "code",
-						"text": "`metaDescription`"
-					},
-					{
-						"kind": "text",
-						"text": "    | rename                        |\n| "
-					},
-					{
-						"kind": "code",
-						"text": "`ogImage`"
-					},
-					{
-						"kind": "text",
-						"text": "     | "
-					},
-					{
-						"kind": "code",
-						"text": "`ogImage`"
-					},
-					{
-						"kind": "text",
-						"text": "            | identical                     |\n| "
-					},
-					{
-						"kind": "code",
-						"text": "`noIndex`"
-					},
-					{
-						"kind": "text",
-						"text": "     | "
-					},
-					{
-						"kind": "code",
-						"text": "`noindex`"
-					},
-					{
-						"kind": "text",
-						"text": "            | casing differs                |\n| "
-					},
-					{
-						"kind": "code",
-						"text": "`canonical`"
-					},
-					{
-						"kind": "text",
-						"text": "   | —                    | new; no contract field yet    |\n\nZod v4 idioms (mirrors "
-					},
-					{
-						"kind": "code",
-						"text": "`@anvilkit/core/src/config/schema.ts`"
-					},
-					{
-						"kind": "text",
-						"text": "):\n- "
-					},
-					{
-						"kind": "code",
-						"text": "`z.url()`"
-					},
-					{
-						"kind": "text",
-						"text": " not "
-					},
-					{
-						"kind": "code",
-						"text": "`z.string().url()`"
-					},
-					{
-						"kind": "text",
-						"text": " — top-level format validators.\n- "
-					},
-					{
-						"kind": "code",
-						"text": "`.prefault({})`"
-					},
-					{
-						"kind": "text",
-						"text": " not "
-					},
-					{
-						"kind": "code",
-						"text": "`.default({})`"
-					},
-					{
-						"kind": "text",
-						"text": " — "
-					},
-					{
-						"kind": "code",
-						"text": "`.default()`"
-					},
-					{
-						"kind": "text",
-						"text": " short-circuits parsing\n  and would yield a literal "
-					},
-					{
-						"kind": "code",
-						"text": "`{}`"
-					},
-					{
-						"kind": "text",
-						"text": "; "
-					},
-					{
-						"kind": "code",
-						"text": "`.prefault({})`"
-					},
-					{
-						"kind": "text",
-						"text": " re-parses so an omitted\n  "
-					},
-					{
-						"kind": "code",
-						"text": "`seo`"
-					},
-					{
-						"kind": "text",
-						"text": " block still resolves to "
-					},
-					{
-						"kind": "code",
-						"text": "`{ noIndex: false }`"
-					},
-					{
-						"kind": "text",
-						"text": "."
-					}
-				]
-			},
-			"sources": [
-				{
-					"fileName": "page-root-schema.ts",
-					"line": 24,
-					"character": 13,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L24"
-				}
-			],
-			"type": {
-				"type": "reference",
-				"target": {
-					"packageName": "zod",
-					"packagePath": "v4/classic/schemas.d.cts",
-					"qualifiedName": "ZodPrefault"
-				},
-				"typeArguments": [
-					{
-						"type": "reference",
-						"target": {
-							"packageName": "zod",
-							"packagePath": "v4/classic/schemas.d.cts",
-							"qualifiedName": "ZodObject"
-						},
-						"typeArguments": [
-							{
-								"type": "reflection",
-								"declaration": {
-									"id": 47,
-									"name": "__type",
-									"variant": "declaration",
-									"kind": 65536,
-									"flags": {},
-									"children": [
-										{
-											"id": 52,
-											"name": "canonical",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"sources": [
-												{
-													"fileName": "page-root-schema.ts",
-													"line": 30,
-													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L30"
-												}
-											],
-											"type": {
-												"type": "reference",
-												"target": {
-													"packageName": "zod",
-													"packagePath": "v4/classic/schemas.d.cts",
-													"qualifiedName": "ZodOptional"
-												},
-												"typeArguments": [
-													{
-														"type": "reference",
-														"target": {
-															"packageName": "zod",
-															"packagePath": "v4/classic/schemas.d.cts",
-															"qualifiedName": "ZodURL"
-														},
-														"name": "ZodURL",
-														"package": "zod"
-													}
-												],
-												"name": "ZodOptional",
-												"package": "zod"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 49,
-											"name": "description",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"sources": [
-												{
-													"fileName": "page-root-schema.ts",
-													"line": 27,
-													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L27"
-												}
-											],
-											"type": {
-												"type": "reference",
-												"target": {
-													"packageName": "zod",
-													"packagePath": "v4/classic/schemas.d.cts",
-													"qualifiedName": "ZodOptional"
-												},
-												"typeArguments": [
-													{
-														"type": "reference",
-														"target": {
-															"packageName": "zod",
-															"packagePath": "v4/classic/schemas.d.cts",
-															"qualifiedName": "ZodString"
-														},
-														"name": "ZodString",
-														"package": "zod"
-													}
-												],
-												"name": "ZodOptional",
-												"package": "zod"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 51,
-											"name": "noIndex",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"sources": [
-												{
-													"fileName": "page-root-schema.ts",
-													"line": 29,
-													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L29"
-												}
-											],
-											"type": {
-												"type": "reference",
-												"target": {
-													"packageName": "zod",
-													"packagePath": "v4/classic/schemas.d.cts",
-													"qualifiedName": "ZodDefault"
-												},
-												"typeArguments": [
-													{
-														"type": "reference",
-														"target": {
-															"packageName": "zod",
-															"packagePath": "v4/classic/schemas.d.cts",
-															"qualifiedName": "ZodBoolean"
-														},
-														"name": "ZodBoolean",
-														"package": "zod"
-													}
-												],
-												"name": "ZodDefault",
-												"package": "zod"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 50,
-											"name": "ogImage",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"sources": [
-												{
-													"fileName": "page-root-schema.ts",
-													"line": 28,
-													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L28"
-												}
-											],
-											"type": {
-												"type": "reference",
-												"target": {
-													"packageName": "zod",
-													"packagePath": "v4/classic/schemas.d.cts",
-													"qualifiedName": "ZodOptional"
-												},
-												"typeArguments": [
-													{
-														"type": "reference",
-														"target": {
-															"packageName": "zod",
-															"packagePath": "v4/classic/schemas.d.cts",
-															"qualifiedName": "ZodURL"
-														},
-														"name": "ZodURL",
-														"package": "zod"
-													}
-												],
-												"name": "ZodOptional",
-												"package": "zod"
-											},
-											"defaultValue": "..."
-										},
-										{
-											"id": 48,
-											"name": "title",
-											"variant": "declaration",
-											"kind": 1024,
-											"flags": {},
-											"sources": [
-												{
-													"fileName": "page-root-schema.ts",
-													"line": 26,
-													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L26"
-												}
-											],
-											"type": {
-												"type": "reference",
-												"target": {
-													"packageName": "zod",
-													"packagePath": "v4/classic/schemas.d.cts",
-													"qualifiedName": "ZodOptional"
-												},
-												"typeArguments": [
-													{
-														"type": "reference",
-														"target": {
-															"packageName": "zod",
-															"packagePath": "v4/classic/schemas.d.cts",
-															"qualifiedName": "ZodString"
-														},
-														"name": "ZodString",
-														"package": "zod"
-													}
-												],
-												"name": "ZodOptional",
-												"package": "zod"
-											},
-											"defaultValue": "..."
-										}
-									],
-									"groups": [
-										{
-											"title": "Properties",
-											"children": [52, 49, 51, 50, 48]
-										}
-									]
-								}
-							},
-							{
-								"type": "reference",
-								"target": {
-									"packageName": "zod",
-									"packagePath": "v4/core/schemas.d.cts",
-									"qualifiedName": "$strip"
-								},
-								"name": "$strip",
-								"package": "zod"
-							}
-						],
-						"name": "ZodObject",
-						"package": "zod"
-					}
-				],
-				"name": "ZodPrefault",
-				"package": "zod"
-			},
-			"defaultValue": "..."
-		},
-		{
-			"id": 3,
-			"name": "configToAiContext",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "config-to-ai-context.ts",
-					"line": 23,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L23"
-				}
-			],
-			"signatures": [
-				{
-					"id": 4,
-					"name": "configToAiContext",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "config-to-ai-context.ts",
-							"line": 23,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L23"
-						}
-					],
-					"typeParameters": [
-						{
-							"id": 5,
-							"name": "C",
-							"variant": "typeParam",
-							"kind": 131072,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
-									"qualifiedName": "Config"
-								},
-								"name": "Config",
-								"package": "@puckeditor/core"
-							}
-						}
-					],
-					"parameters": [
-						{
-							"id": 6,
-							"name": "config",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 5,
-								"name": "C",
-								"package": "@anvilkit/schema",
-								"refersToTypeParameter": true
-							}
-						},
-						{
-							"id": 7,
-							"name": "opts",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {
-								"isOptional": true
-							},
-							"type": {
-								"type": "reference",
-								"target": 1,
-								"name": "ConfigToAiContextOptions",
-								"package": "@anvilkit/schema"
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": {
-							"packageName": "@anvilkit/contracts",
-							"packagePath": "src/ai.ts",
-							"qualifiedName": "AiGenerationContext"
-						},
-						"name": "AiGenerationContext",
-						"package": "@anvilkit/contracts"
-					}
-				}
-			]
-		},
-		{
-			"id": 11,
-			"name": "extractFieldSchema",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "extract-field-schema.ts",
-					"line": 14,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L14"
-				}
-			],
-			"signatures": [
-				{
-					"id": 12,
-					"name": "extractFieldSchema",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "extract-field-schema.ts",
-							"line": 14,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L14"
-						}
-					],
-					"parameters": [
-						{
-							"id": 13,
-							"name": "name",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "string"
-							}
-						},
-						{
-							"id": 14,
-							"name": "field",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
-									"qualifiedName": "Field"
-								},
-								"name": "Field",
-								"package": "@puckeditor/core"
-							}
-						},
-						{
-							"id": 15,
-							"name": "opts",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {
-								"isOptional": true
-							},
-							"type": {
-								"type": "reference",
-								"target": 8,
-								"name": "ExtractFieldSchemaOptions",
-								"package": "@anvilkit/schema"
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": {
-							"packageName": "@anvilkit/contracts",
-							"packagePath": "src/ai.ts",
-							"qualifiedName": "AiFieldSchema"
-						},
-						"name": "AiFieldSchema",
-						"package": "@anvilkit/contracts"
-					}
-				}
-			]
-		},
-		{
-			"id": 16,
-			"name": "identifySlotFields",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "identify-slot-fields.ts",
-					"line": 3,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/identify-slot-fields.ts#L3"
-				}
-			],
-			"signatures": [
-				{
-					"id": 17,
-					"name": "identifySlotFields",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "identify-slot-fields.ts",
-							"line": 3,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/identify-slot-fields.ts#L3"
-						}
-					],
-					"typeParameters": [
-						{
-							"id": 18,
-							"name": "C",
-							"variant": "typeParam",
-							"kind": 131072,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": {
-									"packageName": "@puckeditor/core",
-									"packagePath": "dist/actions-Csn3gOP8.d.ts",
-									"qualifiedName": "Config"
-								},
-								"name": "Config",
-								"package": "@puckeditor/core"
-							}
-						}
-					],
-					"parameters": [
-						{
-							"id": 19,
-							"name": "config",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "reference",
-								"target": 18,
-								"name": "C",
-								"package": "@anvilkit/schema",
-								"refersToTypeParameter": true
-							}
-						}
-					],
-					"type": {
-						"type": "reference",
-						"target": {
-							"packageName": "typescript",
-							"packagePath": "lib/lib.es2015.collection.d.ts",
-							"qualifiedName": "Map"
-						},
-						"typeArguments": [
-							{
-								"type": "intrinsic",
-								"name": "string"
-							},
-							{
-								"type": "typeOperator",
-								"operator": "readonly",
-								"target": {
-									"type": "array",
-									"elementType": {
-										"type": "intrinsic",
-										"name": "string"
-									}
-								}
-							}
-						],
-						"name": "Map",
-						"package": "typescript"
-					}
-				}
-			]
-		},
-		{
-			"id": 22,
-			"name": "isJsonSerializable",
-			"variant": "declaration",
-			"kind": 64,
-			"flags": {},
-			"sources": [
-				{
-					"fileName": "is-json-serializable.ts",
-					"line": 5,
-					"character": 16,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L5"
-				}
-			],
-			"signatures": [
-				{
-					"id": 23,
-					"name": "isJsonSerializable",
-					"variant": "signature",
-					"kind": 4096,
-					"flags": {},
-					"sources": [
-						{
-							"fileName": "is-json-serializable.ts",
-							"line": 5,
-							"character": 16,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L5"
-						}
-					],
-					"parameters": [
-						{
-							"id": 24,
-							"name": "value",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {},
-							"type": {
-								"type": "intrinsic",
-								"name": "unknown"
-							}
-						},
-						{
-							"id": 25,
-							"name": "opts",
-							"variant": "param",
-							"kind": 32768,
-							"flags": {
-								"isOptional": true
-							},
-							"type": {
-								"type": "reference",
-								"target": 20,
-								"name": "IsJsonSerializableOptions",
-								"package": "@anvilkit/schema"
-							}
-						}
-					],
-					"type": {
-						"type": "intrinsic",
-						"name": "boolean"
-					}
-				}
-			]
-		}
-	],
-	"groups": [
-		{
-			"title": "Interfaces",
-			"children": [1, 8, 20]
-		},
-		{
-			"title": "Type Aliases",
-			"children": [26, 27]
-		},
-		{
-			"title": "Variables",
-			"children": [28, 46]
-		},
-		{
-			"title": "Functions",
-			"children": [3, 11, 16, 22]
-		}
-	],
-	"packageName": "@anvilkit/schema",
-	"symbolIdMap": {
-		"0": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/index.ts",
-			"qualifiedName": ""
-		},
-		"1": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/config-to-ai-context.ts",
-			"qualifiedName": "ConfigToAiContextOptions"
-		},
-		"2": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/config-to-ai-context.ts",
-			"qualifiedName": "ConfigToAiContextOptions.include"
-		},
-		"3": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/config-to-ai-context.ts",
-			"qualifiedName": "configToAiContext"
-		},
-		"4": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/config-to-ai-context.ts",
-			"qualifiedName": "configToAiContext"
-		},
-		"5": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/config-to-ai-context.ts",
-			"qualifiedName": "C"
-		},
-		"6": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/config-to-ai-context.ts",
-			"qualifiedName": "config"
-		},
-		"7": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/config-to-ai-context.ts",
-			"qualifiedName": "opts"
-		},
-		"8": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "ExtractFieldSchemaOptions"
-		},
-		"9": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "ExtractFieldSchemaOptions.required"
-		},
-		"10": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "ExtractFieldSchemaOptions.description"
-		},
-		"11": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "extractFieldSchema"
-		},
-		"12": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "extractFieldSchema"
-		},
-		"13": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "name"
-		},
-		"14": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "field"
-		},
-		"15": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/extract-field-schema.ts",
-			"qualifiedName": "opts"
-		},
-		"16": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/identify-slot-fields.ts",
-			"qualifiedName": "identifySlotFields"
-		},
-		"17": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/identify-slot-fields.ts",
-			"qualifiedName": "identifySlotFields"
-		},
-		"18": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/identify-slot-fields.ts",
-			"qualifiedName": "C"
-		},
-		"19": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/identify-slot-fields.ts",
-			"qualifiedName": "config"
-		},
-		"20": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/is-json-serializable.ts",
-			"qualifiedName": "IsJsonSerializableOptions"
-		},
-		"21": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/is-json-serializable.ts",
-			"qualifiedName": "IsJsonSerializableOptions.dateAsIso"
-		},
-		"22": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/is-json-serializable.ts",
-			"qualifiedName": "isJsonSerializable"
-		},
-		"23": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/is-json-serializable.ts",
-			"qualifiedName": "isJsonSerializable"
-		},
-		"24": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/is-json-serializable.ts",
-			"qualifiedName": "value"
-		},
-		"25": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/is-json-serializable.ts",
-			"qualifiedName": "opts"
-		},
-		"26": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "PageRootProps"
-		},
-		"27": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "PageSeo"
-		},
-		"28": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "PageRootSchema"
-		},
-		"29": {
-			"packageName": "zod",
-			"packagePath": "v4/core/util.d.cts",
-			"qualifiedName": "__type"
-		},
-		"30": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "title"
-		},
-		"31": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "slug"
-		},
-		"32": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "status"
-		},
-		"33": {
-			"packageName": "zod",
-			"packagePath": "v4/core/util.d.cts",
-			"qualifiedName": "__type"
-		},
-		"34": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "",
-			"qualifiedName": "draft"
-		},
-		"35": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "",
-			"qualifiedName": "published"
-		},
-		"36": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "",
-			"qualifiedName": "archived"
-		},
-		"37": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "version"
-		},
-		"38": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "parentFolder"
-		},
-		"39": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "seo"
-		},
-		"40": {
-			"packageName": "zod",
-			"packagePath": "v4/core/util.d.cts",
-			"qualifiedName": "__type"
-		},
-		"41": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "title"
-		},
-		"42": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "description"
-		},
-		"43": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "ogImage"
-		},
-		"44": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "noIndex"
-		},
-		"45": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "canonical"
-		},
-		"46": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "PageSeoSchema"
-		},
-		"47": {
-			"packageName": "zod",
-			"packagePath": "v4/core/util.d.cts",
-			"qualifiedName": "__type"
-		},
-		"48": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "title"
-		},
-		"49": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "description"
-		},
-		"50": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "ogImage"
-		},
-		"51": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "noIndex"
-		},
-		"52": {
-			"packageName": "@anvilkit/schema",
-			"packagePath": "src/page-root-schema.ts",
-			"qualifiedName": "canonical"
-		}
-	},
-	"files": {
-		"entries": {
-			"1": "src/index.ts"
-		},
-		"reflections": {
-			"1": 0
-		}
-	}
+  "schemaVersion": "2.0",
+  "id": 0,
+  "name": "@anvilkit/schema",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 1,
+      "name": "ConfigToAiContextOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 2,
+          "name": "include",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "config-to-ai-context.ts",
+              "line": 20,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L20"
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "intrinsic",
+              "name": "string"
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            2
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "config-to-ai-context.ts",
+          "line": 19,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L19"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "ExtractFieldSchemaOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 10,
+          "name": "description",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "extract-field-schema.ts",
+              "line": 11,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L11"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 9,
+          "name": "required",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "extract-field-schema.ts",
+              "line": 10,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L10"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            10,
+            9
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "extract-field-schema.ts",
+          "line": 9,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L9"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "IsJsonSerializableOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "children": [
+        {
+          "id": 21,
+          "name": "dateAsIso",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "is-json-serializable.ts",
+              "line": 2,
+              "character": 1,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L2"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [
+            21
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "is-json-serializable.ts",
+          "line": 1,
+          "character": 17,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L1"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "PageRootProps",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "page-root-schema.ts",
+          "line": 50,
+          "character": 12,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L50"
+        }
+      ],
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "zod",
+          "packagePath": "v4/core/core.d.cts",
+          "qualifiedName": "output"
+        },
+        "typeArguments": [
+          {
+            "type": "query",
+            "queryType": {
+              "type": "reference",
+              "target": 28,
+              "name": "PageRootSchema",
+              "package": "@anvilkit/schema"
+            }
+          }
+        ],
+        "name": "z.infer",
+        "package": "zod",
+        "qualifiedName": "output"
+      }
+    },
+    {
+      "id": 27,
+      "name": "PageSeo",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "page-root-schema.ts",
+          "line": 51,
+          "character": 12,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L51"
+        }
+      ],
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "zod",
+          "packagePath": "v4/core/core.d.cts",
+          "qualifiedName": "output"
+        },
+        "typeArguments": [
+          {
+            "type": "query",
+            "queryType": {
+              "type": "reference",
+              "target": 46,
+              "name": "PageSeoSchema",
+              "package": "@anvilkit/schema"
+            }
+          }
+        ],
+        "name": "z.infer",
+        "package": "zod",
+        "qualifiedName": "output"
+      }
+    },
+    {
+      "id": 28,
+      "name": "PageRootSchema",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "The authoritative page payload, canonical in Puck "
+          },
+          {
+            "kind": "code",
+            "text": "`root.props`"
+          },
+          {
+            "kind": "text",
+            "text": ". Editor,\nvalidator, storage, and renderer all read this single shape.\n\n"
+          },
+          {
+            "kind": "code",
+            "text": "`z.object`"
+          },
+          {
+            "kind": "text",
+            "text": " (not "
+          },
+          {
+            "kind": "code",
+            "text": "`z.strictObject`"
+          },
+          {
+            "kind": "text",
+            "text": ") so Puck-internal keys (e.g. "
+          },
+          {
+            "kind": "code",
+            "text": "`id`"
+          },
+          {
+            "kind": "text",
+            "text": ") and\nforward-compat fields are stripped rather than rejected."
+          }
+        ]
+      },
+      "sources": [
+        {
+          "fileName": "page-root-schema.ts",
+          "line": 41,
+          "character": 13,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L41"
+        }
+      ],
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "zod",
+          "packagePath": "v4/classic/schemas.d.cts",
+          "qualifiedName": "ZodObject"
+        },
+        "typeArguments": [
+          {
+            "type": "reflection",
+            "declaration": {
+              "id": 29,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "id": 38,
+                  "name": "parentFolder",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "page-root-schema.ts",
+                      "line": 46,
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L46"
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "zod",
+                      "packagePath": "v4/classic/schemas.d.cts",
+                      "qualifiedName": "ZodDefault"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "zod",
+                          "packagePath": "v4/classic/schemas.d.cts",
+                          "qualifiedName": "ZodString"
+                        },
+                        "name": "ZodString",
+                        "package": "zod"
+                      }
+                    ],
+                    "name": "ZodDefault",
+                    "package": "zod"
+                  },
+                  "defaultValue": "..."
+                },
+                {
+                  "id": 39,
+                  "name": "seo",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "page-root-schema.ts",
+                      "line": 47,
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L47"
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "zod",
+                      "packagePath": "v4/classic/schemas.d.cts",
+                      "qualifiedName": "ZodPrefault"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "zod",
+                          "packagePath": "v4/classic/schemas.d.cts",
+                          "qualifiedName": "ZodObject"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reflection",
+                            "declaration": {
+                              "id": 40,
+                              "name": "__type",
+                              "variant": "declaration",
+                              "kind": 65536,
+                              "flags": {},
+                              "children": [
+                                {
+                                  "id": 45,
+                                  "name": "canonical",
+                                  "variant": "declaration",
+                                  "kind": 1024,
+                                  "flags": {},
+                                  "sources": [
+                                    {
+                                      "fileName": "page-root-schema.ts",
+                                      "line": 30,
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L30"
+                                    }
+                                  ],
+                                  "type": {
+                                    "type": "reference",
+                                    "target": {
+                                      "packageName": "zod",
+                                      "packagePath": "v4/classic/schemas.d.cts",
+                                      "qualifiedName": "ZodOptional"
+                                    },
+                                    "typeArguments": [
+                                      {
+                                        "type": "reference",
+                                        "target": {
+                                          "packageName": "zod",
+                                          "packagePath": "v4/classic/schemas.d.cts",
+                                          "qualifiedName": "ZodURL"
+                                        },
+                                        "name": "ZodURL",
+                                        "package": "zod"
+                                      }
+                                    ],
+                                    "name": "ZodOptional",
+                                    "package": "zod"
+                                  },
+                                  "defaultValue": "..."
+                                },
+                                {
+                                  "id": 42,
+                                  "name": "description",
+                                  "variant": "declaration",
+                                  "kind": 1024,
+                                  "flags": {},
+                                  "sources": [
+                                    {
+                                      "fileName": "page-root-schema.ts",
+                                      "line": 27,
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L27"
+                                    }
+                                  ],
+                                  "type": {
+                                    "type": "reference",
+                                    "target": {
+                                      "packageName": "zod",
+                                      "packagePath": "v4/classic/schemas.d.cts",
+                                      "qualifiedName": "ZodOptional"
+                                    },
+                                    "typeArguments": [
+                                      {
+                                        "type": "reference",
+                                        "target": {
+                                          "packageName": "zod",
+                                          "packagePath": "v4/classic/schemas.d.cts",
+                                          "qualifiedName": "ZodString"
+                                        },
+                                        "name": "ZodString",
+                                        "package": "zod"
+                                      }
+                                    ],
+                                    "name": "ZodOptional",
+                                    "package": "zod"
+                                  },
+                                  "defaultValue": "..."
+                                },
+                                {
+                                  "id": 44,
+                                  "name": "noIndex",
+                                  "variant": "declaration",
+                                  "kind": 1024,
+                                  "flags": {},
+                                  "sources": [
+                                    {
+                                      "fileName": "page-root-schema.ts",
+                                      "line": 29,
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L29"
+                                    }
+                                  ],
+                                  "type": {
+                                    "type": "reference",
+                                    "target": {
+                                      "packageName": "zod",
+                                      "packagePath": "v4/classic/schemas.d.cts",
+                                      "qualifiedName": "ZodDefault"
+                                    },
+                                    "typeArguments": [
+                                      {
+                                        "type": "reference",
+                                        "target": {
+                                          "packageName": "zod",
+                                          "packagePath": "v4/classic/schemas.d.cts",
+                                          "qualifiedName": "ZodBoolean"
+                                        },
+                                        "name": "ZodBoolean",
+                                        "package": "zod"
+                                      }
+                                    ],
+                                    "name": "ZodDefault",
+                                    "package": "zod"
+                                  },
+                                  "defaultValue": "..."
+                                },
+                                {
+                                  "id": 43,
+                                  "name": "ogImage",
+                                  "variant": "declaration",
+                                  "kind": 1024,
+                                  "flags": {},
+                                  "sources": [
+                                    {
+                                      "fileName": "page-root-schema.ts",
+                                      "line": 28,
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L28"
+                                    }
+                                  ],
+                                  "type": {
+                                    "type": "reference",
+                                    "target": {
+                                      "packageName": "zod",
+                                      "packagePath": "v4/classic/schemas.d.cts",
+                                      "qualifiedName": "ZodOptional"
+                                    },
+                                    "typeArguments": [
+                                      {
+                                        "type": "reference",
+                                        "target": {
+                                          "packageName": "zod",
+                                          "packagePath": "v4/classic/schemas.d.cts",
+                                          "qualifiedName": "ZodURL"
+                                        },
+                                        "name": "ZodURL",
+                                        "package": "zod"
+                                      }
+                                    ],
+                                    "name": "ZodOptional",
+                                    "package": "zod"
+                                  },
+                                  "defaultValue": "..."
+                                },
+                                {
+                                  "id": 41,
+                                  "name": "title",
+                                  "variant": "declaration",
+                                  "kind": 1024,
+                                  "flags": {},
+                                  "sources": [
+                                    {
+                                      "fileName": "page-root-schema.ts",
+                                      "line": 26,
+                                      "character": 2,
+                                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L26"
+                                    }
+                                  ],
+                                  "type": {
+                                    "type": "reference",
+                                    "target": {
+                                      "packageName": "zod",
+                                      "packagePath": "v4/classic/schemas.d.cts",
+                                      "qualifiedName": "ZodOptional"
+                                    },
+                                    "typeArguments": [
+                                      {
+                                        "type": "reference",
+                                        "target": {
+                                          "packageName": "zod",
+                                          "packagePath": "v4/classic/schemas.d.cts",
+                                          "qualifiedName": "ZodString"
+                                        },
+                                        "name": "ZodString",
+                                        "package": "zod"
+                                      }
+                                    ],
+                                    "name": "ZodOptional",
+                                    "package": "zod"
+                                  },
+                                  "defaultValue": "..."
+                                }
+                              ],
+                              "groups": [
+                                {
+                                  "title": "Properties",
+                                  "children": [
+                                    45,
+                                    42,
+                                    44,
+                                    43,
+                                    41
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "zod",
+                              "packagePath": "v4/core/schemas.d.cts",
+                              "qualifiedName": "$strip"
+                            },
+                            "name": "$strip",
+                            "package": "zod"
+                          }
+                        ],
+                        "name": "ZodObject",
+                        "package": "zod"
+                      }
+                    ],
+                    "name": "ZodPrefault",
+                    "package": "zod"
+                  },
+                  "defaultValue": "PageSeoSchema"
+                },
+                {
+                  "id": 31,
+                  "name": "slug",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "page-root-schema.ts",
+                      "line": 43,
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L43"
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "zod",
+                      "packagePath": "v4/classic/schemas.d.cts",
+                      "qualifiedName": "ZodString"
+                    },
+                    "name": "ZodString",
+                    "package": "zod"
+                  },
+                  "defaultValue": "..."
+                },
+                {
+                  "id": 32,
+                  "name": "status",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "page-root-schema.ts",
+                      "line": 44,
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L44"
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "zod",
+                      "packagePath": "v4/classic/schemas.d.cts",
+                      "qualifiedName": "ZodEnum"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "reflection",
+                        "declaration": {
+                          "id": 33,
+                          "name": "__type",
+                          "variant": "declaration",
+                          "kind": 65536,
+                          "flags": {},
+                          "children": [
+                            {
+                              "id": 36,
+                              "name": "archived",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {},
+                              "type": {
+                                "type": "literal",
+                                "value": "archived"
+                              }
+                            },
+                            {
+                              "id": 34,
+                              "name": "draft",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {},
+                              "type": {
+                                "type": "literal",
+                                "value": "draft"
+                              }
+                            },
+                            {
+                              "id": 35,
+                              "name": "published",
+                              "variant": "declaration",
+                              "kind": 1024,
+                              "flags": {},
+                              "type": {
+                                "type": "literal",
+                                "value": "published"
+                              }
+                            }
+                          ],
+                          "groups": [
+                            {
+                              "title": "Properties",
+                              "children": [
+                                36,
+                                34,
+                                35
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "name": "ZodEnum",
+                    "package": "zod"
+                  },
+                  "defaultValue": "..."
+                },
+                {
+                  "id": 30,
+                  "name": "title",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "page-root-schema.ts",
+                      "line": 42,
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L42"
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "zod",
+                      "packagePath": "v4/classic/schemas.d.cts",
+                      "qualifiedName": "ZodString"
+                    },
+                    "name": "ZodString",
+                    "package": "zod"
+                  },
+                  "defaultValue": "..."
+                },
+                {
+                  "id": 37,
+                  "name": "version",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "page-root-schema.ts",
+                      "line": 45,
+                      "character": 1,
+                      "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L45"
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "packageName": "zod",
+                      "packagePath": "v4/classic/schemas.d.cts",
+                      "qualifiedName": "ZodString"
+                    },
+                    "name": "ZodString",
+                    "package": "zod"
+                  },
+                  "defaultValue": "..."
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Properties",
+                  "children": [
+                    38,
+                    39,
+                    31,
+                    32,
+                    30,
+                    37
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "type": "reference",
+            "target": {
+              "packageName": "zod",
+              "packagePath": "v4/core/schemas.d.cts",
+              "qualifiedName": "$strip"
+            },
+            "name": "$strip",
+            "package": "zod"
+          }
+        ],
+        "name": "ZodObject",
+        "package": "zod"
+      },
+      "defaultValue": "..."
+    },
+    {
+      "id": 46,
+      "name": "PageSeoSchema",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Canonical SEO metadata block stored on a page's "
+          },
+          {
+            "kind": "code",
+            "text": "`root.props.seo`"
+          },
+          {
+            "kind": "text",
+            "text": ".\n\nField-name reconciliation with the shared "
+          },
+          {
+            "kind": "code",
+            "text": "`StudioPageSeo`"
+          },
+          {
+            "kind": "text",
+            "text": " contract\n("
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/contracts`"
+          },
+          {
+            "kind": "text",
+            "text": " → "
+          },
+          {
+            "kind": "code",
+            "text": "`packages/foundation/contracts/src/page.ts`"
+          },
+          {
+            "kind": "text",
+            "text": ") so F4 can project\n"
+          },
+          {
+            "kind": "code",
+            "text": "`root.props.seo`"
+          },
+          {
+            "kind": "text",
+            "text": " into the rail/breadcrumb sidecar losslessly:\n\n| This schema   | "
+          },
+          {
+            "kind": "code",
+            "text": "`StudioPageSeo`"
+          },
+          {
+            "kind": "text",
+            "text": "      | Note                          |\n| :------------ | :------------------- | :---------------------------- |\n| "
+          },
+          {
+            "kind": "code",
+            "text": "`title`"
+          },
+          {
+            "kind": "text",
+            "text": "       | "
+          },
+          {
+            "kind": "code",
+            "text": "`metaTitle`"
+          },
+          {
+            "kind": "text",
+            "text": "          | rename                        |\n| "
+          },
+          {
+            "kind": "code",
+            "text": "`description`"
+          },
+          {
+            "kind": "text",
+            "text": " | "
+          },
+          {
+            "kind": "code",
+            "text": "`metaDescription`"
+          },
+          {
+            "kind": "text",
+            "text": "    | rename                        |\n| "
+          },
+          {
+            "kind": "code",
+            "text": "`ogImage`"
+          },
+          {
+            "kind": "text",
+            "text": "     | "
+          },
+          {
+            "kind": "code",
+            "text": "`ogImage`"
+          },
+          {
+            "kind": "text",
+            "text": "            | identical                     |\n| "
+          },
+          {
+            "kind": "code",
+            "text": "`noIndex`"
+          },
+          {
+            "kind": "text",
+            "text": "     | "
+          },
+          {
+            "kind": "code",
+            "text": "`noindex`"
+          },
+          {
+            "kind": "text",
+            "text": "            | casing differs                |\n| "
+          },
+          {
+            "kind": "code",
+            "text": "`canonical`"
+          },
+          {
+            "kind": "text",
+            "text": "   | —                    | new; no contract field yet    |\n\nZod v4 idioms (mirrors "
+          },
+          {
+            "kind": "code",
+            "text": "`@anvilkit/core/src/config/schema.ts`"
+          },
+          {
+            "kind": "text",
+            "text": "):\n- "
+          },
+          {
+            "kind": "code",
+            "text": "`z.url()`"
+          },
+          {
+            "kind": "text",
+            "text": " not "
+          },
+          {
+            "kind": "code",
+            "text": "`z.string().url()`"
+          },
+          {
+            "kind": "text",
+            "text": " — top-level format validators.\n- "
+          },
+          {
+            "kind": "code",
+            "text": "`.prefault({})`"
+          },
+          {
+            "kind": "text",
+            "text": " not "
+          },
+          {
+            "kind": "code",
+            "text": "`.default({})`"
+          },
+          {
+            "kind": "text",
+            "text": " — "
+          },
+          {
+            "kind": "code",
+            "text": "`.default()`"
+          },
+          {
+            "kind": "text",
+            "text": " short-circuits parsing\n  and would yield a literal "
+          },
+          {
+            "kind": "code",
+            "text": "`{}`"
+          },
+          {
+            "kind": "text",
+            "text": "; "
+          },
+          {
+            "kind": "code",
+            "text": "`.prefault({})`"
+          },
+          {
+            "kind": "text",
+            "text": " re-parses so an omitted\n  "
+          },
+          {
+            "kind": "code",
+            "text": "`seo`"
+          },
+          {
+            "kind": "text",
+            "text": " block still resolves to "
+          },
+          {
+            "kind": "code",
+            "text": "`{ noIndex: false }`"
+          },
+          {
+            "kind": "text",
+            "text": "."
+          }
+        ]
+      },
+      "sources": [
+        {
+          "fileName": "page-root-schema.ts",
+          "line": 24,
+          "character": 13,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L24"
+        }
+      ],
+      "type": {
+        "type": "reference",
+        "target": {
+          "packageName": "zod",
+          "packagePath": "v4/classic/schemas.d.cts",
+          "qualifiedName": "ZodPrefault"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "target": {
+              "packageName": "zod",
+              "packagePath": "v4/classic/schemas.d.cts",
+              "qualifiedName": "ZodObject"
+            },
+            "typeArguments": [
+              {
+                "type": "reflection",
+                "declaration": {
+                  "id": 47,
+                  "name": "__type",
+                  "variant": "declaration",
+                  "kind": 65536,
+                  "flags": {},
+                  "children": [
+                    {
+                      "id": 52,
+                      "name": "canonical",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "sources": [
+                        {
+                          "fileName": "page-root-schema.ts",
+                          "line": 30,
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L30"
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "zod",
+                          "packagePath": "v4/classic/schemas.d.cts",
+                          "qualifiedName": "ZodOptional"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "zod",
+                              "packagePath": "v4/classic/schemas.d.cts",
+                              "qualifiedName": "ZodURL"
+                            },
+                            "name": "ZodURL",
+                            "package": "zod"
+                          }
+                        ],
+                        "name": "ZodOptional",
+                        "package": "zod"
+                      },
+                      "defaultValue": "..."
+                    },
+                    {
+                      "id": 49,
+                      "name": "description",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "sources": [
+                        {
+                          "fileName": "page-root-schema.ts",
+                          "line": 27,
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L27"
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "zod",
+                          "packagePath": "v4/classic/schemas.d.cts",
+                          "qualifiedName": "ZodOptional"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "zod",
+                              "packagePath": "v4/classic/schemas.d.cts",
+                              "qualifiedName": "ZodString"
+                            },
+                            "name": "ZodString",
+                            "package": "zod"
+                          }
+                        ],
+                        "name": "ZodOptional",
+                        "package": "zod"
+                      },
+                      "defaultValue": "..."
+                    },
+                    {
+                      "id": 51,
+                      "name": "noIndex",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "sources": [
+                        {
+                          "fileName": "page-root-schema.ts",
+                          "line": 29,
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L29"
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "zod",
+                          "packagePath": "v4/classic/schemas.d.cts",
+                          "qualifiedName": "ZodDefault"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "zod",
+                              "packagePath": "v4/classic/schemas.d.cts",
+                              "qualifiedName": "ZodBoolean"
+                            },
+                            "name": "ZodBoolean",
+                            "package": "zod"
+                          }
+                        ],
+                        "name": "ZodDefault",
+                        "package": "zod"
+                      },
+                      "defaultValue": "..."
+                    },
+                    {
+                      "id": 50,
+                      "name": "ogImage",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "sources": [
+                        {
+                          "fileName": "page-root-schema.ts",
+                          "line": 28,
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L28"
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "zod",
+                          "packagePath": "v4/classic/schemas.d.cts",
+                          "qualifiedName": "ZodOptional"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "zod",
+                              "packagePath": "v4/classic/schemas.d.cts",
+                              "qualifiedName": "ZodURL"
+                            },
+                            "name": "ZodURL",
+                            "package": "zod"
+                          }
+                        ],
+                        "name": "ZodOptional",
+                        "package": "zod"
+                      },
+                      "defaultValue": "..."
+                    },
+                    {
+                      "id": 48,
+                      "name": "title",
+                      "variant": "declaration",
+                      "kind": 1024,
+                      "flags": {},
+                      "sources": [
+                        {
+                          "fileName": "page-root-schema.ts",
+                          "line": 26,
+                          "character": 2,
+                          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/page-root-schema.ts#L26"
+                        }
+                      ],
+                      "type": {
+                        "type": "reference",
+                        "target": {
+                          "packageName": "zod",
+                          "packagePath": "v4/classic/schemas.d.cts",
+                          "qualifiedName": "ZodOptional"
+                        },
+                        "typeArguments": [
+                          {
+                            "type": "reference",
+                            "target": {
+                              "packageName": "zod",
+                              "packagePath": "v4/classic/schemas.d.cts",
+                              "qualifiedName": "ZodString"
+                            },
+                            "name": "ZodString",
+                            "package": "zod"
+                          }
+                        ],
+                        "name": "ZodOptional",
+                        "package": "zod"
+                      },
+                      "defaultValue": "..."
+                    }
+                  ],
+                  "groups": [
+                    {
+                      "title": "Properties",
+                      "children": [
+                        52,
+                        49,
+                        51,
+                        50,
+                        48
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "reference",
+                "target": {
+                  "packageName": "zod",
+                  "packagePath": "v4/core/schemas.d.cts",
+                  "qualifiedName": "$strip"
+                },
+                "name": "$strip",
+                "package": "zod"
+              }
+            ],
+            "name": "ZodObject",
+            "package": "zod"
+          }
+        ],
+        "name": "ZodPrefault",
+        "package": "zod"
+      },
+      "defaultValue": "..."
+    },
+    {
+      "id": 3,
+      "name": "configToAiContext",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "config-to-ai-context.ts",
+          "line": 23,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L23"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 4,
+          "name": "configToAiContext",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "config-to-ai-context.ts",
+              "line": 23,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/config-to-ai-context.ts#L23"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 5,
+              "name": "C",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-Csn3gOP8.d.ts",
+                  "qualifiedName": "Config"
+                },
+                "name": "Config",
+                "package": "@puckeditor/core"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 6,
+              "name": "config",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 5,
+                "name": "C",
+                "package": "@anvilkit/schema",
+                "refersToTypeParameter": true
+              }
+            },
+            {
+              "id": 7,
+              "name": "opts",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {
+                "isOptional": true
+              },
+              "type": {
+                "type": "reference",
+                "target": 1,
+                "name": "ConfigToAiContextOptions",
+                "package": "@anvilkit/schema"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@anvilkit/contracts",
+              "packagePath": "src/ai.ts",
+              "qualifiedName": "AiGenerationContext"
+            },
+            "name": "AiGenerationContext",
+            "package": "@anvilkit/contracts"
+          }
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "extractFieldSchema",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "extract-field-schema.ts",
+          "line": 14,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L14"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 12,
+          "name": "extractFieldSchema",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "extract-field-schema.ts",
+              "line": 14,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/extract-field-schema.ts#L14"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 13,
+              "name": "name",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "id": 14,
+              "name": "field",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-Csn3gOP8.d.ts",
+                  "qualifiedName": "Field"
+                },
+                "name": "Field",
+                "package": "@puckeditor/core"
+              }
+            },
+            {
+              "id": 15,
+              "name": "opts",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {
+                "isOptional": true
+              },
+              "type": {
+                "type": "reference",
+                "target": 8,
+                "name": "ExtractFieldSchemaOptions",
+                "package": "@anvilkit/schema"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "@anvilkit/contracts",
+              "packagePath": "src/ai.ts",
+              "qualifiedName": "AiFieldSchema"
+            },
+            "name": "AiFieldSchema",
+            "package": "@anvilkit/contracts"
+          }
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "identifySlotFields",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "identify-slot-fields.ts",
+          "line": 3,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/identify-slot-fields.ts#L3"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 17,
+          "name": "identifySlotFields",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "identify-slot-fields.ts",
+              "line": 3,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/identify-slot-fields.ts#L3"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 18,
+              "name": "C",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "packageName": "@puckeditor/core",
+                  "packagePath": "dist/actions-Csn3gOP8.d.ts",
+                  "qualifiedName": "Config"
+                },
+                "name": "Config",
+                "package": "@puckeditor/core"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 19,
+              "name": "config",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 18,
+                "name": "C",
+                "package": "@anvilkit/schema",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "packageName": "typescript",
+              "packagePath": "lib/lib.es2015.collection.d.ts",
+              "qualifiedName": "Map"
+            },
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "string"
+              },
+              {
+                "type": "typeOperator",
+                "operator": "readonly",
+                "target": {
+                  "type": "array",
+                  "elementType": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                }
+              }
+            ],
+            "name": "Map",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "isJsonSerializable",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "is-json-serializable.ts",
+          "line": 5,
+          "character": 16,
+          "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L5"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 23,
+          "name": "isJsonSerializable",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "is-json-serializable.ts",
+              "line": 5,
+              "character": 16,
+              "url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/foundation/schema/src/is-json-serializable.ts#L5"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 24,
+              "name": "value",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            },
+            {
+              "id": 25,
+              "name": "opts",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {
+                "isOptional": true
+              },
+              "type": {
+                "type": "reference",
+                "target": 20,
+                "name": "IsJsonSerializableOptions",
+                "package": "@anvilkit/schema"
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "Interfaces",
+      "children": [
+        1,
+        8,
+        20
+      ]
+    },
+    {
+      "title": "Type Aliases",
+      "children": [
+        26,
+        27
+      ]
+    },
+    {
+      "title": "Variables",
+      "children": [
+        28,
+        46
+      ]
+    },
+    {
+      "title": "Functions",
+      "children": [
+        3,
+        11,
+        16,
+        22
+      ]
+    }
+  ],
+  "packageName": "@anvilkit/schema",
+  "symbolIdMap": {
+    "0": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "ConfigToAiContextOptions"
+    },
+    "2": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "ConfigToAiContextOptions.include"
+    },
+    "3": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "configToAiContext"
+    },
+    "4": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "configToAiContext"
+    },
+    "5": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "C"
+    },
+    "6": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "config"
+    },
+    "7": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/config-to-ai-context.ts",
+      "qualifiedName": "opts"
+    },
+    "8": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "ExtractFieldSchemaOptions"
+    },
+    "9": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "ExtractFieldSchemaOptions.required"
+    },
+    "10": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "ExtractFieldSchemaOptions.description"
+    },
+    "11": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "extractFieldSchema"
+    },
+    "12": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "extractFieldSchema"
+    },
+    "13": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "name"
+    },
+    "14": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "field"
+    },
+    "15": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/extract-field-schema.ts",
+      "qualifiedName": "opts"
+    },
+    "16": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "identifySlotFields"
+    },
+    "17": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "identifySlotFields"
+    },
+    "18": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "C"
+    },
+    "19": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/identify-slot-fields.ts",
+      "qualifiedName": "config"
+    },
+    "20": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "IsJsonSerializableOptions"
+    },
+    "21": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "IsJsonSerializableOptions.dateAsIso"
+    },
+    "22": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "isJsonSerializable"
+    },
+    "23": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "isJsonSerializable"
+    },
+    "24": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "value"
+    },
+    "25": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/is-json-serializable.ts",
+      "qualifiedName": "opts"
+    },
+    "26": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "PageRootProps"
+    },
+    "27": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "PageSeo"
+    },
+    "28": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "PageRootSchema"
+    },
+    "29": {
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
+      "qualifiedName": "__type"
+    },
+    "30": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "title"
+    },
+    "31": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "slug"
+    },
+    "32": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "status"
+    },
+    "33": {
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
+      "qualifiedName": "__type"
+    },
+    "34": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "",
+      "qualifiedName": "draft"
+    },
+    "35": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "",
+      "qualifiedName": "published"
+    },
+    "36": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "",
+      "qualifiedName": "archived"
+    },
+    "37": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "version"
+    },
+    "38": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "parentFolder"
+    },
+    "39": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "seo"
+    },
+    "40": {
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
+      "qualifiedName": "__type"
+    },
+    "41": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "title"
+    },
+    "42": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "description"
+    },
+    "43": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "ogImage"
+    },
+    "44": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "noIndex"
+    },
+    "45": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "canonical"
+    },
+    "46": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "PageSeoSchema"
+    },
+    "47": {
+      "packageName": "zod",
+      "packagePath": "v4/core/util.d.cts",
+      "qualifiedName": "__type"
+    },
+    "48": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "title"
+    },
+    "49": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "description"
+    },
+    "50": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "ogImage"
+    },
+    "51": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "noIndex"
+    },
+    "52": {
+      "packageName": "@anvilkit/schema",
+      "packagePath": "src/page-root-schema.ts",
+      "qualifiedName": "canonical"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
 }

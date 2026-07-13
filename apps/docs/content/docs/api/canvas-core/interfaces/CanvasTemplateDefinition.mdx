@@ -3,7 +3,7 @@ title: "CanvasTemplateDefinition"
 description: "@anvilkit/canvas-core · CanvasTemplateDefinition"
 ---
 
-Defined in: [templates/types.ts:144](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L144)
+Defined in: [templates/types.ts:187](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L187)
 
 The canonical template definition contract (PRD FR-020, §12.5).
 
@@ -23,19 +23,20 @@ into `document`, which is itself always a normal, independently-valid
 
 ## Properties
 
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| &lt;a id="category"&gt;&lt;/a&gt; `category` | `string` | [templates/types.ts:148](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L148) |
-| &lt;a id="document"&gt;&lt;/a&gt; `document` | [`CanvasIR`](CanvasIR.md) | [templates/types.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L153) |
-| &lt;a id="editableslots"&gt;&lt;/a&gt; `editableSlots` | [`TemplateSlot`](../type-aliases/TemplateSlot)[] | [templates/types.ts:155](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L155) |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | [templates/types.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L145) |
-| &lt;a id="license"&gt;&lt;/a&gt; `license?` | [`TemplateLicense`](TemplateLicense.md) | [templates/types.ts:157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L157) |
-| &lt;a id="lockednodeids"&gt;&lt;/a&gt; `lockedNodeIds` | `string`[] | [templates/types.ts:156](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L156) |
-| &lt;a id="previewassetid"&gt;&lt;/a&gt; `previewAssetId?` | `string` | [templates/types.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L150) |
-| &lt;a id="requiredassets"&gt;&lt;/a&gt; `requiredAssets?` | `string`[] | [templates/types.ts:152](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L152) |
-| &lt;a id="source"&gt;&lt;/a&gt; `source?` | [`TemplateSourceMeta`](TemplateSourceMeta.md) | [templates/types.ts:158](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L158) |
-| &lt;a id="supportedsizes"&gt;&lt;/a&gt; `supportedSizes` | [`CanvasSizePreset`](CanvasSizePreset.md)[] | [templates/types.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L151) |
-| &lt;a id="tags"&gt;&lt;/a&gt; `tags` | `string`[] | [templates/types.ts:149](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L149) |
-| &lt;a id="title"&gt;&lt;/a&gt; `title` | `string` | [templates/types.ts:147](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L147) |
-| &lt;a id="variables"&gt;&lt;/a&gt; `variables` | [`TemplateVariable`](TemplateVariable.md)[] | [templates/types.ts:154](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L154) |
-| &lt;a id="version"&gt;&lt;/a&gt; `version` | `string` | [templates/types.ts:146](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L146) |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="assetattributions"&gt;&lt;/a&gt; `assetAttributions?` | `Record`\&lt;`string`, [`TemplateAssetAttribution`](TemplateAssetAttribution.md)\&gt; | Attribution metadata for referenced assets, keyed by asset id (FR-082, canvas-m6-003). | [templates/types.ts:203](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L203) |
+| &lt;a id="category"&gt;&lt;/a&gt; `category` | `string` | - | [templates/types.ts:191](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L191) |
+| &lt;a id="document"&gt;&lt;/a&gt; `document` | [`CanvasIR`](CanvasIR.md) | - | [templates/types.ts:196](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L196) |
+| &lt;a id="editableslots"&gt;&lt;/a&gt; `editableSlots` | [`TemplateSlot`](../type-aliases/TemplateSlot)[] | - | [templates/types.ts:198](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L198) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [templates/types.ts:188](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L188) |
+| &lt;a id="license"&gt;&lt;/a&gt; `license?` | [`TemplateLicense`](TemplateLicense.md) | - | [templates/types.ts:200](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L200) |
+| &lt;a id="lockednodeids"&gt;&lt;/a&gt; `lockedNodeIds` | `string`[] | - | [templates/types.ts:199](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L199) |
+| &lt;a id="previewassetid"&gt;&lt;/a&gt; `previewAssetId?` | `string` | - | [templates/types.ts:193](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L193) |
+| &lt;a id="requiredassets"&gt;&lt;/a&gt; `requiredAssets?` | `string`[] | - | [templates/types.ts:195](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L195) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source?` | [`TemplateSourceMeta`](TemplateSourceMeta.md) | - | [templates/types.ts:201](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L201) |
+| &lt;a id="supportedsizes"&gt;&lt;/a&gt; `supportedSizes` | [`CanvasSizePreset`](CanvasSizePreset.md)[] | - | [templates/types.ts:194](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L194) |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags` | `string`[] | - | [templates/types.ts:192](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L192) |
+| &lt;a id="title"&gt;&lt;/a&gt; `title` | `string` | - | [templates/types.ts:190](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L190) |
+| &lt;a id="variables"&gt;&lt;/a&gt; `variables` | [`TemplateVariable`](TemplateVariable.md)[] | - | [templates/types.ts:197](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L197) |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `string` | - | [templates/types.ts:189](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L189) |

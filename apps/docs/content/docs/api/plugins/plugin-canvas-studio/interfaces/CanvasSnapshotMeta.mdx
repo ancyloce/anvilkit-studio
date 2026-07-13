@@ -3,7 +3,7 @@ title: "CanvasSnapshotMeta"
 description: "@anvilkit/plugin-canvas-studio · CanvasSnapshotMeta"
 ---
 
-Defined in: [types/types.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L30)
+Defined in: [types/types.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L46)
 
 One historical snapshot of a canvas design. Mirrors the shape that
 `@anvilkit/plugin-version-history` uses for Puck PageIR snapshots so
@@ -11,9 +11,13 @@ the two histories can later share UI without reshaping data.
 
 ## Properties
 
-| Property | Modifier | Type | Defined in |
-| ------ | ------ | ------ | ------ |
-| &lt;a id="designid"&gt;&lt;/a&gt; `designId` | `readonly` | `string` | [types/types.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L32) |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | [types/types.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L31) |
-| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `readonly` | `string` | [types/types.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L34) |
-| &lt;a id="savedat"&gt;&lt;/a&gt; `savedAt` | `readonly` | `string` | [types/types.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L33) |
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="assetids"&gt;&lt;/a&gt; `assetIds` | `readonly` | readonly `string`[] | Asset ids referenced by the saved IR (FR-073) — ids only, never the full `CanvasAssetRef` records. | [types/types.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L54) |
+| &lt;a id="brandkitid"&gt;&lt;/a&gt; `brandKitId?` | `readonly` | `string` | `CanvasIR.metadata.brandId` at save time (FR-073), if the design used a brand kit. A reference only — never the full `BrandKitDefinition`, consistent with "IR references tokens, not brand kits" (canvas-m2-005). | [types/types.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L60) |
+| &lt;a id="designid"&gt;&lt;/a&gt; `designId` | `readonly` | `string` | - | [types/types.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L48) |
+| &lt;a id="exportmeta"&gt;&lt;/a&gt; `exportMeta` | `readonly` | [`CanvasSnapshotExportMeta`](CanvasSnapshotExportMeta.md) | Export-relevant structural summary (FR-073). See [CanvasSnapshotExportMeta](CanvasSnapshotExportMeta.md). | [types/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L62) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `readonly` | `string` | - | [types/types.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L47) |
+| &lt;a id="irversion"&gt;&lt;/a&gt; `irVersion` | `readonly` | `CanvasIRVersion` | `CanvasIR.version` at save time (FR-073). | [types/types.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L52) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `readonly` | `string` | - | [types/types.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L50) |
+| &lt;a id="savedat"&gt;&lt;/a&gt; `savedAt` | `readonly` | `string` | - | [types/types.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/types/types.ts#L49) |

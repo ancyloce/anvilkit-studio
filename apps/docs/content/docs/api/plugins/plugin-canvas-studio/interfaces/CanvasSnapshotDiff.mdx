@@ -1,0 +1,23 @@
+---
+title: "CanvasSnapshotDiff"
+description: "@anvilkit/plugin-canvas-studio · CanvasSnapshotDiff"
+---
+
+Defined in: state/canvas-snapshot-diff.ts:15
+
+Added/removed/modified pages and nodes between two canvas snapshots
+(FR-073). A structural comparison of two point-in-time `CanvasIR`
+documents — NOT a replay of the command log between them (that is
+`@anvilkit/canvas-core`'s `replayChanges`, which requires the actual
+command sequence; a diff between two saved snapshots has no such log).
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="addednodeids"&gt;&lt;/a&gt; `addedNodeIds` | `readonly` | readonly `string`[] | state/canvas-snapshot-diff.ts:19 |
+| &lt;a id="addedpageids"&gt;&lt;/a&gt; `addedPageIds` | `readonly` | readonly `string`[] | state/canvas-snapshot-diff.ts:16 |
+| &lt;a id="modifiednodeids"&gt;&lt;/a&gt; `modifiedNodeIds` | `readonly` | readonly `string`[] | state/canvas-snapshot-diff.ts:21 |
+| &lt;a id="modifiedpageids"&gt;&lt;/a&gt; `modifiedPageIds` | `readonly` | readonly `string`[] | state/canvas-snapshot-diff.ts:18 |
+| &lt;a id="removednodeids"&gt;&lt;/a&gt; `removedNodeIds` | `readonly` | readonly `string`[] | state/canvas-snapshot-diff.ts:20 |
+| &lt;a id="removedpageids"&gt;&lt;/a&gt; `removedPageIds` | `readonly` | readonly `string`[] | state/canvas-snapshot-diff.ts:17 |

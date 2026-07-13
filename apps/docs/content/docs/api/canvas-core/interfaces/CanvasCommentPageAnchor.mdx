@@ -1,0 +1,22 @@
+---
+title: "CanvasCommentPageAnchor"
+description: "@anvilkit/canvas-core · CanvasCommentPageAnchor"
+---
+
+Defined in: comment-contracts.ts:15
+
+Headless comment anchor contract (FR-072).
+
+Comments (thread, author, body, replies) are stored OUTSIDE Canvas IR and
+outside canvas-core by default — core is React/DOM-free and has no concept
+of a comment thread or platform storage. This module defines only what a
+comment attaches TO: a stable, serializable, versioned reference that an
+external comment-storage system keys its threads on.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `"page"` | comment-contracts.ts:16 |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId` | `string` | comment-contracts.ts:18 |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `string` | comment-contracts.ts:17 |

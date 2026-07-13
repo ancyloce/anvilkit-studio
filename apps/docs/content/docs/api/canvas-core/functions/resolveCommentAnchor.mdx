@@ -1,0 +1,35 @@
+---
+title: "resolveCommentAnchor"
+description: "@anvilkit/canvas-core · resolveCommentAnchor"
+---
+
+```ts
+function resolveCommentAnchor(anchor, ir): CanvasCommentAnchorResolution;
+```
+
+Defined in: comment-contracts.ts:121
+
+Resolve whether an anchor's target still exists in `ir`. Never throws — a
+missing target resolves to `"archived"` with a `reason`, never a thrown
+error or a silently dangling reference, so a comment UI can always render
+*something* for a stale anchor instead of crashing.
+
+Node-clone rule (explicit, per FR-072): anchors are keyed by a node's OWN
+id and are never migrated onto a clone. However a host duplicates a node
+(e.g. `node.create` with a freshly generated id copying the source's
+props), the copy is a distinct node with its own id — an anchor on the
+source keeps pointing at the source; the clone starts with no anchors of
+its own. Only the SOURCE node's own removal archives the anchor; a clone
+existing, or later being deleted itself, has no effect on an anchor that
+was never pointed at it.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `anchor` | [`CanvasCommentAnchor`](../type-aliases/CanvasCommentAnchor) |
+| `ir` | [`CanvasIR`](../interfaces/CanvasIR) |
+
+## Returns
+
+[`CanvasCommentAnchorResolution`](../interfaces/CanvasCommentAnchorResolution)

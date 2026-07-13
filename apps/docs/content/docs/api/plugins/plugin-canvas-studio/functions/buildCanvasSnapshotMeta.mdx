@@ -1,0 +1,34 @@
+---
+title: "buildCanvasSnapshotMeta"
+description: "@anvilkit/plugin-canvas-studio · buildCanvasSnapshotMeta"
+---
+
+```ts
+function buildCanvasSnapshotMeta(
+   id, 
+   designId, 
+   savedAt, 
+   ir, 
+   label?): CanvasSnapshotMeta;
+```
+
+Defined in: state/snapshot-meta.ts:31
+
+Build the enriched [CanvasSnapshotMeta](../interfaces/CanvasSnapshotMeta) for a freshly saved snapshot
+(FR-073) — every `CanvasSnapshotAdapter.save` implementation should
+construct its returned metadata through this so `irVersion`/`assetIds`/
+`brandKitId`/`exportMeta` are derived consistently regardless of adapter.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `id` | `string` |
+| `designId` | `string` |
+| `savedAt` | `string` |
+| `ir` | `CanvasIR` |
+| `label?` | `string` |
+
+## Returns
+
+[`CanvasSnapshotMeta`](../interfaces/CanvasSnapshotMeta)

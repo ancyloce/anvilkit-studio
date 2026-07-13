@@ -1,0 +1,27 @@
+---
+title: "CanvasMotionPathAnimation"
+description: "@anvilkit/canvas-core · CanvasMotionPathAnimation"
+---
+
+Defined in: [ir/types.ts:198](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L198)
+
+Serializable animation metadata (FR-080, canvas-m6-001). Describes intent
+only — timing/kind data for a future editor preview or video/GIF export
+worker to interpret. Static exports (SVG/PNG/PDF) always render a node/page
+in its normal resting state (its own `transform`/`opacity`/etc., unaffected
+by this field) and merely surface a warning that motion exists but isn't
+represented — this metadata is never a second, divergent static appearance.
+
+## Extends
+
+- [`CanvasAnimationBase`](CanvasAnimationBase.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="delay"&gt;&lt;/a&gt; `delay?` | `number` | Seconds after the page/timeline starts before this animation begins. Defaults to 0. | [`CanvasAnimationBase`](CanvasAnimationBase.md).[`delay`](CanvasAnimationBase.md#delay) | [ir/types.ts:155](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L155) |
+| &lt;a id="duration"&gt;&lt;/a&gt; `duration` | `number` | Seconds the animation takes to complete. | [`CanvasAnimationBase`](CanvasAnimationBase.md).[`duration`](CanvasAnimationBase.md#duration) | [ir/types.ts:157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L157) |
+| &lt;a id="easing"&gt;&lt;/a&gt; `easing?` | [`CanvasAnimationEasing`](../type-aliases/CanvasAnimationEasing) | - | [`CanvasAnimationBase`](CanvasAnimationBase.md).[`easing`](CanvasAnimationBase.md#easing) | [ir/types.ts:158](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L158) |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `"motion-path"` | - | - | [ir/types.ts:199](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L199) |
+| &lt;a id="path"&gt;&lt;/a&gt; `path` | `string` | SVG path data (`d` attribute syntax) the node's origin travels along. | - | [ir/types.ts:201](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L201) |

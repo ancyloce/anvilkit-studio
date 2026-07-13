@@ -3,7 +3,7 @@ title: "ApplyCommandsOptions"
 description: "@anvilkit/canvas-core · ApplyCommandsOptions"
 ---
 
-Defined in: [commands/transaction.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L18)
+Defined in: [commands/transaction.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L26)
 
 ## Extends
 
@@ -11,7 +11,11 @@ Defined in: [commands/transaction.ts:18](https://github.com/ancyloce/anvilkit-st
 
 ## Properties
 
-| Property | Type | Inherited from | Defined in |
-| ------ | ------ | ------ | ------ |
-| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `string` | - | [commands/transaction.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L19) |
-| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | [`CommandApplyOptions`](CommandApplyOptions.md).[`now`](CommandApplyOptions.md#now) | [commands/types.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L180) |
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="actorid"&gt;&lt;/a&gt; `actorId?` | `string` | Who applied this transaction. Forwarded to every record. Defaults to `"local"`. | - | [commands/transaction.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L29) |
+| &lt;a id="commandidfactory"&gt;&lt;/a&gt; `commandIdFactory?` | () =&gt; `string` | Injectable id factory for each record's `commandId`. Defaults to `crypto.randomUUID`. | - | [commands/transaction.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L35) |
+| &lt;a id="label"&gt;&lt;/a&gt; `label?` | `string` | - | - | [commands/transaction.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L27) |
+| &lt;a id="now"&gt;&lt;/a&gt; `now?` | () =&gt; `string` | - | [`CommandApplyOptions`](CommandApplyOptions.md).[`now`](CommandApplyOptions.md#now) | [commands/types.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/types.ts#L180) |
+| &lt;a id="sequence"&gt;&lt;/a&gt; `sequence?` | `number` | Base sequence for this transaction; each command's record gets `sequence + index`. Defaults to `0`. | - | [commands/transaction.ts:33](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L33) |
+| &lt;a id="source"&gt;&lt;/a&gt; `source?` | [`CanvasChangeSource`](../type-aliases/CanvasChangeSource) | `"remote"` records may bypass a host's local undo stack. Defaults to `"local"`. | - | [commands/transaction.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L31) |

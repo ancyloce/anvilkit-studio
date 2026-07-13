@@ -1,0 +1,37 @@
+---
+title: "CanvasVideoNode"
+description: "@anvilkit/canvas-core · CanvasVideoNode"
+---
+
+Defined in: [ir/types.ts:472](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L472)
+
+Fields shared by the video/audio asset-reference nodes (FR-081,
+canvas-m6-002). Deliberately holds ONLY an `assetId` — no inline media
+bytes ever enter Canvas IR, matching the `image`/`svg` asset-reference
+convention. No playback/rendering is implemented in canvas-core: this is a
+contract an export/render worker consumes later.
+
+## Extends
+
+- [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md)
+
+## Properties
+
+| Property | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="assetid"&gt;&lt;/a&gt; `assetId` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`assetId`](CanvasMediaNodeBase.md#assetid) | [ir/types.ts:465](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L465) |
+| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`blendMode`](CanvasMediaNodeBase.md#blendmode) | [ir/types.ts:226](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L226) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`bounds`](CanvasMediaNodeBase.md#bounds) | [ir/types.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L222) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`id`](CanvasMediaNodeBase.md#id) | [ir/types.ts:219](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L219) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`locked`](CanvasMediaNodeBase.md#locked) | [ir/types.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L225) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`meta`](CanvasMediaNodeBase.md#meta) | [ir/types.ts:228](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L228) |
+| &lt;a id="muted"&gt;&lt;/a&gt; `muted?` | `boolean` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`muted`](CanvasMediaNodeBase.md#muted) | [ir/types.ts:467](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L467) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`name`](CanvasMediaNodeBase.md#name) | [ir/types.ts:220](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L220) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`opacity`](CanvasMediaNodeBase.md#opacity) | [ir/types.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L223) |
+| &lt;a id="poster"&gt;&lt;/a&gt; `poster?` | `string` | Asset id of a still frame — the only visual a static export can show for a video node. | - | [ir/types.ts:475](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L475) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`transform`](CanvasMediaNodeBase.md#transform) | [ir/types.ts:221](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L221) |
+| &lt;a id="trim"&gt;&lt;/a&gt; `trim?` | [`CanvasMediaTrim`](CanvasMediaTrim.md) | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`trim`](CanvasMediaNodeBase.md#trim) | [ir/types.ts:466](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L466) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"video"` | - | - | [ir/types.ts:473](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L473) |
+| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`visible`](CanvasMediaNodeBase.md#visible) | [ir/types.ts:224](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L224) |
+| &lt;a id="volume"&gt;&lt;/a&gt; `volume?` | `number` | 0-1 playback volume. Defaults to 1 (full volume). Ignored when `muted`. | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`volume`](CanvasMediaNodeBase.md#volume) | [ir/types.ts:469](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L469) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex` | `number` | - | [`CanvasMediaNodeBase`](CanvasMediaNodeBase.md).[`zIndex`](CanvasMediaNodeBase.md#zindex) | [ir/types.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L227) |

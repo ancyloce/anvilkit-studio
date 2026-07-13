@@ -3,12 +3,13 @@ title: "TransactionApplyResult"
 description: "@anvilkit/canvas-core · TransactionApplyResult"
 ---
 
-Defined in: [commands/transaction.ts:10](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L10)
+Defined in: [commands/transaction.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L16)
 
 ## Properties
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="changes"&gt;&lt;/a&gt; `changes` | [`CanvasChange`](../type-aliases/CanvasChange)[] | Per-command change records, in apply order. | [commands/transaction.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L15) |
-| &lt;a id="inverse"&gt;&lt;/a&gt; `inverse` | [`CanvasBatchCommand`](CanvasBatchCommand.md) | A single composite inverse (a `batch`) for the history stack. | [commands/transaction.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L13) |
-| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | [`CanvasIR`](CanvasIR.md) | - | [commands/transaction.ts:11](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L11) |
+| &lt;a id="changes"&gt;&lt;/a&gt; `changes` | [`CanvasChange`](../type-aliases/CanvasChange)[] | Per-command change records, in apply order. | [commands/transaction.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L21) |
+| &lt;a id="inverse"&gt;&lt;/a&gt; `inverse` | [`CanvasBatchCommand`](CanvasBatchCommand.md) | A single composite inverse (a `batch`) for the history stack. | [commands/transaction.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L19) |
+| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | [`CanvasIR`](CanvasIR.md) | - | [commands/transaction.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L17) |
+| &lt;a id="records"&gt;&lt;/a&gt; `records` | [`CanvasChangeRecord`](CanvasChangeRecord.md)[] | Per-command enriched, persistable/replayable records (FR-070), in apply order. | [commands/transaction.ts:23](https://github.com/ancyloce/anvilkit-studio/blob/main/src/commands/transaction.ts#L23) |

@@ -1,0 +1,26 @@
+---
+title: "CanvasAudioNodeSchema"
+description: "@anvilkit/canvas-core · CanvasAudioNodeSchema"
+---
+
+```ts
+const CanvasAudioNodeSchema: ZodObject<{
+  assetId: ZodString;
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  muted: ZodOptional<ZodBoolean>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  trim: ZodOptional<ZodType<CanvasMediaTrim, unknown, $ZodTypeInternals<CanvasMediaTrim, unknown>>>;
+  type: ZodLiteral<"audio">;
+  visible: ZodOptional<ZodBoolean>;
+  volume: ZodOptional<ZodNumber>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:418](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L418)

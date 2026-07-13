@@ -3,13 +3,19 @@ title: "TemplateLicense"
 description: "@anvilkit/canvas-core · TemplateLicense"
 ---
 
-Defined in: [templates/types.ts:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L116)
+Defined in: [templates/types.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L121)
 
-License metadata for a template. Extended into a real shape in canvas-m6-003 (FR-082).
+License metadata for a template (FR-082, canvas-m6-003). `type` is a
+human-facing label (e.g. "CC-BY-4.0", "Marketplace Standard",
+"Enterprise Internal"); the rest is additive over the canvas-m2-001
+placeholder shape so existing consumers keep working unchanged.
 
 ## Properties
 
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| &lt;a id="attribution"&gt;&lt;/a&gt; `attribution?` | `string` | [templates/types.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L118) |
-| &lt;a id="type"&gt;&lt;/a&gt; `type` | `string` | [templates/types.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L117) |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="attribution"&gt;&lt;/a&gt; `attribution?` | `string` | Attribution text to display when `attributionRequired` is set. | [templates/types.ts:124](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L124) |
+| &lt;a id="attributionrequired"&gt;&lt;/a&gt; `attributionRequired?` | `boolean` | Whether `attribution` must be shown to satisfy this license. Defaults to false. | [templates/types.ts:126](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L126) |
+| &lt;a id="redistributable"&gt;&lt;/a&gt; `redistributable?` | `boolean` | Whether designs made from this template may be redistributed/resold. Defaults to false (conservative). | [templates/types.ts:128](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L128) |
+| &lt;a id="redistributionterms"&gt;&lt;/a&gt; `redistributionTerms?` | `string` | Human-readable summary of redistribution restrictions beyond the boolean flag. | [templates/types.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L130) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `string` | - | [templates/types.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/types.ts#L122) |

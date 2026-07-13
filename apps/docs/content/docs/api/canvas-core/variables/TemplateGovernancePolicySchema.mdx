@@ -1,0 +1,14 @@
+---
+title: "TemplateGovernancePolicySchema"
+description: "@anvilkit/canvas-core · TemplateGovernancePolicySchema"
+---
+
+```ts
+const TemplateGovernancePolicySchema: z.ZodType<TemplateGovernancePolicy>;
+```
+
+Defined in: [templates/validators.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/validators.ts#L118)
+
+Standalone — deliberately NOT nested under [CanvasTemplateDefinitionSchema](CanvasTemplateDefinitionSchema.md).
+A marketplace/enterprise platform validates and stores this separately,
+keyed by `templateId`, so it can never affect normal template validation.

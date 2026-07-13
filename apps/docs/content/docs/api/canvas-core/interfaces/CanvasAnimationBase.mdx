@@ -1,0 +1,31 @@
+---
+title: "CanvasAnimationBase"
+description: "@anvilkit/canvas-core · CanvasAnimationBase"
+---
+
+Defined in: [ir/types.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L153)
+
+Serializable animation metadata (FR-080, canvas-m6-001). Describes intent
+only — timing/kind data for a future editor preview or video/GIF export
+worker to interpret. Static exports (SVG/PNG/PDF) always render a node/page
+in its normal resting state (its own `transform`/`opacity`/etc., unaffected
+by this field) and merely surface a warning that motion exists but isn't
+represented — this metadata is never a second, divergent static appearance.
+
+## Extended by
+
+- [`CanvasFadeAnimation`](CanvasFadeAnimation.md)
+- [`CanvasSlideAnimation`](CanvasSlideAnimation.md)
+- [`CanvasScaleAnimation`](CanvasScaleAnimation.md)
+- [`CanvasRotateAnimation`](CanvasRotateAnimation.md)
+- [`CanvasPopAnimation`](CanvasPopAnimation.md)
+- [`CanvasTypewriterAnimation`](CanvasTypewriterAnimation.md)
+- [`CanvasMotionPathAnimation`](CanvasMotionPathAnimation.md)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="delay"&gt;&lt;/a&gt; `delay?` | `number` | Seconds after the page/timeline starts before this animation begins. Defaults to 0. | [ir/types.ts:155](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L155) |
+| &lt;a id="duration"&gt;&lt;/a&gt; `duration` | `number` | Seconds the animation takes to complete. | [ir/types.ts:157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L157) |
+| &lt;a id="easing"&gt;&lt;/a&gt; `easing?` | [`CanvasAnimationEasing`](../type-aliases/CanvasAnimationEasing) | - | [ir/types.ts:158](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L158) |
