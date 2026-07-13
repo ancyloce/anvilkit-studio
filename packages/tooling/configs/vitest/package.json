@@ -30,8 +30,8 @@
 		"@anvilkit/biome-config": "workspace:*",
 		"@anvilkit/typescript-config": "workspace:*",
 		"@testing-library/jest-dom": "^6.9.1",
-		"typescript": "6.0.3",
-		"vitest": "^4.1.9"
+		"typescript": "7.0.2",
+		"vitest": "^4.1.10"
 	},
 	"peerDependencies": {
 		"@testing-library/jest-dom": "^6.9.0",

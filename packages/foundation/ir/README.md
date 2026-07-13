@@ -81,7 +81,7 @@ for the full package catalog and trust-boundary discussion.
 | Package            | Version   |
 | ------------------ | --------- |
 | `@anvilkit/core`   | `^0.1.4`  |
-| `@puckeditor/core` | `^0.22.0` |
+| `@puckeditor/core` | `^0.22.1` |
 
 ## Dependency contract
 

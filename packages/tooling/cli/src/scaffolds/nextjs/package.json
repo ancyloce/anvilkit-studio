@@ -12,15 +12,15 @@
 	"dependencies": {
 		"@anvilkit/core": "0.1.0-alpha.0",
 		"@anvilkit/ir": "0.1.0-alpha.0",
-		"@puckeditor/core": "^0.22.0",
+		"@puckeditor/core": "^0.22.1",
 		"next": "^16.2.9",
 		"react": "^19.2.7",
 		"react-dom": "^19.2.7"
 	},
 	"devDependencies": {
-		"@types/node": "^26.0.1",
+		"@types/node": "^26.1.1",
 		"@types/react": "^19.2.17",
 		"@types/react-dom": "19.2.3",
-		"typescript": "6.0.3"
+		"typescript": "7.0.2"
 	}
 }
