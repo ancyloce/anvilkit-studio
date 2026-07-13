@@ -1,0 +1,22 @@
+---
+title: "AiProviderCapabilities"
+description: "@anvilkit/canvas-core · AiProviderCapabilities"
+---
+
+Defined in: ai-design-contracts.ts:179
+
+Which ops a given provider supports (FR-051) — sibling metadata a host
+supplies alongside its `AiImageProvider`/`AiDesignProvider` functions,
+since a bare function has no introspectable capabilities of its own. The
+editor (canvas-m4-004) reads this to conditionally show/hide AI actions
+rather than surfacing an action that will always fail for a given
+provider. Omitting a list (vs. an empty array) means "unknown — assume
+everything is supported", so pre-M4 hosts that don't yet supply
+capabilities keep today's behavior.
+
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="designops"&gt;&lt;/a&gt; `designOps?` | `readonly` | readonly ( \| `"prompt-to-design"` \| `"prompt-to-template"` \| `"rewrite-copy"` \| `"generate-headline"` \| `"generate-layout-variants"` \| `"apply-brand"` \| `"resize-campaign"` \| `"generate-social-pack"`)[] | ai-design-contracts.ts:181 |
+| &lt;a id="imageops"&gt;&lt;/a&gt; `imageOps?` | `readonly` | readonly ( \| `"text-to-image"` \| `"variation"` \| `"inpaint"` \| `"bg-remove"` \| `"upscale"` \| `"generative-fill"` \| `"generative-expand"` \| `"object-erase"` \| `"background-replace"`)[] | ai-design-contracts.ts:180 |

@@ -1,0 +1,27 @@
+---
+title: "AiDesignJobPayload"
+description: "@anvilkit/plugin-ai-image · AiDesignJobPayload"
+---
+
+```ts
+type AiDesignJobPayload = 
+  | {
+  command: CanvasCommand;
+  kind: "command";
+}
+  | {
+  kind: "pages";
+  pages: readonly CanvasPage[];
+};
+```
+
+Defined in: capabilities/canvas/core/dist/ai-design-contracts.d.ts:97
+
+What a completed design job produced — never a flattened raster. `command`
+covers in-place edits to the CURRENT document (rewrite-copy,
+generate-headline, apply-brand); `pages` covers ops that generate new
+candidate pages (prompt-to-design, prompt-to-template,
+generate-layout-variants, resize-campaign, generate-social-pack), inserted
+as same-document pages exactly like `resizeToVariants`/`instantiateTemplate`
+already do. Both must validate against the normal `CanvasIR`/command
+schemas before ever reaching a real document (canvas-m4-003).

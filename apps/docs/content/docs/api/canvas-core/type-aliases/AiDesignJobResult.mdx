@@ -1,0 +1,29 @@
+---
+title: "AiDesignJobResult"
+description: "@anvilkit/canvas-core · AiDesignJobResult"
+---
+
+```ts
+type AiDesignJobResult = 
+  | AiDesignJobResultBase & {
+  status: "pending";
+}
+  | AiDesignJobResultBase & {
+  payload: AiDesignJobPayload;
+  status: "complete";
+}
+  | AiDesignJobResultBase & {
+  error: AiDesignJobError;
+  status: "error";
+}
+  | AiDesignJobResultBase & {
+  status: "cancelled";
+};
+```
+
+Defined in: ai-design-contracts.ts:140
+
+Status-discriminated, matching `AiImageJobResult`'s FR-050 failed-job
+invariant: `payload` exists ONLY on a `"complete"` result and `error` ONLY
+on an `"error"` one — a failed or cancelled design job has no payload to
+accidentally apply, enforced at compile time rather than by convention.

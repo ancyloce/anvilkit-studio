@@ -1,0 +1,28 @@
+---
+title: "AiPromptToDesignRequest"
+description: "@anvilkit/canvas-core · AiPromptToDesignRequest"
+---
+
+Defined in: ai-design-contracts.ts:27
+
+Design-level AI job contracts (FR-050, canvas-m4-001) — a separate union
+from `AiImageJobRequest` (`ai-contracts.ts`) because these ops are not
+image-in/image-out: they read/produce whole pages, node content, or a
+`BrandKitDefinition`/`CanvasSizePreset` reference, none of which fit that
+union's shape. Ranked at 5 (alongside `serialize/`), not 2 like
+`ai-contracts.ts` — it needs `templates/`/`brand/`/`commands/` (rank 3-4)
+types, so it must outrank all three.
+
+Unlike `ai-contracts.ts`, this module is NOT types-only: canvas-m4-003's
+`validateAiDesignJobResult` is real runtime validation logic (mirrors
+`text-contracts.ts`'s `resolveSpanStyle`, another rank-appropriate contract
+file that mixes types with a small amount of pure logic) — hence the root
+barrel re-exports it with `export *`, not `export type *`.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `"prompt-to-design"` | - | ai-design-contracts.ts:28 |
+| &lt;a id="presetid"&gt;&lt;/a&gt; `presetId?` | `string` | A `CanvasSizePreset.id`; omitted lets the provider choose a default canvas size. | ai-design-contracts.ts:31 |
+| &lt;a id="prompt"&gt;&lt;/a&gt; `prompt` | `string` | - | ai-design-contracts.ts:29 |

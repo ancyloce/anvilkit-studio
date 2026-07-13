@@ -14,7 +14,13 @@ import ts from "typescript";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = join(__dirname, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
-const COMPONENTS_SRC = join(WORKSPACE_ROOT, "packages", "extensions", "components", "src");
+const COMPONENTS_SRC = join(
+	WORKSPACE_ROOT,
+	"packages",
+	"extensions",
+	"components",
+	"src",
+);
 const OUT_DIR = join(DOCS_ROOT, "content", "docs", "components");
 // Central translation store (committed in the main repo). A `<slug>.<lang>.md`
 // here overrides the English package README body for that locale; otherwise the

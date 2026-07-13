@@ -119,12 +119,31 @@ function parseArgs(argv: ReadonlyArray<string>): CliArgs {
 
 function packageDir(entry: RegistryEntry): string {
 	if (entry.kind === "template") {
-		return join(WORKSPACE_ROOT, "packages", "extensions", "templates", entry.slug);
+		return join(
+			WORKSPACE_ROOT,
+			"packages",
+			"extensions",
+			"templates",
+			entry.slug,
+		);
 	}
 	if (entry.kind === "plugin") {
-		return join(WORKSPACE_ROOT, "packages", "extensions", "plugins", entry.slug);
+		return join(
+			WORKSPACE_ROOT,
+			"packages",
+			"extensions",
+			"plugins",
+			entry.slug,
+		);
 	}
-	return join(WORKSPACE_ROOT, "packages", "extensions", "components", "src", entry.slug);
+	return join(
+		WORKSPACE_ROOT,
+		"packages",
+		"extensions",
+		"components",
+		"src",
+		entry.slug,
+	);
 }
 
 function checkLicense(pkgJson: { license?: string }): boolean {

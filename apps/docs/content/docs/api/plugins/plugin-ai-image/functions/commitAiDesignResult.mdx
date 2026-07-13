@@ -1,0 +1,31 @@
+---
+title: "commitAiDesignResult"
+description: "@anvilkit/plugin-ai-image · commitAiDesignResult"
+---
+
+```ts
+function commitAiDesignResult<T>(options): CommitAiDesignResultOutcome<T>;
+```
+
+Defined in: extensions/plugins/plugin-ai-image/src/commit/commit-ai-design-result.ts:46
+
+Validates `result` (canvas-m4-003's quarantine layer) and, only if it
+passes, commits the normalized batch command through the injected
+`commit`. A non-`"complete"` job or an invalid payload never reaches
+`commit` at all — the caller gets a structured `error` back instead.
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `unknown` |
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CommitAiDesignResultOptions`](../interfaces/CommitAiDesignResultOptions)\&lt;`T`\&gt; |
+
+## Returns
+
+[`CommitAiDesignResultOutcome`](../type-aliases/CommitAiDesignResultOutcome)\<`T`\>

@@ -1,7 +1,4 @@
 {
 	"title": "模板",
-	"pages": [
-		"index",
-		"..."
-	]
+	"pages": ["index", "..."]
 }

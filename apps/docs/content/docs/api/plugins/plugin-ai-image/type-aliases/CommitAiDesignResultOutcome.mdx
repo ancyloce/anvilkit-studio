@@ -1,0 +1,24 @@
+---
+title: "CommitAiDesignResultOutcome"
+description: "@anvilkit/plugin-ai-image · CommitAiDesignResultOutcome"
+---
+
+```ts
+type CommitAiDesignResultOutcome<T> = 
+  | {
+  committed: T;
+  ok: true;
+}
+  | {
+  error: AiDesignQuarantineError;
+  ok: false;
+};
+```
+
+Defined in: extensions/plugins/plugin-ai-image/src/commit/commit-ai-design-result.ts:36
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `T` | `unknown` |

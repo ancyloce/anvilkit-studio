@@ -3,12 +3,13 @@ title: "AiLayerContext"
 description: "@anvilkit/plugin-ai-image · AiLayerContext"
 ---
 
-Defined in: capabilities/canvas/core/dist/ai-contracts.d.ts:54
+Defined in: capabilities/canvas/core/dist/ai-contracts.d.ts:107
 
 ## Properties
 
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| &lt;a id="artboardid"&gt;&lt;/a&gt; `artboardId` | `string` | capabilities/canvas/core/dist/ai-contracts.d.ts:55 |
-| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds?` | [`AiLayerBounds`](AiLayerBounds.md) | capabilities/canvas/core/dist/ai-contracts.d.ts:57 |
-| &lt;a id="selectednodeid"&gt;&lt;/a&gt; `selectedNodeId?` | `string` | capabilities/canvas/core/dist/ai-contracts.d.ts:56 |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="artboardid"&gt;&lt;/a&gt; `artboardId` | `string` | - | capabilities/canvas/core/dist/ai-contracts.d.ts:108 |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds?` | [`AiLayerBounds`](AiLayerBounds.md) | - | capabilities/canvas/core/dist/ai-contracts.d.ts:119 |
+| &lt;a id="selectednodeid"&gt;&lt;/a&gt; `selectedNodeId?` | `string` | - | capabilities/canvas/core/dist/ai-contracts.d.ts:109 |
+| &lt;a id="selectednodekind"&gt;&lt;/a&gt; `selectedNodeKind?` | `CanvasNodeKind` | The selected node's kind (FR-053, canvas-m4-004) — lets a host UI decide whether an action that only makes sense for certain node kinds (e.g. rewriting text) applies to the current selection, without a second round-trip into the editor. Omitted means "unknown" (e.g. no selection, or a host that hasn't started populating it yet) — callers should not treat omission as "not a text node". | capabilities/canvas/core/dist/ai-contracts.d.ts:118 |

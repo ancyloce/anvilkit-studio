@@ -1,0 +1,32 @@
+---
+title: "AiImageJobResult"
+description: "@anvilkit/canvas-core · AiImageJobResult"
+---
+
+```ts
+type AiImageJobResult = 
+  | AiImageJobResultBase & {
+  status: "pending";
+}
+  | AiImageJobResultBase & {
+  resultAssetId: string;
+  status: "complete";
+}
+  | AiImageJobResultBase & {
+  error: AiImageJobError;
+  status: "error";
+}
+  | AiImageJobResultBase & {
+  status: "cancelled";
+};
+```
+
+Defined in: [ai-contracts.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ai-contracts.ts#L114)
+
+Status-discriminated (FR-050's failed-job invariant, canvas-m4-001):
+`resultAssetId` exists ONLY on a `"complete"` result and `error` ONLY on an
+`"error"` one, so it is a compile error — not just a documented
+convention — to read an asset id off a job that didn't succeed. This is
+additive over the pre-M4 flat shape: every existing construction site
+already paired `status: "complete"` with `resultAssetId` and
+`status: "error"` with `error`, so no real provider/consumer changes.

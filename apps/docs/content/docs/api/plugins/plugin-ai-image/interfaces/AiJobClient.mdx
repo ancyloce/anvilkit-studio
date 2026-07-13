@@ -3,7 +3,15 @@ title: "AiJobClient"
 description: "@anvilkit/plugin-ai-image · AiJobClient"
 ---
 
-Defined in: [extensions/plugins/plugin-ai-image/src/job/ai-job-client.ts:79](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/ai-job-client.ts#L79)
+Defined in: [extensions/plugins/plugin-ai-image/src/job/ai-job-client.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/ai-job-client.ts#L107)
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `TRequest` | [`AiImageJobRequest`](../type-aliases/AiImageJobRequest) |
+| `TResult` *extends* [`AiJobResultLike`](AiJobResultLike.md) | [`AiImageJobResult`](../type-aliases/AiImageJobResult) |
+| `TContext` | [`AiLayerContext`](AiLayerContext.md) |
 
 ## Methods
 
@@ -13,12 +21,12 @@ Defined in: [extensions/plugins/plugin-ai-image/src/job/ai-job-client.ts:79](htt
 run(
    request, 
    context, 
-options?): Promise<AiImageJobResult>;
+options?): Promise<TResult>;
 ```
 
-Defined in: [extensions/plugins/plugin-ai-image/src/job/ai-job-client.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/ai-job-client.ts#L89)
+Defined in: [extensions/plugins/plugin-ai-image/src/job/ai-job-client.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/ai-job-client.ts#L121)
 
-Submit a job and resolve to its terminal [AiImageJobResult](AiImageJobResult.md).
+Submit a job and resolve to its terminal result.
 
 - Transient failures (provider throws `RetryableError`) are retried
   with full-jitter backoff.
@@ -30,10 +38,10 @@ Submit a job and resolve to its terminal [AiImageJobResult](AiImageJobResult.md)
 
 | Parameter | Type |
 | ------ | ------ |
-| `request` | [`AiImageJobRequest`](../type-aliases/AiImageJobRequest) |
-| `context` | [`AiLayerContext`](AiLayerContext.md) |
+| `request` | `TRequest` |
+| `context` | `TContext` |
 | `options?` | [`AiJobRunOptions`](AiJobRunOptions.md) |
 
 #### Returns
 
-`Promise`\<[`AiImageJobResult`](AiImageJobResult.md)\>
+`Promise`\<`TResult`\>

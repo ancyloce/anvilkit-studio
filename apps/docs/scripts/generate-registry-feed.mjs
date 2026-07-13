@@ -27,7 +27,13 @@ const here = dirname(fileURLToPath(import.meta.url));
 const DOCS_ROOT = join(here, "..");
 const WORKSPACE_ROOT = join(DOCS_ROOT, "..", "..");
 const PLUGINS_ROOT = join(WORKSPACE_ROOT, "packages", "extensions", "plugins");
-const COMPONENTS_ROOT = join(WORKSPACE_ROOT, "packages", "extensions", "components", "src");
+const COMPONENTS_ROOT = join(
+	WORKSPACE_ROOT,
+	"packages",
+	"extensions",
+	"components",
+	"src",
+);
 
 const FEED_OUT_DIR = join(DOCS_ROOT, "src", "registry");
 const FEED_OUT_PATH = join(FEED_OUT_DIR, "feed.json");

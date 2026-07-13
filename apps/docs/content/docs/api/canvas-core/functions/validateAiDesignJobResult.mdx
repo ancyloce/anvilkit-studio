@@ -1,0 +1,29 @@
+---
+title: "validateAiDesignJobResult"
+description: "@anvilkit/canvas-core · validateAiDesignJobResult"
+---
+
+```ts
+function validateAiDesignJobResult(result): ValidateAiDesignJobResultOutcome;
+```
+
+Defined in: ai-design-contracts.ts:228
+
+Validates an `AiDesignJobResult`'s payload against the normal Canvas IR /
+command schemas before it is safe to apply to a real document (FR-052,
+canvas-m4-003). Pure — never mutates anything and never applies the
+command itself; it only decides whether the payload is safe, normalizing
+either payload shape to one ready-to-commit `CanvasBatchCommand`. A
+non-`"complete"` job, or one whose payload fails validation, is
+quarantined: this returns `ok: false` with a structured error rather than
+silently dropping content or force-coercing it into the document.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `result` | [`AiDesignJobResult`](../type-aliases/AiDesignJobResult) |
+
+## Returns
+
+[`ValidateAiDesignJobResultOutcome`](../type-aliases/ValidateAiDesignJobResultOutcome)

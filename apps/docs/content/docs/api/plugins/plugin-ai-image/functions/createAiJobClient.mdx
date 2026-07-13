@@ -4,17 +4,25 @@ description: "@anvilkit/plugin-ai-image · createAiJobClient"
 ---
 
 ```ts
-function createAiJobClient(options): AiJobClient;
+function createAiJobClient<TRequest, TResult, TContext>(options): AiJobClient<TRequest, TResult, TContext>;
 ```
 
-Defined in: [extensions/plugins/plugin-ai-image/src/job/ai-job-client.ts:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/ai-job-client.ts#L116)
+Defined in: [extensions/plugins/plugin-ai-image/src/job/ai-job-client.ts:142](https://github.com/ancyloce/anvilkit-studio/blob/main/src/job/ai-job-client.ts#L142)
+
+## Type Parameters
+
+| Type Parameter | Default type |
+| ------ | ------ |
+| `TRequest` | [`AiImageJobRequest`](../type-aliases/AiImageJobRequest) |
+| `TResult` *extends* [`AiJobResultLike`](../interfaces/AiJobResultLike) | [`AiImageJobResult`](../type-aliases/AiImageJobResult) |
+| `TContext` | [`AiLayerContext`](../interfaces/AiLayerContext) |
 
 ## Parameters
 
 | Parameter | Type |
 | ------ | ------ |
-| `options` | [`AiJobClientOptions`](../interfaces/AiJobClientOptions) |
+| `options` | [`AiJobClientOptions`](../interfaces/AiJobClientOptions)\&lt;`TRequest`, `TResult`, `TContext`\&gt; |
 
 ## Returns
 
-[`AiJobClient`](../interfaces/AiJobClient)
+[`AiJobClient`](../interfaces/AiJobClient)\<`TRequest`, `TResult`, `TContext`\>

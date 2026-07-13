@@ -1,0 +1,31 @@
+---
+title: "AiDesignProvider"
+description: "@anvilkit/canvas-core · AiDesignProvider"
+---
+
+```ts
+type AiDesignProvider = (request, context, options?) => Promise<AiDesignJobResult>;
+```
+
+Defined in: ai-design-contracts.ts:163
+
+Bare function type, deliberately mirroring `AiImageProvider` rather than
+generalizing to an `AssetSourceProvider`-style object interface
+(canvas-m4-002's recorded decision): `AiImageProvider` is already the
+established, widely-consumed shape (mock + real Replicate adapter +
+`AiJobClient`), and object-ifying it now would be a breaking change to
+that existing surface for no behavioral gain — capability discovery
+(below) is handled as sibling metadata instead of restructuring the
+function itself.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `request` | [`AiDesignJobRequest`](AiDesignJobRequest.md) |
+| `context` | [`AiLayerContext`](../interfaces/AiLayerContext) |
+| `options?` | [`AiDesignProviderOptions`](../interfaces/AiDesignProviderOptions) |
+
+## Returns
+
+`Promise`\<[`AiDesignJobResult`](AiDesignJobResult.md)\>

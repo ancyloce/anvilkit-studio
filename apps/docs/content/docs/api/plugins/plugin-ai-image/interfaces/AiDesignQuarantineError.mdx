@@ -1,0 +1,16 @@
+---
+title: "AiDesignQuarantineError"
+description: "@anvilkit/plugin-ai-image · AiDesignQuarantineError"
+---
+
+Defined in: capabilities/canvas/core/dist/ai-design-contracts.d.ts:155
+
+A structured, user-facing reason an `AiDesignJobResult` was quarantined rather than applied.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `"job-not-complete"` \| `"invalid-payload"` | - | capabilities/canvas/core/dist/ai-design-contracts.d.ts:156 |
+| &lt;a id="issues"&gt;&lt;/a&gt; `issues?` | `readonly` | readonly `string`[] | Zod issue messages, present only for `"invalid-payload"`. | capabilities/canvas/core/dist/ai-design-contracts.d.ts:159 |
+| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | - | capabilities/canvas/core/dist/ai-design-contracts.d.ts:157 |

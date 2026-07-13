@@ -1,0 +1,20 @@
+---
+title: "AiApplyBrandRequest"
+description: "@anvilkit/canvas-core · AiApplyBrandRequest"
+---
+
+Defined in: ai-design-contracts.ts:72
+
+Applies a brand kit via an AI-inferred choice of transforms. The AI only
+decides *which* of canvas-m2-006's `applyBrandColors`/`replaceFonts`/etc.
+pure transforms to run and in what combination — the actual document
+mutation always goes through those already-reversible, already-tested
+functions, never a bespoke AI-authored edit.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="brandkit"&gt;&lt;/a&gt; `brandKit` | [`BrandKitDefinition`](BrandKitDefinition.md) | ai-design-contracts.ts:74 |
+| &lt;a id="kind"&gt;&lt;/a&gt; `kind` | `"apply-brand"` | ai-design-contracts.ts:73 |
+| &lt;a id="targetpageid"&gt;&lt;/a&gt; `targetPageId?` | `string` | ai-design-contracts.ts:75 |
