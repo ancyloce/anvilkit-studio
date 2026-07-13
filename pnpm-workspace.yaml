@@ -67,10 +67,38 @@ minimumReleaseAgeExclude:
   - '@dotenvx/primitives@0.8.0'
   - nanoid@3.3.14 || 5.1.15
   - tabbable@6.5.0
-  - '@puckeditor/core@0.22.0'
+  - '@puckeditor/core@0.22.0 || 0.22.1'
   - framer-motion@12.42.0
   - motion-dom@12.42.0
   - motion@12.42.0
+  - '@tiptap/core@3.27.4'
+  - '@tiptap/extension-blockquote@3.27.4'
+  - '@tiptap/extension-bold@3.27.4'
+  - '@tiptap/extension-bubble-menu@3.27.4'
+  - '@tiptap/extension-bullet-list@3.27.4'
+  - '@tiptap/extension-code-block@3.27.4'
+  - '@tiptap/extension-code@3.27.4'
+  - '@tiptap/extension-document@3.27.4'
+  - '@tiptap/extension-dropcursor@3.27.4'
+  - '@tiptap/extension-floating-menu@3.27.4'
+  - '@tiptap/extension-gapcursor@3.27.4'
+  - '@tiptap/extension-hard-break@3.27.4'
+  - '@tiptap/extension-heading@3.27.4'
+  - '@tiptap/extension-horizontal-rule@3.27.4'
+  - '@tiptap/extension-italic@3.27.4'
+  - '@tiptap/extension-link@3.27.4'
+  - '@tiptap/extension-list-item@3.27.4'
+  - '@tiptap/extension-list-keymap@3.27.4'
+  - '@tiptap/extension-list@3.27.4'
+  - '@tiptap/extension-ordered-list@3.27.4'
+  - '@tiptap/extension-paragraph@3.27.4'
+  - '@tiptap/extension-strike@3.27.4'
+  - '@tiptap/extension-text@3.27.4'
+  - '@tiptap/extension-underline@3.27.4'
+  - '@tiptap/extensions@3.27.4'
+  - '@tiptap/pm@3.27.4'
+  - '@tiptap/react@3.27.4'
+  - '@tiptap/starter-kit@3.27.4'
 patchedDependencies:
   "@base-ui/react@1.6.0": packages/extensions/components/patches/@base-ui__react@1.6.0.patch
 
