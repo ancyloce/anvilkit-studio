@@ -1,0 +1,41 @@
+---
+title: "CanvasTemplateDefinition"
+description: "@anvilkit/canvas-core · CanvasTemplateDefinition"
+---
+
+Defined in: templates/types.ts:144
+
+The canonical template definition contract (PRD FR-020, §12.5).
+
+Naming: this supersedes `@anvilkit/canvas-templates`'s existing
+`CanvasTemplate` (`{slug, name, description, ir}`) — that package migrates
+its 10 templates to this shape and re-exports `CanvasTemplateDefinition`
+directly rather than keeping a separate, drifting type (see canvas-m2-004).
+`@anvilkit/canvas-editor`'s `CanvasTemplateEntry` remains the editor-facing,
+host-injected projection of this type — the editor cannot depend on the
+private templates package, so it keeps its own structurally-compatible type
+rather than importing this one (see `editor/src/templates/template-entry.ts`).
+
+Validates independently of normal Canvas IR: template-only metadata
+(`id`, `category`, `tags`, `variables`, `editableSlots`, etc.) never leaks
+into `document`, which is itself always a normal, independently-valid
+[CanvasIR](CanvasIR.md).
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category` | `string` | templates/types.ts:148 |
+| &lt;a id="document"&gt;&lt;/a&gt; `document` | [`CanvasIR`](CanvasIR.md) | templates/types.ts:153 |
+| &lt;a id="editableslots"&gt;&lt;/a&gt; `editableSlots` | [`TemplateSlot`](../type-aliases/TemplateSlot)[] | templates/types.ts:155 |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | templates/types.ts:145 |
+| &lt;a id="license"&gt;&lt;/a&gt; `license?` | [`TemplateLicense`](TemplateLicense.md) | templates/types.ts:157 |
+| &lt;a id="lockednodeids"&gt;&lt;/a&gt; `lockedNodeIds` | `string`[] | templates/types.ts:156 |
+| &lt;a id="previewassetid"&gt;&lt;/a&gt; `previewAssetId?` | `string` | templates/types.ts:150 |
+| &lt;a id="requiredassets"&gt;&lt;/a&gt; `requiredAssets?` | `string`[] | templates/types.ts:152 |
+| &lt;a id="source"&gt;&lt;/a&gt; `source?` | [`TemplateSourceMeta`](TemplateSourceMeta.md) | templates/types.ts:158 |
+| &lt;a id="supportedsizes"&gt;&lt;/a&gt; `supportedSizes` | [`CanvasSizePreset`](CanvasSizePreset.md)[] | templates/types.ts:151 |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags` | `string`[] | templates/types.ts:149 |
+| &lt;a id="title"&gt;&lt;/a&gt; `title` | `string` | templates/types.ts:147 |
+| &lt;a id="variables"&gt;&lt;/a&gt; `variables` | [`TemplateVariable`](TemplateVariable.md)[] | templates/types.ts:154 |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `string` | templates/types.ts:146 |

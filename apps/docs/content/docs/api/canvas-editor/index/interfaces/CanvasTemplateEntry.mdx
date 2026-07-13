@@ -3,21 +3,37 @@ title: "CanvasTemplateEntry"
 description: "@anvilkit/canvas-editor · CanvasTemplateEntry"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/templates/template-entry.ts:12](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-entry.ts#L12)
+Defined in: [packages/capabilities/canvas/editor/src/templates/template-entry.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-entry.ts#L13)
 
-A starter template supplied by the HOST as plain data (canvas-m0-009).
+A starter template supplied by the HOST as plain data (canvas-m0-009,
+upgraded to the canonical FR-020 contract in canvas-m2-004).
 
-Structurally compatible with `@anvilkit/canvas-templates`' `CanvasTemplate`
-so a host can pass that catalog straight through — but the editor
-deliberately does NOT depend on that package: it is private/unpublished,
-and this package is publishable. Templates reach the Templates dock panel
-via `CanvasStudioProps.templates`.
+Structurally compatible with `@anvilkit/canvas-templates`'s
+`CanvasTemplateCatalogEntry` so a host can pass that catalog straight
+through — but the editor deliberately does NOT depend on that package: it
+is private/unpublished, and this package is publishable. Templates reach
+the Templates dock panel via `CanvasStudioProps.templates`.
+
+## Extends
+
+- `CanvasTemplateDefinition`
 
 ## Properties
 
-| Property | Modifier | Type | Description | Defined in |
-| ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="description"&gt;&lt;/a&gt; `description?` | `readonly` | `string` | One-line blurb shown under the name. | [packages/capabilities/canvas/editor/src/templates/template-entry.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-entry.ts#L18) |
-| &lt;a id="ir"&gt;&lt;/a&gt; `ir` | `readonly` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | The design to load. Never mutated — pages are cloned with fresh ids. | [packages/capabilities/canvas/editor/src/templates/template-entry.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-entry.ts#L20) |
-| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | Display name shown in the Templates panel. | [packages/capabilities/canvas/editor/src/templates/template-entry.ts:16](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-entry.ts#L16) |
-| &lt;a id="slug"&gt;&lt;/a&gt; `slug` | `readonly` | `string` | Stable identifier (list key + testids). | [packages/capabilities/canvas/editor/src/templates/template-entry.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-entry.ts#L14) |
+| Property | Modifier | Type | Description | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="category"&gt;&lt;/a&gt; `category` | `public` | `string` | - | `CanvasTemplateDefinition.category` | packages/capabilities/canvas/core/dist/templates/types.d.ts:118 |
+| &lt;a id="description"&gt;&lt;/a&gt; `description?` | `readonly` | `string` | One-line blurb shown under the template's title in the Templates panel. | - | [packages/capabilities/canvas/editor/src/templates/template-entry.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/templates/template-entry.ts#L15) |
+| &lt;a id="document"&gt;&lt;/a&gt; `document` | `public` | [`CanvasIR`](https://github.com/ancyloce/anvilkit-canvas-core/blob/main/src/ir/types.ts) | - | `CanvasTemplateDefinition.document` | packages/capabilities/canvas/core/dist/templates/types.d.ts:123 |
+| &lt;a id="editableslots"&gt;&lt;/a&gt; `editableSlots` | `public` | `TemplateSlot`[] | - | `CanvasTemplateDefinition.editableSlots` | packages/capabilities/canvas/core/dist/templates/types.d.ts:125 |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `public` | `string` | - | `CanvasTemplateDefinition.id` | packages/capabilities/canvas/core/dist/templates/types.d.ts:115 |
+| &lt;a id="license"&gt;&lt;/a&gt; `license?` | `public` | `TemplateLicense` | - | `CanvasTemplateDefinition.license` | packages/capabilities/canvas/core/dist/templates/types.d.ts:127 |
+| &lt;a id="lockednodeids"&gt;&lt;/a&gt; `lockedNodeIds` | `public` | `string`[] | - | `CanvasTemplateDefinition.lockedNodeIds` | packages/capabilities/canvas/core/dist/templates/types.d.ts:126 |
+| &lt;a id="previewassetid"&gt;&lt;/a&gt; `previewAssetId?` | `public` | `string` | - | `CanvasTemplateDefinition.previewAssetId` | packages/capabilities/canvas/core/dist/templates/types.d.ts:120 |
+| &lt;a id="requiredassets"&gt;&lt;/a&gt; `requiredAssets?` | `public` | `string`[] | - | `CanvasTemplateDefinition.requiredAssets` | packages/capabilities/canvas/core/dist/templates/types.d.ts:122 |
+| &lt;a id="source"&gt;&lt;/a&gt; `source?` | `public` | `TemplateSourceMeta` | - | `CanvasTemplateDefinition.source` | packages/capabilities/canvas/core/dist/templates/types.d.ts:128 |
+| &lt;a id="supportedsizes"&gt;&lt;/a&gt; `supportedSizes` | `public` | `CanvasSizePreset`[] | - | `CanvasTemplateDefinition.supportedSizes` | packages/capabilities/canvas/core/dist/templates/types.d.ts:121 |
+| &lt;a id="tags"&gt;&lt;/a&gt; `tags` | `public` | `string`[] | - | `CanvasTemplateDefinition.tags` | packages/capabilities/canvas/core/dist/templates/types.d.ts:119 |
+| &lt;a id="title"&gt;&lt;/a&gt; `title` | `public` | `string` | - | `CanvasTemplateDefinition.title` | packages/capabilities/canvas/core/dist/templates/types.d.ts:117 |
+| &lt;a id="variables"&gt;&lt;/a&gt; `variables` | `public` | `TemplateVariable`[] | - | `CanvasTemplateDefinition.variables` | packages/capabilities/canvas/core/dist/templates/types.d.ts:124 |
+| &lt;a id="version"&gt;&lt;/a&gt; `version` | `public` | `string` | - | `CanvasTemplateDefinition.version` | packages/capabilities/canvas/core/dist/templates/types.d.ts:116 |

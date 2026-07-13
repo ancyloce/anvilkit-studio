@@ -15,7 +15,7 @@ description: "@anvilkit/canvas-editor · index"
 | ------ | ------ |
 | [AddPageOptions](interfaces/AddPageOptions.md) | - |
 | [BrandColor](interfaces/BrandColor.md) | A single named brand color — a swatch the canvas surfaces (color pickers, the property inspector) so designs stay on-brand. |
-| [BrandKit](interfaces/BrandKit.md) | Shared brand colors + font families surfaced to the canvas editor (I3-4). Sourced from the host's Studio config — `plugin-canvas-studio`'s `CanvasModeOverlay` maps `StudioConfig.brandKit`/`branding` → `BrandKit` and passes it via the `<CanvasStudio brandKit>` prop. Read it through [useBrandKit](functions/useBrandKit.md), which normalizes the absent case to [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md). |
+| [BrandKit](interfaces/BrandKit.md) | Shared brand data surfaced to the canvas editor (I3-4, upgraded to the canonical FR-020 contract's full shape in canvas-m2-005). Sourced from the host's Studio config — `plugin-canvas-studio`'s `CanvasModeOverlay` maps `StudioConfig.brandKit`/`branding` → `BrandKit` and passes it via the `<CanvasStudio brandKit>` prop. Read it through [useBrandKit](functions/useBrandKit.md), which normalizes the absent case to [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md). |
 | [BrandPanelProps](interfaces/BrandPanelProps.md) | - |
 | [BuiltinPanelDescriptor](interfaces/BuiltinPanelDescriptor.md) | - |
 | [CanvasEditorExtension](interfaces/CanvasEditorExtension.md) | - |
@@ -30,7 +30,7 @@ description: "@anvilkit/canvas-editor · index"
 | [CanvasPanelContext](interfaces/CanvasPanelContext.md) | - |
 | [CanvasStudioContextValue](interfaces/CanvasStudioContextValue.md) | - |
 | [CanvasStudioProps](interfaces/CanvasStudioProps.md) | - |
-| [CanvasTemplateEntry](interfaces/CanvasTemplateEntry.md) | A starter template supplied by the HOST as plain data (canvas-m0-009). |
+| [CanvasTemplateEntry](interfaces/CanvasTemplateEntry.md) | A starter template supplied by the HOST as plain data (canvas-m0-009, upgraded to the canonical FR-020 contract in canvas-m2-004). |
 | [CanvasToolbarProps](interfaces/CanvasToolbarProps.md) | - |
 | [CanvasWorkspaceProps](interfaces/CanvasWorkspaceProps.md) | - |
 | [ClonePageOptions](interfaces/ClonePageOptions.md) | - |
@@ -74,6 +74,7 @@ description: "@anvilkit/canvas-editor · index"
 | [CommitPatch](type-aliases/CommitPatch.md) | Applies a partial node patch through the editor's `node.update` pipeline. |
 | [DockId](type-aliases/DockId.md) | - |
 | [ReorderDirection](type-aliases/ReorderDirection.md) | - |
+| [TemplateActionResult](type-aliases/TemplateActionResult.md) | Result of a template action. `ok: false` carries a structured, user-facing message (canvas-m2-004 / FR-023) — e.g. an invalid template schema — rather than throwing; `ok: true` carries any non-fatal `instantiateTemplate` warnings (missing required variables, unsupported slot/node combinations) so the panel can surface them without parsing strings. |
 | [ToolId](type-aliases/ToolId.md) | A tool id. Built-in ids keep literal autocomplete; `(string & {})` admits custom tool ids contributed by an editor extension (Area 1). |
 | [WorkspaceUiStoreApi](type-aliases/WorkspaceUiStoreApi.md) | - |
 
@@ -97,7 +98,8 @@ description: "@anvilkit/canvas-editor · index"
 | Function | Description |
 | ------ | ------ |
 | [addPage](functions/addPage.md) | Append a fresh blank page to the IR, commit `page.create`, and activate it. Returns the new page id. |
-| [BrandPanel](functions/BrandPanel.md) | Brand-kit panel: the host's shared palette + fonts (I3-4), sourced from `useBrandColors` / `useBrandFonts`. Mounted by the `CanvasWorkspace` Tab Panel (brand dock). Renders `null` when no brand kit is configured. Testids (`brand-section` / `brand-palette` / `brand-fonts`) are unchanged. |
+| [brandKitDefinitionToBrandKit](functions/brandKitDefinitionToBrandKit.md) | Lossless mapping from the canonical `BrandKitDefinition` (FR-031) to the editor's `BrandKit`. `colors` passes through unchanged (identical shape); `fonts` flattens to the plain family-name strings existing consumers (`useBrandFonts`, `resolveBrandToken`) already expect. Every other field — logos, typography, image style presets, tone of voice, rules, default export presets — passes through unchanged, nothing is dropped. |
+| [BrandPanel](functions/BrandPanel.md) | Brand-kit panel: the host's shared palette + fonts (I3-4), plus — when the host supplied a full `BrandKitDefinition` (canvas-m2-005) — a compliance check and apply-brand-kit actions (canvas-m2-006, FR-032). "Check compliance" computes a preview of every action's effect (count of affected nodes) and a compliance report WITHOUT touching the document; each action button then commits its own transform as one reversible step. Testids (`brand-section` / `brand-palette` / `brand-fonts`) are unchanged. |
 | [CanvasStudio](functions/CanvasStudio.md) | - |
 | [CanvasToolbar](functions/CanvasToolbar.md) | Dynamic property toolbar — a floating, centered pill above the page (Canva style). Surfaces the most-used quick props for the selected node (fill · border · width · opacity), committing through the shared `node.update` pipeline. Renders nothing when the selection is empty. |
 | [CanvasWorkspace](functions/CanvasWorkspace.md) | The Canva-style editor shell: full-width Header · Aside (Panel Dock + Tab Panel) · Canvas (dynamic Toolbar + Page with floating Element Controls) · full-width Footer. Composed over the headless `<CanvasStudio>` via its `renderShell` seam; UI state lives in a per-instance Zustand store provided here. This is the editor's single top-level shell. |
@@ -105,6 +107,7 @@ description: "@anvilkit/canvas-editor · index"
 | [ColorField](functions/ColorField.md) | - |
 | [createCanvasExportPlugin](functions/createCanvasExportPlugin.md) | Builds the export [CanvasHeaderPlugin](interfaces/CanvasHeaderPlugin.md) for the workspace header. Pass it to `<CanvasWorkspace headerPlugins={[…]}>`. PNG/JSON work with no config; inject `exporters.svg` / `exporters.pdf` to enable those cards. |
 | [createCanvasPanelRegistry](functions/createCanvasPanelRegistry.md) | Merge host overrides over the defaults (override wins per dock id). |
+| [createCanvasTextMeasurer](functions/createCanvasTextMeasurer.md) | A `CanvasTextMeasurer` (core's headless text-measurement contract) backed by a real Canvas2D context — pass this to core's `serializePageToSvg({ textMeasurer })` (or `canvasToSvg` in `@anvilkit/plugin-export-canvas`) so an SVG export wraps rich text at exactly the points the stage does. Both paths go through the same internal layout function; only the glyph-width source differs from what the stage renderer (`CanvasNodeRenderer.tsx`) uses, and it is the same source. |
 | [createWorkspaceUiStore](functions/createWorkspaceUiStore.md) | Build a fresh per-instance store. The persistence key is namespaced by `storeId` so concurrent stores never collide in `localStorage`. |
 | [deletePage](functions/deletePage.md) | Delete a page. No-op when only one page remains (last-page guard — empty IR would render the "no active page" fallback in `<CanvasStudio>`). If the deleted page was active, moves active to the page at the same index (or the previous one if the deleted was last). |
 | [downloadCanvasArtifact](functions/downloadCanvasArtifact.md) | Trigger a browser download for an export artifact (client-only). |
@@ -114,8 +117,9 @@ description: "@anvilkit/canvas-editor · index"
 | [ExportMenu](functions/ExportMenu.md) | The header export control: an `@anvilkit/ui` popover laid out after the reference "Export image" panel (format cards · quality · resolution · metadata toggle · Export). Reads the live stage/IR from [useCanvasStudio](functions/useCanvasStudio.md) and runs the matching exporter, then downloads. PNG/JSON are built in; SVG/PDF (and overrides) arrive via `exporters`. |
 | [exportStageContentDataURL](functions/exportStageContentDataURL.md) | Serialize a live editor stage to a data URL with the editor-only chrome layers hidden, so the exported preview shows only design content — not the selection transformer, smart guides, or remote-presence overlays the user happened to have on screen at export time. |
 | [FieldRow](functions/FieldRow.md) | - |
+| [insertTemplateAsNewPages](functions/insertTemplateAsNewPages.md) | Insert a template's pages as NEW pages alongside the current document's existing pages, as ONE undo entry — the "create new" counterpart to [loadTemplate](functions/loadTemplate.md)'s "replace" (FR-023, UX-001). `<CanvasStudio>` owns one live multi-page scene rather than a document tab set, so "create a new document" is expressed here as appending a fresh, non-destructive set of pages rather than discarding the current ones. |
 | [LayerPanel](functions/LayerPanel.md) | - |
-| [loadTemplate](functions/loadTemplate.md) | Replace the current document's pages with a template's pages, as ONE undo entry (canvas-m0-009 / FR-005). |
+| [loadTemplate](functions/loadTemplate.md) | Replace the current document's pages with a template's pages, as ONE undo entry (canvas-m0-009 / FR-005, upgraded to `instantiateTemplate` in canvas-m2-004). The batch creates the new pages first, then deletes the previous ones — ordering that never violates the schema's one-page minimum. Undoing the batch restores the prior pages and removes the template's. |
 | [NumberField](functions/NumberField.md) | - |
 | [PageNavigator](functions/PageNavigator.md) | - |
 | [PagesCanvas](functions/PagesCanvas.md) | Canva-style vertical multi-page view. Owns the scrollable canvas viewport on the neutral-gray surface: the active page is the live editable Konva stage; the rest are cached rasterized thumbnails (`usePageThumbnails`). Clicking a thumbnail activates that page. On entry the active page is zoomed to fit the visible area; all pages share the viewport `zoom`, so the footer slider scales the whole canvas uniformly. |
@@ -124,6 +128,7 @@ description: "@anvilkit/canvas-editor · index"
 | [rasterizePage](functions/rasterizePage.md) | Render a single `CanvasIR` page into a detached `Konva.Stage` and return a data URL of its contents. The stage is built off-screen (the container element is appended to the body but positioned far outside the viewport) and torn down before the function resolves, so callers do not need to manage lifecycle. |
 | [renamePage](functions/renamePage.md) | Rename a page. No-op when the page id is unknown or the new name matches the existing name. Pass `undefined` (or use `clearPageName`) to remove the explicit name and fall back to the default tab label. |
 | [reorderPage](functions/reorderPage.md) | Reorder a page in the IR. No-op when the page is already at `toIndex`, the page id is unknown, or `toIndex` is out of range. Active page is preserved (reordering does not change which page is editable). |
+| [resolveBrandToken](functions/resolveBrandToken.md) | Resolve a `BrandTokenRef` (`@anvilkit/canvas-core`) against the editor's `BrandKit` — the SAME resolution the stage, the offscreen rasterizer, and a host's SVG exporter (via core's `SvgSerializeOptions.resolveBrandToken`) all call, so a document renders identically everywhere. |
 | [Section](functions/Section.md) | - |
 | [switchToPage](functions/switchToPage.md) | Switch active page AND clear transient UI state — selection, draft (any in-progress drag), text editor, and smart guides. Without the clears, a stale `selectionStore.selectedIds` would point at node ids that don't exist on the newly active page. |
 | [TabPanel](functions/TabPanel.md) | Tab Panel (Aside, col 2). Renders the registry descriptor for the active dock id, with an optional search box, and dispatches by descriptor kind (built-in / plugin / remote / search). Search resets when the dock changes so each panel opens fresh. |
@@ -133,7 +138,11 @@ description: "@anvilkit/canvas-editor · index"
 | [useActiveDock](functions/useActiveDock.md) | - |
 | [useBrandColors](functions/useBrandColors.md) | Just the brand color swatches (empty array when none configured). |
 | [useBrandFonts](functions/useBrandFonts.md) | Just the brand font families (empty array when none configured). The first entry, when present, is the brand default font. |
-| [useBrandKit](functions/useBrandKit.md) | The host [BrandKit](interfaces/BrandKit.md) (colors + fonts) from the Studio config, or [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md) when none is configured. Always returns a well-formed kit so callers never branch on `undefined`. |
+| [useBrandKit](functions/useBrandKit.md) | The host [BrandKit](interfaces/BrandKit.md) from the Studio config, or [EMPTY\_BRAND\_KIT](variables/EMPTY_BRAND_KIT.md) when none is configured. Always returns a well-formed kit so callers never branch on `undefined`. |
+| [useBrandKitDefinition](functions/useBrandKitDefinition.md) | The full `BrandKitDefinition` the current kit was mapped from, or `undefined` when the host only configured the legacy `StudioConfig.brandKit` (colors/fonts only, no definition) — see `BrandKit.sourceDefinition`. The apply-brand-kit actions (canvas-m2-006) need this; UI that only reads colors/fonts/logos/etc. should keep using the other `useBrand*` hooks. |
+| [useBrandLogos](functions/useBrandLogos.md) | Just the brand logo/image assets (empty array when none configured). |
+| [useBrandRules](functions/useBrandRules.md) | Just the brand's allowed/forbidden color and font rules (empty array when none configured) — consumed by canvas-m2-006's compliance report. |
+| [useBrandTypography](functions/useBrandTypography.md) | Just the brand typography presets (empty array when none configured). |
 | [useCanvasStores](functions/useCanvasStores.md) | Read the stable store handles + callbacks WITHOUT subscribing to the live per-commit state (W16). Use this in components that only touch stores/commit and have no need for `ir`/`activePageId`/`stage`, so they don't re-render on every edit. |
 | [useCanvasStudio](functions/useCanvasStudio.md) | - |
 | [useCanvasT](functions/useCanvasT.md) | Resolve `canvas.*` chrome strings. Null-tolerant: when there is no `<CanvasStudio>` ancestor (or it provides no `t`), returns [DEFAULT\_CANVAS\_T](#) so the inline English fallback always renders. |

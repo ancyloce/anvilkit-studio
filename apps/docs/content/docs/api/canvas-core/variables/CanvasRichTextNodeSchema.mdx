@@ -1,0 +1,59 @@
+---
+title: "CanvasRichTextNodeSchema"
+description: "@anvilkit/canvas-core · CanvasRichTextNodeSchema"
+---
+
+```ts
+const CanvasRichTextNodeSchema: ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  height: ZodOptional<ZodNumber>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  overflow: ZodOptional<ZodEnum<{
+     auto-height: "auto-height";
+     clip: "clip";
+     ellipsis: "ellipsis";
+     visible: "visible";
+  }>>;
+  paragraphs: ZodArray<ZodObject<{
+     align: ZodOptional<ZodEnum<{
+        center: "center";
+        left: "left";
+        right: "right";
+     }>>;
+     lineHeight: ZodOptional<ZodNumber>;
+     spans: ZodArray<ZodObject<{
+        fill: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<..., ...>>>;
+        fontFamily: ZodOptional<ZodType<CanvasFontFamily, unknown, $ZodTypeInternals<..., ...>>>;
+        fontSize: ZodOptional<ZodNumber>;
+        fontWeight: ZodOptional<ZodString>;
+        italic: ZodOptional<ZodBoolean>;
+        letterSpacing: ZodOptional<ZodNumber>;
+        text: ZodString;
+        textTransform: ZodOptional<ZodEnum<{
+           capitalize: ...;
+           lowercase: ...;
+           none: ...;
+           uppercase: ...;
+        }>>;
+        underline: ZodOptional<ZodBoolean>;
+     }, $loose>>;
+  }, $loose>>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"rich-text">;
+  visible: ZodOptional<ZodBoolean>;
+  width: ZodNumber;
+  wrap: ZodOptional<ZodEnum<{
+     character: "character";
+     none: "none";
+     word: "word";
+  }>>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:284](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L284)

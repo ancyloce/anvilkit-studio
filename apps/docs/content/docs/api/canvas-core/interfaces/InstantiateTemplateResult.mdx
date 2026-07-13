@@ -1,0 +1,14 @@
+---
+title: "InstantiateTemplateResult"
+description: "@anvilkit/canvas-core · InstantiateTemplateResult"
+---
+
+Defined in: templates/instantiate.ts:38
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="command"&gt;&lt;/a&gt; `command` | [`CanvasBatchCommand`](CanvasBatchCommand.md) | One `page.create` per page in `document`, as a single batch — apply via `applyCommand`/`applyCommands` for one reversible undo step. | templates/instantiate.ts:42 |
+| &lt;a id="document"&gt;&lt;/a&gt; `document` | [`CanvasIR`](CanvasIR.md) | A brand-new, fully valid CanvasIR: fresh ids throughout, `documentKind: "template-instance"`. | templates/instantiate.ts:40 |
+| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings` | [`InstantiateTemplateWarning`](InstantiateTemplateWarning.md)[] | - | templates/instantiate.ts:43 |

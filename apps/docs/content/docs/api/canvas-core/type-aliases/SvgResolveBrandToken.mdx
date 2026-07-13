@@ -1,0 +1,32 @@
+---
+title: "SvgResolveBrandToken"
+description: "@anvilkit/canvas-core · SvgResolveBrandToken"
+---
+
+```ts
+type SvgResolveBrandToken = (ref) => 
+  | string
+  | CanvasGradientFill
+  | undefined;
+```
+
+Defined in: [serialize/svg.ts:1145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L1145)
+
+Resolve a `BrandTokenRef` to a concrete value: a fill (color/gradient) for
+a `"color"` token, or a font-family string for a `"font"` token. Core never
+calls this itself with a default — it is the host's brand-kit lookup,
+injected. Return `undefined` (or omit the option) to leave a token
+unresolved; the serializer degrades deterministically and records
+`BRAND_TOKEN_UNRESOLVED`, never throws.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | [`BrandTokenRef`](../interfaces/BrandTokenRef) |
+
+## Returns
+
+  \| `string`
+  \| [`CanvasGradientFill`](../interfaces/CanvasGradientFill)
+  \| `undefined`

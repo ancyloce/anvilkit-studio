@@ -1,0 +1,24 @@
+---
+title: "TemplateActionResult"
+description: "@anvilkit/canvas-editor · TemplateActionResult"
+---
+
+```ts
+type TemplateActionResult = 
+  | {
+  ok: true;
+  warnings: readonly InstantiateTemplateWarning[];
+}
+  | {
+  message: string;
+  ok: false;
+};
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/panels/template-actions.ts:19](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/template-actions.ts#L19)
+
+Result of a template action. `ok: false` carries a structured, user-facing
+message (canvas-m2-004 / FR-023) — e.g. an invalid template schema — rather
+than throwing; `ok: true` carries any non-fatal `instantiateTemplate`
+warnings (missing required variables, unsupported slot/node combinations)
+so the panel can surface them without parsing strings.

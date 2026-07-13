@@ -1,0 +1,27 @@
+---
+title: "CanvasPolygonNodeSchema"
+description: "@anvilkit/canvas-core · CanvasPolygonNodeSchema"
+---
+
+```ts
+const CanvasPolygonNodeSchema: ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  fill: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  shadow: ZodOptional<ZodType<CanvasShadow, unknown, $ZodTypeInternals<CanvasShadow, unknown>>>;
+  sides: ZodNumber;
+  stroke: ZodOptional<ZodString>;
+  strokeWidth: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"polygon">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:205](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L205)

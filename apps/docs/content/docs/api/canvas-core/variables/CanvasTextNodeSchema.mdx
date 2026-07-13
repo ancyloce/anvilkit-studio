@@ -13,7 +13,7 @@ const CanvasTextNodeSchema: ZodObject<{
   blendMode: ZodOptional<ZodString>;
   bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
   fill: ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>;
-  fontFamily: ZodString;
+  fontFamily: ZodType<CanvasFontFamily, unknown, $ZodTypeInternals<CanvasFontFamily, unknown>>;
   fontSize: ZodNumber;
   fontWeight: ZodOptional<ZodString>;
   id: ZodString;
@@ -30,4 +30,4 @@ const CanvasTextNodeSchema: ZodObject<{
 }, $loose>;
 ```
 
-Defined in: [ir/validators.ts:185](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L185)
+Defined in: [ir/validators.ts:244](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L244)

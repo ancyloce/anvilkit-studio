@@ -1,0 +1,21 @@
+---
+title: "TemplateSlot"
+description: "@anvilkit/canvas-core · TemplateSlot"
+---
+
+```ts
+type TemplateSlot = 
+  | TemplateTextSlot
+  | TemplateImageSlot
+  | TemplateLogoSlot
+  | TemplateFrameSlot
+  | TemplateColorSlot
+  | TemplateFontSlot;
+```
+
+Defined in: templates/types.ts:90
+
+A named, editable point inside a template's [CanvasTemplateDefinition.document](../interfaces/CanvasTemplateDefinition#document)
+(FR-021) — one of the six supported kinds, each referencing a stable node ID.
+Kind-specific metadata beyond the shared `id`/`nodeId` lives on the
+individual slot interfaces (e.g. [TemplateColorSlot.property](../interfaces/TemplateColorSlot#property)).

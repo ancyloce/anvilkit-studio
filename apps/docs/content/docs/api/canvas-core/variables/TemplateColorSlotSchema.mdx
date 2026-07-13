@@ -1,0 +1,19 @@
+---
+title: "TemplateColorSlotSchema"
+description: "@anvilkit/canvas-core · TemplateColorSlotSchema"
+---
+
+```ts
+const TemplateColorSlotSchema: ZodObject<{
+  id: ZodString;
+  kind: ZodLiteral<"color">;
+  nodeId: ZodString;
+  property: ZodOptional<ZodEnum<{
+     background: "background";
+     fill: "fill";
+     stroke: "stroke";
+  }>>;
+}, $loose>;
+```
+
+Defined in: templates/validators.ts:57

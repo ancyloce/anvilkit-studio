@@ -1,0 +1,32 @@
+---
+title: "instantiateTemplate"
+description: "@anvilkit/canvas-core · instantiateTemplate"
+---
+
+```ts
+function instantiateTemplate(definition, options?): InstantiateTemplateResult;
+```
+
+Defined in: templates/instantiate.ts:160
+
+Instantiates a [CanvasTemplateDefinition](../interfaces/CanvasTemplateDefinition) into a fresh, normal Canvas IR
+document (FR-022): every node/page gets a brand-new id (via `idFactory`, so
+the same template can be instantiated any number of times without id
+collisions), `variables` are resolved and stamped onto their slots' target
+nodes, and `lockedNodeIds` are never mutated regardless of what a variable
+would otherwise write there.
+
+Deterministic: given the same `definition`, `variables`, and fresh
+`idFactory`/`nowFactory` instances producing the same sequence of values,
+two calls produce deep-equal output.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `definition` | [`CanvasTemplateDefinition`](../interfaces/CanvasTemplateDefinition) |
+| `options` | [`InstantiateTemplateOptions`](../interfaces/InstantiateTemplateOptions) |
+
+## Returns
+
+[`InstantiateTemplateResult`](../interfaces/InstantiateTemplateResult)

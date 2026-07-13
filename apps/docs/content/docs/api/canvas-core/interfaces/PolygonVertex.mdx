@@ -1,0 +1,21 @@
+---
+title: "PolygonVertex"
+description: "@anvilkit/canvas-core · PolygonVertex"
+---
+
+Defined in: [geometry/polygon.ts:13](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/polygon.ts#L13)
+
+Pure vertex geometry for `polygon` and `star` nodes (FR-014).
+
+Shared by the SVG serializer (`emitPolygon`/`emitStar`) and available to a
+future per-kind hit test — today `pointInNode` uses a uniform bounds test
+for every kind (`hit-test.ts`), so nothing here is wired into hit-testing
+yet, but the vertex list is the natural input for a precise point-in-polygon
+test later.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="x"&gt;&lt;/a&gt; `x` | `number` | [geometry/polygon.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/polygon.ts#L14) |
+| &lt;a id="y"&gt;&lt;/a&gt; `y` | `number` | [geometry/polygon.ts:15](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/polygon.ts#L15) |

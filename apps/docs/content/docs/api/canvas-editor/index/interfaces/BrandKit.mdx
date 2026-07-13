@@ -3,18 +3,37 @@ title: "BrandKit"
 description: "@anvilkit/canvas-editor · BrandKit"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:20](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L20)
+Defined in: [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L52)
 
-Shared brand colors + font families surfaced to the canvas editor
-(I3-4). Sourced from the host's Studio config — `plugin-canvas-studio`'s
-`CanvasModeOverlay` maps `StudioConfig.brandKit`/`branding` → `BrandKit`
-and passes it via the `<CanvasStudio brandKit>` prop. Read it through
-[useBrandKit](../functions/useBrandKit), which normalizes the absent case to
-[EMPTY\_BRAND\_KIT](../variables/EMPTY_BRAND_KIT).
+Shared brand data surfaced to the canvas editor (I3-4, upgraded to the
+canonical FR-020 contract's full shape in canvas-m2-005). Sourced from the
+host's Studio config — `plugin-canvas-studio`'s `CanvasModeOverlay` maps
+`StudioConfig.brandKit`/`branding` → `BrandKit` and passes it via the
+`<CanvasStudio brandKit>` prop. Read it through [useBrandKit](../functions/useBrandKit), which
+normalizes the absent case to [EMPTY\_BRAND\_KIT](../variables/EMPTY_BRAND_KIT).
+
+`colors`/`fonts` keep their pre-existing shapes (`BrandColor[]`/`string[]`)
+and REQUIRED-ness, for backward compatibility with every existing consumer
+and every existing object literal that constructs a `BrandKit` with just
+those two fields (`resolveBrandToken`, `PropertyInspector`,
+`CanvasNodeRenderer`, the demo app's fixture, test suites, …). The
+remaining fields mirror `BrandKitDefinition` but stay OPTIONAL here — read
+them via [useBrandLogos](../functions/useBrandLogos)/[useBrandTypography](../functions/useBrandTypography)/
+[useBrandRules](../functions/useBrandRules), which normalize an absent field to `[]`, the same
+pattern [useBrandColors](../functions/useBrandColors)/[useBrandFonts](../functions/useBrandFonts) already establish.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="colors"&gt;&lt;/a&gt; `colors` | `readonly` | readonly [`BrandColor`](BrandColor.md)[] | - | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:21](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L21) |
-| &lt;a id="fonts"&gt;&lt;/a&gt; `fonts` | `readonly` | readonly `string`[] | Font-family names, e.g. `["Inter", "Poppins"]`. The first entry is treated as the brand default. | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L26) |
+| &lt;a id="colors"&gt;&lt;/a&gt; `colors` | `readonly` | readonly [`BrandColor`](BrandColor.md)[] | - | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:55](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L55) |
+| &lt;a id="defaultexportpresets"&gt;&lt;/a&gt; `defaultExportPresets?` | `readonly` | readonly `string`[] | - | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:69](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L69) |
+| &lt;a id="fonts"&gt;&lt;/a&gt; `fonts` | `readonly` | readonly `string`[] | Font-family names, e.g. `["Inter", "Poppins"]`. The first entry is treated as the brand default. | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:60](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L60) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id?` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:53](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L53) |
+| &lt;a id="imagestylepresets"&gt;&lt;/a&gt; `imageStylePresets?` | `readonly` | readonly `BrandImageStylePreset`[] | - | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:65](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L65) |
+| &lt;a id="logos"&gt;&lt;/a&gt; `logos?` | `readonly` | readonly `BrandAsset`[] | Brand logo/image assets. Absent/empty when the host's kit carries none. | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L62) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L54) |
+| &lt;a id="rules"&gt;&lt;/a&gt; `rules?` | `readonly` | readonly `BrandRule`[] | Allowed/forbidden color and font rules — consumed by canvas-m2-006's compliance report. | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L68) |
+| &lt;a id="sourcedefinition"&gt;&lt;/a&gt; `sourceDefinition?` | `readonly` | `BrandKitDefinition` | The original `BrandKitDefinition` this kit was mapped from, when the host supplied one (canvas-m2-006). `fonts` above loses each font's `id` when it flattens to plain family-name strings — the apply-brand-kit actions (`applyBrandColors`, `replaceFonts`, `replaceLogoPlaceholders`, `normalizeTypography`, `generateBrandComplianceReport`) all need the full `BrandKitDefinition`, so `BrandPanel` reads it from here rather than reconstructing it. Absent when the host only configured the legacy `StudioConfig.brandKit` (colors/fonts only, no definition). | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:80](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L80) |
+| &lt;a id="toneofvoice"&gt;&lt;/a&gt; `toneOfVoice?` | `readonly` | `BrandToneMetadata` | - | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:66](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L66) |
+| &lt;a id="typography"&gt;&lt;/a&gt; `typography?` | `readonly` | readonly `BrandTypographyPreset`[] | Named typography presets. Absent/empty when none are configured. | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:64](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L64) |

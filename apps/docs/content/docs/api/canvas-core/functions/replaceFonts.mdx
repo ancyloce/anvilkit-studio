@@ -1,0 +1,31 @@
+---
+title: "replaceFonts"
+description: "@anvilkit/canvas-core · replaceFonts"
+---
+
+```ts
+function replaceFonts(
+   document, 
+   brandKit, 
+   options?): BrandApplyResult;
+```
+
+Defined in: brand/apply.ts:161
+
+Links every literal font-family that matches a brand font BY NAME
+(case-insensitive) to that font's `BrandTokenRef`. `rich-text` spans are
+out of scope here (canvas-m1-009's MVP applies span-level style uniformly
+via the editor, not per-property core transforms) — this covers `text`
+nodes, the common case.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `brandKit` | [`BrandKitDefinition`](../interfaces/BrandKitDefinition) |
+| `options` | [`BrandApplyOptions`](../interfaces/BrandApplyOptions) |
+
+## Returns
+
+[`BrandApplyResult`](../interfaces/BrandApplyResult)

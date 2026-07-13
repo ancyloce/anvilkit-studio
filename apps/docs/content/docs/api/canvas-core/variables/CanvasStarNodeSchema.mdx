@@ -1,0 +1,28 @@
+---
+title: "CanvasStarNodeSchema"
+description: "@anvilkit/canvas-core · CanvasStarNodeSchema"
+---
+
+```ts
+const CanvasStarNodeSchema: ZodObject<{
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  fill: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+  id: ZodString;
+  innerRadiusRatio: ZodNumber;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  points: ZodNumber;
+  shadow: ZodOptional<ZodType<CanvasShadow, unknown, $ZodTypeInternals<CanvasShadow, unknown>>>;
+  stroke: ZodOptional<ZodString>;
+  strokeWidth: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"star">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:215](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L215)

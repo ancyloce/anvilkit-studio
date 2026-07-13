@@ -3,7 +3,7 @@ title: "CanvasNodeBase"
 description: "@anvilkit/canvas-core · CanvasNodeBase"
 ---
 
-Defined in: [ir/types.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L113)
+Defined in: [ir/types.ts:138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L138)
 
 ## Extended by
 
@@ -11,9 +11,12 @@ Defined in: [ir/types.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/m
 - [`CanvasFrameNode`](CanvasFrameNode.md)
 - [`CanvasRectNode`](CanvasRectNode.md)
 - [`CanvasEllipseNode`](CanvasEllipseNode.md)
+- [`CanvasPolygonNode`](CanvasPolygonNode.md)
+- [`CanvasStarNode`](CanvasStarNode.md)
 - [`CanvasLineNode`](CanvasLineNode.md)
 - [`CanvasPathNode`](CanvasPathNode.md)
 - [`CanvasTextNode`](CanvasTextNode.md)
+- [`CanvasRichTextNode`](CanvasRichTextNode.md)
 - [`CanvasImageNode`](CanvasImageNode.md)
 - [`CanvasAiPlaceholderNode`](CanvasAiPlaceholderNode.md)
 
@@ -21,13 +24,13 @@ Defined in: [ir/types.ts:113](https://github.com/ancyloce/anvilkit-studio/blob/m
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | [ir/types.ts:121](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L121) |
-| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | [ir/types.ts:117](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L117) |
-| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | [ir/types.ts:114](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L114) |
-| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | [ir/types.ts:120](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L120) |
-| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | [ir/types.ts:123](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L123) |
-| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | [ir/types.ts:115](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L115) |
-| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | [ir/types.ts:118](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L118) |
-| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | [ir/types.ts:116](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L116) |
-| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | [ir/types.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L119) |
-| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex` | `number` | [ir/types.ts:122](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L122) |
+| &lt;a id="blendmode"&gt;&lt;/a&gt; `blendMode?` | `string` | [ir/types.ts:146](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L146) |
+| &lt;a id="bounds"&gt;&lt;/a&gt; `bounds` | [`CanvasBounds`](CanvasBounds.md) | [ir/types.ts:142](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L142) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | [ir/types.ts:139](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L139) |
+| &lt;a id="locked"&gt;&lt;/a&gt; `locked?` | `boolean` | [ir/types.ts:145](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L145) |
+| &lt;a id="meta"&gt;&lt;/a&gt; `meta?` | [`CanvasNodeMeta`](CanvasNodeMeta.md) | [ir/types.ts:148](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L148) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name?` | `string` | [ir/types.ts:140](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L140) |
+| &lt;a id="opacity"&gt;&lt;/a&gt; `opacity?` | `number` | [ir/types.ts:143](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L143) |
+| &lt;a id="transform"&gt;&lt;/a&gt; `transform` | [`CanvasTransform`](CanvasTransform.md) | [ir/types.ts:141](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L141) |
+| &lt;a id="visible"&gt;&lt;/a&gt; `visible?` | `boolean` | [ir/types.ts:144](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L144) |
+| &lt;a id="zindex"&gt;&lt;/a&gt; `zIndex` | `number` | [ir/types.ts:147](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L147) |

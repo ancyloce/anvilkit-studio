@@ -1,0 +1,20 @@
+---
+title: "useBrandKitDefinition"
+description: "@anvilkit/canvas-editor · useBrandKitDefinition"
+---
+
+```ts
+function useBrandKitDefinition(): BrandKitDefinition | undefined;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand/use-brand-kit.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/use-brand-kit.ts#L63)
+
+The full `BrandKitDefinition` the current kit was mapped from, or
+`undefined` when the host only configured the legacy `StudioConfig.brandKit`
+(colors/fonts only, no definition) — see `BrandKit.sourceDefinition`. The
+apply-brand-kit actions (canvas-m2-006) need this; UI that only reads
+colors/fonts/logos/etc. should keep using the other `useBrand*` hooks.
+
+## Returns
+
+`BrandKitDefinition` \| `undefined`

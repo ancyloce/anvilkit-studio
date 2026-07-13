@@ -1,0 +1,24 @@
+---
+title: "validateTemplateReferences"
+description: "@anvilkit/canvas-core · validateTemplateReferences"
+---
+
+```ts
+function validateTemplateReferences(definition): TemplateReferenceIssue[];
+```
+
+Defined in: templates/resolvers.ts:28
+
+Checks that every [TemplateSlot](../type-aliases/TemplateSlot)'s `nodeId` and every `lockedNodeIds`
+entry on `definition` actually resolves to a node inside `definition.document`.
+Returns an empty array when everything resolves.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `definition` | [`CanvasTemplateDefinition`](../interfaces/CanvasTemplateDefinition) |
+
+## Returns
+
+[`TemplateReferenceIssue`](../interfaces/TemplateReferenceIssue)[]

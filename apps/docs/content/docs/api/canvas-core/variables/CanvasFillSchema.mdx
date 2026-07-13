@@ -7,6 +7,7 @@ description: "@anvilkit/canvas-core · CanvasFillSchema"
 const CanvasFillSchema: z.ZodType<CanvasFill>;
 ```
 
-Defined in: [ir/validators.ts:119](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L119)
+Defined in: [ir/validators.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L150)
 
-A fill is either a plain color string (back-compat) or a structured gradient.
+A fill is a plain color string (back-compat), a structured gradient, or an
+unresolved brand-token reference.

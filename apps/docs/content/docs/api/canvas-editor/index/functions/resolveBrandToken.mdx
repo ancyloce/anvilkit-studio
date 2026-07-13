@@ -1,0 +1,38 @@
+---
+title: "resolveBrandToken"
+description: "@anvilkit/canvas-editor · resolveBrandToken"
+---
+
+```ts
+function resolveBrandToken(ref, brandKit): string | CanvasGradientFill | undefined;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand/resolve-brand-token.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/resolve-brand-token.ts#L43)
+
+Resolve a `BrandTokenRef` (`@anvilkit/canvas-core`) against the editor's
+`BrandKit` — the SAME resolution the stage, the offscreen rasterizer, and
+a host's SVG exporter (via core's `SvgSerializeOptions.resolveBrandToken`)
+all call, so a document renders identically everywhere.
+
+Interim bridge (canvas-m1-013) ahead of FR-031's canonical M2 brand-kit
+contract: `BrandKit` only models colors and font-family names today, so
+`"color"` and `"font"` are the only resolvable `tokenType`s.
+`"spacing"`/`"asset"`/`"logo"` have no `BrandKit` shape yet and always
+resolve to `undefined` — a real ref the schema admits, degrading
+deterministically rather than crashing.
+
+- `"color"`: matches a `BrandColor` by explicit `id`, else by
+  `slug(color.name)`; returns its `value`.
+- `"font"`: matches a font-family string in `brandKit.fonts` by
+  `slug(font)`; returns the font string itself.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ref` | `BrandTokenRef` |
+| `brandKit` | [`BrandKit`](../interfaces/BrandKit) |
+
+## Returns
+
+`string` \| `CanvasGradientFill` \| `undefined`

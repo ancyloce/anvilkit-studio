@@ -1,0 +1,30 @@
+---
+title: "RichTextSpanSchema"
+description: "@anvilkit/canvas-core · RichTextSpanSchema"
+---
+
+```ts
+const RichTextSpanSchema: ZodObject<{
+  fill: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+  fontFamily: ZodOptional<ZodType<CanvasFontFamily, unknown, $ZodTypeInternals<CanvasFontFamily, unknown>>>;
+  fontSize: ZodOptional<ZodNumber>;
+  fontWeight: ZodOptional<ZodString>;
+  italic: ZodOptional<ZodBoolean>;
+  letterSpacing: ZodOptional<ZodNumber>;
+  text: ZodString;
+  textTransform: ZodOptional<ZodEnum<{
+     capitalize: "capitalize";
+     lowercase: "lowercase";
+     none: "none";
+     uppercase: "uppercase";
+  }>>;
+  underline: ZodOptional<ZodBoolean>;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:262](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L262)
+
+A rich-text span. Every style field is optional — an omitted field means
+"inherit from the host's default", which is resolved at measure/render time,
+not here. `text` may legitimately be empty (an empty span is how an editor
+represents a caret sitting in a freshly-split paragraph).

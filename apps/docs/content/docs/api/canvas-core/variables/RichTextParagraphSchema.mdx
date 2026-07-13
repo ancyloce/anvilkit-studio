@@ -1,0 +1,33 @@
+---
+title: "RichTextParagraphSchema"
+description: "@anvilkit/canvas-core · RichTextParagraphSchema"
+---
+
+```ts
+const RichTextParagraphSchema: ZodObject<{
+  align: ZodOptional<ZodEnum<{
+     center: "center";
+     left: "left";
+     right: "right";
+  }>>;
+  lineHeight: ZodOptional<ZodNumber>;
+  spans: ZodArray<ZodObject<{
+     fill: ZodOptional<ZodType<CanvasFill, unknown, $ZodTypeInternals<CanvasFill, unknown>>>;
+     fontFamily: ZodOptional<ZodType<CanvasFontFamily, unknown, $ZodTypeInternals<CanvasFontFamily, unknown>>>;
+     fontSize: ZodOptional<ZodNumber>;
+     fontWeight: ZodOptional<ZodString>;
+     italic: ZodOptional<ZodBoolean>;
+     letterSpacing: ZodOptional<ZodNumber>;
+     text: ZodString;
+     textTransform: ZodOptional<ZodEnum<{
+        capitalize: "capitalize";
+        lowercase: "lowercase";
+        none: "none";
+        uppercase: "uppercase";
+     }>>;
+     underline: ZodOptional<ZodBoolean>;
+  }, $loose>>;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:277](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L277)

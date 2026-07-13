@@ -91,7 +91,7 @@ description: "@anvilkit/canvas-editor · index"
 | [DRAFT\_STROKE\_COLOR](variables/DRAFT_STROKE_COLOR.md) | - |
 | [ellipseTool](variables/ellipseTool.md) | - |
 | [handTool](variables/handTool.md) | MVP-7: hand tool NEVER commits — pan is view state, lives in viewportStore. The MVP-7 single-command assertion test's negative case (active tool = hand) expects history.past.length === 0 after a full down→move*→up sequence. |
-| [imageTool](variables/imageTool.md) | MVP-7: single click → host's pickAsset() resolves → exactly one node.create commits. pointermove/pointerup are not implemented (no drag interaction), so the MVP-7 down→move*→up sequence yields ≤ 1 command. |
+| [imageTool](variables/imageTool.md) | MVP-7: single click → host's pickAsset() resolves → exactly one undo step commits. pointermove/pointerup are not implemented (no drag interaction), so the MVP-7 down→move*→up sequence yields ≤ 1 undoable action. |
 | [lineTool](variables/lineTool.md) | - |
 | [penTool](variables/penTool.md) | Pen tool (I3-2). Click to place anchors; drag after a click to pull out a symmetric bezier handle. Clicking within [CLOSE\_THRESHOLD](#) of the first anchor (with ≥2 anchors) closes the path and commits. Enter/Escape (handled by the `PenToolOverlay`) finalize/cancel. Per MVP-7 the only history commit is the final `node.create` — clicks/drags mutate the transient pen store. |
 | [rectTool](variables/rectTool.md) | MVP-7 rule: commit fires only on pointerup. pointerdown/pointermove update the transient draftStore — never historyStore. |
@@ -150,7 +150,7 @@ description: "@anvilkit/canvas-editor · index"
 | [penBounds](functions/penBounds.md) | Axis-aligned bounds of a pen path, including each anchor's point plus its outgoing and (mirrored) incoming control handles so bezier overshoot is enclosed. Returns a zero box for an empty anchor list. |
 | [PenPreview](functions/PenPreview.md) | Live on-stage preview of the in-progress pen path (I3-2): the open-path curve plus a dot at each placed anchor. Rendered in the selection layer; purely visual (`listening={false}`), so it never intercepts pointer events. |
 | [PenToolOverlay](functions/PenToolOverlay.md) | Keyboard finalizer for the pen tool (I3-2). Renders nothing; while the `path` tool is active it listens globally for Enter (finalize an open path) and Escape (cancel). Commit/cancel run through [commitPenPath](functions/commitPenPath.md)/[cancelPenPath](functions/cancelPenPath.md) — the same path the close-on-first-anchor click uses. |
-| [regenerateIds](functions/regenerateIds.md) | Walk a structurally-cloned (JSON-roundtripped) node tree and rewrite every `id` field with a fresh uuid. Recurses into `group.children`. Exported separately so tests can verify id regeneration in isolation. |
+| [regenerateIds](functions/regenerateIds.md) | Walk a structurally-cloned (JSON-roundtripped) node tree and rewrite every `id` field with a fresh uuid. Recurses into every container's children (group and frame). Exported separately so tests can verify id regeneration in isolation. |
 | [RemoteCursors](functions/RemoteCursors.md) | - |
 | [RemoteSelections](functions/RemoteSelections.md) | - |
 | [RenderLayer](functions/RenderLayer.md) | - |

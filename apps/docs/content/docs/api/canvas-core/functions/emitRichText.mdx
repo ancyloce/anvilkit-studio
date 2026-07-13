@@ -1,0 +1,32 @@
+---
+title: "emitRichText"
+description: "@anvilkit/canvas-core · emitRichText"
+---
+
+```ts
+function emitRichText(node, ctx): string;
+```
+
+Defined in: [serialize/svg.ts:908](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/svg.ts#L908)
+
+Rich text → `<text>` with one `<tspan>` per line.
+
+Without a `textMeasurer` core cannot know where lines break (it has no font
+metrics), so it lays out ONE LINE PER PARAGRAPH and flags the output with
+`RICH_TEXT_WRAP_APPROXIMATE`. The result is still fully deterministic — it is
+simply un-wrapped. With a measurer, the measured line boxes drive the tspan
+positions and the two paths differ only in where the breaks land.
+
+Per-span styling rides on nested `<tspan>`s, which inherit from the `<text>`
+element carrying the resolved defaults.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `node` | [`CanvasRichTextNode`](../interfaces/CanvasRichTextNode) |
+| `ctx` | [`SvgEmitContext`](../interfaces/SvgEmitContext) |
+
+## Returns
+
+`string`

@@ -3,14 +3,19 @@ title: "BrandColor"
 description: "@anvilkit/canvas-editor · BrandColor"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:5](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L5)
+Defined in: [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:18](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L18)
 
 A single named brand color — a swatch the canvas surfaces (color
 pickers, the property inspector) so designs stay on-brand.
+
+Structurally identical to `@anvilkit/canvas-core`'s canonical
+`BrandColorToken` (FR-031, canvas-m2-005) by design — this is what lets
+[brandKitDefinitionToBrandKit](../functions/brandKitDefinitionToBrandKit) pass colors through unchanged.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | Human label, e.g. "Primary", "Accent". | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:7](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L7) |
-| &lt;a id="value"&gt;&lt;/a&gt; `value` | `readonly` | `string` | Any CSS color value, e.g. "#2563eb" or "var(--brand)". | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:9](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L9) |
+| &lt;a id="id"&gt;&lt;/a&gt; `id?` | `readonly` | `string` | Stable identifier a `BrandTokenRef` (`@anvilkit/canvas-core`, `tokenType: "color"`) resolves against. When omitted, [resolveBrandToken](../functions/resolveBrandToken) falls back to a slug of `name` (lowercased, non-alphanumeric runs collapsed to `-`) — e.g. `"Primary Blue"` → `"primary-blue"`. A host that wants stable ids independent of a color's display name should set this explicitly. | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L27) |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `readonly` | `string` | Human label, e.g. "Primary", "Accent". | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:29](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L29) |
+| &lt;a id="value"&gt;&lt;/a&gt; `value` | `readonly` | `string` | Any CSS color value, e.g. "#2563eb" or "var(--brand)". | [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L31) |

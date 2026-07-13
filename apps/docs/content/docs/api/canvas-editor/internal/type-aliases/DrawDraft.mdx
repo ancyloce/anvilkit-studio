@@ -17,7 +17,28 @@ type DrawDraft =
   currentY: number;
   startX: number;
   startY: number;
+  type: "frame";
+}
+  | {
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
   type: "ellipse";
+}
+  | {
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "polygon";
+}
+  | {
+  currentX: number;
+  currentY: number;
+  startX: number;
+  startY: number;
+  type: "star";
 }
   | {
   currentX: number;

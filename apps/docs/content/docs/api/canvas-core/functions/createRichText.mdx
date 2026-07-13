@@ -1,0 +1,28 @@
+---
+title: "createRichText"
+description: "@anvilkit/canvas-core · createRichText"
+---
+
+```ts
+function createRichText(options): CanvasRichTextNode;
+```
+
+Defined in: [ir/builders.ts:420](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/builders.ts#L420)
+
+A rich-text block. `width` defaults to `bounds.width`, so the two agree unless
+a caller deliberately separates them — see [CanvasRichTextNode](../interfaces/CanvasRichTextNode) for why
+both exist.
+
+`paragraphs` defaults to a single empty paragraph rather than `[]`: an empty
+array has no caret position, so an editor would have to special-case it before
+the user can type. One empty paragraph is the natural "empty text block".
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `options` | [`CreateRichTextOptions`](../interfaces/CreateRichTextOptions) |
+
+## Returns
+
+[`CanvasRichTextNode`](../interfaces/CanvasRichTextNode)

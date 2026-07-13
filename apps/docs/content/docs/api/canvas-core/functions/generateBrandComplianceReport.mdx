@@ -1,0 +1,28 @@
+---
+title: "generateBrandComplianceReport"
+description: "@anvilkit/canvas-core · generateBrandComplianceReport"
+---
+
+```ts
+function generateBrandComplianceReport(document, brandKit): BrandComplianceReport;
+```
+
+Defined in: brand/compliance.ts:128
+
+Walks `document` and reports every unresolved brand-token reference,
+forbidden color/font (per `brandKit.rules`), and off-brand literal color/font
+value (a literal that matches neither a brand color/font nor an
+`allowed-*` rule — only raised when the brand kit actually defines
+colors/fonts to compare against, so an empty kit never floods the report).
+Pure and read-only: never mutates `document`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `brandKit` | [`BrandKitDefinition`](../interfaces/BrandKitDefinition) |
+
+## Returns
+
+[`BrandComplianceReport`](../interfaces/BrandComplianceReport)

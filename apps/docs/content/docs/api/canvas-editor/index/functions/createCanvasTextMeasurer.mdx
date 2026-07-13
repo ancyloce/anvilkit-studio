@@ -1,0 +1,22 @@
+---
+title: "createCanvasTextMeasurer"
+description: "@anvilkit/canvas-editor · createCanvasTextMeasurer"
+---
+
+```ts
+function createCanvasTextMeasurer(): CanvasTextMeasurer;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/text/canvas-text-measurer.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text/canvas-text-measurer.ts#L14)
+
+A `CanvasTextMeasurer` (core's headless text-measurement contract) backed
+by a real Canvas2D context — pass this to core's
+`serializePageToSvg({ textMeasurer })` (or `canvasToSvg` in
+`@anvilkit/plugin-export-canvas`) so an SVG export wraps rich text at
+exactly the points the stage does. Both paths go through the same internal
+layout function; only the glyph-width source differs from what the stage
+renderer (`CanvasNodeRenderer.tsx`) uses, and it is the same source.
+
+## Returns
+
+`CanvasTextMeasurer`

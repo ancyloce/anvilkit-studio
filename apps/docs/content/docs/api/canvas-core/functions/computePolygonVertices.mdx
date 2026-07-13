@@ -1,0 +1,26 @@
+---
+title: "computePolygonVertices"
+description: "@anvilkit/canvas-core · computePolygonVertices"
+---
+
+```ts
+function computePolygonVertices(bounds, sides): PolygonVertex[];
+```
+
+Defined in: [geometry/polygon.ts:27](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/polygon.ts#L27)
+
+Vertices of a regular polygon inscribed in `bounds`, one per `sides`,
+evenly spaced starting at the top and going clockwise (SVG's y-down
+convention). The ellipse `bounds` inscribes need not be a circle — a
+non-square box stretches the polygon along the wider axis.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `bounds` | [`CanvasBounds`](../interfaces/CanvasBounds) |
+| `sides` | `number` |
+
+## Returns
+
+[`PolygonVertex`](../interfaces/PolygonVertex)[]

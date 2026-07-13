@@ -1,0 +1,15 @@
+---
+title: "CanvasTemplateDefinitionSchema"
+description: "@anvilkit/canvas-core · CanvasTemplateDefinitionSchema"
+---
+
+```ts
+const CanvasTemplateDefinitionSchema: z.ZodType<CanvasTemplateDefinition>;
+```
+
+Defined in: templates/validators.ts:107
+
+Validates a [CanvasTemplateDefinition](../interfaces/CanvasTemplateDefinition) independently of normal Canvas
+IR validation — template-only fields (`id`, `category`, `tags`, `variables`,
+`editableSlots`, `lockedNodeIds`, `license`, `source`) are never accepted on
+`document`, which is validated purely as a normal [CanvasIRSchema](CanvasIRSchema.md).

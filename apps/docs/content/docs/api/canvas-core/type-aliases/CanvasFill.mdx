@@ -4,9 +4,13 @@ description: "@anvilkit/canvas-core · CanvasFill"
 ---
 
 ```ts
-type CanvasFill = string | CanvasGradientFill;
+type CanvasFill = 
+  | string
+  | CanvasGradientFill
+  | BrandTokenRef;
 ```
 
-Defined in: [ir/types.ts:86](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L86)
+Defined in: [ir/types.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L108)
 
-A node fill: a plain CSS color string (back-compat) or a structured gradient.
+A node fill: a plain CSS color string (back-compat), a structured gradient,
+or a brand-token reference (unresolved until a consumer looks it up).

@@ -1,0 +1,24 @@
+---
+title: "MeasuredRun"
+description: "@anvilkit/canvas-core · MeasuredRun"
+---
+
+Defined in: [text-contracts.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L101)
+
+A contiguous piece of ONE span that landed on ONE line.
+
+A span is split across lines when it wraps, so a run is a slice of it, not the
+whole thing. `spanIndex` points back into the source paragraph so a caller can
+recover the styling (and so a hit-test can map a click back to a text offset)
+without the measurer having to copy the style onto every run.
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="paragraphindex"&gt;&lt;/a&gt; `paragraphIndex` | `number` | - | [text-contracts.ts:102](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L102) |
+| &lt;a id="spanindex"&gt;&lt;/a&gt; `spanIndex` | `number` | - | [text-contracts.ts:103](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L103) |
+| &lt;a id="start"&gt;&lt;/a&gt; `start` | `number` | Character offset of this run within its span's `text`. | [text-contracts.ts:105](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L105) |
+| &lt;a id="text"&gt;&lt;/a&gt; `text` | `string` | The slice itself — `span.text.slice(start, start + text.length)`. | [text-contracts.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L107) |
+| &lt;a id="width"&gt;&lt;/a&gt; `width` | `number` | - | [text-contracts.ts:110](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L110) |
+| &lt;a id="x"&gt;&lt;/a&gt; `x` | `number` | Offset from the line's left edge. | [text-contracts.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L109) |

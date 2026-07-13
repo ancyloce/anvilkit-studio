@@ -1,0 +1,31 @@
+---
+title: "applyBrandColors"
+description: "@anvilkit/canvas-core · applyBrandColors"
+---
+
+```ts
+function applyBrandColors(
+   document, 
+   brandKit, 
+   options?): BrandApplyResult;
+```
+
+Defined in: brand/apply.ts:101
+
+Links every literal (non-token) fill/stroke/background that matches a
+brand color BY VALUE (case-insensitive) to that color's `BrandTokenRef`, so
+future brand-color edits propagate to it. Colors with no matching brand
+swatch are left untouched — this transform never invents a color choice
+for a node, only formalizes an already-correct one into a token reference.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `brandKit` | [`BrandKitDefinition`](../interfaces/BrandKitDefinition) |
+| `options` | [`BrandApplyOptions`](../interfaces/BrandApplyOptions) |
+
+## Returns
+
+[`BrandApplyResult`](../interfaces/BrandApplyResult)

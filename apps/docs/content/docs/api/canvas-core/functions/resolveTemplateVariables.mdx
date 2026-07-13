@@ -1,0 +1,26 @@
+---
+title: "resolveTemplateVariables"
+description: "@anvilkit/canvas-core · resolveTemplateVariables"
+---
+
+```ts
+function resolveTemplateVariables(definition, values?): ResolveTemplateVariablesResult;
+```
+
+Defined in: templates/resolvers.ts:81
+
+Fills in `definition.variables` against a caller-supplied value map: a
+supplied value wins, otherwise `defaultValue` applies, otherwise a
+`required` variable produces a structured warning (never a thrown error) and
+is simply absent from `values`.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `definition` | [`CanvasTemplateDefinition`](../interfaces/CanvasTemplateDefinition) |
+| `values` | `Readonly`\&lt;`Record`\&lt;`string`, `string`\&gt;\&gt; |
+
+## Returns
+
+[`ResolveTemplateVariablesResult`](../interfaces/ResolveTemplateVariablesResult)

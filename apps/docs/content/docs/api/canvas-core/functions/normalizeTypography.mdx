@@ -1,0 +1,32 @@
+---
+title: "normalizeTypography"
+description: "@anvilkit/canvas-core · normalizeTypography"
+---
+
+```ts
+function normalizeTypography(
+   document, 
+   brandKit, 
+   options?): BrandApplyResult;
+```
+
+Defined in: brand/apply.ts:266
+
+Applies a brand typography preset's `fontSize`/`fontWeight` uniformly to
+every `text` node (unlike [applyBrandColors](applyBrandColors.md)/[replaceFonts](replaceFonts.md),
+which only formalize an already-matching value, this one overwrites —
+"normalize" means bringing every text element onto the same scale, not
+linking an existing coincidental match). Font family is untouched — that's
+[replaceFonts](replaceFonts.md)' concern.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `brandKit` | [`BrandKitDefinition`](../interfaces/BrandKitDefinition) |
+| `options` | [`NormalizeTypographyOptions`](../interfaces/NormalizeTypographyOptions) |
+
+## Returns
+
+[`BrandApplyResult`](../interfaces/BrandApplyResult)

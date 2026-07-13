@@ -7,11 +7,12 @@ description: "@anvilkit/canvas-editor · regenerateIds"
 function regenerateIds(node): CanvasNode;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/pages/clone-page.ts:24](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/clone-page.ts#L24)
+Defined in: [packages/capabilities/canvas/editor/src/pages/clone-page.ts:26](https://github.com/ancyloce/anvilkit-studio/blob/main/src/pages/clone-page.ts#L26)
 
 Walk a structurally-cloned (JSON-roundtripped) node tree and rewrite every
-`id` field with a fresh uuid. Recurses into `group.children`. Exported
-separately so tests can verify id regeneration in isolation.
+`id` field with a fresh uuid. Recurses into every container's children
+(group and frame). Exported separately so tests can verify id regeneration
+in isolation.
 
 ## Parameters
 

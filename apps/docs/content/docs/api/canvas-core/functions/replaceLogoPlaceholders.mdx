@@ -1,0 +1,30 @@
+---
+title: "replaceLogoPlaceholders"
+description: "@anvilkit/canvas-core · replaceLogoPlaceholders"
+---
+
+```ts
+function replaceLogoPlaceholders(
+   document, 
+   brandKit, 
+   options?): BrandApplyResult;
+```
+
+Defined in: brand/apply.ts:198
+
+Fills every EMPTY logo-kind frame placeholder with the brand's logo (the
+first asset tagged `kind: "logo"`, else the first logo asset). A
+placeholder that already has an `assetId` or `assetToken` is left alone —
+this only fills gaps, it never replaces a deliberate choice.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `brandKit` | [`BrandKitDefinition`](../interfaces/BrandKitDefinition) |
+| `options` | [`BrandApplyOptions`](../interfaces/BrandApplyOptions) |
+
+## Returns
+
+[`BrandApplyResult`](../interfaces/BrandApplyResult)

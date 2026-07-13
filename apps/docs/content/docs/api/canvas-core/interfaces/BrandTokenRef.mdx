@@ -1,0 +1,21 @@
+---
+title: "BrandTokenRef"
+description: "@anvilkit/canvas-core · BrandTokenRef"
+---
+
+Defined in: [ir/types.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L98)
+
+A reference to a value owned by an external brand kit (PRD §12.4) — a
+color, font, spacing value, asset, or logo — identified by `id` alone.
+Resolution is deliberately EXTERNAL to core: this is just the SHAPE of a
+reference, never a lookup table or a brand-kit type. A consumer (the SVG
+serializer's `resolveBrandToken` option, or a future editor equivalent)
+turns it into a concrete value; core never resolves one itself.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | [ir/types.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L101) |
+| &lt;a id="tokentype"&gt;&lt;/a&gt; `tokenType` | [`BrandTokenType`](../type-aliases/BrandTokenType) | [ir/types.ts:100](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L100) |
+| &lt;a id="type"&gt;&lt;/a&gt; `type` | `"brand-token"` | [ir/types.ts:99](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/types.ts#L99) |

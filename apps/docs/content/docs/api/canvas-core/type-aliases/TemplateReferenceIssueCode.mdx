@@ -1,0 +1,16 @@
+---
+title: "TemplateReferenceIssueCode"
+description: "@anvilkit/canvas-core · TemplateReferenceIssueCode"
+---
+
+```ts
+type TemplateReferenceIssueCode = "slot-node-not-found" | "locked-node-not-found";
+```
+
+Defined in: templates/resolvers.ts:11
+
+A cross-reference problem found while checking a [CanvasTemplateDefinition](../interfaces/CanvasTemplateDefinition)'s
+`editableSlots`/`lockedNodeIds` against its own `document`. Structured (code +
+offending id), not a thrown error — schema validation only checks shape, not
+these referential invariants, so callers decide how to surface them (block
+instantiation, warn, etc.).

@@ -1,0 +1,24 @@
+---
+title: "resolveSpanStyle"
+description: "@anvilkit/canvas-core · resolveSpanStyle"
+---
+
+```ts
+function resolveSpanStyle(span, defaults): ResolvedSpanStyle;
+```
+
+Defined in: [text-contracts.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L68)
+
+Resolve one span against the host's defaults. Pure, allocation-only, and
+deliberately dumb — it is field inheritance, not layout.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `span` | [`RichTextSpan`](../interfaces/RichTextSpan) |
+| `defaults` | [`RichTextStyleDefaults`](../interfaces/RichTextStyleDefaults) |
+
+## Returns
+
+[`ResolvedSpanStyle`](../interfaces/ResolvedSpanStyle)

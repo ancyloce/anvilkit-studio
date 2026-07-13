@@ -1,0 +1,32 @@
+---
+title: "BrandKitDefinition"
+description: "@anvilkit/canvas-core · BrandKitDefinition"
+---
+
+Defined in: brand/types.ts:79
+
+The canonical Brand Kit contract (PRD FR-031, §12.6).
+
+Lives in `canvas-core` rather than `@anvilkit/core` or a shared schema
+package (PRD open question 1, §18): Canvas IR already references brand
+*tokens* (`BrandTokenRef`, canvas-m1-012), and this contract's `rules`
+(allowed/forbidden colors and fonts) are canvas-specific validation
+concerns with no meaning outside the canvas domain.
+
+Kept strictly separate from Canvas IR — a document references brand tokens
+by id only (`BrandTokenRef`); it never embeds a `BrandKitDefinition`.
+
+## Properties
+
+| Property | Type | Defined in |
+| ------ | ------ | ------ |
+| &lt;a id="colors"&gt;&lt;/a&gt; `colors` | [`BrandColorToken`](BrandColorToken.md)[] | brand/types.ts:83 |
+| &lt;a id="defaultexportpresets"&gt;&lt;/a&gt; `defaultExportPresets?` | `string`[] | brand/types.ts:89 |
+| &lt;a id="fonts"&gt;&lt;/a&gt; `fonts` | [`BrandFontToken`](BrandFontToken.md)[] | brand/types.ts:84 |
+| &lt;a id="id"&gt;&lt;/a&gt; `id` | `string` | brand/types.ts:80 |
+| &lt;a id="imagestylepresets"&gt;&lt;/a&gt; `imageStylePresets?` | [`BrandImageStylePreset`](BrandImageStylePreset.md)[] | brand/types.ts:86 |
+| &lt;a id="logos"&gt;&lt;/a&gt; `logos` | [`BrandAsset`](BrandAsset.md)[] | brand/types.ts:82 |
+| &lt;a id="name"&gt;&lt;/a&gt; `name` | `string` | brand/types.ts:81 |
+| &lt;a id="rules"&gt;&lt;/a&gt; `rules` | [`BrandRule`](BrandRule.md)[] | brand/types.ts:88 |
+| &lt;a id="toneofvoice"&gt;&lt;/a&gt; `toneOfVoice?` | [`BrandToneMetadata`](BrandToneMetadata.md) | brand/types.ts:87 |
+| &lt;a id="typography"&gt;&lt;/a&gt; `typography` | [`BrandTypographyPreset`](BrandTypographyPreset.md)[] | brand/types.ts:85 |

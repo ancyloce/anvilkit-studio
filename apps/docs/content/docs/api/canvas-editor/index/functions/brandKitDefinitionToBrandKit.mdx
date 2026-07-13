@@ -1,0 +1,27 @@
+---
+title: "brandKitDefinitionToBrandKit"
+description: "@anvilkit/canvas-editor · brandKitDefinitionToBrandKit"
+---
+
+```ts
+function brandKitDefinitionToBrandKit(definition): BrandKit;
+```
+
+Defined in: [packages/capabilities/canvas/editor/src/brand/brand-kit.ts:98](https://github.com/ancyloce/anvilkit-studio/blob/main/src/brand/brand-kit.ts#L98)
+
+Lossless mapping from the canonical `BrandKitDefinition` (FR-031) to the
+editor's `BrandKit`. `colors` passes through unchanged (identical shape);
+`fonts` flattens to the plain family-name strings existing consumers
+(`useBrandFonts`, `resolveBrandToken`) already expect. Every other field —
+logos, typography, image style presets, tone of voice, rules, default
+export presets — passes through unchanged, nothing is dropped.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `definition` | `BrandKitDefinition` |
+
+## Returns
+
+[`BrandKit`](../interfaces/BrandKit)

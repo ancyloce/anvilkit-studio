@@ -7,11 +7,14 @@ description: "@anvilkit/canvas-editor · BrandPanel"
 function BrandPanel(__namedParameters): Element | null;
 ```
 
-Defined in: [packages/capabilities/canvas/editor/src/panels/BrandPanel.tsx:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/BrandPanel.tsx#L17)
+Defined in: [packages/capabilities/canvas/editor/src/panels/BrandPanel.tsx:94](https://github.com/ancyloce/anvilkit-studio/blob/main/src/panels/BrandPanel.tsx#L94)
 
-Brand-kit panel: the host's shared palette + fonts (I3-4), sourced from
-`useBrandColors` / `useBrandFonts`. Mounted by the `CanvasWorkspace` Tab
-Panel (brand dock). Renders `null` when no brand kit is configured. Testids
+Brand-kit panel: the host's shared palette + fonts (I3-4), plus — when the
+host supplied a full `BrandKitDefinition` (canvas-m2-005) — a compliance
+check and apply-brand-kit actions (canvas-m2-006, FR-032). "Check
+compliance" computes a preview of every action's effect (count of affected
+nodes) and a compliance report WITHOUT touching the document; each action
+button then commits its own transform as one reversible step. Testids
 (`brand-section` / `brand-palette` / `brand-fonts`) are unchanged.
 
 ## Parameters

@@ -1,0 +1,14 @@
+---
+title: "BrandApplyResult"
+description: "@anvilkit/canvas-core · BrandApplyResult"
+---
+
+Defined in: brand/apply.ts:25
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="command"&gt;&lt;/a&gt; `command` | [`CanvasBatchCommand`](CanvasBatchCommand.md) \| `null` | The reversible batch that produced `document` from the input, or `null` when nothing matched. Apply it yourself (e.g. `ctx.commit(command)` in canvas-editor) to get proper undo-stack tracking — `document` alone is NOT re-appliable as a command. | brand/apply.ts:33 |
+| &lt;a id="document"&gt;&lt;/a&gt; `document` | [`CanvasIR`](CanvasIR.md) | - | brand/apply.ts:26 |
+| &lt;a id="report"&gt;&lt;/a&gt; `report` | [`BrandApplyReport`](BrandApplyReport.md) | - | brand/apply.ts:34 |

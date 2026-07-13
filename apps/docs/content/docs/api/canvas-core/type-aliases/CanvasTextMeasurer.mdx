@@ -1,0 +1,23 @@
+---
+title: "CanvasTextMeasurer"
+description: "@anvilkit/canvas-core · CanvasTextMeasurer"
+---
+
+```ts
+type CanvasTextMeasurer = (request) => MeasuredText;
+```
+
+Defined in: [text-contracts.ts:138](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L138)
+
+Lay out rich text. Implementations MUST be pure: the same request has to give
+the same result, or an export will not match what the editor showed.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `request` | [`TextMeasureRequest`](../interfaces/TextMeasureRequest) |
+
+## Returns
+
+[`MeasuredText`](../interfaces/MeasuredText)

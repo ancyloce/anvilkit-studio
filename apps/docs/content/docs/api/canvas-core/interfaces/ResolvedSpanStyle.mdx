@@ -1,0 +1,31 @@
+---
+title: "ResolvedSpanStyle"
+description: "@anvilkit/canvas-core · ResolvedSpanStyle"
+---
+
+Defined in: [text-contracts.ts:35](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L35)
+
+A span's style with every optional field resolved.
+
+[RichTextSpan](RichTextSpan.md) leaves each style field optional, meaning "inherit the
+host's default". Something has to turn that into concrete values before any
+glyph can be measured, and if the editor and the exporter each did it their own
+way they would disagree about where lines break — the exact class of bug this
+contract exists to prevent. [resolveSpanStyle](../functions/resolveSpanStyle) is that single answer.
+
+## Extended by
+
+- [`RichTextStyleDefaults`](RichTextStyleDefaults.md)
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="fill"&gt;&lt;/a&gt; `fill` | [`CanvasFill`](../type-aliases/CanvasFill) | - | [text-contracts.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L52) |
+| &lt;a id="fontfamily"&gt;&lt;/a&gt; `fontFamily` | [`CanvasFontFamily`](../type-aliases/CanvasFontFamily) | A span's `fontFamily` is inheritance-merged here (span over default), NOT brand-token-resolved — a `BrandTokenRef` survives this step unchanged. Core has no brand-kit knowledge (PRD FR-030): resolving one to a concrete name is each CONSUMER's job (the SVG serializer's `resolveBrandToken` option; a future editor equivalent). [RichTextStyleDefaults](RichTextStyleDefaults.md) narrows this back to `string` — the host's fallback is always concrete, since layout/measurement needs a real font name to measure glyphs with. | [text-contracts.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L45) |
+| &lt;a id="fontsize"&gt;&lt;/a&gt; `fontSize` | `number` | - | [text-contracts.ts:46](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L46) |
+| &lt;a id="fontweight"&gt;&lt;/a&gt; `fontWeight` | `string` | - | [text-contracts.ts:47](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L47) |
+| &lt;a id="italic"&gt;&lt;/a&gt; `italic` | `boolean` | - | [text-contracts.ts:48](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L48) |
+| &lt;a id="letterspacing"&gt;&lt;/a&gt; `letterSpacing` | `number` | - | [text-contracts.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L50) |
+| &lt;a id="texttransform"&gt;&lt;/a&gt; `textTransform` | `NonNullable`\&lt;[`RichTextTransform`](../type-aliases/RichTextTransform) \| `undefined`\&gt; | - | [text-contracts.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L51) |
+| &lt;a id="underline"&gt;&lt;/a&gt; `underline` | `boolean` | - | [text-contracts.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/text-contracts.ts#L49) |

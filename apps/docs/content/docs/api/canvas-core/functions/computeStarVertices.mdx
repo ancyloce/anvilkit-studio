@@ -1,0 +1,31 @@
+---
+title: "computeStarVertices"
+description: "@anvilkit/canvas-core · computeStarVertices"
+---
+
+```ts
+function computeStarVertices(
+   bounds, 
+   points, 
+   innerRadiusRatio): PolygonVertex[];
+```
+
+Defined in: [geometry/polygon.ts:54](https://github.com/ancyloce/anvilkit-studio/blob/main/src/geometry/polygon.ts#L54)
+
+Vertices of a star inscribed in `bounds`: `points` outer tips alternating
+with `points` inner vertices at `innerRadiusRatio` of the outer radius
+(0 collapses the inner ring to the center; 1 makes every vertex outer,
+tracing a regular `points`-gon whose extra vertices sit exactly on its
+edges' midpoints).
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `bounds` | [`CanvasBounds`](../interfaces/CanvasBounds) |
+| `points` | `number` |
+| `innerRadiusRatio` | `number` |
+
+## Returns
+
+[`PolygonVertex`](../interfaces/PolygonVertex)[]
