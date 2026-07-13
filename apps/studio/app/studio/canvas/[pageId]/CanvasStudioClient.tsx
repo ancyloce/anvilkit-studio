@@ -139,11 +139,12 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 			createCanvasExportPlugin({
 				exporters: {
 					svg: async ({ ir, activePageId }) => {
-						const { svg } = await canvasToSvg(ir, activePageId);
+						const { svg, warnings } = await canvasToSvg(ir, activePageId);
 						return {
 							filename: `${ir.title || activePageId}.svg`,
 							data: svg,
 							mimeType: "image/svg+xml",
+							warnings,
 						};
 					},
 					pdf: async ({ ir, activePageId, stage }) => {
@@ -152,7 +153,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 							pixelRatio: 2,
 							mimeType: "image/png",
 						});
-						const { pdf } = await canvasToPdf(ir, {
+						const { pdf, warnings } = await canvasToPdf(ir, {
 							rasters: [{ pageId: activePageId, image: dataUrl }],
 							pages: [activePageId],
 						});
@@ -160,6 +161,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 							filename: `${ir.title || activePageId}.pdf`,
 							data: pdf,
 							mimeType: "application/pdf",
+							warnings,
 						};
 					},
 				},
