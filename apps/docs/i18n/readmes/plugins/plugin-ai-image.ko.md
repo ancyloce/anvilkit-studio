@@ -27,7 +27,7 @@ pnpm add @anvilkit/plugin-ai-image react react-dom @puckeditor/core
 ```
 
 peer 의존성: `react >=19.0.0`, `react-dom >=19.0.0`,
-`@puckeditor/core ^0.22.0`, `@anvilkit/ui`（React 패널용）, 그리고
+`@puckeditor/core ^0.22.1`, `@anvilkit/ui`（React 패널용）, 그리고
 `konva ^10` + `react-konva ^19`（`./mask` 및 `./react` Konva
 표면용）. 헤드리스 `.` 진입점——팩토리, 작업 클라이언트, 후처리, 커밋——은
 Konva가 필요하지 않습니다. `@anvilkit/canvas-core`는 직접 의존성으로 함께 제공되며

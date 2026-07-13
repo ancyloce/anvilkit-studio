@@ -10,7 +10,7 @@
 pnpm add @anvilkit/plugin-design-system
 ```
 
-peer 의존성: `@puckeditor/core@^0.22.0`, `react@>=19.0.0`, `react-dom@>=19.0.0`. `@anvilkit/core`는 직접 런타임 의존성으로 함께 제공되므로, 사용자가 그 버전을 별도로 관리할 필요가 없습니다.
+peer 의존성: `@puckeditor/core@^0.22.1`, `react@>=19.0.0`, `react-dom@>=19.0.0`. `@anvilkit/core`는 직접 런타임 의존성으로 함께 제공되므로, 사용자가 그 버전을 별도로 관리할 필요가 없습니다.
 
 ## 최소 호스트
 

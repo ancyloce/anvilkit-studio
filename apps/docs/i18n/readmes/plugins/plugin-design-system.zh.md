@@ -10,7 +10,7 @@
 pnpm add @anvilkit/plugin-design-system
 ```
 
-对等依赖：`@puckeditor/core@^0.22.0`、`react@>=19.0.0` 以及 `react-dom@>=19.0.0`。`@anvilkit/core` 作为直接运行时依赖随包发布，因此使用者无需单独管理其版本。
+对等依赖：`@puckeditor/core@^0.22.1`、`react@>=19.0.0` 以及 `react-dom@>=19.0.0`。`@anvilkit/core` 作为直接运行时依赖随包发布，因此使用者无需单独管理其版本。
 
 ## 最小宿主
 

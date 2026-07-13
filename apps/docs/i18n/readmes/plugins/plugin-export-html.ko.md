@@ -10,7 +10,7 @@ Anvilkit Studio를 위한 HTML 내보내기 플러그인. `PageIR` 문서를 방
 pnpm add @anvilkit/plugin-export-html @anvilkit/core react react-dom @puckeditor/core
 ```
 
-비선택 peer: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.22.0`. 런타임 의존성은 `@anvilkit/core`뿐입니다.
+비선택 peer: `react >=19.0.0`, `react-dom >=19.0.0`, `@puckeditor/core ^0.22.1`. 런타임 의존성은 `@anvilkit/core`뿐입니다.
 
 ## 빠른 시작
 
