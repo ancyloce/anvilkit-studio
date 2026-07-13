@@ -77,7 +77,7 @@ See the [canonical repository architecture](docs/architecture/repository-structu
 
 | Area | Choice |
 | --- | --- |
-| Language | TypeScript 6.0.3 (`verbatimModuleSyntax` enforced) |
+| Language | TypeScript 7.0.2 (`verbatimModuleSyntax` enforced) |
 | UI | React 19, Puck (`@puckeditor/core` 0.22) |
 | Apps | Next.js 16 (studio, playground); TanStack Start + Vite + Fumadocs (docs) |
 | Styling | Tailwind CSS 4, CSS-first, via shared `@anvilkit/tailwind-config` |
