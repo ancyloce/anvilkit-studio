@@ -1,5 +1,5 @@
 import type { CanvasTemplateDefinition } from "@anvilkit/canvas-core";
-import { migrateCanvasIR } from "@anvilkit/canvas-core";
+import { CANVAS_SIZE_PRESETS, migrateCanvasIR } from "@anvilkit/canvas-core";
 import a4Flyer from "./a4-flyer.json" with { type: "json" };
 import businessCard from "./business-card.json" with { type: "json" };
 import fbCover from "./fb-cover.json" with { type: "json" };
@@ -12,6 +12,11 @@ import presentationSection from "./presentation-section.json" with {
 import slide16x9 from "./slide-16x9.json" with { type: "json" };
 import slideTitle from "./slide-title.json" with { type: "json" };
 import twitterHeader from "./twitter-header.json" with { type: "json" };
+
+/** Every preset in `ids` that exists in {@link CANVAS_SIZE_PRESETS}. */
+function sizePresets(...ids: string[]) {
+	return CANVAS_SIZE_PRESETS.filter((preset) => ids.includes(preset.id));
+}
 
 /**
  * A `@anvilkit/canvas-templates` catalog entry: the canonical FR-020
@@ -60,7 +65,7 @@ export const canvasTemplates = {
 			"1080×1080 square card with a centered title and dimension caption.",
 		category: "social",
 		tags: ["instagram", "square"],
-		supportedSizes: [],
+		supportedSizes: sizePresets("instagram-post"),
 		document: migrateCanvasIR(igPost),
 		variables: [],
 		editableSlots: [],
@@ -74,7 +79,7 @@ export const canvasTemplates = {
 			"Vertical story with a color band, kicker, big headline, and swipe-up CTA.",
 		category: "social",
 		tags: ["instagram", "story"],
-		supportedSizes: [],
+		supportedSizes: sizePresets("instagram-story"),
 		document: migrateCanvasIR(igStory),
 		variables: [],
 		editableSlots: [],

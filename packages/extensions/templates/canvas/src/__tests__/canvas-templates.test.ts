@@ -68,6 +68,41 @@ describe("@anvilkit/canvas-templates", () => {
 		}
 	});
 
+	it("wires ig-post and ig-story to their matching FR-060 size preset", () => {
+		const igPost = canvasTemplates["ig-post"];
+		expect(igPost.supportedSizes.map((preset) => preset.id)).toEqual([
+			"instagram-post",
+		]);
+		expect(igPost.supportedSizes[0]).toMatchObject({
+			width: igPost.document.pages[0]?.size.width,
+			height: igPost.document.pages[0]?.size.height,
+		});
+
+		const igStory = canvasTemplates["ig-story"];
+		expect(igStory.supportedSizes.map((preset) => preset.id)).toEqual([
+			"instagram-story",
+		]);
+		expect(igStory.supportedSizes[0]).toMatchObject({
+			width: igStory.document.pages[0]?.size.width,
+			height: igStory.document.pages[0]?.size.height,
+		});
+	});
+
+	it("leaves supportedSizes empty for templates with no matching FR-060 preset", () => {
+		for (const id of [
+			"poster",
+			"slide-16x9",
+			"slide-title",
+			"a4-flyer",
+			"business-card",
+			"fb-cover",
+			"twitter-header",
+			"presentation-section",
+		] as const) {
+			expect(canvasTemplates[id].supportedSizes).toEqual([]);
+		}
+	});
+
 	it("uses unique node ids within each template", () => {
 		for (const template of canvasTemplateList) {
 			const ids: string[] = [];
