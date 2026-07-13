@@ -87,7 +87,8 @@ function resolveBody(
 			}
 			return { body: { ...request, sourceImageUrl: source.url } };
 		}
-		case "inpaint": {
+		case "inpaint":
+		case "generative-fill": {
 			const source = urlFor(request.sourceAssetId);
 			if ("error" in source) {
 				return source;
@@ -103,6 +104,31 @@ function resolveBody(
 					maskImageUrl: mask.url,
 				},
 			};
+		}
+		case "object-erase": {
+			const source = urlFor(request.sourceAssetId);
+			if ("error" in source) {
+				return source;
+			}
+			const mask = urlFor(request.maskAssetId);
+			if ("error" in mask) {
+				return mask;
+			}
+			return {
+				body: {
+					...request,
+					sourceImageUrl: source.url,
+					maskImageUrl: mask.url,
+				},
+			};
+		}
+		case "generative-expand":
+		case "background-replace": {
+			const source = urlFor(request.sourceAssetId);
+			if ("error" in source) {
+				return source;
+			}
+			return { body: { ...request, sourceImageUrl: source.url } };
 		}
 	}
 }
