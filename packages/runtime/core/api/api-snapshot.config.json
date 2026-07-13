@@ -405,9 +405,9 @@
 											"sources": [
 												{
 													"fileName": "config/schema.ts",
-													"line": 285,
+													"line": 294,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L285"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L294"
 												}
 											],
 											"type": {
@@ -460,9 +460,9 @@
 																			"sources": [
 																				{
 																					"fileName": "config/schema.ts",
-																					"line": 293,
+																					"line": 302,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L293"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L302"
 																				}
 																			],
 																			"type": {
@@ -522,9 +522,9 @@
 																			"sources": [
 																				{
 																					"fileName": "config/schema.ts",
-																					"line": 300,
+																					"line": 309,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L300"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L309"
 																				}
 																			],
 																			"type": {
@@ -875,16 +875,56 @@
 													},
 													{
 														"kind": "text",
-														"text": " shape."
+														"text": " shape.\n\nDeliberately stays colors/fonts-only (canvas-m2-005, FR-031):\nthe canonical "
+													},
+													{
+														"kind": "code",
+														"text": "`BrandKitDefinition`"
+													},
+													{
+														"kind": "text",
+														"text": " (logos, typography, tone of\nvoice, compliance rules) lives in "
+													},
+													{
+														"kind": "code",
+														"text": "`@anvilkit/canvas-core`"
+													},
+													{
+														"kind": "text",
+														"text": ", and\n"
+													},
+													{
+														"kind": "code",
+														"text": "`@anvilkit/core`"
+													},
+													{
+														"kind": "text",
+														"text": " must not take a dependency on a canvas-specific\npackage to widen this schema. A host that wants the fuller kit\nsurfaced passes a "
+													},
+													{
+														"kind": "code",
+														"text": "`BrandKitDefinition`"
+													},
+													{
+														"kind": "text",
+														"text": " directly to\n"
+													},
+													{
+														"kind": "code",
+														"text": "`createCanvasStudioPlugin({ brandKit })`"
+													},
+													{
+														"kind": "text",
+														"text": ", which takes precedence\nover this block."
 													}
 												]
 											},
 											"sources": [
 												{
 													"fileName": "config/schema.ts",
-													"line": 229,
+													"line": 238,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L229"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L238"
 												}
 											],
 											"type": {
@@ -953,9 +993,9 @@
 																			"sources": [
 																				{
 																					"fileName": "config/schema.ts",
-																					"line": 235,
+																					"line": 244,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L235"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L244"
 																				}
 																			],
 																			"type": {
@@ -1008,9 +1048,9 @@
 																													"sources": [
 																														{
 																															"fileName": "config/schema.ts",
-																															"line": 239,
+																															"line": 248,
 																															"character": 7,
-																															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L239"
+																															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L248"
 																														}
 																													],
 																													"type": {
@@ -1042,9 +1082,9 @@
 																													"sources": [
 																														{
 																															"fileName": "config/schema.ts",
-																															"line": 241,
+																															"line": 250,
 																															"character": 7,
-																															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L241"
+																															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L250"
 																														}
 																													],
 																													"type": {
@@ -1120,9 +1160,9 @@
 																			"sources": [
 																				{
 																					"fileName": "config/schema.ts",
-																					"line": 250,
+																					"line": 259,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L250"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L259"
 																				}
 																			],
 																			"type": {
@@ -1218,9 +1258,9 @@
 											"sources": [
 												{
 													"fileName": "config/schema.ts",
-													"line": 313,
+													"line": 322,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L313"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L322"
 												}
 											],
 											"type": {
@@ -1286,9 +1326,9 @@
 											"sources": [
 												{
 													"fileName": "config/schema.ts",
-													"line": 257,
+													"line": 266,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L257"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L266"
 												}
 											],
 											"type": {
@@ -1349,9 +1389,9 @@
 																			"sources": [
 																				{
 																					"fileName": "config/schema.ts",
-																					"line": 266,
+																					"line": 275,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L266"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L275"
 																				}
 																			],
 																			"type": {
@@ -1411,9 +1451,9 @@
 																			"sources": [
 																				{
 																					"fileName": "config/schema.ts",
-																					"line": 274,
+																					"line": 283,
 																					"character": 4,
-																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L274"
+																					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L283"
 																				}
 																			],
 																			"type": {
@@ -2922,9 +2962,9 @@
 											"sources": [
 												{
 													"fileName": "config/schema.ts",
-													"line": 285,
+													"line": 294,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L285"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L294"
 												}
 											],
 											"type": {
@@ -2963,9 +3003,9 @@
 															"sources": [
 																{
 																	"fileName": "config/schema.ts",
-																	"line": 293,
+																	"line": 302,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L293"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L302"
 																}
 															],
 															"type": {
@@ -3009,9 +3049,9 @@
 															"sources": [
 																{
 																	"fileName": "config/schema.ts",
-																	"line": 300,
+																	"line": 309,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L300"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L309"
 																}
 															],
 															"type": {
@@ -3248,16 +3288,56 @@
 													},
 													{
 														"kind": "text",
-														"text": " shape."
+														"text": " shape.\n\nDeliberately stays colors/fonts-only (canvas-m2-005, FR-031):\nthe canonical "
+													},
+													{
+														"kind": "code",
+														"text": "`BrandKitDefinition`"
+													},
+													{
+														"kind": "text",
+														"text": " (logos, typography, tone of\nvoice, compliance rules) lives in "
+													},
+													{
+														"kind": "code",
+														"text": "`@anvilkit/canvas-core`"
+													},
+													{
+														"kind": "text",
+														"text": ", and\n"
+													},
+													{
+														"kind": "code",
+														"text": "`@anvilkit/core`"
+													},
+													{
+														"kind": "text",
+														"text": " must not take a dependency on a canvas-specific\npackage to widen this schema. A host that wants the fuller kit\nsurfaced passes a "
+													},
+													{
+														"kind": "code",
+														"text": "`BrandKitDefinition`"
+													},
+													{
+														"kind": "text",
+														"text": " directly to\n"
+													},
+													{
+														"kind": "code",
+														"text": "`createCanvasStudioPlugin({ brandKit })`"
+													},
+													{
+														"kind": "text",
+														"text": ", which takes precedence\nover this block."
 													}
 												]
 											},
 											"sources": [
 												{
 													"fileName": "config/schema.ts",
-													"line": 229,
+													"line": 238,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L229"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L238"
 												}
 											],
 											"type": {
@@ -3312,9 +3392,9 @@
 															"sources": [
 																{
 																	"fileName": "config/schema.ts",
-																	"line": 235,
+																	"line": 244,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L235"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L244"
 																}
 															],
 															"type": {
@@ -3345,9 +3425,9 @@
 																				"sources": [
 																					{
 																						"fileName": "config/schema.ts",
-																						"line": 239,
+																						"line": 248,
 																						"character": 7,
-																						"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L239"
+																						"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L248"
 																					}
 																				],
 																				"type": {
@@ -3373,9 +3453,9 @@
 																				"sources": [
 																					{
 																						"fileName": "config/schema.ts",
-																						"line": 241,
+																						"line": 250,
 																						"character": 7,
-																						"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L241"
+																						"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L250"
 																					}
 																				],
 																				"type": {
@@ -3426,9 +3506,9 @@
 															"sources": [
 																{
 																	"fileName": "config/schema.ts",
-																	"line": 250,
+																	"line": 259,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L250"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L259"
 																}
 															],
 															"type": {
@@ -3527,9 +3607,9 @@
 											"sources": [
 												{
 													"fileName": "config/schema.ts",
-													"line": 257,
+													"line": 266,
 													"character": 2,
-													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L257"
+													"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L266"
 												}
 											],
 											"type": {
@@ -3576,9 +3656,9 @@
 															"sources": [
 																{
 																	"fileName": "config/schema.ts",
-																	"line": 266,
+																	"line": 275,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L266"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L275"
 																}
 															],
 															"type": {
@@ -3622,9 +3702,9 @@
 															"sources": [
 																{
 																	"fileName": "config/schema.ts",
-																	"line": 274,
+																	"line": 283,
 																	"character": 4,
-																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L274"
+																	"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L283"
 																}
 															],
 															"type": {
@@ -4846,9 +4926,9 @@
 									"sources": [
 										{
 											"fileName": "config/schema.ts",
-											"line": 285,
+											"line": 294,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L285"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L294"
 										}
 									],
 									"type": {
@@ -4887,9 +4967,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 293,
+															"line": 302,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L293"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L302"
 														}
 													],
 													"type": {
@@ -4933,9 +5013,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 300,
+															"line": 309,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L300"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L309"
 														}
 													],
 													"type": {
@@ -5172,16 +5252,56 @@
 											},
 											{
 												"kind": "text",
-												"text": " shape."
+												"text": " shape.\n\nDeliberately stays colors/fonts-only (canvas-m2-005, FR-031):\nthe canonical "
+											},
+											{
+												"kind": "code",
+												"text": "`BrandKitDefinition`"
+											},
+											{
+												"kind": "text",
+												"text": " (logos, typography, tone of\nvoice, compliance rules) lives in "
+											},
+											{
+												"kind": "code",
+												"text": "`@anvilkit/canvas-core`"
+											},
+											{
+												"kind": "text",
+												"text": ", and\n"
+											},
+											{
+												"kind": "code",
+												"text": "`@anvilkit/core`"
+											},
+											{
+												"kind": "text",
+												"text": " must not take a dependency on a canvas-specific\npackage to widen this schema. A host that wants the fuller kit\nsurfaced passes a "
+											},
+											{
+												"kind": "code",
+												"text": "`BrandKitDefinition`"
+											},
+											{
+												"kind": "text",
+												"text": " directly to\n"
+											},
+											{
+												"kind": "code",
+												"text": "`createCanvasStudioPlugin({ brandKit })`"
+											},
+											{
+												"kind": "text",
+												"text": ", which takes precedence\nover this block."
 											}
 										]
 									},
 									"sources": [
 										{
 											"fileName": "config/schema.ts",
-											"line": 229,
+											"line": 238,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L229"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L238"
 										}
 									],
 									"type": {
@@ -5236,9 +5356,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 235,
+															"line": 244,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L235"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L244"
 														}
 													],
 													"type": {
@@ -5269,9 +5389,9 @@
 																		"sources": [
 																			{
 																				"fileName": "config/schema.ts",
-																				"line": 239,
+																				"line": 248,
 																				"character": 7,
-																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L239"
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L248"
 																			}
 																		],
 																		"type": {
@@ -5297,9 +5417,9 @@
 																		"sources": [
 																			{
 																				"fileName": "config/schema.ts",
-																				"line": 241,
+																				"line": 250,
 																				"character": 7,
-																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L241"
+																				"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L250"
 																			}
 																		],
 																		"type": {
@@ -5350,9 +5470,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 250,
+															"line": 259,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L250"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L259"
 														}
 													],
 													"type": {
@@ -5451,9 +5571,9 @@
 									"sources": [
 										{
 											"fileName": "config/schema.ts",
-											"line": 257,
+											"line": 266,
 											"character": 2,
-											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L257"
+											"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L266"
 										}
 									],
 									"type": {
@@ -5500,9 +5620,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 266,
+															"line": 275,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L266"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L275"
 														}
 													],
 													"type": {
@@ -5546,9 +5666,9 @@
 													"sources": [
 														{
 															"fileName": "config/schema.ts",
-															"line": 274,
+															"line": 283,
 															"character": 4,
-															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L274"
+															"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/config/schema.ts#L283"
 														}
 													],
 													"type": {

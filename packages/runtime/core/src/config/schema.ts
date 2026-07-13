@@ -225,6 +225,15 @@ export const StudioConfigSchema = z
 		 * the editor *chrome*: `brandKit` is design content the canvas
 		 * reads via its `useBrandKit()` hook. `plugin-canvas-studio`
 		 * maps these entries to the editor's `BrandKit` shape.
+		 *
+		 * Deliberately stays colors/fonts-only (canvas-m2-005, FR-031):
+		 * the canonical `BrandKitDefinition` (logos, typography, tone of
+		 * voice, compliance rules) lives in `@anvilkit/canvas-core`, and
+		 * `@anvilkit/core` must not take a dependency on a canvas-specific
+		 * package to widen this schema. A host that wants the fuller kit
+		 * surfaced passes a `BrandKitDefinition` directly to
+		 * `createCanvasStudioPlugin({ brandKit })`, which takes precedence
+		 * over this block.
 		 */
 		brandKit: z
 			.strictObject({
