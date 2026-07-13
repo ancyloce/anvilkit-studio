@@ -1,0 +1,29 @@
+---
+title: "CanvasSvgNodeSchema"
+description: "@anvilkit/canvas-core · CanvasSvgNodeSchema"
+---
+
+```ts
+const CanvasSvgNodeSchema: ZodObject<{
+  assetId: ZodString;
+  blendMode: ZodOptional<ZodString>;
+  bounds: ZodType<CanvasBounds, unknown, $ZodTypeInternals<CanvasBounds, unknown>>;
+  id: ZodString;
+  locked: ZodOptional<ZodBoolean>;
+  meta: ZodOptional<ZodType<CanvasNodeMeta, unknown, $ZodTypeInternals<CanvasNodeMeta, unknown>>>;
+  name: ZodOptional<ZodString>;
+  opacity: ZodOptional<ZodNumber>;
+  transform: ZodType<CanvasTransform, unknown, $ZodTypeInternals<CanvasTransform, unknown>>;
+  type: ZodLiteral<"svg">;
+  visible: ZodOptional<ZodBoolean>;
+  zIndex: ZodNumber;
+}, $loose>;
+```
+
+Defined in: [ir/validators.ts:312](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L312)
+
+FR-016: deliberately holds ONLY `assetId` — there is no `markup`/`content`
+field for inline SVG text to occupy, so raw markup has nowhere to go even
+under this schema's loose-object (unknown-key-preserving) posture. No
+renderer in this package ever reads an unknown key, so an attacker-supplied
+extra field survives as inert data, never as executed markup.

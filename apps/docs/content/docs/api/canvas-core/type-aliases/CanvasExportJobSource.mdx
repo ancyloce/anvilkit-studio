@@ -1,0 +1,21 @@
+---
+title: "CanvasExportJobSource"
+description: "@anvilkit/canvas-core · CanvasExportJobSource"
+---
+
+```ts
+type CanvasExportJobSource = 
+  | {
+  document: CanvasIR;
+}
+  | {
+  documentRef: string;
+};
+```
+
+Defined in: [export/types.ts:31](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L31)
+
+Where the document to export comes from. `document` carries the IR
+inline; `documentRef` is an opaque reference a host/worker resolves —
+`canvas-core` never attempts to resolve one itself (see
+[resolveInlineExportDocument](../functions/resolveInlineExportDocument) in `./resolve.js`).

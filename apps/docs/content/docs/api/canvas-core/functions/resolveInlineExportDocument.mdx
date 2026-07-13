@@ -1,0 +1,28 @@
+---
+title: "resolveInlineExportDocument"
+description: "@anvilkit/canvas-core · resolveInlineExportDocument"
+---
+
+```ts
+function resolveInlineExportDocument(source): CanvasIR;
+```
+
+Defined in: [export/resolve.ts:14](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/resolve.ts#L14)
+
+Resolves a [CanvasExportJobSource](../type-aliases/CanvasExportJobSource) to a validated, current-version
+`CanvasIR` — only when it carries the document inline. A `documentRef`
+source is a host/worker resolution concern; `canvas-core` never attempts
+to resolve one itself and this function throws rather than guessing.
+
+Always routes through `migrateCanvasIR` (not a bare schema parse), so an
+inline document authored at an older IR version still resolves correctly.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `source` | [`CanvasExportJobSource`](../type-aliases/CanvasExportJobSource) |
+
+## Returns
+
+[`CanvasIR`](../interfaces/CanvasIR)

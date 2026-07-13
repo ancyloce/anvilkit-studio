@@ -1,0 +1,22 @@
+---
+title: "CANVAS_SIZE_PRESETS"
+description: "@anvilkit/canvas-core · CANVAS_SIZE_PRESETS"
+---
+
+```ts
+const CANVAS_SIZE_PRESETS: readonly CanvasSizePreset[];
+```
+
+Defined in: templates/size-presets.ts:16
+
+The initial social size preset catalog (PRD FR-060, §12.8). Each entry's
+`width`/`height` is the platform's own published dimension for that surface
+as of this catalog's `version: "1"` — cited per-preset below since these
+numbers drift as platforms redesign their apps; bump a preset's own
+`version` (never mutate a shipped one in place) when a platform changes its
+spec, so documents pinned to the old preset keep their original size.
+
+`safeArea` is only set for full-bleed short-form video surfaces where the
+host app's own chrome (profile handle, caption, action rail) is known to
+overlap the canvas edges — it is deliberately omitted where the format has
+no such UI overlap (feed photos, thumbnails, banners).

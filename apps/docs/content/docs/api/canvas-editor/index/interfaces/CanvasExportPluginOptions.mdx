@@ -3,7 +3,7 @@ title: "CanvasExportPluginOptions"
 description: "@anvilkit/canvas-editor · CanvasExportPluginOptions"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:57](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L57)
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:76](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L76)
 
 Options for [createCanvasExportPlugin](../functions/createCanvasExportPlugin) / `<ExportMenu>`.
 
@@ -11,6 +11,6 @@ Options for [createCanvasExportPlugin](../functions/createCanvasExportPlugin) / 
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="exporters"&gt;&lt;/a&gt; `exporters?` | `readonly` | `Partial`\&lt;`Record`\&lt;[`CanvasExportFormat`](../type-aliases/CanvasExportFormat), [`CanvasExporter`](../type-aliases/CanvasExporter)\&gt;\&gt; | Per-format serializers, merged over the built-in PNG/JSON exporters. The editor is Puck-independent and budget-capped, so it ships no SVG/PDF serializer — hosts inject those (e.g. from `@anvilkit/plugin-export-canvas`). | [packages/capabilities/canvas/editor/src/header/types.ts:63](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L63) |
-| &lt;a id="formats"&gt;&lt;/a&gt; `formats?` | `readonly` | readonly [`CanvasExportFormat`](../type-aliases/CanvasExportFormat)[] | Which formats to show, in order. Defaults to every format that has an exporter, ordered PNG · SVG · PDF · JSON. | [packages/capabilities/canvas/editor/src/header/types.ts:68](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L68) |
-| &lt;a id="onerror"&gt;&lt;/a&gt; `onError?` | `readonly` | (`error`, `format`) =&gt; `void` | Invoked when an exporter throws. Defaults to `console.error`. | [packages/capabilities/canvas/editor/src/header/types.ts:70](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L70) |
+| &lt;a id="exporters"&gt;&lt;/a&gt; `exporters?` | `readonly` | `Partial`\&lt;`Record`\&lt;[`CanvasExportFormat`](../type-aliases/CanvasExportFormat), [`CanvasExporter`](../type-aliases/CanvasExporter)\&gt;\&gt; | Per-format serializers, merged over the built-in PNG/JSON exporters. The editor is Puck-independent and budget-capped, so it ships no SVG/PDF serializer — hosts inject those (e.g. from `@anvilkit/plugin-export-canvas`). | [packages/capabilities/canvas/editor/src/header/types.ts:82](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L82) |
+| &lt;a id="formats"&gt;&lt;/a&gt; `formats?` | `readonly` | readonly [`CanvasExportFormat`](../type-aliases/CanvasExportFormat)[] | Which formats to show, in order. Defaults to every format that has an exporter, ordered PNG · SVG · PDF · JSON. | [packages/capabilities/canvas/editor/src/header/types.ts:87](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L87) |
+| &lt;a id="onerror"&gt;&lt;/a&gt; `onError?` | `readonly` | (`error`, `format`) =&gt; `void` | Invoked when an exporter throws. Defaults to `console.error`. | [packages/capabilities/canvas/editor/src/header/types.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L89) |

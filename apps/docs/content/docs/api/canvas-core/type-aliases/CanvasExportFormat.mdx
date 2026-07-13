@@ -1,0 +1,23 @@
+---
+title: "CanvasExportFormat"
+description: "@anvilkit/canvas-core · CanvasExportFormat"
+---
+
+```ts
+type CanvasExportFormat = "svg" | "png" | "jpeg" | "webp" | "pdf" | "pdf-print";
+```
+
+Defined in: [export/types.ts:17](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L17)
+
+The headless export job contract (PRD FR-040, §12.7).
+
+Naming: every type here is `CanvasExportJob*` rather than the PRD's
+proposed bare `CanvasExportRequest`/`CanvasExportResponse`/`CanvasExportArtifact`
+— those exact names already exist with DIFFERENT meanings in sibling
+packages: `@anvilkit/plugin-export-canvas`'s `CanvasExportOptions`
+(`src/types.ts:22`, per-format option bag for the Studio `exportAs`
+pipeline) and `@anvilkit/canvas-editor`'s `CanvasExportRequest`/
+`CanvasExportArtifact` (`src/header/types.ts`, the export popover's
+quality/resolution/stripMetadata knobs and its downloadable-artifact
+shape). The `Job` qualifier keeps this headless, worker-facing contract
+unambiguous from both.

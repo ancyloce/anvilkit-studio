@@ -1,0 +1,25 @@
+---
+title: "CanvasExportWarning"
+description: "@anvilkit/canvas-core · CanvasExportWarning"
+---
+
+Defined in: [export/types.ts:150](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L150)
+
+A unified, format-agnostic export warning (FR-041, canvas-m3-002). `code`
+is a plain string rather than a closed union: a single job may touch
+SVG-specific (`SvgWarningCode`) or PDF-specific (`PdfWarningCode`) codes
+depending on `format`, and this shape must not force every new per-format
+code to widen a shared enum. Adapters that serialize via
+`serializePageToSvg`/`serializeDocumentToPdf` map those functions' own
+typed warnings into this shape 1:1 (`code` carries the same string value).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="code"&gt;&lt;/a&gt; `code` | `readonly` | `string` | - | [export/types.ts:152](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L152) |
+| &lt;a id="fallback"&gt;&lt;/a&gt; `fallback?` | `readonly` | `string` | Optional suggested remediation, mirrored from `SvgSerializeWarning.fallback`/`PdfSerializeWarning.fallback` (FR-041, canvas-m3-002). | [export/types.ts:157](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L157) |
+| &lt;a id="level"&gt;&lt;/a&gt; `level` | `readonly` | [`CanvasExportWarningLevel`](../type-aliases/CanvasExportWarningLevel) | - | [export/types.ts:151](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L151) |
+| &lt;a id="message"&gt;&lt;/a&gt; `message` | `readonly` | `string` | - | [export/types.ts:153](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L153) |
+| &lt;a id="nodeid"&gt;&lt;/a&gt; `nodeId?` | `readonly` | `string` | - | [export/types.ts:154](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L154) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId?` | `readonly` | `string` | - | [export/types.ts:155](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L155) |

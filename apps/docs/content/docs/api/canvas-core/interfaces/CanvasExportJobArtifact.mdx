@@ -1,0 +1,18 @@
+---
+title: "CanvasExportJobArtifact"
+description: "@anvilkit/canvas-core · CanvasExportJobArtifact"
+---
+
+Defined in: [export/types.ts:130](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L130)
+
+One produced file. `data` stays `string | Uint8Array` — no base64 round-tripping (matches `@anvilkit/contracts`' `ExportResult` convention).
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="data"&gt;&lt;/a&gt; `data` | `readonly` | `string` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | - | [export/types.ts:132](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L132) |
+| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | - | [export/types.ts:131](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L131) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType` | `readonly` | `string` | - | [export/types.ts:133](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L133) |
+| &lt;a id="pageid"&gt;&lt;/a&gt; `pageId?` | `readonly` | `string` | Which page/variant this artifact corresponds to, for batch exports. | [export/types.ts:135](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L135) |
+| &lt;a id="variantlabel"&gt;&lt;/a&gt; `variantLabel?` | `readonly` | `string` | - | [export/types.ts:136](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L136) |

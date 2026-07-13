@@ -1,0 +1,32 @@
+---
+title: "buildCampaignExportJobRequest"
+description: "@anvilkit/canvas-core · buildCampaignExportJobRequest"
+---
+
+```ts
+function buildCampaignExportJobRequest(
+   document, 
+   variantPages, 
+   request): CanvasExportJobRequest;
+```
+
+Defined in: templates/resize-to-variants.ts:113
+
+Builds one [CanvasExportJobRequest](../interfaces/CanvasExportJobRequest) that exports every variant page
+from a [resizeToVariants](resizeToVariants.md) call in a single batch (FR-061's "export
+job can export all variants in one batch"). `document` must already contain
+`variantPages` (apply the result's `command` first) — this only assembles
+the request; executing a job is a worker/host concern (canvas-m3-001), not
+`canvas-core`'s.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `document` | [`CanvasIR`](../interfaces/CanvasIR) |
+| `variantPages` | readonly [`CanvasPage`](../interfaces/CanvasPage)[] |
+| `request` | [`CampaignExportJobRequestOptions`](../interfaces/CampaignExportJobRequestOptions) |
+
+## Returns
+
+[`CanvasExportJobRequest`](../interfaces/CanvasExportJobRequest)

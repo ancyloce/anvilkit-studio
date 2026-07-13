@@ -52,6 +52,7 @@ description: "@anvilkit/canvas-editor · index"
 | [RasterizePageResult](interfaces/RasterizePageResult.md) | - |
 | [RemotePanelDescriptor](interfaces/RemotePanelDescriptor.md) | - |
 | [SearchPanelDescriptor](interfaces/SearchPanelDescriptor.md) | - |
+| [SizePresetPickerProps](interfaces/SizePresetPickerProps.md) | - |
 | [TabPanelProps](interfaces/TabPanelProps.md) | - |
 | [TextFieldProps](interfaces/TextFieldProps.md) | - |
 | [WorkspaceFooterProps](interfaces/WorkspaceFooterProps.md) | - |
@@ -64,6 +65,7 @@ description: "@anvilkit/canvas-editor · index"
 | Type Alias | Description |
 | ------ | ------ |
 | [AlignDirection](type-aliases/AlignDirection.md) | - |
+| [CampaignResizeResult](type-aliases/CampaignResizeResult.md) | Result of [resizeActivePageToVariants](functions/resizeActivePageToVariants.md). `ok: false` carries a user-facing message rather than throwing — mirrors `TemplateActionResult` (`template-actions.ts`). |
 | [CanvasExporter](type-aliases/CanvasExporter.md) | Turns the live editor state + the requested options into a downloadable artifact. May be async (SVG/PDF serialization is). Throwing surfaces through [CanvasExportPluginOptions.onError](interfaces/CanvasExportPluginOptions.md#onerror). |
 | [CanvasExportFormat](type-aliases/CanvasExportFormat.md) | Built-in export formats. PNG/JSON ship with the editor; SVG/PDF are host-injected. |
 | [CanvasIRGetter](type-aliases/CanvasIRGetter.md) | - |
@@ -100,6 +102,7 @@ description: "@anvilkit/canvas-editor · index"
 | [addPage](functions/addPage.md) | Append a fresh blank page to the IR, commit `page.create`, and activate it. Returns the new page id. |
 | [brandKitDefinitionToBrandKit](functions/brandKitDefinitionToBrandKit.md) | Lossless mapping from the canonical `BrandKitDefinition` (FR-031) to the editor's `BrandKit`. `colors` passes through unchanged (identical shape); `fonts` flattens to the plain family-name strings existing consumers (`useBrandFonts`, `resolveBrandToken`) already expect. Every other field — logos, typography, image style presets, tone of voice, rules, default export presets — passes through unchanged, nothing is dropped. |
 | [BrandPanel](functions/BrandPanel.md) | Brand-kit panel: the host's shared palette + fonts (I3-4), plus — when the host supplied a full `BrandKitDefinition` (canvas-m2-005) — a compliance check and apply-brand-kit actions (canvas-m2-006, FR-032). "Check compliance" computes a preview of every action's effect (count of affected nodes) and a compliance report WITHOUT touching the document; each action button then commits its own transform as one reversible step. Testids (`brand-section` / `brand-palette` / `brand-fonts`) are unchanged. |
+| [CampaignResizePanel](functions/CampaignResizePanel.md) | - |
 | [CanvasStudio](functions/CanvasStudio.md) | - |
 | [CanvasToolbar](functions/CanvasToolbar.md) | Dynamic property toolbar — a floating, centered pill above the page (Canva style). Surfaces the most-used quick props for the selected node (fill · border · width · opacity), committing through the shared `node.update` pipeline. Renders nothing when the selection is empty. |
 | [CanvasWorkspace](functions/CanvasWorkspace.md) | The Canva-style editor shell: full-width Header · Aside (Panel Dock + Tab Panel) · Canvas (dynamic Toolbar + Page with floating Element Controls) · full-width Footer. Composed over the headless `<CanvasStudio>` via its `renderShell` seam; UI state lives in a per-instance Zustand store provided here. This is the editor's single top-level shell. |
@@ -128,8 +131,10 @@ description: "@anvilkit/canvas-editor · index"
 | [rasterizePage](functions/rasterizePage.md) | Render a single `CanvasIR` page into a detached `Konva.Stage` and return a data URL of its contents. The stage is built off-screen (the container element is appended to the body but positioned far outside the viewport) and torn down before the function resolves, so callers do not need to manage lifecycle. |
 | [renamePage](functions/renamePage.md) | Rename a page. No-op when the page id is unknown or the new name matches the existing name. Pass `undefined` (or use `clearPageName`) to remove the explicit name and fall back to the default tab label. |
 | [reorderPage](functions/reorderPage.md) | Reorder a page in the IR. No-op when the page is already at `toIndex`, the page id is unknown, or `toIndex` is out of range. Active page is preserved (reordering does not change which page is editable). |
+| [resizeActivePageToVariants](functions/resizeActivePageToVariants.md) | Generates one new page per preset from `sourcePageId`'s content, commits the whole batch as one undo step, and switches to the first generated variant (FR-061, canvas-m3-007). Presentational callers (e.g. a "Create variants" button) should disable themselves while `presets` is empty rather than calling this with none. |
 | [resolveBrandToken](functions/resolveBrandToken.md) | Resolve a `BrandTokenRef` (`@anvilkit/canvas-core`) against the editor's `BrandKit` — the SAME resolution the stage, the offscreen rasterizer, and a host's SVG exporter (via core's `SvgSerializeOptions.resolveBrandToken`) all call, so a document renders identically everywhere. |
 | [Section](functions/Section.md) | - |
+| [SizePresetPicker](functions/SizePresetPicker.md) | - |
 | [switchToPage](functions/switchToPage.md) | Switch active page AND clear transient UI state — selection, draft (any in-progress drag), text editor, and smart guides. Without the clears, a stale `selectionStore.selectedIds` would point at node ids that don't exist on the newly active page. |
 | [TabPanel](functions/TabPanel.md) | Tab Panel (Aside, col 2). Renders the registry descriptor for the active dock id, with an optional search box, and dispatches by descriptor kind (built-in / plugin / remote / search). Search resets when the dock changes so each panel opens fresh. |
 | [TemplatesPanel](functions/TemplatesPanel.md) | - |

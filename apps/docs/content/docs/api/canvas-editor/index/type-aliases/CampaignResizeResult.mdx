@@ -1,0 +1,22 @@
+---
+title: "CampaignResizeResult"
+description: "@anvilkit/canvas-editor · CampaignResizeResult"
+---
+
+```ts
+type CampaignResizeResult = 
+  | {
+  ok: true;
+  pageIds: readonly string[];
+}
+  | {
+  message: string;
+  ok: false;
+};
+```
+
+Defined in: packages/capabilities/canvas/editor/src/panels/campaign-resize-actions.ts:11
+
+Result of [resizeActivePageToVariants](../functions/resizeActivePageToVariants). `ok: false` carries a
+user-facing message rather than throwing — mirrors `TemplateActionResult`
+(`template-actions.ts`).

@@ -3,14 +3,21 @@ title: "CanvasExportRequest"
 description: "@anvilkit/canvas-editor · CanvasExportRequest"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:30](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L30)
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:39](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L39)
 
 The user-tunable knobs from the export popover (mirrors the reference panel).
+
+Naming: `@anvilkit/canvas-core`'s headless export job contract (FR-040,
+canvas-m3-001) deliberately named its own request/response/artifact types
+`CanvasExportJobRequest`/`CanvasExportJobResponse`/`CanvasExportJobArtifact`
+rather than reusing these bare names — this type and
+[CanvasExportArtifact](CanvasExportArtifact.md) are unrelated, editor-UI-local concepts (popover
+knobs / a downloadable-blob shape) and stay as they are.
 
 ## Properties
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| &lt;a id="quality"&gt;&lt;/a&gt; `quality` | `readonly` | `number` | 0–100. Honored by lossy raster encoders; ignored by PNG/vector/data. | [packages/capabilities/canvas/editor/src/header/types.ts:32](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L32) |
-| &lt;a id="resolution"&gt;&lt;/a&gt; `resolution` | `readonly` | `number` | Output scale factor (e.g. `1`, `0.5`). Raster exporters multiply pixelRatio by it. | [packages/capabilities/canvas/editor/src/header/types.ts:34](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L34) |
-| &lt;a id="stripmetadata"&gt;&lt;/a&gt; `stripMetadata` | `readonly` | `boolean` | Strip EXIF/location/camera metadata from raster output. | [packages/capabilities/canvas/editor/src/header/types.ts:36](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L36) |
+| &lt;a id="quality"&gt;&lt;/a&gt; `quality` | `readonly` | `number` | 0–100. Honored by lossy raster encoders; ignored by PNG/vector/data. | [packages/capabilities/canvas/editor/src/header/types.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L41) |
+| &lt;a id="resolution"&gt;&lt;/a&gt; `resolution` | `readonly` | `number` | Output scale factor (e.g. `1`, `0.5`). Raster exporters multiply pixelRatio by it. | [packages/capabilities/canvas/editor/src/header/types.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L43) |
+| &lt;a id="stripmetadata"&gt;&lt;/a&gt; `stripMetadata` | `readonly` | `boolean` | Strip EXIF/location/camera metadata from raster output. | [packages/capabilities/canvas/editor/src/header/types.ts:45](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L45) |

@@ -1,0 +1,31 @@
+---
+title: "resizeActivePageToVariants"
+description: "@anvilkit/canvas-editor · resizeActivePageToVariants"
+---
+
+```ts
+function resizeActivePageToVariants(
+   ctx, 
+   sourcePageId, 
+   presets): CampaignResizeResult;
+```
+
+Defined in: packages/capabilities/canvas/editor/src/panels/campaign-resize-actions.ts:22
+
+Generates one new page per preset from `sourcePageId`'s content, commits
+the whole batch as one undo step, and switches to the first generated
+variant (FR-061, canvas-m3-007). Presentational callers (e.g. a "Create
+variants" button) should disable themselves while `presets` is empty
+rather than calling this with none.
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `ctx` | [`CanvasStudioContextValue`](../interfaces/CanvasStudioContextValue) |
+| `sourcePageId` | `string` |
+| `presets` | readonly `CanvasSizePreset`[] |
+
+## Returns
+
+[`CampaignResizeResult`](../type-aliases/CampaignResizeResult)

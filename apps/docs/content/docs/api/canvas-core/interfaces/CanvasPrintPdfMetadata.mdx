@@ -1,0 +1,29 @@
+---
+title: "CanvasPrintPdfMetadata"
+description: "@anvilkit/canvas-core · CanvasPrintPdfMetadata"
+---
+
+Defined in: [export/types.ts:89](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L89)
+
+Print-oriented PDF metadata (FR-043, canvas-m3-004). Shared verbatim with
+`serialize/pdf.ts`'s `PdfSerializeOptions.print` (that domain is allowed to
+import this one — `export/` sits at a strictly lower layer rank) so the
+job-contract metadata and the actual print-safety check never drift apart.
+
+Raster PDF (`serializeDocumentToPdf`) remains the only EXECUTABLE path —
+`capabilities.vector` records that true vector PDF is a documented future
+capability, not something this task implements.
+
+## Properties
+
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="bleed"&gt;&lt;/a&gt; `bleed?` | `readonly` | `number` | Bleed distance, in `pageSize.unit`. | [export/types.ts:92](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L92) |
+| &lt;a id="capabilities"&gt;&lt;/a&gt; `capabilities` | `readonly` | \{ `raster`: `true`; `vector`: `boolean`; \} | - | [export/types.ts:109](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L109) |
+| `capabilities.raster` | `readonly` | `true` | - | [export/types.ts:110](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L110) |
+| `capabilities.vector` | `readonly` | `boolean` | Always `false` today — no vector PDF renderer exists yet. | [export/types.ts:112](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L112) |
+| &lt;a id="colormode"&gt;&lt;/a&gt; `colorMode?` | `readonly` | [`CanvasPrintColorMode`](../type-aliases/CanvasPrintColorMode) | Advisory only — `canvas-core` does not introspect an embedded raster's color profile, so a `"cmyk"`-flagged job never actually verifies the source is CMYK. Surfaced so a host/print vendor can act on the intent. | [export/types.ts:107](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L107) |
+| &lt;a id="dpi"&gt;&lt;/a&gt; `dpi?` | `readonly` | `number` | Target DPI for this print job. Doubles as the minimum acceptable DPI for embedded rasters — `serializeDocumentToPdf` warns with `PRINT_UNSAFE` when an embedded raster's effective DPI falls below it. Defaults to 150 (a common print-safety floor) when `print` is present but `dpi` is not. | [export/types.ts:101](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L101) |
+| &lt;a id="margin"&gt;&lt;/a&gt; `margin?` | `readonly` | `number` | Margin distance, in `pageSize.unit`. | [export/types.ts:94](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L94) |
+| &lt;a id="pagesize"&gt;&lt;/a&gt; `pageSize?` | `readonly` | [`CanvasPageSize`](CanvasPageSize.md) | - | [export/types.ts:90](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L90) |
+| &lt;a id="safearea"&gt;&lt;/a&gt; `safeArea?` | `readonly` | [`CanvasPrintSafeArea`](CanvasPrintSafeArea.md) | - | [export/types.ts:108](https://github.com/ancyloce/anvilkit-studio/blob/main/src/export/types.ts#L108) |

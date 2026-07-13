@@ -3,15 +3,16 @@ title: "PdfSerializeOptions"
 description: "@anvilkit/canvas-core · PdfSerializeOptions"
 ---
 
-Defined in: [serialize/pdf.ts:209](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L209)
+Defined in: [serialize/pdf.ts:216](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L216)
 
 ## Properties
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="author"&gt;&lt;/a&gt; `author?` | `string` | Written to the PDF document's author metadata. | [serialize/pdf.ts:222](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L222) |
-| &lt;a id="dpi"&gt;&lt;/a&gt; `dpi?` | `number` | Fallback px→pt DPI when a page omits `size.dpi`. Defaults to [DEFAULT\_DPI](../variables/DEFAULT_DPI). | [serialize/pdf.ts:218](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L218) |
-| &lt;a id="pages"&gt;&lt;/a&gt; `pages?` | (`string` \| `number`)[] | Pages to emit, by id or index, in order. Defaults to every page in IR order. An unknown selector throws; an explicitly empty list throws (no PDF pages). | [serialize/pdf.ts:216](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L216) |
-| &lt;a id="rasters"&gt;&lt;/a&gt; `rasters` | [`PdfRasterPage`](PdfRasterPage.md)[] | Pre-rendered page rasters. A selected page with no matching entry is blank. | [serialize/pdf.ts:211](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L211) |
-| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `string` | Written to the PDF document's title metadata. | [serialize/pdf.ts:220](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L220) |
-| &lt;a id="validate"&gt;&lt;/a&gt; `validate?` | `boolean` | Run [CanvasIRSchema](../variables/CanvasIRSchema) over `ir` before emitting and throw on failure (default `false`). Independently of this flag, a page whose computed dimensions are non-finite throws a `RangeError` rather than producing a corrupt PDF (`pdf-lib` would otherwise receive `NaN` page bounds). | [serialize/pdf.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L229) |
+| &lt;a id="author"&gt;&lt;/a&gt; `author?` | `string` | Written to the PDF document's author metadata. | [serialize/pdf.ts:229](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L229) |
+| &lt;a id="dpi"&gt;&lt;/a&gt; `dpi?` | `number` | Fallback px→pt DPI when a page omits `size.dpi`. Defaults to [DEFAULT\_DPI](../variables/DEFAULT_DPI). | [serialize/pdf.ts:225](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L225) |
+| &lt;a id="pages"&gt;&lt;/a&gt; `pages?` | (`string` \| `number`)[] | Pages to emit, by id or index, in order. Defaults to every page in IR order. An unknown selector throws; an explicitly empty list throws (no PDF pages). | [serialize/pdf.ts:223](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L223) |
+| &lt;a id="print"&gt;&lt;/a&gt; `print?` | [`CanvasPrintPdfMetadata`](CanvasPrintPdfMetadata.md) | Print-safety metadata (FR-043, canvas-m3-004). When present, every successfully-embedded raster's EFFECTIVE dpi (its natural pixel size divided by the page's print size in inches) is compared against `print.dpi` (default 150 DPI); a raster below it warns with `PRINT_UNSAFE` rather than failing the export. `colorMode` is advisory only — see [CanvasPrintPdfMetadata.colorMode](CanvasPrintPdfMetadata.md#colormode). | [serialize/pdf.ts:245](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L245) |
+| &lt;a id="rasters"&gt;&lt;/a&gt; `rasters` | [`PdfRasterPage`](PdfRasterPage.md)[] | Pre-rendered page rasters. A selected page with no matching entry is blank. | [serialize/pdf.ts:218](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L218) |
+| &lt;a id="title"&gt;&lt;/a&gt; `title?` | `string` | Written to the PDF document's title metadata. | [serialize/pdf.ts:227](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L227) |
+| &lt;a id="validate"&gt;&lt;/a&gt; `validate?` | `boolean` | Run [CanvasIRSchema](../variables/CanvasIRSchema) over `ir` before emitting and throw on failure (default `false`). Independently of this flag, a page whose computed dimensions are non-finite throws a `RangeError` rather than producing a corrupt PDF (`pdf-lib` would otherwise receive `NaN` page bounds). | [serialize/pdf.ts:236](https://github.com/ancyloce/anvilkit-studio/blob/main/src/serialize/pdf.ts#L236) |

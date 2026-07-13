@@ -1,0 +1,13 @@
+---
+title: "ResizeToVariantsResult"
+description: "@anvilkit/canvas-core · ResizeToVariantsResult"
+---
+
+Defined in: templates/resize-to-variants.ts:25
+
+## Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| &lt;a id="command"&gt;&lt;/a&gt; `command` | [`CanvasBatchCommand`](CanvasBatchCommand.md) | One `page.create` per page in [ResizeToVariantsResult.pages](#pages), as a single batch — apply via `applyCommand`/`applyCommands` (or a host's `ctx.commit`) for one reversible undo step. | templates/resize-to-variants.ts:29 |
+| &lt;a id="pages"&gt;&lt;/a&gt; `pages` | [`CanvasPage`](CanvasPage.md)[] | The newly generated variant pages — fresh ids throughout, sized per preset, `variantSource` stamped. | templates/resize-to-variants.ts:27 |

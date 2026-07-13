@@ -23,7 +23,7 @@ const CanvasFrameNodeShape: {
 };
 ```
 
-Defined in: [ir/validators.ts:336](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L336)
+Defined in: [ir/validators.ts:350](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L350)
 
 Frame's own (non-recursive) fields. Split out because `children` must be bound
 to whichever node union is being assembled — the static one below, or the
@@ -33,18 +33,18 @@ extension-aware one `buildExtendedSchemas` builds — and the two must not drift
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| &lt;a id="property-background"&gt;&lt;/a&gt; `background` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasFill`](../type-aliases/CanvasFill), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasFill`](../type-aliases/CanvasFill), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:340](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L340) |
-| &lt;a id="property-blendmode"&gt;&lt;/a&gt; `blendMode` | `ZodOptional`\&lt;`ZodString`\&gt; | - | [ir/validators.ts:178](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L178) |
-| &lt;a id="property-bounds"&gt;&lt;/a&gt; `bounds` | `ZodType`\&lt;[`CanvasBounds`](../interfaces/CanvasBounds), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasBounds`](../interfaces/CanvasBounds), `unknown`\&gt;\&gt; | `CanvasBoundsSchema` | [ir/validators.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L174) |
-| &lt;a id="property-clip"&gt;&lt;/a&gt; `clip` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:339](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L339) |
-| &lt;a id="property-id"&gt;&lt;/a&gt; `id` | `ZodString` | - | [ir/validators.ts:171](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L171) |
-| &lt;a id="property-locked"&gt;&lt;/a&gt; `locked` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L177) |
-| &lt;a id="property-meta"&gt;&lt;/a&gt; `meta` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasNodeMeta`](../interfaces/CanvasNodeMeta), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasNodeMeta`](../interfaces/CanvasNodeMeta), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L180) |
-| &lt;a id="property-name"&gt;&lt;/a&gt; `name` | `ZodOptional`\&lt;`ZodString`\&gt; | - | [ir/validators.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L172) |
-| &lt;a id="property-opacity"&gt;&lt;/a&gt; `opacity` | `ZodOptional`\&lt;`ZodNumber`\&gt; | - | [ir/validators.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L175) |
-| &lt;a id="property-placeholder"&gt;&lt;/a&gt; `placeholder` | `ZodOptional`\&lt;`ZodType`\&lt;[`FramePlaceholder`](../interfaces/FramePlaceholder), `unknown`, `$ZodTypeInternals`\&lt;[`FramePlaceholder`](../interfaces/FramePlaceholder), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:341](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L341) |
-| &lt;a id="property-radius"&gt;&lt;/a&gt; `radius` | `ZodOptional`\&lt;`ZodNumber`\&gt; | - | [ir/validators.ts:342](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L342) |
-| &lt;a id="property-transform"&gt;&lt;/a&gt; `transform` | `ZodType`\&lt;[`CanvasTransform`](../interfaces/CanvasTransform), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasTransform`](../interfaces/CanvasTransform), `unknown`\&gt;\&gt; | `CanvasTransformSchema` | [ir/validators.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L173) |
-| &lt;a id="property-type"&gt;&lt;/a&gt; `type` | `ZodLiteral`\&lt;`"frame"`\&gt; | - | [ir/validators.ts:338](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L338) |
-| &lt;a id="property-visible"&gt;&lt;/a&gt; `visible` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L176) |
-| &lt;a id="property-zindex"&gt;&lt;/a&gt; `zIndex` | `ZodNumber` | `FiniteNumber` | [ir/validators.ts:179](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L179) |
+| &lt;a id="property-background"&gt;&lt;/a&gt; `background` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasFill`](../type-aliases/CanvasFill), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasFill`](../type-aliases/CanvasFill), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:354](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L354) |
+| &lt;a id="property-blendmode"&gt;&lt;/a&gt; `blendMode` | `ZodOptional`\&lt;`ZodString`\&gt; | - | [ir/validators.ts:179](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L179) |
+| &lt;a id="property-bounds"&gt;&lt;/a&gt; `bounds` | `ZodType`\&lt;[`CanvasBounds`](../interfaces/CanvasBounds), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasBounds`](../interfaces/CanvasBounds), `unknown`\&gt;\&gt; | `CanvasBoundsSchema` | [ir/validators.ts:175](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L175) |
+| &lt;a id="property-clip"&gt;&lt;/a&gt; `clip` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:353](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L353) |
+| &lt;a id="property-id"&gt;&lt;/a&gt; `id` | `ZodString` | - | [ir/validators.ts:172](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L172) |
+| &lt;a id="property-locked"&gt;&lt;/a&gt; `locked` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:178](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L178) |
+| &lt;a id="property-meta"&gt;&lt;/a&gt; `meta` | `ZodOptional`\&lt;`ZodType`\&lt;[`CanvasNodeMeta`](../interfaces/CanvasNodeMeta), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasNodeMeta`](../interfaces/CanvasNodeMeta), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:181](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L181) |
+| &lt;a id="property-name"&gt;&lt;/a&gt; `name` | `ZodOptional`\&lt;`ZodString`\&gt; | - | [ir/validators.ts:173](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L173) |
+| &lt;a id="property-opacity"&gt;&lt;/a&gt; `opacity` | `ZodOptional`\&lt;`ZodNumber`\&gt; | - | [ir/validators.ts:176](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L176) |
+| &lt;a id="property-placeholder"&gt;&lt;/a&gt; `placeholder` | `ZodOptional`\&lt;`ZodType`\&lt;[`FramePlaceholder`](../interfaces/FramePlaceholder), `unknown`, `$ZodTypeInternals`\&lt;[`FramePlaceholder`](../interfaces/FramePlaceholder), `unknown`\&gt;\&gt;\&gt; | - | [ir/validators.ts:355](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L355) |
+| &lt;a id="property-radius"&gt;&lt;/a&gt; `radius` | `ZodOptional`\&lt;`ZodNumber`\&gt; | - | [ir/validators.ts:356](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L356) |
+| &lt;a id="property-transform"&gt;&lt;/a&gt; `transform` | `ZodType`\&lt;[`CanvasTransform`](../interfaces/CanvasTransform), `unknown`, `$ZodTypeInternals`\&lt;[`CanvasTransform`](../interfaces/CanvasTransform), `unknown`\&gt;\&gt; | `CanvasTransformSchema` | [ir/validators.ts:174](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L174) |
+| &lt;a id="property-type"&gt;&lt;/a&gt; `type` | `ZodLiteral`\&lt;`"frame"`\&gt; | - | [ir/validators.ts:352](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L352) |
+| &lt;a id="property-visible"&gt;&lt;/a&gt; `visible` | `ZodOptional`\&lt;`ZodBoolean`\&gt; | - | [ir/validators.ts:177](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L177) |
+| &lt;a id="property-zindex"&gt;&lt;/a&gt; `zIndex` | `ZodNumber` | `FiniteNumber` | [ir/validators.ts:180](https://github.com/ancyloce/anvilkit-studio/blob/main/src/ir/validators.ts#L180) |

@@ -3,14 +3,15 @@ title: "CanvasExportArtifact"
 description: "@anvilkit/canvas-editor · CanvasExportArtifact"
 ---
 
-Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:40](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L40)
+Defined in: [packages/capabilities/canvas/editor/src/header/types.ts:49](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L49)
 
 A downloadable artifact. `data` accepts a data URL, raw string, bytes, or a Blob.
 
 ## Properties
 
-| Property | Modifier | Type | Defined in |
-| ------ | ------ | ------ | ------ |
-| &lt;a id="data"&gt;&lt;/a&gt; `data` | `readonly` | `string` \| `Blob` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | [packages/capabilities/canvas/editor/src/header/types.ts:42](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L42) |
-| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | [packages/capabilities/canvas/editor/src/header/types.ts:41](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L41) |
-| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType` | `readonly` | `string` | [packages/capabilities/canvas/editor/src/header/types.ts:43](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L43) |
+| Property | Modifier | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| &lt;a id="data"&gt;&lt;/a&gt; `data` | `readonly` | `string` \| `Blob` \| `Uint8Array`\&lt;`ArrayBufferLike`\&gt; | - | [packages/capabilities/canvas/editor/src/header/types.ts:51](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L51) |
+| &lt;a id="filename"&gt;&lt;/a&gt; `filename` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/header/types.ts:50](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L50) |
+| &lt;a id="mimetype"&gt;&lt;/a&gt; `mimeType` | `readonly` | `string` | - | [packages/capabilities/canvas/editor/src/header/types.ts:52](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L52) |
+| &lt;a id="warnings"&gt;&lt;/a&gt; `warnings?` | `readonly` | readonly `CanvasExportWarning`[] | Structured fidelity warnings from serialization (FR-041, canvas-m3-002) — e.g. an unresolved brand token or an unsupported mask. Reuses `@anvilkit/canvas-core`'s `CanvasExportWarning` shape verbatim so a host wiring `canvasToSvg`/`canvasToPdf` (`@anvilkit/plugin-export-canvas`) can pass its `warnings` straight through without remapping (UX-007: "user can see export warnings before download"). Omitted or empty means no fidelity loss was detected. | [packages/capabilities/canvas/editor/src/header/types.ts:62](https://github.com/ancyloce/anvilkit-studio/blob/main/src/header/types.ts#L62) |
