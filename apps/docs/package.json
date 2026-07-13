@@ -6,7 +6,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "NODE_OPTIONS=--max-old-space-size=8192 vite build",
 		"preview": "vite preview",
 		"start": "vite preview",
 		"source": "fumadocs-mdx",
@@ -23,7 +23,7 @@
 		"generate:all": "pnpm generate:components && pnpm generate:api && pnpm generate:plugins && pnpm generate:templates && pnpm generate:registry",
 		"generate:api": "jiti scripts/generate-api-pages.ts",
 		"check:i18n": "node scripts/check-i18n.mjs",
-		"docs:build": "vite build",
+		"docs:build": "NODE_OPTIONS=--max-old-space-size=8192 vite build",
 		"docs:dev": "vite dev"
 	},
 	"dependencies": {
