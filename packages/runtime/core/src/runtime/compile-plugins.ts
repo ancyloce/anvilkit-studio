@@ -217,6 +217,37 @@ export interface CompilePluginsOptions {
 	 * the rationale behind the default `<Studio>` picks.
 	 */
 	readonly lifecycle?: LifecycleManagerOptions;
+	/**
+	 * Polled before each plugin's `register()` call; when it returns `true`
+	 * the compile stops and throws instead of continuing. Without this, a
+	 * superseded compile (the caller started a newer one — e.g. `<Studio>`'s
+	 * plugin-array/config fingerprint changed while this one was still
+	 * awaiting a lazy plugin's dynamic import) keeps calling `register()` on
+	 * every remaining plugin to completion, racing the newer compile into
+	 * the SAME single-occupancy sidebar surfaces / shared registries — two
+	 * live compiles can each land a registration before either one's
+	 * `onDestroy` has a chance to clear the other's, which reads as a bogus
+	 * "surface already registered" warning even though only one compile was
+	 * ever meant to win. `<Studio>` passes its existing stale-generation
+	 * check here so the loser stops advancing the moment it is superseded,
+	 * instead of only noticing after every plugin has already run.
+	 */
+	readonly isAborted?: () => boolean;
+}
+
+/**
+ * Thrown by {@link compilePlugins} when `options.isAborted` reports true
+ * between two plugins' `register()` calls. Callers that pass `isAborted`
+ * already treat "this compile is stale" as a silent no-op (the same path a
+ * stale compile's `isStale()` check after `compilePlugins` resolves already
+ * takes), so this is a plain `Error`, not a `StudioPluginError` — it never
+ * reaches a host's `onError`.
+ */
+class CompileAbortedError extends Error {
+	constructor() {
+		super("compilePlugins aborted: superseded by a newer compile");
+		this.name = "CompileAbortedError";
+	}
 }
 
 /**
@@ -610,6 +641,9 @@ export async function compilePlugins(
 		});
 
 	for (const [index, plugin] of orderedPlugins.entries()) {
+		if (options.isAborted?.()) {
+			throw new CompileAbortedError();
+		}
 		if (isStudioPlugin(plugin)) {
 			const meta = plugin.meta;
 

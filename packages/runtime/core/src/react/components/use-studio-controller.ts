@@ -648,6 +648,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 			try {
 				const runtime = await compilePlugins(resolvedPlugins, ctx, {
 					lifecycle: { onDataChangeDebounceMs: DATA_CHANGE_DEBOUNCE_MS },
+					isAborted: isStale,
 				});
 				if (isStale()) {
 					// This compile was superseded before it could mount (a faster

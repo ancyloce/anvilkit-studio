@@ -493,6 +493,40 @@ describe("compilePlugins — invalid shapes", () => {
 	});
 });
 
+describe("compilePlugins — isAborted", () => {
+	it("stops calling register() on remaining plugins once isAborted() reports true", async () => {
+		const registered: string[] = [];
+		const record = (id: string) => (meta: StudioPluginMeta) => {
+			registered.push(id);
+			return { meta };
+		};
+		const plugins = [
+			makePlugin("first", { register: record("first") }),
+			makePlugin("second", { register: record("second") }),
+			makePlugin("third", { register: record("third") }),
+		];
+		// Reports aborted starting right before "second" would get its turn —
+		// simulates a newer compile superseding this one mid-loop (e.g. the
+		// host's plugins/config changed while this compile was still awaiting
+		// a lazy plugin's dynamic import).
+		await expect(
+			compilePlugins(plugins, makeCtx(), {
+				isAborted: () => registered.length >= 1,
+			}),
+		).rejects.toThrow(/superseded/i);
+		expect(registered).toEqual(["first"]);
+	});
+
+	it("compiles normally when isAborted() never reports true", async () => {
+		const runtime = await compilePlugins(
+			[makePlugin("a"), makePlugin("b")],
+			makeCtx(),
+			{ isAborted: () => false },
+		);
+		expect(runtime.pluginMeta.map((m) => m.id)).toEqual(["a", "b"]);
+	});
+});
+
 describe("compilePlugins — providers / overlays / slots aggregation", () => {
 	// Dummy React component references used to assert the runtime
 	// preserves identity through the aggregation pipeline. The runtime
