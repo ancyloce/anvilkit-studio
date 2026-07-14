@@ -11,7 +11,6 @@ import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
 import { useStudioPagesSource } from "@/context/pages-source";
 import { Button } from "@/primitives/button";
-import { Checkbox } from "@/primitives/checkbox";
 import {
 	Dialog,
 	DialogClose,
@@ -20,14 +19,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/primitives/dialog";
-import {
-	Field,
-	FieldContent,
-	FieldError,
-	FieldGroup,
-	FieldLabel,
-} from "@/primitives/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/primitives/field";
 import { Input } from "@/primitives/input";
+import { Switch } from "@/primitives/switch";
 import { useMsg } from "@/state/editor-i18n-context";
 
 export interface AddPageDialogProps {
@@ -120,6 +114,10 @@ export function AddPageDialog({
 						<Field>
 							<FieldLabel htmlFor={titleId}>
 								{msg("studio.module.layer.pages.dialog.field.title")}
+								<span aria-hidden="true" className="text-[var(--destructive)]">
+									{" "}
+									*
+								</span>
 							</FieldLabel>
 							<Input
 								id={titleId}
@@ -142,11 +140,15 @@ export function AddPageDialog({
 									setForm((prev) => ({ ...prev, path: event.target.value }))
 								}
 								placeholder="/about"
+								aria-invalid={error !== null}
 								data-testid="ak-layer-add-page-path"
 							/>
 						</Field>
-						<Field orientation="horizontal">
-							<Checkbox
+						<Field orientation="horizontal" className="justify-between">
+							<FieldLabel htmlFor={routeId}>
+								{msg("studio.module.layer.pages.dialog.field.route")}
+							</FieldLabel>
+							<Switch
 								id={routeId}
 								checked={form.route}
 								onCheckedChange={(checked) =>
@@ -154,11 +156,6 @@ export function AddPageDialog({
 								}
 								data-testid="ak-layer-add-page-route"
 							/>
-							<FieldContent>
-								<FieldLabel htmlFor={routeId}>
-									{msg("studio.module.layer.pages.dialog.field.route")}
-								</FieldLabel>
-							</FieldContent>
 						</Field>
 						{error !== null ? (
 							<FieldError data-testid="ak-layer-add-page-error">

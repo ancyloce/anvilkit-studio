@@ -12,10 +12,7 @@
 
 .ak-pages-panel {
 	/* Primitives — accent + danger families. */
-	--ak-pages-accent-primitive: var(
-		--ak-studio-theme,
-		oklch(54.6% 0.245 262.881)
-	);
+	--ak-pages-accent-primitive: var(--ak-studio-theme, oklch(0.619 0.141 262.4));
 	--ak-pages-accent-fg-primitive: var(--ak-studio-theme-fg, oklch(1 0 0));
 	--ak-pages-danger-primitive: var(--destructive, oklch(57.7% 0.245 27.325));
 	--ak-pages-danger-fg-primitive: oklch(1 0 0);
@@ -32,6 +29,11 @@
 	--ak-pages-accent: var(--ak-pages-accent-primitive);
 	--ak-pages-accent-fg: var(--ak-pages-accent-fg-primitive);
 	--ak-pages-ring: var(--ak-pages-accent);
+	/* Soft brand surface for multi-select (bulk actions) rows — distinct
+	   from the "current page" `data-active` treatment below, which stays a
+	   stronger NEUTRAL fill per DESIGN.md §7.4 (page-tree selection is
+	   deliberately quieter than layer-tree selection). */
+	--ak-pages-accent-soft: var(--editor-selection-soft, rgb(86 131 218 / 12%));
 
 	/* Semantic — danger (delete confirm). */
 	--ak-pages-danger-bg: var(--ak-pages-danger-primitive);
@@ -43,9 +45,7 @@
 
 .dark .ak-pages-panel {
 	/* Primitives flip; semantic tokens above inherit without redefinition. */
-	--ak-pages-accent-primitive: var(
-		--ak-studio-theme,
-		oklch(62.3% 0.214 259.815)
-	);
+	--ak-pages-accent-primitive: var(--ak-studio-theme, oklch(0.619 0.141 262.4));
 	--ak-pages-danger-primitive: var(--destructive, oklch(70.4% 0.191 22.216));
+	--ak-pages-accent-soft: var(--editor-selection-soft, rgb(86 131 218 / 16%));
 }

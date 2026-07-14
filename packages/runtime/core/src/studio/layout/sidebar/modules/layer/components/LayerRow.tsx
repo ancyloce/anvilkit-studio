@@ -15,8 +15,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { useGetPuck } from "@puckeditor/core";
 import { Box, ChevronDown, ChevronRight, GripVertical } from "lucide-react";
 import { type KeyboardEvent, memo, type ReactNode, useCallback } from "react";
-import { cn } from "@/shared/cn";
 import { Button } from "@/primitives/button";
+import { cn } from "@/shared/cn";
 import { useMsg } from "@/state/editor-i18n-context";
 import type { LayerNode } from "../hooks/use-layer-tree";
 import { useScrollComponentIntoView } from "../hooks/use-scroll-component-into-view";
@@ -95,25 +95,30 @@ function LayerRowImpl({
 		<div
 			ref={setNodeRef}
 			data-testid={`ak-layer-node-${node.id}`}
+			data-selected={selected ? "true" : undefined}
+			data-dragging={isDragging ? "true" : undefined}
 			style={{
 				transform: CSS.Transform.toString(transform),
 				transition,
-				paddingLeft: `${node.depth * 14 + 4}px`,
+				paddingLeft: `${node.depth * 16 + 4}px`,
 			}}
-			className={cn("relative", isDragging && "opacity-50")}
+			className={cn(
+				"relative",
+				isDragging && "opacity-70 shadow-[var(--shadow-floating)]",
+			)}
 		>
 			{showDropLine ? (
 				<span
 					aria-hidden="true"
-					className="pointer-events-none absolute inset-x-1 -top-px h-0.5 rounded bg-[var(--ak-studio-accent)]"
+					className="pointer-events-none absolute inset-x-1 -top-px h-0.5 rounded bg-[var(--editor-selection)]"
 				/>
 			) : null}
 			<div
 				className={cn(
-					"flex h-7 items-center gap-1 rounded px-1 text-sm",
+					"flex h-8 items-center gap-1 rounded-md px-1 text-xs",
 					"text-[var(--ak-studio-fg)] hover:bg-[var(--ak-studio-muted)]",
 					selected &&
-						"bg-[var(--ak-studio-muted)] ring-1 ring-[var(--ak-studio-ring)]",
+						"bg-[var(--editor-selection-soft)] ring-1 ring-inset ring-[var(--editor-selection)] hover:bg-[var(--editor-selection-soft)]",
 				)}
 			>
 				<Button

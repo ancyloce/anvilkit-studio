@@ -13,7 +13,6 @@
 
 import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 import { Button } from "@/primitives/button";
-import { Checkbox } from "@/primitives/checkbox";
 import {
 	Dialog,
 	DialogClose,
@@ -22,14 +21,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/primitives/dialog";
-import {
-	Field,
-	FieldContent,
-	FieldError,
-	FieldGroup,
-	FieldLabel,
-} from "@/primitives/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/primitives/field";
 import { Input } from "@/primitives/input";
+import { Switch } from "@/primitives/switch";
 import { useMsg } from "@/state/editor-i18n-context";
 import { useSidebarRegistry } from "@/state/sidebar-registry/use-sidebar-registry";
 import type {
@@ -210,6 +204,10 @@ export function PageSettingsDialog({
 						<Field>
 							<FieldLabel htmlFor={titleId}>
 								{msg("studio.module.layer.pages.settings.field.title")}
+								<span aria-hidden="true" className="text-[var(--destructive)]">
+									{" "}
+									*
+								</span>
 							</FieldLabel>
 							<Input
 								id={titleId}
@@ -232,11 +230,15 @@ export function PageSettingsDialog({
 									setForm((prev) => ({ ...prev, path: event.target.value }))
 								}
 								placeholder="/about"
+								aria-invalid={error !== null}
 								data-testid={`${pathId}-input`}
 							/>
 						</Field>
-						<Field orientation="horizontal">
-							<Checkbox
+						<Field orientation="horizontal" className="justify-between">
+							<FieldLabel htmlFor={routeId}>
+								{msg("studio.module.layer.pages.settings.field.route")}
+							</FieldLabel>
+							<Switch
 								id={routeId}
 								checked={form.route}
 								onCheckedChange={(checked) =>
@@ -244,11 +246,6 @@ export function PageSettingsDialog({
 								}
 								data-testid={`${routeId}-input`}
 							/>
-							<FieldContent>
-								<FieldLabel htmlFor={routeId}>
-									{msg("studio.module.layer.pages.settings.field.route")}
-								</FieldLabel>
-							</FieldContent>
 						</Field>
 						<Field>
 							<FieldLabel htmlFor={descId}>

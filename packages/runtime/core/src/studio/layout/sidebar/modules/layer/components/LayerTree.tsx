@@ -120,7 +120,7 @@ function LayerZoneImpl({
 				className={cn(
 					"flex flex-col gap-px rounded",
 					nodes.length === 0 && "min-h-6",
-					isOver && "bg-[var(--ak-studio-muted)]",
+					isOver && "bg-[var(--editor-drop-target)]",
 				)}
 			>
 				{nodes.map((node) => {
@@ -186,7 +186,10 @@ function LayerZoneDropTarget({
 			ref={setNodeRef}
 			data-testid={`ak-layer-zone-drop-${zoneKey}`}
 			style={{ paddingLeft: `${depth * 14 + 4}px` }}
-			className={cn("min-h-6 rounded", isOver && "bg-[var(--ak-studio-muted)]")}
+			className={cn(
+				"min-h-6 rounded",
+				isOver && "bg-[var(--editor-drop-target)]",
+			)}
 		/>
 	);
 }
@@ -391,7 +394,7 @@ export function LayerTree(): ReactNode {
 			</div>
 			<DragOverlay>
 				{activeNode !== null ? (
-					<div className="flex h-7 items-center gap-1 rounded bg-[var(--ak-studio-muted)] px-2 text-sm text-[var(--ak-studio-fg)] shadow-lg ring-1 ring-[var(--ak-studio-ring)]">
+					<div className="flex h-8 items-center gap-1 rounded-md bg-[var(--editor-panel-raised)] px-2 text-xs text-[var(--ak-studio-fg)] shadow-[var(--shadow-floating)] ring-1 ring-[var(--ak-studio-border)]">
 						{activeNode.label}
 					</div>
 				) : null}

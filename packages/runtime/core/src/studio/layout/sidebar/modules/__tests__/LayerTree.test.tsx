@@ -50,6 +50,7 @@ afterEach(() => {
 	cleanup();
 	mockPuckSnapshot.appState.data = { content: [], zones: {} };
 	mockPuckSnapshot.config.components = {};
+	mockPuckSnapshot.selectedItem = null;
 });
 
 function Setup({ children }: { readonly children: ReactNode }): ReactElement {
@@ -98,5 +99,41 @@ describe("LayerTree — dual-path threshold", () => {
 		expect(
 			document.querySelectorAll("[data-testid^='ak-layer-node-']").length,
 		).toBeLessThan(total);
+	});
+});
+
+describe("LayerTree — selected row treatment (DESIGN.md §11)", () => {
+	it("marks only the selected row data-selected, never more than one", () => {
+		mockPuckSnapshot.appState.data = { content: makeRoots(3), zones: {} };
+		mockPuckSnapshot.selectedItem = { props: { id: "n-1" } };
+		render(
+			<Setup>
+				<LayerTree />
+			</Setup>,
+		);
+		expect(
+			screen.getByTestId("ak-layer-node-n-1").getAttribute("data-selected"),
+		).toBe("true");
+		expect(
+			screen.getByTestId("ak-layer-node-n-0").getAttribute("data-selected"),
+		).toBeNull();
+		expect(
+			screen.getByTestId("ak-layer-node-n-2").getAttribute("data-selected"),
+		).toBeNull();
+	});
+
+	it("styles the selected row with a soft brand surface + brand outline, not a solid fill", () => {
+		mockPuckSnapshot.appState.data = { content: makeRoots(1), zones: {} };
+		mockPuckSnapshot.selectedItem = { props: { id: "n-0" } };
+		render(
+			<Setup>
+				<LayerTree />
+			</Setup>,
+		);
+		const row = screen.getByTestId("ak-layer-node-n-0");
+		const inner = row.querySelector("div") as HTMLElement;
+		expect(inner.className).toContain("bg-[var(--editor-selection-soft)]");
+		expect(inner.className).toContain("ring-[var(--editor-selection)]");
+		expect(inner.className).not.toMatch(/bg-\[var\(--editor-selection\)\]/);
 	});
 });

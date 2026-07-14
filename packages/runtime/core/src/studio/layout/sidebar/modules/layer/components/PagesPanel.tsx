@@ -196,7 +196,7 @@ function usePagesPanelElement(): ReactNode {
 			className="ak-pages-panel flex shrink-0 flex-col border-b border-[var(--ak-studio-border)]"
 			data-testid="ak-layer-pages"
 		>
-			<div className="flex h-10 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
+			<div className="flex h-8 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
 				<h3 className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]">
 					{msg("studio.module.layer.pages.title")}
 				</h3>

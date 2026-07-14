@@ -233,7 +233,7 @@ function usePageRowElement({
 			<li ref={setNodeRef} style={sortableStyle}>
 				<div
 					className={cn(
-						"flex h-6 items-center gap-2 rounded-sm border-0 px-2 py-0 text-xs",
+						"flex h-8 items-center gap-2 rounded-md border-0 px-2 py-0 text-xs",
 						"text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
 						"bg-[var(--ak-pages-muted,var(--ak-studio-muted))]",
 					)}
@@ -256,7 +256,7 @@ function usePageRowElement({
 						onKeyDown={handleKeyDown}
 						onBlur={handleBlur}
 						data-testid={`ak-layer-page-row-${page.id}-rename-input`}
-						className="h-5 min-w-0 flex-1 px-1 text-xs"
+						className="h-6 min-w-0 flex-1 px-1 text-xs"
 					/>
 				</div>
 				{error !== null ? (
@@ -301,12 +301,12 @@ function usePageRowElement({
 					/>
 				}
 				className={cn(
-					"h-7 rounded-sm border-0 px-2 py-0 text-left text-xs font-normal",
+					"h-8 rounded-md border-0 px-2 py-0 text-left text-xs font-normal",
 					"text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
 					"hover:bg-[var(--ak-pages-muted,var(--ak-studio-muted))]",
 					"focus-visible:ring-2 focus-visible:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
 					"data-[active=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[active=true]:text-[var(--ak-pages-fg,var(--ak-studio-fg))]",
-					"data-[selected=true]:bg-[var(--ak-pages-muted,var(--ak-studio-muted))] data-[selected=true]:ring-1 data-[selected=true]:ring-inset data-[selected=true]:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
+					"data-[selected=true]:bg-[var(--ak-pages-accent-soft)] data-[selected=true]:ring-1 data-[selected=true]:ring-inset data-[selected=true]:ring-[var(--ak-pages-ring,var(--ak-studio-ring))]",
 					hasAnyAction ? "pr-7" : "",
 					canReorder ? "pl-6" : "",
 				)}

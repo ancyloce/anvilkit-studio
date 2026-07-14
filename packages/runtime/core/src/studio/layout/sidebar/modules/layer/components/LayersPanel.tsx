@@ -46,8 +46,8 @@ import type {
 	StudioLayerQuickAdd,
 	StudioLayerQuickAddInserter,
 } from "@/types/sidebar";
-import { LayerTree } from "./LayerTree";
 import { useSourceList } from "../hooks/use-source-list";
+import { LayerTree } from "./LayerTree";
 
 interface BuiltInQuickAdd {
 	readonly id: string;
@@ -169,7 +169,7 @@ export function LayersPanel(): ReactNode {
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col" data-testid="ak-layer-layers">
-			<div className="flex h-10 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
+			<div className="flex h-8 shrink-0 items-center justify-center gap-1 px-2 border-b border-[var(--ak-studio-border)]">
 				<h3 className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]">
 					{msg("studio.module.layer.layers.title")}
 				</h3>
