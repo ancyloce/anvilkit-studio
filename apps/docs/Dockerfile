@@ -21,9 +21,22 @@ RUN corepack enable
 WORKDIR /repo
 COPY . .
 
+# ORDER MATTERS: the components-workspace install must run BEFORE the root
+# install. `packages/extensions/components` is a nested pnpm workspace whose
+# own pnpm-workspace.yaml also claims packages/runtime/ui,
+# packages/capabilities/analytics/*, and packages/tooling/configs/* — so
+# those shared packages' node_modules get resolved by whichever `pnpm
+# install` runs LAST. The components store pins its own (unpatched, and for
+# analytics/*, a newer typescript@7.0.2 vs. the root's 6.0.3) dependency
+# tree, so running it last silently swaps in different deps for those shared
+# packages — for analytics/react this forces rsbuild-plugin-dts onto its
+# "tsgo" (TypeScript-Go native-preview) declaration backend, which fails
+# with spurious TS7016s resolving a sibling workspace package's types. Same
+# root cause as the duplicate-React landmine documented in
+# .github/actions/setup-workspace/action.yml — mirror its install order here.
 RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
-	pnpm install --frozen-lockfile \
-	&& pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false
+	pnpm --dir packages/extensions/components install --frozen-lockfile --config.strictDepBuilds=false \
+	&& pnpm install --frozen-lockfile
 
 # NITRO_PRESET=node-server makes the Nitro/TanStack-Start build emit a runnable
 # Node server (.output/server/index.mjs) instead of the default Vercel build
