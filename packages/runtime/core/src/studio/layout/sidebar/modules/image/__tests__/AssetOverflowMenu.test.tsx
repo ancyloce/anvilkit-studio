@@ -78,3 +78,37 @@ describe("AssetOverflowMenu — optional mutation actions", () => {
 		expect(screen.getByText("Copy URL")).toBeInTheDocument();
 	});
 });
+
+describe("AssetOverflowMenu — delete confirmation", () => {
+	it("opens a themed confirm dialog instead of deleting immediately, and only deletes on confirm", async () => {
+		const deleteFn = vi.fn().mockResolvedValue(undefined);
+		renderMenu({ delete: deleteFn });
+		await openMenu();
+
+		fireEvent.click(screen.getByText("Delete"));
+		const dialog = await screen.findByTestId("ak-image-delete-dialog");
+		expect(dialog).toBeInTheDocument();
+		// Clicking the menu item alone must never call the source directly —
+		// only confirming inside the dialog should.
+		expect(deleteFn).not.toHaveBeenCalled();
+		expect(screen.getByText(/photo\.png/)).toBeInTheDocument();
+
+		fireEvent.click(screen.getByTestId("ak-image-delete-dialog-confirm"));
+		await waitFor(() => expect(deleteFn).toHaveBeenCalledWith(ASSET.id));
+	});
+
+	it("does not delete when the dialog is cancelled", async () => {
+		const deleteFn = vi.fn().mockResolvedValue(undefined);
+		renderMenu({ delete: deleteFn });
+		await openMenu();
+
+		fireEvent.click(screen.getByText("Delete"));
+		await screen.findByTestId("ak-image-delete-dialog");
+		fireEvent.click(screen.getByText("Cancel"));
+
+		await waitFor(() =>
+			expect(screen.queryByTestId("ak-image-delete-dialog")).toBeNull(),
+		);
+		expect(deleteFn).not.toHaveBeenCalled();
+	});
+});
