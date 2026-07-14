@@ -274,7 +274,7 @@ export function ExternalField({
 											{msg("studio.field.external.loadError")}
 										</EmptyTitle>
 										<EmptyDescription>
-											Try a different search term.
+											{msg("studio.field.external.loadError.hint")}
 										</EmptyDescription>
 									</Empty>
 								) : rows.length === 0 ? (
@@ -283,7 +283,7 @@ export function ExternalField({
 											{msg("studio.field.external.noResults")}
 										</EmptyTitle>
 										<EmptyDescription>
-											Try a different search term.
+											{msg("studio.field.external.noResults.hint")}
 										</EmptyDescription>
 									</Empty>
 								) : (

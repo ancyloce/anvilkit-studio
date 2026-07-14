@@ -113,15 +113,26 @@ function getItemSummary(
 	field: PuckArrayField<Record<string, unknown>[]>,
 	item: Record<string, unknown>,
 	index: number,
+	msg: (key: string, fallback?: string) => string,
 ): ReactNode {
-	return field.getItemSummary?.(item, index) ?? `Item ${index + 1}`;
+	return (
+		field.getItemSummary?.(item, index) ??
+		msg("studio.field.array.itemFallback").replace("{index}", String(index + 1))
+	);
 }
 
-function summaryToText(summary: ReactNode, index: number): string {
+function summaryToText(
+	summary: ReactNode,
+	index: number,
+	msg: (key: string, fallback?: string) => string,
+): string {
 	if (typeof summary === "string" || typeof summary === "number") {
 		return String(summary);
 	}
-	return `Item ${index + 1}`;
+	return msg("studio.field.array.itemFallback").replace(
+		"{index}",
+		String(index + 1),
+	);
 }
 
 function withFallbackLabel<F extends ItemField>(field: F, label: string): F {
@@ -431,8 +442,8 @@ const ArrayRow = memo(function ArrayRow({
 	onItemChange,
 }: ArrayRowProps): ReactNode {
 	const msg = useMsg();
-	const summary = getItemSummary(field, item, index);
-	const summaryText = summaryToText(summary, index);
+	const summary = getItemSummary(field, item, index, msg);
+	const summaryText = summaryToText(summary, index, msg);
 
 	return (
 		<Popover open={isOpen} onOpenChange={(open) => onOpenChange(index, open)}>

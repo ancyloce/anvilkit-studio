@@ -24,6 +24,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Bold, Heading2, Italic, List, ListOrdered } from "lucide-react";
 import { type ReactNode, useEffect } from "react";
+import { useMsg } from "@/state/editor-i18n-context";
 
 export interface RichTextEditorProps {
 	/** Current value — an HTML string (the field's serialized content). */
@@ -60,38 +61,39 @@ function ToolbarButton({
 }
 
 function Toolbar({ editor }: { editor: Editor }): ReactNode {
+	const msg = useMsg();
 	return (
 		<div
 			className="ak-richtext-toolbar"
 			role="toolbar"
-			aria-label="Text formatting"
+			aria-label={msg("studio.field.richtext.toolbar")}
 		>
 			<ToolbarButton
-				label="Bold"
+				label={msg("studio.field.richtext.bold")}
 				onClick={() => editor.chain().focus().toggleBold().run()}
 			>
 				<Bold />
 			</ToolbarButton>
 			<ToolbarButton
-				label="Italic"
+				label={msg("studio.field.richtext.italic")}
 				onClick={() => editor.chain().focus().toggleItalic().run()}
 			>
 				<Italic />
 			</ToolbarButton>
 			<ToolbarButton
-				label="Heading"
+				label={msg("studio.field.richtext.heading")}
 				onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
 			>
 				<Heading2 />
 			</ToolbarButton>
 			<ToolbarButton
-				label="Bullet list"
+				label={msg("studio.field.richtext.bulletList")}
 				onClick={() => editor.chain().focus().toggleBulletList().run()}
 			>
 				<List />
 			</ToolbarButton>
 			<ToolbarButton
-				label="Numbered list"
+				label={msg("studio.field.richtext.orderedList")}
 				onClick={() => editor.chain().focus().toggleOrderedList().run()}
 			>
 				<ListOrdered />

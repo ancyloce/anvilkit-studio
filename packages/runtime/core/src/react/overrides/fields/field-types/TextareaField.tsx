@@ -44,7 +44,6 @@ export function TextareaField({
 				value={displayValue}
 				placeholder={field.placeholder}
 				readOnly={readOnly}
-				rows={4}
 				onFocus={onFocus}
 				onBlur={onBlur}
 				onChange={(event) => {
