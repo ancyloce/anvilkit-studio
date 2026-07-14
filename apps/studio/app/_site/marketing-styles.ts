@@ -138,10 +138,6 @@ export const stepNum =
 export const stepTitle = "text-[18px] font-semibold tracking-[-0.01em]";
 export const stepBody = "text-muted-foreground text-[14px] leading-[1.55]";
 
-/* ---- Code blocks ---- */
-export const codeBlock =
-	"rounded-huly-cards border border-border bg-[color-mix(in_srgb,var(--card)_60%,var(--muted))] text-[color-mix(in_srgb,var(--foreground)_90%,transparent)] py-4 px-4.5 font-[ui-monospace,SFMono-Regular,Menlo,monospace] text-[12.5px] leading-[1.6] overflow-x-auto whitespace-pre";
-
 /* ---- Mini interactive editor ---- */
 export const miniEditor =
 	"grid grid-cols-1 gap-4.5 items-start min-[920px]:grid-cols-[360px_1fr]";

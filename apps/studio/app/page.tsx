@@ -16,6 +16,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { DemoMessageKey } from "../lib/i18n/messages";
 import { getServerT } from "../lib/i18n/server";
+import { CodeCard } from "./_site/CodeCard";
 import { EditorMockup } from "./_site/EditorMockup";
 import { MarketingMotion } from "./_site/MarketingMotion";
 import { MiniEditor } from "./_site/MiniEditor";
@@ -89,6 +90,7 @@ interface Step {
 	readonly titleKey: DemoMessageKey;
 	readonly bodyKey: DemoMessageKey;
 	readonly code: string;
+	readonly lang: string;
 }
 
 const STEPS: readonly Step[] = [
@@ -96,21 +98,25 @@ const STEPS: readonly Step[] = [
 		titleKey: "home.step.install.title",
 		bodyKey: "home.step.install.body",
 		code: "pnpm add @anvilkit/core \\\n  @anvilkit/hero @anvilkit/navbar",
+		lang: "bash",
 	},
 	{
 		titleKey: "home.step.compose.title",
 		bodyKey: "home.step.compose.body",
 		code: 'import { createHeroConfig } from "@anvilkit/hero";\n\nconst config = {\n  components: { Hero: createHeroConfig() },\n};',
+		lang: "ts",
 	},
 	{
 		titleKey: "home.step.mount.title",
 		bodyKey: "home.step.mount.body",
 		code: 'import { Studio } from "@anvilkit/core";\n\n<Studio puckConfig={config} data={data} />;',
+		lang: "tsx",
 	},
 	{
 		titleKey: "home.step.publish.title",
 		bodyKey: "home.step.publish.body",
 		code: "// Publish → IR → export\nawait exportHtml(ir);\nawait exportReact(ir, { syntax: 'tsx' });",
+		lang: "ts",
 	},
 ];
 
@@ -231,9 +237,7 @@ export default async function Home() {
 								<span className={marketing.stepNum}>{index + 1}</span>
 								<h3 className={marketing.stepTitle}>{t(step.titleKey)}</h3>
 								<p className={marketing.stepBody}>{t(step.bodyKey)}</p>
-								<pre className={marketing.codeBlock}>
-									<code>{step.code}</code>
-								</pre>
+								<CodeCard code={step.code} lang={step.lang} />
 							</Card>
 						))}
 					</div>

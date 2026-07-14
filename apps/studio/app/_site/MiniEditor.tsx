@@ -8,6 +8,7 @@ import { Textarea } from "@anvilkit/ui/textarea";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useDemoT } from "@/lib/i18n/client";
+import { CodeCard } from "./CodeCard";
 import * as marketing from "./marketing-styles";
 
 type Accent = "iris" | "ember";
@@ -190,9 +191,7 @@ export function MiniEditor() {
 					</div>
 				</div>
 
-				<pre className={marketing.codeBlock}>
-					<code>{snippet}</code>
-				</pre>
+				<CodeCard code={snippet} lang="tsx" />
 
 				<div className={marketing.heroActions}>
 					<Link className={buttonVariants()} href="/puck/editor">

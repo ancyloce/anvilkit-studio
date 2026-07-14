@@ -1,5 +1,6 @@
 import { Hero, defaultProps as heroDefaultProps } from "@anvilkit/hero";
 import "@anvilkit/hero/styles.css";
+import { CodeBlock as CodeBlockPrimitive } from "@anvilkit/ui/components/animate-ui/primitives/animate/code-block";
 import { cn } from "@anvilkit/ui/lib/utils";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -43,7 +44,7 @@ const cardLabel =
 const cardHeading = "mb-[0.8rem] text-[#f7f7fa] text-[1.35rem] leading-[1.08]";
 const list = "grid gap-3 pl-4 text-[rgba(255,255,255,0.72)]";
 const codeBlock =
-	"overflow-x-auto p-4 rounded-[1rem] bg-[#0a0b0f] text-[#f6f7fb] text-[0.9rem] leading-[1.55] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]";
+	"overflow-x-auto p-4 rounded-[1rem] bg-[#0a0b0f] text-[#f6f7fb] text-[0.9rem] leading-[1.55] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] [&_pre]:!bg-transparent [&_pre]:!m-0 [&_pre]:whitespace-pre-wrap [&_pre]:break-words";
 
 const heroSnippet = `import { Hero, defaultProps } from "@anvilkit/hero";
 
@@ -109,7 +110,12 @@ export default function HeroDemoPage() {
 					<article className={card}>
 						<span className={cardLabel}>Usage</span>
 						<h2 className={cardHeading}>Import from the package</h2>
-						<pre className={codeBlock}>{heroSnippet}</pre>
+						<CodeBlockPrimitive
+							code={heroSnippet}
+							lang="tsx"
+							theme="dark"
+							className={codeBlock}
+						/>
 					</article>
 				</div>
 			</section>
