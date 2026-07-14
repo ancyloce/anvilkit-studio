@@ -16,8 +16,13 @@ export const IFRAME_THEME_STYLE_ID = "anvilkit-studio-iframe-theme";
 
 const TOKEN_BLOCK = `:root,
 :host {
-	--ak-studio-blue-600: var(--color-blue-600, oklch(54.6% 0.245 262.881));
-	--ak-studio-theme: var(--ak-studio-blue-600);
+	--brand: oklch(0.619 0.141 262.4);
+	--brand-deep: oklch(0.54 0.155 262.4);
+	--brand-soft: rgb(86 131 218 / 12%);
+	--editor-selection: var(--brand);
+	--editor-selection-soft: rgb(86 131 218 / 12%);
+	--editor-drop-target: rgb(86 131 218 / 18%);
+	--ak-studio-theme: var(--brand);
 	--ak-studio-theme-fg: oklch(1 0 0);
 	--ak-studio-bg: var(--background);
 	--ak-studio-fg: var(--foreground);
@@ -30,10 +35,11 @@ const TOKEN_BLOCK = `:root,
 	--ak-studio-accent-fg: var(--ak-studio-theme-fg);
 	--ak-studio-ring: var(--ak-studio-theme);
 	--ak-studio-layer-icon: var(--ak-studio-theme);
-	--ak-studio-layer-selection: var(--ak-studio-theme);
-	--ak-studio-layer-selection-fg: var(--ak-studio-theme-fg);
-	--ak-studio-rail-width: 44px;
+	--ak-studio-layer-selection: var(--editor-selection-soft);
+	--ak-studio-layer-selection-fg: var(--ak-studio-fg);
+	--ak-studio-rail-width: 52px;
 	--ak-studio-panel-width: 280px;
+	--ak-studio-inspector-width: 336px;
 	--ak-ds-brand-50: oklch(97% 0.013 254);
 	--ak-ds-brand-100: oklch(94% 0.029 254);
 	--ak-ds-brand-200: oklch(88% 0.059 254);
