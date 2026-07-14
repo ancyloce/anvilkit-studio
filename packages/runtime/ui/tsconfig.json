@@ -1,7 +1,6 @@
 {
 	"extends": "@anvilkit/typescript-config/react-library.json",
 	"compilerOptions": {
-		"baseUrl": ".",
 		"ignoreDeprecations": "6.0",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
@@ -12,15 +11,15 @@
 			// published `@anvilkit/ui` name so it is NOT shadowed by the
 			// package `exports` self-reference (which resolves into ./dist).
 			// shadcn falls back to these tsconfig paths → files land in src/.
-			"@ui-src": ["src"],
-			"@ui-src/*": ["src/*"],
-			"@anvilkit/ui": ["src"],
-			"@anvilkit/ui/*": ["src/*"],
-			"@anvilkit/ui/hooks": ["src/hooks"],
-			"@anvilkit/ui/hooks/*": ["src/hooks/*"],
-			"@anvilkit/ui/lib": ["src/lib"],
-			"@anvilkit/ui/lib/utils": ["src/lib/utils.ts"],
-			"@anvilkit/ui/lib/*": ["src/lib/*"]
+			"@ui-src": ["./src"],
+			"@ui-src/*": ["./src/*"],
+			"@anvilkit/ui": ["./src"],
+			"@anvilkit/ui/*": ["./src/*"],
+			"@anvilkit/ui/hooks": ["./src/hooks"],
+			"@anvilkit/ui/hooks/*": ["./src/hooks/*"],
+			"@anvilkit/ui/lib": ["./src/lib"],
+			"@anvilkit/ui/lib/utils": ["./src/lib/utils.ts"],
+			"@anvilkit/ui/lib/*": ["./src/lib/*"]
 		},
 		"strictNullChecks": true,
 		"useDefineForClassFields": true,

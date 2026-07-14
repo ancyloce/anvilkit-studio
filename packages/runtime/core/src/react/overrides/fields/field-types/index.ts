@@ -103,7 +103,7 @@ export function defineFieldTypeRegistry(
  * Default field-type registry. Keys match Puck `Field.type` literals
  * exactly. `custom` is intentionally absent (it has no override target).
  */
-export const defaultFieldTypes = defineFieldTypeRegistry({
+export const defaultFieldTypes: FieldTypeRegistry = defineFieldTypeRegistry({
 	text: asFieldRenderer(TextField),
 	textarea: asFieldRenderer(TextareaField),
 	richtext: asFieldRenderer(RichTextField),

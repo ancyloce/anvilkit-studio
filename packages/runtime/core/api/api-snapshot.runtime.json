@@ -198,15 +198,11 @@
 			"groups": [
 				{
 					"title": "Constructors",
-					"children": [
-						30
-					]
+					"children": [30]
 				},
 				{
 					"title": "Properties",
-					"children": [
-						34
-					]
+					"children": [34]
 				}
 			],
 			"sources": [
@@ -407,15 +403,11 @@
 			"groups": [
 				{
 					"title": "Constructors",
-					"children": [
-						36
-					]
+					"children": [36]
 				},
 				{
 					"title": "Properties",
-					"children": [
-						40
-					]
+					"children": [40]
 				}
 			],
 			"sources": [
@@ -697,16 +689,11 @@
 			"groups": [
 				{
 					"title": "Constructors",
-					"children": [
-						42
-					]
+					"children": [42]
 				},
 				{
 					"title": "Properties",
-					"children": [
-						47,
-						48
-					]
+					"children": [47, 48]
 				}
 			],
 			"sources": [
@@ -982,16 +969,11 @@
 			"groups": [
 				{
 					"title": "Constructors",
-					"children": [
-						50
-					]
+					"children": [50]
 				},
 				{
 					"title": "Properties",
-					"children": [
-						55,
-						56
-					]
+					"children": [55, 56]
 				}
 			],
 			"sources": [
@@ -1376,12 +1358,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						64,
-						68,
-						61,
-						72
-					]
+					"children": [64, 68, 61, 72]
 				}
 			],
 			"sources": [
@@ -2104,13 +2081,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						156,
-						161,
-						140,
-						153,
-						146
-					]
+					"children": [156, 161, 140, 153, 146]
 				}
 			],
 			"sources": [
@@ -2265,11 +2236,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						92,
-						91,
-						93
-					]
+					"children": [92, 91, 93]
 				}
 			],
 			"sources": [
@@ -3086,15 +3053,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						105,
-						99,
-						98,
-						96,
-						97,
-						101,
-						100
-					]
+					"children": [105, 99, 98, 96, 97, 101, 100]
 				}
 			],
 			"sources": [
@@ -3425,9 +3384,7 @@
 							"groups": [
 								{
 									"title": "Properties",
-									"children": [
-										22
-									]
+									"children": [22]
 								}
 							]
 						}
@@ -4041,21 +3998,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						12,
-						11,
-						13,
-						20,
-						10,
-						16,
-						14,
-						8,
-						15,
-						18,
-						9,
-						19,
-						17
-					]
+					"children": [12, 11, 13, 20, 10, 16, 14, 8, 15, 18, 9, 19, 17]
 				}
 			],
 			"sources": [
@@ -4494,18 +4437,7 @@
 			"groups": [
 				{
 					"title": "Properties",
-					"children": [
-						174,
-						173,
-						176,
-						175,
-						178,
-						177,
-						171,
-						172,
-						180,
-						179
-					]
+					"children": [174, 173, 176, 175, 178, 177, 171, 172, 180, 179]
 				}
 			],
 			"sources": [
@@ -4625,10 +4557,7 @@
 							"groups": [
 								{
 									"title": "Properties",
-									"children": [
-										82,
-										81
-									]
+									"children": [82, 81]
 								}
 							]
 						}
@@ -4690,10 +4619,7 @@
 							"groups": [
 								{
 									"title": "Properties",
-									"children": [
-										85,
-										84
-									]
+									"children": [85, 84]
 								}
 							]
 						}
@@ -8105,57 +8031,23 @@
 	"groups": [
 		{
 			"title": "Classes",
-			"children": [
-				29,
-				35,
-				41,
-				49
-			]
+			"children": [29, 35, 41, 49]
 		},
 		{
 			"title": "Interfaces",
-			"children": [
-				60,
-				139,
-				90,
-				95,
-				7,
-				170
-			]
+			"children": [60, 139, 90, 95, 7, 170]
 		},
 		{
 			"title": "Type Aliases",
-			"children": [
-				79,
-				138,
-				164,
-				165,
-				124,
-				94,
-				129
-			]
+			"children": [79, 138, 164, 165, 124, 94, 129]
 		},
 		{
 			"title": "Variables",
-			"children": [
-				181,
-				1,
-				133
-			]
+			"children": [181, 1, 133]
 		},
 		{
 			"title": "Functions",
-			"children": [
-				2,
-				75,
-				57,
-				134,
-				23,
-				26,
-				109,
-				114,
-				86
-			]
+			"children": [2, 75, 57, 134, 23, 26, 109, 114, 86]
 		}
 	],
 	"packageName": "@anvilkit/core",
