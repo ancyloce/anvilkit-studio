@@ -19,9 +19,9 @@ import { getServerT } from "../lib/i18n/server";
 import { EditorMockup } from "./_site/EditorMockup";
 import { MarketingMotion } from "./_site/MarketingMotion";
 import { MiniEditor } from "./_site/MiniEditor";
-import marketing from "./_site/marketing.module.css";
+import * as marketing from "./_site/marketing-styles";
 import { SiteFooter } from "./_site/SiteFooter";
-import { DOCS_URL } from "./_site/site-config";
+import { DOCS_URL, HULY_ROOT } from "./_site/site-config";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getServerT();
@@ -117,7 +117,7 @@ const STEPS: readonly Step[] = [
 export default async function Home() {
 	const t = await getServerT();
 	return (
-		<main className={`huly-root ${marketing.page}`}>
+		<main className={cn(HULY_ROOT, marketing.page)}>
 			{/* Progressive-enhancement GSAP motion (renders null) */}
 			<MarketingMotion />
 			{/* Module 1 — Product Introduction (Hero) */}
@@ -128,18 +128,25 @@ export default async function Home() {
 					<div className={marketing.heroInner}>
 						<div>
 							<span
-								className={`${marketing.tag} ${marketing.tagIris} ${marketing.eyebrow}`}
+								className={cn(
+									marketing.tag,
+									marketing.tagIris,
+									marketing.eyebrow,
+								)}
+								data-anim="eyebrow"
 							>
 								{t("home.hero.tag")}
 							</span>
-							<h1 className={marketing.heroTitle}>
+							<h1 className={marketing.heroTitle} data-anim="hero-title">
 								{t("home.hero.titleLead")}{" "}
 								<span className={marketing.heroTitleAccent}>
 									{t("home.hero.titleAccent")}
 								</span>
 							</h1>
-							<p className={marketing.heroLede}>{t("home.hero.lede")}</p>
-							<div className={marketing.heroActions}>
+							<p className={marketing.heroLede} data-anim="hero-lede">
+								{t("home.hero.lede")}
+							</p>
+							<div className={marketing.heroActions} data-anim="hero-actions">
 								<Link className={buttonVariants({ size: "lg" })} href="/editor">
 									{t("home.hero.ctaPrimary")}
 								</Link>
@@ -153,15 +160,19 @@ export default async function Home() {
 									{t("home.hero.ctaSecondary")}
 								</a>
 							</div>
-							<div className={marketing.heroMeta}>
+							<div className={marketing.heroMeta} data-anim="hero-meta">
 								<span>
-									<strong>11+</strong> {t("home.hero.metaBlocks")}
+									<strong className={marketing.heroMetaStrong}>11+</strong>{" "}
+									{t("home.hero.metaBlocks")}
 								</span>
 								<span>
-									<strong>Puck</strong> {t("home.hero.metaBuilder")}
+									<strong className={marketing.heroMetaStrong}>Puck</strong>{" "}
+									{t("home.hero.metaBuilder")}
 								</span>
 								<span>
-									<strong>HTML · React · JSON</strong>{" "}
+									<strong className={marketing.heroMetaStrong}>
+										HTML · React · JSON
+									</strong>{" "}
 									{t("home.hero.metaExport")}
 								</span>
 							</div>
@@ -174,35 +185,47 @@ export default async function Home() {
 			{/* Module 2 — Interactive Editor Demo (live preview) */}
 			<section
 				id="demo"
-				className={`${marketing.bandDark} ${marketing.sectionPad}`}
+				className={cn(marketing.bandDark, marketing.sectionPad)}
 			>
 				<div className={marketing.container}>
-					<div className={marketing.sectionHead}>
+					<div className={marketing.sectionHead} data-anim="section-head">
 						<span
-							className={`${marketing.tag} ${marketing.tagEmber} ${marketing.kicker}`}
+							className={cn(
+								marketing.tag,
+								marketing.tagEmber,
+								marketing.kicker,
+							)}
 						>
 							{t("home.demo.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>{t("home.demo.title")}</h2>
-						<p className={marketing.sectionLede}>{t("home.demo.lede")}</p>
+						<h2 className={marketing.sectionTitle} data-anim="section-title">
+							{t("home.demo.title")}
+						</h2>
+						<p className={marketing.sectionLede} data-anim="section-lede">
+							{t("home.demo.lede")}
+						</p>
 					</div>
 					<MiniEditor />
 				</div>
 			</section>
 
 			{/* Module 3 — Usage Guide (How to Use) */}
-			<section className={`${marketing.bandLight} ${marketing.sectionPad}`}>
+			<section className={cn(marketing.bandLight, marketing.sectionPad)}>
 				<div className={marketing.container}>
-					<div className={marketing.sectionHead}>
+					<div className={marketing.sectionHead} data-anim="section-head">
 						<span
-							className={`${marketing.tag} ${marketing.tagIris} ${marketing.kicker}`}
+							className={cn(marketing.tag, marketing.tagIris, marketing.kicker)}
 						>
 							{t("home.howto.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>{t("home.howto.title")}</h2>
-						<p className={marketing.sectionLede}>{t("home.howto.lede")}</p>
+						<h2 className={marketing.sectionTitle} data-anim="section-title">
+							{t("home.howto.title")}
+						</h2>
+						<p className={marketing.sectionLede} data-anim="section-lede">
+							{t("home.howto.lede")}
+						</p>
 					</div>
-					<div className={marketing.steps}>
+					<div className={marketing.steps} data-anim="steps-grid">
 						{STEPS.map((step, index) => (
 							<Card key={step.titleKey} className="gap-3.5 p-6">
 								<span className={marketing.stepNum}>{index + 1}</span>
@@ -218,22 +241,29 @@ export default async function Home() {
 			</section>
 
 			{/* Module 4 — Core Features List */}
-			<section className={`${marketing.bandVoid} ${marketing.sectionPad}`}>
+			<section className={cn(marketing.bandVoid, marketing.sectionPad)}>
 				<div className={marketing.container}>
 					<div
-						className={`${marketing.sectionHead} ${marketing.sectionHeadCenter}`}
+						className={cn(marketing.sectionHead, marketing.sectionHeadCenter)}
+						data-anim="section-head"
 					>
 						<span
-							className={`${marketing.tag} ${marketing.tagEmber} ${marketing.kicker}`}
+							className={cn(
+								marketing.tag,
+								marketing.tagEmber,
+								marketing.kicker,
+							)}
 						>
 							{t("home.features.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>
+						<h2 className={marketing.sectionTitle} data-anim="section-title">
 							{t("home.features.title")}
 						</h2>
-						<p className={marketing.sectionLede}>{t("home.features.lede")}</p>
+						<p className={marketing.sectionLede} data-anim="section-lede">
+							{t("home.features.lede")}
+						</p>
 					</div>
-					<div className={marketing.featureGrid}>
+					<div className={marketing.featureGrid} data-anim="feature-grid">
 						{FEATURES.map((feature) => {
 							const Icon = feature.icon;
 							return (
@@ -242,7 +272,10 @@ export default async function Home() {
 									className={cn("relative gap-3 p-6", marketing.cardGlow)}
 								>
 									<span
-										className={`${marketing.featureIcon}${feature.ember ? ` ${marketing.featureIconEmber}` : ""}`}
+										className={cn(
+											marketing.featureIcon,
+											feature.ember && marketing.featureIconEmber,
+										)}
 									>
 										<Icon size={20} strokeWidth={1.75} />
 									</span>
@@ -258,18 +291,20 @@ export default async function Home() {
 			</section>
 
 			{/* Closing CTA */}
-			<section className={`${marketing.bandDark} ${marketing.sectionPad}`}>
+			<section className={cn(marketing.bandDark, marketing.sectionPad)}>
 				<div className={marketing.container}>
 					<div
-						className={`${marketing.sectionHead} ${marketing.sectionHeadCenter}`}
+						className={cn(marketing.sectionHead, marketing.sectionHeadCenter)}
+						data-anim="section-head"
 					>
-						<h2 className={marketing.sectionTitle}>{t("home.cta.title")}</h2>
-						<p className={marketing.sectionLede}>{t("home.cta.lede")}</p>
+						<h2 className={marketing.sectionTitle} data-anim="section-title">
+							{t("home.cta.title")}
+						</h2>
+						<p className={marketing.sectionLede} data-anim="section-lede">
+							{t("home.cta.lede")}
+						</p>
 					</div>
-					<div
-						className={marketing.heroActions}
-						style={{ justifyContent: "center" }}
-					>
+					<div className={cn(marketing.heroActions, "justify-center")}>
 						<Link className={buttonVariants({ size: "lg" })} href="/editor">
 							{t("home.cta.primary")}
 						</Link>

@@ -5,9 +5,59 @@
 @source "../../../packages/runtime/core/src/react/studio/**/*.{ts,tsx}";
 @source "../../../packages/runtime/core/src/react/overrides/**/*.{ts,tsx}";
 
+/*
+ * `prefers-reduced-transparency` and the "no backdrop-filter support" fallback
+ * have no built-in Tailwind variant (unlike `dark:`, `motion-reduce:`,
+ * `contrast-more:`). Registered once here so the marketing nav's Liquid Glass
+ * chrome can use them as ordinary utility variants instead of hand-written
+ * `@media`/`@supports` CSS.
+ */
+@custom-variant reduced-transparency (
+	@media (prefers-reduced-transparency: reduce)
+);
+@custom-variant no-backdrop-filter (
+	@supports not (
+			(backdrop-filter: blur(1px)) or
+			(-webkit-backdrop-filter: blur(1px))
+		)
+);
+/*
+ * Tailwind's built-in `hover:` only guards against `(hover: hover)` (touch
+ * devices don't get sticky hover). Several demo surfaces additionally require
+ * `(pointer: fine)`, so give that exact combination its own variant rather
+ * than an arbitrary `[@media...]` block repeated at every call site.
+ */
+@custom-variant hover-fine (@media (hover: hover) and (pointer: fine));
+
+@theme {
+	/* Huly design language brand tokens (DESIGN.md) — theme-independent: the
+	 * iris/ember accent pair, display/text fonts, pill radii, and elevation
+	 * shadows used by the marketing chrome (nav, footer, Home/Editor/About).
+	 * Surfaces, text, and borders are NOT defined here: marketing components
+	 * read the workspace shadcn tokens directly, so every band/card/control
+	 * flips with the demo's light/dark toggle. */
+	--color-huly-iris: #5683da;
+	--color-huly-ember: #ff8964;
+	--font-huly-sans:
+		"Inter", "DM Sans", ui-sans-serif, system-ui, -apple-system,
+		BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	--font-huly-display:
+		"Sora", "General Sans", ui-sans-serif, system-ui, -apple-system,
+		BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	--radius-huly-tags: 9999px;
+	--radius-huly-cards: 12px;
+	--radius-huly-inputs: 4px;
+	--radius-huly-panels: 30px;
+	--radius-huly-buttons: 9999px;
+	--shadow-huly-md: rgba(0, 0, 0, 0.35) 0px 4px 16px 0px;
+	--shadow-huly-sm: rgba(0, 0, 0, 0.15) 0px 4px 6px 0px;
+	--shadow-huly-xl: rgba(0, 0, 0, 0.5) 0px 6px 25px 0px;
+	--container-huly: 1200px;
+}
+
 :root {
-	--font-sans: var(--font-geist-sans);
-	--font-mono: var(--font-geist-mono);
+	--font-sans: var(--font-geist-sans), sans-serif;
+	--font-mono: var(--font-geist-mono), monospace;
 	--demo-page-bg:
 		radial-gradient(
 			circle at top left,
@@ -107,42 +157,31 @@
 	--demo-canvas-bg: color-mix(in oklab, var(--background) 78%, var(--card) 22%);
 }
 
-html,
-body {
-	max-width: 100vw;
-	overflow-x: hidden;
-}
-
-body {
-	min-height: 100svh;
-	background: var(--demo-page-bg);
-	color: var(--foreground);
-	font-family: var(--font-geist-sans), sans-serif;
-	line-height: 1.5;
-	transition:
-		background-color 160ms ease,
-		color 160ms ease,
-		background 160ms ease;
-}
-
-* {
-	box-sizing: border-box;
-}
-
-/* Keep the anchor reset in `@layer base` so Tailwind/shadcn text-color
- * utilities (e.g. `text-primary-foreground` on a link styled with
- * `buttonVariants()`) win over it — an unlayered `a { color: inherit }` would
- * otherwise beat every layered utility, leaving primary CTA links inheriting
- * the page foreground (white-on-white in dark mode). This mirrors Tailwind's
- * own preflight, which resets `button { color: inherit }` inside `@layer base`. */
+/*
+ * `html`/`body` sizing and the demo page background/transition live on the
+ * root layout's JSX (single attachment point — `app/layout.tsx`) as Tailwind
+ * classes, not here. `* { box-sizing: border-box }` is dropped: Tailwind's
+ * own preflight (imported above) already sets it on every element.
+ *
+ * What stays global: resets keyed to bare element selectors that recur across
+ * dozens of scattered files (every `<a>`, every `<code>`/`<pre>`), where a
+ * single base rule beats repeating the same utility class everywhere.
+ */
 @layer base {
+	/* Keep the anchor reset in `@layer base` so Tailwind/shadcn text-color
+	 * utilities (e.g. `text-primary-foreground` on a link styled with
+	 * `buttonVariants()`) win over it — an unlayered `a { color: inherit }`
+	 * would otherwise beat every layered utility, leaving primary CTA links
+	 * inheriting the page foreground (white-on-white in dark mode). This
+	 * mirrors Tailwind's own preflight, which resets `button { color: inherit }`
+	 * inside `@layer base`. */
 	a {
 		color: inherit;
 		text-decoration: none;
 	}
-}
 
-code,
-pre {
-	font-family: var(--font-geist-mono), monospace;
+	code,
+	pre {
+		font-family: var(--font-geist-mono), monospace;
+	}
 }

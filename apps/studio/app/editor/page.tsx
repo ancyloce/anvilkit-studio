@@ -6,8 +6,9 @@ import Link from "next/link";
 import type { DemoMessageKey } from "@/lib/i18n/messages";
 import { getServerT } from "@/lib/i18n/server";
 import { MarketingMotion } from "../_site/MarketingMotion";
-import marketing from "../_site/marketing.module.css";
+import * as marketing from "../_site/marketing-styles";
 import { SiteFooter } from "../_site/SiteFooter";
+import { HULY_ROOT } from "../_site/site-config";
 
 export async function generateMetadata(): Promise<Metadata> {
 	const t = await getServerT();
@@ -126,7 +127,7 @@ function CapabilityCard({
 		<Link href={href} className="block">
 			<Card
 				className={cn(
-					"relative h-full gap-2.5 p-[22px] hover:ring-[color:var(--huly-electric-iris)]",
+					"relative h-full gap-2.5 p-[22px] hover:ring-huly-iris",
 					marketing.linkCardInteractive,
 				)}
 			>
@@ -146,7 +147,7 @@ function CapabilityCard({
 export default async function EditorHubPage() {
 	const t = await getServerT();
 	return (
-		<main className={`huly-root ${marketing.page}`}>
+		<main className={cn(HULY_ROOT, marketing.page)}>
 			{/* Progressive-enhancement GSAP motion (renders null) */}
 			<MarketingMotion />
 			{/* Intro */}
@@ -154,21 +155,25 @@ export default async function EditorHubPage() {
 				<span className={marketing.heroAurora} aria-hidden="true" />
 				<span className={marketing.heroSunburst} aria-hidden="true" />
 				<div className={marketing.container}>
-					<div
-						className={marketing.heroInner}
-						style={{ gridTemplateColumns: "1fr" }}
-					>
+					<div className={marketing.heroInnerSingle}>
 						<div>
 							<span
-								className={`${marketing.tag} ${marketing.tagIris} ${marketing.eyebrow}`}
+								className={cn(
+									marketing.tag,
+									marketing.tagIris,
+									marketing.eyebrow,
+								)}
+								data-anim="eyebrow"
 							>
 								{t("editorHub.intro.tag")}
 							</span>
-							<h1 className={marketing.heroTitle}>
+							<h1 className={marketing.heroTitle} data-anim="hero-title">
 								{t("editorHub.intro.title")}
 							</h1>
-							<p className={marketing.heroLede}>{t("editorHub.intro.lede")}</p>
-							<div className={marketing.heroActions}>
+							<p className={marketing.heroLede} data-anim="hero-lede">
+								{t("editorHub.intro.lede")}
+							</p>
+							<div className={marketing.heroActions} data-anim="hero-actions">
 								<Link
 									className={buttonVariants({ size: "lg" })}
 									href="/puck/editor"
@@ -191,18 +196,22 @@ export default async function EditorHubPage() {
 			</section>
 
 			{/* Embedded live editor */}
-			<section className={`${marketing.bandDark} ${marketing.sectionPad}`}>
+			<section className={cn(marketing.bandDark, marketing.sectionPad)}>
 				<div className={marketing.container}>
-					<div className={marketing.sectionHead}>
+					<div className={marketing.sectionHead} data-anim="section-head">
 						<span
-							className={`${marketing.tag} ${marketing.tagEmber} ${marketing.kicker}`}
+							className={cn(
+								marketing.tag,
+								marketing.tagEmber,
+								marketing.kicker,
+							)}
 						>
 							{t("editorHub.embed.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>
+						<h2 className={marketing.sectionTitle} data-anim="section-title">
 							{t("editorHub.embed.title")}
 						</h2>
-						<p className={marketing.sectionLede}>
+						<p className={marketing.sectionLede} data-anim="section-lede">
 							{t("editorHub.embed.ledeBefore")} <code>/puck/editor</code>
 							{t("editorHub.embed.ledeAfter")}
 						</p>
@@ -221,7 +230,7 @@ export default async function EditorHubPage() {
 							loading="lazy"
 						/>
 					</div>
-					<div className={marketing.heroActions} style={{ marginTop: 18 }}>
+					<div className={cn(marketing.heroActions, "mt-[18px]")}>
 						<Link
 							className={buttonVariants({ variant: "outline" })}
 							href="/puck/editor"
@@ -233,22 +242,22 @@ export default async function EditorHubPage() {
 			</section>
 
 			{/* Editor surfaces */}
-			<section className={`${marketing.bandVoid} ${marketing.sectionPad}`}>
+			<section className={cn(marketing.bandVoid, marketing.sectionPad)}>
 				<div className={marketing.container}>
-					<div className={marketing.sectionHead}>
+					<div className={marketing.sectionHead} data-anim="section-head">
 						<span
-							className={`${marketing.tag} ${marketing.tagIris} ${marketing.kicker}`}
+							className={cn(marketing.tag, marketing.tagIris, marketing.kicker)}
 						>
 							{t("editorHub.surfaces.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>
+						<h2 className={marketing.sectionTitle} data-anim="section-title">
 							{t("editorHub.surfaces.title")}
 						</h2>
-						<p className={marketing.sectionLede}>
+						<p className={marketing.sectionLede} data-anim="section-lede">
 							{t("editorHub.surfaces.lede")}
 						</p>
 					</div>
-					<div className={marketing.linkGrid}>
+					<div className={marketing.linkGrid} data-anim="link-grid">
 						{SURFACES.map((item) => (
 							<CapabilityCard
 								key={item.titleKey}
@@ -263,22 +272,26 @@ export default async function EditorHubPage() {
 			</section>
 
 			{/* Plugins inside the editor */}
-			<section className={`${marketing.bandDark} ${marketing.sectionPad}`}>
+			<section className={cn(marketing.bandDark, marketing.sectionPad)}>
 				<div className={marketing.container}>
-					<div className={marketing.sectionHead}>
+					<div className={marketing.sectionHead} data-anim="section-head">
 						<span
-							className={`${marketing.tag} ${marketing.tagEmber} ${marketing.kicker}`}
+							className={cn(
+								marketing.tag,
+								marketing.tagEmber,
+								marketing.kicker,
+							)}
 						>
 							{t("editorHub.plugins.tag")}
 						</span>
-						<h2 className={marketing.sectionTitle}>
+						<h2 className={marketing.sectionTitle} data-anim="section-title">
 							{t("editorHub.plugins.title")}
 						</h2>
-						<p className={marketing.sectionLede}>
+						<p className={marketing.sectionLede} data-anim="section-lede">
 							{t("editorHub.plugins.lede")}
 						</p>
 					</div>
-					<div className={marketing.linkGrid}>
+					<div className={marketing.linkGrid} data-anim="link-grid">
 						{PLUGINS.map((item) => (
 							<CapabilityCard
 								key={item.titleKey}

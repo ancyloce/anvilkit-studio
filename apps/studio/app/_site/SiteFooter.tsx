@@ -1,8 +1,27 @@
 import Link from "next/link";
 import type { DemoMessageKey } from "@/lib/i18n/messages";
 import { getServerT } from "@/lib/i18n/server";
-import styles from "./site.module.css";
-import { DOCS_URL, GITHUB_URL } from "./site-config";
+import { BRAND_CLASS, DOCS_URL, GITHUB_URL, HULY_ROOT } from "./site-config";
+
+const FOOTER = `${HULY_ROOT} bg-card border-t border-border text-muted-foreground`;
+
+const FOOTER_INNER =
+	"grid grid-cols-1 gap-10 max-w-huly mx-auto pt-14 px-6 pb-10 min-[720px]:grid-cols-[1.4fr_1fr]";
+
+const FOOTER_BRAND_COL = "max-w-[26rem]";
+
+const FOOTER_TAGLINE = "mt-3.5 text-muted-foreground text-[14px] leading-[1.6]";
+
+const FOOTER_COLS = "grid grid-cols-2 gap-8 min-[720px]:grid-cols-3";
+
+const FOOTER_COL_TITLE =
+	"text-foreground text-[12px] font-semibold tracking-[0.14em] uppercase mb-3.5";
+
+const FOOTER_LINK =
+	"block text-muted-foreground text-[14px] py-[5px] transition-colors duration-[140ms] ease-[ease] hover:text-foreground";
+
+const FOOTER_BOTTOM =
+	"max-w-huly mx-auto pt-5 px-6 pb-10 border-t border-[color-mix(in_srgb,var(--border)_70%,transparent)] text-muted-foreground text-[12px]";
 
 interface FooterLink {
 	readonly labelKey: DemoMessageKey;
@@ -56,14 +75,14 @@ function FooterEntry({
 				href={href}
 				target="_blank"
 				rel="noreferrer noopener"
-				className={styles.footerLink}
+				className={FOOTER_LINK}
 			>
 				{label}
 			</a>
 		);
 	}
 	return (
-		<Link href={href} className={styles.footerLink}>
+		<Link href={href} className={FOOTER_LINK}>
 			{label}
 		</Link>
 	);
@@ -72,16 +91,16 @@ function FooterEntry({
 export async function SiteFooter() {
 	const t = await getServerT();
 	return (
-		<footer className={`huly-root ${styles.footer}`}>
-			<div className={styles.footerInner}>
-				<div className={styles.footerBrandCol}>
-					<span className={styles.brand}>AnvilKit</span>
-					<p className={styles.footerTagline}>{t("footer.tagline")}</p>
+		<footer className={FOOTER}>
+			<div className={FOOTER_INNER}>
+				<div className={FOOTER_BRAND_COL}>
+					<span className={BRAND_CLASS}>AnvilKit</span>
+					<p className={FOOTER_TAGLINE}>{t("footer.tagline")}</p>
 				</div>
-				<div className={styles.footerCols}>
+				<div className={FOOTER_COLS}>
 					{FOOTER_COLUMNS.map((column) => (
 						<div key={column.titleKey}>
-							<p className={styles.footerColTitle}>{t(column.titleKey)}</p>
+							<p className={FOOTER_COL_TITLE}>{t(column.titleKey)}</p>
 							{column.links.map((link) => (
 								<FooterEntry
 									key={link.href}
@@ -94,7 +113,7 @@ export async function SiteFooter() {
 					))}
 				</div>
 			</div>
-			<div className={styles.footerBottom}>{t("footer.bottom")}</div>
+			<div className={FOOTER_BOTTOM}>{t("footer.bottom")}</div>
 		</footer>
 	);
 }

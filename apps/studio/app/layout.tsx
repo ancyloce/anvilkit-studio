@@ -10,9 +10,6 @@ import Script from "next/script";
 // sheet directly.
 import "@anvilkit/core/styles.css";
 import "./globals.css";
-// Huly design tokens (DESIGN.md) scoped to `.huly-root` — used only by the
-// marketing chrome and the Home / Editor / About pages.
-import "./_site/huly.css";
 import { DemoI18nProvider } from "../lib/i18n/client";
 import { getServerLocale, getServerT } from "../lib/i18n/server";
 import { SiteChrome } from "./_site/SiteChrome";
@@ -60,14 +57,18 @@ export default async function RootLayout({
 }>) {
 	const locale = await getServerLocale();
 	return (
-		<html lang={locale} suppressHydrationWarning>
+		<html
+			lang={locale}
+			suppressHydrationWarning
+			className="max-w-[100vw] overflow-x-hidden"
+		>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[100vw] min-h-svh overflow-x-hidden font-sans text-foreground [background:var(--demo-page-bg)] transition-[background-color,color,background] duration-160 ease-[ease]`}
 			>
 				{/* Inter (functional text) + Sora (the DESIGN.md Esbuild substitute,
 				    display headlines), loaded at runtime so an offline build still
-				    succeeds; `.huly-root` falls back to the system stack if the fetch
-				    fails. React hoists these <link>s into <head>. */}
+				    succeeds; `font-huly-sans` falls back to the system stack if the
+				    fetch fails. React hoists these <link>s into <head>. */}
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link
 					rel="preconnect"

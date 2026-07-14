@@ -5,7 +5,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef } from "react";
-import styles from "./marketing.module.css";
 
 // Register GSAP plugins once. This module is "use client", so it never runs
 // during SSR. Registering `useGSAP` enables the hook's auto-cleanup contract.
@@ -23,8 +22,9 @@ interface MarketingMotionProps {
  * Progressive-enhancement motion layer for the marketing pages (Home / Editor /
  * About). It renders NO DOM of its own (returns `null`) and never alters the
  * page markup, layout, colors, or styles — it only *reads* existing elements
- * (by their existing `marketing.module.css` class names) and animates their
- * transform/opacity:
+ * (by their `data-anim` attributes, kept separate from the Tailwind styling
+ * classes in `marketing-styles.ts` so animation targeting doesn't couple to
+ * presentation) and animates their transform/opacity:
  *
  *   1. Hero headline split into characters with an `expo.out` fade-up stagger,
  *      then eyebrow → lede → CTAs → meta → media on a hierarchy-staggered
@@ -73,7 +73,7 @@ export function MarketingMotion({
 			};
 
 			// ---- 1. Hero entrance (time-based, plays on load) --------------
-			const heroTitle = one(`.${styles.heroTitle}`);
+			const heroTitle = one('[data-anim="hero-title"]');
 			const heroTl = gsap.timeline({
 				defaults: { ease: "expo.out", duration: 0.9 },
 			});
@@ -88,10 +88,10 @@ export function MarketingMotion({
 			// Supporting hero elements rise in after the headline, lightly
 			// staggered by visual hierarchy (eyebrow → lede → CTAs → meta).
 			const heroBits = [
-				one(`.${styles.eyebrow}`),
-				one(`.${styles.heroLede}`),
-				one(`.${styles.heroActions}`),
-				one(`.${styles.heroMeta}`),
+				one('[data-anim="eyebrow"]'),
+				one('[data-anim="hero-lede"]'),
+				one('[data-anim="hero-actions"]'),
+				one('[data-anim="hero-meta"]'),
 			].filter((node): node is HTMLElement => node !== null);
 			if (heroBits.length > 0) {
 				heroTl.from(
@@ -107,7 +107,7 @@ export function MarketingMotion({
 				);
 			}
 			// Hero media (the product mock) eases up alongside the copy.
-			const heroMedia = one(`.${styles.productFrame}`);
+			const heroMedia = one('[data-anim="product-frame"]');
 			if (heroMedia) {
 				heroTl.from(
 					heroMedia,
@@ -117,9 +117,9 @@ export function MarketingMotion({
 			}
 
 			// ---- 2. Section headers reveal on scroll ----------------------
-			for (const head of all(`.${styles.sectionHead}`)) {
-				const title = head.querySelector(`.${styles.sectionTitle}`);
-				const lede = head.querySelector(`.${styles.sectionLede}`);
+			for (const head of all('[data-anim="section-head"]')) {
+				const title = head.querySelector('[data-anim="section-title"]');
+				const lede = head.querySelector('[data-anim="section-lede"]');
 				const tl = gsap.timeline({
 					// Start a little before the header fully enters the viewport.
 					scrollTrigger: { trigger: head, start: "top 80%" },
@@ -142,12 +142,12 @@ export function MarketingMotion({
 			// ---- 3. Card grids — scrubbed, scroll-linked stagger ----------
 			// As a grid scrolls through the start→end window its cards reveal in
 			// sequence tied to the scrollbar, so the section breathes.
-			for (const gridClass of [
-				styles.featureGrid,
-				styles.steps,
-				styles.linkGrid,
+			for (const gridSelector of [
+				'[data-anim="feature-grid"]',
+				'[data-anim="steps-grid"]',
+				'[data-anim="link-grid"]',
 			]) {
-				for (const grid of all(`.${gridClass}`)) {
+				for (const grid of all(gridSelector)) {
 					const items = gsap.utils.toArray<HTMLElement>(grid.children);
 					if (items.length === 0) continue;
 					gsap.from(items, {
@@ -167,7 +167,7 @@ export function MarketingMotion({
 			}
 
 			// ---- 4. Embedded-editor frame — gentle scrubbed parallax ------
-			for (const frame of all(`.${styles.embedFrame}`)) {
+			for (const frame of all('[data-anim="embed-frame"]')) {
 				gsap.fromTo(
 					frame,
 					{ y: 36 },

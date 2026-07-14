@@ -194,32 +194,16 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 	return (
 		<main data-testid="canvas-studio-mount" className="flex flex-col gap-4 p-6">
 			<header>
-				<h1 style={{ fontSize: "1.25rem", margin: 0 }}>
+				<h1 className="text-[1.25rem]">
 					Canvas Studio · page <code>{pageId}</code>
 				</h1>
-				<p style={{ color: "var(--demo-muted-text)", margin: "0.25rem 0 0" }}>
+				<p className="mt-1 [color:var(--demo-muted-text)]">
 					Edits autosave to <code>localStorage</code> under the{" "}
 					<code>demo-canvas</code> namespace.
 				</p>
 			</header>
-			<div
-				style={{
-					display: "flex",
-					gap: "1rem",
-					alignItems: "stretch",
-					height: "80vh",
-				}}
-			>
-				<div
-					style={{
-						flex: 1,
-						minWidth: 0,
-						height: "100%",
-						borderRadius: 12,
-						overflow: "hidden",
-						border: "1px solid var(--demo-border, #e2e8f0)",
-					}}
-				>
+			<div className="flex gap-4 items-stretch h-[80vh]">
+				<div className="flex-1 min-w-0 h-full rounded-[12px] overflow-hidden border border-[#e2e8f0]">
 					<CanvasEditorSurface
 						initialIR={initialIR}
 						initialActivePageId={pageId}
@@ -236,13 +220,7 @@ export function CanvasStudioClient({ pageId }: { pageId: string }) {
 				</div>
 				<aside
 					data-testid="ai-image-panel-host"
-					style={{
-						width: "340px",
-						flexShrink: 0,
-						overflowY: "auto",
-						borderLeft: "1px solid var(--demo-border, #e2e8f0)",
-						paddingLeft: "1rem",
-					}}
+					className="w-[340px] shrink-0 overflow-y-auto border-l border-[#e2e8f0] pl-4"
 				>
 					<AiImagePanel
 						jobClient={jobClient}

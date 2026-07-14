@@ -8,15 +8,31 @@ import { Textarea } from "@anvilkit/ui/textarea";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useDemoT } from "@/lib/i18n/client";
-import styles from "./marketing.module.css";
+import * as marketing from "./marketing-styles";
 
 type Accent = "iris" | "ember";
 type Align = "left" | "center";
 
-const ACCENTS: Record<Accent, string> = {
-	iris: "var(--huly-electric-iris)",
-	ember: "var(--huly-ember-pulse)",
+// Fixed 2-value accent enum, so light/dark-aware Tailwind classes replace
+// what used to be runtime `style={{ background/color: ACCENTS[accent] }}`.
+const ACCENT_SWATCH_BG: Record<Accent, string> = {
+	iris: "bg-huly-iris",
+	ember: "bg-huly-ember",
 };
+const ACCENT_TEXT: Record<Accent, string> = {
+	iris: "text-huly-iris",
+	ember: "text-huly-ember",
+};
+const ACCENT_BG: Record<Accent, string> = {
+	iris: "bg-huly-iris",
+	ember: "bg-huly-ember",
+};
+const ACCENT_GLOW_BG: Record<Accent, string> = {
+	iris: "bg-[radial-gradient(circle,rgba(86,131,218,0.55)_0%,transparent_70%)]",
+	ember:
+		"bg-[radial-gradient(circle,rgba(255,137,100,0.5)_0%,transparent_70%)]",
+};
+const ACCENT_KEYS: readonly Accent[] = ["iris", "ember"];
 
 /**
  * A compact, self-contained demonstration of the editor's core loop: edit a
@@ -53,13 +69,11 @@ export function MiniEditor() {
 		].join("\n");
 	}, [eyebrow, headline, body, ctaLabel, accent, align]);
 
-	const accentColor = ACCENTS[accent];
-
 	return (
-		<div className={styles.miniEditor}>
+		<div className={marketing.miniEditor}>
 			<Card className="gap-[1.125rem] p-6">
-				<div className={styles.field}>
-					<label className={styles.label} htmlFor="mini-eyebrow">
+				<div className={marketing.field}>
+					<label className={marketing.label} htmlFor="mini-eyebrow">
 						{t("mini.field.eyebrow")}
 					</label>
 					<Input
@@ -69,8 +83,8 @@ export function MiniEditor() {
 					/>
 				</div>
 
-				<div className={styles.field}>
-					<label className={styles.label} htmlFor="mini-headline">
+				<div className={marketing.field}>
+					<label className={marketing.label} htmlFor="mini-headline">
 						{t("mini.field.headline")}
 					</label>
 					<Input
@@ -80,8 +94,8 @@ export function MiniEditor() {
 					/>
 				</div>
 
-				<div className={styles.field}>
-					<label className={styles.label} htmlFor="mini-body">
+				<div className={marketing.field}>
+					<label className={marketing.label} htmlFor="mini-body">
 						{t("mini.field.description")}
 					</label>
 					<Textarea
@@ -91,8 +105,8 @@ export function MiniEditor() {
 					/>
 				</div>
 
-				<div className={styles.field}>
-					<label className={styles.label} htmlFor="mini-cta">
+				<div className={marketing.field}>
+					<label className={marketing.label} htmlFor="mini-cta">
 						{t("mini.field.cta")}
 					</label>
 					<Input
@@ -102,10 +116,10 @@ export function MiniEditor() {
 					/>
 				</div>
 
-				<div className={styles.field}>
-					<span className={styles.label}>{t("mini.field.accent")}</span>
-					<div className={styles.swatchRow}>
-						{(Object.keys(ACCENTS) as Accent[]).map((key) => (
+				<div className={marketing.field}>
+					<span className={marketing.label}>{t("mini.field.accent")}</span>
+					<div className={marketing.swatchRow}>
+						{ACCENT_KEYS.map((key) => (
 							<Button
 								key={key}
 								type="button"
@@ -119,17 +133,17 @@ export function MiniEditor() {
 								aria-pressed={accent === key}
 								className={cn(
 									"size-8 rounded-full border-2 p-0",
+									ACCENT_SWATCH_BG[key],
 									accent === key ? "border-foreground" : "border-transparent",
 								)}
-								style={{ background: ACCENTS[key] }}
 								onClick={() => setAccent(key)}
 							/>
 						))}
 					</div>
 				</div>
 
-				<div className={styles.field}>
-					<span className={styles.label}>{t("mini.field.alignment")}</span>
+				<div className={marketing.field}>
+					<span className={marketing.label}>{t("mini.field.alignment")}</span>
 					<div className="inline-flex gap-1 rounded-full border border-border p-1">
 						{(["left", "center"] as Align[]).map((value) => (
 							<Button
@@ -148,53 +162,39 @@ export function MiniEditor() {
 				</div>
 			</Card>
 
-			<div className={styles.miniPreviewWrap}>
-				<div className={styles.miniPreview}>
-					<span
-						className={styles.previewGlow}
-						style={{
-							background: `radial-gradient(circle, ${
-								accent === "iris"
-									? "rgba(86,131,218,0.55)"
-									: "rgba(255,137,100,0.5)"
-							} 0%, transparent 70%)`,
-						}}
-					/>
+			<div className={marketing.miniPreviewWrap}>
+				<div className={marketing.miniPreview}>
+					<span className={cn(marketing.previewGlow, ACCENT_GLOW_BG[accent])} />
 					<div
-						className={`${styles.previewBlock} ${
+						className={cn(
+							marketing.previewBlock,
 							align === "center"
-								? styles.previewAligncenter
-								: styles.previewAlignleft
-						}`}
+								? marketing.previewAligncenter
+								: marketing.previewAlignleft,
+						)}
 					>
 						{eyebrow ? (
-							<p
-								className={styles.previewEyebrow}
-								style={{ color: accentColor }}
-							>
+							<p className={cn(marketing.previewEyebrow, ACCENT_TEXT[accent])}>
 								{eyebrow}
 							</p>
 						) : null}
-						<h3 className={styles.previewHeadline}>
+						<h3 className={marketing.previewHeadline}>
 							{headline || t("mini.preview.headlineFallback")}
 						</h3>
-						{body ? <p className={styles.previewBody}>{body}</p> : null}
+						{body ? <p className={marketing.previewBody}>{body}</p> : null}
 						{ctaLabel ? (
-							<span
-								className={styles.previewCta}
-								style={{ background: accentColor }}
-							>
+							<span className={cn(marketing.previewCta, ACCENT_BG[accent])}>
 								{ctaLabel}
 							</span>
 						) : null}
 					</div>
 				</div>
 
-				<pre className={styles.codeBlock}>
+				<pre className={marketing.codeBlock}>
 					<code>{snippet}</code>
 				</pre>
 
-				<div className={styles.heroActions}>
+				<div className={marketing.heroActions}>
 					<Link className={buttonVariants()} href="/puck/editor">
 						{t("mini.openFull")}
 					</Link>

@@ -1,4 +1,5 @@
-import styles from "./marketing.module.css";
+import { cn } from "@anvilkit/ui/lib/utils";
+import * as marketing from "./marketing-styles";
 
 /**
  * Pure-CSS mock of the AnvilKit editor chrome (sidebar · canvas · inspector),
@@ -8,42 +9,51 @@ import styles from "./marketing.module.css";
  */
 export function EditorMockup() {
 	return (
-		<div className={styles.productFrame} aria-hidden="true">
-			<div className={styles.mockBar}>
-				<span className={styles.mockDot} />
-				<span className={styles.mockDot} />
-				<span className={styles.mockDot} />
-				<span className={styles.mockUrl}>anvilkit · /puck/editor</span>
+		<div
+			className={marketing.productFrame}
+			aria-hidden="true"
+			data-anim="product-frame"
+		>
+			<div className={marketing.mockBar}>
+				<span className={marketing.mockDot} />
+				<span className={marketing.mockDot} />
+				<span className={marketing.mockDot} />
+				<span className={marketing.mockUrl}>anvilkit · /puck/editor</span>
 			</div>
-			<div className={styles.mockBody}>
-				<div className={styles.mockSidebar}>
-					<span />
-					<span />
-					<span />
-					<span />
-					<span />
+			<div className={marketing.mockBody}>
+				<div className={marketing.mockSidebar}>
+					<span
+						className={cn(
+							marketing.mockSidebarLine,
+							marketing.mockSidebarLineFirst,
+						)}
+					/>
+					<span className={marketing.mockSidebarLine} />
+					<span className={marketing.mockSidebarLine} />
+					<span className={marketing.mockSidebarLine} />
+					<span className={marketing.mockSidebarLine} />
 				</div>
-				<div className={styles.mockCanvas}>
-					<div className={styles.mockBlock}>
-						<span className={`${styles.mockLine} ${styles.mockLineWide}`} />
-						<span className={styles.mockLine} />
-						<span className={styles.mockPill} />
+				<div className={marketing.mockCanvas}>
+					<div className={marketing.mockBlock}>
+						<span className={cn(marketing.mockLine, marketing.mockLineWide)} />
+						<span className={marketing.mockLine} />
+						<span className={marketing.mockPill} />
 					</div>
-					<div className={`${styles.mockBlock} ${styles.mockBlockActive}`}>
-						<span className={`${styles.mockLine} ${styles.mockLineWide}`} />
-						<span className={styles.mockLine} />
-						<span className={styles.mockLine} />
+					<div className={cn(marketing.mockBlock, marketing.mockBlockActive)}>
+						<span className={cn(marketing.mockLine, marketing.mockLineWide)} />
+						<span className={marketing.mockLine} />
+						<span className={marketing.mockLine} />
 					</div>
-					<div className={styles.mockBlock}>
-						<span className={styles.mockLine} />
-						<span className={styles.mockLine} />
+					<div className={marketing.mockBlock}>
+						<span className={marketing.mockLine} />
+						<span className={marketing.mockLine} />
 					</div>
 				</div>
-				<div className={styles.mockInspector}>
-					<span className={styles.mockField} />
-					<span className={styles.mockField} />
-					<span className={styles.mockField} />
-					<span className={styles.mockField} />
+				<div className={marketing.mockInspector}>
+					<span className={marketing.mockField} />
+					<span className={marketing.mockField} />
+					<span className={marketing.mockField} />
+					<span className={marketing.mockField} />
 				</div>
 			</div>
 		</div>

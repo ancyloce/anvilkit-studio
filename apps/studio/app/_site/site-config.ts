@@ -4,11 +4,22 @@
  *
  * The visual language follows `DESIGN.md` (the "Huly" reference): a near-black
  * aurora hero, alternating dark/light bands, the Electric-Iris / Ember-Pulse
- * accent pair, and pill geometry. Tokens live in `huly.css`; this module owns
- * the route map and external links.
+ * accent pair, and pill geometry. Tokens live in `app/globals.css` (the
+ * `huly-*` `@theme` keys); this module owns the route map and external links.
  */
 
 import type { DemoMessageKey } from "@/lib/i18n/messages";
+
+/**
+ * Huly brand chrome shared by the nav and footer (DESIGN.md): Inter body
+ * face, tight tracking, and antialiasing — mirrors the old `.huly-root`
+ * CSS-module class.
+ */
+export const HULY_ROOT = "font-huly-sans tracking-[-0.01em] antialiased";
+
+/** Brand wordmark treatment, shared by the nav and footer. */
+export const BRAND_CLASS =
+	"inline-flex items-center gap-2.5 text-foreground font-semibold text-[16px] tracking-[-0.02em]";
 
 /**
  * The published docs site is a separate Astro app (`apps/docs`,

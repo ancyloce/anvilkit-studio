@@ -33,6 +33,7 @@ import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
 import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
 import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 import type { PageRootProps } from "@anvilkit/schema";
+import { cn } from "@anvilkit/ui/lib/utils";
 import type { Config, Data } from "@puckeditor/core";
 import { useRouter } from "next/navigation";
 import {
@@ -75,7 +76,22 @@ import {
 import { smokeTestPlugin } from "@/lib/smoke-test-plugin";
 import { readPersistedStudioLocale } from "@/lib/studio-locale";
 import { tokenSwatchComponentConfig } from "@/lib/token-swatch-component";
-import styles from "../puck.module.css";
+
+const editorShell = "flex flex-col min-h-svh [background:var(--demo-page-bg)]";
+// `.Puck` is `@puckeditor/core`'s own root class — we don't render that
+// element, so it can only be reached via an arbitrary descendant selector.
+const editorPanel =
+	"relative flex flex-[1_1_auto] flex-col w-full min-h-0 [&_.Puck]:flex-[1_1_auto] [&_.Puck]:min-h-[calc(100svh-4.5rem)]";
+const snapshot =
+	"mt-4 p-4 rounded-[1.5rem] border [border-color:var(--demo-panel-border)] [background:var(--demo-panel-bg)]";
+const snapshotHeader = "mb-[0.85rem]";
+const snapshotHeaderH2 = "mb-[0.3rem] text-[1.2rem]";
+const snapshotHeaderP = "[color:var(--demo-soft-text)]";
+const codeBlock =
+	"overflow-x-auto p-4 rounded-[1rem] [background:var(--demo-inverse-bg)] [color:var(--demo-inverse-text)] font-mono text-[0.84rem] leading-[1.55]";
+const actions = "flex flex-wrap gap-[0.85rem]";
+const secondaryAction =
+	"inline-flex items-center justify-center min-h-[2.9rem] py-3 px-[1.1rem] rounded-full border [border-color:var(--demo-panel-border-strong)] [background:var(--demo-secondary-bg)] transition-[transform,box-shadow,background-color] duration-[140ms] ease-[ease] hover-fine:-translate-y-px hover-fine:[background:var(--demo-secondary-hover)] hover-fine:shadow-[0_0.75rem_1.6rem_rgba(16,32,51,0.08)]";
 
 // Plugin set (step 3.2 — pluggable lazy loading).
 //
@@ -1228,12 +1244,12 @@ export default function PuckEditorPage() {
 	}
 
 	return (
-		<main className={styles.editorShell}>
+		<main className={editorShell}>
 			{assetManagerTestMode ? (
-				<section className={styles.snapshot} data-testid="asset-manager-e2e">
-					<div className={styles.snapshotHeader}>
-						<h2>Asset manager export harness</h2>
-						<p>
+				<section className={snapshot} data-testid="asset-manager-e2e">
+					<div className={snapshotHeader}>
+						<h2 className={snapshotHeaderH2}>Asset manager export harness</h2>
+						<p className={snapshotHeaderP}>
 							Test-only route wiring for resolver/export end-to-end coverage.
 						</p>
 					</div>
@@ -1241,7 +1257,7 @@ export default function PuckEditorPage() {
 						<div className="flex gap-3 flex-wrap">
 							<button
 								type="button"
-								className={styles.secondaryAction}
+								className={secondaryAction}
 								aria-pressed={assetManagerUploadMode === "safe"}
 								onClick={() => setAssetManagerUploadMode("safe")}
 							>
@@ -1249,7 +1265,7 @@ export default function PuckEditorPage() {
 							</button>
 							<button
 								type="button"
-								className={styles.secondaryAction}
+								className={secondaryAction}
 								aria-pressed={assetManagerUploadMode === "rogue"}
 								onClick={() => setAssetManagerUploadMode("rogue")}
 							>
@@ -1271,7 +1287,7 @@ export default function PuckEditorPage() {
 						<div className="flex gap-3 flex-wrap">
 							<button
 								type="button"
-								className={styles.secondaryAction}
+								className={secondaryAction}
 								onClick={() => {
 									void handleAssetManagerHtmlExport();
 								}}
@@ -1280,7 +1296,7 @@ export default function PuckEditorPage() {
 							</button>
 							<button
 								type="button"
-								className={styles.secondaryAction}
+								className={secondaryAction}
 								onClick={() => {
 									void handleAssetManagerReactExport();
 								}}
@@ -1290,38 +1306,26 @@ export default function PuckEditorPage() {
 						</div>
 					</div>
 					<h3>HTML output</h3>
-					<pre
-						className={styles.codeBlock}
-						data-testid="asset-manager-html-output"
-					>
+					<pre className={codeBlock} data-testid="asset-manager-html-output">
 						{assetManagerHtmlOutput}
 					</pre>
 					<h3>HTML warnings</h3>
-					<pre
-						className={styles.codeBlock}
-						data-testid="asset-manager-html-warnings"
-					>
+					<pre className={codeBlock} data-testid="asset-manager-html-warnings">
 						{assetManagerHtmlWarnings}
 					</pre>
 					<h3>React output</h3>
-					<pre
-						className={styles.codeBlock}
-						data-testid="asset-manager-react-output"
-					>
+					<pre className={codeBlock} data-testid="asset-manager-react-output">
 						{assetManagerReactOutput}
 					</pre>
 					<h3>React warnings</h3>
-					<pre
-						className={styles.codeBlock}
-						data-testid="asset-manager-react-warnings"
-					>
+					<pre className={codeBlock} data-testid="asset-manager-react-warnings">
 						{assetManagerReactWarnings}
 					</pre>
 				</section>
 			) : null}
 
 			<section
-				className={styles.editorPanel}
+				className={editorPanel}
 				data-testid="studio-mount"
 				data-collab={collabEnabled ? "1" : "0"}
 				data-chrome={chromeMode}
@@ -1376,34 +1380,34 @@ export default function PuckEditorPage() {
 			  Studio's own chrome still exposes export via its publish panel.
 			*/}
 			{demoToolsMode ? (
-				<section
-					className={styles.snapshot}
-					aria-labelledby="demo-exports-heading"
-				>
-					<div className={styles.snapshotHeader}>
-						<h2 id="demo-exports-heading">Exports</h2>
-						<p>Demo validation tools (rendered under ?e2e=demo-tools).</p>
+				<section className={snapshot} aria-labelledby="demo-exports-heading">
+					<div className={snapshotHeader}>
+						<h2 id="demo-exports-heading" className={snapshotHeaderH2}>
+							Exports
+						</h2>
+						<p className={snapshotHeaderP}>
+							Demo validation tools (rendered under ?e2e=demo-tools).
+						</p>
 					</div>
-					<div className={styles.actions}>
+					<div className={actions}>
 						<button
 							type="button"
-							className={styles.secondaryAction}
+							className={secondaryAction}
 							onClick={handleExportHtml}
 						>
 							Download HTML
 						</button>
 						<button
 							type="button"
-							className={styles.secondaryAction}
+							className={secondaryAction}
 							onClick={handleExportReact}
 						>
 							Export React
 						</button>
 					</div>
 					<pre
-						className={styles.codeBlock}
+						className={cn(codeBlock, "mt-4")}
 						data-testid="ak-demo-data-snapshot"
-						style={{ marginTop: "1rem" }}
 					>
 						{JSON.stringify(publishedData, null, 2)}
 					</pre>
