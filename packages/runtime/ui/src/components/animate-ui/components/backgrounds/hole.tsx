@@ -1,9 +1,22 @@
 "use client";
 
-import * as React from "react";
-import { motion } from "motion/react";
-
 import { cn } from "@anvilkit/ui/lib/utils";
+import { motion } from "motion/react";
+import * as React from "react";
+import {
+	createHoleState,
+	drawDiscs,
+	drawLines,
+	drawParticles,
+	type HoleState,
+	initHole,
+	moveDiscs,
+	moveParticles,
+	setDiscs,
+	setLines,
+	setParticles,
+	setSize,
+} from "./hole-engine";
 
 type HoleBackgroundProps = React.ComponentProps<"div"> & {
 	strokeColor?: string;
@@ -11,61 +24,6 @@ type HoleBackgroundProps = React.ComponentProps<"div"> & {
 	numberOfDiscs?: number;
 	particleRGBColor?: [number, number, number];
 };
-
-type DiscBase = {
-	x: number;
-	y: number;
-	w: number;
-	h: number;
-};
-
-type Disc = DiscBase & {
-	p: number;
-};
-
-type Point = {
-	x: number;
-	y: number;
-};
-
-type Particle = {
-	x: number;
-	sx: number;
-	dx: number;
-	y: number;
-	vy: number;
-	p: number;
-	r: number;
-	c: string;
-};
-
-type ParticleArea = {
-	sx: number;
-	sw: number;
-	ex: number;
-	ew: number;
-	h: number;
-};
-
-type HoleState = {
-	discs: Disc[];
-	lines: Point[][];
-	particles: Particle[];
-	clip: {
-		disc: Disc;
-		i: number;
-		path: Path2D | null;
-	};
-	startDisc: DiscBase;
-	endDisc: DiscBase;
-	rect: { width: number; height: number };
-	render: { width: number; height: number; dpi: number };
-	particleArea: ParticleArea;
-	linesCanvas: HTMLCanvasElement | null;
-};
-
-const linear = (p: number) => p;
-const easeInExpo = (p: number) => (p === 0 ? 0 : Math.pow(2, 10 * (p - 1)));
 
 function HoleBackground({
 	strokeColor = "#737373",
@@ -77,286 +35,46 @@ function HoleBackground({
 	...props
 }: HoleBackgroundProps) {
 	const canvasRef = React.useRef<HTMLCanvasElement>(null);
-	const stateRef = React.useRef<HoleState>({
-		discs: [],
-		lines: [],
-		particles: [],
-		clip: { disc: { p: 0, x: 0, y: 0, w: 0, h: 0 }, i: 0, path: null },
-		startDisc: { x: 0, y: 0, w: 0, h: 0 },
-		endDisc: { x: 0, y: 0, w: 0, h: 0 },
-		rect: { width: 0, height: 0 },
-		render: { width: 0, height: 0, dpi: 1 },
-		particleArea: { sx: 0, sw: 0, ex: 0, ew: 0, h: 0 },
-		linesCanvas: null,
-	});
+	const stateRef = React.useRef<HoleState>(createHoleState());
 
-	const tweenValue = React.useCallback(
-		(start: number, end: number, p: number, ease: "inExpo" | null = null) => {
-			const delta = end - start;
-			const easeFn = ease === "inExpo" ? easeInExpo : linear;
-			return start + delta * easeFn(p);
-		},
-		[],
-	);
-
-	const tweenDisc = React.useCallback(
-		(disc: Disc) => {
-			const { startDisc, endDisc } = stateRef.current;
-			disc.x = tweenValue(startDisc.x, endDisc.x, disc.p);
-			disc.y = tweenValue(startDisc.y, endDisc.y, disc.p, "inExpo");
-			disc.w = tweenValue(startDisc.w, endDisc.w, disc.p);
-			disc.h = tweenValue(startDisc.h, endDisc.h, disc.p);
-		},
-		[tweenValue],
-	);
-
-	const setSize = React.useCallback(() => {
+	const initEvent = React.useEffectEvent(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
-		const rect = canvas.getBoundingClientRect();
-		stateRef.current.rect = { width: rect.width, height: rect.height };
-		stateRef.current.render = {
-			width: rect.width,
-			height: rect.height,
-			dpi: window.devicePixelRatio || 1,
-		};
-		canvas.width = stateRef.current.render.width * stateRef.current.render.dpi;
-		canvas.height =
-			stateRef.current.render.height * stateRef.current.render.dpi;
-	}, []);
-
-	const setDiscs = React.useCallback(() => {
-		const { width, height } = stateRef.current.rect;
-		stateRef.current.discs = [];
-		stateRef.current.startDisc = {
-			x: width * 0.5,
-			y: height * 0.45,
-			w: width * 0.75,
-			h: height * 0.7,
-		};
-		stateRef.current.endDisc = {
-			x: width * 0.5,
-			y: height * 0.95,
-			w: 0,
-			h: 0,
-		};
-		let prevBottom = height;
-		stateRef.current.clip = {
-			disc: { p: 0, x: 0, y: 0, w: 0, h: 0 },
-			i: 0,
-			path: null,
-		};
-		for (let i = 0; i < numberOfDiscs; i++) {
-			const p = i / numberOfDiscs;
-			const disc = { p, x: 0, y: 0, w: 0, h: 0 };
-			tweenDisc(disc);
-			const bottom = disc.y + disc.h;
-			if (bottom <= prevBottom) {
-				stateRef.current.clip = { disc: { ...disc }, i, path: null };
-			}
-			prevBottom = bottom;
-			stateRef.current.discs.push(disc);
-		}
-		const clipPath = new Path2D();
-		const disc = stateRef.current.clip.disc;
-		clipPath.ellipse(disc.x, disc.y, disc.w, disc.h, 0, 0, Math.PI * 2);
-		clipPath.rect(disc.x - disc.w, 0, disc.w * 2, disc.y);
-		stateRef.current.clip.path = clipPath;
-	}, [numberOfDiscs, tweenDisc]);
-
-	const setLines = React.useCallback(() => {
-		const { width, height } = stateRef.current.rect;
-		stateRef.current.lines = [];
-		const linesAngle = (Math.PI * 2) / numberOfLines;
-		for (let i = 0; i < numberOfLines; i++) {
-			stateRef.current.lines.push([]);
-		}
-		stateRef.current.discs.forEach((disc) => {
-			for (let i = 0; i < numberOfLines; i++) {
-				const angle = i * linesAngle;
-				const p = {
-					x: disc.x + Math.cos(angle) * disc.w,
-					y: disc.y + Math.sin(angle) * disc.h,
-				};
-				stateRef.current.lines[i]?.push(p);
-			}
+		initHole(stateRef.current, canvas, {
+			numberOfDiscs,
+			numberOfLines,
+			strokeColor,
+			particleRGBColor,
 		});
-		const offCanvas = document.createElement("canvas");
-		offCanvas.width = width;
-		offCanvas.height = height;
-		const ctx = offCanvas.getContext("2d");
-		if (!ctx) return;
-		const clipPath = stateRef.current.clip.path;
-		if (!clipPath) return;
-		stateRef.current.lines.forEach((line) => {
-			ctx.save();
-			let lineIsIn = false;
-			line.forEach((p1, j) => {
-				if (j === 0) return;
-				const p0 = line[j - 1];
-				if (!p0) return;
-				if (
-					!lineIsIn &&
-					(ctx.isPointInPath(clipPath, p1.x, p1.y) ||
-						ctx.isPointInStroke(clipPath, p1.x, p1.y))
-				) {
-					lineIsIn = true;
-				} else if (lineIsIn) {
-					ctx.clip(clipPath);
-				}
-				ctx.beginPath();
-				ctx.moveTo(p0.x, p0.y);
-				ctx.lineTo(p1.x, p1.y);
-				ctx.strokeStyle = strokeColor;
-				ctx.lineWidth = 2;
-				ctx.stroke();
-				ctx.closePath();
-			});
-			ctx.restore();
-		});
-		stateRef.current.linesCanvas = offCanvas;
-	}, [numberOfLines, strokeColor]);
-
-	const initParticle = React.useCallback(
-		(start: boolean = false) => {
-			const sx =
-				stateRef.current.particleArea.sx +
-				stateRef.current.particleArea.sw * Math.random();
-			const ex =
-				stateRef.current.particleArea.ex +
-				stateRef.current.particleArea.ew * Math.random();
-			const dx = ex - sx;
-			const y = start
-				? stateRef.current.particleArea.h * Math.random()
-				: stateRef.current.particleArea.h;
-			const r = 0.5 + Math.random() * 4;
-			const vy = 0.5 + Math.random();
-			return {
-				x: sx,
-				sx,
-				dx,
-				y,
-				vy,
-				p: 0,
-				r,
-				c: `rgba(${particleRGBColor[0]}, ${particleRGBColor[1]}, ${particleRGBColor[2]}, ${Math.random()})`,
-			};
-		},
-		[particleRGBColor],
-	);
-
-	const setParticles = React.useCallback(() => {
-		const { width, height } = stateRef.current.rect;
-		stateRef.current.particles = [];
-		const disc = stateRef.current.clip.disc;
-		const sw = disc.w * 0.5;
-		const ew = disc.w * 2;
-		stateRef.current.particleArea = {
-			sw,
-			ew,
-			h: height * 0.85,
-			sx: (width - sw) / 2,
-			ex: (width - ew) / 2,
-		};
-		const totalParticles = 100;
-		for (let i = 0; i < totalParticles; i++) {
-			stateRef.current.particles.push(initParticle(true));
-		}
-	}, [initParticle]);
-
-	const drawDiscs = React.useCallback(
+	});
+	const moveDiscsEvent = React.useEffectEvent(() => {
+		moveDiscs(stateRef.current);
+	});
+	const moveParticlesEvent = React.useEffectEvent(() => {
+		moveParticles(stateRef.current, particleRGBColor);
+	});
+	const drawDiscsEvent = React.useEffectEvent(
 		(ctx: CanvasRenderingContext2D) => {
-			ctx.strokeStyle = strokeColor;
-			ctx.lineWidth = 2;
-			const outerDisc = stateRef.current.startDisc;
-			ctx.beginPath();
-			ctx.ellipse(
-				outerDisc.x,
-				outerDisc.y,
-				outerDisc.w,
-				outerDisc.h,
-				0,
-				0,
-				Math.PI * 2,
-			);
-			ctx.stroke();
-			ctx.closePath();
-			const clipPath = stateRef.current.clip.path;
-			if (!clipPath) return;
-			stateRef.current.discs.forEach((disc, i) => {
-				if (i % 5 !== 0) return;
-				if (disc.w < stateRef.current.clip.disc.w - 5) {
-					ctx.save();
-					ctx.clip(clipPath);
-				}
-				ctx.beginPath();
-				ctx.ellipse(disc.x, disc.y, disc.w, disc.h, 0, 0, Math.PI * 2);
-				ctx.stroke();
-				ctx.closePath();
-				if (disc.w < stateRef.current.clip.disc.w - 5) {
-					ctx.restore();
-				}
-			});
+			drawDiscs(ctx, stateRef.current, strokeColor);
 		},
-		[strokeColor],
 	);
-
-	const drawLines = React.useCallback((ctx: CanvasRenderingContext2D) => {
-		if (stateRef.current.linesCanvas) {
-			ctx.drawImage(stateRef.current.linesCanvas, 0, 0);
-		}
-	}, []);
-
-	const drawParticles = React.useCallback((ctx: CanvasRenderingContext2D) => {
-		const clipPath = stateRef.current.clip.path;
-		if (!clipPath) return;
-		ctx.save();
-		ctx.clip(clipPath);
-		stateRef.current.particles.forEach((particle) => {
-			ctx.fillStyle = particle.c;
-			ctx.beginPath();
-			ctx.rect(particle.x, particle.y, particle.r, particle.r);
-			ctx.closePath();
-			ctx.fill();
-		});
-		ctx.restore();
-	}, []);
-
-	const moveDiscs = React.useCallback(() => {
-		stateRef.current.discs.forEach((disc) => {
-			disc.p = (disc.p + 0.001) % 1;
-			tweenDisc(disc);
-		});
-	}, [tweenDisc]);
-
-	const moveParticles = React.useCallback(() => {
-		stateRef.current.particles.forEach((particle, idx) => {
-			particle.p = 1 - particle.y / stateRef.current.particleArea.h;
-			particle.x = particle.sx + particle.dx * particle.p;
-			particle.y -= particle.vy;
-			if (particle.y < 0) {
-				stateRef.current.particles[idx] = initParticle();
-			}
-		});
-	}, [initParticle]);
-
-	const init = React.useCallback(() => {
-		setSize();
-		setDiscs();
-		setLines();
-		setParticles();
-	}, [setSize, setDiscs, setLines, setParticles]);
-	const initEvent = React.useEffectEvent(init);
-	const moveDiscsEvent = React.useEffectEvent(moveDiscs);
-	const moveParticlesEvent = React.useEffectEvent(moveParticles);
-	const drawDiscsEvent = React.useEffectEvent(drawDiscs);
-	const drawLinesEvent = React.useEffectEvent(drawLines);
-	const drawParticlesEvent = React.useEffectEvent(drawParticles);
+	const drawLinesEvent = React.useEffectEvent(
+		(ctx: CanvasRenderingContext2D) => {
+			drawLines(ctx, stateRef.current);
+		},
+	);
+	const drawParticlesEvent = React.useEffectEvent(
+		(ctx: CanvasRenderingContext2D) => {
+			drawParticles(ctx, stateRef.current);
+		},
+	);
 	const resizeEvent = React.useEffectEvent(() => {
-		setSize();
-		setDiscs();
-		setLines();
-		setParticles();
+		const canvas = canvasRef.current;
+		if (!canvas) return;
+		setSize(stateRef.current, canvas);
+		setDiscs(stateRef.current, numberOfDiscs);
+		setLines(stateRef.current, numberOfLines, strokeColor);
+		setParticles(stateRef.current, particleRGBColor);
 	});
 
 	React.useEffect(() => {
