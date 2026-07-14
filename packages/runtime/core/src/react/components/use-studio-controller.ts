@@ -541,6 +541,29 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		// `activeCompiled` masks it (fail-closed render) and the
 		// `[activeCompiled]` teardown effect disposes it. This effect owns
 		// only the async compile and its stale-generation guard.
+		//
+		// The single-occupancy sidebar surfaces are the one exception: they
+		// live in the long-lived `sidebarRegistryStore` (shared across every
+		// compile in this mount, not reset by the teardown effect above
+		// until its `onDestroy` chain settles — asynchronously, well after
+		// this recompile's `register()` calls run). Left alone, the new
+		// compile's plugins register into slots the previous compile still
+		// occupies and `warnSlotOverwrite` fires a bogus "already
+		// registered" warning even though only one logical plugin ever
+		// contributed the surface. Clearing the six single-occupancy slots
+		// synchronously, before the new compile starts, is safe: the
+		// multi-occupancy maps (insert sections, layer quick-adds, …) are
+		// untouched, and `activeCompiled` already masks the chrome to the
+		// `loading` fallback for the duration of a recompile, so there is
+		// nothing visible to flicker.
+		sidebarRegistryStore.setState({
+			assetSource: null,
+			copilotPanel: null,
+			historyPanel: null,
+			designSystemPanel: null,
+			seoPanel: null,
+			pageSettingsSeoFields: null,
+		});
 		identityRef.current.generation += 1;
 		const myGen = identityRef.current.generation;
 		const isStale = (): boolean => myGen !== identityRef.current.generation;
