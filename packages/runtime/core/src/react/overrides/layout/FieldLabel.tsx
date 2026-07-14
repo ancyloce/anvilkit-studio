@@ -29,6 +29,7 @@ import {
 	FieldLabel as PrimitiveFieldLabel,
 } from "@/primitives/field";
 import { cn } from "@/shared/cn";
+import { useMsg } from "@/state/editor-i18n-context";
 
 export type FieldLabelDataType =
 	| "array"
@@ -106,13 +107,14 @@ function LabelContent({
 	FieldLabelOverrideProps,
 	"icon" | "label" | "readOnly" | "type"
 >): ReactNode {
+	const msg = useMsg();
 	return (
 		<>
 			<LabelIcon icon={icon} type={type} />
 			<span>{label}</span>
 			{readOnly ? (
 				<Lock
-					aria-label="Read-only"
+					aria-label={msg("studio.field.readOnly")}
 					className="size-3 text-[var(--ak-studio-muted-fg)]"
 				/>
 			) : null}

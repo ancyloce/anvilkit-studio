@@ -10,13 +10,80 @@ import { type ReactNode } from "react";
 
 import { Item, ItemContent, ItemHeader, ItemTitle } from "@/primitives";
 
-const DEFAULT_DRAWER_ITEM_IMAGE =
-	"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 120'%3E%3Crect width='160' height='120' rx='8' fill='%23171717'/%3E%3Crect x='14' y='14' width='132' height='92' rx='6' fill='%23202020'/%3E%3Crect x='26' y='28' width='74' height='9' rx='4.5' fill='%23373737'/%3E%3Crect x='26' y='44' width='108' height='6' rx='3' fill='%232f2f2f'/%3E%3Crect x='26' y='62' width='42' height='28' rx='5' fill='%232a2a2a'/%3E%3Crect x='78' y='62' width='56' height='28' rx='5' fill='%23303030'/%3E%3C/svg%3E";
-
 export interface DrawerItemProps {
 	readonly name: string;
 	readonly image?: string;
 	readonly children: ReactNode;
+}
+
+/**
+ * Abstract "no preview supplied" placeholder. Drawn as inline SVG (not a
+ * baked data-URI) using `currentColor` at varying opacities so it adapts
+ * to light/dark mode automatically instead of hardcoding a single
+ * dark-mode-only hex palette.
+ */
+function DrawerItemPlaceholder(): ReactNode {
+	return (
+		<svg
+			viewBox="0 0 160 120"
+			xmlns="http://www.w3.org/2000/svg"
+			aria-hidden="true"
+			className="size-full text-[var(--ak-studio-muted-fg)]"
+		>
+			<rect
+				width="160"
+				height="120"
+				rx="8"
+				fill="currentColor"
+				fillOpacity="0.08"
+			/>
+			<rect
+				x="14"
+				y="14"
+				width="132"
+				height="92"
+				rx="6"
+				fill="currentColor"
+				fillOpacity="0.06"
+			/>
+			<rect
+				x="26"
+				y="28"
+				width="74"
+				height="9"
+				rx="4.5"
+				fill="currentColor"
+				fillOpacity="0.2"
+			/>
+			<rect
+				x="26"
+				y="44"
+				width="108"
+				height="6"
+				rx="3"
+				fill="currentColor"
+				fillOpacity="0.14"
+			/>
+			<rect
+				x="26"
+				y="62"
+				width="42"
+				height="28"
+				rx="5"
+				fill="currentColor"
+				fillOpacity="0.12"
+			/>
+			<rect
+				x="78"
+				y="62"
+				width="56"
+				height="28"
+				rx="5"
+				fill="currentColor"
+				fillOpacity="0.16"
+			/>
+		</svg>
+	);
 }
 
 export function DrawerItem({
@@ -24,10 +91,7 @@ export function DrawerItem({
 	image,
 	children,
 }: DrawerItemProps): ReactNode {
-	const previewImage =
-		image !== undefined && image.trim().length > 0
-			? image
-			: DEFAULT_DRAWER_ITEM_IMAGE;
+	const hasImage = image !== undefined && image.trim().length > 0;
 
 	return (
 		<Item
@@ -37,12 +101,16 @@ export function DrawerItem({
 			data-drawer-item={name}
 		>
 			<ItemHeader className="relative aspect-[4/3] h-auto w-full overflow-hidden">
-				<img
-					src={previewImage}
-					alt={`${name} preview`}
-					draggable={false}
-					className="size-full object-cover"
-				/>
+				{hasImage ? (
+					<img
+						src={image}
+						alt={`${name} preview`}
+						draggable={false}
+						className="size-full object-cover"
+					/>
+				) : (
+					<DrawerItemPlaceholder />
+				)}
 				<div aria-hidden="true" className="absolute inset-0 opacity-0">
 					{children}
 				</div>

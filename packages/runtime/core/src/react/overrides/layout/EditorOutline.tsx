@@ -35,10 +35,7 @@ export function EditorOutline(): ReactNode {
 					<span>{msg("studio.outline.empty")}</span>
 				) : (
 					<span>
-						<span className="font-medium text-[var(--ak-studio-fg)]">
-							{selected.type}
-						</span>
-						<span className="ml-1 opacity-70">selected</span>
+						{msg("studio.outline.selected").replace("{type}", selected.type)}
 					</span>
 				)}
 			</div>
