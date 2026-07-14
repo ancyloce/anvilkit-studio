@@ -99,6 +99,15 @@ The authoritative current map, target map, classifications, dependency direction
 - Do not duplicate bilingual strings inline. Use i18n message keys.
 - Do not add language-specific studio-app translation overrides unless explicitly requested.
 
+## Styling Rules
+
+- All CSS styling must be implemented with Tailwind CSS.
+- Do not create native CSS rules, CSS modules, CSS-in-JS, styled-components, or introduce alternative styling libraries.
+- Prefer existing Tailwind utilities, semantic design tokens, shadcn/ui components, and reusable variants.
+- `globals.css` may only contain Tailwind imports, theme tokens, and unavoidable global base rules.
+- Component-specific and page-specific styling must remain in JSX through Tailwind classes.
+- Inline styles are allowed only for values that are dynamically calculated at runtime and cannot reasonably be represented by Tailwind.
+
 ## Documentation & i18n
 
 - When regenerating docs/i18n content, escape YAML frontmatter values (especially strings starting with `@`) so they parse, and avoid unescaped JSX-like strings in MDX tables.
