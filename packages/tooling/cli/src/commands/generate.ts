@@ -78,11 +78,10 @@ export async function runGenerate(
 		});
 	}
 
-	const generatePage = await resolveGeneratePage(
-		loadedConfig.config,
-		Boolean(options.mock),
-	);
-	const { config } = await resolvePuckConfig(options.config);
+	const [generatePage, { config }] = await Promise.all([
+		resolveGeneratePage(loadedConfig.config, Boolean(options.mock)),
+		resolvePuckConfig(options.config),
+	]);
 	const generationContext = configToAiContext(
 		config as Parameters<typeof configToAiContext>[0],
 	);
