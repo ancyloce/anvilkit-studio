@@ -13,59 +13,59 @@ import { cn } from "@anvilkit/ui/lib/utils";
  */
 
 function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="field-group"
-      className={cn("grid gap-3", className)}
-      {...props}
-    />
-  );
+	return (
+		<div
+			data-slot="field-group"
+			className={cn("grid gap-3", className)}
+			{...props}
+		/>
+	);
 }
 
 function Field({
-  className,
-  orientation = "vertical",
-  ...props
+	className,
+	orientation = "vertical",
+	...props
 }: React.ComponentProps<"div"> & {
-  orientation?: "vertical" | "horizontal";
+	orientation?: "vertical" | "horizontal";
 }) {
-  return (
-    <div
-      role="group"
-      data-slot="field"
-      data-orientation={orientation}
-      className={cn(
-        "grid gap-1",
-        orientation === "horizontal" &&
-          "grid-cols-[1fr_auto] items-center gap-3",
-        className,
-      )}
-      {...props}
-    />
-  );
+	return (
+		<div
+			role="group"
+			data-slot="field"
+			data-orientation={orientation}
+			className={cn(
+				"grid gap-1",
+				orientation === "horizontal" &&
+					"grid-cols-[1fr_auto] items-center gap-3",
+				className,
+			)}
+			{...props}
+		/>
+	);
 }
 
 function FieldLabel({ className, ...props }: React.ComponentProps<"label">) {
-  return (
-    <label
-      data-slot="field-label"
-      className={cn(
-        "text-xs font-medium text-foreground/70 select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        className,
-      )}
-      {...props}
-    />
-  );
+	return (
+		<label
+			data-slot="field-label"
+			className={cn(
+				"text-xs font-medium text-foreground/70 select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+				className,
+			)}
+			{...props}
+		/>
+	);
 }
 
 function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return (
-    <p
-      data-slot="field-description"
-      className={cn("text-xs text-muted-foreground", className)}
-      {...props}
-    />
-  );
+	return (
+		<p
+			data-slot="field-description"
+			className={cn("text-xs text-muted-foreground", className)}
+			{...props}
+		/>
+	);
 }
 
 export { Field, FieldGroup, FieldLabel, FieldDescription };

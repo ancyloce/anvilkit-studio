@@ -9,7 +9,7 @@ import { describe, expect, it } from "vitest";
  * package. Replace or delete once real component tests land.
  */
 describe("workspace smoke test", () => {
-  it("runs Vitest under the @anvilkit/vitest-config react-library preset", () => {
-    expect(true).toBe(true);
-  });
+	it("runs Vitest under the @anvilkit/vitest-config react-library preset", () => {
+		expect(true).toBe(true);
+	});
 });

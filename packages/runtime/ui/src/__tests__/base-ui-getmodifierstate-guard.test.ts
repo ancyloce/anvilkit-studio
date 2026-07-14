@@ -33,37 +33,37 @@ const GUARD = "typeof event.getModifierState === 'function'";
 const PACKAGES = ["@base-ui/react"] as const;
 
 function compositeRootFiles(pkg: string): string[] {
-  // Resolve the installed package dir from this package's context.
-  const pkgJson = require.resolve(`${pkg}/package.json`);
-  const root = dirname(pkgJson);
-  // 1.3.x / rc.0 layout: composite/root/...
-  // 1.4.x layout:        internals/composite/root/...
-  const rel = [
-    "composite/root/useCompositeRoot.js",
-    "esm/composite/root/useCompositeRoot.js",
-    "internals/composite/root/useCompositeRoot.js",
-    "esm/internals/composite/root/useCompositeRoot.js",
-  ];
-  return rel.map((r) => join(root, r)).filter((f) => existsSync(f));
+	// Resolve the installed package dir from this package's context.
+	const pkgJson = require.resolve(`${pkg}/package.json`);
+	const root = dirname(pkgJson);
+	// 1.3.x / rc.0 layout: composite/root/...
+	// 1.4.x layout:        internals/composite/root/...
+	const rel = [
+		"composite/root/useCompositeRoot.js",
+		"esm/composite/root/useCompositeRoot.js",
+		"internals/composite/root/useCompositeRoot.js",
+		"esm/internals/composite/root/useCompositeRoot.js",
+	];
+	return rel.map((r) => join(root, r)).filter((f) => existsSync(f));
 }
 
 describe("base-ui getModifierState autofill guard (pnpm patch)", () => {
-  for (const pkg of PACKAGES) {
-    it(`${pkg}: every composite-root build carries the guard`, () => {
-      const files = compositeRootFiles(pkg);
-      // At least one build file must exist, or resolution changed.
-      expect(files.length).toBeGreaterThan(0);
-      for (const file of files) {
-        const src = readFileSync(file, "utf8");
-        // Sanity: this is the file with the modifier check.
-        expect(src).toContain("isModifierKeySet");
-        // The unguarded form must not survive.
-        expect(src).not.toMatch(
-          /[^&]\bif \(event\.getModifierState\(key\)\) \{/,
-        );
-        // The guard must be present.
-        expect(src).toContain(GUARD);
-      }
-    });
-  }
+	for (const pkg of PACKAGES) {
+		it(`${pkg}: every composite-root build carries the guard`, () => {
+			const files = compositeRootFiles(pkg);
+			// At least one build file must exist, or resolution changed.
+			expect(files.length).toBeGreaterThan(0);
+			for (const file of files) {
+				const src = readFileSync(file, "utf8");
+				// Sanity: this is the file with the modifier check.
+				expect(src).toContain("isModifierKeySet");
+				// The unguarded form must not survive.
+				expect(src).not.toMatch(
+					/[^&]\bif \(event\.getModifierState\(key\)\) \{/,
+				);
+				// The guard must be present.
+				expect(src).toContain(GUARD);
+			}
+		});
+	}
 });

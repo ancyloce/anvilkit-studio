@@ -2,24 +2,24 @@
 
 import { PresenceCursor } from "./presence-cursor";
 import {
-  PresenceSelectionRing,
-  type PresenceSelectionRingRect,
+	PresenceSelectionRing,
+	type PresenceSelectionRingRect,
 } from "./presence-selection-ring";
 import type { PresenceStateFrame } from "./use-presence";
 
 export interface PresenceLayerProps {
-  readonly peers: readonly PresenceStateFrame[];
-  readonly showCursors?: boolean;
-  /**
-   * Optional callback so the host can resolve a node ID to its
-   * current bounding rect. Returning `null` (or omitting the
-   * resolver entirely) disables selection rings while keeping
-   * cursor overlays.
-   */
-  readonly resolveSelectionRect?: (
-    nodeId: string,
-  ) => PresenceSelectionRingRect | null;
-  readonly className?: string;
+	readonly peers: readonly PresenceStateFrame[];
+	readonly showCursors?: boolean;
+	/**
+	 * Optional callback so the host can resolve a node ID to its
+	 * current bounding rect. Returning `null` (or omitting the
+	 * resolver entirely) disables selection rings while keeping
+	 * cursor overlays.
+	 */
+	readonly resolveSelectionRect?: (
+		nodeId: string,
+	) => PresenceSelectionRingRect | null;
+	readonly className?: string;
 }
 
 const ROOT_CLASSES = "pointer-events-none absolute inset-0 overflow-hidden";
@@ -35,60 +35,60 @@ const ROOT_CLASSES = "pointer-events-none absolute inset-0 overflow-hidden";
  * cursors are written in.
  */
 export function PresenceLayer({
-  peers,
-  showCursors = true,
-  resolveSelectionRect,
-  className,
+	peers,
+	showCursors = true,
+	resolveSelectionRect,
+	className,
 }: PresenceLayerProps) {
-  return (
-    <div
-      data-slot="presence-layer"
-      aria-hidden="true"
-      className={className ? `${ROOT_CLASSES} ${className}` : ROOT_CLASSES}
-    >
-      {peers.map((frame) => (
-        <PeerOverlays
-          key={frame.peer.id}
-          frame={frame}
-          showCursors={showCursors}
-          resolveSelectionRect={resolveSelectionRect}
-        />
-      ))}
-    </div>
-  );
+	return (
+		<div
+			data-slot="presence-layer"
+			aria-hidden="true"
+			className={className ? `${ROOT_CLASSES} ${className}` : ROOT_CLASSES}
+		>
+			{peers.map((frame) => (
+				<PeerOverlays
+					key={frame.peer.id}
+					frame={frame}
+					showCursors={showCursors}
+					resolveSelectionRect={resolveSelectionRect}
+				/>
+			))}
+		</div>
+	);
 }
 
 function PeerOverlays({
-  frame,
-  showCursors,
-  resolveSelectionRect,
+	frame,
+	showCursors,
+	resolveSelectionRect,
 }: {
-  readonly frame: PresenceStateFrame;
-  readonly showCursors: boolean;
-  readonly resolveSelectionRect?: (
-    nodeId: string,
-  ) => PresenceSelectionRingRect | null;
+	readonly frame: PresenceStateFrame;
+	readonly showCursors: boolean;
+	readonly resolveSelectionRect?: (
+		nodeId: string,
+	) => PresenceSelectionRingRect | null;
 }) {
-  const cursor = frame.cursor;
-  const selection = frame.selection?.nodeIds ?? [];
-  return (
-    <>
-      {showCursors && cursor ? (
-        <PresenceCursor peer={frame.peer} cursor={cursor} />
-      ) : null}
-      {resolveSelectionRect
-        ? selection.map((nodeId) => {
-            const rect = resolveSelectionRect(nodeId);
-            if (!rect) return null;
-            return (
-              <PresenceSelectionRing
-                key={`${frame.peer.id}:${nodeId}`}
-                peer={frame.peer}
-                rect={rect}
-              />
-            );
-          })
-        : null}
-    </>
-  );
+	const cursor = frame.cursor;
+	const selection = frame.selection?.nodeIds ?? [];
+	return (
+		<>
+			{showCursors && cursor ? (
+				<PresenceCursor peer={frame.peer} cursor={cursor} />
+			) : null}
+			{resolveSelectionRect
+				? selection.map((nodeId) => {
+						const rect = resolveSelectionRect(nodeId);
+						if (!rect) return null;
+						return (
+							<PresenceSelectionRing
+								key={`${frame.peer.id}:${nodeId}`}
+								peer={frame.peer}
+								rect={rect}
+							/>
+						);
+					})
+				: null}
+		</>
+	);
 }

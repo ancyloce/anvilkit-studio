@@ -60,15 +60,15 @@ function Carousel({
 	const [canScrollPrev, setCanScrollPrev] = React.useState(false);
 	const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-		const onSelect = React.useCallback((api: CarouselApi) => {
-			if (!api) return;
-			setCanScrollPrev(api.canScrollPrev());
-			setCanScrollNext(api.canScrollNext());
-		}, []);
-		const onSelectRef = React.useRef(onSelect);
-		React.useEffect(() => {
-			onSelectRef.current = onSelect;
-		});
+	const onSelect = React.useCallback((api: CarouselApi) => {
+		if (!api) return;
+		setCanScrollPrev(api.canScrollPrev());
+		setCanScrollNext(api.canScrollNext());
+	}, []);
+	const onSelectRef = React.useRef(onSelect);
+	React.useEffect(() => {
+		onSelectRef.current = onSelect;
+	});
 
 	const scrollPrev = React.useCallback(() => {
 		api?.scrollPrev();
@@ -96,46 +96,47 @@ function Carousel({
 		setApi(api);
 	}, [api, setApi]);
 
-		React.useEffect(() => {
-			if (!api) return;
-			const handleSelect = (carouselApi: CarouselApi) => {
-				onSelectRef.current(carouselApi);
-			};
-			onSelectRef.current(api);
-			api.on("reInit", handleSelect);
-			api.on("select", handleSelect);
+	React.useEffect(() => {
+		if (!api) return;
+		const handleSelect = (carouselApi: CarouselApi) => {
+			onSelectRef.current(carouselApi);
+		};
+		onSelectRef.current(api);
+		api.on("reInit", handleSelect);
+		api.on("select", handleSelect);
 
-			return () => {
-				api.off("reInit", handleSelect);
-				api.off("select", handleSelect);
-			};
-		}, [api]);
+		return () => {
+			api.off("reInit", handleSelect);
+			api.off("select", handleSelect);
+		};
+	}, [api]);
 
-		const carouselContext = React.useMemo(
-			() => ({
-				carouselRef,
-				api,
-				opts,
-				orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
-				scrollPrev,
-				scrollNext,
-				canScrollPrev,
-				canScrollNext,
-			}),
-			[
-				api,
-				canScrollNext,
-				canScrollPrev,
-				carouselRef,
-				opts,
-				orientation,
-				scrollNext,
-				scrollPrev,
-			],
-		);
+	const carouselContext = React.useMemo(
+		() => ({
+			carouselRef,
+			api,
+			opts,
+			orientation:
+				orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+			scrollPrev,
+			scrollNext,
+			canScrollPrev,
+			canScrollNext,
+		}),
+		[
+			api,
+			canScrollNext,
+			canScrollPrev,
+			carouselRef,
+			opts,
+			orientation,
+			scrollNext,
+			scrollPrev,
+		],
+	);
 
-		return (
-			<CarouselContext value={carouselContext}>
+	return (
+		<CarouselContext value={carouselContext}>
 			<section
 				onKeyDownCapture={handleKeyDown}
 				className={cn("relative", className)}

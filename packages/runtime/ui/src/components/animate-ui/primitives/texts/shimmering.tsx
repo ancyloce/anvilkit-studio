@@ -4,91 +4,91 @@ import * as React from "react";
 import { motion, type HTMLMotionProps } from "motion/react";
 
 type ShimmeringTextProps = Omit<HTMLMotionProps<"span">, "children"> & {
-  text: string;
-  duration?: number;
-  wave?: boolean;
-  color?: string;
-  shimmeringColor?: string;
+	text: string;
+	duration?: number;
+	wave?: boolean;
+	color?: string;
+	shimmeringColor?: string;
 };
 
 function getCharacterKeys(text: string) {
-  const counts = new Map<string, number>();
+	const counts = new Map<string, number>();
 
-  return Array.from(text, (char) => {
-    const occurrence = (counts.get(char) ?? 0) + 1;
-    counts.set(char, occurrence);
-    return `${char}-${occurrence}`;
-  });
+	return Array.from(text, (char) => {
+		const occurrence = (counts.get(char) ?? 0) + 1;
+		counts.set(char, occurrence);
+		return `${char}-${occurrence}`;
+	});
 }
 
 function ShimmeringText({
-  text,
-  duration = 1,
-  transition,
-  wave = false,
-  color = "var(--color-neutral-500)",
-  shimmeringColor = "var(--color-neutral-300)",
-  ...props
+	text,
+	duration = 1,
+	transition,
+	wave = false,
+	color = "var(--color-neutral-500)",
+	shimmeringColor = "var(--color-neutral-300)",
+	...props
 }: ShimmeringTextProps) {
-  const characterKeys = React.useMemo(() => getCharacterKeys(text), [text]);
+	const characterKeys = React.useMemo(() => getCharacterKeys(text), [text]);
 
-  return (
-    <motion.span
-      style={
-        {
-          "--shimmering-color": shimmeringColor,
-          "--color": color,
-          color: "var(--color)",
-          position: "relative",
-          display: "inline-block",
-          perspective: "500px",
-        } as React.CSSProperties
-      }
-      {...props}
-    >
-      {text?.split("")?.map((char, i) => (
-        <motion.span
-          key={characterKeys[i]}
-          style={{
-            display: "inline-block",
-            whiteSpace: "pre",
-            transformStyle: "preserve-3d",
-          }}
-          initial={{
-            ...(wave
-              ? {
-                  scale: 1,
-                  rotateY: 0,
-                }
-              : {}),
-            color: "var(--color)",
-          }}
-          animate={{
-            ...(wave
-              ? {
-                  x: [0, 5, 0],
-                  y: [0, -5, 0],
-                  scale: [1, 1.1, 1],
-                  rotateY: [0, 15, 0],
-                }
-              : {}),
-            color: ["var(--color)", "var(--shimmering-color)", "var(--color)"],
-          }}
-          transition={{
-            duration,
-            repeat: Infinity,
-            repeatType: "loop",
-            repeatDelay: text.length * 0.05,
-            delay: (i * duration) / text.length,
-            ease: "easeInOut",
-            ...transition,
-          }}
-        >
-          {char}
-        </motion.span>
-      ))}
-    </motion.span>
-  );
+	return (
+		<motion.span
+			style={
+				{
+					"--shimmering-color": shimmeringColor,
+					"--color": color,
+					color: "var(--color)",
+					position: "relative",
+					display: "inline-block",
+					perspective: "500px",
+				} as React.CSSProperties
+			}
+			{...props}
+		>
+			{text?.split("")?.map((char, i) => (
+				<motion.span
+					key={characterKeys[i]}
+					style={{
+						display: "inline-block",
+						whiteSpace: "pre",
+						transformStyle: "preserve-3d",
+					}}
+					initial={{
+						...(wave
+							? {
+									scale: 1,
+									rotateY: 0,
+								}
+							: {}),
+						color: "var(--color)",
+					}}
+					animate={{
+						...(wave
+							? {
+									x: [0, 5, 0],
+									y: [0, -5, 0],
+									scale: [1, 1.1, 1],
+									rotateY: [0, 15, 0],
+								}
+							: {}),
+						color: ["var(--color)", "var(--shimmering-color)", "var(--color)"],
+					}}
+					transition={{
+						duration,
+						repeat: Infinity,
+						repeatType: "loop",
+						repeatDelay: text.length * 0.05,
+						delay: (i * duration) / text.length,
+						ease: "easeInOut",
+						...transition,
+					}}
+				>
+					{char}
+				</motion.span>
+			))}
+		</motion.span>
+	);
 }
 
 export { ShimmeringText, type ShimmeringTextProps };
