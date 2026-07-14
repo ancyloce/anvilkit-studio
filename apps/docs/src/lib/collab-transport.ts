@@ -41,8 +41,10 @@ export interface CollabTransportBundle {
  * without a relay.
  */
 export async function createInMemoryCollabTransport(): Promise<CollabTransportBundle> {
-	const { Doc } = await import("yjs");
-	const { Awareness: AwarenessClass } = await import("y-protocols/awareness");
+	const [{ Doc }, { Awareness: AwarenessClass }] = await Promise.all([
+		import("yjs"),
+		import("y-protocols/awareness"),
+	]);
 	const doc = new Doc();
 	const awareness = new AwarenessClass(doc);
 	return {
@@ -73,11 +75,15 @@ export interface CreateCollabHocuspocusTransportOptions {
 export async function createCollabHocuspocusTransport(
 	options: CreateCollabHocuspocusTransportOptions,
 ): Promise<CollabTransportBundle> {
-	const { Doc } = await import("yjs");
-	const { Awareness: AwarenessClass } = await import("y-protocols/awareness");
-	const { HocuspocusProvider: HocuspocusProviderClass } = await import(
-		"@hocuspocus/provider"
-	);
+	const [
+		{ Doc },
+		{ Awareness: AwarenessClass },
+		{ HocuspocusProvider: HocuspocusProviderClass },
+	] = await Promise.all([
+		import("yjs"),
+		import("y-protocols/awareness"),
+		import("@hocuspocus/provider"),
+	]);
 	const doc = new Doc();
 	const awareness = new AwarenessClass(doc);
 	const provider = new HocuspocusProviderClass({
