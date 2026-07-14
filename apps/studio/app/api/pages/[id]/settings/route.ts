@@ -16,9 +16,11 @@ export async function PATCH(
 	req: Request,
 	{ params }: RouteContext,
 ): Promise<Response> {
-	const { id } = await params;
-	const body = await req.json().catch(() => ({}));
-	const storage = await getPageStorage();
+	const [{ id }, body, storage] = await Promise.all([
+		params,
+		req.json().catch(() => ({})),
+		getPageStorage(),
+	]);
 	const { status, body: responseBody } = await updateSettings(
 		storage,
 		id,

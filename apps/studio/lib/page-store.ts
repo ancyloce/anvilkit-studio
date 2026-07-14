@@ -73,11 +73,11 @@ async function createAndSeed(): Promise<PageStorageAdapter> {
 async function seedIfEmpty(storage: PageStorageAdapter): Promise<void> {
 	const existing = await storage.list();
 	if (existing.length > 0) return;
-	for (const [id, data] of Object.entries(createDemoPagesData())) {
+	const seeds = Object.entries(createDemoPagesData()).flatMap(([id, data]) => {
 		const slug = data.root.props?.slug;
-		if (slug === undefined || slug.length === 0) continue;
-		await storage.publish({ id, slug, data });
-	}
+		return slug === undefined || slug.length === 0 ? [] : [{ id, slug, data }];
+	});
+	await Promise.all(seeds.map((seed) => storage.publish(seed)));
 }
 
 /**

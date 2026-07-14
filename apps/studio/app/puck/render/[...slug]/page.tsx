@@ -13,6 +13,7 @@ import type { ReactElement } from "react";
 import {
 	buildPublishedMetadata,
 	loadPublishedRender,
+	sanitizeJsonLdForScript,
 } from "@/lib/published-render";
 import { demoConfig } from "@/lib/puck-demo";
 import { RenderNavigation } from "../_components/RenderNavigation";
@@ -43,8 +44,10 @@ export default async function PuckSlugRenderPage({
 		<>
 			<script
 				type="application/ld+json"
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw injection.
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(model.jsonLd) }}
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: sanitizeJsonLdForScript neutralizes </script> breakout.
+				dangerouslySetInnerHTML={{
+					__html: sanitizeJsonLdForScript(model.jsonLd),
+				}}
 			/>
 			<RenderNavigation>
 				<Render config={demoConfig} data={model.resolved} />

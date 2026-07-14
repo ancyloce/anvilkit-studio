@@ -21,8 +21,29 @@ export interface PublishedRenderModel {
 	readonly pageId: string;
 	/** Document with `dataSource` directives resolved into plain props. */
 	readonly resolved: DemoPageData;
-	/** Schema.org `WebPage` block injected as JSON-LD. */
+	/**
+	 * Schema.org `WebPage` block. SEO fields (title/description/canonical) are
+	 * author-controlled — callers MUST serialize this through
+	 * {@link sanitizeJsonLdForScript}, never a bare `JSON.stringify`, before handing
+	 * it to a `<script>` sink.
+	 */
 	readonly jsonLd: Record<string, string>;
+}
+
+/**
+ * `JSON.stringify` does not HTML-escape, so a `</script>` or `<` inside
+ * author-controlled SEO text would otherwise break out of the `<script>` tag
+ * it's injected into and execute as markup. Unicode-escaping `<`, `>`, and
+ * `&` keeps the result valid JSON (and losslessly re-parseable by JSON-LD
+ * crawlers) while making that breakout impossible. Call this at the sink
+ * itself (`dangerouslySetInnerHTML={{ __html: sanitizeJsonLdForScript(...) }}`),
+ * not upstream, so the safety guarantee is visible right next to the danger.
+ */
+export function sanitizeJsonLdForScript(value: unknown): string {
+	return JSON.stringify(value).replace(
+		/[<>&]/g,
+		(char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`,
+	);
 }
 
 /**
@@ -86,16 +107,16 @@ export async function loadPublishedRender(
 
 	const root = page.root.props as PageRootProps | undefined;
 	const seo: PageSeo | undefined = root?.seo;
-	const jsonLd: Record<string, string> = {
+	const jsonLdData: Record<string, string> = {
 		"@context": "https://schema.org",
 		"@type": "WebPage",
 		name: seo?.title ?? root?.title ?? slugOf(segments),
 	};
-	if (seo?.description !== undefined) jsonLd.description = seo.description;
-	if (seo?.canonical !== undefined) jsonLd.url = seo.canonical;
+	if (seo?.description !== undefined) jsonLdData.description = seo.description;
+	if (seo?.canonical !== undefined) jsonLdData.url = seo.canonical;
 
 	// Resolve `remote_csv` dataSource directives into plain props before
 	// rendering — the component never fetches.
 	const resolved = await resolveDataSources(page);
-	return { pageId, resolved, jsonLd };
+	return { pageId, resolved, jsonLd: jsonLdData };
 }

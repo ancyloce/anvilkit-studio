@@ -6,44 +6,21 @@
 import "@anvilkit/canvas-editor/styles.css";
 import { createHttpAdapter } from "@anvilkit/analytics-core";
 import type { StudioPlugin } from "@anvilkit/core";
-import {
-	compilePlugins,
-	Studio,
-	StudioConfigSchema,
-	StudioLoadingScreen,
-} from "@anvilkit/core";
-import type {
-	ExportWarning,
-	PageIR,
-	StudioPage,
-	StudioPluginContext,
-} from "@anvilkit/core/types";
+import { Studio, StudioLoadingScreen } from "@anvilkit/core";
+import type { StudioPage } from "@anvilkit/core/types";
 import { puckDataToIR } from "@anvilkit/ir";
 import { createAiCopilotPlugin } from "@anvilkit/plugin-ai-copilot";
 import {
 	createMockGeneratePage,
 	createMockGenerateSection,
 } from "@anvilkit/plugin-ai-copilot/mock";
-// Asset-manager runtime values are loaded lazily (see `lazy-plugins.ts`
-// + the dynamic imports in the export / asset-harness handlers below).
-// Only the `UploadResult` *type* is imported eagerly — `import type` is
-// erased by `verbatimModuleSyntax`, so it pulls no chunk.
-import type { UploadResult } from "@anvilkit/plugin-asset-manager";
 import { createDesignSystemPlugin } from "@anvilkit/plugin-design-system";
 import { createCanvasExportPlugin } from "@anvilkit/plugin-export-canvas";
 import { createPageSeoPlugin } from "@anvilkit/plugin-page-seo";
 import type { PageRootProps } from "@anvilkit/schema";
-import { cn } from "@anvilkit/ui/lib/utils";
 import type { Config, Data } from "@puckeditor/core";
 import { useRouter } from "next/navigation";
-import {
-	type ChangeEvent,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDemoIdentity } from "@/lib/collab-identity";
 import { resolveCollabRelayUrl } from "@/lib/collab-relay-url";
 import { createCopilotSidebarPlugin } from "@/lib/copilot-sidebar-plugin";
@@ -76,22 +53,15 @@ import {
 import { smokeTestPlugin } from "@/lib/smoke-test-plugin";
 import { readPersistedStudioLocale } from "@/lib/studio-locale";
 import { tokenSwatchComponentConfig } from "@/lib/token-swatch-component";
+import { AssetManagerE2EPanel } from "./asset-manager-e2e-panel";
+import { DemoToolsExportPanel } from "./demo-tools-export-panel";
+import { useAssetManagerE2E } from "./use-asset-manager-e2e";
 
 const editorShell = "flex flex-col min-h-svh [background:var(--demo-page-bg)]";
 // `.Puck` is `@puckeditor/core`'s own root class — we don't render that
 // element, so it can only be reached via an arbitrary descendant selector.
 const editorPanel =
 	"relative flex flex-[1_1_auto] flex-col w-full min-h-0 [&_.Puck]:flex-[1_1_auto] [&_.Puck]:min-h-[calc(100svh-4.5rem)]";
-const snapshot =
-	"mt-4 p-4 rounded-[1.5rem] border [border-color:var(--demo-panel-border)] [background:var(--demo-panel-bg)]";
-const snapshotHeader = "mb-[0.85rem]";
-const snapshotHeaderH2 = "mb-[0.3rem] text-[1.2rem]";
-const snapshotHeaderP = "[color:var(--demo-soft-text)]";
-const codeBlock =
-	"overflow-x-auto p-4 rounded-[1rem] [background:var(--demo-inverse-bg)] [color:var(--demo-inverse-text)] font-mono text-[0.84rem] leading-[1.55]";
-const actions = "flex flex-wrap gap-[0.85rem]";
-const secondaryAction =
-	"inline-flex items-center justify-center min-h-[2.9rem] py-3 px-[1.1rem] rounded-full border [border-color:var(--demo-panel-border-strong)] [background:var(--demo-secondary-bg)] transition-[transform,box-shadow,background-color] duration-[140ms] ease-[ease] hover-fine:-translate-y-px hover-fine:[background:var(--demo-secondary-hover)] hover-fine:shadow-[0_0.75rem_1.6rem_rgba(16,32,51,0.08)]";
 
 // Plugin set (step 3.2 — pluggable lazy loading).
 //
@@ -116,7 +86,6 @@ const secondaryAction =
 // All wrappers are module-scope constants so React re-renders don't mint
 // new plugin identities (which would churn the fingerprint and re-run
 // `compilePlugins` inside <Studio>, wiping editor/AI data).
-const assetManagerTestStudioConfig = StudioConfigSchema.parse({});
 
 // Design System plugin: contributes the `--ak-ds-*` token-bound field
 // renderers, the Design System rail panel (Tokens + Theme tabs), and
@@ -210,135 +179,6 @@ const {
 	historySidebarPlugin,
 } = createLazyDemoVersionHistoryPlugins(editorDemoConfig as unknown as Config);
 
-interface AssetManagerTestHarness {
-	readonly ctx: StudioPluginContext;
-	readonly runtime: Awaited<ReturnType<typeof compilePlugins>>;
-	asset: UploadResult | null;
-}
-
-function createHeadlessStudioContext(): StudioPluginContext {
-	let currentData: Data = { root: { props: {} }, content: [], zones: {} };
-
-	return {
-		getData: () => currentData,
-		getPuckApi: (() => ({
-			dispatch(action: unknown) {
-				if (
-					action &&
-					typeof action === "object" &&
-					"type" in action &&
-					action.type === "setData" &&
-					"data" in action
-				) {
-					currentData = action.data as Data;
-				}
-			},
-		})) as StudioPluginContext["getPuckApi"],
-		studioConfig: assetManagerTestStudioConfig,
-		log: () => undefined,
-		emit: () => undefined,
-		on: () => () => undefined,
-		t: (key) => key,
-		registerMessages: () => undefined,
-		registerAssetResolver: (_resolver) => undefined,
-	};
-}
-
-async function createAssetManagerTestHarness(): Promise<AssetManagerTestHarness> {
-	const ctx = createHeadlessStudioContext();
-	// Load the plugin factories on demand (the harness only runs under
-	// `?e2e=asset-manager`), reusing the same memoized chunks as the live
-	// lazy plugin entries so no second copy is fetched.
-	const [assetManagerMod, htmlMod, reactMod] = await Promise.all([
-		loadAssetManager(),
-		loadExportHtml(),
-		loadExportReact(),
-	]);
-	const runtime = await compilePlugins(
-		[
-			assetManagerMod.createAssetManagerPlugin({
-				uploader: assetManagerMod.dataUrlUploader(),
-				dataUrlAllowlistOptIn: true,
-			}),
-			htmlMod.createHtmlExportPlugin(),
-			reactMod.createReactExportPlugin({
-				syntax: "tsx",
-				assetStrategy: "url-prop",
-			}),
-		],
-		ctx,
-	);
-
-	await runtime.lifecycle.emit("onInit", ctx);
-
-	return {
-		ctx,
-		runtime,
-		asset: null,
-	};
-}
-
-function createAssetReference(id: string): string {
-	return `asset://${id}`;
-}
-
-function createAssetManagerHtmlIr(assetId: string): PageIR {
-	const assetUrl = createAssetReference(assetId);
-
-	return {
-		version: "1",
-		root: {
-			id: "root",
-			type: "__root__",
-			props: {},
-			children: [
-				{
-					id: "blog-1",
-					type: "BlogList",
-					props: {
-						posts: [
-							{
-								title: "Resolver smoke test",
-								description: "The HTML exporter should resolve asset URLs.",
-								imageSrc: assetUrl,
-								imageAlt: "Uploaded asset",
-							},
-						],
-					},
-				},
-			],
-		},
-		assets: [{ id: assetId, kind: "image", url: assetUrl }],
-		metadata: {},
-	};
-}
-
-function createAssetManagerReactIr(assetId: string): PageIR {
-	const assetUrl = createAssetReference(assetId);
-
-	return {
-		version: "1",
-		root: {
-			id: "root",
-			type: "__root__",
-			props: {},
-			children: [
-				{
-					id: "hero-1",
-					type: "Hero",
-					props: {
-						headline: "Resolver smoke test",
-						description: "The React exporter should resolve asset URLs.",
-						backgroundSrc: assetUrl,
-					},
-				},
-			],
-		},
-		assets: [{ id: assetId, kind: "image", url: assetUrl }],
-		metadata: {},
-	};
-}
-
 function downloadExportResult(
 	content: string | Uint8Array,
 	filename: string,
@@ -357,21 +197,6 @@ function downloadExportResult(
 	URL.revokeObjectURL(url);
 }
 
-function formatWarnings(
-	warnings: readonly ExportWarning[] | undefined,
-): string {
-	if (!warnings || warnings.length === 0) {
-		return "none";
-	}
-
-	return warnings
-		.map(
-			(warning) =>
-				`${warning.code}: ${warning.message}${warning.nodeId ? ` (${warning.nodeId})` : ""}`,
-		)
-		.join("\n");
-}
-
 // The editor page reads the incoming demo `data` param from
 // `window.location.search` in a client effect rather than calling
 // `useSearchParams()` at render time. The hook-based approach forces
@@ -387,7 +212,6 @@ function formatWarnings(
 // requires this page to mount successfully.
 export default function PuckEditorPage() {
 	const router = useRouter();
-	const assetManagerHarnessRef = useRef<AssetManagerTestHarness | null>(null);
 	const [publishedData, setPublishedData] = useState<
 		Data<DemoComponents, PageRootProps>
 	>(() => createDemoData());
@@ -408,23 +232,9 @@ export default function PuckEditorPage() {
 	// exports onto `window.__puckData` / `window.__puckExports` so the
 	// spec can assert without parsing iframe contents or downloads.
 	const [puckDragE2eMode, setPuckDragE2eMode] = useState(false);
-	const [assetManagerUploadMode, setAssetManagerUploadMode] = useState<
-		"safe" | "rogue"
-	>("safe");
-	// Phase 4 hardening fixtures: the spec drives different rogue
-	// payloads through the same registry-bypass code path via
-	// `?rogueUrl=...`. Defaults to the legacy `javascript:` URL so the
-	// existing test continues to pass without a query param.
-	const [assetManagerRogueUrl, setAssetManagerRogueUrl] = useState(
-		"javascript:alert(1)",
-	);
-	const [assetManagerStatus, setAssetManagerStatus] = useState("Idle.");
-	const [assetManagerHtmlOutput, setAssetManagerHtmlOutput] = useState("");
-	const [assetManagerHtmlWarnings, setAssetManagerHtmlWarnings] =
-		useState("none");
-	const [assetManagerReactOutput, setAssetManagerReactOutput] = useState("");
-	const [assetManagerReactWarnings, setAssetManagerReactWarnings] =
-		useState("none");
+	// `?e2e=asset-manager` resolver/export coverage harness — state + handlers
+	// extracted into `useAssetManagerE2E` (react-doctor `no-giant-component`).
+	const assetManagerE2E = useAssetManagerE2E();
 	// Collaboration is ON by default in the showcase editor (`?collab=0` opts
 	// out); the editor auto-connects to the Hocuspocus relay the `dev`
 	// supervisor starts, so opening `/puck/editor` in two tabs shows peers
@@ -814,7 +624,7 @@ export default function PuckEditorPage() {
 		setPuckDragE2eMode(params.get("e2e") === "puck-drag");
 		const rogueUrlParam = params.get("rogueUrl");
 		if (rogueUrlParam !== null && rogueUrlParam.length > 0) {
-			setAssetManagerRogueUrl(rogueUrlParam);
+			assetManagerE2E.setAssetManagerRogueUrl(rogueUrlParam);
 		}
 		if (incomingData !== null) {
 			setPublishedData(getDemoDataFromSearchParam(incomingData));
@@ -876,7 +686,7 @@ export default function PuckEditorPage() {
 				// Malformed query input — fall through with no overrides.
 			}
 		}
-	}, []);
+	}, [assetManagerE2E.setAssetManagerRogueUrl]);
 
 	useEffect(() => {
 		if (!puckDragE2eMode) return;
@@ -894,107 +704,6 @@ export default function PuckEditorPage() {
 			delete w.__puckExportTrigger;
 		};
 	});
-
-	async function ensureAssetManagerHarness(): Promise<AssetManagerTestHarness> {
-		const harness = await createAssetManagerTestHarness();
-		assetManagerHarnessRef.current = harness;
-		return harness;
-	}
-
-	async function handleAssetManagerFileChange(
-		event: ChangeEvent<HTMLInputElement>,
-	) {
-		const file = event.currentTarget.files?.[0];
-		if (!file) {
-			return;
-		}
-
-		setAssetManagerHtmlOutput("");
-		setAssetManagerHtmlWarnings("none");
-		setAssetManagerReactOutput("");
-		setAssetManagerReactWarnings("none");
-
-		try {
-			const harness = await ensureAssetManagerHarness();
-			const { getAssetRegistry, uploadAsset } = await loadAssetManager();
-
-			if (assetManagerUploadMode === "safe") {
-				harness.asset = await uploadAsset(harness.ctx, file);
-				setAssetManagerStatus(
-					`Uploaded ${harness.asset.id} through dataUrlUploader.`,
-				);
-			} else {
-				const registry = getAssetRegistry(harness.ctx);
-				if (!registry) {
-					throw new Error("Asset registry unavailable in test harness.");
-				}
-
-				harness.asset = registry.register({
-					id: "asset-rogue",
-					url: assetManagerRogueUrl,
-					meta: {
-						size: file.size,
-						...(file.type ? { mimeType: file.type } : {}),
-					},
-				});
-				setAssetManagerStatus(
-					`Seeded asset-rogue (${assetManagerRogueUrl}) to simulate a rogue uploader bypassing upload validation.`,
-				);
-			}
-		} catch (error) {
-			setAssetManagerStatus(
-				error instanceof Error ? error.message : String(error),
-			);
-		} finally {
-			event.currentTarget.value = "";
-		}
-	}
-
-	async function handleAssetManagerHtmlExport() {
-		const harness = assetManagerHarnessRef.current;
-		if (!harness?.asset) {
-			setAssetManagerStatus("Upload or seed an asset before exporting.");
-			return;
-		}
-
-		const format = harness.runtime.exportFormats.get("html");
-		if (!format) {
-			setAssetManagerStatus("HTML export format not registered.");
-			return;
-		}
-
-		const result = await format.run(
-			createAssetManagerHtmlIr(harness.asset.id),
-			{ title: "Asset manager test page" },
-			{ assetResolvers: harness.runtime.assetResolvers },
-		);
-
-		setAssetManagerHtmlOutput(String(result.content));
-		setAssetManagerHtmlWarnings(formatWarnings(result.warnings));
-	}
-
-	async function handleAssetManagerReactExport() {
-		const harness = assetManagerHarnessRef.current;
-		if (!harness?.asset) {
-			setAssetManagerStatus("Upload or seed an asset before exporting.");
-			return;
-		}
-
-		const format = harness.runtime.exportFormats.get("react");
-		if (!format) {
-			setAssetManagerStatus("React export format not registered.");
-			return;
-		}
-
-		const result = await format.run(
-			createAssetManagerReactIr(harness.asset.id),
-			{ syntax: "tsx", assetStrategy: "url-prop" },
-			{ assetResolvers: harness.runtime.assetResolvers },
-		);
-
-		setAssetManagerReactOutput(String(result.content));
-		setAssetManagerReactWarnings(formatWarnings(result.warnings));
-	}
 
 	async function handleSaveDraft() {
 		setIsSavingDraft(true);
@@ -1246,82 +955,24 @@ export default function PuckEditorPage() {
 	return (
 		<main className={editorShell}>
 			{assetManagerTestMode ? (
-				<section className={snapshot} data-testid="asset-manager-e2e">
-					<div className={snapshotHeader}>
-						<h2 className={snapshotHeaderH2}>Asset manager export harness</h2>
-						<p className={snapshotHeaderP}>
-							Test-only route wiring for resolver/export end-to-end coverage.
-						</p>
-					</div>
-					<div className="grid gap-3 mb-4">
-						<div className="flex gap-3 flex-wrap">
-							<button
-								type="button"
-								className={secondaryAction}
-								aria-pressed={assetManagerUploadMode === "safe"}
-								onClick={() => setAssetManagerUploadMode("safe")}
-							>
-								Use safe uploader
-							</button>
-							<button
-								type="button"
-								className={secondaryAction}
-								aria-pressed={assetManagerUploadMode === "rogue"}
-								onClick={() => setAssetManagerUploadMode("rogue")}
-							>
-								Simulate rogue uploader
-							</button>
-						</div>
-						<label className="grid gap-2">
-							<span>Upload fixture image</span>
-							<input
-								data-testid="asset-manager-file-input"
-								type="file"
-								accept="image/*"
-								onChange={(event) => {
-									void handleAssetManagerFileChange(event);
-								}}
-							/>
-						</label>
-						<p data-testid="asset-manager-status">{assetManagerStatus}</p>
-						<div className="flex gap-3 flex-wrap">
-							<button
-								type="button"
-								className={secondaryAction}
-								onClick={() => {
-									void handleAssetManagerHtmlExport();
-								}}
-							>
-								Run HTML asset export
-							</button>
-							<button
-								type="button"
-								className={secondaryAction}
-								onClick={() => {
-									void handleAssetManagerReactExport();
-								}}
-							>
-								Run React asset export
-							</button>
-						</div>
-					</div>
-					<h3>HTML output</h3>
-					<pre className={codeBlock} data-testid="asset-manager-html-output">
-						{assetManagerHtmlOutput}
-					</pre>
-					<h3>HTML warnings</h3>
-					<pre className={codeBlock} data-testid="asset-manager-html-warnings">
-						{assetManagerHtmlWarnings}
-					</pre>
-					<h3>React output</h3>
-					<pre className={codeBlock} data-testid="asset-manager-react-output">
-						{assetManagerReactOutput}
-					</pre>
-					<h3>React warnings</h3>
-					<pre className={codeBlock} data-testid="asset-manager-react-warnings">
-						{assetManagerReactWarnings}
-					</pre>
-				</section>
+				<AssetManagerE2EPanel
+					assetManagerUploadMode={assetManagerE2E.assetManagerUploadMode}
+					setAssetManagerUploadMode={assetManagerE2E.setAssetManagerUploadMode}
+					handleAssetManagerFileChange={
+						assetManagerE2E.handleAssetManagerFileChange
+					}
+					assetManagerStatus={assetManagerE2E.assetManagerStatus}
+					handleAssetManagerHtmlExport={
+						assetManagerE2E.handleAssetManagerHtmlExport
+					}
+					handleAssetManagerReactExport={
+						assetManagerE2E.handleAssetManagerReactExport
+					}
+					assetManagerHtmlOutput={assetManagerE2E.assetManagerHtmlOutput}
+					assetManagerHtmlWarnings={assetManagerE2E.assetManagerHtmlWarnings}
+					assetManagerReactOutput={assetManagerE2E.assetManagerReactOutput}
+					assetManagerReactWarnings={assetManagerE2E.assetManagerReactWarnings}
+				/>
 			) : null}
 
 			<section
@@ -1380,38 +1031,11 @@ export default function PuckEditorPage() {
 			  Studio's own chrome still exposes export via its publish panel.
 			*/}
 			{demoToolsMode ? (
-				<section className={snapshot} aria-labelledby="demo-exports-heading">
-					<div className={snapshotHeader}>
-						<h2 id="demo-exports-heading" className={snapshotHeaderH2}>
-							Exports
-						</h2>
-						<p className={snapshotHeaderP}>
-							Demo validation tools (rendered under ?e2e=demo-tools).
-						</p>
-					</div>
-					<div className={actions}>
-						<button
-							type="button"
-							className={secondaryAction}
-							onClick={handleExportHtml}
-						>
-							Download HTML
-						</button>
-						<button
-							type="button"
-							className={secondaryAction}
-							onClick={handleExportReact}
-						>
-							Export React
-						</button>
-					</div>
-					<pre
-						className={cn(codeBlock, "mt-4")}
-						data-testid="ak-demo-data-snapshot"
-					>
-						{JSON.stringify(publishedData, null, 2)}
-					</pre>
-				</section>
+				<DemoToolsExportPanel
+					data={publishedData}
+					onExportHtml={handleExportHtml}
+					onExportReact={handleExportReact}
+				/>
 			) : null}
 		</main>
 	);

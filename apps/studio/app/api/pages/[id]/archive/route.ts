@@ -15,8 +15,7 @@ export async function POST(
 	_req: Request,
 	{ params }: RouteContext,
 ): Promise<Response> {
-	const { id } = await params;
-	const storage = await getPageStorage();
+	const [{ id }, storage] = await Promise.all([params, getPageStorage()]);
 	const { status, body } = await archivePage(storage, id);
 	return Response.json(body, { status });
 }

@@ -172,17 +172,23 @@ export class FileSystemPageStorageAdapter implements PageStorageAdapter {
 			if (isNotFound(error)) return [];
 			throw error;
 		}
-		const records: PageRecord[] = [];
-		for (const entry of entries) {
-			if (!entry.endsWith(".json") || entry.endsWith(".tmp")) continue;
+		const readEntry = async (entry: string): Promise<PageRecord | null> => {
 			try {
 				const raw = await readFile(join(this.dir, entry), "utf8");
-				records.push(JSON.parse(raw) as PageRecord);
+				return JSON.parse(raw) as PageRecord;
 			} catch {
 				// Skip unreadable/partial files rather than failing the whole list.
+				return null;
 			}
-		}
-		return records;
+		};
+		const results = await Promise.all(
+			entries.flatMap((entry) =>
+				entry.endsWith(".json") && !entry.endsWith(".tmp")
+					? [readEntry(entry)]
+					: [],
+			),
+		);
+		return results.filter((record): record is PageRecord => record !== null);
 	}
 
 	private async writeRecord(record: PageRecord): Promise<void> {

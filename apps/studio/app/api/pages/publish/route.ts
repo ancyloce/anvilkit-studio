@@ -14,8 +14,10 @@ export const runtime = "nodejs";
  * validation/storage failure writes nothing.
  */
 export async function POST(req: Request): Promise<Response> {
-	const body = await req.json().catch(() => ({}));
-	const storage = await getPageStorage();
+	const [body, storage] = await Promise.all([
+		req.json().catch(() => ({})),
+		getPageStorage(),
+	]);
 	const { status, body: responseBody } = await publish(storage, body);
 	return Response.json(responseBody, { status });
 }

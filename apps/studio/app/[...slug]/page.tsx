@@ -12,6 +12,7 @@ import type { ReactElement } from "react";
 import {
 	buildPublishedMetadata,
 	loadPublishedRender,
+	sanitizeJsonLdForScript,
 } from "@/lib/published-render";
 import { demoConfig } from "@/lib/puck-demo";
 
@@ -52,8 +53,10 @@ export default async function SlugPage({
 		<>
 			<script
 				type="application/ld+json"
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw injection.
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(model.jsonLd) }}
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: sanitizeJsonLdForScript neutralizes </script> breakout.
+				dangerouslySetInnerHTML={{
+					__html: sanitizeJsonLdForScript(model.jsonLd),
+				}}
 			/>
 			<Render config={demoConfig} data={model.resolved} />
 		</>

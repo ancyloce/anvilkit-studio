@@ -10,8 +10,10 @@ export const runtime = "nodejs";
  * SQLite by default).
  */
 export async function POST(req: Request): Promise<Response> {
-	const body = await req.json().catch(() => ({}));
-	const storage = await getPageStorage();
+	const [body, storage] = await Promise.all([
+		req.json().catch(() => ({})),
+		getPageStorage(),
+	]);
 	const { status, body: responseBody } = await saveDraft(storage, body);
 	return Response.json(responseBody, { status });
 }
