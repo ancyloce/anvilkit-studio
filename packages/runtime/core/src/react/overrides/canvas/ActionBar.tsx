@@ -30,9 +30,9 @@ export function ActionBar({
 			data-ak-action-bar
 			data-component-label={label}
 			className={cn(
-				"flex items-center gap-0.5 rounded-full px-1.5 py-0.5",
+				"flex items-center gap-0.5 rounded-[10px] px-1 py-0.5",
 				"border border-[var(--ak-studio-border)]",
-				"bg-[var(--ak-studio-panel)] text-[var(--ak-studio-panel-fg)] shadow-md",
+				"bg-[var(--editor-panel-raised)] text-[var(--ak-studio-panel-fg)] shadow-[var(--shadow-floating)]",
 			)}
 		>
 			{parentAction}

@@ -87,7 +87,7 @@ describe("EditorOutline reacts to selection changes", () => {
 			</I18n>,
 		);
 		// Nothing selected yet.
-		expect(screen.queryByText("Hero")).toBeNull();
+		expect(screen.queryByText("Hero selected")).toBeNull();
 
 		act(() => {
 			setPuckState({
@@ -95,7 +95,7 @@ describe("EditorOutline reacts to selection changes", () => {
 				selectedItem: { type: "Hero", props: { id: "h-1" } },
 			});
 		});
-		expect(screen.getByText("Hero")).toBeTruthy();
+		expect(screen.getByText("Hero selected")).toBeTruthy();
 	});
 });
 

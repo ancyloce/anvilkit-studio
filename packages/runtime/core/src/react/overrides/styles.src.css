@@ -50,7 +50,9 @@
  * shadcn → Tailwind theme bridge: registers `bg-card`, `text-foreground`,
  * `border-border`, `rounded-lg`, … against the token vars below. Mirrors the
  * color/radius mappings in `@anvilkit/tailwind-config/shadcn` (kept in sync
- * with the demo app's working setup).
+ * with the demo app's working setup). Also registers the Neutral Aurora
+ * brand + editor-alias + elevation tokens (DESIGN.md §3.2/3.4/5.4) so call
+ * sites may use `bg-editor-panel`, `text-brand`, `shadow-floating`, etc.
  */
 @theme inline {
 	--color-background: var(--background);
@@ -68,9 +70,35 @@
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
 	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
+
+	--color-brand: var(--brand);
+	--color-brand-deep: var(--brand-deep);
+	--color-brand-hover: var(--brand-hover);
+	--color-brand-pressed: var(--brand-pressed);
+	--color-brand-soft: var(--brand-soft);
+	--color-warm: var(--warm);
+	--color-warm-soft: var(--warm-soft);
+
+	--color-editor-topbar: var(--editor-topbar);
+	--color-editor-panel: var(--editor-panel);
+	--color-editor-panel-raised: var(--editor-panel-raised);
+	--color-editor-workspace: var(--editor-workspace);
+	--color-editor-canvas-frame: var(--editor-canvas-frame);
+	--color-editor-selection: var(--editor-selection);
+	--color-editor-selection-soft: var(--editor-selection-soft);
+	--color-editor-drop-target: var(--editor-drop-target);
+	--color-editor-grid: var(--editor-grid);
+	--color-editor-overlay: var(--editor-overlay);
+
+	--shadow-overlay: var(--shadow-overlay);
+	--shadow-popover: var(--shadow-popover);
+	--shadow-floating: var(--shadow-floating);
+	--shadow-canvas: var(--shadow-canvas);
+
 	--radius-sm: calc(var(--radius) * 0.6);
 	--radius-md: calc(var(--radius) * 0.8);
 	--radius-lg: var(--radius);
@@ -102,6 +130,7 @@
 		--accent: oklch(0.97 0 0);
 		--accent-foreground: oklch(0.205 0 0);
 		--destructive: oklch(0.577 0.245 27.325);
+		--destructive-foreground: oklch(0.985 0 0);
 		--border: oklch(0.922 0 0);
 		--input: oklch(0.922 0 0);
 		--ring: oklch(0.708 0 0);
@@ -123,6 +152,7 @@
 		--accent: oklch(0.269 0 0);
 		--accent-foreground: oklch(0.985 0 0);
 		--destructive: oklch(0.704 0.191 22.216);
+		--destructive-foreground: oklch(0.145 0 0);
 		--border: oklch(1 0 0 / 10%);
 		--input: oklch(1 0 0 / 15%);
 		--ring: oklch(0.556 0 0);
@@ -141,14 +171,72 @@
 
 /*
  * ----------------------------------------------------------------------------
- * `--ak-studio-*` token bridge (PRD §7.2). The Studio theme color is pinned to
- * Tailwind CSS blue-600 so core chrome and controls keep one consistent brand
- * accent regardless of the host app's shadcn preset.
+ * Neutral Aurora brand + editor-alias + elevation tokens (DESIGN.md §3.2,
+ * §3.4, §5.4). Pinned at normal specificity — like the `--ak-studio-*` bridge
+ * below, these intentionally are NOT host-overridable via `:where()`: the
+ * editor shell keeps one consistent Electric Iris signal regardless of the
+ * host's own shadcn preset, while the shadcn token DEFAULTS above stay
+ * `:where()`-overridable so host branding still flows through `--ak-studio-*`
+ * surface colors (bg / panel / border / muted).
  * ----------------------------------------------------------------------------
  */
 :root {
-	--ak-studio-blue-600: var(--color-blue-600, oklch(54.6% 0.245 262.881));
-	--ak-studio-theme: var(--ak-studio-blue-600);
+	/* Brand */
+	--brand: oklch(0.619 0.141 262.4);
+	--brand-deep: oklch(0.54 0.155 262.4);
+	--brand-hover: oklch(0.675 0.122 263.5);
+	--brand-pressed: oklch(0.566 0.135 262.8);
+	--brand-soft: rgb(86 131 218 / 12%);
+	--warm: oklch(0.753 0.152 38.1);
+	--warm-soft: rgb(255 137 100 / 14%);
+
+	/* Editor aliases — distinct tonal scale for the persistent editor shell,
+	   independent from the host's `--card` / `--background` (which may be
+	   host-overridden for the RENDERED PAGE / dialogs / popovers). */
+	--editor-topbar: oklch(1 0 0);
+	--editor-panel: oklch(1 0 0);
+	--editor-panel-raised: oklch(0.985 0 0);
+	--editor-workspace: oklch(0.97 0 0);
+	--editor-canvas-frame: oklch(1 0 0);
+	--editor-selection: var(--brand);
+	--editor-selection-soft: rgb(86 131 218 / 12%);
+	--editor-drop-target: rgb(86 131 218 / 18%);
+	--editor-grid: rgb(0 0 0 / 5%);
+	--editor-overlay: rgb(0 0 0 / 38%);
+
+	/* Elevation (DESIGN.md §5.4) — same values in both modes. */
+	--shadow-overlay: 0 12px 32px rgb(0 0 0 / 28%);
+	--shadow-popover: 0 8px 24px rgb(0 0 0 / 22%);
+	--shadow-floating: 0 4px 16px rgb(0 0 0 / 24%);
+	--shadow-canvas: 0 8px 28px rgb(0 0 0 / 20%);
+}
+
+.dark {
+	--brand-soft: rgb(86 131 218 / 16%);
+
+	--editor-topbar: oklch(0.145 0 0);
+	--editor-panel: oklch(0.178 0 0);
+	--editor-panel-raised: oklch(0.205 0 0);
+	--editor-workspace: oklch(0.205 0 0);
+	--editor-canvas-frame: oklch(0.145 0 0);
+	--editor-selection-soft: rgb(86 131 218 / 16%);
+	--editor-drop-target: rgb(86 131 218 / 22%);
+	--editor-grid: rgb(255 255 255 / 5%);
+	--editor-overlay: rgb(0 0 0 / 56%);
+}
+
+/*
+ * ----------------------------------------------------------------------------
+ * `--ak-studio-*` token bridge (PRD §7.2). `--ak-studio-theme` is the pinned
+ * chrome accent — Electric Iris (DESIGN.md brand), not the host's shadcn
+ * `--primary` — so core chrome and controls keep one consistent brand accent
+ * regardless of the host app's shadcn preset. Surface tokens (`bg` / `panel` /
+ * `border` / `muted`) still derive from the `:where()`-overridable shadcn
+ * defaults above, so host branding continues to flow through them.
+ * ----------------------------------------------------------------------------
+ */
+:root {
+	--ak-studio-theme: var(--brand);
 	--ak-studio-theme-fg: oklch(1 0 0);
 	--ak-studio-bg: var(--background);
 	--ak-studio-fg: var(--foreground);
@@ -160,11 +248,16 @@
 	--ak-studio-accent: var(--ak-studio-theme);
 	--ak-studio-accent-fg: var(--ak-studio-theme-fg);
 	--ak-studio-ring: var(--ak-studio-theme);
+	/* Unused by any current selector (the layer tree renders its own
+	   `LayerRow`/`LayerTree` components, not Puck's `<Puck.Outline />`) —
+	   kept defined only for backward compatibility with hosts that may read
+	   these CSS variables directly. */
 	--ak-studio-layer-icon: var(--ak-studio-theme);
-	--ak-studio-layer-selection: var(--ak-studio-theme);
-	--ak-studio-layer-selection-fg: var(--ak-studio-theme-fg);
-	--ak-studio-rail-width: 44px;
+	--ak-studio-layer-selection: var(--editor-selection-soft);
+	--ak-studio-layer-selection-fg: var(--ak-studio-fg);
+	--ak-studio-rail-width: 52px;
 	--ak-studio-panel-width: 280px;
+	--ak-studio-inspector-width: 336px;
 
 	/*
 	 * `--ak-ds-*` — Design-System tokens (two-tier, PRD 0005).
@@ -173,6 +266,10 @@
 	 * so a host that omits `@anvilkit/plugin-design-system` still
 	 * renders correctly. Dark mode flips primitives only; semantics
 	 * and stored token refs are theme-stable.
+	 *
+	 * This is the RENDERED-PAGE design-token scale (canvas content), a
+	 * separate system from the editor-chrome brand above (DESIGN.md §1.3
+	 * canvas autonomy) — intentionally NOT repointed to `--brand`.
 	 */
 	--ak-ds-brand-50: oklch(97% 0.013 254);
 	--ak-ds-brand-100: oklch(94% 0.029 254);
@@ -233,6 +330,8 @@
 	 * resolve through the primitives, so they re-bind automatically
 	 * without rewriting stored token refs.
 	 */
+	--ak-studio-layer-selection: var(--editor-selection-soft);
+
 	--ak-ds-neutral-50: oklch(14% 0 0);
 	--ak-ds-neutral-100: oklch(22% 0 0);
 	--ak-ds-neutral-200: oklch(28% 0 0);
@@ -280,81 +379,6 @@
 	scrollbar-color: var(--ak-studio-muted) transparent;
 }
 
-[data-ak-layer-outline] [class*="_LayerTree_"] {
-	color: var(--ak-studio-muted-fg);
-	font-family: inherit;
-	font-size: 12px;
-	line-height: 1.25;
-}
-
-[data-ak-layer-outline] [class*="_LayerTree-zoneTitle_"] {
-	display: none;
-}
-
-[data-ak-layer-outline] [class*="_Layer_"] {
-	border: 0;
-	border-radius: 4px;
-	margin-block: 2px;
-}
-
-[data-ak-layer-outline] [class*="_Layer-inner_"] {
-	border: 0;
-	border-radius: 4px;
-}
-
-[data-ak-layer-outline] [class*="_Layer-clickable_"] {
-	min-height: 24px;
-	padding-inline: 4px;
-}
-
-[data-ak-layer-outline] [class*="_Layer-title_"] {
-	gap: 8px;
-	margin: 0;
-	min-width: 0;
-}
-
-[data-ak-layer-outline] [class*="_Layer-chevron_"] {
-	color: var(--ak-studio-muted-fg);
-	display: flex;
-	margin-inline-end: 2px;
-}
-
-[data-ak-layer-outline] [class*="_Layer-icon_"] {
-	color: var(--ak-studio-layer-icon);
-	display: flex;
-	margin-top: 0;
-}
-
-[data-ak-layer-outline] [class*="_Layer-name_"] {
-	color: inherit;
-}
-
-[data-ak-layer-outline] [class*="_Layer-zones_"] {
-	margin-inline-start: 10px;
-}
-
-[data-ak-layer-outline] [class*="_Layer-zones_"] > [class*="_LayerTree_"] {
-	margin-inline-start: 8px;
-}
-
-[data-ak-layer-outline]
-	[class*="_Layer--isSelected_"]
-	> [class*="_Layer-inner_"] {
-	background: var(--ak-studio-layer-selection);
-	color: var(--ak-studio-layer-selection-fg);
-}
-
-[data-ak-layer-outline]
-	[class*="_Layer--isSelected_"]
-	> [class*="_Layer-inner_"]
-	[class*="_Layer-icon_"],
-[data-ak-layer-outline]
-	[class*="_Layer--isSelected_"]
-	> [class*="_Layer-inner_"]
-	[class*="_Layer-chevron_"] {
-	color: var(--ak-studio-layer-selection-fg);
-}
-
 /*
  * Puck's `_DraggableComponent-overlay_` element ships its own
  * azure outline (hover + selected). Our `ComponentOverlay`
@@ -371,7 +395,9 @@
  * override (`[data-ak-overlay]`). Driven from CSS rather than
  * Tailwind utilities so it works inside the canvas iframe even
  * when Tailwind's per-utility output is not mirrored across
- * documents.
+ * documents. Selected = precise 1px Iris outline at all zoom
+ * levels (DESIGN.md §7.7, §10); hover stays much quieter — a
+ * translucent tint, never the same weight as selection.
  */
 [data-ak-overlay] {
 	outline-style: solid;
@@ -383,21 +409,22 @@
 [data-ak-overlay][data-overlay-state="hover"] {
 	outline-width: 1px;
 	outline-offset: -1px;
-	outline-color: color-mix(in oklab, var(--ak-studio-accent) 30%, transparent);
+	outline-color: color-mix(in oklab, var(--editor-selection) 30%, transparent);
 }
 
 [data-ak-overlay][data-overlay-state="selected"] {
-	outline-width: 2px;
-	outline-offset: -2px;
-	outline-color: var(--ak-studio-accent);
+	outline-width: 1px;
+	outline-offset: -1px;
+	outline-color: var(--editor-selection);
 }
 
 /*
  * Selection label tab — sits on the top-left of the outline.
- * Light mode: soft tinted chip (lighter blue bg + accent text)
- * so it does not shout against a white canvas.
- * Dark mode: solid brand-blue chip + white text — the tinted
- * treatment loses contrast on dark backgrounds.
+ * 10–11px medium text, 4px radius, compact padding (DESIGN.md §7.7,
+ * §10). Uses `--brand-deep` (not the dark-mode `--brand` fill) at this
+ * small size regardless of theme: DESIGN.md §3.2's contrast rule
+ * requires ≥15px/600 text for white-on-`--brand`, and this label is
+ * always well under that, in both light and dark.
  */
 [data-ak-overlay-label] {
 	pointer-events: none;
@@ -408,20 +435,15 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	padding: 4px 8px;
-	padding-top: 6px;
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
+	padding: 3px 6px;
+	padding-top: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 	font-size: 11px;
 	font-weight: 500;
-	line-height: 1;
-	background-color: var(--ak-studio-accent);
-	color: #fff;
-}
-
-.dark [data-ak-overlay-label] {
-	background-color: var(--ak-studio-accent);
-	color: var(--ak-studio-accent-fg);
+	line-height: 1.3;
+	background-color: var(--brand-deep);
+	color: oklch(0.985 0 0);
 }
 
 /*
@@ -435,7 +457,7 @@
 	top: 0;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
-	border-bottom-right-radius: 6px;
+	border-bottom-right-radius: 4px;
 }
 
 /*
