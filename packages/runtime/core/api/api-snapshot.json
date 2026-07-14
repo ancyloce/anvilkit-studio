@@ -41344,9 +41344,9 @@
 			"sources": [
 				{
 					"fileName": "runtime/core/src/runtime/compile-plugins.ts",
-					"line": 457,
+					"line": 488,
 					"character": 22,
-					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L457"
+					"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L488"
 				}
 			],
 			"signatures": [
@@ -41359,9 +41359,9 @@
 					"sources": [
 						{
 							"fileName": "runtime/core/src/runtime/compile-plugins.ts",
-							"line": 457,
+							"line": 488,
 							"character": 22,
-							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L457"
+							"url": "https://github.com/ancyloce/anvilkit-studio/blob/main/packages/runtime/core/src/runtime/compile-plugins.ts#L488"
 						}
 					],
 					"parameters": [
