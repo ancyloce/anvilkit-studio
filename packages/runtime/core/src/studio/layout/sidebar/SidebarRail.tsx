@@ -202,7 +202,7 @@ export const SidebarRail = memo(function SidebarRail({
 			className="flex h-full shrink-0 flex-col items-center border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]"
 			style={{ inlineSize: "var(--ak-studio-rail-width)" }}
 		>
-			<div className="flex h-14 w-full shrink-0 items-center justify-center border-b border-[var(--ak-studio-border)]">
+			<div className="flex h-12 w-full shrink-0 items-center justify-center border-b border-[var(--ak-studio-border)]">
 				<div
 					role="presentation"
 					aria-hidden="true"
@@ -218,7 +218,7 @@ export const SidebarRail = memo(function SidebarRail({
 				className="contents"
 			>
 				<TabsList
-					className="flex h-fit w-fit flex-col items-center justify-start gap-2 rounded-none bg-transparent p-0 pt-2 text-current"
+					className="flex h-fit w-fit flex-col items-center justify-start gap-1.5 rounded-none bg-transparent p-0 pt-2 text-current"
 					onKeyDown={handleKeyDown}
 				>
 					{visibleModules.map(({ key, icon: Icon, labelKey }) => (
@@ -231,9 +231,18 @@ export const SidebarRail = memo(function SidebarRail({
 										aria-controls={SIDEBAR_PANEL_ID}
 										aria-label={msg(labelKey)}
 										onClick={() => handleTabClick(key)}
-										className="p-2"
+										// Neutral active surface + Electric Iris icon + a 2px
+										// logical-start indicator painted via inset box-shadow
+										// (no layout shift). Targets `aria-selected` (Tailwind's
+										// built-in ARIA variant) rather than the primitive's own
+										// `data-[selected]:text-foreground` default — the
+										// underlying base-ui Tabs only ever sets `data-active` /
+										// `aria-selected`, never a `data-selected` attribute, so
+										// the primitive's own selector is inert (DESIGN.md §7.2:
+										// no fully-blue active button).
+										className="size-9 rounded-md p-0 text-[var(--ak-studio-muted-fg)] aria-selected:bg-[var(--editor-panel-raised)] aria-selected:text-[var(--brand)] aria-selected:shadow-[inset_2px_0_0_0_var(--brand)]"
 									>
-										<Icon aria-hidden="true" />
+										<Icon aria-hidden="true" className="size-4" />
 									</TabsTab>
 								}
 							/>

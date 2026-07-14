@@ -13,12 +13,12 @@ import {
 	SidebarRail,
 	type SidebarRailHandle,
 } from "@/layout/sidebar/SidebarRail";
+import { SidebarRegistryProvider } from "@/state/sidebar-registry/SidebarRegistryProvider";
+import { createSidebarRegistryStore } from "@/state/sidebar-registry/sidebar-registry-store";
 import {
 	EditorUiStoreProvider,
 	useEditorUiStoreApi,
 } from "@/state/slices/EditorUiStoreProvider";
-import { SidebarRegistryProvider } from "@/state/sidebar-registry/SidebarRegistryProvider";
-import { createSidebarRegistryStore } from "@/state/sidebar-registry/sidebar-registry-store";
 
 afterEach(cleanup);
 
@@ -176,5 +176,21 @@ describe("SidebarRail", () => {
 		expect(document.activeElement).toBe(tabs[2]);
 		handleRef.current?.focusActive();
 		expect(document.activeElement).toBe(tabs[0]);
+	});
+
+	it("marks only the active tab aria-selected, with the neutral raised surface + Electric Iris className wired (DESIGN.md §7.2)", () => {
+		renderRail("rail-active-styling");
+		const insert = screen.getByRole("tab", { name: "Insert" });
+		const layer = screen.getByRole("tab", { name: "Pages & Layers" });
+		expect(insert.getAttribute("aria-selected")).toBe("true");
+		expect(layer.getAttribute("aria-selected")).toBe("false");
+		// Not a fully-filled blue button: the active-state utilities target a
+		// neutral raised surface + brand-colored icon/indicator, never a flat
+		// brand background fill.
+		expect(insert.className).toContain(
+			"aria-selected:bg-[var(--editor-panel-raised)]",
+		);
+		expect(insert.className).toContain("aria-selected:text-[var(--brand)]");
+		expect(insert.className).not.toMatch(/aria-selected:bg-\[var\(--brand\)/);
 	});
 });

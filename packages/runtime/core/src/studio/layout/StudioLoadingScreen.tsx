@@ -47,10 +47,10 @@ export interface StudioLoadingScreenProps {
 function RailSkeleton(): ReactNode {
 	return (
 		<div
-			className="flex h-full shrink-0 flex-col items-center border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]"
+			className="flex h-full shrink-0 flex-col items-center border-e border-[var(--ak-studio-border)] bg-[var(--editor-panel)]"
 			style={{ inlineSize: "var(--ak-studio-rail-width)" }}
 		>
-			<div className="flex h-14 w-full shrink-0 items-center justify-center border-b border-[var(--ak-studio-border)]">
+			<div className="flex h-12 w-full shrink-0 items-center justify-center border-b border-[var(--ak-studio-border)]">
 				<Skeleton className="size-8 rounded-full" />
 			</div>
 			<div className="flex flex-col items-center gap-2 pt-2">
@@ -86,7 +86,7 @@ export function StudioLoadingScreen({
 			<RailSkeleton />
 			<div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
 				{/* Header */}
-				<div className="flex h-14 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+				<div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--editor-topbar)] px-3">
 					<Skeleton className="size-8 rounded-md" />
 					<div className="mx-auto flex items-center gap-2">
 						<Skeleton className="h-4 w-16" />
@@ -99,13 +99,13 @@ export function StudioLoadingScreen({
 					</div>
 				</div>
 				{/* Toolbar */}
-				<div className="flex h-10 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+				<div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
 					<Skeleton className="h-5 w-16" />
 					<Skeleton className="h-5 w-16" />
 					<Skeleton className="h-5 w-16" />
 				</div>
 				{/* Canvas — spinner + status label */}
-				<div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 bg-[var(--ak-studio-bg)]">
+				<div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 bg-[var(--editor-workspace)]">
 					<Spinner className="size-6 text-[var(--ak-studio-muted-fg)]" />
 					<p className="text-sm text-[var(--ak-studio-muted-fg)]">{label}</p>
 				</div>

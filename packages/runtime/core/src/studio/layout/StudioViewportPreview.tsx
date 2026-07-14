@@ -39,7 +39,7 @@ function StudioViewportPreviewImpl({
 	return (
 		<div
 			className={cn(
-				"flex min-h-0 flex-1 items-start justify-center overflow-auto bg-[var(--ak-studio-muted)] p-6",
+				"flex min-h-0 flex-1 items-start justify-center overflow-auto bg-[var(--editor-workspace)] p-6",
 				className,
 			)}
 		>
@@ -49,7 +49,7 @@ function StudioViewportPreviewImpl({
 					transform: `scale(${zoom})`,
 					transformOrigin: "top center",
 				}}
-				className="flex min-h-full flex-col self-stretch bg-[var(--ak-studio-bg)] shadow-md transition-[width] duration-200"
+				className="flex min-h-full flex-col self-stretch border border-[var(--ak-studio-border)] bg-[var(--editor-canvas-frame)] transition-[width] duration-200 motion-reduce:transition-none dark:shadow-[var(--shadow-canvas)]"
 			>
 				<Puck.Preview />
 			</div>

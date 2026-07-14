@@ -63,11 +63,11 @@ export function SidebarPanel({
 			aria-labelledby={activeTabId}
 			tabIndex={-1}
 			onKeyDown={handleKeyDown}
-			className="flex h-full shrink-0 flex-col border-e border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]"
+			className="flex h-full shrink-0 flex-col border-e border-[var(--ak-studio-border)] bg-[var(--editor-panel)]"
 			style={{ inlineSize: "var(--ak-studio-panel-width)" }}
 		>
 			{hideHeader ? null : (
-				<header className="flex h-10 shrink-0 items-center justify-center gap-1 border-b border-[var(--ak-studio-border)] px-2">
+				<header className="flex h-8 shrink-0 items-center justify-center gap-1 border-b border-[var(--ak-studio-border)] px-2">
 					<h2
 						aria-live="polite"
 						className="grow truncate text-sm font-medium text-[var(--ak-studio-fg)]"

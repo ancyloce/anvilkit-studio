@@ -16,7 +16,7 @@
  * so plugin context still works.
  */
 
-import { createUsePuck, Puck } from "@puckeditor/core";
+import { Puck } from "@puckeditor/core";
 import { memo, type ReactNode, useRef } from "react";
 
 import { useChromeProps } from "@/context/chrome-props";
@@ -27,8 +27,6 @@ import { StudioViewportPreview } from "./StudioViewportPreview";
 import type { SidebarRailHandle } from "./sidebar/SidebarRail";
 
 export type StudioLayoutProps = StudioHeaderProps;
-
-const useStudioPuck = createUsePuck();
 
 function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 	// `<StudioLayout>` is mounted from the `puck` override slot with
@@ -46,9 +44,6 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 		headerEnd,
 		...propOverrides,
 	};
-	const hasSelection = useStudioPuck(
-		(state) => state.appState.ui.itemSelector !== null,
-	);
 	const railRef = useRef<SidebarRailHandle | null>(null);
 	return (
 		<div
@@ -59,7 +54,7 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 			<div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
 				{/* Discrete props (not a spread object literal) so the
 				    `memo`'d `StudioHeader` boundary holds across this
-				    layout's `hasSelection` re-renders. */}
+				    layout's re-renders. */}
 				<StudioHeader
 					onBack={props.onBack}
 					lastSavedAt={props.lastSavedAt}
@@ -71,13 +66,19 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 						<StudioToolbar />
 						<StudioViewportPreview />
 					</main>
-					{hasSelection ? (
-						<aside className="flex w-72 shrink-0 flex-col border-l border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)]">
-							<div className="overflow-auto">
-								<Puck.Fields />
-							</div>
-						</aside>
-					) : null}
+					{/*
+					 * Always mounted at a fixed width (DESIGN.md §7.8: 320–360px)
+					 * — `<FieldsPanel>` (the `fields` override rendered inside
+					 * `<Puck.Fields>`) renders its own quiet empty state when
+					 * nothing is selected, so the pane no longer disappears and
+					 * reflows the canvas on every selection change.
+					 */}
+					<aside
+						className="flex min-h-0 shrink-0 flex-col border-l border-[var(--ak-studio-border)] bg-[var(--editor-panel)]"
+						style={{ inlineSize: "var(--ak-studio-inspector-width)" }}
+					>
+						<Puck.Fields />
+					</aside>
 				</div>
 			</div>
 		</div>
@@ -85,7 +86,8 @@ function StudioLayoutImpl(propOverrides: StudioLayoutProps = {}): ReactNode {
 }
 
 // Memoized so Puck re-rendering the `puck` override slot doesn't force a
-// layout re-render on unrelated parent updates. (Selection changes still
-// re-render via the internal `hasSelection` subscription — the memo'd
-// children above keep that cascade off the panes that don't depend on it.)
+// layout re-render on unrelated parent updates. Selection changes no longer
+// re-render this component at all — the inspector `<aside>` is always
+// mounted, and `<FieldsPanel>` (rendered inside `<Puck.Fields>`) owns its
+// own selection subscription via `useBreadcrumbs()`.
 export const StudioLayout = memo(StudioLayoutImpl);

@@ -77,15 +77,22 @@ function StudioHeaderImpl({
 	}, [onPreview, getPuck]);
 
 	return (
-		<header className="flex h-14 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
-			<Button
-				variant="ghost"
-				size="icon"
-				onClick={handleBack}
-				aria-label={msg("studio.back")}
-			>
-				<ChevronLeft />
-			</Button>
+		<header className="flex h-12 items-center gap-2 border-b border-[var(--ak-studio-border)] bg-[var(--editor-topbar)] px-3">
+			<Tooltip>
+				<TooltipTrigger
+					render={
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={handleBack}
+							aria-label={msg("studio.back")}
+						>
+							<ChevronLeft />
+						</Button>
+					}
+				/>
+				<TooltipContent>{msg("studio.back")}</TooltipContent>
+			</Tooltip>
 			<nav
 				aria-label="Breadcrumb"
 				className="flex min-w-0 flex-1 items-center justify-center"
@@ -106,9 +113,9 @@ function StudioHeaderImpl({
 					</li>
 				</ol>
 			</nav>
-			<div className="ml-auto flex items-center gap-2">
+			<div className="ml-auto flex items-center gap-1.5">
 				{lastSavedAt !== null ? (
-					<span className="text-xs text-[var(--ak-studio-muted-fg)]">
+					<span className="text-xs tabular-nums text-[var(--ak-studio-muted-fg)]">
 						{msg("studio.publishPanel.savedRelative").replace(
 							"{time}",
 							formatRelativeTimestamp(lastSavedAt, msg),
@@ -132,23 +139,37 @@ function StudioHeaderImpl({
 
 				<HeaderActionsRegion />
 
-				<ThemeToggleRegion />
-
-				<LocaleSwitchRegion />
-
-				{headerEnd}
+				{/*
+				 * System-controls cluster (theme / locale / host `headerEnd`).
+				 * Tighter internal gap so these read as one group, visually
+				 * separated from the document-action cluster to its left by
+				 * the divider below — which is never orphaned since Share
+				 * always renders on the left and Preview/Publish always
+				 * render on the right.
+				 */}
+				<Separator
+					orientation="vertical"
+					className="h-5 data-vertical:self-center"
+				/>
+				<div className="flex items-center gap-0.5">
+					<ThemeToggleRegion />
+					<LocaleSwitchRegion />
+					{headerEnd}
+				</div>
 
 				<Tooltip>
 					<TooltipTrigger
 						render={
 							<Button
 								variant="ghost"
-								size="icon"
+								size="sm"
+								className="gap-1.5"
 								onClick={handlePreview}
 								disabled={onPreview === undefined}
 								aria-label={msg("studio.preview")}
 							>
-								<Play />
+								<Play className="size-4" aria-hidden="true" />
+								<span>{msg("studio.preview")}</span>
 							</Button>
 						}
 					/>

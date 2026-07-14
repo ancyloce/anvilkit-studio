@@ -111,14 +111,15 @@ function StudioToolbarImpl(): ReactNode {
 	const homeDisabled = pagesSource === undefined;
 
 	return (
-		<div className="flex h-10 items-center gap-1 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+		<div className="flex h-12 items-center gap-1 border-b border-[var(--ak-studio-border)] bg-[var(--ak-studio-panel)] px-3">
+			{/* Group 1: device preset + viewport width */}
 			<DropdownMenu>
 				<DropdownMenuTrigger
 					render={
 						<Button
 							variant="ghost"
 							size="sm"
-							className="gap-1.5 px-2 text-[var(--ak-studio-fg)]"
+							className="h-8 gap-1.5 px-2 text-[var(--ak-studio-fg)]"
 						>
 							{viewportIcon(activeViewport)}
 							<span className="text-xs font-medium">
@@ -156,11 +157,18 @@ function StudioToolbarImpl(): ReactNode {
 			</DropdownMenu>
 
 			<div className="ms-auto flex items-center gap-0.5">
+				{/* Group 2: undo / redo */}
 				<Tooltip>
 					<TooltipTrigger
 						render={
 							<span className="inline-flex">
-								<Button variant="ghost" size="icon" onClick={undo}>
+								<Button
+									variant="ghost"
+									size="icon"
+									className="size-8"
+									onClick={undo}
+									aria-label={msg("studio.actions.undo")}
+								>
 									<Undo2 />
 								</Button>
 							</span>
@@ -172,7 +180,13 @@ function StudioToolbarImpl(): ReactNode {
 					<TooltipTrigger
 						render={
 							<span className="inline-flex">
-								<Button variant="ghost" size="icon" onClick={redo}>
+								<Button
+									variant="ghost"
+									size="icon"
+									className="size-8"
+									onClick={redo}
+									aria-label={msg("studio.actions.redo")}
+								>
 									<Redo2 />
 								</Button>
 							</span>
@@ -186,6 +200,7 @@ function StudioToolbarImpl(): ReactNode {
 					className="mx-1 h-6 data-vertical:self-center"
 				/>
 
+				{/* Group 3: zoom out / percentage / zoom in */}
 				<Tooltip>
 					<TooltipTrigger
 						render={
@@ -193,8 +208,10 @@ function StudioToolbarImpl(): ReactNode {
 								<Button
 									variant="ghost"
 									size="icon"
+									className="size-8"
 									onClick={() => setZoom(Math.max(ZOOM_MIN, zoom - ZOOM_STEP))}
 									disabled={zoom <= ZOOM_MIN}
+									aria-label={msg("studio.actions.zoomOut")}
 								>
 									<ZoomOut />
 								</Button>
@@ -203,7 +220,10 @@ function StudioToolbarImpl(): ReactNode {
 					/>
 					<TooltipContent>{msg("studio.actions.zoomOut")}</TooltipContent>
 				</Tooltip>
-				<span className="w-12 text-center text-xs tabular-nums text-[var(--ak-studio-muted-fg)]">
+				<span
+					className="w-12 text-center text-xs tabular-nums text-[var(--ak-studio-muted-fg)]"
+					data-testid="ak-toolbar-zoom-value"
+				>
 					{Math.round(zoom * 100)}%
 				</span>
 				<Tooltip>
@@ -213,8 +233,10 @@ function StudioToolbarImpl(): ReactNode {
 								<Button
 									variant="ghost"
 									size="icon"
+									className="size-8"
 									onClick={() => setZoom(Math.min(ZOOM_MAX, zoom + ZOOM_STEP))}
 									disabled={zoom >= ZOOM_MAX}
+									aria-label={msg("studio.actions.zoomIn")}
 								>
 									<ZoomIn />
 								</Button>
@@ -229,6 +251,7 @@ function StudioToolbarImpl(): ReactNode {
 					className="mx-1 h-6 data-vertical:self-center"
 				/>
 
+				{/* Group 4: other document navigation actions */}
 				<Tooltip>
 					<TooltipTrigger
 						render={
@@ -236,7 +259,7 @@ function StudioToolbarImpl(): ReactNode {
 								<Button
 									variant="ghost"
 									size="sm"
-									className="gap-1.5"
+									className="h-8 gap-1.5"
 									onClick={() => {
 										void goHome();
 									}}
