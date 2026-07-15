@@ -785,25 +785,9 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		);
 	}, [messages]);
 
-	// JSON-stable memo of the raw `i18n` slice so an inline `config`
-	// literal (new identity, same content every render) doesn't churn the
-	// live overlay / config context.
+	// Read the live `i18n` slice directly so every host update reaches the
+	// overlay, including values that cannot be represented by JSON.
 	const rawI18n = config?.i18n;
-	const rawI18nKey = useMemo(() => {
-		if (rawI18n === undefined) {
-			return "";
-		}
-		try {
-			return JSON.stringify(rawI18n) ?? "";
-		} catch {
-			// Non-JSON content (bigint/circular) — key on best effort; the
-			// fallback constant means such configs only update the overlay
-			// alongside a structural `config` change.
-			return "<non-json>";
-		}
-	}, [rawI18n]);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: deliberately keyed on the JSON projection (`rawI18nKey`), not the raw reference — see the memo note above.
-	const stableRawI18n = useMemo(() => rawI18n, [rawI18nKey]);
 
 	// The config React readers see: the compiled (validated) snapshot with
 	// the latest raw `i18n` overlaid. `ctx`/compile internals keep the
@@ -812,14 +796,14 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		if (activeCompiled === null) {
 			return null;
 		}
-		if (stableRawI18n === undefined) {
+		if (rawI18n === undefined) {
 			return activeCompiled.studioConfig;
 		}
 		return {
 			...activeCompiled.studioConfig,
-			i18n: mergeLiveI18n(activeCompiled.studioConfig.i18n, stableRawI18n),
+			i18n: mergeLiveI18n(activeCompiled.studioConfig.i18n, rawI18n),
 		};
-	}, [activeCompiled, stableRawI18n]);
+	}, [activeCompiled, rawI18n]);
 
 	// Keep `ctx.t`'s live view current (layout-timed so plugin lifecycle
 	// hooks firing in effects this same pass read the fresh block).
