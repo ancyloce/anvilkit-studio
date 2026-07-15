@@ -41,12 +41,14 @@ test.describe("Canvas Studio — pages + export (PRD §9.2)", () => {
 
 		// Reorder the active page up, then delete it; one remains active. The
 		// reorder/delete controls are per-row and id-scoped, so reach them through
-		// the active row rather than by a fixed id.
+		// the active row rather than by a fixed id. Deleting a page is now
+		// guarded by the workspace confirm dialog (B-05, FR-171).
 		await activeRow.locator('[data-testid^="page-reorder-up-"]').click();
 		await page
 			.locator('[data-testid^="page-row-"][data-active="true"]')
 			.locator('[data-testid^="page-delete-"]')
 			.click();
+		await page.getByTestId("canvas-confirm-accept").click();
 		await expect(rows).toHaveCount(1);
 		await expect(
 			page.locator('[data-testid^="page-row-"][data-active="true"]'),
@@ -59,24 +61,30 @@ test.describe("Canvas Studio — pages + export (PRD §9.2)", () => {
 		const pageId = `e2e-export-${Date.now()}`;
 		await gotoCanvas(page, pageId);
 
-		// The export controls live in a popover: open it, pick a format card,
-		// then commit via "Export". PNG → a non-empty file (rasterized live).
-		await page.getByTestId("canvas-export-trigger").click();
-		await page.getByTestId("canvas-export-png").click();
+		// B-09 (FR-154): export moved from a popover to the full dialog — open
+		// it from the header, pick a format card, then run. PNG → a non-empty
+		// file (rasterized live).
+		await page.getByTestId("workspace-export").click();
+		await expect(page.getByTestId("export-dialog")).toBeVisible();
+		await page.getByTestId("export-format-png").click();
 		const [png] = await Promise.all([
 			page.waitForEvent("download"),
-			page.getByTestId("canvas-export-save").click(),
+			page.getByTestId("export-run").click(),
 		]);
 		const pngPath = await png.path();
 		expect(pngPath ? statSync(pngPath).size : 0).toBeGreaterThan(0);
 
-		// Saving closes the popover; reopen, then JSON → serialized IR; reload
-		// reads it back from localStorage.
-		await page.getByTestId("canvas-export-trigger").click();
-		await page.getByTestId("canvas-export-json").click();
+		// A finished run keeps the dialog open ("Export complete") — dismiss it,
+		// reopen, then JSON (whole-document serialized IR, B-04); reload reads
+		// it back from localStorage.
+		await page.keyboard.press("Escape");
+		await expect(page.getByTestId("export-dialog")).toBeHidden();
+		await page.getByTestId("workspace-export").click();
+		await expect(page.getByTestId("export-dialog")).toBeVisible();
+		await page.getByTestId("export-format-json").click();
 		const [json] = await Promise.all([
 			page.waitForEvent("download"),
-			page.getByTestId("canvas-export-save").click(),
+			page.getByTestId("export-run").click(),
 		]);
 		const jsonPath = await json.path();
 		expect(jsonPath ? statSync(jsonPath).size : 0).toBeGreaterThan(0);
