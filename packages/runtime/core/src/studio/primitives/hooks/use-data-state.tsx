@@ -53,14 +53,17 @@ function useDataState<T extends HTMLElement = HTMLElement>(
 	);
 
 	const value = React.useSyncExternalStore(subscribe, getSnapshot);
+	const notifyChange = React.useEffectEvent((nextValue: DataStateValue) => {
+		onChange?.(nextValue);
+	});
 
 	// `value` comes from an external MutationObserver subscription (Base UI
 	// flips the `data-*` attribute, not any handler in this component), so
 	// there is no event handler that could invoke `onChange` instead —
 	// effect-driven notification is the correct shape here.
 	React.useEffect(() => {
-		if (onChange) onChange(value);
-	}, [value, onChange]);
+		notifyChange(value);
+	}, [value]);
 
 	return [value, localRef];
 }

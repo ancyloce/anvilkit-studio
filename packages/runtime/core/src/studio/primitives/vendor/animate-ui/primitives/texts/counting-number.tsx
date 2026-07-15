@@ -70,9 +70,7 @@ function CountingNumber({
 	useMotionValueEvent(springVal, "change", (latest) => {
 		if (localRef.current) {
 			let formatted =
-				decimals > 0
-					? latest.toFixed(decimals)
-					: Math.round(latest).toString();
+				decimals > 0 ? latest.toFixed(decimals) : Math.round(latest).toString();
 
 			if (decimals > 0) {
 				formatted = formatted.replace(".", decimalSeparator);
