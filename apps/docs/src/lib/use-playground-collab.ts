@@ -267,10 +267,7 @@ export function usePlaygroundCollab(
 			cancelled = true;
 			destroy?.();
 		};
-		// `playgroundConfig` and `setSaveStatus` are stable across renders
-		// (module-scope singleton / React setState identity), matching the
-		// original inline effect's empty dependency array.
-	}, []);
+	}, [playgroundConfig, setSaveStatus]);
 
 	return { collabPlugins, collabMode, collabStatus };
 }

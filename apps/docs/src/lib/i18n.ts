@@ -62,10 +62,3 @@ export function docSplat(locale: string, path: string): string {
 	if (locale === i18n.defaultLanguage) return clean;
 	return clean ? `${locale}/${clean}` : locale;
 }
-
-// Build a localized absolute pathname for a doc `path` (no leading slash).
-// Default locale → `/getting-started`; others → `/zh/getting-started`.
-export function localizedPath(locale: string, path: string): string {
-	const splat = docSplat(locale, path);
-	return splat ? `/${splat}` : "/";
-}
