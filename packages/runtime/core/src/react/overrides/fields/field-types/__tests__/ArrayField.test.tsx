@@ -71,6 +71,24 @@ describe("ArrayField", () => {
 		expect(screen.getByText("Item 2")).toBeInTheDocument();
 	});
 
+	it("derives row controls from the list constraints", () => {
+		render(
+			<ArrayField
+				// biome-ignore lint/suspicious/noExplicitAny: test fixture
+				field={{ ...FIELD, min: 1, max: 1 } as any}
+				value={[{ id: "a", label: "Only" }]}
+				onChange={vi.fn()}
+				name="items"
+			>
+				<div />
+			</ArrayField>,
+		);
+
+		expect(screen.getByLabelText("Reorder Item 1")).toBeDisabled();
+		expect(screen.getByLabelText("Duplicate")).toBeDisabled();
+		expect(screen.getByLabelText("Remove")).toBeDisabled();
+	});
+
 	it("appends a default-shaped item on add", () => {
 		const onChange = vi.fn();
 		render(

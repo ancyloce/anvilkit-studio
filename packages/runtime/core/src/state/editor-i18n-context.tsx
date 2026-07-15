@@ -32,6 +32,7 @@ import {
 	use,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -203,13 +204,10 @@ export function EditorI18nProvider({
 	// Keys already requested (in-flight or done) so a pack is fetched at most
 	// once per `(namespace, locale)`, even across the re-renders each
 	// resolution triggers. A failed load is removed so a later switch retries.
-	const requestedRef = useRef<Set<string>>(null!);
-	if (!requestedRef.current) {
-		requestedRef.current = new Set();
-	}
+	const [requested] = useState(() => new Set<string>());
 
 	// Mount-lifetime flag (finding P2-2): the async `loadMessages()`
-	// resolutions below `setLoadedPacks`/mutate `requestedRef`, and a pack
+	// resolutions below `setLoadedPacks`/mutate `requested`, and a pack
 	// that settles after the provider unmounts (or is replaced) must not
 	// schedule state on a dead provider. Deliberately a mount-lifetime flag
 	// rather than a per-effect `cancelled` one — an in-flight load from a
@@ -231,7 +229,9 @@ export function EditorI18nProvider({
 	// re-running the effect would re-request that key and loop
 	// failed-load → log → delete → re-run. The ref always reads current.
 	const loggerRef = useRef(logger);
-	loggerRef.current = logger;
+	useLayoutEffect(() => {
+		loggerRef.current = logger;
+	}, [logger]);
 
 	useEffect(() => {
 		// English ships inline per entry; everything else resolves through
@@ -247,8 +247,8 @@ export function EditorI18nProvider({
 			for (const entry of allEntries) {
 				if (entry.loadMessages === undefined) continue;
 				const key = loadedPackKey(entry.namespace, target);
-				if (requestedRef.current.has(key)) continue;
-				requestedRef.current.add(key);
+				if (requested.has(key)) continue;
+				requested.add(key);
 				entry
 					.loadMessages(target)
 					.then((bundle) => {
@@ -266,7 +266,7 @@ export function EditorI18nProvider({
 					})
 					.catch((error: unknown) => {
 						// Nothing to do once unmounted (P2-2): no warning, and no
-						// `requestedRef` mutation on a dead provider.
+						// `requested` mutation on a dead provider.
 						if (!mountedRef.current) return;
 						// The namespace stays at its English baseline; dropping the
 						// key allows a retry on a later switch. Surface the failure
@@ -284,11 +284,11 @@ export function EditorI18nProvider({
 						} else {
 							console.warn(message, error);
 						}
-						requestedRef.current.delete(key);
+						requested.delete(key);
 					});
 			}
 		}
-	}, [allEntries, locale, warmLocalePacks]);
+	}, [allEntries, locale, requested, warmLocalePacks]);
 
 	const value = useMemo<EditorI18nContextValue>(() => {
 		const catalog = mergeCatalog(allEntries, locale, loadedPacks);

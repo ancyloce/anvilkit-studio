@@ -143,10 +143,7 @@ function useImageModuleElement(): ReactNode {
 	const requestSeqRef = useRef(0);
 	// In-flight upload AbortControllers, aborted on unmount / source change
 	// so a cancelled batch stops consuming the host endpoint.
-	const uploadAbortControllersRef = useRef<Set<AbortController>>(null!);
-	if (!uploadAbortControllersRef.current) {
-		uploadAbortControllersRef.current = new Set();
-	}
+	const [uploadAbortControllers] = useState(() => new Set<AbortController>());
 
 	// Refresh the asset list whenever the source notifies. Mirrors
 	// `LayersPanel`'s pages-source effect.
@@ -294,12 +291,12 @@ function useImageModuleElement(): ReactNode {
 			requestSeqRef.current++;
 			unsubscribe?.();
 			// Cancel any in-flight uploads so they stop consuming the host.
-			for (const controller of uploadAbortControllersRef.current) {
+			for (const controller of uploadAbortControllers) {
 				controller.abort();
 			}
-			uploadAbortControllersRef.current.clear();
+			uploadAbortControllers.clear();
 		};
-	}, [loadAssets, source]);
+	}, [loadAssets, source, uploadAbortControllers]);
 
 	const pluginActions = useMemo(
 		() => [...pluginActionMap.values()],
@@ -339,7 +336,7 @@ function useImageModuleElement(): ReactNode {
 			}));
 			setUploadingTiles((prev) => [...prev, ...tickets]);
 			const abortController = new AbortController();
-			uploadAbortControllersRef.current.add(abortController);
+			uploadAbortControllers.add(abortController);
 			try {
 				let bytesSeen = 0;
 				const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
@@ -373,7 +370,7 @@ function useImageModuleElement(): ReactNode {
 					toast.error(msg("studio.module.image.upload.error"));
 				}
 			} finally {
-				uploadAbortControllersRef.current.delete(abortController);
+				uploadAbortControllers.delete(abortController);
 				setUploadingTiles((prev) =>
 					prev.filter(
 						(tile) => !tickets.some((ticket) => ticket.id === tile.id),
@@ -381,7 +378,7 @@ function useImageModuleElement(): ReactNode {
 				);
 			}
 		},
-		[msg, source],
+		[msg, source, uploadAbortControllers],
 	);
 
 	const handlePickFiles = useCallback(() => {

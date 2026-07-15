@@ -40,7 +40,7 @@
  * the prior `storeId`-not-in-deps desync.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface PersistableStore {
 	readonly persist: {
@@ -69,19 +69,13 @@ export function useRehydratedStore<TStore>(
 	create: (opts: { storeId: string }) => TStore,
 	injected?: TStore,
 ): { store: TStore; hydrated: boolean } {
-	// Lazy create; recreate on `storeId` change for the non-injected
-	// path. A ref (not `useState`) so the swap is deterministic in
-	// render without an extra pass; idempotent for an unchanged key.
-	const ref = useRef<{ store: TStore; storeId: string } | null>(null);
-	if (ref.current === null) {
-		ref.current = { store: injected ?? create({ storeId }), storeId };
-	} else if (injected !== undefined && ref.current.store !== injected) {
-		// Controller swapped the injected store (rare): adopt it.
-		ref.current = { store: injected, storeId };
-	} else if (injected === undefined && ref.current.storeId !== storeId) {
-		ref.current = { store: create({ storeId }), storeId };
-	}
-	const store = ref.current.store;
+	// Derive one store for the current factory/key/injection tuple. This keeps
+	// render pure while preserving synchronous re-keying: an injected store wins,
+	// and a provider-owned store is recreated as soon as `storeId` changes.
+	const store = useMemo(
+		() => injected ?? create({ storeId }),
+		[create, injected, storeId],
+	);
 
 	// Track *which* store the hydrated flag is for, so a `storeId`
 	// re-key (new store identity) reads as not-hydrated for this render

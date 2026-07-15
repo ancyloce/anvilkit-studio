@@ -85,14 +85,11 @@ function toRecord(value: unknown): Record<string, unknown> {
  * source (finding P2-3): with `array`/`object` sub-fields an item can
  * hold nested objects, and a shared reference lets a later edit (or a
  * custom field) mutate both rows. Puck `array` values are JSON-shaped
- * (no functions/refs), so `structuredClone` — with a JSON fallback for
- * environments that lack it — is an exact, dependency-free clone.
+ * (no functions/refs), so the platform's `structuredClone` is an exact,
+ * dependency-free clone that also preserves richer nested platform values.
  */
 function cloneItem(item: Record<string, unknown>): Record<string, unknown> {
-	if (typeof structuredClone === "function") {
-		return structuredClone(item);
-	}
-	return JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
+	return structuredClone(item);
 }
 
 function defaultItemAt(
@@ -374,6 +371,8 @@ function ItemFieldsPanel({
 	);
 }
 
+type ArrayRowDragState = "idle" | "dragged" | "drop-target";
+
 interface ArrayRowProps {
 	readonly field: PuckArrayField<Record<string, unknown>[]>;
 	readonly fieldName: string;
@@ -382,11 +381,10 @@ interface ArrayRowProps {
 	readonly index: number;
 	readonly item: Record<string, unknown>;
 	readonly isOpen: boolean;
-	readonly isDragged: boolean;
-	readonly isDropTarget: boolean;
-	readonly canReorder: boolean;
-	readonly disableDuplicate: boolean;
-	readonly disableRemove: boolean;
+	readonly dragState: ArrayRowDragState;
+	readonly itemCount: number;
+	readonly min: number;
+	readonly max: number;
 	readonly onOpenChange: (index: number, open: boolean) => void;
 	readonly onDragStart: (
 		event: DragEvent<HTMLButtonElement>,
@@ -426,11 +424,10 @@ const ArrayRow = memo(function ArrayRow({
 	index,
 	item,
 	isOpen,
-	isDragged,
-	isDropTarget,
-	canReorder,
-	disableDuplicate,
-	disableRemove,
+	dragState,
+	itemCount,
+	min,
+	max,
 	onOpenChange,
 	onDragStart,
 	onDragOver,
@@ -444,6 +441,9 @@ const ArrayRow = memo(function ArrayRow({
 	const msg = useMsg();
 	const summary = getItemSummary(field, item, index, msg);
 	const summaryText = summaryToText(summary, index, msg);
+	const canReorder = readOnly !== true && itemCount > 1;
+	const duplicateDisabled = itemCount >= max;
+	const removeDisabled = itemCount <= min;
 
 	return (
 		<Popover open={isOpen} onOpenChange={(open) => onOpenChange(index, open)}>
@@ -453,8 +453,8 @@ const ArrayRow = memo(function ArrayRow({
 				size="xs"
 				className={cn(
 					isOpen && "border-ring",
-					isDragged && "opacity-60",
-					isDropTarget && "border-ring bg-muted/50",
+					dragState === "dragged" && "opacity-60",
+					dragState === "drop-target" && "border-ring bg-muted/50",
 				)}
 				onDragOver={(event) => onDragOver(event, index)}
 				onDrop={(event) => onDrop(event, index)}
@@ -502,7 +502,7 @@ const ArrayRow = memo(function ArrayRow({
 							variant="ghost"
 							size="icon-sm"
 							aria-label={msg("studio.field.array.duplicate")}
-							disabled={disableDuplicate}
+							disabled={duplicateDisabled}
 							onClick={() => onDuplicate(index)}
 						>
 							<Copy data-icon="inline-start" aria-hidden="true" />
@@ -512,7 +512,7 @@ const ArrayRow = memo(function ArrayRow({
 							variant="ghost"
 							size="icon-sm"
 							aria-label={msg("studio.field.array.remove")}
-							disabled={disableRemove}
+							disabled={removeDisabled}
 							className="text-destructive hover:bg-destructive/10 hover:text-destructive"
 							onClick={() => onRemove(index)}
 						>
@@ -756,11 +756,16 @@ export function ArrayField({
 						index={index}
 						item={item}
 						isOpen={effectiveOpenIndex === index}
-						isDragged={draggedIndex === index}
-						isDropTarget={dropIndex === index && draggedIndex !== index}
-						canReorder={readOnly !== true && items.length > 1}
-						disableDuplicate={items.length >= max}
-						disableRemove={items.length <= min}
+						dragState={
+							draggedIndex === index
+								? "dragged"
+								: dropIndex === index
+									? "drop-target"
+									: "idle"
+						}
+						itemCount={items.length}
+						min={min}
+						max={max}
 						onOpenChange={handleOpenChange}
 						onDragStart={handleDragStart}
 						onDragOver={handleDragOver}

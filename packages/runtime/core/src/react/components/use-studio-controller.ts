@@ -372,12 +372,7 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 	// dev-only "config is not referentially stable across renders"
 	// warning is now closure-scoped, so two `<Studio>` mounts can no
 	// longer trip each other's one-shot warning.
-	const fingerprintConfigRef = useRef<
-		ReturnType<typeof createConfigFingerprinter>
-	>(null!);
-	if (!fingerprintConfigRef.current) {
-		fingerprintConfigRef.current = createConfigFingerprinter();
-	}
+	const [fingerprintConfig] = useState(createConfigFingerprinter);
 
 	// Latest `logger` behind a ref so the compile effect can read it
 	// without listing `logger` as a dependency. `plugins`/`config` are
@@ -509,8 +504,8 @@ export function useStudioController<UserConfig extends PuckConfig = PuckConfig>(
 		[config],
 	);
 	const configFingerprint = useMemo(
-		() => fingerprintConfigRef.current(configForFingerprint),
-		[configForFingerprint],
+		() => fingerprintConfig(configForFingerprint),
+		[configForFingerprint, fingerprintConfig],
 	);
 
 	// Identity token recomputed only when an input that requires a full

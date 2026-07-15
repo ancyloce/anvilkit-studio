@@ -1,8 +1,8 @@
 /**
  * @file Tests for option-id helpers and the 2026-05-17 review finding
  * P2: object option values must be matched structurally, not by
- * reference, so persisted/remote/collaborative data that has been
- * JSON round-tripped still selects the configured option.
+ * reference, so persisted/remote/collaborative data reconstructed as a new
+ * object still selects the configured option.
  */
 
 import { describe, expect, it } from "vitest";
@@ -53,13 +53,13 @@ describe("findOptionIndex", () => {
 		expect(findOptionIndex(options, "z")).toBe(-1);
 	});
 
-	it("finds an object value after a JSON serialization round-trip", () => {
+	it("finds an object value after cloning creates a new reference", () => {
 		const original = { region: "us", tier: { plan: "pro" } };
 		const options = [{ value: { region: "eu" } }, { value: original }];
 		// Simulates persisted/remote data: same shape, new reference.
-		const deserialized = JSON.parse(JSON.stringify(original));
-		expect(Object.is(options[1]?.value, deserialized)).toBe(false);
-		expect(findOptionIndex(options, deserialized)).toBe(1);
+		const cloned = structuredClone(original);
+		expect(Object.is(options[1]?.value, cloned)).toBe(false);
+		expect(findOptionIndex(options, cloned)).toBe(1);
 	});
 
 	it("does not match a structurally-different object", () => {
