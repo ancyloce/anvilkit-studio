@@ -80,7 +80,7 @@ function TypingText({
 	React.useEffect(() => {
 		if (!isInView) return;
 
-		const timeoutIds: Array<ReturnType<typeof setTimeout>> = [];
+		let timeoutId: ReturnType<typeof setTimeout> | undefined;
 		const texts: string[] = typeof text === "string" ? [text] : text;
 
 		const typeText = (str: string, onComplete: () => void) => {
@@ -93,8 +93,7 @@ function TypingText({
 						displayedText: str.substring(0, currentIndex),
 					});
 					currentIndex++;
-					const id = setTimeout(type, duration);
-					timeoutIds.push(id);
+					timeoutId = setTimeout(type, duration);
 				} else {
 					dispatchTyping({ type: "typing", isTyping: false });
 					onComplete();
@@ -113,8 +112,7 @@ function TypingText({
 						displayedText: str.substring(0, currentIndex),
 					});
 					currentIndex--;
-					const id = setTimeout(erase, duration);
-					timeoutIds.push(id);
+					timeoutId = setTimeout(erase, duration);
 				} else {
 					dispatchTyping({ type: "typing", isTyping: false });
 					onComplete();
@@ -129,23 +127,21 @@ function TypingText({
 				if (isLast && !loop) {
 					return;
 				}
-				const id = setTimeout(() => {
+				timeoutId = setTimeout(() => {
 					eraseText(texts[index] ?? "", () => {
 						const nextIndex = isLast ? 0 : index + 1;
 						animateTexts(nextIndex);
 					});
 				}, holdDelay);
-				timeoutIds.push(id);
 			});
 		};
 
-		const startId = setTimeout(() => {
+		timeoutId = setTimeout(() => {
 			animateTexts(0);
 		}, delay);
-		timeoutIds.push(startId);
 
 		return () => {
-			for (const timeoutId of timeoutIds) {
+			if (timeoutId !== undefined) {
 				clearTimeout(timeoutId);
 			}
 		};

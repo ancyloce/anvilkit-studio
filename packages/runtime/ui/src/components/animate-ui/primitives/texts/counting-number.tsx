@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useMotionValue, useSpring, type SpringOptions } from "motion/react";
+import {
+	useMotionValue,
+	useMotionValueEvent,
+	useSpring,
+	type SpringOptions,
+} from "motion/react";
 
 import {
 	useIsInView,
@@ -62,33 +67,30 @@ function CountingNumber({
 		return () => clearTimeout(timeoutId);
 	}, [isInView, number, motionVal, delay]);
 
-	React.useEffect(() => {
-		const unsubscribe = springVal.on("change", (latest) => {
-			if (localRef.current) {
-				const numericLatest = Number(latest);
-				let formatted =
-					decimals > 0
-						? numericLatest.toFixed(decimals)
-						: Math.round(numericLatest).toString();
+	useMotionValueEvent(springVal, "change", (latest) => {
+		if (localRef.current) {
+			const numericLatest = Number(latest);
+			let formatted =
+				decimals > 0
+					? numericLatest.toFixed(decimals)
+					: Math.round(numericLatest).toString();
 
-				if (decimals > 0) {
-					formatted = formatted.replace(".", decimalSeparator);
-				}
-
-				if (padStart) {
-					const finalIntLength = Math.floor(Math.abs(number)).toString().length;
-					const [intPart, fracPart] = formatted.split(decimalSeparator);
-					const paddedInt = intPart?.padStart(finalIntLength, "0") ?? "";
-					formatted = fracPart
-						? `${paddedInt}${decimalSeparator}${fracPart}`
-						: paddedInt;
-				}
-
-				localRef.current.textContent = formatted;
+			if (decimals > 0) {
+				formatted = formatted.replace(".", decimalSeparator);
 			}
-		});
-		return unsubscribe;
-	}, [springVal, decimals, padStart, number, decimalSeparator, localRef]);
+
+			if (padStart) {
+				const finalIntLength = Math.floor(Math.abs(number)).toString().length;
+				const [intPart, fracPart] = formatted.split(decimalSeparator);
+				const paddedInt = intPart?.padStart(finalIntLength, "0") ?? "";
+				formatted = fracPart
+					? `${paddedInt}${decimalSeparator}${fracPart}`
+					: paddedInt;
+			}
+
+			localRef.current.textContent = formatted;
+		}
+	});
 
 	const finalIntLength = Math.floor(Math.abs(number)).toString().length;
 

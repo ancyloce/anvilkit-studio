@@ -83,6 +83,20 @@ function findPuckIframe(root: ParentNode): HTMLIFrameElement | null {
 	return root.querySelector<HTMLIFrameElement>("iframe#preview-frame");
 }
 
+function subscribeToSystemPreference(
+	media: MediaQueryList,
+	listener: () => void,
+): (() => void) | undefined {
+	if (typeof media.addEventListener === "function") {
+		media.addEventListener("change", listener);
+		return () => media.removeEventListener("change", listener);
+	}
+	if (typeof media.addListener === "function") {
+		media.addListener(listener);
+		return () => media.removeListener(listener);
+	}
+}
+
 /**
  * Subscribe to the user's mode preference, derive the resolved
  * value, and mirror it everywhere it needs to live: the theme store,
@@ -144,17 +158,6 @@ export function useThemeSync(): void {
 		// `MediaQueryList` only supports the deprecated `addListener`
 		// /`removeListener` API, not `addEventListener`. Prefer the modern
 		// API, fall back to the legacy one, and bail if neither exists.
-		if (typeof media.addEventListener === "function") {
-			media.addEventListener("change", listener);
-			return () => {
-				media.removeEventListener("change", listener);
-			};
-		}
-		if (typeof media.addListener === "function") {
-			media.addListener(listener);
-			return () => {
-				media.removeListener(listener);
-			};
-		}
+		return subscribeToSystemPreference(media, listener);
 	}, [mode, setResolved, rootRef]);
 }

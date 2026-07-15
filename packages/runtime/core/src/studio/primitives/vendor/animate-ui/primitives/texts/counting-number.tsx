@@ -1,6 +1,11 @@
 "use client";
 
-import { type SpringOptions, useMotionValue, useSpring } from "motion/react";
+import {
+	type SpringOptions,
+	useMotionValue,
+	useMotionValueEvent,
+	useSpring,
+} from "motion/react";
 import * as React from "react";
 
 import {
@@ -62,32 +67,29 @@ function CountingNumber({
 		return () => clearTimeout(timeoutId);
 	}, [isInView, number, motionVal, delay]);
 
-	React.useEffect(() => {
-		const unsubscribe = springVal.on("change", (latest) => {
-			if (localRef.current) {
-				let formatted =
-					decimals > 0
-						? latest.toFixed(decimals)
-						: Math.round(latest).toString();
+	useMotionValueEvent(springVal, "change", (latest) => {
+		if (localRef.current) {
+			let formatted =
+				decimals > 0
+					? latest.toFixed(decimals)
+					: Math.round(latest).toString();
 
-				if (decimals > 0) {
-					formatted = formatted.replace(".", decimalSeparator);
-				}
-
-				if (padStart) {
-					const finalIntLength = Math.floor(Math.abs(number)).toString().length;
-					const [intPart, fracPart] = formatted.split(decimalSeparator);
-					const paddedInt = intPart?.padStart(finalIntLength, "0") ?? "";
-					formatted = fracPart
-						? `${paddedInt}${decimalSeparator}${fracPart}`
-						: paddedInt;
-				}
-
-				localRef.current.textContent = formatted;
+			if (decimals > 0) {
+				formatted = formatted.replace(".", decimalSeparator);
 			}
-		});
-		return unsubscribe;
-	}, [springVal, decimals, padStart, number, decimalSeparator, localRef]);
+
+			if (padStart) {
+				const finalIntLength = Math.floor(Math.abs(number)).toString().length;
+				const [intPart, fracPart] = formatted.split(decimalSeparator);
+				const paddedInt = intPart?.padStart(finalIntLength, "0") ?? "";
+				formatted = fracPart
+					? `${paddedInt}${decimalSeparator}${fracPart}`
+					: paddedInt;
+			}
+
+			localRef.current.textContent = formatted;
+		}
+	});
 
 	const finalIntLength = Math.floor(Math.abs(number)).toString().length;
 

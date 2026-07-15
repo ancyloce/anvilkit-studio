@@ -6,6 +6,7 @@ import {
 	useTransform,
 	motion,
 	useMotionValue,
+	useMotionValueEvent,
 	type MotionValue,
 	type SpringOptions,
 	type HTMLMotionProps,
@@ -192,26 +193,25 @@ function SlidingNumber({
 	const onNumberChangeEvent = React.useEffectEvent((value: number) => {
 		onNumberChange?.(value);
 	});
+	const inferredDecimals =
+		typeof decimalPlaces === "number" && decimalPlaces >= 0
+			? decimalPlaces
+			: (() => {
+					const value = String(number);
+					const decimalIndex = value.indexOf(".");
+					return decimalIndex >= 0 ? value.length - decimalIndex - 1 : 0;
+				})();
+	const factor = Math.pow(10, inferredDecimals);
 
 	React.useEffect(() => {
-		if (!hasAnimated) {
-			setEffectiveNumber(
-				initiallyStable ? initialNumeric : !isInView ? 0 : initialNumeric,
-			);
-			return;
-		}
+		if (hasAnimated) return;
+		setEffectiveNumber(
+			initiallyStable ? initialNumeric : !isInView ? 0 : initialNumeric,
+		);
+	}, [hasAnimated, isInView, initiallyStable, initialNumeric]);
 
-		const inferredDecimals =
-			typeof decimalPlaces === "number" && decimalPlaces >= 0
-				? decimalPlaces
-				: (() => {
-						const s = String(number);
-						const idx = s.indexOf(".");
-						return idx >= 0 ? s.length - idx - 1 : 0;
-					})();
-
-		const factor = Math.pow(10, inferredDecimals);
-		const unsubscribe = springVal.on("change", (latest) => {
+	useMotionValueEvent(springVal, "change", (latest) => {
+		if (hasAnimated) {
 			const numericLatest = Number(latest);
 			const newValue =
 				inferredDecimals > 0
@@ -222,18 +222,8 @@ function SlidingNumber({
 				setEffectiveNumber(newValue);
 				onNumberChangeEvent(newValue);
 			}
-		});
-		return unsubscribe;
-	}, [
-		hasAnimated,
-		springVal,
-		isInView,
-		number,
-		decimalPlaces,
-		effectiveNumber,
-		initiallyStable,
-		initialNumeric,
-	]);
+		}
+	});
 
 	const formatNumber = React.useCallback(
 		(num: number) =>
