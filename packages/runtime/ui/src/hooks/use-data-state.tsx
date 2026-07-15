@@ -47,10 +47,13 @@ function useDataState<T extends HTMLElement = HTMLElement>(
 	};
 
 	const value = React.useSyncExternalStore(subscribe, getSnapshot);
+	const notifyChange = React.useEffectEvent((nextValue: DataStateValue) => {
+		onChange?.(nextValue);
+	});
 
 	React.useEffect(() => {
-		if (onChange) onChange(value);
-	}, [value, onChange]);
+		notifyChange(value);
+	}, [value]);
 
 	return [value, localRef];
 }
