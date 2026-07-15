@@ -153,7 +153,7 @@ export function useThemeSync(): void {
 		if (typeof media.addListener === "function") {
 			media.addListener(listener);
 			return () => {
-				media.removeListener?.(listener);
+				media.removeListener(listener);
 			};
 		}
 	}, [mode, setResolved, rootRef]);

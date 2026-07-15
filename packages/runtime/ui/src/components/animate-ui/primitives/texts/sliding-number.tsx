@@ -194,36 +194,36 @@ function SlidingNumber({
 	});
 
 	React.useEffect(() => {
-		if (hasAnimated) {
-			const inferredDecimals =
-				typeof decimalPlaces === "number" && decimalPlaces >= 0
-					? decimalPlaces
-					: (() => {
-							const s = String(number);
-							const idx = s.indexOf(".");
-							return idx >= 0 ? s.length - idx - 1 : 0;
-						})();
-
-			const factor = Math.pow(10, inferredDecimals);
-
-			const unsubscribe = springVal.on("change", (latest) => {
-				const numericLatest = Number(latest);
-				const newValue =
-					inferredDecimals > 0
-						? Math.round(numericLatest * factor) / factor
-						: Math.round(numericLatest);
-
-				if (effectiveNumber !== newValue) {
-					setEffectiveNumber(newValue);
-					onNumberChangeEvent(newValue);
-				}
-			});
-			return () => unsubscribe();
-		} else {
+		if (!hasAnimated) {
 			setEffectiveNumber(
 				initiallyStable ? initialNumeric : !isInView ? 0 : initialNumeric,
 			);
+			return;
 		}
+
+		const inferredDecimals =
+			typeof decimalPlaces === "number" && decimalPlaces >= 0
+				? decimalPlaces
+				: (() => {
+						const s = String(number);
+						const idx = s.indexOf(".");
+						return idx >= 0 ? s.length - idx - 1 : 0;
+					})();
+
+		const factor = Math.pow(10, inferredDecimals);
+		const unsubscribe = springVal.on("change", (latest) => {
+			const numericLatest = Number(latest);
+			const newValue =
+				inferredDecimals > 0
+					? Math.round(numericLatest * factor) / factor
+					: Math.round(numericLatest);
+
+			if (effectiveNumber !== newValue) {
+				setEffectiveNumber(newValue);
+				onNumberChangeEvent(newValue);
+			}
+		});
+		return unsubscribe;
 	}, [
 		hasAnimated,
 		springVal,

@@ -145,7 +145,9 @@ function TypingText({
 		timeoutIds.push(startId);
 
 		return () => {
-			timeoutIds.forEach(clearTimeout);
+			for (const timeoutId of timeoutIds) {
+				clearTimeout(timeoutId);
+			}
 		};
 	}, [text, duration, isInView, delay, loop, holdDelay]);
 

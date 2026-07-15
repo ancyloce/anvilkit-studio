@@ -77,8 +77,6 @@ function CursorProvider({ children, global = false }: CursorProviderProps) {
 	}, []);
 
 	React.useEffect(() => {
-		let removeListeners: () => void;
-
 		if (global) {
 			const handlePointerMove = (e: PointerEvent) => {
 				dispatchCursor({
@@ -108,7 +106,7 @@ function CursorProvider({ children, global = false }: CursorProviderProps) {
 			window.addEventListener("mouseout", handlePointerOut, { passive: true });
 			document.addEventListener("visibilitychange", handleVisibilityChange);
 
-			removeListeners = () => {
+			return () => {
 				window.removeEventListener("pointermove", handlePointerMove);
 				window.removeEventListener("pointerout", handlePointerOut);
 				window.removeEventListener("mouseout", handlePointerOut);
@@ -117,49 +115,47 @@ function CursorProvider({ children, global = false }: CursorProviderProps) {
 					handleVisibilityChange,
 				);
 			};
-		} else {
-			if (!containerRef.current) return;
-
-			const parent = containerRef.current.parentElement;
-			if (!parent) return;
-
-			if (getComputedStyle(parent).position === "static") {
-				parent.style.position = "relative";
-			}
-
-			const handlePointerMove = (e: PointerEvent) => {
-				const rect = parent.getBoundingClientRect();
-				dispatchCursor({
-					type: "move",
-					cursorPos: { x: e.clientX - rect.left, y: e.clientY - rect.top },
-				});
-			};
-
-			const handlePointerOut = (e: PointerEvent | MouseEvent) => {
-				if (
-					e.relatedTarget === null ||
-					!(parent as Node).contains(e.relatedTarget as Node)
-				) {
-					dispatchCursor({ type: "active", active: false });
-				}
-			};
-
-			parent.addEventListener("pointermove", handlePointerMove, {
-				passive: true,
-			});
-			parent.addEventListener("pointerout", handlePointerOut, {
-				passive: true,
-			});
-			parent.addEventListener("mouseout", handlePointerOut, { passive: true });
-
-			removeListeners = () => {
-				parent.removeEventListener("pointermove", handlePointerMove);
-				parent.removeEventListener("pointerout", handlePointerOut);
-				parent.removeEventListener("mouseout", handlePointerOut);
-			};
 		}
 
-		return removeListeners;
+		if (!containerRef.current) return;
+
+		const parent = containerRef.current.parentElement;
+		if (!parent) return;
+
+		if (getComputedStyle(parent).position === "static") {
+			parent.style.position = "relative";
+		}
+
+		const handlePointerMove = (e: PointerEvent) => {
+			const rect = parent.getBoundingClientRect();
+			dispatchCursor({
+				type: "move",
+				cursorPos: { x: e.clientX - rect.left, y: e.clientY - rect.top },
+			});
+		};
+
+		const handlePointerOut = (e: PointerEvent | MouseEvent) => {
+			if (
+				e.relatedTarget === null ||
+				!(parent as Node).contains(e.relatedTarget as Node)
+			) {
+				dispatchCursor({ type: "active", active: false });
+			}
+		};
+
+		parent.addEventListener("pointermove", handlePointerMove, {
+			passive: true,
+		});
+		parent.addEventListener("pointerout", handlePointerOut, {
+			passive: true,
+		});
+		parent.addEventListener("mouseout", handlePointerOut, { passive: true });
+
+		return () => {
+			parent.removeEventListener("pointermove", handlePointerMove);
+			parent.removeEventListener("pointerout", handlePointerOut);
+			parent.removeEventListener("mouseout", handlePointerOut);
+		};
 	}, [global]);
 
 	const cursorContext = React.useMemo(
