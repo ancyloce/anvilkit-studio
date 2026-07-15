@@ -5,7 +5,6 @@ import { dirname, join, resolve } from "node:path";
 import { CliError } from "./errors.js";
 import {
 	type RegistryEntry,
-	type RegistryEntryKind,
 	type RegistryFeed,
 	RegistryFeedParser,
 } from "./registry-schema.js";
@@ -197,11 +196,4 @@ function findMatches(feed: RegistryFeed, requested: string): RegistryEntry[] {
 	return feed.entries.filter(
 		(e) => e.slug === trimmed || e.packageName === trimmed,
 	);
-}
-
-export function filterByKind(
-	entry: RegistryEntry,
-	kind: RegistryEntryKind | undefined,
-): boolean {
-	return kind === undefined || entry.kind === kind;
 }

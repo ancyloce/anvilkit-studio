@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { relative, resolve } from "node:path";
+import { resolve } from "node:path";
 import type { CAC } from "cac";
 import pc from "picocolors";
 
@@ -294,7 +294,3 @@ function printFollowups(
 }
 
 export type RegistryEntryKindForCli = RegistryEntryKind;
-
-export function relativeToCwd(cwd: string, abs: string): string {
-	return relative(cwd, abs);
-}
