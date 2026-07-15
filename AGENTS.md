@@ -56,7 +56,7 @@ All three are read-only: they report and never edit or run write commands.
 
 ## CI/CD Pipelines (`.github/workflows/`)
 
-- `ci.yml` — the pull-request gate, split into path-aware jobs: `changes` classifies changed paths (`dorny/paths-filter`) so leaf-app-only changes skip unrelated jobs; `validate` runs `pnpm lint`, `typecheck`, `madge`, `test`, `build`; `package-gates` runs `pnpm build`, `publint`, `check:all`; `studio-e2e` and `playground-e2e` run Playwright suites with uploaded reports; `docs` runs `docs:build` plus the docs Playwright suite. Setup uses pnpm 11.10.0 / Node 22 with recursive submodule checkout.
+- `ci.yml` — the pull-request gate, split into path-aware jobs: `changes` classifies changed paths (`dorny/paths-filter`) so leaf-app-only changes skip unrelated jobs; `validate` runs `pnpm lint`, `typecheck`, `madge`, `test`, `build`; `package-gates` runs `pnpm build`, `publint`, `check:all`; `studio-e2e` and `playground-e2e` run Playwright suites with uploaded reports; `docs` runs `docs:build` plus the docs Playwright suite. Setup uses pnpm 11.13.0 / Node 22 with recursive submodule checkout.
 - `size.yml` — per-package gzip budgets via `size-limit` on pull requests.
 - `react-doctor.yml` — react-doctor diagnostics on pull requests.
 - `clean-clone.yml` — validates clone/install topology when files defining it change; also dispatchable on demand before a release.

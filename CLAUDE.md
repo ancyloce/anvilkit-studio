@@ -67,7 +67,7 @@ The authoritative current map, target map, classifications, dependency direction
 - `apps/docs`: Fumadocs on TanStack Start/Vite plus marketplace.
 - Current `apps/collab`: standalone production-capable service targeted for extraction to `anvilkit-platform`; do not move it silently.
 
-- Package manager: `pnpm 11.10.0`; orchestration: Turbo; publishable package build: Rslib.
+- Package manager: `pnpm 11.13.0`; orchestration: Turbo; publishable package build: Rslib.
 - TypeScript: workspace and studio use 7.0.2; docs declares `^7.0.2`.
 
 ## Commands

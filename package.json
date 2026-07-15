@@ -75,7 +75,7 @@
 		"zod": "^4.4.3",
 		"zustand": "^5.0.14"
 	},
-	"packageManager": "pnpm@11.10.0",
+	"packageManager": "pnpm@11.13.0",
 	"engines": {
 		"node": ">=22.13"
 	}

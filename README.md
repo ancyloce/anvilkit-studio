@@ -19,7 +19,7 @@ AnvilKit Studio is AnvilKit's frontend SDK, [Puck](https://puckeditor.com/)-nati
 
 ## Quick start
 
-Requires Node >= 22.13 and pnpm 11.10.0 (pinned via `packageManager`).
+Requires Node >= 22.13 and pnpm 11.13.0 (pinned via `packageManager`).
 
 ```bash
 git clone <repo-url>
@@ -82,7 +82,7 @@ See the [canonical repository architecture](docs/architecture/repository-structu
 | Apps | Next.js 16 (studio, playground); TanStack Start + Vite + Fumadocs (docs) |
 | Styling | Tailwind CSS 4, CSS-first, via shared `@anvilkit/tailwind-config` |
 | State & data | Zustand 5, Zod 4, Yjs 13 + Hocuspocus (collab) |
-| Workspace | pnpm 11.10.0 + Turborepo 2 |
+| Workspace | pnpm 11.13.0 + Turborepo 2 |
 | Package builds | Rslib |
 | Quality gates | Biome 2 (lint + format, tabs), Vitest 4, Playwright, madge, publint, size-limit |
 | Releases | Changesets |
@@ -95,7 +95,7 @@ The workspace embeds 17 git submodules: the components workspace (`packages/exte
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs on every pull request (pnpm 11.10.0 / Node 22, submodules pulled recursively) and is split into path-aware jobs so changes scoped to a single leaf app skip unrelated work:
+`.github/workflows/ci.yml` runs on every pull request (pnpm 11.13.0 / Node 22, submodules pulled recursively) and is split into path-aware jobs so changes scoped to a single leaf app skip unrelated work:
 
 - **changes** — classifies changed paths (`dorny/paths-filter`) and gates the jobs below
 - **validate** — `pnpm lint`, `pnpm typecheck`, `pnpm madge`, `pnpm test`, `pnpm build`
