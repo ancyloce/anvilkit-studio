@@ -3,13 +3,12 @@
  *
  * Each `test()` exercises one capability surface added across plan
  * phases P2–P5 (rename / duplicate / delete / search / locked / drag-
- * reorder) plus the new P6 demo wiring in
- * `apps/studio/lib/demo-pages-source.ts`. Conventions match
+ * reorder) plus the P6 page-source wiring. Conventions match
  * `sidebar-modules.spec.ts`: console/pageerror/requestfailed listeners
  * attach before navigation; the rail tablist is the hydration signal.
  *
  * Tests share helpers but each gets a fresh `page` (and therefore a
- * fresh in-memory `createDemoPagesSource()` instance), so ordering
+ * fresh in-memory page source instance), so ordering
  * does not matter.
  */
 

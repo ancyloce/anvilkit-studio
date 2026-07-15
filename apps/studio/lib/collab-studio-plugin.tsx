@@ -76,6 +76,76 @@ function selectSelection(state: PuckSelectionState): string | null {
 	return props.id;
 }
 
+function subscribeToCursorMoves(
+	publishCursor: (cursor: CursorCoords) => void,
+): () => void {
+	const windowHandler = (event: MouseEvent) => {
+		publishCursor({ x: event.clientX, y: event.clientY });
+	};
+	let frame: HTMLIFrameElement | null = null;
+	let frameDocument: Document | null = null;
+	const frameHandler = (event: MouseEvent) => {
+		if (!frame) return;
+		const rect = frame.getBoundingClientRect();
+		publishCursor({
+			x: rect.left + event.clientX,
+			y: rect.top + event.clientY,
+		});
+	};
+
+	function detachFrameDocument(): void {
+		if (frameDocument) {
+			frameDocument.removeEventListener("mousemove", frameHandler);
+		}
+		frameDocument = null;
+	}
+
+	function detachFrame(): void {
+		detachFrameDocument();
+		if (frame) {
+			frame.removeEventListener("load", attachFrame);
+		}
+		frame = null;
+	}
+
+	function attachFrame(): void {
+		const nextFrame = getPuckPreviewFrame();
+		if (nextFrame !== frame) {
+			detachFrame();
+			frame = nextFrame;
+			if (frame) {
+				frame.addEventListener("load", attachFrame);
+			}
+		}
+		const nextDocument = nextFrame
+			? getAccessibleFrameDocument(nextFrame)
+			: null;
+		if (nextDocument === frameDocument) return;
+		detachFrameDocument();
+		frameDocument = nextDocument;
+		if (frameDocument) {
+			frameDocument.addEventListener("mousemove", frameHandler, {
+				passive: true,
+			});
+		}
+	}
+
+	const observer = new MutationObserver(attachFrame);
+	if (document.body) {
+		observer.observe(document.body, { childList: true, subtree: true });
+	}
+	attachFrame();
+	window.addEventListener("mousemove", windowHandler, { passive: true });
+	window.addEventListener("focus", attachFrame);
+
+	return () => {
+		window.removeEventListener("mousemove", windowHandler);
+		window.removeEventListener("focus", attachFrame);
+		observer.disconnect();
+		detachFrame();
+	};
+}
+
 /**
  * Combined presence writer — handles BOTH cursor (mouse move) and
  * selection (Puck selectedItem changes), with both writes carrying the
@@ -131,66 +201,7 @@ function PresenceWriter(): null {
 			});
 		};
 
-		const windowHandler = (event: MouseEvent) => {
-			publishCursor({ x: event.clientX, y: event.clientY });
-		};
-
-		let frame: HTMLIFrameElement | null = null;
-		let frameDocument: Document | null = null;
-
-		const frameHandler = (event: MouseEvent) => {
-			if (!frame) return;
-			const rect = frame.getBoundingClientRect();
-			publishCursor({
-				x: rect.left + event.clientX,
-				y: rect.top + event.clientY,
-			});
-		};
-
-		function detachFrameDocument(): void {
-			frameDocument?.removeEventListener("mousemove", frameHandler);
-			frameDocument = null;
-		}
-
-		function detachFrame(): void {
-			detachFrameDocument();
-			frame?.removeEventListener("load", attachFrame);
-			frame = null;
-		}
-
-		function attachFrame(): void {
-			const nextFrame = getPuckPreviewFrame();
-			if (nextFrame !== frame) {
-				detachFrame();
-				frame = nextFrame;
-				frame?.addEventListener("load", attachFrame);
-			}
-
-			const nextDocument = nextFrame
-				? getAccessibleFrameDocument(nextFrame)
-				: null;
-			if (nextDocument === frameDocument) return;
-			detachFrameDocument();
-			frameDocument = nextDocument;
-			frameDocument?.addEventListener("mousemove", frameHandler, {
-				passive: true,
-			});
-		}
-
-		const observer = new MutationObserver(attachFrame);
-		if (document.body) {
-			observer.observe(document.body, { childList: true, subtree: true });
-		}
-		attachFrame();
-
-		window.addEventListener("mousemove", windowHandler, { passive: true });
-		window.addEventListener("focus", attachFrame);
-		return () => {
-			window.removeEventListener("mousemove", windowHandler);
-			window.removeEventListener("focus", attachFrame);
-			observer.disconnect();
-			detachFrame();
-		};
+		return subscribeToCursorMoves(publishCursor);
 	}, [adapter, self]);
 
 	return null;

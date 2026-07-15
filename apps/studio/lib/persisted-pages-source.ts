@@ -2,13 +2,11 @@
  * @file Durable `StudioPagesSource` for `/puck/editor`, backed by the demo's
  * `/api/pages/*` routes (→ {@link getPageStorage}, SQLite by default).
  *
- * This is a **drop-in replacement** for `createDemoPagesSource`
- * (lib/demo-pages-source.ts): it keeps the exact same client-side snapshot
- * semantics — deterministic seed ids (`home`, `about`, …), `locked` Home,
+ * It keeps deterministic seed ids (`home`, `about`, …), `locked` Home,
  * keyboard reorder, and the optimistic-duplicate pre-select — so the page rail
  * (and the `pages-management` E2E contract that keys on `ak-layer-page-row-<id>`)
- * behaves identically. The difference is that every mutation is *also* written
- * through to the durable store via the Page API, so a page created / renamed /
+ * behaves consistently. Every mutation is also written through to the durable
+ * store via the Page API, so a page created / renamed /
  * deleted / republished in the editor is resolvable at `/puck/render/<slug>` and
  * the public `/<slug>` route.
  *

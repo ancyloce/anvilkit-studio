@@ -318,7 +318,7 @@ export function createDemoData(): Data<DemoComponents, PageRootProps> {
 
 /**
  * Per-page Puck documents for the demo's multi-page layer sidebar, keyed
- * by the seed page ids in `createDemoPagesSource` (`lib/demo-pages-source`).
+ * by the seed page ids in `createPersistedPagesSource`.
  *
  * Each page gets a visually distinct composition so selecting a row in the
  * sidebar obviously swaps the canvas. `home` reuses the full
