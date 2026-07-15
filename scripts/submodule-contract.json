@@ -4,7 +4,7 @@
 	"defaults": {
 		"owners": { "repository": "unknown", "release": "unknown" },
 		"engines": { "node": ">=18" },
-		"packageManager": "pnpm@11.10.0",
+		"packageManager": "pnpm@11.13.0",
 		"typescript": "7.0.2",
 		"requiredScripts": [
 			"build",
