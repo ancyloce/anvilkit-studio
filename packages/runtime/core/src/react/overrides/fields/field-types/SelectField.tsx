@@ -30,6 +30,7 @@ import {
 	optionIndexFromId,
 } from "./option-ids";
 import type { FieldRendererProps } from "./TextField";
+import { useFieldChrome } from "./use-field-chrome";
 
 export function SelectField({
 	field,
@@ -40,6 +41,15 @@ export function SelectField({
 	name,
 }: FieldRendererProps<PuckSelectField, OptionValue | undefined>): ReactNode {
 	const msg = useMsg();
+	const chrome = useFieldChrome({
+		field,
+		name,
+		id,
+		value,
+		readOnly,
+		onChange: onChange as (value: never) => void,
+		rowCapable: true,
+	});
 	const selectedIndex = useMemo(
 		() => findOptionIndex(field.options, value),
 		[field.options, value],
@@ -60,6 +70,11 @@ export function SelectField({
 			type="select"
 			el="div"
 			readOnly={readOnly}
+			layout={chrome.layout}
+			description={chrome.description}
+			descriptionId={chrome.descriptionId}
+			action={chrome.action}
+			htmlFor={id}
 		>
 			<Select
 				items={items}
@@ -78,7 +93,11 @@ export function SelectField({
 				disabled={readOnly}
 				name={name}
 			>
-				<SelectTrigger id={id} className="w-full">
+				<SelectTrigger
+					id={id}
+					className="w-full"
+					aria-describedby={chrome.describedBy}
+				>
 					<SelectValue placeholder={msg("studio.field.placeholder.select")} />
 				</SelectTrigger>
 				<SelectContent>

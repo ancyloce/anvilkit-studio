@@ -6,12 +6,19 @@
  * `<input type="number">`, but the explicit guard handles paste
  * shortcuts).
  *
- * task Phase 7: always renders with tabular numerals (DESIGN.md §4.2 —
- * "tabular numerals for zoom, dimensions, measurements"), and shows an
- * explicit unit suffix (`px`, `%`, `rem`, …) when the component author
- * opts in via `field.metadata.unit` — Puck's own generic per-field
- * `metadata` bag (`BaseField.metadata`), not a new convention. Absent
- * metadata renders exactly as before (no unit, plain `<Input>`).
+ * Always renders with tabular numerals (DESIGN.md §4.2 — "tabular
+ * numerals for zoom, dimensions, measurements"), and shows an
+ * explicit unit suffix (`px`, `%`, `rem`, …) when the component
+ * author opts in via `field.metadata.unit` — Puck's own generic
+ * per-field `metadata` bag (`BaseField.metadata`), not a new
+ * convention. The unit is display-only: a `number` value cannot
+ * persist a unit choice, so no unit *switcher* is offered here (that
+ * belongs to `text` fields via `DimensionControl`). Absent metadata
+ * renders exactly as before (no unit, plain `<Input>`).
+ *
+ * Also adopts the shared field chrome: `property-row` layout opt-in,
+ * description + `aria-describedby`, and the reset-to-default
+ * affordance (see `use-field-chrome.tsx`).
  */
 
 import type {
@@ -28,13 +35,8 @@ import {
 	InputGroupText,
 } from "@/primitives/input-group";
 import type { FieldRendererProps } from "./TextField";
+import { useFieldChrome } from "./use-field-chrome";
 import { type ParseResult, useLocalFieldValue } from "./use-local-field-value";
-
-function readUnit(metadata: unknown): string | undefined {
-	if (metadata === null || typeof metadata !== "object") return undefined;
-	const unit = (metadata as Record<string, unknown>).unit;
-	return typeof unit === "string" && unit.length > 0 ? unit : undefined;
-}
 
 export function NumberField({
 	field,
@@ -44,6 +46,16 @@ export function NumberField({
 	id,
 	name,
 }: FieldRendererProps<PuckNumberField, number | undefined>): ReactNode {
+	const chrome = useFieldChrome({
+		field,
+		name,
+		id,
+		value,
+		readOnly,
+		onChange: onChange as (value: never) => void,
+		rowCapable: true,
+	});
+
 	// Buffer the raw string the user is typing so intermediate states
 	// like `""`, `"-"`, or `"1."` survive a parent re-render. Commit
 	// only when the string parses to a finite number (or to
@@ -66,7 +78,7 @@ export function NumberField({
 		number | undefined
 	>(value, parse, format, handleCommit);
 
-	const unit = readUnit(field.metadata);
+	const unit = chrome.presentation.unit;
 	const handleChange = useCallback(
 		(event: { target: { value: string } }) => {
 			if (readOnly === true) return;
@@ -81,6 +93,11 @@ export function NumberField({
 			label={field.label ?? name}
 			type="number"
 			readOnly={readOnly}
+			layout={chrome.layout}
+			description={chrome.description}
+			descriptionId={chrome.descriptionId}
+			action={chrome.action}
+			htmlFor={id}
 		>
 			{unit === undefined ? (
 				<Input
@@ -94,6 +111,7 @@ export function NumberField({
 					max={field.max}
 					step={field.step}
 					className="tabular-nums"
+					aria-describedby={chrome.describedBy}
 					onFocus={onFocus}
 					onBlur={onBlur}
 					onChange={handleChange}
@@ -111,6 +129,7 @@ export function NumberField({
 						max={field.max}
 						step={field.step}
 						className="tabular-nums"
+						aria-describedby={chrome.describedBy}
 						onFocus={onFocus}
 						onBlur={onBlur}
 						onChange={handleChange}

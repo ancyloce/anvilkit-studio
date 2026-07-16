@@ -33,6 +33,7 @@ import {
 	optionIndexFromId,
 } from "./option-ids";
 import type { FieldRendererProps } from "./TextField";
+import { useFieldChrome } from "./use-field-chrome";
 
 function isBooleanShaped(options: PuckRadioField["options"]): boolean {
 	if (options.length !== 2) return false;
@@ -47,6 +48,14 @@ export function RadioField({
 	readOnly,
 	name,
 }: FieldRendererProps<PuckRadioField, OptionValue | undefined>): ReactNode {
+	const chrome = useFieldChrome({
+		field,
+		name,
+		value,
+		readOnly,
+		onChange: onChange as (value: never) => void,
+	});
+
 	if (isBooleanShaped(field.options)) {
 		return (
 			<FieldLabel
@@ -56,11 +65,15 @@ export function RadioField({
 				el="div"
 				layout="row"
 				readOnly={readOnly}
+				description={chrome.description}
+				descriptionId={chrome.descriptionId}
+				action={chrome.action}
 			>
 				<Switch
 					checked={value === true}
 					disabled={readOnly}
 					aria-label={field.label ?? name}
+					aria-describedby={chrome.describedBy}
 					onCheckedChange={(checked) => {
 						if (readOnly === true) return;
 						onChange(checked as never);
@@ -80,6 +93,9 @@ export function RadioField({
 			type="radio"
 			el="div"
 			readOnly={readOnly}
+			description={chrome.description}
+			descriptionId={chrome.descriptionId}
+			action={chrome.action}
 		>
 			<ToggleGroup
 				value={selected}

@@ -10,6 +10,7 @@ import { type ReactNode, useCallback } from "react";
 import { FieldLabel } from "@/overrides/layout/FieldLabel";
 import { Textarea } from "@/primitives/textarea";
 import type { FieldRendererProps } from "./TextField";
+import { useFieldChrome } from "./use-field-chrome";
 import { useLocalFieldValue } from "./use-local-field-value";
 
 export function TextareaField({
@@ -20,6 +21,16 @@ export function TextareaField({
 	id,
 	name,
 }: FieldRendererProps<PuckTextareaField, string | undefined>): ReactNode {
+	// Textareas are always full-width (task §4.5) — the chrome is used
+	// only for description + reset, never the row layout.
+	const chrome = useFieldChrome({
+		field,
+		name,
+		id,
+		value,
+		readOnly,
+		onChange: onChange as (value: never) => void,
+	});
 	const parse = useCallback(
 		(raw: string) => ({ ok: true, value: raw }) as const,
 		[],
@@ -37,6 +48,10 @@ export function TextareaField({
 			label={field.label ?? name}
 			type="textarea"
 			readOnly={readOnly}
+			description={chrome.description}
+			descriptionId={chrome.descriptionId}
+			action={chrome.action}
+			htmlFor={id}
 		>
 			<Textarea
 				id={id}
@@ -44,6 +59,7 @@ export function TextareaField({
 				value={displayValue}
 				placeholder={field.placeholder}
 				readOnly={readOnly}
+				aria-describedby={chrome.describedBy}
 				onFocus={onFocus}
 				onBlur={onBlur}
 				onChange={(event) => {
