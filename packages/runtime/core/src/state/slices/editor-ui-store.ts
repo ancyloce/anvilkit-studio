@@ -33,7 +33,30 @@
  * - `assetCategoryFilter` — current filter in `image`.
  * - `copyCategoryFilter` — current filter in `text`.
  * - `pagesExpanded` — id-keyed map for nested page groups in `layer/pages`.
- * - `layerSplitRatio` — split ratio of the `layer` module's pages/layers split.
+ *
+ * `layer` module Pages/Layers tabs (task Phase 6 — replaces the v5
+ * `layerSplitRatio` stacked-split field; DESIGN.md §6 "one panel, one
+ * mode at a time" fits a tab switcher better than a resizable split):
+ * - `layerPanelMode` — which of Pages/Layers is the active tab.
+ *
+ * Resizable/collapsible panel shell (task Phase 5):
+ * - `leftPanelWidth` — persisted width (px) of the left nav/module panel.
+ * - `inspectorWidth` — persisted width (px) of the right inspector panel.
+ * - `inspectorCollapsed` — collapsed flag for the inspector (mirrors
+ *   `drawerCollapsed`'s role for the left panel).
+ * - `focusMode` — hides both side panels while keeping the rail + canvas
+ *   toolbar. Transient (not persisted, like `drawerSearch`): a session-
+ *   scoped viewing override, not a durable per-Studio preference — it
+ *   never overwrites `drawerCollapsed`/`inspectorCollapsed`/the panel
+ *   widths, it only changes what the layout shell renders while active.
+ *
+ * Inspector `object`-field sections (task Phase 7):
+ * - `fieldSectionsExpanded` — id-keyed map of which `<InspectorSection>`
+ *   (collapsible `object`-field groups in `FieldsPanel`) are open. Keyed
+ *   by the field's Puck `id` (falling back to `name`), so two different
+ *   components' same-named object field (e.g. both call theirs "seo")
+ *   share a default expand state — an accepted, low-stakes tradeoff
+ *   given Puck field overrides don't receive the owning component's id.
  *
  * ### `EditorTab` migration
  *
@@ -63,6 +86,8 @@ export type AssetCategoryFilter = "all" | "images" | "videos" | "audio";
 
 export type CopyCategoryFilter = "all" | "basic" | "brand";
 
+export type LayerPanelMode = "pages" | "layers";
+
 export interface EditorUiState {
 	readonly activeTab: EditorTab;
 	readonly drawerSearch: string;
@@ -76,7 +101,12 @@ export interface EditorUiState {
 	readonly assetCategoryFilter: AssetCategoryFilter;
 	readonly copyCategoryFilter: CopyCategoryFilter;
 	readonly pagesExpanded: Readonly<Record<string, boolean>>;
-	readonly layerSplitRatio: number;
+	readonly layerPanelMode: LayerPanelMode;
+	readonly leftPanelWidth: number;
+	readonly inspectorWidth: number;
+	readonly inspectorCollapsed: boolean;
+	readonly focusMode: boolean;
+	readonly fieldSectionsExpanded: Readonly<Record<string, boolean>>;
 	setActiveTab(tab: EditorTab): void;
 	setDrawerSearch(query: string): void;
 	setDrawerCollapsed(collapsed: boolean): void;
@@ -89,9 +119,27 @@ export interface EditorUiState {
 	setAssetCategoryFilter(filter: AssetCategoryFilter): void;
 	setCopyCategoryFilter(filter: CopyCategoryFilter): void;
 	setPageExpanded(id: string, expanded: boolean): void;
-	setLayerSplitRatio(ratio: number): void;
+	setFieldSectionExpanded(id: string, expanded: boolean): void;
+	setLayerPanelMode(mode: LayerPanelMode): void;
+	setLeftPanelWidth(width: number): void;
+	setInspectorWidth(width: number): void;
+	setInspectorCollapsed(collapsed: boolean): void;
+	setFocusMode(focusMode: boolean): void;
 	reset(): void;
 }
+
+/**
+ * Left/inspector panel size bounds (task Phase 5). Exported so the
+ * layout shell can pass the identical values to `<ResizablePanel
+ * minSize/maxSize/defaultSize>` — one source of truth instead of
+ * duplicating the numbers at each call site.
+ */
+export const LEFT_PANEL_DEFAULT_WIDTH = 288;
+export const LEFT_PANEL_MIN_WIDTH = 240;
+export const LEFT_PANEL_MAX_WIDTH = 400;
+export const INSPECTOR_DEFAULT_WIDTH = 336;
+export const INSPECTOR_MIN_WIDTH = 288;
+export const INSPECTOR_MAX_WIDTH = 440;
 
 const INITIAL_STATE = {
 	activeTab: "insert" as EditorTab,
@@ -106,15 +154,21 @@ const INITIAL_STATE = {
 	assetCategoryFilter: "all" as AssetCategoryFilter,
 	copyCategoryFilter: "all" as CopyCategoryFilter,
 	pagesExpanded: {} as Readonly<Record<string, boolean>>,
-	layerSplitRatio: 0.4,
+	fieldSectionsExpanded: {} as Readonly<Record<string, boolean>>,
+	layerPanelMode: "pages" as LayerPanelMode,
+	leftPanelWidth: LEFT_PANEL_DEFAULT_WIDTH,
+	inspectorWidth: INSPECTOR_DEFAULT_WIDTH,
+	inspectorCollapsed: false,
+	focusMode: false,
 } as const;
 
 /**
  * Persisted slice — declared explicitly so a field rename fails to
  * compile here instead of silently dropping the persisted value.
- * `drawerSearch` and `canvasRootHeight` are dropped on purpose
- * (transient input + measured layout). Sidebar-module preferences are
- * persisted per the policy in PRD §9.3.
+ * `drawerSearch`, `canvasRootHeight`, and `focusMode` are dropped on
+ * purpose (transient input, measured layout, and session-scoped viewing
+ * override, respectively). Sidebar-module preferences are persisted per
+ * the policy in PRD §9.3.
  */
 interface EditorUiPersistedSlice {
 	readonly activeTab: EditorTab;
@@ -127,17 +181,21 @@ interface EditorUiPersistedSlice {
 	readonly assetCategoryFilter: AssetCategoryFilter;
 	readonly copyCategoryFilter: CopyCategoryFilter;
 	readonly pagesExpanded: Readonly<Record<string, boolean>>;
-	readonly layerSplitRatio: number;
+	readonly fieldSectionsExpanded: Readonly<Record<string, boolean>>;
+	readonly layerPanelMode: LayerPanelMode;
+	readonly leftPanelWidth: number;
+	readonly inspectorWidth: number;
+	readonly inspectorCollapsed: boolean;
 }
 
 /**
- * Persist schema version — bumped to 4 when the `design-system` tab
- * joined the {@link EditorTab} union (review finding AR-a); was 3 for
- * `history`. The migrate callback already coerces unknown `activeTab`
- * values to the default via {@link VALID_ACTIVE_TABS}, so the bump just
+ * Persist schema version — bumped to 8 when `fieldSectionsExpanded`
+ * (task Phase 7 — collapsible `InspectorSection` state for `object`
+ * fields) was added. The migrate callback already defaults missing
+ * fields via {@link migratePersistedState}, so the bump just
  * invalidates caches written by builds in between.
  */
-export const EDITOR_UI_STORE_PERSIST_VERSION = 5;
+export const EDITOR_UI_STORE_PERSIST_VERSION = 8;
 
 const VALID_ACTIVE_TABS: ReadonlySet<EditorTab> = new Set([
 	"insert",
@@ -166,6 +224,11 @@ const VALID_COPY_FILTERS: ReadonlySet<CopyCategoryFilter> = new Set([
 	"all",
 	"basic",
 	"brand",
+]);
+
+const VALID_LAYER_PANEL_MODES: ReadonlySet<LayerPanelMode> = new Set([
+	"pages",
+	"layers",
 ]);
 
 /**
@@ -218,11 +281,23 @@ function migratePersistedState(persisted: unknown, _version: number): unknown {
 			? (source.copyCategoryFilter as CopyCategoryFilter)
 			: INITIAL_STATE.copyCategoryFilter;
 
-	const layerSplitRatio =
-		typeof source.layerSplitRatio === "number" &&
-		Number.isFinite(source.layerSplitRatio)
-			? clampSplitRatio(source.layerSplitRatio)
-			: INITIAL_STATE.layerSplitRatio;
+	const layerPanelMode: LayerPanelMode =
+		typeof source.layerPanelMode === "string" &&
+		VALID_LAYER_PANEL_MODES.has(source.layerPanelMode as LayerPanelMode)
+			? (source.layerPanelMode as LayerPanelMode)
+			: INITIAL_STATE.layerPanelMode;
+
+	const leftPanelWidth =
+		typeof source.leftPanelWidth === "number" &&
+		Number.isFinite(source.leftPanelWidth)
+			? clampLeftPanelWidth(source.leftPanelWidth)
+			: INITIAL_STATE.leftPanelWidth;
+
+	const inspectorWidth =
+		typeof source.inspectorWidth === "number" &&
+		Number.isFinite(source.inspectorWidth)
+			? clampInspectorWidth(source.inspectorWidth)
+			: INITIAL_STATE.inspectorWidth;
 
 	return {
 		activeTab,
@@ -257,7 +332,18 @@ function migratePersistedState(persisted: unknown, _version: number): unknown {
 				? source.pagesExpanded
 				: INITIAL_STATE.pagesExpanded,
 		),
-		layerSplitRatio,
+		fieldSectionsExpanded: capExpansionMap(
+			isStringBoolMap(source.fieldSectionsExpanded)
+				? source.fieldSectionsExpanded
+				: INITIAL_STATE.fieldSectionsExpanded,
+		),
+		layerPanelMode,
+		leftPanelWidth,
+		inspectorWidth,
+		inspectorCollapsed:
+			typeof source.inspectorCollapsed === "boolean"
+				? source.inspectorCollapsed
+				: INITIAL_STATE.inspectorCollapsed,
 	} satisfies EditorUiPersistedSlice;
 }
 
@@ -269,10 +355,16 @@ function isStringBoolMap(value: unknown): value is Record<string, boolean> {
 	return true;
 }
 
-function clampSplitRatio(ratio: number): number {
-	if (ratio < 0.15) return 0.15;
-	if (ratio > 0.85) return 0.85;
-	return ratio;
+function clampLeftPanelWidth(width: number): number {
+	if (width < LEFT_PANEL_MIN_WIDTH) return LEFT_PANEL_MIN_WIDTH;
+	if (width > LEFT_PANEL_MAX_WIDTH) return LEFT_PANEL_MAX_WIDTH;
+	return width;
+}
+
+function clampInspectorWidth(width: number): number {
+	if (width < INSPECTOR_MIN_WIDTH) return INSPECTOR_MIN_WIDTH;
+	if (width > INSPECTOR_MAX_WIDTH) return INSPECTOR_MAX_WIDTH;
+	return width;
 }
 
 /**
@@ -368,8 +460,28 @@ export function createEditorUiStore(
 						}),
 					}));
 				},
-				setLayerSplitRatio(layerSplitRatio) {
-					set({ layerSplitRatio: clampSplitRatio(layerSplitRatio) });
+				setFieldSectionExpanded(id, expanded) {
+					set((state) => ({
+						fieldSectionsExpanded: capExpansionMap({
+							...state.fieldSectionsExpanded,
+							[id]: expanded,
+						}),
+					}));
+				},
+				setLayerPanelMode(layerPanelMode) {
+					set({ layerPanelMode });
+				},
+				setLeftPanelWidth(leftPanelWidth) {
+					set({ leftPanelWidth: clampLeftPanelWidth(leftPanelWidth) });
+				},
+				setInspectorWidth(inspectorWidth) {
+					set({ inspectorWidth: clampInspectorWidth(inspectorWidth) });
+				},
+				setInspectorCollapsed(inspectorCollapsed) {
+					set({ inspectorCollapsed });
+				},
+				setFocusMode(focusMode) {
+					set({ focusMode });
 				},
 				reset() {
 					set({ ...INITIAL_STATE });
@@ -391,7 +503,11 @@ export function createEditorUiStore(
 					assetCategoryFilter: state.assetCategoryFilter,
 					copyCategoryFilter: state.copyCategoryFilter,
 					pagesExpanded: capExpansionMap(state.pagesExpanded),
-					layerSplitRatio: state.layerSplitRatio,
+					fieldSectionsExpanded: capExpansionMap(state.fieldSectionsExpanded),
+					layerPanelMode: state.layerPanelMode,
+					leftPanelWidth: state.leftPanelWidth,
+					inspectorWidth: state.inspectorWidth,
+					inspectorCollapsed: state.inspectorCollapsed,
 				}),
 				migrate: migratePersistedState,
 				// `migrate` only fires on a version mismatch; `merge` runs

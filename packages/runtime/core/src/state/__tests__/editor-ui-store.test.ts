@@ -79,6 +79,57 @@ describe("createEditorUiStore", () => {
 		expect(after.outlineExpanded).toEqual({});
 	});
 
+	it("clamps leftPanelWidth / inspectorWidth to their documented min/max", () => {
+		const store = createEditorUiStore({ storeId: "panel-width-clamp" });
+		const state = store.getState();
+
+		state.setLeftPanelWidth(10);
+		expect(store.getState().leftPanelWidth).toBe(240);
+		state.setLeftPanelWidth(9999);
+		expect(store.getState().leftPanelWidth).toBe(400);
+		state.setLeftPanelWidth(300);
+		expect(store.getState().leftPanelWidth).toBe(300);
+
+		state.setInspectorWidth(10);
+		expect(store.getState().inspectorWidth).toBe(288);
+		state.setInspectorWidth(9999);
+		expect(store.getState().inspectorWidth).toBe(440);
+		state.setInspectorWidth(350);
+		expect(store.getState().inspectorWidth).toBe(350);
+	});
+
+	it("persists leftPanelWidth / inspectorWidth / inspectorCollapsed, but not focusMode", () => {
+		const store = createEditorUiStore({ storeId: "panel-persist" });
+		const state = store.getState();
+		state.setLeftPanelWidth(320);
+		state.setInspectorWidth(400);
+		state.setInspectorCollapsed(true);
+		state.setFocusMode(true);
+
+		const stored =
+			window.localStorage.getItem("anvilkit-ui-panel-persist") ?? "";
+		expect(stored).toContain("320");
+		expect(stored).toContain("400");
+		expect(stored).toContain("inspectorCollapsed");
+		expect(stored).not.toContain("focusMode");
+	});
+
+	it("reset() restores panel width/collapse/focus-mode defaults", () => {
+		const store = createEditorUiStore({ storeId: "panel-reset" });
+		const state = store.getState();
+		state.setLeftPanelWidth(320);
+		state.setInspectorWidth(400);
+		state.setInspectorCollapsed(true);
+		state.setFocusMode(true);
+
+		state.reset();
+		const after = store.getState();
+		expect(after.leftPanelWidth).toBe(288);
+		expect(after.inspectorWidth).toBe(336);
+		expect(after.inspectorCollapsed).toBe(false);
+		expect(after.focusMode).toBe(false);
+	});
+
 	it("caps the in-memory expansion map (most-recently-toggled kept)", () => {
 		const store = createEditorUiStore({ storeId: "cap-in-memory" });
 		const state = store.getState();

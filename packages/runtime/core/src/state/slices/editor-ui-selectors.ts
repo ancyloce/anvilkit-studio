@@ -20,6 +20,7 @@ import type {
 	CopyCategoryFilter,
 	EditorTab,
 	EditorUiState,
+	LayerPanelMode,
 } from "./editor-ui-store";
 
 export function useEditorUiStore<TResult>(
@@ -105,11 +106,61 @@ export function usePagesExpanded(): readonly [
 	);
 }
 
-export function useLayerSplitRatio(): readonly [
-	number,
-	(ratio: number) => void,
+export function useFieldSectionsExpanded(): readonly [
+	Readonly<Record<string, boolean>>,
+	(id: string, expanded: boolean) => void,
 ] {
 	return useEditorUiStore(
-		useShallow((s) => [s.layerSplitRatio, s.setLayerSplitRatio] as const),
+		useShallow(
+			(s) => [s.fieldSectionsExpanded, s.setFieldSectionExpanded] as const,
+		),
+	);
+}
+
+export function useLayerPanelMode(): readonly [
+	LayerPanelMode,
+	(mode: LayerPanelMode) => void,
+] {
+	return useEditorUiStore(
+		useShallow((s) => [s.layerPanelMode, s.setLayerPanelMode] as const),
+	);
+}
+
+export function useDrawerCollapsed(): readonly [boolean, (v: boolean) => void] {
+	return useEditorUiStore(
+		useShallow((s) => [s.drawerCollapsed, s.setDrawerCollapsed] as const),
+	);
+}
+
+export function useLeftPanelWidth(): readonly [
+	number,
+	(width: number) => void,
+] {
+	return useEditorUiStore(
+		useShallow((s) => [s.leftPanelWidth, s.setLeftPanelWidth] as const),
+	);
+}
+
+export function useInspectorWidth(): readonly [
+	number,
+	(width: number) => void,
+] {
+	return useEditorUiStore(
+		useShallow((s) => [s.inspectorWidth, s.setInspectorWidth] as const),
+	);
+}
+
+export function useInspectorCollapsed(): readonly [
+	boolean,
+	(v: boolean) => void,
+] {
+	return useEditorUiStore(
+		useShallow((s) => [s.inspectorCollapsed, s.setInspectorCollapsed] as const),
+	);
+}
+
+export function useFocusMode(): readonly [boolean, (v: boolean) => void] {
+	return useEditorUiStore(
+		useShallow((s) => [s.focusMode, s.setFocusMode] as const),
 	);
 }

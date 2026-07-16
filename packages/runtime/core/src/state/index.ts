@@ -86,8 +86,9 @@ export {
 	useCopyCategoryFilter,
 	useDrawerSearch,
 	useEditorUiStore,
+	useFieldSectionsExpanded,
 	useInsertSectionsExpanded,
-	useLayerSplitRatio,
+	useLayerPanelMode,
 	usePagesExpanded,
 } from "./slices/editor-ui-selectors";
 export {
@@ -100,6 +101,7 @@ export {
 	type EditorTab,
 	type EditorUiState,
 	type EditorUiStoreApi,
+	type LayerPanelMode,
 } from "./slices/editor-ui-store";
 export {
 	type CreateExportStoreOptions,

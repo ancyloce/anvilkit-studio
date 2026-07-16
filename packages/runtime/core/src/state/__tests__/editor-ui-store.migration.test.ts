@@ -80,9 +80,26 @@ describe("editor-ui-store migration", () => {
 		expect(state.assetCategoryFilter).toBe("all");
 		expect(state.copyCategoryFilter).toBe("all");
 		expect(state.pagesExpanded).toEqual({});
-		expect(state.layerSplitRatio).toBe(0.4);
+		expect(state.layerPanelMode).toBe("pages");
 		// Verified-good legacy fields still apply.
 		expect(state.drawerCollapsed).toBe(true);
+	});
+
+	it("falls back to panel-shell defaults (v5 and earlier predate leftPanelWidth/inspectorWidth/inspectorCollapsed)", async () => {
+		seedLegacyV1("legacy-panels", {
+			activeTab: "insert",
+			drawerCollapsed: false,
+			outlineExpanded: {},
+			canvasViewport: "desktop",
+			canvasZoom: 1,
+		});
+
+		const store = createEditorUiStore({ storeId: "legacy-panels" });
+		await (store as unknown as PersistableStoreApi).persist.rehydrate();
+		const state = store.getState();
+		expect(state.leftPanelWidth).toBe(288);
+		expect(state.inspectorWidth).toBe(336);
+		expect(state.inspectorCollapsed).toBe(false);
 	});
 
 	it("ignores unknown activeTab strings and uses the default", async () => {
@@ -121,11 +138,14 @@ describe("editor-ui-store sanitizes a corrupt blob at the CURRENT version", () =
 		expect(store.getState().activeTab).toBe("insert");
 	});
 
-	it("clamps an out-of-range layerSplitRatio to [0.15, 0.85]", async () => {
-		seedCurrent("corrupt-split", { activeTab: "insert", layerSplitRatio: 5 });
-		const store = createEditorUiStore({ storeId: "corrupt-split" });
+	it("defaults an unknown layerPanelMode to pages", async () => {
+		seedCurrent("corrupt-panel-mode", {
+			activeTab: "insert",
+			layerPanelMode: "garbage",
+		});
+		const store = createEditorUiStore({ storeId: "corrupt-panel-mode" });
 		await (store as unknown as PersistableStoreApi).persist.rehydrate();
-		expect(store.getState().layerSplitRatio).toBe(0.85);
+		expect(store.getState().layerPanelMode).toBe("pages");
 	});
 
 	it("falls back to defaults for non-conforming field types", async () => {
@@ -142,6 +162,21 @@ describe("editor-ui-store sanitizes a corrupt blob at the CURRENT version", () =
 		expect(s.componentViewMode).toBe("grid");
 		expect(s.assetCategoryFilter).toBe("all");
 		expect(s.outlineExpanded).toEqual({});
+	});
+
+	it("clamps an out-of-range leftPanelWidth/inspectorWidth and defaults a non-boolean inspectorCollapsed", async () => {
+		seedCurrent("corrupt-panels", {
+			activeTab: "insert",
+			leftPanelWidth: 9999,
+			inspectorWidth: 1,
+			inspectorCollapsed: "yes",
+		});
+		const store = createEditorUiStore({ storeId: "corrupt-panels" });
+		await (store as unknown as PersistableStoreApi).persist.rehydrate();
+		const s = store.getState();
+		expect(s.leftPanelWidth).toBe(400);
+		expect(s.inspectorWidth).toBe(288);
+		expect(s.inspectorCollapsed).toBe(false);
 	});
 });
 
@@ -173,19 +208,44 @@ describe("editor-ui-store new slices", () => {
 		expect(store.getState().copyCategoryFilter).toBe("brand");
 	});
 
-	it("setLayerSplitRatio clamps to [0.15, 0.85]", () => {
-		const store = createEditorUiStore({ storeId: "splitter" });
-		store.getState().setLayerSplitRatio(0.05);
-		expect(store.getState().layerSplitRatio).toBe(0.15);
-		store.getState().setLayerSplitRatio(0.95);
-		expect(store.getState().layerSplitRatio).toBe(0.85);
-		store.getState().setLayerSplitRatio(0.6);
-		expect(store.getState().layerSplitRatio).toBe(0.6);
+	it("setLayerPanelMode switches and persists the active Pages/Layers tab", async () => {
+		const a = createEditorUiStore({ storeId: "layer-mode" });
+		expect(a.getState().layerPanelMode).toBe("pages");
+		a.getState().setLayerPanelMode("layers");
+		expect(a.getState().layerPanelMode).toBe("layers");
+
+		const b = createEditorUiStore({ storeId: "layer-mode" });
+		await (b as unknown as PersistableStoreApi).persist.rehydrate();
+		expect(b.getState().layerPanelMode).toBe("layers");
 	});
 
 	it("setPageExpanded merges into the pages map", () => {
 		const store = createEditorUiStore({ storeId: "pages" });
 		store.getState().setPageExpanded("group-a", true);
 		expect(store.getState().pagesExpanded).toEqual({ "group-a": true });
+	});
+
+	it("setLeftPanelWidth / setInspectorWidth / setInspectorCollapsed persist across instances", async () => {
+		const a = createEditorUiStore({ storeId: "panel-shell" });
+		a.getState().setLeftPanelWidth(320);
+		a.getState().setInspectorWidth(400);
+		a.getState().setInspectorCollapsed(true);
+
+		const b = createEditorUiStore({ storeId: "panel-shell" });
+		await (b as unknown as PersistableStoreApi).persist.rehydrate();
+		const state = b.getState();
+		expect(state.leftPanelWidth).toBe(320);
+		expect(state.inspectorWidth).toBe(400);
+		expect(state.inspectorCollapsed).toBe(true);
+	});
+
+	it("setFocusMode does NOT persist across instances (session-only)", async () => {
+		const a = createEditorUiStore({ storeId: "focus-mode" });
+		a.getState().setFocusMode(true);
+		expect(a.getState().focusMode).toBe(true);
+
+		const b = createEditorUiStore({ storeId: "focus-mode" });
+		await (b as unknown as PersistableStoreApi).persist.rehydrate();
+		expect(b.getState().focusMode).toBe(false);
 	});
 });
